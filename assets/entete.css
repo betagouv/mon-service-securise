@@ -1,0 +1,45 @@
+.habillage-entete {
+  width: 100%;
+  height: 200px;
+  background: url(images/habillage_entete.png) 0 0 no-repeat;
+  background-color: white;
+  background-size: contain;
+  border-bottom: solid 1px #999;
+}
+
+.tab {
+  display: inline-block;
+  margin: 2em 0;
+  cursor: pointer;
+}
+
+.tab.actif {
+  cursor: default;
+}
+
+.etape {
+  background: #ccc;
+  border-radius: 100%;
+  color: white;
+
+  width: 1.5em;
+  height: 0.5em;
+  padding: 0.5em 0em 1.5em 1em;
+
+  display: inline-block;
+}
+
+.tab.actif .etape {
+  background: #283573;
+}
+
+.titre-etape {
+  color: #ccc;
+  padding: 0 3em 0 0.5em;
+}
+
+.tab.actif .titre-etape {
+  color : #283573;
+}
+
+
