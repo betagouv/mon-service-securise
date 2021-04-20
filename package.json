@@ -1,0 +1,22 @@
+{
+  "name": "Mon Service Sécurisé",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/betagouv/mon-service-securise.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/betagouv/mon-service-securise/issues"
+  },
+  "homepage": "https://github.com/betagouv/mon-service-securise#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
