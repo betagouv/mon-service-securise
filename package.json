@@ -2,6 +2,10 @@
   "name": "Mon Service Sécurisé",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "15",
+    "npm": "7"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require ("fs");
 const https = require ("https");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 let utilisateurs = {};
 
@@ -29,11 +29,6 @@ app.post("/service", (requete, reponse) => {
   reponse.json({ nomService });
 });
 
-const serveur = https.createServer({
-  key: fs.readFileSync('domain.key'),
-  cert: fs.readFileSync('domain.crt')
-}, app);
-
-serveur.listen(port, () => {
+app.listen(port, () => {
   console.log(`Mon Service Sécurisé est démarré et écoute le port ${port} !…`);
 });
