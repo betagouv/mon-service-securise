@@ -1,30 +1,66 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <title>Mon Service Sécurisé</title>
+<link href="assets/styles/fonts.css" rel="stylesheet">
 <link href="assets/styles/mss.css" rel="stylesheet">
 
 <header>
-  <div class="creation-compte">
-    <label for="compte-a-creer">Pseudo</label>
-    <input type="text" id="compte-a-creer">
-    <input type="submit" id="submit-compte-a-creer" value="Créer le compte" disabled>
-  </div>
-
-  <div class="connexion">
-    <label for="pseudo">Pseudo</label>
-    <input type="text" id="pseudo">
-    <input type="submit" id="submit-pseudo" value="Se connecter" disabled>
+  <div class="logo-mss">
+    Mon Service <b>Sécurisé</b>
   </div>
 </header>
 
-<hr>
-
 <main>
-  <div id="message-bienvenue"></div>
-  <div id="service" class="invisible">
-    <label for="input-nom-service">Nom du service</label>
-    <input type="text" id="input-nom-service">
+  <div class="introduction">
+    <div class="logo-anssi"></div>
+    <h1>
+      Sécuriser et homologuer<br>
+      mes services publics numériques
+    </h1>
+    <p>
+      Site internet, application mobile, outil collaboratif : Mon Service
+      Sécurisé aide les entités<br>
+      publiques à sécuriser et homologuer simplement leurs services numériques
+      <b>les plus courants</b>.
+    </p>
+  </div>
+
+  <div class="fonctionnalites">
+    <div class="fonctionnalite parcours-guide">
+      Un parcours<br>
+      guidé et unique
+    </div>
+    <div class="fonctionnalite suggestions-anssi">
+      Des suggestions de l'ANSSI pour sécuriser
+    </div>
+    <div class="fonctionnalite mode-collaboratif">
+      Un outil pour<br>
+      collaborer en équipe
+    </div>
+  </div>
+
+  <div class="bandeau">
+    <h1>Comment ça marche ?</h1>
+    <div class="etapes">
+      <div class="etape">
+        <h2>1</h2>
+        <p>
+          Identifiez les risques et<br>
+          les mesures de sécurité
+        </p>
+      </div>
+      <div class="etape">
+        <h2>2</h2>
+        <p>Téléchargez le document d'homologation de sécurité</p>
+      </div>
+      <div class="etape">
+        <h2>3</h2>
+        <p>Publiez l'homologation sur Mon Service Sécurisé</p>
+      </div>
+    </div>
   </div>
 </main>
 
-<script type=module src="scripts/main.js"></script>
+<footer>
+  Mon service sécurisé par l'ANSSI – Version béta
+</footer>
