@@ -48,7 +48,7 @@ main {
 }
 
 .introduction {
-  margin: 4em auto;
+  margin: 4em auto 0;
   width: 51em;
 }
 
@@ -58,6 +58,22 @@ main {
   font-size: 2.8em;
   line-height: 1.2em;
   color: #0d4269;
+}
+
+.introduction a {
+  display: inline-block;
+
+  margin: 2em;
+  padding: 1em;
+  border-radius: 2px;
+  background: #1b7cc4;
+
+  text-decoration: none;
+  color: white;
+}
+
+.introduction a:hover {
+  background: #1b7cc4e0;
 }
 
 .fonctionnalites, .etapes {
