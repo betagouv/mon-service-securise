@@ -1,6 +1,7 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
-DOCKER_IMAGE=mon_service_securise
+source scripts/variables.sh
+
 PORT=${PORT:-1917}
 
 docker build -t ${DOCKER_IMAGE} .
