@@ -12,7 +12,7 @@ describe("Le serveur MSS", () => {
   it("sert des pages statiques", (done) => {
     axios.get("http://localhost:1234/index.html")
       .then((reponse) => {
-        expect(reponse.status).to.equal(200);
+        expect(reponse.status).to.equal(666);
         done();
       })
       .catch(error => done(error));
