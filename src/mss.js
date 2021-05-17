@@ -1,10 +1,10 @@
-const express = require("express");
+const express = require('express');
 
 const creeServeur = () => {
   let serveur;
 
   const app = express();
-  app.use(express.static("public"));
+  app.use(express.static('public'));
 
   const ecoute = (port, succes) => {
     serveur = app.listen(port, succes);
