@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  padding: 0;
+
+  min-width: 1200px;
+
+  font-family: "Marianne";
+}
+
+header, .suivi-homologations, footer {
+  width: 1000px;
+  margin: 0 auto;
+  color: #0d4269;
+}
+
+header {
+  padding: 1em 0;
+}
+
+.logo-mss {
+  display: inline-block;
+  padding: 0 0 0 2em;
+
+  background-image: url(../images/logo_mss.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+main {
+  padding-bottom: 10em;
+  border-top: solid 1px #ebedf0;
+  border-bottom: solid 1px #ebedf0;
+  background: #fdfdfd;
+
+  text-align: center;
+  font-size: 0.9em;
+  color: #2f3a43;
+}
+
+.suivi-homologations h1 {
+  padding: 1em 0;
+
+  text-align: left;
+  color: #2f3a43;
+}
+
+.homologations {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1em;
+}
+
+.homologation {
+  padding: 2em;
+
+  border: solid 1px #ebedf0;
+  border-radius: 5px;
+  background: white;
+
+  color: #1b7cc4;
+}
+
+.nouvelle.homologation {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nouvelle.homologation .icone {
+  width: 1em;
+  margin: 0 auto 0.6em;
+  padding: 0.1em 0.35em;
+
+  border-radius: 100%;
+  background: #ebedf0;
+
+
+  font-weight: bold;
+  font-size: 2.5em;
+}
+
+footer {
+  padding: 1em 0;
+
+  font-size: 0.5em;
+  color: #abb6bf;
+}
