@@ -1,0 +1,12 @@
+extends mss
+
+block append styles
+  link(href='assets/styles/homologations.css', rel='stylesheet')
+
+block main
+  .suivi-homologations
+    h1 Mes homologations
+    .homologations
+      a.nouvelle.homologation(href='#')
+        .icone ＋
+        div Créer un nouveau projet d'homologation
