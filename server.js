@@ -1,7 +1,10 @@
 const MSS = require('./src/mss');
+const DepotDonnees = require('./src/depotDonnees');
+const donnees = require('./jeuDonnees');
 
 const port = process.env.PORT || 3000;
-const serveur = MSS.creeServeur();
+const depotDonnees = DepotDonnees.creeDepot(donnees);
+const serveur = MSS.creeServeur(depotDonnees);
 
 serveur.ecoute(port, () => {
   /* eslint-disable no-console */

@@ -1,6 +1,6 @@
 const express = require('express');
 
-const creeServeur = () => {
+const creeServeur = (depotDonnees) => {
   let serveur;
 
   const app = express();
@@ -14,6 +14,12 @@ const creeServeur = () => {
 
   app.get('/homologations', (requete, reponse) => {
     reponse.render('homologations');
+  });
+
+  app.get('/api/homologations', (requete, reponse) => {
+    const idUtilisateur = requete.headers['x-id-utilisateur'];
+    const homologations = depotDonnees.homologations(idUtilisateur).map((h) => h.toJSON());
+    reponse.json({ homologations });
   });
 
   app.use(express.static('public'));

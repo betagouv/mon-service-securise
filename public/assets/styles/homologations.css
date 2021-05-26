@@ -19,16 +19,18 @@
   background: white;
 
   color: #1b7cc4;
-}
-
-.nouvelle.homologation {
   font-weight: bold;
   text-decoration: none;
 }
 
-.nouvelle.homologation:hover {
+.homologation:hover {
   border-color: #1b7cc460;
   background: #1b7cc401;
+}
+
+.homologation.existante {
+  font-size: 1.5em;
+  color: #2f3a43;
 }
 
 .nouvelle.homologation .icone {
