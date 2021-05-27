@@ -12,6 +12,10 @@ const creeServeur = (depotDonnees) => {
     reponse.render('index');
   });
 
+  app.get('/connexion', (requete, reponse) => {
+    reponse.render('connexion');
+  });
+
   app.get('/homologations', (requete, reponse) => {
     reponse.render('homologations');
   });
@@ -20,6 +24,10 @@ const creeServeur = (depotDonnees) => {
     const idUtilisateur = requete.headers['x-id-utilisateur'];
     const homologations = depotDonnees.homologations(idUtilisateur).map((h) => h.toJSON());
     reponse.json({ homologations });
+  });
+
+  app.post('/api/token', (requete, reponse) => {
+    reponse.end();
   });
 
   app.use(express.static('public'));

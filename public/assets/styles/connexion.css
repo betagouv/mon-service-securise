@@ -1,0 +1,40 @@
+form {
+  margin: 2em auto 0;
+  width: 350px;
+  padding: 0 7em 2em;
+  border-radius: 5px;
+  background: #fff;
+}
+
+form h1 {
+  display: inline-block;
+}
+
+form section {
+  padding: 2em 0 1em;
+  border-top: solid 1px #abb6bf;
+  border-bottom: solid 1px #abb6bf;
+}
+
+form label {
+  display: block;
+  padding-bottom: 2em;
+
+  text-align: left;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+form input {
+  box-sizing: border-box;
+  width: 100%;
+
+  margin-top: 0.3em;
+  padding: 0.5em;
+
+  border: solid 1px #ebedf0;
+  border-radius: 5px;
+  background: #fafbfc;
+
+  font-family: Marianne;
+}

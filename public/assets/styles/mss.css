@@ -33,6 +33,21 @@ a.logo-mss {
   color: #0d4269;
 }
 
+a.connexion {
+  float: right;
+
+  padding: 0.5em 1.5em 0.7em;
+  background: #0d4269;
+  border-radius: 33% / 100%;
+
+  font-size: 0.7em;
+  color: #fff;
+}
+
+a.connexion:hover {
+  background: #1b7cc4;
+}
+
 main {
   padding-bottom: 10em;
   border-top: solid 1px #ebedf0;
@@ -43,6 +58,25 @@ main {
   font-size: 0.9em;
   color: #2f3a43;
 }
+
+.bouton {
+  display: inline-block;
+
+  margin: 2em;
+  padding: 1em 3em;
+  border-radius: 3px;
+  background: #1b7cc4;
+
+  text-decoration: none;
+  color: white;
+}
+
+.bouton:hover {
+  background: #1b7cc4e0;
+
+  cursor: pointer;
+}
+
 
 footer {
   padding: 1em 0;

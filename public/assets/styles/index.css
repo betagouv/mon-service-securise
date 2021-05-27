@@ -21,22 +21,6 @@
   color: #0d4269;
 }
 
-.introduction a {
-  display: inline-block;
-
-  margin: 2em;
-  padding: 1em;
-  border-radius: 2px;
-  background: #1b7cc4;
-
-  text-decoration: none;
-  color: white;
-}
-
-.introduction a:hover {
-  background: #1b7cc4e0;
-}
-
 .fonctionnalites, .etapes {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

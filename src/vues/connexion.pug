@@ -1,0 +1,18 @@
+extends mss
+
+block append styles
+  link(href='assets/styles/connexion.css', rel='stylesheet')
+
+block main
+  form
+    h1 Connectez-vous
+    section
+      label Adresse électronique
+        br
+        input(id='login', type='text')
+      label Mot de passe
+        br
+        input(id='mot-de-passe', type='password')
+    .bouton Je me connecte &nbsp;&nbsp;›
+
+  script(src='connexion.js')
