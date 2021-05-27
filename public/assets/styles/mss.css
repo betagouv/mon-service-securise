@@ -17,20 +17,27 @@ header {
   padding: 1em 0;
 }
 
-.logo-mss {
+header a {
   display: inline-block;
+
+  text-decoration: none;
+}
+
+a.logo-mss {
   padding: 0 0 0 2em;
 
   background-image: url(../images/logo_mss.svg);
   background-repeat: no-repeat;
   background-size: contain;
+
+  color: #0d4269;
 }
 
 main {
   padding-bottom: 10em;
   border-top: solid 1px #ebedf0;
   border-bottom: solid 1px #ebedf0;
-  background: #fdfdfd;
+  background: #fafbfc;
 
   text-align: center;
   font-size: 0.9em;
