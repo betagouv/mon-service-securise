@@ -1,10 +1,22 @@
+const cookieSession = require('cookie-session');
 const express = require('express');
+require('dotenv').config();
 
-const creeServeur = (depotDonnees) => {
+const creeServeur = (depotDonnees, adaptateurJWT,
+  avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
 
   const app = express();
 
+  app.use(express.json());
+  app.use(cookieSession({
+    name: 'token',
+    sameSite: true,
+    secret: process.env.SECRET_COOKIE,
+    secure: avecCookieSecurise,
+  }));
+
+  app.set('trust proxy', 1);
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
 
@@ -21,13 +33,24 @@ const creeServeur = (depotDonnees) => {
   });
 
   app.get('/api/homologations', (requete, reponse) => {
-    const idUtilisateur = requete.headers['x-id-utilisateur'];
-    const homologations = depotDonnees.homologations(idUtilisateur).map((h) => h.toJSON());
+    const token = adaptateurJWT.decode(requete.session.token);
+    const homologations = depotDonnees.homologations(token.idUtilisateur).map((h) => h.toJSON());
     reponse.json({ homologations });
   });
 
-  app.post('/api/token', (requete, reponse) => {
-    reponse.end();
+  app.post('/api/token', (requete, reponse, suite) => {
+    const { login, motDePasse } = requete.body;
+    depotDonnees.utilisateurAuthentifie(login, motDePasse)
+      .then((utilisateur) => {
+        if (utilisateur) {
+          const token = utilisateur.genereToken();
+          requete.session.token = token;
+          reponse.json({ utilisateur: utilisateur.toJSON() });
+        } else {
+          reponse.status(401).send("L'authentification a échoué.");
+        }
+      })
+      .catch(suite);
   });
 
   app.use(express.static('public'));

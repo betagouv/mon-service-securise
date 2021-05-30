@@ -1,3 +1,4 @@
+.env
 domain.key
 domain.crt
 node_modules/

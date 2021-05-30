@@ -23,5 +23,7 @@ module.exports = {
       exports: 'always-multiline',
       functions: 'ignore',
     }],
+    'no-param-reassign': ['error', { props: false }],
+    'no-return-assign': ['error', 'except-parens'],
   },
 };
