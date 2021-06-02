@@ -59,4 +59,18 @@ describe('Le dépôt de données', () => {
       })
       .catch((error) => done(error));
   });
+
+  it("retourne l'utilisateur associé à un identifiant donné", () => {
+    const fauxAdaptateurJWT = 'Un adaptateur';
+    const depot = DepotDonnees.creeDepot({
+      utilisateurs: [{
+        id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
+      }],
+    }, fauxAdaptateurJWT);
+
+    const utilisateur = depot.utilisateur('123');
+    expect(utilisateur).to.be.an(Utilisateur);
+    expect(utilisateur.id).to.equal('123');
+    expect(utilisateur.adaptateurJWT).to.equal(fauxAdaptateurJWT);
+  });
 });

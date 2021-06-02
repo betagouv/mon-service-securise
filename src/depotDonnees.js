@@ -8,6 +8,11 @@ const creeDepot = (donnees, adaptateurJWT) => {
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h));
 
+  const utilisateur = (identifiant) => {
+    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === identifiant);
+    return new Utilisateur(donneesUtilisateur, adaptateurJWT);
+  };
+
   const utilisateurAuthentifie = (login, motDePasse) => {
     const donneesUtilisateur = donnees.utilisateurs.find((u) => u.email === login);
     const motDePasseStocke = donneesUtilisateur && donneesUtilisateur.motDePasse;
@@ -23,7 +28,7 @@ const creeDepot = (donnees, adaptateurJWT) => {
       .catch((error) => error);
   };
 
-  return { homologations, utilisateurAuthentifie };
+  return { homologations, utilisateur, utilisateurAuthentifie };
 };
 
 const creeDepotVide = () => creeDepot({ utilisateurs: [], homologations: [] });

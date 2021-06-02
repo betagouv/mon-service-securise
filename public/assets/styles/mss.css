@@ -34,8 +34,6 @@ a.logo-mss {
 }
 
 a.connexion {
-  float: right;
-
   padding: 0.5em 1.5em 0.7em;
   background: #0d4269;
   border-radius: 33% / 100%;
@@ -46,6 +44,10 @@ a.connexion {
 
 a.connexion:hover {
   background: #1b7cc4;
+}
+
+.utilisateur-courant {
+  float: right;
 }
 
 main {

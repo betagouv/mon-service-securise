@@ -25,6 +25,7 @@ const creeServeur = (depotDonnees, adaptateurJWT,
   });
 
   app.get('/connexion', (requete, reponse) => {
+    requete.session = null;
     reponse.render('connexion');
   });
 
@@ -36,6 +37,14 @@ const creeServeur = (depotDonnees, adaptateurJWT,
     const token = adaptateurJWT.decode(requete.session.token);
     const homologations = depotDonnees.homologations(token.idUtilisateur).map((h) => h.toJSON());
     reponse.json({ homologations });
+  });
+
+  app.get('/api/utilisateurCourant', (requete, reponse) => {
+    const token = adaptateurJWT.decode(requete.session.token);
+    if (token) {
+      const utilisateur = depotDonnees.utilisateur(token.idUtilisateur).toJSON();
+      reponse.json({ utilisateur });
+    } else reponse.status(401).send("Pas d'utilisateur courant.");
   });
 
   app.post('/api/token', (requete, reponse, suite) => {

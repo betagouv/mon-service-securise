@@ -9,14 +9,26 @@ describe('Le serveur MSS', () => {
   const adaptateurJWT = {};
   const serveur = MSS.creeServeur(depotDonnees, adaptateurJWT, false);
 
-  before((done) => { serveur.ecoute(1234, done); });
+  beforeEach((done) => {
+    adaptateurJWT.decode = () => {};
+    serveur.ecoute(1234, done);
+  });
 
-  after(() => { serveur.arreteEcoute(); });
+  afterEach(() => { serveur.arreteEcoute(); });
 
   it('sert des pages HTML', (done) => {
     axios.get('http://localhost:1234/')
       .then((reponse) => {
         expect(reponse.status).to.equal(200);
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
+  it("déconnecte l'utilisateur courant quand demande d'authentification", (done) => {
+    axios.get('http://localhost:1234/connexion')
+      .then((reponse) => {
+        expect(reponse.headers['set-cookie'][0]).to.match(/token=;/);
         done();
       })
       .catch((error) => done(error));
