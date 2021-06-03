@@ -50,6 +50,14 @@ a.connexion:hover {
   float: right;
 }
 
+.nom-utilisateur-courant {
+  padding: 0 0 0 2em;
+
+  background-image: url(../images/icone_utilisateur.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 main {
   padding-bottom: 10em;
   border-top: solid 1px #ebedf0;
