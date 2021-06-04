@@ -48,14 +48,35 @@ a.connexion:hover {
 
 .utilisateur-courant {
   float: right;
+  position: relative;
+
+  cursor: pointer;
 }
 
 .nom-utilisateur-courant {
-  padding: 0 0 0 2em;
+  padding: 0 1em 0 2em;
 
   background-image: url(../images/icone_utilisateur.svg);
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.deconnexion {
+  position: absolute;
+  top: 2em;
+  left: 0;
+
+  padding: 1em;
+
+  border: solid 1px #ebedf0;
+  border-radius: 2px;
+  background: #fafbfc;
+
+  text-decoration: none;
+}
+
+.deconnexion:hover {
+  background: #fff;
 }
 
 main {

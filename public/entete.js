@@ -3,14 +3,26 @@ $(() => {
     '<a href="/connexion" class="connexion">Connexion</a>'
   );
 
-  const creeConteneurUtilisateurCourant = (donneesUtilisateur) => $(
-    `<div class='nom-utilisateur-courant'>${donneesUtilisateur.prenomNom}</div>`
+  const creeConteneurUtilisateurCourant = (donneesUtilisateur) => $(`
+<span class='nom-utilisateur-courant'>${donneesUtilisateur.prenomNom}</span>
+<img src="assets/images/icone_fleche_bas.svg">
+  `);
+
+  const creeLienDeconnexion = () => $(
+    '<a href="/connexion" class="deconnexion">Me déconnecter</a>'
   );
 
   const ajouteUtilisateurCourantDans = (selecteur, donneesUtilisateur) => {
     const $conteneur = $(selecteur);
     const $infosUtilisateurCourant = creeConteneurUtilisateurCourant(donneesUtilisateur);
-    $conteneur.append($infosUtilisateurCourant);
+    const $deconnexion = creeLienDeconnexion();
+    $deconnexion.toggle();
+
+    $conteneur.click(() => {
+      $deconnexion.toggle();
+    });
+
+    $conteneur.append($infosUtilisateurCourant, $deconnexion);
   };
 
   const ajouteBoutonConnexionDans = (selecteur) => {
