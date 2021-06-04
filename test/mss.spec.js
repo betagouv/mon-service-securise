@@ -72,7 +72,7 @@ describe('Le serveur MSS', () => {
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
           expect(reponse.headers['set-cookie'][0]).to.match(
-            /^token=.+; path=\/; samesite=strict; httponly$/
+            /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/
           );
           expect(reponse.data).to.eql({ utilisateur: { prenomNom: 'Jean Dupont' } });
           done();

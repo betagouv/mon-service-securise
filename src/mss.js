@@ -16,6 +16,7 @@ const creeServeur = (depotDonnees, adaptateurJWT,
 
   app.use(express.json());
   app.use(cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
     name: 'token',
     sameSite: true,
     secret: process.env.SECRET_COOKIE,
