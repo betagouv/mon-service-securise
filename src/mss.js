@@ -6,6 +6,12 @@ const creeServeur = (depotDonnees, adaptateurJWT,
   avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
 
+  const verificationAuthentification = (requete, reponse, suite) => {
+    const token = adaptateurJWT.decode(requete.session.token);
+    if (token) requete.idUtilisateurCourant = token.idUtilisateur;
+    suite();
+  };
+
   const app = express();
 
   app.use(express.json());
@@ -29,22 +35,21 @@ const creeServeur = (depotDonnees, adaptateurJWT,
     reponse.render('connexion');
   });
 
-  app.get('/homologations', (requete, reponse) => {
-    const token = adaptateurJWT.decode(requete.session.token);
-    if (token) reponse.render('homologations');
+  app.get('/homologations', verificationAuthentification, (requete, reponse) => {
+    if (requete.idUtilisateurCourant) reponse.render('homologations');
     else reponse.redirect('/connexion');
   });
 
-  app.get('/api/homologations', (requete, reponse) => {
-    const token = adaptateurJWT.decode(requete.session.token);
-    const homologations = depotDonnees.homologations(token.idUtilisateur).map((h) => h.toJSON());
+  app.get('/api/homologations', verificationAuthentification, (requete, reponse) => {
+    const homologations = depotDonnees.homologations(requete.idUtilisateurCourant)
+      .map((h) => h.toJSON());
     reponse.json({ homologations });
   });
 
-  app.get('/api/utilisateurCourant', (requete, reponse) => {
-    const token = adaptateurJWT.decode(requete.session.token);
-    if (token) {
-      const utilisateur = depotDonnees.utilisateur(token.idUtilisateur).toJSON();
+  app.get('/api/utilisateurCourant', verificationAuthentification, (requete, reponse) => {
+    const idUtilisateur = requete.idUtilisateurCourant;
+    if (idUtilisateur) {
+      const utilisateur = depotDonnees.utilisateur(idUtilisateur).toJSON();
       reponse.json({ utilisateur });
     } else reponse.status(401).send("Pas d'utilisateur courant.");
   });
