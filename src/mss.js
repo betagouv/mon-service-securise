@@ -30,7 +30,9 @@ const creeServeur = (depotDonnees, adaptateurJWT,
   });
 
   app.get('/homologations', (requete, reponse) => {
-    reponse.render('homologations');
+    const token = adaptateurJWT.decode(requete.session.token);
+    if (token) reponse.render('homologations');
+    else reponse.redirect('/connexion');
   });
 
   app.get('/api/homologations', (requete, reponse) => {

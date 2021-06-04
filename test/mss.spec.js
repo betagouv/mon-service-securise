@@ -107,5 +107,14 @@ describe('Le serveur MSS', () => {
         })
         .catch((error) => done(error));
     });
+
+    it("redirige l'utilisateur vers la mire de login", (done) => {
+      axios.get('http://localhost:1234/homologations')
+        .then((reponse) => {
+          expect(reponse.request.path).to.equal('/connexion');
+          done();
+        })
+        .catch((error) => done(error));
+    });
   });
 });
