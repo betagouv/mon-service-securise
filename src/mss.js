@@ -8,8 +8,11 @@ const creeServeur = (depotDonnees, adaptateurJWT,
 
   const verificationAuthentification = (requete, reponse, suite) => {
     const token = adaptateurJWT.decode(requete.session.token);
-    if (token) requete.idUtilisateurCourant = token.idUtilisateur;
-    suite();
+    if (!token) reponse.redirect('/connexion');
+    else {
+      requete.idUtilisateurCourant = token.idUtilisateur;
+      suite();
+    }
   };
 
   const app = express();
@@ -37,8 +40,7 @@ const creeServeur = (depotDonnees, adaptateurJWT,
   });
 
   app.get('/homologations', verificationAuthentification, (requete, reponse) => {
-    if (requete.idUtilisateurCourant) reponse.render('homologations');
-    else reponse.redirect('/connexion');
+    reponse.render('homologations');
   });
 
   app.get('/api/homologations', verificationAuthentification, (requete, reponse) => {
