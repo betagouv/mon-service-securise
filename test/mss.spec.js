@@ -51,6 +51,24 @@ describe('Le serveur MSS', () => {
       .catch((error) => done(error));
   });
 
+  it("demande au dépôt de données d'enregistrer les nouvelles homologations", (done) => {
+    adaptateurJWT.decode = () => ({ idUtilisateur: '123' });
+
+    depotDonnees.nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
+      expect(idUtilisateur).to.equal('123');
+      expect(donneesHomologation).to.eql({ nomService: 'Super Service' });
+      return '456';
+    };
+
+    axios.post('http://localhost:1234/api/homologation', { nomService: 'Super Service' })
+      .then((reponse) => {
+        expect(reponse.status).to.equal(200);
+        expect(reponse.data).to.eql({ idHomologation: '456' });
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
   describe("quand l'utilisateur est correctement authentifié", () => {
     before(() => {
       const utilisateur = {

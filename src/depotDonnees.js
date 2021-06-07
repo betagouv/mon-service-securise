@@ -3,10 +3,18 @@ const bcrypt = require('bcrypt');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
-const creeDepot = (donnees, adaptateurJWT) => {
+const creeDepot = (donnees, adaptateurJWT, adaptateurUUID) => {
   const homologations = (idUtilisateur) => donnees.homologations
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h));
+
+  const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
+    donneesHomologation.id = adaptateurUUID.genereUUID();
+    donneesHomologation.idUtilisateur = idUtilisateur;
+    donnees.homologations.push(donneesHomologation);
+
+    return donneesHomologation.id;
+  };
 
   const utilisateur = (identifiant) => {
     const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === identifiant);
@@ -28,7 +36,9 @@ const creeDepot = (donnees, adaptateurJWT) => {
       .catch((error) => error);
   };
 
-  return { homologations, utilisateur, utilisateurAuthentifie };
+  return {
+    homologations, nouvelleHomologation, utilisateur, utilisateurAuthentifie,
+  };
 };
 
 const creeDepotVide = () => creeDepot({ utilisateurs: [], homologations: [] });

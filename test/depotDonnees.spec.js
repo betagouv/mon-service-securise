@@ -73,4 +73,33 @@ describe('Le dépôt de données', () => {
     expect(utilisateur.id).to.equal('123');
     expect(utilisateur.adaptateurJWT).to.equal(fauxAdaptateurJWT);
   });
+
+  describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
+    const adaptateurUUID = { genereUUID: () => {} };
+    let depot;
+
+    beforeEach(() => {
+      depot = DepotDonnees.creeDepot({ homologations: [] }, "Pas besoin d'adaptateur JWT", adaptateurUUID);
+    });
+
+    it('ajoute la nouvelle homologation au dépôt', () => {
+      expect(depot.homologations('123').length).to.equal(0);
+
+      depot.nouvelleHomologation('123', { nomService: 'Super Service' });
+
+      const homologations = depot.homologations('123');
+      expect(homologations.length).to.equal(1);
+      expect(homologations[0].nomService).to.equal('Super Service');
+    });
+
+    it("génère un UUID pour l'homologation créée", () => {
+      adaptateurUUID.genereUUID = () => '11111111-1111-1111-1111-111111111111';
+
+      const idHomologation = depot.nouvelleHomologation('123', { nomService: 'Super Service' });
+      expect(idHomologation).to.equal('11111111-1111-1111-1111-111111111111');
+
+      const homologations = depot.homologations('123');
+      expect(homologations[0].id).to.equal('11111111-1111-1111-1111-111111111111');
+    });
+  });
 });

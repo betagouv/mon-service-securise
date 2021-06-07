@@ -49,6 +49,15 @@ const creeServeur = (depotDonnees, adaptateurJWT,
     reponse.json({ homologations });
   });
 
+  app.post('/api/homologation', verificationAuthentification, (requete, reponse) => {
+    const { nomService } = requete.body;
+    const idHomologation = depotDonnees.nouvelleHomologation(
+      requete.idUtilisateurCourant, { nomService }
+    );
+
+    reponse.json({ idHomologation });
+  });
+
   app.get('/api/utilisateurCourant', verificationAuthentification, (requete, reponse) => {
     const idUtilisateur = requete.idUtilisateurCourant;
     if (idUtilisateur) {
