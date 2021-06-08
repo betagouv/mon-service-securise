@@ -44,6 +44,10 @@ const creeServeur = (depotDonnees, adaptateurJWT,
     reponse.render('homologations');
   });
 
+  app.get('/homologation/creation', verificationAuthentification, (requete, reponse) => {
+    reponse.render('homologation/creation');
+  });
+
   app.get('/homologation/:id', verificationAuthentification, (requete, reponse) => {
     const homologation = depotDonnees.homologation(requete.params.id);
 
