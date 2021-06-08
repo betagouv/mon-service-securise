@@ -81,7 +81,7 @@ const creeServeur = (depotDonnees, adaptateurJWT,
       .catch(suite);
   });
 
-  app.use(express.static('public'));
+  app.use('/statique', express.static('public'));
 
   const ecoute = (port, succes) => {
     serveur = app.listen(port, succes);
