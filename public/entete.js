@@ -8,14 +8,17 @@ $(() => {
 <img src="/statique/assets/images/icone_fleche_bas.svg">
   `);
 
-  const creeLienDeconnexion = () => $(
-    '<a href="/connexion" class="deconnexion">Me déconnecter</a>'
-  );
+  const creeMenu = () => $(`
+<div class="menu">
+  <a href="/homologations">Mes homologations</a>
+  <a href="/connexion">Me déconnecter</a>
+</div>
+  `);
 
   const ajouteUtilisateurCourantDans = (selecteur, donneesUtilisateur) => {
     const $conteneur = $(selecteur);
     const $infosUtilisateurCourant = creeConteneurUtilisateurCourant(donneesUtilisateur);
-    const $deconnexion = creeLienDeconnexion();
+    const $deconnexion = creeMenu();
     $deconnexion.toggle();
 
     $conteneur.click(() => {

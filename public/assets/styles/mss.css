@@ -61,10 +61,11 @@ a.connexion:hover {
   background-size: contain;
 }
 
-.deconnexion {
+.menu {
   position: absolute;
   top: 2em;
   left: 0;
+  width: 10em;
 
   padding: 1em;
 
@@ -75,8 +76,14 @@ a.connexion:hover {
   text-decoration: none;
 }
 
-.deconnexion:hover {
-  background: #fff;
+.menu a {
+  display: block;
+
+  color: #0d4269;
+}
+
+.menu a:hover {
+  color: #1b7cc4;
 }
 
 main {
