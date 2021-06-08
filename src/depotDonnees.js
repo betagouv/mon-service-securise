@@ -4,6 +4,10 @@ const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (donnees, adaptateurJWT, adaptateurUUID) => {
+  const homologation = (idHomologation) => new Homologation(
+    donnees.homologations.find((h) => h.id === idHomologation)
+  );
+
   const homologations = (idUtilisateur) => donnees.homologations
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h));
@@ -37,7 +41,7 @@ const creeDepot = (donnees, adaptateurJWT, adaptateurUUID) => {
   };
 
   return {
-    homologations, nouvelleHomologation, utilisateur, utilisateurAuthentifie,
+    homologation, homologations, nouvelleHomologation, utilisateur, utilisateurAuthentifie,
   };
 };
 

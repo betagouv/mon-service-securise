@@ -1,5 +1,6 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
+
 require('dotenv').config();
 
 const creeServeur = (depotDonnees, adaptateurJWT,
@@ -41,6 +42,12 @@ const creeServeur = (depotDonnees, adaptateurJWT,
 
   app.get('/homologations', verificationAuthentification, (requete, reponse) => {
     reponse.render('homologations');
+  });
+
+  app.get('/homologation/:id', verificationAuthentification, (requete, reponse) => {
+    const homologation = depotDonnees.homologation(requete.params.id);
+
+    reponse.render('homologation', { homologation });
   });
 
   app.get('/api/homologations', verificationAuthentification, (requete, reponse) => {

@@ -3,6 +3,7 @@ const expect = require('expect.js');
 
 const MSS = require('../src/mss');
 const DepotDonnees = require('../src/depotDonnees');
+const Homologation = require('../src/modeles/homologation');
 
 describe('Le serveur MSS', () => {
   const depotDonnees = DepotDonnees.creeDepotVide();
@@ -46,6 +47,23 @@ describe('Le serveur MSS', () => {
     axios.get('http://localhost:1234/api/homologations')
       .then((reponse) => {
         expect(reponse.status).to.equal(200);
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
+  it('sait obtenir une homologation à partir de son identifiant', (done) => {
+    adaptateurJWT.decode = () => ({ idUtilisateur: '123' });
+
+    depotDonnees.homologation = (idHomologation) => {
+      expect(idHomologation).to.equal('456');
+      return new Homologation({ id: '456', idUtilisateur: '123', nomService: 'Super Service' });
+    };
+
+    axios.get('http://localhost:1234/homologation/456')
+      .then((reponse) => {
+        expect(reponse.status).to.equal(200);
+        expect(reponse.data).to.contain('Super Service');
         done();
       })
       .catch((error) => done(error));

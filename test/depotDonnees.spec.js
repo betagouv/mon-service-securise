@@ -37,6 +37,18 @@ describe('Le dépôt de données', () => {
     expect(homologations[0].id).to.equal('123');
   });
 
+  it('peut retrouver une homologation à partir de son identifiant', () => {
+    const depot = DepotDonnees.creeDepot({
+      homologations: [
+        { id: '789', idUtilisateur: '999', nomService: 'Un autre service' },
+      ],
+    });
+
+    const homologation = depot.homologation('789');
+    expect(homologation).to.be.a(Homologation);
+    expect(homologation.id).to.equal('789');
+  });
+
   it("retourne l'utilisateur authentifié", (done) => {
     const adaptateurJWT = {};
 

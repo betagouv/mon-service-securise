@@ -1,9 +1,11 @@
 /* eslint-disable func-names */
 
 (function () {
-  const creeConteneurHomologation = (donneesHomologation) => $(
-    `<a class="homologation existante" href="#"><div>${donneesHomologation.nomService}</div></a>`
-  );
+  const creeConteneurHomologation = (donneesHomologation) => $(`
+<a class="homologation existante" href="/homologation/${donneesHomologation.id}">
+  <div>${donneesHomologation.nomService}</div>
+</a>
+  `);
 
   const creeConteneursHomologation = (donneesHomologations) => donneesHomologations.reduce(
     ($acc, donneesHomologation) => {
