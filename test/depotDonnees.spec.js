@@ -7,9 +7,14 @@ const Utilisateur = require('../src/modeles/utilisateur');
 
 describe('Le dépôt de données', () => {
   describe('quand il est vide', () => {
-    it('ne retourne aucune homologation', () => {
+    it('ne retourne aucune homologation pour un utilisateur donné', () => {
       const depot = DepotDonnees.creeDepotVide();
       expect(depot.homologations('456')).to.eql([]);
+    });
+
+    it('ne retourne rien si on cherche une homologation à partir de son identifiant', () => {
+      const depot = DepotDonnees.creeDepotVide();
+      expect(depot.homologation('123')).to.be(undefined);
     });
 
     it("n'authentifie pas l'utilisateur", (done) => {

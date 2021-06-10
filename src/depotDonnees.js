@@ -4,9 +4,10 @@ const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (donnees, adaptateurJWT, adaptateurUUID) => {
-  const homologation = (idHomologation) => new Homologation(
-    donnees.homologations.find((h) => h.id === idHomologation)
-  );
+  const homologation = (idHomologation) => {
+    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
+    return donneesHomologation ? new Homologation(donneesHomologation) : undefined;
+  };
 
   const homologations = (idUtilisateur) => donnees.homologations
     .filter((h) => h.idUtilisateur === idUtilisateur)
