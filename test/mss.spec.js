@@ -7,7 +7,18 @@ const Homologation = require('../src/modeles/homologation');
 
 describe('Le serveur MSS', () => {
   let idUtilisateurCourant;
+  let suppressionCookieEffectuee;
   let verificationJWTMenee;
+
+  const verifieRequeteExigeSuppressionCookie = (requete, done) => {
+    expect(suppressionCookieEffectuee).to.be(false);
+    axios(requete)
+      .then(() => {
+        expect(suppressionCookieEffectuee).to.be(true);
+        done();
+      })
+      .catch((erreur) => done(erreur));
+  };
 
   const verifieRequeteExigeJWT = (requete, done) => {
     expect(verificationJWTMenee).to.be(false);
@@ -29,6 +40,10 @@ describe('Le serveur MSS', () => {
   };
 
   const middleware = {
+    suppressionCookie: (requete, reponse, suite) => {
+      suppressionCookieEffectuee = true;
+      suite();
+    },
     verificationJWT: (requete, reponse, suite) => {
       requete.idUtilisateurCourant = idUtilisateurCourant;
       verificationJWTMenee = true;
@@ -41,6 +56,7 @@ describe('Le serveur MSS', () => {
 
   beforeEach((done) => {
     idUtilisateurCourant = undefined;
+    suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
 
     depotDonnees = DepotDonnees.creeDepotVide();
@@ -59,13 +75,10 @@ describe('Le serveur MSS', () => {
       .catch((erreur) => done(erreur));
   });
 
-  it("déconnecte l'utilisateur courant quand demande d'authentification", (done) => {
-    axios.get('http://localhost:1234/connexion')
-      .then((reponse) => {
-        expect(reponse.headers['set-cookie'][0]).to.match(/token=;/);
-        done();
-      })
-      .catch((erreur) => done(erreur));
+  describe('quand requête GET sur `/connexion`', () => {
+    it("déconnecte l'utilisateur courant", (done) => {
+      verifieRequeteExigeSuppressionCookie('http://localhost:1234/connexion', done);
+    });
   });
 
   describe('quand requête GET sur `/api/homologations`', () => {

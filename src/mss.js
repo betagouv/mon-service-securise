@@ -26,8 +26,7 @@ const creeServeur = (depotDonnees, middleware,
     reponse.render('index');
   });
 
-  app.get('/connexion', (requete, reponse) => {
-    requete.session = null;
+  app.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
     reponse.render('connexion');
   });
 

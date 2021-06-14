@@ -8,7 +8,12 @@ const middleware = (adaptateurJWT) => {
     }
   };
 
-  return { verificationJWT };
+  const suppressionCookie = (requete, reponse, suite) => {
+    requete.session = null;
+    suite();
+  };
+
+  return { suppressionCookie, verificationJWT };
 };
 
 module.exports = middleware;
