@@ -93,7 +93,7 @@ describe('Le serveur MSS', () => {
           expect(homologation.id).to.equal('456');
           done();
         })
-        .catch((error) => done(error));
+        .catch((erreur) => done(erreur));
     });
   });
 
@@ -130,7 +130,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.contain('Super Service');
           done();
         })
-        .catch((error) => done(error));
+        .catch((erreur) => done(erreur));
     });
 
     it("retourne une erreur HTTP 403 si l'homologation n'est pas liée à l'utilisateur courant", (done) => {
@@ -147,7 +147,7 @@ describe('Le serveur MSS', () => {
           expect(erreur.response.data).to.equal("Accès à l'homologation refusé");
           done();
         })
-        .catch((error) => done(error));
+        .catch((erreur) => done(erreur));
     });
   });
 
@@ -184,7 +184,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch((error) => done(error));
+        .catch((erreur) => done(erreur));
     });
   });
 
@@ -215,7 +215,7 @@ describe('Le serveur MSS', () => {
             expect(reponse.data).to.eql({ utilisateur: { prenomNom: 'Jean Dupont' } });
             done();
           })
-          .catch((error) => done(error));
+          .catch((erreur) => done(erreur));
       });
 
       it("retourne les infos de l'utilisateur", (done) => {
@@ -224,7 +224,7 @@ describe('Le serveur MSS', () => {
             expect(reponse.data).to.eql({ utilisateur: { prenomNom: 'Jean Dupont' } });
             done();
           })
-          .catch((error) => done(error));
+          .catch((erreur) => done(erreur));
       });
     });
 
@@ -238,12 +238,12 @@ describe('Le serveur MSS', () => {
       it('retourne un HTTP 401', (done) => {
         axios.post('http://localhost:1234/api/token', { login: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' })
           .then(() => done('Réponse OK inattendue.'))
-          .catch((error) => {
-            expect(error.response.status).to.equal(401);
-            expect(error.response.data).to.equal("L'authentification a échoué.");
+          .catch((erreur) => {
+            expect(erreur.response.status).to.equal(401);
+            expect(erreur.response.data).to.equal("L'authentification a échoué.");
             done();
           })
-          .catch((error) => done(error));
+          .catch((erreur) => done(erreur));
       });
     });
   });
