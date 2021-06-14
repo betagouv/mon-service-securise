@@ -132,6 +132,23 @@ describe('Le serveur MSS', () => {
         })
         .catch((error) => done(error));
     });
+
+    it("retourne une erreur HTTP 403 si l'homologation n'est pas liée à l'utilisateur courant", (done) => {
+      idUtilisateurCourant = '123';
+
+      depotDonnees.homologation = () => new Homologation({
+        id: '456', idUtilisateur: '999', nomService: 'Super Service',
+      });
+
+      axios.get('http://localhost:1234/homologation/456')
+        .then(() => done('Réponse HTTP OK inattendue'))
+        .catch((erreur) => {
+          expect(erreur.response.status).to.equal(403);
+          expect(erreur.response.data).to.equal("Accès à l'homologation refusé");
+          done();
+        })
+        .catch((error) => done(error));
+    });
   });
 
   describe('quand requête POST sur `/api/homologation`', () => {

@@ -41,8 +41,10 @@ const creeServeur = (depotDonnees, middleware,
 
   app.get('/homologation/:id', middleware.verificationJWT, (requete, reponse) => {
     const homologation = depotDonnees.homologation(requete.params.id);
-    if (homologation) reponse.render('homologation', { homologation });
-    else reponse.status(404).send('Homologation non trouvée');
+    if (!homologation) reponse.status(404).send('Homologation non trouvée');
+    else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
+      reponse.status(403).send("Accès à l'homologation refusé");
+    } else reponse.render('homologation', { homologation });
   });
 
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
