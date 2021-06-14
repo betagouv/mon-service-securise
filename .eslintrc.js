@@ -25,5 +25,11 @@ module.exports = {
     }],
     'no-param-reassign': ['error', { props: false }],
     'no-return-assign': ['error', 'except-parens'],
+    'object-curly-newline': ['error', {
+      ObjectExpression: { consistent: true },
+      ObjectPattern: { consistent: true },
+      ImportDeclaration: { consistent: true },
+      ExportDeclaration: { consistent: true },
+    }],
   },
 };

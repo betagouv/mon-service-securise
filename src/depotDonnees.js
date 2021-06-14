@@ -21,9 +21,19 @@ const creeDepot = (donnees, adaptateurJWT, adaptateurUUID) => {
     return donneesHomologation.id;
   };
 
+  const nouvelUtilisateur = (donneesUtilisateur) => {
+    donneesUtilisateur.id = adaptateurUUID.genereUUID();
+    return bcrypt.hash(donneesUtilisateur.motDePasse, 10)
+      .then((hash) => {
+        donneesUtilisateur.motDePasse = hash;
+        donnees.utilisateurs.push(donneesUtilisateur);
+        return new Utilisateur(donneesUtilisateur, adaptateurJWT);
+      });
+  };
+
   const utilisateur = (identifiant) => {
     const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === identifiant);
-    return new Utilisateur(donneesUtilisateur, adaptateurJWT);
+    return donneesUtilisateur ? new Utilisateur(donneesUtilisateur, adaptateurJWT) : undefined;
   };
 
   const utilisateurAuthentifie = (login, motDePasse) => {
@@ -42,7 +52,12 @@ const creeDepot = (donnees, adaptateurJWT, adaptateurUUID) => {
   };
 
   return {
-    homologation, homologations, nouvelleHomologation, utilisateur, utilisateurAuthentifie,
+    homologation,
+    homologations,
+    nouvelleHomologation,
+    nouvelUtilisateur,
+    utilisateur,
+    utilisateurAuthentifie,
   };
 };
 

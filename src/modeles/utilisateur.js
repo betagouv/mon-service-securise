@@ -1,8 +1,9 @@
 class Utilisateur {
-  constructor({ id, prenom, nom }, adaptateurJWT) {
+  constructor({ id, prenom, nom, email }, adaptateurJWT) {
     this.id = id;
     this.prenom = prenom;
     this.nom = nom;
+    this.email = email;
     this.adaptateurJWT = adaptateurJWT;
   }
 
