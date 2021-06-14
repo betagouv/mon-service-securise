@@ -3,18 +3,9 @@ const express = require('express');
 
 require('dotenv').config();
 
-const creeServeur = (depotDonnees, adaptateurJWT,
+const creeServeur = (depotDonnees, middleware,
   avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
-
-  const verificationAuthentification = (requete, reponse, suite) => {
-    const token = adaptateurJWT.decode(requete.session.token);
-    if (!token) reponse.redirect('/connexion');
-    else {
-      requete.idUtilisateurCourant = token.idUtilisateur;
-      suite();
-    }
-  };
 
   const app = express();
 
@@ -40,36 +31,38 @@ const creeServeur = (depotDonnees, adaptateurJWT,
     reponse.render('connexion');
   });
 
-  app.get('/homologations', verificationAuthentification, (requete, reponse) => {
+  app.get('/homologations', middleware.verificationJWT, (requete, reponse) => {
     reponse.render('homologations');
   });
 
-  app.get('/homologation/creation', verificationAuthentification, (requete, reponse) => {
+  app.get('/homologation/creation', middleware.verificationJWT, (requete, reponse) => {
     reponse.render('homologation/creation');
   });
 
-  app.get('/homologation/:id', verificationAuthentification, (requete, reponse) => {
+  app.get('/homologation/:id', middleware.verificationJWT, (requete, reponse) => {
     const homologation = depotDonnees.homologation(requete.params.id);
-
-    reponse.render('homologation', { homologation });
+    if (homologation) reponse.render('homologation', { homologation });
+    else reponse.status(404).send('Homologation non trouvée');
   });
 
-  app.get('/api/homologations', verificationAuthentification, (requete, reponse) => {
+  app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
     const homologations = depotDonnees.homologations(requete.idUtilisateurCourant)
       .map((h) => h.toJSON());
     reponse.json({ homologations });
   });
 
-  app.post('/api/homologation', verificationAuthentification, (requete, reponse) => {
-    const { nomService } = requete.body;
-    const idHomologation = depotDonnees.nouvelleHomologation(
-      requete.idUtilisateurCourant, { nomService }
-    );
+  app.post('/api/homologation', middleware.verificationJWT, (requete, reponse) => {
+    if (Object.keys(requete.body).length > 0) {
+      const { nomService } = requete.body;
+      const idHomologation = depotDonnees.nouvelleHomologation(
+        requete.idUtilisateurCourant, { nomService }
+      );
 
-    reponse.json({ idHomologation });
+      reponse.json({ idHomologation });
+    } else reponse.status(422).send("Données insuffisantes pour créer l'homologation");
   });
 
-  app.get('/api/utilisateurCourant', verificationAuthentification, (requete, reponse) => {
+  app.get('/api/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {
     const idUtilisateur = requete.idUtilisateurCourant;
     if (idUtilisateur) {
       const utilisateur = depotDonnees.utilisateur(idUtilisateur).toJSON();
