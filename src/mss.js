@@ -30,6 +30,10 @@ const creeServeur = (depotDonnees, middleware,
     reponse.render('connexion');
   });
 
+  app.get('/inscription', middleware.suppressionCookie, (requete, reponse) => {
+    reponse.render('inscription');
+  });
+
   app.get('/homologations', middleware.verificationJWT, (requete, reponse) => {
     reponse.render('homologations');
   });
@@ -61,6 +65,17 @@ const creeServeur = (depotDonnees, middleware,
 
       reponse.json({ idHomologation });
     } else reponse.status(422).send("Données insuffisantes pour créer l'homologation");
+  });
+
+  app.post('/api/utilisateur', (requete, reponse, suite) => {
+    const { prenom, nom, email, motDePasse } = requete.body;
+    depotDonnees.nouvelUtilisateur({ prenom, nom, email, motDePasse })
+      .then((utilisateur) => {
+        requete.session.token = utilisateur.genereToken();
+        const idUtilisateur = utilisateur.id;
+        reponse.json({ idUtilisateur });
+      })
+      .catch(suite);
   });
 
   app.get('/api/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {

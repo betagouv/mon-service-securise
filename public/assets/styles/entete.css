@@ -1,0 +1,94 @@
+header {
+  padding: 1em 0 1.5em;
+}
+
+header a {
+  display: inline-block;
+
+  text-decoration: none;
+}
+
+a.logo-mss {
+  padding: 0 0 0 2em;
+
+  background-image: url(../images/logo_mss.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  color: #0d4269;
+}
+
+a.connexion, a.inscription {
+  margin-left: 1em;
+  padding: 0.5em 1.5em 0.7em;
+  background: #0d4269;
+  border: 0.5px solid #0d4269;
+  border-radius: 33% / 100%;
+
+  font-size: 0.7em;
+  color: #fff;
+}
+
+a.connexion {
+  background: #0d4269;
+
+  color: #fff;
+}
+
+a.inscription {
+  background: #fff;
+
+  color: #0d4269;
+}
+
+a.connexion:hover {
+  background: #1b7cc4;
+}
+
+a.inscription:hover {
+  border: 0.5px solid #1b7cc4;
+
+  color: #1b7cc4;
+}
+
+.utilisateur-courant {
+  float: right;
+  position: relative;
+
+  cursor: pointer;
+}
+
+.nom-utilisateur-courant {
+  padding: 0 1em 0 2em;
+
+  background-image: url(../images/icone_utilisateur.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.menu {
+  position: absolute;
+  top: 2em;
+  left: 0;
+  width: 10em;
+
+  padding: 1em;
+
+  border: solid 1px #ebedf0;
+  border-radius: 2px;
+  background: #fafbfc;
+
+  text-decoration: none;
+}
+
+.menu a {
+  display: block;
+
+  color: #0d4269;
+}
+
+.menu a:hover {
+  color: #1b7cc4;
+}
+
+

@@ -1,7 +1,8 @@
 $(() => {
-  const creeBoutonConnexion = () => $(
-    '<a href="/connexion" class="connexion">Connexion</a>'
-  );
+  const creeBoutonConnexion = () => $(`
+<a href="/inscription" class="inscription">Inscription</a>
+<a href="/connexion" class="connexion">Connexion</a>
+  `);
 
   const creeConteneurUtilisateurCourant = (donneesUtilisateur) => $(`
 <span class='nom-utilisateur-courant'>${donneesUtilisateur.prenomNom}</span>

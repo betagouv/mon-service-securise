@@ -81,6 +81,12 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête GET sur `/inscription`', () => {
+    it("déconnecte l'utilisateur courant", (done) => {
+      verifieRequeteExigeSuppressionCookie('http://localhost:1234/inscription', done);
+    });
+  });
+
   describe('quand requête GET sur `/api/homologations`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT(
@@ -195,6 +201,42 @@ describe('Le serveur MSS', () => {
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch((erreur) => done(erreur));
+    });
+  });
+
+  describe('quand requête POST sur `/api/utilisateur`', () => {
+    const utilisateur = { id: '123', genereToken: () => 'un token' };
+
+    it("demande au dépôt de créer l'utilisateur", (done) => {
+      const donneesRequete = {
+        prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345',
+      };
+
+      depotDonnees.nouvelUtilisateur = (donneesUtilisateur) => {
+        expect(donneesUtilisateur).to.eql(donneesRequete);
+        return new Promise((resolve) => resolve(utilisateur));
+      };
+
+      axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idUtilisateur: '123' });
+          done();
+        })
+        .catch((erreur) => done(erreur));
+    });
+
+    it('dépose le jeton dans un cookie', (done) => {
+      depotDonnees.nouvelUtilisateur = () => new Promise((resolve) => resolve(utilisateur));
+
+      axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
+        .then((reponse) => {
+          expect(reponse.headers['set-cookie'][0]).to.match(
+            /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/
+          );
           done();
         })
         .catch((erreur) => done(erreur));
