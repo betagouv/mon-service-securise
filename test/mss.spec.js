@@ -39,6 +39,13 @@ describe('Le serveur MSS', () => {
       .catch((erreur) => done(erreur));
   };
 
+  const verifieJetonDepose = (reponse, done) => {
+    expect(reponse.headers['set-cookie'][0]).to.match(
+      /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/
+    );
+    done();
+  };
+
   const middleware = {
     suppressionCookie: (requete, reponse, suite) => {
       suppressionCookieEffectuee = true;
@@ -233,12 +240,7 @@ describe('Le serveur MSS', () => {
       depotDonnees.nouvelUtilisateur = () => new Promise((resolve) => resolve(utilisateur));
 
       axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
-        .then((reponse) => {
-          expect(reponse.headers['set-cookie'][0]).to.match(
-            /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/
-          );
-          done();
-        })
+        .then((reponse) => verifieJetonDepose(reponse, done))
         .catch((erreur) => done(erreur));
     });
   });
@@ -260,16 +262,19 @@ describe('Le serveur MSS', () => {
         );
       });
 
-      it('pose un cookie', (done) => {
+      it("retourne les informations de l'utilisateur", (done) => {
         axios.post('http://localhost:1234/api/token', { login: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' })
           .then((reponse) => {
             expect(reponse.status).to.equal(200);
-            expect(reponse.headers['set-cookie'][0]).to.match(
-              /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/
-            );
             expect(reponse.data).to.eql({ utilisateur: { prenomNom: 'Jean Dupont' } });
             done();
           })
+          .catch((erreur) => done(erreur));
+      });
+
+      it('pose un cookie', (done) => {
+        axios.post('http://localhost:1234/api/token', { login: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' })
+          .then((reponse) => verifieJetonDepose(reponse, done))
           .catch((erreur) => done(erreur));
       });
 
