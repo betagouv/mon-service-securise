@@ -1,6 +1,8 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 
+const { ErreurUtilisateurExistant } = require('./erreurs');
+
 require('dotenv').config();
 
 const creeServeur = (depotDonnees, middleware,
@@ -69,13 +71,19 @@ const creeServeur = (depotDonnees, middleware,
 
   app.post('/api/utilisateur', (requete, reponse, suite) => {
     const { prenom, nom, email, motDePasse } = requete.body;
-    depotDonnees.nouvelUtilisateur({ prenom, nom, email, motDePasse })
-      .then((utilisateur) => {
-        requete.session.token = utilisateur.genereToken();
-        const idUtilisateur = utilisateur.id;
-        reponse.json({ idUtilisateur });
-      })
-      .catch(suite);
+    try {
+      depotDonnees.nouvelUtilisateur({ prenom, nom, email, motDePasse })
+        .then((utilisateur) => {
+          requete.session.token = utilisateur.genereToken();
+          const idUtilisateur = utilisateur.id;
+          reponse.json({ idUtilisateur });
+        })
+        .catch(suite);
+    } catch (e) {
+      if (e instanceof ErreurUtilisateurExistant) {
+        reponse.status(422).send('Utilisateur déjà existant pour cette adresse email.');
+      } else throw e;
+    }
   });
 
   app.get('/api/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {

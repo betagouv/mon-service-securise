@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 
+const { ErreurUtilisateurExistant } = require('./erreurs');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
@@ -22,6 +23,10 @@ const creeDepot = (donnees, adaptateurJWT, adaptateurUUID) => {
   };
 
   const nouvelUtilisateur = (donneesUtilisateur) => {
+    const utilisateurExiste = (email) => !!(donnees.utilisateurs.find((u) => u.email === email));
+
+    if (utilisateurExiste(donneesUtilisateur.email)) throw new ErreurUtilisateurExistant();
+
     donneesUtilisateur.id = adaptateurUUID.genereUUID();
     return bcrypt.hash(donneesUtilisateur.motDePasse, 10)
       .then((hash) => {

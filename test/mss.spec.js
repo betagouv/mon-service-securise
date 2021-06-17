@@ -1,6 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
+const { ErreurUtilisateurExistant } = require('../src/erreurs');
 const MSS = require('../src/mss');
 const DepotDonnees = require('../src/depotDonnees');
 const Homologation = require('../src/modeles/homologation');
@@ -241,6 +242,19 @@ describe('Le serveur MSS', () => {
 
       axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
         .then((reponse) => verifieJetonDepose(reponse, done))
+        .catch((erreur) => done(erreur));
+    });
+
+    it("génère une erreur HTTP 422 si l'utilisateur existe déjà", (done) => {
+      depotDonnees.nouvelUtilisateur = () => { throw new ErreurUtilisateurExistant(); };
+
+      axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
+        .then(() => done('Reponse HTTP OK inattendue'))
+        .catch((erreur) => {
+          expect(erreur.response.status).to.equal(422);
+          expect(erreur.response.data).to.equal('Utilisateur déjà existant pour cette adresse email.');
+          done();
+        })
         .catch((erreur) => done(erreur));
     });
   });

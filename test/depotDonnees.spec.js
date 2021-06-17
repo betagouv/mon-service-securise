@@ -2,6 +2,7 @@ const expect = require('expect.js');
 const bcrypt = require('bcrypt');
 
 const DepotDonnees = require('../src/depotDonnees');
+const { ErreurUtilisateurExistant } = require('../src/erreurs');
 const Homologation = require('../src/modeles/homologation');
 const Utilisateur = require('../src/modeles/utilisateur');
 
@@ -130,52 +131,70 @@ describe('Le dépôt de données', () => {
     const adaptateurJWT = 'un adaptateur JWT';
     let depot;
 
-    beforeEach(() => {
-      depot = DepotDonnees.creeDepot({ utilisateurs: [] }, adaptateurJWT, adaptateurUUID);
+    describe("quand l'utilisateur n'existe pas déjà", () => {
+      beforeEach(() => {
+        depot = DepotDonnees.creeDepot({ utilisateurs: [] }, adaptateurJWT, adaptateurUUID);
+      });
+
+      it('génère un UUID pour cet utilisateur', (done) => {
+        depot.nouvelUtilisateur({
+          prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345',
+        })
+          .then((utilisateur) => {
+            expect(utilisateur.id).to.equal('11111111-1111-1111-1111-111111111111');
+            done();
+          })
+          .catch((erreur) => done(erreur));
+      });
+
+      it('ajoute le nouvel utilisateur au dépôt', (done) => {
+        expect(depot.utilisateur('11111111-1111-1111-1111-111111111111')).to.be(undefined);
+
+        depot.nouvelUtilisateur({
+          prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345',
+        })
+          .then(() => {
+            const utilisateurCree = depot.utilisateur('11111111-1111-1111-1111-111111111111');
+            expect(utilisateurCree).to.be.an(Utilisateur);
+            expect(utilisateurCree.id).to.equal('11111111-1111-1111-1111-111111111111');
+            expect(utilisateurCree.prenom).to.equal('Jean');
+            expect(utilisateurCree.nom).to.equal('Dupont');
+            expect(utilisateurCree.email).to.equal('jean.dupont@mail.fr');
+            expect(utilisateurCree.adaptateurJWT).to.equal(adaptateurJWT);
+            done();
+          })
+          .catch((erreur) => done(erreur));
+      });
+
+      it('enregistre le mot de passe chiffré', (done) => {
+        depot.nouvelUtilisateur({
+          prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345',
+        })
+          .then(() => depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345'))
+          .then((utilisateur) => {
+            expect(utilisateur).to.be.an(Utilisateur);
+            expect(utilisateur.id).to.equal('11111111-1111-1111-1111-111111111111');
+
+            done();
+          })
+          .catch((error) => done(error));
+      });
     });
 
-    it('génère un UUID pour cet utilisateur', (done) => {
-      depot.nouvelUtilisateur({
-        prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345',
-      })
-        .then((utilisateur) => {
-          expect(utilisateur.id).to.equal('11111111-1111-1111-1111-111111111111');
+    describe("quand l'utilisateur existe déjà", () => {
+      it('lève une `ErreurUtilisateurExistant`', (done) => {
+        depot = DepotDonnees.creeDepot({
+          utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+        }, "Pas besoin d'adaptateur JWT", adaptateurUUID);
+
+        try {
+          depot.nouvelUtilisateur({ email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' });
+          done('Une exception aurait dû être levée.');
+        } catch (e) {
+          expect(e).to.be.a(ErreurUtilisateurExistant);
           done();
-        })
-        .catch((erreur) => done(erreur));
-    });
-
-    it('ajoute le nouvel utilisateur au dépôt', (done) => {
-      expect(depot.utilisateur('11111111-1111-1111-1111-111111111111')).to.be(undefined);
-
-      depot.nouvelUtilisateur({
-        prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345',
-      })
-        .then(() => {
-          const utilisateurCree = depot.utilisateur('11111111-1111-1111-1111-111111111111');
-          expect(utilisateurCree).to.be.an(Utilisateur);
-          expect(utilisateurCree.id).to.equal('11111111-1111-1111-1111-111111111111');
-          expect(utilisateurCree.prenom).to.equal('Jean');
-          expect(utilisateurCree.nom).to.equal('Dupont');
-          expect(utilisateurCree.email).to.equal('jean.dupont@mail.fr');
-          expect(utilisateurCree.adaptateurJWT).to.equal(adaptateurJWT);
-          done();
-        })
-        .catch((erreur) => done(erreur));
-    });
-
-    it('enregistre le mot de passe chiffré', (done) => {
-      depot.nouvelUtilisateur({
-        prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345',
-      })
-        .then(() => depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345'))
-        .then((utilisateur) => {
-          expect(utilisateur).to.be.an(Utilisateur);
-          expect(utilisateur.id).to.equal('11111111-1111-1111-1111-111111111111');
-
-          done();
-        })
-        .catch((error) => done(error));
+        }
+      });
     });
   });
 });
