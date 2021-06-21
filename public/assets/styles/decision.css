@@ -1,0 +1,271 @@
+body {
+  margin: 2em;
+  padding: 0;
+  background: #fafbfc;
+
+  font-family: "Marianne";
+  font-size: 10px;
+  color: #0d4269;
+}
+
+header {
+  margin-bottom: 4em;
+}
+
+header .mss, header .anssi {
+  display: inline-block;
+}
+
+header .mss {
+  padding-left: 3em;
+
+  background-image: url(../images/logo_mss.svg);
+  background-repeat: no-repeat;
+  background-size: 1.6em;
+  background-position: 0em 0.6em;
+}
+
+header h1 {
+  margin: 0;
+  font-weight: normal;
+}
+
+header p {
+  margin-top: 0;
+}
+
+header .anssi {
+  float: right;
+
+  width: 20em;
+  padding: 1em 6em;
+
+  background-image: url(../images/logo_anssi.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position-x: 100%;
+
+  text-align: right;
+}
+
+main h1 {
+  position: relative;
+  left: -2em;
+  display: inline-block;
+  padding: 1em 2em;
+  background: #1b7cc4;
+  border-radius: 5px;
+
+  font-size: 1.5em;
+  color: #fff;
+}
+
+section {
+  margin: 2em 0;
+  padding: 1.5em 2em 2em;
+
+  border: solid 1px #abb6bf;
+  border-radius: 10px;
+
+  background: #fff;
+}
+
+section h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+section p {
+  margin: 0;
+  color: #abb6bf;
+}
+
+section ul {
+  display: grid;
+
+  margin: 3em 0 0;
+  padding: 0;
+}
+
+section li {
+  list-style-type: none;
+}
+
+dl {
+  margin: 2em 0 0;
+}
+
+dt, dd {
+  display: inline;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin: 0.2em;
+}
+
+dd:after {
+  display: block;
+  margin-bottom: 0.5em;
+
+  content: '';
+}
+
+section {
+  position: relative;
+}
+
+section.introduction h2 {
+  font-size: 1.8em;
+}
+
+section.risques ul {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 1em 2em;
+}
+
+section.risques li {
+  padding: 0.5em 0.5em 0.5em 8em;
+  border: solid 1px #ebedf0;
+  border-radius: 3px;
+
+  background-image: url(../images/icone_parcours_guide.svg);
+  background-repeat: no-repeat;
+  background-size: 1.5em;
+  background-position-x: 1em;
+  background-position-y: 50%;
+
+  text-align: right;
+  font-weight: bold;
+}
+
+section.mesures .legende {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+
+  font-size: 0.8em;
+}
+
+section.mesures .legende * {
+  float: right;
+}
+
+.legende *:before {
+  position: relative;
+  top: 0.2em;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+
+  margin: 0 1em 0 2em;
+
+  border: solid 1px #abb6bf;
+
+  content: '';
+}
+
+.legende .mises-en-oeuvre:before {
+  background: #caefcb;
+}
+
+.legende .planifiees:before {
+  background: #fff1ce;
+}
+
+section.mesures ul {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1em;
+}
+
+.type-mesure, .pourcentage {
+  font-size: 1.7em;
+  font-weight: bold;
+  color: #1b7cc4;
+}
+
+section.niveau-protection ul {
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1em;
+}
+
+.niveau.bon:after, .avis-expert-cyber.favorable:after {
+  position: absolute;
+  top: 0.5em;
+  right: 1em;
+
+  color: #1aaf54;
+  font-size: 1.7em;
+  font-weight: bold;
+}
+
+.niveau.bon:after {
+  content: 'Bon';
+}
+
+.criticite-mesure {
+  font-size: 1.2em;
+}
+
+.avis-expert-cyber.favorable:after {
+  content: 'Favorable';
+}
+
+.expert-cyber {
+  margin-top: 2em;
+  color: #0d4269;
+}
+
+.signature {
+  margin-bottom: 10em;
+}
+
+section.decision ul {
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 1em;
+
+  margin-bottom: 2em;
+
+  color: #1b7cc4;
+}
+
+.notes-finales {
+  font-size: 0.8em;
+  color: #0d4269;
+}
+
+section.pieces-jointes {
+  margin-top: 5em;
+  padding-top: 0;
+
+  border: 0;
+  background: none;
+}
+
+section.pieces-jointes h2 {
+  display: inline-block;
+
+  vertical-align: top;
+}
+
+section.pieces-jointes ul {
+  display: inline-block;
+
+  position: relative;
+  left: 3em;
+  top: 0.2em;
+
+  margin: 0;
+
+  font-size: 1.2em;
+}
+
+@media print {
+* {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+}

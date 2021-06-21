@@ -1,0 +1,113 @@
+doctype html
+meta(charset='utf-8')
+
+link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
+link(href='/statique/assets/styles/decision.css', rel='stylesheet')
+
+header
+  .mss
+    h1 Mon Service <b>Sécurisé</b>
+    p Sécuriser les service publics numériques
+  .anssi Agence nationale de la sécurité des systèmes d'information (ANSSI)
+
+main
+  h1 Décision d'homologation de sécurité
+  section.introduction
+    h2 Mon Super Service
+    dl
+      dt Type :
+      dd site internet
+      dt Objet :
+      dd donner accès au catalogue multimédia de la médiathèque, permettant aux usagers de se créer un compte et de réserver ou renouveler des réservations de livres, jeux, DVD, etc.
+      dt Développé par :
+      dd Webservice
+      dt Hébergement et localisation des données :
+      dd OVH, France
+
+  section.risques
+    h2 Principaux risques de sécurité identifiés
+    p Suggestions de l'ANSSI, détails en annexe
+    ul
+      li Indisponibilité du service
+      li Vol / diffusion de données utilisateurs
+      li Installation de logiciels malveillants
+      li Défiguration de contenu
+
+  section.mesures
+    h2 Mesures de sécurité retenues
+    p Recommandées par l'ANSSI, détails en annexe
+
+    .legende
+      .planifiees Planifiées à 3 mois
+      .mises-en-oeuvre Mises en œuvre
+
+    ul
+      li
+        .nombre-mesures 5 mesures de
+        .type-mesure Gouvernance
+        .barre
+      li
+        .nombre-mesures 13 mesures de
+        .type-mesure Protection
+        .barre
+      li
+        .nombre-mesures 4 mesures de
+        .type-mesure Défense
+        .barre
+      li
+        .nombre-mesures 4 mesures de
+        .type-mesure Résilience
+        .barre
+
+  section.niveau-protection
+    h2 Niveau de protection indicatif
+    p Calculé à partir du pourcentage de mesures recommandées par l'ANSSI mises en œuvre
+    .niveau.bon
+    ul
+      li
+        .pourcentage 100%
+        .criticite-mesure des <b>mesures indispensables</b> selon l'ANSSI mises en œuvre
+      li
+        .pourcentage 60%
+        .criticite-mesure des <b>autres mesures suggérées</b> mises en œuvre
+
+  section
+    h2 Avis de l'expert cyber
+    p sur le maintien ou la mise en service
+    .avis-expert-cyber.favorable
+    p.expert-cyber M. Jean Dujardin, RSSI
+    h4 Recommandations additionnelles :
+
+  section
+    h2 Équipe
+    dl
+      dt Décision d'homologation préparée par :
+      dd Jean Dujardin (responsable du projet), Sylvie Chemin (DSI)
+      dt Équipe chargée du maintien en fonctionnement et de la sécurité en continu :
+      dd Jean Dujardin (responsable du projet), Sylvie Chemin (DSI)
+
+  section
+    h2 Calendrier
+    dl
+      dt Échéance de mise en œuvre des mesures planifiées :
+      dd 3 mois
+      dt Date d'expiration de l'homologation :
+      dd 2 ans après signature de la présente homologation
+
+  section.decision
+    h2 Décision d'homologation
+    dl
+      dt Autorité d'homologation :
+      dd M. Maxime Emmanuel (directeur général des services)
+    p.signature Lu et approuvé | date | signature
+    ul
+      li Conformité au référentiel général de sécurité (RGS)
+      li Contribue à la mise en conformité avec les obligations du règlement européen pour la protection des données à caractère personnel (RGPD) en matière de « sécurité du traitement des données »
+    p.notes-finales Par la signature de cette décision, vous attestez avoir pris connaissance des risques principaux pour le service numérique et des mesures de sécurité retenues, sur la base des informations fournies dans le présent dossier et ses pièces jointes. Vous validez son maintien ou sa mise en service, dont la sécurité devra être maintenue dans la durée. Une fois signée, la décision d'homologation pourra être publiée sur MonServiceSécurisé et sur SuperService. MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus responsables d'incidents de sécurité susceptibles d'affeter le service numérique homologué et des conséquences qui pourraient en découler.
+
+  section.pieces-jointes
+    h2 Pièces jointes
+    ul
+      li Visuel du service
+      li Compte-rendu de test de pénétration ou de bugbounty
+
