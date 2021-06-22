@@ -13,7 +13,7 @@ header
 main
   h1 Décision d'homologation de sécurité
   section.introduction
-    h2 Mon Super Service
+    h2= homologation.nomService
     dl
       dt Type :
       dd site internet
@@ -103,7 +103,7 @@ main
     ul
       li Conformité au référentiel général de sécurité (RGS)
       li Contribue à la mise en conformité avec les obligations du règlement européen pour la protection des données à caractère personnel (RGPD) en matière de « sécurité du traitement des données »
-    p.notes-finales Par la signature de cette décision, vous attestez avoir pris connaissance des risques principaux pour le service numérique et des mesures de sécurité retenues, sur la base des informations fournies dans le présent dossier et ses pièces jointes. Vous validez son maintien ou sa mise en service, dont la sécurité devra être maintenue dans la durée. Une fois signée, la décision d'homologation pourra être publiée sur MonServiceSécurisé et sur SuperService. MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus responsables d'incidents de sécurité susceptibles d'affeter le service numérique homologué et des conséquences qui pourraient en découler.
+    p.notes-finales Par la signature de cette décision, vous attestez avoir pris connaissance des risques principaux pour le service numérique et des mesures de sécurité retenues, sur la base des informations fournies dans le présent dossier et ses pièces jointes. Vous validez son maintien ou sa mise en service, dont la sécurité devra être maintenue dans la durée. Une fois signée, la décision d'homologation pourra être publiée sur MonServiceSécurisé et sur « #{homologation.nomService} ». MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus responsables d'incidents de sécurité susceptibles d'affeter le service numérique homologué et des conséquences qui pourraient en découler.
 
   section.pieces-jointes
     h2 Pièces jointes

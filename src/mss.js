@@ -53,7 +53,8 @@ const creeServeur = (depotDonnees, middleware,
   });
 
   app.get('/homologation/:id/decision', middleware.verificationJWT, (requete, reponse) => {
-    reponse.render('homologation/decision');
+    const homologation = depotDonnees.homologation(requete.params.id);
+    reponse.render('homologation/decision', { homologation });
   });
 
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
