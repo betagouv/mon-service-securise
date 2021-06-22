@@ -271,6 +271,15 @@ section.pieces-jointes ul {
   font-size: 1.2em;
 }
 
+section.pieces-jointes li {
+  margin-bottom: 0.5em;
+  padding-left: 2em;
+
+  background-image: url(../images/icone_coche_verte.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 @media print {
 * {
     -webkit-print-color-adjust: exact !important;
