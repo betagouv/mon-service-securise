@@ -5,13 +5,13 @@ block append styles
   link(href='/statique/assets/styles/homologation/creation.css', rel='stylesheet')
 
 block main
-  form.homologation
+  form#homologation
     h1 Informations générales
     p Pour bien démarrer votre nouveau projet d'homologation, dites-nous en un peu plus sur le service numérique.
     section
       label Nom du service à homologuer
         br
-        input(id='nom-service', type='text')
+        input(id='nom-service', name='nomService', type='text')
     .bouton Continuer &nbsp;&nbsp;›
 
   script(src='/statique/homologation/creation.js')
