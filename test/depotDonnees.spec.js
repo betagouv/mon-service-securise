@@ -35,13 +35,12 @@ describe('Le dépôt de données', () => {
   });
 
   it("connaît toutes les homologations d'un utilisateur donné", () => {
-    const referentiel = 'Le référentiel';
     const depot = DepotDonnees.creeDepot({
       homologations: [
         { id: '123', idUtilisateur: '456', nomService: 'Super Service' },
         { id: '789', idUtilisateur: '999', nomService: 'Un autre service' },
       ],
-    }, 'adaptateur JWT inutile', 'adaptateur UUID inutile', referentiel);
+    }, { referentiel: 'Le référentiel' });
 
     const homologations = depot.homologations('456');
     expect(homologations.length).to.equal(1);
@@ -51,12 +50,11 @@ describe('Le dépôt de données', () => {
   });
 
   it('peut retrouver une homologation à partir de son identifiant', () => {
-    const referentiel = 'Le référentiel';
     const depot = DepotDonnees.creeDepot({
       homologations: [
         { id: '789', idUtilisateur: '999', nomService: 'Un autre service' },
       ],
-    }, 'adaptateur JWT inutile', 'adaptateur UUID inutile', referentiel);
+    }, { referentiel: 'Le référentiel' });
 
     const homologation = depot.homologation('789');
     expect(homologation).to.be.a(Homologation);
@@ -73,7 +71,7 @@ describe('Le dépôt de données', () => {
           utilisateurs: [{
             id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: hash,
           }],
-        }, adaptateurJWT);
+        }, { adaptateurJWT });
 
         return depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345');
       })
@@ -88,17 +86,17 @@ describe('Le dépôt de données', () => {
   });
 
   it("retourne l'utilisateur associé à un identifiant donné", () => {
-    const fauxAdaptateurJWT = 'Un adaptateur';
+    const adaptateurJWT = 'Un adaptateur';
     const depot = DepotDonnees.creeDepot({
       utilisateurs: [{
         id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
       }],
-    }, fauxAdaptateurJWT);
+    }, { adaptateurJWT });
 
     const utilisateur = depot.utilisateur('123');
     expect(utilisateur).to.be.an(Utilisateur);
     expect(utilisateur.id).to.equal('123');
-    expect(utilisateur.adaptateurJWT).to.equal(fauxAdaptateurJWT);
+    expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
   });
 
   describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
@@ -106,7 +104,7 @@ describe('Le dépôt de données', () => {
     let depot;
 
     beforeEach(() => {
-      depot = DepotDonnees.creeDepot({ homologations: [] }, "Pas besoin d'adaptateur JWT", adaptateurUUID);
+      depot = DepotDonnees.creeDepot({ homologations: [] }, { adaptateurUUID });
     });
 
     it('ajoute la nouvelle homologation au dépôt', () => {
@@ -131,13 +129,13 @@ describe('Le dépôt de données', () => {
   });
 
   describe("sur réception d'une demande d'enregistrement d'un nouvel utilisateur", () => {
+    const adaptateurJWT = 'Un adaptateur';
     const adaptateurUUID = { genereUUID: () => '11111111-1111-1111-1111-111111111111' };
-    const adaptateurJWT = 'un adaptateur JWT';
     let depot;
 
     describe("quand l'utilisateur n'existe pas déjà", () => {
       beforeEach(() => {
-        depot = DepotDonnees.creeDepot({ utilisateurs: [] }, adaptateurJWT, adaptateurUUID);
+        depot = DepotDonnees.creeDepot({ utilisateurs: [] }, { adaptateurJWT, adaptateurUUID });
       });
 
       it('génère un UUID pour cet utilisateur', (done) => {
@@ -189,7 +187,7 @@ describe('Le dépôt de données', () => {
       it('lève une `ErreurUtilisateurExistant`', (done) => {
         depot = DepotDonnees.creeDepot({
           utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
-        }, "Pas besoin d'adaptateur JWT", adaptateurUUID);
+        }, { adaptateurUUID });
 
         try {
           depot.nouvelUtilisateur({ email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' });

@@ -7,7 +7,9 @@ const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
 
 const port = process.env.PORT || 3000;
-const depotDonnees = DepotDonnees.creeDepot(donnees, adaptateurJWT, adaptateurUUID, referentiel);
+const depotDonnees = DepotDonnees.creeDepot(donnees, {
+  adaptateurJWT, adaptateurUUID, referentiel,
+});
 const serveur = MSS.creeServeur(depotDonnees, middleware(adaptateurJWT));
 
 serveur.ecoute(port, () => {
