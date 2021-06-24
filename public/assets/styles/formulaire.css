@@ -19,13 +19,14 @@ form section {
   padding: 2em 0 1em;
   border-top: solid 1px #abb6bf;
   border-bottom: solid 1px #abb6bf;
+
+  text-align: left;
 }
 
-form label {
+form label, fieldset {
   display: block;
   padding-bottom: 2em;
 
-  text-align: left;
   font-size: 0.9em;
   font-weight: bold;
 }
@@ -42,4 +43,29 @@ form input {
   background: #fafbfc;
 
   font-family: Marianne;
+}
+
+form .bouton {
+  text-align: center;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0 0 2em;
+  border: none;
+}
+
+input[type='checkbox'] {
+  width: revert;
+  height: 1.33em;
+
+  margin: 0 1em 0 0;
+}
+
+input[type='checkbox'] + label {
+  display: inline-block;
+
+  padding: 1em 0 0;
+
+  font-weight: normal;
 }
