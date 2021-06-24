@@ -1,5 +1,5 @@
 class Homologation {
-  constructor({ id, idUtilisateur, nomService, natureService }, referentiel) {
+  constructor({ id, idUtilisateur, nomService, natureService = [] }, referentiel) {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
     this.nomService = nomService;
@@ -9,6 +9,7 @@ class Homologation {
   }
 
   descriptionNatureService() {
+    if (this.natureService.length === 0) return 'Non renseigné';
     return this.natureService.map((ns) => this.referentiel.natureService[ns]).join(', ');
   }
 

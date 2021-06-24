@@ -22,4 +22,13 @@ describe('Une homologation', () => {
 
     expect(homologation.descriptionNatureService()).to.equal('Une nature, Une autre');
   });
+
+  it("se comporte correctement si la nature du service n'est pas présente", () => {
+    const referentiel = {};
+    const homologation = new Homologation({
+      id: '123', idUtilisateur: '456', nomService: 'nom',
+    }, referentiel);
+
+    expect(homologation.descriptionNatureService()).to.equal('Non renseigné');
+  });
 });
