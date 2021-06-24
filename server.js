@@ -1,4 +1,5 @@
 const donnees = require('./jeuDonnees');
+const referentiel = require('./referentiel');
 const DepotDonnees = require('./src/depotDonnees');
 const middleware = require('./src/middleware');
 const MSS = require('./src/mss');
@@ -6,7 +7,7 @@ const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
 
 const port = process.env.PORT || 3000;
-const depotDonnees = DepotDonnees.creeDepot(donnees, adaptateurJWT, adaptateurUUID);
+const depotDonnees = DepotDonnees.creeDepot(donnees, adaptateurJWT, adaptateurUUID, referentiel);
 const serveur = MSS.creeServeur(depotDonnees, middleware(adaptateurJWT));
 
 serveur.ecoute(port, () => {

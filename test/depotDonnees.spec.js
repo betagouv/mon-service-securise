@@ -35,29 +35,33 @@ describe('Le dépôt de données', () => {
   });
 
   it("connaît toutes les homologations d'un utilisateur donné", () => {
+    const referentiel = 'Le référentiel';
     const depot = DepotDonnees.creeDepot({
       homologations: [
         { id: '123', idUtilisateur: '456', nomService: 'Super Service' },
         { id: '789', idUtilisateur: '999', nomService: 'Un autre service' },
       ],
-    });
+    }, 'adaptateur JWT inutile', 'adaptateur UUID inutile', referentiel);
 
     const homologations = depot.homologations('456');
     expect(homologations.length).to.equal(1);
     expect(homologations[0]).to.be.a(Homologation);
     expect(homologations[0].id).to.equal('123');
+    expect(homologations[0].referentiel).to.equal('Le référentiel');
   });
 
   it('peut retrouver une homologation à partir de son identifiant', () => {
+    const referentiel = 'Le référentiel';
     const depot = DepotDonnees.creeDepot({
       homologations: [
         { id: '789', idUtilisateur: '999', nomService: 'Un autre service' },
       ],
-    });
+    }, 'adaptateur JWT inutile', 'adaptateur UUID inutile', referentiel);
 
     const homologation = depot.homologation('789');
     expect(homologation).to.be.a(Homologation);
     expect(homologation.id).to.equal('789');
+    expect(homologation.referentiel).to.equal('Le référentiel');
   });
 
   it("retourne l'utilisateur authentifié", (done) => {

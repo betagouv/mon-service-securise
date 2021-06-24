@@ -4,15 +4,15 @@ const { ErreurUtilisateurExistant } = require('./erreurs');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
-const creeDepot = (donnees, adaptateurJWT, adaptateurUUID) => {
+const creeDepot = (donnees, adaptateurJWT, adaptateurUUID, referentiel) => {
   const homologation = (idHomologation) => {
     const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
-    return donneesHomologation ? new Homologation(donneesHomologation) : undefined;
+    return donneesHomologation ? new Homologation(donneesHomologation, referentiel) : undefined;
   };
 
   const homologations = (idUtilisateur) => donnees.homologations
     .filter((h) => h.idUtilisateur === idUtilisateur)
-    .map((h) => new Homologation(h));
+    .map((h) => new Homologation(h, referentiel));
 
   const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
     donneesHomologation.id = adaptateurUUID.genereUUID();

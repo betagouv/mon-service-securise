@@ -105,7 +105,7 @@ describe('Le serveur MSS', () => {
     it("interroge le dépôt de données pour récupérer les homologations de l'utilisateur", (done) => {
       idUtilisateurCourant = '123';
 
-      const homologation = new Homologation({ id: '456', nomService: 'Super Service' });
+      const homologation = { toJSON: () => ({ id: '456' }) };
       depotDonnees.homologations = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');
         return [homologation];
@@ -117,7 +117,7 @@ describe('Le serveur MSS', () => {
 
           const { homologations } = reponse.data;
           expect(homologations.length).to.equal(1);
-          expect(homologation.id).to.equal('456');
+          expect(homologations[0].id).to.equal('456');
           done();
         })
         .catch((erreur) => done(erreur));
@@ -238,16 +238,17 @@ describe('Le serveur MSS', () => {
 
       depotDonnees.nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
         expect(idUtilisateur).to.equal('123');
-        expect(donneesHomologation).to.eql({ nomService: 'Super Service' });
+        expect(donneesHomologation).to.eql({ nomService: 'Super Service', natureService: ['api'] });
         return '456';
       };
 
-      axios.post('http://localhost:1234/api/homologation', { nomService: 'Super Service' })
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
-          done();
-        })
+      axios.post('http://localhost:1234/api/homologation', {
+        nomService: 'Super Service', natureService: ['api'],
+      }).then((reponse) => {
+        expect(reponse.status).to.equal(200);
+        expect(reponse.data).to.eql({ idHomologation: '456' });
+        done();
+      })
         .catch((erreur) => done(erreur));
     });
   });
