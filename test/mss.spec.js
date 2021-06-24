@@ -68,7 +68,7 @@ describe('Le serveur MSS', () => {
     verificationJWTMenee = false;
 
     depotDonnees = DepotDonnees.creeDepotVide();
-    serveur = MSS.creeServeur(depotDonnees, middleware, false);
+    serveur = MSS.creeServeur(depotDonnees, middleware, {}, false);
     serveur.ecoute(1234, done);
   });
 

@@ -13,16 +13,11 @@ block main
         br
         input(id='nom-service', name='nomService', type='text')
       fieldset Quelle est la nature du service numérique ?
-        br
-        input(id='nature-service-site-internet', name='natureService', value='siteInternet', type='checkbox')
-        label(for='nature-service-site-internet') Site internet
-        br
-        input(id='nature-service-application-mobile', name='natureService',
-              value='applicationMobile', type='checkbox')
-        label(for='nature-service-application-mobile') Application mobile
-        br
-        input(id='nature-service-api', name='natureService', value='api', type='checkbox')
-        label(for='nature-service-api') API
+        each description, identifiant in referentiel.natureService
+          br
+          input(id = 'nature-service-' + identifiant, name = 'natureService',
+                value = identifiant, type = 'checkbox')
+          label(for = 'nature-service-' + identifiant)= description
     .bouton Continuer &nbsp;&nbsp;›
 
   script(src='/statique/homologation/creation.js')

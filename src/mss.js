@@ -5,7 +5,7 @@ const { ErreurUtilisateurExistant } = require('./erreurs');
 
 require('dotenv').config();
 
-const creeServeur = (depotDonnees, middleware,
+const creeServeur = (depotDonnees, middleware, referentiel,
   avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
 
@@ -41,7 +41,7 @@ const creeServeur = (depotDonnees, middleware,
   });
 
   app.get('/homologation/creation', middleware.verificationJWT, (requete, reponse) => {
-    reponse.render('homologation/creation');
+    reponse.render('homologation/creation', { referentiel });
   });
 
   app.get('/homologation/:id', middleware.verificationJWT, (requete, reponse) => {

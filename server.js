@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 const depotDonnees = DepotDonnees.creeDepot(donnees, {
   adaptateurJWT, adaptateurUUID, referentiel,
 });
-const serveur = MSS.creeServeur(depotDonnees, middleware(adaptateurJWT));
+const serveur = MSS.creeServeur(depotDonnees, middleware(adaptateurJWT), referentiel);
 
 serveur.ecoute(port, () => {
   /* eslint-disable no-console */
