@@ -59,6 +59,15 @@ block main
         items: referentiel.donneesCaracterePersonnel(),
       })
 
+    section
+      +inputChoix({
+        type: 'radio',
+        prefixeIdentifiant: 'delai-avant-impact-critique-',
+        nom: 'delaiAvantImpactCritique',
+        titre: 'Au bout de combien de temps le dysfonctionnement grave de votre service aura-t-il un impact critique pour votre organisation ou pour les usagers ?',
+        items: referentiel.delaisAvantImpactCritique(),
+      })
+
     .bouton Continuer &nbsp;&nbsp;›
 
   script(src = '/statique/homologation/creation.js')

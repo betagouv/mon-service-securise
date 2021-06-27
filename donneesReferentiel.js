@@ -58,4 +58,10 @@ module.exports = {
       exemple: 'données de santé, orientation sexuelle, origine raciale ou ethnique, opinions politiques ou religieuses',
     },
   },
+  delaisAvantImpactCritique: {
+    uneHeure: { description: 'Une heure' },
+    uneJournee: { description: 'Une journée' },
+    uneSemaine: { description: 'Une semaine' },
+    unMois: { description: 'Un mois ou plus' },
+  },
 };

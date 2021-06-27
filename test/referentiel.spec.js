@@ -53,4 +53,12 @@ describe('Le référentiel', () => {
 
     expect(referentiel.donneesCaracterePersonnel()).to.eql({ uneClef: 'une valeur' });
   });
+
+  it('connaît la liste des délais avant impact critique', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      delaisAvantImpactCritique: { uneClef: 'une valeur' },
+    });
+
+    expect(referentiel.delaisAvantImpactCritique()).to.eql({ uneClef: 'une valeur' });
+  });
 });
