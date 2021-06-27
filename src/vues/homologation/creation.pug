@@ -31,6 +31,7 @@ block main
           input(id = 'provenance-service-' + identifiant, name = 'provenanceService',
                 value = identifiant, type = 'checkbox')
           label(for = 'provenance-service-' + identifiant)= description
+          br
           label.exemple(for = 'provenance-service-' + identifiant)= exemple
 
       fieldset Le service numérique est-il déjà mis en ligne ?
@@ -48,6 +49,17 @@ block main
           input(id = 'fonctionnalite-' + identifiant, name = 'fonctionnalite',
                 value = identifiant, type = 'checkbox')
           label(for = 'fonctionnalite-' + identifiant)= description
+
+      fieldset Le service numérique est-il amené à traiter une ou plusieurs des données à caractère personnel suivantes ?
+        each donnees, identifiant in referentiel.donneesCaracterePersonnel()
+          - const { description, exemple } = donnees
+          br
+          input(id = 'donnees-caractere-personnel-' + identifiant, name = 'donneesCaracterePersonnel',
+                value = identifiant, type = 'checkbox')
+          label(for = 'donnees-caractere-personnel-' + identifiant)= description
+          br
+          label.exemple(for = 'donnees-caractere-personnel-' + identifiant)= exemple
+
     .bouton Continuer &nbsp;&nbsp;›
 
   script(src = '/statique/homologation/creation.js')

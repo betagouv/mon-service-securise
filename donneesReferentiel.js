@@ -29,4 +29,33 @@ module.exports = {
     edition: 'Édition collaborative (documents, murs collaboratifs, etc.)',
     autre: 'Autres fonctionnalités permettant des échanges de données (préciser)',
   },
+  donneesCaracterePersonnel: {
+    contact: {
+      description: 'Données de contact',
+      exemple: 'mail, numéro de téléphone, adresse postale',
+    },
+    identite: {
+      description: "Données d'identité",
+      exemple: "nom/prénom, pseudonyme, date de maissance, numéros de pièce d'identité, de sécurité sociale, etc.",
+    },
+    situation: {
+      description: 'Données relatives à la situation familiale, économique et financière',
+      exemple: 'enfants',
+    },
+    localisation: {
+      description: 'Données de localisation',
+      exemple: 'adresse IP, identifiant de connexion, cookies',
+    },
+    banque: {
+      description: 'Données bancaires',
+      exemple: 'nº de carte bancaire, établissement bancaire, etc.',
+    },
+    mineurs: {
+      description: 'Données concernant des personnes mineures',
+    },
+    sensibiliteParticuliere: {
+      description: 'Données particulièrement sensibles (santé, opinions, etc.)',
+      exemple: 'données de santé, orientation sexuelle, origine raciale ou ethnique, opinions politiques ou religieuses',
+    },
+  },
 };

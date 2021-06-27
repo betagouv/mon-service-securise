@@ -48,4 +48,16 @@ describe('Le référentiel', () => {
       uneFonctionnalite: 'Une description de fonctionnalité',
     });
   });
+
+  it('connaît la liste des données à caractère personnel', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      donneesCaracterePersonnel: {
+        contact: { description: 'Données de contact', exemple: 'un exemple' },
+      },
+    });
+
+    expect(referentiel.donneesCaracterePersonnel()).to.eql({
+      contact: { description: 'Données de contact', exemple: 'un exemple' },
+    });
+  });
 });
