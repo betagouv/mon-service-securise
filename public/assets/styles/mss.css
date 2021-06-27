@@ -7,7 +7,7 @@ body {
   font-family: "Marianne";
 }
 
-header, .fonctionnalites, .etapes, .suivi-homologations, footer {
+header, .fonctionnalites, .etapes, .suivi-homologations, .details-homologation, footer {
   width: 1000px;
   margin: 0 auto;
   color: #0d4269;
@@ -42,6 +42,16 @@ main {
   cursor: pointer;
 }
 
+section {
+  padding: 2em 0 1em;
+  border-top: solid 1px #abb6bf;
+
+  text-align: left;
+}
+
+section:last-of-type {
+  border-bottom: solid 1px #abb6bf;
+}
 
 footer {
   padding: 1em 0;

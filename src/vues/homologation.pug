@@ -1,5 +1,26 @@
 extends mss
 
+block append styles
+  link(href = '/statique/assets/styles/homologation.css', rel = 'stylesheet')
+
 block main
-  h1= homologation.nomService
-  a(href=`/homologation/${homologation.id}/decision`) Télécharger le document
+  .details-homologation
+    .tableau-bord
+      h1= homologation.nomService
+      a.bouton(href = `/homologation/${homologation.id}/decision`) Télécharger le document d'homologation
+
+      section
+        dl.actions
+          dt Décrivez le service numérique
+          dd
+            ul
+              li.action.faite
+                a(href = '#') Informations générales
+
+    .besoin-aide
+      h1 Besoin d'aide ?
+      p.
+        Vous avez des questions sur votre homologation ou sur notre service ?
+        Vous voulez nous faire part de vos remarques ?
+      a(href = "mailto:contact@monservicesecurise.beta.gouv.fr?subject=Utilisation%20de%20Mon%20Service%20S%C3%A9curis%C3%A9").
+        Contactez-nous &nbsp;&nbsp;›

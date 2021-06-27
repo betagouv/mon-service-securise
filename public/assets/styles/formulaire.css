@@ -15,17 +15,6 @@ form a {
   text-decoration: none;
 }
 
-form section {
-  padding: 2em 0 1em;
-  border-top: solid 1px #abb6bf;
-
-  text-align: left;
-}
-
-form section:last-of-type {
-  border-bottom: solid 1px #abb6bf;
-}
-
 form label, fieldset {
   display: block;
   padding-bottom: 2em;

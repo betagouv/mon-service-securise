@@ -1,0 +1,105 @@
+.details-homologation {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-gap: 1em;
+
+  margin-top: 3em;
+
+  text-align: left;
+}
+
+.tableau-bord {
+  position: relative;
+
+  padding: 1em 1.5em;
+
+  background: #fff;
+  border-radius: 5px;
+}
+
+.tableau-bord h1 {
+  margin: 0;
+  padding: 0.3em 0 2em;
+
+  color: #000;
+}
+
+.tableau-bord .bouton {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  padding: 1em 1.5em;
+
+  font-size: 0.8em;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1em;
+}
+
+.actions dt {
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+.actions dd {
+  margin: 0;
+}
+
+.actions ul {
+  margin: 0;
+  padding: 0;
+}
+
+li.action {
+  list-style-type: none;
+
+  padding: 1em 2em;
+
+  border-radius: 5px;
+  background: #ebedf0;
+}
+
+li.action.faite {
+  background-image: url(../images/icone_ok_pastille_verte.svg);
+  background-repeat: no-repeat;
+  background-size: 2em;
+  background-position: 98% 50%;
+}
+
+.action a {
+  text-decoration: none;
+
+  font-weight: bold;
+  font-size: 0.9em;
+  color: #1b7cc4;
+}
+
+.besoin-aide {
+  font-size: 0.7em;
+}
+
+.besoin-aide h1 {
+  margin: 0;
+  padding: 0 0 0 1.4em;
+
+  background-image: url(../images/icone_marqueur.svg);
+  background-repeat: no-repeat;
+  background-size: 1em;
+  background-position: 0 0.2em;
+
+  font-size: 1.2em;
+  color: #000;
+}
+
+.besoin-aide p {
+  color: #abb6bf;
+}
+
+.besoin-aide a {
+  text-decoration: none;
+  color: #1b7cc4;
+}
