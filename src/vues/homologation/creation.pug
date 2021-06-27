@@ -32,6 +32,14 @@ block main
                 value = identifiant, type = 'checkbox')
           label(for = 'provenance-service-' + identifiant)= description
           label.exemple(for = 'provenance-service-' + identifiant)= exemple
+
+      fieldset Le service numérique est-il déjà mis en ligne ?
+        br
+        input(id = 'deja-mis-en-ligne-oui', name = 'dejaMisEnLigne', value = 'oui', type = 'radio')
+        label(for = 'deja-mis-en-ligne-oui') Oui
+        br
+        input(id = 'deja-mis-en-ligne-non', name = 'dejaMisEnLigne', value = 'non', type = 'radio')
+        label(for = 'deja-mis-en-ligne-non') Non
     .bouton Continuer &nbsp;&nbsp;›
 
   script(src = '/statique/homologation/creation.js')
