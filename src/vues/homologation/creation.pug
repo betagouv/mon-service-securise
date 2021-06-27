@@ -1,17 +1,22 @@
 extends ../mss
 
 block append styles
-  link(href='/statique/assets/styles/formulaire.css', rel='stylesheet')
-  link(href='/statique/assets/styles/homologation/creation.css', rel='stylesheet')
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/creation.css', rel = 'stylesheet')
 
 block main
   form#homologation
-    h1 Informations générales
-    p Pour bien démarrer votre nouveau projet d'homologation, dites-nous en un peu plus sur le service numérique.
+    h1 Décrivez le service numérique
+    h2 Informations générales
+    p.
+      Ces informations permettront d'évaluer les besoins de sécurité de votre
+      service numérique, afin de vous proposer des mesures de sécurité adaptées
+      et les pièces à joindre au document d'homologation.
     section
       label Nom du service à homologuer
         br
-        input(id='nom-service', name='nomService', type='text')
+        input(id = 'nom-service', name = 'nomService', type = 'text')
+
       fieldset Quelle est la nature du service numérique ?
         each description, identifiant in referentiel.naturesService()
           br
@@ -20,4 +25,4 @@ block main
           label(for = 'nature-service-' + identifiant)= description
     .bouton Continuer &nbsp;&nbsp;›
 
-  script(src='/statique/homologation/creation.js')
+  script(src = '/statique/homologation/creation.js')

@@ -1,7 +1,28 @@
 form#homologation {
-  width: 500px;
+  width: 700px;
 }
 
-form#homologation h1, form#homologation p {
+form#homologation * {
   text-align: left;
+}
+
+form#homologation h1 {
+  margin: 0;
+  padding-top: 5em;
+
+  font-size: 0.8em;
+  color: #0d4269;
+  text-transform: uppercase;
+}
+
+form#homologation h2 {
+  margin-top: 0;
+
+  font-weight: normal;
+  font-size: 1.7em;
+  color: #abb6bf;
+}
+
+form#homologation p {
+  margin-bottom: 3em;
 }
