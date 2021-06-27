@@ -36,4 +36,16 @@ describe('Le référentiel', () => {
       provenance: { description: 'Une description de provenance', exemple: 'possible provenance' },
     });
   });
+
+  it('connaît la liste des fonctionnalités possibles', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      fonctionnalites: {
+        uneFonctionnalite: 'Une description de fonctionnalité',
+      },
+    });
+
+    expect(referentiel.fonctionnalites()).to.eql({
+      uneFonctionnalite: 'Une description de fonctionnalité',
+    });
+  });
 });

@@ -6,10 +6,11 @@ const creeReferentiel = (donnees) => {
       .join(', ');
   };
 
+  const fonctionnalites = () => donnees.fonctionnalites;
   const naturesService = () => donnees.naturesService;
   const provenancesService = () => donnees.provenancesService;
 
-  return { natureService, naturesService, provenancesService };
+  return { fonctionnalites, natureService, naturesService, provenancesService };
 };
 
 module.exports = { creeReferentiel };

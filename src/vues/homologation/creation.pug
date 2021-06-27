@@ -40,6 +40,14 @@ block main
         br
         input(id = 'deja-mis-en-ligne-non', name = 'dejaMisEnLigne', value = 'non', type = 'radio')
         label(for = 'deja-mis-en-ligne-non') Non
+
+    section
+      fieldset Le service numérique inclut-il une ou plusieurs des fonctionnalités suivantes ?
+        each description, identifiant in referentiel.fonctionnalites()
+          br
+          input(id = 'fonctionnalite-' + identifiant, name = 'fonctionnalite',
+                value = identifiant, type = 'checkbox')
+          label(for = 'fonctionnalite-' + identifiant)= description
     .bouton Continuer &nbsp;&nbsp;›
 
   script(src = '/statique/homologation/creation.js')

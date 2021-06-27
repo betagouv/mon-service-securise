@@ -18,9 +18,12 @@ form a {
 form section {
   padding: 2em 0 1em;
   border-top: solid 1px #abb6bf;
-  border-bottom: solid 1px #abb6bf;
 
   text-align: left;
+}
+
+form section:last-of-type {
+  border-bottom: solid 1px #abb6bf;
 }
 
 form label, fieldset {
