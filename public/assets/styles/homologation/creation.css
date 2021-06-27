@@ -26,3 +26,16 @@ form#homologation h2 {
 form#homologation p {
   margin-bottom: 3em;
 }
+
+label.exemple::before {
+  content: 'ex. '
+}
+
+label.exemple {
+  display: inline-block;
+
+  padding: 0 0 0 1.7em;
+
+  font-weight: normal;
+  color: #abb6bf;
+}

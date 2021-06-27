@@ -24,4 +24,16 @@ describe('Le référentiel', () => {
     const referentiel = Referentiel.creeReferentiel({ naturesService: { api: 'API' } });
     expect(referentiel.naturesService()).to.eql({ api: 'API' });
   });
+
+  it('connaît la liste des différentes provenances de service possibles', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      provenancesService: {
+        provenance: { description: 'Une description de provenance', exemple: 'possible provenance' },
+      },
+    });
+
+    expect(referentiel.provenancesService()).to.eql({
+      provenance: { description: 'Une description de provenance', exemple: 'possible provenance' },
+    });
+  });
 });

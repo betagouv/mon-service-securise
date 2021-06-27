@@ -23,6 +23,15 @@ block main
           input(id = 'nature-service-' + identifiant, name = 'natureService',
                 value = identifiant, type = 'checkbox')
           label(for = 'nature-service-' + identifiant)= description
+
+      fieldset Quelle est la provenance du service numérique ?
+        each donnees, identifiant in referentiel.provenancesService()
+          - const { description, exemple } = donnees
+          br
+          input(id = 'provenance-service-' + identifiant, name = 'provenanceService',
+                value = identifiant, type = 'checkbox')
+          label(for = 'provenance-service-' + identifiant)= description
+          label.exemple(for = 'provenance-service-' + identifiant)= exemple
     .bouton Continuer &nbsp;&nbsp;›
 
   script(src = '/statique/homologation/creation.js')

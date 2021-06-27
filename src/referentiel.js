@@ -7,8 +7,9 @@ const creeReferentiel = (donnees) => {
   };
 
   const naturesService = () => donnees.naturesService;
+  const provenancesService = () => donnees.provenancesService;
 
-  return { natureService, naturesService };
+  return { natureService, naturesService, provenancesService };
 };
 
 module.exports = { creeReferentiel };
