@@ -1,5 +1,5 @@
 module.exports = {
-  natureService: {
+  naturesService: {
     siteInternet: 'Site Internet',
     applicationMobile: 'Application Mobile',
     api: 'API',

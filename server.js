@@ -1,12 +1,14 @@
 const donnees = require('./jeuDonnees');
-const referentiel = require('./referentiel');
+const donneesReferentiel = require('./donneesReferentiel');
 const DepotDonnees = require('./src/depotDonnees');
 const middleware = require('./src/middleware');
 const MSS = require('./src/mss');
+const Referentiel = require('./src/referentiel');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
 
 const port = process.env.PORT || 3000;
+const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 const depotDonnees = DepotDonnees.creeDepot(donnees, {
   adaptateurJWT, adaptateurUUID, referentiel,
 });

@@ -13,7 +13,7 @@ block main
         br
         input(id='nom-service', name='nomService', type='text')
       fieldset Quelle est la nature du service numérique ?
-        each description, identifiant in referentiel.natureService
+        each description, identifiant in referentiel.naturesService()
           br
           input(id = 'nature-service-' + identifiant, name = 'natureService',
                 value = identifiant, type = 'checkbox')
