@@ -17,7 +17,10 @@ describe('Une homologation', () => {
 
   it('sait décrire la nature du service', () => {
     const referentiel = Referentiel.creeReferentiel({
-      naturesService: { uneNature: 'Une nature', uneAutre: 'Une autre' },
+      naturesService: {
+        uneNature: { description: 'Une nature' },
+        uneAutre: { description: 'Une autre' },
+      },
     });
     const homologation = new Homologation({
       id: '123', idUtilisateur: '456', nomService: 'nom', natureService: ['uneNature', 'uneAutre'],

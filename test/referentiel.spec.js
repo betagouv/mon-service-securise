@@ -4,13 +4,18 @@ const Referentiel = require('../src/referentiel');
 
 describe('Le référentiel', () => {
   it("sait décrire la nature du service à partir d'identifiants", () => {
-    const referentiel = Referentiel.creeReferentiel({ naturesService: { siteInternet: 'Site internet' } });
+    const referentiel = Referentiel.creeReferentiel({
+      naturesService: { siteInternet: { description: 'Site internet' } },
+    });
     expect(referentiel.natureService(['siteInternet'])).to.equal('Site internet');
   });
 
   it('sait décrire la nature du service à partir de plusieurs identifiants', () => {
     const referentiel = Referentiel.creeReferentiel({
-      naturesService: { siteInternet: 'Site internet', api: 'API' },
+      naturesService: {
+        siteInternet: { description: 'Site internet' },
+        api: { description: 'API' },
+      },
     });
     expect(referentiel.natureService(['siteInternet', 'api'])).to.equal('Site internet, API');
   });
@@ -21,43 +26,31 @@ describe('Le référentiel', () => {
   });
 
   it('connaît la liste des différentes natures de service possibles', () => {
-    const referentiel = Referentiel.creeReferentiel({ naturesService: { api: 'API' } });
-    expect(referentiel.naturesService()).to.eql({ api: 'API' });
+    const referentiel = Referentiel.creeReferentiel({ naturesService: { uneClef: 'une valeur' } });
+    expect(referentiel.naturesService()).to.eql({ uneClef: 'une valeur' });
   });
 
   it('connaît la liste des différentes provenances de service possibles', () => {
     const referentiel = Referentiel.creeReferentiel({
-      provenancesService: {
-        provenance: { description: 'Une description de provenance', exemple: 'possible provenance' },
-      },
+      provenancesService: { uneClef: 'une valeur' },
     });
 
-    expect(referentiel.provenancesService()).to.eql({
-      provenance: { description: 'Une description de provenance', exemple: 'possible provenance' },
-    });
+    expect(referentiel.provenancesService()).to.eql({ uneClef: 'une valeur' });
   });
 
   it('connaît la liste des fonctionnalités possibles', () => {
     const referentiel = Referentiel.creeReferentiel({
-      fonctionnalites: {
-        uneFonctionnalite: 'Une description de fonctionnalité',
-      },
+      fonctionnalites: { uneClef: 'une valeur' },
     });
 
-    expect(referentiel.fonctionnalites()).to.eql({
-      uneFonctionnalite: 'Une description de fonctionnalité',
-    });
+    expect(referentiel.fonctionnalites()).to.eql({ uneClef: 'une valeur' });
   });
 
   it('connaît la liste des données à caractère personnel', () => {
     const referentiel = Referentiel.creeReferentiel({
-      donneesCaracterePersonnel: {
-        contact: { description: 'Données de contact', exemple: 'un exemple' },
-      },
+      donneesCaracterePersonnel: { uneClef: 'une valeur' },
     });
 
-    expect(referentiel.donneesCaracterePersonnel()).to.eql({
-      contact: { description: 'Données de contact', exemple: 'un exemple' },
-    });
+    expect(referentiel.donneesCaracterePersonnel()).to.eql({ uneClef: 'une valeur' });
   });
 });

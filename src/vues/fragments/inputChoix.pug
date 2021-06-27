@@ -1,0 +1,12 @@
+mixin inputChoix({ type, prefixeIdentifiant, nom, titre, items })
+  fieldset= titre
+    each donnees, identifiant in items
+      - const { description, exemple } = donnees
+      - const identifiantInput = prefixeIdentifiant + identifiant
+      br
+      input(id = identifiantInput, name = nom, value = identifiant, type = type)
+      label(for = identifiantInput)= description
+      if exemple
+        br
+        label.exemple(for = identifiantInput)= exemple
+

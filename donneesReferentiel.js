@@ -1,8 +1,8 @@
 module.exports = {
   naturesService: {
-    siteInternet: 'Site Internet',
-    applicationMobile: 'Application Mobile',
-    api: 'API',
+    siteInternet: { description: 'Site Internet' },
+    applicationMobile: { description: 'Application Mobile' },
+    api: { description: 'API' },
   },
   provenancesService: {
     developpement: {
@@ -15,19 +15,19 @@ module.exports = {
     },
   },
   fonctionnalites: {
-    newsletter: 'Inscription à une newsletter',
-    compte: 'Création de compte (utilisateurs avec comptes)',
-    formulaire: 'Formulaire administratif ou démarche en ligne',
-    questionnaire: 'Questionnaires, sondages',
-    reservation: 'Outils de réservation (livres, places, salles, etc.)',
-    paiement: 'Paiement en ligne, conservation de données bancaires',
-    reseauSocial: 'Réseau social, forum, commentaires',
-    visionconference: 'Audio, visioconférence',
-    messagerie: 'Messagerie instantanée',
-    emails: "Envoi et réception d'emails",
-    documents: 'Stockage de documents',
-    edition: 'Édition collaborative (documents, murs collaboratifs, etc.)',
-    autre: 'Autres fonctionnalités permettant des échanges de données (préciser)',
+    newsletter: { description: 'Inscription à une newsletter' },
+    compte: { description: 'Création de compte (utilisateurs avec comptes)' },
+    formulaire: { description: 'Formulaire administratif ou démarche en ligne' },
+    questionnaire: { description: 'Questionnaires, sondages' },
+    reservation: { description: 'Outils de réservation (livres, places, salles, etc.)' },
+    paiement: { description: 'Paiement en ligne, conservation de données bancaires' },
+    reseauSocial: { description: 'Réseau social, forum, commentaires' },
+    visionconference: { description: 'Audio, visioconférence' },
+    messagerie: { description: 'Messagerie instantanée' },
+    emails: { description: "Envoi et réception d'emails" },
+    documents: { description: 'Stockage de documents' },
+    edition: { description: 'Édition collaborative (documents, murs collaboratifs, etc.)' },
+    autre: { description: 'Autres fonctionnalités permettant des échanges de données (préciser)' },
   },
   donneesCaracterePersonnel: {
     contact: {

@@ -1,4 +1,5 @@
 extends ../mss
+include ../fragments/inputChoix
 
 block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
@@ -17,48 +18,46 @@ block main
         br
         input(id = 'nom-service', name = 'nomService', type = 'text')
 
-      fieldset Quelle est la nature du service numérique ?
-        each description, identifiant in referentiel.naturesService()
-          br
-          input(id = 'nature-service-' + identifiant, name = 'natureService',
-                value = identifiant, type = 'checkbox')
-          label(for = 'nature-service-' + identifiant)= description
+      +inputChoix({
+        type: 'checkbox',
+        prefixeIdentifiant: 'nature-service-',
+        nom: 'natureService',
+        titre: 'Quelle est la nature du service numérique ?',
+        items: referentiel.naturesService(),
+      })
 
-      fieldset Quelle est la provenance du service numérique ?
-        each donnees, identifiant in referentiel.provenancesService()
-          - const { description, exemple } = donnees
-          br
-          input(id = 'provenance-service-' + identifiant, name = 'provenanceService',
-                value = identifiant, type = 'checkbox')
-          label(for = 'provenance-service-' + identifiant)= description
-          br
-          label.exemple(for = 'provenance-service-' + identifiant)= exemple
+      +inputChoix({
+        type: 'checkbox',
+        prefixeIdentifiant: 'provenance-service-',
+        nom: 'provenanceService',
+        titre: 'Quelle est la provenance du service numérique ?',
+        items: referentiel.provenancesService(),
+      })
 
-      fieldset Le service numérique est-il déjà mis en ligne ?
-        br
-        input(id = 'deja-mis-en-ligne-oui', name = 'dejaMisEnLigne', value = 'oui', type = 'radio')
-        label(for = 'deja-mis-en-ligne-oui') Oui
-        br
-        input(id = 'deja-mis-en-ligne-non', name = 'dejaMisEnLigne', value = 'non', type = 'radio')
-        label(for = 'deja-mis-en-ligne-non') Non
+      +inputChoix({
+        type: 'radio',
+        prefixeIdentifiant: 'deja-mis-en-ligne-',
+        nom: 'dejaMisEnLigne',
+        titre: 'Le service numérique est-il déjà mis en ligne ?',
+        items: { oui: { description: 'Oui' }, non: { description: 'Non' } },
+      })
 
     section
-      fieldset Le service numérique inclut-il une ou plusieurs des fonctionnalités suivantes ?
-        each description, identifiant in referentiel.fonctionnalites()
-          br
-          input(id = 'fonctionnalite-' + identifiant, name = 'fonctionnalite',
-                value = identifiant, type = 'checkbox')
-          label(for = 'fonctionnalite-' + identifiant)= description
+      +inputChoix({
+        type: 'checkbox',
+        prefixeIdentifiant: 'fonctionnalite-',
+        nom: 'fonctionnalite',
+        titre: 'Le service numérique inclut-il une ou plusieurs des fonctionnalités suivantes ?',
+        items: referentiel.fonctionnalites(),
+      })
 
-      fieldset Le service numérique est-il amené à traiter une ou plusieurs des données à caractère personnel suivantes ?
-        each donnees, identifiant in referentiel.donneesCaracterePersonnel()
-          - const { description, exemple } = donnees
-          br
-          input(id = 'donnees-caractere-personnel-' + identifiant, name = 'donneesCaracterePersonnel',
-                value = identifiant, type = 'checkbox')
-          label(for = 'donnees-caractere-personnel-' + identifiant)= description
-          br
-          label.exemple(for = 'donnees-caractere-personnel-' + identifiant)= exemple
+      +inputChoix({
+        type: 'checkbox',
+        prefixeIdentifiant: 'donnees-caractere-personnel-',
+        nom: 'donneesCaracterePersonnel',
+        titre: 'Le service numérique est-il amené à traiter une ou plusieurs des données à caractère personnel suivantes ?',
+        items: referentiel.donneesCaracterePersonnel(),
+      })
 
     .bouton Continuer &nbsp;&nbsp;›
 

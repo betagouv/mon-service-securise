@@ -2,7 +2,7 @@ const creeReferentiel = (donnees) => {
   const natureService = (identifiants) => {
     if (identifiants.length === 0) return 'Nature du service non renseignée';
     return identifiants
-      .map((identifiant) => donnees.naturesService[identifiant])
+      .map((identifiant) => donnees.naturesService[identifiant].description)
       .join(', ');
   };
 
