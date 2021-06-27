@@ -10,3 +10,11 @@ mixin inputChoix({ type, prefixeIdentifiant, nom, titre, items })
         br
         label.exemple(for = identifiantInput)= exemple
 
+mixin inputOuiNon({ prefixeIdentifiant, nom, titre })
+  +inputChoix({
+    type: 'radio',
+    prefixeIdentifiant: prefixeIdentifiant,
+    nom: nom,
+    titre: titre,
+    items: { oui: { description: 'Oui' }, non: { description: 'Non' } },
+  })

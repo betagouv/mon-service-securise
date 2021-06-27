@@ -19,7 +19,7 @@ const parametres = (selecteurFormulaire) => {
       return acc;
     }, {});
   return avecPremierElementCommeValeurs(params,
-    ['nomService', 'dejaMisEnLigne', 'delaiAvantImpactCritique']);
+    ['nomService', 'dejaMisEnLigne', 'delaiAvantImpactCritique', 'presenceResponsable']);
 };
 
 $(() => {

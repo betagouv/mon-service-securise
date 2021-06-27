@@ -34,12 +34,10 @@ block main
         items: referentiel.provenancesService(),
       })
 
-      +inputChoix({
-        type: 'radio',
+      +inputOuiNon({
         prefixeIdentifiant: 'deja-mis-en-ligne-',
         nom: 'dejaMisEnLigne',
         titre: 'Le service numérique est-il déjà mis en ligne ?',
-        items: { oui: { description: 'Oui' }, non: { description: 'Non' } },
       })
 
     section
@@ -66,6 +64,12 @@ block main
         nom: 'delaiAvantImpactCritique',
         titre: 'Au bout de combien de temps le dysfonctionnement grave de votre service aura-t-il un impact critique pour votre organisation ou pour les usagers ?',
         items: referentiel.delaisAvantImpactCritique(),
+      })
+
+      +inputOuiNon({
+        prefixeIdentifiant: 'presence-responsable-',
+        nom: 'presenceResponsable',
+        titre: "Une personne est-elle responsable de la sécurité des systèmes d'information au sein de votre organisation ?",
       })
 
     .bouton Continuer &nbsp;&nbsp;›
