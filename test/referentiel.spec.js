@@ -61,4 +61,9 @@ describe('Le référentiel', () => {
 
     expect(referentiel.delaisAvantImpactCritique()).to.eql({ uneClef: 'une valeur' });
   });
+
+  it('peut être construit sans donnée', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    expect(referentiel.naturesService()).to.eql({});
+  });
 });

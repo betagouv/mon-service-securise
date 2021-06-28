@@ -3,6 +3,7 @@ const expect = require('expect.js');
 
 const { ErreurUtilisateurExistant } = require('../src/erreurs');
 const MSS = require('../src/mss');
+const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
 const Homologation = require('../src/modeles/homologation');
 
@@ -60,6 +61,7 @@ describe('Le serveur MSS', () => {
   };
 
   let depotDonnees;
+  let referentiel;
   let serveur;
 
   beforeEach((done) => {
@@ -68,7 +70,8 @@ describe('Le serveur MSS', () => {
     verificationJWTMenee = false;
 
     depotDonnees = DepotDonnees.creeDepotVide();
-    serveur = MSS.creeServeur(depotDonnees, middleware, {}, false);
+    referentiel = Referentiel.creeReferentielVide();
+    serveur = MSS.creeServeur(depotDonnees, middleware, referentiel, false);
     serveur.ecoute(1234, done);
   });
 
@@ -175,6 +178,14 @@ describe('Le serveur MSS', () => {
           done();
         })
         .catch((erreur) => done(erreur));
+    });
+  });
+
+  describe('quand requête GET sur `/homologation/:id/edition`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      verifieRequeteExigeJWT(
+        { method: 'get', url: 'http://localhost:1234/homologation/456/edition' }, done
+      );
     });
   });
 

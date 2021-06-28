@@ -22,4 +22,12 @@ const creeReferentiel = (donnees) => {
   };
 };
 
-module.exports = { creeReferentiel };
+const creeReferentielVide = () => creeReferentiel({
+  naturesService: {},
+  provenancesService: {},
+  fonctionnalites: {},
+  donneesCaracterePersonnel: {},
+  delaisAvantImpactCritique: {},
+});
+
+module.exports = { creeReferentiel, creeReferentielVide };
