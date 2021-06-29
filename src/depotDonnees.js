@@ -14,6 +14,15 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h, referentiel));
 
+  const metsAJourHomologation = (identifiant, donneesHomologation) => {
+    const donneesPersistees = donnees.homologations.find((h) => h.id === identifiant);
+    Object.keys(donneesHomologation).forEach((clef) => {
+      if (donneesHomologation[clef]) donneesPersistees[clef] = donneesHomologation[clef];
+    });
+
+    return donneesPersistees.id;
+  };
+
   const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
     donneesHomologation.id = adaptateurUUID.genereUUID();
     donneesHomologation.idUtilisateur = idUtilisateur;
@@ -59,6 +68,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
   return {
     homologation,
     homologations,
+    metsAJourHomologation,
     nouvelleHomologation,
     nouvelUtilisateur,
     utilisateur,

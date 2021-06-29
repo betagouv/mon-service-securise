@@ -128,6 +128,21 @@ describe('Le dépôt de données', () => {
     });
   });
 
+  describe("quand il reçoit une demande de mise à jour d'une homologation", () => {
+    it("met à jour l'homologation", () => {
+      const depot = DepotDonnees.creeDepot({
+        homologations: [
+          { id: '123', nomService: 'Super Service' },
+        ],
+      }, {});
+
+      depot.metsAJourHomologation('123', { nomService: 'Nouveau Nom' });
+
+      const homologation = depot.homologation('123');
+      expect(homologation.nomService).to.equal('Nouveau Nom');
+    });
+  });
+
   describe("sur réception d'une demande d'enregistrement d'un nouvel utilisateur", () => {
     const adaptateurJWT = 'Un adaptateur';
     const adaptateurUUID = { genereUUID: () => '11111111-1111-1111-1111-111111111111' };

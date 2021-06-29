@@ -249,17 +249,25 @@ describe('Le serveur MSS', () => {
 
       depotDonnees.nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
         expect(idUtilisateur).to.equal('123');
-        expect(donneesHomologation).to.eql({ nomService: 'Super Service', natureService: ['api'] });
+        expect(donneesHomologation).to.eql({
+          nomService: 'Super Service',
+          natureService: undefined,
+          provenanceService: undefined,
+          dejaMisEnLigne: undefined,
+          fonctionnalites: undefined,
+          donneesCaracterePersonnel: undefined,
+          delaiAvantImpactCritique: undefined,
+          presenceResponsable: undefined,
+        });
         return '456';
       };
 
-      axios.post('http://localhost:1234/api/homologation', {
-        nomService: 'Super Service', natureService: ['api'],
-      }).then((reponse) => {
-        expect(reponse.status).to.equal(200);
-        expect(reponse.data).to.eql({ idHomologation: '456' });
-        done();
-      })
+      axios.post('http://localhost:1234/api/homologation', { nomService: 'Super Service' })
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
         .catch((erreur) => done(erreur));
     });
   });

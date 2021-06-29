@@ -72,9 +72,28 @@ const creeServeur = (depotDonnees, middleware, referentiel,
 
   app.post('/api/homologation', middleware.verificationJWT, (requete, reponse) => {
     if (Object.keys(requete.body).length > 0) {
-      const { nomService, natureService } = requete.body;
+      const {
+        nomService,
+        natureService,
+        provenanceService,
+        dejaMisEnLigne,
+        fonctionnalites,
+        donneesCaracterePersonnel,
+        delaiAvantImpactCritique,
+        presenceResponsable,
+      } = requete.body;
+
       const idHomologation = depotDonnees.nouvelleHomologation(
-        requete.idUtilisateurCourant, { nomService, natureService }
+        requete.idUtilisateurCourant, {
+          nomService,
+          natureService,
+          provenanceService,
+          dejaMisEnLigne,
+          fonctionnalites,
+          donneesCaracterePersonnel,
+          delaiAvantImpactCritique,
+          presenceResponsable,
+        }
       );
 
       reponse.json({ idHomologation });
