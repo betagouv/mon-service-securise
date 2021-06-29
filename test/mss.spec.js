@@ -182,6 +182,12 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête GET sur `/homologation/:id/edition`', () => {
+    beforeEach(() => (
+      depotDonnees.homologation = () => new Homologation({
+        id: '456', idUtilisateur: '999', nomService: 'Super Service',
+      })
+    ));
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT(
         { method: 'get', url: 'http://localhost:1234/homologation/456/edition' }, done

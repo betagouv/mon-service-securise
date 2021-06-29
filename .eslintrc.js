@@ -32,4 +32,8 @@ module.exports = {
       ExportDeclaration: { consistent: true },
     }],
   },
+  overrides: [{
+    files: ['public/*/*.js'],
+    rules: { 'import/extensions': ['error', 'always'] },
+  }],
 };

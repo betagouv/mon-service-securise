@@ -4,7 +4,7 @@ block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/homologation/formulaireInformationsGenerales.css', rel = 'stylesheet')
 
-mixin formulaireInformationsGenerales
+mixin formulaireInformationsGenerales(identifiantHomologation)
   form#homologation
     h1 Décrivez le service numérique
     h2 Informations générales
@@ -15,11 +15,10 @@ mixin formulaireInformationsGenerales
     section
       label Nom du service à homologuer
         br
-        input(id = 'nom-service', name = 'nomService', type = 'text')
+        input(id = 'nom-service', name = 'nomService', type = 'text', value = homologation.nomService)
 
       +inputChoix({
         type: 'checkbox',
-        prefixeIdentifiant: 'nature-service-',
         nom: 'natureService',
         titre: 'Quelle est la nature du service numérique ?',
         items: referentiel.naturesService(),
@@ -27,14 +26,12 @@ mixin formulaireInformationsGenerales
 
       +inputChoix({
         type: 'checkbox',
-        prefixeIdentifiant: 'provenance-service-',
         nom: 'provenanceService',
         titre: 'Quelle est la provenance du service numérique ?',
         items: referentiel.provenancesService(),
       })
 
       +inputOuiNon({
-        prefixeIdentifiant: 'deja-mis-en-ligne-',
         nom: 'dejaMisEnLigne',
         titre: 'Le service numérique est-il déjà mis en ligne ?',
       })
@@ -42,15 +39,13 @@ mixin formulaireInformationsGenerales
     section
       +inputChoix({
         type: 'checkbox',
-        prefixeIdentifiant: 'fonctionnalite-',
-        nom: 'fonctionnalite',
+        nom: 'fonctionnalites',
         titre: 'Le service numérique inclut-il une ou plusieurs des fonctionnalités suivantes ?',
         items: referentiel.fonctionnalites(),
       })
 
       +inputChoix({
         type: 'checkbox',
-        prefixeIdentifiant: 'donnees-caractere-personnel-',
         nom: 'donneesCaracterePersonnel',
         titre: 'Le service numérique est-il amené à traiter une ou plusieurs des données à caractère personnel suivantes ?',
         items: referentiel.donneesCaracterePersonnel(),
@@ -59,16 +54,14 @@ mixin formulaireInformationsGenerales
     section
       +inputChoix({
         type: 'radio',
-        prefixeIdentifiant: 'delai-avant-impact-critique-',
         nom: 'delaiAvantImpactCritique',
         titre: 'Au bout de combien de temps le dysfonctionnement grave de votre service aura-t-il un impact critique pour votre organisation ou pour les usagers ?',
         items: referentiel.delaisAvantImpactCritique(),
       })
 
       +inputOuiNon({
-        prefixeIdentifiant: 'presence-responsable-',
         nom: 'presenceResponsable',
         titre: "Une personne est-elle responsable de la sécurité des systèmes d'information au sein de votre organisation ?",
       })
 
-    .bouton Continuer &nbsp;&nbsp;›
+    .bouton(identifiant = homologation.id) Continuer &nbsp;&nbsp;›

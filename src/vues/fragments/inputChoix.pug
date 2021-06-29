@@ -1,19 +1,29 @@
-mixin inputChoix({ type, prefixeIdentifiant, nom, titre, items })
+mixin inputChoix({ type, nom, titre, items })
+  - let valeursSelectionnees = homologation[nom]
   fieldset= titre
     each donnees, identifiant in items
       - const { description, exemple } = donnees
-      - const identifiantInput = prefixeIdentifiant + identifiant
+      - const identifiantInput = nom + identifiant
       br
-      input(id = identifiantInput, name = nom, value = identifiant, type = type)
+      input(
+        id = identifiantInput,
+        name = nom,
+        value = identifiant,
+        type = type,
+        checked = (
+          Array.isArray(valeursSelectionnees)
+            ? valeursSelectionnees.includes(identifiant)
+            : identifiant === valeursSelectionnees
+        )
+      )
       label(for = identifiantInput)= description
       if exemple
         br
         label.exemple(for = identifiantInput)= exemple
 
-mixin inputOuiNon({ prefixeIdentifiant, nom, titre })
+mixin inputOuiNon({ nom, titre })
   +inputChoix({
     type: 'radio',
-    prefixeIdentifiant: prefixeIdentifiant,
     nom: nom,
     titre: titre,
     items: { oui: { description: 'Oui' }, non: { description: 'Non' } },

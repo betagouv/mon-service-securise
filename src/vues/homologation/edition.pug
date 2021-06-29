@@ -2,4 +2,6 @@ extends ../mss
 include ../fragments/formulaireInformationsGenerales
 
 block main
-  +formulaireInformationsGenerales
+  +formulaireInformationsGenerales("#{ homologation.id }")
+
+  script(type = 'module', src = '/statique/homologation/edition.js')

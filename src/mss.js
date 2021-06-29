@@ -2,6 +2,7 @@ const cookieSession = require('cookie-session');
 const express = require('express');
 
 const { ErreurUtilisateurExistant } = require('./erreurs');
+const Homologation = require('./modeles/homologation');
 
 require('dotenv').config();
 
@@ -41,7 +42,8 @@ const creeServeur = (depotDonnees, middleware, referentiel,
   });
 
   app.get('/homologation/creation', middleware.verificationJWT, (requete, reponse) => {
-    reponse.render('homologation/creation', { referentiel });
+    const homologation = new Homologation({});
+    reponse.render('homologation/creation', { referentiel, homologation });
   });
 
   app.get('/homologation/:id', middleware.verificationJWT, (requete, reponse) => {
@@ -61,7 +63,8 @@ const creeServeur = (depotDonnees, middleware, referentiel,
   });
 
   app.get('/homologation/:id/edition', middleware.verificationJWT, (requete, reponse) => {
-    reponse.render('homologation/edition', { referentiel });
+    const homologation = depotDonnees.homologation(requete.params.id);
+    reponse.render('homologation/edition', { referentiel, homologation });
   });
 
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
