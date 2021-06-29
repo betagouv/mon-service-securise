@@ -7,6 +7,10 @@ const avecPremierElementCommeValeurs = (params, nomsParamsAtomiques) => {
   return resultat;
 };
 
+const nomsInput = (selecteurInputs) => $
+  .map($(selecteurInputs), ($i) => $i.name)
+  .filter((nom, index, nomsParams) => nomsParams.indexOf(nom) === index);
+
 const parametres = (selecteurFormulaire) => {
   const params = $(selecteurFormulaire)
     .serializeArray()
@@ -18,9 +22,11 @@ const parametres = (selecteurFormulaire) => {
 
       return acc;
     }, {});
-  const nomsParamsAtomiques = $
-    .map($('input[type!="checkbox"]'), ($i) => $i.name)
-    .filter((nom, index, nomsParams) => nomsParams.indexOf(nom) === index);
+
+  const nomsParamsMultiples = nomsInput(`${selecteurFormulaire} input[type="checkbox"]`);
+  nomsParamsMultiples.forEach((n) => (params[n] ||= []));
+
+  const nomsParamsAtomiques = nomsInput(`${selecteurFormulaire} input[type!="checkbox"]`);
   return avecPremierElementCommeValeurs(params, nomsParamsAtomiques);
 };
 
