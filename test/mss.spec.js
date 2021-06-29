@@ -272,6 +272,34 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête PUT sur `/api/homologation/:id`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      depotDonnees.metsAJourHomologation = () => {};
+
+      verifieRequeteExigeJWT(
+        { method: 'put', url: 'http://localhost:1234/api/homologation/456' }, done
+      );
+    });
+
+    it("demande au dépôt de données de mettre à jour l'homologation", (done) => {
+      idUtilisateurCourant = '123';
+
+      depotDonnees.metsAJourHomologation = (identifiant, donneesHomologation) => {
+        expect(identifiant).to.equal('456');
+        expect(donneesHomologation.nomService).to.equal('Nouveau Nom');
+        return '456';
+      };
+
+      axios.put('http://localhost:1234/api/homologation/456', { nomService: 'Nouveau Nom' })
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch((erreur) => done(erreur));
+    });
+  });
+
   describe('quand requête POST sur `/api/utilisateur`', () => {
     const utilisateur = { id: '123', genereToken: () => 'un token' };
 

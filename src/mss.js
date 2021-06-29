@@ -100,6 +100,32 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     } else reponse.status(422).send("Données insuffisantes pour créer l'homologation");
   });
 
+  app.put('/api/homologation/:id', middleware.verificationJWT, (requete, reponse) => {
+    const {
+      nomService,
+      natureService,
+      provenanceService,
+      dejaMisEnLigne,
+      fonctionnalites,
+      donneesCaracterePersonnel,
+      delaiAvantImpactCritique,
+      presenceResponsable,
+    } = requete.body;
+
+    const idHomologation = depotDonnees.metsAJourHomologation(requete.params.id, {
+      nomService,
+      natureService,
+      provenanceService,
+      dejaMisEnLigne,
+      fonctionnalites,
+      donneesCaracterePersonnel,
+      delaiAvantImpactCritique,
+      presenceResponsable,
+    });
+
+    reponse.json({ idHomologation });
+  });
+
   app.post('/api/utilisateur', (requete, reponse, suite) => {
     const { prenom, nom, email, motDePasse } = requete.body;
     try {
