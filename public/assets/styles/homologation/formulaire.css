@@ -1,12 +1,12 @@
-form#homologation {
+form.homologation {
   width: 700px;
 }
 
-form#homologation * {
+form.homologation * {
   text-align: left;
 }
 
-form#homologation h1 {
+form.homologation h1 {
   margin: 0;
   padding-top: 5em;
 
@@ -15,7 +15,7 @@ form#homologation h1 {
   text-transform: uppercase;
 }
 
-form#homologation h2 {
+form.homologation h2 {
   margin-top: 0;
 
   font-weight: normal;
@@ -23,7 +23,7 @@ form#homologation h2 {
   color: #abb6bf;
 }
 
-form#homologation p {
+form.homologation p {
   margin-bottom: 3em;
 }
 
