@@ -1,0 +1,38 @@
+extends ../mss
+include ../fragments/inputChoix
+
+mixin inputMesure({ nom, titre })
+  +inputChoix({
+    type: 'radio',
+    nom: nom,
+    titre: titre,
+    items: { fait: { description: 'Fait' }, planifie: { description: 'Planifié' }, nonRetenu: { description: 'Non retenu' } },
+    decoration: '<div class="mention-anssi mesure-indispensable">Indispensable</div>',
+  })
+
+block append styles
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
+
+block main
+  form.homologation#mesures
+    h1 Sécurisez le service numérique
+    h2 Informations générales
+    p.
+      Fixez les mesures pour sécuriser votre service à partir des
+      recommandations de l'ANSSI.
+
+    each donnees, identifiant in referentiel.mesures()
+      section
+        +inputMesure({
+          nom: identifiant,
+          titre: donnees.description,
+        })
+
+    .bouton(identifiant = homologation.id) Continuer &nbsp;&nbsp;›
+
+  script(id = 'donneesMesures', type = 'application/json').
+    !{JSON.stringify(homologation.mesures.map((m) => m.toJSON()))}
+  script(type = 'module', src = '/statique/homologation/mesures.js')
+

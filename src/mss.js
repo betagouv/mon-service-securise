@@ -3,6 +3,7 @@ const express = require('express');
 
 const { ErreurUtilisateurExistant } = require('./erreurs');
 const Homologation = require('./modeles/homologation');
+const Mesure = require('./modeles/mesure');
 
 require('dotenv').config();
 
@@ -67,6 +68,11 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('homologation/edition', { referentiel, homologation });
   });
 
+  app.get('/homologation/:id/mesures', middleware.verificationJWT, (requete, reponse) => {
+    const homologation = depotDonnees.homologation(requete.params.id);
+    reponse.render('homologation/mesures', { referentiel, homologation });
+  });
+
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
     const homologations = depotDonnees.homologations(requete.idUtilisateurCourant)
       .map((h) => h.toJSON());
@@ -127,6 +133,21 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     });
 
     reponse.json({ idHomologation });
+  });
+
+  app.post('/api/homologation/:id/mesures', middleware.verificationJWT, (requete, reponse) => {
+    const params = requete.body;
+    const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
+    identifiantsMesures.forEach((im) => {
+      const mesure = new Mesure({
+        id: im,
+        statut: params[im],
+        modalites: params[`modalites-${im}`],
+      }, referentiel);
+      depotDonnees.ajouteMesureAHomologation(requete.params.id, mesure);
+    });
+
+    reponse.send({ idHomologation: requete.params.id });
   });
 
   app.post('/api/utilisateur', (requete, reponse, suite) => {

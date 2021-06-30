@@ -64,4 +64,9 @@ module.exports = {
     uneSemaine: { description: 'Une semaine' },
     unMois: { description: 'Un mois ou plus' },
   },
+  mesures: {
+    identificationInterconnexions: {
+      description: "Identifier les interconnexions avec d'autres systèmes essentiels",
+    },
+  },
 };

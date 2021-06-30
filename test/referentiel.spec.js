@@ -82,4 +82,10 @@ describe('Le référentiel', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.naturesService()).to.eql({});
   });
+
+  it("peut être rechargé avec d'autres données", () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    referentiel.recharge({ naturesService: { uneClef: 'une valeur' } });
+    expect(referentiel.naturesService()).to.eql({ uneClef: 'une valeur' });
+  });
 });

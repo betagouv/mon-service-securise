@@ -232,6 +232,24 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête GET sur `/homologation/:id/mesures`', () => {
+    beforeEach(() => (
+      depotDonnees.homologation = () => new Homologation({
+        id: '456', idUtilisateur: '999', nomService: 'Super Service',
+      })
+    ));
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      depotDonnees.homologation = () => new Homologation({
+        id: '456', idUtilisateur: '999', nomService: 'Super Service',
+      });
+
+      verifieRequeteExigeJWT(
+        { method: 'get', url: 'http://localhost:1234/homologation/456/mesures' }, done
+      );
+    });
+  });
+
   describe('quand requête POST sur `/api/homologation`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT(
@@ -298,6 +316,39 @@ describe('Le serveur MSS', () => {
 
       axios.put('http://localhost:1234/api/homologation/456', { nomService: 'Nouveau Nom' })
         .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch((erreur) => done(erreur));
+    });
+  });
+
+  describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      verifieRequeteExigeJWT(
+        { method: 'post', url: 'http://localhost:1234/api/homologation/456/mesures' }, done
+      );
+    });
+
+    it("demande au dépôt d'associer les mesures à l'homologation", (done) => {
+      referentiel.recharge({ mesures: { identifiantMesure: {} } });
+      let mesureAjoutee = false;
+
+      depotDonnees.ajouteMesureAHomologation = (idHomologation, mesure) => {
+        expect(idHomologation).to.equal('456');
+        expect(mesure.id).to.equal('identifiantMesure');
+        expect(mesure.statut).to.equal('fait');
+        expect(mesure.modalites).to.equal("Des modalités d'application");
+        mesureAjoutee = true;
+      };
+
+      axios.post('http://localhost:1234/api/homologation/456/mesures', {
+        identifiantMesure: 'fait',
+        'modalites-identifiantMesure': "Des modalités d'application",
+      })
+        .then((reponse) => {
+          expect(mesureAjoutee).to.be(true);
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
