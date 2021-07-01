@@ -35,5 +35,11 @@ module.exports = {
   overrides: [{
     files: ['public/*/*.js'],
     rules: { 'import/extensions': ['error', 'always'] },
+  }, {
+    files: ['test/*/*.js'],
+    rules: { 'no-new': ['off'] },
+  }, {
+    files: ['src/erreurs.js'],
+    rules: { 'max-classes-per-file': ['off'] },
   }],
 };
