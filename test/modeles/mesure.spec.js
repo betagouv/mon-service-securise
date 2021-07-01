@@ -23,6 +23,11 @@ describe('Une mesure de sécurité', () => {
     expect(mesure.id).to.equal('identifiantMesure');
     expect(mesure.statut).to.equal(Mesure.STATUT_FAIT);
     expect(mesure.modalites).to.equal("Des modalités d'application");
+    expect(mesure.toJSON()).to.eql({
+      id: 'identifiantMesure',
+      statut: Mesure.STATUT_FAIT,
+      modalites: "Des modalités d'application",
+    });
   });
 
   it('vérifie que la mesure est bien répertoriée', (done) => {

@@ -28,6 +28,10 @@ class Mesure {
     this.statut = statut;
     this.modalites = modalites;
   }
+
+  toJSON() {
+    return { id: this.id, statut: this.statut, modalites: this.modalites };
+  }
 }
 
 Object.keys(STATUTS).forEach((s) => (Mesure[s] = STATUTS[s]));
