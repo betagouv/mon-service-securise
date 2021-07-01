@@ -62,6 +62,22 @@ describe('Le référentiel', () => {
     expect(referentiel.delaisAvantImpactCritique()).to.eql({ uneClef: 'une valeur' });
   });
 
+  it('connaît la liste des mesures', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { uneClef: 'une valeur' },
+    });
+
+    expect(referentiel.mesures()).to.eql({ uneClef: 'une valeur' });
+  });
+
+  it('connaît la liste des identifiants de mesures répertoriées', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { uneMesure: {}, uneAutreMesure: {} },
+    });
+
+    expect(referentiel.identifiantsMesures()).to.eql(['uneMesure', 'uneAutreMesure']);
+  });
+
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.naturesService()).to.eql({});
