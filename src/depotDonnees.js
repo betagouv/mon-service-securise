@@ -10,6 +10,21 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
     return donneesHomologation ? new Homologation(donneesHomologation, referentiel) : undefined;
   };
 
+  const ajouteMesureAHomologation = (idHomologation, mesure) => {
+    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
+    donneesHomologation.mesures ||= [];
+
+    const donneesMesure = mesure.toJSON();
+    const mesureDejaDansDepot = donneesHomologation.mesures.find((m) => m.id === mesure.id);
+    if (mesureDejaDansDepot) {
+      Object.keys(donneesMesure)
+        .filter((k) => k !== 'id')
+        .forEach((k) => (mesureDejaDansDepot[k] = donneesMesure[k]));
+    } else {
+      donneesHomologation.mesures.push(donneesMesure);
+    }
+  };
+
   const homologations = (idUtilisateur) => donnees.homologations
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h, referentiel));
@@ -66,6 +81,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
   };
 
   return {
+    ajouteMesureAHomologation,
     homologation,
     homologations,
     metsAJourHomologation,

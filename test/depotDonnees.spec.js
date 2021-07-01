@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt');
 
 const DepotDonnees = require('../src/depotDonnees');
 const { ErreurUtilisateurExistant } = require('../src/erreurs');
+const Referentiel = require('../src/referentiel');
 const Homologation = require('../src/modeles/homologation');
+const Mesure = require('../src/modeles/mesure');
 const Utilisateur = require('../src/modeles/utilisateur');
 
 describe('Le dépôt de données', () => {
@@ -60,6 +62,56 @@ describe('Le dépôt de données', () => {
     expect(homologation).to.be.a(Homologation);
     expect(homologation.id).to.equal('789');
     expect(homologation.referentiel).to.equal('Le référentiel');
+  });
+
+  it('renseigne les mesures associées à une homologation', () => {
+    const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
+    const depot = DepotDonnees.creeDepot({
+      homologations: [{
+        id: '123',
+        nomService: 'Un service',
+        mesures: [{ id: 'identifiantMesure', statut: 'fait' }],
+      }],
+    }, { referentiel });
+
+    const { mesures } = depot.homologation('123');
+    expect(mesures.length).to.equal(1);
+
+    const mesure = mesures[0];
+    expect(mesure).to.be.a(Mesure);
+    expect(mesure.id).to.equal('identifiantMesure');
+  });
+
+  it('sait associer une mesure à une homologation', () => {
+    const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
+    const depot = DepotDonnees.creeDepot({
+      homologations: [
+        { id: '123', nomService: 'Un service' },
+      ],
+    }, { referentiel });
+
+    const mesure = new Mesure({ id: 'identifiantMesure', statut: 'fait' }, referentiel);
+    depot.ajouteMesureAHomologation('123', mesure);
+
+    const { mesures } = depot.homologation('123');
+    expect(mesures.length).to.equal(1);
+    expect(mesures[0].id).to.equal('identifiantMesure');
+  });
+
+  it("mets à jour les données de la mesure si elle est déjà associée à l'homologation", () => {
+    const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
+    const depot = DepotDonnees.creeDepot({
+      homologations: [
+        { id: '123', mesures: [{ id: 'identifiantMesure', statut: Mesure.STATUT_PLANIFIE }] },
+      ],
+    }, { referentiel });
+
+    const mesure = new Mesure({ id: 'identifiantMesure', statut: Mesure.STATUT_FAIT }, referentiel);
+    depot.ajouteMesureAHomologation('123', mesure);
+
+    const { mesures } = depot.homologation('123');
+    expect(mesures.length).to.equal(1);
+    expect(mesures[0].statut).to.equal(Mesure.STATUT_FAIT);
   });
 
   it("retourne l'utilisateur authentifié", (done) => {

@@ -1,3 +1,5 @@
+const Mesure = require('./mesure');
+
 class Homologation {
   constructor({
     id = '',
@@ -10,6 +12,7 @@ class Homologation {
     donneesCaracterePersonnel,
     delaiAvantImpactCritique,
     presenceResponsable,
+    mesures = [],
   }, referentiel) {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
@@ -21,6 +24,7 @@ class Homologation {
     this.donneesCaracterePersonnel = donneesCaracterePersonnel;
     this.delaiAvantImpactCritique = delaiAvantImpactCritique;
     this.presenceResponsable = presenceResponsable;
+    this.mesures = mesures.map((donneesMesure) => new Mesure(donneesMesure, referentiel));
 
     this.referentiel = referentiel;
   }
