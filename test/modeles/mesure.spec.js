@@ -51,4 +51,11 @@ describe('Une mesure de sécurité', () => {
       done();
     }
   });
+
+  it('connaît sa description', () => {
+    expect(referentiel.mesures().identifiantMesure.description).to.equal('Une description');
+
+    const mesure = new Mesure({ id: 'identifiantMesure', statut: 'fait' }, referentiel);
+    expect(mesure.description()).to.equal('Une description');
+  });
 });

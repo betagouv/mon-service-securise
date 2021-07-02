@@ -27,10 +27,16 @@ class Mesure {
     this.id = id;
     this.statut = statut;
     this.modalites = modalites;
+
+    this.referentiel = referentiel;
   }
 
   toJSON() {
     return { id: this.id, statut: this.statut, modalites: this.modalites };
+  }
+
+  description() {
+    return this.referentiel.mesures()[this.id].description;
   }
 }
 

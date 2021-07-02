@@ -53,11 +53,18 @@ main h1 {
   left: -2em;
   display: inline-block;
   padding: 1em 2em;
-  background: #1b7cc4;
   border-radius: 5px;
 
   font-size: 1.5em;
   color: #fff;
+}
+
+main h1.bleu {
+  background: #1b7cc4;
+}
+
+main h1.vert {
+  background: #1aaf54;
 }
 
 section {
@@ -140,40 +147,6 @@ section.risques li {
 
   text-align: right;
   font-weight: bold;
-}
-
-section.mesures .legende {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-
-  font-size: 0.8em;
-}
-
-section.mesures .legende * {
-  float: right;
-}
-
-.legende *:before {
-  position: relative;
-  top: 0.2em;
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-
-  margin: 0 1em 0 2em;
-
-  border: solid 1px #abb6bf;
-
-  content: '';
-}
-
-.legende .mises-en-oeuvre:before {
-  background: #caefcb;
-}
-
-.legende .planifiees:before {
-  background: #fff1ce;
 }
 
 section.mesures ul {
@@ -278,6 +251,97 @@ section.pieces-jointes li {
   background-image: url(../images/icone_coche_verte.svg);
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.annexe {
+  position: relative;
+  padding-top: 3em;
+}
+
+.legende {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+
+  font-size: 0.8em;
+}
+
+.legende.avis-anssi {
+  top: 3em;
+}
+
+.legende * {
+  float: right;
+}
+
+.legende *:before {
+  position: relative;
+  top: 0.2em;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+
+  margin: 0 1em 0 2em;
+
+  border: solid 1px #abb6bf;
+
+  content: '';
+}
+
+.legende.avis-anssi *:before {
+  border: none;
+  margin: 0 0 0 2em;
+}
+
+section.detail-mesures li {
+  margin-bottom: 1em;
+  padding: 1em;
+  border: solid 1px #abb6bf;
+  border-radius: 3px;
+}
+
+section.detail-mesures li:last-child {
+  margin-bottom: 0;
+}
+
+section.detail-mesures .description {
+  display: inline-block;
+  font-weight: bold;
+}
+
+section.detail-mesures .statut {
+  float: right;
+
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+
+  border: solid 1px #abb6bf;
+}
+
+section.detail-mesures .indispensable {
+  float: right;
+}
+
+section.detail-mesures .indispensable, .legende.avis-anssi .indispensable:before {
+  width: 3em;
+  height: 1em;
+  background-image: url(../images/icone_clef.svg);
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: 0.2em -0.5em;
+}
+
+section.detail-mesures .statut.fait, .legende .fait:before {
+  background: #caefcb;
+}
+
+section.detail-mesures .statut.planifie, .legende .planifie:before {
+  background: #fff1ce;
+}
+
+section.detail-mesures .statut.nonRetenu, .legende .nonRetenu:before {
+  background: #ebedf0;
 }
 
 @media print {

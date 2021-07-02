@@ -11,7 +11,7 @@ header
   .anssi Agence nationale de la sécurité des systèmes d'information (ANSSI)
 
 main
-  h1 Décision d'homologation de sécurité
+  h1.bleu Décision d'homologation de sécurité
   section.introduction
     h2= homologation.nomService
     dl
@@ -38,8 +38,8 @@ main
     p Recommandées par l'ANSSI, détails en annexe
 
     .legende
-      .planifiees Planifiées à 3 mois
-      .mises-en-oeuvre Mises en œuvre
+      .planifie Planifiées à 3 mois
+      .fait Mises en œuvre
 
     ul
       li
@@ -110,4 +110,25 @@ main
     ul
       li Visuel du service
       li Compte-rendu de test de pénétration ou de bugbounty
+
+  h1.vert Annexe – Détail des mesures de sécurité
+
+  .annexe
+    .legende
+      .nonRetenu Non retenues
+      .planifie Planifiées à 3 mois
+      .fait Mesures mises en œuvre
+    .legende.avis-anssi
+      .indispensable Mesure indispensable (ANSSI)
+
+    section.detail-mesures
+      h2 Mesures de gouvernance
+      p S'organiser pour gérer la sécurité du service
+
+      ul
+        each mesure in homologation.mesures
+          li
+            .description= mesure.description()
+            .statut(class = mesure.statut)
+            .indispensable
 
