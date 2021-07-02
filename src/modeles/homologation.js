@@ -1,3 +1,4 @@
+const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const Mesure = require('./mesure');
 
 class Homologation {
@@ -13,6 +14,7 @@ class Homologation {
     delaiAvantImpactCritique,
     presenceResponsable,
     mesures = [],
+    caracteristiquesComplementaires = {},
   }, referentiel) {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
@@ -25,6 +27,9 @@ class Homologation {
     this.delaiAvantImpactCritique = delaiAvantImpactCritique;
     this.presenceResponsable = presenceResponsable;
     this.mesures = mesures.map((donneesMesure) => new Mesure(donneesMesure, referentiel));
+    this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
+      caracteristiquesComplementaires, referentiel,
+    );
 
     this.referentiel = referentiel;
   }

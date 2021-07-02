@@ -37,4 +37,18 @@ describe('Une homologation', () => {
 
     expect(homologation.descriptionNatureService()).to.equal('Nature du service non renseignée');
   });
+
+  it('connaît ses caractéristiques complémentaires', () => {
+    const referentiel = Referentiel.creeReferentiel({});
+    const homologation = new Homologation({
+      id: '123',
+      caracteristiquesComplementaires: {
+        presentation: 'Une présentation',
+      },
+    }, referentiel);
+
+    expect(homologation.caracteristiquesComplementaires.presentation).to.equal(
+      'Une présentation'
+    );
+  });
 });

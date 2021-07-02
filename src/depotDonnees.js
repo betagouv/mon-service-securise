@@ -25,6 +25,16 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
     }
   };
 
+  const ajouteCaracteristiquesAHomologation = (idHomologation, caracteristiques) => {
+    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
+    donneesHomologation.caracteristiquesComplementaires ||= {};
+
+    const donneesCaracteristiques = caracteristiques.toJSON();
+    Object.keys(donneesCaracteristiques).forEach((k) => (
+      donneesHomologation.caracteristiquesComplementaires[k] = donneesCaracteristiques[k]
+    ));
+  };
+
   const homologations = (idUtilisateur) => donnees.homologations
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h, referentiel));
@@ -81,6 +91,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
   };
 
   return {
+    ajouteCaracteristiquesAHomologation,
     ajouteMesureAHomologation,
     homologation,
     homologations,

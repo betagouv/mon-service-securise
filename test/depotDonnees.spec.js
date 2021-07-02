@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const DepotDonnees = require('../src/depotDonnees');
 const { ErreurUtilisateurExistant } = require('../src/erreurs');
 const Referentiel = require('../src/referentiel');
+const CaracteristiquesComplementaires = require('../src/modeles/caracteristiquesComplementaires');
 const Homologation = require('../src/modeles/homologation');
 const Mesure = require('../src/modeles/mesure');
 const Utilisateur = require('../src/modeles/utilisateur');
@@ -112,6 +113,38 @@ describe('Le dépôt de données', () => {
     const { mesures } = depot.homologation('123');
     expect(mesures.length).to.equal(1);
     expect(mesures[0].statut).to.equal(Mesure.STATUT_FAIT);
+  });
+
+  it('sait associer des caractéristiques complémentaires à une homologation', () => {
+    const referentiel = Referentiel.creeReferentiel({ localisationsDonnees: { france: {} } });
+    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] }, { referentiel });
+
+    const caracteristiques = new CaracteristiquesComplementaires({
+      localisationDonnees: 'france',
+    }, referentiel);
+    depot.ajouteCaracteristiquesAHomologation('123', caracteristiques);
+
+    const { caracteristiquesComplementaires } = depot.homologation('123');
+    expect(caracteristiquesComplementaires.localisationDonnees).to.equal('france');
+  });
+
+  it("met à jour les caractéristiques si elles existent déjà pour l'homologation", () => {
+    const referentiel = Referentiel.creeReferentiel({ localisationsDonnees: { france: {} } });
+    const depot = DepotDonnees.creeDepot({
+      homologations: [{
+        id: '123',
+        caracteristiquesComplementaires: { presentation: 'Une présentation' },
+      }],
+    }, { referentiel });
+
+    const caracteristiques = new CaracteristiquesComplementaires({
+      localisationDonnees: 'france',
+    }, referentiel);
+    depot.ajouteCaracteristiquesAHomologation('123', caracteristiques);
+
+    const { caracteristiquesComplementaires } = depot.homologation('123');
+    expect(caracteristiquesComplementaires.presentation).to.equal('Une présentation');
+    expect(caracteristiquesComplementaires.localisationDonnees).to.equal('france');
   });
 
   it("retourne l'utilisateur authentifié", (done) => {
