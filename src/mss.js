@@ -2,6 +2,7 @@ const cookieSession = require('cookie-session');
 const express = require('express');
 
 const { ErreurUtilisateurExistant } = require('./erreurs');
+const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const Mesure = require('./modeles/mesure');
 
@@ -141,6 +142,14 @@ const creeServeur = (depotDonnees, middleware, referentiel,
 
     reponse.json({ idHomologation });
   });
+
+  app.post('/api/homologation/:id/caracteristiquesComplementaires',
+    middleware.verificationJWT, (requete, reponse) => {
+      const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
+      depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques);
+
+      reponse.send({ idHomologation: requete.params.id });
+    });
 
   app.post('/api/homologation/:id/mesures', middleware.verificationJWT, (requete, reponse) => {
     const params = requete.body;

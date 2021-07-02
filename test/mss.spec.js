@@ -337,6 +337,38 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      depotDonnees.ajouteCaracteristiquesAHomologation = () => {};
+
+      verifieRequeteExigeJWT({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
+      }, done);
+    });
+
+    it("demande au dépôt d'associer les caractéristiques à l'homologation", (done) => {
+      let caracteristiquesAjoutees = false;
+
+      depotDonnees.ajouteCaracteristiquesAHomologation = (idHomologation, caracteristiques) => {
+        expect(idHomologation).to.equal('456');
+        expect(caracteristiques.presentation).to.equal('Une présentation');
+        caracteristiquesAjoutees = true;
+      };
+
+      axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
+        presentation: 'Une présentation',
+      })
+        .then((reponse) => {
+          expect(caracteristiquesAjoutees).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch((erreur) => done(erreur));
+    });
+  });
+
   describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT(

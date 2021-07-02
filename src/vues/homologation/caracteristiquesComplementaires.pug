@@ -13,19 +13,28 @@ block main
     section
       label Présentation du service numérique
         p Présentez en quelques lignes l'objet du service numérique, son rôle, ses utilisateurs, etc.
-        textarea(id = 'presentation', name = 'presentation')
+        textarea(
+          id = 'presentation', name = 'presentation',
+        )= homologation.caracteristiquesComplementaires.presentation
 
       label Structure ayant développé le service numérique
-        input(id = 'structure-developpement', name = 'structureDeveloppement', type = 'text')
+        input(
+          id = 'structure-developpement', name = 'structureDeveloppement', type = 'text',
+          value = homologation.caracteristiquesComplementaires.structureDeveloppement,
+        )
 
       label Nom de l'hébergeur
-        input(id = 'hebergeur', name = 'hebergeur', type = 'text')
+        input(
+          id = 'hebergeur', name = 'hebergeur', type = 'text',
+          value = homologation.caracteristiquesComplementaires.hebergeur,
+        )
 
       +inputChoix({
         type: 'radio',
         nom: 'localisationDonnees',
         titre: 'Localisation des données',
         items: referentiel.localisationsDonnees(),
+        objetDonnees: homologation.caracteristiquesComplementaires,
       })
 
     .bouton(identifiant = homologation.id) Continuer &nbsp;&nbsp;›
