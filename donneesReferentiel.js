@@ -4,6 +4,7 @@ module.exports = {
     applicationMobile: { description: 'Application Mobile' },
     api: { description: 'API' },
   },
+
   provenancesService: {
     developpement: {
       description: 'Il a été développé pour votre organisation, en interne ou par un prestataire',
@@ -14,6 +15,7 @@ module.exports = {
       exemple: 'service de visioconférence',
     },
   },
+
   fonctionnalites: {
     newsletter: { description: 'Inscription à une newsletter' },
     compte: { description: 'Création de compte (utilisateurs avec comptes)' },
@@ -29,6 +31,7 @@ module.exports = {
     edition: { description: 'Édition collaborative (documents, murs collaboratifs, etc.)' },
     autre: { description: 'Autres fonctionnalités permettant des échanges de données (préciser)' },
   },
+
   donneesCaracterePersonnel: {
     contact: {
       description: 'Données de contact',
@@ -58,15 +61,23 @@ module.exports = {
       exemple: 'données de santé, orientation sexuelle, origine raciale ou ethnique, opinions politiques ou religieuses',
     },
   },
+
   delaisAvantImpactCritique: {
     uneHeure: { description: 'Une heure' },
     uneJournee: { description: 'Une journée' },
     uneSemaine: { description: 'Une semaine' },
     unMois: { description: 'Un mois ou plus' },
   },
+
   mesures: {
     identificationInterconnexions: {
       description: "Identifier les interconnexions avec d'autres systèmes essentiels",
     },
+  },
+
+  localisationsDonnees: {
+    france: { description: 'France' },
+    unionEuropeenne: { description: 'Union Européenne' },
+    autre: { description: 'Autre' },
   },
 };

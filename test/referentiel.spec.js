@@ -78,6 +78,16 @@ describe('Le référentiel', () => {
     expect(referentiel.identifiantsMesures()).to.eql(['uneMesure', 'uneAutreMesure']);
   });
 
+  it('connaît la liste des identifiants des localisations de données', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      localisationsDonnees: { uneLocalisation: {}, uneAutreLocalisation: {} },
+    });
+
+    expect(referentiel.identifiantsLocalisationsDonnees()).to.eql(
+      ['uneLocalisation', 'uneAutreLocalisation']
+    );
+  });
+
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.naturesService()).to.eql({});

@@ -13,6 +13,7 @@ const creeReferentiel = (donneesReferentiel) => {
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const fonctionnalites = () => donnees.fonctionnalites;
+  const identifiantsLocalisationsDonnees = () => Object.keys(donnees.localisationsDonnees);
   const mesures = () => donnees.mesures;
   const identifiantsMesures = () => Object.keys(mesures());
   const naturesService = () => donnees.naturesService;
@@ -22,6 +23,7 @@ const creeReferentiel = (donneesReferentiel) => {
     delaisAvantImpactCritique,
     donneesCaracterePersonnel,
     fonctionnalites,
+    identifiantsLocalisationsDonnees,
     identifiantsMesures,
     mesures,
     natureService,
@@ -32,12 +34,13 @@ const creeReferentiel = (donneesReferentiel) => {
 };
 
 const creeReferentielVide = () => creeReferentiel({
+  delaisAvantImpactCritique: {},
+  donneesCaracterePersonnel: {},
+  fonctionnalites: {},
+  localisationsDonnees: {},
+  mesures: {},
   naturesService: {},
   provenancesService: {},
-  fonctionnalites: {},
-  donneesCaracterePersonnel: {},
-  delaisAvantImpactCritique: {},
-  mesures: {},
 });
 
 module.exports = { creeReferentiel, creeReferentielVide };
