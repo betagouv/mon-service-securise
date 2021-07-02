@@ -61,6 +61,7 @@
 li.action {
   list-style-type: none;
 
+  margin-bottom: 1em;
   padding: 1em 2em;
 
   border-radius: 5px;

@@ -55,6 +55,13 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     } else reponse.render('homologation', { homologation });
   });
 
+  app.get('/homologation/:id/caracteristiquesComplementaires',
+    middleware.verificationJWT,
+    (requete, reponse) => {
+      const homologation = depotDonnees.homologation(requete.params.id);
+      reponse.render('homologation/caracteristiquesComplementaires', { referentiel, homologation });
+    });
+
   app.get('/homologation/:id/decision', middleware.verificationJWT, (requete, reponse) => {
     const homologation = depotDonnees.homologation(requete.params.id);
     if (!homologation) reponse.status(404).send('Homologation non trouvée');

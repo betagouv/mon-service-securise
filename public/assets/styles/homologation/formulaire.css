@@ -27,6 +27,12 @@ form.homologation p {
   margin-bottom: 3em;
 }
 
+form.homologation label p {
+  margin: 0 0 1em;
+  font-weight: 200;
+  color: #abb6bf;
+}
+
 label.exemple::before {
   content: 'ex. '
 }

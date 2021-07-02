@@ -13,7 +13,8 @@ const creeReferentiel = (donneesReferentiel) => {
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const fonctionnalites = () => donnees.fonctionnalites;
-  const identifiantsLocalisationsDonnees = () => Object.keys(donnees.localisationsDonnees);
+  const localisationsDonnees = () => donnees.localisationsDonnees;
+  const identifiantsLocalisationsDonnees = () => Object.keys(localisationsDonnees());
   const mesures = () => donnees.mesures;
   const identifiantsMesures = () => Object.keys(mesures());
   const naturesService = () => donnees.naturesService;
@@ -23,6 +24,7 @@ const creeReferentiel = (donneesReferentiel) => {
     delaisAvantImpactCritique,
     donneesCaracterePersonnel,
     fonctionnalites,
+    localisationsDonnees,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
     mesures,
