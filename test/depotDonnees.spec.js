@@ -98,7 +98,7 @@ describe('Le dépôt de données', () => {
     expect(mesures[0].id).to.equal('identifiantMesure');
   });
 
-  it("mets à jour les données de la mesure si elle est déjà associée à l'homologation", () => {
+  it("met à jour les données de la mesure si elle est déjà associée à l'homologation", () => {
     const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
     const depot = DepotDonnees.creeDepot({
       homologations: [
