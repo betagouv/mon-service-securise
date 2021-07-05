@@ -12,19 +12,31 @@ block main
     section
       h3 Autorité d'homologation
       label Prénom et nom de l'autorité d'homologation
-        input(id = 'autorite-homologation', name = 'autoriteHomologation', type = 'text')
+        input(
+          id = 'autorite-homologation', name = 'autoriteHomologation', type = 'text',
+          value = homologation.partiesPrenantes.autoriteHomologation,
+        )
       label Fonction de l'autorité d'homologation
-        input(id = 'fonction-autorite-homologation', name = 'fonctionAutoriteHomologation', type = 'text')
+        input(
+          id = 'fonction-autorite-homologation', name = 'fonctionAutoriteHomologation', type = 'text'
+          value = homologation.partiesPrenantes.fonctionAutoriteHomologation,
+        )
 
     section
       h3 Équipe chagée du projet d'homologation
       label Prénom et nom du pilote du projet
         p ex : personne proposant le déploiement du service, chef de projet numérique, responsable métier, etc.
-        input(id = 'pilote-projet', name = 'piloteProjet', type = 'text')
+        input(
+          id = 'pilote-projet', name = 'piloteProjet', type = 'text'
+          value = homologation.partiesPrenantes.piloteProjet,
+        )
 
       label Prénom et nom de l'expert cybersécurité
         p ex : RSSI, DSSI, prestataire externe
-        input(id = 'expert-cybersecurite', name = 'expertCybersecurite', type = 'text')
+        input(
+          id = 'expert-cybersecurite', name = 'expertCybersecurite', type = 'text',
+          value = homologation.partiesPrenantes.expertCybersecurite
+        )
 
 
     .bouton(identifiant = homologation.id)  Continuer &nbsp;&nbsp;›
