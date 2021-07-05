@@ -52,4 +52,21 @@ describe('Une homologation', () => {
     expect(homologation.hebergeur()).to.equal('Un hébergeur');
     expect(homologation.localisationDonnees()).to.equal('Quelque part en France');
   });
+
+  it('connait ses parties prenantes', () => {
+    const homologation = new Homologation({
+      id: '123',
+      partiesPrenantes: {
+        autoriteHomologation: 'Jean Dupont',
+        fonctionAutoriteHomologation: 'Maire',
+        piloteProjet: 'Sylvie Martin',
+        expertCybersecurite: 'Anna Dubreuil',
+      },
+    });
+
+    expect(homologation.autoriteHomologation()).to.equal('Jean Dupont');
+    expect(homologation.fonctionAutoriteHomologation()).to.equal('Maire');
+    expect(homologation.piloteProjet()).to.equal('Sylvie Martin');
+    expect(homologation.expertCybersecurite()).to.equal('Anna Dubreuil');
+  });
 });

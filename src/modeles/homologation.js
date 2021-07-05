@@ -1,6 +1,7 @@
 const Referentiel = require('../referentiel');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const Mesure = require('./mesure');
+const PartiesPrenantes = require('./partiesPrenantes');
 
 class Homologation {
   constructor({
@@ -16,6 +17,7 @@ class Homologation {
     presenceResponsable,
     mesures = [],
     caracteristiquesComplementaires = {},
+    partiesPrenantes = {},
   }, referentiel = Referentiel.creeReferentielVide()) {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
@@ -31,6 +33,7 @@ class Homologation {
     this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
       caracteristiquesComplementaires, referentiel,
     );
+    this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
 
     this.referentiel = referentiel;
   }
@@ -46,6 +49,14 @@ class Homologation {
   presentation() { return this.caracteristiquesComplementaires.presentation; }
 
   structureDeveloppement() { return this.caracteristiquesComplementaires.structureDeveloppement; }
+
+  autoriteHomologation() { return this.partiesPrenantes.autoriteHomologation; }
+
+  fonctionAutoriteHomologation() { return this.partiesPrenantes.fonctionAutoriteHomologation; }
+
+  piloteProjet() { return this.partiesPrenantes.piloteProjet; }
+
+  expertCybersecurite() { return this.partiesPrenantes.expertCybersecurite; }
 
   toJSON() {
     return {
