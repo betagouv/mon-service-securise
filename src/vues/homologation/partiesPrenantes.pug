@@ -1,0 +1,32 @@
+extends ../mss
+
+block append styles
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
+
+block main
+  form.homologation#parties-prenantes
+    h1 Décrivez le service numérique
+    h2 Parties prenantes
+
+    section
+      h3 Autorité d'homologation
+      label Prénom et nom de l'autorité d'homologation
+        input(id = 'autorite-homologation', name = 'autoriteHomologation', type = 'text')
+      label Fonction de l'autorité d'homologation
+        input(id = 'fonction-autorite-homologation', name = 'fonctionAutoriteHomologation', type = 'text')
+
+    section
+      h3 Équipe chagée du projet d'homologation
+      label Prénom et nom du pilote du projet
+        p ex : personne proposant le déploiement du service, chef de projet numérique, responsable métier, etc.
+        input(id = 'pilote-projet', name = 'piloteProjet', type = 'text')
+
+      label Prénom et nom de l'expert cybersécurité
+        p ex : RSSI, DSSI, prestataire externe
+        input(id = 'expert-cybersecurite', name = 'expertCybersecurite', type = 'text')
+
+
+    .bouton(identifiant = homologation.id)  Continuer &nbsp;&nbsp;›
+
+  script(type = 'module', src = '/statique/homologation/partiesPrenantes.js')

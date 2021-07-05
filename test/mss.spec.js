@@ -246,12 +246,6 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête GET sur `/homologation/:id/mesures`', () => {
-    beforeEach(() => (
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      })
-    ));
-
     it("vérifie que l'utilisateur est authentifié", (done) => {
       depotDonnees.homologation = () => new Homologation({
         id: '456', idUtilisateur: '999', nomService: 'Super Service',
@@ -259,6 +253,18 @@ describe('Le serveur MSS', () => {
 
       verifieRequeteExigeJWT(
         { method: 'get', url: 'http://localhost:1234/homologation/456/mesures' }, done
+      );
+    });
+  });
+
+  describe('quand requete GET sur `/homologation/:id/partiesPrenantes`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      depotDonnees.homologation = () => new Homologation({
+        id: '456', idUtilisateur: '999', nomService: 'Super Service',
+      });
+
+      verifieRequeteExigeJWT(
+        { method: 'get', url: 'http://localhost:1234/homologation/456/partiesPrenantes' }, done
       );
     });
   });
@@ -394,6 +400,38 @@ describe('Le serveur MSS', () => {
       })
         .then((reponse) => {
           expect(mesureAjoutee).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch((erreur) => done(erreur));
+    });
+  });
+
+  describe('quand requête POST sur `/api/homologation/:id/partiesPrenantes`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      depotDonnees.ajoutePartiesPrenantesAHomologation = () => {};
+
+      verifieRequeteExigeJWT({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/partiesPrenantes',
+      }, done);
+    });
+
+    it("demande au dépôt d'associer les parties prenantes à l'homologation", (done) => {
+      let partiesPrenantesAjoutees = false;
+
+      depotDonnees.ajoutePartiesPrenantesAHomologation = (idHomologation, pp) => {
+        expect(idHomologation).to.equal('456');
+        expect(pp.autoriteHomologation).to.equal('Jean Dupont');
+        partiesPrenantesAjoutees = true;
+      };
+
+      axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {
+        autoriteHomologation: 'Jean Dupont',
+      })
+        .then((reponse) => {
+          expect(partiesPrenantesAjoutees).to.be(true);
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();

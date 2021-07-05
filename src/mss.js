@@ -5,6 +5,7 @@ const { ErreurUtilisateurExistant } = require('./erreurs');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const Mesure = require('./modeles/mesure');
+const PartiesPrenantes = require('./modeles/partiesPrenantes');
 
 require('dotenv').config();
 
@@ -79,6 +80,11 @@ const creeServeur = (depotDonnees, middleware, referentiel,
   app.get('/homologation/:id/mesures', middleware.verificationJWT, (requete, reponse) => {
     const homologation = depotDonnees.homologation(requete.params.id);
     reponse.render('homologation/mesures', { referentiel, homologation });
+  });
+
+  app.get('/homologation/:id/partiesPrenantes', middleware.verificationJWT, (requete, reponse) => {
+    const homologation = depotDonnees.homologation(requete.params.id);
+    reponse.render('homologation/partiesPrenantes', { homologation });
   });
 
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
@@ -162,6 +168,13 @@ const creeServeur = (depotDonnees, middleware, referentiel,
       }, referentiel);
       depotDonnees.ajouteMesureAHomologation(requete.params.id, mesure);
     });
+
+    reponse.send({ idHomologation: requete.params.id });
+  });
+
+  app.post('/api/homologation/:id/partiesPrenantes', middleware.verificationJWT, (requete, reponse) => {
+    const partiesPrenantes = new PartiesPrenantes(requete.body);
+    depotDonnees.ajoutePartiesPrenantesAHomologation(requete.params.id, partiesPrenantes);
 
     reponse.send({ idHomologation: requete.params.id });
   });
