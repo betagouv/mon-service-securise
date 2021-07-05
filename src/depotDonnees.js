@@ -4,7 +4,7 @@ const { ErreurUtilisateurExistant } = require('./erreurs');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
-const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
+const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {}) => {
   const homologation = (idHomologation) => {
     const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
     return donneesHomologation ? new Homologation(donneesHomologation, referentiel) : undefined;
@@ -32,6 +32,16 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
     const donneesCaracteristiques = caracteristiques.toJSON();
     Object.keys(donneesCaracteristiques).forEach((k) => (
       donneesHomologation.caracteristiquesComplementaires[k] = donneesCaracteristiques[k]
+    ));
+  };
+
+  const ajoutePartiesPrenantesAHomologation = (idHomologation, partiesPrenantes) => {
+    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
+    donneesHomologation.partiesPrenantes ||= {};
+
+    const donneesPartiesPrenantes = partiesPrenantes.toJSON();
+    Object.keys(donneesPartiesPrenantes).forEach((k) => (
+      donneesHomologation.partiesPrenantes[k] = donneesPartiesPrenantes[k]
     ));
   };
 
@@ -93,6 +103,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
   return {
     ajouteCaracteristiquesAHomologation,
     ajouteMesureAHomologation,
+    ajoutePartiesPrenantesAHomologation,
     homologation,
     homologations,
     metsAJourHomologation,
@@ -103,6 +114,6 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel }) => {
   };
 };
 
-const creeDepotVide = () => creeDepot({ utilisateurs: [], homologations: [] }, {});
+const creeDepotVide = () => creeDepot({ utilisateurs: [], homologations: [] });
 
 module.exports = { creeDepot, creeDepotVide };

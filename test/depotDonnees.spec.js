@@ -7,6 +7,7 @@ const Referentiel = require('../src/referentiel');
 const CaracteristiquesComplementaires = require('../src/modeles/caracteristiquesComplementaires');
 const Homologation = require('../src/modeles/homologation');
 const Mesure = require('../src/modeles/mesure');
+const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
 const Utilisateur = require('../src/modeles/utilisateur');
 
 describe('Le dépôt de données', () => {
@@ -147,6 +148,31 @@ describe('Le dépôt de données', () => {
     expect(caracteristiquesComplementaires.localisationDonnees).to.equal('france');
   });
 
+  it('sait associer des parties prenantes à une homologation', () => {
+    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] });
+    const pp = new PartiesPrenantes({ autoriteHomologation: 'Jean Dupont' });
+    depot.ajoutePartiesPrenantesAHomologation('123', pp);
+
+    const { partiesPrenantes } = depot.homologation('123');
+    expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
+  });
+
+  it("met à jour les parties prenantes si elles existent déjà pour l'homologation", () => {
+    const depot = DepotDonnees.creeDepot({
+      homologations: [{
+        id: '123',
+        partiesPrenantes: { autoriteHomologation: 'Jean Dupont' },
+      }],
+    });
+
+    const pp = new PartiesPrenantes({ fonctionAutoriteHomologation: 'Maire' });
+    depot.ajoutePartiesPrenantesAHomologation('123', pp);
+
+    const { partiesPrenantes } = depot.homologation('123');
+    expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
+    expect(partiesPrenantes.fonctionAutoriteHomologation).to.equal('Maire');
+  });
+
   it("retourne l'utilisateur authentifié", (done) => {
     const adaptateurJWT = {};
 
@@ -219,7 +245,7 @@ describe('Le dépôt de données', () => {
         homologations: [
           { id: '123', nomService: 'Super Service' },
         ],
-      }, {});
+      });
 
       depot.metsAJourHomologation('123', { nomService: 'Nouveau Nom' });
 
