@@ -1,15 +1,6 @@
 const creeReferentiel = (donneesReferentiel) => {
   let donnees = donneesReferentiel;
 
-  const natureService = (identifiants) => {
-    if (identifiants.length === 0) return 'Nature du service non renseignée';
-    return identifiants
-      .map((identifiant) => donnees.naturesService[identifiant].description)
-      .join(', ');
-  };
-
-  const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
-
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const fonctionnalites = () => donnees.fonctionnalites;
@@ -20,13 +11,28 @@ const creeReferentiel = (donneesReferentiel) => {
   const naturesService = () => donnees.naturesService;
   const provenancesService = () => donnees.provenancesService;
 
+  const natureService = (identifiants) => {
+    if (identifiants.length === 0) return 'Nature du service non renseignée';
+    return identifiants
+      .map((identifiant) => naturesService()[identifiant].description)
+      .join(', ');
+  };
+
+  const localisationDonnees = (identifiant) => {
+    if (!identifiant) return 'Localisation des données non renseignée';
+    return localisationsDonnees()[identifiant].description;
+  };
+
+  const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
+
   return {
     delaisAvantImpactCritique,
     donneesCaracterePersonnel,
     fonctionnalites,
-    localisationsDonnees,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
+    localisationDonnees,
+    localisationsDonnees,
     mesures,
     natureService,
     naturesService,

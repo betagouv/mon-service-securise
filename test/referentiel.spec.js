@@ -21,8 +21,21 @@ describe('Le référentiel', () => {
   });
 
   it('donne une description par défaut si aucun identifiant de nature service', () => {
-    const referentiel = Referentiel.creeReferentiel({});
+    const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.natureService([])).to.equal('Nature du service non renseignée');
+  });
+
+  it('sait décrire la localisation des données', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      localisationsDonnees: { france: { description: 'Quelque part en France' } },
+    });
+
+    expect(referentiel.localisationDonnees('france')).to.equal('Quelque part en France');
+  });
+
+  it('donne une description par défaut si pas de localisation des données', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    expect(referentiel.localisationDonnees()).to.equal('Localisation des données non renseignée');
   });
 
   it('connaît la liste des différentes natures de service possibles', () => {

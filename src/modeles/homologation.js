@@ -34,9 +34,17 @@ class Homologation {
     this.referentiel = referentiel;
   }
 
-  descriptionNatureService() {
-    return this.referentiel.natureService(this.natureService);
+  descriptionNatureService() { return this.referentiel.natureService(this.natureService); }
+
+  localisationDonnees() {
+    return this.caracteristiquesComplementaires.descriptionLocalisationDonnees();
   }
+
+  hebergeur() { return this.caracteristiquesComplementaires.descriptionHebergeur(); }
+
+  presentation() { return this.caracteristiquesComplementaires.presentation; }
+
+  structureDeveloppement() { return this.caracteristiquesComplementaires.structureDeveloppement; }
 
   toJSON() {
     return {

@@ -9,7 +9,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
 
   beforeEach(() => (referentiel = Referentiel.creeReferentiel({
     localisationsDonnees: {
-      france: { description: 'France' },
+      france: { description: 'Quelque part en France' },
     },
   })));
 
@@ -25,6 +25,19 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
     expect(caracteristiques.structureDeveloppement).to.equal('Une structure');
     expect(caracteristiques.hebergeur).to.equal('Un hébergeur');
     expect(caracteristiques.localisationDonnees).to.equal('france');
+  });
+
+  it('sait décrire la localisation des données', () => {
+    const caracteristiques = new CaracteristiquesComplementaires({
+      localisationDonnees: 'france',
+    }, referentiel);
+
+    expect(caracteristiques.descriptionLocalisationDonnees()).to.equal('Quelque part en France');
+  });
+
+  it("retourne une valeur d'hébergeur par défaut", () => {
+    const caracteristiques = new CaracteristiquesComplementaires();
+    expect(caracteristiques.descriptionHebergeur()).to.equal('Hébergeur non renseigné');
   });
 
   it('sait se présenter au format JSON', () => {
@@ -44,14 +57,12 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
   });
 
   it('presente un JSON partiel si certaines caractéristiques ne sont pas définies', () => {
-    const caracteristiques = new CaracteristiquesComplementaires({
-      presentation: 'Une présentation',
-    }, referentiel);
+    const caracteristiques = new CaracteristiquesComplementaires({ presentation: 'Une présentation' });
 
     expect(caracteristiques.toJSON()).to.eql({ presentation: 'Une présentation' });
   });
 
-  it('valide la localisation des données', (done) => {
+  it('valide la localisation des données si elle est présente', (done) => {
     try {
       new CaracteristiquesComplementaires({ localisationDonnees: 'localisationInvalide' }, referentiel);
       done('La création des caractéristiques aurait dû lever une ErreurLocalisationDonneesInvalide');
@@ -60,12 +71,5 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       expect(e.message).to.equal('La localisation des données "localisationInvalide" est invalide');
       done();
     }
-  });
-
-  it("ne lève pas d'erreur si la localisation des données est absente", () => {
-    const caracteristiques = new CaracteristiquesComplementaires({
-      presentation: 'Une présentation',
-    }, referentiel);
-    expect(caracteristiques.presentation).to.equal('Une présentation');
   });
 });

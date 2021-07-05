@@ -1,4 +1,5 @@
 const { ErreurLocalisationDonneesInvalide } = require('../erreurs');
+const Referentiel = require('../referentiel');
 
 const valide = (donnees, referentiel) => {
   const { localisationDonnees } = donnees;
@@ -12,7 +13,7 @@ const valide = (donnees, referentiel) => {
 };
 
 class CaracteristiquesComplementaires {
-  constructor(donneesCaracteristiques, referentiel) {
+  constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
     valide(donneesCaracteristiques, referentiel);
     const {
       presentation,
@@ -25,6 +26,16 @@ class CaracteristiquesComplementaires {
     this.structureDeveloppement = structureDeveloppement;
     this.hebergeur = hebergeur;
     this.localisationDonnees = localisationDonnees;
+
+    this.referentiel = referentiel;
+  }
+
+  descriptionLocalisationDonnees() {
+    return this.referentiel.localisationDonnees(this.localisationDonnees);
+  }
+
+  descriptionHebergeur() {
+    return this.hebergeur || 'Hébergeur non renseigné';
   }
 
   toJSON() {

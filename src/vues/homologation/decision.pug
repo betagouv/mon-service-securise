@@ -16,13 +16,13 @@ main
     h2= homologation.nomService
     dl
       dt Type :
-      dd #{ homologation.descriptionNatureService() }
+      dd= homologation.descriptionNatureService()
       dt Objet :
-      dd donner accès au catalogue multimédia de la médiathèque, permettant aux usagers de se créer un compte et de réserver ou renouveler des réservations de livres, jeux, DVD, etc.
+      dd= homologation.presentation()
       dt Développé par :
-      dd Webservice
+      dd= homologation.structureDeveloppement()
       dt Hébergement et localisation des données :
-      dd OVH, France
+      dd= `${homologation.hebergeur()}, ${homologation.localisationDonnees()}`
 
   section.risques
     h2 Principaux risques de sécurité identifiés

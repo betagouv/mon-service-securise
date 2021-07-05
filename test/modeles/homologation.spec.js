@@ -39,16 +39,22 @@ describe('Une homologation', () => {
   });
 
   it('connaît ses caractéristiques complémentaires', () => {
-    const referentiel = Referentiel.creeReferentiel({});
+    const referentiel = Referentiel.creeReferentiel({
+      localisationsDonnees: { france: { description: 'Quelque part en France' } },
+    });
     const homologation = new Homologation({
       id: '123',
       caracteristiquesComplementaires: {
         presentation: 'Une présentation',
+        structureDeveloppement: 'Une structure',
+        hebergeur: 'Un hébergeur',
+        localisationDonnees: 'france',
       },
     }, referentiel);
 
-    expect(homologation.caracteristiquesComplementaires.presentation).to.equal(
-      'Une présentation'
-    );
+    expect(homologation.presentation()).to.equal('Une présentation');
+    expect(homologation.structureDeveloppement()).to.equal('Une structure');
+    expect(homologation.hebergeur()).to.equal('Un hébergeur');
+    expect(homologation.localisationDonnees()).to.equal('Quelque part en France');
   });
 });
