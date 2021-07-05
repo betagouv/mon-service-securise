@@ -26,6 +26,10 @@ block main
       h3 Équipe chagée du projet d'homologation
       label Prénom et nom du pilote du projet
         p ex : personne proposant le déploiement du service, chef de projet numérique, responsable métier, etc.
+
+        input(id = 'je-suis-pilote-projet', name = 'jeSuisPiloteProjet', type = 'checkbox')
+        label(for = 'je-suis-pilote-projet') Je suis le responsable du projet
+
         input(
           id = 'pilote-projet', name = 'piloteProjet', type = 'text'
           value = homologation.partiesPrenantes.piloteProjet,
@@ -33,6 +37,10 @@ block main
 
       label Prénom et nom de l'expert cybersécurité
         p ex : RSSI, DSSI, prestataire externe
+
+        input(id = 'je-suis-expert-cybersecurite', name = 'jeSuisExpertCybersecurite', type = 'checkbox')
+        label(for = 'je-suis-expert-cybersecurite') Je suis l'expert cybersécurité
+
         input(
           id = 'expert-cybersecurite', name = 'expertCybersecurite', type = 'text',
           value = homologation.partiesPrenantes.expertCybersecurite
