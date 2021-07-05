@@ -1,3 +1,4 @@
+const Referentiel = require('../referentiel');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const Mesure = require('./mesure');
 
@@ -15,7 +16,7 @@ class Homologation {
     presenceResponsable,
     mesures = [],
     caracteristiquesComplementaires = {},
-  }, referentiel) {
+  }, referentiel = Referentiel.creeReferentielVide()) {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
     this.nomService = nomService;
