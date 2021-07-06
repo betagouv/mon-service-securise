@@ -40,6 +40,14 @@ class Homologation {
 
   descriptionNatureService() { return this.referentiel.natureService(this.natureService); }
 
+  descriptionEquipePreparation() {
+    return this.partiesPrenantes.descriptionEquipePreparation();
+  }
+
+  descriptionAutoriteHomologation() {
+    return this.partiesPrenantes.descriptionAutoriteHomologation();
+  }
+
   localisationDonnees() {
     return this.caracteristiquesComplementaires.descriptionLocalisationDonnees();
   }

@@ -69,4 +69,26 @@ describe('Une homologation', () => {
     expect(homologation.piloteProjet()).to.equal('Sylvie Martin');
     expect(homologation.expertCybersecurite()).to.equal('Anna Dubreuil');
   });
+
+  it("sait décrire l'équipe de préparation du dossier", () => {
+    const homologation = new Homologation({
+      id: '123',
+      partiesPrenantes: { piloteProjet: 'Sylvie Martin' },
+    });
+
+    expect(homologation.descriptionEquipePreparation()).to.equal(
+      'Sylvie Martin (responsable du projet)'
+    );
+  });
+
+  it("sait décrire l'autorité d'homologation", () => {
+    const homologation = new Homologation({
+      id: '123',
+      partiesPrenantes: {
+        autoriteHomologation: 'Jean Dupont', fonctionAutoriteHomologation: 'Maire',
+      },
+    });
+
+    expect(homologation.descriptionAutoriteHomologation()).to.equal('Jean Dupont (Maire)');
+  });
 });

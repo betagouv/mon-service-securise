@@ -82,9 +82,7 @@ main
     h2 Équipe
     dl
       dt Décision d'homologation préparée par :
-      dd Jean Dujardin (responsable du projet), Sylvie Chemin (DSI)
-      dt Équipe chargée du maintien en fonctionnement et de la sécurité en continu :
-      dd Jean Dujardin (responsable du projet), Sylvie Chemin (DSI)
+      dd= homologation.descriptionEquipePreparation()
 
   section
     h2 Calendrier
@@ -98,7 +96,7 @@ main
     h2 Décision d'homologation
     dl
       dt Autorité d'homologation :
-      dd M. Maxime Emmanuel (directeur général des services)
+      dd= homologation.descriptionAutoriteHomologation()
     p.signature Lu et approuvé | date | signature
     ul
       li Conformité au référentiel général de sécurité (RGS)
