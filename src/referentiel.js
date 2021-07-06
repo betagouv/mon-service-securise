@@ -10,6 +10,8 @@ const creeReferentiel = (donneesReferentiel) => {
   const identifiantsMesures = () => Object.keys(mesures());
   const naturesService = () => donnees.naturesService;
   const provenancesService = () => donnees.provenancesService;
+  const risques = () => donnees.risques;
+  const identifiantsRisques = () => Object.keys(donnees.risques);
 
   const natureService = (identifiants) => {
     if (identifiants.length === 0) return 'Nature du service non renseignée';
@@ -31,6 +33,7 @@ const creeReferentiel = (donneesReferentiel) => {
     fonctionnalites,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
+    identifiantsRisques,
     localisationDonnees,
     localisationsDonnees,
     mesures,
@@ -38,6 +41,7 @@ const creeReferentiel = (donneesReferentiel) => {
     naturesService,
     provenancesService,
     recharge,
+    risques,
   };
 };
 
@@ -47,6 +51,7 @@ const creeReferentielVide = () => creeReferentiel({
   fonctionnalites: {},
   localisationsDonnees: {},
   mesures: {},
+  risques: {},
   naturesService: {},
   provenancesService: {},
 });
