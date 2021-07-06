@@ -10,19 +10,27 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     return donneesHomologation ? new Homologation(donneesHomologation, referentiel) : undefined;
   };
 
-  const ajouteMesureAHomologation = (idHomologation, mesure) => {
+  const ajouteAItemsDansHomologation = (nomListeItems, idHomologation, item) => {
     const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
-    donneesHomologation.mesures ||= [];
+    donneesHomologation[nomListeItems] ||= [];
 
-    const donneesMesure = mesure.toJSON();
-    const mesureDejaDansDepot = donneesHomologation.mesures.find((m) => m.id === mesure.id);
-    if (mesureDejaDansDepot) {
-      Object.keys(donneesMesure)
+    const donneesItem = item.toJSON();
+    const itemDejaDansDepot = donneesHomologation[nomListeItems].find((m) => m.id === item.id);
+    if (itemDejaDansDepot) {
+      Object.keys(donneesItem)
         .filter((k) => k !== 'id')
-        .forEach((k) => (mesureDejaDansDepot[k] = donneesMesure[k]));
+        .forEach((k) => (itemDejaDansDepot[k] = donneesItem[k]));
     } else {
-      donneesHomologation.mesures.push(donneesMesure);
+      donneesHomologation[nomListeItems].push(donneesItem);
     }
+  };
+
+  const ajouteMesureAHomologation = (...params) => {
+    ajouteAItemsDansHomologation('mesures', ...params);
+  };
+
+  const ajouteRisqueAHomologation = (...params) => {
+    ajouteAItemsDansHomologation('risques', ...params);
   };
 
   const ajouteCaracteristiquesAHomologation = (idHomologation, caracteristiques) => {
@@ -104,6 +112,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     ajouteCaracteristiquesAHomologation,
     ajouteMesureAHomologation,
     ajoutePartiesPrenantesAHomologation,
+    ajouteRisqueAHomologation,
     homologation,
     homologations,
     metsAJourHomologation,

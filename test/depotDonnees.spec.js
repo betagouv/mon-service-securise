@@ -8,6 +8,7 @@ const CaracteristiquesComplementaires = require('../src/modeles/caracteristiques
 const Homologation = require('../src/modeles/homologation');
 const Mesure = require('../src/modeles/mesure');
 const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
+const Risque = require('../src/modeles/risque');
 const Utilisateur = require('../src/modeles/utilisateur');
 
 describe('Le dépôt de données', () => {
@@ -171,6 +172,18 @@ describe('Le dépôt de données', () => {
     const { partiesPrenantes } = depot.homologation('123');
     expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
     expect(partiesPrenantes.fonctionAutoriteHomologation).to.equal('Maire');
+  });
+
+  it('sait associer un risque à une homologation', () => {
+    const referentiel = Referentiel.creeReferentiel({ risques: { unRisque: {} } });
+    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] }, { referentiel });
+    const risque = new Risque({ id: 'unRisque', commentaire: 'Un commentaire' }, referentiel);
+    depot.ajouteRisqueAHomologation('123', risque);
+
+    const { risques } = depot.homologation('123');
+    expect(risques.length).to.equal(1);
+    expect(risques[0]).to.be.a(Risque);
+    expect(risques[0].id).to.equal('unRisque');
   });
 
   it("retourne l'utilisateur authentifié", (done) => {

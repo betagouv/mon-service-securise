@@ -2,6 +2,7 @@ const Referentiel = require('../referentiel');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const Mesure = require('./mesure');
 const PartiesPrenantes = require('./partiesPrenantes');
+const Risque = require('./risque');
 
 class Homologation {
   constructor({
@@ -18,6 +19,7 @@ class Homologation {
     mesures = [],
     caracteristiquesComplementaires = {},
     partiesPrenantes = {},
+    risques = [],
   }, referentiel = Referentiel.creeReferentielVide()) {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
@@ -34,6 +36,7 @@ class Homologation {
       caracteristiquesComplementaires, referentiel,
     );
     this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
+    this.risques = risques.map((donneesRisque) => new Risque(donneesRisque, referentiel));
 
     this.referentiel = referentiel;
   }
