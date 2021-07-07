@@ -269,6 +269,18 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête GET sur `/homologation/:id/risques`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      depotDonnees.homologation = () => new Homologation({
+        id: '456', idUtilisateur: '999', nomService: 'Super Service',
+      });
+
+      verifieRequeteExigeJWT(
+        { method: 'get', url: 'http://localhost:1234/homologation/456/risques' }, done
+      );
+    });
+  });
+
   describe('quand requête POST sur `/api/homologation`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT(

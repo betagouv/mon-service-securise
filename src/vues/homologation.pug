@@ -28,7 +28,9 @@ block main
           dt Sécurisez le service numérique
           dd
             ul
-              li.action.a-faire
+              li.action
+                a(href = `/homologation/${homologation.id}/risques`) Vérification des risques
+              li.action
                 a(href = `/homologation/${homologation.id}/mesures`) Mesures de sécurité
 
     .besoin-aide

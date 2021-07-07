@@ -1,0 +1,31 @@
+extend ../mss
+
+block append styles
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/risques.css', rel = 'stylesheet')
+
+block main
+  form.homologation#risques
+    h1 Sécurisez le service numérique
+    h2 Vérification des risques de sécurité
+    p.
+      Vérifiez ou précisez la liste des risques pour votre service numérique
+      afin de sensibiliser les parties prenantes et l'autorité d'homologation
+      sur les risques identifiés comme les plus courants.
+
+    section
+      each donnees, identifiant in referentiel.risques()
+        .risque(id = identifiant)
+          .information
+            .rideau
+              .modale
+                .fermeture-modale
+                h1= donnees.description
+                p= donnees.descriptionLongue
+          .titre= donnees.description
+          a.informations-additionnelles Précisez le risque dans le cadre de votre organisation (facultatif)
+
+    .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
+
+  script(type = 'module', src = '/statique/homologation/risques.js')

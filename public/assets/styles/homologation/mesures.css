@@ -19,26 +19,8 @@ form#mesures fieldset .titre {
   font-weight: normal;
 }
 
-form#mesures a {
-  display: inline-block;
-  margin-top: 2em;
-  padding-left: 2em;
-
-  background-image: url(../../images/icone_plus_pastille_bleue.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: 0 0;
-
-  font-weight: 200;
-  font-size: 0.9em;
-}
-
 form#mesures textarea {
-  display: block;
-  width: 100%;
-  height: 10em;
 
-  margin-top: 1em;
 }
 
 .mention-anssi.mesure-indispensable {

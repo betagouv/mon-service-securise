@@ -32,6 +32,20 @@ form.homologation p {
   margin-bottom: 3em;
 }
 
+form.homologation a.informations-additionnelles {
+  display: inline-block;
+  margin-top: 2em;
+  padding-left: 2em;
+
+  background-image: url(../../images/icone_plus_pastille_bleue.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 0 0;
+
+  font-weight: 200;
+  font-size: 0.9em;
+}
+
 form.homologation label p {
   margin: 0 0 1em;
   font-weight: 200;
