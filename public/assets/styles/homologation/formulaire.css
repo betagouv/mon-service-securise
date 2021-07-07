@@ -1,5 +1,20 @@
+.retour {
+  display: inline-block;
+  width: 1000px;
+
+  margin-top: 3em;
+
+  text-align: left;
+}
+
+.retour a {
+  text-decoration: none;
+  color: #1b7cc4;
+}
+
 form.homologation {
-  width: 700px;
+  width: 580px;
+  margin: 0;
 }
 
 form.homologation * {

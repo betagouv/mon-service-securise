@@ -1,4 +1,4 @@
-extends ../mss
+extends ./formulaire
 include ../fragments/inputChoix
 
 mixin inputMesure({ nom, titre })
@@ -11,11 +11,9 @@ mixin inputMesure({ nom, titre })
   })
 
 block append styles
-  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
 
-block main
+block formulaire
   form.homologation#mesures
     h1 Sécurisez le service numérique
     h2 Informations générales

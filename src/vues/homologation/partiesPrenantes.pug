@@ -1,10 +1,6 @@
-extends ../mss
+extends ./formulaire
 
-block append styles
-  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
-
-block main
+block formulaire
   form.homologation#parties-prenantes
     h1 Décrivez le service numérique
     h2 Parties prenantes

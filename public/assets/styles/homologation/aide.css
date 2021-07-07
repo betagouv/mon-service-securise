@@ -1,0 +1,34 @@
+.formulaire {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-gap: 1em;
+
+  margin-top: 3em;
+}
+
+.besoin-aide {
+  text-align: left;
+  font-size: 0.7em;
+}
+
+.besoin-aide h1 {
+  margin: 0;
+  padding: 0 0 0 1.4em;
+
+  background-image: url(../../images/icone_marqueur.svg);
+  background-repeat: no-repeat;
+  background-size: 1em;
+  background-position: 0 0.2em;
+
+  font-size: 1.2em;
+  color: #000;
+}
+
+.besoin-aide p {
+  color: #abb6bf;
+}
+
+.besoin-aide a {
+  text-decoration: none;
+  color: #1b7cc4;
+}
