@@ -6,6 +6,7 @@ const CaracteristiquesComplementaires = require('./modeles/caracteristiquesCompl
 const Homologation = require('./modeles/homologation');
 const Mesure = require('./modeles/mesure');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
+const Risque = require('./modeles/risque');
 
 require('dotenv').config();
 
@@ -180,6 +181,20 @@ const creeServeur = (depotDonnees, middleware, referentiel,
   app.post('/api/homologation/:id/partiesPrenantes', middleware.verificationJWT, (requete, reponse) => {
     const partiesPrenantes = new PartiesPrenantes(requete.body);
     depotDonnees.ajoutePartiesPrenantesAHomologation(requete.params.id, partiesPrenantes);
+
+    reponse.send({ idHomologation: requete.params.id });
+  });
+
+  app.post('/api/homologation/:id/risques', middleware.verificationJWT, (requete, reponse) => {
+    const params = requete.body;
+    const prefixeCommentaire = /^commentaire-/;
+    const commentairesRisques = Object.keys(params).filter((p) => p.match(prefixeCommentaire));
+    commentairesRisques.forEach((cr) => {
+      const idRisque = cr.replace(prefixeCommentaire, '');
+      const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
+
+      depotDonnees.ajouteRisqueAHomologation(requete.params.id, risque);
+    });
 
     reponse.send({ idHomologation: requete.params.id });
   });

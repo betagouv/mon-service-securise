@@ -452,6 +452,37 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête POST sur `/api/homologation/:id/risques', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      verifieRequeteExigeJWT(
+        { method: 'post', url: 'http://localhost:1234/api/homologation/456/risques' }, done
+      );
+    });
+
+    it("demande au dépôt d'associer les risques à l'homologation", (done) => {
+      referentiel.recharge({ risques: { unRisque: {} } });
+      let risqueAjoute = false;
+
+      depotDonnees.ajouteRisqueAHomologation = (idHomologation, risque) => {
+        expect(idHomologation).to.equal('456');
+        expect(risque.id).to.equal('unRisque');
+        expect(risque.commentaire).to.equal('Un commentaire');
+        risqueAjoute = true;
+      };
+
+      axios.post('http://localhost:1234/api/homologation/456/risques', {
+        'commentaire-unRisque': 'Un commentaire',
+      })
+        .then((reponse) => {
+          expect(risqueAjoute).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch((erreur) => done(erreur));
+    });
+  });
+
   describe('quand requête POST sur `/api/utilisateur`', () => {
     const utilisateur = { id: '123', genereToken: () => 'un token' };
 

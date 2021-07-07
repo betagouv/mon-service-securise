@@ -1,3 +1,5 @@
+import parametres from '../modules/parametres.js';
+
 $(() => {
   $('.information').click((eInformation) => {
     $('body').css('overflow', 'hidden');
@@ -21,5 +23,11 @@ $(() => {
   });
 
   const $bouton = $('.bouton');
-  $bouton.click(() => {});
+  const identifiantHomologation = $bouton.attr('identifiant');
+
+  $bouton.click(() => {
+    const params = parametres('form#risques');
+    axios.post(`/api/homologation/${identifiantHomologation}/risques`, params)
+      .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
+  });
 });
