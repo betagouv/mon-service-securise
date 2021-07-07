@@ -28,4 +28,6 @@ block main
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
+  script(id = 'donnees-risques', type = 'application/json').
+    !{JSON.stringify(homologation.risques.map((r) => r.toJSON()))}
   script(type = 'module', src = '/statique/homologation/risques.js')

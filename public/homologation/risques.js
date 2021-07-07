@@ -22,6 +22,11 @@ $(() => {
     $zoneSaisie.appendTo($r);
   });
 
+  const donneesRisques = JSON.parse($('#donnees-risques').text());
+  donneesRisques.forEach(({ id, commentaire }) => {
+    if (commentaire) $(`#commentaire-${id}`).show().val(commentaire);
+  });
+
   const $bouton = $('.bouton');
   const identifiantHomologation = $bouton.attr('identifiant');
 
