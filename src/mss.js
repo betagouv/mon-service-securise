@@ -37,9 +37,21 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('connexion');
   });
 
-  app.get('/inscription', middleware.suppressionCookie, (requete, reponse) => {
-    reponse.render('inscription');
+  app.get('/inscription', (requete, reponse) => {
+    reponse.send(
+      'Inscription non autorisée pendant la version alpha ! '
+      + 'contact@mss.beta.gouv.fr pour obtenir un compte.'
+    );
   });
+
+  app.get(
+    '/admin/inscription',
+    middleware.suppressionCookie,
+    middleware.authentificationBasique,
+    (requete, reponse) => {
+      reponse.render('inscription');
+    }
+  );
 
   app.get('/homologations', middleware.verificationJWT, (requete, reponse) => {
     reponse.render('homologations');

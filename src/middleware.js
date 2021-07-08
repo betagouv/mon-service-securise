@@ -1,4 +1,11 @@
-const middleware = (adaptateurJWT) => {
+const basicAuth = require('express-basic-auth');
+
+const middleware = (adaptateurJWT, login, motDePasse) => {
+  const users = {};
+  users[login] = motDePasse;
+
+  const authentificationBasique = basicAuth({ users, challenge: true });
+
   const verificationJWT = (requete, reponse, suite) => {
     const token = adaptateurJWT.decode(requete.session.token);
     if (!token) reponse.redirect('/connexion');
@@ -13,7 +20,7 @@ const middleware = (adaptateurJWT) => {
     suite();
   };
 
-  return { suppressionCookie, verificationJWT };
+  return { authentificationBasique, suppressionCookie, verificationJWT };
 };
 
 module.exports = middleware;

@@ -28,6 +28,7 @@
     "cookie-session": "^1.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "pug": "^3.0.2",
     "uuid": "^8.3.2"

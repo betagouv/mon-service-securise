@@ -11,6 +11,7 @@ describe('Le serveur MSS', () => {
   let idUtilisateurCourant;
   let suppressionCookieEffectuee;
   let verificationJWTMenee;
+  let authentificationBasiqueMenee;
 
   const verifieRequeteExigeSuppressionCookie = (requete, done) => {
     expect(suppressionCookieEffectuee).to.be(false);
@@ -48,6 +49,17 @@ describe('Le serveur MSS', () => {
     done();
   };
 
+  const verifieRequeteExigeAuthentificationBasique = (requete, done) => {
+    expect(authentificationBasiqueMenee).to.be(false);
+
+    axios(requete)
+      .then(() => {
+        expect(authentificationBasiqueMenee).to.be(true);
+        done();
+      })
+      .catch((erreur) => done(erreur));
+  };
+
   const middleware = {
     suppressionCookie: (requete, reponse, suite) => {
       suppressionCookieEffectuee = true;
@@ -56,6 +68,10 @@ describe('Le serveur MSS', () => {
     verificationJWT: (requete, reponse, suite) => {
       requete.idUtilisateurCourant = idUtilisateurCourant;
       verificationJWTMenee = true;
+      suite();
+    },
+    authentificationBasique: (requete, reponse, suite) => {
+      authentificationBasiqueMenee = true;
       suite();
     },
   };
@@ -68,6 +84,7 @@ describe('Le serveur MSS', () => {
     idUtilisateurCourant = undefined;
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
+    authentificationBasiqueMenee = false;
 
     depotDonnees = DepotDonnees.creeDepotVide();
     referentiel = Referentiel.creeReferentielVide();
@@ -92,9 +109,13 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/inscription`', () => {
+  describe('quand requête GET sur `/admin/inscription`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
-      verifieRequeteExigeSuppressionCookie('http://localhost:1234/inscription', done);
+      verifieRequeteExigeSuppressionCookie('http://localhost:1234/admin/inscription', done);
+    });
+
+    it("verrouille l'accès par une authentification basique", (done) => {
+      verifieRequeteExigeAuthentificationBasique('http://localhost:1234/admin/inscription', done);
     });
   });
 
