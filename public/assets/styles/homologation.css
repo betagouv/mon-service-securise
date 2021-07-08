@@ -82,29 +82,3 @@ li.action.faite {
   font-size: 0.9em;
   color: #1b7cc4;
 }
-
-.besoin-aide {
-  font-size: 0.7em;
-}
-
-.besoin-aide h1 {
-  margin: 0;
-  padding: 0 0 0 1.4em;
-
-  background-image: url(../images/icone_marqueur.svg);
-  background-repeat: no-repeat;
-  background-size: 1em;
-  background-position: 0 0.2em;
-
-  font-size: 1.2em;
-  color: #000;
-}
-
-.besoin-aide p {
-  color: #abb6bf;
-}
-
-.besoin-aide a {
-  text-decoration: none;
-  color: #1b7cc4;
-}
