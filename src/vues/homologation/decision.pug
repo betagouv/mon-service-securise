@@ -28,10 +28,8 @@ main
     h2 Principaux risques de sécurité identifiés
     p Suggestions de l'ANSSI, détails en annexe
     ul
-      li Indisponibilité du service
-      li Vol / diffusion de données utilisateurs
-      li Installation de logiciels malveillants
-      li Défiguration de contenu
+      each donneesRisque in referentiel.risques()
+        li= donneesRisque.description
 
   section.mesures
     h2 Mesures de sécurité retenues
@@ -109,8 +107,17 @@ main
       li Visuel du service
       li Compte-rendu de test de pénétration ou de bugbounty
 
-  h1.vert Annexe – Détail des mesures de sécurité
+  .saut-page
+  h1.vert Annexe 1 – Détail des risques principaux
+  .annexe
+    section.detail-risques
+      dl
+        each donneesRisque in referentiel.risques()
+          dt= donneesRisque.description
+          dd= donneesRisque.descriptionLongue
 
+  .saut-page
+  h1.vert Annexe 2 – Détail des mesures de sécurité
   .annexe
     .legende
       .nonRetenu Non retenues

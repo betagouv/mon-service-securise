@@ -70,7 +70,7 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     if (!homologation) reponse.status(404).send('Homologation non trouvée');
     else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
       reponse.status(403).send("Accès à l'homologation refusé");
-    } else reponse.render('homologation/decision', { homologation });
+    } else reponse.render('homologation/decision', { homologation, referentiel });
   });
 
   app.get('/homologation/:id/edition', middleware.verificationJWT, (requete, reponse) => {
