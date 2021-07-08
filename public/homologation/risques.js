@@ -1,6 +1,6 @@
 import parametres from '../modules/parametres.js';
 
-$(() => {
+const ajouteInformationsModales = () => {
   $('.information').click((eInformation) => {
     $('body').css('overflow', 'hidden');
     $('.rideau', $(eInformation.target)).css('display', 'flex');
@@ -11,21 +11,28 @@ $(() => {
       $('body').css('overflow', '');
     });
   });
+};
 
-  $('.risque').each((_, $r) => {
-    const $lien = $('a', $r);
-    const nom = `commentaire-${$r.id}`;
-    const $zoneSaisie = $(`<textarea id=${nom} name=${nom}></textarea>`);
-    $zoneSaisie.hide();
-    $lien.click(() => $zoneSaisie.toggle());
+const ajouteZoneSaisieCommentairePourRisque = ($r, nom) => {
+  const $lien = $('a', $r);
+  const $zoneSaisie = $(`<textarea id=${nom} name=${nom}></textarea>`);
+  $zoneSaisie.hide();
+  $lien.click(() => $zoneSaisie.toggle());
 
-    $zoneSaisie.appendTo($r);
-  });
+  $zoneSaisie.appendTo($r);
+};
 
-  const donneesRisques = JSON.parse($('#donnees-risques').text());
+const peupleCommentairesAvec = (selecteurDonnees) => {
+  const donneesRisques = JSON.parse($(selecteurDonnees).text());
   donneesRisques.forEach(({ id, commentaire }) => {
     if (commentaire) $(`#commentaire-${id}`).show().val(commentaire);
   });
+};
+
+$(() => {
+  ajouteInformationsModales();
+  $('.risque').each((_, $r) => ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`));
+  peupleCommentairesAvec('#donnees-risques');
 
   const $bouton = $('.bouton');
   const identifiantHomologation = $bouton.attr('identifiant');
