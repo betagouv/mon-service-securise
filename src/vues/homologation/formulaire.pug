@@ -7,8 +7,11 @@ block append styles
 
 block main
   .retour
-    a(href=(homologation.id ? `/homologation/${homologation.id}` : "/homologations")).
-      ‹&nbsp;&nbsp;Retour
+    - let lienRetour = '/';
+    - if (homologation) lienRetour = '/homologations';
+    - if (homologation && homologation.id) lienRetour = `/homologation/${homologation.id}`;
+    a(href = lienRetour) ‹&nbsp;&nbsp;Retour
+
   .formulaire
     block formulaire
     +besoinAide

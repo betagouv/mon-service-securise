@@ -1,13 +1,15 @@
 const basicAuth = require('express-basic-auth');
+const pug = require('pug');
 
 const middleware = (adaptateurJWT, login, motDePasse) => {
   const users = {};
   users[login] = motDePasse;
 
   const authentificationBasique = basicAuth({
-    users,
     challenge: true,
     realm: 'Administration Mon Service Sécurisé',
+    users,
+    unauthorizedResponse: () => pug.renderFile('src/vues/accesRefuse.pug'),
   });
 
   const verificationJWT = (requete, reponse, suite) => {

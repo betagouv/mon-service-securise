@@ -50,7 +50,7 @@ describe('Le middleware MSS', () => {
           expect(s).to.equal(401);
           return reponse;
         },
-        send: done,
+        send: () => done(),
       };
 
       middleware.authentificationBasique(requete, reponse, () => done('Exécution suite chaîne inattendue'));
