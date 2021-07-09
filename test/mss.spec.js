@@ -110,10 +110,6 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête GET sur `/admin/inscription`', () => {
-    it("déconnecte l'utilisateur courant", (done) => {
-      verifieRequeteExigeSuppressionCookie('http://localhost:1234/admin/inscription', done);
-    });
-
     it("verrouille l'accès par une authentification basique", (done) => {
       verifieRequeteExigeAuthentificationBasique('http://localhost:1234/admin/inscription', done);
     });

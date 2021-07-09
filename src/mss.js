@@ -46,7 +46,6 @@ const creeServeur = (depotDonnees, middleware, referentiel,
 
   app.get(
     '/admin/inscription',
-    middleware.suppressionCookie,
     middleware.authentificationBasique,
     (requete, reponse) => {
       reponse.render('inscription');
