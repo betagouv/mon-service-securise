@@ -44,7 +44,7 @@ describe('Le middleware MSS', () => {
       const reponse = {
         set: (nomHeader, valeurHeader) => {
           expect(nomHeader).to.equal('WWW-Authenticate');
-          expect(valeurHeader).to.equal('Basic');
+          expect(valeurHeader).to.equal('Basic realm="Administration Mon Service Sécurisé"');
         },
         status: (s) => {
           expect(s).to.equal(401);

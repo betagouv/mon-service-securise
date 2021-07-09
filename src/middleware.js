@@ -4,7 +4,11 @@ const middleware = (adaptateurJWT, login, motDePasse) => {
   const users = {};
   users[login] = motDePasse;
 
-  const authentificationBasique = basicAuth({ users, challenge: true });
+  const authentificationBasique = basicAuth({
+    users,
+    challenge: true,
+    realm: 'Administration Mon Service Sécurisé',
+  });
 
   const verificationJWT = (requete, reponse, suite) => {
     const token = adaptateurJWT.decode(requete.session.token);
