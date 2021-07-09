@@ -1,0 +1,27 @@
+extends ../mss
+
+block append styles
+  link(href='/statique/assets/styles/formulaire.css', rel='stylesheet')
+
+block main
+  form
+    h1 Créez votre compte
+    p
+      a(href='/connexion') Connectez-vous
+      span &nbsp;si vous avez déjà un compte
+    section
+      label Prénom
+        br
+        input(id='prenom', type='text')
+      label Nom
+        br
+        input(id='nom', type='text')
+      label Adresse email
+        br
+        input(id='email', type='email')
+      label Mot de passe
+        br
+        input(id='mot-de-passe', type='password')
+    .bouton Je crée mon compte &nbsp;&nbsp;›
+
+  script(src='/statique/inscription.js')
