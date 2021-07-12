@@ -25,6 +25,16 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     }
   };
 
+  const metsAJourProprieteHomologation = (nomPropriete, idHomologation, propriete) => {
+    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
+    donneesHomologation[nomPropriete] ||= {};
+
+    const donneesPropriete = propriete.toJSON();
+    Object.keys(donneesPropriete).forEach((k) => (
+      donneesHomologation[nomPropriete][k] = donneesPropriete[k]
+    ));
+  };
+
   const ajouteMesureAHomologation = (...params) => {
     ajouteAItemsDansHomologation('mesures', ...params);
   };
@@ -33,24 +43,12 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     ajouteAItemsDansHomologation('risques', ...params);
   };
 
-  const ajouteCaracteristiquesAHomologation = (idHomologation, caracteristiques) => {
-    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
-    donneesHomologation.caracteristiquesComplementaires ||= {};
-
-    const donneesCaracteristiques = caracteristiques.toJSON();
-    Object.keys(donneesCaracteristiques).forEach((k) => (
-      donneesHomologation.caracteristiquesComplementaires[k] = donneesCaracteristiques[k]
-    ));
+  const ajouteCaracteristiquesAHomologation = (...params) => {
+    metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params);
   };
 
-  const ajoutePartiesPrenantesAHomologation = (idHomologation, partiesPrenantes) => {
-    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
-    donneesHomologation.partiesPrenantes ||= {};
-
-    const donneesPartiesPrenantes = partiesPrenantes.toJSON();
-    Object.keys(donneesPartiesPrenantes).forEach((k) => (
-      donneesHomologation.partiesPrenantes[k] = donneesPartiesPrenantes[k]
-    ));
+  const ajoutePartiesPrenantesAHomologation = (...params) => {
+    metsAJourProprieteHomologation('partiesPrenantes', ...params);
   };
 
   const homologations = (idUtilisateur) => donnees.homologations
