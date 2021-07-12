@@ -44,9 +44,13 @@ form .bouton {
 }
 
 fieldset {
-  margin: 0;
+  margin: 0 0 1em 0;
   padding: 0 0 2em;
   border: none;
+}
+
+fieldset:last-of-type {
+  margin-bottom: 0;
 }
 
 input[type='checkbox'], input[type='radio'] {

@@ -98,6 +98,11 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('homologation/risques', { referentiel, homologation });
   });
 
+  app.get('/homologation/:id/avisExpertCyber', middleware.verificationJWT, (requete, reponse) => {
+    const homologation = depotDonnees.homologation(requete.params.id);
+    reponse.render('homologation/avisExpertCyber', { homologation });
+  });
+
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
     const homologations = depotDonnees.homologations(requete.idUtilisateurCourant)
       .map((h) => h.toJSON());

@@ -1,0 +1,48 @@
+extends ./formulaire
+include ../fragments/inputChoix
+
+block formulaire
+  form.homologation#avis-expert-cyber
+    h1 Complétez le dossier
+    h2 Avis de l'expert cyber
+
+    section
+      label Expert cybersécurité
+        p.
+          Personne en capacité de donner un avis sur la sécurité numérique du
+          projet. Cette personne ne devrait pas être celle ayant développé ou
+          fourni le service (ex. responsable de la sécurité des systèmes
+          d'information de l'entité, prestataire de conseil en sécurité).
+
+        input(id = 'je-suis-expert-cybersecurite', name = 'jeSuisExpertCybersecurite', type = 'checkbox')
+        label(for = 'je-suis-expert-cybersecurite') Je suis l'expert cybersécurité
+
+        input(
+          id = 'expert-cybersecurite', name = 'expertCybersecurite', type = 'text',
+          value = homologation.partiesPrenantes.expertCybersecurite
+        )
+
+      +inputChoix({
+        type: 'radio',
+        nom: 'avis',
+        titre: "Avis de l'expert cybersécurité sur le lancement ou le maintien en service.",
+        items: {
+          favorable: { description: 'Avis favorable' },
+          defavorable: { description: 'Avis défavorable' },
+        },
+        decoration: "Au regard des mesures de sécurité mises en œuvre, l'expert cybersécurité doit exprimer un avis sur le lancement ou le maintien en service.",
+      })
+
+      +inputChoix({
+        type: 'radio',
+        nom: 'dateRenouvellement',
+        titre: "Date de renouvellement de l'homologation",
+        items: {
+          renouvellementDansSixMois: { description: 'Dans six mois' },
+          renouvellementDansUnAn: { description: 'Dans un an' },
+          renouvellementDansDeuxAns: { description: 'Dans deux ans' },
+        },
+      })
+
+    .bouton(identifiant = homologation.id)  Continuer &nbsp;&nbsp;›
+

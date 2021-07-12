@@ -1,7 +1,6 @@
 extends mss
 include ./fragments/besoinAide
 
-
 block append styles
   link(href = '/statique/assets/styles/homologation.css', rel = 'stylesheet')
 
@@ -34,5 +33,13 @@ block main
                 a(href = `/homologation/${homologation.id}/risques`) Vérification des risques
               li.action
                 a(href = `/homologation/${homologation.id}/mesures`) Mesures de sécurité
+
+      section
+        dl.actions
+          dt Complétez le dossier
+          dd
+            ul
+              li.action
+                a(href = `/homologation/${homologation.id}/avisExpertCyber`) Avis de l'expert cyber
 
     +besoinAide

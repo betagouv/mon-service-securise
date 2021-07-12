@@ -1,7 +1,7 @@
 const { ErreurAvisInvalide, ErreurDateRenouvellementInvalide } = require('../erreurs');
 
-const AVIS_FAVORABLE = true;
-const AVIS_DEFAVORABLE = false;
+const AVIS_FAVORABLE = 'favorable';
+const AVIS_DEFAVORABLE = 'defavorable';
 
 const DATES_RENOUVELLEMENT = {
   RENOUVELLEMENT_DANS_SIX_MOIS: 'renouvellementDansSixMois',

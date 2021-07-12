@@ -298,6 +298,14 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête GET sur `/homologation/:id/avisExpertCyber`', () => {
+    it("vérifie que l'utilsiateur est authentifié", (done) => {
+      verifieRequeteExigeJWT(
+        { method: 'get', url: 'http://localhost:1234/homologation/456/avisExpertCyber' }, done
+      );
+    });
+  });
+
   describe('quand requête POST sur `/api/homologation`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT(
