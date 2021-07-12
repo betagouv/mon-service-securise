@@ -3,7 +3,6 @@ import brancheInputsIdentite from '../modules/brancheInputsIdentite.js';
 
 $(() => {
   const idsInputsIdentite = [
-    { idJeSuis: '#je-suis-pilote-projet', idZoneSaisie: '#pilote-projet' },
     { idJeSuis: '#je-suis-expert-cybersecurite', idZoneSaisie: '#expert-cybersecurite' },
   ];
 
@@ -17,9 +16,9 @@ $(() => {
       .map((ids) => ids.idZoneSaisie)
       .forEach((selecteur) => $(selecteur).removeAttr('disabled'));
 
-    const params = parametres('form#parties-prenantes');
-
+    const params = parametres('form#avis-expert-cyber');
     axios.post(`/api/homologation/${identifiantHomologation}/partiesPrenantes`, params)
+      .then(() => axios.post(`/api/homologation/${identifiantHomologation}/avisExpertCyber`, params))
       .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
   });
 });

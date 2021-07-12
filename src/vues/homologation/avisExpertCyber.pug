@@ -30,6 +30,7 @@ block formulaire
           favorable: { description: 'Avis favorable' },
           defavorable: { description: 'Avis défavorable' },
         },
+        objetDonnees: homologation.avisExpertCyber,
         decoration: "Au regard des mesures de sécurité mises en œuvre, l'expert cybersécurité doit exprimer un avis sur le lancement ou le maintien en service.",
       })
 
@@ -42,7 +43,9 @@ block formulaire
           renouvellementDansUnAn: { description: 'Dans un an' },
           renouvellementDansDeuxAns: { description: 'Dans deux ans' },
         },
+        objetDonnees: homologation.avisExpertCyber,
       })
 
     .bouton(identifiant = homologation.id)  Continuer &nbsp;&nbsp;›
 
+  script(type = 'module', src = '/statique/homologation/avisExpertCyber.js')
