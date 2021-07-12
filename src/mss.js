@@ -2,6 +2,7 @@ const cookieSession = require('cookie-session');
 const express = require('express');
 
 const { ErreurUtilisateurExistant } = require('./erreurs');
+const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const Mesure = require('./modeles/mesure');
@@ -200,6 +201,12 @@ const creeServeur = (depotDonnees, middleware, referentiel,
       depotDonnees.ajouteRisqueAHomologation(requete.params.id, risque);
     });
 
+    reponse.send({ idHomologation: requete.params.id });
+  });
+
+  app.post('/api/homologation/:id/avisExpertCyber', middleware.verificationJWT, (requete, reponse) => {
+    const avisExpert = new AvisExpertCyber(requete.body);
+    depotDonnees.ajouteAvisExpertCyberAHomologation(requete.params.id, avisExpert);
     reponse.send({ idHomologation: requete.params.id });
   });
 
