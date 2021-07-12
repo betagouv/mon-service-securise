@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const DepotDonnees = require('../src/depotDonnees');
 const { ErreurUtilisateurExistant } = require('../src/erreurs');
 const Referentiel = require('../src/referentiel');
+const AvisExpertCyber = require('../src/modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('../src/modeles/caracteristiquesComplementaires');
 const Homologation = require('../src/modeles/homologation');
 const Mesure = require('../src/modeles/mesure');
@@ -184,6 +185,15 @@ describe('Le dépôt de données', () => {
     expect(risques.length).to.equal(1);
     expect(risques[0]).to.be.a(Risque);
     expect(risques[0].id).to.equal('unRisque');
+  });
+
+  it("sait associer un avis d'expert cyber à une homologation", () => {
+    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] });
+    const avisExpert = new AvisExpertCyber({ avis: AvisExpertCyber.FAVORABLE });
+    depot.ajouteAvisExpertCyberAHomologation('123', avisExpert);
+
+    const { avisExpertCyber } = depot.homologation('123');
+    expect(avisExpertCyber.favorable()).to.be(true);
   });
 
   it("retourne l'utilisateur authentifié", (done) => {

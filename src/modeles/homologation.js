@@ -1,26 +1,30 @@
 const Referentiel = require('../referentiel');
+const AvisExpertCyber = require('./avisExpertCyber');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const Mesure = require('./mesure');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risque = require('./risque');
 
 class Homologation {
-  constructor({
-    id = '',
-    idUtilisateur,
-    nomService,
-    natureService = [],
-    provenanceService,
-    dejaMisEnLigne,
-    fonctionnalites,
-    donneesCaracterePersonnel,
-    delaiAvantImpactCritique,
-    presenceResponsable,
-    mesures = [],
-    caracteristiquesComplementaires = {},
-    partiesPrenantes = {},
-    risques = [],
-  }, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
+    const {
+      id = '',
+      idUtilisateur,
+      nomService,
+      natureService = [],
+      provenanceService,
+      dejaMisEnLigne,
+      fonctionnalites,
+      donneesCaracterePersonnel,
+      delaiAvantImpactCritique,
+      presenceResponsable,
+      mesures = [],
+      caracteristiquesComplementaires = {},
+      partiesPrenantes = {},
+      risques = [],
+      avisExpertCyber = {},
+    } = donnees;
+
     this.id = id;
     this.idUtilisateur = idUtilisateur;
     this.nomService = nomService;
@@ -37,6 +41,7 @@ class Homologation {
     );
     this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
     this.risques = risques.map((donneesRisque) => new Risque(donneesRisque, referentiel));
+    this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber);
 
     this.referentiel = referentiel;
   }

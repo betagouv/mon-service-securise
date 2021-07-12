@@ -51,6 +51,10 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     metsAJourProprieteHomologation('partiesPrenantes', ...params);
   };
 
+  const ajouteAvisExpertCyberAHomologation = (...params) => {
+    metsAJourProprieteHomologation('avisExpertCyber', ...params);
+  };
+
   const homologations = (idUtilisateur) => donnees.homologations
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h, referentiel));
@@ -107,6 +111,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
   };
 
   return {
+    ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
     ajouteMesureAHomologation,
     ajoutePartiesPrenantesAHomologation,
