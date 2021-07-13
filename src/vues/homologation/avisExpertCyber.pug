@@ -7,21 +7,6 @@ block formulaire
     h2 Avis de l'expert cyber
 
     section
-      label Expert cybersécurité
-        p.
-          Personne en capacité de donner un avis sur la sécurité numérique du
-          projet. Cette personne ne devrait pas être celle ayant développé ou
-          fourni le service (ex. responsable de la sécurité des systèmes
-          d'information de l'entité, prestataire de conseil en sécurité).
-
-        input(id = 'je-suis-expert-cybersecurite', name = 'jeSuisExpertCybersecurite', type = 'checkbox')
-        label(for = 'je-suis-expert-cybersecurite') Je suis l'expert cybersécurité
-
-        input(
-          id = 'expert-cybersecurite', name = 'expertCybersecurite', type = 'text',
-          value = homologation.partiesPrenantes.expertCybersecurite
-        )
-
       +inputChoix({
         type: 'radio',
         nom: 'avis',
@@ -45,6 +30,13 @@ block formulaire
         },
         objetDonnees: homologation.avisExpertCyber,
       })
+
+      label Commentaires et recommandations de l'expert cybersécurité
+        p Ajoutez ici les commentaires, recommandations ou remarques de l'expert cybersécurité.
+        textarea(
+          id = 'commentaire', name = 'commentaire',
+        )= homologation.avisExpertCyber.commentaire
+
 
     .bouton(identifiant = homologation.id)  Continuer &nbsp;&nbsp;›
 
