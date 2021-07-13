@@ -77,7 +77,7 @@ describe('Une homologation', () => {
     });
 
     expect(homologation.descriptionEquipePreparation()).to.equal(
-      'Sylvie Martin (responsable du projet)'
+      'Sylvie Martin (fonction non renseignée)'
     );
   });
 

@@ -1,3 +1,13 @@
+const descriptionPartiePrenante = (partiePrenante, fonction) => {
+  const description = [];
+  if (partiePrenante) {
+    description.push(partiePrenante);
+    description.push(fonction ? `(${fonction})` : '(fonction non renseignée)');
+  }
+
+  return description.length === 0 ? 'Information non renseignée' : description.join(' ');
+};
+
 class PartiesPrenantes {
   constructor(donneesPartiesPrenantes = {}) {
     const {
@@ -19,24 +29,22 @@ class PartiesPrenantes {
 
   descriptionEquipePreparation() {
     const membresEquipe = [];
-    if (this.piloteProjet) membresEquipe.push(`${this.piloteProjet} (responsable du projet)`);
-    if (this.expertCybersecurite) {
-      membresEquipe.push(`${this.expertCybersecurite} (expert cybersécurité)`);
-    }
+    if (this.piloteProjet) membresEquipe.push(this.descriptionPiloteProjet());
+    if (this.expertCybersecurite) membresEquipe.push(this.descriptionExpertCybersecurite());
 
     return membresEquipe.length === 0 ? 'Information non renseignée' : membresEquipe.join(', ');
   }
 
   descriptionAutoriteHomologation() {
-    const description = [];
-    if (this.autoriteHomologation) {
-      description.push(`${this.autoriteHomologation}`);
-      description.push(this.fonctionAutoriteHomologation
-        ? `(${this.fonctionAutoriteHomologation})`
-        : '(fonction non renseignée)');
-    }
+    return descriptionPartiePrenante(this.autoriteHomologation, this.fonctionAutoriteHomologation);
+  }
 
-    return description.length === 0 ? 'Information non renseignée' : description.join(' ');
+  descriptionPiloteProjet() {
+    return descriptionPartiePrenante(this.piloteProjet, this.fonctionPiloteProjet);
+  }
+
+  descriptionExpertCybersecurite() {
+    return descriptionPartiePrenante(this.expertCybersecurite, this.fonctionExpertCybersecurite);
   }
 
   toJSON() {

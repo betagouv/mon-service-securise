@@ -72,9 +72,28 @@ main
   section
     h2 Avis de l'expert cyber
     p sur le maintien ou la mise en service
-    .avis-expert-cyber.favorable
-    p.expert-cyber M. Jean Dujardin, RSSI
-    h4 Recommandations additionnelles :
+    .avis-expert-cyber
+      if false
+        .disque
+        .disque
+        .avis.inconnu Inconnu
+      else if homologation.avisExpertCyber.favorable()
+        .disque
+        .disque.vert
+        .avis.favorable Favorable
+      else
+        .disque.rouge
+        .disque
+        .avis.defavorable Défavorable
+    dl
+      dt Expert cybersécurité :
+      dd= homologation.partiesPrenantes.descriptionExpertCybersecurite()
+
+      dt Recommandations additionnelles :
+      if homologation.avisExpertCyber.commentaire
+        dd= homologation.avisExpertCyber.commentaire
+      else
+        dd Aucune
 
   section
     h2 Équipe

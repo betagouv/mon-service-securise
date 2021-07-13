@@ -29,7 +29,7 @@ describe("L'ensemble des parties prenantes", () => {
       });
 
       expect(partiesPrenantes.descriptionEquipePreparation()).to.equal(
-        'Sylvie Martin (responsable du projet), Anna Dubreuil (expert cybersécurité)'
+        'Sylvie Martin (fonction non renseignée), Anna Dubreuil (fonction non renseignée)'
       );
     });
 
@@ -37,7 +37,7 @@ describe("L'ensemble des parties prenantes", () => {
       const partiesPrenantes = new PartiesPrenantes({ expertCybersecurite: 'Anna Dubreuil' });
 
       expect(partiesPrenantes.descriptionEquipePreparation()).to.equal(
-        'Anna Dubreuil (expert cybersécurité)'
+        'Anna Dubreuil (fonction non renseignée)'
       );
     });
 
@@ -45,7 +45,7 @@ describe("L'ensemble des parties prenantes", () => {
       const partiesPrenantes = new PartiesPrenantes({ piloteProjet: 'Sylvie Martin' });
 
       expect(partiesPrenantes.descriptionEquipePreparation()).to.equal(
-        'Sylvie Martin (responsable du projet)'
+        'Sylvie Martin (fonction non renseignée)'
       );
     });
 
@@ -81,6 +81,24 @@ describe("L'ensemble des parties prenantes", () => {
         'Information non renseignée'
       );
     });
+  });
+
+  it('présente les informations relatives au pilote projet', () => {
+    const partiesPrenantes = new PartiesPrenantes({
+      piloteProjet: 'Jean Dupont',
+      fonctionPiloteProjet: 'Expert métier',
+    });
+
+    expect(partiesPrenantes.descriptionPiloteProjet()).to.equal('Jean Dupont (Expert métier)');
+  });
+
+  it("présente les informations relatives à l'expert cybersécurité", () => {
+    const partiesPrenantes = new PartiesPrenantes({
+      expertCybersecurite: 'Jean Dupont',
+      fonctionExpertCybersecurite: 'RSSI',
+    });
+
+    expect(partiesPrenantes.descriptionExpertCybersecurite()).to.equal('Jean Dupont (RSSI)');
   });
 
   it('sait se présenter au format JSON', () => {
