@@ -3,8 +3,8 @@ import brancheInputsIdentite from '../modules/brancheInputsIdentite.js';
 
 $(() => {
   const idsInputsIdentite = [
-    { idJeSuis: '#je-suis-pilote-projet', idZoneSaisie: '#pilote-projet' },
-    { idJeSuis: '#je-suis-expert-cybersecurite', idZoneSaisie: '#expert-cybersecurite' },
+    { idJeSuis: '#jeSuisPiloteProjet', idZoneSaisie: '#piloteProjet' },
+    { idJeSuis: '#jeSuisExpertCybersecurite', idZoneSaisie: '#expertCybersecurite' },
   ];
 
   brancheInputsIdentite(idsInputsIdentite);

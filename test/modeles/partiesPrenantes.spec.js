@@ -8,13 +8,17 @@ describe("L'ensemble des parties prenantes", () => {
       autoriteHomologation: 'Jean Dupont',
       fonctionAutoriteHomologation: 'Maire',
       piloteProjet: 'Sylvie Martin',
+      fonctionPiloteProjet: 'Responsable métier',
       expertCybersecurite: 'Anna Dubreuil',
+      fonctionExpertCybersecurite: 'RSSI',
     });
 
     expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
     expect(partiesPrenantes.fonctionAutoriteHomologation).to.equal('Maire');
     expect(partiesPrenantes.piloteProjet).to.equal('Sylvie Martin');
+    expect(partiesPrenantes.fonctionPiloteProjet).to.equal('Responsable métier');
     expect(partiesPrenantes.expertCybersecurite).to.equal('Anna Dubreuil');
+    expect(partiesPrenantes.fonctionExpertCybersecurite).to.equal('RSSI');
   });
 
   describe("sur interrogation sur l'équipe de préparation du dossier", () => {
@@ -84,14 +88,18 @@ describe("L'ensemble des parties prenantes", () => {
       autoriteHomologation: 'Jean Dupont',
       fonctionAutoriteHomologation: 'Maire',
       piloteProjet: 'Sylvie Martin',
+      fonctionPiloteProjet: 'Responsable métier',
       expertCybersecurite: 'Anna Dubreuil',
+      fonctionExpertCybersecurite: 'RSSI',
     });
 
     expect(partiesPrenantes.toJSON()).to.eql({
       autoriteHomologation: 'Jean Dupont',
       fonctionAutoriteHomologation: 'Maire',
       piloteProjet: 'Sylvie Martin',
+      fonctionPiloteProjet: 'Responsable métier',
       expertCybersecurite: 'Anna Dubreuil',
+      fonctionExpertCybersecurite: 'RSSI',
     });
   });
 

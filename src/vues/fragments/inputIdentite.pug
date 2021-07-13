@@ -1,0 +1,31 @@
+mixin inputIdentite({ role, descriptif = '', nomParametre, raccourciVisible = false })
+  label= role
+    p= descriptif
+
+    - const nomParamCapitalise = `${nomParametre.charAt(0).toUpperCase()}${nomParametre.slice(1)}`
+
+    if raccourciVisible
+      - const nomParamJeSuis = `jeSuis${nomParamCapitalise}`
+      input(id = nomParamJeSuis, name = nomParamJeSuis, type = 'checkbox')
+      label(for = nomParamJeSuis) Je suis cette personne
+
+    input(
+      id = nomParametre, name = nomParametre, type = 'text',
+      placeholder = 'Prénom et nom',
+      value = homologation.partiesPrenantes[nomParametre]
+    )
+
+    - const nomParamFonction = `fonction${nomParamCapitalise}`
+    input(
+      id = nomParamFonction, name = nomParamFonction, type = 'text',
+      placeholder = 'Fonction',
+      value = homologation.partiesPrenantes[nomParamFonction]
+    )
+
+mixin inputIdentiteExpertCyber
+  +inputIdentite({
+    role: 'Expert cybersécurité',
+    descriptif: 'ex : RSSI, DSSI, prestataire externe',
+    nomParametre: 'expertCybersecurite',
+    raccourciVisible: true
+  })

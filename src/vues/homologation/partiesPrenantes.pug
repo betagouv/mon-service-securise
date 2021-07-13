@@ -1,4 +1,5 @@
 extends ./formulaire
+include ../fragments/inputIdentite
 
 block formulaire
   form.homologation#parties-prenantes
@@ -7,41 +8,23 @@ block formulaire
 
     section
       h3 Autorité d'homologation
-      label Prénom et nom de l'autorité d'homologation
-        input(
-          id = 'autorite-homologation', name = 'autoriteHomologation', type = 'text',
-          value = homologation.partiesPrenantes.autoriteHomologation,
-        )
-      label Fonction de l'autorité d'homologation
-        input(
-          id = 'fonction-autorite-homologation', name = 'fonctionAutoriteHomologation', type = 'text'
-          value = homologation.partiesPrenantes.fonctionAutoriteHomologation,
-        )
+
+      +inputIdentite({
+        role: "Autorité d'homologation",
+        nomParametre: 'autoriteHomologation',
+      })
 
     section
       h3 Équipe chagée du projet d'homologation
-      label Prénom et nom du pilote du projet
-        p ex : personne proposant le déploiement du service, chef de projet numérique, responsable métier, etc.
 
-        input(id = 'je-suis-pilote-projet', name = 'jeSuisPiloteProjet', type = 'checkbox')
-        label(for = 'je-suis-pilote-projet') Je suis le responsable du projet
+      +inputIdentite({
+        role: 'Pilote du projet',
+        descriptif: 'ex : personne proposant le déploiement du service, chef de projet numérique, responsable métier, etc.',
+        nomParametre: 'piloteProjet',
+        raccourciVisible: true
+      })
 
-        input(
-          id = 'pilote-projet', name = 'piloteProjet', type = 'text'
-          value = homologation.partiesPrenantes.piloteProjet,
-        )
-
-      label Prénom et nom de l'expert cybersécurité
-        p ex : RSSI, DSSI, prestataire externe
-
-        input(id = 'je-suis-expert-cybersecurite', name = 'jeSuisExpertCybersecurite', type = 'checkbox')
-        label(for = 'je-suis-expert-cybersecurite') Je suis l'expert cybersécurité
-
-        input(
-          id = 'expert-cybersecurite', name = 'expertCybersecurite', type = 'text',
-          value = homologation.partiesPrenantes.expertCybersecurite
-        )
-
+      +inputIdentiteExpertCyber
 
     .bouton(identifiant = homologation.id)  Continuer &nbsp;&nbsp;›
 

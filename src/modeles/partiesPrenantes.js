@@ -4,13 +4,17 @@ class PartiesPrenantes {
       autoriteHomologation,
       fonctionAutoriteHomologation,
       piloteProjet,
+      fonctionPiloteProjet,
       expertCybersecurite,
+      fonctionExpertCybersecurite,
     } = donneesPartiesPrenantes;
 
     this.autoriteHomologation = autoriteHomologation;
     this.fonctionAutoriteHomologation = fonctionAutoriteHomologation;
     this.piloteProjet = piloteProjet;
+    this.fonctionPiloteProjet = fonctionPiloteProjet;
     this.expertCybersecurite = expertCybersecurite;
+    this.fonctionExpertCybersecurite = fonctionExpertCybersecurite;
   }
 
   descriptionEquipePreparation() {
@@ -37,8 +41,11 @@ class PartiesPrenantes {
 
   toJSON() {
     const resultat = {};
-    ['autoriteHomologation', 'fonctionAutoriteHomologation', 'piloteProjet', 'expertCybersecurite']
-      .filter((k) => this[k])
+    [
+      'autoriteHomologation', 'fonctionAutoriteHomologation',
+      'piloteProjet', 'fonctionPiloteProjet',
+      'expertCybersecurite', 'fonctionExpertCybersecurite',
+    ].filter((k) => this[k])
       .forEach((k) => (resultat[k] = this[k]));
 
     return resultat;
