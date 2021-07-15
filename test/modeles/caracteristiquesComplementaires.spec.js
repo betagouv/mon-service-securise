@@ -57,9 +57,12 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
   });
 
   it('presente un JSON partiel si certaines caractéristiques ne sont pas définies', () => {
-    const caracteristiques = new CaracteristiquesComplementaires({ presentation: 'Une présentation' });
+    const caracteristiques = new CaracteristiquesComplementaires({
+      presentation: 'Une présentation',
+      hebergeur: '',
+    });
 
-    expect(caracteristiques.toJSON()).to.eql({ presentation: 'Une présentation' });
+    expect(caracteristiques.toJSON()).to.eql({ presentation: 'Une présentation', hebergeur: '' });
   });
 
   it('valide la localisation des données si elle est présente', (done) => {

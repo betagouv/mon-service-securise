@@ -1,3 +1,4 @@
+const Base = require('./base');
 const { ErreurLocalisationDonneesInvalide } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
@@ -12,21 +13,13 @@ const valide = (donnees, referentiel) => {
   }
 };
 
-class CaracteristiquesComplementaires {
+class CaracteristiquesComplementaires extends Base {
   constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
+    super(['presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees']);
+
     valide(donneesCaracteristiques, referentiel);
-    const {
-      presentation,
-      structureDeveloppement,
-      hebergeur,
-      localisationDonnees,
-    } = donneesCaracteristiques;
 
-    this.presentation = presentation;
-    this.structureDeveloppement = structureDeveloppement;
-    this.hebergeur = hebergeur;
-    this.localisationDonnees = localisationDonnees;
-
+    this.renseigneProprietes(donneesCaracteristiques);
     this.referentiel = referentiel;
   }
 
@@ -36,15 +29,6 @@ class CaracteristiquesComplementaires {
 
   descriptionHebergeur() {
     return this.hebergeur || 'Hébergeur non renseigné';
-  }
-
-  toJSON() {
-    const resultat = {};
-    ['presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees']
-      .filter((k) => this[k])
-      .forEach((k) => (resultat[k] = this[k]));
-
-    return resultat;
   }
 }
 

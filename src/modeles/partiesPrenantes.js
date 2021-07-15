@@ -1,3 +1,5 @@
+const Base = require('./base');
+
 const descriptionPartiePrenante = (partiePrenante, fonction) => {
   const description = [];
   if (partiePrenante) {
@@ -8,23 +10,18 @@ const descriptionPartiePrenante = (partiePrenante, fonction) => {
   return description.length === 0 ? 'Information non renseignée' : description.join(' ');
 };
 
-class PartiesPrenantes {
+class PartiesPrenantes extends Base {
   constructor(donneesPartiesPrenantes = {}) {
-    const {
-      autoriteHomologation,
-      fonctionAutoriteHomologation,
-      piloteProjet,
-      fonctionPiloteProjet,
-      expertCybersecurite,
-      fonctionExpertCybersecurite,
-    } = donneesPartiesPrenantes;
+    super([
+      'autoriteHomologation',
+      'fonctionAutoriteHomologation',
+      'piloteProjet',
+      'fonctionPiloteProjet',
+      'expertCybersecurite',
+      'fonctionExpertCybersecurite',
+    ]);
 
-    this.autoriteHomologation = autoriteHomologation;
-    this.fonctionAutoriteHomologation = fonctionAutoriteHomologation;
-    this.piloteProjet = piloteProjet;
-    this.fonctionPiloteProjet = fonctionPiloteProjet;
-    this.expertCybersecurite = expertCybersecurite;
-    this.fonctionExpertCybersecurite = fonctionExpertCybersecurite;
+    this.renseigneProprietes(donneesPartiesPrenantes);
   }
 
   descriptionEquipePreparation() {
@@ -45,18 +42,6 @@ class PartiesPrenantes {
 
   descriptionExpertCybersecurite() {
     return descriptionPartiePrenante(this.expertCybersecurite, this.fonctionExpertCybersecurite);
-  }
-
-  toJSON() {
-    const resultat = {};
-    [
-      'autoriteHomologation', 'fonctionAutoriteHomologation',
-      'piloteProjet', 'fonctionPiloteProjet',
-      'expertCybersecurite', 'fonctionExpertCybersecurite',
-    ].filter((k) => this[k])
-      .forEach((k) => (resultat[k] = this[k]));
-
-    return resultat;
   }
 }
 

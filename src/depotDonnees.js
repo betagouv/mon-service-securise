@@ -61,9 +61,9 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
 
   const metsAJourHomologation = (identifiant, donneesHomologation) => {
     const donneesPersistees = donnees.homologations.find((h) => h.id === identifiant);
-    Object.keys(donneesHomologation).forEach((clef) => {
-      if (donneesHomologation[clef]) donneesPersistees[clef] = donneesHomologation[clef];
-    });
+    Object.keys(donneesHomologation)
+      .filter((k) => typeof k !== 'undefined')
+      .forEach((k) => (donneesPersistees[k] = donneesHomologation[k]));
 
     return donneesPersistees.id;
   };

@@ -275,6 +275,17 @@ describe('Le dépôt de données', () => {
       const homologation = depot.homologation('123');
       expect(homologation.nomService).to.equal('Nouveau Nom');
     });
+
+    it('met à jour les valeurs remises à chaîne vide', () => {
+      const depot = DepotDonnees.creeDepot({
+        homologations: [{ id: '123', nomService: 'Super Service' }],
+      });
+
+      depot.metsAJourHomologation('123', { nomService: '' });
+
+      const homologation = depot.homologation('123');
+      expect(homologation.nomService).to.equal('');
+    });
   });
 
   describe("sur réception d'une demande d'enregistrement d'un nouvel utilisateur", () => {

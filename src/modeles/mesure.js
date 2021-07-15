@@ -1,3 +1,4 @@
+const Base = require('./base');
 const { ErreurMesureInconnue, ErreurStatutMesureInvalide } = require('../erreurs');
 
 const STATUTS = {
@@ -7,7 +8,7 @@ const STATUTS = {
 };
 
 const valide = (donnees, referentiel) => {
-  const { id, statut, modalites } = donnees;
+  const { id, statut } = donnees;
 
   const identifiantsMesuresRepertoriees = referentiel.identifiantsMesures();
   if (!identifiantsMesuresRepertoriees.includes(id)) {
@@ -17,22 +18,16 @@ const valide = (donnees, referentiel) => {
   if (!Object.values(STATUTS).includes(statut)) {
     throw new ErreurStatutMesureInvalide(`Le statut "${statut}" est invalide`);
   }
-
-  return { id, statut, modalites };
 };
 
-class Mesure {
+class Mesure extends Base {
   constructor(donneesMesure, referentiel) {
-    const { id, statut, modalites } = valide(donneesMesure, referentiel);
-    this.id = id;
-    this.statut = statut;
-    this.modalites = modalites;
+    super(['id', 'statut', 'modalites']);
+
+    valide(donneesMesure, referentiel);
+    this.renseigneProprietes(donneesMesure);
 
     this.referentiel = referentiel;
-  }
-
-  toJSON() {
-    return { id: this.id, statut: this.statut, modalites: this.modalites };
   }
 
   description() {
