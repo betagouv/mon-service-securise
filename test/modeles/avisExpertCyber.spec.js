@@ -56,6 +56,11 @@ describe("L'avis de l'expert Cyber", () => {
     }
   });
 
+  it("détecte si l'expert a donné un avis", () => {
+    const avisExpert = new AvisExpertCyber();
+    expect(avisExpert.inconnu()).to.be(true);
+  });
+
   it("décrit l'échéance de l'homologation", () => {
     referentiel.descriptionExpiration = (identifiant) => {
       expect(identifiant).to.equal('unAn');

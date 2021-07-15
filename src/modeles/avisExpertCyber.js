@@ -22,7 +22,7 @@ const valide = (donnees, referentiel) => {
 };
 
 class AvisExpertCyber {
-  constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     const { avis, dateRenouvellement, commentaire } = valide(donnees, referentiel);
 
     this.avis = avis;
@@ -37,6 +37,8 @@ class AvisExpertCyber {
   }
 
   favorable() { return this.avis === AVIS_FAVORABLE; }
+
+  inconnu() { return typeof this.avis === 'undefined'; }
 
   toJSON() {
     return {

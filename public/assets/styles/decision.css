@@ -217,6 +217,10 @@ section.niveau-protection ul {
   padding-left: 0.5em;
 }
 
+.avis.inconnu {
+  color: #abb6bf;
+}
+
 .avis.favorable {
   color: #1aaf54;
 }

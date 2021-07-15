@@ -73,10 +73,10 @@ main
     h2 Avis de l'expert cyber
     p sur le maintien ou la mise en service
     .avis-expert-cyber
-      if false
+      if homologation.avisExpertCyber.inconnu()
         .disque
         .disque
-        .avis.inconnu Inconnu
+        .avis.inconnu Avis Inconnu
       else if homologation.avisExpertCyber.favorable()
         .disque
         .disque.vert
