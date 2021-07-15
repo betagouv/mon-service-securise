@@ -41,7 +41,7 @@ class Homologation {
     );
     this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
     this.risques = risques.map((donneesRisque) => new Risque(donneesRisque, referentiel));
-    this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber);
+    this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber, referentiel);
 
     this.referentiel = referentiel;
   }
@@ -54,6 +54,10 @@ class Homologation {
 
   descriptionAutoriteHomologation() {
     return this.partiesPrenantes.descriptionAutoriteHomologation();
+  }
+
+  descriptionExpiration() {
+    return this.avisExpertCyber.descriptionExpiration();
   }
 
   localisationDonnees() {

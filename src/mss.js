@@ -100,7 +100,7 @@ const creeServeur = (depotDonnees, middleware, referentiel,
 
   app.get('/homologation/:id/avisExpertCyber', middleware.verificationJWT, (requete, reponse) => {
     const homologation = depotDonnees.homologation(requete.params.id);
-    reponse.render('homologation/avisExpertCyber', { homologation });
+    reponse.render('homologation/avisExpertCyber', { referentiel, homologation });
   });
 
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
@@ -210,7 +210,7 @@ const creeServeur = (depotDonnees, middleware, referentiel,
   });
 
   app.post('/api/homologation/:id/avisExpertCyber', middleware.verificationJWT, (requete, reponse) => {
-    const avisExpert = new AvisExpertCyber(requete.body);
+    const avisExpert = new AvisExpertCyber(requete.body, referentiel);
     depotDonnees.ajouteAvisExpertCyberAHomologation(requete.params.id, avisExpert);
     reponse.send({ idHomologation: requete.params.id });
   });

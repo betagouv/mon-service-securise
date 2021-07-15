@@ -23,11 +23,7 @@ block formulaire
         type: 'radio',
         nom: 'dateRenouvellement',
         titre: "Date de renouvellement de l'homologation",
-        items: {
-          renouvellementDansSixMois: { description: 'Dans six mois' },
-          renouvellementDansUnAn: { description: 'Dans un an' },
-          renouvellementDansDeuxAns: { description: 'Dans deux ans' },
-        },
+        items: referentiel.echeancesRenouvellement(),
         objetDonnees: homologation.avisExpertCyber,
       })
 

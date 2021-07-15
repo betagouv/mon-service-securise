@@ -122,6 +122,35 @@ describe('Le référentiel', () => {
     );
   });
 
+  it('connaît la liste des échéances de renouvellement', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { uneClef: 'une valeur' },
+    });
+
+    expect(referentiel.echeancesRenouvellement()).to.eql({ uneClef: 'une valeur' });
+  });
+
+  it('connaît la liste des identifiants de chaque échéance de renouvellement', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { uneEch: {}, uneAutreEch: {} },
+    });
+
+    expect(referentiel.identifiantsEcheancesRenouvellement()).to.eql(['uneEch', 'uneAutreEch']);
+  });
+
+  it("sait décrire l'échéance de l'homologation", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { uneEcheance: { expiration: 'description expiration' } },
+    });
+
+    expect(referentiel.descriptionExpiration('uneEcheance')).to.equal('description expiration');
+  });
+
+  it("donne une valeur par défaut pour l'échéance d'homologation", () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    expect(referentiel.descriptionExpiration()).to.equal('Information non renseignée');
+  });
+
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.naturesService()).to.eql({});

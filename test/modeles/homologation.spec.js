@@ -91,4 +91,17 @@ describe('Une homologation', () => {
 
     expect(homologation.descriptionAutoriteHomologation()).to.equal('Jean Dupont (Maire)');
   });
+
+  it('décrit son expiration', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { unAn: { expiration: 'Dans un an' } },
+    });
+
+    const homologation = new Homologation({
+      id: '123',
+      avisExpertCyber: { dateRenouvellement: 'unAn' },
+    }, referentiel);
+
+    expect(homologation.descriptionExpiration()).to.equal('Dans un an');
+  });
 });

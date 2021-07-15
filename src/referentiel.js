@@ -3,6 +3,8 @@ const creeReferentiel = (donneesReferentiel) => {
 
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
+  const echeancesRenouvellement = () => donnees.echeancesRenouvellement;
+  const identifiantsEcheancesRenouvellement = () => Object.keys(echeancesRenouvellement());
   const fonctionnalites = () => donnees.fonctionnalites;
   const localisationsDonnees = () => donnees.localisationsDonnees;
   const identifiantsLocalisationsDonnees = () => Object.keys(localisationsDonnees());
@@ -12,6 +14,12 @@ const creeReferentiel = (donneesReferentiel) => {
   const provenancesService = () => donnees.provenancesService;
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
+
+  const descriptionExpiration = (identifiant) => {
+    if (!identifiant) return 'Information non renseignée';
+
+    return donnees.echeancesRenouvellement[identifiant].expiration;
+  };
 
   const natureService = (identifiants) => {
     if (identifiants.length === 0) return 'Nature du service non renseignée';
@@ -29,8 +37,11 @@ const creeReferentiel = (donneesReferentiel) => {
 
   return {
     delaisAvantImpactCritique,
+    descriptionExpiration,
     donneesCaracterePersonnel,
+    echeancesRenouvellement,
     fonctionnalites,
+    identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
     identifiantsRisques,
@@ -48,6 +59,7 @@ const creeReferentiel = (donneesReferentiel) => {
 const creeReferentielVide = () => creeReferentiel({
   delaisAvantImpactCritique: {},
   donneesCaracterePersonnel: {},
+  echeancesRenouvellement: {},
   fonctionnalites: {},
   localisationsDonnees: {},
   mesures: {},

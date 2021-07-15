@@ -1,17 +1,20 @@
 const expect = require('expect.js');
 
 const { ErreurAvisInvalide, ErreurDateRenouvellementInvalide } = require('../../src/erreurs');
+const Referentiel = require('../../src/referentiel');
 const AvisExpertCyber = require('../../src/modeles/avisExpertCyber');
 
 describe("L'avis de l'expert Cyber", () => {
+  const referentiel = Referentiel.creeReferentiel({ echeancesRenouvellement: { unAn: {} } });
+
   it('connaît ses constituants', () => {
     const avisExpert = new AvisExpertCyber({
       avis: AvisExpertCyber.FAVORABLE,
-      dateRenouvellement: AvisExpertCyber.RENOUVELLEMENT_DANS_SIX_MOIS,
+      dateRenouvellement: 'unAn',
       commentaire: 'Un commentaire',
-    });
+    }, referentiel);
 
-    expect(avisExpert.dateRenouvellement).to.equal(AvisExpertCyber.RENOUVELLEMENT_DANS_SIX_MOIS);
+    expect(avisExpert.dateRenouvellement).to.equal('unAn');
     expect(avisExpert.commentaire).to.equal('Un commentaire');
 
     expect(avisExpert.favorable()).to.be(true);
@@ -20,13 +23,13 @@ describe("L'avis de l'expert Cyber", () => {
   it('sait se décrire au format JSON', () => {
     const avisExpert = new AvisExpertCyber({
       avis: AvisExpertCyber.FAVORABLE,
-      dateRenouvellement: AvisExpertCyber.RENOUVELLEMENT_DANS_SIX_MOIS,
+      dateRenouvellement: 'unAn',
       commentaire: 'Un commentaire',
-    });
+    }, referentiel);
 
     expect(avisExpert.toJSON()).to.eql({
       avis: AvisExpertCyber.FAVORABLE,
-      dateRenouvellement: AvisExpertCyber.RENOUVELLEMENT_DANS_SIX_MOIS,
+      dateRenouvellement: 'unAn',
       commentaire: 'Un commentaire',
     });
   });
@@ -51,5 +54,15 @@ describe("L'avis de l'expert Cyber", () => {
       expect(e.message).to.equal('Le délai avant renouvellement "delaiInvalide" est invalide');
       done();
     }
+  });
+
+  it("décrit l'échéance de l'homologation", () => {
+    referentiel.descriptionExpiration = (identifiant) => {
+      expect(identifiant).to.equal('unAn');
+      return 'Une description';
+    };
+
+    const avisExpert = new AvisExpertCyber({ dateRenouvellement: 'unAn' }, referentiel);
+    expect(avisExpert.descriptionExpiration()).to.equal('Une description');
   });
 });

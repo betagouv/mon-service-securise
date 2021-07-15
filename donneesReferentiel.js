@@ -1,3 +1,6 @@
+const echeance = (duree) => `Dans ${duree}`;
+const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)} après signature de la présente homologation`;
+
 module.exports = {
   naturesService: {
     siteInternet: { description: 'Site Internet' },
@@ -106,5 +109,11 @@ module.exports = {
     france: { description: 'France' },
     unionEuropeenne: { description: 'Union Européenne' },
     autre: { description: 'Autre' },
+  },
+
+  echeancesRenouvellement: {
+    sixMois: { description: echeance('six mois'), expiration: expiration('six mois') },
+    unAn: { description: echeance('un an'), expiration: expiration('un an') },
+    deuxAns: { description: echeance('deux ans'), expiration: expiration('deux ans') },
   },
 };
