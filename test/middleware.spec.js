@@ -13,7 +13,7 @@ describe('Le middleware MSS', () => {
       },
     };
 
-    const middleware = Middleware(adaptateurJWT);
+    const middleware = Middleware({ adaptateurJWT });
 
     const reponse = {
       redirect: (url) => {
@@ -37,7 +37,7 @@ describe('Le middleware MSS', () => {
 
   describe('sur authentification basique', () => {
     it('retourne une erreur HTTP 401 et demande un challenge si échec authentification', (done) => {
-      const middleware = Middleware(undefined, 'admin', 'password');
+      const middleware = Middleware({ login: 'admin', motDePasse: 'password' });
 
       requete.headers = {};
 
@@ -57,7 +57,7 @@ describe('Le middleware MSS', () => {
     });
 
     it('poursuit normalement si succès authentification', (done) => {
-      const middleware = Middleware(undefined, 'admin', 'password');
+      const middleware = Middleware({ login: 'admin', motDePasse: 'password' });
 
       requete.headers = { authorization: 'Basic YWRtaW46cGFzc3dvcmQ=' }; // admin:password
       const reponse = {};

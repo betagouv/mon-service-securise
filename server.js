@@ -12,11 +12,11 @@ const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 const depotDonnees = DepotDonnees.creeDepot(donnees, {
   adaptateurJWT, adaptateurUUID, referentiel,
 });
-const middleware = Middleware(
+const middleware = Middleware({
   adaptateurJWT,
-  process.env.LOGIN_ADMIN,
-  process.env.MOT_DE_PASSE_ADMIN
-);
+  login: process.env.LOGIN_ADMIN,
+  motDePasse: process.env.MOT_DE_PASSE_ADMIN,
+});
 const serveur = MSS.creeServeur(depotDonnees, middleware, referentiel);
 
 serveur.ecoute(port, () => {
