@@ -174,114 +174,72 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête GET sur `/homologation/:id/edition`', () => {
-    beforeEach(() => (
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      })
-    ));
-
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
-        { method: 'get', url: 'http://localhost:1234/homologation/456/edition' }, done
-      );
+      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/edition', done);
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation('http://localhost:1234/homologation/456/edition', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/caracteristiquesComplementaires`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      });
+      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/caracteristiquesComplementaires', done);
+    });
 
-      verifieRequeteExigeJWT({
-        method: 'get',
-        url: 'http://localhost:1234/homologation/456/caracteristiquesComplementaires',
-      }, done);
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation('http://localhost:1234/homologation/456/caracteristiquesComplementaires', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/decision`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
-        { method: 'get', url: 'http://localhost:1234/homologation/456/decision' }, done
-      );
+      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/decision', done);
     });
 
-    it('retourne une erreur HTTP 404 si homologation inexistante', (done) => {
-      expect(depotDonnees.homologation('456')).to.be(undefined);
-      axios.get('http://localhost:1234/homologation/456/decision')
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(404);
-          expect(erreur.response.data).to.equal('Homologation non trouvée');
-          done();
-        })
-        .catch((erreur) => done(erreur));
-    });
-
-    it("retourne une erreur HTTP 403 si l'homologation n'est pas liée à l'utilisateur courant", (done) => {
-      idUtilisateurCourant = '123';
-
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      });
-
-      axios.get('http://localhost:1234/homologation/456/decision')
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(403);
-          expect(erreur.response.data).to.equal("Accès à l'homologation refusé");
-          done();
-        })
-        .catch((erreur) => done(erreur));
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation('http://localhost:1234/homologation/456/decision', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/mesures`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      });
+      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/mesures', done);
+    });
 
-      verifieRequeteExigeJWT(
-        { method: 'get', url: 'http://localhost:1234/homologation/456/mesures' }, done
-      );
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation('http://localhost:1234/homologation/456/mesures', done);
     });
   });
 
   describe('quand requete GET sur `/homologation/:id/partiesPrenantes`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      });
+      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/partiesPrenantes', done);
+    });
 
-      verifieRequeteExigeJWT(
-        { method: 'get', url: 'http://localhost:1234/homologation/456/partiesPrenantes' }, done
-      );
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation('http://localhost:1234/homologation/456/partiesPrenantes', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/risques`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      });
+      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/risques', done);
+    });
 
-      verifieRequeteExigeJWT(
-        { method: 'get', url: 'http://localhost:1234/homologation/456/risques' }, done
-      );
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation('http://localhost:1234/homologation/456/risques', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/avisExpertCyber`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      });
+      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/avisExpertCyber', done);
+    });
 
-      verifieRequeteExigeJWT(
-        { method: 'get', url: 'http://localhost:1234/homologation/456/avisExpertCyber' }, done
-      );
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation('http://localhost:1234/homologation/456/avisExpertCyber', done);
     });
   });
 
@@ -332,10 +290,18 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
+    beforeEach(() => {
       depotDonnees.metsAJourHomologation = () => {};
+    });
 
+    it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT(
+        { method: 'put', url: 'http://localhost:1234/api/homologation/456' }, done
+      );
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation(
         { method: 'put', url: 'http://localhost:1234/api/homologation/456' }, done
       );
     });
@@ -360,10 +326,17 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.ajouteCaracteristiquesAHomologation = () => {};
+    beforeEach(() => (depotDonnees.ajouteCaracteristiquesAHomologation = () => {}));
 
+    it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
+      }, done);
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
       }, done);
@@ -398,6 +371,13 @@ describe('Le serveur MSS', () => {
       );
     });
 
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/mesures',
+      }, done);
+    });
+
     it("demande au dépôt d'associer les mesures à l'homologation", (done) => {
       referentiel.recharge({ mesures: { identifiantMesure: {} } });
       let mesureAjoutee = false;
@@ -425,10 +405,17 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/partiesPrenantes`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.ajoutePartiesPrenantesAHomologation = () => {};
+    beforeEach(() => (depotDonnees.ajoutePartiesPrenantesAHomologation = () => {}));
 
+    it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/partiesPrenantes',
+      }, done);
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/partiesPrenantes',
       }, done);
@@ -463,6 +450,13 @@ describe('Le serveur MSS', () => {
       );
     });
 
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/risques',
+      }, done);
+    });
+
     it("demande au dépôt d'associer les risques à l'homologation", (done) => {
       referentiel.recharge({ risques: { unRisque: {} } });
       let risqueAjoute = false;
@@ -488,12 +482,19 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/avisExpertCyber`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.ajouteAvisExpertCyberAHomologation = () => {};
+    beforeEach(() => (depotDonnees.ajouteAvisExpertCyberAHomologation = () => {}));
 
+    it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT(
         { method: 'post', url: 'http://localhost:1234/api/homologation/456/avisExpertCyber' }, done
       );
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/avisExpertCyber',
+      }, done);
     });
 
     it("demande au dépôt d'associer l'avis d'expert à l'homologation", (done) => {
