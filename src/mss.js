@@ -55,12 +55,9 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('homologation/creation', { referentiel, homologation });
   });
 
-  app.get('/homologation/:id', middleware.verificationJWT, (requete, reponse) => {
-    const homologation = depotDonnees.homologation(requete.params.id);
-    if (!homologation) reponse.status(404).send('Homologation non trouvée');
-    else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
-      reponse.status(403).send("Accès à l'homologation refusé");
-    } else reponse.render('homologation', { homologation });
+  app.get('/homologation/:id', middleware.verificationJWT, middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    reponse.render('homologation', { homologation });
   });
 
   app.get('/homologation/:id/caracteristiquesComplementaires',

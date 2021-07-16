@@ -2,7 +2,7 @@ const basicAuth = require('express-basic-auth');
 const pug = require('pug');
 
 const middleware = (configuration = {}) => {
-  const { adaptateurJWT, login, motDePasse } = configuration;
+  const { depotDonnees, adaptateurJWT, login, motDePasse } = configuration;
 
   const authentificationBasique = basicAuth({
     challenge: true,
@@ -25,7 +25,18 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  return { authentificationBasique, suppressionCookie, verificationJWT };
+  const trouveHomologation = (requete, reponse, suite) => {
+    const homologation = depotDonnees.homologation(requete.params.id);
+    if (!homologation) reponse.status(404).send('Homologation non trouvée');
+    else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
+      reponse.status(403).send("Accès à l'homologation refusé");
+    } else {
+      requete.homologation = homologation;
+      suite();
+    }
+  };
+
+  return { authentificationBasique, trouveHomologation, suppressionCookie, verificationJWT };
 };
 
 module.exports = middleware;

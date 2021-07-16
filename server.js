@@ -14,6 +14,7 @@ const depotDonnees = DepotDonnees.creeDepot(donnees, {
 });
 const middleware = Middleware({
   adaptateurJWT,
+  depotDonnees,
   login: process.env.LOGIN_ADMIN,
   motDePasse: process.env.MOT_DE_PASSE_ADMIN,
 });

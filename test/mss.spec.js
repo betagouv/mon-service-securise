@@ -12,6 +12,7 @@ describe('Le serveur MSS', () => {
   let suppressionCookieEffectuee;
   let verificationJWTMenee;
   let authentificationBasiqueMenee;
+  let rechercheHomologationEffectuee;
 
   const verifieRequeteExigeSuppressionCookie = (requete, done) => {
     expect(suppressionCookieEffectuee).to.be(false);
@@ -60,6 +61,17 @@ describe('Le serveur MSS', () => {
       .catch((erreur) => done(erreur));
   };
 
+  const verifieRechercheHomologation = (requete, done) => {
+    expect(rechercheHomologationEffectuee).to.be(false);
+
+    axios(requete)
+      .then(() => {
+        expect(rechercheHomologationEffectuee).to.be(true);
+        done();
+      })
+      .catch((erreur) => done(erreur));
+  };
+
   const middleware = {
     suppressionCookie: (requete, reponse, suite) => {
       suppressionCookieEffectuee = true;
@@ -74,6 +86,12 @@ describe('Le serveur MSS', () => {
       authentificationBasiqueMenee = true;
       suite();
     },
+
+    trouveHomologation: (requete, reponse, suite) => {
+      requete.homologation = new Homologation({ id: '456' });
+      rechercheHomologationEffectuee = true;
+      suite();
+    },
   };
 
   let depotDonnees;
@@ -85,6 +103,7 @@ describe('Le serveur MSS', () => {
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
     authentificationBasiqueMenee = false;
+    rechercheHomologationEffectuee = false;
 
     depotDonnees = DepotDonnees.creeDepotVide();
     referentiel = Referentiel.creeReferentielVide();
@@ -146,55 +165,11 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/homologation/:id`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
-        { method: 'get', url: 'http://localhost:1234/homologation/456' }, done
-      );
+      verifieRequeteExigeJWT('http://localhost:1234/homologation/456', done);
     });
 
-    it('retourne une erreur HTTP 404 si homologation inexistante', (done) => {
-      expect(depotDonnees.homologation('456')).to.be(undefined);
-      axios.get('http://localhost:1234/homologation/456')
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(404);
-          expect(erreur.response.data).to.equal('Homologation non trouvée');
-          done();
-        })
-        .catch((erreur) => done(erreur));
-    });
-
-    it("retrouve l'homologation à partir de son identifiant", (done) => {
-      idUtilisateurCourant = '123';
-
-      depotDonnees.homologation = (idHomologation) => {
-        expect(idHomologation).to.equal('456');
-        return new Homologation({ id: '456', idUtilisateur: '123', nomService: 'Super Service' });
-      };
-
-      axios.get('http://localhost:1234/homologation/456')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.contain('Super Service');
-          done();
-        })
-        .catch((erreur) => done(erreur));
-    });
-
-    it("retourne une erreur HTTP 403 si l'homologation n'est pas liée à l'utilisateur courant", (done) => {
-      idUtilisateurCourant = '123';
-
-      depotDonnees.homologation = () => new Homologation({
-        id: '456', idUtilisateur: '999', nomService: 'Super Service',
-      });
-
-      axios.get('http://localhost:1234/homologation/456')
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(403);
-          expect(erreur.response.data).to.equal("Accès à l'homologation refusé");
-          done();
-        })
-        .catch((erreur) => done(erreur));
+    it("recherche l'homologation correspondante", (done) => {
+      verifieRechercheHomologation('http://localhost:1234/homologation/456', done);
     });
   });
 
