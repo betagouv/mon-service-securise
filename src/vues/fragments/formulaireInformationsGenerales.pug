@@ -4,7 +4,7 @@ block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
 
-mixin formulaireInformationsGenerales(identifiantHomologation)
+mixin formulaireInformationsGenerales(idHomologation)
   form.homologation#homologation
     h1 Décrivez le service numérique
     h2 Informations générales
@@ -13,7 +13,7 @@ mixin formulaireInformationsGenerales(identifiantHomologation)
       service numérique, afin de vous proposer des mesures de sécurité adaptées
       et les pièces à joindre au document d'homologation.
     section
-      label Nom du service à homologuer
+      label Nom du service numérique à homologuer
         br
         input(id = 'nom-service', name = 'nomService', type = 'text', value = homologation.nomService)
 
@@ -64,4 +64,7 @@ mixin formulaireInformationsGenerales(identifiantHomologation)
         titre: "Une personne est-elle responsable de la sécurité des systèmes d'information au sein de votre organisation ?",
       })
 
-    .bouton(identifiant = homologation.id) Continuer &nbsp;&nbsp;›
+    if idHomologation
+      .bouton(identifiant = idHomologation) Enregistrer &nbsp;&nbsp;›
+    else
+      .bouton Continuer &nbsp;&nbsp;›

@@ -2,6 +2,6 @@ extends ./formulaire
 include ../fragments/formulaireInformationsGenerales
 
 block formulaire
-  +formulaireInformationsGenerales("#{ homologation.id }")
+  +formulaireInformationsGenerales(homologation.id)
 
   script(type = 'module', src = '/statique/homologation/edition.js')

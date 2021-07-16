@@ -11,6 +11,7 @@ block formulaire
 
       +inputIdentite({
         role: "Autorité d'homologation",
+        descriptif: "Personne en capacité de prendre la responsabilité de la mise en ligne d'un service (ex. directeur·ice, maire ou adjoint·e au maire)",
         nomParametre: 'autoriteHomologation',
       })
 
@@ -19,13 +20,13 @@ block formulaire
 
       +inputIdentite({
         role: 'Pilote du projet',
-        descriptif: 'ex : personne proposant le déploiement du service, chef de projet numérique, responsable métier, etc.',
+        descriptif: 'Personne pilote du projet au niveau métier (ex. chef·fe du projet, responsable métier)',
         nomParametre: 'piloteProjet',
         raccourciVisible: true
       })
 
       +inputIdentiteExpertCyber
 
-    .bouton(identifiant = homologation.id)  Continuer &nbsp;&nbsp;›
+    .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(type = 'module', src = '/statique/homologation/partiesPrenantes.js')
