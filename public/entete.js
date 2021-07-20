@@ -27,6 +27,7 @@ $(() => {
     });
 
     $conteneur.append($infosUtilisateurCourant, $deconnexion);
+    $conteneur.css('cursor', 'pointer');
   };
 
   const ajouteBoutonConnexionDans = (selecteur) => {

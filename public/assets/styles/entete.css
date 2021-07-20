@@ -1,21 +1,63 @@
 header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 1em 0 1.5em;
+}
+
+header > * {
+  flex: 1 0 auto;
 }
 
 header a {
   display: inline-block;
 
   text-decoration: none;
+  font-size: 0.7em;
+  color: #0d4269;
+}
+
+header a:hover {
+  color: #1b7cc4;
+}
+
+.marianne, .devise {
+  width: 45%;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.marianne {
+  height: 0.8em;
+
+  background-image: url(../images/marianne.svg);
+}
+
+.devise {
+  height: 2em;
+
+  background-image: url(../images/devise.svg);
+}
+
+.republique-francaise {
+  padding: 0.25em 0 0.5em;
+
+  line-height: 100%;
+  color: black;
+  font-size: 0.7em;
+  font-weight: bold;
 }
 
 a.logo-mss {
+  flex: 4 0 auto;
   padding: 0 0 0 2em;
 
   background-image: url(../images/logo_mss.svg);
   background-repeat: no-repeat;
   background-size: contain;
 
-  color: #0d4269;
+  font-size: 1.2em;
 }
 
 a.connexion, a.inscription {
@@ -24,9 +66,6 @@ a.connexion, a.inscription {
   background: #0d4269;
   border: 0.5px solid #0d4269;
   border-radius: 33% / 100%;
-
-  font-size: 0.7em;
-  color: #fff;
 }
 
 a.connexion {
@@ -37,18 +76,16 @@ a.connexion {
 
 a.inscription {
   background: #fff;
-
-  color: #0d4269;
 }
 
 a.connexion:hover {
   background: #1b7cc4;
+
+  color: #fff;
 }
 
 a.inscription:hover {
   border: 0.5px solid #1b7cc4;
-
-  color: #1b7cc4;
 }
 
 .utilisateur-courant {
