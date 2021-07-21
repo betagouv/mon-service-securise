@@ -34,6 +34,10 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('index');
   });
 
+  app.get('/doisJeHomologuer', (requete, reponse) => {
+    reponse.render('doisJeHomologuer');
+  });
+
   app.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
     reponse.render('connexion');
   });

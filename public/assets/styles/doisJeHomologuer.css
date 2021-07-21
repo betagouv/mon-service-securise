@@ -1,0 +1,54 @@
+.documentation {
+  position: relative;
+
+  margin: 1em 5em;
+  padding: 2em 6em;
+
+  background: #fff;
+  border-radius: 5px;
+
+  text-align: left;
+}
+
+.documentation section {
+  padding: 3em 0;
+}
+
+.documentation h1 {
+  font-size: 2.8em;
+}
+
+.documentation h2 {
+  margin-top: 0;
+}
+
+.documentation p, .documentation ul {
+  color: #2f3a43;
+}
+
+.resume {
+  line-height: 180%;
+  font-weight: bold;
+}
+
+.resume ul {
+  padding-top: 1em;
+  padding-bottom: 2em;
+}
+
+.en-savoir-plus ul {
+  color: #1b7cc4;
+}
+
+.question {
+  text-align: center;
+}
+
+.question p {
+  margin: 0;
+  padding: 2em 0 0;
+
+  font-size: 2em;
+  font-weight: bold;
+  color: #0d4269;
+}
