@@ -5,10 +5,6 @@ header {
   padding: 1em 0 1.5em;
 }
 
-header > * {
-  flex: 1 0 auto;
-}
-
 header a {
   display: inline-block;
 
@@ -49,8 +45,12 @@ header a:hover {
   font-weight: bold;
 }
 
+.fill {
+  display: inline;
+  flex-grow: 0.4;
+}
+
 a.logo-mss {
-  flex: 4 0 auto;
   padding: 0 0 0 2em;
 
   background-image: url(../images/logo_mss.svg);
