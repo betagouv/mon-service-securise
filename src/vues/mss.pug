@@ -7,6 +7,7 @@ block styles
   link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
   link(href='/statique/assets/styles/mss.css', rel='stylesheet')
   link(href='/statique/assets/styles/entete.css', rel='stylesheet')
+  link(href='/statique/assets/styles/piedPage.css', rel='stylesheet')
 
 title Mon Service Sécurisé
 
@@ -23,6 +24,9 @@ header
 main
   block main
 
-footer Mon Service Sécurisé par l'ANSSI – Version béta
+footer
+  span Mon Service Sécurisé par l'ANSSI – Version béta
+  nav
+    a(href = '/aPropos') À propos
 
 script(src='/statique/entete.js')

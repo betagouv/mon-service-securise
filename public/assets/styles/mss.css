@@ -57,10 +57,3 @@ section {
 section:last-of-type {
   border-bottom: solid 1px #abb6bf;
 }
-
-footer {
-  padding: 1em 0;
-
-  font-size: 0.5em;
-  color: #abb6bf;
-}

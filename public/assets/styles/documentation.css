@@ -26,6 +26,10 @@
   color: #2f3a43;
 }
 
+.documentation li {
+  padding-bottom: 0.5em;
+}
+
 .resume {
   line-height: 180%;
   font-weight: bold;

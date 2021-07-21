@@ -1,0 +1,25 @@
+footer {
+  display: flex;
+
+  padding: 1em 0;
+
+  font-size: 0.5em;
+  color: #abb6bf;
+}
+
+footer nav {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 2em;
+
+  margin-left: auto;
+}
+
+footer a {
+  text-decoration: none;
+  color: #abb6bf;
+}
+
+footer a:hover {
+  color: #1b7cc4;
+}
