@@ -1,0 +1,4 @@
+.aide-entete {
+  display: flex;
+  column-gap: 1.4em;
+}

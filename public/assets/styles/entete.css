@@ -1,6 +1,6 @@
 header {
   display: flex;
-  justify-content: space-between;
+  column-gap: 1.4em;
   align-items: center;
   padding: 1em 0 1.5em;
 }
@@ -45,12 +45,8 @@ header a:hover {
   font-weight: bold;
 }
 
-.fill {
-  display: inline;
-  flex-grow: 0.4;
-}
-
 a.logo-mss {
+  margin-right: auto;
   padding: 0 0 0 2em;
 
   background-image: url(../images/logo_mss.svg);
