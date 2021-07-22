@@ -50,6 +50,10 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('doisJeHomologuer');
   });
 
+  app.get('/mentionsLegales', (requete, reponse) => {
+    reponse.render('mentionsLegales');
+  });
+
   app.get('/inscription', (requete, reponse) => {
     reponse.render('inscription');
   });
