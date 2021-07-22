@@ -22,12 +22,40 @@
   margin-top: 0;
 }
 
+.documentation h3 {
+  margin-top: 2em;
+  font-weight: normal;
+  color: #2f3a43;
+}
+
 .documentation p, .documentation ul {
   color: #2f3a43;
 }
 
 .documentation li {
   padding-bottom: 0.5em;
+}
+
+.documentation dl {
+  color: #2f3a43;
+}
+
+.documentation dd, .documentation dt {
+  display: inline;
+}
+
+.documentation dt {
+  font-weight: bold;
+}
+
+.documentation dt:before {
+  display: block;
+  margin-top: 1em;
+  content: '';
+}
+
+.documentation dd {
+  margin-inline-start: 0.5em;
 }
 
 .resume {

@@ -38,6 +38,10 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('aPropos');
   });
 
+  app.get('/confidentialite', (requete, reponse) => {
+    reponse.render('confidentialite');
+  });
+
   app.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
     reponse.render('connexion');
   });
