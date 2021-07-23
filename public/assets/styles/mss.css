@@ -7,14 +7,14 @@ body {
   font-family: "Marianne";
 }
 
-header, .page, .fonctionnalites, .etapes, .suivi-homologations, .details-homologation, .formulaire, footer {
+header, .marges-fixes, .page, .suivi-homologations, .details-homologation, .formulaire, footer {
   width: 1000px;
   margin: 0 auto;
   color: #0d4269;
 }
 
 main {
-  padding-bottom: 10em;
+  padding-bottom: 5em;
   border-top: solid 1px #ebedf0;
   border-bottom: solid 1px #ebedf0;
   background: #fafbfc;

@@ -4,46 +4,127 @@ block append styles
   link(href='/statique/assets/styles/index.css', rel='stylesheet')
 
 block main
-  .introduction
-    .logo-anssi
-    h1
-      | Sécuriser et homologuer
-      br
-      | mes services publics numériques
-    p
-      | Site internet, application mobile, outil collaboratif : Mon Service
-      | Sécurisé aide les entités
-      br
-      | publiques à sécuriser et homologuer simplement leurs services
-      | numériques <b>les plus courants</b>.
+  .introduction.marges-fixes
+    .presentation
+      h1.
+        Sécuriser et homologuer<br>
+        mes services publics numériques
+      p.
+        Mon Service Sécurisé aide les entités publiques à sécuriser et homologuer
+        simplement leurs services numériques <b>les plus courants</b>.
+      nav
+        a.bouton(href = 'mailto:contact@monservicesecurise.beta.gouv.fr?subject=Cr%C3%A9ation%20de%20compte').
+          M'inscrire pour démarrer une homologation &nbsp;&nbsp;›
+        a(href='/#exemple-dossier') Voir un exemple d'homologation
+    a.logo-anssi(href = 'https://www.ssi.gouv.fr')
 
-    a.bouton(href="mailto:contact@monservicesecurise.beta.gouv.fr?subject=Tenez-moi%20au%20courant%20de%20l'avanc%C3%A9e%20du%20projet%20!&body=%C2%AB%C2%A0Mon%20service%20S%C3%A9curis%C3%A9%20%C2%BB%20m'int%C3%A9resse.%20Merci%20de%20me%20tenir%20au%20courant%20des%20prochaines%20%C3%A9volutions.")
-      | Tenez-moi au courant de l'avancée du projet !
-
-  .fonctionnalites
-    .fonctionnalite.parcours-guide
-      | Un parcours
-      br
-      |guidé et unique
-    .fonctionnalite.suggestions-anssi Des suggestions de l'ANSSI pour sécuriser
-    .fonctionnalite.mode-collaboratif
-      | Un outil pour
-      br
-      | collaborer en équipe
+  .fonctionnalites.marges-fixes
+    ul
+      li.demarrage-rapide Démarrez rapidement vos homologations
+      li.gain-temps Gagnez du temps en allant à l'essentiel
+      li.conseils-anssi Appuyez-vous sur les conseils de l'ANSSI
 
   .bandeau
-    h1 Comment ça marche ?
+    .description
+      h1 Mon Service Sécurisé facilite votre mise en conformité
+
+      p.
+        L'homologation de sécurité des services numériques permettant des
+        échanges de données (téléservices) est obligatoire pour les entités
+        publiques au titre du
+        <a href='https://www.ssi.gouv.fr/entreprise/reglementation/confiance-numerique/le-referentiel-general-de-securite-rgs/'>Réferentiel
+        général de sécurité (RGS)</a>.
+
+      p.
+        Mon Service Sécurisé facilite l'homologation des services publics
+        numériques les plus courants aux besoins de sécurité de faible ampleur,
+        et s'inscrit dans la continuité du
+        <a href='https://www.ssi.gouv.fr/uploads/2014/06/guide_homologation_de_securite_en_9_etapes.pdf'>Guide
+        de l'ANSSI sur l'homologation de sécurité en 9 étapes</a> et du guide
+        <a href='https://www.ssi.gouv.fr/uploads/2018/11/guide-securite-numerique-agile-anssi-pa-v1.pdf'>Agilité
+        &amp; sécurité numériques</a>.
+
+      p.
+        L'homologation de sécurité participe au renforcement de la sécurité du
+        traitement de données à caractère personnel encadrée par le
+        <a href='https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr'>RGPD</a>.
+
+      hr
+
+      h2.
+        Exemples de services numériques pouvant être homologués à l'aide de Mon
+        Service Sécurisé
+
+      .exemples
+        .exemple.site-internet
+          h3 Site internet
+          p Le site Internet de la médiathèque, pour réserver les livres
+
+        .exemple.application
+          h3 Application
+          p L'application mobile de guide touristique pour la ville
+
+        .exemple.api
+          h3 API
+          p.
+            L'API permettant l'accès à la base de données du service de
+            transports de la ville
+
+  .utilisation.marges-fixes
+    h1 Il n'est jamais trop tôt pour sécuriser et homologuer un service numérique
+
+    p.
+      Avant le démarrage, pendant le développement, avant la mise en service ou
+      après le lancement vous pouvez utiliser Mon Service Sécurisé
+
     .etapes
       .etape
-        h2 1
-        p
-          | Identifiez les risques et
-          br
-          | les mesures de sécurité
+        h1 1
+        h2 Décrivez le service numérique à homologuer
+        p.
+          Quelques questions simples pour en apprendre plus sur le service
+          numérique et vous guider.
+      .point-etape
+      .icone-etape.informations
+
+      .icone-etape.mesures
+      .point-etape
+      .ligne-verticale
       .etape
-        h2 2
-        p Télécharger le document d'homologation de sécurité
+        h1 2
+        h2 Fixez les mesures de sécurité
+        p.
+          Une liste de risques et de mesures de sécurité à mettre en œuvre pour
+          le service numérique
+
       .etape
-        h2 3
-        p Publiez l'homologation sur Mon Service Sécurisé
+        h1 3
+        h2 Évaluez votre niveau de sécurité
+        p.
+          Un niveau indicatif de sécurité de votre service numérique en
+          fonction des mesures mises en œuvre
+      .point-etape
+      .icone-etape.niveau-securite
+
+      .icone-etape.dossier
+      .point-etape
+      .etape
+        h1 4
+        h2 Téléchargez votre dossier d'homologation
+        p.
+          Un document court et pédagogique conçu poru faciliter la décision de l'autorité d'homologation.
+      .ligne-verticale
+
+  .bandeau#exemple-dossier
+    .exemple-dossier.marges-fixes
+      .legende
+        h1 Un dossier d'homologation généré automatiquement
+        p Un document court et pédagogique conçu pour faciliter la décision de l'autorité d'homologation.
+        a(href = '/statique/exempleDossierHomologation.pdf') Voir un exemple &nbsp;&nbsp;›
+      a.capture-ecran(href = '/statique/exempleDossierHomologation.pdf')
+
+
+
+  a.bouton(href="mailto:contact@monservicesecurise.beta.gouv.fr?subject=Tenez-moi%20au%20courant%20de%20l'avanc%C3%A9e%20du%20projet%20!&body=%C2%AB%C2%A0Mon%20service%20S%C3%A9curis%C3%A9%20%C2%BB%20m'int%C3%A9resse.%20Merci%20de%20me%20tenir%20au%20courant%20des%20prochaines%20%C3%A9volutions.")
+    | Tenez-moi au courant de l'avancée du projet !
 
