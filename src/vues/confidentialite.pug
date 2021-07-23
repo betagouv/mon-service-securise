@@ -2,11 +2,10 @@ extend mss-aide-entete
 
 block append styles
   link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/confidentialite.css', rel = 'stylesheet')
 
 block main
   .page
-    .documentation.confidentialite
+    .documentation
       h1 Politique de confidentialité de Mon Service Sécurisé
 
       p.
@@ -48,7 +47,7 @@ block main
 
       p.
         La Politique de confidentialité fait partie intégrante des
-        <a href='/#'>Conditions générales d'utilisation</a>.
+        <a href='/cgu'>Conditions générales d'utilisation</a>.
 
 
       h2 1. Objet
@@ -92,7 +91,7 @@ block main
       p.
         En effet, lors de la création de son compte sur le Site, l'Utilisateur
         consent à la collecte de ses données à caractère personnel en cochant
-        en ligne la case d'acceptation des <a href='/#'>Conditions générales
+        en ligne la case d'acceptation des <a href='/cgu'>Conditions générales
         d'utilisation</a> et de la Politique de confidentialité, dont il
         déclare avoir pris connaissance.
 

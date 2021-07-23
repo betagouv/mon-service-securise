@@ -38,6 +38,10 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('aPropos');
   });
 
+  app.get('/cgu', (requete, reponse) => {
+    reponse.render('cgu');
+  });
+
   app.get('/confidentialite', (requete, reponse) => {
     reponse.render('confidentialite');
   });
