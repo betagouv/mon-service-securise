@@ -7,7 +7,7 @@ body {
   font-family: "Marianne";
 }
 
-header, .marges-fixes, .page, .suivi-homologations, .details-homologation, .formulaire, footer {
+.marges-fixes {
   width: 1000px;
   margin: 0 auto;
   color: #0d4269;

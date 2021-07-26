@@ -5,7 +5,7 @@ block append styles
   link(href = '/statique/assets/styles/homologation.css', rel = 'stylesheet')
 
 block main
-  .details-homologation
+  .details-homologation.marges-fixes
     .tableau-bord
       h1= homologation.nomService
       a.bouton(href = `/homologation/${homologation.id}/decision`) Télécharger le document d'homologation
