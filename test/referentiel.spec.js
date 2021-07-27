@@ -83,6 +83,14 @@ describe('Le référentiel', () => {
     expect(referentiel.mesures()).to.eql({ uneClef: 'une valeur' });
   });
 
+  it('connaît la liste des catégories de mesures', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { uneClef: 'une valeur' },
+    });
+
+    expect(referentiel.categoriesMesures()).to.eql({ uneClef: 'une valeur' });
+  });
+
   it('connaît la liste des risques', () => {
     const referentiel = Referentiel.creeReferentiel({ risques: { uneClef: 'une valeur' } });
     expect(referentiel.risques()).to.eql({ uneClef: 'une valeur' });

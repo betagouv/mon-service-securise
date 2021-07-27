@@ -1,6 +1,7 @@
 const creeReferentiel = (donneesReferentiel) => {
   let donnees = donneesReferentiel;
 
+  const categoriesMesures = () => donnees.categoriesMesures;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement;
@@ -36,6 +37,7 @@ const creeReferentiel = (donneesReferentiel) => {
   const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
 
   return {
+    categoriesMesures,
     delaisAvantImpactCritique,
     descriptionExpiration,
     donneesCaracterePersonnel,
@@ -57,6 +59,7 @@ const creeReferentiel = (donneesReferentiel) => {
 };
 
 const creeReferentielVide = () => creeReferentiel({
+  categoriesMesures: {},
   delaisAvantImpactCritique: {},
   donneesCaracterePersonnel: {},
   echeancesRenouvellement: {},
