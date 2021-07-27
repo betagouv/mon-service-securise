@@ -2,8 +2,8 @@ mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, decorat
   - let valeursSelectionnees = objetDonnees[nom]
   fieldset(id = nom)
     .titre= titre
-    if decoration
-      .decoration !{decoration}
+      if decoration
+        .decoration !{decoration}
     each donnees, identifiant in items
       - const { description, exemple } = donnees
       - const identifiantInput = `${nom}-${identifiant}`

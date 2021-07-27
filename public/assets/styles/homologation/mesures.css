@@ -22,39 +22,62 @@ form#mesures nav > a.actif {
 
 form#mesures fieldset {
   overflow: hidden;
+  display: grid;
+  grid-template-columns: auto 1fr;
+
   position: relative;
 
-  padding: 4em 2em 2em;
   border: solid 1px #ebedf0;
   border-radius: 5px;
 }
 
-form#mesures fieldset .titre {
-  position: absolute;
-  top: 0;
-  left: 0;
+form#mesures fieldset br {
+  display: none;
+}
 
-  width: 100%;
+form#mesures fieldset .titre {
+  grid-column: 1/-1;
+
+  margin-bottom: 1em;
   padding: 1em 2em;
+
   box-sizing: border-box;
 
-  background: #ebedf0;
-  font-weight: normal;
+  border-bottom: solid 1px #ebedf0;
+  background: #fafbfc;
+
+  color: #2f3a43;
+}
+
+form#mesures div.informations-additionnelles {
+  grid-column: 1/-1;
+  padding: 0 2em;
+}
+
+form#mesures input[type='radio'] {
+  width: revert;
+  height: revert;
+  margin: 0.3em 1em 0.5em 2.3em;
+}
+
+form#mesures input[type='radio'] + label {
+  padding: 0;
+}
+
+form#mesures .decoration {
+  margin: 0.2em 0 0;
 }
 
 .mention-anssi.mesure-indispensable {
   display: inline-block;
 
-  position: absolute;
-  bottom: -0.3em;
-  right: 1.5em;
-
-  padding:  0.2em 0.6em 0.7em;
+  margin-top: 0.2em;
+  padding:  0.2em 0.6em 0.4em;
 
   background: #1aaf54;
   border-radius: 3px;
 
   font-weight: normal;
-  font-size: 0.4em;
+  font-size: 0.2em;
   color: #fff;
 }
