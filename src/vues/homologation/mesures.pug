@@ -1,13 +1,13 @@
 extends ./formulaire
 include ../fragments/inputChoix
 
-mixin inputMesure({ nom, titre })
+mixin inputMesure({ nom, titre, indispensable })
   +inputChoix({
     type: 'radio',
     nom: nom,
     titre: titre,
     items: { fait: { description: 'Fait' }, planifie: { description: 'Planifié' }, nonRetenu: { description: 'Non retenu' } },
-    decoration: '<div class="mention-anssi mesure-indispensable">Indispensable</div>',
+    decoration: indispensable ? '<div class="mention-anssi mesure-indispensable">Indispensable</div>' : '',
   })
 
 block append styles
@@ -16,21 +16,31 @@ block append styles
 block formulaire
   form.homologation#mesures
     h1 Sécurisez le service numérique
-    h2 Informations générales
+    h2 Mesures de sécurité
     p.
       Fixez les mesures pour sécuriser votre service à partir des
       recommandations de l'ANSSI.
 
-    each donnees, identifiant in referentiel.mesures()
-      section
-        +inputMesure({
-          nom: identifiant,
-          titre: donnees.description,
-        })
+    section
+      nav
+        a.actif Tout
+        each categorie, identifiant in referentiel.categoriesMesures()
+          a(id = identifiant)= categorie
+
+      .mesures
+        each donnees, identifiant in referentiel.mesures()
+          +inputMesure({
+            nom: identifiant,
+            titre: donnees.description,
+            indispensable: donnees.indispensable,
+          })
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donneesMesures', type = 'application/json').
     !{JSON.stringify(homologation.mesures.map((m) => m.toJSON()))}
-  script(type = 'module', src = '/statique/homologation/mesures.js')
 
+  script(id = 'referentielMesures', type = 'application/json').
+    !{JSON.stringify(referentiel.mesures())}
+
+  script(type = 'module', src = '/statique/homologation/mesures.js')

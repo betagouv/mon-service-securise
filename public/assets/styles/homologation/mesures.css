@@ -1,3 +1,25 @@
+form#mesures nav {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 2em;
+  padding: 0.5em 1em;
+
+  border: solid 1px #ebedf0;
+  border-radius: 5px;
+}
+
+form#mesures nav > a {
+  padding: 0.5em 1.3em;
+}
+
+form#mesures nav > a.actif {
+  background: #1b7cc430;
+  border-radius: 3px;
+
+  font-weight: bold;
+}
+
 form#mesures fieldset {
   overflow: hidden;
   position: relative;
@@ -14,13 +36,10 @@ form#mesures fieldset .titre {
 
   width: 100%;
   padding: 1em 2em;
+  box-sizing: border-box;
 
   background: #ebedf0;
   font-weight: normal;
-}
-
-form#mesures textarea {
-
 }
 
 .mention-anssi.mesure-indispensable {

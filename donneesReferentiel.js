@@ -99,9 +99,229 @@ module.exports = {
     },
   },
 
+  categoriesMesures: {
+    gouvernance: 'Gouvernance',
+    protection: 'Protection',
+    defense: 'Défense',
+    resilience: 'Résilience',
+  },
+
   mesures: {
-    identificationInterconnexions: {
-      description: "Identifier les interconnexions avec d'autres systèmes essentiels",
+    limitationInterconnexions: {
+      description: "Identifier et limiter les interconnexions du service avec d'autres systèmes",
+      categorie: 'gouvernance',
+    },
+    listeEquipements: {
+      description: "Disposer d'une liste à jour des équipements et logiciels contribuant au fonctionnement du service",
+      categorie: 'gouvernance',
+    },
+    identificationDonneesSensibles: {
+      description: 'Identifier les données les plus sensibles à protéger',
+      categorie: 'gouvernance',
+      indispensable: true,
+    },
+    contactSecurite: {
+      description: 'Rendre public un contact pour signaler un problème de sécurité',
+      categorie: 'gouvernance',
+    },
+    exigencesSecurite: {
+      description: 'Connaître les exigences de sécurité incombant aux sous-traitants du service',
+      categorie: 'gouvernance',
+    },
+    modalitesSuivi: {
+      description: 'Fixer les modalités du suivi de la sécurité du service entre les parties prenantes',
+      categorie: 'gouvernance',
+    },
+    hebergementUE: {
+      description: "Héberger le service au sein de l'Union européenne",
+      categorie: 'gouvernance',
+      indispensable: true,
+    },
+    secNumCloud: {
+      description: "Héberger le service au sein d'un Cloud qualifié SecNumCloud",
+      categorie: 'gouvernance',
+    },
+    interdictionParageVente: {
+      description: 'Proscrire le partage ou la vente de données des utilisateurs du service à des tierces parties à des fins commerciales',
+      categorie: 'gouvernance',
+      indispensable: true,
+    },
+    sensibilisationRisques: {
+      description: 'Réaliser des actions régulières de sensibilisation des agents aux risques numériques',
+      categorie: 'gouvernance',
+    },
+    consignesSecurite: {
+      description: "Fixer et sensibiliser les agents aux consignes de sécurité liées à l'utilisation du service",
+      categorie: 'gouvernance',
+      indispensable: true,
+    },
+
+    deconnexionAutomatique: {
+      description: 'Mettre en place la déconnexion automatique des sessions utilisateurs après une certaine durée',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    accesSecurise: {
+      description: 'Prévoir un accès sécurisé des utilisateurs à leur compte',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    franceConnect: {
+      description: 'Permettre la connexion des utilisateurs via FranceConnect',
+      categorie: 'protection',
+    },
+    listeComptesPrivilegies: {
+      description: "Disposer d'une liste à jour des comptes disposant d'un d'accès privilégié au service",
+      categorie: 'protection',
+      indispensable: true,
+    },
+    gestionComptesAcces: {
+      description: "Mettre en oeuvre une procédure de gestion des comptes d'accès",
+      categorie: 'protection',
+    },
+    dissocierComptesAdmin: {
+      description: 'Dissocier les accès, les comptes et les privilèges des agents à la fois utilisateurs et administrateurs',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    limitationCreationComptes: {
+      description: "Limiter la création de compte d'accès aux seuls comptes nominatifs",
+      categorie: 'protection',
+      indispensable: true,
+    },
+    doubleAuthentAdmins: {
+      description: 'Prévoir la double authentification des administrateurs au service',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    limitationAccesAdmin: {
+      description: 'Limiter au strict nécessaire les accès administrateurs et tenir la liste à jour',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    certificatChiffrement: {
+      description: "Chiffrer le trafic avec l'utilisation d'un certificat conforme au référentiel général de sécurité",
+      categorie: 'protection',
+      indispensable: true,
+    },
+    differentiationFiltrage: {
+      description: 'Différencier le filtrage des accès utilisateurs, agents et administrateurs',
+      categorie: 'protection',
+    },
+    nomsDomaineSimilaires: {
+      description: 'Acheter plusieurs noms de domaine proches du nom de domaine du service',
+      categorie: 'protection',
+    },
+    securisationCode: {
+      description: "Mettre en oeuvre des bonnes pratiques de sécurisation du code, comme celles de l'OWASP",
+      categorie: 'protection',
+      indispensable: true,
+    },
+    bugBounty: {
+      description: 'Réaliser un test technique de la sécurité du service comme un bug bounty',
+      categorie: 'protection',
+    },
+    auditsSecurite: {
+      description: "Prévoir l'organisation de contrôles et d'audits de sécurité réguliers",
+      categorie: 'protection',
+    },
+    parefeu: {
+      description: 'Installer un parefeu',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    chiffrementFlux: {
+      description: 'Désactiver tout flux non chiffré.',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    protectionDeniService: {
+      description: 'Souscrire à un service de protection contre les attaques de déni de service',
+      categorie: 'protection',
+    },
+    hebergementMachineVirtuelle: {
+      description: 'Héberger le service dans une machine virtuelle',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    chiffrementMachineVirtuelle: {
+      description: 'Chiffrer la machine virtuelle',
+      categorie: 'protection',
+    },
+    misesAJour: {
+      description: "Disposer d'une politique d'application des mises à jour fonctionnelles et de sécurité du service",
+      categorie: 'protection',
+      indispensable: true,
+    },
+    versionRecente: {
+      description: "Utiliser une version récente des éléments applicatifs composant le service toujours maintenus par l'éditeur",
+      categorie: 'protection',
+      indispensable: true,
+    },
+    moindrePrivilege: {
+      description: 'Configurer les applicatifs selon la règle du moindre privilège',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    configurationMinimaliste: {
+      description: 'Configurer le service selon la règle de la configuration minimaliste',
+      categorie: 'protection',
+      indispensable: true,
+    },
+    telechargementsOfficiels: {
+      description: "Permettre exclusivement le téléchargement d'une application mobile depuis les magasins officiels",
+      categorie: 'protection',
+      indispensable: true,
+    },
+
+    gestionIncidents: {
+      description: 'Définir une procédure de gestion des incidents de sécurité',
+      categorie: 'defense',
+      indispensable: true,
+    },
+    journalAcces: {
+      description: "Disposer d'un journal de tous les accès",
+      categorie: 'defense',
+      indispensable: true,
+    },
+    notificationConnexionsSuspectes: {
+      description: 'Envoyer aux administrateurs et utilisateurs une notification en cas de connexion suspecte',
+      categorie: 'defense',
+    },
+    supervision: {
+      description: 'Recourir à un service de supervision de la sécurité',
+      categorie: 'defense',
+    },
+    testsProcedures: {
+      description: "Tester régulièrement les procédures de gestion d'incident",
+      categorie: 'defense',
+    },
+    affichageDerniereConnexion: {
+      description: "Afficher aux utilisateurs l'heure et la date de leur dernière connexion",
+      categorie: 'defense',
+    },
+
+    exerciceGestionCrise: {
+      description: 'Planifier un exercice de gestion de crise, notamment face au risque de rançongiciel',
+      categorie: 'resilience',
+    },
+    politiqueInformation: {
+      description: "Disposer d'une politique d'information des utilisateurs en cas d'incident",
+      categorie: 'resilience',
+    },
+    sauvegardeDonnees: {
+      description: 'Mettre en place une sauvegarde régulière des données dans un environnement non connecté au service',
+      categorie: 'resilience',
+      indispensable: true,
+    },
+    sauvegardeMachineVirtuelle: {
+      description: 'Mettre en place une sauvegarde en continu de la machine virtuelle sur lequel est déployé le service.',
+      categorie: 'resilience',
+    },
+    testsSauvegardes: {
+      description: 'Tester régulièrement les sauvegardes',
+      categorie: 'resilience',
+      indispensable: true,
     },
   },
 

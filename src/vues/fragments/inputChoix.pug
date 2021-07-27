@@ -1,6 +1,6 @@
 mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, decoration })
   - let valeursSelectionnees = objetDonnees[nom]
-  fieldset
+  fieldset(id = nom)
     .titre= titre
     if decoration
       .decoration !{decoration}

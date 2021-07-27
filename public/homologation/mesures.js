@@ -1,5 +1,26 @@
 import parametres from '../modules/parametres.js';
 
+const filtreMesures = (selecteurMesures, categorieFiltre) => {
+  const referentielMesures = JSON.parse($('#referentielMesures').text());
+  Object.keys(referentielMesures)
+    .forEach((id) => $(`fieldset#${id}`).toggle(
+      (!categorieFiltre) || categorieFiltre === referentielMesures[id].categorie
+    ));
+};
+
+const brancheFiltres = (selecteurFiltres, selecteurMesures) => {
+  const $filtres = $(selecteurFiltres);
+  $filtres.each((_, f) => {
+    $(f).click((e) => {
+      $('.actif').removeClass('actif');
+      $(e.target).addClass('actif');
+
+      const idCategorie = e.target.id;
+      filtreMesures(selecteurMesures, idCategorie);
+    });
+  });
+};
+
 const $conteneurModalites = (nom) => {
   const $conteneur = $('<div></div>');
   const $lien = $('<a class="informations-additionnelles" href="#">Précisez les modalités de mise en œuvre (facultatif)</a>');
@@ -27,6 +48,8 @@ const peupleFormulaire = () => {
 };
 
 $(() => {
+  brancheFiltres('form#mesures nav > a', '.mesures');
+
   ajouteConteneursModalites();
   peupleFormulaire();
 
