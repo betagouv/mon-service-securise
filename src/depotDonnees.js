@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 
 const { ErreurUtilisateurExistant } = require('./erreurs');
 const Homologation = require('./modeles/homologation');
+const Mesure = require('./modeles/mesure');
+const StatistiquesMesures = require('./modeles/statistiquesMesures');
 const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {}) => {
@@ -90,6 +92,26 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
       });
   };
 
+  const statistiquesMesures = (idHomologation) => {
+    const stats = {};
+    const { mesures } = donnees.homologations.find((h) => h.id === idHomologation);
+
+    mesures.forEach(({ id, statut }) => {
+      const { categorie } = referentiel.mesures()[id];
+
+      if (statut === Mesure.STATUT_FAIT || statut === Mesure.STATUT_PLANIFIE) {
+        stats[categorie] ||= { retenues: 0, misesEnOeuvre: 0 };
+        stats[categorie].retenues += 1;
+
+        if (statut === Mesure.STATUT_FAIT) {
+          stats[categorie].misesEnOeuvre += 1;
+        }
+      }
+    });
+
+    return new StatistiquesMesures(stats, referentiel);
+  };
+
   const utilisateur = (identifiant) => {
     const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === identifiant);
     return donneesUtilisateur ? new Utilisateur(donneesUtilisateur, adaptateurJWT) : undefined;
@@ -121,6 +143,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     metsAJourHomologation,
     nouvelleHomologation,
     nouvelUtilisateur,
+    statistiquesMesures,
     utilisateur,
     utilisateurAuthentifie,
   };

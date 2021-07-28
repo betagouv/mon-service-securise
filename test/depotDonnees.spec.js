@@ -86,6 +86,27 @@ describe('Le dépôt de données', () => {
     expect(mesure.id).to.equal('identifiantMesure');
   });
 
+  it('calcule des statistiques sur les mesures associées à une homologation', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { une: 'catégorie 1', deux: 'catégorie 2' },
+      mesures: { id1: { categorie: 'une' }, id2: { categorie: 'une' }, id3: { categorie: 'deux' } },
+    });
+    const depot = DepotDonnees.creeDepot({
+      homologations: [
+        { id: '1', mesures: [{ id: 'id1', statut: 'fait' }, { id: 'id2', statut: 'fait' }] },
+        { id: '2', mesures: [{ id: 'id1', statut: 'fait' }, { id: 'id2', statut: 'planifie' }] },
+        { id: '3', mesures: [{ id: 'id1', statut: 'planifie' }, { id: 'id2', statut: 'nonRetenu' }] },
+        { id: '4', mesures: [{ id: 'id1', statut: 'nonRetenu' }, { id: 'id3', statut: 'fait' }] },
+      ],
+    }, { referentiel });
+
+    const stats = (idHomologation) => depot.statistiquesMesures(idHomologation).toJSON();
+    expect(stats('1')).to.eql({ une: { retenues: 2, misesEnOeuvre: 2 } });
+    expect(stats('2')).to.eql({ une: { retenues: 2, misesEnOeuvre: 1 } });
+    expect(stats('3')).to.eql({ une: { retenues: 1, misesEnOeuvre: 0 } });
+    expect(stats('4')).to.eql({ deux: { retenues: 1, misesEnOeuvre: 1 } });
+  });
+
   it('sait associer une mesure à une homologation', () => {
     const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
     const depot = DepotDonnees.creeDepot({
