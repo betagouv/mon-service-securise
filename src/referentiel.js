@@ -2,6 +2,8 @@ const creeReferentiel = (donneesReferentiel) => {
   let donnees = donneesReferentiel;
 
   const categoriesMesures = () => donnees.categoriesMesures;
+  const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
+  const descriptionCategorie = (idCategorie) => donnees.categoriesMesures[idCategorie];
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement;
@@ -39,10 +41,12 @@ const creeReferentiel = (donneesReferentiel) => {
   return {
     categoriesMesures,
     delaisAvantImpactCritique,
+    descriptionCategorie,
     descriptionExpiration,
     donneesCaracterePersonnel,
     echeancesRenouvellement,
     fonctionnalites,
+    identifiantsCategoriesMesures,
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,

@@ -91,6 +91,22 @@ describe('Le référentiel', () => {
     expect(referentiel.categoriesMesures()).to.eql({ uneClef: 'une valeur' });
   });
 
+  it('connaît la liste des identifiants de catégories', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { uneClef: 'une valeur' },
+    });
+
+    expect(referentiel.identifiantsCategoriesMesures()).to.eql(['uneClef']);
+  });
+
+  it('sait décrire une catégorie', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { uneCategorie: 'une description' },
+    });
+
+    expect(referentiel.descriptionCategorie('uneCategorie')).to.equal('une description');
+  });
+
   it('connaît la liste des risques', () => {
     const referentiel = Referentiel.creeReferentiel({ risques: { uneClef: 'une valeur' } });
     expect(referentiel.risques()).to.eql({ uneClef: 'une valeur' });
