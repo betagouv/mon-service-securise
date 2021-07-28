@@ -10,6 +10,10 @@ describe('Une mesure de sécurité', () => {
   beforeEach(() => (referentiel = Referentiel.creeReferentiel({
     mesures: {
       identifiantMesure: { description: 'Une description' },
+      identifiantMesureIndispensable: {
+        description: 'Cette mesure est indispensable',
+        indispensable: true,
+      },
     },
   })));
 
@@ -57,5 +61,21 @@ describe('Une mesure de sécurité', () => {
 
     const mesure = new Mesure({ id: 'identifiantMesure', statut: 'fait' }, referentiel);
     expect(mesure.description()).to.equal('Une description');
+  });
+
+  it("sait si elle est indispensable selon l'ANSSI", () => {
+    expect(referentiel.mesures().identifiantMesureIndispensable.indispensable).to.be(true);
+
+    const mesureIndispensable = new Mesure(
+      { id: 'identifiantMesureIndispensable', statut: 'fait' }, referentiel
+    );
+    expect(mesureIndispensable.estIndispensable()).to.be(true);
+  });
+
+  it('sait si elle est seulement recommandée', () => {
+    expect(referentiel.mesures().identifiantMesure.indispensable).to.not.be.ok();
+
+    const mesure = new Mesure({ id: 'identifiantMesure', statut: 'fait' }, referentiel);
+    expect(mesure.estIndispensable()).to.be(false);
   });
 });

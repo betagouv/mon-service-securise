@@ -30,8 +30,16 @@ class Mesure extends Base {
     this.referentiel = referentiel;
   }
 
+  donneesReferentiel() {
+    return this.referentiel.mesures()[this.id];
+  }
+
   description() {
-    return this.referentiel.mesures()[this.id].description;
+    return this.donneesReferentiel().description;
+  }
+
+  estIndispensable() {
+    return !!this.donneesReferentiel().indispensable;
   }
 }
 

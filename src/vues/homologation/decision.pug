@@ -167,5 +167,6 @@ main
           li
             .description= mesure.description()
             .statut(class = mesure.statut)
-            .indispensable
+            if mesure.estIndispensable()
+              .indispensable
 
