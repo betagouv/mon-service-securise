@@ -17,7 +17,31 @@ module.exports = {
   ],
 
   homologations: [
-    { id: '123', idUtilisateur: '456', nomService: 'Super Service', natureService: ['api'] },
+    {
+      id: '123',
+      idUtilisateur: '456',
+      nomService: 'Super Service',
+      natureService: ['api'],
+      mesures: [
+        // gouvernance
+        { id: 'limitationInterconnexions', statut: 'fait' },
+        { id: 'listeEquipements', statut: 'fait' },
+        { id: 'identificationDonneesSensibles', statut: 'planifie' },
+        { id: 'contactSecurite', statut: 'nonRetenu' },
+
+        // protection
+        { id: 'deconnexionAutomatique', statut: 'fait' },
+        { id: 'accesSecurise', statut: 'fait' },
+
+        // defense
+        { id: 'gestionIncidents', statut: 'fait' },
+        { id: 'journalAcces', statut: 'planifie' },
+
+        // resilience
+        { id: 'exerciceGestionCrise', statut: 'planifie' },
+        { id: 'politiqueInformation', statut: 'planifie' },
+      ],
+    },
     { id: '789', idUtilisateur: '999', nomService: 'Un autre service', natureService: ['siteInternet'] },
   ],
 };
