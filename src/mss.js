@@ -93,7 +93,8 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     middleware.verificationJWT, middleware.trouveHomologation,
     (requete, reponse) => {
       const { homologation } = requete;
-      reponse.render('homologation/decision', { homologation, referentiel });
+      const statistiquesMesures = depotDonnees.statistiquesMesures(homologation.id);
+      reponse.render('homologation/decision', { homologation, referentiel, statistiquesMesures });
     });
 
   app.get('/homologation/:id/edition',

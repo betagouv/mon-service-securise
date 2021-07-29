@@ -158,13 +158,43 @@ section.risques li, section.detail-risques dt {
 
 section.mesures ul {
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 1em;
+  grid-gap: 8em;
 }
 
 .type-mesure, .pourcentage {
   font-size: 1.7em;
   font-weight: bold;
   color: #1b7cc4;
+}
+
+.barre {
+  position: relative;
+  margin-top: 1em;
+
+  width: 100%;
+  height: 2em;
+}
+
+.barre > * {
+  height: 100%;
+  border: solid 1px #abb6bf;
+  border-radius: 3px;
+}
+
+.barre-mesures-retenues {
+  width: 100%;
+  position: absolute;
+
+  background: #fff1ce;
+}
+
+.barre-mesures-misesEnOeuvre {
+  position: relative;
+
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+
+  background: #caefcb;
 }
 
 section.niveau-protection ul {

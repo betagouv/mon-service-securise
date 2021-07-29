@@ -39,23 +39,22 @@ main
       .planifie Planifiées à 3 mois
       .fait Mises en œuvre
 
+    - const categories = statistiquesMesures.categories()
     ul
-      li
-        .nombre-mesures 5 mesures de
-        .type-mesure Gouvernance
-        .barre
-      li
-        .nombre-mesures 13 mesures de
-        .type-mesure Protection
-        .barre
-      li
-        .nombre-mesures 4 mesures de
-        .type-mesure Défense
-        .barre
-      li
-        .nombre-mesures 4 mesures de
-        .type-mesure Résilience
-        .barre
+      if categories.length === 0
+        li Aucune mesure retenue
+
+      each idCategorie in categories
+        - const pourcentage = 100 * statistiquesMesures.misesEnOeuvre(idCategorie) / statistiquesMesures.retenues(idCategorie)
+        - let style = `width: ${pourcentage}%;`
+        - if (pourcentage === 0) style += ' border: none;'
+        - if (pourcentage > 97) style += ' border-radius: 3px;'
+        li
+          .nombre-mesures= `${statistiquesMesures.retenues(idCategorie)} mesures de`
+          .type-mesure= referentiel.descriptionCategorie(idCategorie)
+          .barre(id = idCategorie)
+            .barre-mesures-retenues
+            .barre-mesures-misesEnOeuvre(style = style)
 
   section.niveau-protection
     h2 Niveau de protection indicatif
@@ -163,10 +162,12 @@ main
       p S'organiser pour gérer la sécurité du service
 
       ul
+        if homologation.mesures.length === 0
+          li Aucune mesure retenue
+
         each mesure in homologation.mesures
           li
             .description= mesure.description()
             .statut(class = mesure.statut)
             if mesure.estIndispensable()
               .indispensable
-

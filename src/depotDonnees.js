@@ -94,7 +94,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
 
   const statistiquesMesures = (idHomologation) => {
     const stats = {};
-    const { mesures } = donnees.homologations.find((h) => h.id === idHomologation);
+    const { mesures = [] } = donnees.homologations.find((h) => h.id === idHomologation);
 
     mesures.forEach(({ id, statut }) => {
       const { categorie } = referentiel.mesures()[id];
