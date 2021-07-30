@@ -2,6 +2,7 @@ const expect = require('expect.js');
 
 const Referentiel = require('../../src/referentiel');
 const Homologation = require('../../src/modeles/homologation');
+const Mesure = require('../../src/modeles/mesure');
 
 describe('Une homologation', () => {
   it('sait se convertir en JSON', () => {
@@ -103,5 +104,148 @@ describe('Une homologation', () => {
     }, referentiel);
 
     expect(homologation.descriptionExpiration()).to.equal('Dans un an');
+  });
+
+  describe('sur calcul du nombre de mesures mises en œuvre', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: {
+        m1: { indispensable: true },
+        m2: { indispensable: true },
+        m3: { indispensable: true },
+        m4: {},
+      },
+    });
+
+    it('additionne les mesures mises en oeuvre', () => {
+      const homologation = new Homologation({
+        mesures: [{ id: 'm1', statut: Mesure.STATUT_FAIT }, { id: 'm2', statut: Mesure.STATUT_FAIT }],
+      }, referentiel);
+
+      expect(homologation.nbMesuresIndispensablesMisesEnOeuvre()).to.equal(2);
+    });
+
+    it('tient uniquement compte des mesures mises en œuvre', () => {
+      const homologation = new Homologation({
+        mesures: [{ id: 'm1', statut: Mesure.STATUT_PLANIFIE }, { id: 'm2', statut: Mesure.STATUT_NON_RETENU }],
+      }, referentiel);
+
+      expect(homologation.nbMesuresIndispensablesMisesEnOeuvre()).to.equal(0);
+    });
+
+    it('ne tient pas compte des mesures non concernees', () => {
+      const homologation = new Homologation({
+        mesures: [{ id: 'm1', statut: Mesure.STATUT_FAIT }, { id: 'm4', statut: Mesure.STATUT_FAIT }],
+      }, referentiel);
+
+      expect(homologation.nbMesuresIndispensablesMisesEnOeuvre()).to.equal(1);
+      expect(homologation.nbMesuresRecommandeesMisesEnOeuvre()).to.equal(1);
+    });
+  });
+
+  describe('sur calcul du niveau de sécurité', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: {
+        m1: { indispensable: true },
+        m2: { indispensable: true },
+        m3: { indispensable: true },
+        m4: { indispensable: true },
+        m5: {},
+        m6: {},
+      },
+    });
+
+    it('retourne un niveau « bon » quand mise en œuvre 100% des mesures indispensables '
+      + 'et plus de 50% des mesures recommandées', () => {
+      const homologation = new Homologation({
+        mesures: [
+          { id: 'm1', statut: Mesure.STATUT_FAIT },
+          { id: 'm2', statut: Mesure.STATUT_FAIT },
+          { id: 'm3', statut: Mesure.STATUT_FAIT },
+          { id: 'm4', statut: Mesure.STATUT_FAIT },
+          { id: 'm5', statut: Mesure.STATUT_FAIT },
+          { id: 'm6', statut: Mesure.STATUT_PLANIFIE },
+        ],
+      }, referentiel);
+
+      expect(homologation.niveauSecurite()).to.equal(Homologation.NIVEAU_SECURITE_BON);
+    });
+
+    it('retourne niveau « statisfaisant » quand mise en œuvre 100% des mesures indispensables '
+      + 'et strictement moins de 50% des mesures recommandées', () => {
+      const homologation = new Homologation({
+        mesures: [
+          { id: 'm1', statut: Mesure.STATUT_FAIT },
+          { id: 'm2', statut: Mesure.STATUT_FAIT },
+          { id: 'm3', statut: Mesure.STATUT_FAIT },
+          { id: 'm4', statut: Mesure.STATUT_FAIT },
+          { id: 'm5', statut: Mesure.STATUT_PLANIFIE },
+          { id: 'm6', statut: Mesure.STATUT_PLANIFIE },
+        ],
+      }, referentiel);
+
+      expect(homologation.niveauSecurite()).to.equal(Homologation.NIVEAU_SECURITE_SATISFAISANT);
+    });
+
+    it('retourne niveau « à renforcer » quand mise en œuvre au moins 75% des '
+      + 'mesures indispensables', () => {
+      const homologation = new Homologation({
+        mesures: [
+          { id: 'm1', statut: Mesure.STATUT_FAIT },
+          { id: 'm2', statut: Mesure.STATUT_FAIT },
+          { id: 'm3', statut: Mesure.STATUT_FAIT },
+          { id: 'm4', statut: Mesure.STATUT_PLANIFIE },
+          { id: 'm5', statut: Mesure.STATUT_FAIT },
+          { id: 'm6', statut: Mesure.STATUT_FAIT },
+        ],
+      }, referentiel);
+
+      expect(homologation.niveauSecurite()).to.equal(Homologation.NIVEAU_SECURITE_A_RENFORCER);
+    });
+
+    it('retourne niveau « insatisfaisant » quand mise en œuvre de moins de 75% des '
+      + 'mesures indispensables', () => {
+      const homologation = new Homologation({
+        mesures: [
+          { id: 'm1', statut: Mesure.STATUT_FAIT },
+          { id: 'm2', statut: Mesure.STATUT_FAIT },
+          { id: 'm3', statut: Mesure.STATUT_PLANIFIE },
+          { id: 'm4', statut: Mesure.STATUT_PLANIFIE },
+          { id: 'm5', statut: Mesure.STATUT_FAIT },
+          { id: 'm6', statut: Mesure.STATUT_FAIT },
+        ],
+      }, referentiel);
+
+      expect(homologation.niveauSecurite()).to.equal(Homologation.NIVEAU_SECURITE_INSUFFISANT);
+    });
+
+    it('ne tient pas compte des mesures non retenues pour les calculs', () => {
+      const homologation = new Homologation({
+        mesures: [
+          { id: 'm1', statut: Mesure.STATUT_FAIT },
+          { id: 'm2', statut: Mesure.STATUT_FAIT },
+          { id: 'm3', statut: Mesure.STATUT_FAIT },
+          { id: 'm4', statut: Mesure.STATUT_NON_RETENU },
+          { id: 'm5', statut: Mesure.STATUT_FAIT },
+          { id: 'm6', statut: Mesure.STATUT_FAIT },
+        ],
+      }, referentiel);
+
+      expect(homologation.niveauSecurite()).to.equal(Homologation.NIVEAU_SECURITE_BON);
+    });
+
+    it("gère les cas où aucune mesure n'est retenue", () => {
+      const homologation = new Homologation({
+        mesures: [
+          { id: 'm1', statut: Mesure.STATUT_FAIT },
+          { id: 'm2', statut: Mesure.STATUT_FAIT },
+          { id: 'm3', statut: Mesure.STATUT_FAIT },
+          { id: 'm4', statut: Mesure.STATUT_FAIT },
+          { id: 'm5', statut: Mesure.STATUT_NON_RETENU },
+          { id: 'm6', statut: Mesure.STATUT_NON_RETENU },
+        ],
+      }, referentiel);
+
+      expect(homologation.niveauSecurite()).to.equal(Homologation.NIVEAU_SECURITE_BON);
+    });
   });
 });

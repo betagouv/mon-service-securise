@@ -1,3 +1,5 @@
+const { neg } = require('./utils');
+
 const creeReferentiel = (donneesReferentiel) => {
   let donnees = donneesReferentiel;
 
@@ -11,8 +13,12 @@ const creeReferentiel = (donneesReferentiel) => {
   const fonctionnalites = () => donnees.fonctionnalites;
   const localisationsDonnees = () => donnees.localisationsDonnees;
   const identifiantsLocalisationsDonnees = () => Object.keys(localisationsDonnees());
+  const mesureIndispensable = (idMesure) => !!donnees.mesures[idMesure].indispensable;
   const mesures = () => donnees.mesures;
   const identifiantsMesures = () => Object.keys(mesures());
+  const identifiantsMesuresIndispensables = () => identifiantsMesures().filter(mesureIndispensable);
+  const identifiantsMesuresRecommandees = () => identifiantsMesures()
+    .filter(neg(mesureIndispensable));
   const naturesService = () => donnees.naturesService;
   const provenancesService = () => donnees.provenancesService;
   const risques = () => donnees.risques;
@@ -24,16 +30,16 @@ const creeReferentiel = (donneesReferentiel) => {
     return donnees.echeancesRenouvellement[identifiant].expiration;
   };
 
+  const localisationDonnees = (identifiant) => {
+    if (!identifiant) return 'Localisation des données non renseignée';
+    return localisationsDonnees()[identifiant].description;
+  };
+
   const natureService = (identifiants) => {
     if (identifiants.length === 0) return 'Nature du service non renseignée';
     return identifiants
       .map((identifiant) => naturesService()[identifiant].description)
       .join(', ');
-  };
-
-  const localisationDonnees = (identifiant) => {
-    if (!identifiant) return 'Localisation des données non renseignée';
-    return localisationsDonnees()[identifiant].description;
   };
 
   const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
@@ -50,9 +56,12 @@ const creeReferentiel = (donneesReferentiel) => {
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
+    identifiantsMesuresIndispensables,
+    identifiantsMesuresRecommandees,
     identifiantsRisques,
     localisationDonnees,
     localisationsDonnees,
+    mesureIndispensable,
     mesures,
     natureService,
     naturesService,

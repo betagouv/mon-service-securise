@@ -5,6 +5,13 @@ const Mesure = require('./mesure');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risque = require('./risque');
 
+const NIVEAUX = {
+  NIVEAU_SECURITE_BON: 'bon',
+  NIVEAU_SECURITE_SATISFAISANT: 'satisfaisant',
+  NIVEAU_SECURITE_A_RENFORCER: 'aRenforcer',
+  NIVEAU_SECURITE_INSUFFISANT: 'insuffisant',
+};
+
 class Homologation {
   constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
     const {
@@ -46,37 +53,97 @@ class Homologation {
     this.referentiel = referentiel;
   }
 
-  descriptionNatureService() { return this.referentiel.natureService(this.natureService); }
-
-  descriptionEquipePreparation() {
-    return this.partiesPrenantes.descriptionEquipePreparation();
-  }
+  autoriteHomologation() { return this.partiesPrenantes.autoriteHomologation; }
 
   descriptionAutoriteHomologation() {
     return this.partiesPrenantes.descriptionAutoriteHomologation();
+  }
+
+  descriptionEquipePreparation() {
+    return this.partiesPrenantes.descriptionEquipePreparation();
   }
 
   descriptionExpiration() {
     return this.avisExpertCyber.descriptionExpiration();
   }
 
+  descriptionNatureService() { return this.referentiel.natureService(this.natureService); }
+
+  expertCybersecurite() { return this.partiesPrenantes.expertCybersecurite; }
+
+  fonctionAutoriteHomologation() { return this.partiesPrenantes.fonctionAutoriteHomologation; }
+
+  hebergeur() { return this.caracteristiquesComplementaires.descriptionHebergeur(); }
+
   localisationDonnees() {
     return this.caracteristiquesComplementaires.descriptionLocalisationDonnees();
   }
 
-  hebergeur() { return this.caracteristiquesComplementaires.descriptionHebergeur(); }
+  nbMesuresMisesEnOeuvreAvecCondition(condition) {
+    return this.mesures
+      .filter((m) => m.miseEnOeuvre() && condition(m.id))
+      .length;
+  }
 
-  presentation() { return this.caracteristiquesComplementaires.presentation; }
+  nbMesuresIndispensablesMisesEnOeuvre() {
+    return this.mesures.filter((m) => m.miseEnOeuvre() && m.estIndispensable()).length;
+  }
 
-  structureDeveloppement() { return this.caracteristiquesComplementaires.structureDeveloppement; }
+  nbMesuresRecommandeesMisesEnOeuvre() {
+    return this.mesures.filter((m) => m.miseEnOeuvre() && m.estRecommandee()).length;
+  }
 
-  autoriteHomologation() { return this.partiesPrenantes.autoriteHomologation; }
+  niveauSecurite() {
+    const proportionIndispensables = this.proportionMesuresIndispensablesMisesEnOeuvre();
+    const proportionRecommandees = this.proportionMesuresRecommandeesMisesEnOeuvre();
 
-  fonctionAutoriteHomologation() { return this.partiesPrenantes.fonctionAutoriteHomologation; }
+    if (proportionIndispensables === 1) {
+      return proportionRecommandees >= 0.5
+        ? NIVEAUX.NIVEAU_SECURITE_BON
+        : NIVEAUX.NIVEAU_SECURITE_SATISFAISANT;
+    }
+
+    if (proportionIndispensables >= 0.75) return NIVEAUX.NIVEAU_SECURITE_A_RENFORCER;
+
+    return NIVEAUX.NIVEAU_SECURITE_INSUFFISANT;
+  }
 
   piloteProjet() { return this.partiesPrenantes.piloteProjet; }
 
-  expertCybersecurite() { return this.partiesPrenantes.expertCybersecurite; }
+  presentation() { return this.caracteristiquesComplementaires.presentation; }
+
+  proportionMesures(nbMisesEnOeuvre, idsMesures) {
+    const identifiantsMesuresNonRetenues = () => this.mesures
+      .filter((m) => m.nonRetenue())
+      .map((m) => m.id);
+
+    const nbTotalMesuresRetenuesParmi = (identifiantsMesures) => {
+      const nonRetenues = identifiantsMesuresNonRetenues();
+
+      return identifiantsMesures
+        .filter((id) => !nonRetenues.includes(id))
+        .length;
+    };
+
+    const nbTotal = nbTotalMesuresRetenuesParmi(idsMesures);
+    return nbTotal ? nbMisesEnOeuvre / nbTotal : 1;
+  }
+
+  proportionMesuresIndispensablesMisesEnOeuvre() {
+    return this.proportionMesures(
+      this.nbMesuresIndispensablesMisesEnOeuvre(),
+      this.referentiel.identifiantsMesuresIndispensables()
+    );
+  }
+
+  proportionMesuresRecommandeesMisesEnOeuvre() {
+    return this.proportionMesures(
+      this.nbMesuresRecommandeesMisesEnOeuvre(),
+      this.referentiel.identifiantsMesuresRecommandees()
+    );
+  }
+
+  structureDeveloppement() { return this.caracteristiquesComplementaires.structureDeveloppement; }
 
   toJSON() {
     return {
@@ -85,5 +152,7 @@ class Homologation {
     };
   }
 }
+
+Object.assign(Homologation, NIVEAUX);
 
 module.exports = Homologation;

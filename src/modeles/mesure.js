@@ -41,8 +41,20 @@ class Mesure extends Base {
   estIndispensable() {
     return !!this.donneesReferentiel().indispensable;
   }
+
+  estRecommandee() {
+    return !this.estIndispensable();
+  }
+
+  miseEnOeuvre() {
+    return this.statut === STATUTS.STATUT_FAIT;
+  }
+
+  nonRetenue() {
+    return this.statut === STATUTS.STATUT_NON_RETENU;
+  }
 }
 
-Object.keys(STATUTS).forEach((s) => (Mesure[s] = STATUTS[s]));
+Object.assign(Mesure, STATUTS);
 
 module.exports = Mesure;
