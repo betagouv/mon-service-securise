@@ -4,6 +4,7 @@ const CaracteristiquesComplementaires = require('./caracteristiquesComplementair
 const Mesure = require('./mesure');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risque = require('./risque');
+const StatistiquesMesures = require('./statistiquesMesures');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -141,6 +142,25 @@ class Homologation {
       this.nbMesuresRecommandeesMisesEnOeuvre(),
       this.referentiel.identifiantsMesuresRecommandees()
     );
+  }
+
+  statistiquesMesures() {
+    const stats = {};
+
+    this.mesures.forEach(({ id, statut }) => {
+      const { categorie } = this.referentiel.mesures()[id];
+
+      if (statut === Mesure.STATUT_FAIT || statut === Mesure.STATUT_PLANIFIE) {
+        stats[categorie] ||= { retenues: 0, misesEnOeuvre: 0 };
+        stats[categorie].retenues += 1;
+
+        if (statut === Mesure.STATUT_FAIT) {
+          stats[categorie].misesEnOeuvre += 1;
+        }
+      }
+    });
+
+    return new StatistiquesMesures(stats, this.referentiel);
   }
 
   structureDeveloppement() { return this.caracteristiquesComplementaires.structureDeveloppement; }

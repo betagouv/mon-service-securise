@@ -6,7 +6,6 @@ const MSS = require('../src/mss');
 const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
 const Homologation = require('../src/modeles/homologation');
-const StatistiquesMesures = require('../src/modeles/statistiquesMesures');
 
 describe('Le serveur MSS', () => {
   let idUtilisateurCourant;
@@ -195,32 +194,12 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête GET sur `/homologation/:id/decision`', () => {
-    beforeEach(() => (depotDonnees.statistiquesMesures = () => new StatistiquesMesures()));
-
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeJWT('http://localhost:1234/homologation/456/decision', done);
     });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/decision', done);
-    });
-
-    it('calcule les statistiques liées aux mesures de protection', (done) => {
-      let calculStatistiquesMesuresAppele = false;
-
-      depotDonnees.statistiquesMesures = (idHomologation) => {
-        expect(idHomologation).to.equal('456');
-        calculStatistiquesMesuresAppele = true;
-        return new StatistiquesMesures();
-      };
-
-      axios.get('http://localhost:1234/homologation/456/decision')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(calculStatistiquesMesuresAppele).to.be(true);
-          done();
-        })
-        .catch((erreur) => done(erreur));
     });
   });
 
