@@ -35,6 +35,8 @@ class AvisExpertCyber extends Base {
 
   favorable() { return this.avis === AVIS_FAVORABLE; }
 
+  defavorable() { return this.avis === AVIS_DEFAVORABLE; }
+
   inconnu() { return typeof this.avis === 'undefined'; }
 }
 

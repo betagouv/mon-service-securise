@@ -16,8 +16,27 @@ describe("L'avis de l'expert Cyber", () => {
 
     expect(avisExpert.dateRenouvellement).to.equal('unAn');
     expect(avisExpert.commentaire).to.equal('Un commentaire');
+  });
 
+  it("détecte si l'expert a donné un avis", () => {
+    const avisExpert = new AvisExpertCyber();
+    expect(avisExpert.favorable()).to.be(false);
+    expect(avisExpert.defavorable()).to.be(false);
+    expect(avisExpert.inconnu()).to.be(true);
+  });
+
+  it('sait détecter un avis favorable', () => {
+    const avisExpert = new AvisExpertCyber({ avis: AvisExpertCyber.FAVORABLE }, referentiel);
     expect(avisExpert.favorable()).to.be(true);
+    expect(avisExpert.defavorable()).to.be(false);
+    expect(avisExpert.inconnu()).to.be(false);
+  });
+
+  it('sait détecter un avis défavorable', () => {
+    const avisExpert = new AvisExpertCyber({ avis: AvisExpertCyber.DEFAVORABLE }, referentiel);
+    expect(avisExpert.favorable()).to.be(false);
+    expect(avisExpert.defavorable()).to.be(true);
+    expect(avisExpert.inconnu()).to.be(false);
   });
 
   it('sait se décrire au format JSON', () => {
@@ -54,11 +73,6 @@ describe("L'avis de l'expert Cyber", () => {
       expect(e.message).to.equal('Le délai avant renouvellement "delaiInvalide" est invalide');
       done();
     }
-  });
-
-  it("détecte si l'expert a donné un avis", () => {
-    const avisExpert = new AvisExpertCyber();
-    expect(avisExpert.inconnu()).to.be(true);
   });
 
   it("décrit l'échéance de l'homologation", () => {
