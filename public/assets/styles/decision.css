@@ -197,12 +197,12 @@ section.mesures ul {
   background: #caefcb;
 }
 
-section.niveau-protection ul {
+section.niveau-securite ul {
   grid-template-columns: 1fr 1fr;
   grid-gap: 1em;
 }
 
-.niveau.bon:after, .avis-expert-cyber {
+.diagnostic-niveau-securite, .avis-expert-cyber {
   position: absolute;
   top: 0.8em;
   right: 1em;
@@ -211,13 +211,8 @@ section.niveau-protection ul {
   justify-content: flex-end;
   column-gap: 0.5em;
 
-  color: #1aaf54;
   font-size: 1.7em;
   font-weight: bold;
-}
-
-.niveau.bon:after {
-  content: 'Bon';
 }
 
 .criticite-mesure {
@@ -238,11 +233,19 @@ section.niveau-protection ul {
   background-color: #ce1b25;
 }
 
+.disque.orange {
+  background-color: #f9b049;
+}
+
 .disque.vert {
   background-color: #1aaf54;
 }
 
-.avis {
+.disque.vert-fonce {
+  background-color: #378348;
+}
+
+.avis, .niveau {
   display: inline-block;
   padding-left: 0.5em;
 }
@@ -251,12 +254,20 @@ section.niveau-protection ul {
   color: #abb6bf;
 }
 
-.avis.favorable {
+.avis.favorable, .niveau.satisfaisant {
   color: #1aaf54;
 }
 
-.avis.defavorable {
+.avis.defavorable, .niveau.insuffisant {
   color: #ce1b25;
+}
+
+.niveau.bon {
+  color: #378348;
+}
+
+.niveau.a-renforcer {
+  color: #f9b049;
 }
 
 .expert-cyber {

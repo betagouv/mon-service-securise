@@ -56,16 +56,42 @@ main
             .barre-mesures-retenues
             .barre-mesures-misesEnOeuvre(style = style)
 
-  section.niveau-protection
-    h2 Niveau de protection indicatif
+  section.niveau-securite
+    - const niveauSecurite = homologation.niveauSecurite()
+    h2 Niveau de sécurité indicatif
     p Calculé à partir du pourcentage de mesures recommandées par l'ANSSI mises en œuvre
-    .niveau.bon
+    .diagnostic-niveau-securite
+      case niveauSecurite
+        when Homologation.NIVEAU_SECURITE_BON
+          .disque
+          .disque
+          .disque
+          .disque.vert-fonce
+          .niveau.bon Bon
+        when Homologation.NIVEAU_SECURITE_SATISFAISANT
+          .disque
+          .disque
+          .disque.vert
+          .disque
+          .niveau.satisfaisant Satisfaisant
+        when Homologation.NIVEAU_SECURITE_INSUFFISANT
+          .disque
+          .disque.orange
+          .disque
+          .disque
+          .niveau.a-renforcer À renforcer
+        when Homologation.NIVEAU_SECURITE_INSUFFISANT
+          .disque.rouge
+          .disque
+          .disque
+          .disque
+          .niveau.insuffisant Insuffisant
     ul
       li
-        .pourcentage 100%
+        .pourcentage= `${Math.round(100 * homologation.proportionMesuresIndispensablesMisesEnOeuvre())}%`
         .criticite-mesure des <b>mesures indispensables</b> selon l'ANSSI mises en œuvre
       li
-        .pourcentage 60%
+        .pourcentage= `${Math.round(100 * homologation.proportionMesuresRecommandeesMisesEnOeuvre())}%`
         .criticite-mesure des <b>autres mesures suggérées</b> mises en œuvre
 
   section
