@@ -563,6 +563,47 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête PUT sur `/api/utilisateur`', () => {
+    let utilisateur;
+
+    beforeEach(() => {
+      utilisateur = { genereToken: () => 'un token' };
+      depotDonnees.metsAJourMotDePasse = () => new Promise((resolve) => resolve(utilisateur));
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      verifieRequeteExigeJWT(
+        { method: 'put', url: 'http://localhost:1234/api/utilisateur' }, done
+      );
+    });
+
+    it("met à jour le mot de passe de l'utilisateur", (done) => {
+      idUtilisateurCourant = '123';
+
+      depotDonnees.metsAJourMotDePasse = (idUtilisateur, motDePasse) => new Promise(
+        (resolve) => {
+          expect(idUtilisateur).to.equal('123');
+          expect(motDePasse).to.equal('mdp_12345');
+          resolve(utilisateur);
+        }
+      );
+
+      axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idUtilisateur: '123' });
+          done();
+        })
+        .catch(done);
+    });
+
+    it('pose un nouveau cookie', (done) => {
+      axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
+        .then((reponse) => verifieJetonDepose(reponse, done))
+        .catch(done);
+    });
+  });
+
   describe('quand requête POST sur `/api/token`', () => {
     describe("avec authentification réussie de l'utilisateur", () => {
       beforeEach(() => {

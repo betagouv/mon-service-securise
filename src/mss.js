@@ -271,6 +271,18 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     }
   });
 
+  app.put('/api/utilisateur', middleware.verificationJWT, (requete, reponse, suite) => {
+    const idUtilisateur = requete.idUtilisateurCourant;
+    const { motDePasse } = requete.body;
+    depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
+      .then((utilisateur) => {
+        const token = utilisateur.genereToken();
+        requete.session.token = token;
+        reponse.json({ idUtilisateur });
+      })
+      .catch(suite);
+  });
+
   app.get('/api/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {
     const idUtilisateur = requete.idUtilisateurCourant;
     if (idUtilisateur) {
