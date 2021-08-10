@@ -76,6 +76,15 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     return donneesHomologation.id;
   };
 
+  const metsAJourMotDePasse = (idUtilisateur, motDePasse) => {
+    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === idUtilisateur);
+    return bcrypt.hash(motDePasse, 10)
+      .then((hash) => {
+        donneesUtilisateur.motDePasse = hash;
+        return new Utilisateur(donneesUtilisateur, adaptateurJWT);
+      });
+  };
+
   const nouvelUtilisateur = (donneesUtilisateur) => {
     const utilisateurExiste = (email) => !!(donnees.utilisateurs.find((u) => u.email === email));
 
@@ -119,6 +128,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     homologation,
     homologations,
     metsAJourHomologation,
+    metsAJourMotDePasse,
     nouvelleHomologation,
     nouvelUtilisateur,
     utilisateur,

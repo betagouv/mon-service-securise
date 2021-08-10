@@ -36,7 +36,7 @@ describe('Le dépôt de données', () => {
           expect(utilisateur).to.be(undefined);
           done();
         })
-        .catch((error) => done(error));
+        .catch((erreur) => done(erreur));
     });
   });
 
@@ -216,7 +216,31 @@ describe('Le dépôt de données', () => {
 
         done();
       })
-      .catch((error) => done(error));
+      .catch((erreur) => done(erreur));
+  });
+
+  it("mets à jour le mot de passe d'un utilisateur", (done) => {
+    const adaptateurJWT = {};
+    const depot = DepotDonnees.creeDepot({
+      utilisateurs: [{
+        id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
+      }],
+    }, { adaptateurJWT });
+
+    depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
+      .then((utilisateur) => expect(typeof utilisateur).to.be('undefined'))
+      .then(() => depot.metsAJourMotDePasse('123', 'mdp_12345'))
+      .then((utilisateur) => {
+        expect(utilisateur).to.be.an(Utilisateur);
+        expect(utilisateur.id).to.equal('123');
+        expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
+      })
+      .then(() => depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345'))
+      .then((utilisateur) => {
+        expect(utilisateur.id).to.equal('123');
+        done();
+      })
+      .catch((erreur) => done(erreur));
   });
 
   it("retourne l'utilisateur associé à un identifiant donné", () => {
@@ -339,7 +363,7 @@ describe('Le dépôt de données', () => {
 
             done();
           })
-          .catch((error) => done(error));
+          .catch((erreur) => done(erreur));
       });
     });
 
