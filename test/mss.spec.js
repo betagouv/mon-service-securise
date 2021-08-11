@@ -21,7 +21,7 @@ describe('Le serveur MSS', () => {
         expect(suppressionCookieEffectuee).to.be(true);
         done();
       })
-      .catch((erreur) => done(erreur));
+      .catch(done);
   };
 
   const verifieRequeteExigeJWT = (requete, done) => {
@@ -40,7 +40,7 @@ describe('Le serveur MSS', () => {
           done();
         } else throw erreur;
       })
-      .catch((erreur) => done(erreur));
+      .catch(done);
   };
 
   const verifieJetonDepose = (reponse, done) => {
@@ -58,7 +58,7 @@ describe('Le serveur MSS', () => {
         expect(authentificationBasiqueMenee).to.be(true);
         done();
       })
-      .catch((erreur) => done(erreur));
+      .catch(done);
   };
 
   const verifieRechercheHomologation = (requete, done) => {
@@ -69,7 +69,7 @@ describe('Le serveur MSS', () => {
         expect(rechercheHomologationEffectuee).to.be(true);
         done();
       })
-      .catch((erreur) => done(erreur));
+      .catch(done);
   };
 
   const middleware = {
@@ -119,7 +119,7 @@ describe('Le serveur MSS', () => {
         expect(reponse.status).to.equal(200);
         done();
       })
-      .catch((erreur) => done(erreur));
+      .catch(done);
   });
 
   describe('quand requête GET sur `/connexion`', () => {
@@ -159,7 +159,7 @@ describe('Le serveur MSS', () => {
           expect(homologations[0].id).to.equal('456');
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -258,7 +258,7 @@ describe('Le serveur MSS', () => {
           expect(erreur.response.data).to.equal("Données insuffisantes pour créer l'homologation");
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
 
     it("demande au dépôt de données d'enregistrer les nouvelles homologations", (done) => {
@@ -285,7 +285,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -321,7 +321,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -360,7 +360,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -400,7 +400,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -439,7 +439,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -477,7 +477,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -515,7 +515,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -544,7 +544,7 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idUtilisateur: '123' });
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
 
     it('dépose le jeton dans un cookie', (done) => {
@@ -552,7 +552,7 @@ describe('Le serveur MSS', () => {
 
       axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
         .then((reponse) => verifieJetonDepose(reponse, done))
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
 
     it("génère une erreur HTTP 422 si l'utilisateur existe déjà", (done) => {
@@ -565,7 +565,7 @@ describe('Le serveur MSS', () => {
           expect(erreur.response.data).to.equal('Utilisateur déjà existant pour cette adresse email.');
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -634,13 +634,13 @@ describe('Le serveur MSS', () => {
             expect(reponse.data).to.eql({ utilisateur: { prenomNom: 'Jean Dupont' } });
             done();
           })
-          .catch((erreur) => done(erreur));
+          .catch(done);
       });
 
       it('pose un cookie', (done) => {
         axios.post('http://localhost:1234/api/token', { login: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' })
           .then((reponse) => verifieJetonDepose(reponse, done))
-          .catch((erreur) => done(erreur));
+          .catch(done);
       });
 
       it("retourne les infos de l'utilisateur", (done) => {
@@ -649,7 +649,7 @@ describe('Le serveur MSS', () => {
             expect(reponse.data).to.eql({ utilisateur: { prenomNom: 'Jean Dupont' } });
             done();
           })
-          .catch((erreur) => done(erreur));
+          .catch(done);
       });
     });
 
@@ -668,7 +668,7 @@ describe('Le serveur MSS', () => {
             expect(erreur.response.data).to.equal("L'authentification a échoué.");
             done();
           })
-          .catch((erreur) => done(erreur));
+          .catch(done);
       });
     });
   });

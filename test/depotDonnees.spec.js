@@ -36,7 +36,7 @@ describe('Le dépôt de données', () => {
           expect(utilisateur).to.be(undefined);
           done();
         })
-        .catch((erreur) => done(erreur));
+        .catch(done);
     });
   });
 
@@ -216,7 +216,7 @@ describe('Le dépôt de données', () => {
 
         done();
       })
-      .catch((erreur) => done(erreur));
+      .catch(done);
   });
 
   it("mets à jour le mot de passe d'un utilisateur", (done) => {
@@ -240,7 +240,7 @@ describe('Le dépôt de données', () => {
         expect(utilisateur.id).to.equal('123');
         done();
       })
-      .catch((erreur) => done(erreur));
+      .catch(done);
   });
 
   it("retourne l'utilisateur associé à un identifiant donné", () => {
@@ -330,7 +330,7 @@ describe('Le dépôt de données', () => {
             expect(utilisateur.id).to.equal('11111111-1111-1111-1111-111111111111');
             done();
           })
-          .catch((erreur) => done(erreur));
+          .catch(done);
       });
 
       it('ajoute le nouvel utilisateur au dépôt', (done) => {
@@ -349,7 +349,7 @@ describe('Le dépôt de données', () => {
             expect(utilisateurCree.adaptateurJWT).to.equal(adaptateurJWT);
             done();
           })
-          .catch((erreur) => done(erreur));
+          .catch(done);
       });
 
       it('enregistre le mot de passe chiffré', (done) => {
@@ -363,7 +363,7 @@ describe('Le dépôt de données', () => {
 
             done();
           })
-          .catch((erreur) => done(erreur));
+          .catch(done);
       });
     });
 
