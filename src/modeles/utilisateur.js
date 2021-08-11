@@ -1,9 +1,9 @@
-class Utilisateur {
-  constructor({ id, prenom, nom, email }, adaptateurJWT) {
-    this.id = id;
-    this.prenom = prenom;
-    this.nom = nom;
-    this.email = email;
+const Base = require('./base');
+
+class Utilisateur extends Base {
+  constructor(donnees, adaptateurJWT) {
+    super(['id', 'prenom', 'nom', 'email']);
+    this.renseigneProprietes(donnees);
     this.adaptateurJWT = adaptateurJWT;
   }
 
