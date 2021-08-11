@@ -519,6 +519,12 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête GET sur `/utilisateur/edition`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      verifieRequeteExigeJWT('http://localhost:1234/utilisateur/edition', done);
+    });
+  });
+
   describe('quand requête POST sur `/api/utilisateur`', () => {
     const utilisateur = { id: '123', genereToken: () => 'un token' };
 

@@ -131,6 +131,10 @@ const creeServeur = (depotDonnees, middleware, referentiel,
       reponse.render('homologation/avisExpertCyber', { referentiel, homologation });
     });
 
+  app.get('/utilisateur/edition', middleware.verificationJWT, (requete, reponse) => {
+    reponse.render('utilisateur/edition');
+  });
+
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
     const homologations = depotDonnees.homologations(requete.idUtilisateurCourant)
       .map((h) => h.toJSON());

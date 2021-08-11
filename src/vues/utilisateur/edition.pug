@@ -1,0 +1,17 @@
+extends ../mss
+
+block append styles
+  link(href = '/statique/assets/styles/formulaire.css', rel='stylesheet')
+
+block main
+  form
+    h1 Changez votre mot de passe
+
+    section
+      label Nouveau mot de passe
+        br
+        input(id='mot-de-passe', type='password')
+
+    .bouton Je mets à jour mon mot de passe  &nbsp;&nbsp;›
+
+  script(src = '/statique/utilisateur/edition.js')
