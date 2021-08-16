@@ -119,6 +119,14 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
       .catch((error) => error);
   };
 
+  const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => {
+    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === utilisateurAModifier.id);
+    if (!donneesUtilisateur) return undefined;
+
+    donneesUtilisateur.cguAcceptees = true;
+    return new Utilisateur(donneesUtilisateur, adaptateurJWT);
+  };
+
   return {
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
@@ -133,6 +141,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     nouvelUtilisateur,
     utilisateur,
     utilisateurAuthentifie,
+    valideAcceptationCGUPourUtilisateur,
   };
 };
 

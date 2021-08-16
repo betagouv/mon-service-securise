@@ -1,9 +1,12 @@
+import parametres from '../modules/parametres.js';
+
 $(() => {
   const $bouton = $('.bouton');
   $bouton.click(() => {
-    const motDePasse = $('#mot-de-passe').val();
+    const params = parametres('form#edition');
+    params.cguAcceptees &&= params.cguAcceptees[0] === 'on';
 
-    axios.put('/api/utilisateur', { motDePasse })
+    axios.put('/api/utilisateur', params)
       .then(() => (window.location = '/homologations'));
   });
 });

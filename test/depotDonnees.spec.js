@@ -243,6 +243,20 @@ describe('Le dépôt de données', () => {
       .catch(done);
   });
 
+  it("retient qu'un utilisateur accepte les CGU", () => {
+    const depot = DepotDonnees.creeDepot({
+      utilisateurs: [{
+        id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
+      }],
+    });
+
+    let utilisateur = depot.utilisateur('123');
+    expect(utilisateur.accepteCGU()).to.be(false);
+
+    utilisateur = depot.valideAcceptationCGUPourUtilisateur(utilisateur);
+    expect(utilisateur.accepteCGU()).to.be(true);
+  });
+
   it("retourne l'utilisateur associé à un identifiant donné", () => {
     const adaptateurJWT = 'Un adaptateur';
     const depot = DepotDonnees.creeDepot({

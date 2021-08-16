@@ -12,7 +12,7 @@
   color: #1b7cc4;
 }
 
-form.homologation, form.acces-refuse {
+form.homologation, form.acces-refuse, form.utilisateur {
   width: 580px;
   margin: 0;
 }

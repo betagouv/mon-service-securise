@@ -132,7 +132,9 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     });
 
   app.get('/utilisateur/edition', middleware.verificationJWT, (requete, reponse) => {
-    reponse.render('utilisateur/edition');
+    const idUtilisateur = requete.idUtilisateurCourant;
+    const utilisateur = depotDonnees.utilisateur(idUtilisateur);
+    reponse.render('utilisateur/edition', { utilisateur });
   });
 
   app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
@@ -277,14 +279,20 @@ const creeServeur = (depotDonnees, middleware, referentiel,
 
   app.put('/api/utilisateur', middleware.verificationJWT, (requete, reponse, suite) => {
     const idUtilisateur = requete.idUtilisateurCourant;
-    const { motDePasse } = requete.body;
-    depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
-      .then((utilisateur) => {
-        const token = utilisateur.genereToken();
-        requete.session.token = token;
-        reponse.json({ idUtilisateur });
-      })
-      .catch(suite);
+    const utilisateur = depotDonnees.utilisateur(idUtilisateur);
+    const { motDePasse, cguAcceptees } = requete.body;
+
+    if (!utilisateur.accepteCGU() && !cguAcceptees) reponse.status(422).send('CGU non acceptées');
+    else {
+      depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
+        .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
+        .then((u) => {
+          const token = u.genereToken();
+          requete.session.token = token;
+          reponse.json({ idUtilisateur });
+        })
+        .catch(suite);
+    }
   });
 
   app.get('/api/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {

@@ -6,6 +6,7 @@ module.exports = {
       nom: 'Dupont',
       email: 'jean.dupont@mail.fr',
       motDePasse: '$2b$10$drxIuIeBOfVzpdwZydd1/u5UUo8x7U2.8GOuoVvbGXY57SYtXOPNy', // 'mdp_12345'
+      cguAcceptees: true,
     },
     {
       id: '999',

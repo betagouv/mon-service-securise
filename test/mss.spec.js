@@ -521,6 +521,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/utilisateur/edition`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
+      depotDonnees.utilisateur = () => ({ accepteCGU: () => true });
       verifieRequeteExigeJWT('http://localhost:1234/utilisateur/edition', done);
     });
   });
@@ -573,8 +574,10 @@ describe('Le serveur MSS', () => {
     let utilisateur;
 
     beforeEach(() => {
-      utilisateur = { genereToken: () => 'un token' };
+      utilisateur = { id: '123', genereToken: () => 'un token', accepteCGU: () => true };
       depotDonnees.metsAJourMotDePasse = () => new Promise((resolve) => resolve(utilisateur));
+      depotDonnees.utilisateur = () => utilisateur;
+      depotDonnees.valideAcceptationCGUPourUtilisateur = () => utilisateur;
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -583,30 +586,76 @@ describe('Le serveur MSS', () => {
       );
     });
 
-    it("met à jour le mot de passe de l'utilisateur", (done) => {
-      idUtilisateurCourant = '123';
+    describe("lorsque l'utilisateur a déjà accepté les CGU", () => {
+      it("met à jour le mot de passe de l'utilisateur", (done) => {
+        idUtilisateurCourant = utilisateur.id;
 
-      depotDonnees.metsAJourMotDePasse = (idUtilisateur, motDePasse) => new Promise(
-        (resolve) => {
-          expect(idUtilisateur).to.equal('123');
-          expect(motDePasse).to.equal('mdp_12345');
-          resolve(utilisateur);
-        }
-      );
+        depotDonnees.metsAJourMotDePasse = (idUtilisateur, motDePasse) => new Promise(
+          (resolve) => {
+            expect(idUtilisateur).to.equal('123');
+            expect(motDePasse).to.equal('mdp_12345');
+            resolve(utilisateur);
+          }
+        );
 
-      axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idUtilisateur: '123' });
-          done();
-        })
-        .catch(done);
+        axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
+          .then((reponse) => {
+            expect(reponse.status).to.equal(200);
+            expect(reponse.data).to.eql({ idUtilisateur: '123' });
+            done();
+          })
+          .catch(done);
+      });
+
+      it('pose un nouveau cookie', (done) => {
+        axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
+          .then((reponse) => verifieJetonDepose(reponse, done))
+          .catch(done);
+      });
     });
 
-    it('pose un nouveau cookie', (done) => {
-      axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
-        .then((reponse) => verifieJetonDepose(reponse, done))
-        .catch(done);
+    describe("lorsque utilisateur n'a pas encore accepté les CGU", () => {
+      beforeEach(() => (utilisateur.accepteCGU = () => false));
+
+      it('met à jour le mot de passe si case CGU cochée dans formulaire', (done) => {
+        let motDePasseMisAJour = false;
+        depotDonnees.metsAJourMotDePasse = () => new Promise((resolve) => {
+          motDePasseMisAJour = true;
+          resolve(utilisateur);
+        });
+
+        expect(motDePasseMisAJour).to.be(false);
+        axios.put('http://localhost:1234/api/utilisateur', { cguAcceptees: true, motDePasse: 'mdp_12345' })
+          .then(() => {
+            expect(motDePasseMisAJour).to.be(true);
+            done();
+          })
+          .catch(done);
+      });
+
+      it("indique que l'utilisateur a coché la case CGU dans le formulaire", (done) => {
+        idUtilisateurCourant = utilisateur.id;
+
+        depotDonnees.valideAcceptationCGUPourUtilisateur = (u) => {
+          expect(u.id).to.equal('123');
+          return u;
+        };
+
+        axios.put('http://localhost:1234/api/utilisateur', { cguAcceptees: true, motDePasse: 'mdp_12345' })
+          .then(() => done())
+          .catch(done);
+      });
+
+      it("retourne une erreur HTTP 422 si la case CGU du formulaire n'est pas cochée", (done) => {
+        axios.put('http://localhost:1234/api/utilisateur', { cguAcceptees: false, motDePasse: 'mdp_12345' })
+          .then(() => done('réponse HTTP OK inattendue'))
+          .catch((erreur) => {
+            expect(erreur.response.status).to.equal(422);
+            expect(erreur.response.data).to.equal('CGU non acceptées');
+            done();
+          })
+          .catch(done);
+      });
     });
   });
 

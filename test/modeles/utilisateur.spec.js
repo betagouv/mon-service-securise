@@ -31,4 +31,12 @@ describe('Un utilisateur', () => {
       done();
     });
   });
+
+  it('sait détecter si les conditions générales ont été acceptées', () => {
+    const utilisateur = new Utilisateur({ cguAcceptees: true });
+    expect(utilisateur.accepteCGU()).to.be(true);
+
+    const autreUtilisateur = new Utilisateur();
+    expect(autreUtilisateur.accepteCGU()).to.be(false);
+  });
 });
