@@ -14,11 +14,12 @@ describe('Un utilisateur', () => {
   it('sait générer son JWT', (done) => {
     const adaptateurJWT = {};
     const utilisateur = new Utilisateur({
-      id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
+      id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', cguAcceptees: false,
     }, adaptateurJWT);
 
-    adaptateurJWT.genereToken = (idUtilisateur, callback) => {
+    adaptateurJWT.genereToken = (idUtilisateur, cguAcceptees, callback) => {
       expect(idUtilisateur).to.equal('123');
+      expect(cguAcceptees).to.be(false);
 
       let aucuneErreur;
       callback(aucuneErreur, 'un jeton');

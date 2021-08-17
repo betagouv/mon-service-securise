@@ -91,7 +91,8 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     if (utilisateurExiste(donneesUtilisateur.email)) throw new ErreurUtilisateurExistant();
 
     donneesUtilisateur.id = adaptateurUUID.genereUUID();
-    return bcrypt.hash(donneesUtilisateur.motDePasse, 10)
+    donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
+    return bcrypt.hash(adaptateurUUID.genereUUID(), 10)
       .then((hash) => {
         donneesUtilisateur.motDePasse = hash;
         donnees.utilisateurs.push(donneesUtilisateur);
@@ -101,6 +102,11 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
 
   const utilisateur = (identifiant) => {
     const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === identifiant);
+    return donneesUtilisateur ? new Utilisateur(donneesUtilisateur, adaptateurJWT) : undefined;
+  };
+
+  const utilisateurAFinaliser = (idReset) => {
+    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset);
     return donneesUtilisateur ? new Utilisateur(donneesUtilisateur, adaptateurJWT) : undefined;
   };
 
@@ -140,6 +146,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     nouvelleHomologation,
     nouvelUtilisateur,
     utilisateur,
+    utilisateurAFinaliser,
     utilisateurAuthentifie,
     valideAcceptationCGUPourUtilisateur,
   };

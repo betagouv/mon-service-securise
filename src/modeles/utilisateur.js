@@ -2,7 +2,7 @@ const Base = require('./base');
 
 class Utilisateur extends Base {
   constructor(donnees = {}, adaptateurJWT) {
-    super(['id', 'prenom', 'nom', 'email', 'cguAcceptees']);
+    super(['id', 'idResetMotDePasse', 'prenom', 'nom', 'email', 'cguAcceptees']);
     this.renseigneProprietes(donnees);
     this.adaptateurJWT = adaptateurJWT;
   }
@@ -12,7 +12,7 @@ class Utilisateur extends Base {
   }
 
   genereToken(callback) {
-    return this.adaptateurJWT.genereToken(this.id, callback);
+    return this.adaptateurJWT.genereToken(this.id, this.cguAcceptees, callback);
   }
 
   toJSON() {

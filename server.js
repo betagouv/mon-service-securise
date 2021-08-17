@@ -5,6 +5,7 @@ const Middleware = require('./src/middleware');
 const MSS = require('./src/mss');
 const Referentiel = require('./src/referentiel');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
+const adaptateurMail = require('./src/adaptateurs/adaptateurMail');
 const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
 
 const port = process.env.PORT || 3000;
@@ -18,7 +19,7 @@ const middleware = Middleware({
   login: process.env.LOGIN_ADMIN,
   motDePasse: process.env.MOT_DE_PASSE_ADMIN,
 });
-const serveur = MSS.creeServeur(depotDonnees, middleware, referentiel);
+const serveur = MSS.creeServeur(depotDonnees, middleware, referentiel, adaptateurMail);
 
 serveur.ecoute(port, () => {
   /* eslint-disable no-console */

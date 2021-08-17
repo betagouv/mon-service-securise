@@ -11,36 +11,46 @@ describe('Le serveur MSS', () => {
   let idUtilisateurCourant;
   let suppressionCookieEffectuee;
   let verificationJWTMenee;
+  let verificationCGUMenee;
   let authentificationBasiqueMenee;
   let rechercheHomologationEffectuee;
 
-  const verifieRequeteExigeSuppressionCookie = (requete, done) => {
-    expect(suppressionCookieEffectuee).to.be(false);
+  const verifieRequeteChangeEtat = (etat, requete, done) => {
+    expect(etat()).to.be(false);
+
     axios(requete)
       .then(() => {
-        expect(suppressionCookieEffectuee).to.be(true);
-        done();
-      })
-      .catch(done);
-  };
-
-  const verifieRequeteExigeJWT = (requete, done) => {
-    expect(verificationJWTMenee).to.be(false);
-
-    idUtilisateurCourant = '123';
-    axios(requete)
-      .then(() => {
-        expect(verificationJWTMenee).to.be(true);
+        expect(etat()).to.be(true);
         done();
       })
       .catch((erreur) => {
         const erreurHTTP = erreur.response && erreur.response.status;
         if (erreurHTTP >= 400 && erreurHTTP < 500) {
-          expect(verificationJWTMenee).to.be(true);
+          expect(etat()).to.be(true);
           done();
         } else throw erreur;
       })
       .catch(done);
+  };
+
+  const verifieRequeteExigeSuppressionCookie = (...params) => {
+    verifieRequeteChangeEtat(() => suppressionCookieEffectuee, ...params);
+  };
+
+  const verifieRequeteExigeJWT = (...params) => {
+    verifieRequeteChangeEtat(() => verificationJWTMenee, ...params);
+  };
+
+  const verifieRequeteExigeAcceptationCGU = (...params) => {
+    verifieRequeteChangeEtat(() => verificationCGUMenee, ...params);
+  };
+
+  const verifieRequeteExigeAuthentificationBasique = (...params) => {
+    verifieRequeteChangeEtat(() => authentificationBasiqueMenee, ...params);
+  };
+
+  const verifieRechercheHomologation = (...params) => {
+    verifieRequeteChangeEtat(() => rechercheHomologationEffectuee, ...params);
   };
 
   const verifieJetonDepose = (reponse, done) => {
@@ -50,38 +60,24 @@ describe('Le serveur MSS', () => {
     done();
   };
 
-  const verifieRequeteExigeAuthentificationBasique = (requete, done) => {
-    expect(authentificationBasiqueMenee).to.be(false);
-
-    axios(requete)
-      .then(() => {
-        expect(authentificationBasiqueMenee).to.be(true);
-        done();
-      })
-      .catch(done);
-  };
-
-  const verifieRechercheHomologation = (requete, done) => {
-    expect(rechercheHomologationEffectuee).to.be(false);
-
-    axios(requete)
-      .then(() => {
-        expect(rechercheHomologationEffectuee).to.be(true);
-        done();
-      })
-      .catch(done);
-  };
-
   const middleware = {
     suppressionCookie: (requete, reponse, suite) => {
       suppressionCookieEffectuee = true;
       suite();
     },
+
     verificationJWT: (requete, reponse, suite) => {
       requete.idUtilisateurCourant = idUtilisateurCourant;
       verificationJWTMenee = true;
       suite();
     },
+
+    verificationAcceptationCGU: (requete, reponse, suite) => {
+      requete.idUtilisateurCourant = idUtilisateurCourant;
+      verificationCGUMenee = true;
+      suite();
+    },
+
     authentificationBasique: (requete, reponse, suite) => {
       authentificationBasiqueMenee = true;
       suite();
@@ -94,6 +90,7 @@ describe('Le serveur MSS', () => {
     },
   };
 
+  let adaptateurMail;
   let depotDonnees;
   let referentiel;
   let serveur;
@@ -102,12 +99,14 @@ describe('Le serveur MSS', () => {
     idUtilisateurCourant = undefined;
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
+    verificationCGUMenee = false;
     authentificationBasiqueMenee = false;
     rechercheHomologationEffectuee = false;
 
     depotDonnees = DepotDonnees.creeDepotVide();
     referentiel = Referentiel.creeReferentielVide();
-    serveur = MSS.creeServeur(depotDonnees, middleware, referentiel, false);
+    adaptateurMail = { envoieMessageResetMotDePasse: () => {} };
+    serveur = MSS.creeServeur(depotDonnees, middleware, referentiel, adaptateurMail, false);
     serveur.ecoute(1234, done);
   });
 
@@ -128,6 +127,23 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête GET sur `/finalisationInscription/:idReset`', () => {
+    it('dépose le jeton dans un cookie', (done) => {
+      const utilisateur = { genereToken: () => 'un token', accepteCGU: () => false };
+
+      depotDonnees.utilisateurAFinaliser = (idReset) => {
+        expect(idReset).to.equal('999');
+        return utilisateur;
+      };
+
+      depotDonnees.utilisateur = () => utilisateur;
+
+      axios.get('http://localhost:1234/finalisationInscription/999')
+        .then((reponse) => verifieJetonDepose(reponse, done))
+        .catch(done);
+    });
+  });
+
   describe('quand requête GET sur `/admin/inscription`', () => {
     it("verrouille l'accès par une authentification basique", (done) => {
       verifieRequeteExigeAuthentificationBasique('http://localhost:1234/admin/inscription', done);
@@ -136,7 +152,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/api/homologations`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
+      verifieRequeteExigeAcceptationCGU(
         { method: 'get', url: 'http://localhost:1234/api/homologations' }, done
       );
     });
@@ -163,81 +179,55 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id`', () => {
+  describe('quand requête GET sur `/homologations`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT('http://localhost:1234/homologation/456', done);
+      verifieRequeteExigeAcceptationCGU('http://localhost:1234/homologations', done);
     });
+  });
 
+  describe('quand requête GET sur `/homologation/:id`', () => {
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/edition`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/edition', done);
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/edition', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/caracteristiquesComplementaires`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/caracteristiquesComplementaires', done);
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/caracteristiquesComplementaires', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/decision`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/decision', done);
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/decision', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/mesures`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/mesures', done);
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/mesures', done);
     });
   });
 
   describe('quand requete GET sur `/homologation/:id/partiesPrenantes`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/partiesPrenantes', done);
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/partiesPrenantes', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/risques`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/risques', done);
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/risques', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/avisExpertCyber`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT('http://localhost:1234/homologation/456/avisExpertCyber', done);
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/avisExpertCyber', done);
     });
@@ -245,7 +235,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête POST sur `/api/homologation`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
+      verifieRequeteExigeAcceptationCGU(
         { method: 'post', url: 'http://localhost:1234/api/homologation' }, done
       );
     });
@@ -294,12 +284,6 @@ describe('Le serveur MSS', () => {
       depotDonnees.metsAJourHomologation = () => {};
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
-        { method: 'put', url: 'http://localhost:1234/api/homologation/456' }, done
-      );
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation(
         { method: 'put', url: 'http://localhost:1234/api/homologation/456' }, done
@@ -327,13 +311,6 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
     beforeEach(() => (depotDonnees.ajouteCaracteristiquesAHomologation = () => {}));
-
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT({
-        method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
-      }, done);
-    });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -365,12 +342,6 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
-        { method: 'post', url: 'http://localhost:1234/api/homologation/456/mesures' }, done
-      );
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
         method: 'post',
@@ -407,13 +378,6 @@ describe('Le serveur MSS', () => {
   describe('quand requête POST sur `/api/homologation/:id/partiesPrenantes`', () => {
     beforeEach(() => (depotDonnees.ajoutePartiesPrenantesAHomologation = () => {}));
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT({
-        method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/partiesPrenantes',
-      }, done);
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
         method: 'post',
@@ -444,12 +408,6 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/risques`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
-        { method: 'post', url: 'http://localhost:1234/api/homologation/456/risques' }, done
-      );
-    });
-
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
         method: 'post',
@@ -483,12 +441,6 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête POST sur `/api/homologation/:id/avisExpertCyber`', () => {
     beforeEach(() => (depotDonnees.ajouteAvisExpertCyberAHomologation = () => {}));
-
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
-        { method: 'post', url: 'http://localhost:1234/api/homologation/456/avisExpertCyber' }, done
-      );
-    });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -530,9 +482,7 @@ describe('Le serveur MSS', () => {
     const utilisateur = { id: '123', genereToken: () => 'un token' };
 
     it("demande au dépôt de créer l'utilisateur", (done) => {
-      const donneesRequete = {
-        prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345',
-      };
+      const donneesRequete = { prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' };
 
       depotDonnees.nouvelUtilisateur = (donneesUtilisateur) => {
         expect(donneesUtilisateur).to.eql(donneesRequete);
@@ -548,11 +498,19 @@ describe('Le serveur MSS', () => {
         .catch(done);
     });
 
-    it('dépose le jeton dans un cookie', (done) => {
+    it("envoie un message de notification à l'utilisateur créé", (done) => {
       depotDonnees.nouvelUtilisateur = () => new Promise((resolve) => resolve(utilisateur));
 
+      utilisateur.email = 'jean.dupont@mail.fr';
+      utilisateur.idResetMotDePasse = '999';
+
+      adaptateurMail.envoieMessageResetMotDePasse = (destinataire, idResetMotDePasse) => {
+        expect(destinataire).to.equal('jean.dupont@mail.fr');
+        expect(idResetMotDePasse).to.equal('999');
+        done();
+      };
+
       axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
-        .then((reponse) => verifieJetonDepose(reponse, done))
         .catch(done);
     });
 

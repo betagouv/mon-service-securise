@@ -11,9 +11,17 @@ const Risque = require('./modeles/risque');
 
 require('dotenv').config();
 
-const creeServeur = (depotDonnees, middleware, referentiel,
+const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
+
+  const sersFormulaireEditionUtilisateur = (requete, reponse) => {
+    middleware.verificationJWT(requete, reponse, () => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const utilisateur = depotDonnees.utilisateur(idUtilisateur);
+      reponse.render('utilisateur/edition', { utilisateur });
+    });
+  };
 
   const app = express();
 
@@ -62,88 +70,85 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     reponse.render('inscription');
   });
 
+  app.get('/finalisationInscription/:idReset', (requete, reponse) => {
+    const utilisateur = depotDonnees.utilisateurAFinaliser(requete.params.idReset);
+    const token = utilisateur.genereToken();
+    requete.session.token = token;
+    sersFormulaireEditionUtilisateur(requete, reponse);
+  });
+
   app.get('/admin/inscription', middleware.authentificationBasique, (requete, reponse) => {
     reponse.render('admin/inscription');
   });
 
-  app.get('/homologations', middleware.verificationJWT, (requete, reponse) => {
+  app.get('/homologations', middleware.verificationAcceptationCGU, (requete, reponse) => {
     reponse.render('homologations');
   });
 
-  app.get('/homologation/creation', middleware.verificationJWT, (requete, reponse) => {
+  app.get('/homologation/creation', middleware.verificationAcceptationCGU, (requete, reponse) => {
     const homologation = new Homologation({});
     reponse.render('homologation/creation', { referentiel, homologation });
   });
 
-  app.get('/homologation/:id',
-    middleware.verificationJWT, middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation', { homologation });
-    });
+  app.get('/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    reponse.render('homologation', { homologation });
+  });
 
   app.get('/homologation/:id/caracteristiquesComplementaires',
-    middleware.verificationJWT, middleware.trouveHomologation,
+    middleware.trouveHomologation,
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.render('homologation/caracteristiquesComplementaires', { referentiel, homologation });
     });
 
-  app.get('/homologation/:id/decision',
-    middleware.verificationJWT, middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation/decision', { Homologation, homologation, referentiel });
-    });
+  app.get('/homologation/:id/decision', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    reponse.render('homologation/decision', { Homologation, homologation, referentiel });
+  });
 
-  app.get('/homologation/:id/edition',
-    middleware.verificationJWT, middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation/edition', { referentiel, homologation });
-    });
+  app.get('/homologation/:id/edition', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    reponse.render('homologation/edition', { referentiel, homologation });
+  });
 
-  app.get('/homologation/:id/mesures',
-    middleware.verificationJWT, middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation/mesures', { referentiel, homologation });
-    });
+  app.get('/homologation/:id/mesures', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    reponse.render('homologation/mesures', { referentiel, homologation });
+  });
 
   app.get('/homologation/:id/partiesPrenantes',
-    middleware.verificationJWT, middleware.trouveHomologation,
+    middleware.trouveHomologation,
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.render('homologation/partiesPrenantes', { homologation });
     });
 
   app.get('/homologation/:id/risques',
-    middleware.verificationJWT, middleware.trouveHomologation,
+    middleware.trouveHomologation,
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.render('homologation/risques', { referentiel, homologation });
     });
 
   app.get('/homologation/:id/avisExpertCyber',
-    middleware.verificationJWT, middleware.trouveHomologation,
+    middleware.trouveHomologation,
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.render('homologation/avisExpertCyber', { referentiel, homologation });
     });
 
-  app.get('/utilisateur/edition', middleware.verificationJWT, (requete, reponse) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
-    const utilisateur = depotDonnees.utilisateur(idUtilisateur);
-    reponse.render('utilisateur/edition', { utilisateur });
+  app.get('/utilisateur/edition', (requete, reponse) => {
+    sersFormulaireEditionUtilisateur(requete, reponse);
   });
 
-  app.get('/api/homologations', middleware.verificationJWT, (requete, reponse) => {
+  app.get('/api/homologations', middleware.verificationAcceptationCGU, (requete, reponse) => {
     const homologations = depotDonnees.homologations(requete.idUtilisateurCourant)
       .map((h) => h.toJSON());
     reponse.json({ homologations });
   });
 
-  app.post('/api/homologation', middleware.verificationJWT, (requete, reponse) => {
+  app.post('/api/homologation', middleware.verificationAcceptationCGU, (requete, reponse) => {
     if (Object.keys(requete.body).length > 0) {
       const {
         nomService,
@@ -173,36 +178,34 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     } else reponse.status(422).send("Données insuffisantes pour créer l'homologation");
   });
 
-  app.put('/api/homologation/:id',
-    middleware.verificationJWT, middleware.trouveHomologation,
-    (requete, reponse) => {
-      const {
-        nomService,
-        natureService,
-        provenanceService,
-        dejaMisEnLigne,
-        fonctionnalites,
-        donneesCaracterePersonnel,
-        delaiAvantImpactCritique,
-        presenceResponsable,
-      } = requete.body;
+  app.put('/api/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
+    const {
+      nomService,
+      natureService,
+      provenanceService,
+      dejaMisEnLigne,
+      fonctionnalites,
+      donneesCaracterePersonnel,
+      delaiAvantImpactCritique,
+      presenceResponsable,
+    } = requete.body;
 
-      const idHomologation = depotDonnees.metsAJourHomologation(requete.homologation.id, {
-        nomService,
-        natureService,
-        provenanceService,
-        dejaMisEnLigne,
-        fonctionnalites,
-        donneesCaracterePersonnel,
-        delaiAvantImpactCritique,
-        presenceResponsable,
-      });
-
-      reponse.json({ idHomologation });
+    const idHomologation = depotDonnees.metsAJourHomologation(requete.homologation.id, {
+      nomService,
+      natureService,
+      provenanceService,
+      dejaMisEnLigne,
+      fonctionnalites,
+      donneesCaracterePersonnel,
+      delaiAvantImpactCritique,
+      presenceResponsable,
     });
 
+    reponse.json({ idHomologation });
+  });
+
   app.post('/api/homologation/:id/caracteristiquesComplementaires',
-    middleware.verificationJWT, middleware.trouveHomologation,
+    middleware.trouveHomologation,
     (requete, reponse) => {
       const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
       depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques);
@@ -210,25 +213,23 @@ const creeServeur = (depotDonnees, middleware, referentiel,
       reponse.send({ idHomologation: requete.homologation.id });
     });
 
-  app.post('/api/homologation/:id/mesures',
-    middleware.verificationJWT, middleware.trouveHomologation,
-    (requete, reponse) => {
-      const params = requete.body;
-      const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
-      identifiantsMesures.forEach((im) => {
-        const mesure = new Mesure({
-          id: im,
-          statut: params[im],
-          modalites: params[`modalites-${im}`],
-        }, referentiel);
-        depotDonnees.ajouteMesureAHomologation(requete.homologation.id, mesure);
-      });
-
-      reponse.send({ idHomologation: requete.homologation.id });
+  app.post('/api/homologation/:id/mesures', middleware.trouveHomologation, (requete, reponse) => {
+    const params = requete.body;
+    const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
+    identifiantsMesures.forEach((im) => {
+      const mesure = new Mesure({
+        id: im,
+        statut: params[im],
+        modalites: params[`modalites-${im}`],
+      }, referentiel);
+      depotDonnees.ajouteMesureAHomologation(requete.homologation.id, mesure);
     });
 
+    reponse.send({ idHomologation: requete.homologation.id });
+  });
+
   app.post('/api/homologation/:id/partiesPrenantes',
-    middleware.verificationJWT, middleware.trouveHomologation,
+    middleware.trouveHomologation,
     (requete, reponse) => {
       const partiesPrenantes = new PartiesPrenantes(requete.body);
       depotDonnees.ajoutePartiesPrenantesAHomologation(requete.homologation.id, partiesPrenantes);
@@ -236,24 +237,22 @@ const creeServeur = (depotDonnees, middleware, referentiel,
       reponse.send({ idHomologation: requete.homologation.id });
     });
 
-  app.post('/api/homologation/:id/risques',
-    middleware.verificationJWT, middleware.trouveHomologation,
-    (requete, reponse) => {
-      const params = requete.body;
-      const prefixeCommentaire = /^commentaire-/;
-      const commentairesRisques = Object.keys(params).filter((p) => p.match(prefixeCommentaire));
-      commentairesRisques.forEach((cr) => {
-        const idRisque = cr.replace(prefixeCommentaire, '');
-        const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
+  app.post('/api/homologation/:id/risques', middleware.trouveHomologation, (requete, reponse) => {
+    const params = requete.body;
+    const prefixeCommentaire = /^commentaire-/;
+    const commentairesRisques = Object.keys(params).filter((p) => p.match(prefixeCommentaire));
+    commentairesRisques.forEach((cr) => {
+      const idRisque = cr.replace(prefixeCommentaire, '');
+      const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
 
-        depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque);
-      });
-
-      reponse.send({ idHomologation: requete.homologation.id });
+      depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque);
     });
 
+    reponse.send({ idHomologation: requete.homologation.id });
+  });
+
   app.post('/api/homologation/:id/avisExpertCyber',
-    middleware.verificationJWT, middleware.trouveHomologation,
+    middleware.trouveHomologation,
     (requete, reponse) => {
       const avisExpert = new AvisExpertCyber(requete.body, referentiel);
       depotDonnees.ajouteAvisExpertCyberAHomologation(requete.params.id, avisExpert);
@@ -261,11 +260,13 @@ const creeServeur = (depotDonnees, middleware, referentiel,
     });
 
   app.post('/api/utilisateur', (requete, reponse, suite) => {
-    const { prenom, nom, email, motDePasse } = requete.body;
+    const { prenom, nom, email } = requete.body;
     try {
-      depotDonnees.nouvelUtilisateur({ prenom, nom, email, motDePasse })
+      depotDonnees.nouvelUtilisateur({ prenom, nom, email })
         .then((utilisateur) => {
-          requete.session.token = utilisateur.genereToken();
+          adaptateurMail.envoieMessageResetMotDePasse(
+            utilisateur.email, utilisateur.idResetMotDePasse
+          );
           const idUtilisateur = utilisateur.id;
           reponse.json({ idUtilisateur });
         })

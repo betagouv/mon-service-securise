@@ -50,6 +50,18 @@ describe('Le middleware MSS', () => {
     middleware.verificationJWT(requete, reponse);
   });
 
+  it("vérifie que les CGU sont acceptées et redirige l'utilisateur si besoin", (done) => {
+    const adaptateurJWT = { decode: () => ({ cguAcceptees: false }) };
+    const middleware = Middleware({ adaptateurJWT });
+
+    reponse.redirect = (url) => {
+      expect(url).to.equal('/utilisateur/edition');
+      done();
+    };
+
+    middleware.verificationAcceptationCGU(requete, reponse);
+  });
+
   it('efface les cookies sur demande', (done) => {
     expect(requete.session).to.not.be(null);
 
@@ -90,6 +102,8 @@ describe('Le middleware MSS', () => {
   });
 
   describe('sur recherche homologation existante', () => {
+    const adaptateurJWT = { decode: () => ({ idUtilisateur: '999', cguAcceptees: true }) };
+
     it('requête le dépôt de données', (done) => {
       const depotDonnees = {
         homologation(id) {
@@ -97,15 +111,15 @@ describe('Le middleware MSS', () => {
           done();
         },
       };
-      const middleware = Middleware({ depotDonnees });
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       requete.params = { id: '123' };
-      middleware.trouveHomologation(requete);
+      middleware.trouveHomologation(requete, reponse);
     });
 
     it('renvoie une erreur HTTP 404 si homologation non trouvée', (done) => {
       const depotDonnees = { homologation: () => undefined };
-      const middleware = Middleware({ depotDonnees });
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       prepareVerificationReponse(reponse, 404, 'Homologation non trouvée', done);
 
@@ -117,7 +131,7 @@ describe('Le middleware MSS', () => {
       requete.idUtilisateurCourant = 'unIdentifiant';
       const homologation = { idUtilisateur: 'unAutreIdentifiant' };
       const depotDonnees = { homologation: () => homologation };
-      const middleware = Middleware({ depotDonnees });
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       prepareVerificationReponse(reponse, 403, "Accès à l'homologation refusé", done);
 
@@ -126,10 +140,9 @@ describe('Le middleware MSS', () => {
     });
 
     it("retourne l'homologation trouvée et appelle le middleware suivant", (done) => {
-      requete.idUtilisateurCourant = '999';
       const homologation = { idUtilisateur: '999' };
       const depotDonnees = { homologation: () => homologation };
-      const middleware = Middleware({ depotDonnees });
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       middleware.trouveHomologation(requete, reponse, () => {
         expect(requete.homologation).to.equal(homologation);

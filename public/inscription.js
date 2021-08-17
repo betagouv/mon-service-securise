@@ -4,9 +4,8 @@ $(() => {
     const prenom = $('#prenom').val();
     const nom = $('#nom').val();
     const email = $('#email').val();
-    const motDePasse = $('#mot-de-passe').val();
 
-    axios.post('/api/utilisateur', { prenom, nom, email, motDePasse })
+    axios.post('/api/utilisateur', { prenom, nom, email })
       .then(() => (window.location = '/homologations'));
   });
 });

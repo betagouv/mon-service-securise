@@ -11,32 +11,48 @@ const middleware = (configuration = {}) => {
     unauthorizedResponse: () => pug.renderFile('src/vues/accesRefuse.pug'),
   });
 
-  const verificationJWT = (requete, reponse, suite) => {
-    const token = adaptateurJWT.decode(requete.session.token);
-    if (!token) reponse.redirect('/connexion');
-    else {
-      requete.idUtilisateurCourant = token.idUtilisateur;
-      suite();
-    }
-  };
-
   const suppressionCookie = (requete, reponse, suite) => {
     requete.session = null;
     suite();
   };
 
-  const trouveHomologation = (requete, reponse, suite) => {
-    const homologation = depotDonnees.homologation(requete.params.id);
-    if (!homologation) reponse.status(404).send('Homologation non trouvée');
-    else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
-      reponse.status(403).send("Accès à l'homologation refusé");
-    } else {
-      requete.homologation = homologation;
+  const verificationJWT = (requete, reponse, suite) => {
+    const token = adaptateurJWT.decode(requete.session.token);
+    if (!token) reponse.redirect('/connexion');
+    else {
+      requete.idUtilisateurCourant = token.idUtilisateur;
+      requete.cguAcceptees = token.cguAcceptees;
       suite();
     }
   };
 
-  return { authentificationBasique, trouveHomologation, suppressionCookie, verificationJWT };
+  const verificationAcceptationCGU = (requete, reponse, suite) => {
+    verificationJWT(requete, reponse, () => {
+      if (!requete.cguAcceptees) reponse.redirect('/utilisateur/edition');
+      else suite();
+    });
+  };
+
+  const trouveHomologation = (requete, reponse, suite) => {
+    verificationAcceptationCGU(requete, reponse, () => {
+      const homologation = depotDonnees.homologation(requete.params.id);
+      if (!homologation) reponse.status(404).send('Homologation non trouvée');
+      else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
+        reponse.status(403).send("Accès à l'homologation refusé");
+      } else {
+        requete.homologation = homologation;
+        suite();
+      }
+    });
+  };
+
+  return {
+    authentificationBasique,
+    trouveHomologation,
+    suppressionCookie,
+    verificationAcceptationCGU,
+    verificationJWT,
+  };
 };
 
 module.exports = middleware;
