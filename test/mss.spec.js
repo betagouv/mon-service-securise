@@ -7,6 +7,35 @@ const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
 const Homologation = require('../src/modeles/homologation');
 
+const verifieRequeteGenereErreurHTTP = (status, messageErreur, requete, suite) => {
+  axios(requete)
+    .then(() => suite('Réponse OK inattendue'))
+    .catch((erreur) => {
+      expect(erreur.response.status).to.equal(status);
+      expect(erreur.response.data).to.equal(messageErreur);
+      suite();
+    })
+    .catch(suite);
+};
+
+const verifieRequeteChangeEtat = (etat, requete, done) => {
+  expect(etat()).to.be(false);
+
+  axios(requete)
+    .then(() => {
+      expect(etat()).to.be(true);
+      done();
+    })
+    .catch((erreur) => {
+      const erreurHTTP = erreur.response && erreur.response.status;
+      if (erreurHTTP >= 400 && erreurHTTP < 500) {
+        expect(etat()).to.be(true);
+        done();
+      } else throw erreur;
+    })
+    .catch(done);
+};
+
 describe('Le serveur MSS', () => {
   let idUtilisateurCourant;
   let suppressionCookieEffectuee;
@@ -14,24 +43,6 @@ describe('Le serveur MSS', () => {
   let verificationCGUMenee;
   let authentificationBasiqueMenee;
   let rechercheHomologationEffectuee;
-
-  const verifieRequeteChangeEtat = (etat, requete, done) => {
-    expect(etat()).to.be(false);
-
-    axios(requete)
-      .then(() => {
-        expect(etat()).to.be(true);
-        done();
-      })
-      .catch((erreur) => {
-        const erreurHTTP = erreur.response && erreur.response.status;
-        if (erreurHTTP >= 400 && erreurHTTP < 500) {
-          expect(etat()).to.be(true);
-          done();
-        } else throw erreur;
-      })
-      .catch(done);
-  };
 
   const verifieRequeteExigeSuppressionCookie = (...params) => {
     verifieRequeteChangeEtat(() => suppressionCookieEffectuee, ...params);
@@ -169,14 +180,10 @@ describe('Le serveur MSS', () => {
     it('retourne une erreur HTTP 404 si idReset inconnu', (done) => {
       expect(depotDonnees.utilisateurAFinaliser('999', 'motDePasse')).to.be(undefined);
 
-      axios.get('http://localhost:1234/finalisationInscription/999')
-        .then(() => done('Réponse OK inattendue.'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(404);
-          expect(erreur.response.data).to.equal("Identifiant de finalisation d'inscription \"999\" inconnu");
-          done();
-        })
-        .catch(done);
+      verifieRequeteGenereErreurHTTP(
+        404, "Identifiant de finalisation d'inscription \"999\" inconnu",
+        'http://localhost:1234/finalisationInscription/999', done
+      );
     });
   });
 
@@ -188,9 +195,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/api/homologations`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeAcceptationCGU(
-        { method: 'get', url: 'http://localhost:1234/api/homologations' }, done
-      );
+      verifieRequeteExigeAcceptationCGU('http://localhost:1234/api/homologations', done);
     });
 
     it("interroge le dépôt de données pour récupérer les homologations de l'utilisateur", (done) => {
@@ -553,14 +558,10 @@ describe('Le serveur MSS', () => {
     it("génère une erreur HTTP 422 si l'utilisateur existe déjà", (done) => {
       depotDonnees.nouvelUtilisateur = () => { throw new ErreurUtilisateurExistant(); };
 
-      axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
-        .then(() => done('Reponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(422);
-          expect(erreur.response.data).to.equal('Utilisateur déjà existant pour cette adresse email.');
-          done();
-        })
-        .catch(done);
+      verifieRequeteGenereErreurHTTP(
+        422, 'Utilisateur déjà existant pour cette adresse email',
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
+      );
     });
   });
 
@@ -641,14 +642,13 @@ describe('Le serveur MSS', () => {
       });
 
       it("retourne une erreur HTTP 422 si la case CGU du formulaire n'est pas cochée", (done) => {
-        axios.put('http://localhost:1234/api/utilisateur', { cguAcceptees: false, motDePasse: 'mdp_12345' })
-          .then(() => done('réponse HTTP OK inattendue'))
-          .catch((erreur) => {
-            expect(erreur.response.status).to.equal(422);
-            expect(erreur.response.data).to.equal('CGU non acceptées');
-            done();
-          })
-          .catch(done);
+        verifieRequeteGenereErreurHTTP(
+          422, 'CGU non acceptées', {
+            method: 'put',
+            url: 'http://localhost:1234/api/utilisateur',
+            data: { cguAcceptees: false, motDePasse: 'mdp_12345' },
+          }, done
+        );
       });
     });
   });
@@ -697,21 +697,16 @@ describe('Le serveur MSS', () => {
     });
 
     describe("avec échec de l'authentification de l'utilisateur", () => {
-      before(() => (
-        depotDonnees.utilisateurAuthentifie = () => new Promise(
-          (resolve) => resolve(undefined)
-        )
-      ));
-
       it('retourne un HTTP 401', (done) => {
-        axios.post('http://localhost:1234/api/token', { login: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' })
-          .then(() => done('Réponse OK inattendue.'))
-          .catch((erreur) => {
-            expect(erreur.response.status).to.equal(401);
-            expect(erreur.response.data).to.equal("L'authentification a échoué.");
-            done();
-          })
-          .catch(done);
+        depotDonnees.utilisateurAuthentifie = () => new Promise((resolve) => resolve(undefined));
+
+        verifieRequeteGenereErreurHTTP(
+          401, "L'authentification a échoué", {
+            method: 'post',
+            url: 'http://localhost:1234/api/token',
+            data: { login: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' },
+          }, done
+        );
       });
     });
   });

@@ -280,7 +280,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         .catch(suite);
     } catch (e) {
       if (e instanceof ErreurUtilisateurExistant) {
-        reponse.status(422).send('Utilisateur déjà existant pour cette adresse email.');
+        reponse.status(422).send('Utilisateur déjà existant pour cette adresse email');
       } else throw e;
     }
   });
@@ -308,7 +308,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     if (idUtilisateur) {
       const utilisateur = depotDonnees.utilisateur(idUtilisateur).toJSON();
       reponse.json({ utilisateur });
-    } else reponse.status(401).send("Pas d'utilisateur courant.");
+    } else reponse.status(401).send("Pas d'utilisateur courant");
   });
 
   app.post('/api/token', (requete, reponse, suite) => {
@@ -320,7 +320,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           requete.session.token = token;
           reponse.json({ utilisateur: utilisateur.toJSON() });
         } else {
-          reponse.status(401).send("L'authentification a échoué.");
+          reponse.status(401).send("L'authentification a échoué");
         }
       })
       .catch(suite);
