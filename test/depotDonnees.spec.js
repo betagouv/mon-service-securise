@@ -257,6 +257,17 @@ describe('Le dépôt de données', () => {
     expect(utilisateur.accepteCGU()).to.be(true);
   });
 
+  it('sait si un utilisateur existe', () => {
+    const depot = DepotDonnees.creeDepot({
+      utilisateurs: [{
+        id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
+      }],
+    });
+
+    expect(depot.utilisateurExiste('123')).to.be(true);
+    expect(depot.utilisateurExiste('999')).to.be(false);
+  });
+
   it("retourne l'utilisateur associé à un identifiant donné", () => {
     const adaptateurJWT = 'Un adaptateur';
     const depot = DepotDonnees.creeDepot({

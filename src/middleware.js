@@ -18,8 +18,9 @@ const middleware = (configuration = {}) => {
 
   const verificationJWT = (requete, reponse, suite) => {
     const token = adaptateurJWT.decode(requete.session.token);
-    if (!token) reponse.redirect('/connexion');
-    else {
+    if (!token || !depotDonnees.utilisateurExiste(token.idUtilisateur)) {
+      reponse.redirect('/connexion');
+    } else {
       requete.idUtilisateurCourant = token.idUtilisateur;
       requete.cguAcceptees = token.cguAcceptees;
       suite();

@@ -125,6 +125,8 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
       .catch((error) => error);
   };
 
+  const utilisateurExiste = (id) => !!utilisateur(id);
+
   const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => {
     const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === utilisateurAModifier.id);
     if (!donneesUtilisateur) return undefined;
@@ -148,6 +150,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     utilisateur,
     utilisateurAFinaliser,
     utilisateurAuthentifie,
+    utilisateurExiste,
     valideAcceptationCGUPourUtilisateur,
   };
 };

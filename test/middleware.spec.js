@@ -19,9 +19,17 @@ const prepareVerificationReponse = (reponse, status, ...params) => {
   };
 };
 
+const prepareVerificationRedirection = (reponse, urlRedirection, done) => {
+  reponse.redirect = (url) => {
+    expect(url).to.equal('/connexion');
+    done();
+  };
+};
+
 describe('Le middleware MSS', () => {
   const requete = {};
   const reponse = {};
+  const depotDonnees = {};
 
   beforeEach(() => {
     requete.session = { token: 'XXX' };
@@ -31,28 +39,39 @@ describe('Le middleware MSS', () => {
     reponse.set = () => {};
     reponse.status = () => reponse;
     reponse.send = () => {};
+
+    depotDonnees.homologation = () => undefined;
+    depotDonnees.utilisateurExiste = () => true;
   });
 
   it("redirige l'utilisateur vers la mire de login quand échec vérification JWT", (done) => {
-    const adaptateurJWT = {
-      decode: (token) => {
-        expect(token).to.equal('XXX');
-      },
-    };
+    const adaptateurJWT = { decode: (token) => { expect(token).to.equal('XXX'); } };
+    expect(adaptateurJWT.decode('XXX')).to.be(undefined);
+
+    prepareVerificationRedirection(reponse, '/connexion', done);
 
     const middleware = Middleware({ adaptateurJWT });
+    middleware.verificationJWT(requete, reponse);
+  });
 
-    reponse.redirect = (url) => {
-      expect(url).to.equal('/connexion');
-      done();
+  it('redirige vers mire login si identifiant dans token ne correspond à aucun utilisateur', (done) => {
+    const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
+
+    depotDonnees.utilisateurExiste = (id) => {
+      expect(id).to.equal('123');
+      return false;
     };
 
-    middleware.verificationJWT(requete, reponse);
+    prepareVerificationRedirection(reponse, '/connexion', done);
+
+    const middleware = Middleware({ adaptateurJWT, depotDonnees });
+    const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
+    middleware.verificationJWT(requete, reponse, suite);
   });
 
   it("vérifie que les CGU sont acceptées et redirige l'utilisateur si besoin", (done) => {
     const adaptateurJWT = { decode: () => ({ cguAcceptees: false }) };
-    const middleware = Middleware({ adaptateurJWT });
+    const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
     reponse.redirect = (url) => {
       expect(url).to.equal('/utilisateur/edition');
@@ -105,11 +124,9 @@ describe('Le middleware MSS', () => {
     const adaptateurJWT = { decode: () => ({ idUtilisateur: '999', cguAcceptees: true }) };
 
     it('requête le dépôt de données', (done) => {
-      const depotDonnees = {
-        homologation(id) {
-          expect(id).to.equal('123');
-          done();
-        },
+      depotDonnees.homologation = (id) => {
+        expect(id).to.equal('123');
+        done();
       };
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
@@ -118,7 +135,6 @@ describe('Le middleware MSS', () => {
     });
 
     it('renvoie une erreur HTTP 404 si homologation non trouvée', (done) => {
-      const depotDonnees = { homologation: () => undefined };
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       prepareVerificationReponse(reponse, 404, 'Homologation non trouvée', done);
@@ -128,9 +144,8 @@ describe('Le middleware MSS', () => {
     });
 
     it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès à l'homologation", (done) => {
-      requete.idUtilisateurCourant = 'unIdentifiant';
-      const homologation = { idUtilisateur: 'unAutreIdentifiant' };
-      const depotDonnees = { homologation: () => homologation };
+      const homologation = { idUtilisateur: 'unAutreIdentifiantQueCeluiUtilisateurCourant' };
+      depotDonnees.homologation = () => homologation;
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       prepareVerificationReponse(reponse, 403, "Accès à l'homologation refusé", done);
@@ -141,7 +156,7 @@ describe('Le middleware MSS', () => {
 
     it("retourne l'homologation trouvée et appelle le middleware suivant", (done) => {
       const homologation = { idUtilisateur: '999' };
-      const depotDonnees = { homologation: () => homologation };
+      depotDonnees.homologation = () => homologation;
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       middleware.trouveHomologation(requete, reponse, () => {
