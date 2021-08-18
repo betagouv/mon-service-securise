@@ -413,9 +413,7 @@ describe('Le dépôt de données', () => {
       let utilisateur = depot.utilisateur('123');
       expect(utilisateur.idResetMotDePasse).to.equal('999');
 
-      depot.supprimeIdResetMotDePassePourUtilisateur('123');
-
-      utilisateur = depot.utilisateur('123');
+      utilisateur = depot.supprimeIdResetMotDePassePourUtilisateur(utilisateur);
       expect(utilisateur.idResetMotDePasse).to.be(undefined);
     });
   });

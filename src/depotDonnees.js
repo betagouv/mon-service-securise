@@ -100,9 +100,12 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
       });
   };
 
-  const supprimeIdResetMotDePassePourUtilisateur = (idUtilisateur) => {
-    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === idUtilisateur);
-    if (donneesUtilisateur) donneesUtilisateur.idResetMotDePasse = undefined;
+  const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) => {
+    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === utilisateurAModifier.id);
+    if (!donneesUtilisateur) return undefined;
+
+    donneesUtilisateur.idResetMotDePasse = undefined;
+    return new Utilisateur(donneesUtilisateur, adaptateurJWT);
   };
 
   const utilisateur = (identifiant) => {

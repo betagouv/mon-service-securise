@@ -143,7 +143,6 @@ describe('Le serveur MSS', () => {
       const utilisateur = { id: '123', genereToken: () => 'un token', accepteCGU: () => false };
 
       beforeEach(() => {
-        depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () => {};
         depotDonnees.utilisateurAFinaliser = () => utilisateur;
         depotDonnees.utilisateur = () => utilisateur;
       });
@@ -156,23 +155,6 @@ describe('Le serveur MSS', () => {
 
         axios.get('http://localhost:1234/finalisationInscription/999')
           .then((reponse) => verifieJetonDepose(reponse, done))
-          .catch(done);
-      });
-
-      it("invalide l'identifiant de reset", (done) => {
-        let idResetSupprime = false;
-
-        expect(utilisateur.id).to.equal('123');
-        depotDonnees.supprimeIdResetMotDePassePourUtilisateur = (idUtilisateur) => {
-          expect(idUtilisateur).to.equal('123');
-          idResetSupprime = true;
-        };
-
-        axios.get('http://localhost:1234/finalisationInscription/999')
-          .then(() => {
-            expect(idResetSupprime).to.be(true);
-            done();
-          })
           .catch(done);
       });
     });
@@ -573,6 +555,7 @@ describe('Le serveur MSS', () => {
       depotDonnees.metsAJourMotDePasse = () => new Promise((resolve) => resolve(utilisateur));
       depotDonnees.utilisateur = () => utilisateur;
       depotDonnees.valideAcceptationCGUPourUtilisateur = () => utilisateur;
+      depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () => utilisateur;
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -605,6 +588,24 @@ describe('Le serveur MSS', () => {
       it('pose un nouveau cookie', (done) => {
         axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
           .then((reponse) => verifieJetonDepose(reponse, done))
+          .catch(done);
+      });
+
+      it("invalide l'identifiant de reset", (done) => {
+        let idResetSupprime = false;
+
+        expect(utilisateur.id).to.equal('123');
+        depotDonnees.supprimeIdResetMotDePassePourUtilisateur = (u) => {
+          expect(u.id).to.equal('123');
+          idResetSupprime = true;
+          return u;
+        };
+
+        axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
+          .then(() => {
+            expect(idResetSupprime).to.be(true);
+            done();
+          })
           .catch(done);
       });
     });

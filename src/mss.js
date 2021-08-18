@@ -76,8 +76,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     if (!utilisateur) {
       reponse.status(404).send(`Identifiant de finalisation d'inscription "${idReset}" inconnu`);
     } else {
-      depotDonnees.supprimeIdResetMotDePassePourUtilisateur(utilisateur.id);
-
       const token = utilisateur.genereToken();
       requete.session.token = token;
       sersFormulaireEditionUtilisateur(requete, reponse);
@@ -294,6 +292,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     else {
       depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
         .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
+        .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
         .then((u) => {
           const token = u.genereToken();
           requete.session.token = token;
