@@ -100,6 +100,11 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
       });
   };
 
+  const supprimeIdResetMotDePassePourUtilisateur = (idUtilisateur) => {
+    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === idUtilisateur);
+    if (donneesUtilisateur) donneesUtilisateur.idResetMotDePasse = undefined;
+  };
+
   const utilisateur = (identifiant) => {
     const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === identifiant);
     return donneesUtilisateur ? new Utilisateur(donneesUtilisateur, adaptateurJWT) : undefined;
@@ -147,6 +152,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     metsAJourMotDePasse,
     nouvelleHomologation,
     nouvelUtilisateur,
+    supprimeIdResetMotDePassePourUtilisateur,
     utilisateur,
     utilisateurAFinaliser,
     utilisateurAuthentifie,

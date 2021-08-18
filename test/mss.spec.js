@@ -128,18 +128,54 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête GET sur `/finalisationInscription/:idReset`', () => {
-    it('dépose le jeton dans un cookie', (done) => {
-      const utilisateur = { genereToken: () => 'un token', accepteCGU: () => false };
+    describe('avec idReset valide', () => {
+      const utilisateur = { id: '123', genereToken: () => 'un token', accepteCGU: () => false };
 
-      depotDonnees.utilisateurAFinaliser = (idReset) => {
-        expect(idReset).to.equal('999');
-        return utilisateur;
-      };
+      beforeEach(() => {
+        depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () => {};
+        depotDonnees.utilisateurAFinaliser = () => utilisateur;
+        depotDonnees.utilisateur = () => utilisateur;
+      });
 
-      depotDonnees.utilisateur = () => utilisateur;
+      it('dépose le jeton dans un cookie', (done) => {
+        depotDonnees.utilisateurAFinaliser = (idReset) => {
+          expect(idReset).to.equal('999');
+          return utilisateur;
+        };
+
+        axios.get('http://localhost:1234/finalisationInscription/999')
+          .then((reponse) => verifieJetonDepose(reponse, done))
+          .catch(done);
+      });
+
+      it("invalide l'identifiant de reset", (done) => {
+        let idResetSupprime = false;
+
+        expect(utilisateur.id).to.equal('123');
+        depotDonnees.supprimeIdResetMotDePassePourUtilisateur = (idUtilisateur) => {
+          expect(idUtilisateur).to.equal('123');
+          idResetSupprime = true;
+        };
+
+        axios.get('http://localhost:1234/finalisationInscription/999')
+          .then(() => {
+            expect(idResetSupprime).to.be(true);
+            done();
+          })
+          .catch(done);
+      });
+    });
+
+    it('retourne une erreur HTTP 404 si idReset inconnu', (done) => {
+      expect(depotDonnees.utilisateurAFinaliser('999', 'motDePasse')).to.be(undefined);
 
       axios.get('http://localhost:1234/finalisationInscription/999')
-        .then((reponse) => verifieJetonDepose(reponse, done))
+        .then(() => done('Réponse OK inattendue.'))
+        .catch((erreur) => {
+          expect(erreur.response.status).to.equal(404);
+          expect(erreur.response.data).to.equal("Identifiant de finalisation d'inscription \"999\" inconnu");
+          done();
+        })
         .catch(done);
     });
   });

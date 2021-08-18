@@ -404,5 +404,19 @@ describe('Le dépôt de données', () => {
         }
       });
     });
+
+    it('supprime un identifiant de reset de mot de passe', () => {
+      depot = DepotDonnees.creeDepot({
+        utilisateurs: [{ id: '123', idResetMotDePasse: '999' }],
+      });
+
+      let utilisateur = depot.utilisateur('123');
+      expect(utilisateur.idResetMotDePasse).to.equal('999');
+
+      depot.supprimeIdResetMotDePassePourUtilisateur('123');
+
+      utilisateur = depot.utilisateur('123');
+      expect(utilisateur.idResetMotDePasse).to.be(undefined);
+    });
   });
 });

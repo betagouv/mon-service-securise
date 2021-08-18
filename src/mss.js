@@ -71,10 +71,17 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   });
 
   app.get('/finalisationInscription/:idReset', (requete, reponse) => {
-    const utilisateur = depotDonnees.utilisateurAFinaliser(requete.params.idReset);
-    const token = utilisateur.genereToken();
-    requete.session.token = token;
-    sersFormulaireEditionUtilisateur(requete, reponse);
+    const { idReset } = requete.params;
+    const utilisateur = depotDonnees.utilisateurAFinaliser(idReset);
+    if (!utilisateur) {
+      reponse.status(404).send(`Identifiant de finalisation d'inscription "${idReset}" inconnu`);
+    } else {
+      depotDonnees.supprimeIdResetMotDePassePourUtilisateur(utilisateur.id);
+
+      const token = utilisateur.genereToken();
+      requete.session.token = token;
+      sersFormulaireEditionUtilisateur(requete, reponse);
+    }
   });
 
   app.get('/admin/inscription', middleware.authentificationBasique, (requete, reponse) => {
