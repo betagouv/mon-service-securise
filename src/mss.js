@@ -288,8 +288,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     const utilisateur = depotDonnees.utilisateur(idUtilisateur);
     const { motDePasse, cguAcceptees } = requete.body;
 
-    if (!utilisateur.accepteCGU() && !cguAcceptees) reponse.status(422).send('CGU non acceptées');
-    else {
+    if (typeof motDePasse !== 'string' || !motDePasse) {
+      reponse.status(422).send('Le mot de passe ne doit pas être une chaîne vide');
+    } else if (!utilisateur.accepteCGU() && !cguAcceptees) {
+      reponse.status(422).send('CGU non acceptées');
+    } else {
       depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
         .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
         .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)

@@ -608,6 +608,16 @@ describe('Le serveur MSS', () => {
           })
           .catch(done);
       });
+
+      it('retourne une erreur HTTP 422 si le mot de passe est vide', (done) => {
+        verifieRequeteGenereErreurHTTP(
+          422, 'Le mot de passe ne doit pas être une chaîne vide', {
+            method: 'put',
+            url: 'http://localhost:1234/api/utilisateur',
+            data: { motDePasse: '' },
+          }, done
+        );
+      });
     });
 
     describe("lorsque utilisateur n'a pas encore accepté les CGU", () => {
