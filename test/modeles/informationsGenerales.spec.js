@@ -43,7 +43,7 @@ describe('Les informations générales', () => {
   });
 
   elles("se comportent correctement si la nature du service n'est pas présente", () => {
-    const infos = new InformationsGenerales({ nomService: 'nom' });
+    const infos = new InformationsGenerales();
     expect(infos.descriptionNatureService()).to.equal('Nature du service non renseignée');
   });
 });
