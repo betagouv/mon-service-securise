@@ -38,7 +38,7 @@ header
 main
   h1.bleu Décision d'homologation de sécurité
   section.introduction
-    h2= homologation.nomService
+    h2= homologation.nomService()
     dl
       dt Type :
       dd= homologation.descriptionNatureService()
@@ -152,7 +152,7 @@ main
       dossier et ses pièces jointes. Vous validez son maintien ou sa mise en
       service, dont la sécurité devra être maintenue dans la durée. Une fois
       signée, la décision d'homologation pourra être publiée sur
-      MonServiceSécurisé et sur « #{homologation.nomService} ».
+      MonServiceSécurisé et sur « #{homologation.nomService()} ».
       MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
       responsables d'incidents de sécurité susceptibles d'affeter le service
       numérique homologué et des conséquences qui pourraient en découler.

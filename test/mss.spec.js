@@ -304,7 +304,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
     beforeEach(() => {
-      depotDonnees.metsAJourHomologation = () => {};
+      depotDonnees.ajouteInformationsGeneralesAHomologation = () => {};
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -316,9 +316,9 @@ describe('Le serveur MSS', () => {
     it("demande au dépôt de données de mettre à jour l'homologation", (done) => {
       idUtilisateurCourant = '123';
 
-      depotDonnees.metsAJourHomologation = (identifiant, donneesHomologation) => {
+      depotDonnees.ajouteInformationsGeneralesAHomologation = (identifiant, infosGenerales) => {
         expect(identifiant).to.equal('456');
-        expect(donneesHomologation.nomService).to.equal('Nouveau Nom');
+        expect(infosGenerales.nomService).to.equal('Nouveau Nom');
         return '456';
       };
 

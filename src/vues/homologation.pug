@@ -7,7 +7,7 @@ block append styles
 block main
   .details-homologation.marges-fixes
     .tableau-bord
-      h1= homologation.nomService
+      h1= homologation.nomService()
       a.bouton(href = `/homologation/${homologation.id}/decision`) Télécharger le document d'homologation
 
       section

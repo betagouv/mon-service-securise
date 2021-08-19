@@ -15,13 +15,19 @@ mixin formulaireInformationsGenerales(idHomologation)
     section
       label Nom du service numérique à homologuer
         br
-        input(id = 'nom-service', name = 'nomService', type = 'text', value = homologation.nomService)
+        input(
+          id = 'nom-service',
+          name = 'nomService',
+          type = 'text',
+          value = homologation.nomService(),
+        )
 
       +inputChoix({
         type: 'checkbox',
         nom: 'natureService',
         titre: 'Quelle est la nature du service numérique ?',
         items: referentiel.naturesService(),
+        objetDonnees: homologation.informationsGenerales,
       })
 
       +inputChoix({
@@ -29,11 +35,13 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'provenanceService',
         titre: 'Quelle est la provenance du service numérique ?',
         items: referentiel.provenancesService(),
+        objetDonnees: homologation.informationsGenerales,
       })
 
       +inputOuiNon({
         nom: 'dejaMisEnLigne',
         titre: 'Le service numérique est-il déjà mis en ligne ?',
+        objetDonnees: homologation.informationsGenerales,
       })
 
     section
@@ -42,6 +50,7 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'fonctionnalites',
         titre: 'Le service numérique inclut-il une ou plusieurs des fonctionnalités suivantes ?',
         items: referentiel.fonctionnalites(),
+        objetDonnees: homologation.informationsGenerales,
       })
 
       +inputChoix({
@@ -49,6 +58,7 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'donneesCaracterePersonnel',
         titre: 'Le service numérique est-il amené à traiter une ou plusieurs des données à caractère personnel suivantes ?',
         items: referentiel.donneesCaracterePersonnel(),
+        objetDonnees: homologation.informationsGenerales,
       })
 
     section
@@ -57,11 +67,13 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'delaiAvantImpactCritique',
         titre: 'Au bout de combien de temps le dysfonctionnement grave de votre service aura-t-il un impact critique pour votre organisation ou pour les usagers ?',
         items: referentiel.delaisAvantImpactCritique(),
+        objetDonnees: homologation.informationsGenerales,
       })
 
       +inputOuiNon({
         nom: 'presenceResponsable',
         titre: "Une personne est-elle responsable de la sécurité des systèmes d'information au sein de votre organisation ?",
+        objetDonnees: homologation.informationsGenerales,
       })
 
     if idHomologation

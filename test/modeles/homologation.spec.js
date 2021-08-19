@@ -5,9 +5,17 @@ const Homologation = require('../../src/modeles/homologation');
 const Mesure = require('../../src/modeles/mesure');
 
 describe('Une homologation', () => {
+  it('connaît le nom du service', () => {
+    const homologation = new Homologation({
+      id: '123', idUtilisateur: '456', informationsGenerales: { nomService: 'Super Service' },
+    });
+
+    expect(homologation.nomService()).to.equal('Super Service');
+  });
+
   it('sait se convertir en JSON', () => {
     const homologation = new Homologation({
-      id: '123', idUtilisateur: '456', nomService: 'Super Service',
+      id: '123', idUtilisateur: '456', informationsGenerales: { nomService: 'Super Service' },
     });
 
     expect(homologation.toJSON()).to.eql({
@@ -23,14 +31,16 @@ describe('Une homologation', () => {
       },
     });
     const homologation = new Homologation({
-      id: '123', idUtilisateur: '456', nomService: 'nom', natureService: ['uneNature', 'uneAutre'],
+      id: '123',
+      idUtilisateur: '456',
+      informationsGenerales: { nomService: 'nom', natureService: ['uneNature', 'uneAutre'] },
     }, referentiel);
 
     expect(homologation.descriptionNatureService()).to.equal('Une nature, Une autre');
   });
 
   it("se comporte correctement si la nature du service n'est pas présente", () => {
-    const homologation = new Homologation({ id: '123', idUtilisateur: '456', nomService: 'nom' });
+    const homologation = new Homologation({ id: '123' });
     expect(homologation.descriptionNatureService()).to.equal('Nature du service non renseignée');
   });
 

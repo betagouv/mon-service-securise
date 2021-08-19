@@ -2,11 +2,12 @@ const expect = require('expect.js');
 const bcrypt = require('bcrypt');
 
 const DepotDonnees = require('../src/depotDonnees');
-const { ErreurUtilisateurExistant } = require('../src/erreurs');
+const { ErreurNomServiceManquant, ErreurUtilisateurExistant } = require('../src/erreurs');
 const Referentiel = require('../src/referentiel');
 const AvisExpertCyber = require('../src/modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('../src/modeles/caracteristiquesComplementaires');
 const Homologation = require('../src/modeles/homologation');
+const InformationsGenerales = require('../src/modeles/informationsGenerales');
 const Mesure = require('../src/modeles/mesure');
 const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
 const Risque = require('../src/modeles/risque');
@@ -43,8 +44,8 @@ describe('Le dépôt de données', () => {
   it("connaît toutes les homologations d'un utilisateur donné", () => {
     const depot = DepotDonnees.creeDepot({
       homologations: [
-        { id: '123', idUtilisateur: '456', nomService: 'Super Service' },
-        { id: '789', idUtilisateur: '999', nomService: 'Un autre service' },
+        { id: '123', idUtilisateur: '456', informationsGenerales: { nomService: 'Super Service' } },
+        { id: '789', idUtilisateur: '999', informationsGenerales: { nomService: 'Autre service' } },
       ],
     }, { referentiel: 'Le référentiel' });
 
@@ -58,7 +59,7 @@ describe('Le dépôt de données', () => {
   it('peut retrouver une homologation à partir de son identifiant', () => {
     const depot = DepotDonnees.creeDepot({
       homologations: [
-        { id: '789', idUtilisateur: '999', nomService: 'Un autre service' },
+        { id: '789', idUtilisateur: '999', informationsGenerales: { nomService: 'nom' } },
       ],
     }, { referentiel: 'Le référentiel' });
 
@@ -73,7 +74,7 @@ describe('Le dépôt de données', () => {
     const depot = DepotDonnees.creeDepot({
       homologations: [{
         id: '123',
-        nomService: 'Un service',
+        informationsGenerales: { nomService: 'Un service' },
         mesures: [{ id: 'identifiantMesure', statut: 'fait' }],
       }],
     }, { referentiel });
@@ -90,7 +91,7 @@ describe('Le dépôt de données', () => {
     const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
     const depot = DepotDonnees.creeDepot({
       homologations: [
-        { id: '123', nomService: 'Un service' },
+        { id: '123', informationsGenerales: { nomService: 'Un service' } },
       ],
     }, { referentiel });
 
@@ -106,7 +107,11 @@ describe('Le dépôt de données', () => {
     const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
     const depot = DepotDonnees.creeDepot({
       homologations: [
-        { id: '123', mesures: [{ id: 'identifiantMesure', statut: Mesure.STATUT_PLANIFIE }] },
+        {
+          id: '123',
+          informationsGenerales: { nomService: 'nom' },
+          mesures: [{ id: 'identifiantMesure', statut: Mesure.STATUT_PLANIFIE }],
+        },
       ],
     }, { referentiel });
 
@@ -118,9 +123,45 @@ describe('Le dépôt de données', () => {
     expect(mesures[0].statut).to.equal(Mesure.STATUT_FAIT);
   });
 
+  describe("sur demande de mise à jour des infos générales d'une homologation", () => {
+    it("met à jour les informations générales d'une homologation", () => {
+      const depot = DepotDonnees.creeDepot({
+        homologations: [
+          { id: '123', informationsGenerales: { nomService: 'Super Service' } },
+        ],
+      });
+
+      const infos = new InformationsGenerales({ nomService: 'Nouveau Nom' });
+      depot.ajouteInformationsGeneralesAHomologation('123', infos);
+
+      const { informationsGenerales } = depot.homologation('123');
+      expect(informationsGenerales.nomService).to.equal('Nouveau Nom');
+    });
+
+    it('lève une exception si le nom du service est absent', (done) => {
+      const depot = DepotDonnees.creeDepot({
+        homologations: [
+          { id: '123', informationsGenerales: { nomService: 'Super Service' } },
+        ],
+      });
+
+      const infos = new InformationsGenerales({ nomService: '' });
+      try {
+        depot.ajouteInformationsGeneralesAHomologation('123', infos);
+        done('La mise à jour des informations générales aurait dû lever une exception');
+      } catch (e) {
+        expect(e).to.be.an(ErreurNomServiceManquant);
+        expect(e.message).to.equal('Le nom du service ne peut pas être vide');
+        done();
+      }
+    });
+  });
+
   it('sait associer des caractéristiques complémentaires à une homologation', () => {
     const referentiel = Referentiel.creeReferentiel({ localisationsDonnees: { france: {} } });
-    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] }, { referentiel });
+    const depot = DepotDonnees.creeDepot({ homologations: [
+      { id: '123', informationsGenerales: { nomService: 'nom' } },
+    ] }, { referentiel });
 
     const caracteristiques = new CaracteristiquesComplementaires({
       localisationDonnees: 'france',
@@ -136,6 +177,7 @@ describe('Le dépôt de données', () => {
     const depot = DepotDonnees.creeDepot({
       homologations: [{
         id: '123',
+        informationsGenerales: { nomService: 'nom' },
         caracteristiquesComplementaires: { presentation: 'Une présentation' },
       }],
     }, { referentiel });
@@ -151,7 +193,9 @@ describe('Le dépôt de données', () => {
   });
 
   it('sait associer des parties prenantes à une homologation', () => {
-    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] });
+    const depot = DepotDonnees.creeDepot({ homologations: [
+      { id: '123', informationsGenerales: { nomService: 'nom' } },
+    ] });
     const pp = new PartiesPrenantes({ autoriteHomologation: 'Jean Dupont' });
     depot.ajoutePartiesPrenantesAHomologation('123', pp);
 
@@ -163,6 +207,7 @@ describe('Le dépôt de données', () => {
     const depot = DepotDonnees.creeDepot({
       homologations: [{
         id: '123',
+        informationsGenerales: { nomService: 'nom' },
         partiesPrenantes: { autoriteHomologation: 'Jean Dupont' },
       }],
     });
@@ -177,7 +222,9 @@ describe('Le dépôt de données', () => {
 
   it('sait associer un risque à une homologation', () => {
     const referentiel = Referentiel.creeReferentiel({ risques: { unRisque: {} } });
-    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] }, { referentiel });
+    const depot = DepotDonnees.creeDepot({ homologations: [
+      { id: '123', informationsGenerales: { nomService: 'nom' } },
+    ] }, { referentiel });
     const risque = new Risque({ id: 'unRisque', commentaire: 'Un commentaire' }, referentiel);
     depot.ajouteRisqueAHomologation('123', risque);
 
@@ -188,7 +235,9 @@ describe('Le dépôt de données', () => {
   });
 
   it("sait associer un avis d'expert cyber à une homologation", () => {
-    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] });
+    const depot = DepotDonnees.creeDepot({ homologations: [
+      { id: '123', informationsGenerales: { nomService: 'nom' } },
+    ] });
     const avisExpert = new AvisExpertCyber({ avis: AvisExpertCyber.FAVORABLE });
     depot.ajouteAvisExpertCyberAHomologation('123', avisExpert);
 
@@ -311,7 +360,7 @@ describe('Le dépôt de données', () => {
 
       const homologations = depot.homologations('123');
       expect(homologations.length).to.equal(1);
-      expect(homologations[0].nomService).to.equal('Super Service');
+      expect(homologations[0].informationsGenerales.nomService).to.equal('Super Service');
     });
 
     it("génère un UUID pour l'homologation créée", () => {
@@ -323,31 +372,15 @@ describe('Le dépôt de données', () => {
       const homologations = depot.homologations('123');
       expect(homologations[0].id).to.equal('11111111-1111-1111-1111-111111111111');
     });
-  });
 
-  describe("quand il reçoit une demande de mise à jour d'une homologation", () => {
-    it("met à jour l'homologation", () => {
-      const depot = DepotDonnees.creeDepot({
-        homologations: [
-          { id: '123', nomService: 'Super Service' },
-        ],
-      });
-
-      depot.metsAJourHomologation('123', { nomService: 'Nouveau Nom' });
-
-      const homologation = depot.homologation('123');
-      expect(homologation.nomService).to.equal('Nouveau Nom');
-    });
-
-    it('met à jour les valeurs remises à chaîne vide', () => {
-      const depot = DepotDonnees.creeDepot({
-        homologations: [{ id: '123', nomService: 'Super Service' }],
-      });
-
-      depot.metsAJourHomologation('123', { nomService: '' });
-
-      const homologation = depot.homologation('123');
-      expect(homologation.nomService).to.equal('');
+    it('lève une exception si le nom du service est manquant', (done) => {
+      try {
+        depot.nouvelleHomologation('123', { nomService: '' });
+        done("La création de l'homologation aurait dû lever une exception");
+      } catch (e) {
+        expect(e).to.be.an(ErreurNomServiceManquant);
+        done();
+      }
     });
   });
 

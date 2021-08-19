@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const { ErreurUtilisateurExistant } = require('./erreurs');
+const { ErreurNomServiceManquant, ErreurUtilisateurExistant } = require('./erreurs');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
@@ -43,6 +43,18 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     ajouteAItemsDansHomologation('risques', ...params);
   };
 
+  const valideInformationsGenerales = (infos) => {
+    const { nomService } = infos;
+    if (typeof nomService !== 'string' || !nomService) {
+      throw new ErreurNomServiceManquant('Le nom du service ne peut pas être vide');
+    }
+  };
+
+  const ajouteInformationsGeneralesAHomologation = (idHomologation, infos) => {
+    valideInformationsGenerales(infos);
+    metsAJourProprieteHomologation('informationsGenerales', idHomologation, infos);
+  };
+
   const ajouteCaracteristiquesAHomologation = (...params) => {
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params);
   };
@@ -59,20 +71,15 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h, referentiel));
 
-  const metsAJourHomologation = (identifiant, donneesHomologation) => {
-    const donneesPersistees = donnees.homologations.find((h) => h.id === identifiant);
-    Object.keys(donneesHomologation)
-      .filter((k) => typeof k !== 'undefined')
-      .forEach((k) => (donneesPersistees[k] = donneesHomologation[k]));
+  const nouvelleHomologation = (idUtilisateur, donneesInformationsGenerales) => {
+    valideInformationsGenerales(donneesInformationsGenerales);
 
-    return donneesPersistees.id;
-  };
-
-  const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
-    donneesHomologation.id = adaptateurUUID.genereUUID();
-    donneesHomologation.idUtilisateur = idUtilisateur;
+    const donneesHomologation = {
+      id: adaptateurUUID.genereUUID(),
+      idUtilisateur,
+      informationsGenerales: donneesInformationsGenerales,
+    };
     donnees.homologations.push(donneesHomologation);
-
     return donneesHomologation.id;
   };
 
@@ -146,12 +153,12 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
   return {
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
+    ajouteInformationsGeneralesAHomologation,
     ajouteMesureAHomologation,
     ajoutePartiesPrenantesAHomologation,
     ajouteRisqueAHomologation,
     homologation,
     homologations,
-    metsAJourHomologation,
     metsAJourMotDePasse,
     nouvelleHomologation,
     nouvelUtilisateur,

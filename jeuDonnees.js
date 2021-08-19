@@ -21,8 +21,7 @@ module.exports = {
     {
       id: '123',
       idUtilisateur: '456',
-      nomService: 'Super Service',
-      natureService: ['api'],
+      informationsGenerales: { nomService: 'Super Service', natureService: ['api'] },
       mesures: [
         // gouvernance
         { id: 'limitationInterconnexions', statut: 'fait' },
@@ -43,6 +42,10 @@ module.exports = {
         { id: 'politiqueInformation', statut: 'planifie' },
       ],
     },
-    { id: '789', idUtilisateur: '999', nomService: 'Un autre service', natureService: ['siteInternet'] },
+    {
+      id: '789',
+      idUtilisateur: '999',
+      informationsGenerales: { nomService: 'Un autre service', natureService: ['siteInternet'] },
+    },
   ],
 };

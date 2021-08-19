@@ -5,6 +5,7 @@ const { ErreurUtilisateurExistant } = require('./erreurs');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
+const InformationsGenerales = require('./modeles/informationsGenerales');
 const Mesure = require('./modeles/mesure');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
 const Risque = require('./modeles/risque');
@@ -184,29 +185,10 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   });
 
   app.put('/api/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
-    const {
-      nomService,
-      natureService,
-      provenanceService,
-      dejaMisEnLigne,
-      fonctionnalites,
-      donneesCaracterePersonnel,
-      delaiAvantImpactCritique,
-      presenceResponsable,
-    } = requete.body;
+    const infosGenerales = new InformationsGenerales(requete.body, referentiel);
+    depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales);
 
-    const idHomologation = depotDonnees.metsAJourHomologation(requete.homologation.id, {
-      nomService,
-      natureService,
-      provenanceService,
-      dejaMisEnLigne,
-      fonctionnalites,
-      donneesCaracterePersonnel,
-      delaiAvantImpactCritique,
-      presenceResponsable,
-    });
-
-    reponse.json({ idHomologation });
+    reponse.send({ idHomologation: requete.homologation.id });
   });
 
   app.post('/api/homologation/:id/caracteristiquesComplementaires',

@@ -1,6 +1,7 @@
 const Referentiel = require('../referentiel');
 const AvisExpertCyber = require('./avisExpertCyber');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
+const InformationsGenerales = require('./informationsGenerales');
 const Mesure = require('./mesure');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risque = require('./risque');
@@ -18,14 +19,7 @@ class Homologation {
     const {
       id = '',
       idUtilisateur,
-      nomService,
-      natureService = [],
-      provenanceService,
-      dejaMisEnLigne,
-      fonctionnalites,
-      donneesCaracterePersonnel,
-      delaiAvantImpactCritique,
-      presenceResponsable,
+      informationsGenerales = {},
       mesures = [],
       caracteristiquesComplementaires = {},
       partiesPrenantes = {},
@@ -35,14 +29,7 @@ class Homologation {
 
     this.id = id;
     this.idUtilisateur = idUtilisateur;
-    this.nomService = nomService;
-    this.natureService = natureService;
-    this.provenanceService = provenanceService;
-    this.dejaMisEnLigne = dejaMisEnLigne;
-    this.fonctionnalites = fonctionnalites;
-    this.donneesCaracterePersonnel = donneesCaracterePersonnel;
-    this.delaiAvantImpactCritique = delaiAvantImpactCritique;
-    this.presenceResponsable = presenceResponsable;
+    this.informationsGenerales = new InformationsGenerales(informationsGenerales, referentiel);
     this.mesures = mesures.map((donneesMesure) => new Mesure(donneesMesure, referentiel));
     this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
       caracteristiquesComplementaires, referentiel,
@@ -68,7 +55,7 @@ class Homologation {
     return this.avisExpertCyber.descriptionExpiration();
   }
 
-  descriptionNatureService() { return this.referentiel.natureService(this.natureService); }
+  descriptionNatureService() { return this.informationsGenerales.descriptionNatureService(); }
 
   expertCybersecurite() { return this.partiesPrenantes.expertCybersecurite; }
 
@@ -108,6 +95,8 @@ class Homologation {
 
     return NIVEAUX.NIVEAU_SECURITE_INSUFFISANT;
   }
+
+  nomService() { return this.informationsGenerales.nomService; }
 
   piloteProjet() { return this.partiesPrenantes.piloteProjet; }
 
@@ -168,7 +157,7 @@ class Homologation {
   toJSON() {
     return {
       id: this.id,
-      nomService: this.nomService,
+      nomService: this.nomService(),
     };
   }
 }
