@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const { ErreurLocalisationDonneesInvalide } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const CaracteristiquesComplementaires = require('../../src/modeles/caracteristiquesComplementaires');
+const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 
 describe("L'ensemble des caractéristiques complémentaires", () => {
   let referentiel;
@@ -74,5 +75,10 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       expect(e.message).to.equal('La localisation des données "localisationInvalide" est invalide');
       done();
     }
+  });
+
+  it('détermine le statut de saisie', () => {
+    const caracteristiques = new CaracteristiquesComplementaires({ presentation: 'Une présentation' });
+    expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
   });
 });

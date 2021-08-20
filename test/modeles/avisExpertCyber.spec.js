@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const { ErreurAvisInvalide, ErreurDateRenouvellementInvalide } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const AvisExpertCyber = require('../../src/modeles/avisExpertCyber');
+const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 
 describe("L'avis de l'expert Cyber", () => {
   const referentiel = Referentiel.creeReferentiel({ echeancesRenouvellement: { unAn: {} } });
@@ -83,5 +84,13 @@ describe("L'avis de l'expert Cyber", () => {
 
     const avisExpert = new AvisExpertCyber({ dateRenouvellement: 'unAn' }, referentiel);
     expect(avisExpert.descriptionExpiration()).to.equal('Une description');
+  });
+
+  it('détermine le statut de saisie', () => {
+    const avisExpert = new AvisExpertCyber({
+      avis: AvisExpertCyber.FAVORABLE, dateRenouvellement: 'unAn', commentaire: 'Un commentaire',
+    }, referentiel);
+
+    expect(avisExpert.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
   });
 });

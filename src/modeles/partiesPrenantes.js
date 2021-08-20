@@ -1,4 +1,4 @@
-const Base = require('./base');
+const InformationsHomologation = require('./informationsHomologation');
 
 const descriptionPartiePrenante = (partiePrenante, fonction) => {
   const description = [];
@@ -10,7 +10,7 @@ const descriptionPartiePrenante = (partiePrenante, fonction) => {
   return description.length === 0 ? 'Information non renseignée' : description.join(' ');
 };
 
-class PartiesPrenantes extends Base {
+class PartiesPrenantes extends InformationsHomologation {
   constructor(donneesPartiesPrenantes = {}) {
     super([
       'autoriteHomologation',

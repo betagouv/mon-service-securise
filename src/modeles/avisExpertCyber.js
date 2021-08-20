@@ -1,4 +1,4 @@
-const Base = require('./base');
+const InformationsHomologation = require('./informationsHomologation');
 const { ErreurAvisInvalide, ErreurDateRenouvellementInvalide } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
@@ -22,7 +22,7 @@ const valide = (donnees, referentiel) => {
   }
 };
 
-class AvisExpertCyber extends Base {
+class AvisExpertCyber extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super(['avis', 'dateRenouvellement', 'commentaire']);
     valide(donnees, referentiel);

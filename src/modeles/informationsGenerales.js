@@ -1,21 +1,21 @@
-const Base = require('./base');
+const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
 
-class InformationsGenerales extends Base {
+class InformationsGenerales extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super([
       'delaiAvantImpactCritique',
       'dejaMisEnLigne',
+      'nomService',
+      'presenceResponsable',
+    ], [
       'donneesCaracterePersonnel',
       'fonctionnalites',
       'natureService',
-      'nomService',
-      'presenceResponsable',
       'provenanceService',
     ]);
     this.renseigneProprietes(donnees);
 
-    this.natureService ||= [];
     this.referentiel = referentiel;
   }
 

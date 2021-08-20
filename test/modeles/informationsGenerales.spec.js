@@ -2,6 +2,7 @@ const expect = require('expect.js');
 
 const Referentiel = require('../../src/referentiel');
 const InformationsGenerales = require('../../src/modeles/informationsGenerales');
+const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 
 const elles = it;
 
@@ -45,5 +46,26 @@ describe('Les informations générales', () => {
   elles("se comportent correctement si la nature du service n'est pas présente", () => {
     const infos = new InformationsGenerales();
     expect(infos.descriptionNatureService()).to.equal('Nature du service non renseignée');
+  });
+
+  elles("détectent qu'elles sont encore à saisir", () => {
+    const infos = new InformationsGenerales();
+    expect(infos.statutSaisie()).to.equal(InformationsHomologation.A_SAISIR);
+  });
+
+  elles("détectent qu'elles sont partiellement saisies", () => {
+    const infos = new InformationsGenerales({ nomService: 'Super Service' });
+    expect(infos.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
+  });
+
+  elles("détectent qu'elles sont complètement saisies", () => {
+    const infos = new InformationsGenerales({
+      nomService: 'Super Service',
+      dejaMisEnLigne: 'non',
+      delaiAvantImpactCritique: 'uneJournee',
+      presenceResponsable: 'oui',
+    });
+
+    expect(infos.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
   });
 });

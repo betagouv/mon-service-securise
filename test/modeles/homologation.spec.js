@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 
 const Referentiel = require('../../src/referentiel');
+const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 const Homologation = require('../../src/modeles/homologation');
 const Mesure = require('../../src/modeles/mesure');
 
@@ -295,6 +296,53 @@ describe('Une homologation', () => {
       }, referentiel);
 
       expect(homologation.niveauSecurite()).to.equal(Homologation.NIVEAU_SECURITE_BON);
+    });
+  });
+
+  it("détecte qu'un des agrégats d'informations reste à saisir", () => {
+    const homologation = new Homologation({ id: '123' });
+    expect(homologation.statutSaisie('informationsGenerales')).to.equal(
+      InformationsHomologation.A_SAISIR
+    );
+  });
+
+  describe('sur évaluation du statut de saisie des mesures', () => {
+    const referentiel = Referentiel.creeReferentiel({ mesures: { m1: {}, m2: {} } });
+
+    it('détecte que la liste des mesures reste à saisir', () => {
+      const homologation = new Homologation({ id: '123' });
+      expect(homologation.statutSaisie('mesures')).to.equal(InformationsHomologation.A_SAISIR);
+    });
+
+    it('détecte que la liste des mesures est à compléter', () => {
+      const homologation = new Homologation({
+        mesures: [{ id: 'm1', statut: Mesure.STATUT_FAIT }],
+      }, referentiel);
+
+      expect(homologation.statutSaisie('mesures')).to.equal(InformationsHomologation.A_COMPLETER);
+    });
+
+    it('détecte que la liste des mesures est complète', () => {
+      const homologation = new Homologation({
+        mesures: [
+          { id: 'm1', statut: Mesure.STATUT_FAIT },
+          { id: 'm2', statut: Mesure.STATUT_NON_RETENU },
+        ],
+      }, referentiel);
+
+      expect(homologation.statutSaisie('mesures')).to.equal(InformationsHomologation.COMPLETES);
+    });
+  });
+
+  describe('sur évaluation du statut de saisie des risques', () => {
+    it('détecte que la liste des risques reste à vérifier', () => {
+      const homologation = new Homologation({ id: '123' });
+      expect(homologation.statutSaisie('risques')).to.equal(InformationsHomologation.A_SAISIR);
+    });
+
+    it('détecte que la liste des risques a été vérifiée', () => {
+      const homologation = new Homologation({ id: '123', risquesVerifies: true });
+      expect(homologation.statutSaisie('risques')).to.equal(InformationsHomologation.COMPLETES);
     });
   });
 });

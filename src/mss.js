@@ -228,6 +228,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     const params = requete.body;
     const prefixeCommentaire = /^commentaire-/;
     const commentairesRisques = Object.keys(params).filter((p) => p.match(prefixeCommentaire));
+
     commentairesRisques.forEach((cr) => {
       const idRisque = cr.replace(prefixeCommentaire, '');
       const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
@@ -235,6 +236,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque);
     });
 
+    depotDonnees.marqueRisquesCommeVerifies(requete.homologation.id);
     reponse.send({ idHomologation: requete.homologation.id });
   });
 

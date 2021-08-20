@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 
+const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 const PartiesPrenantes = require('../../src/modeles/partiesPrenantes');
 
 describe("L'ensemble des parties prenantes", () => {
@@ -108,5 +109,10 @@ describe("L'ensemble des parties prenantes", () => {
     });
 
     expect(partiesPrenantes.descriptionExpertCybersecurite()).to.equal('Jean Dupont (RSSI)');
+  });
+
+  it('détermine le statut de saisie', () => {
+    const partiesPrenantes = new PartiesPrenantes();
+    expect(partiesPrenantes.statutSaisie()).to.equal(InformationsHomologation.A_SAISIR);
   });
 });

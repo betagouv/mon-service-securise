@@ -67,6 +67,11 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     metsAJourProprieteHomologation('avisExpertCyber', ...params);
   };
 
+  const marqueRisquesCommeVerifies = (idHomologation) => {
+    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
+    donneesHomologation.risquesVerifies = true;
+  };
+
   const homologations = (idUtilisateur) => donnees.homologations
     .filter((h) => h.idUtilisateur === idUtilisateur)
     .map((h) => new Homologation(h, referentiel));
@@ -159,6 +164,7 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
     ajouteRisqueAHomologation,
     homologation,
     homologations,
+    marqueRisquesCommeVerifies,
     metsAJourMotDePasse,
     nouvelleHomologation,
     nouvelUtilisateur,

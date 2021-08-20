@@ -2,6 +2,7 @@ const Referentiel = require('../referentiel');
 const AvisExpertCyber = require('./avisExpertCyber');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const InformationsGenerales = require('./informationsGenerales');
+const InformationsHomologation = require('./informationsHomologation');
 const Mesure = require('./mesure');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risque = require('./risque');
@@ -24,6 +25,7 @@ class Homologation {
       caracteristiquesComplementaires = {},
       partiesPrenantes = {},
       risques = [],
+      risquesVerifies = false,
       avisExpertCyber = {},
     } = donnees;
 
@@ -36,6 +38,7 @@ class Homologation {
     );
     this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
     this.risques = risques.map((donneesRisque) => new Risque(donneesRisque, referentiel));
+    this.risquesVerifies = risquesVerifies;
     this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber, referentiel);
 
     this.referentiel = referentiel;
@@ -150,6 +153,22 @@ class Homologation {
     });
 
     return new StatistiquesMesures(stats, this.referentiel);
+  }
+
+  statutSaisie(nomInformationsHomologation) {
+    if (nomInformationsHomologation === 'mesures') {
+      if (this.mesures.length === 0) return InformationsHomologation.A_SAISIR;
+      if (this.mesures.length === this.referentiel.identifiantsMesures().length) {
+        return InformationsGenerales.COMPLETES;
+      }
+      return InformationsGenerales.A_COMPLETER;
+    }
+    if (nomInformationsHomologation === 'risques') {
+      return this.risquesVerifies
+        ? InformationsHomologation.COMPLETES
+        : InformationsHomologation.A_SAISIR;
+    }
+    return this[nomInformationsHomologation].statutSaisie();
   }
 
   structureDeveloppement() { return this.caracteristiquesComplementaires.structureDeveloppement; }

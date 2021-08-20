@@ -1,4 +1,4 @@
-const Base = require('./base');
+const InformationsHomologation = require('./informationsHomologation');
 const { ErreurLocalisationDonneesInvalide } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
@@ -13,7 +13,7 @@ const valide = (donnees, referentiel) => {
   }
 };
 
-class CaracteristiquesComplementaires extends Base {
+class CaracteristiquesComplementaires extends InformationsHomologation {
   constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
     super(['presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees']);
 

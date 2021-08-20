@@ -234,6 +234,16 @@ describe('Le dépôt de données', () => {
     expect(risques[0].id).to.equal('unRisque');
   });
 
+  it('sait marquer une liste de risques comme vérifiée', () => {
+    const depot = DepotDonnees.creeDepot({ homologations: [{ id: '123' }] });
+    expect(depot.homologation('123').risquesVerifies).to.be(false);
+
+    depot.marqueRisquesCommeVerifies('123');
+
+    const { risquesVerifies } = depot.homologation('123');
+    expect(risquesVerifies).to.be(true);
+  });
+
   it("sait associer un avis d'expert cyber à une homologation", () => {
     const depot = DepotDonnees.creeDepot({ homologations: [
       { id: '123', informationsGenerales: { nomService: 'nom' } },
@@ -243,6 +253,45 @@ describe('Le dépôt de données', () => {
 
     const { avisExpertCyber } = depot.homologation('123');
     expect(avisExpertCyber.favorable()).to.be(true);
+  });
+
+  describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
+    const adaptateurUUID = { genereUUID: () => {} };
+    let depot;
+
+    beforeEach(() => {
+      depot = DepotDonnees.creeDepot({ homologations: [] }, { adaptateurUUID });
+    });
+
+    it('ajoute la nouvelle homologation au dépôt', () => {
+      expect(depot.homologations('123').length).to.equal(0);
+
+      depot.nouvelleHomologation('123', { nomService: 'Super Service' });
+
+      const homologations = depot.homologations('123');
+      expect(homologations.length).to.equal(1);
+      expect(homologations[0].informationsGenerales.nomService).to.equal('Super Service');
+    });
+
+    it("génère un UUID pour l'homologation créée", () => {
+      adaptateurUUID.genereUUID = () => '11111111-1111-1111-1111-111111111111';
+
+      const idHomologation = depot.nouvelleHomologation('123', { nomService: 'Super Service' });
+      expect(idHomologation).to.equal('11111111-1111-1111-1111-111111111111');
+
+      const homologations = depot.homologations('123');
+      expect(homologations[0].id).to.equal('11111111-1111-1111-1111-111111111111');
+    });
+
+    it('lève une exception si le nom du service est manquant', (done) => {
+      try {
+        depot.nouvelleHomologation('123', { nomService: '' });
+        done("La création de l'homologation aurait dû lever une exception");
+      } catch (e) {
+        expect(e).to.be.an(ErreurNomServiceManquant);
+        done();
+      }
+    });
   });
 
   it("retourne l'utilisateur authentifié", (done) => {
@@ -343,45 +392,6 @@ describe('Le dépôt de données', () => {
     expect(utilisateur).to.be.an(Utilisateur);
     expect(utilisateur.id).to.equal('123');
     expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
-  });
-
-  describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
-    const adaptateurUUID = { genereUUID: () => {} };
-    let depot;
-
-    beforeEach(() => {
-      depot = DepotDonnees.creeDepot({ homologations: [] }, { adaptateurUUID });
-    });
-
-    it('ajoute la nouvelle homologation au dépôt', () => {
-      expect(depot.homologations('123').length).to.equal(0);
-
-      depot.nouvelleHomologation('123', { nomService: 'Super Service' });
-
-      const homologations = depot.homologations('123');
-      expect(homologations.length).to.equal(1);
-      expect(homologations[0].informationsGenerales.nomService).to.equal('Super Service');
-    });
-
-    it("génère un UUID pour l'homologation créée", () => {
-      adaptateurUUID.genereUUID = () => '11111111-1111-1111-1111-111111111111';
-
-      const idHomologation = depot.nouvelleHomologation('123', { nomService: 'Super Service' });
-      expect(idHomologation).to.equal('11111111-1111-1111-1111-111111111111');
-
-      const homologations = depot.homologations('123');
-      expect(homologations[0].id).to.equal('11111111-1111-1111-1111-111111111111');
-    });
-
-    it('lève une exception si le nom du service est manquant', (done) => {
-      try {
-        depot.nouvelleHomologation('123', { nomService: '' });
-        done("La création de l'homologation aurait dû lever une exception");
-      } catch (e) {
-        expect(e).to.be.an(ErreurNomServiceManquant);
-        done();
-      }
-    });
   });
 
   describe("sur réception d'une demande d'enregistrement d'un nouvel utilisateur", () => {
