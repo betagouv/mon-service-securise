@@ -6,6 +6,7 @@ const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const InformationsGenerales = require('./modeles/informationsGenerales');
+const InformationsHomologation = require('./modeles/informationsHomologation');
 const Mesure = require('./modeles/mesure');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
 const Risque = require('./modeles/risque');
@@ -98,7 +99,38 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.get('/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation', { homologation });
+    const actionsDeSaisie = {
+      'Décrivez le service numérique': [{
+        description: 'Informations générales',
+        url: `/homologation/${homologation.id}/edition`,
+        statut: homologation.statutSaisie('informationsGenerales'),
+      }, {
+        description: 'Caractéristiques complémentaires',
+        url: `/homologation/${homologation.id}/caracteristiquesComplementaires`,
+        statut: homologation.statutSaisie('caracteristiquesComplementaires'),
+      }, {
+        description: 'Parties prenantes',
+        url: `/homologation/${homologation.id}/partiesPrenantes`,
+        statut: homologation.statutSaisie('partiesPrenantes'),
+      }],
+
+      'Sécurisez le service numérique': [{
+        description: 'Vérification des risques',
+        url: `/homologation/${homologation.id}/risques`,
+        statut: homologation.statutSaisie('risques'),
+      }, {
+        description: 'Mesures de sécurité',
+        url: `/homologation/${homologation.id}/mesures`,
+        statut: homologation.statutSaisie('mesures'),
+      }],
+
+      'Complétez le dossier': [{
+        description: "Avis de l'expert cyber",
+        url: `/homologation/${homologation.id}/avisExpertCyber`,
+        statut: homologation.statutSaisie('avisExpertCyber'),
+      }],
+    };
+    reponse.render('homologation', { homologation, actionsDeSaisie, InformationsHomologation });
   });
 
   app.get('/homologation/:id/caracteristiquesComplementaires',

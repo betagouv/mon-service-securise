@@ -70,11 +70,22 @@ li.action {
   background: #ebedf0;
 }
 
-li.action.faite {
-  background-image: url(../images/icone_ok_pastille_verte.svg);
+li.action {
   background-repeat: no-repeat;
   background-size: 2em;
   background-position: 98% 50%;
+}
+
+li.action.faite {
+  background-image: url(../images/icone_ok_pastille_verte.svg);
+}
+
+li.action.a-completer {
+  background-image: url(../images/icone_edition_pastille_grise.svg);
+}
+
+li.action.a-faire {
+  background-image: url(../images/icone_vide_pastille_blanche.svg);
 }
 
 .action a {

@@ -1,6 +1,20 @@
 extends mss
 include ./fragments/besoinAide
 
+mixin action({ description, url, statut })
+  - let classeStyleStatut
+  -
+    switch(statut) {
+      case InformationsHomologation.A_SAISIR: classeStyleStatut = 'a-faire'; break;
+      case InformationsHomologation.A_COMPLETER: classeStyleStatut = 'a-completer'; break;
+      case InformationsHomologation.COMPLETES: classeStyleStatut = 'faite'; break;
+      default: '';
+    }
+
+  li.action(class = classeStyleStatut)
+    a(href = url)= description
+
+
 block append styles
   link(href = '/statique/assets/styles/homologation.css', rel = 'stylesheet')
 
@@ -10,36 +24,13 @@ block main
       h1= homologation.nomService()
       a.bouton(href = `/homologation/${homologation.id}/decision`) Télécharger le document d'homologation
 
-      section
-        dl.actions
-          dt Décrivez le service numérique
-          dd
-            ul
-              li.action.faite
-                a(href = `/homologation/${homologation.id}/edition`) Informations générales
-              li.action
-                a(href = `/homologation/${homologation.id}/caracteristiquesComplementaires`).
-                  Caractéristiques complémentaires
-              li.action
-                a(href = `/homologation/${homologation.id}/partiesPrenantes`).
-                  Parties prenantes
-
-      section
-        dl.actions
-          dt Sécurisez le service numérique
-          dd
-            ul
-              li.action
-                a(href = `/homologation/${homologation.id}/risques`) Vérification des risques
-              li.action
-                a(href = `/homologation/${homologation.id}/mesures`) Mesures de sécurité
-
-      section
-        dl.actions
-          dt Complétez le dossier
-          dd
-            ul
-              li.action
-                a(href = `/homologation/${homologation.id}/avisExpertCyber`) Avis de l'expert cyber
+      each actions, descriptionSection in actionsDeSaisie
+        section
+          dl.actions
+            dt= descriptionSection
+            dd
+              ul
+                each donneesAction in actions
+                  +action(donneesAction)
 
     +besoinAide
