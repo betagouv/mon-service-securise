@@ -1,11 +1,14 @@
-import parametres from '../modules/parametres.js';
+import soumetsHomologation from '../modules/soumetsHomologation.js';
 
 $(() => {
   const $bouton = $('.bouton');
-  $bouton.click(() => {
-    const params = parametres('form#homologation');
+  const selecteurFormulaire = 'form#homologation';
+  const $form = $(selecteurFormulaire);
 
-    axios.post('/api/homologation', params)
-      .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
+  $form.submit((e) => {
+    e.preventDefault();
+    soumetsHomologation({ method: 'post', url: '/api/homologation' }, selecteurFormulaire);
   });
+
+  $bouton.click(() => $form.submit());
 });
