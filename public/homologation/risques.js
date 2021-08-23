@@ -1,4 +1,5 @@
 import parametres from '../modules/parametres.js';
+import texteHTML from '../modules/texteHTML.js';
 
 const ajouteInformationsModales = () => {
   $('.information').click((eInformation) => {
@@ -25,7 +26,7 @@ const ajouteZoneSaisieCommentairePourRisque = ($r, nom) => {
 const peupleCommentairesAvec = (selecteurDonnees) => {
   const donneesRisques = JSON.parse($(selecteurDonnees).text());
   donneesRisques.forEach(({ id, commentaire }) => {
-    if (commentaire) $(`#commentaire-${id}`).show().val(commentaire);
+    if (commentaire) $(`#commentaire-${id}`).show().val(texteHTML(commentaire));
   });
 };
 

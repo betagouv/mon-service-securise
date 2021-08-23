@@ -1,4 +1,5 @@
 import parametres from '../modules/parametres.js';
+import texteHTML from '../modules/texteHTML.js';
 
 const filtreMesures = (selecteurMesures, categorieFiltre) => {
   const referentielMesures = JSON.parse($('#referentielMesures').text());
@@ -46,7 +47,7 @@ const peupleFormulaire = () => {
   const donneesMesures = JSON.parse($('#donneesMesures').text());
   donneesMesures.forEach(({ id, statut, modalites }) => {
     $(`#${id}-${statut}`).prop('checked', true);
-    if (modalites) $(`#modalites-${id}`).show().val(modalites);
+    if (modalites) $(`#modalites-${id}`).show().val(texteHTML(modalites));
   });
 };
 
