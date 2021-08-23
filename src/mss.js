@@ -219,12 +219,15 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       } else reponse.status(422).send("Données insuffisantes pour créer l'homologation");
     });
 
-  app.put('/api/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
-    const infosGenerales = new InformationsGenerales(requete.body, referentiel);
-    depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales);
+  app.put('/api/homologation/:id',
+    middleware.trouveHomologation,
+    middleware.aseptise('nomService'),
+    (requete, reponse) => {
+      const infosGenerales = new InformationsGenerales(requete.body, referentiel);
+      depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales);
 
-    reponse.send({ idHomologation: requete.homologation.id });
-  });
+      reponse.send({ idHomologation: requete.homologation.id });
+    });
 
   app.post('/api/homologation/:id/caracteristiquesComplementaires',
     middleware.trouveHomologation,

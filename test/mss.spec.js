@@ -337,6 +337,14 @@ describe('Le serveur MSS', () => {
       );
     });
 
+    it('aseptise les paramètres', (done) => {
+      verifieAseptisationParametres(
+        ['nomService'],
+        { method: 'put', url: 'http://localhost:1234/api/homologation/456' },
+        done
+      );
+    });
+
     it("demande au dépôt de données de mettre à jour l'homologation", (done) => {
       idUtilisateurCourant = '123';
 
