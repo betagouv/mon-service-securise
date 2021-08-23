@@ -55,8 +55,15 @@ const middleware = (configuration = {}) => {
       .catch(suite);
   });
 
+  const aseptiseTout = (requete, reponse, suite) => {
+    const parametresChaines = Object.keys(requete.body)
+      .filter((p) => typeof p === 'string');
+    return aseptise(parametresChaines)(requete, reponse, suite);
+  };
+
   return {
     aseptise,
+    aseptiseTout,
     authentificationBasique,
     trouveHomologation,
     suppressionCookie,

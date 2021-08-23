@@ -238,20 +238,23 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       reponse.send({ idHomologation: requete.homologation.id });
     });
 
-  app.post('/api/homologation/:id/mesures', middleware.trouveHomologation, (requete, reponse) => {
-    const params = requete.body;
-    const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
-    identifiantsMesures.forEach((im) => {
-      const mesure = new Mesure({
-        id: im,
-        statut: params[im],
-        modalites: params[`modalites-${im}`],
-      }, referentiel);
-      depotDonnees.ajouteMesureAHomologation(requete.homologation.id, mesure);
-    });
+  app.post('/api/homologation/:id/mesures',
+    middleware.trouveHomologation,
+    middleware.aseptiseTout,
+    (requete, reponse) => {
+      const params = requete.body;
+      const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
+      identifiantsMesures.forEach((im) => {
+        const mesure = new Mesure({
+          id: im,
+          statut: params[im],
+          modalites: params[`modalites-${im}`],
+        }, referentiel);
+        depotDonnees.ajouteMesureAHomologation(requete.homologation.id, mesure);
+      });
 
-    reponse.send({ idHomologation: requete.homologation.id });
-  });
+      reponse.send({ idHomologation: requete.homologation.id });
+    });
 
   app.post('/api/homologation/:id/partiesPrenantes',
     middleware.trouveHomologation,
@@ -262,21 +265,24 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       reponse.send({ idHomologation: requete.homologation.id });
     });
 
-  app.post('/api/homologation/:id/risques', middleware.trouveHomologation, (requete, reponse) => {
-    const params = requete.body;
-    const prefixeCommentaire = /^commentaire-/;
-    const commentairesRisques = Object.keys(params).filter((p) => p.match(prefixeCommentaire));
+  app.post('/api/homologation/:id/risques',
+    middleware.trouveHomologation,
+    middleware.aseptiseTout,
+    (requete, reponse) => {
+      const params = requete.body;
+      const prefixeCommentaire = /^commentaire-/;
+      const commentairesRisques = Object.keys(params).filter((p) => p.match(prefixeCommentaire));
 
-    commentairesRisques.forEach((cr) => {
-      const idRisque = cr.replace(prefixeCommentaire, '');
-      const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
+      commentairesRisques.forEach((cr) => {
+        const idRisque = cr.replace(prefixeCommentaire, '');
+        const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
 
-      depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque);
+        depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque);
+      });
+
+      depotDonnees.marqueRisquesCommeVerifies(requete.homologation.id);
+      reponse.send({ idHomologation: requete.homologation.id });
     });
-
-    depotDonnees.marqueRisquesCommeVerifies(requete.homologation.id);
-    reponse.send({ idHomologation: requete.homologation.id });
-  });
 
   app.post('/api/homologation/:id/avisExpertCyber',
     middleware.trouveHomologation,

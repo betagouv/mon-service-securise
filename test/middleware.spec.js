@@ -200,4 +200,15 @@ describe('Le middleware MSS', () => {
         .catch(done);
     });
   });
+
+  it('aseptise tous les paramètres de la requête', (done) => {
+    const middleware = Middleware();
+    requete.body = { param: '  une valeur ', autreParam: '  une autre valeur ' };
+    middleware.aseptiseTout(requete, reponse, () => {
+      expect(requete.body.param).to.equal('une valeur');
+      expect(requete.body.autreParam).to.equal('une autre valeur');
+      done();
+    })
+      .catch(done);
+  });
 });

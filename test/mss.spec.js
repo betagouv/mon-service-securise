@@ -42,6 +42,7 @@ describe('Le serveur MSS', () => {
   let suppressionCookieEffectuee;
   let verificationJWTMenee;
   let verificationCGUMenee;
+  let aseptisationCompleteMenee;
   let authentificationBasiqueMenee;
   let rechercheHomologationEffectuee;
   let parametresAseptises;
@@ -72,6 +73,10 @@ describe('Le serveur MSS', () => {
       etatInitial: [],
       etatFinal: nomsParametres,
     }, ...params);
+  };
+
+  const verifieAseptisationComplete = (...params) => {
+    verifieRequeteChangeEtat({ lectureEtat: () => aseptisationCompleteMenee }, ...params);
   };
 
   const verifieJetonDepose = (reponse, done) => {
@@ -110,10 +115,15 @@ describe('Le serveur MSS', () => {
       suite();
     },
 
-    aseptise: (...nomsParametres) => ((requete, reponse, suite) => {
+    aseptise: (...nomsParametres) => (requete, reponse, suite) => {
       parametresAseptises = nomsParametres;
       suite();
-    }),
+    },
+
+    aseptiseTout: (requete, reponse, suite) => {
+      aseptisationCompleteMenee = true;
+      suite();
+    },
   };
 
   let adaptateurMail;
@@ -126,6 +136,7 @@ describe('Le serveur MSS', () => {
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
     verificationCGUMenee = false;
+    aseptisationCompleteMenee = false;
     authentificationBasiqueMenee = false;
     rechercheHomologationEffectuee = false;
     parametresAseptises = [];
@@ -404,6 +415,13 @@ describe('Le serveur MSS', () => {
       }, done);
     });
 
+    it('aseptise tous les paramètres de la requête', (done) => {
+      verifieAseptisationComplete({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/mesures',
+      }, done);
+    });
+
     it("demande au dépôt d'associer les mesures à l'homologation", (done) => {
       referentiel.recharge({ mesures: { identifiantMesure: {} } });
       let mesureAjoutee = false;
@@ -467,6 +485,13 @@ describe('Le serveur MSS', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/risques',
+      }, done);
+    });
+
+    it('aseptise tous les paramètres de la requête', (done) => {
+      verifieAseptisationComplete({
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/risques',
       }, done);
