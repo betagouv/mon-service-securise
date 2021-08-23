@@ -18,18 +18,19 @@ const verifieRequeteGenereErreurHTTP = (status, messageErreur, requete, suite) =
     .catch(suite);
 };
 
-const verifieRequeteChangeEtat = (etat, requete, done) => {
-  expect(etat()).to.be(false);
+const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
+  const { lectureEtat, etatInitial = false, etatFinal = true } = donneesEtat;
+  expect(lectureEtat()).to.eql(etatInitial);
 
   axios(requete)
     .then(() => {
-      expect(etat()).to.be(true);
+      expect(lectureEtat()).to.eql(etatFinal);
       done();
     })
     .catch((erreur) => {
       const erreurHTTP = erreur.response && erreur.response.status;
       if (erreurHTTP >= 400 && erreurHTTP < 500) {
-        expect(etat()).to.be(true);
+        expect(lectureEtat()).to.eql(etatFinal);
         done();
       } else throw erreur;
     })
@@ -43,25 +44,34 @@ describe('Le serveur MSS', () => {
   let verificationCGUMenee;
   let authentificationBasiqueMenee;
   let rechercheHomologationEffectuee;
+  let parametresAseptises;
 
   const verifieRequeteExigeSuppressionCookie = (...params) => {
-    verifieRequeteChangeEtat(() => suppressionCookieEffectuee, ...params);
+    verifieRequeteChangeEtat({ lectureEtat: () => suppressionCookieEffectuee }, ...params);
   };
 
   const verifieRequeteExigeJWT = (...params) => {
-    verifieRequeteChangeEtat(() => verificationJWTMenee, ...params);
+    verifieRequeteChangeEtat({ lectureEtat: () => verificationJWTMenee }, ...params);
   };
 
   const verifieRequeteExigeAcceptationCGU = (...params) => {
-    verifieRequeteChangeEtat(() => verificationCGUMenee, ...params);
+    verifieRequeteChangeEtat({ lectureEtat: () => verificationCGUMenee }, ...params);
   };
 
   const verifieRequeteExigeAuthentificationBasique = (...params) => {
-    verifieRequeteChangeEtat(() => authentificationBasiqueMenee, ...params);
+    verifieRequeteChangeEtat({ lectureEtat: () => authentificationBasiqueMenee }, ...params);
   };
 
   const verifieRechercheHomologation = (...params) => {
-    verifieRequeteChangeEtat(() => rechercheHomologationEffectuee, ...params);
+    verifieRequeteChangeEtat({ lectureEtat: () => rechercheHomologationEffectuee }, ...params);
+  };
+
+  const verifieAseptisationParametres = (nomsParametres, ...params) => {
+    verifieRequeteChangeEtat({
+      lectureEtat: () => parametresAseptises,
+      etatInitial: [],
+      etatFinal: nomsParametres,
+    }, ...params);
   };
 
   const verifieJetonDepose = (reponse, done) => {
@@ -99,6 +109,11 @@ describe('Le serveur MSS', () => {
       rechercheHomologationEffectuee = true;
       suite();
     },
+
+    aseptise: (...nomsParametres) => ((requete, reponse, suite) => {
+      parametresAseptises = nomsParametres;
+      suite();
+    }),
   };
 
   let adaptateurMail;
@@ -113,6 +128,7 @@ describe('Le serveur MSS', () => {
     verificationCGUMenee = false;
     authentificationBasiqueMenee = false;
     rechercheHomologationEffectuee = false;
+    parametresAseptises = [];
 
     depotDonnees = DepotDonnees.creeDepotVide();
     referentiel = Referentiel.creeReferentielVide();
@@ -521,6 +537,18 @@ describe('Le serveur MSS', () => {
   describe('quand requête POST sur `/api/utilisateur`', () => {
     const utilisateur = { id: '123', genereToken: () => 'un token' };
 
+    beforeEach(() => (
+      depotDonnees.nouvelUtilisateur = () => new Promise((resolve) => resolve(utilisateur))
+    ));
+
+    it('aseptise les paramètres de la requête', (done) => {
+      verifieAseptisationParametres(
+        ['prenom', 'nom', 'email'],
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur' },
+        done
+      );
+    });
+
     it("demande au dépôt de créer l'utilisateur", (done) => {
       const donneesRequete = { prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' };
 
@@ -539,8 +567,6 @@ describe('Le serveur MSS', () => {
     });
 
     it("envoie un message de notification à l'utilisateur créé", (done) => {
-      depotDonnees.nouvelUtilisateur = () => new Promise((resolve) => resolve(utilisateur));
-
       utilisateur.email = 'jean.dupont@mail.fr';
       utilisateur.idResetMotDePasse = '999';
 

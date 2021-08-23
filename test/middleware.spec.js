@@ -34,6 +34,7 @@ describe('Le middleware MSS', () => {
   beforeEach(() => {
     requete.session = { token: 'XXX' };
     requete.params = {};
+    requete.body = {};
 
     reponse.redirect = () => {};
     reponse.set = () => {};
@@ -163,6 +164,40 @@ describe('Le middleware MSS', () => {
         expect(requete.homologation).to.equal(homologation);
         done();
       });
+    });
+  });
+
+  describe("sur demande d'aseptisation", () => {
+    it('supprime les espaces au début et à la fin du paramètre', (done) => {
+      const middleware = Middleware();
+      requete.body.param = '  une valeur ';
+      middleware.aseptise('param')(requete, reponse, () => {
+        expect(requete.body.param).to.equal('une valeur');
+        done();
+      })
+        .catch(done);
+    });
+
+    it('prend en compte plusieurs paramètres', (done) => {
+      const middleware = Middleware();
+      requete.body.paramRenseigne = '  une valeur ';
+      middleware.aseptise('paramAbsent', 'paramRenseigne')(requete, reponse, () => {
+        expect(requete.body.paramRenseigne).to.equal('une valeur');
+        done();
+      })
+        .catch(done);
+    });
+
+    it('neutralise le code HTML', (done) => {
+      const middleware = Middleware();
+      requete.body.paramRenseigne = '<script>alert("hacked!");</script>';
+      middleware.aseptise('paramAbsent', 'paramRenseigne')(requete, reponse, () => {
+        expect(requete.body.paramRenseigne).to.equal(
+          '&lt;script&gt;alert(&quot;hacked!&quot;);&lt;&#x2F;script&gt;'
+        );
+        done();
+      })
+        .catch(done);
     });
   });
 });

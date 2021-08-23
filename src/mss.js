@@ -280,7 +280,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       reponse.send({ idHomologation: requete.params.id });
     });
 
-  app.post('/api/utilisateur', (requete, reponse, suite) => {
+  app.post('/api/utilisateur', middleware.aseptise('prenom', 'nom', 'email'), (requete, reponse, suite) => {
     const { prenom, nom, email } = requete.body;
     try {
       depotDonnees.nouvelUtilisateur({ prenom, nom, email })
