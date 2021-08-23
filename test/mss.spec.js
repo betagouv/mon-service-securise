@@ -279,6 +279,14 @@ describe('Le serveur MSS', () => {
       );
     });
 
+    it('aseptise les paramètres', (done) => {
+      verifieAseptisationParametres(
+        ['nomService'],
+        { method: 'post', url: 'http://localhost:1234/api/homologation' },
+        done
+      );
+    });
+
     it('retourne une erreur HTTP 422 si données insuffisantes pour création homologation', (done) => {
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => done('Réponse HTTP OK inattendue'))

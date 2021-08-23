@@ -186,21 +186,12 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     reponse.json({ homologations });
   });
 
-  app.post('/api/homologation', middleware.verificationAcceptationCGU, (requete, reponse) => {
-    if (Object.keys(requete.body).length > 0) {
-      const {
-        nomService,
-        natureService,
-        provenanceService,
-        dejaMisEnLigne,
-        fonctionnalites,
-        donneesCaracterePersonnel,
-        delaiAvantImpactCritique,
-        presenceResponsable,
-      } = requete.body;
-
-      const idHomologation = depotDonnees.nouvelleHomologation(
-        requete.idUtilisateurCourant, {
+  app.post('/api/homologation',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('nomService'),
+    (requete, reponse) => {
+      if (Object.keys(requete.body).length > 0) {
+        const {
           nomService,
           natureService,
           provenanceService,
@@ -209,12 +200,24 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           donneesCaracterePersonnel,
           delaiAvantImpactCritique,
           presenceResponsable,
-        }
-      );
+        } = requete.body;
 
-      reponse.json({ idHomologation });
-    } else reponse.status(422).send("Données insuffisantes pour créer l'homologation");
-  });
+        const idHomologation = depotDonnees.nouvelleHomologation(
+          requete.idUtilisateurCourant, {
+            nomService,
+            natureService,
+            provenanceService,
+            dejaMisEnLigne,
+            fonctionnalites,
+            donneesCaracterePersonnel,
+            delaiAvantImpactCritique,
+            presenceResponsable,
+          }
+        );
+
+        reponse.json({ idHomologation });
+      } else reponse.status(422).send("Données insuffisantes pour créer l'homologation");
+    });
 
   app.put('/api/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
     const infosGenerales = new InformationsGenerales(requete.body, referentiel);
