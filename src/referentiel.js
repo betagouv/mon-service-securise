@@ -74,6 +74,7 @@ const creeReferentiel = (donneesReferentiel) => {
 const creeReferentielVide = () => creeReferentiel({
   categoriesMesures: {},
   delaisAvantImpactCritique: {},
+  documentsComplementaires: {},
   donneesCaracterePersonnel: {},
   echeancesRenouvellement: {},
   fonctionnalites: {},
@@ -82,6 +83,7 @@ const creeReferentielVide = () => creeReferentiel({
   risques: {},
   naturesService: {},
   provenancesService: {},
+  seuilsCriticites: [],
 });
 
 module.exports = { creeReferentiel, creeReferentielVide };

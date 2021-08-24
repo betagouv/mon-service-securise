@@ -2,6 +2,8 @@ const echeance = (duree) => `Dans ${duree}`;
 const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)} après signature de la présente homologation`;
 
 module.exports = {
+  seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
+
   naturesService: {
     siteInternet: { description: 'Site Internet' },
     applicationMobile: { description: 'Application Mobile' },
@@ -20,56 +22,114 @@ module.exports = {
   },
 
   fonctionnalites: {
-    newsletter: { description: 'Inscription à une newsletter' },
-    compte: { description: 'Création de compte (utilisateurs avec comptes)' },
-    formulaire: { description: 'Formulaire administratif ou démarche en ligne' },
-    questionnaire: { description: 'Questionnaires, sondages' },
-    reservation: { description: 'Outils de réservation (livres, places, salles, etc.)' },
-    paiement: { description: 'Paiement en ligne, conservation de données bancaires' },
-    reseauSocial: { description: 'Réseau social, forum, commentaires' },
-    visionconference: { description: 'Audio, visioconférence' },
-    messagerie: { description: 'Messagerie instantanée' },
-    emails: { description: "Envoi et réception d'emails" },
-    documents: { description: 'Stockage de documents' },
-    edition: { description: 'Édition collaborative (documents, murs collaboratifs, etc.)' },
-    autre: { description: 'Autres fonctionnalités permettant des échanges de données (préciser)' },
+    newsletter: {
+      description: 'Inscription à une newsletter',
+      seuilCriticite: 'faible',
+    },
+    compte: {
+      description: 'Création de compte (utilisateurs avec comptes)',
+      seuilCriticite: 'faible',
+    },
+    formulaire: {
+      description: 'Formulaire administratif ou démarche en ligne',
+      seuilCriticite: 'faible',
+    },
+    questionnaire: {
+      description: 'Questionnaires, sondages',
+      seuilCriticite: 'faible',
+    },
+    reservation: {
+      description: 'Outils de réservation (livres, places, salles, etc.)',
+      seuilCriticite: 'faible',
+    },
+    paiement: {
+      description: 'Paiement en ligne, conservation de données bancaires',
+      seuilCriticite: 'eleve',
+    },
+    reseauSocial: {
+      description: 'Réseau social, forum, commentaires',
+      seuilCriticite: 'moyen',
+    },
+    visionconference: {
+      description: 'Audio, visioconférence',
+      seuilCriticite: 'moyen',
+    },
+    messagerie: {
+      description: 'Messagerie instantanée',
+      seuilCriticite: 'moyen',
+    },
+    emails: {
+      description: "Envoi et réception d'emails",
+      seuilCriticite: 'moyen',
+    },
+    documents: {
+      description: 'Stockage de documents',
+      seuilCriticite: 'moyen',
+    },
+    edition: {
+      description: 'Édition collaborative (documents, murs collaboratifs, etc.)',
+      seuilCriticite: 'moyen',
+    },
+    autre: {
+      description: 'Autres fonctionnalités permettant des échanges de données (préciser)',
+      seuilCriticite: 'faible',
+    },
   },
 
   donneesCaracterePersonnel: {
     contact: {
       description: 'Données de contact',
       exemple: 'mail, numéro de téléphone, adresse postale',
+      seuilCriticite: 'faible',
     },
     identite: {
       description: "Données d'identité",
       exemple: "nom/prénom, pseudonyme, date de maissance, numéros de pièce d'identité, de sécurité sociale, etc.",
+      seuilCriticite: 'moyen',
     },
     situation: {
       description: 'Données relatives à la situation familiale, économique et financière',
       exemple: 'enfants',
+      seuilCriticite: 'moyen',
     },
     localisation: {
       description: 'Données de localisation',
       exemple: 'adresse IP, identifiant de connexion, cookies',
+      seuilCriticite: 'faible',
     },
     banque: {
       description: 'Données bancaires',
       exemple: 'nº de carte bancaire, établissement bancaire, etc.',
+      seuilCriticite: 'eleve',
     },
     mineurs: {
       description: 'Données concernant des personnes mineures',
+      seuilCriticite: 'eleve',
     },
     sensibiliteParticuliere: {
       description: 'Données particulièrement sensibles (santé, opinions, etc.)',
       exemple: 'données de santé, orientation sexuelle, origine raciale ou ethnique, opinions politiques ou religieuses',
+      seuilCriticite: 'critique',
     },
   },
 
   delaisAvantImpactCritique: {
-    uneHeure: { description: 'Une heure' },
-    uneJournee: { description: 'Une journée' },
-    uneSemaine: { description: 'Une semaine' },
-    unMois: { description: 'Un mois ou plus' },
+    uneHeure: {
+      description: 'Une heure',
+      seuilCriticite: 'critique',
+    },
+    uneJournee: {
+      description: 'Une journée',
+      seuilCriticite: 'eleve',
+    },
+    uneSemaine: {
+      description: 'Une semaine',
+      seuilCriticite: 'moyen',
+    },
+    unMois: {
+      description: 'Un mois ou plus',
+      seuilCriticite: 'faible',
+    },
   },
 
   risques: {
@@ -335,5 +395,20 @@ module.exports = {
     sixMois: { description: echeance('six mois'), expiration: expiration('six mois') },
     unAn: { description: echeance('un an'), expiration: expiration('un an') },
     deuxAns: { description: echeance('deux ans'), expiration: expiration('deux ans') },
+  },
+
+  documentsComplementaires: {
+    testsIntrusion: {
+      description: "Compte-rendu de tests d'intrusion ou de prime aux bogues (bug bounty)",
+      seuilCriticite: 'moyen',
+    },
+    analyseRisques: {
+      description: 'Analyse de risques',
+      seuilCriticite: 'eleve',
+    },
+    audit: {
+      description: "Compte-rendu d'audit du service",
+      seuilCriticite: 'critique',
+    },
   },
 };
