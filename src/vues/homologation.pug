@@ -1,5 +1,6 @@
 extends mss
 include ./fragments/besoinAide
+include ./fragments/diagnostics
 
 mixin action({ description, url, statut })
   - let classeStyleStatut
@@ -23,6 +24,10 @@ block main
     .tableau-bord
       h1!= homologation.nomService()
       a.bouton(href = `/homologation/${homologation.id}/decision`) Télécharger le document d'homologation
+      .niveau-securite
+        h2 Niveau indicatif de sécurité face aux risques
+        +diagnosticNiveauSecurite
+
 
       each actions, descriptionSection in actionsDeSaisie
         section

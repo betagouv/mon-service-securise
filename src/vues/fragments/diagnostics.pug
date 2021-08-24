@@ -1,0 +1,48 @@
+block append styles
+  link(href='/statique/assets/styles/diagnostics.css', rel='stylesheet')
+
+mixin disque(valeurCalculee, valeurReference, couleur)
+  if valeurCalculee === valeurReference
+    .disque(class = couleur)
+  else
+    .disque
+
+mixin diagnosticNiveauSecurite
+  -
+    const {
+      NIVEAU_SECURITE_INSUFFISANT,
+      NIVEAU_SECURITE_A_RENFORCER,
+      NIVEAU_SECURITE_SATISFAISANT,
+      NIVEAU_SECURITE_BON,
+    } = homologation.constructor
+
+  - const niveauSecurite = homologation.niveauSecurite()
+  .diagnostic-niveau-securite
+    +disque(niveauSecurite, NIVEAU_SECURITE_INSUFFISANT, 'rouge')
+    +disque(niveauSecurite, NIVEAU_SECURITE_A_RENFORCER, 'orange')
+    +disque(niveauSecurite, NIVEAU_SECURITE_SATISFAISANT, 'vert')
+    +disque(niveauSecurite, NIVEAU_SECURITE_BON, 'vert-fonce')
+
+    case niveauSecurite
+      when NIVEAU_SECURITE_INSUFFISANT
+        .niveau.insuffisant Insuffisant
+      when NIVEAU_SECURITE_A_RENFORCER
+        .niveau.a-renforcer À renforcer
+      when NIVEAU_SECURITE_SATISFAISANT
+        .niveau.satisfaisant Satisfaisant
+      when NIVEAU_SECURITE_BON
+        .niveau.bon Bon
+
+mixin avisExpertCyber
+  - const avis = homologation.avisExpertCyber
+
+  .avis-expert-cyber
+    +disque(avis.defavorable(), true, 'rouge')
+    +disque(avis.favorable(), true, 'vert')
+
+    if avis.defavorable()
+      .avis.defavorable Défavorable
+    if avis.favorable()
+      .avis.favorable Favorable
+    if avis.inconnu()
+      .avis.inconnu Avis Inconnu

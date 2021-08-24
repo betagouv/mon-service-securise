@@ -142,7 +142,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.get('/homologation/:id/decision', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/decision', { Homologation, homologation, referentiel });
+    reponse.render('homologation/decision', { homologation, referentiel });
   });
 
   app.get('/homologation/:id/edition', middleware.trouveHomologation, (requete, reponse) => {
