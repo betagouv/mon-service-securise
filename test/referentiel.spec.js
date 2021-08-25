@@ -195,6 +195,39 @@ describe('Le référentiel', () => {
     expect(referentiel.descriptionExpiration('uneEcheance')).to.equal('description expiration');
   });
 
+  it('connaît la liste des seuils de criticité', () => {
+    const referentiel = Referentiel.creeReferentiel({ seuilsCriticites: ['fort', 'faible'] });
+    expect(referentiel.seuilsCriticites()).to.eql(['fort', 'faible']);
+  });
+
+  it("connaît le seuil de criticité d'une fonctionnalité du service", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      fonctionnalites: { idFonctionnalite: { seuilCriticite: 'unSeuil' } },
+    });
+    expect(referentiel.criticiteFonctionnalite('idFonctionnalite')).to.equal('unSeuil');
+  });
+
+  it('connaît le seuil de criticité des données conservées par le service', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      donneesCaracterePersonnel: { idDonnees: { seuilCriticite: 'unSeuil' } },
+    });
+    expect(referentiel.criticiteDonnees('idDonnees')).to.equal('unSeuil');
+  });
+
+  it("connaît le seuil de criticité d'un délai avant impact critique", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      delaisAvantImpactCritique: { idDelai: { seuilCriticite: 'unSeuil' } },
+    });
+    expect(referentiel.criticiteDelai('idDelai')).to.equal('unSeuil');
+  });
+
+  it('sait ordonner les criticités suivant leur ordre de déclaration', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      seuilsCriticites: ['eleve', 'moyen', 'faible'],
+    });
+    expect(referentiel.criticiteMax('faible', 'eleve')).to.equal('eleve');
+  });
+
   it("donne une valeur par défaut pour l'échéance d'homologation", () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.descriptionExpiration()).to.equal('Information non renseignée');

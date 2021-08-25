@@ -68,4 +68,40 @@ describe('Les informations générales', () => {
 
     expect(infos.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
   });
+
+  describe('sur demande du seuil de criticité', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      seuilsCriticites: ['eleve', 'moyen', 'faible'],
+      donneesCaracterePersonnel: {
+        dFaible: { seuilCriticite: 'faible' },
+        dEleve: { seuilCriticite: 'eleve' },
+      },
+      fonctionnalites: {
+        fFaible: { seuilCriticite: 'faible' },
+        fMoyen: { seuilCriticite: 'moyen' },
+      },
+      delaisAvantImpactCritique: { dEleve: { seuilCriticite: 'eleve' } },
+    });
+
+    elles('tiennent compte du seuil de criticité max pour les fonctionnalités', () => {
+      const infos = new InformationsGenerales({ fonctionnalites: ['fFaible', 'fMoyen'] }, referentiel);
+      expect(infos.criticite()).to.equal('moyen');
+    });
+
+    elles('tiennent compte du seuil de criticité max pour les données sauvegardées', () => {
+      const infos = new InformationsGenerales({
+        donneesCaracterePersonnel: ['dFaible', 'dEleve'],
+      }, referentiel);
+      expect(infos.criticite()).to.equal('eleve');
+    });
+
+    elles('tiennent compte du seuil de criticité du délai avant impact', () => {
+      const infos = new InformationsGenerales({
+        fonctionnalites: ['fMoyen'],
+        donneesCaracterePersonnel: ['dFaible'],
+        delaiAvantImpactCritique: 'dEleve',
+      }, referentiel);
+      expect(infos.criticite()).to.equal('eleve');
+    });
+  });
 });

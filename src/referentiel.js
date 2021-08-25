@@ -23,6 +23,7 @@ const creeReferentiel = (donneesReferentiel) => {
   const provenancesService = () => donnees.provenancesService;
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
+  const seuilsCriticites = () => donnees.seuilsCriticites;
 
   const descriptionExpiration = (identifiant) => {
     if (!identifiant) return 'Information non renseignée';
@@ -42,10 +43,49 @@ const creeReferentiel = (donneesReferentiel) => {
       .join(', ');
   };
 
+  const seuilCriticiteMin = () => {
+    const seuils = seuilsCriticites();
+    return seuils[seuils.length - 1];
+  };
+
+  const criticiteElement = (nomElement, idElement) => (
+    idElement ? donnees[nomElement][idElement].seuilCriticite : seuilCriticiteMin()
+  );
+
+  const criticiteDelai = (...params) => criticiteElement('delaisAvantImpactCritique', ...params);
+  const criticiteDonnees = (...params) => criticiteElement('donneesCaracterePersonnel', ...params);
+  const criticiteFonctionnalite = (...params) => criticiteElement('fonctionnalites', ...params);
+
+  const criticiteMax = (...criticites) => {
+    const seuils = seuilsCriticites();
+    const positionMin = Math.min(...(criticites.map((c) => seuils.indexOf(c))));
+    return seuils[positionMin];
+  };
+
+  const criticite = (idsFonctionnalites, idsDonnees, idDelai) => {
+    const seuils = seuilsCriticites();
+    const seuilMin = seuilCriticiteMin();
+
+    const criticiteMaxFonctionnalites = idsFonctionnalites.length
+      ? seuils.find((s) => idsFonctionnalites.find((id) => criticiteFonctionnalite(id) === s))
+      : seuilMin;
+
+    const criticiteMaxDonnees = idsDonnees.length
+      ? seuils.find((s) => idsDonnees.find((d) => criticiteDonnees(d) === s))
+      : seuilMin;
+
+    return criticiteMax(criticiteMaxFonctionnalites, criticiteMaxDonnees, criticiteDelai(idDelai));
+  };
+
   const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
 
   return {
     categoriesMesures,
+    criticite,
+    criticiteDelai,
+    criticiteDonnees,
+    criticiteFonctionnalite,
+    criticiteMax,
     delaisAvantImpactCritique,
     descriptionCategorie,
     descriptionExpiration,
@@ -68,6 +108,8 @@ const creeReferentiel = (donneesReferentiel) => {
     provenancesService,
     recharge,
     risques,
+    seuilCriticiteMin,
+    seuilsCriticites,
   };
 };
 

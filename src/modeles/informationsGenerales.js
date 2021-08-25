@@ -19,6 +19,12 @@ class InformationsGenerales extends InformationsHomologation {
     this.referentiel = referentiel;
   }
 
+  criticite() {
+    return this.referentiel.criticite(
+      this.fonctionnalites, this.donneesCaracterePersonnel, this.delaiAvantImpactCritique
+    );
+  }
+
   descriptionNatureService() {
     return this.referentiel.natureService(this.natureService);
   }
