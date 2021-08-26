@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    networks:
+      - postgres
+    volumes:
+      - /var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+    env_file:
+      - .env
+    command: "npx nodemon server.js"
+    networks:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "${PORT_MSS}:3000"
+    depends_on:
+      - db
+
+networks:
+  postgres:

@@ -7,7 +7,7 @@
     "npm": "7"
   },
   "scripts": {
-    "build": "npm test",
+    "build": "knex migrate:rollback --all && knex migrate:latest && npm test",
     "test": "eslint . && mocha --recursive",
     "start": "node --require dotenv/config server.js"
   },
@@ -31,7 +31,9 @@
     "express-basic-auth": "^1.2.0",
     "express-validator": "^6.12.1",
     "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.10",
     "nodemailer": "^6.6.3",
+    "pg": "^8.7.1",
     "pug": "^3.0.2",
     "uuid": "^8.3.2"
   },
