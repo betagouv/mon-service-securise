@@ -1,7 +1,9 @@
 extends ./formulaire
 include ../fragments/formulaireInformationsGenerales
+include ../fragments/modaleInformationsGenerales
 
 block formulaire
+  +modaleInformationsGenerales
   +formulaireInformationsGenerales
 
   script(type= 'module', src = '/statique/homologation/creation.js')

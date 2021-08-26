@@ -1,0 +1,14 @@
+.diagnostic-documents-complementaires ul {
+  padding: 0;
+}
+
+.diagnostic-documents-complementaires li {
+  margin-bottom: 0.5em;
+  padding-left: 2em;
+
+  list-style-type: none;
+
+  background-image: url(../images/icone_coche_verte.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}

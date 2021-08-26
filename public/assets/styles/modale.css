@@ -62,3 +62,9 @@
   border-radius: 3px;
   background: #1b7cc408;
 }
+
+.rideau .modale a {
+  cursor: pointer;
+
+  display: block;
+}

@@ -283,6 +283,34 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  describe('quand requête GET sur `/api/documentsComplementaires`', () => {
+    beforeEach(() => (referentiel.documentsComplementaires = () => ['un document']));
+
+    it('vérifie que les CGU sont acceptées', (done) => {
+      verifieRequeteExigeAcceptationCGU(
+        'http://localhost:1234/api/documentsComplementaires', done
+      );
+    });
+
+    it('détermine les documents complémentaires à fournir', (done) => {
+      referentiel.documentsComplementaires = (idsFonctionnalites, idsDonnees, idDelai) => {
+        expect(idsFonctionnalites).to.eql(['f1', 'f2']);
+        expect(idsDonnees).to.eql(['d1', 'd2']);
+        expect(idDelai).to.equal('unDelai');
+        return ['un document'];
+      };
+
+      axios('http://localhost:1234/api/documentsComplementaires', { params: {
+        nomService: 'Super Service',
+        fonctionnalites: ['f1', 'f2'],
+        donneesCaracterePersonnel: ['d1', 'd2'],
+        delaiAvantImpactCritique: 'unDelai',
+      } })
+        .then(() => done())
+        .catch(done);
+    });
+  });
+
   describe('quand requête POST sur `/api/homologation`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeAcceptationCGU(
