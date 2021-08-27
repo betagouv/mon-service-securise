@@ -7,7 +7,7 @@
     "npm": "7"
   },
   "scripts": {
-    "build": "knex migrate:rollback --all && knex migrate:latest && npm test",
+    "build": "knex --env test migrate:latest && knex migrate:latest && npm test",
     "test": "eslint . && mocha --recursive",
     "start": "node --require dotenv/config server.js"
   },
@@ -42,6 +42,7 @@
     "eslint-config-airbnb": "^18.2.1",
     "expect.js": "^0.3.1",
     "mocha": "^8.4.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "sqlite3": "^5.0.2"
   }
 }

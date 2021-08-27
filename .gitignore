@@ -1,4 +1,5 @@
 .env
 domain.key
 domain.crt
+mydb.sqlite
 node_modules/

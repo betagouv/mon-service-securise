@@ -1,4 +1,10 @@
 module.exports = {
+  test: {
+    client: 'sqlite3',
+    connection: { filename: './mydb.sqlite' },
+    useNullAsDefault: true,
+  },
+
   development: {
     client: 'pg',
     connection: process.env.URL_SERVEUR_BASE_DONNEES,

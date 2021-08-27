@@ -13,7 +13,7 @@ const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
 const Risque = require('../src/modeles/risque');
 const Utilisateur = require('../src/modeles/utilisateur');
 
-describe('Le dépôt de données', () => {
+describe('Le dépôt de données persistées en mémoire', () => {
   describe('quand il est vide', () => {
     it('ne retourne aucune homologation pour un utilisateur donné', () => {
       const depot = DepotDonnees.creeDepotVide();
