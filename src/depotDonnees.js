@@ -1,159 +1,164 @@
 const bcrypt = require('bcrypt');
 
 const { ErreurNomServiceManquant, ErreurUtilisateurExistant } = require('./erreurs');
+const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
-const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {}) => {
-  const homologation = (idHomologation) => {
-    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
-    return donneesHomologation ? new Homologation(donneesHomologation, referentiel) : undefined;
-  };
+const creeDepot = (config = {}) => {
+  const {
+    adaptateurJWT,
+    adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(),
+    adaptateurUUID,
+    referentiel,
+  } = config;
 
-  const ajouteAItemsDansHomologation = (nomListeItems, idHomologation, item) => {
-    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
-    donneesHomologation[nomListeItems] ||= [];
+  const homologation = (idHomologation) => adaptateurPersistance.homologation(idHomologation)
+    .then((h) => (h ? new Homologation(h, referentiel) : undefined));
 
-    const donneesItem = item.toJSON();
-    const itemDejaDansDepot = donneesHomologation[nomListeItems].find((m) => m.id === item.id);
-    if (itemDejaDansDepot) {
-      Object.keys(donneesItem)
-        .filter((k) => k !== 'id')
-        .forEach((k) => (itemDejaDansDepot[k] = donneesItem[k]));
-    } else {
-      donneesHomologation[nomListeItems].push(donneesItem);
-    }
-  };
+  const ajouteAItemsDansHomologation = (nomListeItems, idHomologation, item) => (
+    adaptateurPersistance.homologation(idHomologation)
+      .then((h) => {
+        h[nomListeItems] ||= [];
 
-  const metsAJourProprieteHomologation = (nomPropriete, idHomologation, propriete) => {
-    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
-    donneesHomologation[nomPropriete] ||= {};
+        const donneesItem = item.toJSON();
+        const itemDejaDansDepot = h[nomListeItems].find((i) => i.id === donneesItem.id);
+        if (itemDejaDansDepot) {
+          Object.assign(itemDejaDansDepot, donneesItem);
+        } else {
+          h[nomListeItems].push(donneesItem);
+        }
 
-    const donneesPropriete = propriete.toJSON();
-    Object.keys(donneesPropriete).forEach((k) => (
-      donneesHomologation[nomPropriete][k] = donneesPropriete[k]
-    ));
-  };
+        const { id, ...donnees } = h;
+        return adaptateurPersistance.metsAJourHomologation(id, donnees);
+      })
+  );
 
-  const ajouteMesureAHomologation = (...params) => {
-    ajouteAItemsDansHomologation('mesures', ...params);
-  };
+  const metsAJourProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
+    adaptateurPersistance.homologation(idHomologation)
+      .then((h) => {
+        h[nomPropriete] ||= {};
 
-  const ajouteRisqueAHomologation = (...params) => {
-    ajouteAItemsDansHomologation('risques', ...params);
-  };
+        const donneesPropriete = propriete.toJSON();
+        Object.assign(h[nomPropriete], donneesPropriete);
 
-  const valideInformationsGenerales = (infos) => {
+        const { id, ...donnees } = h;
+        return adaptateurPersistance.metsAJourHomologation(id, donnees);
+      })
+  );
+
+  const ajouteMesureAHomologation = (...params) => (
+    ajouteAItemsDansHomologation('mesures', ...params)
+  );
+
+  const ajouteRisqueAHomologation = (...params) => (
+    ajouteAItemsDansHomologation('risques', ...params)
+  );
+
+  const valideInformationsGenerales = (infos) => new Promise((resolve, reject) => {
     const { nomService } = infos;
     if (typeof nomService !== 'string' || !nomService) {
-      throw new ErreurNomServiceManquant('Le nom du service ne peut pas être vide');
+      reject(new ErreurNomServiceManquant('Le nom du service ne peut pas être vide'));
     }
-  };
 
-  const ajouteInformationsGeneralesAHomologation = (idHomologation, infos) => {
-    valideInformationsGenerales(infos);
-    metsAJourProprieteHomologation('informationsGenerales', idHomologation, infos);
-  };
+    resolve();
+  });
 
-  const ajouteCaracteristiquesAHomologation = (...params) => {
-    metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params);
-  };
+  const ajouteInformationsGeneralesAHomologation = (idHomologation, infos) => (
+    valideInformationsGenerales(infos)
+      .then(() => metsAJourProprieteHomologation('informationsGenerales', idHomologation, infos))
+  );
 
-  const ajoutePartiesPrenantesAHomologation = (...params) => {
-    metsAJourProprieteHomologation('partiesPrenantes', ...params);
-  };
+  const ajouteCaracteristiquesAHomologation = (...params) => (
+    metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
+  );
 
-  const ajouteAvisExpertCyberAHomologation = (...params) => {
-    metsAJourProprieteHomologation('avisExpertCyber', ...params);
-  };
+  const ajoutePartiesPrenantesAHomologation = (...params) => (
+    metsAJourProprieteHomologation('partiesPrenantes', ...params)
+  );
 
-  const marqueRisquesCommeVerifies = (idHomologation) => {
-    const donneesHomologation = donnees.homologations.find((h) => h.id === idHomologation);
-    donneesHomologation.risquesVerifies = true;
-  };
+  const ajouteAvisExpertCyberAHomologation = (...params) => (
+    metsAJourProprieteHomologation('avisExpertCyber', ...params)
+  );
 
-  const homologations = (idUtilisateur) => donnees.homologations
-    .filter((h) => h.idUtilisateur === idUtilisateur)
-    .map((h) => new Homologation(h, referentiel));
+  const marqueRisquesCommeVerifies = (idHomologation) => (
+    adaptateurPersistance.metsAJourHomologation(idHomologation, { risquesVerifies: true })
+  );
 
-  const nouvelleHomologation = (idUtilisateur, donneesInformationsGenerales) => {
-    valideInformationsGenerales(donneesInformationsGenerales);
+  const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
+    .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
 
-    const donneesHomologation = {
-      id: adaptateurUUID.genereUUID(),
-      idUtilisateur,
-      informationsGenerales: donneesInformationsGenerales,
-    };
-    donnees.homologations.push(donneesHomologation);
-    return donneesHomologation.id;
-  };
+  const nouvelleHomologation = (idUtilisateur, donneesInformationsGenerales) => (
+    valideInformationsGenerales(donneesInformationsGenerales)
+      .then(() => {
+        const id = adaptateurUUID.genereUUID();
+        const donnees = { idUtilisateur, informationsGenerales: donneesInformationsGenerales };
 
-  const metsAJourMotDePasse = (idUtilisateur, motDePasse) => {
-    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === idUtilisateur);
-    return bcrypt.hash(motDePasse, 10)
-      .then((hash) => {
-        donneesUtilisateur.motDePasse = hash;
-        return new Utilisateur(donneesUtilisateur, adaptateurJWT);
+        return adaptateurPersistance.ajouteHomologation(id, donnees)
+          .then(() => id);
+      })
+  );
+
+  const utilisateur = (identifiant) => adaptateurPersistance.utilisateur(identifiant)
+    .then((u) => (u ? new Utilisateur(u, adaptateurJWT) : undefined));
+
+  const nouvelUtilisateur = (donneesUtilisateur) => new Promise((resolve, reject) => {
+    adaptateurPersistance.utilisateurAvecEmail(donneesUtilisateur.email)
+      .then((u) => {
+        if (u) reject(new ErreurUtilisateurExistant());
+
+        const id = adaptateurUUID.genereUUID();
+        donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
+        bcrypt.hash(adaptateurUUID.genereUUID(), 10)
+          .then((hash) => {
+            donneesUtilisateur.motDePasse = hash;
+
+            adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur)
+              .then(() => resolve(utilisateur(id)));
+          });
       });
-  };
+  });
 
-  const nouvelUtilisateur = (donneesUtilisateur) => {
-    const utilisateurExiste = (email) => !!(donnees.utilisateurs.find((u) => u.email === email));
+  const utilisateurAFinaliser = (idReset) => adaptateurPersistance.utilisateurAvecIdReset(idReset)
+    .then((u) => (u ? new Utilisateur(u, adaptateurJWT) : undefined));
 
-    if (utilisateurExiste(donneesUtilisateur.email)) throw new ErreurUtilisateurExistant();
+  const utilisateurAuthentifie = (login, motDePasse) => (
+    adaptateurPersistance.utilisateurAvecEmail(login)
+      .then((u) => {
+        const motDePasseStocke = u && u.motDePasse;
+        const echecAuthentification = undefined;
 
-    donneesUtilisateur.id = adaptateurUUID.genereUUID();
-    donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
-    return bcrypt.hash(adaptateurUUID.genereUUID(), 10)
-      .then((hash) => {
-        donneesUtilisateur.motDePasse = hash;
-        donnees.utilisateurs.push(donneesUtilisateur);
-        return new Utilisateur(donneesUtilisateur, adaptateurJWT);
-      });
-  };
+        if (!motDePasseStocke) return new Promise((resolve) => resolve(echecAuthentification));
 
-  const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) => {
-    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === utilisateurAModifier.id);
-    if (!donneesUtilisateur) return undefined;
+        return bcrypt.compare(motDePasse, motDePasseStocke)
+          .then((authentificationReussie) => (authentificationReussie
+            ? new Utilisateur(u, adaptateurJWT)
+            : echecAuthentification
+          ));
+      })
+  );
 
-    donneesUtilisateur.idResetMotDePasse = undefined;
-    return new Utilisateur(donneesUtilisateur, adaptateurJWT);
-  };
+  const utilisateurExiste = (id) => utilisateur(id).then((u) => !!u);
 
-  const utilisateur = (identifiant) => {
-    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === identifiant);
-    return donneesUtilisateur ? new Utilisateur(donneesUtilisateur, adaptateurJWT) : undefined;
-  };
-
-  const utilisateurAFinaliser = (idReset) => {
-    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset);
-    return donneesUtilisateur ? new Utilisateur(donneesUtilisateur, adaptateurJWT) : undefined;
-  };
-
-  const utilisateurAuthentifie = (login, motDePasse) => {
-    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.email === login);
-    const motDePasseStocke = donneesUtilisateur && donneesUtilisateur.motDePasse;
-    const echecAuthentification = undefined;
-
-    if (!motDePasseStocke) return new Promise((resolve) => resolve(echecAuthentification));
-
-    return bcrypt.compare(motDePasse, motDePasseStocke)
-      .then((authentificationReussie) => (authentificationReussie
-        ? new Utilisateur(donneesUtilisateur, adaptateurJWT)
-        : echecAuthentification
+  const metsAJourMotDePasse = (idUtilisateur, motDePasse) => (
+    bcrypt.hash(motDePasse, 10)
+      .then((hash) => adaptateurPersistance.metsAJourUtilisateur(
+        idUtilisateur, { motDePasse: hash }
       ))
-      .catch((error) => error);
-  };
+      .then(() => utilisateur(idUtilisateur))
+  );
 
-  const utilisateurExiste = (id) => !!utilisateur(id);
+  const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) => (
+    adaptateurPersistance.metsAJourUtilisateur(
+      utilisateurAModifier.id, { idResetMotDePasse: undefined }
+    )
+      .then(() => utilisateur(utilisateurAModifier.id))
+  );
 
-  const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => {
-    const donneesUtilisateur = donnees.utilisateurs.find((u) => u.id === utilisateurAModifier.id);
-    if (!donneesUtilisateur) return undefined;
-
-    donneesUtilisateur.cguAcceptees = true;
-    return new Utilisateur(donneesUtilisateur, adaptateurJWT);
-  };
+  const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => (
+    adaptateurPersistance.metsAJourUtilisateur(utilisateurAModifier.id, { cguAcceptees: true })
+      .then(() => utilisateur(utilisateurAModifier.id))
+  );
 
   return {
     ajouteAvisExpertCyberAHomologation,
@@ -177,6 +182,11 @@ const creeDepot = (donnees, { adaptateurJWT, adaptateurUUID, referentiel } = {})
   };
 };
 
-const creeDepotVide = () => creeDepot({ utilisateurs: [], homologations: [] });
+const creeDepotVide = () => {
+  const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
+  return adaptateurPersistance.supprimeUtilisateurs()
+    .then(() => adaptateurPersistance.supprimeHomologations())
+    .then(() => creeDepot({ adaptateurPersistance }));
+};
 
 module.exports = { creeDepot, creeDepotVide };

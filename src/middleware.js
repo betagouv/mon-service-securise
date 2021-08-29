@@ -19,12 +19,17 @@ const middleware = (configuration = {}) => {
 
   const verificationJWT = (requete, reponse, suite) => {
     const token = adaptateurJWT.decode(requete.session.token);
-    if (!token || !depotDonnees.utilisateurExiste(token.idUtilisateur)) {
-      reponse.redirect('/connexion');
-    } else {
-      requete.idUtilisateurCourant = token.idUtilisateur;
-      requete.cguAcceptees = token.cguAcceptees;
-      suite();
+    if (!token) reponse.redirect('/connexion');
+    else {
+      depotDonnees.utilisateurExiste(token.idUtilisateur)
+        .then((utilisateurExiste) => {
+          if (!utilisateurExiste) reponse.redirect('/connexion');
+          else {
+            requete.idUtilisateurCourant = token.idUtilisateur;
+            requete.cguAcceptees = token.cguAcceptees;
+            suite();
+          }
+        });
     }
   };
 
@@ -36,16 +41,16 @@ const middleware = (configuration = {}) => {
   };
 
   const trouveHomologation = (requete, reponse, suite) => {
-    verificationAcceptationCGU(requete, reponse, () => {
-      const homologation = depotDonnees.homologation(requete.params.id);
-      if (!homologation) reponse.status(404).send('Homologation non trouvée');
-      else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
-        reponse.status(403).send("Accès à l'homologation refusé");
-      } else {
-        requete.homologation = homologation;
-        suite();
-      }
-    });
+    verificationAcceptationCGU(requete, reponse, () => depotDonnees.homologation(requete.params.id)
+      .then((homologation) => {
+        if (!homologation) reponse.status(404).send('Homologation non trouvée');
+        else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
+          reponse.status(403).send("Accès à l'homologation refusé");
+        } else {
+          requete.homologation = homologation;
+          suite();
+        }
+      }));
   };
 
   const aseptise = (...nomsParametres) => ((requete, reponse, suite) => {

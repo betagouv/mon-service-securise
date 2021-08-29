@@ -141,11 +141,14 @@ describe('Le serveur MSS', () => {
     rechercheHomologationEffectuee = false;
     parametresAseptises = [];
 
-    depotDonnees = DepotDonnees.creeDepotVide();
     referentiel = Referentiel.creeReferentielVide();
     adaptateurMail = { envoieMessageResetMotDePasse: () => {} };
-    serveur = MSS.creeServeur(depotDonnees, middleware, referentiel, adaptateurMail, false);
-    serveur.ecoute(1234, done);
+    DepotDonnees.creeDepotVide()
+      .then((depot) => {
+        depotDonnees = depot;
+        serveur = MSS.creeServeur(depotDonnees, middleware, referentiel, adaptateurMail, false);
+        serveur.ecoute(1234, done);
+      });
   });
 
   afterEach(() => { serveur.arreteEcoute(); });
@@ -170,15 +173,15 @@ describe('Le serveur MSS', () => {
       const utilisateur = { id: '123', genereToken: () => 'un token', accepteCGU: () => false };
 
       beforeEach(() => {
-        depotDonnees.utilisateurAFinaliser = () => utilisateur;
-        depotDonnees.utilisateur = () => utilisateur;
+        depotDonnees.utilisateurAFinaliser = () => Promise.resolve(utilisateur);
+        depotDonnees.utilisateur = () => Promise.resolve(utilisateur);
       });
 
       it('dépose le jeton dans un cookie', (done) => {
-        depotDonnees.utilisateurAFinaliser = (idReset) => {
+        depotDonnees.utilisateurAFinaliser = (idReset) => new Promise((resolve) => {
           expect(idReset).to.equal('999');
-          return utilisateur;
-        };
+          resolve(utilisateur);
+        });
 
         axios.get('http://localhost:1234/finalisationInscription/999')
           .then((reponse) => verifieJetonDepose(reponse, done))
@@ -187,7 +190,7 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 404 si idReset inconnu', (done) => {
-      expect(depotDonnees.utilisateurAFinaliser('999', 'motDePasse')).to.be(undefined);
+      depotDonnees.utilisateurAFinaliser = () => Promise.resolve(undefined);
 
       verifieRequeteGenereErreurHTTP(
         404, "Identifiant de finalisation d'inscription \"999\" inconnu",
@@ -213,7 +216,7 @@ describe('Le serveur MSS', () => {
       const homologation = { toJSON: () => ({ id: '456' }) };
       depotDonnees.homologations = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');
-        return [homologation];
+        return Promise.resolve([homologation]);
       };
 
       axios.get('http://localhost:1234/api/homologations')
@@ -352,7 +355,7 @@ describe('Le serveur MSS', () => {
           delaiAvantImpactCritique: undefined,
           presenceResponsable: undefined,
         });
-        return '456';
+        return Promise.resolve('456');
       };
 
       axios.post('http://localhost:1234/api/homologation', { nomService: 'Super Service' })
@@ -366,9 +369,9 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
-    beforeEach(() => {
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => {};
-    });
+    beforeEach(() => (
+      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve()
+    ));
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation(
@@ -387,11 +390,13 @@ describe('Le serveur MSS', () => {
     it("demande au dépôt de données de mettre à jour l'homologation", (done) => {
       idUtilisateurCourant = '123';
 
-      depotDonnees.ajouteInformationsGeneralesAHomologation = (identifiant, infosGenerales) => {
-        expect(identifiant).to.equal('456');
-        expect(infosGenerales.nomService).to.equal('Nouveau Nom');
-        return '456';
-      };
+      depotDonnees.ajouteInformationsGeneralesAHomologation = (
+        (identifiant, infosGenerales) => new Promise((resolve) => {
+          expect(identifiant).to.equal('456');
+          expect(infosGenerales.nomService).to.equal('Nouveau Nom');
+          resolve();
+        })
+      );
 
       axios.put('http://localhost:1234/api/homologation/456', { nomService: 'Nouveau Nom' })
         .then((reponse) => {
@@ -404,7 +409,9 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
-    beforeEach(() => (depotDonnees.ajouteCaracteristiquesAHomologation = () => {}));
+    beforeEach(() => (
+      depotDonnees.ajouteCaracteristiquesAHomologation = () => new Promise((resolve) => resolve())
+    ));
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -416,11 +423,14 @@ describe('Le serveur MSS', () => {
     it("demande au dépôt d'associer les caractéristiques à l'homologation", (done) => {
       let caracteristiquesAjoutees = false;
 
-      depotDonnees.ajouteCaracteristiquesAHomologation = (idHomologation, caracteristiques) => {
-        expect(idHomologation).to.equal('456');
-        expect(caracteristiques.presentation).to.equal('Une présentation');
-        caracteristiquesAjoutees = true;
-      };
+      depotDonnees.ajouteCaracteristiquesAHomologation = (
+        (idHomologation, caracteristiques) => new Promise((resolve) => {
+          expect(idHomologation).to.equal('456');
+          expect(caracteristiques.presentation).to.equal('Une présentation');
+          caracteristiquesAjoutees = true;
+          resolve();
+        })
+      );
 
       axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
         presentation: 'Une présentation',
@@ -454,13 +464,16 @@ describe('Le serveur MSS', () => {
       referentiel.recharge({ mesures: { identifiantMesure: {} } });
       let mesureAjoutee = false;
 
-      depotDonnees.ajouteMesureAHomologation = (idHomologation, mesure) => {
-        expect(idHomologation).to.equal('456');
-        expect(mesure.id).to.equal('identifiantMesure');
-        expect(mesure.statut).to.equal('fait');
-        expect(mesure.modalites).to.equal("Des modalités d'application");
-        mesureAjoutee = true;
-      };
+      depotDonnees.ajouteMesureAHomologation = (idHomologation, mesure) => new Promise(
+        (resolve) => {
+          expect(idHomologation).to.equal('456');
+          expect(mesure.id).to.equal('identifiantMesure');
+          expect(mesure.statut).to.equal('fait');
+          expect(mesure.modalites).to.equal("Des modalités d'application");
+          mesureAjoutee = true;
+          resolve();
+        }
+      );
 
       axios.post('http://localhost:1234/api/homologation/456/mesures', {
         identifiantMesure: 'fait',
@@ -477,7 +490,9 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/partiesPrenantes`', () => {
-    beforeEach(() => (depotDonnees.ajoutePartiesPrenantesAHomologation = () => {}));
+    beforeEach(() => (
+      depotDonnees.ajoutePartiesPrenantesAHomologation = () => new Promise((resolve) => resolve())
+    ));
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -489,11 +504,14 @@ describe('Le serveur MSS', () => {
     it("demande au dépôt d'associer les parties prenantes à l'homologation", (done) => {
       let partiesPrenantesAjoutees = false;
 
-      depotDonnees.ajoutePartiesPrenantesAHomologation = (idHomologation, pp) => {
-        expect(idHomologation).to.equal('456');
-        expect(pp.autoriteHomologation).to.equal('Jean Dupont');
-        partiesPrenantesAjoutees = true;
-      };
+      depotDonnees.ajoutePartiesPrenantesAHomologation = (idHomologation, pp) => new Promise(
+        (resolve) => {
+          expect(idHomologation).to.equal('456');
+          expect(pp.autoriteHomologation).to.equal('Jean Dupont');
+          partiesPrenantesAjoutees = true;
+          resolve();
+        }
+      );
 
       axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {
         autoriteHomologation: 'Jean Dupont',
@@ -509,7 +527,9 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/risques`', () => {
-    beforeEach(() => (depotDonnees.marqueRisquesCommeVerifies = () => {}));
+    beforeEach(() => (
+      depotDonnees.marqueRisquesCommeVerifies = () => new Promise((resolve) => resolve())
+    ));
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -529,12 +549,15 @@ describe('Le serveur MSS', () => {
       referentiel.recharge({ risques: { unRisque: {} } });
       let risqueAjoute = false;
 
-      depotDonnees.ajouteRisqueAHomologation = (idHomologation, risque) => {
-        expect(idHomologation).to.equal('456');
-        expect(risque.id).to.equal('unRisque');
-        expect(risque.commentaire).to.equal('Un commentaire');
-        risqueAjoute = true;
-      };
+      depotDonnees.ajouteRisqueAHomologation = (idHomologation, risque) => new Promise(
+        (resolve) => {
+          expect(idHomologation).to.equal('456');
+          expect(risque.id).to.equal('unRisque');
+          expect(risque.commentaire).to.equal('Un commentaire');
+          risqueAjoute = true;
+          resolve();
+        }
+      );
 
       axios.post('http://localhost:1234/api/homologation/456/risques', {
         'commentaire-unRisque': 'Un commentaire',
@@ -550,22 +573,23 @@ describe('Le serveur MSS', () => {
 
     it("demande au dépôt d'enregistrer que la liste des risques a été vérifiée", (done) => {
       let listeRisquesMarqueeCommeVerifiee = false;
-      depotDonnees.marqueRisquesCommeVerifies = (idHomologation) => {
+      depotDonnees.marqueRisquesCommeVerifies = (idHomologation) => new Promise((resolve) => {
         expect(idHomologation).to.equal('456');
         listeRisquesMarqueeCommeVerifiee = true;
-      };
+        resolve();
+      });
 
       axios.post('http://localhost:1234/api/homologation/456/risques')
-        .then(() => {
-          expect(listeRisquesMarqueeCommeVerifiee).to.be(true);
-          done();
-        })
+        .then(() => expect(listeRisquesMarqueeCommeVerifiee).to.be(true))
+        .then(() => done())
         .catch(done);
     });
   });
 
   describe('quand requête POST sur `/api/homologation/:id/avisExpertCyber`', () => {
-    beforeEach(() => (depotDonnees.ajouteAvisExpertCyberAHomologation = () => {}));
+    beforeEach(() => (
+      depotDonnees.ajouteAvisExpertCyberAHomologation = () => Promise.resolve()
+    ));
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -577,11 +601,14 @@ describe('Le serveur MSS', () => {
     it("demande au dépôt d'associer l'avis d'expert à l'homologation", (done) => {
       let avisAjoute = false;
 
-      depotDonnees.ajouteAvisExpertCyberAHomologation = (idHomologation, avis) => {
-        expect(idHomologation).to.equal('456');
-        expect(avis.commentaire).to.equal('Un commentaire');
-        avisAjoute = true;
-      };
+      depotDonnees.ajouteAvisExpertCyberAHomologation = (idHomologation, avis) => new Promise(
+        (resolve) => {
+          expect(idHomologation).to.equal('456');
+          expect(avis.commentaire).to.equal('Un commentaire');
+          avisAjoute = true;
+          resolve();
+        }
+      );
 
       axios.post('http://localhost:1234/api/homologation/456/avisExpertCyber', {
         commentaire: 'Un commentaire',
@@ -598,7 +625,8 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/utilisateur/edition`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      depotDonnees.utilisateur = () => ({ accepteCGU: () => true });
+      const utilisateur = { accepteCGU: () => true };
+      depotDonnees.utilisateur = () => new Promise((resolve) => resolve(utilisateur));
       verifieRequeteExigeJWT('http://localhost:1234/utilisateur/edition', done);
     });
   });
@@ -623,7 +651,7 @@ describe('Le serveur MSS', () => {
 
       depotDonnees.nouvelUtilisateur = (donneesUtilisateur) => {
         expect(donneesUtilisateur).to.eql(donneesRequete);
-        return new Promise((resolve) => resolve(utilisateur));
+        return Promise.resolve(utilisateur);
       };
 
       axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
@@ -650,7 +678,7 @@ describe('Le serveur MSS', () => {
     });
 
     it("génère une erreur HTTP 422 si l'utilisateur existe déjà", (done) => {
-      depotDonnees.nouvelUtilisateur = () => { throw new ErreurUtilisateurExistant(); };
+      depotDonnees.nouvelUtilisateur = () => Promise.reject(new ErreurUtilisateurExistant());
 
       verifieRequeteGenereErreurHTTP(
         422, 'Utilisateur déjà existant pour cette adresse email',
@@ -664,10 +692,10 @@ describe('Le serveur MSS', () => {
 
     beforeEach(() => {
       utilisateur = { id: '123', genereToken: () => 'un token', accepteCGU: () => true };
-      depotDonnees.metsAJourMotDePasse = () => new Promise((resolve) => resolve(utilisateur));
-      depotDonnees.utilisateur = () => utilisateur;
-      depotDonnees.valideAcceptationCGUPourUtilisateur = () => utilisateur;
-      depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () => utilisateur;
+      depotDonnees.metsAJourMotDePasse = () => Promise.resolve(utilisateur);
+      depotDonnees.utilisateur = () => Promise.resolve(utilisateur);
+      depotDonnees.valideAcceptationCGUPourUtilisateur = () => Promise.resolve(utilisateur);
+      depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () => Promise.resolve(utilisateur);
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -707,11 +735,11 @@ describe('Le serveur MSS', () => {
         let idResetSupprime = false;
 
         expect(utilisateur.id).to.equal('123');
-        depotDonnees.supprimeIdResetMotDePassePourUtilisateur = (u) => {
+        depotDonnees.supprimeIdResetMotDePassePourUtilisateur = (u) => new Promise((resolve) => {
           expect(u.id).to.equal('123');
           idResetSupprime = true;
-          return u;
-        };
+          resolve(u);
+        });
 
         axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
           .then(() => {
@@ -722,13 +750,11 @@ describe('Le serveur MSS', () => {
       });
 
       it('retourne une erreur HTTP 422 si le mot de passe est vide', (done) => {
-        verifieRequeteGenereErreurHTTP(
-          422, 'Le mot de passe ne doit pas être une chaîne vide', {
-            method: 'put',
-            url: 'http://localhost:1234/api/utilisateur',
-            data: { motDePasse: '' },
-          }, done
-        );
+        verifieRequeteGenereErreurHTTP(422, 'Le mot de passe ne doit pas être une chaîne vide', {
+          method: 'put',
+          url: 'http://localhost:1234/api/utilisateur',
+          data: { motDePasse: '' },
+        }, done);
       });
     });
 
@@ -744,20 +770,18 @@ describe('Le serveur MSS', () => {
 
         expect(motDePasseMisAJour).to.be(false);
         axios.put('http://localhost:1234/api/utilisateur', { cguAcceptees: true, motDePasse: 'mdp_12345' })
-          .then(() => {
-            expect(motDePasseMisAJour).to.be(true);
-            done();
-          })
+          .then(() => expect(motDePasseMisAJour).to.be(true))
+          .then(() => done())
           .catch(done);
       });
 
       it("indique que l'utilisateur a coché la case CGU dans le formulaire", (done) => {
         idUtilisateurCourant = utilisateur.id;
 
-        depotDonnees.valideAcceptationCGUPourUtilisateur = (u) => {
+        depotDonnees.valideAcceptationCGUPourUtilisateur = (u) => new Promise((resolve) => {
           expect(u.id).to.equal('123');
-          return u;
-        };
+          resolve(u);
+        });
 
         axios.put('http://localhost:1234/api/utilisateur', { cguAcceptees: true, motDePasse: 'mdp_12345' })
           .then(() => done())
@@ -765,13 +789,11 @@ describe('Le serveur MSS', () => {
       });
 
       it("retourne une erreur HTTP 422 si la case CGU du formulaire n'est pas cochée", (done) => {
-        verifieRequeteGenereErreurHTTP(
-          422, 'CGU non acceptées', {
-            method: 'put',
-            url: 'http://localhost:1234/api/utilisateur',
-            data: { cguAcceptees: false, motDePasse: 'mdp_12345' },
-          }, done
-        );
+        verifieRequeteGenereErreurHTTP(422, 'CGU non acceptées', {
+          method: 'put',
+          url: 'http://localhost:1234/api/utilisateur',
+          data: { cguAcceptees: false, motDePasse: 'mdp_12345' },
+        }, done);
       });
     });
   });

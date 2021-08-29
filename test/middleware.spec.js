@@ -41,8 +41,8 @@ describe('Le middleware MSS', () => {
     reponse.status = () => reponse;
     reponse.send = () => {};
 
-    depotDonnees.homologation = () => undefined;
-    depotDonnees.utilisateurExiste = () => true;
+    depotDonnees.homologation = () => Promise.resolve();
+    depotDonnees.utilisateurExiste = () => Promise.resolve(true);
   });
 
   it("redirige l'utilisateur vers la mire de login quand échec vérification JWT", (done) => {
@@ -60,7 +60,7 @@ describe('Le middleware MSS', () => {
 
     depotDonnees.utilisateurExiste = (id) => {
       expect(id).to.equal('123');
-      return false;
+      return Promise.resolve(false);
     };
 
     prepareVerificationRedirection(reponse, '/connexion', done);
@@ -123,6 +123,7 @@ describe('Le middleware MSS', () => {
 
   describe('sur recherche homologation existante', () => {
     const adaptateurJWT = { decode: () => ({ idUtilisateur: '999', cguAcceptees: true }) };
+    beforeEach(() => (depotDonnees.homologation = () => Promise.resolve()));
 
     it('requête le dépôt de données', (done) => {
       depotDonnees.homologation = (id) => {
@@ -146,7 +147,7 @@ describe('Le middleware MSS', () => {
 
     it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès à l'homologation", (done) => {
       const homologation = { idUtilisateur: 'unAutreIdentifiantQueCeluiUtilisateurCourant' };
-      depotDonnees.homologation = () => homologation;
+      depotDonnees.homologation = () => Promise.resolve(homologation);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       prepareVerificationReponse(reponse, 403, "Accès à l'homologation refusé", done);
@@ -157,7 +158,7 @@ describe('Le middleware MSS', () => {
 
     it("retourne l'homologation trouvée et appelle le middleware suivant", (done) => {
       const homologation = { idUtilisateur: '999' };
-      depotDonnees.homologation = () => homologation;
+      depotDonnees.homologation = () => Promise.resolve(homologation);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       middleware.trouveHomologation(requete, reponse, () => {
