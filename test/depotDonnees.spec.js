@@ -557,4 +557,33 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .catch(done);
     });
   });
+
+  describe('Sur demande réinitialisation du mot de passe', () => {
+    it("ajoute un identifiant de reset de mot de passe à l'utilisateur", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+      });
+      const adaptateurUUID = { genereUUID: () => '11111111-1111-1111-1111-111111111111' };
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance, adaptateurUUID });
+
+      depot.utilisateur('123')
+        .then((u) => expect(u.idResetMotDePasse).to.be(undefined))
+        .then(() => depot.reinitialiseMotDePasse('jean.dupont@mail.fr'))
+        .then((u) => expect(u.idResetMotDePasse).to.equal('11111111-1111-1111-1111-111111111111'))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("échoue silencieusement si l'utilisateur est inconnu", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.reinitialiseMotDePasse('jean.dupont@mail.fr')
+        .then((u) => expect(u).to.be(undefined))
+        .then(() => done())
+        .catch(done);
+    });
+  });
 });

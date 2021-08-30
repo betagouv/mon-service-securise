@@ -142,7 +142,10 @@ describe('Le serveur MSS', () => {
     parametresAseptises = [];
 
     referentiel = Referentiel.creeReferentielVide();
-    adaptateurMail = { envoieMessageResetMotDePasse: () => {} };
+    adaptateurMail = {
+      envoieMessageFinalisationInscription: () => Promise.resolve(),
+      envoieMessageReinitialisationMotDePasse: () => Promise.resolve(),
+    };
     DepotDonnees.creeDepotVide()
       .then((depot) => {
         depotDonnees = depot;
@@ -168,7 +171,15 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/finalisationInscription/:idReset`', () => {
+  describe('quand requête GET sur `/reinitialisationMotDePasse`', () => {
+    it("déconnecte l'utilisateur courant", (done) => {
+      verifieRequeteExigeSuppressionCookie(
+        'http://localhost:1234/reinitialisationMotDePasse', done
+      );
+    });
+  });
+
+  describe('quand requête GET sur `/initialisationMotDePasse/:idReset`', () => {
     describe('avec idReset valide', () => {
       const utilisateur = { id: '123', genereToken: () => 'un token', accepteCGU: () => false };
 
@@ -183,7 +194,7 @@ describe('Le serveur MSS', () => {
           resolve(utilisateur);
         });
 
-        axios.get('http://localhost:1234/finalisationInscription/999')
+        axios.get('http://localhost:1234/initialisationMotDePasse/999')
           .then((reponse) => verifieJetonDepose(reponse, done))
           .catch(done);
       });
@@ -193,8 +204,8 @@ describe('Le serveur MSS', () => {
       depotDonnees.utilisateurAFinaliser = () => Promise.resolve(undefined);
 
       verifieRequeteGenereErreurHTTP(
-        404, "Identifiant de finalisation d'inscription \"999\" inconnu",
-        'http://localhost:1234/finalisationInscription/999', done
+        404, "Identifiant d'initialisation de mot de passe \"999\" inconnu",
+        'http://localhost:1234/initialisationMotDePasse/999', done
       );
     });
   });
@@ -667,7 +678,7 @@ describe('Le serveur MSS', () => {
       utilisateur.email = 'jean.dupont@mail.fr';
       utilisateur.idResetMotDePasse = '999';
 
-      adaptateurMail.envoieMessageResetMotDePasse = (destinataire, idResetMotDePasse) => {
+      adaptateurMail.envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) => {
         expect(destinataire).to.equal('jean.dupont@mail.fr');
         expect(idResetMotDePasse).to.equal('999');
         done();
@@ -684,6 +695,53 @@ describe('Le serveur MSS', () => {
         422, 'Utilisateur déjà existant pour cette adresse email',
         { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
       );
+    });
+  });
+
+  describe('quand requête POST sur `/api/reinitialisationMotDePasse`', () => {
+    const utilisateur = { email: 'jean.dupont@mail.fr', idResetMotDePasse: '999' };
+
+    beforeEach(() => (
+      depotDonnees.reinitialiseMotDePasse = () => Promise.resolve(utilisateur)
+    ));
+
+    it('demande au dépôt de réinitialiser le mot de passe', (done) => {
+      depotDonnees.reinitialiseMotDePasse = (email) => new Promise((resolve) => {
+        expect(email).to.equal('jean.dupont@mail.fr');
+        resolve(utilisateur);
+      });
+
+      axios.post(
+        'http://localhost:1234/api/reinitialisationMotDePasse', { email: 'jean.dupont@mail.fr' }
+      )
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({});
+          done();
+        })
+        .catch(done);
+    });
+
+    it("envoie un mail à l'utilisateur", (done) => {
+      let messageEnvoye = false;
+
+      expect(utilisateur.idResetMotDePasse).to.equal('999');
+
+      adaptateurMail.envoieMessageReinitialisationMotDePasse = (email, idReset) => (
+        new Promise((resolve) => {
+          expect(email).to.equal('jean.dupont@mail.fr');
+          expect(idReset).to.equal('999');
+          messageEnvoye = true;
+          resolve();
+        })
+      );
+
+      axios.post(
+        'http://localhost:1234/api/reinitialisationMotDePasse', { email: 'jean.dupont@mail.fr' }
+      )
+        .then(() => expect(messageEnvoye).to.be(true))
+        .then(() => done())
+        .catch(done);
     });
   });
 

@@ -1,0 +1,20 @@
+extends mss-aide-entete
+
+block append styles
+  link(href='/statique/assets/styles/formulaire.css', rel='stylesheet')
+
+block main
+  form
+    h1.
+      Réinitialisez<br>
+      votre mot de passe
+    p.
+      Vous avez oublié votre mot de passe ? Indiquez-nous l'email associé à
+      votre compte et nous vous enverrons un lien de réinitialisation.
+    section
+      label Adresse électronique
+        br
+        input(id='email', type='email')
+    .bouton Je réinitialise &nbsp;&nbsp;›
+
+  script(src='/statique/reinitialisationMotDePasse.js')

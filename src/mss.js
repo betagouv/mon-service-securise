@@ -68,16 +68,21 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     reponse.render('mentionsLegales');
   });
 
+  app.get('/reinitialisationMotDePasse', middleware.suppressionCookie, (requete, reponse) => {
+    reponse.render('reinitialisationMotDePasse');
+  });
+
   app.get('/inscription', (requete, reponse) => {
     reponse.render('inscription');
   });
 
-  app.get('/finalisationInscription/:idReset', (requete, reponse) => {
+  app.get('/initialisationMotDePasse/:idReset', (requete, reponse) => {
     const { idReset } = requete.params;
     depotDonnees.utilisateurAFinaliser(idReset)
       .then((utilisateur) => {
         if (!utilisateur) {
-          reponse.status(404).send(`Identifiant de finalisation d'inscription "${idReset}" inconnu`);
+          reponse.status(404)
+            .send(`Identifiant d'initialisation de mot de passe "${idReset}" inconnu`);
         } else {
           const token = utilisateur.genereToken();
           requete.session.token = token;
@@ -320,7 +325,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     const { prenom, nom, email } = requete.body;
     depotDonnees.nouvelUtilisateur({ prenom, nom, email })
       .then((utilisateur) => {
-        adaptateurMail.envoieMessageResetMotDePasse(
+        adaptateurMail.envoieMessageFinalisationInscription(
           utilisateur.email, utilisateur.idResetMotDePasse
         );
         const idUtilisateur = utilisateur.id;
@@ -330,6 +335,20 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           reponse.status(422).send('Utilisateur déjà existant pour cette adresse email');
         } else throw e;
       });
+  });
+
+  app.post('/api/reinitialisationMotDePasse', (requete, reponse, suite) => {
+    const { email } = requete.body;
+    depotDonnees.reinitialiseMotDePasse(email)
+      .then((utilisateur) => {
+        if (utilisateur) {
+          adaptateurMail.envoieMessageReinitialisationMotDePasse(
+            utilisateur.email, utilisateur.idResetMotDePasse
+          );
+        }
+      })
+      .then(() => reponse.send(''))
+      .catch(suite);
   });
 
   app.put('/api/utilisateur', middleware.verificationJWT, (requete, reponse, suite) => {

@@ -148,6 +148,15 @@ const creeDepot = (config = {}) => {
       .then(() => utilisateur(idUtilisateur))
   );
 
+  const reinitialiseMotDePasse = (email) => adaptateurPersistance.utilisateurAvecEmail(email)
+    .then((u) => {
+      if (!u) return undefined;
+
+      const idResetMotDePasse = adaptateurUUID.genereUUID();
+      return adaptateurPersistance.metsAJourUtilisateur(u.id, { idResetMotDePasse })
+        .then(() => utilisateur(u.id));
+    });
+
   const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) => (
     adaptateurPersistance.metsAJourUtilisateur(
       utilisateurAModifier.id, { idResetMotDePasse: undefined }
@@ -173,6 +182,7 @@ const creeDepot = (config = {}) => {
     metsAJourMotDePasse,
     nouvelleHomologation,
     nouvelUtilisateur,
+    reinitialiseMotDePasse,
     supprimeIdResetMotDePassePourUtilisateur,
     utilisateur,
     utilisateurAFinaliser,
