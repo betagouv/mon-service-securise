@@ -228,6 +228,43 @@ describe('Le référentiel', () => {
     expect(referentiel.criticiteMax('faible', 'eleve')).to.equal('eleve');
   });
 
+  describe('quand demande du seuil de criticité', () => {
+    it('tient compte du seuil de criticité max pour les fonctionnalités', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        seuilsCriticites: ['eleve', 'moyen', 'faible'],
+        fonctionnalites: {
+          fFaible: { seuilCriticite: 'faible' },
+          fMoyen: { seuilCriticite: 'moyen' },
+        },
+      });
+
+      expect(referentiel.criticite(['fFaible', 'fMoyen'], [], undefined)).to.equal('moyen');
+    });
+
+    it('tient compte du seuil de criticité max pour les données sauvegardées', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        seuilsCriticites: ['eleve', 'moyen', 'faible'],
+        donneesCaracterePersonnel: {
+          dFaible: { seuilCriticite: 'faible' },
+          dEleve: { seuilCriticite: 'eleve' },
+        },
+      });
+
+      expect(referentiel.criticite([], ['dFaible', 'dEleve'], undefined)).to.equal('eleve');
+    });
+
+    it('tient compte du seuil de criticité du délai avant impact', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        seuilsCriticites: ['eleve', 'moyen', 'faible'],
+        donneesCaracterePersonnel: { dFaible: { seuilCriticite: 'faible' } },
+        fonctionnalites: { fMoyen: { seuilCriticite: 'moyen' } },
+        delaisAvantImpactCritique: { dEleve: { seuilCriticite: 'eleve' } },
+      });
+
+      expect(referentiel.criticite(['fMoyen'], ['dFaible'], 'dEleve')).to.equal('eleve');
+    });
+  });
+
   describe('quand demande documents complémentaires à fournir', () => {
     it('retourne le document correspondant à la criticité', () => {
       const referentiel = Referentiel.creeReferentiel({

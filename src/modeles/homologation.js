@@ -50,6 +50,10 @@ class Homologation {
     return this.partiesPrenantes.descriptionAutoriteHomologation();
   }
 
+  descriptionsDocumentsComplementaires() {
+    return this.informationsGenerales.descriptionsDocumentsComplementaires();
+  }
+
   descriptionEquipePreparation() {
     return this.partiesPrenantes.descriptionEquipePreparation();
   }
