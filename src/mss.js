@@ -192,7 +192,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     middleware.verificationAcceptationCGU,
     middleware.aseptise('nomService'),
     (requete, reponse) => {
-      if (Object.keys(requete.body).length > 0) {
+      if (typeof requete.body.nomService === 'string' && requete.body.nomService) {
         const {
           nomService,
           natureService,
@@ -224,7 +224,10 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     (requete, reponse) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
-        .then(() => reponse.send({ idHomologation: requete.homologation.id }));
+        .then(() => reponse.send({ idHomologation: requete.homologation.id }))
+        .catch(() => reponse.status(422).send(
+          "Données insuffisantes pour mettre à jour l'homologation"
+        ));
     });
 
   app.post('/api/homologation/:id/caracteristiquesComplementaires',
