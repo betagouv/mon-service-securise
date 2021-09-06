@@ -33,15 +33,13 @@
   color: #2f3a43;
 }
 
-.nouvelle.homologation .icone {
-  width: 1em;
-  margin: 0 auto 0.6em;
-  padding: 0.1em 0.35em;
+.nouvelle.homologation .icone_ajout {
+  width: 4em;
+  height: 4em;
 
-  border-radius: 100%;
-  background: #ebedf0;
+  margin: 0 auto 1.3em;
 
-
-  font-weight: bold;
-  font-size: 2.5em;
+  background-image: url(../images/icone_plus_pastille_grise.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
 }
