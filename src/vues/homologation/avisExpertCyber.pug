@@ -22,9 +22,10 @@ block formulaire
       +inputChoix({
         type: 'radio',
         nom: 'dateRenouvellement',
-        titre: "Date de renouvellement de l'homologation",
+        titre: "Renouvellement de l'homologation",
         items: referentiel.echeancesRenouvellement(),
         objetDonnees: homologation.avisExpertCyber,
+        decoration: "Précisez la date à laquelle l'homologation devra être renouvelée.",
       })
 
       label Commentaires et recommandations de l'expert cybersécurité
