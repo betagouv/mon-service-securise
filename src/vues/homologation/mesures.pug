@@ -6,7 +6,7 @@ mixin inputMesure({ nom, titre, indispensable })
     type: 'radio',
     nom: nom,
     titre: titre,
-    items: { fait: { description: 'Fait' }, planifie: { description: 'Planifié' }, nonRetenu: { description: 'Non retenu' } },
+    items: { fait: { description: 'Fait' }, planifie: { description: 'Planifié' }, nonRetenu: { description: 'Non concerné' } },
     decoration: indispensable ? '<div class="mention-anssi mesure-indispensable">Indispensable</div>' : '',
   })
 
