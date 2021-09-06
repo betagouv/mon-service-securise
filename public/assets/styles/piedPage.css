@@ -4,7 +4,6 @@ footer {
   padding: 1em 0;
 
   font-size: 0.8em;
-  color: #abb6bf;
 }
 
 footer nav {
@@ -17,7 +16,7 @@ footer nav {
 
 footer a {
   text-decoration: none;
-  color: #abb6bf;
+  color: #2f3a43;
 }
 
 footer a:hover {
