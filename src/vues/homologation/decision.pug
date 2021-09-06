@@ -39,7 +39,7 @@ main
     p Recommandées par l'ANSSI, détails en annexe
 
     .legende
-      .planifie Planifiées à 3 mois
+      .planifie Planifiées
       .fait Mises en œuvre
 
     - const statistiquesMesures = homologation.statistiquesMesures()
@@ -96,8 +96,6 @@ main
   section
     h2 Calendrier
     dl
-      dt Échéance de mise en œuvre des mesures planifiées :
-      dd 3 mois
       dt Date d'expiration de l'homologation :
       dd= homologation.descriptionExpiration()
 
@@ -145,7 +143,7 @@ main
   .annexe
     .legende
       .nonRetenu Non concerné
-      .planifie Planifiées à 3 mois
+      .planifie Planifiées
       .fait Mesures mises en œuvre
     .legende.avis-anssi
       .indispensable Mesure indispensable (ANSSI)
