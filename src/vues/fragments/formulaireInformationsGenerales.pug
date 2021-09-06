@@ -10,9 +10,8 @@ mixin formulaireInformationsGenerales(idHomologation)
     h1 Décrivez le service numérique
     h2 Informations générales
     p.
-      Ces informations permettront d'évaluer les besoins de sécurité de votre
-      service numérique, afin de vous proposer des mesures de sécurité adaptées
-      et les pièces à joindre au document d'homologation.
+      Ces informations nous permettront de vous proposer des mesures de
+      sécurité adaptées.
     section
       label Nom du service numérique à homologuer
         br
@@ -41,7 +40,7 @@ mixin formulaireInformationsGenerales(idHomologation)
 
       +inputOuiNon({
         nom: 'dejaMisEnLigne',
-        titre: 'Le service numérique est-il déjà mis en ligne ?',
+        titre: 'Le service numérique est-il déjà en ligne ?',
         objetDonnees: homologation.informationsGenerales,
       })
 
@@ -57,7 +56,7 @@ mixin formulaireInformationsGenerales(idHomologation)
       +inputChoix({
         type: 'checkbox',
         nom: 'donneesCaracterePersonnel',
-        titre: 'Le service numérique est-il amené à traiter une ou plusieurs des données à caractère personnel suivantes ?',
+        titre: 'Le service numérique est-il amené à traiter une ou plusieurs données à caractère personnel ?',
         items: referentiel.donneesCaracterePersonnel(),
         objetDonnees: homologation.informationsGenerales,
       })
