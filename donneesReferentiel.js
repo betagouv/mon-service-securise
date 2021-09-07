@@ -146,7 +146,7 @@ module.exports = {
       descriptionLongue: "La menace d'accès illégitime à un échange, à des données à des fins d'information, de renseignement peut viser les services permettant les échanges entre personnes, des données sensibles stockées susceptibles d'intéresser des concurrents ou entités malveillantes souhaitant exploiter ses données à des fins de renseignement. Cette menace peut être permise par un contrôle d'accès insuffisant ou le piratage de comptes d'utilisateurs (vol d'identifiant / mot de passe) ou plus grave d'administrateurs permettant la prise de contrôle du service et l'accès à de nombreuses données, ou encore par la surveillance d'un trafic non chiffré.",
     },
     defigurationSiteWeb: {
-      description: "La défiguration d'un site web",
+      description: 'La défiguration',
       descriptionLongue: "Une défiguration est une attaque par laquelle une personne malveillante modifie le site pour remplacer le contenu légitime par un contenu qu'il choisit, par exemple pour relayer un message revendicatif, pour dénigrer le propriétaire du site ou simplement. L'attaque peut avoir des conséquences négatives en termes d'image pour le propriétaire du service.",
     },
     logicielsMalveillants: {
