@@ -68,6 +68,8 @@ main h1.vert {
 }
 
 section {
+  position: relative;
+
   margin: 2em 0;
   padding: 1.5em 2em 2em;
 
@@ -121,12 +123,15 @@ dd:after {
   content: '';
 }
 
-section {
-  position: relative;
-}
-
 section.introduction h2 {
   font-size: 1.8em;
+}
+
+section.alerte {
+  border: solid 2px #ce1b25;
+  background: #ce1b2510;
+
+  font-size: 1.2em;
 }
 
 section.risques ul {

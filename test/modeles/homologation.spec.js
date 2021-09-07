@@ -345,4 +345,22 @@ describe('Une homologation', () => {
       expect(homologation.statutSaisie('risques')).to.equal(InformationsHomologation.COMPLETES);
     });
   });
+
+  it("déclare le seuil de criticité trop élevé s'il est `critique` ou `eleve`", () => {
+    const homologation = new Homologation({ id: '123' });
+    homologation.informationsGenerales = { seuilCriticite: () => 'critique' };
+    expect(homologation.seuilCriticiteTropEleve()).to.be(true);
+
+    homologation.informationsGenerales = { seuilCriticite: () => 'eleve' };
+    expect(homologation.seuilCriticiteTropEleve()).to.be(true);
+  });
+
+  it("déclare le seuil de criticité acceptable s'il est `moyen` ou `faible`", () => {
+    const homologation = new Homologation({ id: '123' });
+    homologation.informationsGenerales = { seuilCriticite: () => 'moyen' };
+    expect(homologation.seuilCriticiteTropEleve()).to.be(false);
+
+    homologation.informationsGenerales = { seuilCriticite: () => 'faible' };
+    expect(homologation.seuilCriticiteTropEleve()).to.be(false);
+  });
 });

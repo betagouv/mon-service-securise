@@ -136,6 +136,11 @@ class Homologation {
     );
   }
 
+  seuilCriticiteTropEleve() {
+    const seuil = this.informationsGenerales.seuilCriticite();
+    return seuil === 'eleve' || seuil === 'critique';
+  }
+
   statistiquesMesures() {
     const stats = {};
 
