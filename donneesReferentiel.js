@@ -71,7 +71,7 @@ module.exports = {
       seuilCriticite: 'moyen',
     },
     autre: {
-      description: 'Autres fonctionnalités permettant des échanges de données (préciser)',
+      description: 'Autres fonctionnalités permettant des échanges de données',
       seuilCriticite: 'faible',
     },
   },
