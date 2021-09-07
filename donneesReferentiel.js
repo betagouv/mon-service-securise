@@ -277,10 +277,6 @@ module.exports = {
       categorie: 'protection',
       indispensable: true,
     },
-    bugBounty: {
-      description: 'Réaliser un test technique de la sécurité du service comme un bug bounty',
-      categorie: 'protection',
-    },
     auditsSecurite: {
       description: "Prévoir l'organisation de contrôles et d'audits de sécurité réguliers",
       categorie: 'protection',
