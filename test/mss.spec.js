@@ -297,29 +297,25 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/api/documentsComplementaires`', () => {
-    beforeEach(() => (referentiel.documentsComplementaires = () => ['un document']));
-
+  describe('quand requête GET sur `/api/seuilCriticite`', () => {
     it('vérifie que les CGU sont acceptées', (done) => {
-      verifieRequeteExigeAcceptationCGU(
-        'http://localhost:1234/api/documentsComplementaires', done
-      );
+      verifieRequeteExigeAcceptationCGU('http://localhost:1234/api/seuilCriticite', done);
     });
 
-    it('détermine les documents complémentaires à fournir', (done) => {
-      referentiel.documentsComplementaires = (idsFonctionnalites, idsDonnees, idDelai) => {
+    it('détermine le seuil de criticité pour le service', (done) => {
+      referentiel.criticite = (idsFonctionnalites, idsDonnees, idDelai) => {
         expect(idsFonctionnalites).to.eql(['f1', 'f2']);
         expect(idsDonnees).to.eql(['d1', 'd2']);
         expect(idDelai).to.equal('unDelai');
-        return ['un document'];
+        return 'moyen';
       };
 
-      axios('http://localhost:1234/api/documentsComplementaires', { params: {
-        nomService: 'Super Service',
+      axios('http://localhost:1234/api/seuilCriticite', { params: {
         fonctionnalites: ['f1', 'f2'],
         donneesCaracterePersonnel: ['d1', 'd2'],
         delaiAvantImpactCritique: 'unDelai',
       } })
+        .then((reponse) => expect(reponse.data).to.eql({ seuilCriticite: 'moyen' }))
         .then(() => done())
         .catch(done);
     });

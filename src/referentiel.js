@@ -77,21 +77,6 @@ const creeReferentiel = (donneesReferentiel) => {
     return criticiteMax(criticiteMaxFonctionnalites, criticiteMaxDonnees, criticiteDelai(idDelai));
   };
 
-  const documentsComplementaires = (...params) => {
-    const seuil = criticite(...params);
-    if (seuil === seuilCriticiteMin()) return ['Aucun document complémentaire'];
-
-    const seuils = seuilsCriticites();
-    const seuilsConserves = seuils.slice(seuils.indexOf(seuil));
-
-    const documents = Object.values(donnees.documentsComplementaires);
-    return seuilsConserves
-      .map((s) => documents.find((d) => d.seuilCriticite === s))
-      .filter((d) => typeof d !== 'undefined')
-      .map((d) => d.description)
-      .reverse();
-  };
-
   const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
 
   return {
@@ -104,7 +89,6 @@ const creeReferentiel = (donneesReferentiel) => {
     delaisAvantImpactCritique,
     descriptionCategorie,
     descriptionExpiration,
-    documentsComplementaires,
     donneesCaracterePersonnel,
     echeancesRenouvellement,
     fonctionnalites,
@@ -132,7 +116,6 @@ const creeReferentiel = (donneesReferentiel) => {
 const creeReferentielVide = () => creeReferentiel({
   categoriesMesures: {},
   delaisAvantImpactCritique: {},
-  documentsComplementaires: {},
   donneesCaracterePersonnel: {},
   echeancesRenouvellement: {},
   fonctionnalites: {},

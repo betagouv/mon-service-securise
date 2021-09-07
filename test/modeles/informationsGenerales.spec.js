@@ -68,22 +68,4 @@ describe('Les informations générales', () => {
 
     expect(infos.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
   });
-
-  elles('délèguent au référentiel la description des documents complémentaires à fournir', () => {
-    const referentiel = {
-      documentsComplementaires: (idFonctionnalites, idDonnees, idDelai) => {
-        expect(idFonctionnalites).to.eql(['f1', 'f2']);
-        expect(idDonnees).to.eql(['d1', 'd2']);
-        expect(idDelai).to.equal('unDelai');
-        return ['un document', 'un autre'];
-      },
-    };
-    const infos = new InformationsGenerales({
-      fonctionnalites: ['f1', 'f2'],
-      donneesCaracterePersonnel: ['d1', 'd2'],
-      delaiAvantImpactCritique: 'unDelai',
-    }, referentiel);
-
-    expect(infos.descriptionsDocumentsComplementaires()).to.eql(['un document', 'un autre']);
-  });
 });

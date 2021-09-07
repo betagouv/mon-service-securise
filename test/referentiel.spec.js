@@ -265,58 +265,6 @@ describe('Le référentiel', () => {
     });
   });
 
-  describe('quand demande documents complémentaires à fournir', () => {
-    it('retourne le document correspondant à la criticité', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        seuilsCriticites: ['eleve', 'moyen', 'faible'],
-        documentsComplementaires: {
-          dMoyen: {
-            description: 'Description dMoyen',
-            seuilCriticite: 'moyen',
-          },
-        },
-        fonctionnalites: { f1: { seuilCriticite: 'moyen' } },
-      });
-
-      expect(referentiel.documentsComplementaires(['f1'], [], undefined)).to.eql(
-        ['Description dMoyen']
-      );
-    });
-
-    it('retourne aussi les documents de criticité plus faible', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        seuilsCriticites: ['eleve', 'moyen', 'faible'],
-        documentsComplementaires: {
-          dMoyen: {
-            description: 'Description dMoyen',
-            seuilCriticite: 'moyen',
-          },
-          dEleve: {
-            description: 'Description dEleve',
-            seuilCriticite: 'eleve',
-          },
-        },
-        fonctionnalites: { f1: { seuilCriticite: 'eleve' } },
-      });
-
-      expect(referentiel.documentsComplementaires(['f1'], [], undefined)).to.eql(
-        ['Description dMoyen', 'Description dEleve']
-      );
-    });
-
-    it('retourne une valeur par défaut', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        seuilsCriticites: ['eleve', 'moyen', 'faible'],
-        documentsComplementaires: {},
-        fonctionnalites: { f1: { seuilCriticite: 'faible' } },
-      });
-
-      expect(referentiel.documentsComplementaires(['f1'], [], undefined)).to.eql(
-        ['Aucun document complémentaire']
-      );
-    });
-  });
-
   it("donne une valeur par défaut pour l'échéance d'homologation", () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.descriptionExpiration()).to.equal('Information non renseignée');

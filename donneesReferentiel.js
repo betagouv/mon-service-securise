@@ -392,19 +392,4 @@ module.exports = {
     unAn: { description: echeance('un an'), expiration: expiration('un an') },
     deuxAns: { description: echeance('deux ans'), expiration: expiration('deux ans') },
   },
-
-  documentsComplementaires: {
-    testsIntrusion: {
-      description: "Compte-rendu de tests d'intrusion ou de prime aux bogues (bug bounty)",
-      seuilCriticite: 'moyen',
-    },
-    analyseRisques: {
-      description: 'Analyse de risques',
-      seuilCriticite: 'eleve',
-    },
-    audit: {
-      description: "Compte-rendu d'audit du service",
-      seuilCriticite: 'critique',
-    },
-  },
 };

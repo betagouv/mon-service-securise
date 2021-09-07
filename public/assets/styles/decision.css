@@ -247,41 +247,6 @@ section.decision li {
   color: #0d4269;
 }
 
-section.pieces-jointes {
-  margin-top: 5em;
-  padding-top: 0;
-
-  border: 0;
-  background: none;
-}
-
-section.pieces-jointes h2 {
-  display: inline-block;
-
-  vertical-align: top;
-}
-
-section.pieces-jointes ul {
-  display: inline-block;
-
-  position: relative;
-  left: 3em;
-  top: 0.2em;
-
-  margin: 0;
-
-  font-size: 1.2em;
-}
-
-section.pieces-jointes li {
-  margin-bottom: 0.5em;
-  padding-left: 2em;
-
-  background-image: url(../images/icone_coche_verte.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
 .annexe {
   position: relative;
   padding-top: 3em;

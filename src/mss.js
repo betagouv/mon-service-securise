@@ -304,22 +304,17 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         .then(() => reponse.send({ idHomologation: requete.params.id }));
     });
 
-  app.get('/api/documentsComplementaires',
-    middleware.verificationAcceptationCGU,
-    (requete, reponse) => {
-      const {
-        nomService,
-        fonctionnalites = [],
-        donneesCaracterePersonnel = [],
-        delaiAvantImpactCritique,
-      } = requete.query;
-
-      const documents = referentiel.documentsComplementaires(
-        fonctionnalites, donneesCaracterePersonnel, delaiAvantImpactCritique
-      );
-
-      reponse.render('diagnosticDocumentsComplementaires', { nomService, documents });
-    });
+  app.get('/api/seuilCriticite', middleware.verificationAcceptationCGU, (requete, reponse) => {
+    const {
+      fonctionnalites = [],
+      donneesCaracterePersonnel = [],
+      delaiAvantImpactCritique,
+    } = requete.query;
+    const seuilCriticite = referentiel.criticite(
+      fonctionnalites, donneesCaracterePersonnel, delaiAvantImpactCritique
+    );
+    reponse.json({ seuilCriticite });
+  });
 
   app.post('/api/utilisateur', middleware.aseptise('prenom', 'nom', 'email'), (requete, reponse) => {
     const { prenom, nom, email } = requete.body;

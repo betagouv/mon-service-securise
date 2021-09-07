@@ -22,12 +22,6 @@ class InformationsGenerales extends InformationsHomologation {
   descriptionNatureService() {
     return this.referentiel.natureService(this.natureService);
   }
-
-  descriptionsDocumentsComplementaires() {
-    return this.referentiel.documentsComplementaires(
-      this.fonctionnalites, this.donneesCaracterePersonnel, this.delaiAvantImpactCritique
-    );
-  }
 }
 
 module.exports = InformationsGenerales;
