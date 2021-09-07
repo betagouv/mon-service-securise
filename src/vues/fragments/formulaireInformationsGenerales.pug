@@ -56,7 +56,7 @@ mixin formulaireInformationsGenerales(idHomologation)
       +inputChoix({
         type: 'checkbox',
         nom: 'donneesCaracterePersonnel',
-        titre: 'Le service numérique est-il amené à traiter une ou plusieurs données à caractère personnel ?',
+        titre: 'Le service numérique est-il amené à traiter une ou plusieurs données à caractère personnel ?',
         items: referentiel.donneesCaracterePersonnel(),
         objetDonnees: homologation.informationsGenerales,
       })
