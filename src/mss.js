@@ -122,7 +122,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       }],
 
       'Sécurisez le service numérique': [{
-        description: 'Vérification des risques',
+        description: 'Risques de sécurité',
         url: `/homologation/${homologation.id}/risques`,
         statut: homologation.statutSaisie('risques'),
       }, {
