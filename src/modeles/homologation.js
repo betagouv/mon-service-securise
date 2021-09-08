@@ -160,9 +160,13 @@ class Homologation {
     return new StatistiquesMesures(stats, this.referentiel);
   }
 
+  mesuresNonSaisies() {
+    return this.mesures.length === 0;
+  }
+
   statutSaisie(nomInformationsHomologation) {
     if (nomInformationsHomologation === 'mesures') {
-      if (this.mesures.length === 0) return InformationsHomologation.A_SAISIR;
+      if (this.mesuresNonSaisies()) return InformationsHomologation.A_SAISIR;
       if (this.mesures.length === this.referentiel.identifiantsMesures().length) {
         return InformationsGenerales.COMPLETES;
       }
