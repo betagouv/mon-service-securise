@@ -6,7 +6,7 @@ block append styles
   link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
 
 block main
-  .retour
+  .retour.marges-fixes
     - let lienRetour = '/';
     - if (homologation) lienRetour = '/homologations';
     - if (homologation && homologation.id) lienRetour = `/homologation/${homologation.id}`;

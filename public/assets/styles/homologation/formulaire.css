@@ -1,6 +1,5 @@
 .retour {
   display: inline-block;
-  width: 1000px;
 
   margin-top: 3em;
 
@@ -12,10 +11,12 @@
   color: #1b7cc4;
 }
 
+/*
 form.homologation, form.acces-refuse, form.utilisateur {
   width: 580px;
   margin: 0;
 }
+*/
 
 form.homologation * {
   text-align: left;
