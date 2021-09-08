@@ -19,9 +19,12 @@ const afficheModaleSeuilMoyen = () => afficheModale(`
   de :
 </div>
 <ul>
-  <li>Réaliser un bug bounty et de sécuriser le service en conséquence ;</li>
   <li>
-    Réaliser un atelier d'analyse de risque en vue de compléter les risques et
+    réaliser un test technique de la sécurité du service (test de pénétration,
+    bug bounty, etc.) ;
+  </li>
+  <li>
+    réaliser un atelier d'analyse de risque en vue de compléter les risques et
     de préciser les mesures de sécurité.
   </li>
 </ul>
