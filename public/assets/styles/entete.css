@@ -9,7 +9,7 @@ header a {
   display: inline-block;
 
   text-decoration: none;
-  font-size: 0.7em;
+  font-size: 0.8em;
   color: #0d4269;
 }
 
@@ -103,7 +103,7 @@ a.inscription:hover {
   position: absolute;
   top: 2em;
   left: 0;
-  width: 10em;
+  width: 12em;
 
   padding: 1em;
 
