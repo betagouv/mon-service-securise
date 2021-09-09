@@ -85,7 +85,7 @@ module.exports = {
     identite: {
       description: "Données d'identité",
       exemple: "nom/prénom, pseudonyme, date de maissance, numéros de pièce d'identité, de sécurité sociale, etc.",
-      seuilCriticite: 'moyen',
+      seuilCriticite: 'faible',
     },
     situation: {
       description: 'Données relatives à la situation familiale, économique et financière',

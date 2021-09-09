@@ -20,17 +20,33 @@ const afficheModaleSeuilMoyen = () => afficheModale(`
 </div>
 <ul>
   <li>
-    réaliser un test technique de la sécurité du service (test de pénétration,
-    bug bounty, etc.) ;
-  </li>
-  <li>
-    réaliser un atelier d'analyse de risque en vue de compléter les risques et
-    de préciser les mesures de sécurité.
+    réaliser un test technique de la sécurité du service (ex. test automatique
+    en ligne, test d'intrusion, bug bounty, etc.).
   </li>
 </ul>
 `);
 
 const afficheModaleSeuilEleve = () => afficheModale(`
+<div>
+  Compte tenu des risques auxquels votre service est susceptible de faire face,
+  aux vues des fonctionnalités offertes et de la sensibilité des données
+  traitées, il vous sera demandé, en plus des mesures de sécurité recommandées,
+  de :
+</div>
+<ul>
+  <li>
+    réaliser un test technique de la sécurité du service (ex. test automatique
+    en ligne, test d'intrusion, bug bounty, etc.) ;
+  </li>
+  <li>
+    réaliser un atelier d'analyse de risques en vue de compléter les risques et
+    de préciser les mesures de sécurité (vous pouvez vous aider du guide «
+    Sécurité et Agilité numériques »).
+  </li>
+</ul>
+`);
+
+const afficheModaleSeuilCritique = () => afficheModale(`
 <div>
   Compte tenu des risques auxquels votre service est susceptible de faire face,
   aux vues des fonctionnalités offertes et de la sensibilité des données
@@ -81,8 +97,10 @@ const soumetsHomologation = (selecteurFormulaire) => {
           afficheModaleSeuilMoyen();
           break;
         case 'eleve':
-        case 'critique':
           afficheModaleSeuilEleve();
+          break;
+        case 'critique':
+          afficheModaleSeuilCritique();
           break;
         default:
       }
