@@ -114,17 +114,21 @@ module.exports = {
   },
 
   delaisAvantImpactCritique: {
+    immediat: {
+      description: 'Immédiatement',
+      seuilCriticite: 'critique',
+    },
     uneHeure: {
       description: 'Une heure',
-      seuilCriticite: 'critique',
+      seuilCriticite: 'eleve',
     },
     uneJournee: {
       description: 'Une journée',
-      seuilCriticite: 'eleve',
+      seuilCriticite: 'moyen',
     },
     uneSemaine: {
       description: 'Une semaine',
-      seuilCriticite: 'moyen',
+      seuilCriticite: 'faible',
     },
     unMois: {
       description: 'Un mois ou plus',
