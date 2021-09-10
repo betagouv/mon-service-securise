@@ -17,14 +17,14 @@ const parametres = (selecteurFormulaire) => {
     .reduce((acc, nomValeur) => {
       const nomParam = nomValeur.name;
       const valeurParam = nomValeur.value;
-      acc[nomParam] ||= [];
+      acc[nomParam] = acc[nomParam] || [];
       acc[nomParam].push(valeurParam);
 
       return acc;
     }, {});
 
   const nomsParamsMultiples = nomsInput(`${selecteurFormulaire} input[type="checkbox"]`);
-  nomsParamsMultiples.forEach((n) => (params[n] ||= []));
+  nomsParamsMultiples.forEach((n) => (params[n] = params[n] || []));
 
   const nomsParamsAtomiques = nomsInput(`${selecteurFormulaire} input[type!="checkbox"], ${selecteurFormulaire} textarea`);
   return avecPremierElementCommeValeurs(params, nomsParamsAtomiques);
