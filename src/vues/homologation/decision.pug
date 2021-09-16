@@ -162,12 +162,16 @@ main
       p S'organiser pour gérer la sécurité du service
 
       ul
-        if homologation.mesures.length === 0
+        if homologation.mesuresNonSaisies()
           li Aucune mesure retenue
 
-        each mesure in homologation.mesures
+        - let i = 0;
+        - const nbMesures = homologation.mesures.nombre()
+        while i < nbMesures
+          - const mesure = homologation.mesures.mesure(i)
           li
             .description= mesure.description()
             .statut(class = mesure.statut)
             if mesure.estIndispensable()
               .indispensable
+          - i++

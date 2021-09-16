@@ -38,7 +38,7 @@ block formulaire
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donneesMesures', type = 'application/json').
-    !{JSON.stringify(homologation.mesures.map((m) => m.toJSON()))}
+    !{JSON.stringify(homologation.mesures.toJSON())}
 
   script(id = 'referentielMesures', type = 'application/json').
     !{JSON.stringify(referentiel.mesures())}
