@@ -100,9 +100,9 @@ describe('Le dépôt de données persistées en mémoire', () => {
 
     depot.homologation('123')
       .then(({ mesures }) => {
-        expect(mesures.length).to.equal(1);
+        expect(mesures.nombre()).to.equal(1);
 
-        const mesure = mesures[0];
+        const mesure = mesures.mesure(0);
         expect(mesure).to.be.a(Mesure);
         expect(mesure.id).to.equal('identifiantMesure');
         done();
@@ -123,8 +123,8 @@ describe('Le dépôt de données persistées en mémoire', () => {
     depot.ajouteMesureAHomologation('123', mesure)
       .then(() => depot.homologation('123'))
       .then(({ mesures }) => {
-        expect(mesures.length).to.equal(1);
-        expect(mesures[0].id).to.equal('identifiantMesure');
+        expect(mesures.nombre()).to.equal(1);
+        expect(mesures.mesure(0).id).to.equal('identifiantMesure');
         done();
       })
       .catch(done);
@@ -147,8 +147,8 @@ describe('Le dépôt de données persistées en mémoire', () => {
     depot.ajouteMesureAHomologation('123', mesure)
       .then(() => depot.homologation('123'))
       .then(({ mesures }) => {
-        expect(mesures.length).to.equal(1);
-        expect(mesures[0].statut).to.equal(Mesure.STATUT_FAIT);
+        expect(mesures.nombre()).to.equal(1);
+        expect(mesures.mesure(0).statut).to.equal(Mesure.STATUT_FAIT);
         done();
       })
       .catch(done);

@@ -3,10 +3,9 @@ const AvisExpertCyber = require('./avisExpertCyber');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const InformationsGenerales = require('./informationsGenerales');
 const InformationsHomologation = require('./informationsHomologation');
-const Mesure = require('./mesure');
+const Mesures = require('./mesures');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risque = require('./risque');
-const StatistiquesMesures = require('./statistiquesMesures');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -32,7 +31,7 @@ class Homologation {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
     this.informationsGenerales = new InformationsGenerales(informationsGenerales, referentiel);
-    this.mesures = mesures.map((donneesMesure) => new Mesure(donneesMesure, referentiel));
+    this.mesures = new Mesures({ mesures }, referentiel);
     this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
       caracteristiquesComplementaires, referentiel,
     );
@@ -70,20 +69,6 @@ class Homologation {
     return this.caracteristiquesComplementaires.descriptionLocalisationDonnees();
   }
 
-  nbMesuresMisesEnOeuvreAvecCondition(condition) {
-    return this.mesures
-      .filter((m) => m.miseEnOeuvre() && condition(m.id))
-      .length;
-  }
-
-  nbMesuresIndispensablesMisesEnOeuvre() {
-    return this.mesures.filter((m) => m.miseEnOeuvre() && m.estIndispensable()).length;
-  }
-
-  nbMesuresRecommandeesMisesEnOeuvre() {
-    return this.mesures.filter((m) => m.miseEnOeuvre() && m.estRecommandee()).length;
-  }
-
   niveauSecurite() {
     const proportionIndispensables = this.proportionMesuresIndispensablesMisesEnOeuvre();
     const proportionRecommandees = this.proportionMesuresRecommandeesMisesEnOeuvre();
@@ -105,35 +90,12 @@ class Homologation {
 
   presentation() { return this.caracteristiquesComplementaires.presentation; }
 
-  proportionMesures(nbMisesEnOeuvre, idsMesures) {
-    const identifiantsMesuresNonRetenues = () => this.mesures
-      .filter((m) => m.nonRetenue())
-      .map((m) => m.id);
-
-    const nbTotalMesuresRetenuesParmi = (identifiantsMesures) => {
-      const nonRetenues = identifiantsMesuresNonRetenues();
-
-      return identifiantsMesures
-        .filter((id) => !nonRetenues.includes(id))
-        .length;
-    };
-
-    const nbTotal = nbTotalMesuresRetenuesParmi(idsMesures);
-    return nbTotal ? nbMisesEnOeuvre / nbTotal : 1;
-  }
-
   proportionMesuresIndispensablesMisesEnOeuvre() {
-    return this.proportionMesures(
-      this.nbMesuresIndispensablesMisesEnOeuvre(),
-      this.referentiel.identifiantsMesuresIndispensables()
-    );
+    return this.mesures.proportionIndispensablesMisesEnOeuvre();
   }
 
   proportionMesuresRecommandeesMisesEnOeuvre() {
-    return this.proportionMesures(
-      this.nbMesuresRecommandeesMisesEnOeuvre(),
-      this.referentiel.identifiantsMesuresRecommandees()
-    );
+    return this.mesures.proportionRecommandeesMisesEnOeuvre();
   }
 
   seuilCriticiteTropEleve() {
@@ -142,36 +104,14 @@ class Homologation {
   }
 
   statistiquesMesures() {
-    const stats = {};
-
-    this.mesures.forEach(({ id, statut }) => {
-      const { categorie } = this.referentiel.mesures()[id];
-
-      if (statut === Mesure.STATUT_FAIT || statut === Mesure.STATUT_PLANIFIE) {
-        stats[categorie] ||= { retenues: 0, misesEnOeuvre: 0 };
-        stats[categorie].retenues += 1;
-
-        if (statut === Mesure.STATUT_FAIT) {
-          stats[categorie].misesEnOeuvre += 1;
-        }
-      }
-    });
-
-    return new StatistiquesMesures(stats, this.referentiel);
+    return this.mesures.statistiques();
   }
 
   mesuresNonSaisies() {
-    return this.mesures.length === 0;
+    return this.mesures.nonSaisies();
   }
 
   statutSaisie(nomInformationsHomologation) {
-    if (nomInformationsHomologation === 'mesures') {
-      if (this.mesuresNonSaisies()) return InformationsHomologation.A_SAISIR;
-      if (this.mesures.length === this.referentiel.identifiantsMesures().length) {
-        return InformationsGenerales.COMPLETES;
-      }
-      return InformationsGenerales.A_COMPLETER;
-    }
     if (nomInformationsHomologation === 'risques') {
       return this.risquesVerifies
         ? InformationsHomologation.COMPLETES
