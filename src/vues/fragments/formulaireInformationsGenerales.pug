@@ -17,7 +17,7 @@ mixin formulaireInformationsGenerales(idHomologation)
           id = 'nom-service',
           name = 'nomService',
           type = 'text',
-          value = homologation.nomService(),
+          value != homologation.nomService(),
         )
 
       +inputChoix({
