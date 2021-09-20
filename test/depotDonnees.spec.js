@@ -102,7 +102,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(({ mesures }) => {
         expect(mesures.nombre()).to.equal(1);
 
-        const mesure = mesures.mesure(0);
+        const mesure = mesures.item(0);
         expect(mesure).to.be.a(Mesure);
         expect(mesure.id).to.equal('identifiantMesure');
         done();
@@ -124,7 +124,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(() => depot.homologation('123'))
       .then(({ mesures }) => {
         expect(mesures.nombre()).to.equal(1);
-        expect(mesures.mesure(0).id).to.equal('identifiantMesure');
+        expect(mesures.item(0).id).to.equal('identifiantMesure');
         done();
       })
       .catch(done);
@@ -148,7 +148,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(() => depot.homologation('123'))
       .then(({ mesures }) => {
         expect(mesures.nombre()).to.equal(1);
-        expect(mesures.mesure(0).statut).to.equal(Mesure.STATUT_FAIT);
+        expect(mesures.item(0).statut).to.equal(Mesure.STATUT_FAIT);
         done();
       })
       .catch(done);
@@ -273,9 +273,9 @@ describe('Le dépôt de données persistées en mémoire', () => {
     depot.ajouteRisqueAHomologation('123', risque)
       .then(() => depot.homologation('123'))
       .then(({ risques }) => {
-        expect(risques.length).to.equal(1);
-        expect(risques[0]).to.be.a(Risque);
-        expect(risques[0].id).to.equal('unRisque');
+        expect(risques.nombre()).to.equal(1);
+        expect(risques.item(0)).to.be.a(Risque);
+        expect(risques.item(0).id).to.equal('unRisque');
         done();
       })
       .catch(done);
@@ -288,11 +288,11 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
     depot.homologation('123')
-      .then(({ risquesVerifies }) => expect(risquesVerifies).to.be(false))
+      .then(({ risques }) => expect(risques.verifies()).to.be(false))
       .then(() => depot.marqueRisquesCommeVerifies('123'))
       .then(() => depot.homologation('123'))
-      .then(({ risquesVerifies }) => {
-        expect(risquesVerifies).to.be(true);
+      .then(({ risques }) => {
+        expect(risques.verifies()).to.be(true);
         done();
       })
       .catch(done);
