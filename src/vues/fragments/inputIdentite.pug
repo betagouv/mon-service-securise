@@ -12,7 +12,7 @@ mixin inputIdentite({ role, descriptif = '', nomParametre, raccourciVisible = fa
     input(
       id = nomParametre, name = nomParametre, type = 'text',
       placeholder = 'Prénom et nom',
-      value = homologation.partiesPrenantes[nomParametre]
+      value != homologation.partiesPrenantes[nomParametre]
     )
 
     - const nomParamFonction = `fonction${nomParamCapitalise}`

@@ -1,3 +1,5 @@
+import texteHTML from './texteHTML.js';
+
 const relieInputsIdentite = (selecteurCheckbox, selecteurPrenomNom, prenomNom) => {
   const $checkbox = $(selecteurCheckbox);
   const $prenomNom = $(selecteurPrenomNom);
@@ -18,7 +20,7 @@ const brancheInputsIdentite = (idsInputsIdentite) => {
     .then((reponse) => {
       const { prenomNom } = reponse.data.utilisateur;
       idsInputsIdentite.forEach((ids) => relieInputsIdentite(
-        ids.idJeSuis, ids.idZoneSaisie, prenomNom
+        ids.idJeSuis, ids.idZoneSaisie, texteHTML(prenomNom)
       ));
     });
 };
