@@ -4,7 +4,7 @@ const Risque = require('./risque');
 class Risques extends ListeItems {
   constructor(donnees, referentiel) {
     const { risques, risquesVerifies } = donnees;
-    super({ items: risques }, referentiel, Risque);
+    super(Risque, { items: risques }, referentiel);
     this.risquesVerifies = risquesVerifies;
   }
 
