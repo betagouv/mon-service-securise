@@ -168,7 +168,7 @@ main
         - let i = 0;
         - const nbMesures = homologation.mesures.nombre()
         while i < nbMesures
-          - const mesure = homologation.mesures.mesure(i)
+          - const mesure = homologation.mesures.item(i)
           li
             .description= mesure.description()
             .statut(class = mesure.statut)

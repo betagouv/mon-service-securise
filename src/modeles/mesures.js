@@ -1,28 +1,19 @@
-const InformationsHomologation = require('./informationsGenerales');
+const ListeItems = require('./listeItems');
 const Mesure = require('./mesure');
 const StatistiquesMesures = require('./statistiquesMesures');
 
-class Mesures {
+class Mesures extends ListeItems {
   constructor(donnees, referentiel) {
-    const { mesures } = donnees;
-    this.mesures = mesures.map((donneesMesure) => new Mesure(donneesMesure, referentiel));
+    super({ items: donnees.mesures }, referentiel, Mesure);
     this.referentiel = referentiel;
   }
 
-  mesure(index) {
-    return this.mesures[index];
-  }
-
   nbIndispensablesMisesEnOeuvre() {
-    return this.mesures.filter((m) => m.miseEnOeuvre() && m.estIndispensable()).length;
+    return this.items.filter((m) => m.miseEnOeuvre() && m.estIndispensable()).length;
   }
 
   nbRecommandeesMisesEnOeuvre() {
-    return this.mesures.filter((m) => m.miseEnOeuvre() && m.estRecommandee()).length;
-  }
-
-  nombre() {
-    return this.mesures.length;
+    return this.items.filter((m) => m.miseEnOeuvre() && m.estRecommandee()).length;
   }
 
   nonSaisies() {
@@ -30,7 +21,7 @@ class Mesures {
   }
 
   proportion(nbMisesEnOeuvre, idsMesures) {
-    const identifiantsMesuresNonRetenues = () => this.mesures
+    const identifiantsMesuresNonRetenues = () => this.items
       .filter((m) => m.nonRetenue())
       .map((m) => m.id);
 
@@ -63,7 +54,7 @@ class Mesures {
   statistiques() {
     const stats = {};
 
-    this.mesures.forEach(({ id, statut }) => {
+    this.items.forEach(({ id, statut }) => {
       const { categorie } = this.referentiel.mesures()[id];
 
       if (statut === Mesure.STATUT_FAIT || statut === Mesure.STATUT_PLANIFIE) {
@@ -80,15 +71,11 @@ class Mesures {
   }
 
   statutSaisie() {
-    if (this.nonSaisies()) return InformationsHomologation.A_SAISIR;
-    if (this.mesures.length === this.referentiel.identifiantsMesures().length) {
-      return InformationsHomologation.COMPLETES;
+    if (this.nonSaisies()) return Mesures.A_SAISIR;
+    if (this.items.length === this.referentiel.identifiantsMesures().length) {
+      return Mesures.COMPLETES;
     }
-    return InformationsHomologation.A_COMPLETER;
-  }
-
-  toJSON() {
-    return this.mesures.map((m) => m.toJSON());
+    return Mesures.A_COMPLETER;
   }
 }
 

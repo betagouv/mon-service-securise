@@ -28,5 +28,5 @@ block formulaire
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donnees-risques', type = 'application/json').
-    !{JSON.stringify(homologation.risques.map((r) => r.toJSON()))}
+    !{JSON.stringify(homologation.risques.toJSON())}
   script(type = 'module', src = '/statique/homologation/risques.js')

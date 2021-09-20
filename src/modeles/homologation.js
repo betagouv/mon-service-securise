@@ -2,10 +2,9 @@ const Referentiel = require('../referentiel');
 const AvisExpertCyber = require('./avisExpertCyber');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const InformationsGenerales = require('./informationsGenerales');
-const InformationsHomologation = require('./informationsHomologation');
 const Mesures = require('./mesures');
 const PartiesPrenantes = require('./partiesPrenantes');
-const Risque = require('./risque');
+const Risques = require('./risques');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -36,8 +35,7 @@ class Homologation {
       caracteristiquesComplementaires, referentiel,
     );
     this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
-    this.risques = risques.map((donneesRisque) => new Risque(donneesRisque, referentiel));
-    this.risquesVerifies = risquesVerifies;
+    this.risques = new Risques({ risques, risquesVerifies }, referentiel);
     this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber, referentiel);
 
     this.referentiel = referentiel;
@@ -112,11 +110,6 @@ class Homologation {
   }
 
   statutSaisie(nomInformationsHomologation) {
-    if (nomInformationsHomologation === 'risques') {
-      return this.risquesVerifies
-        ? InformationsHomologation.COMPLETES
-        : InformationsHomologation.A_SAISIR;
-    }
     return this[nomInformationsHomologation].statutSaisie();
   }
 
