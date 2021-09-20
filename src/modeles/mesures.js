@@ -4,7 +4,7 @@ const StatistiquesMesures = require('./statistiquesMesures');
 
 class Mesures extends ListeItems {
   constructor(donnees, referentiel) {
-    super({ items: donnees.mesures }, referentiel, Mesure);
+    super(Mesure, { items: donnees.mesures }, referentiel);
     this.referentiel = referentiel;
   }
 
