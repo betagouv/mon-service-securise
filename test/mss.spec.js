@@ -427,6 +427,17 @@ describe('Le serveur MSS', () => {
       }, done);
     });
 
+    it('aseptise les paramètres entités externes', (done) => {
+      verifieAseptisationParametres(
+        ['entitesExternes.*.nom', 'entitesExternes.*.role'],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
+        },
+        done
+      );
+    });
+
     it("demande au dépôt d'associer les caractéristiques à l'homologation", (done) => {
       let caracteristiquesAjoutees = false;
 
