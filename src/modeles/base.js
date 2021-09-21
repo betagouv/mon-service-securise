@@ -1,12 +1,18 @@
 class Base {
-  constructor(nomsProprietesAtomiques = [], nomsProprietesListes = []) {
+  constructor(nomsProprietesAtomiques = [], nomsProprietesListes = [], nomsListesAgregats = {}) {
     this.nomsProprietesAtomiques = nomsProprietesAtomiques;
     this.nomsProprietesListes = nomsProprietesListes;
+    this.nomsListesAgregats = nomsListesAgregats;
   }
 
   renseigneProprietes(donnees) {
     this.nomsProprietesAtomiques.forEach((np) => (this[np] = donnees[np]));
     this.nomsProprietesListes.forEach((np) => (this[np] = donnees[np] || []));
+    Object.keys(this.nomsListesAgregats).forEach((nl) => {
+      const ClasseListeAgregats = this.nomsListesAgregats[nl];
+      const donneesListeAgregat = { [nl]: donnees[nl] || [] };
+      this[nl] = new ClasseListeAgregats(donneesListeAgregat);
+    });
   }
 
   proprieteSaisie(nomPropriete) {
@@ -21,6 +27,10 @@ class Base {
     [...this.nomsProprietesAtomiques, ...this.nomsProprietesListes]
       .filter((k) => typeof this[k] !== 'undefined')
       .forEach((k) => (resultat[k] = this[k]));
+
+    Object.keys(this.nomsListesAgregats).forEach((nl) => {
+      Object.assign(resultat, { [nl]: this[nl].toJSON() });
+    });
 
     return resultat;
   }
