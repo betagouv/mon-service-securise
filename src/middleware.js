@@ -55,6 +55,7 @@ const middleware = (configuration = {}) => {
 
   const aseptise = (...nomsParametres) => ((requete, reponse, suite) => {
     const aseptisations = nomsParametres.map((p) => body(p).trim().escape().run(requete));
+
     return Promise.all(aseptisations)
       .then(() => suite())
       .catch(suite);

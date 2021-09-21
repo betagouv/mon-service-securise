@@ -237,6 +237,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.post('/api/homologation/:id/caracteristiquesComplementaires',
     middleware.trouveHomologation,
+    middleware.aseptise('entitesExternes.*.nom', 'entitesExternes.*.role'),
     (requete, reponse) => {
       requete.body.entitesExternes &&= requete.body.entitesExternes.filter(
         (e) => e && (e.nom || e.role)
