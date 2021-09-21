@@ -450,6 +450,25 @@ describe('Le serveur MSS', () => {
         })
         .catch(done);
     });
+
+    it('filtre les entités externes vides', (done) => {
+      depotDonnees.ajouteCaracteristiquesAHomologation = (_, caracteristiques) => (
+        new Promise((resolve) => {
+          expect(caracteristiques.entitesExternes.nombre()).to.equal(1);
+          resolve();
+        })
+      );
+
+      const entitesExternes = [];
+      entitesExternes[2] = { nom: 'Une entité', role: 'Un rôle' };
+
+      axios.post(
+        'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
+        { entitesExternes },
+      )
+        .then(() => done())
+        .catch(done);
+    });
   });
 
   describe('quand requête POST sur `/api/homologation/:id/mesures', () => {

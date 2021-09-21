@@ -238,6 +238,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.post('/api/homologation/:id/caracteristiquesComplementaires',
     middleware.trouveHomologation,
     (requete, reponse) => {
+      requete.body.entitesExternes &&= requete.body.entitesExternes.filter(
+        (e) => e && (e.nom || e.role)
+      );
       const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
       depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
         .then(() => reponse.send({ idHomologation: requete.homologation.id }));
