@@ -20,12 +20,14 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
       localisationDonnees: 'france',
+      entitesExternes: [{ nom: 'Un nom', role: 'Un rôle' }],
     }, referentiel);
 
     expect(caracteristiques.presentation).to.equal('Une présentation');
     expect(caracteristiques.structureDeveloppement).to.equal('Une structure');
     expect(caracteristiques.hebergeur).to.equal('Un hébergeur');
     expect(caracteristiques.localisationDonnees).to.equal('france');
+    expect(caracteristiques.nombreEntitesExternes()).to.equal(1);
   });
 
   it('sait décrire la localisation des données', () => {
@@ -47,6 +49,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
       localisationDonnees: 'france',
+      entitesExternes: [{ nom: 'Une entité', role: 'Un rôle' }],
     }, referentiel);
 
     expect(caracteristiques.toJSON()).to.eql({
@@ -54,6 +57,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
       localisationDonnees: 'france',
+      entitesExternes: [{ nom: 'Une entité', role: 'Un rôle' }],
     });
   });
 
@@ -63,7 +67,11 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       hebergeur: '',
     });
 
-    expect(caracteristiques.toJSON()).to.eql({ presentation: 'Une présentation', hebergeur: '' });
+    expect(caracteristiques.toJSON()).to.eql({
+      presentation: 'Une présentation',
+      hebergeur: '',
+      entitesExternes: [],
+    });
   });
 
   it('valide la localisation des données si elle est présente', (done) => {

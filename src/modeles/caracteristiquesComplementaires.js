@@ -1,3 +1,4 @@
+const EntitesExternes = require('./entitesExternes');
 const InformationsHomologation = require('./informationsHomologation');
 const { ErreurLocalisationDonneesInvalide } = require('../erreurs');
 const Referentiel = require('../referentiel');
@@ -15,11 +16,14 @@ const valide = (donnees, referentiel) => {
 
 class CaracteristiquesComplementaires extends InformationsHomologation {
   constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super(['presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees']);
-
+    super(
+      ['presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees'],
+      [],
+      { entitesExternes: EntitesExternes },
+    );
     valide(donneesCaracteristiques, referentiel);
-
     this.renseigneProprietes(donneesCaracteristiques);
+
     this.referentiel = referentiel;
   }
 
@@ -29,6 +33,10 @@ class CaracteristiquesComplementaires extends InformationsHomologation {
 
   descriptionHebergeur() {
     return this.hebergeur || 'Hébergeur non renseigné';
+  }
+
+  nombreEntitesExternes() {
+    return this.entitesExternes.nombre();
   }
 }
 
