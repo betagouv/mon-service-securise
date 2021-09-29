@@ -85,8 +85,49 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
     }
   });
 
-  it('détermine le statut de saisie', () => {
-    const caracteristiques = new CaracteristiquesComplementaires({ presentation: 'Une présentation' });
-    expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
+  describe('sur demande du statut de saisie', () => {
+    describe("quand aucune entité externe n'a été saisie", () => {
+      it('détermine le statut de saisie de manière standard', () => {
+        const caracteristiques = new CaracteristiquesComplementaires({ presentation: 'Une présentation' });
+        expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
+      });
+    });
+
+    describe("quand au moins une entité externe n'a été que partiellement saisie", () => {
+      it('a pour statut de saisie A_COMPLETER', () => {
+        const caracteristiques = new CaracteristiquesComplementaires({
+          presentation: 'Une présentation',
+          structureDeveloppement: 'Une structure',
+          hebergeur: 'Un hébergeur',
+          localisationDonnees: 'france',
+          entitesExternes: [{ nom: 'Un nom, mais pas de contact' }],
+        }, referentiel);
+
+        expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
+      });
+    });
+
+    describe('quand toutes les entités externes sont complètement saisies', () => {
+      it('a pour statut COMPLETES si tous les autres champs sont remplis', () => {
+        const caracteristiques = new CaracteristiquesComplementaires({
+          presentation: 'Une présentation',
+          structureDeveloppement: 'Une structure',
+          hebergeur: 'Un hébergeur',
+          localisationDonnees: 'france',
+          entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
+        }, referentiel);
+
+        expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
+      });
+
+      it("a pour statut A_COMPLETER si un des autres champs n'est pas saisi", () => {
+        const caracteristiques = new CaracteristiquesComplementaires({
+          presentation: 'Une présentation',
+          entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
+        });
+
+        expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
+      });
+    });
   });
 });
