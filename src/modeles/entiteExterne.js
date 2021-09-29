@@ -2,7 +2,7 @@ const InformationsHomologation = require('./informationsHomologation');
 
 class EntiteExterne extends InformationsHomologation {
   constructor(donneesEntite) {
-    super(['nom', 'role']);
+    super(['nom', 'acces']);
     this.renseigneProprietes(donneesEntite);
   }
 }

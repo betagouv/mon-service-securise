@@ -4,8 +4,8 @@ const EntiteExterne = require('../../src/modeles/entiteExterne');
 
 describe('Une entité externe', () => {
   it('connaît ses constituants', () => {
-    const entite = new EntiteExterne({ nom: 'Un nom', role: 'Un rôle' });
+    const entite = new EntiteExterne({ nom: 'Un nom', acces: 'Accès administrateur' });
     expect(entite.nom).to.equal('Un nom');
-    expect(entite.role).to.equal('Un rôle');
+    expect(entite.acces).to.equal('Accès administrateur');
   });
 });

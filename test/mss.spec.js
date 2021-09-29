@@ -429,7 +429,7 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres entités externes', (done) => {
       verifieAseptisationParametres(
-        ['entitesExternes.*.nom', 'entitesExternes.*.role'],
+        ['entitesExternes.*.nom', 'entitesExternes.*.acces'],
         {
           method: 'post',
           url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
@@ -471,7 +471,7 @@ describe('Le serveur MSS', () => {
       );
 
       const entitesExternes = [];
-      entitesExternes[2] = { nom: 'Une entité', role: 'Un rôle' };
+      entitesExternes[2] = { nom: 'Une entité', acces: 'Accès administrateur' };
 
       axios.post(
         'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',

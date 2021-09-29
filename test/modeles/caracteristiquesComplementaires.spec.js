@@ -20,7 +20,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
       localisationDonnees: 'france',
-      entitesExternes: [{ nom: 'Un nom', role: 'Un rôle' }],
+      entitesExternes: [{ nom: 'Un nom', acces: 'Accès administrateur' }],
     }, referentiel);
 
     expect(caracteristiques.presentation).to.equal('Une présentation');
@@ -49,7 +49,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
       localisationDonnees: 'france',
-      entitesExternes: [{ nom: 'Une entité', role: 'Un rôle' }],
+      entitesExternes: [{ nom: 'Une entité', acces: 'Accès administrateur' }],
     }, referentiel);
 
     expect(caracteristiques.toJSON()).to.eql({
@@ -57,7 +57,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
       localisationDonnees: 'france',
-      entitesExternes: [{ nom: 'Une entité', role: 'Un rôle' }],
+      entitesExternes: [{ nom: 'Une entité', acces: 'Accès administrateur' }],
     });
   });
 
