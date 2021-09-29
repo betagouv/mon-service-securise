@@ -429,7 +429,7 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres entités externes', (done) => {
       verifieAseptisationParametres(
-        ['entitesExternes.*.nom', 'entitesExternes.*.acces'],
+        ['entitesExternes.*.nom', 'entitesExternes.*.contact', 'entitesExternes.*.acces'],
         {
           method: 'post',
           url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',

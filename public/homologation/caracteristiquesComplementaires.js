@@ -4,26 +4,26 @@ $(() => {
   let indexMaxEntitesExternes = 0;
 
   const afficheZoneSaisieEntiteExterne = (selecteur, index, donneesEntiteExterne = {}) => {
-    const conteneurSaisieEntitesExternes = $(selecteur);
-    const proprieteNom = `nom-entite-${index}`;
-    const proprieteAcces = `acces-entite-${index}`;
-    const { nom = '', acces = '' } = donneesEntiteExterne;
-    conteneurSaisieEntitesExternes.append(`
-<label>
-  <input
-    id="${proprieteNom}"
-    name="${proprieteNom}"
-    type="text"
-    placeholder="Nom de l'entité"
-    value="${nom}">
-  <input
-    id="${proprieteAcces}"
-    name="${proprieteAcces}"
-    type="text"
-    placeholder="Nature de l'accès"
-    value="${acces}">
-</label>
-    `);
+    const $conteneurSaisieEntitesExternes = $('<label/>');
+    $(selecteur).append($conteneurSaisieEntitesExternes);
+
+    const proprietesEntiteExterne = {
+      nom: "Nom de l'entité",
+      contact: 'Point de contact',
+      acces: "Nature de l'accès (facultatif)",
+    };
+
+    Object.keys(proprietesEntiteExterne).forEach((p) => {
+      const propriete = `${p}-entite-${index}`;
+      const valeur = donneesEntiteExterne[p] || '';
+      $conteneurSaisieEntitesExternes.append(`
+<input id="${propriete}"
+  name="${propriete}"
+  type="text"
+  placeholder="${proprietesEntiteExterne[p]}"
+  value="${valeur}">
+      `);
+    });
   };
 
   const peupleEntitesExternes = (selecteurConteneur, selecteurDonnees) => {
@@ -49,14 +49,14 @@ $(() => {
   };
 
   const extraisEntitesExternes = (params) => {
-    const regExpParametresEntitesExternes = /^(nom|acces)-entite-/;
+    const regExpParametresEntitesExternes = /^(nom|contact|acces)-entite-/;
     const donneesEntitesExternes = { entitesExternes: [] };
 
     Object.keys(params)
       .filter((p) => !!p.match(regExpParametresEntitesExternes))
       .forEach((p) => {
         if (params[p]) {
-          const resultat = p.match(/^(nom|acces)-entite-([0-9]*)$/);
+          const resultat = p.match(/^(nom|contact|acces)-entite-([0-9]*)$/);
           const propriete = resultat[1];
           let index = resultat[2];
           index = parseInt(index, 10);
