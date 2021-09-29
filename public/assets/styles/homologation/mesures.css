@@ -61,7 +61,7 @@ form#mesures input[type='radio'] {
 }
 
 form#mesures input[type='radio'] + label {
-  padding: 0;
+  margin: 0;
 }
 
 form#mesures .decoration {

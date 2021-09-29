@@ -4,8 +4,16 @@ $(() => {
   let indexMaxEntitesExternes = 0;
 
   const afficheZoneSaisieEntiteExterne = (selecteur, index, donneesEntiteExterne = {}) => {
-    const $conteneurSaisieEntitesExternes = $('<label/>');
+    const $conteneurSaisieEntitesExternes = $(`
+<label class="entite-externe">
+  <div class="icone-suppression"/>
+</label>
+`);
     $(selecteur).append($conteneurSaisieEntitesExternes);
+    $('.icone-suppression').click((e) => {
+      e.preventDefault();
+      $(e.target).parent().remove();
+    });
 
     const proprietesEntiteExterne = {
       nom: "Nom de l'entité",

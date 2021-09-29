@@ -75,7 +75,7 @@ label.exemple::before {
 label.exemple {
   display: inline-block;
 
-  padding: 0 0 0 1.7em;
+  margin: 0 0 0 1.7em;
 
   font-weight: normal;
   color: #abb6bf;

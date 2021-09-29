@@ -8,3 +8,39 @@ a.nouvelle-entite-externe {
 
   font-weight: normal;
 }
+
+.entite-externe {
+  position: relative;
+
+  padding: 1em;
+
+  border: solid 1px #ebedf0;
+  border-radius: 5px;
+}
+
+.icone-suppression {
+  position: absolute;
+  top: -0.55em;
+  right: -0.55em;
+
+  width: 1em;
+  height: 1em;
+  box-sizing: border-box;
+
+  border: solid 1px #abb6bf;
+  border-radius: 50%;
+
+  background-color: white;
+  background-image: url(../../images/icone_fermer.svg);
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+}
+
+.icone-suppression:hover {
+  cursor: pointer;
+
+  border: solid 1px #ce1b25;
+  background-color: #ce1b25;
+  background-image: url(../../images/icone_fermer_blanche.svg);
+}

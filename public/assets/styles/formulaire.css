@@ -22,7 +22,7 @@ form a {
 
 form label, fieldset {
   display: block;
-  padding-bottom: 3em;
+  margin-bottom: 3em;
 
   font-weight: bold;
 }
@@ -69,7 +69,7 @@ input[type='checkbox'], input[type='radio'] {
 input[type='checkbox'] + label, input[type='radio'] + label {
   display: inline-block;
 
-  padding: 1em 0 0;
+  margin: 1em 0 0;
 
   font-weight: normal;
 }
