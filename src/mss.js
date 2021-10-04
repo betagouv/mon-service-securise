@@ -244,9 +244,13 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       requete.body.entitesExternes &&= requete.body.entitesExternes.filter(
         (e) => e && (e.nom || e.contact || e.acces)
       );
-      const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
-      depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
-        .then(() => reponse.send({ idHomologation: requete.homologation.id }));
+      try {
+        const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
+        depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
+          .then(() => reponse.send({ idHomologation: requete.homologation.id }));
+      } catch {
+        reponse.status(422).send('Données invalides');
+      }
     });
 
   app.post('/api/homologation/:id/mesures',
