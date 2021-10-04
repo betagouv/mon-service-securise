@@ -260,19 +260,23 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       const params = requete.body;
       const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
       let ajouts = Promise.resolve();
-      identifiantsMesures.forEach((im) => {
-        const mesure = new Mesure({
-          id: im,
-          statut: params[im],
-          modalites: params[`modalites-${im}`],
-        }, referentiel);
+      try {
+        identifiantsMesures.forEach((im) => {
+          const mesure = new Mesure({
+            id: im,
+            statut: params[im],
+            modalites: params[`modalites-${im}`],
+          }, referentiel);
 
-        ajouts = ajouts.then(
-          () => depotDonnees.ajouteMesureAHomologation(requete.homologation.id, mesure)
-        );
-      });
+          ajouts = ajouts.then(
+            () => depotDonnees.ajouteMesureAHomologation(requete.homologation.id, mesure)
+          );
+        });
 
-      ajouts.then(() => reponse.send({ idHomologation: requete.homologation.id }));
+        ajouts.then(() => reponse.send({ idHomologation: requete.homologation.id }));
+      } catch {
+        reponse.status(422).send('Données invalides');
+      }
     });
 
   app.post('/api/homologation/:id/partiesPrenantes',

@@ -543,6 +543,19 @@ describe('Le serveur MSS', () => {
         })
         .catch(done);
     });
+
+    it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
+      axios.post('http://localhost:1234/api/homologation/456/mesures', {
+        identifiantInvalide: 'statutInvalide',
+      })
+        .then(() => done('Réponse HTTP OK inattendue'))
+        .catch((erreur) => {
+          expect(erreur.response.status).to.equal(422);
+          expect(erreur.response.data).to.equal('Données invalides');
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('quand requête POST sur `/api/homologation/:id/partiesPrenantes`', () => {
