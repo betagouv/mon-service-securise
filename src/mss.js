@@ -332,10 +332,14 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       donneesCaracterePersonnel = [],
       delaiAvantImpactCritique,
     } = requete.query;
-    const seuilCriticite = referentiel.criticite(
-      fonctionnalites, donneesCaracterePersonnel, delaiAvantImpactCritique
-    );
-    reponse.json({ seuilCriticite });
+    try {
+      const seuilCriticite = referentiel.criticite(
+        fonctionnalites, donneesCaracterePersonnel, delaiAvantImpactCritique
+      );
+      reponse.json({ seuilCriticite });
+    } catch {
+      reponse.status(422).send('Données invalides');
+    }
   });
 
   app.post('/api/utilisateur', middleware.aseptise('prenom', 'nom', 'email'), (requete, reponse) => {

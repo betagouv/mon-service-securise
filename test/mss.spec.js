@@ -325,6 +325,19 @@ describe('Le serveur MSS', () => {
         .then(() => done())
         .catch(done);
     });
+
+    it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
+      axios.get('http://localhost:1234/api/seuilCriticite', { params: {
+        delaiAvantImpactCritique: 'delaiInvalide',
+      } })
+        .then(() => done('Réponse HTTP OK inattendue'))
+        .catch((erreur) => {
+          expect(erreur.response.status).to.equal(422);
+          expect(erreur.response.data).to.equal('Données invalides');
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('quand requête POST sur `/api/homologation`', () => {
