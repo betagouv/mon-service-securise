@@ -317,9 +317,13 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.post('/api/homologation/:id/avisExpertCyber',
     middleware.trouveHomologation,
     (requete, reponse) => {
-      const avisExpert = new AvisExpertCyber(requete.body, referentiel);
-      depotDonnees.ajouteAvisExpertCyberAHomologation(requete.params.id, avisExpert)
-        .then(() => reponse.send({ idHomologation: requete.params.id }));
+      try {
+        const avisExpert = new AvisExpertCyber(requete.body, referentiel);
+        depotDonnees.ajouteAvisExpertCyberAHomologation(requete.params.id, avisExpert)
+          .then(() => reponse.send({ idHomologation: requete.params.id }));
+      } catch {
+        reponse.status(422).send('Données invalides');
+      }
     });
 
   app.get('/api/seuilCriticite', middleware.verificationAcceptationCGU, (requete, reponse) => {
