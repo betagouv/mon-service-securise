@@ -50,7 +50,8 @@ const middleware = (configuration = {}) => {
           requete.homologation = homologation;
           suite();
         }
-      }));
+      })
+      .catch(() => reponse.status(422).send("L'homologation n'a pas pu être récupérée")));
   };
 
   const aseptise = (...nomsParametres) => ((requete, reponse, suite) => {

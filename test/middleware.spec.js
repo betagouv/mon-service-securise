@@ -9,13 +9,26 @@ const prepareVerificationReponse = (reponse, status, ...params) => {
   if (params.length === 2) [message, suite] = params;
 
   reponse.status = (s) => {
-    expect(s).to.equal(status);
-    return reponse;
+    try {
+      expect(s).to.equal(status);
+      return reponse;
+    } catch (e) {
+      /* eslint-disable no-console */
+      console.log(e);
+      /* eslint-enable no-console */
+      return undefined;
+    }
   };
 
   reponse.send = (m) => {
-    if (typeof message !== 'undefined') expect(m).to.equal(message);
-    suite();
+    try {
+      if (typeof message !== 'undefined') expect(m).to.equal(message);
+      suite();
+    } catch (e) {
+      /* eslint-disable no-console */
+      console.log(e);
+      /* eslint-enable no-console */
+    }
   };
 };
 
@@ -151,6 +164,16 @@ describe('Le middleware MSS', () => {
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       prepareVerificationReponse(reponse, 403, "Accès à l'homologation refusé", done);
+
+      const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
+      middleware.trouveHomologation(requete, reponse, suite);
+    });
+
+    it("retourne une erreur HTTP 422 si l'homologation n'a pas pu être instanciée", (done) => {
+      depotDonnees.homologation = () => Promise.reject(new Error('oups'));
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
+
+      prepareVerificationReponse(reponse, 422, "L'homologation n'a pas pu être récupérée", done);
 
       const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
       middleware.trouveHomologation(requete, reponse, suite);
