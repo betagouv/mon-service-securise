@@ -76,20 +76,22 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     reponse.render('inscription');
   });
 
-  app.get('/initialisationMotDePasse/:idReset', (requete, reponse) => {
-    const { idReset } = requete.params;
-    depotDonnees.utilisateurAFinaliser(idReset)
-      .then((utilisateur) => {
-        if (!utilisateur) {
-          reponse.status(404)
-            .send(`Identifiant d'initialisation de mot de passe "${idReset}" inconnu`);
-        } else {
-          const token = utilisateur.genereToken();
-          requete.session.token = token;
-          sersFormulaireEditionUtilisateur(requete, reponse);
-        }
-      });
-  });
+  app.get('/initialisationMotDePasse/:idReset',
+    middleware.aseptise('idReset'),
+    (requete, reponse) => {
+      const { idReset } = requete.params;
+      depotDonnees.utilisateurAFinaliser(idReset)
+        .then((utilisateur) => {
+          if (!utilisateur) {
+            reponse.status(404)
+              .send(`Identifiant d'initialisation de mot de passe "${idReset}" inconnu`);
+          } else {
+            const token = utilisateur.genereToken();
+            requete.session.token = token;
+            sersFormulaireEditionUtilisateur(requete, reponse);
+          }
+        });
+    });
 
   app.get('/admin/inscription', middleware.authentificationBasique, (requete, reponse) => {
     reponse.render('admin/inscription');

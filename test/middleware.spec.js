@@ -200,6 +200,18 @@ describe('Le middleware MSS', () => {
       })
         .catch(done);
     });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      const middleware = Middleware();
+      requete.params.paramRenseigne = '<script>alert("hacked!");</script>';
+      middleware.aseptise('paramAbsent', 'paramRenseigne')(requete, reponse, () => {
+        expect(requete.params.paramRenseigne).to.equal(
+          '&lt;script&gt;alert(&quot;hacked!&quot;);&lt;&#x2F;script&gt;'
+        );
+        done();
+      })
+        .catch(done);
+    });
   });
 
   it('aseptise tous les paramètres de la requête', (done) => {

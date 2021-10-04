@@ -200,6 +200,12 @@ describe('Le serveur MSS', () => {
       });
     });
 
+    it("aseptise l'identifiant reçu", (done) => {
+      verifieAseptisationParametres(
+        ['idReset'], 'http://localhost:1234/initialisationMotDePasse/999', done
+      );
+    });
+
     it('retourne une erreur HTTP 404 si idReset inconnu', (done) => {
       depotDonnees.utilisateurAFinaliser = () => Promise.resolve(undefined);
 
