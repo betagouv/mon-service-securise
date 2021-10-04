@@ -296,18 +296,22 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       const commentairesRisques = Object.keys(params).filter((p) => p.match(prefixeCommentaire));
 
       let ajouts = Promise.resolve();
-      commentairesRisques.forEach((cr) => {
-        const idRisque = cr.replace(prefixeCommentaire, '');
-        const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
-        ajouts = ajouts.then(
-          () => depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque)
-        );
-      });
+      try {
+        commentairesRisques.forEach((cr) => {
+          const idRisque = cr.replace(prefixeCommentaire, '');
+          const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
+          ajouts = ajouts.then(
+            () => depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque)
+          );
+        });
 
-      ajouts
-        .then(() => depotDonnees.marqueRisquesCommeVerifies(requete.homologation.id))
-        .then(() => reponse.send({ idHomologation: requete.homologation.id }))
-        .catch(suite);
+        ajouts
+          .then(() => depotDonnees.marqueRisquesCommeVerifies(requete.homologation.id))
+          .then(() => reponse.send({ idHomologation: requete.homologation.id }))
+          .catch(suite);
+      } catch {
+        reponse.status(422).send('Données invalides');
+      }
     });
 
   app.post('/api/homologation/:id/avisExpertCyber',
