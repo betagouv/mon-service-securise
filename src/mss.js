@@ -1,7 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 
-const { ErreurUtilisateurExistant } = require('./erreurs');
+const { ErreurEmailManquant, ErreurUtilisateurExistant } = require('./erreurs');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
@@ -354,6 +354,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       }, (e) => {
         if (e instanceof ErreurUtilisateurExistant) {
           reponse.status(422).send('Utilisateur déjà existant pour cette adresse email');
+        } else if (e instanceof ErreurEmailManquant) {
+          reponse.status(422).send('Le champ email doit être renseigné');
         } else throw e;
       });
   });

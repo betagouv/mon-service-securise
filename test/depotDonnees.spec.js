@@ -2,7 +2,11 @@ const expect = require('expect.js');
 const bcrypt = require('bcrypt');
 
 const DepotDonnees = require('../src/depotDonnees');
-const { ErreurNomServiceManquant, ErreurUtilisateurExistant } = require('../src/erreurs');
+const {
+  ErreurEmailManquant,
+  ErreurNomServiceManquant,
+  ErreurUtilisateurExistant,
+} = require('../src/erreurs');
 const Referentiel = require('../src/referentiel');
 const AdaptateurPersistanceMemoire = require('../src/adaptateurs/adaptateurPersistanceMemoire');
 const AvisExpertCyber = require('../src/modeles/avisExpertCyber');
@@ -489,13 +493,29 @@ describe('Le dépôt de données persistées en mémoire', () => {
     let depot;
 
     describe("quand l'utilisateur n'existe pas déjà", () => {
+      let adaptateurPersistance;
+
       beforeEach(() => {
         let compteurId = 0;
         const adaptateurUUID = { genereUUID: () => { compteurId += 1; return `${compteurId}`; } };
-        const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [],
         });
         depot = DepotDonnees.creeDepot({ adaptateurJWT, adaptateurPersistance, adaptateurUUID });
+      });
+
+      it("lève une exception et n'enregistre pas l'utilisateur si l'email n'est pas renseigné", (done) => {
+        let utilisateurCree = false;
+        adaptateurPersistance.ajouteUtilisateur = () => Promise.resolve(utilisateurCree = true);
+
+        depot.nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont' })
+          .then(() => done("La création de l'utilisateur aurait dû lever une ErreurEmailManquant"))
+          .catch((erreur) => {
+            expect(erreur).to.be.a(ErreurEmailManquant);
+            expect(utilisateurCree).to.be(false);
+            done();
+          })
+          .catch(done);
       });
 
       it('génère un UUID pour cet utilisateur', (done) => {
@@ -542,7 +562,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
 
     it('supprime un identifiant de reset de mot de passe', (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [{ id: '123', idResetMotDePasse: '999' }],
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr', idResetMotDePasse: '999' }],
       });
       depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 

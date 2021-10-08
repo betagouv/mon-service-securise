@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt');
 
-const { ErreurNomServiceManquant, ErreurUtilisateurExistant } = require('./erreurs');
+const {
+  ErreurEmailManquant,
+  ErreurNomServiceManquant,
+  ErreurUtilisateurExistant,
+} = require('./erreurs');
 const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
@@ -103,6 +107,9 @@ const creeDepot = (config = {}) => {
     .then((u) => (u ? new Utilisateur(u, adaptateurJWT) : undefined));
 
   const nouvelUtilisateur = (donneesUtilisateur) => new Promise((resolve, reject) => {
+    const { email } = donneesUtilisateur;
+    if (!email) throw new ErreurEmailManquant();
+
     adaptateurPersistance.utilisateurAvecEmail(donneesUtilisateur.email)
       .then((u) => {
         if (u) reject(new ErreurUtilisateurExistant());

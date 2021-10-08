@@ -1,7 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
-const { ErreurUtilisateurExistant } = require('../src/erreurs');
+const { ErreurEmailManquant, ErreurUtilisateurExistant } = require('../src/erreurs');
 const MSS = require('../src/mss');
 const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
@@ -790,6 +790,15 @@ describe('Le serveur MSS', () => {
 
       verifieRequeteGenereErreurHTTP(
         422, 'Utilisateur déjà existant pour cette adresse email',
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
+      );
+    });
+
+    it("génère une erreur HTTP 422 si l'email n'est pas renseigné", (done) => {
+      depotDonnees.nouvelUtilisateur = () => Promise.reject(new ErreurEmailManquant());
+
+      verifieRequeteGenereErreurHTTP(
+        422, 'Le champ email doit être renseigné',
         { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
       );
     });

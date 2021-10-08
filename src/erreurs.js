@@ -2,6 +2,7 @@ class ErreurAvisInvalide extends Error {}
 class ErreurCategorieInconnue extends Error {}
 class ErreurDateRenouvellementInvalide extends Error {}
 class ErreurDonneesStatistiques extends Error {}
+class ErreurEmailManquant extends Error {}
 class ErreurLocalisationDonneesInvalide extends Error {}
 class ErreurMesureInconnue extends Error {}
 class ErreurNomServiceManquant extends Error {}
@@ -14,6 +15,7 @@ module.exports = {
   ErreurCategorieInconnue,
   ErreurDateRenouvellementInvalide,
   ErreurDonneesStatistiques,
+  ErreurEmailManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
   ErreurNomServiceManquant,

@@ -1,8 +1,15 @@
 const Base = require('./base');
+const { ErreurEmailManquant } = require('../erreurs');
+
+const valide = (donnees) => {
+  const { email } = donnees;
+  if (typeof email !== 'string' || email === '') throw new ErreurEmailManquant();
+};
 
 class Utilisateur extends Base {
   constructor(donnees = {}, adaptateurJWT) {
     super(['id', 'idResetMotDePasse', 'prenom', 'nom', 'email', 'cguAcceptees']);
+    valide(donnees);
     this.renseigneProprietes(donnees);
     this.adaptateurJWT = adaptateurJWT;
   }

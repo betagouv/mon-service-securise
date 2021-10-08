@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 
+const { ErreurEmailManquant } = require('../../src/erreurs');
 const Utilisateur = require('../../src/modeles/utilisateur');
 
 describe('Un utilisateur', () => {
@@ -34,10 +35,20 @@ describe('Un utilisateur', () => {
   });
 
   it('sait détecter si les conditions générales ont été acceptées', () => {
-    const utilisateur = new Utilisateur({ cguAcceptees: true });
+    const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr', cguAcceptees: true });
     expect(utilisateur.accepteCGU()).to.be(true);
 
-    const autreUtilisateur = new Utilisateur();
+    const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
     expect(autreUtilisateur.accepteCGU()).to.be(false);
+  });
+
+  it("exige que l'adresse électronique soit renseignée", (done) => {
+    try {
+      new Utilisateur({ prenom: 'Jean', nom: 'Dupont' });
+      done("La création de l'utilisateur aurait dû lever une ErreurEmailManquant");
+    } catch (e) {
+      expect(e).to.be.a(ErreurEmailManquant);
+      done();
+    }
   });
 });
