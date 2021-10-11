@@ -342,7 +342,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     }
   });
 
-  app.post('/api/utilisateur', middleware.aseptise('prenom', 'nom', 'email'), (requete, reponse) => {
+  app.post('/api/utilisateur', middleware.aseptise('prenom', 'nom', 'email'), (requete, reponse, suite) => {
     const { prenom, nom, email } = requete.body;
     depotDonnees.nouvelUtilisateur({ prenom, nom, email })
       .then((utilisateur) => (
@@ -362,7 +362,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           reponse.status(422).send('Utilisateur déjà existant pour cette adresse email');
         } else if (e instanceof ErreurEmailManquant) {
           reponse.status(422).send('Le champ email doit être renseigné');
-        } else throw e;
+        } else suite(e);
       });
   });
 
