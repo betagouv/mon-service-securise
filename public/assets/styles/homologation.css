@@ -65,38 +65,40 @@
   padding: 0;
 }
 
-li.action {
+.actions li {
   list-style-type: none;
+}
+
+a.action {
+  display: block;
 
   margin-bottom: 1em;
   padding: 1em 2em;
 
   border-radius: 5px;
   background: #ebedf0;
-}
-
-li.action {
   background-repeat: no-repeat;
   background-size: 2em;
   background-position: 98% 50%;
-}
 
-li.action.faite {
-  background-image: url(../images/icone_ok_pastille_verte.svg);
-}
-
-li.action.a-completer {
-  background-image: url(../images/icone_edition_pastille_grise.svg);
-}
-
-li.action.a-faire {
-  background-image: url(../images/icone_vide_pastille_blanche.svg);
-}
-
-.action a {
   text-decoration: none;
 
   font-weight: bold;
   font-size: 0.9em;
   color: #1b7cc4;
+}
+
+a.action.faite {
+  background-image: url(../images/icone_ok_pastille_verte.svg);
+}
+
+a.action.a-completer {
+  background-image: url(../images/icone_edition_pastille_grise.svg);
+}
+
+a.action.a-faire {
+  background-image: url(../images/icone_vide_pastille_blanche.svg);
+}
+
+.action a {
 }

@@ -12,8 +12,7 @@ mixin action({ description, url, statut })
       default: '';
     }
 
-  li.action(class = classeStyleStatut)
-    a(href = url)= description
+  a.action(class = classeStyleStatut, href = url)= description
 
 
 block append styles
@@ -36,6 +35,7 @@ block main
             dd
               ul
                 each donneesAction in actions
-                  +action(donneesAction)
+                  li
+                    +action(donneesAction)
 
     +besoinAide
