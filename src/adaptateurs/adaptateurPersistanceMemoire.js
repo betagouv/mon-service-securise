@@ -1,53 +1,59 @@
 const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [] }) => {
-  const ajouteHomologation = (id, donneesHomologation) => new Promise((resolve) => resolve(
-    donnees.homologations.push(Object.assign(donneesHomologation, { id }))
-  ));
+  const ajouteHomologation = (id, donneesHomologation) => {
+    donnees.homologations.push(Object.assign(donneesHomologation, { id }));
+    return Promise.resolve();
+  };
 
-  const ajouteUtilisateur = (id, donneesUtilisateur) => new Promise((resolve) => resolve(
-    donnees.utilisateurs.push(Object.assign(donneesUtilisateur, { id }))
-  ));
+  const ajouteUtilisateur = (id, donneesUtilisateur) => {
+    donnees.utilisateurs.push(Object.assign(donneesUtilisateur, { id }));
+    return Promise.resolve();
+  };
 
-  const homologation = (idHomologation) => new Promise((resolve) => resolve(
+  const homologation = (idHomologation) => Promise.resolve(
     donnees.homologations.find((h) => h.id === idHomologation)
-  ));
+  );
 
-  const homologations = (idUtilisateur) => new Promise((resolve) => resolve(
+  const homologations = (idUtilisateur) => Promise.resolve(
     donnees.homologations.filter((h) => h.idUtilisateur === idUtilisateur)
-  ));
+  );
 
-  const metsAJourHomologation = (id, donneesAMettreAJour) => new Promise((resolve) => resolve(
-    homologation(id).then((h) => Object.assign(h, donneesAMettreAJour))
-  ));
+  const metsAJourHomologation = (id, donneesAMettreAJour) => homologation(id)
+    .then((h) => Object.assign(h, donneesAMettreAJour))
+    .then(() => {});
 
   const supprimeHomologation = (id) => {
     donnees.homologations = donnees.homologations.filter((h) => h.id !== id);
     return Promise.resolve();
   };
 
-  const supprimeHomologations = () => new Promise((resolve) => resolve(donnees.homologations = []));
+  const supprimeHomologations = () => {
+    donnees.homologations = [];
+    return Promise.resolve();
+  };
 
   const supprimeUtilisateur = (id) => {
     donnees.utilisateurs = donnees.utilisateurs.filter((u) => u.id !== id);
     return Promise.resolve();
   };
 
-  const supprimeUtilisateurs = () => new Promise((resolve) => resolve(donnees.utilisateurs = []));
+  const supprimeUtilisateurs = () => {
+    donnees.utilisateurs = [];
+    return Promise.resolve();
+  };
 
-  const utilisateur = (id) => new Promise((resolve) => resolve(
-    donnees.utilisateurs.find((u) => u.id === id)
-  ));
+  const utilisateur = (id) => Promise.resolve(donnees.utilisateurs.find((u) => u.id === id));
 
-  const metsAJourUtilisateur = (id, donneesAMettreAJour) => new Promise((resolve) => resolve(
-    utilisateur(id).then((u) => Object.assign(u, donneesAMettreAJour))
-  ));
+  const metsAJourUtilisateur = (id, donneesAMettreAJour) => utilisateur(id)
+    .then((u) => Object.assign(u, donneesAMettreAJour))
+    .then(() => {});
 
-  const utilisateurAvecEmail = (email) => new Promise((resolve) => resolve(
+  const utilisateurAvecEmail = (email) => Promise.resolve(
     donnees.utilisateurs.find((u) => u.email === email)
-  ));
+  );
 
-  const utilisateurAvecIdReset = (idReset) => new Promise((resolve) => resolve(
+  const utilisateurAvecIdReset = (idReset) => Promise.resolve(
     donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset)
-  ));
+  );
 
   return {
     ajouteHomologation,
