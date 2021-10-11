@@ -13,7 +13,7 @@ const creeTransport = () => nodemailer.createTransport({
 const envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) => {
   const transport = creeTransport();
 
-  transport.sendMail({
+  return transport.sendMail({
     from: process.env.ADRESSE_MAIL_CONTACT,
     to: destinataire,
     subject: 'Finalisation inscription Mon Service Sécurisé',

@@ -778,11 +778,43 @@ describe('Le serveur MSS', () => {
       adaptateurMail.envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) => {
         expect(destinataire).to.equal('jean.dupont@mail.fr');
         expect(idResetMotDePasse).to.equal('999');
-        done();
+        return Promise.resolve();
       };
 
       axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
+        .then(() => done())
         .catch(done);
+    });
+
+    describe("si l'envoi de mail échoue", () => {
+      beforeEach(() => {
+        adaptateurMail.envoieMessageFinalisationInscription = () => Promise.reject(new Error('Oups.'));
+        depotDonnees.supprimeUtilisateur = () => Promise.resolve();
+      });
+
+      it('retourne une erreur HTTP 424', (done) => {
+        verifieRequeteGenereErreurHTTP(
+          424, "L'envoi de l'email de finalisation d'inscription a échoué",
+          { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
+        );
+      });
+
+      it("supprime l'utilisateur créé", (done) => {
+        let utilisateurSupprime = false;
+        depotDonnees.supprimeUtilisateur = (id) => {
+          expect(id).to.equal('123');
+
+          utilisateurSupprime = true;
+          return Promise.resolve();
+        };
+
+        axios.post('http://localhost:1234/api/utilisateur', { desDonnes: 'des données' })
+          .catch(() => {
+            expect(utilisateurSupprime).to.be(true);
+            done();
+          })
+          .catch(done);
+      });
     });
 
     it("génère une erreur HTTP 422 si l'utilisateur existe déjà", (done) => {

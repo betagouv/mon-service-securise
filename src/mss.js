@@ -345,13 +345,19 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.post('/api/utilisateur', middleware.aseptise('prenom', 'nom', 'email'), (requete, reponse) => {
     const { prenom, nom, email } = requete.body;
     depotDonnees.nouvelUtilisateur({ prenom, nom, email })
-      .then((utilisateur) => {
+      .then((utilisateur) => (
         adaptateurMail.envoieMessageFinalisationInscription(
           utilisateur.email, utilisateur.idResetMotDePasse
-        );
-        const idUtilisateur = utilisateur.id;
-        reponse.json({ idUtilisateur });
-      }, (e) => {
+        )
+          .then(() => reponse.json({ idUtilisateur: utilisateur.id }))
+          .catch(() => {
+            depotDonnees.supprimeUtilisateur(utilisateur.id)
+              .then(() => reponse.status(424).send(
+                "L'envoi de l'email de finalisation d'inscription a échoué"
+              ));
+          })
+      ))
+      .catch((e) => {
         if (e instanceof ErreurUtilisateurExistant) {
           reponse.status(422).send('Utilisateur déjà existant pour cette adresse email');
         } else if (e instanceof ErreurEmailManquant) {

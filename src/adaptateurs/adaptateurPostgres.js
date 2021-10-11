@@ -48,7 +48,16 @@ const nouvelAdaptateur = (env) => {
   const nbUtilisateurs = () => knex('utilisateurs').count()
     .then((rows) => rows[0]['count(*)']);
 
+  const supprimeHomologation = (id) => knex('homologations')
+    .where({ id })
+    .del();
+
   const supprimeHomologations = () => knex('homologations').del();
+
+  const supprimeUtilisateur = (id) => knex('utilisateurs')
+    .where({ id })
+    .del();
+
   const supprimeUtilisateurs = () => knex('utilisateurs').del();
 
   const utilisateur = (id) => elementDeTable('utilisateurs', id);
@@ -67,7 +76,9 @@ const nouvelAdaptateur = (env) => {
     metsAJourHomologation,
     metsAJourUtilisateur,
     nbUtilisateurs,
+    supprimeHomologation,
     supprimeHomologations,
+    supprimeUtilisateur,
     supprimeUtilisateurs,
     utilisateur,
     utilisateurAvecEmail,

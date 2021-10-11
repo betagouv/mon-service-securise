@@ -19,7 +19,18 @@ const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [] }) => 
     homologation(id).then((h) => Object.assign(h, donneesAMettreAJour))
   ));
 
+  const supprimeHomologation = (id) => {
+    donnees.homologations = donnees.homologations.filter((h) => h.id !== id);
+    return Promise.resolve();
+  };
+
   const supprimeHomologations = () => new Promise((resolve) => resolve(donnees.homologations = []));
+
+  const supprimeUtilisateur = (id) => {
+    donnees.utilisateurs = donnees.utilisateurs.filter((u) => u.id !== id);
+    return Promise.resolve();
+  };
+
   const supprimeUtilisateurs = () => new Promise((resolve) => resolve(donnees.utilisateurs = []));
 
   const utilisateur = (id) => new Promise((resolve) => resolve(
@@ -45,7 +56,9 @@ const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [] }) => 
     homologations,
     metsAJourHomologation,
     metsAJourUtilisateur,
+    supprimeHomologation,
     supprimeHomologations,
+    supprimeUtilisateur,
     supprimeUtilisateurs,
     utilisateur,
     utilisateurAvecEmail,

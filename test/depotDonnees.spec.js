@@ -606,4 +606,52 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .catch(done);
     });
   });
+
+  it('supprime une homologation avec un identifiant donné', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+      homologations: [
+        { id: '123', idUtilisateur: '999', informationsGenerales: { nomService: 'Un service' } },
+      ],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.supprimeHomologation('123')
+      .then(depot.homologation('123'))
+      .then((h) => expect(h).to.be(undefined))
+      .then(() => done())
+      .catch(done);
+  });
+
+  describe("Sur demande de suppression d'un utilisateur", () => {
+    it("supprime les homologations associées à l'utilisateur", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        homologations: [
+          { id: '123', idUtilisateur: '999', informationsGenerales: { nomService: 'Un service' } },
+        ],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.supprimeUtilisateur('999')
+        .then(() => depot.homologation('123'))
+        .then((h) => expect(h).to.be(undefined))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("supprime l'utilisateur", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        homologations: [],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.supprimeUtilisateur('999')
+        .then(() => depot.utilisateur('999'))
+        .then((u) => expect(u).to.be(undefined))
+        .then(() => done())
+        .catch(done);
+    });
+  });
 });

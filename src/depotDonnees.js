@@ -112,11 +112,11 @@ const creeDepot = (config = {}) => {
 
     adaptateurPersistance.utilisateurAvecEmail(donneesUtilisateur.email)
       .then((u) => {
-        if (u) reject(new ErreurUtilisateurExistant());
+        if (u) return reject(new ErreurUtilisateurExistant());
 
         const id = adaptateurUUID.genereUUID();
         donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
-        bcrypt.hash(adaptateurUUID.genereUUID(), 10)
+        return bcrypt.hash(adaptateurUUID.genereUUID(), 10)
           .then((hash) => {
             donneesUtilisateur.motDePasse = hash;
 
@@ -164,12 +164,19 @@ const creeDepot = (config = {}) => {
         .then(() => utilisateur(u.id));
     });
 
+  const { supprimeHomologation } = adaptateurPersistance;
+
   const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) => (
     adaptateurPersistance.metsAJourUtilisateur(
       utilisateurAModifier.id, { idResetMotDePasse: undefined }
     )
       .then(() => utilisateur(utilisateurAModifier.id))
   );
+
+  const supprimeUtilisateur = (id) => homologations(id)
+    .then((hs) => hs.map((h) => adaptateurPersistance.supprimeHomologation(h.id)))
+    .then((suppressions) => Promise.all(suppressions))
+    .then(() => adaptateurPersistance.supprimeUtilisateur(id));
 
   const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => (
     adaptateurPersistance.metsAJourUtilisateur(utilisateurAModifier.id, { cguAcceptees: true })
@@ -190,7 +197,9 @@ const creeDepot = (config = {}) => {
     nouvelleHomologation,
     nouvelUtilisateur,
     reinitialiseMotDePasse,
+    supprimeHomologation,
     supprimeIdResetMotDePassePourUtilisateur,
+    supprimeUtilisateur,
     utilisateur,
     utilisateurAFinaliser,
     utilisateurAuthentifie,
