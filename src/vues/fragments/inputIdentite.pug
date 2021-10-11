@@ -1,5 +1,5 @@
 mixin inputIdentite({ role, descriptif = '', nomParametre, raccourciVisible = false })
-  label= role
+  label(for='aucuneAction')= role
     p= descriptif
 
     - const nomParamCapitalise = `${nomParametre.charAt(0).toUpperCase()}${nomParametre.slice(1)}`
