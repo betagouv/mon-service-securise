@@ -101,6 +101,8 @@ a.inscription:hover {
 
 .menu {
   position: absolute;
+  z-index: 1;
+
   top: 2em;
   left: 0;
   width: 12em;
