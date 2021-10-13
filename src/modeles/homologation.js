@@ -22,7 +22,7 @@ class Homologation {
       mesures = [],
       caracteristiquesComplementaires = {},
       partiesPrenantes = {},
-      risques = [],
+      risquesGeneraux = [],
       risquesVerifies = false,
       avisExpertCyber = {},
     } = donnees;
@@ -35,7 +35,7 @@ class Homologation {
       caracteristiquesComplementaires, referentiel,
     );
     this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
-    this.risques = new Risques({ risques, risquesVerifies }, referentiel);
+    this.risques = new Risques({ risquesGeneraux, risquesVerifies }, referentiel);
     this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber, referentiel);
 
     this.referentiel = referentiel;

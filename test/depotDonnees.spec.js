@@ -274,12 +274,12 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
 
     const risque = new RisqueGeneral({ id: 'unRisque', commentaire: 'Un commentaire' }, referentiel);
-    depot.ajouteRisqueAHomologation('123', risque)
+    depot.ajouteRisqueGeneralAHomologation('123', risque)
       .then(() => depot.homologation('123'))
       .then(({ risques }) => {
-        expect(risques.risques.nombre()).to.equal(1);
-        expect(risques.risques.item(0)).to.be.a(RisqueGeneral);
-        expect(risques.risques.item(0).id).to.equal('unRisque');
+        expect(risques.risquesGeneraux.nombre()).to.equal(1);
+        expect(risques.risquesGeneraux.item(0)).to.be.a(RisqueGeneral);
+        expect(risques.risquesGeneraux.item(0).id).to.equal('unRisque');
         done();
       })
       .catch(done);

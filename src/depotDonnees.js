@@ -55,8 +55,8 @@ const creeDepot = (config = {}) => {
     ajouteAItemsDansHomologation('mesures', ...params)
   );
 
-  const ajouteRisqueAHomologation = (...params) => (
-    ajouteAItemsDansHomologation('risques', ...params)
+  const ajouteRisqueGeneralAHomologation = (...params) => (
+    ajouteAItemsDansHomologation('risquesGeneraux', ...params)
   );
 
   const valideInformationsGenerales = (infos) => new Promise((resolve, reject) => {
@@ -189,7 +189,7 @@ const creeDepot = (config = {}) => {
     ajouteInformationsGeneralesAHomologation,
     ajouteMesureAHomologation,
     ajoutePartiesPrenantesAHomologation,
-    ajouteRisqueAHomologation,
+    ajouteRisqueGeneralAHomologation,
     homologation,
     homologations,
     marqueRisquesCommeVerifies,

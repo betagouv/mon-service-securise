@@ -4,7 +4,7 @@ const Referentiel = require('../referentiel');
 
 class Risques extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super(['risquesVerifies'], [], { risques: RisquesGeneraux });
+    super(['risquesVerifies'], [], { risquesGeneraux: RisquesGeneraux });
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
   }

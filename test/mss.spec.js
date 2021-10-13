@@ -631,7 +631,7 @@ describe('Le serveur MSS', () => {
       referentiel.recharge({ risques: { unRisque: {} } });
       let risqueAjoute = false;
 
-      depotDonnees.ajouteRisqueAHomologation = (idHomologation, risque) => new Promise(
+      depotDonnees.ajouteRisqueGeneralAHomologation = (idHomologation, risque) => new Promise(
         (resolve) => {
           expect(idHomologation).to.equal('456');
           expect(risque.id).to.equal('unRisque');

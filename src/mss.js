@@ -301,7 +301,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           const idRisque = cr.replace(prefixeCommentaire, '');
           const risque = new RisqueGeneral({ id: idRisque, commentaire: params[cr] }, referentiel);
           ajouts = ajouts.then(
-            () => depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque)
+            () => depotDonnees.ajouteRisqueGeneralAHomologation(requete.homologation.id, risque)
           );
         });
 
