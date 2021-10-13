@@ -277,9 +277,9 @@ describe('Le dépôt de données persistées en mémoire', () => {
     depot.ajouteRisqueAHomologation('123', risque)
       .then(() => depot.homologation('123'))
       .then(({ risques }) => {
-        expect(risques.nombre()).to.equal(1);
-        expect(risques.item(0)).to.be.a(RisqueGeneral);
-        expect(risques.item(0).id).to.equal('unRisque');
+        expect(risques.risques.nombre()).to.equal(1);
+        expect(risques.risques.item(0)).to.be.a(RisqueGeneral);
+        expect(risques.risques.item(0).id).to.equal('unRisque');
         done();
       })
       .catch(done);

@@ -5,13 +5,13 @@ class Base {
     this.nomsListesAgregats = nomsListesAgregats;
   }
 
-  renseigneProprietes(donnees) {
+  renseigneProprietes(donnees, referentiel) {
     this.nomsProprietesAtomiques.forEach((np) => (this[np] = donnees[np]));
     this.nomsProprietesListes.forEach((np) => (this[np] = donnees[np] || []));
     Object.keys(this.nomsListesAgregats).forEach((nl) => {
       const ClasseListeAgregats = this.nomsListesAgregats[nl];
       const donneesListeAgregat = { [nl]: donnees[nl] || [] };
-      this[nl] = new ClasseListeAgregats(donneesListeAgregat);
+      this[nl] = new ClasseListeAgregats(donneesListeAgregat, referentiel);
     });
   }
 

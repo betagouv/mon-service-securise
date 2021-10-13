@@ -1,11 +1,12 @@
-const ListeItems = require('./listeItems');
-const RisqueGeneral = require('./risqueGeneral');
+const InformationsHomologation = require('./informationsHomologation');
+const RisquesGeneraux = require('./risquesGeneraux');
+const Referentiel = require('../referentiel');
 
-class Risques extends ListeItems {
-  constructor(donnees, referentiel) {
-    const { risques, risquesVerifies } = donnees;
-    super(RisqueGeneral, { items: risques }, referentiel);
-    this.risquesVerifies = risquesVerifies;
+class Risques extends InformationsHomologation {
+  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+    super(['risquesVerifies'], [], { risques: RisquesGeneraux });
+    this.renseigneProprietes(donnees, referentiel);
+    this.referentiel = referentiel;
   }
 
   statutSaisie() {

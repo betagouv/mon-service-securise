@@ -25,7 +25,7 @@ const ajouteZoneSaisieCommentairePourRisque = ($r, nom) => {
 
 const peupleCommentairesAvec = (selecteurDonnees) => {
   const donneesRisques = JSON.parse($(selecteurDonnees).text());
-  donneesRisques.forEach(({ id, commentaire }) => {
+  donneesRisques.risques.forEach(({ id, commentaire }) => {
     if (commentaire) $(`#commentaire-${id}`).show().val(texteHTML(commentaire));
   });
 };
