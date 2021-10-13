@@ -9,7 +9,7 @@ const InformationsGenerales = require('./modeles/informationsGenerales');
 const InformationsHomologation = require('./modeles/informationsHomologation');
 const Mesure = require('./modeles/mesure');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
-const Risque = require('./modeles/risque');
+const RisqueGeneral = require('./modeles/risqueGeneral');
 
 require('dotenv').config();
 
@@ -299,7 +299,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       try {
         commentairesRisques.forEach((cr) => {
           const idRisque = cr.replace(prefixeCommentaire, '');
-          const risque = new Risque({ id: idRisque, commentaire: params[cr] }, referentiel);
+          const risque = new RisqueGeneral({ id: idRisque, commentaire: params[cr] }, referentiel);
           ajouts = ajouts.then(
             () => depotDonnees.ajouteRisqueAHomologation(requete.homologation.id, risque)
           );

@@ -10,7 +10,7 @@ const valide = (donnees, referentiel) => {
   }
 };
 
-class Risque extends Base {
+class RisqueGeneral extends Base {
   constructor(donneesRisque = {}, referentiel = Referentiel.creeReferentielVide()) {
     super(['id', 'commentaire']);
 
@@ -20,4 +20,4 @@ class Risque extends Base {
   }
 }
 
-module.exports = Risque;
+module.exports = RisqueGeneral;

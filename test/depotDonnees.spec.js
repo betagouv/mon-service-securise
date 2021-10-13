@@ -15,7 +15,7 @@ const Homologation = require('../src/modeles/homologation');
 const InformationsGenerales = require('../src/modeles/informationsGenerales');
 const Mesure = require('../src/modeles/mesure');
 const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
-const Risque = require('../src/modeles/risque');
+const RisqueGeneral = require('../src/modeles/risqueGeneral');
 const Utilisateur = require('../src/modeles/utilisateur');
 
 describe('Le dépôt de données persistées en mémoire', () => {
@@ -273,12 +273,12 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const referentiel = Referentiel.creeReferentiel({ risques: { unRisque: {} } });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
 
-    const risque = new Risque({ id: 'unRisque', commentaire: 'Un commentaire' }, referentiel);
+    const risque = new RisqueGeneral({ id: 'unRisque', commentaire: 'Un commentaire' }, referentiel);
     depot.ajouteRisqueAHomologation('123', risque)
       .then(() => depot.homologation('123'))
       .then(({ risques }) => {
         expect(risques.nombre()).to.equal(1);
-        expect(risques.item(0)).to.be.a(Risque);
+        expect(risques.item(0)).to.be.a(RisqueGeneral);
         expect(risques.item(0).id).to.equal('unRisque');
         done();
       })

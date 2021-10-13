@@ -1,10 +1,10 @@
 const ListeItems = require('./listeItems');
-const Risque = require('./risque');
+const RisqueGeneral = require('./risqueGeneral');
 
 class Risques extends ListeItems {
   constructor(donnees, referentiel) {
     const { risques, risquesVerifies } = donnees;
-    super(Risque, { items: risques }, referentiel);
+    super(RisqueGeneral, { items: risques }, referentiel);
     this.risquesVerifies = risquesVerifies;
   }
 

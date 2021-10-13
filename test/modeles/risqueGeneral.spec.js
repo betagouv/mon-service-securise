@@ -2,7 +2,7 @@ const expect = require('expect.js');
 
 const { ErreurRisqueInconnu } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
-const Risque = require('../../src/modeles/risque');
+const RisqueGeneral = require('../../src/modeles/risqueGeneral');
 
 describe('Un risque', () => {
   let referentiel;
@@ -14,7 +14,7 @@ describe('Un risque', () => {
   ));
 
   it('sait se décrire', () => {
-    const risque = new Risque({ id: 'unRisque', commentaire: 'Un commentaire' }, referentiel);
+    const risque = new RisqueGeneral({ id: 'unRisque', commentaire: 'Un commentaire' }, referentiel);
 
     expect(risque.id).to.equal('unRisque');
     expect(risque.commentaire).to.equal('Un commentaire');
@@ -25,13 +25,13 @@ describe('Un risque', () => {
   });
 
   it('retourne un JSON partiel si certaines informations sont inexistantes', () => {
-    const risque = new Risque({ id: 'unRisque' }, referentiel);
+    const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
     expect(risque.toJSON()).to.eql({ id: 'unRisque' });
   });
 
   it('vérifie que le risque est bien répertorié', (done) => {
     try {
-      new Risque({ id: 'identifiantInconnu' }, referentiel);
+      new RisqueGeneral({ id: 'identifiantInconnu' }, referentiel);
       done('La création du risque aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.a(ErreurRisqueInconnu);
