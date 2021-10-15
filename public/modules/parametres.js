@@ -30,4 +30,27 @@ const parametres = (selecteurFormulaire) => {
   return avecPremierElementCommeValeurs(params, nomsParamsAtomiques);
 };
 
-export { parametres as default };
+const parametresAvecItemsExtraits = (selecteurForm, nomListeItems, sourceRegExpParamsItem) => {
+  const params = parametres(selecteurForm);
+  const donneesItems = { [nomListeItems]: [] };
+
+  Object.keys(params)
+    .filter((p) => !!p.match(new RegExp(sourceRegExpParamsItem)))
+    .forEach((p) => {
+      if (params[p]) {
+        const resultat = p.match(new RegExp(`${sourceRegExpParamsItem}([0-9]*)$`));
+        const propriete = resultat[1];
+        let index = resultat[2];
+        index = parseInt(index, 10);
+        donneesItems[nomListeItems][index] = (
+          donneesItems[nomListeItems][index] || {}
+        );
+        donneesItems[nomListeItems][index][propriete] = params[p];
+      }
+      delete params[p];
+    });
+
+  return Object.assign(params, donneesItems);
+};
+
+export { parametres as default, parametresAvecItemsExtraits };

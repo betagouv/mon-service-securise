@@ -25,6 +25,11 @@ block formulaire
           .titre= donnees.description
           a.informations-additionnelles Précisez le risque dans le cadre de votre organisation (facultatif)
 
+    section
+      label Risques spécifiques au service numérique
+      #risques-specifiques
+      a.nouvel-item Ajouter un risque spécifique
+
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donnees-risques', type = 'application/json').

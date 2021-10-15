@@ -11,13 +11,6 @@
   color: #1b7cc4;
 }
 
-/*
-form.homologation, form.acces-refuse, form.utilisateur {
-  width: 580px;
-  margin: 0;
-}
-*/
-
 form.homologation * {
   text-align: left;
 }
@@ -79,4 +72,49 @@ label.exemple {
 
   font-weight: normal;
   color: #abb6bf;
+}
+
+a.nouvel-item {
+  padding-left: 2em;
+  background-image: url(../../images/icone_ajout_bleue.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  font-weight: normal;
+}
+
+.item-ajoute {
+  position: relative;
+
+  padding: 1em;
+
+  border: solid 1px #ebedf0;
+  border-radius: 5px;
+}
+
+.icone-suppression {
+  position: absolute;
+  top: -0.55em;
+  right: -0.55em;
+
+  width: 1em;
+  height: 1em;
+  box-sizing: border-box;
+
+  border: solid 1px #abb6bf;
+  border-radius: 50%;
+
+  background-color: white;
+  background-image: url(../../images/icone_fermer.svg);
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+}
+
+.icone-suppression:hover {
+  cursor: pointer;
+
+  border: solid 1px #ce1b25;
+  background-color: #ce1b25;
+  background-image: url(../../images/icone_fermer_blanche.svg);
 }

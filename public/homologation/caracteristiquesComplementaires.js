@@ -1,37 +1,44 @@
-import parametres from '../modules/parametres.js';
+import brancheAjoutItem from '../modules/saisieListeItems.js';
+import { parametresAvecItemsExtraits } from '../modules/parametres.js';
 
 $(() => {
   let indexMaxEntitesExternes = 0;
 
-  const afficheZoneSaisieEntiteExterne = (selecteur, index, donneesEntiteExterne = {}) => {
-    const $conteneurSaisieEntitesExternes = $(`
-<label class="entite-externe">
-  <div class="icone-suppression"/>
-</label>
-`);
-    $(selecteur).append($conteneurSaisieEntitesExternes);
-    $('.icone-suppression').click((e) => {
-      e.preventDefault();
-      $(e.target).parent().remove();
-    });
-
+  const zoneSaisieEntiteExterne = (index, donneesEntiteExterne = {}) => {
     const proprietesEntiteExterne = {
       nom: "Nom de l'entité",
       contact: 'Point de contact',
       acces: "Nature de l'accès (facultatif)",
     };
 
-    Object.keys(proprietesEntiteExterne).forEach((p) => {
+    return Object.keys(proprietesEntiteExterne).reduce((acc, p) => {
       const propriete = `${p}-entite-${index}`;
       const valeur = donneesEntiteExterne[p] || '';
-      $conteneurSaisieEntitesExternes.append(`
+      return `${acc}
 <input id="${propriete}"
   name="${propriete}"
   type="text"
   placeholder="${proprietesEntiteExterne[p]}"
   value="${valeur}">
-      `);
+      `;
+    }, '');
+  };
+
+  const afficheZoneSaisieEntiteExterne = (selecteur, index, donneesEntiteExterne) => {
+    const $conteneurSaisieEntitesExternes = $(`
+<label class="item-ajoute">
+  <div class="icone-suppression"/>
+</label>
+    `);
+
+    $(selecteur).append($conteneurSaisieEntitesExternes);
+    $('.icone-suppression').click((e) => {
+      e.preventDefault();
+      $(e.target).parent().remove();
     });
+
+    const zoneSaisie = zoneSaisieEntiteExterne(index, donneesEntiteExterne);
+    $conteneurSaisieEntitesExternes.append(zoneSaisie);
   };
 
   const peupleEntitesExternes = (selecteurConteneur, selecteurDonnees) => {
@@ -48,50 +55,25 @@ $(() => {
     return Math.max(0, donneesEntitesExternes.length - 1);
   };
 
-  const brancheAjoutEntiteExterne = (selecteurAction, selecteurConteneur) => {
-    $(selecteurAction).click((e) => {
-      e.preventDefault();
-      indexMaxEntitesExternes += 1;
-      afficheZoneSaisieEntiteExterne(selecteurConteneur, indexMaxEntitesExternes);
-    });
-  };
-
-  const extraisEntitesExternes = (params) => {
-    const regExpParametresEntitesExternes = /^(nom|contact|acces)-entite-/;
-    const donneesEntitesExternes = { entitesExternes: [] };
-
-    Object.keys(params)
-      .filter((p) => !!p.match(regExpParametresEntitesExternes))
-      .forEach((p) => {
-        if (params[p]) {
-          const resultat = p.match(/^(nom|contact|acces)-entite-([0-9]*)$/);
-          const propriete = resultat[1];
-          let index = resultat[2];
-          index = parseInt(index, 10);
-          donneesEntitesExternes.entitesExternes[index] = (
-            donneesEntitesExternes.entitesExternes[index] || {}
-          );
-          donneesEntitesExternes.entitesExternes[index][propriete] = params[p];
-        }
-      });
-    Object.assign(params, donneesEntitesExternes);
-
-    Object.keys(params).forEach((p) => {
-      if (p.match(regExpParametresEntitesExternes)) delete params[p];
-    });
-
-    return params;
-  };
+  const brancheAjoutEntiteExterne = (...params) => brancheAjoutItem(
+    ...params,
+    (index) => zoneSaisieEntiteExterne(index),
+    () => (indexMaxEntitesExternes += 1),
+  );
 
   const $bouton = $('.bouton');
   const identifiantHomologation = $bouton.attr('identifiant');
 
   indexMaxEntitesExternes = peupleEntitesExternes('#entites-externes', '#donneesEntitesExternes');
-  brancheAjoutEntiteExterne('.nouvelle-entite-externe', '#entites-externes');
+  brancheAjoutEntiteExterne('.nouvel-item', '#entites-externes');
 
   $bouton.click(() => {
-    let params = parametres('form#caracteristiques-complementaires');
-    params = extraisEntitesExternes(params);
+    const params = parametresAvecItemsExtraits(
+      'form#caracteristiques-complementaires',
+      'entitesExternes',
+      '^(nom|contact|acces)-entite-',
+    );
+
     axios.post(
       `/api/homologation/${identifiantHomologation}/caracteristiquesComplementaires`,
       params,
