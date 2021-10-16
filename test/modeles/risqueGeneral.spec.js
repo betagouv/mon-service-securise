@@ -39,8 +39,4 @@ describe('Un risque général', () => {
       done();
     }
   });
-
-  it('connaît sa description', () => {
-    expect(referentiel.risques().unRisque.description).to.equal('Une description');
-  });
 });
