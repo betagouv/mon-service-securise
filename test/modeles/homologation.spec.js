@@ -82,6 +82,15 @@ describe('Une homologation', () => {
     expect(homologation.expertCybersecurite()).to.equal('Anna Dubreuil');
   });
 
+  it('connaît ses risques spécifiques', () => {
+    const homologation = new Homologation({
+      id: '123',
+      risquesSpecifiques: [{ description: 'Un risque' }],
+    });
+
+    expect(homologation.risquesSpecifiques().nombre()).to.equal(1);
+  });
+
   it("sait décrire l'équipe de préparation du dossier", () => {
     const homologation = new Homologation({
       id: '123',

@@ -23,6 +23,7 @@ class Homologation {
       caracteristiquesComplementaires = {},
       partiesPrenantes = {},
       risquesGeneraux = [],
+      risquesSpecifiques = [],
       risquesVerifies = false,
       avisExpertCyber = {},
     } = donnees;
@@ -35,7 +36,10 @@ class Homologation {
       caracteristiquesComplementaires, referentiel,
     );
     this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
-    this.risques = new Risques({ risquesGeneraux, risquesVerifies }, referentiel);
+    this.risques = new Risques(
+      { risquesGeneraux, risquesSpecifiques, risquesVerifies },
+      referentiel,
+    );
     this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber, referentiel);
 
     this.referentiel = referentiel;
@@ -94,6 +98,10 @@ class Homologation {
 
   proportionMesuresRecommandeesMisesEnOeuvre() {
     return this.mesures.proportionRecommandeesMisesEnOeuvre();
+  }
+
+  risquesSpecifiques() {
+    return this.risques.risquesSpecifiques;
   }
 
   seuilCriticiteTropEleve() {
