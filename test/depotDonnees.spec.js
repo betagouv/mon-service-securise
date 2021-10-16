@@ -16,6 +16,8 @@ const InformationsGenerales = require('../src/modeles/informationsGenerales');
 const Mesure = require('../src/modeles/mesure');
 const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
 const RisqueGeneral = require('../src/modeles/risqueGeneral');
+const RisqueSpecifique = require('../src/modeles/risqueSpecifique');
+const RisquesSpecifiques = require('../src/modeles/risquesSpecifiques');
 const Utilisateur = require('../src/modeles/utilisateur');
 
 describe('Le dépôt de données persistées en mémoire', () => {
@@ -264,7 +266,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
-  it('sait associer un risque à une homologation', (done) => {
+  it('sait associer un risque général à une homologation', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
         { id: '123', informationsGenerales: { nomService: 'nom' } },
@@ -280,6 +282,48 @@ describe('Le dépôt de données persistées en mémoire', () => {
         expect(risques.risquesGeneraux.nombre()).to.equal(1);
         expect(risques.risquesGeneraux.item(0)).to.be.a(RisqueGeneral);
         expect(risques.risquesGeneraux.item(0).id).to.equal('unRisque');
+        done();
+      })
+      .catch(done);
+  });
+
+  it('sait associer un risque spécifique à une homologation', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [
+        { id: '123', informationsGenerales: { nomService: 'nom' } },
+      ],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    const risque = new RisquesSpecifiques({ risquesSpecifiques: [{ description: 'Un risque' }] });
+    depot.remplaceRisquesSpecifiquesPourHomologation('123', risque)
+      .then(() => depot.homologation('123'))
+      .then(({ risques: { risquesSpecifiques } }) => {
+        expect(risquesSpecifiques.nombre()).to.equal(1);
+        expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
+        expect(risquesSpecifiques.item(0).description).to.equal('Un risque');
+        done();
+      })
+      .catch(done);
+  });
+
+  it('supprime les risques spécifiques précédemment associés', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{
+        id: '123',
+        informationsGenerales: { nomService: 'nom' },
+        risquesSpecifiques: [{ description: 'Un ancien risque' }],
+      }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    const risques = new RisquesSpecifiques({ risquesSpecifiques: [{ description: 'Un nouveau risque' }] });
+    depot.remplaceRisquesSpecifiquesPourHomologation('123', risques)
+      .then(() => depot.homologation('123'))
+      .then(({ risques: { risquesSpecifiques } }) => {
+        expect(risquesSpecifiques.nombre()).to.equal(1);
+        expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
+        expect(risquesSpecifiques.item(0).description).to.equal('Un nouveau risque');
         done();
       })
       .catch(done);

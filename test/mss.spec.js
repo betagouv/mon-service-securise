@@ -609,9 +609,10 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/risques`', () => {
-    beforeEach(() => (
-      depotDonnees.marqueRisquesCommeVerifies = () => new Promise((resolve) => resolve())
-    ));
+    beforeEach(() => {
+      depotDonnees.marqueRisquesCommeVerifies = () => Promise.resolve();
+      depotDonnees.remplaceRisquesSpecifiquesPourHomologation = () => Promise.resolve();
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -627,7 +628,7 @@ describe('Le serveur MSS', () => {
       }, done);
     });
 
-    it("demande au dépôt d'associer les risques à l'homologation", (done) => {
+    it("demande au dépôt d'associer les risques généraux à l'homologation", (done) => {
       referentiel.recharge({ risques: { unRisque: {} } });
       let risqueAjoute = false;
 
@@ -653,7 +654,43 @@ describe('Le serveur MSS', () => {
         .catch(done);
     });
 
-    it("demande au dépôt d'enregistrer que la liste des risques a été vérifiée", (done) => {
+    it("demande au dépôt d'associer les risques spécifiques à l'homologation", (done) => {
+      let risquesRemplaces = false;
+      depotDonnees.remplaceRisquesSpecifiquesPourHomologation = (idHomologation, risques) => {
+        expect(idHomologation).to.equal('456');
+        expect(risques.nombre()).to.equal(1);
+        expect(risques.item(0).description).to.equal('Un risque spécifique');
+        expect(risques.item(0).commentaire).to.equal('Un commentaire');
+        risquesRemplaces = true;
+        return Promise.resolve();
+      };
+
+      axios.post('http://localhost:1234/api/homologation/456/risques', {
+        risquesSpecifiques: [{ description: 'Un risque spécifique', commentaire: 'Un commentaire' }],
+      })
+        .then(() => expect(risquesRemplaces).to.be(true))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it('filtre les risques spécifiques vides', (done) => {
+      let risquesRemplaces = false;
+      depotDonnees.remplaceRisquesSpecifiquesPourHomologation = (_, risques) => {
+        expect(risques.nombre()).to.equal(1);
+        risquesRemplaces = true;
+        return Promise.resolve();
+      };
+
+      const risquesSpecifiques = [];
+      risquesSpecifiques[2] = { description: 'Un risque spécifique' };
+
+      axios.post('http://localhost:1234/api/homologation/456/risques', { risquesSpecifiques })
+        .then(() => expect(risquesRemplaces).to.be(true))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("demande au dépôt d'enregistrer que la liste des risques généraux a été vérifiée", (done) => {
       let listeRisquesMarqueeCommeVerifiee = false;
       depotDonnees.marqueRisquesCommeVerifies = (idHomologation) => new Promise((resolve) => {
         expect(idHomologation).to.equal('456');

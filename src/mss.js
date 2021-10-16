@@ -10,6 +10,7 @@ const InformationsHomologation = require('./modeles/informationsHomologation');
 const Mesure = require('./modeles/mesure');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
 const RisqueGeneral = require('./modeles/risqueGeneral');
+const RisquesSpecifiques = require('./modeles/risquesSpecifiques');
 
 require('dotenv').config();
 
@@ -291,23 +292,38 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     middleware.trouveHomologation,
     middleware.aseptiseTout,
     (requete, reponse, suite) => {
-      const params = requete.body;
+      const { risquesSpecifiques = [], ...params } = requete.body;
       const prefixeCommentaire = /^commentaire-/;
-      const commentairesRisques = Object.keys(params).filter((p) => p.match(prefixeCommentaire));
+      const idHomologation = requete.homologation.id;
 
-      let ajouts = Promise.resolve();
       try {
-        commentairesRisques.forEach((cr) => {
-          const idRisque = cr.replace(prefixeCommentaire, '');
-          const risque = new RisqueGeneral({ id: idRisque, commentaire: params[cr] }, referentiel);
-          ajouts = ajouts.then(
-            () => depotDonnees.ajouteRisqueGeneralAHomologation(requete.homologation.id, risque)
-          );
-        });
+        const ajouts = Object.keys(params)
+          .filter((p) => p.match(prefixeCommentaire))
+          .reduce((acc, cr) => {
+            const idRisque = cr.replace(prefixeCommentaire, '');
+            const risque = new RisqueGeneral(
+              { id: idRisque, commentaire: params[cr] },
+              referentiel,
+            );
+            return acc.then(() => depotDonnees.ajouteRisqueGeneralAHomologation(
+              idHomologation,
+              risque,
+            ));
+          }, Promise.resolve());
 
         ajouts
-          .then(() => depotDonnees.marqueRisquesCommeVerifies(requete.homologation.id))
-          .then(() => reponse.send({ idHomologation: requete.homologation.id }))
+          .then(() => {
+            const aPersister = risquesSpecifiques.filter((r) => r?.description || r?.commentaire);
+            const listeRisquesSpecifiques = new RisquesSpecifiques(
+              { risquesSpecifiques: aPersister },
+            );
+
+            return depotDonnees.remplaceRisquesSpecifiquesPourHomologation(
+              idHomologation, listeRisquesSpecifiques,
+            );
+          })
+          .then(() => depotDonnees.marqueRisquesCommeVerifies(idHomologation))
+          .then(() => reponse.send({ idHomologation }))
           .catch(suite);
       } catch {
         reponse.status(422).send('Données invalides');

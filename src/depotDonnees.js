@@ -51,6 +51,17 @@ const creeDepot = (config = {}) => {
       })
   );
 
+  const remplaceProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
+    adaptateurPersistance.homologation(idHomologation)
+      .then((h) => {
+        const donneesPropriete = propriete.toJSON();
+        h[nomPropriete] = donneesPropriete;
+
+        const { id, ...donnees } = h;
+        return adaptateurPersistance.metsAJourHomologation(id, donnees);
+      })
+  );
+
   const ajouteMesureAHomologation = (...params) => (
     ajouteAItemsDansHomologation('mesures', ...params)
   );
@@ -101,6 +112,10 @@ const creeDepot = (config = {}) => {
         return adaptateurPersistance.ajouteHomologation(id, donnees)
           .then(() => id);
       })
+  );
+
+  const remplaceRisquesSpecifiquesPourHomologation = (...params) => (
+    remplaceProprieteHomologation('risquesSpecifiques', ...params)
   );
 
   const utilisateur = (identifiant) => adaptateurPersistance.utilisateur(identifiant)
@@ -197,6 +212,7 @@ const creeDepot = (config = {}) => {
     nouvelleHomologation,
     nouvelUtilisateur,
     reinitialiseMotDePasse,
+    remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeUtilisateur,
