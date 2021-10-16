@@ -4,7 +4,7 @@ const { ErreurRisqueInconnu } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const RisqueGeneral = require('../../src/modeles/risqueGeneral');
 
-describe('Un risque', () => {
+describe('Un risque général', () => {
   let referentiel;
 
   beforeEach(() => (
