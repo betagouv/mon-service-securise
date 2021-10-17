@@ -256,7 +256,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.post('/api/homologation/:id/mesures',
     middleware.trouveHomologation,
-    middleware.aseptiseTout,
+    middleware.aseptise('*'),
     (requete, reponse) => {
       const params = requete.body;
       const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
