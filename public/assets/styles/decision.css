@@ -296,6 +296,7 @@ section.detail-risques dl {
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-gap: 1em 2em;
+  align-items: center;
 }
 
 section.detail-mesures li {

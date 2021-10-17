@@ -134,8 +134,25 @@ main
           dt= donneesRisque.description
           dd= donneesRisque.descriptionLongue
 
+  - const { risquesSpecifiques } = homologation.risques
+  h1.vert Annexe 2 – Détail des risques spécifiques au service numérique
+  .annexe
+    section.detail-risques
+      dl
+        - let i = 0
+        - const nbRisquesSpecifiques = risquesSpecifiques.nombre()
+        if nbRisquesSpecifiques === 0
+          dd Aucun risque spécifique saisi
+
+        while i < nbRisquesSpecifiques
+          - const risqueSpecifique = risquesSpecifiques.item(i)
+          dt!= risqueSpecifique.description
+          dd!= risqueSpecifique.commentaire
+          - i++
+
+
   .saut-page
-  h1.vert Annexe 2 – Détail des mesures de sécurité
+  h1.vert Annexe 3 – Détail des mesures de sécurité
   .annexe
     .legende
       .nonRetenu Non concerné
@@ -152,7 +169,7 @@ main
         if homologation.mesuresNonSaisies()
           li Aucune mesure retenue
 
-        - let i = 0;
+        - i = 0;
         - const nbMesures = homologation.mesures.nombre()
         while i < nbMesures
           - const mesure = homologation.mesures.item(i)
