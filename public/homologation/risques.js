@@ -27,7 +27,7 @@ $(() => {
     $zoneSaisie.appendTo($r);
   };
 
-  const peupleCommentairesAvec = (selecteurDonnees) => {
+  const peupleRisquesGeneraux = (selecteurDonnees) => {
     const donneesRisques = JSON.parse($(selecteurDonnees).text());
     donneesRisques.risquesGeneraux.forEach(({ id, commentaire }) => {
       if (commentaire) $(`#commentaire-${id}`).show().val(texteHTML(commentaire));
@@ -46,13 +46,13 @@ $(() => {
 
   const brancheAjoutRisqueSpecifique = (...params) => brancheAjoutItem(
     ...params,
-    (index) => zoneSaisieRisqueSpecifique(index),
+    zoneSaisieRisqueSpecifique,
     () => (indexMaxRisquesSpecifiques += 1),
   );
 
   ajouteInformationsModales();
   $('.risque').each((_, $r) => ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`));
-  peupleCommentairesAvec('#donnees-risques');
+  peupleRisquesGeneraux('#donnees-risques-generaux');
 
   const $bouton = $('.bouton');
   const identifiantHomologation = $bouton.attr('identifiant');
