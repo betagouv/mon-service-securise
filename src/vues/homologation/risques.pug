@@ -32,6 +32,8 @@ block formulaire
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
-  script(id = 'donnees-risques', type = 'application/json').
-    !{JSON.stringify(homologation.risques.toJSON())}
+  script(id = 'donnees-risques-generaux', type = 'application/json').
+    !{JSON.stringify(homologation.risques.toJSON().risquesGeneraux || [])}
+  script(id = 'donnees-risques-specifiques', type = 'application/json').
+    !{JSON.stringify(homologation.risques.toJSON().risquesSpecifiques || [])}
   script(type = 'module', src = '/statique/homologation/risques.js')

@@ -1,4 +1,4 @@
-import brancheAjoutItem from '../modules/saisieListeItems.js';
+import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
 import { parametresAvecItemsExtraits } from '../modules/parametres.js';
 import texteHTML from '../modules/texteHTML.js';
 
@@ -29,20 +29,24 @@ $(() => {
 
   const peupleRisquesGeneraux = (selecteurDonnees) => {
     const donneesRisques = JSON.parse($(selecteurDonnees).text());
-    donneesRisques.risquesGeneraux.forEach(({ id, commentaire }) => {
+    donneesRisques.forEach(({ id, commentaire }) => {
       if (commentaire) $(`#commentaire-${id}`).show().val(texteHTML(commentaire));
     });
   };
 
-  const zoneSaisieRisqueSpecifique = (index) => `
+  const zoneSaisieRisqueSpecifique = (index, donnees = {}) => {
+    const { description = '', commentaire = '' } = donnees;
+
+    return `
 <input id="description-risque-specifique-${index}"
-     name="description-risque-specifique-${index}"
-     placeholder="Description du risque"
-     value="">
+       name="description-risque-specifique-${index}"
+       placeholder="Description du risque"
+       value="${description}">
 <textarea id="commentaire-risque-specifique-${index}"
-        name="commentaire-risque-specifique-${index}"
-        placeholder="Commentaires additionnels (facultatifs)"></textarea>
-  `;
+          name="commentaire-risque-specifique-${index}"
+          placeholder="Commentaires additionnels (facultatifs)">${commentaire}</textarea>
+    `;
+  };
 
   const brancheAjoutRisqueSpecifique = (...params) => brancheAjoutItem(
     ...params,
@@ -50,14 +54,19 @@ $(() => {
     () => (indexMaxRisquesSpecifiques += 1),
   );
 
+  const peupleRisquesSpecifiques = (...params) => (
+    peupleListeItems(...params, zoneSaisieRisqueSpecifique)
+  );
+
   ajouteInformationsModales();
   $('.risque').each((_, $r) => ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`));
   peupleRisquesGeneraux('#donnees-risques-generaux');
 
+  indexMaxRisquesSpecifiques = peupleRisquesSpecifiques('#risques-specifiques', '#donnees-risques-specifiques');
+  brancheAjoutRisqueSpecifique('.nouvel-item', '#risques-specifiques');
+
   const $bouton = $('.bouton');
   const identifiantHomologation = $bouton.attr('identifiant');
-
-  brancheAjoutRisqueSpecifique('.nouvel-item', '#risques-specifiques');
 
   $bouton.click(() => {
     const params = parametresAvecItemsExtraits(
