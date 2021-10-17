@@ -22,4 +22,13 @@ const brancheAjoutItem = (selecteurAction, selecteurConteneur, cbZoneSaisie, cbI
   });
 };
 
-export { brancheAjoutItem as default };
+const peupleListeItems = (selecteurConteneur, selecteurDonnees, cbZoneSaisie) => {
+  const donneesItems = JSON.parse($(selecteurDonnees).text());
+  donneesItems.forEach((donnees, index) => {
+    afficheZoneSaisieItem(selecteurConteneur, cbZoneSaisie(index, donnees));
+  });
+
+  return donneesItems.length;
+};
+
+export { brancheAjoutItem, peupleListeItems };
