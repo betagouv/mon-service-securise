@@ -15,7 +15,9 @@ class Risques extends InformationsHomologation {
   }
 
   statutSaisie() {
-    return this.verifies() ? Risques.COMPLETES : Risques.A_SAISIR;
+    if (!this.verifies()) return Risques.A_SAISIR;
+
+    return this.risquesSpecifiques.statutSaisie();
   }
 
   verifies() {
