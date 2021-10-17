@@ -621,11 +621,12 @@ describe('Le serveur MSS', () => {
       }, done);
     });
 
-    it('aseptise tous les paramètres de la requête', (done) => {
-      verifieAseptisationComplete({
-        method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/risques',
-      }, done);
+    it('aseptise les paramètres de la requête', (done) => {
+      verifieAseptisationParametres(
+        ['*', 'risquesSpecifiques.*.description', 'risquesSpecifiques.*.commentaire'],
+        { method: 'post', url: 'http://localhost:1234/api/homologation/456/risques' },
+        done
+      );
     });
 
     it("demande au dépôt d'associer les risques généraux à l'homologation", (done) => {

@@ -290,7 +290,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.post('/api/homologation/:id/risques',
     middleware.trouveHomologation,
-    middleware.aseptiseTout,
+    middleware.aseptise('*', 'risquesSpecifiques.*.description', 'risquesSpecifiques.*.commentaire'),
     (requete, reponse, suite) => {
       const { risquesSpecifiques = [], ...params } = requete.body;
       const prefixeCommentaire = /^commentaire-/;

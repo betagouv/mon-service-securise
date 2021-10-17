@@ -55,9 +55,13 @@ const middleware = (configuration = {}) => {
   };
 
   const aseptise = (...nomsParametres) => ((requete, reponse, suite) => {
+    const paramsTableauxVides = Object.keys(requete.body)
+      .filter((p) => (Array.isArray(requete.body[p]) && requete.body[p].length === 0));
+
     const aseptisations = nomsParametres.map((p) => check(p).trim().escape().run(requete));
 
     return Promise.all(aseptisations)
+      .then(() => paramsTableauxVides.forEach((p) => (requete.body[p] = [])))
       .then(() => suite())
       .catch(suite);
   });

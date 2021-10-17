@@ -212,6 +212,17 @@ describe('Le middleware MSS', () => {
         .catch(done);
     });
 
+    it('ne cherche pas à aseptiser les tableaux vides', (done) => {
+      const middleware = Middleware();
+      requete.body.param = [];
+      middleware.aseptise('*')(requete, reponse, () => {
+        expect(Array.isArray(requete.body.param)).to.be(true);
+        expect(requete.body.param).to.eql([]);
+        done();
+      })
+        .catch(done);
+    });
+
     it('neutralise le code HTML', (done) => {
       const middleware = Middleware();
       requete.body.paramRenseigne = '<script>alert("hacked!");</script>';
