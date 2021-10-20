@@ -75,19 +75,6 @@ main
             .barre-mesures-retenues
             .barre-mesures-misesEnOeuvre(style = style)
 
-  section.niveau-securite
-    h2 Niveau de sécurité indicatif
-    p Calculé à partir du pourcentage de mesures recommandées par l'ANSSI mises en œuvre
-    +diagnosticNiveauSecurite
-
-    ul
-      li
-        .pourcentage= `${Math.round(100 * homologation.proportionMesuresIndispensablesMisesEnOeuvre())}%`
-        .criticite-mesure des <b>mesures indispensables</b> selon l'ANSSI mises en œuvre
-      li
-        .pourcentage= `${Math.round(100 * homologation.proportionMesuresRecommandeesMisesEnOeuvre())}%`
-        .criticite-mesure des <b>autres mesures suggérées</b> mises en œuvre
-
   section
     h2 Avis de l'expert cyber
     p sur le maintien ou la mise en service
