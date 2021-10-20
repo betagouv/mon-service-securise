@@ -71,34 +71,11 @@ class Homologation {
     return this.caracteristiquesComplementaires.descriptionLocalisationDonnees();
   }
 
-  niveauSecurite() {
-    const proportionIndispensables = this.proportionMesuresIndispensablesMisesEnOeuvre();
-    const proportionRecommandees = this.proportionMesuresRecommandeesMisesEnOeuvre();
-
-    if (proportionIndispensables === 1) {
-      return proportionRecommandees >= 0.5
-        ? NIVEAUX.NIVEAU_SECURITE_BON
-        : NIVEAUX.NIVEAU_SECURITE_SATISFAISANT;
-    }
-
-    if (proportionIndispensables >= 0.75) return NIVEAUX.NIVEAU_SECURITE_A_RENFORCER;
-
-    return NIVEAUX.NIVEAU_SECURITE_INSUFFISANT;
-  }
-
   nomService() { return this.informationsGenerales.nomService; }
 
   piloteProjet() { return this.partiesPrenantes.piloteProjet; }
 
   presentation() { return this.caracteristiquesComplementaires.presentation; }
-
-  proportionMesuresIndispensablesMisesEnOeuvre() {
-    return this.mesures.proportionIndispensablesMisesEnOeuvre();
-  }
-
-  proportionMesuresRecommandeesMisesEnOeuvre() {
-    return this.mesures.proportionRecommandeesMisesEnOeuvre();
-  }
 
   risquesSpecifiques() {
     return this.risques.risquesSpecifiques;

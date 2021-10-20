@@ -1,5 +1,3 @@
-const { neg } = require('./utils');
-
 const creeReferentiel = (donneesReferentiel) => {
   let donnees = donneesReferentiel;
 
@@ -16,9 +14,6 @@ const creeReferentiel = (donneesReferentiel) => {
   const mesureIndispensable = (idMesure) => !!donnees.mesures[idMesure].indispensable;
   const mesures = () => donnees.mesures;
   const identifiantsMesures = () => Object.keys(mesures());
-  const identifiantsMesuresIndispensables = () => identifiantsMesures().filter(mesureIndispensable);
-  const identifiantsMesuresRecommandees = () => identifiantsMesures()
-    .filter(neg(mesureIndispensable));
   const naturesService = () => donnees.naturesService;
   const provenancesService = () => donnees.provenancesService;
   const risques = () => donnees.risques;
@@ -96,8 +91,6 @@ const creeReferentiel = (donneesReferentiel) => {
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
-    identifiantsMesuresIndispensables,
-    identifiantsMesuresRecommandees,
     identifiantsRisques,
     localisationDonnees,
     localisationsDonnees,

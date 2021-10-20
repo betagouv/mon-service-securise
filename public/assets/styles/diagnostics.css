@@ -1,4 +1,4 @@
-.diagnostic-niveau-securite, .avis-expert-cyber {
+.avis-expert-cyber {
   display: flex;
   column-gap: 0.5em;
 
@@ -19,19 +19,11 @@
   background-color: #ce1b25;
 }
 
-.disque.orange {
-  background-color: #f9b049;
-}
-
 .disque.vert {
   background-color: #1aaf54;
 }
 
-.disque.vert-fonce {
-  background-color: #378348;
-}
-
-.avis, .niveau {
+.avis {
   display: inline-block;
   padding-left: 0.5em;
 }
@@ -40,22 +32,10 @@
   color: #abb6bf;
 }
 
-.avis.favorable, .niveau.satisfaisant {
+.avis.favorable {
   color: #1aaf54;
 }
 
-.avis.defavorable, .niveau.insuffisant {
+.avis.defavorable {
   color: #ce1b25;
-}
-
-.niveau.bon {
-  color: #378348;
-}
-
-.niveau.a-renforcer {
-  color: #f9b049;
-}
-
-.niveau.inconnu {
-  color: #abb6bf;
 }

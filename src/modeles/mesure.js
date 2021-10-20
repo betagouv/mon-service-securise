@@ -42,14 +42,6 @@ class Mesure extends Base {
     return !!this.donneesReferentiel().indispensable;
   }
 
-  estRecommandee() {
-    return !this.estIndispensable();
-  }
-
-  miseEnOeuvre() {
-    return this.statut === STATUTS.STATUT_FAIT;
-  }
-
   nonRetenue() {
     return this.statut === STATUTS.STATUT_NON_RETENU;
   }

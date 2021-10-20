@@ -92,22 +92,6 @@ describe('Le référentiel', () => {
     expect(referentiel.mesureIndispensable('mesureRecommandee')).to.be(false);
   });
 
-  it('connaît les identifiants des mesures indispensables', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      mesures: { m1: { indispensable: true }, m2: { indispensable: true }, m3: {} },
-    });
-
-    expect(referentiel.identifiantsMesuresIndispensables()).to.eql(['m1', 'm2']);
-  });
-
-  it('connaît les identifiants des mesures recommandees', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      mesures: { m1: { indispensable: true }, m2: { indispensable: true }, m3: {} },
-    });
-
-    expect(referentiel.identifiantsMesuresRecommandees()).to.eql(['m3']);
-  });
-
   it('connaît la liste des catégories de mesures', () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { uneClef: 'une valeur' },

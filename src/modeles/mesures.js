@@ -8,14 +8,6 @@ class Mesures extends ListeItems {
     this.referentiel = referentiel;
   }
 
-  nbIndispensablesMisesEnOeuvre() {
-    return this.items.filter((m) => m.miseEnOeuvre() && m.estIndispensable()).length;
-  }
-
-  nbRecommandeesMisesEnOeuvre() {
-    return this.items.filter((m) => m.miseEnOeuvre() && m.estRecommandee()).length;
-  }
-
   nonSaisies() {
     return this.nombre() === 0;
   }
@@ -35,20 +27,6 @@ class Mesures extends ListeItems {
 
     const nbTotal = nbTotalMesuresRetenuesParmi(idsMesures);
     return nbTotal ? nbMisesEnOeuvre / nbTotal : 1;
-  }
-
-  proportionIndispensablesMisesEnOeuvre() {
-    return this.proportion(
-      this.nbIndispensablesMisesEnOeuvre(),
-      this.referentiel.identifiantsMesuresIndispensables()
-    );
-  }
-
-  proportionRecommandeesMisesEnOeuvre() {
-    return this.proportion(
-      this.nbRecommandeesMisesEnOeuvre(),
-      this.referentiel.identifiantsMesuresRecommandees()
-    );
   }
 
   statistiques() {
