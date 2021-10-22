@@ -7,7 +7,7 @@ const CaracteristiquesComplementaires = require('./modeles/caracteristiquesCompl
 const Homologation = require('./modeles/homologation');
 const InformationsGenerales = require('./modeles/informationsGenerales');
 const InformationsHomologation = require('./modeles/informationsHomologation');
-const Mesure = require('./modeles/mesure');
+const MesureGenerale = require('./modeles/mesureGenerale');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
 const RisqueGeneral = require('./modeles/risqueGeneral');
 const RisquesSpecifiques = require('./modeles/risquesSpecifiques');
@@ -263,7 +263,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       let ajouts = Promise.resolve();
       try {
         identifiantsMesures.forEach((im) => {
-          const mesure = new Mesure({
+          const mesure = new MesureGenerale({
             id: im,
             statut: params[im],
             modalites: params[`modalites-${im}`],

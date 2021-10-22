@@ -13,7 +13,7 @@ const AvisExpertCyber = require('../src/modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('../src/modeles/caracteristiquesComplementaires');
 const Homologation = require('../src/modeles/homologation');
 const InformationsGenerales = require('../src/modeles/informationsGenerales');
-const Mesure = require('../src/modeles/mesure');
+const MesureGenerale = require('../src/modeles/mesureGenerale');
 const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
 const RisqueGeneral = require('../src/modeles/risqueGeneral');
 const RisqueSpecifique = require('../src/modeles/risqueSpecifique');
@@ -109,7 +109,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
         expect(mesures.nombre()).to.equal(1);
 
         const mesure = mesures.item(0);
-        expect(mesure).to.be.a(Mesure);
+        expect(mesure).to.be.a(MesureGenerale);
         expect(mesure.id).to.equal('identifiantMesure');
         done();
       })
@@ -124,7 +124,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
     });
     const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
-    const mesure = new Mesure({ id: 'identifiantMesure', statut: Mesure.STATUT_FAIT }, referentiel);
+    const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT }, referentiel);
 
     depot.ajouteMesureAHomologation('123', mesure)
       .then(() => depot.homologation('123'))
@@ -142,19 +142,19 @@ describe('Le dépôt de données persistées en mémoire', () => {
         {
           id: '123',
           informationsGenerales: { nomService: 'nom' },
-          mesures: [{ id: 'identifiantMesure', statut: Mesure.STATUT_PLANIFIE }],
+          mesures: [{ id: 'identifiantMesure', statut: MesureGenerale.STATUT_PLANIFIE }],
         },
       ],
     });
     const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
 
-    const mesure = new Mesure({ id: 'identifiantMesure', statut: Mesure.STATUT_FAIT }, referentiel);
+    const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT }, referentiel);
     depot.ajouteMesureAHomologation('123', mesure)
       .then(() => depot.homologation('123'))
       .then(({ mesures }) => {
         expect(mesures.nombre()).to.equal(1);
-        expect(mesures.item(0).statut).to.equal(Mesure.STATUT_FAIT);
+        expect(mesures.item(0).statut).to.equal(MesureGenerale.STATUT_FAIT);
         done();
       })
       .catch(done);

@@ -20,7 +20,7 @@ const valide = (donnees, referentiel) => {
   }
 };
 
-class Mesure extends Base {
+class MesureGenerale extends Base {
   constructor(donneesMesure, referentiel) {
     super(['id', 'statut', 'modalites']);
 
@@ -47,6 +47,6 @@ class Mesure extends Base {
   }
 }
 
-Object.assign(Mesure, STATUTS);
+Object.assign(MesureGenerale, STATUTS);
 
-module.exports = Mesure;
+module.exports = MesureGenerale;

@@ -3,7 +3,7 @@ const expect = require('expect.js');
 const Referentiel = require('../../src/referentiel');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 const Homologation = require('../../src/modeles/homologation');
-const Mesure = require('../../src/modeles/mesure');
+const MesureGenerale = require('../../src/modeles/mesureGenerale');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
@@ -175,7 +175,7 @@ describe('Une homologation', () => {
 
     it('détecte que la liste des mesures est à compléter', () => {
       const homologation = new Homologation({
-        mesures: [{ id: 'm1', statut: Mesure.STATUT_FAIT }],
+        mesures: [{ id: 'm1', statut: MesureGenerale.STATUT_FAIT }],
       }, referentiel);
 
       expect(homologation.statutSaisie('mesures')).to.equal(InformationsHomologation.A_COMPLETER);
@@ -184,8 +184,8 @@ describe('Une homologation', () => {
     it('détecte que la liste des mesures est complète', () => {
       const homologation = new Homologation({
         mesures: [
-          { id: 'm1', statut: Mesure.STATUT_FAIT },
-          { id: 'm2', statut: Mesure.STATUT_NON_RETENU },
+          { id: 'm1', statut: MesureGenerale.STATUT_FAIT },
+          { id: 'm2', statut: MesureGenerale.STATUT_NON_RETENU },
         ],
       }, referentiel);
 

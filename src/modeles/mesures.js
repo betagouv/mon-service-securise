@@ -1,10 +1,11 @@
 const ListeItems = require('./listeItems');
-const Mesure = require('./mesure');
+const MesureGenerale = require('./mesureGenerale');
 const StatistiquesMesures = require('./statistiquesMesures');
 
 class Mesures extends ListeItems {
   constructor(donnees, referentiel) {
-    super(Mesure, { items: donnees.mesures }, referentiel);
+    const { mesures } = donnees;
+    super(MesureGenerale, { items: mesures }, referentiel);
     this.referentiel = referentiel;
   }
 
@@ -35,11 +36,11 @@ class Mesures extends ListeItems {
     this.items.forEach(({ id, statut }) => {
       const { categorie } = this.referentiel.mesures()[id];
 
-      if (statut === Mesure.STATUT_FAIT || statut === Mesure.STATUT_PLANIFIE) {
+      if (statut === MesureGenerale.STATUT_FAIT || statut === MesureGenerale.STATUT_PLANIFIE) {
         stats[categorie] ||= { retenues: 0, misesEnOeuvre: 0 };
         stats[categorie].retenues += 1;
 
-        if (statut === Mesure.STATUT_FAIT) {
+        if (statut === MesureGenerale.STATUT_FAIT) {
           stats[categorie].misesEnOeuvre += 1;
         }
       }
