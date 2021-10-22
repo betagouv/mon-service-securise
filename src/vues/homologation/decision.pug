@@ -170,9 +170,9 @@ main
           li Aucune mesure retenue
 
         - i = 0;
-        - const nbMesures = homologation.mesures.nombre()
+        - const nbMesures = homologation.mesures.mesures.nombre()
         while i < nbMesures
-          - const mesure = homologation.mesures.item(i)
+          - const mesure = homologation.mesures.mesures.item(i)
           li
             .description= mesure.description()
             .statut(class = mesure.statut)

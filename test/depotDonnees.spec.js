@@ -105,7 +105,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
 
     depot.homologation('123')
-      .then(({ mesures }) => {
+      .then(({ mesures: { mesures } }) => {
         expect(mesures.nombre()).to.equal(1);
 
         const mesure = mesures.item(0);
@@ -128,7 +128,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
 
     depot.ajouteMesureAHomologation('123', mesure)
       .then(() => depot.homologation('123'))
-      .then(({ mesures }) => {
+      .then(({ mesures: { mesures } }) => {
         expect(mesures.nombre()).to.equal(1);
         expect(mesures.item(0).id).to.equal('identifiantMesure');
         done();
@@ -152,7 +152,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT }, referentiel);
     depot.ajouteMesureAHomologation('123', mesure)
       .then(() => depot.homologation('123'))
-      .then(({ mesures }) => {
+      .then(({ mesures: { mesures } }) => {
         expect(mesures.nombre()).to.equal(1);
         expect(mesures.item(0).statut).to.equal(MesureGenerale.STATUT_FAIT);
         done();

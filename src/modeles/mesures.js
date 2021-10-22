@@ -1,60 +1,28 @@
-const ListeItems = require('./listeItems');
-const MesureGenerale = require('./mesureGenerale');
-const StatistiquesMesures = require('./statistiquesMesures');
+const InformationsHomologation = require('./informationsHomologation');
+const MesuresGenerales = require('./mesuresGenerales');
+const Referentiel = require('../referentiel');
 
-class Mesures extends ListeItems {
-  constructor(donnees, referentiel) {
-    const { mesures } = donnees;
-    super(MesureGenerale, { items: mesures }, referentiel);
+class Mesures extends InformationsHomologation {
+  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+    super([], [], { mesures: MesuresGenerales });
+    this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
   }
 
   nonSaisies() {
-    return this.nombre() === 0;
+    return this.mesures.nonSaisies();
   }
 
-  proportion(nbMisesEnOeuvre, idsMesures) {
-    const identifiantsMesuresNonRetenues = () => this.items
-      .filter((m) => m.nonRetenue())
-      .map((m) => m.id);
-
-    const nbTotalMesuresRetenuesParmi = (identifiantsMesures) => {
-      const nonRetenues = identifiantsMesuresNonRetenues();
-
-      return identifiantsMesures
-        .filter((id) => !nonRetenues.includes(id))
-        .length;
-    };
-
-    const nbTotal = nbTotalMesuresRetenuesParmi(idsMesures);
-    return nbTotal ? nbMisesEnOeuvre / nbTotal : 1;
+  proportion(...params) {
+    return this.mesures.proportion(...params);
   }
 
   statistiques() {
-    const stats = {};
-
-    this.items.forEach(({ id, statut }) => {
-      const { categorie } = this.referentiel.mesures()[id];
-
-      if (statut === MesureGenerale.STATUT_FAIT || statut === MesureGenerale.STATUT_PLANIFIE) {
-        stats[categorie] ||= { retenues: 0, misesEnOeuvre: 0 };
-        stats[categorie].retenues += 1;
-
-        if (statut === MesureGenerale.STATUT_FAIT) {
-          stats[categorie].misesEnOeuvre += 1;
-        }
-      }
-    });
-
-    return new StatistiquesMesures(stats, this.referentiel);
+    return this.mesures.statistiques();
   }
 
   statutSaisie() {
-    if (this.nonSaisies()) return Mesures.A_SAISIR;
-    if (this.items.length === this.referentiel.identifiantsMesures().length) {
-      return Mesures.COMPLETES;
-    }
-    return Mesures.A_COMPLETER;
+    return this.mesures.statutSaisie();
   }
 }
 
