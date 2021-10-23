@@ -523,16 +523,14 @@ describe('Le serveur MSS', () => {
       referentiel.recharge({ mesures: { identifiantMesure: {} } });
       let mesureAjoutee = false;
 
-      depotDonnees.ajouteMesureAHomologation = (idHomologation, mesure) => new Promise(
-        (resolve) => {
-          expect(idHomologation).to.equal('456');
-          expect(mesure.id).to.equal('identifiantMesure');
-          expect(mesure.statut).to.equal('fait');
-          expect(mesure.modalites).to.equal("Des modalités d'application");
-          mesureAjoutee = true;
-          resolve();
-        }
-      );
+      depotDonnees.ajouteMesureGeneraleAHomologation = (idHomologation, mesure) => {
+        expect(idHomologation).to.equal('456');
+        expect(mesure.id).to.equal('identifiantMesure');
+        expect(mesure.statut).to.equal('fait');
+        expect(mesure.modalites).to.equal("Des modalités d'application");
+        mesureAjoutee = true;
+        return Promise.resolve();
+      };
 
       axios.post('http://localhost:1234/api/homologation/456/mesures', {
         identifiantMesure: 'fait',

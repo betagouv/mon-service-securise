@@ -4,8 +4,8 @@ const StatistiquesMesures = require('./statistiquesMesures');
 
 class MesuresGenerales extends ListeItems {
   constructor(donnees, referentiel) {
-    const { mesures } = donnees;
-    super(MesureGenerale, { items: mesures }, referentiel);
+    const { mesuresGenerales } = donnees;
+    super(MesureGenerale, { items: mesuresGenerales }, referentiel);
   }
 
   nonSaisies() {

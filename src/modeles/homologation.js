@@ -19,7 +19,7 @@ class Homologation {
       id = '',
       idUtilisateur,
       informationsGenerales = {},
-      mesures = [],
+      mesuresGenerales = [],
       caracteristiquesComplementaires = {},
       partiesPrenantes = {},
       risquesGeneraux = [],
@@ -31,7 +31,7 @@ class Homologation {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
     this.informationsGenerales = new InformationsGenerales(informationsGenerales, referentiel);
-    this.mesures = new Mesures({ mesures }, referentiel);
+    this.mesures = new Mesures({ mesuresGenerales }, referentiel);
     this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
       caracteristiquesComplementaires, referentiel,
     );

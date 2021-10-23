@@ -45,7 +45,7 @@ const ajouteConteneursModalites = () => $('fieldset').each((_, $f) => {
 
 const peupleFormulaire = () => {
   const donneesMesures = JSON.parse($('#donneesMesures').text());
-  donneesMesures.mesures.forEach(({ id, statut, modalites }) => {
+  donneesMesures.mesuresGenerales.forEach(({ id, statut, modalites }) => {
     $(`#${id}-${statut}`).prop('checked', true);
     if (modalites) $(`#modalites-${id}`).show().val(texteHTML(modalites));
   });

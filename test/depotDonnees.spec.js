@@ -98,17 +98,17 @@ describe('Le dépôt de données persistées en mémoire', () => {
       homologations: [{
         id: '123',
         informationsGenerales: { nomService: 'Un service' },
-        mesures: [{ id: 'identifiantMesure', statut: 'fait' }],
+        mesuresGenerales: [{ id: 'identifiantMesure', statut: 'fait' }],
       }],
     });
     const referentiel = Referentiel.creeReferentiel({ mesures: { identifiantMesure: {} } });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
 
     depot.homologation('123')
-      .then(({ mesures: { mesures } }) => {
-        expect(mesures.nombre()).to.equal(1);
+      .then(({ mesures: { mesuresGenerales } }) => {
+        expect(mesuresGenerales.nombre()).to.equal(1);
 
-        const mesure = mesures.item(0);
+        const mesure = mesuresGenerales.item(0);
         expect(mesure).to.be.a(MesureGenerale);
         expect(mesure.id).to.equal('identifiantMesure');
         done();
@@ -116,7 +116,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
-  it('sait associer une mesure à une homologation', (done) => {
+  it('sait associer une mesure générale à une homologation', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
         { id: '123', informationsGenerales: { nomService: 'Un service' } },
@@ -126,11 +126,11 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
     const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT }, referentiel);
 
-    depot.ajouteMesureAHomologation('123', mesure)
+    depot.ajouteMesureGeneraleAHomologation('123', mesure)
       .then(() => depot.homologation('123'))
-      .then(({ mesures: { mesures } }) => {
-        expect(mesures.nombre()).to.equal(1);
-        expect(mesures.item(0).id).to.equal('identifiantMesure');
+      .then(({ mesures: { mesuresGenerales } }) => {
+        expect(mesuresGenerales.nombre()).to.equal(1);
+        expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
         done();
       })
       .catch(done);
@@ -150,11 +150,11 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
 
     const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT }, referentiel);
-    depot.ajouteMesureAHomologation('123', mesure)
+    depot.ajouteMesureGeneraleAHomologation('123', mesure)
       .then(() => depot.homologation('123'))
-      .then(({ mesures: { mesures } }) => {
-        expect(mesures.nombre()).to.equal(1);
-        expect(mesures.item(0).statut).to.equal(MesureGenerale.STATUT_FAIT);
+      .then(({ mesures: { mesuresGenerales } }) => {
+        expect(mesuresGenerales.nombre()).to.equal(1);
+        expect(mesuresGenerales.item(0).statut).to.equal(MesureGenerale.STATUT_FAIT);
         done();
       })
       .catch(done);

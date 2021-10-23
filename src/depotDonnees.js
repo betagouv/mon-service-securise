@@ -62,8 +62,8 @@ const creeDepot = (config = {}) => {
       })
   );
 
-  const ajouteMesureAHomologation = (...params) => (
-    ajouteAItemsDansHomologation('mesures', ...params)
+  const ajouteMesureGeneraleAHomologation = (...params) => (
+    ajouteAItemsDansHomologation('mesuresGenerales', ...params)
   );
 
   const ajouteRisqueGeneralAHomologation = (...params) => (
@@ -202,7 +202,7 @@ const creeDepot = (config = {}) => {
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
     ajouteInformationsGeneralesAHomologation,
-    ajouteMesureAHomologation,
+    ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
     ajouteRisqueGeneralAHomologation,
     homologation,

@@ -4,25 +4,25 @@ const Referentiel = require('../referentiel');
 
 class Mesures extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super([], [], { mesures: MesuresGenerales });
+    super([], [], { mesuresGenerales: MesuresGenerales });
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
   }
 
   nonSaisies() {
-    return this.mesures.nonSaisies();
+    return this.mesuresGenerales.nonSaisies();
   }
 
   proportion(...params) {
-    return this.mesures.proportion(...params);
+    return this.mesuresGenerales.proportion(...params);
   }
 
   statistiques() {
-    return this.mesures.statistiques();
+    return this.mesuresGenerales.statistiques();
   }
 
   statutSaisie() {
-    return this.mesures.statutSaisie();
+    return this.mesuresGenerales.statutSaisie();
   }
 }
 

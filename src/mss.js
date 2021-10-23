@@ -270,7 +270,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           }, referentiel);
 
           ajouts = ajouts.then(
-            () => depotDonnees.ajouteMesureAHomologation(requete.homologation.id, mesure)
+            () => depotDonnees.ajouteMesureGeneraleAHomologation(requete.homologation.id, mesure)
           );
         });
 
