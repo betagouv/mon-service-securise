@@ -26,7 +26,7 @@ const parametres = (selecteurFormulaire) => {
   const nomsParamsMultiples = nomsInput(`${selecteurFormulaire} input[type="checkbox"]`);
   nomsParamsMultiples.forEach((n) => (params[n] = params[n] || []));
 
-  const nomsParamsAtomiques = nomsInput(`${selecteurFormulaire} input[type!="checkbox"], ${selecteurFormulaire} textarea`);
+  const nomsParamsAtomiques = nomsInput(`${selecteurFormulaire} input[type!="checkbox"], ${selecteurFormulaire} textarea, ${selecteurFormulaire} select`);
   return avecPremierElementCommeValeurs(params, nomsParamsAtomiques);
 };
 

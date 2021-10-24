@@ -35,6 +35,11 @@ block formulaire
             indispensable: donnees.indispensable,
           })
 
+    section
+      label Mesures spécifiques au service numérique
+      #mesures-specifiques
+      a.nouvel-item Ajouter une mesure spécifique
+
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donneesMesures', type = 'application/json').
@@ -42,5 +47,8 @@ block formulaire
 
   script(id = 'referentielMesures', type = 'application/json').
     !{JSON.stringify(referentiel.mesures())}
+
+  script(id = 'referentiel-categories-mesures', type = 'application/json').
+    !{JSON.stringify(referentiel.categoriesMesures())}
 
   script(type = 'module', src = '/statique/homologation/mesures.js')
