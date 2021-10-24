@@ -1,10 +1,14 @@
 const InformationsHomologation = require('./informationsHomologation');
 const MesuresGenerales = require('./mesuresGenerales');
+const MesuresSpecifiques = require('./mesuresSpecifiques');
 const Referentiel = require('../referentiel');
 
 class Mesures extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super([], [], { mesuresGenerales: MesuresGenerales });
+    super([], [], {
+      mesuresGenerales: MesuresGenerales,
+      mesuresSpecifiques: MesuresSpecifiques,
+    });
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
   }
