@@ -91,6 +91,15 @@ describe('Une homologation', () => {
     expect(homologation.risquesSpecifiques().nombre()).to.equal(1);
   });
 
+  it('connaît ses mesures spécifiques', () => {
+    const homologation = new Homologation({
+      id: '123',
+      mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+    });
+
+    expect(homologation.mesuresSpecifiques().nombre()).to.equal(1);
+  });
+
   it("sait décrire l'équipe de préparation du dossier", () => {
     const homologation = new Homologation({
       id: '123',

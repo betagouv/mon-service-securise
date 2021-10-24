@@ -20,6 +20,7 @@ class Homologation {
       idUtilisateur,
       informationsGenerales = {},
       mesuresGenerales = [],
+      mesuresSpecifiques = [],
       caracteristiquesComplementaires = {},
       partiesPrenantes = {},
       risquesGeneraux = [],
@@ -31,7 +32,7 @@ class Homologation {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
     this.informationsGenerales = new InformationsGenerales(informationsGenerales, referentiel);
-    this.mesures = new Mesures({ mesuresGenerales }, referentiel);
+    this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
     this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
       caracteristiquesComplementaires, referentiel,
     );
@@ -70,6 +71,8 @@ class Homologation {
   localisationDonnees() {
     return this.caracteristiquesComplementaires.descriptionLocalisationDonnees();
   }
+
+  mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }
 
   nomService() { return this.informationsGenerales.nomService; }
 
