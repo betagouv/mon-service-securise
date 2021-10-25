@@ -504,6 +504,10 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
+    beforeEach(() => (
+      depotDonnees.remplaceMesuresSpecifiquesPourHomologation = () => Promise.resolve()
+    ));
+
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
         method: 'post',
@@ -513,13 +517,19 @@ describe('Le serveur MSS', () => {
 
     it('aseptise tous les paramètres de la requête', (done) => {
       verifieAseptisationParametres(
-        ['*'],
+        [
+          '*',
+          'mesuresSpecifiques.*.description',
+          'mesuresSpecifiques.*.categorie',
+          'mesuresSpecifiques.*.statut',
+          'mesuresSpecifiques.*.modalites',
+        ],
         { method: 'post', url: 'http://localhost:1234/api/homologation/456/mesures' },
         done
       );
     });
 
-    it("demande au dépôt d'associer les mesures à l'homologation", (done) => {
+    it("demande au dépôt d'associer les mesures générales à l'homologation", (done) => {
       referentiel.recharge({ mesures: { identifiantMesure: {} } });
       let mesureAjoutee = false;
 
@@ -542,6 +552,41 @@ describe('Le serveur MSS', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
+        .catch(done);
+    });
+
+    it("demande au dépôt d'associer les mesures spécifiques à l'homologation", (done) => {
+      let mesuresRemplacees = false;
+      depotDonnees.remplaceMesuresSpecifiquesPourHomologation = (idHomologation, mesures) => {
+        expect(idHomologation).to.equal('456');
+        expect(mesures.nombre()).to.equal(1);
+        expect(mesures.item(0).description).to.equal('Une mesure spécifique');
+        mesuresRemplacees = true;
+        return Promise.resolve();
+      };
+
+      axios.post('http://localhost:1234/api/homologation/456/mesures', {
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+      })
+        .then(() => expect(mesuresRemplacees).to.be(true))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it('filtre les mesures spécifiques vides', (done) => {
+      let mesuresRemplacees = false;
+      depotDonnees.remplaceMesuresSpecifiquesPourHomologation = (_, mesures) => {
+        expect(mesures.nombre()).to.equal(1);
+        mesuresRemplacees = true;
+        return Promise.resolve();
+      };
+
+      const mesuresSpecifiques = [];
+      mesuresSpecifiques[2] = { description: 'Une mesure spécifique' };
+
+      axios.post('http://localhost:1234/api/homologation/456/mesures', { mesuresSpecifiques })
+        .then(() => expect(mesuresRemplacees).to.be(true))
+        .then(() => done())
         .catch(done);
     });
 

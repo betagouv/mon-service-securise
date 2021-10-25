@@ -14,6 +14,8 @@ const CaracteristiquesComplementaires = require('../src/modeles/caracteristiques
 const Homologation = require('../src/modeles/homologation');
 const InformationsGenerales = require('../src/modeles/informationsGenerales');
 const MesureGenerale = require('../src/modeles/mesureGenerale');
+const MesureSpecifique = require('../src/modeles/mesureSpecifique');
+const MesuresSpecifiques = require('../src/modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
 const RisqueGeneral = require('../src/modeles/risqueGeneral');
 const RisqueSpecifique = require('../src/modeles/risqueSpecifique');
@@ -131,6 +133,26 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(({ mesures: { mesuresGenerales } }) => {
         expect(mesuresGenerales.nombre()).to.equal(1);
         expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
+        done();
+      })
+      .catch(done);
+  });
+
+  it('sait associer une mesure spécifique à une homologation', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [
+        { id: '123', informationsGenerales: { nomService: 'nom' } },
+      ],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    const mesures = new MesuresSpecifiques({ mesuresSpecifiques: [{ description: 'Une mesure spécifique' }] });
+    depot.remplaceMesuresSpecifiquesPourHomologation('123', mesures)
+      .then(() => depot.homologation('123'))
+      .then(({ mesures: { mesuresSpecifiques } }) => {
+        expect(mesuresSpecifiques.nombre()).to.equal(1);
+        expect(mesuresSpecifiques.item(0)).to.be.a(MesureSpecifique);
+        expect(mesuresSpecifiques.item(0).description).to.equal('Une mesure spécifique');
         done();
       })
       .catch(done);

@@ -8,6 +8,7 @@ const Homologation = require('./modeles/homologation');
 const InformationsGenerales = require('./modeles/informationsGenerales');
 const InformationsHomologation = require('./modeles/informationsHomologation');
 const MesureGenerale = require('./modeles/mesureGenerale');
+const MesuresSpecifiques = require('./modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
 const RisqueGeneral = require('./modeles/risqueGeneral');
 const RisquesSpecifiques = require('./modeles/risquesSpecifiques');
@@ -256,25 +257,44 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.post('/api/homologation/:id/mesures',
     middleware.trouveHomologation,
-    middleware.aseptise('*'),
-    (requete, reponse) => {
-      const params = requete.body;
+    middleware.aseptise(
+      '*',
+      'mesuresSpecifiques.*.description',
+      'mesuresSpecifiques.*.categorie',
+      'mesuresSpecifiques.*.statut',
+      'mesuresSpecifiques.*.modalites',
+    ),
+    (requete, reponse, suite) => {
+      const { mesuresSpecifiques = [], ...params } = requete.body;
       const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
-      let ajouts = Promise.resolve();
+      const idHomologation = requete.homologation.id;
       try {
-        identifiantsMesures.forEach((im) => {
+        const ajouts = identifiantsMesures.reduce((acc, im) => {
           const mesure = new MesureGenerale({
             id: im,
             statut: params[im],
             modalites: params[`modalites-${im}`],
           }, referentiel);
 
-          ajouts = ajouts.then(
-            () => depotDonnees.ajouteMesureGeneraleAHomologation(requete.homologation.id, mesure)
+          return acc.then(
+            () => depotDonnees.ajouteMesureGeneraleAHomologation(idHomologation, mesure)
           );
-        });
+        }, Promise.resolve());
 
-        ajouts.then(() => reponse.send({ idHomologation: requete.homologation.id }));
+        ajouts
+          .then(() => {
+            const aPersister = mesuresSpecifiques.filter(
+              (m) => m?.description || m?.categorie || m?.statut || m?.modalites
+            );
+
+            const listeMesures = new MesuresSpecifiques({ mesuresSpecifiques: aPersister });
+            return depotDonnees.remplaceMesuresSpecifiquesPourHomologation(
+              idHomologation,
+              listeMesures,
+            );
+          })
+          .then(() => reponse.send({ idHomologation }))
+          .catch(suite);
       } catch {
         reponse.status(422).send('Données invalides');
       }

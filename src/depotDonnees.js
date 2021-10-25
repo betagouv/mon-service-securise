@@ -114,6 +114,10 @@ const creeDepot = (config = {}) => {
       })
   );
 
+  const remplaceMesuresSpecifiquesPourHomologation = (...params) => (
+    remplaceProprieteHomologation('mesuresSpecifiques', ...params)
+  );
+
   const remplaceRisquesSpecifiquesPourHomologation = (...params) => (
     remplaceProprieteHomologation('risquesSpecifiques', ...params)
   );
@@ -212,6 +216,7 @@ const creeDepot = (config = {}) => {
     nouvelleHomologation,
     nouvelUtilisateur,
     reinitialiseMotDePasse,
+    remplaceMesuresSpecifiquesPourHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeIdResetMotDePassePourUtilisateur,
