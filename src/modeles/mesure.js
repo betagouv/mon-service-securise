@@ -4,6 +4,7 @@ const { ErreurStatutMesureInvalide } = require('../erreurs');
 const STATUTS = {
   STATUT_FAIT: 'fait',
   STATUT_PLANIFIE: 'planifie',
+  STATUT_NON_FAIT: 'nonFait',
   STATUT_NON_RETENU: 'nonRetenu',
 };
 
