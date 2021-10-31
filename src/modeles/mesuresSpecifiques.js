@@ -7,6 +7,12 @@ class MesuresSpecifiques extends ListeItems {
     const { mesuresSpecifiques } = donnees;
     super(MesureSpecifique, { items: mesuresSpecifiques }, referentiel);
   }
+
+  statutSaisie() {
+    return super.statutSaisie() === MesuresSpecifiques.A_COMPLETER
+      ? MesuresSpecifiques.A_COMPLETER
+      : MesuresSpecifiques.COMPLETES;
+  }
 }
 
 module.exports = MesuresSpecifiques;

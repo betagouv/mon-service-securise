@@ -7,6 +7,10 @@ class MesureSpecifique extends InformationsHomologation {
     this.renseigneProprietes(donneesMesure);
     this.referentiel = referentiel;
   }
+
+  proprieteSaisie(nomPropriete) {
+    return nomPropriete === 'modalites' ? true : super.proprieteSaisie(nomPropriete);
+  }
 }
 
 module.exports = MesureSpecifique;

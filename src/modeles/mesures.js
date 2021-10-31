@@ -26,7 +26,9 @@ class Mesures extends InformationsHomologation {
   }
 
   statutSaisie() {
-    return this.mesuresGenerales.statutSaisie();
+    return this.mesuresSpecifiques.statutSaisie() === InformationsHomologation.A_COMPLETER
+      ? InformationsHomologation.A_COMPLETER
+      : this.mesuresGenerales.statutSaisie();
   }
 }
 
