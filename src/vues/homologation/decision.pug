@@ -179,3 +179,17 @@ main
             if mesure.estIndispensable()
               .indispensable
           - i++
+
+    - const nbMesuresSpecifiques = homologation.mesures.mesuresSpecifiques.nombre()
+    if nbMesuresSpecifiques > 0
+      section.detail-mesures
+        h2 Mesures spécifiques au service numérique
+
+        ul
+          - i = 0;
+          while i < nbMesuresSpecifiques
+            - const mesure = homologation.mesures.mesuresSpecifiques.item(i)
+            li
+              .description= mesure.description
+              .statut(class = mesure.statut)
+            - i++
