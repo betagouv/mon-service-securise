@@ -134,12 +134,13 @@ main
           dt= donneesRisque.description
           dd= donneesRisque.descriptionLongue
 
-  - const { risquesSpecifiques } = homologation.risques
+  .saut-page
   h1.vert Annexe 2 – Détail des risques spécifiques au service numérique
   .annexe
     section.detail-risques
       dl
         - let i = 0
+        - const { risquesSpecifiques } = homologation.risques
         - const nbRisquesSpecifiques = risquesSpecifiques.nombre()
         if nbRisquesSpecifiques === 0
           dd Aucun risque spécifique saisi
