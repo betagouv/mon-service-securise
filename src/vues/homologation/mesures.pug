@@ -42,10 +42,13 @@ block formulaire
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
-  script(id = 'donneesMesures', type = 'application/json').
-    !{JSON.stringify(homologation.mesures.toJSON())}
+  script(id = 'donnees-mesures-generales', type = 'application/json').
+    !{JSON.stringify(homologation.mesures.toJSON().mesuresGenerales || [])}
 
-  script(id = 'referentielMesures', type = 'application/json').
+  script(id = 'donnees-mesures-specifiques', type = 'application/json').
+    !{JSON.stringify(homologation.mesures.toJSON().mesuresSpecifiques || [])}
+
+  script(id = 'referentiel-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.mesures())}
 
   script(id = 'referentiel-categories-mesures', type = 'application/json').

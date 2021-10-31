@@ -1,4 +1,4 @@
-import { brancheAjoutItem } from '../modules/saisieListeItems.js';
+import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
 import { parametresAvecItemsExtraits } from '../modules/parametres.js';
 import texteHTML from '../modules/texteHTML.js';
 
@@ -6,7 +6,7 @@ $(() => {
   let indexMaxMesuresSpecifiques = 0;
 
   const filtreMesures = (selecteurMesures, categorieFiltre) => {
-    const referentielMesures = JSON.parse($('#referentielMesures').text());
+    const referentielMesures = JSON.parse($('#referentiel-mesures').text());
     Object.keys(referentielMesures)
       .forEach((id) => $(`fieldset#${id}`).toggle(
         (!categorieFiltre) || categorieFiltre === referentielMesures[id].categorie
@@ -48,24 +48,29 @@ $(() => {
   });
 
   const peupleFormulaire = () => {
-    const donneesMesures = JSON.parse($('#donneesMesures').text());
-    donneesMesures.mesuresGenerales.forEach(({ id, statut, modalites }) => {
+    const donneesMesuresGenerales = JSON.parse($('#donnees-mesures-generales').text());
+    donneesMesuresGenerales.forEach(({ id, statut, modalites }) => {
       $(`#${id}-${statut}`).prop('checked', true);
       if (modalites) $(`#modalites-${id}`).show().val(texteHTML(modalites));
     });
   };
 
-  const zoneSaisieMesureSpecifique = (index) => {
-    const referentielCategoriesMesures = JSON.parse($('#referentiel-categories-mesures').text());
-    const options = Object.keys(referentielCategoriesMesures).map((c) => (
-      `<option value="${c}">${referentielCategoriesMesures[c]}</option>`
-    )).join('');
+  const zoneSaisieMesureSpecifique = (index, donnees = {}) => {
+    const { description = '', categorie = '', statut = '', modalites = '' } = donnees;
 
-    const referentielStatuts = { fait: 'Fait', planifié: 'Planifié', nonRetenu: 'Non concerné' };
+    const referentielCategoriesMesures = JSON.parse($('#referentiel-categories-mesures').text());
+    const options = Object.keys(referentielCategoriesMesures).map((c) => (`
+<option value="${c}"${c === categorie ? ' selected' : ''}>
+  ${referentielCategoriesMesures[c]}
+</option>
+    `)).join('');
+
+    const referentielStatuts = { fait: 'Fait', planifie: 'Planifié', nonRetenu: 'Non concerné' };
     const statuts = Object.keys(referentielStatuts).map((s) => `
 <input id="statut-${s}-mesure-specifique-${index}"
        name="statut-mesure-specifique-${index}"
        value="${s}"
+       ${s === statut ? 'checked' : ''}
        type="radio">
 <label for="statut-${s}-mesure-specifique-${index}">${referentielStatuts[s]}</label>
 <br>
@@ -75,7 +80,7 @@ $(() => {
 <input id="description-mesure-specifique-${index}"
        name="description-mesure-specifique-${index}"
        placeholder="Description de la mesure"
-       value="">
+       value="${description}">
 
 <select id="categorie-mesure-specifique-${index}" name="categorie-mesure-specifique-${index}">
   <option value="">--Catégorie--</option>
@@ -86,7 +91,7 @@ ${statuts}
 
 <textarea id="modalites-mesure-specifique-${index}"
           name="modalites-mesure-specifique-${index}"
-          placeholder="Modalités de mise en œuvre"></textarea>
+          placeholder="Modalités de mise en œuvre">${modalites}</textarea>
       `;
   };
 
@@ -96,11 +101,16 @@ ${statuts}
     () => (indexMaxMesuresSpecifiques += 1),
   );
 
+  const peupleMesuresSpecifiques = (...params) => (
+    peupleListeItems(...params, zoneSaisieMesureSpecifique)
+  );
+
   brancheFiltres('form#mesures nav > a', '.mesures');
 
   ajouteConteneursModalites();
   peupleFormulaire();
 
+  indexMaxMesuresSpecifiques = peupleMesuresSpecifiques('#mesures-specifiques', '#donnees-mesures-specifiques');
   brancheAjoutMesureSpecifique('.nouvel-item', '#mesures-specifiques');
 
   const $bouton = $('.bouton');
