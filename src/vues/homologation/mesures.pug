@@ -6,7 +6,7 @@ mixin inputMesure({ nom, titre, indispensable })
     type: 'radio',
     nom: nom,
     titre: titre,
-    items: { fait: { description: 'Fait' }, planifie: { description: 'Planifié' }, nonRetenu: { description: 'Non concerné' } },
+    items: homologation.descriptionStatutsMesures(),
     decoration: indispensable ? '<div class="mention-anssi mesure-indispensable">Indispensable</div>' : '',
   })
 
@@ -53,5 +53,8 @@ block formulaire
 
   script(id = 'referentiel-categories-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.categoriesMesures())}
+
+  script(id = 'referentiel-statuts-mesures', type = 'application/json').
+    !{JSON.stringify(referentiel.statutsMesures())}
 
   script(type = 'module', src = '/statique/homologation/mesures.js')

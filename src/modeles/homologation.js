@@ -2,6 +2,7 @@ const Referentiel = require('../referentiel');
 const AvisExpertCyber = require('./avisExpertCyber');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const InformationsGenerales = require('./informationsGenerales');
+const Mesure = require('./mesure');
 const Mesures = require('./mesures');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risques = require('./risques');
@@ -61,6 +62,13 @@ class Homologation {
   }
 
   descriptionNatureService() { return this.informationsGenerales.descriptionNatureService(); }
+
+  descriptionStatutsMesures() {
+    return Mesure.statutsPossibles().reduce((acc, s) => {
+      acc[s] = { description: this.referentiel.descriptionStatutMesure(s) };
+      return acc;
+    }, {});
+  }
 
   expertCybersecurite() { return this.partiesPrenantes.expertCybersecurite; }
 

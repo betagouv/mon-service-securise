@@ -1,30 +1,11 @@
-const Base = require('./base');
-const { ErreurMesureInconnue, ErreurStatutMesureInvalide } = require('../erreurs');
+const Mesure = require('./mesure');
+const { ErreurMesureInconnue } = require('../erreurs');
 
-const STATUTS = {
-  STATUT_FAIT: 'fait',
-  STATUT_PLANIFIE: 'planifie',
-  STATUT_NON_RETENU: 'nonRetenu',
-};
-
-const valide = (donnees, referentiel) => {
-  const { id, statut } = donnees;
-
-  const identifiantsMesuresRepertoriees = referentiel.identifiantsMesures();
-  if (!identifiantsMesuresRepertoriees.includes(id)) {
-    throw new ErreurMesureInconnue(`La mesure "${id}" n'est pas répertoriée`);
-  }
-
-  if (!Object.values(STATUTS).includes(statut)) {
-    throw new ErreurStatutMesureInvalide(`Le statut "${statut}" est invalide`);
-  }
-};
-
-class MesureGenerale extends Base {
+class MesureGenerale extends Mesure {
   constructor(donneesMesure, referentiel) {
     super(['id', 'statut', 'modalites']);
 
-    valide(donneesMesure, referentiel);
+    MesureGenerale.valide(donneesMesure, referentiel);
     this.renseigneProprietes(donneesMesure);
 
     this.referentiel = referentiel;
@@ -43,10 +24,17 @@ class MesureGenerale extends Base {
   }
 
   nonRetenue() {
-    return this.statut === STATUTS.STATUT_NON_RETENU;
+    return this.statut === Mesure.STATUT_NON_RETENU;
+  }
+
+  static valide({ id, statut }, referentiel) {
+    super.valide({ statut }, referentiel);
+
+    const identifiantsMesuresRepertoriees = referentiel.identifiantsMesures();
+    if (!identifiantsMesuresRepertoriees.includes(id)) {
+      throw new ErreurMesureInconnue(`La mesure "${id}" n'est pas répertoriée`);
+    }
   }
 }
-
-Object.assign(MesureGenerale, STATUTS);
 
 module.exports = MesureGenerale;

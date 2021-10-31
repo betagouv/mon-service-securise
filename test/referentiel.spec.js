@@ -116,6 +116,14 @@ describe('Le référentiel', () => {
     expect(referentiel.descriptionCategorie('uneCategorie')).to.equal('une description');
   });
 
+  it('sait décrire les statuts des mesures', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      statutsMesures: { unStatut: 'Un statut' },
+    });
+
+    expect(referentiel.descriptionStatutMesure('unStatut')).to.equal('Un statut');
+  });
+
   it('connaît la liste des risques', () => {
     const referentiel = Referentiel.creeReferentiel({ risques: { uneClef: 'une valeur' } });
     expect(referentiel.risques()).to.eql({ uneClef: 'une valeur' });

@@ -65,14 +65,14 @@ $(() => {
 </option>
     `)).join('');
 
-    const referentielStatuts = { fait: 'Fait', planifie: 'Planifié', nonRetenu: 'Non concerné' };
-    const statuts = Object.keys(referentielStatuts).map((s) => `
+    const referentielStatutsMesures = JSON.parse($('#referentiel-statuts-mesures').text());
+    const statuts = Object.keys(referentielStatutsMesures).map((s) => `
 <input id="statut-${s}-mesure-specifique-${index}"
        name="statut-mesure-specifique-${index}"
        value="${s}"
        ${s === statut ? 'checked' : ''}
        type="radio">
-<label for="statut-${s}-mesure-specifique-${index}">${referentielStatuts[s]}</label>
+<label for="statut-${s}-mesure-specifique-${index}">${referentielStatutsMesures[s]}</label>
 <br>
     `).join('');
 

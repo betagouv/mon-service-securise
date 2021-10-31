@@ -170,6 +170,12 @@ module.exports = {
     resilience: 'Résilience',
   },
 
+  statutsMesures: {
+    fait: 'Fait',
+    planifie: 'Planifié',
+    nonRetenu: 'Non concerné',
+  },
+
   mesures: {
     limitationInterconnexions: {
       description: "Identifier et limiter les interconnexions du service avec d'autres systèmes",

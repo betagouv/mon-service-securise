@@ -19,6 +19,8 @@ const creeReferentiel = (donneesReferentiel) => {
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
   const seuilsCriticites = () => donnees.seuilsCriticites;
+  const statutsMesures = () => donnees.statutsMesures;
+  const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
 
   const descriptionExpiration = (identifiant) => {
     if (!identifiant) return 'Information non renseignée';
@@ -84,6 +86,7 @@ const creeReferentiel = (donneesReferentiel) => {
     delaisAvantImpactCritique,
     descriptionCategorie,
     descriptionExpiration,
+    descriptionStatutMesure,
     donneesCaracterePersonnel,
     echeancesRenouvellement,
     fonctionnalites,
@@ -103,6 +106,7 @@ const creeReferentiel = (donneesReferentiel) => {
     risques,
     seuilCriticiteMin,
     seuilsCriticites,
+    statutsMesures,
   };
 };
 
@@ -118,6 +122,7 @@ const creeReferentielVide = () => creeReferentiel({
   naturesService: {},
   provenancesService: {},
   seuilsCriticites: [],
+  statutsMesures: {},
 });
 
 module.exports = { creeReferentiel, creeReferentielVide };
