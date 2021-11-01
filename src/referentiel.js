@@ -2,8 +2,8 @@ const creeReferentiel = (donneesReferentiel) => {
   let donnees = donneesReferentiel;
 
   const categoriesMesures = () => donnees.categoriesMesures;
+  const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
-  const descriptionCategorie = (idCategorie) => donnees.categoriesMesures[idCategorie];
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement;
