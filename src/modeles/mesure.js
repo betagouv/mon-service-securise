@@ -1,4 +1,4 @@
-const Base = require('./base');
+const InformationsHomologation = require('./informationsHomologation');
 const { ErreurStatutMesureInvalide } = require('../erreurs');
 
 const STATUTS = {
@@ -8,11 +8,11 @@ const STATUTS = {
   STATUT_NON_RETENU: 'nonRetenu',
 };
 
-class Mesure extends Base {
+class Mesure extends InformationsHomologation {
   static statutsPossibles() { return Object.values(STATUTS); }
 
   static valide({ statut }) {
-    if (!this.statutsPossibles().includes(statut)) {
+    if (statut && !this.statutsPossibles().includes(statut)) {
       throw new ErreurStatutMesureInvalide(`Le statut "${statut}" est invalide`);
     }
   }

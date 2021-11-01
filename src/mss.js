@@ -287,7 +287,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
               (m) => m?.description || m?.categorie || m?.statut || m?.modalites
             );
 
-            const listeMesures = new MesuresSpecifiques({ mesuresSpecifiques: aPersister });
+            const listeMesures = new MesuresSpecifiques({
+              mesuresSpecifiques: aPersister,
+            }, referentiel);
             return depotDonnees.remplaceMesuresSpecifiquesPourHomologation(
               idHomologation,
               listeMesures,

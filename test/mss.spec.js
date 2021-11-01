@@ -565,8 +565,9 @@ describe('Le serveur MSS', () => {
         return Promise.resolve();
       };
 
+      referentiel.recharge({ categoriesMesures: { uneCategorie: 'Une catégorie' } });
       axios.post('http://localhost:1234/api/homologation/456/mesures', {
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique', categorie: 'uneCategorie' }],
       })
         .then(() => expect(mesuresRemplacees).to.be(true))
         .then(() => done())

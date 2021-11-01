@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 
+const { ErreurCategorieInconnue, ErreurStatutMesureInvalide } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
@@ -33,5 +34,36 @@ describe('Une mesure spécifique', () => {
     }, referentiel);
 
     expect(mesure.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
+  });
+
+  elle('vérifie que le statut est bien valide', (done) => {
+    try {
+      new MesureSpecifique({ statut: 'statutInconnu' });
+      done('La création de la mesure aurait dû lever une exception.');
+    } catch (e) {
+      expect(e).to.be.an(ErreurStatutMesureInvalide);
+      expect(e.message).to.equal('Le statut "statutInconnu" est invalide');
+      done();
+    }
+  });
+
+  elle('vérifie que la catégorie est bien répertoriée', (done) => {
+    try {
+      new MesureSpecifique({ categorie: 'categorieInconnue' });
+      done('La création de la mesure aurait dû lever une exception.');
+    } catch (e) {
+      expect(e).to.be.an(ErreurCategorieInconnue);
+      expect(e.message).to.equal("La catégorie \"categorieInconnue\" n'est pas répertoriée");
+      done();
+    }
+  });
+
+  elle("ne tient pas compte de la catégorie si elle n'est pas renseignée", (done) => {
+    try {
+      new MesureSpecifique();
+      done();
+    } catch {
+      done("La création de la mesure sans catégorie n'aurait pas dû lever d'exception.");
+    }
   });
 });

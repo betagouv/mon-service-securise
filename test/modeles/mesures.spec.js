@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 
+const Referentiel = require('../../src/referentiel');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 const Mesures = require('../../src/modeles/mesures');
 const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
@@ -24,11 +25,17 @@ describe('Les mesures liées à une homologation', () => {
     expect(mesures.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
   });
 
-  elles('ont comme statut celui des mesures générales si celui des mesures spécifiques est `COMPLETES`', () => {
+  elles('ont le statut de saisie des mesures générales si celui des mesures spécifiques est `COMPLETES`', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { uneCategorie: 'Une catégorie' },
+    });
+
     const mesures = new Mesures({
       mesuresGenerales: [],
-      mesuresSpecifiques: [{ description: 'Une mesure spécifique', categorie: 'uneCategorie', statut: 'fait' }],
-    });
+      mesuresSpecifiques: [
+        { description: 'Une mesure spécifique', categorie: 'uneCategorie', statut: 'fait' },
+      ],
+    }, referentiel);
 
     expect(mesures.statutSaisie()).to.equal(InformationsHomologation.A_SAISIR);
   });
