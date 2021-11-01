@@ -5,15 +5,29 @@ import texteHTML from '../modules/texteHTML.js';
 $(() => {
   let indexMaxMesuresSpecifiques = 0;
 
-  const filtreMesures = (selecteurMesures, categorieFiltre) => {
+  const mesureGeneraleDeCategorie = (mesureGenerale, categorieFiltre) => (
+    categorieFiltre
+      ? categorieFiltre === mesureGenerale.categorie
+      : true
+  );
+
+  const mesureSpecifiqueDeCategorie = (elementMesureSpecifique, categorieFiltre) => (
+    categorieFiltre
+      ? $(`option[value="${categorieFiltre}"]:selected, option[value=""]:selected`, elementMesureSpecifique).length === 1
+      : true
+  );
+
+  const filtreMesures = (categorieFiltre) => {
     const referentielMesures = JSON.parse($('#referentiel-mesures').text());
-    Object.keys(referentielMesures)
-      .forEach((id) => $(`fieldset#${id}`).toggle(
-        (!categorieFiltre) || categorieFiltre === referentielMesures[id].categorie
-      ));
+
+    Object.keys(referentielMesures).forEach((id) => $(`fieldset#${id}`)
+      .toggle(mesureGeneraleDeCategorie(referentielMesures[id], categorieFiltre)));
+
+    $('.item-ajoute').each((_, item) => $(item)
+      .toggle(mesureSpecifiqueDeCategorie(item, categorieFiltre)));
   };
 
-  const brancheFiltres = (selecteurFiltres, selecteurMesures) => {
+  const brancheFiltres = (selecteurFiltres) => {
     const $filtres = $(selecteurFiltres);
     $filtres.each((_, f) => {
       $(f).click((e) => {
@@ -21,7 +35,7 @@ $(() => {
         $(e.target).addClass('actif');
 
         const idCategorie = e.target.id;
-        filtreMesures(selecteurMesures, idCategorie);
+        filtreMesures(idCategorie);
       });
     });
   };
@@ -105,7 +119,7 @@ ${statuts}
     peupleListeItems(...params, zoneSaisieMesureSpecifique)
   );
 
-  brancheFiltres('form#mesures nav > a', '.mesures');
+  brancheFiltres('form#mesures nav > a');
 
   ajouteConteneursModalites();
   peupleFormulaire();
