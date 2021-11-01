@@ -54,8 +54,8 @@ main
     p Recommandées par l'ANSSI, détails en annexe
 
     .legende
-      .planifie Planifiées
-      .fait Mises en œuvre
+      .planifie Planifié
+      .fait Fait
 
     - const statistiquesMesures = homologation.statistiquesMesures()
     - const categories = statistiquesMesures.categories()
@@ -156,10 +156,8 @@ main
   h1.vert Annexe 3 – Détail des mesures de sécurité
   .annexe
     .legende
-      .nonRetenu Non concerné
-      .nonFait Non fait
-      .planifie Planifiées
-      .fait Mesures mises en œuvre
+      each description, id in referentiel.statutsMesures()
+        div(class = id)= description
     .legende.avis-anssi
       .indispensable Mesure indispensable (ANSSI)
 
