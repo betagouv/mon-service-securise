@@ -346,6 +346,10 @@ section.detail-mesures .statut.planifie, .legende .planifie:before {
   background: #fff1ce;
 }
 
+section.detail-mesures .statut.nonFait, .legende .nonFait:before {
+  background: #ce1b2577;
+}
+
 section.detail-mesures .statut.nonRetenu, .legende .nonRetenu:before {
   background: #ebedf0;
 }
