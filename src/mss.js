@@ -38,6 +38,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     secure: avecCookieSecurise,
   }));
 
+  app.use((requete, reponse, suite) => {
+    reponse.set('content-security-policy', "default-src 'self'; script-src 'self' unpkg.com code.jquery.com");
+    suite();
+  });
+
   app.set('trust proxy', 1);
   app.set('view engine', 'pug');
   app.set('views', './src/vues');

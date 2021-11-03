@@ -154,6 +154,46 @@ describe('Le serveur MSS', () => {
       .catch(done);
   });
 
+  describe('quand une page est servie', () => {
+    it('positionne le header content-security-policy', (done) => {
+      axios.get('http://localhost:1234/')
+        .then((reponse) => {
+          expect(reponse.headers).to.have.property('content-security-policy');
+          done();
+        })
+        .catch(done);
+    });
+
+    describe('dans le header content-security-policy', () => {
+      it('permet de charger toutes les ressources du domaine', (done) => {
+        axios.get('http://localhost:1234/')
+          .then((reponse) => {
+            expect(reponse.headers['content-security-policy']).to.match(/default-src 'self'/);
+            done();
+          })
+          .catch(done);
+      });
+
+      it('permet de charger tous les scripts extérieurs utilisés dans la vue', (done) => {
+        axios.get('http://localhost:1234/')
+          .then((reponse) => {
+            expect(reponse.headers['content-security-policy']).to.match(/script-src[^;]* unpkg.com code.jquery.com/);
+            done();
+          })
+          .catch(done);
+      });
+
+      it('permet de charger tous les scripts du domaine', (done) => {
+        axios.get('http://localhost:1234/')
+          .then((reponse) => {
+            expect(reponse.headers['content-security-policy']).to.match(/script-src[^;]* 'self'/);
+            done();
+          })
+          .catch(done);
+      });
+    });
+  });
+
   describe('quand requête GET sur `/connexion`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
       verifieRequeteExigeSuppressionCookie('http://localhost:1234/connexion', done);
