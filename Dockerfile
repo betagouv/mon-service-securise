@@ -1,4 +1,4 @@
-FROM node
+FROM node:16
 
 RUN npm install -g npm
 
