@@ -100,6 +100,11 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance.metsAJourHomologation(idHomologation, { risquesVerifies: true })
   );
 
+  const homologationExiste = (...params) => (
+    adaptateurPersistance.homologationAvecNomService(...params)
+      .then((h) => !!h)
+  );
+
   const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
     .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
 
@@ -210,6 +215,7 @@ const creeDepot = (config = {}) => {
     ajoutePartiesPrenantesAHomologation,
     ajouteRisqueGeneralAHomologation,
     homologation,
+    homologationExiste,
     homologations,
     marqueRisquesCommeVerifies,
     metsAJourMotDePasse,

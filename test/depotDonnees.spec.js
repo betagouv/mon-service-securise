@@ -516,6 +516,61 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  describe('sur vérification existence homologation avec un nom de service donné', () => {
+    it('détecte existence homologation', (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+        homologations: [{
+          id: '789', idUtilisateur: '123', informationsGenerales: { nomService: 'Un service existant' },
+        }],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.homologationExiste('123', 'Un nom de service')
+        .then((homologationExiste) => expect(homologationExiste).to.be(false))
+        .then(() => depot.homologationExiste('123', 'Un service existant'))
+        .then((homologationExiste) => expect(homologationExiste).to.be(true))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("ne considère que les homologations de l'utilisateur donné", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '123', email: 'jean.dupont@mail.fr' },
+          { id: '456', email: 'sylvie.martin@mail.fr' },
+        ],
+        homologations: [{
+          id: '789', idUtilisateur: '123', informationsGenerales: { nomService: 'Un service existant' },
+        }],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.homologationExiste('456', 'Un service existant')
+        .then((homologationExiste) => expect(homologationExiste).to.be(false))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("ne considère pas l'homologation en cours de mise à jour", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+        homologations: [
+          { id: '888', idUtilisateur: '123', informationsGenerales: { nomService: 'Un service existant' } },
+          { id: '999', idUtilisateur: '123', informationsGenerales: { nomService: 'Un nom de service' } },
+        ],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.homologationExiste('123', 'Un service existant', '888')
+        .then((homologationExiste) => expect(homologationExiste).to.be(false))
+        .then(() => depot.homologationExiste('123', 'Un service existant', '999'))
+        .then((homologationExiste) => expect(homologationExiste).to.be(true))
+        .then(() => done())
+        .catch(done);
+    });
+  });
+
   it("retourne l'utilisateur associé à un identifiant donné", (done) => {
     const adaptateurJWT = 'Un adaptateur';
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({

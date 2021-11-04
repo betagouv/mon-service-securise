@@ -13,6 +13,16 @@ const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [] }) => 
     donnees.homologations.find((h) => h.id === idHomologation)
   );
 
+  const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour) => (
+    Promise.resolve(
+      donnees.homologations.find((h) => (
+        h.id !== idHomologationMiseAJour
+        && h.idUtilisateur === idUtilisateur
+        && h.informationsGenerales?.nomService === nomService
+      ))
+    )
+  );
+
   const homologations = (idUtilisateur) => Promise.resolve(
     donnees.homologations.filter((h) => h.idUtilisateur === idUtilisateur)
   );
@@ -59,6 +69,7 @@ const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [] }) => 
     ajouteHomologation,
     ajouteUtilisateur,
     homologation,
+    homologationAvecNomService,
     homologations,
     metsAJourHomologation,
     metsAJourUtilisateur,
