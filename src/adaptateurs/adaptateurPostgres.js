@@ -26,7 +26,7 @@ const nouvelAdaptateur = (env) => {
     .catch(() => undefined);
 
   const elementDeTableAvec = (nomTable, nomClef, valeur) => knex(nomTable)
-    .whereRaw(`donnees->>'${nomClef}'=?`, valeur)
+    .whereRaw(`donnees#>>'{${nomClef}}'=?`, valeur)
     .first()
     .then(convertisLigneEnObjet)
     .catch(() => undefined);
