@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 
 const {
   ErreurEmailManquant,
+  ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
   ErreurUtilisateurExistant,
 } = require('./erreurs');
@@ -38,18 +39,25 @@ const creeDepot = (config = {}) => {
       })
   );
 
-  const metsAJourProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
-    adaptateurPersistance.homologation(idHomologation)
-      .then((h) => {
-        h[nomPropriete] ||= {};
+  const metsAJourProprieteHomologation = (nomPropriete, idOuHomologation, propriete) => {
+    const metsAJour = (h) => {
+      h[nomPropriete] ||= {};
 
-        const donneesPropriete = propriete.toJSON();
-        Object.assign(h[nomPropriete], donneesPropriete);
+      const donneesPropriete = propriete.toJSON();
+      Object.assign(h[nomPropriete], donneesPropriete);
 
-        const { id, ...donnees } = h;
-        return adaptateurPersistance.metsAJourHomologation(id, donnees);
-      })
-  );
+      const { id, ...donnees } = h;
+      return adaptateurPersistance.metsAJourHomologation(id, donnees);
+    };
+
+    const trouveDonneesHomologation = (param) => (
+      typeof param === 'object'
+        ? Promise.resolve(param)
+        : adaptateurPersistance.homologation(param)
+    );
+
+    return trouveDonneesHomologation(idOuHomologation).then(metsAJour);
+  };
 
   const remplaceProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
     adaptateurPersistance.homologation(idHomologation)
@@ -70,18 +78,31 @@ const creeDepot = (config = {}) => {
     ajouteAItemsDansHomologation('risquesGeneraux', ...params)
   );
 
-  const valideInformationsGenerales = (infos) => new Promise((resolve, reject) => {
+  const homologationExiste = (...params) => (
+    adaptateurPersistance.homologationAvecNomService(...params)
+      .then((h) => !!h)
+  );
+
+  const valideInformationsGenerales = (idUtilisateur, infos) => {
     const { nomService } = infos;
     if (typeof nomService !== 'string' || !nomService) {
-      reject(new ErreurNomServiceManquant('Le nom du service ne peut pas être vide'));
+      return Promise.reject(new ErreurNomServiceManquant('Le nom du service ne peut pas être vide'));
     }
 
-    resolve();
-  });
+    return homologationExiste(idUtilisateur, nomService).then((homologationExistante) => (
+      homologationExistante
+        ? Promise.reject(new ErreurNomServiceDejaExistant(
+          `Le nom du service "${nomService}" existe déjà pour une autre homologation`
+        ))
+        : Promise.resolve()));
+  };
 
   const ajouteInformationsGeneralesAHomologation = (idHomologation, infos) => (
-    valideInformationsGenerales(infos)
-      .then(() => metsAJourProprieteHomologation('informationsGenerales', idHomologation, infos))
+    adaptateurPersistance.homologation(idHomologation)
+      .then((h) => (
+        valideInformationsGenerales(h.idUtilisateur, infos)
+          .then(() => metsAJourProprieteHomologation('informationsGenerales', h, infos))
+      ))
   );
 
   const ajouteCaracteristiquesAHomologation = (...params) => (
@@ -100,16 +121,11 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance.metsAJourHomologation(idHomologation, { risquesVerifies: true })
   );
 
-  const homologationExiste = (...params) => (
-    adaptateurPersistance.homologationAvecNomService(...params)
-      .then((h) => !!h)
-  );
-
   const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
     .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
 
   const nouvelleHomologation = (idUtilisateur, donneesInformationsGenerales) => (
-    valideInformationsGenerales(donneesInformationsGenerales)
+    valideInformationsGenerales(idUtilisateur, donneesInformationsGenerales)
       .then(() => {
         const id = adaptateurUUID.genereUUID();
         const donnees = { idUtilisateur, informationsGenerales: donneesInformationsGenerales };

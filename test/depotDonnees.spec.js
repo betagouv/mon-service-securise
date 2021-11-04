@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const DepotDonnees = require('../src/depotDonnees');
 const {
   ErreurEmailManquant,
+  ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
   ErreurUtilisateurExistant,
 } = require('../src/erreurs');
@@ -387,11 +388,12 @@ describe('Le dépôt de données persistées en mémoire', () => {
   });
 
   describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
-    const adaptateurUUID = { genereUUID: () => {} };
+    const adaptateurUUID = { genereUUID: () => 'unUUID' };
     let depot;
 
     beforeEach(() => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [],
       });
       depot = DepotDonnees.creeDepot({ adaptateurPersistance, adaptateurUUID });
@@ -430,6 +432,18 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .then(() => done("La création de l'homologation aurait dû lever une exception"))
         .catch((e) => expect(e).to.be.an(ErreurNomServiceManquant))
         .then(() => done())
+        .catch(done);
+    });
+
+    it('lève une exception si le nom du service existe déjà pour une autre homologation', (done) => {
+      depot.nouvelleHomologation('123', { nomService: 'Un nom' })
+        .then(() => depot.nouvelleHomologation('123', { nomService: 'Un nom' }))
+        .then(() => done("La création de l'homologation aurait dû lever une exception"))
+        .catch((e) => {
+          expect(e).to.be.an(ErreurNomServiceDejaExistant);
+          expect(e.message).to.equal('Le nom du service "Un nom" existe déjà pour une autre homologation');
+          done();
+        })
         .catch(done);
     });
   });
