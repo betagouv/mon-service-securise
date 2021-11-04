@@ -38,6 +38,16 @@ const nouvelAdaptateur = (env) => {
 
   const homologation = (id) => elementDeTable('homologations', id);
 
+  const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour = '') => (
+    knex('homologations')
+      .whereRaw('not id::text=?', idHomologationMiseAJour)
+      .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
+      .whereRaw("donnees#>>'{informationsGenerales,nomService}'=?", nomService)
+      .first()
+      .then(convertisLigneEnObjet)
+      .catch(() => undefined)
+  );
+
   const homologations = (idUtilisateur) => knex('homologations')
     .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
     .then((rows) => rows.map(convertisLigneEnObjet));
@@ -72,6 +82,7 @@ const nouvelAdaptateur = (env) => {
     ajouteUtilisateur,
     arreteTout,
     homologation,
+    homologationAvecNomService,
     homologations,
     metsAJourHomologation,
     metsAJourUtilisateur,
