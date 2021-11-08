@@ -105,7 +105,7 @@ ${statuts}
 
 <textarea id="modalites-mesure-specifique-${index}"
           name="modalites-mesure-specifique-${index}"
-          placeholder="Modalités de mise en œuvre">${modalites}</textarea>
+          placeholder="Modalités de mise en œuvre (facultatif)">${modalites}</textarea>
       `;
   };
 
