@@ -74,12 +74,23 @@ describe('Le serveur MSS', () => {
     }, ...params);
   };
 
-  const verifieJetonDepose = (reponse, done) => {
-    expect(reponse.headers['set-cookie'][0]).to.match(
-      /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/
-    );
-    done();
+  const verifieValeurHeader = (valeurHeader, regExpValeurAttendue, suite) => {
+    expect(valeurHeader).to.match(regExpValeurAttendue);
+    suite();
   };
+
+  const verifieJetonDepose = (reponse, suite) => verifieValeurHeader(
+    reponse.headers['set-cookie'][0],
+    /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/,
+    suite
+  );
+
+  const verifiePositionnementHeader = (requete, nomHeader, regExpAttendue, suite) => axios(requete)
+    .then((reponse) => {
+      expect(reponse.headers).to.have.property(nomHeader);
+      verifieValeurHeader(reponse.headers[nomHeader], regExpAttendue, suite);
+    })
+    .catch(suite);
 
   const middleware = {
     suppressionCookie: (requete, reponse, suite) => {
@@ -155,42 +166,28 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand une page est servie', () => {
-    it('positionne le header content-security-policy', (done) => {
-      axios.get('http://localhost:1234/')
-        .then((reponse) => {
-          expect(reponse.headers).to.have.property('content-security-policy');
-          done();
-        })
-        .catch(done);
+    it('autorise le chargement de toutes les ressources du domaine', (done) => {
+      verifiePositionnementHeader(
+        'http://localhost:1234/',
+        'content-security-policy', /default-src 'self'/,
+        done,
+      );
     });
 
-    describe('dans le header content-security-policy', () => {
-      it('permet de charger toutes les ressources du domaine', (done) => {
-        axios.get('http://localhost:1234/')
-          .then((reponse) => {
-            expect(reponse.headers['content-security-policy']).to.match(/default-src 'self'/);
-            done();
-          })
-          .catch(done);
-      });
+    it('autorise le chargement de tous les scripts extérieurs utilisés dans la vue', (done) => {
+      verifiePositionnementHeader(
+        'http://localhost:1234/',
+        'content-security-policy', /script-src[^;]* unpkg.com code.jquery.com/,
+        done,
+      );
+    });
 
-      it('permet de charger tous les scripts extérieurs utilisés dans la vue', (done) => {
-        axios.get('http://localhost:1234/')
-          .then((reponse) => {
-            expect(reponse.headers['content-security-policy']).to.match(/script-src[^;]* unpkg.com code.jquery.com/);
-            done();
-          })
-          .catch(done);
-      });
-
-      it('permet de charger tous les scripts du domaine', (done) => {
-        axios.get('http://localhost:1234/')
-          .then((reponse) => {
-            expect(reponse.headers['content-security-policy']).to.match(/script-src[^;]* 'self'/);
-            done();
-          })
-          .catch(done);
-      });
+    it('autorise le chargemnet de tous les scripts du domaine', (done) => {
+      verifiePositionnementHeader(
+        'http://localhost:1234/',
+        'content-security-policy', /script-src[^;]* 'self'/,
+        done,
+      );
     });
   });
 
