@@ -4,7 +4,7 @@
   "description": "",
   "engines": {
     "node": "16",
-    "npm": "7"
+    "npm": "8"
   },
   "scripts": {
     "build": "knex --env test migrate:latest && knex migrate:latest && npm test",
