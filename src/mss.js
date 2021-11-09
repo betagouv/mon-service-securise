@@ -43,6 +43,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       'content-security-policy': "default-src 'self'; script-src 'self' unpkg.com code.jquery.com",
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
+      'referrer-policy': 'no-referrer',
     });
     suite();
   });

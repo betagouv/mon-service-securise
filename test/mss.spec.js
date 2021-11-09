@@ -205,6 +205,14 @@ describe('Le serveur MSS', () => {
         done
       );
     });
+
+    it("n'affiche pas l'URL de provenance quand l'utilisateur change de page", (done) => {
+      verifiePositionnementHeader(
+        'http://localhost:1234/',
+        'referrer-policy', /^no-referrer$/,
+        done
+      );
+    });
   });
 
   describe('quand requête GET sur `/connexion`', () => {
