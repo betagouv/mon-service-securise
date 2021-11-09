@@ -197,6 +197,14 @@ describe('Le serveur MSS', () => {
         done
       );
     });
+
+    it('interdit les inférences de types de média hors des infos données par le serveur', (done) => {
+      verifiePositionnementHeader(
+        'http://localhost:1234/',
+        'x-content-type-options', /^nosniff$/,
+        done
+      );
+    });
   });
 
   describe('quand requête GET sur `/connexion`', () => {
