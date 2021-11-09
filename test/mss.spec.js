@@ -189,6 +189,14 @@ describe('Le serveur MSS', () => {
         done,
       );
     });
+
+    it('interdit le chargement de cette page dans une iFrame', (done) => {
+      verifiePositionnementHeader(
+        'http://localhost:1234/',
+        'x-frame-options', /^deny$/,
+        done
+      );
+    });
   });
 
   describe('quand requête GET sur `/connexion`', () => {
