@@ -1,1 +1,1 @@
-DOCKER_IMAGE=mon_service_securise
+DOCKER_IMAGE=mss_web
