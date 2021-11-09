@@ -213,6 +213,15 @@ describe('Le serveur MSS', () => {
         done
       );
     });
+
+    it("n'affiche pas d'information sur la nature du serveur", (done) => {
+      axios.get('http://localhost:1234')
+        .then((reponse) => {
+          expect(reponse.headers).to.not.have.property('x-powered-by');
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('quand requête GET sur `/connexion`', () => {

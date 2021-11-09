@@ -48,6 +48,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     suite();
   });
 
+  app.disable('x-powered-by');
+
   app.set('trust proxy', 1);
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
