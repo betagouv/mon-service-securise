@@ -1,7 +1,12 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
-const { ErreurEmailManquant, ErreurUtilisateurExistant } = require('../src/erreurs');
+const {
+  ErreurEmailManquant,
+  ErreurNomServiceDejaExistant,
+  ErreurNomServiceManquant,
+  ErreurUtilisateurExistant,
+} = require('../src/erreurs');
 const MSS = require('../src/mss');
 const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
@@ -415,14 +420,23 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 422 si données insuffisantes pour création homologation', (done) => {
-      axios.post('http://localhost:1234/api/homologation', {})
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(422);
-          expect(erreur.response.data).to.equal("Données insuffisantes pour créer l'homologation");
-          done();
-        })
-        .catch(done);
+      depotDonnees.nouvelleHomologation = () => Promise.reject(new ErreurNomServiceManquant('oups'));
+
+      verifieRequeteGenereErreurHTTP(422, 'oups', {
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation',
+        data: {},
+      }, done);
+    });
+
+    it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
+      depotDonnees.nouvelleHomologation = () => Promise.reject(new ErreurNomServiceDejaExistant('oups'));
+
+      verifieRequeteGenereErreurHTTP(422, 'oups', {
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation',
+        data: { nomService: 'Un nom déjà existant' },
+      }, done);
     });
 
     it("demande au dépôt de données d'enregistrer les nouvelles homologations", (done) => {
@@ -490,6 +504,18 @@ describe('Le serveur MSS', () => {
           done();
         })
         .catch(done);
+    });
+
+    it('retourne une erreur HTTP 422 si la validation des données échoue', (done) => {
+      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.reject(
+        new ErreurNomServiceDejaExistant('oups')
+      );
+
+      verifieRequeteGenereErreurHTTP(422, 'oups', {
+        method: 'put',
+        url: 'http://localhost:1234/api/homologation/456',
+        data: { nomService: 'service déjà existant' },
+      }, done);
     });
   });
 

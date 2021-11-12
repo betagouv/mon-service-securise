@@ -1,7 +1,12 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 
-const { ErreurEmailManquant, ErreurUtilisateurExistant } = require('./erreurs');
+const {
+  ErreurEmailManquant,
+  ErreurNomServiceDejaExistant,
+  ErreurNomServiceManquant,
+  ErreurUtilisateurExistant,
+} = require('./erreurs');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
@@ -212,43 +217,48 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.post('/api/homologation',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('nomService'),
-    (requete, reponse) => {
-      if (typeof requete.body.nomService === 'string' && requete.body.nomService) {
-        const {
-          nomService,
-          natureService,
-          provenanceService,
-          dejaMisEnLigne,
-          fonctionnalites,
-          donneesCaracterePersonnel,
-          delaiAvantImpactCritique,
-          presenceResponsable,
-        } = requete.body;
+    (requete, reponse, suite) => {
+      const {
+        nomService,
+        natureService,
+        provenanceService,
+        dejaMisEnLigne,
+        fonctionnalites,
+        donneesCaracterePersonnel,
+        delaiAvantImpactCritique,
+        presenceResponsable,
+      } = requete.body;
 
-        depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
-          nomService,
-          natureService,
-          provenanceService,
-          dejaMisEnLigne,
-          fonctionnalites,
-          donneesCaracterePersonnel,
-          delaiAvantImpactCritique,
-          presenceResponsable,
-        })
-          .then((idHomologation) => reponse.json({ idHomologation }));
-      } else reponse.status(422).send("Données insuffisantes pour créer l'homologation");
+      depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
+        nomService,
+        natureService,
+        provenanceService,
+        dejaMisEnLigne,
+        fonctionnalites,
+        donneesCaracterePersonnel,
+        delaiAvantImpactCritique,
+        presenceResponsable,
+      })
+        .then((idHomologation) => reponse.json({ idHomologation }))
+        .catch((e) => {
+          if (e instanceof ErreurNomServiceDejaExistant || e instanceof ErreurNomServiceManquant) {
+            reponse.status(422).send(e.message);
+          } else suite(e);
+        });
     });
 
   app.put('/api/homologation/:id',
     middleware.trouveHomologation,
     middleware.aseptise('nomService'),
-    (requete, reponse) => {
+    (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
-        .catch(() => reponse.status(422).send(
-          "Données insuffisantes pour mettre à jour l'homologation"
-        ));
+        .catch((e) => {
+          if (e instanceof ErreurNomServiceDejaExistant || e instanceof ErreurNomServiceManquant) {
+            reponse.status(422).send(e.message);
+          } else suite(e);
+        });
     });
 
   app.post('/api/homologation/:id/caracteristiquesComplementaires',
