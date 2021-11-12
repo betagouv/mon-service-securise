@@ -391,16 +391,11 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
-      axios.get('http://localhost:1234/api/seuilCriticite', { params: {
-        delaiAvantImpactCritique: 'delaiInvalide',
-      } })
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(422);
-          expect(erreur.response.data).to.equal('Données invalides');
-          done();
-        })
-        .catch(done);
+      verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
+        method: 'get',
+        url: 'http://localhost:1234/api/seuilCriticite',
+        params: { delaiAvantImpactCritique: 'delaiInvalide' },
+      }, done);
     });
   });
 
@@ -586,16 +581,11 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
-      axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
-        localisationDonnees: 'localisationInvalide',
-      })
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(422);
-          expect(erreur.response.data).to.equal('Données invalides');
-          done();
-        })
-        .catch(done);
+      verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
+        data: { localisationDonnees: 'localisationInvalide' },
+      }, done);
     });
   });
 
@@ -688,16 +678,11 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
-      axios.post('http://localhost:1234/api/homologation/456/mesures', {
-        identifiantInvalide: 'statutInvalide',
-      })
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(422);
-          expect(erreur.response.data).to.equal('Données invalides');
-          done();
-        })
-        .catch(done);
+      verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/mesures',
+        data: { identifiantInvalide: 'statutInvalide' },
+      }, done);
     });
   });
 
@@ -836,16 +821,11 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
-      axios.post('http://localhost:1234/api/homologation/456/risques', {
-        'commentaire-unRisqueInvalide': 'Un commentaire',
-      })
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(422);
-          expect(erreur.response.data).to.equal('Données invalides');
-          done();
-        })
-        .catch(done);
+      verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/risques',
+        data: { 'commentaire-unRisqueInvalide': 'Un commentaire' },
+      }, done);
     });
   });
 
@@ -886,16 +866,11 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
-      axios.post('http://localhost:1234/api/homologation/456/avisExpertCyber', {
-        avis: 'avisInvalide',
-      })
-        .then(() => done('Réponse HTTP OK inattendue'))
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(422);
-          expect(erreur.response.data).to.equal('Données invalides');
-          done();
-        })
-        .catch(done);
+      verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation/456/avisExpertCyber',
+        data: { avis: 'avisInvalide' },
+      }, done);
     });
   });
 
