@@ -83,24 +83,25 @@ const creeDepot = (config = {}) => {
       .then((h) => !!h)
   );
 
-  const valideInformationsGenerales = (idUtilisateur, infos) => {
-    const { nomService } = infos;
+  const valideInformationsGenerales = (idUtilisateur, { nomService }, idHomologationMiseAJour) => {
     if (typeof nomService !== 'string' || !nomService) {
       return Promise.reject(new ErreurNomServiceManquant('Le nom du service ne peut pas être vide'));
     }
 
-    return homologationExiste(idUtilisateur, nomService).then((homologationExistante) => (
-      homologationExistante
-        ? Promise.reject(new ErreurNomServiceDejaExistant(
-          `Le nom du service "${nomService}" existe déjà pour une autre homologation`
-        ))
-        : Promise.resolve()));
+    return homologationExiste(idUtilisateur, nomService, idHomologationMiseAJour)
+      .then((homologationExistante) => (
+        homologationExistante
+          ? Promise.reject(new ErreurNomServiceDejaExistant(
+            `Le nom du service "${nomService}" existe déjà pour une autre homologation`
+          ))
+          : Promise.resolve()
+      ));
   };
 
   const ajouteInformationsGeneralesAHomologation = (idHomologation, infos) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((h) => (
-        valideInformationsGenerales(h.idUtilisateur, infos)
+        valideInformationsGenerales(h.idUtilisateur, infos, h.id)
           .then(() => metsAJourProprieteHomologation('informationsGenerales', h, infos))
       ))
   );

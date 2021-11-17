@@ -223,6 +223,24 @@ describe('Le dépôt de données persistées en mémoire', () => {
         })
         .catch(done);
     });
+
+    it("ne détecte pas de doublon sur le nom de service pour l'homologation en cours de mise à jour", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [
+          { id: '123', informationsGenerales: { nomService: 'Super Service', dejaMisEnLigne: 'non' } },
+        ],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      const infos = new InformationsGenerales({ nomService: 'Super Service', dejaMisEnLigne: 'oui' });
+      depot.ajouteInformationsGeneralesAHomologation('123', infos)
+        .then(() => depot.homologation('123'))
+        .then(({ informationsGenerales }) => {
+          expect(informationsGenerales.dejaMisEnLigne).to.equal('oui');
+          done();
+        })
+        .catch(done);
+    });
   });
 
   it('sait associer des caractéristiques complémentaires à une homologation', (done) => {
