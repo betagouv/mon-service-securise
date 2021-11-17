@@ -151,7 +151,7 @@ const creeDepot = (config = {}) => {
     const { email } = donneesUtilisateur;
     if (!email) throw new ErreurEmailManquant('Le champ email doit être renseigné');
 
-    adaptateurPersistance.utilisateurAvecEmail(donneesUtilisateur.email)
+    adaptateurPersistance.utilisateurAvecEmail(email)
       .then((u) => {
         if (u) {
           return reject(new ErreurUtilisateurExistant(
