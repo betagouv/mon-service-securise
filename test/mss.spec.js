@@ -961,19 +961,19 @@ describe('Le serveur MSS', () => {
     });
 
     it("génère une erreur HTTP 422 si l'utilisateur existe déjà", (done) => {
-      depotDonnees.nouvelUtilisateur = () => Promise.reject(new ErreurUtilisateurExistant());
+      depotDonnees.nouvelUtilisateur = () => Promise.reject(new ErreurUtilisateurExistant('oups'));
 
       verifieRequeteGenereErreurHTTP(
-        422, 'Utilisateur déjà existant pour cette adresse email',
+        422, 'oups',
         { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
       );
     });
 
     it("génère une erreur HTTP 422 si l'email n'est pas renseigné", (done) => {
-      depotDonnees.nouvelUtilisateur = () => Promise.reject(new ErreurEmailManquant());
+      depotDonnees.nouvelUtilisateur = () => Promise.reject(new ErreurEmailManquant('oups'));
 
       verifieRequeteGenereErreurHTTP(
-        422, 'Le champ email doit être renseigné',
+        422, 'oups',
         { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
       );
     });

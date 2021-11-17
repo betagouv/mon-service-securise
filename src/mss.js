@@ -1,12 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 
-const {
-  ErreurEmailManquant,
-  ErreurNomServiceDejaExistant,
-  ErreurNomServiceManquant,
-  ErreurUtilisateurExistant,
-} = require('./erreurs');
+const { ErreurModele } = require('./erreurs');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
@@ -241,9 +236,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       })
         .then((idHomologation) => reponse.json({ idHomologation }))
         .catch((e) => {
-          if (e instanceof ErreurNomServiceDejaExistant || e instanceof ErreurNomServiceManquant) {
-            reponse.status(422).send(e.message);
-          } else suite(e);
+          if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+          else suite(e);
         });
     });
 
@@ -255,7 +249,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
         .catch((e) => {
-          if (e instanceof ErreurNomServiceDejaExistant || e instanceof ErreurNomServiceManquant) {
+          if (e instanceof ErreurModele) {
             reponse.status(422).send(e.message);
           } else suite(e);
         });
@@ -418,11 +412,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           })
       ))
       .catch((e) => {
-        if (e instanceof ErreurUtilisateurExistant) {
-          reponse.status(422).send('Utilisateur déjà existant pour cette adresse email');
-        } else if (e instanceof ErreurEmailManquant) {
-          reponse.status(422).send('Le champ email doit être renseigné');
-        } else suite(e);
+        if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+        else suite(e);
       });
   });
 

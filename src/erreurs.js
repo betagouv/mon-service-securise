@@ -1,15 +1,16 @@
-class ErreurAvisInvalide extends Error {}
-class ErreurCategorieInconnue extends Error {}
-class ErreurDateRenouvellementInvalide extends Error {}
-class ErreurDonneesStatistiques extends Error {}
-class ErreurEmailManquant extends Error {}
-class ErreurLocalisationDonneesInvalide extends Error {}
-class ErreurMesureInconnue extends Error {}
-class ErreurNomServiceDejaExistant extends Error {}
-class ErreurNomServiceManquant extends Error {}
-class ErreurRisqueInconnu extends Error {}
-class ErreurStatutMesureInvalide extends Error {}
-class ErreurUtilisateurExistant extends Error {}
+class ErreurModele extends Error {}
+class ErreurAvisInvalide extends ErreurModele {}
+class ErreurCategorieInconnue extends ErreurModele {}
+class ErreurDateRenouvellementInvalide extends ErreurModele {}
+class ErreurDonneesStatistiques extends ErreurModele {}
+class ErreurEmailManquant extends ErreurModele {}
+class ErreurLocalisationDonneesInvalide extends ErreurModele {}
+class ErreurMesureInconnue extends ErreurModele {}
+class ErreurNomServiceDejaExistant extends ErreurModele {}
+class ErreurNomServiceManquant extends ErreurModele {}
+class ErreurRisqueInconnu extends ErreurModele {}
+class ErreurStatutMesureInvalide extends ErreurModele {}
+class ErreurUtilisateurExistant extends ErreurModele {}
 
 module.exports = {
   ErreurAvisInvalide,
@@ -19,6 +20,7 @@ module.exports = {
   ErreurEmailManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
+  ErreurModele,
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
   ErreurRisqueInconnu,

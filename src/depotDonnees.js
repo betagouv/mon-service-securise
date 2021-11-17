@@ -149,11 +149,15 @@ const creeDepot = (config = {}) => {
 
   const nouvelUtilisateur = (donneesUtilisateur) => new Promise((resolve, reject) => {
     const { email } = donneesUtilisateur;
-    if (!email) throw new ErreurEmailManquant();
+    if (!email) throw new ErreurEmailManquant('Le champ email doit être renseigné');
 
     adaptateurPersistance.utilisateurAvecEmail(donneesUtilisateur.email)
       .then((u) => {
-        if (u) return reject(new ErreurUtilisateurExistant());
+        if (u) {
+          return reject(new ErreurUtilisateurExistant(
+            'Utilisateur déjà existant pour cette adresse email'
+          ));
+        }
 
         const id = adaptateurUUID.genereUUID();
         donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
