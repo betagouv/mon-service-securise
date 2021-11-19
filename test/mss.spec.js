@@ -43,14 +43,14 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
 };
 
 describe('Le serveur MSS', () => {
+  let authentificationBasiqueMenee;
   let expirationCookieRepoussee;
   let idUtilisateurCourant;
+  let parametresAseptises;
+  let rechercheHomologationEffectuee;
   let suppressionCookieEffectuee;
   let verificationJWTMenee;
   let verificationCGUMenee;
-  let authentificationBasiqueMenee;
-  let rechercheHomologationEffectuee;
-  let parametresAseptises;
 
   const verifieRequeteExigeSuppressionCookie = (...params) => {
     verifieRequeteChangeEtat({ lectureEtat: () => suppressionCookieEffectuee }, ...params);
@@ -148,14 +148,14 @@ describe('Le serveur MSS', () => {
   let serveur;
 
   beforeEach((done) => {
+    authentificationBasiqueMenee = false;
     expirationCookieRepoussee = false;
     idUtilisateurCourant = undefined;
+    parametresAseptises = [];
+    rechercheHomologationEffectuee = false;
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
     verificationCGUMenee = false;
-    authentificationBasiqueMenee = false;
-    rechercheHomologationEffectuee = false;
-    parametresAseptises = [];
 
     referentiel = Referentiel.creeReferentielVide();
     adaptateurMail = {

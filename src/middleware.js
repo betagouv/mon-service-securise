@@ -74,9 +74,9 @@ const middleware = (configuration = {}) => {
   return {
     aseptise,
     authentificationBasique,
-    trouveHomologation,
     repousseExpirationCookie,
     suppressionCookie,
+    trouveHomologation,
     verificationAcceptationCGU,
     verificationJWT,
   };
