@@ -43,6 +43,7 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
 };
 
 describe('Le serveur MSS', () => {
+  let expirationCookieRepoussee;
   let idUtilisateurCourant;
   let suppressionCookieEffectuee;
   let verificationJWTMenee;
@@ -53,6 +54,10 @@ describe('Le serveur MSS', () => {
 
   const verifieRequeteExigeSuppressionCookie = (...params) => {
     verifieRequeteChangeEtat({ lectureEtat: () => suppressionCookieEffectuee }, ...params);
+  };
+
+  const verifieRequeteRepousseExpirationCookie = (...params) => {
+    verifieRequeteChangeEtat({ lectureEtat: () => expirationCookieRepoussee }, ...params);
   };
 
   const verifieRequeteExigeJWT = (...params) => {
@@ -98,8 +103,29 @@ describe('Le serveur MSS', () => {
     .catch(suite);
 
   const middleware = {
+    aseptise: (...nomsParametres) => (requete, reponse, suite) => {
+      parametresAseptises = nomsParametres;
+      suite();
+    },
+
+    authentificationBasique: (requete, reponse, suite) => {
+      authentificationBasiqueMenee = true;
+      suite();
+    },
+
+    repousseExpirationCookie: (requete, reponse, suite) => {
+      expirationCookieRepoussee = true;
+      suite();
+    },
+
     suppressionCookie: (requete, reponse, suite) => {
       suppressionCookieEffectuee = true;
+      suite();
+    },
+
+    trouveHomologation: (requete, reponse, suite) => {
+      requete.homologation = new Homologation({ id: '456' });
+      rechercheHomologationEffectuee = true;
       suite();
     },
 
@@ -114,22 +140,6 @@ describe('Le serveur MSS', () => {
       verificationCGUMenee = true;
       suite();
     },
-
-    authentificationBasique: (requete, reponse, suite) => {
-      authentificationBasiqueMenee = true;
-      suite();
-    },
-
-    trouveHomologation: (requete, reponse, suite) => {
-      requete.homologation = new Homologation({ id: '456' });
-      rechercheHomologationEffectuee = true;
-      suite();
-    },
-
-    aseptise: (...nomsParametres) => (requete, reponse, suite) => {
-      parametresAseptises = nomsParametres;
-      suite();
-    },
   };
 
   let adaptateurMail;
@@ -138,6 +148,7 @@ describe('Le serveur MSS', () => {
   let serveur;
 
   beforeEach((done) => {
+    expirationCookieRepoussee = false;
     idUtilisateurCourant = undefined;
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
@@ -226,6 +237,10 @@ describe('Le serveur MSS', () => {
           done();
         })
         .catch(done);
+    });
+
+    it("repousse l'expiration du cookie", (done) => {
+      verifieRequeteRepousseExpirationCookie('http://localhost:1234/', done);
     });
   });
 

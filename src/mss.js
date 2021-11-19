@@ -48,6 +48,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     suite();
   });
 
+  app.use(middleware.repousseExpirationCookie);
+
   app.disable('x-powered-by');
 
   app.set('trust proxy', 1);

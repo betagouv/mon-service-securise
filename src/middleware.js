@@ -12,6 +12,11 @@ const middleware = (configuration = {}) => {
     unauthorizedResponse: () => pug.renderFile('src/vues/accesRefuse.pug'),
   });
 
+  const repousseExpirationCookie = (requete, reponse, suite) => {
+    requete.session.maintenant = Math.floor(Date.now() / 60_000);
+    suite();
+  };
+
   const suppressionCookie = (requete, reponse, suite) => {
     requete.session = null;
     suite();
@@ -70,6 +75,7 @@ const middleware = (configuration = {}) => {
     aseptise,
     authentificationBasique,
     trouveHomologation,
+    repousseExpirationCookie,
     suppressionCookie,
     verificationAcceptationCGU,
     verificationJWT,

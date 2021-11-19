@@ -83,6 +83,23 @@ describe('Le middleware MSS', () => {
     middleware.verificationJWT(requete, reponse, suite);
   });
 
+  it('repousse la date expiration du cookie de session en mettant à jour le cookie', (done) => {
+    const middleware = Middleware({});
+
+    const suite = () => {
+      try {
+        const dateAttendueArrondieAMinuteInferieure = 2;
+        expect(requete.session.maintenant).to.equal(dateAttendueArrondieAMinuteInferieure);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    };
+
+    Date.now = () => 120_999;
+    middleware.repousseExpirationCookie(requete, reponse, suite);
+  });
+
   it("vérifie que les CGU sont acceptées et redirige l'utilisateur si besoin", (done) => {
     const adaptateurJWT = { decode: () => ({ cguAcceptees: false }) };
     const middleware = Middleware({ adaptateurJWT, depotDonnees });
