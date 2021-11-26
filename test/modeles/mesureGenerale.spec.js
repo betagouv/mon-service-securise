@@ -60,7 +60,7 @@ describe('Une mesure de sécurité', () => {
     expect(referentiel.mesures().identifiantMesure.description).to.equal('Une description');
 
     const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: 'fait' }, referentiel);
-    expect(mesure.description()).to.equal('Une description');
+    expect(mesure.descriptionMesure()).to.equal('Une description');
   });
 
   it("sait si elle est indispensable selon l'ANSSI", () => {

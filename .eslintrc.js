@@ -11,6 +11,8 @@ module.exports = {
   ],
   globals: {
     axios: 'readonly',
+    html2canvas: 'readonly',
+    jspdf: 'readonly',
   },
   parserOptions: {
     ecmaVersion: 12,

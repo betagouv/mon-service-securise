@@ -12,6 +12,10 @@ class MesureSpecifique extends Mesure {
     this.referentiel = referentiel;
   }
 
+  descriptionMesure() {
+    return this.description;
+  }
+
   proprieteSaisie(nomPropriete) {
     return nomPropriete === 'modalites' ? true : super.proprieteSaisie(nomPropriete);
   }

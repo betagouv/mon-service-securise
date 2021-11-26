@@ -1,195 +1,212 @@
-include ../fragments/diagnostics
+mixin mesuresPaginees({ titreAnnexe, titreSection, donnees })
+  each mesures, index in donnees
+    .page
+      main
+        h1.vert= index === 0 ? titreAnnexe : `${titreAnnexe} (suite)`
+        .annexe
+          .legende
+            each description, id in referentiel.statutsMesures()
+              div(class = id)= description
+          .legende.avis-anssi
+            .indispensable Mesure indispensable (ANSSI)
+
+          section.detail-mesures
+            h2= titreSection
+
+            ul
+              if mesures.length === 0
+                li Aucune mesure retenue
+
+              each mesure in mesures
+                li
+                  .description= mesure.descriptionMesure()
+                  .statut(class = mesure.statut)
+                  if mesure.estIndispensable()
+                    .indispensable
+      .saut-page
 
 doctype html
 meta(charset='utf-8')
+script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+script(src='https://unpkg.com/dompurify/dist/purify.min.js')
+script(src='https://unpkg.com/html2canvas/dist/html2canvas.min.js')
+script(src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js')
+
+include ../fragments/diagnostics
 
 block styles
   link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
   link(href='/statique/assets/styles/decision.css', rel='stylesheet')
+  link(href='/statique/assets/styles/bouton.css', rel='stylesheet')
 
-header
-  .mss
-    h1 Mon Service <b>Sécurisé</b>
-    p Sécuriser les service publics numériques
-  .anssi Agence nationale de la sécurité des systèmes d'information (ANSSI)
+nav.ne-pas-imprimer
+  .bouton#telecharger Télécharger le document
 
-main
-  h1.bleu Décision d'homologation de sécurité
-  if homologation.seuilCriticiteTropEleve()
-    section.alerte
-      div.
-        Compte tenu des risques auxquels votre service est susceptible de faire
-        face, aux vues des fonctionnalités offertes et de la sensibilité des
-        données traitées, l'ANSSI vous recommande de réaliser une démarche
-        d'homologation approfondie en vous appuyant sur le « guide d’homologation
-        en 9 étapes ».
-      br
-      div.
-        Celle-ci peut être effectuée en substitution ou en complément d'une
-        démarche via Mon Service Sécurisé. Le cas échéant, toutes les pièces
-        complémentaires au dossier d'homologation recommandées dans le guide en 9
-        étapes devront être jointes au dossier généré sur Mon Service Sécurisé.
+.page
+  header
+    .mss
+      h1 Mon Service <b>Sécurisé</b>
+      p Sécuriser les service publics numériques
+    .anssi Agence nationale de la sécurité des systèmes d'information (ANSSI)
 
-  section.introduction
-    h2!= homologation.nomService()
-    dl
-      dt Type :
-      dd= homologation.descriptionNatureService()
-      dt Objet :
-      dd= homologation.presentation()
-      dt Développé par :
-      dd= homologation.structureDeveloppement()
-      dt Hébergement et localisation des données :
-      dd= `${homologation.hebergeur()}, ${homologation.localisationDonnees()}`
+  main
+    h1.bleu Décision d'homologation de sécurité
+    if homologation.seuilCriticiteTropEleve()
+      section.alerte
+        div.
+          Compte tenu des risques auxquels votre service est susceptible de faire
+          face, aux vues des fonctionnalités offertes et de la sensibilité des
+          données traitées, l'ANSSI vous recommande de réaliser une démarche
+          d'homologation approfondie en vous appuyant sur le « guide d’homologation
+          en 9 étapes ».
+        br
+        div.
+          Celle-ci peut être effectuée en substitution ou en complément d'une
+          démarche via Mon Service Sécurisé. Le cas échéant, toutes les pièces
+          complémentaires au dossier d'homologation recommandées dans le guide en 9
+          étapes devront être jointes au dossier généré sur Mon Service Sécurisé.
 
-  section.risques
-    h2 Principaux risques de sécurité identifiés
-    p Suggestions de l'ANSSI, détails en annexe
-    ul
-      each donneesRisque in referentiel.risques()
-        li= donneesRisque.description
-
-  section.mesures
-    h2 Mesures de sécurité retenues
-    p Recommandées par l'ANSSI, détails en annexe
-
-    .legende
-      .planifie Planifié
-      .fait Fait
-
-    - const statistiquesMesures = homologation.statistiquesMesures()
-    - const categories = statistiquesMesures.categories()
-    ul
-      if categories.length === 0
-        li Aucune mesure retenue
-
-      each idCategorie in categories
-        - const pourcentage = 100 * statistiquesMesures.misesEnOeuvre(idCategorie) / statistiquesMesures.retenues(idCategorie)
-        - let style = `width: ${pourcentage}%;`
-        - if (pourcentage === 0) style += ' border: none;'
-        - if (pourcentage > 97) style += ' border-radius: 3px;'
-        li
-          .nombre-mesures= `${statistiquesMesures.retenues(idCategorie)} mesures de`
-          .type-mesure= referentiel.descriptionCategorie(idCategorie)
-          .barre(id = idCategorie)
-            .barre-mesures-retenues
-            .barre-mesures-misesEnOeuvre(style = style)
-
-  section
-    h2 Avis de l'expert cyber
-    p sur le maintien ou la mise en service
-    +avisExpertCyber
-    dl
-      dt Expert cybersécurité :
-      dd= homologation.partiesPrenantes.descriptionExpertCybersecurite()
-
-      dt Recommandations additionnelles :
-      if homologation.avisExpertCyber.commentaire
-        dd= homologation.avisExpertCyber.commentaire
-      else
-        dd Aucune
-
-  section
-    h2 Équipe
-    dl
-      dt Décision d'homologation préparée par :
-      dd= homologation.descriptionEquipePreparation()
-
-  section
-    h2 Calendrier
-    dl
-      dt Date de renouvellement de l'homologation :
-      dd= homologation.descriptionExpiration()
-
-  section.decision
-    h2 Décision d'homologation
-    dl
-      dt Autorité d'homologation :
-      dd= homologation.descriptionAutoriteHomologation()
-    p.signature Lu et approuvé | date | signature
-    ul
-      li Conformité au référentiel général de sécurité (RGS)
-      li.
-        Contribue à la mise en conformité avec les obligations du règlement
-        européen pour la protection des données à caractère personnel (RGPD) en
-        matière de « sécurité du traitement des données »
-    p.notes-finales.
-      Par la signature de cette décision, vous attestez avoir pris connaissance
-      des risques principaux pour le service numérique et des mesures de
-      sécurité retenues, sur la base des informations fournies dans le présent
-      dossier et ses pièces jointes. Vous validez son maintien ou sa mise en
-      service, dont la sécurité devra être maintenue dans la durée. Une fois
-      signée, la décision d'homologation pourra être publiée sur
-      MonServiceSécurisé et sur « !{homologation.nomService()} ».
-      MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
-      responsables d'incidents de sécurité susceptibles d'affeter le service
-      numérique homologué et des conséquences qui pourraient en découler.
-
-  .saut-page
-  h1.vert Annexe 1 – Détail des risques principaux
-  .annexe
-    section.detail-risques
+    section.introduction
+      h2!= homologation.nomService()
       dl
-        each donneesRisque in referentiel.risques()
-          dt= donneesRisque.description
-          dd= donneesRisque.descriptionLongue
+        dt Type :
+        dd= homologation.descriptionNatureService()
+        dt Objet :
+        dd= homologation.presentation()
+        dt Développé par :
+        dd= homologation.structureDeveloppement()
+        dt Hébergement et localisation des données :
+        dd= `${homologation.hebergeur()}, ${homologation.localisationDonnees()}`
 
-  .saut-page
-  h1.vert Annexe 2 – Détail des risques spécifiques au service numérique
-  .annexe
-    section.detail-risques
-      dl
-        - let i = 0
-        - const { risquesSpecifiques } = homologation.risques
-        - const nbRisquesSpecifiques = risquesSpecifiques.nombre()
-        if nbRisquesSpecifiques === 0
-          dd Aucun risque spécifique saisi
-
-        while i < nbRisquesSpecifiques
-          - const risqueSpecifique = risquesSpecifiques.item(i)
-          dt!= risqueSpecifique.description
-          dd!= risqueSpecifique.commentaire
-          - i++
-
-
-  .saut-page
-  h1.vert Annexe 3 – Détail des mesures de sécurité
-  .annexe
-    .legende
-      each description, id in referentiel.statutsMesures()
-        div(class = id)= description
-    .legende.avis-anssi
-      .indispensable Mesure indispensable (ANSSI)
-
-    section.detail-mesures
-      h2 Mesures de gouvernance
-      p S'organiser pour gérer la sécurité du service
-
+    section.risques
+      h2 Principaux risques de sécurité identifiés
+      p Suggestions de l'ANSSI, détails en annexe
       ul
-        if homologation.mesuresNonSaisies()
+        each donneesRisque in referentiel.risques()
+          li= donneesRisque.description
+
+    section.mesures
+      h2 Mesures de sécurité retenues
+      p Recommandées par l'ANSSI, détails en annexe
+
+      .legende
+        .planifie Planifié
+        .fait Fait
+
+      - const statistiquesMesures = homologation.statistiquesMesures()
+      - const categories = statistiquesMesures.categories()
+      ul
+        if categories.length === 0
           li Aucune mesure retenue
 
-        - i = 0;
-        - const nbMesures = homologation.mesures.mesuresGenerales.nombre()
-        while i < nbMesures
-          - const mesure = homologation.mesures.mesuresGenerales.item(i)
+        each idCategorie in categories
+          - const pourcentage = 100 * statistiquesMesures.misesEnOeuvre(idCategorie) / statistiquesMesures.retenues(idCategorie)
+          - let style = `width: ${pourcentage}%;`
+          - if (pourcentage === 0) style += ' border: none;'
+          - if (pourcentage > 97) style += ' border-radius: 3px;'
           li
-            .description= mesure.description()
-            .statut(class = mesure.statut)
-            if mesure.estIndispensable()
-              .indispensable
-          - i++
+            .nombre-mesures= `${statistiquesMesures.retenues(idCategorie)} mesures de`
+            .type-mesure= referentiel.descriptionCategorie(idCategorie)
+            .barre(id = idCategorie)
+              .barre-mesures-retenues
+              .barre-mesures-misesEnOeuvre(style = style)
 
-    - const nbMesuresSpecifiques = homologation.mesures.mesuresSpecifiques.nombre()
-    if nbMesuresSpecifiques > 0
-      section.detail-mesures
-        h2 Mesures spécifiques au service numérique
+.page
+  main
+    section
+      h2 Avis de l'expert cyber
+      p sur le maintien ou la mise en service
+      +avisExpertCyber
+      dl
+        dt Expert cybersécurité :
+        dd= homologation.partiesPrenantes.descriptionExpertCybersecurite()
 
-        ul
-          - i = 0;
-          while i < nbMesuresSpecifiques
-            - const mesure = homologation.mesures.mesuresSpecifiques.item(i)
-            li
-              .description= mesure.description
-              .statut(class = mesure.statut)
+        dt Recommandations additionnelles :
+        if homologation.avisExpertCyber.commentaire
+          dd= homologation.avisExpertCyber.commentaire
+        else
+          dd Aucune
+
+    section
+      h2 Équipe
+      dl
+        dt Décision d'homologation préparée par :
+        dd= homologation.descriptionEquipePreparation()
+
+    section
+      h2 Calendrier
+      dl
+        dt Date de renouvellement de l'homologation :
+        dd= homologation.descriptionExpiration()
+
+    section.decision
+      h2 Décision d'homologation
+      dl
+        dt Autorité d'homologation :
+        dd= homologation.descriptionAutoriteHomologation()
+      p.signature Lu et approuvé | date | signature
+      ul
+        li Conformité au référentiel général de sécurité (RGS)
+        li.
+          Contribue à la mise en conformité avec les obligations du règlement
+          européen pour la protection des données à caractère personnel (RGPD) en
+          matière de « sécurité du traitement des données »
+      p.notes-finales.
+        Par la signature de cette décision, vous attestez avoir pris connaissance
+        des risques principaux pour le service numérique et des mesures de
+        sécurité retenues, sur la base des informations fournies dans le présent
+        dossier et ses pièces jointes. Vous validez son maintien ou sa mise en
+        service, dont la sécurité devra être maintenue dans la durée. Une fois
+        signée, la décision d'homologation pourra être publiée sur
+        MonServiceSécurisé et sur « !{homologation.nomService()} ».
+        MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
+        responsables d'incidents de sécurité susceptibles d'affeter le service
+        numérique homologué et des conséquences qui pourraient en découler.
+
+    .saut-page
+
+.page
+  main
+    h1.vert Annexe 1 – Détail des risques principaux
+    .annexe
+      section.detail-risques
+        dl
+          each donneesRisque in referentiel.risques()
+            dt= donneesRisque.description
+            dd= donneesRisque.descriptionLongue
+
+    .saut-page
+
+.page
+  main
+    h1.vert Annexe 2 – Détail des risques spécifiques au service numérique
+    .annexe
+      section.detail-risques
+        dl
+          - let i = 0
+          - const { risquesSpecifiques } = homologation.risques
+          - const nbRisquesSpecifiques = risquesSpecifiques.nombre()
+          if nbRisquesSpecifiques === 0
+            dd Aucun risque spécifique saisi
+
+          while i < nbRisquesSpecifiques
+            - const risqueSpecifique = risquesSpecifiques.item(i)
+            dt!= risqueSpecifique.description
+            dd!= risqueSpecifique.commentaire
             - i++
+
+    .saut-page
+
++mesuresPaginees({
+  titreAnnexe: 'Annexe 3 – Détail des mesures de sécurité',
+  titreSection: 'Mesures de gouvernance',
+  donnees: homologation.mesures.mesuresGenerales.paginees(15)
+})
+
++mesuresPaginees({
+  titreAnnexe: 'Annexe 4 – Détail des mesures de sécurité spécifiques au service numérique',
+  titreSection: 'Mesures spécifiques au service numérique',
+  donnees: homologation.mesures.mesuresSpecifiques.paginees(15)
+})
+
+script(src='/statique/homologation/decision.js')
