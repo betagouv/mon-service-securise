@@ -16,6 +16,20 @@ class ListeItems extends InformationsHomologation {
     return this.items.length;
   }
 
+  pagines(nbItemsParPage) {
+    let page = -1;
+    return this.items.reduce((acc, item, index) => {
+      if (index % nbItemsParPage === 0) page += 1;
+      acc[page] ||= [];
+      acc[page].push(item);
+      return acc;
+    }, [[]]);
+  }
+
+  paginees(...params) {
+    return this.pagines(...params);
+  }
+
   statutSaisie() {
     if (this.nombre() === 0) return InformationsHomologation.A_SAISIR;
 
