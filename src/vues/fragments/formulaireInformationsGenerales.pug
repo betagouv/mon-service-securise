@@ -42,6 +42,11 @@ mixin formulaireInformationsGenerales(idHomologation)
         objetDonnees: homologation.informationsGenerales,
       })
 
+      label Accès au service numérique
+        br
+        #points-acces
+        a.nouvel-item Ajouter un accès
+
     section
       +inputChoix({
         type: 'checkbox',
@@ -78,3 +83,8 @@ mixin formulaireInformationsGenerales(idHomologation)
       .bouton#diagnostic(identifiant = idHomologation) Enregistrer &nbsp;&nbsp;›
     else
       .bouton#diagnostic Continuer &nbsp;&nbsp;›
+
+
+  script(id = 'donneesPointsAcces', type = 'application/json').
+    !{(homologation.informationsGenerales.pointsAcces) ? JSON.stringify(homologation.informationsGenerales.pointsAcces.toJSON()) : JSON.stringify([]) }
+  script(type = 'module', src = '/statique/homologation/formulaireInformationsGenerales.js')

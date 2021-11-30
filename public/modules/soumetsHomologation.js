@@ -1,4 +1,4 @@
-import parametres from './parametres.js';
+import { parametresAvecItemsExtraits } from './parametres.js';
 
 const fermeModale = () => {
   $('.rideau').css('display', '');
@@ -67,6 +67,10 @@ const afficheModaleSeuilCritique = () => afficheModale(`
 </div>
 `);
 
+const lectureParams = (selecteurFormulaire) => (
+  parametresAvecItemsExtraits(selecteurFormulaire, 'pointsAcces', '^(description)-point-acces-')
+);
+
 const initialiseComportementModale = (url, selecteurFormulaire) => {
   $('.fermeture-modale').click((eFermeture) => {
     eFermeture.stopPropagation();
@@ -76,7 +80,7 @@ const initialiseComportementModale = (url, selecteurFormulaire) => {
   $('a#annulation').click(fermeModale);
 
   $('.bouton#envoi').click(() => {
-    const params = parametres(selecteurFormulaire);
+    const params = lectureParams(selecteurFormulaire);
     Object.assign(url, { data: params });
 
     axios(url)
@@ -85,7 +89,7 @@ const initialiseComportementModale = (url, selecteurFormulaire) => {
 };
 
 const soumetsHomologation = (selecteurFormulaire) => {
-  const params = parametres(selecteurFormulaire);
+  const params = lectureParams(selecteurFormulaire);
 
   axios.get('/api/seuilCriticite', { params })
     .then((reponse) => {
