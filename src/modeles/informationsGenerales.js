@@ -1,4 +1,5 @@
 const InformationsHomologation = require('./informationsHomologation');
+const PointsAcces = require('./pointsAcces');
 const Referentiel = require('../referentiel');
 
 class InformationsGenerales extends InformationsHomologation {
@@ -13,7 +14,9 @@ class InformationsGenerales extends InformationsHomologation {
       'fonctionnalites',
       'natureService',
       'provenanceService',
-    ]);
+    ], {
+      pointsAcces: PointsAcces,
+    });
     this.renseigneProprietes(donnees);
 
     this.referentiel = referentiel;
@@ -21,6 +24,10 @@ class InformationsGenerales extends InformationsHomologation {
 
   descriptionNatureService() {
     return this.referentiel.natureService(this.natureService);
+  }
+
+  nombrePointsAcces() {
+    return this.pointsAcces.nombre();
   }
 
   seuilCriticite() {

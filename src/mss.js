@@ -241,6 +241,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     middleware.trouveHomologation,
     middleware.aseptise('nomService'),
     (requete, reponse, suite) => {
+      requete.body.pointsAcces &&= requete.body.pointsAcces.filter(
+        (pointAcces) => pointAcces?.description
+      );
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
