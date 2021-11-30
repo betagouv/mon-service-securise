@@ -11,6 +11,7 @@ const MSS = require('../src/mss');
 const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
 const Homologation = require('../src/modeles/homologation');
+const PointsAcces = require('../src/modeles/pointsAcces');
 
 const verifieRequeteGenereErreurHTTP = (status, messageErreur, requete, suite) => {
   axios(requete)
@@ -464,6 +465,26 @@ describe('Le serveur MSS', () => {
         { method: 'put', url: 'http://localhost:1234/api/homologation/456' },
         done
       );
+    });
+
+    it("retire les points d'accès qui n'ont pas de description", (done) => {
+      const pointsAcces = new PointsAcces({
+        pointsAcces: [
+          { description: 'une description' },
+          { description: null },
+        ],
+      });
+
+      depotDonnees.ajouteInformationsGeneralesAHomologation = (_, infosGenerales) => (
+        new Promise((resolve) => {
+          expect(infosGenerales.pointsAcces.nombre()).to.equal(1);
+          resolve();
+        })
+      );
+
+      axios.put('http://localhost:1234/api/homologation/456', { pointsAcces })
+        .then(() => done())
+        .catch(done);
     });
 
     it("demande au dépôt de données de mettre à jour l'homologation", (done) => {

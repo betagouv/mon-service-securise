@@ -1,0 +1,3 @@
+[ ] Factoriser le code de filtrage ?
+[ ] Afficher correctement les descriptions lors de l'édition des informations générales
+[ ] Aseptiser les descriptions de points d'accès saisies
