@@ -1,12 +1,12 @@
 import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
 
 $(() => {
-  const zoneSaisiePointAcces = (index, donnees = '') => `
+  const zoneSaisiePointAcces = (index, { description = '' }) => `
     <input
       id="description-point-acces-${index}"
       name="description-point-acces-${index}"
       type="text"
-      value="${donnees}"
+      value="${description}"
       placeholder="exemple : https://www.adresse.fr, App Store, Play Store, ..."
     >
   `;
@@ -17,7 +17,7 @@ $(() => {
 
   const brancheAjoutPointAcces = (...params) => brancheAjoutItem(
     ...params,
-    (index) => zoneSaisiePointAcces(index),
+    (index) => zoneSaisiePointAcces(index, {}),
     () => (indexMaxPointsAcces += 1),
   );
 
