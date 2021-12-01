@@ -3,6 +3,7 @@ const DepotDonnees = require('./src/depotDonnees');
 const Middleware = require('./src/middleware');
 const MSS = require('./src/mss');
 const Referentiel = require('./src/referentiel');
+const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = require('./src/adaptateurs/adaptateurMail');
 const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
@@ -15,6 +16,7 @@ const depotDonnees = DepotDonnees.creeDepot({
   adaptateurJWT, adaptateurPersistance, adaptateurUUID, referentiel,
 });
 const middleware = Middleware({
+  adaptateurChiffrement,
   adaptateurJWT,
   depotDonnees,
   login: process.env.LOGIN_ADMIN,

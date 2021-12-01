@@ -3,7 +3,7 @@ const pug = require('pug');
 const { check } = require('express-validator');
 
 const middleware = (configuration = {}) => {
-  const { depotDonnees, adaptateurJWT, login, motDePasse } = configuration;
+  const { depotDonnees, adaptateurChiffrement, adaptateurJWT, login, motDePasse } = configuration;
 
   const authentificationBasique = basicAuth({
     challenge: true,
@@ -13,8 +13,17 @@ const middleware = (configuration = {}) => {
   });
 
   const positionneHeaders = (requete, reponse, suite) => {
+    const { nonce } = requete;
+    const politiqueCommuneSecuriteContenus = "default-src 'self'; img-src 'self' data:;";
+    const politiqueSecuriteStyles = nonce
+      ? `style-src 'self' 'nonce-${nonce}';`
+      : '';
+    const politiqueSecuriteScripts = nonce
+      ? `script-src 'self' 'nonce-${nonce}';`
+      : "script-src 'self' unpkg.com code.jquery.com";
     reponse.set({
-      'content-security-policy': "default-src 'self'; script-src 'self' unpkg.com code.jquery.com",
+      'content-security-policy':
+        `${politiqueCommuneSecuriteContenus} ${politiqueSecuriteStyles} ${politiqueSecuriteScripts}`,
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'no-referrer',
@@ -22,6 +31,13 @@ const middleware = (configuration = {}) => {
 
     suite();
   };
+
+  const positionneHeadersAvecNonce = (requete, reponse, suite) => adaptateurChiffrement.nonce()
+    .then((n) => {
+      requete.nonce = n;
+      positionneHeaders(requete, reponse, suite);
+    })
+    .catch(suite);
 
   const repousseExpirationCookie = (requete, reponse, suite) => {
     requete.session.maintenant = Math.floor(Date.now() / 60_000);
@@ -86,6 +102,7 @@ const middleware = (configuration = {}) => {
     aseptise,
     authentificationBasique,
     positionneHeaders,
+    positionneHeadersAvecNonce,
     repousseExpirationCookie,
     suppressionCookie,
     trouveHomologation,
