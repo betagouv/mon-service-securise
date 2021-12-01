@@ -89,16 +89,11 @@ describe('Le serveur MSS', () => {
     }, ...params);
   };
 
-  const verifieValeurHeader = (valeurHeader, regExpValeurAttendue, suite) => {
-    expect(valeurHeader).to.match(regExpValeurAttendue);
+  const verifieJetonDepose = (reponse, suite) => {
+    const valeurHeader = reponse.headers['set-cookie'][0];
+    expect(valeurHeader).to.match(/^token=.+; path=\/; expires=.+; samesite=strict; httponly$/);
     suite();
   };
-
-  const verifieJetonDepose = (reponse, suite) => verifieValeurHeader(
-    reponse.headers['set-cookie'][0],
-    /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/,
-    suite
-  );
 
   const middleware = {
     aseptise: (...nomsParametres) => (requete, reponse, suite) => {
