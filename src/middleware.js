@@ -12,6 +12,17 @@ const middleware = (configuration = {}) => {
     unauthorizedResponse: () => pug.renderFile('src/vues/accesRefuse.pug'),
   });
 
+  const positionneHeaders = (requete, reponse, suite) => {
+    reponse.set({
+      'content-security-policy': "default-src 'self'; script-src 'self' unpkg.com code.jquery.com",
+      'x-frame-options': 'deny',
+      'x-content-type-options': 'nosniff',
+      'referrer-policy': 'no-referrer',
+    });
+
+    suite();
+  };
+
   const repousseExpirationCookie = (requete, reponse, suite) => {
     requete.session.maintenant = Math.floor(Date.now() / 60_000);
     suite();
@@ -74,6 +85,7 @@ const middleware = (configuration = {}) => {
   return {
     aseptise,
     authentificationBasique,
+    positionneHeaders,
     repousseExpirationCookie,
     suppressionCookie,
     trouveHomologation,

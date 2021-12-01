@@ -38,16 +38,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     secure: avecCookieSecurise,
   }));
 
-  app.use((requete, reponse, suite) => {
-    reponse.set({
-      'content-security-policy': "default-src 'self'; script-src 'self' unpkg.com code.jquery.com",
-      'x-frame-options': 'deny',
-      'x-content-type-options': 'nosniff',
-      'referrer-policy': 'no-referrer',
-    });
-    suite();
-  });
-
+  app.use(middleware.positionneHeaders);
   app.use(middleware.repousseExpirationCookie);
 
   app.disable('x-powered-by');
