@@ -394,10 +394,30 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres', (done) => {
       verifieAseptisationParametres(
-        ['nomService'],
+        ['nomService', 'pointsAcces.*.description'],
         { method: 'post', url: 'http://localhost:1234/api/homologation' },
         done
       );
+    });
+
+    it("retire les points d'accès qui n'ont pas de description", (done) => {
+      const pointsAcces = new PointsAcces({
+        pointsAcces: [
+          { description: 'une description' },
+          { description: null },
+        ],
+      });
+
+      depotDonnees.nouvelleHomologation = (_, infosGenerales) => (
+        new Promise((resolve) => {
+          expect(infosGenerales.pointsAcces.length).to.equal(1);
+          resolve();
+        })
+      );
+
+      axios.post('http://localhost:1234/api/homologation', { pointsAcces })
+        .then(() => done())
+        .catch(done);
     });
 
     it('retourne une erreur HTTP 422 si données insuffisantes pour création homologation', (done) => {
@@ -434,6 +454,7 @@ describe('Le serveur MSS', () => {
           donneesCaracterePersonnel: undefined,
           delaiAvantImpactCritique: undefined,
           presenceResponsable: undefined,
+          pointsAcces: undefined,
         });
         return Promise.resolve('456');
       };
@@ -461,7 +482,7 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres', (done) => {
       verifieAseptisationParametres(
-        ['nomService'],
+        ['nomService', 'pointsAcces.*.description'],
         { method: 'put', url: 'http://localhost:1234/api/homologation/456' },
         done
       );

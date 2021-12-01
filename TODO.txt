@@ -1,2 +1,1 @@
 [ ] Factoriser le code de filtrage ?
-[ ] Aseptiser les descriptions de points d'accès saisies
