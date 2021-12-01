@@ -156,10 +156,13 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       reponse.render('homologation/caracteristiquesComplementaires', { referentiel, homologation });
     });
 
-  app.get('/homologation/:id/decision', middleware.trouveHomologation, (requete, reponse) => {
-    const { homologation } = requete;
-    reponse.render('homologation/decision', { homologation, referentiel });
-  });
+  app.get('/homologation/:id/decision',
+    middleware.trouveHomologation,
+    middleware.positionneHeadersAvecNonce,
+    (requete, reponse) => {
+      const { homologation, nonce } = requete;
+      reponse.render('homologation/decision', { homologation, referentiel, nonce });
+    });
 
   app.get('/homologation/:id/edition', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
