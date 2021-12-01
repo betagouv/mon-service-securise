@@ -39,6 +39,11 @@ const prepareVerificationRedirection = (reponse, urlRedirection, done) => {
   };
 };
 
+const verifieValeurHeader = (nomHeader, regExpValeurAttendue, reponse) => {
+  expect(reponse.headers).to.have.property(nomHeader);
+  expect(reponse.headers[nomHeader]).to.match(new RegExp(regExpValeurAttendue));
+};
+
 describe('Le middleware MSS', () => {
   const requete = {};
   const reponse = {};
@@ -266,18 +271,65 @@ describe('Le middleware MSS', () => {
     });
   });
 
+  describe('sur demande positionnement headers avec un nonce', () => {
+    const verifieHeaderAvecNonce = (nonce, nomHeader, regExpValeurAttendue, suite) => {
+      const adaptateurChiffrement = { nonce: () => Promise.resolve(nonce) };
+      const middleware = Middleware({ adaptateurChiffrement });
+
+      middleware.positionneHeadersAvecNonce(requete, reponse, () => {
+        verifieValeurHeader(nomHeader, regExpValeurAttendue, reponse);
+        suite();
+      });
+    };
+
+    it('ajoute un nonce dans la requête', (done) => {
+      const adaptateurChiffrement = { nonce: () => Promise.resolve('12345') };
+      const middleware = Middleware({ adaptateurChiffrement });
+
+      middleware.positionneHeadersAvecNonce(requete, reponse, (e) => {
+        if (e) return done(e);
+
+        expect(requete.nonce).to.equal('12345');
+        return done();
+      });
+    });
+
+    it('autorise le chargement des styles avec ce nonce', (done) => {
+      verifieHeaderAvecNonce(
+        '12345',
+        'content-security-policy',
+        "style-src 'self' 'nonce-12345';",
+        done,
+      );
+    });
+
+    it('autorise le chargement des scripts avec ce nonce', (done) => {
+      verifieHeaderAvecNonce(
+        '12345',
+        'content-security-policy',
+        "script-src 'self' 'nonce-12345';",
+        done,
+      );
+    });
+  });
+
   describe('sur demande positionnement des headers', () => {
+    beforeEach(() => (requete.nonce = undefined));
+
     const verifiePositionnementHeader = (nomHeader, regExpValeurAttendue, suite) => {
       const middleware = Middleware();
       middleware.positionneHeaders(requete, reponse, () => {
-        expect(reponse.headers).to.have.property(nomHeader);
-        expect(reponse.headers[nomHeader]).to.match(new RegExp(regExpValeurAttendue));
+        verifieValeurHeader(nomHeader, regExpValeurAttendue, reponse);
         suite();
       });
     };
 
     it('autorise le chargement de toutes les ressources du domaine', (done) => {
       verifiePositionnementHeader('content-security-policy', "default-src 'self'", done);
+    });
+
+    it("autorise le chargement des images dont l'URL commence par `data:`", (done) => {
+      verifiePositionnementHeader('content-security-policy', "img-src 'self' data:;", done);
     });
 
     it('autorise le chargement de tous les scripts extérieurs utilisés dans la vue', (done) => {
