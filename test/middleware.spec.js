@@ -49,8 +49,9 @@ describe('Le middleware MSS', () => {
     requete.params = {};
     requete.body = {};
 
+    reponse.headers = {};
     reponse.redirect = () => {};
-    reponse.set = () => {};
+    reponse.set = (clefsValeurs) => Object.assign(reponse.headers, clefsValeurs);
     reponse.status = () => reponse;
     reponse.send = () => {};
 
@@ -262,6 +263,37 @@ describe('Le middleware MSS', () => {
         done();
       })
         .catch(done);
+    });
+  });
+
+  describe('sur demande positionnement des headers', () => {
+    const verifiePositionnementHeader = (nomHeader, regExpValeurAttendue, suite) => {
+      const middleware = Middleware();
+      middleware.positionneHeaders(requete, reponse, () => {
+        expect(reponse.headers).to.have.property(nomHeader);
+        expect(reponse.headers[nomHeader]).to.match(new RegExp(regExpValeurAttendue));
+        suite();
+      });
+    };
+
+    it('autorise le chargement de toutes les ressources du domaine', (done) => {
+      verifiePositionnementHeader('content-security-policy', "default-src 'self'", done);
+    });
+
+    it('autorise le chargement de tous les scripts extérieurs utilisés dans la vue', (done) => {
+      verifiePositionnementHeader(
+        'content-security-policy',
+        /script-src[^;]* unpkg.com code.jquery.com/,
+        done
+      );
+    });
+
+    it('interdit le chargement de la page dans une iFrame', (done) => {
+      verifiePositionnementHeader('x-frame-options', /^deny$/, done);
+    });
+
+    it("n'affiche pas l'URL de provenance quand l'utilisateur change de page", (done) => {
+      verifiePositionnementHeader('referrer-policy', /^no-referrer$/, done);
     });
   });
 });

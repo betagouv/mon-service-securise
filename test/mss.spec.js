@@ -46,6 +46,7 @@ describe('Le serveur MSS', () => {
   let authentificationBasiqueMenee;
   let expirationCookieRepoussee;
   let idUtilisateurCourant;
+  let headersPositionnes;
   let parametresAseptises;
   let rechercheHomologationEffectuee;
   let suppressionCookieEffectuee;
@@ -72,6 +73,10 @@ describe('Le serveur MSS', () => {
     verifieRequeteChangeEtat({ lectureEtat: () => authentificationBasiqueMenee }, ...params);
   };
 
+  const verifieRequetePositionneHeaders = (...params) => {
+    verifieRequeteChangeEtat({ lectureEtat: () => headersPositionnes }, ...params);
+  };
+
   const verifieRechercheHomologation = (...params) => {
     verifieRequeteChangeEtat({ lectureEtat: () => rechercheHomologationEffectuee }, ...params);
   };
@@ -95,13 +100,6 @@ describe('Le serveur MSS', () => {
     suite
   );
 
-  const verifiePositionnementHeader = (requete, nomHeader, regExpAttendue, suite) => axios(requete)
-    .then((reponse) => {
-      expect(reponse.headers).to.have.property(nomHeader);
-      verifieValeurHeader(reponse.headers[nomHeader], regExpAttendue, suite);
-    })
-    .catch(suite);
-
   const middleware = {
     aseptise: (...nomsParametres) => (requete, reponse, suite) => {
       parametresAseptises = nomsParametres;
@@ -110,6 +108,11 @@ describe('Le serveur MSS', () => {
 
     authentificationBasique: (requete, reponse, suite) => {
       authentificationBasiqueMenee = true;
+      suite();
+    },
+
+    positionneHeaders: (requete, reponse, suite) => {
+      headersPositionnes = true;
       suite();
     },
 
@@ -150,6 +153,7 @@ describe('Le serveur MSS', () => {
   beforeEach((done) => {
     authentificationBasiqueMenee = false;
     expirationCookieRepoussee = false;
+    headersPositionnes = false;
     idUtilisateurCourant = undefined;
     parametresAseptises = [];
     rechercheHomologationEffectuee = false;
@@ -182,52 +186,8 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand une page est servie', () => {
-    it('autorise le chargement de toutes les ressources du domaine', (done) => {
-      verifiePositionnementHeader(
-        'http://localhost:1234/',
-        'content-security-policy', /default-src 'self'/,
-        done,
-      );
-    });
-
-    it('autorise le chargement de tous les scripts extérieurs utilisés dans la vue', (done) => {
-      verifiePositionnementHeader(
-        'http://localhost:1234/',
-        'content-security-policy', /script-src[^;]* unpkg.com code.jquery.com/,
-        done,
-      );
-    });
-
-    it('autorise le chargemnet de tous les scripts du domaine', (done) => {
-      verifiePositionnementHeader(
-        'http://localhost:1234/',
-        'content-security-policy', /script-src[^;]* 'self'/,
-        done,
-      );
-    });
-
-    it('interdit le chargement de cette page dans une iFrame', (done) => {
-      verifiePositionnementHeader(
-        'http://localhost:1234/',
-        'x-frame-options', /^deny$/,
-        done
-      );
-    });
-
-    it('interdit les inférences de types de média hors des infos données par le serveur', (done) => {
-      verifiePositionnementHeader(
-        'http://localhost:1234/',
-        'x-content-type-options', /^nosniff$/,
-        done
-      );
-    });
-
-    it("n'affiche pas l'URL de provenance quand l'utilisateur change de page", (done) => {
-      verifiePositionnementHeader(
-        'http://localhost:1234/',
-        'referrer-policy', /^no-referrer$/,
-        done
-      );
+    it('positionne les headers', (done) => {
+      verifieRequetePositionneHeaders('http://localhost:1234/', done);
     });
 
     it("n'affiche pas d'information sur la nature du serveur", (done) => {
