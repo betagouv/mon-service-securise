@@ -47,11 +47,16 @@ describe('Le serveur MSS', () => {
   let expirationCookieRepoussee;
   let idUtilisateurCourant;
   let headersPositionnes;
+  let headersAvecNoncePositionnes;
   let parametresAseptises;
   let rechercheHomologationEffectuee;
   let suppressionCookieEffectuee;
   let verificationJWTMenee;
   let verificationCGUMenee;
+
+  const verifieRequetePositionneHeadersAvecNonce = (...params) => {
+    verifieRequeteChangeEtat({ lectureEtat: () => headersAvecNoncePositionnes }, ...params);
+  };
 
   const verifieRequeteExigeSuppressionCookie = (...params) => {
     verifieRequeteChangeEtat({ lectureEtat: () => suppressionCookieEffectuee }, ...params);
@@ -111,6 +116,11 @@ describe('Le serveur MSS', () => {
       suite();
     },
 
+    positionneHeadersAvecNonce: (requete, reponse, suite) => {
+      headersAvecNoncePositionnes = true;
+      suite();
+    },
+
     repousseExpirationCookie: (requete, reponse, suite) => {
       expirationCookieRepoussee = true;
       suite();
@@ -150,6 +160,7 @@ describe('Le serveur MSS', () => {
     expirationCookieRepoussee = false;
     headersPositionnes = false;
     idUtilisateurCourant = undefined;
+    headersAvecNoncePositionnes = false;
     parametresAseptises = [];
     rechercheHomologationEffectuee = false;
     suppressionCookieEffectuee = false;
@@ -310,6 +321,10 @@ describe('Le serveur MSS', () => {
   describe('quand requête GET sur `/homologation/:id/decision`', () => {
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation('http://localhost:1234/homologation/456/decision', done);
+    });
+
+    it('sert la page avec un nonce', (done) => {
+      verifieRequetePositionneHeadersAvecNonce('http://localhost:1234/homologation/456/decision', done);
     });
   });
 
