@@ -14,10 +14,16 @@ nav {
   top: 0;
   z-index: 1;
 
+  display: flex;
+
   width: inherit;
   border-bottom: solid 1px;
 
   background: inherit;
+}
+
+nav .bouton {
+  margin-left: auto;
 }
 
 .page {
