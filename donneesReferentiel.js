@@ -154,6 +154,14 @@ module.exports = {
     },
   },
 
+  niveauxGravite: {
+    nonConcerne: { position: 0, description: 'Non concerné' },
+    minime: { position: 1, description: 'Minime' },
+    significatif: { position: 2, description: 'Significatif' },
+    grave: { position: 3, description: 'Grave' },
+    critique: { position: 4, description: 'Critique' },
+  },
+
   risques: {
     indisponibiliteService: {
       description: "L'indisponibilité du service",
