@@ -49,6 +49,7 @@ describe('Le serveur MSS', () => {
   let idUtilisateurCourant;
   let headersPositionnes;
   let headersAvecNoncePositionnes;
+  let listeAseptise;
   let parametresAseptises;
   let rechercheHomologationEffectuee;
   let suppressionCookieEffectuee;
@@ -95,6 +96,11 @@ describe('Le serveur MSS', () => {
     }, ...params);
   };
 
+  const verifieAseptisationListe = (nomListe, proprietesParametre) => {
+    expect(nomListe).to.equal(listeAseptise?.nomListe);
+    expect(proprietesParametre).to.eql(listeAseptise?.proprietesParametre);
+  };
+
   const verifieJetonDepose = (reponse, suite) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
     expect(valeurHeader).to.match(/^token=.+; path=\/; expires=.+; samesite=strict; httponly$/);
@@ -119,6 +125,11 @@ describe('Le serveur MSS', () => {
 
     positionneHeadersAvecNonce: (requete, reponse, suite) => {
       headersAvecNoncePositionnes = true;
+      suite();
+    },
+
+    aseptiseListe: (nomListe, proprietesParametre) => (requete, reponse, suite) => {
+      listeAseptise = { nomListe, proprietesParametre };
       suite();
     },
 
@@ -400,7 +411,7 @@ describe('Le serveur MSS', () => {
       );
     });
 
-    it("retire les points d'accès qui n'ont pas de description", (done) => {
+    it("aseptise la liste des points d'accès des descriptions vides", (done) => {
       const pointsAcces = new PointsAcces({
         pointsAcces: [
           { description: 'une description' },
@@ -408,15 +419,13 @@ describe('Le serveur MSS', () => {
         ],
       });
 
-      depotDonnees.nouvelleHomologation = (_, infosGenerales) => (
-        new Promise((resolve) => {
-          expect(infosGenerales.pointsAcces.length).to.equal(1);
-          resolve();
-        })
-      );
+      depotDonnees.nouvelleHomologation = () => Promise.resolve();
 
       axios.post('http://localhost:1234/api/homologation', { pointsAcces })
-        .then(() => done())
+        .then(() => {
+          verifieAseptisationListe('pointsAcces', ['description']);
+          done();
+        })
         .catch(done);
     });
 
@@ -488,7 +497,7 @@ describe('Le serveur MSS', () => {
       );
     });
 
-    it("retire les points d'accès qui n'ont pas de description", (done) => {
+    it("aseptise la liste des points d'accès des descriptions vides", (done) => {
       const pointsAcces = new PointsAcces({
         pointsAcces: [
           { description: 'une description' },
@@ -496,15 +505,13 @@ describe('Le serveur MSS', () => {
         ],
       });
 
-      depotDonnees.ajouteInformationsGeneralesAHomologation = (_, infosGenerales) => (
-        new Promise((resolve) => {
-          expect(infosGenerales.pointsAcces.nombre()).to.equal(1);
-          resolve();
-        })
-      );
+      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
 
       axios.put('http://localhost:1234/api/homologation/456', { pointsAcces })
-        .then(() => done())
+        .then(() => {
+          verifieAseptisationListe('pointsAcces', ['description']);
+          done();
+        })
         .catch(done);
     });
 
