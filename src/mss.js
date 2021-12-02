@@ -208,6 +208,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.post('/api/homologation',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('nomService', 'pointsAcces.*.description'),
+    middleware.aseptiseListe('pointsAcces', ['description']),
     (requete, reponse, suite) => {
       const {
         nomService,
@@ -218,11 +219,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
+        pointsAcces,
       } = requete.body;
-
-      const pointsAcces = requete.body?.pointsAcces?.filter(
-        (pointAcces) => pointAcces?.description
-      );
 
       depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
         nomService,
@@ -245,10 +243,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.put('/api/homologation/:id',
     middleware.trouveHomologation,
     middleware.aseptise('nomService', 'pointsAcces.*.description'),
+    middleware.aseptiseListe('pointsAcces', ['description']),
     (requete, reponse, suite) => {
-      requete.body.pointsAcces &&= requete.body.pointsAcces.filter(
-        (pointAcces) => pointAcces?.description
-      );
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
