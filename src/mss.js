@@ -10,6 +10,7 @@ const InformationsHomologation = require('./modeles/informationsHomologation');
 const MesureGenerale = require('./modeles/mesureGenerale');
 const MesuresSpecifiques = require('./modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
+const PointAcces = require('./modeles/pointAcces');
 const RisqueGeneral = require('./modeles/risqueGeneral');
 const RisquesSpecifiques = require('./modeles/risquesSpecifiques');
 
@@ -208,7 +209,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.post('/api/homologation',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('nomService', 'pointsAcces.*.description'),
-    middleware.aseptiseListe('pointsAcces', ['description']),
+    middleware.aseptiseListe('pointsAcces', PointAcces.proprietes()),
     (requete, reponse, suite) => {
       const {
         nomService,

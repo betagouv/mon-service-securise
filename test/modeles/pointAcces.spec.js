@@ -10,4 +10,8 @@ describe("Un point d'accès", () => {
 
     expect(pointAcces.description).to.equal('Une description');
   });
+
+  it('donne la liste des noms de ses propriétés', () => {
+    expect(PointAcces.proprietes()).to.eql(['description']);
+  });
 });
