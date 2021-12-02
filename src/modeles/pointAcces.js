@@ -5,6 +5,10 @@ class PointAcces extends InformationsHomologation {
     super(['description']);
     this.renseigneProprietes(donneesPointsAcces);
   }
+
+  static proprietes() {
+    return ['description'];
+  }
 }
 
 module.exports = PointAcces;
