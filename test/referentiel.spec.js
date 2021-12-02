@@ -262,6 +262,14 @@ describe('Le référentiel', () => {
     expect(referentiel.descriptionExpiration()).to.equal('Information non renseignée');
   });
 
+  it('connaît la liste des identifiants des niveaux de gravité des risques', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      niveauxGravite: { unNiveau: {}, unAutreNiveau: {} },
+    });
+
+    expect(referentiel.identifiantsNiveauxGravite()).to.eql(['unNiveau', 'unAutreNiveau']);
+  });
+
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.typesService()).to.eql({});
