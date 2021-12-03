@@ -17,7 +17,7 @@ $(() => {
 
     construisPDF.then(() => {
       doc.deletePage(1);
-      doc.save('sample-file.pdf');
+      doc.save('dossierHomologation.pdf');
     });
   };
 
