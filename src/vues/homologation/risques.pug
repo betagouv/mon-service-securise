@@ -22,7 +22,19 @@ block formulaire
                 .fermeture-modale
                 h1= donnees.description
                 p= donnees.descriptionLongue
-          .titre= donnees.description
+          .synthese
+            .titre= donnees.description
+            .niveau-gravite
+              input(
+                type = 'hidden',
+                id = `niveauGravite-${identifiant}`,
+                name = `niveauGravite-${identifiant}`,
+                value = '',
+              )
+              .curseur
+                each niveau in referentiel.identifiantsNiveauxGravite()
+                  .disque(niveau = niveau)
+              .legende
           a.informations-additionnelles Précisez le risque dans le cadre de votre organisation (facultatif)
 
     section
