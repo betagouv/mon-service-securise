@@ -23,8 +23,8 @@ mixin formulaireInformationsGenerales(idHomologation)
       +inputChoix({
         type: 'checkbox',
         nom: 'natureService',
-        titre: 'Quelle est la nature du service numérique ?',
-        items: referentiel.naturesService(),
+        titre: 'Type de service numérique',
+        items: referentiel.typesService(),
         objetDonnees: homologation.informationsGenerales,
       })
 

@@ -26,7 +26,7 @@ describe('Une homologation', () => {
 
   it('sait décrire la nature du service', () => {
     const referentiel = Referentiel.creeReferentiel({
-      naturesService: {
+      typesService: {
         uneNature: { description: 'Une nature' },
         uneAutre: { description: 'Une autre' },
       },
@@ -42,7 +42,7 @@ describe('Une homologation', () => {
 
   it("se comporte correctement si la nature du service n'est pas présente", () => {
     const homologation = new Homologation({ id: '123' });
-    expect(homologation.descriptionNatureService()).to.equal('Nature du service non renseignée');
+    expect(homologation.descriptionNatureService()).to.equal('Type de service non renseignée');
   });
 
   it('connaît ses caractéristiques complémentaires', () => {
