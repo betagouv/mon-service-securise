@@ -4,10 +4,10 @@ const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)}
 module.exports = {
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
 
-  naturesService: {
+  typesService: {
     siteInternet: { description: 'Site Internet' },
     applicationMobile: { description: 'Application Mobile' },
-    api: { description: 'API' },
+    api: { description: "API mise à disposition par l'organisation" },
   },
 
   provenancesService: {

@@ -5,24 +5,24 @@ const Referentiel = require('../src/referentiel');
 describe('Le référentiel', () => {
   it("sait décrire la nature du service à partir d'identifiants", () => {
     const referentiel = Referentiel.creeReferentiel({
-      naturesService: { siteInternet: { description: 'Site internet' } },
+      typesService: { siteInternet: { description: 'Site internet' } },
     });
     expect(referentiel.natureService(['siteInternet'])).to.equal('Site internet');
   });
 
   it('sait décrire la nature du service à partir de plusieurs identifiants', () => {
     const referentiel = Referentiel.creeReferentiel({
-      naturesService: {
+      typesService: {
         siteInternet: { description: 'Site internet' },
-        api: { description: 'API' },
+        api: { description: "API mise à disposition par l'organisation" },
       },
     });
-    expect(referentiel.natureService(['siteInternet', 'api'])).to.equal('Site internet, API');
+    expect(referentiel.natureService(['siteInternet', 'api'])).to.equal("Site internet, API mise à disposition par l'organisation");
   });
 
   it('donne une description par défaut si aucun identifiant de nature service', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    expect(referentiel.natureService([])).to.equal('Nature du service non renseignée');
+    expect(referentiel.natureService([])).to.equal('Type de service non renseignée');
   });
 
   it('sait décrire la localisation des données', () => {
@@ -39,8 +39,8 @@ describe('Le référentiel', () => {
   });
 
   it('connaît la liste des différentes natures de service possibles', () => {
-    const referentiel = Referentiel.creeReferentiel({ naturesService: { uneClef: 'une valeur' } });
-    expect(referentiel.naturesService()).to.eql({ uneClef: 'une valeur' });
+    const referentiel = Referentiel.creeReferentiel({ typesService: { uneClef: 'une valeur' } });
+    expect(referentiel.typesService()).to.eql({ uneClef: 'une valeur' });
   });
 
   it('connaît la liste des différentes provenances de service possibles', () => {
@@ -264,12 +264,12 @@ describe('Le référentiel', () => {
 
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    expect(referentiel.naturesService()).to.eql({});
+    expect(referentiel.typesService()).to.eql({});
   });
 
   it("peut être rechargé avec d'autres données", () => {
     const referentiel = Referentiel.creeReferentielVide();
-    referentiel.recharge({ naturesService: { uneClef: 'une valeur' } });
-    expect(referentiel.naturesService()).to.eql({ uneClef: 'une valeur' });
+    referentiel.recharge({ typesService: { uneClef: 'une valeur' } });
+    expect(referentiel.typesService()).to.eql({ uneClef: 'une valeur' });
   });
 });

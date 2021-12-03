@@ -34,7 +34,7 @@ describe('Les informations générales', () => {
 
   elles('décrivent la nature du service', () => {
     const referentiel = Referentiel.creeReferentiel({
-      naturesService: {
+      typesService: {
         uneNature: { description: 'Une nature' },
         uneAutre: { description: 'Une autre' },
       },
@@ -48,7 +48,7 @@ describe('Les informations générales', () => {
 
   elles("se comportent correctement si la nature du service n'est pas présente", () => {
     const infos = new InformationsGenerales();
-    expect(infos.descriptionNatureService()).to.equal('Nature du service non renseignée');
+    expect(infos.descriptionNatureService()).to.equal('Type de service non renseignée');
   });
 
   elles("détectent qu'elles sont encore à saisir", () => {
