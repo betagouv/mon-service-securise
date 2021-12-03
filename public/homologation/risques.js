@@ -18,6 +18,20 @@ $(() => {
     });
   };
 
+  const brancheComportementSaisieNiveauGravite = ($r) => {
+    const $disques = $('.disque', $r);
+    $disques.click((e) => {
+      const $disque = $(e.target);
+      const position = $disque.index();
+      const niveau = $disque.attr('niveau');
+
+      $disques.removeClass('rouge eteint');
+      $disques.addClass((i) => (i <= position ? 'rouge' : 'eteint'));
+      $('input', $r).val(niveau);
+      $('.legende', $r).text(niveau);
+    });
+  };
+
   const ajouteZoneSaisieCommentairePourRisque = ($r, nom) => {
     const $lien = $('a', $r);
     const $zoneSaisie = $(`<textarea id=${nom} name=${nom}></textarea>`);
@@ -59,7 +73,11 @@ $(() => {
   );
 
   ajouteInformationsModales();
-  $('.risque').each((_, $r) => ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`));
+  $('.risque').each((_, $r) => {
+    brancheComportementSaisieNiveauGravite($r);
+    ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`);
+  });
+
   peupleRisquesGeneraux('#donnees-risques-generaux');
 
   indexMaxRisquesSpecifiques = peupleRisquesSpecifiques('#risques-specifiques', '#donnees-risques-specifiques');

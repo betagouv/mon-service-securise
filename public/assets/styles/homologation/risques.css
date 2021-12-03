@@ -22,6 +22,41 @@
   background-repeat: no-repeat;
 }
 
-.risque .titre {
+.risque .synthese {
+  display: flex;
+  align-items: center;
+}
+
+.synthese .titre {
+  flex-basis: 67%;
   font-weight: bold;
+}
+
+.risque .curseur {
+  display: flex;
+  gap: 0.4em;
+}
+
+.risque .disque {
+  height: 1em;
+  width: 1em;
+
+  border-radius: 50%;
+  border: solid .5px;
+  border-color: transparent;
+  background: #ebedf0;
+}
+
+.risque .disque:hover {
+  cursor: pointer;
+
+  border-color: black;
+}
+
+.risque .disque.eteint {
+  background: #ebedf0;
+}
+
+.risque .disque.rouge {
+  background: red;
 }
