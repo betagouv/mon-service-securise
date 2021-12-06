@@ -26,25 +26,9 @@ module.exports = {
       description: 'Inscription à une newsletter',
       seuilCriticite: 'faible',
     },
-    compte: {
-      description: 'Création de compte (utilisateurs avec comptes)',
-      seuilCriticite: 'faible',
-    },
-    formulaire: {
-      description: 'Formulaire administratif ou démarche en ligne',
-      seuilCriticite: 'faible',
-    },
     questionnaire: {
       description: 'Questionnaires, sondages',
       seuilCriticite: 'faible',
-    },
-    reservation: {
-      description: 'Outils de réservation (livres, places, salles, etc.)',
-      seuilCriticite: 'faible',
-    },
-    paiement: {
-      description: 'Paiement en ligne, conservation de données bancaires',
-      seuilCriticite: 'eleve',
     },
     reseauSocial: {
       description: 'Réseau social, forum, commentaires',
@@ -53,6 +37,14 @@ module.exports = {
     visionconference: {
       description: 'Audio, visioconférence',
       seuilCriticite: 'moyen',
+    },
+    paiement: {
+      description: 'Paiement en ligne',
+      seuilCriticite: 'eleve',
+    },
+    compte: {
+      description: 'Création de compte (utilisateurs avec comptes)',
+      seuilCriticite: 'faible',
     },
     messagerie: {
       description: 'Messagerie instantanée',
@@ -66,9 +58,17 @@ module.exports = {
       description: 'Stockage de documents',
       seuilCriticite: 'moyen',
     },
+    formulaire: {
+      description: 'Formulaire administratif ou démarche en ligne',
+      seuilCriticite: 'faible',
+    },
     edition: {
       description: 'Édition collaborative (documents, murs collaboratifs, etc.)',
       seuilCriticite: 'moyen',
+    },
+    reservation: {
+      description: 'Outils de réservation (livres, places, salles, etc.)',
+      seuilCriticite: 'faible',
     },
     autre: {
       description: 'Autres fonctionnalités permettant des échanges de données',
