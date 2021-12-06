@@ -42,6 +42,10 @@ module.exports = {
       description: 'Paiement en ligne',
       seuilCriticite: 'eleve',
     },
+    signatureElectronique: {
+      description: 'Dispositif de signature électronique',
+      seuilCriticite: 'eleve',
+    },
     compte: {
       description: 'Création de compte (utilisateurs avec comptes)',
       seuilCriticite: 'faible',
