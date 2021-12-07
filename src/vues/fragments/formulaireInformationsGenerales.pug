@@ -86,5 +86,5 @@ mixin formulaireInformationsGenerales(idHomologation)
 
 
   script(id = 'donneesPointsAcces', type = 'application/json').
-    !{(homologation.informationsGenerales.pointsAcces) ? JSON.stringify(homologation.informationsGenerales.pointsAcces.toJSON()) : JSON.stringify([]) }
+    !{JSON.stringify(homologation.informationsGenerales.pointsAcces.toJSON()) }
   script(type = 'module', src = '/statique/homologation/formulaireInformationsGenerales.js')
