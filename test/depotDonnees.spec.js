@@ -270,7 +270,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       homologations: [{
         id: '123',
         informationsGenerales: { nomService: 'nom' },
-        caracteristiquesComplementaires: { presentation: 'Une présentation' },
+        caracteristiquesComplementaires: { hebergeur: 'Un hébergeur' },
       }],
     });
     const referentiel = Referentiel.creeReferentiel({ localisationsDonnees: { france: {} } });
@@ -282,8 +282,23 @@ describe('Le dépôt de données persistées en mémoire', () => {
     depot.ajouteCaracteristiquesAHomologation('123', caracteristiques)
       .then(() => depot.homologation('123'))
       .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.presentation).to.equal('Une présentation');
+        expect(caracteristiquesComplementaires.hebergeur).to.equal('Un hébergeur');
         expect(caracteristiquesComplementaires.localisationDonnees).to.equal('france');
+        done();
+      })
+      .catch(done);
+  });
+
+  it('ajoute une présentation à une homologation', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{ id: '123', informationsGenerales: { nomService: 'nom' } }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.ajoutePresentationAHomologation('123', 'Une présentation')
+      .then(() => depot.homologation('123'))
+      .then(({ informationsGenerales: { presentation } }) => {
+        expect(presentation).to.equal('Une présentation');
         done();
       })
       .catch(done);

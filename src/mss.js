@@ -270,7 +270,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       );
       try {
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
+        const { presentation } = caracteristiques;
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
+          .then(() => depotDonnees.ajoutePresentationAHomologation(requete.params.id, presentation))
           .then(() => reponse.send({ idHomologation: requete.homologation.id }));
       } catch {
         reponse.status(422).send('Données invalides');

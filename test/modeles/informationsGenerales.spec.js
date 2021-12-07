@@ -18,6 +18,7 @@ describe('Les informations générales', () => {
       nomService: 'Super Service',
       pointsAcces: [{ description: 'Une description' }],
       presenceResponsable: 'non',
+      presentation: 'Une présentation du service',
       provenanceService: ['uneProvenance'],
     });
 
@@ -28,6 +29,7 @@ describe('Les informations générales', () => {
     expect(infos.typeService).to.eql(['unType']);
     expect(infos.nomService).to.equal('Super Service');
     expect(infos.presenceResponsable).to.be('non');
+    expect(infos.presentation).to.equal('Une présentation du service');
     expect(infos.provenanceService).to.eql(['uneProvenance']);
 
     expect(infos.nombrePointsAcces()).to.equal(1);

@@ -12,6 +12,9 @@ class InformationsGenerales extends InformationsHomologation {
         'nomService',
         'presenceResponsable',
       ],
+      proprietesAtomiquesFacultatives: [
+        'presentation',
+      ],
       proprietesListes: [
         'donneesCaracterePersonnel',
         'fonctionnalites',
