@@ -575,9 +575,10 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
-    beforeEach(() => (
-      depotDonnees.ajouteCaracteristiquesAHomologation = () => new Promise((resolve) => resolve())
-    ));
+    beforeEach(() => {
+      depotDonnees.ajouteCaracteristiquesAHomologation = () => Promise.resolve();
+      depotDonnees.ajoutePresentationAHomologation = () => Promise.resolve();
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -597,20 +598,43 @@ describe('Le serveur MSS', () => {
       );
     });
 
+    it("demande au dépôt d'ajouter la présentation", (done) => {
+      let presentationAjouteeAHomologation = false;
+      depotDonnees.ajoutePresentationAHomologation = (idHomologation, presentation) => {
+        try {
+          expect(presentation).to.equal('Une présentation');
+          presentationAjouteeAHomologation = true;
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(done(e));
+        }
+      };
+
+      axios.post(
+        'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
+        { presentation: 'Une présentation' },
+      )
+        .then(() => {
+          expect(presentationAjouteeAHomologation).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+
     it("demande au dépôt d'associer les caractéristiques à l'homologation", (done) => {
       let caracteristiquesAjoutees = false;
 
       depotDonnees.ajouteCaracteristiquesAHomologation = (
         (idHomologation, caracteristiques) => new Promise((resolve) => {
           expect(idHomologation).to.equal('456');
-          expect(caracteristiques.presentation).to.equal('Une présentation');
+          expect(caracteristiques.hebergeur).to.equal('Un hébergeur');
           caracteristiquesAjoutees = true;
           resolve();
         })
       );
 
       axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
-        presentation: 'Une présentation',
+        hebergeur: 'Un hébergeur',
       })
         .then((reponse) => {
           expect(caracteristiquesAjoutees).to.be(true);
