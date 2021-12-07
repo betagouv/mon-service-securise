@@ -16,6 +16,7 @@ class InformationsGenerales extends InformationsHomologation {
         'donneesCaracterePersonnel',
         'fonctionnalites',
         'typeService',
+        'presentation',
         'provenanceService',
       ],
       listesAgregats: {

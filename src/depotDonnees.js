@@ -8,6 +8,7 @@ const {
 } = require('./erreurs');
 const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
 const Homologation = require('./modeles/homologation');
+const InformationsGenerales = require('./modeles/informationsGenerales');
 const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
@@ -108,6 +109,16 @@ const creeDepot = (config = {}) => {
 
   const ajouteCaracteristiquesAHomologation = (...params) => (
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
+  );
+
+  const ajoutePresentationAHomologation = (idHomologation, presentation) => (
+    adaptateurPersistance.homologation(idHomologation)
+      .then((h) => {
+        const informationsGenerales = new InformationsGenerales(h.informationsGenerales);
+        informationsGenerales.proprietesAtomiquesRequises.push('presentation');
+        informationsGenerales.presentation = presentation;
+        return metsAJourProprieteHomologation('informationsGenerales', h, informationsGenerales);
+      })
   );
 
   const ajoutePartiesPrenantesAHomologation = (...params) => (
@@ -230,6 +241,7 @@ const creeDepot = (config = {}) => {
     ajouteInformationsGeneralesAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
+    ajoutePresentationAHomologation,
     ajouteRisqueGeneralAHomologation,
     homologation,
     homologationExiste,
