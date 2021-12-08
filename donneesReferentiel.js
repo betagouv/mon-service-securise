@@ -83,27 +83,27 @@ module.exports = {
   donneesCaracterePersonnel: {
     contact: {
       description: 'Données de contact',
-      exemple: 'mail, numéro de téléphone, adresse postale',
+      exemple: 'mail, numéro de téléphone, adresse postale.',
       seuilCriticite: 'faible',
     },
     identite: {
       description: "Données d'identité",
-      exemple: "nom/prénom, pseudonyme, date de maissance, numéros de pièce d'identité, de sécurité sociale, etc.",
+      exemple: "nom/prénom, pseudonyme, date de naissance, numéro de sécurité sociale.",
       seuilCriticite: 'faible',
     },
     situation: {
       description: 'Données relatives à la situation familiale, économique et financière',
-      exemple: 'enfants',
+      exemple: 'revenus, état civil.',
       seuilCriticite: 'moyen',
     },
     localisation: {
       description: 'Données de localisation',
-      exemple: 'adresse IP, identifiant de connexion, cookies',
+      exemple: 'adresse IP, identifiant de connexion, cookies.',
       seuilCriticite: 'faible',
     },
     banque: {
-      description: 'Données bancaires',
-      exemple: 'nº de carte bancaire, établissement bancaire, etc.',
+      description: 'Données de paiement',
+      exemple: 'nº de carte bancaire, etc.',
       seuilCriticite: 'eleve',
     },
     mineurs: {
@@ -111,8 +111,8 @@ module.exports = {
       seuilCriticite: 'eleve',
     },
     sensibiliteParticuliere: {
-      description: 'Données particulièrement sensibles (santé, opinions, etc.)',
-      exemple: 'données de santé, orientation sexuelle, origine raciale ou ethnique, opinions politiques ou religieuses',
+      description: 'Données de santé et autres données particulièrement sensibles',
+      exemple: 'orientation sexuelle, origine, orientations politiques, religieuses.',
       seuilCriticite: 'critique',
     },
   },
