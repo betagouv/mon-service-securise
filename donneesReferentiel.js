@@ -88,7 +88,12 @@ module.exports = {
     },
     identite: {
       description: "Données d'identité",
-      exemple: "nom/prénom, pseudonyme, date de naissance, numéro de sécurité sociale.",
+      exemple: 'nom/prénom, pseudonyme, date de naissance, numéro de sécurité sociale.',
+      seuilCriticite: 'faible',
+    },
+    document: {
+      description: "Documents d'identité et autres documents officiels",
+      exemple: 'photo de passeport, titre de séjour.',
       seuilCriticite: 'faible',
     },
     situation: {
@@ -114,6 +119,15 @@ module.exports = {
       description: 'Données de santé et autres données particulièrement sensibles',
       exemple: 'orientation sexuelle, origine, orientations politiques, religieuses.',
       seuilCriticite: 'critique',
+    },
+    diffusionRestreinte: {
+      description: 'Données de niveau « Diffusion Restreinte »',
+      seuilCriticite: 'eleve',
+    },
+    autre: {
+      description: 'Autre données sensibles',
+      exemple: "documents sensibles internes à l'administration.",
+      seuilCriticite: 'faible',
     },
   },
 
