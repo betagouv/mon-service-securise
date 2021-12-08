@@ -7,7 +7,7 @@ $(() => {
       name="description-point-acces-${index}"
       type="text"
       value="${description}"
-      placeholder="exemple : https://www.adresse.fr, App Store, Play Store, ..."
+      placeholder="exemple : https://www.adresse.fr, App Store, Play Store, …"
     >
   `;
 
