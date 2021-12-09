@@ -30,8 +30,7 @@ const parametres = (selecteurFormulaire) => {
   return avecPremierElementCommeValeurs(params, nomsParamsAtomiques);
 };
 
-const parametresAvecItemsExtraits = (selecteurForm, nomListeItems, sourceRegExpParamsItem) => {
-  const params = parametres(selecteurForm);
+const modifieParametresAvecItemsExtraits = (params, nomListeItems, sourceRegExpParamsItem) => {
   const donneesItems = { [nomListeItems]: [] };
 
   Object.keys(params)
@@ -52,5 +51,9 @@ const parametresAvecItemsExtraits = (selecteurForm, nomListeItems, sourceRegExpP
 
   return Object.assign(params, donneesItems);
 };
+const parametresAvecItemsExtraits = (selecteurForm, nomListeItems, sourceRegExpParamsItem) => {
+  const params = parametres(selecteurForm);
+  return modifieParametresAvecItemsExtraits(params, nomListeItems, sourceRegExpParamsItem);
+};
 
-export { parametres as default, parametresAvecItemsExtraits };
+export { parametres as default, parametresAvecItemsExtraits, modifieParametresAvecItemsExtraits };
