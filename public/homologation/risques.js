@@ -5,6 +5,8 @@ import texteHTML from '../modules/texteHTML.js';
 $(() => {
   let indexMaxRisquesSpecifiques = 0;
 
+  const COULEURS_NIVEAUX_GRAVITE = ['blanc', 'vert', 'jaune', 'orange', 'rouge'];
+
   const NIVEAUX_GRAVITE = JSON.parse($('#donnees-referentiel-niveaux-gravite-risque').text());
 
   const ajouteInformationsModales = () => {
@@ -25,8 +27,10 @@ $(() => {
 
     const { position, description } = NIVEAUX_GRAVITE[niveau];
     const $disques = $('.disque', $risque);
-    $disques.removeClass('rouge eteint');
-    $disques.addClass((i) => (i <= position ? 'rouge' : 'eteint'));
+    $disques.removeClass('eteint');
+    $disques.removeClass(COULEURS_NIVEAUX_GRAVITE.join(' '));
+    $disques.addClass((i) => (i <= position ? COULEURS_NIVEAUX_GRAVITE[position] : 'eteint'));
+    $disques.first().toggleClass('cercle', position === 0);
     $('.legende', $risque).text(description);
   };
 

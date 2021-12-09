@@ -53,10 +53,35 @@
   border-color: black;
 }
 
+.risque .disque.cercle {
+  border: solid .5px black;
+}
+
 .risque .disque.eteint {
   background: #ebedf0;
 }
 
+.risque .disque.blanc {
+  background: #fff;
+}
+
+.risque .disque.vert {
+  background: #1aaf54;
+}
+
+.risque .disque.jaune {
+  background: #fcdf41;
+}
+
+.risque .disque.orange {
+  background: #f9b049;
+}
+
 .risque .disque.rouge {
   background: red;
+}
+
+.risque .niveau-gravite .legende {
+  height: 1.4em;
+  font-size: 0.7em;
 }
