@@ -15,7 +15,8 @@ const creeReferentiel = (donneesReferentiel) => {
   const mesures = () => donnees.mesures;
   const identifiantsMesures = () => Object.keys(mesures());
   const typesService = () => donnees.typesService;
-  const identifiantsNiveauxGravite = () => Object.keys(donnees.niveauxGravite || {});
+  const niveauxGravite = () => donnees.niveauxGravite;
+  const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
   const provenancesService = () => donnees.provenancesService;
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
@@ -103,6 +104,7 @@ const creeReferentiel = (donneesReferentiel) => {
     mesures,
     typeService,
     typesService,
+    niveauxGravite,
     provenancesService,
     recharge,
     risques,
@@ -122,7 +124,7 @@ const creeReferentielVide = () => creeReferentiel({
   mesures: {},
   risques: {},
   typesService: {},
-  niveauxGravite: [],
+  niveauxGravite: {},
   provenancesService: {},
   seuilsCriticites: [],
   statutsMesures: {},

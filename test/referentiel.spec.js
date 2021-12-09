@@ -262,6 +262,16 @@ describe('Le référentiel', () => {
     expect(referentiel.descriptionExpiration()).to.equal('Information non renseignée');
   });
 
+  it('connait les niveaux de gravité des risques', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      niveauxGravite: { unNiveau: { position: 0, description: 'Une description' } },
+    });
+
+    expect(referentiel.niveauxGravite()).to.eql({
+      unNiveau: { position: 0, description: 'Une description' },
+    });
+  });
+
   it('connaît la liste des identifiants des niveaux de gravité des risques', () => {
     const referentiel = Referentiel.creeReferentiel({
       niveauxGravite: { unNiveau: {}, unAutreNiveau: {} },
