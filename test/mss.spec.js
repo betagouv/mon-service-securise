@@ -779,21 +779,25 @@ describe('Le serveur MSS', () => {
     });
 
     it("demande au dépôt d'associer les risques généraux à l'homologation", (done) => {
-      referentiel.recharge({ risques: { unRisque: {} } });
+      referentiel.recharge({ risques: { unRisque: {} }, niveauxGravite: { unNiveau: {} } });
       let risqueAjoute = false;
 
-      depotDonnees.ajouteRisqueGeneralAHomologation = (idHomologation, risque) => new Promise(
-        (resolve) => {
+      depotDonnees.ajouteRisqueGeneralAHomologation = (idHomologation, risque) => {
+        try {
           expect(idHomologation).to.equal('456');
           expect(risque.id).to.equal('unRisque');
           expect(risque.commentaire).to.equal('Un commentaire');
+          expect(risque.niveauGravite).to.equal('unNiveau');
           risqueAjoute = true;
-          resolve();
+          return Promise.resolve();
+        } catch (e) {
+          return done(e);
         }
-      );
+      };
 
       axios.post('http://localhost:1234/api/homologation/456/risques', {
         'commentaire-unRisque': 'Un commentaire',
+        'niveauGravite-unRisque': 'unNiveau',
       })
         .then((reponse) => {
           expect(risqueAjoute).to.be(true);
