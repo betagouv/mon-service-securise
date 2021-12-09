@@ -61,7 +61,7 @@ class Homologation {
     return this.avisExpertCyber.descriptionExpiration();
   }
 
-  descriptionNatureService() { return this.informationsGenerales.descriptionNatureService(); }
+  descriptionTypeService() { return this.informationsGenerales.descriptionTypeService(); }
 
   descriptionStatutsMesures() {
     return Mesure.statutsPossibles().reduce((acc, s) => {

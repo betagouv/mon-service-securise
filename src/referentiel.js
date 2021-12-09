@@ -33,7 +33,7 @@ const creeReferentiel = (donneesReferentiel) => {
     return localisationsDonnees()[identifiant].description;
   };
 
-  const natureService = (identifiants) => {
+  const typeService = (identifiants) => {
     if (identifiants.length === 0) return 'Type de service non renseignée';
     return identifiants
       .map((identifiant) => typesService()[identifiant].description)
@@ -99,7 +99,7 @@ const creeReferentiel = (donneesReferentiel) => {
     localisationsDonnees,
     mesureIndispensable,
     mesures,
-    natureService,
+    typeService,
     typesService,
     provenancesService,
     recharge,

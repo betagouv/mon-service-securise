@@ -3,26 +3,26 @@ const expect = require('expect.js');
 const Referentiel = require('../src/referentiel');
 
 describe('Le référentiel', () => {
-  it("sait décrire la nature du service à partir d'identifiants", () => {
+  it("sait décrire le type de service à partir d'identifiants", () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: { siteInternet: { description: 'Site internet' } },
     });
-    expect(referentiel.natureService(['siteInternet'])).to.equal('Site internet');
+    expect(referentiel.typeService(['siteInternet'])).to.equal('Site internet');
   });
 
-  it('sait décrire la nature du service à partir de plusieurs identifiants', () => {
+  it('sait décrire le type de service à partir de plusieurs identifiants', () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: {
         siteInternet: { description: 'Site internet' },
         api: { description: "API mise à disposition par l'organisation" },
       },
     });
-    expect(referentiel.natureService(['siteInternet', 'api'])).to.equal("Site internet, API mise à disposition par l'organisation");
+    expect(referentiel.typeService(['siteInternet', 'api'])).to.equal("Site internet, API mise à disposition par l'organisation");
   });
 
-  it('donne une description par défaut si aucun identifiant de nature service', () => {
+  it('donne une description par défaut si aucun identifiant de type de service', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    expect(referentiel.natureService([])).to.equal('Type de service non renseignée');
+    expect(referentiel.typeService([])).to.equal('Type de service non renseignée');
   });
 
   it('sait décrire la localisation des données', () => {
@@ -38,7 +38,7 @@ describe('Le référentiel', () => {
     expect(referentiel.localisationDonnees()).to.equal('Localisation des données non renseignée');
   });
 
-  it('connaît la liste des différentes natures de service possibles', () => {
+  it('connaît la liste des différents types de service possibles', () => {
     const referentiel = Referentiel.creeReferentiel({ typesService: { uneClef: 'une valeur' } });
     expect(referentiel.typesService()).to.eql({ uneClef: 'une valeur' });
   });

@@ -12,7 +12,7 @@ class InformationsGenerales extends InformationsHomologation {
     ], [
       'donneesCaracterePersonnel',
       'fonctionnalites',
-      'natureService',
+      'typeService',
       'provenanceService',
     ], {
       pointsAcces: PointsAcces,
@@ -22,8 +22,8 @@ class InformationsGenerales extends InformationsHomologation {
     this.referentiel = referentiel;
   }
 
-  descriptionNatureService() {
-    return this.referentiel.natureService(this.natureService);
+  descriptionTypeService() {
+    return this.referentiel.typeService(this.typeService);
   }
 
   nombrePointsAcces() {
