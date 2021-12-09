@@ -1,4 +1,4 @@
-import { parametresAvecItemsExtraits } from './parametres.js';
+import parametres, { modifieParametresAvecItemsExtraits } from './parametres.js';
 
 const fermeModale = () => {
   $('.rideau').css('display', '');
@@ -67,11 +67,21 @@ const afficheModaleSeuilCritique = () => afficheModale(`
 </div>
 `);
 
-const lectureParams = (selecteurFormulaire) => (
-  parametresAvecItemsExtraits(selecteurFormulaire, 'pointsAcces', '^(description)-point-acces-')
+const organiseParametresPointsAcces = (params) => (
+  modifieParametresAvecItemsExtraits(params, 'pointsAcces', '^(description)-point-acces-')
+);
+const organiseParametresFonctionnalite = (params) => (
+  modifieParametresAvecItemsExtraits(params, 'fonctionnalitesSupplementaires', '^(description)-fonctionnalite-')
 );
 
-const initialiseComportementModale = (url, selecteurFormulaire) => {
+const tousLesParametres = (selecteurFormulaire) => {
+  const params = parametres(selecteurFormulaire);
+  organiseParametresPointsAcces(params);
+  organiseParametresFonctionnalite(params);
+  return params;
+};
+
+const initialiseComportementModale = (url, parametresFormulaire) => {
   $('.fermeture-modale').click((eFermeture) => {
     eFermeture.stopPropagation();
     fermeModale();
@@ -80,7 +90,7 @@ const initialiseComportementModale = (url, selecteurFormulaire) => {
   $('a#annulation').click(fermeModale);
 
   $('.bouton#envoi').click(() => {
-    const params = lectureParams(selecteurFormulaire);
+    const params = tousLesParametres(parametresFormulaire);
     Object.assign(url, { data: params });
 
     axios(url)
@@ -89,7 +99,7 @@ const initialiseComportementModale = (url, selecteurFormulaire) => {
 };
 
 const soumetsHomologation = (selecteurFormulaire) => {
-  const params = lectureParams(selecteurFormulaire);
+  const params = tousLesParametres(selecteurFormulaire);
 
   axios.get('/api/seuilCriticite', { params })
     .then((reponse) => {

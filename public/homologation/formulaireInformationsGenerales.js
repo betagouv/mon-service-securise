@@ -1,26 +1,43 @@
 import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
 
 $(() => {
-  const zoneSaisiePointAcces = (index, { description = '' }) => `
+  const zoneSaisie = (nom, descriptif = '') => (index, { description = '' }) => `
     <input
-      id="description-point-acces-${index}"
-      name="description-point-acces-${index}"
+      id="description-${nom}-${index}"
+      name="description-${nom}-${index}"
       type="text"
       value="${description}"
-      placeholder="exemple : https://www.adresse.fr, App Store, Play Store, …"
+      placeholder="${descriptif}"
     >
   `;
 
-  let indexMaxPointsAcces = 0;
-
-  const peuplePointsAcces = (...params) => peupleListeItems(...params, zoneSaisiePointAcces);
-
-  const brancheAjoutPointAcces = (...params) => brancheAjoutItem(
+  const brancheAjoutElements = (zoneSaisieElement) => (...params) => (element) => brancheAjoutItem(
     ...params,
-    (index) => zoneSaisiePointAcces(index, {}),
-    () => (indexMaxPointsAcces += 1),
+    (index) => zoneSaisieElement(index, {}),
+    () => (element.indexMax += 1)
   );
 
-  indexMaxPointsAcces = peuplePointsAcces('#points-acces', '#donneesPointsAcces');
-  brancheAjoutPointAcces('.nouvel-item', '#points-acces');
+  const peupleElements = (zoneSaisieElement) => (...params) => (
+    peupleListeItems(...params, zoneSaisieElement)
+  );
+
+  const zoneSaisiePointAcces = zoneSaisie('point-acces', 'exemple : https://www.adresse.fr, App Store, Play Store, …');
+  const pointsAcces = {
+    indexMax: 0,
+  };
+  const brancheAjoutPointAcces = brancheAjoutElements(zoneSaisiePointAcces);
+  const peuplePointsAcces = peupleElements(zoneSaisiePointAcces);
+
+  const zoneSaisieFonctionnalite = zoneSaisie('fonctionnalite');
+  const fonctionnalitesSupplementaires = {
+    indexMax: 0,
+  };
+  const brancheAjoutFonctionnalite = brancheAjoutElements(zoneSaisieFonctionnalite);
+  const peupleFonctionnalite = peupleElements(zoneSaisieFonctionnalite);
+
+  pointsAcces.indexMax = peuplePointsAcces('#points-acces', '#donneesPointsAcces');
+  brancheAjoutPointAcces('.nouveau-point-acces', '#points-acces')(pointsAcces);
+
+  fonctionnalitesSupplementaires.indexMax = peupleFonctionnalite('#fonctionnalites-supplementaires', '#donnees-fonctionnalites-suppementaires');
+  brancheAjoutFonctionnalite('.nouvelle-fonctionnalite', '#fonctionnalites-supplementaires')(fonctionnalitesSupplementaires);
 });
