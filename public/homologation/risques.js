@@ -5,6 +5,8 @@ import texteHTML from '../modules/texteHTML.js';
 $(() => {
   let indexMaxRisquesSpecifiques = 0;
 
+  const NIVEAUX_GRAVITE = JSON.parse($('#donnees-referentiel-niveaux-gravite-risque').text());
+
   const ajouteInformationsModales = () => {
     $('.information').click((eInformation) => {
       $('body').css('overflow', 'hidden');
@@ -18,17 +20,23 @@ $(() => {
     });
   };
 
+  const metsAJourAffichageNiveauGravite = ($risque, niveau) => {
+    $('input', $risque).val(niveau);
+
+    const { position, description } = NIVEAUX_GRAVITE[niveau];
+    const $disques = $('.disque', $risque);
+    $disques.removeClass('rouge eteint');
+    $disques.addClass((i) => (i <= position ? 'rouge' : 'eteint'));
+    $('.legende', $risque).text(description);
+  };
+
   const brancheComportementSaisieNiveauGravite = ($r) => {
     const $disques = $('.disque', $r);
     $disques.click((e) => {
       const $disque = $(e.target);
-      const position = $disque.index();
       const niveau = $disque.attr('niveau');
 
-      $disques.removeClass('rouge eteint');
-      $disques.addClass((i) => (i <= position ? 'rouge' : 'eteint'));
-      $('input', $r).val(niveau);
-      $('.legende', $r).text(niveau);
+      metsAJourAffichageNiveauGravite($r, niveau);
     });
   };
 
@@ -43,8 +51,11 @@ $(() => {
 
   const peupleRisquesGeneraux = (selecteurDonnees) => {
     const donneesRisques = JSON.parse($(selecteurDonnees).text());
-    donneesRisques.forEach(({ id, commentaire }) => {
+    donneesRisques.forEach(({ id, commentaire, niveauGravite }) => {
       if (commentaire) $(`#commentaire-${id}`).show().val(texteHTML(commentaire));
+
+      const $risque = $(`.risque#${id}`);
+      if (niveauGravite) metsAJourAffichageNiveauGravite($risque, niveauGravite);
     });
   };
 

@@ -44,6 +44,8 @@ block formulaire
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
+  script(id = 'donnees-referentiel-niveaux-gravite-risque', type = 'application/json').
+    !{JSON.stringify(referentiel.niveauxGravite())}
   script(id = 'donnees-risques-generaux', type = 'application/json').
     !{JSON.stringify(homologation.risques.toJSON().risquesGeneraux || [])}
   script(id = 'donnees-risques-specifiques', type = 'application/json').
