@@ -213,7 +213,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     (requete, reponse, suite) => {
       const {
         nomService,
-        natureService,
+        typeService,
         provenanceService,
         dejaMisEnLigne,
         fonctionnalites,
@@ -225,7 +225,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
       depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
         nomService,
-        natureService,
+        typeService,
         provenanceService,
         dejaMisEnLigne,
         fonctionnalites,

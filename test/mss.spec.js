@@ -456,7 +456,7 @@ describe('Le serveur MSS', () => {
         expect(idUtilisateur).to.equal('123');
         expect(donneesHomologation).to.eql({
           nomService: 'Super Service',
-          natureService: undefined,
+          typeService: undefined,
           provenanceService: undefined,
           dejaMisEnLigne: undefined,
           fonctionnalites: undefined,

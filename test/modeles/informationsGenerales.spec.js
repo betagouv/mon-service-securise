@@ -13,7 +13,7 @@ describe('Les informations générales', () => {
       delaiAvantImpactCritique: 'unDelai',
       donneesCaracterePersonnel: ['desDonnees'],
       fonctionnalites: ['uneFonctionnalite'],
-      natureService: ['uneNature'],
+      typeService: ['unType'],
       nomService: 'Super Service',
       pointsAcces: [{ description: 'Une description' }],
       presenceResponsable: 'non',
@@ -24,7 +24,7 @@ describe('Les informations générales', () => {
     expect(infos.delaiAvantImpactCritique).to.equal('unDelai');
     expect(infos.donneesCaracterePersonnel).to.eql(['desDonnees']);
     expect(infos.fonctionnalites).to.eql(['uneFonctionnalite']);
-    expect(infos.natureService).to.eql(['uneNature']);
+    expect(infos.typeService).to.eql(['unType']);
     expect(infos.nomService).to.equal('Super Service');
     expect(infos.presenceResponsable).to.be('non');
     expect(infos.provenanceService).to.eql(['uneProvenance']);
@@ -32,23 +32,23 @@ describe('Les informations générales', () => {
     expect(infos.nombrePointsAcces()).to.equal(1);
   });
 
-  elles('décrivent la nature du service', () => {
+  elles('décrivent le type service', () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: {
-        uneNature: { description: 'Une nature' },
-        uneAutre: { description: 'Une autre' },
+        unType: { description: 'Un type' },
+        unAutre: { description: 'Un autre' },
       },
     });
     const infos = new InformationsGenerales({
-      nomService: 'nom', natureService: ['uneNature', 'uneAutre'],
+      nomService: 'nom', typeService: ['unType', 'unAutre'],
     }, referentiel);
 
-    expect(infos.descriptionNatureService()).to.equal('Une nature, Une autre');
+    expect(infos.descriptionTypeService()).to.equal('Un type, Un autre');
   });
 
-  elles("se comportent correctement si la nature du service n'est pas présente", () => {
+  elles("se comportent correctement si le type de service n'est pas présent", () => {
     const infos = new InformationsGenerales();
-    expect(infos.descriptionNatureService()).to.equal('Type de service non renseignée');
+    expect(infos.descriptionTypeService()).to.equal('Type de service non renseignée');
   });
 
   elles("détectent qu'elles sont encore à saisir", () => {
