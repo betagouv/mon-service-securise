@@ -74,7 +74,7 @@ mixin formulaireInformationsGenerales(idHomologation)
       +inputChoix({
         type: 'radio',
         nom: 'delaiAvantImpactCritique',
-        titre: 'Au bout de combien de temps le dysfonctionnement grave de votre service aura-t-il un impact critique pour votre organisation ou pour les usagers ?',
+        titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
         items: referentiel.delaisAvantImpactCritique(),
         objetDonnees: homologation.informationsGenerales,
       })
