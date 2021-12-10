@@ -10,6 +10,7 @@ const {
 const MSS = require('../src/mss');
 const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
+const FonctionnalitesSupplementaires = require('../src/modeles/fonctionnalitesSupplementaires');
 const Homologation = require('../src/modeles/homologation');
 const PointsAcces = require('../src/modeles/pointsAcces');
 
@@ -49,7 +50,7 @@ describe('Le serveur MSS', () => {
   let idUtilisateurCourant;
   let headersPositionnes;
   let headersAvecNoncePositionnes;
-  let listeAseptise;
+  let listesAseptisees;
   let parametresAseptises;
   let rechercheHomologationEffectuee;
   let suppressionCookieEffectuee;
@@ -96,9 +97,10 @@ describe('Le serveur MSS', () => {
     }, ...params);
   };
 
-  const verifieAseptisationListe = (nomListe, proprietesParametre) => {
-    expect(nomListe).to.equal(listeAseptise?.nomListe);
-    expect(proprietesParametre).to.eql(listeAseptise?.proprietesParametre);
+  const verifieAseptisationListe = (nom, proprietesParametre) => {
+    expect(listesAseptisees.some((liste) => liste?.nom === nom)).to.be(true);
+    const listeRecherche = listesAseptisees.find((liste) => liste.nom === nom);
+    expect(listeRecherche?.proprietesParametre).to.eql(proprietesParametre);
   };
 
   const verifieJetonDepose = (reponse, suite) => {
@@ -128,8 +130,8 @@ describe('Le serveur MSS', () => {
       suite();
     },
 
-    aseptiseListe: (nomListe, proprietesParametre) => (requete, reponse, suite) => {
-      listeAseptise = { nomListe, proprietesParametre };
+    aseptiseListe: (nom, proprietesParametre) => (requete, reponse, suite) => {
+      listesAseptisees.push({ nom, proprietesParametre });
       suite();
     },
 
@@ -173,6 +175,7 @@ describe('Le serveur MSS', () => {
     headersPositionnes = false;
     idUtilisateurCourant = undefined;
     headersAvecNoncePositionnes = false;
+    listesAseptisees = [];
     parametresAseptises = [];
     rechercheHomologationEffectuee = false;
     suppressionCookieEffectuee = false;
@@ -405,7 +408,7 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres', (done) => {
       verifieAseptisationParametres(
-        ['nomService', 'pointsAcces.*.description'],
+        ['nomService', 'pointsAcces.*.description', 'fonctionnalitesSupplementaires.*.description'],
         { method: 'post', url: 'http://localhost:1234/api/homologation' },
         done
       );
@@ -424,6 +427,24 @@ describe('Le serveur MSS', () => {
       axios.post('http://localhost:1234/api/homologation', { pointsAcces })
         .then(() => {
           verifieAseptisationListe('pointsAcces', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('aseptise la liste des fonctionnalités supplémentaires des descriptions vides', (done) => {
+      const fonctionnalitesSupplementaires = new FonctionnalitesSupplementaires({
+        fonctionnalitesSupplementaires: [
+          { description: 'une description' },
+          { description: null },
+        ],
+      });
+
+      depotDonnees.nouvelleHomologation = () => Promise.resolve();
+
+      axios.post('http://localhost:1234/api/homologation', { fonctionnalitesSupplementaires })
+        .then(() => {
+          verifieAseptisationListe('fonctionnalitesSupplementaires', ['description']);
           done();
         })
         .catch(done);
@@ -460,6 +481,7 @@ describe('Le serveur MSS', () => {
           provenanceService: undefined,
           dejaMisEnLigne: undefined,
           fonctionnalites: undefined,
+          fonctionnalitesSupplementaires: undefined,
           donneesCaracterePersonnel: undefined,
           delaiAvantImpactCritique: undefined,
           presenceResponsable: undefined,
@@ -491,7 +513,7 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres', (done) => {
       verifieAseptisationParametres(
-        ['nomService', 'pointsAcces.*.description'],
+        ['nomService', 'pointsAcces.*.description', 'fonctionnalitesSupplementaires.*.description'],
         { method: 'put', url: 'http://localhost:1234/api/homologation/456' },
         done
       );
@@ -510,6 +532,24 @@ describe('Le serveur MSS', () => {
       axios.put('http://localhost:1234/api/homologation/456', { pointsAcces })
         .then(() => {
           verifieAseptisationListe('pointsAcces', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('aseptise la liste des fonctionnalités supplémentaires des descriptions vides', (done) => {
+      const fonctionnalitesSupplementaires = new FonctionnalitesSupplementaires({
+        fonctionnalitesSupplementaires: [
+          { description: 'une description' },
+          { description: null },
+        ],
+      });
+
+      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
+
+      axios.put('http://localhost:1234/api/homologation/456', { fonctionnalitesSupplementaires })
+        .then(() => {
+          verifieAseptisationListe('fonctionnalitesSupplementaires', ['description']);
           done();
         })
         .catch(done);
