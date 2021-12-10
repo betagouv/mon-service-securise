@@ -208,8 +208,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.post('/api/homologation',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('nomService', 'pointsAcces.*.description'),
+    middleware.aseptise('nomService', 'pointsAcces.*.description', 'fonctionnalitesSupplementaires.*.description'),
     middleware.aseptiseListe('pointsAcces', PointAcces.proprietes()),
+    middleware.aseptiseListe('fonctionnalitesSupplementaires', ['description']),
     (requete, reponse, suite) => {
       const {
         nomService,
@@ -217,6 +218,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         provenanceService,
         dejaMisEnLigne,
         fonctionnalites,
+        fonctionnalitesSupplementaires,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
@@ -229,6 +231,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         provenanceService,
         dejaMisEnLigne,
         fonctionnalites,
+        fonctionnalitesSupplementaires,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
@@ -243,8 +246,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.put('/api/homologation/:id',
     middleware.trouveHomologation,
-    middleware.aseptise('nomService', 'pointsAcces.*.description'),
+    middleware.aseptise('nomService', 'pointsAcces.*.description', 'fonctionnalitesSupplementaires.*.description'),
     middleware.aseptiseListe('pointsAcces', ['description']),
+    middleware.aseptiseListe('fonctionnalitesSupplementaires', ['description']),
     (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
