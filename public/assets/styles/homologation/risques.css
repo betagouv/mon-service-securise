@@ -22,22 +22,26 @@
   background-repeat: no-repeat;
 }
 
-.risque .synthese {
+.synthese {
   display: flex;
   align-items: center;
+  gap: 2em;
+}
+
+.synthese .titre, .synthese input[name^=description-risque-specifique] {
+  flex-basis: 67%;
 }
 
 .synthese .titre {
-  flex-basis: 67%;
   font-weight: bold;
 }
 
-.risque .curseur {
+.niveau-gravite .curseur {
   display: flex;
   gap: 0.4em;
 }
 
-.risque .disque {
+.niveau-gravite .disque {
   height: 1em;
   width: 1em;
 
@@ -47,41 +51,41 @@
   background: #ebedf0;
 }
 
-.risque .disque:hover {
+.niveau-gravite .disque:hover {
   cursor: pointer;
-
   border-color: black;
 }
 
-.risque .disque.cercle {
+.niveau-gravite .disque.cercle {
   border: solid .5px black;
 }
 
-.risque .disque.eteint {
+.niveau-gravite .disque.eteint {
   background: #ebedf0;
 }
 
-.risque .disque.blanc {
+.niveau-gravite .disque.blanc {
   background: #fff;
 }
 
-.risque .disque.vert {
+.niveau-gravite .disque.vert {
   background: #1aaf54;
 }
 
-.risque .disque.jaune {
+.niveau-gravite .disque.jaune {
   background: #fcdf41;
 }
 
-.risque .disque.orange {
+.niveau-gravite .disque.orange {
   background: #f9b049;
 }
 
-.risque .disque.rouge {
+.niveau-gravite .disque.rouge {
   background: red;
 }
 
-.risque .niveau-gravite .legende {
+.niveau-gravite .legende {
   height: 1.4em;
   font-size: 0.7em;
+  font-weight: normal;
 }
