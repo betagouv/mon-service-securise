@@ -415,16 +415,9 @@ describe('Le serveur MSS', () => {
     });
 
     it("aseptise la liste des points d'accès des descriptions vides", (done) => {
-      const pointsAcces = new PointsAcces({
-        pointsAcces: [
-          { description: 'une description' },
-          { description: null },
-        ],
-      });
-
       depotDonnees.nouvelleHomologation = () => Promise.resolve();
 
-      axios.post('http://localhost:1234/api/homologation', { pointsAcces })
+      axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('pointsAcces', ['description']);
           done();
@@ -433,16 +426,9 @@ describe('Le serveur MSS', () => {
     });
 
     it('aseptise la liste des fonctionnalités supplémentaires des descriptions vides', (done) => {
-      const fonctionnalitesSupplementaires = new FonctionnalitesSupplementaires({
-        fonctionnalitesSupplementaires: [
-          { description: 'une description' },
-          { description: null },
-        ],
-      });
-
       depotDonnees.nouvelleHomologation = () => Promise.resolve();
 
-      axios.post('http://localhost:1234/api/homologation', { fonctionnalitesSupplementaires })
+      axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSupplementaires', ['description']);
           done();
