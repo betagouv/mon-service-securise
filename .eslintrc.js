@@ -35,7 +35,7 @@ module.exports = {
     }],
   },
   overrides: [{
-    files: ['public/*/*.js'],
+    files: ['public/**/*.js'],
     rules: { 'import/extensions': ['error', 'always'] },
   }, {
     files: ['test/*/*.js'],
