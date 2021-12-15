@@ -363,9 +363,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         ajouts
           .then(() => {
             const aPersister = risquesSpecifiques.filter((r) => r?.description || r?.commentaire);
-            const listeRisquesSpecifiques = new RisquesSpecifiques(
-              { risquesSpecifiques: aPersister },
-            );
+            const listeRisquesSpecifiques = new RisquesSpecifiques({
+              risquesSpecifiques: aPersister,
+            }, referentiel);
 
             return depotDonnees.remplaceRisquesSpecifiquesPourHomologation(
               idHomologation, listeRisquesSpecifiques,
