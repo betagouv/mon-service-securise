@@ -1,4 +1,7 @@
-import { brancheComportementSaisieNiveauGravite } from '../interactions/saisieNiveauGravite.js';
+import {
+  brancheComportementSaisieNiveauGravite,
+  metsAJourAffichageNiveauGravite,
+} from '../interactions/saisieNiveauGravite.js';
 
 const $inputDescription = (index, description) => (
   $(`
@@ -28,6 +31,11 @@ const $saisieNiveauGravite = (index, niveauGravite, niveaux) => {
   `);
   $conteneurSaisie.append($curseur(niveaux), $('<div class="legende"></div>'));
   brancheComportementSaisieNiveauGravite($conteneurSaisie, niveaux);
+
+  if (niveauGravite) {
+    const { position, description } = niveaux[niveauGravite];
+    metsAJourAffichageNiveauGravite($conteneurSaisie, niveauGravite, position, description);
+  }
 
   return $conteneurSaisie;
 };
