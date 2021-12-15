@@ -70,8 +70,9 @@ const afficheModaleSeuilCritique = () => afficheModale(`
 const organiseParametresPointsAcces = (params) => (
   modifieParametresAvecItemsExtraits(params, 'pointsAcces', '^(description)-point-acces-')
 );
+
 const organiseParametresFonctionnalite = (params) => (
-  modifieParametresAvecItemsExtraits(params, 'fonctionnalitesSupplementaires', '^(description)-fonctionnalite-')
+  modifieParametresAvecItemsExtraits(params, 'fonctionnalitesSpecifiques', '^(description)-fonctionnalite-')
 );
 
 const tousLesParametres = (selecteurFormulaire) => {

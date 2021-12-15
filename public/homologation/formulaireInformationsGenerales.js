@@ -3,8 +3,8 @@ import ElementsAjoutables from '../modules/elementsAjoutables.js';
 $(() => {
   ElementsAjoutables.nouveaux(
     { nom: 'fonctionnalite' },
-    '#fonctionnalites-supplementaires',
-    '#donnees-fonctionnalites-suppementaires',
+    '#fonctionnalites-specifiques',
+    '#donnees-fonctionnalites-specifiques',
     '.nouvelle-fonctionnalite'
   );
 

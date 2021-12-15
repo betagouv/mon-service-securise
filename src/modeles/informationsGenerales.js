@@ -1,4 +1,4 @@
-const FonctionnalitesSupplementaires = require('./fonctionnalitesSupplementaires');
+const FonctionnalitesSpecifiques = require('./fonctionnalitesSpecifiques');
 const InformationsHomologation = require('./informationsHomologation');
 const PointsAcces = require('./pointsAcces');
 const Referentiel = require('../referentiel');
@@ -17,7 +17,7 @@ class InformationsGenerales extends InformationsHomologation {
       'provenanceService',
     ], {
       pointsAcces: PointsAcces,
-      fonctionnalitesSupplementaires: FonctionnalitesSupplementaires,
+      fonctionnalitesSpecifiques: FonctionnalitesSpecifiques,
     });
 
     this.renseigneProprietes(donnees);
@@ -29,8 +29,8 @@ class InformationsGenerales extends InformationsHomologation {
     return this.referentiel.typeService(this.typeService);
   }
 
-  nombreFonctionnalitesSupplementaires() {
-    return this.fonctionnalitesSupplementaires.nombre();
+  nombreFonctionnalitesSpecifiques() {
+    return this.fonctionnalitesSpecifiques.nombre();
   }
 
   nombrePointsAcces() {

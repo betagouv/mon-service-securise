@@ -10,7 +10,7 @@ const {
 const MSS = require('../src/mss');
 const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
-const FonctionnalitesSupplementaires = require('../src/modeles/fonctionnalitesSupplementaires');
+const FonctionnalitesSpecifiques = require('../src/modeles/fonctionnalitesSpecifiques');
 const Homologation = require('../src/modeles/homologation');
 const PointsAcces = require('../src/modeles/pointsAcces');
 
@@ -408,7 +408,7 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres', (done) => {
       verifieAseptisationParametres(
-        ['nomService', 'pointsAcces.*.description', 'fonctionnalitesSupplementaires.*.description'],
+        ['nomService', 'pointsAcces.*.description', 'fonctionnalitesSpecifiques.*.description'],
         { method: 'post', url: 'http://localhost:1234/api/homologation' },
         done
       );
@@ -425,12 +425,12 @@ describe('Le serveur MSS', () => {
         .catch(done);
     });
 
-    it('aseptise la liste des fonctionnalités supplémentaires des descriptions vides', (done) => {
+    it('aseptise la liste des fonctionnalités spécifiques des descriptions vides', (done) => {
       depotDonnees.nouvelleHomologation = () => Promise.resolve();
 
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
-          verifieAseptisationListe('fonctionnalitesSupplementaires', ['description']);
+          verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
           done();
         })
         .catch(done);
@@ -467,7 +467,7 @@ describe('Le serveur MSS', () => {
           provenanceService: undefined,
           dejaMisEnLigne: undefined,
           fonctionnalites: undefined,
-          fonctionnalitesSupplementaires: undefined,
+          fonctionnalitesSpecifiques: undefined,
           donneesCaracterePersonnel: undefined,
           delaiAvantImpactCritique: undefined,
           presenceResponsable: undefined,
@@ -499,7 +499,7 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres', (done) => {
       verifieAseptisationParametres(
-        ['nomService', 'pointsAcces.*.description', 'fonctionnalitesSupplementaires.*.description'],
+        ['nomService', 'pointsAcces.*.description', 'fonctionnalitesSpecifiques.*.description'],
         { method: 'put', url: 'http://localhost:1234/api/homologation/456' },
         done
       );
@@ -523,9 +523,9 @@ describe('Le serveur MSS', () => {
         .catch(done);
     });
 
-    it('aseptise la liste des fonctionnalités supplémentaires des descriptions vides', (done) => {
-      const fonctionnalitesSupplementaires = new FonctionnalitesSupplementaires({
-        fonctionnalitesSupplementaires: [
+    it('aseptise la liste des fonctionnalités spécifiques des descriptions vides', (done) => {
+      const fonctionnalitesSpecifiques = new FonctionnalitesSpecifiques({
+        fonctionnalitesSpecifiques: [
           { description: 'une description' },
           { description: null },
         ],
@@ -533,9 +533,9 @@ describe('Le serveur MSS', () => {
 
       depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
 
-      axios.put('http://localhost:1234/api/homologation/456', { fonctionnalitesSupplementaires })
+      axios.put('http://localhost:1234/api/homologation/456', { fonctionnalitesSpecifiques })
         .then(() => {
-          verifieAseptisationListe('fonctionnalitesSupplementaires', ['description']);
+          verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
           done();
         })
         .catch(done);
