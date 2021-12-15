@@ -798,7 +798,12 @@ describe('Le serveur MSS', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       verifieAseptisationParametres(
-        ['*', 'risquesSpecifiques.*.description', 'risquesSpecifiques.*.commentaire'],
+        [
+          '*',
+          'risquesSpecifiques.*.description',
+          'risquesSpecifiques.*.niveauGravite',
+          'risquesSpecifiques.*.commentaire',
+        ],
         { method: 'post', url: 'http://localhost:1234/api/homologation/456/risques' },
         done
       );
@@ -854,15 +859,18 @@ describe('Le serveur MSS', () => {
     });
 
     it('filtre les risques spécifiques vides', (done) => {
+      referentiel.recharge({ niveauxGravite: { unNiveau: {} } });
+
       let risquesRemplaces = false;
       depotDonnees.remplaceRisquesSpecifiquesPourHomologation = (_, risques) => {
-        expect(risques.nombre()).to.equal(1);
+        expect(risques.nombre()).to.equal(2);
         risquesRemplaces = true;
         return Promise.resolve();
       };
 
       const risquesSpecifiques = [];
       risquesSpecifiques[2] = { description: 'Un risque spécifique' };
+      risquesSpecifiques[5] = { niveauGravite: 'unNiveau' };
 
       axios.post('http://localhost:1234/api/homologation/456/risques', { risquesSpecifiques })
         .then(() => expect(risquesRemplaces).to.be(true))
