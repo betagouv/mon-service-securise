@@ -56,7 +56,7 @@ mixin formulaireInformationsGenerales(idHomologation)
         objetDonnees: homologation.informationsGenerales,
       })
 
-      #fonctionnalites-supplementaires
+      #fonctionnalites-specifiques
       a.nouvel-item.nouvelle-fonctionnalite Ajouter une fonctionnalité
 
     section
@@ -91,6 +91,6 @@ mixin formulaireInformationsGenerales(idHomologation)
 
   script(id = 'donneesPointsAcces', type = 'application/json').
     !{JSON.stringify(homologation.informationsGenerales.pointsAcces.toJSON()) }
-  script(id = 'donnees-fonctionnalites-suppementaires', type = 'application/json').
-    !{(homologation.informationsGenerales.fonctionnalitesSupplementaires) ? JSON.stringify(homologation.informationsGenerales.fonctionnalitesSupplementaires.toJSON()) : '[]'}
+  script(id = 'donnees-fonctionnalites-specifiques', type = 'application/json').
+    !{(homologation.informationsGenerales.fonctionnalitesSpecifiques) ? JSON.stringify(homologation.informationsGenerales.fonctionnalitesSpecifiques.toJSON()) : '[]'}
   script(type = 'module', src = '/statique/homologation/formulaireInformationsGenerales.js')

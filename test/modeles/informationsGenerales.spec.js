@@ -12,7 +12,8 @@ describe('Les informations générales', () => {
       dejaMisEnLigne: 'oui',
       delaiAvantImpactCritique: 'unDelai',
       donneesCaracterePersonnel: ['desDonnees'],
-      fonctionnalites: ['uneFonctionnalite'],fonctionnalitesSupplementaires: [{ description: 'Une fonctionnalité' }],
+      fonctionnalites: ['uneFonctionnalite'],
+      fonctionnalitesSpecifiques: [{ description: 'Une fonctionnalité' }],
       typeService: ['unType'],
       nomService: 'Super Service',
       pointsAcces: [{ description: 'Une description' }],
@@ -30,7 +31,7 @@ describe('Les informations générales', () => {
     expect(infos.provenanceService).to.eql(['uneProvenance']);
 
     expect(infos.nombrePointsAcces()).to.equal(1);
-    expect(infos.nombreFonctionnalitesSupplementaires()).to.equal(1);
+    expect(infos.nombreFonctionnalitesSpecifiques()).to.equal(1);
   });
 
   elles('décrivent le type service', () => {
