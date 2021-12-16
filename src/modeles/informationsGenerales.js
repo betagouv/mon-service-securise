@@ -9,7 +9,6 @@ class InformationsGenerales extends InformationsHomologation {
     super({
       proprietesAtomiquesRequises: [
         'delaiAvantImpactCritique',
-        'dejaMisEnLigne',
         'nomService',
         'presenceResponsable',
         'statutDeploiement',

@@ -465,7 +465,6 @@ describe('Le serveur MSS', () => {
           nomService: 'Super Service',
           typeService: undefined,
           provenanceService: undefined,
-          dejaMisEnLigne: undefined,
           fonctionnalites: undefined,
           fonctionnalitesSpecifiques: undefined,
           donneesCaracterePersonnel: undefined,

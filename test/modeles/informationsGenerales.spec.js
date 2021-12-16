@@ -14,7 +14,6 @@ describe('Les informations générales', () => {
 
   elles('connaissent leurs constituants', () => {
     const infos = new InformationsGenerales({
-      dejaMisEnLigne: 'oui',
       delaiAvantImpactCritique: 'unDelai',
       donneesCaracterePersonnel: ['desDonnees'],
       fonctionnalites: ['uneFonctionnalite'],
@@ -28,7 +27,6 @@ describe('Les informations générales', () => {
       statutDeploiement: 'unStatut',
     }, referentielAvecStatutValide('unStatut'));
 
-    expect(infos.dejaMisEnLigne).to.be('oui');
     expect(infos.delaiAvantImpactCritique).to.equal('unDelai');
     expect(infos.donneesCaracterePersonnel).to.eql(['desDonnees']);
     expect(infos.fonctionnalites).to.eql(['uneFonctionnalite']);
@@ -85,7 +83,6 @@ describe('Les informations générales', () => {
   elles("détectent qu'elles sont complètement saisies", () => {
     const infos = new InformationsGenerales({
       nomService: 'Super Service',
-      dejaMisEnLigne: 'non',
       delaiAvantImpactCritique: 'uneJournee',
       presenceResponsable: 'oui',
       statutDeploiement: 'accessible',
