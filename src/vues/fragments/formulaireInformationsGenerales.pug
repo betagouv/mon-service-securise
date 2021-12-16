@@ -89,7 +89,7 @@ mixin formulaireInformationsGenerales(idHomologation)
       .bouton#diagnostic Continuer &nbsp;&nbsp;›
 
 
-  script(id = 'donneesPointsAcces', type = 'application/json').
+  script(id = 'donnees-points-acces', type = 'application/json').
     !{JSON.stringify(homologation.informationsGenerales.pointsAcces.toJSON()) }
   script(id = 'donnees-fonctionnalites-specifiques', type = 'application/json').
     !{(homologation.informationsGenerales.fonctionnalitesSpecifiques) ? JSON.stringify(homologation.informationsGenerales.fonctionnalitesSpecifiques.toJSON()) : '[]'}

@@ -11,7 +11,7 @@ $(() => {
   ElementsAjoutables.nouveaux(
     { nom: 'point-acces', valeurExemple: 'exemple : https://www.adresse.fr, App Store, Play Store…' },
     '#points-acces',
-    '#donneesPointsAcces',
+    '#donnees-points-acces',
     '.nouveau-point-acces'
   );
 });
