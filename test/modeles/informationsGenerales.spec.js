@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 
+const { ErreurStatutDeploiementInvalide } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const InformationsGenerales = require('../../src/modeles/informationsGenerales');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
@@ -7,6 +8,10 @@ const InformationsHomologation = require('../../src/modeles/informationsHomologa
 const elles = it;
 
 describe('Les informations générales', () => {
+  const referentielAvecStatutValide = (statut) => Referentiel.creeReferentiel({
+    statutsDeploiement: { [statut]: {} },
+  });
+
   elles('connaissent leurs constituants', () => {
     const infos = new InformationsGenerales({
       dejaMisEnLigne: 'oui',
@@ -20,7 +25,8 @@ describe('Les informations générales', () => {
       presenceResponsable: 'non',
       presentation: 'Une présentation du service',
       provenanceService: ['uneProvenance'],
-    });
+      statutDeploiement: 'unStatut',
+    }, referentielAvecStatutValide('unStatut'));
 
     expect(infos.dejaMisEnLigne).to.be('oui');
     expect(infos.delaiAvantImpactCritique).to.equal('unDelai');
@@ -31,6 +37,7 @@ describe('Les informations générales', () => {
     expect(infos.presenceResponsable).to.be('non');
     expect(infos.presentation).to.equal('Une présentation du service');
     expect(infos.provenanceService).to.eql(['uneProvenance']);
+    expect(infos.statutDeploiement).to.eql('unStatut');
 
     expect(infos.nombrePointsAcces()).to.equal(1);
     expect(infos.nombreFonctionnalitesSpecifiques()).to.equal(1);
@@ -55,6 +62,16 @@ describe('Les informations générales', () => {
     expect(infos.descriptionTypeService()).to.equal('Type de service non renseignée');
   });
 
+  elles('valident que le statut de déploiement est bien du référentiel', () => {
+    const referentiel = Referentiel.creeReferentiel({ statutsDeploiement: {} });
+    const creeInfos = () => new InformationsGenerales({ statutDeploiement: 'pasAccessible' }, referentiel);
+
+    expect(creeInfos).to.throwException((error) => {
+      expect(error).to.be.a(ErreurStatutDeploiementInvalide);
+      expect(error.message).to.equal('Le statut de déploiement "pasAccessible" est invalide');
+    });
+  });
+
   elles("détectent qu'elles sont encore à saisir", () => {
     const infos = new InformationsGenerales();
     expect(infos.statutSaisie()).to.equal(InformationsHomologation.A_SAISIR);
@@ -71,7 +88,8 @@ describe('Les informations générales', () => {
       dejaMisEnLigne: 'non',
       delaiAvantImpactCritique: 'uneJournee',
       presenceResponsable: 'oui',
-    });
+      statutDeploiement: 'accessible',
+    }, referentielAvecStatutValide('accessible'));
 
     expect(infos.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
   });

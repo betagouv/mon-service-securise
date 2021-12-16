@@ -472,6 +472,7 @@ describe('Le serveur MSS', () => {
           delaiAvantImpactCritique: undefined,
           presenceResponsable: undefined,
           pointsAcces: undefined,
+          statutDeploiement: undefined,
         });
         return Promise.resolve('456');
       };
