@@ -36,12 +36,6 @@ mixin formulaireInformationsGenerales(idHomologation)
         objetDonnees: homologation.informationsGenerales,
       })
 
-      +inputOuiNon({
-        nom: 'dejaMisEnLigne',
-        titre: 'Le service numérique est-il déjà en ligne ?',
-        objetDonnees: homologation.informationsGenerales,
-      })
-      
       +inputChoix({
         type: 'radio',
         nom: 'statutDeploiement',
