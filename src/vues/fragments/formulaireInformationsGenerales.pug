@@ -45,7 +45,7 @@ mixin formulaireInformationsGenerales(idHomologation)
       label Accès au service numérique
         br
         #points-acces
-        a.nouvel-item.nouveau-point-acces Ajouter un accès
+        a.nouvel-item#nouveau-point-acces Ajouter un accès
 
     section
       +inputChoix({
@@ -57,7 +57,7 @@ mixin formulaireInformationsGenerales(idHomologation)
       })
 
       #fonctionnalites-specifiques
-      a.nouvel-item.nouvelle-fonctionnalite Ajouter une fonctionnalité
+      a.nouvel-item#nouvelle-fonctionnalite Ajouter une fonctionnalité
 
     section
       +inputChoix({
@@ -92,5 +92,5 @@ mixin formulaireInformationsGenerales(idHomologation)
   script(id = 'donnees-points-acces', type = 'application/json').
     !{JSON.stringify(homologation.informationsGenerales.pointsAcces.toJSON()) }
   script(id = 'donnees-fonctionnalites-specifiques', type = 'application/json').
-    !{(homologation.informationsGenerales.fonctionnalitesSpecifiques) ? JSON.stringify(homologation.informationsGenerales.fonctionnalitesSpecifiques.toJSON()) : '[]'}
+    !{JSON.stringify(homologation.informationsGenerales.fonctionnalitesSpecifiques.toJSON())}
   script(type = 'module', src = '/statique/homologation/formulaireInformationsGenerales.js')
