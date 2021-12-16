@@ -21,6 +21,8 @@ const creeReferentiel = (donneesReferentiel) => {
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
   const seuilsCriticites = () => donnees.seuilsCriticites;
+  const statutsDeploiement = () => donnees.statutsDeploiement;
+  const statutDeploiementValide = (id) => Object.keys(statutsDeploiement()).includes(id);
   const statutsMesures = () => donnees.statutsMesures;
   const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
 
@@ -98,6 +100,7 @@ const creeReferentiel = (donneesReferentiel) => {
     identifiantsMesures,
     identifiantsNiveauxGravite,
     identifiantsRisques,
+    statutDeploiementValide,
     localisationDonnees,
     localisationsDonnees,
     mesureIndispensable,
@@ -110,6 +113,7 @@ const creeReferentiel = (donneesReferentiel) => {
     risques,
     seuilCriticiteMin,
     seuilsCriticites,
+    statutsDeploiement,
     statutsMesures,
   };
 };
@@ -127,6 +131,7 @@ const creeReferentielVide = () => creeReferentiel({
   niveauxGravite: {},
   provenancesService: {},
   seuilsCriticites: [],
+  statutsDeploiement: {},
   statutsMesures: {},
 });
 

@@ -227,16 +227,16 @@ describe('Le dépôt de données persistées en mémoire', () => {
     it("ne détecte pas de doublon sur le nom de service pour l'homologation en cours de mise à jour", (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         homologations: [
-          { id: '123', informationsGenerales: { nomService: 'Super Service', dejaMisEnLigne: 'non' } },
+          { id: '123', informationsGenerales: { nomService: 'Super Service', presenceResponsable: 'non' } },
         ],
       });
       const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
-      const infos = new InformationsGenerales({ nomService: 'Super Service', dejaMisEnLigne: 'oui' });
+      const infos = new InformationsGenerales({ nomService: 'Super Service', presenceResponsable: 'oui' });
       depot.ajouteInformationsGeneralesAHomologation('123', infos)
         .then(() => depot.homologation('123'))
         .then(({ informationsGenerales }) => {
-          expect(informationsGenerales.dejaMisEnLigne).to.equal('oui');
+          expect(informationsGenerales.presenceResponsable).to.equal('oui');
           done();
         })
         .catch(done);

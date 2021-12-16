@@ -1,3 +1,4 @@
+const { ErreurStatutDeploiementInvalide } = require('../erreurs');
 const FonctionnalitesSpecifiques = require('./fonctionnalitesSpecifiques');
 const InformationsHomologation = require('./informationsHomologation');
 const PointsAcces = require('./pointsAcces');
@@ -11,6 +12,7 @@ class InformationsGenerales extends InformationsHomologation {
         'dejaMisEnLigne',
         'nomService',
         'presenceResponsable',
+        'statutDeploiement',
       ],
       proprietesAtomiquesFacultatives: [
         'presentation',
@@ -26,7 +28,7 @@ class InformationsGenerales extends InformationsHomologation {
         fonctionnalitesSpecifiques: FonctionnalitesSpecifiques,
       },
     });
-
+    InformationsGenerales.valide(donnees, referentiel);
     this.renseigneProprietes(donnees);
 
     this.referentiel = referentiel;
@@ -48,6 +50,16 @@ class InformationsGenerales extends InformationsHomologation {
     return this.referentiel.criticite(
       this.fonctionnalites, this.donneesCaracterePersonnel, this.delaiAvantImpactCritique
     );
+  }
+
+  static valide(donnees, referentiel) {
+    const { statutDeploiement } = donnees;
+
+    if (statutDeploiement && !referentiel.statutDeploiementValide(statutDeploiement)) {
+      throw new ErreurStatutDeploiementInvalide(
+        `Le statut de déploiement "${statutDeploiement}" est invalide`
+      );
+    }
   }
 }
 

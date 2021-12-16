@@ -224,6 +224,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         delaiAvantImpactCritique,
         presenceResponsable,
         pointsAcces,
+        statutDeploiement,
       } = requete.body;
 
       depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
@@ -237,6 +238,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         delaiAvantImpactCritique,
         presenceResponsable,
         pointsAcces,
+        statutDeploiement,
       })
         .then((idHomologation) => reponse.json({ idHomologation }))
         .catch((e) => {

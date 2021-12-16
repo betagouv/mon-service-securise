@@ -19,6 +19,15 @@ module.exports = {
     },
   },
 
+  statutsDeploiement: {
+    accessible: {
+      description: 'Le service est déjà accessible aux utilisateurs',
+    },
+    nonAccessible: {
+      description: 'Le service n’est pas accessible aux utilisateurs',
+    },
+  },
+
   fonctionnalites: {
     newsletter: {
       description: 'Inscription à une newsletter',
