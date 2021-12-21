@@ -13,11 +13,9 @@ module.exports = {
   provenancesService: {
     developpement: {
       description: 'Développé en interne ou par un prestataire au profit de votre organisation',
-      exemple: 'site internet de la commune',
     },
     achat: {
       description: 'Acheté sur étagère auprès d’un fournisseur ou obtenu à titre gratuit',
-      exemple: 'service de visioconférence',
     },
   },
 
