@@ -44,6 +44,13 @@ mixin formulaireInformationsGenerales(idHomologation)
         objetDonnees: homologation.informationsGenerales,
       })
 
+      label Présentation du service numérique
+        textarea(
+          id = 'presentation',
+          name = 'presentation',
+          placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
+        )= homologation.informationsGenerales.presentation
+
       label Accès au service numérique
         br
         #points-acces
