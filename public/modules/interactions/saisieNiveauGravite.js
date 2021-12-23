@@ -16,7 +16,7 @@ const brancheComportementSaisieNiveauGravite = ($parent, niveaux) => {
   $disques.click((e) => {
     e.preventDefault();
     const $disque = $(e.target);
-    const niveau = $disque.attr('niveau');
+    const niveau = $disque.data('niveau');
 
     const { position, description } = niveaux[niveau];
     metsAJourAffichageNiveauGravite($parent, niveau, position, description);
