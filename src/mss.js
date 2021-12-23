@@ -222,6 +222,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
+        presentation,
         pointsAcces,
         statutDeploiement,
       } = requete.body;
@@ -235,9 +236,14 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
+        presentation,
         pointsAcces,
         statutDeploiement,
       })
+        .then((idHomologation) => {
+          depotDonnees.ajoutePresentationACaracteristiques(idHomologation, presentation);
+          return Promise.resolve(idHomologation);
+        })
         .then((idHomologation) => reponse.json({ idHomologation }))
         .catch((e) => {
           if (e instanceof ErreurModele) reponse.status(422).send(e.message);
@@ -253,6 +259,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
+        .then(() => (
+          depotDonnees.ajoutePresentationACaracteristiques(
+            requete.params.id, infosGenerales.presentation
+          )
+        ))
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
         .catch((e) => {
           if (e instanceof ErreurModele) {
@@ -272,7 +283,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
         const { presentation } = caracteristiques;
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
-          .then(() => depotDonnees.ajoutePresentationAHomologation(requete.params.id, presentation))
+          .then(() => (
+            depotDonnees.ajoutePresentationAHomologation(
+              requete.params.id, presentation, referentiel
+            )
+          ))
           .then(() => reponse.send({ idHomologation: requete.homologation.id }));
       } catch {
         reponse.status(422).send('Données invalides');

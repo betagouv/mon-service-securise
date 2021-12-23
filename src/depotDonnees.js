@@ -7,6 +7,7 @@ const {
   ErreurUtilisateurExistant,
 } = require('./erreurs');
 const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
+const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const InformationsGenerales = require('./modeles/informationsGenerales');
 const Utilisateur = require('./modeles/utilisateur');
@@ -107,16 +108,31 @@ const creeDepot = (config = {}) => {
       ))
   );
 
+  const ajoutePresentationAHomologation = (idHomologation, presentation) => (
+    adaptateurPersistance.homologation(idHomologation)
+      .then((homologationTrouvee) => {
+        const informationsGenerales = new InformationsGenerales(
+          homologationTrouvee.informationsGenerales,
+          referentiel
+        );
+        informationsGenerales.presentation = presentation;
+        return metsAJourProprieteHomologation('informationsGenerales', homologationTrouvee, informationsGenerales);
+      })
+  );
+
   const ajouteCaracteristiquesAHomologation = (...params) => (
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
   );
 
-  const ajoutePresentationAHomologation = (idHomologation, presentation) => (
+  const ajoutePresentationACaracteristiques = (idHomologation, presentation) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((h) => {
-        const informationsGenerales = new InformationsGenerales(h.informationsGenerales);
-        informationsGenerales.presentation = presentation;
-        return metsAJourProprieteHomologation('informationsGenerales', h, informationsGenerales);
+        const caracteristiques = new CaracteristiquesComplementaires(
+          h.caracteristiquesComplementaires,
+          referentiel
+        );
+        caracteristiques.presentation = presentation;
+        return metsAJourProprieteHomologation('caracteristiquesComplementaires', h, caracteristiques);
       })
   );
 
@@ -240,6 +256,7 @@ const creeDepot = (config = {}) => {
     ajouteInformationsGeneralesAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
+    ajoutePresentationACaracteristiques,
     ajoutePresentationAHomologation,
     ajouteRisqueGeneralAHomologation,
     homologation,

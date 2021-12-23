@@ -85,6 +85,7 @@ describe('Les informations générales', () => {
       nomService: 'Super Service',
       delaiAvantImpactCritique: 'uneJournee',
       presenceResponsable: 'oui',
+      presentation: 'Une présentation',
       statutDeploiement: 'accessible',
     }, referentielAvecStatutValide('accessible'));
 

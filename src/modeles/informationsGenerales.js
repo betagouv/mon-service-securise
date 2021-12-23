@@ -11,10 +11,8 @@ class InformationsGenerales extends InformationsHomologation {
         'delaiAvantImpactCritique',
         'nomService',
         'presenceResponsable',
-        'statutDeploiement',
-      ],
-      proprietesAtomiquesFacultatives: [
         'presentation',
+        'statutDeploiement',
       ],
       proprietesListes: [
         'donneesCaracterePersonnel',
