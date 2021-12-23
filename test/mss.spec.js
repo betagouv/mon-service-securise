@@ -400,6 +400,11 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation`', () => {
+    beforeEach(() => {
+      depotDonnees.nouvelleHomologation = () => Promise.resolve();
+      depotDonnees.ajoutePresentationACaracteristiques = () => Promise.resolve();
+    });
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeAcceptationCGU(
         { method: 'post', url: 'http://localhost:1234/api/homologation' }, done
@@ -415,8 +420,6 @@ describe('Le serveur MSS', () => {
     });
 
     it("aseptise la liste des points d'accès des descriptions vides", (done) => {
-      depotDonnees.nouvelleHomologation = () => Promise.resolve();
-
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('pointsAcces', ['description']);
@@ -431,6 +434,22 @@ describe('Le serveur MSS', () => {
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("demande au dépôt de données d'ajouter la présentation aux caractéristiques", (done) => {
+      let appelleAjoutePresentationACaracteristiques = false;
+      depotDonnees.ajoutePresentationACaracteristiques = (idHomologation, presentation) => {
+        appelleAjoutePresentationACaracteristiques = true;
+        expect(presentation).to.equal('Une présentation');
+        return Promise.resolve();
+      };
+
+      axios.post('http://localhost:1234/api/homologation', { presentation: 'Une présentation' })
+        .then(() => {
+          expect(appelleAjoutePresentationACaracteristiques).to.be(true);
           done();
         })
         .catch(done);
@@ -470,6 +489,7 @@ describe('Le serveur MSS', () => {
           donneesCaracterePersonnel: undefined,
           delaiAvantImpactCritique: undefined,
           presenceResponsable: undefined,
+          presentation: undefined,
           pointsAcces: undefined,
           statutDeploiement: undefined,
         });
@@ -487,9 +507,10 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
-    beforeEach(() => (
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve()
-    ));
+    beforeEach(() => {
+      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
+      depotDonnees.ajoutePresentationACaracteristiques = () => Promise.resolve();
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation(
@@ -513,8 +534,6 @@ describe('Le serveur MSS', () => {
         ],
       });
 
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
-
       axios.put('http://localhost:1234/api/homologation/456', { pointsAcces })
         .then(() => {
           verifieAseptisationListe('pointsAcces', ['description']);
@@ -536,6 +555,22 @@ describe('Le serveur MSS', () => {
       axios.put('http://localhost:1234/api/homologation/456', { fonctionnalitesSpecifiques })
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("demande au dépôt de données d'ajouter la présentation aux caractéristiques", (done) => {
+      let appelleAjoutePresentationACaracteristiques = false;
+      depotDonnees.ajoutePresentationACaracteristiques = (idHomologation, presentation) => {
+        appelleAjoutePresentationACaracteristiques = true;
+        expect(presentation).to.equal('Une présentation');
+        return Promise.resolve();
+      };
+
+      axios.put('http://localhost:1234/api/homologation/456', { presentation: 'Une présentation' })
+        .then(() => {
+          expect(appelleAjoutePresentationACaracteristiques).to.be(true);
           done();
         })
         .catch(done);
