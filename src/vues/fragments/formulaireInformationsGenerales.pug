@@ -90,7 +90,7 @@ mixin formulaireInformationsGenerales(idHomologation)
       +elementsAjoutables({
               identifiantConteneur: 'donnees-sensibles-specifiques',
               nom: 'donnees-sensibles',
-              donnees: {},
+              donnees: homologation.informationsGenerales.donneesSensiblesSpecifiques.toJSON(),
               textBoutonAjouter: 'Ajouter des données',
             })
 
