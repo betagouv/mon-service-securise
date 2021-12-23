@@ -28,7 +28,7 @@ $(() => {
   };
 
   const ajouteZoneSaisieCommentairePourRisque = ($r, nom) => {
-    const $lien = $('a', $r);
+    const $lien = $('a.informations-additionnelles', $r);
     const $zoneSaisie = $(`<textarea id=${nom} name=${nom}></textarea>`);
     $zoneSaisie.hide();
     $lien.click(() => $zoneSaisie.toggle());

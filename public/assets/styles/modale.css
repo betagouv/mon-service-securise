@@ -65,6 +65,8 @@
 
 .rideau .modale a {
   cursor: pointer;
+}
 
+.rideau .modale a.bloc {
   display: block;
 }

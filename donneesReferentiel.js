@@ -159,28 +159,32 @@ module.exports = {
 
   risques: {
     indisponibiliteService: {
-      description: "L'indisponibilité du service",
-      descriptionLongue: "Ce risque peut notamment découler d'une attaque par déni de service. Elle peut consister à exploiter, par exemple, une vulnérabilité logicielle ou matérielle ou à saturer la bande passante du réseau. Une telle attaque peut rendre inaccessible tout ou partie du service, empêchant son utilisation  pendant une durée de quelques heures à plusieurs jours. L'indisponibilité peut être aussi consécutive d'un problème technique chez l'hébergeur n'ayant pas pris des dispositions nécessaires pour assurer sa résilience.",
+      description: 'Le service numérique et ses données sont tout ou en partie inaccessibles',
+      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si son indisponibilité peut avoir des conséquences graves sur le fonctionnement de l'organisation, de telle sorte qu'un attaquant pourrait chercher à en tirer un avantage financier – via une demande de rançon – ou à nuire au fonctionnement de votre organisation ou à sa réputation. Par exemple, <a href=\"https://www.lemonde.fr/pixels/article/2021/02/15/apres-celui-de-dax-l-hopital-de-villefranche-paralyse-par-un-rancongiciel_6070049_4408996.html\" target=\"_blank\" rel=\"noopener\">les données d'un hôpital public ont été rendues inaccessibles par un rançongiciel</a>, qui constitue l'une des attaques les plus répandues aujourd'hui.",
+    },
+    donneesModifiees: {
+      description: 'Des informations concernant des utilisateurs sont modifiées ou supprimées',
+      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si celui-ci inclut des données dont la modification pourrait bénéficier à une ou plusieurs personnes ou à l'inverse leur porter préjudice, ou nuire à la réputation ou au fonctionnement de votre organisation. Par exemple, <a href=\"https://www.europe1.fr/faits-divers/Un-collegien-pirate-son-proviseur-pour-modifier-ses-notes-en-ligne-781242\" target=\"_blank\" rel=\"noopener\">un attaquant a modifié les notes et le relevé d'assiduité d'élèves en leur faveur depuis l'espace numérique d'un établissement scolaire</a>.",
     },
     divulgationDonnees: {
-      description: "La divulgation de données d'utilisateurs",
-      descriptionLongue: "Le vol de données peut être recherché à des fins d'usurpation d'identité. La diffusion de données afin de discréditer des personnes, organisations ou bien l'entité propriétaire du service elle-même. Cette menace peut être permise par un contrôle d'accès insuffisant ou le piratage de comptes d'utilisateurs (vol d'identifiant / mot de passe) ou plus grave d'administrateurs permettant la prise de contrôle du service, ou encore par la surveillance d'un trafic non chiffré. Les impacts pour le propriétaire du service peuvent être graves en termes de responsabilité juridique et d'image.",
-    },
-    surveillance: {
-      description: 'La surveillance',
-      descriptionLongue: "La menace d'accès illégitime à un échange, à des données à des fins d'information, de renseignement peut viser les services permettant les échanges entre personnes, des données sensibles stockées susceptibles d'intéresser des concurrents ou entités malveillantes souhaitant exploiter ses données à des fins de renseignement. Cette menace peut être permise par un contrôle d'accès insuffisant ou le piratage de comptes d'utilisateurs (vol d'identifiant / mot de passe) ou plus grave d'administrateurs permettant la prise de contrôle du service et l'accès à de nombreuses données, ou encore par la surveillance d'un trafic non chiffré.",
+      description: 'Des informations sont divulguées publiquement',
+      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si celui-ci inclut des informations dont la divulgation publique pourrait porter préjudice aux personnes concernées et à la réputation de votre organisation. Par exemple, <a href=\"https://www.lagazettedescommunes.com/746159/les-donnees-personnelles-dagents-du-grand-annecy-diffusees-cinq-mois-apres-la-cyberattaque/?abo=1\" target=\"_blank\" rel=\"noopener\">un attaquant a déjà diffusé publiquement des données à caractère personnel concernant plusieurs agents d'une collectivité</a>.",
     },
     defigurationSiteWeb: {
-      description: 'La défiguration',
-      descriptionLongue: "Une défiguration est une attaque par laquelle une personne malveillante modifie le site pour remplacer le contenu légitime par un contenu qu'il choisit, par exemple pour relayer un message revendicatif, pour dénigrer le propriétaire du site ou simplement. L'attaque peut avoir des conséquences négatives en termes d'image pour le propriétaire du service.",
-    },
-    logicielsMalveillants: {
-      description: 'Logiciels malveillants',
-      descriptionLongue: "Votre service peut être attaqué en vue de devenir un véhicule pour la diffusion de logiciels malveillants aux utilisateurs de votre service. Cela est rendu possible par l'exploitation de vulnérabilités techniques de votre service, par exemple, si votre service n'a pas été développé avec précaution, si votre service repose sur des logiciels ou équipements n'ayant pas fait l'objet de correctifs de sécurité de vulnérabilités connues. Une telle attaque peut n'avoir aucun impact visible pour le propriétaire du site mais susciter des impacts forts pour les utilisateurs. L'usurpation d'accès d'administrateurs peut également permettre l'envoi de messages malveillants paraissant légitimes aux utilisateurs du service.",
+      description: 'Le service numérique est défiguré',
+      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si sa visibilité est à même d'être exploitée par des attaquants cherchant à diffuser des messages à des fins idéologiques, de revanche ou de simple dégradation. Ce risque est accru si des vulnérabilités facilement identifiables peuvent être exploitées. Par exemple, <a href=\"https://www.europe1.fr/technologies/plusieurs-sites-internet-francais-ont-ete-victimes-de-cyberattaques-4001200\" target=\"_blank\" rel=\"noopener\">des messages ou des images à caractère terroriste ont déjà été affichés sur des sites internet français ainsi défigurés</a>. Votre service numérique peut aussi être concerné par ce risque si la modification discrète des informations affichées peut nuire à des utilisateurs ou à la réputation de votre organisation.",
     },
     arnaques: {
-      description: 'Arnaques',
-      descriptionLongue: "Votre service peut être utilisé à des fins d'arnaques, par exemple, par la création d'un service imitant le vôtre ou envoyant des mails ou SMS ayant l'apparence de messages légitimes, en vue de subtiliser des données, extorquer de l'argent. L'inclusion de code malveillant dans un service numérique peut permettre d'afficher du contenu illicite comme des arnaques au faux support technique.",
+      description: "Des informations dérobées sont utilisées à des fins d'escroquerie",
+      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si celui-ci inclut des informations pouvant être réutilisées à des fins malveillantes, la plupart du temps motivées par le gain financier. Par exemple par leur <a href=\"https://www.hashtagg.fr/2021/03/07/le-business-des-donnees-revendues-sur-le-dark-web/\" target=\"_blank\" rel=\"noopener\">revente</a> sur le dark web, à des fins <a href=\"https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/violation-donnees-ap-hp-formulaire-lettre-plainte-electronique\" target=\"_blank\" rel=\"noopener\">d'arnaque</a>, de spam, d'usurpation d'identité ou pour mener d'autres attaques telles que des campagnes de <a href=\"https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/hameconnage-assurance-maladie-ameli\" target=\"_blank\" rel=\"noopener\">hameçonnage</a>.",
+    },
+    logicielsMalveillants: {
+      description: 'Le service numérique est détourné de son usage initial',
+      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si ses capacités techniques ou encore ses utilisateurs sont susceptibles d'intéresser un attaquant souhaitant mener d'autres actions malveillantes la plupart du temps à des fins de gain financier. Ce risque est accru si des vulnérabilités facilement identifiables peuvent être exploitées. Par exemple, le détournement de la puissance de votre service peut permettre de miner des crypto-monnaies ou <a href=\"https://business.lesechos.fr/directions-numeriques/technologie/cybersecurite/0602985980097-de-nombreux-hackers-utilisent-le-covid-19-a-des-fins-malveillantes-336176.php\" target=\"_blank\" rel=\"noopener\">l'introduction d'un logiciel malveillant visant à infecter des utilisateurs du service</a> peut permettre de dérober des informations.",
+    },
+    surveillance: {
+      description: "Le contenu d'échanges est intercepté",
+      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si l'interception du contenu d'échanges entre agents publics ou avec des usagers peut intéresser des acteurs malveillants à des fins de renseignement, d'espionnage économique. Par exemple, les échanges entre de jeunes entreprises technologiques et une administration soutenant ces dernières pourraient donner accès à des informations privilégiées à de potentiels concurrents sur les « pépites » françaises.",
     },
   },
 

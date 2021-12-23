@@ -1,6 +1,6 @@
 body {
   margin: 10em auto 0;
-  width: 750px;
+  width: 1000px;
 
   background: #fafbfc;
 
@@ -166,7 +166,7 @@ section.risques li, section.detail-risques dt {
   justify-content: flex-end;
   align-items: center;
 
-  height: 3em;
+  height: 4em;
   overflow: hidden;
 
   padding: 0.5em 0.5em 0.5em 3.5em;
