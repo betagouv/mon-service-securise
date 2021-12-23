@@ -12,7 +12,7 @@ const $inputDescription = (index, description) => (
   `)
 );
 
-const $disque = (niveau) => $(`<div class="disque" niveau="${niveau}"></div>`);
+const $disque = (niveau) => $(`<div class="disque" data-niveau="${niveau}"></div>`);
 
 const $curseur = (niveaux) => Object.keys(niveaux)
   .reduce(
