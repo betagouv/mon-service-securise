@@ -17,6 +17,7 @@ describe('Les informations générales', () => {
     const infos = new InformationsGenerales({
       delaiAvantImpactCritique: 'unDelai',
       donneesCaracterePersonnel: ['desDonnees'],
+      donneesSensiblesSpecifiques: [{ description: 'Des données sensibles' }],
       fonctionnalites: ['uneFonctionnalite'],
       fonctionnalitesSpecifiques: [{ description: 'Une fonctionnalité' }],
       localisationDonnees: 'france',
@@ -40,8 +41,9 @@ describe('Les informations générales', () => {
     expect(infos.provenanceService).to.eql(['uneProvenance']);
     expect(infos.statutDeploiement).to.eql('unStatut');
 
-    expect(infos.nombrePointsAcces()).to.equal(1);
+    expect(infos.nombreDonneesSensiblesSpecifiques()).to.equal(1);
     expect(infos.nombreFonctionnalitesSpecifiques()).to.equal(1);
+    expect(infos.nombrePointsAcces()).to.equal(1);
   });
 
   elles('décrivent le type service', () => {
