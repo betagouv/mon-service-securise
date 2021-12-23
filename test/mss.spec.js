@@ -427,11 +427,18 @@ describe('Le serveur MSS', () => {
     });
 
     it('aseptise la liste des fonctionnalités spécifiques ainsi que son contenu', (done) => {
-      depotDonnees.nouvelleHomologation = () => Promise.resolve();
-
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
+      axios.post('http://localhost:1234/api/homologation', {})
+        .then(() => {
+          verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
           done();
         })
         .catch(done);
@@ -469,6 +476,7 @@ describe('Le serveur MSS', () => {
           fonctionnalites: undefined,
           fonctionnalitesSpecifiques: undefined,
           donneesCaracterePersonnel: undefined,
+          donneesSensiblesSpecifiques: undefined,
           delaiAvantImpactCritique: undefined,
           localisationDonnees: undefined,
           presenceResponsable: undefined,
@@ -521,6 +529,15 @@ describe('Le serveur MSS', () => {
       axios.put('http://localhost:1234/api/homologation/456', {})
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
+      axios.put('http://localhost:1234/api/homologation/456', {})
+        .then(() => {
+          verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
           done();
         })
         .catch(done);
