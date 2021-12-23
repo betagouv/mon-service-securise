@@ -150,7 +150,7 @@ module.exports = {
       descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si celui-ci inclut des informations dont la divulgation publique pourrait porter préjudice aux personnes concernées et à la réputation de votre organisation. Par exemple, <a href='un attaquant a déjà diffusé publiquement des données à caractère personnel concernant plusieurs agents d’une collectivité.'>https://www.lagazettedescommunes.com/746159/les-donnees-personnelles-dagents-du-grand-annecy-diffusees-cinq-mois-apres-la-cyberattaque/?abo=1</a>",
     },
     defigurationSiteWeb: {
-      description: 'Le service numérique est « défiguré »',
+      description: 'Le service numérique est défiguré',
       descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si sa visibilité est à même d’être exploitée par des attaquants cherchant à diffuser des messages, à des fins idéologiques, de revanche ou de simple dégradation. Ce risque est accru si des vulnérabilités facilement identifiables peuvent être exploitées. Par exemple, <a href='des messages ou des images à caractère terroriste ont déjà été affichés sur des sites internet français ainsi défigurés'>https://www.europe1.fr/technologies/plusieurs-sites-internet-francais-ont-ete-victimes-de-cyberattaques-4001200</a>. Votre service numérique peut aussi être concerné par ce risque si la modification discrète des informations affichées peut nuire à des utilisateurs ou à la réputation de votre organisation.",
     },
     arnaques: {
