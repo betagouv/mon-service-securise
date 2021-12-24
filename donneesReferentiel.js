@@ -138,15 +138,15 @@ module.exports = {
 
   risques: {
     indisponibiliteService: {
-      description: "Le service numérique et ses données sont tout ou en partie inaccessibles",
-      descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si son indisponibilité peut avoir des conséquences graves sur le fonctionnement de l’organisation, de telle sorte qu’un attaquant pourrait chercher à en tirer un avantage financier – via une demande de rançon – ou à nuire au fonctionnement de votre organisation ou à sa réputation. Par exemple, <a href='les données d’un hôpital public ont déjà été rendues inaccessibles par un rançongiciel'>https://www.lemonde.fr/pixels/article/2021/02/15/apres-celui-de-dax-l-hopital-de-villefranche-paralyse-par-un-rancongiciel_6070049_4408996.html</a>, qui constitue l’une des attaques les plus répandues aujourd’hui.",
+      description: 'Le service numérique et ses données sont tout ou en partie inaccessibles',
+      descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si son indisponibilité peut avoir des conséquences graves sur le fonctionnement de l’organisation, de telle sorte qu’un attaquant pourrait chercher à en tirer un avantage financier – via une demande de rançon – ou à nuire au fonctionnement de votre organisation ou à sa réputation. Par exemple, <a href='les données d’un hôpital public ont été rendues inaccessibles par un rançongiciel'>https://www.lemonde.fr/pixels/article/2021/02/15/apres-celui-de-dax-l-hopital-de-villefranche-paralyse-par-un-rancongiciel_6070049_4408996.html</a>, qui constitue l’une des attaques les plus répandues aujourd’hui.",
     },
     donneesModifiees: {
-      description: "Des informations concernant des utilisateurs sont modifiées ou supprimées",
+      description: 'Des informations concernant des utilisateurs sont modifiées ou supprimées',
       descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si celui-ci inclut des données dont la modification pourrait bénéficier à une ou plusieurs personnes ou à l’inverse leur porter préjudice, ou nuire à la réputation ou au fonctionnement de votre organisation. Par exemple, <a href='un attaquant a modifié les notes et le relevé d’assiduité d’élèves en leur faveur depuis l’espace numérique d’un établissement scolaire.'>https://www.europe1.fr/faits-divers/Un-collegien-pirate-son-proviseur-pour-modifier-ses-notes-en-ligne-781242</a>",
     },
     divulgationDonnees: {
-      description: "Des informations sont divulguées publiquement",
+      description: 'Des informations sont divulguées publiquement',
       descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si celui-ci inclut des informations dont la divulgation publique pourrait porter préjudice aux personnes concernées et à la réputation de votre organisation. Par exemple, <a href='un attaquant a déjà diffusé publiquement des données à caractère personnel concernant plusieurs agents d’une collectivité.'>https://www.lagazettedescommunes.com/746159/les-donnees-personnelles-dagents-du-grand-annecy-diffusees-cinq-mois-apres-la-cyberattaque/?abo=1</a>",
     },
     defigurationSiteWeb: {
@@ -155,7 +155,7 @@ module.exports = {
     },
     arnaques: {
       description: 'Des informations dérobées sont utilisées à des fins d’escroquerie',
-      descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si celui-ci inclut des informations pouvant être réutilisées à des fins malveillantes, la plupart du temps motivées par le gain financier. Par exemple par leur <a href='revente'>https://www.hashtagg.fr/2021/03/07/le-business-des-donnees-revendues-sur-le-dark-web/</a> sur le dark web, à des fins <a href='d’arnaque'>https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/violation-donnees-ap-hp-formulaire-lettre-plainte-electronique</a>, de spam, d’usurpation d’identité ou pour mener d’autres attaques telles que des campagnes de <a href='hameçonnage'>https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/hameconnage-assurance-maladie-ameli</a>.",},
+      descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si celui-ci inclut des informations pouvant être réutilisées à des fins malveillantes, la plupart du temps motivées par le gain financier. Par exemple par leur <a href='revente'>https://www.hashtagg.fr/2021/03/07/le-business-des-donnees-revendues-sur-le-dark-web/</a> sur le dark web, à des fins <a href='d’arnaque'>https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/violation-donnees-ap-hp-formulaire-lettre-plainte-electronique</a>, de spam, d’usurpation d’identité ou pour mener d’autres attaques telles que des campagnes de <a href='hameçonnage'>https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/hameconnage-assurance-maladie-ameli</a>.",
     },
     logicielsMalveillants: {
       description: 'Le service numérique est détourné de son usage initial',
@@ -163,7 +163,7 @@ module.exports = {
     },
     surveillance: {
       description: 'Le contenu d’échanges est intercepté',
-      descriptionLongue: "Votre service numérique est susceptible d’être concerné par ce risque si l’interception du contenu d’échanges entre agents publics ou avec des usagers peut intéresser des acteurs malveillants à des fins de renseignement, d’espionnage économique. Par exemple, les échanges entre de jeunes entreprises technologiques et une administration soutenant ces dernières pourraient donner accès à des informations privilégiées à de potentiels concurrents sur les « pépites » françaises.",
+      descriptionLongue: 'Votre service numérique est susceptible d’être concerné par ce risque si l’interception du contenu d’échanges entre agents publics ou avec des usagers peut intéresser des acteurs malveillants à des fins de renseignement, d’espionnage économique. Par exemple, les échanges entre de jeunes entreprises technologiques et une administration soutenant ces dernières pourraient donner accès à des informations privilégiées à de potentiels concurrents sur les « pépites » françaises.',
   },
 
   categoriesMesures: {
