@@ -81,10 +81,6 @@ module.exports = {
       description: 'Outils de réservation (livres, places, salles, etc.)',
       seuilCriticite: 'faible',
     },
-    autre: {
-      description: 'Autres fonctionnalités permettant des échanges de données',
-      seuilCriticite: 'faible',
-    },
   },
 
   donneesCaracterePersonnel: {
