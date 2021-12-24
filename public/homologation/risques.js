@@ -5,6 +5,10 @@ import texteHTML from '../modules/texteHTML.js';
 $(() => {
   let indexMaxRisquesSpecifiques = 0;
 
+  const COULEURS_NIVEAUX_GRAVITE = ['blanc', 'vert', 'jaune', 'orange', 'rouge'];
+
+  const NIVEAUX_GRAVITE = JSON.parse($('#donnees-referentiel-niveaux-gravite-risque').text());
+
   const ajouteInformationsModales = () => {
     $('.information').click((eInformation) => {
       $('body').css('overflow', 'hidden');
@@ -15,6 +19,28 @@ $(() => {
         $('.rideau', $(eInformation.target)).css('display', '');
         $('body').css('overflow', '');
       });
+    });
+  };
+
+  const metsAJourAffichageNiveauGravite = ($risque, niveau) => {
+    $('input', $risque).val(niveau);
+
+    const { position, description } = NIVEAUX_GRAVITE[niveau];
+    const $disques = $('.disque', $risque);
+    $disques.removeClass('eteint');
+    $disques.removeClass(COULEURS_NIVEAUX_GRAVITE.join(' '));
+    $disques.addClass((i) => (i <= position ? COULEURS_NIVEAUX_GRAVITE[position] : 'eteint'));
+    $disques.first().toggleClass('cercle', position === 0);
+    $('.legende', $risque).text(description);
+  };
+
+  const brancheComportementSaisieNiveauGravite = ($r) => {
+    const $disques = $('.disque', $r);
+    $disques.click((e) => {
+      const $disque = $(e.target);
+      const niveau = $disque.attr('niveau');
+
+      metsAJourAffichageNiveauGravite($r, niveau);
     });
   };
 
@@ -29,8 +55,11 @@ $(() => {
 
   const peupleRisquesGeneraux = (selecteurDonnees) => {
     const donneesRisques = JSON.parse($(selecteurDonnees).text());
-    donneesRisques.forEach(({ id, commentaire }) => {
+    donneesRisques.forEach(({ id, commentaire, niveauGravite }) => {
       if (commentaire) $(`#commentaire-${id}`).show().val(texteHTML(commentaire));
+
+      const $risque = $(`.risque#${id}`);
+      if (niveauGravite) metsAJourAffichageNiveauGravite($risque, niveauGravite);
     });
   };
 
@@ -59,7 +88,11 @@ $(() => {
   );
 
   ajouteInformationsModales();
-  $('.risque').each((_, $r) => ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`));
+  $('.risque').each((_, $r) => {
+    brancheComportementSaisieNiveauGravite($r);
+    ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`);
+  });
+
   peupleRisquesGeneraux('#donnees-risques-generaux');
 
   indexMaxRisquesSpecifiques = peupleRisquesSpecifiques('#risques-specifiques', '#donnees-risques-specifiques');

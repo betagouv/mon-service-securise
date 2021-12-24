@@ -4,10 +4,10 @@ const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)}
 module.exports = {
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
 
-  naturesService: {
+  typesService: {
     siteInternet: { description: 'Site Internet' },
     applicationMobile: { description: 'Application Mobile' },
-    api: { description: 'API' },
+    api: { description: "API mise à disposition par l'organisation" },
   },
 
   provenancesService: {
@@ -26,25 +26,9 @@ module.exports = {
       description: 'Inscription à une newsletter',
       seuilCriticite: 'faible',
     },
-    compte: {
-      description: 'Création de compte (utilisateurs avec comptes)',
-      seuilCriticite: 'faible',
-    },
-    formulaire: {
-      description: 'Formulaire administratif ou démarche en ligne',
-      seuilCriticite: 'faible',
-    },
     questionnaire: {
       description: 'Questionnaires, sondages',
       seuilCriticite: 'faible',
-    },
-    reservation: {
-      description: 'Outils de réservation (livres, places, salles, etc.)',
-      seuilCriticite: 'faible',
-    },
-    paiement: {
-      description: 'Paiement en ligne, conservation de données bancaires',
-      seuilCriticite: 'eleve',
     },
     reseauSocial: {
       description: 'Réseau social, forum, commentaires',
@@ -53,6 +37,18 @@ module.exports = {
     visionconference: {
       description: 'Audio, visioconférence',
       seuilCriticite: 'moyen',
+    },
+    paiement: {
+      description: 'Paiement en ligne',
+      seuilCriticite: 'eleve',
+    },
+    signatureElectronique: {
+      description: 'Dispositif de signature électronique',
+      seuilCriticite: 'eleve',
+    },
+    compte: {
+      description: 'Création de compte (utilisateurs avec comptes)',
+      seuilCriticite: 'faible',
     },
     messagerie: {
       description: 'Messagerie instantanée',
@@ -66,9 +62,17 @@ module.exports = {
       description: 'Stockage de documents',
       seuilCriticite: 'moyen',
     },
+    formulaire: {
+      description: 'Formulaire administratif ou démarche en ligne',
+      seuilCriticite: 'faible',
+    },
     edition: {
       description: 'Édition collaborative (documents, murs collaboratifs, etc.)',
       seuilCriticite: 'moyen',
+    },
+    reservation: {
+      description: 'Outils de réservation (livres, places, salles, etc.)',
+      seuilCriticite: 'faible',
     },
     autre: {
       description: 'Autres fonctionnalités permettant des échanges de données',
@@ -79,27 +83,32 @@ module.exports = {
   donneesCaracterePersonnel: {
     contact: {
       description: 'Données de contact',
-      exemple: 'mail, numéro de téléphone, adresse postale',
+      exemple: 'mail, numéro de téléphone, adresse postale.',
       seuilCriticite: 'faible',
     },
     identite: {
       description: "Données d'identité",
-      exemple: "nom/prénom, pseudonyme, date de maissance, numéros de pièce d'identité, de sécurité sociale, etc.",
+      exemple: 'nom/prénom, pseudonyme, date de naissance, numéro de sécurité sociale.',
+      seuilCriticite: 'faible',
+    },
+    document: {
+      description: "Documents d'identité et autres documents officiels",
+      exemple: 'photo de passeport, titre de séjour.',
       seuilCriticite: 'faible',
     },
     situation: {
       description: 'Données relatives à la situation familiale, économique et financière',
-      exemple: 'enfants',
+      exemple: 'revenus, état civil.',
       seuilCriticite: 'moyen',
     },
     localisation: {
       description: 'Données de localisation',
-      exemple: 'adresse IP, identifiant de connexion, cookies',
+      exemple: 'adresse IP, identifiant de connexion, cookies.',
       seuilCriticite: 'faible',
     },
     banque: {
-      description: 'Données bancaires',
-      exemple: 'nº de carte bancaire, établissement bancaire, etc.',
+      description: 'Données de paiement',
+      exemple: 'nº de carte bancaire, etc.',
       seuilCriticite: 'eleve',
     },
     mineurs: {
@@ -107,9 +116,18 @@ module.exports = {
       seuilCriticite: 'eleve',
     },
     sensibiliteParticuliere: {
-      description: 'Données particulièrement sensibles (santé, opinions, etc.)',
-      exemple: 'données de santé, orientation sexuelle, origine raciale ou ethnique, opinions politiques ou religieuses',
+      description: 'Données de santé et autres données particulièrement sensibles',
+      exemple: 'orientation sexuelle, origine, orientations politiques, religieuses.',
       seuilCriticite: 'critique',
+    },
+    diffusionRestreinte: {
+      description: 'Données de niveau « Diffusion Restreinte »',
+      seuilCriticite: 'eleve',
+    },
+    autre: {
+      description: 'Autre données sensibles',
+      exemple: "documents sensibles internes à l'administration.",
+      seuilCriticite: 'faible',
     },
   },
 
@@ -134,6 +152,14 @@ module.exports = {
       description: 'Un mois ou plus',
       seuilCriticite: 'faible',
     },
+  },
+
+  niveauxGravite: {
+    nonConcerne: { position: 0, description: 'Non concerné' },
+    minime: { position: 1, description: 'Minime' },
+    significatif: { position: 2, description: 'Significatif' },
+    grave: { position: 3, description: 'Grave' },
+    critique: { position: 4, description: 'Critique' },
   },
 
   risques: {

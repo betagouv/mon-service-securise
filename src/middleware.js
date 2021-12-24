@@ -98,11 +98,20 @@ const middleware = (configuration = {}) => {
       .catch(suite);
   });
 
+  const aseptiseListe = (nomListe, proprietesParametre) => (
+    (requete, reponse, suite) => {
+      requete.body[nomListe] &&= requete.body[nomListe].filter(
+        (element) => proprietesParametre.some((propriete) => element && element[propriete])
+      );
+      suite();
+    });
+
   return {
     aseptise,
     authentificationBasique,
     positionneHeaders,
     positionneHeadersAvecNonce,
+    aseptiseListe,
     repousseExpirationCookie,
     suppressionCookie,
     trouveHomologation,

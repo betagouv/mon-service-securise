@@ -14,7 +14,9 @@ const creeReferentiel = (donneesReferentiel) => {
   const mesureIndispensable = (idMesure) => !!donnees.mesures[idMesure].indispensable;
   const mesures = () => donnees.mesures;
   const identifiantsMesures = () => Object.keys(mesures());
-  const naturesService = () => donnees.naturesService;
+  const typesService = () => donnees.typesService;
+  const niveauxGravite = () => donnees.niveauxGravite;
+  const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
   const provenancesService = () => donnees.provenancesService;
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
@@ -33,10 +35,10 @@ const creeReferentiel = (donneesReferentiel) => {
     return localisationsDonnees()[identifiant].description;
   };
 
-  const natureService = (identifiants) => {
-    if (identifiants.length === 0) return 'Nature du service non renseignée';
+  const typeService = (identifiants) => {
+    if (identifiants.length === 0) return 'Type de service non renseignée';
     return identifiants
-      .map((identifiant) => naturesService()[identifiant].description)
+      .map((identifiant) => typesService()[identifiant].description)
       .join(', ');
   };
 
@@ -94,13 +96,15 @@ const creeReferentiel = (donneesReferentiel) => {
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
+    identifiantsNiveauxGravite,
     identifiantsRisques,
     localisationDonnees,
     localisationsDonnees,
     mesureIndispensable,
     mesures,
-    natureService,
-    naturesService,
+    typeService,
+    typesService,
+    niveauxGravite,
     provenancesService,
     recharge,
     risques,
@@ -119,7 +123,8 @@ const creeReferentielVide = () => creeReferentiel({
   localisationsDonnees: {},
   mesures: {},
   risques: {},
-  naturesService: {},
+  typesService: {},
+  niveauxGravite: {},
   provenancesService: {},
   seuilsCriticites: [],
   statutsMesures: {},

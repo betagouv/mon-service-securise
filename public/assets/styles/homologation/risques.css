@@ -22,6 +22,66 @@
   background-repeat: no-repeat;
 }
 
-.risque .titre {
+.risque .synthese {
+  display: flex;
+  align-items: center;
+}
+
+.synthese .titre {
+  flex-basis: 67%;
   font-weight: bold;
+}
+
+.risque .curseur {
+  display: flex;
+  gap: 0.4em;
+}
+
+.risque .disque {
+  height: 1em;
+  width: 1em;
+
+  border-radius: 50%;
+  border: solid .5px;
+  border-color: transparent;
+  background: #ebedf0;
+}
+
+.risque .disque:hover {
+  cursor: pointer;
+
+  border-color: black;
+}
+
+.risque .disque.cercle {
+  border: solid .5px black;
+}
+
+.risque .disque.eteint {
+  background: #ebedf0;
+}
+
+.risque .disque.blanc {
+  background: #fff;
+}
+
+.risque .disque.vert {
+  background: #1aaf54;
+}
+
+.risque .disque.jaune {
+  background: #fcdf41;
+}
+
+.risque .disque.orange {
+  background: #f9b049;
+}
+
+.risque .disque.rouge {
+  background: red;
+}
+
+.risque .niveau-gravite .legende {
+  height: 1.4em;
+  font-size: 0.7em;
 }

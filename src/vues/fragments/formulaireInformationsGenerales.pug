@@ -22,9 +22,9 @@ mixin formulaireInformationsGenerales(idHomologation)
 
       +inputChoix({
         type: 'checkbox',
-        nom: 'natureService',
-        titre: 'Quelle est la nature du service numérique ?',
-        items: referentiel.naturesService(),
+        nom: 'typeService',
+        titre: 'Type de service numérique',
+        items: referentiel.typesService(),
         objetDonnees: homologation.informationsGenerales,
       })
 
@@ -42,19 +42,28 @@ mixin formulaireInformationsGenerales(idHomologation)
         objetDonnees: homologation.informationsGenerales,
       })
 
+      label Accès au service numérique
+        br
+        #points-acces
+        a.nouvel-item#nouveau-point-acces Ajouter un accès
+
     section
       +inputChoix({
         type: 'checkbox',
         nom: 'fonctionnalites',
-        titre: 'Le service numérique inclut-il une ou plusieurs des fonctionnalités suivantes ?',
+        titre: 'Principales fonctionnalités offertes par le service numérique',
         items: referentiel.fonctionnalites(),
         objetDonnees: homologation.informationsGenerales,
       })
 
+      #fonctionnalites-specifiques
+      a.nouvel-item#nouvelle-fonctionnalite Ajouter une fonctionnalité
+
+    section
       +inputChoix({
         type: 'checkbox',
         nom: 'donneesCaracterePersonnel',
-        titre: 'Le service numérique est-il amené à traiter une ou plusieurs données à caractère personnel ?',
+        titre: 'Données à caractère personnel et autres données sensibles stockées par le service',
         items: referentiel.donneesCaracterePersonnel(),
         objetDonnees: homologation.informationsGenerales,
       })
@@ -78,3 +87,10 @@ mixin formulaireInformationsGenerales(idHomologation)
       .bouton#diagnostic(identifiant = idHomologation) Enregistrer &nbsp;&nbsp;›
     else
       .bouton#diagnostic Continuer &nbsp;&nbsp;›
+
+
+  script(id = 'donnees-points-acces', type = 'application/json').
+    !{JSON.stringify(homologation.informationsGenerales.pointsAcces.toJSON()) }
+  script(id = 'donnees-fonctionnalites-specifiques', type = 'application/json').
+    !{JSON.stringify(homologation.informationsGenerales.fonctionnalitesSpecifiques.toJSON())}
+  script(type = 'module', src = '/statique/homologation/formulaireInformationsGenerales.js')

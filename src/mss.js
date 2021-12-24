@@ -4,12 +4,14 @@ const express = require('express');
 const { ErreurModele } = require('./erreurs');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
+const FonctionnaliteSpecifique = require('./modeles/fonctionnaliteSpecifique');
 const Homologation = require('./modeles/homologation');
 const InformationsGenerales = require('./modeles/informationsGenerales');
 const InformationsHomologation = require('./modeles/informationsHomologation');
 const MesureGenerale = require('./modeles/mesureGenerale');
 const MesuresSpecifiques = require('./modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
+const PointAcces = require('./modeles/pointAcces');
 const RisqueGeneral = require('./modeles/risqueGeneral');
 const RisquesSpecifiques = require('./modeles/risquesSpecifiques');
 
@@ -207,28 +209,34 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.post('/api/homologation',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('nomService'),
+    middleware.aseptise('nomService', 'pointsAcces.*.description', 'fonctionnalitesSpecifiques.*.description'),
+    middleware.aseptiseListe('pointsAcces', PointAcces.proprietes()),
+    middleware.aseptiseListe('fonctionnalitesSpecifiques', FonctionnaliteSpecifique.proprietes()),
     (requete, reponse, suite) => {
       const {
         nomService,
-        natureService,
+        typeService,
         provenanceService,
         dejaMisEnLigne,
         fonctionnalites,
+        fonctionnalitesSpecifiques,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
+        pointsAcces,
       } = requete.body;
 
       depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
         nomService,
-        natureService,
+        typeService,
         provenanceService,
         dejaMisEnLigne,
         fonctionnalites,
+        fonctionnalitesSpecifiques,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
+        pointsAcces,
       })
         .then((idHomologation) => reponse.json({ idHomologation }))
         .catch((e) => {
@@ -239,7 +247,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.put('/api/homologation/:id',
     middleware.trouveHomologation,
-    middleware.aseptise('nomService'),
+    middleware.aseptise('nomService', 'pointsAcces.*.description', 'fonctionnalitesSpecifiques.*.description'),
+    middleware.aseptiseListe('pointsAcces', PointAcces.proprietes()),
+    middleware.aseptiseListe('fonctionnalitesSpecifiques', FonctionnaliteSpecifique.proprietes()),
     (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
@@ -327,18 +337,23 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     middleware.aseptise('*', 'risquesSpecifiques.*.description', 'risquesSpecifiques.*.commentaire'),
     (requete, reponse, suite) => {
       const { risquesSpecifiques = [], ...params } = requete.body;
-      const prefixeCommentaire = /^commentaire-/;
+      const prefixeAttributRisque = /^(commentaire|niveauGravite)-/;
       const idHomologation = requete.homologation.id;
 
       try {
-        const ajouts = Object.keys(params)
-          .filter((p) => p.match(prefixeCommentaire))
-          .reduce((acc, cr) => {
-            const idRisque = cr.replace(prefixeCommentaire, '');
-            const risque = new RisqueGeneral(
-              { id: idRisque, commentaire: params[cr] },
-              referentiel,
-            );
+        const donneesRisques = Object.keys(params)
+          .filter((p) => p.match(prefixeAttributRisque))
+          .reduce((acc, p) => {
+            const idRisque = p.replace(prefixeAttributRisque, '');
+            const nomAttribut = p.match(prefixeAttributRisque)[1];
+            acc[idRisque] ||= {};
+            Object.assign(acc[idRisque], { id: idRisque, [nomAttribut]: params[p] });
+            return acc;
+          }, {});
+
+        const ajouts = Object.values(donneesRisques)
+          .reduce((acc, donnees) => {
+            const risque = new RisqueGeneral(donnees, referentiel);
             return acc.then(() => depotDonnees.ajouteRisqueGeneralAHomologation(
               idHomologation,
               risque,

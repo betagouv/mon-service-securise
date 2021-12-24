@@ -348,4 +348,17 @@ describe('Le middleware MSS', () => {
       verifiePositionnementHeader('referrer-policy', /^no-referrer$/, done);
     });
   });
+
+  describe("sur une demande d'aseptisation d'une liste", () => {
+    it('supprime les éléments dont les propriétés sont vides', (done) => {
+      const middleware = Middleware();
+      requete.body.listeAvecProprieteVide = [
+        { description: 'une description' }, { description: null },
+      ];
+      middleware.aseptiseListe('listeAvecProprieteVide', ['description'])(requete, reponse, () => {
+        expect(requete.body.listeAvecProprieteVide).to.have.length(1);
+        done();
+      });
+    });
+  });
 });
