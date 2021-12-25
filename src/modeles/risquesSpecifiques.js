@@ -2,9 +2,9 @@ const ListeItems = require('./listeItems');
 const RisqueSpecifique = require('./risqueSpecifique');
 
 class RisquesSpecifiques extends ListeItems {
-  constructor(donnees) {
+  constructor(donnees, referentiel) {
     const { risquesSpecifiques } = donnees;
-    super(RisqueSpecifique, { items: risquesSpecifiques });
+    super(RisqueSpecifique, { items: risquesSpecifiques }, referentiel);
   }
 
   statutSaisie() {

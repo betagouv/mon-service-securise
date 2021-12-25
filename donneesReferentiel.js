@@ -12,12 +12,10 @@ module.exports = {
 
   provenancesService: {
     developpement: {
-      description: 'Il a été développé pour votre organisation, en interne ou par un prestataire',
-      exemple: 'site internet de la commune',
+      description: 'Développé en interne ou par un prestataire au profit de votre organisation',
     },
     achat: {
-      description: "Le service a été acheté sur étagère auprès d'un fournisseur",
-      exemple: 'service de visioconférence',
+      description: 'Acheté sur étagère auprès d’un fournisseur ou obtenu à titre gratuit',
     },
   },
 

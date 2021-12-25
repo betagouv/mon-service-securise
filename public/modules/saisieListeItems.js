@@ -18,7 +18,7 @@ const brancheAjoutItem = (selecteurAction, selecteurConteneur, cbZoneSaisie, cbI
   $(selecteurAction).click((e) => {
     e.preventDefault();
     const index = cbIncrementeIndex();
-    afficheZoneSaisieItem(selecteurConteneur, cbZoneSaisie(index));
+    afficheZoneSaisieItem(selecteurConteneur, cbZoneSaisie(index, {}));
   });
 };
 

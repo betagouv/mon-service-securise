@@ -334,7 +334,12 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.post('/api/homologation/:id/risques',
     middleware.trouveHomologation,
-    middleware.aseptise('*', 'risquesSpecifiques.*.description', 'risquesSpecifiques.*.commentaire'),
+    middleware.aseptise(
+      '*',
+      'risquesSpecifiques.*.description',
+      'risquesSpecifiques.*.niveauGravite',
+      'risquesSpecifiques.*.commentaire',
+    ),
     (requete, reponse, suite) => {
       const { risquesSpecifiques = [], ...params } = requete.body;
       const prefixeAttributRisque = /^(commentaire|niveauGravite)-/;
@@ -362,10 +367,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
         ajouts
           .then(() => {
-            const aPersister = risquesSpecifiques.filter((r) => r?.description || r?.commentaire);
-            const listeRisquesSpecifiques = new RisquesSpecifiques(
-              { risquesSpecifiques: aPersister },
-            );
+            const aPersister = risquesSpecifiques
+              .filter((r) => r?.description || r?.commentaire || r?.niveauGravite);
+            const listeRisquesSpecifiques = new RisquesSpecifiques({
+              risquesSpecifiques: aPersister,
+            }, referentiel);
 
             return depotDonnees.remplaceRisquesSpecifiquesPourHomologation(
               idHomologation, listeRisquesSpecifiques,
