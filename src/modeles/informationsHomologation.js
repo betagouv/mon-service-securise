@@ -7,7 +7,30 @@ const STATUTS_SAISIE = {
 };
 
 class InformationsHomologation extends Base {
+  aucunAgregatSaisi() {
+    return Object.keys(this.listesAgregats)
+      .every((l) => this[l].statutSaisie() === InformationsHomologation.A_SAISIR);
+  }
+
+  auMoinsUnAgregatACompleter() {
+    return Object.keys(this.listesAgregats)
+      .some((l) => this[l].statutSaisie() === InformationsHomologation.A_COMPLETER);
+  }
+
   statutSaisie() {
+    switch(this.statutSaisieAgregats()) {
+      case InformationsHomologation.A_COMPLETER:
+        return InformationsHomologation.A_COMPLETER;
+      case InformationsHomologation.COMPLETES:
+        return this.statutSaisieProprietesAtomiques() === InformationsHomologation.COMPLETES
+          ? InformationsHomologation.COMPLETES
+          : InformationsHomologation.A_COMPLETER
+      default:
+        return this.statutSaisieProprietesAtomiques();
+    }
+  }
+
+  statutSaisieProprietesAtomiques() {
     const proprietesSaisies = this.proprietesAtomiquesRequises.filter(this.proprieteSaisie, this);
 
     if (proprietesSaisies.length === 0) return InformationsHomologation.A_SAISIR;
@@ -15,6 +38,12 @@ class InformationsHomologation extends Base {
       return InformationsHomologation.COMPLETES;
     }
     return InformationsHomologation.A_COMPLETER;
+  }
+
+  statutSaisieAgregats() {
+    if (this.aucunAgregatSaisi()) return InformationsHomologation.A_SAISIR;
+    if (this.auMoinsUnAgregatACompleter()) return InformationsHomologation.A_COMPLETER;
+    return InformationsHomologation.COMPLETES;
   }
 }
 
