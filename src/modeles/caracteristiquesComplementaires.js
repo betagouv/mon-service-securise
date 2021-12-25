@@ -17,7 +17,7 @@ const valide = (donnees, referentiel) => {
 class CaracteristiquesComplementaires extends InformationsHomologation {
   constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
-      proprietesAtomiques: [
+      proprietesAtomiquesRequises: [
         'presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees',
       ],
       listesAgregats: { entitesExternes: EntitesExternes },
