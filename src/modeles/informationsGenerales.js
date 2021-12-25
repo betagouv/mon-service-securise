@@ -6,7 +6,7 @@ const Referentiel = require('../referentiel');
 class InformationsGenerales extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
-      proprietesAtomiques: [
+      proprietesAtomiquesRequises: [
         'delaiAvantImpactCritique',
         'dejaMisEnLigne',
         'nomService',

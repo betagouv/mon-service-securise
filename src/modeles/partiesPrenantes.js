@@ -13,7 +13,7 @@ const descriptionPartiePrenante = (partiePrenante, fonction) => {
 class PartiesPrenantes extends InformationsHomologation {
   constructor(donneesPartiesPrenantes = {}) {
     super({
-      proprietesAtomiques: [
+      proprietesAtomiquesRequises: [
         'autoriteHomologation',
         'fonctionAutoriteHomologation',
         'piloteProjet',

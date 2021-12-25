@@ -4,7 +4,7 @@ const Base = require('../../src/modeles/base');
 
 describe('Un objet métier', () => {
   it('sait si une de ses propriétés a été saisie', () => {
-    const objetMetier = new Base({ proprietesAtomiques: ['propriete'] });
+    const objetMetier = new Base({ proprietesAtomiquesRequises: ['propriete'] });
     objetMetier.renseigneProprietes({});
     expect(objetMetier.proprieteSaisie('propriete')).to.be(false);
 
@@ -13,7 +13,7 @@ describe('Un objet métier', () => {
   });
 
   it("considère qu'une propriété renseignée à chaîne vide n'est pas saisie", () => {
-    const objetMetier = new Base({ proprietesAtomiques: ['propriete'] });
+    const objetMetier = new Base({ proprietesAtomiquesRequises: ['propriete'] });
 
     objetMetier.renseigneProprietes({ propriete: '' });
     expect(objetMetier.proprieteSaisie('propriete')).to.be(false);
