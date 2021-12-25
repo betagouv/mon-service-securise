@@ -2,16 +2,19 @@ class Base {
   constructor(proprietes = {}) {
     const {
       proprietesAtomiquesRequises = [],
+      proprietesAtomiquesFacultatives = [],
       proprietesListes = [],
       listesAgregats = {},
     } = proprietes;
     this.proprietesAtomiquesRequises = proprietesAtomiquesRequises;
+    this.proprietesAtomiquesFacultatives = proprietesAtomiquesFacultatives;
     this.proprietesListes = proprietesListes;
     this.listesAgregats = listesAgregats;
   }
 
   renseigneProprietes(donnees, referentiel) {
-    this.proprietesAtomiquesRequises.forEach((p) => (this[p] = donnees[p]));
+    [...this.proprietesAtomiquesRequises, ...this.proprietesAtomiquesFacultatives]
+      .forEach((p) => (this[p] = donnees[p]));
     this.proprietesListes.forEach((p) => (this[p] = donnees[p] || []));
     Object.keys(this.listesAgregats).forEach((l) => {
       const ClasseListeAgregats = this.listesAgregats[l];
@@ -29,7 +32,11 @@ class Base {
   toJSON() {
     const resultat = {};
 
-    [...this.proprietesAtomiquesRequises, ...this.proprietesListes]
+    [
+      ...this.proprietesAtomiquesRequises,
+      ...this.proprietesAtomiquesFacultatives,
+      ...this.proprietesListes,
+    ]
       .filter((k) => typeof this[k] !== 'undefined')
       .forEach((k) => (resultat[k] = this[k]));
 
