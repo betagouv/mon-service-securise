@@ -4,7 +4,7 @@ const Referentiel = require('../referentiel');
 
 class MesureSpecifique extends Mesure {
   constructor(donneesMesure = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super(['description', 'categorie', 'statut', 'modalites']);
+    super({ proprietesAtomiques: ['description', 'categorie', 'statut', 'modalites'] });
 
     MesureSpecifique.valide(donneesMesure, referentiel);
     this.renseigneProprietes(donneesMesure);

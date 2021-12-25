@@ -2,7 +2,7 @@ const InformationsHomologation = require('./informationsHomologation');
 
 class PointAcces extends InformationsHomologation {
   constructor(donneesPointsAcces) {
-    super(['description']);
+    super({ proprietesAtomiques: ['description'] });
     this.renseigneProprietes(donneesPointsAcces);
   }
 

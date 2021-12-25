@@ -8,10 +8,10 @@ const STATUTS_SAISIE = {
 
 class InformationsHomologation extends Base {
   statutSaisie() {
-    const nomsProprietesSaisies = this.nomsProprietesAtomiques.filter(this.proprieteSaisie, this);
+    const proprietesSaisies = this.proprietesAtomiques.filter(this.proprieteSaisie, this);
 
-    if (nomsProprietesSaisies.length === 0) return InformationsHomologation.A_SAISIR;
-    if (this.nomsProprietesAtomiques.length === nomsProprietesSaisies.length) {
+    if (proprietesSaisies.length === 0) return InformationsHomologation.A_SAISIR;
+    if (this.proprietesAtomiques.length === proprietesSaisies.length) {
       return InformationsHomologation.COMPLETES;
     }
     return InformationsHomologation.A_COMPLETER;

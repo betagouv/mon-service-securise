@@ -16,11 +16,12 @@ const valide = (donnees, referentiel) => {
 
 class CaracteristiquesComplementaires extends InformationsHomologation {
   constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super(
-      ['presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees'],
-      [],
-      { entitesExternes: EntitesExternes },
-    );
+    super({
+      proprietesAtomiques: [
+        'presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees',
+      ],
+      listesAgregats: { entitesExternes: EntitesExternes },
+    });
     valide(donneesCaracteristiques, referentiel);
     this.renseigneProprietes(donneesCaracteristiques);
 
