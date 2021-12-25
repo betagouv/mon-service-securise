@@ -5,19 +5,23 @@ const Referentiel = require('../referentiel');
 
 class InformationsGenerales extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super([
-      'delaiAvantImpactCritique',
-      'dejaMisEnLigne',
-      'nomService',
-      'presenceResponsable',
-    ], [
-      'donneesCaracterePersonnel',
-      'fonctionnalites',
-      'typeService',
-      'provenanceService',
-    ], {
-      pointsAcces: PointsAcces,
-      fonctionnalitesSpecifiques: FonctionnalitesSpecifiques,
+    super({
+      proprietesAtomiques: [
+        'delaiAvantImpactCritique',
+        'dejaMisEnLigne',
+        'nomService',
+        'presenceResponsable',
+      ],
+      proprietesListes: [
+        'donneesCaracterePersonnel',
+        'fonctionnalites',
+        'typeService',
+        'provenanceService',
+      ],
+      listesAgregats: {
+        pointsAcces: PointsAcces,
+        fonctionnalitesSpecifiques: FonctionnalitesSpecifiques,
+      },
     });
 
     this.renseigneProprietes(donnees);

@@ -5,9 +5,11 @@ const Referentiel = require('../referentiel');
 
 class Mesures extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super([], [], {
-      mesuresGenerales: MesuresGenerales,
-      mesuresSpecifiques: MesuresSpecifiques,
+    super({
+      listesAgregats: {
+        mesuresGenerales: MesuresGenerales,
+        mesuresSpecifiques: MesuresSpecifiques,
+      },
     });
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;

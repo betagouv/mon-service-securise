@@ -8,7 +8,9 @@ const valide = (donnees) => {
 
 class Utilisateur extends Base {
   constructor(donnees = {}, adaptateurJWT) {
-    super(['id', 'idResetMotDePasse', 'prenom', 'nom', 'email', 'cguAcceptees']);
+    super({
+      proprietesAtomiques: ['id', 'idResetMotDePasse', 'prenom', 'nom', 'email', 'cguAcceptees'],
+    });
     valide(donnees);
     this.renseigneProprietes(donnees);
     this.adaptateurJWT = adaptateurJWT;

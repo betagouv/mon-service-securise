@@ -24,7 +24,7 @@ const valide = (donnees, referentiel) => {
 
 class AvisExpertCyber extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super(['avis', 'dateRenouvellement', 'commentaire']);
+    super({ proprietesAtomiques: ['avis', 'dateRenouvellement', 'commentaire'] });
     valide(donnees, referentiel);
     this.renseigneProprietes(donnees);
 

@@ -1,17 +1,18 @@
 class Base {
-  constructor(nomsProprietesAtomiques = [], nomsProprietesListes = [], nomsListesAgregats = {}) {
-    this.nomsProprietesAtomiques = nomsProprietesAtomiques;
-    this.nomsProprietesListes = nomsProprietesListes;
-    this.nomsListesAgregats = nomsListesAgregats;
+  constructor(proprietes = {}) {
+    const { proprietesAtomiques = [], proprietesListes = [], listesAgregats = {} } = proprietes;
+    this.proprietesAtomiques = proprietesAtomiques;
+    this.proprietesListes = proprietesListes;
+    this.listesAgregats = listesAgregats;
   }
 
   renseigneProprietes(donnees, referentiel) {
-    this.nomsProprietesAtomiques.forEach((np) => (this[np] = donnees[np]));
-    this.nomsProprietesListes.forEach((np) => (this[np] = donnees[np] || []));
-    Object.keys(this.nomsListesAgregats).forEach((nl) => {
-      const ClasseListeAgregats = this.nomsListesAgregats[nl];
-      const donneesListeAgregat = { [nl]: donnees[nl] || [] };
-      this[nl] = new ClasseListeAgregats(donneesListeAgregat, referentiel);
+    this.proprietesAtomiques.forEach((p) => (this[p] = donnees[p]));
+    this.proprietesListes.forEach((p) => (this[p] = donnees[p] || []));
+    Object.keys(this.listesAgregats).forEach((l) => {
+      const ClasseListeAgregats = this.listesAgregats[l];
+      const donneesListeAgregat = { [l]: donnees[l] || [] };
+      this[l] = new ClasseListeAgregats(donneesListeAgregat, referentiel);
     });
   }
 
@@ -24,12 +25,12 @@ class Base {
   toJSON() {
     const resultat = {};
 
-    [...this.nomsProprietesAtomiques, ...this.nomsProprietesListes]
+    [...this.proprietesAtomiques, ...this.proprietesListes]
       .filter((k) => typeof this[k] !== 'undefined')
       .forEach((k) => (resultat[k] = this[k]));
 
-    Object.keys(this.nomsListesAgregats).forEach((nl) => {
-      Object.assign(resultat, { [nl]: this[nl].toJSON() });
+    Object.keys(this.listesAgregats).forEach((l) => {
+      Object.assign(resultat, { [l]: this[l].toJSON() });
     });
 
     return resultat;
