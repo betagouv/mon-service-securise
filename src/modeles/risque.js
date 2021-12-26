@@ -1,7 +1,7 @@
-const Base = require('./base');
+const InformationsHomologation = require('./informationsHomologation');
 const { ErreurNiveauGraviteInconnu } = require('../erreurs');
 
-class Risque extends Base {
+class Risque extends InformationsHomologation {
   static valide({ niveauGravite }, referentiel) {
     const identifiantsNiveauxGravite = referentiel.identifiantsNiveauxGravite();
     if (niveauGravite && !identifiantsNiveauxGravite.includes(niveauGravite)) {

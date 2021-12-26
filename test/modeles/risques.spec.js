@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 
+const Referentiel = require('../../src/referentiel');
 const Risques = require('../../src/modeles/risques');
 const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 
@@ -16,16 +17,17 @@ describe('Les risques liés à une homologation', () => {
 
   describe('sur demande du statut de saisie', () => {
     ils("retournent `A_SAISIR` s'il n'y a encore eu aucune vérification", () => {
-      const risques = new Risques({ risquesVerifies: false });
+      const risques = new Risques({});
       expect(risques.statutSaisie()).to.equal(Risques.A_SAISIR);
     });
 
     describe('quand les risques ont été vérifiés', () => {
-      ils('retournent `COMPLETES`si tous les risques spécifiques saisis ont une description', () => {
+      ils('retournent `COMPLETES`si tous les risques spécifiques sont complètement saisis', () => {
+        const referentiel = Referentiel.creeReferentiel({ niveauxGravite: { grave: {} } });
         const risques = new Risques({
           risquesVerifies: true,
-          risquesSpecifiques: [{ description: 'Un risque spécifique' }],
-        });
+          risquesSpecifiques: [{ description: 'Un risque spécifique', niveauGravite: 'grave' }],
+        }, referentiel);
 
         expect(risques.statutSaisie()).to.equal(Risques.COMPLETES);
       });

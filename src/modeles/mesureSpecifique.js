@@ -4,7 +4,10 @@ const Referentiel = require('../referentiel');
 
 class MesureSpecifique extends Mesure {
   constructor(donneesMesure = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super({ proprietesAtomiquesRequises: ['description', 'categorie', 'statut', 'modalites'] });
+    super({
+      proprietesAtomiquesRequises: ['description', 'categorie', 'statut'],
+      proprietesAtomiquesFacultatives: ['modalites'],
+    });
 
     MesureSpecifique.valide(donneesMesure, referentiel);
     this.renseigneProprietes(donneesMesure);
@@ -14,10 +17,6 @@ class MesureSpecifique extends Mesure {
 
   descriptionMesure() {
     return this.description;
-  }
-
-  proprieteSaisie(nomPropriete) {
-    return nomPropriete === 'modalites' ? true : super.proprieteSaisie(nomPropriete);
   }
 
   static valide({ categorie, statut }, referentiel) {

@@ -207,11 +207,6 @@ describe('Une homologation', () => {
       const homologation = new Homologation({ id: '123' });
       expect(homologation.statutSaisie('risques')).to.equal(InformationsHomologation.A_SAISIR);
     });
-
-    it('détecte que la liste des risques a été vérifiée', () => {
-      const homologation = new Homologation({ id: '123', risquesVerifies: true });
-      expect(homologation.statutSaisie('risques')).to.equal(InformationsHomologation.COMPLETES);
-    });
   });
 
   it("déclare le seuil de criticité trop élevé s'il est `critique` ou `eleve`", () => {

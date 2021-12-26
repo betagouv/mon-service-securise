@@ -18,25 +18,27 @@ class InformationsHomologation extends Base {
   }
 
   statutSaisie() {
-    switch(this.statutSaisieAgregats()) {
+    switch (this.statutSaisieAgregats()) {
       case InformationsHomologation.A_COMPLETER:
         return InformationsHomologation.A_COMPLETER;
       case InformationsHomologation.COMPLETES:
         return this.statutSaisieProprietesAtomiques() === InformationsHomologation.COMPLETES
           ? InformationsHomologation.COMPLETES
-          : InformationsHomologation.A_COMPLETER
+          : InformationsHomologation.A_COMPLETER;
       default:
-        return this.statutSaisieProprietesAtomiques();
+        return this.aucuneProprieteAtomiqueRequise()
+          ? InformationsHomologation.A_SAISIR
+          : this.statutSaisieProprietesAtomiques();
     }
   }
 
   statutSaisieProprietesAtomiques() {
     const proprietesSaisies = this.proprietesAtomiquesRequises.filter(this.proprieteSaisie, this);
 
-    if (proprietesSaisies.length === 0) return InformationsHomologation.A_SAISIR;
     if (this.proprietesAtomiquesRequises.length === proprietesSaisies.length) {
       return InformationsHomologation.COMPLETES;
     }
+    if (proprietesSaisies.length === 0) return InformationsHomologation.A_SAISIR;
     return InformationsHomologation.A_COMPLETER;
   }
 
