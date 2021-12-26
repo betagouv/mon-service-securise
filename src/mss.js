@@ -377,7 +377,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
               idHomologation, listeRisquesSpecifiques,
             );
           })
-          .then(() => depotDonnees.marqueRisquesCommeVerifies(idHomologation))
           .then(() => reponse.send({ idHomologation }))
           .catch(suite);
       } catch {

@@ -785,7 +785,6 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête POST sur `/api/homologation/:id/risques`', () => {
     beforeEach(() => {
-      depotDonnees.marqueRisquesCommeVerifies = () => Promise.resolve();
       depotDonnees.remplaceRisquesSpecifiquesPourHomologation = () => Promise.resolve();
     });
 
@@ -874,20 +873,6 @@ describe('Le serveur MSS', () => {
 
       axios.post('http://localhost:1234/api/homologation/456/risques', { risquesSpecifiques })
         .then(() => expect(risquesRemplaces).to.be(true))
-        .then(() => done())
-        .catch(done);
-    });
-
-    it("demande au dépôt d'enregistrer que la liste des risques généraux a été vérifiée", (done) => {
-      let listeRisquesMarqueeCommeVerifiee = false;
-      depotDonnees.marqueRisquesCommeVerifies = (idHomologation) => new Promise((resolve) => {
-        expect(idHomologation).to.equal('456');
-        listeRisquesMarqueeCommeVerifiee = true;
-        resolve();
-      });
-
-      axios.post('http://localhost:1234/api/homologation/456/risques')
-        .then(() => expect(listeRisquesMarqueeCommeVerifiee).to.be(true))
         .then(() => done())
         .catch(done);
     });

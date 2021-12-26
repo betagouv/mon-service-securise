@@ -118,10 +118,6 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteHomologation('avisExpertCyber', ...params)
   );
 
-  const marqueRisquesCommeVerifies = (idHomologation) => (
-    adaptateurPersistance.metsAJourHomologation(idHomologation, { risquesVerifies: true })
-  );
-
   const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
     .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
 
@@ -238,7 +234,6 @@ const creeDepot = (config = {}) => {
     homologation,
     homologationExiste,
     homologations,
-    marqueRisquesCommeVerifies,
     metsAJourMotDePasse,
     nouvelleHomologation,
     nouvelUtilisateur,
