@@ -4,7 +4,11 @@ const Referentiel = require('../referentiel');
 
 class RisqueGeneral extends Risque {
   constructor(donneesRisque = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super({ proprietesAtomiquesRequises: ['id', 'commentaire', 'niveauGravite'] });
+    super({
+      proprietesAtomiquesRequises: ['id', 'niveauGravite'],
+      proprietesAtomiquesFacultatives: ['commentaire'],
+    });
+
     RisqueGeneral.valide(donneesRisque, referentiel);
     this.renseigneProprietes(donneesRisque);
   }

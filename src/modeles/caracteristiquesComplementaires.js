@@ -39,22 +39,6 @@ class CaracteristiquesComplementaires extends InformationsHomologation {
   nombreEntitesExternes() {
     return this.entitesExternes.nombre();
   }
-
-  statutSaisie() {
-    const statutSaisieBase = super.statutSaisie();
-    const statutSaisieEntitesExternes = this.entitesExternes?.statutSaisie?.();
-
-    switch (statutSaisieEntitesExternes) {
-      case InformationsHomologation.A_COMPLETER:
-        return InformationsHomologation.A_COMPLETER;
-      case InformationsHomologation.COMPLETES:
-        return statutSaisieBase === InformationsHomologation.COMPLETES
-          ? InformationsHomologation.COMPLETES
-          : InformationsHomologation.A_COMPLETER;
-      default:
-        return statutSaisieBase;
-    }
-  }
 }
 
 module.exports = CaracteristiquesComplementaires;

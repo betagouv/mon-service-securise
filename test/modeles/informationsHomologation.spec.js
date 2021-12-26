@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 const expect = require('expect.js');
 
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
@@ -23,6 +24,16 @@ class Agregats extends ListeItems {
 }
 
 describe("Les informations d'une homologation", () => {
+  describe('sur demande du statut de saisie des propriétés atomiques', () => {
+    elles('retournent `COMPLETES` quand aucune propriété atomique requise', () => {
+      const objetMetier = new InformationsHomologation({ proprietesAtomiquesFacultatives: ['prop'] });
+      objetMetier.renseigneProprietes({ prop: 'valeur' });
+
+      expect(objetMetier.statutSaisieProprietesAtomiques())
+        .to.equal(InformationsHomologation.COMPLETES);
+    });
+  });
+
   describe('sur demande du statut de saisie des agrégats', () => {
     let objetMetier;
 

@@ -2,14 +2,11 @@ const InformationsHomologation = require('./informationsHomologation');
 
 class EntiteExterne extends InformationsHomologation {
   constructor(donneesEntite) {
-    super({ proprietesAtomiquesRequises: ['nom', 'contact', 'acces'] });
+    super({
+      proprietesAtomiquesRequises: ['nom', 'contact'],
+      proprietesAtomiquesFacultatives: ['acces'],
+    });
     this.renseigneProprietes(donneesEntite);
-  }
-
-  statutSaisie() {
-    return this.nom && this.contact
-      ? InformationsHomologation.COMPLETES
-      : InformationsHomologation.A_COMPLETER;
   }
 }
 

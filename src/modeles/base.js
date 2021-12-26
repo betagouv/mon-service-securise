@@ -12,6 +12,10 @@ class Base {
     this.listesAgregats = listesAgregats;
   }
 
+  aucuneProprieteAtomiqueRequise() {
+    return this.proprietesAtomiquesRequises.length === 0;
+  }
+
   renseigneProprietes(donnees, referentiel) {
     [...this.proprietesAtomiquesRequises, ...this.proprietesAtomiquesFacultatives]
       .forEach((p) => (this[p] = donnees[p]));
