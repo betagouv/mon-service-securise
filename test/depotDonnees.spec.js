@@ -370,23 +370,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
-  it('sait marquer une liste de risques comme vérifiée', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{ id: '123' }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.homologation('123')
-      .then(({ risques }) => expect(risques.verifies()).to.be(false))
-      .then(() => depot.marqueRisquesCommeVerifies('123'))
-      .then(() => depot.homologation('123'))
-      .then(({ risques }) => {
-        expect(risques.verifies()).to.be(true);
-        done();
-      })
-      .catch(done);
-  });
-
   it("sait associer un avis d'expert cyber à une homologation", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
