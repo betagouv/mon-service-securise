@@ -51,7 +51,7 @@ module.exports = {
     },
     signatureElectronique: {
       description: 'Dispositif de signature électronique',
-      seuilCriticite: 'eleve',
+      seuilCriticite: 'critique',
     },
     compte: {
       description: 'Création de compte (utilisateurs avec comptes)',
@@ -112,7 +112,7 @@ module.exports = {
     banque: {
       description: 'Données de paiement',
       exemple: 'nº de carte bancaire, etc.',
-      seuilCriticite: 'eleve',
+      seuilCriticite: 'critique',
     },
     mineurs: {
       description: 'Données concernant des personnes mineures',
@@ -125,7 +125,7 @@ module.exports = {
     },
     diffusionRestreinte: {
       description: 'Données de niveau « Diffusion Restreinte »',
-      seuilCriticite: 'eleve',
+      seuilCriticite: 'critique',
     },
     autre: {
       description: 'Autre données sensibles',
