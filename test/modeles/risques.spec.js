@@ -18,30 +18,26 @@ describe('Les risques liés à une homologation', () => {
   });
 
   describe('sur demande du statut de saisie', () => {
-    ils("retournent `A_SAISIR` s'il n'y a encore eu aucune vérification", () => {
+    ils("retournent `A_SAISIR` s'il n'y a encore eu aucune saisie", () => {
       const risques = new Risques({});
       expect(risques.statutSaisie()).to.equal(Risques.A_SAISIR);
     });
 
-    describe('quand les risques ont été vérifiés', () => {
-      ils('retournent `COMPLETES`si tous les risques spécifiques sont complètement saisis', () => {
-        const referentiel = Referentiel.creeReferentiel({ niveauxGravite: { grave: {} } });
-        const risques = new Risques({
-          risquesVerifies: true,
-          risquesSpecifiques: [{ description: 'Un risque spécifique', niveauGravite: 'grave' }],
-        }, referentiel);
+    ils('retournent `COMPLETES` si tous les risques spécifiques sont complètement saisis', () => {
+      const referentiel = Referentiel.creeReferentiel({ niveauxGravite: { grave: {} } });
+      const risques = new Risques({
+        risquesSpecifiques: [{ description: 'Un risque spécifique', niveauGravite: 'grave' }],
+      }, referentiel);
 
-        expect(risques.statutSaisie()).to.equal(Risques.COMPLETES);
+      expect(risques.statutSaisie()).to.equal(Risques.COMPLETES);
+    });
+
+    ils("retournent `A_COMPLETER` si au moins un risque spécifique n'a pas de description", () => {
+      const risques = new Risques({
+        risquesSpecifiques: [{ commentaire: 'Un commentaire sans description' }],
       });
 
-      ils("retournent `A_COMPLETER` si au moins un risque spécifique n'a pas de description", () => {
-        const risques = new Risques({
-          risquesVerifies: true,
-          risquesSpecifiques: [{ commentaire: 'Un commentaire sans description' }],
-        });
-
-        expect(risques.statutSaisie()).to.equal(Risques.A_COMPLETER);
-      });
+      expect(risques.statutSaisie()).to.equal(Risques.A_COMPLETER);
     });
   });
 
