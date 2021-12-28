@@ -9,7 +9,6 @@ const {
 const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
-const InformationsGenerales = require('./modeles/informationsGenerales');
 const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
@@ -108,23 +107,11 @@ const creeDepot = (config = {}) => {
       ))
   );
 
-  const ajoutePresentationAHomologation = (idHomologation, presentation) => (
-    adaptateurPersistance.homologation(idHomologation)
-      .then((homologationTrouvee) => {
-        const informationsGenerales = new InformationsGenerales(
-          homologationTrouvee.informationsGenerales,
-          referentiel
-        );
-        informationsGenerales.presentation = presentation;
-        return metsAJourProprieteHomologation('informationsGenerales', homologationTrouvee, informationsGenerales);
-      })
-  );
-
   const ajouteCaracteristiquesAHomologation = (...params) => (
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
   );
 
-  const ajoutePresentationACaracteristiques = (idHomologation, presentation) => (
+  const ajoutePresentationAHomologation = (idHomologation, presentation) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((h) => {
         const caracteristiques = new CaracteristiquesComplementaires(
@@ -256,7 +243,6 @@ const creeDepot = (config = {}) => {
     ajouteInformationsGeneralesAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
-    ajoutePresentationACaracteristiques,
     ajoutePresentationAHomologation,
     ajouteRisqueGeneralAHomologation,
     homologation,

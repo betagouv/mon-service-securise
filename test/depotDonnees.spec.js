@@ -294,28 +294,13 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
-  it('ajoute une présentation à une homologation', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{ id: '123', informationsGenerales: { nomService: 'nom' } }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.ajoutePresentationAHomologation('123', 'Une présentation')
-      .then(() => depot.homologation('123'))
-      .then(({ informationsGenerales: { presentation } }) => {
-        expect(presentation).to.equal('Une présentation');
-        done();
-      })
-      .catch(done);
-  });
-
   it('ajoute une présentation à une homologation en caractéristique complémentaire', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [{ id: '123', informationsGenerales: { nomService: 'nom' } }],
     });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
-    depot.ajoutePresentationACaracteristiques('123', 'Une présentation')
+    depot.ajoutePresentationAHomologation('123', 'Une présentation')
       .then(() => depot.homologation('123'))
       .then(({ caracteristiquesComplementaires: { presentation } }) => {
         expect(presentation).to.equal('Une présentation');
