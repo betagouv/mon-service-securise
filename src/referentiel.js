@@ -17,12 +17,15 @@ const creeReferentiel = (donneesReferentiel) => {
   const typesService = () => donnees.typesService;
   const niveauxGravite = () => donnees.niveauxGravite;
   const niveauGravite = (idNiveau) => niveauxGravite()[idNiveau] || {};
+  const descriptionNiveauGravite = (idNiveau) => niveauGravite(idNiveau).description || 'Non renseigné';
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
   const niveauGraviteImportant = (idNiveau) => niveauGravite(idNiveau).important;
   const positionNiveauGravite = (idNiveau) => niveauGravite(idNiveau).position;
   const provenancesService = () => donnees.provenancesService;
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
+  const risque = (id) => risques()[id] || {};
+  const descriptionRisque = (idRisque) => risque(idRisque).description;
   const seuilsCriticites = () => donnees.seuilsCriticites;
   const statutsDeploiement = () => donnees.statutsDeploiement;
   const statutDeploiementValide = (id) => Object.keys(statutsDeploiement()).includes(id);
@@ -93,6 +96,8 @@ const creeReferentiel = (donneesReferentiel) => {
     delaisAvantImpactCritique,
     descriptionCategorie,
     descriptionExpiration,
+    descriptionNiveauGravite,
+    descriptionRisque,
     descriptionStatutMesure,
     donneesCaracterePersonnel,
     echeancesRenouvellement,

@@ -10,7 +10,7 @@ describe('Un risque général', () => {
   beforeEach(() => (
     referentiel = Referentiel.creeReferentiel({
       niveauxGravite: { unNiveau: {} },
-      risques: { unRisque: { description: 'Une description' } },
+      risques: { unRisque: {} },
     })
   ));
 
@@ -29,6 +29,14 @@ describe('Un risque général', () => {
       commentaire: 'Un commentaire',
       niveauGravite: 'unNiveau',
     });
+  });
+
+  it('connaît sa description', () => {
+    referentiel.recharge({
+      risques: { unRisque: { description: 'Une description' } },
+    });
+    const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
+    expect(risque.descriptionRisque()).to.equal('Une description');
   });
 
   it('retourne un JSON partiel si certaines informations sont inexistantes', () => {
@@ -56,6 +64,15 @@ describe('Un risque général', () => {
       expect(e.message).to.equal("Le niveau de gravité \"niveauInconnu\" n'est pas répertorié");
       done();
     }
+  });
+
+  it('connaît la description de son niveau de gravité', () => {
+    referentiel.recharge({
+      risques: { unRisque: {} },
+      niveauxGravite: { unNiveau: { description: 'Une description' } },
+    });
+    const risque = new RisqueGeneral({ id: 'unRisque', niveauGravite: 'unNiveau' }, referentiel);
+    expect(risque.descriptionNiveauGravite()).to.equal('Une description');
   });
 
   it('connaît son importance', () => {

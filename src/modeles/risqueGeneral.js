@@ -13,6 +13,10 @@ class RisqueGeneral extends Risque {
     this.renseigneProprietes(donneesRisque);
   }
 
+  descriptionRisque() {
+    return this.referentiel.descriptionRisque(this.id);
+  }
+
   static valide(donnees, referentiel) {
     super.valide(donnees, referentiel);
 

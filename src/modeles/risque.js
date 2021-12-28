@@ -8,6 +8,10 @@ class Risque extends InformationsHomologation {
     this.referentiel = referentiel;
   }
 
+  descriptionNiveauGravite() {
+    return this.referentiel.descriptionNiveauGravite(this.niveauGravite);
+  }
+
   important() {
     return !!this.referentiel.niveauGraviteImportant(this.niveauGravite);
   }
