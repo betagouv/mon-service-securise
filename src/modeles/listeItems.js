@@ -1,5 +1,5 @@
 const InformationsHomologation = require('./informationsHomologation');
-const { pagination } = require('../utilitaires');
+const { pagination } = require('../utilitaires/pagination');
 
 class ListeItems extends InformationsHomologation {
   constructor(ClasseItem, donnees, referentiel) {
