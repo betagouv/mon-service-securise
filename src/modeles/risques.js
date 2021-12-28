@@ -3,7 +3,7 @@ const RisquesGeneraux = require('./risquesGeneraux');
 const RisquesSpecifiques = require('./risquesSpecifiques');
 
 const Referentiel = require('../referentiel');
-const { pagination } = require('../utilitaires');
+const { pagination } = require('../utilitaires/pagination');
 
 class Risques extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
