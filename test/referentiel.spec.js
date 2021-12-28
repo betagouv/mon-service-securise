@@ -289,6 +289,14 @@ describe('Le référentiel', () => {
     expect(referentiel.identifiantsNiveauxGravite()).to.eql(['unNiveau', 'unAutreNiveau']);
   });
 
+  it('sait discriminer le niveau de gravité selon son importance', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      niveauxGravite: { negligeable: { important: false }, significatif: { important: true } },
+    });
+    expect(referentiel.niveauGraviteImportant('negligeable')).to.be(false);
+    expect(referentiel.niveauGraviteImportant('significatif')).to.be(true);
+  });
+
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.typesService()).to.eql({});
