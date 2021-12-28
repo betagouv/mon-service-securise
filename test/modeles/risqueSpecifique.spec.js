@@ -23,6 +23,11 @@ describe('Un risque spécifique', () => {
     expect(risque.niveauGravite).to.equal('unNiveau');
   });
 
+  it("expose sa description en cohérence avec l'API des classes sœurs", () => {
+    const risque = new RisqueSpecifique({ description: 'Un risque' });
+    expect(risque.descriptionRisque()).to.equal('Un risque');
+  });
+
   it('vérifie que le niveau de gravité est bien répertorié', (done) => {
     try {
       new RisqueSpecifique({ niveauGravite: 'niveauInconnu' }, referentiel);

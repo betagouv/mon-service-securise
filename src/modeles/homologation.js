@@ -88,6 +88,10 @@ class Homologation {
 
   presentation() { return this.caracteristiquesComplementaires.presentation; }
 
+  risquesPrincipaux() {
+    return this.risques.principaux();
+  }
+
   risquesSpecifiques() {
     return this.risques.risquesSpecifiques;
   }

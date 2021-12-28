@@ -80,10 +80,12 @@ nav.ne-pas-imprimer
 
     section.risques
       h2 Principaux risques de sécurité identifiés
-      p Suggestions de l'ANSSI, détails en annexe
+      p Détails en annexe
       ul
-        each donneesRisque in referentiel.risques()
-          li= donneesRisque.description
+        each risque in homologation.risquesPrincipaux()
+          li.
+            #{risque.descriptionRisque()} <br>
+            (niveau de gravité : #{risque.descriptionNiveauGravite()})
 
     section.mesures
       h2 Mesures de sécurité retenues

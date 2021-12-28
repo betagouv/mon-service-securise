@@ -10,6 +10,10 @@ class RisqueSpecifique extends Risque {
     Risque.valide(donneesRisque, referentiel);
     this.renseigneProprietes(donneesRisque);
   }
+
+  descriptionRisque() {
+    return this.description;
+  }
 }
 
 module.exports = RisqueSpecifique;
