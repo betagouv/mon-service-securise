@@ -6,7 +6,7 @@ class RisqueSpecifique extends Risque {
     super({
       proprietesAtomiquesRequises: ['description', 'niveauGravite'],
       proprietesAtomiquesFacultatives: ['commentaire'],
-    });
+    }, referentiel);
     Risque.valide(donneesRisque, referentiel);
     this.renseigneProprietes(donneesRisque);
   }

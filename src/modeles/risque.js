@@ -1,7 +1,17 @@
 const InformationsHomologation = require('./informationsHomologation');
 const { ErreurNiveauGraviteInconnu } = require('../erreurs');
+const Referentiel = require('../referentiel');
 
 class Risque extends InformationsHomologation {
+  constructor(proprietesRisque, referentiel = Referentiel.creeReferentielVide()) {
+    super(proprietesRisque);
+    this.referentiel = referentiel;
+  }
+
+  important() {
+    return !!this.referentiel.niveauGraviteImportant(this.niveauGravite);
+  }
+
   static valide({ niveauGravite }, referentiel) {
     const identifiantsNiveauxGravite = referentiel.identifiantsNiveauxGravite();
     if (niveauGravite && !identifiantsNiveauxGravite.includes(niveauGravite)) {

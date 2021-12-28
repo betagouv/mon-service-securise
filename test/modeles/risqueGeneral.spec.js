@@ -57,4 +57,21 @@ describe('Un risque général', () => {
       done();
     }
   });
+
+  it('connaît son importance', () => {
+    referentiel.recharge({
+      risques: { unRisque: {} },
+      niveauxGravite: { negligeable: { important: false }, significatif: { important: true } },
+    });
+
+    const risqueNegligeable = new RisqueGeneral({
+      id: 'unRisque', niveauGravite: 'negligeable',
+    }, referentiel);
+    expect(risqueNegligeable.important()).to.be(false);
+
+    const risqueSignificatif = new RisqueGeneral({
+      id: 'unRisque', niveauGravite: 'significatif',
+    }, referentiel);
+    expect(risqueSignificatif.important()).to.be(true);
+  });
 });

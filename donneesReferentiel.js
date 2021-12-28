@@ -150,11 +150,11 @@ module.exports = {
   },
 
   niveauxGravite: {
-    nonConcerne: { position: 0, description: 'Non concerné' },
-    minime: { position: 1, description: 'Minime' },
-    significatif: { position: 2, description: 'Significatif' },
-    grave: { position: 3, description: 'Grave' },
-    critique: { position: 4, description: 'Critique' },
+    nonConcerne: { position: 0, description: 'Non concerné', important: false },
+    minime: { position: 1, description: 'Minime', important: false },
+    significatif: { position: 2, description: 'Significatif', important: true },
+    grave: { position: 3, description: 'Grave', important: true },
+    critique: { position: 4, description: 'Critique', important: true },
   },
 
   risques: {

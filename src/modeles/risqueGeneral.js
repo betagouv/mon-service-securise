@@ -7,7 +7,7 @@ class RisqueGeneral extends Risque {
     super({
       proprietesAtomiquesRequises: ['id', 'niveauGravite'],
       proprietesAtomiquesFacultatives: ['commentaire'],
-    });
+    }, referentiel);
 
     RisqueGeneral.valide(donneesRisque, referentiel);
     this.renseigneProprietes(donneesRisque);
