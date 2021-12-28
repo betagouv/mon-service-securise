@@ -12,6 +12,12 @@ class Risques extends InformationsHomologation {
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
   }
+
+  principaux() {
+    return [this.risquesGeneraux, this.risquesSpecifiques]
+      .flatMap((rs) => rs.principaux())
+      .sort((rs1, rs2) => rs2.positionNiveauGravite() - rs1.positionNiveauGravite());
+  }
 }
 
 module.exports = Risques;
