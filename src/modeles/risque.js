@@ -1,36 +1,27 @@
 const InformationsHomologation = require('./informationsHomologation');
-const { ErreurNiveauGraviteInconnu } = require('../erreurs');
-const Referentiel = require('../referentiel');
+const NiveauGravite = require('./niveauGravite');
 
 class Risque extends InformationsHomologation {
-  constructor(donneesRisque = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(donneesRisque = {}, referentiel) {
     super({
       proprietesAtomiquesRequises: ['niveauGravite'],
       proprietesAtomiquesFacultatives: ['commentaire'],
     });
-    Risque.valide(donneesRisque, referentiel);
 
     this.renseigneProprietes(donneesRisque);
-    this.referentiel = referentiel;
+    this.objetNiveauGravite = new NiveauGravite(this.niveauGravite, referentiel);
   }
 
   descriptionNiveauGravite() {
-    return this.referentiel.descriptionNiveauGravite(this.niveauGravite);
+    return this.objetNiveauGravite.descriptionNiveau();
   }
 
   important() {
-    return !!this.referentiel.niveauGraviteImportant(this.niveauGravite);
+    return this.objetNiveauGravite.niveauImportant();
   }
 
   positionNiveauGravite() {
-    return this.referentiel.positionNiveauGravite(this.niveauGravite);
-  }
-
-  static valide({ niveauGravite }, referentiel) {
-    const identifiantsNiveauxGravite = referentiel.identifiantsNiveauxGravite();
-    if (niveauGravite && !identifiantsNiveauxGravite.includes(niveauGravite)) {
-      throw new ErreurNiveauGraviteInconnu(`Le niveau de gravité "${niveauGravite}" n'est pas répertorié`);
-    }
+    return this.objetNiveauGravite.position;
   }
 }
 

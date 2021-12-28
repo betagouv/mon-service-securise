@@ -289,27 +289,6 @@ describe('Le référentiel', () => {
     expect(referentiel.identifiantsNiveauxGravite()).to.eql(['unNiveau', 'unAutreNiveau']);
   });
 
-  it('sait discriminer le niveau de gravité selon son importance', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      niveauxGravite: { negligeable: { important: false }, significatif: { important: true } },
-    });
-    expect(referentiel.niveauGraviteImportant('negligeable')).to.be(false);
-    expect(referentiel.niveauGraviteImportant('significatif')).to.be(true);
-  });
-
-  it("connaît la description d'un niveau de gravité", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      niveauxGravite: { unNiveau: { description: 'Une description' } },
-    });
-
-    expect(referentiel.descriptionNiveauGravite('unNiveau')).to.equal('Une description');
-  });
-
-  it("donne une description par défaut si le niveau de gravité n'est pas répertorié", () => {
-    const referentiel = Referentiel.creeReferentiel({ niveauxGravite: {} });
-    expect(referentiel.descriptionNiveauGravite('unNiveau')).to.equal('Non renseigné');
-  });
-
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.typesService()).to.eql({});
