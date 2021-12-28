@@ -1,6 +1,8 @@
 const expect = require('expect.js');
 
 const Referentiel = require('../../src/referentiel');
+const RisqueGeneral = require('../../src/modeles/risqueGeneral');
+const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
 const Risques = require('../../src/modeles/risques');
 const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 
@@ -40,6 +42,61 @@ describe('Les risques liés à une homologation', () => {
 
         expect(risques.statutSaisie()).to.equal(Risques.A_COMPLETER);
       });
+    });
+  });
+
+  describe('sur demande des risques principaux', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      risques: { unRisque: {}, unAutreRisque: {} },
+      niveauxGravite: {
+        negligeable: { position: 0, important: false },
+        significatif: { position: 1, important: true },
+        critique: { position: 2, important: true },
+      },
+    });
+
+    ils('conservent les risques généraux importants', () => {
+      const risques = new Risques({
+        risquesGeneraux: [
+          { id: 'unRisque', niveauGravite: 'negligeable' },
+          { id: 'unAutreRisque', niveauGravite: 'significatif' },
+        ],
+      }, referentiel);
+      const risquesPrincipaux = risques.principaux();
+
+      expect(risquesPrincipaux.length).to.equal(1);
+      expect(risquesPrincipaux[0].id).to.equal('unAutreRisque');
+    });
+
+    ils('conservent les risques spécifiques importants', () => {
+      const risques = new Risques({
+        risquesSpecifiques: [
+          { description: 'Un risque', niveauGravite: 'negligeable' },
+          { description: 'Un autre risque', niveauGravite: 'significatif' },
+        ],
+      }, referentiel);
+      const risquesPrincipaux = risques.principaux();
+
+      expect(risquesPrincipaux.length).to.equal(1);
+      expect(risquesPrincipaux[0].description).to.equal('Un autre risque');
+    });
+
+    ils('trient les risques par ordre décroisant de gravité', () => {
+      const risques = new Risques({
+        risquesGeneraux: [
+          { id: 'unRisque', niveauGravite: 'negligeable' },
+          { id: 'unAutreRisque', niveauGravite: 'significatif' },
+        ],
+        risquesSpecifiques: [
+          { description: 'Un risque', niveauGravite: 'negligeable' },
+          { description: 'Un autre risque', niveauGravite: 'critique' },
+        ],
+      }, referentiel);
+      const risquesPrincipaux = risques.principaux();
+
+      expect(risquesPrincipaux.length).to.equal(2);
+      expect(risquesPrincipaux[0]).to.be.a(RisqueSpecifique);
+      expect(risquesPrincipaux[1]).to.be.a(RisqueGeneral);
     });
   });
 });

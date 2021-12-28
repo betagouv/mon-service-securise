@@ -12,6 +12,10 @@ class Risque extends InformationsHomologation {
     return !!this.referentiel.niveauGraviteImportant(this.niveauGravite);
   }
 
+  positionNiveauGravite() {
+    return this.referentiel.positionNiveauGravite(this.niveauGravite);
+  }
+
   static valide({ niveauGravite }, referentiel) {
     const identifiantsNiveauxGravite = referentiel.identifiantsNiveauxGravite();
     if (niveauGravite && !identifiantsNiveauxGravite.includes(niveauGravite)) {
