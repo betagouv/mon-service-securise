@@ -88,7 +88,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
   describe('sur demande du statut de saisie', () => {
     describe("quand aucune entité externe n'a été saisie", () => {
       it('détermine le statut de saisie de manière standard', () => {
-        const caracteristiques = new CaracteristiquesComplementaires({ presentation: 'Une présentation' });
+        const caracteristiques = new CaracteristiquesComplementaires({ hebergeur: 'Un hébergeur' });
         expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
       });
     });

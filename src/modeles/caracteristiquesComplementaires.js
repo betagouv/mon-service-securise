@@ -18,8 +18,9 @@ class CaracteristiquesComplementaires extends InformationsHomologation {
   constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
       proprietesAtomiquesRequises: [
-        'presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees',
+        'structureDeveloppement', 'hebergeur', 'localisationDonnees',
       ],
+      proprietesAtomiquesFacultatives: ['presentation'],
       listesAgregats: { entitesExternes: EntitesExternes },
     });
     valide(donneesCaracteristiques, referentiel);
