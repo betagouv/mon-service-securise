@@ -17,7 +17,8 @@ describe('Le référentiel', () => {
         api: { description: "API mise à disposition par l'organisation" },
       },
     });
-    expect(referentiel.typeService(['siteInternet', 'api'])).to.equal("Site internet, API mise à disposition par l'organisation");
+    expect(referentiel.typeService(['siteInternet', 'api']))
+      .to.equal("Site internet, API mise à disposition par l'organisation");
   });
 
   it('donne une description par défaut si aucun identifiant de type de service', () => {
