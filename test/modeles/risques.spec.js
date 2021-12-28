@@ -99,4 +99,20 @@ describe('Les risques liés à une homologation', () => {
       expect(risquesPrincipaux[1]).to.be.a(RisqueGeneral);
     });
   });
+
+  ils('paginent tous les agrégats', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      risques: { unRisque: {}, unAutreRisque: {} },
+    });
+
+    const risques = new Risques({
+      risquesGeneraux: [{ id: 'unRisque' }, { id: 'unAutreRisque' }],
+      risquesSpecifiques: [{ description: 'Un risque' }, { description: 'Un autre risque' }],
+    }, referentiel);
+    const risquesPagines = risques.pagines(3);
+
+    expect(risquesPagines.length).to.equal(2);
+    expect(risquesPagines[0].length).to.eql(3);
+    expect(risquesPagines[1].length).to.eql(1);
+  });
 });

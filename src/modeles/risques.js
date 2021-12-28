@@ -1,7 +1,9 @@
 const InformationsHomologation = require('./informationsHomologation');
 const RisquesGeneraux = require('./risquesGeneraux');
 const RisquesSpecifiques = require('./risquesSpecifiques');
+
 const Referentiel = require('../referentiel');
+const { pagination } = require('../utilitaires');
 
 class Risques extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
@@ -11,6 +13,12 @@ class Risques extends InformationsHomologation {
 
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
+  }
+
+  pagines(nbRisquesParPage) {
+    const tousLesRisques = [this.risquesGeneraux, this.risquesSpecifiques]
+      .flatMap((rs) => rs.tous());
+    return pagination(nbRisquesParPage, tousLesRisques);
   }
 
   principaux() {

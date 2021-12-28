@@ -1,3 +1,18 @@
+mixin risquesPagines({ titreAnnexe, titreSection, donnees })
+  each risques, index in donnees
+    .page
+      main
+        h1.vert= index === 0 ? titreAnnexe : `${titreAnnexe} (suite)`
+        .annexe
+          section.detail-risques
+            dl
+              each risque in risques
+                dt.
+                  !{risque.descriptionRisque()}<br>
+                  (niveau de gravité : #{risque.descriptionNiveauGravite()})
+                dd!= risque.commentaire
+        .saut-page
+
 mixin mesuresPaginees({ titreAnnexe, titreSection, donnees })
   each mesures, index in donnees
     .page
@@ -171,46 +186,19 @@ nav.ne-pas-imprimer
 
     .saut-page
 
-.page
-  main
-    h1.vert Annexe 1 – Détail des risques principaux
-    .annexe
-      section.detail-risques
-        dl
-          each donneesRisque in referentiel.risques()
-            dt= donneesRisque.description
-            dd= donneesRisque.descriptionLongue
-
-    .saut-page
-
-.page
-  main
-    h1.vert Annexe 2 – Détail des risques spécifiques au service numérique
-    .annexe
-      section.detail-risques
-        dl
-          - let i = 0
-          - const { risquesSpecifiques } = homologation.risques
-          - const nbRisquesSpecifiques = risquesSpecifiques.nombre()
-          if nbRisquesSpecifiques === 0
-            dd Aucun risque spécifique saisi
-
-          while i < nbRisquesSpecifiques
-            - const risqueSpecifique = risquesSpecifiques.item(i)
-            dt!= risqueSpecifique.description
-            dd!= risqueSpecifique.commentaire
-            - i++
-
-    .saut-page
++risquesPagines({
+  titreAnnexe: 'Annexe 1 - Détail des risques',
+  donnees: homologation.risques.pagines(15)
+})
 
 +mesuresPaginees({
-  titreAnnexe: 'Annexe 3 – Détail des mesures de sécurité',
+  titreAnnexe: 'Annexe 2 – Détail des mesures de sécurité',
   titreSection: 'Mesures de gouvernance',
   donnees: homologation.mesures.mesuresGenerales.paginees(15)
 })
 
 +mesuresPaginees({
-  titreAnnexe: 'Annexe 4 – Détail des mesures de sécurité spécifiques au service numérique',
+  titreAnnexe: 'Annexe 3 – Détail des mesures de sécurité spécifiques au service numérique',
   titreSection: 'Mesures spécifiques au service numérique',
   donnees: homologation.mesures.mesuresSpecifiques.paginees(15)
 })

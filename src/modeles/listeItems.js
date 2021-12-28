@@ -1,4 +1,5 @@
 const InformationsHomologation = require('./informationsHomologation');
+const { pagination } = require('../utilitaires');
 
 class ListeItems extends InformationsHomologation {
   constructor(ClasseItem, donnees, referentiel) {
@@ -17,13 +18,7 @@ class ListeItems extends InformationsHomologation {
   }
 
   pagines(nbItemsParPage) {
-    let page = -1;
-    return this.items.reduce((acc, item, index) => {
-      if (index % nbItemsParPage === 0) page += 1;
-      acc[page] ||= [];
-      acc[page].push(item);
-      return acc;
-    }, [[]]);
+    return pagination(nbItemsParPage, this.items);
   }
 
   paginees(...params) {
@@ -40,6 +35,10 @@ class ListeItems extends InformationsHomologation {
 
   toJSON() {
     return this.items.map((i) => i.toJSON());
+  }
+
+  tous() {
+    return this.items;
   }
 }
 
