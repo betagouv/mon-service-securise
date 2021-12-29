@@ -1,4 +1,4 @@
-const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [] }) => {
+const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [], autorisations: [] }) => {
   const ajouteHomologation = (id, donneesHomologation) => {
     donnees.homologations.push(Object.assign(donneesHomologation, { id }));
     return Promise.resolve();
@@ -65,14 +65,28 @@ const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [] }) => 
     donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset)
   );
 
+  const autorisations = (idUtilisateur) => Promise.resolve(
+    donnees.autorisations.filter((a) => a.idUtilisateur === idUtilisateur)
+  );
+
+  const ajouteAutorisation = (id, donneesAutorisation) => {
+    donnees.autorisations.push(Object.assign(donneesAutorisation, { id }));
+    return Promise.resolve();
+  };
+
+  const supprimeAutorisations = () => Promise.resolve(donnees.autorisations = []);
+
   return {
+    ajouteAutorisation,
     ajouteHomologation,
     ajouteUtilisateur,
+    autorisations,
     homologation,
     homologationAvecNomService,
     homologations,
     metsAJourHomologation,
     metsAJourUtilisateur,
+    supprimeAutorisations,
     supprimeHomologation,
     supprimeHomologations,
     supprimeUtilisateur,

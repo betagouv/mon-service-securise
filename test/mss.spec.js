@@ -190,6 +190,7 @@ describe('Le serveur MSS', () => {
     DepotDonnees.creeDepotVide()
       .then((depot) => {
         depotDonnees = depot;
+        depotDonnees.nouvelleHomologation = () => Promise.resolve();
         serveur = MSS.creeServeur(depotDonnees, middleware, referentiel, adaptateurMail, false);
         serveur.ecoute(1234, done);
       });

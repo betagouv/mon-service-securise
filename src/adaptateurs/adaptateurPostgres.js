@@ -77,16 +77,27 @@ const nouvelAdaptateur = (env) => {
     'utilisateurs', 'idResetMotDePasse', idReset
   );
 
+  const autorisations = (idUtilisateur) => knex('autorisations')
+    .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
+    .then((rows) => rows.map(convertisLigneEnObjet));
+
+  const ajouteAutorisation = (...params) => ajouteLigneDansTable('autorisations', ...params);
+
+  const supprimeAutorisations = () => knex('autorisations').del();
+
   return {
+    ajouteAutorisation,
     ajouteHomologation,
     ajouteUtilisateur,
     arreteTout,
+    autorisations,
     homologation,
     homologationAvecNomService,
     homologations,
     metsAJourHomologation,
     metsAJourUtilisateur,
     nbUtilisateurs,
+    supprimeAutorisations,
     supprimeHomologation,
     supprimeHomologations,
     supprimeUtilisateur,
