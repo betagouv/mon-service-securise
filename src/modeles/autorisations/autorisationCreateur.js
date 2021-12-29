@@ -1,4 +1,4 @@
-const Base = require('./base');
+const Base = require('../base');
 
 class AutorisationCreateur extends Base {
   constructor(donnees = {}) {

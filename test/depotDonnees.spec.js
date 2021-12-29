@@ -9,7 +9,7 @@ const {
   ErreurUtilisateurExistant,
 } = require('../src/erreurs');
 const AdaptateurPersistanceMemoire = require('../src/adaptateurs/adaptateurPersistanceMemoire');
-const AutorisationCreateur = require('../src/modeles/autorisationCreateur');
+const AutorisationCreateur = require('../src/modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../src/modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('../src/modeles/caracteristiquesComplementaires');
 const Homologation = require('../src/modeles/homologation');
