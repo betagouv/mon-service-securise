@@ -7,6 +7,7 @@ const {
   ErreurUtilisateurExistant,
 } = require('./erreurs');
 const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
+const AutorisationCreateur = require('./modeles/autorisationCreateur');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
@@ -134,16 +135,18 @@ const creeDepot = (config = {}) => {
   const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
     .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
 
-  const nouvelleHomologation = (idUtilisateur, donneesInformationsGenerales) => (
-    valideInformationsGenerales(idUtilisateur, donneesInformationsGenerales)
-      .then(() => {
-        const id = adaptateurUUID.genereUUID();
-        const donnees = { idUtilisateur, informationsGenerales: donneesInformationsGenerales };
+  const nouvelleHomologation = (idUtilisateur, donneesInformationsGenerales) => {
+    const idHomologation = adaptateurUUID.genereUUID();
+    const idAutorisation = adaptateurUUID.genereUUID();
+    const donnees = { idUtilisateur, informationsGenerales: donneesInformationsGenerales };
 
-        return adaptateurPersistance.ajouteHomologation(id, donnees)
-          .then(() => id);
-      })
-  );
+    return valideInformationsGenerales(idUtilisateur, donneesInformationsGenerales)
+      .then(() => adaptateurPersistance.ajouteHomologation(idHomologation, donnees))
+      .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
+        idUtilisateur, idHomologation, type: 'createur',
+      }))
+      .then(() => idHomologation);
+  };
 
   const remplaceMesuresSpecifiquesPourHomologation = (...params) => (
     remplaceProprieteHomologation('mesuresSpecifiques', ...params)
@@ -237,6 +240,9 @@ const creeDepot = (config = {}) => {
       .then(() => utilisateur(utilisateurAModifier.id))
   );
 
+  const autorisations = (idUtilisateur) => adaptateurPersistance.autorisations(idUtilisateur)
+    .then((as) => as.map((a) => new AutorisationCreateur(a)));
+
   return {
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
@@ -245,6 +251,7 @@ const creeDepot = (config = {}) => {
     ajoutePartiesPrenantesAHomologation,
     ajoutePresentationAHomologation,
     ajouteRisqueGeneralAHomologation,
+    autorisations,
     homologation,
     homologationExiste,
     homologations,
@@ -269,6 +276,7 @@ const creeDepotVide = () => {
   const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
   return adaptateurPersistance.supprimeUtilisateurs()
     .then(() => adaptateurPersistance.supprimeHomologations())
+    .then(() => adaptateurPersistance.supprimeAutorisations())
     .then(() => creeDepot({ adaptateurPersistance }));
 };
 

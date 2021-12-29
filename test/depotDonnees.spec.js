@@ -9,6 +9,7 @@ const {
   ErreurUtilisateurExistant,
 } = require('../src/erreurs');
 const AdaptateurPersistanceMemoire = require('../src/adaptateurs/adaptateurPersistanceMemoire');
+const AutorisationCreateur = require('../src/modeles/autorisationCreateur');
 const AvisExpertCyber = require('../src/modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('../src/modeles/caracteristiquesComplementaires');
 const Homologation = require('../src/modeles/homologation');
@@ -428,6 +429,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [],
+        autorisations: [],
       });
       depot = DepotDonnees.creeDepot({ adaptateurPersistance, adaptateurUUID });
     });
@@ -440,6 +442,22 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .then((homologations) => {
           expect(homologations.length).to.equal(1);
           expect(homologations[0].informationsGenerales.nomService).to.equal('Super Service');
+          done();
+        })
+        .catch(done);
+    });
+
+    it("déclare un accès entre l'utilisateur et l'homologation", (done) => {
+      depot.autorisations('123')
+        .then((as) => expect(as.length).to.equal(0))
+        .then(() => depot.nouvelleHomologation('123', { nomService: 'SuperService' }))
+        .then(() => depot.autorisations('123'))
+        .then((as) => {
+          expect(as.length).to.equal(1);
+          const autorisation = as[0];
+          expect(autorisation).to.be.an(AutorisationCreateur);
+          expect(autorisation.idHomologation).to.equal('unUUID');
+          expect(autorisation.idUtilisateur).to.equal('123');
           done();
         })
         .catch(done);
