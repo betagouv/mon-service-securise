@@ -7,8 +7,8 @@ const {
   ErreurUtilisateurExistant,
 } = require('./erreurs');
 const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
-const AutorisationCreateur = require('./modeles/autorisationCreateur');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
+const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisation');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
 
@@ -241,7 +241,7 @@ const creeDepot = (config = {}) => {
   );
 
   const autorisations = (idUtilisateur) => adaptateurPersistance.autorisations(idUtilisateur)
-    .then((as) => as.map((a) => new AutorisationCreateur(a)));
+    .then((as) => as.map((a) => FabriqueAutorisation.fabrique(a)));
 
   return {
     ajouteAvisExpertCyberAHomologation,
