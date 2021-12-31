@@ -1,0 +1,226 @@
+extends mss-aide-entete
+
+block append styles
+  link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/questionsFrequentes.css', rel = 'stylesheet')
+
+block main
+  .marges-fixes
+    .documentation.dois-je-homologuer
+      h1 Questions fréquentes
+
+      section.sommaire
+        h2 Sommaire
+        ul
+          li
+            a(href = '#utilite').
+              À quoi sert l'homologation de sécurité ?
+          li
+            a(href = '#obligatoire').
+              Est-il obligatoire d'homologuer la sécurité de services
+              numériques ?
+          li
+            a(href = '#responsable').
+              Qui est responsable de l'homologation de sécurité ?
+          li
+            a(href = '#services-concernes').
+              Quels types de services numériques doivent être homologués au
+              titre du RGS ?
+          li
+            a(href = '#MSS').
+              Comment Mon Service Sécurisé peut-il m'aider à homologuer mes
+              services numériques ?
+          li
+            a(href = '#adapte').
+              Mon Service Sécurisé est-il adapté à l'homologation de tous les
+              services numériques ?
+          li
+            a(href = '#prestas').
+              Des prestataires peuvent-ils aider à la réalisation d'une
+              homologation de sécurité ?
+
+      section
+        h2#utilite.
+          A quoi sert l'homologation de sécurité ?
+
+        p.
+          Les services numériques de toutes origines et de toute nature (sites
+          web, applications mobiles, etc.) peuvent être la cible d'attaques
+          informatiques.
+
+        p.
+          Pour protéger ces services, l'homologation de sécurité est une
+          démarche essentielle permettant de réduire leurs vulnérabilités et
+          d'accroître la confiance des utilisateurs dans ces derniers, grâce à :
+
+        ul
+          li.
+            L'identification les risques de sécurité potentiels devant être
+            adressés.
+          li.
+            La mise en place de mesures de sécurité permettant de réduire ces
+            risques.
+          li.
+            L'implication de l'ensemble des personnes concernées dans une
+            organisation par la sécurité d'un service numérique et la
+            formalisation d'une décision d'homologation de sécurité.
+
+      section
+        h2#obligatoire.
+          Est-il obligatoire d'homologuer la sécurité de services numériques ?
+
+        p.
+          L'homologation de sécurité est obligatoire pour l'ensemble des
+          entités publiques (ou « autorités administratives ») au titre du
+          Référentiel Général de Sécurité (RGS), visant au renforcement de la
+          confiance des usagers dans les services publics numériques.  Un
+          service public numérique conforme au RGS peut également être
+          considéré comme conforme à l'article 32 du Règlement Général de la
+          Protection des Données (RGPD) portant sur la sécurité du traitement
+          des données.
+
+        p.
+          Les entités publiques concernées incluent notamment :
+
+        ul
+          li Les administrations d'État
+          li Les collectivités territoriales
+          li Les établissements publics
+          li.
+            Les organismes gérant des régimes de protection sociale relevant du
+            code de la sécurité sociale et du code rural ou mentionnés aux
+            articles L. 223-16 et L. 351-21 du code du travail (ex : les caisses
+            d'allocations familiales),
+          li.
+            Les autres organismes chargés de la gestion d'un service public
+            administratif.
+
+      section
+        h2#responsable.
+          Qui est responsable de l'homologation de sécurité ?
+
+        p.
+          Un service public numérique (ou « téléservice » dans le RGS) doit être
+          homologué par une autorité administrative s'il permet des échanges de
+          données entre l'administration et les usagers ou entre
+          administrations, en particulier lorsqu'ils permettent des démarches
+          administratives en ligne.
+
+        p.
+          Tous les services publics numériques sont concernés par
+          l'homologation de sécurité quelque soit leur origine :
+
+        ul
+          li.
+            Un service développé en interne ou par un prestataire au profit
+            d'une autorité administrative.
+          li.
+            Un service ou un logiciel acheté sur étagère auprès d'un
+            fournisseur (ex. service de visioconférence, de stockage de
+            fichiers).
+
+      section
+        h2#services-concernes.
+          Quels types de services numériques doivent être homologués au titre
+          du RGS ?
+
+        p.
+          L'autorité d'homologation d'un service prévu par le RGS doit être à
+          un niveau hiérarchique suffisamment élevé pour assumer la
+          responsabilité de la mise en service d'un service numérique au regard
+          des risques identifiés et de mesures mises en œuvre au moment de la
+          décision.
+
+        p.
+          A titre d'exemple, au sein d'une collectivité territoriale,
+          l'autorité d'homologation peut être la personne occupant la fonction
+          de Maire, d'adjoint au Maire ou de directeur général des services, au
+          sein d'un ministère, de directeur général.
+
+        p.
+          Si l'autorité d'homologation signe la décision d'homologation (note,
+          arrêté, etc), il en peut déléguer l'instruction afin de faciliter et
+          d'accélérer la prise de décision finale (ex : au sein d'une
+          collectivité un ou une chef(fe) de service, au sein d'une
+          administration un sous-directeur ou une sous-directrice).
+
+        p.
+          Lorsque le système est sous la responsabilité de plusieurs autorités,
+          l'autorité d'homologation est désignée conjointement par les
+          autorités concernées.
+
+      section
+        h2#MSS.
+          Comment Mon Service Sécurisé peut-il m'aider à homologuer mes services
+          numériques ?
+
+        p.
+          Mon Service Sécurisé permet l'homologation de sites web, d'API publics
+          et d'applications mobiles aux besoins de sécurité modérés (démarrer
+          ici un dossier d'homologation en ligne pour l'un de ses services).
+
+        p.
+          Pour cela, MonServiceSecurisé propose une démarche en ligne basée sur
+          l'identification du niveau de gravité des risques les plus courants
+          pour ces types de service et le respect d'un socle de sécurité
+          composé de mesures de sécurité proposées par l'ANSSI.
+
+      section
+        h2#adapte.
+          Mon Service Sécurisé est-il adapté à l'homologation de tous les
+          services numériques&nbsp;?
+
+        p.
+          Mon Service Sécurisé permet l'homologation des téléservices les plus
+          courants, à savoir les sites web, les API publics et les applications
+          mobiles aux besoins de sécurité modérés (niveaux « pianissimo » et «
+          mezzo piano » du guide d'homologation en 9 étapes).
+
+        p.
+          Pour les services numériques aux besoins de sécurité plus élevés et
+          pour les autres types de services non pris en compte par
+          Mon Service Sécurisé (ex. : logiciels, systèmes d'information
+          complexes, etc.), il est nécessaire de réaliser une démarche
+          d'homologation de manière autonome. Il est, pour cela, possible de
+          s'appuyer sur la méthode d'homologation de sécurité conçue par
+          l'ANSSI décrite dans :
+
+        ul
+          li
+            a(href = 'https://www.ssi.gouv.fr/actualite/lhomologation-en-9-etapes-simples-nouvelle-publication-de-lanssi/').
+              le Guide de l'homologation en 9 étapes
+          li
+            a(href = "https://www.ssi.gouv.fr/uploads/2018/11/guide-securite-numerique-agile-anssi-pa-v1.pdf").
+              le Guide Agilité et sécurité numérique adapté aux projets
+              agiles
+
+      section
+        h2#prestas.
+          Des prestataires peuvent-ils aider à la réalisation d'une
+          homologation de sécurité ?
+
+        p.
+          Plusieurs catégories de prestataires peuvent aider à la réalisation
+          d'une homologation de sécurité.
+
+        ul
+          li.
+            Faire appel à un prestataire d'analyse de risque labellisés Ebios
+            RM par l'ANSSI, mettant à disposition des outils et vous
+            accompagnent dans votre démarche d'analyse de risque.
+            <a href="https://www.ssi.gouv.fr/entreprise/management-du-risque/la-methode-ebios-risk-manager/label-ebios-risk-manager-des-outils-pour-faciliter-le-management-du-risque-numerique/">En savoir plus</a>
+          li.
+            Faire appel à un prestataire d'audit de sécurité qualifié par
+            l'ANSSI (PASSI) pour vous accompagner dans l'audit approfondi de
+            vos systèmes d'information. L'audit peut inclure un audit de
+            configuration, de code, la réalisation de tests d'intrusion, etc.
+            <a href="https://www.ssi.gouv.fr/entreprise/qualifications/prestataires-de-services-de-confiance-qualifies/prestataires-daudit-de-la-securite-des-systemes-dinformation-passi-qualifies/">En savoir plus</a>
+          li.
+            Faire appel à un prestataire de Bug Bounty afin de réaliser une
+            compagne de recherche de vulnérabilités, notamment via le catalogue
+            de l'UGAP.
+
+      .question
+        p Vous avez une question ?
+        a.bouton(href='mailto:contact@monservicesecurise.beta.gouv.fr').
+          Nous contacter

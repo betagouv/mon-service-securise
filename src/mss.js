@@ -69,8 +69,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     reponse.render('connexion');
   });
 
-  app.get('/doisJeHomologuer', (requete, reponse) => {
-    reponse.render('doisJeHomologuer');
+  app.get('/questionsFrequentes', (requete, reponse) => {
+    reponse.render('questionsFrequentes');
   });
 
   app.get('/mentionsLegales', (requete, reponse) => {
