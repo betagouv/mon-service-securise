@@ -17,7 +17,8 @@ describe('Le référentiel', () => {
         api: { description: "API mise à disposition par l'organisation" },
       },
     });
-    expect(referentiel.typeService(['siteInternet', 'api'])).to.equal("Site internet, API mise à disposition par l'organisation");
+    expect(referentiel.typeService(['siteInternet', 'api']))
+      .to.equal("Site internet, API mise à disposition par l'organisation");
   });
 
   it('donne une description par défaut si aucun identifiant de type de service', () => {
@@ -49,6 +50,14 @@ describe('Le référentiel', () => {
     });
 
     expect(referentiel.provenancesService()).to.eql({ uneClef: 'une valeur' });
+  });
+
+  it('connaît la liste des statuts de déploiement possibles', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      statutsDeploiement: { uneClef: 'une valeur' },
+    });
+
+    expect(referentiel.statutsDeploiement()).to.eql({ uneClef: 'une valeur' });
   });
 
   it('connaît la liste des fonctionnalités possibles', () => {

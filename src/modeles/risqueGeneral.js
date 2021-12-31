@@ -4,14 +4,19 @@ const Referentiel = require('../referentiel');
 
 class RisqueGeneral extends Risque {
   constructor(donneesRisque = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super(['id', 'commentaire', 'niveauGravite']);
+    super(donneesRisque, referentiel);
+
+    this.proprietesAtomiquesRequises.push('id');
     RisqueGeneral.valide(donneesRisque, referentiel);
     this.renseigneProprietes(donneesRisque);
+    this.referentiel = referentiel;
+  }
+
+  descriptionRisque() {
+    return this.referentiel.descriptionRisque(this.id);
   }
 
   static valide(donnees, referentiel) {
-    super.valide(donnees, referentiel);
-
     const { id } = donnees;
     const identifiantsRisquesRepertories = referentiel.identifiantsRisques();
     if (!identifiantsRisquesRepertories.includes(id)) {

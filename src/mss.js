@@ -217,27 +217,33 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         nomService,
         typeService,
         provenanceService,
-        dejaMisEnLigne,
         fonctionnalites,
         fonctionnalitesSpecifiques,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
+        presentation,
         pointsAcces,
+        statutDeploiement,
       } = requete.body;
 
       depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
         nomService,
         typeService,
         provenanceService,
-        dejaMisEnLigne,
         fonctionnalites,
         fonctionnalitesSpecifiques,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
         presenceResponsable,
+        presentation,
         pointsAcces,
+        statutDeploiement,
       })
+        .then((idHomologation) => {
+          depotDonnees.ajoutePresentationAHomologation(idHomologation, presentation);
+          return Promise.resolve(idHomologation);
+        })
         .then((idHomologation) => reponse.json({ idHomologation }))
         .catch((e) => {
           if (e instanceof ErreurModele) reponse.status(422).send(e.message);
@@ -253,6 +259,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
+        .then(() => (
+          depotDonnees.ajoutePresentationAHomologation(
+            requete.params.id, infosGenerales.presentation
+          )
+        ))
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
         .catch((e) => {
           if (e instanceof ErreurModele) {
@@ -377,7 +388,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
               idHomologation, listeRisquesSpecifiques,
             );
           })
-          .then(() => depotDonnees.marqueRisquesCommeVerifies(idHomologation))
           .then(() => reponse.send({ idHomologation }))
           .catch(suite);
       } catch {

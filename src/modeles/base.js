@@ -1,17 +1,29 @@
 class Base {
-  constructor(nomsProprietesAtomiques = [], nomsProprietesListes = [], nomsListesAgregats = {}) {
-    this.nomsProprietesAtomiques = nomsProprietesAtomiques;
-    this.nomsProprietesListes = nomsProprietesListes;
-    this.nomsListesAgregats = nomsListesAgregats;
+  constructor(proprietes = {}) {
+    const {
+      proprietesAtomiquesRequises = [],
+      proprietesAtomiquesFacultatives = [],
+      proprietesListes = [],
+      listesAgregats = {},
+    } = proprietes;
+    this.proprietesAtomiquesRequises = proprietesAtomiquesRequises;
+    this.proprietesAtomiquesFacultatives = proprietesAtomiquesFacultatives;
+    this.proprietesListes = proprietesListes;
+    this.listesAgregats = listesAgregats;
+  }
+
+  aucuneProprieteAtomiqueRequise() {
+    return this.proprietesAtomiquesRequises.length === 0;
   }
 
   renseigneProprietes(donnees, referentiel) {
-    this.nomsProprietesAtomiques.forEach((np) => (this[np] = donnees[np]));
-    this.nomsProprietesListes.forEach((np) => (this[np] = donnees[np] || []));
-    Object.keys(this.nomsListesAgregats).forEach((nl) => {
-      const ClasseListeAgregats = this.nomsListesAgregats[nl];
-      const donneesListeAgregat = { [nl]: donnees[nl] || [] };
-      this[nl] = new ClasseListeAgregats(donneesListeAgregat, referentiel);
+    [...this.proprietesAtomiquesRequises, ...this.proprietesAtomiquesFacultatives]
+      .forEach((p) => (this[p] = donnees[p]));
+    this.proprietesListes.forEach((p) => (this[p] = donnees[p] || []));
+    Object.keys(this.listesAgregats).forEach((l) => {
+      const ClasseListeAgregats = this.listesAgregats[l];
+      const donneesListeAgregat = { [l]: donnees[l] || [] };
+      this[l] = new ClasseListeAgregats(donneesListeAgregat, referentiel);
     });
   }
 
@@ -24,12 +36,16 @@ class Base {
   toJSON() {
     const resultat = {};
 
-    [...this.nomsProprietesAtomiques, ...this.nomsProprietesListes]
+    [
+      ...this.proprietesAtomiquesRequises,
+      ...this.proprietesAtomiquesFacultatives,
+      ...this.proprietesListes,
+    ]
       .filter((k) => typeof this[k] !== 'undefined')
       .forEach((k) => (resultat[k] = this[k]));
 
-    Object.keys(this.nomsListesAgregats).forEach((nl) => {
-      Object.assign(resultat, { [nl]: this[nl].toJSON() });
+    Object.keys(this.listesAgregats).forEach((l) => {
+      Object.assign(resultat, { [l]: this[l].toJSON() });
     });
 
     return resultat;

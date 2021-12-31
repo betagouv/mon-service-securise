@@ -36,11 +36,20 @@ mixin formulaireInformationsGenerales(idHomologation)
         objetDonnees: homologation.informationsGenerales,
       })
 
-      +inputOuiNon({
-        nom: 'dejaMisEnLigne',
-        titre: 'Le service numérique est-il déjà en ligne ?',
+      +inputChoix({
+        type: 'radio',
+        nom: 'statutDeploiement',
+        titre: 'Statut',
+        items: referentiel.statutsDeploiement(),
         objetDonnees: homologation.informationsGenerales,
       })
+
+      label Présentation du service numérique
+        textarea(
+          id = 'presentation',
+          name = 'presentation',
+          placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
+        )= homologation.informationsGenerales.presentation
 
       label Accès au service numérique
         br
@@ -72,7 +81,7 @@ mixin formulaireInformationsGenerales(idHomologation)
       +inputChoix({
         type: 'radio',
         nom: 'delaiAvantImpactCritique',
-        titre: 'Au bout de combien de temps le dysfonctionnement grave de votre service aura-t-il un impact critique pour votre organisation ou pour les usagers ?',
+        titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
         items: referentiel.delaisAvantImpactCritique(),
         objetDonnees: homologation.informationsGenerales,
       })

@@ -1,3 +1,4 @@
+const { ErreurStatutDeploiementInvalide } = require('../erreurs');
 const FonctionnalitesSpecifiques = require('./fonctionnalitesSpecifiques');
 const InformationsHomologation = require('./informationsHomologation');
 const PointsAcces = require('./pointsAcces');
@@ -5,21 +6,26 @@ const Referentiel = require('../referentiel');
 
 class InformationsGenerales extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super([
-      'delaiAvantImpactCritique',
-      'dejaMisEnLigne',
-      'nomService',
-      'presenceResponsable',
-    ], [
-      'donneesCaracterePersonnel',
-      'fonctionnalites',
-      'typeService',
-      'provenanceService',
-    ], {
-      pointsAcces: PointsAcces,
-      fonctionnalitesSpecifiques: FonctionnalitesSpecifiques,
+    super({
+      proprietesAtomiquesRequises: [
+        'delaiAvantImpactCritique',
+        'nomService',
+        'presenceResponsable',
+        'presentation',
+        'statutDeploiement',
+      ],
+      proprietesListes: [
+        'donneesCaracterePersonnel',
+        'fonctionnalites',
+        'typeService',
+        'provenanceService',
+      ],
+      listesAgregats: {
+        pointsAcces: PointsAcces,
+        fonctionnalitesSpecifiques: FonctionnalitesSpecifiques,
+      },
     });
-
+    InformationsGenerales.valide(donnees, referentiel);
     this.renseigneProprietes(donnees);
 
     this.referentiel = referentiel;
@@ -41,6 +47,16 @@ class InformationsGenerales extends InformationsHomologation {
     return this.referentiel.criticite(
       this.fonctionnalites, this.donneesCaracterePersonnel, this.delaiAvantImpactCritique
     );
+  }
+
+  static valide(donnees, referentiel) {
+    const { statutDeploiement } = donnees;
+
+    if (statutDeploiement && !referentiel.statutDeploiementValide(statutDeploiement)) {
+      throw new ErreurStatutDeploiementInvalide(
+        `Le statut de déploiement "${statutDeploiement}" est invalide`
+      );
+    }
   }
 }
 

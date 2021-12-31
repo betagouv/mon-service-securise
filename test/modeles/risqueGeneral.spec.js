@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 
-const { ErreurNiveauGraviteInconnu, ErreurRisqueInconnu } = require('../../src/erreurs');
+const { ErreurRisqueInconnu } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const RisqueGeneral = require('../../src/modeles/risqueGeneral');
 
@@ -10,7 +10,7 @@ describe('Un risque général', () => {
   beforeEach(() => (
     referentiel = Referentiel.creeReferentiel({
       niveauxGravite: { unNiveau: {} },
-      risques: { unRisque: { description: 'Une description' } },
+      risques: { unRisque: {} },
     })
   ));
 
@@ -31,6 +31,14 @@ describe('Un risque général', () => {
     });
   });
 
+  it('connaît sa description', () => {
+    referentiel.recharge({
+      risques: { unRisque: { description: 'Une description' } },
+    });
+    const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
+    expect(risque.descriptionRisque()).to.equal('Une description');
+  });
+
   it('retourne un JSON partiel si certaines informations sont inexistantes', () => {
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
     expect(risque.toJSON()).to.eql({ id: 'unRisque' });
@@ -43,17 +51,6 @@ describe('Un risque général', () => {
     } catch (e) {
       expect(e).to.be.a(ErreurRisqueInconnu);
       expect(e.message).to.equal("Le risque \"identifiantInconnu\" n'est pas répertorié");
-      done();
-    }
-  });
-
-  it('vérifie que le niveau de gravité est bien répertorié', (done) => {
-    try {
-      new RisqueGeneral({ id: 'unRisque', niveauGravite: 'niveauInconnu' }, referentiel);
-      done('La création du risque aurait dû lever une exception.');
-    } catch (e) {
-      expect(e).to.be.a(ErreurNiveauGraviteInconnu);
-      expect(e.message).to.equal("Le niveau de gravité \"niveauInconnu\" n'est pas répertorié");
       done();
     }
   });

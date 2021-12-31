@@ -400,6 +400,11 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation`', () => {
+    beforeEach(() => {
+      depotDonnees.nouvelleHomologation = () => Promise.resolve();
+      depotDonnees.ajoutePresentationAHomologation = () => Promise.resolve();
+    });
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       verifieRequeteExigeAcceptationCGU(
         { method: 'post', url: 'http://localhost:1234/api/homologation' }, done
@@ -415,8 +420,6 @@ describe('Le serveur MSS', () => {
     });
 
     it("aseptise la liste des points d'accès des descriptions vides", (done) => {
-      depotDonnees.nouvelleHomologation = () => Promise.resolve();
-
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('pointsAcces', ['description']);
@@ -431,6 +434,22 @@ describe('Le serveur MSS', () => {
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("demande au dépôt de données d'ajouter la présentation aux caractéristiques", (done) => {
+      let appelleAjoutePresentationAHomologation = false;
+      depotDonnees.ajoutePresentationAHomologation = (idHomologation, presentation) => {
+        appelleAjoutePresentationAHomologation = true;
+        expect(presentation).to.equal('Une présentation');
+        return Promise.resolve();
+      };
+
+      axios.post('http://localhost:1234/api/homologation', { presentation: 'Une présentation' })
+        .then(() => {
+          expect(appelleAjoutePresentationAHomologation).to.be(true);
           done();
         })
         .catch(done);
@@ -465,13 +484,14 @@ describe('Le serveur MSS', () => {
           nomService: 'Super Service',
           typeService: undefined,
           provenanceService: undefined,
-          dejaMisEnLigne: undefined,
           fonctionnalites: undefined,
           fonctionnalitesSpecifiques: undefined,
           donneesCaracterePersonnel: undefined,
           delaiAvantImpactCritique: undefined,
           presenceResponsable: undefined,
+          presentation: undefined,
           pointsAcces: undefined,
+          statutDeploiement: undefined,
         });
         return Promise.resolve('456');
       };
@@ -487,9 +507,10 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
-    beforeEach(() => (
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve()
-    ));
+    beforeEach(() => {
+      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
+      depotDonnees.ajoutePresentationAHomologation = () => Promise.resolve();
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation(
@@ -513,8 +534,6 @@ describe('Le serveur MSS', () => {
         ],
       });
 
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
-
       axios.put('http://localhost:1234/api/homologation/456', { pointsAcces })
         .then(() => {
           verifieAseptisationListe('pointsAcces', ['description']);
@@ -536,6 +555,22 @@ describe('Le serveur MSS', () => {
       axios.put('http://localhost:1234/api/homologation/456', { fonctionnalitesSpecifiques })
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("demande au dépôt de données d'ajouter la présentation aux caractéristiques", (done) => {
+      let appelleAjoutePresentationAHomologation = false;
+      depotDonnees.ajoutePresentationAHomologation = (idHomologation, presentation) => {
+        appelleAjoutePresentationAHomologation = true;
+        expect(presentation).to.equal('Une présentation');
+        return Promise.resolve();
+      };
+
+      axios.put('http://localhost:1234/api/homologation/456', { presentation: 'Une présentation' })
+        .then(() => {
+          expect(appelleAjoutePresentationAHomologation).to.be(true);
           done();
         })
         .catch(done);
@@ -575,9 +610,9 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
-    beforeEach(() => (
-      depotDonnees.ajouteCaracteristiquesAHomologation = () => new Promise((resolve) => resolve())
-    ));
+    beforeEach(() => {
+      depotDonnees.ajouteCaracteristiquesAHomologation = () => Promise.resolve();
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -603,14 +638,14 @@ describe('Le serveur MSS', () => {
       depotDonnees.ajouteCaracteristiquesAHomologation = (
         (idHomologation, caracteristiques) => new Promise((resolve) => {
           expect(idHomologation).to.equal('456');
-          expect(caracteristiques.presentation).to.equal('Une présentation');
+          expect(caracteristiques.hebergeur).to.equal('Un hébergeur');
           caracteristiquesAjoutees = true;
           resolve();
         })
       );
 
       axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
-        presentation: 'Une présentation',
+        hebergeur: 'Un hébergeur',
       })
         .then((reponse) => {
           expect(caracteristiquesAjoutees).to.be(true);
@@ -785,7 +820,6 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête POST sur `/api/homologation/:id/risques`', () => {
     beforeEach(() => {
-      depotDonnees.marqueRisquesCommeVerifies = () => Promise.resolve();
       depotDonnees.remplaceRisquesSpecifiquesPourHomologation = () => Promise.resolve();
     });
 
@@ -874,20 +908,6 @@ describe('Le serveur MSS', () => {
 
       axios.post('http://localhost:1234/api/homologation/456/risques', { risquesSpecifiques })
         .then(() => expect(risquesRemplaces).to.be(true))
-        .then(() => done())
-        .catch(done);
-    });
-
-    it("demande au dépôt d'enregistrer que la liste des risques généraux a été vérifiée", (done) => {
-      let listeRisquesMarqueeCommeVerifiee = false;
-      depotDonnees.marqueRisquesCommeVerifies = (idHomologation) => new Promise((resolve) => {
-        expect(idHomologation).to.equal('456');
-        listeRisquesMarqueeCommeVerifiee = true;
-        resolve();
-      });
-
-      axios.post('http://localhost:1234/api/homologation/456/risques')
-        .then(() => expect(listeRisquesMarqueeCommeVerifiee).to.be(true))
         .then(() => done())
         .catch(done);
     });

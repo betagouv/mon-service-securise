@@ -19,6 +19,15 @@ module.exports = {
     },
   },
 
+  statutsDeploiement: {
+    accessible: {
+      description: 'Le service est déjà accessible aux utilisateurs',
+    },
+    nonAccessible: {
+      description: 'Le service n’est pas accessible aux utilisateurs',
+    },
+  },
+
   fonctionnalites: {
     newsletter: {
       description: 'Inscription à une newsletter',
@@ -42,7 +51,7 @@ module.exports = {
     },
     signatureElectronique: {
       description: 'Dispositif de signature électronique',
-      seuilCriticite: 'eleve',
+      seuilCriticite: 'critique',
     },
     compte: {
       description: 'Création de compte (utilisateurs avec comptes)',
@@ -70,10 +79,6 @@ module.exports = {
     },
     reservation: {
       description: 'Outils de réservation (livres, places, salles, etc.)',
-      seuilCriticite: 'faible',
-    },
-    autre: {
-      description: 'Autres fonctionnalités permettant des échanges de données',
       seuilCriticite: 'faible',
     },
   },
@@ -107,7 +112,7 @@ module.exports = {
     banque: {
       description: 'Données de paiement',
       exemple: 'nº de carte bancaire, etc.',
-      seuilCriticite: 'eleve',
+      seuilCriticite: 'critique',
     },
     mineurs: {
       description: 'Données concernant des personnes mineures',
@@ -120,7 +125,7 @@ module.exports = {
     },
     diffusionRestreinte: {
       description: 'Données de niveau « Diffusion Restreinte »',
-      seuilCriticite: 'eleve',
+      seuilCriticite: 'critique',
     },
     autre: {
       description: 'Autre données sensibles',
@@ -130,34 +135,26 @@ module.exports = {
   },
 
   delaisAvantImpactCritique: {
-    immediat: {
-      description: 'Immédiatement',
+    moinsUneHeure: {
+      description: "Moins d'une heure",
       seuilCriticite: 'critique',
-    },
-    uneHeure: {
-      description: 'Une heure',
-      seuilCriticite: 'eleve',
     },
     uneJournee: {
       description: 'Une journée',
       seuilCriticite: 'moyen',
     },
-    uneSemaine: {
-      description: 'Une semaine',
-      seuilCriticite: 'faible',
-    },
-    unMois: {
-      description: 'Un mois ou plus',
+    plusUneJournee: {
+      description: "Plus d'une journée",
       seuilCriticite: 'faible',
     },
   },
 
   niveauxGravite: {
-    nonConcerne: { position: 0, description: 'Non concerné' },
-    minime: { position: 1, description: 'Minime' },
-    significatif: { position: 2, description: 'Significatif' },
-    grave: { position: 3, description: 'Grave' },
-    critique: { position: 4, description: 'Critique' },
+    nonConcerne: { position: 0, description: 'Non concerné', important: false },
+    minime: { position: 1, description: 'Minime', important: false },
+    significatif: { position: 2, description: 'Significatif', important: true },
+    grave: { position: 3, description: 'Grave', important: true },
+    critique: { position: 4, description: 'Critique', important: true },
   },
 
   risques: {

@@ -1,16 +1,10 @@
-const ListeItems = require('./listeItems');
+const ListeRisques = require('./listeRisques');
 const RisqueSpecifique = require('./risqueSpecifique');
 
-class RisquesSpecifiques extends ListeItems {
+class RisquesSpecifiques extends ListeRisques {
   constructor(donnees, referentiel) {
     const { risquesSpecifiques } = donnees;
     super(RisqueSpecifique, { items: risquesSpecifiques }, referentiel);
-  }
-
-  statutSaisie() {
-    return this.items.every((i) => !!i.description)
-      ? RisquesSpecifiques.COMPLETES
-      : RisquesSpecifiques.A_COMPLETER;
   }
 }
 

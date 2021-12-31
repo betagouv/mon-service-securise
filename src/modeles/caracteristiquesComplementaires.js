@@ -16,11 +16,13 @@ const valide = (donnees, referentiel) => {
 
 class CaracteristiquesComplementaires extends InformationsHomologation {
   constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super(
-      ['presentation', 'structureDeveloppement', 'hebergeur', 'localisationDonnees'],
-      [],
-      { entitesExternes: EntitesExternes },
-    );
+    super({
+      proprietesAtomiquesRequises: [
+        'structureDeveloppement', 'hebergeur', 'localisationDonnees',
+      ],
+      proprietesAtomiquesFacultatives: ['presentation'],
+      listesAgregats: { entitesExternes: EntitesExternes },
+    });
     valide(donneesCaracteristiques, referentiel);
     this.renseigneProprietes(donneesCaracteristiques);
 
@@ -37,22 +39,6 @@ class CaracteristiquesComplementaires extends InformationsHomologation {
 
   nombreEntitesExternes() {
     return this.entitesExternes.nombre();
-  }
-
-  statutSaisie() {
-    const statutSaisieBase = super.statutSaisie();
-    const statutSaisieEntitesExternes = this.entitesExternes?.statutSaisie?.();
-
-    switch (statutSaisieEntitesExternes) {
-      case InformationsHomologation.A_COMPLETER:
-        return InformationsHomologation.A_COMPLETER;
-      case InformationsHomologation.COMPLETES:
-        return statutSaisieBase === InformationsHomologation.COMPLETES
-          ? InformationsHomologation.COMPLETES
-          : InformationsHomologation.A_COMPLETER;
-      default:
-        return statutSaisieBase;
-    }
   }
 }
 
