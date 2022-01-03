@@ -255,7 +255,11 @@ const creeDepot = (config = {}) => {
   const autorisations = (idUtilisateur) => adaptateurPersistance.autorisations(idUtilisateur)
     .then((as) => as.map((a) => FabriqueAutorisation.fabrique(a)));
 
+  const accesAutorise = (idUtilisateur, idHomologation) => autorisations(idUtilisateur)
+    .then((as) => as.some((a) => a.idHomologation === idHomologation));
+
   return {
+    accesAutorise,
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
     ajouteInformationsGeneralesAHomologation,

@@ -1,4 +1,8 @@
-const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [], autorisations: [] }) => {
+const nouvelAdaptateur = (donnees = {}) => {
+  donnees.utilisateurs ||= [];
+  donnees.homologations ||= [];
+  donnees.autorisations ||= [];
+
   const ajouteHomologation = (id, donneesHomologation) => {
     donnees.homologations.push(Object.assign(donneesHomologation, { id }));
     return Promise.resolve();
@@ -9,22 +13,24 @@ const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [], autor
     return Promise.resolve();
   };
 
+  const autorisations = (idUtilisateur) => Promise.resolve(
+    donnees.autorisations.filter((a) => a.idUtilisateur === idUtilisateur)
+  );
+
   const homologation = (idHomologation) => Promise.resolve(
     donnees.homologations.find((h) => h.id === idHomologation)
   );
 
-  const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour) => (
-    Promise.resolve(
-      donnees.homologations.find((h) => (
-        h.id !== idHomologationMiseAJour
-        && h.idUtilisateur === idUtilisateur
-        && h.informationsGenerales?.nomService === nomService
-      ))
-    )
-  );
+  const homologations = (idUtilisateur) => autorisations(idUtilisateur)
+    .then((as) => Promise.all(
+      as.map(({ idHomologation }) => homologation(idHomologation))
+    ));
 
-  const homologations = (idUtilisateur) => Promise.resolve(
-    donnees.homologations.filter((h) => h.idUtilisateur === idUtilisateur)
+  const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour) => (
+    homologations(idUtilisateur)
+      .then((hs) => hs.find((h) => (
+        h.id !== idHomologationMiseAJour && h.informationsGenerales?.nomService === nomService
+      )))
   );
 
   const metsAJourHomologation = (id, donneesAMettreAJour) => homologation(id)
@@ -63,10 +69,6 @@ const nouvelAdaptateur = (donnees = { utilisateurs: [], homologations: [], autor
 
   const utilisateurAvecIdReset = (idReset) => Promise.resolve(
     donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset)
-  );
-
-  const autorisations = (idUtilisateur) => Promise.resolve(
-    donnees.autorisations.filter((a) => a.idUtilisateur === idUtilisateur)
   );
 
   const ajouteAutorisation = (id, donneesAutorisation) => {
