@@ -87,6 +87,13 @@ mixin formulaireInformationsGenerales(idHomologation)
         objetDonnees: homologation.informationsGenerales,
       })
 
+      +elementsAjoutables({
+              identifiantConteneur: 'donnees-sensibles-specifiques',
+              nom: 'donnees-sensibles',
+              donnees: {},
+              textBoutonAjouter: 'Ajouter des données',
+            })
+
     section
       +inputChoix({
         type: 'radio',
