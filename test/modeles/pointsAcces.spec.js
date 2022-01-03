@@ -5,12 +5,11 @@ const PointsAcces = require('../../src/modeles/pointsAcces');
 const ils = it;
 
 describe("Les points d'accès", () => {
-  ils('savent se dénombrer', () => {
-    const pointsAcces = new PointsAcces({ pointsAcces: [
-      { description: "Un point d'accès" },
-      { description: "Un autre point d'accès" },
-    ] });
+  ils("se construisent avec le bon nom d'item", () => {
+    const pointsAcces = new PointsAcces(
+      { pointsAcces: [] }
+    );
 
-    expect(pointsAcces.nombre()).to.equal(2);
+    expect(pointsAcces.nombre()).to.equal(0);
   });
 });

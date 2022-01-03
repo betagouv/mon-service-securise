@@ -1,9 +1,8 @@
-const ListeItems = require('./listeItems');
-const FonctionnaliteSpecifique = require('./fonctionnaliteSpecifique');
+const ItemsAvecDescription = require('./itemsAvecDescription');
 
-class FonctionnalitesSpecifiques extends ListeItems {
+class FonctionnalitesSpecifiques extends ItemsAvecDescription {
   constructor(donnees) {
-    super(FonctionnaliteSpecifique, { items: donnees.fonctionnalitesSpecifiques });
+    super({ items: donnees.fonctionnalitesSpecifiques });
   }
 }
 

@@ -5,14 +5,11 @@ const FonctionnalitesSpecifiques = require('../../src/modeles/fonctionnalitesSpe
 const elles = it;
 
 describe('Les fonctionnalités spécifiques', () => {
-  elles('savent se dénombrer', () => {
+  elles("se construisent avec le bon nom d'item", () => {
     const fonctionnalitesSpecifiques = new FonctionnalitesSpecifiques(
-      { fonctionnalitesSpecifiques: [
-        { description: 'Une fonctionnalité' },
-        { description: 'Une autre fonctionnalité' },
-      ] }
+      { fonctionnalitesSpecifiques: [] }
     );
 
-    expect(fonctionnalitesSpecifiques.nombre()).to.equal(2);
+    expect(fonctionnalitesSpecifiques.nombre()).to.equal(0);
   });
 });
