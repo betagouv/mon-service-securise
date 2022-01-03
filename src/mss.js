@@ -4,14 +4,14 @@ const express = require('express');
 const { ErreurModele } = require('./erreurs');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
-const FonctionnaliteSpecifique = require('./modeles/fonctionnaliteSpecifique');
+const FonctionnalitesSpecifiques = require('./modeles/fonctionnalitesSpecifiques');
 const Homologation = require('./modeles/homologation');
 const InformationsGenerales = require('./modeles/informationsGenerales');
 const InformationsHomologation = require('./modeles/informationsHomologation');
 const MesureGenerale = require('./modeles/mesureGenerale');
 const MesuresSpecifiques = require('./modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
-const PointAcces = require('./modeles/pointAcces');
+const PointsAcces = require('./modeles/pointsAcces');
 const RisqueGeneral = require('./modeles/risqueGeneral');
 const RisquesSpecifiques = require('./modeles/risquesSpecifiques');
 
@@ -210,8 +210,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.post('/api/homologation',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('nomService', 'pointsAcces.*.description', 'fonctionnalitesSpecifiques.*.description'),
-    middleware.aseptiseListe('pointsAcces', PointAcces.proprietes()),
-    middleware.aseptiseListe('fonctionnalitesSpecifiques', FonctionnaliteSpecifique.proprietes()),
+    middleware.aseptiseListe('pointsAcces', PointsAcces.proprietesItem()),
+    middleware.aseptiseListe('fonctionnalitesSpecifiques', FonctionnalitesSpecifiques.proprietesItem()),
     (requete, reponse, suite) => {
       const {
         nomService,
@@ -254,8 +254,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.put('/api/homologation/:id',
     middleware.trouveHomologation,
     middleware.aseptise('nomService', 'pointsAcces.*.description', 'fonctionnalitesSpecifiques.*.description'),
-    middleware.aseptiseListe('pointsAcces', PointAcces.proprietes()),
-    middleware.aseptiseListe('fonctionnalitesSpecifiques', FonctionnaliteSpecifique.proprietes()),
+    middleware.aseptiseListe('pointsAcces', PointsAcces.proprietesItem()),
+    middleware.aseptiseListe('fonctionnalitesSpecifiques', FonctionnalitesSpecifiques.proprietesItem()),
     (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)

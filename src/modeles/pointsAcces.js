@@ -1,9 +1,8 @@
-const ListeItems = require('./listeItems');
-const PointAcces = require('./pointAcces');
+const ItemsAvecDescription = require('./itemsAvecDescription');
 
-class PointsAcces extends ListeItems {
+class PointsAcces extends ItemsAvecDescription {
   constructor(donnees) {
-    super(PointAcces, { items: donnees.pointsAcces });
+    super({ items: donnees.pointsAcces });
   }
 }
 
