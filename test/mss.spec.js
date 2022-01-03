@@ -613,6 +613,7 @@ describe('Le serveur MSS', () => {
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
     beforeEach(() => {
       depotDonnees.ajouteCaracteristiquesAHomologation = () => Promise.resolve();
+      depotDonnees.ajouteLocalisationDonneesAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -631,6 +632,34 @@ describe('Le serveur MSS', () => {
         },
         done
       );
+    });
+
+    it("demande au dépôt d'ajouter la localisation des données", (done) => {
+      referentiel.identifiantsLocalisationsDonnees = () => ['france'];
+
+      let localisationDonneesAjouteeAHomologation = false;
+      depotDonnees.ajouteLocalisationDonneesAHomologation = (
+        idHomologation, localisationDonnees
+      ) => {
+        try {
+          expect(localisationDonnees).to.equal('france');
+          expect(idHomologation).to.equal('456');
+          localisationDonneesAjouteeAHomologation = true;
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(done(e));
+        }
+      };
+
+      axios.post(
+        'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
+        { localisationDonnees: 'france' },
+      )
+        .then(() => {
+          expect(localisationDonneesAjouteeAHomologation).to.be(true);
+          done();
+        })
+        .catch(done);
     });
 
     it("demande au dépôt d'associer les caractéristiques à l'homologation", (done) => {

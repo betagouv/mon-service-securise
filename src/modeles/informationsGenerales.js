@@ -14,6 +14,9 @@ class InformationsGenerales extends InformationsHomologation {
         'presentation',
         'statutDeploiement',
       ],
+      proprietesAtomiquesFacultatives: [
+        'localisationDonnees',
+      ],
       proprietesListes: [
         'donneesCaracterePersonnel',
         'fonctionnalites',
