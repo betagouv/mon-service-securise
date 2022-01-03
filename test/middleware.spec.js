@@ -13,9 +13,7 @@ const prepareVerificationReponse = (reponse, status, ...params) => {
       expect(s).to.equal(status);
       return reponse;
     } catch (e) {
-      /* eslint-disable no-console */
-      console.log(e);
-      /* eslint-enable no-console */
+      suite(e);
       return undefined;
     }
   };
@@ -182,8 +180,8 @@ describe('Le middleware MSS', () => {
     });
 
     it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès à l'homologation", (done) => {
-      const homologation = { idUtilisateur: 'unAutreIdentifiantQueCeluiUtilisateurCourant' };
-      depotDonnees.homologation = () => Promise.resolve(homologation);
+      depotDonnees.homologation = () => Promise.resolve({});
+      depotDonnees.accesAutorise = () => Promise.resolve(false);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       prepareVerificationReponse(reponse, 403, "Accès à l'homologation refusé", done);
@@ -203,13 +201,16 @@ describe('Le middleware MSS', () => {
     });
 
     it("retourne l'homologation trouvée et appelle le middleware suivant", (done) => {
-      const homologation = { idUtilisateur: '999' };
+      const homologation = {};
       depotDonnees.homologation = () => Promise.resolve(homologation);
+      depotDonnees.accesAutorise = () => Promise.resolve(true);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       middleware.trouveHomologation(requete, reponse, () => {
-        expect(requete.homologation).to.equal(homologation);
-        done();
+        try {
+          expect(requete.homologation).to.equal(homologation);
+          done();
+        } catch (e) { done(e); }
       });
     });
   });
