@@ -310,6 +310,21 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it('ajoute une localisation des données à une homologation', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{ id: '123', informationsGenerales: { nomService: 'nom' } }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.ajouteLocalisationDonneesAHomologation('123', 'france')
+      .then(() => depot.homologation('123'))
+      .then(({ informationsGenerales: { localisationDonnees } }) => {
+        expect(localisationDonnees).to.equal('france');
+        done();
+      })
+      .catch(done);
+  });
+
   it('sait associer des parties prenantes à une homologation', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [

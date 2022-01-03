@@ -281,7 +281,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       );
       try {
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
+        const { localisationDonnees } = caracteristiques;
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
+          .then(() => depotDonnees.ajouteLocalisationDonneesAHomologation(
+            requete.params.id, localisationDonnees
+          ))
           .then(() => reponse.send({ idHomologation: requete.homologation.id }));
       } catch {
         reponse.status(422).send('Données invalides');

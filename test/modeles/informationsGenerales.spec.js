@@ -18,6 +18,7 @@ describe('Les informations générales', () => {
       donneesCaracterePersonnel: ['desDonnees'],
       fonctionnalites: ['uneFonctionnalite'],
       fonctionnalitesSpecifiques: [{ description: 'Une fonctionnalité' }],
+      localisationDonnees: 'france',
       typeService: ['unType'],
       nomService: 'Super Service',
       pointsAcces: [{ description: 'Une description' }],
@@ -30,6 +31,7 @@ describe('Les informations générales', () => {
     expect(infos.delaiAvantImpactCritique).to.equal('unDelai');
     expect(infos.donneesCaracterePersonnel).to.eql(['desDonnees']);
     expect(infos.fonctionnalites).to.eql(['uneFonctionnalite']);
+    expect(infos.localisationDonnees).to.equal('france');
     expect(infos.typeService).to.eql(['unType']);
     expect(infos.nomService).to.equal('Super Service');
     expect(infos.presenceResponsable).to.be('non');
