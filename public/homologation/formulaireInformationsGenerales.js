@@ -1,5 +1,14 @@
 import ElementsAjoutables from '../modules/elementsAjoutables.js';
 
+const sourceRegExpParamsItem = (nomIndicatif) => `^(description)-${nomIndicatif}-`;
+
+const listesAvecItemsExtraits = [
+  { cle: 'pointsAcces', nomIndicatif: 'point-acces' },
+  { cle: 'fonctionnalitesSpecifiques', nomIndicatif: 'fonctionnalite' },
+].map((valeur) => (
+  { ...valeur, sourceRegExpParamsItem: sourceRegExpParamsItem(valeur.nomIndicatif) }
+));
+
 $(() => {
   ElementsAjoutables.nouveaux(
     { nom: 'fonctionnalite' },
@@ -15,3 +24,5 @@ $(() => {
     '#nouveau-point-acces'
   );
 });
+
+export default listesAvecItemsExtraits;
