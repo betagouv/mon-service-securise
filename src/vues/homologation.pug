@@ -18,6 +18,9 @@ block append styles
   link(href = '/statique/assets/styles/homologation.css', rel = 'stylesheet')
 
 block main
+  .retour.marges-fixes
+    a(href = '/homologations') ‹&nbsp;&nbsp;Mon espace personnel
+
   .details-homologation.marges-fixes
     .tableau-bord
       h1!= homologation.nomService()

@@ -39,3 +39,11 @@ section {
 section:last-of-type {
   border-bottom: solid 1px #abb6bf;
 }
+
+.retour {
+  display: inline-block;
+
+  margin-top: 3em;
+
+  text-align: left;
+}
