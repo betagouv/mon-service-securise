@@ -1,14 +1,14 @@
 extends mss-aide-entete
 
 block append styles
-  link(href='/statique/assets/styles/homologations.css', rel='stylesheet')
+  link(href='/statique/assets/styles/espacePersonnel.css', rel='stylesheet')
 
 block main
   .suivi-homologations.marges-fixes
-    h1 Mes homologations
+    h1 Mon espace personnel
     .homologations
       a.nouvelle.homologation(href='/homologation/creation')
         .icone_ajout
         div Créer un nouveau projet d'homologation
 
-  script(type="module", src="/statique/homologations.js")
+  script(type="module", src="/statique/espacePersonnel.js")

@@ -11,7 +11,7 @@ $(() => {
 
   const creeMenu = () => $(`
 <div class="menu">
-  <a href="/homologations">Mes homologations</a>
+  <a href="/espacePersonnel">Mon espace personnel</a>
   <a href="/utilisateur/edition">Changer mon mot de passe</a>
   <a href="/connexion">Me déconnecter</a>
 </div>

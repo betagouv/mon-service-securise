@@ -8,7 +8,7 @@ block append styles
 block main
   .retour.marges-fixes
     - let lienRetour = '/';
-    - if (homologation) lienRetour = '/homologations';
+    - if (homologation) lienRetour = '/espacePersonnel';
     - if (homologation && homologation.id) lienRetour = `/homologation/${homologation.id}`;
     a(href = lienRetour) ‹&nbsp;&nbsp;Retour
 

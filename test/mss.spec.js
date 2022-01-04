@@ -310,9 +310,9 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/homologations`', () => {
+  describe('quand requête GET sur `/espacePersonnel`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeAcceptationCGU('http://localhost:1234/homologations', done);
+      verifieRequeteExigeAcceptationCGU('http://localhost:1234/espacePersonnel', done);
     });
   });
 
