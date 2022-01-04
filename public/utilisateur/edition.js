@@ -9,7 +9,7 @@ $(() => {
     params.cguAcceptees = params.cguAcceptees && params.cguAcceptees[0] === 'on';
 
     axios.put('/api/utilisateur', params)
-      .then(() => (window.location = '/homologations'));
+      .then(() => (window.location = '/espacePersonnel'));
   });
 
   const $bouton = $('.bouton');

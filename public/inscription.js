@@ -6,6 +6,6 @@ $(() => {
     const email = $('#email').val();
 
     axios.post('/api/utilisateur', { prenom, nom, email })
-      .then(() => (window.location = '/homologations'));
+      .then(() => (window.location = '/espacePersonnel'));
   });
 });

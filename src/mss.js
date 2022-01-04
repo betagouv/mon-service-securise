@@ -106,8 +106,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     reponse.render('admin/inscription');
   });
 
-  app.get('/homologations', middleware.verificationAcceptationCGU, (requete, reponse) => {
-    reponse.render('homologations');
+  app.get('/espacePersonnel', middleware.verificationAcceptationCGU, (requete, reponse) => {
+    reponse.render('espacePersonnel');
   });
 
   app.get('/homologation/creation', middleware.verificationAcceptationCGU, (requete, reponse) => {
