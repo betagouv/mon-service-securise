@@ -1,4 +1,5 @@
 import parametres, { modifieParametresAvecItemsExtraits } from './parametres.js';
+import listesAvecItemsExtraits from '../homologation/formulaireInformationsGenerales.js';
 
 const fermeModale = () => {
   $('.rideau').css('display', '');
@@ -10,18 +11,13 @@ const afficheModaleSeuilCritique = () => {
   $('.rideau').css('display', 'flex');
 };
 
-const organiseParametresPointsAcces = (params) => (
-  modifieParametresAvecItemsExtraits(params, 'pointsAcces', '^(description)-point-acces-')
-);
-
-const organiseParametresFonctionnalite = (params) => (
-  modifieParametresAvecItemsExtraits(params, 'fonctionnalitesSpecifiques', '^(description)-fonctionnalite-')
-);
-
 const tousLesParametres = (selecteurFormulaire) => {
   const params = parametres(selecteurFormulaire);
-  organiseParametresPointsAcces(params);
-  organiseParametresFonctionnalite(params);
+  listesAvecItemsExtraits.forEach(
+    ({ cle, sourceRegExpParamsItem }) => (
+      modifieParametresAvecItemsExtraits(params, cle, sourceRegExpParamsItem)
+    )
+  );
   return params;
 };
 
