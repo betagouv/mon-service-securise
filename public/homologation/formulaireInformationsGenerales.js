@@ -1,4 +1,4 @@
-import ElementsAjoutables from '../modules/elementsAjoutables.js';
+import brancheElementsAjoutables from '../modules/elementsAjoutables.js';
 
 const sourceRegExpParamsItem = (nomIndicatif) => `^(description)-${nomIndicatif}-`;
 
@@ -10,19 +10,8 @@ const listesAvecItemsExtraits = [
 ));
 
 $(() => {
-  ElementsAjoutables.nouveaux(
-    { nom: 'fonctionnalite' },
-    '#fonctionnalites-specifiques',
-    '#donnees-fonctionnalites-specifiques',
-    '#nouvelle-fonctionnalite'
-  );
-
-  ElementsAjoutables.nouveaux(
-    { nom: 'point-acces', valeurExemple: 'exemple : https://www.adresse.fr, App Store, Play Store…' },
-    '#points-acces',
-    '#donnees-points-acces',
-    '#nouveau-point-acces'
-  );
+  brancheElementsAjoutables('fonctionnalites-specifiques', 'fonctionnalite');
+  brancheElementsAjoutables('points-acces', 'point-acces', 'exemple : https://www.adresse.fr, App Store, Play Store…');
 });
 
 export default listesAvecItemsExtraits;
