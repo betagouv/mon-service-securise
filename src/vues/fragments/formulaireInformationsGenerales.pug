@@ -1,4 +1,5 @@
 include ./inputChoix
+include ./elementsAjoutables
 
 block append styles
   link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
@@ -53,8 +54,13 @@ mixin formulaireInformationsGenerales(idHomologation)
 
       label Accès au service numérique
         br
-        #points-acces
-        a.nouvel-item#nouveau-point-acces Ajouter un accès
+        +elementsAjoutables({
+          identifiantConteneur: 'points-acces',
+          nom: 'point-acces',
+          valeurExemple: 'exemple : https://www.adresse.fr, App Store, Play Store…',
+          donnees: homologation.informationsGenerales.pointsAcces.toJSON(),
+          textBoutonAjouter: 'Ajouter un accès',
+        })
 
     section
       +inputChoix({
@@ -65,8 +71,12 @@ mixin formulaireInformationsGenerales(idHomologation)
         objetDonnees: homologation.informationsGenerales,
       })
 
-      #fonctionnalites-specifiques
-      a.nouvel-item#nouvelle-fonctionnalite Ajouter une fonctionnalité
+      +elementsAjoutables({
+        identifiantConteneur: 'fonctionnalites-specifiques',
+        nom: 'fonctionnalite',
+        donnees: homologation.informationsGenerales.fonctionnalitesSpecifiques.toJSON(),
+        textBoutonAjouter: 'Ajouter une fonctionnalité',
+      })
 
     section
       +inputChoix({
@@ -105,9 +115,4 @@ mixin formulaireInformationsGenerales(idHomologation)
     else
       .bouton#diagnostic Valider
 
-
-  script(id = 'donnees-points-acces', type = 'application/json').
-    !{JSON.stringify(homologation.informationsGenerales.pointsAcces.toJSON()) }
-  script(id = 'donnees-fonctionnalites-specifiques', type = 'application/json').
-    !{JSON.stringify(homologation.informationsGenerales.fonctionnalitesSpecifiques.toJSON())}
   script(type = 'module', src = '/statique/homologation/formulaireInformationsGenerales.js')
