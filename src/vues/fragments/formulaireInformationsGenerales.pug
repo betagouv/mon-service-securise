@@ -80,6 +80,14 @@ mixin formulaireInformationsGenerales(idHomologation)
     section
       +inputChoix({
         type: 'radio',
+        nom: 'localisationDonnees',
+        titre: 'Localisation des données',
+        items: referentiel.localisationsDonnees(),
+        objetDonnees: homologation.informationsGenerales,
+      })
+
+      +inputChoix({
+        type: 'radio',
         nom: 'delaiAvantImpactCritique',
         titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
         items: referentiel.delaisAvantImpactCritique(),
