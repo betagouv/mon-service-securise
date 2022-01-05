@@ -5,10 +5,10 @@ h1 {
   line-height: 1.2em;
 }
 
-.logo-anssi {
-  width: 33%;
+.intro-mss {
+  width: 67%;
 
-  background-image: url(../images/logo_anssi.png);
+  background-image: url(../images/image_intro_mss.svg);
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -62,16 +62,16 @@ h1 {
   background-position-y: 1.2em;
 }
 
-.demarrage-rapide {
-  background-image: url(../images/icone_demarrage_rapide.svg);
+.pedagogique {
+  background-image: url(../images/icone_gros_livre.svg);
 }
 
-.gain-temps {
-  background-image: url(../images/icone_gain_temps.svg);
+.collaborative {
+  background-image: url(../images/icone_personnes.svg);
 }
 
-.conseils-anssi {
-  background-image: url(../images/icone_conseils_anssi.svg);
+.personnalisee {
+  background-image: url(../images/icone_etoile.svg);
 }
 
 .bandeau {
@@ -141,15 +141,15 @@ h1 {
 }
 
 .exemple.site-internet h3:before {
-  background-image: url(../images/photo_site_internet.png);
+  background-image: url(../images/image_site_internet.svg);
 }
 
 .exemple.application h3:before {
-  background-image: url(../images/photo_application.png);
+  background-image: url(../images/image_appli_mobile.svg);
 }
 
 .exemple.api h3:before {
-  background-image: url(../images/photo_api.png);
+  background-image: url(../images/image_api.svg);
 }
 
 
