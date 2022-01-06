@@ -118,7 +118,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.get('/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
     const actionsDeSaisie = {
-         {
+        {
         description: 'Informations générales',
         url: `/homologation/${homologation.id}/edition`,
         statut: homologation.statutSaisie('informationsGenerales'),
