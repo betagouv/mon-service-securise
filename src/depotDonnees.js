@@ -150,7 +150,11 @@ const creeDepot = (config = {}) => {
   const nouvelleHomologation = (idUtilisateur, donneesInformationsGenerales) => {
     const idHomologation = adaptateurUUID.genereUUID();
     const idAutorisation = adaptateurUUID.genereUUID();
-    const donnees = { idUtilisateur, informationsGenerales: donneesInformationsGenerales };
+    const donnees = {
+      idUtilisateur,
+      informationsGenerales: donneesInformationsGenerales,
+      descriptionService: donneesInformationsGenerales,
+    };
 
     return valideInformationsGenerales(idUtilisateur, donneesInformationsGenerales)
       .then(() => adaptateurPersistance.ajouteHomologation(idHomologation, donnees))

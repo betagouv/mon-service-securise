@@ -532,6 +532,19 @@ describe('Le dépôt de données persistées en mémoire', () => {
         })
         .catch(done);
     });
+
+    it("duplique les données d'informations générales dans description du service", (done) => {
+      depot.homologations('123')
+        .then(() => depot.nouvelleHomologation('123', { nomService: 'Super Service' }))
+        .then(() => depot.homologations('123'))
+        .then((homologations) => {
+          expect(homologations.length).to.equal(1);
+          expect(homologations[0].informationsGenerales.nomService).to.equal('Super Service');
+          expect(homologations[0].descriptionService.nomService).to.equal('Super Service');
+          done();
+        })
+        .catch(done);
+    });
   });
 
   it("retourne l'utilisateur authentifié", (done) => {
