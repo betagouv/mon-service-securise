@@ -43,14 +43,6 @@
   border-bottom: none;
 }
 
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-gap: 1em;
-
-  margin: 0 0 1em;
-}
-
 .actions dt {
   font-weight: bold;
   font-size: 1.3em;
