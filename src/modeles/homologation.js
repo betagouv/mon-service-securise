@@ -1,6 +1,7 @@
 const Referentiel = require('../referentiel');
 const AvisExpertCyber = require('./avisExpertCyber');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
+const DescriptionService = require('./descriptionService');
 const InformationsGenerales = require('./informationsGenerales');
 const Mesure = require('./mesure');
 const Mesures = require('./mesures');
@@ -33,7 +34,7 @@ class Homologation {
     this.id = id;
     this.idUtilisateur = idUtilisateur;
     this.informationsGenerales = new InformationsGenerales(informationsGenerales, referentiel);
-    this.descriptionService = new InformationsGenerales(descriptionService, referentiel);
+    this.descriptionService = new DescriptionService(descriptionService, referentiel);
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
     this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
       caracteristiquesComplementaires, referentiel,

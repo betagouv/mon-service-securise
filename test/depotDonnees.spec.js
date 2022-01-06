@@ -230,6 +230,24 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .catch(done);
     });
 
+    it('met à jour les informations générales dans description du service', (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [
+          { id: '123', descriptionService: { nomService: 'Super Service' } },
+        ],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      const infos = new InformationsGenerales({ nomService: 'Nouveau Nom' });
+      depot.ajouteInformationsGeneralesAHomologation('123', infos)
+        .then(() => depot.homologation('123'))
+        .then(({ descriptionService }) => {
+          expect(descriptionService.nomService).to.equal('Nouveau Nom');
+          done();
+        })
+        .catch(done);
+    });
+
     it('lève une exception si le nom du service est absent', (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         homologations: [
@@ -339,6 +357,21 @@ describe('Le dépôt de données persistées en mémoire', () => {
     depot.ajouteLocalisationDonneesAHomologation('123', 'france')
       .then(() => depot.homologation('123'))
       .then(({ informationsGenerales: { localisationDonnees } }) => {
+        expect(localisationDonnees).to.equal('france');
+        done();
+      })
+      .catch(done);
+  });
+
+  it('ajoute une localisation des données à la description du service', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{ id: '123', informationsGenerales: { nomService: 'nom' } }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.ajouteLocalisationDonneesAHomologation('123', 'france')
+      .then(() => depot.homologation('123'))
+      .then(({ descriptionService: { localisationDonnees } }) => {
         expect(localisationDonnees).to.equal('france');
         done();
       })
