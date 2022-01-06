@@ -62,6 +62,11 @@ const creeDepot = (config = {}) => {
     return trouveDonneesHomologation(idOuHomologation).then(metsAJour);
   };
 
+  const metsAJourInformationsGeneralesHomologation = (homologationCible, informations) => (
+    metsAJourProprieteHomologation('informationsGenerales', homologationCible, informations)
+      .then(() => metsAJourProprieteHomologation('descriptionService', homologationCible, informations))
+  );
+
   const remplaceProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((h) => {
@@ -105,7 +110,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance.homologation(idHomologation)
       .then((h) => (
         valideInformationsGenerales(h.idUtilisateur, infos, h.id)
-          .then(() => metsAJourProprieteHomologation('informationsGenerales', h, infos))
+          .then(() => metsAJourInformationsGeneralesHomologation(h, infos))
       ))
   );
 
@@ -132,7 +137,7 @@ const creeDepot = (config = {}) => {
           h.informationsGenerales, referentiel
         );
         informationsGenerales.localisationDonnees = localisationDonnees;
-        return metsAJourProprieteHomologation('informationsGenerales', h, informationsGenerales);
+        return metsAJourInformationsGeneralesHomologation(h, informationsGenerales);
       })
   );
 
