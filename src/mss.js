@@ -118,7 +118,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.get('/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
     const actionsDeSaisie = {
-      'Décrivez le service numérique': [{
+         {
         description: 'Informations générales',
         url: `/homologation/${homologation.id}/edition`,
         statut: homologation.statutSaisie('informationsGenerales'),
@@ -130,9 +130,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         description: 'Parties prenantes',
         url: `/homologation/${homologation.id}/partiesPrenantes`,
         statut: homologation.statutSaisie('partiesPrenantes'),
-      }],
-
-      'Sécurisez le service numérique': [{
+      }, {
         description: 'Risques de sécurité',
         url: `/homologation/${homologation.id}/risques`,
         statut: homologation.statutSaisie('risques'),
@@ -140,13 +138,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         description: 'Mesures de sécurité',
         url: `/homologation/${homologation.id}/mesures`,
         statut: homologation.statutSaisie('mesures'),
-      }],
-
-      'Complétez le dossier': [{
+      }, {
         description: "Avis de l'expert cyber",
         url: `/homologation/${homologation.id}/avisExpertCyber`,
         statut: homologation.statutSaisie('avisExpertCyber'),
-      }],
+      },
     };
     reponse.render('homologation', { homologation, actionsDeSaisie, InformationsHomologation });
   });
