@@ -55,6 +55,8 @@ describe('Une homologation', () => {
         presentation: 'Une présentation',
         structureDeveloppement: 'Une structure',
         hebergeur: 'Un hébergeur',
+      },
+      informationsGenerales: {
         localisationDonnees: 'france',
       },
     }, referentiel);
