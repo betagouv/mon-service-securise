@@ -1,19 +1,9 @@
 const expect = require('expect.js');
 
-const { ErreurLocalisationDonneesInvalide } = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
 const CaracteristiquesComplementaires = require('../../src/modeles/caracteristiquesComplementaires');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 
 describe("L'ensemble des caractéristiques complémentaires", () => {
-  let referentiel;
-
-  beforeEach(() => (referentiel = Referentiel.creeReferentiel({
-    localisationsDonnees: {
-      france: { description: 'Quelque part en France' },
-    },
-  })));
-
   it('connaît ses constituants', () => {
     const caracteristiques = new CaracteristiquesComplementaires({
       presentation: 'Une présentation',
@@ -21,21 +11,13 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       hebergeur: 'Un hébergeur',
       localisationDonnees: 'france',
       entitesExternes: [{ nom: 'Un nom' }],
-    }, referentiel);
+    });
 
     expect(caracteristiques.presentation).to.equal('Une présentation');
     expect(caracteristiques.structureDeveloppement).to.equal('Une structure');
     expect(caracteristiques.hebergeur).to.equal('Un hébergeur');
     expect(caracteristiques.localisationDonnees).to.equal('france');
     expect(caracteristiques.nombreEntitesExternes()).to.equal(1);
-  });
-
-  it('sait décrire la localisation des données', () => {
-    const caracteristiques = new CaracteristiquesComplementaires({
-      localisationDonnees: 'france',
-    }, referentiel);
-
-    expect(caracteristiques.descriptionLocalisationDonnees()).to.equal('Quelque part en France');
   });
 
   it("retourne une valeur d'hébergeur par défaut", () => {
@@ -50,7 +32,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
       hebergeur: 'Un hébergeur',
       localisationDonnees: 'france',
       entitesExternes: [{ nom: 'Une entité', contact: 'jean.dupont@mail.fr', acces: 'Accès administrateur' }],
-    }, referentiel);
+    });
 
     expect(caracteristiques.toJSON()).to.eql({
       presentation: 'Une présentation',
@@ -74,17 +56,6 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
     });
   });
 
-  it('valide la localisation des données si elle est présente', (done) => {
-    try {
-      new CaracteristiquesComplementaires({ localisationDonnees: 'localisationInvalide' }, referentiel);
-      done('La création des caractéristiques aurait dû lever une ErreurLocalisationDonneesInvalide');
-    } catch (e) {
-      expect(e).to.be.a(ErreurLocalisationDonneesInvalide);
-      expect(e.message).to.equal('La localisation des données "localisationInvalide" est invalide');
-      done();
-    }
-  });
-
   describe('sur demande du statut de saisie', () => {
     describe("quand aucune entité externe n'a été saisie", () => {
       it('détermine le statut de saisie de manière standard', () => {
@@ -101,7 +72,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
           hebergeur: 'Un hébergeur',
           localisationDonnees: 'france',
           entitesExternes: [{ nom: 'Un nom, mais pas de contact' }],
-        }, referentiel);
+        });
 
         expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.A_COMPLETER);
       });
@@ -115,7 +86,7 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
           hebergeur: 'Un hébergeur',
           localisationDonnees: 'france',
           entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
-        }, referentiel);
+        });
 
         expect(caracteristiques.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
       });

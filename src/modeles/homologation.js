@@ -79,7 +79,7 @@ class Homologation {
   hebergeur() { return this.caracteristiquesComplementaires.descriptionHebergeur(); }
 
   localisationDonnees() {
-    return this.caracteristiquesComplementaires.descriptionLocalisationDonnees();
+    return this.informationsGenerales.descriptionLocalisationDonnees();
   }
 
   mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }

@@ -221,6 +221,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         fonctionnalitesSpecifiques,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
+        localisationDonnees,
         presenceResponsable,
         presentation,
         pointsAcces,
@@ -235,6 +236,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         fonctionnalitesSpecifiques,
         donneesCaracterePersonnel,
         delaiAvantImpactCritique,
+        localisationDonnees,
         presenceResponsable,
         presentation,
         pointsAcces,
@@ -242,6 +244,12 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       })
         .then((idHomologation) => {
           depotDonnees.ajoutePresentationAHomologation(idHomologation, presentation);
+          return Promise.resolve(idHomologation);
+        })
+        .then((idHomologation) => {
+          depotDonnees.ajouteLocalisationDonneesACaracteristiques(
+            idHomologation, localisationDonnees
+          );
           return Promise.resolve(idHomologation);
         })
         .then((idHomologation) => reponse.json({ idHomologation }))
@@ -263,6 +271,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           depotDonnees.ajoutePresentationAHomologation(
             requete.params.id, infosGenerales.presentation
           )
+        ))
+        .then(() => depotDonnees.ajouteLocalisationDonneesACaracteristiques(
+          requete.params.id, infosGenerales.localisationDonnees
         ))
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
         .catch((e) => {
