@@ -27,8 +27,11 @@ block main
       a.bouton(href = `/homologation/${homologation.id}/decision`) Voir le document d'homologation
 
       each actions in actionsDeSaisie
-        section
-          .actions
-            div
-            
+        .actions
+          div
+            ul
+              each donneesAction in actions
+                li
+                  +action(donneesAction)
+
     +besoinAide
