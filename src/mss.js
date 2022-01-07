@@ -131,8 +131,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         url: `/homologation/${homologation.id}/partiesPrenantes`,
         statut: homologation.statutSaisie('partiesPrenantes'),
       }],
-    
-      'Sécurisez le service numérique': [{                              
+
+      'Sécurisez le service numérique': [{
         description: 'Risques de sécurité',
         url: `/homologation/${homologation.id}/risques`,
         statut: homologation.statutSaisie('risques'),
@@ -141,7 +141,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         url: `/homologation/${homologation.id}/mesures`,
         statut: homologation.statutSaisie('mesures'),
       }],
-      
+
       'Complétez le dossier': [{
         description: "Avis de l'expert cyber",
         url: `/homologation/${homologation.id}/avisExpertCyber`,
