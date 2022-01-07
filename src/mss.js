@@ -209,9 +209,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.post('/api/homologation',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('nomService', 'pointsAcces.*.description', 'fonctionnalitesSpecifiques.*.description'),
-    middleware.aseptiseListe('pointsAcces', PointsAcces.proprietesItem()),
-    middleware.aseptiseListe('fonctionnalitesSpecifiques', FonctionnalitesSpecifiques.proprietesItem()),
+    middleware.aseptise('nomService'),
+    middleware.aseptiseListes([
+      { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
+      { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
+    ]),
     (requete, reponse, suite) => {
       const {
         nomService,
@@ -261,9 +263,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.put('/api/homologation/:id',
     middleware.trouveHomologation,
-    middleware.aseptise('nomService', 'pointsAcces.*.description', 'fonctionnalitesSpecifiques.*.description'),
-    middleware.aseptiseListe('pointsAcces', PointsAcces.proprietesItem()),
-    middleware.aseptiseListe('fonctionnalitesSpecifiques', FonctionnalitesSpecifiques.proprietesItem()),
+    middleware.aseptise('nomService'),
+    middleware.aseptiseListes([
+      { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
+      { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
+    ]),
     (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
