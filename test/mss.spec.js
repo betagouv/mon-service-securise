@@ -1260,6 +1260,24 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/token`', () => {
+    it("authentifie l'utilisateur avec le login en minuscules", (done) => {
+      const utilisateur = { toJSON: () => {}, genereToken: () => {} };
+
+      depotDonnees.utilisateurAuthentifie = (login, motDePasse) => {
+        try {
+          expect(login).to.equal('jean.dupont@mail.fr');
+          expect(motDePasse).to.equal('mdp_12345');
+          return Promise.resolve(utilisateur);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.post('http://localhost:1234/api/token', { login: 'Jean.DUPONT@mail.fr', motDePasse: 'mdp_12345' })
+        .then(() => done())
+        .catch(done);
+    });
+
     describe("avec authentification réussie de l'utilisateur", () => {
       beforeEach(() => {
         const utilisateur = {
@@ -1267,13 +1285,7 @@ describe('Le serveur MSS', () => {
           genereToken: () => 'un token',
         };
 
-        depotDonnees.utilisateurAuthentifie = (login, motDePasse) => new Promise(
-          (resolve) => {
-            expect(login).to.equal('jean.dupont@mail.fr');
-            expect(motDePasse).to.equal('mdp_12345');
-            resolve(utilisateur);
-          }
-        );
+        depotDonnees.utilisateurAuthentifie = () => Promise.resolve(utilisateur);
       });
 
       it("retourne les informations de l'utilisateur", (done) => {
@@ -1310,7 +1322,7 @@ describe('Le serveur MSS', () => {
           401, "L'authentification a échoué", {
             method: 'post',
             url: 'http://localhost:1234/api/token',
-            data: { login: 'jean.dupont@mail.fr', motDePasse: 'mdp_12345' },
+            data: {},
           }, done
         );
       });
