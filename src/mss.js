@@ -497,7 +497,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   });
 
   app.post('/api/token', (requete, reponse, suite) => {
-    const { login, motDePasse } = requete.body;
+    const login = requete.body.login?.toLowerCase();
+    const { motDePasse } = requete.body;
     depotDonnees.utilisateurAuthentifie(login, motDePasse)
       .then((utilisateur) => {
         if (utilisateur) {
