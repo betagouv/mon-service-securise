@@ -360,42 +360,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
 
     depot.ajouteLocalisationDonneesAHomologation('123', 'france')
       .then(() => depot.homologation('123'))
-      .then(({ informationsGenerales: { localisationDonnees } }) => {
-        expect(localisationDonnees).to.equal('france');
-        done();
-      })
-      .catch(done);
-  });
-
-  it('ajoute une localisation des données à la description du service', (done) => {
-    const referentiel = Referentiel.creeReferentiel({
-      localisationsDonnees: { france: {} },
-    });
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{ id: '123', informationsGenerales: { nomService: 'nom' } }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
-
-    depot.ajouteLocalisationDonneesAHomologation('123', 'france')
-      .then(() => depot.homologation('123'))
-      .then(({ descriptionService: { localisationDonnees } }) => {
-        expect(localisationDonnees).to.equal('france');
-        done();
-      })
-      .catch(done);
-  });
-
-  it('ajoute une localisation des données à une homologation en caractéristique complémentaire', (done) => {
-    const referentiel = Referentiel.creeReferentiel({
-      localisationsDonnees: { france: {} },
-    });
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{ id: '123', informationsGenerales: { nomService: 'nom' } }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel });
-
-    depot.ajouteLocalisationDonneesACaracteristiques('123', 'france')
-      .then(() => depot.homologation('123'))
       .then(({ caracteristiquesComplementaires: { localisationDonnees } }) => {
         expect(localisationDonnees).to.equal('france');
         done();

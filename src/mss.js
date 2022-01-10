@@ -247,7 +247,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
           return Promise.resolve(idHomologation);
         })
         .then((idHomologation) => {
-          depotDonnees.ajouteLocalisationDonneesACaracteristiques(
+          depotDonnees.ajouteLocalisationDonneesAHomologation(
             idHomologation, localisationDonnees
           );
           return Promise.resolve(idHomologation);
@@ -272,7 +272,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
             requete.params.id, infosGenerales.presentation
           )
         ))
-        .then(() => depotDonnees.ajouteLocalisationDonneesACaracteristiques(
+        .then(() => depotDonnees.ajouteLocalisationDonneesAHomologation(
           requete.params.id, infosGenerales.localisationDonnees
         ))
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
@@ -292,11 +292,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       );
       try {
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
-        const { localisationDonnees } = caracteristiques;
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
-          .then(() => depotDonnees.ajouteLocalisationDonneesAHomologation(
-            requete.params.id, localisationDonnees
-          ))
           .then(() => reponse.send({ idHomologation: requete.homologation.id }));
       } catch {
         reponse.status(422).send('Données invalides');
