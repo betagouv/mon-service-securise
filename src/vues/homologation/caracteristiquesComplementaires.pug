@@ -1,5 +1,4 @@
 extends ./formulaire
-include ../fragments/inputChoix
 
 block append styles
   link(href = '/statique/assets/styles/homologation/caracteristiquesComplementaires.css', rel = 'stylesheet')
@@ -22,14 +21,6 @@ block formulaire
           id = 'hebergeur', name = 'hebergeur', type = 'text',
           value = homologation.caracteristiquesComplementaires.hebergeur,
         )
-
-      +inputChoix({
-        type: 'radio',
-        nom: 'localisationDonnees',
-        titre: 'Localisation des données',
-        items: referentiel.localisationsDonnees(),
-        objetDonnees: homologation.caracteristiquesComplementaires,
-      })
 
       label Entités externes disposant d'un accès privilégié au service
         p.
