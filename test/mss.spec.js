@@ -1019,6 +1019,17 @@ describe('Le serveur MSS', () => {
       );
     });
 
+    it("convertis l'email en minuscules", (done) => {
+      depotDonnees.nouvelUtilisateur = ({ email }) => {
+        expect(email).to.equal('jean.dupont@mail.fr');
+        return Promise.resolve(utilisateur);
+      };
+
+      axios.post('http://localhost:1234/api/utilisateur', { email: 'Jean.DUPONT@mail.fr' })
+        .then(() => done())
+        .catch(done);
+    });
+
     it("demande au dépôt de créer l'utilisateur", (done) => {
       const donneesRequete = { prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' };
 
@@ -1107,6 +1118,27 @@ describe('Le serveur MSS', () => {
     beforeEach(() => (
       depotDonnees.reinitialiseMotDePasse = () => Promise.resolve(utilisateur)
     ));
+
+    it("convertis l'email en minuscules", (done) => {
+      depotDonnees.reinitialiseMotDePasse = (email) => {
+        expect(email).to.equal('jean.dupont@mail.fr');
+        return Promise.resolve(utilisateur);
+      };
+
+      axios.post(
+        'http://localhost:1234/api/reinitialisationMotDePasse', { email: 'Jean.DUPONT@mail.fr' }
+      )
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("échoue silencieusement si l'email n'est pas renseigné", (done) => {
+      depotDonnees.nouvelUtilisateur = () => Promise.resolve();
+
+      axios.post('http://localhost:1234/api/reinitialisationMotDePasse')
+        .then(() => done())
+        .catch(done);
+    });
 
     it('demande au dépôt de réinitialiser le mot de passe', (done) => {
       depotDonnees.reinitialiseMotDePasse = (email) => new Promise((resolve) => {
