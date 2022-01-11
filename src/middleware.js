@@ -73,14 +73,22 @@ const middleware = (configuration = {}) => {
   };
 
   const trouveHomologation = (requete, reponse, suite) => {
-    verificationAcceptationCGU(requete, reponse, () => depotDonnees.homologation(requete.params.id)
+    const idHomologation = requete.params.id;
+
+    verificationAcceptationCGU(requete, reponse, () => depotDonnees.homologation(idHomologation)
       .then((homologation) => {
+        const idUtilisateur = requete.idUtilisateurCourant;
+
         if (!homologation) reponse.status(404).send('Homologation non trouvée');
-        else if (homologation.idUtilisateur !== requete.idUtilisateurCourant) {
-          reponse.status(403).send("Accès à l'homologation refusé");
-        } else {
-          requete.homologation = homologation;
-          suite();
+        else {
+          depotDonnees.accesAutorise(idUtilisateur, idHomologation)
+            .then((accesAutorise) => {
+              if (!accesAutorise) reponse.status(403).send("Accès à l'homologation refusé");
+              else {
+                requete.homologation = homologation;
+                suite();
+              }
+            });
         }
       })
       .catch(() => reponse.status(422).send("L'homologation n'a pas pu être récupérée")));

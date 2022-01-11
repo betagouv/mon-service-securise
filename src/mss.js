@@ -428,7 +428,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   });
 
   app.post('/api/utilisateur', middleware.aseptise('prenom', 'nom', 'email'), (requete, reponse, suite) => {
-    const { prenom, nom, email } = requete.body;
+    const { prenom, nom } = requete.body;
+    const email = requete.body.email?.toLowerCase();
+
     depotDonnees.nouvelUtilisateur({ prenom, nom, email })
       .then((utilisateur) => (
         adaptateurMail.envoieMessageFinalisationInscription(
@@ -449,7 +451,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   });
 
   app.post('/api/reinitialisationMotDePasse', (requete, reponse, suite) => {
-    const { email } = requete.body;
+    const email = requete.body.email?.toLowerCase();
+
     depotDonnees.reinitialiseMotDePasse(email)
       .then((utilisateur) => {
         if (utilisateur) {
@@ -497,7 +500,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   });
 
   app.post('/api/token', (requete, reponse, suite) => {
-    const { login, motDePasse } = requete.body;
+    const login = requete.body.login?.toLowerCase();
+    const { motDePasse } = requete.body;
     depotDonnees.utilisateurAuthentifie(login, motDePasse)
       .then((utilisateur) => {
         if (utilisateur) {

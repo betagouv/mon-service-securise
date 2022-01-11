@@ -40,16 +40,20 @@ const nouvelAdaptateur = (env) => {
 
   const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour = '') => (
     knex('homologations')
-      .whereRaw('not id::text=?', idHomologationMiseAJour)
-      .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
-      .whereRaw("donnees#>>'{informationsGenerales,nomService}'=?", nomService)
+      .join('autorisations', knex.raw("(autorisations.donnees->>'idHomologation')::uuid"), 'homologations.id')
+      .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
+      .whereRaw('not homologations.id::text=?', idHomologationMiseAJour)
+      .whereRaw("homologations.donnees#>>'{informationsGenerales,nomService}'=?", nomService)
+      .select('homologations.*')
       .first()
       .then(convertisLigneEnObjet)
       .catch(() => undefined)
   );
 
   const homologations = (idUtilisateur) => knex('homologations')
-    .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
+    .join('autorisations', knex.raw("(autorisations.donnees->>'idHomologation')::uuid"), 'homologations.id')
+    .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
+    .select('homologations.*')
     .then((rows) => rows.map(convertisLigneEnObjet));
 
   const metsAJourHomologation = (...params) => metsAJourTable('homologations', ...params);

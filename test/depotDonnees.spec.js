@@ -64,6 +64,10 @@ describe('Le dépôt de données persistées en mémoire', () => {
         { id: '123', idUtilisateur: '456', informationsGenerales: { nomService: 'Super Service' } },
         { id: '789', idUtilisateur: '999', informationsGenerales: { nomService: 'Autre service' } },
       ],
+      autorisations: [
+        { idUtilisateur: '456', idHomologation: '123', type: 'createur' },
+        { idUtilisateur: '999', idHomologation: '789', type: 'createur' },
+      ],
     });
 
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel: 'Le référentiel' });
@@ -75,6 +79,22 @@ describe('Le dépôt de données persistées en mémoire', () => {
         expect(homologations[0].referentiel).to.equal('Le référentiel');
         done();
       })
+      .catch(done);
+  });
+
+  it("vérifie que l'utilisateur a accès à l'homologation", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      autorisations: [
+        { idUtilisateur: '456', idHomologation: '123', type: 'createur' },
+      ],
+    });
+
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+    depot.accesAutorise('456', '123')
+      .then((accesAutorise) => expect(accesAutorise).to.be(true))
+      .then(() => depot.accesAutorise('456', '999'))
+      .then((accesAutorise) => expect(accesAutorise).to.be(false))
+      .then(() => done())
       .catch(done);
   });
 
@@ -601,8 +621,9 @@ describe('Le dépôt de données persistées en mémoire', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [{
-          id: '789', idUtilisateur: '123', informationsGenerales: { nomService: 'Un service existant' },
+          id: '789', informationsGenerales: { nomService: 'Un service existant' },
         }],
+        autorisations: [{ idUtilisateur: '123', idHomologation: '789', type: 'createur' }],
       });
       const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
@@ -636,8 +657,12 @@ describe('Le dépôt de données persistées en mémoire', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [
-          { id: '888', idUtilisateur: '123', informationsGenerales: { nomService: 'Un service existant' } },
-          { id: '999', idUtilisateur: '123', informationsGenerales: { nomService: 'Un nom de service' } },
+          { id: '888', informationsGenerales: { nomService: 'Un service existant' } },
+          { id: '999', informationsGenerales: { nomService: 'Un nom de service' } },
+        ],
+        autorisations: [
+          { idUtilisateur: '123', idHomologation: '888', type: 'createur' },
+          { idUtilisateur: '123', idHomologation: '999', type: 'createur' },
         ],
       });
       const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
@@ -828,9 +853,8 @@ describe('Le dépôt de données persistées en mémoire', () => {
     it("supprime les homologations associées à l'utilisateur", (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [
-          { id: '123', idUtilisateur: '999', informationsGenerales: { nomService: 'Un service' } },
-        ],
+        homologations: [{ id: '123', informationsGenerales: { nomService: 'Un service' } }],
+        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
       });
       const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
@@ -844,7 +868,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
     it("supprime l'utilisateur", (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [],
       });
       const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
