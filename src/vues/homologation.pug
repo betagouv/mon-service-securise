@@ -23,8 +23,8 @@ block main
 
   .details-homologation.marges-fixes
     .tableau-bord
-      h1!= homologation.nomService()
       a.bouton(href = `/homologation/${homologation.id}/decision`) Voir le document d'homologation
+      h1!= homologation.nomService()
 
       each actions, descriptionSection in actionsDeSaisie
         section

@@ -30,10 +30,8 @@
 }
 
 .tableau-bord .bouton {
-  position: absolute;
-  top: 0;
-  right: 0;
-
+  margin: 1em 0.5em 0.2em 1em;
+  float: right;
   padding: 1em 1.5em;
 
   font-size: 0.8em;
