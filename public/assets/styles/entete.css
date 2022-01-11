@@ -46,9 +46,9 @@ header a:hover {
 }
 
 .logo-anssi {
-  width: 66px;
-  height: 66px;
-  margin: 0 10px;
+  width: 5.2em;
+  height: 5.2em;
+  margin: 0 0.8em;
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url(../images/logo_anssi.png);

@@ -30,6 +30,26 @@ h1 {
   font-size: 1.5em;
 }
 
+.introduction .logos {
+  display: flex;
+}
+
+.introduction .logos div {
+  width: 5.5em;
+  height: 5.5em;
+  margin-right: 1.7em;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.introduction .logo-rgpd {
+  background-image: url(../images/logo_RGPD.svg);
+}
+
+.introduction .logo-rgs {
+  background-image: url(../images/logo_rgs.svg);
+}
+
 .introduction .bouton {
   margin-left: 0;
 }
@@ -47,7 +67,8 @@ h1 {
   flex: 1;
 
   margin: 0;
-  padding: 5em 1em 2em;
+  padding: 1.3em;
+  text-align: left;
 
   border: solid 1px #ebedf0;
   border-radius: 2px;
@@ -62,15 +83,36 @@ h1 {
   background-position-y: 1.2em;
 }
 
-.pedagogique {
+.fonctionnalites .message {
+  align-self: center;
+  padding: 0 0.5em 0 0;
+  border: none;
+  background: inherit;
+  font-size: 2.2em;
+}
+
+.fonctionnalites p {
+  font-size: 0.7em;
+  font-weight: normal;
+}
+
+.icone-fonctionnalite {
+  width: 0.9em;
+  height: 0.9em;
+  margin-bottom: 0.44em;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.pedagogie {
   background-image: url(../images/icone_gros_livre.svg);
 }
 
-.collaborative {
+.collaboration{
   background-image: url(../images/icone_personnes.svg);
 }
 
-.personnalisee {
+.personnalisation{
   background-image: url(../images/icone_etoile.svg);
 }
 
