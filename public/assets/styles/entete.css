@@ -45,6 +45,15 @@ header a:hover {
   font-weight: bold;
 }
 
+.logo-anssi {
+  width: 66px;
+  height: 66px;
+  margin: 0 10px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(../images/logo_anssi.png);
+}
+
 a.logo-mss {
   margin-right: auto;
   padding: 0 0 0 2em;
