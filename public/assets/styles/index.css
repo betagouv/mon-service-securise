@@ -54,7 +54,12 @@ h1 {
   margin-left: 0;
 }
 
-.fonctionnalites ul, .exemples {
+.bandeau-solution {
+  background-color: #f6f6f6;
+  padding-bottom: 3em;
+}
+
+.fonctionnalites ul {
   display: flex;
   column-gap: 1em;
 
@@ -117,46 +122,71 @@ h1 {
 }
 
 .bandeau {
-  margin-top: 3em;
-  padding: 5em;
-  background: #0d4269;
+  padding: 3em 0 5em;
+  background: #1b7cc4;
 
   font-size: 1.2em;
 }
 
-.description {
-  width: 800px;
-  margin: 0 auto;
-
+.bandeau a {
   color: #fff;
+}
+
+.bandeau a:hover {
+  color: #f9b049;
+}
+
+.bandeau-description {
+  box-sizing: border-box;
+  padding: 4em 6em;
+  font-size: 1.2em;
+}
+
+.guide-homologation {
+  flex: 1 1;
+
+  background-image: url(../images/image_guide_homologation.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 20em;
+}
+
+.description {
+  flex: 2 1;
+  color: #0d4269;
 }
 
 .description h1 {
   margin-bottom: 2em;
 }
 
-.description h2 {
-  font-size: 1.3em;
-}
-
 .description p {
   text-align: left;
 }
 
-.description hr {
-  margin: 4em 0 3em;
+.illustration {
+  box-sizing: border-box;
+  padding: 0 10em;
+  margin: 0 auto;
+  color: #fff;
+}
 
-  border: none;
-  border-top: solid 0.5px;
+.illustration h2 {
+  font-size: 1.3em;
 }
 
 .exemples {
+  display: flex;
+
+  margin-top: 3em;
+
   color: #0d4269;
 }
 
 .exemple {
   flex: 1;
 
+  margin: 0 0.75em;
   padding: 1em;
   border-radius: 2px;
 
