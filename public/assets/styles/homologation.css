@@ -43,23 +43,6 @@
   border-bottom: none;
 }
 
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-gap: 1em;
-
-  margin: 0 0 1em;
-}
-
-.actions dt {
-  font-weight: bold;
-  font-size: 1.3em;
-}
-
-.actions dd {
-  margin: 0;
-}
-
 .actions ul {
   margin: 0;
   padding: 0;
@@ -98,7 +81,4 @@ a.action.a-completer {
 
 a.action.a-faire {
   background-image: url(../images/icone_vide_pastille_blanche.svg);
-}
-
-.action a {
 }

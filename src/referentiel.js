@@ -4,6 +4,7 @@ const creeReferentiel = (donneesReferentiel) => {
   const actionsSaisie = () => donnees.actionsSaisie;
   const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
   const actionSaisie = (id) => actionsSaisie()[id] || {};
+  const positionActionSaisie = (id) => actionSaisie(id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
@@ -34,8 +35,8 @@ const creeReferentiel = (donneesReferentiel) => {
   const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
 
   const actionSuivante = (id) => {
-    const { position } = actionSaisie(id);
-    return Object.keys(actionsSaisie()).find((a) => actionSaisie(a).position === position + 1);
+    const position = positionActionSaisie(id);
+    return Object.keys(actionsSaisie()).find((a) => positionActionSaisie(a) === position + 1);
   };
 
   const descriptionExpiration = (identifiant) => {
@@ -93,6 +94,7 @@ const creeReferentiel = (donneesReferentiel) => {
   const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
 
   return {
+    actionsSaisie,
     actionSuivante,
     categoriesMesures,
     criticite,
@@ -123,6 +125,7 @@ const creeReferentiel = (donneesReferentiel) => {
     mesures,
     niveauGravite,
     niveauxGravite,
+    positionActionSaisie,
     provenancesService,
     recharge,
     risques,
