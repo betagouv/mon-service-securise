@@ -4,6 +4,8 @@ class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurDateRenouvellementInvalide extends ErreurModele {}
 class ErreurDonneesStatistiques extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
+class ErreurIdentifiantActionSaisieInvalide extends ErreurModele {}
+class ErreurIdentifiantActionSaisieManquant extends ErreurModele {}
 class ErreurLocalisationDonneesInvalide extends ErreurModele {}
 class ErreurMesureInconnue extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
@@ -20,6 +22,8 @@ module.exports = {
   ErreurDateRenouvellementInvalide,
   ErreurDonneesStatistiques,
   ErreurEmailManquant,
+  ErreurIdentifiantActionSaisieInvalide,
+  ErreurIdentifiantActionSaisieManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
   ErreurModele,
