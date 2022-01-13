@@ -2,6 +2,7 @@ const cookieSession = require('cookie-session');
 const express = require('express');
 
 const { ErreurModele } = require('./erreurs');
+const ActionsSaisie = require('./modeles/actionsSaisie');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const FonctionnalitesSpecifiques = require('./modeles/fonctionnalitesSpecifiques');
@@ -117,38 +118,13 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
 
   app.get('/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    const actionsDeSaisie = {
-      'Décrivez le service numérique': [{
-        description: 'Description du service',
-        url: `/homologation/${homologation.id}/descriptionService`,
-        statut: homologation.statutSaisie('descriptionService'),
-      }, {
-        description: 'Caractéristiques complémentaires',
-        url: `/homologation/${homologation.id}/caracteristiquesComplementaires`,
-        statut: homologation.statutSaisie('caracteristiquesComplementaires'),
-      }, {
-        description: 'Parties prenantes',
-        url: `/homologation/${homologation.id}/partiesPrenantes`,
-        statut: homologation.statutSaisie('partiesPrenantes'),
-      }],
+    const actionsSaisie = new ActionsSaisie(referentiel, homologation)
+      .toJSON()
+      .map(({ id, ...autresDonnees }) => (
+        { url: `/homologation/${homologation.id}/${id}`, ...autresDonnees }
+      ));
 
-      'Sécurisez le service numérique': [{
-        description: 'Risques de sécurité',
-        url: `/homologation/${homologation.id}/risques`,
-        statut: homologation.statutSaisie('risques'),
-      }, {
-        description: 'Mesures de sécurité',
-        url: `/homologation/${homologation.id}/mesures`,
-        statut: homologation.statutSaisie('mesures'),
-      }],
-
-      'Complétez le dossier': [{
-        description: "Avis de l'expert cyber",
-        url: `/homologation/${homologation.id}/avisExpertCyber`,
-        statut: homologation.statutSaisie('avisExpertCyber'),
-      }],
-    };
-    reponse.render('homologation', { homologation, actionsDeSaisie, InformationsHomologation });
+    reponse.render('homologation', { homologation, actionsSaisie, InformationsHomologation });
   });
 
   app.get('/homologation/:id/caracteristiquesComplementaires',
