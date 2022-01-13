@@ -176,7 +176,7 @@ h1 {
 }
 
 .illustration h2 {
-  font-size: 1.3em;
+  font-size: 2em;
 }
 
 .exemples {
@@ -327,7 +327,9 @@ h1 {
 }
 
 .exemple-dossier h1 {
-  font-size: 1.2em;
+  font-size: 2em;
+  line-height: 1.4em;
+  padding-right: 2em;
 }
 
 .exemple-dossier .legende {
