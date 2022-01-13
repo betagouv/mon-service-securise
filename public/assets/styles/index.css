@@ -247,8 +247,10 @@ h1 {
   display: grid;
   grid-template-columns: 2fr 1fr 2fr;
   grid-gap: 5em 3em;
+}
 
-  margin-top: 6em;
+.etapes {
+  margin: 6em 0 4em;
 }
 
 .etape {
@@ -322,6 +324,8 @@ h1 {
 }
 
 .exemple-dossier {
+  margin-top: 2em;
+
   text-align: left;
   color: #fff;
 }
