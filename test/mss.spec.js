@@ -320,9 +320,9 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/edition`', () => {
+  describe('quand requête GET sur `/homologation/:id/descriptionService`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456/edition', done);
+      verifieRechercheHomologation('http://localhost:1234/homologation/456/descriptionService', done);
     });
   });
 

@@ -119,9 +119,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     const { homologation } = requete;
     const actionsDeSaisie = {
       'Décrivez le service numérique': [{
-        description: 'Informations générales',
-        url: `/homologation/${homologation.id}/edition`,
-        statut: homologation.statutSaisie('informationsGenerales'),
+        description: 'Description du service',
+        url: `/homologation/${homologation.id}/descriptionService`,
+        statut: homologation.statutSaisie('descriptionService'),
       }, {
         description: 'Caractéristiques complémentaires',
         url: `/homologation/${homologation.id}/caracteristiquesComplementaires`,
@@ -166,9 +166,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       reponse.render('homologation/decision', { homologation, referentiel, nonce });
     });
 
-  app.get('/homologation/:id/edition', middleware.trouveHomologation, (requete, reponse) => {
+  app.get('/homologation/:id/descriptionService', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/edition', { referentiel, homologation });
+    reponse.render('homologation/descriptionService', { referentiel, homologation });
   });
 
   app.get('/homologation/:id/mesures', middleware.trouveHomologation, (requete, reponse) => {
