@@ -1,9 +1,13 @@
 const creeReferentiel = (donneesReferentiel) => {
   let donnees = donneesReferentiel;
 
+  const actionsSaisie = () => donnees.actionsSaisie;
+  const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
+  const actionSaisie = (id) => actionsSaisie()[id] || {};
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
+  const descriptionActionSaisie = (id) => actionSaisie(id).description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement;
@@ -28,6 +32,11 @@ const creeReferentiel = (donneesReferentiel) => {
   const statutDeploiementValide = (id) => Object.keys(statutsDeploiement()).includes(id);
   const statutsMesures = () => donnees.statutsMesures;
   const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
+
+  const actionSuivante = (id) => {
+    const { position } = actionSaisie(id);
+    return Object.keys(actionsSaisie()).find((a) => actionSaisie(a).position === position + 1);
+  };
 
   const descriptionExpiration = (identifiant) => {
     if (!identifiant) return 'Information non renseignée';
@@ -84,6 +93,7 @@ const creeReferentiel = (donneesReferentiel) => {
   const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
 
   return {
+    actionSuivante,
     categoriesMesures,
     criticite,
     criticiteDelai,
@@ -91,6 +101,7 @@ const creeReferentiel = (donneesReferentiel) => {
     criticiteFonctionnalite,
     criticiteMax,
     delaisAvantImpactCritique,
+    descriptionActionSaisie,
     descriptionCategorie,
     descriptionExpiration,
     descriptionRisque,
@@ -98,6 +109,7 @@ const creeReferentiel = (donneesReferentiel) => {
     donneesCaracterePersonnel,
     echeancesRenouvellement,
     fonctionnalites,
+    identifiantsActionsSaisie,
     identifiantsCategoriesMesures,
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
@@ -124,6 +136,7 @@ const creeReferentiel = (donneesReferentiel) => {
 };
 
 const creeReferentielVide = () => creeReferentiel({
+  actionsSaisie: {},
   categoriesMesures: {},
   delaisAvantImpactCritique: {},
   donneesCaracterePersonnel: {},
