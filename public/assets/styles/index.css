@@ -264,16 +264,17 @@ h1 {
 .etape h1 {
   color: #1b7cc4;
   margin: 0;
+  font-size: 3.9em;
 }
 
 .etape h2 {
   margin-top: 0;
-  font-size: 1.2em;
+  font-size: 1.7em;
 }
 
 .etape p {
   font-weight: light;
-  font-size: 0.9em;
+  font-size: 0.8em;
   color: #2f3a43;
 }
 
