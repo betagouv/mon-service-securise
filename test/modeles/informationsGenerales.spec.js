@@ -23,7 +23,6 @@ describe('Les informations générales', () => {
       typeService: ['unType'],
       nomService: 'Super Service',
       pointsAcces: [{ description: 'Une description' }],
-      presenceResponsable: 'non',
       presentation: 'Une présentation du service',
       provenanceService: ['uneProvenance'],
       statutDeploiement: 'unStatut',
@@ -35,7 +34,6 @@ describe('Les informations générales', () => {
     expect(infos.localisationDonnees).to.equal('france');
     expect(infos.typeService).to.eql(['unType']);
     expect(infos.nomService).to.equal('Super Service');
-    expect(infos.presenceResponsable).to.be('non');
     expect(infos.presentation).to.equal('Une présentation du service');
     expect(infos.provenanceService).to.eql(['uneProvenance']);
     expect(infos.statutDeploiement).to.eql('unStatut');
@@ -118,7 +116,6 @@ describe('Les informations générales', () => {
       nomService: 'Super Service',
       delaiAvantImpactCritique: 'uneJournee',
       localisationDonnees: 'france',
-      presenceResponsable: 'oui',
       presentation: 'Une présentation',
       statutDeploiement: 'accessible',
     }, referentielAvecStatutValide('accessible'));

@@ -11,7 +11,6 @@ class InformationsGenerales extends InformationsHomologation {
         'delaiAvantImpactCritique',
         'localisationDonnees',
         'nomService',
-        'presenceResponsable',
         'presentation',
         'statutDeploiement',
       ],

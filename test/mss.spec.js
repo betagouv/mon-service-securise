@@ -515,7 +515,6 @@ describe('Le serveur MSS', () => {
           donneesCaracterePersonnel: undefined,
           delaiAvantImpactCritique: undefined,
           localisationDonnees: undefined,
-          presenceResponsable: undefined,
           presentation: undefined,
           pointsAcces: undefined,
           statutDeploiement: undefined,
