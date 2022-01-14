@@ -7,7 +7,6 @@ const {
   ErreurUtilisateurExistant,
 } = require('./erreurs');
 const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
-const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisation');
 const Homologation = require('./modeles/homologation');
 const Utilisateur = require('./modeles/utilisateur');
@@ -115,18 +114,6 @@ const creeDepot = (config = {}) => {
 
   const ajouteCaracteristiquesAHomologation = (...params) => (
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
-  );
-
-  const ajouteLocalisationDonneesAHomologation = (idHomologation, localisationDonnees) => (
-    adaptateurPersistance.homologation(idHomologation)
-      .then((homologationTrouvee) => {
-        const caracteristiquesComplementaires = new CaracteristiquesComplementaires(
-          homologationTrouvee.caracteristiquesComplementaires,
-          referentiel
-        );
-        caracteristiquesComplementaires.localisationDonnees = localisationDonnees;
-        return metsAJourProprieteHomologation('caracteristiquesComplementaires', homologationTrouvee, caracteristiquesComplementaires);
-      })
   );
 
   const ajoutePartiesPrenantesAHomologation = (...params) => (
@@ -260,7 +247,6 @@ const creeDepot = (config = {}) => {
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
     ajouteInformationsGeneralesAHomologation,
-    ajouteLocalisationDonneesAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
     ajouteRisqueGeneralAHomologation,
