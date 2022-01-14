@@ -117,18 +117,6 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
   );
 
-  const ajoutePresentationAHomologation = (idHomologation, presentation) => (
-    adaptateurPersistance.homologation(idHomologation)
-      .then((h) => {
-        const caracteristiques = new CaracteristiquesComplementaires(
-          h.caracteristiquesComplementaires,
-          referentiel
-        );
-        caracteristiques.presentation = presentation;
-        return metsAJourProprieteHomologation('caracteristiquesComplementaires', h, caracteristiques);
-      })
-  );
-
   const ajouteLocalisationDonneesAHomologation = (idHomologation, localisationDonnees) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((homologationTrouvee) => {
@@ -275,7 +263,6 @@ const creeDepot = (config = {}) => {
     ajouteLocalisationDonneesAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
-    ajoutePresentationAHomologation,
     ajouteRisqueGeneralAHomologation,
     autorisations,
     homologation,
