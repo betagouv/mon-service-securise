@@ -245,10 +245,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         statutDeploiement,
       })
         .then((idHomologation) => {
-          depotDonnees.ajoutePresentationAHomologation(idHomologation, presentation);
-          return Promise.resolve(idHomologation);
-        })
-        .then((idHomologation) => {
           depotDonnees.ajouteLocalisationDonneesAHomologation(
             idHomologation, localisationDonnees
           );
@@ -271,11 +267,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
-        .then(() => (
-          depotDonnees.ajoutePresentationAHomologation(
-            requete.params.id, infosGenerales.presentation
-          )
-        ))
         .then(() => depotDonnees.ajouteLocalisationDonneesAHomologation(
           requete.params.id, infosGenerales.localisationDonnees
         ))

@@ -401,7 +401,6 @@ describe('Le serveur MSS', () => {
   describe('quand requête POST sur `/api/homologation`', () => {
     beforeEach(() => {
       depotDonnees.nouvelleHomologation = () => Promise.resolve();
-      depotDonnees.ajoutePresentationAHomologation = () => Promise.resolve();
       depotDonnees.ajouteLocalisationDonneesAHomologation = () => Promise.resolve();
     });
 
@@ -434,22 +433,6 @@ describe('Le serveur MSS', () => {
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
-          done();
-        })
-        .catch(done);
-    });
-
-    it("demande au dépôt de données d'ajouter la présentation aux caractéristiques", (done) => {
-      let appelleAjoutePresentationAHomologation = false;
-      depotDonnees.ajoutePresentationAHomologation = (idHomologation, presentation) => {
-        appelleAjoutePresentationAHomologation = true;
-        expect(presentation).to.equal('Une présentation');
-        return Promise.resolve();
-      };
-
-      axios.post('http://localhost:1234/api/homologation', { presentation: 'Une présentation' })
-        .then(() => {
-          expect(appelleAjoutePresentationAHomologation).to.be(true);
           done();
         })
         .catch(done);
@@ -534,7 +517,6 @@ describe('Le serveur MSS', () => {
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
     beforeEach(() => {
       depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
-      depotDonnees.ajoutePresentationAHomologation = () => Promise.resolve();
       depotDonnees.ajouteLocalisationDonneesAHomologation = () => Promise.resolve();
     });
 
@@ -565,22 +547,6 @@ describe('Le serveur MSS', () => {
       axios.put('http://localhost:1234/api/homologation/456', {})
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
-          done();
-        })
-        .catch(done);
-    });
-
-    it("demande au dépôt de données d'ajouter la présentation aux caractéristiques", (done) => {
-      let appelleAjoutePresentationAHomologation = false;
-      depotDonnees.ajoutePresentationAHomologation = (idHomologation, presentation) => {
-        appelleAjoutePresentationAHomologation = true;
-        expect(presentation).to.equal('Une présentation');
-        return Promise.resolve();
-      };
-
-      axios.put('http://localhost:1234/api/homologation/456', { presentation: 'Une présentation' })
-        .then(() => {
-          expect(appelleAjoutePresentationAHomologation).to.be(true);
           done();
         })
         .catch(done);
