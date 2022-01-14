@@ -244,12 +244,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         pointsAcces,
         statutDeploiement,
       })
-        .then((idHomologation) => {
-          depotDonnees.ajouteLocalisationDonneesAHomologation(
-            idHomologation, localisationDonnees
-          );
-          return Promise.resolve(idHomologation);
-        })
         .then((idHomologation) => reponse.json({ idHomologation }))
         .catch((e) => {
           if (e instanceof ErreurModele) reponse.status(422).send(e.message);
@@ -267,9 +261,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     (requete, reponse, suite) => {
       const infosGenerales = new InformationsGenerales(requete.body, referentiel);
       depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
-        .then(() => depotDonnees.ajouteLocalisationDonneesAHomologation(
-          requete.params.id, infosGenerales.localisationDonnees
-        ))
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
         .catch((e) => {
           if (e instanceof ErreurModele) {
