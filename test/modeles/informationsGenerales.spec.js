@@ -125,22 +125,4 @@ describe('Les informations générales', () => {
 
     expect(infos.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
   });
-
-  elles('délèguent au référentiel la détermination du seuil de criticité', () => {
-    const referentiel = {
-      criticite: (idFonctionnalites, idDonnees, idDelai) => {
-        expect(idFonctionnalites).to.eql(['f1', 'f2']);
-        expect(idDonnees).to.eql(['d1', 'd2']);
-        expect(idDelai).to.equal('unDelai');
-        return 'moyen';
-      },
-    };
-    const infos = new InformationsGenerales({
-      fonctionnalites: ['f1', 'f2'],
-      donneesCaracterePersonnel: ['d1', 'd2'],
-      delaiAvantImpactCritique: 'unDelai',
-    }, referentiel);
-
-    expect(infos.seuilCriticite()).to.equal('moyen');
-  });
 });

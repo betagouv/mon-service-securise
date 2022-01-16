@@ -48,12 +48,6 @@ class InformationsGenerales extends InformationsHomologation {
     return this.pointsAcces.nombre();
   }
 
-  seuilCriticite() {
-    return this.referentiel.criticite(
-      this.fonctionnalites, this.donneesCaracterePersonnel, this.delaiAvantImpactCritique
-    );
-  }
-
   static valide(donnees, referentiel) {
     const { statutDeploiement, localisationDonnees } = donnees;
 

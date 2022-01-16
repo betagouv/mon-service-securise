@@ -98,11 +98,6 @@ class Homologation {
     return this.risques.risquesSpecifiques;
   }
 
-  seuilCriticiteTropEleve() {
-    const seuil = this.informationsGenerales.seuilCriticite();
-    return seuil === 'eleve' || seuil === 'critique';
-  }
-
   statistiquesMesures() {
     return this.mesures.statistiques();
   }
