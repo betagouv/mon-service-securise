@@ -1,5 +1,4 @@
 const InformationsHomologation = require('./informationsHomologation');
-const { pagination } = require('../utilitaires/pagination');
 
 class ListeItems extends InformationsHomologation {
   constructor(ClasseItem, donnees, referentiel) {
@@ -15,14 +14,6 @@ class ListeItems extends InformationsHomologation {
 
   nombre() {
     return this.items.length;
-  }
-
-  pagines(nbItemsParPage) {
-    return pagination(nbItemsParPage, this.items);
-  }
-
-  paginees(...params) {
-    return this.pagines(...params);
   }
 
   statutSaisie() {
