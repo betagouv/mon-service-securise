@@ -66,20 +66,6 @@ nav.ne-pas-imprimer
 
   main
     h1.bleu Décision d'homologation de sécurité
-    if homologation.seuilCriticiteTropEleve()
-      section.alerte
-        div.
-          Compte tenu des risques auxquels votre service est susceptible de faire
-          face, aux vues des fonctionnalités offertes et de la sensibilité des
-          données traitées, l'ANSSI vous recommande de réaliser une démarche
-          d'homologation approfondie en vous appuyant sur le « guide d’homologation
-          en 9 étapes ».
-        br
-        div.
-          Celle-ci peut être effectuée en substitution ou en complément d'une
-          démarche via Mon Service Sécurisé. Le cas échéant, toutes les pièces
-          complémentaires au dossier d'homologation recommandées dans le guide en 9
-          étapes devront être jointes au dossier généré sur Mon Service Sécurisé.
 
     section.introduction
       h2!= homologation.nomService()
