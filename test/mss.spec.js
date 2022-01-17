@@ -499,7 +499,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
     beforeEach(() => {
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
+      depotDonnees.ajouteDescriptionServiceAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -546,10 +546,10 @@ describe('Le serveur MSS', () => {
     it("demande au dépôt de données de mettre à jour l'homologation", (done) => {
       idUtilisateurCourant = '123';
 
-      depotDonnees.ajouteInformationsGeneralesAHomologation = (
-        (identifiant, infosGenerales) => new Promise((resolve) => {
+      depotDonnees.ajouteDescriptionServiceAHomologation = (
+        (identifiant, descriptionService) => new Promise((resolve) => {
           expect(identifiant).to.equal('456');
-          expect(infosGenerales.nomService).to.equal('Nouveau Nom');
+          expect(descriptionService.nomService).to.equal('Nouveau Nom');
           resolve();
         })
       );
@@ -564,7 +564,7 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 422 si la validation des données échoue', (done) => {
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.reject(
+      depotDonnees.ajouteDescriptionServiceAHomologation = () => Promise.reject(
         new ErreurNomServiceDejaExistant('oups')
       );
 
