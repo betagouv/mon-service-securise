@@ -19,6 +19,11 @@ describe("L'avis de l'expert Cyber", () => {
     expect(avisExpert.commentaire).to.equal('Un commentaire');
   });
 
+  it('accepte le commentaire comme information facultative', () => {
+    const avisExpert = new AvisExpertCyber();
+    expect(avisExpert.proprietesAtomiquesFacultatives).to.eql(['commentaire']);
+  });
+
   it("détecte si l'expert a donné un avis", () => {
     const avisExpert = new AvisExpertCyber();
     expect(avisExpert.favorable()).to.be(false);
@@ -90,6 +95,12 @@ describe("L'avis de l'expert Cyber", () => {
     const avisExpert = new AvisExpertCyber({
       avis: AvisExpertCyber.FAVORABLE, dateRenouvellement: 'unAn', commentaire: 'Un commentaire',
     }, referentiel);
+
+    expect(avisExpert.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
+  });
+
+  it("n'exige pas que la date de renouvellement soit renseignée si l'avis est négatif", () => {
+    const avisExpert = new AvisExpertCyber({ avis: AvisExpertCyber.DEFAVORABLE }, referentiel);
 
     expect(avisExpert.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
   });
