@@ -16,15 +16,16 @@ const envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) =
   return transport.sendMail({
     from: process.env.ADRESSE_MAIL_CONTACT,
     to: destinataire,
-    subject: 'Finalisation inscription Mon Service Sécurisé',
+    subject: 'MonServiceSécurisé – Activation du compte',
     text: `Bonjour,
 
-Votre compte Mon Service Sécurisé a été créé !…
-Pour finaliser votre inscription, vous devez saisir votre mot de passe à l'URL suivante :
+Suite à votre demande de création de compte, cliquez sur le lien d'activation pour
+finaliser votre inscription :
 ${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}
 
-Merci pour le soutien et l'intérêt que vous portez à Mon Service Sécurisé,
--- Toute l'équipe MSS.`,
+Nous vous remercions pour l'intérêt que vous portez à notre service.
+
+L'équipe MonServiceSécurisé`,
   });
 };
 
@@ -34,19 +35,20 @@ const envoieMessageReinitialisationMotDePasse = (destinataire, idResetMotDePasse
   transport.sendMail({
     from: process.env.ADRESSE_MAIL_CONTACT,
     to: destinataire,
-    subject: 'Réinitialisation de votre mot de passe Mon Service Sécurisé',
+    subject: 'MonServiceSécurisé – Réinitialisation du mot de passe',
     text: `Bonjour,
 
 Nous avons reçu une demande de réinitialisation du mot de passe pour votre
-compte Mon Service Sécurisé. Pour réinitialiser votre mot de passe, vous devez
+compte MonServiceSécurisé. Pour réinitialiser votre mot de passe, vous devez
 en saisir un nouveau à l'URL suivante :
 ${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}
 
 Si vous n'avez pas demandé cette réinitialisation, vous n'avez rien à faire de
 plus. Veuillez simplement ignorer ce message.
 
-Nous restons à votre disposition pour vos éventuelles questions,
--- Toute l'équipe MSS.`,
+Nous restons à votre disposition pour vos éventuelles questions.
+
+L'équipe MonServiceSécurisé`,
   });
 };
 
