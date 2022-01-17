@@ -11,7 +11,7 @@ const brancheElementsAjoutables = (identifiantConteneurElements, identifiantElem
         10
       ));
 
-    return Math.max(...tousLesIndex) + 1;
+    return Math.max(...tousLesIndex, -1) + 1;
   };
 
   const selecteurConteneur = `#${identifiantConteneurElements}`;
