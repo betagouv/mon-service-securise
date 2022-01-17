@@ -3,7 +3,6 @@ include ../fragments/inputIdentite
 
 block formulaire
   form.homologation#parties-prenantes
-    h1 Décrivez le service numérique
     h2 Parties prenantes
 
     section
@@ -19,7 +18,7 @@ block formulaire
       h3 Équipe chargée du projet d'homologation
 
       +inputIdentite({
-        role: 'Pilote du projet',
+        role: 'Responsable métier du projet',
         descriptif: 'Personne pilote du projet au niveau métier (ex. chef·fe du projet, responsable métier)',
         nomParametre: 'piloteProjet',
         raccourciVisible: true
