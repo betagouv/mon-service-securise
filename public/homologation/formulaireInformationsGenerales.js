@@ -1,4 +1,4 @@
-import brancheElementsAjoutables from '../modules/elementsAjoutables.js';
+import brancheElementsAjoutables from '../modules/brancheElementsAjoutables.js';
 
 const sourceRegExpParamsItem = (nomIndicatif) => `^(description)-${nomIndicatif}-`;
 
