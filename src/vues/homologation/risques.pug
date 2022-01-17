@@ -6,12 +6,11 @@ block append styles
 
 block formulaire
   form.homologation#risques
-    h1 Sécurisez le service numérique
     h2 Risques de sécurité
     p.
-      Vérifiez ou précisez la liste des risques pour votre service numérique
-      afin de sensibiliser les parties prenantes et l'autorité d'homologation
-      sur les risques identifiés comme les plus courants.
+      A partir des risques 
+      Évaluez le niveau de gravité pour votre service numérique des risques les plus courants identifiés par l'ANSSI.
+      Si vous le souhaitez, précisez ces risques ou ajoutez de nouveaux risques qui guideront d’éventuelles mesures de sécurité complémentaires.
 
     section
       each donnees, identifiant in referentiel.risques()
