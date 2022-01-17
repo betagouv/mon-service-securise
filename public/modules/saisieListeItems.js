@@ -1,3 +1,10 @@
+const brancheSuppressionElement = () => {
+  $('.icone-suppression').click((e) => {
+    e.preventDefault();
+    $(e.target).parent().remove();
+  });
+};
+
 const afficheZoneSaisieItem = (selecteur, zoneSaisie) => {
   const $conteneurSaisieItem = $(`
 <label class="item-ajoute">
@@ -6,10 +13,7 @@ const afficheZoneSaisieItem = (selecteur, zoneSaisie) => {
   `);
 
   $(selecteur).append($conteneurSaisieItem);
-  $('.icone-suppression').click((e) => {
-    e.preventDefault();
-    $(e.target).parent().remove();
-  });
+  brancheSuppressionElement();
 
   $conteneurSaisieItem.append(zoneSaisie);
 };
@@ -31,4 +35,4 @@ const peupleListeItems = (selecteurConteneur, selecteurDonnees, cbZoneSaisie) =>
   return donneesItems.length;
 };
 
-export { brancheAjoutItem, peupleListeItems };
+export { brancheAjoutItem, peupleListeItems, brancheSuppressionElement };
