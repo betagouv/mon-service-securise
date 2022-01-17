@@ -63,7 +63,7 @@ class Homologation {
     return this.avisExpertCyber.descriptionExpiration();
   }
 
-  descriptionTypeService() { return this.informationsGenerales.descriptionTypeService(); }
+  descriptionTypeService() { return this.descriptionService.descriptionTypeService(); }
 
   descriptionStatutsMesures() {
     return Mesure.statutsPossibles().reduce((acc, s) => {
@@ -79,12 +79,12 @@ class Homologation {
   hebergeur() { return this.caracteristiquesComplementaires.descriptionHebergeur(); }
 
   localisationDonnees() {
-    return this.informationsGenerales.descriptionLocalisationDonnees();
+    return this.descriptionService.descriptionLocalisationDonnees();
   }
 
   mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }
 
-  nomService() { return this.informationsGenerales.nomService; }
+  nomService() { return this.descriptionService.nomService; }
 
   piloteProjet() { return this.partiesPrenantes.piloteProjet; }
 

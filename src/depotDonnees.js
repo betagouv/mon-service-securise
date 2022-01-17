@@ -60,9 +60,9 @@ const creeDepot = (config = {}) => {
     return trouveDonneesHomologation(idOuHomologation).then(metsAJour);
   };
 
-  const metsAJourInformationsGeneralesHomologation = (homologationCible, informations) => (
-    metsAJourProprieteHomologation('informationsGenerales', homologationCible, informations)
-      .then(() => metsAJourProprieteHomologation('descriptionService', homologationCible, informations))
+  const metsAJourDescriptionServiceHomologation = (homologationCible, informations) => (
+    metsAJourProprieteHomologation('descriptionService', homologationCible, informations)
+      .then(() => metsAJourProprieteHomologation('informationsGenerales', homologationCible, informations))
   );
 
   const remplaceProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
@@ -89,7 +89,7 @@ const creeDepot = (config = {}) => {
       .then((h) => !!h)
   );
 
-  const valideInformationsGenerales = (idUtilisateur, { nomService }, idHomologationMiseAJour) => {
+  const valideDescriptionService = (idUtilisateur, { nomService }, idHomologationMiseAJour) => {
     if (typeof nomService !== 'string' || !nomService) {
       return Promise.reject(new ErreurNomServiceManquant('Le nom du service ne peut pas être vide'));
     }
@@ -104,11 +104,11 @@ const creeDepot = (config = {}) => {
       ));
   };
 
-  const ajouteInformationsGeneralesAHomologation = (idHomologation, infos) => (
+  const ajouteDescriptionServiceAHomologation = (idHomologation, infos) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((h) => (
-        valideInformationsGenerales(h.idUtilisateur, infos, h.id)
-          .then(() => metsAJourInformationsGeneralesHomologation(h, infos))
+        valideDescriptionService(h.idUtilisateur, infos, h.id)
+          .then(() => metsAJourDescriptionServiceHomologation(h, infos))
       ))
   );
 
@@ -127,16 +127,16 @@ const creeDepot = (config = {}) => {
   const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
     .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
 
-  const nouvelleHomologation = (idUtilisateur, donneesInformationsGenerales) => {
+  const nouvelleHomologation = (idUtilisateur, donneesDescriptionService) => {
     const idHomologation = adaptateurUUID.genereUUID();
     const idAutorisation = adaptateurUUID.genereUUID();
     const donnees = {
       idUtilisateur,
-      informationsGenerales: donneesInformationsGenerales,
-      descriptionService: donneesInformationsGenerales,
+      descriptionService: donneesDescriptionService,
+      informationsGenerales: donneesDescriptionService,
     };
 
-    return valideInformationsGenerales(idUtilisateur, donneesInformationsGenerales)
+    return valideDescriptionService(idUtilisateur, donneesDescriptionService)
       .then(() => adaptateurPersistance.ajouteHomologation(idHomologation, donnees))
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
         idUtilisateur, idHomologation, type: 'createur',
@@ -246,7 +246,7 @@ const creeDepot = (config = {}) => {
     accesAutorise,
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
-    ajouteInformationsGeneralesAHomologation,
+    ajouteDescriptionServiceAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
     ajouteRisqueGeneralAHomologation,

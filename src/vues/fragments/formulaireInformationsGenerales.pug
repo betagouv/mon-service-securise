@@ -26,7 +26,7 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'typeService',
         titre: 'Type de service numérique',
         items: referentiel.typesService(),
-        objetDonnees: homologation.informationsGenerales,
+        objetDonnees: homologation.descriptionService,
       })
 
       +inputChoix({
@@ -34,7 +34,7 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'provenanceService',
         titre: 'Provenance du service numérique',
         items: referentiel.provenancesService(),
-        objetDonnees: homologation.informationsGenerales,
+        objetDonnees: homologation.descriptionService,
       })
 
       +inputChoix({
@@ -42,7 +42,7 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'statutDeploiement',
         titre: 'Statut',
         items: referentiel.statutsDeploiement(),
-        objetDonnees: homologation.informationsGenerales,
+        objetDonnees: homologation.descriptionService,
       })
 
       label Présentation du service numérique
@@ -50,7 +50,7 @@ mixin formulaireInformationsGenerales(idHomologation)
           id = 'presentation',
           name = 'presentation',
           placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
-        )= homologation.informationsGenerales.presentation
+        )= homologation.descriptionService.presentation
 
       label Accès au service numérique
         br
@@ -58,7 +58,7 @@ mixin formulaireInformationsGenerales(idHomologation)
           identifiantConteneur: 'points-acces',
           nom: 'point-acces',
           valeurExemple: 'exemple : https://www.adresse.fr, App Store, Play Store…',
-          donnees: homologation.informationsGenerales.pointsAcces.toJSON(),
+          donnees: homologation.descriptionService.pointsAcces.toJSON(),
           textBoutonAjouter: 'Ajouter un accès',
         })
 
@@ -68,13 +68,13 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'fonctionnalites',
         titre: 'Principales fonctionnalités offertes par le service numérique',
         items: referentiel.fonctionnalites(),
-        objetDonnees: homologation.informationsGenerales,
+        objetDonnees: homologation.descriptionService,
       })
 
       +elementsAjoutables({
         identifiantConteneur: 'fonctionnalites-specifiques',
         nom: 'fonctionnalite',
-        donnees: homologation.informationsGenerales.fonctionnalitesSpecifiques.toJSON(),
+        donnees: homologation.descriptionService.fonctionnalitesSpecifiques.toJSON(),
         textBoutonAjouter: 'Ajouter une fonctionnalité',
       })
 
@@ -84,13 +84,13 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'donneesCaracterePersonnel',
         titre: 'Données à caractère personnel et autres données sensibles stockées par le service',
         items: referentiel.donneesCaracterePersonnel(),
-        objetDonnees: homologation.informationsGenerales,
+        objetDonnees: homologation.descriptionService,
       })
 
       +elementsAjoutables({
               identifiantConteneur: 'donnees-sensibles-specifiques',
               nom: 'donnees-sensibles',
-              donnees: homologation.informationsGenerales.donneesSensiblesSpecifiques.toJSON(),
+              donnees: homologation.descriptionService.donneesSensiblesSpecifiques.toJSON(),
               textBoutonAjouter: 'Ajouter des données',
             })
 
@@ -100,7 +100,7 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'localisationDonnees',
         titre: 'Localisation des données',
         items: referentiel.localisationsDonnees(),
-        objetDonnees: homologation.informationsGenerales,
+        objetDonnees: homologation.descriptionService,
       })
 
       +inputChoix({
@@ -108,13 +108,13 @@ mixin formulaireInformationsGenerales(idHomologation)
         nom: 'delaiAvantImpactCritique',
         titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
         items: referentiel.delaisAvantImpactCritique(),
-        objetDonnees: homologation.informationsGenerales,
+        objetDonnees: homologation.descriptionService,
       })
 
       +inputOuiNon({
         nom: 'presenceResponsable',
         titre: "Une personne est-elle responsable de la sécurité des systèmes d'information au sein de votre organisation ?",
-        objetDonnees: homologation.informationsGenerales,
+        objetDonnees: homologation.descriptionService,
       })
 
     if idHomologation

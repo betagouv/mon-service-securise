@@ -5,10 +5,10 @@ const { ErreurModele } = require('./erreurs');
 const ActionsSaisie = require('./modeles/actionsSaisie');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
+const DescriptionService = require('./modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('./modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('./modeles/donneesSensiblesSpecifiques');
 const Homologation = require('./modeles/homologation');
-const InformationsGenerales = require('./modeles/informationsGenerales');
 const InformationsHomologation = require('./modeles/informationsHomologation');
 const MesureGenerale = require('./modeles/mesureGenerale');
 const MesuresSpecifiques = require('./modeles/mesuresSpecifiques');
@@ -240,8 +240,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
       { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
     ]),
     (requete, reponse, suite) => {
-      const infosGenerales = new InformationsGenerales(requete.body, referentiel);
-      depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
+      const descriptionService = new DescriptionService(requete.body, referentiel);
+      depotDonnees.ajouteDescriptionServiceAHomologation(requete.params.id, descriptionService)
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
         .catch((e) => {
           if (e instanceof ErreurModele) {
