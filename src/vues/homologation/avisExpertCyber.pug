@@ -3,35 +3,34 @@ include ../fragments/inputChoix
 
 block formulaire
   form.homologation#avis-expert-cyber
-    h1 Complétez le dossier
-    h2 Avis de l'expert cyber
+    h2 Avis sur le dossier
+    p.
+      Renseignez ici l’avis sur le lancement ou le maintien en ligne des principaux
+      acteurs de l’homologation, en capacité d’évaluer le niveau de sécurité du service.
 
     section
       +inputChoix({
         type: 'radio',
         nom: 'avis',
-        titre: "Avis de l'expert cybersécurité sur le lancement ou le maintien en service.",
+        titre: "Spécialiste cybersécurité",
         items: {
           favorable: { description: 'Avis favorable' },
           defavorable: { description: 'Avis défavorable' },
         },
         objetDonnees: homologation.avisExpertCyber,
-        decoration: "Au regard des mesures de sécurité mises en œuvre, l'expert cybersécurité doit exprimer un avis sur le lancement ou le maintien en service.",
       })
 
       +inputChoix({
         type: 'radio',
         nom: 'dateRenouvellement',
-        titre: "Renouvellement de l'homologation",
+        titre: "Durée proposée de l'homologation",
         items: referentiel.echeancesRenouvellement(),
         objetDonnees: homologation.avisExpertCyber,
-        decoration: "Précisez la date à laquelle l'homologation devra être renouvelée.",
       })
 
-      label Commentaires et recommandations de l'expert cybersécurité
-        p Ajoutez ici les commentaires, recommandations ou remarques de l'expert cybersécurité.
+      label Commentaires et recommandations
         textarea(
-          id = 'commentaire', name = 'commentaire',
+          id = 'commentaire', name = 'commentaire', placeholder = "Précisez l'avis rendu sur l'homologation",
         )= homologation.avisExpertCyber.commentaire
 
 
