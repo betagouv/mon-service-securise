@@ -1,0 +1,7 @@
+.elements-ajoutables label{
+    margin-top: 1em;
+}
+
+.elements-ajoutables > label{
+    margin-bottom: 2em;
+}

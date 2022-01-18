@@ -1,15 +1,20 @@
-mixin elementsAjoutables({ identifiantConteneur, nom, valeurExemple = '', donnees = [], texteLienAjouter = 'Ajouter' })
-  div(id = identifiantConteneur)
-    each value, index in donnees
-      label.item-ajoute
-        .icone-suppression
-        input(
-          id = 'description-' + nom + '-' + index,
-          name = 'description-' + nom + '-' + index,
-          type = 'text',
-          value != value.description,
-          placeholder = valeurExemple
-        )
+mixin zoneSaisie(nom, index, description, valeurExemple)
+  label.item-ajoute
+    .icone-suppression
+    input(
+      id = 'description-' + nom + '-' + index,
+      name = 'description-' + nom + '-' + index,
+      type = 'text',
+      value != description,
+      placeholder = valeurExemple
+    )
+
+mixin elementsAjoutables({ identifiantConteneur, nom, valeurExemple = '', donnees = [], texteLienAjouter = 'Ajouter', zoneSaisieVideVisible = false })
+  div(id = identifiantConteneur class = 'elements-ajoutables')
+    if zoneSaisieVideVisible && donnees.length === 0
+      +zoneSaisie(nom, 0, '', valeurExemple)
+    each valeur, index in donnees
+      +zoneSaisie(nom, index, valeur.description, valeurExemple)
   a(
     class = 'nouvel-item',
     id = 'ajout-element-' + nom

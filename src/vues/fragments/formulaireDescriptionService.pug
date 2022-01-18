@@ -3,6 +3,7 @@ include ./elementsAjoutables
 
 block append styles
   link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/descriptionService.css', rel = 'stylesheet')
 
 mixin formulaireDescriptionService(idHomologation)
   form.homologation#homologation
@@ -60,6 +61,7 @@ mixin formulaireDescriptionService(idHomologation)
           valeurExemple: 'exemple : https://www.adresse.fr, App Store, Play Store…',
           donnees: homologation.descriptionService.pointsAcces.toJSON(),
           texteLienAjouter: 'Ajouter un accès',
+          zoneSaisieVideVisible: true,
         })
 
     section
