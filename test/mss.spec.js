@@ -427,11 +427,18 @@ describe('Le serveur MSS', () => {
     });
 
     it('aseptise la liste des fonctionnalités spécifiques ainsi que son contenu', (done) => {
-      depotDonnees.nouvelleHomologation = () => Promise.resolve();
-
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
           verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
+      axios.post('http://localhost:1234/api/homologation', {})
+        .then(() => {
+          verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
           done();
         })
         .catch(done);
@@ -469,6 +476,7 @@ describe('Le serveur MSS', () => {
           fonctionnalites: undefined,
           fonctionnalitesSpecifiques: undefined,
           donneesCaracterePersonnel: undefined,
+          donneesSensiblesSpecifiques: undefined,
           delaiAvantImpactCritique: undefined,
           localisationDonnees: undefined,
           presenceResponsable: undefined,
@@ -491,7 +499,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
     beforeEach(() => {
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.resolve();
+      depotDonnees.ajouteDescriptionServiceAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -526,13 +534,22 @@ describe('Le serveur MSS', () => {
         .catch(done);
     });
 
+    it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
+      axios.put('http://localhost:1234/api/homologation/456', {})
+        .then(() => {
+          verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
+          done();
+        })
+        .catch(done);
+    });
+
     it("demande au dépôt de données de mettre à jour l'homologation", (done) => {
       idUtilisateurCourant = '123';
 
-      depotDonnees.ajouteInformationsGeneralesAHomologation = (
-        (identifiant, infosGenerales) => new Promise((resolve) => {
+      depotDonnees.ajouteDescriptionServiceAHomologation = (
+        (identifiant, descriptionService) => new Promise((resolve) => {
           expect(identifiant).to.equal('456');
-          expect(infosGenerales.nomService).to.equal('Nouveau Nom');
+          expect(descriptionService.nomService).to.equal('Nouveau Nom');
           resolve();
         })
       );
@@ -547,7 +564,7 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 422 si la validation des données échoue', (done) => {
-      depotDonnees.ajouteInformationsGeneralesAHomologation = () => Promise.reject(
+      depotDonnees.ajouteDescriptionServiceAHomologation = () => Promise.reject(
         new ErreurNomServiceDejaExistant('oups')
       );
 

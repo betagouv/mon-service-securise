@@ -5,9 +5,10 @@ const { ErreurModele } = require('./erreurs');
 const ActionsSaisie = require('./modeles/actionsSaisie');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
+const DescriptionService = require('./modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('./modeles/fonctionnalitesSpecifiques');
+const DonneesSensiblesSpecifiques = require('./modeles/donneesSensiblesSpecifiques');
 const Homologation = require('./modeles/homologation');
-const InformationsGenerales = require('./modeles/informationsGenerales');
 const InformationsHomologation = require('./modeles/informationsHomologation');
 const MesureGenerale = require('./modeles/mesureGenerale');
 const MesuresSpecifiques = require('./modeles/mesuresSpecifiques');
@@ -189,6 +190,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     middleware.aseptiseListes([
       { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
       { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
+      { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
     ]),
     (requete, reponse, suite) => {
       const {
@@ -198,6 +200,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         fonctionnalites,
         fonctionnalitesSpecifiques,
         donneesCaracterePersonnel,
+        donneesSensiblesSpecifiques,
         delaiAvantImpactCritique,
         localisationDonnees,
         presenceResponsable,
@@ -213,6 +216,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         fonctionnalites,
         fonctionnalitesSpecifiques,
         donneesCaracterePersonnel,
+        donneesSensiblesSpecifiques,
         delaiAvantImpactCritique,
         localisationDonnees,
         presenceResponsable,
@@ -233,10 +237,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     middleware.aseptiseListes([
       { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
       { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
+      { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
     ]),
     (requete, reponse, suite) => {
-      const infosGenerales = new InformationsGenerales(requete.body, referentiel);
-      depotDonnees.ajouteInformationsGeneralesAHomologation(requete.params.id, infosGenerales)
+      const descriptionService = new DescriptionService(requete.body, referentiel);
+      depotDonnees.ajouteDescriptionServiceAHomologation(requete.params.id, descriptionService)
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
         .catch((e) => {
           if (e instanceof ErreurModele) {

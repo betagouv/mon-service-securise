@@ -15,14 +15,23 @@ nav {
   z-index: 1;
 
   display: flex;
+  align-items: center;
 
+  box-sizing: border-box;
   width: inherit;
+  padding: 2em;
   border-bottom: solid 1px;
 
   background: inherit;
 }
 
+nav a {
+  text-decoration: none;
+  color: #1b7cc4;
+}
+
 nav .bouton {
+  margin: 0;
   margin-left: auto;
 }
 

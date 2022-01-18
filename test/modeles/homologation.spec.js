@@ -8,7 +8,7 @@ const MesureGenerale = require('../../src/modeles/mesureGenerale');
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
     const homologation = new Homologation({
-      id: '123', idUtilisateur: '456', informationsGenerales: { nomService: 'Super Service' },
+      id: '123', idUtilisateur: '456', descriptionService: { nomService: 'Super Service' },
     });
 
     expect(homologation.nomService()).to.equal('Super Service');
@@ -16,7 +16,7 @@ describe('Une homologation', () => {
 
   it('sait se convertir en JSON', () => {
     const homologation = new Homologation({
-      id: '123', idUtilisateur: '456', informationsGenerales: { nomService: 'Super Service' },
+      id: '123', idUtilisateur: '456', descriptionService: { nomService: 'Super Service' },
     });
 
     expect(homologation.toJSON()).to.eql({
@@ -34,7 +34,7 @@ describe('Une homologation', () => {
     const homologation = new Homologation({
       id: '123',
       idUtilisateur: '456',
-      informationsGenerales: { nomService: 'nom', typeService: ['unType', 'unAutre'] },
+      descriptionService: { nomService: 'nom', typeService: ['unType', 'unAutre'] },
     }, referentiel);
 
     expect(homologation.descriptionTypeService()).to.equal('Un type, Un autre');
@@ -56,7 +56,7 @@ describe('Une homologation', () => {
         structureDeveloppement: 'Une structure',
         hebergeur: 'Un hébergeur',
       },
-      informationsGenerales: {
+      descriptionService: {
         localisationDonnees: 'france',
       },
     }, referentiel);
