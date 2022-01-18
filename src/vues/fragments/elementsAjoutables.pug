@@ -7,7 +7,7 @@ mixin elementsAjoutables({ identifiantConteneur, nom, valeurExemple = '', donnee
           id = 'description-' + nom + '-' + index,
           name = 'description-' + nom + '-' + index,
           type = 'text',
-          value = value.description,
+          value != value.description,
           placeholder = valeurExemple
         )
   a(
