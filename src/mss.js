@@ -241,7 +241,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     ]),
     (requete, reponse, suite) => {
       const descriptionService = new DescriptionService(requete.body, referentiel);
-      depotDonnees.ajouteDescriptionServiceAHomologation(requete.params.id, descriptionService)
+      depotDonnees.ajouteDescriptionServiceAHomologation(
+        requete.idUtilisateurCourant,
+        requete.params.id,
+        descriptionService
+      )
         .then(() => reponse.send({ idHomologation: requete.homologation.id }))
         .catch((e) => {
           if (e instanceof ErreurModele) {

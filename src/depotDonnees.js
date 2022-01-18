@@ -104,10 +104,10 @@ const creeDepot = (config = {}) => {
       ));
   };
 
-  const ajouteDescriptionServiceAHomologation = (idHomologation, infos) => (
+  const ajouteDescriptionServiceAHomologation = (idUtilisateur, idHomologation, infos) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((h) => (
-        valideDescriptionService(h.idUtilisateur, infos, h.id)
+        valideDescriptionService(idUtilisateur, infos, h.id)
           .then(() => metsAJourDescriptionServiceHomologation(h, infos))
       ))
   );

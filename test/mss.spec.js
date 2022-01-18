@@ -144,6 +144,7 @@ describe('Le serveur MSS', () => {
     },
 
     trouveHomologation: (requete, reponse, suite) => {
+      requete.idUtilisateurCourant = idUtilisateurCourant;
       requete.homologation = new Homologation({ id: '456' });
       rechercheHomologationEffectuee = true;
       suite();
@@ -547,11 +548,12 @@ describe('Le serveur MSS', () => {
       idUtilisateurCourant = '123';
 
       depotDonnees.ajouteDescriptionServiceAHomologation = (
-        (identifiant, descriptionService) => new Promise((resolve) => {
-          expect(identifiant).to.equal('456');
-          expect(descriptionService.nomService).to.equal('Nouveau Nom');
-          resolve();
-        })
+        (idUtilisateur, idHomologation, infosGenerales) => {
+          expect(idUtilisateur).to.equal('123');
+          expect(idHomologation).to.equal('456');
+          expect(infosGenerales.nomService).to.equal('Nouveau Nom');
+          return Promise.resolve();
+        }
       );
 
       axios.put('http://localhost:1234/api/homologation/456', { nomService: 'Nouveau Nom' })
