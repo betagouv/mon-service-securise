@@ -43,7 +43,7 @@ const nouvelAdaptateur = (env) => {
       .join('autorisations', knex.raw("(autorisations.donnees->>'idHomologation')::uuid"), 'homologations.id')
       .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
       .whereRaw('not homologations.id::text=?', idHomologationMiseAJour)
-      .whereRaw("homologations.donnees#>>'{informationsGenerales,nomService}'=?", nomService)
+      .whereRaw("homologations.donnees#>>'{descriptionService,nomService}'=?", nomService)
       .select('homologations.*')
       .first()
       .then(convertisLigneEnObjet)

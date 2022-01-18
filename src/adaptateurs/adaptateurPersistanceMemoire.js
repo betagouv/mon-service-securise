@@ -29,7 +29,7 @@ const nouvelAdaptateur = (donnees = {}) => {
   const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour) => (
     homologations(idUtilisateur)
       .then((hs) => hs.find((h) => (
-        h.id !== idHomologationMiseAJour && h.informationsGenerales?.nomService === nomService
+        h.id !== idHomologationMiseAJour && h.descriptionService?.nomService === nomService
       )))
   );
 

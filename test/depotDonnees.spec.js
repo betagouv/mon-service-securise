@@ -623,7 +623,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [{
-          id: '789', informationsGenerales: { nomService: 'Un service existant' },
+          id: '789', descriptionService: { nomService: 'Un service existant' },
         }],
         autorisations: [{ idUtilisateur: '123', idHomologation: '789', type: 'createur' }],
       });
@@ -659,8 +659,8 @@ describe('Le dépôt de données persistées en mémoire', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [
-          { id: '888', informationsGenerales: { nomService: 'Un service existant' } },
-          { id: '999', informationsGenerales: { nomService: 'Un nom de service' } },
+          { id: '888', descriptionService: { nomService: 'Un service existant' } },
+          { id: '999', descriptionService: { nomService: 'Un nom de service' } },
         ],
         autorisations: [
           { idUtilisateur: '123', idHomologation: '888', type: 'createur' },
