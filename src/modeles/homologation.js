@@ -19,7 +19,6 @@ class Homologation {
   constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
     const {
       id = '',
-      idUtilisateur,
       informationsGenerales = {},
       descriptionService = {},
       mesuresGenerales = [],
@@ -32,7 +31,6 @@ class Homologation {
     } = donnees;
 
     this.id = id;
-    this.idUtilisateur = idUtilisateur;
     this.informationsGenerales = new InformationsGenerales(informationsGenerales, referentiel);
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
