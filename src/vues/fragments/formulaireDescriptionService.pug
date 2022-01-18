@@ -4,7 +4,7 @@ include ./elementsAjoutables
 block append styles
   link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
 
-mixin formulaireInformationsGenerales(idHomologation)
+mixin formulaireDescriptionService(idHomologation)
   form.homologation#homologation
     h1 Première étape de la constitution de votre dossier
     h2 Description du service
@@ -122,4 +122,4 @@ mixin formulaireInformationsGenerales(idHomologation)
     else
       .bouton#diagnostic Valider
 
-  script(type = 'module', src = '/statique/homologation/formulaireInformationsGenerales.js')
+  script(type = 'module', src = '/statique/homologation/formulaireDescriptionService.js')
