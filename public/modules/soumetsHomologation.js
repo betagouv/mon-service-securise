@@ -1,5 +1,5 @@
 import parametres, { modifieParametresAvecItemsExtraits } from './parametres.js';
-import listesAvecItemsExtraits from '../homologation/formulaireInformationsGenerales.js';
+import listesAvecItemsExtraits from '../homologation/formulaireDescriptionService.js';
 
 const fermeModale = () => {
   $('.rideau').css('display', '');
