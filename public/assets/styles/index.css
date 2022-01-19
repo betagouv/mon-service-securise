@@ -353,3 +353,7 @@ h1 {
 .bandeau ~ .bouton {
   margin-top: 10em;
 }
+
+main {
+  padding-bottom: 0;
+}
