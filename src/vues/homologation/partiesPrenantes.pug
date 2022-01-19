@@ -6,16 +6,13 @@ block formulaire
     h1.action Parties prenantes
 
     section
-      h3 Autorité d'homologation
+      h3 Acteurs de l'homologation
 
       +inputIdentite({
         role: "Autorité d'homologation",
         descriptif: "Personne en capacité de prendre la responsabilité de la mise en ligne d'un service (ex. directeur·ice général·e des services, maire ou adjoint·e au maire)",
         nomParametre: 'autoriteHomologation',
       })
-
-    section
-      h3 Équipe chargée du projet d'homologation
 
       +inputIdentite({
         role: 'Responsable métier du projet',
