@@ -11,12 +11,18 @@ form.homologation h1 {
   text-transform: uppercase;
 }
 
-form.homologation h2 {
-  margin-top: 0;
+form.homologation h1.action {
+  margin-top: 2em;
+  padding-top: 0;
 
   font-weight: normal;
   font-size: 1.7em;
+  text-transform: none;
   color: #abb6bf;
+}
+
+.action + section {
+  margin-top: 2em;
 }
 
 form.homologation h3 {
