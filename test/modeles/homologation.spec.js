@@ -52,12 +52,12 @@ describe('Une homologation', () => {
     const homologation = new Homologation({
       id: '123',
       caracteristiquesComplementaires: {
-        presentation: 'Une présentation',
         structureDeveloppement: 'Une structure',
         hebergeur: 'Un hébergeur',
       },
       descriptionService: {
         localisationDonnees: 'france',
+        presentation: 'Une présentation',
       },
     }, referentiel);
 
