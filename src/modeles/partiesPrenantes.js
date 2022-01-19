@@ -16,6 +16,8 @@ class PartiesPrenantes extends InformationsHomologation {
       proprietesAtomiquesRequises: [
         'autoriteHomologation',
         'fonctionAutoriteHomologation',
+        'delegueProtectionDonnees',
+        'fonctionDelegueProtectionDonnees',
         'piloteProjet',
         'fonctionPiloteProjet',
         'expertCybersecurite',
@@ -44,6 +46,12 @@ class PartiesPrenantes extends InformationsHomologation {
 
   descriptionExpertCybersecurite() {
     return descriptionPartiePrenante(this.expertCybersecurite, this.fonctionExpertCybersecurite);
+  }
+
+  descriptionDelegueProtectionDonnees() {
+    return descriptionPartiePrenante(
+      this.delegueProtectionDonnees, this.fonctionDelegueProtectionDonnees
+    );
   }
 }
 
