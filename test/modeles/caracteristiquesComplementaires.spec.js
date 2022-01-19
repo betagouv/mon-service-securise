@@ -6,17 +6,13 @@ const InformationsHomologation = require('../../src/modeles/informationsHomologa
 describe("L'ensemble des caractéristiques complémentaires", () => {
   it('connaît ses constituants', () => {
     const caracteristiques = new CaracteristiquesComplementaires({
-      presentation: 'Une présentation',
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
-      localisationDonnees: 'france',
       entitesExternes: [{ nom: 'Un nom' }],
     });
 
-    expect(caracteristiques.presentation).to.equal('Une présentation');
     expect(caracteristiques.structureDeveloppement).to.equal('Une structure');
     expect(caracteristiques.hebergeur).to.equal('Un hébergeur');
-    expect(caracteristiques.localisationDonnees).to.equal('france');
     expect(caracteristiques.nombreEntitesExternes()).to.equal(1);
   });
 
@@ -27,31 +23,25 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
 
   it('sait se présenter au format JSON', () => {
     const caracteristiques = new CaracteristiquesComplementaires({
-      presentation: 'Une présentation',
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
-      localisationDonnees: 'france',
       entitesExternes: [{ nom: 'Une entité', contact: 'jean.dupont@mail.fr', acces: 'Accès administrateur' }],
     });
 
     expect(caracteristiques.toJSON()).to.eql({
-      presentation: 'Une présentation',
       structureDeveloppement: 'Une structure',
       hebergeur: 'Un hébergeur',
-      localisationDonnees: 'france',
       entitesExternes: [{ nom: 'Une entité', contact: 'jean.dupont@mail.fr', acces: 'Accès administrateur' }],
     });
   });
 
   it('presente un JSON partiel si certaines caractéristiques ne sont pas définies', () => {
     const caracteristiques = new CaracteristiquesComplementaires({
-      presentation: 'Une présentation',
-      hebergeur: '',
+      hebergeur: 'ovh',
     });
 
     expect(caracteristiques.toJSON()).to.eql({
-      presentation: 'Une présentation',
-      hebergeur: '',
+      hebergeur: 'ovh',
       entitesExternes: [],
     });
   });
@@ -67,10 +57,8 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
     describe("quand au moins une entité externe n'a été que partiellement saisie", () => {
       it('a pour statut de saisie A_COMPLETER', () => {
         const caracteristiques = new CaracteristiquesComplementaires({
-          presentation: 'Une présentation',
           structureDeveloppement: 'Une structure',
           hebergeur: 'Un hébergeur',
-          localisationDonnees: 'france',
           entitesExternes: [{ nom: 'Un nom, mais pas de contact' }],
         });
 
@@ -81,10 +69,8 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
     describe('quand toutes les entités externes sont complètement saisies', () => {
       it('a pour statut COMPLETES si tous les autres champs sont remplis', () => {
         const caracteristiques = new CaracteristiquesComplementaires({
-          presentation: 'Une présentation',
           structureDeveloppement: 'Une structure',
           hebergeur: 'Un hébergeur',
-          localisationDonnees: 'france',
           entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
         });
 
@@ -93,7 +79,6 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
 
       it("a pour statut A_COMPLETER si un des autres champs n'est pas saisi", () => {
         const caracteristiques = new CaracteristiquesComplementaires({
-          presentation: 'Une présentation',
           entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
         });
 
