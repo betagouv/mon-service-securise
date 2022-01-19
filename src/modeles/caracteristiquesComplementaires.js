@@ -8,9 +8,6 @@ class CaracteristiquesComplementaires extends InformationsHomologation {
       proprietesAtomiquesRequises: [
         'structureDeveloppement', 'hebergeur',
       ],
-      proprietesAtomiquesFacultatives: [
-        'presentation', 'localisationDonnees',
-      ],
       listesAgregats: { entitesExternes: EntitesExternes },
     });
     this.renseigneProprietes(donneesCaracteristiques);
