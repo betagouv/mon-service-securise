@@ -73,6 +73,7 @@ describe('Une homologation', () => {
       partiesPrenantes: {
         autoriteHomologation: 'Jean Dupont',
         fonctionAutoriteHomologation: 'Maire',
+        delegueProtectionDonnees: 'Rémi Fassol',
         piloteProjet: 'Sylvie Martin',
         expertCybersecurite: 'Anna Dubreuil',
       },
@@ -80,6 +81,7 @@ describe('Une homologation', () => {
 
     expect(homologation.autoriteHomologation()).to.equal('Jean Dupont');
     expect(homologation.fonctionAutoriteHomologation()).to.equal('Maire');
+    expect(homologation.delegueProtectionDonnees()).to.equal('Rémi Fassol');
     expect(homologation.piloteProjet()).to.equal('Sylvie Martin');
     expect(homologation.expertCybersecurite()).to.equal('Anna Dubreuil');
   });

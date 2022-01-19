@@ -49,6 +49,10 @@ class Homologation {
 
   autoriteHomologation() { return this.partiesPrenantes.autoriteHomologation; }
 
+  delegueProtectionDonnees() {
+    return this.partiesPrenantes.delegueProtectionDonnees;
+  }
+
   descriptionAutoriteHomologation() {
     return this.partiesPrenantes.descriptionAutoriteHomologation();
   }

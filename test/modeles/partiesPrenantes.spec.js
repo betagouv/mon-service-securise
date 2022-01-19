@@ -7,6 +7,8 @@ describe("L'ensemble des parties prenantes", () => {
   it('connaît ses constituants', () => {
     const partiesPrenantes = new PartiesPrenantes({
       autoriteHomologation: 'Jean Dupont',
+      delegueProtectionDonnees: 'Rémi Fassol',
+      fonctionDelegueProtectionDonnees: 'DSI',
       fonctionAutoriteHomologation: 'Maire',
       piloteProjet: 'Sylvie Martin',
       fonctionPiloteProjet: 'Responsable métier',
@@ -16,6 +18,8 @@ describe("L'ensemble des parties prenantes", () => {
 
     expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
     expect(partiesPrenantes.fonctionAutoriteHomologation).to.equal('Maire');
+    expect(partiesPrenantes.delegueProtectionDonnees).to.equal('Rémi Fassol');
+    expect(partiesPrenantes.fonctionDelegueProtectionDonnees).to.equal('DSI');
     expect(partiesPrenantes.piloteProjet).to.equal('Sylvie Martin');
     expect(partiesPrenantes.fonctionPiloteProjet).to.equal('Responsable métier');
     expect(partiesPrenantes.expertCybersecurite).to.equal('Anna Dubreuil');
@@ -24,6 +28,8 @@ describe("L'ensemble des parties prenantes", () => {
     expect(partiesPrenantes.toJSON()).to.eql({
       autoriteHomologation: 'Jean Dupont',
       fonctionAutoriteHomologation: 'Maire',
+      delegueProtectionDonnees: 'Rémi Fassol',
+      fonctionDelegueProtectionDonnees: 'DSI',
       piloteProjet: 'Sylvie Martin',
       fonctionPiloteProjet: 'Responsable métier',
       expertCybersecurite: 'Anna Dubreuil',
@@ -109,6 +115,15 @@ describe("L'ensemble des parties prenantes", () => {
     });
 
     expect(partiesPrenantes.descriptionExpertCybersecurite()).to.equal('Jean Dupont (RSSI)');
+  });
+
+  it('présente les informations relatives au ou à la déléguée à la protection des données', () => {
+    const partiesPrenantes = new PartiesPrenantes({
+      delegueProtectionDonnees: 'Jean Dupont',
+      fonctionDelegueProtectionDonnees: 'DSI',
+    });
+
+    expect(partiesPrenantes.descriptionDelegueProtectionDonnees()).to.equal('Jean Dupont (DSI)');
   });
 
   it('détermine le statut de saisie', () => {
