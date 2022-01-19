@@ -86,7 +86,7 @@ class Homologation {
 
   piloteProjet() { return this.partiesPrenantes.piloteProjet; }
 
-  presentation() { return this.caracteristiquesComplementaires.presentation; }
+  presentation() { return this.descriptionService.presentation; }
 
   risquesPrincipaux() {
     return this.risques.principaux();
