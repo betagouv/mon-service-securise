@@ -1,31 +1,17 @@
-mixin inputIdentite({ role, descriptif = '', nomParametre, raccourciVisible = false })
+mixin inputIdentite({ role, nomParametre })
   label(for='aucuneAction')= role
-    p= descriptif
+    .saisie-identite
+      label(for = nomParametre) Nom / Prénom
+      input(
+        id = nomParametre, name = nomParametre, type = 'text',
+        placeholder = 'Exemple : Dujardin Jean',
+        value != homologation.partiesPrenantes[nomParametre]
+      )
 
-    - const nomParamCapitalise = `${nomParametre.charAt(0).toUpperCase()}${nomParametre.slice(1)}`
-
-    if raccourciVisible
-      - const nomParamJeSuis = `jeSuis${nomParamCapitalise}`
-      input(id = nomParamJeSuis, name = nomParamJeSuis, type = 'checkbox')
-      label(for = nomParamJeSuis) Je suis cette personne
-
-    input(
-      id = nomParametre, name = nomParametre, type = 'text',
-      placeholder = 'Prénom et nom',
-      value != homologation.partiesPrenantes[nomParametre]
-    )
-
-    - const nomParamFonction = `fonction${nomParamCapitalise}`
-    input(
-      id = nomParamFonction, name = nomParamFonction, type = 'text',
-      placeholder = 'Fonction',
-      value = homologation.partiesPrenantes[nomParamFonction]
-    )
-
-mixin inputIdentiteExpertCyber
-  +inputIdentite({
-    role: 'Spécialiste cybersécurité',
-    descriptif: "Personne en capacité de donner un avis sur la sécurité numérique du projet. Cette personne ne devrait pas être celle ayant développé ou fourni le service (ex. responsable de la sécurité des systèmes d'information de l'entité, prestataire de conseil en sécurité)",
-    nomParametre: 'expertCybersecurite',
-    raccourciVisible: true
-  })
+      - const nomParamFonction = `fonction${nomParametre.charAt(0).toUpperCase()}${nomParametre.slice(1)}`
+      label(for = nomParamFonction) Fonction
+      input(
+        id = nomParamFonction, name = nomParamFonction, type = 'text',
+        placeholder = 'Exemple : Direction générale des services, maire',
+        value = homologation.partiesPrenantes[nomParamFonction]
+      )

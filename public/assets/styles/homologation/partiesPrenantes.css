@@ -1,0 +1,13 @@
+.saisie-identite {
+    border: .3px solid;
+    border-color: var(--liseres);
+    padding: .5em;
+    margin-top: 0.6em;
+}
+
+.saisie-identite label {
+    display: inline-block;
+    margin: 0;
+    margin-left: 0.1em;
+    font-weight: normal;
+}

@@ -1,6 +1,9 @@
 extends ./formulaire
 include ../fragments/inputIdentite
 
+block append styles
+  link(href = '/statique/assets/styles/homologation/partiesPrenantes.css', rel = 'stylesheet')
+
 block formulaire
   form.homologation#parties-prenantes
     h1.action Parties prenantes
@@ -10,18 +13,18 @@ block formulaire
 
       +inputIdentite({
         role: "Autorité d'homologation",
-        descriptif: "Personne en capacité de prendre la responsabilité de la mise en ligne d'un service (ex. directeur·ice général·e des services, maire ou adjoint·e au maire)",
         nomParametre: 'autoriteHomologation',
       })
 
       +inputIdentite({
-        role: 'Responsable métier du projet',
-        descriptif: 'Personne pilote du projet au niveau métier (ex. chef·fe du projet, responsable métier)',
-        nomParametre: 'piloteProjet',
-        raccourciVisible: true
+        role: 'Spécialiste cybersécurité',
+        nomParametre: 'expertCybersecurite',
       })
 
-      +inputIdentiteExpertCyber
+      +inputIdentite({
+        role: 'Responsable métier du projet',
+        nomParametre: 'piloteProjet',
+      })
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
