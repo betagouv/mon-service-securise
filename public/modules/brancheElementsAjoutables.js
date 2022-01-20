@@ -20,17 +20,25 @@ const brancheElementsAjoutables = (
   const selecteurLienAjout = `#ajout-element-${identifiantElement}`;
 
   const templateZoneSaisie = (nomElement, index, proprietes) => {
+    const label = (valeurLabel, idInputAssocie) => (
+      valeurLabel ? `<label for="${idInputAssocie}">${valeurLabel}</label>` : ''
+    );
+
     const $inputs = Object
       .keys(proprietes)
-      .map((cle) => $(
-        `<input
-          id="${cle}-${nomElement}-${index}"
-          name="${cle}-${nomElement}-${index}"
-          type="text"
-          value="${proprietes[cle].valeur}"
-          placeholder="${proprietes[cle].valeurExemple}"
-        >`
-      ));
+      .map((cle) => {
+        const id = `${cle}-${nomElement}-${index}`;
+        return $(
+          `${label(proprietes[cle].label, id)}
+          <input
+            id="${id}"
+            name="${id}"
+            type="text"
+            value="${proprietes[cle].valeur || ''}"
+            placeholder="${proprietes[cle].valeurExemple || ''}"
+          >`
+        );
+      });
     return $(`<div id="element-${nomElement}-${index}"></div>`).append($inputs);
   };
 

@@ -80,9 +80,18 @@ a.nouvel-item {
   position: relative;
 
   padding: 1em;
+  margin-top: 1em;
+  margin-bottom: 2em;
 
   border: solid 1px var(--liseres);
   border-radius: 5px;
+}
+
+.item-ajoute label {
+  display: inline-block;
+  margin: 0;
+  margin-left: 0.1em;
+  font-weight: normal;
 }
 
 .icone-suppression {
