@@ -1,3 +1,4 @@
+const ActeursHomologation = require('./acteursHomologation');
 const InformationsHomologation = require('./informationsHomologation');
 
 const descriptionPartiePrenante = (partiePrenante, fonction) => {
@@ -23,6 +24,9 @@ class PartiesPrenantes extends InformationsHomologation {
         'expertCybersecurite',
         'fonctionExpertCybersecurite',
       ],
+      listesAgregats: {
+        acteursHomologation: ActeursHomologation,
+      },
     });
 
     this.renseigneProprietes(donneesPartiesPrenantes);
