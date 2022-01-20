@@ -1,0 +1,12 @@
+include ./elementsAjoutables.pug
+
+mixin elementsAjoutablesDescription({ identifiantConteneur, nom, valeurExemple = '', donnees = [], texteLienAjouter, zoneSaisieVideVisible })
+  - var donneesElements = donnees.map(donnee => ({ description: ({ valeur: donnee.description, valeurExemple })}))
+  +elementsAjoutables({
+    identifiantConteneur,
+    nom,
+    donneesElements,
+    texteLienAjouter,
+    zoneSaisieVideVisible,
+    structureZoneSaisieVide: ({ description: ({ valeur: '', valeurExemple })})
+  })

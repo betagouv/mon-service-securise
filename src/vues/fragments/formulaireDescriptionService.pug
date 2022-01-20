@@ -1,5 +1,5 @@
 include ./inputChoix
-include ./elementsAjoutables
+include ./elementsAjoutables/elementsAjoutablesDescription
 
 block append styles
   link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
@@ -54,7 +54,7 @@ mixin formulaireDescriptionService(idHomologation)
 
       label Accès au service numérique
         br
-        +elementsAjoutables({
+        +elementsAjoutablesDescription({
           identifiantConteneur: 'points-acces',
           nom: 'point-acces',
           valeurExemple: 'exemple : https://www.adresse.fr, App Store, Play Store…',
@@ -72,7 +72,7 @@ mixin formulaireDescriptionService(idHomologation)
         objetDonnees: homologation.descriptionService,
       })
 
-      +elementsAjoutables({
+      +elementsAjoutablesDescription({
         identifiantConteneur: 'fonctionnalites-specifiques',
         nom: 'fonctionnalite',
         donnees: homologation.descriptionService.fonctionnalitesSpecifiques.toJSON(),
@@ -88,12 +88,12 @@ mixin formulaireDescriptionService(idHomologation)
         objetDonnees: homologation.descriptionService,
       })
 
-      +elementsAjoutables({
-              identifiantConteneur: 'donnees-sensibles-specifiques',
-              nom: 'donnees-sensibles',
-              donnees: homologation.descriptionService.donneesSensiblesSpecifiques.toJSON(),
-              texteLienAjouter: 'Ajouter des données',
-            })
+      +elementsAjoutablesDescription({
+        identifiantConteneur: 'donnees-sensibles-specifiques',
+        nom: 'donnees-sensibles',
+        donnees: homologation.descriptionService.donneesSensiblesSpecifiques.toJSON(),
+        texteLienAjouter: 'Ajouter des données',
+      })
 
     section
       +inputChoix({
