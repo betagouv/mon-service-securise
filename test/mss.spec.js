@@ -777,6 +777,15 @@ describe('Le serveur MSS', () => {
         })
         .catch(done);
     });
+
+    it("aseptise la liste des acteurs de l'homologation ainsi que son contenu", (done) => {
+      axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {})
+        .then(() => {
+          verifieAseptisationListe('acteursHomologation', ['role', 'nom', 'fonction']);
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('quand requête POST sur `/api/homologation/:id/risques`', () => {
