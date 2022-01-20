@@ -1,0 +1,16 @@
+include ./elementsAjoutables
+
+mixin elementsAjoutablesActeurHomologation({ donnees = [] })
+  -
+    var donneesElements = donnees.map(({ role, nom, fonction }) => ({
+      role: ({ valeur: role, label: 'Rôle au regard du projet' }),
+      nom: ({ valeur: nom, label: 'Nom / Prénom' }),
+      fonction: ({ valeur: fonction, label: 'Fonction' })
+    }))
+
+  +elementsAjoutables({
+    identifiantConteneur: 'acteurs-homologation',
+    nom: 'acteur-homologation',
+    donneesElements,
+    texteLienAjouter: 'Ajouter un acteur'
+  })

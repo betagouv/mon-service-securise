@@ -1,8 +1,11 @@
 mixin zoneSaisieElementAjoutable(donneesElement, nom, index)
   each valeur, cle in donneesElement
+    - var id = cle + '-' + nom + '-' + index;
+    if valeur.label
+      label(for = id) #{valeur.label}
     input(
-      id = cle + '-' + nom + '-' + index,
-      name = cle + '-' + nom + '-' + index,
+      id = id,
+      name = id,
       type = 'text',
       value != valeur.valeur,
       placeholder = valeur.valeurExemple
