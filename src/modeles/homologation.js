@@ -100,10 +100,6 @@ class Homologation {
     return this.mesures.statistiques();
   }
 
-  mesuresNonSaisies() {
-    return this.mesures.nonSaisies();
-  }
-
   statutSaisie(nomInformationsHomologation) {
     return this[nomInformationsHomologation].statutSaisie();
   }
