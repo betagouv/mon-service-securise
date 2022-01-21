@@ -8,6 +8,6 @@ $(() => {
     $conteneurHomologations.prepend($conteneursHomologation);
   };
 
-  axios.get('/api/homologations', { headers: { 'x-id-utilisateur': '456' } })
+  axios.get('/api/homologations')
     .then((reponse) => ajouteConteneursHomologationDans('.homologations', reponse.data.homologations));
 });
