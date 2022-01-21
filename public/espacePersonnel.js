@@ -1,6 +1,4 @@
-/* eslint-disable func-names */
-
-(function () {
+$(() => {
   const creeConteneurHomologation = (donneesHomologation) => $(`
 <a class="homologation existante" href="/homologation/${donneesHomologation.id}">
   <div>${donneesHomologation.nomService}</div>
@@ -25,6 +23,4 @@
     axios.get('/api/homologations', { headers: { 'x-id-utilisateur': '456' } })
       .then((reponse) => ajouteConteneursHomologationDans('.homologations', reponse.data.homologations));
   });
-}());
-
-/* eslint-enable func-names */
+});
