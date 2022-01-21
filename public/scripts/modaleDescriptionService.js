@@ -1,22 +1,3 @@
-const afficheModale = (selecteurModale) => {
-  $('body').css('overflow', 'hidden');
-  $(selecteurModale).css('display', 'flex');
-};
+import initialiseComportementModale from '../modules/interactions/modale.mjs';
 
-const fermeModale = (selecteurModale) => {
-  $(selecteurModale).css('display', '');
-  $('body').css('overflow', '');
-};
-
-const initialiseComportementModale = (selecteurModale) => {
-  $(selecteurModale)
-    .on('afficheModaleDescriptionService', () => afficheModale(selecteurModale))
-    .on('fermeModaleDescriptionService', () => fermeModale(selecteurModale));
-
-  $('.fermeture-modale').on('click', (eFermeture) => {
-    eFermeture.stopPropagation();
-    $(selecteurModale).trigger('fermeModaleDescriptionService');
-  });
-};
-
-$(() => initialiseComportementModale('.rideau'));
+$(() => initialiseComportementModale($('.rideau')));

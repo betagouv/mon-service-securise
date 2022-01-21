@@ -4,7 +4,7 @@ import texteHTML from '../modules/texteHTML.js';
 
 import $saisieRisqueSpecifique from '../modules/elementsDom/saisieRisqueSpecifique.js';
 
-import ajouteInformationsModales from '../modules/interactions/modale.mjs';
+import ajouteModalesInformations from '../modules/interactions/modalesInformations.mjs';
 import {
   brancheComportementSaisieNiveauGravite,
   metsAJourAffichageNiveauGravite,
@@ -51,7 +51,8 @@ $(() => {
     peupleListeItems(...params, zoneSaisieRisqueSpecifique)
   );
 
-  ajouteInformationsModales();
+  ajouteModalesInformations();
+
   $('.risque').each((_, $r) => {
     brancheComportementSaisieNiveauGravite($r, NIVEAUX_GRAVITE);
     ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`);
