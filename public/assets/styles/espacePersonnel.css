@@ -32,6 +32,12 @@
   background-color: inherit;
 }
 
+.homologation p {
+  margin: 0.5em;
+
+  font-size: 0.8em;
+}
+
 .titre-homologation {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -43,16 +49,6 @@
   font-weight: bold;
 }
 
-.homologation p {
-  margin: 0.5em;
-
-  font-size: 0.8em;
-}
-
-.contributeurs {
-  display: none;
-}
-
 .pastilles-contributeurs {
   display: flex;
   align-items: center;
@@ -62,6 +58,17 @@
 .pastilles-contributeurs > div {
   width: 2.5em;
   height: 2.5em;
+}
+
+.ajout-contributeur {
+  cursor: pointer;
+
+  width: 1.8em;
+  height: 1.8em;
+
+  background-image: url(../images/icone_plus_pastille_bleue.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .pastille-contributeur {
@@ -106,4 +113,52 @@
   background-image: url(../images/icone_plus_pastille_grise.svg);
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.contenu-modale {
+  display: flex;
+  flex-direction: column;
+  padding: 0 5em;
+}
+
+.contenu-modale h1 {
+  align-self: center;
+}
+
+.nouveau-contributeur {
+  display: flex;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.icone-enveloppe {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 1em;
+
+  background-image: url(../images/icone_enveloppe.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.contenu-modale input {
+  flex: auto;
+
+  margin: 0;
+  padding: 1em;
+  border: solid 1px #ebedf0;
+  border-radius: 3px;
+
+  font-size: 0.9em;
+}
+
+.contenu-modale .confirmation {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 2em;
+}
+
+.confirmation .bouton {
+  margin: 0;
 }

@@ -1,20 +1,20 @@
-import $homologations from './modules/elementsDom/homologations.js';
+import { $homologations, $modaleNouveauContributeur } from './modules/elementsDom/homologations.js';
+import { brancheModales } from './modules/interactions/modale.mjs';
 
 $(() => {
-  const ajouteConteneursHomologationDans = (placeholder, donneesHomologations, idUtilisateur) => {
+  const peupleHomologationsDans = (placeholder, donneesHomologations, idUtilisateur) => {
     const $conteneurHomologations = $(placeholder);
-    const $conteneursHomologation = $homologations(donneesHomologations, idUtilisateur);
+    const $conteneursHomologation = $homologations(donneesHomologations, idUtilisateur, 'ajout-contributeur');
 
     $conteneurHomologations.prepend($conteneursHomologation);
+
+    $('body').append($modaleNouveauContributeur());
+    brancheModales('.ajout-contributeur', 'body');
   };
 
   axios.get('/api/utilisateurCourant')
     .then((reponse) => reponse.data.utilisateur.id)
     .then((idUtilisateur) => axios
       .get('/api/homologations')
-      .then((reponse) => ajouteConteneursHomologationDans(
-        '.homologations',
-        reponse.data.homologations,
-        idUtilisateur,
-      )));
+      .then((reponse) => peupleHomologationsDans('.homologations', reponse.data.homologations, idUtilisateur)));
 });
