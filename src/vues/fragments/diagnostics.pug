@@ -2,7 +2,7 @@ block append styles
   link(href='/statique/assets/styles/diagnostics.css', rel='stylesheet')
 
 mixin disque(valeurCalculee, valeurReference, couleur)
-  if !homologation.mesuresNonSaisies() && valeurCalculee === valeurReference
+  if valeurCalculee === valeurReference
     .disque(class = couleur)
   else
     .disque
