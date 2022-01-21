@@ -1,20 +1,9 @@
+import $homologations from './modules/elementsDom/homologations.js';
+
 $(() => {
-  const creeConteneurHomologation = (donneesHomologation) => $(`
-<a class="homologation existante" href="/homologation/${donneesHomologation.id}">
-  <div>${donneesHomologation.nomService}</div>
-</a>
-  `);
-
-  const creeConteneursHomologation = (donneesHomologations) => donneesHomologations.reduce(
-    ($acc, donneesHomologation) => {
-      const $conteneurHomologation = creeConteneurHomologation(donneesHomologation);
-      return $acc.append($conteneurHomologation);
-    }, $(document.createDocumentFragment())
-  );
-
   const ajouteConteneursHomologationDans = (placeholder, donneesHomologations) => {
     const $conteneurHomologations = $(placeholder);
-    const $conteneursHomologation = creeConteneursHomologation(donneesHomologations);
+    const $conteneursHomologation = $homologations(donneesHomologations);
 
     $conteneurHomologations.prepend($conteneursHomologation);
   };
