@@ -2,7 +2,7 @@ import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.
 import { parametresAvecItemsExtraits } from '../modules/parametres.mjs';
 import texteHTML from '../modules/texteHTML.js';
 
-import ajouteInformationsModales from '../modules/interactions/modale.mjs';
+import ajouteModalesInformations from '../modules/interactions/modalesInformations.mjs';
 
 $(() => {
   let indexMaxMesuresSpecifiques = 0;
@@ -121,7 +121,7 @@ ${statuts}
     peupleListeItems(...params, zoneSaisieMesureSpecifique)
   );
 
-  ajouteInformationsModales();
+  ajouteModalesInformations();
 
   brancheFiltres('form#mesures nav > a');
 

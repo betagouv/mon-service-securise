@@ -1,3 +1,7 @@
+body.recouvert {
+  overflow: hidden;
+}
+
 .puce-information {
   cursor: pointer;
 
@@ -28,6 +32,10 @@
   justify-content: center;
 
   background: #0005;
+}
+
+.rideau.visible {
+  display: flex;
 }
 
 .rideau .modale {

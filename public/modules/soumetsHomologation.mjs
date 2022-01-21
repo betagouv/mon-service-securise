@@ -17,7 +17,7 @@ const soumetsHomologation = (url, selecteurFormulaire) => {
 
   axios.get('/api/seuilCriticite', { params })
     .then(({ data: { seuilCriticite } }) => {
-      if (seuilCriticite === 'critique') $('*').trigger('afficheModaleDescriptionService');
+      if (seuilCriticite === 'critique') $('*').trigger('afficheModale');
       else {
         axios(url)
           .then(({ data: { idHomologation } }) => (window.location = `/homologation/${idHomologation}`));

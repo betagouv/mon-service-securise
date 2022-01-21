@@ -1,14 +1,23 @@
-const ajouteInformationsModales = () => {
-  $('.puce-information').click((eInformation) => {
-    $('body').css('overflow', 'hidden');
-    $('.rideau', $(eInformation.target)).css('display', 'flex');
+const afficheModale = ($rideauModale) => {
+  $('body').addClass('recouvert');
+  $rideauModale.addClass('visible');
+};
 
-    $('.fermeture-modale', $(eInformation.target)).click((eFermeture) => {
-      eFermeture.stopPropagation();
-      $('.rideau', $(eInformation.target)).css('display', '');
-      $('body').css('overflow', '');
-    });
+const fermeModale = ($rideauModale) => {
+  $rideauModale.removeClass('visible');
+  $('body').removeClass('recouvert');
+};
+
+const initialiseComportementModale = ($rideauModale) => {
+  $rideauModale
+    .on('click', (e) => e.stopPropagation())
+    .on('afficheModale', () => afficheModale($rideauModale))
+    .on('fermeModale', () => fermeModale($rideauModale));
+
+  $('.fermeture-modale', $rideauModale).on('click', (eFermeture) => {
+    eFermeture.stopPropagation();
+    $rideauModale.trigger('fermeModale');
   });
 };
 
-export default ajouteInformationsModales;
+export default initialiseComportementModale;
