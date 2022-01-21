@@ -1,3 +1,3 @@
-import initialiseComportementModale from '../modules/interactions/modale.mjs';
+import { initialiseComportementModale } from '../modules/interactions/modale.mjs';
 
 $(() => initialiseComportementModale($('.rideau')));

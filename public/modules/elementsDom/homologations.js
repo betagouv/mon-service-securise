@@ -1,4 +1,26 @@
-const $homologationExistante = (donneesHomologation, idUtilisateur) => {
+const $modaleNouveauContributeur = () => $(`
+<div class="rideau">
+  <div class="modale">
+    <div class="fermeture-modale"></div>
+    <div class="contenu-modale">
+      <h1>Ajout de contributeurs</h1>
+      <label for="emailContributeur">Inviter un nouveau contributeur</label>
+      <div class="consigne">Cette personne doit déjà avoir un compte MonServiceSécurisé</div>
+      <div class="nouveau-contributeur">
+        <div class="icone-enveloppe"></div>
+        <input id="emailContributeur"
+               name="emailContributeur"
+               placeholder="ex. jean.dupont@mail.fr">
+      </div>
+      <div class="confirmation">
+        <a class="bouton" id="nouveau-contributeur">Envoyer</a>
+      </div>
+    </div>
+  </div>
+</div>
+`);
+
+const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouveauContributeur) => {
   const descriptionContributeur = (donneesContributeur) => {
     let resultat = donneesContributeur.prenomNom;
     if (donneesContributeur.id === idUtilisateur) resultat += ' (vous)';
@@ -12,7 +34,9 @@ const $homologationExistante = (donneesHomologation, idUtilisateur) => {
   <div class="titre-homologation">${donneesHomologation.nomService}</div>
   <div class="contributeurs">
     <p>Contributeurs</p>
-    <div class="${classePastillesContributeurs}"></div>
+    <div class="${classePastillesContributeurs}">
+      <div class="${classeNouveauContributeur}"></div>
+    </div>
   </div>
 </a>
   `);
@@ -39,16 +63,17 @@ const $ajoutNouvelleHomologation = () => $(`
 </a>
 `);
 
-const $homologations = (donneesHomologations, idUtilisateur) => (
+const $homologations = (donneesHomologations, idUtilisateur, classeNouveauContributeur) => (
   donneesHomologations
     .reduce(($acc, donneesHomologation) => {
       const $homologation = $homologationExistante(
         donneesHomologation,
         idUtilisateur,
+        classeNouveauContributeur,
       );
       return $acc.append($homologation);
     }, $(document.createDocumentFragment()))
     .append($ajoutNouvelleHomologation())
 );
 
-export default $homologations;
+export { $homologations, $modaleNouveauContributeur };
