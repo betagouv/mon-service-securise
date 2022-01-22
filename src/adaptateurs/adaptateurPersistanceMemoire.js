@@ -77,6 +77,15 @@ const nouvelAdaptateur = (donnees = {}) => {
     donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset)
   );
 
+  const autorisation = (id) => Promise.resolve(
+    donnees.autorisations.find((a) => a.id === id)
+  );
+
+  const autorisationExiste = (idUtilisateur, idHomologation) => Promise.resolve(
+    !!donnees.autorisations
+      .find((a) => a.idUtilisateur === idUtilisateur && a.idHomologation === idHomologation)
+  );
+
   const ajouteAutorisation = (id, donneesAutorisation) => {
     donnees.autorisations.push(Object.assign(donneesAutorisation, { id }));
     return Promise.resolve();
@@ -94,6 +103,8 @@ const nouvelAdaptateur = (donnees = {}) => {
     ajouteAutorisation,
     ajouteHomologation,
     ajouteUtilisateur,
+    autorisation,
+    autorisationExiste,
     autorisations,
     homologation,
     homologationAvecNomService,

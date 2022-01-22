@@ -108,6 +108,15 @@ const nouvelAdaptateur = (env) => {
     'utilisateurs', 'idResetMotDePasse', idReset
   );
 
+  const autorisation = (id) => elementDeTable('autorisations', id);
+
+  const autorisationExiste = (idUtilisateur, idHomologation) => knex('autorisations')
+    .whereRaw(
+      "donnees->>'idUtilisateur'=? and donnees->>'idHomologation'=?",
+      [idUtilisateur, idHomologation],
+    )
+    .then((rows) => rows.length > 0);
+
   const autorisations = (idUtilisateur) => knex('autorisations')
     .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
     .then((rows) => rows.map(convertisLigneEnObjet));
@@ -127,6 +136,8 @@ const nouvelAdaptateur = (env) => {
     ajouteHomologation,
     ajouteUtilisateur,
     arreteTout,
+    autorisation,
+    autorisationExiste,
     autorisations,
     homologation,
     homologationAvecNomService,

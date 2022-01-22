@@ -1,10 +1,5 @@
-const Base = require('../base');
+const AutorisationBase = require('./autorisationBase');
 
-class AutorisationCreateur extends Base {
-  constructor(donnees = {}) {
-    super({ proprietesAtomiquesRequises: ['id', 'idUtilisateur', 'idHomologation'] });
-    this.renseigneProprietes(donnees);
-  }
-}
+class AutorisationCreateur extends AutorisationBase {}
 
 module.exports = AutorisationCreateur;
