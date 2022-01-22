@@ -118,6 +118,18 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .catch(suite);
   });
 
+  routes.post('/autorisation', middleware.verificationAcceptationCGU, (requete, reponse, suite) => {
+    const { emailContributeur, idHomologation } = requete.body;
+
+    depotDonnees.utilisateurAvecEmail(emailContributeur)
+      .then((u) => depotDonnees.ajouteContributeurAHomologation(u?.id, idHomologation))
+      .then(() => reponse.send(''))
+      .catch((e) => {
+        if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+        else suite(e);
+      });
+  });
+
   return routes;
 };
 

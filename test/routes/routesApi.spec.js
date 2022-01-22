@@ -1,7 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
-const { ErreurEmailManquant, ErreurUtilisateurExistant } = require('../../src/erreurs');
+const { ErreurEmailManquant, ErreurModele, ErreurUtilisateurExistant } = require('../../src/erreurs');
 
 const testeurMSS = require('./testeurMSS');
 
@@ -439,6 +439,55 @@ describe('Le serveur MSS des routes /api/*', () => {
           data: {},
         }, done);
       });
+    });
+  });
+
+  describe('quand requête POST sur `/api/autorisation`', () => {
+    const utilisateur = { id: '999', genereToken: () => 'un token', accepteCGU: () => true };
+
+    beforeEach(() => {
+      testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateur);
+      testeur.depotDonnees().ajouteContributeurAHomologation = () => Promise.resolve();
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU({
+        method: 'post',
+        url: 'http://localhost:1234/api/autorisation',
+      }, done);
+    });
+
+    it("demande au dépôt de données d'ajouter l'autorisation", (done) => {
+      testeur.depotDonnees().ajouteContributeurAHomologation = (
+        (idContributeur, idHomologation) => {
+          expect(utilisateur.id).to.equal('999');
+          expect(idContributeur).to.equal('999');
+          expect(idHomologation).to.equal('123');
+          return Promise.resolve();
+        }
+      );
+
+      axios.post('http://localhost:1234/api/autorisation', {
+        emailContributeur: 'jean.dupont@mail.fr',
+        idHomologation: '123',
+      })
+        .then((reponse) => {
+          expect(reponse.status).to.be(200);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('retourne une erreur HTTP 422 si le dépôt a levé une `ErreurModele`', (done) => {
+      testeur.depotDonnees().ajouteContributeurAHomologation = () => {
+        throw new ErreurModele('oups');
+      };
+
+      testeur.verifieRequeteGenereErreurHTTP(
+        422, 'oups',
+        { method: 'post', url: 'http://localhost:1234/api/autorisation', data: {} },
+        done
+      );
     });
   });
 });

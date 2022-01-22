@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 
 const {
+  ErreurAutorisationExisteDeja,
   ErreurEmailManquant,
+  ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
   ErreurUtilisateurExistant,
@@ -281,6 +283,11 @@ const creeDepot = (config = {}) => {
       .then(() => utilisateur(utilisateurAModifier.id))
   );
 
+  const autorisation = (id) => adaptateurPersistance.autorisation(id)
+    .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
+
+  const { autorisationExiste } = adaptateurPersistance;
+
   const autorisations = (idUtilisateur) => adaptateurPersistance.autorisations(idUtilisateur)
     .then((as) => as.map((a) => FabriqueAutorisation.fabrique(a)));
 
@@ -299,10 +306,37 @@ const creeDepot = (config = {}) => {
         .transfereAutorisations(idUtilisateurSource, idUtilisateurCible));
   };
 
+  const ajouteContributeurAHomologation = (idContributeur, idHomologation) => {
+    const verifieUtilisateurExiste = (id) => utilisateurExiste(id)
+      .then((existe) => {
+        if (!existe) throw new ErreurUtilisateurInexistant(`Le contributeur "${id}" n'existe pas`);
+      });
+
+    const verifieHomologationExiste = (id) => homologation(idHomologation)
+      .then((h) => {
+        if (!h) throw new ErreurHomologationInexistante(`L'homologation "${id}" n'existe pas`);
+      });
+
+    const verifieAutorisationInexistante = (...params) => autorisationExiste(...params)
+      .then((existe) => {
+        if (existe) throw new ErreurAutorisationExisteDeja("L'autorisation existe déjà");
+      });
+
+    const idAutorisation = adaptateurUUID.genereUUID();
+
+    return verifieUtilisateurExiste(idContributeur)
+      .then(() => verifieHomologationExiste(idHomologation))
+      .then(() => verifieAutorisationInexistante(idContributeur, idHomologation))
+      .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
+        idUtilisateur: idContributeur, idHomologation, type: 'contributeur',
+      }));
+  };
+
   return {
     accesAutorise,
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
+    ajouteContributeurAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteHebergementAHomologation,
     ajouteMesureGeneraleAHomologation,
@@ -310,6 +344,8 @@ const creeDepot = (config = {}) => {
     ajoutePartiesPrenantesSpecifiquesAHomologation,
     ajouteRisqueGeneralAHomologation,
     ajouteStructureDeveloppementAHomologation,
+    autorisation,
+    autorisationExiste,
     autorisations,
     homologation,
     homologationExiste,

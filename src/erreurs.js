@@ -1,9 +1,11 @@
 class ErreurModele extends Error {}
+class ErreurAutorisationExisteDeja extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurDateRenouvellementInvalide extends ErreurModele {}
 class ErreurDonneesStatistiques extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
+class ErreurHomologationInexistante extends ErreurModele {}
 class ErreurIdentifiantActionSaisieInvalide extends ErreurModele {}
 class ErreurIdentifiantActionSaisieManquant extends ErreurModele {}
 class ErreurLocalisationDonneesInvalide extends ErreurModele {}
@@ -19,11 +21,13 @@ class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
 
 module.exports = {
+  ErreurAutorisationExisteDeja,
   ErreurAvisInvalide,
   ErreurCategorieInconnue,
   ErreurDateRenouvellementInvalide,
   ErreurDonneesStatistiques,
   ErreurEmailManquant,
+  ErreurHomologationInexistante,
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,
   ErreurLocalisationDonneesInvalide,
