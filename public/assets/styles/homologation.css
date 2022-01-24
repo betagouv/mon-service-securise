@@ -13,7 +13,7 @@
   margin: 0;
   padding: 0.3em 0 1em;
 
-  color: #000;
+  color: var(--texte-fonce);
   font-size: 2.2em;
 }
 
@@ -59,7 +59,7 @@ a.action {
   padding: 1em 2em;
 
   border-radius: 5px;
-  background: #ebedf0;
+  background: var(--liseres);
   background-repeat: no-repeat;
   background-size: 2em;
   background-position: 98% 50%;
@@ -68,7 +68,7 @@ a.action {
 
   font-weight: bold;
   font-size: 0.9em;
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
 }
 
 a.action.faite {

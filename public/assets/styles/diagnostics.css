@@ -12,15 +12,15 @@
   height: 1.5em;
   border-radius: 50%;
 
-  background-color: #ebedf0;
+  background-color: var(--liseres);
 }
 
 .disque.rouge {
-  background-color: #ce1b25;
+  background-color: var(--rouge-anssi);
 }
 
 .disque.vert {
-  background-color: #1aaf54;
+  background-color: var(--vert-anssi);
 }
 
 .avis {
@@ -29,13 +29,13 @@
 }
 
 .avis.inconnu {
-  color: #abb6bf;
+  color: var(--texte-clair);
 }
 
 .avis.favorable {
-  color: #1aaf54;
+  color: var(--vert-anssi);
 }
 
 .avis.defavorable {
-  color: #ce1b25;
+  color: var(--rouge-anssi);
 }

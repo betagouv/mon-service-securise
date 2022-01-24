@@ -46,21 +46,21 @@
   padding: 1em 0;
 
   font-size: 1.3em;
-  color: black;
+  color: var(--bleu-standard);
   text-transform: none;
 }
 
 .rideau .modale p {
   margin-bottom: 0;
-  color: #abb6bf;
+  color: var(--texte-fonce);
 }
 
 .rideau .modale section {
   padding: 2em;
 
-  border: solid 1.5px #1b7cc4;
+  border: solid 1.5px var(--bleu-mise-en-avant);
   border-radius: 3px;
-  background: #1b7cc408;
+  background: var(--bleu-mise-en-avant-03-pc);
 }
 
 .rideau .modale a {

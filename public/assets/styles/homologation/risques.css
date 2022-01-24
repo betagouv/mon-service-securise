@@ -4,7 +4,7 @@
   margin-bottom: 1em;
   padding: 1em 2em;
 
-  border: solid 1px #ebedf0;
+  border: solid 1px var(--liseres);
   border-radius: 3px;
 }
 
@@ -48,20 +48,20 @@
   border-radius: 50%;
   border: solid .5px;
   border-color: transparent;
-  background: #ebedf0;
+  background: var(--liseres);
 }
 
 .niveau-gravite .disque:hover {
   cursor: pointer;
-  border-color: black;
+  border-color: var(--bleu-standard);
 }
 
 .niveau-gravite .disque.cercle {
-  border: solid .5px black;
+  border: solid .5px var(--bleu-standard);
 }
 
 .niveau-gravite .disque.eteint {
-  background: #ebedf0;
+  background: var(--liseres);
 }
 
 .niveau-gravite .disque.blanc {
@@ -69,19 +69,19 @@
 }
 
 .niveau-gravite .disque.vert {
-  background: #1aaf54;
+  background: var(--vert-anssi);
 }
 
 .niveau-gravite .disque.jaune {
-  background: #fcdf41;
+  background: var(--jaune-anssi);
 }
 
 .niveau-gravite .disque.orange {
-  background: #f9b049;
+  background: var(--orange-anssi);
 }
 
 .niveau-gravite .disque.rouge {
-  background: red;
+  background: var(--rouge-anssi);
 }
 
 .niveau-gravite .legende {

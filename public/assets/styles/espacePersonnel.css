@@ -2,7 +2,7 @@
   padding: 1em 0;
 
   text-align: left;
-  color: #2f3a43;
+  color: var(--texte-fonce);
 }
 
 .homologations {
@@ -14,23 +14,22 @@
 .homologation {
   padding: 2em;
 
-  border: solid 1px #ebedf0;
+  border: solid 1px var(--liseres);
   border-radius: 5px;
   background: white;
 
-  color: #1b7cc4;
   font-weight: bold;
   text-decoration: none;
 }
 
 .homologation:hover {
-  border-color: #1b7cc460;
-  background: #1b7cc401;
+  border-color: var(--bleu-mise-en-avant-20-pc);
+  background-color: inherit;
 }
 
 .homologation.existante {
   font-size: 1.5em;
-  color: #2f3a43;
+  color: var(--texte-fonce);
 }
 
 .nouvelle.homologation .icone-ajout {

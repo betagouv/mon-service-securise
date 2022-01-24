@@ -16,7 +16,7 @@ form h1 {
 form a {
   cursor: pointer;
 
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
   text-decoration: none;
 }
 
@@ -34,9 +34,9 @@ form input {
   margin-top: 0.3em;
   padding: 0.8em;
 
-  border: solid 1px #ebedf0;
+  border: solid 1px var(--liseres);
   border-radius: 5px;
-  background: #fafbfc;
+  background: var(--fond-pale);
 
   font-family: Marianne;
 }
@@ -85,10 +85,10 @@ textarea {
   margin-top: 1em;
   padding: 0.8em;
 
-  border: solid 1px #ebedf0;
+  border: solid 1px var(--liseres);
   border-radius: 3px;
 
-  background: #fafbfc;
+  background: var(--fond-pale);
 
   font-family: "Marianne";
 }

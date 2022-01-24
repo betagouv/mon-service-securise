@@ -4,14 +4,15 @@
   margin: 2em;
   padding: 1em 3em;
   border-radius: 3px;
-  background: #1b7cc4;
+  background: var(--bleu-mise-en-avant);
 
   text-decoration: none;
-  color: white;
+  color: #fff;
 }
 
 .bouton:hover {
-  background: #1b7cc4e0;
+  opacity: .87;
+  background-color: var(--bleu-mise-en-avant);
 
   cursor: pointer;
 }
