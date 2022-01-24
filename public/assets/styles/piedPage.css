@@ -16,9 +16,9 @@ footer nav {
 
 footer a {
   text-decoration: none;
-  color: #2f3a43;
+  color: var(--texte-fonce);
 }
 
 footer a:hover {
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
 }

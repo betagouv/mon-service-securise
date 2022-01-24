@@ -1,20 +1,19 @@
-/*
+:root {
+  --bleu-anssi: #08416a;
+  --bleu-ciel: #a3c6ee;
+  --bleu-mise-en-avant: #0f7ac7;
+  --bleu-mise-en-avant-03-pc: #0f7ac708;
+  --bleu-mise-en-avant-20-pc: #0f7ac730;
 
-bleu marine : #0d4269
-bleu moyen : #456d96
-bleu cliquable : #1b7cc4
+  --texte-fonce: #2f3a43;
+  --texte-moyen: #929292;
+  --texte-clair: #abb6bf;
 
-gris pâle : #fafbfc
-gris liserés : #ebedf0
-gris moyen: #abb6bf
-gris foncé : #2f3a43
+  --liseres: #ebedf0;
+  --fond-pale: #fafbfc;
 
-vert pâle : #caefcb
-vert : #1aaf54
-vert foncé : #378348
-jaune pâle : #fff1ce
-jaune : #fcdf41
-orange : #f9b049
-rouge : #ce1b25
-
-*/
+  --vert-anssi: #4cb963;
+  --jaune-anssi: #fcdf41;
+  --orange-anssi: #ff9940;
+  --rouge-anssi: #e32630;
+}

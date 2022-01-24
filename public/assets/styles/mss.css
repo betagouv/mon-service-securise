@@ -10,34 +10,34 @@ body {
 .marges-fixes {
   width: 1200px;
   margin: 0 auto;
-  color: #0d4269;
+  color: var(--bleu-anssi);
 }
 
 main {
   padding-bottom: 5em;
-  border-top: solid 1px #ebedf0;
-  border-bottom: solid 1px #ebedf0;
-  background: #fafbfc;
+  border-top: solid 1px var(--liseres);
+  border-bottom: solid 1px var(--liseres);
+  background: var(--fond-pale);
 
   text-align: center;
   font-size: 0.9em;
-  color: #2f3a43;
+  color: var(--texte-fonce);
 }
 
 main a {
   text-decoration: none;
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
 }
 
 section {
   padding: 2em 0;
-  border-top: solid 1px #abb6bf;
+  border-top: solid 1px var(--liseres);
 
   text-align: left;
 }
 
 section:last-of-type {
-  border-bottom: solid 1px #abb6bf;
+  border-bottom: solid 1px var(--liseres);
 }
 
 .retour {

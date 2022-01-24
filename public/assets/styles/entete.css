@@ -10,11 +10,11 @@ header a {
 
   text-decoration: none;
   font-size: 0.8em;
-  color: #0d4269;
+  color: var(--bleu-anssi);
 }
 
-header a:hover {
-  color: #1b7cc4;
+.aide-entete a:hover {
+  color: var(--bleu-mise-en-avant);
 }
 
 .marianne, .devise {
@@ -40,7 +40,7 @@ header a:hover {
   padding: 0.25em 0 0.5em;
 
   line-height: 100%;
-  color: black;
+  color: #000;
   font-size: 0.7em;
   font-weight: bold;
 }
@@ -68,13 +68,13 @@ a.logo-mss {
 a.connexion, a.inscription {
   margin-left: 1em;
   padding: 0.5em 1.5em 0.7em;
-  background: #0d4269;
-  border: 0.5px solid #0d4269;
+  background: var(--bleu-anssi);
+  border: 0.5px solid var(--bleu-anssi);
   border-radius: 33% / 100%;
 }
 
 a.connexion {
-  background: #0d4269;
+  background: var(--bleu-anssi);
 
   color: #fff;
 }
@@ -84,13 +84,15 @@ a.inscription {
 }
 
 a.connexion:hover {
-  background: #1b7cc4;
+  background: var(--bleu-mise-en-avant);
+  border-color: var(--bleu-mise-en-avant);
 
   color: #fff;
 }
 
 a.inscription:hover {
-  border: 0.5px solid #1b7cc4;
+  border-color: var(--bleu-mise-en-avant);
+  color: var(--bleu-mise-en-avant);
 }
 
 .utilisateur-courant {
@@ -118,9 +120,9 @@ a.inscription:hover {
 
   padding: 1em;
 
-  border: solid 1px #ebedf0;
+  border: solid 1px var(--liseres);
   border-radius: 2px;
-  background: #fafbfc;
+  background: var(--fond-pale);
 
   text-decoration: none;
 }
@@ -128,11 +130,11 @@ a.inscription:hover {
 .menu a {
   display: block;
 
-  color: #0d4269;
+  color: var(--bleu-anssi);
 }
 
 .menu a:hover {
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
 }
 
 

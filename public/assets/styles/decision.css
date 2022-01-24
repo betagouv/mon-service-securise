@@ -2,11 +2,11 @@ body {
   margin: 10em auto 0;
   width: 1000px;
 
-  background: #fafbfc;
+  background: var(--fond-pale);
 
   font-family: "Marianne";
   font-size: 10px;
-  color: #0d4269;
+  color: var(--bleu-anssi);
 }
 
 nav {
@@ -27,7 +27,7 @@ nav {
 
 nav a {
   text-decoration: none;
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
 }
 
 nav .bouton {
@@ -91,11 +91,11 @@ main h1 {
 }
 
 main h1.bleu {
-  background: #1b7cc4;
+  background: var(--bleu-mise-en-avant);
 }
 
 main h1.vert {
-  background: #1aaf54;
+  background: var(--vert-anssi);
 }
 
 section {
@@ -104,7 +104,7 @@ section {
   margin: 2em 0;
   padding: 1.5em 2em 2em;
 
-  border: solid 1px #abb6bf;
+  border: solid 1px var(--liseres);
   border-radius: 10px;
 
   background: #fff;
@@ -117,7 +117,7 @@ section h2 {
 
 section p {
   margin: 0;
-  color: #abb6bf;
+  color: var(--texte-clair);
 }
 
 section ul {
@@ -158,13 +158,6 @@ section.introduction h2 {
   font-size: 1.8em;
 }
 
-section.alerte {
-  border: solid 2px #ce1b25;
-  background: #ce1b2510;
-
-  font-size: 1.2em;
-}
-
 section.risques ul {
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 1em 2em;
@@ -179,7 +172,7 @@ section.risques li, section.detail-risques dt {
   overflow: hidden;
 
   padding: 0.5em 0.5em 0.5em 3.5em;
-  border: solid 1px #ebedf0;
+  border: solid 1px var(--liseres);
   border-radius: 3px;
 
   background-image: url(../images/icone_risque.svg);
@@ -197,10 +190,10 @@ section.mesures ul {
   grid-gap: 8em;
 }
 
-.type-mesure, .pourcentage {
+.type-mesure {
   font-size: 1.7em;
   font-weight: bold;
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
 }
 
 .barre {
@@ -213,7 +206,7 @@ section.mesures ul {
 
 .barre > * {
   height: 100%;
-  border: solid 1px #abb6bf;
+  border: solid 1px var(--bleu-anssi);
   border-radius: 3px;
 }
 
@@ -221,7 +214,7 @@ section.mesures ul {
   width: 100%;
   position: absolute;
 
-  background: #fff1ce;
+  background: var(--bleu-ciel);
 }
 
 .barre-mesures-misesEnOeuvre {
@@ -230,7 +223,7 @@ section.mesures ul {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 
-  background: #caefcb;
+  background: var(--bleu-mise-en-avant);
 }
 
 section.niveau-securite ul {
@@ -252,11 +245,6 @@ section.niveau-securite ul {
   font-size: 1.2em;
 }
 
-.expert-cyber {
-  margin-top: 2em;
-  color: #0d4269;
-}
-
 .signature {
   margin-bottom: 10em;
 }
@@ -267,7 +255,7 @@ section.decision ul {
 
   margin-bottom: 2em;
 
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
 }
 
 section.decision li {
@@ -280,7 +268,7 @@ section.decision li {
 
 .notes-finales {
   font-size: 0.8em;
-  color: #0d4269;
+  color: var(--bleu-anssi);
 }
 
 .annexe {
@@ -313,7 +301,7 @@ section.decision li {
 
   margin: 0 1em 0 2em;
 
-  border: solid 1px #abb6bf;
+  border: solid 1px var(--bleu-anssi);
 
   content: '';
 }
@@ -333,7 +321,7 @@ section.detail-risques dl {
 section.detail-mesures li {
   margin-bottom: 1em;
   padding: 1em;
-  border: solid 1px #abb6bf;
+  border: solid 1px var(--bleu-anssi);
   border-radius: 3px;
 }
 
@@ -353,7 +341,7 @@ section.detail-mesures .statut {
   width: 1em;
   height: 1em;
 
-  border: solid 1px #abb6bf;
+  border: solid 1px var(--bleu-anssi);
 }
 
 section.detail-mesures .indispensable {
@@ -370,19 +358,19 @@ section.detail-mesures .indispensable, .legende.avis-anssi .indispensable:before
 }
 
 section.detail-mesures .statut.fait, .legende .fait:before {
-  background: #caefcb;
+  background: var(--bleu-mise-en-avant);
 }
 
 section.detail-mesures .statut.planifie, .legende .planifie:before {
-  background: #fff1ce;
+  background: var(--bleu-ciel);
 }
 
 section.detail-mesures .statut.nonFait, .legende .nonFait:before {
-  background: #ce1b2577;
+  background: var(--bleu-anssi);
 }
 
 section.detail-mesures .statut.nonRetenu, .legende .nonRetenu:before {
-  background: #ebedf0;
+  background: #fff;
 }
 
 @page print {

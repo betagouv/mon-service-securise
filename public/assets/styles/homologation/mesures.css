@@ -5,7 +5,7 @@ form#mesures nav {
   margin-bottom: 2em;
   padding: 0.5em 1em;
 
-  border: solid 1px #ebedf0;
+  border: solid 1px var(--liseres);
   border-radius: 5px;
 }
 
@@ -14,7 +14,7 @@ form#mesures nav > a {
 }
 
 form#mesures nav > a.actif {
-  background: #1b7cc430;
+  background: var(--bleu-mise-en-avant-20-pc);
   border-radius: 3px;
 
   font-weight: bold;
@@ -27,7 +27,7 @@ form#mesures fieldset {
 
   position: relative;
 
-  border: solid 1px #ebedf0;
+  border: solid 1px var(--liseres);
   border-radius: 5px;
 }
 
@@ -43,10 +43,10 @@ form#mesures fieldset .titre {
 
   box-sizing: border-box;
 
-  border-bottom: solid 1px #ebedf0;
-  background: #fafbfc;
+  border-bottom: solid 1px var(--liseres);
+  background: var(--fond-pale);
 
-  color: #2f3a43;
+  color: var(--texte-fonce);
 }
 
 form#mesures div.informations-additionnelles {
@@ -74,7 +74,7 @@ form#mesures .decoration {
   margin-top: 0.2em;
   padding:  0.2em 0.6em 0.4em;
 
-  background: #1aaf54;
+  background: var(--vert-anssi);
   border-radius: 3px;
 
   font-weight: normal;

@@ -21,14 +21,14 @@
   background-position: 0 0.2em;
 
   font-size: 1.2em;
-  color: #000;
+  color: var(--texte-fonce);
 }
 
 .besoin-aide p {
-  color: #abb6bf;
+  color: var(--texte-clair);
 }
 
 .besoin-aide a {
   text-decoration: none;
-  color: #1b7cc4;
+  color: var(--bleu-mise-en-avant);
 }
