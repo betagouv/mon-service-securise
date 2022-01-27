@@ -317,6 +317,25 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it("met à jour les parties prenantes avec l'hébergement", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{
+        id: '123',
+        descriptionService: { nomService: 'nom' },
+        caracteristiquesComplementaires: { hebergeur: 'Un hébergeur' },
+      }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.ajouteHebergementAHomologation('123', 'Un hébergeur')
+      .then(() => depot.homologation('123'))
+      .then(({ partiesPrenantes }) => {
+        expect(partiesPrenantes.partiesPrenantes.items[0].nom).to.equal('Un hébergeur');
+        done();
+      })
+      .catch(done);
+  });
+
   it('sait associer des parties prenantes à une homologation', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
