@@ -2,20 +2,18 @@ const cookieSession = require('cookie-session');
 const express = require('express');
 
 const { ErreurModele } = require('./erreurs');
-const ActionsSaisie = require('./modeles/actionsSaisie');
 const AvisExpertCyber = require('./modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const DescriptionService = require('./modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('./modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('./modeles/donneesSensiblesSpecifiques');
-const Homologation = require('./modeles/homologation');
-const InformationsHomologation = require('./modeles/informationsHomologation');
 const MesureGenerale = require('./modeles/mesureGenerale');
 const MesuresSpecifiques = require('./modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
 const PointsAcces = require('./modeles/pointsAcces');
 const RisqueGeneral = require('./modeles/risqueGeneral');
 const RisquesSpecifiques = require('./modeles/risquesSpecifiques');
+const routesHomologation = require('./routes/routesHomologation');
 
 require('dotenv').config();
 
@@ -112,67 +110,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     reponse.render('espacePersonnel');
   });
 
-  app.get('/homologation/creation', middleware.verificationAcceptationCGU, (requete, reponse) => {
-    const homologation = new Homologation({});
-    reponse.render('homologation/creation', { referentiel, homologation });
-  });
-
-  app.get('/homologation/:id', middleware.trouveHomologation, (requete, reponse) => {
-    const { homologation } = requete;
-    const actionsSaisie = new ActionsSaisie(referentiel, homologation)
-      .toJSON()
-      .map(({ id, ...autresDonnees }) => (
-        { url: `/homologation/${homologation.id}/${id}`, ...autresDonnees }
-      ));
-
-    reponse.render('homologation', { homologation, actionsSaisie, InformationsHomologation });
-  });
-
-  app.get('/homologation/:id/caracteristiquesComplementaires',
-    middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation/caracteristiquesComplementaires', { referentiel, homologation });
-    });
-
-  app.get('/homologation/:id/decision',
-    middleware.trouveHomologation,
-    middleware.positionneHeadersAvecNonce,
-    (requete, reponse) => {
-      const { homologation, nonce } = requete;
-      reponse.render('homologation/decision', { homologation, referentiel, nonce });
-    });
-
-  app.get('/homologation/:id/descriptionService', middleware.trouveHomologation, (requete, reponse) => {
-    const { homologation } = requete;
-    reponse.render('homologation/descriptionService', { referentiel, homologation });
-  });
-
-  app.get('/homologation/:id/mesures', middleware.trouveHomologation, (requete, reponse) => {
-    const { homologation } = requete;
-    reponse.render('homologation/mesures', { referentiel, homologation });
-  });
-
-  app.get('/homologation/:id/partiesPrenantes',
-    middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation/partiesPrenantes', { homologation });
-    });
-
-  app.get('/homologation/:id/risques',
-    middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation/risques', { referentiel, homologation });
-    });
-
-  app.get('/homologation/:id/avisExpertCyber',
-    middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation/avisExpertCyber', { referentiel, homologation });
-    });
+  app.use('/homologation', routesHomologation(middleware, referentiel));
 
   app.get('/utilisateur/edition', (requete, reponse) => {
     sersFormulaireEditionUtilisateur(requete, reponse);
