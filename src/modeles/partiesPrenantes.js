@@ -1,5 +1,6 @@
 const ActeursHomologation = require('./acteursHomologation');
 const InformationsHomologation = require('./informationsHomologation');
+const PartiesPrenantesHomologation = require('./partiesPrenantes/partiesPrenantes');
 
 const descriptionPartiePrenante = (partiePrenante, fonction) => {
   const description = [];
@@ -26,6 +27,7 @@ class PartiesPrenantes extends InformationsHomologation {
       ],
       listesAgregats: {
         acteursHomologation: ActeursHomologation,
+        partiesPrenantes: PartiesPrenantesHomologation,
       },
     });
 

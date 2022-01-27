@@ -581,6 +581,7 @@ describe('Le serveur MSS', () => {
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
     beforeEach(() => {
       depotDonnees.ajouteCaracteristiquesAHomologation = () => Promise.resolve();
+      depotDonnees.ajouteHebergementAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -618,6 +619,30 @@ describe('Le serveur MSS', () => {
       })
         .then((reponse) => {
           expect(caracteristiquesAjoutees).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch(done);
+    });
+
+    it("demande au dépôt d'ajouter l'hébergeur dans les parties prenantes", (done) => {
+      let hebergementAjoute = false;
+
+      depotDonnees.ajouteHebergementAHomologation = (
+        (idHomologation, hebergeur) => new Promise((resolve) => {
+          expect(idHomologation).to.equal('456');
+          expect(hebergeur).to.equal('Un hébergeur');
+          hebergementAjoute = true;
+          resolve();
+        })
+      );
+
+      axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
+        hebergeur: 'Un hébergeur',
+      })
+        .then((reponse) => {
+          expect(hebergementAjoute).to.be(true);
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
