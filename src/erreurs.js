@@ -15,6 +15,7 @@ class ErreurRisqueInconnu extends ErreurModele {}
 class ErreurStatutDeploiementInvalide extends ErreurModele {}
 class ErreurStatutMesureInvalide extends ErreurModele {}
 class ErreurUtilisateurExistant extends ErreurModele {}
+class ErreurUtilisateurInexistant extends ErreurModele {}
 
 module.exports = {
   ErreurAvisInvalide,
@@ -34,4 +35,5 @@ module.exports = {
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
   ErreurUtilisateurExistant,
+  ErreurUtilisateurInexistant,
 };

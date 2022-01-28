@@ -78,6 +78,12 @@ const nouvelAdaptateur = (donnees = {}) => {
 
   const supprimeAutorisations = () => Promise.resolve(donnees.autorisations = []);
 
+  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => (
+    autorisations(idUtilisateurSource)
+      .then((as) => as.map((a) => Promise.resolve(a.idUtilisateur = idUtilisateurCible)))
+      .then((transferts) => Promise.all(transferts))
+  );
+
   return {
     ajouteAutorisation,
     ajouteHomologation,
@@ -93,6 +99,7 @@ const nouvelAdaptateur = (donnees = {}) => {
     supprimeHomologations,
     supprimeUtilisateur,
     supprimeUtilisateurs,
+    transfereAutorisations,
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,

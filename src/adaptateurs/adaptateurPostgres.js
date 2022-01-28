@@ -89,6 +89,12 @@ const nouvelAdaptateur = (env) => {
 
   const supprimeAutorisations = () => knex('autorisations').del();
 
+  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => knex('autorisations')
+    .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateurSource)
+    .update({
+      donnees: knex.raw("(jsonb_set(donnees::jsonb, '{ idUtilisateur }', '??'))::json", idUtilisateurCible),
+    });
+
   return {
     ajouteAutorisation,
     ajouteHomologation,
@@ -106,6 +112,7 @@ const nouvelAdaptateur = (env) => {
     supprimeHomologations,
     supprimeUtilisateur,
     supprimeUtilisateurs,
+    transfereAutorisations,
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,

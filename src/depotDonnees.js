@@ -5,6 +5,7 @@ const {
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
   ErreurUtilisateurExistant,
+  ErreurUtilisateurInexistant,
 } = require('./erreurs');
 const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
 const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisation');
@@ -242,6 +243,18 @@ const creeDepot = (config = {}) => {
   const accesAutorise = (idUtilisateur, idHomologation) => autorisations(idUtilisateur)
     .then((as) => as.some((a) => a.idHomologation === idHomologation));
 
+  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => {
+    const verifieUtilisateurExiste = (id) => utilisateurExiste(id)
+      .then((existe) => {
+        if (!existe) throw new ErreurUtilisateurInexistant(`L'utilisateur "${id}" n'existe pas`);
+      });
+
+    return verifieUtilisateurExiste(idUtilisateurSource)
+      .then(() => verifieUtilisateurExiste(idUtilisateurCible))
+      .then(() => adaptateurPersistance
+        .transfereAutorisations(idUtilisateurSource, idUtilisateurCible));
+  };
+
   return {
     accesAutorise,
     ajouteAvisExpertCyberAHomologation,
@@ -263,6 +276,7 @@ const creeDepot = (config = {}) => {
     supprimeHomologation,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeUtilisateur,
+    transfereAutorisations,
     utilisateur,
     utilisateurAFinaliser,
     utilisateurAuthentifie,
