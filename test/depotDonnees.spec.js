@@ -7,6 +7,7 @@ const {
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
   ErreurUtilisateurExistant,
+  ErreurUtilisateurInexistant,
 } = require('../src/erreurs');
 const AdaptateurPersistanceMemoire = require('../src/adaptateurs/adaptateurPersistanceMemoire');
 const AutorisationCreateur = require('../src/modeles/autorisations/autorisationCreateur');
@@ -877,6 +878,62 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .then(() => depot.utilisateur('999'))
         .then((u) => expect(u).to.be(undefined))
         .then(() => done())
+        .catch(done);
+    });
+  });
+
+  describe("Sur demande de transfert des autorisations d'un utilisateur à un autre", () => {
+    it("vérifie que l'utilisateur source existe", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({});
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.transfereAutorisations('999', '000')
+        .then(() => done('Le transfert aurait dû lever une erreur'))
+        .catch((erreur) => {
+          expect(erreur).to.be.a(ErreurUtilisateurInexistant);
+          expect(erreur.message).to.equal("L'utilisateur \"999\" n'existe pas");
+          done();
+        })
+        .catch(done);
+    });
+
+    it("vérifie que l'utilisateur cible existe", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.transfereAutorisations('999', '000')
+        .then(() => done('Le transfert aurait dû lever une erreur'))
+        .catch((erreur) => {
+          expect(erreur).to.be.a(ErreurUtilisateurInexistant);
+          expect(erreur.message).to.equal("L'utilisateur \"000\" n'existe pas");
+          done();
+        })
+        .catch(done);
+    });
+
+    it('effectue le transfert', (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'autre.utilisateur@mail.fr' },
+        ],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+      });
+      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+      depot.transfereAutorisations('999', '000')
+        .then(() => depot.autorisations('999'))
+        .then((as) => expect(as.length).to.equal(0))
+        .then(() => depot.autorisations('000'))
+        .then((as) => {
+          expect(as.length).to.equal(1);
+          expect(as[0]).to.be.an(AutorisationCreateur);
+          expect(as[0].idHomologation).to.equal('123');
+          done();
+        })
         .catch(done);
     });
   });
