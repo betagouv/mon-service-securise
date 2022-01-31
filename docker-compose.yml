@@ -1,4 +1,14 @@
 version: '3'
+
+x-app:
+  &configuration-base
+  build:
+    context: .
+  env_file:
+    - .env
+  volumes:
+    - .:/usr/src/app
+
 services:
   db:
     image: postgres
@@ -9,16 +19,17 @@ services:
     volumes:
       - /var/lib/postgresql/data
 
+  test:
+    <<: *configuration-base
+    command: "npx mocha --recursive --watch"
+    environment:
+      - NODE_ENV=test
+
   web:
-    build:
-      context: .
-    env_file:
-      - .env
+    <<: *configuration-base
     command: "npx nodemon server.js"
     networks:
       - postgres
-    volumes:
-      - .:/usr/src/app
     ports:
       - "${PORT_MSS}:3000"
     depends_on:
