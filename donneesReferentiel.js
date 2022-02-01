@@ -8,7 +8,7 @@ module.exports = {
     partiesPrenantes: { position: 2, description: 'Parties prenantes' },
     risques: { position: 3, description: 'Risques de sécurité' },
     mesures: { position: 4, description: 'Mesures de sécurité' },
-    avisExpertCyber: { position: 5, description: "Avis de l'expert cyber" },
+    avisExpertCyber: { position: 5, description: 'Avis sur le dossier' },
   },
 
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
