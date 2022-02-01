@@ -2,7 +2,6 @@ const Referentiel = require('../referentiel');
 const AvisExpertCyber = require('./avisExpertCyber');
 const CaracteristiquesComplementaires = require('./caracteristiquesComplementaires');
 const DescriptionService = require('./descriptionService');
-const InformationsGenerales = require('./informationsGenerales');
 const Mesure = require('./mesure');
 const Mesures = require('./mesures');
 const PartiesPrenantes = require('./partiesPrenantes');
@@ -19,7 +18,6 @@ class Homologation {
   constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
     const {
       id = '',
-      informationsGenerales = {},
       descriptionService = {},
       mesuresGenerales = [],
       mesuresSpecifiques = [],
@@ -31,7 +29,6 @@ class Homologation {
     } = donnees;
 
     this.id = id;
-    this.informationsGenerales = new InformationsGenerales(informationsGenerales, referentiel);
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
     this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
