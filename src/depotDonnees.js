@@ -63,7 +63,6 @@ const creeDepot = (config = {}) => {
 
   const metsAJourDescriptionServiceHomologation = (homologationCible, informations) => (
     metsAJourProprieteHomologation('descriptionService', homologationCible, informations)
-      .then(() => metsAJourProprieteHomologation('informationsGenerales', homologationCible, informations))
   );
 
   const remplaceProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
@@ -134,7 +133,6 @@ const creeDepot = (config = {}) => {
     const donnees = {
       idUtilisateur,
       descriptionService: donneesDescriptionService,
-      informationsGenerales: donneesDescriptionService,
     };
 
     return valideDescriptionService(idUtilisateur, donneesDescriptionService)
