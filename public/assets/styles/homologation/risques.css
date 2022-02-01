@@ -53,11 +53,11 @@
 
 .niveau-gravite .disque:hover {
   cursor: pointer;
-  border-color: var(--bleu-standard);
+  border-color: var(--bleu-anssi);
 }
 
 .niveau-gravite .disque.cercle {
-  border: solid .5px var(--bleu-standard);
+  border: solid .5px var(--bleu-anssi);
 }
 
 .niveau-gravite .disque.eteint {
