@@ -11,7 +11,3 @@ block main
     - if (homologation) lienRetour = '/espacePersonnel';
     - if (homologation && homologation.id) lienRetour = `/homologation/${homologation.id}`;
     a(href = lienRetour) ‹&nbsp;&nbsp;Retour
-
-  .formulaire.marges-fixes
-    block formulaire
-    +besoinAide
