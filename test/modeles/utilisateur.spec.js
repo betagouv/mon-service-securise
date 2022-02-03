@@ -4,12 +4,24 @@ const { ErreurEmailManquant } = require('../../src/erreurs');
 const Utilisateur = require('../../src/modeles/utilisateur');
 
 describe('Un utilisateur', () => {
+  describe('sur demande de ses initiales', () => {
+    it('renvoie les initiales du prénom et du nom', () => {
+      const utilisateur = new Utilisateur({ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' });
+      expect(utilisateur.initiales()).to.equal('JD');
+    });
+
+    it('reste robuste en cas de prénom ou de nom absent', () => {
+      const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
+      expect(utilisateur.initiales()).to.equal('');
+    });
+  });
+
   it('sait se convertir en JSON', () => {
     const utilisateur = new Utilisateur({
       id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
     });
 
-    expect(utilisateur.toJSON()).to.eql({ prenomNom: 'Jean Dupont' });
+    expect(utilisateur.toJSON()).to.eql({ prenomNom: 'Jean Dupont', initiales: 'JD' });
   });
 
   it('sait générer son JWT', (done) => {
