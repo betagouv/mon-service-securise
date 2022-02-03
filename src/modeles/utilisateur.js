@@ -31,8 +31,20 @@ class Utilisateur extends Base {
     return this.adaptateurJWT.genereToken(this.id, this.cguAcceptees, callback);
   }
 
+  initiales() {
+    const premiereLettreMajuscule = (s) => (
+      typeof s === 'string' ? s.charAt(0).toUpperCase() : ''
+    );
+
+    return `${premiereLettreMajuscule(this.prenom)}${premiereLettreMajuscule(this.nom)}`;
+  }
+
+  prenomNom() {
+    return `${this.prenom} ${this.nom}`;
+  }
+
   toJSON() {
-    return { prenomNom: `${this.prenom} ${this.nom}` };
+    return { prenomNom: this.prenomNom(), initiales: this.initiales() };
   }
 }
 
