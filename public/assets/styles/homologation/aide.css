@@ -1,34 +1,6 @@
 .details-homologation, .formulaire {
-  display: grid;
-  grid-template-columns: 4fr 1fr;
-  grid-gap: 3em;
+  display: block;
+  width: 700px;
 
   margin-top: 3em;
-}
-
-.besoin-aide {
-  text-align: left;
-  font-size: 0.9em;
-}
-
-.besoin-aide h1 {
-  margin: 0;
-  padding: 0 0 0 1.4em;
-
-  background-image: url(../../images/icone_marqueur.svg);
-  background-repeat: no-repeat;
-  background-size: 1em;
-  background-position: 0 0.2em;
-
-  font-size: 1.2em;
-  color: var(--texte-fonce);
-}
-
-.besoin-aide p {
-  color: var(--texte-clair);
-}
-
-.besoin-aide a {
-  text-decoration: none;
-  color: var(--bleu-mise-en-avant);
 }
