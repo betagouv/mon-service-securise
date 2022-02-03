@@ -82,3 +82,8 @@ a.action.a-completer {
 a.action.a-faire {
   background-image: url(../images/icone_vide_pastille_blanche.svg);
 }
+
+.details-homologation {
+  width: 800px;
+  margin-top: 3em;
+}
