@@ -1,5 +1,4 @@
 extends mss
-include ./fragments/besoinAide
 
 mixin action({ description, url, statut })
   - let classeStyleStatut
@@ -31,5 +30,3 @@ block main
           each actionSaisie in actionsSaisie
             li
               +action(actionSaisie)
-
-    +besoinAide
