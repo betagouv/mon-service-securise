@@ -25,7 +25,7 @@ block main
       h1!= homologation.nomService()
       a.bouton(href = `/homologation/${homologation.id}/decision`) Voir le document d'homologation
 
-      .actions
+      section.actions
         ul
           each actionSaisie in actionsSaisie
             li
