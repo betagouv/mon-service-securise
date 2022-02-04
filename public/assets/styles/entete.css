@@ -9,11 +9,16 @@ header a {
   display: inline-block;
 
   text-decoration: none;
-  font-size: 0.8em;
   color: var(--bleu-anssi);
 }
 
-.aide-entete a:hover {
+header nav {
+  display: flex;
+  column-gap: 1.4em;
+  align-items: center;
+}
+
+header nav a:hover {
   color: var(--bleu-mise-en-avant);
 }
 
@@ -52,6 +57,8 @@ header a {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url(../images/logo_anssi.png);
+
+  font-size: 0.8em;
 }
 
 a.logo-mss {
@@ -63,6 +70,14 @@ a.logo-mss {
   background-size: contain;
 
   font-size: 1.2em;
+}
+
+a.aide {
+  padding: 0 0 0 2em;
+
+  background-image: url(../images/icone_question.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 a.connexion, a.inscription {
@@ -131,10 +146,9 @@ a.inscription:hover {
   display: block;
 
   color: var(--bleu-anssi);
+  font-size: 0.8em;
 }
 
 .menu a:hover {
   color: var(--bleu-mise-en-avant);
 }
-
-
