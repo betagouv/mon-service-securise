@@ -1,7 +1,9 @@
-.tableau-bord {
-  position: relative;
+.details-homologation {
+  width: 800px;
 
-  padding: 1em 1.5em;
+  box-sizing: border-box;
+  margin-top: 3em;
+  padding: 1em 6em;
 
   background: #fff;
   border-radius: 5px;
@@ -9,10 +11,13 @@
   text-align: left;
 }
 
-.tableau-bord h1 {
-  margin: 0;
-  padding: 0.3em 0 1em;
+.tableau-bord {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+.tableau-bord h1 {
   color: var(--texte-fonce);
   font-size: 2.2em;
 }
@@ -30,16 +35,13 @@
 }
 
 .tableau-bord .bouton {
-  position: absolute;
-  top: 0;
-  right: 0;
-
+  margin: 0;
   padding: 1em 1.5em;
 
   font-size: 0.8em;
 }
 
-.tableau-bord section:last-of-type {
+.details-homologation section:last-of-type {
   border-bottom: none;
 }
 
@@ -81,9 +83,4 @@ a.action.a-completer {
 
 a.action.a-faire {
   background-image: url(../images/icone_vide_pastille_blanche.svg);
-}
-
-.details-homologation {
-  width: 800px;
-  margin-top: 3em;
 }
