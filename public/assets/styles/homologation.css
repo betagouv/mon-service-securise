@@ -22,18 +22,6 @@
   font-size: 2.2em;
 }
 
-.tableau-bord h2 {
-  font-size: 1em;
-}
-
-.tableau-bord .niveau-securite {
-  padding-bottom: 2em;
-}
-
-.tableau-bord .niveau {
-  text-transform: uppercase;
-}
-
 .tableau-bord .bouton {
   margin: 0;
   padding: 1em 1.5em;
