@@ -2,10 +2,11 @@ const ListeItems = require('./listeItems');
 
 class ElementsConstructibles extends ListeItems {
   constructor(ClasseItem, donnees, referentiel) {
-    super();
-    const { items } = donnees;
-    this.items = items.map((donneesItem) => new ClasseItem(donneesItem, referentiel));
-    this.referentiel = referentiel;
+    super(
+      (donneesItem) => new ClasseItem(donneesItem, referentiel),
+      donnees,
+      referentiel,
+    );
   }
 }
 
