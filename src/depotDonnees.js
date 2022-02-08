@@ -121,7 +121,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance.homologation(idHomologation)
       .then((homologationTrouvee) => {
         const { partiesPrenantes = {} } = homologationTrouvee;
-        partiesPrenantes.partiesPrenantes = [{ type: 'hebergement', nom: hebergeur }];
+        partiesPrenantes.partiesPrenantes = [{ type: 'Hebergement', nom: hebergeur }];
         return metsAJourProprieteHomologation('partiesPrenantes', homologationTrouvee, new PartiesPrenantes(partiesPrenantes, referentiel));
       })
   );
