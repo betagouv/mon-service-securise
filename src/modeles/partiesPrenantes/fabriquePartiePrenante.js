@@ -1,7 +1,12 @@
-const PartiePrenante = require('./partiePrenante');
+const Hebergement = require('./hebergement');
+const { ErreurTypeInconnu } = require('../../erreurs');
 
 const fabriquePartiePrenante = {
-  cree: (donnees) => new PartiePrenante(donnees),
+  cree: (donnees) => {
+    const { type } = donnees;
+    if (type !== 'Hebergement') throw new ErreurTypeInconnu(`Le type "${type}" est inconnu`);
+    return new Hebergement(donnees);
+  },
 };
 
 module.exports = fabriquePartiePrenante;

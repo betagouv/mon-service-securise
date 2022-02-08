@@ -7,14 +7,13 @@ class PartiePrenante extends InformationsHomologation {
       proprietesAtomiquesFacultatives: ['natureAcces', 'pointContact'],
     });
 
-    this.type = donnees.type;
     this.renseigneProprietes(donnees);
   }
 
   toJSON() {
     return {
       ...super.toJSON(),
-      type: this.type,
+      type: this.constructor.name,
     };
   }
 }
