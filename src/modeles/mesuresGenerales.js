@@ -1,8 +1,8 @@
-const ListeItems = require('./listeItems');
+const ElementsConstructibles = require('./elementsConstructibles');
 const MesureGenerale = require('./mesureGenerale');
 const StatistiquesMesures = require('./statistiquesMesures');
 
-class MesuresGenerales extends ListeItems {
+class MesuresGenerales extends ElementsConstructibles {
   constructor(donnees, referentiel) {
     const { mesuresGenerales } = donnees;
     super(MesureGenerale, { items: mesuresGenerales }, referentiel);

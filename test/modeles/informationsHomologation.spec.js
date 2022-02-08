@@ -2,7 +2,7 @@
 const expect = require('expect.js');
 
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
-const ListeItems = require('../../src/modeles/listeItems');
+const ElementsConstructibles = require('../../src/modeles/elementsConstructibles');
 
 const elles = it;
 
@@ -17,7 +17,7 @@ class AgregatAvecStatutSaisieDetermine extends InformationsHomologation {
   }
 }
 
-class Agregats extends ListeItems {
+class Agregats extends ElementsConstructibles {
   constructor(donnees) {
     super(AgregatAvecStatutSaisieDetermine, { items: Object.values(donnees)[0] });
   }
