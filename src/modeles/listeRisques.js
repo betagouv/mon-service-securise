@@ -1,6 +1,6 @@
-const ListeItems = require('./listeItems');
+const ElementsConstructibles = require('./elementsConstructibles');
 
-class ListeRisques extends ListeItems {
+class ListeRisques extends ElementsConstructibles {
   principaux() {
     return this.items.filter((risque) => risque.important());
   }

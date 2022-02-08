@@ -1,7 +1,7 @@
-const ListeItems = require('./listeItems');
+const ElementsConstructibles = require('./elementsConstructibles');
 const ActeurHomologation = require('./acteurHomologation');
 
-class ActeursHomologation extends ListeItems {
+class ActeursHomologation extends ElementsConstructibles {
   constructor(donnees) {
     super(ActeurHomologation, { items: donnees.acteursHomologation });
   }
