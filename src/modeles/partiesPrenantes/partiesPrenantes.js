@@ -1,10 +1,10 @@
-const ElementsConstructibles = require('../elementsConstructibles');
-const PartiePrenante = require('./partiePrenante');
+const ElementsFabricables = require('../elementsFabricables');
+const fabriquePartiePrenante = require('./fabriquePartiePrenante');
 
-class PartiesPrenantes extends ElementsConstructibles {
+class PartiesPrenantes extends ElementsFabricables {
   constructor(donnees = {}) {
     const { partiesPrenantes = [] } = donnees;
-    super(PartiePrenante, { items: partiesPrenantes });
+    super(fabriquePartiePrenante, { items: partiesPrenantes });
   }
 }
 
