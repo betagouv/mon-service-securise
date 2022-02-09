@@ -15,6 +15,8 @@ const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisati
 const Homologation = require('./modeles/homologation');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
 const ListePartiesPrenantes = require('./modeles/partiesPrenantes/partiesPrenantes');
+const Hebergement = require('./modeles/partiesPrenantes/hebergement');
+const DeveloppementFourniture = require('./modeles/partiesPrenantes/developpementFourniture');
 const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
@@ -121,13 +123,25 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
   );
 
-  const ajouteHebergementAHomologation = (idHomologation, hebergeur) => (
+  const ajoutePartiePrenanteAHomologation = (typePartiePrenante) => (
+    idHomologation, nomPartiePrenante
+  ) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((homologationTrouvee) => {
         const { partiesPrenantes = {} } = homologationTrouvee;
-        partiesPrenantes.partiesPrenantes = [{ type: 'Hebergement', nom: hebergeur }];
+        partiesPrenantes.partiesPrenantes ||= [];
+        partiesPrenantes.partiesPrenantes = partiesPrenantes.partiesPrenantes
+          .filter((partiePrenante) => partiePrenante.type !== typePartiePrenante);
+        partiesPrenantes.partiesPrenantes.push(
+          { type: typePartiePrenante, nom: nomPartiePrenante }
+        );
         return metsAJourProprieteHomologation('partiesPrenantes', homologationTrouvee, new PartiesPrenantes(partiesPrenantes, referentiel));
       })
+  );
+  const ajouteHebergementAHomologation = ajoutePartiePrenanteAHomologation(Hebergement.name);
+
+  const ajouteDeveloppementFournitureAHomologation = ajoutePartiePrenanteAHomologation(
+    DeveloppementFourniture.name
   );
 
   const ajoutePartiesPrenantesAHomologation = (idHomologation, partiesPrenantes) => (
@@ -278,6 +292,7 @@ const creeDepot = (config = {}) => {
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
     ajouteDescriptionServiceAHomologation,
+    ajouteDeveloppementFournitureAHomologation,
     ajouteHebergementAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
