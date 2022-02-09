@@ -354,6 +354,28 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it("sait conserver l'hébergement quand les parties prenantes sont écrites", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [
+        {
+          id: '123',
+          descriptionService: { nomService: 'nom' },
+          partiesPrenantes: { partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }] },
+        },
+      ],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    const pp = new PartiesPrenantes({ autoriteHomologation: 'Jean Dupont' });
+    depot.ajoutePartiesPrenantesAHomologation('123', pp)
+      .then(() => depot.homologation('123'))
+      .then(({ partiesPrenantes }) => {
+        expect(partiesPrenantes.partiesPrenantes.item(0).nom).to.equal('hébergeur');
+        done();
+      })
+      .catch(done);
+  });
+
   describe('concernant les risques généraux', () => {
     let valideRisque;
 
