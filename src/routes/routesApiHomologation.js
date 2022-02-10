@@ -91,7 +91,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
           .then(() => (
-            depotDonnees.ajouteHebergementAHomologation(
+            depotDonnees.ajouteHebergementARolesResponsabilites(
               requete.params.id, caracteristiques.hebergeur
             )
           ))
@@ -158,8 +158,13 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     ]),
     (requete, reponse) => {
       const partiesPrenantes = new PartiesPrenantes(requete.body);
-      depotDonnees.ajoutePartiesPrenantesAHomologation(requete.homologation.id, partiesPrenantes)
-        .then(() => reponse.send({ idHomologation: requete.homologation.id }));
+      const nomHebergement = partiesPrenantes.partiesPrenantes?.hebergement()?.nom;
+      const idHomologation = requete.homologation.id;
+      depotDonnees.ajouteHebergementAHomologation(requete.homologation.id, nomHebergement)
+        .then(() => depotDonnees.ajoutePartiesPrenantesAHomologation(
+          idHomologation, partiesPrenantes
+        ))
+        .then(() => reponse.send({ idHomologation }));
     });
 
   routes.post('/:id/risques', middleware.trouveHomologation, middleware.aseptise(

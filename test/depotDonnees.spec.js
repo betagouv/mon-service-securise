@@ -328,7 +328,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
     });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
-    depot.ajouteHebergementAHomologation('123', 'Un hébergeur')
+    depot.ajouteHebergementARolesResponsabilites('123', 'Un hébergeur')
       .then(() => depot.homologation('123'))
       .then(({ partiesPrenantes }) => {
         expect(partiesPrenantes.partiesPrenantes.item(0).nom).to.equal('Un hébergeur');
@@ -415,23 +415,19 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
-  it("sait conserver l'hébergement quand les parties prenantes sont écrites", (done) => {
+  it("met à jour les caractéristiques complémentaires avec l'hébergeur", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [
-        {
-          id: '123',
-          descriptionService: { nomService: 'nom' },
-          partiesPrenantes: { partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }] },
-        },
-      ],
+      homologations: [{
+        id: '123',
+        descriptionService: { nomService: 'nom' },
+      }],
     });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
-    const pp = new PartiesPrenantes({ autoriteHomologation: 'Jean Dupont' });
-    depot.ajoutePartiesPrenantesAHomologation('123', pp)
+    depot.ajouteHebergementAHomologation('123', 'Un hébergeur')
       .then(() => depot.homologation('123'))
-      .then(({ partiesPrenantes }) => {
-        expect(partiesPrenantes.partiesPrenantes.item(0).nom).to.equal('hébergeur');
+      .then(({ caracteristiquesComplementaires }) => {
+        expect(caracteristiquesComplementaires.hebergeur).to.equal('Un hébergeur');
         done();
       })
       .catch(done);
