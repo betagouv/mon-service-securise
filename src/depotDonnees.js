@@ -12,9 +12,9 @@ const adaptateurJWTParDefaut = require('./adaptateurs/adaptateurJWT');
 const adaptateurUUIDParDefaut = require('./adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisation');
+const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
-const ListePartiesPrenantes = require('./modeles/partiesPrenantes/partiesPrenantes');
 const Hebergement = require('./modeles/partiesPrenantes/hebergement');
 const DeveloppementFourniture = require('./modeles/partiesPrenantes/developpementFourniture');
 const Utilisateur = require('./modeles/utilisateur');
@@ -138,20 +138,29 @@ const creeDepot = (config = {}) => {
         return metsAJourProprieteHomologation('partiesPrenantes', homologationTrouvee, new PartiesPrenantes(partiesPrenantes, referentiel));
       })
   );
-  const ajouteHebergementAHomologation = ajoutePartiePrenanteAHomologation(Hebergement.name);
+  const ajouteHebergementARolesResponsabilites = ajoutePartiePrenanteAHomologation(
+    Hebergement.name
+  );
 
   const ajouteDeveloppementFournitureAHomologation = ajoutePartiePrenanteAHomologation(
     DeveloppementFourniture.name
   );
 
-  const ajoutePartiesPrenantesAHomologation = (idHomologation, partiesPrenantes) => (
+  const ajouteHebergementAHomologation = (idHomologation, nomHebergement) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((homologationTrouvee) => {
-        partiesPrenantes.partiesPrenantes = new ListePartiesPrenantes(
-          { partiesPrenantes: homologationTrouvee.partiesPrenantes?.partiesPrenantes }
+        const { caracteristiquesComplementaires = {} } = homologationTrouvee;
+        caracteristiquesComplementaires.hebergeur = nomHebergement;
+        return metsAJourProprieteHomologation(
+          'caracteristiquesComplementaires',
+          homologationTrouvee,
+          new CaracteristiquesComplementaires(caracteristiquesComplementaires, referentiel)
         );
-        return metsAJourProprieteHomologation('partiesPrenantes', idHomologation, partiesPrenantes);
       })
+  );
+
+  const ajoutePartiesPrenantesAHomologation = (...params) => (
+    metsAJourProprieteHomologation('partiesPrenantes', ...params)
   );
 
   const ajouteAvisExpertCyberAHomologation = (...params) => (
@@ -294,6 +303,7 @@ const creeDepot = (config = {}) => {
     ajouteDescriptionServiceAHomologation,
     ajouteDeveloppementFournitureAHomologation,
     ajouteHebergementAHomologation,
+    ajouteHebergementARolesResponsabilites,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
     ajouteRisqueGeneralAHomologation,

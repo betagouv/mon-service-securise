@@ -12,4 +12,12 @@ describe('Les parties prenantes', () => {
 
     expect(partiesPrenantes.toJSON()).to.eql([{ type: 'Hebergement', nom: 'hébergeur' }]);
   });
+
+  elles("savent transmettre l'hébergement", () => {
+    const partiesPrenantes = new PartiesPrenantes(
+      { partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }] }
+    );
+
+    expect(partiesPrenantes.hebergement()).to.eql({ type: 'Hebergement', nom: 'hébergeur' });
+  });
 });

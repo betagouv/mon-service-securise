@@ -583,6 +583,7 @@ describe('Le serveur MSS', () => {
       depotDonnees.ajouteCaracteristiquesAHomologation = () => Promise.resolve();
       depotDonnees.ajouteHebergementAHomologation = () => Promise.resolve();
       depotDonnees.ajouteDeveloppementFournitureAHomologation = () => Promise.resolve();
+      depotDonnees.ajouteHebergementARolesResponsabilites = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -630,7 +631,7 @@ describe('Le serveur MSS', () => {
     it("demande au dépôt d'ajouter l'hébergeur dans les parties prenantes", (done) => {
       let hebergementAjoute = false;
 
-      depotDonnees.ajouteHebergementAHomologation = (
+      depotDonnees.ajouteHebergementARolesResponsabilites = (
         (idHomologation, hebergeur) => new Promise((resolve) => {
           expect(idHomologation).to.equal('456');
           expect(hebergeur).to.equal('Un hébergeur');
@@ -793,9 +794,10 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/partiesPrenantes`', () => {
-    beforeEach(() => (
-      depotDonnees.ajoutePartiesPrenantesAHomologation = () => new Promise((resolve) => resolve())
-    ));
+    beforeEach(() => {
+      depotDonnees.ajoutePartiesPrenantesAHomologation = () => new Promise((resolve) => resolve());
+      depotDonnees.ajouteHebergementAHomologation = () => new Promise((resolve) => resolve());
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       verifieRechercheHomologation({
@@ -832,6 +834,30 @@ describe('Le serveur MSS', () => {
       axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {})
         .then(() => {
           verifieAseptisationListe('acteursHomologation', ['role', 'nom', 'fonction']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("demande au dépôt d'ajouter l'hébergement dans les caractéristiques complémentaires", (done) => {
+      let hebergeurAjoute = false;
+
+      depotDonnees.ajouteHebergementAHomologation = (
+        (idHomologation, nomHebergeur) => new Promise((resolve) => {
+          expect(idHomologation).to.equal('456');
+          expect(nomHebergeur).to.equal('Un hébergeur');
+          hebergeurAjoute = true;
+          resolve();
+        })
+      );
+
+      axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {
+        partiesPrenantes: [{ type: 'Hebergement', nom: 'Un hébergeur' }],
+      })
+        .then((reponse) => {
+          expect(hebergeurAjoute).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
         .catch(done);
