@@ -15,7 +15,6 @@ const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisati
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
-const Hebergement = require('./modeles/partiesPrenantes/hebergement');
 const DeveloppementFourniture = require('./modeles/partiesPrenantes/developpementFourniture');
 const Utilisateur = require('./modeles/utilisateur');
 
@@ -137,9 +136,6 @@ const creeDepot = (config = {}) => {
         );
         return metsAJourProprieteHomologation('partiesPrenantes', homologationTrouvee, new PartiesPrenantes(partiesPrenantes, referentiel));
       })
-  );
-  const ajouteHebergementARolesResponsabilites = ajoutePartiePrenanteAHomologation(
-    Hebergement.name
   );
 
   const ajouteDeveloppementFournitureAHomologation = ajoutePartiePrenanteAHomologation(
@@ -303,7 +299,6 @@ const creeDepot = (config = {}) => {
     ajouteDescriptionServiceAHomologation,
     ajouteDeveloppementFournitureAHomologation,
     ajouteHebergementAHomologation,
-    ajouteHebergementARolesResponsabilites,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
     ajouteRisqueGeneralAHomologation,

@@ -91,11 +91,6 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
           .then(() => (
-            depotDonnees.ajouteHebergementARolesResponsabilites(
-              requete.params.id, caracteristiques.hebergeur
-            )
-          ))
-          .then(() => (
             depotDonnees.ajouteDeveloppementFournitureAHomologation(
               requete.params.id, caracteristiques.structureDeveloppement
             )
