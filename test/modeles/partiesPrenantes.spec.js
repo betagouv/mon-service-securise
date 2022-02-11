@@ -2,6 +2,7 @@ const expect = require('expect.js');
 
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 const PartiesPrenantes = require('../../src/modeles/partiesPrenantes');
+const Hebergement = require('../../src/modeles/partiesPrenantes/hebergement');
 
 describe("L'ensemble des parties prenantes", () => {
   it('connaît ses constituants', () => {
@@ -14,6 +15,8 @@ describe("L'ensemble des parties prenantes", () => {
       fonctionPiloteProjet: 'Responsable métier',
       expertCybersecurite: 'Anna Dubreuil',
       fonctionExpertCybersecurite: 'RSSI',
+      acteursHomologation: [{ role: 'DSI', nom: 'John', fonction: 'Maire' }],
+      partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }],
     });
 
     expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
@@ -24,6 +27,11 @@ describe("L'ensemble des parties prenantes", () => {
     expect(partiesPrenantes.fonctionPiloteProjet).to.equal('Responsable métier');
     expect(partiesPrenantes.expertCybersecurite).to.equal('Anna Dubreuil');
     expect(partiesPrenantes.fonctionExpertCybersecurite).to.equal('RSSI');
+    expect(partiesPrenantes.acteursHomologation.item(0).role).to.equal('DSI');
+    expect(partiesPrenantes.acteursHomologation.item(0).nom).to.equal('John');
+    expect(partiesPrenantes.acteursHomologation.item(0).fonction).to.equal('Maire');
+    expect(partiesPrenantes.partiesPrenantes.items[0]).to.be.an(Hebergement);
+    expect(partiesPrenantes.partiesPrenantes.items[0].nom).to.equal('hébergeur');
 
     expect(partiesPrenantes.toJSON()).to.eql({
       autoriteHomologation: 'Jean Dupont',
@@ -34,6 +42,8 @@ describe("L'ensemble des parties prenantes", () => {
       fonctionPiloteProjet: 'Responsable métier',
       expertCybersecurite: 'Anna Dubreuil',
       fonctionExpertCybersecurite: 'RSSI',
+      acteursHomologation: [{ role: 'DSI', nom: 'John', fonction: 'Maire' }],
+      partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }],
     });
   });
 

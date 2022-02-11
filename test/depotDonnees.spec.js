@@ -217,7 +217,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123', informationsGenerales: { nomService: 'Super Service' } }],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Super Service' } }],
       });
       const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
@@ -231,29 +231,11 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .catch(done);
     });
 
-    it('met à jour la description du service dans informations générales', (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
-        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123', informationsGenerales: { nomService: 'Super Service' } }],
-      });
-      const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-      const description = new DescriptionService({ nomService: 'Nouveau Nom' });
-      depot.ajouteDescriptionServiceAHomologation('999', '123', description)
-        .then(() => depot.homologation('123'))
-        .then(({ informationsGenerales }) => {
-          expect(informationsGenerales.nomService).to.equal('Nouveau Nom');
-          done();
-        })
-        .catch(done);
-    });
-
     it('lève une exception si le nom du service est absent', (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123', informationsGenerales: { nomService: 'Super Service' } }],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Super Service' } }],
       });
       const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
@@ -335,6 +317,25 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it("met à jour les parties prenantes avec l'hébergement", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{
+        id: '123',
+        descriptionService: { nomService: 'nom' },
+        caracteristiquesComplementaires: { hebergeur: 'Un hébergeur' },
+      }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.ajouteHebergementAHomologation('123', 'Un hébergeur')
+      .then(() => depot.homologation('123'))
+      .then(({ partiesPrenantes }) => {
+        expect(partiesPrenantes.partiesPrenantes.items[0].nom).to.equal('Un hébergeur');
+        done();
+      })
+      .catch(done);
+  });
+
   it('sait associer des parties prenantes à une homologation', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
@@ -348,6 +349,28 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(() => depot.homologation('123'))
       .then(({ partiesPrenantes }) => {
         expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
+        done();
+      })
+      .catch(done);
+  });
+
+  it("sait conserver l'hébergement quand les parties prenantes sont écrites", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [
+        {
+          id: '123',
+          descriptionService: { nomService: 'nom' },
+          partiesPrenantes: { partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }] },
+        },
+      ],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    const pp = new PartiesPrenantes({ autoriteHomologation: 'Jean Dupont' });
+    depot.ajoutePartiesPrenantesAHomologation('123', pp)
+      .then(() => depot.homologation('123'))
+      .then(({ partiesPrenantes }) => {
+        expect(partiesPrenantes.partiesPrenantes.item(0).nom).to.equal('hébergeur');
         done();
       })
       .catch(done);
@@ -518,19 +541,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .catch((e) => {
           expect(e).to.be.an(ErreurNomServiceDejaExistant);
           expect(e.message).to.equal('Le nom du service "Un nom" existe déjà pour une autre homologation');
-          done();
-        })
-        .catch(done);
-    });
-
-    it('duplique les données de description du service dans informations générales', (done) => {
-      depot.homologations('123')
-        .then(() => depot.nouvelleHomologation('123', { nomService: 'Super Service' }))
-        .then(() => depot.homologations('123'))
-        .then((homologations) => {
-          expect(homologations.length).to.equal(1);
-          expect(homologations[0].descriptionService.nomService).to.equal('Super Service');
-          expect(homologations[0].informationsGenerales.nomService).to.equal('Super Service');
           done();
         })
         .catch(done);

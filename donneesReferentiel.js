@@ -136,11 +136,6 @@ module.exports = {
       description: 'Données de niveau « Diffusion Restreinte »',
       seuilCriticite: 'critique',
     },
-    autre: {
-      description: 'Autre données sensibles',
-      exemple: "documents sensibles internes à l'administration.",
-      seuilCriticite: 'faible',
-    },
   },
 
   delaisAvantImpactCritique: {

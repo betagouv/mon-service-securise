@@ -91,6 +91,7 @@ textarea {
   background: var(--fond-pale);
 
   font-family: "Marianne";
+  font-size: 0.93em;
 }
 
 select {

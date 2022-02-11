@@ -1,7 +1,7 @@
-const ListeItems = require('./listeItems');
+const ElementsConstructibles = require('./elementsConstructibles');
 const ItemAvecDescription = require('./itemAvecDescription');
 
-class ItemsAvecDescription extends ListeItems {
+class ItemsAvecDescription extends ElementsConstructibles {
   constructor(items) {
     super(ItemAvecDescription, items);
   }

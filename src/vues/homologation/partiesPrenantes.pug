@@ -1,5 +1,6 @@
 extends ./formulaire
 include ../fragments/inputIdentite
+include ../fragments/elementsAjoutables/elementsAjoutablesActeurHomologation
 
 block append styles
   link(href = '/statique/assets/styles/homologation/partiesPrenantes.css', rel = 'stylesheet')
@@ -29,6 +30,10 @@ block formulaire
       +inputIdentite({
         role: 'Responsable métier du projet',
         nomParametre: 'piloteProjet',
+      })
+
+      +elementsAjoutablesActeurHomologation({
+        donnees: homologation.partiesPrenantes.acteursHomologation.toJSON(),
       })
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›

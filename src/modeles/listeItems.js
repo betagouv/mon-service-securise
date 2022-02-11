@@ -1,10 +1,10 @@
 const InformationsHomologation = require('./informationsHomologation');
 
 class ListeItems extends InformationsHomologation {
-  constructor(ClasseItem, donnees, referentiel) {
+  constructor(fonctionCreation, donnees, referentiel) {
     super();
     const { items } = donnees;
-    this.items = items.map((donneesItem) => new ClasseItem(donneesItem, referentiel));
+    this.items = items.map(fonctionCreation);
     this.referentiel = referentiel;
   }
 

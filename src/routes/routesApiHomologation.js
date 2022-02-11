@@ -1,6 +1,7 @@
 const express = require('express');
 
 const { ErreurModele } = require('../erreurs');
+const ActeursHomologation = require('../modeles/acteursHomologation');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
 const CaracteristiquesComplementaires = require('../modeles/caracteristiquesComplementaires');
 const DescriptionService = require('../modeles/descriptionService');
@@ -89,6 +90,11 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       try {
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
+          .then(() => (
+            depotDonnees.ajouteHebergementAHomologation(
+              requete.params.id, caracteristiques.hebergeur
+            )
+          ))
           .then(() => reponse.send({ idHomologation: requete.homologation.id }));
       } catch {
         reponse.status(422).send('Données invalides');
@@ -140,11 +146,16 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     }
   });
 
-  routes.post('/:id/partiesPrenantes', middleware.trouveHomologation, (requete, reponse) => {
-    const partiesPrenantes = new PartiesPrenantes(requete.body);
-    depotDonnees.ajoutePartiesPrenantesAHomologation(requete.homologation.id, partiesPrenantes)
-      .then(() => reponse.send({ idHomologation: requete.homologation.id }));
-  });
+  routes.post('/:id/partiesPrenantes',
+    middleware.trouveHomologation,
+    middleware.aseptiseListes([
+      { nom: 'acteursHomologation', proprietes: ActeursHomologation.proprietesItem() },
+    ]),
+    (requete, reponse) => {
+      const partiesPrenantes = new PartiesPrenantes(requete.body);
+      depotDonnees.ajoutePartiesPrenantesAHomologation(requete.homologation.id, partiesPrenantes)
+        .then(() => reponse.send({ idHomologation: requete.homologation.id }));
+    });
 
   routes.post('/:id/risques', middleware.trouveHomologation, middleware.aseptise(
     '*',

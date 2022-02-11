@@ -4,7 +4,6 @@ mixin inputIdentite({ role, nomParametre })
       label(for = nomParametre) Nom / Prénom
       input(
         id = nomParametre, name = nomParametre, type = 'text',
-        placeholder = 'Exemple : Dujardin Jean',
         value != homologation.partiesPrenantes[nomParametre]
       )
 
@@ -12,6 +11,5 @@ mixin inputIdentite({ role, nomParametre })
       label(for = nomParamFonction) Fonction
       input(
         id = nomParamFonction, name = nomParamFonction, type = 'text',
-        placeholder = 'Exemple : Direction générale des services, maire',
         value = homologation.partiesPrenantes[nomParamFonction]
       )

@@ -1,0 +1,31 @@
+mixin zoneSaisieElementAjoutable(donneesElement, nom, index)
+  each valeur, cle in donneesElement
+    - var id = cle + '-' + nom + '-' + index;
+    if valeur.label
+      label(for = id) #{valeur.label}
+    input(
+      id = id,
+      name = id,
+      type = 'text',
+      value != valeur.valeur,
+      placeholder = valeur.valeurExemple
+    )
+
+mixin zoneSaisie(nom, donneesElement, index)
+  .item-ajoute
+    .icone-suppression
+    div(id = 'element-' + nom + '-' + index)
+      +zoneSaisieElementAjoutable(donneesElement, nom, index)
+
+mixin elementsAjoutables({ identifiantConteneur, nom, donneesElements = [], texteLienAjouter = 'Ajouter', zoneSaisieVideVisible = false, structureZoneSaisieVide = {} })
+  div(id = identifiantConteneur class = 'elements-ajoutables')
+    if zoneSaisieVideVisible && donneesElements.length === 0
+      +zoneSaisie(nom, structureZoneSaisieVide, 0)
+    each donneesElement, index in donneesElements
+      +zoneSaisie(nom, donneesElement, index)
+  a(
+    class = 'nouvel-item',
+    id = 'ajout-element-' + nom
+  )= texteLienAjouter
+
+  script(type = 'module', src = '/statique/modules/elementsAjoutables.js')
