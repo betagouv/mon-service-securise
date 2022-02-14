@@ -1,9 +1,9 @@
 .details-homologation {
-  width: 800px;
+  width: 700px;
 
   box-sizing: border-box;
   margin-top: 3em;
-  padding: 1em 6em;
+  padding: 2em 2em 0;
 
   background: #fff;
   border-radius: 5px;
@@ -13,20 +13,59 @@
 
 .tableau-bord {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
-}
 
-.tableau-bord h1 {
-  color: var(--texte-fonce);
-  font-size: 2.2em;
+  margin-bottom: 1.5em;
 }
 
 .tableau-bord .bouton {
+  align-self: flex-end;
   margin: 0;
   padding: 1em 1.5em;
 
   font-size: 0.8em;
+}
+
+.description-dossier {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: .5em;
+}
+
+.description-dossier .icone-dossier {
+  width: 8em;
+  height: 6em;
+
+  background-image: url(../images/icone_dossier.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.titre-homologation {
+  flex-basis: 100%;
+  min-width: 0;
+}
+
+.titre-homologation h1 {
+  margin: 0 0 .3em;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1em;
+  color: var(--texte-fonce);
+}
+
+.titre-homologation h2 {
+  margin: 0;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-weight: normal;
+  font-size: 2.2em;
+  color: var(--texte-clair);
 }
 
 .details-homologation section:last-of-type {
