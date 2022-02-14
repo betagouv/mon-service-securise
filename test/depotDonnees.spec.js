@@ -414,6 +414,26 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it('sait enregistrer les parties prenantes en rôles et responsabilités', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{
+        id: '123',
+        descriptionService: { nomService: 'nom' },
+      }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    const partiesPrenantes = new PartiesPrenantes({ autoriteHomologation: 'Jean Dupont' });
+    depot.ajoutePartiesPrenantesAHomologation('123', partiesPrenantes)
+      .then(() => depot.homologation('123'))
+      .then(({ rolesResponsabilites }) => {
+        expect(rolesResponsabilites).to.be.ok();
+        expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
+        done();
+      })
+      .catch(done);
+  });
+
   it("met à jour les caractéristiques complémentaires avec l'hébergeur", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [{
