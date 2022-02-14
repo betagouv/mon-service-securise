@@ -6,6 +6,7 @@ const Mesure = require('./mesure');
 const Mesures = require('./mesures');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risques = require('./risques');
+const RolesResponsabilites = require('./rolesResponsabilites');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -25,6 +26,7 @@ class Homologation {
       partiesPrenantes = {},
       risquesGeneraux = [],
       risquesSpecifiques = [],
+      rolesResponsabilites = {},
       avisExpertCyber = {},
     } = donnees;
 
@@ -35,6 +37,7 @@ class Homologation {
       caracteristiquesComplementaires, referentiel,
     );
     this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
+    this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
     this.risques = new Risques(
       { risquesGeneraux, risquesSpecifiques },
       referentiel,

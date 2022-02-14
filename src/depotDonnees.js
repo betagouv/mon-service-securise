@@ -16,6 +16,7 @@ const CaracteristiquesComplementaires = require('./modeles/caracteristiquesCompl
 const Homologation = require('./modeles/homologation');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
 const DeveloppementFourniture = require('./modeles/partiesPrenantes/developpementFourniture');
+const RolesResponsabilites = require('./modeles/rolesResponsabilites');
 const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
@@ -153,9 +154,12 @@ const creeDepot = (config = {}) => {
       })
   );
 
-  const ajoutePartiesPrenantesAHomologation = (...params) => (
-    metsAJourProprieteHomologation('partiesPrenantes', ...params)
-  );
+  const ajoutePartiesPrenantesAHomologation = (...params) => {
+    const [idHomologation, partiesPrenantes] = params;
+
+    return metsAJourProprieteHomologation('partiesPrenantes', ...params)
+      .then(() => metsAJourProprieteHomologation('rolesResponsabilites', idHomologation, new RolesResponsabilites(partiesPrenantes.toJSON())));
+  };
 
   const ajouteAvisExpertCyberAHomologation = (...params) => (
     metsAJourProprieteHomologation('avisExpertCyber', ...params)
