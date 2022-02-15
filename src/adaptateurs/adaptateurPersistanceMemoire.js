@@ -17,9 +17,15 @@ const nouvelAdaptateur = (donnees = {}) => {
     donnees.autorisations.filter((a) => a.idUtilisateur === idUtilisateur)
   );
 
-  const homologation = (idHomologation) => Promise.resolve(
-    donnees.homologations.find((h) => h.id === idHomologation)
-  );
+  const homologation = (id) => {
+    const contributeurs = (idHomologation) => donnees.autorisations
+      .filter((a) => a.idHomologation === idHomologation && a.type === 'contributeur')
+      .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
+
+    const homologationTrouvee = donnees.homologations.find((h) => h.id === id);
+    if (homologationTrouvee) homologationTrouvee.contributeurs = contributeurs(id);
+    return Promise.resolve(homologationTrouvee);
+  };
 
   const homologations = (idUtilisateur) => autorisations(idUtilisateur)
     .then((as) => Promise.all(
