@@ -1,9 +1,5 @@
-const donneesReferentiel = require('./donneesReferentiel');
 const DepotDonnees = require('./src/depotDonnees');
-const Referentiel = require('./src/referentiel');
-const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
-const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
-const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
+const fabriqueAdaptateurPersistance = require('./src/adaptateurs/fabriqueAdaptateurPersistance');
 
 const creeDonnees = (depotDonnees) => depotDonnees
   .nouvelUtilisateur({
@@ -18,13 +14,8 @@ const creeDonnees = (depotDonnees) => depotDonnees
   .then((u) => depotDonnees.nouvelleHomologation(u.id, { nomService: 'Dossier de test' }));
 
 if (process.env.CREATION_UTILISATEUR_DEMO) {
-  const adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur(
-    process.env.NODE_ENV || 'development'
-  );
-  const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
-  const depotDonnees = DepotDonnees.creeDepot({
-    adaptateurJWT, adaptateurPersistance, adaptateurUUID, referentiel,
-  });
+  const adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV);
+  const depotDonnees = DepotDonnees.creeDepot();
 
   /* eslint-disable no-console */
   adaptateurPersistance.utilisateurAvecEmail(process.env.EMAIL_UTILISATEUR_DEMO)

@@ -28,6 +28,8 @@ services:
   web:
     <<: *configuration-base
     command: "npx nodemon server.js"
+    environment:
+      - NODE_ENV=development
     networks:
       - postgres
     ports:

@@ -1,4 +1,3 @@
-const donneesReferentiel = require('./donneesReferentiel');
 const DepotDonnees = require('./src/depotDonnees');
 const Middleware = require('./src/middleware');
 const MSS = require('./src/mss');
@@ -6,15 +5,10 @@ const Referentiel = require('./src/referentiel');
 const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = require('./src/adaptateurs/adaptateurMail');
-const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
-const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
 
 const port = process.env.PORT || 3000;
-const adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur(process.env.NODE_ENV || 'development');
-const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
-const depotDonnees = DepotDonnees.creeDepot({
-  adaptateurJWT, adaptateurPersistance, adaptateurUUID, referentiel,
-});
+const referentiel = Referentiel.creeReferentiel();
+const depotDonnees = DepotDonnees.creeDepot();
 const middleware = Middleware({
   adaptateurChiffrement,
   adaptateurJWT,
