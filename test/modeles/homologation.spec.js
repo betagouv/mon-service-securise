@@ -4,6 +4,7 @@ const Referentiel = require('../../src/referentiel');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
+const Utilisateur = require('../../src/modeles/utilisateur');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
@@ -12,6 +13,20 @@ describe('Une homologation', () => {
     });
 
     expect(homologation.nomService()).to.equal('Super Service');
+  });
+
+  it('connaît ses contributrices et contributeurs', () => {
+    const homologation = new Homologation({
+      id: '123',
+      contributeurs: [{ id: '456', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
+    });
+
+    const { contributeurs } = homologation;
+    expect(contributeurs.length).to.equal(1);
+
+    const contributeur = contributeurs[0];
+    expect(contributeur).to.be.an(Utilisateur);
+    expect(contributeur.id).to.equal('456');
   });
 
   it('sait se convertir en JSON', () => {
