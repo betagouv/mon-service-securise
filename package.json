@@ -7,7 +7,8 @@
     "npm": "8"
   },
   "scripts": {
-    "build": "knex migrate:latest && npm test",
+    "build": "knex migrate:latest && npm test && npm run cree-utilisateur-demo",
+    "cree-utilisateur-demo": "node creeUtilisateurDemo.js",
     "test": "eslint . && mocha --recursive",
     "start": "node --require dotenv/config server.js"
   },
