@@ -1,4 +1,6 @@
-const creeReferentiel = (donneesReferentiel) => {
+const donneesParDefaut = require('../donneesReferentiel');
+
+const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   let donnees = donneesReferentiel;
 
   const actionsSaisie = () => donnees.actionsSaisie;

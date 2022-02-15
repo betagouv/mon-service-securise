@@ -7,7 +7,10 @@ const {
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
 } = require('./erreurs');
-const AdaptateurPersistanceMemoire = require('./adaptateurs/adaptateurPersistanceMemoire');
+const Referentiel = require('./referentiel');
+const adaptateurJWTParDefaut = require('./adaptateurs/adaptateurJWT');
+const adaptateurUUIDParDefaut = require('./adaptateurs/adaptateurUUID');
+const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisation');
 const Homologation = require('./modeles/homologation');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
@@ -16,10 +19,10 @@ const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
   const {
-    adaptateurJWT,
-    adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(),
-    adaptateurUUID,
-    referentiel,
+    adaptateurJWT = adaptateurJWTParDefaut,
+    adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
+    adaptateurUUID = adaptateurUUIDParDefaut,
+    referentiel = Referentiel.creeReferentiel(),
   } = config;
 
   const homologation = (idHomologation) => adaptateurPersistance.homologation(idHomologation)
@@ -302,7 +305,7 @@ const creeDepot = (config = {}) => {
 };
 
 const creeDepotVide = () => {
-  const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
+  const adaptateurPersistance = fabriqueAdaptateurPersistance();
   return adaptateurPersistance.supprimeUtilisateurs()
     .then(() => adaptateurPersistance.supprimeHomologations())
     .then(() => adaptateurPersistance.supprimeAutorisations())
