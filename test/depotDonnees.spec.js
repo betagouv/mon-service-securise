@@ -118,6 +118,29 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it("associe ses contributeurs à l'homologation", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      utilisateurs: [{ id: '111', email: 'createur@mail.fr' }, { id: '999', email: 'contributeur@mail.fr' }],
+      homologations: [
+        { id: '789', descriptionService: { nomService: 'nom' } },
+      ],
+      autorisations: [
+        { idHomologation: '789', idUtilisateur: '111', type: 'createur' },
+        { idHomologation: '789', idUtilisateur: '999', type: 'contributeur' },
+      ],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance, referentiel: 'Le référentiel' });
+
+    depot.homologation('789')
+      .then((homologation) => {
+        const { contributeurs } = homologation;
+        expect(contributeurs.length).to.equal(1);
+        expect(contributeurs[0].id).to.equal('999');
+        done();
+      })
+      .catch(done);
+  });
+
   it('sait associer une mesure spécifique à une homologation', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [

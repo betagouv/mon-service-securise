@@ -50,11 +50,38 @@ const nouvelAdaptateur = (env) => {
       .catch(() => undefined)
   );
 
-  const homologations = (idUtilisateur) => knex('homologations')
-    .join('autorisations', knex.raw("(autorisations.donnees->>'idHomologation')::uuid"), 'homologations.id')
-    .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
-    .select('homologations.*')
-    .then((rows) => rows.map(convertisLigneEnObjet));
+  const homologations = (idUtilisateur) => knex('homologations as h')
+    .join('autorisations as a1', knex.raw("(a1.donnees->>'idHomologation')::uuid"), 'h.id')
+    .join(
+      'autorisations as a2',
+      knex.raw("a1.donnees->>'idHomologation'"),
+      knex.raw("a2.donnees->>'idHomologation'"),
+    )
+    .join('utilisateurs as u', knex.raw("(a2.donnees->>'idUtilisateur')::uuid"), 'u.id')
+    .whereRaw("a1.donnees->>'idUtilisateur'=?", idUtilisateur)
+    .select({
+      idHomologation: 'h.id',
+      donneesHomologation: 'h.donnees',
+      idUtilisateur: 'u.id',
+      donneesUtilisateur: 'u.donnees',
+      type: knex.raw("a2.donnees->>'type'"),
+    })
+    .then((lignes) => lignes
+      .reduce((acc, ligne) => {
+        const homologationDejaExistante = acc.find((h) => h.id === ligne.idHomologation);
+        const nouvelleLigne = homologationDejaExistante || {
+          id: ligne.idHomologation, ...ligne.donneesHomologation,
+        };
+        nouvelleLigne.contributeurs ||= [];
+
+        if (ligne.type === 'contributeur') {
+          const contributeur = { id: ligne.idUtilisateur, ...ligne.donneesUtilisateur };
+          nouvelleLigne.contributeurs.push(contributeur);
+        }
+
+        if (!homologationDejaExistante) acc.push(nouvelleLigne);
+        return acc;
+      }, []));
 
   const metsAJourHomologation = (...params) => metsAJourTable('homologations', ...params);
   const metsAJourUtilisateur = (...params) => metsAJourTable('utilisateurs', ...params);
