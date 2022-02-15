@@ -7,6 +7,7 @@ const Mesures = require('./mesures');
 const PartiesPrenantes = require('./partiesPrenantes');
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
+const Utilisateur = require('./utilisateur');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -19,6 +20,7 @@ class Homologation {
   constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
     const {
       id = '',
+      contributeurs = [],
       descriptionService = {},
       mesuresGenerales = [],
       mesuresSpecifiques = [],
@@ -31,6 +33,7 @@ class Homologation {
     } = donnees;
 
     this.id = id;
+    this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
     this.caracteristiquesComplementaires = new CaracteristiquesComplementaires(
