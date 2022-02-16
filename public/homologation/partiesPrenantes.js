@@ -1,6 +1,5 @@
 import parametres, { modifieParametresAvecItemsExtraits, modifieParametresGroupementElements } from '../modules/parametres.mjs';
 import brancheElementsAjoutables from '../modules/brancheElementsAjoutables.js';
-import brancheInputsIdentite from '../modules/brancheInputsIdentite.js';
 
 $(() => {
   brancheElementsAjoutables('acteurs-homologation', 'acteur-homologation', {
@@ -20,21 +19,10 @@ $(() => {
     return params;
   };
 
-  const idsInputsIdentite = [
-    { idJeSuis: '#jeSuisPiloteProjet', idZoneSaisie: '#piloteProjet' },
-    { idJeSuis: '#jeSuisExpertCybersecurite', idZoneSaisie: '#expertCybersecurite' },
-  ];
-
-  brancheInputsIdentite(idsInputsIdentite);
-
   const $bouton = $('.bouton');
   const identifiantHomologation = $bouton.attr('identifiant');
 
   $bouton.click(() => {
-    idsInputsIdentite
-      .map((ids) => ids.idZoneSaisie)
-      .forEach((selecteur) => $(selecteur).removeAttr('disabled'));
-
     const params = tousLesParametres('form#parties-prenantes');
 
     axios.post(`/api/homologation/${identifiantHomologation}/partiesPrenantes`, params)
