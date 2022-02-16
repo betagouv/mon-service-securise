@@ -16,6 +16,7 @@ header nav {
   display: flex;
   column-gap: 1.4em;
   align-items: center;
+  font-size: 0.9em;
 }
 
 header nav a:hover {
@@ -86,6 +87,8 @@ a.connexion, a.inscription {
   background: var(--bleu-anssi);
   border: 0.5px solid var(--bleu-anssi);
   border-radius: 33% / 100%;
+
+  font-size: 0.9em;
 }
 
 a.connexion {
@@ -146,7 +149,7 @@ a.inscription:hover {
   display: block;
 
   color: var(--bleu-anssi);
-  font-size: 0.8em;
+  font-size: 0.9em;
 }
 
 .menu a:hover {
