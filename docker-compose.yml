@@ -21,7 +21,7 @@ services:
 
   test:
     <<: *configuration-base
-    command: "npx mocha --recursive --watch"
+    command: "npm run test:watch"
     environment:
       - NODE_ENV=test
 

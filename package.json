@@ -9,8 +9,13 @@
   "scripts": {
     "build": "knex migrate:latest && npm test && npm run cree-utilisateur-demo",
     "cree-utilisateur-demo": "node creeUtilisateurDemo.js",
-    "test": "eslint . && mocha --recursive",
+    "test": "eslint . && mocha",
+    "test:mocha": "mocha",
+    "test:watch": "nodemon --exec mocha",
     "start": "node --require dotenv/config server.js"
+  },
+  "mocha": {
+    "spec": "./test*/**/*.spec.*js"
   },
   "repository": {
     "type": "git",
@@ -42,6 +47,8 @@
     "eslint": "^7.26.0",
     "eslint-config-airbnb": "^18.2.1",
     "expect.js": "^0.3.1",
+    "jquery": "^3.6.0",
+    "jsdom": "^19.0.0",
     "mocha": "^9.2.0",
     "nodemon": "^2.0.7"
   }
