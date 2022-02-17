@@ -1,8 +1,25 @@
-const $homologationExistante = (donneesHomologation) => $(`
+const $homologationExistante = (donneesHomologation) => {
+  const $element = $(`
 <a class="homologation existante" href="/homologation/${donneesHomologation.id}">
-  <div>${donneesHomologation.nomService}</div>
+  <div class="titre-homologation">${donneesHomologation.nomService}</div>
+  <div class="contributeurs">
+    <p>Contributeurs</p>
+    <div class="pastilles-contributeurs">
+    </div>
+  </div>
 </a>
-`);
+  `);
+
+  donneesHomologation.contributeurs.forEach((donneesContributeur) => {
+    $('.pastilles-contributeurs', $element).append($(`
+<div class="pastille-contributeur" title="${donneesContributeur.prenomNom}">
+  <div class="initiales">${donneesContributeur.initiales}</div>
+</div>
+    `));
+  });
+
+  return $element;
+};
 
 const $ajoutNouvelleHomologation = () => $(`
 <a class="nouvelle homologation" href="/homologation/creation">

@@ -31,11 +31,16 @@ describe('Une homologation', () => {
 
   it('sait se convertir en JSON', () => {
     const homologation = new Homologation({
-      id: '123', idUtilisateur: '456', descriptionService: { nomService: 'Super Service' },
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'Super Service' },
+      contributeurs: [{ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
     });
 
     expect(homologation.toJSON()).to.eql({
-      id: '123', nomService: 'Super Service',
+      id: '123',
+      nomService: 'Super Service',
+      contributeurs: [{ prenomNom: 'Jean Dupont', initiales: 'JD' }],
     });
   });
 

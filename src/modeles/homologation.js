@@ -117,6 +117,7 @@ class Homologation {
     return {
       id: this.id,
       nomService: this.nomService(),
+      contributeurs: this.contributeurs.map((c) => c.toJSON()),
     };
   }
 }
