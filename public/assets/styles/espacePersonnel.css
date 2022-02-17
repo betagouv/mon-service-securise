@@ -12,14 +12,14 @@
 }
 
 .homologation {
+  min-width: 0;
+
+  height: 12em;
   padding: 2em;
 
   border: solid 1px var(--liseres);
   border-radius: 5px;
   background: white;
-
-  font-weight: bold;
-  text-decoration: none;
 }
 
 .homologation:hover {
@@ -27,9 +27,67 @@
   background-color: inherit;
 }
 
-.homologation.existante {
+.titre-homologation {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: break-word;
+
   font-size: 1.5em;
+  font-weight: bold;
+}
+
+.homologation.existante {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
   color: var(--texte-fonce);
+}
+
+.homologation p {
+  margin: 0.5em;
+
+  font-size: 0.8em;
+}
+
+.pastilles-contributeurs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pastilles-contributeurs > div {
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.pastille-contributeur {
+  cursor: default;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 0.3em;
+  box-sizing: border-box;
+
+  background-image: url(../images/pastille_bleu_anssi.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+}
+
+.pastille-contributeur .initiales {
+  font-size: 0.7em;
+  color: #fff;
+}
+
+.nouvelle.homologation {
+  color: var(--bleu-mise-en-avant);
+  font-weight: bold;
+  text-decoration: none;
 }
 
 .nouvelle.homologation .icone-ajout {
