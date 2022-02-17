@@ -337,6 +337,24 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it('ne met pas à jour les parties prenantes avec avec une entité développeur / fournisseur du service vide', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{
+        id: '123',
+        descriptionService: { nomService: 'nom' },
+      }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.ajouteDeveloppementFournitureAHomologation('123', '')
+      .then(() => depot.homologation('123'))
+      .then(({ partiesPrenantes }) => {
+        expect(partiesPrenantes.partiesPrenantes.nombre()).to.equal(0);
+        done();
+      })
+      .catch(done);
+  });
+
   it("conserve les anciennes parties prenantes lors de la mise à jour avec l'entité développeur / fournisseur du service", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [{
