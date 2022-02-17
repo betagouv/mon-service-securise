@@ -122,25 +122,23 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
   );
 
-  const ajoutePartiePrenanteAHomologation = (typePartiePrenante) => (
-    idHomologation, nomPartiePrenante
-  ) => (
-    adaptateurPersistance.homologation(idHomologation)
+  const ajouteDeveloppementFournitureAHomologation = (idHomologation, nomPartiePrenante) => {
+    if (!nomPartiePrenante) {
+      return Promise.resolve();
+    }
+
+    return adaptateurPersistance.homologation(idHomologation)
       .then((homologationTrouvee) => {
         const { partiesPrenantes = {} } = homologationTrouvee;
         partiesPrenantes.partiesPrenantes ||= [];
         partiesPrenantes.partiesPrenantes = partiesPrenantes.partiesPrenantes
-          .filter((partiePrenante) => partiePrenante.type !== typePartiePrenante);
+          .filter((partiePrenante) => partiePrenante.type !== DeveloppementFourniture.name);
         partiesPrenantes.partiesPrenantes.push(
-          { type: typePartiePrenante, nom: nomPartiePrenante }
+          { type: DeveloppementFourniture.name, nom: nomPartiePrenante }
         );
         return metsAJourProprieteHomologation('partiesPrenantes', homologationTrouvee, new PartiesPrenantes(partiesPrenantes, referentiel));
-      })
-  );
-
-  const ajouteDeveloppementFournitureAHomologation = ajoutePartiePrenanteAHomologation(
-    DeveloppementFourniture.name
-  );
+      });
+  };
 
   const ajouteHebergementAHomologation = (idHomologation, nomHebergement) => (
     adaptateurPersistance.homologation(idHomologation)
