@@ -16,6 +16,8 @@ const CaracteristiquesComplementaires = require('./modeles/caracteristiquesCompl
 const Homologation = require('./modeles/homologation');
 const RolesResponsabilites = require('./modeles/rolesResponsabilites');
 const Utilisateur = require('./modeles/utilisateur');
+const PartiePrenanteSpecifique = require('./modeles/partiesPrenantes/partiePrenanteSpecifique');
+const PartiesPrenantes = require('./modeles/partiesPrenantes');
 
 const creeDepot = (config = {}) => {
   const {
@@ -144,6 +146,25 @@ const creeDepot = (config = {}) => {
     return metsAJourProprieteHomologation('partiesPrenantes', ...params)
       .then(() => metsAJourProprieteHomologation('rolesResponsabilites', idHomologation, new RolesResponsabilites(partiesPrenantes.toJSON())));
   };
+
+  const ajoutePartiesPrenantesSpecifiquesAHomologation = (idHomologation, entitesExternes) => (
+    adaptateurPersistance.homologation(idHomologation)
+      .then((homologationTrouvee) => {
+        const { partiesPrenantes = {} } = homologationTrouvee;
+        partiesPrenantes.partiesPrenantes ||= [];
+        partiesPrenantes.partiesPrenantes = partiesPrenantes.partiesPrenantes
+          .filter((partiePrenante) => partiePrenante.type !== PartiePrenanteSpecifique.name);
+
+        entitesExternes.map((entiteExterne) => ({
+          type: PartiePrenanteSpecifique.name,
+          nom: entiteExterne.nom,
+          natureAcces: entiteExterne.acces,
+          pointContact: entiteExterne.contact,
+        })).forEach((partiePrenante) => partiesPrenantes.partiesPrenantes.push(partiePrenante));
+
+        return metsAJourProprieteHomologation('partiesPrenantes', homologationTrouvee, new PartiesPrenantes(partiesPrenantes));
+      })
+  );
 
   const ajouteAvisExpertCyberAHomologation = (...params) => (
     metsAJourProprieteHomologation('avisExpertCyber', ...params)
@@ -286,6 +307,7 @@ const creeDepot = (config = {}) => {
     ajouteHebergementAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
+    ajoutePartiesPrenantesSpecifiquesAHomologation,
     ajouteRisqueGeneralAHomologation,
     ajouteStructureDeveloppementAHomologation,
     autorisations,
