@@ -32,11 +32,12 @@ block formulaire
           +inputMesure({
             nom: identifiant,
             titre: donnees.description,
-            .information
+            information:
               .rideau
-                 .modale
-                 .fermeture-modale
-                 p!= donnees.descriptionLongueeach donnees, identifiant in referentiel.mesures()
+                .modale
+                  .fermeture-modale
+                  p!= donnees.descriptionLongue
+                  h1= donnees.description
             indispensable: donnees.indispensable,
           })
 
