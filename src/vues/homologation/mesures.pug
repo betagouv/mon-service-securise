@@ -28,7 +28,7 @@ block formulaire
         each categorie, identifiant in referentiel.categoriesMesures()
           a(id = identifiant)= categorie
 
-      .mesures
+      .mesures(id = identifiant)
         each donnees, identifiant in referentiel.mesures()
         +inputMesure({
            nom: identifiant,
