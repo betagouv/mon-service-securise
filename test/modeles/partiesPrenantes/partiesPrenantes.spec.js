@@ -28,4 +28,16 @@ describe('Les parties prenantes', () => {
 
     expect(partiesPrenantes.developpementFourniture()).to.eql({ type: 'DeveloppementFourniture', nom: 'structure' });
   });
+
+  elles('savent transmettre les parties prenantes spécifiques', () => {
+    const partiesPrenantes = new PartiesPrenantes(
+      { partiesPrenantes: [
+        { type: 'PartiePrenanteSpecifique', nom: 'une partie' },
+        { type: 'PartiePrenanteSpecifique', nom: 'une autre partie' },
+      ] }
+    );
+
+    expect(partiesPrenantes.specifiques()).to.have.length(2);
+    expect(partiesPrenantes.specifiques()[0]).to.eql({ type: 'PartiePrenanteSpecifique', nom: 'une partie' });
+  });
 });
