@@ -11,6 +11,7 @@ mixin inputMesure({ nom, titre, indispensable })
   })
 
 block append styles
+  link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
 
 block formulaire
@@ -29,16 +30,16 @@ block formulaire
 
       .mesures
         each donnees, identifiant in referentiel.mesures()
+         .information
+           .rideau
+             .modale
+               .fermeture-modale
+               h1= donnees.description
+               p!= donnees.descriptionLongue
           +inputMesure({
             nom: identifiant,
             titre: donnees.description,
             indispensable: donnees.indispensable,
-          .information
-            .rideau
-              .modale
-                .fermeture-modale
-                h1= donnees.description
-                p!= donnees.descriptionLongue
           })
 
     section
