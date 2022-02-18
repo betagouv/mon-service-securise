@@ -12,6 +12,7 @@ mixin inputMesure({ nom, titre, indispensable })
 
 block append styles
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
 
 block formulaire
   form.homologation#mesures
@@ -29,6 +30,13 @@ block formulaire
 
       .mesures
         each donnees, identifiant in referentiel.mesures()
+          .mesure(id = identifiant)
+            .information
+              .rideau
+                .modale
+                  .fermeture-modale
+                  h1= donnees.description
+                  p!= donnees.descriptionLongue
           +inputMesure({
             nom: identifiant,
             titre: donnees.description,
