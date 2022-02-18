@@ -1201,4 +1201,20 @@ describe('Le dépôt de données persistées en mémoire', () => {
         .catch(done);
     });
   });
+
+  it("connaît l'autorisation pour un utilisateur et une homologation donnée", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+      homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+      autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+    depot.autorisationPour('999', '123')
+      .then((a) => {
+        expect(a).to.be.an(AutorisationCreateur);
+        expect(a.id).to.equal('456');
+        done();
+      })
+      .catch(done);
+  });
 });

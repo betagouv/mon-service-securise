@@ -286,7 +286,11 @@ const creeDepot = (config = {}) => {
   const autorisation = (id) => adaptateurPersistance.autorisation(id)
     .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
 
-  const { autorisationExiste } = adaptateurPersistance;
+  const autorisationPour = (...params) => adaptateurPersistance.autorisationPour(...params)
+    .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
+
+  const autorisationExiste = (...params) => autorisationPour(...params)
+    .then((a) => !!a);
 
   const autorisations = (idUtilisateur) => adaptateurPersistance.autorisations(idUtilisateur)
     .then((as) => as.map((a) => FabriqueAutorisation.fabrique(a)));
@@ -346,6 +350,7 @@ const creeDepot = (config = {}) => {
     ajouteStructureDeveloppementAHomologation,
     autorisation,
     autorisationExiste,
+    autorisationPour,
     autorisations,
     homologation,
     homologationExiste,
