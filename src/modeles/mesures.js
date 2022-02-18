@@ -2,6 +2,18 @@ const InformationsHomologation = require('./informationsHomologation');
 const MesuresGenerales = require('./mesuresGenerales');
 const MesuresSpecifiques = require('./mesuresSpecifiques');
 const Referentiel = require('../referentiel');
+const ajouteInformationsModales = () => {
+    $('.information').click((eInformation) => {
+      $('body').css('overflow', 'hidden');
+      $('.rideau', $(eInformation.target)).css('display', 'flex');
+
+      $('.fermeture-modale', $(eInformation.target)).click((eFermeture) => {
+        eFermeture.stopPropagation();
+        $('.rideau', $(eInformation.target)).css('display', '');
+        $('body').css('overflow', '');
+      });
+    });
+  };
 
 class Mesures extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
