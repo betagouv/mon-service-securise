@@ -28,14 +28,15 @@ block formulaire
         each categorie, identifiant in referentiel.categoriesMesures()
           a(id = identifiant)= categorie
 
-      .mesures(id = identifiant)
+      .mesures
         each donnees, identifiant in referentiel.mesures()
         +inputMesure({
            nom: identifiant,
            titre: donnees.description,
            indispensable: donnees.indispensable,
           })
-
+          
+       .mesures(id = identifiant)
          .information
            .rideau
              .modale
