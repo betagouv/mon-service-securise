@@ -81,8 +81,8 @@ const nouvelAdaptateur = (donnees = {}) => {
     donnees.autorisations.find((a) => a.id === id)
   );
 
-  const autorisationExiste = (idUtilisateur, idHomologation) => Promise.resolve(
-    !!donnees.autorisations
+  const autorisationPour = (idUtilisateur, idHomologation) => Promise.resolve(
+    donnees.autorisations
       .find((a) => a.idUtilisateur === idUtilisateur && a.idHomologation === idHomologation)
   );
 
@@ -104,7 +104,7 @@ const nouvelAdaptateur = (donnees = {}) => {
     ajouteHomologation,
     ajouteUtilisateur,
     autorisation,
-    autorisationExiste,
+    autorisationPour,
     autorisations,
     homologation,
     homologationAvecNomService,

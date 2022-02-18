@@ -1,5 +1,11 @@
 const AutorisationBase = require('./autorisationBase');
 
-class AutorisationCreateur extends AutorisationBase {}
+class AutorisationCreateur extends AutorisationBase {
+  constructor(...params) {
+    super(...params);
+
+    this.permissionAjoutContributeur = true;
+  }
+}
 
 module.exports = AutorisationCreateur;
