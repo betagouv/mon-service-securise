@@ -10,7 +10,7 @@ $(() => {
       ? categorieFiltre === mesureGenerale.categorie
       : true
   );
-
+  
   const mesureSpecifiqueDeCategorie = (elementMesureSpecifique, categorieFiltre) => (
     categorieFiltre
       ? $(`option[value="${categorieFiltre}"]:selected, option[value=""]:selected`, elementMesureSpecifique).length === 1
@@ -26,6 +26,21 @@ $(() => {
     $('.item-ajoute').each((_, item) => $(item)
       .toggle(mesureSpecifiqueDeCategorie(item, categorieFiltre)));
   };
+  
+  const ajouteInformationsModales = () => {
+    $('.information').click((eInformation) => {
+      $('body').css('overflow', 'hidden');
+      $('.rideau', $(eInformation.target)).css('display', 'flex');
+
+      $('.fermeture-modale', $(eInformation.target)).click((eFermeture) => {
+        eFermeture.stopPropagation();
+        $('.rideau', $(eInformation.target)).css('display', '');
+        $('body').css('overflow', '');
+      });
+    });
+  };
+
+  ajouteInformationsModales();
 
   const brancheFiltres = (selecteurFiltres) => {
     const $filtres = $(selecteurFiltres);
