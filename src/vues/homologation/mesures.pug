@@ -29,15 +29,16 @@ block formulaire
           a(id = identifiant)= categorie
 
       .mesures
+         .information
+            .rideau
+               .modale
+                  .fermeture-modale
+                  h1= donnees.description
+                  p!= donnees.descriptionLongue
          +inputMesure({
            nom: identifiant,
            titre: donnees.description,
            indispensable: donnees.indispensable,
-           information: information
-              .rideau
-                 .modale
-                    .fermeture-modale
-                    h1= donnees.description, p!= donnees.descriptionLongue,   
           })
 
     section
