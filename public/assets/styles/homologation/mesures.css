@@ -81,3 +81,18 @@ form#mesures .decoration {
   font-size: 0.7em;
   color: #fff;
 }
+
+.mesure .information {
+  cursor: pointer;
+
+  position: relative;
+  z-index: 2;
+  left: calc(100% - 2em);
+  top: 2em;
+
+  width: 1em;
+  height: 1em;
+  background-image: url(../../images/icone_information.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
