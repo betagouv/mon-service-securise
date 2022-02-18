@@ -4,6 +4,7 @@ const { ErreurTypeInconnu } = require('../../../src/erreurs');
 const fabriquePartiePrenante = require('../../../src/modeles/partiesPrenantes/fabriquePartiePrenante');
 const DeveloppementFourniture = require('../../../src/modeles/partiesPrenantes/developpementFourniture');
 const Hebergement = require('../../../src/modeles/partiesPrenantes/hebergement');
+const PartiePrenanteSpecifique = require('../../../src/modeles/partiesPrenantes/partiePrenanteSpecifique');
 
 describe('La fabrique de partie prenante', () => {
   it('fabrique des hébergements', () => {
@@ -14,6 +15,11 @@ describe('La fabrique de partie prenante', () => {
   it('fabrique des développements / fournitures de service', () => {
     const developpementFourniture = fabriquePartiePrenante.cree({ type: 'DeveloppementFourniture', nom: 'Mss' });
     expect(developpementFourniture).to.be.a(DeveloppementFourniture);
+  });
+
+  it('fabrique des parties prenantes spécifiques', () => {
+    const partiePrenanteSpecifique = fabriquePartiePrenante.cree({ type: 'PartiePrenanteSpecifique', nom: 'Partie' });
+    expect(partiePrenanteSpecifique).to.be.a(PartiePrenanteSpecifique);
   });
 
   it('retourne une erreur si le type est inconnu', () => {

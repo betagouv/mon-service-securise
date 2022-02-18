@@ -1,6 +1,6 @@
 const ElementsFabricables = require('../elementsFabricables');
 const fabriquePartiePrenante = require('./fabriquePartiePrenante');
-const { estHebergement, estDeveloppementFourniture } = require('./typePartiePrenante');
+const { estDeveloppementFourniture, estHebergement, estSpecifique } = require('./typePartiePrenante');
 
 class PartiesPrenantes extends ElementsFabricables {
   constructor(donnees = {}) {
@@ -18,6 +18,12 @@ class PartiesPrenantes extends ElementsFabricables {
 
   developpementFourniture() {
     return this.type(estDeveloppementFourniture);
+  }
+
+  specifiques() {
+    return this.tous()
+      .filter(estSpecifique)
+      .map((partiePrenante) => partiePrenante.toJSON());
   }
 }
 
