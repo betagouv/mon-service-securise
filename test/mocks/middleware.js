@@ -68,6 +68,8 @@ const middlewareFantaisie = {
     suite();
   },
 
+  idUtilisateurCourant: () => idUtilisateurCourant,
+
   positionneHeaders: (requete, reponse, suite) => {
     headersPositionnes = true;
     suite();

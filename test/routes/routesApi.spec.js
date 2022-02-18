@@ -443,9 +443,14 @@ describe('Le serveur MSS des routes /api/*', () => {
   });
 
   describe('quand requête POST sur `/api/autorisation`', () => {
+    const autorisation = { id: '111' };
     const utilisateur = { id: '999', genereToken: () => 'un token', accepteCGU: () => true };
 
     beforeEach(() => {
+      testeur.middleware().reinitialise('456');
+      autorisation.permissionAjoutContributeur = true;
+
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisation);
       testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateur);
       testeur.depotDonnees().ajouteContributeurAHomologation = () => Promise.resolve();
     });
@@ -455,6 +460,51 @@ describe('Le serveur MSS des routes /api/*', () => {
         method: 'post',
         url: 'http://localhost:1234/api/autorisation',
       }, done);
+    });
+
+    it("vérifie que l'utilisateur a le droit d'ajouter un contributeur", (done) => {
+      let autorisationInterogee = false;
+      testeur.depotDonnees().autorisationPour = (idUtilisateur, idHomologation) => {
+        try {
+          expect(testeur.middleware().idUtilisateurCourant()).to.equal('456');
+
+          expect(idUtilisateur).to.equal('456');
+          expect(idHomologation).to.equal('123');
+          autorisationInterogee = true;
+          return Promise.resolve(autorisation);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.post('http://localhost:1234/api/autorisation', {
+        emailContributeur: 'jean.dupont@mail.fr',
+        idHomologation: '123',
+      })
+        .then(() => {
+          expect(autorisationInterogee).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit d'ajouter un contributeur", (done) => {
+      autorisation.permissionAjoutContributeur = false;
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisation);
+
+      axios.post('http://localhost:1234/api/autorisation', {
+        emailContributeur: 'jean.dupont@mail.fr',
+        idHomologation: '123',
+      })
+        .then(() => {
+          done('La requête aurait dû lever une erreur HTTP 403');
+        })
+        .catch((e) => {
+          expect(e.response.status).to.equal(403);
+          expect(e.response.data).to.equal("Ajout non autorisé d'un contributeur");
+          done();
+        })
+        .catch(done);
     });
 
     it("demande au dépôt de données d'ajouter l'autorisation", (done) => {
