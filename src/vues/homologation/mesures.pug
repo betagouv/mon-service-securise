@@ -27,18 +27,16 @@ block formulaire
         a.actif Tout
         each categorie, identifiant in referentiel.categoriesMesures()
           a(id = identifiant)= categorie
-        
-        .information
-          .rideau
-            .modale
-              .fermeture-modale
-              p!= donnees.descriptionLongue
 
       .mesures
-        each donnees, identifiant in referentiel.mesures()
           +inputMesure({
             nom: identifiant,
             titre: donnees.description,
+            .information
+              .rideau
+                 .modale
+                 .fermeture-modale
+                 p!= donnees.descriptionLongueeach donnees, identifiant in referentiel.mesures()
             indispensable: donnees.indispensable,
           })
 
