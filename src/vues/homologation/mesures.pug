@@ -34,14 +34,15 @@ block formulaire
            nom: identifiant,
            titre: donnees.description,
            indispensable: donnees.indispensable,
-           information: mesures.information
-               .rideau
-                  .modale
-                    .fermeture-modale
-                    h1= donnees.description
-                    p!= donnees.descriptionLongue,
           })
 
+         .information
+           .rideau
+             .modale
+                .fermeture-modale
+                h1= donnees.description
+                p!= donnees.descriptionLongue
+                
     section
       label Mesures spécifiques au service numérique
       #mesures-specifiques
