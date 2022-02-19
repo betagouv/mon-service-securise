@@ -22,6 +22,12 @@ const $modaleNouveauContributeur = () => $(`
 `);
 
 const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouveauContributeur) => {
+  const utilisateurCourantPeutAjouterContributeurs = () => {
+    const idContributeurs = donneesHomologation.contributeurs.map((c) => c.id);
+
+    return !idContributeurs.includes(idUtilisateur);
+  };
+
   const descriptionContributeur = (donneesContributeur) => {
     let resultat = donneesContributeur.prenomNom;
     if (donneesContributeur.id === idUtilisateur) resultat += ' (vous)';
@@ -35,12 +41,16 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
   <div class="titre-homologation">${donneesHomologation.nomService}</div>
   <div class="contributeurs">
     <p>Contributeurs</p>
-    <div class="${classePastillesContributeurs}">
-      <div class="${classeNouveauContributeur}" data-id-homologation="${donneesHomologation.id}"></div>
-    </div>
+    <div class="${classePastillesContributeurs}"></div>
   </div>
 </a>
   `);
+
+  if (utilisateurCourantPeutAjouterContributeurs()) {
+    $(`.${classePastillesContributeurs}`, $element).append($(`
+<div class="${classeNouveauContributeur}" data-id-homologation="${donneesHomologation.id}"></div>
+    `));
+  }
 
   donneesHomologation.contributeurs.forEach((donneesContributeur) => {
     const classePastilleContributeur = (
@@ -65,15 +75,14 @@ const $ajoutNouvelleHomologation = () => $(`
 `);
 
 const $homologations = (donneesHomologations, idUtilisateur, classeNouveauContributeur) => (
-  donneesHomologations
-    .reduce(($acc, donneesHomologation) => {
-      const $homologation = $homologationExistante(
-        donneesHomologation,
-        idUtilisateur,
-        classeNouveauContributeur,
-      );
-      return $acc.append($homologation);
-    }, $(document.createDocumentFragment()))
+  donneesHomologations.reduce(($acc, donneesHomologation) => {
+    const $homologation = $homologationExistante(
+      donneesHomologation,
+      idUtilisateur,
+      classeNouveauContributeur,
+    );
+    return $acc.append($homologation);
+  }, $(document.createDocumentFragment()))
     .append($ajoutNouvelleHomologation())
 );
 
