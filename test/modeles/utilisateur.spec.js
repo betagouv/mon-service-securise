@@ -21,7 +21,7 @@ describe('Un utilisateur', () => {
       id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
     });
 
-    expect(utilisateur.toJSON()).to.eql({ prenomNom: 'Jean Dupont', initiales: 'JD' });
+    expect(utilisateur.toJSON()).to.eql({ id: '123', prenomNom: 'Jean Dupont', initiales: 'JD' });
   });
 
   it('sait générer son JWT', (done) => {
