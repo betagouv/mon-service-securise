@@ -44,7 +44,7 @@ class Utilisateur extends Base {
   }
 
   toJSON() {
-    return { prenomNom: this.prenomNom(), initiales: this.initiales() };
+    return { id: this.id, prenomNom: this.prenomNom(), initiales: this.initiales() };
   }
 }
 

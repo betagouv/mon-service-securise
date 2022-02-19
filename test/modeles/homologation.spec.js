@@ -34,13 +34,13 @@ describe('Une homologation', () => {
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'Super Service' },
-      contributeurs: [{ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
+      contributeurs: [{ id: '999', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
     });
 
     expect(homologation.toJSON()).to.eql({
       id: '123',
       nomService: 'Super Service',
-      contributeurs: [{ prenomNom: 'Jean Dupont', initiales: 'JD' }],
+      contributeurs: [{ id: '999', prenomNom: 'Jean Dupont', initiales: 'JD' }],
     });
   });
 
