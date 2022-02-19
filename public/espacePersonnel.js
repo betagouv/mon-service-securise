@@ -16,7 +16,6 @@ $(() => {
 
   axios.get('/api/utilisateurCourant')
     .then((reponse) => reponse.data.utilisateur.id)
-    .then((idUtilisateur) => axios
-      .get('/api/homologations')
+    .then((idUtilisateur) => axios.get('/api/homologations')
       .then((reponse) => peupleHomologationsDans('.homologations', reponse.data.homologations, idUtilisateur)));
 });
