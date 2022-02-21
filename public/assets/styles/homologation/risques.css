@@ -8,20 +8,6 @@
   border-radius: 3px;
 }
 
-.risque .information {
-  cursor: pointer;
-
-  position: absolute;
-  top: 1em;
-  right: 1em;
-
-  width: 1em;
-  height: 1em;
-  background-image: url(../../images/icone_information.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
 .synthese {
   display: flex;
   align-items: center;

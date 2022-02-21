@@ -110,7 +110,7 @@ ${statuts}
   };
 
   const ajouteInformationsModales = () => {
-    $('.information').click((eInformation) => {
+    $('.puce-information').click((eInformation) => {
       $('body').css('overflow', 'hidden');
       $('.rideau', $(eInformation.target)).css('display', 'flex');
 
