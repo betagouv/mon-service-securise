@@ -15,7 +15,7 @@ $(() => {
   const NIVEAUX_GRAVITE = JSON.parse($('#donnees-referentiel-niveaux-gravite-risque').text());
 
   const ajouteInformationsModales = () => {
-    $('.information').click((eInformation) => {
+    $('.puce-information').click((eInformation) => {
       $('body').css('overflow', 'hidden');
       $('.rideau', $(eInformation.target)).css('display', 'flex');
 

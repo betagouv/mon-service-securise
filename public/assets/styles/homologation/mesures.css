@@ -85,17 +85,3 @@ form#mesures .decoration {
   font-size: 0.7em;
   color: #fff;
 }
-
-.mesure .information {
-  cursor: pointer;
-
-  position: absolute;
-  right: 1em;
-  top: 1em;
-
-  width: 1em;
-  height: 1em;
-  background-image: url(../../images/icone_information.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
