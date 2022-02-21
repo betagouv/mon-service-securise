@@ -1,4 +1,4 @@
-import parametres, { modifieParametresAvecItemsExtraits } from '../modules/parametres.mjs';
+import parametres, { modifieParametresAvecItemsExtraits, modifieParametresGroupementElements } from '../modules/parametres.mjs';
 import brancheElementsAjoutables from '../modules/brancheElementsAjoutables.js';
 import brancheInputsIdentite from '../modules/brancheInputsIdentite.js';
 
@@ -13,6 +13,9 @@ $(() => {
     const params = parametres(selecteurFormulaire);
     modifieParametresAvecItemsExtraits(
       params, 'acteursHomologation', '^(role|nom|fonction)-acteur-homologation-'
+    );
+    modifieParametresGroupementElements(
+      params, 'partiesPrenantes', 'hebergement'
     );
     return params;
   };

@@ -1,3 +1,5 @@
+import { capitalise, decapitalise } from './manipulationTexte.mjs';
+
 const avecPremierElementCommeValeurs = (params, nomsParamsAtomiques) => {
   const resultat = params;
   Object.keys(params).forEach((clef) => {
@@ -51,9 +53,41 @@ const modifieParametresAvecItemsExtraits = (params, nomListeItems, sourceRegExpP
 
   return Object.assign(params, donneesItems);
 };
+
+const modifieParametresGroupementElements = (params, nomListe, nomParametre) => {
+  const donneesFormatees = { [nomListe]: {} };
+
+  Object.keys(params)
+    .filter((param) => !!param.match(new RegExp(`^${nomParametre}\\w*$`)))
+    .forEach((param) => {
+      if (params[param]) {
+        const resultat = param.match(new RegExp(`^${nomParametre}(\\w*)$`));
+        const propriete = decapitalise(resultat[1]);
+        donneesFormatees[nomListe][nomParametre] = (
+          donneesFormatees[nomListe][nomParametre] || {}
+        );
+        donneesFormatees[nomListe][nomParametre][propriete] = params[param];
+      }
+      delete params[param];
+    });
+
+  donneesFormatees[nomListe] = Object.keys(donneesFormatees[nomListe]).map((cle) => (
+    {
+      ...donneesFormatees[nomListe][cle],
+      type: capitalise(cle),
+    }));
+
+  return Object.assign(params, donneesFormatees);
+};
+
 const parametresAvecItemsExtraits = (selecteurForm, nomListeItems, sourceRegExpParamsItem) => {
   const params = parametres(selecteurForm);
   return modifieParametresAvecItemsExtraits(params, nomListeItems, sourceRegExpParamsItem);
 };
 
-export { parametres as default, parametresAvecItemsExtraits, modifieParametresAvecItemsExtraits };
+export default parametres;
+export {
+  parametresAvecItemsExtraits,
+  modifieParametresAvecItemsExtraits,
+  modifieParametresGroupementElements,
+};
