@@ -4,6 +4,7 @@ import texteHTML from '../modules/texteHTML.js';
 
 import $saisieRisqueSpecifique from '../modules/elementsDom/saisieRisqueSpecifique.js';
 
+import ajouteInformationsModales from '../modules/interactions/modale.mjs';
 import {
   brancheComportementSaisieNiveauGravite,
   metsAJourAffichageNiveauGravite,
@@ -13,19 +14,6 @@ $(() => {
   let indexMaxRisquesSpecifiques = 0;
 
   const NIVEAUX_GRAVITE = JSON.parse($('#donnees-referentiel-niveaux-gravite-risque').text());
-
-  const ajouteInformationsModales = () => {
-    $('.puce-information').click((eInformation) => {
-      $('body').css('overflow', 'hidden');
-      $('.rideau', $(eInformation.target)).css('display', 'flex');
-
-      $('.fermeture-modale', $(eInformation.target)).click((eFermeture) => {
-        eFermeture.stopPropagation();
-        $('.rideau', $(eInformation.target)).css('display', '');
-        $('body').css('overflow', '');
-      });
-    });
-  };
 
   const ajouteZoneSaisieCommentairePourRisque = ($r, nom) => {
     const $lien = $('a.informations-additionnelles', $r);

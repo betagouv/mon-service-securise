@@ -2,6 +2,8 @@ import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.
 import { parametresAvecItemsExtraits } from '../modules/parametres.mjs';
 import texteHTML from '../modules/texteHTML.js';
 
+import ajouteInformationsModales from '../modules/interactions/modale.mjs';
+
 $(() => {
   let indexMaxMesuresSpecifiques = 0;
 
@@ -107,19 +109,6 @@ ${statuts}
           name="modalites-mesure-specifique-${index}"
           placeholder="Modalités de mise en œuvre (facultatif)">${modalites}</textarea>
       `;
-  };
-
-  const ajouteInformationsModales = () => {
-    $('.puce-information').click((eInformation) => {
-      $('body').css('overflow', 'hidden');
-      $('.rideau', $(eInformation.target)).css('display', 'flex');
-
-      $('.fermeture-modale', $(eInformation.target)).click((eFermeture) => {
-        eFermeture.stopPropagation();
-        $('.rideau', $(eInformation.target)).css('display', '');
-        $('body').css('overflow', '');
-      });
-    });
   };
 
   const brancheAjoutMesureSpecifique = (...params) => brancheAjoutItem(
