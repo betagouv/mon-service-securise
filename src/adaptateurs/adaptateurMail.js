@@ -35,18 +35,17 @@ const envoieMessageReinitialisationMotDePasse = (destinataire, idResetMotDePasse
   transport.sendMail({
     from: process.env.ADRESSE_MAIL_CONTACT,
     to: destinataire,
-    subject: 'MonServiceSécurisé – Réinitialisation du mot de passe',
+    subject: 'MonServiceSécurisé – Changement du mot de passe',
     text: `Bonjour,
 
-Nous avons reçu une demande de réinitialisation du mot de passe pour votre
-compte MonServiceSécurisé. Pour réinitialiser votre mot de passe, vous devez
-en saisir un nouveau à l'URL suivante :
+Suite à votre demande de réinitialisation du mot de passe, cliquez sur ce lien
+pour en définir un nouveau :
 ${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}
 
-Si vous n'avez pas demandé cette réinitialisation, vous n'avez rien à faire de
-plus. Veuillez simplement ignorer ce message.
+Si vous n'êtes pas l'origine de cette demande, votre compte est sécurisé et
+vous pouvez ignorer cet e-mail.
 
-Nous restons à votre disposition pour vos éventuelles questions.
+N'hésitez pas à nous contacter pour toutes précisions.
 
 L'équipe MonServiceSécurisé`,
   });
