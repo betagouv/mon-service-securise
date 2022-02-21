@@ -68,6 +68,10 @@ form#mesures .decoration {
   margin: 0.2em 0 0;
 }
 
+.mesure {
+  position: relative;
+}
+
 .mention-anssi.mesure-indispensable {
   display: inline-block;
 
@@ -85,10 +89,9 @@ form#mesures .decoration {
 .mesure .information {
   cursor: pointer;
 
-  position: relative;
-  z-index: 2;
-  left: calc(100% - 2em);
-  top: 2em;
+  position: absolute;
+  right: 1em;
+  top: 1em;
 
   width: 1em;
   height: 1em;
