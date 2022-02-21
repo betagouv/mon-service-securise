@@ -1,4 +1,4 @@
-import parametres, { modifieParametresAvecItemsExtraits } from '../modules/parametres.js';
+import parametres, { modifieParametresAvecItemsExtraits } from '../modules/parametres.mjs';
 import brancheElementsAjoutables from '../modules/brancheElementsAjoutables.js';
 import brancheInputsIdentite from '../modules/brancheInputsIdentite.js';
 

@@ -1,5 +1,5 @@
 import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
-import { parametresAvecItemsExtraits } from '../modules/parametres.js';
+import { parametresAvecItemsExtraits } from '../modules/parametres.mjs';
 import texteHTML from '../modules/texteHTML.js';
 
 $(() => {

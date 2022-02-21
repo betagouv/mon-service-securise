@@ -1,4 +1,4 @@
-import parametres, { modifieParametresAvecItemsExtraits } from './parametres.js';
+import parametres, { modifieParametresAvecItemsExtraits } from './parametres.mjs';
 import listesAvecItemsExtraits from '../homologation/formulaireDescriptionService.js';
 
 const fermeModale = () => {
