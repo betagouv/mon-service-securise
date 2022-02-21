@@ -1,5 +1,6 @@
 extends ./formulaire
 include ../fragments/inputIdentite
+include ../fragments/inputPartiePrenante
 include ../fragments/elementsAjoutables/elementsAjoutablesActeurHomologation
 
 block append styles
@@ -34,6 +35,15 @@ block formulaire
 
       +elementsAjoutablesActeurHomologation({
         donnees: homologation.partiesPrenantes.acteursHomologation.toJSON(),
+      })
+
+    section
+      h3 Parties prenantes
+
+      +inputPartiePrenante({
+        categorie: 'Hébergement du service',
+        nomParametre: 'hebergement',
+        donnees: {},
       })
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›

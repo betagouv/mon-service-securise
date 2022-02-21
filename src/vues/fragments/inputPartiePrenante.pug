@@ -1,0 +1,28 @@
+mixin inputPartiePrenante({ categorie, nomParametre, donnees })
+  label= categorie
+    .saisie-role-responsabilite
+      -
+        const proprietes = [
+          {
+            nom: 'nom',
+            parametre: `${nomParametre}Nom`,
+            libelle: "Nom de l'entité externe ou interne",
+          },
+          {
+            nom: 'natureAcces',
+            parametre: `${nomParametre}NatureAcces`,
+            libelle: "Nature de l'accès au service numérique (facultatif)",
+          },
+          {
+            nom: 'pointContact',
+            parametre: `${nomParametre}PointContact`,
+            libelle: "Point de contact (facultatif)",
+          }
+        ];
+
+      each propriete in proprietes
+        label(for = propriete.parametre)= propriete.libelle
+        input(
+          id = propriete.parametre, name = propriete.parametre, type = 'text',
+          value != donnees ? donnees[propriete.nom] : ''
+        )
