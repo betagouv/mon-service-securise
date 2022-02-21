@@ -30,18 +30,19 @@ block formulaire
 
       .mesures
         each donnees, identifiant in referentiel.mesures()
-          .mesure(id = identifiant)
+          .mesure
+            +inputMesure({
+              nom: identifiant,
+              titre: donnees.description,
+              indispensable: donnees.indispensable,
+            })
+
             .information
               .rideau
                 .modale
                   .fermeture-modale
                   h1= donnees.description
                   p!= donnees.descriptionLongue
-          +inputMesure({
-            nom: identifiant,
-            titre: donnees.description,
-            indispensable: donnees.indispensable,
-          })
 
     section
       label Mesures spécifiques au service numérique
