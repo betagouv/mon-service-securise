@@ -1,4 +1,4 @@
-import parametres from '../modules/parametres.js';
+import parametres from '../modules/parametres.mjs';
 
 const conditionneAffichageRenouvellement = (selecteurAvis, selecteurRenouvellement, condition) => {
   const $avis = $(selecteurAvis);
