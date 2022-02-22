@@ -173,58 +173,6 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456', done);
-    });
-  });
-
-  describe('quand requête GET sur `/homologation/:id/descriptionService`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/descriptionService', done);
-    });
-  });
-
-  describe('quand requête GET sur `/homologation/:id/caracteristiquesComplementaires`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/caracteristiquesComplementaires', done);
-    });
-  });
-
-  describe('quand requête GET sur `/homologation/:id/decision`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/decision', done);
-    });
-
-    it('sert la page avec un nonce', (done) => {
-      middleware.verifieRequetePositionneHeadersAvecNonce('http://localhost:1234/homologation/456/decision', done);
-    });
-  });
-
-  describe('quand requête GET sur `/homologation/:id/mesures`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/mesures', done);
-    });
-  });
-
-  describe('quand requete GET sur `/homologation/:id/partiesPrenantes`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/partiesPrenantes', done);
-    });
-  });
-
-  describe('quand requête GET sur `/homologation/:id/risques`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/risques', done);
-    });
-  });
-
-  describe('quand requête GET sur `/homologation/:id/avisExpertCyber`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/avisExpertCyber', done);
-    });
-  });
-
   describe('quand requête GET sur `/api/seuilCriticite`', () => {
     it('vérifie que les CGU sont acceptées', (done) => {
       middleware.verifieRequeteExigeAcceptationCGU('http://localhost:1234/api/seuilCriticite', done);
