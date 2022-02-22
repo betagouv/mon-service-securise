@@ -10,7 +10,8 @@ const {
 const MSS = require('../src/mss');
 const Referentiel = require('../src/referentiel');
 const DepotDonnees = require('../src/depotDonnees');
-const Homologation = require('../src/modeles/homologation');
+
+const middleware = require('./mocks/middleware');
 
 const verifieRequeteGenereErreurHTTP = (status, messageErreur, requete, suite) => {
   axios(requete)
@@ -23,169 +24,26 @@ const verifieRequeteGenereErreurHTTP = (status, messageErreur, requete, suite) =
     .catch(suite);
 };
 
-const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
-  const { lectureEtat, etatInitial = false, etatFinal = true } = donneesEtat;
-  expect(lectureEtat()).to.eql(etatInitial);
-
-  axios(requete)
-    .then(() => {
-      expect(lectureEtat()).to.eql(etatFinal);
-      done();
-    })
-    .catch((erreur) => {
-      const erreurHTTP = erreur.response && erreur.response.status;
-      if (erreurHTTP >= 400 && erreurHTTP < 500) {
-        expect(lectureEtat()).to.eql(etatFinal);
-        done();
-      } else throw erreur;
-    })
-    .catch(done);
+const verifieJetonDepose = (reponse, suite) => {
+  const valeurHeader = reponse.headers['set-cookie'][0];
+  expect(valeurHeader).to.match(/^token=.+; path=\/; expires=.+; samesite=strict; httponly$/);
+  suite();
 };
 
 describe('Le serveur MSS', () => {
-  let authentificationBasiqueMenee;
-  let expirationCookieRepoussee;
-  let idUtilisateurCourant;
-  let headersPositionnes;
-  let headersAvecNoncePositionnes;
-  let listesAseptisees;
-  let parametresAseptises;
-  let rechercheHomologationEffectuee;
-  let suppressionCookieEffectuee;
-  let verificationJWTMenee;
-  let verificationCGUMenee;
-
-  const verifieRequetePositionneHeadersAvecNonce = (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => headersAvecNoncePositionnes }, ...params);
-  };
-
-  const verifieRequeteExigeSuppressionCookie = (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => suppressionCookieEffectuee }, ...params);
-  };
-
-  const verifieRequeteRepousseExpirationCookie = (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => expirationCookieRepoussee }, ...params);
-  };
-
-  const verifieRequeteExigeJWT = (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => verificationJWTMenee }, ...params);
-  };
-
-  const verifieRequeteExigeAcceptationCGU = (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => verificationCGUMenee }, ...params);
-  };
-
-  const verifieRequeteExigeAuthentificationBasique = (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => authentificationBasiqueMenee }, ...params);
-  };
-
-  const verifieRequetePositionneHeaders = (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => headersPositionnes }, ...params);
-  };
-
-  const verifieRechercheHomologation = (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => rechercheHomologationEffectuee }, ...params);
-  };
-
-  const verifieAseptisationParametres = (nomsParametres, ...params) => {
-    verifieRequeteChangeEtat({
-      lectureEtat: () => parametresAseptises,
-      etatInitial: [],
-      etatFinal: nomsParametres,
-    }, ...params);
-  };
-
-  const verifieAseptisationListe = (nom, proprietesParametre) => {
-    expect(listesAseptisees.some((liste) => liste?.nom === nom)).to.be(true);
-    const listeRecherche = listesAseptisees.find((liste) => liste.nom === nom);
-    expect(listeRecherche?.proprietes).to.eql(proprietesParametre);
-  };
-
-  const verifieJetonDepose = (reponse, suite) => {
-    const valeurHeader = reponse.headers['set-cookie'][0];
-    expect(valeurHeader).to.match(/^token=.+; path=\/; expires=.+; samesite=strict; httponly$/);
-    suite();
-  };
-
-  const middleware = {
-    aseptise: (...nomsParametres) => (requete, reponse, suite) => {
-      parametresAseptises = nomsParametres;
-      suite();
-    },
-
-    aseptiseListes: (listes) => (requete, reponse, suite) => {
-      listes.forEach(({ nom, proprietes }) => listesAseptisees.push({ nom, proprietes }));
-      suite();
-    },
-
-    authentificationBasique: (requete, reponse, suite) => {
-      authentificationBasiqueMenee = true;
-      suite();
-    },
-
-    positionneHeaders: (requete, reponse, suite) => {
-      headersPositionnes = true;
-      suite();
-    },
-
-    positionneHeadersAvecNonce: (requete, reponse, suite) => {
-      headersAvecNoncePositionnes = true;
-      suite();
-    },
-
-    repousseExpirationCookie: (requete, reponse, suite) => {
-      expirationCookieRepoussee = true;
-      suite();
-    },
-
-    suppressionCookie: (requete, reponse, suite) => {
-      suppressionCookieEffectuee = true;
-      suite();
-    },
-
-    trouveHomologation: (requete, reponse, suite) => {
-      requete.idUtilisateurCourant = idUtilisateurCourant;
-      requete.homologation = new Homologation({ id: '456' });
-      rechercheHomologationEffectuee = true;
-      suite();
-    },
-
-    verificationJWT: (requete, reponse, suite) => {
-      requete.idUtilisateurCourant = idUtilisateurCourant;
-      verificationJWTMenee = true;
-      suite();
-    },
-
-    verificationAcceptationCGU: (requete, reponse, suite) => {
-      requete.idUtilisateurCourant = idUtilisateurCourant;
-      verificationCGUMenee = true;
-      suite();
-    },
-  };
-
   let adaptateurMail;
   let depotDonnees;
   let referentiel;
   let serveur;
 
   beforeEach((done) => {
-    authentificationBasiqueMenee = false;
-    expirationCookieRepoussee = false;
-    headersPositionnes = false;
-    idUtilisateurCourant = undefined;
-    headersAvecNoncePositionnes = false;
-    listesAseptisees = [];
-    parametresAseptises = [];
-    rechercheHomologationEffectuee = false;
-    suppressionCookieEffectuee = false;
-    verificationJWTMenee = false;
-    verificationCGUMenee = false;
-
+    middleware.reinitialise();
     referentiel = Referentiel.creeReferentielVide();
     adaptateurMail = {
       envoieMessageFinalisationInscription: () => Promise.resolve(),
       envoieMessageReinitialisationMotDePasse: () => Promise.resolve(),
     };
+
     DepotDonnees.creeDepotVide()
       .then((depot) => {
         depotDonnees = depot;
@@ -208,7 +66,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand une page est servie', () => {
     it('positionne les headers', (done) => {
-      verifieRequetePositionneHeaders('http://localhost:1234/', done);
+      middleware.verifieRequetePositionneHeaders('http://localhost:1234/', done);
     });
 
     it("n'affiche pas d'information sur la nature du serveur", (done) => {
@@ -221,19 +79,19 @@ describe('Le serveur MSS', () => {
     });
 
     it("repousse l'expiration du cookie", (done) => {
-      verifieRequeteRepousseExpirationCookie('http://localhost:1234/', done);
+      middleware.verifieRequeteRepousseExpirationCookie('http://localhost:1234/', done);
     });
   });
 
   describe('quand requête GET sur `/connexion`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
-      verifieRequeteExigeSuppressionCookie('http://localhost:1234/connexion', done);
+      middleware.verifieRequeteExigeSuppressionCookie('http://localhost:1234/connexion', done);
     });
   });
 
   describe('quand requête GET sur `/reinitialisationMotDePasse`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
-      verifieRequeteExigeSuppressionCookie(
+      middleware.verifieRequeteExigeSuppressionCookie(
         'http://localhost:1234/reinitialisationMotDePasse', done
       );
     });
@@ -261,7 +119,7 @@ describe('Le serveur MSS', () => {
     });
 
     it("aseptise l'identifiant reçu", (done) => {
-      verifieAseptisationParametres(
+      middleware.verifieAseptisationParametres(
         ['idReset'], 'http://localhost:1234/initialisationMotDePasse/999', done
       );
     });
@@ -278,17 +136,17 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/admin/inscription`', () => {
     it("verrouille l'accès par une authentification basique", (done) => {
-      verifieRequeteExigeAuthentificationBasique('http://localhost:1234/admin/inscription', done);
+      middleware.verifieRequeteExigeAuthentificationBasique('http://localhost:1234/admin/inscription', done);
     });
   });
 
   describe('quand requête GET sur `/api/homologations`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeAcceptationCGU('http://localhost:1234/api/homologations', done);
+      middleware.verifieRequeteExigeAcceptationCGU('http://localhost:1234/api/homologations', done);
     });
 
     it("interroge le dépôt de données pour récupérer les homologations de l'utilisateur", (done) => {
-      idUtilisateurCourant = '123';
+      middleware.reinitialise('123');
 
       const homologation = { toJSON: () => ({ id: '456' }) };
       depotDonnees.homologations = (idUtilisateur) => {
@@ -311,65 +169,65 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/espacePersonnel`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeAcceptationCGU('http://localhost:1234/espacePersonnel', done);
+      middleware.verifieRequeteExigeAcceptationCGU('http://localhost:1234/espacePersonnel', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456', done);
+      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/descriptionService`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456/descriptionService', done);
+      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/descriptionService', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/caracteristiquesComplementaires`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456/caracteristiquesComplementaires', done);
+      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/caracteristiquesComplementaires', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/decision`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456/decision', done);
+      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/decision', done);
     });
 
     it('sert la page avec un nonce', (done) => {
-      verifieRequetePositionneHeadersAvecNonce('http://localhost:1234/homologation/456/decision', done);
+      middleware.verifieRequetePositionneHeadersAvecNonce('http://localhost:1234/homologation/456/decision', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/mesures`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456/mesures', done);
+      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/mesures', done);
     });
   });
 
   describe('quand requete GET sur `/homologation/:id/partiesPrenantes`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456/partiesPrenantes', done);
+      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/partiesPrenantes', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/risques`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456/risques', done);
+      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/risques', done);
     });
   });
 
   describe('quand requête GET sur `/homologation/:id/avisExpertCyber`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation('http://localhost:1234/homologation/456/avisExpertCyber', done);
+      middleware.verifieRechercheHomologation('http://localhost:1234/homologation/456/avisExpertCyber', done);
     });
   });
 
   describe('quand requête GET sur `/api/seuilCriticite`', () => {
     it('vérifie que les CGU sont acceptées', (done) => {
-      verifieRequeteExigeAcceptationCGU('http://localhost:1234/api/seuilCriticite', done);
+      middleware.verifieRequeteExigeAcceptationCGU('http://localhost:1234/api/seuilCriticite', done);
     });
 
     it('détermine le seuil de criticité pour le service', (done) => {
@@ -405,13 +263,13 @@ describe('Le serveur MSS', () => {
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeAcceptationCGU(
+      middleware.verifieRequeteExigeAcceptationCGU(
         { method: 'post', url: 'http://localhost:1234/api/homologation' }, done
       );
     });
 
     it('aseptise les paramètres', (done) => {
-      verifieAseptisationParametres(
+      middleware.verifieAseptisationParametres(
         ['nomService'],
         { method: 'post', url: 'http://localhost:1234/api/homologation' },
         done
@@ -421,7 +279,7 @@ describe('Le serveur MSS', () => {
     it("aseptise la liste des points d'accès ainsi que son contenu", (done) => {
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
-          verifieAseptisationListe('pointsAcces', ['description']);
+          middleware.verifieAseptisationListe('pointsAcces', ['description']);
           done();
         })
         .catch(done);
@@ -430,7 +288,7 @@ describe('Le serveur MSS', () => {
     it('aseptise la liste des fonctionnalités spécifiques ainsi que son contenu', (done) => {
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
-          verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          middleware.verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
           done();
         })
         .catch(done);
@@ -439,7 +297,7 @@ describe('Le serveur MSS', () => {
     it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
       axios.post('http://localhost:1234/api/homologation', {})
         .then(() => {
-          verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
+          middleware.verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
           done();
         })
         .catch(done);
@@ -466,7 +324,7 @@ describe('Le serveur MSS', () => {
     });
 
     it("demande au dépôt de données d'enregistrer les nouvelles homologations", (done) => {
-      idUtilisateurCourant = '123';
+      middleware.reinitialise('123');
 
       depotDonnees.nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
         expect(idUtilisateur).to.equal('123');
@@ -504,13 +362,13 @@ describe('Le serveur MSS', () => {
     });
 
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation(
+      middleware.verifieRechercheHomologation(
         { method: 'put', url: 'http://localhost:1234/api/homologation/456' }, done
       );
     });
 
     it('aseptise les paramètres', (done) => {
-      verifieAseptisationParametres(
+      middleware.verifieAseptisationParametres(
         ['nomService'],
         { method: 'put', url: 'http://localhost:1234/api/homologation/456' },
         done
@@ -520,7 +378,7 @@ describe('Le serveur MSS', () => {
     it("aseptise la liste des points d'accès ainsi que son contenu", (done) => {
       axios.put('http://localhost:1234/api/homologation/456', {})
         .then(() => {
-          verifieAseptisationListe('pointsAcces', ['description']);
+          middleware.verifieAseptisationListe('pointsAcces', ['description']);
           done();
         })
         .catch(done);
@@ -529,7 +387,7 @@ describe('Le serveur MSS', () => {
     it('aseptise la liste des fonctionnalités spécifiques ainsi que son contenu', (done) => {
       axios.put('http://localhost:1234/api/homologation/456', {})
         .then(() => {
-          verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
+          middleware.verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
           done();
         })
         .catch(done);
@@ -538,14 +396,14 @@ describe('Le serveur MSS', () => {
     it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
       axios.put('http://localhost:1234/api/homologation/456', {})
         .then(() => {
-          verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
+          middleware.verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
           done();
         })
         .catch(done);
     });
 
     it("demande au dépôt de données de mettre à jour l'homologation", (done) => {
-      idUtilisateurCourant = '123';
+      middleware.reinitialise('123');
 
       depotDonnees.ajouteDescriptionServiceAHomologation = (
         (idUtilisateur, idHomologation, infosGenerales) => {
@@ -586,14 +444,14 @@ describe('Le serveur MSS', () => {
     });
 
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation({
+      middleware.verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
       }, done);
     });
 
     it('aseptise les paramètres entités externes', (done) => {
-      verifieAseptisationParametres(
+      middleware.verifieAseptisationParametres(
         ['entitesExternes.*.nom', 'entitesExternes.*.contact', 'entitesExternes.*.acces'],
         {
           method: 'post',
@@ -677,14 +535,14 @@ describe('Le serveur MSS', () => {
     ));
 
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation({
+      middleware.verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/mesures',
       }, done);
     });
 
     it('aseptise tous les paramètres de la requête', (done) => {
-      verifieAseptisationParametres(
+      middleware.verifieAseptisationParametres(
         [
           '*',
           'mesuresSpecifiques.*.description',
@@ -775,7 +633,7 @@ describe('Le serveur MSS', () => {
     });
 
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation({
+      middleware.verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/partiesPrenantes',
       }, done);
@@ -808,7 +666,7 @@ describe('Le serveur MSS', () => {
     it("aseptise la liste des acteurs de l'homologation ainsi que son contenu", (done) => {
       axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {})
         .then(() => {
-          verifieAseptisationListe('acteursHomologation', ['role', 'nom', 'fonction']);
+          middleware.verifieAseptisationListe('acteursHomologation', ['role', 'nom', 'fonction']);
           done();
         })
         .catch(done);
@@ -845,14 +703,14 @@ describe('Le serveur MSS', () => {
     });
 
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation({
+      middleware.verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/risques',
       }, done);
     });
 
     it('aseptise les paramètres de la requête', (done) => {
-      verifieAseptisationParametres(
+      middleware.verifieAseptisationParametres(
         [
           '*',
           'risquesSpecifiques.*.description',
@@ -948,7 +806,7 @@ describe('Le serveur MSS', () => {
     ));
 
     it("recherche l'homologation correspondante", (done) => {
-      verifieRechercheHomologation({
+      middleware.verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/avisExpertCyber',
       }, done);
@@ -991,7 +849,7 @@ describe('Le serveur MSS', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       const utilisateur = { accepteCGU: () => true };
       depotDonnees.utilisateur = () => new Promise((resolve) => resolve(utilisateur));
-      verifieRequeteExigeJWT('http://localhost:1234/utilisateur/edition', done);
+      middleware.verifieRequeteExigeJWT('http://localhost:1234/utilisateur/edition', done);
     });
   });
 
@@ -1003,7 +861,7 @@ describe('Le serveur MSS', () => {
     ));
 
     it('aseptise les paramètres de la requête', (done) => {
-      verifieAseptisationParametres(
+      middleware.verifieAseptisationParametres(
         ['prenom', 'nom', 'email'],
         { method: 'post', url: 'http://localhost:1234/api/utilisateur' },
         done
@@ -1183,14 +1041,14 @@ describe('Le serveur MSS', () => {
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      verifieRequeteExigeJWT(
+      middleware.verifieRequeteExigeJWT(
         { method: 'put', url: 'http://localhost:1234/api/utilisateur' }, done
       );
     });
 
     describe("lorsque l'utilisateur a déjà accepté les CGU", () => {
       it("met à jour le mot de passe de l'utilisateur", (done) => {
-        idUtilisateurCourant = utilisateur.id;
+        middleware.reinitialise(utilisateur.id);
 
         depotDonnees.metsAJourMotDePasse = (idUtilisateur, motDePasse) => new Promise(
           (resolve) => {
@@ -1260,7 +1118,7 @@ describe('Le serveur MSS', () => {
       });
 
       it("indique que l'utilisateur a coché la case CGU dans le formulaire", (done) => {
-        idUtilisateurCourant = utilisateur.id;
+        middleware.reinitialise(utilisateur.id);
 
         depotDonnees.valideAcceptationCGUPourUtilisateur = (u) => new Promise((resolve) => {
           expect(u.id).to.equal('123');
