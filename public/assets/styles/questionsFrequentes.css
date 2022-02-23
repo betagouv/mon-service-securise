@@ -2,4 +2,6 @@
   margin-top: 0em;
 }
 
-
+.conseils-commentes li {
+  font-weight: bold;
+}
