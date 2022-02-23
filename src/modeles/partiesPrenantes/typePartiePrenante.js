@@ -1,5 +1,10 @@
 const Hebergement = require('./hebergement');
+const DeveloppementFourniture = require('./developpementFourniture');
 
-exports.estHebergement = (partiePrenante) => (
-  partiePrenante.constructor.name === Hebergement.name
+const estType = (Type) => (objet) => (
+  objet.constructor.name === Type.name
 );
+
+exports.estHebergement = estType(Hebergement);
+
+exports.estDeveloppementFourniture = estType(DeveloppementFourniture);
