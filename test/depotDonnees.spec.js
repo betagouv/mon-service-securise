@@ -475,6 +475,24 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it('met à jour les caractéristiques complémentaires avec la structure du service', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{
+        id: '123',
+        descriptionService: { nomService: 'nom' },
+      }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.ajouteStructureDeveloppementAHomologation('123', 'Une structure')
+      .then(() => depot.homologation('123'))
+      .then(({ caracteristiquesComplementaires }) => {
+        expect(caracteristiquesComplementaires.structureDeveloppement).to.equal('Une structure');
+        done();
+      })
+      .catch(done);
+  });
+
   describe('concernant les risques généraux', () => {
     let valideRisque;
 

@@ -386,6 +386,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajoutePartiesPrenantesAHomologation = () => Promise.resolve();
       testeur.depotDonnees().ajouteHebergementAHomologation = () => Promise.resolve();
+      testeur.depotDonnees().ajouteStructureDeveloppementAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -443,6 +444,30 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       })
         .then((reponse) => {
           expect(hebergeurAjoute).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch(done);
+    });
+
+    it("demande au dépôt d'ajouter le développement du service dans les caractéristiques complémentaires", (done) => {
+      let structureDeveloppementAjoutee = false;
+
+      testeur.depotDonnees().ajouteStructureDeveloppementAHomologation = (
+        (idHomologation, nomStructureDeveloppement) => new Promise((resolve) => {
+          expect(idHomologation).to.equal('456');
+          expect(nomStructureDeveloppement).to.equal('Une structure');
+          structureDeveloppementAjoutee = true;
+          resolve();
+        })
+      );
+
+      axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {
+        partiesPrenantes: [{ type: 'DeveloppementFourniture', nom: 'Une structure' }],
+      })
+        .then((reponse) => {
+          expect(structureDeveloppementAjoutee).to.be(true);
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();

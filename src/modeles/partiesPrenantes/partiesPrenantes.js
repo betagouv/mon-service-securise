@@ -1,6 +1,6 @@
 const ElementsFabricables = require('../elementsFabricables');
 const fabriquePartiePrenante = require('./fabriquePartiePrenante');
-const { estHebergement } = require('./typePartiePrenante');
+const { estHebergement, estDeveloppementFourniture } = require('./typePartiePrenante');
 
 class PartiesPrenantes extends ElementsFabricables {
   constructor(donnees = {}) {
@@ -8,8 +8,16 @@ class PartiesPrenantes extends ElementsFabricables {
     super(fabriquePartiePrenante, { items: partiesPrenantes });
   }
 
+  type(estType) {
+    return this.tous().find(estType)?.toJSON();
+  }
+
   hebergement() {
-    return this.tous().find(estHebergement)?.toJSON();
+    return this.type(estHebergement);
+  }
+
+  developpementFourniture() {
+    return this.type(estDeveloppementFourniture);
   }
 }
 
