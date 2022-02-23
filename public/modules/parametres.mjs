@@ -55,7 +55,7 @@ const modifieParametresAvecItemsExtraits = (params, nomListeItems, sourceRegExpP
 };
 
 const modifieParametresGroupementElements = (params, nomListe, nomParametre) => {
-  const donneesFormatees = { [nomListe]: {} };
+  const donneesFormatees = {};
 
   Object.keys(params)
     .filter((param) => !!param.match(new RegExp(`^${nomParametre}\\w*$`)))
@@ -63,21 +63,22 @@ const modifieParametresGroupementElements = (params, nomListe, nomParametre) => 
       if (params[param]) {
         const resultat = param.match(new RegExp(`^${nomParametre}(\\w*)$`));
         const propriete = decapitalise(resultat[1]);
-        donneesFormatees[nomListe][nomParametre] = (
-          donneesFormatees[nomListe][nomParametre] || {}
+        donneesFormatees[nomParametre] = (
+          donneesFormatees[nomParametre] || {}
         );
-        donneesFormatees[nomListe][nomParametre][propriete] = params[param];
+        donneesFormatees[nomParametre][propriete] = params[param];
       }
       delete params[param];
     });
 
-  donneesFormatees[nomListe] = Object.keys(donneesFormatees[nomListe]).map((cle) => (
+  const listeFormatee = Object.keys(donneesFormatees).map((cle) => (
     {
-      ...donneesFormatees[nomListe][cle],
+      ...donneesFormatees[cle],
       type: capitalise(cle),
     }));
 
-  return Object.assign(params, donneesFormatees);
+  params[nomListe] = [...(params[nomListe] || []), ...listeFormatee];
+  return params;
 };
 
 const parametresAvecItemsExtraits = (selecteurForm, nomListeItems, sourceRegExpParamsItem) => {

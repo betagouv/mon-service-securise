@@ -46,6 +46,12 @@ block formulaire
         donnees: homologation.partiesPrenantes.partiesPrenantes.hebergement(),
       })
 
+      +inputPartiePrenante({
+        categorie: 'Développement / fourniture du service',
+        nomParametre: 'developpementFourniture',
+        donnees: {},
+      })
+
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(type = 'module', src = '/statique/homologation/partiesPrenantes.js')
