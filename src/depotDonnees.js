@@ -14,8 +14,6 @@ const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurP
 const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisation');
 const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
-const PartiesPrenantes = require('./modeles/partiesPrenantes');
-const DeveloppementFourniture = require('./modeles/partiesPrenantes/developpementFourniture');
 const RolesResponsabilites = require('./modeles/rolesResponsabilites');
 const Utilisateur = require('./modeles/utilisateur');
 
@@ -122,24 +120,6 @@ const creeDepot = (config = {}) => {
   const ajouteCaracteristiquesAHomologation = (...params) => (
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
   );
-
-  const ajouteDeveloppementFournitureAHomologation = (idHomologation, nomPartiePrenante) => {
-    if (!nomPartiePrenante) {
-      return Promise.resolve();
-    }
-
-    return adaptateurPersistance.homologation(idHomologation)
-      .then((homologationTrouvee) => {
-        const { partiesPrenantes = {} } = homologationTrouvee;
-        partiesPrenantes.partiesPrenantes ||= [];
-        partiesPrenantes.partiesPrenantes = partiesPrenantes.partiesPrenantes
-          .filter((partiePrenante) => partiePrenante.type !== DeveloppementFourniture.name);
-        partiesPrenantes.partiesPrenantes.push(
-          { type: DeveloppementFourniture.name, nom: nomPartiePrenante }
-        );
-        return metsAJourProprieteHomologation('partiesPrenantes', homologationTrouvee, new PartiesPrenantes(partiesPrenantes, referentiel));
-      });
-  };
 
   const ajouteAuxCaracteristiquesComplementaires = (propriete) => (idHomologation, nom) => (
     adaptateurPersistance.homologation(idHomologation)
@@ -303,7 +283,6 @@ const creeDepot = (config = {}) => {
     ajouteAvisExpertCyberAHomologation,
     ajouteCaracteristiquesAHomologation,
     ajouteDescriptionServiceAHomologation,
-    ajouteDeveloppementFournitureAHomologation,
     ajouteHebergementAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,

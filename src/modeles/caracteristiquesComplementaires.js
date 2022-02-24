@@ -5,8 +5,7 @@ const Referentiel = require('../referentiel');
 class CaracteristiquesComplementaires extends InformationsHomologation {
   constructor(donneesCaracteristiques = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
-      proprietesAtomiquesRequises: ['structureDeveloppement'],
-      proprietesAtomiquesFacultatives: ['hebergeur'],
+      proprietesAtomiquesFacultatives: ['hebergeur', 'structureDeveloppement'],
       listesAgregats: { entitesExternes: EntitesExternes },
     });
     this.renseigneProprietes(donneesCaracteristiques);

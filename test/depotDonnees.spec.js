@@ -19,7 +19,6 @@ const MesureGenerale = require('../src/modeles/mesureGenerale');
 const MesureSpecifique = require('../src/modeles/mesureSpecifique');
 const MesuresSpecifiques = require('../src/modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
-const DeveloppementFourniture = require('../src/modeles/partiesPrenantes/developpementFourniture');
 const RisqueGeneral = require('../src/modeles/risqueGeneral');
 const RisqueSpecifique = require('../src/modeles/risqueSpecifique');
 const RisquesSpecifiques = require('../src/modeles/risquesSpecifiques');
@@ -336,84 +335,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(({ caracteristiquesComplementaires }) => {
         expect(caracteristiquesComplementaires.hebergeur).to.equal('Un hébergeur');
         expect(caracteristiquesComplementaires.structureDeveloppement).to.equal('Une structure');
-        done();
-      })
-      .catch(done);
-  });
-
-  it("met à jour les parties prenantes avec l'entité développeur / fournisseur du service", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-        caracteristiquesComplementaires: { structureDeveloppement: 'Une structure' },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.ajouteDeveloppementFournitureAHomologation('123', 'Une structure')
-      .then(() => depot.homologation('123'))
-      .then(({ partiesPrenantes }) => {
-        expect(partiesPrenantes.partiesPrenantes.item(0).nom).to.equal('Une structure');
-        done();
-      })
-      .catch(done);
-  });
-
-  it('ne met pas à jour les parties prenantes avec avec une entité développeur / fournisseur du service vide', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.ajouteDeveloppementFournitureAHomologation('123', '')
-      .then(() => depot.homologation('123'))
-      .then(({ partiesPrenantes }) => {
-        expect(partiesPrenantes.partiesPrenantes.nombre()).to.equal(0);
-        done();
-      })
-      .catch(done);
-  });
-
-  it("conserve les anciennes parties prenantes lors de la mise à jour avec l'entité développeur / fournisseur du service", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-        caracteristiquesComplementaires: { structureDeveloppement: 'Une structure' },
-        partiesPrenantes: { partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }] },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.ajouteDeveloppementFournitureAHomologation('123', 'Une structure')
-      .then(() => depot.homologation('123'))
-      .then(({ partiesPrenantes }) => {
-        expect(partiesPrenantes.partiesPrenantes.tous()).to.have.length(2);
-        expect(partiesPrenantes.partiesPrenantes.tous().find((item) => item instanceof DeveloppementFourniture).nom).to.equal('Une structure');
-        done();
-      })
-      .catch(done);
-  });
-
-  it("écrase l'ancien développeur / fournisseur lors de la mise à jour de celui-ci dans les parties prenantes", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-        caracteristiquesComplementaires: { structureDeveloppement: 'Une ancienne structure' },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.ajouteDeveloppementFournitureAHomologation('123', 'Une structure')
-      .then(() => depot.homologation('123'))
-      .then(({ partiesPrenantes }) => {
-        expect(partiesPrenantes.partiesPrenantes.tous()).to.have.length(1);
-        expect(partiesPrenantes.partiesPrenantes.item(0).nom).to.equal('Une structure');
         done();
       })
       .catch(done);
