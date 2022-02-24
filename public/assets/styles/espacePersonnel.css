@@ -12,14 +12,19 @@
 }
 
 .homologation {
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 
+  min-width: 0;
   height: 12em;
   padding: 2em;
 
   border: solid 1px var(--liseres);
   border-radius: 5px;
   background: white;
+
+  color: var(--texte-fonce);
 }
 
 .homologation:hover {
@@ -38,18 +43,14 @@
   font-weight: bold;
 }
 
-.homologation.existante {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-
-  color: var(--texte-fonce);
-}
-
 .homologation p {
   margin: 0.5em;
 
   font-size: 0.8em;
+}
+
+.contributeurs {
+  display: none;
 }
 
 .pastilles-contributeurs {
