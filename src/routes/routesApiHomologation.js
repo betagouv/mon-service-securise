@@ -90,11 +90,6 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       try {
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
-          .then(() => (
-            depotDonnees.ajouteDeveloppementFournitureAHomologation(
-              requete.params.id, caracteristiques.structureDeveloppement
-            )
-          ))
           .then(() => reponse.send({ idHomologation: requete.homologation.id }));
       } catch {
         reponse.status(422).send('Données invalides');
