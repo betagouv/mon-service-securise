@@ -123,25 +123,28 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .catch(suite);
   });
 
-  routes.post('/autorisation', middleware.verificationAcceptationCGU, (requete, reponse, suite) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
-    const { emailContributeur, idHomologation } = requete.body;
+  routes.post('/autorisation',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('emailContributeur'),
+    (requete, reponse, suite) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const { emailContributeur, idHomologation } = requete.body;
 
-    depotDonnees.autorisationPour(idUtilisateur, idHomologation)
-      .then((a) => {
-        if (!a.permissionAjoutContributeur) {
-          return reponse.status(403).send("Ajout non autorisé d'un contributeur");
-        }
+      depotDonnees.autorisationPour(idUtilisateur, idHomologation)
+        .then((a) => {
+          if (!a.permissionAjoutContributeur) {
+            return reponse.status(403).send("Ajout non autorisé d'un contributeur");
+          }
 
-        return depotDonnees.utilisateurAvecEmail(emailContributeur)
-          .then((u) => depotDonnees.ajouteContributeurAHomologation(u?.id, idHomologation))
-          .then(() => reponse.send(''));
-      })
-      .catch((e) => {
-        if (e instanceof ErreurModele) reponse.status(422).send(e.message);
-        else suite(e);
-      });
-  });
+          return depotDonnees.utilisateurAvecEmail(emailContributeur)
+            .then((u) => depotDonnees.ajouteContributeurAHomologation(u?.id, idHomologation))
+            .then(() => reponse.send(''));
+        })
+        .catch((e) => {
+          if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+          else suite(e);
+        });
+    });
 
   return routes;
 };

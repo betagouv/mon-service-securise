@@ -499,6 +499,14 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.depotDonnees().ajouteContributeurAHomologation = () => Promise.resolve();
     });
 
+    it("aseptise l'email du contributeur", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['emailContributeur'],
+        { method: 'post', url: 'http://localhost:1234/api/autorisation' },
+        done
+      );
+    });
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur.middleware().verifieRequeteExigeAcceptationCGU({
         method: 'post',
