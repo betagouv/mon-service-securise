@@ -559,6 +559,71 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
+    describe("si le contributeur n'existe pas déjà", () => {
+      let contributeurCree;
+
+      beforeEach(() => {
+        let utilisateurInexistant;
+        testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateurInexistant);
+        testeur.adaptateurMail().envoieMessageFinalisationInscription = () => Promise.resolve();
+
+        contributeurCree = {
+          id: '789',
+          email: 'jean.dupont@mail.fr',
+          idResetMotDePasse: 'reset',
+        };
+        testeur.depotDonnees().nouvelUtilisateur = () => Promise.resolve(contributeurCree);
+      });
+
+      it('demande au dépôt de le créer', (done) => {
+        let nouveauContributeurCree = false;
+        testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
+          try {
+            expect(donneesUtilisateur.email).to.equal('jean.dupont@mail.fr');
+            nouveauContributeurCree = true;
+            return Promise.resolve(contributeurCree);
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        axios.post('http://localhost:1234/api/autorisation', {
+          emailContributeur: 'jean.dupont@mail.fr',
+          idHomologation: '123',
+        })
+          .then(() => {
+            expect(nouveauContributeurCree).to.be(true);
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it("envoie un mail d'invitation au contributeur créé", (done) => {
+        let messageEnvoye = false;
+
+        testeur.adaptateurMail().envoieMessageFinalisationInscription = (email, idReset) => {
+          try {
+            expect(email).to.eql('jean.dupont@mail.fr');
+            expect(idReset).to.eql('reset');
+            messageEnvoye = true;
+            return Promise.resolve();
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        axios.post('http://localhost:1234/api/autorisation', {
+          emailContributeur: 'jean.dupont@mail.fr',
+          idHomologation: '123',
+        })
+          .then(() => {
+            expect(messageEnvoye).to.be(true);
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
+    });
+
     it("demande au dépôt de données d'ajouter l'autorisation", (done) => {
       testeur.depotDonnees().ajouteContributeurAHomologation = (
         (idContributeur, idHomologation) => {
