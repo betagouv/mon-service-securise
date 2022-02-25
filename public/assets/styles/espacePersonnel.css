@@ -74,10 +74,16 @@
   margin-left: 0.3em;
   box-sizing: border-box;
 
-  background-image: url(../images/pastille_bleu_anssi.svg);
   background-repeat: no-repeat;
   background-size: contain;
+}
 
+.pastille-contributeur.valide {
+  background-image: url(../images/pastille_bleu_anssi.svg);
+}
+
+.pastille-contributeur.en-attente {
+  background-image: url(../images/pastille_grise.svg);
 }
 
 .pastille-contributeur .initiales {
