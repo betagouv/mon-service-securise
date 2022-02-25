@@ -12,7 +12,24 @@ describe('Un utilisateur', () => {
 
     it('reste robuste en cas de prénom ou de nom absent', () => {
       const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-      expect(utilisateur.initiales()).to.equal('');
+      expect(utilisateur.initiales()).to.equal('…');
+    });
+  });
+
+  describe('sur demande du « prénom / nom »', () => {
+    it('reste robuste si le nom est absent', () => {
+      const utilisateur = new Utilisateur({ prenom: 'Jean', email: 'jean.dupont@mail.fr' });
+      expect(utilisateur.prenomNom()).to.equal('Jean');
+    });
+
+    it('reste robuste si le prénom est absent', () => {
+      const utilisateur = new Utilisateur({ nom: 'Dupont', email: 'jean.dupont@mail.fr' });
+      expect(utilisateur.prenomNom()).to.equal('Dupont');
+    });
+
+    it("retourne l'email si le prénom et le nom sont absents", () => {
+      const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
+      expect(utilisateur.prenomNom()).to.equal('jean.dupont@mail.fr');
     });
   });
 
