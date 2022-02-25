@@ -18,8 +18,12 @@ const $homologationExistante = (donneesHomologation, idUtilisateur) => {
   `);
 
   donneesHomologation.contributeurs.forEach((donneesContributeur) => {
+    const classePastilleContributeur = (
+      `pastille-contributeur ${donneesContributeur.cguAcceptees ? 'valide' : 'en-attente'}`
+    );
+
     $(`.${classePastillesContributeurs}`, $element).append($(`
-<div class="pastille-contributeur" title="${descriptionContributeur(donneesContributeur)}">
+<div class="${classePastilleContributeur}" title="${descriptionContributeur(donneesContributeur)}">
   <div class="initiales">${donneesContributeur.initiales}</div>
 </div>
     `));
