@@ -36,11 +36,11 @@ class Utilisateur extends Base {
       typeof s === 'string' ? s.charAt(0).toUpperCase() : ''
     );
 
-    return `${premiereLettreMajuscule(this.prenom)}${premiereLettreMajuscule(this.nom)}`;
+    return `${premiereLettreMajuscule(this.prenom)}${premiereLettreMajuscule(this.nom)}` || '…';
   }
 
   prenomNom() {
-    return `${this.prenom} ${this.nom}`;
+    return [this.prenom, this.nom].join(' ').trim() || this.email;
   }
 
   toJSON() {
