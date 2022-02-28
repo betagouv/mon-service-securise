@@ -27,6 +27,12 @@ form label, fieldset {
   font-weight: bold;
 }
 
+form label .infos-complementaires {
+  font-weight: normal;
+  font-size: 0.9em;
+  color: var(--texte-moyen);
+}
+
 form input {
   box-sizing: border-box;
   width: 100%;

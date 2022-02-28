@@ -655,7 +655,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
-  it("mets à jour le mot de passe d'un utilisateur", (done) => {
+  it("met à jour le mot de passe d'un utilisateur", (done) => {
     const adaptateurJWT = {};
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{
@@ -676,6 +676,42 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then((utilisateur) => expect(utilisateur.id).to.equal('123'))
       .then(() => done())
       .catch(done);
+  });
+
+  describe('sur demande de mise à jour des informations du profil utilisateur', () => {
+    let depot;
+
+    beforeEach(() => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
+      });
+
+      depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+    });
+
+    it('met les informations à jour', (done) => {
+      depot.metsAJourUtilisateur('123', { prenom: 'Jérôme', nom: 'Dubois' })
+        .then(() => depot.utilisateur('123'))
+        .then((u) => {
+          expect(u.prenom).to.equal('Jérôme');
+          expect(u.nom).to.equal('Dubois');
+          done();
+        })
+        .catch(done);
+    });
+
+    it('ignore les demandes de changement de mot de passe', (done) => {
+      depot.metsAJourMotDePasse('123', 'mdp_12345')
+        .then(() => depot.metsAJourUtilisateur('123', { nom: 'Dubois', motDePasse: 'non pris en compte' }))
+        .then(() => depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345'))
+        .then((u) => {
+          if (!u) throw new Error("Le dépôt aurait dû authentifier l'utilisateur avec le mot de passe inchangé");
+
+          expect(u.id).to.equal('123');
+          done();
+        })
+        .catch(done);
+    });
   });
 
   it("retient qu'un utilisateur accepte les CGU", (done) => {
