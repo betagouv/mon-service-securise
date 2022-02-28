@@ -70,16 +70,20 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
 
   routes.put('/utilisateur', middleware.verificationJWT, (requete, reponse, suite) => {
     const idUtilisateur = requete.idUtilisateurCourant;
+
     depotDonnees.utilisateur(idUtilisateur)
       .then((utilisateur) => {
         const { motDePasse, cguAcceptees } = requete.body;
 
-        if (typeof motDePasse !== 'string' || !motDePasse) {
-          reponse.status(422).send('Le mot de passe ne doit pas être une chaîne vide');
-        } else if (!utilisateur.accepteCGU() && !cguAcceptees) {
+        const metsAJourMotDePasseSiNecessaire = () => {
+          if (typeof motDePasse !== 'string' || !motDePasse) return Promise.resolve(utilisateur);
+          return depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
+        };
+
+        if (!utilisateur.accepteCGU() && !cguAcceptees) {
           reponse.status(422).send('CGU non acceptées');
         } else {
-          depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
+          metsAJourMotDePasseSiNecessaire()
             .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
             .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
             .then((u) => {

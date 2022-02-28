@@ -325,12 +325,18 @@ describe('Le serveur MSS des routes /api/*', () => {
           .catch(done);
       });
 
-      it('retourne une erreur HTTP 422 si le mot de passe est vide', (done) => {
-        testeur.verifieRequeteGenereErreurHTTP(422, 'Le mot de passe ne doit pas être une chaîne vide', {
-          method: 'put',
-          url: 'http://localhost:1234/api/utilisateur',
-          data: { motDePasse: '' },
-        }, done);
+      it("ne met pas à jour le mot de passe s'il est vide", (done) => {
+        let motDePasseMisAJour = false;
+
+        testeur.depotDonnees().metsAJourMotDePasse = () => {
+          motDePasseMisAJour = true;
+          return Promise.resolve();
+        };
+
+        axios.put('http://localhost:1234/api/utilisateur', { motDePasse: '' })
+          .then(() => expect(motDePasseMisAJour).to.be(false))
+          .then(() => done())
+          .catch(done);
       });
     });
 
