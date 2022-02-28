@@ -31,6 +31,10 @@ class ListeItems extends InformationsHomologation {
   tous() {
     return this.items;
   }
+
+  toutes() {
+    return this.tous();
+  }
 }
 
 module.exports = ListeItems;

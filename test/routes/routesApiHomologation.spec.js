@@ -193,7 +193,8 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteCaracteristiquesAHomologation = () => Promise.resolve();
-      testeur.depotDonnees().ajouteHebergementAHomologation = () => Promise.resolve();
+      testeur.depotDonnees()
+        .ajoutePartiesPrenantesSpecifiquesAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -231,6 +232,35 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       })
         .then((reponse) => {
           expect(caracteristiquesAjoutees).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch(done);
+    });
+
+    it("demande au dépôt d'ajouter les entités externes dans les parties prenantes", (done) => {
+      let entitesExternesAjoutees = false;
+
+      testeur.depotDonnees().ajoutePartiesPrenantesSpecifiquesAHomologation = (
+        (idHomologation, entitesExternes) => new Promise((resolve) => {
+          try {
+            expect(idHomologation).to.equal('456');
+            expect(entitesExternes.length).to.equal(1);
+            expect(entitesExternes[0].nom).to.equal('nom');
+            entitesExternesAjoutees = true;
+            resolve();
+          } catch (error) {
+            resolve(error);
+          }
+        })
+      );
+
+      axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
+        entitesExternes: [{ nom: 'nom', acces: 'acces', contact: 'contact' }],
+      })
+        .then((reponse) => {
+          expect(entitesExternesAjoutees).to.be(true);
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
