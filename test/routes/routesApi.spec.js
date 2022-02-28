@@ -271,6 +271,7 @@ describe('Le serveur MSS des routes /api/*', () => {
 
       const depotDonnees = testeur.depotDonnees();
       depotDonnees.metsAJourMotDePasse = () => Promise.resolve(utilisateur);
+      depotDonnees.metsAJourUtilisateur = () => Promise.resolve(utilisateur);
       depotDonnees.utilisateur = () => Promise.resolve(utilisateur);
       depotDonnees.valideAcceptationCGUPourUtilisateur = () => Promise.resolve(utilisateur);
       depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () => Promise.resolve(utilisateur);
@@ -284,21 +285,58 @@ describe('Le serveur MSS des routes /api/*', () => {
 
     describe("lorsque l'utilisateur a déjà accepté les CGU", () => {
       it("met à jour le mot de passe de l'utilisateur", (done) => {
-        testeur.middleware().reinitialise(utilisateur.id);
+        let motDePasseMisAJour = false;
 
+        testeur.middleware().reinitialise(utilisateur.id);
         testeur.depotDonnees().metsAJourMotDePasse = (idUtilisateur, motDePasse) => {
-          expect(idUtilisateur).to.equal('123');
-          expect(motDePasse).to.equal('mdp_12345');
-          return Promise.resolve(utilisateur);
+          try {
+            expect(idUtilisateur).to.equal('123');
+            expect(motDePasse).to.equal('mdp_12345');
+            motDePasseMisAJour = true;
+            return Promise.resolve(utilisateur);
+          } catch (e) {
+            return Promise.reject(e);
+          }
         };
 
         axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
           .then((reponse) => {
+            expect(motDePasseMisAJour).to.be(true);
             expect(reponse.status).to.equal(200);
             expect(reponse.data).to.eql({ idUtilisateur: '123' });
             done();
           })
-          .catch(done);
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it("met à jour les autres informations de l'utilisateur", (done) => {
+        let infosMisesAJour = false;
+
+        testeur.middleware().reinitialise(utilisateur.id);
+
+        testeur.depotDonnees().metsAJourUtilisateur = (id, donnees) => {
+          try {
+            expect(id).to.equal('123');
+            expect(donnees.prenom).to.equal('Jean');
+            expect(donnees.nom).to.equal('Dupont');
+            infosMisesAJour = true;
+            return Promise.resolve(utilisateur);
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        axios.put('http://localhost:1234/api/utilisateur', {
+          prenom: 'Jean',
+          nom: 'Dupont',
+        })
+          .then((reponse) => {
+            expect(infosMisesAJour).to.be(true);
+            expect(reponse.status).to.equal(200);
+            expect(reponse.data).to.eql({ idUtilisateur: '123' });
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
       });
 
       it('pose un nouveau cookie', (done) => {

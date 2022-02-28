@@ -12,7 +12,7 @@ $(() => {
   const creeMenu = () => $(`
 <div class="menu">
   <a href="/espacePersonnel">Mon espace personnel</a>
-  <a href="/utilisateur/edition">Changer mon mot de passe</a>
+  <a href="/utilisateur/edition">Mettre à jour mon profil</a>
   <a href="/connexion">Me déconnecter</a>
 </div>
   `);

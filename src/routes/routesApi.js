@@ -73,7 +73,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
 
     depotDonnees.utilisateur(idUtilisateur)
       .then((utilisateur) => {
-        const { motDePasse, cguAcceptees } = requete.body;
+        const { prenom, nom, motDePasse, cguAcceptees } = requete.body;
 
         const metsAJourMotDePasseSiNecessaire = () => {
           if (typeof motDePasse !== 'string' || !motDePasse) return Promise.resolve(utilisateur);
@@ -84,6 +84,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
           reponse.status(422).send('CGU non acceptées');
         } else {
           metsAJourMotDePasseSiNecessaire()
+            .then((u) => depotDonnees.metsAJourUtilisateur(u.id, { prenom, nom }))
             .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
             .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
             .then((u) => {

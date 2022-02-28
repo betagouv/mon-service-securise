@@ -239,6 +239,12 @@ const creeDepot = (config = {}) => {
       .then(() => utilisateur(idUtilisateur))
   );
 
+  const metsAJourUtilisateur = (id, donnees) => {
+    delete donnees.motDePasse;
+    return adaptateurPersistance.metsAJourUtilisateur(id, donnees)
+      .then(() => utilisateur(id));
+  };
+
   const reinitialiseMotDePasse = (email) => adaptateurPersistance.utilisateurAvecEmail(email)
     .then((u) => {
       if (!u) return undefined;
@@ -338,6 +344,7 @@ const creeDepot = (config = {}) => {
     homologationExiste,
     homologations,
     metsAJourMotDePasse,
+    metsAJourUtilisateur,
     nouvelleHomologation,
     nouvelUtilisateur,
     reinitialiseMotDePasse,

@@ -2,11 +2,23 @@ extends ../homologation/formulaire
 
 block formulaire
   form.utilisateur#edition
-    h1 Changez votre mot de passe
+    h1 Mon profil
 
     section
-      label Nouveau mot de passe
+      label Prénom
         br
+        input(id='prenom', name = 'prenom', value = utilisateur.prenom, placeholder = 'ex. Jean')
+      label Nom
+        br
+        input(id='nom', name = 'nom', value = utilisateur.nom, placeholder = 'ex. Dupont')
+
+      p= `email : ${utilisateur.email}`
+
+    section
+      h2 Changer de mot de passe
+
+      label Nouveau mot de passe
+        .infos-complementaires (Si vous laissez ce champ vide, le mot de passe ne sera pas modifié.)
         input(id='mot-de-passe', name = 'motDePasse', type='password')
 
       if !utilisateur.accepteCGU()
