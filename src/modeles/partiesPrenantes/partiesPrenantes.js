@@ -3,6 +3,7 @@ const ElementsFabricables = require('../elementsFabricables');
 const Hebergement = require('./hebergement');
 const MaintenanceService = require('./maintenanceService');
 const PartiePrenanteSpecifique = require('./partiePrenanteSpecifique');
+const SecuriteService = require('./securiteService');
 const fabriquePartiePrenante = require('./fabriquePartiePrenante');
 
 class PartiesPrenantes extends ElementsFabricables {
@@ -25,6 +26,10 @@ class PartiesPrenantes extends ElementsFabricables {
 
   maintenanceService() {
     return this.type(MaintenanceService);
+  }
+
+  securiteService() {
+    return this.type(SecuriteService);
   }
 
   specifiques() {
