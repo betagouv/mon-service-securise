@@ -52,6 +52,12 @@ block formulaire
         donnees: homologation.partiesPrenantes.partiesPrenantes.developpementFourniture(),
       })
 
+      +inputPartiePrenante({
+        categorie: 'Maintenance du service',
+        nomParametre: 'maintenanceService',
+        donnees: homologation.partiesPrenantes.partiesPrenantes.maintenanceService(),
+      })
+
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(type = 'module', src = '/statique/homologation/partiesPrenantes.js')
