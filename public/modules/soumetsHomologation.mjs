@@ -1,11 +1,6 @@
 import parametres, { modifieParametresAvecItemsExtraits } from './parametres.mjs';
 import listesAvecItemsExtraits from '../modules/listesAvecItemsExtraits.mjs';
 
-const fermeModale = () => {
-  $('.rideau').css('display', '');
-  $('body').css('overflow', '');
-};
-
 const afficheModaleSeuilCritique = () => {
   $('body').css('overflow', 'hidden');
   $('.rideau').css('display', 'flex');
@@ -19,13 +14,6 @@ const tousLesParametres = (selecteurFormulaire) => {
     )
   );
   return params;
-};
-
-const initialiseComportementModale = () => {
-  $('.fermeture-modale').click((eFermeture) => {
-    eFermeture.stopPropagation();
-    fermeModale();
-  });
 };
 
 const soumetsHomologation = (url, selecteurFormulaire) => {
@@ -43,8 +31,6 @@ const soumetsHomologation = (url, selecteurFormulaire) => {
 };
 
 const initialiseComportementFormulaire = (selecteurFormulaire, selecteurBouton) => {
-  initialiseComportementModale();
-
   const $bouton = $(selecteurBouton);
   const identifiantHomologation = $bouton.attr('identifiant');
   const url = identifiantHomologation
