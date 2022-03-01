@@ -10,6 +10,10 @@ class PartiePrenante extends InformationsHomologation {
     this.renseigneProprietes(donnees);
   }
 
+  estDeType(Type) {
+    return this.constructor.name === Type?.name;
+  }
+
   toJSON() {
     return {
       ...super.toJSON(),

@@ -6,6 +6,8 @@ const InformationsHomologation = require('../../../src/modeles/informationsHomol
 const elle = it;
 
 describe('Une partie prenante', () => {
+  const LaPartiePrenante = class LaPartiePrenante extends PartiePrenante {};
+
   elle('est complète quand elle a un nom', () => {
     const partiePrenante = new PartiePrenante({ nom: 'hébergeur' });
 
@@ -34,5 +36,24 @@ describe('Une partie prenante', () => {
     const partiePrenante = new PartiePrenante({ pointContact: 'point de contact' });
 
     expect(partiePrenante.pointContact).to.equal('point de contact');
+  });
+
+  elle('indique si son type est le même que celui demandé', () => {
+    const partiePrenante = new LaPartiePrenante();
+
+    expect(partiePrenante.estDeType(LaPartiePrenante)).to.be(true);
+  });
+
+  elle("indique si son type n'est pas le même que celui demandé", () => {
+    const partiePrenante = new PartiePrenante();
+
+    expect(partiePrenante.estDeType(LaPartiePrenante)).to.be(false);
+  });
+
+  elle('reste robuste face à une demande avec un type non valide', () => {
+    const LaPartiePrenanteNonValide = null;
+    const partiePrenante = new PartiePrenante();
+
+    expect(partiePrenante.estDeType(LaPartiePrenanteNonValide)).to.be(false);
   });
 });
