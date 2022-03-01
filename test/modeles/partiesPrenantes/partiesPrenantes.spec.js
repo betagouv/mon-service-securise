@@ -37,6 +37,14 @@ describe('Les parties prenantes', () => {
     expect(partiesPrenantes.maintenanceService()).to.eql({ type: 'MaintenanceService', nom: 'mainteneur' });
   });
 
+  elles('savent transmettre la sécurité du service', () => {
+    const partiesPrenantes = new PartiesPrenantes(
+      { partiesPrenantes: [{ type: 'SecuriteService', nom: 'Structure supervision' }] }
+    );
+
+    expect(partiesPrenantes.securiteService()).to.eql({ type: 'SecuriteService', nom: 'Structure supervision' });
+  });
+
   elles('savent transmettre les parties prenantes spécifiques', () => {
     const partiesPrenantes = new PartiesPrenantes(
       { partiesPrenantes: [
