@@ -13,7 +13,7 @@ $(() => {
     modifieParametresAvecItemsExtraits(
       params, 'acteursHomologation', '^(role|nom|fonction)-acteur-homologation-'
     );
-    ['hebergement', 'developpementFourniture'].forEach(
+    ['developpementFourniture', 'hebergement', 'maintenanceService'].forEach(
       (identifiant) => modifieParametresGroupementElements(params, 'partiesPrenantes', identifiant)
     );
     return params;
