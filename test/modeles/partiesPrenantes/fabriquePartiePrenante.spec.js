@@ -4,6 +4,7 @@ const { ErreurTypeInconnu } = require('../../../src/erreurs');
 const fabriquePartiePrenante = require('../../../src/modeles/partiesPrenantes/fabriquePartiePrenante');
 const DeveloppementFourniture = require('../../../src/modeles/partiesPrenantes/developpementFourniture');
 const Hebergement = require('../../../src/modeles/partiesPrenantes/hebergement');
+const MaintenanceService = require('../../../src/modeles/partiesPrenantes/maintenanceService');
 const PartiePrenanteSpecifique = require('../../../src/modeles/partiesPrenantes/partiePrenanteSpecifique');
 
 describe('La fabrique de partie prenante', () => {
@@ -15,6 +16,11 @@ describe('La fabrique de partie prenante', () => {
   it('fabrique des développements / fournitures de service', () => {
     const developpementFourniture = fabriquePartiePrenante.cree({ type: 'DeveloppementFourniture', nom: 'Mss' });
     expect(developpementFourniture).to.be.a(DeveloppementFourniture);
+  });
+
+  it('fabrique des maintenances du service', () => {
+    const maintenanceService = fabriquePartiePrenante.cree({ type: 'MaintenanceService', nom: 'Mss' });
+    expect(maintenanceService).to.be.a(MaintenanceService);
   });
 
   it('fabrique des parties prenantes spécifiques', () => {
