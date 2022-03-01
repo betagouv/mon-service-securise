@@ -1,11 +1,6 @@
 import parametres, { modifieParametresAvecItemsExtraits } from './parametres.mjs';
 import listesAvecItemsExtraits from '../modules/listesAvecItemsExtraits.mjs';
 
-const afficheModaleSeuilCritique = () => {
-  $('body').css('overflow', 'hidden');
-  $('.rideau').css('display', 'flex');
-};
-
 const tousLesParametres = (selecteurFormulaire) => {
   const params = parametres(selecteurFormulaire);
   listesAvecItemsExtraits.forEach(
@@ -22,7 +17,7 @@ const soumetsHomologation = (url, selecteurFormulaire) => {
 
   axios.get('/api/seuilCriticite', { params })
     .then(({ data: { seuilCriticite } }) => {
-      if (seuilCriticite === 'critique') afficheModaleSeuilCritique();
+      if (seuilCriticite === 'critique') $('*').trigger('afficheModaleDescriptionService');
       else {
         axios(url)
           .then(({ data: { idHomologation } }) => (window.location = `/homologation/${idHomologation}`));
