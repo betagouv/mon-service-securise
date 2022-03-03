@@ -1,13 +1,41 @@
 .saisie-role-responsabilite {
-    border: 1px solid var(--liseres);
-    border-radius: 3px;
-    padding: 1em;
-    margin-top: 1em;
+  border: 1px solid var(--liseres);
+  border-radius: 3px;
+  padding: 1em;
+  margin-top: 1em;
 }
 
 .saisie-role-responsabilite label {
-    display: inline-block;
-    margin: 0;
-    margin-left: 0.1em;
-    font-weight: normal;
+  display: inline-block;
+  margin: 0;
+  margin-left: 0.1em;
+  font-weight: normal;
+}
+
+#onglets-liens {
+  display: flex;
+  column-gap: 1em;
+
+  margin-bottom: 2em;
+  padding: 0.5em 1em;
+
+  border: solid 1px var(--liseres);
+  border-radius: 5px;
+}
+  
+#onglets-liens > a {
+  padding: 0.5em 1.3em;
+  width: 100%;
+  text-align: center;
+}
+
+#onglets-liens > a.actif {
+  background: var(--bleu-mise-en-avant-20-pc);
+  border-radius: 3px;
+
+  font-weight: bold;
+}
+
+#onglets-liens ~ .onglet.invisible {
+  display: none;
 }

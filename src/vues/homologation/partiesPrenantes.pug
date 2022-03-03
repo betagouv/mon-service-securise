@@ -11,58 +11,59 @@ block formulaire
     h1.action Parties prenantes
 
     section
-      h3 Acteurs de l'homologation
+      nav#onglets-liens
+        a.actif#onglet-acteurs-homologations Acteurs de l'homologation
+        a#onglet-les-parties-prenantes Parties prenantes
 
-      +inputIdentite({
-        role: "Autorité d'homologation",
-        nomParametre: 'autoriteHomologation',
-      })
+      .onglet#acteurs-homologations
+        +inputIdentite({
+          role: "Autorité d'homologation",
+          nomParametre: 'autoriteHomologation',
+        })
 
-      +inputIdentite({
-        role: 'Spécialiste cybersécurité',
-        nomParametre: 'expertCybersecurite',
-      })
+        +inputIdentite({
+          role: 'Spécialiste cybersécurité',
+          nomParametre: 'expertCybersecurite',
+        })
 
-      +inputIdentite({
-        role: 'Délégué(e) à la protection des données à caractère personnel',
-        nomParametre: 'delegueProtectionDonnees',
-      })
+        +inputIdentite({
+          role: 'Délégué(e) à la protection des données à caractère personnel',
+          nomParametre: 'delegueProtectionDonnees',
+        })
 
-      +inputIdentite({
-        role: 'Responsable métier du projet',
-        nomParametre: 'piloteProjet',
-      })
+        +inputIdentite({
+          role: 'Responsable métier du projet',
+          nomParametre: 'piloteProjet',
+        })
 
-      +elementsAjoutablesActeurHomologation({
-        donnees: homologation.partiesPrenantes.acteursHomologation.toJSON(),
-      })
+        +elementsAjoutablesActeurHomologation({
+          donnees: homologation.partiesPrenantes.acteursHomologation.toJSON(),
+        })
 
-    section
-      h3 Parties prenantes
+      .onglet#les-parties-prenantes
+        +inputPartiePrenante({
+          categorie: 'Hébergement du service',
+          nomParametre: 'hebergement',
+          donnees: homologation.partiesPrenantes.partiesPrenantes.hebergement(),
+        })
 
-      +inputPartiePrenante({
-        categorie: 'Hébergement du service',
-        nomParametre: 'hebergement',
-        donnees: homologation.partiesPrenantes.partiesPrenantes.hebergement(),
-      })
+        +inputPartiePrenante({
+          categorie: 'Développement / fourniture du service',
+          nomParametre: 'developpementFourniture',
+          donnees: homologation.partiesPrenantes.partiesPrenantes.developpementFourniture(),
+        })
 
-      +inputPartiePrenante({
-        categorie: 'Développement / fourniture du service',
-        nomParametre: 'developpementFourniture',
-        donnees: homologation.partiesPrenantes.partiesPrenantes.developpementFourniture(),
-      })
+        +inputPartiePrenante({
+          categorie: 'Maintenance du service',
+          nomParametre: 'maintenanceService',
+          donnees: homologation.partiesPrenantes.partiesPrenantes.maintenanceService(),
+        })
 
-      +inputPartiePrenante({
-        categorie: 'Maintenance du service',
-        nomParametre: 'maintenanceService',
-        donnees: homologation.partiesPrenantes.partiesPrenantes.maintenanceService(),
-      })
-
-      +inputPartiePrenante({
-        categorie: 'Gestion de la sécurité du service',
-        nomParametre: 'securiteService',
-        donnees: homologation.partiesPrenantes.partiesPrenantes.securiteService(),
-      })
+        +inputPartiePrenante({
+          categorie: 'Gestion de la sécurité du service',
+          nomParametre: 'securiteService',
+          donnees: homologation.partiesPrenantes.partiesPrenantes.securiteService(),
+        })
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
