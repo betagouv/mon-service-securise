@@ -153,14 +153,12 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     ]),
     (requete, reponse) => {
       const partiesPrenantes = new PartiesPrenantes(requete.body);
-      const nomHebergement = partiesPrenantes.partiesPrenantes?.hebergement()?.nom;
       const nomStructureDeveloppement = partiesPrenantes
         .partiesPrenantes?.developpementFourniture()?.nom;
       const idHomologation = requete.homologation.id;
-      depotDonnees.ajouteHebergementAHomologation(requete.homologation.id, nomHebergement)
-        .then(() => depotDonnees.ajouteStructureDeveloppementAHomologation(
-          requete.homologation.id, nomStructureDeveloppement
-        ))
+      depotDonnees.ajouteStructureDeveloppementAHomologation(
+        requete.homologation.id, nomStructureDeveloppement
+      )
         .then(() => depotDonnees.ajoutePartiesPrenantesAHomologation(
           idHomologation, partiesPrenantes
         ))
