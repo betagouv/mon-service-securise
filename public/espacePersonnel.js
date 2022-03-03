@@ -1,5 +1,6 @@
 import { $homologations, $modaleNouveauContributeur } from './modules/elementsDom/homologations.js';
 import { brancheModales } from './modules/interactions/modale.mjs';
+import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
 
 $(() => {
   const peupleHomologationsDans = (placeholder, donneesHomologations, idUtilisateur) => {
@@ -10,6 +11,7 @@ $(() => {
 
     $('body').append($modaleNouveauContributeur());
     brancheModales('.ajout-contributeur', 'body');
+    brancheComportementSaisieContributeur('.ajout-contributeur');
   };
 
   axios.get('/api/utilisateurCourant')
