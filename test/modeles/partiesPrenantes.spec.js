@@ -136,6 +136,20 @@ describe("L'ensemble des parties prenantes", () => {
     expect(partiesPrenantes.descriptionDelegueProtectionDonnees()).to.equal('Jean Dupont (DSI)');
   });
 
+  describe("sur une demande de description de l'hébergeur", () => {
+    it("présente le nom de l'hébergement", () => {
+      const partiesPrenantes = new PartiesPrenantes({ partiesPrenantes: [{ type: 'Hebergement', nom: 'Un hébergeur' }] });
+
+      expect(partiesPrenantes.descriptionHebergeur()).to.equal('Un hébergeur');
+    });
+
+    it("retourne une valeur par défaut lorsque l'hébergement n'est pas présent", () => {
+      const partiesPrenantes = new PartiesPrenantes();
+
+      expect(partiesPrenantes.descriptionHebergeur()).to.equal('Hébergeur non renseigné');
+    });
+  });
+
   it('détermine le statut de saisie', () => {
     const partiesPrenantes = new PartiesPrenantes();
     expect(partiesPrenantes.statutSaisie()).to.equal(InformationsHomologation.A_SAISIR);

@@ -73,7 +73,6 @@ describe('Une homologation', () => {
       id: '123',
       caracteristiquesComplementaires: {
         structureDeveloppement: 'Une structure',
-        hebergeur: 'Un hébergeur',
       },
       descriptionService: {
         localisationDonnees: 'france',
@@ -83,7 +82,6 @@ describe('Une homologation', () => {
 
     expect(homologation.presentation()).to.equal('Une présentation');
     expect(homologation.structureDeveloppement()).to.equal('Une structure');
-    expect(homologation.hebergeur()).to.equal('Un hébergeur');
     expect(homologation.localisationDonnees()).to.equal('Quelque part en France');
   });
 
@@ -96,6 +94,9 @@ describe('Une homologation', () => {
         delegueProtectionDonnees: 'Rémi Fassol',
         piloteProjet: 'Sylvie Martin',
         expertCybersecurite: 'Anna Dubreuil',
+        partiesPrenantes: [
+          { type: 'Hebergement', nom: 'Hébergeur' },
+        ],
       },
     });
 
@@ -104,6 +105,7 @@ describe('Une homologation', () => {
     expect(homologation.delegueProtectionDonnees()).to.equal('Rémi Fassol');
     expect(homologation.piloteProjet()).to.equal('Sylvie Martin');
     expect(homologation.expertCybersecurite()).to.equal('Anna Dubreuil');
+    expect(homologation.hebergeur()).to.equal('Hébergeur');
   });
 
   it('connaît ses risques spécifiques', () => {

@@ -81,7 +81,7 @@ class Homologation {
 
   fonctionAutoriteHomologation() { return this.partiesPrenantes.fonctionAutoriteHomologation; }
 
-  hebergeur() { return this.caracteristiquesComplementaires.descriptionHebergeur(); }
+  hebergeur() { return this.partiesPrenantes.descriptionHebergeur(); }
 
   localisationDonnees() {
     return this.descriptionService.descriptionLocalisationDonnees();
