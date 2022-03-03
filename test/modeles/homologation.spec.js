@@ -40,7 +40,7 @@ describe('Une homologation', () => {
     expect(homologation.toJSON()).to.eql({
       id: '123',
       nomService: 'Super Service',
-      contributeurs: [{ id: '999', prenomNom: 'Jean Dupont', initiales: 'JD' }],
+      contributeurs: [{ id: '999', cguAcceptees: false, prenomNom: 'Jean Dupont', initiales: 'JD' }],
     });
   });
 
