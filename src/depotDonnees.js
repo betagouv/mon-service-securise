@@ -125,11 +125,11 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
   );
 
-  const ajouteAuxCaracteristiquesComplementaires = (propriete) => (idHomologation, nom) => (
+  const ajouteStructureDeveloppementAHomologation = (idHomologation, nom) => (
     adaptateurPersistance.homologation(idHomologation)
       .then((homologationTrouvee) => {
         const { caracteristiquesComplementaires = {} } = homologationTrouvee;
-        caracteristiquesComplementaires[propriete] = nom;
+        caracteristiquesComplementaires.structureDeveloppement = nom;
         return metsAJourProprieteHomologation(
           'caracteristiquesComplementaires',
           homologationTrouvee,
@@ -137,10 +137,6 @@ const creeDepot = (config = {}) => {
         );
       })
   );
-
-  const ajouteStructureDeveloppementAHomologation = ajouteAuxCaracteristiquesComplementaires('structureDeveloppement');
-
-  const ajouteHebergementAHomologation = ajouteAuxCaracteristiquesComplementaires('hebergeur');
 
   const ajoutePartiesPrenantesAHomologation = (...params) => {
     const [idHomologation, partiesPrenantes] = params;
@@ -342,7 +338,6 @@ const creeDepot = (config = {}) => {
     ajouteCaracteristiquesAHomologation,
     ajouteContributeurAHomologation,
     ajouteDescriptionServiceAHomologation,
-    ajouteHebergementAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
     ajoutePartiesPrenantesSpecifiquesAHomologation,

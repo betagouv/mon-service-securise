@@ -325,7 +325,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
       homologations: [{
         id: '123',
         descriptionService: { nomService: 'nom' },
-        caracteristiquesComplementaires: { hebergeur: 'Un hébergeur' },
+        caracteristiquesComplementaires: { entitesExternes: [] },
       }],
     });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
@@ -336,7 +336,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
     depot.ajouteCaracteristiquesAHomologation('123', caracteristiques)
       .then(() => depot.homologation('123'))
       .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.hebergeur).to.equal('Un hébergeur');
         expect(caracteristiquesComplementaires.structureDeveloppement).to.equal('Une structure');
         done();
       })
@@ -456,24 +455,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(({ rolesResponsabilites }) => {
         expect(rolesResponsabilites).to.be.ok();
         expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
-        done();
-      })
-      .catch(done);
-  });
-
-  it("met à jour les caractéristiques complémentaires avec l'hébergeur", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.ajouteHebergementAHomologation('123', 'Un hébergeur')
-      .then(() => depot.homologation('123'))
-      .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.hebergeur).to.equal('Un hébergeur');
         done();
       })
       .catch(done);
