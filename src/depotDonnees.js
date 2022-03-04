@@ -19,6 +19,7 @@ const RolesResponsabilites = require('./modeles/rolesResponsabilites');
 const Utilisateur = require('./modeles/utilisateur');
 const PartiePrenanteSpecifique = require('./modeles/partiesPrenantes/partiePrenanteSpecifique');
 const PartiesPrenantes = require('./modeles/partiesPrenantes');
+const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 
 const creeDepot = (config = {}) => {
   const {
@@ -122,6 +123,19 @@ const creeDepot = (config = {}) => {
 
   const ajouteCaracteristiquesAHomologation = (...params) => (
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
+  );
+
+  const ajouteEntitesExternesAHomologation = (idHomologation, donnees) => (
+    adaptateurPersistance.homologation(idHomologation)
+      .then((homologationTrouvee) => {
+        const { caracteristiquesComplementaires = {} } = homologationTrouvee;
+        caracteristiquesComplementaires.entitesExternes = donnees;
+        return metsAJourProprieteHomologation(
+          'caracteristiquesComplementaires',
+          homologationTrouvee,
+          new CaracteristiquesComplementaires(caracteristiquesComplementaires, referentiel)
+        );
+      })
   );
 
   const ajoutePartiesPrenantesAHomologation = (...params) => {
@@ -332,6 +346,7 @@ const creeDepot = (config = {}) => {
     ajouteCaracteristiquesAHomologation,
     ajouteContributeurAHomologation,
     ajouteDescriptionServiceAHomologation,
+    ajouteEntitesExternesAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajoutePartiesPrenantesAHomologation,
     ajoutePartiesPrenantesSpecifiquesAHomologation,

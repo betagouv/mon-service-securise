@@ -150,6 +150,16 @@ describe("L'ensemble des parties prenantes", () => {
     });
   });
 
+  it('présente les entités externes', () => {
+    const partiesPrenantes = new PartiesPrenantes({
+      partiesPrenantes: [
+        { type: 'PartiePrenanteSpecifique', nom: 'Un nom', natureAcces: 'un accès', pointContact: 'un contact' },
+      ],
+    });
+
+    expect(partiesPrenantes.entitesExternes()).to.eql([{ nom: 'Un nom', acces: 'un accès', contact: 'un contact' }]);
+  });
+
   it('détermine le statut de saisie', () => {
     const partiesPrenantes = new PartiesPrenantes();
     expect(partiesPrenantes.statutSaisie()).to.equal(InformationsHomologation.A_SAISIR);
