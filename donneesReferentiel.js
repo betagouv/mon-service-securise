@@ -4,11 +4,10 @@ const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)}
 module.exports = {
   actionsSaisie: {
     descriptionService: { position: 0, description: 'Description du service' },
-    caracteristiquesComplementaires: { position: 1, description: 'Caractéristiques complémentaires' },
-    partiesPrenantes: { position: 2, description: 'Parties prenantes' },
-    risques: { position: 3, description: 'Risques de sécurité' },
-    mesures: { position: 4, description: 'Mesures de sécurité' },
-    avisExpertCyber: { position: 5, description: 'Avis sur le dossier' },
+    partiesPrenantes: { position: 1, description: 'Parties prenantes' },
+    risques: { position: 2, description: 'Risques de sécurité' },
+    mesures: { position: 3, description: 'Mesures de sécurité' },
+    avisExpertCyber: { position: 4, description: 'Avis sur le dossier' },
   },
 
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
