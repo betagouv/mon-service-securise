@@ -83,19 +83,10 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   });
 
   routes.post('/:id/caracteristiquesComplementaires', middleware.trouveHomologation,
-    middleware.aseptise('entitesExternes.*.nom', 'entitesExternes.*.contact', 'entitesExternes.*.acces'),
     (requete, reponse) => {
-      requete.body.entitesExternes &&= requete.body.entitesExternes.filter(
-        (e) => e && (e.nom || e.contact || e.acces)
-      );
       try {
         const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
         depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
-          .then(() => (
-            depotDonnees.ajoutePartiesPrenantesSpecifiquesAHomologation(
-              requete.params.id, caracteristiques.entitesExternes.toutes()
-            )
-          ))
           .then(() => reponse.send({ idHomologation: requete.homologation.id }));
       } catch {
         reponse.status(422).send('Données invalides');
