@@ -1,5 +1,5 @@
 import parametres, { modifieParametresAvecItemsExtraits } from './parametres.mjs';
-import listesAvecItemsExtraits from '../modules/listesAvecItemsExtraits.mjs';
+import listesAvecItemsExtraits from './listesAvecItemsExtraits.mjs';
 
 const tousLesParametres = (selecteurFormulaire) => {
   const params = parametres(selecteurFormulaire);

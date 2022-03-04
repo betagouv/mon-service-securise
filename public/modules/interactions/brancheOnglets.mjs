@@ -7,7 +7,7 @@ const identifiantOngletActif = (selecteurLienActif) => $(selecteurLienActif).pro
 
 const brancheOnglets = (selecteurLiens) => {
   $(SELECTEUR_ONGLETS).addClass(CLASSE_ONGLET_INVISIBLE);
-  
+
   const selecteurLienActif = `${selecteurLiens}.${CLASSE_LIEN_ACTIF}`;
   $(`#${identifiantOngletActif(selecteurLienActif)}`).removeClass(CLASSE_ONGLET_INVISIBLE);
 
