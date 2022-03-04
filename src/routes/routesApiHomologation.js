@@ -10,6 +10,7 @@ const DonneesSensiblesSpecifiques = require('../modeles/donneesSensiblesSpecifiq
 const MesureGenerale = require('../modeles/mesureGenerale');
 const MesuresSpecifiques = require('../modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('../modeles/partiesPrenantes');
+const PartiesPrenantesHomologation = require('../modeles/partiesPrenantes/partiesPrenantes');
 const PointsAcces = require('../modeles/pointsAcces');
 const RisqueGeneral = require('../modeles/risqueGeneral');
 const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
@@ -150,11 +151,17 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     middleware.trouveHomologation,
     middleware.aseptiseListes([
       { nom: 'acteursHomologation', proprietes: ActeursHomologation.proprietesItem() },
+      { nom: 'partiesPrenantes', proprietes: PartiesPrenantesHomologation.proprietesItem() },
     ]),
     (requete, reponse) => {
       const partiesPrenantes = new PartiesPrenantes(requete.body);
       const idHomologation = requete.homologation.id;
-      depotDonnees.ajoutePartiesPrenantesAHomologation(idHomologation, partiesPrenantes)
+      depotDonnees.ajouteEntitesExternesAHomologation(
+        idHomologation, partiesPrenantes.entitesExternes()
+      )
+        .then(() => depotDonnees.ajoutePartiesPrenantesAHomologation(
+          idHomologation, partiesPrenantes
+        ))
         .then(() => reponse.send({ idHomologation }));
     });
 

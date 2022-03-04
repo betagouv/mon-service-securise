@@ -56,4 +56,8 @@ describe('Les parties prenantes', () => {
     expect(partiesPrenantes.specifiques()).to.have.length(2);
     expect(partiesPrenantes.specifiques()[0]).to.eql({ type: 'PartiePrenanteSpecifique', nom: 'une partie' });
   });
+
+  elles('donnent la liste des propriétés de la partie prenante', () => {
+    expect(PartiesPrenantes.proprietesItem()).to.eql(['nom', 'natureAcces', 'pointContact']);
+  });
 });

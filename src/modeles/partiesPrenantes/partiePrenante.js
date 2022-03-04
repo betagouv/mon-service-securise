@@ -20,6 +20,10 @@ class PartiePrenante extends InformationsHomologation {
       type: this.constructor.name,
     };
   }
+
+  static proprietes() {
+    return ['nom', 'natureAcces', 'pointContact'];
+  }
 }
 
 module.exports = PartiePrenante;

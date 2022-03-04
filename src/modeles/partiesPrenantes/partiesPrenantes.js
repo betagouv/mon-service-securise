@@ -2,6 +2,7 @@ const DeveloppementFourniture = require('./developpementFourniture');
 const ElementsFabricables = require('../elementsFabricables');
 const Hebergement = require('./hebergement');
 const MaintenanceService = require('./maintenanceService');
+const PartiePrenante = require('./partiePrenante');
 const PartiePrenanteSpecifique = require('./partiePrenanteSpecifique');
 const SecuriteService = require('./securiteService');
 const fabriquePartiePrenante = require('./fabriquePartiePrenante');
@@ -36,6 +37,10 @@ class PartiesPrenantes extends ElementsFabricables {
     return this.toutes()
       .filter((partiePrenante) => partiePrenante.estDeType(PartiePrenanteSpecifique))
       .map((partiePrenante) => partiePrenante.toJSON());
+  }
+
+  static proprietesItem() {
+    return PartiePrenante.proprietes();
   }
 }
 

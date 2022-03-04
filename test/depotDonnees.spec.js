@@ -467,6 +467,26 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
+  it('met à jour les caractéristiques complémentaires avec les entités externes', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [{
+        id: '123',
+        descriptionService: { nomService: 'nom' },
+      }],
+    });
+    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
+
+    depot.ajouteEntitesExternesAHomologation('123', [{ nom: 'Un nom', contact: 'jean.dupont@mail.fr', acces: 'Accès administrateur' }])
+      .then(() => depot.homologation('123'))
+      .then(({ caracteristiquesComplementaires }) => {
+        expect(caracteristiquesComplementaires.entitesExternes.item(0).nom).to.equal('Un nom');
+        expect(caracteristiquesComplementaires.entitesExternes.item(0).contact).to.equal('jean.dupont@mail.fr');
+        expect(caracteristiquesComplementaires.entitesExternes.item(0).acces).to.equal('Accès administrateur');
+        done();
+      })
+      .catch(done);
+  });
+
   describe('concernant les risques généraux', () => {
     let valideRisque;
 
