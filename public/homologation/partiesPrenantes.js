@@ -20,6 +20,12 @@ $(() => {
     fonction: { label: 'Fonction' },
   });
 
+  brancheElementsAjoutables('parties-prenantes-specifiques', 'partie-prenante-specifique', {
+    nom: { label: "Nom de l'entité" },
+    natureAcces: { label: "Nature de l'accès au service numérique" },
+    pointContact: { label: 'Point de contact' },
+  });
+
   const $bouton = $('.bouton');
   const identifiantHomologation = $bouton.attr('identifiant');
 
