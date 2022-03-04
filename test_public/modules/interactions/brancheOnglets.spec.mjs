@@ -1,7 +1,7 @@
 import expect from 'expect.js';
-import brancheOnglets from '../../../public/modules/interactions/brancheOnglets.mjs';
 import jquery from 'jquery';
 import { JSDOM } from 'jsdom';
+import brancheOnglets from '../../../public/modules/interactions/brancheOnglets.mjs';
 
 describe('Le branchement des onglets', () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('Le branchement des onglets', () => {
   describe('sur une action de click sur un lien', () => {
     it('rend actif le lien cliqué', () => {
       brancheOnglets('#onglets-liens > a');
-      
+
       $('#onglet-parties-prenantes').trigger('click');
 
       expect($('#onglet-parties-prenantes').hasClass('actif')).to.be(true);
@@ -34,7 +34,7 @@ describe('Le branchement des onglets', () => {
 
     it('rend inactif les liens non cliqués', () => {
       brancheOnglets('#onglets-liens > a');
-      
+
       $('#onglet-parties-prenantes').trigger('click');
 
       expect($('#onglet-acteurs-homologations').hasClass('actif')).to.be(false);
@@ -42,15 +42,15 @@ describe('Le branchement des onglets', () => {
 
     it("rend visible l'onglet ciblé", () => {
       brancheOnglets('#onglets-liens > a');
-      
+
       $('#onglet-parties-prenantes').trigger('click');
 
       expect($('#parties-prenantes').hasClass('invisible')).to.be(false);
     });
 
-    it("rend non visible les onglets non ciblés", () => {
+    it('rend non visible les onglets non ciblés', () => {
       brancheOnglets('#onglets-liens > a');
-      
+
       $('#onglet-parties-prenantes').trigger('click');
 
       expect($('#acteurs-homologations').hasClass('invisible')).to.be(true);

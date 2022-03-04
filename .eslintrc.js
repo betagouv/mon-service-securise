@@ -35,11 +35,15 @@ module.exports = {
     }],
   },
   overrides: [{
-    files: ['public/**/*.js'],
+    files: ['public/**/*.*js'],
     rules: { 'import/extensions': ['error', 'always'] },
   }, {
-    files: ['test/*/*.js'],
-    rules: { 'no-new': ['off'] },
+    files: ['test*/**/*.*js'],
+    rules: {
+      'no-new': ['off'],
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+      'import/extensions': ['error', { mjs: 'always' }],
+    },
   }, {
     files: ['src/erreurs.js'],
     rules: { 'max-classes-per-file': ['off'] },
