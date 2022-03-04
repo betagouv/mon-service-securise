@@ -193,8 +193,6 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
   describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteCaracteristiquesAHomologation = () => Promise.resolve();
-      testeur.depotDonnees()
-        .ajoutePartiesPrenantesSpecifiquesAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -202,17 +200,6 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
       }, done);
-    });
-
-    it('aseptise les paramètres entités externes', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['entitesExternes.*.nom', 'entitesExternes.*.contact', 'entitesExternes.*.acces'],
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
-        },
-        done
-      );
     });
 
     it("demande au dépôt d'associer les caractéristiques à l'homologation", (done) => {
@@ -238,54 +225,6 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch(done);
-    });
-
-    it("demande au dépôt d'ajouter les entités externes dans les parties prenantes", (done) => {
-      let entitesExternesAjoutees = false;
-
-      testeur.depotDonnees().ajoutePartiesPrenantesSpecifiquesAHomologation = (
-        (idHomologation, entitesExternes) => new Promise((resolve) => {
-          try {
-            expect(idHomologation).to.equal('456');
-            expect(entitesExternes.length).to.equal(1);
-            expect(entitesExternes[0].nom).to.equal('nom');
-            entitesExternesAjoutees = true;
-            resolve();
-          } catch (error) {
-            resolve(error);
-          }
-        })
-      );
-
-      axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
-        entitesExternes: [{ nom: 'nom', acces: 'acces', contact: 'contact' }],
-      })
-        .then((reponse) => {
-          expect(entitesExternesAjoutees).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
-          done();
-        })
-        .catch(done);
-    });
-
-    it('filtre les entités externes vides', (done) => {
-      testeur.depotDonnees().ajouteCaracteristiquesAHomologation = (_, caracteristiques) => (
-        new Promise((resolve) => {
-          expect(caracteristiques.entitesExternes.nombre()).to.equal(1);
-          resolve();
-        })
-      );
-
-      const entitesExternes = [];
-      entitesExternes[2] = { nom: 'Une entité', acces: 'Accès administrateur' };
-
-      axios.post(
-        'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
-        { entitesExternes },
-      )
-        .then(() => done())
         .catch(done);
     });
   });

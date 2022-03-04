@@ -1,27 +1,10 @@
 extends ./formulaire
 
 block append styles
-  link(href = '/statique/assets/styles/homologation/caracteristiquesComplementaires.css', rel = 'stylesheet')
 
 block formulaire
   form.homologation#caracteristiques-complementaires
     h1.action Caractéristiques complémentaires
+    .bouton(identifiant = homologation.id) Retour
 
-    section
-
-      label Entités externes disposant d'un accès privilégié au service
-        p.
-          Listez les tierces parties ayant un accès privilégié au service qui
-          peuvent, à leur insu ou par négligence, constituer des vecteurs par
-          lesquels un incident de sécurité pourrait affecter votre service. Ex.
-          entité publique partenaire co-gérant le service, prestataire
-          d'infogérance, prestataires de sécurité, etc.
-
-        #entites-externes
-        a.nouvel-item Référencer une entité externe
-
-    .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
-
-  script(id = 'donneesEntitesExternes', type = 'application/json').
-    !{JSON.stringify(homologation.caracteristiquesComplementaires.entitesExternes.toJSON())}
   script(type = 'module', src = '/statique/homologation/caracteristiquesComplementaires.js')
