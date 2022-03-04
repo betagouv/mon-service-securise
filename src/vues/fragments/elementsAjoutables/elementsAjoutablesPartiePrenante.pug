@@ -1,0 +1,16 @@
+include ./elementsAjoutables
+
+mixin elementsAjoutablesPartiePrenante({ donnees = [] })
+  -
+    var donneesElements = donnees.map(({ nom, natureAcces, pointContact }) => ({
+      nom: ({ valeur: nom, label: "Nom de l'entité" }),
+      natureAcces: ({ valeur: natureAcces, label: "Nature de l'accès au service numérique" }),
+      pointContact: ({ valeur: pointContact, label: 'Point de contact' })
+    }))
+
+  +elementsAjoutables({
+    identifiantConteneur: 'parties-prenantes-specifiques',
+    nom: 'partie-prenante-specifique',
+    donneesElements,
+    texteLienAjouter: 'Ajouter une partie prenante'
+  })

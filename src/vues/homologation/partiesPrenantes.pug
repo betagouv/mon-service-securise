@@ -2,6 +2,7 @@ extends ./formulaire
 include ../fragments/inputIdentite
 include ../fragments/inputPartiePrenante
 include ../fragments/elementsAjoutables/elementsAjoutablesActeurHomologation
+include ../fragments/elementsAjoutables/elementsAjoutablesPartiePrenante
 
 block append styles
   link(href = '/statique/assets/styles/homologation/partiesPrenantes.css', rel = 'stylesheet')
@@ -63,6 +64,10 @@ block formulaire
           categorie: 'Gestion de la sécurité du service',
           nomParametre: 'securiteService',
           donnees: homologation.partiesPrenantes.partiesPrenantes.securiteService(),
+        })
+
+        +elementsAjoutablesPartiePrenante({
+          donnees: [],
         })
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
