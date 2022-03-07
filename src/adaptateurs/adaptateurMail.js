@@ -1,5 +1,20 @@
 const nodemailer = require('nodemailer');
 
+const configurationDKIM = () => {
+  const configurationDKIMPresente = process.env.NOM_DOMAINE_DKIM
+    && process.env.CLEF_DKIM
+    && process.env.CLEF_PRIVEE_DKIM;
+  if (!configurationDKIMPresente) return {};
+
+  return {
+    dkim: {
+      domainName: process.env.NOM_DOMAINE_DKIM,
+      keySelector: process.env.CLEF_DKIM,
+      privateKey: process.env.CLEF_PRIVEE_DKIM,
+    },
+  };
+};
+
 const creeTransport = () => nodemailer.createTransport({
   host: process.env.URL_SERVEUR_SMTP,
   port: 465,
@@ -8,6 +23,7 @@ const creeTransport = () => nodemailer.createTransport({
     user: process.env.LOGIN_SERVEUR_SMTP,
     pass: process.env.MOT_DE_PASSE_SERVEUR_SMTP,
   },
+  ...configurationDKIM(),
 });
 
 const envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) => {
