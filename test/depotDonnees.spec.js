@@ -308,13 +308,13 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
     const caracteristiques = new CaracteristiquesComplementaires({
-      structureDeveloppement: 'Une structure',
+      entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
     });
 
     depot.ajouteCaracteristiquesAHomologation('123', caracteristiques)
       .then(() => depot.homologation('123'))
       .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.structureDeveloppement).to.equal('Une structure');
+        expect(caracteristiquesComplementaires.entitesExternes.item(0).nom).to.equal('Un nom');
         done();
       })
       .catch(done);
@@ -331,12 +331,13 @@ describe('Le dépôt de données persistées en mémoire', () => {
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
     const caracteristiques = new CaracteristiquesComplementaires({
-      structureDeveloppement: 'Une structure',
+      entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
     });
     depot.ajouteCaracteristiquesAHomologation('123', caracteristiques)
       .then(() => depot.homologation('123'))
       .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.structureDeveloppement).to.equal('Une structure');
+        expect(caracteristiquesComplementaires.entitesExternes.item(0).nom).to.equal('Un nom');
+        expect(caracteristiquesComplementaires.entitesExternes.item(0).contact).to.equal('Une adresse');
         done();
       })
       .catch(done);
@@ -455,24 +456,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(({ rolesResponsabilites }) => {
         expect(rolesResponsabilites).to.be.ok();
         expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
-        done();
-      })
-      .catch(done);
-  });
-
-  it('met à jour les caractéristiques complémentaires avec la structure du service', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.ajouteStructureDeveloppementAHomologation('123', 'Une structure')
-      .then(() => depot.homologation('123'))
-      .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.structureDeveloppement).to.equal('Une structure');
         done();
       })
       .catch(done);
