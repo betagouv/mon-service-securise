@@ -14,7 +14,6 @@ const adaptateurJWTParDefaut = require('./adaptateurs/adaptateurJWT');
 const adaptateurUUIDParDefaut = require('./adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisation');
-const CaracteristiquesComplementaires = require('./modeles/caracteristiquesComplementaires');
 const Homologation = require('./modeles/homologation');
 const RolesResponsabilites = require('./modeles/rolesResponsabilites');
 const Utilisateur = require('./modeles/utilisateur');
@@ -123,19 +122,6 @@ const creeDepot = (config = {}) => {
 
   const ajouteCaracteristiquesAHomologation = (...params) => (
     metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
-  );
-
-  const ajouteStructureDeveloppementAHomologation = (idHomologation, nom) => (
-    adaptateurPersistance.homologation(idHomologation)
-      .then((homologationTrouvee) => {
-        const { caracteristiquesComplementaires = {} } = homologationTrouvee;
-        caracteristiquesComplementaires.structureDeveloppement = nom;
-        return metsAJourProprieteHomologation(
-          'caracteristiquesComplementaires',
-          homologationTrouvee,
-          new CaracteristiquesComplementaires(caracteristiquesComplementaires, referentiel)
-        );
-      })
   );
 
   const ajoutePartiesPrenantesAHomologation = (...params) => {
@@ -342,7 +328,6 @@ const creeDepot = (config = {}) => {
     ajoutePartiesPrenantesAHomologation,
     ajoutePartiesPrenantesSpecifiquesAHomologation,
     ajouteRisqueGeneralAHomologation,
-    ajouteStructureDeveloppementAHomologation,
     autorisation,
     autorisationExiste,
     autorisationPour,

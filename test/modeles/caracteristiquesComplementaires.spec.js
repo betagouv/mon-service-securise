@@ -6,34 +6,19 @@ const InformationsHomologation = require('../../src/modeles/informationsHomologa
 describe("L'ensemble des caractéristiques complémentaires", () => {
   it('connaît ses constituants', () => {
     const caracteristiques = new CaracteristiquesComplementaires({
-      structureDeveloppement: 'Une structure',
       entitesExternes: [{ nom: 'Un nom' }],
     });
 
-    expect(caracteristiques.structureDeveloppement).to.equal('Une structure');
     expect(caracteristiques.nombreEntitesExternes()).to.equal(1);
   });
 
   it('sait se présenter au format JSON', () => {
     const caracteristiques = new CaracteristiquesComplementaires({
-      structureDeveloppement: 'Une structure',
       entitesExternes: [{ nom: 'Une entité', contact: 'jean.dupont@mail.fr', acces: 'Accès administrateur' }],
     });
 
     expect(caracteristiques.toJSON()).to.eql({
-      structureDeveloppement: 'Une structure',
       entitesExternes: [{ nom: 'Une entité', contact: 'jean.dupont@mail.fr', acces: 'Accès administrateur' }],
-    });
-  });
-
-  it('presente un JSON partiel si certaines caractéristiques ne sont pas définies', () => {
-    const caracteristiques = new CaracteristiquesComplementaires({
-      structureDeveloppement: 'Une structure',
-    });
-
-    expect(caracteristiques.toJSON()).to.eql({
-      structureDeveloppement: 'Une structure',
-      entitesExternes: [],
     });
   });
 
@@ -58,7 +43,6 @@ describe("L'ensemble des caractéristiques complémentaires", () => {
     describe('quand toutes les entités externes sont complètement saisies', () => {
       it('a pour statut COMPLETES si tous les autres champs sont remplis', () => {
         const caracteristiques = new CaracteristiquesComplementaires({
-          structureDeveloppement: 'Une structure',
           entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
         });
 
