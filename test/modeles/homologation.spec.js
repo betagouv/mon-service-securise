@@ -72,7 +72,7 @@ describe('Une homologation', () => {
     const homologation = new Homologation({
       id: '123',
       caracteristiquesComplementaires: {
-        structureDeveloppement: 'Une structure',
+        entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
       },
       descriptionService: {
         localisationDonnees: 'france',
@@ -81,7 +81,7 @@ describe('Une homologation', () => {
     }, referentiel);
 
     expect(homologation.presentation()).to.equal('Une présentation');
-    expect(homologation.structureDeveloppement()).to.equal('Une structure');
+    expect(homologation.caracteristiquesComplementaires.entitesExternes.item(0).nom).to.equal('Un nom');
     expect(homologation.localisationDonnees()).to.equal('Quelque part en France');
   });
 
@@ -96,6 +96,7 @@ describe('Une homologation', () => {
         expertCybersecurite: 'Anna Dubreuil',
         partiesPrenantes: [
           { type: 'Hebergement', nom: 'Hébergeur' },
+          { type: 'DeveloppementFourniture', nom: 'Une structure' },
         ],
       },
     });
@@ -106,6 +107,7 @@ describe('Une homologation', () => {
     expect(homologation.piloteProjet()).to.equal('Sylvie Martin');
     expect(homologation.expertCybersecurite()).to.equal('Anna Dubreuil');
     expect(homologation.hebergeur()).to.equal('Hébergeur');
+    expect(homologation.structureDeveloppement()).to.equal('Une structure');
   });
 
   it('connaît ses risques spécifiques', () => {

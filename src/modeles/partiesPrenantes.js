@@ -63,6 +63,10 @@ class PartiesPrenantes extends InformationsHomologation {
   descriptionHebergeur() {
     return this.partiesPrenantes.hebergement()?.nom || 'Hébergeur non renseigné';
   }
+
+  descriptionStructureDeveloppement() {
+    return this.partiesPrenantes.developpementFourniture()?.nom || '';
+  }
 }
 
 module.exports = PartiesPrenantes;
