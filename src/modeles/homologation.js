@@ -111,7 +111,9 @@ class Homologation {
     return this[nomInformationsHomologation].statutSaisie();
   }
 
-  structureDeveloppement() { return this.caracteristiquesComplementaires.structureDeveloppement; }
+  structureDeveloppement() {
+    return this.partiesPrenantes.descriptionStructureDeveloppement();
+  }
 
   toJSON() {
     return {

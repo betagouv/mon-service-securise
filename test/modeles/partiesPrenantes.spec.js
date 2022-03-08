@@ -154,4 +154,18 @@ describe("L'ensemble des parties prenantes", () => {
     const partiesPrenantes = new PartiesPrenantes();
     expect(partiesPrenantes.statutSaisie()).to.equal(InformationsHomologation.A_SAISIR);
   });
+
+  describe('sur une demande de description de la structure ayant réalisé le développement', () => {
+    it('présente le nom de la structure', () => {
+      const partiesPrenantes = new PartiesPrenantes({ partiesPrenantes: [{ type: 'DeveloppementFourniture', nom: 'Une structure' }] });
+
+      expect(partiesPrenantes.descriptionStructureDeveloppement()).to.equal('Une structure');
+    });
+
+    it("reste robuste lorsque la structure n'est pas présent", () => {
+      const partiesPrenantes = new PartiesPrenantes();
+
+      expect(partiesPrenantes.descriptionStructureDeveloppement()).to.equal('');
+    });
+  });
 });
