@@ -565,14 +565,16 @@ describe('Le serveur MSS des routes /api/*', () => {
       beforeEach(() => {
         let utilisateurInexistant;
         testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateurInexistant);
-        testeur.adaptateurMail().envoieMessageFinalisationInscription = () => Promise.resolve();
+        testeur.adaptateurMail().envoieMessageInvitationInscription = () => Promise.resolve();
 
-        contributeurCree = {
-          id: '789',
-          email: 'jean.dupont@mail.fr',
-          idResetMotDePasse: 'reset',
-        };
+        contributeurCree = { id: '789', email: 'jean.dupont@mail.fr', idResetMotDePasse: 'reset' };
         testeur.depotDonnees().nouvelUtilisateur = () => Promise.resolve(contributeurCree);
+
+        const utilisateurCourant = { prenomNom: () => '' };
+        testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateurCourant);
+
+        const homologation = { nomService: () => '' };
+        testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
       });
 
       it('demande au dépôt de le créer', (done) => {
@@ -600,11 +602,34 @@ describe('Le serveur MSS des routes /api/*', () => {
 
       it("envoie un mail d'invitation au contributeur créé", (done) => {
         let messageEnvoye = false;
+        testeur.middleware().reinitialise('456');
 
-        testeur.adaptateurMail().envoieMessageFinalisationInscription = (email, idReset) => {
+        testeur.depotDonnees().utilisateur = (id) => {
           try {
-            expect(email).to.eql('jean.dupont@mail.fr');
-            expect(idReset).to.eql('reset');
+            expect(id).to.equal('456');
+            return Promise.resolve({ prenomNom: () => 'Utilisateur Courant' });
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        testeur.depotDonnees().homologation = (id) => {
+          try {
+            expect(id).to.equal('123');
+            return Promise.resolve({ nomService: () => 'Nom Service' });
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        testeur.adaptateurMail().envoieMessageInvitationInscription = (
+          destinataire, prenomNomEmetteur, nomService, idResetMotDePasse
+        ) => {
+          try {
+            expect(destinataire).to.equal('jean.dupont@mail.fr');
+            expect(prenomNomEmetteur).to.equal('Utilisateur Courant');
+            expect(nomService).to.equal('Nom Service');
+            expect(idResetMotDePasse).to.equal('reset');
             messageEnvoye = true;
             return Promise.resolve();
           } catch (e) {

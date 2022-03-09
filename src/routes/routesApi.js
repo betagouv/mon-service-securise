@@ -4,11 +4,29 @@ const { EchecEnvoiMessage, ErreurModele } = require('../erreurs');
 const routesApiHomologation = require('./routesApiHomologation');
 
 const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
-  const envoieMessageFinalisationInscription = (utilisateur) => adaptateurMail
-    .envoieMessageFinalisationInscription(utilisateur.email, utilisateur.idResetMotDePasse)
+  const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) => promesseEnvoiMessage
     .then(() => utilisateur)
     .catch(() => depotDonnees.supprimeUtilisateur(utilisateur.id)
       .then(() => Promise.reject(new EchecEnvoiMessage())));
+
+  const envoieMessageInvitationInscription = (emetteur, contributeur, homologation) => (
+    verifieSuccesEnvoiMessage(
+      adaptateurMail.envoieMessageInvitationInscription(
+        contributeur.email,
+        emetteur.prenomNom(),
+        homologation.nomService(),
+        contributeur.idResetMotDePasse,
+      ),
+      contributeur,
+    ));
+
+  const envoieMessageFinalisationInscription = (utilisateur) => (
+    verifieSuccesEnvoiMessage(
+      adaptateurMail.envoieMessageFinalisationInscription(
+        utilisateur.email, utilisateur.idResetMotDePasse,
+      ),
+      utilisateur,
+    ));
 
   const routes = express.Router();
 
@@ -131,8 +149,12 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       const creeContributeurSiNecessaire = (contributeur) => {
         if (contributeur) return Promise.resolve(contributeur);
 
-        return depotDonnees.nouvelUtilisateur({ email: emailContributeur })
-          .then(envoieMessageFinalisationInscription);
+        return Promise.all([
+          depotDonnees.utilisateur(idUtilisateur),
+          depotDonnees.nouvelUtilisateur({ email: emailContributeur }),
+          depotDonnees.homologation(idHomologation),
+        ])
+          .then((resultats) => envoieMessageInvitationInscription(...resultats));
       };
 
       depotDonnees.autorisationPour(idUtilisateur, idHomologation)
@@ -143,7 +165,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
 
           return depotDonnees.utilisateurAvecEmail(emailContributeur)
             .then(creeContributeurSiNecessaire)
-            .then((u) => depotDonnees.ajouteContributeurAHomologation(u.id, idHomologation))
+            .then((c) => depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation))
             .then(() => reponse.send(''));
         })
         .catch((e) => {
