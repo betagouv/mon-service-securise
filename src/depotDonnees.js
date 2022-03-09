@@ -229,6 +229,8 @@ const creeDepot = (config = {}) => {
 
   const utilisateurExiste = (id) => utilisateur(id).then((u) => !!u);
 
+  const { utilisateurAvecEmail } = adaptateurPersistance;
+
   const metsAJourMotDePasse = (idUtilisateur, motDePasse) => (
     bcrypt.hash(motDePasse, 10)
       .then((hash) => adaptateurPersistance.metsAJourUtilisateur(
@@ -349,6 +351,7 @@ const creeDepot = (config = {}) => {
     utilisateurAFinaliser,
     utilisateurAuthentifie,
     utilisateurExiste,
+    utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
   };
 };
