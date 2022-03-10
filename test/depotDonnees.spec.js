@@ -313,37 +313,12 @@ describe('Le dépôt de données persistées en mémoire', () => {
     });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
-    const caracteristiques = new CaracteristiquesComplementaires({
-      entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
-    });
+    const caracteristiques = new CaracteristiquesComplementaires({});
 
     depot.ajouteCaracteristiquesAHomologation('123', caracteristiques)
       .then(() => depot.homologation('123'))
       .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.entitesExternes.item(0).nom).to.equal('Un nom');
-        done();
-      })
-      .catch(done);
-  });
-
-  it("met à jour les caractéristiques si elles existent déjà pour l'homologation", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-        caracteristiquesComplementaires: { entitesExternes: [] },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    const caracteristiques = new CaracteristiquesComplementaires({
-      entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
-    });
-    depot.ajouteCaracteristiquesAHomologation('123', caracteristiques)
-      .then(() => depot.homologation('123'))
-      .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.entitesExternes.item(0).nom).to.equal('Un nom');
-        expect(caracteristiquesComplementaires.entitesExternes.item(0).contact).to.equal('Une adresse');
+        expect(caracteristiquesComplementaires).to.be.ok();
         done();
       })
       .catch(done);
@@ -382,26 +357,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .then(({ rolesResponsabilites }) => {
         expect(rolesResponsabilites).to.be.ok();
         expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
-        done();
-      })
-      .catch(done);
-  });
-
-  it('met à jour les caractéristiques complémentaires avec les entités externes', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    depot.ajouteEntitesExternesAHomologation('123', [{ nom: 'Un nom', contact: 'jean.dupont@mail.fr', acces: 'Accès administrateur' }])
-      .then(() => depot.homologation('123'))
-      .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires.entitesExternes.item(0).nom).to.equal('Un nom');
-        expect(caracteristiquesComplementaires.entitesExternes.item(0).contact).to.equal('jean.dupont@mail.fr');
-        expect(caracteristiquesComplementaires.entitesExternes.item(0).acces).to.equal('Accès administrateur');
         done();
       })
       .catch(done);

@@ -147,13 +147,9 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     (requete, reponse) => {
       const partiesPrenantes = new PartiesPrenantes(requete.body);
       const idHomologation = requete.homologation.id;
-      depotDonnees.ajouteEntitesExternesAHomologation(
-        idHomologation, partiesPrenantes.entitesExternes()
-      )
-        .then(() => depotDonnees.ajoutePartiesPrenantesAHomologation(
-          idHomologation, partiesPrenantes
-        ))
-        .then(() => reponse.send({ idHomologation }));
+      depotDonnees.ajoutePartiesPrenantesAHomologation(
+        idHomologation, partiesPrenantes
+      ).then(() => reponse.send({ idHomologation }));
     });
 
   routes.post('/:id/risques', middleware.trouveHomologation, middleware.aseptise(

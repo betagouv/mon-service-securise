@@ -82,9 +82,7 @@ describe('Une homologation', () => {
     });
     const homologation = new Homologation({
       id: '123',
-      caracteristiquesComplementaires: {
-        entitesExternes: [{ nom: 'Un nom', contact: 'Une adresse' }],
-      },
+      caracteristiquesComplementaires: {},
       descriptionService: {
         localisationDonnees: 'france',
         presentation: 'Une présentation',
@@ -92,7 +90,7 @@ describe('Une homologation', () => {
     }, referentiel);
 
     expect(homologation.presentation()).to.equal('Une présentation');
-    expect(homologation.caracteristiquesComplementaires.entitesExternes.item(0).nom).to.equal('Un nom');
+    expect(homologation.caracteristiquesComplementaires).to.be.ok();
     expect(homologation.localisationDonnees()).to.equal('Quelque part en France');
   });
 
