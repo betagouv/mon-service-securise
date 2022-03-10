@@ -208,17 +208,13 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       testeur.depotDonnees().ajouteCaracteristiquesAHomologation = (
         (idHomologation, caracteristiques) => new Promise((resolve) => {
           expect(idHomologation).to.equal('456');
-          expect(caracteristiques.entitesExternes.item(0).nom).to.equal('nom');
-          expect(caracteristiques.entitesExternes.item(0).acces).to.equal('acces');
-          expect(caracteristiques.entitesExternes.item(0).contact).to.equal('contact');
+          expect(caracteristiques).to.be.ok();
           caracteristiquesAjoutees = true;
           resolve();
         })
       );
 
-      axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {
-        entitesExternes: [{ nom: 'nom', acces: 'acces', contact: 'contact' }],
-      })
+      axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {})
         .then((reponse) => {
           expect(caracteristiquesAjoutees).to.be(true);
           expect(reponse.status).to.equal(200);
@@ -376,30 +372,6 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('partiesPrenantes', ['nom', 'natureAcces', 'pointContact']);
-          done();
-        })
-        .catch(done);
-    });
-
-    it("demande au dépôt d'ajouter les entités externes dans les caractéristiques complémentaires", (done) => {
-      let entitesExternesAjoutee = false;
-
-      testeur.depotDonnees().ajouteEntitesExternesAHomologation = (
-        (idHomologation, entitesExternes) => new Promise((resolve) => {
-          expect(idHomologation).to.equal('456');
-          expect(entitesExternes).to.eql([{ nom: 'Un nom', contact: 'jean.dupont@mail.fr', acces: 'Accès administrateur' }]);
-          entitesExternesAjoutee = true;
-          resolve();
-        })
-      );
-
-      axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {
-        partiesPrenantes: [{ type: 'PartiePrenanteSpecifique', nom: 'Un nom', pointContact: 'jean.dupont@mail.fr', natureAcces: 'Accès administrateur' }],
-      })
-        .then((reponse) => {
-          expect(entitesExternesAjoutee).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
         .catch(done);

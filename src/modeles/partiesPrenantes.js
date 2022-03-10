@@ -67,14 +67,6 @@ class PartiesPrenantes extends InformationsHomologation {
   descriptionStructureDeveloppement() {
     return this.partiesPrenantes.developpementFourniture()?.nom || '';
   }
-
-  entitesExternes() {
-    return this.partiesPrenantes.specifiques().map((specifique) => ({
-      nom: specifique.nom,
-      acces: specifique.natureAcces,
-      contact: specifique.pointContact,
-    }));
-  }
 }
 
 module.exports = PartiesPrenantes;
