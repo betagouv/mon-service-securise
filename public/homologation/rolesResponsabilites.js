@@ -30,7 +30,7 @@ $(() => {
   const identifiantHomologation = $bouton.attr('identifiant');
 
   $bouton.on('click', () => {
-    const params = tousLesParametres('form#parties-prenantes');
+    const params = tousLesParametres('form#roles-responsabilites');
 
     axios.post(`/api/homologation/${identifiantHomologation}/rolesResponsabilites`, params)
       .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));

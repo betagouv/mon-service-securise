@@ -8,13 +8,16 @@ block append styles
   link(href = '/statique/assets/styles/homologation/rolesResponsabilites.css', rel = 'stylesheet')
 
 block formulaire
-  form.homologation#parties-prenantes
-    h1.action Parties prenantes
+  form.homologation#roles-responsabilites
+    h1.action Rôles et responsabilités
+    p.
+      Listez les acteurs de la démarche d’homologation ainsi que les principales parties prenantes
+      participant au fonctionnement ou ayant un accès privilégié au service numérique.
 
     section
       nav#onglets-liens
         a.actif#onglet-acteurs-homologations Acteurs de l'homologation
-        a#onglet-les-parties-prenantes Parties prenantes
+        a#onglet-parties-prenantes Parties prenantes
 
       .onglet#acteurs-homologations
         +inputIdentite({
@@ -41,7 +44,7 @@ block formulaire
           donnees: homologation.rolesResponsabilites.acteursHomologation.toJSON(),
         })
 
-      .onglet#les-parties-prenantes
+      .onglet#parties-prenantes
         +inputPartiePrenante({
           categorie: 'Hébergement du service',
           nomParametre: 'hebergement',
