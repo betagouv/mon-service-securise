@@ -20,10 +20,10 @@ const Homologation = require('../src/modeles/homologation');
 const MesureGenerale = require('../src/modeles/mesureGenerale');
 const MesureSpecifique = require('../src/modeles/mesureSpecifique');
 const MesuresSpecifiques = require('../src/modeles/mesuresSpecifiques');
-const PartiesPrenantes = require('../src/modeles/partiesPrenantes');
 const RisqueGeneral = require('../src/modeles/risqueGeneral');
 const RisqueSpecifique = require('../src/modeles/risqueSpecifique');
 const RisquesSpecifiques = require('../src/modeles/risquesSpecifiques');
+const RolesResponsabilites = require('../src/modeles/rolesResponsabilites');
 const Utilisateur = require('../src/modeles/utilisateur');
 
 describe('Le dépôt de données persistées en mémoire', () => {
@@ -304,7 +304,7 @@ describe('Le dépôt de données persistées en mémoire', () => {
     });
   });
 
-  it('sait associer des parties prenantes à une homologation', (done) => {
+  it('sait associer des rôles et responsabilités à une homologation', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
         { id: '123', descriptionService: { nomService: 'nom' } },
@@ -312,17 +312,17 @@ describe('Le dépôt de données persistées en mémoire', () => {
     });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
-    const pp = new PartiesPrenantes({ autoriteHomologation: 'Jean Dupont' });
-    depot.ajoutePartiesPrenantesAHomologation('123', pp)
+    const roles = new RolesResponsabilites({ autoriteHomologation: 'Jean Dupont' });
+    depot.ajouteRolesResponsabilitesAHomologation('123', roles)
       .then(() => depot.homologation('123'))
-      .then(({ partiesPrenantes }) => {
-        expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
+      .then(({ rolesResponsabilites }) => {
+        expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
         done();
       })
       .catch(done);
   });
 
-  it('sait enregistrer les parties prenantes en rôles et responsabilités', (done) => {
+  it('sait enregistrer les rôles et responsabilités en parties prenantes', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [{
         id: '123',
@@ -331,12 +331,12 @@ describe('Le dépôt de données persistées en mémoire', () => {
     });
     const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
 
-    const partiesPrenantes = new PartiesPrenantes({ autoriteHomologation: 'Jean Dupont' });
-    depot.ajoutePartiesPrenantesAHomologation('123', partiesPrenantes)
+    const roles = new RolesResponsabilites({ autoriteHomologation: 'Jean Dupont' });
+    depot.ajouteRolesResponsabilitesAHomologation('123', roles)
       .then(() => depot.homologation('123'))
-      .then(({ rolesResponsabilites }) => {
-        expect(rolesResponsabilites).to.be.ok();
-        expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
+      .then(({ partiesPrenantes }) => {
+        expect(partiesPrenantes).to.be.ok();
+        expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
         done();
       })
       .catch(done);

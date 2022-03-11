@@ -8,11 +8,11 @@ const FonctionnalitesSpecifiques = require('../modeles/fonctionnalitesSpecifique
 const DonneesSensiblesSpecifiques = require('../modeles/donneesSensiblesSpecifiques');
 const MesureGenerale = require('../modeles/mesureGenerale');
 const MesuresSpecifiques = require('../modeles/mesuresSpecifiques');
-const PartiesPrenantes = require('../modeles/partiesPrenantes');
-const PartiesPrenantesHomologation = require('../modeles/partiesPrenantes/partiesPrenantes');
+const PartiesPrenantes = require('../modeles/partiesPrenantes/partiesPrenantes');
 const PointsAcces = require('../modeles/pointsAcces');
 const RisqueGeneral = require('../modeles/risqueGeneral');
 const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
+const RolesResponsabilites = require('../modeles/rolesResponsabilites');
 
 const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   const routes = express.Router();
@@ -130,13 +130,13 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     middleware.trouveHomologation,
     middleware.aseptiseListes([
       { nom: 'acteursHomologation', proprietes: ActeursHomologation.proprietesItem() },
-      { nom: 'partiesPrenantes', proprietes: PartiesPrenantesHomologation.proprietesItem() },
+      { nom: 'partiesPrenantes', proprietes: PartiesPrenantes.proprietesItem() },
     ]),
     (requete, reponse) => {
-      const partiesPrenantes = new PartiesPrenantes(requete.body);
+      const rolesResponsabilites = new RolesResponsabilites(requete.body);
       const idHomologation = requete.homologation.id;
-      depotDonnees.ajoutePartiesPrenantesAHomologation(
-        idHomologation, partiesPrenantes
+      depotDonnees.ajouteRolesResponsabilitesAHomologation(
+        idHomologation, rolesResponsabilites
       ).then(() => reponse.send({ idHomologation }));
     });
 

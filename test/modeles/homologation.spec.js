@@ -76,10 +76,10 @@ describe('Une homologation', () => {
     expect(homologation.descriptionTypeService()).to.equal('Type de service non renseignée');
   });
 
-  it('connait ses parties prenantes', () => {
+  it('connaît les rôles et responsabilités de ses acteurs et parties prenantes', () => {
     const homologation = new Homologation({
       id: '123',
-      partiesPrenantes: {
+      rolesResponsabilites: {
         autoriteHomologation: 'Jean Dupont',
         fonctionAutoriteHomologation: 'Maire',
         delegueProtectionDonnees: 'Rémi Fassol',
@@ -122,7 +122,7 @@ describe('Une homologation', () => {
   it("sait décrire l'équipe de préparation du dossier", () => {
     const homologation = new Homologation({
       id: '123',
-      partiesPrenantes: { piloteProjet: 'Sylvie Martin' },
+      rolesResponsabilites: { piloteProjet: 'Sylvie Martin' },
     });
 
     expect(homologation.descriptionEquipePreparation()).to.equal(
@@ -133,7 +133,7 @@ describe('Une homologation', () => {
   it("sait décrire l'autorité d'homologation", () => {
     const homologation = new Homologation({
       id: '123',
-      partiesPrenantes: {
+      rolesResponsabilites: {
         autoriteHomologation: 'Jean Dupont', fonctionAutoriteHomologation: 'Maire',
       },
     });
