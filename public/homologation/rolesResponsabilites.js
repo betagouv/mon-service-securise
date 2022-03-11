@@ -32,7 +32,7 @@ $(() => {
   $bouton.on('click', () => {
     const params = tousLesParametres('form#parties-prenantes');
 
-    axios.post(`/api/homologation/${identifiantHomologation}/partiesPrenantes`, params)
+    axios.post(`/api/homologation/${identifiantHomologation}/rolesResponsabilites`, params)
       .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
   });
 });

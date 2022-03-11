@@ -5,7 +5,7 @@ include ../fragments/elementsAjoutables/elementsAjoutablesActeurHomologation
 include ../fragments/elementsAjoutables/elementsAjoutablesPartiePrenante
 
 block append styles
-  link(href = '/statique/assets/styles/homologation/partiesPrenantes.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/rolesResponsabilites.css', rel = 'stylesheet')
 
 block formulaire
   form.homologation#parties-prenantes
@@ -72,4 +72,4 @@ block formulaire
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 
-  script(type = 'module', src = '/statique/homologation/partiesPrenantes.js')
+  script(type = 'module', src = '/statique/homologation/rolesResponsabilites.js')
