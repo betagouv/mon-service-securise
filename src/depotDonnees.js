@@ -15,7 +15,6 @@ const adaptateurUUIDParDefaut = require('./adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const FabriqueAutorisation = require('./modeles/autorisations/fabriqueAutorisation');
 const Homologation = require('./modeles/homologation');
-const RolesResponsabilites = require('./modeles/rolesResponsabilites');
 const Utilisateur = require('./modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
@@ -118,12 +117,10 @@ const creeDepot = (config = {}) => {
       ))
   );
 
-  const ajoutePartiesPrenantesAHomologation = (...params) => {
-    const [idHomologation, partiesPrenantes] = params;
-
-    return metsAJourProprieteHomologation('partiesPrenantes', ...params)
-      .then(() => metsAJourProprieteHomologation('rolesResponsabilites', idHomologation, new RolesResponsabilites(partiesPrenantes.toJSON())));
-  };
+  const ajouteRolesResponsabilitesAHomologation = (...params) => (
+    metsAJourProprieteHomologation('partiesPrenantes', ...params)
+      .then(() => metsAJourProprieteHomologation('rolesResponsabilites', ...params))
+  );
 
   const ajouteAvisExpertCyberAHomologation = (...params) => (
     metsAJourProprieteHomologation('avisExpertCyber', ...params)
@@ -307,8 +304,8 @@ const creeDepot = (config = {}) => {
     ajouteContributeurAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteMesureGeneraleAHomologation,
-    ajoutePartiesPrenantesAHomologation,
     ajouteRisqueGeneralAHomologation,
+    ajouteRolesResponsabilitesAHomologation,
     autorisation,
     autorisationExiste,
     autorisationPour,

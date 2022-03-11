@@ -47,18 +47,18 @@ class Homologation {
     this.referentiel = referentiel;
   }
 
-  autoriteHomologation() { return this.partiesPrenantes.autoriteHomologation; }
+  autoriteHomologation() { return this.rolesResponsabilites.autoriteHomologation; }
 
   delegueProtectionDonnees() {
-    return this.partiesPrenantes.delegueProtectionDonnees;
+    return this.rolesResponsabilites.delegueProtectionDonnees;
   }
 
   descriptionAutoriteHomologation() {
-    return this.partiesPrenantes.descriptionAutoriteHomologation();
+    return this.rolesResponsabilites.descriptionAutoriteHomologation();
   }
 
   descriptionEquipePreparation() {
-    return this.partiesPrenantes.descriptionEquipePreparation();
+    return this.rolesResponsabilites.descriptionEquipePreparation();
   }
 
   descriptionExpiration() {
@@ -74,11 +74,11 @@ class Homologation {
     }, {});
   }
 
-  expertCybersecurite() { return this.partiesPrenantes.expertCybersecurite; }
+  expertCybersecurite() { return this.rolesResponsabilites.expertCybersecurite; }
 
-  fonctionAutoriteHomologation() { return this.partiesPrenantes.fonctionAutoriteHomologation; }
+  fonctionAutoriteHomologation() { return this.rolesResponsabilites.fonctionAutoriteHomologation; }
 
-  hebergeur() { return this.partiesPrenantes.descriptionHebergeur(); }
+  hebergeur() { return this.rolesResponsabilites.descriptionHebergeur(); }
 
   localisationDonnees() {
     return this.descriptionService.descriptionLocalisationDonnees();
@@ -88,7 +88,7 @@ class Homologation {
 
   nomService() { return this.descriptionService.nomService; }
 
-  piloteProjet() { return this.partiesPrenantes.piloteProjet; }
+  piloteProjet() { return this.rolesResponsabilites.piloteProjet; }
 
   presentation() { return this.descriptionService.presentation; }
 
@@ -109,7 +109,7 @@ class Homologation {
   }
 
   structureDeveloppement() {
-    return this.partiesPrenantes.descriptionStructureDeveloppement();
+    return this.rolesResponsabilites.descriptionStructureDeveloppement();
   }
 
   toJSON() {
