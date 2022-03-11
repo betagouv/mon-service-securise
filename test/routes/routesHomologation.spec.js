@@ -50,10 +50,10 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     });
   });
 
-  describe('quand requete GET sur `/homologation/:id/partiesPrenantes`', () => {
+  describe('quand requete GET sur `/homologation/:id/rolesResponsabilites`', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/partiesPrenantes',
+        'http://localhost:1234/homologation/456/rolesResponsabilites',
         done,
       );
     });

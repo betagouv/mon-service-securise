@@ -41,9 +41,9 @@ const routesHomologation = (middleware, referentiel) => {
     reponse.render('homologation/mesures', { referentiel, homologation });
   });
 
-  routes.get('/:id/partiesPrenantes', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/rolesResponsabilites', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/partiesPrenantes', { homologation });
+    reponse.render('homologation/rolesResponsabilites', { homologation });
   });
 
   routes.get('/:id/risques', middleware.trouveHomologation, (requete, reponse) => {

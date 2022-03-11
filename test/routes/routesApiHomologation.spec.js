@@ -289,7 +289,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
   });
 
-  describe('quand requête POST sur `/api/homologation/:id/partiesPrenantes`', () => {
+  describe('quand requête POST sur `/api/homologation/:id/rolesResponsabilites`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = () => Promise.resolve();
       testeur.depotDonnees().ajouteEntitesExternesAHomologation = () => Promise.resolve();
@@ -298,7 +298,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/partiesPrenantes',
+        url: 'http://localhost:1234/api/homologation/456/rolesResponsabilites',
       }, done);
     });
 
@@ -312,7 +312,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         return Promise.resolve();
       };
 
-      axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {
+      axios.post('http://localhost:1234/api/homologation/456/rolesResponsabilites', {
         autoriteHomologation: 'Jean Dupont',
       })
         .then((reponse) => {
@@ -325,7 +325,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it("aseptise la liste des acteurs de l'homologation ainsi que son contenu", (done) => {
-      axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {})
+      axios.post('http://localhost:1234/api/homologation/456/rolesResponsabilites', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('acteursHomologation', ['role', 'nom', 'fonction']);
           done();
@@ -334,7 +334,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it('aseptise la liste des parties prenantes ainsi que son contenu', (done) => {
-      axios.post('http://localhost:1234/api/homologation/456/partiesPrenantes', {})
+      axios.post('http://localhost:1234/api/homologation/456/rolesResponsabilites', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('partiesPrenantes', ['nom', 'natureAcces', 'pointContact']);
           done();
