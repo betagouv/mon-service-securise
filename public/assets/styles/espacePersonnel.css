@@ -49,13 +49,13 @@
   font-weight: bold;
 }
 
-.pastilles-contributeurs {
+.pastilles {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.pastilles-contributeurs > div {
+.pastilles > div {
   width: 2.5em;
   height: 2.5em;
 }
@@ -71,7 +71,7 @@
   background-size: contain;
 }
 
-.pastille-contributeur {
+.pastille {
   cursor: default;
 
   display: flex;
@@ -85,15 +85,19 @@
   background-size: contain;
 }
 
-.pastille-contributeur.valide {
+.contributeur.valide {
   background-image: url(../images/pastille_bleu_anssi.svg);
 }
 
-.pastille-contributeur.en-attente {
+.contributeur.en-attente {
   background-image: url(../images/pastille_grise.svg);
 }
 
-.pastille-contributeur .initiales {
+.createur {
+  background-image: url(../images/pastille_foncee.svg);
+}
+
+.initiales {
   font-size: 0.7em;
   color: #fff;
 }

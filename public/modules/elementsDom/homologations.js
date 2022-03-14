@@ -34,34 +34,38 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
     return resultat;
   };
 
-  const classePastillesContributeurs = 'pastilles-contributeurs';
+  const $pastille = (classePastille, donneesUtilisateur) => $(`
+<div class="${classePastille}" title="${descriptionContributeur(donneesUtilisateur)}">
+  <div class="initiales">${donneesUtilisateur.initiales}</div>
+</div>
+    `);
+
+  const classePastilles = 'pastilles';
 
   const $element = $(`
 <a class="homologation existante" href="/homologation/${donneesHomologation.id}">
   <div class="titre-homologation">${donneesHomologation.nomService}</div>
   <div class="contributeurs">
     <p>Contributeurs</p>
-    <div class="${classePastillesContributeurs}"></div>
+    <div class="${classePastilles}"></div>
   </div>
 </a>
   `);
 
   if (utilisateurCourantPeutAjouterContributeurs()) {
-    $(`.${classePastillesContributeurs}`, $element).append($(`
+    $(`.${classePastilles}`, $element).append($(`
 <div class="${classeNouveauContributeur}" data-id-homologation="${donneesHomologation.id}"></div>
     `));
   }
 
+  $(`.${classePastilles}`, $element).append($pastille('pastille createur', donneesHomologation.createur));
+
   donneesHomologation.contributeurs.forEach((donneesContributeur) => {
     const classePastilleContributeur = (
-      `pastille-contributeur ${donneesContributeur.cguAcceptees ? 'valide' : 'en-attente'}`
+      `pastille contributeur ${donneesContributeur.cguAcceptees ? 'valide' : 'en-attente'}`
     );
 
-    $(`.${classePastillesContributeurs}`, $element).append($(`
-<div class="${classePastilleContributeur}" title="${descriptionContributeur(donneesContributeur)}">
-  <div class="initiales">${donneesContributeur.initiales}</div>
-</div>
-    `));
+    $(`.${classePastilles}`, $element).append($pastille(classePastilleContributeur, donneesContributeur));
   });
 
   return $element;
