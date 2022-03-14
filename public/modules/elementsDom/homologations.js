@@ -28,14 +28,15 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
     return !idContributeurs.includes(idUtilisateur);
   };
 
-  const descriptionContributeur = (donneesContributeur) => {
+  const descriptionContributeur = (donneesContributeur, proprietaire) => {
     let resultat = donneesContributeur.prenomNom;
     if (donneesContributeur.id === idUtilisateur) resultat += ' (vous)';
+    if (proprietaire) resultat += '\nPropriétaire';
     return resultat;
   };
 
-  const $pastille = (classePastille, donneesUtilisateur) => $(`
-<div class="${classePastille}" title="${descriptionContributeur(donneesUtilisateur)}">
+  const $pastille = (classePastille, donneesUtilisateur, proprietaire = false) => $(`
+<div class="${classePastille}" title="${descriptionContributeur(donneesUtilisateur, proprietaire)}">
   <div class="initiales">${donneesUtilisateur.initiales}</div>
 </div>
     `);
@@ -58,7 +59,7 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
     `));
   }
 
-  $(`.${classePastilles}`, $element).append($pastille('pastille createur', donneesHomologation.createur));
+  $(`.${classePastilles}`, $element).append($pastille('pastille createur', donneesHomologation.createur, true));
 
   donneesHomologation.contributeurs.forEach((donneesContributeur) => {
     const classePastilleContributeur = (
