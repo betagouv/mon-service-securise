@@ -65,8 +65,11 @@ describe('Le dépôt de données persistées en mémoire', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
-        { id: '123', idUtilisateur: '456', descriptionService: { nomService: 'Super Service' } },
-        { id: '789', idUtilisateur: '999', descriptionService: { nomService: 'Autre service' } },
+        { id: '123', descriptionService: { nomService: 'Super Service' } },
+        { id: '789', descriptionService: { nomService: 'Autre service' } },
+      ],
+      utilisateurs: [
+        { id: '456', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' },
       ],
       autorisations: [
         { idUtilisateur: '456', idHomologation: '123', type: 'createur' },
@@ -81,6 +84,9 @@ describe('Le dépôt de données persistées en mémoire', () => {
         expect(homologations[0]).to.be.a(Homologation);
         expect(homologations[0].id).to.equal('123');
         expect(homologations[0].referentiel).to.equal('Le référentiel');
+
+        expect(homologations[0].createur).to.be.ok();
+        expect(homologations[0].createur.id).to.equal('456');
         done();
       })
       .catch(done);

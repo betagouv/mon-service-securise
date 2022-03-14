@@ -74,9 +74,15 @@ const nouvelAdaptateur = (env) => {
         };
         nouvelleLigne.contributeurs ||= [];
 
-        if (ligne.type === 'contributeur') {
-          const contributeur = { id: ligne.idUtilisateur, ...ligne.donneesUtilisateur };
-          nouvelleLigne.contributeurs.push(contributeur);
+        const intervenant = { id: ligne.idUtilisateur, ...ligne.donneesUtilisateur };
+        switch (ligne.type) {
+          case 'contributeur':
+            nouvelleLigne.contributeurs.push(intervenant);
+            break;
+          case 'createur':
+            nouvelleLigne.createur = intervenant;
+            break;
+          default: // ne fais rien
         }
 
         if (!homologationDejaExistante) acc.push(nouvelleLigne);

@@ -29,10 +29,20 @@ describe('Une homologation', () => {
     expect(contributeur.id).to.equal('456');
   });
 
+  it('connaît son créateur', () => {
+    const homologation = new Homologation({
+      id: '123', createur: { id: '456', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' },
+    });
+
+    const { createur } = homologation;
+    expect(createur).to.be.an(Utilisateur);
+    expect(createur.id).to.equal('456');
+  });
+
   it('sait se convertir en JSON', () => {
     const homologation = new Homologation({
       id: '123',
-      idUtilisateur: '456',
+      createur: { id: '456', prenom: 'Bruno', nom: 'Dumans', email: 'bruno.dumans@mail.fr' },
       descriptionService: { nomService: 'Super Service' },
       contributeurs: [{ id: '999', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
     });
@@ -40,6 +50,7 @@ describe('Une homologation', () => {
     expect(homologation.toJSON()).to.eql({
       id: '123',
       nomService: 'Super Service',
+      createur: { id: '456', cguAcceptees: false, prenomNom: 'Bruno Dumans', initiales: 'BD' },
       contributeurs: [{ id: '999', cguAcceptees: false, prenomNom: 'Jean Dupont', initiales: 'JD' }],
     });
   });

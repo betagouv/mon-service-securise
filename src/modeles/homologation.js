@@ -21,6 +21,7 @@ class Homologation {
     const {
       id = '',
       contributeurs = [],
+      createur = {},
       descriptionService = {},
       mesuresGenerales = [],
       mesuresSpecifiques = [],
@@ -33,6 +34,7 @@ class Homologation {
     } = donnees;
 
     this.id = id;
+    if (createur.email) this.createur = new Utilisateur(createur);
     this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
@@ -118,8 +120,9 @@ class Homologation {
   toJSON() {
     return {
       id: this.id,
-      nomService: this.nomService(),
+      createur: this.createur.toJSON(),
       contributeurs: this.contributeurs.map((c) => c.toJSON()),
+      nomService: this.nomService(),
     };
   }
 }
