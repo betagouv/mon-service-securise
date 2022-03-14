@@ -77,11 +77,6 @@ body.recouvert {
   color: var(--texte-fonce);
 }
 
-.rideau .modale .consigne {
-  font-size: 0.8em;
-  color: var(--texte-moyen);
-}
-
 .rideau .modale section {
   padding: 2em;
 
