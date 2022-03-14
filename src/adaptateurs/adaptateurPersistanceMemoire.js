@@ -18,12 +18,19 @@ const nouvelAdaptateur = (donnees = {}) => {
   );
 
   const homologation = (id) => {
-    const contributeurs = (idHomologation) => donnees.autorisations
-      .filter((a) => a.idHomologation === idHomologation && a.type === 'contributeur')
-      .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
+    const intervenantsHomologation = (idHomologation) => donnees.autorisations
+      .filter((a) => a.idHomologation === idHomologation)
+      .reduce((acc, a) => {
+        acc[`${a.type}s`].push(donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
+        return acc;
+      }, { createurs: [], contributeurs: [] });
 
     const homologationTrouvee = donnees.homologations.find((h) => h.id === id);
-    if (homologationTrouvee) homologationTrouvee.contributeurs = contributeurs(id);
+    if (homologationTrouvee) {
+      const intervenants = intervenantsHomologation(id);
+      [homologationTrouvee.createur] = intervenants.createurs;
+      homologationTrouvee.contributeurs = intervenants.contributeurs;
+    }
     return Promise.resolve(homologationTrouvee);
   };
 
