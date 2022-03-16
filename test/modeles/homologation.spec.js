@@ -161,6 +161,25 @@ describe('Une homologation', () => {
     expect(homologation.descriptionAutoriteHomologation()).to.equal('Jean Dupont (Maire)');
   });
 
+  describe('sur une demande du nom de personne responsable du maintien en conditions opérationnelles', () => {
+    it('trouve le nom dans la partie prenante maintenance du service', () => {
+      const homologation = new Homologation({
+        id: '123',
+        partiesPrenantes: {
+          partiesPrenantes: [{ type: 'MaintenanceService', nom: 'MCO' }],
+        },
+      });
+
+      expect(homologation.nomMaintenanceService()).to.equal('MCO');
+    });
+
+    it('reste robuste sans la présence de la partie prenante maintenance du service', () => {
+      const homologation = new Homologation({ id: '123' });
+
+      expect(homologation.nomMaintenanceService()).to.equal('');
+    });
+  });
+
   it('décrit son expiration', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: { expiration: 'Dans un an' } },

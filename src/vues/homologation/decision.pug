@@ -80,6 +80,8 @@ nav.ne-pas-imprimer
         dd= homologation.structureDeveloppement()
         dt Hébergement et localisation des données :
         dd= `${homologation.hebergeur()}, ${homologation.localisationDonnees()}`
+        dt Maintien en conditions opérationnelles :
+        dd= homologation.nomMaintenanceService()
 
     section.risques
       h2 Principaux risques de sécurité identifiés
