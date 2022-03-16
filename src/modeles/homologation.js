@@ -56,6 +56,8 @@ class Homologation {
 
   nomMaintenanceService() { return this.partiesPrenantes.partiesPrenantes.maintenanceService()?.nom || ''; }
 
+  nomSecuriteService() { return this.partiesPrenantes.partiesPrenantes.securiteService()?.nom || ''; }
+
   delegueProtectionDonnees() {
     return this.partiesPrenantes.delegueProtectionDonnees;
   }

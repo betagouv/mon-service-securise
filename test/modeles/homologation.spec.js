@@ -180,6 +180,25 @@ describe('Une homologation', () => {
     });
   });
 
+  describe('sur une demande du nom de personne responsable du maintien en conditions de sécurité', () => {
+    it('trouve le nom dans la partie prenante sécurité du service', () => {
+      const homologation = new Homologation({
+        id: '123',
+        partiesPrenantes: {
+          partiesPrenantes: [{ type: 'SecuriteService', nom: 'MCS' }],
+        },
+      });
+
+      expect(homologation.nomSecuriteService()).to.equal('MCS');
+    });
+
+    it('reste robuste sans la présence de la partie prenante sécurité du service', () => {
+      const homologation = new Homologation({ id: '123' });
+
+      expect(homologation.nomSecuriteService()).to.equal('');
+    });
+  });
+
   it('décrit son expiration', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: { expiration: 'Dans un an' } },
