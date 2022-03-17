@@ -139,6 +139,9 @@ nav.ne-pas-imprimer
       dl
         dt Décision d'homologation préparée par :
         dd= homologation.descriptionEquipePreparation()
+        each acteur in homologation.acteursHomologation()
+          dt #{acteur.role} :
+          dd= acteur.description
 
     section
       h2 Calendrier
