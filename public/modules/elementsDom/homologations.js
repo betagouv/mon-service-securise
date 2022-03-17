@@ -5,7 +5,6 @@ const $modaleNouveauContributeur = () => $(`
     <div class="contenu-modale">
       <h1>Ajout de contributeurs</h1>
       <label for="emailContributeur">Inviter un nouveau contributeur</label>
-      <div class="consigne">Cette personne doit déjà avoir un compte MonServiceSécurisé</div>
       <div class="nouveau-contributeur">
         <div class="icone-enveloppe"></div>
         <input id="emailContributeur"

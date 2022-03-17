@@ -45,10 +45,32 @@ L'équipe MonServiceSécurisé`,
   });
 };
 
+const envoieMessageInvitationInscription = (
+  destinataire, prenomNomEmetteur, nomService, idResetMotDePasse,
+) => {
+  const transport = creeTransport();
+
+  return transport.sendMail({
+    from: process.env.ADRESSE_MAIL_CONTACT,
+    to: destinataire,
+    subject: 'MonServiceSécurisé – Invitation à contribuer',
+    text: `Bonjour,
+
+${prenomNomEmetteur} vous invite à contribuer à l'homologation du service
+${nomService} sur MonServiceSécurisé. Nous vous avons créé un compte utilisateur.
+Cliquez sur le lien d'activation pour finaliser votre inscription :
+${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}
+
+N'hésitez pas à nous contacter pour toutes précisions.
+
+L'équipe MonServiceSécurisé`,
+  });
+};
+
 const envoieMessageReinitialisationMotDePasse = (destinataire, idResetMotDePasse) => {
   const transport = creeTransport();
 
-  transport.sendMail({
+  return transport.sendMail({
     from: process.env.ADRESSE_MAIL_CONTACT,
     to: destinataire,
     subject: 'MonServiceSécurisé – Changement du mot de passe',
@@ -69,5 +91,6 @@ L'équipe MonServiceSécurisé`,
 
 module.exports = {
   envoieMessageFinalisationInscription,
+  envoieMessageInvitationInscription,
   envoieMessageReinitialisationMotDePasse,
 };

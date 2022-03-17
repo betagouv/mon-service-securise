@@ -1,9 +1,33 @@
 const express = require('express');
 
-const { ErreurModele } = require('../erreurs');
+const { EchecEnvoiMessage, ErreurModele } = require('../erreurs');
 const routesApiHomologation = require('./routesApiHomologation');
 
 const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
+  const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) => promesseEnvoiMessage
+    .then(() => utilisateur)
+    .catch(() => depotDonnees.supprimeUtilisateur(utilisateur.id)
+      .then(() => Promise.reject(new EchecEnvoiMessage())));
+
+  const envoieMessageInvitationInscription = (emetteur, contributeur, homologation) => (
+    verifieSuccesEnvoiMessage(
+      adaptateurMail.envoieMessageInvitationInscription(
+        contributeur.email,
+        emetteur.prenomNom(),
+        homologation.nomService(),
+        contributeur.idResetMotDePasse,
+      ),
+      contributeur,
+    ));
+
+  const envoieMessageFinalisationInscription = (utilisateur) => (
+    verifieSuccesEnvoiMessage(
+      adaptateurMail.envoieMessageFinalisationInscription(
+        utilisateur.email, utilisateur.idResetMotDePasse,
+      ),
+      utilisateur,
+    ));
+
   const routes = express.Router();
 
   routes.get('/homologations', middleware.verificationAcceptationCGU, (requete, reponse) => {
@@ -35,20 +59,12 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
     const email = requete.body.email?.toLowerCase();
 
     depotDonnees.nouvelUtilisateur({ prenom, nom, email })
-      .then((utilisateur) => (
-        adaptateurMail.envoieMessageFinalisationInscription(
-          utilisateur.email, utilisateur.idResetMotDePasse
-        )
-          .then(() => reponse.json({ idUtilisateur: utilisateur.id }))
-          .catch(() => {
-            depotDonnees.supprimeUtilisateur(utilisateur.id)
-              .then(() => reponse.status(424).send(
-                "L'envoi de l'email de finalisation d'inscription a échoué"
-              ));
-          })
-      ))
+      .then(envoieMessageFinalisationInscription)
+      .then((u) => reponse.json({ idUtilisateur: u.id }))
       .catch((e) => {
-        if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+        if (e instanceof EchecEnvoiMessage) {
+          reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
+        } else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
         else suite(e);
       });
   });
@@ -123,25 +139,42 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .catch(suite);
   });
 
-  routes.post('/autorisation', middleware.verificationAcceptationCGU, (requete, reponse, suite) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
-    const { emailContributeur, idHomologation } = requete.body;
+  routes.post('/autorisation',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('emailContributeur'),
+    (requete, reponse, suite) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const { emailContributeur, idHomologation } = requete.body;
 
-    depotDonnees.autorisationPour(idUtilisateur, idHomologation)
-      .then((a) => {
-        if (!a.permissionAjoutContributeur) {
-          return reponse.status(403).send("Ajout non autorisé d'un contributeur");
-        }
+      const creeContributeurSiNecessaire = (contributeur) => {
+        if (contributeur) return Promise.resolve(contributeur);
 
-        return depotDonnees.utilisateurAvecEmail(emailContributeur)
-          .then((u) => depotDonnees.ajouteContributeurAHomologation(u?.id, idHomologation))
-          .then(() => reponse.send(''));
-      })
-      .catch((e) => {
-        if (e instanceof ErreurModele) reponse.status(422).send(e.message);
-        else suite(e);
-      });
-  });
+        return Promise.all([
+          depotDonnees.utilisateur(idUtilisateur),
+          depotDonnees.nouvelUtilisateur({ email: emailContributeur }),
+          depotDonnees.homologation(idHomologation),
+        ])
+          .then((resultats) => envoieMessageInvitationInscription(...resultats));
+      };
+
+      depotDonnees.autorisationPour(idUtilisateur, idHomologation)
+        .then((a) => {
+          if (!a.permissionAjoutContributeur) {
+            return reponse.status(403).send("Ajout non autorisé d'un contributeur");
+          }
+
+          return depotDonnees.utilisateurAvecEmail(emailContributeur)
+            .then(creeContributeurSiNecessaire)
+            .then((c) => depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation))
+            .then(() => reponse.send(''));
+        })
+        .catch((e) => {
+          if (e instanceof EchecEnvoiMessage) {
+            reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
+          } else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+          else suite(e);
+        });
+    });
 
   return routes;
 };

@@ -499,6 +499,14 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.depotDonnees().ajouteContributeurAHomologation = () => Promise.resolve();
     });
 
+    it("aseptise l'email du contributeur", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['emailContributeur'],
+        { method: 'post', url: 'http://localhost:1234/api/autorisation' },
+        done
+      );
+    });
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur.middleware().verifieRequeteExigeAcceptationCGU({
         method: 'post',
@@ -549,6 +557,96 @@ describe('Le serveur MSS des routes /api/*', () => {
           done();
         })
         .catch(done);
+    });
+
+    describe("si le contributeur n'existe pas déjà", () => {
+      let contributeurCree;
+
+      beforeEach(() => {
+        let utilisateurInexistant;
+        testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateurInexistant);
+        testeur.adaptateurMail().envoieMessageInvitationInscription = () => Promise.resolve();
+
+        contributeurCree = { id: '789', email: 'jean.dupont@mail.fr', idResetMotDePasse: 'reset' };
+        testeur.depotDonnees().nouvelUtilisateur = () => Promise.resolve(contributeurCree);
+
+        const utilisateurCourant = { prenomNom: () => '' };
+        testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateurCourant);
+
+        const homologation = { nomService: () => '' };
+        testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
+      });
+
+      it('demande au dépôt de le créer', (done) => {
+        let nouveauContributeurCree = false;
+        testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
+          try {
+            expect(donneesUtilisateur.email).to.equal('jean.dupont@mail.fr');
+            nouveauContributeurCree = true;
+            return Promise.resolve(contributeurCree);
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        axios.post('http://localhost:1234/api/autorisation', {
+          emailContributeur: 'jean.dupont@mail.fr',
+          idHomologation: '123',
+        })
+          .then(() => {
+            expect(nouveauContributeurCree).to.be(true);
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it("envoie un mail d'invitation au contributeur créé", (done) => {
+        let messageEnvoye = false;
+        testeur.middleware().reinitialise('456');
+
+        testeur.depotDonnees().utilisateur = (id) => {
+          try {
+            expect(id).to.equal('456');
+            return Promise.resolve({ prenomNom: () => 'Utilisateur Courant' });
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        testeur.depotDonnees().homologation = (id) => {
+          try {
+            expect(id).to.equal('123');
+            return Promise.resolve({ nomService: () => 'Nom Service' });
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        testeur.adaptateurMail().envoieMessageInvitationInscription = (
+          destinataire, prenomNomEmetteur, nomService, idResetMotDePasse
+        ) => {
+          try {
+            expect(destinataire).to.equal('jean.dupont@mail.fr');
+            expect(prenomNomEmetteur).to.equal('Utilisateur Courant');
+            expect(nomService).to.equal('Nom Service');
+            expect(idResetMotDePasse).to.equal('reset');
+            messageEnvoye = true;
+            return Promise.resolve();
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        axios.post('http://localhost:1234/api/autorisation', {
+          emailContributeur: 'jean.dupont@mail.fr',
+          idHomologation: '123',
+        })
+          .then(() => {
+            expect(messageEnvoye).to.be(true);
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
     });
 
     it("demande au dépôt de données d'ajouter l'autorisation", (done) => {
