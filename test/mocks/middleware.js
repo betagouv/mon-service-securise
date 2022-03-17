@@ -50,60 +50,60 @@ const middlewareFantaisie = {
   },
 
   aseptise: (...nomsParametres) => (
-    (requete, reponse, suite) => {
+    (_requete, _reponse, suite) => {
       parametresAseptises = nomsParametres;
       suite();
     }
   ),
 
   aseptiseListes: (listes) => (
-    (requete, reponse, suite) => {
+    (_requete, _reponse, suite) => {
       listes.forEach(({ nom, proprietes }) => listesAseptisees.push({ nom, proprietes }));
       suite();
     }
   ),
 
-  authentificationBasique: (requete, reponse, suite) => {
+  authentificationBasique: (_requete, _reponse, suite) => {
     authentificationBasiqueMenee = true;
     suite();
   },
 
   idUtilisateurCourant: () => idUtilisateurCourant,
 
-  positionneHeaders: (requete, reponse, suite) => {
+  positionneHeaders: (_requete, _reponse, suite) => {
     headersPositionnes = true;
     suite();
   },
 
-  positionneHeadersAvecNonce: (requete, reponse, suite) => {
+  positionneHeadersAvecNonce: (_requete, _reponse, suite) => {
     headersAvecNoncePositionnes = true;
     suite();
   },
 
-  repousseExpirationCookie: (requete, reponse, suite) => {
+  repousseExpirationCookie: (_requete, _reponse, suite) => {
     expirationCookieRepoussee = true;
     suite();
   },
 
-  suppressionCookie: (requete, reponse, suite) => {
+  suppressionCookie: (_requete, _reponse, suite) => {
     suppressionCookieEffectuee = true;
     suite();
   },
 
-  trouveHomologation: (requete, reponse, suite) => {
+  trouveHomologation: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.homologation = new Homologation({ id: '456' });
     rechercheHomologationEffectuee = true;
     suite();
   },
 
-  verificationJWT: (requete, reponse, suite) => {
+  verificationJWT: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     verificationJWTMenee = true;
     suite();
   },
 
-  verificationAcceptationCGU: (requete, reponse, suite) => {
+  verificationAcceptationCGU: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     verificationCGUMenee = true;
     suite();

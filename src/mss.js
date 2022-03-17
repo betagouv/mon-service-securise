@@ -38,39 +38,39 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
 
-  app.get('/', (requete, reponse) => {
+  app.get('/', (_requete, reponse) => {
     reponse.render('index');
   });
 
-  app.get('/aPropos', (requete, reponse) => {
+  app.get('/aPropos', (_requete, reponse) => {
     reponse.render('aPropos');
   });
 
-  app.get('/cgu', (requete, reponse) => {
+  app.get('/cgu', (_requete, reponse) => {
     reponse.render('cgu');
   });
 
-  app.get('/confidentialite', (requete, reponse) => {
+  app.get('/confidentialite', (_requete, reponse) => {
     reponse.render('confidentialite');
   });
 
-  app.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
+  app.get('/connexion', middleware.suppressionCookie, (_requete, reponse) => {
     reponse.render('connexion');
   });
 
-  app.get('/questionsFrequentes', (requete, reponse) => {
+  app.get('/questionsFrequentes', (_requete, reponse) => {
     reponse.render('questionsFrequentes');
   });
 
-  app.get('/mentionsLegales', (requete, reponse) => {
+  app.get('/mentionsLegales', (_requete, reponse) => {
     reponse.render('mentionsLegales');
   });
 
-  app.get('/reinitialisationMotDePasse', middleware.suppressionCookie, (requete, reponse) => {
+  app.get('/reinitialisationMotDePasse', middleware.suppressionCookie, (_requete, reponse) => {
     reponse.render('reinitialisationMotDePasse');
   });
 
-  app.get('/inscription', (requete, reponse) => {
+  app.get('/inscription', (_requete, reponse) => {
     reponse.render('inscription');
   });
 
@@ -91,11 +91,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
         });
     });
 
-  app.get('/admin/inscription', middleware.authentificationBasique, (requete, reponse) => {
+  app.get('/admin/inscription', middleware.authentificationBasique, (_requete, reponse) => {
     reponse.render('admin/inscription');
   });
 
-  app.get('/espacePersonnel', middleware.verificationAcceptationCGU, (requete, reponse) => {
+  app.get('/espacePersonnel', middleware.verificationAcceptationCGU, (_requete, reponse) => {
     reponse.render('espacePersonnel');
   });
 

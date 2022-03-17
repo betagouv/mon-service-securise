@@ -1,7 +1,7 @@
 exports.up = (knex) => knex('homologations')
   .then((lignes) => {
     const suppressions = lignes
-      .map(({ id, donnees: { idUtilisateur, ...autresDonnees } }) => knex('homologations')
+      .map(({ id, donnees: { idUtilisateur: _, ...autresDonnees } }) => knex('homologations')
         .where({ id })
         .update({ donnees: { ...autresDonnees } }));
 

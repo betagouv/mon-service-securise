@@ -7,7 +7,7 @@ const InformationsHomologation = require('../modeles/informationsHomologation');
 const routesHomologation = (middleware, referentiel) => {
   const routes = express.Router();
 
-  routes.get('/creation', middleware.verificationAcceptationCGU, (requete, reponse) => {
+  routes.get('/creation', middleware.verificationAcceptationCGU, (_requete, reponse) => {
     const homologation = new Homologation({});
     reponse.render('homologation/creation', { referentiel, homologation });
   });

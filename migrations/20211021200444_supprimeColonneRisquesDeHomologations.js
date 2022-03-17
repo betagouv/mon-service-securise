@@ -1,7 +1,7 @@
 exports.up = (knex) => knex('homologations')
   .then((lignes) => {
     const misesAJour = lignes
-      .map(({ id, donnees: { risques, ...autresDonnees } }) => knex('homologations')
+      .map(({ id, donnees: { risques: _, ...autresDonnees } }) => knex('homologations')
         .where({ id })
         .update({ donnees: { ...autresDonnees } }));
 

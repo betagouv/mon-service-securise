@@ -2,7 +2,7 @@ exports.up = (knex) => knex('homologations')
   .then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees }) => donnees.informationsGenerales)
-      .map(({ id, donnees: { informationsGenerales, ...autresDonnees } }) => knex('homologations')
+      .map(({ id, donnees: { informationsGenerales: _, ...autresDonnees } }) => knex('homologations')
         .where({ id })
         .update({ donnees: { ...autresDonnees } }));
     return Promise.all(misesAJour);

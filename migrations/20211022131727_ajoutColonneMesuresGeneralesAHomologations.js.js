@@ -13,7 +13,7 @@ exports.down = (knex) => knex('homologations')
   .then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees }) => donnees.mesuresGenerales)
-      .map(({ id, donnees: { mesures, mesuresGenerales, ...autresDonnees } }) => knex('homologations')
+      .map(({ id, donnees: { mesures: _, mesuresGenerales, ...autresDonnees } }) => knex('homologations')
         .where({ id })
         .update({ donnees: { mesures: mesuresGenerales, ...autresDonnees } }));
 

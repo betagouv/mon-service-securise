@@ -32,7 +32,7 @@ const prepareVerificationReponse = (reponse, status, ...params) => {
 
 const prepareVerificationRedirection = (reponse, urlRedirection, done) => {
   reponse.redirect = (url) => {
-    expect(url).to.equal('/connexion');
+    expect(url).to.equal(urlRedirection);
     done();
   };
 };
