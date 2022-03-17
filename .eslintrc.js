@@ -17,9 +17,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
-  plugins: [
-    'mocha',
-  ],
+  plugins: ['mocha'],
   rules: {
     'comma-dangle': ['error', {
       arrays: 'always-multiline',
@@ -31,6 +29,10 @@ module.exports = {
     'mocha/no-exclusive-tests': 'error',
     'no-param-reassign': ['error', { props: false }],
     'no-return-assign': ['error', 'except-parens'],
+    'no-unused-vars': ['error', {
+      args: 'all',
+      argsIgnorePattern: '^_',
+    }],
     'object-curly-newline': ['error', {
       ObjectExpression: { consistent: true },
       ObjectPattern: { consistent: true },

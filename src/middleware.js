@@ -39,12 +39,12 @@ const middleware = (configuration = {}) => {
     })
     .catch(suite);
 
-  const repousseExpirationCookie = (requete, reponse, suite) => {
+  const repousseExpirationCookie = (requete, _reponse, suite) => {
     requete.session.maintenant = Math.floor(Date.now() / 60_000);
     suite();
   };
 
-  const suppressionCookie = (requete, reponse, suite) => {
+  const suppressionCookie = (requete, _reponse, suite) => {
     requete.session = null;
     suite();
   };
@@ -94,7 +94,7 @@ const middleware = (configuration = {}) => {
       .catch(() => reponse.status(422).send("L'homologation n'a pas pu être récupérée")));
   };
 
-  const aseptise = (...nomsParametres) => ((requete, reponse, suite) => {
+  const aseptise = (...nomsParametres) => ((requete, _reponse, suite) => {
     const paramsTableauxVides = Object.keys(requete.body)
       .filter((p) => (Array.isArray(requete.body[p]) && requete.body[p].length === 0));
 
