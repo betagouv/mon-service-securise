@@ -168,4 +168,70 @@ describe("L'ensemble des rôles et responsabilités", () => {
       expect(rolesResponsabilites.descriptionStructureDeveloppement()).to.equal('');
     });
   });
+
+  describe("sur une demande de description des acteurs de l'homologation", () => {
+    it("intègre l'autorité d'homologation", () => {
+      const rolesResponsabilites = new RolesResponsabilites({
+        autoriteHomologation: 'Jean Dupont', fonctionAutoriteHomologation: 'Maire',
+      });
+
+      const acteursHomologations = rolesResponsabilites.descriptionActeursHomologation();
+      expect(acteursHomologations).to.eql([{ role: "Autorité d'homologation", description: 'Jean Dupont (Maire)' }]);
+    });
+
+    it('intègre le ou la spécialiste cybersécurité', () => {
+      const rolesResponsabilites = new RolesResponsabilites({
+        expertCybersecurite: 'John Dupond', fonctionExpertCybersecurite: 'Spécialiste',
+      });
+
+      const acteursHomologations = rolesResponsabilites.descriptionActeursHomologation();
+      expect(acteursHomologations).to.eql([{ role: 'Spécialiste cybersécurité', description: 'John Dupond (Spécialiste)' }]);
+    });
+
+    it('intègre le délégué ou la délégué à la protection des données à caractère personnel', () => {
+      const rolesResponsabilites = new RolesResponsabilites({
+        delegueProtectionDonnees: 'Marie Age', fonctionDelegueProtectionDonnees: 'Déléguée',
+      });
+
+      const acteursHomologations = rolesResponsabilites.descriptionActeursHomologation();
+      expect(acteursHomologations).to.eql([{ role: 'Délégué(e) à la protection des données à caractère personnel', description: 'Marie Age (Déléguée)' }]);
+    });
+
+    it('intègre le ou la responsable métier du projet', () => {
+      const rolesResponsabilites = new RolesResponsabilites({
+        piloteProjet: 'Otto Graf', fonctionPiloteProjet: 'Pilote',
+      });
+
+      const acteursHomologations = rolesResponsabilites.descriptionActeursHomologation();
+      expect(acteursHomologations).to.eql([{ role: 'Responsable métier du projet', description: 'Otto Graf (Pilote)' }]);
+    });
+
+    it('intègre les acteurs spécifiques', () => {
+      const rolesResponsabilites = new RolesResponsabilites({
+        acteursHomologation: [
+          { role: 'Rôle dans le projet', nom: 'Sandra Nicouverture', fonction: 'Fonction' },
+        ],
+      });
+
+      const acteursHomologations = rolesResponsabilites.descriptionActeursHomologation();
+      expect(acteursHomologations).to.eql([{ role: 'Rôle dans le projet', description: 'Sandra Nicouverture (Fonction)' }]);
+    });
+
+    it('intègre les acteurs spécifiques sans les fonctions si elles ne sont pas présentes', () => {
+      const rolesResponsabilites = new RolesResponsabilites({
+        acteursHomologation: [
+          { role: 'Rôle dans le projet', nom: 'Yamamoto Kaderate' },
+        ],
+      });
+
+      const acteursHomologations = rolesResponsabilites.descriptionActeursHomologation();
+      expect(acteursHomologations).to.eql([{ role: 'Rôle dans le projet', description: 'Yamamoto Kaderate' }]);
+    });
+
+    it("n'intègre pas les acteurs non renseignés", () => {
+      const rolesResponsabilites = new RolesResponsabilites({});
+
+      expect(rolesResponsabilites.descriptionActeursHomologation()).to.have.length(0);
+    });
+  });
 });

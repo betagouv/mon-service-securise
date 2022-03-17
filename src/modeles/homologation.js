@@ -47,6 +47,10 @@ class Homologation {
     this.referentiel = referentiel;
   }
 
+  acteursHomologation() {
+    return this.rolesResponsabilites.descriptionActeursHomologation();
+  }
+
   autoriteHomologation() { return this.rolesResponsabilites.autoriteHomologation; }
 
   delegueProtectionDonnees() {
