@@ -190,41 +190,6 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
   });
 
-  describe('quand requête POST sur `/api/homologation/:id/caracteristiquesComplementaires', () => {
-    beforeEach(() => {
-      testeur.depotDonnees().ajouteCaracteristiquesAHomologation = () => Promise.resolve();
-    });
-
-    it("recherche l'homologation correspondante", (done) => {
-      testeur.middleware().verifieRechercheHomologation({
-        method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/caracteristiquesComplementaires',
-      }, done);
-    });
-
-    it("demande au dépôt d'associer les caractéristiques à l'homologation", (done) => {
-      let caracteristiquesAjoutees = false;
-
-      testeur.depotDonnees().ajouteCaracteristiquesAHomologation = (
-        (idHomologation, caracteristiques) => new Promise((resolve) => {
-          expect(idHomologation).to.equal('456');
-          expect(caracteristiques).to.be.ok();
-          caracteristiquesAjoutees = true;
-          resolve();
-        })
-      );
-
-      axios.post('http://localhost:1234/api/homologation/456/caracteristiquesComplementaires', {})
-        .then((reponse) => {
-          expect(caracteristiquesAjoutees).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
-          done();
-        })
-        .catch(done);
-    });
-  });
-
   describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
     beforeEach(() => (
       testeur.depotDonnees().remplaceMesuresSpecifiquesPourHomologation = () => Promise.resolve()

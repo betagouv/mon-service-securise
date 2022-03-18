@@ -118,10 +118,6 @@ const creeDepot = (config = {}) => {
       ))
   );
 
-  const ajouteCaracteristiquesAHomologation = (...params) => (
-    metsAJourProprieteHomologation('caracteristiquesComplementaires', ...params)
-  );
-
   const ajoutePartiesPrenantesAHomologation = (...params) => {
     const [idHomologation, partiesPrenantes] = params;
 
@@ -308,7 +304,6 @@ const creeDepot = (config = {}) => {
   return {
     accesAutorise,
     ajouteAvisExpertCyberAHomologation,
-    ajouteCaracteristiquesAHomologation,
     ajouteContributeurAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteMesureGeneraleAHomologation,
