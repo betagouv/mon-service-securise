@@ -25,15 +25,6 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/caracteristiquesComplementaires`', () => {
-    it("recherche l'homologation correspondante", (done) => {
-      testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/caracteristiquesComplementaires',
-        done,
-      );
-    });
-  });
-
   describe('quand requête GET sur `/homologation/:id/decision`', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
