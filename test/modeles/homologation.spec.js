@@ -76,24 +76,6 @@ describe('Une homologation', () => {
     expect(homologation.descriptionTypeService()).to.equal('Type de service non renseignée');
   });
 
-  it('connaît ses caractéristiques complémentaires', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      localisationsDonnees: { france: { description: 'Quelque part en France' } },
-    });
-    const homologation = new Homologation({
-      id: '123',
-      caracteristiquesComplementaires: {},
-      descriptionService: {
-        localisationDonnees: 'france',
-        presentation: 'Une présentation',
-      },
-    }, referentiel);
-
-    expect(homologation.presentation()).to.equal('Une présentation');
-    expect(homologation.caracteristiquesComplementaires).to.be.ok();
-    expect(homologation.localisationDonnees()).to.equal('Quelque part en France');
-  });
-
   it('connait ses parties prenantes', () => {
     const homologation = new Homologation({
       id: '123',
