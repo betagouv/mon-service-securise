@@ -3,7 +3,6 @@ const express = require('express');
 const { ErreurModele } = require('../erreurs');
 const ActeursHomologation = require('../modeles/acteursHomologation');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
-const CaracteristiquesComplementaires = require('../modeles/caracteristiquesComplementaires');
 const DescriptionService = require('../modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('../modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('../modeles/donneesSensiblesSpecifiques');
@@ -81,17 +80,6 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
         } else suite(e);
       });
   });
-
-  routes.post('/:id/caracteristiquesComplementaires', middleware.trouveHomologation,
-    (requete, reponse) => {
-      try {
-        const caracteristiques = new CaracteristiquesComplementaires(requete.body, referentiel);
-        depotDonnees.ajouteCaracteristiquesAHomologation(requete.params.id, caracteristiques)
-          .then(() => reponse.send({ idHomologation: requete.homologation.id }));
-      } catch {
-        reponse.status(422).send('Données invalides');
-      }
-    });
 
   routes.post('/:id/mesures', middleware.trouveHomologation, middleware.aseptise(
     '*',

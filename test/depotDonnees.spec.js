@@ -15,7 +15,6 @@ const AdaptateurPersistanceMemoire = require('../src/adaptateurs/adaptateurPersi
 const AutorisationContributeur = require('../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../src/modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../src/modeles/avisExpertCyber');
-const CaracteristiquesComplementaires = require('../src/modeles/caracteristiquesComplementaires');
 const DescriptionService = require('../src/modeles/descriptionService');
 const Homologation = require('../src/modeles/homologation');
 const MesureGenerale = require('../src/modeles/mesureGenerale');
@@ -303,25 +302,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
         })
         .catch(done);
     });
-  });
-
-  it('sait associer des caractéristiques complémentaires à une homologation', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [
-        { id: '123', descriptionService: { nomService: 'nom' } },
-      ],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    const caracteristiques = new CaracteristiquesComplementaires({});
-
-    depot.ajouteCaracteristiquesAHomologation('123', caracteristiques)
-      .then(() => depot.homologation('123'))
-      .then(({ caracteristiquesComplementaires }) => {
-        expect(caracteristiquesComplementaires).to.be.ok();
-        done();
-      })
-      .catch(done);
   });
 
   it('sait associer des parties prenantes à une homologation', (done) => {
