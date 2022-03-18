@@ -1,44 +1,43 @@
-import parametres, { modifieParametresAvecItemsExtraits } from './parametres.mjs';
-import listesAvecItemsExtraits from './listesAvecItemsExtraits.mjs';
+import parametres from './parametres.mjs';
 
-const tousLesParametres = (selecteurFormulaire) => {
-  const params = parametres(selecteurFormulaire);
-  listesAvecItemsExtraits.forEach(
-    ({ cle, sourceRegExpParamsItem }) => (
-      modifieParametresAvecItemsExtraits(params, cle, sourceRegExpParamsItem)
-    )
-  );
-  return params;
+const redirigeVersSynthese = ({ data: { idHomologation } }) => (
+  window.location = `/homologation/${idHomologation}`
+);
+
+const afficheModale = () => $('*').trigger('afficheModale');
+
+const soumetsHomologation = (requete, selecteurFormulaire, fonctionExtractionParametres) => {
+  const params = fonctionExtractionParametres(selecteurFormulaire);
+  requete.data = params;
+
+  axios.get('/api/seuilCriticite', { params }).then(({ data: { seuilCriticite } }) => {
+    if (seuilCriticite === 'critique') {
+      afficheModale();
+      return false;
+    }
+
+    return axios(requete).then(redirigeVersSynthese);
+  });
 };
 
-const soumetsHomologation = (url, selecteurFormulaire) => {
-  const params = tousLesParametres(selecteurFormulaire);
-  Object.assign(url, { data: params });
-
-  axios.get('/api/seuilCriticite', { params })
-    .then(({ data: { seuilCriticite } }) => {
-      if (seuilCriticite === 'critique') $('*').trigger('afficheModale');
-      else {
-        axios(url)
-          .then(({ data: { idHomologation } }) => (window.location = `/homologation/${idHomologation}`));
-      }
-    });
-};
-
-const initialiseComportementFormulaire = (selecteurFormulaire, selecteurBouton) => {
+const initialiseComportementFormulaire = (
+  selecteurFormulaire,
+  selecteurBouton,
+  fonctionExtractionParametres = parametres
+) => {
   const $bouton = $(selecteurBouton);
   const identifiantHomologation = $bouton.attr('identifiant');
-  const url = identifiantHomologation
+  const requete = identifiantHomologation
     ? { method: 'put', url: `/api/homologation/${identifiantHomologation}` }
     : { method: 'post', url: '/api/homologation' };
   const $form = $(selecteurFormulaire);
 
-  $form.submit((e) => {
-    e.preventDefault();
-    soumetsHomologation(url, selecteurFormulaire);
-  });
+  $form.on('submit', ((evenement) => {
+    evenement.preventDefault();
+    soumetsHomologation(requete, selecteurFormulaire, fonctionExtractionParametres);
+  }));
 
-  $bouton.click(() => $form.submit());
+  $bouton.on('click', () => $form.trigger('submit'));
 };
 
-export { initialiseComportementFormulaire as default };
+export default initialiseComportementFormulaire;
