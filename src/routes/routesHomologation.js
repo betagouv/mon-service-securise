@@ -23,12 +23,6 @@ const routesHomologation = (middleware, referentiel) => {
     reponse.render('homologation', { homologation, actionsSaisie, InformationsHomologation });
   });
 
-  routes.get('/:id/caracteristiquesComplementaires', middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('homologation/caracteristiquesComplementaires', { referentiel, homologation });
-    });
-
   routes.get('/:id/decision',
     middleware.trouveHomologation,
     middleware.positionneHeadersAvecNonce,
