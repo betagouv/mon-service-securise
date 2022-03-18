@@ -1,8 +1,9 @@
 import { brancheElementsAjoutablesDescription } from '../modules/brancheElementsAjoutables.js';
+import extraisParametresDescriptionService from '../modules/parametresDescriptionService.mjs';
 import initialiseComportementFormulaire from '../modules/soumetsHomologation.mjs';
 
 $(() => {
-  initialiseComportementFormulaire('form#homologation', '.bouton#diagnostic');
+  initialiseComportementFormulaire('form#homologation', '.bouton#diagnostic', extraisParametresDescriptionService);
 
   brancheElementsAjoutablesDescription('donnees-sensibles-specifiques', 'donnees-sensibles');
   brancheElementsAjoutablesDescription('fonctionnalites-specifiques', 'fonctionnalite');
