@@ -497,6 +497,14 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisation);
       testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateur);
       testeur.depotDonnees().ajouteContributeurAHomologation = () => Promise.resolve();
+
+      const utilisateurCourant = { prenomNom: () => '' };
+      testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateurCourant);
+
+      const homologation = { nomService: () => '' };
+      testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
+
+      testeur.adaptateurMail().envoieMessageInvitationContribution = () => Promise.resolve();
     });
 
     it("aseptise l'email du contributeur", (done) => {
@@ -537,7 +545,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           expect(autorisationInterogee).to.be(true);
           done();
         })
-        .catch(done);
+        .catch((e) => done(e.response?.data || e));
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit d'ajouter un contributeur", (done) => {
@@ -559,6 +567,44 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
+    describe('si le contributeur existe déjà', () => {
+      it('envoie un email de notification au contributeur', (done) => {
+        const contributeur = { email: 'jean.dupont@mail.fr' };
+        testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(contributeur);
+
+        const utilisateurCourant = { prenomNom: () => 'Utilisateur Courant' };
+        testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateurCourant);
+
+        const homologation = { id: '123', nomService: () => 'Nom Service' };
+        testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
+
+        let emailEnvoye = false;
+
+        testeur.adaptateurMail().envoieMessageInvitationContribution = (
+          destinataire, prenomNomEmetteur, nomService, idHomologation
+        ) => {
+          try {
+            expect(destinataire).to.equal('jean.dupont@mail.fr');
+            expect(prenomNomEmetteur).to.equal('Utilisateur Courant');
+            expect(nomService).to.equal('Nom Service');
+            expect(idHomologation).to.equal('123');
+            emailEnvoye = true;
+            return Promise.resolve();
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        axios.post('http://localhost:1234/api/autorisation', {
+          emailContributeur: 'jean.dupont@mail.fr',
+          idHomologation: '123',
+        })
+          .then(() => expect(emailEnvoye).to.be(true))
+          .then(() => done())
+          .catch((e) => done(e.response?.data || e));
+      });
+    });
+
     describe("si le contributeur n'existe pas déjà", () => {
       let contributeurCree;
 
@@ -569,12 +615,6 @@ describe('Le serveur MSS des routes /api/*', () => {
 
         contributeurCree = { id: '789', email: 'jean.dupont@mail.fr', idResetMotDePasse: 'reset' };
         testeur.depotDonnees().nouvelUtilisateur = () => Promise.resolve(contributeurCree);
-
-        const utilisateurCourant = { prenomNom: () => '' };
-        testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateurCourant);
-
-        const homologation = { nomService: () => '' };
-        testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
       });
 
       it('demande au dépôt de le créer', (done) => {
@@ -652,10 +692,14 @@ describe('Le serveur MSS des routes /api/*', () => {
     it("demande au dépôt de données d'ajouter l'autorisation", (done) => {
       testeur.depotDonnees().ajouteContributeurAHomologation = (
         (idContributeur, idHomologation) => {
-          expect(utilisateur.id).to.equal('999');
-          expect(idContributeur).to.equal('999');
-          expect(idHomologation).to.equal('123');
-          return Promise.resolve();
+          try {
+            expect(utilisateur.id).to.equal('999');
+            expect(idContributeur).to.equal('999');
+            expect(idHomologation).to.equal('123');
+            return Promise.resolve();
+          } catch (e) {
+            return Promise.reject(e);
+          }
         }
       );
 
@@ -667,7 +711,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           expect(reponse.status).to.be(200);
           done();
         })
-        .catch(done);
+        .catch((e) => done(e.response?.data || e));
     });
 
     it('retourne une erreur HTTP 422 si le dépôt a levé une `ErreurModele`', (done) => {

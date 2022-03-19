@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { EchecEnvoiMessage, ErreurModele } = require('../erreurs');
+const { EchecAutorisation, EchecEnvoiMessage, ErreurModele } = require('../erreurs');
 const routesApiHomologation = require('./routesApiHomologation');
 
 const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
@@ -27,6 +27,16 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       ),
       utilisateur,
     ));
+
+  const envoieMessageInvitationContribution = (emetteur, contributeur, homologation) => (
+    adaptateurMail.envoieMessageInvitationContribution(
+      contributeur.email,
+      emetteur.prenomNom(),
+      homologation.nomService(),
+      homologation.id,
+    )
+      .then(() => contributeur)
+  );
 
   const routes = express.Router();
 
@@ -146,30 +156,43 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const { emailContributeur, idHomologation } = requete.body;
 
-      const creeContributeurSiNecessaire = (contributeur) => {
-        if (contributeur) return Promise.resolve(contributeur);
+      const verifieAutorisation = (a) => (
+        a.permissionAjoutContributeur ? Promise.resolve() : Promise.reject(new EchecAutorisation())
+      );
 
-        return Promise.all([
+      const creeContributeurSiNecessaire = (contributeurExistant) => (
+        contributeurExistant
+          ? Promise.resolve(contributeurExistant)
+          : depotDonnees.nouvelUtilisateur({ email: emailContributeur })
+      );
+
+      const informeContributeur = (contributeurAInformer, contributeurExistant) => (
+        Promise.all([
           depotDonnees.utilisateur(idUtilisateur),
-          depotDonnees.nouvelUtilisateur({ email: emailContributeur }),
           depotDonnees.homologation(idHomologation),
         ])
-          .then((resultats) => envoieMessageInvitationInscription(...resultats));
-      };
+          .then(([emetteur, homologation]) => (
+            contributeurExistant
+              ? envoieMessageInvitationContribution(emetteur, contributeurAInformer, homologation)
+              : envoieMessageInvitationInscription(emetteur, contributeurAInformer, homologation)
+          ))
+      );
+
+      const inviteContributeur = (contributeurExistant) => (
+        creeContributeurSiNecessaire(contributeurExistant)
+          .then((c) => informeContributeur(c, contributeurExistant))
+      );
 
       depotDonnees.autorisationPour(idUtilisateur, idHomologation)
-        .then((a) => {
-          if (!a.permissionAjoutContributeur) {
-            return reponse.status(403).send("Ajout non autorisé d'un contributeur");
-          }
-
-          return depotDonnees.utilisateurAvecEmail(emailContributeur)
-            .then(creeContributeurSiNecessaire)
-            .then((c) => depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation))
-            .then(() => reponse.send(''));
-        })
+        .then(verifieAutorisation)
+        .then(() => depotDonnees.utilisateurAvecEmail(emailContributeur))
+        .then(inviteContributeur)
+        .then((c) => depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation))
+        .then(() => reponse.send(''))
         .catch((e) => {
-          if (e instanceof EchecEnvoiMessage) {
+          if (e instanceof EchecAutorisation) {
+            reponse.status(403).send("Ajout non autorisé d'un contributeur");
+          } else if (e instanceof EchecEnvoiMessage) {
             reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
           } else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
           else suite(e);
