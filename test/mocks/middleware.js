@@ -19,7 +19,7 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
         done();
       } else throw erreur;
     })
-    .catch(done);
+    .catch((e) => done(e.response?.data || e));
 };
 
 let authentificationBasiqueMenee = false;

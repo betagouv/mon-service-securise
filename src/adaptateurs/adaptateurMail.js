@@ -45,6 +45,28 @@ L'équipe MonServiceSécurisé`,
   });
 };
 
+const envoieMessageInvitationContribution = (
+  destinataire, prenomNomEmetteur, nomService, idHomologation
+) => {
+  const transport = creeTransport();
+
+  return transport.sendMail({
+    from: process.env.ADRESSE_MAIL_CONTACT,
+    to: destinataire,
+    subject: 'MonServiceSécurisé – Invitation à contribuer',
+    text: `Bonjour,
+
+${prenomNomEmetteur} vous invite à contribuer à l'homologation du service ${nomService}.
+Ce dossier d'homologation apparaît maintenant dans votre espace personnel.
+Vous pouvez également directement accéder à ce dossier en cliquant sur ce lien :
+${process.env.URL_BASE_MSS}/homologation/${idHomologation}
+
+N'hésitez pas à nous contacter pour toutes précisions.
+
+L'équipe MonServiceSécurisé`,
+  });
+};
+
 const envoieMessageInvitationInscription = (
   destinataire, prenomNomEmetteur, nomService, idResetMotDePasse,
 ) => {
@@ -91,6 +113,7 @@ L'équipe MonServiceSécurisé`,
 
 module.exports = {
   envoieMessageFinalisationInscription,
+  envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieMessageReinitialisationMotDePasse,
 };

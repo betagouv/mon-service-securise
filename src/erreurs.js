@@ -1,3 +1,4 @@
+class EchecAutorisation extends Error {}
 class EchecEnvoiMessage extends Error {}
 class ErreurModele extends Error {}
 class ErreurAutorisationExisteDeja extends ErreurModele {}
@@ -22,6 +23,7 @@ class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
 
 module.exports = {
+  EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
   ErreurAvisInvalide,
