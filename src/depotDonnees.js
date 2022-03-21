@@ -118,8 +118,7 @@ const creeDepot = (config = {}) => {
   );
 
   const ajouteRolesResponsabilitesAHomologation = (...params) => (
-    metsAJourProprieteHomologation('partiesPrenantes', ...params)
-      .then(() => metsAJourProprieteHomologation('rolesResponsabilites', ...params))
+    metsAJourProprieteHomologation('rolesResponsabilites', ...params)
   );
 
   const ajouteAvisExpertCyberAHomologation = (...params) => (
