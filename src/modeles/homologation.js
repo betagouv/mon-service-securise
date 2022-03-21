@@ -3,7 +3,6 @@ const AvisExpertCyber = require('./avisExpertCyber');
 const DescriptionService = require('./descriptionService');
 const Mesure = require('./mesure');
 const Mesures = require('./mesures');
-const PartiesPrenantes = require('./partiesPrenantes');
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
@@ -24,7 +23,6 @@ class Homologation {
       descriptionService = {},
       mesuresGenerales = [],
       mesuresSpecifiques = [],
-      partiesPrenantes = {},
       risquesGeneraux = [],
       risquesSpecifiques = [],
       rolesResponsabilites = {},
@@ -36,7 +34,6 @@ class Homologation {
     this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
-    this.partiesPrenantes = new PartiesPrenantes(partiesPrenantes);
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
     this.risques = new Risques(
       { risquesGeneraux, risquesSpecifiques },
