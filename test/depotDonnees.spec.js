@@ -322,26 +322,6 @@ describe('Le dépôt de données persistées en mémoire', () => {
       .catch(done);
   });
 
-  it('sait enregistrer les rôles et responsabilités en parties prenantes', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-      }],
-    });
-    const depot = DepotDonnees.creeDepot({ adaptateurPersistance });
-
-    const roles = new RolesResponsabilites({ autoriteHomologation: 'Jean Dupont' });
-    depot.ajouteRolesResponsabilitesAHomologation('123', roles)
-      .then(() => depot.homologation('123'))
-      .then(({ partiesPrenantes }) => {
-        expect(partiesPrenantes).to.be.ok();
-        expect(partiesPrenantes.autoriteHomologation).to.equal('Jean Dupont');
-        done();
-      })
-      .catch(done);
-  });
-
   describe('concernant les risques généraux', () => {
     let valideRisque;
 
