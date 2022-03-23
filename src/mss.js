@@ -66,6 +66,10 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     reponse.render('mentionsLegales');
   });
 
+  app.get('/nouvellesFonctionnalites', (_requete, reponse) => {
+    reponse.render('nouvellesFonctionnalites');
+  });
+
   app.get('/reinitialisationMotDePasse', middleware.suppressionCookie, (_requete, reponse) => {
     reponse.render('reinitialisationMotDePasse');
   });

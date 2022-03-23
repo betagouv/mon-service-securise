@@ -1,0 +1,33 @@
+extends mssDeconnecte
+
+block append styles
+  link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/nouvellesFonctionnalites.css', rel = 'stylesheet')
+
+block main
+  .marges-fixes
+    .documentation
+      h1 Nouvelles Fonctionnalités
+      p.description Découvrez les dernières évolutions de MonServiceSécurisé.
+
+      section.informations.
+        Toutes les données déjà renseignées dans vos dossiers en cours et finalisés sont toujours
+        conservées et accessibles quelles que soient les améliorations apportées dans l’interface.
+
+      h2 21 mars 2022
+      ul.evolutions
+        li.
+          La rubrique « Parties prenantes » renommée « Rôles et responsabilités » pour renseigner
+          tous les membres de l’équipe d’homologation et créer une cartographie des parties prenantes.
+        li
+          .
+            Plus de clarté et de rapidité avec la fusion des rubriques « Informations générales »
+            et « Caractéristiques complémentaires » en rubrique « Description du service ».
+          img(src = './statique/assets/images/captures/nouveautes__page_synthese.png')
+        li
+          .
+            Un mode collaboratif simple permettant au propriétaire d’un dossier de l’ouvrir en écriture aux personnes de son choix.
+          img(src = './statique/assets/images/captures/nouveautes__collaboration.gif')
+
+      .boutons
+        a.bouton(href = '/espacePersonnel') Revenir sur l'espace personnel
