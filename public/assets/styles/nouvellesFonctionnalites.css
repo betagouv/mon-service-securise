@@ -1,0 +1,52 @@
+.description {
+  margin-bottom: 2.5em;
+}
+
+section.informations {
+  display: flex;
+  padding: 1.5em 0;
+  color: var(--texte-fonce);
+}
+
+.informations::before {
+  content: '';
+  display: block;
+  width: 1.7em;
+  height: 1.2em;
+  margin: 0.25em 0.5em 0 0;
+  background-image: url(../images/icone_information_bleue.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.informations, .evolutions {
+  line-height: 1.6em;
+}
+
+.evolutions {
+  list-style: none;
+  padding: 0;
+}
+
+.evolutions li {
+ margin-bottom: 1em;
+}
+
+.evolutions li::before {
+  content: '\2705';
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 0.5em;
+}
+
+.evolutions img {
+  display: block;
+  width: 70%;
+  margin: 2em auto;
+}
+
+.boutons {
+  display: flex;
+  justify-content: end;
+}
