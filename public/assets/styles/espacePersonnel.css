@@ -166,3 +166,23 @@
 .confirmation .bouton {
   margin: 0;
 }
+
+.bandeau-nouveautes {
+  display: flex;
+  height: 2.7em;
+  align-items: center;
+  
+  background-color: var(--rose-anssi);
+}
+
+.bandeau-nouveautes:hover {
+  background-color: var(--rose-mise-en-avant);
+}
+
+.bandeau-nouveautes p {
+  color: #fff;
+  font-weight: bold;
+  font-size: .95em;
+  text-transform: uppercase;
+  text-align: left;
+}
