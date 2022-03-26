@@ -1,3 +1,3 @@
 {
-  "ext": "js,json,pug"
+  "ext": "js,json,mjs,pug"
 }
