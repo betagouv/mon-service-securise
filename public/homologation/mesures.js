@@ -1,5 +1,6 @@
+import arrangeParametresMesures from '../modules/arrangeParametresMesures.mjs';
+import parametres from '../modules/parametres.mjs';
 import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
-import { parametresAvecItemsExtraits } from '../modules/parametres.mjs';
 import texteHTML from '../modules/texteHTML.js';
 
 import ajouteModalesInformations from '../modules/interactions/modalesInformations.mjs';
@@ -135,11 +136,9 @@ ${statuts}
   const identifiantHomologation = $bouton.attr('identifiant');
 
   $bouton.click(() => {
-    const params = parametresAvecItemsExtraits(
-      'form#mesures',
-      'mesuresSpecifiques',
-      '^(description|categorie|statut|modalites)-mesure-specifique-',
-    );
+    const params = parametres('form#mesures');
+    arrangeParametresMesures(params);
+
     axios.post(`/api/homologation/${identifiantHomologation}/mesures`, params)
       .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
   });
