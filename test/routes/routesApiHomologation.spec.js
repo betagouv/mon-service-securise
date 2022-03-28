@@ -205,7 +205,8 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it('aseptise tous les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         [
-          '*',
+          'mesuresGenerales.*.statut',
+          'mesuresGenerales.*.modalites',
           'mesuresSpecifiques.*.description',
           'mesuresSpecifiques.*.categorie',
           'mesuresSpecifiques.*.statut',
@@ -230,8 +231,9 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       };
 
       axios.post('http://localhost:1234/api/homologation/456/mesures', {
-        identifiantMesure: 'fait',
-        'modalites-identifiantMesure': "Des modalités d'application",
+        mesuresGenerales: {
+          identifiantMesure: { statut: 'fait', modalites: "Des modalités d'application" },
+        },
       })
         .then((reponse) => {
           expect(mesureAjoutee).to.be(true);
@@ -284,7 +286,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       testeur.verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/mesures',
-        data: { identifiantInvalide: 'statutInvalide' },
+        data: { mesuresGenerales: { identifiantInvalide: { statut: 'statutInvalide' } } },
       }, done);
     });
   });

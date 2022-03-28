@@ -20,4 +20,41 @@ describe("Une demande d'arrangement des paramètres des mesures", () => {
     expect(mesuresSpecifiques[0].statut).to.equal('fait');
     expect(mesuresSpecifiques[0].modalites).to.equal('Des modalités');
   });
+
+  it("met en forme le statut d'une mesure", () => {
+    const parametres = { contactSecurite: 'fait' };
+
+    arrangeParametresMesures(parametres);
+
+    const { mesuresGenerales } = parametres;
+    expect(mesuresGenerales).to.have.property('contactSecurite');
+    expect(mesuresGenerales.contactSecurite.statut).to.equal('fait');
+  });
+
+  it('supprime la clé après la mise en forme', () => {
+    const parametres = { contactSecurite: 'fait' };
+
+    arrangeParametresMesures(parametres);
+
+    expect(parametres).to.not.have.property('contactSecurite');
+  });
+
+  it('doit contenir uniquement les mesures générales sous la clé `mesuresGenerales`', () => {
+    const parametres = { contactSecurite: 'fait' };
+
+    arrangeParametresMesures(parametres);
+
+    const { mesuresGenerales } = parametres;
+    expect(Object.keys(mesuresGenerales).length).to.equal(1);
+  });
+
+  it("met en forme la modalité d'une mesure", () => {
+    const parametres = { 'modalites-contactSecurite': 'Des modalités' };
+
+    arrangeParametresMesures(parametres);
+
+    const { mesuresGenerales } = parametres;
+    expect(mesuresGenerales).to.have.property('contactSecurite');
+    expect(mesuresGenerales.contactSecurite.modalites).to.equal('Des modalités');
+  });
 });
