@@ -82,22 +82,23 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   });
 
   routes.post('/:id/mesures', middleware.trouveHomologation, middleware.aseptise(
-    '*',
+    'mesuresGenerales.*.statut',
+    'mesuresGenerales.*.modalites',
     'mesuresSpecifiques.*.description',
     'mesuresSpecifiques.*.categorie',
     'mesuresSpecifiques.*.statut',
     'mesuresSpecifiques.*.modalites',
   ),
   (requete, reponse, suite) => {
-    const { mesuresSpecifiques = [], ...params } = requete.body;
-    const identifiantsMesures = Object.keys(params).filter((p) => !p.match(/^modalites-/));
+    const { mesuresSpecifiques = [], mesuresGenerales = {} } = requete.body;
+
     const idHomologation = requete.homologation.id;
     try {
-      const ajouts = identifiantsMesures.reduce((acc, im) => {
+      const ajouts = Object.keys(mesuresGenerales).reduce((acc, im) => {
         const mesure = new MesureGenerale({
           id: im,
-          statut: params[im],
-          modalites: params[`modalites-${im}`],
+          statut: mesuresGenerales[im].statut,
+          modalites: mesuresGenerales[im].modalites,
         }, referentiel);
 
         return acc.then(
