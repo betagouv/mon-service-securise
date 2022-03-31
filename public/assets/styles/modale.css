@@ -7,10 +7,10 @@ body.recouvert {
 
   position: absolute;
   top: 1em;
-  right: 1em;
+  right: 2em;
 
-  width: 1em;
-  height: 1em;
+  width: 1.2em;
+  height: 1.2em;
   background-image: url(../images/icone_information.svg);
   background-size: contain;
   background-repeat: no-repeat;
