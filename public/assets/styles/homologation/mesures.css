@@ -39,7 +39,7 @@ form#mesures fieldset .titre {
   grid-column: 1/-1;
 
   margin-bottom: 1em;
-  padding: 1em 2em;
+  padding: 1em 4em 1em 2em;
 
   box-sizing: border-box;
 
