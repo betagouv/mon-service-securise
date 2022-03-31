@@ -55,13 +55,14 @@ form#mesures div.informations-additionnelles {
 }
 
 form#mesures input[type='radio'] {
-  width: revert;
-  height: revert;
-  margin: 0.3em 1em 0.5em 2.3em;
+  font-size: 0.85em;
+  margin: 0.2em 1em 0.2em 2.3em;
 }
 
 form#mesures input[type='radio'] + label {
   margin: 0;
+  padding-top: 0.54em;
+  font-size: inherit;
 }
 
 form#mesures .decoration {
