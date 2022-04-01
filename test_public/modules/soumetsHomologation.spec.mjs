@@ -2,11 +2,10 @@ import expect from 'expect.js';
 import { JSDOM } from 'jsdom';
 import jquery from 'jquery';
 import initialiseComportementFormulaire from '../../public/modules/soumetsHomologation.mjs';
+import ErreurSeuilCriticiteTropEleve from '../../public/modules/erreurs.mjs';
 
 describe("L'initialisation du comportement du formulaire", () => {
   describe('après la soumission du formulaire', () => {
-    const axiosMock = {};
-
     beforeEach(() => {
       const dom = new JSDOM(`
         <form class="formulaire">
@@ -16,65 +15,77 @@ describe("L'initialisation du comportement du formulaire", () => {
       `);
       global.$ = jquery(dom.window);
 
-      global.axios = axiosMock;
       global.window = { location: '/' };
     });
 
-    it('affiche la modale quand le seuil de criticité est critique', async () => {
-      let modaleAffichee = false;
-      axiosMock.get = () => Promise.resolve({ data: { seuilCriticite: 'critique' } });
+    it('affiche la modale quand le seuil de criticité est critique', (done) => {
+      const adaptateurAjax = {
+        verifieSeuilCriticite: () => Promise.reject(new ErreurSeuilCriticiteTropEleve('Seuil de criticité critique')),
+      };
+
+      const evenementsDifferes = $.Deferred();
       $('.formulaire').on('afficheModale', () => {
-        modaleAffichee = true;
+        evenementsDifferes.resolve();
       });
 
-      initialiseComportementFormulaire('.formulaire', '.bouton');
-      await $('.formulaire').trigger('submit');
+      initialiseComportementFormulaire('.formulaire', '.bouton', { adaptateurAjax });
+      $('.bouton').trigger('click');
 
-      expect(modaleAffichee).to.be(true);
+      evenementsDifferes.promise()
+        .then(() => done())
+        .catch(done);
     });
 
     describe("quand le seuil de criticité n'est pas critique", () => {
-      let axiosRequete;
-      let axiosMockFonction;
+      let ajaxRequete;
+      const adaptateurAjax = {};
 
       beforeEach(() => {
-        axiosMockFonction = (requete) => {
-          axiosRequete = requete;
+        adaptateurAjax.verifieSeuilCriticite = () => Promise.resolve();
+        adaptateurAjax.execute = (requete) => {
+          ajaxRequete = requete;
           return Promise.resolve({ data: { idHomologation: '123' } });
         };
-        axiosMockFonction.get = () => Promise.resolve({ data: { seuilCriticite: 'normal' } });
-        global.axios = axiosMockFonction;
       });
 
-      it("Écris une nouvelle homologation si elle n'est pas identifiée", async () => {
-        initialiseComportementFormulaire('.formulaire', '.bouton');
-        await $('.formulaire').trigger('submit');
+      it("envoie au serveur les données de l'homologation à créer", (done) => {
+        const evenementsDifferes = $.Deferred();
+        initialiseComportementFormulaire('.formulaire', '.bouton', { adaptateurAjax });
 
-        expect(axiosRequete.method).to.equal('post');
-        expect(axiosRequete.url).to.equal('/api/homologation');
-        expect(axiosRequete.data['champs-1']).to.equal('valeur 1');
+        evenementsDifferes.resolveWith($('.bouton').trigger('click'))
+          .then(() => {
+            expect(ajaxRequete.method).to.equal('post');
+            expect(ajaxRequete.url).to.equal('/api/homologation');
+            expect(ajaxRequete.data['champs-1']).to.equal('valeur 1');
+          })
+          .then(() => done())
+          .catch(done);
       });
 
-      it("Mets à jour l'homologation si elle est identifiée", async () => {
+      it("envoie au serveur les données de l'homologation à modifier", (done) => {
+        const evenementsDifferes = $.Deferred();
         $('.bouton').attr('identifiant', '12345');
 
-        initialiseComportementFormulaire('.formulaire', '.bouton');
-        await $('.formulaire').trigger('submit');
+        initialiseComportementFormulaire('.formulaire', '.bouton', { adaptateurAjax });
 
-        expect(axiosRequete.method).to.equal('put');
-        expect(axiosRequete.url).to.equal('/api/homologation/12345');
-        expect(axiosRequete.data['champs-1']).to.equal('valeur 1');
+        evenementsDifferes.resolveWith($('.bouton').trigger('click'))
+          .then(() => {
+            expect(ajaxRequete.method).to.equal('put');
+            expect(ajaxRequete.url).to.equal('/api/homologation/12345');
+            expect(ajaxRequete.data['champs-1']).to.equal('valeur 1');
+          })
+          .then(() => done())
+          .catch(done);
       });
 
-      it("Renvoie vers la synthèse de l'homologation", async () => {
-        const soumission = async () => {
-          initialiseComportementFormulaire('.formulaire', '.bouton');
-          await $('.formulaire').trigger('submit');
-        };
+      it("renvoie vers la synthèse de l'homologation", (done) => {
+        const evenementsDifferes = $.Deferred();
+        initialiseComportementFormulaire('.formulaire', '.bouton', { adaptateurAjax });
 
-        await soumission();
-
-        expect(global.window.location).to.equal('/homologation/123');
+        evenementsDifferes.resolveWith($('.bouton').trigger('click'))
+          .then(() => expect(window.location).to.equal('/homologation/123'))
+          .then(() => done())
+          .catch(done);
       });
     });
   });

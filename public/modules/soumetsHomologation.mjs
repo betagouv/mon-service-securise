@@ -1,3 +1,5 @@
+import adaptateurAjaxAxios from './adaptateurAjaxAxios.mjs';
+import ErreurSeuilCriticiteTropEleve from './erreurs.mjs';
 import parametres from './parametres.mjs';
 
 const redirigeVersSynthese = ({ data: { idHomologation } }) => (
@@ -6,24 +8,26 @@ const redirigeVersSynthese = ({ data: { idHomologation } }) => (
 
 const afficheModale = () => $('*').trigger('afficheModale');
 
-const soumetsHomologation = (requete, selecteurFormulaire, fonctionExtractionParametres) => {
+const soumetsHomologation = (
+  adaptateurAjax, requete, selecteurFormulaire, fonctionExtractionParametres
+) => {
   const params = fonctionExtractionParametres(selecteurFormulaire);
   requete.data = params;
 
-  axios.get('/api/seuilCriticite', { params }).then(({ data: { seuilCriticite } }) => {
-    if (seuilCriticite === 'critique') {
-      afficheModale();
-      return false;
-    }
-
-    return axios(requete).then(redirigeVersSynthese);
-  });
+  adaptateurAjax.verifieSeuilCriticite(params)
+    .then(() => adaptateurAjax.execute(requete))
+    .then(redirigeVersSynthese)
+    .catch((erreur) => {
+      if (erreur instanceof ErreurSeuilCriticiteTropEleve) {
+        afficheModale();
+      }
+    });
 };
 
 const initialiseComportementFormulaire = (
   selecteurFormulaire,
   selecteurBouton,
-  fonctionExtractionParametres = parametres
+  { fonctionExtractionParametres = parametres, adaptateurAjax = adaptateurAjaxAxios }
 ) => {
   const $bouton = $(selecteurBouton);
   const identifiantHomologation = $bouton.attr('identifiant');
@@ -34,7 +38,7 @@ const initialiseComportementFormulaire = (
 
   $form.on('submit', ((evenement) => {
     evenement.preventDefault();
-    soumetsHomologation(requete, selecteurFormulaire, fonctionExtractionParametres);
+    soumetsHomologation(adaptateurAjax, requete, selecteurFormulaire, fonctionExtractionParametres);
   }));
 
   $bouton.on('click', () => $form.trigger('submit'));

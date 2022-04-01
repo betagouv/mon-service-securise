@@ -3,7 +3,11 @@ import extraisParametresDescriptionService from '../modules/parametresDescriptio
 import initialiseComportementFormulaire from '../modules/soumetsHomologation.mjs';
 
 $(() => {
-  initialiseComportementFormulaire('form#homologation', '.bouton#diagnostic', extraisParametresDescriptionService);
+  initialiseComportementFormulaire(
+    'form#homologation',
+    '.bouton#diagnostic',
+    { fonctionExtractionParametres: extraisParametresDescriptionService },
+  );
 
   brancheElementsAjoutablesDescription('donnees-sensibles-specifiques', 'donnees-sensibles');
   brancheElementsAjoutablesDescription('fonctionnalites-specifiques', 'fonctionnalite');
