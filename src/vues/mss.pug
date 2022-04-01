@@ -1,38 +1,40 @@
 doctype html
-meta(charset='utf-8')
-link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
-script(src='https://unpkg.com/axios/dist/axios.min.js')
-script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+html(lang='fr')
+  head
+    meta(charset='utf-8')
+    link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
+    script(src='https://unpkg.com/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.6.0.min.js')
 
-block styles
-  link(href='/statique/assets/styles/palette.css', rel='stylesheet')
-  link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
-  link(href='/statique/assets/styles/bouton.css', rel='stylesheet')
-  link(href='/statique/assets/styles/mss.css', rel='stylesheet')
-  link(href='/statique/assets/styles/entete.css', rel='stylesheet')
-  link(href='/statique/assets/styles/piedPage.css', rel='stylesheet')
+    block styles
+      link(href='/statique/assets/styles/palette.css', rel='stylesheet')
+      link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
+      link(href='/statique/assets/styles/bouton.css', rel='stylesheet')
+      link(href='/statique/assets/styles/mss.css', rel='stylesheet')
+      link(href='/statique/assets/styles/entete.css', rel='stylesheet')
+      link(href='/statique/assets/styles/piedPage.css', rel='stylesheet')
 
-title Mon Service Sécurisé
+    title Mon Service Sécurisé
+  body
+    header.marges-fixes
+      .bloc-marque
+        .marianne
+        .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
+        .devise
+      a.logo-anssi(href='https://www.ssi.gouv.fr')
+      a.logo-mss(href='/') Mon Service <b>Sécurisé</b>
+      nav
+        block navigation
 
-header.marges-fixes
-  .bloc-marque
-    .marianne
-    .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
-    .devise
-  a.logo-anssi(href='https://www.ssi.gouv.fr')
-  a.logo-mss(href='/') Mon Service <b>Sécurisé</b>
-  nav
-    block navigation
+    main
+      block main
 
-main
-  block main
+    footer.marges-fixes
+      span Mon Service Sécurisé par l'ANSSI – Version béta
+      nav
+        a(href = '/aPropos') À propos
+        a(href = '/confidentialite') Politique de confidentialité
+        a(href = '/mentionsLegales') Mentions légales
+        a(href = '/cgu') Conditions générales d'utilisation
 
-footer.marges-fixes
-  span Mon Service Sécurisé par l'ANSSI – Version béta
-  nav
-    a(href = '/aPropos') À propos
-    a(href = '/confidentialite') Politique de confidentialité
-    a(href = '/mentionsLegales') Mentions légales
-    a(href = '/cgu') Conditions générales d'utilisation
-
-script(src='/statique/entete.js')
+    script(src='/statique/entete.js')
