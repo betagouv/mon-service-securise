@@ -70,12 +70,12 @@ const creeDepot = (config = {}) => {
 
   return {
     accesAutorise,
+    ajouteContributeurAHomologation,
     autorisation,
     autorisationExiste,
     autorisationPour,
     autorisations,
     transfereAutorisations,
-    ajouteContributeurAHomologation,
   };
 };
 
