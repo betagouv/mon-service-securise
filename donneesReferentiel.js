@@ -511,7 +511,7 @@ module.exports = {
       descriptionLongue: "Cette mesure vise à permettre de protéger l'ensemble des données contenues dans le service et permettre à nouveau leur accès dans le cas où le service serait compromis, par exemple, par un rançongiciel qui aurait « chiffré » et donc rendu inaccessibles ces données. Il est recommandé de procéder à cette sauvegarde au minimum, une fois par semaine.",
     },
     sauvegardeMachineVirtuelle: {
-      description: 'Mettre en place une sauvegarde en continu de la machine virtuelle sur lequel est déployé le service numérique.',
+      description: 'Mettre en place une sauvegarde en continu de la machine virtuelle sur laquelle est déployé le service numérique.',
       categorie: 'resilience',
       descriptionLongue: 'Cette mesure vise à permettre de réinstaller le service dans sa configuration la plus récente, dans le cas où celui-ci aurait été compromis, par exemple, par un rançongiciel, par une défiguration, etc.',
     },
