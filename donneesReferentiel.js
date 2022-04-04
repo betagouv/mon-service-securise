@@ -354,7 +354,7 @@ module.exports = {
       descriptionLongue: "Cette mesure vise à cloisonner les différents types d'accès afin d'éviter qu'un accès utilisateur puisse être détourné par un attaquant pour gagner un accès administrateur au service.",
     },
     nomsDomaineFrUe: {
-      description: "Privilégier l'achat de noms de domaines en .fr ou .ue",
+      description: "Privilégier l'achat de noms de domaines en .fr ou .eu",
       categorie: 'protection',
       descriptionLongue: 'Cette mesure vise à permettre une réaction rapide en cas de typosquatting (consistant à utiliser des noms de domaines proches contenant des erreurs typographiques discrètes ou courantes permettant de rediriger les utilisateurs vers un site malveillant) et renforcer la confiance dans les utilisateurs du service',
     },
