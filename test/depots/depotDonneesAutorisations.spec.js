@@ -7,7 +7,9 @@ const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologa
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const {
   ErreurAutorisationExisteDeja,
+  ErreurAutorisationInexistante,
   ErreurHomologationInexistante,
+  ErreurTentativeSuppressionCreateur,
   ErreurUtilisateurInexistant,
 } = require('../../src/erreurs');
 const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
@@ -257,5 +259,75 @@ describe('Le dépôt de données des autorisations', () => {
       .then((existe) => expect(existe).to.be(false))
       .then(() => done())
       .catch(done);
+  });
+
+  describe("sur demande de suppression d'un contributeur", () => {
+    it("vérifie que l'autorisation de contribution existe", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'annie.dubois@mail.fr' },
+        ],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [
+          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+        ],
+      });
+      const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
+
+      depot.supprimeContributeur('000', '123')
+        .then(() => done('La demande de suppression aurait dû lever une erreur'))
+        .catch((e) => {
+          expect(e).to.be.an(ErreurAutorisationInexistante);
+          expect(e.message).to.equal("L'utilisateur \"000\" n'est pas contributeur de l'homologation \"123\"");
+          done();
+        })
+        .catch(done);
+    });
+
+    it("vérifie qu'il s'agit bien d'un contributeur et non du créateur de l'homologation", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+        ],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [
+          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+        ],
+      });
+      const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
+
+      depot.supprimeContributeur('999', '123')
+        .then(() => done('La demande de suppression aurait dû lever une erreur'))
+        .catch((e) => {
+          expect(e).to.be.an(ErreurTentativeSuppressionCreateur);
+          expect(e.message).to.equal("Suppression impossible : l'utilisateur \"999\" est le propriétaire de l'homologation \"123\"");
+          done();
+        })
+        .catch(done);
+    });
+
+    it('supprime le contributeur', (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'contributeur@mail.fr' },
+        ],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [
+          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+          { id: '789', idUtilisateur: '000', idHomologation: '123', type: 'contributeur' },
+        ],
+      });
+      const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
+
+      depot.autorisationPour('000', '123')
+        .then((a) => expect(a).to.be.an(AutorisationContributeur))
+        .then(() => depot.supprimeContributeur('000', '123'))
+        .then(() => depot.autorisationPour('000', '123'))
+        .then((a) => expect(a).to.be(undefined))
+        .then(() => done())
+        .catch(done);
+    });
   });
 });

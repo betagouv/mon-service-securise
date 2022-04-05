@@ -62,6 +62,7 @@ const creeDepot = (config = {}) => {
     autorisationExiste,
     autorisationPour,
     autorisations,
+    supprimeContributeur,
     transfereAutorisations,
     ajouteContributeurAHomologation,
   } = depotAutorisations;
@@ -88,6 +89,7 @@ const creeDepot = (config = {}) => {
     reinitialiseMotDePasse,
     remplaceMesuresSpecifiquesPourHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
+    supprimeContributeur,
     supprimeHomologation,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeUtilisateur,

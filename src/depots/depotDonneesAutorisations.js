@@ -2,9 +2,12 @@ const adaptateurUUIDParDefaut = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
 const {
   ErreurAutorisationExisteDeja,
+  ErreurAutorisationInexistante,
   ErreurHomologationInexistante,
+  ErreurTentativeSuppressionCreateur,
   ErreurUtilisateurInexistant,
 } = require('../erreurs');
+const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
 const FabriqueAutorisation = require('../modeles/autorisations/fabriqueAutorisation');
 
 const creeDepot = (config = {}) => {
@@ -68,6 +71,34 @@ const creeDepot = (config = {}) => {
       }));
   };
 
+  const supprimeContributeur = (...params) => {
+    const verifieAutorisationExiste = (idContributeur, idHomologation) => (
+      autorisationExiste(idContributeur, idHomologation)
+        .then((existe) => {
+          if (!existe) {
+            throw new ErreurAutorisationInexistante(
+              `L'utilisateur "${idContributeur}" n'est pas contributeur de l'homologation "${idHomologation}"`
+            );
+          }
+        })
+    );
+
+    const verifieSuppressionPermise = (idContributeur, idHomologation) => (
+      autorisationPour(idContributeur, idHomologation)
+        .then((a) => {
+          if (a.constructor.name === AutorisationCreateur.name) {
+            throw new ErreurTentativeSuppressionCreateur(
+              `Suppression impossible : l'utilisateur "${idContributeur}" est le propriétaire de l'homologation "${idHomologation}"`
+            );
+          }
+        })
+    );
+
+    return verifieAutorisationExiste(...params)
+      .then(() => verifieSuppressionPermise(...params))
+      .then(() => adaptateurPersistance.supprimeAutorisation(...params));
+  };
+
   return {
     accesAutorise,
     ajouteContributeurAHomologation,
@@ -75,6 +106,7 @@ const creeDepot = (config = {}) => {
     autorisationExiste,
     autorisationPour,
     autorisations,
+    supprimeContributeur,
     transfereAutorisations,
   };
 };

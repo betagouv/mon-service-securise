@@ -2,6 +2,7 @@ class EchecAutorisation extends Error {}
 class EchecEnvoiMessage extends Error {}
 class ErreurModele extends Error {}
 class ErreurAutorisationExisteDeja extends ErreurModele {}
+class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurDateRenouvellementInvalide extends ErreurModele {}
@@ -18,6 +19,7 @@ class ErreurNomServiceManquant extends ErreurModele {}
 class ErreurRisqueInconnu extends ErreurModele {}
 class ErreurStatutDeploiementInvalide extends ErreurModele {}
 class ErreurStatutMesureInvalide extends ErreurModele {}
+class ErreurTentativeSuppressionCreateur extends ErreurModele {}
 class ErreurUtilisateurExistant extends ErreurModele {}
 class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
@@ -26,6 +28,7 @@ module.exports = {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
+  ErreurAutorisationInexistante,
   ErreurAvisInvalide,
   ErreurCategorieInconnue,
   ErreurDateRenouvellementInvalide,
@@ -43,7 +46,8 @@ module.exports = {
   ErreurRisqueInconnu,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
+  ErreurTentativeSuppressionCreateur,
+  ErreurTypeInconnu,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
-  ErreurTypeInconnu,
 };
