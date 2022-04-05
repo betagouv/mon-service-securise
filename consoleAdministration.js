@@ -17,6 +17,10 @@ class ConsoleAdministration {
   transfereAutorisations(idUtilisateurSource, idUtilisateurCible) {
     return this.depotDonnees.transfereAutorisations(idUtilisateurSource, idUtilisateurCible);
   }
+
+  supprimeContributeur(idContributeur, idHomologation) {
+    return this.depotDonnees.supprimeContributeur(idContributeur, idHomologation);
+  }
 }
 
 module.exports = ConsoleAdministration;

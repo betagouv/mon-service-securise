@@ -131,6 +131,13 @@ const nouvelAdaptateur = (env) => {
 
   const ajouteAutorisation = (...params) => ajouteLigneDansTable('autorisations', ...params);
 
+  const supprimeAutorisation = (idUtilisateur, idHomologation) => knex('autorisations')
+    .whereRaw(
+      "donnees->>'idUtilisateur'=? and donnees->>'idHomologation'=?",
+      [idUtilisateur, idHomologation],
+    )
+    .del();
+
   const supprimeAutorisations = () => knex('autorisations').del();
 
   const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => knex('autorisations')
@@ -153,6 +160,7 @@ const nouvelAdaptateur = (env) => {
     metsAJourHomologation,
     metsAJourUtilisateur,
     nbUtilisateurs,
+    supprimeAutorisation,
     supprimeAutorisations,
     supprimeHomologation,
     supprimeHomologations,
