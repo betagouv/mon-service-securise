@@ -6,6 +6,10 @@ import ErreurSeuilCriticiteTropEleve from '../../public/modules/erreurs.mjs';
 
 describe("L'initialisation du comportement du formulaire", () => {
   describe('après la soumission du formulaire', () => {
+    const fonctionExtractionParametres = (selecteurFormulaire) => $(selecteurFormulaire)
+      .serializeArray()
+      .reduce((acc, nomValeur) => ({ ...acc, [nomValeur.name]: nomValeur.value }), {});
+
     beforeEach(() => {
       const dom = new JSDOM(`
         <form class="formulaire">
@@ -28,7 +32,7 @@ describe("L'initialisation du comportement du formulaire", () => {
         evenementsDifferes.resolve();
       });
 
-      initialiseComportementFormulaire('.formulaire', '.bouton', { adaptateurAjax });
+      initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
       $('.bouton').trigger('click');
 
       evenementsDifferes.promise()
@@ -50,7 +54,7 @@ describe("L'initialisation du comportement du formulaire", () => {
 
       it("envoie au serveur les données de l'homologation à créer", (done) => {
         const evenementsDifferes = $.Deferred();
-        initialiseComportementFormulaire('.formulaire', '.bouton', { adaptateurAjax });
+        initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
 
         evenementsDifferes.resolveWith($('.bouton').trigger('click'))
           .then(() => {
@@ -66,7 +70,7 @@ describe("L'initialisation du comportement du formulaire", () => {
         const evenementsDifferes = $.Deferred();
         $('.bouton').attr('identifiant', '12345');
 
-        initialiseComportementFormulaire('.formulaire', '.bouton', { adaptateurAjax });
+        initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
 
         evenementsDifferes.resolveWith($('.bouton').trigger('click'))
           .then(() => {
@@ -80,7 +84,7 @@ describe("L'initialisation du comportement du formulaire", () => {
 
       it("renvoie vers la synthèse de l'homologation", (done) => {
         const evenementsDifferes = $.Deferred();
-        initialiseComportementFormulaire('.formulaire', '.bouton', { adaptateurAjax });
+        initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
 
         evenementsDifferes.resolveWith($('.bouton').trigger('click'))
           .then(() => expect(window.location).to.equal('/homologation/123'))
