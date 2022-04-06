@@ -1,7 +1,7 @@
 mixin inputIdentite({ role, nomParametre })
   label(for='aucuneAction')= role
     .saisie-role-responsabilite
-      label(for = nomParametre) Nom / Prénom
+      label(for = nomParametre) Prénom / Nom
       input(
         id = nomParametre, name = nomParametre, type = 'text',
         value != homologation.rolesResponsabilites[nomParametre]
