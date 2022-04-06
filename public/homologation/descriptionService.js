@@ -6,7 +6,7 @@ $(() => {
   initialiseComportementFormulaire(
     'form#homologation',
     '.bouton#diagnostic',
-    { fonctionExtractionParametres: extraisParametresDescriptionService },
+    extraisParametresDescriptionService,
   );
 
   brancheElementsAjoutablesDescription('donnees-sensibles-specifiques', 'donnees-sensibles');
