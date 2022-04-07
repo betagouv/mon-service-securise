@@ -161,6 +161,7 @@ section.introduction h2 {
 section.risques ul {
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 1em 2em;
+  grid-auto-rows: 1fr;
 }
 
 section.risques li, section.detail-risques dt {
@@ -168,7 +169,7 @@ section.risques li, section.detail-risques dt {
   justify-content: flex-end;
   align-items: center;
 
-  height: 4em;
+  min-height: 4em;
   overflow: hidden;
 
   padding: 0.5em 0.5em 0.5em 3.5em;
