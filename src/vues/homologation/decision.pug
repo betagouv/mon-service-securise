@@ -1,3 +1,5 @@
+extends ../base
+
 mixin risquesPagines({ titreAnnexe, titreSection, donnees })
   each risques, index in donnees
     .page
@@ -40,152 +42,151 @@ mixin mesuresPaginees({ titreAnnexe, titreSection, donnees })
                     .indispensable
       .saut-page
 
-doctype html
-meta(charset='utf-8')
-script(nonce = nonce, src='https://code.jquery.com/jquery-3.6.0.min.js')
-script(nonce = nonce, src='https://unpkg.com/dompurify/dist/purify.min.js')
-script(nonce = nonce, src='https://unpkg.com/html2canvas/dist/html2canvas.min.js')
-script(nonce = nonce, src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js')
+block page
+  script(nonce = nonce, src='https://code.jquery.com/jquery-3.6.0.min.js')
+  script(nonce = nonce, src='https://unpkg.com/dompurify/dist/purify.min.js')
+  script(nonce = nonce, src='https://unpkg.com/html2canvas/dist/html2canvas.min.js')
+  script(nonce = nonce, src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js')
 
-include ../fragments/diagnostics
+  include ../fragments/diagnostics
 
-block styles
-  link(href='/statique/assets/styles/palette.css', rel='stylesheet')
-  link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
-  link(href='/statique/assets/styles/decision.css', rel='stylesheet')
-  link(href='/statique/assets/styles/bouton.css', rel='stylesheet')
+  block styles
+    link(href='/statique/assets/styles/palette.css', rel='stylesheet')
+    link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
+    link(href='/statique/assets/styles/decision.css', rel='stylesheet')
+    link(href='/statique/assets/styles/bouton.css', rel='stylesheet')
 
-nav.ne-pas-imprimer
-  a(href = `/homologation/${homologation.id}`) ‹&nbsp;&nbsp;Retour
-  .bouton#telecharger Télécharger le document
+  nav.ne-pas-imprimer
+    a(href = `/homologation/${homologation.id}`) ‹&nbsp;&nbsp;Retour
+    .bouton#telecharger Télécharger le document
 
-.page
-  header
-    .mss
-      h1 Mon Service <b>Sécurisé</b>
-      p Sécuriser les service publics numériques
-    .anssi Agence nationale de la sécurité des systèmes d'information (ANSSI)
+  .page
+    header
+      .mss
+        h1 Mon Service <b>Sécurisé</b>
+        p Sécuriser les service publics numériques
+      .anssi Agence nationale de la sécurité des systèmes d'information (ANSSI)
 
-  main
-    h1.bleu Décision d'homologation de sécurité
+    main
+      h1.bleu Décision d'homologation de sécurité
 
-    section.introduction
-      h2!= homologation.nomService()
-      dl
-        dt Type :
-        dd= homologation.descriptionTypeService()
-        dt Objet :
-        dd= homologation.presentation()
-        dt Développé par :
-        dd!= homologation.structureDeveloppement()
-        dt Hébergement et localisation des données :
-        dd!= `${homologation.hebergeur()}, ${homologation.localisationDonnees()}`
+      section.introduction
+        h2!= homologation.nomService()
+        dl
+          dt Type :
+          dd= homologation.descriptionTypeService()
+          dt Objet :
+          dd= homologation.presentation()
+          dt Développé par :
+          dd!= homologation.structureDeveloppement()
+          dt Hébergement et localisation des données :
+          dd!= `${homologation.hebergeur()}, ${homologation.localisationDonnees()}`
 
-    section.risques
-      h2 Principaux risques de sécurité identifiés
-      p Détails en annexe
-      ul
-        each risque in homologation.risquesPrincipaux()
+      section.risques
+        h2 Principaux risques de sécurité identifiés
+        p Détails en annexe
+        ul
+          each risque in homologation.risquesPrincipaux()
+            li.
+              #{risque.descriptionRisque()} <br>
+              (niveau de gravité : #{risque.descriptionNiveauGravite()})
+
+      section.mesures
+        h2 Mesures de sécurité retenues
+        p Recommandées par l'ANSSI, détails en annexe
+
+        .legende
+          .planifie Planifié
+          .fait Fait
+
+        - const statistiquesMesures = homologation.statistiquesMesures()
+        - const categories = statistiquesMesures.categories()
+        ul
+          if categories.length === 0
+            li Aucune mesure retenue
+
+          each idCategorie in categories
+            - const pourcentage = 100 * statistiquesMesures.misesEnOeuvre(idCategorie) / statistiquesMesures.retenues(idCategorie)
+            - let style = `width: ${pourcentage}%;`
+            - if (pourcentage === 0) style += ' border: none;'
+            - if (pourcentage > 97) style += ' border-radius: 3px;'
+            li
+              .nombre-mesures= `${statistiquesMesures.retenues(idCategorie)} mesures de`
+              .type-mesure= referentiel.descriptionCategorie(idCategorie)
+              style(nonce = nonce).
+                #!{idCategorie} .barre-mesures-misesEnOeuvre {
+                  !{style}
+                }
+              .barre(id = idCategorie)
+                .barre-mesures-retenues
+                .barre-mesures-misesEnOeuvre
+
+      section
+        h2 Avis de l'expert cyber
+        p sur le maintien ou la mise en service
+        +avisExpertCyber
+        dl
+          dt Expert cybersécurité :
+          dd= homologation.rolesResponsabilites.descriptionExpertCybersecurite()
+
+          dt Recommandations additionnelles :
+          if homologation.avisExpertCyber.commentaire
+            dd= homologation.avisExpertCyber.commentaire
+          else
+            dd Aucune
+
+      section
+        h2 Équipe
+        dl
+          dt Décision d'homologation préparée par :
+          dd= homologation.descriptionEquipePreparation()
+          each acteur in homologation.acteursHomologation()
+            dt #{acteur.role} :
+            dd= acteur.description
+
+      section
+        h2 Calendrier
+        dl
+          dt Date de renouvellement de l'homologation :
+          dd= homologation.descriptionExpiration()
+
+  .page
+    main
+      section.decision
+        h2 Décision d'homologation
+        dl
+          dt Autorité d'homologation :
+          dd= homologation.descriptionAutoriteHomologation()
+        p.signature Lu et approuvé | date | signature
+        ul
+          li Conformité au référentiel général de sécurité (RGS)
           li.
-            !{risque.descriptionRisque()} <br>
-            (niveau de gravité : #{risque.descriptionNiveauGravite()})
+            Contribue à la mise en conformité avec les obligations du règlement
+            européen pour la protection des données à caractère personnel (RGPD) en
+            matière de « sécurité du traitement des données »
+        p.notes-finales.
+          Par la signature de cette décision, vous attestez avoir pris connaissance
+          des risques principaux pour le service numérique et des mesures de
+          sécurité retenues, sur la base des informations fournies dans le présent
+          dossier et ses pièces jointes. Vous validez son maintien ou sa mise en
+          service, dont la sécurité devra être maintenue dans la durée. Une fois
+          signée, la décision d'homologation pourra être publiée sur
+          MonServiceSécurisé et sur « !{homologation.nomService()} ».
+          MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
+          responsables d'incidents de sécurité susceptibles d'affeter le service
+          numérique homologué et des conséquences qui pourraient en découler.
 
-    section.mesures
-      h2 Mesures de sécurité retenues
-      p Recommandées par l'ANSSI, détails en annexe
+      .saut-page
 
-      .legende
-        .planifie Planifié
-        .fait Fait
+  +risquesPagines({
+    titreAnnexe: 'Annexe 1 - Détail des risques',
+    donnees: homologation.risques.pagines(15)
+  })
 
-      - const statistiquesMesures = homologation.statistiquesMesures()
-      - const categories = statistiquesMesures.categories()
-      ul
-        if categories.length === 0
-          li Aucune mesure retenue
+  +mesuresPaginees({
+    titreAnnexe: 'Annexe 2 – Détail des mesures de sécurité',
+    titreSection: 'Mesures de gouvernance',
+    donnees: homologation.mesures.paginees(25)
+  })
 
-        each idCategorie in categories
-          - const pourcentage = 100 * statistiquesMesures.misesEnOeuvre(idCategorie) / statistiquesMesures.retenues(idCategorie)
-          - let style = `width: ${pourcentage}%;`
-          - if (pourcentage === 0) style += ' border: none;'
-          - if (pourcentage > 97) style += ' border-radius: 3px;'
-          li
-            .nombre-mesures= `${statistiquesMesures.retenues(idCategorie)} mesures de`
-            .type-mesure= referentiel.descriptionCategorie(idCategorie)
-            style(nonce = nonce).
-              #!{idCategorie} .barre-mesures-misesEnOeuvre {
-                !{style}
-              }
-            .barre(id = idCategorie)
-              .barre-mesures-retenues
-              .barre-mesures-misesEnOeuvre
-
-    section
-      h2 Avis de l'expert cyber
-      p sur le maintien ou la mise en service
-      +avisExpertCyber
-      dl
-        dt Expert cybersécurité :
-        dd= homologation.rolesResponsabilites.descriptionExpertCybersecurite()
-
-        dt Recommandations additionnelles :
-        if homologation.avisExpertCyber.commentaire
-          dd= homologation.avisExpertCyber.commentaire
-        else
-          dd Aucune
-
-    section
-      h2 Équipe
-      dl
-        dt Décision d'homologation préparée par :
-        dd= homologation.descriptionEquipePreparation()
-        each acteur in homologation.acteursHomologation()
-          dt #{acteur.role} :
-          dd= acteur.description
-
-    section
-      h2 Calendrier
-      dl
-        dt Date de renouvellement de l'homologation :
-        dd= homologation.descriptionExpiration()
-
-.page
-  main
-    section.decision
-      h2 Décision d'homologation
-      dl
-        dt Autorité d'homologation :
-        dd= homologation.descriptionAutoriteHomologation()
-      p.signature Lu et approuvé | date | signature
-      ul
-        li Conformité au référentiel général de sécurité (RGS)
-        li.
-          Contribue à la mise en conformité avec les obligations du règlement
-          européen pour la protection des données à caractère personnel (RGPD) en
-          matière de « sécurité du traitement des données »
-      p.notes-finales.
-        Par la signature de cette décision, vous attestez avoir pris connaissance
-        des risques principaux pour le service numérique et des mesures de
-        sécurité retenues, sur la base des informations fournies dans le présent
-        dossier et ses pièces jointes. Vous validez son maintien ou sa mise en
-        service, dont la sécurité devra être maintenue dans la durée. Une fois
-        signée, la décision d'homologation pourra être publiée sur
-        MonServiceSécurisé et sur « !{homologation.nomService()} ».
-        MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
-        responsables d'incidents de sécurité susceptibles d'affeter le service
-        numérique homologué et des conséquences qui pourraient en découler.
-
-    .saut-page
-
-+risquesPagines({
-  titreAnnexe: 'Annexe 1 - Détail des risques',
-  donnees: homologation.risques.pagines(15)
-})
-
-+mesuresPaginees({
-  titreAnnexe: 'Annexe 2 – Détail des mesures de sécurité',
-  titreSection: 'Mesures de gouvernance',
-  donnees: homologation.mesures.paginees(25)
-})
-
-script(src='/statique/homologation/decision.js')
+  script(src='/statique/homologation/decision.js')
