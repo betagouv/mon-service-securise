@@ -58,13 +58,13 @@ const creeDepot = (config = {}) => {
 
   const {
     accesAutorise,
+    ajouteContributeurAHomologation,
     autorisation,
     autorisationExiste,
     autorisationPour,
     autorisations,
     supprimeContributeur,
     transfereAutorisations,
-    ajouteContributeurAHomologation,
   } = depotAutorisations;
 
   return {
