@@ -18,6 +18,12 @@ const creeDepot = (config = {}) => {
     depotUtilisateurs,
   } = config;
 
+  const autorisations = (idUtilisateur) => adaptateurPersistance.autorisations(idUtilisateur)
+    .then((as) => as.map((a) => FabriqueAutorisation.fabrique(a)));
+
+  const accesAutorise = (idUtilisateur, idHomologation) => autorisations(idUtilisateur)
+    .then((as) => as.some((a) => a.idHomologation === idHomologation));
+
   const autorisation = (id) => adaptateurPersistance.autorisation(id)
     .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
 
@@ -26,24 +32,6 @@ const creeDepot = (config = {}) => {
 
   const autorisationExiste = (...params) => autorisationPour(...params)
     .then((a) => !!a);
-
-  const autorisations = (idUtilisateur) => adaptateurPersistance.autorisations(idUtilisateur)
-    .then((as) => as.map((a) => FabriqueAutorisation.fabrique(a)));
-
-  const accesAutorise = (idUtilisateur, idHomologation) => autorisations(idUtilisateur)
-    .then((as) => as.some((a) => a.idHomologation === idHomologation));
-
-  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => {
-    const verifieUtilisateurExiste = (id) => depotUtilisateurs.utilisateurExiste(id)
-      .then((existe) => {
-        if (!existe) throw new ErreurUtilisateurInexistant(`L'utilisateur "${id}" n'existe pas`);
-      });
-
-    return verifieUtilisateurExiste(idUtilisateurSource)
-      .then(() => verifieUtilisateurExiste(idUtilisateurCible))
-      .then(() => adaptateurPersistance
-        .transfereAutorisations(idUtilisateurSource, idUtilisateurCible));
-  };
 
   const ajouteContributeurAHomologation = (idContributeur, idHomologation) => {
     const verifieUtilisateurExiste = (id) => depotUtilisateurs.utilisateurExiste(id)
@@ -97,6 +85,18 @@ const creeDepot = (config = {}) => {
     return verifieAutorisationExiste(...params)
       .then(() => verifieSuppressionPermise(...params))
       .then(() => adaptateurPersistance.supprimeAutorisation(...params));
+  };
+
+  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => {
+    const verifieUtilisateurExiste = (id) => depotUtilisateurs.utilisateurExiste(id)
+      .then((existe) => {
+        if (!existe) throw new ErreurUtilisateurInexistant(`L'utilisateur "${id}" n'existe pas`);
+      });
+
+    return verifieUtilisateurExiste(idUtilisateurSource)
+      .then(() => verifieUtilisateurExiste(idUtilisateurCible))
+      .then(() => adaptateurPersistance
+        .transfereAutorisations(idUtilisateurSource, idUtilisateurCible));
   };
 
   return {
