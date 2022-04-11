@@ -21,8 +21,10 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
   const app = express();
 
   app.use(express.json());
+
+  const UNE_HEURE = 60 * 60 * 1000;
   app.use(cookieSession({
-    maxAge: 30 * 60 * 1000,
+    maxAge: UNE_HEURE,
     name: 'token',
     sameSite: true,
     secret: process.env.SECRET_COOKIE,
