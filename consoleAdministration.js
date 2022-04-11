@@ -21,6 +21,10 @@ class ConsoleAdministration {
   supprimeContributeur(idContributeur, idHomologation) {
     return this.depotDonnees.supprimeContributeur(idContributeur, idHomologation);
   }
+
+  supprimeHomologation(idHomologation) {
+    return this.depotDonnees.supprimeHomologation(idHomologation);
+  }
 }
 
 module.exports = ConsoleAdministration;

@@ -106,6 +106,12 @@ const nouvelAdaptateur = (donnees = {}) => {
 
   const supprimeAutorisations = () => Promise.resolve(donnees.autorisations = []);
 
+  const supprimeAutorisationsHomologation = (idHomologation) => {
+    donnees.autorisations = donnees.autorisations
+      .filter((a) => a.idHomologation !== idHomologation);
+    return Promise.resolve();
+  };
+
   const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => (
     autorisations(idUtilisateurSource)
       .then((as) => as.map((a) => Promise.resolve(a.idUtilisateur = idUtilisateurCible)))
@@ -126,6 +132,7 @@ const nouvelAdaptateur = (donnees = {}) => {
     metsAJourUtilisateur,
     supprimeAutorisation,
     supprimeAutorisations,
+    supprimeAutorisationsHomologation,
     supprimeHomologation,
     supprimeHomologations,
     supprimeUtilisateur,

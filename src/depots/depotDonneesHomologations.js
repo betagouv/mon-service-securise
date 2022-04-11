@@ -134,7 +134,9 @@ const creeDepot = (config = {}) => {
     remplaceProprieteHomologation('risquesSpecifiques', ...params)
   );
 
-  const { supprimeHomologation } = adaptateurPersistance;
+  const supprimeHomologation = (idHomologation) => adaptateurPersistance
+    .supprimeAutorisationsHomologation(idHomologation)
+    .then(() => adaptateurPersistance.supprimeHomologation(idHomologation));
 
   return {
     ajouteAvisExpertCyberAHomologation,
