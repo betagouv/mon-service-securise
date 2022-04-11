@@ -502,9 +502,8 @@ describe('Le dépot de données des homologations', () => {
   it('supprime une homologation avec un identifiant donné', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-      homologations: [
-        { id: '123', idUtilisateur: '999', descriptionService: { nomService: 'Un service' } },
-      ],
+      homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+      autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
     });
     const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
