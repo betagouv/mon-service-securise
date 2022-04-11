@@ -140,6 +140,10 @@ const nouvelAdaptateur = (env) => {
 
   const supprimeAutorisations = () => knex('autorisations').del();
 
+  const supprimeAutorisationsHomologation = (idHomologation) => knex('autorisations')
+    .whereRaw("donnees->>'idHomologation'=?", idHomologation)
+    .del();
+
   const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => knex('autorisations')
     .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateurSource)
     .update({
@@ -162,6 +166,7 @@ const nouvelAdaptateur = (env) => {
     nbUtilisateurs,
     supprimeAutorisation,
     supprimeAutorisations,
+    supprimeAutorisationsHomologation,
     supprimeHomologation,
     supprimeHomologations,
     supprimeUtilisateur,

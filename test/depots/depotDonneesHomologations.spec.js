@@ -499,18 +499,50 @@ describe('Le dépot de données des homologations', () => {
     });
   });
 
-  it('supprime une homologation avec un identifiant donné', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-      homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-      autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
-    });
-    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+  describe("sur demande de suppression d'une homologation", () => {
+    it("supprime l'homologation", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
-    depot.supprimeHomologation('123')
-      .then(depot.homologation('123'))
-      .then((h) => expect(h).to.be(undefined))
-      .then(() => done())
-      .catch(done);
+      depot.supprimeHomologation('123')
+        .then(depot.homologation('123'))
+        .then((h) => expect(h).to.be(undefined))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it('supprime les autorisations associées', (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'contributeur@mail.fr' },
+        ],
+        homologations: [
+          { id: '111', descriptionService: { nomService: 'Un service' } },
+          { id: '222', descriptionService: { nomService: 'Un autre service' } },
+        ],
+        autorisations: [
+          { id: '123', idUtilisateur: '999', idHomologation: '111', type: 'createur' },
+          { id: '456', idUtilisateur: '000', idHomologation: '111', type: 'contributeur' },
+          { id: '789', idUtilisateur: '000', idHomologation: '222', type: 'contributeur' },
+        ],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depotAutorisations = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
+
+      depot.supprimeHomologation('111')
+        .then(() => depotAutorisations.autorisations('999'))
+        .then((as) => expect(as.length).to.equal(0))
+        .then(() => depotAutorisations.autorisations('000'))
+        .then((as) => expect(as.length).to.equal(1))
+        .then(() => depotAutorisations.autorisation('789'))
+        .then((a) => expect(a).to.be.ok())
+        .then(() => done())
+        .catch(done);
+    });
   });
 });
