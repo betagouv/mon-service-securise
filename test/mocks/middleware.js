@@ -13,7 +13,7 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
       done();
     })
     .catch((erreur) => {
-      const erreurHTTP = erreur.response && erreur.response.status;
+      const erreurHTTP = erreur.response?.status;
       if (erreurHTTP >= 400 && erreurHTTP < 500) {
         expect(lectureEtat()).to.eql(etatFinal);
         done();
