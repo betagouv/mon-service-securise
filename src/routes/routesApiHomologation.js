@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { ErreurModele } = require('../erreurs');
+const { EchecAutorisation, ErreurModele } = require('../erreurs');
 const ActeursHomologation = require('../modeles/acteursHomologation');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
 const DescriptionService = require('../modeles/descriptionService');
@@ -200,6 +200,35 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       reponse.status(422).send('Données invalides');
     }
   });
+
+  routes.delete('/:id/autorisationContributeur',
+    middleware.verificationAcceptationCGU,
+    (requete, reponse, suite) => {
+      const { idUtilisateurCourant } = requete;
+      const idHomologation = requete.params.id;
+      const { idContributeur } = requete.body;
+
+      const verifiePermissionSuppressionContributeur = (...params) => depotDonnees
+        .autorisationPour(...params)
+        .then((a) => (
+          a?.permissionSuppressionContributeur
+            ? Promise.resolve()
+            : Promise.reject(new EchecAutorisation())
+        ));
+
+      verifiePermissionSuppressionContributeur(idUtilisateurCourant, idHomologation)
+        .then(() => depotDonnees.supprimeContributeur(idContributeur, idHomologation))
+        .then(() => reponse.send(`Contributeur "${idContributeur}" supprimé pour l'homologation "${idHomologation}"`))
+        .catch((e) => {
+          if (e instanceof EchecAutorisation) {
+            reponse.status(403).send(`Droits insuffisants pour supprimer un collaborateur de l'homologation "${idHomologation}"`);
+          } else if (e instanceof ErreurModele) {
+            reponse.status(422).send(e.message);
+          } else {
+            suite(e);
+          }
+        });
+    });
 
   return routes;
 };

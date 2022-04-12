@@ -1,9 +1,11 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
-const { ErreurNomServiceManquant, ErreurNomServiceDejaExistant } = require('../../src/erreurs');
-
 const testeurMSS = require('./testeurMSS');
+
+const { ErreurModele, ErreurNomServiceManquant, ErreurNomServiceDejaExistant } = require('../../src/erreurs');
+const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
+const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 
 describe('Le serveur MSS des routes /api/homologation/*', () => {
   const testeur = testeurMSS();
@@ -492,6 +494,101 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         method: 'post',
         url: 'http://localhost:1234/api/homologation/456/avisExpertCyber',
         data: { avis: 'avisInvalide' },
+      }, done);
+    });
+  });
+
+  describe('quand requête DELETE sur `/api/homologation/:id/autorisationContributeur`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(new AutorisationCreateur());
+      testeur.depotDonnees().supprimeContributeur = () => Promise.resolve();
+    });
+
+    it('vérifie que les CGU sont acceptées', (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU({
+        method: 'delete',
+        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+      }, done);
+    });
+
+    it("demande au dépôt de vérifier l'autorisation d'accès à l'homologation pour l'utilisateur courant", (done) => {
+      let autorisationVerifiee = false;
+
+      testeur.middleware().reinitialise('999');
+      testeur.depotDonnees().autorisationPour = (idUtilisateur, idHomologation) => {
+        try {
+          expect(idUtilisateur).to.equal('999');
+          expect(idHomologation).to.equal('123');
+          autorisationVerifiee = true;
+
+          return Promise.resolve(new AutorisationCreateur());
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.delete('http://localhost:1234/api/homologation/123/autorisationContributeur')
+        .then(() => expect(autorisationVerifiee).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès à l'homologation", (done) => {
+      const autorisationNonTrouvee = undefined;
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisationNonTrouvee);
+
+      testeur.verifieRequeteGenereErreurHTTP(403, "Droits insuffisants pour supprimer un collaborateur de l'homologation \"123\"", {
+        method: 'delete',
+        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+      }, done);
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur courant est simple contributeur de l'homologation", (done) => {
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(
+        new AutorisationContributeur()
+      );
+
+      testeur.verifieRequeteGenereErreurHTTP(403, "Droits insuffisants pour supprimer un collaborateur de l'homologation \"123\"", {
+        method: 'delete',
+        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+      }, done);
+    });
+
+    it("demande au dépôt de supprimer l'accès à l'homologation pour le contributeur", (done) => {
+      let contributeurSupprime = false;
+
+      testeur.depotDonnees().supprimeContributeur = (idContributeur, idHomologation) => {
+        try {
+          expect(idContributeur).to.equal('000');
+          expect(idHomologation).to.equal('123');
+          contributeurSupprime = true;
+
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios({
+        method: 'delete',
+        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+        data: { idContributeur: '000' },
+      })
+        .then((reponse) => {
+          expect(contributeurSupprime).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.equal("Contributeur \"000\" supprimé pour l'homologation \"123\"");
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it('retourne une erreur HTTP 422 si le dépôt a levé une `ErreurModele`', (done) => {
+      testeur.depotDonnees().supprimeContributeur = () => Promise.reject(new ErreurModele('Données invalides'));
+
+      testeur.verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
+        method: 'delete',
+        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
       }, done);
     });
   });
