@@ -7,4 +7,9 @@ describe('Une autorisation de base', () => {
     const autorisation = new AutorisationBase();
     expect(autorisation.permissionAjoutContributeur).to.be(false);
   });
+
+  it('ne permet pas de supprimer un contributeur', () => {
+    const autorisation = new AutorisationBase();
+    expect(autorisation.permissionSuppressionContributeur).to.be(false);
+  });
 });
