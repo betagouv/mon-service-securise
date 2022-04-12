@@ -4,20 +4,26 @@ const expect = require('expect.js');
 const Homologation = require('../../src/modeles/homologation');
 
 const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
+  const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => (
+    expect(`${[valeurConstatee, ...diagnostics].join(' ')}`)
+      .to.eql(`${[valeurReference, ...diagnostics].join(' ')}`)
+  );
+
   const { lectureEtat, etatInitial = false, etatFinal = true } = donneesEtat;
-  expect(lectureEtat()).to.eql(etatInitial);
+  const suffixeLectureEtat = `(sur appel à ${lectureEtat.toString()})`;
+
+  verifieEgalite(lectureEtat(), etatInitial, suffixeLectureEtat);
 
   axios(requete)
-    .then(() => {
-      expect(lectureEtat()).to.eql(etatFinal);
+    .then(() => verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat))
+    .then(() => done())
+    .catch((e) => {
+      const erreurHTTP = e.response?.status;
+      if (!erreurHTTP || erreurHTTP >= 500) throw e;
+
+      const suffixeErreurHTTP = `(sur erreur HTTP ${erreurHTTP})`;
+      verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat, suffixeErreurHTTP);
       done();
-    })
-    .catch((erreur) => {
-      const erreurHTTP = erreur.response?.status;
-      if (erreurHTTP >= 400 && erreurHTTP < 500) {
-        expect(lectureEtat()).to.eql(etatFinal);
-        done();
-      } else throw erreur;
     })
     .catch((e) => done(e.response?.data || e));
 };
