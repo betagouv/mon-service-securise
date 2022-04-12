@@ -7,4 +7,9 @@ describe("Une autorisation d'accès en tant que créateur", () => {
     const autorisation = new AutorisationCreateur();
     expect(autorisation.permissionAjoutContributeur).to.be(true);
   });
+
+  it('permet de supprimer un contributeur', () => {
+    const autorisation = new AutorisationCreateur();
+    expect(autorisation.permissionSuppressionContributeur).to.be(true);
+  });
 });
