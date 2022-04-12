@@ -56,12 +56,12 @@ const envoieMessageInvitationContribution = (
     subject: 'MonServiceSécurisé – Invitation à contribuer',
     text: `Bonjour,
 
-${prenomNomEmetteur} vous invite à contribuer à l'homologation du service ${nomService}.
-Ce dossier d'homologation apparaît maintenant dans votre espace personnel.
-Vous pouvez également directement accéder à ce dossier en cliquant sur ce lien :
-${process.env.URL_BASE_MSS}/homologation/${idHomologation}
+${prenomNomEmetteur} vous invite à rejoindre le dossier d'homologation de sécurité « ${nomService} ».
+Pour découvrir et commencer à contribuer au projet :
+- allez dans votre espace personnel
+- ou cliquez sur ce lien : ${process.env.URL_BASE_MSS}/homologation/${idHomologation}
 
-N'hésitez pas à nous contacter pour toutes précisions.
+Nous vous remercions pour l'intérêt que vous portez à notre service.
 
 L'équipe MonServiceSécurisé`,
   });
@@ -78,12 +78,11 @@ const envoieMessageInvitationInscription = (
     subject: 'MonServiceSécurisé – Invitation à contribuer',
     text: `Bonjour,
 
-${prenomNomEmetteur} vous invite à contribuer à l'homologation du service
-${nomService} sur MonServiceSécurisé. Nous vous avons créé un compte utilisateur.
-Cliquez sur le lien d'activation pour finaliser votre inscription :
-${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}
+${prenomNomEmetteur} vous invite à rejoindre le dossier d'homologation de sécurité « ${nomService} ».
+Votre compte personnel a été créé pour découvrir et commencer à contribuer au projet.
+Cliquez sur ce lien pour finaliser votre inscription : ${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}
 
-N'hésitez pas à nous contacter pour toutes précisions.
+Nous vous remercions pour l'intérêt que vous portez à notre service.
 
 L'équipe MonServiceSécurisé`,
   });
