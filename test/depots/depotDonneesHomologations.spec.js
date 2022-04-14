@@ -50,6 +50,35 @@ describe('Le dépot de données des homologations', () => {
       .catch(done);
   });
 
+  it('trie les homologations par ordre alphabétique du nom du service', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [
+        { id: '123', descriptionService: { nomService: 'B-service' } },
+        { id: '456', descriptionService: { nomService: 'C-service' } },
+        { id: '789', descriptionService: { nomService: 'A-service' } },
+      ],
+      utilisateurs: [
+        { id: '999', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' },
+      ],
+      autorisations: [
+        { idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+        { idUtilisateur: '999', idHomologation: '456', type: 'createur' },
+        { idUtilisateur: '999', idHomologation: '789', type: 'createur' },
+      ],
+    });
+    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+
+    depot.homologations('999')
+      .then((hs) => {
+        expect(hs.length).to.equal(3);
+        expect(hs[0].nomService()).to.equal('A-service');
+        expect(hs[1].nomService()).to.equal('B-service');
+        expect(hs[2].nomService()).to.equal('C-service');
+        done();
+      })
+      .catch(done);
+  });
+
   it('peut retrouver une homologation à partir de son identifiant', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
