@@ -108,7 +108,9 @@ const creeDepot = (config = {}) => {
   );
 
   const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
-    .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
+    .then((hs) => hs
+      .map((h) => new Homologation(h, referentiel))
+      .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService())));
 
   const nouvelleHomologation = (idUtilisateur, donneesDescriptionService) => {
     const idHomologation = adaptateurUUID.genereUUID();
