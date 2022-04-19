@@ -494,6 +494,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.middleware().reinitialise('456');
       autorisation.permissionAjoutContributeur = true;
 
+      testeur.depotDonnees().autorisationExiste = () => Promise.resolve(false);
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisation);
       testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateur);
       testeur.depotDonnees().ajouteContributeurAHomologation = () => Promise.resolve();
@@ -568,7 +569,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     describe('si le contributeur existe déjà', () => {
-      it('envoie un email de notification au contributeur', (done) => {
+      beforeEach(() => {
         const contributeur = { email: 'jean.dupont@mail.fr' };
         testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(contributeur);
 
@@ -577,31 +578,81 @@ describe('Le serveur MSS des routes /api/*', () => {
 
         const homologation = { id: '123', nomService: () => 'Nom Service' };
         testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
+      });
 
-        let emailEnvoye = false;
+      describe("si le contributeur n'a pas déjà été invité", () => {
+        it('envoie un email de notification au contributeur', (done) => {
+          let emailEnvoye = false;
 
-        testeur.adaptateurMail().envoieMessageInvitationContribution = (
-          destinataire, prenomNomEmetteur, nomService, idHomologation
-        ) => {
-          try {
-            expect(destinataire).to.equal('jean.dupont@mail.fr');
-            expect(prenomNomEmetteur).to.equal('Utilisateur Courant');
-            expect(nomService).to.equal('Nom Service');
-            expect(idHomologation).to.equal('123');
+          testeur.adaptateurMail().envoieMessageInvitationContribution = (
+            destinataire, prenomNomEmetteur, nomService, idHomologation
+          ) => {
+            try {
+              expect(destinataire).to.equal('jean.dupont@mail.fr');
+              expect(prenomNomEmetteur).to.equal('Utilisateur Courant');
+              expect(nomService).to.equal('Nom Service');
+              expect(idHomologation).to.equal('123');
+              emailEnvoye = true;
+              return Promise.resolve();
+            } catch (e) {
+              return Promise.reject(e);
+            }
+          };
+
+          axios.post('http://localhost:1234/api/autorisation', {
+            emailContributeur: 'jean.dupont@mail.fr',
+            idHomologation: '123',
+          })
+            .then(() => expect(emailEnvoye).to.be(true))
+            .then(() => done())
+            .catch((e) => done(e.response?.data || e));
+        });
+      });
+
+      describe('si le contributeur a déjà été invité', () => {
+        beforeEach(() => {
+          testeur.depotDonnees().autorisationExiste = () => Promise.resolve(true);
+        });
+
+        it("n'envoie pas d'email d'invitation à contribuer", (done) => {
+          let emailEnvoye = false;
+
+          testeur.adaptateurMail().envoieMessageInvitationContribution = () => {
             emailEnvoye = true;
             return Promise.resolve();
-          } catch (e) {
-            return Promise.reject(e);
-          }
-        };
+          };
 
-        axios.post('http://localhost:1234/api/autorisation', {
-          emailContributeur: 'jean.dupont@mail.fr',
-          idHomologation: '123',
-        })
-          .then(() => expect(emailEnvoye).to.be(true))
-          .then(() => done())
-          .catch((e) => done(e.response?.data || e));
+          axios.post('http://localhost:1234/api/autorisation', {
+            emailContributeur: 'jean.dupont@mail.fr',
+            idHomologation: '123',
+          })
+            .then(() => done('Le serveur aurait dû lever une erreur HTTP 424'))
+            .catch(() => {
+              expect(emailEnvoye).to.be(false);
+              done();
+            })
+            .catch((e) => done(e.response?.data || e));
+        });
+
+        it("n'envoie pas d'email d'invitation à s'inscrire", (done) => {
+          let emailEnvoye = false;
+
+          testeur.adaptateurMail().envoieMessageInvitationInscription = () => {
+            emailEnvoye = true;
+            return Promise.resolve();
+          };
+
+          axios.post('http://localhost:1234/api/autorisation', {
+            emailContributeur: 'jean.dupont@mail.fr',
+            idHomologation: '123',
+          })
+            .then(() => done('Le serveur aurait dû lever une erreur HTTP 424'))
+            .catch(() => {
+              expect(emailEnvoye).to.be(false);
+              done();
+            })
+            .catch((e) => done(e.response?.data || e));
+        });
       });
     });
 

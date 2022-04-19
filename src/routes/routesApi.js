@@ -1,6 +1,11 @@
 const express = require('express');
 
-const { EchecAutorisation, EchecEnvoiMessage, ErreurModele } = require('../erreurs');
+const {
+  EchecAutorisation,
+  EchecEnvoiMessage,
+  ErreurAutorisationExisteDeja,
+  ErreurModele,
+} = require('../erreurs');
 const routesApiHomologation = require('./routesApiHomologation');
 
 const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
@@ -156,9 +161,20 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const { emailContributeur, idHomologation } = requete.body;
 
-      const verifieAutorisation = (a) => (
-        a.permissionAjoutContributeur ? Promise.resolve() : Promise.reject(new EchecAutorisation())
-      );
+      const verifiePermission = (...params) => depotDonnees.autorisationPour(...params)
+        .then((a) => (
+          a.permissionAjoutContributeur
+            ? Promise.resolve()
+            : Promise.reject(new EchecAutorisation())
+        ));
+
+      const verifieAutorisationInexistante = (...params) => depotDonnees
+        .autorisationExiste(...params)
+        .then((existe) => (
+          existe
+            ? Promise.reject(new ErreurAutorisationExisteDeja("L'autorisation existe déjà"))
+            : Promise.resolve()
+        ));
 
       const creeContributeurSiNecessaire = (contributeurExistant) => (
         contributeurExistant
@@ -179,12 +195,12 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       );
 
       const inviteContributeur = (contributeurExistant) => (
-        creeContributeurSiNecessaire(contributeurExistant)
+        verifieAutorisationInexistante(contributeurExistant?.id, idHomologation)
+          .then(() => creeContributeurSiNecessaire(contributeurExistant, idHomologation))
           .then((c) => informeContributeur(c, contributeurExistant))
       );
 
-      depotDonnees.autorisationPour(idUtilisateur, idHomologation)
-        .then(verifieAutorisation)
+      verifiePermission(idUtilisateur, idHomologation)
         .then(() => depotDonnees.utilisateurAvecEmail(emailContributeur))
         .then(inviteContributeur)
         .then((c) => depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation))
