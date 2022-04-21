@@ -8,10 +8,11 @@ block formulaire
   form.homologation#risques
     h1.action Risques de sécurité
     p.
-      Évaluez le niveau de gravité pour votre service numérique des risques les
-      plus courants identifiés par l'ANSSI. Si vous le souhaitez, précisez ces
-      risques ou ajoutez de nouveaux risques qui guideront d’éventuelles
-      mesures de sécurité complémentaires.
+      Cliquez sur le curseur à droite de chaque risque pour sélectionnez le niveau
+      de gravité en termes d'impact dans le cas où celui-ci se réaliserait. Vous
+      pouvez ajouter des risques complémentaires, si vous en identifiez.<br>
+      Cette évaluation sert à connaître les principaux risques de sécurité
+      pour le service.
 
     section
       each donnees, identifiant in referentiel.risques()
