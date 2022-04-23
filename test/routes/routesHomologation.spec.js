@@ -1,3 +1,6 @@
+const axios = require('axios');
+const expect = require('expect.js');
+
 const testeurMSS = require('./testeurMSS');
 
 describe('Le serveur MSS des routes /homologation/*', () => {
@@ -47,6 +50,27 @@ describe('Le serveur MSS des routes /homologation/*', () => {
         'http://localhost:1234/homologation/456/mesures',
         done
       );
+    });
+
+    it('interroge le moteur de règles pour obtenir les mesures personnalisées', (done) => {
+      let moteurInterroge = false;
+      const requete = {};
+
+      testeur.middleware().trouveHomologation(requete, undefined, () => {
+        const { nomService } = requete.homologation.descriptionService;
+        expect(nomService).to.equal('un service'); // sanity check
+      });
+
+      testeur.moteurRegles().mesures = (descriptionService) => {
+        expect(descriptionService.nomService).to.equal('un service');
+        moteurInterroge = true;
+        return {};
+      };
+
+      axios('http://localhost:1234/homologation/456/mesures')
+        .then(() => expect(moteurInterroge).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
     });
   });
 

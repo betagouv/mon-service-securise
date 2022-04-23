@@ -6,7 +6,7 @@ const routesHomologation = require('./routes/routesHomologation');
 
 require('dotenv').config();
 
-const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
+const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adaptateurMail,
   avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
 
@@ -105,7 +105,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, adaptateurMail,
     reponse.render('espacePersonnel');
   });
 
-  app.use('/homologation', routesHomologation(middleware, referentiel));
+  app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
 
   app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel));
 

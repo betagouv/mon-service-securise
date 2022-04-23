@@ -2,6 +2,7 @@ const axios = require('axios');
 const expect = require('expect.js');
 
 const DepotDonnees = require('../../src/depotDonnees');
+const MoteurRegles = require('../../src/moteurRegles');
 const MSS = require('../../src/mss');
 const Referentiel = require('../../src/referentiel');
 
@@ -10,6 +11,7 @@ const middleware = require('../mocks/middleware');
 const testeurMss = () => {
   let adaptateurMail;
   let depotDonnees;
+  let moteurRegles;
   let referentiel;
   let serveur;
 
@@ -34,10 +36,18 @@ const testeurMss = () => {
     adaptateurMail = {};
     middleware.reinitialise();
     referentiel = Referentiel.creeReferentielVide();
+    moteurRegles = new MoteurRegles(referentiel);
     DepotDonnees.creeDepotVide()
       .then((depot) => {
         depotDonnees = depot;
-        serveur = MSS.creeServeur(depotDonnees, middleware, referentiel, adaptateurMail, false);
+        serveur = MSS.creeServeur(
+          depotDonnees,
+          middleware,
+          referentiel,
+          moteurRegles,
+          adaptateurMail,
+          false,
+        );
         serveur.ecoute(1234, done);
       });
   };
@@ -48,6 +58,7 @@ const testeurMss = () => {
     adaptateurMail: () => adaptateurMail,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
+    moteurRegles: () => moteurRegles,
     referentiel: () => referentiel,
     arrete,
     initialise,

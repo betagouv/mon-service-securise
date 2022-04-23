@@ -21,11 +21,13 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const mesureIndispensable = (idMesure) => !!donnees.mesures[idMesure].indispensable;
   const mesures = () => donnees.mesures;
   const identifiantsMesures = () => Object.keys(mesures());
+  const mesure = (id) => mesures()[id];
   const typesService = () => donnees.typesService;
   const niveauxGravite = () => donnees.niveauxGravite || {};
   const niveauGravite = (idNiveau) => niveauxGravite()[idNiveau] || {};
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
   const provenancesService = () => donnees.provenancesService;
+  const reglesPersonnalisation = () => donnees.reglesPersonnalisation || {};
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
   const risque = (id) => risques()[id] || {};
@@ -123,6 +125,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     statutDeploiementValide,
     localisationDonnees,
     localisationsDonnees,
+    mesure,
     mesureIndispensable,
     mesures,
     niveauGravite,
@@ -130,6 +133,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     positionActionSaisie,
     provenancesService,
     recharge,
+    reglesPersonnalisation,
     risques,
     seuilCriticiteMin,
     seuilsCriticites,

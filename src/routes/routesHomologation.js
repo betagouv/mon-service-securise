@@ -4,7 +4,7 @@ const ActionsSaisie = require('../modeles/actionsSaisie');
 const Homologation = require('../modeles/homologation');
 const InformationsHomologation = require('../modeles/informationsHomologation');
 
-const routesHomologation = (middleware, referentiel) => {
+const routesHomologation = (middleware, referentiel, moteurRegles) => {
   const routes = express.Router();
 
   routes.get('/creation', middleware.verificationAcceptationCGU, (_requete, reponse) => {
@@ -38,7 +38,8 @@ const routesHomologation = (middleware, referentiel) => {
 
   routes.get('/:id/mesures', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/mesures', { referentiel, homologation });
+    const mesures = moteurRegles.mesures(homologation.descriptionService);
+    reponse.render('homologation/mesures', { referentiel, homologation, mesures });
   });
 
   routes.get('/:id/rolesResponsabilites', middleware.trouveHomologation, (requete, reponse) => {
