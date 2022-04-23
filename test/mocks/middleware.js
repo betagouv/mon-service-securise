@@ -98,7 +98,10 @@ const middlewareFantaisie = {
 
   trouveHomologation: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
-    requete.homologation = new Homologation({ id: '456' });
+    requete.homologation = new Homologation({
+      id: '456',
+      descriptionService: { nomService: 'un service' },
+    });
     rechercheHomologationEffectuee = true;
     suite();
   },
