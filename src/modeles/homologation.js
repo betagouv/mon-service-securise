@@ -1,4 +1,6 @@
+const MoteurRegles = require('../moteurRegles');
 const Referentiel = require('../referentiel');
+
 const AvisExpertCyber = require('./avisExpertCyber');
 const DescriptionService = require('./descriptionService');
 const Mesure = require('./mesure');
@@ -15,13 +17,16 @@ const NIVEAUX = {
 };
 
 class Homologation {
-  constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    donnees,
+    referentiel = Referentiel.creeReferentielVide(),
+    moteurRegles = new MoteurRegles(referentiel),
+  ) {
     const {
       id = '',
       contributeurs = [],
       createur = {},
       descriptionService = {},
-      mesuresGenerales = [],
       mesuresSpecifiques = [],
       risquesGeneraux = [],
       risquesSpecifiques = [],
@@ -29,11 +34,17 @@ class Homologation {
       avisExpertCyber = {},
     } = donnees;
 
+    let { mesuresGenerales = [] } = donnees;
+
     this.id = id;
     if (createur.email) this.createur = new Utilisateur(createur);
     this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
+
+    const idMesures = Object.keys(moteurRegles.mesures(this.descriptionService));
+    mesuresGenerales = mesuresGenerales.filter((m) => idMesures.includes(m.id));
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
+
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
     this.risques = new Risques(
       { risquesGeneraux, risquesSpecifiques },

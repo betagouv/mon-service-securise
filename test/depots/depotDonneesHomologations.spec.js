@@ -1,15 +1,19 @@
 const expect = require('expect.js');
 
-const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const DescriptionService = require('../../src/modeles/descriptionService');
-const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
 const {
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
 } = require('../../src/erreurs');
+const Referentiel = require('../../src/referentiel');
+
+const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
+
+const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
+const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../../src/modeles/avisExpertCyber');
+const DescriptionService = require('../../src/modeles/descriptionService');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
@@ -35,13 +39,14 @@ describe('Le dépot de données des homologations', () => {
       ],
     });
 
-    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel: 'Le référentiel' });
+    const referentiel = Referentiel.creeReferentielVide();
+    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
     depot.homologations('456')
       .then((homologations) => {
         expect(homologations.length).to.equal(1);
         expect(homologations[0]).to.be.a(Homologation);
         expect(homologations[0].id).to.equal('123');
-        expect(homologations[0].referentiel).to.equal('Le référentiel');
+        expect(homologations[0].referentiel).to.equal(referentiel);
 
         expect(homologations[0].createur).to.be.ok();
         expect(homologations[0].createur.id).to.equal('456');
@@ -85,13 +90,14 @@ describe('Le dépot de données des homologations', () => {
         { id: '789', idUtilisateur: '999', descriptionService: { nomService: 'nom' } },
       ],
     });
-    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel: 'Le référentiel' });
+    const referentiel = Referentiel.creeReferentielVide();
+    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
 
     depot.homologation('789')
       .then((homologation) => {
         expect(homologation).to.be.a(Homologation);
         expect(homologation.id).to.equal('789');
-        expect(homologation.referentiel).to.equal('Le référentiel');
+        expect(homologation.referentiel).to.equal(referentiel);
         done();
       })
       .catch(done);
@@ -108,7 +114,7 @@ describe('Le dépot de données des homologations', () => {
         { idHomologation: '789', idUtilisateur: '999', type: 'contributeur' },
       ],
     });
-    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel: 'Le référentiel' });
+    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
     depot.homologation('789')
       .then((homologation) => {
@@ -143,6 +149,11 @@ describe('Le dépot de données des homologations', () => {
   describe('concernant les mesures générales', () => {
     let valideMesure;
 
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { identifiantMesure: {} },
+      reglesPersonnalisation: { mesuresBase: ['identifiantMesure'] },
+    });
+
     before(() => {
       valideMesure = MesureGenerale.valide;
       MesureGenerale.valide = () => {};
@@ -158,7 +169,7 @@ describe('Le dépot de données des homologations', () => {
           mesuresGenerales: [{ id: 'identifiantMesure', statut: 'fait' }],
         }],
       });
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
 
       depot.homologation('123')
         .then(({ mesures: { mesuresGenerales } }) => {
@@ -178,7 +189,7 @@ describe('Le dépot de données des homologations', () => {
           { id: '123', descriptionService: { nomService: 'Un service' } },
         ],
       });
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
       const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
 
       depot.ajouteMesureGeneraleAHomologation('123', mesure)
@@ -201,7 +212,7 @@ describe('Le dépot de données des homologations', () => {
           },
         ],
       });
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
 
       const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
       depot.ajouteMesureGeneraleAHomologation('123', mesure)
