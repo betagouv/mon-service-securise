@@ -8,8 +8,7 @@ mixin formulaireDescriptionService(idHomologation)
   form.homologation#homologation
     h1.action Description du service
     p.
-      Présentez les caractéristiques de votre service numérique à homologuer pour recevoir des recommandations personnalisées.
-      Ces informations peuvent être complétées ou modifiées à tout instant.
+      Précisez les caractéristiques de votre service numérique.
     section
       label Nom du service numérique à homologuer
         br
@@ -23,7 +22,7 @@ mixin formulaireDescriptionService(idHomologation)
       +inputChoix({
         type: 'checkbox',
         nom: 'typeService',
-        titre: 'Type de service numérique',
+        titre: 'Type',
         items: referentiel.typesService(),
         objetDonnees: homologation.descriptionService,
       })
@@ -31,7 +30,7 @@ mixin formulaireDescriptionService(idHomologation)
       +inputChoix({
         type: 'checkbox',
         nom: 'provenanceService',
-        titre: 'Provenance du service numérique',
+        titre: 'Provenance',
         items: referentiel.provenancesService(),
         objetDonnees: homologation.descriptionService,
       })
@@ -44,14 +43,14 @@ mixin formulaireDescriptionService(idHomologation)
         objetDonnees: homologation.descriptionService,
       })
 
-      label Présentation du service numérique
+      label Présentation
         textarea(
           id = 'presentation',
           name = 'presentation',
           placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
         )= homologation.descriptionService.presentation
 
-      label Accès au service numérique
+      label Accès
         br
         +elementsAjoutablesDescription({
           identifiantConteneur: 'points-acces',
