@@ -22,7 +22,7 @@ mixin formulaireDescriptionService(idHomologation)
       +inputChoix({
         type: 'checkbox',
         nom: 'typeService',
-        titre: 'Type',
+        titre: 'Type(s)',
         items: referentiel.typesService(),
         objetDonnees: homologation.descriptionService,
       })
@@ -30,7 +30,7 @@ mixin formulaireDescriptionService(idHomologation)
       +inputChoix({
         type: 'checkbox',
         nom: 'provenanceService',
-        titre: 'Provenance',
+        titre: 'Provenance(s)',
         items: referentiel.provenancesService(),
         objetDonnees: homologation.descriptionService,
       })
