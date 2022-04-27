@@ -27,7 +27,16 @@
   gap: 0.4em;
 }
 
-.niveau-gravite .disque {
+.niveau-gravite .disque:hover {
+  cursor: pointer;
+  border-color: var(--bleu-anssi);
+}
+
+.niveau-gravite .disque.eteint {
+  background: var(--liseres);
+}
+
+.disque {
   height: 1em;
   width: 1em;
 
@@ -37,36 +46,27 @@
   background: var(--liseres);
 }
 
-.niveau-gravite .disque:hover {
-  cursor: pointer;
-  border-color: var(--bleu-anssi);
-}
-
-.niveau-gravite .disque.cercle {
+.disque.cercle {
   border: solid .5px var(--bleu-anssi);
 }
 
-.niveau-gravite .disque.eteint {
-  background: var(--liseres);
-}
-
-.niveau-gravite .disque.blanc {
+.disque.blanc {
   background: #fff;
 }
 
-.niveau-gravite .disque.vert {
+.disque.vert {
   background: var(--vert-anssi);
 }
 
-.niveau-gravite .disque.jaune {
+.disque.jaune {
   background: var(--jaune-anssi);
 }
 
-.niveau-gravite .disque.orange {
+.disque.orange {
   background: var(--orange-anssi);
 }
 
-.niveau-gravite .disque.rouge {
+.disque.rouge {
   background: var(--rouge-anssi);
 }
 
@@ -74,4 +74,83 @@
   height: 1.4em;
   font-size: 0.7em;
   font-weight: normal;
+}
+
+.formulaire {
+  grid-gap: 1.7em;
+}
+
+.carte {
+  box-sizing: border-box;
+  width: 270px;
+  margin-bottom: 1.7em;
+  padding: 1.7em;
+
+  background-color: #fff;
+
+  text-align: left;
+}
+
+.carte .titre {
+  display: inline;
+
+  font-size: 1.2em;
+}
+
+.carte .sous-titre {
+  margin-top: 0;
+
+  font-size: 1em;
+  font-weight: 600;
+  color: var(--texte-clair);
+}
+
+.carte ul.niveaux-gravites {
+  list-style: none;
+
+  padding: 0;
+
+  line-height: 1.8em;
+}
+.carte .niveaux-gravites .disque {
+  display: inline-block;
+
+  margin: 0 0.8em -0.2em 0;
+}
+.carte .plus-details, .carte .moins-details {
+  text-align: right;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+.carte .plus-details::after, .carte .moins-details::after {
+  content: '';
+  display: inline-block;
+  width: .6em;
+  height: .6em;
+  margin-left: 1em;
+
+  border: 2px var(--bleu-anssi) solid;
+  transform: rotate(0.12turn);
+}
+
+.carte .moins-details::after {
+  margin-bottom: -0.2em;
+
+  border-bottom: 0;
+  border-right: 0;
+}
+
+.carte .plus-details::after {
+  margin-bottom: 0.2em;
+
+  border-top: 0;
+  border-left: 0;
+}
+.carte h4 {
+  margin: 0;
+
+  color: var(--bleu-mise-en-avant);
+}
+.carte h4 + p {
+  margin-top: 0;
 }
