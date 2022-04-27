@@ -72,9 +72,22 @@ body.recouvert {
   text-transform: none;
 }
 
-.rideau .modale p {
+.rideau .modale p, .rideau .modale li {
   margin-bottom: 0;
   color: var(--texte-fonce);
+}
+
+.rideau .modale li {
+  margin-top: 0.3em;
+  margin-left: 1.5em;
+  display: flex;
+              
+}
+.rideau .modale li::before {
+  content: '\25CF';
+  display: block;
+  position: absolute;
+  left: 3em;
 }
 
 .rideau .modale section {
