@@ -162,32 +162,48 @@ module.exports = {
 
   risques: {
     indisponibiliteService: {
-      description: 'Le service numérique et ses données sont tout ou en partie inaccessibles',
-      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si son indisponibilité peut avoir des conséquences graves sur le fonctionnement de l'organisation, de telle sorte qu'un attaquant pourrait chercher à en tirer un avantage financier – via une demande de rançon – ou à nuire au fonctionnement de votre organisation ou à sa réputation. Par exemple, <a href=\"https://www.lemonde.fr/pixels/article/2021/02/15/apres-celui-de-dax-l-hopital-de-villefranche-paralyse-par-un-rancongiciel_6070049_4408996.html\" target=\"_blank\" rel=\"noopener\">les données d'un hôpital public ont été rendues inaccessibles par un rançongiciel</a>, qui constitue l'une des attaques les plus répandues aujourd'hui.",
+      description: 'Indisponibilité partielle ou totale du service numérique pendant plusieurs heures à quelques jours',
+      descriptionLongue: `
+        L'indisponibilité du service numérique signifie que certaines fonctionnalités ou que la totalité du service
+        n'est plus accessible aux usagers et/ou aux agents publics.<br>Par exemple :<li>Un service numérique connaît
+        une panne suite à une attaque de type "déni de service" : un message d'erreur est susceptible de s'afficher en
+        lieu et place de la page d'accueil pour un site web.</li><li>Un service numérique devient inaccessible, suite à
+        une attaque de type rançongiciel, contre la fausse-promesse de leur restitution en cas de paiement d'une rançon.
+        Cette attaque est l'une des plus courantes et a déjà frappé de nombreuses collectivités et entités publiques.</li>
+      `,
     },
     donneesModifiees: {
-      description: 'Des informations concernant des utilisateurs sont modifiées ou supprimées',
-      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si celui-ci inclut des données dont la modification pourrait bénéficier à une ou plusieurs personnes ou à l'inverse leur porter préjudice, ou nuire à la réputation ou au fonctionnement de votre organisation. Par exemple, <a href=\"https://www.europe1.fr/faits-divers/Un-collegien-pirate-son-proviseur-pour-modifier-ses-notes-en-ligne-781242\" target=\"_blank\" rel=\"noopener\">un attaquant a modifié les notes et le relevé d'assiduité d'élèves en leur faveur depuis l'espace numérique d'un établissement scolaire</a>.",
+      description: "Suppression ou modification d'informations concernant des usagers ou des agents publics",
+      descriptionLongue: "Ce risque signifie que des informations appartenant à des usagers ou à des agents publics sont supprimées en partie ou en totalité par un attaquant ou sont modifiées en leur avantage ou en leur défaveur.<br>Par exemple : <li>Des documents téléversés par des usagers dans le cadre d'une démarche en ligne sont supprimés en partie ou en totalité.</li><li>Un élève modifie ses notes sur un espace numérique de travail (ENT) après avoir dérobé ou deviné l'identifiant et le mot de passe d'un enseignant.</li>",
     },
     divulgationDonnees: {
-      description: 'Des informations sont divulguées publiquement',
-      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si celui-ci inclut des informations dont la divulgation publique pourrait porter préjudice aux personnes concernées et à la réputation de votre organisation. Par exemple, <a href=\"https://www.lagazettedescommunes.com/746159/les-donnees-personnelles-dagents-du-grand-annecy-diffusees-cinq-mois-apres-la-cyberattaque/?abo=1\" target=\"_blank\" rel=\"noopener\">un attaquant a déjà diffusé publiquement des données à caractère personnel concernant plusieurs agents d'une collectivité</a>.",
+      description: "Divulgation publique d'informations dérobées concernant des usagers ou des agents publics",
+      descriptionLongue: "Ce risque signifie que des informations concernant des usagers ou des agents publics, traitées dans le cadre du service numérique, sont dérobées par un attaquant puis rendues publiques pour porter préjudice aux personnes concernées et/ou nuire à la réputation de l'entité. <br>Par exemple :<li>La liste de bénéficiaires d'une aide publique et de leurs coordonnées est divulguée sur internet.</li> <li>L'adresse mail des personnes ayant signalé des incivilités sur la voirie via une application dédiée est divulguée sur internet.</li><li>La divulgation des votes des habitants d'une commune s'étant exprimés dans le cadre d'une consultation publique en ligne.</li>",
     },
     defigurationSiteWeb: {
-      description: 'Le service numérique est défiguré',
-      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si sa visibilité est à même d'être exploitée par des attaquants cherchant à diffuser des messages à des fins idéologiques, de revanche ou de simple dégradation. Ce risque est accru si des vulnérabilités facilement identifiables peuvent être exploitées. Par exemple, <a href=\"https://www.europe1.fr/technologies/plusieurs-sites-internet-francais-ont-ete-victimes-de-cyberattaques-4001200\" target=\"_blank\" rel=\"noopener\">des messages ou des images à caractère terroriste ont déjà été affichés sur des sites internet français ainsi défigurés</a>. Votre service numérique peut aussi être concerné par ce risque si la modification discrète des informations affichées peut nuire à des utilisateurs ou à la réputation de votre organisation.",
+      description: "Défiguration visible de l'apparence du service numérique",
+      descriptionLongue: "La défiguration d'un service numérique signifie que son apparence est modifiée de manière visible par l'ajout de messages ou d'images, le plus souvent à caractère idéologique, ou à des fins de simples détérioration en vue de nuire à la réputation de l'entité publique.<br>Par exemple :<li>Une image satirique apparaît sur la page d'accueil d'un service numérique.</li><li>Des messages de protestation contre la politique d'une collectivité sont insérés sur plusieurs pages du service numérique.</li>",
     },
     arnaques: {
-      description: "Des informations dérobées sont utilisées à des fins d'escroquerie",
-      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si celui-ci inclut des informations pouvant être réutilisées à des fins malveillantes, la plupart du temps motivées par le gain financier. Par exemple par leur <a href=\"https://www.hashtagg.fr/2021/03/07/le-business-des-donnees-revendues-sur-le-dark-web/\" target=\"_blank\" rel=\"noopener\">revente</a> sur le dark web, à des fins <a href=\"https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/violation-donnees-ap-hp-formulaire-lettre-plainte-electronique\" target=\"_blank\" rel=\"noopener\">d'arnaque</a>, de spam, d'usurpation d'identité ou pour mener d'autres attaques telles que des campagnes de <a href=\"https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/hameconnage-assurance-maladie-ameli\" target=\"_blank\" rel=\"noopener\">hameçonnage</a>.",
+      description: "Vol d'informations concernant des usagers ou des agents publics à des fins d'escroquerie",
+      descriptionLongue: `
+        Ce risque signifie que des informations traitées dans le cadre du service numérique sont dérobées par un attaquant,
+        le plus souvent à des fins d'usurpation d'identité ou de gain financier.<br>Par exemple :
+        <li>Des moyens de paiement stockés sur le service numérique (ex. numéro de carte bancaire) sont volés en vue de les
+        revendre sur internet ou de procéder à des achats illicites.</li><li>Les coordonnées d'usagers ou d'agents publics
+        (ex.email, adresse, numéro de téléphone) sont volées en vue de mener des campagnes de 
+        <a href="https://www.cybermalveillance.gouv.fr/tous-nos-contenus/fiches-reflexes/spam-electronique">spam</a> ou de
+        <a href="https://www.cybermalveillance.gouv.fr/tous-nos-contenus/fiches-reflexes/hameconnage-phishing">hameçonnage</a>.</li>
+        <li>Des documents officiels d'identité sont volés à des fins d'usurpation d'identité.</li>
+      `,
     },
     logicielsMalveillants: {
-      description: 'Le service numérique est détourné de son usage initial',
-      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si ses capacités techniques ou encore ses utilisateurs sont susceptibles d'intéresser un attaquant souhaitant mener d'autres actions malveillantes la plupart du temps à des fins de gain financier. Ce risque est accru si des vulnérabilités facilement identifiables peuvent être exploitées. Par exemple, le détournement de la puissance de votre service peut permettre de miner des crypto-monnaies ou <a href=\"https://business.lesechos.fr/directions-numeriques/technologie/cybersecurite/0602985980097-de-nombreux-hackers-utilisent-le-covid-19-a-des-fins-malveillantes-336176.php\" target=\"_blank\" rel=\"noopener\">l'introduction d'un logiciel malveillant visant à infecter des utilisateurs du service</a> peut permettre de dérober des informations.",
+      description: "Détournement de l'usage du service numérique en vue de conduire des activités non prévues pour ce dernier",
+      descriptionLongue: "Ce risque signifie que le service numérique est utilisé de manière discrète et illicite afin de conduire des activités ne correspondant pas à sa finalité, la plupart du temps à des fins de gain financier.<br>Par exemple :<li>La puissance d'un service numérique est utilisée dans le but de mener une activité de minage de cryptomonnaie.</li><li>Un logiciel malveillant est introduit sur la page d'accueil d'un service numérique afin d'infecter les équipements informatiques des usagers et/ou des agents publics en vue d'accéder à leurs données ou de mener une autre attaque (ex.rançongiciel).</li>",
     },
     surveillance: {
-      description: "Le contenu d'échanges est intercepté",
-      descriptionLongue: "Votre service numérique est susceptible d'être concerné par ce risque si l'interception du contenu d'échanges entre agents publics ou avec des usagers peut intéresser des acteurs malveillants à des fins de renseignement, d'espionnage économique. Par exemple, les échanges entre de jeunes entreprises technologiques et une administration soutenant ces dernières pourraient donner accès à des informations privilégiées à de potentiels concurrents sur les « pépites » françaises.",
+      description: "Vol de données ou interception d'échanges à des fins de renseignement",
+      descriptionLongue: "Ce risque signifie que des échanges entre agents publics ou avec des usagers sont interceptés ou que des documents sont dérobés, le plus souvent à des fins de renseignement économique ou politique.<br> Par exemple :<li>Des documents concernant des candidatures à un marché public avant la date finale de dépôt des dossiers sont dérobés par des concurrents afin d'en tirer un avantage concurrentiel.</li><li>Des échanges entre agents publics et entreprises technologiques sont interceptée via la messagerie d'une plateforme permettant l'attribution d'aides publiques, à des fins d'intelligence économique.</li>",
     },
   },
 
