@@ -110,12 +110,6 @@ mixin formulaireDescriptionService(idHomologation)
         objetDonnees: homologation.descriptionService,
       })
 
-      +inputOuiNon({
-        nom: 'presenceResponsable',
-        titre: "Une personne est-elle responsable de la sécurité des systèmes d'information au sein de votre organisation ?",
-        objetDonnees: homologation.descriptionService,
-      })
-
     if idHomologation
       .bouton#diagnostic(identifiant = idHomologation) Enregistrer
     else
