@@ -95,7 +95,6 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
           donneesSensiblesSpecifiques: undefined,
           delaiAvantImpactCritique: undefined,
           localisationDonnees: undefined,
-          presenceResponsable: undefined,
           presentation: undefined,
           pointsAcces: undefined,
           statutDeploiement: undefined,

@@ -24,7 +24,6 @@ describe('La description du service', () => {
       typeService: ['unType'],
       nomService: 'Super Service',
       pointsAcces: [{ description: 'Une description' }],
-      presenceResponsable: 'non',
       presentation: 'Une présentation du service',
       provenanceService: ['uneProvenance'],
       statutDeploiement: 'unStatut',
@@ -36,7 +35,6 @@ describe('La description du service', () => {
     expect(descriptionService.localisationDonnees).to.equal('france');
     expect(descriptionService.typeService).to.eql(['unType']);
     expect(descriptionService.nomService).to.equal('Super Service');
-    expect(descriptionService.presenceResponsable).to.be('non');
     expect(descriptionService.presentation).to.equal('Une présentation du service');
     expect(descriptionService.provenanceService).to.eql(['uneProvenance']);
     expect(descriptionService.statutDeploiement).to.eql('unStatut');
@@ -120,7 +118,6 @@ describe('La description du service', () => {
       nomService: 'Super Service',
       delaiAvantImpactCritique: 'uneJournee',
       localisationDonnees: 'france',
-      presenceResponsable: 'oui',
       presentation: 'Une présentation',
       statutDeploiement: 'accessible',
     }, referentielAvecStatutValide('accessible'));
