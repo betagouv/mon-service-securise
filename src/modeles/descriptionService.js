@@ -12,7 +12,6 @@ class DescriptionService extends InformationsHomologation {
         'delaiAvantImpactCritique',
         'localisationDonnees',
         'nomService',
-        'presenceResponsable',
         'presentation',
         'statutDeploiement',
       ],

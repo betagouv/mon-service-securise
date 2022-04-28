@@ -260,16 +260,16 @@ describe('Le dépot de données des homologations', () => {
         autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
         homologations: [
-          { id: '123', descriptionService: { nomService: 'Super Service', presenceResponsable: 'non' } },
+          { id: '123', descriptionService: { nomService: 'Super Service', presentation: 'Une présentation' } },
         ],
       });
       const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
-      const description = new DescriptionService({ nomService: 'Super Service', presenceResponsable: 'oui' });
+      const description = new DescriptionService({ nomService: 'Super Service', presentation: 'Une autre présentation' });
       depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .then(() => depot.homologation('123'))
         .then(({ descriptionService }) => {
-          expect(descriptionService.presenceResponsable).to.equal('oui');
+          expect(descriptionService.presentation).to.equal('Une autre présentation');
           done();
         })
         .catch(done);
