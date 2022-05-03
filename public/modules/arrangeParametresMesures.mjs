@@ -17,13 +17,15 @@ const arrangeParametresMesures = (parametres) => {
       nomParametre !== CLE_MESURES_SPECIFIQUES && nomParametre !== CLE_MESURES_GENERALES
     ))
     .reduce((acc, nomParametre) => {
-      const nomParametreModalites = nomParametre.match(/^modalites-(.*)$/)?.[1];
-      if (nomParametreModalites) {
-        acc[nomParametreModalites] = acc[nomParametreModalites] || {};
-        acc[nomParametreModalites].modalites = parametres[nomParametre];
-      } else {
-        acc[nomParametre] = acc[nomParametre] || {};
-        acc[nomParametre].statut = parametres[nomParametre];
+      if (parametres[nomParametre]) {
+        const nomParametreModalites = nomParametre.match(/^modalites-(.*)$/)?.[1];
+        if (nomParametreModalites) {
+          acc[nomParametreModalites] = acc[nomParametreModalites] || {};
+          acc[nomParametreModalites].modalites = parametres[nomParametre];
+        } else {
+          acc[nomParametre] = acc[nomParametre] || {};
+          acc[nomParametre].statut = parametres[nomParametre];
+        }
       }
       delete parametres[nomParametre];
       return acc;
