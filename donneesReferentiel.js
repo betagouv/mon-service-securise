@@ -552,7 +552,7 @@ module.exports = {
   },
 
   reglesPersonnalisation: {
-    clefsDescriptionServiceAConsiderer: ['typeService'],
+    clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites'],
     mesuresBase: [
       'limitationInterconnexions',
       'listeEquipements',
@@ -573,7 +573,6 @@ module.exports = {
       'listeComptesPrivilegies',
       'gestionComptesAcces',
       'compartimenter',
-      'dissocierComptesAdmin',
       'limitationCreationComptes',
       'doubleAuthentAdmins',
       'limitationAccesAdmin',
@@ -606,12 +605,21 @@ module.exports = {
       'affichageDerniereConnexion',
       'exerciceGestionCrise',
       'politiqueInformation',
-      'sauvegardeDonnees',
       'sauvegardeMachineVirtuelle',
       'testsSauvegardes',
     ],
     mesuresAAjouter: {
       applicationMobile: ['telechargementsOfficiels'],
+      compte: [
+        'analyseRisques',
+        'secNumCloud',
+        'modalitesSuivi',
+        'formaliserModalitesSecurite',
+        'dissocierComptesAdmin',
+        'testIntrusion',
+        'supervision',
+        'sauvegardeDonnees',
+      ],
     },
   },
 };
