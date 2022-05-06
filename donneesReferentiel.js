@@ -552,7 +552,7 @@ module.exports = {
   },
 
   reglesPersonnalisation: {
-    clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites'],
+    clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites', 'provenanceService'],
     mesuresBase: [
       'limitationInterconnexions',
       'listeEquipements',
@@ -619,6 +619,13 @@ module.exports = {
         'testIntrusion',
         'supervision',
         'sauvegardeDonnees',
+      ],
+    },
+    mesuresARetirer: {
+      achat: [
+        'listeEquipements',
+        'testIntrusion',
+        'notificationConnexionsSuspectes',
       ],
     },
   },
