@@ -8,12 +8,6 @@ import ajouteModalesInformations from '../modules/interactions/modalesInformatio
 $(() => {
   let indexMaxMesuresSpecifiques = 0;
 
-  const mesureGeneraleDeCategorie = (mesureGenerale, categorieFiltre) => (
-    categorieFiltre
-      ? categorieFiltre === mesureGenerale.categorie
-      : true
-  );
-
   const mesureSpecifiqueDeCategorie = (elementMesureSpecifique, categorieFiltre) => (
     categorieFiltre
       ? $(`option[value="${categorieFiltre}"]:selected, option[value=""]:selected`, elementMesureSpecifique).length === 1
@@ -21,11 +15,7 @@ $(() => {
   );
 
   const filtreMesures = (categorieFiltre) => {
-    const referentielMesures = JSON.parse($('#referentiel-mesures').text());
-
-    Object.keys(referentielMesures).forEach((id) => $(`fieldset#${id}`)
-      .toggle(mesureGeneraleDeCategorie(referentielMesures[id], categorieFiltre)));
-
+    $('.mesure').each((_, item) => $(item).toggle($(item).hasClass(categorieFiltre)));
     $('.item-ajoute').each((_, item) => $(item)
       .toggle(mesureSpecifiqueDeCategorie(item, categorieFiltre)));
   };
@@ -33,7 +23,7 @@ $(() => {
   const brancheFiltres = (selecteurFiltres) => {
     const $filtres = $(selecteurFiltres);
     $filtres.each((_, f) => {
-      $(f).click((e) => {
+      $(f).on('click', (e) => {
         $('.actif').removeClass('actif');
         $(e.target).addClass('actif');
 
@@ -49,7 +39,7 @@ $(() => {
     const $zoneSaisie = $(`<textarea id=${nom} name=${nom}></textarea>`);
     $zoneSaisie.hide();
 
-    $lien.click(() => {
+    $lien.on('click', () => {
       $zoneSaisie.toggle();
       if ($zoneSaisie.is(':visible')) $zoneSaisie.focus();
     });
@@ -135,7 +125,7 @@ ${statuts}
   const $bouton = $('.bouton');
   const identifiantHomologation = $bouton.attr('identifiant');
 
-  $bouton.click(() => {
+  $bouton.on('click', () => {
     const params = parametres('form#mesures');
     arrangeParametresMesures(params);
 

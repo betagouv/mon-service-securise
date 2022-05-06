@@ -25,13 +25,13 @@ block formulaire
 
     section
       nav
-        a.actif Tout
+        a.actif#tout Tout
         each categorie, identifiant in referentiel.categoriesMesures()
           a(id = identifiant)= categorie
 
       .mesures
         each donnees, identifiant in mesures
-          .mesure
+          .mesure.tout(class = donnees.categorie)
             +inputMesure({
               nom: identifiant,
               titre: donnees.description,
@@ -57,9 +57,6 @@ block formulaire
 
   script(id = 'donnees-mesures-specifiques', type = 'application/json').
     !{JSON.stringify(homologation.mesures.toJSON().mesuresSpecifiques || [])}
-
-  script(id = 'referentiel-mesures', type = 'application/json').
-    !{JSON.stringify(referentiel.mesures())}
 
   script(id = 'referentiel-categories-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.categoriesMesures())}
