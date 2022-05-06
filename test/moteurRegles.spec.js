@@ -61,4 +61,48 @@ describe('Le moteur de règles', () => {
     const description = new DescriptionService();
     expect(moteur.mesures(description)).to.eql({});
   });
+
+  describe('quand il est faut retirer des mesures', () => {
+    it('détermine quelles mesures sont à retirer en fonction de la description du service', () => {
+      const referentiel = Referentiel.creeReferentiel({ reglesPersonnalisation: {
+        clefsDescriptionServiceAConsiderer: ['provenanceService'],
+        mesuresARetirer: { achat: ['uneMesure', 'uneAutreMesure'] },
+      } });
+      const moteur = new MoteurRegles(referentiel);
+
+      const achat = new DescriptionService({ provenanceService: ['achat'] });
+      expect(moteur.mesuresARetirer(achat)).to.eql(['uneMesure', 'uneAutreMesure']);
+    });
+
+    it('ne retire aucune mesure si aucune règle ne correspond à la description du service', () => {
+      const referentiel = Referentiel.creeReferentiel({ reglesPersonnalisation: {
+        clefsDescriptionServiceAConsiderer: ['provenanceService'],
+        mesuresARetirer: { achat: ['uneMesure', 'uneAutreMesure'] },
+      } });
+      const moteur = new MoteurRegles(referentiel);
+
+      const developpement = new DescriptionService({ provenanceService: ['developpement'] });
+      expect(moteur.mesuresARetirer(developpement)).to.eql([]);
+    });
+
+    it('retire les mesures à retirer aux mesures de base', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        mesures: {
+          mesureBase: {},
+          mesureASupprimer: {},
+        },
+        reglesPersonnalisation: {
+          clefsDescriptionServiceAConsiderer: ['provenanceService'],
+          mesuresBase: ['mesureBase', 'mesureASupprimer'],
+          mesuresARetirer: { achat: ['mesureASupprimer'] },
+        },
+      });
+      const moteur = new MoteurRegles(referentiel);
+
+      const achat = new DescriptionService({ provenanceService: ['achat'] });
+      expect(moteur.mesures(achat)).to.eql({
+        mesureBase: {},
+      });
+    });
+  });
 });
