@@ -4,7 +4,7 @@ const MesuresSpecifiques = require('./mesuresSpecifiques');
 const Referentiel = require('../referentiel');
 
 class Mesures extends InformationsHomologation {
-  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide(), identifiantsMesures) {
     super({
       listesAgregats: {
         mesuresGenerales: MesuresGenerales,
@@ -13,6 +13,7 @@ class Mesures extends InformationsHomologation {
     });
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
+    this.identifiantsMesures = identifiantsMesures || this.referentiel.identifiantsMesures();
   }
 
   nonSaisies() {
@@ -25,6 +26,16 @@ class Mesures extends InformationsHomologation {
 
   statistiques() {
     return this.mesuresGenerales.statistiques();
+  }
+
+  statutSaisie() {
+    const statutSaisieMesures = super.statutSaisie();
+    if (statutSaisieMesures === Mesures.COMPLETES
+      && this.identifiantsMesures.length !== this.mesuresGenerales.nombre()) {
+      return Mesures.A_COMPLETER;
+    }
+
+    return statutSaisieMesures;
   }
 }
 

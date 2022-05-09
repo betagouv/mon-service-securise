@@ -50,7 +50,7 @@ class MesuresGenerales extends ElementsConstructibles {
 
   statutSaisie() {
     if (this.nonSaisies()) return MesuresGenerales.A_SAISIR;
-    if (this.items.length === this.referentiel.identifiantsMesures().length) {
+    if (this.items.every((item) => item.statutSaisie() === MesuresGenerales.COMPLETES)) {
       return MesuresGenerales.COMPLETES;
     }
     return MesuresGenerales.A_COMPLETER;
