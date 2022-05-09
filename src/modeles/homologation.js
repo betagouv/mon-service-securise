@@ -43,7 +43,7 @@ class Homologation {
 
     const idMesures = Object.keys(moteurRegles.mesures(this.descriptionService));
     mesuresGenerales = mesuresGenerales.filter((m) => idMesures.includes(m.id));
-    this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel);
+    this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel, idMesures);
 
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
     this.risques = new Risques(
