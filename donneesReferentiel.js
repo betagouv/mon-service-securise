@@ -574,7 +574,6 @@ module.exports = {
           absence: ['achat'],
         }],
         mesuresAAjouter: [
-          'analyseRisques',
           'secNumCloud',
           'modalitesSuivi',
           'formaliserModalitesSecurite',
