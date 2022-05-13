@@ -554,6 +554,14 @@ module.exports = {
   reglesPersonnalisation: {
     clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites', 'provenanceService'],
     profils: {
+      applicationMobile: {
+        regles: {
+          presence: ['applicationMobile'],
+          absence: ['siteInternet'],
+        },
+        mesuresAAjouter: ['telechargementsOfficiels'],
+        mesuresARetirer: ['nomsDomaineFrUe', 'nomsDomaineSimilaires'],
+      },
       applicationHybride: {
         regles: {
           presence: ['applicationMobile'],
