@@ -10,9 +10,9 @@ describe('Le moteur de règles', () => {
       clefsDescriptionServiceAConsiderer: ['typeService'],
       profils: {
         applicationMobile: {
-          regles: {
+          regles: [{
             presence: ['applicationMobile'],
-          },
+          }],
           mesuresAAjouter: ['uneMesure', 'uneAutreMesure'],
         },
       },
@@ -35,9 +35,9 @@ describe('Le moteur de règles', () => {
       clefsDescriptionServiceAConsiderer: ['typeService'],
       profils: {
         applicationMobile: {
-          regles: {
+          regles: [{
             presence: ['applicationMobile'],
-          },
+          }],
           mesuresAAjouter: ['uneMesure', 'uneAutreMesure'],
         },
       },
@@ -53,15 +53,15 @@ describe('Le moteur de règles', () => {
       clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites'],
       profils: {
         applicationMobile: {
-          regles: {
+          regles: [{
             presence: ['applicationMobile'],
-          },
+          }],
           mesuresAAjouter: ['uneMesure', 'uneAutreMesure'],
         },
         creationComptes: {
-          regles: {
+          regles: [{
             presence: ['compte'],
-          },
+          }],
           mesuresAAjouter: ['uneMesure', 'uneTroisiemeMesure'],
         },
       },
@@ -84,9 +84,9 @@ describe('Le moteur de règles', () => {
         mesuresBase: ['mesureBase'],
         profils: {
           applicationMobile: {
-            regles: {
+            regles: [{
               presence: ['applicationMobile'],
-            },
+            }],
             mesuresAAjouter: ['mesureSupplementaire'],
           },
         },
@@ -113,9 +113,9 @@ describe('Le moteur de règles', () => {
         clefsDescriptionServiceAConsiderer: ['provenanceService'],
         profils: {
           applicationAchettee: {
-            regles: {
+            regles: [{
               presence: ['achat'],
-            },
+            }],
             mesuresARetirer: ['uneMesure', 'uneAutreMesure'],
           },
         },
@@ -131,9 +131,9 @@ describe('Le moteur de règles', () => {
         clefsDescriptionServiceAConsiderer: ['provenanceService'],
         profils: {
           applicationAchettee: {
-            regles: {
+            regles: [{
               presence: ['achat'],
-            },
+            }],
             mesuresARetirer: ['uneMesure', 'uneAutreMesure'],
           },
         },
@@ -155,9 +155,9 @@ describe('Le moteur de règles', () => {
           mesuresBase: ['mesureBase', 'mesureASupprimer'],
           profils: {
             applicationAchettee: {
-              regles: {
+              regles: [{
                 presence: ['achat'],
-              },
+              }],
               mesuresARetirer: ['mesureASupprimer'],
             },
           },
