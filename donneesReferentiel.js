@@ -552,7 +552,7 @@ module.exports = {
   },
 
   reglesPersonnalisation: {
-    clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites', 'provenanceService'],
+    clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites', 'provenanceService', 'donneesCaracterePersonnel'],
     profils: {
       applicationMobile: {
         regles: [{
@@ -595,6 +595,40 @@ module.exports = {
           'notificationConnexionsSuspectes',
         ],
       },
+      mssPlus: {
+        regles: [
+          {
+            presence: ['developpement', 'reseauSocial'],
+            absence: ['achat'],
+          },
+          {
+            presence: ['developpement', 'visionconference'],
+            absence: ['achat'],
+          },
+          {
+            presence: ['developpement', 'messagerie'],
+            absence: ['achat'],
+          },
+          {
+            presence: ['developpement', 'edition'],
+            absence: ['achat'],
+          },
+          {
+            presence: ['developpement', 'paiement'],
+            absence: ['achat'],
+          },
+          { presence: ['identite'] },
+          { presence: ['situation'] },
+          { presence: ['mineurs'] },
+        ],
+        mesuresAAjouter: [
+          'secNumCloud',
+          'modalitesSuivi',
+          'formaliserModalitesSecurite',
+          'testIntrusion',
+          'supervision',
+        ],
+      },
     },
     mesuresBase: [
       'limitationInterconnexions',
@@ -602,10 +636,7 @@ module.exports = {
       'identificationDonneesSensibles',
       'contactSecurite',
       'exigencesSecurite',
-      'modalitesSuivi',
-      'formaliserModalitesSecurite',
       'hebergementUE',
-      'secNumCloud',
       'interdictionParageVente',
       'sensibilisationRisques',
       'consignesSecurite',
@@ -636,13 +667,11 @@ module.exports = {
       'moindrePrivilege',
       'configurationMinimaliste',
       'verificationAutomatique',
-      'testIntrusion',
       'veilleSecurite',
       'gestionIncidents',
       'journalAcces',
       'journalEvenementSecu',
       'notificationConnexionsSuspectes',
-      'supervision',
       'testsProcedures',
       'scanIP',
       'affichageDerniereConnexion',
