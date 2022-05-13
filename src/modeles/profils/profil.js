@@ -1,6 +1,9 @@
 const Regles = require('./regles');
 const Mesures = require('./mesures');
 
+const estConforme = (cles, regle) => regle.presence.every((cle) => cles.includes(cle))
+  && regle.absence.every((cle) => !cles.includes(cle));
+
 class Profil {
   constructor(regles, mesures) {
     this.regles = new Regles(regles);
@@ -8,8 +11,10 @@ class Profil {
   }
 
   estProfil(cles) {
-    return this.regles.presence.every((cle) => cles.includes(cle))
-    && this.regles.absence.every((cle) => !cles.includes(cle));
+    return this.regles.sontVides()
+    || this.regles.toutes()
+      .map((regle) => estConforme(cles, regle))
+      .reduce((accumulateur, courant) => accumulateur || courant, false);
   }
 
   mesuresACibler(cles, action) {

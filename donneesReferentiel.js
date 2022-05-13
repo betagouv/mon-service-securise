@@ -555,24 +555,24 @@ module.exports = {
     clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites', 'provenanceService'],
     profils: {
       applicationMobile: {
-        regles: {
+        regles: [{
           presence: ['applicationMobile'],
           absence: ['siteInternet'],
-        },
+        }],
         mesuresAAjouter: ['telechargementsOfficiels'],
         mesuresARetirer: ['nomsDomaineFrUe', 'nomsDomaineSimilaires'],
       },
       applicationHybride: {
-        regles: {
+        regles: [{
           presence: ['applicationMobile'],
-        },
+        }],
         mesuresAAjouter: ['telechargementsOfficiels'],
       },
       creationComptes: {
-        regles: {
+        regles: [{
           presence: ['compte', 'developpement'],
           absence: ['achat'],
-        },
+        }],
         mesuresAAjouter: [
           'analyseRisques',
           'secNumCloud',
@@ -585,10 +585,10 @@ module.exports = {
         ],
       },
       applicationAchettee: {
-        regles: {
+        regles: [{
           presence: ['achat'],
           absence: ['developpement'],
-        },
+        }],
         mesuresARetirer: [
           'listeEquipements',
           'testIntrusion',
