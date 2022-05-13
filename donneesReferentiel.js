@@ -570,7 +570,8 @@ module.exports = {
       },
       creationComptes: {
         regles: {
-          presence: ['compte'],
+          presence: ['compte', 'developpement'],
+          absence: ['achat'],
         },
         mesuresAAjouter: [
           'analyseRisques',
