@@ -1,4 +1,5 @@
 const Referentiel = require('./referentiel');
+const Profil = require('./modeles/profils/profil');
 
 class MoteurRegles {
   constructor(referentiel = Referentiel.creeReferentielVide()) {
@@ -6,25 +7,31 @@ class MoteurRegles {
     this.referentiel = referentiel;
   }
 
-  regle(identifiantRegle, descriptionService) {
+  mesuresAModifier(descriptionService, mesuresACibler) {
     const { clefsDescriptionServiceAConsiderer = [] } = this.reglesPersonnalisation;
-    const regle = this.reglesPersonnalisation[identifiantRegle] || {};
-
     const valeursDescriptionService = clefsDescriptionServiceAConsiderer.flatMap(
       (clef) => descriptionService[clef]
     );
 
-    return Object.keys(regle)
-      .filter((clef) => valeursDescriptionService.includes(clef))
-      .flatMap((clef) => regle[clef]);
+    const profils = this.reglesPersonnalisation.profils || {};
+    const mapMesures = Object.keys(profils).map((profil) => new Profil(
+      profils[profil].regles,
+      {
+        ajouter: profils[profil].mesuresAAjouter,
+        retirer: profils[profil].mesuresARetirer,
+      }
+    )).flatMap((profil) => profil[mesuresACibler](valeursDescriptionService))
+      .reduce((accumulateur, mesure) => ({ ...accumulateur, [mesure]: mesure }), {});
+
+    return Object.keys(mapMesures);
   }
 
   mesuresAAjouter(descriptionService) {
-    return this.regle('mesuresAAjouter', descriptionService);
+    return this.mesuresAModifier(descriptionService, 'mesuresAAjouter');
   }
 
   mesuresARetirer(descriptionService) {
-    return this.regle('mesuresARetirer', descriptionService);
+    return this.mesuresAModifier(descriptionService, 'mesuresARetirer');
   }
 
   mesures(...params) {

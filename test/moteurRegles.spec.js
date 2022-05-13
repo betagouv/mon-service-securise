@@ -8,7 +8,14 @@ describe('Le moteur de règles', () => {
   it('détermine quelles mesures ajouter en fonction de la description du service', () => {
     const referentiel = Referentiel.creeReferentiel({ reglesPersonnalisation: {
       clefsDescriptionServiceAConsiderer: ['typeService'],
-      mesuresAAjouter: { applicationMobile: ['uneMesure', 'uneAutreMesure'] },
+      profils: {
+        applicationMobile: {
+          regles: {
+            presence: ['applicationMobile'],
+          },
+          mesuresAAjouter: ['uneMesure', 'uneAutreMesure'],
+        },
+      },
     } });
     const moteur = new MoteurRegles(referentiel);
 
@@ -26,12 +33,43 @@ describe('Le moteur de règles', () => {
   it("n'ajoute pas de mesure si aucune règle ne correspond à la description du service", () => {
     const referentiel = Referentiel.creeReferentiel({ reglesPersonnalisation: {
       clefsDescriptionServiceAConsiderer: ['typeService'],
-      mesuresAAjouter: { applicationMobile: ['uneMesure', 'uneAutreMesure'] },
+      profils: {
+        applicationMobile: {
+          regles: {
+            presence: ['applicationMobile'],
+          },
+          mesuresAAjouter: ['uneMesure', 'uneAutreMesure'],
+        },
+      },
     } });
     const moteur = new MoteurRegles(referentiel);
 
     const siteInternet = new DescriptionService({ typeService: ['siteInternet'] });
     expect(moteur.mesuresAAjouter(siteInternet)).to.eql([]);
+  });
+
+  it('ne propose pas de mesures en plusieurs exemplaires', () => {
+    const referentiel = Referentiel.creeReferentiel({ reglesPersonnalisation: {
+      clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites'],
+      profils: {
+        applicationMobile: {
+          regles: {
+            presence: ['applicationMobile'],
+          },
+          mesuresAAjouter: ['uneMesure', 'uneAutreMesure'],
+        },
+        creationComptes: {
+          regles: {
+            presence: ['compte'],
+          },
+          mesuresAAjouter: ['uneMesure', 'uneTroisiemeMesure'],
+        },
+      },
+    } });
+    const moteur = new MoteurRegles(referentiel);
+
+    const siteInternet = new DescriptionService({ typeService: ['applicationMobile'], fonctionnalites: ['compte'] });
+    expect(moteur.mesuresAAjouter(siteInternet)).to.eql(['uneMesure', 'uneAutreMesure', 'uneTroisiemeMesure']);
   });
 
   it('ajoute les mesures à ajouter aux mesures de base', () => {
@@ -44,7 +82,14 @@ describe('Le moteur de règles', () => {
       reglesPersonnalisation: {
         clefsDescriptionServiceAConsiderer: ['typeService'],
         mesuresBase: ['mesureBase'],
-        mesuresAAjouter: { applicationMobile: ['mesureSupplementaire'] },
+        profils: {
+          applicationMobile: {
+            regles: {
+              presence: ['applicationMobile'],
+            },
+            mesuresAAjouter: ['mesureSupplementaire'],
+          },
+        },
       },
     });
     const moteur = new MoteurRegles(referentiel);
@@ -66,7 +111,14 @@ describe('Le moteur de règles', () => {
     it('détermine quelles mesures sont à retirer en fonction de la description du service', () => {
       const referentiel = Referentiel.creeReferentiel({ reglesPersonnalisation: {
         clefsDescriptionServiceAConsiderer: ['provenanceService'],
-        mesuresARetirer: { achat: ['uneMesure', 'uneAutreMesure'] },
+        profils: {
+          applicationAchettee: {
+            regles: {
+              presence: ['achat'],
+            },
+            mesuresARetirer: ['uneMesure', 'uneAutreMesure'],
+          },
+        },
       } });
       const moteur = new MoteurRegles(referentiel);
 
@@ -77,7 +129,14 @@ describe('Le moteur de règles', () => {
     it('ne retire aucune mesure si aucune règle ne correspond à la description du service', () => {
       const referentiel = Referentiel.creeReferentiel({ reglesPersonnalisation: {
         clefsDescriptionServiceAConsiderer: ['provenanceService'],
-        mesuresARetirer: { achat: ['uneMesure', 'uneAutreMesure'] },
+        profils: {
+          applicationAchettee: {
+            regles: {
+              presence: ['achat'],
+            },
+            mesuresARetirer: ['uneMesure', 'uneAutreMesure'],
+          },
+        },
       } });
       const moteur = new MoteurRegles(referentiel);
 
@@ -94,7 +153,14 @@ describe('Le moteur de règles', () => {
         reglesPersonnalisation: {
           clefsDescriptionServiceAConsiderer: ['provenanceService'],
           mesuresBase: ['mesureBase', 'mesureASupprimer'],
-          mesuresARetirer: { achat: ['mesureASupprimer'] },
+          profils: {
+            applicationAchettee: {
+              regles: {
+                presence: ['achat'],
+              },
+              mesuresARetirer: ['mesureASupprimer'],
+            },
+          },
         },
       });
       const moteur = new MoteurRegles(referentiel);

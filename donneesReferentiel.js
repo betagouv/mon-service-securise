@@ -553,6 +553,40 @@ module.exports = {
 
   reglesPersonnalisation: {
     clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites', 'provenanceService'],
+    profils: {
+      applicationHybride: {
+        regles: {
+          presence: ['applicationMobile'],
+        },
+        mesuresAAjouter: ['telechargementsOfficiels'],
+      },
+      creationComptes: {
+        regles: {
+          presence: ['compte'],
+        },
+        mesuresAAjouter: [
+          'analyseRisques',
+          'secNumCloud',
+          'modalitesSuivi',
+          'formaliserModalitesSecurite',
+          'dissocierComptesAdmin',
+          'testIntrusion',
+          'supervision',
+          'sauvegardeDonnees',
+        ],
+      },
+      applicationAchettee: {
+        regles: {
+          presence: ['achat'],
+          absence: ['developpement'],
+        },
+        mesuresARetirer: [
+          'listeEquipements',
+          'testIntrusion',
+          'notificationConnexionsSuspectes',
+        ],
+      },
+    },
     mesuresBase: [
       'limitationInterconnexions',
       'listeEquipements',
@@ -608,25 +642,5 @@ module.exports = {
       'sauvegardeMachineVirtuelle',
       'testsSauvegardes',
     ],
-    mesuresAAjouter: {
-      applicationMobile: ['telechargementsOfficiels'],
-      compte: [
-        'analyseRisques',
-        'secNumCloud',
-        'modalitesSuivi',
-        'formaliserModalitesSecurite',
-        'dissocierComptesAdmin',
-        'testIntrusion',
-        'supervision',
-        'sauvegardeDonnees',
-      ],
-    },
-    mesuresARetirer: {
-      achat: [
-        'listeEquipements',
-        'testIntrusion',
-        'notificationConnexionsSuspectes',
-      ],
-    },
   },
 };
