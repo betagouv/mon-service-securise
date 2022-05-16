@@ -154,3 +154,19 @@
 .carte h4 + p {
   margin-top: 0;
 }
+
+.rideau .modale {
+  list-style: none;
+}
+.rideau .modale li {
+  margin-top: 0.3em;
+  margin-left: 1.5em;
+
+  color: var(--texte-fonce);            
+}
+.rideau .modale li::before {
+  content: '\25CF';
+  display: block;
+  position: absolute;
+  left: 3em;
+}
