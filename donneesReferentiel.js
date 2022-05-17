@@ -28,6 +28,9 @@ module.exports = {
   },
 
   statutsDeploiement: {
+    enProjet: {
+      description: 'En projet',
+    },
     accessible: {
       description: 'Le service est déjà accessible aux utilisateurs',
     },
