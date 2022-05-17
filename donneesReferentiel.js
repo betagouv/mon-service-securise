@@ -31,11 +31,11 @@ module.exports = {
     enProjet: {
       description: 'En projet',
     },
-    accessible: {
-      description: 'Le service est déjà accessible aux utilisateurs',
+    enCours: {
+      description: 'En cours de développement ou de déploiement',
     },
-    nonAccessible: {
-      description: "Le service n'est pas accessible aux utilisateurs",
+    enLigne: {
+      description: 'En ligne et accessible aux usagers et/ou agents',
     },
   },
 
