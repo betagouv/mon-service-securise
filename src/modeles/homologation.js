@@ -2,6 +2,7 @@ const MoteurRegles = require('../moteurRegles');
 const Referentiel = require('../referentiel');
 
 const AvisExpertCyber = require('./avisExpertCyber');
+const CartographieActeurs = require('./cartographieActeurs');
 const DescriptionService = require('./descriptionService');
 const Mesure = require('./mesure');
 const Mesures = require('./mesures');
@@ -24,6 +25,7 @@ class Homologation {
   ) {
     const {
       id = '',
+      cartographieActeurs = {},
       contributeurs = [],
       createur = {},
       descriptionService = {},
@@ -46,6 +48,7 @@ class Homologation {
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel, idMesures);
 
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
+    this.cartographieActeurs = new CartographieActeurs(cartographieActeurs);
     this.risques = new Risques(
       { risquesGeneraux, risquesSpecifiques },
       referentiel,
