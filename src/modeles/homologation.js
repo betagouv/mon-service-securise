@@ -7,7 +7,6 @@ const DescriptionService = require('./descriptionService');
 const Mesure = require('./mesure');
 const Mesures = require('./mesures');
 const Risques = require('./risques');
-const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
 
 const NIVEAUX = {
@@ -32,7 +31,6 @@ class Homologation {
       mesuresSpecifiques = [],
       risquesGeneraux = [],
       risquesSpecifiques = [],
-      rolesResponsabilites = {},
       avisExpertCyber = {},
     } = donnees;
 
@@ -47,7 +45,6 @@ class Homologation {
     mesuresGenerales = mesuresGenerales.filter((m) => idMesures.includes(m.id));
     this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel, idMesures);
 
-    this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
     this.cartographieActeurs = new CartographieActeurs(cartographieActeurs);
     this.risques = new Risques(
       { risquesGeneraux, risquesSpecifiques },
