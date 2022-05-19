@@ -74,10 +74,10 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     });
   });
 
-  describe('quand requete GET sur `/homologation/:id/rolesResponsabilites`', () => {
+  describe('quand requête GET sur `/homologation/:id/cartographieActeurs`', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/rolesResponsabilites',
+        'http://localhost:1234/homologation/456/cartographieActeurs',
         done,
       );
     });

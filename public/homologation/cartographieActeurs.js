@@ -30,9 +30,9 @@ $(() => {
   const identifiantHomologation = $bouton.attr('identifiant');
 
   $bouton.on('click', () => {
-    const params = tousLesParametres('form#roles-responsabilites');
+    const params = tousLesParametres('form#cartographie-acteurs');
 
-    axios.post(`/api/homologation/${identifiantHomologation}/rolesResponsabilites`, params)
+    axios.post(`/api/homologation/${identifiantHomologation}/cartographieActeurs`, params)
       .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
   });
 });

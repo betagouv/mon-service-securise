@@ -42,9 +42,9 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
     reponse.render('homologation/mesures', { referentiel, homologation, mesures });
   });
 
-  routes.get('/:id/rolesResponsabilites', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/cartographieActeurs', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/rolesResponsabilites', { homologation });
+    reponse.render('homologation/cartographieActeurs', { homologation });
   });
 
   routes.get('/:id/risques', middleware.trouveHomologation, (requete, reponse) => {

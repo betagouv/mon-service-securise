@@ -125,7 +125,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     }
   });
 
-  routes.post('/:id/rolesResponsabilites',
+  routes.post('/:id/cartographieActeurs',
     middleware.trouveHomologation,
     middleware.aseptiseListes([
       { nom: 'acteursHomologation', proprietes: ActeursHomologation.proprietesItem() },

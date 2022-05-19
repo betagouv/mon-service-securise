@@ -1,11 +1,11 @@
-.saisie-role-responsabilite {
+.saisie-acteur {
   border: 1px solid var(--liseres);
   border-radius: 3px;
   padding: 1em;
   margin-top: 1em;
 }
 
-.saisie-role-responsabilite label {
+.saisie-acteur label {
   display: inline-block;
   margin: 0;
   margin-left: 0.1em;
