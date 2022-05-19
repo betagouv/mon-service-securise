@@ -305,26 +305,6 @@ describe('Le dépot de données des homologations', () => {
       .catch(done);
   });
 
-  it('sait enregistrer la cartographie des acteurs en rôles et responsabilités', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [{
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-      }],
-    });
-    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-
-    const cartographieActeurs = new CartographieActeurs({ autoriteHomologation: 'Jean Dupont' });
-    depot.ajouteCartographieActeursAHomologation('123', cartographieActeurs)
-      .then(() => depot.homologation('123'))
-      .then(({ rolesResponsabilites }) => {
-        expect(rolesResponsabilites).to.be.ok();
-        expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
-        done();
-      })
-      .catch(done);
-  });
-
   describe('concernant les risques généraux', () => {
     let valideRisque;
 

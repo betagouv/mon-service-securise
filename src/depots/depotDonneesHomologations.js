@@ -101,7 +101,6 @@ const creeDepot = (config = {}) => {
 
   const ajouteCartographieActeursAHomologation = (...params) => (
     metsAJourProprieteHomologation('cartographieActeurs', ...params)
-      .then(() => metsAJourProprieteHomologation('rolesResponsabilites', ...params))
   );
 
   const ajouteAvisExpertCyberAHomologation = (...params) => (
