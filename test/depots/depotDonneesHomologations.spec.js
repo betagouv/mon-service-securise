@@ -13,6 +13,7 @@ const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologa
 
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../../src/modeles/avisExpertCyber');
+const CartographieActeurs = require('../../src/modeles/cartographieActeurs');
 const DescriptionService = require('../../src/modeles/descriptionService');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
@@ -21,7 +22,6 @@ const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 const RisqueGeneral = require('../../src/modeles/risqueGeneral');
 const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
 const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
-const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 describe('Le dépot de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -287,7 +287,7 @@ describe('Le dépot de données des homologations', () => {
     });
   });
 
-  it('sait associer des rôles et responsabilités à une homologation', (done) => {
+  it('sait associer la cartographie es acteurs à une homologation', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
         { id: '123', descriptionService: { nomService: 'nom' } },
@@ -295,17 +295,17 @@ describe('Le dépot de données des homologations', () => {
     });
     const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
-    const roles = new RolesResponsabilites({ autoriteHomologation: 'Jean Dupont' });
-    depot.ajouteRolesResponsabilitesAHomologation('123', roles)
+    const roles = new CartographieActeurs({ autoriteHomologation: 'Jean Dupont' });
+    depot.ajouteCartographieActeursAHomologation('123', roles)
       .then(() => depot.homologation('123'))
-      .then(({ rolesResponsabilites }) => {
-        expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
+      .then(({ cartographieActeurs }) => {
+        expect(cartographieActeurs.autoriteHomologation).to.equal('Jean Dupont');
         done();
       })
       .catch(done);
   });
 
-  it('sait enregistrer les rôles et responsabilités en cartographie des acteurs', (done) => {
+  it('sait enregistrer la cartographie des acteurs en rôles et responsabilités', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [{
         id: '123',
@@ -314,12 +314,12 @@ describe('Le dépot de données des homologations', () => {
     });
     const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
-    const rolesResponsabilites = new RolesResponsabilites({ autoriteHomologation: 'Jean Dupont' });
-    depot.ajouteRolesResponsabilitesAHomologation('123', rolesResponsabilites)
+    const cartographieActeurs = new CartographieActeurs({ autoriteHomologation: 'Jean Dupont' });
+    depot.ajouteCartographieActeursAHomologation('123', cartographieActeurs)
       .then(() => depot.homologation('123'))
-      .then(({ cartographieActeurs }) => {
-        expect(cartographieActeurs).to.be.ok();
-        expect(cartographieActeurs.autoriteHomologation).to.equal('Jean Dupont');
+      .then(({ rolesResponsabilites }) => {
+        expect(rolesResponsabilites).to.be.ok();
+        expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
         done();
       })
       .catch(done);

@@ -42,36 +42,36 @@ block formulaire
         })
 
         +elementsAjoutablesActeurHomologation({
-          donnees: homologation.rolesResponsabilites.acteursHomologation.toJSON(),
+          donnees: homologation.cartographieActeurs.acteursHomologation.toJSON(),
         })
 
       .onglet#parties-prenantes
         +inputPartiePrenante({
           categorie: 'Hébergement du service',
           nomParametre: 'hebergement',
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.hebergement(),
+          donnees: homologation.cartographieActeurs.partiesPrenantes.hebergement(),
         })
 
         +inputPartiePrenante({
           categorie: 'Développement / fourniture du service',
           nomParametre: 'developpementFourniture',
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.developpementFourniture(),
+          donnees: homologation.cartographieActeurs.partiesPrenantes.developpementFourniture(),
         })
 
         +inputPartiePrenante({
           categorie: 'Maintenance du service',
           nomParametre: 'maintenanceService',
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.maintenanceService(),
+          donnees: homologation.cartographieActeurs.partiesPrenantes.maintenanceService(),
         })
 
         +inputPartiePrenante({
           categorie: 'Gestion de la sécurité du service',
           nomParametre: 'securiteService',
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.securiteService(),
+          donnees: homologation.cartographieActeurs.partiesPrenantes.securiteService(),
         })
 
         +elementsAjoutablesPartiePrenante({
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.specifiques(),
+          donnees: homologation.cartographieActeurs.partiesPrenantes.specifiques(),
         })
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›

@@ -59,21 +59,21 @@ class Homologation {
   }
 
   acteursHomologation() {
-    return this.rolesResponsabilites.descriptionActeursHomologation();
+    return this.cartographieActeurs.descriptionActeursHomologation();
   }
 
-  autoriteHomologation() { return this.rolesResponsabilites.autoriteHomologation; }
+  autoriteHomologation() { return this.cartographieActeurs.autoriteHomologation; }
 
   delegueProtectionDonnees() {
-    return this.rolesResponsabilites.delegueProtectionDonnees;
+    return this.cartographieActeurs.delegueProtectionDonnees;
   }
 
   descriptionAutoriteHomologation() {
-    return this.rolesResponsabilites.descriptionAutoriteHomologation();
+    return this.cartographieActeurs.descriptionAutoriteHomologation();
   }
 
   descriptionEquipePreparation() {
-    return this.rolesResponsabilites.descriptionEquipePreparation();
+    return this.cartographieActeurs.descriptionEquipePreparation();
   }
 
   descriptionExpiration() {
@@ -89,11 +89,11 @@ class Homologation {
     }, {});
   }
 
-  expertCybersecurite() { return this.rolesResponsabilites.expertCybersecurite; }
+  expertCybersecurite() { return this.cartographieActeurs.expertCybersecurite; }
 
-  fonctionAutoriteHomologation() { return this.rolesResponsabilites.fonctionAutoriteHomologation; }
+  fonctionAutoriteHomologation() { return this.cartographieActeurs.fonctionAutoriteHomologation; }
 
-  hebergeur() { return this.rolesResponsabilites.descriptionHebergeur(); }
+  hebergeur() { return this.cartographieActeurs.descriptionHebergeur(); }
 
   localisationDonnees() {
     return this.descriptionService.descriptionLocalisationDonnees();
@@ -103,7 +103,7 @@ class Homologation {
 
   nomService() { return this.descriptionService.nomService; }
 
-  piloteProjet() { return this.rolesResponsabilites.piloteProjet; }
+  piloteProjet() { return this.cartographieActeurs.piloteProjet; }
 
   presentation() { return this.descriptionService.presentation; }
 
@@ -124,7 +124,7 @@ class Homologation {
   }
 
   structureDeveloppement() {
-    return this.rolesResponsabilites.descriptionStructureDeveloppement();
+    return this.cartographieActeurs.descriptionStructureDeveloppement();
   }
 
   toJSON() {

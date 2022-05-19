@@ -4,12 +4,12 @@ mixin inputIdentite({ role, nomParametre })
       label(for = nomParametre) Prénom / Nom
       input(
         id = nomParametre, name = nomParametre, type = 'text',
-        value != homologation.rolesResponsabilites[nomParametre]
+        value != homologation.cartographieActeurs[nomParametre]
       )
 
       - const nomParamFonction = `fonction${nomParametre.charAt(0).toUpperCase()}${nomParametre.slice(1)}`
       label(for = nomParamFonction) Fonction
       input(
         id = nomParamFonction, name = nomParamFonction, type = 'text',
-        value = homologation.rolesResponsabilites[nomParamFonction]
+        value = homologation.cartographieActeurs[nomParamFonction]
       )

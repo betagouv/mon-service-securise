@@ -294,7 +294,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
   describe('quand requête POST sur `/api/homologation/:id/rolesResponsabilites`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = () => Promise.resolve();
+      testeur.depotDonnees().ajouteCartographieActeursAHomologation = () => Promise.resolve();
       testeur.depotDonnees().ajouteEntitesExternesAHomologation = () => Promise.resolve();
     });
 
@@ -305,13 +305,13 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       }, done);
     });
 
-    it("demande au dépôt d'associer les rôles et responsabilités à l'homologation", (done) => {
-      let rolesResponsabilitesAjoutees = false;
+    it("demande au dépôt d'associer la cartographie des acteurs à l'homologation", (done) => {
+      let cartographieActeursAjoutees = false;
 
-      testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = (idHomologation, role) => {
+      testeur.depotDonnees().ajouteCartographieActeursAHomologation = (idHomologation, role) => {
         expect(idHomologation).to.equal('456');
         expect(role.autoriteHomologation).to.equal('Jean Dupont');
-        rolesResponsabilitesAjoutees = true;
+        cartographieActeursAjoutees = true;
         return Promise.resolve();
       };
 
@@ -319,7 +319,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         autoriteHomologation: 'Jean Dupont',
       })
         .then((reponse) => {
-          expect(rolesResponsabilitesAjoutees).to.be(true);
+          expect(cartographieActeursAjoutees).to.be(true);
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();

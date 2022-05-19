@@ -3,6 +3,7 @@ const express = require('express');
 const { EchecAutorisation, ErreurModele } = require('../erreurs');
 const ActeursHomologation = require('../modeles/acteursHomologation');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
+const CartographieActeurs = require('../modeles/cartographieActeurs');
 const DescriptionService = require('../modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('../modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('../modeles/donneesSensiblesSpecifiques');
@@ -12,7 +13,6 @@ const PartiesPrenantes = require('../modeles/partiesPrenantes/partiesPrenantes')
 const PointsAcces = require('../modeles/pointsAcces');
 const RisqueGeneral = require('../modeles/risqueGeneral');
 const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
-const RolesResponsabilites = require('../modeles/rolesResponsabilites');
 
 const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   const routes = express.Router();
@@ -132,10 +132,10 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       { nom: 'partiesPrenantes', proprietes: PartiesPrenantes.proprietesItem() },
     ]),
     (requete, reponse) => {
-      const rolesResponsabilites = new RolesResponsabilites(requete.body);
+      const cartographieActeurs = new CartographieActeurs(requete.body);
       const idHomologation = requete.homologation.id;
-      depotDonnees.ajouteRolesResponsabilitesAHomologation(
-        idHomologation, rolesResponsabilites
+      depotDonnees.ajouteCartographieActeursAHomologation(
+        idHomologation, cartographieActeurs
       ).then(() => reponse.send({ idHomologation }));
     });
 

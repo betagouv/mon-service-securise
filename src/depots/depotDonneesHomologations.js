@@ -2,7 +2,6 @@ const {
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
 } = require('../erreurs');
-const CartographieActeurs = require('../modeles/cartographieActeurs');
 const Homologation = require('../modeles/homologation');
 
 const creeDepot = (config = {}) => {
@@ -100,12 +99,10 @@ const creeDepot = (config = {}) => {
       ))
   );
 
-  const ajouteRolesResponsabilitesAHomologation = (...params) => {
-    const [idHomologation, rolesResponsabilites] = params;
-
-    return metsAJourProprieteHomologation('rolesResponsabilites', ...params)
-      .then(() => metsAJourProprieteHomologation('cartographieActeurs', idHomologation, new CartographieActeurs(rolesResponsabilites.toJSON())));
-  };
+  const ajouteCartographieActeursAHomologation = (...params) => (
+    metsAJourProprieteHomologation('cartographieActeurs', ...params)
+      .then(() => metsAJourProprieteHomologation('rolesResponsabilites', ...params))
+  );
 
   const ajouteAvisExpertCyberAHomologation = (...params) => (
     metsAJourProprieteHomologation('avisExpertCyber', ...params)
@@ -146,10 +143,10 @@ const creeDepot = (config = {}) => {
 
   return {
     ajouteAvisExpertCyberAHomologation,
+    ajouteCartographieActeursAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteMesureGeneraleAHomologation,
     ajouteRisqueGeneralAHomologation,
-    ajouteRolesResponsabilitesAHomologation,
     homologation,
     homologationExiste,
     homologations,
