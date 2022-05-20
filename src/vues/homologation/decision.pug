@@ -140,7 +140,7 @@ block page
         dl
           dt Décision d'homologation préparée par :
           dd= homologation.descriptionEquipePreparation()
-          each acteur in homologation.acteursHomologation()
+          each acteur in homologation.responsables()
             dt #{acteur.role} :
             dd= acteur.description
 

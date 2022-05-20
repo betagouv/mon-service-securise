@@ -68,7 +68,7 @@ class RolesResponsabilites extends InformationsHomologation {
     return this.partiesPrenantes.developpementFourniture()?.nom || '';
   }
 
-  descriptionActeursHomologation() {
+  descriptionResponsables() {
     const acteurHomologationDecrit = (role, description) => ({ role, description });
     const description = (acteur) => acteur.nom + (acteur.fonction ? ` (${acteur.fonction})` : '');
     const acteursSpecifiques = () => this.acteursHomologation.tous()
