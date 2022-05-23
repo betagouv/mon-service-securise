@@ -36,7 +36,7 @@ mixin mesuresPaginees({ titreAnnexe, titreSection, donnees })
 
               each mesure in mesures
                 li
-                  .description= mesure.descriptionMesure()
+                  .description!= mesure.descriptionMesure()
                   .statut(class = mesure.statut)
                   if mesure.estIndispensable()
                     .indispensable
