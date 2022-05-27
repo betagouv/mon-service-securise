@@ -169,7 +169,7 @@ module.exports = {
       descriptionLongue: `
         L'indisponibilité du service numérique signifie que certaines fonctionnalités ou que la totalité du service
         n'est plus accessible aux usagers et/ou aux agents publics.<br>Par exemple :<li>Un service numérique connaît
-        une panne suite à une attaque de type "déni de service" : un message d'erreur est susceptible de s'afficher en
+        une panne suite à une attaque de type « déni de service » : un message d'erreur est susceptible de s'afficher en
         lieu et place de la page d'accueil pour un site web.</li><li>Un service numérique devient inaccessible, suite à
         une attaque de type rançongiciel, contre la fausse-promesse de leur restitution en cas de paiement d'une rançon.
         Cette attaque est l'une des plus courantes et a déjà frappé de nombreuses collectivités et entités publiques.</li>
@@ -206,7 +206,7 @@ module.exports = {
     },
     surveillance: {
       description: "Vol de données ou interception d'échanges à des fins de renseignement",
-      descriptionLongue: "Ce risque signifie que des échanges entre agents publics ou avec des usagers sont interceptés ou que des documents sont dérobés, le plus souvent à des fins de renseignement économique ou politique.<br> Par exemple :<li>Des documents concernant des candidatures à un marché public avant la date finale de dépôt des dossiers sont dérobés par des concurrents afin d'en tirer un avantage concurrentiel.</li><li>Des échanges entre agents publics et entreprises technologiques sont interceptée via la messagerie d'une plateforme permettant l'attribution d'aides publiques, à des fins d'intelligence économique.</li>",
+      descriptionLongue: "Ce risque signifie que des échanges entre agents publics ou avec des usagers sont interceptés ou que des documents sont dérobés, le plus souvent à des fins de renseignement économique ou politique.<br> Par exemple :<li>Des documents concernant des candidatures à un marché public avant la date finale de dépôt des dossiers sont dérobés par des concurrents afin d'en tirer un avantage concurrentiel.</li><li>Des échanges entre agents publics et entreprises technologiques sont interceptés via la messagerie d'une plateforme permettant l'attribution d'aides publiques, à des fins d'intelligence économique.</li>",
     },
   },
 
