@@ -72,6 +72,10 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adapta
     reponse.render('nouvellesFonctionnalites');
   });
 
+  app.get('/statistiques', (_requete, reponse) => {
+    reponse.render('statistiques');
+  });
+
   app.get('/reinitialisationMotDePasse', middleware.suppressionCookie, (_requete, reponse) => {
     reponse.render('reinitialisationMotDePasse');
   });

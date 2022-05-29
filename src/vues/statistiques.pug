@@ -1,0 +1,15 @@
+extends mssDeconnecte
+
+block main
+  script(src='https://cdn.jsdelivr.net/npm/chart.js@^3')
+  script(src='https://cdn.jsdelivr.net/npm/moment@^2')
+  script(src='https://cdn.jsdelivr.net/npm/moment/locale/fr.js')
+  script(src='https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1')
+
+  .marges-fixes
+    h1 Statistiques
+
+    div
+      canvas(id = 'utilisateursEtDossiers')
+
+  script(type = 'module', src = '/statique/statistiques.js')
