@@ -1,39 +1,58 @@
 import donnees from './modules/statistiques/donnees.mjs';
 import construis from './modules/statistiques/construis.mjs';
 
-$(() => {
-  moment.locale('fr');
+const COULEURS_GRAPHES = ['#0f7ac7', '#ff6584'];
 
-  const data = {
-    datasets: [{
-      label: 'Utilisateurs inscrits',
-      backgroundColor: '#0f7ac7',
-      borderColor: '#0f7ac7',
-      data: construis('utilisateurs', donnees),
-    },
-    {
-      label: 'Dossiers créés',
-      backgroundColor: '#ff6584',
-      borderColor: '#ff6584',
-      data: construis('dossiers', donnees),
-    }],
-  };
+const TEMPS_EN_MOIS = {
+  type: 'time',
+  time: { unit: 'month', tooltipFormat: 'DD MMMM YYYY' },
+};
+
+const construisEvolution = (
+  identifiantCanevas,
+  titresDonnees,
+  clefsDonnees,
+  optionsSupplementaires = {}
+) => {
+  const couleur = (index) => COULEURS_GRAPHES[index % COULEURS_GRAPHES.length];
+
+  const datasets = clefsDonnees.map((clef, index) => ({
+    label: titresDonnees[index],
+    backgroundColor: couleur(index),
+    borderColor: couleur(index),
+    data: construis(clef, donnees),
+  }));
 
   const options = {
     elements: {
       point: { radius: 0 },
     },
     scales: {
-      x: {
-        type: 'time',
-        time: { unit: 'month' },
-      },
+      x: TEMPS_EN_MOIS,
     },
+    ...optionsSupplementaires,
   };
 
-  const config = { type: 'line', data, options };
+  const config = { type: 'line', data: { datasets }, options };
 
   /* eslint-disable no-new */
-  new Chart(document.getElementById('utilisateursEtDossiers'), config);
+  new Chart(document.getElementById(identifiantCanevas), config);
   /* eslint-enable no-new */
+};
+
+$(() => {
+  moment.locale('fr');
+
+  construisEvolution('utilisateursEtDossiers', ['Utilisateurs inscrits', 'Dossiers créés'], ['utilisateurs', 'dossiers']);
+  construisEvolution(
+    'pourcentageUtilisateursEnPlus',
+    ['Nouveaux utilisateurs (en %)'],
+    ['pourcentageUtilisateursEnPlus'],
+    {
+      scales: {
+        x: TEMPS_EN_MOIS,
+        y: { ticks: { callback: (value) => `${value} %` } },
+      },
+    },
+  );
 });
