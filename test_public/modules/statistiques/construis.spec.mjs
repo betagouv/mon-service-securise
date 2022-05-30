@@ -14,4 +14,17 @@ describe('La construction des données statistiques', () => {
       { x: '2022-12-31', y: 1789 },
     ]);
   });
+
+  it('ignore les valeurs non définies', () => {
+    const donnees = {
+      '2022-01-01': { stat1: 15, stat2: 26 },
+      '2022-02-01': { stat1: 50 },
+      '2022-03-01': { stat1: 209, stat2: 1789 },
+    };
+
+    expect(construis('stat2', donnees)).to.eql([
+      { x: '2022-01-01', y: 26 },
+      { x: '2022-03-01', y: 1789 },
+    ]);
+  });
 });

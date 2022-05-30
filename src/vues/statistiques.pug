@@ -1,5 +1,8 @@
 extends mssDeconnecte
 
+block append styles
+  link(href='/statique/assets/styles/statistiques.css', rel='stylesheet')
+
 block main
   script(src='https://cdn.jsdelivr.net/npm/chart.js@^3')
   script(src='https://cdn.jsdelivr.net/npm/moment@^2')
@@ -9,7 +12,7 @@ block main
   .marges-fixes
     h1 Statistiques
 
-    div
-      canvas(id = 'utilisateursEtDossiers')
+    canvas(id = 'utilisateursEtDossiers')
+    canvas(id = 'pourcentageUtilisateursEnPlus')
 
   script(type = 'module', src = '/statique/statistiques.js')
