@@ -1,6 +1,7 @@
 import expect from 'expect.js';
 import jquery from 'jquery';
 import { JSDOM } from 'jsdom';
+
 import brancheOnglets from '../../../public/modules/interactions/brancheOnglets.mjs';
 
 describe('Le branchement des onglets', () => {
