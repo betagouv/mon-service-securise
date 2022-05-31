@@ -86,3 +86,11 @@ form#mesures .decoration {
   font-size: 0.7em;
   color: #fff;
 }
+
+.specifiques {
+  margin-bottom: 2em;
+}
+
+#mesures-specifiques {
+  margin-top: 2em;
+}
