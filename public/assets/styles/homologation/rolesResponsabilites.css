@@ -22,7 +22,7 @@
   border: solid 1px var(--liseres);
   border-radius: 5px;
 }
-  
+
 #onglets-liens > a {
   padding: 0.5em 1.3em;
   width: 100%;
@@ -34,8 +34,4 @@
   border-radius: 3px;
 
   font-weight: bold;
-}
-
-#onglets-liens ~ .onglet.invisible {
-  display: none;
 }

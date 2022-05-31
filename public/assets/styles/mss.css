@@ -47,3 +47,7 @@ section:last-of-type {
 
   text-align: left;
 }
+
+.invisible {
+  display: none;
+}

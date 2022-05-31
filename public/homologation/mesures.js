@@ -1,4 +1,5 @@
 import arrangeParametresMesures from '../modules/arrangeParametresMesures.mjs';
+import brancheFiltresMesures from '../modules/interactions/brancheFiltresMesures.mjs';
 import parametres from '../modules/parametres.mjs';
 import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
 import texteHTML from '../modules/texteHTML.js';
@@ -7,31 +8,6 @@ import ajouteModalesInformations from '../modules/interactions/modalesInformatio
 
 $(() => {
   let indexMaxMesuresSpecifiques = 0;
-
-  const mesureSpecifiqueDeCategorie = (elementMesureSpecifique, categorieFiltre) => (
-    categorieFiltre
-      ? $(`option[value="${categorieFiltre}"]:selected, option[value=""]:selected`, elementMesureSpecifique).length === 1
-      : true
-  );
-
-  const filtreMesures = (categorieFiltre) => {
-    $('.mesure').each((_, item) => $(item).toggle($(item).hasClass(categorieFiltre)));
-    $('.item-ajoute').each((_, item) => $(item)
-      .toggle(mesureSpecifiqueDeCategorie(item, categorieFiltre)));
-  };
-
-  const brancheFiltres = (selecteurFiltres) => {
-    const $filtres = $(selecteurFiltres);
-    $filtres.each((_, f) => {
-      $(f).on('click', (e) => {
-        $('.actif').removeClass('actif');
-        $(e.target).addClass('actif');
-
-        const idCategorie = e.target.id;
-        filtreMesures(idCategorie);
-      });
-    });
-  };
 
   const $conteneurModalites = (nom) => {
     const $conteneur = $('<div class="informations-additionnelles"></div>');
@@ -114,7 +90,7 @@ ${statuts}
 
   ajouteModalesInformations();
 
-  brancheFiltres('form#mesures nav > a');
+  brancheFiltresMesures('actif', 'form#mesures nav > a', '.mesure', '.item-ajoute');
 
   ajouteConteneursModalites();
   peupleFormulaire();
