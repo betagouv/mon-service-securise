@@ -25,7 +25,7 @@ block formulaire
 
     section
       nav
-        a.actif#tout Tout
+        a.actif Tout
         each categorie, identifiant in referentiel.categoriesMesures()
           a(id = identifiant)= categorie
 
@@ -35,7 +35,7 @@ block formulaire
 
       .mesures
         each donnees, identifiant in mesures
-          .mesure.tout(class = donnees.categorie)
+          .mesure(class = donnees.categorie)
             +inputMesure({
               nom: identifiant,
               titre: donnees.description,
