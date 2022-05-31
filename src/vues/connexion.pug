@@ -6,7 +6,7 @@ block append styles
 block main
   form.etroit
     h1 Connectez-vous
-    p ou&nbsp;
+    p.sous-titre ou&nbsp;
       a(href='/inscription') créez votre compte
     section
       label E-mail
@@ -15,7 +15,7 @@ block main
       label Mot de passe
         br
         input(id='mot-de-passe', type='password')
-        a(href='/reinitialisationMotDePasse') mot de passe oublié
-    .bouton Se connecter &nbsp;&nbsp;›
+        a(href='/reinitialisationMotDePasse' class='texte-normal') mot de passe oublié
+    .bouton Valider
 
   script(src='/statique/connexion.js')
