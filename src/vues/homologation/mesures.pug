@@ -29,6 +29,10 @@ block formulaire
         each categorie, identifiant in referentiel.categoriesMesures()
           a(id = identifiant)= categorie
 
+      .specifiques
+        a.nouvel-item Ajouter une mesure spécifique
+        #mesures-specifiques
+
       .mesures
         each donnees, identifiant in mesures
           .mesure.tout(class = donnees.categorie)
@@ -44,11 +48,6 @@ block formulaire
                   .fermeture-modale
                   h1= donnees.description
                   p!= donnees.descriptionLongue
-
-    section
-      label Mesures spécifiques au service numérique
-      #mesures-specifiques
-      a.nouvel-item Ajouter une mesure spécifique
 
     .bouton(identifiant = homologation.id) Enregistrer &nbsp;&nbsp;›
 

@@ -106,10 +106,11 @@ ${statuts}
     ...params,
     zoneSaisieMesureSpecifique,
     () => (indexMaxMesuresSpecifiques += 1),
+    { ordreInverse: true },
   );
 
   const peupleMesuresSpecifiques = (...params) => (
-    peupleListeItems(...params, zoneSaisieMesureSpecifique)
+    peupleListeItems(...params, zoneSaisieMesureSpecifique, { ordreInverse: true })
   );
 
   ajouteModalesInformations();
