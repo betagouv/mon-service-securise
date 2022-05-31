@@ -40,19 +40,17 @@ const construisEvolution = (
   /* eslint-enable no-new */
 };
 
+const construisEvolutionPourcentage = (...params) => construisEvolution(...params, {
+  scales: {
+    x: TEMPS_EN_MOIS,
+    y: { ticks: { callback: (value) => `${value} %` } },
+  },
+});
+
 $(() => {
   moment.locale('fr');
 
   construisEvolution('utilisateursEtDossiers', ['Utilisateurs inscrits', 'Dossiers créés'], ['utilisateurs', 'dossiers']);
-  construisEvolution(
-    'pourcentageUtilisateursEnPlus',
-    ['Nouveaux utilisateurs (en %)'],
-    ['pourcentageUtilisateursEnPlus'],
-    {
-      scales: {
-        x: TEMPS_EN_MOIS,
-        y: { ticks: { callback: (value) => `${value} %` } },
-      },
-    },
-  );
+  construisEvolutionPourcentage('pourcentageCreateurs', ['Utilisateurs ayant créé au moins un dossier (en %)'], ['pourcentageCreateurs']);
+  construisEvolutionPourcentage('pourcentageUtilisateursEnPlus', ['Nouveaux utilisateurs (en %)'], ['pourcentageUtilisateursEnPlus']);
 });
