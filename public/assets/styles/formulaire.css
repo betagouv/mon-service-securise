@@ -17,6 +17,12 @@ form.etroit .sous-titre {
   margin: 0;
 }
 
+form.etroit .description {
+  margin-top: 2em;
+
+  text-align: left;
+}
+
 form.etroit section {
   padding-bottom: 0;
   border: 0;
