@@ -9,7 +9,7 @@ h1 {
   display: flex;
   column-gap: 3em;
 
-  margin-top: 3em;
+  margin: 5em auto 3em auto;
 
   text-align: left;
 }
@@ -60,7 +60,7 @@ h1 {
 
 .bandeau-solution {
   background-color: #f6f6f6;
-  padding-bottom: 3em;
+  padding: 1em 0 4em 0;
 }
 
 .fonctionnalites ul {
