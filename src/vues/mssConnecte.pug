@@ -1,5 +1,16 @@
 extends mss
 
+block append styles
+  link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
+
 block navigation
   a.aide(href = 'mailto:contact@monservicesecurise.beta.gouv.fr') Besoin d'aide
   .utilisateur-courant
+
+  .rideau#deconnexion
+    .modale
+      .fermeture-modale
+      p Votre session a expiré, veuillez vous reconnecter.
+      a.bouton(href = '/connexion') Reconnexion
+
+  script(type = 'module', src = '/statique/mssConnecte.js')
