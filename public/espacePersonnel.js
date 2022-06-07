@@ -9,8 +9,8 @@ $(() => {
 
     $conteneurHomologations.prepend($conteneursHomologation);
 
-    $('body').append($modaleNouveauContributeur());
-    brancheModales('.ajout-contributeur', 'body');
+    $('main').append($modaleNouveauContributeur());
+    brancheModales('.ajout-contributeur', 'main');
     brancheComportementSaisieContributeur('.ajout-contributeur');
   };
 
