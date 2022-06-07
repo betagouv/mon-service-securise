@@ -5,9 +5,9 @@ const redirigeVersSynthese = ({ data: { idHomologation } }) => (
   window.location = `/homologation/${idHomologation}`
 );
 
-const afficheModale = () => $('*').trigger('afficheModale');
+const afficheModale = (selecteurRideau) => $(selecteurRideau).trigger('afficheModale');
 
-const soumetsHomologation = (adaptateurAjax, requete, params) => {
+const soumetsHomologation = (adaptateurAjax, requete, params, selecteurRideau) => {
   requete.data = params;
 
   adaptateurAjax.verifieSeuilCriticite(params)
@@ -15,7 +15,7 @@ const soumetsHomologation = (adaptateurAjax, requete, params) => {
     .then(redirigeVersSynthese)
     .catch((erreur) => {
       if (erreur instanceof ErreurSeuilCriticiteTropEleve) {
-        afficheModale();
+        afficheModale(selecteurRideau);
       }
     });
 };
@@ -23,6 +23,7 @@ const soumetsHomologation = (adaptateurAjax, requete, params) => {
 const initialiseComportementFormulaire = (
   selecteurFormulaire,
   selecteurBouton,
+  selecteurRideau,
   fonctionExtractionParametres,
   adaptateurAjax = adaptateurAjaxAxios,
 ) => {
@@ -36,7 +37,7 @@ const initialiseComportementFormulaire = (
   $form.on('submit', ((evenement) => {
     evenement.preventDefault();
     const params = fonctionExtractionParametres(selecteurFormulaire);
-    soumetsHomologation(adaptateurAjax, requete, params);
+    soumetsHomologation(adaptateurAjax, requete, params, selecteurRideau);
   }));
 
   $bouton.on('click', () => $form.trigger('submit'));

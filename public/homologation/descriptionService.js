@@ -6,6 +6,7 @@ $(() => {
   initialiseComportementFormulaire(
     'form#homologation',
     '.bouton#diagnostic',
+    '.rideau#descriptionService',
     extraisParametresDescriptionService,
   );
 
