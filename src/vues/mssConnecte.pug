@@ -8,9 +8,11 @@ block navigation
   .utilisateur-courant
 
   .rideau#deconnexion
-    .modale
+    .modale.deconnexion
       .fermeture-modale
-      p Votre session a expiré, veuillez vous reconnecter.
+      .image-deconnexion
+      h1 Session expirée
+      p Veuillez vous reconnecter.
       a.bouton(href = '/connexion') Reconnexion
 
   script(type = 'module', src = '/statique/mssConnecte.js')
