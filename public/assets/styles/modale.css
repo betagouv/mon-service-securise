@@ -92,3 +92,42 @@ body.recouvert {
 .rideau .modale a.bloc {
   display: block;
 }
+
+.modale.deconnexion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  background-image: url('../images/forme_rectangle_vague.svg');
+  background-size: 100% 40%;
+  background-repeat: no-repeat;
+
+  padding: 72px 5em 1em;
+  width: revert;
+  text-align: center;
+}
+
+.modale.deconnexion h1 {
+  padding: 0;
+  margin: 1.5em 0 0 0;
+
+  font-size: 1.3em;
+}
+
+.modale.deconnexion p {
+  margin: 0;
+}
+
+.modale.deconnexion .bouton:hover {
+  color: #fff;
+}
+
+.modale.deconnexion .image-deconnexion {
+  background-image: url('../images/fermeture_coffre_fort.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  width: 100%;
+  background-position-x: center;
+  height: 180px;
+}
