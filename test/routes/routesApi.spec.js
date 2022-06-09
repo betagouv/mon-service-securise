@@ -418,6 +418,68 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
   });
 
+  describe('quand requête GET sur `/api/utilisateurCourant`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeJWT(
+        { method: 'get', url: 'http://localhost:1234/api/utilisateurCourant' }, done
+      );
+    });
+
+    it("renvoie l'utilisateur correspondant à l'identifiant", (done) => {
+      testeur.middleware().reinitialise('123');
+
+      const depotDonnees = testeur.depotDonnees();
+      depotDonnees.utilisateur = (idUtilisateur) => {
+        try {
+          expect(idUtilisateur).to.equal('123');
+          return Promise.resolve({ toJSON: () => ({ id: '123' }) });
+        } catch (erreur) {
+          return Promise.reject(erreur);
+        }
+      };
+
+      axios.get('http://localhost:1234/api/utilisateurCourant')
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+
+          const { utilisateur } = reponse.data;
+          expect(utilisateur.id).to.equal('123');
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("répond avec un code 401 quand il n'y a pas d'identifiant", (done) => {
+      testeur.middleware().reinitialise('');
+
+      axios.get('http://localhost:1234/api/utilisateurCourant')
+        .then(() => {
+          done(new Error('La requête aurait du être en erreur'));
+        })
+        .catch((erreur) => {
+          expect(erreur.response.status).to.equal(401);
+          done();
+        });
+    });
+
+    it('renvoie la durée de session', (done) => {
+      testeur.middleware().reinitialise('123');
+
+      const depotDonnees = testeur.depotDonnees();
+      depotDonnees.utilisateur = () => Promise.resolve({ toJSON: () => {} });
+
+      axios.get('http://localhost:1234/api/utilisateurCourant')
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+
+          const { dureeSession } = reponse.data;
+          expect(dureeSession).to.equal(3600000);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
+
   describe('quand requête POST sur `/api/token`', () => {
     it("authentifie l'utilisateur avec le login en minuscules", (done) => {
       const utilisateur = { toJSON: () => {}, genereToken: () => {} };
