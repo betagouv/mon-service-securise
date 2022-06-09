@@ -110,6 +110,12 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adapta
     reponse.render('espacePersonnel');
   });
 
+  app.get('/dureeSession', (_requete, reponse) => {
+    reponse.status(200).send(UNE_HEURE.toString());
+  });
+
+  app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
+
   app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel));
 
   app.use('/bibliotheques', routesBibliotheques());

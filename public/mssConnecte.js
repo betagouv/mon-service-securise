@@ -1,10 +1,22 @@
 import { initialiseComportementModale } from './modules/interactions/modale.mjs';
 import afficheModaleDeconnexion from './modules/interactions/afficheModaleDeconnexion.mjs';
 
-const DELAI = 60 * 60 * 1000;
+const dureeSessionLocal = () => {
+  if (localStorage.dureeSession) {
+    return Promise.resolve(localStorage.dureeSession);
+  }
+  return axios.get('/dureeSession').then((reponse) => {
+    localStorage.dureeSession = reponse.data;
+  });
+};
 
 $(() => {
   initialiseComportementModale($('.rideau#deconnexion'));
 
-  setTimeout(afficheModaleDeconnexion, DELAI, '.rideau#deconnexion', '.rideau');
+  dureeSessionLocal().then((dureeSession) => {
+    const duree = parseInt(dureeSession, 10);
+    if (duree) {
+      setTimeout(afficheModaleDeconnexion, duree, '.rideau#deconnexion', '.rideau');
+    }
+  });
 });
