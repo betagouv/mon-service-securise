@@ -1,6 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 
+const { DUREE_SESSION } = require('./configurationServeur');
 const routesApi = require('./routes/routesApi');
 const routesBibliotheques = require('./routes/routesBibliotheques');
 const routesHomologation = require('./routes/routesHomologation');
@@ -23,9 +24,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adapta
 
   app.use(express.json());
 
-  const UNE_HEURE = 60 * 60 * 1000;
   app.use(cookieSession({
-    maxAge: UNE_HEURE,
+    maxAge: DUREE_SESSION,
     name: 'token',
     sameSite: true,
     secret: process.env.SECRET_COOKIE,
@@ -108,10 +108,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adapta
 
   app.get('/espacePersonnel', middleware.verificationAcceptationCGU, (_requete, reponse) => {
     reponse.render('espacePersonnel');
-  });
-
-  app.get('/dureeSession', (_requete, reponse) => {
-    reponse.status(200).send(UNE_HEURE.toString());
   });
 
   app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));

@@ -1,5 +1,6 @@
 const express = require('express');
 
+const { DUREE_SESSION } = require('../configurationServeur');
 const {
   EchecAutorisation,
   EchecEnvoiMessage,
@@ -133,7 +134,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
     if (idUtilisateur) {
       depotDonnees.utilisateur(idUtilisateur)
         .then((utilisateur) => {
-          reponse.json({ utilisateur: utilisateur.toJSON() });
+          reponse.json({ utilisateur: utilisateur.toJSON(), dureeSession: DUREE_SESSION });
         });
     } else reponse.status(401).send("Pas d'utilisateur courant");
   });

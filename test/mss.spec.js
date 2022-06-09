@@ -114,16 +114,4 @@ describe('Le serveur MSS', () => {
       testeur.middleware().verifieRequeteExigeJWT('http://localhost:1234/utilisateur/edition', done);
     });
   });
-
-  describe('quand requête GET sur `/dureeSession`', () => {
-    it('transmet la durée maximum de la session', (done) => {
-      axios.get('http://localhost:1234/dureeSession')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.equal(3600000);
-          done();
-        })
-        .catch(done);
-    });
-  });
 });
