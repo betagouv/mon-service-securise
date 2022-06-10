@@ -8,10 +8,10 @@ describe('Le branchement des onglets', () => {
   beforeEach(() => {
     const sourcePage = `
       <nav id="onglets-liens">
-        <a class="actif" id="onglet-acteurs-homologations"></a>
+        <a class="actif" id="onglet-gouvernance"></a>
         <a id="onglet-parties-prenantes">Parties prenantes</a>
       </nav>
-      <div class="onglet" id="acteurs-homologations"></div>
+      <div class="onglet" id="gouvernance"></div>
       <div class="onglet" id="parties-prenantes"></div>
     `;
     const dom = new JSDOM(sourcePage);
@@ -21,7 +21,7 @@ describe('Le branchement des onglets', () => {
   it("rend visible l'onglet actif", () => {
     brancheOnglets('#onglets-liens > a');
 
-    expect($('#acteurs-homologations').hasClass('invisible')).to.be(false);
+    expect($('#gouvernance').hasClass('invisible')).to.be(false);
   });
 
   describe('sur une action de click sur un lien', () => {
@@ -38,7 +38,7 @@ describe('Le branchement des onglets', () => {
 
       $('#onglet-parties-prenantes').trigger('click');
 
-      expect($('#onglet-acteurs-homologations').hasClass('actif')).to.be(false);
+      expect($('#onglet-gouvernance').hasClass('actif')).to.be(false);
     });
 
     it("rend visible l'onglet ciblé", () => {
@@ -54,7 +54,7 @@ describe('Le branchement des onglets', () => {
 
       $('#onglet-parties-prenantes').trigger('click');
 
-      expect($('#acteurs-homologations').hasClass('invisible')).to.be(true);
+      expect($('#gouvernance').hasClass('invisible')).to.be(true);
     });
   });
 });

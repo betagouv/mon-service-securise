@@ -55,8 +55,8 @@ class Homologation {
     this.referentiel = referentiel;
   }
 
-  acteursHomologation() {
-    return this.rolesResponsabilites.descriptionActeursHomologation();
+  gouvernance() {
+    return this.rolesResponsabilites.descriptionGouvernance();
   }
 
   autoriteHomologation() { return this.rolesResponsabilites.autoriteHomologation; }
