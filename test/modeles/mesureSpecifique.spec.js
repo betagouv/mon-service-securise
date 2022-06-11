@@ -66,4 +66,9 @@ describe('Une mesure spécifique', () => {
       done("La création de la mesure sans catégorie n'aurait pas dû lever d'exception.");
     }
   });
+
+  elle("n'est pas indispensable selon l'ANSSI", () => {
+    const mesure = new MesureSpecifique();
+    expect(mesure.estIndispensable()).to.be(false);
+  });
 });
