@@ -154,45 +154,14 @@ describe('Une homologation', () => {
     expect(homologation.descriptionExpiration()).to.equal('Dans un an');
   });
 
-  describe('sur demande de statistiques sur les mesures associées', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: { une: 'catégorie 1', deux: 'catégorie 2' },
-      mesures: { id1: { categorie: 'une' }, id2: { categorie: 'une' }, id3: { categorie: 'deux' } },
-    });
+  it('délègue aux mesures le calcul des statistiques', () => {
+    let calculDelegueAuxMesures = false;
 
-    const moteur = { mesures: () => referentiel.mesures() };
+    const homologation = new Homologation({ id: '123', mesuresGenerales: [] });
+    homologation.mesures.statistiques = () => (calculDelegueAuxMesures = true);
 
-    it('fait la somme des mesures mises en oeuvre pour une catégorie donnée', () => {
-      const homologation = new Homologation({
-        id: '123', mesuresGenerales: [{ id: 'id1', statut: 'fait' }, { id: 'id2', statut: 'fait' }],
-      }, referentiel, moteur);
-      const stats = homologation.statistiquesMesures().toJSON();
-      expect(stats).to.eql({ une: { retenues: 2, misesEnOeuvre: 2 } });
-    });
-
-    it('ajoute les mesures planifiées à la somme des mesures retenues', () => {
-      const homologation = new Homologation({
-        id: '123', mesuresGenerales: [{ id: 'id1', statut: 'fait' }, { id: 'id2', statut: 'planifie' }],
-      }, referentiel, moteur);
-      const stats = homologation.statistiquesMesures().toJSON();
-      expect(stats).to.eql({ une: { retenues: 2, misesEnOeuvre: 1 } });
-    });
-
-    it('ne tient pas compte des mesures non retenues', () => {
-      const homologation = new Homologation({
-        id: '123', mesuresGenerales: [{ id: 'id1', statut: 'planifie' }, { id: 'id2', statut: 'nonRetenu' }],
-      }, referentiel, moteur);
-      const stats = homologation.statistiquesMesures().toJSON();
-      expect(stats).to.eql({ une: { retenues: 1, misesEnOeuvre: 0 } });
-    });
-
-    it('classe les statistiques par catégorie de mesure', () => {
-      const homologation = new Homologation({
-        id: '123', mesuresGenerales: [{ id: 'id1', statut: 'nonRetenu' }, { id: 'id3', statut: 'fait' }],
-      }, referentiel, moteur);
-      const stats = homologation.statistiquesMesures().toJSON();
-      expect(stats).to.eql({ deux: { retenues: 1, misesEnOeuvre: 1 } });
-    });
+    homologation.statistiquesMesures();
+    expect(calculDelegueAuxMesures).to.be(true);
   });
 
   describe('sur évaluation du statut de saisie des mesures', () => {
