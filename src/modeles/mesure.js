@@ -1,4 +1,7 @@
-/* eslint class-methods-use-this: ["error", { "exceptMethods": ["estIndispensable"] }] */
+/*
+   eslint class-methods-use-this:
+     ["error", { "exceptMethods": ["estIndispensable", "estRecommandee"] }]
+*/
 
 const InformationsHomologation = require('./informationsHomologation');
 const { ErreurStatutMesureInvalide } = require('../erreurs');
@@ -12,6 +15,10 @@ const STATUTS = {
 
 class Mesure extends InformationsHomologation {
   estIndispensable() {
+    return false;
+  }
+
+  estRecommandee() {
     return false;
   }
 

@@ -76,6 +76,6 @@ describe('Une mesure de sécurité', () => {
     expect(referentiel.mesures().identifiantMesure.indispensable).to.not.be.ok();
 
     const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: 'fait' }, referentiel);
-    expect(mesure.estIndispensable()).to.be(false);
+    expect(mesure.estRecommandee()).to.be(true);
   });
 });
