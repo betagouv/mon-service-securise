@@ -71,4 +71,9 @@ describe('Une mesure spécifique', () => {
     const mesure = new MesureSpecifique();
     expect(mesure.estIndispensable()).to.be(false);
   });
+
+  elle("n'est pas recommandée par l'ANSSI", () => {
+    const mesure = new MesureSpecifique();
+    expect(mesure.estRecommandee()).to.be(false);
+  });
 });
