@@ -51,6 +51,5 @@ $(() => {
   moment.locale('fr');
 
   construisEvolution('utilisateursEtDossiers', ['Utilisateurs inscrits', 'Dossiers créés'], ['utilisateurs', 'dossiers']);
-  construisEvolutionPourcentage('pourcentageCreateurs', ['Utilisateurs ayant créé au moins un dossier (en %)'], ['pourcentageCreateurs']);
   construisEvolutionPourcentage('pourcentageUtilisateursEnPlus', ['Nouveaux utilisateurs (en %)'], ['pourcentageUtilisateursEnPlus']);
 });
