@@ -29,21 +29,43 @@ class MesuresGenerales extends ElementsConstructibles {
     return nbTotal ? nbMisesEnOeuvre / nbTotal : 1;
   }
 
-  statistiques() {
-    const stats = {};
+  statistiques(identifiantsMesuresPersonnalisees) {
+    const statsInitiales = () => ({
+      indispensablesFaites: 0,
+      misesEnOeuvre: 0,
+      recommandeesFaites: 0,
+      retenues: 0,
+      totalIndispensables: 0,
+      totalRecommandees: 0,
+    });
 
-    this.items.forEach(({ id, statut }) => {
-      const { categorie } = this.referentiel.mesures()[id];
+    const stats = this.referentiel.identifiantsCategoriesMesures()
+      .reduce((acc, categorie) => Object.assign(acc, { [categorie]: statsInitiales() }), {});
+
+    this.items.forEach((mesure) => {
+      const { id, statut } = mesure;
+      const { categorie } = this.referentiel.mesure(id);
 
       if (statut === MesureGenerale.STATUT_FAIT || statut === MesureGenerale.STATUT_PLANIFIE) {
-        stats[categorie] ||= { retenues: 0, misesEnOeuvre: 0 };
         stats[categorie].retenues += 1;
 
         if (statut === MesureGenerale.STATUT_FAIT) {
           stats[categorie].misesEnOeuvre += 1;
+
+          if (mesure.estIndispensable()) stats[categorie].indispensablesFaites += 1;
+          if (mesure.estRecommandee()) stats[categorie].recommandeesFaites += 1;
         }
       }
     });
+
+    identifiantsMesuresPersonnalisees
+      .map((id) => new MesureGenerale({ id }, this.referentiel))
+      .reduce((acc, mesure) => {
+        const { categorie } = this.referentiel.mesure(mesure.id);
+        if (mesure.estIndispensable()) acc[categorie].totalIndispensables += 1;
+        if (mesure.estRecommandee()) acc[categorie].totalRecommandees += 1;
+        return acc;
+      }, stats);
 
     return new StatistiquesMesures(stats, this.referentiel);
   }
