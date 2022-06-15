@@ -74,10 +74,10 @@ describe('La liste des mesures générales', () => {
       expect(stats.deux.misesEnOeuvre).to.equal(0);
     });
 
-    it('ajoute les mesures planifiées à la somme des mesures retenues', () => {
+    it('ajoute les mesures en cours à la somme des mesures retenues', () => {
       const mesuresGenerales = creeMesuresGenerales([
         { id: 'id1', statut: 'fait' },
-        { id: 'id2', statut: 'planifie' },
+        { id: 'id2', statut: 'enCours' },
       ]);
 
       const stats = mesuresGenerales.statistiques(['id1', 'id2', 'id3']).toJSON();
@@ -87,7 +87,7 @@ describe('La liste des mesures générales', () => {
 
     it('ne tient pas compte des mesures non retenues', () => {
       const mesuresGenerales = creeMesuresGenerales([
-        { id: 'id1', statut: 'planifie' },
+        { id: 'id1', statut: 'enCours' },
         { id: 'id2', statut: 'nonRetenu' },
       ]);
 

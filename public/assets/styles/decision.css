@@ -362,7 +362,7 @@ section.detail-mesures .statut.fait, .legende .fait:before {
   background: var(--bleu-mise-en-avant);
 }
 
-section.detail-mesures .statut.planifie, .legende .planifie:before {
+section.detail-mesures .statut.enCours, .legende .enCours:before {
   background: var(--bleu-ciel);
 }
 

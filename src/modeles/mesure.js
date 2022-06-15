@@ -8,7 +8,7 @@ const { ErreurStatutMesureInvalide } = require('../erreurs');
 
 const STATUTS = {
   STATUT_FAIT: 'fait',
-  STATUT_PLANIFIE: 'planifie',
+  STATUT_EN_COURS: 'enCours',
   STATUT_NON_FAIT: 'nonFait',
   STATUT_NON_RETENU: 'nonRetenu',
 };
