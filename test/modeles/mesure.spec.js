@@ -6,7 +6,7 @@ const elle = it;
 
 describe('Une mesure', () => {
   elle('connaît ses statuts possibles', () => {
-    expect(Mesure.statutsPossibles()).to.eql(['fait', 'planifie', 'nonFait', 'nonRetenu']);
+    expect(Mesure.statutsPossibles()).to.eql(['fait', 'enCours', 'nonFait', 'nonRetenu']);
   });
 
   elle("ne tient pas compte du statut s'il n'est pas renseigné", (done) => {
