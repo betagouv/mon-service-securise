@@ -38,6 +38,16 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const statutsMesures = () => donnees.statutsMesures;
   const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
 
+  const coefficientCyberscoreMesuresIndispensables = () => (
+    donnees.cyberscore?.coefficientIndispensables || 0.5
+  );
+
+  const coefficientCyberscoreMesuresRecommandees = () => (
+    donnees.cyberscore?.coefficientRecommandees || 0.5
+  );
+
+  const cyberscoreMax = () => donnees.cyberscore?.noteMax || 10;
+
   const actionSuivante = (id) => {
     const position = positionActionSaisie(id);
     return Object.keys(actionsSaisie()).find((a) => positionActionSaisie(a) === position + 1);
@@ -101,11 +111,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     actionsSaisie,
     actionSuivante,
     categoriesMesures,
+    coefficientCyberscoreMesuresIndispensables,
+    coefficientCyberscoreMesuresRecommandees,
     criticite,
     criticiteDelai,
     criticiteDonnees,
     criticiteFonctionnalite,
     criticiteMax,
+    cyberscoreMax,
     delaisAvantImpactCritique,
     descriptionActionSaisie,
     descriptionCategorie,
@@ -147,6 +160,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 const creeReferentielVide = () => creeReferentiel({
   actionsSaisie: {},
   categoriesMesures: {},
+  cyberscore: {},
   delaisAvantImpactCritique: {},
   donneesCaracterePersonnel: {},
   echeancesRenouvellement: {},

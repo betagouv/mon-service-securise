@@ -4,6 +4,8 @@ const { ErreurCategorieInconnue, ErreurDonneesStatistiques } = require('../erreu
 const categories = Object.keys;
 const statistiques = Object.values;
 
+const PRECISION = { NOMBRE_CHIFFRES_APRES_VIRGULE: 1 };
+
 const valide = (donnees, referentiel) => {
   const categoriesRepertoriees = referentiel.identifiantsCategoriesMesures();
   const categorieNonRepertoriee = categories(donnees)
@@ -33,10 +35,34 @@ class StatistiquesMesures {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     valide(donnees, referentiel);
     this.donnees = donnees;
+    this.referentiel = referentiel;
   }
 
   categories() {
     return categories(this.donnees);
+  }
+
+  cyberscore() {
+    const nbMesures = (categorie) => {
+      const { totalIndispensables, totalRecommandees } = this.donnees[categorie];
+      return totalIndispensables + totalRecommandees;
+    };
+
+    const arrondis = (n, precision) => {
+      const arrondiEntier = Math.round(`${n}e${precision}`);
+      return Number(`${arrondiEntier}e-${precision}`);
+    };
+
+    const totalPondere = this.categories().reduce((acc, categorie) => (
+      acc + nbMesures(categorie) * this.score(categorie)
+    ), 0);
+
+    const nbTotalMesures = this.categories().reduce((acc, categorie) => (
+      acc + nbMesures(categorie)
+    ), 0);
+
+    const resultatBrut = this.referentiel.cyberscoreMax() * (totalPondere / nbTotalMesures);
+    return arrondis(resultatBrut, StatistiquesMesures.NOMBRE_CHIFFRES_APRES_VIRGULE);
   }
 
   misesEnOeuvre(idCategorie) {
@@ -47,9 +73,25 @@ class StatistiquesMesures {
     return this.donnees[idCategorie].retenues;
   }
 
+  score(idCategorie) {
+    const {
+      recommandeesFaites,
+      indispensablesFaites,
+      totalRecommandees,
+      totalIndispensables,
+    } = this.donnees[idCategorie];
+
+    const coeffIndispensables = this.referentiel.coefficientCyberscoreMesuresIndispensables();
+    const coeffRecommandees = this.referentiel.coefficientCyberscoreMesuresRecommandees();
+
+    return (coeffIndispensables + coeffRecommandees * (recommandeesFaites / totalRecommandees))
+      * (indispensablesFaites / totalIndispensables);
+  }
+
   toJSON() {
     return JSON.parse(JSON.stringify(this.donnees));
   }
 }
 
+Object.assign(StatistiquesMesures, PRECISION);
 module.exports = StatistiquesMesures;
