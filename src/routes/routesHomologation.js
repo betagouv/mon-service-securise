@@ -20,7 +20,7 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
         { url: `/homologation/${homologation.id}/${id}`, ...autresDonnees }
       ));
 
-    reponse.render('homologation', { homologation, actionsSaisie, InformationsHomologation });
+    reponse.render('homologation', { referentiel, homologation, actionsSaisie, InformationsHomologation });
   });
 
   routes.get('/:id/decision',

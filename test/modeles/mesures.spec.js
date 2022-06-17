@@ -52,4 +52,15 @@ describe('Les mesures liées à une homologation', () => {
     expect(calculStatistiqueAppele).to.be(true);
     expect(stats).to.equal('résultat');
   });
+
+  elles('délèguent le calcul du cyberscore aux mesures générales', () => {
+    const mesures = new Mesures({}, Referentiel.creeReferentielVide(), ['id1']);
+
+    mesures.mesuresGenerales.statistiques = (identifiantsMesuresPersonnalisees) => {
+      expect(identifiantsMesuresPersonnalisees).to.eql(['id1']);
+      return { cyberscore: () => 3.7 };
+    };
+
+    expect(mesures.cyberscore()).to.equal(3.7);
+  });
 });
