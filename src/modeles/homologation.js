@@ -55,10 +55,6 @@ class Homologation {
     this.referentiel = referentiel;
   }
 
-  gouvernance() {
-    return this.rolesResponsabilites.descriptionGouvernance();
-  }
-
   autoriteHomologation() { return this.rolesResponsabilites.autoriteHomologation; }
 
   delegueProtectionDonnees() {
@@ -89,6 +85,10 @@ class Homologation {
   expertCybersecurite() { return this.rolesResponsabilites.expertCybersecurite; }
 
   fonctionAutoriteHomologation() { return this.rolesResponsabilites.fonctionAutoriteHomologation; }
+
+  gouvernance() {
+    return this.rolesResponsabilites.descriptionGouvernance();
+  }
 
   hebergeur() { return this.rolesResponsabilites.descriptionHebergeur(); }
 
