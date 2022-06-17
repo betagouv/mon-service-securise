@@ -199,4 +199,11 @@ describe('Une homologation', () => {
       expect(homologation.statutSaisie('risques')).to.equal(InformationsHomologation.A_SAISIR);
     });
   });
+
+  it('connaît son cyberscore', () => {
+    const homologation = new Homologation({ createur: { email: 'bruno.dumans@mail.fr' } });
+    homologation.mesures.cyberscore = () => 3.7;
+
+    expect(homologation.cyberscore()).to.equal(3.7);
+  });
 });
