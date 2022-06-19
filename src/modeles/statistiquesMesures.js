@@ -81,6 +81,9 @@ class StatistiquesMesures {
       totalIndispensables,
     } = this.donnees[idCategorie];
 
+    if (totalRecommandees === 0) return indispensablesFaites / totalIndispensables;
+    if (totalIndispensables === 0) return recommandeesFaites / totalRecommandees;
+
     const coeffIndispensables = this.referentiel.coefficientCyberscoreMesuresIndispensables();
     const coeffRecommandees = this.referentiel.coefficientCyberscoreMesuresRecommandees();
 
