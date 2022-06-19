@@ -107,6 +107,40 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     );
   });
 
+  describe("Lorsqu'il n'y a pas de mesure recommandée personnalisée", () => {
+    elles('calculent le score en ne tenant compte que des mesures indispensables', () => {
+      const stats = new StatistiquesMesures({
+        une: {
+          misesEnOeuvre: 2,
+          retenues: 4,
+          indispensablesFaites: 2,
+          totalIndispensables: 4,
+          recommandeesFaites: 0,
+          totalRecommandees: 0,
+        },
+      }, referentiel);
+
+      verifieEgaliteNumerique((2 / 4), stats.score('une'));
+    });
+  });
+
+  describe("Lorsqu'il n'y a pas de mesure indispensable personnalisée", () => {
+    elles('calculent le score en ne tenant compte que des mesures recommandées', () => {
+      const stats = new StatistiquesMesures({
+        une: {
+          misesEnOeuvre: 2,
+          retenues: 4,
+          indispensablesFaites: 0,
+          totalIndispensables: 0,
+          recommandeesFaites: 1,
+          totalRecommandees: 4,
+        },
+      }, referentiel);
+
+      verifieEgaliteNumerique((1 / 4), stats.score('une'));
+    });
+  });
+
   elles('calculent le cyberscore total', () => {
     const stats = new StatistiquesMesures({
       une: {
