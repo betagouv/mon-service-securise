@@ -26,8 +26,8 @@ $(() => {
     pointContact: { label: 'Point de contact' },
   });
 
-  const $bouton = $('.bouton');
-  const identifiantHomologation = $bouton.attr('identifiant');
+  const $bouton = $('.bouton[idHomologation]');
+  const identifiantHomologation = $bouton.attr('idHomologation');
 
   $bouton.on('click', () => {
     const params = tousLesParametres('form#roles-responsabilites');

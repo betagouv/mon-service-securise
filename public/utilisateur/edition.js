@@ -12,6 +12,6 @@ $(() => {
       .then(() => (window.location = '/espacePersonnel'));
   });
 
-  const $bouton = $('.bouton');
+  const $bouton = $('.bouton', $formulaire);
   $bouton.click(() => $formulaire.submit());
 });

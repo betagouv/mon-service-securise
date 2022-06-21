@@ -99,8 +99,8 @@ ${statuts}
   indexMaxMesuresSpecifiques = peupleMesuresSpecifiques('#mesures-specifiques', '#donnees-mesures-specifiques');
   brancheAjoutMesureSpecifique('.nouvel-item', '#mesures-specifiques');
 
-  const $bouton = $('.bouton');
-  const identifiantHomologation = $bouton.attr('identifiant');
+  const $bouton = $('.bouton[idHomologation]');
+  const identifiantHomologation = $bouton.attr('idHomologation');
 
   $bouton.on('click', () => {
     const params = parametres('form#mesures');

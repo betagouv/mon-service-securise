@@ -27,7 +27,7 @@ const initialiseComportementFormulaire = (
   adaptateurAjax = adaptateurAjaxAxios,
 ) => {
   const $bouton = $(selecteurBouton);
-  const identifiantHomologation = $bouton.attr('identifiant');
+  const identifiantHomologation = $bouton.attr('idHomologation');
   const requete = identifiantHomologation
     ? { method: 'put', url: `/api/homologation/${identifiantHomologation}` }
     : { method: 'post', url: '/api/homologation' };
