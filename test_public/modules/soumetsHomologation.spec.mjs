@@ -68,7 +68,7 @@ describe("L'initialisation du comportement du formulaire", () => {
 
       it("envoie au serveur les données de l'homologation à modifier", (done) => {
         const evenementsDifferes = $.Deferred();
-        $('.bouton').attr('identifiant', '12345');
+        $('.bouton').attr('idHomologation', '12345');
 
         initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
 

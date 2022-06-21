@@ -70,8 +70,8 @@ $(() => {
     $('.carte .plus-details, .carte .moins-details').toggle();
   });
 
-  const $bouton = $('.bouton');
-  const identifiantHomologation = $bouton.attr('identifiant');
+  const $bouton = $('.bouton[idHomologation]');
+  const identifiantHomologation = $bouton.attr('idHomologation');
 
   $bouton.click(() => {
     const params = parametresAvecItemsExtraits(

@@ -20,8 +20,8 @@ $(() => {
     () => $('input[id=avis-favorable]').prop('checked')
   );
 
-  const $bouton = $('.bouton');
-  const identifiantHomologation = $bouton.attr('identifiant');
+  const $bouton = $('.bouton[idHomologation]');
+  const identifiantHomologation = $bouton.attr('idHomologation');
 
   $bouton.click(() => {
     const params = parametres('form#avis-expert-cyber');
