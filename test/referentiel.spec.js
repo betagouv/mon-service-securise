@@ -1,8 +1,33 @@
 const expect = require('expect.js');
 
+const { ErreurDonneesReferentielIncorrectes } = require('../src/erreurs');
 const Referentiel = require('../src/referentiel');
 
 describe('Le référentiel', () => {
+  describe('à sa création', () => {
+    it('valide que la somme des coefficients pour le calcul du cyberscore vaut 1', () => {
+      expect(() => Referentiel.creeReferentiel({
+        cyberscore: { coefficientIndispensables: 1.2, coefficientRecommandees: 0.8 },
+      })).to.throwException((e) => {
+        expect(e).to.be.an(ErreurDonneesReferentielIncorrectes);
+        expect(e.message).to.equal(
+          "La somme des coefficients pour le calcul du cyberscore vaut 2, alors qu'elle aurait dû valoir 1."
+        );
+      });
+    });
+
+    it('valide les valeurs par défaut des coefficients', () => {
+      expect(() => Referentiel.creeReferentielVide()).to.not.throwException();
+    });
+
+    it('valide les valeurs des coefficients après la recharge', () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      expect(() => referentiel.recharge({
+        cyberscore: { coefficientIndispensables: 1.2, coefficientRecommandees: 0.8 },
+      })).to.throwException();
+    });
+  });
+
   it("sait décrire le type de service à partir d'identifiants", () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: { siteInternet: { description: 'Site internet' } },

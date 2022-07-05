@@ -1,3 +1,4 @@
+const { ErreurDonneesReferentielIncorrectes } = require('./erreurs');
 const donneesParDefaut = require('../donneesReferentiel');
 
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
@@ -105,7 +106,23 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return criticiteMax(criticiteMaxFonctionnalites, criticiteMaxDonnees, criticiteDelai(idDelai));
   };
 
-  const recharge = (nouvellesDonnees) => (donnees = nouvellesDonnees);
+  const valideDonnees = () => {
+    const sommeCoefficients = coefficientCyberscoreMesuresIndispensables()
+      + coefficientCyberscoreMesuresRecommandees();
+
+    if (sommeCoefficients !== 1) {
+      throw new ErreurDonneesReferentielIncorrectes(
+        `La somme des coefficients pour le calcul du cyberscore vaut ${sommeCoefficients}, alors qu'elle aurait dû valoir 1.`
+      );
+    }
+  };
+
+  const recharge = (nouvellesDonnees) => {
+    donnees = nouvellesDonnees;
+    valideDonnees();
+  };
+
+  valideDonnees();
 
   return {
     actionsSaisie,
