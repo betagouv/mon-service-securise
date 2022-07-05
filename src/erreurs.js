@@ -6,6 +6,7 @@ class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurDateRenouvellementInvalide extends ErreurModele {}
+class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
 class ErreurHomologationInexistante extends ErreurModele {}
@@ -32,6 +33,7 @@ module.exports = {
   ErreurAvisInvalide,
   ErreurCategorieInconnue,
   ErreurDateRenouvellementInvalide,
+  ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
   ErreurEmailManquant,
   ErreurHomologationInexistante,
