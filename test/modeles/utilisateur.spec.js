@@ -82,4 +82,12 @@ describe('Un utilisateur', () => {
       done();
     }
   });
+
+  it('connaît sa date de création', () => {
+    const dateCreation = new Date(2000, 1, 1, 12, 0);
+    const utilisateur = new Utilisateur({ dateCreation, prenom: 'Jean', nom: 'Dupont', email: 'email' }, {});
+
+    expect(utilisateur.dateCreation).to.be.ok();
+    expect(utilisateur.dateCreation).to.eql(dateCreation);
+  });
 });
