@@ -10,6 +10,7 @@ class Utilisateur extends Base {
   constructor(donnees = {}, adaptateurJWT) {
     super({
       proprietesAtomiquesRequises: [
+        'dateCreation',
         'id',
         'idResetMotDePasse',
         'prenom',

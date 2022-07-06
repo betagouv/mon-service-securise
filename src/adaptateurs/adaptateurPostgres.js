@@ -2,16 +2,23 @@ const Knex = require('knex');
 
 const config = require('../../knexfile');
 
+const CORRESPONDANCE_COLONNES_PROPRIETES = {
+  date_creation: 'dateCreation',
+};
+
 const nouvelAdaptateur = (env) => {
   const knex = Knex(config[env]);
+
+  const nomPropriete = (colonne) => (CORRESPONDANCE_COLONNES_PROPRIETES[colonne] || colonne);
 
   const ajouteLigneDansTable = (nomTable, id, donnees) => knex(nomTable)
     .insert({ id, donnees });
 
   const convertisLigneEnObjet = (ligne) => {
-    const { id } = ligne;
-    const donnees = { ...ligne.donnees };
-    return Object.assign(donnees, { id });
+    const { id, donnees, ...autresColonnes } = ligne;
+    const autresProprietes = Object.keys(autresColonnes)
+      .reduce((acc, clef) => ({ ...acc, [nomPropriete(clef)]: autresColonnes[clef] }), {});
+    return Object.assign(donnees, { id, ...autresProprietes });
   };
 
   const metsAJourTable = (nomTable, id, donneesAMettreAJour) => knex(nomTable)
