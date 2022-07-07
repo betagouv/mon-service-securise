@@ -2,6 +2,7 @@ const cookieSession = require('cookie-session');
 const express = require('express');
 
 const routesApi = require('./routes/routesApi');
+const routesBibliotheques = require('./routes/routesBibliotheques');
 const routesHomologation = require('./routes/routesHomologation');
 
 require('dotenv').config();
@@ -109,9 +110,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adapta
     reponse.render('espacePersonnel');
   });
 
-  app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
-
   app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel));
+
+  app.use('/bibliotheques', routesBibliotheques());
+
+  app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
 
   app.get('/utilisateur/edition', (requete, reponse) => {
     sersFormulaireEditionUtilisateur(requete, reponse);
