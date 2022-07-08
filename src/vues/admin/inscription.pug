@@ -1,5 +1,7 @@
 extends ../mssDeconnecte
 
+include ../fragments/inputChoix
+
 block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
 
@@ -12,13 +14,32 @@ block main
     section
       label Prénom
         br
-        input(id = 'prenom', type = 'text')
+        input(id = 'prenom', type = 'text', placeholder = 'exemple : Jean')
       label Nom
         br
-        input(id = 'nom', type = 'text')
+        input(id = 'nom', type = 'text', placeholder = 'exemple : Dupont')
       label Adresse email
         br
-        input(id = 'email', type = 'email')
+        input(id = 'email', type = 'email', placeholder = 'exemple : jean.dupont@domaine.fr')
+      +inputOuiNon({
+        nom: 'rssi',
+        titre: 'Êtes-vous Responsable de la sécurité des systèmes d’information ?',
+        objetDonnees: {},
+      })
+      +inputOuiNon({
+        nom: 'delegueProtectionDonnees',
+        titre: 'Exercez-vous la fonction de Délégué/e à la protection des données ?',
+        objetDonnees: {},
+      })
+      label Poste
+        br
+        input(id = 'poste', type = 'text', placeholder = "exemple : Chargé des systèmes d'informations")
+      label Nom de votre entité publique
+        br
+        input(id = 'nomEntitePublique', type = 'text', placeholder = "exemple : Agglomération de Mansart")
+      label Numéro du département de votre entité publique
+        br
+        input(id = 'departementEntitePublique', type = 'text', placeholder = "exemple : 75")
     .bouton Créer le compte &nbsp;&nbsp;›
 
   script(src = '/statique/inscription.js')

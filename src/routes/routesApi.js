@@ -70,20 +70,39 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
     }
   });
 
-  routes.post('/utilisateur', middleware.aseptise('prenom', 'nom', 'email'), (requete, reponse, suite) => {
-    const { prenom, nom } = requete.body;
-    const email = requete.body.email?.toLowerCase();
+  routes.post('/utilisateur',
+    middleware.aseptise('prenom', 'nom', 'email', 'rssi', 'delegueProtectionDonnees', 'poste', 'nomEntitePublique', 'departementEntitePublique'),
+    (requete, reponse, suite) => {
+      const {
+        prenom,
+        nom,
+        rssi,
+        delegueProtectionDonnees,
+        poste,
+        nomEntitePublique,
+        departementEntitePublique,
+      } = requete.body;
+      const email = requete.body.email?.toLowerCase();
 
-    depotDonnees.nouvelUtilisateur({ prenom, nom, email })
-      .then(envoieMessageFinalisationInscription)
-      .then((u) => reponse.json({ idUtilisateur: u.id }))
-      .catch((e) => {
-        if (e instanceof EchecEnvoiMessage) {
-          reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
-        } else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
-        else suite(e);
-      });
-  });
+      depotDonnees.nouvelUtilisateur({
+        prenom,
+        nom,
+        email,
+        rssi,
+        delegueProtectionDonnees,
+        poste,
+        nomEntitePublique,
+        departementEntitePublique,
+      })
+        .then(envoieMessageFinalisationInscription)
+        .then((u) => reponse.json({ idUtilisateur: u.id }))
+        .catch((e) => {
+          if (e instanceof EchecEnvoiMessage) {
+            reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
+          } else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+          else suite(e);
+        });
+    });
 
   routes.post('/reinitialisationMotDePasse', (requete, reponse, suite) => {
     const email = requete.body.email?.toLowerCase();
