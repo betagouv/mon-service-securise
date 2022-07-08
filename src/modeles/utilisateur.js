@@ -17,6 +17,11 @@ class Utilisateur extends Base {
         'nom',
         'email',
         'cguAcceptees',
+        'poste',
+        'rssi',
+        'delegueProtectionDonnees',
+        'nomEntitePublique',
+        'departementEntitePublique',
       ],
     });
     valide(donnees);
@@ -26,6 +31,14 @@ class Utilisateur extends Base {
 
   accepteCGU() {
     return !!this.cguAcceptees;
+  }
+
+  estRSSI() {
+    return !!this.rssi;
+  }
+
+  estDelegueProtectionDonnees() {
+    return !!this.delegueProtectionDonnees;
   }
 
   genereToken(callback) {
@@ -50,6 +63,11 @@ class Utilisateur extends Base {
       cguAcceptees: this.accepteCGU(),
       initiales: this.initiales(),
       prenomNom: this.prenomNom(),
+      poste: this.poste || '',
+      rssi: this.estRSSI(),
+      delegueProtectionDonnees: this.estDelegueProtectionDonnees(),
+      nomEntitePublique: this.nomEntitePublique || '',
+      departementEntitePublique: this.departementEntitePublique || '',
     };
   }
 }

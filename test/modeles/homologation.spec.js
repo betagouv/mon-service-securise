@@ -50,8 +50,28 @@ describe('Une homologation', () => {
     expect(homologation.toJSON()).to.eql({
       id: '123',
       nomService: 'Super Service',
-      createur: { id: '456', cguAcceptees: false, prenomNom: 'Bruno Dumans', initiales: 'BD' },
-      contributeurs: [{ id: '999', cguAcceptees: false, prenomNom: 'Jean Dupont', initiales: 'JD' }],
+      createur: {
+        id: '456',
+        cguAcceptees: false,
+        prenomNom: 'Bruno Dumans',
+        initiales: 'BD',
+        poste: '',
+        rssi: false,
+        delegueProtectionDonnees: false,
+        nomEntitePublique: '',
+        departementEntitePublique: '',
+      },
+      contributeurs: [{
+        id: '999',
+        cguAcceptees: false,
+        prenomNom: 'Jean Dupont',
+        initiales: 'JD',
+        poste: '',
+        rssi: false,
+        delegueProtectionDonnees: false,
+        nomEntitePublique: '',
+        departementEntitePublique: '',
+      }],
     });
   });
 

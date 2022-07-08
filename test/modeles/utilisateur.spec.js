@@ -35,11 +35,28 @@ describe('Un utilisateur', () => {
 
   it('sait se convertir en JSON', () => {
     const utilisateur = new Utilisateur({
-      id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
+      id: '123',
+      prenom: 'Jean',
+      nom: 'Dupont',
+      email: 'jean.dupont@mail.fr',
+      motDePasse: 'XXX',
+      poste: 'RSSI',
+      rssi: true,
+      delegueProtectionDonnees: false,
+      nomEntitePublique: 'Ville de Paris',
+      departementEntitePublique: '75',
     });
 
     expect(utilisateur.toJSON()).to.eql({
-      id: '123', cguAcceptees: false, prenomNom: 'Jean Dupont', initiales: 'JD',
+      id: '123',
+      cguAcceptees: false,
+      prenomNom: 'Jean Dupont',
+      initiales: 'JD',
+      poste: 'RSSI',
+      rssi: true,
+      delegueProtectionDonnees: false,
+      nomEntitePublique: 'Ville de Paris',
+      departementEntitePublique: '75',
     });
   });
 

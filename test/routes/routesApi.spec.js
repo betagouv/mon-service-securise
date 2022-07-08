@@ -89,7 +89,7 @@ describe('Le serveur MSS des routes /api/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['prenom', 'nom', 'email'],
+        ['prenom', 'nom', 'email', 'rssi', 'delegueProtectionDonnees', 'poste', 'nomEntitePublique', 'departementEntitePublique'],
         { method: 'post', url: 'http://localhost:1234/api/utilisateur' },
         done
       );
@@ -107,7 +107,16 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it("demande au dépôt de créer l'utilisateur", (done) => {
-      const donneesRequete = { prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' };
+      const donneesRequete = {
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+        rssi: true,
+        delegueProtectionDonnees: false,
+        poste: "Chargé des systèmes d'informations",
+        nomEntitePublique: 'Ville de Paris',
+        departementEntitePublique: '75',
+      };
 
       testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
         expect(donneesUtilisateur).to.eql(donneesRequete);
