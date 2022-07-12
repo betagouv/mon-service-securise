@@ -1,7 +1,3 @@
-import lanceDecompteDeconnexion from './modules/deconnexion.js';
-
-class ErreurConversionNumerique extends Error {}
-
 $(() => {
   const creeBoutonConnexion = () => $(`
 <a href="/inscription" class="inscription">Inscription</a>
@@ -42,22 +38,6 @@ $(() => {
   };
 
   axios.get('/api/utilisateurCourant')
-    .then((reponse) => {
-      ajouteUtilisateurCourantDans('.utilisateur-courant', reponse.data.utilisateur);
-      const duree = parseInt(reponse.data.dureeSession, 10);
-      if (!duree) {
-        return Promise.reject(new ErreurConversionNumerique());
-      }
-
-      return lanceDecompteDeconnexion(duree);
-    })
-    .catch((erreur) => {
-      if (erreur instanceof ErreurConversionNumerique) {
-        /* eslint-disable no-console */
-        console.warn("Impossible d'initialiser la modale de déconnexion, causé par une erreur pendant la conversion du délai de déconnexion");
-        /* eslint-enable no-console */
-      } else {
-        ajouteBoutonConnexionDans('.utilisateur-courant');
-      }
-    });
+    .then((reponse) => ajouteUtilisateurCourantDans('.utilisateur-courant', reponse.data.utilisateur))
+    .catch(() => ajouteBoutonConnexionDans('.utilisateur-courant'));
 });

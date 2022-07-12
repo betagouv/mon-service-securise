@@ -134,7 +134,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
     if (idUtilisateur) {
       depotDonnees.utilisateur(idUtilisateur)
         .then((utilisateur) => {
-          reponse.json({ utilisateur: utilisateur.toJSON(), dureeSession: DUREE_SESSION });
+          reponse.json({ utilisateur: utilisateur.toJSON() });
         });
     } else reponse.status(401).send("Pas d'utilisateur courant");
   });
@@ -215,6 +215,10 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
           else suite(e);
         });
     });
+
+  routes.get('/dureeSession', (_requete, reponse) => {
+    reponse.send({ dureeSession: DUREE_SESSION });
+  });
 
   return routes;
 };

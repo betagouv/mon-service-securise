@@ -461,23 +461,6 @@ describe('Le serveur MSS des routes /api/*', () => {
           done();
         });
     });
-
-    it('renvoie la durée de session', (done) => {
-      testeur.middleware().reinitialise('123');
-
-      const depotDonnees = testeur.depotDonnees();
-      depotDonnees.utilisateur = () => Promise.resolve({ toJSON: () => {} });
-
-      axios.get('http://localhost:1234/api/utilisateurCourant')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-
-          const { dureeSession } = reponse.data;
-          expect(dureeSession).to.equal(3600000);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
-    });
   });
 
   describe('quand requête POST sur `/api/token`', () => {
@@ -837,6 +820,20 @@ describe('Le serveur MSS des routes /api/*', () => {
         { method: 'post', url: 'http://localhost:1234/api/autorisation', data: {} },
         done
       );
+    });
+  });
+
+  describe('quand requête GET sur `/api/dureeSession`', () => {
+    it('renvoie la durée de session', (done) => {
+      axios.get('http://localhost:1234/api/dureeSession')
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+
+          const { dureeSession } = reponse.data;
+          expect(dureeSession).to.equal(3600000);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
     });
   });
 });
