@@ -17,6 +17,6 @@ const changementMesures = (changeStatut) => (knex) => knex('homologations')
     return Promise.all(misesAJour);
   });
 
-exports.up = changementMesures((statut) => (statut === 'planifie' ? 'enCours' : statut));
+exports.up = changementMesures((statut) => (statut === 'planifie' ? 'nonFait' : statut));
 
 exports.down = changementMesures((statut) => (statut === 'enCours' ? 'planifie' : statut));
