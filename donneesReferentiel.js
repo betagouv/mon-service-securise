@@ -225,7 +225,7 @@ module.exports = {
 
   statutsMesures: {
     fait: 'Fait',
-    enCours: 'En cours',
+    planifie: 'Planifié',
     nonFait: 'Non fait',
     nonRetenu: 'Non concerné',
   },

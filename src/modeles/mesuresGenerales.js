@@ -46,7 +46,7 @@ class MesuresGenerales extends ElementsConstructibles {
       const { id, statut } = mesure;
       const { categorie } = this.referentiel.mesure(id);
 
-      if (statut === MesureGenerale.STATUT_FAIT || statut === MesureGenerale.STATUT_EN_COURS) {
+      if (statut === MesureGenerale.STATUT_FAIT || statut === MesureGenerale.STATUT_PLANIFIE) {
         stats[categorie].retenues += 1;
 
         if (statut === MesureGenerale.STATUT_FAIT) {
