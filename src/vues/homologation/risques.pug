@@ -1,4 +1,5 @@
 extends ./formulaire
+include ../carteInformations
 
 block append styles
   link(href = '/statique/assets/styles/homologation/risques.css', rel = 'stylesheet')
@@ -53,10 +54,39 @@ block formulaire
   script(type = 'module', src = '/statique/homologation/risques.js')
 
 block cartes-informations
-  .carte
-    h2.titre Niveaux de gravité
-    h3.sous-titre Découvrez les 5 niveaux définis par l'ANSSI.
-    ul.niveaux-gravites
+  mixin detailsRisques
+    h3 Critique
+    p.
+      Incapacité pour l’organisation d’assurer la totalité ou une partie de son activité,
+      avec d’éventuels impacts graves sur la sécurité des personnes et des biens.
+      L’organisation ne surmontera vraisemblablement pas la situation (sa survie est menacée),
+      les secteurs d’activité ou étatiques dans lesquels elle opère seront susceptibles d’être légèrement impactés,
+      sans conséquences durables
+
+    h3 Grave
+    p.
+      Forte dégradation des performances de l’activité, avec d’éventuels impacts significatifs
+      sur la sécurité des personnes et des biens. L’organisation surmontera la situation avec
+      de sérieuses difficultés (fonctionnement en mode très dégradé), sans impacts sectoriel ou étatique
+
+    h3 Significatif
+    p.
+      Dégradation des performances de l’activité sans impact sur la sécurité des personnes et des biens.
+      L’organisation surmontera la situation malgré quelques difficultés (fonctionnement en mode dégradé)
+
+    h3 Minime
+    p.
+      Aucun impact opérationnel ni sur les performances de l’activité ni sur la sécurité des personnes et des biens.
+      L’organisation surmontera la situation sans trop de difficultés (consommation des marges)
+
+    h3 Non concerné
+
+  +carteInformations({
+    titre: 'Niveaux de gravité',
+    sousTitre: "Découvrez les 5 niveaux définis par l'ANSSI.",
+    details: 'detailsRisques',
+  })
+    ul.niveaux-gravite
       li
         .disque.rouge
         .
@@ -77,31 +107,3 @@ block cartes-informations
         .disque.cercle.blanc
         .
           Non concerné
-    .plus-details Plus de détails
-    .moins-details Moins de détails
-    .details
-      h4 Critique
-      p.
-        Incapacité pour l’organisation d’assurer la totalité ou une partie de son activité,
-        avec d’éventuels impacts graves sur la sécurité des personnes et des biens.
-        L’organisation ne surmontera vraisemblablement pas la situation (sa survie est menacée),
-        les secteurs d’activité ou étatiques dans lesquels elle opère seront susceptibles d’être légèrement impactés,
-        sans conséquences durables
-
-      h4 Grave
-      p.
-        Forte dégradation des performances de l’activité, avec d’éventuels impacts significatifs
-        sur la sécurité des personnes et des biens. L’organisation surmontera la situation avec
-        de sérieuses difficultés (fonctionnement en mode très dégradé), sans impacts sectoriel ou étatique
-
-      h4 Significatif
-      p.
-        Dégradation des performances de l’activité sans impact sur la sécurité des personnes et des biens.
-        L’organisation surmontera la situation malgré quelques difficultés (fonctionnement en mode dégradé)
-
-      h4 Minime
-      p.
-        Aucun impact opérationnel ni sur les performances de l’activité ni sur la sécurité des personnes et des biens.
-        L’organisation surmontera la situation sans trop de difficultés (consommation des marges)
-
-      h4 Non concerné

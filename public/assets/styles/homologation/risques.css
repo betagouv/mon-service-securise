@@ -80,79 +80,18 @@
   grid-gap: 1.7em;
 }
 
-.carte {
-  box-sizing: border-box;
-  width: 270px;
-  margin-bottom: 1.7em;
-  padding: 1.7em;
-
-  background-color: #fff;
-
-  text-align: left;
-}
-
-.carte .titre {
-  display: inline;
-
-  font-size: 1.2em;
-}
-
-.carte .sous-titre {
-  margin-top: 0;
-
-  font-size: 1em;
-  font-weight: 600;
-  color: var(--texte-clair);
-}
-
-.carte ul.niveaux-gravites {
+ul.niveaux-gravite {
   list-style: none;
 
   padding: 0;
 
   line-height: 1.8em;
 }
-.carte .niveaux-gravites .disque {
+
+.niveaux-gravite .disque {
   display: inline-block;
 
   margin: 0 0.8em -0.2em 0;
-}
-.carte .plus-details, .carte .moins-details {
-  text-align: right;
-  font-size: 0.85em;
-  cursor: pointer;
-}
-.carte .plus-details::after, .carte .moins-details::after {
-  content: '';
-  display: inline-block;
-  width: .6em;
-  height: .6em;
-  margin-left: 1em;
-
-  border: 2px var(--bleu-anssi) solid;
-  transform: rotate(0.12turn);
-}
-
-.carte .moins-details::after {
-  margin-bottom: -0.2em;
-
-  border-bottom: 0;
-  border-right: 0;
-}
-
-.carte .plus-details::after {
-  margin-bottom: 0.2em;
-
-  border-top: 0;
-  border-left: 0;
-}
-.carte h4 {
-  margin: 0;
-
-  color: var(--bleu-mise-en-avant);
-}
-.carte h4 + p {
-  margin-top: 0;
 }
 
 .rideau .modale {
@@ -162,8 +101,9 @@
   margin-top: 0.3em;
   margin-left: 1.5em;
 
-  color: var(--texte-fonce);            
+  color: var(--texte-fonce);
 }
+
 .rideau .modale li::before {
   content: '\25CF';
   display: block;
