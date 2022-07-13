@@ -192,14 +192,17 @@ describe('Le dépôt de données des utilisateurs', () => {
     let depot;
 
     describe("quand l'utilisateur n'existe pas déjà", () => {
+      const adaptateurHorloge = {};
       let adaptateurPersistance;
 
       beforeEach(() => {
         let compteurId = 0;
         const adaptateurUUID = { genereUUID: () => { compteurId += 1; return `${compteurId}`; } };
-        adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [],
-        });
+        adaptateurHorloge.maintenant = () => new Date(2000, 1, 1, 12, 0);
+        adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
+          { utilisateurs: [] },
+          adaptateurHorloge,
+        );
         depot = DepotDonneesUtilisateurs.creeDepot({
           adaptateurJWT, adaptateurPersistance, adaptateurUUID,
         });
@@ -240,6 +243,17 @@ describe('Le dépôt de données des utilisateurs', () => {
             expect(utilisateur.nom).to.equal('Dupont');
             expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
             expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
+            done();
+          })
+          .catch(done);
+      });
+
+      it('utilise la date actuelle comme date de création du nouvel utilisateur', (done) => {
+        depot.nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' })
+          .then((utilisateur) => {
+            expect(utilisateur).to.be.an(Utilisateur);
+            expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
+            expect(utilisateur.dateCreation).to.eql(adaptateurHorloge.maintenant());
             done();
           })
           .catch(done);

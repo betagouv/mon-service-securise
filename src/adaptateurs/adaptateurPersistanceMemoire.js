@@ -1,4 +1,6 @@
-const nouvelAdaptateur = (donnees = {}) => {
+const adaptateurHorlogeParDefaut = require('./adaptateurHorloge');
+
+const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogeParDefaut) => {
   donnees.utilisateurs ||= [];
   donnees.homologations ||= [];
   donnees.autorisations ||= [];
@@ -9,7 +11,9 @@ const nouvelAdaptateur = (donnees = {}) => {
   };
 
   const ajouteUtilisateur = (id, donneesUtilisateur) => {
-    donnees.utilisateurs.push(Object.assign(donneesUtilisateur, { id }));
+    donnees.utilisateurs.push(
+      Object.assign(donneesUtilisateur, { id, dateCreation: adaptateurHorloge.maintenant() })
+    );
     return Promise.resolve();
   };
 
