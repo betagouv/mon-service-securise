@@ -208,7 +208,7 @@ describe('Le dépot de données des homologations', () => {
           {
             id: '123',
             descriptionService: { nomService: 'nom' },
-            mesures: [{ id: 'identifiantMesure', statut: MesureGenerale.STATUT_EN_COURS }],
+            mesures: [{ id: 'identifiantMesure', statut: MesureGenerale.STATUT_PLANIFIE }],
           },
         ],
       });
