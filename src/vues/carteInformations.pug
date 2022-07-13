@@ -1,0 +1,14 @@
+block append styles
+  link(href = '/statique/assets/styles/carteInformations.css', rel = 'stylesheet')
+
+mixin carteInformations({ titre, sousTitre, details })
+  .carte
+    h1= titre
+    h2= sousTitre
+
+    block
+
+    .plus-details Plus de détails
+    .moins-details Moins de détails
+    .details
+      +#{details}
