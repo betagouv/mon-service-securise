@@ -9,6 +9,11 @@ const routesBibliotheques = () => {
       .then((reponseJquery) => reponse.type('text/javascript').send(reponseJquery.data));
   });
 
+  routes.get('/axios.min.js', (_requete, reponse) => {
+    axios.get('https://unpkg.com/axios/dist/axios.min.js')
+      .then((reponseAxios) => reponse.type('text/javascript').send(reponseAxios.data));
+  });
+
   return routes;
 };
 
