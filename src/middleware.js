@@ -18,7 +18,7 @@ const middleware = (configuration = {}) => {
     const politiqueSecuriteStyles = nonce
       ? `style-src 'self' 'nonce-${nonce}';`
       : '';
-    const politiqueSecuriteScripts = "script-src 'self' cdn.jsdelivr.net";
+    const politiqueSecuriteScripts = "script-src 'self'";
     reponse.set({
       'content-security-policy':
         `${politiqueCommuneSecuriteContenus} ${politiqueSecuriteStyles} ${politiqueSecuriteScripts}`,
