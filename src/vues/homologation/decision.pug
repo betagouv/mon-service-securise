@@ -44,9 +44,9 @@ mixin mesuresPaginees({ titreAnnexe, titreSection, donnees })
 
 block page
   script(src='/bibliotheques/jquery-3.6.0.min.js')
-  script(nonce = nonce, src='https://unpkg.com/dompurify/dist/purify.min.js')
-  script(nonce = nonce, src='https://unpkg.com/html2canvas/dist/html2canvas.min.js')
-  script(nonce = nonce, src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js')
+  script(src='/bibliotheques/purify.min.js')
+  script(src='/bibliotheques/html2canvas.min.js')
+  script(src='/bibliotheques/jspdf.umd.min.js')
 
   include ../fragments/diagnostics
 
