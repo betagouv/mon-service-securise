@@ -303,15 +303,6 @@ describe('Le middleware MSS', () => {
         done,
       );
     });
-
-    it('autorise le chargement des scripts avec ce nonce', (done) => {
-      verifieHeaderAvecNonce(
-        '12345',
-        'content-security-policy',
-        "script-src 'self' 'nonce-12345';",
-        done,
-      );
-    });
   });
 
   describe('sur demande positionnement des headers', () => {
