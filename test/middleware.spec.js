@@ -336,7 +336,7 @@ describe('Le middleware MSS', () => {
     it('autorise le chargement de tous les scripts extérieurs utilisés dans la vue', (done) => {
       verifiePositionnementHeader(
         'content-security-policy',
-        /script-src[^;]* unpkg.com cdn.jsdelivr.net/,
+        /script-src[^;]* cdn.jsdelivr.net/,
         done
       );
     });
