@@ -324,12 +324,8 @@ describe('Le middleware MSS', () => {
       verifiePositionnementHeader('content-security-policy', "img-src 'self' data:;", done);
     });
 
-    it('autorise le chargement de tous les scripts extérieurs utilisés dans la vue', (done) => {
-      verifiePositionnementHeader(
-        'content-security-policy',
-        /script-src[^;]* cdn.jsdelivr.net/,
-        done
-      );
+    it('autorise le chargement de tous les scripts du domaine (et uniquement ceux-là)', (done) => {
+      verifiePositionnementHeader('content-security-policy', "script-src 'self'", done);
     });
 
     it('interdit le chargement de la page dans une iFrame', (done) => {

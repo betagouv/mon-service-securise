@@ -3,9 +3,13 @@ const express = require('express');
 
 const CHEMINS_BIBLIOTHEQUES = {
   'axios.min.js': 'https://unpkg.com/axios/dist/axios.min.js',
+  'chart.js': 'https://cdn.jsdelivr.net/npm/chart.js@^3',
+  'chartjs-adapter-moment': 'https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1',
   'html2canvas.min.js': 'https://unpkg.com/html2canvas/dist/html2canvas.min.js',
   'jquery-3.6.0.min.js': 'https://code.jquery.com/jquery-3.6.0.min.js',
   'jspdf.umd.min.js': 'https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js',
+  moment: 'https://cdn.jsdelivr.net/npm/moment@^2',
+  'moment-locale-fr.js': 'https://cdn.jsdelivr.net/npm/moment/locale/fr.js',
   'purify.min.js': 'https://unpkg.com/dompurify/dist/purify.min.js',
 };
 
