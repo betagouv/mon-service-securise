@@ -40,9 +40,12 @@ block main
       label Nom de votre entité publique
         br
         input(id = 'nomEntitePublique', type = 'text', placeholder = "ex : Agglomération de Mansart")
-      label Numéro du département de votre entité publique
+      label Département de votre entité publique
         br
-        input(id = 'departementEntitePublique', type = 'text', placeholder = "ex : 75")
+        select(id = 'departementEntitePublique')
+          option(value = '') - Sélectionnez un département -
+          each departement in departements
+            option(value = departement.code) #{departement.code} #{departement.nom}
     .bouton Valider
 
   script(src = '/statique/inscription.js')
