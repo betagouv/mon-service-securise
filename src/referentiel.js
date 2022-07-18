@@ -38,6 +38,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const statutDeploiementValide = (id) => Object.keys(statutsDeploiement()).includes(id);
   const statutsMesures = () => donnees.statutsMesures;
   const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
+  const departements = () => donneesReferentiel.departements || [];
+  const codeDepartements = () => donneesReferentiel
+    .departements?.map((departement) => departement.code);
+  const departement = (code) => donneesReferentiel
+    .departements?.find((unDepartement) => unDepartement.code === code)?.nom;
 
   const coefficientCyberscoreMesuresIndispensables = () => (
     donnees.cyberscore?.coefficientIndispensables || 0.5
@@ -128,6 +133,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     actionsSaisie,
     actionSuivante,
     categoriesMesures,
+    codeDepartements,
     coefficientCyberscoreMesuresIndispensables,
     coefficientCyberscoreMesuresRecommandees,
     criticite,
@@ -137,6 +143,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     criticiteMax,
     cyberscoreMax,
     delaisAvantImpactCritique,
+    departement,
+    departements,
     descriptionActionSaisie,
     descriptionCategorie,
     descriptionExpiration,

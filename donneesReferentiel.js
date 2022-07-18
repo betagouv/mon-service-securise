@@ -1,3 +1,5 @@
+const { departements } = require('./donneesReferentielDepartements');
+
 const echeance = (duree) => `Dans ${duree}`;
 const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)} après signature de la présente homologation`;
 
@@ -689,4 +691,5 @@ module.exports = {
       'testsSauvegardes',
     ],
   },
+  departements,
 };
