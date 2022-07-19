@@ -88,7 +88,7 @@ block page
         ul
           each risque in homologation.risquesPrincipaux()
             li.
-              #{risque.descriptionRisque()} <br>
+              !{risque.descriptionRisque()} <br>
               (niveau de gravité : #{risque.descriptionNiveauGravite()})
 
       section.mesures
