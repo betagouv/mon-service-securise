@@ -4,6 +4,7 @@ include ../fragments/inputChoix
 
 block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/admin/inscription.css', rel = 'stylesheet')
 
 block main
   form.etroit
@@ -42,10 +43,12 @@ block main
         input(id = 'nomEntitePublique', type = 'text', placeholder = "ex : Agglomération de Mansart")
       label Département de votre entité publique
         br
-        select(id = 'departementEntitePublique')
-          option(value = '') - Sélectionnez un département -
-          each departement in departements
-            option(value = departement.code) #{departement.code} #{departement.nom}
+        .departements
+          select(id = 'departementEntitePublique')
+            option(value = '') - Sélectionnez un département -
+            each departement in departements
+              option(value = departement.code) #{departement.code} #{departement.nom}
+
     .bouton Valider
 
   script(src = '/statique/inscription.js')
