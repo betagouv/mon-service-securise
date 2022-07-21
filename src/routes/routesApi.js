@@ -71,11 +71,12 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   });
 
   routes.post('/utilisateur',
-    middleware.aseptise('prenom', 'nom', 'email', 'rssi', 'delegueProtectionDonnees', 'poste', 'nomEntitePublique', 'departementEntitePublique'),
+    middleware.aseptise('prenom', 'nom', 'email', 'telephone', 'rssi', 'delegueProtectionDonnees', 'poste', 'nomEntitePublique', 'departementEntitePublique'),
     (requete, reponse, suite) => {
       const {
         prenom,
         nom,
+        telephone,
         rssi,
         delegueProtectionDonnees,
         poste,
@@ -88,6 +89,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
         prenom,
         nom,
         email,
+        telephone,
         rssi,
         delegueProtectionDonnees,
         poste,
