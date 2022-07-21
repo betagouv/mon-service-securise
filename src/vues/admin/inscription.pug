@@ -9,18 +9,18 @@ block main
   form.etroit
     h1 Créez votre compte
     p.sous-titre
-      a(href = '/connexion') Connectez-vous
-      span &nbsp;si vous avez déjà un compte
+      span ou&nbsp;
+      a(href = '/connexion') connectez-vous
     section
       label Prénom
         br
-        input(id = 'prenom', type = 'text', placeholder = 'exemple : Jean')
+        input(id = 'prenom', type = 'text', placeholder = 'ex : Jean')
       label Nom
         br
-        input(id = 'nom', type = 'text', placeholder = 'exemple : Dupont')
-      label Adresse email
+        input(id = 'nom', type = 'text', placeholder = 'ex : Dupont')
+      label E-mail
         br
-        input(id = 'email', type = 'email', placeholder = 'exemple : jean.dupont@domaine.fr')
+        input(id = 'email', type = 'email', placeholder = 'ex : jean.dupont@domaine.fr')
       label Téléphone
         br
         input(id = 'telephone', type = 'tel', placeholder = 'ex : 0XXXXXXXXX')
@@ -36,13 +36,13 @@ block main
       })
       label Poste
         br
-        input(id = 'poste', type = 'text', placeholder = "exemple : Chargé des systèmes d'informations")
+        input(id = 'poste', type = 'text', placeholder = "ex : Chargé des systèmes d'informations")
       label Nom de votre entité publique
         br
-        input(id = 'nomEntitePublique', type = 'text', placeholder = "exemple : Agglomération de Mansart")
+        input(id = 'nomEntitePublique', type = 'text', placeholder = "ex : Agglomération de Mansart")
       label Numéro du département de votre entité publique
         br
-        input(id = 'departementEntitePublique', type = 'text', placeholder = "exemple : 75")
-    .bouton Créer le compte &nbsp;&nbsp;›
+        input(id = 'departementEntitePublique', type = 'text', placeholder = "ex : 75")
+    .bouton Valider
 
   script(src = '/statique/inscription.js')
