@@ -89,7 +89,17 @@ describe('Le serveur MSS des routes /api/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['prenom', 'nom', 'email', 'rssi', 'delegueProtectionDonnees', 'poste', 'nomEntitePublique', 'departementEntitePublique'],
+        [
+          'prenom',
+          'nom',
+          'email',
+          'telephone',
+          'rssi',
+          'delegueProtectionDonnees',
+          'poste',
+          'nomEntitePublique',
+          'departementEntitePublique',
+        ],
         { method: 'post', url: 'http://localhost:1234/api/utilisateur' },
         done
       );
@@ -111,6 +121,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         prenom: 'Jean',
         nom: 'Dupont',
         email: 'jean.dupont@mail.fr',
+        telephone: '0100000000',
         rssi: true,
         delegueProtectionDonnees: false,
         poste: "Chargé des systèmes d'informations",
