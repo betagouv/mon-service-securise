@@ -1,5 +1,6 @@
+import { controleChampsRequis, tousChampsRequisRemplis } from './modules/interactions/champsRequis.mjs';
+
 $(() => {
-  const $bouton = $('.bouton');
   const reponseOuiNon = (nom) => {
     const valeur = $(`input[name="${nom}"]:checked`).val();
     switch (valeur) {
@@ -8,27 +9,28 @@ $(() => {
       default: return undefined;
     }
   };
-  $bouton.on('click', () => {
-    const prenom = $('#prenom').val();
-    const nom = $('#nom').val();
-    const email = $('#email').val();
-    const telephone = $('#telephone').val();
-    const rssi = reponseOuiNon('rssi');
-    const delegueProtectionDonnees = reponseOuiNon('delegueProtectionDonnees');
-    const poste = $('#poste').val();
-    const nomEntitePublique = $('#nomEntitePublique').val();
-    const departementEntitePublique = $('#departementEntitePublique').val();
 
-    axios.post('/api/utilisateur', {
-      prenom,
-      nom,
-      email,
-      telephone,
-      rssi,
-      delegueProtectionDonnees,
-      poste,
-      nomEntitePublique,
-      departementEntitePublique,
-    }).then(() => (window.location = '/espacePersonnel'));
+  const obtentionDonnees = {
+    prenom: () => $('#prenom').val(),
+    nom: () => $('#nom').val(),
+    email: () => $('#email').val(),
+    telephone: () => $('#telephone').val(),
+    rssi: () => reponseOuiNon('rssi'),
+    delegueProtectionDonnees: () => reponseOuiNon('delegueProtectionDonnees'),
+    poste: () => $('#poste').val(),
+    nomEntitePublique: () => $('#nomEntitePublique').val(),
+    departementEntitePublique: () => $('#departementEntitePublique').val(),
+  };
+
+  const $bouton = $('.bouton');
+
+  $bouton.on('click', () => {
+    controleChampsRequis(obtentionDonnees);
+    if (tousChampsRequisRemplis(obtentionDonnees)) {
+      const donnees = Object
+        .keys(obtentionDonnees)
+        .reduce((acc, clef) => ({ ...acc, [clef]: obtentionDonnees[clef]() }), {});
+      axios.post('/api/utilisateur', donnees).then(() => (window.location = '/espacePersonnel'));
+    }
   });
 });

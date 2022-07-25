@@ -1,4 +1,4 @@
-mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, decoration })
+mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, messageErreur, decoration })
   - let valeursSelectionnees = objetDonnees[nom]
   - if (typeof valeursSelectionnees === 'boolean') valeursSelectionnees = (valeurSelectionnees ? 'oui' : 'non')
   fieldset(id = nom)
@@ -24,12 +24,14 @@ mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, decorat
       if exemple
         label.exemple(for = identifiantInput)= exemple
         br
+    .message-erreur=messageErreur
 
-mixin inputOuiNon({ nom, titre, objetDonnees })
+mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur })
   +inputChoix({
     nom,
     titre,
     objetDonnees,
+    messageErreur,
     type: 'radio',
     items: { oui: { description: 'Oui' }, non: { description: 'Non' } },
   })
