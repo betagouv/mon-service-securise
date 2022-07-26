@@ -6,6 +6,7 @@ class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurDateRenouvellementInvalide extends ErreurModele {}
+class ErreurDepartementInconnu extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
@@ -17,6 +18,7 @@ class ErreurMesureInconnue extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
 class ErreurNomServiceDejaExistant extends ErreurModele {}
 class ErreurNomServiceManquant extends ErreurModele {}
+class ErreurProprieteManquante extends ErreurModele {}
 class ErreurRisqueInconnu extends ErreurModele {}
 class ErreurStatutDeploiementInvalide extends ErreurModele {}
 class ErreurStatutMesureInvalide extends ErreurModele {}
@@ -33,6 +35,7 @@ module.exports = {
   ErreurAvisInvalide,
   ErreurCategorieInconnue,
   ErreurDateRenouvellementInvalide,
+  ErreurDepartementInconnu,
   ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
   ErreurEmailManquant,
@@ -45,6 +48,7 @@ module.exports = {
   ErreurNiveauGraviteInconnu,
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
+  ErreurProprieteManquante,
   ErreurRisqueInconnu,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,

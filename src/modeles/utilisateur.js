@@ -1,5 +1,6 @@
 const Base = require('./base');
-const { ErreurEmailManquant } = require('../erreurs');
+const { ErreurDepartementInconnu, ErreurEmailManquant, ErreurProprieteManquante } = require('../erreurs');
+const Referentiel = require('../referentiel');
 
 const valide = (donnees) => {
   const { email } = donnees;
@@ -28,6 +29,31 @@ class Utilisateur extends Base {
     valide(donnees);
     this.renseigneProprietes(donnees);
     this.adaptateurJWT = adaptateurJWT;
+  }
+
+  static valideCreationNouvelUtilisateur(donnees, referentiel = Referentiel.creeReferentielVide()) {
+    const proprietesTextesObligatoires = ['prenom', 'nom', 'email', 'nomEntitePublique', 'departementEntitePublique'];
+    const proprietesBooleenesObligatoires = ['rssi', 'delegueProtectionDonnees'];
+
+    const envoieErreurProprieteManquante = (propriete) => {
+      throw new ErreurProprieteManquante(`La propriété "${propriete}" est requise`);
+    };
+
+    proprietesTextesObligatoires.forEach((propriete) => {
+      if (typeof donnees[propriete] !== 'string' || donnees[propriete] === '') {
+        envoieErreurProprieteManquante(propriete);
+      }
+    });
+    proprietesBooleenesObligatoires.forEach((propriete) => {
+      if (typeof donnees[propriete] !== 'boolean') {
+        envoieErreurProprieteManquante(propriete);
+      }
+    });
+
+    const { departementEntitePublique } = donnees;
+    if (!referentiel.departement(departementEntitePublique)) {
+      throw new ErreurDepartementInconnu(`Le département identifié par "${departementEntitePublique}" n'est pas répertorié`);
+    }
   }
 
   accepteCGU() {

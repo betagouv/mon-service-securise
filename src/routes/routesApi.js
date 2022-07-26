@@ -8,6 +8,7 @@ const {
   ErreurModele,
 } = require('../erreurs');
 const routesApiHomologation = require('./routesApiHomologation');
+const Utilisateur = require('../modeles/utilisateur');
 
 const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) => promesseEnvoiMessage
@@ -73,36 +74,42 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   routes.post('/utilisateur',
     middleware.aseptise('prenom', 'nom', 'email', 'telephone', 'rssi', 'delegueProtectionDonnees', 'poste', 'nomEntitePublique', 'departementEntitePublique'),
     (requete, reponse, suite) => {
-      const {
-        prenom,
-        nom,
-        telephone,
-        rssi,
-        delegueProtectionDonnees,
-        poste,
-        nomEntitePublique,
-        departementEntitePublique,
-      } = requete.body;
-      const email = requete.body.email?.toLowerCase();
+      const valeurBooleene = (valeur) => {
+        switch (valeur) {
+          case 'true': return true;
+          case 'false': return false;
+          default: return undefined;
+        }
+      };
 
-      depotDonnees.nouvelUtilisateur({
-        prenom,
-        nom,
-        email,
-        telephone,
-        rssi,
-        delegueProtectionDonnees,
-        poste,
-        nomEntitePublique,
-        departementEntitePublique,
-      })
+      const donnees = {
+        prenom: requete.body.prenom,
+        nom: requete.body.nom,
+        telephone: requete.body.telephone,
+        rssi: valeurBooleene(requete.body.rssi),
+        delegueProtectionDonnees: valeurBooleene(requete.body.delegueProtectionDonnees),
+        poste: requete.body.poste,
+        nomEntitePublique: requete.body.nomEntitePublique,
+        departementEntitePublique: requete.body.departementEntitePublique,
+        email: requete.body.email?.toLowerCase(),
+      };
+
+      new Promise((resolve, reject) => {
+        try {
+          Utilisateur.valideCreationNouvelUtilisateur(donnees, referentiel);
+          resolve();
+        } catch (erreur) {
+          reject(new ErreurModele("La création d'un nouvel utilisateur car les paramètres sont invalides"));
+        }
+      }).then(() => depotDonnees.nouvelUtilisateur(donnees))
         .then(envoieMessageFinalisationInscription)
         .then((u) => reponse.json({ idUtilisateur: u.id }))
         .catch((e) => {
           if (e instanceof EchecEnvoiMessage) {
             reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
-          } else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
-          else suite(e);
+          } else if (e instanceof ErreurModele) {
+            reponse.status(422).send(e.message);
+          } else suite(e);
         });
     });
 
