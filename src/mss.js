@@ -82,7 +82,12 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adapta
   });
 
   app.get('/inscription', (_requete, reponse) => {
-    reponse.render('inscription');
+    const departements = referentiel.departements();
+    reponse.render('inscription', { departements });
+  });
+
+  app.get('/activation', (_requete, reponse) => {
+    reponse.render('activation');
   });
 
   app.get('/initialisationMotDePasse/:idReset',

@@ -1,0 +1,11 @@
+extends ./mssDeconnecte
+
+block append styles
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/activation.css', rel = 'stylesheet')
+
+block main
+  .etroit
+    h1 Activer votre compte
+    p.description Un e-mail contenant un lien d’activation vous a été envoyé pour finaliser la création de votre compte.
+    a.bouton(href = '/') Aller sur la page d'accueil

@@ -30,7 +30,7 @@ $(() => {
       const donnees = Object
         .keys(obtentionDonnees)
         .reduce((acc, clef) => ({ ...acc, [clef]: obtentionDonnees[clef]() }), {});
-      axios.post('/api/utilisateur', donnees).then(() => (window.location = '/espacePersonnel'));
+      axios.post('/api/utilisateur', donnees).then(() => (window.location = '/activation'));
     }
   });
 });
