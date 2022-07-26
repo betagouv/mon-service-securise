@@ -79,8 +79,22 @@ describe('Le serveur MSS des routes /api/*', () => {
 
   describe('quand requête POST sur `/api/utilisateur`', () => {
     const utilisateur = { id: '123', genereToken: () => 'un token' };
+    let donneesRequete;
 
     beforeEach(() => {
+      donneesRequete = {
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+        telephone: '0100000000',
+        rssi: 'true',
+        delegueProtectionDonnees: 'false',
+        poste: "Chargé des systèmes d'informations",
+        nomEntitePublique: 'Ville de Paris',
+        departementEntitePublique: '75',
+      };
+
+      testeur.referentiel().departement = () => 'Paris';
       testeur.adaptateurMail().envoieMessageFinalisationInscription = () => Promise.resolve();
       testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse = () => Promise.resolve();
 
@@ -100,7 +114,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           'nomEntitePublique',
           'departementEntitePublique',
         ],
-        { method: 'post', url: 'http://localhost:1234/api/utilisateur' },
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
         done
       );
     });
@@ -111,26 +125,56 @@ describe('Le serveur MSS des routes /api/*', () => {
         return Promise.resolve(utilisateur);
       };
 
-      axios.post('http://localhost:1234/api/utilisateur', { email: 'Jean.DUPONT@mail.fr' })
+      donneesRequete.email = 'Jean.DUPONT@mail.fr';
+
+      axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
         .then(() => done())
         .catch(done);
     });
 
-    it("demande au dépôt de créer l'utilisateur", (done) => {
-      const donneesRequete = {
-        prenom: 'Jean',
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
-        telephone: '0100000000',
-        rssi: true,
-        delegueProtectionDonnees: false,
-        poste: "Chargé des systèmes d'informations",
-        nomEntitePublique: 'Ville de Paris',
-        departementEntitePublique: '75',
+    it('convertis le RSSI en booléen', (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ rssi }) => {
+        expect(rssi).to.equal(true);
+        return Promise.resolve(utilisateur);
       };
 
+      donneesRequete.rssi = 'true';
+
+      axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch(done);
+    });
+
+    it('convertis le délégué à la protection des données en booléen', (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ delegueProtectionDonnees }) => {
+        expect(delegueProtectionDonnees).to.equal(true);
+        return Promise.resolve(utilisateur);
+      };
+
+      donneesRequete.delegueProtectionDonnees = 'true';
+
+      axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", (done) => {
+      donneesRequete.prenom = '';
+
+      testeur.verifieRequeteGenereErreurHTTP(
+        422, "La création d'un nouvel utilisateur car les paramètres sont invalides",
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
+      );
+    });
+
+    it("demande au dépôt de créer l'utilisateur", (done) => {
       testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
-        expect(donneesUtilisateur).to.eql(donneesRequete);
+        const donneesAttendues = {
+          ...donneesRequete,
+          rssi: true,
+          delegueProtectionDonnees: false,
+        };
+        expect(donneesUtilisateur).to.eql(donneesAttendues);
         return Promise.resolve(utilisateur);
       };
 
@@ -155,7 +199,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         }
       );
 
-      axios.post('http://localhost:1234/api/utilisateur', { desDonnees: 'des donnees' })
+      axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
         .then(() => done())
         .catch(done);
     });
@@ -171,7 +215,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       it('retourne une erreur HTTP 424', (done) => {
         testeur.verifieRequeteGenereErreurHTTP(
           424, "L'envoi de l'email de finalisation d'inscription a échoué",
-          { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
+          { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
         );
       });
 
@@ -184,7 +228,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           return Promise.resolve();
         };
 
-        axios.post('http://localhost:1234/api/utilisateur', { desDonnes: 'des données' })
+        axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
           .catch(() => {
             expect(utilisateurSupprime).to.be(true);
             done();
@@ -200,7 +244,7 @@ describe('Le serveur MSS des routes /api/*', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(
         422, 'oups',
-        { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
       );
     });
 
@@ -209,7 +253,7 @@ describe('Le serveur MSS des routes /api/*', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(
         422, 'oups',
-        { method: 'post', url: 'http://localhost:1234/api/utilisateur' }, done
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
       );
     });
   });
