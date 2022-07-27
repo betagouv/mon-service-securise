@@ -72,9 +72,20 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   });
 
   routes.post('/utilisateur',
-    middleware.aseptise('prenom', 'nom', 'email', 'telephone', 'rssi', 'delegueProtectionDonnees', 'poste', 'nomEntitePublique', 'departementEntitePublique'),
+    middleware.aseptise(
+      'prenom',
+      'nom',
+      'email',
+      'telephone',
+      'rssi',
+      'delegueProtectionDonnees',
+      'poste',
+      'nomEntitePublique',
+      'departementEntitePublique',
+      'cguAcceptees',
+    ),
     (requete, reponse, suite) => {
-      const valeurBooleene = (valeur) => {
+      const valeurBooleenne = (valeur) => {
         switch (valeur) {
           case 'true': return true;
           case 'false': return false;
@@ -85,13 +96,14 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       const donnees = {
         prenom: requete.body.prenom,
         nom: requete.body.nom,
+        email: requete.body.email?.toLowerCase(),
         telephone: requete.body.telephone,
-        rssi: valeurBooleene(requete.body.rssi),
-        delegueProtectionDonnees: valeurBooleene(requete.body.delegueProtectionDonnees),
+        rssi: valeurBooleenne(requete.body.rssi),
+        delegueProtectionDonnees: valeurBooleenne(requete.body.delegueProtectionDonnees),
         poste: requete.body.poste,
         nomEntitePublique: requete.body.nomEntitePublique,
         departementEntitePublique: requete.body.departementEntitePublique,
-        email: requete.body.email?.toLowerCase(),
+        cguAcceptees: valeurBooleenne(requete.body.cguAcceptees),
       };
 
       new Promise((resolve, reject) => {
