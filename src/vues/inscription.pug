@@ -64,6 +64,13 @@ block main
                 option(value = departement.code) #{departement.code} #{departement.nom}
           .message-erreur Ce champs est obligatoire. Veuillez sélectionner une entrée.
 
+      .requis(data-nom = 'cguAcceptees')
+        .case-a-cocher
+          input(id = 'cguAcceptees', name = 'cguAcceptees', type = 'checkbox')
+          label(for = 'cguAcceptees').
+            J'accepte les <a href="/cgu">conditions générales d'utilisation de Mon Service Sécurisé</a>
+        .message-erreur Ce champs est obligatoire. Veuillez le cocher.
+
     .bouton Valider
 
   script(type = 'module', src = '/statique/inscription.js')

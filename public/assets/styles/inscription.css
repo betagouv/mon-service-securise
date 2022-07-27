@@ -65,10 +65,26 @@
   display: block;
 }
 
-.erreur input, .erreur select {
+.erreur input, .erreur select, .erreur input[type="checkbox"] {
   border-color: var(--rose-anssi);
 }
 
 .erreur input[type="radio"] {
   background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %23ff6584; stroke-width: 0.50em" /></svg>')
+}
+
+.case-a-cocher {
+  display: flex;
+}
+
+.case-a-cocher > input + label {
+  margin-top: 0;
+}
+
+.case-a-cocher input[type='checkbox'] {
+  width: 2.35em;
+}
+
+.requis[data-nom = 'cguAcceptees'] {
+  margin-bottom: 2em;
 }

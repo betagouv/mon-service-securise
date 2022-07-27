@@ -10,6 +10,8 @@ $(() => {
     }
   };
 
+  const reponseAcceptee = (nom) => ($(`#${nom}:checked`).val() ? true : undefined);
+
   const obtentionDonnees = {
     prenom: () => $('#prenom').val(),
     nom: () => $('#nom').val(),
@@ -20,6 +22,7 @@ $(() => {
     poste: () => $('#poste').val(),
     nomEntitePublique: () => $('#nomEntitePublique').val(),
     departementEntitePublique: () => $('#departementEntitePublique').val(),
+    cguAcceptees: () => reponseAcceptee('cguAcceptees'),
   };
 
   const $bouton = $('.bouton');

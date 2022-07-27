@@ -92,6 +92,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         poste: "Chargé des systèmes d'informations",
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
+        cguAcceptees: 'true',
       };
 
       testeur.referentiel().departement = () => 'Paris';
@@ -113,6 +114,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           'poste',
           'nomEntitePublique',
           'departementEntitePublique',
+          'cguAcceptees',
         ],
         { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
         done
@@ -158,6 +160,19 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
+    it('convertis les cgu acceptées en valeur booléenne', (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ cguAcceptees }) => {
+        expect(cguAcceptees).to.equal(true);
+        return Promise.resolve(utilisateur);
+      };
+
+      donneesRequete.cguAcceptees = 'true';
+
+      axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch(done);
+    });
+
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", (done) => {
       donneesRequete.prenom = '';
 
@@ -173,6 +188,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           ...donneesRequete,
           rssi: true,
           delegueProtectionDonnees: false,
+          cguAcceptees: true,
         };
         expect(donneesUtilisateur).to.eql(donneesAttendues);
         return Promise.resolve(utilisateur);
