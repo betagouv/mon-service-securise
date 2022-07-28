@@ -25,9 +25,10 @@ $(() => {
     cguAcceptees: () => reponseAcceptee('cguAcceptees'),
   };
 
-  const $bouton = $('.bouton');
+  const $formulaire = $('form#inscription');
 
-  $bouton.on('click', () => {
+  $formulaire.on('submit', (evenement) => {
+    evenement.preventDefault();
     controleChampsRequis(obtentionDonnees);
     if (tousChampsRequisRemplis(obtentionDonnees)) {
       const donnees = Object
