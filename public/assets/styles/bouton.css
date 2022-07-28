@@ -16,3 +16,10 @@
 
   cursor: pointer;
 }
+
+button.bouton {
+  border: 0;
+
+  font-family: 'Marianne';
+  font-size: 1em;
+}
