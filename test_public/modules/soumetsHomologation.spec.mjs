@@ -14,7 +14,7 @@ describe("L'initialisation du comportement du formulaire", () => {
       const dom = new JSDOM(`
         <div class="rideau"></<div>
         <form class="formulaire">
-          <input name="champs-1" value="valeur 1">
+          <input name="champ-1" value="valeur 1">
           <div class="bouton"></div>
         </form>
       `);
@@ -61,7 +61,7 @@ describe("L'initialisation du comportement du formulaire", () => {
           .then(() => {
             expect(ajaxRequete.method).to.equal('post');
             expect(ajaxRequete.url).to.equal('/api/homologation');
-            expect(ajaxRequete.data['champs-1']).to.equal('valeur 1');
+            expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
           })
           .then(() => done())
           .catch(done);
@@ -77,7 +77,7 @@ describe("L'initialisation du comportement du formulaire", () => {
           .then(() => {
             expect(ajaxRequete.method).to.equal('put');
             expect(ajaxRequete.url).to.equal('/api/homologation/12345');
-            expect(ajaxRequete.data['champs-1']).to.equal('valeur 1');
+            expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
           })
           .then(() => done())
           .catch(done);

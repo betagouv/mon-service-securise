@@ -1,15 +1,15 @@
 const obtentionValeur = (obtentionDonnees, element) => obtentionDonnees[$(element).data('nom')]();
-const champsNonRempli = (valeur) => valeur === '' || valeur === undefined;
-const champsRempli = (valeur) => !champsNonRempli(valeur);
+const champNonRempli = (valeur) => valeur === '' || valeur === undefined;
+const champRempli = (valeur) => !champNonRempli(valeur);
 
 const controleChampsRequis = (obtentionDonnees) => {
   $('.requis').each((_, element) => {
     const valeur = () => obtentionValeur(obtentionDonnees, element);
-    if (champsNonRempli(valeur())) {
+    if (champNonRempli(valeur())) {
       $(element).addClass('erreur');
 
       $(element).on('change', () => {
-        $(element).toggleClass('erreur', champsNonRempli(valeur()));
+        $(element).toggleClass('erreur', champNonRempli(valeur()));
       });
     }
   });
@@ -20,7 +20,7 @@ const tousChampsRequisRemplis = (obtentionDonnees) => {
 
   $('.requis').each((_, element) => {
     const valeur = () => obtentionValeur(obtentionDonnees, element);
-    tousChampsRequisCompletes &&= champsRempli(valeur());
+    tousChampsRequisCompletes &&= champRempli(valeur());
   });
 
   return tousChampsRequisCompletes;

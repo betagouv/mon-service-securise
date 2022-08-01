@@ -48,13 +48,13 @@ describe('Le contrôle des champs requis', () => {
 
   it('ajoute une action conditionnée par un changement dans le composant qui permet de retirer le statut erreur', () => {
     controleChampsRequis(obtentionDonnees);
-    const champsPrenomEnErreur = () => $(".requis[data-nom='prenom']").hasClass('erreur');
-    const statutInitial = champsPrenomEnErreur();
+    const champPrenomEnErreur = () => $(".requis[data-nom='prenom']").hasClass('erreur');
+    const statutInitial = champPrenomEnErreur();
 
     $('#prenom').val('prénom');
     $(".requis[data-nom='prenom']").trigger('change');
 
     expect(statutInitial).to.be(true);
-    expect(champsPrenomEnErreur()).to.be(false);
+    expect(champPrenomEnErreur()).to.be(false);
   });
 });
