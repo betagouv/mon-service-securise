@@ -27,9 +27,39 @@
   transform: rotate(45deg);
 }
 
+.avertissement {
+  display: flex;
+  margin-top: 2em;
+  text-align: left;
+}
+
+.avertissement::before {
+  content: '⚠';
+  background-color: var(--bleu-mise-en-avant);
+  border-radius: 5px 0 0 5px;
+  border: 1px var(--bleu-mise-en-avant) solid;
+  border-right: 0;
+
+  padding-top: 0.9em;
+  width: 6em;
+
+  text-align: center;
+  color: #fff;
+  font-size: 1.2em;
+}
+
+.avertissement p {
+  border: 1px var(--bleu-mise-en-avant) solid;
+  border-left: 0;
+  border-radius: 0 5px 5px 0;
+
+  margin: 0;
+  padding: 1em;
+}
+
 .mention {
   align-self: end;
-  margin-top: 3em;
+  margin-top: 2em;
   margin-bottom: -1em;
 }
 
