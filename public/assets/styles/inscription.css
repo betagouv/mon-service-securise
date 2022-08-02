@@ -1,4 +1,4 @@
-.departements select {
+select {
   box-sizing: border-box;
   width: 100%;
   margin-top: 0.3em;
@@ -117,4 +117,8 @@
 
 .requis[data-nom = 'cguAcceptees'] {
   margin-bottom: 2em;
+}
+
+.champ-saisi {
+  border-color: var(--bleu-mise-en-avant);
 }

@@ -1,6 +1,9 @@
 import { controleChampsRequis, tousChampsRequisRemplis } from './modules/interactions/champsRequis.mjs';
 
 $(() => {
+  const brancheMiseEnAvantSaisie = () => $("input[type!='radio'][type!='checkbox'], select")
+    .on('change', (evenement) => $(evenement.target).toggleClass('champ-saisi', evenement.target.value !== ''));
+
   const reponseOuiNon = (nom) => {
     const valeur = $(`input[name="${nom}"]:checked`).val();
     switch (valeur) {
@@ -27,6 +30,7 @@ $(() => {
 
   const $formulaire = $('form#inscription');
 
+  brancheMiseEnAvantSaisie();
   $formulaire.on('submit', (evenement) => {
     evenement.preventDefault();
     controleChampsRequis(obtentionDonnees);
