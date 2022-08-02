@@ -59,6 +59,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return Object.keys(actionsSaisie()).find((a) => positionActionSaisie(a) === position + 1);
   };
 
+  const infosNiveauxGravite = (ordreInverse = false) => {
+    const niveaux = Object.values(niveauxGravite());
+    return ordreInverse ? niveaux.reverse() : niveaux;
+  };
+
   const descriptionExpiration = (identifiant) => {
     if (!identifiant) return 'Information non renseignée';
 
@@ -160,7 +165,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     identifiantsMesures,
     identifiantsNiveauxGravite,
     identifiantsRisques,
-    statutDeploiementValide,
+    infosNiveauxGravite,
     localisationDonnees,
     localisationsDonnees,
     mesure,
@@ -176,6 +181,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     seuilCriticiteMin,
     seuilsCriticites,
     statutsDeploiement,
+    statutDeploiementValide,
     statutsMesures,
     typeService,
     typesService,

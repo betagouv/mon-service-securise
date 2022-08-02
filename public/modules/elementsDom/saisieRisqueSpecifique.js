@@ -20,7 +20,7 @@ const $curseur = (niveaux) => Object.keys(niveaux)
     $('<div class="curseur"></div>')
   );
 
-const $saisieNiveauGravite = (index, niveauGravite, niveaux) => {
+const $saisieNiveauGravite = (index, niveauGravite, niveaux, couleurs) => {
   const $conteneurSaisie = $(`
 <div class="niveau-gravite">
 <input id="niveauGravite-risque-specifique-${index}"
@@ -30,11 +30,17 @@ const $saisieNiveauGravite = (index, niveauGravite, niveaux) => {
 </div>
   `);
   $conteneurSaisie.append($curseur(niveaux), $('<div class="legende"></div>'));
-  brancheComportementSaisieNiveauGravite($conteneurSaisie, niveaux);
+  brancheComportementSaisieNiveauGravite($conteneurSaisie, niveaux, couleurs);
 
   if (niveauGravite) {
     const { position, description } = niveaux[niveauGravite];
-    metsAJourAffichageNiveauGravite($conteneurSaisie, niveauGravite, position, description);
+    metsAJourAffichageNiveauGravite(
+      $conteneurSaisie,
+      niveauGravite,
+      couleurs,
+      position,
+      description
+    );
   }
 
   return $conteneurSaisie;
@@ -48,14 +54,14 @@ const $textareaCommentaire = (index, commentaire) => (
   `)
 );
 
-const $saisieRisqueSpecifique = (index, donnees = {}, niveaux) => {
+const $saisieRisqueSpecifique = (index, donnees = {}, niveaux, couleurs) => {
   const { description = '', niveauGravite = '', commentaire = '' } = donnees;
 
   const $conteneur = $('<div class="saisie-risque-specifique"><div class="synthese"></div></div>');
 
   $('.synthese', $conteneur).append(
     $inputDescription(index, description),
-    $saisieNiveauGravite(index, niveauGravite, niveaux),
+    $saisieNiveauGravite(index, niveauGravite, niveaux, couleurs),
   );
 
   $conteneur.append(

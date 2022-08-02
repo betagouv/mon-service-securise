@@ -55,31 +55,10 @@ block formulaire
 
 block cartes-informations
   mixin detailsRisques
-    h3 Critique
-    p.
-      Incapacité pour l’organisation d’assurer la totalité ou une partie de son activité,
-      avec d’éventuels impacts graves sur la sécurité des personnes et des biens.
-      L’organisation ne surmontera vraisemblablement pas la situation (sa survie est menacée),
-      les secteurs d’activité ou étatiques dans lesquels elle opère seront susceptibles d’être légèrement impactés,
-      sans conséquences durables
-
-    h3 Grave
-    p.
-      Forte dégradation des performances de l’activité, avec d’éventuels impacts significatifs
-      sur la sécurité des personnes et des biens. L’organisation surmontera la situation avec
-      de sérieuses difficultés (fonctionnement en mode très dégradé), sans impacts sectoriel ou étatique
-
-    h3 Significatif
-    p.
-      Dégradation des performances de l’activité sans impact sur la sécurité des personnes et des biens.
-      L’organisation surmontera la situation malgré quelques difficultés (fonctionnement en mode dégradé)
-
-    h3 Minime
-    p.
-      Aucun impact opérationnel ni sur les performances de l’activité ni sur la sécurité des personnes et des biens.
-      L’organisation surmontera la situation sans trop de difficultés (consommation des marges)
-
-    h3 Non concerné
+    each niveau in referentiel.infosNiveauxGravite(ordreInverse = true)
+      - const { description, descriptionLongue } = niveau
+      h3= description
+      p= descriptionLongue
 
   +carteInformations({
     titre: 'Niveaux de gravité',
@@ -87,23 +66,8 @@ block cartes-informations
     details: 'detailsRisques',
   })
     ul.niveaux-gravite
-      li
-        .disque.rouge
-        .
-          Critique
-      li
-        .disque.orange
-        .
-          Grave
-      li
-        .disque.jaune
-        .
-          Significatif
-      li
-        .disque.vert
-        .
-          Minime
-      li
-        .disque.cercle.blanc
-        .
-          Non concerné
+      each niveau in referentiel.infosNiveauxGravite(ordreInverse = true)
+        - const { couleur, description } = niveau
+        li
+          .disque(class = `${ couleur === 'blanc' ? 'cercle blanc' : couleur }`)
+          = description

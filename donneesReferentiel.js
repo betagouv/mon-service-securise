@@ -164,11 +164,62 @@ module.exports = {
   },
 
   niveauxGravite: {
-    nonConcerne: { position: 0, description: 'Non concerné', important: false },
-    minime: { position: 1, description: 'Minime', important: false },
-    significatif: { position: 2, description: 'Significatif', important: true },
-    grave: { position: 3, description: 'Grave', important: true },
-    critique: { position: 4, description: 'Critique', important: true },
+    nonConcerne: {
+      position: 0,
+      couleur: 'blanc',
+      description: 'Non concerné',
+      descriptionLongue: '',
+      important: false,
+    },
+    minime: {
+      position: 1,
+      couleur: 'vert',
+      description: 'Minime',
+      descriptionLongue: `
+        Aucun impact opérationnel ni sur les performances de l'activité ni sur
+        la sécurité des personnes et des biens. L'organisation surmontera la
+        situation sans trop de difficultés (consommation des marges)
+      `,
+      important: false,
+    },
+    significatif: {
+      position: 2,
+      couleur: 'jaune',
+      description: 'Significatif',
+      descriptionLongue: `
+        Dégradation des performances de l'activité sans impact sur la sécurité
+        des personnes et des biens. L'organisation surmontera la situation
+        malgré quelques difficultés (fonctionnement en mode dégradé)
+      `,
+      important: true,
+    },
+    grave: {
+      position: 3,
+      couleur: 'orange',
+      description: 'Grave',
+      descriptionLongue: `
+        Forte dégradation des performances de l'activité, avec d'éventuels
+        impacts significatifs sur la sécurité des personnes et des biens.
+        L'organisation surmontera la situation avec de sérieuses difficultés
+        (fonctionnement en mode très dégradé), sans impacts sectoriel ou
+        étatique
+      `,
+      important: true,
+    },
+    critique: {
+      position: 4,
+      couleur: 'rouge',
+      description: 'Critique',
+      descriptionLongue: `
+        Incapacité pour l'organisation d'assurer la totalité ou une partie de
+        son activité, avec d'éventuels impacts graves sur la sécurité des
+        personnes et des biens. L'organisation ne surmontera vraisemblablement
+        pas la situation (sa survie est menacée), les secteurs d'activité ou
+        étatiques dans lesquels elle opère seront susceptibles d'être
+        légèrement impactés, sans conséquences durables
+      `,
+      important: true,
+    },
   },
 
   risques: {
@@ -315,7 +366,7 @@ module.exports = {
       description: 'Mettre en place une politique de sécurité des mots de passe',
       categorie: 'protection',
       indispensable: true,
-      descriptionLongue: "Cette mesure permet d'éviter des mots de passe trop simples, trop courts ou anciens ne soient utilisés par un acteur malveillant pour accéder au service. Cette mesure peut être mise en œuvre en fixant des règles au moment de l'enregistrement d'un mot de passe (longueur, complexité, etc.) ; l'introduction d'un testeur de force de mot de passe ;  un délai d'expiration du mot de passe ; une politique de renouvellement automatique ; un accès sans mot de passe par la réception d'un code à usage unique à chaque connexion (hors SMS) ; l'impossibilité de réutiliser des mots de passe déjà employés par le passé ; la révocation immédiate de mots de passe  en cas de connexion suspecte, etc. Pour plus de détails, consultez le <a href=\"https://www.ssi.gouv.fr/administration/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/\" target=\"_blank\" rel=\"noopener\">« Guide de l'ANSSI relatives à l'authentification multifacteur et aux mots de passe ».</a>",
+      descriptionLongue: "Cette mesure permet d'éviter des mots de passe trop simples, trop courts ou anciens ne soient utilisés par un acteur malveillant pour accéder au service. Cette mesure peut être mise en œuvre en fixant des règles au moment de l'enregistrement d'un mot de passe (longueur, complexité, etc.) ; l'introduction d'un testeur de force de mot de passe ; un délai d'expiration du mot de passe ; une politique de renouvellement automatique ; un accès sans mot de passe par la réception d'un code à usage unique à chaque connexion (hors SMS) ; l'impossibilité de réutiliser des mots de passe déjà employés par le passé ; la révocation immédiate de mots de passe en cas de connexion suspecte, etc. Pour plus de détails, consultez le <a href=\"https://www.ssi.gouv.fr/administration/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/\" target=\"_blank\" rel=\"noopener\">« Guide de l'ANSSI relatives à l'authentification multifacteur et aux mots de passe ».</a>",
     },
     franceConnect: {
       description: 'Permettre la connexion des utilisateurs via FranceConnect',
