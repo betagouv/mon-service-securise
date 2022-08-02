@@ -14,6 +14,7 @@ $(() => {
   let indexMaxRisquesSpecifiques = 0;
 
   const NIVEAUX_GRAVITE = JSON.parse($('#donnees-referentiel-niveaux-gravite-risque').text());
+  const COULEURS = Object.values(NIVEAUX_GRAVITE).map((niveau) => niveau.couleur);
 
   const ajouteZoneSaisieCommentairePourRisque = ($r, nom) => {
     const $lien = $('a.informations-additionnelles', $r);
@@ -26,19 +27,20 @@ $(() => {
 
   const peupleRisquesGeneraux = (selecteurDonnees) => {
     const donneesRisques = JSON.parse($(selecteurDonnees).text());
+
     donneesRisques.forEach(({ id, commentaire, niveauGravite }) => {
       if (commentaire) $(`#commentaire-${id}`).show().val(texteHTML(commentaire));
 
       const $risque = $(`.risque#${id}`);
       if (niveauGravite) {
         const { position, description } = NIVEAUX_GRAVITE[niveauGravite];
-        metsAJourAffichageNiveauGravite($risque, niveauGravite, position, description);
+        metsAJourAffichageNiveauGravite($risque, niveauGravite, COULEURS, position, description);
       }
     });
   };
 
   const zoneSaisieRisqueSpecifique = (...params) => (
-    $saisieRisqueSpecifique(...params, NIVEAUX_GRAVITE)
+    $saisieRisqueSpecifique(...params, NIVEAUX_GRAVITE, COULEURS)
   );
 
   const brancheAjoutRisqueSpecifique = (...params) => brancheAjoutItem(
@@ -54,7 +56,7 @@ $(() => {
   ajouteModalesInformations();
 
   $('.risque').each((_, $r) => {
-    brancheComportementSaisieNiveauGravite($r, NIVEAUX_GRAVITE);
+    brancheComportementSaisieNiveauGravite($r, NIVEAUX_GRAVITE, COULEURS);
     ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`);
   });
 

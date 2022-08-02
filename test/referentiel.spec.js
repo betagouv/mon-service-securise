@@ -314,6 +314,27 @@ describe('Le référentiel', () => {
     expect(referentiel.identifiantsNiveauxGravite()).to.eql(['unNiveau', 'unAutreNiveau']);
   });
 
+  describe('sur demande des infos sur les niveaux de gravité des risques', () => {
+    it('retourne les informations', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: { niveauUn: { position: 0 }, niveauDeux: { position: 1 } },
+      });
+
+      expect(referentiel.infosNiveauxGravite()).to.eql([{ position: 0 }, { position: 1 }]);
+    });
+
+    it("sait retourner les informations dans l'ordre inverse", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: { niveauUn: { position: 0 }, niveauDeux: { position: 1 } },
+      });
+
+      expect(referentiel.infosNiveauxGravite(true)).to.eql([
+        { position: 1 },
+        { position: 0 },
+      ]);
+    });
+  });
+
   it("connaît l'action de saisie suivante d'une action de saisie donnée", () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: { uneAction: { position: 0 }, actionSuivante: { position: 1 } },
