@@ -14,10 +14,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
   let serveur;
 
   const sersFormulaireEditionUtilisateur = (requete, reponse) => {
+    const departements = referentiel.departements();
     middleware.verificationJWT(requete, reponse, () => {
       const idUtilisateur = requete.idUtilisateurCourant;
       depotDonnees.utilisateur(idUtilisateur)
-        .then((utilisateur) => reponse.render('utilisateur/edition', { utilisateur }));
+        .then((utilisateur) => reponse.render('utilisateur/edition', { utilisateur, departements }));
     });
   };
 

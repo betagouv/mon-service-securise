@@ -1,0 +1,107 @@
+include ./inputChoix
+
+block append styles
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/utilisateur.css', rel = 'stylesheet')
+
+mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
+  .mention champ obligatoire
+
+  section
+    block champs-formulaire
+      if emailLectureSeule
+        p.affichage-simple
+          strong E-mail&nbsp
+          span : #{donnees.email}
+
+      .requis(data-nom = 'prenom')
+        label Prénom
+          br
+          input(
+            id = 'prenom',
+            name = 'prenom',
+            value = donnees.prenom,
+            placeholder = 'ex : Jean'
+          )
+          .message-erreur Le prénom est obligatoire. Veuillez le renseigner.
+
+      .requis(data-nom = 'nom')
+        label Nom
+          br
+          input(
+            id = 'nom',
+            name = 'nom',
+            value = donnees.nom,
+            placeholder = 'ex : Dupont'
+          )
+          .message-erreur Le nom est obligatoire. Veuillez le renseigner.
+
+      if !emailLectureSeule
+        .requis(data-nom = 'email')
+          label E-mail
+            br
+            input(
+              id = 'email',
+              name = 'email',
+              type = 'email',
+              placeholder = 'ex : jean.dupont@domaine.fr'
+            )
+            .message-erreur L'e-mail est obligatoire. Veuillez respecter le format jean.dupont@domaine.fr.
+
+      label Téléphone
+        br
+        input(
+          id = 'telephone',
+          name = 'telephone',
+          type = 'tel',
+          value = donnees.telephone,
+          placeholder = 'ex : 0XXXXXXXXX'
+      )
+
+      .requis(data-nom = 'rssi')
+        +inputOuiNon({
+          nom: 'rssi',
+          titre: "Êtes-vous Responsable de la sécurité des systèmes d'information ?",
+          objetDonnees: donnees,
+          messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+        })
+
+      .requis(data-nom = 'delegueProtectionDonnees')
+        +inputOuiNon({
+          nom: 'delegueProtectionDonnees',
+          titre: 'Exercez-vous la fonction de Délégué/e à la protection des données ?',
+          objetDonnees: donnees,
+          messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+        })
+
+      label Poste
+        br
+        input(
+          id = 'poste',
+          name = 'poste',
+          value = donnees.poste,
+          placeholder = "ex : Cheffe/Chef de projet maîtrise d'ouvrage"
+        )
+
+      .requis(data-nom = 'nomEntitePublique')
+        label Nom de votre entité publique
+          br
+          input(
+            id = 'nomEntitePublique',
+            name = 'nomEntitePublique',
+            type = 'text',
+            value = donnees.nomEntitePublique,
+            placeholder = "ex : Agglomération de Mansart"
+          )
+          .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
+
+      .requis(data-nom = 'departementEntitePublique')
+        label Département où est localisée cette entité
+          br
+          .departements
+            select(id = 'departementEntitePublique', name = 'departementEntitePublique')
+              option(value = '') - Sélectionnez un département -
+              each departement in departements
+                option(value = departement.code, selected = departement.code === donnees.departementEntitePublique).
+                  #{departement.code} #{departement.nom}
+          .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.

@@ -1,10 +1,6 @@
 extends ./mssDeconnecte
 
-include ./fragments/inputChoix
-
-block append styles
-  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/inscription.css', rel = 'stylesheet')
+include ./fragments/formulaireUtilisateur
 
 block main
   form.etroit#inscription
@@ -14,59 +10,8 @@ block main
       a(href = '/connexion') connectez-vous
     .avertissement
       p La création de compte est exclusivement réservée aux agents publics.
-    .mention champ obligatoire
-    section
-      block champs-formulaire
-        .requis(data-nom = 'prenom')
-          label Prénom
-            br
-            input(id = 'prenom', type = 'text', placeholder = 'ex : Jean')
-            .message-erreur Le prénom est obligatoire. Veuillez le renseigner.
-        .requis(data-nom = 'nom')
-          label Nom
-            br
-            input(id = 'nom', type = 'text', placeholder = 'ex : Dupont')
-            .message-erreur Le nom est obligatoire. Veuillez le renseigner.
-        .requis(data-nom = 'email')
-          label E-mail
-            br
-            input(id = 'email', type = 'email', placeholder = 'ex : jean.dupont@domaine.fr')
-            .message-erreur L'e-mail est obligatoire. Veuillez respecter le format jean.dupont@domaine.fr.
-        label Téléphone
-          br
-          input(id = 'telephone', type = 'tel', placeholder = 'ex : 0XXXXXXXXX')
-        .requis(data-nom = 'rssi')
-          +inputOuiNon({
-            nom: 'rssi',
-            titre: "Êtes-vous Responsable de la sécurité des systèmes d'information ?",
-            objetDonnees: {},
-            messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
-          })
-        .requis(data-nom = 'delegueProtectionDonnees')
-          +inputOuiNon({
-            nom: 'delegueProtectionDonnees',
-            titre: 'Exercez-vous la fonction de Délégué/e à la protection des données ?',
-            objetDonnees: {},
-            messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
-          })
-        label Poste
-          br
-          input(id = 'poste', type = 'text', placeholder = "ex : Cheffe/Chef de projet maîtrise d'ouvrage")
-        .requis(data-nom = 'nomEntitePublique')
-          label Nom de votre entité publique
-            br
-            input(id = 'nomEntitePublique', type = 'text', placeholder = "ex : Agglomération de Mansart")
-            .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
-        .requis(data-nom = 'departementEntitePublique')
-          label Département où est localisée cette entité
-            br
-            .departements
-              select(id = 'departementEntitePublique')
-                option(value = '') - Sélectionnez un département -
-                each departement in departements
-                  option(value = departement.code) #{departement.code} #{departement.nom}
-            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
 
+    +formulaireUtilisateur({})
     button(type = 'submit').bouton Valider
 
   script(type = 'module', src = '/statique/inscription.js')

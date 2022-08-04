@@ -1,6 +1,6 @@
 mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, messageErreur, decoration })
   - let valeursSelectionnees = objetDonnees[nom]
-  - if (typeof valeursSelectionnees === 'boolean') valeursSelectionnees = (valeurSelectionnees ? 'oui' : 'non')
+  - if (typeof valeursSelectionnees === 'boolean') valeursSelectionnees = (valeursSelectionnees ? 'oui' : 'non')
   fieldset(id = nom)
     .titre= titre
       if decoration
