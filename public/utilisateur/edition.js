@@ -1,17 +1,11 @@
-import parametres from '../modules/parametres.mjs';
+import brancheSoumissionFormulaireUtilisateur from '../modules/interactions/brancheSoumissionFormulaireUtilisateur.js';
+import brancheMiseEnAvantSaisie from '../modules/interactions/brancheMiseEnAvantSaisie.js';
 
 $(() => {
   const $formulaire = $('form.utilisateur#edition');
-  $formulaire.submit((e) => {
-    e.preventDefault();
+  const action = (donnees) => axios.put('/api/utilisateur', donnees)
+    .then(() => (window.location = '/espacePersonnel'));
 
-    const params = parametres('form#edition');
-    params.cguAcceptees = params.cguAcceptees && params.cguAcceptees[0] === 'on';
-
-    axios.put('/api/utilisateur', params)
-      .then(() => (window.location = '/espacePersonnel'));
-  });
-
-  const $bouton = $('.bouton', $formulaire);
-  $bouton.click(() => $formulaire.submit());
+  brancheMiseEnAvantSaisie();
+  brancheSoumissionFormulaireUtilisateur($formulaire, action);
 });

@@ -99,7 +99,7 @@ select {
   display: flex;
 }
 
-.case-a-cocher > input + label {
+.case-a-cocher > input[type='checkbox'] + label {
   margin-top: 0;
 }
 
@@ -113,4 +113,8 @@ select {
 
 .champ-saisi {
   border-color: var(--bleu-mise-en-avant);
+}
+
+.affichage-simple {
+  margin-bottom: 2em;
 }

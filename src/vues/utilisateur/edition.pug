@@ -1,32 +1,23 @@
-extends ../homologation/formulaire
+extends ../mssConnecte
 
-block formulaire
-  form.utilisateur#edition
-    h1 Mon profil
+include ../fragments/formulaireUtilisateur
+include ../fragments/utilisateur/nouveauMotDePasse
+include ../fragments/utilisateur/questionCgu
+
+block main
+  form.etroit.utilisateur#edition
+    h1 Profil
+
+    +formulaireUtilisateur({
+      donnees: utilisateur,
+      emailLectureSeule: true
+    })
 
     section
-      label Prénom
-        br
-        input(id='prenom', name = 'prenom', value = utilisateur.prenom, placeholder = 'ex. Jean')
-      label Nom
-        br
-        input(id='nom', name = 'nom', value = utilisateur.nom, placeholder = 'ex. Dupont')
-
-      p= `email : ${utilisateur.email}`
-
-    section
-      h2 Changer de mot de passe
-
-      label Nouveau mot de passe
-        .infos-complementaires (Si vous laissez ce champ vide, le mot de passe ne sera pas modifié.)
-        input(id='mot-de-passe', name = 'motDePasse', type='password')
-
+      +nouveauMotDePasse
       if !utilisateur.accepteCGU()
-        input(id = 'cguAcceptees', name = 'cguAcceptees', type = 'checkbox')
-        label(for = 'cguAcceptees').
-          J'accepte les <a href="/cgu">conditions générales d'utilisation de
-          MonServiceSécurisé</a>
+        +questionCgu
 
-    .bouton Mettre à jour &nbsp;&nbsp;›
+    button(type = 'submit').bouton Enregistrer
 
   script(type = 'module', src = '/statique/utilisateur/edition.js')

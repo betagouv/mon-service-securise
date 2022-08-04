@@ -1,9 +1,5 @@
 extends ./mssInscription
+include ./fragments/utilisateur/questionCgu
 
 append champs-formulaire
-  .requis(data-nom = 'cguAcceptees')
-    .case-a-cocher
-      input(id = 'cguAcceptees', name = 'cguAcceptees', type = 'checkbox')
-      label(for = 'cguAcceptees').
-        J'accepte les <a href="/cgu">conditions générales d'utilisation de MonServiceSécurisé</a>
-    .message-erreur Ce champ est obligatoire. Veuillez le cocher.
+  +questionCgu
