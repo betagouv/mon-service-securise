@@ -31,29 +31,43 @@ class Utilisateur extends Base {
     this.adaptateurJWT = adaptateurJWT;
   }
 
-  static valideCreationNouvelUtilisateur(donnees, referentiel = Referentiel.creeReferentielVide()) {
-    const proprietesTextesObligatoires = ['prenom', 'nom', 'email', 'nomEntitePublique', 'departementEntitePublique'];
-    const proprietesBooleenesObligatoires = ['rssi', 'delegueProtectionDonnees'];
-
+  static valideDonnees(
+    donnees = {},
+    referentiel = Referentiel.creeReferentielVide(),
+    utilisateurExistant = false
+  ) {
     const envoieErreurProprieteManquante = (propriete) => {
       throw new ErreurProprieteManquante(`La propriété "${propriete}" est requise`);
     };
 
-    proprietesTextesObligatoires.forEach((propriete) => {
-      if (typeof donnees[propriete] !== 'string' || donnees[propriete] === '') {
-        envoieErreurProprieteManquante(propriete);
-      }
-    });
-    proprietesBooleenesObligatoires.forEach((propriete) => {
-      if (typeof donnees[propriete] !== 'boolean') {
-        envoieErreurProprieteManquante(propriete);
-      }
-    });
+    const validePresenceProprietes = (proprietes) => {
+      proprietes.forEach((propriete) => {
+        if (typeof donnees[propriete] !== 'string' || donnees[propriete] === '') {
+          envoieErreurProprieteManquante(propriete);
+        }
+      });
+    };
 
-    const { departementEntitePublique } = donnees;
-    if (!referentiel.departement(departementEntitePublique)) {
-      throw new ErreurDepartementInconnu(`Le département identifié par "${departementEntitePublique}" n'est pas répertorié`);
+    const validePresenceProprietesBooleenes = (proprietes) => {
+      proprietes.forEach((propriete) => {
+        if (typeof donnees[propriete] !== 'boolean') {
+          envoieErreurProprieteManquante(propriete);
+        }
+      });
+    };
+
+    const valideDepartement = (codeDepartement) => {
+      if (!referentiel.departement(codeDepartement)) {
+        throw new ErreurDepartementInconnu(`Le département identifié par "${codeDepartement}" n'est pas répertorié`);
+      }
+    };
+
+    if (!utilisateurExistant) {
+      validePresenceProprietes(['email']);
     }
+    validePresenceProprietes(['prenom', 'nom', 'nomEntitePublique', 'departementEntitePublique']);
+    validePresenceProprietesBooleenes(['rssi', 'delegueProtectionDonnees']);
+    valideDepartement(donnees.departementEntitePublique, referentiel);
   }
 
   static nomsProprietesBase() {
