@@ -1,4 +1,5 @@
-extends mssConnecte
+extends homologation/formulaire
+include carteInformations
 
 mixin action({ description, url, statut })
   - let classeStyleStatut
@@ -16,11 +17,11 @@ mixin action({ description, url, statut })
 block append styles
   link(href = '/statique/assets/styles/homologation.css', rel = 'stylesheet')
 
-block main
-  .retour.marges-fixes
-    a(href = '/espacePersonnel') ‹&nbsp;&nbsp;Mon espace personnel
+block retour
+  a(href = '/espacePersonnel') ‹&nbsp;&nbsp;Mon espace personnel
 
-  .details-homologation.marges-fixes
+block formulaire
+  .details-homologation
     .tableau-bord
       .description-dossier
         .icone-dossier
@@ -29,13 +30,28 @@ block main
           h2!= homologation.nomService()
       a.bouton(href = `/homologation/${homologation.id}/decision`) Voir le document d'homologation
 
-      - const indiceSecurite = homologation.indiceSecurite()
-      if process.env.AVEC_INDICE_SECURITE && indiceSecurite > 0
-        - const indiceSecuriteFormate = Intl.NumberFormat('fr').format(indiceSecurite);
-        h3= `Indice de sécurité : ${indiceSecuriteFormate} / ${referentiel.indiceSecuriteMax()}`
-
     section.actions
       ul
         each actionSaisie in actionsSaisie
           li
             +action(actionSaisie)
+
+block cartes-informations
+  mixin detailsIndiceSecurite
+    h3 À quoi sert l'indice de sécurité ?
+    p.
+      L'indice de sécurité fournit une indication du niveau de sécurité du
+      service basée sur une évaluation de la conformité de ce dernier à un
+      socle de mesures de sécurité personnalisé.
+    p.
+      Cette note ne constitue pas une preuve effective de la sécurité du
+      service. MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
+      responsables d'incidents de sécurité susceptibles d'affecter le service
+      numérique, quelle que soit la note attribuée à ce dernier.
+
+  - const indiceSecurite = homologation.indiceSecurite()
+  if process.env.AVEC_INDICE_SECURITE && indiceSecurite > 0
+    +carteInformations({ titre: 'Indice de sécurité', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceSecurite' })
+      .score-mss
+        span.score= Intl.NumberFormat('fr').format(indiceSecurite)
+        span.score-max= ` / ${referentiel.indiceSecuriteMax()}`

@@ -1,9 +1,7 @@
 .details-homologation {
-  width: 700px;
-
   box-sizing: border-box;
-  margin-top: 3em;
   padding: 2em 2em 0;
+  height: fit-content;
 
   background: #fff;
   border-radius: 5px;
@@ -110,4 +108,18 @@ a.action.a-completer {
 
 a.action.a-faire {
   background-image: url(../images/icone_vide_pastille_blanche.svg);
+}
+
+.carte .score-mss {
+  margin-bottom: 1em;
+  font-size: 1.3em;
+}
+
+.carte :is(.score, .score-max) {
+  font-weight: bold;
+  color: var(--rose-anssi);
+}
+
+.carte .score {
+  font-size: 1.6em;
 }

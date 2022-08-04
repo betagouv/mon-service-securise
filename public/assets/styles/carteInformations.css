@@ -1,7 +1,6 @@
 .carte {
   box-sizing: border-box;
   width: 270px;
-  margin-bottom: 1.7em;
   padding: 1.7em;
 
   background-color: #fff;
@@ -24,19 +23,26 @@
 }
 
 .carte h3 {
-  margin: 0;
+  margin: 1.5em 0 0.5em;
 
-  color: var(--bleu-mise-en-avant);
+  color: var(--bleu-anssi);
 }
 
 .carte h3 + p {
   margin-top: 0;
 }
 
+.carte .details {
+  margin-top: 2em;
+}
+
 .carte .plus-details, .carte .moins-details {
-  text-align: right;
-  font-size: 0.85em;
   cursor: pointer;
+
+  text-align: right;
+
+  font-size: 0.85em;
+  color: var(--bleu-mise-en-avant);
 }
 
 .carte .plus-details::after, .carte .moins-details::after {
@@ -46,7 +52,7 @@
   height: .6em;
   margin-left: 1em;
 
-  border: 2px var(--bleu-anssi) solid;
+  border: 2px var(--bleu-mise-en-avant) solid;
   transform: rotate(0.12turn);
 }
 
