@@ -45,6 +45,25 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .then(() => contributeur)
   );
 
+  const valeurBooleenne = (valeur) => {
+    switch (valeur) {
+      case 'true': return true;
+      case 'false': return false;
+      default: return undefined;
+    }
+  };
+
+  const obtentionDonneesDeBaseUtilisateur = (corps) => ({
+    prenom: corps.prenom,
+    nom: corps.nom,
+    telephone: corps.telephone,
+    rssi: valeurBooleenne(corps.rssi),
+    delegueProtectionDonnees: valeurBooleenne(corps.delegueProtectionDonnees),
+    poste: corps.poste,
+    nomEntitePublique: corps.nomEntitePublique,
+    departementEntitePublique: corps.departementEntitePublique,
+  });
+
   const routes = express.Router();
 
   routes.get('/homologations', middleware.verificationAcceptationCGU, (requete, reponse) => {
@@ -72,46 +91,17 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   });
 
   routes.post('/utilisateur',
-    middleware.aseptise(
-      'prenom',
-      'nom',
-      'email',
-      'telephone',
-      'rssi',
-      'delegueProtectionDonnees',
-      'poste',
-      'nomEntitePublique',
-      'departementEntitePublique',
-      'cguAcceptees',
-    ),
-    (requete, reponse, suite) => {
-      const valeurBooleenne = (valeur) => {
-        switch (valeur) {
-          case 'true': return true;
-          case 'false': return false;
-          default: return undefined;
-        }
-      };
-
-      const donnees = {
-        prenom: requete.body.prenom,
-        nom: requete.body.nom,
-        email: requete.body.email?.toLowerCase(),
-        telephone: requete.body.telephone,
-        rssi: valeurBooleenne(requete.body.rssi),
-        delegueProtectionDonnees: valeurBooleenne(requete.body.delegueProtectionDonnees),
-        poste: requete.body.poste,
-        nomEntitePublique: requete.body.nomEntitePublique,
-        departementEntitePublique: requete.body.departementEntitePublique,
-        cguAcceptees: valeurBooleenne(requete.body.cguAcceptees),
-      };
+    middleware.aseptise(...Utilisateur.nomsProprietesBase()), (requete, reponse, suite) => {
+      const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
+      donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
+      donnees.email = requete.body.email?.toLowerCase();
 
       new Promise((resolve, reject) => {
         try {
           Utilisateur.valideCreationNouvelUtilisateur(donnees, referentiel);
           resolve();
         } catch (erreur) {
-          reject(new ErreurModele("La création d'un nouvel utilisateur car les paramètres sont invalides"));
+          reject(new ErreurModele("La création d'un nouvel utilisateur a échoué car les paramètres sont invalides"));
         }
       }).then(() => depotDonnees.nouvelUtilisateur(donnees))
         .then(envoieMessageFinalisationInscription)
@@ -140,34 +130,39 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .catch(suite);
   });
 
-  routes.put('/utilisateur', middleware.verificationJWT, (requete, reponse, suite) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
+  routes.put('/utilisateur', middleware.verificationJWT,
+    middleware.aseptise(
+      'motDePasse',
+      ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email'),
+    ), (requete, reponse, suite) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
+      const cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
+      const { motDePasse } = requete.body;
 
-    depotDonnees.utilisateur(idUtilisateur)
-      .then((utilisateur) => {
-        const { prenom, nom, motDePasse, cguAcceptees } = requete.body;
+      depotDonnees.utilisateur(idUtilisateur)
+        .then((utilisateur) => {
+          const metsAJourMotDePasseSiNecessaire = () => {
+            if (typeof motDePasse !== 'string' || !motDePasse) return Promise.resolve(utilisateur);
+            return depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
+          };
 
-        const metsAJourMotDePasseSiNecessaire = () => {
-          if (typeof motDePasse !== 'string' || !motDePasse) return Promise.resolve(utilisateur);
-          return depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
-        };
-
-        if (!utilisateur.accepteCGU() && !cguAcceptees) {
-          reponse.status(422).send('CGU non acceptées');
-        } else {
-          metsAJourMotDePasseSiNecessaire()
-            .then((u) => depotDonnees.metsAJourUtilisateur(u.id, { prenom, nom }))
-            .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
-            .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
-            .then((u) => {
-              const token = u.genereToken();
-              requete.session.token = token;
-              reponse.json({ idUtilisateur });
-            })
-            .catch(suite);
-        }
-      });
-  });
+          if (!utilisateur.accepteCGU() && !cguAcceptees) {
+            reponse.status(422).send('CGU non acceptées');
+          } else {
+            metsAJourMotDePasseSiNecessaire()
+              .then((u) => depotDonnees.metsAJourUtilisateur(u.id, donnees))
+              .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
+              .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
+              .then((u) => {
+                const token = u.genereToken();
+                requete.session.token = token;
+                reponse.json({ idUtilisateur });
+              })
+              .catch(suite);
+          }
+        });
+    });
 
   routes.get('/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {
     const idUtilisateur = requete.idUtilisateurCourant;

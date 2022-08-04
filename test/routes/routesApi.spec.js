@@ -109,19 +109,19 @@ describe('Le serveur MSS des routes /api/*', () => {
           'nom',
           'email',
           'telephone',
+          'cguAcceptees',
+          'poste',
           'rssi',
           'delegueProtectionDonnees',
-          'poste',
           'nomEntitePublique',
           'departementEntitePublique',
-          'cguAcceptees',
         ],
         { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
         done
       );
     });
 
-    it("convertis l'email en minuscules", (done) => {
+    it("convertit l'email en minuscules", (done) => {
       testeur.depotDonnees().nouvelUtilisateur = ({ email }) => {
         expect(email).to.equal('jean.dupont@mail.fr');
         return Promise.resolve(utilisateur);
@@ -134,7 +134,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
-    it('convertis le RSSI en booléen', (done) => {
+    it('convertit le RSSI en booléen', (done) => {
       testeur.depotDonnees().nouvelUtilisateur = ({ rssi }) => {
         expect(rssi).to.equal(true);
         return Promise.resolve(utilisateur);
@@ -147,7 +147,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
-    it('convertis le délégué à la protection des données en booléen', (done) => {
+    it('convertit le délégué à la protection des données en booléen', (done) => {
       testeur.depotDonnees().nouvelUtilisateur = ({ delegueProtectionDonnees }) => {
         expect(delegueProtectionDonnees).to.equal(true);
         return Promise.resolve(utilisateur);
@@ -160,7 +160,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
-    it('convertis les cgu acceptées en valeur booléenne', (done) => {
+    it('convertit les cgu acceptées en valeur booléenne', (done) => {
       testeur.depotDonnees().nouvelUtilisateur = ({ cguAcceptees }) => {
         expect(cguAcceptees).to.equal(true);
         return Promise.resolve(utilisateur);
@@ -177,7 +177,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       donneesRequete.prenom = '';
 
       testeur.verifieRequeteGenereErreurHTTP(
-        422, "La création d'un nouvel utilisateur car les paramètres sont invalides",
+        422, "La création d'un nouvel utilisateur a échoué car les paramètres sont invalides",
         { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
       );
     });
@@ -282,7 +282,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.depotDonnees().reinitialiseMotDePasse = () => Promise.resolve(utilisateur);
     });
 
-    it("convertis l'email en minuscules", (done) => {
+    it("convertit l'email en minuscules", (done) => {
       testeur.depotDonnees().reinitialiseMotDePasse = (email) => {
         expect(email).to.equal('jean.dupont@mail.fr');
         return Promise.resolve(utilisateur);
@@ -345,10 +345,25 @@ describe('Le serveur MSS des routes /api/*', () => {
 
   describe('quand requête PUT sur `/api/utilisateur`', () => {
     let utilisateur;
+    let donneesRequete;
 
     beforeEach(() => {
       utilisateur = { id: '123', genereToken: () => 'un token', accepteCGU: () => true };
 
+      donneesRequete = {
+        prenom: 'Jean',
+        nom: 'Dupont',
+        telephone: '0100000000',
+        rssi: 'true',
+        delegueProtectionDonnees: 'false',
+        poste: "Chargé des systèmes d'informations",
+        nomEntitePublique: 'Ville de Paris',
+        departementEntitePublique: '75',
+        motDePasse: 'mdp_12345',
+        cguAcceptees: 'true',
+      };
+
+      testeur.referentiel().departement = () => 'Paris';
       const depotDonnees = testeur.depotDonnees();
       depotDonnees.metsAJourMotDePasse = () => Promise.resolve(utilisateur);
       depotDonnees.metsAJourUtilisateur = () => Promise.resolve(utilisateur);
@@ -359,7 +374,26 @@ describe('Le serveur MSS des routes /api/*', () => {
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur.middleware().verifieRequeteExigeJWT(
-        { method: 'put', url: 'http://localhost:1234/api/utilisateur' }, done
+        { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        [
+          'motDePasse',
+          'prenom',
+          'nom',
+          'telephone',
+          'cguAcceptees',
+          'poste',
+          'rssi',
+          'delegueProtectionDonnees',
+          'nomEntitePublique',
+          'departementEntitePublique',
+        ],
+        { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
+        done
       );
     });
 
@@ -379,9 +413,57 @@ describe('Le serveur MSS des routes /api/*', () => {
           }
         };
 
-        axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
           .then((reponse) => {
             expect(motDePasseMisAJour).to.be(true);
+            expect(reponse.status).to.equal(200);
+            expect(reponse.data).to.eql({ idUtilisateur: '123' });
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it('convertit le RSSI en booléen', (done) => {
+        testeur.middleware().reinitialise(utilisateur.id);
+
+        testeur.depotDonnees().metsAJourUtilisateur = (id, { rssi }) => {
+          try {
+            expect(id).to.equal('123');
+            expect(rssi).to.equal(false);
+            return Promise.resolve(utilisateur);
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        donneesRequete.rssi = 'false';
+
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+          .then((reponse) => {
+            expect(reponse.status).to.equal(200);
+            expect(reponse.data).to.eql({ idUtilisateur: '123' });
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it('convertit le délégué à la protection des données en booléen', (done) => {
+        testeur.middleware().reinitialise(utilisateur.id);
+
+        testeur.depotDonnees().metsAJourUtilisateur = (id, { delegueProtectionDonnees }) => {
+          try {
+            expect(id).to.equal('123');
+            expect(delegueProtectionDonnees).to.equal(true);
+            return Promise.resolve(utilisateur);
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
+
+        donneesRequete.delegueProtectionDonnees = 'true';
+
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+          .then((reponse) => {
             expect(reponse.status).to.equal(200);
             expect(reponse.data).to.eql({ idUtilisateur: '123' });
             done();
@@ -399,6 +481,10 @@ describe('Le serveur MSS des routes /api/*', () => {
             expect(id).to.equal('123');
             expect(donnees.prenom).to.equal('Jean');
             expect(donnees.nom).to.equal('Dupont');
+            expect(donnees.telephone).to.equal('0100000000');
+            expect(donnees.poste).to.equal("Chargé des systèmes d'informations");
+            expect(donnees.nomEntitePublique).to.equal('Ville de Paris');
+            expect(donnees.departementEntitePublique).to.equal('75');
             infosMisesAJour = true;
             return Promise.resolve(utilisateur);
           } catch (e) {
@@ -406,10 +492,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           }
         };
 
-        axios.put('http://localhost:1234/api/utilisateur', {
-          prenom: 'Jean',
-          nom: 'Dupont',
-        })
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
           .then((reponse) => {
             expect(infosMisesAJour).to.be(true);
             expect(reponse.status).to.equal(200);
@@ -420,7 +503,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       });
 
       it('pose un nouveau cookie', (done) => {
-        axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
           .then((reponse) => testeur.verifieJetonDepose(reponse, done))
           .catch(done);
       });
@@ -435,7 +518,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           return Promise.resolve(u);
         };
 
-        axios.put('http://localhost:1234/api/utilisateur', { motDePasse: 'mdp_12345' })
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
           .then(() => {
             expect(idResetSupprime).to.be(true);
             done();
@@ -451,7 +534,9 @@ describe('Le serveur MSS des routes /api/*', () => {
           return Promise.resolve();
         };
 
-        axios.put('http://localhost:1234/api/utilisateur', { motDePasse: '' })
+        donneesRequete.motDePasse = '';
+
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
           .then(() => expect(motDePasseMisAJour).to.be(false))
           .then(() => done())
           .catch(done);
@@ -469,7 +554,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         };
 
         expect(motDePasseMisAJour).to.be(false);
-        axios.put('http://localhost:1234/api/utilisateur', { cguAcceptees: true, motDePasse: 'mdp_12345' })
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
           .then(() => expect(motDePasseMisAJour).to.be(true))
           .then(() => done())
           .catch(done);
@@ -483,16 +568,17 @@ describe('Le serveur MSS des routes /api/*', () => {
           return Promise.resolve(u);
         };
 
-        axios.put('http://localhost:1234/api/utilisateur', { cguAcceptees: true, motDePasse: 'mdp_12345' })
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
           .then(() => done())
           .catch(done);
       });
 
       it("retourne une erreur HTTP 422 si la case CGU du formulaire n'est pas cochée", (done) => {
+        donneesRequete.cguAcceptees = 'false';
         testeur.verifieRequeteGenereErreurHTTP(422, 'CGU non acceptées', {
           method: 'put',
           url: 'http://localhost:1234/api/utilisateur',
-          data: { cguAcceptees: false, motDePasse: 'mdp_12345' },
+          data: donneesRequete,
         }, done);
       });
     });
