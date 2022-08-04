@@ -110,7 +110,24 @@ describe('Un utilisateur', () => {
     expect(utilisateur.dateCreation).to.be.ok();
     expect(utilisateur.dateCreation).to.eql(dateCreation);
   });
-  describe("sur une demande de validation pour la création d'un nouvel utilisateur", () => {
+
+  it('connaît la liste des noms de ses propriétés de base', () => {
+    const nomsProprietes = [
+      'prenom',
+      'nom',
+      'email',
+      'telephone',
+      'cguAcceptees',
+      'poste',
+      'rssi',
+      'delegueProtectionDonnees',
+      'nomEntitePublique',
+      'departementEntitePublique',
+    ];
+    expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
+  });
+
+  describe("sur une demande de validation des données d'un utilisateur", () => {
     let donnees;
     const referentiel = Referentiel.creeReferentiel({ departements: [
       { nom: 'Ain', code: '01', codeRegion: '84' },
@@ -120,8 +137,8 @@ describe('Un utilisateur', () => {
     const verifiePresencePropriete = (clef, nom, done) => {
       delete donnees[clef];
       try {
-        Utilisateur.valideCreationNouvelUtilisateur(donnees, referentiel);
-        done(`La validation de la création d'un nouvel utilisateur sans ${nom} aurait du lever une erreur de propriété manquante`);
+        Utilisateur.valideDonnees(donnees, referentiel);
+        done(`La validation des données d'un utilisateur sans ${nom} aurait du lever une erreur de propriété manquante`);
       } catch (error) {
         expect(error).to.be.a(ErreurProprieteManquante);
         expect(error.message).to.equal(`La propriété "${clef}" est requise`);
@@ -149,8 +166,22 @@ describe('Un utilisateur', () => {
       verifiePresencePropriete('nom', 'nom', done);
     });
 
-    it("exige que l'e-mail soit renseigné", (done) => {
+    it("exige que l'e-mail soit renseigné quand l'utilisateur est inexistant", (done) => {
       verifiePresencePropriete('email', 'e-mail', done);
+    });
+
+    it("n'exige pas que l'e-mail soit renseigné quand l'utilisateur existe déjà", (done) => {
+      delete donnees.email;
+      try {
+        Utilisateur.valideDonnees(donnees, referentiel, true);
+        done();
+      } catch (erreur) {
+        let messageEchec = `La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur : ${erreur.message}`;
+        if (erreur instanceof ErreurProprieteManquante) {
+          messageEchec = "La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur de propriété manquante";
+        }
+        done(messageEchec);
+      }
     });
 
     it("exige que le nom de l'entité publique soit renseigné", (done) => {
@@ -161,40 +192,24 @@ describe('Un utilisateur', () => {
       verifiePresencePropriete('departementEntitePublique', "département de l'entité publique", done);
     });
 
-    it("exige que l'information de RSSI soit renseigné", (done) => {
+    it("exige que l'information de RSSI soit renseignée", (done) => {
       verifiePresencePropriete('rssi', 'RSSI', done);
     });
 
-    it("exige que l'information de délégué à la protection des données soit renseigné", (done) => {
+    it("exige que l'information de délégué à la protection des données soit renseignée", (done) => {
       verifiePresencePropriete('delegueProtectionDonnees', 'délégué à la protection des données', done);
     });
 
     it('exige un département présent dans le référentiel', (done) => {
       donnees.departementEntitePublique = 'codeDepartementInconnu';
       try {
-        Utilisateur.valideCreationNouvelUtilisateur(donnees, referentiel);
-        done("La validation de la création d'un nouvel utilisateur avec un département hors référentiel aurait du lever une erreur");
+        Utilisateur.valideDonnees(donnees, referentiel);
+        done("La validation des données d'un utilisateur avec un département hors référentiel aurait du lever une erreur");
       } catch (error) {
         expect(error).to.be.a(ErreurDepartementInconnu);
         expect(error.message).to.equal("Le département identifié par \"codeDepartementInconnu\" n'est pas répertorié");
         done();
       }
     });
-  });
-
-  it('connaît la liste des noms de ses propriétés de base', () => {
-    const nomsProprietes = [
-      'prenom',
-      'nom',
-      'email',
-      'telephone',
-      'cguAcceptees',
-      'poste',
-      'rssi',
-      'delegueProtectionDonnees',
-      'nomEntitePublique',
-      'departementEntitePublique',
-    ];
-    expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
   });
 });

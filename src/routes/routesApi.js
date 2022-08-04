@@ -98,7 +98,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
 
       new Promise((resolve, reject) => {
         try {
-          Utilisateur.valideCreationNouvelUtilisateur(donnees, referentiel);
+          Utilisateur.valideDonnees(donnees, referentiel);
           resolve();
         } catch (erreur) {
           reject(new ErreurModele("La création d'un nouvel utilisateur a échoué car les paramètres sont invalides"));
@@ -140,7 +140,14 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       const cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       const { motDePasse } = requete.body;
 
-      depotDonnees.utilisateur(idUtilisateur)
+      new Promise((resolve, reject) => {
+        try {
+          Utilisateur.valideDonnees(donnees, referentiel, true);
+          resolve();
+        } catch (erreur) {
+          reject(new ErreurModele("La mise à jour de l'utilisateur a échoué car les paramètres sont invalides"));
+        }
+      }).then(() => depotDonnees.utilisateur(idUtilisateur))
         .then((utilisateur) => {
           const metsAJourMotDePasseSiNecessaire = () => {
             if (typeof motDePasse !== 'string' || !motDePasse) return Promise.resolve(utilisateur);
@@ -161,6 +168,11 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
               })
               .catch(suite);
           }
+        })
+        .catch((e) => {
+          if (e instanceof ErreurModele) {
+            reponse.status(422).send(e.message);
+          } else suite(e);
         });
     });
 

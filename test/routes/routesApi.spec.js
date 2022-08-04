@@ -397,6 +397,15 @@ describe('Le serveur MSS des routes /api/*', () => {
       );
     });
 
+    it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", (done) => {
+      donneesRequete.prenom = '';
+
+      testeur.verifieRequeteGenereErreurHTTP(
+        422, "La mise à jour de l'utilisateur a échoué car les paramètres sont invalides",
+        { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
+      );
+    });
+
     describe("lorsque l'utilisateur a déjà accepté les CGU", () => {
       it("met à jour le mot de passe de l'utilisateur", (done) => {
         let motDePasseMisAJour = false;
