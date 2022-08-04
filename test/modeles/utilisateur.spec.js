@@ -181,4 +181,20 @@ describe('Un utilisateur', () => {
       }
     });
   });
+
+  it('connaît la liste des noms de ses propriétés de base', () => {
+    const nomsProprietes = [
+      'prenom',
+      'nom',
+      'email',
+      'telephone',
+      'cguAcceptees',
+      'poste',
+      'rssi',
+      'delegueProtectionDonnees',
+      'nomEntitePublique',
+      'departementEntitePublique',
+    ];
+    expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
+  });
 });

@@ -56,6 +56,21 @@ class Utilisateur extends Base {
     }
   }
 
+  static nomsProprietesBase() {
+    return [
+      'prenom',
+      'nom',
+      'email',
+      'telephone',
+      'cguAcceptees',
+      'poste',
+      'rssi',
+      'delegueProtectionDonnees',
+      'nomEntitePublique',
+      'departementEntitePublique',
+    ];
+  }
+
   accepteCGU() {
     return !!this.cguAcceptees;
   }
