@@ -65,13 +65,6 @@ $(() => {
   indexMaxRisquesSpecifiques = peupleRisquesSpecifiques('#risques-specifiques', '#donnees-risques-specifiques');
   brancheAjoutRisqueSpecifique('.nouvel-item', '#risques-specifiques');
 
-  $('.carte .details').hide();
-  $('.carte .moins-details').hide();
-  $('.carte .plus-details, .carte .moins-details').on('click', () => {
-    $('.carte .details').toggle();
-    $('.carte .plus-details, .carte .moins-details').toggle();
-  });
-
   const $bouton = $('.bouton[idHomologation]');
   const identifiantHomologation = $bouton.attr('idHomologation');
 
