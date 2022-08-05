@@ -4,7 +4,7 @@ const echeance = (duree) => `Dans ${duree}`;
 const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)} après signature de la présente homologation`;
 
 module.exports = {
-  cyberscore: {
+  indiceSecurite: {
     coefficientIndispensables: 0.6,
     coefficientRecommandees: 0.4,
     noteMax: 5,

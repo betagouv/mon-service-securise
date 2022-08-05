@@ -8,7 +8,7 @@ const elles = it;
 
 describe('Les statistiques sur les mesures de sécurité', () => {
   const referentiel = Referentiel.creeReferentiel({
-    cyberscore: { coefficientIndispensables: 0.8, coefficientRecommandees: 0.2, noteMax: 5 },
+    indiceSecurite: { coefficientIndispensables: 0.8, coefficientRecommandees: 0.2, noteMax: 5 },
     categoriesMesures: { une: 'catégorie 1', deux: 'catégorie 2', trois: 'catégorie 3' },
   });
 
@@ -99,8 +99,8 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       },
     }, referentiel);
 
-    expect(referentiel.coefficientCyberscoreMesuresIndispensables()).to.equal(0.8);
-    expect(referentiel.coefficientCyberscoreMesuresRecommandees()).to.equal(0.2);
+    expect(referentiel.coefficientIndiceSecuriteMesuresIndispensables()).to.equal(0.8);
+    expect(referentiel.coefficientIndiceSecuriteMesuresRecommandees()).to.equal(0.2);
     verifieEgaliteNumerique(
       (0.8 + 0.2 * (1 / 5)) * (2 / 4),
       stats.score('une'),
@@ -141,7 +141,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     });
   });
 
-  elles('calculent le cyberscore total', () => {
+  elles("calculent l'indice de sécurité total", () => {
     const stats = new StatistiquesMesures({
       une: {
         misesEnOeuvre: 3,
@@ -161,10 +161,10 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       },
     }, referentiel);
 
-    expect(referentiel.cyberscoreMax()).to.equal(5);
+    expect(referentiel.indiceSecuriteMax()).to.equal(5);
     verifieEgaliteNumerique(
       5 * ((stats.score('une') * 13 + stats.score('deux') * 6) / (13 + 6)),
-      stats.cyberscore(),
+      stats.indiceSecurite(),
     );
   });
 });

@@ -222,10 +222,10 @@ describe('Une homologation', () => {
     });
   });
 
-  it('connaît son cyberscore', () => {
+  it('connaît son indice de sécurité', () => {
     const homologation = new Homologation({ createur: { email: 'bruno.dumans@mail.fr' } });
-    homologation.mesures.cyberscore = () => 3.7;
+    homologation.mesures.indiceSecurite = () => 3.7;
 
-    expect(homologation.cyberscore()).to.equal(3.7);
+    expect(homologation.indiceSecurite()).to.equal(3.7);
   });
 });

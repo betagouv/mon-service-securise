@@ -42,7 +42,7 @@ class StatistiquesMesures {
     return categories(this.donnees);
   }
 
-  cyberscore() {
+  indiceSecurite() {
     const nbMesures = (categorie) => {
       const { totalIndispensables, totalRecommandees } = this.donnees[categorie];
       return totalIndispensables + totalRecommandees;
@@ -61,7 +61,7 @@ class StatistiquesMesures {
       acc + nbMesures(categorie)
     ), 0);
 
-    const resultatBrut = this.referentiel.cyberscoreMax() * (totalPondere / nbTotalMesures);
+    const resultatBrut = this.referentiel.indiceSecuriteMax() * (totalPondere / nbTotalMesures);
     return arrondis(resultatBrut, StatistiquesMesures.NOMBRE_CHIFFRES_APRES_VIRGULE);
   }
 
@@ -84,8 +84,8 @@ class StatistiquesMesures {
     if (totalRecommandees === 0) return indispensablesFaites / totalIndispensables;
     if (totalIndispensables === 0) return recommandeesFaites / totalRecommandees;
 
-    const coeffIndispensables = this.referentiel.coefficientCyberscoreMesuresIndispensables();
-    const coeffRecommandees = this.referentiel.coefficientCyberscoreMesuresRecommandees();
+    const coeffIndispensables = this.referentiel.coefficientIndiceSecuriteMesuresIndispensables();
+    const coeffRecommandees = this.referentiel.coefficientIndiceSecuriteMesuresRecommandees();
 
     return (coeffIndispensables + coeffRecommandees * (recommandeesFaites / totalRecommandees))
       * (indispensablesFaites / totalIndispensables);

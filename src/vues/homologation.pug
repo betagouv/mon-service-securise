@@ -29,10 +29,10 @@ block main
           h2!= homologation.nomService()
       a.bouton(href = `/homologation/${homologation.id}/decision`) Voir le document d'homologation
 
-      - const cyberscore = homologation.cyberscore()
-      if process.env.AVEC_CYBERSCORE && cyberscore > 0
-        - const cyberscoreFormate = Intl.NumberFormat('fr').format(cyberscore);
-        h3= `Cyberscore : ${cyberscoreFormate} / ${referentiel.cyberscoreMax()}`
+      - const indiceSecurite = homologation.indiceSecurite()
+      if process.env.AVEC_INDICE_SECURITE && indiceSecurite > 0
+        - const indiceSecuriteFormate = Intl.NumberFormat('fr').format(indiceSecurite);
+        h3= `Indice de sécurité : ${indiceSecuriteFormate} / ${referentiel.indiceSecuriteMax()}`
 
     section.actions
       ul
