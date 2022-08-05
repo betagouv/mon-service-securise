@@ -57,7 +57,7 @@ class Homologation {
 
   autoriteHomologation() { return this.rolesResponsabilites.autoriteHomologation; }
 
-  cyberscore() { return this.mesures.cyberscore(); }
+  indiceSecurite() { return this.mesures.indiceSecurite(); }
 
   delegueProtectionDonnees() {
     return this.rolesResponsabilites.delegueProtectionDonnees;

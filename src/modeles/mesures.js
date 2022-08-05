@@ -16,8 +16,8 @@ class Mesures extends InformationsHomologation {
     this.identifiantsMesures = identifiantsMesures || this.referentiel.identifiantsMesures();
   }
 
-  cyberscore() {
-    return this.statistiques().cyberscore();
+  indiceSecurite() {
+    return this.statistiques().indiceSecurite();
   }
 
   nonSaisies() {
