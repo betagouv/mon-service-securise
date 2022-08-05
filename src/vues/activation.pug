@@ -7,5 +7,11 @@ block append styles
 block main
   .etroit
     h1 Activer votre compte
-    p.description Un e-mail contenant un lien d’activation vous a été envoyé pour finaliser la création de votre compte.
-    a.bouton(href = '/') Aller sur la page d'accueil
+    .description
+      p.
+        Un e-mail contenant un lien d'activation vous a été envoyé pour finaliser la création de votre compte.
+      p.
+        La réception peut prendre quelques minutes.<br>
+        Si vous n'avez pas reçu cet e-mail, contactez-nous à
+        <a href="mailto:contact@monservicesecurise.beta.gouv.fr?subject=Non%20r%C3%A9ception%20du%20lien%20d%27activation">contact@monservicesecurise.beta.gouv.fr</a>.
+    a.bouton(href = '/') Aller à la page d'accueil
