@@ -41,6 +41,9 @@ block main
             a(href = '#prestas').
               Quelles aides sont disponibles pour la réalisation d'une
               homologation de sécurité ?
+          li
+            a(href = '#indice-securite').
+              Que signifie et comment est calculé l'indice de sécurité ?
 
       section
         h2#utilite.
@@ -267,6 +270,65 @@ block main
           p.
            Il est possible de faire appel à un prestataire de Bug Bounty qui
            fera une campagne de recherche de vulnérabilité du service.
+
+      section
+        h2#indice-securite.
+          Que signifie et comment est calculé l'indice de sécurité ?
+
+        p.
+          L'indice de sécurité fournit une indication du niveau de sécurité du
+          service basée sur une évaluation de la conformité de ce dernier à un
+          socle de mesures de sécurité personnalisé.
+        p Cet indice K est calculé selon la formule suivante.
+
+        figure(title = "formule de calcul de l'indice de sécurité")!= formuleIndiceSecurite
+
+        p … avec
+        ul
+          li <i>i<sub>c</sub></i> le nombre de mesures indispensables cochées « faites » pour la catégorie
+          li <i>I<sub>c</sub></i> le nombre total de mesures indispensables proposées pour la catégorie
+          li <i>r<sub>c</sub></i> le nombre de mesures recommandées cochées « faites » pour la catégorie
+          li <i>R<sub>c</sub></i> le nombre total de mesures recommandées proposées pour la catégorie
+          li <i>n<sub>c</sub></i> le nombre total de mesures proposées pour la catégorie (indispensables et recommandées)
+          li <i>N</i> le nombre total de mesures proposées pour le service (toutes catégories confondues)
+        p.
+          Cette formule exprime les règles suivantes.
+        ul
+          li.
+            Seules les mesures de sécurité cochées « faites » sont prises en
+            compte dans le calcul de l'indice pour un service.
+          li.
+            L'indice est calculé à partir de la totalité des mesures de
+            sécurité proposées par l'ANSSI pour le service.
+          li.
+            L'indice est d'abord calculé par catégorie (gouvernance,
+            protection, défense, résilience) sur 5 points, sur la base du
+            rapport entre les mesures cochées « faites » et le nombre total de
+            mesures pour la catégorie.
+          li.
+            Les mesures marquées « indispensables » sont pondérées de manière à
+            contribuer davantage que les mesures simplement recommandées
+            (non-indispensables). Le coefficient de pondération pour les mesures
+            indispensables est de 0,6 et celui pour les mesures simplement
+            recommandées est de 0,4. Ainsi, chaque mesure indispensable vaut
+            50% de plus qu'une mesure simplement recommandée.
+          li.
+            La prise en compte des mesures recommandées cochées « faites » dans
+            le calcul de l'indice est proportionné à la mise en œuvre des
+            mesures indispensables. Ainsi, si aucune mesure indispensable n'est
+            cochée « faite » mais que toutes les mesures recommandées le sont,
+            la note sera malgré tout de 0.
+          li.
+            L'indice global est calculé en réalisant une moyenne arithmétique
+            pondérée des scores de chaque catégorie, chaque coefficient de
+            pondération étant établi à partir du nombre de mesures contenues au
+            sein de la catégorie correspondante.
+        p.
+          Cette note ne constitue pas une preuve effective de la sécurité du
+          service. MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être
+          tenus responsables d'incidents de sécurité susceptibles d'affecter le
+          service numérique, quelle que soit la note attribuée à ce dernier.
+
 
       .question
         p Vous avez une question ?

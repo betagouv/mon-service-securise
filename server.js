@@ -4,6 +4,7 @@ const MoteurRegles = require('./src/moteurRegles');
 const MSS = require('./src/mss');
 const Referentiel = require('./src/referentiel');
 const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
+const adaptateurEquations = require('./src/adaptateurs/adaptateurEquations');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = require('./src/adaptateurs/adaptateurMail');
 
@@ -23,6 +24,7 @@ const serveur = MSS.creeServeur(
   middleware,
   referentiel,
   moteurRegles,
+  adaptateurEquations,
   adaptateurMail,
 );
 

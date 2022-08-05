@@ -8,7 +8,8 @@ const routesHomologation = require('./routes/routesHomologation');
 
 require('dotenv').config();
 
-const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adaptateurMail,
+const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
+  adaptateurEquations, adaptateurMail,
   avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
 
@@ -62,7 +63,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles, adapta
   });
 
   app.get('/questionsFrequentes', (_requete, reponse) => {
-    reponse.render('questionsFrequentes');
+    adaptateurEquations.indiceSecurite()
+      .then((svg) => reponse.render('questionsFrequentes', { formuleIndiceSecurite: svg }));
   });
 
   app.get('/mentionsLegales', (_requete, reponse) => {

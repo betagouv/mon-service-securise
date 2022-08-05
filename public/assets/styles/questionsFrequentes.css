@@ -5,3 +5,7 @@
 .conseils-commentes li {
   font-weight: bold;
 }
+
+figure {
+  text-align: center;
+}

@@ -49,6 +49,9 @@ block cartes-informations
       responsables d'incidents de sécurité susceptibles d'affecter le service
       numérique, quelle que soit la note attribuée à ce dernier.
 
+    p: a(href = '/questionsFrequentes#indice-securite', target = '_blank', rel = 'noopener').nouvel-onglet En savoir plus
+
+
   - const indiceSecurite = homologation.indiceSecurite()
   if process.env.AVEC_INDICE_SECURITE && indiceSecurite > 0
     +carteInformations({ titre: 'Indice de sécurité', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceSecurite' })
