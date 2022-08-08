@@ -30,31 +30,23 @@ select {
 .avertissement {
   display: flex;
   margin-top: 2em;
+  border: 1px var(--bleu-anssi) solid;
+  border-radius: 5px;
   text-align: left;
 }
 
 .avertissement::before {
-  content: '⚠';
-  background-color: var(--bleu-mise-en-avant);
-  border-radius: 5px 0 0 5px;
-  border: 1px var(--bleu-mise-en-avant) solid;
-  border-right: 0;
-
-  padding-top: 0.9em;
-  width: 6em;
-
-  text-align: center;
-  color: #fff;
-  font-size: 1.2em;
+  content: '';
+  background-image: url(../images/icone_information_bulle.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 2.3em;
+  margin: 1em 0 0 1em;
 }
 
 .avertissement p {
-  border: 1px var(--bleu-mise-en-avant) solid;
-  border-left: 0;
-  border-radius: 0 5px 5px 0;
-
   margin: 0;
-  padding: 1em;
+  padding: 1em 1em 1em 0.8em;
 }
 
 .mention {
