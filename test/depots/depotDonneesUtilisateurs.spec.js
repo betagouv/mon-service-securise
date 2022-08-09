@@ -10,9 +10,19 @@ const {
 const Utilisateur = require('../../src/modeles/utilisateur');
 
 describe('Le dépôt de données des utilisateurs', () => {
+  let adaptateurJWT;
+  let adaptateurChiffrement;
+
+  beforeEach(() => {
+    adaptateurJWT = 'Un adaptateur';
+    adaptateurChiffrement = {
+      chiffre: () => Promise.resolve('chaîne chiffrée'),
+      compare: () => Promise.resolve(true),
+    };
+  });
+
   it("retourne l'utilisateur authentifié", (done) => {
-    const adaptateurJWT = {};
-    const adaptateurChiffrement = {
+    adaptateurChiffrement = {
       chiffre: (chaine) => {
         expect(chaine).to.equal('mdp_12345');
         return Promise.resolve('12345-chiffré');
@@ -46,13 +56,24 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   it("met à jour le mot de passe d'un utilisateur", (done) => {
-    const adaptateurJWT = {};
+    adaptateurChiffrement.chiffre = (chaineEnClair) => Promise.resolve(
+      chaineEnClair === 'mdp_12345' ? 'mdp_12345-chiffré' : 'un_autre_mdp-chiffré'
+    );
+    adaptateurChiffrement.compare = (chaineEnClair, chaineChiffree) => (
+      adaptateurChiffrement.chiffre(chaineEnClair)
+        .then((resultatChiffre) => resultatChiffre === chaineChiffree)
+    );
+
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{
-        id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
+        id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_origine-chiffré',
       }],
     });
-    const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurJWT, adaptateurPersistance });
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance,
+    });
 
     depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
       .then((utilisateur) => expect(typeof utilisateur).to.be('undefined'))
@@ -76,7 +97,10 @@ describe('Le dépôt de données des utilisateurs', () => {
         utilisateurs: [{ id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
       });
 
-      depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+      depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurPersistance,
+      });
     });
 
     it('met les informations à jour', (done) => {
@@ -110,7 +134,10 @@ describe('Le dépôt de données des utilisateurs', () => {
         id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
       }],
     });
-    const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurPersistance,
+    });
 
     depot.utilisateur('123')
       .then((utilisateur) => {
@@ -130,7 +157,11 @@ describe('Le dépôt de données des utilisateurs', () => {
         id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
       }],
     });
-    const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance,
+    });
 
     depot.utilisateurExiste('123')
       .then((utilisateurExiste) => expect(utilisateurExiste).to.be(true))
@@ -141,13 +172,16 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   it("retourne l'utilisateur associé à un identifiant donné", (done) => {
-    const adaptateurJWT = 'Un adaptateur';
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{
         id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX',
       }],
     });
-    const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurJWT, adaptateurPersistance });
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance,
+    });
 
     depot.utilisateur('123')
       .then((utilisateur) => {
@@ -160,14 +194,17 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   it("retourne l'utilisateur avec sa date de création", (done) => {
-    const adaptateurJWT = 'Un adaptateur';
     const date = new Date(2000, 1, 1, 12, 0);
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{
         id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX', dateCreation: date,
       }],
     });
-    const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurJWT, adaptateurPersistance });
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance,
+    });
 
     depot.utilisateur('123')
       .then((utilisateur) => {
@@ -180,13 +217,16 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   it("retourne l'utilisateur associé à un identifiant reset de mot de passe", (done) => {
-    const adaptateurJWT = 'Un adaptateur';
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{
         id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', idResetMotDePasse: '999',
       }],
     });
-    const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurJWT, adaptateurPersistance });
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance,
+    });
 
     depot.utilisateurAFinaliser('999')
       .then((utilisateur) => {
@@ -199,7 +239,6 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   describe("sur réception d'une demande d'enregistrement d'un nouvel utilisateur", () => {
-    const adaptateurJWT = 'Un adaptateur';
     let depot;
 
     describe("quand l'utilisateur n'existe pas déjà", () => {
@@ -215,7 +254,10 @@ describe('Le dépôt de données des utilisateurs', () => {
           adaptateurHorloge,
         );
         depot = DepotDonneesUtilisateurs.creeDepot({
-          adaptateurJWT, adaptateurPersistance, adaptateurUUID,
+          adaptateurChiffrement,
+          adaptateurJWT,
+          adaptateurPersistance,
+          adaptateurUUID,
         });
       });
 
@@ -276,7 +318,10 @@ describe('Le dépôt de données des utilisateurs', () => {
         const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         });
-        depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+        depot = DepotDonneesUtilisateurs.creeDepot({
+          adaptateurChiffrement,
+          adaptateurPersistance,
+        });
 
         depot.nouvelUtilisateur({ email: 'jean.dupont@mail.fr' })
           .then(() => done('Une exception aurait dû être levée.'))
@@ -290,7 +335,10 @@ describe('Le dépôt de données des utilisateurs', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr', idResetMotDePasse: '999' }],
       });
-      depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+      depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurPersistance,
+      });
 
       depot.utilisateur('123')
         .then((utilisateur) => {
@@ -310,7 +358,11 @@ describe('Le dépôt de données des utilisateurs', () => {
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
       });
       const adaptateurUUID = { genereUUID: () => '11111111-1111-1111-1111-111111111111' };
-      const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance, adaptateurUUID });
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurPersistance,
+        adaptateurUUID,
+      });
 
       depot.utilisateur('123')
         .then((u) => expect(u.idResetMotDePasse).to.be(undefined))
@@ -324,7 +376,10 @@ describe('Le dépôt de données des utilisateurs', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [],
       });
-      const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurPersistance,
+      });
 
       depot.reinitialiseMotDePasse('jean.dupont@mail.fr')
         .then((u) => expect(u).to.be(undefined))
@@ -342,7 +397,9 @@ describe('Le dépôt de données des utilisateurs', () => {
       });
       const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance, depotHomologations,
+        adaptateurChiffrement,
+        adaptateurPersistance,
+        depotHomologations,
       });
 
       depot.supprimeUtilisateur('999')
@@ -358,7 +415,9 @@ describe('Le dépôt de données des utilisateurs', () => {
       });
       const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance, depotHomologations,
+        adaptateurChiffrement,
+        adaptateurPersistance,
+        depotHomologations,
       });
 
       depot.supprimeUtilisateur('999')
