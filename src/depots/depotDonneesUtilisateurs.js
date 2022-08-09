@@ -1,5 +1,4 @@
-const bcrypt = require('bcrypt');
-
+const adaptateurChiffrementParDefaut = require('../adaptateurs/adaptateurChiffrement');
 const adaptateurJWTParDefaut = require('../adaptateurs/adaptateurJWT');
 const adaptateurUUIDParDefaut = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
@@ -11,6 +10,7 @@ const Utilisateur = require('../modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
   const {
+    adaptateurChiffrement = adaptateurChiffrementParDefaut,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = adaptateurUUIDParDefaut,
@@ -34,7 +34,7 @@ const creeDepot = (config = {}) => {
 
         const id = adaptateurUUID.genereUUID();
         donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
-        return bcrypt.hash(adaptateurUUID.genereUUID(), 10)
+        return adaptateurChiffrement.chiffre(adaptateurUUID.genereUUID())
           .then((hash) => {
             donneesUtilisateur.motDePasse = hash;
 
@@ -55,7 +55,7 @@ const creeDepot = (config = {}) => {
 
         if (!motDePasseStocke) return new Promise((resolve) => resolve(echecAuthentification));
 
-        return bcrypt.compare(motDePasse, motDePasseStocke)
+        return adaptateurChiffrement.compare(motDePasse, motDePasseStocke)
           .then((authentificationReussie) => (authentificationReussie
             ? new Utilisateur(u, adaptateurJWT)
             : echecAuthentification
@@ -68,7 +68,7 @@ const creeDepot = (config = {}) => {
   const { utilisateurAvecEmail } = adaptateurPersistance;
 
   const metsAJourMotDePasse = (idUtilisateur, motDePasse) => (
-    bcrypt.hash(motDePasse, 10)
+    adaptateurChiffrement.chiffre(motDePasse)
       .then((hash) => adaptateurPersistance.metsAJourUtilisateur(
         idUtilisateur, { motDePasse: hash }
       ))

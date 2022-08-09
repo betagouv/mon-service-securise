@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const expect = require('expect.js');
 
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
@@ -13,18 +12,30 @@ const Utilisateur = require('../../src/modeles/utilisateur');
 describe('Le dépôt de données des utilisateurs', () => {
   it("retourne l'utilisateur authentifié", (done) => {
     const adaptateurJWT = {};
+    const adaptateurChiffrement = {
+      chiffre: (chaine) => {
+        expect(chaine).to.equal('mdp_12345');
+        return Promise.resolve('12345-chiffré');
+      },
+      compare: (chaine1, chaine2) => {
+        expect(chaine1).to.equal('mdp_12345');
+        expect(chaine2).to.equal('12345-chiffré');
+        return Promise.resolve(true);
+      },
+    };
 
-    bcrypt.hash('mdp_12345', 10)
-      .then((hash) => {
-        const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{
-            id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: hash,
-          }],
-        });
-        const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurJWT, adaptateurPersistance });
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      utilisateurs: [{
+        id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: '12345-chiffré',
+      }],
+    });
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance,
+    });
 
-        return depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345');
-      })
+    depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
       .then((utilisateur) => {
         expect(utilisateur).to.be.an(Utilisateur);
         expect(utilisateur.id).to.equal('123');
