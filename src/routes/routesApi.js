@@ -5,6 +5,7 @@ const {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
+  ErreurCGUNonAcceptees,
   ErreurModele,
 } = require('../erreurs');
 const routesApiHomologation = require('./routesApiHomologation');
@@ -64,6 +65,15 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
     departementEntitePublique: corps.departementEntitePublique,
   });
 
+  const messageErreurDonneesUtilisateur = (donneesRequete, utilisateurExistant = false) => {
+    try {
+      Utilisateur.valideDonnees(donneesRequete, referentiel, utilisateurExistant);
+      return { donneesInvalides: false };
+    } catch (erreur) {
+      return { donneesInvalides: true, messageErreur: erreur.message };
+    }
+  };
+
   const routes = express.Router();
 
   routes.get('/homologations', middleware.verificationAcceptationCGU, (requete, reponse) => {
@@ -96,23 +106,21 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       donnees.email = requete.body.email?.toLowerCase();
 
-      new Promise((resolve, reject) => {
-        try {
-          Utilisateur.valideDonnees(donnees, referentiel);
-          resolve();
-        } catch (erreur) {
-          reject(new ErreurModele("La création d'un nouvel utilisateur a échoué car les paramètres sont invalides"));
-        }
-      }).then(() => depotDonnees.nouvelUtilisateur(donnees))
-        .then(envoieMessageFinalisationInscription)
-        .then((u) => reponse.json({ idUtilisateur: u.id }))
-        .catch((e) => {
-          if (e instanceof EchecEnvoiMessage) {
-            reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
-          } else if (e instanceof ErreurModele) {
-            reponse.status(422).send(e.message);
-          } else suite(e);
-        });
+      const { donneesInvalides, messageErreur } = messageErreurDonneesUtilisateur(donnees);
+      if (donneesInvalides) {
+        reponse.status(422).send(`La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`);
+      } else {
+        depotDonnees.nouvelUtilisateur(donnees)
+          .then(envoieMessageFinalisationInscription)
+          .then((u) => reponse.json({ idUtilisateur: u.id }))
+          .catch((e) => {
+            if (e instanceof EchecEnvoiMessage) {
+              reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
+            } else if (e instanceof ErreurModele) {
+              reponse.status(422).send(e.message);
+            } else suite(e);
+          });
+      }
     });
 
   routes.post('/reinitialisationMotDePasse', (requete, reponse, suite) => {
@@ -140,40 +148,40 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       const cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       const { motDePasse } = requete.body;
 
-      new Promise((resolve, reject) => {
-        try {
-          Utilisateur.valideDonnees(donnees, referentiel, true);
-          resolve();
-        } catch (erreur) {
-          reject(new ErreurModele("La mise à jour de l'utilisateur a échoué car les paramètres sont invalides"));
-        }
-      }).then(() => depotDonnees.utilisateur(idUtilisateur))
-        .then((utilisateur) => {
-          const metsAJourMotDePasseSiNecessaire = () => {
-            if (typeof motDePasse !== 'string' || !motDePasse) return Promise.resolve(utilisateur);
-            return depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
-          };
-
-          if (!utilisateur.accepteCGU() && !cguAcceptees) {
-            reponse.status(422).send('CGU non acceptées');
-          } else {
-            metsAJourMotDePasseSiNecessaire()
-              .then((u) => depotDonnees.metsAJourUtilisateur(u.id, donnees))
-              .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
-              .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
-              .then((u) => {
-                const token = u.genereToken();
-                requete.session.token = token;
-                reponse.json({ idUtilisateur });
-              })
-              .catch(suite);
-          }
-        })
-        .catch((e) => {
-          if (e instanceof ErreurModele) {
-            reponse.status(422).send(e.message);
-          } else suite(e);
-        });
+      const { donneesInvalides, messageErreur } = messageErreurDonneesUtilisateur(donnees, true);
+      if (donneesInvalides) {
+        reponse.status(422).send(`La mise à jour de l'utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`);
+      } else {
+        const motDePasseValide = (valeur) => (typeof valeur === 'string' && valeur);
+        depotDonnees.utilisateur(idUtilisateur)
+          .then((utilisateur) => {
+            if (utilisateur.accepteCGU() || cguAcceptees) {
+              return utilisateur;
+            }
+            throw new ErreurCGUNonAcceptees();
+          })
+          .then((utilisateur) => {
+            if (motDePasseValide(motDePasse)) {
+              return depotDonnees.metsAJourMotDePasse(utilisateur.id, motDePasse);
+            }
+            return utilisateur;
+          })
+          .then((utilisateur) => depotDonnees.metsAJourUtilisateur(utilisateur.id, donnees))
+          .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
+          .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
+          .then((utilisateur) => {
+            const token = utilisateur.genereToken();
+            requete.session.token = token;
+            reponse.json({ idUtilisateur: utilisateur.id });
+          })
+          .catch((erreur) => {
+            if (erreur instanceof ErreurCGUNonAcceptees) {
+              reponse.status(422).send('CGU non acceptées');
+            } else {
+              suite(erreur);
+            }
+          });
+      }
     });
 
   routes.get('/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {

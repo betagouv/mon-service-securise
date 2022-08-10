@@ -177,7 +177,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       donneesRequete.prenom = '';
 
       testeur.verifieRequeteGenereErreurHTTP(
-        422, "La création d'un nouvel utilisateur a échoué car les paramètres sont invalides",
+        422, "La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété \"prenom\" est requise",
         { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
       );
     });
@@ -401,7 +401,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       donneesRequete.prenom = '';
 
       testeur.verifieRequeteGenereErreurHTTP(
-        422, "La mise à jour de l'utilisateur a échoué car les paramètres sont invalides",
+        422, "La mise à jour de l'utilisateur a échoué car les paramètres sont invalides. La propriété \"prenom\" est requise",
         { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
       );
     });
