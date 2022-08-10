@@ -10,6 +10,7 @@ class ErreurDepartementInconnu extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
+class ErreurCGUNonAcceptees extends Error {}
 class ErreurHomologationInexistante extends ErreurModele {}
 class ErreurIdentifiantActionSaisieInvalide extends ErreurModele {}
 class ErreurIdentifiantActionSaisieManquant extends ErreurModele {}
@@ -39,6 +40,7 @@ module.exports = {
   ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
   ErreurEmailManquant,
+  ErreurCGUNonAcceptees,
   ErreurHomologationInexistante,
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,
