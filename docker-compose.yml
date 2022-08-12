@@ -8,6 +8,7 @@ x-app:
     - .env
   volumes:
     - .:/usr/src/app
+    - node_modules:/usr/src/app/node_modules/
 
 services:
   db:
@@ -39,3 +40,6 @@ services:
 
 networks:
   postgres:
+
+volumes:
+  node_modules:
