@@ -113,12 +113,12 @@ input[type="checkbox"], input[type="radio"] {
 
 input[type="checkbox"] {
   border-radius: 0.15em;
-  border: 0.15em solid var(--bleu-mise-en-avant);
+  border: 1px solid var(--gris-fonce);
 }
 
 input[type="radio"] {
   border: 0;
-  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %230f7ac7; stroke-width: 0.50em" /></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %232f3a43; stroke-width: 0.25em" /></svg>');
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -134,6 +134,12 @@ input[type="radio"]:focus {
 
 input[type="checkbox"]:checked {
   background-color: var(--bleu-mise-en-avant);
+
+  border-color: var(--bleu-mise-en-avant);
+}
+
+input[type="radio"]:checked {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %230f7ac7; stroke-width: 0.50em" /></svg>');
 }
 
 input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
