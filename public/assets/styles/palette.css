@@ -6,8 +6,9 @@
   --bleu-mise-en-avant-20-pc: #0f7ac730;
   --rose-anssi: #ff6584;
   --rose-mise-en-avant: #f15172;
+  --gris-fonce: #2f3a43;
 
-  --texte-fonce: #2f3a43;
+  --texte-fonce: var(--gris-fonce);
   --texte-moyen: #929292;
   --texte-clair: #abb6bf;
 
