@@ -1,5 +1,7 @@
 const expect = require('expect.js');
 
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
+
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
@@ -15,10 +17,7 @@ describe('Le dépôt de données des utilisateurs', () => {
 
   beforeEach(() => {
     adaptateurJWT = 'Un adaptateur';
-    adaptateurChiffrement = {
-      chiffre: () => Promise.resolve('chaîne chiffrée'),
-      compare: () => Promise.resolve(true),
-    };
+    adaptateurChiffrement = fauxAdaptateurChiffrement;
   });
 
   it("retourne l'utilisateur authentifié", (done) => {
@@ -56,14 +55,6 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   it("met à jour le mot de passe d'un utilisateur", (done) => {
-    adaptateurChiffrement.chiffre = (chaineEnClair) => Promise.resolve(
-      chaineEnClair === 'mdp_12345' ? 'mdp_12345-chiffré' : 'un_autre_mdp-chiffré'
-    );
-    adaptateurChiffrement.compare = (chaineEnClair, chaineChiffree) => (
-      adaptateurChiffrement.chiffre(chaineEnClair)
-        .then((resultatChiffre) => resultatChiffre === chaineChiffree)
-    );
-
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{
         id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'mdp_origine-chiffré',
