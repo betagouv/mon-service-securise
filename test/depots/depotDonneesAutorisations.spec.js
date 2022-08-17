@@ -1,7 +1,8 @@
 const expect = require('expect.js');
 
+const { depotVide } = require('./depotVide');
+
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const DepotDonnees = require('../../src/depotDonnees');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
@@ -118,7 +119,7 @@ describe('Le dépôt de données des autorisations', () => {
     });
 
     it("retourne `undefined` si l'autorisation est inexistante", (done) => {
-      DepotDonnees.creeDepotVide()
+      depotVide()
         .then((depot) => depot.autorisation('123'))
         .then((autorisation) => expect(autorisation).to.be(undefined))
         .then(() => done())
