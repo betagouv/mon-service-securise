@@ -103,12 +103,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-const creeDepotVide = () => {
-  const adaptateurPersistance = fabriqueAdaptateurPersistance();
-  return adaptateurPersistance.supprimeUtilisateurs()
-    .then(() => adaptateurPersistance.supprimeHomologations())
-    .then(() => adaptateurPersistance.supprimeAutorisations())
-    .then(() => creeDepot({ adaptateurPersistance }));
-};
-
-module.exports = { creeDepot, creeDepotVide };
+module.exports = { creeDepot };

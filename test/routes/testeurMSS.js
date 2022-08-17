@@ -1,7 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
-const DepotDonnees = require('../../src/depotDonnees');
+const { depotVide } = require('../depots/depotVide');
 const MoteurRegles = require('../../src/moteurRegles');
 const MSS = require('../../src/mss');
 const Referentiel = require('../../src/referentiel');
@@ -37,7 +37,7 @@ const testeurMss = () => {
     middleware.reinitialise();
     referentiel = Referentiel.creeReferentielVide();
     moteurRegles = new MoteurRegles(referentiel);
-    DepotDonnees.creeDepotVide()
+    depotVide()
       .then((depot) => {
         depotDonnees = depot;
         serveur = MSS.creeServeur(
