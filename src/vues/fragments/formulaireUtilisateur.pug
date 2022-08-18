@@ -10,6 +10,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
 
   section
     block champs-formulaire
+      - const patternNomPrenom = "^[a-zàâäéèêëïîôöùûüÿçæœA-ZÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇÆŒ]+([ .'\\-]?[a-zàâäéèêëïîôöùûüÿçæœA-ZÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇÆŒ]+)*$"
       if emailLectureSeule
         p.affichage-simple
           strong E-mail&nbsp
@@ -24,6 +25,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             value = donnees.prenom,
             placeholder = 'ex : Jean',
             required,
+            pattern = patternNomPrenom,
             title = ''
           )
           .message-erreur Le prénom est obligatoire. Veuillez le renseigner.
@@ -37,6 +39,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             value = donnees.nom,
             placeholder = 'ex : Dupont',
             required,
+            pattern = patternNomPrenom,
             title = ''
           )
           .message-erreur Le nom est obligatoire. Veuillez le renseigner.
@@ -62,8 +65,11 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           name = 'telephone',
           type = 'tel',
           value = donnees.telephone,
-          placeholder = 'ex : 0XXXXXXXXX'
+          placeholder = 'ex : 0XXXXXXXXX',
+          pattern = '^0\\d{9}$',
+          title = ''
         )
+        .message-erreur Le numéro de téléphone doit respecter le format 0000000000.
 
       .requis(data-nom = 'rssi')
         +inputOuiNon({
