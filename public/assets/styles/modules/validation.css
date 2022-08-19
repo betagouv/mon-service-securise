@@ -1,0 +1,53 @@
+.mention {
+  align-self: end;
+  margin-top: 2em;
+  margin-bottom: -1em;
+}
+
+.mention::before {
+  margin-right: .4em;
+}
+
+.mention::before, .requis::before {
+  content: "*";
+  color: var(--rose-anssi);
+}
+
+.requis::before {
+  position: absolute;
+  left: -1em;
+}
+
+.requis {
+  position: relative;
+}
+
+.message-erreur {
+  display: none;
+
+  margin-top: 1em;
+
+  color: var(--rose-anssi);
+  font-weight: normal;
+  font-size: 0.85em;
+}
+
+.erreur .message-erreur {
+  display: block;
+}
+
+.erreur input, .erreur select, .erreur input[type="checkbox"] {
+  border-color: var(--rose-anssi);
+}
+
+.erreur input[type="radio"] {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %23ff6584; stroke-width: 0.50em" /></svg>')
+}
+
+.requis[data-nom = 'cguAcceptees'] {
+  margin-bottom: 2em;
+}
+
+.champ-saisi {
+  border-color: var(--bleu-mise-en-avant);
+}
