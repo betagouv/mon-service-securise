@@ -1,5 +1,5 @@
 const obtentionValeur = (obtentionDonnees, element) => obtentionDonnees[$(element).data('nom')]();
-const champNonRempli = (valeur) => valeur === '' || valeur === undefined;
+const champNonRempli = (valeur) => valeur === '' || typeof valeur === 'undefined';
 const champRempli = (valeur) => !champNonRempli(valeur);
 
 const controleChampsRequis = (obtentionDonnees) => {
