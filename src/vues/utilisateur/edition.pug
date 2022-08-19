@@ -5,7 +5,7 @@ include ../fragments/utilisateur/nouveauMotDePasse
 include ../fragments/utilisateur/questionCgu
 
 block main
-  form.etroit.utilisateur#edition
+  form.etroit.utilisateur#edition(novalidate)
     h1 Profil
 
     +formulaireUtilisateur({
