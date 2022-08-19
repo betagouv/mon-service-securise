@@ -1,6 +1,6 @@
-import { controleChampsRequis, tousChampsRequisRemplis } from './champsRequis.mjs';
+import brancheValidation from './brancheValidation.js';
 
-const brancheSoumissionFormulaireUtilisateur = ($formulaire, action) => {
+const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => {
   const reponseOuiNon = (nom) => {
     const valeur = $(`input[name="${nom}"]:checked`).val();
     switch (valeur) {
@@ -26,22 +26,20 @@ const brancheSoumissionFormulaireUtilisateur = ($formulaire, action) => {
     cguAcceptees: () => reponseAcceptee('cguAcceptees'),
   };
 
-  $formulaire.on('submit', (evenement) => {
+  brancheValidation(selecteurFormulaire);
+  $(selecteurFormulaire).on('submit', (evenement) => {
     evenement.preventDefault();
 
-    controleChampsRequis(obtentionDonnees);
-    if (tousChampsRequisRemplis(obtentionDonnees)) {
-      const donnees = Object
-        .keys(obtentionDonnees)
-        .reduce((acc, clef) => {
-          const valeur = obtentionDonnees[clef]();
-          if (typeof valeur === 'undefined' || valeur === '') {
-            return acc;
-          }
-          return { ...acc, [clef]: obtentionDonnees[clef]() };
-        }, {});
-      action(donnees);
-    }
+    const donnees = Object
+      .keys(obtentionDonnees)
+      .reduce((acc, clef) => {
+        const valeur = obtentionDonnees[clef]();
+        if (typeof valeur === 'undefined' || valeur === '') {
+          return acc;
+        }
+        return { ...acc, [clef]: obtentionDonnees[clef]() };
+      }, {});
+    action(donnees);
   });
 };
 
