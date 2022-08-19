@@ -22,7 +22,9 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             id = 'prenom',
             name = 'prenom',
             value = donnees.prenom,
-            placeholder = 'ex : Jean'
+            placeholder = 'ex : Jean',
+            required,
+            title = ''
           )
           .message-erreur Le prénom est obligatoire. Veuillez le renseigner.
 
@@ -33,7 +35,9 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             id = 'nom',
             name = 'nom',
             value = donnees.nom,
-            placeholder = 'ex : Dupont'
+            placeholder = 'ex : Dupont',
+            required,
+            title = ''
           )
           .message-erreur Le nom est obligatoire. Veuillez le renseigner.
 
@@ -45,7 +49,9 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
               id = 'email',
               name = 'email',
               type = 'email',
-              placeholder = 'ex : jean.dupont@domaine.fr'
+              placeholder = 'ex : jean.dupont@domaine.fr',
+              required,
+              title = ''
             )
             .message-erreur L'e-mail est obligatoire. Veuillez respecter le format jean.dupont@domaine.fr.
 
@@ -57,7 +63,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           type = 'tel',
           value = donnees.telephone,
           placeholder = 'ex : 0XXXXXXXXX'
-      )
+        )
 
       .requis(data-nom = 'rssi')
         +inputOuiNon({
@@ -65,6 +71,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           titre: "Êtes-vous Responsable de la sécurité des systèmes d'information ?",
           objetDonnees: donnees,
           messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+          requis: true,
         })
 
       .requis(data-nom = 'delegueProtectionDonnees')
@@ -73,6 +80,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           titre: 'Exercez-vous la fonction de Délégué/e à la protection des données ?',
           objetDonnees: donnees,
           messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+          requis: true,
         })
 
       label Poste
@@ -92,7 +100,9 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             name = 'nomEntitePublique',
             type = 'text',
             value = donnees.nomEntitePublique,
-            placeholder = "ex : Agglomération de Mansart"
+            placeholder = "ex : Agglomération de Mansart",
+            required,
+            title = ''
           )
           .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
 
@@ -100,7 +110,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
         label Département où est localisée cette entité
           br
           .departements
-            select(id = 'departementEntitePublique', name = 'departementEntitePublique')
+            select(id = 'departementEntitePublique', name = 'departementEntitePublique', required, title = '')
               option(value = '') - Sélectionnez un département -
               each departement in departements
                 option(value = departement.code, selected = departement.code === donnees.departementEntitePublique).

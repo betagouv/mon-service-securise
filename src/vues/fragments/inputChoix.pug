@@ -18,7 +18,8 @@ mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, message
             ? valeursSelectionnees.includes(identifiant)
             : identifiant === valeursSelectionnees
         ),
-        required = requis
+        required = requis,
+        title = ''
       )
       label(for = identifiantInput)= description
       br

@@ -1,7 +1,7 @@
 mixin questionCgu
   .requis(data-nom = 'cguAcceptees')
     .case-a-cocher
-      input(id = 'cguAcceptees', name = 'cguAcceptees', type = 'checkbox')
+      input(id = 'cguAcceptees', name = 'cguAcceptees', type = 'checkbox', required, title = '')
       label(for = 'cguAcceptees').
         J'accepte les <a href="/cgu">conditions générales d'utilisation de MonServiceSécurisé</a>
       .message.message-erreur Ce champ est obligatoire. Veuillez le cocher.
