@@ -1,4 +1,4 @@
-import brancheValidation from './brancheValidation.js';
+import { brancheValidation, declencheValidation } from './validation.js';
 
 const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => {
   const reponseOuiNon = (nom) => {
@@ -27,6 +27,9 @@ const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => 
   };
 
   brancheValidation(selecteurFormulaire);
+  $(`${selecteurFormulaire} button[type = 'submit']`).on('click', () => {
+    declencheValidation(selecteurFormulaire);
+  });
   $(selecteurFormulaire).on('submit', (evenement) => {
     evenement.preventDefault();
 
