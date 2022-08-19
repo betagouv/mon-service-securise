@@ -1,4 +1,4 @@
-mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, messageErreur, decoration })
+mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, messageErreur, decoration, requis = false })
   - let valeursSelectionnees = objetDonnees[nom]
   - if (typeof valeursSelectionnees === 'boolean') valeursSelectionnees = (valeursSelectionnees ? 'oui' : 'non')
   fieldset(id = nom)
@@ -17,7 +17,8 @@ mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, message
           Array.isArray(valeursSelectionnees)
             ? valeursSelectionnees.includes(identifiant)
             : identifiant === valeursSelectionnees
-        )
+        ),
+        required = requis
       )
       label(for = identifiantInput)= description
       br
@@ -26,12 +27,13 @@ mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, message
         br
     .message-erreur=messageErreur
 
-mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur })
+mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur, requis })
   +inputChoix({
     nom,
     titre,
     objetDonnees,
     messageErreur,
+    requis,
     type: 'radio',
     items: { oui: { description: 'Oui' }, non: { description: 'Non' } },
   })
