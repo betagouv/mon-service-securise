@@ -105,4 +105,4 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
               each departement in departements
                 option(value = departement.code, selected = departement.code === donnees.departementEntitePublique).
                   #{departement.code} #{departement.nom}
-          .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
+            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.

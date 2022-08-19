@@ -50,15 +50,16 @@ select {
 }
 
 .case-a-cocher {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
 
 .case-a-cocher > input[type='checkbox'] + label {
   margin-top: 0;
 }
 
-.case-a-cocher input[type='checkbox'] {
-  width: 2.35em;
+.case-a-cocher .message {
+  grid-column-end: span 2;
 }
 
 .affichage-simple {
