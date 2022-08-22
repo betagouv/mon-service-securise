@@ -29,7 +29,7 @@ const serveur = MSS.creeServeur(
 serveur.ecoute(port, () => {
   /* eslint-disable no-console */
 
-  console.log(`Mon Service Sécurisé est démarré et écoute le port ${port} !…`);
+  console.log(`MonServiceSécurisé est démarré et écoute le port ${port} !…`);
 
   /* eslint-enable no-console */
 });
