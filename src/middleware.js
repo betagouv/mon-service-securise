@@ -7,7 +7,7 @@ const middleware = (configuration = {}) => {
 
   const authentificationBasique = basicAuth({
     challenge: true,
-    realm: 'Administration Mon Service Sécurisé',
+    realm: 'Administration MonServiceSécurisé',
     users: { [login]: motDePasse },
     unauthorizedResponse: () => pug.renderFile('src/vues/accesRefuse.pug'),
   });

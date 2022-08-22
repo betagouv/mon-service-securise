@@ -134,7 +134,7 @@ describe('Le middleware MSS', () => {
 
       reponse.set = (nomHeader, valeurHeader) => {
         expect(nomHeader).to.equal('WWW-Authenticate');
-        expect(valeurHeader).to.equal('Basic realm="Administration Mon Service Sécurisé"');
+        expect(valeurHeader).to.equal('Basic realm="Administration MonServiceSécurisé"');
       };
 
       prepareVerificationReponse(reponse, 401, done);
