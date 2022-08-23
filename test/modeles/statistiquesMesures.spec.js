@@ -79,9 +79,14 @@ describe('Les statistiques sur les mesures de sécurité', () => {
   });
 
   const verifieEgaliteNumerique = (valeurAttendue, valeurCalculee) => {
-    const precision = 0.5 * Number(`1e-${StatistiquesMesures.NOMBRE_CHIFFRES_APRES_VIRGULE}`);
+    const nbDecimales = StatistiquesMesures.NOMBRE_CHIFFRES_APRES_VIRGULE;
+    const precision = 0.5 * Number(`1e-${nbDecimales}`);
+
     try {
-      expect(Math.abs(valeurAttendue - valeurCalculee)).to.be.lessThan(precision);
+      const difference = Number(
+        parseFloat(Math.abs(valeurAttendue - valeurCalculee)).toPrecision(nbDecimales + 1)
+      );
+      expect(difference <= precision).to.be(true);
     } catch {
       throw new Error(`Échec ! On voulait ${valeurAttendue}, mais on a eu ${valeurCalculee}.`);
     }
@@ -162,9 +167,11 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     }, referentiel);
 
     expect(referentiel.indiceSecuriteMax()).to.equal(5);
+    verifieEgaliteNumerique(5 * stats.score('une'), stats.indiceSecurite().une);
+    verifieEgaliteNumerique(5 * stats.score('deux'), stats.indiceSecurite().deux);
     verifieEgaliteNumerique(
       5 * ((stats.score('une') * 13 + stats.score('deux') * 6) / (13 + 6)),
-      stats.indiceSecurite(),
+      stats.indiceSecurite().total,
     );
   });
 });

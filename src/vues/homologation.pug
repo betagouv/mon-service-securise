@@ -37,7 +37,17 @@ block formulaire
             +action(actionSaisie)
 
 block cartes-informations
+  - const indiceSecurite = homologation.indiceSecurite()
+  - const indiceSecuriteMax = referentiel.indiceSecuriteMax()
+  - const formatte = Intl.NumberFormat('fr').format
+
   mixin detailsIndiceSecurite
+    h3 Par catégorie de mesure
+    dl
+      each id in referentiel.identifiantsCategoriesMesures()
+        dt= referentiel.descriptionCategorie(id)
+        dd= (typeof indiceSecurite[id] === 'number' ? `${formatte(indiceSecurite[id])} / ${indiceSecuriteMax}` : '–')
+
     h3 À quoi sert l'indice de sécurité ?
     p.
       L'indice de sécurité fournit une indication du niveau de sécurité du
@@ -52,9 +62,9 @@ block cartes-informations
     p: a(href = '/questionsFrequentes#indice-securite', target = '_blank', rel = 'noopener').nouvel-onglet En savoir plus
 
 
-  - const indiceSecurite = homologation.indiceSecurite()
-  if process.env.AVEC_INDICE_SECURITE && indiceSecurite > 0
+  - const { total } = indiceSecurite
+  if process.env.AVEC_INDICE_SECURITE && total > 0
     +carteInformations({ titre: 'Indice de sécurité', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceSecurite' })
       .score-mss
-        span.score= Intl.NumberFormat('fr').format(indiceSecurite)
-        span.score-max= ` / ${referentiel.indiceSecuriteMax()}`
+        span.score= formatte(total)
+        span.score-max= ` / ${indiceSecuriteMax}`

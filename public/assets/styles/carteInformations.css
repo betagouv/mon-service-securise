@@ -32,6 +32,21 @@
   margin-top: 0;
 }
 
+.carte dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.carte :is(dt, dd) {
+  margin: 0;
+}
+
+.carte dd {
+  font-family: 'Arial';
+  text-align: right;
+}
+
 .carte .details {
   margin-top: 2em;
 }
