@@ -61,8 +61,16 @@ class StatistiquesMesures {
       acc + nbMesures(categorie)
     ), 0);
 
-    const resultatBrut = this.referentiel.indiceSecuriteMax() * (totalPondere / nbTotalMesures);
-    return arrondis(resultatBrut, StatistiquesMesures.NOMBRE_CHIFFRES_APRES_VIRGULE);
+    const indiceTotalBrut = this.referentiel.indiceSecuriteMax() * (totalPondere / nbTotalMesures);
+    const indiceTotal = arrondis(indiceTotalBrut, PRECISION.NOMBRE_CHIFFRES_APRES_VIRGULE);
+
+    return this.categories().reduce((acc, categorie) => {
+      const scoreBrut = this.referentiel.indiceSecuriteMax() * this.score(categorie);
+      return Object.assign(
+        acc,
+        { [categorie]: arrondis(scoreBrut, PRECISION.NOMBRE_CHIFFRES_APRES_VIRGULE) },
+      );
+    }, { total: indiceTotal });
   }
 
   misesEnOeuvre(idCategorie) {
