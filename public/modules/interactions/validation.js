@@ -25,4 +25,33 @@ const declencheValidation = (selecteurFormulaire) => {
   $(selecteurFormulaire).trigger(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE);
 };
 
-export { brancheValidation, declencheValidation };
+const brancheValidationPersonnalisee = (selecteurChampCible) => {
+  $(selecteurChampCible).on('invalid', (evenement) => {
+    evenement.preventDefault();
+    const champSaisie = evenement.target;
+    if (champSaisie.validity.customError) {
+      const $champSaisieEnErreur = $(champSaisie);
+      $champSaisieEnErreur.nextAll('.message-erreur-personnalise')
+        .text(champSaisie.validationMessage);
+      $champSaisieEnErreur.on('input', () => {
+        $champSaisieEnErreur.nextAll('.message-erreur-personnalise')
+          .text('');
+        champSaisie.setCustomValidity('');
+        champSaisie.reportValidity();
+      });
+    }
+  });
+};
+
+const declencheErreurPersonnalisee = (selecteurChampCible, messageErreur) => {
+  const htmlElement = $(selecteurChampCible)[0];
+  htmlElement.setCustomValidity(messageErreur);
+  htmlElement.reportValidity();
+};
+
+export {
+  brancheValidation,
+  brancheValidationPersonnalisee,
+  declencheValidation,
+  declencheErreurPersonnalisee,
+};
