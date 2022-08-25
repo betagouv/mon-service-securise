@@ -74,12 +74,8 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     });
   });
 
-  elles('sont précises au 1/10', () => {
-    expect(StatistiquesMesures.NOMBRE_CHIFFRES_APRES_VIRGULE).to.equal(1);
-  });
-
   const verifieEgaliteNumerique = (valeurAttendue, valeurCalculee) => {
-    const nbDecimales = StatistiquesMesures.NOMBRE_CHIFFRES_APRES_VIRGULE;
+    const nbDecimales = 6;
     const precision = 0.5 * Number(`1e-${nbDecimales}`);
 
     try {

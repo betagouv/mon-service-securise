@@ -39,7 +39,7 @@ block formulaire
 block cartes-informations
   - const indiceSecurite = homologation.indiceSecurite()
   - const indiceSecuriteMax = referentiel.indiceSecuriteMax()
-  - const formatte = Intl.NumberFormat('fr').format
+  - const formatte = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
 
   mixin detailsIndiceSecurite
     h3 Par catégorie de mesure
