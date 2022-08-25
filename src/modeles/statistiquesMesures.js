@@ -4,8 +4,6 @@ const { ErreurCategorieInconnue, ErreurDonneesStatistiques } = require('../erreu
 const categories = Object.keys;
 const statistiques = Object.values;
 
-const PRECISION = { NOMBRE_CHIFFRES_APRES_VIRGULE: 1 };
-
 const valide = (donnees, referentiel) => {
   const categoriesRepertoriees = referentiel.identifiantsCategoriesMesures();
   const categorieNonRepertoriee = categories(donnees)
@@ -48,11 +46,6 @@ class StatistiquesMesures {
       return totalIndispensables + totalRecommandees;
     };
 
-    const arrondis = (n, precision) => {
-      const arrondiEntier = Math.round(`${n}e${precision}`);
-      return Number(`${arrondiEntier}e-${precision}`);
-    };
-
     const totalPondere = this.categories().reduce((acc, categorie) => (
       acc + nbMesures(categorie) * this.score(categorie)
     ), 0);
@@ -61,16 +54,11 @@ class StatistiquesMesures {
       acc + nbMesures(categorie)
     ), 0);
 
-    const indiceTotalBrut = this.referentiel.indiceSecuriteMax() * (totalPondere / nbTotalMesures);
-    const indiceTotal = arrondis(indiceTotalBrut, PRECISION.NOMBRE_CHIFFRES_APRES_VIRGULE);
+    const indiceTotal = this.referentiel.indiceSecuriteMax() * (totalPondere / nbTotalMesures);
 
-    return this.categories().reduce((acc, categorie) => {
-      const scoreBrut = this.referentiel.indiceSecuriteMax() * this.score(categorie);
-      return Object.assign(
-        acc,
-        { [categorie]: arrondis(scoreBrut, PRECISION.NOMBRE_CHIFFRES_APRES_VIRGULE) },
-      );
-    }, { total: indiceTotal });
+    return this.categories().reduce((acc, categorie) => Object.assign(acc, {
+      [categorie]: this.referentiel.indiceSecuriteMax() * this.score(categorie),
+    }), { total: indiceTotal });
   }
 
   misesEnOeuvre(idCategorie) {
@@ -104,5 +92,4 @@ class StatistiquesMesures {
   }
 }
 
-Object.assign(StatistiquesMesures, PRECISION);
 module.exports = StatistiquesMesures;
