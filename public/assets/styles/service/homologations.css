@@ -1,0 +1,13 @@
+hr {
+  width: 100%;
+  border: solid 1px var(--liseres);
+}
+
+.consignes {
+  padding: 1em 0;
+}
+
+.bouton.blanc {
+  border: solid 1px var(--bleu-mise-en-avant);
+  background: #fff;
+}
