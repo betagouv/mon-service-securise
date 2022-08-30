@@ -44,6 +44,8 @@
 
 .carte dd {
   font-family: 'Arial';
+
+  padding-top: 0.2em;
   text-align: right;
 }
 
