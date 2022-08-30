@@ -603,8 +603,8 @@ module.exports = {
 
   localisationsDonnees: {
     france: { description: 'France' },
-    unionEuropeenne: { description: 'Union Européenne' },
-    autre: { description: 'Autre' },
+    unionEuropeenne: { description: 'Union européenne' },
+    autre: { description: 'Hors Union européenne' },
   },
 
   echeancesRenouvellement: {
