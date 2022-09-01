@@ -1,13 +1,11 @@
 # MonServiceSécurisé
 
-MonServiceSécurisé est un service numérique développé par l'incubateur de
-services numériques du [laboratoire d'innovation de
-l'ANSSI](https://www.ssi.gouv.fr/agence/missions/rapport-dactivite-2020/), avec
-le soutien de l'incubateur [beta.gouv](https://beta.gouv.fr/). Il vise à aider
-les collectivités territoriales et les administrations à maîtriser la sécurité
-des services publics numériques, notamment en facilitant l'homologation des
-services numériques les plus courants - à savoir les sites webs, applications
-mobiles et API - aux besoins de sécurité modérés.
+MonServiceSécurisé est un service numérique développé par le laboratoire
+d'innovation de l'[ANSSI](https://www.ssi.gouv.fr/), en lien avec l'incubateur
+[BetaGouv](https://beta.gouv.fr/) de la direction interministérielle du
+numérique. Il vise à aider les collectivités territoriales et les autres
+entités publiques à sécuriser et à homologuer leurs services publics numériques
+(sites web, applications mobiles, API).
 
 ## Configuration de l'environnement de développement
 
