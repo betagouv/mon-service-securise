@@ -97,7 +97,7 @@ body.recouvert {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   background-image: url('../images/forme_rectangle_vague.svg');
   background-size: 100% 40%;
   background-repeat: no-repeat;

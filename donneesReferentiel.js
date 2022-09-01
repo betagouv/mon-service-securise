@@ -253,7 +253,7 @@ module.exports = {
         le plus souvent à des fins d'usurpation d'identité ou de gain financier.<br>Par exemple :
         <li>Des moyens de paiement stockés sur le service numérique (ex. numéro de carte bancaire) sont volés en vue de les
         revendre sur internet ou de procéder à des achats illicites.</li><li>Les coordonnées d'usagers ou d'agents publics
-        (ex.email, adresse, numéro de téléphone) sont volées en vue de mener des campagnes de 
+        (ex.email, adresse, numéro de téléphone) sont volées en vue de mener des campagnes de
         <a href="https://www.cybermalveillance.gouv.fr/tous-nos-contenus/fiches-reflexes/spam-electronique">spam</a> ou de
         <a href="https://www.cybermalveillance.gouv.fr/tous-nos-contenus/fiches-reflexes/hameconnage-phishing">hameçonnage</a>.</li>
         <li>Des documents officiels d'identité sont volés à des fins d'usurpation d'identité.</li>
