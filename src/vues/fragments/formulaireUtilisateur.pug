@@ -11,7 +11,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
   section
     block champs-formulaire
       -
-        const patternNomPrenom = "^[a-zàâäéèêëïîôöùûüÿçæœA-ZÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇÆŒ]+([ .'\\-]?[a-zàâäéèêëïîôöùûüÿçæœA-ZÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇÆŒ]+)*$";
+        const patternNomPrenom = '^\\D+$';
         const messageErreurNomPrenom = (label) => `
           Le ${label} est obligatoire. Veuillez renseigner des lettres avec ou sans signes diacritiques.
           Les chiffres ne sont pas autorisés.
