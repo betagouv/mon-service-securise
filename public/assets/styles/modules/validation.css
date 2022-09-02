@@ -24,12 +24,28 @@
 
 .message-erreur {
   display: none;
+  position: relative;
+  left: 1.1em;
 
   margin-top: 1em;
 
   color: var(--rose-anssi);
   font-weight: normal;
-  font-size: 0.85em;
+}
+
+.message-erreur::before {
+  content: '';
+
+  position: absolute;
+  left: -1.1em;
+
+  background-image: url(../../images/icone_attention_rose.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 1em;
+  height: 1em;
+
+  transform: translateY(0.35em);
 }
 
 .requis[data-nom = 'cguAcceptees'] {
