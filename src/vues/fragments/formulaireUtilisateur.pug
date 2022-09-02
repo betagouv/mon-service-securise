@@ -10,7 +10,13 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
 
   section
     block champs-formulaire
-      - const patternNomPrenom = "^[a-zàâäéèêëïîôöùûüÿçæœA-ZÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇÆŒ]+([ .'\\-]?[a-zàâäéèêëïîôöùûüÿçæœA-ZÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇÆŒ]+)*$"
+      -
+        const patternNomPrenom = "^[a-zàâäéèêëïîôöùûüÿçæœA-ZÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇÆŒ]+([ .'\\-]?[a-zàâäéèêëïîôöùûüÿçæœA-ZÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇÆŒ]+)*$";
+        const messageErreurNomPrenom = (label) => `
+          Le ${label} est obligatoire. Veuillez renseigner des lettres avec ou sans signes diacritiques.
+          Les chiffres ne sont pas autorisés.
+        `;
+
       if emailLectureSeule
         p.affichage-simple
           strong E-mail&nbsp
@@ -28,7 +34,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             pattern = patternNomPrenom,
             title = ''
           )
-          .message-erreur Le prénom est obligatoire. Veuillez le renseigner.
+          .message-erreur= messageErreurNomPrenom('prénom') 
 
       .requis(data-nom = 'nom')
         label Nom
@@ -42,7 +48,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             pattern = patternNomPrenom,
             title = ''
           )
-          .message-erreur Le nom est obligatoire. Veuillez le renseigner.
+          .message-erreur= messageErreurNomPrenom('nom') 
 
       if !emailLectureSeule
         .requis(data-nom = 'email')
