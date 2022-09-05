@@ -1,5 +1,7 @@
 FROM node:16
 
+RUN apt-get update && apt-get install --yes texlive
+
 RUN npm install -g npm
 
 WORKDIR /usr/src/app
