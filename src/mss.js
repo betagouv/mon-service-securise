@@ -1,5 +1,6 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
+const pdflatex = require('node-pdflatex').default;
 
 const { DUREE_SESSION } = require('./configurationServeur');
 const routesApi = require('./routes/routesApi');
@@ -117,6 +118,21 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
 
   app.get('/espacePersonnel', middleware.verificationAcceptationCGU, (_requete, reponse) => {
     reponse.render('espacePersonnel');
+  });
+
+  app.get('/testPDF', (_requete, reponse) => {
+    const source = `
+\\documentclass{article}
+\\begin{document}
+Hello World!
+\\end{document}
+    `;
+
+    pdflatex(source)
+      .then((pdf) => {
+        reponse.contentType('application/pdf');
+        reponse.send(pdf);
+      });
   });
 
   app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
