@@ -28,6 +28,7 @@ const donnees = {
   '2022-08-16': { utilisateurs: 155, pourcentageUtilisateursEnPlus: 4, dossiers: 116 },
   '2022-08-22': { utilisateurs: 157, pourcentageUtilisateursEnPlus: 1, dossiers: 117 },
   '2022-08-29': { utilisateurs: 167, pourcentageUtilisateursEnPlus: 6, dossiers: 125 },
+  '2022-09-09': { utilisateurs: 170, pourcentageUtilisateursEnPlus: 2, dossiers: 129 },
 };
 
 export default donnees;
