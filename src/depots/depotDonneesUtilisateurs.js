@@ -27,9 +27,9 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance.utilisateurAvecEmail(email)
       .then((u) => {
         if (u) {
-          return reject(new ErreurUtilisateurExistant(
-            'Utilisateur déjà existant pour cette adresse email'
-          ));
+          return reject(
+            new ErreurUtilisateurExistant('Utilisateur déjà existant pour cette adresse email', u.id)
+          );
         }
 
         const id = adaptateurUUID.genereUUID();

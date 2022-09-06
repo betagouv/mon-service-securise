@@ -316,7 +316,10 @@ describe('Le dépôt de données des utilisateurs', () => {
 
         depot.nouvelUtilisateur({ email: 'jean.dupont@mail.fr' })
           .then(() => done('Une exception aurait dû être levée.'))
-          .catch((e) => expect(e).to.be.a(ErreurUtilisateurExistant))
+          .catch((e) => {
+            expect(e).to.be.a(ErreurUtilisateurExistant);
+            expect(e.idUtilisateur).to.equal('123');
+          })
           .then(() => done())
           .catch(done);
       });
