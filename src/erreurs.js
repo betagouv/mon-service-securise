@@ -24,9 +24,15 @@ class ErreurRisqueInconnu extends ErreurModele {}
 class ErreurStatutDeploiementInvalide extends ErreurModele {}
 class ErreurStatutMesureInvalide extends ErreurModele {}
 class ErreurTentativeSuppressionCreateur extends ErreurModele {}
-class ErreurUtilisateurExistant extends ErreurModele {}
 class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
+
+class ErreurUtilisateurExistant extends ErreurModele {
+  constructor(message = '', idUtilisateur) {
+    super(message);
+    this.idUtilisateur = idUtilisateur;
+  }
+}
 
 module.exports = {
   EchecAutorisation,
