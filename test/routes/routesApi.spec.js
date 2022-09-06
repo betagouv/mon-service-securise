@@ -253,15 +253,26 @@ describe('Le serveur MSS des routes /api/*', () => {
       });
     });
 
-    it("génère une erreur HTTP 422 si l'utilisateur existe déjà", (done) => {
+    it('envoie un email de notification de tentative de réinscription', (done) => {
+      expect(donneesRequete.email).to.equal('jean.dupont@mail.fr');
+      let notificationEnvoyee = false;
+
       testeur.depotDonnees().nouvelUtilisateur = () => (
-        Promise.reject(new ErreurUtilisateurExistant('oups'))
+        Promise.reject(new ErreurUtilisateurExistant('oups', '123'))
       );
 
-      testeur.verifieRequeteGenereErreurHTTP(
-        422, 'oups',
-        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
-      );
+      testeur.adaptateurMail().envoieNotificationTentativeReinscription = ((destinataire) => {
+        expect(destinataire).to.equal('jean.dupont@mail.fr');
+        notificationEnvoyee = true;
+        return Promise.resolve();
+      });
+
+      axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => {
+          expect(notificationEnvoyee).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
     });
 
     it("génère une erreur HTTP 422 si l'email n'est pas renseigné", (done) => {

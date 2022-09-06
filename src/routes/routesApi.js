@@ -7,6 +7,7 @@ const {
   ErreurAutorisationExisteDeja,
   ErreurCGUNonAcceptees,
   ErreurModele,
+  ErreurUtilisateurExistant,
 } = require('../erreurs');
 const routesApiHomologation = require('./routesApiHomologation');
 const Utilisateur = require('../modeles/utilisateur');
@@ -112,7 +113,14 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       } else {
         depotDonnees.nouvelUtilisateur(donnees)
           .then(envoieMessageFinalisationInscription)
-          .then((u) => reponse.json({ idUtilisateur: u.id }))
+          .catch((erreur) => {
+            if (erreur instanceof ErreurUtilisateurExistant) {
+              return adaptateurMail.envoieNotificationTentativeReinscription(donnees.email)
+                .then(() => ({ id: erreur.idUtilisateur }));
+            }
+            throw erreur;
+          })
+          .then(({ id }) => reponse.json({ idUtilisateur: id }))
           .catch((e) => {
             if (e instanceof EchecEnvoiMessage) {
               reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");

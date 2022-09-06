@@ -110,9 +110,35 @@ L'équipe MonServiceSécurisé`,
   });
 };
 
+const envoieNotificationTentativeReinscription = (destinataire) => {
+  const transport = creeTransport();
+
+  return transport.sendMail({
+    from: process.env.ADRESSE_MAIL_CONTACT,
+    to: destinataire,
+    subject: 'MonServiceSécurisé - Tentative de réinscription',
+    text: `Bonjour,
+
+Lors de la création de votre compte utilisateur sur MonServiceSécurisé, l'e-mail que vous avez renseigné est déjà associé à un compte existant.
+
+Si vous souhaitez en créer un nouveau, cliquez sur ce lien :  
+${process.env.URL_BASE_MSS}/inscription
+
+Si vous souhaitez réinitialiser votre mot de passe, cliquez sur ce lien :  
+${process.env.URL_BASE_MSS}/reinitialisationMotDePasse
+
+Si vous n'êtes pas l'origine de cette demande, votre compte est sécurisé et vous pouvez ignorer cet e-mail.
+
+N'hésitez pas à nous contacter pour toutes précisions.
+
+L'équipe MonServiceSécurisé`,
+  });
+};
+
 module.exports = {
   envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieMessageReinitialisationMotDePasse,
+  envoieNotificationTentativeReinscription,
 };
