@@ -85,6 +85,16 @@ describe('Le référentiel', () => {
     expect(referentiel.statutsDeploiement()).to.eql({ uneClef: 'une valeur' });
   });
 
+  it('sait décrire un statut de déploiement', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      statutsDeploiement: {
+        uneClef: { description: 'Une description' },
+      },
+    });
+
+    expect(referentiel.descriptionStatutDeploiement('uneClef')).to.equal('Une description');
+  });
+
   it('connaît la liste des fonctionnalités possibles', () => {
     const referentiel = Referentiel.creeReferentiel({
       fonctionnalites: { uneClef: 'une valeur' },

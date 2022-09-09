@@ -228,4 +228,21 @@ describe('Une homologation', () => {
 
     expect(homologation.indiceSecurite()).to.equal(3.7);
   });
+
+  it('sait décrire le statut de déploiement', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      statutsDeploiement: {
+        enLigne: {
+          description: 'En ligne',
+        },
+      },
+    });
+    const homologation = new Homologation({
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'nom', statutDeploiement: 'enLigne' },
+    }, referentiel);
+
+    expect(homologation.descriptionStatutDeploiement()).to.equal('En ligne');
+  });
 });

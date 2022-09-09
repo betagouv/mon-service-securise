@@ -72,6 +72,22 @@ describe('La description du service', () => {
     expect(descriptionService.descriptionLocalisationDonnees()).to.equal('Quelque part en France');
   });
 
+  elle('décrit le statut de déploiement', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      statutsDeploiement: {
+        enLigne: {
+          description: 'En ligne',
+        },
+      },
+    });
+
+    const descriptionService = new DescriptionService({
+      statutDeploiement: 'enLigne',
+    }, referentiel);
+
+    expect(descriptionService.descriptionStatutDeploiement()).to.equal('En ligne');
+  });
+
   elle("se comporte correctement si le type de service n'est pas présent", () => {
     const descriptionService = new DescriptionService();
     expect(descriptionService.descriptionTypeService()).to.equal('Type de service non renseignée');
