@@ -1,4 +1,4 @@
-extends homologation/formulaire
+extends deuxColonnes
 include carteInformations
 
 mixin action({ description, url, statut })
@@ -20,7 +20,7 @@ block append styles
 block retour
   a(href = '/espacePersonnel') ‹&nbsp;&nbsp;Mon espace personnel
 
-block formulaire
+block zone-principale
   .details-homologation
     .tableau-bord
       .description-dossier

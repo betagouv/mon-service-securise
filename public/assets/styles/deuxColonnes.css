@@ -1,0 +1,6 @@
+.corps {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-gap: 2em;
+  margin-top: 3em;
+}

@@ -1,10 +1,4 @@
-.etroit {
-  width: 400px;
-  padding: 0 5.25em 2em;
-  border-radius: 5px;
-  background: #fff;
-}
-
-.etroit .bouton {
-  margin-top: 2em;
+.info {
+  display: flex;
+  flex-direction: column;
 }
