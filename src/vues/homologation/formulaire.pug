@@ -1,17 +1,14 @@
-extends ../mssConnecte
+extends ../deuxColonnes
 
 block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
 
-block retour
-  - let lienRetour = '/';
-  - if (homologation) lienRetour = '/espacePersonnel';
-  - if (homologation && homologation.id) lienRetour = `/homologation/${homologation.id}`;
-  a(href = lienRetour) ‹&nbsp;&nbsp;Retour
+block nom-service
+  if (homologation)
+    .nom-service
+      h1!= homologation.nomService()
 
-block main
-  .formulaire.marges-fixes
+block zone-principale
+  .formulaire
     block formulaire
-    .cartes-informations
-      block cartes-informations

@@ -1,0 +1,19 @@
+extends mssConnecte
+
+block append styles
+  link(href = '/statique/assets/styles/deuxColonnes.css', rel = 'stylesheet')
+
+block retour
+  - let lienRetour = '/';
+  - if (homologation) lienRetour = '/espacePersonnel';
+  - if (homologation && homologation.id) lienRetour = `/homologation/${homologation.id}`;
+  a(href = lienRetour) ‹&nbsp;&nbsp;Retour
+
+block main
+  .corps.marges-fixes
+    .zone-principale
+      block nom-service
+      block zone-principale
+
+    .cartes-informations
+      block cartes-informations

@@ -1,7 +1,7 @@
 .bouton {
   display: inline-block;
 
-  margin: 2em;
+  margin: 2em auto;
   padding: 1em 3em;
   border-radius: 3px;
   background: var(--bleu-mise-en-avant);
