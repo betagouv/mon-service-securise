@@ -34,7 +34,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             pattern = patternNomPrenom,
             title = ''
           )
-          .message-erreur= messageErreurNomPrenom('prénom') 
+          .message-erreur= messageErreurNomPrenom('prénom')
 
       .requis(data-nom = 'nom')
         label Nom
@@ -48,7 +48,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             pattern = patternNomPrenom,
             title = ''
           )
-          .message-erreur= messageErreurNomPrenom('nom') 
+          .message-erreur= messageErreurNomPrenom('nom')
 
       if !emailLectureSeule
         .requis(data-nom = 'email')
