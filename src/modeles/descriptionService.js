@@ -37,6 +37,10 @@ class DescriptionService extends InformationsHomologation {
     return this.referentiel.localisationDonnees(this.localisationDonnees);
   }
 
+  descriptionStatutDeploiement() {
+    return this.referentiel.descriptionStatutDeploiement(this.statutDeploiement);
+  }
+
   descriptionTypeService() {
     return this.referentiel.typeService(this.typeService);
   }

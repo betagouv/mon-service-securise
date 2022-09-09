@@ -77,6 +77,8 @@ class Homologation {
 
   descriptionTypeService() { return this.descriptionService.descriptionTypeService(); }
 
+  descriptionStatutDeploiement() { return this.descriptionService.descriptionStatutDeploiement(); }
+
   descriptionStatutsMesures() {
     return Mesure.statutsPossibles().reduce((acc, s) => {
       acc[s] = { description: this.referentiel.descriptionStatutMesure(s) };
