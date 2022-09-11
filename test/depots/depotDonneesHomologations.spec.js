@@ -87,7 +87,7 @@ describe('Le dépot de données des homologations', () => {
   it('peut retrouver une homologation à partir de son identifiant', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
-        { id: '789', idUtilisateur: '999', descriptionService: { nomService: 'nom' } },
+        { id: '789', descriptionService: { nomService: 'nom' } },
       ],
     });
     const referentiel = Referentiel.creeReferentielVide();
