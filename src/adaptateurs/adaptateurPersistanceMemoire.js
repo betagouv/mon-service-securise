@@ -5,6 +5,12 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
   donnees.homologations ||= [];
   donnees.autorisations ||= [];
 
+  const metsAJourEnregistrement = (fonctionRecherche, id, donneesAMettreAJour) => (
+    fonctionRecherche(id)
+      .then((e) => Object.assign(e, donneesAMettreAJour))
+      .then(() => {})
+  );
+
   const ajouteHomologation = (id, donneesHomologation) => {
     donnees.homologations.push(Object.assign(donneesHomologation, { id }));
     return Promise.resolve();
@@ -21,14 +27,14 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     donnees.autorisations.filter((a) => a.idUtilisateur === idUtilisateur)
   );
 
-  const homologation = (id) => {
-    const intervenantsHomologation = (idHomologation) => donnees.autorisations
-      .filter((a) => a.idHomologation === idHomologation)
-      .reduce((acc, a) => {
-        acc[`${a.type}s`].push(donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
-        return acc;
-      }, { createurs: [], contributeurs: [] });
+  const intervenantsHomologation = (idHomologation) => donnees.autorisations
+    .filter((a) => a.idHomologation === idHomologation)
+    .reduce((acc, a) => {
+      acc[`${a.type}s`].push(donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
+      return acc;
+    }, { createurs: [], contributeurs: [] });
 
+  const homologation = (id) => {
     const homologationTrouvee = donnees.homologations.find((h) => h.id === id);
     if (homologationTrouvee) {
       const intervenants = intervenantsHomologation(id);
@@ -36,6 +42,16 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
       homologationTrouvee.contributeurs = intervenants.contributeurs;
     }
     return Promise.resolve(homologationTrouvee);
+  };
+
+  const service = (id) => {
+    const serviceTrouve = donnees.services.find((s) => s.id === id);
+    if (serviceTrouve) {
+      const intervenants = intervenantsHomologation(id);
+      [serviceTrouve.createur] = intervenants.createurs;
+      serviceTrouve.contributeurs = intervenants.contributeurs;
+    }
+    return Promise.resolve(serviceTrouve);
   };
 
   const homologations = (idUtilisateur) => autorisations(idUtilisateur)
@@ -50,9 +66,9 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
       )))
   );
 
-  const metsAJourHomologation = (id, donneesAMettreAJour) => homologation(id)
-    .then((h) => Object.assign(h, donneesAMettreAJour))
-    .then(() => {});
+  const metsAJourHomologation = (...params) => metsAJourEnregistrement(homologation, ...params);
+
+  const metsAJourService = (...params) => metsAJourEnregistrement(service, ...params);
 
   const supprimeHomologation = (id) => {
     donnees.homologations = donnees.homologations.filter((h) => h.id !== id);
@@ -76,9 +92,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
 
   const utilisateur = (id) => Promise.resolve(donnees.utilisateurs.find((u) => u.id === id));
 
-  const metsAJourUtilisateur = (id, donneesAMettreAJour) => utilisateur(id)
-    .then((u) => Object.assign(u, donneesAMettreAJour))
-    .then(() => {});
+  const metsAJourUtilisateur = (...params) => metsAJourEnregistrement(utilisateur, ...params);
 
   const utilisateurAvecEmail = (email) => Promise.resolve(
     donnees.utilisateurs.find((u) => u.email === email)
@@ -133,7 +147,9 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     homologationAvecNomService,
     homologations,
     metsAJourHomologation,
+    metsAJourService,
     metsAJourUtilisateur,
+    service,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsHomologation,

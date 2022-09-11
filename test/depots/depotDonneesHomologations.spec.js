@@ -10,6 +10,7 @@ const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPe
 
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../../src/modeles/avisExpertCyber');
@@ -24,6 +25,8 @@ const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 describe('Le dépot de données des homologations', () => {
+  const copie = (donnees) => JSON.parse(JSON.stringify(donnees));
+
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
@@ -162,12 +165,15 @@ describe('Le dépot de données des homologations', () => {
     after(() => (MesureGenerale.valide = valideMesure));
 
     it('renseigne les mesures associées à une homologation', (done) => {
+      const donneesHomologation = {
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
+        mesuresGenerales: [{ id: 'identifiantMesure', statut: 'fait' }],
+      };
+
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        homologations: [{
-          id: '123',
-          descriptionService: { nomService: 'Un service' },
-          mesuresGenerales: [{ id: 'identifiantMesure', statut: 'fait' }],
-        }],
+        homologations: [copie(donneesHomologation)],
+        services: [copie(donneesHomologation)],
       });
       const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
 
@@ -183,34 +189,57 @@ describe('Le dépot de données des homologations', () => {
         .catch(done);
     });
 
-    it('sait associer une mesure à une homologation', (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        homologations: [
-          { id: '123', descriptionService: { nomService: 'Un service' } },
-        ],
-      });
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
-      const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
+    describe("sur demande d'association d'une mesure à une homologation", () => {
+      let adaptateurPersistance;
 
-      depot.ajouteMesureGeneraleAHomologation('123', mesure)
-        .then(() => depot.homologation('123'))
-        .then(({ mesures: { mesuresGenerales } }) => {
-          expect(mesuresGenerales.nombre()).to.equal(1);
-          expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
-          done();
-        })
-        .catch(done);
+      beforeEach(() => {
+        const donneesHomologation = { id: '123', descriptionService: { nomService: 'Un service' } };
+        adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          homologations: [copie(donneesHomologation)],
+          services: [copie(donneesHomologation)],
+        });
+      });
+
+      it("associe la mesure à l'homologation", (done) => {
+        const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
+        const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
+
+        depot.ajouteMesureGeneraleAHomologation('123', mesure)
+          .then(() => depot.homologation('123'))
+          .then(({ mesures: { mesuresGenerales } }) => {
+            expect(mesuresGenerales.nombre()).to.equal(1);
+            expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
+            done();
+          })
+          .catch(done);
+      });
+
+      it('associe la mesure au service', (done) => {
+        const config = { adaptateurPersistance, referentiel };
+        const depot = DepotDonneesHomologations.creeDepot(config);
+        const depotServices = DepotDonneesServices.creeDepot(config);
+        const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
+
+        depot.ajouteMesureGeneraleAHomologation('123', mesure)
+          .then(() => depotServices.service('123'))
+          .then(({ mesures: { mesuresGenerales } }) => {
+            expect(mesuresGenerales.nombre()).to.equal(1);
+            expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
+            done();
+          })
+          .catch(done);
+      });
     });
 
     it("met à jour les données de la mesure si elle est déjà associée à l'homologation", (done) => {
+      const donneesHomologation = {
+        id: '123',
+        descriptionService: { nomService: 'nom' },
+        mesures: [{ id: 'identifiantMesure', statut: MesureGenerale.STATUT_EN_COURS }],
+      };
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        homologations: [
-          {
-            id: '123',
-            descriptionService: { nomService: 'nom' },
-            mesures: [{ id: 'identifiantMesure', statut: MesureGenerale.STATUT_EN_COURS }],
-          },
-        ],
+        homologations: [copie(donneesHomologation)],
+        services: [copie(donneesHomologation)],
       });
       const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
 
@@ -318,10 +347,10 @@ describe('Le dépot de données des homologations', () => {
     it('sait associer un risque général à une homologation', (done) => {
       RisqueGeneral.valide = () => {};
 
+      const donneesHomologation = { id: '123', descriptionService: { nomService: 'nom' } };
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        homologations: [
-          { id: '123', descriptionService: { nomService: 'nom' } },
-        ],
+        homologations: [copie(donneesHomologation)],
+        services: [copie(donneesHomologation)],
       });
       const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
