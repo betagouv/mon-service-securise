@@ -45,6 +45,8 @@ const nouvelAdaptateur = (env) => {
 
   const homologation = (id) => elementDeTable('homologations', id);
 
+  const service = (id) => elementDeTable('services', id);
+
   const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour = '') => (
     knex('homologations')
       .join('autorisations', knex.raw("(autorisations.donnees->>'idHomologation')::uuid"), 'homologations.id')
@@ -97,6 +99,7 @@ const nouvelAdaptateur = (env) => {
       }, []));
 
   const metsAJourHomologation = (...params) => metsAJourTable('homologations', ...params);
+  const metsAJourService = (...params) => metsAJourTable('services', ...params);
   const metsAJourUtilisateur = (...params) => metsAJourTable('utilisateurs', ...params);
 
   const nbUtilisateurs = () => knex('utilisateurs').count()
@@ -169,8 +172,10 @@ const nouvelAdaptateur = (env) => {
     homologationAvecNomService,
     homologations,
     metsAJourHomologation,
+    metsAJourService,
     metsAJourUtilisateur,
     nbUtilisateurs,
+    service,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsHomologation,
