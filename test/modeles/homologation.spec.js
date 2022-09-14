@@ -237,6 +237,7 @@ describe('Une homologation', () => {
         },
       },
     });
+
     const homologation = new Homologation({
       id: '123',
       idUtilisateur: '456',
@@ -244,5 +245,41 @@ describe('Une homologation', () => {
     }, referentiel);
 
     expect(homologation.descriptionStatutDeploiement()).to.equal('En ligne');
+  });
+
+  it('connaît la localisation des données', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      localisationsDonnees: {
+        france: {
+          description: 'France',
+        },
+      },
+    });
+
+    const homologation = new Homologation({
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'nom', localisationDonnees: 'france' },
+    }, referentiel);
+
+    expect(homologation.localisationDonnees()).to.equal('france');
+  });
+
+  it('sait décrire la localisation des données', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      localisationsDonnees: {
+        france: {
+          description: 'France',
+        },
+      },
+    });
+
+    const homologation = new Homologation({
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'nom', localisationDonnees: 'france' },
+    }, referentiel);
+
+    expect(homologation.descriptionLocalisationDonnees()).to.equal('France');
   });
 });

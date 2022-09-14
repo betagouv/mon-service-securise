@@ -75,6 +75,10 @@ class Homologation {
     return this.avisExpertCyber.descriptionExpiration();
   }
 
+  descriptionLocalisationDonnees() {
+    return this.descriptionService.descriptionLocalisationDonnees();
+  }
+
   descriptionTypeService() { return this.descriptionService.descriptionTypeService(); }
 
   descriptionStatutDeploiement() { return this.descriptionService.descriptionStatutDeploiement(); }
@@ -97,7 +101,7 @@ class Homologation {
   hebergeur() { return this.rolesResponsabilites.descriptionHebergeur(); }
 
   localisationDonnees() {
-    return this.descriptionService.descriptionLocalisationDonnees();
+    return this.descriptionService.localisationDonnees;
   }
 
   mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }
