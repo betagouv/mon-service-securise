@@ -20,6 +20,10 @@ class Mesures extends InformationsHomologation {
     return this.statistiques().indiceCyber();
   }
 
+  nombreTotalMesuresGenerales() {
+    return this.identifiantsMesures.length;
+  }
+
   nonSaisies() {
     return this.mesuresGenerales.nonSaisies();
   }

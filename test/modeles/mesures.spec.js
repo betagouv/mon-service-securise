@@ -63,4 +63,16 @@ describe('Les mesures liées à une homologation', () => {
 
     expect(mesures.indiceCyber()).to.equal(3.7);
   });
+
+  elles('connaissent le nombre total de mesures générales', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    referentiel.identifiantsMesures = () => ['mesure 1', 'mesure 2'];
+
+    const mesures = new Mesures({
+      mesuresGenerales: [],
+      mesuresSpecifiques: [],
+    }, referentiel);
+
+    expect(mesures.nombreTotalMesuresGenerales()).to.equal(2);
+  });
 });
