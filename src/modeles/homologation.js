@@ -106,6 +106,10 @@ class Homologation {
 
   mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }
 
+  nombreTotalMesuresGenerales() {
+    return this.mesures.nombreTotalMesuresGenerales();
+  }
+
   nomService() { return this.descriptionService.nomService; }
 
   piloteProjet() { return this.rolesResponsabilites.piloteProjet; }

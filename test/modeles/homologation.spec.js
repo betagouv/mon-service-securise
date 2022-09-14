@@ -229,6 +229,13 @@ describe('Une homologation', () => {
     expect(homologation.indiceCyber()).to.equal(3.7);
   });
 
+  it('délègue aux mesures le calcul du nombre total de mesures générales', () => {
+    const homologation = new Homologation({ mesuresGenerales: [] });
+    homologation.mesures.nombreTotalMesuresGenerales = () => 42;
+
+    expect(homologation.nombreTotalMesuresGenerales()).to.equal(42);
+  });
+
   it('sait décrire le statut de déploiement', () => {
     const referentiel = Referentiel.creeReferentiel({
       statutsDeploiement: {
