@@ -230,7 +230,7 @@ describe('Le serveur MSS des routes /api/*', () => {
 
       it('retourne une erreur HTTP 424', (done) => {
         testeur.verifieRequeteGenereErreurHTTP(
-          424, "L'envoi de l'email de finalisation d'inscription a échoué",
+          424, { type: 'ERREUR_ENVOI_EMAIL', message: "L'envoi de l'email de finalisation d'inscription a échoué" },
           { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
         );
       });

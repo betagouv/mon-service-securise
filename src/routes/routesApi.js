@@ -115,7 +115,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
           .then((u) => reponse.json({ idUtilisateur: u.id }))
           .catch((e) => {
             if (e instanceof EchecEnvoiMessage) {
-              reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
+              reponse.status(424).send({ type: 'ERREUR_ENVOI_EMAIL', message: "L'envoi de l'email de finalisation d'inscription a échoué" });
             } else if (e instanceof ErreurModele) {
               reponse.status(422).send(e.message);
             } else suite(e);
