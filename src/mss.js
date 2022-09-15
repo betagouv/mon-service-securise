@@ -120,11 +120,15 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
     reponse.render('espacePersonnel');
   });
 
-  app.get('/testPDF', (_requete, reponse) => {
+  app.get('/testPDF', (_requete, reponse, suite) => {
     const source = `
 \\documentclass{article}
+\\usepackage{tcolorbox}
+
 \\begin{document}
-Hello World!
+  \\begin{tcolorbox}
+    Hello World!
+  \\end{tcolorbox}
 \\end{document}
     `;
 
@@ -132,7 +136,8 @@ Hello World!
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);
-      });
+      })
+      .catch(suite);
   });
 
   app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
