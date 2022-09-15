@@ -1,0 +1,115 @@
+\documentclass[9pt, a4paper]{article}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+
+
+\usepackage{array}
+\usepackage[a4paper, margin=10mm]{geometry}
+
+\usepackage[scaled]{helvet}
+\renewcommand*\familydefault{\sfdefault}
+
+\usepackage[inkscape=off,inkscapepath=svgpath]{svg}
+\svgpath{__CHEMIN_BASE_ABSOLU__/public/assets/images/tex/}
+
+\usepackage{multicol}
+\usepackage{nopageno}
+
+\usepackage{tcolorbox}
+
+\usepackage{xcolor}
+\definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
+\definecolor{gris}{rgb}{0.37, 0.37, 0.37}
+\definecolor{gris_clair}{rgb}{0.96, 0.96, 0.96}
+\definecolor{lisere}{rgb}{0.71, 0.76, 0.82}
+
+\setlength\parindent{0cm}
+
+\begin{document}
+  \begin{multicols}{2}
+    \includeinkscape[height=1cm]{logo_republique_francaise}
+    \columnbreak
+    \flushright\includeinkscape[height=1cm]{logo_mss_complet}
+  \end{multicols}
+
+  \vskip 1cm
+
+  \textbf{DÉCISION D'HOMOLOGATION DE SÉCURITÉ}
+
+  \textcolor{bleu}{Mon Service Sécurisé}
+
+  \vskip 1cm
+
+  \begin{tcolorbox}[colback=white, colframe=lisere, boxrule=1px]
+    \textbf{Considérant}
+
+    %\begin{tabular}{@{}p{0.05\linewidth} p{0.9\linewidth}}
+    \begin{tabular}{@{}p{0.05\linewidth} l}
+      \begin{tcolorbox}[colback=gris_clair, colframe=gris_clair, boxrule=1px, width=\linewidth, height=\linewidth, left=0.3\linewidth]
+        0
+      \end{tcolorbox} & ~ \\
+      1 & Le document de synthèse de la sécurité du service, incluant le score attribué par l'ANSSI.                      \\
+      2 & La recommandation de l'ANSSI concernant l'homologation de sécurité du service et sa durée sugéerée de validité. \\
+      3 & L'ensemble des documents joints présentés en amont de cette décision.                                           \\
+      4 & Le ou les avis émis par l'équipe ayant participé à préparer la présente décision.
+    \end{tabular}
+
+    \vskip 1cm
+
+    \textbf{Approuve l'homologation de la sécurité du service}
+
+    \textbf{Pour une durée de} \textcolor{gris}{(cochez l'une des cases suivantes)} :
+
+    \begin{tcolorbox}[colback=gris_clair, colframe=gris_clair, boxrule=1px]
+      \textbf{Prénom Nom :} \textcolor{gris}{Émilie Leroy}
+    \end{tcolorbox}
+
+    \begin{tcolorbox}[colback=gris_clair, colframe=gris_clair, boxrule=1px]
+      \textbf{Fonction :} \textcolor{gris}{Maire}
+    \end{tcolorbox}
+
+    \begin{tcolorbox}[colback=white, colframe=lisere, boxrule=1px]
+      \textbf{Date :}
+    \end{tcolorbox}
+
+    \begin{tcolorbox}[colback=white, colframe=lisere, boxrule=1px]
+      \textbf{Signature :}
+
+      \textcolor{gris}{Précédée de la mention « Lu et Approuvé »}
+
+      \vskip 3cm
+
+      ~
+    \end{tcolorbox}
+
+    \vskip 2cm
+
+    \begin{tabular}{p{0.2\linewidth} p{0.75\linewidth}}
+      \includeinkscape[height=17mm]{badges}
+      &
+      \begin{minipage}[b]{\linewidth}
+        \small\textbf{%
+          L'homologation de sécurité d'un service public numérique est une
+          obligation du référentiel général de sécurité et du décret nº2022-513
+          du 8 avril 2022 relatif à la sécurité numérique du système
+          d'information et de communication de l'État et de ses établissements
+          publics. L'homologation de sécurité participe également à la mise en
+          conformité avec l'article 32 du règlement européen de la protection des
+          données à caractère personnel relatif à la sécurité des données.
+        }
+      \end{minipage}
+    \end{tabular}
+
+    \vskip 0.5cm
+
+    \textcolor{gris}{%
+      MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
+      responsables d'incidents de sécurité susceptibles d'affecter le service
+      numérique homologué et des conséquences qui pourraient en découler.
+    }
+  \end{tcolorbox}
+
+  \vskip 1cm
+
+  \textcolor{bleu}{\textbf{MonServiceSécurisé}}, service proposé par l'ANSSI.
+\end{document}

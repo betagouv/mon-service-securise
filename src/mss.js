@@ -1,5 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
+const fs = require('fs');
+const pdflatex = require('node-pdflatex').default;
 
 const { DUREE_SESSION } = require('./configurationServeur');
 const routesApi = require('./routes/routesApi');
@@ -117,6 +119,18 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
 
   app.get('/espacePersonnel', middleware.verificationAcceptationCGU, (_requete, reponse) => {
     reponse.render('espacePersonnel');
+  });
+
+  app.get('/decisionHomologation.pdf', (_requete, reponse, suite) => {
+    fs.readFile('src/vuesTex/decisionHomologation.tex', (_erreurs, donnees) => {
+      const avecCheminAbsolu = donnees.toString().replace(/__CHEMIN_BASE_ABSOLU__/g, process.env.CHEMIN_BASE_ABSOLU);
+      pdflatex(avecCheminAbsolu)
+        .then((pdf) => {
+          reponse.contentType('application/pdf');
+          reponse.send(pdf);
+        })
+        .catch(suite);
+    });
   });
 
   app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
