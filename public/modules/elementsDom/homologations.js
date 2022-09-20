@@ -71,7 +71,7 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
   return $element;
 };
 
-const $ajoutNouvelleHomologation = () => $(`
+const $nouveauService = () => $(`
 <a class="nouvelle homologation" href="/homologation/creation">
   <div class="icone-ajout"></div>
   <div>Nouveau service</div>
@@ -87,7 +87,7 @@ const $homologations = (donneesHomologations, idUtilisateur, classeNouveauContri
     );
     return $acc.append($homologation);
   }, $(document.createDocumentFragment()))
-    .append($ajoutNouvelleHomologation())
+    .append($nouveauService())
 );
 
 export { $homologations, $modaleNouveauContributeur };
