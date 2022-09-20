@@ -11,7 +11,7 @@
   grid-gap: 1em;
 }
 
-.homologation {
+.service {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -27,12 +27,12 @@
   color: var(--texte-fonce);
 }
 
-.homologation:hover {
+.service:hover {
   border-color: var(--bleu-mise-en-avant-20-pc);
   background-color: inherit;
 }
 
-.homologation p {
+.service p {
   margin: 0.5em;
 
   font-size: 0.8em;
@@ -102,13 +102,13 @@
   color: #fff;
 }
 
-.nouvelle.homologation {
+.nouveau.service {
   color: var(--bleu-mise-en-avant);
   font-weight: bold;
   text-decoration: none;
 }
 
-.nouvelle.homologation .icone-ajout {
+.nouveau.service .icone-ajout {
   width: 4em;
   height: 4em;
 
