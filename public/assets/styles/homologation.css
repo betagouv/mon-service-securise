@@ -32,15 +32,6 @@
   margin-bottom: .5em;
 }
 
-.description-dossier .icone-dossier {
-  width: 8em;
-  height: 6em;
-
-  background-image: url(../images/icone_dossier.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
 .titre-homologation {
   flex-basis: 100%;
   min-width: 0;
