@@ -8,11 +8,9 @@ block formulaire
   form.homologation#risques
     h1.action Risques de sécurité
     p.
-      Cliquez sur le curseur à droite de chaque risque pour sélectionner le niveau
-      de gravité en termes d'impact dans le cas où celui-ci se réaliserait. Vous
-      pouvez ajouter des risques complémentaires, si vous en identifiez.<br>
-      Cette évaluation sert à connaître les principaux risques de sécurité
-      pour le service.
+      Cliquez sur le curseur pour évaluer l'impact potentiel des risques
+      de sécurité les plus courants sur votre service. Apportez des précisions
+      et ajoutez des risques complémentaires, si nécessaire.
 
     section
       each donnees, identifiant in referentiel.risques()
