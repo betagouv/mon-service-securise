@@ -35,4 +35,16 @@ const brancheModales = (selecteurAffichageModale, selecteurParentRideau) => {
   });
 };
 
-export { brancheModales, initialiseComportementModale };
+const brancheModaleUnique = (selecteurAffichageModale, rideauModale) => {
+  const $rideauModale = $(rideauModale);
+  const $selecteurAffichageModale = $(selecteurAffichageModale);
+  
+  initialiseComportementModale($rideauModale);
+  
+  $(selecteurAffichageModale).on('click', (eAffichage) => {
+    eAffichage.preventDefault();
+    $rideauModale.trigger('afficheModale');
+  });
+};
+
+export { brancheModales, brancheModaleUnique, initialiseComportementModale };

@@ -72,7 +72,7 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
 };
 
 const $nouveauService = () => $(`
-<a class="nouveau service" href="/homologation/creation">
+<a class="nouveau service" href="/homologation/creation" id="nouveauService">
   <div class="icone-ajout"></div>
   <div>Nouveau service</div>
 </a>

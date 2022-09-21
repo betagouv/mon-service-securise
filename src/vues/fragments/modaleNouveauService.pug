@@ -1,0 +1,13 @@
+mixin modaleNouveauService
+  .rideau#modaleNouveauService
+    .modale
+      .fermeture-modale
+      h1 Nouveau service
+      p
+        input(type="checkbox", name="")
+        p
+            | J'atteste que le service ne relève pas d'une réglementation encadrant
+            | spécifiquement la sécurité de systèmes d'information aux besoins de sécurité élevés. 
+            a.inline(href='/questionsFrequentes', target='_blank', rel='noopener') En savoir plus
+      a.bouton(href='/homologation/creation').
+        Continuer

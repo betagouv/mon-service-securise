@@ -1,5 +1,5 @@
 import { $homologations, $modaleNouveauContributeur } from './modules/elementsDom/homologations.js';
-import { brancheModales } from './modules/interactions/modale.mjs';
+import { brancheModales, brancheModaleUnique } from './modules/interactions/modale.mjs';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
 
 $(() => {
@@ -12,6 +12,8 @@ $(() => {
     $('main').append($modaleNouveauContributeur());
     brancheModales('.ajout-contributeur', 'main');
     brancheComportementSaisieContributeur('.ajout-contributeur');
+
+    brancheModaleUnique('#nouveauService', '.rideau#modaleNouveauService');
   };
 
   axios.get('/api/utilisateurCourant')

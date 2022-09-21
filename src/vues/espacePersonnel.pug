@@ -1,9 +1,12 @@
 extends mssConnecte
+include fragments/modaleNouveauService
 
 block append styles
   link(href='/statique/assets/styles/espacePersonnel.css', rel='stylesheet')
 
 block main
+  +modaleNouveauService
+  
   a(href= './nouvellesFonctionnalites').bandeau-nouveautes
     p.marges-fixes.
       Découvrez les nouvelles fonctionnalités  ›
@@ -12,3 +15,4 @@ block main
     .homologations
 
   script(type="module", src="/statique/espacePersonnel.js")
+  
