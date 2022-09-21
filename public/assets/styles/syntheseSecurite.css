@@ -84,3 +84,57 @@ h1 {
   font-size: 2em;
   color: var(--bleu-anssi);
 }
+
+section {
+  position: relative;
+  border: 1px solid var(--bordure-foncee);
+  border-radius: 10px;
+  margin: 3.5em 0;
+  padding: 2.4em 1.7em 1.7em;
+}
+
+section:first-of-type {
+  margin-top: 5em;
+}
+
+section > h2 {
+  position: absolute;
+  top: -1.8em;
+  background-color: var(--fond-gris-clair);
+  border-radius: 33% / 100%;
+  padding: 0.17em 0.83em 0.33em;
+  color: var(--bleu-anssi);
+}
+
+.description dl {
+  margin: 0.5em 0;
+}
+
+.description dl.presentation {
+  margin-top: 1em;
+}
+
+.description :is(dt, dd) {
+  display: inline;
+}
+
+.description dt {
+  color: var(--texte-moyen);
+}
+
+.description dd {
+  margin-left: 0.25em;
+}
+
+.description .localisation-donnees.france::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 16px;
+  background-image: url(../images/vignette_drapeau_france.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 5px;
+  margin-right: 3px;
+  transform: translateY(4px);
+}
