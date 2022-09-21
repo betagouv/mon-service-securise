@@ -13,8 +13,10 @@
   --texte-moyen: #929292;
   --texte-clair: #abb6bf;
 
+  --bordure-foncee: var(--texte-clair);
   --liseres: #ebedf0;
   --fond-pale: #fafbfc;
+  --fond-gris-clair: var(--liseres);
 
   --vert-anssi: #4cb963;
   --jaune-anssi: #fcdf41;

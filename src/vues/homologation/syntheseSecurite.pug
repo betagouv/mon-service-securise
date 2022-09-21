@@ -19,4 +19,20 @@ block append page
       h1 Synthèse de la sécurité du service
       .nom-service!= homologation.nomService()
 
+      section.description
+        h2 Résumé
+        dl
+          dt Type :
+          dd= homologation.descriptionTypeService()
+        dl
+          dt Données stockées :
+          dd( class = `localisation-donnees ${homologation.localisationDonnees()}`)= homologation.descriptionLocalisationDonnees()
+        dl
+          dt Statut :
+          dd= homologation.descriptionStatutDeploiement()
+
+        dl.presentation
+          dt Présentation :
+          dd= homologation.presentation()
+
   script(type = 'module', src = '/statique/homologation/syntheseSecurite.js')
