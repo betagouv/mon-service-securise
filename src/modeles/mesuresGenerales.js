@@ -30,8 +30,14 @@ class MesuresGenerales extends ElementsConstructibles {
   }
 
   statistiques(identifiantsMesuresPersonnalisees) {
+    const fait = (statut) => statut === MesureGenerale.STATUT_FAIT;
+    const nonFait = (statut) => statut === MesureGenerale.STATUT_NON_FAIT;
+    const enCours = (statut) => statut === MesureGenerale.STATUT_EN_COURS;
+
     const statsInitiales = () => ({
       indispensablesFaites: 0,
+      indispensablesNonFaites: 0,
+      indispensablesEnCours: 0,
       misesEnOeuvre: 0,
       recommandeesFaites: 0,
       retenues: 0,
@@ -46,16 +52,18 @@ class MesuresGenerales extends ElementsConstructibles {
       const { id, statut } = mesure;
       const { categorie } = this.referentiel.mesure(id);
 
-      if (statut === MesureGenerale.STATUT_FAIT || statut === MesureGenerale.STATUT_EN_COURS) {
-        stats[categorie].retenues += 1;
+      stats[categorie].misesEnOeuvre += fait(statut) ? 1 : 0;
+      stats[categorie].retenues += (fait(statut) || enCours(statut)) ? 1 : 0;
 
-        if (statut === MesureGenerale.STATUT_FAIT) {
-          stats[categorie].misesEnOeuvre += 1;
+      stats[categorie].indispensablesFaites += (fait(statut) && mesure.estIndispensable()) ? 1 : 0;
+      stats[categorie].indispensablesEnCours += (enCours(statut) && mesure.estIndispensable())
+        ? 1
+        : 0;
+      stats[categorie].indispensablesNonFaites += (nonFait(statut) && mesure.estIndispensable())
+        ? 1
+        : 0;
 
-          if (mesure.estIndispensable()) stats[categorie].indispensablesFaites += 1;
-          if (mesure.estRecommandee()) stats[categorie].recommandeesFaites += 1;
-        }
-      }
+      stats[categorie].recommandeesFaites += (fait(statut) && mesure.estRecommandee()) ? 1 : 0;
     });
 
     identifiantsMesuresPersonnalisees
