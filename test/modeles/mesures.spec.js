@@ -75,4 +75,26 @@ describe('Les mesures liées à une homologation', () => {
 
     expect(mesures.nombreTotalMesuresGenerales()).to.equal(2);
   });
+
+  elles('connaissent le nombre total de mesures générales indispensables', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: {
+        mesure1: {
+          indispensable: true,
+        },
+        mesure2: {
+          indispensable: true,
+        },
+        mesure3: {},
+      },
+    });
+    referentiel.identifiantsMesures = () => ['mesure1', 'mesure3'];
+
+    const mesures = new Mesures({
+      mesuresGenerales: [],
+      mesuresSpecifiques: [],
+    }, referentiel);
+
+    expect(mesures.nombreTotalMesuresGeneralesIndispensables()).to.equal(1);
+  });
 });

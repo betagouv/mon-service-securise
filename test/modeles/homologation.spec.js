@@ -236,6 +236,19 @@ describe('Une homologation', () => {
     expect(homologation.nombreTotalMesuresGenerales()).to.equal(42);
   });
 
+  it('connaît le nombre total de mesures générales indispensables', () => {
+    const referentiel = Referentiel.creeReferentiel({ mesures: {
+      m1: { indispensable: true },
+      m2: {},
+    } });
+    const moteur = { mesures: () => ({ m1: {}, m2: {} }) };
+    const homologation = new Homologation({
+      mesuresGenerales: [],
+    }, referentiel, moteur);
+
+    expect(homologation.nombreTotalMesuresGeneralesIndispensables()).to.equal(1);
+  });
+
   it('sait décrire le statut de déploiement', () => {
     const referentiel = Referentiel.creeReferentiel({
       statutsDeploiement: {
