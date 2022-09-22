@@ -24,6 +24,12 @@ class Mesures extends InformationsHomologation {
     return this.identifiantsMesures.length;
   }
 
+  nombreTotalMesuresGeneralesIndispensables() {
+    return this.identifiantsMesures
+      .filter((identifiant) => this.referentiel.mesureIndispensable(identifiant))
+      .length;
+  }
+
   nonSaisies() {
     return this.mesuresGenerales.nonSaisies();
   }

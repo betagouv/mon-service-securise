@@ -110,6 +110,10 @@ class Homologation {
     return this.mesures.nombreTotalMesuresGenerales();
   }
 
+  nombreTotalMesuresGeneralesIndispensables() {
+    return this.mesures.nombreTotalMesuresGeneralesIndispensables();
+  }
+
   nomService() { return this.descriptionService.nomService; }
 
   piloteProjet() { return this.rolesResponsabilites.piloteProjet; }
