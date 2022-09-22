@@ -37,10 +37,7 @@ const brancheModales = (selecteurAffichageModale, selecteurParentRideau) => {
 
 const brancheModaleUnique = (selecteurAffichageModale, rideauModale) => {
   const $rideauModale = $(rideauModale);
-  const $selecteurAffichageModale = $(selecteurAffichageModale);
-  
   initialiseComportementModale($rideauModale);
-  
   $(selecteurAffichageModale).on('click', (eAffichage) => {
     eAffichage.preventDefault();
     $rideauModale.trigger('afficheModale');
