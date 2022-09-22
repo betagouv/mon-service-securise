@@ -4,6 +4,8 @@ block append styles
   link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
 
 block append page
+  script(src='/bibliotheques/chart.js')
+  script(src='/bibliotheques/chartjs-plugin-datalabels.js')
 
   .page
     header
@@ -41,9 +43,31 @@ block append page
 
         h3 Par niveau de criticité
         .regroupement-criticite
+          - const statistiquesMesures = homologation.statistiquesMesures();
+          - const nombreTotalMesuresIndispensables = homologation.nombreTotalMesuresGeneralesIndispensables();
+          - const mesuresFaites = statistiquesMesures.nombreIndispensables().fait;
+          - const mesuresEnCours = statistiquesMesures.nombreIndispensables().enCours;
+          - const mesuresNonFaites = statistiquesMesures.nombreIndispensables().nonFait;
+          - const mesuresARemplir = nombreTotalMesuresIndispensables - mesuresFaites - mesuresEnCours - mesuresNonFaites;
+
+          .graphique.indispensables(
+              data-faites = mesuresFaites,
+              data-en-cours = mesuresEnCours,
+              data-non-faites = mesuresNonFaites,
+              data-a-remplir = mesuresARemplir,
+            )
+            h4 Indispensables
+            .canvas
+              canvas#indispensables
+
           .total-mesures
             .total
               strong Total :
               span &nbsp;#{homologation.nombreTotalMesuresGenerales()} mesures proposées par l'ANSSI.
+            .legendes
+              .legende.legende-faites Faites
+              .legende.legende-en-cours En cours
+              .legende.legende-non-faites Non faites
+              .legende.legende-a-remplir À remplir
 
   script(type = 'module', src = '/statique/homologation/syntheseSecurite.js')
