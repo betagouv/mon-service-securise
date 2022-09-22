@@ -9,6 +9,10 @@
   --gris-fonce: #2f3a43;
   --gris-inactif: #929292;
 
+  --camaieu-fonce: #0a4c8c;
+  --camaieu-moyen: #75a1e8;
+  --camaieu-clair: #e4efff;
+
   --texte-fonce: var(--gris-fonce);
   --texte-moyen-fonce: #5e5e5e;
   --texte-moyen: #929292;

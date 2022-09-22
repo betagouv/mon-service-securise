@@ -148,13 +148,109 @@ section > h2 {
   margin: 1em;
 }
 
-.regroupement-criticite .total-mesures {
+.regroupement-criticite :is(h4, .total-mesures) {
   background-color: var(--fond-gris-clair);
   margin: 0;
   text-align: center;
   padding: 1.2em;
 }
 
+.regroupement-criticite .total-mesures {
+  border-radius: 0 0 1em 1em;
+}
+
+.graphique {
+  background-color: var(--fond-gris-clair);
+  padding: 1.7em;
+  margin: 0.2em 0;
+}
+
+.regroupement-criticite .graphique {
+  height: 150px;
+  border-radius: 1em 1em 0 0;
+}
+
+.indispensables {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.indispensables h4::after {
+  content:'';
+  display: inline-block;
+
+  background-image: url(../images/icone_etoile_orange.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  height: 1.2em;
+  width: 1.2em;
+  margin-left: 0.5em;
+  transform: translateY(0.2em);
+}
+
+.indispensables h4 {
+  width: 100%;
+  margin: 0;
+  font-size: 1em;
+  color: var(--bleu-anssi);
+  text-align: center;
+}
+
+.canvas {
+  width: 110px;
+  height: 110px;
+}
+
+.regroupement-criticite .total-mesures {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.7em;
+}
+
 .total-mesures .total {
   color: var(--texte-moyen-fonce);
+}
+
+.legendes {
+  display: flex;
+  margin: 0.7em 0;
+}
+
+.legendes .legende {
+  margin: 0;
+  padding: 0.5em 1em;
+  font-weight: bold;
+}
+
+.legendes .legende::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1px var(--bordure-fonce) solid;
+  border-radius: 2px;
+  margin-right: 0.7em;
+  transform: translateY(2px);
+}
+
+.legendes .legende.legende-faites::before {
+  background-color: var(--camaieu-fonce);
+  border-color: var(--camaieu-fonce);
+}
+
+.legendes .legende.legende-en-cours::before {
+  background-color: var(--camaieu-moyen);
+  border-color: var(--camaieu-moyen);
+}
+
+.legendes .legende.legende-non-faites::before {
+  background-color: var(--camaieu-clair);
+}
+
+.legendes .legende.legende-a-remplir::before {
+  background-color: #fff;
 }
