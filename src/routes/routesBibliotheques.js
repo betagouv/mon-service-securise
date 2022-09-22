@@ -11,6 +11,7 @@ const CHEMINS_BIBLIOTHEQUES = {
   moment: 'https://cdn.jsdelivr.net/npm/moment@^2',
   'moment-locale-fr.js': 'https://cdn.jsdelivr.net/npm/moment/locale/fr.js',
   'purify.min.js': 'https://unpkg.com/dompurify/dist/purify.min.js',
+  'chartjs-plugin-datalabels.js': 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels',
 };
 
 const routesBibliotheques = () => {
