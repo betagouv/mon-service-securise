@@ -1,5 +1,5 @@
 const $modaleNouveauContributeur = () => $(`
-<div class="rideau">
+<div class="rideau" id="rideau-nouveau-contributeur">
   <div class="modale">
     <div class="fermeture-modale"></div>
     <div class="contenu-modale">

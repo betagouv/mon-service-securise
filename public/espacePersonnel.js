@@ -1,5 +1,5 @@
 import { $homologations, $modaleNouveauContributeur } from './modules/elementsDom/homologations.js';
-import { brancheModales, brancheModaleUnique } from './modules/interactions/modale.mjs';
+import { brancheModale } from './modules/interactions/modale.mjs';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
 
 $(() => {
@@ -10,10 +10,10 @@ $(() => {
     $conteneurHomologations.prepend($conteneursHomologation);
 
     $('main').append($modaleNouveauContributeur());
-    brancheModales('.ajout-contributeur', 'main');
+    brancheModale('.ajout-contributeur', '#rideau-nouveau-contributeur');
     brancheComportementSaisieContributeur('.ajout-contributeur');
 
-    brancheModaleUnique('#nouveauService', '.rideau#modaleNouveauService');
+    brancheModale('#nouveauService', '#modaleNouveauService');
   };
 
   axios.get('/api/utilisateurCourant')
