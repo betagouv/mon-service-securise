@@ -65,19 +65,27 @@ class StatistiquesMesures {
     return this.donnees[idCategorie].misesEnOeuvre;
   }
 
-  nombreIndispensables() {
-    const totalIndispensablesStatut = (clefStatut) => Object
+  nombreMesuresParRecommandation(clef) {
+    const totalParStatut = (clefStatut) => Object
       .keys(this.donnees)
       .map((idCategorie) => this.donnees[idCategorie][clefStatut])
       .reduce((acc, nombre) => acc + nombre, 0);
 
-    const indispensables = {
-      fait: totalIndispensablesStatut('indispensablesFaites'),
-      nonFait: totalIndispensablesStatut('indispensablesNonFaites'),
-      enCours: totalIndispensablesStatut('indispensablesEnCours'),
+    const mesures = {
+      fait: totalParStatut(`${clef}Faites`),
+      nonFait: totalParStatut(`${clef}NonFaites`),
+      enCours: totalParStatut(`${clef}EnCours`),
     };
 
-    return indispensables;
+    return mesures;
+  }
+
+  nombreIndispensables() {
+    return this.nombreMesuresParRecommandation('indispensables');
+  }
+
+  nombreRecommandees() {
+    return this.nombreMesuresParRecommandation('recommandees');
   }
 
   retenues(idCategorie) {

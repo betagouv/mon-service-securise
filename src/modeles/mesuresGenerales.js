@@ -40,6 +40,8 @@ class MesuresGenerales extends ElementsConstructibles {
       indispensablesEnCours: 0,
       misesEnOeuvre: 0,
       recommandeesFaites: 0,
+      recommandeesEnCours: 0,
+      recommandeesNonFaites: 0,
       retenues: 0,
       totalIndispensables: 0,
       totalRecommandees: 0,
@@ -64,6 +66,12 @@ class MesuresGenerales extends ElementsConstructibles {
         : 0;
 
       stats[categorie].recommandeesFaites += (fait(statut) && mesure.estRecommandee()) ? 1 : 0;
+      stats[categorie].recommandeesEnCours += (enCours(statut) && mesure.estRecommandee())
+        ? 1
+        : 0;
+      stats[categorie].recommandeesNonFaites += (nonFait(statut) && mesure.estRecommandee())
+        ? 1
+        : 0;
     });
 
     identifiantsMesuresPersonnalisees
