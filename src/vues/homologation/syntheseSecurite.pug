@@ -44,25 +44,46 @@ block append page
         h3 Par niveau de criticité
         .regroupement-criticite
           - const statistiquesMesures = homologation.statistiquesMesures();
-          - const nombreTotalMesuresIndispensables = homologation.nombreTotalMesuresGeneralesIndispensables();
-          - const mesuresFaites = statistiquesMesures.nombreIndispensables().fait;
-          - const mesuresEnCours = statistiquesMesures.nombreIndispensables().enCours;
-          - const mesuresNonFaites = statistiquesMesures.nombreIndispensables().nonFait;
-          - const mesuresARemplir = nombreTotalMesuresIndispensables - mesuresFaites - mesuresEnCours - mesuresNonFaites;
-          - const mesuresRestantes = nombreTotalMesuresIndispensables - mesuresFaites;
+          - const nombreTotalMesuresGenerales = homologation.nombreTotalMesuresGenerales();
 
+          - const nombreTotalMesuresIndispensables = homologation.nombreTotalMesuresGeneralesIndispensables();
+          - const mesuresIndispensablesFaites = statistiquesMesures.nombreIndispensables().fait;
+          - const mesuresIndispensablesEnCours = statistiquesMesures.nombreIndispensables().enCours;
+          - const mesuresIndispensablesNonFaites = statistiquesMesures.nombreIndispensables().nonFait;
+          - const mesuresIndispensablesARemplir = nombreTotalMesuresIndispensables - mesuresIndispensablesFaites - mesuresIndispensablesEnCours - mesuresIndispensablesNonFaites;
+          - const mesuresIndispensablesRestantes = nombreTotalMesuresIndispensables - mesuresIndispensablesFaites;
           .graphique.indispensables(
-              data-faites = mesuresFaites,
-              data-en-cours = mesuresEnCours,
-              data-non-faites = mesuresNonFaites,
-              data-a-remplir = mesuresARemplir,
+              data-faites = mesuresIndispensablesFaites,
+              data-en-cours = mesuresIndispensablesEnCours,
+              data-non-faites = mesuresIndispensablesNonFaites,
+              data-a-remplir = mesuresIndispensablesARemplir,
             )
             h4 Indispensables
             .canvas
               canvas#indispensables
             .reste-mesures
               p Il reste
-              p.mesures-restantes #{mesuresRestantes} mesures
+              p.mesures-restantes #{mesuresIndispensablesRestantes} mesures
+              p à mettre en œuvre
+
+          - const nombreTotalMesuresRecommandees = nombreTotalMesuresGenerales - nombreTotalMesuresIndispensables;
+          - const mesuresRecommandeesFaites = statistiquesMesures.nombreRecommandees().fait;
+          - const mesuresRecommandeesEnCours = statistiquesMesures.nombreRecommandees().enCours;
+          - const mesuresRecommandeesNonFaites = statistiquesMesures.nombreRecommandees().nonFait;
+          - const mesuresRecommandeesARemplir = nombreTotalMesuresRecommandees - mesuresRecommandeesFaites - mesuresRecommandeesEnCours - mesuresRecommandeesNonFaites;
+          - const mesuresRecommandeesRestantes = nombreTotalMesuresRecommandees - mesuresRecommandeesFaites;
+          .graphique.recommandees(
+            data-faites = mesuresRecommandeesFaites,
+            data-en-cours = mesuresRecommandeesEnCours,
+            data-non-faites = mesuresRecommandeesNonFaites,
+            data-a-remplir = mesuresRecommandeesARemplir,
+          )
+            h4 Mesures recommandées
+            .canvas
+              canvas#recommandees
+            .reste-mesures
+              p Il reste
+              p.mesures-restantes #{mesuresRecommandeesRestantes} mesures
               p à mettre en œuvre
 
           .total-mesures

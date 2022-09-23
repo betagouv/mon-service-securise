@@ -162,19 +162,28 @@ section > h2 {
 .graphique {
   background-color: var(--fond-gris-clair);
   padding: 1.7em;
-  margin: 0.2em 0;
 }
 
-.regroupement-criticite .graphique {
-  height: 150px;
-  border-radius: 1em 1em 0 0;
-}
-
-.indispensables {
-  display: flex;
+.indispensables, .recommandees {
+  display: inline-flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+
+  box-sizing: border-box;
+  width: calc(50% - 0.1em);
+  height: 210px;
+  margin-bottom: 0.2em;
+}
+
+.indispensables {
+  margin-right: 0.1em;
+  border-top-left-radius: 1em;
+}
+
+.recommandees {
+  margin-left: 0.1em;
+  border-top-right-radius: 1em;
 }
 
 .indispensables h4::after {
@@ -185,16 +194,16 @@ section > h2 {
   background-repeat: no-repeat;
   background-size: contain;
 
-  height: 1.2em;
-  width: 1.2em;
+  height: 1.1em;
+  width: 1.1em;
   margin-left: 0.5em;
-  transform: translateY(0.2em);
+  transform: translateY(0.15em);
 }
 
-.indispensables h4 {
+:is(.indispensables, .recommandees) h4 {
   width: 100%;
   margin: 0;
-  font-size: 1em;
+  font-size: 1.1em;
   color: var(--bleu-anssi);
   text-align: center;
 }
