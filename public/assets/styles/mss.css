@@ -67,6 +67,10 @@ section:last-of-type {
   background: #fff;
 }
 
+.zone-principale {
+  min-width: 0;
+}
+
 .etroit {
   width: 400px;
   margin: 2em auto 0;
