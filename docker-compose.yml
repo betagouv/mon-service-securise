@@ -7,8 +7,11 @@ x-app:
   env_file:
     - .env
   volumes:
-    - .:/usr/src/app
-    - node_modules:/usr/src/app/node_modules/
+    - .:/home/mss
+    - node_modules:/home/mss/node_modules/
+    - /home/mss/.npm/
+    - /home/mss/.profile.d/
+    - /home/mss/.scalingo/
 
 services:
   db:
@@ -28,7 +31,6 @@ services:
 
   web:
     <<: *configuration-base
-    command: "npx nodemon server.js"
     environment:
       - NODE_ENV=development
     networks:
