@@ -43,7 +43,7 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
   const classePastilles = 'pastilles';
 
   const $element = $(`
-<a class="homologation existante" href="/homologation/${donneesHomologation.id}">
+<a class="service existante" href="/homologation/${donneesHomologation.id}">
   <div class="titre-homologation">${donneesHomologation.nomService}</div>
   <div class="contributeurs">
     <p>Contributeurs</p>
