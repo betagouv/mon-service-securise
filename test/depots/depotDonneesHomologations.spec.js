@@ -256,12 +256,19 @@ describe('Le dépot de données des homologations', () => {
   });
 
   describe("sur demande de mise à jour de la description du service d'une homologation", () => {
-    it("met à jour la description du service d'une homologation", (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+    let adaptateurPersistance;
+
+    beforeEach(() => {
+      const donneesHomologation = { id: '123', descriptionService: { nomService: 'Super Service', presentation: 'Une présentation' } };
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Super Service' } }],
+        homologations: [copie(donneesHomologation)],
+        services: [copie(donneesHomologation)],
       });
+    });
+
+    it("met à jour la description du service d'une homologation", (done) => {
       const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
       const description = new DescriptionService({ nomService: 'Nouveau Nom' });
@@ -274,12 +281,21 @@ describe('Le dépot de données des homologations', () => {
         .catch(done);
     });
 
+    it("met à jour la description de service dans l'objet métier service", (done) => {
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depotServices = DepotDonneesServices.creeDepot({ adaptateurPersistance });
+
+      const description = new DescriptionService({ nomService: 'Nouveau Nom' });
+      depot.ajouteDescriptionServiceAHomologation('999', '123', description)
+        .then(() => depotServices.service('123'))
+        .then(({ descriptionService }) => {
+          expect(descriptionService.nomService).to.equal('Nouveau Nom');
+          done();
+        })
+        .catch(done);
+    });
+
     it('lève une exception si le nom du service est absent', (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
-        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Super Service' } }],
-      });
       const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
       const description = new DescriptionService({ nomService: '' });
@@ -296,13 +312,6 @@ describe('Le dépot de données des homologations', () => {
     });
 
     it("ne détecte pas de doublon sur le nom de service pour l'homologation en cours de mise à jour", (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
-        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [
-          { id: '123', descriptionService: { nomService: 'Super Service', presentation: 'Une présentation' } },
-        ],
-      });
       const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
       const description = new DescriptionService({ nomService: 'Super Service', presentation: 'Une autre présentation' });
@@ -317,10 +326,10 @@ describe('Le dépot de données des homologations', () => {
   });
 
   it('sait associer des rôles et responsabilités à une homologation', (done) => {
+    const donneesHomologation = { id: '123', descriptionService: { nomService: 'nom' } };
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [
-        { id: '123', descriptionService: { nomService: 'nom' } },
-      ],
+      homologations: [copie(donneesHomologation)],
+      services: [copie(donneesHomologation)],
     });
     const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
@@ -410,10 +419,10 @@ describe('Le dépot de données des homologations', () => {
   });
 
   it("sait associer un avis d'expert cyber à une homologation", (done) => {
+    const donneesHomologation = { id: '123', descriptionService: { nomService: 'nom' } };
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      homologations: [
-        { id: '123', descriptionService: { nomService: 'nom' } },
-      ],
+      homologations: [copie(donneesHomologation)],
+      services: [copie(donneesHomologation)],
     });
     const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 

@@ -39,7 +39,10 @@ const creeDepot = (config = {}) => {
       Object.assign(h[nomPropriete], donneesPropriete);
 
       const { id, ...donnees } = h;
-      return adaptateurPersistance.metsAJourHomologation(id, donnees);
+      return Promise.all([
+        adaptateurPersistance.metsAJourHomologation(id, donnees),
+        adaptateurPersistance.metsAJourService(id, donnees),
+      ]);
     };
 
     const trouveDonneesHomologation = (param) => (
