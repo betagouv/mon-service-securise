@@ -20,19 +20,21 @@ const initialiseComportementModale = ($rideauModale) => {
   });
 };
 
-const brancheModales = (selecteurAffichageModale, selecteurParentRideau) => {
-  $(selecteurAffichageModale).each((_, afficheur) => {
-    const $parentRideau = selecteurParentRideau ? $(selecteurParentRideau) : $(afficheur);
-    const $rideauModale = $('.rideau', $parentRideau);
-    initialiseComportementModale($rideauModale);
-  });
+const brancheModale = (selecteurAffichageModale, rideauModale) => {
+  const $rideauModale = $(rideauModale);
+  initialiseComportementModale($rideauModale);
 
   $(selecteurAffichageModale).on('click', (eAffichage) => {
     eAffichage.preventDefault();
-    const $parentRideau = selecteurParentRideau ? $(selecteurParentRideau) : $(eAffichage.target);
-    const $rideauModale = $('.rideau', $parentRideau);
     $rideauModale.trigger('afficheModale');
   });
 };
 
-export { brancheModales, initialiseComportementModale };
+const brancheModales = (selecteurAffichageModale) => {
+  $(selecteurAffichageModale).each((_, afficheur) => {
+    const rideauModale = $(afficheur).children('.rideau').first();
+    brancheModale(afficheur, rideauModale);
+  });
+};
+
+export { brancheModale, brancheModales, initialiseComportementModale };

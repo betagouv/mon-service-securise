@@ -49,19 +49,6 @@ select {
   transform: rotate(45deg);
 }
 
-.case-a-cocher {
-  display: grid;
-  grid-template-columns: auto 1fr;
-}
-
-.case-a-cocher > input[type='checkbox'] + label {
-  margin-top: 0;
-}
-
-.case-a-cocher .message {
-  grid-column-end: span 2;
-}
-
 .affichage-simple {
   margin-bottom: 2em;
 }

@@ -119,16 +119,6 @@
   background-size: contain;
 }
 
-.contenu-modale {
-  display: flex;
-  flex-direction: column;
-  padding: 0 5em;
-}
-
-.contenu-modale h1 {
-  align-self: center;
-}
-
 .nouveau-contributeur {
   display: flex;
   align-items: center;
@@ -143,28 +133,6 @@
   background-image: url(../images/icone_enveloppe.svg);
   background-size: contain;
   background-repeat: no-repeat;
-}
-
-.contenu-modale input {
-  flex: auto;
-
-  margin: 0;
-  padding: 1em;
-  border: solid 1px #ebedf0;
-  border-radius: 3px;
-
-  font-size: 0.9em;
-}
-
-.contenu-modale .confirmation {
-  display: flex;
-  justify-content: flex-end;
-
-  margin-top: 2em;
-}
-
-.confirmation .bouton {
-  margin: 0;
 }
 
 .bandeau-nouveautes {
