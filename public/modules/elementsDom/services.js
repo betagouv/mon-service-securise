@@ -1,5 +1,5 @@
 const $modaleNouveauContributeur = () => $(`
-<div class="rideau">
+<div class="rideau" id="rideau-nouveau-contributeur">
   <div class="modale">
     <div class="fermeture-modale"></div>
     <div class="contenu-modale">
@@ -72,7 +72,7 @@ const $serviceExistant = (donneesService, idUtilisateur, classeNouveauContribute
 };
 
 const $nouveauService = () => $(`
-<a class="nouveau service" href="/homologation/creation">
+<a class="nouveau service" href="/homologation/creation" id="nouveau-service">
   <div class="icone-ajout"></div>
   <div>Nouveau service</div>
 </a>

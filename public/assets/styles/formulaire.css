@@ -41,10 +41,6 @@ form input {
   font-family: Marianne;
 }
 
-form .bouton {
-  text-align: center;
-}
-
 fieldset {
   margin: 0 0 1em 0;
   padding: 0 0 2em;
@@ -153,4 +149,17 @@ textarea {
 select {
   display: block;
   margin: 1em 0;
+}
+
+.case-a-cocher {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.case-a-cocher > input[type='checkbox'] + label {
+  margin-top: 0;
+}
+
+.case-a-cocher .message {
+  grid-column-end: span 2;
 }

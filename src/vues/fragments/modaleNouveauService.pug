@@ -1,0 +1,24 @@
+include lienNouvelOnglet
+
+block append styles
+  link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/formulaire.css', rel='stylesheet')
+  link(href = '/statique/assets/styles/bouton.css', rel='stylesheet')
+  link(href = '/statique/assets/styles/modaleNouveauService.css', rel='stylesheet')
+
+mixin modaleNouveauService
+  .rideau#modale-nouveau-service
+    .modale
+      .fermeture-modale
+      .contenu-modale
+        h1 Nouveau service
+        form(action = "/homologation/creation", method = "GET")
+          .case-a-cocher.requis
+            input(id = 'attestation', name = 'attestation', type = 'checkbox', required, title = '')
+            label(for = 'attestation')
+              | J'atteste que le service ne relève pas d'une réglementation encadrant spécifiquement la sécurité de systèmes d'information aux besoins de sécurité élevés.
+              |
+              +lienNouvelOnglet('/questionsFrequentes#services-exclus', 'En savoir plus')
+          button.confirmation(type = "submit").bouton Continuer
+
+  script(type = 'module', src = '/statique/modules/modaleNouveauService.js')

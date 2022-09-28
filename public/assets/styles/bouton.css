@@ -1,25 +1,30 @@
+button {
+  text-align: center;
+
+  font-family: 'Marianne';
+  font-size: 1em;
+}
+
 .bouton {
   display: inline-block;
 
   margin: 2em 0 2em auto;
   padding: 1em 3em;
+
+  border: 0;
   border-radius: 3px;
+
   background: var(--bleu-mise-en-avant);
+  color: #fff;
 
   text-decoration: none;
-  color: #fff;
 }
 
-.bouton:hover {
-  opacity: .87;
-  background-color: var(--bleu-mise-en-avant);
-
+.bouton:not(:disabled):hover {
   cursor: pointer;
+  opacity: .87;
 }
 
-button.bouton {
-  border: 0;
-
-  font-family: 'Marianne';
-  font-size: 1em;
+.bouton:disabled {
+  background-color: var(--gris-inactif);
 }
