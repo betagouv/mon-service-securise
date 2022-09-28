@@ -10,7 +10,7 @@ const $modaleNouveauContributeur = () => $(`
         <input id="emailContributeur"
                name="emailContributeur"
                placeholder="ex. jean.dupont@mail.fr">
-        <input id="idHomologation" name="idHomologation" type="hidden">
+        <input id="idService" name="idService" type="hidden">
       </div>
       <div class="confirmation">
         <a class="bouton" id="nouveau-contributeur">Envoyer</a>
@@ -20,9 +20,9 @@ const $modaleNouveauContributeur = () => $(`
 </div>
 `);
 
-const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouveauContributeur) => {
+const $serviceExistant = (donneesService, idUtilisateur, classeNouveauContributeur) => {
   const utilisateurCourantPeutAjouterContributeurs = () => {
-    const idContributeurs = donneesHomologation.contributeurs.map((c) => c.id);
+    const idContributeurs = donneesService.contributeurs.map((c) => c.id);
 
     return !idContributeurs.includes(idUtilisateur);
   };
@@ -43,8 +43,8 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
   const classePastilles = 'pastilles';
 
   const $element = $(`
-<a class="homologation existante" href="/homologation/${donneesHomologation.id}">
-  <div class="titre-homologation">${donneesHomologation.nomService}</div>
+<a class="service" href="/homologation/${donneesService.id}">
+  <div class="titre-service">${donneesService.nomService}</div>
   <div class="contributeurs">
     <p>Contributeurs</p>
     <div class="${classePastilles}"></div>
@@ -54,13 +54,13 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
 
   if (utilisateurCourantPeutAjouterContributeurs()) {
     $(`.${classePastilles}`, $element).append($(`
-<div class="${classeNouveauContributeur}" data-id-homologation="${donneesHomologation.id}"></div>
+<div class="${classeNouveauContributeur}" data-id-service="${donneesService.id}"></div>
     `));
   }
 
-  $(`.${classePastilles}`, $element).append($pastille('pastille createur', donneesHomologation.createur, true));
+  $(`.${classePastilles}`, $element).append($pastille('pastille createur', donneesService.createur, true));
 
-  donneesHomologation.contributeurs.forEach((donneesContributeur) => {
+  donneesService.contributeurs.forEach((donneesContributeur) => {
     const classePastilleContributeur = (
       `pastille contributeur ${donneesContributeur.cguAcceptees ? 'valide' : 'en-attente'}`
     );
@@ -71,23 +71,23 @@ const $homologationExistante = (donneesHomologation, idUtilisateur, classeNouvea
   return $element;
 };
 
-const $ajoutNouvelleHomologation = () => $(`
-<a class="nouvelle homologation" href="/homologation/creation">
+const $nouveauService = () => $(`
+<a class="nouveau service" href="/homologation/creation">
   <div class="icone-ajout"></div>
-  <div>Créer un nouveau projet d'homologation</div>
+  <div>Nouveau service</div>
 </a>
 `);
 
-const $homologations = (donneesHomologations, idUtilisateur, classeNouveauContributeur) => (
-  donneesHomologations.reduce(($acc, donneesHomologation) => {
-    const $homologation = $homologationExistante(
-      donneesHomologation,
+const $services = (donneesServices, idUtilisateur, classeNouveauContributeur) => (
+  donneesServices.reduce(($acc, donneesService) => {
+    const $service = $serviceExistant(
+      donneesService,
       idUtilisateur,
       classeNouveauContributeur,
     );
-    return $acc.append($homologation);
+    return $acc.append($service);
   }, $(document.createDocumentFragment()))
-    .append($ajoutNouvelleHomologation())
+    .append($nouveauService())
 );
 
-export { $homologations, $modaleNouveauContributeur };
+export { $services, $modaleNouveauContributeur };

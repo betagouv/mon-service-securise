@@ -1,13 +1,13 @@
-import { $homologations, $modaleNouveauContributeur } from './modules/elementsDom/homologations.js';
 import { brancheModales } from './modules/interactions/modale.mjs';
+import { $services, $modaleNouveauContributeur } from './modules/elementsDom/services.js';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
 
 $(() => {
-  const peupleHomologationsDans = (placeholder, donneesHomologations, idUtilisateur) => {
-    const $conteneurHomologations = $(placeholder);
-    const $conteneursHomologation = $homologations(donneesHomologations, idUtilisateur, 'ajout-contributeur');
+  const peupleServicesDans = (placeholder, donneesServices, idUtilisateur) => {
+    const $conteneurServices = $(placeholder);
+    const $conteneursService = $services(donneesServices, idUtilisateur, 'ajout-contributeur');
 
-    $conteneurHomologations.prepend($conteneursHomologation);
+    $conteneurServices.prepend($conteneursService);
 
     $('main').append($modaleNouveauContributeur());
     brancheModales('.ajout-contributeur', 'main');
@@ -17,5 +17,5 @@ $(() => {
   axios.get('/api/utilisateurCourant')
     .then((reponse) => reponse.data.utilisateur.id)
     .then((idUtilisateur) => axios.get('/api/homologations')
-      .then((reponse) => peupleHomologationsDans('.homologations', reponse.data.homologations, idUtilisateur)));
+      .then((reponse) => peupleServicesDans('.services', reponse.data.homologations, idUtilisateur)));
 });
