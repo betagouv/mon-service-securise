@@ -39,6 +39,7 @@ const nouvelAdaptateur = (env) => {
     .catch(() => undefined);
 
   const ajouteHomologation = (...params) => ajouteLigneDansTable('homologations', ...params);
+  const ajouteService = (...params) => ajouteLigneDansTable('services', ...params);
   const ajouteUtilisateur = (...params) => ajouteLigneDansTable('utilisateurs', ...params);
 
   const arreteTout = () => knex.destroy();
@@ -163,6 +164,7 @@ const nouvelAdaptateur = (env) => {
   return {
     ajouteAutorisation,
     ajouteHomologation,
+    ajouteService,
     ajouteUtilisateur,
     arreteTout,
     autorisation,

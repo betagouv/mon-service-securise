@@ -470,6 +470,7 @@ describe('Le dépot de données des homologations', () => {
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [],
+        services: [],
         autorisations: [],
       });
       adaptateurUUID = { genereUUID: () => 'unUUID' };
@@ -483,7 +484,7 @@ describe('Le dépot de données des homologations', () => {
         .then(() => depot.homologations('123'))
         .then((homologations) => {
           expect(homologations.length).to.equal(1);
-          expect(homologations[0].descriptionService.nomService).to.equal('Super Service');
+          expect(homologations[0].nomService()).to.equal('Super Service');
           done();
         })
         .catch(done);
@@ -499,6 +500,18 @@ describe('Le dépot de données des homologations', () => {
         .then(() => depot.homologations('123'))
         .then((homologations) => {
           expect(homologations[0].id).to.equal('11111111-1111-1111-1111-111111111111');
+          done();
+        })
+        .catch(done);
+    });
+
+    it('ajoute en copie un nouveau service au dépôt', (done) => {
+      const depotDonneesServices = DepotDonneesServices.creeDepot({ adaptateurPersistance });
+
+      depot.nouvelleHomologation('123', { nomService: 'Super Service' })
+        .then((idHomologation) => depotDonneesServices.service(idHomologation))
+        .then((service) => {
+          expect(service.nomService()).to.equal('Super Service');
           done();
         })
         .catch(done);
