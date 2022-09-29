@@ -130,7 +130,10 @@ const creeDepot = (config = {}) => {
     };
 
     return valideDescriptionService(idUtilisateur, donneesDescriptionService)
-      .then(() => adaptateurPersistance.ajouteHomologation(idHomologation, donnees))
+      .then(() => Promise.all([
+        adaptateurPersistance.ajouteHomologation(idHomologation, donnees),
+        adaptateurPersistance.ajouteService(idHomologation, donnees),
+      ]))
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
         idUtilisateur, idHomologation, type: 'createur',
       }))

@@ -3,6 +3,7 @@ const adaptateurHorlogeParDefaut = require('./adaptateurHorloge');
 const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogeParDefaut) => {
   donnees.utilisateurs ||= [];
   donnees.homologations ||= [];
+  donnees.services ||= [];
   donnees.autorisations ||= [];
 
   const metsAJourEnregistrement = (fonctionRecherche, id, donneesAMettreAJour) => (
@@ -13,6 +14,11 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
 
   const ajouteHomologation = (id, donneesHomologation) => {
     donnees.homologations.push(Object.assign(donneesHomologation, { id }));
+    return Promise.resolve();
+  };
+
+  const ajouteService = (id, donneesService) => {
+    donnees.services.push(Object.assign(donneesService, { id }));
     return Promise.resolve();
   };
 
@@ -139,6 +145,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
   return {
     ajouteAutorisation,
     ajouteHomologation,
+    ajouteService,
     ajouteUtilisateur,
     autorisation,
     autorisationPour,
