@@ -150,7 +150,10 @@ const creeDepot = (config = {}) => {
 
   const supprimeHomologation = (idHomologation) => adaptateurPersistance
     .supprimeAutorisationsHomologation(idHomologation)
-    .then(() => adaptateurPersistance.supprimeHomologation(idHomologation));
+    .then(() => Promise.all([
+      adaptateurPersistance.supprimeHomologation(idHomologation),
+      adaptateurPersistance.supprimeService(idHomologation),
+    ]));
 
   return {
     ajouteAvisExpertCyberAHomologation,

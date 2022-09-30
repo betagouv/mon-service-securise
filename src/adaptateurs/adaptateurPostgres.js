@@ -38,6 +38,10 @@ const nouvelAdaptateur = (env) => {
     .then(convertisLigneEnObjet)
     .catch(() => undefined);
 
+  const supprimeEnregistrement = (nomTable, id) => knex(nomTable)
+    .where({ id })
+    .del();
+
   const ajouteHomologation = (...params) => ajouteLigneDansTable('homologations', ...params);
   const ajouteService = (...params) => ajouteLigneDansTable('services', ...params);
   const ajouteUtilisateur = (...params) => ajouteLigneDansTable('utilisateurs', ...params);
@@ -106,15 +110,11 @@ const nouvelAdaptateur = (env) => {
   const nbUtilisateurs = () => knex('utilisateurs').count()
     .then((rows) => rows[0]['count(*)']);
 
-  const supprimeHomologation = (id) => knex('homologations')
-    .where({ id })
-    .del();
+  const supprimeHomologation = (...params) => supprimeEnregistrement('homologations', ...params);
+  const supprimeService = (...params) => supprimeEnregistrement('services', ...params);
+  const supprimeUtilisateur = (...params) => supprimeEnregistrement('utilisaateurs', ...params);
 
   const supprimeHomologations = () => knex('homologations').del();
-
-  const supprimeUtilisateur = (id) => knex('utilisateurs')
-    .where({ id })
-    .del();
 
   const supprimeUtilisateurs = () => knex('utilisateurs').del();
 
@@ -182,6 +182,7 @@ const nouvelAdaptateur = (env) => {
     supprimeAutorisations,
     supprimeAutorisationsHomologation,
     supprimeHomologation,
+    supprimeService,
     supprimeHomologations,
     supprimeUtilisateur,
     supprimeUtilisateurs,
