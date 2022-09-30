@@ -5,13 +5,13 @@ const Referentiel = require('../src/referentiel');
 
 describe('Le référentiel', () => {
   describe('à sa création', () => {
-    it("valide que la somme des coefficients pour le calcul de l'incide de sécurité vaut 1", () => {
+    it("valide que la somme des coefficients pour le calcul de l'incide cyber vaut 1", () => {
       expect(() => Referentiel.creeReferentiel({
-        indiceSecurite: { coefficientIndispensables: 1.2, coefficientRecommandees: 0.8 },
+        indiceCyber: { coefficientIndispensables: 1.2, coefficientRecommandees: 0.8 },
       })).to.throwException((e) => {
         expect(e).to.be.an(ErreurDonneesReferentielIncorrectes);
         expect(e.message).to.equal(
-          "La somme des coefficients pour le calcul de l'indice de sécurité vaut 2, alors qu'elle aurait dû valoir 1."
+          "La somme des coefficients pour le calcul de l'indice cyber vaut 2, alors qu'elle aurait dû valoir 1."
         );
       });
     });
@@ -23,7 +23,7 @@ describe('Le référentiel', () => {
     it('valide les valeurs des coefficients après la recharge', () => {
       const referentiel = Referentiel.creeReferentielVide();
       expect(() => referentiel.recharge({
-        indiceSecurite: { coefficientIndispensables: 1.2, coefficientRecommandees: 0.8 },
+        indiceCyber: { coefficientIndispensables: 1.2, coefficientRecommandees: 0.8 },
       })).to.throwException();
     });
   });

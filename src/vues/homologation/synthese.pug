@@ -38,6 +38,6 @@ block zone-principale
       // vide pour l'instant
 
 block cartes-informations
-  - const indiceSecurite = service.indiceSecurite()
-  if process.env.AVEC_INDICE_SECURITE
-    +indiceCyber({ referentiel, indiceSecurite })
+  - const indiceCyber = service.indiceCyber()
+  if process.env.AVEC_INDICE_CYBER
+    +indiceCyber({ referentiel, indiceCyber })

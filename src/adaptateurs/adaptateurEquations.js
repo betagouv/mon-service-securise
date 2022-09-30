@@ -7,7 +7,7 @@ const enSvg = (equationTex) => {
     .then((resultat) => resultat.svg);
 };
 
-const indiceSecurite = () => enSvg(`
+const indiceCyber = () => enSvg(`
   K = 5 \\times \\sum_{Cat.} \\left(
     \\frac{i_c}{I_c}
     \\times \\left( 0.6 + \\frac{r_c}{R_c} \\times 0.4 \\right)
@@ -15,4 +15,4 @@ const indiceSecurite = () => enSvg(`
   \\right)
 `);
 
-module.exports = { indiceSecurite };
+module.exports = { indiceCyber };

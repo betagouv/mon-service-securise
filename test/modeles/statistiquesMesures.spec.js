@@ -8,7 +8,7 @@ const elles = it;
 
 describe('Les statistiques sur les mesures de sécurité', () => {
   const referentiel = Referentiel.creeReferentiel({
-    indiceSecurite: { coefficientIndispensables: 0.8, coefficientRecommandees: 0.2, noteMax: 5 },
+    indiceCyber: { coefficientIndispensables: 0.8, coefficientRecommandees: 0.2, noteMax: 5 },
     categoriesMesures: { une: 'catégorie 1', deux: 'catégorie 2', trois: 'catégorie 3' },
   });
 
@@ -100,8 +100,8 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       },
     }, referentiel);
 
-    expect(referentiel.coefficientIndiceSecuriteMesuresIndispensables()).to.equal(0.8);
-    expect(referentiel.coefficientIndiceSecuriteMesuresRecommandees()).to.equal(0.2);
+    expect(referentiel.coefficientIndiceCyberMesuresIndispensables()).to.equal(0.8);
+    expect(referentiel.coefficientIndiceCyberMesuresRecommandees()).to.equal(0.2);
     verifieEgaliteNumerique(
       (0.8 + 0.2 * (1 / 5)) * (2 / 4),
       stats.score('une'),
@@ -142,7 +142,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     });
   });
 
-  elles("calculent l'indice de sécurité total", () => {
+  elles("calculent l'indice cyber total", () => {
     const stats = new StatistiquesMesures({
       une: {
         misesEnOeuvre: 3,
@@ -162,12 +162,12 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       },
     }, referentiel);
 
-    expect(referentiel.indiceSecuriteMax()).to.equal(5);
-    verifieEgaliteNumerique(5 * stats.score('une'), stats.indiceSecurite().une);
-    verifieEgaliteNumerique(5 * stats.score('deux'), stats.indiceSecurite().deux);
+    expect(referentiel.indiceCyberMax()).to.equal(5);
+    verifieEgaliteNumerique(5 * stats.score('une'), stats.indiceCyber().une);
+    verifieEgaliteNumerique(5 * stats.score('deux'), stats.indiceCyber().deux);
     verifieEgaliteNumerique(
       5 * ((stats.score('une') * 13 + stats.score('deux') * 6) / (13 + 6)),
-      stats.indiceSecurite().total,
+      stats.indiceCyber().total,
     );
   });
 });

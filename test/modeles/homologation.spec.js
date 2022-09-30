@@ -222,11 +222,11 @@ describe('Une homologation', () => {
     });
   });
 
-  it('connaît son indice de sécurité', () => {
+  it('connaît son indice cyber', () => {
     const homologation = new Homologation({ createur: { email: 'bruno.dumans@mail.fr' } });
-    homologation.mesures.indiceSecurite = () => 3.7;
+    homologation.mesures.indiceCyber = () => 3.7;
 
-    expect(homologation.indiceSecurite()).to.equal(3.7);
+    expect(homologation.indiceCyber()).to.equal(3.7);
   });
 
   it('sait décrire le statut de déploiement', () => {
