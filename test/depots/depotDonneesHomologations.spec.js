@@ -616,23 +616,48 @@ describe('Le dépot de données des homologations', () => {
   });
 
   describe("sur demande de suppression d'une homologation", () => {
-    it("supprime l'homologation", (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+    let adaptateurPersistance;
+
+    beforeEach(() => {
+      const donneesHomologation = { id: '123', descriptionService: { nomService: 'Un service' } };
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        homologations: [copie(donneesHomologation)],
+        services: [copie(donneesHomologation)],
         autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
       });
+    });
+
+    it("supprime l'homologation", (done) => {
       const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
 
-      depot.supprimeHomologation('123')
-        .then(depot.homologation('123'))
-        .then((h) => expect(h).to.be(undefined))
-        .then(() => done())
+      adaptateurPersistance.homologation('123')
+        .then((h) => expect(h).to.be.an(Object))
+        .then(() => depot.supprimeHomologation('123'))
+        .then(() => adaptateurPersistance.homologation('123'))
+        .then((h) => {
+          expect(h).to.be(undefined);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('supprime le service', (done) => {
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+
+      adaptateurPersistance.service('123')
+        .then((s) => expect(s).to.be.an(Object))
+        .then(() => depot.supprimeHomologation('123'))
+        .then(() => adaptateurPersistance.service('123'))
+        .then((s) => {
+          expect(s).to.be(undefined);
+          done();
+        })
         .catch(done);
     });
 
     it('supprime les autorisations associées', (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'contributeur@mail.fr' },

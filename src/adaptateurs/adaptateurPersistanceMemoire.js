@@ -12,6 +12,11 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
       .then(() => {})
   );
 
+  const supprimeEnregistrement = (nomTable, id) => {
+    donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
+    return Promise.resolve();
+  };
+
   const ajouteHomologation = (id, donneesHomologation) => {
     donnees.homologations.push(Object.assign(donneesHomologation, { id }));
     return Promise.resolve();
@@ -76,20 +81,16 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
 
   const metsAJourService = (...params) => metsAJourEnregistrement(service, ...params);
 
-  const supprimeHomologation = (id) => {
-    donnees.homologations = donnees.homologations.filter((h) => h.id !== id);
-    return Promise.resolve();
-  };
+  const supprimeHomologation = (...params) => supprimeEnregistrement('homologations', ...params);
 
   const supprimeHomologations = () => {
     donnees.homologations = [];
     return Promise.resolve();
   };
 
-  const supprimeUtilisateur = (id) => {
-    donnees.utilisateurs = donnees.utilisateurs.filter((u) => u.id !== id);
-    return Promise.resolve();
-  };
+  const supprimeService = (...params) => supprimeEnregistrement('services', ...params);
+
+  const supprimeUtilisateur = (...params) => supprimeEnregistrement('utilisateurs', ...params);
 
   const supprimeUtilisateurs = () => {
     donnees.utilisateurs = [];
@@ -162,6 +163,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     supprimeAutorisationsHomologation,
     supprimeHomologation,
     supprimeHomologations,
+    supprimeService,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     transfereAutorisations,
