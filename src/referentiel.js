@@ -45,15 +45,15 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const departement = (code) => donneesReferentiel
     .departements?.find((unDepartement) => unDepartement.code === code)?.nom;
 
-  const coefficientIndiceSecuriteMesuresIndispensables = () => (
-    donnees.indiceSecurite?.coefficientIndispensables || 0.5
+  const coefficientIndiceCyberMesuresIndispensables = () => (
+    donnees.indiceCyber?.coefficientIndispensables || 0.5
   );
 
-  const coefficientIndiceSecuriteMesuresRecommandees = () => (
-    donnees.indiceSecurite?.coefficientRecommandees || 0.5
+  const coefficientIndiceCyberMesuresRecommandees = () => (
+    donnees.indiceCyber?.coefficientRecommandees || 0.5
   );
 
-  const indiceSecuriteMax = () => donnees.indiceSecurite?.noteMax || 10;
+  const indiceCyberMax = () => donnees.indiceCyber?.noteMax || 10;
 
   const actionSuivante = (id) => {
     const position = positionActionSaisie(id);
@@ -118,12 +118,12 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   };
 
   const valideDonnees = () => {
-    const sommeCoefficients = coefficientIndiceSecuriteMesuresIndispensables()
-      + coefficientIndiceSecuriteMesuresRecommandees();
+    const sommeCoefficients = coefficientIndiceCyberMesuresIndispensables()
+      + coefficientIndiceCyberMesuresRecommandees();
 
     if (sommeCoefficients !== 1) {
       throw new ErreurDonneesReferentielIncorrectes(
-        `La somme des coefficients pour le calcul de l'indice de sécurité vaut ${sommeCoefficients}, alors qu'elle aurait dû valoir 1.`
+        `La somme des coefficients pour le calcul de l'indice cyber vaut ${sommeCoefficients}, alors qu'elle aurait dû valoir 1.`
       );
     }
   };
@@ -140,14 +140,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     actionSuivante,
     categoriesMesures,
     codeDepartements,
-    coefficientIndiceSecuriteMesuresIndispensables,
-    coefficientIndiceSecuriteMesuresRecommandees,
+    coefficientIndiceCyberMesuresIndispensables,
+    coefficientIndiceCyberMesuresRecommandees,
     criticite,
     criticiteDelai,
     criticiteDonnees,
     criticiteFonctionnalite,
     criticiteMax,
-    indiceSecuriteMax,
+    indiceCyberMax,
     delaisAvantImpactCritique,
     departement,
     departements,
@@ -193,7 +193,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 const creeReferentielVide = () => creeReferentiel({
   actionsSaisie: {},
   categoriesMesures: {},
-  indiceSecurite: {},
+  indiceCyber: {},
   delaisAvantImpactCritique: {},
   donneesCaracterePersonnel: {},
   echeancesRenouvellement: {},

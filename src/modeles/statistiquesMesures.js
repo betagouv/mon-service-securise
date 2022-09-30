@@ -40,7 +40,7 @@ class StatistiquesMesures {
     return categories(this.donnees);
   }
 
-  indiceSecurite() {
+  indiceCyber() {
     const nbMesures = (categorie) => {
       const { totalIndispensables, totalRecommandees } = this.donnees[categorie];
       return totalIndispensables + totalRecommandees;
@@ -54,10 +54,10 @@ class StatistiquesMesures {
       acc + nbMesures(categorie)
     ), 0);
 
-    const indiceTotal = this.referentiel.indiceSecuriteMax() * (totalPondere / nbTotalMesures);
+    const indiceTotal = this.referentiel.indiceCyberMax() * (totalPondere / nbTotalMesures);
 
     return this.categories().reduce((acc, categorie) => Object.assign(acc, {
-      [categorie]: this.referentiel.indiceSecuriteMax() * this.score(categorie),
+      [categorie]: this.referentiel.indiceCyberMax() * this.score(categorie),
     }), { total: indiceTotal });
   }
 
@@ -80,8 +80,8 @@ class StatistiquesMesures {
     if (totalRecommandees === 0) return indispensablesFaites / totalIndispensables;
     if (totalIndispensables === 0) return recommandeesFaites / totalRecommandees;
 
-    const coeffIndispensables = this.referentiel.coefficientIndiceSecuriteMesuresIndispensables();
-    const coeffRecommandees = this.referentiel.coefficientIndiceSecuriteMesuresRecommandees();
+    const coeffIndispensables = this.referentiel.coefficientIndiceCyberMesuresIndispensables();
+    const coeffRecommandees = this.referentiel.coefficientIndiceCyberMesuresRecommandees();
 
     return (coeffIndispensables + coeffRecommandees * (recommandeesFaites / totalRecommandees))
       * (indispensablesFaites / totalIndispensables);

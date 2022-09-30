@@ -65,8 +65,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
   });
 
   app.get('/questionsFrequentes', (_requete, reponse) => {
-    adaptateurEquations.indiceSecurite()
-      .then((svg) => reponse.render('questionsFrequentes', { formuleIndiceSecurite: svg }));
+    adaptateurEquations.indiceCyber()
+      .then((svg) => reponse.render('questionsFrequentes', { formuleIndiceCyber: svg }));
   });
 
   app.get('/mentionsLegales', (_requete, reponse) => {
