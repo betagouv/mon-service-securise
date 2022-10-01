@@ -24,9 +24,9 @@ const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
 const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
-describe('Le dépot de données des homologations', () => {
-  const copie = (donnees) => JSON.parse(JSON.stringify(donnees));
+const copie = require('../../src/utilitaires/copie');
 
+describe('Le dépot de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [

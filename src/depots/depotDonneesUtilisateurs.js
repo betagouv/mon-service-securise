@@ -98,7 +98,10 @@ const creeDepot = (config = {}) => {
   );
 
   const supprimeUtilisateur = (id) => depotHomologations.homologations(id)
-    .then((hs) => hs.map((h) => adaptateurPersistance.supprimeHomologation(h.id)))
+    .then((hs) => hs.map((h) => Promise.all([
+      adaptateurPersistance.supprimeHomologation(h.id),
+      adaptateurPersistance.supprimeService(h.id),
+    ])))
     .then((suppressions) => Promise.all(suppressions))
     .then(() => adaptateurPersistance.supprimeUtilisateur(id));
 
