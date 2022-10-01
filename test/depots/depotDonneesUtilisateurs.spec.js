@@ -11,6 +11,8 @@ const {
 } = require('../../src/erreurs');
 const Utilisateur = require('../../src/modeles/utilisateur');
 
+const copie = require('../../src/utilitaires/copie');
+
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
   let adaptateurChiffrement;
@@ -398,6 +400,30 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       depot.supprimeUtilisateur('999')
         .then(() => depotHomologations.homologation('123'))
+        .then((h) => expect(h).to.be(undefined))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("supprime les services en copie des homologations associées à l'utilisateur", (done) => {
+      const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        homologations: [copie(donneesHomologations)],
+        services: [copie(donneesHomologations)],
+        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+      });
+      const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurPersistance,
+        depotHomologations,
+      });
+
+      adaptateurPersistance.service('123')
+        .then((s) => expect(s).to.be.an(Object))
+        .then(() => depot.supprimeUtilisateur('999'))
+        .then(() => adaptateurPersistance.service('123'))
         .then((h) => expect(h).to.be(undefined))
         .then(() => done())
         .catch(done);
