@@ -31,5 +31,8 @@ mixin indiceCyber({ referentiel, indiceCyber })
   - const { total } = indiceCyber
   +carteInformations({ titre: 'Indice cyber', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceCyber' })
     .score-indice-cyber
-      span.score= formatte(total)
-      span.score-max= ` / ${indiceCyberMax}`
+      .logo
+        div(class = `disque couleur-indice-cyber-${Math.floor(total)}`)
+        div(class = `curseur position-${Math.floor(total)}`)
+        span.score= formatte(total)
+        span.score-max= `/${indiceCyberMax}`
