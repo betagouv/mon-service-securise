@@ -35,6 +35,6 @@ block zone-principale
             +action(actionSaisie)
 
 block cartes-informations
-  - const indiceCyber = homologation.indiceCyber()
   if process.env.AVEC_INDICE_CYBER
+    - const indiceCyber = homologation.indiceCyber()
     +indiceCyber({ referentiel, indiceCyber })
