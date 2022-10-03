@@ -1,4 +1,4 @@
-extends ../base
+extends ../documentImprimable
 
 mixin risquesPagines({ titreAnnexe, titreSection, donnees })
   each risques, index in donnees
@@ -42,23 +42,12 @@ mixin mesuresPaginees({ titreAnnexe, titreSection, donnees })
                     .indispensable
       .saut-page
 
-block page
-  script(src='/bibliotheques/jquery-3.6.0.min.js')
-  script(src='/bibliotheques/purify.min.js')
-  script(src='/bibliotheques/html2canvas.min.js')
-  script(src='/bibliotheques/jspdf.umd.min.js')
+block append page
 
   include ../fragments/diagnostics
 
-  block styles
-    link(href='/statique/assets/styles/palette.css', rel='stylesheet')
-    link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
+  block append styles
     link(href='/statique/assets/styles/decision.css', rel='stylesheet')
-    link(href='/statique/assets/styles/bouton.css', rel='stylesheet')
-
-  nav.ne-pas-imprimer
-    a(href = `/homologation/${homologation.id}`) ‹&nbsp;&nbsp;Retour
-    .bouton#telecharger Télécharger le document
 
   .page
     header
