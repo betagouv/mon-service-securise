@@ -11,14 +11,14 @@
 .carte h1 {
   display: inline;
 
-  font-size: 1.2em;
+  font-size: 0.9em;
 }
 
 .carte h2 {
   margin-top: 0;
 
-  font-size: 1em;
-  font-weight: 600;
+  font-size: 0.8em;
+  font-weight: 500;
   color: var(--texte-clair);
 }
 
@@ -26,6 +26,7 @@
   margin: 1.5em 0 0.5em;
 
   color: var(--bleu-anssi);
+  font-size: 1em;
 }
 
 .carte h3 + p {
@@ -51,6 +52,8 @@
 
 .carte .details {
   margin-top: 2em;
+
+  font-size: 0.8em;
 }
 
 .carte .plus-details, .carte .moins-details {
@@ -58,7 +61,7 @@
 
   text-align: right;
 
-  font-size: 0.85em;
+  font-size: 0.7em;
   color: var(--bleu-mise-en-avant);
 }
 
@@ -100,5 +103,6 @@
 
   background-image: url(../images/icone_lien_nouvel_onglet.svg);
   background-repeat: no-repeat;
+  background-size: 100%;
   transform: translateY(0.2em);
 }
