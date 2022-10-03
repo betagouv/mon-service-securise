@@ -14,16 +14,12 @@ mixin indiceCyber({ referentiel, indiceCyber })
         dt= referentiel.descriptionCategorie(id)
         dd= (typeof indiceCyber[id] === 'number' ? `${formatte(indiceCyber[id])} / ${indiceCyberMax}` : '–')
 
-    h3 À quoi sert l'indice cyber ?
+    h3 Qu'est-ce que l'indice cyber ?
     p.
-      L'indice cyber fournit une indication du niveau de sécurité du
-      service basée sur une évaluation de la conformité de ce dernier à un
-      socle de mesures de sécurité personnalisé.
-    p.
-      Cette note ne constitue pas une preuve effective de la sécurité du
-      service. MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
-      responsables d'incidents de sécurité susceptibles d'affecter le service
-      numérique, quelle que soit la note attribuée à ce dernier.
+      L'indice cyber est calculé à partir des mesures de sécurité renseignées
+      et mises en œuvre par l'équipe par rapport à l'ensemble des mesures
+      proposées par l'ANSSI. Il fournit une évaluation indicative du niveau de
+      sécurité du service.
 
     p: a(href = '/questionsFrequentes#indice-cyber', target = '_blank', rel = 'noopener').nouvel-onglet En savoir plus
 
