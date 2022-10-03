@@ -1,43 +1,8 @@
-body {
-  margin: 10em auto 0;
-  width: 1000px;
-
-  background: var(--fond-pale);
-
-  font-family: "Marianne";
-  font-size: 10px;
-  color: var(--bleu-anssi);
-}
-
-nav {
-  position: fixed;
-  top: 0;
-  z-index: 1;
-
-  display: flex;
-  align-items: center;
-
-  box-sizing: border-box;
-  width: inherit;
-  padding: 2em;
-  border-bottom: solid 1px;
-
-  background: inherit;
-}
-
-nav a {
-  text-decoration: none;
-  color: var(--bleu-mise-en-avant);
-}
-
-nav .bouton {
-  margin: 0;
-  margin-left: auto;
-}
-
 .page {
   margin: 2em;
   padding: 0;
+
+  color: var(--bleu-anssi);
 }
 
 header {
