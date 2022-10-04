@@ -7,6 +7,12 @@ const InformationsHomologation = require('../../src/modeles/informationsHomologa
 
 const elles = it;
 
+function uneHomologation() {
+  const homologation = new Homologation({});
+  homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
+  return homologation;
+}
+
 describe("Les actions de saisie d'une homologation", () => {
   elles('retournent les infos de chaque action triée par position', () => {
     const referentiel = Referentiel.creeReferentiel({
@@ -18,10 +24,8 @@ describe("Les actions de saisie d'une homologation", () => {
       },
     });
 
-    const homologation = new Homologation({});
-    homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
+    const actions = new ActionsSaisie('v1', referentiel, uneHomologation());
 
-    const actions = new ActionsSaisie('v1', referentiel, homologation);
     expect(actions.toJSON()).to.eql([
       {
         id: 'uneAction',
@@ -44,10 +48,7 @@ describe("Les actions de saisie d'une homologation", () => {
       },
     });
 
-    const homologation = new Homologation({});
-    homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
-
-    const actions = new ActionsSaisie('v2', referentiel, homologation);
+    const actions = new ActionsSaisie('v2', referentiel, uneHomologation());
 
     const [action] = actions.toJSON();
     expect(action.id).to.equal('uneAction');
