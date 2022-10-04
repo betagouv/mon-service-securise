@@ -1,5 +1,5 @@
 extends deuxColonnes
-include carteInformations
+include cartes/indiceCyber
 
 mixin action({ description, url, statut })
   - let classeStyleStatut
@@ -36,33 +36,5 @@ block zone-principale
 
 block cartes-informations
   - const indiceSecurite = homologation.indiceSecurite()
-  - const indiceSecuriteMax = referentiel.indiceSecuriteMax()
-  - const formatte = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
-
-  mixin detailsIndiceSecurite
-    h3 Par catégorie de mesure
-    dl
-      each id in referentiel.identifiantsCategoriesMesures()
-        dt= referentiel.descriptionCategorie(id)
-        dd= (typeof indiceSecurite[id] === 'number' ? `${formatte(indiceSecurite[id])} / ${indiceSecuriteMax}` : '–')
-
-    h3 À quoi sert l'indice de sécurité ?
-    p.
-      L'indice de sécurité fournit une indication du niveau de sécurité du
-      service basée sur une évaluation de la conformité de ce dernier à un
-      socle de mesures de sécurité personnalisé.
-    p.
-      Cette note ne constitue pas une preuve effective de la sécurité du
-      service. MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
-      responsables d'incidents de sécurité susceptibles d'affecter le service
-      numérique, quelle que soit la note attribuée à ce dernier.
-
-    p: a(href = '/questionsFrequentes#indice-securite', target = '_blank', rel = 'noopener').nouvel-onglet En savoir plus
-
-
-  - const { total } = indiceSecurite
-  if process.env.AVEC_INDICE_SECURITE && total > 0
-    +carteInformations({ titre: 'Indice de sécurité', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceSecurite' })
-      .score-mss
-        span.score= formatte(total)
-        span.score-max= ` / ${indiceSecuriteMax}`
+  if process.env.AVEC_INDICE_SECURITE
+    +indiceCyber({ referentiel, indiceSecurite })
