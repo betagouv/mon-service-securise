@@ -88,6 +88,23 @@ describe('Une action de saisie', () => {
     }
   });
 
+  it("exige que l'identifiant soit connu dans la version demandée", (done) => {
+    try {
+      const referentiel = Referentiel.creeReferentiel({
+        actionsSaisie: {
+          v1: { uneActionV1: {} },
+          v2: { uneActionV2: {} },
+        },
+      });
+      new ActionSaisie({ id: 'uneActionV2', version: 'v1' }, referentiel);
+      done("La création de l'action de saisie aurait dû lever une erreur");
+    } catch (e) {
+      expect(e).to.be.a(ErreurIdentifiantActionSaisieInvalide);
+      expect(e.message).to.equal("L'action de saisie \"uneActionV2\" est invalide");
+      done();
+    }
+  });
+
   it('exige la présence de la version', (done) => {
     try {
       new ActionSaisie({ id: 'uneAction' });
