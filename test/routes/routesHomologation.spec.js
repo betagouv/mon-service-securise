@@ -19,6 +19,15 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     });
   });
 
+  describe('quand requête GET sur `/homologation/:id/synthese`', () => {
+    it('recherche la ressource correspondante', (done) => {
+      testeur.middleware().verifieRechercheHomologation(
+        'http://localhost:1234/homologation/456/synthese',
+        done,
+      );
+    });
+  });
+
   describe('quand requête GET sur `/homologation/:id/descriptionService`', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
