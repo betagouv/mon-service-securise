@@ -4,6 +4,7 @@ const Homologation = require('./homologation');
 const {
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,
+  ErreurVersionActionSaisieManquante,
 } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
@@ -13,7 +14,7 @@ class ActionSaisie extends Base {
     referentiel = Referentiel.creeReferentielVide(),
     homologation = new Homologation({})
   ) {
-    super({ proprietesAtomiquesRequises: ['id'] });
+    super({ proprietesAtomiquesRequises: ['id', 'version'] });
     ActionSaisie.valide(donnees, referentiel);
     this.renseigneProprietes(donnees);
 
@@ -38,10 +39,16 @@ class ActionSaisie extends Base {
   }
 
   static valide(donnees, referentiel) {
-    const { id } = donnees;
+    const { id, version } = donnees;
     if (!id) {
       throw new ErreurIdentifiantActionSaisieManquant(
         "L'identifiant d'action de saisie doit être renseigné"
+      );
+    }
+
+    if (!version) {
+      throw new ErreurVersionActionSaisieManquante(
+        "La version d'action de saisie doit être renseignée"
       );
     }
 

@@ -13,7 +13,15 @@ class ActionsSaisie {
 
     return Object.keys(this.referentiel.actionsSaisie())
       .sort((a1, a2) => position(a1) - position(a2))
-      .map((a) => new ActionSaisie({ id: a }, this.referentiel, this.homologation).toJSON());
+      .map((a) => new ActionSaisie(
+        { id: a, version: ActionsSaisie.versionParDefaut() },
+        this.referentiel,
+        this.homologation
+      ).toJSON());
+  }
+
+  static versionParDefaut() {
+    return 'v1';
   }
 }
 
