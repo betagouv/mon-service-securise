@@ -1,0 +1,10 @@
+.tableau-bord {
+  display: flex;
+  display-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.outils-complementaires {
+  text-align: left;
+}

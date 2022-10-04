@@ -23,6 +23,13 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
     reponse.render('homologation', { referentiel, homologation, actionsSaisie, InformationsHomologation });
   });
 
+  routes.get('/:id/synthese/', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    const actionsSaisie = [];
+
+    reponse.render('homologation/synthese', { referentiel, service: homologation, actionsSaisie, InformationsHomologation });
+  });
+
   routes.get('/:id/decision',
     middleware.trouveHomologation,
     middleware.positionneHeadersAvecNonce,
