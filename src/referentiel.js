@@ -4,14 +4,14 @@ const donneesParDefaut = require('../donneesReferentiel');
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   let donnees = donneesReferentiel;
 
-  const actionsSaisie = () => donnees.actionsSaisie;
-  const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
-  const actionSaisie = (id) => actionsSaisie()[id] || {};
-  const positionActionSaisie = (id) => actionSaisie(id).position;
+  const actionsSaisie = (version) => donnees.actionsSaisie[version] || {};
+  const identifiantsActionsSaisie = (version) => Object.keys(actionsSaisie(version));
+  const actionSaisie = (version, id) => actionsSaisie(version)[id] || {};
+  const positionActionSaisie = (version, id) => actionSaisie(version, id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
-  const descriptionActionSaisie = (id) => actionSaisie(id).description;
+  const descriptionActionSaisie = (version, id) => actionSaisie(version, id).description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement;
@@ -55,9 +55,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const indiceCyberMax = () => donnees.indiceCyber?.noteMax || 10;
 
-  const actionSuivante = (id) => {
-    const position = positionActionSaisie(id);
-    return Object.keys(actionsSaisie()).find((a) => positionActionSaisie(a) === position + 1);
+  const actionSuivante = (version, id) => {
+    const position = positionActionSaisie(version, id);
+    return Object.keys(actionsSaisie(version))
+      .find((a) => positionActionSaisie(version, a) === position + 1);
   };
 
   const infosNiveauxGravite = (ordreInverse = false) => {

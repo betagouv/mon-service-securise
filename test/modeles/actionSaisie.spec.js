@@ -13,7 +13,7 @@ const Referentiel = require('../../src/referentiel');
 
 describe('Une action de saisie', () => {
   it('connaît son identifiant', () => {
-    const referentiel = Referentiel.creeReferentiel({ actionsSaisie: { uneAction: {} } });
+    const referentiel = Referentiel.creeReferentiel({ actionsSaisie: { v1: { uneAction: {} } } });
 
     const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel);
     expect(action.id).to.equal('uneAction');
@@ -21,7 +21,9 @@ describe('Une action de saisie', () => {
 
   it('connaît sa description', () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { description: 'Une description' } },
+      actionsSaisie: {
+        v1: { uneAction: { description: 'Une description' } },
+      },
     });
 
     const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel);
@@ -30,7 +32,9 @@ describe('Une action de saisie', () => {
 
   it("connaît l'identifiant de l'action suivante", () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { position: 0 }, actionSuivante: { position: 1 } },
+      actionsSaisie: {
+        v1: { uneAction: { position: 0 }, actionSuivante: { position: 1 } },
+      },
     });
 
     const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel);
@@ -38,9 +42,7 @@ describe('Une action de saisie', () => {
   });
 
   it('connaît sa version', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { } },
-    });
+    const referentiel = Referentiel.creeReferentiel({ actionsSaisie: { v1: { uneAction: {} } } });
 
     const action = new ActionSaisie({ version: 'v1', id: 'uneAction' }, referentiel);
     expect(action.version).to.equal('v1');
@@ -48,7 +50,9 @@ describe('Une action de saisie', () => {
 
   it('sait se décrire comme un objet JSON', () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { position: 0, description: 'Une description' } },
+      actionsSaisie: {
+        v1: { uneAction: { position: 0, description: 'Une description' } },
+      },
     });
 
     const homologation = new Homologation({});
