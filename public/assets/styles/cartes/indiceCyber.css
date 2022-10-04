@@ -1,0 +1,13 @@
+.carte .score-mss {
+  margin-bottom: 1em;
+  font-size: 1.3em;
+}
+
+.carte :is(.score, .score-max) {
+  font-weight: bold;
+  color: var(--rose-anssi);
+}
+
+.carte .score {
+  font-size: 1.6em;
+}
