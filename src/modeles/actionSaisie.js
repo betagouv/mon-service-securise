@@ -23,11 +23,11 @@ class ActionSaisie extends Base {
   }
 
   description() {
-    return this.referentiel.descriptionActionSaisie(this.id);
+    return this.referentiel.descriptionActionSaisie(this.version, this.id);
   }
 
   suivante() {
-    return this.referentiel.actionSuivante(this.id);
+    return this.referentiel.actionSuivante(this.version, this.id);
   }
 
   toJSON() {
@@ -52,7 +52,7 @@ class ActionSaisie extends Base {
       );
     }
 
-    const identifiants = referentiel.identifiantsActionsSaisie();
+    const identifiants = referentiel.identifiantsActionsSaisie(version);
     if (!identifiants.includes(id)) {
       throw new ErreurIdentifiantActionSaisieInvalide(
         `L'action de saisie "${id}" est invalide`

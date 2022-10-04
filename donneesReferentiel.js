@@ -11,11 +11,13 @@ module.exports = {
   },
 
   actionsSaisie: {
-    descriptionService: { position: 0, description: 'Description du service' },
-    rolesResponsabilites: { position: 1, description: 'Rôles et responsabilités' },
-    risques: { position: 2, description: 'Risques de sécurité' },
-    mesures: { position: 3, description: 'Mesures de sécurité' },
-    avisExpertCyber: { position: 4, description: 'Avis sur le dossier' },
+    v1: {
+      descriptionService: { position: 0, description: 'Description du service' },
+      rolesResponsabilites: { position: 1, description: 'Rôles et responsabilités' },
+      risques: { position: 2, description: 'Risques de sécurité' },
+      mesures: { position: 3, description: 'Mesures de sécurité' },
+      avisExpertCyber: { position: 4, description: 'Avis sur le dossier' },
+    },
   },
 
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
