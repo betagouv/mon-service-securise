@@ -16,7 +16,7 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
     new ActionsSaisie(version, referentiel, homologation)
       .toJSON()
       .map(({ id, ...autresDonnees }) => (
-        { url: `/homologation/${homologation.id}/${id}`, ...autresDonnees }
+        { url: `/homologation/${homologation.id}/${id}`, id, ...autresDonnees }
       ))
   );
 
