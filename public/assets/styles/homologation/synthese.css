@@ -2,8 +2,77 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  margin-bottom: 1em;
 }
 
 .outils-complementaires {
   text-align: left;
+}
+
+.actions {
+  display: flex;
+  column-gap: 1.5em;
+
+  margin-bottom: 5em;
+}
+
+.actions a {
+  width: 33%;
+
+  color: var(--bleu-anssi);
+  font-weight: bold;
+}
+
+.action {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 0.5em;
+
+  padding: 4em 0;
+  border: solid 1.5px var(--texte-clair);
+  border-radius: 10px;
+}
+
+.action:hover {
+  background: var(--fond-pale);
+}
+
+.action h2 {
+  margin: 0;
+}
+
+.action .statut {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+
+  width: 1.3em;
+  height: 1.3em;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.action .statut.faite {
+  background-image: url(../../images/icone_ok_pastille_verte.svg);
+}
+
+
+.icone-action {
+  width: 2.2em;
+  height: 2.2em;
+
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.action.descriptionService .icone-action {
+  background-image: url(../../images/icone_stylo.svg);
+}
+
+.action.mesures .icone-action {
+  background-image: url(../../images/icone_cadenas.svg);
 }

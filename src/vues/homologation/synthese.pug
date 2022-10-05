@@ -1,17 +1,12 @@
 extends ../deuxColonnes
 include ../cartes/indiceCyber
 
-mixin action({ description, url, statut })
-  - let classeStyleStatut
-  -
-    switch(statut) {
-      case InformationsHomologation.A_SAISIR: classeStyleStatut = 'a-faire'; break;
-      case InformationsHomologation.A_COMPLETER: classeStyleStatut = 'a-completer'; break;
-      case InformationsHomologation.COMPLETES: classeStyleStatut = 'faite'; break;
-      default: '';
-    }
-
-  a.action(class = classeStyleStatut, href = url)= description
+mixin action({ id, description, url, statut })
+  a(href = url)
+    .action(class = id)
+      .statut(class = (statut === InformationsHomologation.COMPLETES ? 'faite' : ''))
+      div(class = `icone-action`)
+      h2= description
 
 
 block append styles
@@ -28,10 +23,8 @@ block zone-principale
       a.bouton(href = `/homologation/${service.id}/decision`) Télécharger la synthèse
 
     .actions
-      ul
-        each actionSaisie in actionsSaisie
-          li
-            +action(actionSaisie)
+      each actionSaisie in actionsSaisie
+        +action(actionSaisie)
 
     .outils-complementaires
       h3 Outils complémentaires
