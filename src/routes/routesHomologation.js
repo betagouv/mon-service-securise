@@ -12,20 +12,24 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
     reponse.render('homologation/creation', { referentiel, homologation });
   });
 
-  routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
-    const { homologation } = requete;
-    const actionsSaisie = new ActionsSaisie('v1', referentiel, homologation)
+  const donneesActionsSaisie = (version, homologation) => (
+    new ActionsSaisie(version, referentiel, homologation)
       .toJSON()
       .map(({ id, ...autresDonnees }) => (
         { url: `/homologation/${homologation.id}/${id}`, ...autresDonnees }
-      ));
+      ))
+  );
+
+  routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    const actionsSaisie = donneesActionsSaisie('v1', homologation);
 
     reponse.render('homologation', { referentiel, homologation, actionsSaisie, InformationsHomologation });
   });
 
   routes.get('/:id/synthese/', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    const actionsSaisie = [];
+    const actionsSaisie = donneesActionsSaisie('v2', homologation);
 
     reponse.render('homologation/synthese', { referentiel, service: homologation, actionsSaisie, InformationsHomologation });
   });
