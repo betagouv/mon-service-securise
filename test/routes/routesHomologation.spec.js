@@ -26,6 +26,23 @@ describe('Le serveur MSS des routes /homologation/*', () => {
         done,
       );
     });
+
+    it('charge les actions de saisie v2', (done) => {
+      let actionsSaisieChargees = false;
+
+      testeur.referentiel().actionsSaisie = (version) => {
+        expect(version).to.equal('v2');
+        actionsSaisieChargees = true;
+        return {};
+      };
+
+      axios('http://localhost:1234/homologation/456/synthese')
+        .then(() => {
+          expect(actionsSaisieChargees).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
   });
 
   describe('quand requête GET sur `/homologation/:id/descriptionService`', () => {

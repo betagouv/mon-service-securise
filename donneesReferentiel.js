@@ -18,6 +18,10 @@ module.exports = {
       mesures: { position: 3, description: 'Mesures de sécurité' },
       avisExpertCyber: { position: 4, description: 'Avis sur le dossier' },
     },
+    v2: {
+      descriptionService: { position: 0, description: 'Décrire' },
+      mesures: { position: 3, description: 'Sécuriser' },
+    },
   },
 
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
