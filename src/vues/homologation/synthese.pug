@@ -9,6 +9,12 @@ mixin action({ id, description, indisponible, sousTitre, url, statut })
       h2= description
       .sous-titre= sousTitre
 
+mixin outilComplementaire({ id, nom, description, lien })
+  .outil-complementaire(class = id)
+    .titre-outil
+      .icone-outil
+      h3= nom
+    .description #{description} #[a(href = lien.url)= lien.texte]
 
 block append styles
   link(href = '/statique/assets/styles/homologation/synthese.css', rel = 'stylesheet')
@@ -27,9 +33,21 @@ block zone-principale
       each actionSaisie in actionsSaisie
         +action(actionSaisie)
 
-    .outils-complementaires
-      h3 Outils complémentaires
-      // vide pour l'instant
+    .cartes-outils-complementaires
+      h2 Outils complémentaires
+      .outils-complementaires
+        +outilComplementaire({
+          id: 'risques',
+          nom: 'Risques',
+          description: 'Cartographiez les impacts potentiels des risques de sécurité les plus courant.',
+          lien: { url: `/homologation/${service.id}/risques`, texte: 'Remplir'}
+        })
+        +outilComplementaire({
+          id: 'contactsUtiles',
+          nom: 'Contacts utiles',
+          description: 'Créez la liste des personne contribuant au fonctionnement du service à contacter en cas de besoin.',
+          lien: { url: `/homologation/${service.id}/rolesResponsabilites`, texte: 'Compléter' }
+        })
 
 block cartes-informations
   if process.env.AVEC_INDICE_CYBER
