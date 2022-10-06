@@ -75,6 +75,7 @@ header {
 }
 
 h1 {
+  margin: 2em 0 0;
   text-transform: uppercase;
   font-size: 1.5em;
 }
