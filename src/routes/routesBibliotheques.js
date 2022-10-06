@@ -2,7 +2,7 @@ const axios = require('axios');
 const express = require('express');
 
 const CHEMINS_BIBLIOTHEQUES = {
-  'axios.min.js': 'https://unpkg.com/axios/dist/axios.min.js',
+  'axios-1.0.0.min.js': 'https://unpkg.com/axios@1.0.0/dist/axios.min.js',
   'chart.js': 'https://cdn.jsdelivr.net/npm/chart.js@^3',
   'chartjs-adapter-moment': 'https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1',
   'html2canvas.min.js': 'https://unpkg.com/html2canvas/dist/html2canvas.min.js',
