@@ -1,13 +1,13 @@
+.details-service {
+  margin-bottom: 3em;
+}
+
 .tableau-bord {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   margin-bottom: 1em;
-}
-
-.outils-complementaires {
-  text-align: left;
 }
 
 .actions {
@@ -82,7 +82,6 @@
   background-image: url(../../images/icone_ok_pastille_verte.svg);
 }
 
-
 .icone-action {
   width: 2.2em;
   height: 2.2em;
@@ -105,4 +104,71 @@
 
 .action .sous-titre {
   font-size: 0.9em;
+}
+
+.cartes-outils-complementaires {
+  text-align: left;
+}
+
+.cartes-outils-complementaires h2 {
+  margin-bottom: 1.5em;
+
+  font-size: 1.2em;
+  font-weight: normal;
+  color: var(--gris-fonce);
+}
+
+.outils-complementaires {
+  display: flex;
+  column-gap: 1.5em;
+}
+
+.outils-complementaires h3 {
+  margin: 0;
+
+  font-size: 1.5em;
+}
+
+.outil-complementaire {
+  flex: 1;
+  padding: 1.5em 2em;
+  border: solid 1.5px var(--texte-clair);
+  border-radius: 10px;
+}
+
+.outil-complementaire .titre-outil {
+  display: flex;
+  align-items: center;
+}
+
+.outil-complementaire .titre-outil .icone-outil {
+  width: 1.7em;
+  height: 1.7em;
+  margin-right: 0.8em;
+}
+
+.outil-complementaire.risques .icone-outil {
+  background-image: url(../../images/icone_outils.svg)
+}
+
+.outil-complementaire.contactsUtiles .icone-outil {
+  background-image: url(../../images/icone_outils_graphiques.svg)
+}
+
+.outil-complementaire .description {
+  margin-top: 1em;
+}
+
+.outil-complementaire .description a:after {
+  content: '';
+  display: inline-block;
+
+  width: 0.4em;
+  height: 0.4em;
+  margin-left: 0.2em;
+  border: 2px var(--bleu-mise-en-avant) solid;
+  border-left: 0;
+  border-bottom: 0;
+
+  transform: rotate(0.12turn) translateY(-0.05em);
 }
