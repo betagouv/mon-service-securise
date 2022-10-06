@@ -42,13 +42,12 @@ mixin mesuresPaginees({ titreAnnexe, titreSection, donnees })
                     .indispensable
       .saut-page
 
-block append page
+include ../fragments/diagnostics
 
-  include ../fragments/diagnostics
-
-  block append styles
+block append styles
     link(href='/statique/assets/styles/decision.css', rel='stylesheet')
 
+block append page
   .page
     header
       .mss

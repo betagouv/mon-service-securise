@@ -1,10 +1,9 @@
 extends ../documentImprimable
 
+block append styles
+  link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
+
 block append page
-
-  block append styles
-    link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
-
   .page
     header
       .bloc-marque
