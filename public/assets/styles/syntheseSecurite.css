@@ -81,6 +81,5 @@ h1 {
 
 .nom-service {
   font-size: 2em;
-  font-weight: bold;
   color: var(--bleu-anssi);
 }
