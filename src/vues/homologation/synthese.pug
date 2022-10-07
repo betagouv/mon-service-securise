@@ -1,12 +1,13 @@
 extends ../deuxColonnes
 include ../cartes/indiceCyber
 
-mixin action({ id, description, url, statut })
+mixin action({ id, description, sousTitre, url, statut })
   a(href = url)
     .action(class = id)
       .statut(class = (statut === InformationsHomologation.COMPLETES ? 'faite' : ''))
       div(class = `icone-action`)
       h2= description
+      .sous-titre= sousTitre
 
 
 block append styles

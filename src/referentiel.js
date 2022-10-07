@@ -34,6 +34,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const risque = (id) => risques()[id] || {};
   const descriptionRisque = (idRisque) => risque(idRisque).description;
   const seuilsCriticites = () => donnees.seuilsCriticites;
+  const sousTitreActionSaisie = (version, id) => actionSaisie(version, id)?.sousTitre;
   const statutsDeploiement = () => donnees.statutsDeploiement;
   const descriptionStatutDeploiement = (idStatut) => statutsDeploiement()[idStatut]?.description;
   const statutDeploiementValide = (id) => Object.keys(statutsDeploiement()).includes(id);
@@ -183,6 +184,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     seuilCriticiteMin,
     seuilsCriticites,
     descriptionStatutDeploiement,
+    sousTitreActionSaisie,
     statutsDeploiement,
     statutDeploiementValide,
     statutsMesures,
