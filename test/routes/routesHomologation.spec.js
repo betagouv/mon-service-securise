@@ -1,5 +1,6 @@
 const axios = require('axios');
 const expect = require('expect.js');
+const pug = require('pug');
 
 const testeurMSS = require('./testeurMSS');
 
@@ -17,31 +18,52 @@ describe('Le serveur MSS des routes /homologation/*', () => {
         done,
       );
     });
-  });
 
-  describe('quand requête GET sur `/homologation/:id/synthese`', () => {
-    it('recherche la ressource correspondante', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/synthese',
-        done,
-      );
-    });
+    describe('selon la valeur de la variable `AVEC_SYNTHESE_V2`', () => {
+      let variableEnvironnement;
+      let fonctionRendu;
 
-    it('charge les actions de saisie v2', (done) => {
-      let actionsSaisieChargees = false;
+      beforeEach(() => {
+        variableEnvironnement = process.env.AVEC_SYNTHESE_V2;
+        fonctionRendu = pug.renderFile;
+      });
 
-      testeur.referentiel().actionsSaisie = (version) => {
-        expect(version).to.equal('v2');
-        actionsSaisieChargees = true;
-        return {};
+      afterEach(() => {
+        process.env.AVEC_SYNTHESE_V2 = variableEnvironnement;
+        pug.renderFile = fonctionRendu;
+      });
+
+      const verifieVersionTemplate = (versionAttendue, regExpTemplate, requete, suite) => {
+        let actionsSaisieChargees = false;
+
+        testeur.referentiel().actionsSaisie = (version) => {
+          expect(version).to.equal(versionAttendue);
+          actionsSaisieChargees = true;
+          return {};
+        };
+
+        pug.renderFile = (nomTemplate, ...params) => {
+          expect(nomTemplate).to.match(regExpTemplate);
+          return fonctionRendu(nomTemplate, ...params);
+        };
+
+        axios(requete)
+          .then(() => {
+            expect(actionsSaisieChargees).to.be(true);
+            suite();
+          })
+          .catch((e) => suite(e.response?.data || e));
       };
 
-      axios('http://localhost:1234/homologation/456/synthese')
-        .then(() => {
-          expect(actionsSaisieChargees).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      it("sert l'ancienne version de la page de synthèse (v1) par défaut", (done) => {
+        delete process.env.AVEC_SYNTHESE_V2;
+        verifieVersionTemplate('v1', /\/homologation.pug$/, 'http://localhost:1234/homologation/456', done);
+      });
+
+      it('sert la nouvelle version de la page de synthèse si `AVEC_SYNTHESE_V2` est présente', (done) => {
+        process.env.AVEC_SYNTHESE_V2 = 'true';
+        verifieVersionTemplate('v2', /\/homologation\/synthese.pug$/, 'http://localhost:1234/homologation/456', done);
+      });
     });
   });
 
