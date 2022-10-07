@@ -18,9 +18,12 @@
 }
 
 .actions a {
-  width: 33%;
-
+  flex: 1;
   color: var(--bleu-anssi);
+}
+
+.actions a.indisponible {
+  pointer-events: none;
 }
 
 .action {
@@ -36,7 +39,26 @@
   border-radius: 10px;
 }
 
-.action:hover {
+.action.indisponible {
+  background: var(--bleu-mise-en-avant-03-pc);
+  color: var(--texte-moyen);
+}
+
+.action.indisponible:after {
+  position: absolute;
+  top: 1em;
+
+  display: inline-block;
+  content: 'BIENTÔT DISPONIBLE';
+
+  padding: 0.1em 0.8em 0.2em;
+  border-radius: 15% / 100%;
+  background: var(--vert-anssi);
+
+  color: #fff;
+}
+
+.action:not(.indisponible):hover {
   background: var(--fond-pale);
 }
 
@@ -75,6 +97,10 @@
 
 .action.mesures .icone-action {
   background-image: url(../../images/icone_cadenas.svg);
+}
+
+.action.homologations .icone-action {
+  background-image: url(../../images/icone_feuille_papier.svg);
 }
 
 .action .sous-titre {

@@ -1,9 +1,9 @@
 extends ../deuxColonnes
 include ../cartes/indiceCyber
 
-mixin action({ id, description, sousTitre, url, statut })
-  a(href = url)
-    .action(class = id)
+mixin action({ id, description, indisponible, sousTitre, url, statut })
+  a(href = (indisponible ? '#' : url), class = (indisponible ? 'indisponible' : ''))
+    .action(class = `${id} ${indisponible ? 'indisponible' : ''}`)
       .statut(class = (statut === InformationsHomologation.COMPLETES ? 'faite' : ''))
       div(class = `icone-action`)
       h2= description

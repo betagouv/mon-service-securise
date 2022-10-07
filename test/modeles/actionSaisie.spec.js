@@ -57,6 +57,42 @@ describe('Une action de saisie', () => {
     expect(action.sousTitre()).to.equal('Un sous-titre');
   });
 
+  it('sait si elle est indisponible', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      actionsSaisie: { v2: { uneAction: {}, uneActionIndisponible: { indisponible: true } } },
+    });
+
+    const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel);
+    expect(action.indisponible()).to.be(false);
+
+    const actionIndisponible = new ActionSaisie({ id: 'uneActionIndisponible', version: 'v2' }, referentiel);
+    expect(actionIndisponible.indisponible()).to.be(true);
+  });
+
+  it('connaît son statut', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      actionsSaisie: { v2: { uneAction: {} } },
+    });
+
+    const homologation = new Homologation({});
+    homologation.statutSaisie = () => InformationsHomologation.COMPLETES;
+
+    const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel, homologation);
+    expect(action.statut()).to.equal(InformationsHomologation.COMPLETES);
+  });
+
+  it("retourne le statut « À saisir » si l'action est indisponible", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      actionsSaisie: { v2: { uneAction: { indisponible: true } } },
+    });
+
+    const homologation = new Homologation({});
+    homologation.statutSaisie = () => InformationsHomologation.COMPLETES;
+
+    const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel, homologation);
+    expect(action.statut()).to.equal(InformationsHomologation.A_SAISIR);
+  });
+
   describe('sur demande de description en objet JSON', () => {
     it('sait se décrire en v1', () => {
       const referentiel = Referentiel.creeReferentiel({
@@ -77,7 +113,7 @@ describe('Une action de saisie', () => {
     it('sait se décrire en v2', () => {
       const referentiel = Referentiel.creeReferentiel({
         actionsSaisie: {
-          v2: { uneAction: { position: 0, description: 'Une description', sousTitre: 'Un sous-titre' } },
+          v2: { uneAction: { position: 0, indisponible: true, description: 'Une description', sousTitre: 'Un sous-titre' } },
         },
       });
 
@@ -87,6 +123,7 @@ describe('Une action de saisie', () => {
       const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel, homologation);
       expect(action.toJSON()).to.eql({
         id: 'uneAction',
+        indisponible: true,
         description: 'Une description',
         sousTitre: 'Un sous-titre',
         statut: InformationsHomologation.A_SAISIR,

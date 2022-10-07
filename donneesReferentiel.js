@@ -29,6 +29,12 @@ module.exports = {
         description: 'Sécuriser',
         sousTitre: 'Mettez en œuvre les mesures de sécurité adaptées à votre service.',
       },
+      homologations: {
+        position: 2,
+        indisponible: true,
+        description: 'Homologuer',
+        sousTitre: 'Complétez et téléchargez les documents pour homologuer le service.',
+      },
     },
   },
 

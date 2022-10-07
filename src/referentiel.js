@@ -7,6 +7,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const actionsSaisie = (version) => donnees.actionsSaisie[version] || {};
   const identifiantsActionsSaisie = (version) => Object.keys(actionsSaisie(version));
   const actionSaisie = (version, id) => actionsSaisie(version)[id] || {};
+  const actionSaisieIndisponible = (version, id) => !!actionSaisie(version, id)?.indisponible;
   const positionActionSaisie = (version, id) => actionSaisie(version, id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
@@ -139,6 +140,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   return {
     actionsSaisie,
+    actionSaisieIndisponible,
     actionSuivante,
     categoriesMesures,
     codeDepartements,
