@@ -49,6 +49,7 @@ block append page
           - const mesuresEnCours = statistiquesMesures.nombreIndispensables().enCours;
           - const mesuresNonFaites = statistiquesMesures.nombreIndispensables().nonFait;
           - const mesuresARemplir = nombreTotalMesuresIndispensables - mesuresFaites - mesuresEnCours - mesuresNonFaites;
+          - const mesuresRestantes = nombreTotalMesuresIndispensables - mesuresFaites;
 
           .graphique.indispensables(
               data-faites = mesuresFaites,
@@ -59,6 +60,10 @@ block append page
             h4 Indispensables
             .canvas
               canvas#indispensables
+            .reste-mesures
+              p Il reste
+              p.mesures-restantes #{mesuresRestantes} mesures
+              p à mettre en œuvre
 
           .total-mesures
             .total

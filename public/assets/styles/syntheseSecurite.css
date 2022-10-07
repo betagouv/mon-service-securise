@@ -204,6 +204,49 @@ section > h2 {
   height: 110px;
 }
 
+.reste-mesures {
+  margin-left: 50px;
+  position: relative;
+}
+
+.reste-mesures::before {
+  content: '';
+  width: 10px;
+  height: 20px;
+  display: block;
+  
+  background-image: url(../images/forme_fleche_bleue.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  left: -35px;
+  top: 26px;
+}
+
+.reste-mesures p {
+  margin: 0;
+  background-color: #fff;
+  padding: 0 1em;
+  color: var(--texte-moyen-fonce);
+  font-weight: bold;
+}
+
+.reste-mesures p:first-of-type {
+  border-radius: 1em 1em 0 0;
+  padding-top: 1em;
+}
+
+.reste-mesures p:last-of-type {
+  border-radius: 0 0 1em 1em;
+  padding-bottom: 1em;
+}
+
+.reste-mesures .mesures-restantes {
+  padding: 0 0.9em;
+  font-size: 1.1em;
+  color: var(--bleu-mise-en-avant);
+}
+
 .regroupement-criticite .total-mesures {
   display: flex;
   justify-content: space-between;
