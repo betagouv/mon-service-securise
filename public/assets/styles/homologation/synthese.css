@@ -21,7 +21,6 @@
   width: 33%;
 
   color: var(--bleu-anssi);
-  font-weight: bold;
 }
 
 .action {
@@ -32,7 +31,7 @@
   align-items: center;
   row-gap: 0.5em;
 
-  padding: 4em 0;
+  padding: 4em 2em 3em;
   border: solid 1.5px var(--texte-clair);
   border-radius: 10px;
 }
@@ -43,6 +42,7 @@
 
 .action h2 {
   margin: 0;
+  padding-bottom: 1em;
 }
 
 .action .statut {
@@ -75,4 +75,8 @@
 
 .action.mesures .icone-action {
   background-image: url(../../images/icone_cadenas.svg);
+}
+
+.action .sous-titre {
+  font-size: 0.9em;
 }

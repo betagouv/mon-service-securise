@@ -48,21 +48,49 @@ describe('Une action de saisie', () => {
     expect(action.version).to.equal('v1');
   });
 
-  it('sait se décrire comme un objet JSON', () => {
+  it('connaît son sous-titre', () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: {
-        v1: { uneAction: { position: 0, description: 'Une description' } },
-      },
+      actionsSaisie: { v2: { uneAction: { sousTitre: 'Un sous-titre' } } },
     });
 
-    const homologation = new Homologation({});
-    homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
+    const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel);
+    expect(action.sousTitre()).to.equal('Un sous-titre');
+  });
 
-    const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel, homologation);
-    expect(action.toJSON()).to.eql({
-      id: 'uneAction',
-      description: 'Une description',
-      statut: InformationsHomologation.A_SAISIR,
+  describe('sur demande de description en objet JSON', () => {
+    it('sait se décrire en v1', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        actionsSaisie: { v1: { uneAction: { position: 0, description: 'Une description' } } },
+      });
+
+      const homologation = new Homologation({});
+      homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
+
+      const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel, homologation);
+      expect(action.toJSON()).to.eql({
+        id: 'uneAction',
+        description: 'Une description',
+        statut: InformationsHomologation.A_SAISIR,
+      });
+    });
+
+    it('sait se décrire en v2', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        actionsSaisie: {
+          v2: { uneAction: { position: 0, description: 'Une description', sousTitre: 'Un sous-titre' } },
+        },
+      });
+
+      const homologation = new Homologation({});
+      homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
+
+      const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel, homologation);
+      expect(action.toJSON()).to.eql({
+        id: 'uneAction',
+        description: 'Une description',
+        sousTitre: 'Un sous-titre',
+        statut: InformationsHomologation.A_SAISIR,
+      });
     });
   });
 

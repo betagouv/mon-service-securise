@@ -26,16 +26,26 @@ class ActionSaisie extends Base {
     return this.referentiel.descriptionActionSaisie(this.version, this.id);
   }
 
+  sousTitre() {
+    return this.referentiel.sousTitreActionSaisie(this.version, this.id);
+  }
+
   suivante() {
     return this.referentiel.actionSuivante(this.version, this.id);
   }
 
   toJSON() {
-    return {
+    const resultat = {
       id: this.id,
       description: this.description(),
       statut: this.homologation.statutSaisie(this.id),
     };
+
+    if (this.version === 'v2') {
+      resultat.sousTitre = this.sousTitre();
+    }
+
+    return resultat;
   }
 
   static valide(donnees, referentiel) {

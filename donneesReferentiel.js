@@ -19,8 +19,16 @@ module.exports = {
       avisExpertCyber: { position: 4, description: 'Avis sur le dossier' },
     },
     v2: {
-      descriptionService: { position: 0, description: 'Décrire' },
-      mesures: { position: 3, description: 'Sécuriser' },
+      descriptionService: {
+        position: 0,
+        description: 'Décrire',
+        sousTitre: 'Présentez les caractéristiques de votre service.',
+      },
+      mesures: {
+        position: 1,
+        description: 'Sécuriser',
+        sousTitre: 'Mettez en œuvre les mesures de sécurité adaptées à votre service.',
+      },
     },
   },
 
