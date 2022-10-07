@@ -1,4 +1,5 @@
 const Base = require('./base');
+const InformationsHomologation = require('./informationsHomologation');
 const Homologation = require('./homologation');
 
 const {
@@ -26,8 +27,18 @@ class ActionSaisie extends Base {
     return this.referentiel.descriptionActionSaisie(this.version, this.id);
   }
 
+  indisponible() {
+    return this.referentiel.actionSaisieIndisponible(this.version, this.id);
+  }
+
   sousTitre() {
     return this.referentiel.sousTitreActionSaisie(this.version, this.id);
+  }
+
+  statut() {
+    return this.indisponible()
+      ? InformationsHomologation.A_SAISIR
+      : this.homologation.statutSaisie(this.id);
   }
 
   suivante() {
@@ -38,11 +49,12 @@ class ActionSaisie extends Base {
     const resultat = {
       id: this.id,
       description: this.description(),
-      statut: this.homologation.statutSaisie(this.id),
+      statut: this.statut(),
     };
 
     if (this.version === 'v2') {
       resultat.sousTitre = this.sousTitre();
+      resultat.indisponible = this.indisponible();
     }
 
     return resultat;
