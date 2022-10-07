@@ -22,16 +22,16 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
 
   routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    const actionsSaisie = donneesActionsSaisie('v1', homologation);
+    const version = process.env.AVEC_SYNTHESE_V2 ? 'v2' : 'v1';
 
-    reponse.render('homologation', { referentiel, homologation, actionsSaisie, InformationsHomologation });
-  });
+    const actionsSaisie = donneesActionsSaisie(version, homologation);
+    const paramsRequete = { referentiel, actionsSaisie, InformationsHomologation };
 
-  routes.get('/:id/synthese/', middleware.trouveHomologation, (requete, reponse) => {
-    const { homologation } = requete;
-    const actionsSaisie = donneesActionsSaisie('v2', homologation);
-
-    reponse.render('homologation/synthese', { referentiel, service: homologation, actionsSaisie, InformationsHomologation });
+    if (process.env.AVEC_SYNTHESE_V2) {
+      reponse.render('homologation/synthese', { service: homologation, ...paramsRequete });
+    } else {
+      reponse.render('homologation', { homologation, ...paramsRequete });
+    }
   });
 
   routes.get('/:id/decision',
