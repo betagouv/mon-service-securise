@@ -4,6 +4,7 @@ block append styles
   link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
 
 block append page
+
   .page
     header
       .bloc-marque
@@ -34,5 +35,15 @@ block append page
         dl.presentation
           dt Présentation :
           dd= homologation.presentation()
+
+      section.mesures
+        h2 Mesures de sécurité
+
+        h3 Par niveau de criticité
+        .regroupement-criticite
+          .total-mesures
+            .total
+              strong Total :
+              span &nbsp;#{homologation.nombreTotalMesuresGenerales()} mesures proposées par l'ANSSI.
 
   script(type = 'module', src = '/statique/homologation/syntheseSecurite.js')

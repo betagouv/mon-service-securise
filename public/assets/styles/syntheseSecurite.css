@@ -101,7 +101,7 @@ section > h2 {
   position: absolute;
   top: -1.8em;
   background-color: var(--fond-gris-clair);
-  border-radius: 33% / 100%;
+  border-radius: 1em;
   padding: 0.17em 0.83em 0.33em;
   color: var(--bleu-anssi);
 }
@@ -137,4 +137,24 @@ section > h2 {
   border-radius: 5px;
   margin-right: 3px;
   transform: translateY(4px);
+}
+
+.mesures h3 {
+  margin-left: 1em;
+  font-weight: normal;
+}
+
+.regroupement-criticite {
+  margin: 1em;
+}
+
+.regroupement-criticite .total-mesures {
+  background-color: var(--fond-gris-clair);
+  margin: 0;
+  text-align: center;
+  padding: 1.2em;
+}
+
+.total-mesures .total {
+  color: var(--texte-moyen-fonce);
 }
