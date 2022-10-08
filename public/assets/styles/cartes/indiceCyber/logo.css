@@ -1,0 +1,101 @@
+.logo-indice-cyber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+
+  background-image: url(../../../images/logo_indice_cyber.svg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.logo-indice-cyber > * {
+  position: absolute;
+}
+
+.logo-indice-cyber .disque {
+  top: 18%;
+  left: 18%;
+
+  width: 64%;
+  height: 64%;
+
+  border-radius: 50%;
+}
+
+.couleur-indice-cyber-0 {
+  background: var(--mauve-indice-cyber);
+}
+
+.couleur-indice-cyber-1 {
+  background: var(--violet-indice-cyber);
+}
+
+.couleur-indice-cyber-2 {
+  background: var(--indigo-indice-cyber);
+}
+
+.couleur-indice-cyber-3 {
+  background: var(--bleu-indice-cyber);
+}
+
+.couleur-indice-cyber-4 {
+  background: radial-gradient(var(--argent-brillant-indice-cyber), var(--argent-indice-cyber));
+}
+
+.couleur-indice-cyber-5 {
+  background: radial-gradient(var(--or-brillant-indice-cyber), var(--or-indice-cyber));
+}
+
+.logo-indice-cyber .curseur {
+  width: 14%;
+  height: 14%;
+  background-image: url(../../../images/curseur_gris.svg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.curseur.position-0 {
+  transform: rotate(15deg) translateX(-258%)
+}
+
+.curseur.position-1 {
+  transform: rotate(50deg) translateX(-258%)
+}
+
+.curseur.position-2 {
+  transform: rotate(86deg) translateX(-258%)
+}
+
+.curseur.position-3 {
+  transform: rotate(122deg) translateX(-258%)
+}
+
+.curseur.position-4 {
+  transform: rotate(157deg) translateX(-258%)
+}
+
+.curseur.position-5 {
+  transform: rotate(180deg) translateX(-258%)
+}
+
+.logo-indice-cyber :is(.score, .score-max) {
+  color: #fff;
+}
+
+.logo-indice-cyber .score {
+  font-weight: bold;
+  font-size: 1.3em;
+
+  transform: translate(-20%, -20%);
+}
+
+.logo-indice-cyber .score-max {
+  font-size: 0.8em;
+
+  transform: translate(115%, 15%);
+}

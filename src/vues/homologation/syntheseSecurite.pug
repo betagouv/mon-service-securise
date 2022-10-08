@@ -1,5 +1,6 @@
 extends ../documentImprimable
 include ../fragments/statistiquesMesures
+include ../fragments/scoreIndiceCyber
 
 block append styles
   link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
@@ -38,22 +39,18 @@ block append page
           dd= homologation.presentation()
       section.indice-cyber
         - const indiceCyber = homologation.indiceCyber();
-        - const { total } = indiceCyber
         - const indiceCyberMax = referentiel.indiceCyberMax()
-        - const formatte = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
+        - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
 
-        .graphique-indice-cyber
-          .logo
-            div(class = `disque couleur-indice-cyber-${Math.floor(total)}`)
-            div(class = `curseur position-${Math.floor(total)}`)
-            span.score= formatte(total)
-            span.score-max= `/${indiceCyberMax}`
+        .score-indice-cyber
+          +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, indiceCyberMax)
+
         .indice-par-categories
           h3 Par Catégorie :
           dl
             each id in referentiel.identifiantsCategoriesMesures()
               dt= referentiel.descriptionCategorie(id)
-              dd= (typeof indiceCyber[id] === 'number' ? formatte(indiceCyber[id]) : '–')
+              dd= (typeof indiceCyber[id] === 'number' ? formatIndiceCyber(indiceCyber[id]) : '–')
 
       section.mesures
         h2 Mesures de sécurité
