@@ -232,15 +232,19 @@ section > h2 {
 }
 
 .indices-par-categories h3 {
+  width: 9em;
+  margin: 0;
+
   font-size: 1em;
   font-weight: normal;
   color: var(--texte-moyen);
-  width: 9em;
 }
 
 .indices-par-categories dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
+
+  margin: 0;
 }
 
 .indices-par-categories dt {
