@@ -1,0 +1,7 @@
+mixin indicesCyberParCategorie(referentiel, formatIndiceCyber, indiceCyber, indiceCyberMax)
+  dl
+    each id in referentiel.identifiantsCategoriesMesures()
+      dt= referentiel.descriptionCategorie(id)
+      dd= (typeof indiceCyber[id] === 'number' ? `${formatIndiceCyber(indiceCyber[id])} / ${indiceCyberMax}` : '–')
+
+

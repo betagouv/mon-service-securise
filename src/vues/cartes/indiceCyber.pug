@@ -1,5 +1,6 @@
 include ../carteInformations
 include ../fragments/scoreIndiceCyber
+include ../fragments/indicesCyberParCategorie
 include ../fragments/lienNouvelOnglet
 
 block append styles
@@ -10,11 +11,9 @@ mixin indiceCyber({ referentiel, indiceCyber })
   - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
 
   mixin detailsIndiceCyber
-    h3 Par catégorie de mesure
-    dl
-      each id in referentiel.identifiantsCategoriesMesures()
-        dt= referentiel.descriptionCategorie(id)
-        dd= (typeof indiceCyber[id] === 'number' ? `${formatIndiceCyber(indiceCyber[id])} / ${indiceCyberMax}` : '–')
+    .indices-par-categories
+      h3 Par catégorie de mesure
+      +indicesCyberParCategorie(referentiel, formatIndiceCyber, indiceCyber, indiceCyberMax)
 
     h3 Qu'est-ce que l'indice cyber ?
     p.
