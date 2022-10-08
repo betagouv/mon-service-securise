@@ -1,4 +1,5 @@
 include ../carteInformations
+include ../fragments/scoreIndiceCyber
 include ../fragments/lienNouvelOnglet
 
 block append styles
@@ -6,14 +7,14 @@ block append styles
 
 mixin indiceCyber({ referentiel, indiceCyber })
   - const indiceCyberMax = referentiel.indiceCyberMax()
-  - const formatte = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
+  - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
 
   mixin detailsIndiceCyber
     h3 Par catégorie de mesure
     dl
       each id in referentiel.identifiantsCategoriesMesures()
         dt= referentiel.descriptionCategorie(id)
-        dd= (typeof indiceCyber[id] === 'number' ? `${formatte(indiceCyber[id])} / ${indiceCyberMax}` : '–')
+        dd= (typeof indiceCyber[id] === 'number' ? `${formatIndiceCyber(indiceCyber[id])} / ${indiceCyberMax}` : '–')
 
     h3 Qu'est-ce que l'indice cyber ?
     p.
@@ -26,8 +27,4 @@ mixin indiceCyber({ referentiel, indiceCyber })
 
   +carteInformations({ titre: 'Indice cyber', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceCyber' })
     .score-indice-cyber
-      .logo
-        div(class = `disque couleur-indice-cyber-${Math.floor(total)}`)
-        div(class = `curseur position-${Math.floor(total)}`)
-        span.score= formatte(total)
-        span.score-max= `/${indiceCyberMax}`
+      +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, indiceCyberMax)
