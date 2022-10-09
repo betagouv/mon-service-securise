@@ -158,3 +158,22 @@ section > h2 {
 .total-mesures .total {
   color: var(--texte-moyen-fonce);
 }
+
+footer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2em;
+
+  margin-top: 10em;
+
+  font-size: 0.9em;
+}
+
+footer .infos-indice-cyber {
+  color: var(--texte-moyen-fonce);
+}
+
+footer .nom-mss {
+  color: var(--bleu-anssi);
+  font-weight: bold;
+}
