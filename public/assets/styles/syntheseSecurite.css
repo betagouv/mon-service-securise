@@ -144,11 +144,11 @@ section > h2 {
   font-weight: normal;
 }
 
-.regroupement-criticite {
+.statistiques-par-criticite {
   margin: 1em;
 }
 
-.regroupement-criticite .total-mesures {
+.total-mesures {
   background-color: var(--fond-gris-clair);
   margin: 0;
   text-align: center;
