@@ -201,6 +201,11 @@ section > h2 {
   column-gap: 2em;
 }
 
+.camembert {
+  width: 10em;
+  height: 10em;
+}
+
 .total-mesures {
   margin: 0;
   padding: 1.2em;
