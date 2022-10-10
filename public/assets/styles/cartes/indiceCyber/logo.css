@@ -83,18 +83,18 @@
   transform: rotate(180deg) translateX(-258%)
 }
 
-.logo-indice-cyber :is(.score, .score-max) {
+.logo-indice-cyber :is(.note, .note-max) {
   color: #fff;
 }
 
-.logo-indice-cyber .score {
+.logo-indice-cyber .note {
   font-weight: bold;
   font-size: 1.3em;
 
   transform: translate(-20%, -20%);
 }
 
-.logo-indice-cyber .score-max {
+.logo-indice-cyber .note-max {
   font-size: 0.8em;
 
   transform: translate(115%, 15%);

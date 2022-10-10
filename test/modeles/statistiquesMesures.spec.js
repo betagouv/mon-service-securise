@@ -162,7 +162,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       },
     }, referentiel);
 
-    expect(referentiel.indiceCyberMax()).to.equal(5);
+    expect(referentiel.indiceCyberNoteMax()).to.equal(5);
     verifieEgaliteNumerique(5 * stats.score('une'), stats.indiceCyber().une);
     verifieEgaliteNumerique(5 * stats.score('deux'), stats.indiceCyber().deux);
     verifieEgaliteNumerique(

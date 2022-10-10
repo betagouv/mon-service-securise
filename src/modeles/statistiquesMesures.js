@@ -54,10 +54,10 @@ class StatistiquesMesures {
       acc + nbMesures(categorie)
     ), 0);
 
-    const indiceTotal = this.referentiel.indiceCyberMax() * (totalPondere / nbTotalMesures);
+    const indiceTotal = this.referentiel.indiceCyberNoteMax() * (totalPondere / nbTotalMesures);
 
     return this.categories().reduce((acc, categorie) => Object.assign(acc, {
-      [categorie]: this.referentiel.indiceCyberMax() * this.score(categorie),
+      [categorie]: this.referentiel.indiceCyberNoteMax() * this.score(categorie),
     }), { total: indiceTotal });
   }
 

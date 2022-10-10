@@ -7,13 +7,13 @@ block append styles
   link(href = '/statique/assets/styles/cartes/indiceCyber.css', rel = 'stylesheet')
 
 mixin indiceCyber({ referentiel, indiceCyber })
-  - const indiceCyberMax = referentiel.indiceCyberMax()
+  - const noteMax = referentiel.indiceCyberNoteMax()
   - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
 
   mixin detailsIndiceCyber
     .indices-par-categories
       h3 Par catégorie de mesure
-      +indicesCyberParCategorie(referentiel, formatIndiceCyber, indiceCyber, indiceCyberMax)
+      +indicesCyberParCategorie(referentiel, formatIndiceCyber, indiceCyber, noteMax)
 
     h3 Qu'est-ce que l'indice cyber ?
     p.
@@ -26,4 +26,4 @@ mixin indiceCyber({ referentiel, indiceCyber })
 
   +carteInformations({ titre: 'Indice cyber', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceCyber' })
     .score-indice-cyber
-      +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, indiceCyberMax)
+      +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, noteMax)
