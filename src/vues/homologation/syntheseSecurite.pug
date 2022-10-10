@@ -1,4 +1,5 @@
 extends ../documentImprimable
+include ../fragments/statistiquesMesures
 
 block append styles
   link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
@@ -41,9 +42,11 @@ block append page
 
         h3 Par niveau de criticité
         .statistiques-par-criticite
-          .total-mesures
-            .total
-              strong Total :
-              span &nbsp;#{homologation.nombreTotalMesuresGenerales()} mesures proposées par l'ANSSI.
+          +statistiquesMesures('Indispensables')
+          +statistiquesMesures('Recommandées')
+        .total-mesures
+          .total
+            strong Total :
+            span &nbsp;#{homologation.nombreTotalMesuresGenerales()} mesures proposées par l'ANSSI.
 
   script(type = 'module', src = '/statique/homologation/syntheseSecurite.js')
