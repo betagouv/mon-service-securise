@@ -150,7 +150,7 @@ module.exports = {
     },
     banque: {
       description: 'Données de paiement',
-      exemple: 'nº de carte bancaire, etc.',
+      exemple: 'nº de carte bancaire',
       seuilCriticite: 'critique',
     },
     mineurs: {
