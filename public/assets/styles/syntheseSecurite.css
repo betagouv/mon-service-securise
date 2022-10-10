@@ -180,6 +180,20 @@ section > h2 {
   text-align: center;
 }
 
+.statistiques-mesures h4.important::after {
+  content:'';
+  display: inline-block;
+
+  background-image: url(../images/icone_etoile_orange.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  height: 1.2em;
+  width: 1.2em;
+  margin-left: 0.5em;
+  transform: translateY(0.2em);
+}
+
 .statistiques-mesures .details {
   display: flex;
   align-items: center;

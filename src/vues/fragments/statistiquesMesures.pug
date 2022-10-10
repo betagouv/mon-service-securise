@@ -1,6 +1,6 @@
-mixin statistiquesMesures(titre)
+mixin statistiquesMesures(titre, styleTitre = '')
   .statistiques-mesures
-    h4= titre
+    h4(class = styleTitre)= titre
     .details
       .camembert
         // Un camembert à insérer
