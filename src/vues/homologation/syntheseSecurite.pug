@@ -40,15 +40,15 @@ block append page
           dd= homologation.presentation()
       section.indice-cyber
         - const indiceCyber = homologation.indiceCyber();
-        - const indiceCyberMax = referentiel.indiceCyberMax()
+        - const noteMax = referentiel.indiceCyberNoteMax()
         - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
 
         .score-indice-cyber
-          +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, indiceCyberMax)
+          +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, noteMax)
 
         .indices-par-categories
           h3 Par catégorie :
-          +indicesCyberParCategorie(referentiel, formatIndiceCyber, indiceCyber, indiceCyberMax)
+          +indicesCyberParCategorie(referentiel, formatIndiceCyber, indiceCyber, noteMax)
 
       section.mesures
         h2 Mesures de sécurité

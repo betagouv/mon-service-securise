@@ -55,7 +55,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donnees.indiceCyber?.coefficientRecommandees || 0.5
   );
 
-  const indiceCyberMax = () => donnees.indiceCyber?.noteMax || 10;
+  const indiceCyberNoteMax = () => donnees.indiceCyber?.noteMax || 10;
 
   const actionSuivante = (version, id) => {
     const position = positionActionSaisie(version, id);
@@ -151,7 +151,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     criticiteDonnees,
     criticiteFonctionnalite,
     criticiteMax,
-    indiceCyberMax,
+    indiceCyberNoteMax,
     delaisAvantImpactCritique,
     departement,
     departements,

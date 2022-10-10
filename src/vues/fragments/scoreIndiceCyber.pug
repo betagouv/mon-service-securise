@@ -5,5 +5,5 @@ mixin scoreIndiceCyber(formatIndiceCyber, noteObtenue, noteMax)
   .logo-indice-cyber
     div(class = `disque couleur-indice-cyber-${Math.floor(noteObtenue)}`)
     div(class = `curseur position-${Math.floor(noteObtenue)}`)
-    span.score= formatIndiceCyber(noteObtenue)
-    span.score-max= `/${noteMax}`
+    span.note= formatIndiceCyber(noteObtenue)
+    span.note-max= `/${noteMax}`
