@@ -1,15 +1,15 @@
 const brancheComportementSaisieContributeur = (selecteurAjoutContributeur) => {
   $(selecteurAjoutContributeur).on('click', (e) => {
-    const idService = $(e.target).data('id-service');
-    $('input#idService').val(idService);
+    const idHomologation = $(e.target).data('id-homologation');
+    $('input#idHomologation').val(idHomologation);
   });
 
   $('.bouton#nouveau-contributeur').on('click', (e) => {
     e.stopPropagation();
     const emailContributeur = $('input#emailContributeur').val();
-    const idService = $('input#idService').val();
+    const idHomologation = $('input#idHomologation').val();
 
-    axios.post('/api/autorisation', { emailContributeur, idService })
+    axios.post('/api/autorisation', { emailContributeur, idHomologation })
       .then(() => (window.location = '/espacePersonnel'));
   });
 };
