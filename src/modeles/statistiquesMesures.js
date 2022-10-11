@@ -98,11 +98,12 @@ class StatistiquesMesures {
   }
 
   indispensables() {
-    return {
-      enCours: this.categories()
-        .map((categorie) => (this.donnees[categorie].indispensables.enCours))
-        .reduce((acc, total) => (acc + total), 0),
-    };
+    const totalToutesCategories = (statut) => this.categories()
+      .map((categorie) => (this.donnees[categorie].indispensables[statut]))
+      .reduce((acc, total) => (acc + total), 0);
+
+    return ['enCours', 'total']
+      .reduce((acc, statut) => Object.assign(acc, { [statut]: totalToutesCategories(statut) }), {});
   }
 }
 

@@ -193,15 +193,16 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       une: {
         misesEnOeuvre: 1,
         retenues: 5,
-        indispensables: { enCours: 2 },
+        indispensables: { total: 12, enCours: 2 },
       },
       deux: {
         misesEnOeuvre: 1,
         retenues: 5,
-        indispensables: { enCours: 3 },
+        indispensables: { total: 15, enCours: 3 },
       },
     }, referentiel);
 
     expect(stats.indispensables().enCours).to.equal(2 + 3);
+    expect(stats.indispensables().total).to.equal(12 + 15);
   });
 });
