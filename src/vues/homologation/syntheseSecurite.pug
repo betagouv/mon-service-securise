@@ -55,6 +55,7 @@ block append page
 
         h3 Par niveau de criticité
         - const totalIndispensables = homologation.totalMesuresIndispensables()
+        - const { enCours } = homologation.statistiquesMesuresIndispensables()
         .statistiques-par-criticite
           +statistiquesMesures({
             id: 'mesures-indispensables',
@@ -63,7 +64,7 @@ block append page
             styleTitre: 'important',
             statistiques: {
               total: totalIndispensables,
-              enCours: 8,
+              enCours,
               nonFaites: 7,
               faites: 20,
             },

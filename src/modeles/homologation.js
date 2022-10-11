@@ -128,6 +128,10 @@ class Homologation {
     return this.mesures.statistiques();
   }
 
+  statistiquesMesuresIndispensables() {
+    return this.statistiquesMesures().indispensables();
+  }
+
   statutSaisie(nomInformationsHomologation) {
     return this[nomInformationsHomologation].statutSaisie();
   }

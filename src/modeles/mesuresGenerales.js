@@ -31,9 +31,9 @@ class MesuresGenerales extends ElementsConstructibles {
 
   statistiques(identifiantsMesuresPersonnalisees) {
     const statsInitiales = () => ({
-      indispensablesFaites: 0,
+      indispensables: { [MesureGenerale.STATUT_FAIT]: 0, [MesureGenerale.STATUT_EN_COURS]: 0 },
       misesEnOeuvre: 0,
-      recommandeesFaites: 0,
+      recommandees: { [MesureGenerale.STATUT_FAIT]: 0, [MesureGenerale.STATUT_EN_COURS]: 0 },
       retenues: 0,
       totalIndispensables: 0,
       totalRecommandees: 0,
@@ -46,16 +46,22 @@ class MesuresGenerales extends ElementsConstructibles {
       const { id, statut } = mesure;
       const { categorie } = this.referentiel.mesure(id);
 
+      if (statut === MesureGenerale.STATUT_FAIT) {
+        stats[categorie].misesEnOeuvre += 1;
+      }
       if (statut === MesureGenerale.STATUT_FAIT || statut === MesureGenerale.STATUT_EN_COURS) {
         stats[categorie].retenues += 1;
-
-        if (statut === MesureGenerale.STATUT_FAIT) {
-          stats[categorie].misesEnOeuvre += 1;
-
-          if (mesure.estIndispensable()) stats[categorie].indispensablesFaites += 1;
-          if (mesure.estRecommandee()) stats[categorie].recommandeesFaites += 1;
-        }
       }
+
+      [MesureGenerale.STATUT_EN_COURS, MesureGenerale.STATUT_FAIT].forEach((statutReference) => {
+        if (statut === statutReference) {
+          if (mesure.estIndispensable()) {
+            stats[categorie].indispensables[statut] += 1;
+          } else {
+            stats[categorie].recommandees[statut] += 1;
+          }
+        }
+      });
     });
 
     identifiantsMesuresPersonnalisees
@@ -67,6 +73,12 @@ class MesuresGenerales extends ElementsConstructibles {
         return acc;
       }, stats);
 
+    this.referentiel.identifiantsCategoriesMesures().forEach((categorie) => {
+      stats[categorie].indispensablesFaites = stats[categorie]
+        .indispensables[MesureGenerale.STATUT_FAIT];
+      stats[categorie].recommandeesFaites = stats[categorie]
+        .recommandees[MesureGenerale.STATUT_FAIT];
+    });
     return new StatistiquesMesures(stats, this.referentiel);
   }
 

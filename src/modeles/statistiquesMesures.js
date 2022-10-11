@@ -96,6 +96,14 @@ class StatistiquesMesures {
       .map((categorie) => (this.donnees[categorie].totalIndispensables))
       .reduce((acc, total) => (acc + total), 0);
   }
+
+  indispensables() {
+    return {
+      enCours: this.categories()
+        .map((categorie) => (this.donnees[categorie].indispensables.enCours))
+        .reduce((acc, total) => (acc + total), 0),
+    };
+  }
 }
 
 module.exports = StatistiquesMesures;
