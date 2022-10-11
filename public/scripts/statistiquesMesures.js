@@ -59,6 +59,7 @@ const dessineCamembert = ($canevas, {
               font: { weight: 'bold' },
               align: 'start',
               offset: [-15, -15, -15, -20],
+              formatter: (valeur) => (valeur || ''),
             },
           },
         ],
