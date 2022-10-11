@@ -811,6 +811,27 @@ describe('Le serveur MSS des routes /api/*', () => {
         testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
       });
 
+      describe('avec un email en majuscules', () => {
+        it('retrouve le compte et le ne recrée donc pas', (done) => {
+          testeur.depotDonnees().utilisateurAvecEmail = (emailRecherche) => {
+            const enMinuscules = 'jean.dupont@mail.fr';
+            expect(emailRecherche).to.be(enMinuscules);
+            done();
+            return Promise.resolve({ email: enMinuscules });
+          };
+
+          testeur.depotDonnees().nouvelUtilisateur = () => {
+            done("L'utilisateur ne devrait pas être re-créé");
+          };
+
+          axios.post('http://localhost:1234/api/autorisation', {
+            emailContributeur: 'Jean.DUPONT@mail.fr',
+            idHomologation: '123',
+          })
+            .catch((e) => done(e.response?.data || e));
+        });
+      });
+
       describe("si le contributeur n'a pas déjà été invité", () => {
         it('envoie un email de notification au contributeur', (done) => {
           let emailEnvoye = false;
@@ -919,6 +940,21 @@ describe('Le serveur MSS des routes /api/*', () => {
             expect(nouveauContributeurCree).to.be(true);
             done();
           })
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it('crée le compte avec un email converti en minuscules', (done) => {
+        testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
+          const enMinuscules = 'jean.dupont@mail.fr';
+          expect(donneesUtilisateur.email).to.be(enMinuscules);
+          done();
+          return Promise.resolve(contributeurCree);
+        };
+
+        axios.post('http://localhost:1234/api/autorisation', {
+          emailContributeur: 'Jean.DUPONT@mail.fr',
+          idHomologation: '123',
+        })
           .catch((e) => done(e.response?.data || e));
       });
 

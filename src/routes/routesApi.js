@@ -223,7 +223,8 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
     middleware.aseptise('emailContributeur'),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
-      const { emailContributeur, idHomologation } = requete.body;
+      const { idHomologation } = requete.body;
+      const emailContributeur = requete.body.emailContributeur?.toLowerCase();
 
       const verifiePermission = (...params) => depotDonnees.autorisationPour(...params)
         .then((a) => (
