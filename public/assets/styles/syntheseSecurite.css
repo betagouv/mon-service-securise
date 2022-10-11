@@ -213,6 +213,28 @@ section > h2 {
   height: 10em;
 }
 
+.statistiques-mesures .fleche {
+  width: 1em;
+  height: 1.3em;
+
+  background-image: url(../images/forme_fleche_bleue.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.statistiques-mesures .mesures-restantes {
+  padding: 1em;
+  border-radius: 0.5em;
+
+  background-color: white;
+  color: var(--texte-moyen-fonce);
+  line-height: 0.25em;
+}
+
+.statistiques-mesures .nombre-restantes {
+  color: var(--bleu-mise-en-avant);
+}
+
 .total-mesures {
   margin: 0;
   padding: 1.2em;

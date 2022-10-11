@@ -3,7 +3,7 @@ block append scripts
   script(src='/bibliotheques/chartjs-plugin-datalabels.js')
   script(src = '/statique/scripts/statistiquesMesures.js')
 
-mixin statistiquesMesures(id, titre, styleTitre = '')
+mixin statistiquesMesures(id, nombreTotalMesuresRestantes, titre, styleTitre = '')
   .statistiques-mesures
     h4(class = styleTitre)= titre
     .details
@@ -17,6 +17,8 @@ mixin statistiquesMesures(id, titre, styleTitre = '')
           data-mesures-faites = 20,
         )
       .fleche
-        // Une image à insérer
       .mesures-restantes
         // La zone blanche à insérer
+        p Il reste
+        p.nombre-restantes #{nombreTotalMesuresRestantes} #{nombreTotalMesuresRestantes <= 1 ? `mesure`: `mesures`}
+        p à mettre en œuvre
