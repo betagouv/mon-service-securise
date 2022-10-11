@@ -54,19 +54,13 @@ block append page
         h2 Mesures de sécurité
 
         h3 Par niveau de criticité
-        - const { total, enCours, nonFait } = homologation.statistiquesMesuresIndispensables()
         .statistiques-par-criticite
           +statistiquesMesures({
             id: 'mesures-indispensables',
             nombreTotalMesuresRestantes: 0,
             titre: 'Indispensables',
             styleTitre: 'important',
-            statistiques: {
-              total,
-              enCours,
-              nonFait,
-              faites: 20,
-            },
+            statistiques: homologation.statistiquesMesuresIndispensables(),
           })
           +statistiquesMesures({
             id: 'mesures-recommandees',

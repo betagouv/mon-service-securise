@@ -1,3 +1,5 @@
+const Mesure = require('./mesure');
+
 const Referentiel = require('../referentiel');
 const { ErreurCategorieInconnue, ErreurDonneesStatistiques } = require('../erreurs');
 
@@ -66,7 +68,7 @@ class StatistiquesMesures {
       .map((categorie) => (this.donnees[categorie].indispensables[statut]))
       .reduce((acc, total) => (acc + total), 0);
 
-    return ['enCours', 'nonFait', 'total']
+    return [...Mesure.statutsPossibles(), 'total']
       .reduce((acc, statut) => Object.assign(acc, { [statut]: totalToutesCategories(statut) }), {});
   }
 
