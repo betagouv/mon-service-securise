@@ -170,4 +170,21 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       stats.indiceCyber().total,
     );
   });
+
+  elles('connaissent le nombre total de mesures indispensables', () => {
+    const stats = new StatistiquesMesures({
+      une: {
+        misesEnOeuvre: 1,
+        retenues: 2,
+        totalIndispensables: 8,
+      },
+      deux: {
+        misesEnOeuvre: 1,
+        retenues: 2,
+        totalIndispensables: 4,
+      },
+    }, referentiel);
+
+    expect(stats.totalIndispensables()).to.equal(8 + 4);
+  });
 });

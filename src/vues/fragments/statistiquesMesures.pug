@@ -3,7 +3,8 @@ block append scripts
   script(src='/bibliotheques/chartjs-plugin-datalabels.js')
   script(src = '/statique/scripts/statistiquesMesures.js')
 
-mixin statistiquesMesures({ id, nombreTotalMesuresRestantes, titre, styleTitre = '' })
+mixin statistiquesMesures({ id, nombreTotalMesuresRestantes, titre, styleTitre = '', statistiques = {} })
+  - const { total = 0, enCours = 0, nonFaites = 0, faites = 0 } = statistiques
   .statistiques-mesures
     h4(class = styleTitre)= titre
     .details
@@ -11,10 +12,10 @@ mixin statistiquesMesures({ id, nombreTotalMesuresRestantes, titre, styleTitre =
         // Un canevas avec des valeurs d'illustration
         canvas(
           id = id,
-          data-total-mesures = 60,
-          data-mesures-en-cours = 8,
-          data-mesures-non-faites = 7,
-          data-mesures-faites = 20,
+          data-total-mesures = total,
+          data-mesures-en-cours = enCours,
+          data-mesures-non-faites = nonFaites,
+          data-mesures-faites = faites,
         )
       .fleche
       .mesures-restantes
