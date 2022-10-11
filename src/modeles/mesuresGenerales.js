@@ -81,7 +81,6 @@ class MesuresGenerales extends ElementsConstructibles {
       }, stats);
 
     this.referentiel.identifiantsCategoriesMesures().forEach((categorie) => {
-      stats[categorie].totalRecommandees = stats[categorie].recommandees.total;
       stats[categorie].indispensablesFaites = stats[categorie]
         .indispensables[MesureGenerale.STATUT_FAIT];
       stats[categorie].recommandeesFaites = stats[categorie]
