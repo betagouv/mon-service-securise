@@ -36,12 +36,13 @@ class MesuresGenerales extends ElementsConstructibles {
         [MesureGenerale.STATUT_FAIT]: 0,
         [MesureGenerale.STATUT_EN_COURS]: 0,
       },
-      misesEnOeuvre: 0,
       recommandees: {
         total: 0,
         [MesureGenerale.STATUT_FAIT]: 0,
         [MesureGenerale.STATUT_EN_COURS]: 0,
       },
+
+      misesEnOeuvre: 0,
       retenues: 0,
     });
 
@@ -80,7 +81,6 @@ class MesuresGenerales extends ElementsConstructibles {
       }, stats);
 
     this.referentiel.identifiantsCategoriesMesures().forEach((categorie) => {
-      stats[categorie].totalIndispensables = stats[categorie].indispensables.total;
       stats[categorie].totalRecommandees = stats[categorie].recommandees.total;
       stats[categorie].indispensablesFaites = stats[categorie]
         .indispensables[MesureGenerale.STATUT_FAIT];

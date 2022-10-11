@@ -78,6 +78,8 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     const nbDecimales = 6;
     const precision = 0.5 * Number(`1e-${nbDecimales}`);
 
+    if (Number.isNaN(valeurCalculee)) throw new Error('Valeur NaN inattendue');
+
     try {
       const difference = Number(
         parseFloat(Math.abs(valeurAttendue - valeurCalculee)).toPrecision(nbDecimales + 1)
@@ -93,8 +95,8 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       une: {
         misesEnOeuvre: 3,
         retenues: 9,
+        indispensables: { total: 4 },
         indispensablesFaites: 2,
-        totalIndispensables: 4,
         recommandeesFaites: 1,
         totalRecommandees: 5,
       },
@@ -114,8 +116,8 @@ describe('Les statistiques sur les mesures de sécurité', () => {
         une: {
           misesEnOeuvre: 2,
           retenues: 4,
+          indispensables: { total: 4 },
           indispensablesFaites: 2,
-          totalIndispensables: 4,
           recommandeesFaites: 0,
           totalRecommandees: 0,
         },
@@ -132,7 +134,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
           misesEnOeuvre: 2,
           retenues: 4,
           indispensablesFaites: 0,
-          totalIndispensables: 0,
+          indispensables: { total: 0 },
           recommandeesFaites: 1,
           totalRecommandees: 4,
         },
@@ -147,16 +149,16 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       une: {
         misesEnOeuvre: 3,
         retenues: 13,
+        indispensables: { total: 8 },
         indispensablesFaites: 2,
-        totalIndispensables: 8,
         recommandeesFaites: 1,
         totalRecommandees: 5,
       },
       deux: {
         misesEnOeuvre: 3,
         retenues: 6,
+        indispensables: { total: 4 },
         indispensablesFaites: 3,
-        totalIndispensables: 4,
         recommandeesFaites: 0,
         totalRecommandees: 2,
       },
@@ -176,16 +178,16 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       une: {
         misesEnOeuvre: 1,
         retenues: 2,
-        totalIndispensables: 8,
+        indispensables: { total: 8 },
       },
       deux: {
         misesEnOeuvre: 1,
         retenues: 2,
-        totalIndispensables: 4,
+        indispensables: { total: 4 },
       },
     }, referentiel);
 
-    expect(stats.totalIndispensables()).to.equal(8 + 4);
+    expect(stats.indispensables().total).to.equal(8 + 4);
   });
 
   elles('peuvent filtrer les totaux par mesures indispensables', () => {
