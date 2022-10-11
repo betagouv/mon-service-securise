@@ -187,4 +187,21 @@ describe('Les statistiques sur les mesures de sécurité', () => {
 
     expect(stats.totalIndispensables()).to.equal(8 + 4);
   });
+
+  elles('peuvent filtrer les totaux par mesures indispensables', () => {
+    const stats = new StatistiquesMesures({
+      une: {
+        misesEnOeuvre: 1,
+        retenues: 5,
+        indispensables: { enCours: 2 },
+      },
+      deux: {
+        misesEnOeuvre: 1,
+        retenues: 5,
+        indispensables: { enCours: 3 },
+      },
+    }, referentiel);
+
+    expect(stats.indispensables().enCours).to.equal(2 + 3);
+  });
 });
