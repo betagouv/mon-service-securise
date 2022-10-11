@@ -144,6 +144,10 @@ class Homologation {
       nomService: this.nomService(),
     };
   }
+
+  totalMesuresIndispensables() {
+    return this.statistiquesMesures().totalIndispensables();
+  }
 }
 
 Object.assign(Homologation, NIVEAUX);

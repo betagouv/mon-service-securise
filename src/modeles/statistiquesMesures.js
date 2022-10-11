@@ -90,6 +90,12 @@ class StatistiquesMesures {
   toJSON() {
     return JSON.parse(JSON.stringify(this.donnees));
   }
+
+  totalIndispensables() {
+    return this.categories()
+      .map((categorie) => (this.donnees[categorie].totalIndispensables))
+      .reduce((acc, total) => (acc + total), 0);
+  }
 }
 
 module.exports = StatistiquesMesures;
