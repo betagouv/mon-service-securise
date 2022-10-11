@@ -70,6 +70,11 @@ block append page
           .total
             strong Total :
             span &nbsp;#{homologation.nombreTotalMesuresGenerales()} mesures proposées par l'ANSSI.
+          .legende
+            .legende-faites Faites
+            .legende-en-cours En cours
+            .legende-non-faites Non faites
+            .legende-a-remplir À remplir
 
     footer
       .infos-indice-cyber.
@@ -81,7 +86,5 @@ block append page
       .nature-document
         span.nom-mss MonServiceSécurisé – 
         span Homologation de sécurité du service « #{homologation.nomService()} »
-
-
 
   script(type = 'module', src = '/statique/homologation/syntheseSecurite.js')

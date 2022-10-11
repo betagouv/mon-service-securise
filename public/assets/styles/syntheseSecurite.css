@@ -235,18 +235,6 @@ section > h2 {
   color: var(--bleu-mise-en-avant);
 }
 
-.total-mesures {
-  margin: 0;
-  padding: 1.2em;
-  border-radius: 0 0 1em 1em;
-
-  text-align: center;
-}
-
-.total-mesures .total {
-  color: var(--texte-moyen-fonce);
-}
-
 .score-indice-cyber {
   width: 6em;
   height: 6em;
@@ -282,10 +270,59 @@ section > h2 {
   font-weight: bold;
 }
 
-
 .indices-par-categories dd {
   color: var(--bleu-mise-en-avant);
   text-align: right;
+}
+
+.total-mesures {
+  display: flex;
+  margin: 0;
+  padding: 1.2em 2em;
+  border-radius: 0 0 1em 1em;
+}
+
+.total, .legende {
+  flex: 1;
+}
+
+.total-mesures .total {
+  color: var(--texte-moyen-fonce);
+}
+
+.total-mesures .legende {
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 1em;
+}
+
+.legende > *::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: solid 1px var(--gris-inactif);
+  border-radius: 2px;
+  margin-right: 0.5em;
+  transform: translateY(2px);
+}
+
+.legende-faites::before {
+  background: var(--graphique-bleu-fonce);
+  border-color: var(--graphique-bleu-fonce);
+}
+
+.legende-en-cours::before {
+  background: var(--graphique-bleu-moyen);
+  border-color: var(--graphique-bleu-moyen);
+}
+
+.legende-non-faites::before {
+  background: var(--graphique-bleu-clair);
+}
+
+.legende-a-remplir::before{
+  background: #fff;
 }
 
 footer {
