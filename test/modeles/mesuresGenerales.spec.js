@@ -126,8 +126,8 @@ describe('La liste des mesures générales', () => {
       const mesuresGenerales = creeMesuresGenerales([]);
 
       const stats = mesuresGenerales.statistiques(['id1', 'id2', 'id3']).toJSON();
-      expect(stats.une.totalRecommandees).to.equal(1);
-      expect(stats.deux.totalRecommandees).to.equal(1);
+      expect(stats.une.recommandees.total).to.equal(1);
+      expect(stats.deux.recommandees.total).to.equal(1);
     });
 
     it('calcule le nombre de mesures indispensables faites', () => {

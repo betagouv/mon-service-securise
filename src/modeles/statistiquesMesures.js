@@ -42,9 +42,8 @@ class StatistiquesMesures {
 
   indiceCyber() {
     const nbMesures = (categorie) => {
-      const { indispensables } = this.donnees[categorie];
-      const { totalRecommandees } = this.donnees[categorie];
-      return indispensables.total + totalRecommandees;
+      const { indispensables, recommandees } = this.donnees[categorie];
+      return indispensables.total + recommandees.total;
     };
 
     const totalPondere = this.categories().reduce((acc, categorie) => (
@@ -74,11 +73,12 @@ class StatistiquesMesures {
     const {
       recommandeesFaites,
       indispensablesFaites,
-      totalRecommandees,
       indispensables,
+      recommandees,
     } = this.donnees[idCategorie];
 
     const totalIndispensables = indispensables.total;
+    const totalRecommandees = recommandees.total;
 
     if (totalRecommandees === 0) return indispensablesFaites / totalIndispensables;
     if (totalIndispensables === 0) return recommandeesFaites / totalRecommandees;
