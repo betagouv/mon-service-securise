@@ -55,8 +55,17 @@ block append page
 
         h3 Par niveau de criticité
         .statistiques-par-criticite
-          +statistiquesMesures('mesures-indispensables', 0, 'Indispensables', 'important')
-          +statistiquesMesures('mesures-recommandees', 2, 'Recommandées')
+          +statistiquesMesures({
+            id: 'mesures-indispensables',
+            nombreTotalMesuresRestantes: 0,
+            titre: 'Indispensables',
+            styleTitre: 'important',
+          })
+          +statistiquesMesures({
+            id: 'mesures-recommandees',
+            nombreTotalMesuresRestantes: 2,
+            titre: 'Recommandées'
+          })
         .total-mesures
           .total
             strong Total :

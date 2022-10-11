@@ -3,7 +3,7 @@ block append scripts
   script(src='/bibliotheques/chartjs-plugin-datalabels.js')
   script(src = '/statique/scripts/statistiquesMesures.js')
 
-mixin statistiquesMesures(id, nombreTotalMesuresRestantes, titre, styleTitre = '')
+mixin statistiquesMesures({ id, nombreTotalMesuresRestantes, titre, styleTitre = '' })
   .statistiques-mesures
     h4(class = styleTitre)= titre
     .details
