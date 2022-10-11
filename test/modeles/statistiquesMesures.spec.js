@@ -197,6 +197,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     expect(stats.indispensables().enCours).to.equal(2 + 3);
     expect(stats.indispensables().fait).to.equal(1 + 2);
     expect(stats.indispensables().total).to.equal(12 + 15);
+    expect(stats.indispensables().restant).to.equal((12 + 15) - (1 + 2));
   });
 
   elles('peuvent filtrer les totaux par mesures recommandées', () => {

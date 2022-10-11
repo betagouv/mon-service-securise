@@ -57,14 +57,12 @@ block append page
         .statistiques-par-criticite
           +statistiquesMesures({
             id: 'mesures-indispensables',
-            nombreTotalMesuresRestantes: 0,
             titre: 'Indispensables',
             styleTitre: 'important',
             statistiques: homologation.statistiquesMesuresIndispensables(),
           })
           +statistiquesMesures({
             id: 'mesures-recommandees',
-            nombreTotalMesuresRestantes: 2,
             titre: 'Recommandées',
             statistiques: homologation.statistiquesMesuresRecommandees(),
           })
