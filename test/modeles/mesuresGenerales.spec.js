@@ -146,6 +146,14 @@ describe('La liste des mesures générales', () => {
       expect(stats.deux.indispensables.enCours).to.equal(0);
     });
 
+    it('calcule le nombre de mesures indispensables non faites', () => {
+      const mesuresGenerales = creeMesuresGenerales([{ id: 'id1', statut: 'nonFait' }]);
+
+      const stats = mesuresGenerales.statistiques(['id1', 'id2']).toJSON();
+      expect(stats.une.indispensables.nonFait).to.equal(1);
+      expect(stats.deux.indispensables.nonFait).to.equal(0);
+    });
+
     it('calcule le nombre de mesures recommandées faites', () => {
       const mesuresGenerales = creeMesuresGenerales([{ id: 'id3', statut: 'fait' }]);
 

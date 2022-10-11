@@ -30,17 +30,14 @@ class MesuresGenerales extends ElementsConstructibles {
   }
 
   statistiques(identifiantsMesuresPersonnalisees) {
+    const statuts = MesureGenerale.statutsPossibles();
+
+    const statsPartiellesAvecStatut = () => statuts
+      .reduce((acc, statut) => Object.assign(acc, { [statut]: 0 }), { total: 0 });
+
     const statsInitiales = () => ({
-      indispensables: {
-        total: 0,
-        [MesureGenerale.STATUT_FAIT]: 0,
-        [MesureGenerale.STATUT_EN_COURS]: 0,
-      },
-      recommandees: {
-        total: 0,
-        [MesureGenerale.STATUT_FAIT]: 0,
-        [MesureGenerale.STATUT_EN_COURS]: 0,
-      },
+      indispensables: statsPartiellesAvecStatut(),
+      recommandees: statsPartiellesAvecStatut(),
 
       misesEnOeuvre: 0,
       retenues: 0,
@@ -60,7 +57,7 @@ class MesuresGenerales extends ElementsConstructibles {
         stats[categorie].retenues += 1;
       }
 
-      [MesureGenerale.STATUT_EN_COURS, MesureGenerale.STATUT_FAIT].forEach((statutReference) => {
+      statuts.forEach((statutReference) => {
         if (statut === statutReference) {
           if (mesure.estIndispensable()) {
             stats[categorie].indispensables[statut] += 1;
