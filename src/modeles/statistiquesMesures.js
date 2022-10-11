@@ -47,8 +47,11 @@ class StatistiquesMesures {
       .map((categorie) => (this.donnees[categorie][type][statut]))
       .reduce((acc, total) => (acc + total), 0);
 
-    return [...Mesure.statutsPossibles(), 'total']
+    const resultat = [...Mesure.statutsPossibles(), 'total']
       .reduce((acc, statut) => Object.assign(acc, { [statut]: totalToutesCategories(statut) }), {});
+
+    resultat.restant = resultat.total - resultat.fait;
+    return resultat;
   }
 
   indiceCyber() {
