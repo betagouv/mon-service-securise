@@ -69,14 +69,18 @@ const dessineCamembert = ($canevas, {
   /* eslint-enable no-new */
 };
 
-$(() => {
-  const $canevasMesuresIndispensables = $('canvas#mesures-indispensables');
-  const statistiquesMesuresIndispensables = {
-    totalMesures: $canevasMesuresIndispensables.data('total-mesures'),
-    mesuresEnCours: $canevasMesuresIndispensables.data('mesures-en-cours'),
-    mesuresNonFaites: $canevasMesuresIndispensables.data('mesures-non-faites'),
-    mesuresFaites: $canevasMesuresIndispensables.data('mesures-faites'),
+const dessineStatistiquesMesures = ($canevas) => {
+  const statistiquesMesures = {
+    totalMesures: $canevas.data('total-mesures'),
+    mesuresEnCours: $canevas.data('mesures-en-cours'),
+    mesuresNonFaites: $canevas.data('mesures-non-faites'),
+    mesuresFaites: $canevas.data('mesures-faites'),
   };
 
-  dessineCamembert($canevasMesuresIndispensables, statistiquesMesuresIndispensables);
+  dessineCamembert($canevas, statistiquesMesures);
+};
+
+$(() => {
+  dessineStatistiquesMesures($('canvas#mesures-indispensables'));
+  dessineStatistiquesMesures($('canvas#mesures-recommandees'));
 });

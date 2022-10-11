@@ -254,6 +254,24 @@ describe('Une homologation', () => {
     expect(statistiquesMesuresAppelees).to.be(true);
   });
 
+  it('délègue aux statistiques le filtrage par mesures recommandées', () => {
+    let statistiquesMesuresAppelees = false;
+    const unObjet = {};
+
+    const homologation = new Homologation({
+      mesuresGenerales: [],
+    });
+    homologation.statistiquesMesures = () => ({
+      recommandees: () => {
+        statistiquesMesuresAppelees = true;
+        return unObjet;
+      },
+    });
+
+    expect(homologation.statistiquesMesuresRecommandees()).to.equal(unObjet);
+    expect(statistiquesMesuresAppelees).to.be(true);
+  });
+
   it('sait décrire le statut de déploiement', () => {
     const referentiel = Referentiel.creeReferentiel({
       statutsDeploiement: {

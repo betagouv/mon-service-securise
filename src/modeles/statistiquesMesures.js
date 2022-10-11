@@ -42,6 +42,15 @@ class StatistiquesMesures {
     return categories(this.donnees);
   }
 
+  filtreesParType(type) {
+    const totalToutesCategories = (statut) => this.categories()
+      .map((categorie) => (this.donnees[categorie][type][statut]))
+      .reduce((acc, total) => (acc + total), 0);
+
+    return [...Mesure.statutsPossibles(), 'total']
+      .reduce((acc, statut) => Object.assign(acc, { [statut]: totalToutesCategories(statut) }), {});
+  }
+
   indiceCyber() {
     const nbMesures = (categorie) => {
       const { indispensables, recommandees } = this.donnees[categorie];
@@ -64,16 +73,15 @@ class StatistiquesMesures {
   }
 
   indispensables() {
-    const totalToutesCategories = (statut) => this.categories()
-      .map((categorie) => (this.donnees[categorie].indispensables[statut]))
-      .reduce((acc, total) => (acc + total), 0);
-
-    return [...Mesure.statutsPossibles(), 'total']
-      .reduce((acc, statut) => Object.assign(acc, { [statut]: totalToutesCategories(statut) }), {});
+    return this.filtreesParType('indispensables');
   }
 
   misesEnOeuvre(idCategorie) {
     return this.donnees[idCategorie].misesEnOeuvre;
+  }
+
+  recommandees() {
+    return this.filtreesParType('recommandees');
   }
 
   retenues(idCategorie) {
