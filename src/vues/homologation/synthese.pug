@@ -27,7 +27,7 @@ block zone-principale
     .tableau-bord
       .titre-service
         h1!= service.nomService()
-      a.bouton(href = `/homologation/${service.id}/decision`) Télécharger la synthèse
+      a.bouton(href = `/homologation/${service.id}/syntheseSecurite`) Télécharger la synthèse
 
     .actions
       each actionSaisie in actionsSaisie
@@ -53,3 +53,8 @@ block cartes-informations
   if process.env.AVEC_INDICE_CYBER
     - const indiceCyber = service.indiceCyber()
     +indiceCyber({ referentiel, indiceCyber })
+
+  +carteInformations({ titre: 'Pour les services référencés avant le 12/10/2022' })
+    .liens
+      a(href = `/homologation/${service.id}/decision`) Télécharger la synthèse (1ère version)
+      a(href = `/homologation/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »

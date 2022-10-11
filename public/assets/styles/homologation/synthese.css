@@ -159,7 +159,7 @@
   margin-top: 1em;
 }
 
-.outil-complementaire .description a:after {
+.outil-complementaire .description a:after, .liens a:after {
   content: '';
   display: inline-block;
 
@@ -171,4 +171,12 @@
   border-bottom: 0;
 
   transform: rotate(0.12turn) translateY(-0.05em);
+}
+
+.liens {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+
+  font-size: 0.65em;
 }
