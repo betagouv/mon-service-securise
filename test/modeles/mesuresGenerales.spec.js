@@ -111,15 +111,15 @@ describe('La liste des mesures générales', () => {
       const mesuresGenerales = creeMesuresGenerales([]);
 
       const stats = mesuresGenerales.statistiques(['id1', 'id2', 'id3']).toJSON();
-      expect(stats.une.totalIndispensables).to.equal(1);
-      expect(stats.deux.totalIndispensables).to.equal(0);
+      expect(stats.une.indispensables.total).to.equal(1);
+      expect(stats.deux.indispensables.total).to.equal(0);
     });
 
     it('ignore les mesures indispensables non personnalisées', () => {
       const mesuresGenerales = creeMesuresGenerales([]);
 
       const stats = mesuresGenerales.statistiques(['id2', 'id3']).toJSON();
-      expect(stats.une.totalIndispensables).to.equal(0);
+      expect(stats.une.indispensables.total).to.equal(0);
     });
 
     it('calcule le nombre total de mesures recommandées personnalisées', () => {
