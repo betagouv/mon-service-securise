@@ -61,6 +61,15 @@ class StatistiquesMesures {
     }), { total: indiceTotal });
   }
 
+  indispensables() {
+    const totalToutesCategories = (statut) => this.categories()
+      .map((categorie) => (this.donnees[categorie].indispensables[statut]))
+      .reduce((acc, total) => (acc + total), 0);
+
+    return ['enCours', 'nonFait', 'total']
+      .reduce((acc, statut) => Object.assign(acc, { [statut]: totalToutesCategories(statut) }), {});
+  }
+
   misesEnOeuvre(idCategorie) {
     return this.donnees[idCategorie].misesEnOeuvre;
   }
@@ -92,15 +101,6 @@ class StatistiquesMesures {
 
   toJSON() {
     return JSON.parse(JSON.stringify(this.donnees));
-  }
-
-  indispensables() {
-    const totalToutesCategories = (statut) => this.categories()
-      .map((categorie) => (this.donnees[categorie].indispensables[statut]))
-      .reduce((acc, total) => (acc + total), 0);
-
-    return ['enCours', 'total']
-      .reduce((acc, statut) => Object.assign(acc, { [statut]: totalToutesCategories(statut) }), {});
   }
 }
 
