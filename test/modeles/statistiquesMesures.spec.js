@@ -96,8 +96,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
         misesEnOeuvre: 3,
         retenues: 9,
         indispensables: { total: 4, fait: 2 },
-        recommandees: { total: 5 },
-        recommandeesFaites: 1,
+        recommandees: { total: 5, fait: 1 },
       },
     }, referentiel);
 
@@ -116,8 +115,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
           misesEnOeuvre: 2,
           retenues: 4,
           indispensables: { total: 4, fait: 2 },
-          recommandees: { total: 0 },
-          recommandeesFaites: 0,
+          recommandees: { total: 0, fait: 0 },
         },
       }, referentiel);
 
@@ -132,8 +130,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
           misesEnOeuvre: 2,
           retenues: 4,
           indispensables: { total: 0, fait: 0 },
-          recommandees: { total: 4 },
-          recommandeesFaites: 1,
+          recommandees: { total: 4, fait: 1 },
         },
       }, referentiel);
 
@@ -147,15 +144,13 @@ describe('Les statistiques sur les mesures de sécurité', () => {
         misesEnOeuvre: 3,
         retenues: 13,
         indispensables: { total: 8, fait: 2 },
-        recommandees: { total: 5 },
-        recommandeesFaites: 1,
+        recommandees: { total: 5, fait: 1 },
       },
       deux: {
         misesEnOeuvre: 3,
         retenues: 6,
         indispensables: { total: 4, fait: 3 },
-        recommandees: { total: 2 },
-        recommandeesFaites: 0,
+        recommandees: { total: 2, fait: 0 },
       },
     }, referentiel);
 
