@@ -80,10 +80,6 @@ class MesuresGenerales extends ElementsConstructibles {
         return acc;
       }, stats);
 
-    this.referentiel.identifiantsCategoriesMesures().forEach((categorie) => {
-      stats[categorie].recommandeesFaites = stats[categorie]
-        .recommandees[MesureGenerale.STATUT_FAIT];
-    });
     return new StatistiquesMesures(stats, this.referentiel);
   }
 

@@ -150,8 +150,8 @@ describe('La liste des mesures générales', () => {
       const mesuresGenerales = creeMesuresGenerales([{ id: 'id3', statut: 'fait' }]);
 
       const stats = mesuresGenerales.statistiques(['id1', 'id2', 'id3']).toJSON();
-      expect(stats.une.recommandeesFaites).to.equal(0);
-      expect(stats.deux.recommandeesFaites).to.equal(1);
+      expect(stats.une.recommandees.fait).to.equal(0);
+      expect(stats.deux.recommandees.fait).to.equal(1);
     });
   });
 });
