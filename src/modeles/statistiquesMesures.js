@@ -72,12 +72,12 @@ class StatistiquesMesures {
   score(idCategorie) {
     const {
       recommandeesFaites,
-      indispensablesFaites,
       indispensables,
       recommandees,
     } = this.donnees[idCategorie];
 
     const totalIndispensables = indispensables.total;
+    const indispensablesFaites = indispensables.fait;
     const totalRecommandees = recommandees.total;
 
     if (totalRecommandees === 0) return indispensablesFaites / totalIndispensables;
