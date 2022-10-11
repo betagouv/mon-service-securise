@@ -57,15 +57,11 @@ class MesuresGenerales extends ElementsConstructibles {
         stats[categorie].retenues += 1;
       }
 
-      statuts.forEach((statutReference) => {
-        if (statut === statutReference) {
-          if (mesure.estIndispensable()) {
-            stats[categorie].indispensables[statut] += 1;
-          } else {
-            stats[categorie].recommandees[statut] += 1;
-          }
-        }
-      });
+      if (mesure.estIndispensable()) {
+        stats[categorie].indispensables[statut] += 1;
+      } else {
+        stats[categorie].recommandees[statut] += 1;
+      }
     });
 
     identifiantsMesuresPersonnalisees
