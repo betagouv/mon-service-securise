@@ -31,12 +31,18 @@ class MesuresGenerales extends ElementsConstructibles {
 
   statistiques(identifiantsMesuresPersonnalisees) {
     const statsInitiales = () => ({
-      indispensables: { [MesureGenerale.STATUT_FAIT]: 0, [MesureGenerale.STATUT_EN_COURS]: 0 },
+      indispensables: {
+        total: 0,
+        [MesureGenerale.STATUT_FAIT]: 0,
+        [MesureGenerale.STATUT_EN_COURS]: 0,
+      },
       misesEnOeuvre: 0,
-      recommandees: { [MesureGenerale.STATUT_FAIT]: 0, [MesureGenerale.STATUT_EN_COURS]: 0 },
+      recommandees: {
+        total: 0,
+        [MesureGenerale.STATUT_FAIT]: 0,
+        [MesureGenerale.STATUT_EN_COURS]: 0,
+      },
       retenues: 0,
-      totalIndispensables: 0,
-      totalRecommandees: 0,
     });
 
     const stats = this.referentiel.identifiantsCategoriesMesures()
@@ -68,12 +74,14 @@ class MesuresGenerales extends ElementsConstructibles {
       .map((id) => new MesureGenerale({ id }, this.referentiel))
       .reduce((acc, mesure) => {
         const { categorie } = this.referentiel.mesure(mesure.id);
-        if (mesure.estIndispensable()) acc[categorie].totalIndispensables += 1;
-        if (mesure.estRecommandee()) acc[categorie].totalRecommandees += 1;
+        if (mesure.estIndispensable()) acc[categorie].indispensables.total += 1;
+        if (mesure.estRecommandee()) acc[categorie].recommandees.total += 1;
         return acc;
       }, stats);
 
     this.referentiel.identifiantsCategoriesMesures().forEach((categorie) => {
+      stats[categorie].totalIndispensables = stats[categorie].indispensables.total;
+      stats[categorie].totalRecommandees = stats[categorie].recommandees.total;
       stats[categorie].indispensablesFaites = stats[categorie]
         .indispensables[MesureGenerale.STATUT_FAIT];
       stats[categorie].recommandeesFaites = stats[categorie]
