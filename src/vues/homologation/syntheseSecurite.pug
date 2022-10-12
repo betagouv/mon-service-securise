@@ -4,6 +4,17 @@ include ../fragments/scoreIndiceCyber
 include ../fragments/indicesCyberParCategorie
 include ../fragments/descriptionIndiceCyber
 
+mixin totalMesures(nombreTotalMesuresGenerales)
+  .total-mesures
+    .total
+      strong Total :
+      span &nbsp;#{nombreTotalMesuresGenerales} mesures proposées par l'ANSSI.
+    .legende
+      .legende-faites Faites
+      .legende-en-cours En cours
+      .legende-non-faites Non faites
+      .legende-a-remplir À remplir
+
 block append styles
   link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
 
@@ -67,15 +78,20 @@ block append page
             titre: 'Recommandées',
             statistiques: homologation.statistiquesMesuresRecommandees(),
           })
-        .total-mesures
-          .total
-            strong Total :
-            span &nbsp;#{homologation.nombreTotalMesuresGenerales()} mesures proposées par l'ANSSI.
-          .legende
-            .legende-faites Faites
-            .legende-en-cours En cours
-            .legende-non-faites Non faites
-            .legende-a-remplir À remplir
+        +totalMesures(homologation.nombreTotalMesuresGenerales())
+
+        h3 Par catégorie
+        .statistiques-par-categorie
+          - var categories = ['Gouvernance', 'Protection', 'Défense', 'Résilience']
+            each categorie in categories
+              .categorie
+                h4= categorie
+                .graphique
+                  .statut.faites 2
+                  .statut.en-cours 2
+                  .statut.non-faites 4
+                  .statut.a-remplir 3
+        +totalMesures(homologation.nombreTotalMesuresGenerales())
 
     footer
       .infos-indice-cyber
