@@ -158,7 +158,7 @@ section > h2 {
   margin-bottom: 2px;
 }
 
-.statistiques-mesures, .total-mesures {
+.statistiques-mesures, .total-mesures, .statistiques-par-categorie {
   background-color: var(--fond-gris-clair);
 }
 
@@ -180,7 +180,7 @@ section > h2 {
   border-top-right-radius: 1em;
 }
 
-.statistiques-mesures h4 {
+:is(.statistiques-mesures, .statistiques-par-categorie) h4 {
   margin: 0;
 
   color: var(--bleu-anssi);
@@ -342,4 +342,58 @@ footer .infos-indice-cyber {
 footer .nom-mss {
   color: var(--bleu-anssi);
   font-weight: bold;
+}
+
+.statistiques-par-categorie {
+  display: flex;
+  column-gap: 2em;
+  padding: 1.8em;
+  margin-bottom: 2px;
+
+  border-radius: 1em 1em 0 0;
+}
+
+.categorie {
+  width: 100%;
+}
+
+.graphique {
+  display: flex;
+}
+
+.graphique .statut {
+  padding: 0.8em;
+  flex-grow: 1;
+  margin-top: 1em;
+  text-align: center;
+}
+
+.graphique .statut:first-of-type {
+  border-top-left-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
+}
+
+.graphique .statut:last-of-type {
+  border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
+.graphique .faites {
+  background-color: var(--graphique-bleu-fonce);
+  color: #fff;
+}
+
+.graphique .en-cours {
+  background-color: var(--graphique-bleu-moyen);
+  color: #fff;
+}
+
+.graphique .non-faites {
+  background-color: var(--graphique-bleu-clair);
+  color: var(--graphique-bleu-fonce);
+}
+
+.graphique .a-remplir {
+  background-color: #fff;
+  color: var(--graphique-bleu-fonce);
 }
