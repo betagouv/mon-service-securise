@@ -82,15 +82,19 @@ block append page
 
         h3 Par catégorie
         .statistiques-par-categorie
-          - var categories = ['Gouvernance', 'Protection', 'Défense', 'Résilience']
-            each categorie in categories
-              .categorie
-                h4= categorie
-                .graphique
-                  .statut.faites 2
-                  .statut.en-cours 2
-                  .statut.non-faites 4
-                  .statut.a-remplir 3
+          - const faites = (idCategorie) => homologation.statistiquesMesures().misesEnOeuvre(idCategorie)
+          - const enCours = (idCategorie) => homologation.statistiquesMesures().enCours(idCategorie)
+          - const nonFaites = (idCategorie) => homologation.statistiquesMesures().nonFaites(idCategorie)
+          - const aRemplir = (idCategorie) => homologation.statistiquesMesures().aRemplir(idCategorie)
+
+          each idCategorie in homologation.statistiquesMesures().categories()
+            .categorie
+              h4= referentiel.descriptionCategorie(idCategorie)
+              .graphique
+                .statut.faites= faites(idCategorie)
+                .statut.en-cours= enCours(idCategorie)
+                .statut.non-faites= nonFaites(idCategorie)
+                .statut.a-remplir= aRemplir(idCategorie)
         +totalMesures(homologation.nombreTotalMesuresGenerales())
 
     footer
