@@ -2,6 +2,7 @@ extends ../documentImprimable
 include ../fragments/statistiquesMesures
 include ../fragments/scoreIndiceCyber
 include ../fragments/indicesCyberParCategorie
+include ../fragments/descriptionIndiceCyber
 
 block append styles
   link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
@@ -77,11 +78,10 @@ block append page
             .legende-a-remplir À remplir
 
     footer
-      .infos-indice-cyber.
-        * L'indice cyber est calculé à partir des mesures de sécurité mises en
-        œuvre renseignées par l'équipe par rapport à l'ensemble des mesures
-        proposées par l'ANSSI. Il fournit une évaluation indicative du niveau
-        de sécurité du service.
+      .infos-indice-cyber
+        .
+          * 
+        +descriptionIndiceCyber()
 
       .nature-document
         span.nom-mss MonServiceSécurisé – 
