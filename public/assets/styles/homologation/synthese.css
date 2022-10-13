@@ -10,6 +10,16 @@
   margin-bottom: 1em;
 }
 
+.titre-service {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tableau-bord .bouton {
+  flex-shrink: 0;
+}
+
 .actions {
   display: flex;
   column-gap: 1.5em;

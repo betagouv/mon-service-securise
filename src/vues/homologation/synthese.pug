@@ -25,8 +25,7 @@ block retour
 block zone-principale
   .details-service
     .tableau-bord
-      .titre-service
-        h1!= service.nomService()
+      h1.titre-service!= service.nomService()
       a.bouton(href = `/homologation/${service.id}/syntheseSecurite`) Télécharger la synthèse
 
     .actions
