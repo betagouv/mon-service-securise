@@ -91,10 +91,14 @@ block append page
             .categorie
               h4= referentiel.descriptionCategorie(idCategorie)
               .graphique
-                .statut.faites= faites(idCategorie)
-                .statut.en-cours= enCours(idCategorie)
-                .statut.non-faites= nonFaites(idCategorie)
-                .statut.a-remplir= aRemplir(idCategorie)
+                if faites(idCategorie)
+                  .statut.faites= faites(idCategorie)
+                if enCours(idCategorie)
+                  .statut.en-cours= enCours(idCategorie)
+                if nonFaites(idCategorie)
+                  .statut.non-faites= nonFaites(idCategorie)
+                if aRemplir(idCategorie)
+                  .statut.a-remplir= aRemplir(idCategorie)
         +totalMesures(homologation.nombreTotalMesuresGenerales())
 
     footer
