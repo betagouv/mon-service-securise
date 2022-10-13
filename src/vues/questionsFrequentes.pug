@@ -1,4 +1,5 @@
 extends mssDeconnecte
+include ../vues/fragments/descriptionIndiceCyber
 
 block append styles
   link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
@@ -285,10 +286,7 @@ block main
         h2#indice-cyber.
           Que signifie et comment est calculé l'indice cyber ?
 
-        p.
-          L'indice cyber est calculé à partir des mesures de sécurité déclarées mises en œuvre par l'équipe
-          par rapport à l'ensemble des mesures proposées par l'ANSSI.
-          Il fournit une évaluation indicative du niveau de sécurité du service.
+        p: +descriptionIndiceCyber()
         p Cet indice K est calculé selon la formule suivante.
 
         figure(title = "formule de calcul de l'indice cyber")!= formuleIndiceCyber

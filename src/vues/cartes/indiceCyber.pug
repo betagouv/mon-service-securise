@@ -1,5 +1,6 @@
 include ../carteInformations
 include ../fragments/scoreIndiceCyber
+include ../fragments/descriptionIndiceCyber
 include ../fragments/indicesCyberParCategorie
 include ../fragments/lienNouvelOnglet
 
@@ -16,12 +17,7 @@ mixin indiceCyber({ referentiel, indiceCyber })
       +indicesCyberParCategorie(referentiel, formatIndiceCyber, indiceCyber, noteMax)
 
     h3 Qu'est-ce que l'indice cyber ?
-    p.
-      L'indice cyber est calculé à partir des mesures de sécurité renseignées
-      et mises en œuvre par l'équipe par rapport à l'ensemble des mesures
-      proposées par l'ANSSI. Il fournit une évaluation indicative du niveau de
-      sécurité du service.
-
+    p: +descriptionIndiceCyber()
     p: +lienNouvelOnglet('/questionsFrequentes#indice-cyber', 'En savoir plus')
 
   +carteInformations({ titre: 'Indice cyber', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceCyber' })
