@@ -38,8 +38,22 @@ class StatistiquesMesures {
     this.referentiel = referentiel;
   }
 
+  aRemplir(idCategorie) {
+    const total = this.donnees[idCategorie].indispensables.total
+      + this.donnees[idCategorie].recommandees.total;
+    return total
+      - this.misesEnOeuvre(idCategorie)
+      - this.enCours(idCategorie)
+      - this.nonFaites(idCategorie);
+  }
+
   categories() {
     return categories(this.donnees);
+  }
+
+  enCours(idCategorie) {
+    const stats = this.donnees[idCategorie];
+    return stats.retenues - stats.misesEnOeuvre;
   }
 
   filtreesParType(type) {
@@ -81,6 +95,11 @@ class StatistiquesMesures {
 
   misesEnOeuvre(idCategorie) {
     return this.donnees[idCategorie].misesEnOeuvre;
+  }
+
+  nonFaites(idCategorie) {
+    const stats = this.donnees[idCategorie];
+    return stats.indispensables.nonFait + stats.recommandees.nonFait;
   }
 
   recommandees() {

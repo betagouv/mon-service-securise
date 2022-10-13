@@ -62,6 +62,41 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     expect(stats.misesEnOeuvre('une')).to.equal(2);
   });
 
+  elles('connaissent les mesures en cours pour une catégorie', () => {
+    const stats = new StatistiquesMesures({
+      une: { retenues: 5, misesEnOeuvre: 2 },
+    }, referentiel);
+    expect(stats.enCours('une')).to.equal(5 - 2);
+  });
+
+  elles('connaissent les mesures non faites pour une catégorie', () => {
+    const stats = new StatistiquesMesures({
+      une: {
+        misesEnOeuvre: 3,
+        retenues: 9,
+        indispensables: { total: 4, nonFait: 2 },
+        recommandees: { total: 5, nonFait: 1 },
+      },
+    }, referentiel);
+
+    expect(stats.nonFaites('une')).to.equal(2 + 1);
+  });
+
+  elles('connaissent les mesures à remplir pour une catégorie', () => {
+    const stats = new StatistiquesMesures({
+      une: {
+        misesEnOeuvre: 3,
+        retenues: 9,
+        indispensables: { total: 8, fait: 2, enCours: 3, nonFait: 1 },
+        recommandees: { total: 10, fait: 1, enCours: 3, nonFait: 1 },
+      },
+    }, referentiel);
+
+    const mesuresIndispensableARemplir = 8 - 2 - 3 - 1;
+    const mesuresRecommandeesARemplir = 10 - 1 - 3 - 1;
+    expect(stats.aRemplir('une')).to.equal(mesuresIndispensableARemplir + mesuresRecommandeesARemplir);
+  });
+
   elles("s'affichent au format JSON", () => {
     const stats = new StatistiquesMesures({
       une: { retenues: 4, misesEnOeuvre: 2 },
