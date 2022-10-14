@@ -1,19 +1,9 @@
 extends ../documentImprimable
-include ../fragments/statistiquesMesures
-include ../fragments/scoreIndiceCyber
-include ../fragments/indicesCyberParCategorie
 include ../fragments/descriptionIndiceCyber
-
-mixin totalMesures(nombreTotalMesuresGenerales)
-  .total-mesures
-    .total
-      strong Total :
-      span &nbsp;#{nombreTotalMesuresGenerales} mesures proposées par l'ANSSI.
-    .legende
-      .legende-faites Faites
-      .legende-en-cours En cours
-      .legende-non-faites Non faites
-      .legende-a-remplir À remplir
+include ../fragments/indicesCyberParCategorie
+include ../fragments/scoreIndiceCyber
+include ../fragments/statistiquesMesures
+include ../fragments/totalMesures
 
 block append styles
   link(href='/statique/assets/styles/syntheseSecurite.css', rel='stylesheet')
@@ -99,7 +89,7 @@ block append page
                   .statut.non-faites= nonFaites(idCategorie)
                 if aRemplir(idCategorie)
                   .statut.a-remplir= aRemplir(idCategorie)
-        +totalMesures(homologation.nombreTotalMesuresGenerales())
+        +totalMesures(homologation.nombreTotalMesuresGenerales(), 8)
 
     footer
       .infos-indice-cyber
