@@ -335,7 +335,7 @@ module.exports = {
       descriptionLongue: "Disposer et tenir à jour une liste des comptes disposant d'un accès administrateur au service, les personnes associées et la nature de leur(s) accès. Sont concernés par cette mesure les administrateurs techniques (ex. accès à la configuration de l'hébergement du service) et les administrateurs métiers (ex. agent public ayant un droit de modification des informations affichées sur le service). <br>Cette mesure permet de gérer la liste des comptes disposant d'un accès privilégié en vue d'en limiter le nombre au strict nécessaire et ainsi réduire le risque que des comptes non nécessaires soient détournés par un acteur malveillant.",
     },
     hebergementUE: {
-      description: "Héberger le service numérique et les données au sein de l'Union européenne ",
+      description: "Héberger le service numérique et les données au sein de l'Union européenne",
       categorie: 'gouvernance',
       descriptionLongue: "Privilégier le recours à un hébergeur proposant la localisation au sein de l'Union européenne du service numérique et des données.<br>Cette mesure vise à renforcer la protection des données grâce aux garanties offertes par la réglementation européenne et à faciliter les actions de remédiation et d'investigation en cas d'incident de sécurité.",
     },
@@ -427,13 +427,13 @@ module.exports = {
       description: 'Installer un certificat de signature électronique',
       categorie: 'protection',
       indispensable: true,
-      descriptionLongue: 'Dans le cadre de la configuration du service, installer un certificat de signature électronique qualifié au sens du règlement n°910/2014 eIDAS, délivré par un prestataire qualifié, ou recourir à un service conforme.<br>Cette mesure permet la réalisation d'une signature électronique robuste sur le plan de la sécurité, conforme à la réglementation française et européenne.',
+      descriptionLongue: "Dans le cadre de la configuration du service, installer un certificat de signature électronique qualifié au sens du règlement n°910/2014 eIDAS, délivré par un prestataire qualifié, ou recourir à un service conforme.<br>Cette mesure permet la réalisation d'une signature électronique robuste sur le plan de la sécurité, conforme à la réglementation française et européenne.",
     },
     limitationAccesAdmin: {
       description: "Limiter au strict nécessaire le nombre de personnes disposant d'un accès administrateur au service numérique",
       categorie: 'protection',
       indispensable: true,
-      descriptionLongue: "Créer des comptes d'administration technique et/ou métier, aux seules personnes ayant besoin de disposer de ces accès.<br>Cette mesure permet de limiter le nombre de comptes disposant de privilèges susceptibles d'être usurpés à des fins malveillantes. Cette mesure réduit la “surface d'attaque" du service.",
+      descriptionLongue: "Créer des comptes d'administration technique et/ou métier, aux seules personnes ayant besoin de disposer de ces accès.<br>Cette mesure permet de limiter le nombre de comptes disposant de privilèges susceptibles d'être usurpés à des fins malveillantes. Cette mesure réduit la « surface d'attaque » du service.",
     },
     limitationDroitsAdmin: {
       description: 'Limiter les droits de chaque administrateur au strict nécessaire',
