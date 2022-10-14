@@ -1,7 +1,14 @@
 extends ../../documentImprimable
 
+block append styles
+  link(href = '/statique/assets/styles/annexes/mesures.css', rel = 'stylesheet')
+
 block append page
   .page
-    h1 Mesures de sécurité détaillées
+    .titre-icone
+    .titre
+      h1 Mesures de sécurité détaillées
+      .sous-titre.
+        Toutes les mesures indispensables #[.icone-etoile], recommandées et créées sont classées selon leur statut de mise en oeuvre et par catégorie.
 
   script(type = 'module', src = '/statique/homologation/annexes/mesures.js')

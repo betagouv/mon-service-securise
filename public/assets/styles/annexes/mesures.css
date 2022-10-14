@@ -1,0 +1,37 @@
+.titre-icone {
+  display: inline-block;
+
+  height: 4em;
+  width: 4em;
+  transform: translateY(0.5em);
+
+  background-image: url(../../images/icone_dossier.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.titre {
+  display: inline-block;
+  margin-left: 1em;
+}
+
+.titre h1 {
+  text-transform: uppercase;
+  font-weight: normal;
+  font-size: 1.4em;
+  margin: 0;
+}
+
+.titre .sous-titre {
+  color: var(--texte-moyen-fonce);
+}
+
+.titre .icone-etoile {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  transform: translateY(0.15em);
+  background-image: url(../../images/icone_etoile_orange.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
