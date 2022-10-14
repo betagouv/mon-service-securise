@@ -11,7 +11,7 @@ describe('La liste des mesures spécifiques', () => {
     expect(mesures.nombre()).to.equal(0);
   });
 
-  elle('est composée de risques spécifiques', () => {
+  elle('est composée de mesures spécifiques', () => {
     const mesures = new MesuresSpecifiques({ mesuresSpecifiques: [
       { description: 'Une mesure spécifique', modalites: 'Des modalités' },
     ] });

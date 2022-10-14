@@ -106,6 +106,10 @@ class Homologation {
 
   mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }
 
+  nombreMesuresSpecifiques() {
+    return this.mesures.nombreMesuresSpecifiques();
+  }
+
   nombreTotalMesuresGenerales() {
     return this.mesures.nombreTotalMesuresGenerales();
   }
