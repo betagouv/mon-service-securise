@@ -1,0 +1,15 @@
+mixin totalMesures(totalMesuresGenerales, totalMesuresSpecifiques)
+  .total-mesures
+    .total
+      strong Total :
+      span.
+        &nbsp;#{totalMesuresGenerales} #{totalMesuresGenerales <= 1 ? `mesure proposée`: `mesures proposées`} par l'ANSSI
+      if totalMesuresSpecifiques
+        span &nbsp;+ #{totalMesuresSpecifiques} #{totalMesuresSpecifiques <= 1 ? `ajoutée`: `ajoutées`} par l'équipe.
+      else
+        span .
+    .legende
+      .legende-faites Faites
+      .legende-en-cours En cours
+      .legende-non-faites Non faites
+      .legende-a-remplir À remplir
