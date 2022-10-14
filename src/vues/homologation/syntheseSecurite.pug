@@ -89,7 +89,7 @@ block append page
                   .statut.non-faites= nonFaites(idCategorie)
                 if aRemplir(idCategorie)
                   .statut.a-remplir= aRemplir(idCategorie)
-        +totalMesures(homologation.nombreTotalMesuresGenerales(), 8)
+        +totalMesures(homologation.nombreTotalMesuresGenerales(), homologation.nombreMesuresSpecifiques())
 
     footer
       .infos-indice-cyber

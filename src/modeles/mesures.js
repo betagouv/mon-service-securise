@@ -20,6 +20,10 @@ class Mesures extends InformationsHomologation {
     return this.statistiques().indiceCyber();
   }
 
+  nombreMesuresSpecifiques() {
+    return this.mesuresSpecifiques.nombre();
+  }
+
   nombreTotalMesuresGenerales() {
     return this.identifiantsMesures.length;
   }
