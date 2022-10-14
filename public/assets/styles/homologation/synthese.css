@@ -4,8 +4,8 @@
 
 .tableau-bord {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  column-gap: 1em;
 
   margin-bottom: 1em;
 }
