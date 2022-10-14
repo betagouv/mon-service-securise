@@ -101,6 +101,15 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     });
   });
 
+  describe('quand requête GET sur `/homologation/:id/syntheseSecurite/annexes/mesures`', () => {
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheHomologation(
+        'http://localhost:1234/homologation/456/syntheseSecurite/annexes/mesures',
+        done,
+      );
+    });
+  });
+
   describe('quand requête GET sur `/homologation/:id/mesures`', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
