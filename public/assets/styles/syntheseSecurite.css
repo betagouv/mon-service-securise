@@ -92,23 +92,6 @@ h1 {
   margin-top: 3em;
 }
 
-section {
-  position: relative;
-  border: 1px solid var(--bordure-foncee);
-  border-radius: 10px;
-  margin-top: 2em;
-  padding: 2.4em 1.7em 1.7em;
-}
-
-section > h2 {
-  position: absolute;
-  top: -1.8em;
-  background-color: var(--fond-gris-clair);
-  border-radius: 1em;
-  padding: 0.17em 0.83em 0.33em;
-  color: var(--bleu-anssi);
-}
-
 .description dl {
   margin: 0.5em 0;
 }
