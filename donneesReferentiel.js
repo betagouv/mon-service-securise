@@ -403,7 +403,7 @@ module.exports = {
     contactSecurite: {
       description: 'Rendre public une procédure permettant de signaler un problème de sécurité',
       categorie: 'gouvernance',
-      descriptionLongue: 'Fournir publiquement une procédure permettant à une personne ou à une entité de signaler un problème de sécurité concernant le service numérique. Cette procédure doit préciser les conditions dans lesquelles un problème de sécurité peut être identifié et signalé et fournir un moyen non nominatif de contacter l'équipe en charge du service ou de sa sécurité (ex. email, formulaire de contact).<br>Cette mesure facilite l'identification et le traitement de problèmes de sécurité concernant le service.',
+      descriptionLongue: "Fournir publiquement une procédure permettant à une personne ou à une entité de signaler un problème de sécurité concernant le service numérique. Cette procédure doit préciser les conditions dans lesquelles un problème de sécurité peut être identifié et signalé et fournir un moyen non nominatif de contacter l'équipe en charge du service ou de sa sécurité (ex. email, formulaire de contact).<br>Cette mesure facilite l'identification et le traitement de problèmes de sécurité concernant le service.",
     },
     certificatChiffrement: {
       description: "Chiffrer le trafic des données avec un certificat de sécurité conforme au référentiel général de sécurité",
