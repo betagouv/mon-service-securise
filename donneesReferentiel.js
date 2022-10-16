@@ -406,7 +406,7 @@ module.exports = {
       descriptionLongue: "Fournir publiquement une procédure permettant à une personne ou à une entité de signaler un problème de sécurité concernant le service numérique. Cette procédure doit préciser les conditions dans lesquelles un problème de sécurité peut être identifié et signalé et fournir un moyen non nominatif de contacter l'équipe en charge du service ou de sa sécurité (ex. email, formulaire de contact).<br>Cette mesure facilite l'identification et le traitement de problèmes de sécurité concernant le service.",
     },
     certificatChiffrement: {
-      description: 'Chiffrer le trafic des données avec un certificat de sécurité conforme au référentiel général de sécurité',
+      description: 'Chiffrer le trafic des données avec un certificat de sécurité conforme à la réglementation',
       categorie: 'protection',
       indispensable: true,
       descriptionLongue: "Dans le cadre de la configuration du service, installer un certificat de sécurité serveur conforme au référentiel général de sécurité (RGS) défini par l'ANSSI, délivré par un prestataire de service de confiance qualifié.<br>Cette mesure permet de chiffrer les flux de données transitant par le service numérique avec des mécanismes de chiffrement robustes ainsi que de prouver l'identité de l'organisation détentrice du certificat.",
@@ -424,7 +424,7 @@ module.exports = {
       descriptionLongue: "Configurer le service en vue de fermer tous les ports réseau non strictement nécessaires à l'administration et au fonctionnement du service et fermer tous les autres ports.<br>Cette mesure permet de réduire le risque d'accès illégitime au service de la part d'acteurs malveillants.",
     },
     certificatSignature: {
-      description: 'Installer un certificat de signature électronique',
+      description: 'Installer un certificat de signature électronique conforme à la réglementation',
       categorie: 'protection',
       indispensable: true,
       descriptionLongue: "Dans le cadre de la configuration du service, installer un certificat de signature électronique qualifié au sens du règlement n°910/2014 eIDAS, délivré par un prestataire qualifié, ou recourir à un service conforme.<br>Cette mesure permet la réalisation d'une signature électronique robuste sur le plan de la sécurité, conforme à la réglementation française et européenne.",
