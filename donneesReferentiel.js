@@ -667,7 +667,7 @@ module.exports = {
       description: 'Vérifier régulièrement les sauvegardes',
       categorie: 'resilience',
       indispensable: true,
-      descriptionLongue: 'Réaliser des tests réguliers des sauvegardes (ex. tous les trois mois) afin de vérifier que celles-ci sont bien réalisées, accessibles et fonctionnelles.<br>Cette mesure permet de vérifier que les sauvegardes effectuées peuvent être utilisées pour restaurer le service et/ou ses données en cas d'incident de sécurité.',
+      descriptionLongue: "Réaliser des tests réguliers des sauvegardes (ex. tous les trois mois) afin de vérifier que celles-ci sont bien réalisées, accessibles et fonctionnelles.<br>Cette mesure permet de vérifier que les sauvegardes effectuées peuvent être utilisées pour restaurer le service et/ou ses données en cas d'incident de sécurité.",
     },
     dispoDonneesIND: {
       description: 'Recourir à une ou plusieurs solutions garantissant un haut niveau de disponibilité du service',
