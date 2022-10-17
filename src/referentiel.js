@@ -21,7 +21,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const localisationsDonnees = () => donnees.localisationsDonnees;
   const identifiantsLocalisationsDonnees = () => Object.keys(localisationsDonnees());
   const mesureIndispensable = (idMesure) => !!donnees.mesures[idMesure].indispensable;
-  const mesures = () => donnees.mesures;
+  const mesures = () => JSON.parse(JSON.stringify(donnees.mesures));
   const identifiantsMesures = () => Object.keys(mesures());
   const mesure = (id) => mesures()[id];
   const typesService = () => donnees.typesService;

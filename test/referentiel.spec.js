@@ -119,12 +119,25 @@ describe('Le référentiel', () => {
     expect(referentiel.delaisAvantImpactCritique()).to.eql({ uneClef: 'une valeur' });
   });
 
-  it('connaît la liste des mesures', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      mesures: { uneClef: 'une valeur' },
+  describe('sur demande de la liste des mesures', () => {
+    it('retourne la liste', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        mesures: { uneClef: 'une valeur' },
+      });
+
+      expect(referentiel.mesures()).to.eql({ uneClef: 'une valeur' });
     });
 
-    expect(referentiel.mesures()).to.eql({ uneClef: 'une valeur' });
+    it('retourne toujours la même liste', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        mesures: { idMesure: { attributModifiable: 'Une valeur de référence' } },
+      });
+
+      const mesure = referentiel.mesure('idMesure');
+      mesure.attributModifiable = 'Une valeur modifiée';
+
+      expect(referentiel.mesures()).to.eql({ idMesure: { attributModifiable: 'Une valeur de référence' } });
+    });
   });
 
   it('sait si une mesure est indispensable', () => {
