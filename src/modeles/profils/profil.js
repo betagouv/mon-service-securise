@@ -25,6 +25,10 @@ class Profil {
     return this.mesuresACibler(cles, 'ajouter');
   }
 
+  mesuresARendreIndispensables(cles) {
+    return this.mesuresACibler(cles, 'rendreIndispensables');
+  }
+
   mesuresARetirer(cles) {
     return this.mesuresACibler(cles, 'retirer');
   }

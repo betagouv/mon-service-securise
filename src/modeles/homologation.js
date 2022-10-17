@@ -34,16 +34,20 @@ class Homologation {
       avisExpertCyber = {},
     } = donnees;
 
-    let { mesuresGenerales = [] } = donnees;
-
     this.id = id;
     if (createur.email) this.createur = new Utilisateur(createur);
     this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
 
-    const idMesures = Object.keys(moteurRegles.mesures(this.descriptionService));
-    mesuresGenerales = mesuresGenerales.filter((m) => idMesures.includes(m.id));
-    this.mesures = new Mesures({ mesuresGenerales, mesuresSpecifiques }, referentiel, idMesures);
+    let { mesuresGenerales = [] } = donnees;
+    const mesuresApplicables = moteurRegles.mesures(this.descriptionService);
+    const idMesuresApplicables = Object.keys(mesuresApplicables);
+    mesuresGenerales = mesuresGenerales.filter((m) => idMesuresApplicables.includes(m.id));
+    this.mesures = new Mesures(
+      { mesuresGenerales, mesuresSpecifiques },
+      referentiel,
+      idMesuresApplicables,
+    );
 
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
     this.risques = new Risques(

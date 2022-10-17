@@ -8,17 +8,18 @@ class MoteurRegles {
   }
 
   mesuresAModifier(descriptionService, mesuresACibler) {
-    const { clefsDescriptionServiceAConsiderer = [] } = this.reglesPersonnalisation;
+    const { clefsDescriptionServiceAConsiderer = [], profils = {} } = this.reglesPersonnalisation;
+
     const valeursDescriptionService = clefsDescriptionServiceAConsiderer.flatMap(
       (clef) => descriptionService[clef]
     );
 
-    const profils = this.reglesPersonnalisation.profils || {};
     const mapMesures = Object.keys(profils).map((profil) => new Profil(
       profils[profil].regles,
       {
         ajouter: profils[profil].mesuresAAjouter,
         retirer: profils[profil].mesuresARetirer,
+        rendreIndispensables: profils[profil].mesuresARendreIndispensables,
       }
     )).flatMap((profil) => profil[mesuresACibler](valeursDescriptionService))
       .reduce((accumulateur, mesure) => ({ ...accumulateur, [mesure]: mesure }), {});
@@ -30,6 +31,10 @@ class MoteurRegles {
     return this.mesuresAModifier(descriptionService, 'mesuresAAjouter');
   }
 
+  mesuresARendreIndispensables(descriptionService) {
+    return this.mesuresAModifier(descriptionService, 'mesuresARendreIndispensables');
+  }
+
   mesuresARetirer(descriptionService) {
     return this.mesuresAModifier(descriptionService, 'mesuresARetirer');
   }
@@ -38,14 +43,28 @@ class MoteurRegles {
     const { mesuresBase = [] } = this.reglesPersonnalisation;
     const mesuresAAjouter = this.mesuresAAjouter(...params);
     const mesuresARetirer = this.mesuresARetirer(...params);
-    const idMesures = mesuresBase
+    const mesuresARendreIndispensables = this.mesuresARendreIndispensables(...params);
+
+    const idsMesures = mesuresBase
       .concat(mesuresAAjouter)
       .filter((mesure) => !mesuresARetirer.includes(mesure));
 
-    return idMesures.reduce(
-      (resultat, id) => Object.assign(resultat, { [id]: this.referentiel.mesure(id) }),
-      {},
+    const mesureAvecImportanceAjustee = (idsMesuresReference, idMesure) => {
+      const mesure = this.referentiel.mesure(idMesure);
+      mesure.indispensable ||= idsMesuresReference.includes(idMesure);
+
+      return mesure;
+    };
+
+    const ajouteEtRendsIndispensable = (idsMesuresReference, accumulateur, idMesure) => (
+      Object.assign(accumulateur, {
+        [idMesure]: mesureAvecImportanceAjustee(idsMesuresReference, idMesure),
+      })
     );
+
+    return idsMesures.reduce((...parametres) => (
+      ajouteEtRendsIndispensable(mesuresARendreIndispensables, ...parametres)
+    ), {});
   }
 }
 

@@ -95,10 +95,8 @@ describe('Le moteur de règles', () => {
     const moteur = new MoteurRegles(referentiel);
 
     const applicationMobile = new DescriptionService({ typeService: ['applicationMobile'] });
-    expect(moteur.mesures(applicationMobile)).to.eql({
-      mesureBase: {},
-      mesureSupplementaire: {},
-    });
+    const mesures = Object.keys(moteur.mesures(applicationMobile));
+    expect(mesures).to.eql(['mesureBase', 'mesureSupplementaire']);
   });
 
   it("reste robuste quand aucune mesure de base n'est spécifiée", () => {
@@ -166,9 +164,59 @@ describe('Le moteur de règles', () => {
       const moteur = new MoteurRegles(referentiel);
 
       const achat = new DescriptionService({ provenanceService: ['achat'] });
-      expect(moteur.mesures(achat)).to.eql({
-        mesureBase: {},
-      });
+      const mesures = Object.keys(moteur.mesures(achat));
+      expect(mesures).to.eql(['mesureBase']);
     });
+  });
+
+  it('rend indispensable une mesure', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: {
+        supervision: {},
+      },
+      reglesPersonnalisation: {
+        clefsDescriptionServiceAConsiderer: ['delaiAvantImpactCritique'],
+        mesuresBase: [],
+        profils: {
+          mssPlusPlus: {
+            regles: [{
+              presence: ['moinsUneHeure'],
+            }],
+            mesuresAAjouter: ['supervision'],
+            mesuresARendreIndispensables: ['supervision'],
+          },
+        },
+      },
+    });
+    const moteur = new MoteurRegles(referentiel);
+
+    const service = new DescriptionService({ delaiAvantImpactCritique: ['moinsUneHeure'] });
+    expect(moteur.mesures(service)).to.eql({ supervision: { indispensable: true } });
+  });
+
+  it("change l'importance de la mesure lorsque la description du service change", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: {
+        supervision: {},
+      },
+      reglesPersonnalisation: {
+        clefsDescriptionServiceAConsiderer: ['delaiAvantImpactCritique'],
+        mesuresBase: ['supervision'],
+        profils: {
+          mssPlusPlus: {
+            regles: [{
+              presence: ['moinsUneHeure'],
+            }],
+            mesuresARendreIndispensables: ['supervision'],
+          },
+        },
+      },
+    });
+    const moteur = new MoteurRegles(referentiel);
+
+    let service = new DescriptionService({ delaiAvantImpactCritique: ['moinsUneHeure'] });
+    moteur.mesures(service); // Accès au référentiel qui ne devrait pas avoir d'effet de bord
+    service = new DescriptionService();
+    expect(moteur.mesures(service)).to.eql({ supervision: { indispensable: false } });
   });
 });

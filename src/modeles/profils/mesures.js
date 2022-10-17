@@ -1,7 +1,8 @@
 class Mesures {
-  constructor({ ajouter, retirer } = {}) {
-    this.ajouter = ajouter || [];
-    this.retirer = retirer || [];
+  constructor({ ajouter = [], retirer = [], rendreIndispensables = [] } = {}) {
+    this.ajouter = ajouter;
+    this.retirer = retirer;
+    this.rendreIndispensables = rendreIndispensables;
   }
 }
 
