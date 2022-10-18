@@ -86,7 +86,7 @@ a.aide {
 
 a.connexion {
   margin-left: 1em;
-  padding: 0.3em 1em;
+  padding: 0.3em 0.9em 0.3em 0.7em;
 
   border: 0.5px solid var(--systeme-design-etat-bleu);
   border-radius: 0.4em;
@@ -97,6 +97,19 @@ a.connexion:hover {
   border-color: var(--bleu-mise-en-avant);
 
   color: #fff;
+}
+
+a.connexion:before {
+  content: '';
+  display: inline-block;
+  width: 0.9em;
+  height: 1.1em;
+  margin-right: 0.7em;
+  position: relative;
+  top: 2px;
+
+  background: url(../images/icone_utilisateur.svg) no-repeat;
+  background-size: contain;
 }
 
 .utilisateur-courant {
