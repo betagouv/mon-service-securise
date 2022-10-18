@@ -12,6 +12,22 @@ class MesuresGenerales extends ElementsConstructibles {
     return this.nombre() === 0;
   }
 
+  parStatut() {
+    let mesuresParStatut = { fait: {}, enCours: {}, nonFait: {} };
+    mesuresParStatut = this.toutes()
+      .filter((mesure) => mesure.statutRenseigne())
+      .reduce((acc, mesure) => {
+        const mesureReference = this.referentiel.mesure(mesure.id);
+        acc[mesure.statut][mesureReference.categorie] ||= [];
+        acc[mesure.statut][mesureReference.categorie].push({
+          description: mesure.descriptionMesure(),
+          indispensable: mesure.estIndispensable(),
+        });
+        return acc;
+      }, mesuresParStatut);
+    return mesuresParStatut;
+  }
+
   proportion(nbMisesEnOeuvre, idsMesures) {
     const identifiantsMesuresNonRetenues = () => this.items
       .filter((m) => m.nonRetenue())

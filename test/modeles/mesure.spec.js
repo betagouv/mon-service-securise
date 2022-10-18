@@ -17,4 +17,18 @@ describe('Une mesure', () => {
       done("La validation de la mesure sans statut n'aurait pas dû lever d'exception.");
     }
   });
+
+  describe('sur une interrogation de statut renseigné', () => {
+    elle('répond favorablement quand le statut est dans les statuts concernés', () => {
+      expect(Mesure.statutRenseigne('fait')).to.be(true);
+    });
+
+    elle('répond défavorablement quand le statut est non retenu', () => {
+      expect(Mesure.statutRenseigne('nonRetenu')).to.be(false);
+    });
+
+    elle("répond défavorablement quand le statut n'est pas renseigné", () => {
+      expect(Mesure.statutRenseigne()).to.be(false);
+    });
+  });
 });

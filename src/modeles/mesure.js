@@ -24,6 +24,13 @@ class Mesure extends InformationsHomologation {
 
   static statutsPossibles() { return Object.values(STATUTS); }
 
+  static statutRenseigne(statut) {
+    return Object.keys(STATUTS)
+      .filter((clef) => clef !== 'STATUT_NON_RETENU')
+      .map((clef) => STATUTS[clef])
+      .includes(statut);
+  }
+
   static valide({ statut }) {
     if (statut && !this.statutsPossibles().includes(statut)) {
       throw new ErreurStatutMesureInvalide(`Le statut "${statut}" est invalide`);
