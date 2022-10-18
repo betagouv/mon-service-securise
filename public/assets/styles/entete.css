@@ -14,7 +14,7 @@ header a {
 
 header nav {
   display: flex;
-  column-gap: 1.4em;
+  column-gap: 1.8em;
   align-items: baseline;
   font-size: 0.9em;
 }
