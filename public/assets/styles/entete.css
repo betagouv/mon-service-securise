@@ -14,15 +14,19 @@ header a {
 
 header nav {
   display: flex;
-  column-gap: 1.8em;
+  column-gap: 0.5em;
   align-items: baseline;
   font-size: 0.9em;
 
   color: var(--systeme-design-etat-bleu);
 }
 
+header nav a {
+  padding: 0.5em 1.1em;
+}
+
 header nav a:hover {
-  color: var(--bleu-mise-en-avant);
+  background-color: var(--systeme-design-etat-gris-survol);
 }
 
 .marianne, .devise {
@@ -77,11 +81,11 @@ a.logo-mss {
 }
 
 a.aide {
-  padding: 0 0 0 2em;
+  padding-left: 2em;
 
   background-image: url(../images/icone_question.svg);
   background-repeat: no-repeat;
-  background-size: contain;
+  background-position: left;
 }
 
 a.connexion {
@@ -90,13 +94,6 @@ a.connexion {
 
   border: 0.5px solid var(--systeme-design-etat-bleu);
   border-radius: 0.4em;
-}
-
-a.connexion:hover {
-  background: var(--bleu-mise-en-avant);
-  border-color: var(--bleu-mise-en-avant);
-
-  color: #fff;
 }
 
 a.connexion:before {
@@ -146,11 +143,7 @@ a.connexion:before {
 
 .menu a {
   display: block;
+  padding:0;
 
-  color: var(--systeme-design-etat-bleu);
   font-size: 0.9em;
-}
-
-.menu a:hover {
-  color: var(--bleu-mise-en-avant);
 }
