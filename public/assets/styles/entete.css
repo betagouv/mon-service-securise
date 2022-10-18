@@ -9,7 +9,7 @@ header a {
   display: inline-block;
 
   text-decoration: none;
-  color: var(--bleu-anssi);
+  color: var(--systeme-design-etat-bleu );
 }
 
 header nav {
@@ -17,6 +17,8 @@ header nav {
   column-gap: 1.8em;
   align-items: baseline;
   font-size: 0.9em;
+
+  color: var(--systeme-design-etat-bleu);
 }
 
 header nav a:hover {
@@ -71,6 +73,7 @@ a.logo-mss {
   background-size: contain;
 
   font-size: 1.2em;
+  color: var(--bleu-anssi)
 }
 
 a.aide {
@@ -85,7 +88,7 @@ a.connexion {
   margin-left: 1em;
   padding: 0.3em 1em;
 
-  border: 0.5px solid var(--bleu-anssi);
+  border: 0.5px solid var(--systeme-design-etat-bleu);
   border-radius: 0.4em;
 }
 
@@ -131,7 +134,7 @@ a.connexion:hover {
 .menu a {
   display: block;
 
-  color: var(--bleu-anssi);
+  color: var(--systeme-design-etat-bleu);
   font-size: 0.9em;
 }
 
