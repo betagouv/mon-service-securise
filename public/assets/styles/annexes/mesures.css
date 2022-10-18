@@ -35,3 +35,52 @@
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+.mesures-par-statut h3 {
+  display: inline-block;
+
+  margin-bottom: 0;
+  padding: 0.3em 0.8em;
+
+  border-radius: 0.4em;
+  background-color: var(--pdf-bleu-clair);
+
+  color: var(--bleu-anssi);
+  text-transform: uppercase;
+}
+
+.mesures-par-statut ul {
+  padding: 0;
+
+  line-height: 2em;
+}
+
+.mesures-par-statut li {
+  list-style-type: none;
+}
+
+.mesures-par-statut li::before {
+  content: '';
+  display: inline-block;
+
+  width: 1.4em;
+  margin-right: 1em;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.mesures-par-statut li:not(.indispensable)::before {
+  height: 0.6em;
+
+  background-image: url(../../images/forme_point_bleu.svg);
+}
+
+.mesures-par-statut li.indispensable::before {
+  height: 1.4em;
+  margin-left: 0;
+
+  background-image: url(../../images/icone_etoile_orange.svg);
+  transform: translateY(0.2em);
+}

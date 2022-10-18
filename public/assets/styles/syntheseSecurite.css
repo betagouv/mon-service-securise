@@ -301,7 +301,7 @@ h1 {
 }
 
 .legende-non-faites::before {
-  background: var(--graphique-bleu-clair);
+  background: var(--pdf-bleu-clair);
 }
 
 .legende-a-remplir::before{
@@ -371,7 +371,7 @@ footer .nom-mss {
 }
 
 .graphique .non-faites {
-  background-color: var(--graphique-bleu-clair);
+  background-color: var(--pdf-bleu-clair);
   color: var(--graphique-bleu-fonce);
 }
 
