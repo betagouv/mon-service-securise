@@ -15,7 +15,7 @@ header a {
 header nav {
   display: flex;
   column-gap: 1.4em;
-  align-items: center;
+  align-items: baseline;
   font-size: 0.9em;
 }
 
@@ -99,24 +99,14 @@ a.aide {
   background-size: contain;
 }
 
-a.connexion, a.inscription {
+a.connexion {
   margin-left: 1em;
   padding: 0.5em 1.5em 0.7em;
-  background: var(--bleu-anssi);
+
   border: 0.5px solid var(--bleu-anssi);
   border-radius: 33% / 100%;
-
-  font-size: 0.9em;
-}
-
-a.connexion {
   background: var(--bleu-anssi);
-
   color: #fff;
-}
-
-a.inscription {
-  background: #fff;
 }
 
 a.connexion:hover {
@@ -124,11 +114,6 @@ a.connexion:hover {
   border-color: var(--bleu-mise-en-avant);
 
   color: #fff;
-}
-
-a.inscription:hover {
-  border-color: var(--bleu-mise-en-avant);
-  color: var(--bleu-mise-en-avant);
 }
 
 .utilisateur-courant {
