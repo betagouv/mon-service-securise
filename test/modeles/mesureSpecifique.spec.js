@@ -76,4 +76,9 @@ describe('Une mesure spécifique', () => {
     const mesure = new MesureSpecifique();
     expect(mesure.estRecommandee()).to.be(false);
   });
+
+  elle('sait si son statut est renseigné', () => {
+    const mesure = new MesureSpecifique({ statut: 'fait' });
+    expect(mesure.statutRenseigne()).to.be(true);
+  });
 });

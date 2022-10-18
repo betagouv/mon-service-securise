@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 
 const MesuresGenerales = require('../../src/modeles/mesuresGenerales');
+const Referentiel = require('../../src/referentiel');
 
 const { A_SAISIR, COMPLETES, A_COMPLETER } = MesuresGenerales;
 
@@ -174,6 +175,44 @@ describe('La liste des mesures générales', () => {
       const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
       expect(stats.une.recommandees.fait).to.equal(0);
       expect(stats.deux.recommandees.fait).to.equal(1);
+    });
+  });
+
+  describe('sur une demande de mesures par statut', () => {
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        mesures: {
+          mesure1: {
+            description: 'Mesure une',
+            categorie: 'categorie1',
+            indispensable: true,
+          },
+        },
+      });
+    });
+
+    it('regroupe par statut les mesures', () => {
+      const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
+
+      expect(mesures.parStatut().fait).to.be.ok();
+    });
+
+    it('regroupe par catégorie les mesures', () => {
+      const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
+
+      expect(mesures.parStatut().fait.categorie1.length).to.equal(1);
+    });
+
+    it("ajoute l'importance de la mesure", () => {
+      const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
+
+      expect(mesures.parStatut().fait.categorie1[0].indispensable).to.be(true);
+    });
+
+    it('ajoute la description de la mesure', () => {
+      const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
+
+      expect(mesures.parStatut().fait.categorie1[0].description).to.equal('Mesure une');
     });
   });
 });

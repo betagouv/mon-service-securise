@@ -19,6 +19,10 @@ class MesureSpecifique extends Mesure {
     return this.description;
   }
 
+  statutRenseigne() {
+    return Mesure.statutRenseigne(this.statut);
+  }
+
   static valide({ categorie, statut }, referentiel) {
     super.valide({ statut });
 

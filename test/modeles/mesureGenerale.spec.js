@@ -86,4 +86,9 @@ describe('Une mesure de sécurité', () => {
     const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: 'fait' }, referentiel, mesureRendueIndispensable);
     expect(mesure.estIndispensable()).to.be(true);
   });
+
+  it('sait si son statut est renseigné', () => {
+    const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: 'fait' }, referentiel);
+    expect(mesure.statutRenseigne()).to.be(true);
+  });
 });

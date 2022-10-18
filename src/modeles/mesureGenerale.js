@@ -35,6 +35,10 @@ class MesureGenerale extends Mesure {
     return this.statut === Mesure.STATUT_NON_RETENU;
   }
 
+  statutRenseigne() {
+    return Mesure.statutRenseigne(this.statut);
+  }
+
   static valide({ id, statut }, referentiel) {
     super.valide({ statut }, referentiel);
 
