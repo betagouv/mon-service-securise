@@ -2,7 +2,7 @@ header {
   display: flex;
   column-gap: 1.4em;
   align-items: center;
-  padding: 1em 0 1.5em;
+  padding: 1em 0;
 }
 
 header a {
