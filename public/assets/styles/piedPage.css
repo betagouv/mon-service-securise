@@ -8,8 +8,6 @@ footer {
 
 footer nav {
   display: flex;
-  justify-content: space-between;
-  column-gap: 2em;
 }
 
 footer a {
@@ -17,6 +15,22 @@ footer a {
   color: var(--texte-fonce);
 }
 
-footer a:hover {
-  color: var(--bleu-mise-en-avant);
+footer nav a {
+  display: inline-block;
+  margin: 0.4em 0;
+  padding: 0 1.2em;
+
+  border-right: 1px solid var(--contour-champs);
+}
+
+footer nav a:first-of-type {
+  padding-left: 0;
+}
+
+footer nav a:last-of-type {
+  border-right: none;
+}
+
+footer nav a:hover {
+  background-color: var(--systeme-design-etat-gris-survol);
 }
