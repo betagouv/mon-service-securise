@@ -83,12 +83,10 @@ a.aide {
 
 a.connexion {
   margin-left: 1em;
-  padding: 0.5em 1.5em 0.7em;
+  padding: 0.3em 1em;
 
   border: 0.5px solid var(--bleu-anssi);
-  border-radius: 33% / 100%;
-  background: var(--bleu-anssi);
-  color: #fff;
+  border-radius: 0.4em;
 }
 
 a.connexion:hover {
