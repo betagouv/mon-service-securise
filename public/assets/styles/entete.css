@@ -29,26 +29,26 @@ header nav a:hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
-.marianne, .devise {
+header .marianne, header .devise {
   width: 45%;
 
   background-repeat: no-repeat;
   background-size: contain;
 }
 
-.marianne {
+header .marianne {
   height: 0.8em;
 
   background-image: url(../images/marianne.svg);
 }
 
-.devise {
+header .devise {
   height: 2em;
 
   background-image: url(../images/devise.svg);
 }
 
-.republique-francaise {
+header .republique-francaise {
   padding: 0.25em 0 0.5em;
 
   line-height: 100%;

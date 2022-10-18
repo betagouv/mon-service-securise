@@ -12,6 +12,30 @@ footer .bandeau-mss {
   padding: 1.5em 0;
 }
 
+footer .bloc-france .marianne {
+  height: 1.6em;
+
+  background-image: url(../images/marianne.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+footer .bloc-france .republique-francaise {
+  padding: 0.5em 0;
+
+  color: #000;
+  font-weight: bold;
+  line-height: 1em;
+}
+
+footer .bloc-france .devise {
+  height: 3em;
+
+  background-image: url(../images/devise.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
 footer .separateur {
   border-top: 1px solid var(--contour-champs);
 }
