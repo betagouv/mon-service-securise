@@ -1,18 +1,24 @@
 footer {
-  display: flex;
-
-  padding: 1em 0;
-
   font-size: 0.8em;
-}
-
-footer nav {
-  display: flex;
 }
 
 footer a {
   text-decoration: none;
   color: var(--texte-fonce);
+}
+
+footer .bandeau-mss {
+  display: flex;
+  padding: 1.5em 0;
+}
+
+footer .separateur {
+  border-top: 1px solid var(--contour-champs);
+}
+
+footer nav {
+  display: flex;
+  padding: 1em 0;
 }
 
 footer nav a {
