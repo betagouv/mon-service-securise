@@ -12,6 +12,22 @@ footer .bandeau-mss {
   padding: 1.5em 0;
 }
 
+footer .bandeau-mss a:after {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  content: '';
+  margin-left: .4em;
+
+  background: url(../images/icone_lien_nouvel_onglet_gris.svg) no-repeat;
+  background-size: contain;
+}
+
+footer .bloc-france {
+  flex: 1;
+  align-self: center;
+}
+
 footer .bloc-france .marianne {
   height: 1.6em;
 
@@ -34,6 +50,34 @@ footer .bloc-france .devise {
   background-image: url(../images/devise.svg);
   background-size: contain;
   background-repeat: no-repeat;
+}
+
+footer .infos-mss {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.8em;
+
+  color: var(--texte-fonce);
+}
+
+footer .infos-mss a {
+  text-decoration: underline;
+}
+
+footer .infos-mss a:hover {
+  text-decoration-thickness: 2px;
+}
+
+footer .infos-mss .liens {
+  display: flex;
+  justify-content: space-between;
+
+  font-weight: bold;
+}
+
+footer .infos-mss .liens a {
+  text-decoration: none;
 }
 
 footer .separateur {
