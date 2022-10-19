@@ -13,6 +13,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
       acc[mesure.statut][mesure.categorie] ||= [];
       acc[mesure.statut][mesure.categorie].push({
         description: mesure.descriptionMesure(),
+        modalites: mesure.modalites,
       });
       return acc;
     }, accumulateur);
