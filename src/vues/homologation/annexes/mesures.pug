@@ -19,5 +19,6 @@ block append page
         ul
           each mesure in mesures
             li(class = mesure.indispensable ? 'indispensable' : '')= mesure.description
+            p.modalites!= mesure.modalites
 
   script(type = 'module', src = '/statique/homologation/annexes/mesures.js')
