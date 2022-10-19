@@ -65,7 +65,11 @@ class MesuresGenerales extends ElementsConstructibles {
     });
 
     Object.keys(mesuresPersonnalisees)
-      .map((id) => new MesureGenerale({ id }, this.referentiel))
+      .map((id) => new MesureGenerale(
+        { id },
+        this.referentiel,
+        mesuresPersonnalisees[id].indispensable,
+      ))
       .reduce((acc, mesure) => {
         const { categorie } = this.referentiel.mesure(mesure.id);
         if (mesure.estIndispensable()) acc[categorie].indispensables.total += 1;
