@@ -84,3 +84,12 @@
   background-image: url(../../images/icone_etoile_orange.svg);
   transform: translateY(0.2em);
 }
+
+.mesures-par-statut p.modalites {
+  margin: 0 0 0.4em 2.4em;
+  color: var(--texte-moyen);
+}
+
+.mesures-par-statut p.modalites:empty {
+  margin: 0;
+}
