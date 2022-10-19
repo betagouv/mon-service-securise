@@ -22,6 +22,7 @@ class MesuresGenerales extends ElementsConstructibles {
         acc[mesure.statut][mesureReference.categorie].push({
           description: mesure.descriptionMesure(),
           indispensable: mesure.estIndispensable(),
+          modalites: mesure.modalites,
         });
         return acc;
       }, mesuresParStatut);

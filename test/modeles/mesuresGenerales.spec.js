@@ -214,5 +214,12 @@ describe('La liste des mesures générales', () => {
 
       expect(mesures.parStatut().fait.categorie1[0].description).to.equal('Mesure une');
     });
+
+    it('ajoute les modalités de la mesure', () => {
+      const mesuresGenerales = [{ id: 'mesure1', statut: 'fait', modalites: 'Modalités de la mesure' }];
+      const mesures = new MesuresGenerales({ mesuresGenerales }, referentiel, ['mesure1']);
+
+      expect(mesures.parStatut().fait.categorie1[0].modalites).to.equal('Modalités de la mesure');
+    });
   });
 });

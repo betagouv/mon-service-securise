@@ -28,12 +28,25 @@ describe('La liste des mesures spécifiques', () => {
 
   elle('peut être triée par statut', () => {
     const mesures = new MesuresSpecifiques({
-      mesuresSpecifiques: [{ description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1' }],
+      mesuresSpecifiques: [
+        { description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1' },
+        { description: 'Mesure Spécifique 2', statut: 'nonFait', categorie: 'categorie1' },
+      ],
+    },
+    referentiel);
+
+    expect(mesures.parStatut().fait.categorie1[0].description).to.equal('Mesure Spécifique 1');
+    expect(mesures.parStatut().nonFait.categorie1[0].description).to.equal('Mesure Spécifique 2');
+  });
+
+  elle('prend le modalités lors du tri par statut', () => {
+    const mesures = new MesuresSpecifiques({
+      mesuresSpecifiques: [{ description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1', modalites: 'Modalités' }],
     },
     referentiel);
 
     expect(mesures.parStatut().fait.categorie1.length).to.equal(1);
-    expect(mesures.parStatut().fait.categorie1[0].description).to.equal('Mesure Spécifique 1');
+    expect(mesures.parStatut().fait.categorie1[0].modalites).to.equal('Modalités');
   });
 
   elle('peut être triée par statut en utilisant un accumulateur personnalisé', () => {
