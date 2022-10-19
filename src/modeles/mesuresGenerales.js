@@ -29,7 +29,7 @@ class MesuresGenerales extends ElementsConstructibles {
     return nbTotal ? nbMisesEnOeuvre / nbTotal : 1;
   }
 
-  statistiques(identifiantsMesuresPersonnalisees) {
+  statistiques(mesuresPersonnalisees) {
     const statuts = MesureGenerale.statutsPossibles();
 
     const statsPartiellesAvecStatut = () => statuts
@@ -64,7 +64,7 @@ class MesuresGenerales extends ElementsConstructibles {
       }
     });
 
-    identifiantsMesuresPersonnalisees
+    Object.keys(mesuresPersonnalisees)
       .map((id) => new MesureGenerale({ id }, this.referentiel))
       .reduce((acc, mesure) => {
         const { categorie } = this.referentiel.mesure(mesure.id);

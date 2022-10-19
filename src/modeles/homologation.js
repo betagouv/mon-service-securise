@@ -40,13 +40,13 @@ class Homologation {
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
 
     let { mesuresGenerales = [] } = donnees;
-    const mesuresApplicables = moteurRegles.mesures(this.descriptionService);
-    const idMesuresApplicables = Object.keys(mesuresApplicables);
-    mesuresGenerales = mesuresGenerales.filter((m) => idMesuresApplicables.includes(m.id));
+    const mesuresPersonnalisees = moteurRegles.mesures(this.descriptionService);
+    const idMesuresPersonnalisees = Object.keys(mesuresPersonnalisees);
+    mesuresGenerales = mesuresGenerales.filter((m) => idMesuresPersonnalisees.includes(m.id));
     this.mesures = new Mesures(
       { mesuresGenerales, mesuresSpecifiques },
       referentiel,
-      idMesuresApplicables,
+      mesuresPersonnalisees,
     );
 
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);

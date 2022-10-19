@@ -8,6 +8,13 @@ const Referentiel = require('../../src/referentiel');
 const elles = it;
 
 describe('Les mesures liées à une homologation', () => {
+  elles('comptent les mesures personnalisees', () => {
+    const mesuresPersonnalisees = { uneMesure: {} };
+    const mesures = new Mesures({}, Referentiel.creeReferentielVide(), mesuresPersonnalisees);
+
+    expect(mesures.nombreMesuresPersonnalisees()).to.equal(1);
+  });
+
   elles('agrègent des mesures spécifiques', () => {
     const mesures = new Mesures({ mesuresSpecifiques: [
       { description: 'Une mesure spécifique' },
@@ -40,9 +47,10 @@ describe('Les mesures liées à une homologation', () => {
   elles('délèguent le calcul statistique aux mesures générales', () => {
     let calculStatistiqueAppele = false;
 
-    const mesures = new Mesures({}, Referentiel.creeReferentielVide(), ['id1', 'id2']);
+    const mesuresRecommandees = {};
+    const mesures = new Mesures({}, Referentiel.creeReferentielVide(), mesuresRecommandees);
     mesures.mesuresGenerales.statistiques = (identifiantsMesuresPersonnalisees) => {
-      expect(identifiantsMesuresPersonnalisees).to.eql(['id1', 'id2']);
+      expect(identifiantsMesuresPersonnalisees).to.equal(mesuresRecommandees);
       calculStatistiqueAppele = true;
       return 'résultat';
     };
@@ -66,12 +74,11 @@ describe('Les mesures liées à une homologation', () => {
 
   elles('connaissent le nombre total de mesures générales', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    referentiel.identifiantsMesures = () => ['mesure 1', 'mesure 2'];
 
     const mesures = new Mesures({
       mesuresGenerales: [],
       mesuresSpecifiques: [],
-    }, referentiel);
+    }, referentiel, { m1: {}, m2: {} });
 
     expect(mesures.nombreTotalMesuresGenerales()).to.equal(2);
   });
