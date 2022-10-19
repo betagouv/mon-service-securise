@@ -605,7 +605,6 @@ module.exports = {
     sauvegardeDonnees: {
       description: 'Mettre en place une sauvegarde régulière des données dans un environnement non connecté au service numérique',
       categorie: 'resilience',
-      indispensable: true,
       descriptionLongue: "Cette mesure vise à permettre de protéger l'ensemble des données contenues dans le service et permettre à nouveau leur accès dans le cas où le service serait compromis, par exemple, par un rançongiciel qui aurait « chiffré » et donc rendu inaccessibles ces données. Il est recommandé de procéder à cette sauvegarde au minimum, une fois par semaine.",
     },
     sauvegardeMachineVirtuelle: {
@@ -662,7 +661,6 @@ module.exports = {
           'dissocierComptesAdmin',
           'testIntrusion',
           'supervision',
-          'sauvegardeDonnees',
         ],
       },
       applicationAchettee: {
@@ -708,6 +706,9 @@ module.exports = {
           'formaliserModalitesSecurite',
           'testIntrusion',
           'supervision',
+        ],
+        mesuresARendreIndispensables: [
+          'sauvegardeDonnees',
         ],
       },
     },
@@ -760,6 +761,7 @@ module.exports = {
       'politiqueInformation',
       'sauvegardeMachineVirtuelle',
       'testsSauvegardes',
+      'sauvegardeDonnees',
     ],
   },
   departements,
