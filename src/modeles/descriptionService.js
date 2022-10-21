@@ -13,6 +13,7 @@ class DescriptionService extends InformationsHomologation {
         'localisationDonnees',
         'nomService',
         'presentation',
+        'risqueJuridiqueFinancierReputationnel',
         'statutDeploiement',
       ],
       proprietesListes: [

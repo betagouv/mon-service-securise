@@ -26,6 +26,7 @@ describe('La description du service', () => {
       pointsAcces: [{ description: 'Une description' }],
       presentation: 'Une présentation du service',
       provenanceService: ['uneProvenance'],
+      risqueJuridiqueFinancierReputationnel: true,
       statutDeploiement: 'unStatut',
     }, referentielAvecStatutValide('unStatut'));
 
@@ -37,7 +38,8 @@ describe('La description du service', () => {
     expect(descriptionService.nomService).to.equal('Super Service');
     expect(descriptionService.presentation).to.equal('Une présentation du service');
     expect(descriptionService.provenanceService).to.eql(['uneProvenance']);
-    expect(descriptionService.statutDeploiement).to.eql('unStatut');
+    expect(descriptionService.risqueJuridiqueFinancierReputationnel).to.be(true);
+    expect(descriptionService.statutDeploiement).to.equal('unStatut');
 
     expect(descriptionService.nombreDonneesSensiblesSpecifiques()).to.equal(1);
     expect(descriptionService.nombreFonctionnalitesSpecifiques()).to.equal(1);
@@ -135,6 +137,7 @@ describe('La description du service', () => {
       delaiAvantImpactCritique: 'uneJournee',
       localisationDonnees: 'france',
       presentation: 'Une présentation',
+      risqueJuridiqueFinancierReputationnel: true,
       statutDeploiement: 'accessible',
     }, referentielAvecStatutValide('accessible'));
 
