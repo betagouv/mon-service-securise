@@ -331,16 +331,6 @@ module.exports = {
       categorie: 'gouvernance',
       descriptionLongue: 'Cette mesure permet de vérifier le respect des exigences de sécurité par les sous-traitants (hébergeur, prestataires, etc.) idéalement fixées sur le plan contractuel.',
     },
-    modalitesSuivi: {
-      description: 'Fixer les modalités du suivi de la sécurité du service entre les parties prenantes',
-      categorie: 'gouvernance',
-      descriptionLongue: "Cette mesure garantit que le ou la spécialiste cybersécurité et l'ensemble des parties prenantes (internes, externes) échangent régulièrement sur le maintien en sécurité du service et décident des actions à mener en conséquence. Il est recommandé de réunir l'équipe au moins 2 fois par an.",
-    },
-    formaliserModalitesSecurite: {
-      description: 'Formaliser les modalités de mise en œuvre des mécanismes de sécurité importants pour le service',
-      categorie: 'gouvernance',
-      descriptionLongue: 'Cette mesure permet à tous les administrateurs et exploitants du système de savoir quelles mesures mettre en œuvre pour assurer le niveau de sécurité du système tel que prévu par les équipes projets',
-    },
     hebergementUE: {
       description: "Héberger le service numérique et les données au sein de l'Union européenne",
       categorie: 'gouvernance',
@@ -351,18 +341,6 @@ module.exports = {
       description: "Héberger le service numérique et les données au sein d'un Cloud qualifié SecNumCloud",
       categorie: 'gouvernance',
       descriptionLongue: "Cette mesure apporte des garanties techniques et juridiques supplémentaires pour la sécurité du service et des données, en recourant à une solution d'hébergement disposant d'un visa de sécurité de l'ANSSI.",
-    },
-    interdictionParageVente: {
-      description: 'Proscrire le partage ou la vente de données des utilisateurs du service à des tierces parties à des fins commerciales',
-      categorie: 'gouvernance',
-      indispensable: true,
-      descriptionLongue: "Cette mesure protège les utilisateurs contre toutes formes d'utilisation abusive de leurs données, par exemple, via l'installation d'outils d'analyse d'audience, dispositif publicitaires, etc. Cette mesure n'empêche pas l'ouverture des données publiques à des fins d'intérêt général.",
-    },
-    sensibilisationRisques: {
-      description: 'Réaliser des actions régulières de sensibilisation des agents aux risques numériques',
-      categorie: 'gouvernance',
-      indispensable: true,
-      descriptionLongue: "Cette mesure contribue à accroître globalement la vigilance des agents face aux risques de sécurité et d'adopter les bons réflexes, comme éviter certaines actions imprudentes ou signaler un problème de sécurité.",
     },
     consignesSecurite: {
       description: "Fixer et sensibiliser les agents aux consignes de sécurité liées à l'utilisation du service",
@@ -381,17 +359,6 @@ module.exports = {
       categorie: 'protection',
       indispensable: true,
       descriptionLongue: "Cette mesure vise à diminuer le risque d'usurpation d'un accès au service, dans le cas où l'équipement serait laissé sans surveillance par l'utilisateur.",
-    },
-    accesSecurise: {
-      description: 'Mettre en place une politique de sécurité des mots de passe',
-      categorie: 'protection',
-      indispensable: true,
-      descriptionLongue: "Cette mesure permet d'éviter des mots de passe trop simples, trop courts ou anciens ne soient utilisés par un acteur malveillant pour accéder au service. Cette mesure peut être mise en œuvre en fixant des règles au moment de l'enregistrement d'un mot de passe (longueur, complexité, etc.) ; l'introduction d'un testeur de force de mot de passe ; un délai d'expiration du mot de passe ; une politique de renouvellement automatique ; un accès sans mot de passe par la réception d'un code à usage unique à chaque connexion (hors SMS) ; l'impossibilité de réutiliser des mots de passe déjà employés par le passé ; la révocation immédiate de mots de passe en cas de connexion suspecte, etc. Pour plus de détails, consultez le <a href=\"https://www.ssi.gouv.fr/administration/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/\" target=\"_blank\" rel=\"noopener\">« Guide de l'ANSSI relatives à l'authentification multifacteur et aux mots de passe ».</a>",
-    },
-    franceConnect: {
-      description: 'Permettre la connexion des utilisateurs via FranceConnect',
-      categorie: 'protection',
-      descriptionLongue: "Cette mesure vise à faciliter l'accès sécurisé des utilisateurs au service. FranceConnect permet également aux internautes de s'identifier sur un service en ligne par l'intermédiaire d'un compte existant",
     },
     listeComptesPrivilegies: {
       description: "Disposer d'une liste à jour des comptes disposant d'un d'accès privilégié au service",
@@ -471,12 +438,6 @@ module.exports = {
       description: 'Organiser des contrôles et audits de sécurité périodiques',
       categorie: 'protection',
       descriptionLongue: "Cette mesure vise à assurer un suivi de la sécurité du service. Les contrôles doivent porter sur l'architecture, la configuration, le code source, la réalisation de tests d'intrusion",
-    },
-    parefeu: {
-      description: 'Installer un parefeu',
-      categorie: 'protection',
-      indispensable: true,
-      descriptionLongue: "Cette mesure vise à filtrer les flux au niveau du réseau, afin d'éviter des accès illégitimes au service.",
     },
     chiffrementFlux: {
       description: 'Désactiver tout flux non chiffré',
@@ -581,26 +542,11 @@ module.exports = {
       categorie: 'defense',
       descriptionLongue: 'Cette mesure vise à vérifier que les procédures de détection et de gestion des incidents en place sont bien fonctionnelles.',
     },
-    scanIP: {
-      description: "Souscrire ou mettre en œuvre un outil de scan Internet des plages d'adresses IP du service numérique",
-      categorie: 'defense',
-      descriptionLongue: "Cette mesure vise à mesurer le niveau d'exposition du service numérique aux menaces et déterminer si seuls les services numériques utiles sont exposés à Internet. Cette mesure peut également viser à consolider les éléments de cartographie du système d'information.",
-    },
-    affichageDerniereConnexion: {
-      description: "Afficher aux utilisateurs l'heure et la date de leur dernière connexion",
-      categorie: 'defense',
-      descriptionLongue: 'Cette mesure contribue à aider les utilisateurs à détecter eux-mêmes une utilisation à leur insu du service par une autre personne.',
-    },
 
     exerciceGestionCrise: {
       description: 'Planifier un exercice de gestion de crise, notamment face au risque de rançongiciel',
       categorie: 'resilience',
       descriptionLongue: "Cette mesure vise à préparer l'organisation à la gestion de crises de sécurité, afin de permettre un retour le plus rapide possible à un mode de fonctionnement normal du service et de l'organisation. Cette mesure permet d'identifier et de qualifier la capacité de réaction de l'ensemble de la chaîne hiérarchique (phase de réaction), dont les équipes techniques et de vérifier la résilience en validant la capacité à remettre en service opérationnel le service web.",
-    },
-    politiqueInformation: {
-      description: "Disposer d'une politique d'information des administrateurs métiers et des utilisateurs en cas d'incident",
-      categorie: 'resilience',
-      descriptionLongue: "Cette mesure vise à préparer l'organisation à communiquer vers les utilisateurs de son service au bon moment, notamment dans le cas où des données seraient compromises. Le réglement général sur la protection des données à caractère personnel prévoit notamment une obligation d'information des personnes concernées en cas de fuite de données à caractère personnel.",
     },
     sauvegardeDonnees: {
       description: 'Mettre en place une sauvegarde régulière des données dans un environnement non connecté au service numérique',
@@ -656,8 +602,6 @@ module.exports = {
         }],
         mesuresAAjouter: [
           'secNumCloud',
-          'modalitesSuivi',
-          'formaliserModalitesSecurite',
           'dissocierComptesAdmin',
           'testIntrusion',
           'supervision',
@@ -702,8 +646,6 @@ module.exports = {
         ],
         mesuresAAjouter: [
           'secNumCloud',
-          'modalitesSuivi',
-          'formaliserModalitesSecurite',
           'testIntrusion',
           'supervision',
         ],
@@ -719,13 +661,9 @@ module.exports = {
       'contactSecurite',
       'exigencesSecurite',
       'hebergementUE',
-      'interdictionParageVente',
-      'sensibilisationRisques',
       'consignesSecurite',
       'analyseRisques',
       'deconnexionAutomatique',
-      'accesSecurise',
-      'franceConnect',
       'listeComptesPrivilegies',
       'gestionComptesAcces',
       'compartimenter',
@@ -739,7 +677,6 @@ module.exports = {
       'nomsDomaineSimilaires',
       'securisationCode',
       'auditsSecurite',
-      'parefeu',
       'chiffrementFlux',
       'protectionDeniService',
       'hebergementMachineVirtuelle',
@@ -755,10 +692,7 @@ module.exports = {
       'journalEvenementSecu',
       'notificationConnexionsSuspectes',
       'testsProcedures',
-      'scanIP',
-      'affichageDerniereConnexion',
       'exerciceGestionCrise',
-      'politiqueInformation',
       'sauvegardeMachineVirtuelle',
       'testsSauvegardes',
       'sauvegardeDonnees',
