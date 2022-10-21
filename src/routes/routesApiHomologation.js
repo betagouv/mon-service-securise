@@ -35,6 +35,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       localisationDonnees,
       presentation,
       pointsAcces,
+      risqueJuridiqueFinancierReputationnel,
       statutDeploiement,
     } = requete.body;
 
@@ -50,6 +51,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       localisationDonnees,
       presentation,
       pointsAcces,
+      risqueJuridiqueFinancierReputationnel,
       statutDeploiement,
     })
       .then((idHomologation) => reponse.json({ idHomologation }))

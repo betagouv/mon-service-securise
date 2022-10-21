@@ -97,6 +97,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
           localisationDonnees: undefined,
           presentation: undefined,
           pointsAcces: undefined,
+          risqueJuridiqueFinancierReputationnel: undefined,
           statutDeploiement: undefined,
         });
         return Promise.resolve('456');
