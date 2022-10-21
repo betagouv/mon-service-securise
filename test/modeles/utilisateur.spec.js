@@ -130,8 +130,8 @@ describe('Un utilisateur', () => {
   describe("sur une demande de validation des données d'un utilisateur", () => {
     let donnees;
     const referentiel = Referentiel.creeReferentiel({ departements: [
-      { nom: 'Ain', code: '01', codeRegion: '84' },
-      { nom: 'Paris', code: '75', codeRegion: '11' },
+      { nom: 'Ain', code: '01' },
+      { nom: 'Paris', code: '75' },
     ] });
 
     const verifiePresencePropriete = (clef, nom, done) => {
