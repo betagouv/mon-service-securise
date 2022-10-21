@@ -2,7 +2,7 @@ header {
   display: flex;
   column-gap: 1.4em;
   align-items: center;
-  padding: 1em 0;
+  padding: 0.8em 0;
 }
 
 header a {
@@ -25,7 +25,7 @@ header nav a {
   padding: 0.4em 0.9em;
 }
 
-:is(header nav a, .logo-mss):hover {
+:is(header nav a, .logo-mss, .logo-anssi):hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
@@ -58,14 +58,15 @@ header .republique-francaise {
 }
 
 .logo-anssi {
-  width: 5.2em;
-  height: 5.2em;
+  width: 4.2em;
+  height: 4.2em;
   margin: 0 0.8em;
+  padding: 0.75em;
+
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url(../images/logo_anssi.png);
-
-  font-size: 0.8em;
+  background-origin: content-box;
 }
 
 .logo-mss {
