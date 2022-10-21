@@ -22,10 +22,10 @@ header nav {
 }
 
 header nav a {
-  padding: 0.5em 1.1em;
+  padding: 0.4em 0.9em;
 }
 
-header nav a:hover {
+:is(header nav a, .logo-mss):hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
@@ -68,16 +68,24 @@ header .republique-francaise {
   font-size: 0.8em;
 }
 
-a.logo-mss {
+.logo-mss {
+  display: flex;
+  padding: 0.6em;
   margin-right: auto;
-  padding: 0 0 0 2em;
+
+  font-size: 1.2em;
+  color: var(--bleu-anssi)
+}
+
+.logo-mss:before {
+  display: inline-block;
+  content: '';
+  width: 1.2em;
+  margin-right: 0.4em;
 
   background-image: url(../images/logo_mss.svg);
   background-repeat: no-repeat;
   background-size: contain;
-
-  font-size: 1.2em;
-  color: var(--bleu-anssi)
 }
 
 a.aide {
