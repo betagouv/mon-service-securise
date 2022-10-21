@@ -1,15 +1,8 @@
 import { brancheValidation, declencheValidation } from './validation.js';
+import convertisReponseOuiNon from '../convertisReponseOuiNon.mjs';
 
 const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => {
-  const reponseOuiNon = (nom) => {
-    const valeur = $(`input[name="${nom}"]:checked`).val();
-    switch (valeur) {
-      case 'oui': return true;
-      case 'non': return false;
-      default: return undefined;
-    }
-  };
-
+  const reponseOuiNon = (nom) => convertisReponseOuiNon($(`input[name="${nom}"]:checked`).val());
   const reponseAcceptee = (nom) => ($(`#${nom}:checked`).val() ? true : undefined);
 
   const obtentionDonnees = {
