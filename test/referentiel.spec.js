@@ -387,23 +387,23 @@ describe('Le référentiel', () => {
   it('connaît la liste des départements', () => {
     const referentiel = Referentiel.creeReferentiel({
       departements: [
-        { nom: 'Ain', code: '01', codeRegion: '84' },
-        { nom: 'Aisne', code: '02', codeRegion: '32' },
+        { nom: 'Ain', code: '01' },
+        { nom: 'Aisne', code: '02' },
       ],
     });
 
     expect(referentiel.departements()).to.have.length(2);
     expect(referentiel.departements()).to.eql([
-      { nom: 'Ain', code: '01', codeRegion: '84' },
-      { nom: 'Aisne', code: '02', codeRegion: '32' },
+      { nom: 'Ain', code: '01' },
+      { nom: 'Aisne', code: '02' },
     ]);
   });
 
   it('connaît la liste des codes des départements', () => {
     const referentiel = Referentiel.creeReferentiel({
       departements: [
-        { nom: 'Ain', code: '01', codeRegion: '84' },
-        { nom: 'Aisne', code: '02', codeRegion: '32' },
+        { nom: 'Ain', code: '01' },
+        { nom: 'Aisne', code: '02' },
       ],
     });
 
@@ -412,7 +412,7 @@ describe('Le référentiel', () => {
 
   it("trouve le nom d'un département grace à son code", () => {
     const referentiel = Referentiel.creeReferentiel({
-      departements: [{ nom: 'Ain', code: '01', codeRegion: '84' }],
+      departements: [{ nom: 'Ain', code: '01' }],
     });
 
     expect(referentiel.departement('01')).to.equal('Ain');
