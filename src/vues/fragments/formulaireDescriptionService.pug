@@ -107,6 +107,12 @@ mixin formulaireDescriptionService(idHomologation)
         objetDonnees: homologation.descriptionService,
       })
 
+      +inputOuiNon({
+        nom: 'risqueJuridiqueFinancierReputationnel',
+        titre: 'Une atteinte à la sécurité ou au bon fonctionnement du service pourrait entraîner des conséquences graves sur les plans juridique, financier ou réputationnel',
+        objetDonnees: homologation.descriptionService,
+      })
+
     if idHomologation
       .bouton#diagnostic(idHomologation = idHomologation) Enregistrer
     else
