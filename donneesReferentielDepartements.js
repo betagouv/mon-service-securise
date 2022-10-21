@@ -501,9 +501,41 @@ module.exports = {
       codeRegion: '04',
     },
     {
+      nom: 'Saint-Pierre-et-Miquelon',
+      code: '975',
+    },
+    {
       nom: 'Mayotte',
       code: '976',
       codeRegion: '06',
+    },
+    {
+      nom: 'Saint-Barthélemy',
+      code: '977',
+    },
+    {
+      nom: 'Saint-Martin',
+      code: '978',
+    },
+    {
+      nom: 'Terres australes et antarctiques françaises',
+      code: '984',
+    },
+    {
+      nom: 'Wallis et Futuna',
+      code: '986',
+    },
+    {
+      nom: 'Polynésie française',
+      code: '987',
+    },
+    {
+      nom: 'Nouvelle-Calédonie',
+      code: '988',
+    },
+    {
+      nom: 'Île de Clipperton',
+      code: '989',
     },
   ],
 };
