@@ -35,6 +35,7 @@ const donnees = {
   '2022-10-03': { utilisateurs: 253, pourcentageUtilisateursEnPlus: 27, dossiers: 163 },
   '2022-10-10': { utilisateurs: 280, pourcentageUtilisateursEnPlus: 11, dossiers: 174 },
   '2022-10-13': { utilisateurs: 297, pourcentageUtilisateursEnPlus: 6, dossiers: 181 },
+  '2022-10-24': { utilisateurs: 362, pourcentageUtilisateursEnPlus: 22, dossiers: 208 },
 };
 
 export default donnees;
