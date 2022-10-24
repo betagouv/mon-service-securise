@@ -14,9 +14,12 @@ header a {
 
 header nav {
   display: flex;
-  column-gap: 1.4em;
   align-items: baseline;
   font-size: 0.9em;
+}
+
+header nav a {
+  padding: 0.25em 0.85em;
 }
 
 header nav a:hover {
@@ -89,23 +92,6 @@ header nav a:hover {
 
 :is(.logo-anssi, .logo-mss):hover {
   background-color: var(--systeme-design-etat-gris-survol);
-}
-
-a.connexion {
-  margin-left: 1em;
-  padding: 0.5em 1.5em 0.7em;
-
-  border: 0.5px solid var(--bleu-anssi);
-  border-radius: 33% / 100%;
-  background: var(--bleu-anssi);
-  color: #fff;
-}
-
-a.connexion:hover {
-  background: var(--bleu-mise-en-avant);
-  border-color: var(--bleu-mise-en-avant);
-
-  color: #fff;
 }
 
 .utilisateur-courant {
