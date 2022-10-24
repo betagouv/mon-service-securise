@@ -62,11 +62,11 @@ header nav a:hover {
   font-size: 0.8em;
 }
 
-
 .logo-mss {
   display: flex;
   align-items: center;
   margin-right: auto;
+  padding: 0.3em 0.85em;
 
   font-size: 1.2em;
 }
@@ -83,6 +83,10 @@ header nav a:hover {
   mask-position: center;
   mask-size: contain;
   background-color: var(--bleu-anssi);
+}
+
+.logo-mss:hover {
+  background-color: var(--systeme-design-etat-gris-survol);
 }
 
 a.aide {
