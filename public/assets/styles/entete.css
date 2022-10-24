@@ -15,20 +15,20 @@ header a {
 header nav, .utilisateur-courant {
   display: flex;
   column-gap: 0.4em;
-  align-items: baseline;
+  align-items: center;
 }
 
 header nav {
   font-size: 0.9em;
 }
 
-header nav a {
+header nav a, .nom-utilisateur-courant {
   padding: 0.3em 0.85em;
 
   color: var(--systeme-design-etat-bleu);
 }
 
-header nav a:hover {
+:is(header nav a, .nom-utilisateur-courant):hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
@@ -101,18 +101,45 @@ header nav a:hover {
 }
 
 .utilisateur-courant {
-  float: right;
   position: relative;
 
   cursor: pointer;
 }
 
 .nom-utilisateur-courant {
-  padding: 0 1em 0 2em;
+  display: flex;
+  align-items: center;
 
-  background-image: url(../images/icone_utilisateur.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
+  color: var(--systeme-design-etat-bleu);
+}
+
+.nom-utilisateur-courant::before, .nom-utilisateur-courant::after {
+  display: inline-block;
+
+  content: '';
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: var(--systeme-design-etat-bleu);
+}
+
+.nom-utilisateur-courant::before {
+  width: 1.3em;
+  height: 1.3em;
+  margin-right: 0.3em;
+
+  mask: url(../images/icone_utilisateur.svg) no-repeat center;
+  -webkit-mask: url(../images/icone_utilisateur.svg) no-repeat center;
+}
+
+.nom-utilisateur-courant::after {
+  width: 0.7em;
+  height: 0.7em;
+  margin-left: 0.3em;
+
+  -webkit-mask: url(../images/icone_fleche_bas.svg) no-repeat center;
+  mask: url(../images/icone_fleche_bas.svg) no-repeat center;
+  -webkit-mask-position-y: 0.2em;
+  mask-position-y: 0.2em;
 }
 
 .menu {
@@ -135,10 +162,6 @@ header nav a:hover {
 .menu a {
   display: block;
 
-  color: var(--bleu-anssi);
+  color: var(--systeme-design-etat-bleu);
   font-size: 0.9em;
-}
-
-.menu a:hover {
-  color: var(--bleu-mise-en-avant);
 }

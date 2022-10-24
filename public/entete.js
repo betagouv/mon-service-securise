@@ -5,8 +5,7 @@ $(() => {
   `);
 
   const creeConteneurUtilisateurCourant = (donneesUtilisateur) => $(`
-<span class='nom-utilisateur-courant'>${donneesUtilisateur.prenomNom}</span>
-<img src="/statique/assets/images/icone_fleche_bas.svg">
+<div class='nom-utilisateur-courant'>${donneesUtilisateur.prenomNom}</div>
   `);
 
   const creeMenu = () => $(`
