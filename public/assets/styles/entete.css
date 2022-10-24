@@ -52,14 +52,16 @@ header nav a:hover {
 }
 
 .logo-anssi {
-  width: 5.2em;
-  height: 5.2em;
-  margin: 0 0.8em;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url(../images/logo_anssi.png);
+  width: 4.05em;
+  height: 4.05em;
+  margin: 0 0.4em;
+  padding: 0.3em 0.85em;
 
-  font-size: 0.8em;
+  background-image: url(../images/logo_anssi.png);
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .logo-mss {
@@ -85,7 +87,7 @@ header nav a:hover {
   background-color: var(--bleu-anssi);
 }
 
-.logo-mss:hover {
+:is(.logo-anssi, .logo-mss):hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
