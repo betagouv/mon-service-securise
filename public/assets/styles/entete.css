@@ -91,14 +91,6 @@ header nav a:hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
-a.aide {
-  padding: 0 0 0 2em;
-
-  background-image: url(../images/icone_question.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
 a.connexion {
   margin-left: 1em;
   padding: 0.5em 1.5em 0.7em;
