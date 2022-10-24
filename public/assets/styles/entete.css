@@ -12,18 +12,24 @@ header a {
   color: var(--bleu-anssi);
 }
 
-header nav {
+header nav, .utilisateur-courant {
   display: flex;
+  column-gap: 0.4em;
   align-items: baseline;
+}
+
+header nav {
   font-size: 0.9em;
 }
 
 header nav a {
-  padding: 0.25em 0.85em;
+  padding: 0.3em 0.85em;
+
+  color: var(--systeme-design-etat-bleu);
 }
 
 header nav a:hover {
-  color: var(--bleu-mise-en-avant);
+  background-color: var(--systeme-design-etat-gris-survol);
 }
 
 .marianne, .devise {
