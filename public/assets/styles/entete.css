@@ -62,15 +62,27 @@ header nav a:hover {
   font-size: 0.8em;
 }
 
-a.logo-mss {
-  margin-right: auto;
-  padding: 0 0 0 2em;
 
-  background-image: url(../images/logo_mss.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
+.logo-mss {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
 
   font-size: 1.2em;
+}
+
+.logo-mss:before {
+  display: inline-block;
+  content: '';
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.4em;
+
+  mask-image: url(../images/logo_mss.svg);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  background-color: var(--bleu-anssi);
 }
 
 a.aide {
