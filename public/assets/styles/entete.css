@@ -73,16 +73,16 @@ header nav a:hover {
   font-size: 1.2em;
 }
 
-.logo-mss:before {
+.logo-mss::before {
   display: inline-block;
   content: '';
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.4em;
 
-  mask-image: url(../images/logo_mss.svg);
-  mask-repeat: no-repeat;
-  mask-position: center;
+  -webkit-mask: url(../images/logo_mss.svg) no-repeat center;
+  mask: url(../images/logo_mss.svg) no-repeat center;
+  -webkit-mask-size: contain;
   mask-size: contain;
   background-color: var(--bleu-anssi);
 }
