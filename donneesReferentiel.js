@@ -353,12 +353,22 @@ module.exports = {
       categorie: 'gouvernance',
       descriptionLongue: "Cette mesure vise à étoffer, par l'organisation d'un atelier d'analyse de risques avec l'ensemble des acteurs de l'homologation, à améliorer la connaissance des risques pour le service numérique et permettre l'ajout de mesures de sécurité spécifiques. Ces informations doivent être renseignées dans les rubriques « risques » et « mesures » de sécurité de MonServiceSécurisé.",
     },
+    audit: {
+      description: 'Réaliser un audit de la sécurité du service',
+      categorie: 'gouvernance',
+      descriptionLongue: "Faire réaliser un audit de la sécurité du service. Les audits réalisés par des prestataires qualifiés par l'ANSSI (PASSI) incluent un audit d'architecture, de code, de configuration et un test d'intrusion.<br>Cette mesure permet d'identifier les vulnérabilités du service et les mesures de sécurité spécifiques à mettre en œuvre en vue de les corriger et ainsi renforcer significativement sa sécurité.",
+    },
 
     deconnexionAutomatique: {
       description: "Mettre en place la déconnexion automatique des sessions d'accès après une certaine durée",
       categorie: 'protection',
       indispensable: true,
       descriptionLongue: "Cette mesure vise à diminuer le risque d'usurpation d'un accès au service, dans le cas où l'équipement serait laissé sans surveillance par l'utilisateur.",
+    },
+    environnementSecurise: {
+      description: 'Administrer techniquement le service dans des environnements dédiés et sécurisés',
+      categorie: 'protection',
+      descriptionLongue: "Demander aux administrateurs techniques du service de n'administrer ce dernier que depuis un environnement informatique dédié et sécurisé. Le recours à des équipements personnels doit notamment être proscrit.<br>Cette mesure vise à diminuer le risque de compromission des droits d'administration service via des moyens informatiques insuffisamment sécurisés.",
     },
     listeComptesPrivilegies: {
       description: "Disposer d'une liste à jour des comptes disposant d'un d'accès privilégié au service",
@@ -377,6 +387,12 @@ module.exports = {
       indispensable: true,
       descriptionLongue: "Cette mesure permet de limiter la portée d'une compromission d'un compte d'administrateur et le risque de pouvoir accéder à des services/fonctions non nécessaires à ce rôle. Elle consiste à compartimenter les rôles d'administration métier/fonctionnel (rôle de publication, gestion des utilisateurs du sites, etc.) des rôles techniques (administration des bases de données, le serveur web, l'infrastructure d'accueil, l'admin de la ou des VM participant à l'offre de service).",
     },
+    contraintesMotDePasse: {
+      description: 'Fixer des contraintes de longueur et de complexité des mots de passe',
+      categorie: 'protection',
+      indispensable: true,
+      descriptionLongue: "Fixer des règles de longueur et de complexité des mots de passe lors de la création d'un mot de passe ou de son renouvellement par un utilisateur ou un administrateur. Lorsque cela est possible, configurer le service pour interdire les mots de passe faibles.<br>Cette mesure permet de diminuer le risque de découverte et l'usurpation de mots de passe par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
+    },
     dissocierComptesAdmin: {
       description: 'Dissocier les accès, les comptes et les privilèges des agents à la fois utilisateurs et administrateurs',
       categorie: 'protection',
@@ -394,6 +410,23 @@ module.exports = {
       categorie: 'protection',
       indispensable: true,
       descriptionLongue: "Cette mesure vise à réduire le risque d'usurpation d'accès au service avec un compte administrateur, donnant des droits supérieurs à ceux d'un utilisateur, susceptibles d'être utilisés à des fins malveillantes (ex. supprimer des données, faire cesser le service, etc.). Pour plus de détails, consultez les recommandations de l'ANSSI relatives à l'authentification multifacteur et aux mots de passe.",
+    },
+    coffreFort: {
+      description: 'Encourager les administrateurs à utiliser un coffre-fort de mots de passe',
+      categorie: 'protection',
+      indispensable: true,
+      descriptionLongue: "Recommander ou proposer aux administrateurs le recours à une ou plusieurs solutions de gestion de mots de passe sécurisés, permettant de générer des mots de passe aléatoires et robustes et de les enregistrer.<br>Cette mesure permet de faciliter la création de mots de passe différents, longs et complexes, distincts pour chaque compte d'accès, sans effort de mémorisation.",
+    },
+    renouvellementMotsDePasse: {
+      description: 'Planifier le renouvellement régulier des mots de passe des administrateurs',
+      categorie: 'protection',
+      descriptionLongue: "Configurer ou recommander à intervalle régulier le renouvellement des mots de passe des comptes d'administration.<br>Cette mesure permet d'éviter qu'un mot de passe ancien ou proche d'un mot de passe déjà utilisé toujours utilisé ne soit découvert et utilisé par un acteur malveillant.",
+    },
+    protectionMotsDePasse: {
+      description: 'Protéger les mots de passe stockés sur le service',
+      categorie: 'protection',
+      indispensable: true,
+      descriptionLongue: "Dans le cadre de la configuration du service au niveau du serveur d'hébergement, veiller à ne pas stocker les mots de passe « en clair ». Seule une « empreinte » des mots de passe doit être stockée.<br>L'objectif de cette mesure est de limiter la capacité d'un attaquant à accéder aux mots de passe en cas de compromission de la base de données des mots de passe.",
     },
     limitationAccesAdmin: {
       description: "Limiter au strict nécessaire le nombre d'administrateurs du service",
@@ -428,6 +461,11 @@ module.exports = {
       categorie: 'protection',
       descriptionLongue: 'Cette mesure vise à permettre une réaction rapide en cas de typosquatting (consistant à utiliser des noms de domaines proches contenant des erreurs typographiques discrètes ou courantes permettant de rediriger les utilisateurs vers un site malveillant) et renforcer la confiance dans les utilisateurs du service',
     },
+    anonymisationDonnees: {
+      description: "Anonymiser autant que possible les données conservées concernant l'activité des utilisateurs",
+      categorie: 'protection',
+      descriptionLongue: "Configurer le service en vue d'anonymiser autant que possible les données à caractère personnel des utilisateurs conservées pour le bon fonctionnement ou la sécurité du service (ex. log de tentatives d'accès au service) ou à des fins d'analyse (ex. statistiques).<br>Cette mesure vise à protéger les utilisateurs contre la traçabilité nominative de leurs actions dans le cadre de l'utilisation du service tout en permettant d'assurer la sécurité de ce dernier au travers du suivi et de l'imputabilité des actions.",
+    },
     securisationCode: {
       description: 'Mettre en œuvre des bonnes pratiques de sécurisation du code',
       categorie: 'protection',
@@ -444,6 +482,18 @@ module.exports = {
       categorie: 'protection',
       indispensable: true,
       descriptionLongue: 'Cette mesure vise à empêcher que des flux de données non chiffrés ne soient interceptés par des acteurs malveillants.',
+    },
+    portsOuverts: {
+      description: 'Fermer tous les ports non strictement nécessaires',
+      categorie: 'protection',
+      indispensable: true,
+      descriptionLongue: "Configurer le service en vue de fermer tous les ports réseau non strictement nécessaires à l'administration et au fonctionnement du service et fermer tous les autres ports.<br>Cette mesure permet de réduire le risque d'accès illégitime au service de la part d'acteurs malveillants.",
+    },
+    certificatSignature: {
+      description: 'Installer un certificat de signature électronique conforme à la réglementation',
+      categorie: 'protection',
+      indispensable: true,
+      descriptionLongue: "Dans le cadre de la configuration du service, installer un certificat de signature électronique qualifié au sens du règlement n° 910/2014 eIDAS, délivré par un prestataire qualifié, ou recourir à un service conforme.<br>Cette mesure permet la réalisation d'une signature électronique robuste sur le plan de la sécurité, conforme à la réglementation française et européenne.",
     },
     protectionDeniService: {
       description: 'Souscrire à un service de protection contre les attaques de déni de service',
@@ -563,6 +613,12 @@ module.exports = {
       categorie: 'resilience',
       indispensable: true,
       descriptionLongue: 'Cette mesure vise à vérifier que les sauvegardes réalisées sont fonctionnelles et pourront être utilisées en cas de problème.',
+    },
+    garantieHauteDisponibilite: {
+      description: 'Recourir à une ou plusieurs solutions garantissant un haut niveau de disponibilité du service',
+      categorie: 'resilience',
+      indispensable: true,
+      descriptionLongue: "Recourir à une ou plusieurs solutions garantissant un haut niveau de disponibilité, en particulier dans le cadre de l'hébergement du service (ex. obligation de redondance de la machine virtuelle et des données).<br>Cette mesure permet d'éviter une interruption du service dépassant quelques minutes.",
     },
   },
 
