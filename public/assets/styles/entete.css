@@ -28,7 +28,7 @@ header nav a, .nom-utilisateur-courant {
   color: var(--systeme-design-etat-bleu);
 }
 
-:is(header nav a, .nom-utilisateur-courant):hover {
+:is(header nav a, .nom-utilisateur-courant, .logo-anssi, .logo-mss):hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
@@ -96,10 +96,6 @@ header nav a, .nom-utilisateur-courant {
   background-color: var(--bleu-anssi);
 }
 
-:is(.logo-anssi, .logo-mss):hover {
-  background-color: var(--systeme-design-etat-gris-survol);
-}
-
 .utilisateur-courant {
   position: relative;
 
@@ -117,8 +113,8 @@ header nav a, .nom-utilisateur-courant {
   display: inline-block;
 
   content: '';
-  mask-size: contain;
   -webkit-mask-size: contain;
+  mask-size: contain;
   background-color: var(--systeme-design-etat-bleu);
 }
 
@@ -127,8 +123,8 @@ header nav a, .nom-utilisateur-courant {
   height: 1.3em;
   margin-right: 0.3em;
 
-  mask: url(../images/icone_utilisateur.svg) no-repeat center;
   -webkit-mask: url(../images/icone_utilisateur.svg) no-repeat center;
+  mask: url(../images/icone_utilisateur.svg) no-repeat center;
 }
 
 .nom-utilisateur-courant::after {
