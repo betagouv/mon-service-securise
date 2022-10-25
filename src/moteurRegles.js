@@ -10,9 +10,11 @@ class MoteurRegles {
   mesuresAModifier(descriptionService, mesuresACibler) {
     const { clefsDescriptionServiceAConsiderer = [], profils = {} } = this.reglesPersonnalisation;
 
-    const valeursDescriptionService = clefsDescriptionServiceAConsiderer.flatMap(
-      (clef) => descriptionService[clef]
-    );
+    const valeursDescriptionService = clefsDescriptionServiceAConsiderer
+      .filter((clef) => descriptionService[clef] !== false)
+      .flatMap((clef) => (
+        (typeof descriptionService[clef] === 'boolean') ? clef : descriptionService[clef]
+      ));
 
     const mapMesures = Object.keys(profils).map((profil) => new Profil(
       profils[profil].regles,

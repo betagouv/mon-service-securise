@@ -23,6 +23,29 @@ describe('Le moteur de règles', () => {
     expect(moteur.mesuresAAjouter(applicationMobile)).to.eql(['uneMesure', 'uneAutreMesure']);
   });
 
+  it('sait gérer des règles faisant intervenir des valeurs booléennes', () => {
+    const referentiel = Referentiel.creeReferentiel({ reglesPersonnalisation: {
+      clefsDescriptionServiceAConsiderer: ['risqueJuridiqueFinancierReputationnel'],
+      profils: {
+        unProfil: {
+          regles: [{ presence: ['risqueJuridiqueFinancierReputationnel'] }],
+          mesuresAAjouter: ['uneMesure'],
+        },
+      },
+    } });
+    const moteur = new MoteurRegles(referentiel);
+
+    const descriptionServiceAvecRisque = new DescriptionService({
+      risqueJuridiqueFinancierReputationnel: true,
+    });
+    expect(moteur.mesuresAAjouter(descriptionServiceAvecRisque)).to.eql(['uneMesure']);
+
+    const descriptionServiceSansRisque = new DescriptionService({
+      risqueJuridiqueFinancierReputationnel: false,
+    });
+    expect(moteur.mesuresAAjouter(descriptionServiceSansRisque)).to.eql([]);
+  });
+
   it("n'ajoute pas de mesure si le moteur ne contient aucune règle", () => {
     const moteur = new MoteurRegles();
 
