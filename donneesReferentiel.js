@@ -579,7 +579,13 @@ module.exports = {
   },
 
   reglesPersonnalisation: {
-    clefsDescriptionServiceAConsiderer: ['typeService', 'fonctionnalites', 'provenanceService', 'donneesCaracterePersonnel'],
+    clefsDescriptionServiceAConsiderer: [
+      'typeService',
+      'fonctionnalites',
+      'provenanceService',
+      'donneesCaracterePersonnel',
+      'risqueJuridiqueFinancierReputationnel',
+    ],
     profils: {
       applicationMobile: {
         regles: [{
@@ -647,10 +653,17 @@ module.exports = {
         mesuresAAjouter: [
           'secNumCloud',
           'testIntrusion',
+        ],
+      },
+      mssPlusPlus: {
+        regles: [
+          { presence: ['risqueJuridiqueFinancierReputationnel'] },
+        ],
+        mesuresAAjouter: [
           'supervision',
         ],
         mesuresARendreIndispensables: [
-          'sauvegardeDonnees',
+          'supervision',
         ],
       },
     },
