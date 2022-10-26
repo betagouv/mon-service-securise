@@ -49,6 +49,7 @@ class MesuresGenerales extends ElementsConstructibles {
     this.items.forEach((mesure) => {
       const { id, statut } = mesure;
       const { categorie } = this.referentiel.mesure(id);
+      mesure.rendueIndispensable = mesuresPersonnalisees[id].indispensable;
 
       if (statut === MesureGenerale.STATUT_FAIT) {
         stats[categorie].misesEnOeuvre += 1;

@@ -145,6 +145,13 @@ describe('La liste des mesures générales', () => {
       expect(stats.deux.indispensables.fait).to.equal(0);
     });
 
+    it('tient compte des mesures faites rendues indispensables', () => {
+      const mesuresGenerales = creeMesuresGenerales([{ id: 'id2', statut: 'fait' }]);
+
+      const stats = mesuresGenerales.statistiques({ id2: { indispensable: true } }).toJSON();
+      expect(stats.une.indispensables.fait).to.equal(1);
+    });
+
     it('calcule le nombre de mesures indispensables en cours', () => {
       const mesuresGenerales = creeMesuresGenerales([{ id: 'id1', statut: 'enCours' }]);
 
