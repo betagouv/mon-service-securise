@@ -57,6 +57,10 @@ section:last-of-type {
   text-align: left;
 }
 
+.retour:empty {
+  display: none;
+}
+
 .invisible {
   display: none;
 }
