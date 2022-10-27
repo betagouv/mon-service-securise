@@ -102,6 +102,15 @@ header nav a, .nom-utilisateur-courant {
   cursor: pointer;
 }
 
+.connexion {
+  display: flex;
+  align-items: center;
+  padding-left: 0.5em;
+
+  border: 1px solid var(--systeme-design-etat-bleu);
+  border-radius: 0.35em;
+}
+
 .nom-utilisateur-courant {
   display: flex;
   align-items: center;
@@ -109,7 +118,8 @@ header nav a, .nom-utilisateur-courant {
   color: var(--systeme-design-etat-bleu);
 }
 
-.nom-utilisateur-courant::before, .nom-utilisateur-courant::after {
+:is(.connexion, .nom-utilisateur-courant):before,
+.nom-utilisateur-courant::after {
   display: inline-block;
 
   content: '';
@@ -118,7 +128,7 @@ header nav a, .nom-utilisateur-courant {
   background-color: var(--systeme-design-etat-bleu);
 }
 
-.nom-utilisateur-courant::before {
+:is(.connexion, .nom-utilisateur-courant)::before {
   width: 1.3em;
   height: 1.3em;
   margin-right: 0.3em;
