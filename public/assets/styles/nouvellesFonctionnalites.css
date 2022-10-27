@@ -41,10 +41,19 @@ section.informations {
   left: 0;
 }
 
+.evolutions h4 {
+  margin: 0;
+  font-weight: bold;
+}
+
 .evolutions img {
   display: block;
   width: 70%;
   margin: 2em auto;
+}
+
+.evolutions img.moyenne {
+  width: 50%;
 }
 
 .boutons {
