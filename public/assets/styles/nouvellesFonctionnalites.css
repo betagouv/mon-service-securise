@@ -41,6 +41,14 @@ section.informations {
   left: 0;
 }
 
+.evolutions .astuce {
+  color: var(--bleu-anssi);
+}
+
+.evolutions .astuce::before {
+  content: '👌'
+}
+
 .evolutions h4 {
   margin: 0;
   font-weight: bold;
