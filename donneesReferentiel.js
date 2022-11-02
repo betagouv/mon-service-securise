@@ -652,7 +652,7 @@ module.exports = {
       applicationAchettee: {
         regles: [{
           presence: ['achat'],
-          absence: ['developpement'],
+          absence: ['developpement', 'outilExistant'],
         }],
         mesuresARetirer: [
           'analyseRisques',
