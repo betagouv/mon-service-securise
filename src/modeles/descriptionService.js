@@ -13,6 +13,7 @@ class DescriptionService extends InformationsHomologation {
         'localisationDonnees',
         'nomService',
         'presentation',
+        'provenanceService',
         'risqueJuridiqueFinancierReputationnel',
         'statutDeploiement',
       ],
@@ -20,7 +21,6 @@ class DescriptionService extends InformationsHomologation {
         'donneesCaracterePersonnel',
         'fonctionnalites',
         'typeService',
-        'provenanceService',
       ],
       listesAgregats: {
         donneesSensiblesSpecifiques: DonneesSensiblesSpecifiques,
