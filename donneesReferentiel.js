@@ -50,6 +50,9 @@ module.exports = {
     developpement: {
       description: 'Développé en interne ou par un prestataire au profit de votre organisation',
     },
+    outilExistant: {
+      description: 'Déployé à partir d’un outil existant',
+    },
     achat: {
       description: "Acheté sur étagère auprès d'un fournisseur ou obtenu à titre gratuit",
     },
