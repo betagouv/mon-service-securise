@@ -48,13 +48,16 @@ module.exports = {
 
   provenancesService: {
     developpement: {
-      description: 'Développé en interne ou par un prestataire au profit de votre organisation',
+      description: "Développé pour les besoins de l'organisation",
+      exemple: "application mobile ou site développé de A à Z par une agence web ou à partir de briques existantes adaptées aux besoins de l'organisation",
     },
     outilExistant: {
-      description: 'Déployé à partir d’un outil existant',
+      description: "Déployé à partir d'un outil existant",
+      exemple: "outil métier proposé à l'achat par un éditeur ou gratuit et déployé au profit de l'organisation",
     },
     achat: {
-      description: "Acheté sur étagère auprès d'un fournisseur ou obtenu à titre gratuit",
+      description: 'Proposé en ligne par un fournisseur',
+      exemple: 'service standard disponible en ligne (SaaS), gratuitement ou via souscription, développé et déployé mis à disposition par un fournisseur',
     },
   },
 
