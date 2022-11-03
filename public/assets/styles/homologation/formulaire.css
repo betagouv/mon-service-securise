@@ -62,13 +62,13 @@ form.homologation label p, form .decoration {
 }
 
 label.exemple::before {
-  content: 'ex. '
+  content: 'ex : '
 }
 
 label.exemple {
   display: inline-block;
 
-  margin: 0 0 0 1.7em;
+  margin: 0 0 0 2.5em;
 
   font-weight: normal;
   color: var(--texte-clair);
