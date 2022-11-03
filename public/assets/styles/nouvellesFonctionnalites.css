@@ -1,26 +1,11 @@
 .description {
   margin-bottom: 2.5em;
+  padding-bottom: 2.2em;
+
+  border-bottom: 1px solid var(--liseres);
 }
 
-section.informations {
-  display: flex;
-  padding: 1.5em 0;
-  color: var(--texte-fonce);
-}
-
-.informations::before {
-  content: '';
-  display: block;
-
-  width: 1.7em;
-  margin: 0.25em 0.5em 0 0;
-
-  background-image: url(../images/icone_information_bleue.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.informations, .evolutions {
+.evolutions {
   line-height: 1.6em;
 }
 
