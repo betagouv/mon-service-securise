@@ -28,7 +28,7 @@ services:
 
   web:
     <<: *configuration-base
-    command: "npx nodemon server.js"
+    command: bash -c "npx knex migrate:latest && npx nodemon server.js"
     environment:
       - NODE_ENV=development
     networks:
