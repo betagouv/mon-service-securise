@@ -123,18 +123,18 @@ header nav a, .nom-utilisateur-courant {
   display: inline-block;
 
   content: '';
-  -webkit-mask-size: contain;
-  mask-size: contain;
   background-color: var(--systeme-design-etat-bleu);
 }
 
 :is(.connexion, .nom-utilisateur-courant)::before {
   width: 1.3em;
-  height: 1.3em;
+  height: 1.1em;
   margin-right: 0.3em;
 
   -webkit-mask: url(../images/icone_utilisateur.svg) no-repeat center;
   mask: url(../images/icone_utilisateur.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
 
 .nom-utilisateur-courant::after {
@@ -144,6 +144,8 @@ header nav a, .nom-utilisateur-courant {
 
   -webkit-mask: url(../images/icone_fleche_bas.svg) no-repeat center;
   mask: url(../images/icone_fleche_bas.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
   -webkit-mask-position-y: 0.2em;
   mask-position-y: 0.2em;
 }
