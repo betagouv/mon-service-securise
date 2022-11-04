@@ -43,3 +43,29 @@ footer nav a:hover {
 footer nav a:active {
   background-color: var(--systeme-design-etat-gris-actif);
 }
+
+footer .bandeau-mss {
+  padding: 1.5em 0;
+}
+
+footer .bloc-france .marianne {
+  height: 1.6em;
+
+  background: url(../images/marianne.svg) no-repeat;
+  background-size: contain;
+}
+
+footer .bloc-france .republique-francaise {
+  padding: 0.5em 0;
+
+  color: #000;
+  font-weight: bold;
+  line-height: 1em;
+}
+
+footer .bloc-france .devise {
+  height: 3em;
+
+  background: url(../images/devise.svg) no-repeat;
+  background-size: contain;
+}
