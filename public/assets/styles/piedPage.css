@@ -10,8 +10,6 @@ footer nav {
   display: flex;
   justify-content: space-between;
   column-gap: 2em;
-
-  margin-left: auto;
 }
 
 footer a {
