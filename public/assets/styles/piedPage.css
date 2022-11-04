@@ -45,7 +45,14 @@ footer nav a:active {
 }
 
 footer .bandeau-mss {
+  display: flex;
+
   padding: 1.5em 0;
+}
+
+footer .bloc-france {
+  flex: 1;
+  align-self: center;
 }
 
 footer .bloc-france .marianne {
@@ -68,4 +75,18 @@ footer .bloc-france .devise {
 
   background: url(../images/devise.svg) no-repeat;
   background-size: contain;
+}
+
+footer .infos-mss {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.8em;
+
+  color: var(--texte-fonce);
+}
+
+footer .infos-mss .liens {
+  display: flex;
+  justify-content: space-between;
 }
