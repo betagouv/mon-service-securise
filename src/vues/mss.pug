@@ -30,12 +30,18 @@ block page
       block retour
     block main
 
-  footer.marges-fixes
-    nav
-      a(href = '/aPropos') À propos
-      a(href = '/mentionsLegales') Mentions légales
-      a(href = '/confidentialite') Politique de confidentialité
-      a(href = '/cgu') Conditions générales
-      a(href = '/statistiques') Statistiques d'utilisation
+  footer
+    nav.marges-fixes
+      ul
+        li
+          a(href = '/aPropos') À propos
+        li
+          a(href = '/mentionsLegales') Mentions légales
+        li
+          a(href = '/confidentialite') Politique de confidentialité
+        li
+          a(href = '/cgu') Conditions générales
+        li
+          a(href = '/statistiques') Statistiques d'utilisation
 
   script(type = 'module', src = '/statique/entete.js')
