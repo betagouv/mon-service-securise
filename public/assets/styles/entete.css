@@ -32,6 +32,10 @@ header nav a, .nom-utilisateur-courant {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
+:is(header nav a, .logo-anssi, .logo-mss):active {
+  background-color: var(--systeme-design-etat-gris-actif);
+}
+
 .marianne, .devise {
   width: 45%;
 
