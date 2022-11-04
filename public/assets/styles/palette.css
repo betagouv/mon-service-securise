@@ -41,4 +41,5 @@
   /* https://www.systeme-de-design.gouv.fr */
   --systeme-design-etat-bleu: #000091;
   --systeme-design-etat-gris-survol: #f6f6f6;
+  --systeme-design-etat-contour-champs: #dddddd;
 }
