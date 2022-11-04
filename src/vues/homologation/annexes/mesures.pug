@@ -1,24 +1,29 @@
 extends ../../documentImprimable
 
+mixin mesuresTrieesParStatut( mesuresDuStatut = [], nomStatut = '')
+  section.mesures-par-statut
+      h2=nomStatut
+      each mesures, categorie in mesuresDuStatut
+        h3= categorie || 'Sans catégorie renseignée'
+        ul
+          each mesure in mesures
+            li(class = mesure.indispensable ? 'indispensable' : '')= mesure.description
+            p.modalites!= mesure.modalites
+
 block append styles
   link(href='/statique/assets/styles/pdfs.css', rel='stylesheet')
   link(href = '/statique/assets/styles/annexes/mesures.css', rel = 'stylesheet')
 
 block append page
-  .page
-    .titre-icone
-    .titre
-      h1 Mesures de sécurité détaillées
-      .sous-titre.
-        Toutes les mesures indispensables #[.icone-etoile], recommandées et créées sont classées selon leur statut de mise en œuvre et par catégorie.
-    section.mesures-par-statut
-      h2 En cours
-      - const mesuresEnCours = homologation.mesuresParStatut().enCours
-      each mesures, categorie in mesuresEnCours
-        h3= categorie
-        ul
-          each mesure in mesures
-            li(class = mesure.indispensable ? 'indispensable' : '')= mesure.description
-            p.modalites!= mesure.modalites
+  - const mesuresParStatut = homologation.mesuresParStatut()
+  - const statuts = [{ clef: 'enCours', nom: 'En cours' }, { clef: 'nonFait', nom: 'Non faites' }, { clef: 'fait', nom: 'Faites' }]
+  each statut in statuts
+    .page
+      .titre-icone
+      .titre
+        h1 Mesures de sécurité détaillées
+        .sous-titre.
+          Toutes les mesures indispensables #[.icone-etoile], recommandées et créées sont classées selon leur statut de mise en œuvre et par catégorie.
+      +mesuresTrieesParStatut(mesuresParStatut[statut.clef], statut.nom)
 
   script(type = 'module', src = '/statique/homologation/annexes/mesures.js')

@@ -1,3 +1,7 @@
+.page:nth-of-type(n + 2) {
+  margin-top: 4em;
+}
+
 .titre-icone {
   display: inline-block;
 
@@ -34,6 +38,10 @@
   background-image: url(../../images/icone_etoile_orange.svg);
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.mesures-par-statut {
+  margin-top: 4em;
 }
 
 .mesures-par-statut h3 {
