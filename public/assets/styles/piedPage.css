@@ -120,11 +120,20 @@ footer .infos-mss a:active {
 footer .infos-mss .liens {
   display: flex;
   justify-content: space-between;
+  transform: translateX(-0.7em);
 }
 
 footer .infos-mss .liens a {
+  padding: 0.15em 0.7em;
+
   text-decoration: none;
+  font-weight: bold;
 }
+
+footer .infos-mss .liens a:hover {
+  background-color: var(--systeme-design-etat-gris-survol);
+}
+
 footer .infos-mss .liens a:active {
-  background-color: initial;
+  background-color: var(--systeme-design-etat-gris-actif);
 }
