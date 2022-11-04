@@ -84,9 +84,47 @@ footer .infos-mss {
   row-gap: 1.8em;
 
   color: var(--texte-fonce);
+  line-height: 1.7em;
+}
+
+footer .infos-mss a {
+  color: var(--texte-fonce);
+  text-decoration: underline;
+  text-decoration-thickness: 0.03em;
+  text-underline-offset: 0.3em;
+}
+
+footer .infos-mss a::after {
+  display: inline-block;
+  content: '';
+  width: 1.2em;
+  height: 1.2em;
+
+  -webkit-mask: url(../images/icone_lien_nouvel_onglet.svg) no-repeat;
+  mask: url(../images/icone_lien_nouvel_onglet.svg) no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  background-color: var(--texte-fonce);
+  transform: translateX(0.12em) translateY(0.15em);
+}
+
+footer .infos-mss a:hover {
+  color: var(--texte-fonce);
+  text-decoration-thickness: 0.12em;
+}
+
+footer .infos-mss a:active {
+  background-color: var(--systeme-design-etat-gris-actif);
 }
 
 footer .infos-mss .liens {
   display: flex;
   justify-content: space-between;
+}
+
+footer .infos-mss .liens a {
+  text-decoration: none;
+}
+footer .infos-mss .liens a:active {
+  background-color: initial;
 }
