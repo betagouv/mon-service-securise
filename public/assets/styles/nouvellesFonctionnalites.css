@@ -15,15 +15,19 @@
   padding: 0;
 }
 
-.evolutions li {
+.evolutions > li {
  margin-bottom: 1em;
  margin-left: 1.7em;
 }
 
-.evolutions li::before {
+.evolutions > li::before {
   content: '\2705';
   position: absolute;
   left: 0;
+}
+
+.evolutions > li li {
+  list-style-type: initial;
 }
 
 .evolutions li a::after {
@@ -46,6 +50,20 @@
 
 .evolutions .astuce::before {
   content: '👌'
+}
+
+.evolutions ul.ajouts li,
+.evolutions ul.suppressions li {
+  padding-left: 0.5em;
+  line-height: 1.25em;
+}
+
+.evolutions ul.ajouts li {
+  list-style-type: '👌';
+}
+
+.evolutions ul.suppressions li {
+  list-style-type: '❌';
 }
 
 .evolutions h4 {
