@@ -1,0 +1,52 @@
+\documentclass[9pt, a4paper]{article}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+
+
+\usepackage{array}
+\usepackage[a4paper, margin=10mm]{geometry}
+
+\usepackage[scaled]{helvet}
+\renewcommand*\familydefault{\sfdefault}
+
+\usepackage{multicol}
+\usepackage{nopageno}
+
+\usepackage{tcolorbox}
+
+\usepackage{xcolor}
+\definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
+\definecolor{gris}{rgb}{0.37, 0.37, 0.37}
+\definecolor{gris_clair}{rgb}{0.96, 0.96, 0.96}
+\definecolor{lisere}{rgb}{0.71, 0.76, 0.82}
+
+\setlength\parindent{0cm}
+
+\begin{document}
+  \textbf{MESURES DE SÉCURITÉ DÉTAILLÉES}
+
+  \textcolor{gris}{Toutes les mesures indispensables *, recommandées et créées sont classées selon
+  leur statut de mise en œuvre et par catégorie.}
+
+  \vskip 0.5cm
+
+  \textbf{En cours}
+
+  \begin{tcolorbox}[colback=white, colframe=lisere, boxrule=1px]
+    \textcolor{bleu}{__=donnees.categorie__}
+    \begin{itemize}
+      __~ donnees.mesures :m __
+        \item * __=m.description__
+
+          \textcolor{gris}{__=m.modalites__}
+      __~__
+      \item * Disposer d'une liste à jour des équipements et des logiciels contribuant au
+        fonctionnement du service numérique
+      \item Identifier les données les plus sensibles à protéger
+    \end{itemize}
+  \end{tcolorbox}
+
+  \vskip 1cm
+
+  \textcolor{bleu}{\textbf{MonServiceSécurisé}}, service proposé par l'ANSSI.
+\end{document}
