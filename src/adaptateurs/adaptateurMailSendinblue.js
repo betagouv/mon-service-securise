@@ -8,7 +8,7 @@ function envoieEmail(destinataire, sujet, corpsHtml) {
       subject: sujet,
       htmlContent: `<html><head></head><body><p>${corpsHtml}</p></body></html>`,
     },
-    { headers: { 'api-key': process.env.CLE_API_SENDINBLUE } });
+    { headers: { 'api-key': process.env.CLEF_API_SENDINBLUE } });
 }
 
 const envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) => envoieEmail(
