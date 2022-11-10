@@ -6,7 +6,7 @@ const Referentiel = require('./src/referentiel');
 const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurEquations = require('./src/adaptateurs/adaptateurEquations');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
-const adaptateurMail = require('./src/adaptateurs/adaptateurMail');
+const adaptateurMailSmtp = require('./src/adaptateurs/adaptateurMailSmtp');
 
 const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
@@ -25,7 +25,7 @@ const serveur = MSS.creeServeur(
   referentiel,
   moteurRegles,
   adaptateurEquations,
-  adaptateurMail,
+  adaptateurMailSmtp,
 );
 
 serveur.ecoute(port, () => {
