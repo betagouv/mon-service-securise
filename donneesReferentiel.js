@@ -168,10 +168,6 @@ module.exports = {
       exemple: 'orientation sexuelle, origine, orientations politiques, religieuses.',
       seuilCriticite: 'critique',
     },
-    diffusionRestreinte: {
-      description: 'Données de niveau « Diffusion Restreinte »',
-      seuilCriticite: 'critique',
-    },
   },
 
   delaisAvantImpactCritique: {
