@@ -1,14 +1,17 @@
-a.nouvel-onglet:after {
+a.nouvel-onglet::after {
   content: '';
   display: inline-block;
-  width: 1.3em;
-  height: 1.3em;
-  margin-left: 0.3em;
+  width: 1.2em;
+  height: 1.2em;
 
-  background-image: url(../../images/icone_lien_nouvel_onglet.svg);
-  background-repeat: no-repeat;
-  background-size: 100%;
-  transform: translateY(0.2em);
+  -webkit-mask: url(/statique/assets/images/icone_lien_nouvel_onglet.svg) no-repeat center;
+  mask: url(/statique/assets/images/icone_lien_nouvel_onglet.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position-y: 0.1em;
+  mask-position-y: 0.1em;
+  background-color: var(--bleu-mise-en-avant);
+  transform: translateX(0.12em) translateY(0.15em);
 }
 
 a.nouvel-onglet {
