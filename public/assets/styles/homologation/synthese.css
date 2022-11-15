@@ -45,7 +45,7 @@
   color: var(--texte-moyen);
 }
 
-.action.indisponible:after {
+.action.indisponible::after {
   position: absolute;
   top: 1em;
 
