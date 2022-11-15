@@ -9,6 +9,7 @@ block page
     link(href='/statique/assets/styles/palette.css', rel='stylesheet')
     link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
     link(href='/statique/assets/styles/bouton.css', rel='stylesheet')
+    link(href='/statique/assets/styles/modules/lienNouvelOnglet.css', rel='stylesheet')
     link(href='/statique/assets/styles/mss.css', rel='stylesheet')
     link(href='/statique/assets/styles/entete.css', rel='stylesheet')
     link(href='/statique/assets/styles/piedPage.css', rel='stylesheet')
@@ -42,14 +43,14 @@ block page
             MonServiceSécurisé aide les entités publiques à sécuriser et homologuer leurs services
             publics numériques : site web, applications mobiles, API.
           div.
-            Il est développé par l'#[a(href='https://www.ssi.gouv.fr', target='_blank', rel='noopener') Agence nationale de la sécurité des systèmes d'information],
-            en lien avec #[a(href='https://beta.gouv.fr', target='_blank', rel='noopener') BetaGouv] et la
-            #[a(href='https://www.numerique.gouv.fr/dinum', target='_blank', rel='noopener') Direction interministérielle du numérique].
+            Il est développé par l'#[a.nouvel-onglet(href='https://www.ssi.gouv.fr', target='_blank', rel='noopener') Agence nationale de la sécurité des systèmes d'information],
+            en lien avec #[a.nouvel-onglet(href='https://beta.gouv.fr', target='_blank', rel='noopener') BetaGouv] et la
+            #[a.nouvel-onglet(href='https://www.numerique.gouv.fr/dinum', target='_blank', rel='noopener') Direction interministérielle du numérique].
           .liens
-            a(href = 'https://www.legifrance.gouv.fr', target = '_blank', rel = 'noopener') legifrance.gouv.fr
-            a(href = 'https://www.gouvernement.fr', target = '_blank', rel = 'noopener') gouvernement.fr
-            a(href = 'https://www.service-public.fr', target = '_blank', rel = 'noopener') service-public.fr
-            a(href = 'https://www.data.gouv.fr', target = '_blank', rel = 'noopener') data.gouv.fr
+            a.nouvel-onglet(href = 'https://www.legifrance.gouv.fr', target = '_blank', rel = 'noopener') legifrance.gouv.fr
+            a.nouvel-onglet(href = 'https://www.gouvernement.fr', target = '_blank', rel = 'noopener') gouvernement.fr
+            a.nouvel-onglet(href = 'https://www.service-public.fr', target = '_blank', rel = 'noopener') service-public.fr
+            a.nouvel-onglet(href = 'https://www.data.gouv.fr', target = '_blank', rel = 'noopener') data.gouv.fr
       .separateur
     nav.marges-fixes
       ul
