@@ -2,22 +2,13 @@
   margin-bottom: 3em;
 }
 
-.tableau-bord {
-  display: flex;
-  align-items: center;
-  column-gap: 1em;
-
-  margin-bottom: 1em;
-}
-
 .titre-service {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
 
-.tableau-bord .bouton {
-  flex-shrink: 0;
+  text-align: left;
+  margin-bottom: 1em;
 }
 
 .actions {
@@ -169,13 +160,18 @@
   margin-top: 1em;
 }
 
-.outil-complementaire .description a:after, .liens a:after {
+.vers-complements {
+  margin-right: 0.18em;
+}
+
+.vers-complements::after {
   content: '';
   display: inline-block;
 
   width: 0.4em;
   height: 0.4em;
   margin-left: 0.2em;
+
   border: 2px var(--bleu-mise-en-avant) solid;
   border-left: 0;
   border-bottom: 0;
@@ -189,4 +185,28 @@
   row-gap: 1em;
 
   font-size: 0.65em;
+}
+
+.telechargement-pdfs {
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 2em;
+}
+
+.telechargement-pdfs .bouton {
+  font-weight: bold;
+  margin-bottom: 1em;
+  padding-left: 1.85em;
+  padding-right: 1.85em;
+}
+
+.telechargement-pdfs .ancienne-version {
+  text-align: right;
+
+  font-size: 0.85em;
+}
+
+a.nouvel-onglet::after {
+  background-color: white;
 }

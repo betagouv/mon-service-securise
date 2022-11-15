@@ -14,7 +14,7 @@ mixin outilComplementaire({ id, nom, description, lien })
     .titre-outil
       .icone-outil
       h3= nom
-    .description #{description} #[a(href = lien.url)= lien.texte]
+    .description #{description} #[a.vers-complements(href = lien.url)= lien.texte]
 
 block append styles
   link(href = '/statique/assets/styles/homologation/synthese.css', rel = 'stylesheet')
@@ -24,9 +24,7 @@ block retour
 
 block zone-principale
   .details-service
-    .tableau-bord
-      h1.titre-service!= service.nomService()
-      a.bouton(href = `/homologation/${service.id}/syntheseSecurite`) Télécharger la synthèse
+    h1.titre-service!= service.nomService()
 
     .actions
       each actionSaisie in actionsSaisie
@@ -48,6 +46,14 @@ block zone-principale
           lien: { url: `/homologation/${service.id}/rolesResponsabilites`, texte: 'Compléter' }
         })
 
+    .telechargement-pdfs
+      a.bouton.nouvel-onglet(
+        href = `/homologation/${service.id}/syntheseSecurite`,
+        target = `blank`,
+        rel = ``
+      ) Télécharger la synthèse
+      a.ancienne-version.vers-complements(href = `/homologation/${service.id}/decision`) Télécharger les annexes (+ synthèse 1ère version)
+
 block cartes-informations
   if process.env.AVEC_INDICE_CYBER
     - const indiceCyber = service.indiceCyber()
@@ -55,5 +61,4 @@ block cartes-informations
 
   +carteInformations({ titre: 'Pour les services référencés avant le 12/10/2022' })
     .liens
-      a(href = `/homologation/${service.id}/decision`) Télécharger la synthèse (1ère version)
-      a(href = `/homologation/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »
+      a.vers-complements(href = `/homologation/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »
