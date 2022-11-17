@@ -545,7 +545,7 @@ describe('Le dépôt de données des homologations', () => {
         depot.nouvelleHomologation('123', { nomService: 'Super Service' })
           .then(() => {
             const evenement = adaptateurJournalMSS.evenements()[0];
-            expect(evenement.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
+            expect(evenement.toJSON().type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
             done();
           })
           .catch(done);
