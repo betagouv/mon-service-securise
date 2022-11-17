@@ -6,6 +6,7 @@ const {
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
+const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
@@ -462,11 +463,13 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
+    let adaptateurJournalMSS;
     let adaptateurPersistance;
     let adaptateurUUID;
     let depot;
 
     beforeEach(() => {
+      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [],
@@ -474,7 +477,10 @@ describe('Le dépôt de données des homologations', () => {
         autorisations: [],
       });
       adaptateurUUID = { genereUUID: () => 'unUUID' };
-      depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, adaptateurUUID });
+
+      depot = DepotDonneesHomologations.creeDepot({
+        adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID,
+      });
     });
 
     it('ajoute la nouvelle homologation au dépôt', (done) => {
@@ -532,6 +538,18 @@ describe('Le dépôt de données des homologations', () => {
           done();
         })
         .catch(done);
+    });
+
+    describe("le journal MSS est utilisé pour consigner l'enregistrement", () => {
+      it('avec un événement typé', (done) => {
+        depot.nouvelleHomologation('123', { nomService: 'Super Service' })
+          .then(() => {
+            const evenement = adaptateurJournalMSS.evenements()[0];
+            expect(evenement.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
+            done();
+          })
+          .catch(done);
+      });
     });
 
     it('lève une exception si le nom du service est manquant', (done) => {
