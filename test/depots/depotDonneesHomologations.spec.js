@@ -26,7 +26,7 @@ const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 const copie = require('../../src/utilitaires/copie');
 
-describe('Le dépot de données des homologations', () => {
+describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
