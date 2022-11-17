@@ -5,7 +5,7 @@ const {
 const Homologation = require('../modeles/homologation');
 
 const creeDepot = (config = {}) => {
-  const { adaptateurPersistance, adaptateurUUID, referentiel } = config;
+  const { adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel } = config;
 
   const homologation = (idHomologation) => adaptateurPersistance.homologation(idHomologation)
     .then((h) => (h ? new Homologation(h, referentiel) : undefined));
@@ -137,6 +137,7 @@ const creeDepot = (config = {}) => {
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
         idUtilisateur, idHomologation, type: 'createur',
       }))
+      .then(() => adaptateurJournalMSS.consigneEvenement({ type: 'NOUVELLE_HOMOLOGATION_CREEE' }))
       .then(() => idHomologation);
   };
 
