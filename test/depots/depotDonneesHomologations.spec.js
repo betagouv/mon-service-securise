@@ -543,7 +543,7 @@ describe('Le dépôt de données des homologations', () => {
     describe("le journal MSS est utilisé pour consigner l'enregistrement", () => {
       it('avec un événement typé', (done) => {
         adaptateurJournalMSS.consigneEvenement = (evenement) => {
-          expect(evenement.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
+          expect(evenement.toJSON().type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
           done();
         };
 
