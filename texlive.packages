@@ -2,9 +2,12 @@ babel-french
 collection-fontsrecommended
 environ
 etoolbox
+fancyhdr
 koma-script
 nopageno
+pdfcol
 pgf
+setspace
 svg
 tcolorbox
 transparent

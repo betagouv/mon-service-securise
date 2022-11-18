@@ -2,21 +2,16 @@
 \usepackage[french]{babel}
 \usepackage[T1]{fontenc}
 
-
 \usepackage{array}
-\usepackage[a4paper, margin=10mm]{geometry}
+\usepackage[a4paper, margin=10mm, includehead, includefoot, headheight=15mm]{geometry}
 
 \usepackage[scaled]{helvet}
 \renewcommand*\familydefault{\sfdefault}
 
 \usepackage[inkscape=off,inkscapepath=svgpath]{svg}
+\svgpath{__=donnees.CHEMIN_BASE_ABSOLU__/public/assets/images/tex/}
 
-\usepackage{multicol}
-\usepackage{nopageno}
-
-\usepackage{tcolorbox}
-
-\usepackage{xcolor}
+\usepackage{xcolor,multicol}
 \definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
 \definecolor{gris}{rgb}{0.37, 0.37, 0.37}
 \definecolor{gris_clair}{rgb}{0.96, 0.96, 0.96}
@@ -24,35 +19,39 @@
 
 \setlength\parindent{0cm}
 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{
+    \large\textbf{MESURES DE SÉCURITÉ DÉTAILLÉES}
+    \\\small\textcolor{gris}{Toutes les mesures indispensables \includeinkscape[height=9pt]{star}, recommandées et créées sont classées selon leur statut de mise en œuvre et par catégorie.}
+}
+\fancyfoot[L]{\small{\textcolor{bleu}{\textbf{MonServiceSécurisé -}} __= donnees.nomService __}}
+\fancyfoot[R]{\thepage}
+
+\renewcommand{\headrulewidth}{0pt}
+
 \begin{document}
-  \textbf{MESURES DE SÉCURITÉ DÉTAILLÉES}
-
-  \textcolor{gris}{Toutes les mesures indispensables *, recommandées et créées sont classées selon
-  leur statut de mise en œuvre et par catégorie.}
-
-  \vskip 0.5cm
-
   __~ Object.keys(donnees.mesuresParStatut) :statut __
-    \textbf{__= donnees.statuts[statut] __}
-
-    \begin{tcolorbox}[colback=white, colframe=lisere, boxrule=1px]
-      __~ Object.keys(donnees.mesuresParStatut[statut]) :categorie __
-        \textcolor{bleu}{__= categorie __}
-        __? donnees.mesuresParStatut[statut][categorie] && donnees.mesuresParStatut[statut][categorie].length __
-          \begin{itemize}
-            __~ donnees.mesuresParStatut[statut][categorie] :mesure __
-              \item __? mesure.indispensable__*__?__ __= mesure.description__
-                __? mesure.modalites __
-                  \textcolor{gris}{__= mesure.modalites__}
-                __?__
-            __~__
-          \end{itemize}
-        __?__
-      __~__
-    \end{tcolorbox}
+    \pagebreak[3]\textbf{__= donnees.statuts[statut] __}
+    __~ Object.keys(donnees.mesuresParStatut[statut]) :categorie __
+    \nopagebreak[1]\textcolor{bleu}{__= categorie __}
+      __? donnees.mesuresParStatut[statut][categorie] &&
+      donnees.mesuresParStatut[statut][categorie].length __
+        \nopagebreak[4]\begin{itemize}
+          __~ donnees.mesuresParStatut[statut][categorie] :mesure __%
+          \nopagebreak[3]
+          __? mesure.indispensable__\item[{\includeinkscape[height=9pt]{star}}] __?__%
+          __? !mesure.indispensable__\item[{\hspace*{\fill}\includeinkscape[height=3pt]{point-median}}\hspace*{\fill}] __?__%
+            __= mesure.description__
+            __? mesure.modalites __
+              \textcolor{gris}{__= mesure.modalites__}
+            __?__%
+          __~__%
+        \end{itemize}
+      __?__
+    __~__
+    \vskip 1cm
   __~__
-
   \vskip 1cm
-
-  \textcolor{bleu}{\textbf{MonServiceSécurisé}}, service proposé par l'ANSSI.
 \end{document}

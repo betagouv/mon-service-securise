@@ -7,7 +7,11 @@ const routesPdf = (middleware, referentiel, adaptateurPdf) => {
     const { homologation } = requete;
     const mesuresParStatut = homologation.mesuresParStatut();
     const statuts = { enCours: 'En cours', nonFait: 'Non fait', fait: 'Fait' };
-    const donnees = { statuts, mesuresParStatut };
+    const donnees = {
+      statuts,
+      mesuresParStatut,
+      CHEMIN_BASE_ABSOLU: process.env.CHEMIN_BASE_ABSOLU,
+    };
     adaptateurPdf.genereAnnexeMesures(donnees)
       .then((pdf) => {
         reponse.contentType('application/pdf');
