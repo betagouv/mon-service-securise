@@ -8,7 +8,7 @@ const adaptateurEquations = require('./src/adaptateurs/adaptateurEquations');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMailSmtp = require('./src/adaptateurs/adaptateurMailSmtp');
 const adaptateurMailSendinblue = require('./src/adaptateurs/adaptateurMailSendinblue');
-const adaptateurPdfStatique = require('./src/adaptateurs/adaptateurPdfStatique');
+const adaptateurPdfLatex = require('./src/adaptateurs/adaptateurPdfLatex');
 
 const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
@@ -31,7 +31,7 @@ const serveur = MSS.creeServeur(
   moteurRegles,
   adaptateurEquations,
   adaptateurMail,
-  adaptateurPdfStatique,
+  adaptateurPdfLatex,
 );
 
 serveur.ecoute(port, () => {
