@@ -12,26 +12,16 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
     reponse.render('homologation/creation', { referentiel, homologation });
   });
 
-  const donneesActionsSaisie = (version, homologation) => (
-    new ActionsSaisie(version, referentiel, homologation)
+  routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+
+    const actionsSaisie = new ActionsSaisie('v2', referentiel, homologation)
       .toJSON()
       .map(({ id, ...autresDonnees }) => (
         { url: `/homologation/${homologation.id}/${id}`, id, ...autresDonnees }
-      ))
-  );
+      ));
 
-  routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
-    const { homologation } = requete;
-    const version = process.env.AVEC_SYNTHESE_V2 ? 'v2' : 'v1';
-
-    const actionsSaisie = donneesActionsSaisie(version, homologation);
-    const paramsRequete = { referentiel, actionsSaisie, InformationsHomologation };
-
-    if (process.env.AVEC_SYNTHESE_V2) {
-      reponse.render('homologation/synthese', { service: homologation, ...paramsRequete });
-    } else {
-      reponse.render('homologation', { homologation, ...paramsRequete });
-    }
+    reponse.render('homologation/synthese', { service: homologation, referentiel, actionsSaisie, InformationsHomologation });
   });
 
   routes.get('/:id/decision',
