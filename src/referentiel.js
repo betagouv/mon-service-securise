@@ -4,15 +4,15 @@ const donneesParDefaut = require('../donneesReferentiel');
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   let donnees = donneesReferentiel;
 
-  const actionsSaisie = (version) => donnees.actionsSaisie[version] || {};
-  const identifiantsActionsSaisie = (version) => Object.keys(actionsSaisie(version));
-  const actionSaisie = (version, id) => actionsSaisie(version)[id] || {};
-  const actionSaisieIndisponible = (version, id) => !!actionSaisie(version, id)?.indisponible;
-  const positionActionSaisie = (version, id) => actionSaisie(version, id).position;
+  const actionsSaisie = () => donnees.actionsSaisie || {};
+  const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
+  const actionSaisie = (id) => actionsSaisie()[id] || {};
+  const actionSaisieIndisponible = (id) => !!actionSaisie(id)?.indisponible;
+  const positionActionSaisie = (id) => actionSaisie(id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
-  const descriptionActionSaisie = (version, id) => actionSaisie(version, id).description;
+  const descriptionActionSaisie = (id) => actionSaisie(id).description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement;
@@ -35,7 +35,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const risque = (id) => risques()[id] || {};
   const descriptionRisque = (idRisque) => risque(idRisque).description;
   const seuilsCriticites = () => donnees.seuilsCriticites;
-  const sousTitreActionSaisie = (version, id) => actionSaisie(version, id)?.sousTitre;
+  const sousTitreActionSaisie = (id) => actionSaisie(id)?.sousTitre;
   const statutsDeploiement = () => donnees.statutsDeploiement;
   const descriptionStatutDeploiement = (idStatut) => statutsDeploiement()[idStatut]?.description;
   const statutDeploiementValide = (id) => Object.keys(statutsDeploiement()).includes(id);
@@ -57,10 +57,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const indiceCyberNoteMax = () => donnees.indiceCyber?.noteMax || 10;
 
-  const actionSuivante = (version, id) => {
-    const position = positionActionSaisie(version, id);
-    return Object.keys(actionsSaisie(version))
-      .find((a) => positionActionSaisie(version, a) === position + 1);
+  const actionSuivante = (id) => {
+    const position = positionActionSaisie(id);
+    return Object.keys(actionsSaisie())
+      .find((a) => positionActionSaisie(a) === position + 1);
   };
 
   const infosNiveauxGravite = (ordreInverse = false) => {

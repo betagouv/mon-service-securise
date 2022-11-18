@@ -11,30 +11,21 @@ module.exports = {
   },
 
   actionsSaisie: {
-    v1: {
-      descriptionService: { position: 0, description: 'Description du service' },
-      rolesResponsabilites: { position: 1, description: 'Rôles et responsabilités' },
-      risques: { position: 2, description: 'Risques de sécurité' },
-      mesures: { position: 3, description: 'Mesures de sécurité' },
-      avisExpertCyber: { position: 4, description: 'Avis sur le dossier' },
+    descriptionService: {
+      position: 0,
+      description: 'Décrire',
+      sousTitre: 'Présentez les caractéristiques de votre service.',
     },
-    v2: {
-      descriptionService: {
-        position: 0,
-        description: 'Décrire',
-        sousTitre: 'Présentez les caractéristiques de votre service.',
-      },
-      mesures: {
-        position: 1,
-        description: 'Sécuriser',
-        sousTitre: 'Mettez en œuvre les mesures de sécurité adaptées à votre service.',
-      },
-      homologations: {
-        position: 2,
-        indisponible: true,
-        description: 'Homologuer',
-        sousTitre: 'Complétez et téléchargez les documents pour homologuer le service.',
-      },
+    mesures: {
+      position: 1,
+      description: 'Sécuriser',
+      sousTitre: 'Mettez en œuvre les mesures de sécurité adaptées à votre service.',
+    },
+    homologations: {
+      position: 2,
+      indisponible: true,
+      description: 'Homologuer',
+      sousTitre: 'Complétez et téléchargez les documents pour homologuer le service.',
     },
   },
 

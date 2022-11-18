@@ -26,7 +26,6 @@ class ErreurStatutMesureInvalide extends ErreurModele {}
 class ErreurTentativeSuppressionCreateur extends ErreurModele {}
 class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
-class ErreurVersionActionSaisieManquante extends ErreurModele { }
 
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(message = '', idUtilisateur) {
@@ -65,5 +64,4 @@ module.exports = {
   ErreurTypeInconnu,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
-  ErreurVersionActionSaisieManquante,
 };

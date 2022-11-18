@@ -7,127 +7,97 @@ const InformationsHomologation = require('../../src/modeles/informationsHomologa
 const {
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,
-  ErreurVersionActionSaisieManquante,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
 describe('Une action de saisie', () => {
   it('connaît son identifiant', () => {
-    const referentiel = Referentiel.creeReferentiel({ actionsSaisie: { v1: { uneAction: {} } } });
+    const referentiel = Referentiel.creeReferentiel({ actionsSaisie: { uneAction: {} } });
 
-    const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel);
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
     expect(action.id).to.equal('uneAction');
   });
 
   it('connaît sa description', () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: {
-        v1: { uneAction: { description: 'Une description' } },
-      },
+      actionsSaisie: { uneAction: { description: 'Une description' } },
     });
 
-    const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel);
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
     expect(action.description()).to.equal('Une description');
   });
 
   it("connaît l'identifiant de l'action suivante", () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: {
-        v1: { uneAction: { position: 0 }, actionSuivante: { position: 1 } },
-      },
+      actionsSaisie: { uneAction: { position: 0 }, actionSuivante: { position: 1 } },
     });
 
-    const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel);
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
     expect(action.suivante()).to.equal('actionSuivante');
-  });
-
-  it('connaît sa version', () => {
-    const referentiel = Referentiel.creeReferentiel({ actionsSaisie: { v1: { uneAction: {} } } });
-
-    const action = new ActionSaisie({ version: 'v1', id: 'uneAction' }, referentiel);
-    expect(action.version).to.equal('v1');
   });
 
   it('connaît son sous-titre', () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { v2: { uneAction: { sousTitre: 'Un sous-titre' } } },
+      actionsSaisie: { uneAction: { sousTitre: 'Un sous-titre' } },
     });
 
-    const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel);
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
     expect(action.sousTitre()).to.equal('Un sous-titre');
   });
 
   it('sait si elle est indisponible', () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { v2: { uneAction: {}, uneActionIndisponible: { indisponible: true } } },
+      actionsSaisie: { uneAction: {}, uneActionIndisponible: { indisponible: true } },
     });
 
-    const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel);
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
     expect(action.indisponible()).to.be(false);
 
-    const actionIndisponible = new ActionSaisie({ id: 'uneActionIndisponible', version: 'v2' }, referentiel);
+    const actionIndisponible = new ActionSaisie({ id: 'uneActionIndisponible' }, referentiel);
     expect(actionIndisponible.indisponible()).to.be(true);
   });
 
   it('connaît son statut', () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { v2: { uneAction: {} } },
+      actionsSaisie: { uneAction: {} },
     });
 
     const homologation = new Homologation({});
     homologation.statutSaisie = () => InformationsHomologation.COMPLETES;
 
-    const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel, homologation);
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, homologation);
     expect(action.statut()).to.equal(InformationsHomologation.COMPLETES);
   });
 
   it("retourne le statut « À saisir » si l'action est indisponible", () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { v2: { uneAction: { indisponible: true } } },
+      actionsSaisie: { uneAction: { indisponible: true } },
     });
 
     const homologation = new Homologation({});
     homologation.statutSaisie = () => InformationsHomologation.COMPLETES;
 
-    const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel, homologation);
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, homologation);
     expect(action.statut()).to.equal(InformationsHomologation.A_SAISIR);
   });
 
-  describe('sur demande de description en objet JSON', () => {
-    it('sait se décrire en v1', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        actionsSaisie: { v1: { uneAction: { position: 0, description: 'Une description' } } },
-      });
-
-      const homologation = new Homologation({});
-      homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
-
-      const action = new ActionSaisie({ id: 'uneAction', version: 'v1' }, referentiel, homologation);
-      expect(action.toJSON()).to.eql({
-        id: 'uneAction',
-        description: 'Une description',
-        statut: InformationsHomologation.A_SAISIR,
-      });
+  it('sait se décrire comme un objet JSON', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      actionsSaisie: {
+        uneAction: { position: 0, indisponible: true, description: 'Une description', sousTitre: 'Un sous-titre' },
+      },
     });
 
-    it('sait se décrire en v2', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        actionsSaisie: {
-          v2: { uneAction: { position: 0, indisponible: true, description: 'Une description', sousTitre: 'Un sous-titre' } },
-        },
-      });
+    const homologation = new Homologation({});
+    homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
 
-      const homologation = new Homologation({});
-      homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
-
-      const action = new ActionSaisie({ id: 'uneAction', version: 'v2' }, referentiel, homologation);
-      expect(action.toJSON()).to.eql({
-        id: 'uneAction',
-        indisponible: true,
-        description: 'Une description',
-        sousTitre: 'Un sous-titre',
-        statut: InformationsHomologation.A_SAISIR,
-      });
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, homologation);
+    expect(action.toJSON()).to.eql({
+      id: 'uneAction',
+      indisponible: true,
+      description: 'Une description',
+      sousTitre: 'Un sous-titre',
+      statut: InformationsHomologation.A_SAISIR,
     });
   });
 
@@ -144,39 +114,11 @@ describe('Une action de saisie', () => {
 
   it("vérifie la validité de l'identifiant", (done) => {
     try {
-      new ActionSaisie({ id: 'actionInvalide', version: 'v1' });
+      new ActionSaisie({ id: 'actionInvalide' });
       done("La création de l'action de saisie aurait dû lever une erreur");
     } catch (e) {
       expect(e).to.be.a(ErreurIdentifiantActionSaisieInvalide);
       expect(e.message).to.equal("L'action de saisie \"actionInvalide\" est invalide");
-      done();
-    }
-  });
-
-  it("exige que l'identifiant soit connu dans la version demandée", (done) => {
-    try {
-      const referentiel = Referentiel.creeReferentiel({
-        actionsSaisie: {
-          v1: { uneActionV1: {} },
-          v2: { uneActionV2: {} },
-        },
-      });
-      new ActionSaisie({ id: 'uneActionV2', version: 'v1' }, referentiel);
-      done("La création de l'action de saisie aurait dû lever une erreur");
-    } catch (e) {
-      expect(e).to.be.a(ErreurIdentifiantActionSaisieInvalide);
-      expect(e.message).to.equal("L'action de saisie \"uneActionV2\" est invalide");
-      done();
-    }
-  });
-
-  it('exige la présence de la version', (done) => {
-    try {
-      new ActionSaisie({ id: 'uneAction' });
-      done("La création de l'action de saisie aurait dû lever une erreur");
-    } catch (e) {
-      expect(e).to.be.a(ErreurVersionActionSaisieManquante);
-      expect(e.message).to.equal("La version d'action de saisie doit être renseignée");
       done();
     }
   });
