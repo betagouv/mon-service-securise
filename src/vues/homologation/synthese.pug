@@ -55,9 +55,8 @@ block zone-principale
       a.ancienne-version.vers-complements(href = `/homologation/${service.id}/decision`) Télécharger les annexes (+ synthèse 1ère version)
 
 block cartes-informations
-  if process.env.AVEC_INDICE_CYBER
-    - const indiceCyber = service.indiceCyber()
-    +indiceCyber({ referentiel, indiceCyber })
+  - const indiceCyber = service.indiceCyber()
+  +indiceCyber({ referentiel, indiceCyber })
 
   +carteInformations({ titre: 'Pour les services référencés avant le 12/10/2022' })
     .liens
