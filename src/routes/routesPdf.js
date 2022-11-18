@@ -4,7 +4,7 @@ const routesPdf = (adaptateurPdf) => {
   const routes = express.Router();
 
   routes.get('/:id/annexeMesures.pdf', (_requete, reponse, suite) => {
-    adaptateurPdf.genereAnnexeMesures()
+    adaptateurPdf.genereAnnexeMesures({ categorie: 'GOUVERNANCE' })
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);
