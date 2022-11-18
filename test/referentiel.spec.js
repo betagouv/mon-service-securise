@@ -358,22 +358,14 @@ describe('Le référentiel', () => {
     });
   });
 
-  it("retourne des actions de saisie vides si la version demandée n'existe pas", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { v1: { uneAction: { position: 0 } } },
-    });
-
-    expect(referentiel.actionsSaisie('vAutre')).to.eql({});
-  });
-
   it("connaît l'action de saisie suivante d'une action de saisie donnée", () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: {
-        v1: { uneAction: { position: 0 }, actionSuivante: { position: 1 } },
+        uneAction: { position: 0 }, actionSuivante: { position: 1 },
       },
     });
 
-    expect(referentiel.actionSuivante('v1', 'uneAction')).to.equal('actionSuivante');
+    expect(referentiel.actionSuivante('uneAction')).to.equal('actionSuivante');
   });
 
   it("retourne `undefined` s'il n'y a pas d'action de saisie suivante", () => {

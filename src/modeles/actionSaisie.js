@@ -5,7 +5,6 @@ const Homologation = require('./homologation');
 const {
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,
-  ErreurVersionActionSaisieManquante,
 } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
@@ -15,7 +14,7 @@ class ActionSaisie extends Base {
     referentiel = Referentiel.creeReferentielVide(),
     homologation = new Homologation({})
   ) {
-    super({ proprietesAtomiquesRequises: ['id', 'version'] });
+    super({ proprietesAtomiquesRequises: ['id'] });
     ActionSaisie.valide(donnees, referentiel);
     this.renseigneProprietes(donnees);
 
@@ -24,15 +23,15 @@ class ActionSaisie extends Base {
   }
 
   description() {
-    return this.referentiel.descriptionActionSaisie(this.version, this.id);
+    return this.referentiel.descriptionActionSaisie(this.id);
   }
 
   indisponible() {
-    return this.referentiel.actionSaisieIndisponible(this.version, this.id);
+    return this.referentiel.actionSaisieIndisponible(this.id);
   }
 
   sousTitre() {
-    return this.referentiel.sousTitreActionSaisie(this.version, this.id);
+    return this.referentiel.sousTitreActionSaisie(this.id);
   }
 
   statut() {
@@ -42,39 +41,28 @@ class ActionSaisie extends Base {
   }
 
   suivante() {
-    return this.referentiel.actionSuivante(this.version, this.id);
+    return this.referentiel.actionSuivante(this.id);
   }
 
   toJSON() {
-    const resultat = {
+    return {
       id: this.id,
       description: this.description(),
       statut: this.statut(),
+      sousTitre: this.sousTitre(),
+      indisponible: this.indisponible(),
     };
-
-    if (this.version === 'v2') {
-      resultat.sousTitre = this.sousTitre();
-      resultat.indisponible = this.indisponible();
-    }
-
-    return resultat;
   }
 
   static valide(donnees, referentiel) {
-    const { id, version } = donnees;
+    const { id } = donnees;
     if (!id) {
       throw new ErreurIdentifiantActionSaisieManquant(
         "L'identifiant d'action de saisie doit être renseigné"
       );
     }
 
-    if (!version) {
-      throw new ErreurVersionActionSaisieManquante(
-        "La version d'action de saisie doit être renseignée"
-      );
-    }
-
-    const identifiants = referentiel.identifiantsActionsSaisie(version);
+    const identifiants = referentiel.identifiantsActionsSaisie();
     if (!identifiants.includes(id)) {
       throw new ErreurIdentifiantActionSaisieInvalide(
         `L'action de saisie "${id}" est invalide`

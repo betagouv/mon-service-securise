@@ -15,7 +15,7 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
   routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
 
-    const actionsSaisie = new ActionsSaisie('v2', referentiel, homologation)
+    const actionsSaisie = new ActionsSaisie(referentiel, homologation)
       .toJSON()
       .map(({ id, ...autresDonnees }) => (
         { url: `/homologation/${homologation.id}/${id}`, id, ...autresDonnees }
