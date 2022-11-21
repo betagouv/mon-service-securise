@@ -5,11 +5,11 @@ const routesPdf = (middleware, referentiel, adaptateurPdf) => {
 
   routes.get('/:id/annexeMesures.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
-    const mesuresParStatut = homologation.mesuresParStatut();
-    const statuts = { enCours: 'En cours', nonFait: 'Non fait', fait: 'Fait' };
     const donnees = {
-      statuts,
-      mesuresParStatut,
+      statuts: referentiel.statutsMesures(),
+      categories: referentiel.categoriesMesures(),
+      nomService: homologation.nomService(),
+      mesuresParStatut: homologation.mesuresParStatut(),
       CHEMIN_BASE_ABSOLU: process.env.CHEMIN_BASE_ABSOLU,
     };
     adaptateurPdf.genereAnnexeMesures(donnees)

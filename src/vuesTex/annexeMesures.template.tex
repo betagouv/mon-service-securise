@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 
 \usepackage{array}
+\usepackage{enumitem}
 \usepackage[a4paper, margin=10mm, includehead, includefoot, headheight=15mm]{geometry}
 
 \usepackage[scaled]{helvet}
@@ -11,13 +12,17 @@
 \usepackage[inkscape=off,inkscapepath=svgpath]{svg}
 \svgpath{__=donnees.CHEMIN_BASE_ABSOLU__/public/assets/images/tex/}
 
-\usepackage{xcolor,multicol}
+\usepackage{xcolor,multicol,setspace}
+\definecolor{blanc}{rgb}{1, 1, 1}
 \definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
 \definecolor{gris}{rgb}{0.37, 0.37, 0.37}
 \definecolor{gris_clair}{rgb}{0.96, 0.96, 0.96}
 \definecolor{lisere}{rgb}{0.71, 0.76, 0.82}
 
-\setlength\parindent{0cm}
+\doublespacing
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -33,25 +38,26 @@
 
 \begin{document}
   __~ Object.keys(donnees.mesuresParStatut) :statut __
-    \pagebreak[3]\textbf{__= donnees.statuts[statut] __}
+    \pagebreak[4]\begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt]
+      \vspace{-16.5pt}\hspace{-3pt}\raisebox{10pt}{\colorbox{blanc}{\textbf{__= donnees.statuts[statut]__}}}
     __~ Object.keys(donnees.mesuresParStatut[statut]) :categorie __
-    \nopagebreak[1]\textcolor{bleu}{__= categorie __}
-      __? donnees.mesuresParStatut[statut][categorie] &&
-      donnees.mesuresParStatut[statut][categorie].length __
-        \nopagebreak[4]\begin{itemize}
+      \nopagebreak[1]\MakeUppercase{__= donnees.categories[categorie] __}
+      __? donnees.mesuresParStatut[statut][categorie]
+          && donnees.mesuresParStatut[statut][categorie].length __
+        \nopagebreak[4]\begin{itemize}[leftmargin=1.5em]
           __~ donnees.mesuresParStatut[statut][categorie] :mesure __%
-          \nopagebreak[3]
-          __? mesure.indispensable__\item[{\includeinkscape[height=9pt]{star}}] __?__%
-          __? !mesure.indispensable__\item[{\hspace*{\fill}\includeinkscape[height=3pt]{point-median}}\hspace*{\fill}] __?__%
+            __? mesure.indispensable__
+              \item[{\includeinkscape[height=9pt]{star}}]
+            __??__
+              \item[{\hspace*{\fill}\includeinkscape[height=3pt]{point-median}}\hspace*{\fill}]
+            __?__
             __= mesure.description__
-            __? mesure.modalites __
-              \textcolor{gris}{__= mesure.modalites__}
-            __?__%
+            __? mesure.modalites __\item[]\textcolor{gris}{__= mesure.modalites__}__?__%
           __~__%
         \end{itemize}
       __?__
+      \vskip 5mm
     __~__
-    \vskip 1cm
+    \end{tcolorbox}
   __~__
-  \vskip 1cm
 \end{document}
