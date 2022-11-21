@@ -58,7 +58,9 @@ const testeurMss = () => {
       });
   };
 
-  const arrete = () => (serveur.arreteEcoute());
+  const arrete = (suite = () => {}) => (serveur.arreteEcoute(suite));
+
+  const reinitialise = (done) => arrete(() => initialise(done));
 
   return {
     adaptateurEquations: () => adaptateurEquations,
@@ -70,6 +72,7 @@ const testeurMss = () => {
     referentiel: () => referentiel,
     arrete,
     initialise,
+    reinitialise,
     verifieRequeteGenereErreurHTTP,
     verifieJetonDepose,
   };

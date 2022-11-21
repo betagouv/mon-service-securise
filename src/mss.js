@@ -143,8 +143,8 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
     serveur = app.listen(port, succes);
   };
 
-  const arreteEcoute = () => {
-    serveur.close();
+  const arreteEcoute = (suite) => {
+    serveur.close(suite);
   };
 
   return { ecoute, arreteEcoute };
