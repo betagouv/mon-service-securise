@@ -7,6 +7,12 @@ describe('La mise en forme de données', () => {
     it('décode les caractères html', () => {
       expect(miseEnFormeLatex('l&#39;orage est proche')).to.equal("l'orage est proche");
     });
+
+    it('échappe les caractères spéciaux latex', () => {
+      expect(miseEnFormeLatex('\\ & % $ # _ { } ~ ^')).to.equal(
+        '\\textbackslash \\& \\% \\textdollar \\# \\_ \\{ \\} \\textasciitilde \\textasciicircum'
+      );
+    });
   });
 
   describe("sur une demande de mise en forme d'un objet", () => {
@@ -40,6 +46,13 @@ describe('La mise en forme de données', () => {
       expect(miseEnForme(operation)({ clef: 12 })).to.eql({ clef: 12 });
       expect(miseEnForme(operation)(undefined)).to.equal(undefined);
       expect(miseEnForme(operation)(null)).to.equal(null);
+    });
+
+    it('permet de faire plusieurs opérations', () => {
+      const operation1 = (texte) => texte.replaceAll('#', '');
+      const operation2 = (texte) => texte.replaceAll('__', '--');
+
+      expect(miseEnForme(operation1, operation2)({ clef: ['##croisillons', '__TEXTE__'] })).to.eql({ clef: ['croisillons', '--TEXTE--'] });
     });
   });
 });
