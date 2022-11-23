@@ -37,6 +37,7 @@
     "express": "^4.17.3",
     "express-basic-auth": "^1.2.1",
     "express-validator": "^6.14.0",
+    "html-entities": "^2.3.3",
     "jsonwebtoken": "^8.5.1",
     "knex": "^1.0.4",
     "mathjax-node": "^2.1.1",
