@@ -1,11 +1,33 @@
 const { decode } = require('html-entities');
 
+// Cette liste provient d'ici https://tex.stackexchange.com/a/34586
+const caracteresSpeciauxLatex = [
+  { special: '\\', latex: '\\textbackslash' },
+  { special: '&', latex: '\\&' },
+  { special: '%', latex: '\\%' },
+  { special: '$', latex: '\\textdollar' },
+  { special: '#', latex: '\\#' },
+  { special: '_', latex: '\\_' },
+  { special: '{', latex: '\\{' },
+  { special: '}', latex: '\\}' },
+  { special: '~', latex: '\\textasciitilde' },
+  { special: '^', latex: '\\textasciicircum' },
+];
+
+const echappeCaracteresSpeciauxLatex = (texte) => caracteresSpeciauxLatex.reduce(
+  (accumulateur, caractere) => accumulateur.replaceAll(caractere.special, caractere.latex), texte
+);
+
 const decodeCaracteresHtml = (texte) => decode(texte);
 
-const miseEnForme = (operation) => {
+const miseEnForme = (...operations) => {
+  const opere = (texte) => operations.reduce(
+    (accumulateur, operation) => operation(accumulateur), texte
+  );
+
   const metEnForme = (objet) => {
     if (typeof objet === 'string') {
-      return operation(objet);
+      return opere(objet);
     }
 
     if (Array.isArray(objet)) {
@@ -24,7 +46,7 @@ const miseEnForme = (operation) => {
   return metEnForme;
 };
 
-const miseEnFormeLatex = miseEnForme(decodeCaracteresHtml);
+const miseEnFormeLatex = miseEnForme(decodeCaracteresHtml, echappeCaracteresSpeciauxLatex);
 
 module.exports = {
   miseEnForme,
