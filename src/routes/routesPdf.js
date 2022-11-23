@@ -8,6 +8,7 @@ const routesPdf = (adaptateurPdf) => {
       categorie: 'GOUVERNANCE',
       mesure: {
         description: 'Héberger le service numérique et les données au sein de l&#39;Union européenne',
+        modalites: 'Les données sont en France & Espagne % $ # _ { } ~ ^ \\',
       },
     };
     adaptateurPdf.genereAnnexeMesures(echantillonDonnees)
