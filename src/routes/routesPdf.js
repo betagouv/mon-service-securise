@@ -1,17 +1,14 @@
 const express = require('express');
 
-const routesPdf = (adaptateurPdf) => {
+const routesPdf = (middleware, adaptateurPdf) => {
   const routes = express.Router();
 
-  routes.get('/:id/annexeMesures.pdf', (_requete, reponse, suite) => {
-    const echantillonDonnees = {
-      categorie: 'GOUVERNANCE',
-      mesure: {
-        description: 'Héberger le service numérique et les données au sein de l&#39;Union européenne',
-        modalites: 'Les données sont en France & Espagne % $ # _ { } ~ ^ \\',
-      },
-    };
-    adaptateurPdf.genereAnnexeMesures(echantillonDonnees)
+  routes.get('/:id/annexeMesures.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
+    const { homologation } = requete;
+    const mesuresParStatut = homologation.mesuresParStatut();
+    const statuts = { enCours: 'En cours', nonFait: 'Non fait', fait: 'Fait' };
+    const donnees = { statuts, mesuresParStatut };
+    adaptateurPdf.genereAnnexeMesures(donnees)
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);

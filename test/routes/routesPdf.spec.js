@@ -15,6 +15,13 @@ describe('Le serveur MSS des routes /pdf/*', () => {
       testeur.adaptateurPdf().genereAnnexeMesures = () => Promise.resolve('Pdf annexe mesures');
     });
 
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheHomologation(
+        'http://localhost:1234/pdf/456/annexeMesures.pdf',
+        done,
+      );
+    });
+
     it('sert un fichier de type pdf', (done) => {
       axios.get('http://localhost:1234/pdf/456/annexeMesures.pdf')
         .then((pdf) => {
