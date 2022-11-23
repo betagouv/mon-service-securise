@@ -129,7 +129,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
 
   app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
 
-  app.use('/pdf', routesPdf(adaptateurPdf));
+  app.use('/pdf', routesPdf(middleware, adaptateurPdf));
 
   app.use('/service', routesService(middleware));
 
