@@ -10,7 +10,7 @@
 \renewcommand*\familydefault{\sfdefault}
 
 \usepackage[inkscape=off,inkscapepath=svgpath]{svg}
-\svgpath{__=donnees.CHEMIN_BASE_ABSOLU__/public/assets/images/tex/}
+\svgpath{__=donnees.CHEMIN_BASE_ABSOLU__/src/vuesTex/images/}
 
 \usepackage{xcolor,multicol,setspace}
 \definecolor{blanc}{rgb}{1, 1, 1}
@@ -29,7 +29,7 @@
 \fancyhf{}
 \fancyhead[L]{
     \large\textbf{MESURES DE SÉCURITÉ DÉTAILLÉES}
-    \\\small\textcolor{gris}{Toutes les mesures indispensables \includeinkscape[height=9pt]{star}, recommandées et créées sont classées selon leur statut de mise en œuvre et par catégorie.}
+    \\\small\textcolor{gris}{Toutes les mesures indispensables \includeinkscape[height=9pt]{etoile}, recommandées et créées sont classées selon leur statut de mise en œuvre et par catégorie.}
 }
 \fancyfoot[L]{\small{\textcolor{bleu}{\textbf{MonServiceSécurisé -}} __= donnees.nomService __}}
 \fancyfoot[R]{\thepage}
@@ -47,7 +47,7 @@
         \nopagebreak[4]\begin{itemize}[leftmargin=1.5em]
           __~ donnees.mesuresParStatut[statut][categorie] :mesure __%
             __? mesure.indispensable__
-              \item[{\includeinkscape[height=9pt]{star}}]
+              \item[{\includeinkscape[height=9pt]{etoile}}]
             __??__
               \item[{\hspace*{\fill}\includeinkscape[height=3pt]{point-median}}\hspace*{\fill}]
             __?__
