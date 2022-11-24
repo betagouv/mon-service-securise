@@ -26,6 +26,7 @@ const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 const copie = require('../../src/utilitaires/copie');
+const { EvenementNouvelleHomologationCreee } = require('../../src/modeles/journalMSS/evenements');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -543,7 +544,7 @@ describe('Le dépôt de données des homologations', () => {
     describe("le journal MSS est utilisé pour consigner l'enregistrement", () => {
       it('avec un événement typé', (done) => {
         adaptateurJournalMSS.consigneEvenement = (evenement) => {
-          expect(evenement.toJSON().type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
+          expect(evenement).to.be.an(EvenementNouvelleHomologationCreee);
           done();
         };
 
