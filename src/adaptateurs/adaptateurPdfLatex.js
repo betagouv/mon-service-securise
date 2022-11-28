@@ -16,4 +16,6 @@ const generationPdfLatex = (cheminFichierTex, donnees = {}) => fsPromises
 
 const genereAnnexeMesures = (donnees) => generationPdfLatex('src/vuesTex/annexeMesures.template.tex', donnees);
 
-module.exports = { genereAnnexeMesures };
+const genereAnnexeRisques = (donnees) => generationPdfLatex('src/vuesTex/annexeRisques.template.tex', donnees);
+
+module.exports = { genereAnnexeMesures, genereAnnexeRisques };

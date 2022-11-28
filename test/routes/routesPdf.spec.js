@@ -46,4 +46,34 @@ describe('Le serveur MSS des routes /pdf/*', () => {
         .catch(done);
     });
   });
+
+  describe('quand requête GET sur `/pdf/:id/annexeRisques.pdf`', () => {
+    beforeEach(() => {
+      testeur.adaptateurPdf().genereAnnexeRisques = () => Promise.resolve('Pdf annexe risques');
+    });
+
+    it('sert un fichier de type pdf', (done) => {
+      axios.get('http://localhost:1234/pdf/456/annexeRisques.pdf')
+        .then((pdf) => {
+          expect(pdf.headers['content-type']).to.contain('application/pdf');
+          done();
+        })
+        .catch(done);
+    });
+
+    it('utilise un adaptateur de pdf pour la génération', (done) => {
+      let adaptateurPdfAppele = false;
+      testeur.adaptateurPdf().genereAnnexeRisques = () => {
+        adaptateurPdfAppele = true;
+        return Promise.resolve('Pdf annexes risques');
+      };
+
+      axios.get('http://localhost:1234/pdf/456/annexeRisques.pdf')
+        .then(() => {
+          expect(adaptateurPdfAppele).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+  });
 });
