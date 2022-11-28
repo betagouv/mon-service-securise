@@ -121,8 +121,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
     reponse.render('espacePersonnel');
   });
 
-  app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
-
   app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel));
 
   app.use('/bibliotheques', routesBibliotheques());
