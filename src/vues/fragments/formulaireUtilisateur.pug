@@ -28,7 +28,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           input(
             id = 'prenom',
             name = 'prenom',
-            value = donnees.prenom,
+            value != donnees.prenom,
             placeholder = 'ex : Jean',
             required,
             pattern = patternNomPrenom,
@@ -42,7 +42,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           input(
             id = 'nom',
             name = 'nom',
-            value = donnees.nom,
+            value != donnees.nom,
             placeholder = 'ex : Dupont',
             required,
             pattern = patternNomPrenom,
@@ -100,7 +100,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
         input(
           id = 'poste',
           name = 'poste',
-          value = donnees.poste,
+          value != donnees.poste,
           placeholder = "ex : Cheffe/Chef de projet maîtrise d'ouvrage"
         )
 
@@ -111,7 +111,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             id = 'nomEntitePublique',
             name = 'nomEntitePublique',
             type = 'text',
-            value = donnees.nomEntitePublique,
+            value != donnees.nomEntitePublique,
             placeholder = "ex : Agglomération de Mansart",
             required,
             title = ''
