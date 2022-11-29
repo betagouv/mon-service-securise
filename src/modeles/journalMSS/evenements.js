@@ -12,10 +12,10 @@ class Evenements {
   }
 }
 
-class EvenementNouvelleHomologationCreee extends Evenements {
+class EvenementNouveauServiceCree extends Evenements {
   constructor(date = Date.now()) {
-    super('NOUVELLE_HOMOLOGATION_CREEE', date);
+    super('NOUVEAU_SERVICE_CREE', date);
   }
 }
 
-module.exports = { EvenementNouvelleHomologationCreee };
+module.exports = { EvenementNouveauServiceCree };
