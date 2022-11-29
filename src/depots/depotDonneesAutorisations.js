@@ -55,7 +55,7 @@ const creeDepot = (config = {}) => {
       .then(() => verifieHomologationExiste(idHomologation))
       .then(() => verifieAutorisationInexistante(idContributeur, idHomologation))
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
-        idUtilisateur: idContributeur, idHomologation, type: 'contributeur',
+        idUtilisateur: idContributeur, idHomologation, idService: idHomologation, type: 'contributeur',
       }));
   };
 

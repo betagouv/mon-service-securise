@@ -221,6 +221,7 @@ describe('Le dépôt de données des autorisations', () => {
         .then((a) => {
           expect(a).to.be.a(AutorisationContributeur);
           expect(a.idHomologation).to.equal('123');
+          expect(a.idService).to.equal('123');
           expect(a.idUtilisateur).to.equal('000');
           done();
         })
