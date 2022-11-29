@@ -183,6 +183,7 @@ module.exports = {
       description: 'Non concerné',
       descriptionLongue: '',
       important: false,
+      nonConcerne: true,
     },
     minime: {
       position: 1,
