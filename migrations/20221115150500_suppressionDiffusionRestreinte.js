@@ -2,7 +2,7 @@
 // 'donneesCaracterePersonnel' de la description des services.
 // Car 'Diffusion restreinte' est supprimée du référentiel.
 
-exports.up = (knex) => knex('homologations')
+const supprimeDiffusionRestreinteDansTable = (knex, table) => knex(table)
   .then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees }) => donnees.descriptionService?.donneesCaracterePersonnel)
@@ -12,10 +12,15 @@ exports.up = (knex) => knex('homologations')
           .donneesCaracterePersonnel
           .filter((d) => d !== 'diffusionRestreinte');
 
-        return knex('homologations').where({ id }).update({ donnees });
+        return knex(table).where({ id }).update({ donnees });
       });
 
     return Promise.all(misesAJour);
   });
+
+exports.up = (knex) => Promise.all(
+  ['homologations', 'services']
+    .map((table) => supprimeDiffusionRestreinteDansTable(knex, table))
+);
 
 exports.down = () => Promise.resolve();

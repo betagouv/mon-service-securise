@@ -32,7 +32,7 @@ const developpeProvenance = (provenance) => {
   return PROVENANCES.includes(provenance) ? [provenance] : [];
 };
 
-const changementDescriptionService = (changeProvenance) => (knex) => knex('homologations')
+const changementDescriptionServicePourTable = (knex, table, changeProvenance) => knex(table)
   .then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees }) => donnees?.descriptionService)
@@ -40,12 +40,17 @@ const changementDescriptionService = (changeProvenance) => (knex) => knex('homol
         descriptionService.provenanceService = changeProvenance(
           descriptionService.provenanceService
         );
-        return knex('homologations')
+        return knex(table)
           .where({ id })
           .update({ donnees: { descriptionService, ...autresDonnees } });
       });
     return Promise.all(misesAJour);
   });
+
+const changementDescriptionService = (changeProvenance) => (knex) => Promise.all(
+  ['homologations', 'services']
+    .map((table) => changementDescriptionServicePourTable(knex, table, changeProvenance))
+);
 
 exports.up = changementDescriptionService(reduitProvenance);
 
