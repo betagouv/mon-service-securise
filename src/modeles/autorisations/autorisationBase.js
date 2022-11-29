@@ -2,7 +2,7 @@ const Base = require('../base');
 
 class AutorisationBase extends Base {
   constructor(donnees = {}) {
-    super({ proprietesAtomiquesRequises: ['id', 'idUtilisateur', 'idHomologation'] });
+    super({ proprietesAtomiquesRequises: ['id', 'idUtilisateur', 'idHomologation', 'idService'] });
     this.renseigneProprietes(donnees);
 
     this.permissionAjoutContributeur = false;

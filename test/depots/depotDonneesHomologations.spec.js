@@ -537,6 +537,7 @@ describe('Le dépôt de données des homologations', () => {
           const autorisation = as[0];
           expect(autorisation).to.be.an(AutorisationCreateur);
           expect(autorisation.idHomologation).to.equal('unUUID');
+          expect(autorisation.idService).to.equal('unUUID');
           expect(autorisation.idUtilisateur).to.equal('123');
           done();
         })
