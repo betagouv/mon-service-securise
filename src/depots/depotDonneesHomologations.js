@@ -3,7 +3,7 @@ const {
   ErreurNomServiceManquant,
 } = require('../erreurs');
 const Homologation = require('../modeles/homologation');
-const { EvenementNouvelleHomologationCreee } = require('../modeles/journalMSS/evenements');
+const { EvenementNouveauServiceCree } = require('../modeles/journalMSS/evenements');
 
 const creeDepot = (config = {}) => {
   const { adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel } = config;
@@ -138,7 +138,7 @@ const creeDepot = (config = {}) => {
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
         idUtilisateur, idHomologation, type: 'createur',
       }))
-      .then(() => adaptateurJournalMSS.consigneEvenement(new EvenementNouvelleHomologationCreee()))
+      .then(() => adaptateurJournalMSS.consigneEvenement(new EvenementNouveauServiceCree()))
       .then(() => idHomologation);
   };
 
