@@ -1,6 +1,6 @@
 const express = require('express');
 
-const routesPdf = (middleware, adaptateurPdf) => {
+const routesPdf = (middleware, referentiel, adaptateurPdf) => {
   const routes = express.Router();
 
   routes.get('/:id/annexeMesures.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
@@ -17,7 +17,8 @@ const routesPdf = (middleware, adaptateurPdf) => {
   });
 
   routes.get('/:id/annexeRisques.pdf', (_requete, reponse, suite) => {
-    adaptateurPdf.genereAnnexeRisques()
+    const niveauxGravite = referentiel.infosNiveauxGraviteConcernes(true);
+    adaptateurPdf.genereAnnexeRisques({ niveauxGravite })
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);
