@@ -1,20 +1,33 @@
+const AdaptateurChiffrement = require('../../adaptateurs/adaptateurChiffrement');
+
 class Evenements {
-  constructor(type, date) {
+  constructor(type, donnees, date) {
     this.type = type;
+    this.donnees = donnees;
     this.date = date;
   }
 
   toJSON() {
     return {
       type: this.type,
+      donnees: this.donnees,
       date: this.date,
     };
   }
 }
 
 class EvenementNouveauServiceCree extends Evenements {
-  constructor(date = Date.now()) {
-    super('NOUVEAU_SERVICE_CREE', date);
+  constructor(donnees, options = {}) {
+    const {
+      date = Date.now(),
+      adaptateurChiffrement = AdaptateurChiffrement,
+    } = options;
+
+    super(
+      'NOUVEAU_SERVICE_CREE',
+      { idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur) },
+      date
+    );
   }
 }
 

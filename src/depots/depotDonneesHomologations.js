@@ -138,7 +138,9 @@ const creeDepot = (config = {}) => {
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
         idUtilisateur, idHomologation, type: 'createur',
       }))
-      .then(() => adaptateurJournalMSS.consigneEvenement(new EvenementNouveauServiceCree()))
+      .then(() => adaptateurJournalMSS.consigneEvenement(
+        new EvenementNouveauServiceCree({ idUtilisateur })
+      ))
       .then(() => idHomologation);
   };
 
