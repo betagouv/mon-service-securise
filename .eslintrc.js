@@ -35,6 +35,7 @@ module.exports = {
     'no-unused-vars': ['error', {
       args: 'all',
       argsIgnorePattern: '^_',
+      ignoreRestSiblings: true,
     }],
     'object-curly-newline': ['error', {
       ObjectExpression: { consistent: true },
