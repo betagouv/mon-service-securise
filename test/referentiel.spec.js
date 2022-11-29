@@ -358,6 +358,20 @@ describe('Le référentiel', () => {
     });
   });
 
+  it('sait retourner les infos sur les niveaux de gravité concernés en ordre inverse', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      niveauxGravite: {
+        niveauUn: { position: 0, nonConcerne: true },
+        niveauDeux: { position: 1 },
+        niveauTrois: { position: 2 },
+      },
+    });
+
+    expect(referentiel.infosNiveauxGraviteConcernes(true)).to.eql(
+      [{ position: 2 }, { position: 1 }]
+    );
+  });
+
   it("connaît l'action de saisie suivante d'une action de saisie donnée", () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: {

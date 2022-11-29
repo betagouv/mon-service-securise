@@ -68,6 +68,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return ordreInverse ? niveaux.reverse() : niveaux;
   };
 
+  const infosNiveauxGraviteConcernes = (ordreInverse) => infosNiveauxGravite(ordreInverse)
+    .filter((niveaux) => !niveaux.nonConcerne);
+
   const descriptionExpiration = (identifiant) => {
     if (!identifiant) return 'Information non renseignée';
 
@@ -171,6 +174,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     identifiantsNiveauxGravite,
     identifiantsRisques,
     infosNiveauxGravite,
+    infosNiveauxGraviteConcernes,
     localisationDonnees,
     localisationsDonnees,
     mesure,
