@@ -2,13 +2,39 @@
 \usepackage[french]{babel}
 \usepackage[T1]{fontenc}
 
+\usepackage{array}
 \usepackage[a4paper, margin=10mm]{geometry}
 
 \usepackage[scaled]{helvet}
 \renewcommand*\familydefault{\sfdefault}
 
+\usepackage{nopageno}
+
+\usepackage{tcolorbox}
+
+\usepackage{xcolor}
+\definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
+\definecolor{gris}{rgb}{0.37, 0.37, 0.37}
+\definecolor{lisere}{rgb}{0.71, 0.76, 0.82}
+
 \setlength\parindent{0cm}
 
 \begin{document}
-  \textbf{RISQUES DE SÉCURITÉ DÉTAILLÉES}
+  \textbf{RISQUES DE SÉCURITÉ}
+
+  \textcolor{gris}{Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.}
+
+  \vskip 0.5cm
+
+  __~ donnees.niveauxGravite :niveaux __
+    \textbf{__= niveaux.description __}
+
+    \begin{tcolorbox}[colback=white, colframe=lisere, boxrule=1px]
+        \textcolor{gris}{__= niveaux.descriptionLongue __}
+    \end{tcolorbox}
+  __~__
+
+  \vskip 1cm
+
+  \textcolor{bleu}{\textbf{MonServiceSécurisé}}, service proposé par l'ANSSI.
 \end{document}
