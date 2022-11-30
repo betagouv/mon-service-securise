@@ -31,10 +31,6 @@ class MesureGenerale extends Mesure {
     return !this.estIndispensable();
   }
 
-  nonRetenue() {
-    return this.statut === Mesure.STATUT_NON_RETENU;
-  }
-
   statutRenseigne() {
     return Mesure.statutRenseigne(this.statut);
   }

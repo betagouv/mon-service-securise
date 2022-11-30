@@ -335,10 +335,6 @@ section.detail-mesures .statut.nonFait, .legende .nonFait:before {
   background: var(--bleu-anssi);
 }
 
-section.detail-mesures .statut.nonRetenu, .legende .nonRetenu:before {
-  background: #fff;
-}
-
 @page print {
   * {
       -webkit-print-color-adjust: exact !important;
