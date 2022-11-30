@@ -30,23 +30,6 @@ class MesuresGenerales extends ElementsConstructibles {
       .reduce(rangeMesureParStatut, { fait: {}, enCours: {}, nonFait: {} });
   }
 
-  proportion(nbMisesEnOeuvre, idsMesures) {
-    const identifiantsMesuresNonRetenues = () => this.items
-      .filter((m) => m.nonRetenue())
-      .map((m) => m.id);
-
-    const nbTotalMesuresRetenuesParmi = (identifiantsMesures) => {
-      const nonRetenues = identifiantsMesuresNonRetenues();
-
-      return identifiantsMesures
-        .filter((id) => !nonRetenues.includes(id))
-        .length;
-    };
-
-    const nbTotal = nbTotalMesuresRetenuesParmi(idsMesures);
-    return nbTotal ? nbMisesEnOeuvre / nbTotal : 1;
-  }
-
   statistiques(mesuresPersonnalisees) {
     const stats = StatistiquesMesures.donneesAZero(
       MesureGenerale.statutsPossibles(),
