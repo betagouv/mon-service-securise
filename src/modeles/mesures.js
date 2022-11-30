@@ -45,10 +45,6 @@ class Mesures extends InformationsHomologation {
     return this.mesuresSpecifiques.parStatut(mesuresGeneralesParStatut);
   }
 
-  proportion(...params) {
-    return this.mesuresGenerales.proportion(...params);
-  }
-
   statistiques() {
     return this.mesuresGenerales.statistiques(this.mesuresPersonnalisees);
   }
