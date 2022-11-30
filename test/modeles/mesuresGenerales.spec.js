@@ -86,28 +86,6 @@ describe('La liste des mesures générales', () => {
       expect(stats.une.misesEnOeuvre).to.equal(1);
     });
 
-    it('ne tient pas compte des mesures non retenues', () => {
-      const mesuresGenerales = creeMesuresGenerales([
-        { id: 'id1', statut: 'enCours' },
-        { id: 'id2', statut: 'nonRetenu' },
-      ]);
-
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
-      expect(stats.une.retenues).to.equal(1);
-      expect(stats.une.misesEnOeuvre).to.equal(0);
-    });
-
-    it('classe les statistiques par catégorie de mesure', () => {
-      const mesuresGenerales = creeMesuresGenerales([
-        { id: 'id1', statut: 'nonRetenu' },
-        { id: 'id3', statut: 'fait' },
-      ]);
-
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
-      expect(stats.deux.retenues).to.equal(1);
-      expect(stats.deux.misesEnOeuvre).to.equal(1);
-    });
-
     it('calcule le nombre total de mesures indispensables personnalisées', () => {
       const mesuresGenerales = creeMesuresGenerales([]);
 

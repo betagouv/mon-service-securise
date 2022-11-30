@@ -292,7 +292,6 @@ module.exports = {
     fait: 'Fait',
     enCours: 'En cours',
     nonFait: 'Non fait',
-    nonRetenu: 'Non concerné',
   },
 
   mesures: {

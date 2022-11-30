@@ -10,7 +10,6 @@ const STATUTS = {
   STATUT_FAIT: 'fait',
   STATUT_EN_COURS: 'enCours',
   STATUT_NON_FAIT: 'nonFait',
-  STATUT_NON_RETENU: 'nonRetenu',
 };
 
 class Mesure extends InformationsHomologation {
@@ -26,7 +25,6 @@ class Mesure extends InformationsHomologation {
 
   static statutRenseigne(statut) {
     return Object.keys(STATUTS)
-      .filter((clef) => clef !== 'STATUT_NON_RETENU')
       .map((clef) => STATUTS[clef])
       .includes(statut);
   }

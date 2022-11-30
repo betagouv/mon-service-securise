@@ -224,7 +224,7 @@ describe('Une homologation', () => {
       const homologation = new Homologation({
         mesuresGenerales: [
           { id: 'm1', statut: MesureGenerale.STATUT_FAIT },
-          { id: 'm2', statut: MesureGenerale.STATUT_NON_RETENU },
+          { id: 'm2', statut: MesureGenerale.STATUT_FAIT },
         ],
       }, referentiel, moteur);
 
