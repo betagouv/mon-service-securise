@@ -187,6 +187,16 @@ describe('La liste des mesures générales', () => {
             categorie: 'categorie1',
             indispensable: true,
           },
+          mesure2: {
+            description: 'Mesure deux',
+            categorie: 'categorie1',
+            indispensable: false,
+          },
+          mesure3: {
+            description: 'Mesure trois',
+            categorie: 'categorie1',
+            indispensable: true,
+          },
         },
       });
     });
@@ -220,6 +230,16 @@ describe('La liste des mesures générales', () => {
       const mesures = new MesuresGenerales({ mesuresGenerales }, referentiel, ['mesure1']);
 
       expect(mesures.parStatut().fait.categorie1[0].modalites).to.equal('Modalités de la mesure');
+    });
+
+    it('retourne les mesures indispensables avant les mesures recommandées', () => {
+      const mesures = new MesuresGenerales({ mesuresGenerales: [
+        { id: 'mesure1', statut: 'fait' },
+        { id: 'mesure2', statut: 'fait' },
+        { id: 'mesure3', statut: 'fait' },
+      ] }, referentiel);
+
+      expect(mesures.parStatut().fait.categorie1[2].description).to.equal('Mesure deux');
     });
   });
 });
