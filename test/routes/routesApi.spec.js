@@ -389,60 +389,22 @@ describe('Le serveur MSS des routes /api/*', () => {
       );
     });
 
-    describe("suivant la valeur de la variable d'environnement `AVEC_CORRECTION_ASEPTISATION_MOT_DE_PASSE`", () => {
-      let variableEnvironnement;
-
-      beforeEach(() => {
-        variableEnvironnement = process.env.AVEC_CORRECTION_ASEPTISATION_MOT_DE_PASSE;
-      });
-
-      afterEach(() => {
-        process.env.AVEC_CORRECTION_ASEPTISATION_MOT_DE_PASSE = variableEnvironnement;
-      });
-
-      it('aseptise les paramètres de la requête (y compris le mot de passe) par défaut', (done) => {
-        delete process.env.AVEC_CORRECTION_ASEPTISATION_MOT_DE_PASSE;
-        testeur.reinitialise(() => {
-          testeur.middleware().verifieAseptisationParametres(
-            [
-              'prenom',
-              'nom',
-              'telephone',
-              'cguAcceptees',
-              'poste',
-              'rssi',
-              'delegueProtectionDonnees',
-              'nomEntitePublique',
-              'departementEntitePublique',
-              'motDePasse',
-            ],
-            { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
-            done
-          );
-        });
-      });
-
-      it('aseptise les paramètres de la requête (mais pas le mot de passe) si cette variable est renseignée à `"true"`', (done) => {
-        process.env.AVEC_CORRECTION_ASEPTISATION_MOT_DE_PASSE = 'true';
-
-        testeur.reinitialise(() => {
-          testeur.middleware().verifieAseptisationParametres(
-            [
-              'prenom',
-              'nom',
-              'telephone',
-              'cguAcceptees',
-              'poste',
-              'rssi',
-              'delegueProtectionDonnees',
-              'nomEntitePublique',
-              'departementEntitePublique',
-            ],
-            { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
-            done
-          );
-        });
-      });
+    it('aseptise les paramètres de la requête (mais pas le mot de passe)', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        [
+          'prenom',
+          'nom',
+          'telephone',
+          'cguAcceptees',
+          'poste',
+          'rssi',
+          'delegueProtectionDonnees',
+          'nomEntitePublique',
+          'departementEntitePublique',
+        ],
+        { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
+        done
+      );
     });
 
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", (done) => {
