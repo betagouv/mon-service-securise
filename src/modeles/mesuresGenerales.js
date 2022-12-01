@@ -13,20 +13,21 @@ class MesuresGenerales extends ElementsConstructibles {
   }
 
   parStatut() {
-    let mesuresParStatut = { fait: {}, enCours: {}, nonFait: {} };
-    mesuresParStatut = this.toutes()
+    const rangeMesureParStatut = (acc, mesure) => {
+      const mesureReference = this.referentiel.mesure(mesure.id);
+      acc[mesure.statut][mesureReference.categorie] ||= [];
+      acc[mesure.statut][mesureReference.categorie].push({
+        description: mesure.descriptionMesure(),
+        indispensable: mesure.estIndispensable(),
+        modalites: mesure.modalites,
+      });
+      return acc;
+    };
+
+    return this.toutes()
       .filter((mesure) => mesure.statutRenseigne())
-      .reduce((acc, mesure) => {
-        const mesureReference = this.referentiel.mesure(mesure.id);
-        acc[mesure.statut][mesureReference.categorie] ||= [];
-        acc[mesure.statut][mesureReference.categorie].push({
-          description: mesure.descriptionMesure(),
-          indispensable: mesure.estIndispensable(),
-          modalites: mesure.modalites,
-        });
-        return acc;
-      }, mesuresParStatut);
-    return mesuresParStatut;
+      .sort((m, _) => (m.estIndispensable() ? -1 : 1))
+      .reduce(rangeMesureParStatut, { fait: {}, enCours: {}, nonFait: {} });
   }
 
   proportion(nbMisesEnOeuvre, idsMesures) {
