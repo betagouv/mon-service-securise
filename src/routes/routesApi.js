@@ -146,17 +146,9 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .catch(suite);
   });
 
-  const parametresPutUtilisateurAAseptiser = () => {
-    const resultat = [...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email')];
-    if (!process.env.AVEC_CORRECTION_ASEPTISATION_MOT_DE_PASSE) {
-      resultat.push('motDePasse');
-    }
-
-    return resultat;
-  };
-
-  routes.put('/utilisateur', middleware.verificationJWT,
-    middleware.aseptise(parametresPutUtilisateurAAseptiser()),
+  routes.put('/utilisateur',
+    middleware.verificationJWT,
+    middleware.aseptise([...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email')]),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
