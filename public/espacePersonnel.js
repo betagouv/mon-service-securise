@@ -1,11 +1,17 @@
-import { $services, $modaleNouveauContributeur } from './modules/elementsDom/services.js';
+import { $services, $modaleNouveauContributeur } from './modules/elementsDom/services.mjs';
 import { brancheModale } from './modules/interactions/modale.mjs';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
 
 $(() => {
   const peupleServicesDans = (placeholder, donneesServices, idUtilisateur) => {
     const $conteneurServices = $(placeholder);
-    const $conteneursService = $services(donneesServices, idUtilisateur, 'ajout-contributeur');
+    const nombreMaxContributeursDistincts = 2;
+    const $conteneursService = $services(
+      donneesServices,
+      idUtilisateur,
+      'ajout-contributeur',
+      nombreMaxContributeursDistincts
+    );
 
     $conteneurServices.prepend($conteneursService);
 
