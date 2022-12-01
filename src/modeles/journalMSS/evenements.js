@@ -1,5 +1,7 @@
 const AdaptateurChiffrement = require('../../adaptateurs/adaptateurChiffrement');
 
+const { ErreurIdentifiantUtilisateurManquant } = require('./erreurs');
+
 class Evenements {
   constructor(type, donnees, date) {
     this.type = type;
@@ -22,6 +24,12 @@ class EvenementNouveauServiceCree extends Evenements {
       date = Date.now(),
       adaptateurChiffrement = AdaptateurChiffrement,
     } = options;
+
+    const valide = () => {
+      if (!donnees.idUtilisateur) throw new ErreurIdentifiantUtilisateurManquant();
+    };
+
+    valide();
 
     super(
       'NOUVEAU_SERVICE_CREE',

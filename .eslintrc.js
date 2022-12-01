@@ -54,7 +54,7 @@ module.exports = {
       'import/extensions': ['error', { mjs: 'always' }],
     },
   }, {
-    files: ['src/erreurs.js', 'src/modeles/journalMSS/evenements.js'],
+    files: ['src/erreurs.js', 'src/modeles/journalMSS/evenements.js', 'src/modeles/journalMSS/erreurs.js'],
     rules: { 'max-classes-per-file': ['off'] },
   }],
 };
