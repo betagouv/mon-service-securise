@@ -56,15 +56,12 @@
 }
 
 .pastilles > div {
-  width: 2.5em;
-  height: 2.5em;
+  width: 2em;
+  height: 2em;
 }
 
 .ajout-contributeur {
   cursor: pointer;
-
-  width: 1.8em;
-  height: 1.8em;
 
   background-image: url(../images/icone_plus_pastille_bleue.svg);
   background-repeat: no-repeat;
@@ -86,20 +83,33 @@
 }
 
 .contributeur.valide {
-  background-image: url(../images/pastille_bleu_anssi.svg);
+  background-image: url(../images/pastille_violette.svg);
 }
 
 .contributeur.en-attente {
   background-image: url(../images/pastille_grise.svg);
 }
 
+.contributeurs-supplementaires {
+  background-image: url(../images/pastille_transparente.svg);
+}
+
 .createur {
-  background-image: url(../images/pastille_foncee.svg);
+  margin-left: 1.2em;
+  background-image: url(../images/pastille_bleu_anssi.svg);
+}
+
+.initiales, .nombre-contributeurs-supplementaires {
+  font-size: 0.8em;
+  transform: translateY(-0.1em);
 }
 
 .initiales {
-  font-size: 0.7em;
   color: #fff;
+}
+
+.nombre-contributeurs-supplementaires {
+  color: var(--bleu-mise-en-avant);
 }
 
 .nouveau.service {

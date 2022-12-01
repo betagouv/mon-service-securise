@@ -20,7 +20,12 @@ const $modaleNouveauContributeur = () => $(`
 </div>
 `);
 
-const $serviceExistant = (donneesService, idUtilisateur, classeNouveauContributeur) => {
+const $serviceExistant = (
+  donneesService,
+  idUtilisateur,
+  classeNouveauContributeur,
+  nombreMaxContributeursDistincts
+) => {
   const utilisateurCourantPeutAjouterContributeurs = () => {
     const idContributeurs = donneesService.contributeurs.map((c) => c.id);
 
@@ -38,7 +43,13 @@ const $serviceExistant = (donneesService, idUtilisateur, classeNouveauContribute
 <div class="${classePastille}" title="${descriptionContributeur(donneesUtilisateur, proprietaire)}">
   <div class="initiales">${donneesUtilisateur.initiales}</div>
 </div>
-    `);
+  `);
+
+  const $pastilleContributeursSupplementaires = (contributeursSupplementaires) => $(`
+<div class="pastille contributeurs-supplementaires" title="${contributeursSupplementaires.join('\n')}">
+  <div class="nombre-contributeurs-supplementaires">+${contributeursSupplementaires.length}</div>
+</div>
+  `);
 
   const classePastilles = 'pastilles';
 
@@ -60,13 +71,23 @@ const $serviceExistant = (donneesService, idUtilisateur, classeNouveauContribute
 
   $(`.${classePastilles}`, $element).append($pastille('pastille createur', donneesService.createur, true));
 
-  donneesService.contributeurs.forEach((donneesContributeur) => {
-    const classePastilleContributeur = (
-      `pastille contributeur ${donneesContributeur.cguAcceptees ? 'valide' : 'en-attente'}`
-    );
+  donneesService.contributeurs.sort(({ initiales: i1 }, { initiales: i2 }) => i1.localeCompare(i2));
 
-    $(`.${classePastilles}`, $element).append($pastille(classePastilleContributeur, donneesContributeur));
-  });
+  donneesService.contributeurs.slice(0, nombreMaxContributeursDistincts)
+    .forEach((donneesContributeur) => {
+      const classePastilleContributeur = (
+        `pastille contributeur ${donneesContributeur.cguAcceptees ? 'valide' : 'en-attente'}`
+      );
+
+      $(`.${classePastilles}`, $element).append($pastille(classePastilleContributeur, donneesContributeur));
+    });
+
+  const contributeursSupplementaires = donneesService.contributeurs
+    .slice(nombreMaxContributeursDistincts)
+    .map((c) => c.prenomNom);
+  if (contributeursSupplementaires.length > 0) {
+    $(`.${classePastilles}`, $element).append($pastilleContributeursSupplementaires(contributeursSupplementaires));
+  }
 
   return $element;
 };
@@ -78,13 +99,9 @@ const $nouveauService = () => $(`
 </a>
 `);
 
-const $services = (donneesServices, idUtilisateur, classeNouveauContributeur) => (
+const $services = (donneesServices, ...params) => (
   donneesServices.reduce(($acc, donneesService) => {
-    const $service = $serviceExistant(
-      donneesService,
-      idUtilisateur,
-      classeNouveauContributeur,
-    );
+    const $service = $serviceExistant(donneesService, ...params);
     return $acc.append($service);
   }, $(document.createDocumentFragment()))
     .append($nouveauService())
