@@ -272,6 +272,17 @@ describe('Une homologation', () => {
     expect(statistiquesMesuresAppelees).to.be(true);
   });
 
+  it('délègue aux statistiques le calcul du nombre de mesures à remplir toutes catégories confondues', () => {
+    const homologation = new Homologation({ mesuresGenerales: [] });
+    homologation.statistiquesMesures = () => ({
+      aRemplirToutesCategories: () => 42,
+    });
+
+    const nombre = homologation.nombreTotalMesuresARemplirToutesCategories();
+
+    expect(nombre).to.equal(42);
+  });
+
   it('délègue aux mesures le calcul du nombre de mesures spécifiques', () => {
     const homologation = new Homologation({ mesuresGenerales: [] });
     homologation.mesures.nombreMesuresSpecifiques = () => 42;

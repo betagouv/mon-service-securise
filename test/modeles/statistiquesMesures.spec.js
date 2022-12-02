@@ -97,6 +97,26 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     expect(stats.aRemplir('une')).to.equal(mesuresIndispensableARemplir + mesuresRecommandeesARemplir);
   });
 
+  elles('connaissent les mesures à remplir pour toutes les catégories', () => {
+    const deuxNonRemplies = {
+      misesEnOeuvre: 16,
+      retenues: 16,
+      indispensables: { total: 8, fait: 7, enCours: 0, nonFait: 0 },
+      recommandees: { total: 10, fait: 9, enCours: 0, nonFait: 0 },
+    };
+
+    const stats = new StatistiquesMesures(
+      {
+        une: deuxNonRemplies,
+        deux: deuxNonRemplies,
+        trois: deuxNonRemplies,
+      },
+      referentiel
+    );
+
+    expect(stats.aRemplirToutesCategories()).to.equal(3 * 2);
+  });
+
   elles("s'affichent au format JSON", () => {
     const stats = new StatistiquesMesures({
       une: { retenues: 4, misesEnOeuvre: 2 },

@@ -122,6 +122,10 @@ class Homologation {
     return this.mesures.nombreTotalMesuresGenerales();
   }
 
+  nombreTotalMesuresARemplirToutesCategories() {
+    return this.statistiquesMesures().aRemplirToutesCategories();
+  }
+
   nomService() { return this.descriptionService.nomService; }
 
   piloteProjet() { return this.rolesResponsabilites.piloteProjet; }
