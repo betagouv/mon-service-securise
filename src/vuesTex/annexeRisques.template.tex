@@ -3,38 +3,41 @@
 \usepackage[T1]{fontenc}
 
 \usepackage{array}
-\usepackage[a4paper, margin=10mm]{geometry}
+\usepackage{enumitem}
+\usepackage[a4paper, margin=10mm, includehead, includefoot, headheight=15mm]{geometry}
 
 \usepackage[scaled]{helvet}
 \renewcommand*\familydefault{\sfdefault}
 
-\usepackage{nopageno}
-
 \usepackage{tcolorbox}
+\tcbuselibrary{breakable}
 
-\usepackage{xcolor}
+\usepackage{xcolor,multicol,setspace}
+\definecolor{blanc}{rgb}{1, 1, 1}
 \definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
 \definecolor{gris}{rgb}{0.37, 0.37, 0.37}
 \definecolor{lisere}{rgb}{0.71, 0.76, 0.82}
 
-\setlength\parindent{0cm}
+\doublespacing
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{
+    \large\textbf{RISQUES DE SÉCURITÉ}
+    \\\small\textcolor{gris}{Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.}
+}
+\fancyfoot[L]{\small{\textcolor{bleu}{\textbf{MonServiceSécurisé -}} __= donnees.nomService __}}
+\fancyfoot[R]{\thepage}
+
+\renewcommand{\headrulewidth}{0pt}
 
 \begin{document}
-  \textbf{RISQUES DE SÉCURITÉ}
-
-  \textcolor{gris}{Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.}
-
-  \vskip 0.5cm
-
-  __~ donnees.niveauxGravite :niveaux __
-    \textbf{__= niveaux.description __}
-
-    \begin{tcolorbox}[colback=white, colframe=lisere, boxrule=1px]
-        \textcolor{gris}{__= niveaux.descriptionLongue __}
+  __~ donnees.niveauxGravite :niveau __
+    \begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt]
+      \vspace{-16.5pt}\hspace{-3pt}\raisebox{10pt}{\colorbox{blanc}{\textbf{__= niveau.description __}}}
+      \singlespacing\textcolor{gris}{__= niveau.descriptionLongue __}
     \end{tcolorbox}
+    \vskip 5mm
   __~__
-
-  \vskip 1cm
-
-  \textcolor{bleu}{\textbf{MonServiceSécurisé}}, service proposé par l'ANSSI.
 \end{document}
