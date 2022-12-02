@@ -48,21 +48,10 @@ class MesuresGenerales extends ElementsConstructibles {
   }
 
   statistiques(mesuresPersonnalisees) {
-    const statuts = MesureGenerale.statutsPossibles();
-
-    const statsPartiellesAvecStatut = () => statuts
-      .reduce((acc, statut) => Object.assign(acc, { [statut]: 0 }), { total: 0 });
-
-    const statsInitiales = () => ({
-      indispensables: statsPartiellesAvecStatut(),
-      recommandees: statsPartiellesAvecStatut(),
-
-      misesEnOeuvre: 0,
-      retenues: 0,
-    });
-
-    const stats = this.referentiel.identifiantsCategoriesMesures()
-      .reduce((acc, categorie) => Object.assign(acc, { [categorie]: statsInitiales() }), {});
+    const stats = StatistiquesMesures.creeStatistiquesVides(
+      MesureGenerale.statutsPossibles(),
+      this.referentiel.identifiantsCategoriesMesures()
+    );
 
     this.items.forEach((mesure) => {
       const { id, statut } = mesure;
