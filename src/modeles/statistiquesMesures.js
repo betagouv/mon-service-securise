@@ -32,20 +32,19 @@ const valide = (donnees, referentiel) => {
 };
 
 class StatistiquesMesures {
-  static creeStatistiquesVides(statuts, identifiantsCategoriesMesures) {
-    const statsPartiellesAvecStatut = () => statuts
-      .reduce((acc, statut) => Object.assign(acc, { [statut]: 0 }), { total: 0 });
+  static donneesAZero(statuts, identifiantsCategoriesMesures) {
+    const statutsAZero = () => statuts
+      .reduce((acc, statut) => ({ ...acc, [statut]: 0 }), { total: 0 });
 
     const statsInitiales = () => ({
-      indispensables: statsPartiellesAvecStatut(),
-      recommandees: statsPartiellesAvecStatut(),
-
+      indispensables: statutsAZero(),
+      recommandees: statutsAZero(),
       misesEnOeuvre: 0,
       retenues: 0,
     });
 
     return identifiantsCategoriesMesures
-      .reduce((acc, categorie) => Object.assign(acc, { [categorie]: statsInitiales() }), {});
+      .reduce((acc, categorie) => ({ ...acc, [categorie]: statsInitiales() }), {});
   }
 
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
