@@ -254,13 +254,13 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     expect(stats.recommandees().total).to.equal(12 + 15);
   });
 
-  elles('savent créer des statistiques vides à partir de statuts et de categories', () => {
-    const statsVides = StatistiquesMesures.creeStatistiquesVides(
+  elles('savent créer un JSON de statistiques à 0 à partir de statuts et de categories', () => {
+    const statsZero = StatistiquesMesures.donneesAZero(
       ['fait', 'enCours', 'nonFait'],
       ['categorieA', 'categorieB']
     );
 
-    expect(statsVides).to.eql({
+    expect(statsZero).to.eql({
       categorieA: {
         indispensables: { total: 0, fait: 0, enCours: 0, nonFait: 0 },
         recommandees: { total: 0, fait: 0, enCours: 0, nonFait: 0 },

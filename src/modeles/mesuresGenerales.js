@@ -48,7 +48,7 @@ class MesuresGenerales extends ElementsConstructibles {
   }
 
   statistiques(mesuresPersonnalisees) {
-    const stats = StatistiquesMesures.creeStatistiquesVides(
+    const stats = StatistiquesMesures.donneesAZero(
       MesureGenerale.statutsPossibles(),
       this.referentiel.identifiantsCategoriesMesures()
     );
