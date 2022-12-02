@@ -21,9 +21,10 @@ const routesPdf = (middleware, referentiel, adaptateurPdf) => {
       .catch(suite);
   });
 
-  routes.get('/:id/annexeRisques.pdf', (_requete, reponse, suite) => {
-    const niveauxGravite = referentiel.infosNiveauxGraviteConcernes(true);
-    adaptateurPdf.genereAnnexeRisques({ niveauxGravite })
+  routes.get('/:id/annexeRisques.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
+    const { homologation } = requete;
+    const donnees = homologation.vueAnnexePDFRisques().donnees();
+    adaptateurPdf.genereAnnexeRisques(donnees)
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);

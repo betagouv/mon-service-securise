@@ -75,6 +75,13 @@ describe('Le serveur MSS des routes /pdf/*', () => {
       testeur.referentiel().recharge({ niveauxGravite });
     });
 
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheHomologation(
+        'http://localhost:1234/pdf/456/annexeRisques.pdf',
+        done,
+      );
+    });
+
     it('sert un fichier de type pdf', (done) => {
       axios.get('http://localhost:1234/pdf/456/annexeRisques.pdf')
         .then((pdf) => {
@@ -96,41 +103,6 @@ describe('Le serveur MSS des routes /pdf/*', () => {
           expect(adaptateurPdfAppele).to.be(true);
           done();
         })
-        .catch(done);
-    });
-
-    it('utilise les informations de niveaux de gravité du référentiel', (done) => {
-      testeur.adaptateurPdf().genereAnnexeRisques = (donnees) => {
-        expect(donnees.niveauxGravite).to.contain(niveauxGravite.critique);
-        return Promise.resolve('Pdf annexes risques');
-      };
-
-      axios.get('http://localhost:1234/pdf/456/annexeRisques.pdf')
-        .then(() => done())
-        .catch(done);
-    });
-
-    it('ignore le niveaux de gravité non concerné', (done) => {
-      testeur.adaptateurPdf().genereAnnexeRisques = (donnees) => {
-        expect(donnees.niveauxGravite.map((niveaux) => niveaux.description)).to.not.contain('Non concerné');
-        return Promise.resolve('Pdf annexes risques');
-      };
-
-      axios.get('http://localhost:1234/pdf/456/annexeRisques.pdf')
-        .then(() => done())
-        .catch(done);
-    });
-
-    it('trie les niveaux de gravité par position décroissante', (done) => {
-      testeur.adaptateurPdf().genereAnnexeRisques = (donnees) => {
-        const positions = donnees.niveauxGravite.map((niveaux) => niveaux.position);
-        expect(positions[0]).to.equal(4);
-        expect(positions[1]).to.equal(3);
-        return Promise.resolve('Pdf annexes risques');
-      };
-
-      axios.get('http://localhost:1234/pdf/456/annexeRisques.pdf')
-        .then(() => done())
         .catch(done);
     });
   });
