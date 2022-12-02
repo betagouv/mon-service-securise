@@ -47,6 +47,11 @@ class StatistiquesMesures {
       - this.nonFaites(idCategorie);
   }
 
+  aRemplirToutesCategories() {
+    return this.categories()
+      .reduce((total, categorie) => total + this.aRemplir(categorie), 0);
+  }
+
   categories() {
     return categories(this.donnees);
   }

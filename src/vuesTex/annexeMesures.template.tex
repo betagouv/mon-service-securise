@@ -60,4 +60,14 @@
     __~__
     \end{tcolorbox}
   __~__
+
+  __? donnees.nbMesuresARemplirToutesCategories > 0 __
+    \pagebreak[4]\begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt]
+      \vspace{-16.5pt}\hspace{-3pt}\raisebox{10pt}{\colorbox{blanc}{\textbf{NON RENSEIGNÉES}}}
+        \par
+          Il reste __= donnees.nbMesuresARemplirToutesCategories __
+          __? donnees.nbMesuresARemplirToutesCategories === 1 __ mesure __??__ mesures __?__
+          à compléter pour obtenir 100\% des mesures de sécurité proposées par l'ANSSI remplies.
+    \end{tcolorbox}
+  __?__
 \end{document}

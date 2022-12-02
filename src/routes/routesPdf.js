@@ -10,6 +10,7 @@ const routesPdf = (middleware, referentiel, adaptateurPdf) => {
       categories: referentiel.categoriesMesures(),
       nomService: homologation.nomService(),
       mesuresParStatut: homologation.mesuresParStatut(),
+      nbMesuresARemplirToutesCategories: homologation.nombreTotalMesuresARemplirToutesCategories(),
       CHEMIN_BASE_ABSOLU: process.env.CHEMIN_BASE_ABSOLU,
     };
     adaptateurPdf.genereAnnexeMesures(donnees)
