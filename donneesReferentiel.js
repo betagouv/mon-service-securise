@@ -578,7 +578,7 @@ module.exports = {
       descriptionLongue: 'Réaliser à intervalle régulier (ex. une fois par an) un test de la procédure de gestion des incidents de sécurité du service ou de plusieurs services, en impliquant les personnes concernées (ex. vérifier que les coordonnées sont exactes, vérifier la disponibilité des personnes).<br>Cette mesure vise à vérifier que la procédure de gestion des incidents en place fonctionne bien dans la pratique.',
     },
     veilleSecurite: {
-      description: 'Réaliser une veille régulière des vulnérabilité et des compagnes de compromission',
+      description: 'Réaliser une veille régulière des vulnérabilités et des campagnes de compromission',
       categorie: 'defense',
       descriptionLongue: "Consulter plusieurs sources d'informations sur les vulnérabilités concernant les applicatifs participant au fonctionnement du service ainsi que sur les campagnes de compromission connues (ou campagnes d'attaques informatiques), notamment les alertes de sécurité du CERT-FR.<br>Cette mesure permet d'identifier des vulnérabilités ou risques nouveaux pour le service et de mettre en œuvre les mesures de sécurité permettant d'y faire face, par exemple des mises à jour de sécurité.",
     },
