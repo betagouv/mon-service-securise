@@ -8,6 +8,7 @@ const Mesures = require('./mesures');
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
+const VueAnnexePDFRisques = require('./objetsVues/vueAnnexePDFRisques');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -134,6 +135,10 @@ class Homologation {
 
   risquesSpecifiques() {
     return this.risques.risquesSpecifiques;
+  }
+
+  vueAnnexePDFRisques() {
+    return new VueAnnexePDFRisques(this, this.referentiel);
   }
 
   statistiquesMesures() {
