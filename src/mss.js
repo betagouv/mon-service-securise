@@ -6,7 +6,6 @@ const routesApi = require('./routes/routesApi');
 const routesBibliotheques = require('./routes/routesBibliotheques');
 const routesHomologation = require('./routes/routesHomologation');
 const routesPdf = require('./routes/routesPdf');
-const routesService = require('./routes/routesService');
 
 require('dotenv').config();
 
@@ -128,8 +127,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
   app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
 
   app.use('/pdf', routesPdf(middleware, referentiel, adaptateurPdf));
-
-  app.use('/service', routesService(middleware));
 
   app.get('/utilisateur/edition', (requete, reponse) => {
     sersFormulaireEditionUtilisateur(requete, reponse);
