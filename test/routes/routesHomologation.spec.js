@@ -118,4 +118,45 @@ describe('Le serveur MSS des routes /homologation/*', () => {
       );
     });
   });
+
+  describe('quand requête GET sur `/homologation/:id/dossiers`', () => {
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheHomologation(
+        'http://localhost:1234/homologation/456/dossiers',
+        done,
+      );
+    });
+  });
+
+  describe('quand requête GET sur `/homologation/:id/dossier/nouveau`', () => {
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheHomologation(
+        'http://localhost:1234/homologation/456/dossier/nouveau',
+        done,
+      );
+    });
+
+    it('redirige vers `/homologation/:id/dossier/edition/etape/1`', (done) => {
+      axios('http://localhost:1234/homologation/456/dossier/nouveau')
+        .then((reponse) => expect(reponse.request.res.responseUrl).to.equal('http://localhost:1234/homologation/456/dossier/edition/etape/1'))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
+
+  describe('quand requête GET sur `/homologation/:id/dossier/edition/etape/:idEtape`', () => {
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheHomologation(
+        'http://localhost:1234/homologation/456/dossier/edition/etape/1',
+        done,
+      );
+    });
+
+    it("répond avec une erreur HTTP 404 si l'identifiant d'étape n'est pas un entier entre 1 et 3", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(404, 'Étape inconnue', {
+        method: 'get',
+        url: 'http://localhost:1234/homologation/456/dossier/edition/etape/truc',
+      }, done);
+    });
+  });
 });

@@ -72,6 +72,25 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
     reponse.render('homologation/avisExpertCyber', { referentiel, homologation });
   });
 
+  routes.get('/:id/dossiers', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    reponse.render('homologation/dossiers', { homologation });
+  });
+
+  routes.get('/:id/dossier/nouveau', middleware.trouveHomologation, (requete, reponse) => {
+    reponse.redirect(`/homologation/${requete.params.id}/dossier/edition/etape/1`);
+  });
+
+  routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    const idEtape = parseInt(requete.params.idEtape, 10);
+    if (![1, 2, 3].includes(idEtape)) {
+      reponse.status(404).send('Étape inconnue');
+    } else {
+      reponse.render(`homologation/etapeDossier/${idEtape}`, { homologation, idEtape });
+    }
+  });
+
   return routes;
 };
 
