@@ -21,7 +21,7 @@ module.exports = {
       description: 'Sécuriser',
       sousTitre: 'Mettez en œuvre les mesures de sécurité adaptées à votre service.',
     },
-    homologations: {
+    'dossier/nouveau': {
       position: 2,
       indisponible: true,
       description: 'Homologuer',
