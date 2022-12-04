@@ -9,6 +9,7 @@ const Referentiel = require('../../src/referentiel');
 const middleware = require('../mocks/middleware');
 
 const testeurMss = () => {
+  let adaptateurEnvironnement;
   let adaptateurEquations;
   let adaptateurMail;
   let adaptateurPdf;
@@ -35,6 +36,7 @@ const testeurMss = () => {
   };
 
   const initialise = (done) => {
+    adaptateurEnvironnement = {};
     adaptateurEquations = {};
     adaptateurMail = {};
     adaptateurPdf = {};
@@ -49,6 +51,7 @@ const testeurMss = () => {
           middleware,
           referentiel,
           moteurRegles,
+          adaptateurEnvironnement,
           adaptateurEquations,
           adaptateurMail,
           adaptateurPdf,
@@ -61,6 +64,7 @@ const testeurMss = () => {
   const arrete = () => (serveur.arreteEcoute());
 
   return {
+    adaptateurEnvironnement: () => adaptateurEnvironnement,
     adaptateurEquations: () => adaptateurEquations,
     adaptateurMail: () => adaptateurMail,
     adaptateurPdf: () => adaptateurPdf,

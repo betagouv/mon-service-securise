@@ -2,8 +2,11 @@ extends ../deuxColonnes
 include ../cartes/indiceCyber
 
 mixin action({ id, description, indisponible, sousTitre, url, statut })
-  a(href = (indisponible ? '#' : url), class = (indisponible ? 'indisponible' : ''))
-    .action(class = `${id} ${indisponible ? 'indisponible' : ''}`)
+  a(
+    href = ((indisponible && !avecAccesEtapier) ? '#' : url),
+    class = ((indisponible && !avecAccesEtapier) ? 'indisponible' : '')
+  )
+    .action(class = `${id} ${(indisponible && !avecAccesEtapier) ? 'indisponible' : ''}`)
       .statut(class = (statut === InformationsHomologation.COMPLETES ? 'faite' : ''))
       div(class = `icone-action`)
       h2= description

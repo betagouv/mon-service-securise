@@ -4,7 +4,7 @@ const ActionsSaisie = require('../modeles/actionsSaisie');
 const Homologation = require('../modeles/homologation');
 const InformationsHomologation = require('../modeles/informationsHomologation');
 
-const routesHomologation = (middleware, referentiel, moteurRegles) => {
+const routesHomologation = (middleware, referentiel, moteurRegles, adaptateurEnvironnement) => {
   const routes = express.Router();
 
   routes.get('/creation', middleware.verificationAcceptationCGU, (_requete, reponse) => {
@@ -21,7 +21,15 @@ const routesHomologation = (middleware, referentiel, moteurRegles) => {
         { url: `/homologation/${homologation.id}/${id}`, id, ...autresDonnees }
       ));
 
-    reponse.render('homologation/synthese', { service: homologation, referentiel, actionsSaisie, InformationsHomologation });
+    const avecAccesEtapier = adaptateurEnvironnement.avecAccesEtapier();
+
+    reponse.render('homologation/synthese', {
+      InformationsHomologation,
+      actionsSaisie,
+      avecAccesEtapier,
+      referentiel,
+      service: homologation,
+    });
   });
 
   routes.get('/:id/decision',

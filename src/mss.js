@@ -10,7 +10,7 @@ const routesPdf = require('./routes/routesPdf');
 require('dotenv').config();
 
 const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
-  adaptateurEquations, adaptateurMail, adaptateurPdf,
+  adaptateurEnvironnement, adaptateurEquations, adaptateurMail, adaptateurPdf,
   avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
 
@@ -124,7 +124,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
 
   app.use('/bibliotheques', routesBibliotheques());
 
-  app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles));
+  app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles, adaptateurEnvironnement));
 
   app.use('/pdf', routesPdf(middleware, referentiel, adaptateurPdf));
 
