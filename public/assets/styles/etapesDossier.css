@@ -1,0 +1,21 @@
+hr {
+  width: 100%;
+
+  margin-top: 2em;
+  border: solid 1px var(--liseres);
+}
+
+.boutons {
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 2em;
+}
+
+.bouton {
+  margin: 2em 0;
+}
+
+.bouton.blanc {
+  border: solid 1px var(--bleu-mise-en-avant);
+  background: #fff;
+}

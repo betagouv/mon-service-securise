@@ -1,0 +1,18 @@
+extends ./formulaire
+
+block append styles
+  link(href='/statique/assets/styles/etapesDossier.css', rel='stylesheet')
+
+block zone-principale
+  form.homologation
+    h1.action Homologuer
+
+    hr
+    block formulaire
+
+    .boutons
+      .bouton.blanc
+        a(href = `/homologation/${homologation.id}`) Revenir à la synthèse
+      block bouton-etape
+
+  script(type = 'module', src = '/statique/homologation/etapesDossier.js')
