@@ -5,6 +5,61 @@ hr {
   border: solid 1px var(--liseres);
 }
 
+.etapes {
+  margin-top: 3em;
+  display: flex;
+}
+
+.etape {
+  display: flex;
+  align-items: center;
+}
+
+.etape:not(:last-of-type):after {
+  content: '';
+  display: block;
+  width: 1.5em;
+  height: 0px;
+
+  margin: 0 1em;
+  border: solid 1.5px var(--bordure-foncee);
+  background: var(--bordure-foncee);
+}
+
+.etape.passee a {
+  display: flex;
+  align-items: center;
+}
+
+form .numero-etape {
+  width: 2em;
+  height: 2em;
+
+  margin-right: 0.5em;
+  border-radius: 50%;
+  border: solid 2px;
+
+  text-align: center;
+  line-height: 1.9;
+}
+
+.etape.passee .numero-etape {
+  border-color: var(--bleu-mise-en-avant);
+  background: var(--bleu-mise-en-avant);
+  color: #fff;
+}
+
+.etape.courante .numero-etape {
+  border-color: var(--bleu-anssi);
+  background: var(--bleu-anssi);
+  color: #fff;
+}
+
+.etape.future .numero-etape {
+  border-color: var(--texte-moyen-fonce);
+  color: var(--texte-moyen-fonce);
+}
+
 .boutons {
   display: flex;
   justify-content: flex-end;

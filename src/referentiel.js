@@ -16,6 +16,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement;
+  const etapesParcoursHomologation = () => donnees.etapesParcoursHomologation || [];
   const identifiantsEcheancesRenouvellement = () => Object.keys(echeancesRenouvellement());
   const fonctionnalites = () => donnees.fonctionnalites;
   const localisationsDonnees = () => donnees.localisationsDonnees;
@@ -123,6 +124,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return criticiteMax(criticiteMaxFonctionnalites, criticiteMaxDonnees, criticiteDelai(idDelai));
   };
 
+  const etapeExiste = (numero) => etapesParcoursHomologation()
+    .map((e) => e.numero)
+    .includes(numero);
+
   const valideDonnees = () => {
     const sommeCoefficients = coefficientIndiceCyberMesuresIndispensables()
       + coefficientIndiceCyberMesuresRecommandees();
@@ -165,6 +170,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionStatutMesure,
     donneesCaracterePersonnel,
     echeancesRenouvellement,
+    etapeExiste,
+    etapesParcoursHomologation,
     fonctionnalites,
     identifiantsActionsSaisie,
     identifiantsCategoriesMesures,
@@ -206,6 +213,7 @@ const creeReferentielVide = () => creeReferentiel({
   delaisAvantImpactCritique: {},
   donneesCaracterePersonnel: {},
   echeancesRenouvellement: {},
+  etapesParcoursHomologation: [],
   fonctionnalites: {},
   localisationsDonnees: {},
   mesures: {},

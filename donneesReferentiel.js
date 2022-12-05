@@ -624,6 +624,12 @@ module.exports = {
     deuxAns: { description: echeance('deux ans'), expiration: expiration('deux ans') },
   },
 
+  etapesParcoursHomologation: [
+    { numero: 1, libelle: 'Décision' },
+    { numero: 2, libelle: 'Date' },
+    { numero: 3, libelle: 'Récapitulatif' },
+  ],
+
   reglesPersonnalisation: {
     clefsDescriptionServiceAConsiderer: [
       'typeService',
