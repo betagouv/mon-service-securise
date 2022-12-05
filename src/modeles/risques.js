@@ -21,7 +21,8 @@ class Risques extends InformationsHomologation {
   }
 
   parNiveauGravite() {
-    return this.risquesGeneraux.parNiveauGravite();
+    const risquesParNiveauGravite = this.risquesGeneraux.parNiveauGravite();
+    return this.risquesSpecifiques.parNiveauGravite(risquesParNiveauGravite);
   }
 }
 

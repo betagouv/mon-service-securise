@@ -113,15 +113,22 @@ describe('Les risques liés à une homologation', () => {
   });
 
   describe('sur une demande des risques par niveau de gravité', () => {
-    it('délègue la demande aux risques généraux', () => {
+    ils('fusionnent les risques récupérés généraux et spécifiques', () => {
       const referentiel = Referentiel.creeReferentiel({
         risques: { unRisque: { description: 'Un risque' } },
         niveauxGravite: { grave: {} },
       });
-      const risques = new Risques({ risquesGeneraux: [{ id: 'unRisque', niveauGravite: 'grave' }] }, referentiel);
+      const risques = new Risques({
+        risquesGeneraux: [{ id: 'unRisque', niveauGravite: 'grave' }],
+        risquesSpecifiques: [{ description: 'Un risque deux', niveauGravite: 'grave' }],
+      }, referentiel);
       risques.risquesGeneraux.parNiveauGravite = () => ({ grave: [{ description: 'Un risque' }] });
+      risques.risquesSpecifiques.parNiveauGravite = (risquesParNiveauGravite) => {
+        expect(risquesParNiveauGravite).to.eql({ grave: [{ description: 'Un risque' }] });
+        return { grave: [{ description: 'Un risque' }, { description: 'Un risque deux' }] };
+      };
 
-      expect(risques.parNiveauGravite()).to.eql({ grave: [{ description: 'Un risque' }] });
+      expect(risques.parNiveauGravite()).to.eql({ grave: [{ description: 'Un risque' }, { description: 'Un risque deux' }] });
     });
   });
 });
