@@ -16,6 +16,13 @@ class RisqueGeneral extends Risque {
     return this.referentiel.descriptionRisque(this.id);
   }
 
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      description: this.descriptionRisque(),
+    };
+  }
+
   static valide(donnees, referentiel) {
     const { id } = donnees;
     const identifiantsRisquesRepertories = referentiel.identifiantsRisques();
