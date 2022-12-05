@@ -131,6 +131,10 @@ describe('Le serveur MSS des routes /homologation/*', () => {
   });
 
   describe('quand requête GET sur `/homologation/:id/dossier/nouveau`', () => {
+    beforeEach(() => testeur.referentiel().recharge({
+      etapesParcoursHomologation: [{ numero: 1 }],
+    }));
+
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
         'http://localhost:1234/homologation/456/dossier/nouveau',
@@ -147,6 +151,10 @@ describe('Le serveur MSS des routes /homologation/*', () => {
   });
 
   describe('quand requête GET sur `/homologation/:id/dossier/edition/etape/:idEtape`', () => {
+    beforeEach(() => testeur.referentiel().recharge({
+      etapesParcoursHomologation: [{ numero: 1 }],
+    }));
+
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
         'http://localhost:1234/homologation/456/dossier/edition/etape/1',
@@ -154,10 +162,10 @@ describe('Le serveur MSS des routes /homologation/*', () => {
       );
     });
 
-    it("répond avec une erreur HTTP 404 si l'identifiant d'étape n'est pas un entier entre 1 et 3", (done) => {
+    it("répond avec une erreur HTTP 404 si l'identifiant d'étape n'est pas connu du référentiel", (done) => {
       testeur.verifieRequeteGenereErreurHTTP(404, 'Étape inconnue', {
         method: 'get',
-        url: 'http://localhost:1234/homologation/456/dossier/edition/etape/truc',
+        url: 'http://localhost:1234/homologation/456/dossier/edition/etape/2',
       }, done);
     });
   });

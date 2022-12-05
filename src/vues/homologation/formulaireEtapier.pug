@@ -1,13 +1,34 @@
 extends ./formulaire
 
+mixin descriptionEtape({ etape })
+  .numero-etape= etape.numero
+  .libelle-etape= etape.libelle
+
+mixin barre-progression({ idEtape })
+  .etapes
+    each etape in referentiel.etapesParcoursHomologation()
+      -
+        let classeEtape = 'courante';
+        if (etape.numero < idEtape) classeEtape = 'passee';
+        if (etape.numero > idEtape) classeEtape = 'future';
+
+      .etape(class = classeEtape)
+        if classeEtape === 'passee'
+          a(href = `/homologation/${homologation.id}/dossier/edition/etape/${etape.numero}`)
+            +descriptionEtape({ etape })
+        else
+          +descriptionEtape({ etape })
+
 block append styles
   link(href='/statique/assets/styles/etapesDossier.css', rel='stylesheet')
 
 block zone-principale
   form.homologation
     h1.action Homologuer
-
+    if idEtape
+      +barre-progression({ idEtape })
     hr
+
     block formulaire
 
     .boutons

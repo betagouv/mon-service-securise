@@ -92,10 +92,10 @@ const routesHomologation = (middleware, referentiel, moteurRegles, adaptateurEnv
   routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
     const idEtape = parseInt(requete.params.idEtape, 10);
-    if (![1, 2, 3].includes(idEtape)) {
+    if (!referentiel.etapeExiste(idEtape)) {
       reponse.status(404).send('Étape inconnue');
     } else {
-      reponse.render(`homologation/etapeDossier/${idEtape}`, { homologation, idEtape });
+      reponse.render(`homologation/etapeDossier/${idEtape}`, { referentiel, homologation, idEtape });
     }
   });
 
