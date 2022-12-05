@@ -11,12 +11,12 @@ x-app:
     - node_modules:/usr/src/app/node_modules/
 
 services:
-  db:
+  mss-db:
     image: postgres
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     networks:
-      - postgres
+      - mss-network
     volumes:
       - /var/lib/postgresql/data
 
@@ -32,14 +32,15 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - postgres
+      - mss-network
     ports:
       - "${PORT_MSS}:3000"
     depends_on:
-      - db
+      - mss-db
 
 networks:
-  postgres:
+  mss-network:
+    external: true
 
 volumes:
   node_modules:
