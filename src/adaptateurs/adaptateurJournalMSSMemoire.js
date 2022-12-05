@@ -1,8 +1,8 @@
 const nouvelAdaptateur = () => {
   const donnees = { evenements: [] };
 
-  const consigneEvenement = (evenement) => {
-    donnees.evenements.push(evenement);
+  const consigneEvenement = (donneesEvenements) => {
+    donnees.evenements.push(donneesEvenements);
     return Promise.resolve();
   };
 

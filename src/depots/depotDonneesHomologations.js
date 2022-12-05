@@ -139,7 +139,7 @@ const creeDepot = (config = {}) => {
         idUtilisateur, idHomologation, type: 'createur',
       }))
       .then(() => adaptateurJournalMSS.consigneEvenement(
-        new EvenementNouveauServiceCree({ idUtilisateur })
+        new EvenementNouveauServiceCree({ idUtilisateur }).toJSON()
       ))
       .then(() => idHomologation);
   };

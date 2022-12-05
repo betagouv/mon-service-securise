@@ -10,8 +10,8 @@ const config = {
 const nouvelAdaptateur = () => {
   const knex = Knex(config);
 
-  const consigneEvenement = (evenement) => {
-    const { type, donnees, date } = evenement.toJSON();
+  const consigneEvenement = (donneesEvenement) => {
+    const { type, donnees, date } = donneesEvenement;
 
     return knex('journal_mss.evenements').insert({
       id: uuid.v4(),

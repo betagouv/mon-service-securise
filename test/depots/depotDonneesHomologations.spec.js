@@ -25,8 +25,6 @@ const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
 const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
-const { EvenementNouveauServiceCree } = require('../../src/modeles/journalMSS/evenements');
-
 const copie = require('../../src/utilitaires/copie');
 
 describe('Le dépôt de données des homologations', () => {
@@ -545,7 +543,7 @@ describe('Le dépôt de données des homologations', () => {
     describe("le journal MSS est utilisé pour consigner l'enregistrement", () => {
       it('avec un événement typé', (done) => {
         adaptateurJournalMSS.consigneEvenement = (evenement) => {
-          expect(evenement).to.be.an(EvenementNouveauServiceCree);
+          expect(evenement.type).to.equal('NOUVEAU_SERVICE_CREE');
           done();
         };
 
