@@ -5,37 +5,39 @@ const Referentiel = require('../../../src/referentiel');
 const VueAnnexePDFRisques = require('../../../src/modeles/objetsVues/vueAnnexePDFRisques');
 
 describe("L'objet de vue des descriptions des risques", () => {
+  const donneesReferentiel = {
+    niveauxGravite: {
+      nonConcerne: {
+        position: 0,
+        couleur: 'blanc',
+        description: 'Non concerné',
+        descriptionLongue: '',
+        nonConcerne: true,
+      },
+      grave: {
+        position: 3,
+        couleur: 'orange',
+        description: 'Grave',
+        descriptionLongue: 'Niveaux de gravité grave',
+      },
+      critique: {
+        position: 4,
+        couleur: 'rouge',
+        description: 'Critique',
+        descriptionLongue: 'Niveaux de gravité critique',
+      },
+    },
+    risques: { unRisque: { description: 'Une description' } },
+  };
+
   const homologation = new Homologation({
     id: '123',
     idUtilisateur: '456',
     descriptionService: { nomService: 'Nom Service' },
-  });
+    risquesGeneraux: [{ id: 'unRisque', niveauGravite: 'grave' }],
+  }, Referentiel.creeReferentiel(donneesReferentiel));
 
   describe('avec des informations de niveaux de gravité dans le référentiel', () => {
-    const donneesReferentiel = {
-      niveauxGravite: {
-        nonConcerne: {
-          position: 0,
-          couleur: 'blanc',
-          description: 'Non concerné',
-          descriptionLongue: '',
-          nonConcerne: true,
-        },
-        grave: {
-          position: 3,
-          couleur: 'orange',
-          description: 'Grave',
-          descriptionLongue: 'Niveaux de gravité grave',
-        },
-        critique: {
-          position: 4,
-          couleur: 'rouge',
-          description: 'Critique',
-          descriptionLongue: 'Niveaux de gravité critique',
-        },
-      },
-    };
-
     let referentiel;
 
     beforeEach(() => {
@@ -78,5 +80,16 @@ describe("L'objet de vue des descriptions des risques", () => {
 
     expect(donnees).to.have.key('nomService');
     expect(donnees.nomService).to.equal('Nom Service');
+  });
+
+  it('ajoute les risques par niveau de gravité', () => {
+    const vueAnnexePDFRisques = new VueAnnexePDFRisques(homologation);
+
+    const donnees = vueAnnexePDFRisques.donnees();
+
+    expect(donnees).to.have.key('risquesParNiveauGravite');
+    expect(donnees.risquesParNiveauGravite).to.have.key('grave');
+    expect(donnees.risquesParNiveauGravite.grave.length).to.equal(1);
+    expect(donnees.risquesParNiveauGravite.grave[0].description).to.equal('Une description');
   });
 });
