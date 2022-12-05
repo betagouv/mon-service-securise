@@ -141,10 +141,6 @@ class Homologation {
     return this.risques.risquesSpecifiques;
   }
 
-  vueAnnexePDFRisques() {
-    return new VueAnnexePDFRisques(this, this.referentiel);
-  }
-
   statistiquesMesures() {
     return this.mesures.statistiques();
   }
@@ -172,6 +168,10 @@ class Homologation {
       contributeurs: this.contributeurs.map((c) => c.toJSON()),
       nomService: this.nomService(),
     };
+  }
+
+  vueAnnexePDFRisques() {
+    return new VueAnnexePDFRisques(this, this.referentiel);
   }
 }
 

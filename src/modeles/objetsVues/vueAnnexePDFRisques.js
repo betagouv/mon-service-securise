@@ -10,6 +10,7 @@ class VueAnnexePDFRisques {
     return {
       niveauxGravite: this.referentiel.infosNiveauxGraviteConcernes(true),
       nomService: this.homologation.nomService(),
+      risquesParNiveauGravite: this.homologation.risques.parNiveauGravite(),
     };
   }
 }
