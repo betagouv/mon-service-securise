@@ -18,6 +18,12 @@ Commencer par récupérer les sources du projet et aller dans le répertoire cr�
 $ git clone https://github.com/betagouv/mon-service-securise.git && cd mon-service-securise
 ```
 
+Créer un `network` Docker pour accueillir MonServiceSécurisé en local.
+
+```sh
+$ docker network create mss-network
+```
+
 Créer un fichier `.env` à partir du fichier `.env.template` et renseigner les diverses variables d'environnement.
 
 Lancer le script `scripts/start.sh`
@@ -25,13 +31,13 @@ Lancer le script `scripts/start.sh`
 Se connecter au conteneur de la base de données et créer une nouvelle base `mss` pour un utilisateur postgres.
 
 ```sh
-$ docker exec -t mon-service-securise_db_1 createdb -U postgres mss
+$ docker compose exec mss-db createdb -U postgres mss
 ```
 
 Exécuter les migrations depuis le conteneur du serveur web.
 
 ```sh
-$ docker exec -t mon-service-securise_web_1 npx knex migrate:latest
+$ docker compose exec web npx knex migrate:latest
 ```
 
 Le serveur est configuré et prêt à être redémarré.
