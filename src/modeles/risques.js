@@ -19,6 +19,10 @@ class Risques extends InformationsHomologation {
       .flatMap((rs) => rs.principaux())
       .sort((rs1, rs2) => rs2.positionNiveauGravite() - rs1.positionNiveauGravite());
   }
+
+  parNiveauGravite() {
+    return this.risquesGeneraux.parNiveauGravite();
+  }
 }
 
 module.exports = Risques;

@@ -111,4 +111,17 @@ describe('Les risques liés à une homologation', () => {
     expect(risquesPagines[0].length).to.eql(3);
     expect(risquesPagines[1].length).to.eql(1);
   });
+
+  describe('sur une demande des risques par niveau de gravité', () => {
+    it('délègue la demande aux risques généraux', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        risques: { unRisque: { description: 'Un risque' } },
+        niveauxGravite: { grave: {} },
+      });
+      const risques = new Risques({ risquesGeneraux: [{ id: 'unRisque', niveauGravite: 'grave' }] }, referentiel);
+      risques.risquesGeneraux.parNiveauGravite = () => ({ grave: [{ description: 'Un risque' }] });
+
+      expect(risques.parNiveauGravite()).to.eql({ grave: [{ description: 'Un risque' }] });
+    });
+  });
 });

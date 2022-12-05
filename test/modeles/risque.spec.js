@@ -35,4 +35,13 @@ describe('Un risque', () => {
     const risque = new Risque({ niveauGravite: 'unNiveau' }, referentiel);
     expect(risque.descriptionNiveauGravite()).to.equal('Une description');
   });
+
+  it('sait se décrire', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      niveauxGravite: { unNiveau: { description: 'Une description' } },
+    });
+    const risque = new Risque({ niveauGravite: 'unNiveau', commentaire: 'Un commentaire' }, referentiel);
+
+    expect(risque.toJSON()).to.eql({ commentaire: 'Un commentaire', niveauGravite: 'unNiveau' });
+  });
 });
