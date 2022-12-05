@@ -1,6 +1,6 @@
-const adaptateurJournalMSSMemoire = require('./adaptateurs/adaptateurJournalMSSMemoire');
 const adaptateurJWTParDefaut = require('./adaptateurs/adaptateurJWT');
 const adaptateurUUIDParDefaut = require('./adaptateurs/adaptateurUUID');
+const fabriqueAdaptateurJournalMSS = require('./adaptateurs/fabriqueAdaptateurJournalMSS');
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const Referentiel = require('./referentiel');
 const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
@@ -9,7 +9,7 @@ const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 
 const creeDepot = (config = {}) => {
   const {
-    adaptateurJournalMSS = adaptateurJournalMSSMemoire.nouvelAdaptateur(),
+    adaptateurJournalMSS = fabriqueAdaptateurJournalMSS(),
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = adaptateurUUIDParDefaut,
