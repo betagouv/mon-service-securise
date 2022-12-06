@@ -50,7 +50,8 @@ describe("L'objet de vue des descriptions des risques", () => {
       const donnees = vueAnnexePDFRisques.donnees();
 
       expect(donnees).to.have.key('niveauxGravite');
-      expect(donnees.niveauxGravite).to.contain(donneesReferentiel.niveauxGravite.critique);
+      const niveauCritique = donnees.niveauxGravite.find((niveau) => niveau.identifiant === 'critique');
+      expect(niveauCritique).to.eql({ identifiant: 'critique', ...donneesReferentiel.niveauxGravite.critique });
     });
 
     it('ignore le niveau de gravité non concerné', () => {
