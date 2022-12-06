@@ -9,16 +9,20 @@
 \usepackage[scaled]{helvet}
 \renewcommand*\familydefault{\sfdefault}
 
-\usepackage{tcolorbox}
-\tcbuselibrary{breakable}
-
 \usepackage{xcolor,multicol,setspace}
 \definecolor{blanc}{rgb}{1, 1, 1}
 \definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
 \definecolor{gris}{rgb}{0.37, 0.37, 0.37}
 \definecolor{lisere}{rgb}{0.71, 0.76, 0.82}
+\definecolor{rouge}{HTML}{e32630}
+\definecolor{orange}{HTML}{ff9940}
+\definecolor{jaune}{HTML}{fcdf41}
+\definecolor{vert}{HTML}{4cb963}
 
 \doublespacing
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -34,9 +38,23 @@
 
 \begin{document}
   __~ donnees.niveauxGravite :niveau __
-    \begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt]
-      \vspace{-16.5pt}\hspace{-3pt}\raisebox{10pt}{\colorbox{blanc}{\textbf{__= niveau.description __}}}
-      \singlespacing\textcolor{gris}{__= niveau.descriptionLongue __}
+    \begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt, top=20pt]
+      \vspace{-31pt}\hspace{-3pt}{\colorbox{blanc}{\textbf{__= niveau.description __}}}
+      \nopagebreak[4]\singlespacing\textcolor{gris}{__= niveau.descriptionLongue __}
+      __? donnees.risquesParNiveauGravite[niveau.identifiant] && donnees.risquesParNiveauGravite[niveau.identifiant].length __
+        \begin{itemize}[leftmargin=1.5em]
+          __~ donnees.risquesParNiveauGravite[niveau.identifiant] :risque __%
+            \item[\textcolor{__= niveau.couleur __}{\textbullet}]
+              \vskip 2mm
+              __= risque.description __
+              __? risque.commentaire __
+                \nopagebreak[4]\item[]
+                  \vbox{\textcolor{gris}{__= risque.commentaire __}}
+                  \vskip 3mm
+              __?__%
+          __~__%
+        \end{itemize}
+      __?__
     \end{tcolorbox}
     \vskip 5mm
   __~__
