@@ -343,7 +343,10 @@ describe('Le référentiel', () => {
         niveauxGravite: { niveauUn: { position: 0 }, niveauDeux: { position: 1 } },
       });
 
-      expect(referentiel.infosNiveauxGravite()).to.eql([{ position: 0 }, { position: 1 }]);
+      expect(referentiel.infosNiveauxGravite()).to.eql([
+        { identifiant: 'niveauUn', position: 0 },
+        { identifiant: 'niveauDeux', position: 1 },
+      ]);
     });
 
     it("sait retourner les informations dans l'ordre inverse", () => {
@@ -352,24 +355,40 @@ describe('Le référentiel', () => {
       });
 
       expect(referentiel.infosNiveauxGravite(true)).to.eql([
-        { position: 1 },
-        { position: 0 },
+        { identifiant: 'niveauDeux', position: 1 },
+        { identifiant: 'niveauUn', position: 0 },
       ]);
     });
   });
 
-  it('sait retourner les infos sur les niveaux de gravité concernés en ordre inverse', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      niveauxGravite: {
-        niveauUn: { position: 0, nonConcerne: true },
-        niveauDeux: { position: 1 },
-        niveauTrois: { position: 2 },
-      },
+  describe('sur demande des infos sur les niveaux de gravité concernés des risques', () => {
+    it('sait retourner les infos en ordre inverse', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: {
+          niveauUn: { position: 0, nonConcerne: true },
+          niveauDeux: { position: 1 },
+          niveauTrois: { position: 2 },
+        },
+      });
+
+      const positions = referentiel.infosNiveauxGraviteConcernes(true).map((info) => info.position);
+
+      expect(positions).to.eql([2, 1]);
     });
 
-    expect(referentiel.infosNiveauxGraviteConcernes(true)).to.eql(
-      [{ position: 2 }, { position: 1 }]
-    );
+    it('inclue les identifiants dans les informations', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: {
+          niveauUn: { position: 0 },
+          niveauDeux: { position: 1 },
+          niveauTrois: { position: 2 },
+        },
+      });
+
+      const identifiants = referentiel.infosNiveauxGraviteConcernes()
+        .map((info) => info.identifiant);
+      expect(identifiants).to.eql(['niveauUn', 'niveauDeux', 'niveauTrois']);
+    });
   });
 
   it("connaît l'action de saisie suivante d'une action de saisie donnée", () => {

@@ -65,12 +65,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   };
 
   const infosNiveauxGravite = (ordreInverse = false) => {
-    const niveaux = Object.values(niveauxGravite());
+    const niveaux = Object.keys(niveauxGravite())
+      .map((clef) => ({ identifiant: clef, ...niveauGravite(clef) }));
     return ordreInverse ? niveaux.reverse() : niveaux;
   };
 
-  const infosNiveauxGraviteConcernes = (ordreInverse) => infosNiveauxGravite(ordreInverse)
-    .filter((niveaux) => !niveaux.nonConcerne);
+  const infosNiveauxGraviteConcernes = (ordreInverse) => (
+    infosNiveauxGravite(ordreInverse).filter((niveau) => !niveau.nonConcerne)
+  );
 
   const descriptionExpiration = (identifiant) => {
     if (!identifiant) return 'Information non renseignée';
