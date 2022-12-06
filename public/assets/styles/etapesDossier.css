@@ -60,6 +60,42 @@ form .numero-etape {
   color: var(--texte-moyen-fonce);
 }
 
+.consignes {
+  padding: 1em 0 1em 1em;
+}
+
+.consignes > li {
+  padding: 1em 0;
+}
+
+ul.documents {
+  margin: 0;
+  padding: 0;
+}
+
+.documents li {
+  list-style: none;
+  position: relative;
+
+  margin: 0.5em 0;
+  padding-left: 0.5em;
+}
+
+.documents li::before {
+  content: '';
+  display: inline-block;
+  position: relative;
+  left: -0.5em;
+  width: 1.5em;
+  height: 1.5em;
+
+  background-image: url('../images/icone_telechargement.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  transform: translateY(0.2em);
+}
+
 .boutons {
   display: flex;
   justify-content: flex-end;
