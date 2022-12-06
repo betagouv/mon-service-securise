@@ -1,7 +1,24 @@
 extends ../formulaireEtapier
 
+mixin document({ url, description })
+  a(href = url, target='_blank', rel='noopener')= description
+
 block formulaire
-  //rien pour l'instant
+  ul.consignes
+    li Télécharger les documents ci-dessous :
+      ul.documents
+        li: +document({ url: '/statique/assets/pdf/dossierDecision.pdf', description: "Décision d'homologation de sécurité (modèle)" })
+        li: +document({ url: `/homologation/${homologation.id}/syntheseSecurite`, description: "Synthèse de l'état de sécurité du service" })
+        li: +document({ url: `/pdf/${homologation.id}/annexeMesures.pdf`, description: 'Annexes' })
+    li.
+      Remplir la décision d'homologation de sécurité avec l'ensemble des
+      personnes concernées.
+    li.
+      Présenter, pour signature, la décision d'homologation à l'autorité
+      d'homologation ainsi que la synthèse de la sécurité.
+    li.
+      Reconnectez-vous ensuite pour renseigner la date de signature et la
+      durée de validité de l'homologation dans la dernière étape <b>Date</b>.
 
 block bouton-etape
   .bouton#suivant(idHomologation = homologation.id, idEtapeSuivante = idEtape + 1) Suivant
