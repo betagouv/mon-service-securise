@@ -6,6 +6,11 @@ const testeurMSS = require('./testeurMSS');
 describe('Le serveur MSS des routes /pdf/*', () => {
   const testeur = testeurMSS();
 
+  const verifieTypeFichierServiEstPDF = (url, done) => axios.get(url)
+    .then((reponse) => expect(reponse.headers['content-type']).to.contain('application/pdf'))
+    .then(() => done())
+    .catch(done);
+
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
@@ -23,12 +28,7 @@ describe('Le serveur MSS des routes /pdf/*', () => {
     });
 
     it('sert un fichier de type pdf', (done) => {
-      axios.get('http://localhost:1234/pdf/456/annexeMesures.pdf')
-        .then((pdf) => {
-          expect(pdf.headers['content-type']).to.contain('application/pdf');
-          done();
-        })
-        .catch(done);
+      verifieTypeFichierServiEstPDF('http://localhost:1234/pdf/456/annexeMesures.pdf', done);
     });
 
     it('utilise un adaptateur de pdf pour la génération', (done) => {
@@ -83,12 +83,7 @@ describe('Le serveur MSS des routes /pdf/*', () => {
     });
 
     it('sert un fichier de type pdf', (done) => {
-      axios.get('http://localhost:1234/pdf/456/annexeRisques.pdf')
-        .then((pdf) => {
-          expect(pdf.headers['content-type']).to.contain('application/pdf');
-          done();
-        })
-        .catch(done);
+      verifieTypeFichierServiEstPDF('http://localhost:1234/pdf/456/annexeRisques.pdf', done);
     });
 
     it('utilise un adaptateur de pdf pour la génération', (done) => {
