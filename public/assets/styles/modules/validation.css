@@ -23,6 +23,7 @@
 }
 
 .message-erreur {
+  position: relative;
   display: none;
 
   margin-top: 1em;
