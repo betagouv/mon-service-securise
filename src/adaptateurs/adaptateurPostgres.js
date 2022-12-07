@@ -167,6 +167,10 @@ const nouvelAdaptateur = (env) => {
       donnees: knex.raw("(jsonb_set(donnees::jsonb, '{ idUtilisateur }', '??'))::json", idUtilisateurCible),
     });
 
+  const utilisateursCreesAvantLe = (date) => knex('utilisateurs')
+    .whereRaw('date_creation < ?', date.toISOString())
+    .then((lignes) => lignes.map(convertisLigneEnObjet));
+
   return {
     ajouteAutorisation,
     ajouteHomologation,
@@ -196,6 +200,7 @@ const nouvelAdaptateur = (env) => {
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,
+    utilisateursCreesAvantLe,
   };
 };
 

@@ -4,6 +4,7 @@ const Referentiel = require('./src/referentiel');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
 const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
+const { EvenementNouveauServiceCree } = require('./src/modeles/journalMSS/evenements');
 
 class ConsoleAdministration {
   constructor(environnementNode = (process.env.NODE_ENV || 'development')) {
@@ -24,6 +25,22 @@ class ConsoleAdministration {
 
   supprimeHomologation(idHomologation) {
     return this.depotDonnees.supprimeHomologation(idHomologation);
+  }
+
+  genereEvenementsDeCreationService(dateLimite) {
+    const jourSuivant = (date) => {
+      const timestampJourSuivant = new Date(date).setDate(date.getDate() + 1);
+      return new Date(timestampJourSuivant);
+    };
+
+    const evenementPourHomologation = (h) => new EvenementNouveauServiceCree(
+      { idUtilisateur: h.createur.id },
+      { date: jourSuivant(h.createur.dateCreation) }
+    );
+
+    return this.depotDonnees
+      .homologationsCreeesAvantLe(dateLimite)
+      .then((homologations) => homologations.map(evenementPourHomologation));
   }
 }
 
