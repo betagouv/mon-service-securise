@@ -704,4 +704,31 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
   });
+
+  it("sait retrouver les homologations créées avant une certaine date en utilisant la date d'inscription de leur créateur", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      utilisateurs: [
+        { id: 'JANVIER', dateCreation: '2022-01-15 13:30:00' },
+        { id: 'FEVRIER', dateCreation: '2022-02-15 13:30:00' },
+      ],
+      homologations: [
+        { id: '123', idUtilisateur: 'JANVIER' },
+        { id: '789', idUtilisateur: 'FEVRIER' },
+      ],
+      autorisations: [
+        { idUtilisateur: 'JANVIER', idHomologation: '123', type: 'createur' },
+        { idUtilisateur: 'FEVRIER', idHomologation: '789', type: 'createur' },
+      ],
+    });
+
+    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+
+    depot.homologationsCreeesAvantLe(new Date('2022-01-30 10:00:00'))
+      .then((h) => {
+        expect(h.length).to.be(1);
+        expect(h[0].id).to.equal('123');
+        done();
+      })
+      .catch(done);
+  });
 });

@@ -143,6 +143,10 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
       .then((transferts) => Promise.all(transferts))
   );
 
+  const utilisateursCreesAvantLe = (date) => Promise.resolve(
+    donnees.utilisateurs.filter((u) => date - new Date(u.dateCreation) > 0)
+  );
+
   return {
     ajouteAutorisation,
     ajouteHomologation,
@@ -170,6 +174,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,
+    utilisateursCreesAvantLe,
   };
 };
 
