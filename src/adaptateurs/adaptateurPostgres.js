@@ -77,6 +77,7 @@ const nouvelAdaptateur = (env) => {
       idHomologation: 'h.id',
       donneesHomologation: 'h.donnees',
       idUtilisateur: 'u.id',
+      dateCreationUtilisateur: 'u.date_creation',
       donneesUtilisateur: 'u.donnees',
       type: knex.raw("a2.donnees->>'type'"),
     })
@@ -88,7 +89,12 @@ const nouvelAdaptateur = (env) => {
         };
         nouvelleLigne.contributeurs ||= [];
 
-        const intervenant = { id: ligne.idUtilisateur, ...ligne.donneesUtilisateur };
+        const intervenant = {
+          id: ligne.idUtilisateur,
+          dateCreation: ligne.dateCreationUtilisateur,
+          ...ligne.donneesUtilisateur,
+        };
+
         switch (ligne.type) {
           case 'contributeur':
             nouvelleLigne.contributeurs.push(intervenant);
