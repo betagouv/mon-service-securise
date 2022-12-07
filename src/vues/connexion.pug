@@ -2,6 +2,7 @@ extends mssConnexionEnCours
 
 block append styles
   link(href='/statique/assets/styles/formulaire.css', rel='stylesheet')
+  link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
 block main
   form.etroit
@@ -15,7 +16,8 @@ block main
       label Mot de passe
         br
         input(id='mot-de-passe', type='password')
-        a(href='/reinitialisationMotDePasse' class='texte-normal') mot de passe oublié
+      .message-erreur L'email et le mot de passe saisis ne correspondent à aucun compte. Veuillez renseigner les identifiants d'un compte existant.
+      a(href='/reinitialisationMotDePasse' class='texte-normal') mot de passe oublié
     .bouton Valider
 
   script(src='/statique/connexion.js')
