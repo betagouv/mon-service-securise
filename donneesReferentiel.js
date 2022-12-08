@@ -1,6 +1,5 @@
 const { departements } = require('./donneesReferentielDepartements');
 
-const echeance = (duree) => `Dans ${duree}`;
 const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)} après signature de la présente homologation`;
 
 module.exports = {
@@ -619,9 +618,9 @@ module.exports = {
   },
 
   echeancesRenouvellement: {
-    sixMois: { description: echeance('six mois'), expiration: expiration('six mois') },
-    unAn: { description: echeance('un an'), expiration: expiration('un an') },
-    deuxAns: { description: echeance('deux ans'), expiration: expiration('deux ans') },
+    sixMois: { description: '6 mois', expiration: expiration('six mois') },
+    unAn: { description: '1 an', expiration: expiration('un an') },
+    deuxAns: { description: '2 ans', expiration: expiration('deux ans') },
   },
 
   etapesParcoursHomologation: [

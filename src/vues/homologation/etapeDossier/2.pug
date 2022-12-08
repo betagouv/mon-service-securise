@@ -1,7 +1,34 @@
 extends ../formulaireEtapier
 
+include ../../fragments/inputChoix
+
+block append styles
+  link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
+
 block formulaire
-  // rien pour l'instant
+  .mention champ obligatoire
+
+  section
+    p.
+      Saisissez les informations remplies par l'autorité d'homologation sur le document
+      <a href="/statique/assets/pdf/dossierDecision.pdf" target="_blank" rel="noopener">Décision
+      de l'homologation de sécurité</a>.
+
+    .requis
+      label Date d'homologation
+        .infos-complementaires Cette date correspond à la date de signature de l'autorité d'homologation.
+        input(id = 'date-homologation' nom = 'dateHomologation', type = 'date', required)
+        .message-erreur Ce champ est obligatoire. Veuillez saisir une date.
+
+    .requis
+      +inputChoix({
+        type: 'radio',
+        nom: 'dureeValidite',
+        items: referentiel.echeancesRenouvellement(),
+        titre: "Durée de validité de l'homologation",
+        messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
+        requis: true,
+      })
 
 block bouton-etape
-  .bouton#suivant(idHomologation = homologation.id, idEtapeSuivante = idEtape + 1) Suivant
+  button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape-suivante = idEtape + 1) Suivant

@@ -55,6 +55,10 @@ input[type='text']:last-of-type {
   margin-bottom: 0;
 }
 
+input[type='date'] {
+  width: 11em;
+}
+
 input[type="checkbox"], input[type="radio"] {
   appearance: none;
   background-color: #fff;
