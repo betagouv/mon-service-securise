@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 
 const { ErreurCategorieInconnue, ErreurDonneesStatistiques } = require('../../src/erreurs');
+const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 const Referentiel = require('../../src/referentiel');
 const StatistiquesMesures = require('../../src/modeles/statistiquesMesures');
 
@@ -275,10 +276,11 @@ describe('Les statistiques sur les mesures de sécurité', () => {
   });
 
   describe('sur demande de la complétude', () => {
-    elles('savent calculer la complétude à partir des mesures personnalisées fournies', () => {
-      const troisRempliesSurDix = { total: 10, fait: 1, enCours: 1, nonFait: 1 };
-      const quatreRempliesSurDix = { total: 10, fait: 2, enCours: 1, nonFait: 1 };
+    const troisRempliesSurDix = { total: 10, fait: 1, enCours: 1, nonFait: 1 };
+    const quatreRempliesSurDix = { total: 10, fait: 2, enCours: 1, nonFait: 1 };
 
+    elles('savent calculer la complétude à partir des mesures personnalisées fournies', () => {
+      const aucuneSpecifique = new MesuresSpecifiques();
       const statsUneCategorie = new StatistiquesMesures({
         une: {
           indispensables: troisRempliesSurDix,
@@ -292,11 +294,36 @@ describe('Les statistiques sur les mesures de sécurité', () => {
           retenues: (1 + 1) + (2 + 1),
           misesEnOeuvre: 1 + 2,
         },
-      }, referentiel);
+      },
+      referentiel,
+      aucuneSpecifique);
 
       expect(statsUneCategorie.completude()).to.eql({
         nombreTotalMesures: (10 + 10) * 2,
         nombreMesuresCompletes: (3 + 4) * 2,
+      });
+    });
+
+    elles('intègrent au calcul les mesures spécifiques qui sont fournies', () => {
+      const uneSpecifiqueRemplieSurDeux = new MesuresSpecifiques(
+        { mesuresSpecifiques: [{ statut: 'fait' }, { statut: '' }] },
+        referentiel
+      );
+
+      const statsUneCategorie = new StatistiquesMesures({
+        une: {
+          indispensables: troisRempliesSurDix,
+          recommandees: quatreRempliesSurDix,
+          retenues: (1 + 1) + (2 + 1),
+          misesEnOeuvre: 1 + 2,
+        },
+      },
+      referentiel,
+      uneSpecifiqueRemplieSurDeux);
+
+      expect(statsUneCategorie.completude()).to.eql({
+        nombreTotalMesures: 10 + 10 + 2,
+        nombreMesuresCompletes: 3 + 4 + 1,
       });
     });
   });

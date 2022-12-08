@@ -47,10 +47,11 @@ class StatistiquesMesures {
       .reduce((acc, categorie) => ({ ...acc, [categorie]: statsInitiales() }), {});
   }
 
-  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide(), mesuresSpecifiques) {
     valide(donnees, referentiel);
     this.donnees = donnees;
     this.referentiel = referentiel;
+    this.mesuresSpecifiques = mesuresSpecifiques;
   }
 
   aRemplir(idCategorie) {
@@ -72,8 +73,13 @@ class StatistiquesMesures {
   }
 
   completude() {
-    const nombreTotalMesures = this.indispensables().total + this.recommandees().total;
-    const nombreMesuresCompletes = nombreTotalMesures - this.aRemplirToutesCategories();
+    const nombreTotalMesures = this.indispensables().total
+        + this.recommandees().total
+        + this.mesuresSpecifiques.nombre();
+
+    const nombreMesuresCompletes = nombreTotalMesures
+        - this.aRemplirToutesCategories()
+        - this.mesuresSpecifiques.nombreDeSansStatut();
 
     return { nombreTotalMesures, nombreMesuresCompletes };
   }
