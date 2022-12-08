@@ -13,7 +13,7 @@ block append page
         Toutes les mesures indispensables #[.icone-etoile], recommandées et créées sont classées selon leur statut de mise en œuvre et par catégorie.
     section.mesures-par-statut
       h2 En cours
-      - const mesuresEnCours = homologation.mesuresParStatut().enCours
+      - const mesuresEnCours = homologation.mesuresParStatutEtCategorie().enCours
       each mesures, categorie in mesuresEnCours
         h3= categorie
         ul
