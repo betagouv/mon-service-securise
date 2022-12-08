@@ -42,25 +42,16 @@ header {
 }
 
 .logo-mss {
-  color: var(--bleu-anssi);
-}
-
-.logo-mss::before {
-  content: '';
-  display: block;
-  position: absolute;
-  margin: 11px 0 0 -30px;
-
-  width: 25px;
-  height: 30px;
+  width: 14em;
+  height: 5em;
 
   background-image: url(../images/logo_mss.svg);
+  background-origin: content-box;
   background-repeat: no-repeat;
+  background-position: center;
   background-size: contain;
-}
 
-.logo-mss .logo {
-  font-size: 2em;
+  color: var(--bleu-anssi);
 }
 
 .logo-anssi {
