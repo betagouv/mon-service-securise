@@ -3,6 +3,7 @@ const Referentiel = require('../referentiel');
 
 const AvisExpertCyber = require('./avisExpertCyber');
 const DescriptionService = require('./descriptionService');
+const Dossiers = require('./dossiers');
 const Mesure = require('./mesure');
 const Mesures = require('./mesures');
 const Risques = require('./risques');
@@ -28,6 +29,7 @@ class Homologation {
       contributeurs = [],
       createur = {},
       descriptionService = {},
+      dossiers = [],
       mesuresSpecifiques = [],
       risquesGeneraux = [],
       risquesSpecifiques = [],
@@ -39,6 +41,7 @@ class Homologation {
     if (createur.email) this.createur = new Utilisateur(createur);
     this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
     this.descriptionService = new DescriptionService(descriptionService, referentiel);
+    this.dossiers = new Dossiers({ dossiers }, referentiel);
 
     let { mesuresGenerales = [] } = donnees;
     const mesuresPersonnalisees = moteurRegles.mesures(this.descriptionService);
@@ -95,6 +98,10 @@ class Homologation {
     }, {});
   }
 
+  dossierCourant() {
+    return this.dossiers.item(0);
+  }
+
   expertCybersecurite() { return this.rolesResponsabilites.expertCybersecurite; }
 
   fonctionAutoriteHomologation() { return this.rolesResponsabilites.fonctionAutoriteHomologation; }
@@ -114,6 +121,10 @@ class Homologation {
   }
 
   mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }
+
+  nombreDossiers() {
+    return this.dossiers.nombre();
+  }
 
   nombreMesuresSpecifiques() {
     return this.mesures.nombreMesuresSpecifiques();

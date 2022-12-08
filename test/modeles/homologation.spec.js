@@ -124,6 +124,22 @@ describe('Une homologation', () => {
     expect(homologation.structureDeveloppement()).to.equal('Une structure');
   });
 
+  it('connaît ses dossiers', () => {
+    const referentiel = Referentiel.creeReferentiel({ echeancesRenouvellement: { unAn: {} } });
+    const homologation = new Homologation({ id: '123', dossiers: [{ id: '999' }] }, referentiel);
+
+    expect(homologation.nombreDossiers()).to.equal(1);
+  });
+
+  it('utilise le premier dossier comme dossier courant', () => {
+    const referentiel = Referentiel.creeReferentiel({ echeancesRenouvellement: { unAn: {} } });
+    const homologation = new Homologation({
+      id: '123', dossiers: [{ id: '999', dateHomologation: '2022-12-01', dureeValidite: 'unAn' }],
+    }, referentiel);
+
+    expect(homologation.dossierCourant().id).to.equal('999');
+  });
+
   it('connaît ses risques spécifiques', () => {
     const homologation = new Homologation({
       id: '123',
