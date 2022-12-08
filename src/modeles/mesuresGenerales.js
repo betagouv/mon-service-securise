@@ -33,7 +33,7 @@ class MesuresGenerales extends ElementsConstructibles {
       .reduce(rangeMesureParStatut, accumulateur);
   }
 
-  statistiques(mesuresPersonnalisees) {
+  statistiques(mesuresPersonnalisees, mesuresSpecifiques) {
     const stats = StatistiquesMesures.donneesAZero(
       MesureGenerale.statutsPossibles(),
       this.referentiel.identifiantsCategoriesMesures()
@@ -71,7 +71,7 @@ class MesuresGenerales extends ElementsConstructibles {
         return acc;
       }, stats);
 
-    return new StatistiquesMesures(stats, this.referentiel);
+    return new StatistiquesMesures(stats, this.referentiel, mesuresSpecifiques);
   }
 
   statutSaisie() {
