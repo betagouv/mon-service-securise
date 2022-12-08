@@ -5,10 +5,12 @@ class ErreurAutorisationExisteDeja extends ErreurModele {}
 class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
+class ErreurDateHomologationInvalide extends ErreurModele {}
 class ErreurDateRenouvellementInvalide extends ErreurModele {}
 class ErreurDepartementInconnu extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
+class ErreurDureeValiditeInvalide extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
 class ErreurCGUNonAcceptees extends Error {}
 class ErreurHomologationInexistante extends ErreurModele {}
@@ -41,10 +43,12 @@ module.exports = {
   ErreurAutorisationInexistante,
   ErreurAvisInvalide,
   ErreurCategorieInconnue,
+  ErreurDateHomologationInvalide,
   ErreurDateRenouvellementInvalide,
   ErreurDepartementInconnu,
   ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
+  ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
   ErreurCGUNonAcceptees,
   ErreurHomologationInexistante,
