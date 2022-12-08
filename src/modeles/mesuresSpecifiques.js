@@ -4,7 +4,7 @@ const Referentiel = require('../referentiel');
 
 class MesuresSpecifiques extends ElementsConstructibles {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
-    const { mesuresSpecifiques } = donnees;
+    const { mesuresSpecifiques = [] } = donnees;
     super(MesureSpecifique, { items: mesuresSpecifiques }, referentiel);
   }
 
@@ -18,6 +18,10 @@ class MesuresSpecifiques extends ElementsConstructibles {
       });
       return acc;
     }, accumulateur);
+  }
+
+  nombreDeSansStatut() {
+    return this.toutes().filter((ms) => !ms.statutRenseigne()).length;
   }
 }
 
