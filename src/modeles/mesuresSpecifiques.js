@@ -10,7 +10,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
 
   parStatutEtCategorie(accumulateur = { fait: {}, enCours: {}, nonFait: {} }) {
     return this.toutes().reduce((acc, mesure) => {
-      if (!mesure.statut) return acc;
+      if (!mesure.statut || !mesure.categorie) return acc;
       acc[mesure.statut][mesure.categorie] ||= [];
       acc[mesure.statut][mesure.categorie].push({
         description: mesure.descriptionMesure(),
