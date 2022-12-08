@@ -68,6 +68,10 @@ class Homologation {
 
   indiceCyber() { return this.mesures.indiceCyber(); }
 
+  completudeMesures() {
+    return this.statistiquesMesures().completude();
+  }
+
   delegueProtectionDonnees() {
     return this.rolesResponsabilites.delegueProtectionDonnees;
   }

@@ -46,7 +46,10 @@ class Mesures extends InformationsHomologation {
   }
 
   statistiques() {
-    return this.mesuresGenerales.statistiques(this.mesuresPersonnalisees);
+    return this.mesuresGenerales.statistiques(
+      this.mesuresPersonnalisees,
+      this.mesuresSpecifiques
+    );
   }
 
   statutSaisie() {
