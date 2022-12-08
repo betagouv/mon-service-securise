@@ -1,7 +1,6 @@
 .mention {
   align-self: end;
   margin-top: 2em;
-  margin-bottom: -1em;
 }
 
 .mention::before {

@@ -5,6 +5,10 @@ hr {
   border: solid 1px var(--liseres);
 }
 
+section {
+  border: 0;
+}
+
 .etapes {
   margin-top: 3em;
   display: flex;

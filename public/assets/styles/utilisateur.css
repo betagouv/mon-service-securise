@@ -20,6 +20,10 @@
   padding: 1em 1em 1em 0.8em;
 }
 
+.mention {
+  margin-bottom: -1em;
+}
+
 select {
   box-sizing: border-box;
   width: 100%;
