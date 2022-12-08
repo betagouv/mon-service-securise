@@ -12,7 +12,7 @@ class MesuresGenerales extends ElementsConstructibles {
     return this.nombre() === 0;
   }
 
-  parStatut() {
+  parStatutEtCategorie() {
     const rangeMesureParStatut = (acc, mesure) => {
       const mesureReference = this.referentiel.mesure(mesure.id);
       acc[mesure.statut][mesureReference.categorie] ||= [];

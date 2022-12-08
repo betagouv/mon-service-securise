@@ -204,32 +204,32 @@ describe('La liste des mesures générales', () => {
     it('regroupe par statut les mesures', () => {
       const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
 
-      expect(mesures.parStatut().fait).to.be.ok();
+      expect(mesures.parStatutEtCategorie().fait).to.be.ok();
     });
 
     it('regroupe par catégorie les mesures', () => {
       const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
 
-      expect(mesures.parStatut().fait.categorie1.length).to.equal(1);
+      expect(mesures.parStatutEtCategorie().fait.categorie1.length).to.equal(1);
     });
 
     it("ajoute l'importance de la mesure", () => {
       const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
 
-      expect(mesures.parStatut().fait.categorie1[0].indispensable).to.be(true);
+      expect(mesures.parStatutEtCategorie().fait.categorie1[0].indispensable).to.be(true);
     });
 
     it('ajoute la description de la mesure', () => {
       const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
 
-      expect(mesures.parStatut().fait.categorie1[0].description).to.equal('Mesure une');
+      expect(mesures.parStatutEtCategorie().fait.categorie1[0].description).to.equal('Mesure une');
     });
 
     it('ajoute les modalités de la mesure', () => {
       const mesuresGenerales = [{ id: 'mesure1', statut: 'fait', modalites: 'Modalités de la mesure' }];
       const mesures = new MesuresGenerales({ mesuresGenerales }, referentiel, ['mesure1']);
 
-      expect(mesures.parStatut().fait.categorie1[0].modalites).to.equal('Modalités de la mesure');
+      expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).to.equal('Modalités de la mesure');
     });
 
     it('retourne les mesures indispensables avant les mesures recommandées', () => {
@@ -239,7 +239,7 @@ describe('La liste des mesures générales', () => {
         { id: 'mesure3', statut: 'fait' },
       ] }, referentiel);
 
-      expect(mesures.parStatut().fait.categorie1[2].description).to.equal('Mesure deux');
+      expect(mesures.parStatutEtCategorie().fait.categorie1[2].description).to.equal('Mesure deux');
     });
   });
 });

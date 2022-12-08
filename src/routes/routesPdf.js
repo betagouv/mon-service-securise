@@ -9,7 +9,7 @@ const routesPdf = (middleware, referentiel, adaptateurPdf) => {
       statuts: referentiel.statutsMesures(),
       categories: referentiel.categoriesMesures(),
       nomService: homologation.nomService(),
-      mesuresParStatut: homologation.mesuresParStatut(),
+      mesuresParStatut: homologation.mesuresParStatutEtCategorie(),
       nbMesuresARemplirToutesCategories: homologation.nombreTotalMesuresARemplirToutesCategories(),
       CHEMIN_BASE_ABSOLU: process.env.CHEMIN_BASE_ABSOLU,
     };

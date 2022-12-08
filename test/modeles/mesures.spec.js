@@ -109,9 +109,9 @@ describe('Les mesures liées à une homologation', () => {
 
     elles('récupère les mesures générales triées', () => {
       const mesures = new Mesures({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel, ['mesure1']);
-      mesures.mesuresGenerales.parStatut = () => ({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
+      mesures.mesuresGenerales.parStatutEtCategorie = () => ({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
 
-      expect(mesures.parStatut()).to.eql({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
+      expect(mesures.parStatutEtCategorie()).to.eql({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
     });
 
     elles('ajoutent les mesures spécifiques', () => {
@@ -119,9 +119,9 @@ describe('Les mesures liées à une homologation', () => {
         mesuresSpecifiques: [{ description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1' }],
       },
       referentiel, ['mesure1']);
-      mesures.mesuresSpecifiques.parStatut = () => ({ fait: { categorie1: [{ description: 'Mesure Spécifique 1' }] } });
+      mesures.mesuresSpecifiques.parStatutEtCategorie = () => ({ fait: { categorie1: [{ description: 'Mesure Spécifique 1' }] } });
 
-      expect(mesures.parStatut()).to.eql({ fait: { categorie1: [{ description: 'Mesure Spécifique 1' }] } });
+      expect(mesures.parStatutEtCategorie()).to.eql({ fait: { categorie1: [{ description: 'Mesure Spécifique 1' }] } });
     });
 
     elles('fusionnent les mesures générales et spécifiques', () => {
@@ -130,14 +130,14 @@ describe('Les mesures liées à une homologation', () => {
         mesuresSpecifiques: [{ description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1' }],
       },
       referentiel, ['mesure1']);
-      mesures.mesuresGenerales.parStatut = () => ({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
-      mesures.mesuresSpecifiques.parStatut = (mesuresParStatut) => {
+      mesures.mesuresGenerales.parStatutEtCategorie = () => ({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
+      mesures.mesuresSpecifiques.parStatutEtCategorie = (mesuresParStatut) => {
         expect(mesuresParStatut).to.eql({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
         return { fait: { categorie1: [{ description: 'mesure1', indispensable: true }, { description: 'Mesure Spécifique 1' }] } };
       };
 
-      expect(mesures.parStatut().fait.categorie1.length).to.equal(2);
-      expect(mesures.parStatut().fait.categorie1).to.eql([{ description: 'mesure1', indispensable: true }, { description: 'Mesure Spécifique 1' }]);
+      expect(mesures.parStatutEtCategorie().fait.categorie1.length).to.equal(2);
+      expect(mesures.parStatutEtCategorie().fait.categorie1).to.eql([{ description: 'mesure1', indispensable: true }, { description: 'Mesure Spécifique 1' }]);
     });
   });
 });

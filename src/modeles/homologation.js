@@ -109,8 +109,8 @@ class Homologation {
     return this.descriptionService.localisationDonnees;
   }
 
-  mesuresParStatut() {
-    return this.mesures.parStatut();
+  mesuresParStatutEtCategorie() {
+    return this.mesures.parStatutEtCategorie();
   }
 
   mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }

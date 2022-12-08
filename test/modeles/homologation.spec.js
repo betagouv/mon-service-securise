@@ -293,9 +293,9 @@ describe('Une homologation', () => {
 
   it('délègue aux mesures la récupération des mesures par statut et par catégorie', () => {
     const homologation = new Homologation({ mesuresGenerales: [{ id: 'mesure1', statut: 'enCours' }] });
-    homologation.mesures.parStatut = () => ({ unStatut: {} });
+    homologation.mesures.parStatutEtCategorie = () => ({ unStatut: {} });
 
-    expect(homologation.mesuresParStatut()).to.eql({ unStatut: {} });
+    expect(homologation.mesuresParStatutEtCategorie()).to.eql({ unStatut: {} });
   });
 
   it('sait décrire le statut de déploiement', () => {

@@ -35,8 +35,8 @@ describe('La liste des mesures spécifiques', () => {
     },
     referentiel);
 
-    expect(mesures.parStatut().fait.categorie1[0].description).to.equal('Mesure Spécifique 1');
-    expect(mesures.parStatut().nonFait.categorie1[0].description).to.equal('Mesure Spécifique 2');
+    expect(mesures.parStatutEtCategorie().fait.categorie1[0].description).to.equal('Mesure Spécifique 1');
+    expect(mesures.parStatutEtCategorie().nonFait.categorie1[0].description).to.equal('Mesure Spécifique 2');
   });
 
   elle('prend le modalités lors du tri par statut', () => {
@@ -45,8 +45,8 @@ describe('La liste des mesures spécifiques', () => {
     },
     referentiel);
 
-    expect(mesures.parStatut().fait.categorie1.length).to.equal(1);
-    expect(mesures.parStatut().fait.categorie1[0].modalites).to.equal('Modalités');
+    expect(mesures.parStatutEtCategorie().fait.categorie1.length).to.equal(1);
+    expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).to.equal('Modalités');
   });
 
   elle('exclut les mesures sans statut', () => {
@@ -58,8 +58,8 @@ describe('La liste des mesures spécifiques', () => {
     },
     referentiel);
 
-    expect(mesures.parStatut().fait.categorie1.length).to.equal(1);
-    expect(mesures.parStatut().fait.categorie1[0].modalites).to.equal('Modalités');
+    expect(mesures.parStatutEtCategorie().fait.categorie1.length).to.equal(1);
+    expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).to.equal('Modalités');
   });
 
   elle('peut être triée par statut en utilisant un accumulateur personnalisé', () => {
@@ -68,7 +68,7 @@ describe('La liste des mesures spécifiques', () => {
     },
     referentiel);
 
-    const mesuresParStatut = mesures.parStatut({ fait: { categorie1: [{ description: 'Mesure une', indispensable: true }] }, enCours: {}, nonFait: {} });
+    const mesuresParStatut = mesures.parStatutEtCategorie({ fait: { categorie1: [{ description: 'Mesure une', indispensable: true }] }, enCours: {}, nonFait: {} });
     expect(mesuresParStatut.fait.categorie1.length).to.equal(2);
     expect(mesuresParStatut.fait.categorie1[0].description).to.equal('Mesure une');
     expect(mesuresParStatut.fait.categorie1[1].description).to.equal('Mesure Spécifique 1');
