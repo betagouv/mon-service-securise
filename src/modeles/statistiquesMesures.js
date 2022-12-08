@@ -71,6 +71,13 @@ class StatistiquesMesures {
     return categories(this.donnees);
   }
 
+  completude() {
+    const nombreTotalMesures = this.indispensables().total + this.recommandees().total;
+    const nombreMesuresCompletes = nombreTotalMesures - this.aRemplirToutesCategories();
+
+    return { nombreTotalMesures, nombreMesuresCompletes };
+  }
+
   enCours(idCategorie) {
     const stats = this.donnees[idCategorie];
     return stats.retenues - stats.misesEnOeuvre;
