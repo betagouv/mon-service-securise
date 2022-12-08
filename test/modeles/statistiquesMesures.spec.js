@@ -274,6 +274,33 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     expect(stats.recommandees().total).to.equal(12 + 15);
   });
 
+  describe('sur demande de la complétude', () => {
+    elles('savent calculer la complétude à partir des mesures personnalisées fournies', () => {
+      const troisRempliesSurDix = { total: 10, fait: 1, enCours: 1, nonFait: 1 };
+      const quatreRempliesSurDix = { total: 10, fait: 2, enCours: 1, nonFait: 1 };
+
+      const statsUneCategorie = new StatistiquesMesures({
+        une: {
+          indispensables: troisRempliesSurDix,
+          recommandees: quatreRempliesSurDix,
+          retenues: (1 + 1) + (2 + 1),
+          misesEnOeuvre: 1 + 2,
+        },
+        deux: {
+          indispensables: troisRempliesSurDix,
+          recommandees: quatreRempliesSurDix,
+          retenues: (1 + 1) + (2 + 1),
+          misesEnOeuvre: 1 + 2,
+        },
+      }, referentiel);
+
+      expect(statsUneCategorie.completude()).to.eql({
+        nombreTotalMesures: (10 + 10) * 2,
+        nombreMesuresCompletes: (3 + 4) * 2,
+      });
+    });
+  });
+
   elles('savent créer un JSON de statistiques à 0 à partir de statuts et de categories', () => {
     const statsZero = StatistiquesMesures.donneesAZero(
       ['fait', 'enCours', 'nonFait'],
