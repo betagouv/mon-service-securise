@@ -78,26 +78,16 @@ header nav a, .nom-utilisateur-courant {
 }
 
 .logo-mss {
-  display: flex;
-  align-items: center;
+  width: 11em;
+  height: 4.05em;
   margin-right: auto;
   padding: 0.3em 0.85em;
 
-  font-size: 1.2em;
-}
-
-.logo-mss::before {
-  display: inline-block;
-  content: '';
-  width: 1.5em;
-  height: 1.5em;
-  margin-right: 0.4em;
-
-  -webkit-mask: url(../images/logo_mss.svg) no-repeat center;
-  mask: url(../images/logo_mss.svg) no-repeat center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  background-color: var(--bleu-anssi);
+  background-image: url(../images/logo_mss.svg);
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .utilisateur-courant {
