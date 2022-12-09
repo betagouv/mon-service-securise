@@ -146,6 +146,12 @@ const nouvelAdaptateur = (env) => {
     .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
     .then((rows) => rows.map(convertisLigneEnObjet));
 
+  const autorisationsCreation = (idUtilisateur, idsHomologationsAExclure = []) => knex('autorisations')
+    .whereRaw("donnees->>'idUtilisateur'=? AND donnees->>'type'='createur'", idUtilisateur)
+    .whereNotIn(knex.raw("donnees->>'idHomologation'"), idsHomologationsAExclure)
+    .select({ idHomologation: knex.raw("donnees->>'idHomologation'") })
+    .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
+
   const ajouteAutorisation = (...params) => ajouteLigneDansTable('autorisations', ...params);
 
   const supprimeAutorisation = (idUtilisateur, idHomologation) => knex('autorisations')
@@ -180,6 +186,7 @@ const nouvelAdaptateur = (env) => {
     autorisation,
     autorisationPour,
     autorisations,
+    autorisationsCreation,
     homologation,
     homologationAvecNomService,
     homologations,

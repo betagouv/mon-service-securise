@@ -934,4 +934,48 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
   });
+
+  describe('sur demande de suppression des homologations créées par un utilisateur', () => {
+    it("supprime les homologations dont l'utilisateur est le créateur", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: 'ABC', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [{ id: '456', idUtilisateur: 'ABC', idHomologation: '123', type: 'createur' }],
+      });
+
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+
+      adaptateurPersistance.homologation('123')
+        .then((h) => expect(h).to.be.an(Object))
+        .then(() => depot.supprimeHomologationsCreeesPar('ABC'))
+        .then(() => adaptateurPersistance.homologation('123'))
+        .then((h) => expect(h).to.be(undefined))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("ne supprime pas les homologations où l'utilisateur est contributeur", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: 'ABC', email: 'jean.dupont@mail.fr' },
+          { id: 'DEF', email: 'martin.dujardin@mail.fr' },
+        ],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [
+          { id: 'a', idUtilisateur: 'ABC', idHomologation: '123', type: 'createur' },
+          { id: 'b', idUtilisateur: 'DEF', idHomologation: '123', type: 'contributeur' },
+        ],
+      });
+
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+
+      adaptateurPersistance.homologation('123')
+        .then((h) => expect(h).to.be.an(Object))
+        .then(() => depot.supprimeHomologationsCreeesPar('DEF'))
+        .then(() => adaptateurPersistance.homologation('123'))
+        .then((h) => expect(h).to.be.an(Object))
+        .then(() => done())
+        .catch(done);
+    });
+  });
 });

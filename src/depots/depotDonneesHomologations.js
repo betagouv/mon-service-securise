@@ -202,6 +202,11 @@ const creeDepot = (config = {}) => {
       adaptateurPersistance.supprimeService(idHomologation),
     ]));
 
+  const supprimeHomologationsCreeesPar = (idUtilisateur, idsHomologationsAConserver = []) => (
+    adaptateurPersistance.autorisationsCreation(idUtilisateur, idsHomologationsAConserver)
+      .then((idsHomologations) => Promise.all(idsHomologations.map(supprimeHomologation)))
+  );
+
   return {
     ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
@@ -218,6 +223,7 @@ const creeDepot = (config = {}) => {
     remplaceMesuresSpecifiquesPourHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
+    supprimeHomologationsCreeesPar,
   };
 };
 
