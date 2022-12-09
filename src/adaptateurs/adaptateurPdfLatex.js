@@ -1,5 +1,6 @@
 const fsPromises = require('fs/promises');
 const pdflatex = require('node-pdflatex').default;
+const { PDFDocument } = require('pdf-lib');
 
 const fabriquantGabarit = require('../latex/fabriquantGabarit');
 const { miseEnFormeLatex } = require('../latex/miseEnFormeDonnees');
@@ -19,4 +20,25 @@ const genereAnnexeMesures = (donnees) => generationPdfLatex('src/vuesTex/annexeM
 
 const genereAnnexeRisques = (donnees) => generationPdfLatex('src/vuesTex/annexeRisques.template.tex', donnees);
 
-module.exports = { genereAnnexeMesures, genereAnnexeRisques };
+const genereAnnexes = (donneesMesures, donneesRisques) => {
+  const ajoutePdf = (accumulateurPdf, pdfAAjouter) => accumulateurPdf
+    .then((pdfFusion) => pdfAAjouter.then((pdfAnnexe) => ({ pdfAnnexe, pdfFusion })))
+    .then(({ pdfAnnexe, pdfFusion }) => (
+      PDFDocument.load(pdfAnnexe).then((pdf) => ({ pdf, pdfFusion }))
+    ))
+    .then(({ pdf, pdfFusion }) => {
+      pdfFusion.copyPages(pdf, pdf.getPageIndices()).then((pagesCopiees) => {
+        pagesCopiees.forEach((page) => pdfFusion.addPage(page));
+      });
+      return pdfFusion;
+    });
+
+  return ajoutePdf(PDFDocument.create(), genereAnnexeMesures(donneesMesures))
+    .then((pdfFusion) => ajoutePdf(
+      Promise.resolve(pdfFusion), genereAnnexeRisques(donneesRisques)
+    ))
+    .then((pdfFusion) => pdfFusion.save())
+    .then((pdf) => Buffer.from(pdf.buffer, 'binary'));
+};
+
+module.exports = { genereAnnexeMesures, genereAnnexeRisques, genereAnnexes };
