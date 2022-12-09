@@ -124,7 +124,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
 
   app.use('/bibliotheques', routesBibliotheques());
 
-  app.use('/homologation', routesHomologation(middleware, referentiel, moteurRegles, adaptateurEnvironnement));
+  app.use('/homologation', routesHomologation(middleware, referentiel, depotDonnees, moteurRegles, adaptateurEnvironnement));
 
   app.use('/pdf', routesPdf(middleware, referentiel, adaptateurPdf));
 

@@ -4,6 +4,7 @@ const { EchecAutorisation, ErreurModele } = require('../erreurs');
 const ActeursHomologation = require('../modeles/acteursHomologation');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
 const DescriptionService = require('../modeles/descriptionService');
+const Dossier = require('../modeles/dossier');
 const FonctionnalitesSpecifiques = require('../modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('../modeles/donneesSensiblesSpecifiques');
 const MesureGenerale = require('../modeles/mesureGenerale');
@@ -200,6 +201,27 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       reponse.status(422).send('Données invalides');
     }
   });
+
+  routes.put(
+    '/:id/dossier',
+    middleware.aseptise('dateHomologation', 'dureeValidite'),
+    middleware.trouveHomologation,
+    (requete, reponse, suite) => {
+      const idHomologation = requete.homologation.id;
+      const { dateHomologation, dureeValidite } = requete.body;
+
+      if (!dateHomologation?.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        reponse.status(422).send("Date d'homologation manquante");
+      } else if (!dureeValidite) {
+        reponse.status(422).send('Durée de validité manquante');
+      } else {
+        const dossier = new Dossier({ dateHomologation, dureeValidite }, referentiel);
+        depotDonnees.metsAJourDossierCourant(idHomologation, dossier)
+          .then(() => reponse.send({ idHomologation }))
+          .catch(suite);
+      }
+    }
+  );
 
   routes.delete('/:id/autorisationContributeur',
     middleware.verificationAcceptationCGU,
