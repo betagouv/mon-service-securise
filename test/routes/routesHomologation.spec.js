@@ -131,9 +131,10 @@ describe('Le serveur MSS des routes /homologation/*', () => {
   });
 
   describe('quand requête GET sur `/homologation/:id/dossier/nouveau`', () => {
-    beforeEach(() => testeur.referentiel().recharge({
-      etapesParcoursHomologation: [{ numero: 1 }],
-    }));
+    beforeEach(() => {
+      testeur.referentiel().recharge({ etapesParcoursHomologation: [{ numero: 1 }] });
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
@@ -151,9 +152,10 @@ describe('Le serveur MSS des routes /homologation/*', () => {
   });
 
   describe('quand requête GET sur `/homologation/:id/dossier/edition/etape/:idEtape`', () => {
-    beforeEach(() => testeur.referentiel().recharge({
-      etapesParcoursHomologation: [{ numero: 1 }],
-    }));
+    beforeEach(() => {
+      testeur.referentiel().recharge({ etapesParcoursHomologation: [{ numero: 1 }] });
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
@@ -167,6 +169,24 @@ describe('Le serveur MSS des routes /homologation/*', () => {
         method: 'get',
         url: 'http://localhost:1234/homologation/456/dossier/edition/etape/2',
       }, done);
+    });
+
+    it("ajoute un dossier courant à l'homologation si nécessaire", (done) => {
+      let dossierAjoute = false;
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = (idHomologation) => {
+        try {
+          expect(idHomologation).to.equal('456');
+          dossierAjoute = true;
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios('http://localhost:1234/homologation/456/dossier/edition/etape/1')
+        .then(() => expect(dossierAjoute).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
     });
   });
 });

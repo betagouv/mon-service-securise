@@ -498,6 +498,71 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
   });
 
+  describe('quand requête PUT sur `/api/homologation/:id/dossier`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.referentiel().recharge({ echeancesRenouvellement: { unAn: {} } });
+    });
+
+    it('aseptise les paramètres', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['dateHomologation', 'dureeValidite'],
+        { method: 'put', url: 'http://localhost:1234/api/homologation/456/dossier' },
+        done
+      );
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheHomologation({
+        method: 'put',
+        url: 'http://localhost:1234/api/homologation/456/dossier',
+      }, done);
+    });
+
+    it('demande au dépôt de persister les données du dossier', (done) => {
+      let dossierSauve = false;
+      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+        try {
+          expect(idHomologation).to.equal('456');
+          expect(dossier.dateHomologation).to.equal('2022-12-01');
+          expect(dossier.dureeValidite).to.equal('unAn');
+          dossierSauve = true;
+
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.put('http://localhost:1234/api/homologation/456/dossier', {
+        dateHomologation: '2022-12-01',
+        dureeValidite: 'unAn',
+      })
+        .then((reponse) => {
+          expect(dossierSauve).to.be(true);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("retourne une erreur HTTP 422 s'il manque la date d'homologation", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(422, "Date d'homologation manquante", {
+        method: 'put',
+        url: 'http://localhost:1234/api/homologation/456/dossier',
+        data: { dureeValidite: 'unAn' },
+      }, done);
+    });
+
+    it("retourne une erreur HTTP 422 s'il manque la durée de validité", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(422, 'Durée de validité manquante', {
+        method: 'put',
+        url: 'http://localhost:1234/api/homologation/456/dossier',
+        data: { dateHomologation: '2022-12-01' },
+      }, done);
+    });
+  });
+
   describe('quand requête DELETE sur `/api/homologation/:id/autorisationContributeur`', () => {
     beforeEach(() => {
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(new AutorisationCreateur());

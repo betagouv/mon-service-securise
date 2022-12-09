@@ -4,7 +4,13 @@ const ActionsSaisie = require('../modeles/actionsSaisie');
 const Homologation = require('../modeles/homologation');
 const InformationsHomologation = require('../modeles/informationsHomologation');
 
-const routesHomologation = (middleware, referentiel, moteurRegles, adaptateurEnvironnement) => {
+const routesHomologation = (
+  middleware,
+  referentiel,
+  depotDonnees,
+  moteurRegles,
+  adaptateurEnvironnement,
+) => {
   const routes = express.Router();
 
   routes.get('/creation', middleware.verificationAcceptationCGU, (_requete, reponse) => {
@@ -89,13 +95,16 @@ const routesHomologation = (middleware, referentiel, moteurRegles, adaptateurEnv
     reponse.redirect(`/homologation/${requete.params.id}/dossier/edition/etape/1`);
   });
 
-  routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
     const idEtape = parseInt(requete.params.idEtape, 10);
+
     if (!referentiel.etapeExiste(idEtape)) {
       reponse.status(404).send('Étape inconnue');
     } else {
-      reponse.render(`homologation/etapeDossier/${idEtape}`, { referentiel, homologation, idEtape });
+      depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id)
+        .then(() => reponse.render(`homologation/etapeDossier/${idEtape}`, { referentiel, homologation, idEtape }))
+        .catch(suite);
     }
   });
 
