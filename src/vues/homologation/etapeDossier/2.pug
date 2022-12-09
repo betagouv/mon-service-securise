@@ -6,6 +6,8 @@ block append styles
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
 block formulaire
+  - const dossierCourant = homologation.dossierCourant()
+
   .mention champ obligatoire
 
   section
@@ -17,7 +19,7 @@ block formulaire
     .requis
       label Date d'homologation
         .infos-complementaires Cette date correspond à la date de signature de l'autorité d'homologation.
-        input(id = 'date-homologation' nom = 'dateHomologation', type = 'date', required)
+        input(id = 'date-homologation' nom = 'dateHomologation', type = 'date', required, value = dossierCourant.dateHomologation)
         .message-erreur Ce champ est obligatoire. Veuillez saisir une date.
 
     .requis
@@ -26,9 +28,10 @@ block formulaire
         nom: 'dureeValidite',
         items: referentiel.echeancesRenouvellement(),
         titre: "Durée de validité de l'homologation",
+        objetDonnees: dossierCourant,
         messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
         requis: true,
       })
 
 block bouton-etape
-  button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape-suivante = idEtape + 1) Suivant
+  button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape = idEtape, data-id-etape-suivante = idEtape + 1) Suivant
