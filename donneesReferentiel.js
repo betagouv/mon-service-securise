@@ -126,7 +126,7 @@ module.exports = {
     },
     identite: {
       description: "Données d'identité",
-      exemple: 'nom/prénom, pseudonyme, date de naissance, numéro de sécurité sociale.',
+      exemple: 'nom/prénom, pseudonyme, date de naissance.',
       seuilCriticite: 'faible',
     },
     document: {
@@ -154,8 +154,7 @@ module.exports = {
       seuilCriticite: 'eleve',
     },
     sensibiliteParticuliere: {
-      description: 'Données de santé et autres données particulièrement sensibles',
-      exemple: 'orientation sexuelle, origine, orientations politiques, religieuses.',
+      description: 'Données de santé',
       seuilCriticite: 'critique',
     },
   },
