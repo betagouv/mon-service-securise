@@ -29,6 +29,13 @@ class ConsoleAdministration {
     return this.depotDonnees.supprimeHomologation(idHomologation);
   }
 
+  supprimeHomologationsDeUtilisateur(idUtilisateur, idsHomologationsAConserver) {
+    return this.depotDonnees.supprimeHomologationsCreeesPar(
+      idUtilisateur,
+      idsHomologationsAConserver
+    );
+  }
+
   genereEvenementsDeCreationService(dateLimite, persisteEvenements = false) {
     const jourSuivant = (date) => {
       const timestampJourSuivant = new Date(date).setDate(date.getDate() + 1);
