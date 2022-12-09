@@ -620,6 +620,7 @@ module.exports = {
     sixMois: { description: '6 mois', expiration: expiration('six mois') },
     unAn: { description: '1 an', expiration: expiration('un an') },
     deuxAns: { description: '2 ans', expiration: expiration('deux ans') },
+    troisAns: { description: '3 ans', expiration: expiration('trois ans') },
   },
 
   etapesParcoursHomologation: [
