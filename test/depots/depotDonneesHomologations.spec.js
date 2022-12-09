@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 
 const {
+  ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
 } = require('../../src/erreurs');
@@ -16,6 +17,7 @@ const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../../src/modeles/avisExpertCyber');
 const DescriptionService = require('../../src/modeles/descriptionService');
+const Dossier = require('../../src/modeles/dossier');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
@@ -756,6 +758,143 @@ describe('Le dépôt de données des homologations', () => {
         .then((hs) => {
           expect(hs.length).to.be(2);
           expect(hs.map((h) => h.id)).to.eql(['123', '789']);
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe("sur demande d'ajout d'un dossier courant si nécessaire", () => {
+    let adaptateurUUID;
+
+    beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
+
+    it('ne fait rien si un dossier courant existe déjà', (done) => {
+      const donneesHomologations = {
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
+        dossiers: [{ id: '999' }],
+      };
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [copie(donneesHomologations)],
+        services: [copie(donneesHomologations)],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, adaptateurUUID });
+
+      depot.ajouteDossierCourantSiNecessaire('123')
+        .then(() => depot.homologation('123'))
+        .then((h) => expect(h.nombreDossiers()).to.equal(1))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("ajoute le dossier s'il n'existe pas déjà", (done) => {
+      const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [copie(donneesHomologations)],
+        services: [copie(donneesHomologations)],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, adaptateurUUID });
+
+      depot.ajouteDossierCourantSiNecessaire('123')
+        .then(() => depot.homologation('123'))
+        .then((h) => expect(h.nombreDossiers()).to.equal(1))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it('associe un UUID au dossier créé', (done) => {
+      const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [copie(donneesHomologations)],
+        services: [copie(donneesHomologations)],
+      });
+      adaptateurUUID.genereUUID = () => '999';
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, adaptateurUUID });
+
+      depot.ajouteDossierCourantSiNecessaire('123')
+        .then(() => depot.homologation('123'))
+        .then((h) => expect(h.dossiers.item(0).id).to.equal('999'))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("lève une exception si l'homologation n'existe pas", (done) => {
+      const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [copie(donneesHomologations)],
+        services: [copie(donneesHomologations)],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+
+      depot.ajouteDossierCourantSiNecessaire('999')
+        .then(() => done("La tentative d'ajout de dossier aurait dû lever une exception"))
+        .catch((e) => {
+          expect(e).to.be.an(ErreurHomologationInexistante);
+          expect(e.message).to.equal('Homologation "999" non trouvée');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('sur demande de mise à jour du dossier courant', () => {
+    let adaptateurUUID;
+    const referentiel = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { sixMois: {}, unAn: {} },
+    });
+
+    beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
+
+    it("crée le dossier s'il n'existe pas déjà", (done) => {
+      const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [copie(donneesHomologations)],
+        services: [copie(donneesHomologations)],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        adaptateurUUID,
+        referentiel,
+      });
+      const dossier = new Dossier({ dateHomologation: '2022-12-01', dureeValidite: 'unAn' }, referentiel);
+
+      depot.metsAJourDossierCourant('123', dossier)
+        .then(() => depot.homologation('123'))
+        .then((h) => {
+          expect(h.nombreDossiers()).to.equal(1);
+          const dossierCourant = h.dossierCourant();
+          expect(dossierCourant.dateHomologation).to.equal('2022-12-01');
+          expect(dossierCourant.dureeValidite).to.equal('unAn');
+          done();
+        })
+        .catch(done);
+    });
+
+    it("met à jour le dossier courant s'il existe", (done) => {
+      const donneesHomologations = {
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
+        dossiers: [{ id: '999', dateHomologation: '2022-12-01', dureeValidite: 'unAn' }],
+      };
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [copie(donneesHomologations)],
+        services: [copie(donneesHomologations)],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        adaptateurUUID,
+        referentiel,
+      });
+      const dossier = new Dossier({ dateHomologation: '2022-11-30', dureeValidite: 'sixMois' }, referentiel);
+
+      depot.metsAJourDossierCourant('123', dossier)
+        .then(() => depot.homologation('123'))
+        .then((h) => {
+          expect(h.nombreDossiers()).to.equal(1);
+          const dossierCourant = h.dossierCourant();
+          expect(dossierCourant.dateHomologation).to.equal('2022-11-30');
+          expect(dossierCourant.dureeValidite).to.equal('sixMois');
           done();
         })
         .catch(done);
