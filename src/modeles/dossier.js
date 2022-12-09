@@ -1,6 +1,7 @@
 const InformationsHomologation = require('./informationsHomologation');
 const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../erreurs');
 const Referentiel = require('../referentiel');
+const { dateInvalide } = require('../utilitaires/date');
 
 class Dossier extends InformationsHomologation {
   constructor(donneesDossier = {}, referentiel = Referentiel.creeReferentielVide()) {
@@ -17,7 +18,7 @@ class Dossier extends InformationsHomologation {
       );
     }
 
-    if (dateHomologation && Number.isNaN(new Date(dateHomologation).valueOf())) {
+    if (dateHomologation && dateInvalide(dateHomologation)) {
       throw new ErreurDateHomologationInvalide(
         `La date "${dateHomologation}" est invalide`
       );
