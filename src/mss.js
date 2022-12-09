@@ -126,7 +126,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
 
   app.use('/homologation', routesHomologation(middleware, referentiel, depotDonnees, moteurRegles, adaptateurEnvironnement));
 
-  app.use('/pdf', routesPdf(middleware, referentiel, adaptateurPdf));
+  app.use('/pdf', routesPdf(middleware, adaptateurPdf));
 
   app.get('/utilisateur/edition', (requete, reponse) => {
     sersFormulaireEditionUtilisateur(requete, reponse);

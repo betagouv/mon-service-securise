@@ -6,6 +6,7 @@ const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const Utilisateur = require('../../src/modeles/utilisateur');
 const VueAnnexePDFRisques = require('../../src/modeles/objetsVues/vueAnnexePDFRisques');
+const VueAnnexePDFMesures = require('../../src/modeles/objetsVues/vueAnnexePDFMesures');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
@@ -376,5 +377,15 @@ describe('Une homologation', () => {
     });
 
     expect(homologation.vueAnnexePDFRisques()).to.be.a(VueAnnexePDFRisques);
+  });
+
+  it("récupère un objet de vue pour le pdf de l'annexe des mesures", () => {
+    const homologation = new Homologation({
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'nom' },
+    });
+
+    expect(homologation.vueAnnexePDFMesures()).to.be.a(VueAnnexePDFMesures);
   });
 });

@@ -1,18 +1,11 @@
 const express = require('express');
 
-const routesPdf = (middleware, referentiel, adaptateurPdf) => {
+const routesPdf = (middleware, adaptateurPdf) => {
   const routes = express.Router();
 
   routes.get('/:id/annexeMesures.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
-    const donnees = {
-      statuts: referentiel.statutsMesures(),
-      categories: referentiel.categoriesMesures(),
-      nomService: homologation.nomService(),
-      mesuresParStatut: homologation.mesuresParStatutEtCategorie(),
-      nbMesuresARemplirToutesCategories: homologation.nombreTotalMesuresARemplirToutesCategories(),
-      CHEMIN_BASE_ABSOLU: process.env.CHEMIN_BASE_ABSOLU,
-    };
+    const donnees = homologation.vueAnnexePDFMesures().donnees();
     adaptateurPdf.genereAnnexeMesures(donnees)
       .then((pdf) => {
         reponse.contentType('application/pdf');

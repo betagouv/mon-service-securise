@@ -7,6 +7,7 @@ const { miseEnFormeLatex } = require('../latex/miseEnFormeDonnees');
 const generationPdfLatex = (cheminFichierTex, donnees = {}) => fsPromises
   .readFile(cheminFichierTex)
   .then((donneesFichier) => {
+    donnees.CHEMIN_BASE_ABSOLU = process.env.CHEMIN_BASE_ABSOLU;
     const donneesMisesEnForme = miseEnFormeLatex(donnees);
     const texConfectionne = fabriquantGabarit.confectionne(
       donneesFichier.toString(), donneesMisesEnForme
