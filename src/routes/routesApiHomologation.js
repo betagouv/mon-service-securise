@@ -14,6 +14,7 @@ const PointsAcces = require('../modeles/pointsAcces');
 const RisqueGeneral = require('../modeles/risqueGeneral');
 const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../modeles/rolesResponsabilites');
+const { dateInvalide } = require('../utilitaires/date');
 
 const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   const routes = express.Router();
@@ -210,7 +211,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       const idHomologation = requete.homologation.id;
       const { dateHomologation, dureeValidite } = requete.body;
 
-      if (!dateHomologation?.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      if (dateInvalide(dateHomologation)) {
         reponse.status(422).send("Date d'homologation manquante");
       } else if (!dureeValidite) {
         reponse.status(422).send('Durée de validité manquante');
