@@ -113,6 +113,15 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     donnees.autorisations.find((a) => a.id === id)
   );
 
+  const autorisationsCreation = (idUtilisateur, idsHomologationsAExclure = []) => Promise.resolve(
+    donnees.autorisations
+      .filter((as) => (
+        as.idUtilisateur === idUtilisateur
+          && as.type === 'createur'
+          && !idsHomologationsAExclure.includes(as.idHomologation)))
+      .map((a) => a.idHomologation)
+  );
+
   const autorisationPour = (idUtilisateur, idHomologation) => Promise.resolve(
     donnees.autorisations
       .find((a) => a.idUtilisateur === idUtilisateur && a.idHomologation === idHomologation)
@@ -155,6 +164,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     autorisation,
     autorisationPour,
     autorisations,
+    autorisationsCreation,
     homologation,
     homologationAvecNomService,
     homologations,
