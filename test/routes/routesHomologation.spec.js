@@ -136,13 +136,6 @@ describe('Le serveur MSS des routes /homologation/*', () => {
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
     });
 
-    it("recherche l'homologation correspondante", (done) => {
-      testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/dossier/nouveau',
-        done,
-      );
-    });
-
     it('redirige vers `/homologation/:id/dossier/edition/etape/1`', (done) => {
       axios('http://localhost:1234/homologation/456/dossier/nouveau')
         .then((reponse) => expect(reponse.request.res.responseUrl).to.equal('http://localhost:1234/homologation/456/dossier/edition/etape/1'))
