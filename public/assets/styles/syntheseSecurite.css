@@ -42,8 +42,9 @@ header {
 }
 
 .logo-mss {
-  width: 14em;
-  height: 5em;
+  width: 12.1em;
+  height: 4.35em;
+  align-self: center;
 
   background-image: url(../images/logo_mss.svg);
   background-origin: content-box;
@@ -58,7 +59,7 @@ header {
   width: 60px;
   height: 60px;
 
-  margin-left: 15px;
+  margin-left: 1.5em;
 
   background-size: contain;
   background-repeat: no-repeat;
