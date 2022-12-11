@@ -8,6 +8,21 @@ class Dossier extends InformationsHomologation {
     super({ proprietesAtomiquesFacultatives: ['id', 'dateHomologation', 'dureeValidite'] });
     Dossier.valide(donneesDossier, referentiel);
     this.renseigneProprietes(donneesDossier);
+
+    this.referentiel = referentiel;
+  }
+
+  descriptionDateHomologation() {
+    if (!this.dateHomologation) {
+      return '';
+    }
+
+    const date = new Date(this.dateHomologation);
+    return date.toLocaleString('fr-FR', { dateStyle: 'short' });
+  }
+
+  descriptionDureeValidite() {
+    return this.referentiel.descriptionEcheanceRenouvellement(this.dureeValidite);
   }
 
   static valide({ dateHomologation, dureeValidite }, referentiel) {
