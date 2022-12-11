@@ -70,20 +70,22 @@ describe("Un dossier d'homologation", () => {
     expect(dossier.descriptionDateHomologation()).to.equal('');
   });
 
-  it("est incomplet s'il manque la durée de validité", () => {
-    const dossierIncomplet = new Dossier({ dateHomologation: '2022-11-27' });
-    expect(dossierIncomplet.estComplet()).to.be(false);
-  });
+  describe('sur vérification que ce dossier est complet', () => {
+    it("retourne `false` s'il manque la durée de validité", () => {
+      const dossierIncomplet = new Dossier({ dateHomologation: '2022-11-27' });
+      expect(dossierIncomplet.estComplet()).to.be(false);
+    });
 
-  it("est incomplet s'il manque la date d'homologation", () => {
-    referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
-    const dossierIncomplet = new Dossier({ dureeValidite: 'unAn' }, referentiel);
-    expect(dossierIncomplet.estComplet()).to.be(false);
-  });
+    it("retourne `false` s'il manque la date d'homologation", () => {
+      referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
+      const dossierIncomplet = new Dossier({ dureeValidite: 'unAn' }, referentiel);
+      expect(dossierIncomplet.estComplet()).to.be(false);
+    });
 
-  it("est complet s'il ne manque rien", () => {
-    referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
-    const dossierComplet = new Dossier({ dateHomologation: '2022-11-27', dureeValidite: 'unAn' }, referentiel);
-    expect(dossierComplet.estComplet()).to.be(true);
+    it("retourne `true` s'il ne manque rien", () => {
+      referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
+      const dossierComplet = new Dossier({ dateHomologation: '2022-11-27', dureeValidite: 'unAn' }, referentiel);
+      expect(dossierComplet.estComplet()).to.be(true);
+    });
   });
 });
