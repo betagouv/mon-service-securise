@@ -561,6 +561,28 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         data: { dateHomologation: '2022-12-01' },
       }, done);
     });
+
+    it('finalise le dossier si le paramètre est présent dans la requête', (done) => {
+      let dossierFinalise = false;
+      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation) => {
+        try {
+          expect(idHomologation).to.equal('456');
+          dossierFinalise = true;
+
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.put('http://localhost:1234/api/homologation/456/dossier', { finalise: true })
+        .then((reponse) => {
+          expect(dossierFinalise).to.be(true);
+          expect(reponse.data).to.eql({ idHomologation: '456' });
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
   });
 
   describe('quand requête DELETE sur `/api/homologation/:id/autorisationContributeur`', () => {
