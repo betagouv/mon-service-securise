@@ -209,14 +209,14 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     middleware.trouveHomologation,
     (requete, reponse, suite) => {
       const idHomologation = requete.homologation.id;
-      const { dateHomologation, dureeValidite } = requete.body;
+      const { dateHomologation, dureeValidite, finalise = false } = requete.body;
 
-      if (dateInvalide(dateHomologation)) {
+      if (!finalise && dateInvalide(dateHomologation)) {
         reponse.status(422).send("Date d'homologation manquante");
-      } else if (!dureeValidite) {
+      } else if (!finalise && !dureeValidite) {
         reponse.status(422).send('Durée de validité manquante');
       } else {
-        const dossier = new Dossier({ dateHomologation, dureeValidite }, referentiel);
+        const dossier = new Dossier({ dateHomologation, dureeValidite, finalise }, referentiel);
         depotDonnees.metsAJourDossierCourant(idHomologation, dossier)
           .then(() => reponse.send({ idHomologation }))
           .catch(suite);
