@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 
 const {
+  ErreurDossierNonFinalisable,
   ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
@@ -846,8 +847,12 @@ describe('Le dépôt de données des homologations', () => {
 
     beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
 
-    it("crée le dossier s'il n'existe pas déjà", (done) => {
-      const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
+    it("crée le dossier s'il n'existe pas déjà un dossier non-finalisé", (done) => {
+      const donneesHomologations = {
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
+        dossiers: [{ id: '999', dateHomologation: '2022-07-14', dureeValidite: 'sixMois', finalise: true }],
+      };
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         homologations: [copie(donneesHomologations)],
         services: [copie(donneesHomologations)],
@@ -862,7 +867,7 @@ describe('Le dépôt de données des homologations', () => {
       depot.metsAJourDossierCourant('123', dossier)
         .then(() => depot.homologation('123'))
         .then((h) => {
-          expect(h.nombreDossiers()).to.equal(1);
+          expect(h.nombreDossiers()).to.equal(2);
           const dossierCourant = h.dossierCourant();
           expect(dossierCourant.dateHomologation).to.equal('2022-12-01');
           expect(dossierCourant.dureeValidite).to.equal('unAn');
@@ -898,6 +903,35 @@ describe('Le dépôt de données des homologations', () => {
           done();
         })
         .catch(done);
+    });
+
+    describe('avec demande de finalisation du dossier', () => {
+      it('vérifie que la finalisation est possible', (done) => {
+        const donneesHomologations = {
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
+          dossiers: [{ id: '999' }],
+        };
+        const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          homologations: [copie(donneesHomologations)],
+          services: [copie(donneesHomologations)],
+        });
+        const depot = DepotDonneesHomologations.creeDepot({
+          adaptateurPersistance,
+          adaptateurUUID,
+          referentiel,
+        });
+        const dossier = new Dossier({ finalise: true }, referentiel);
+
+        depot.metsAJourDossierCourant('123', dossier)
+          .then(() => done('La mise à jour aurait dû lever une exception'))
+          .catch((e) => {
+            expect(e).to.be.an(ErreurDossierNonFinalisable);
+            expect(e.message).to.equal("Le dossier n'est pas complet et ne peut pas être finalisé");
+            done();
+          })
+          .catch(done);
+      });
     });
   });
 });

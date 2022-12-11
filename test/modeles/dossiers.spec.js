@@ -18,7 +18,7 @@ describe('Les dossiers liés à un service', () => {
     }
   });
 
-  ils('retourne comme dossier courant le dossier non finalisé', () => {
+  ils('retournent comme dossier courant le dossier non finalisé', () => {
     const dossiers = new Dossiers({ dossiers: [{ id: '1', finalise: true }, { id: '2' }] });
 
     const dossierCourant = dossiers.dossierCourant();

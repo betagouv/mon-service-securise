@@ -1,4 +1,5 @@
 const {
+  ErreurDossierNonFinalisable,
   ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
   ErreurNomServiceManquant,
@@ -83,7 +84,7 @@ const creeDepot = (config = {}) => {
         ));
       }
 
-      if (h.nombreDossiers() === 0) {
+      if (!h.dossierCourant()) {
         const idDossier = adaptateurUUID.genereUUID();
         const dossier = new Dossier({ id: idDossier });
         return ajouteAItemsDansHomologation('dossiers', idHomologation, dossier)
@@ -157,6 +158,9 @@ const creeDepot = (config = {}) => {
       .then((d) => {
         const donneesDossier = { ...d.toJSON(), ...dossier.toJSON() };
         const dossierMisAJour = new Dossier(donneesDossier, referentiel);
+        if (dossierMisAJour.finalise && !dossierMisAJour.estComplet()) {
+          throw new ErreurDossierNonFinalisable("Le dossier n'est pas complet et ne peut pas être finalisé");
+        }
         return ajouteAItemsDansHomologation('dossiers', idHomologation, dossierMisAJour);
       })
   );
