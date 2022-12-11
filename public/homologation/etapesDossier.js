@@ -12,6 +12,10 @@ const action = (idEtape, idHomologation) => {
     resultat = axios.put(`/api/homologation/${idHomologation}/dossier`, donnees);
   }
 
+  if (idEtape === 3) {
+    resultat = axios.put(`/api/homologation/${idHomologation}/dossier`, { finalise: true });
+  }
+
   return resultat;
 };
 
@@ -27,22 +31,22 @@ const brancheComportemenFormulaire = (
     e.preventDefault();
     action(idEtape, idHomologation)
       .then(() => (
-        window.location = `/homologation/${idHomologation}/dossier/edition/etape/${idEtapeSuivante}`
+        window.location = idEtapeSuivante
+          ? `/homologation/${idHomologation}/dossier/edition/etape/${idEtapeSuivante}`
+          : `/homologation/${idHomologation}/dossiers`
       ));
   });
 };
 
 $(() => {
   const $boutonSuivant = $('.bouton#suivant');
-  const $boutonFinal = $('.bouton#final');
 
-  const idHomologation = $boutonSuivant.data('id-homologation') || $boutonFinal.data('id-homologation');
+  const selecteurFormulaire = 'form';
+  const idHomologation = $boutonSuivant.data('id-homologation');
   const idEtape = $boutonSuivant.data('id-etape');
   const idEtapeSuivante = $boutonSuivant.data('id-etape-suivante');
 
-  const selecteurFormulaire = 'form';
   brancheComportemenFormulaire(selecteurFormulaire, idHomologation, idEtape, idEtapeSuivante);
 
   $boutonSuivant.on('click', () => declencheValidation(selecteurFormulaire));
-  $boutonFinal.on('click', () => (window.location = `/homologation/${idHomologation}/dossiers`));
 });
