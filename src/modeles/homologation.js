@@ -99,7 +99,7 @@ class Homologation {
   }
 
   dossierCourant() {
-    return this.dossiers.item(0);
+    return this.dossiers.dossierCourant();
   }
 
   expertCybersecurite() { return this.rolesResponsabilites.expertCybersecurite; }

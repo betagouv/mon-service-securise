@@ -131,10 +131,10 @@ describe('Une homologation', () => {
     expect(homologation.nombreDossiers()).to.equal(1);
   });
 
-  it('utilise le premier dossier comme dossier courant', () => {
+  it('connaît le dossier courant', () => {
     const referentiel = Referentiel.creeReferentiel({ echeancesRenouvellement: { unAn: {} } });
     const homologation = new Homologation({
-      id: '123', dossiers: [{ id: '999', dateHomologation: '2022-12-01', dureeValidite: 'unAn' }],
+      id: '123', dossiers: [{ id: '777', dateHomologation: '2022-12-01', dureeValidite: 'unAn', finalise: true }, { id: '999' }],
     }, referentiel);
 
     expect(homologation.dossierCourant().id).to.equal('999');

@@ -5,7 +5,9 @@ const { dateInvalide } = require('../utilitaires/date');
 
 class Dossier extends InformationsHomologation {
   constructor(donneesDossier = {}, referentiel = Referentiel.creeReferentielVide()) {
-    super({ proprietesAtomiquesFacultatives: ['id', 'dateHomologation', 'dureeValidite'] });
+    donneesDossier.finalise = !!donneesDossier.finalise;
+
+    super({ proprietesAtomiquesFacultatives: ['id', 'dateHomologation', 'dureeValidite', 'finalise'] });
     Dossier.valide(donneesDossier, referentiel);
     this.renseigneProprietes(donneesDossier);
 
@@ -23,6 +25,10 @@ class Dossier extends InformationsHomologation {
 
   descriptionDureeValidite() {
     return this.referentiel.descriptionEcheanceRenouvellement(this.dureeValidite);
+  }
+
+  estComplet() {
+    return !!this.dateHomologation && !!this.dureeValidite;
   }
 
   static valide({ dateHomologation, dureeValidite }, referentiel) {
