@@ -10,6 +10,7 @@ class ErreurDateRenouvellementInvalide extends ErreurModele {}
 class ErreurDepartementInconnu extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
+class ErreurDossiersInvalides extends ErreurModele {}
 class ErreurDureeValiditeInvalide extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
 class ErreurCGUNonAcceptees extends Error {}
@@ -48,6 +49,7 @@ module.exports = {
   ErreurDepartementInconnu,
   ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
+  ErreurDossiersInvalides,
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
   ErreurCGUNonAcceptees,

@@ -11,11 +11,16 @@ describe("Un dossier d'homologation", () => {
 
   it('sait se convertir en JSON', () => {
     const dossier = new Dossier(
-      { id: '123', dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
+      { id: '123', dateHomologation: '2022-12-01', dureeValidite: 'unAn', finalise: true },
       referentiel,
     );
 
-    expect(dossier.toJSON()).to.eql({ id: '123', dateHomologation: '2022-12-01', dureeValidite: 'unAn' });
+    expect(dossier.toJSON()).to.eql({ id: '123', dateHomologation: '2022-12-01', dureeValidite: 'unAn', finalise: true });
+  });
+
+  it('est non-finalisé par défaut', () => {
+    const dossier = new Dossier({ id: '123' }, referentiel);
+    expect(dossier.finalise).to.be(false);
   });
 
   it('valide la valeur passée pour la durée de validité', (done) => {
@@ -63,5 +68,22 @@ describe("Un dossier d'homologation", () => {
   it("présente une chaîne vide s'il n'y a pas de date d'homologation renseignée", () => {
     const dossier = new Dossier();
     expect(dossier.descriptionDateHomologation()).to.equal('');
+  });
+
+  it("est incomplet s'il manque la durée de validité", () => {
+    const dossierIncomplet = new Dossier({ dateHomologation: '2022-11-27' });
+    expect(dossierIncomplet.estComplet()).to.be(false);
+  });
+
+  it("est incomplet s'il manque la date d'homologation", () => {
+    referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
+    const dossierIncomplet = new Dossier({ dureeValidite: 'unAn' }, referentiel);
+    expect(dossierIncomplet.estComplet()).to.be(false);
+  });
+
+  it("est complet s'il ne manque rien", () => {
+    referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
+    const dossierComplet = new Dossier({ dateHomologation: '2022-11-27', dureeValidite: 'unAn' }, referentiel);
+    expect(dossierComplet.estComplet()).to.be(true);
   });
 });
