@@ -5,9 +5,9 @@ const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require(
 const Referentiel = require('../../src/referentiel');
 
 describe("Un dossier d'homologation", () => {
-  const referentiel = Referentiel.creeReferentiel({
-    echeancesRenouvellement: { unAn: { } },
-  });
+  const referentiel = Referentiel.creeReferentielVide();
+
+  beforeEach(() => referentiel.recharge({ echeancesRenouvellement: { unAn: {} } }));
 
   it('sait se convertir en JSON', () => {
     const dossier = new Dossier(
@@ -47,5 +47,21 @@ describe("Un dossier d'homologation", () => {
     } catch (e) {
       done("la création du dossier n'aurait pas dû lever une exception");
     }
+  });
+
+  it('connaît la description de sa durée de validité', () => {
+    referentiel.recharge({ echeancesRenouvellement: { unAn: { description: '1 an' } } });
+    const dossier = new Dossier({ dureeValidite: 'unAn' }, referentiel);
+    expect(dossier.descriptionDureeValidite()).to.equal('1 an');
+  });
+
+  it("présente la date d'homologation localisée en français", () => {
+    const dossier = new Dossier({ dateHomologation: '2022-11-27' });
+    expect(dossier.descriptionDateHomologation()).to.equal('27/11/2022');
+  });
+
+  it("présente une chaîne vide s'il n'y a pas de date d'homologation renseignée", () => {
+    const dossier = new Dossier();
+    expect(dossier.descriptionDateHomologation()).to.equal('');
   });
 });

@@ -1,7 +1,19 @@
 extends ../formulaireEtapier
 
 block formulaire
-  // rien pour l'instant
+  -
+    const LABEL_BOUTON = 'Enregistrer la décision';
+    const dossierCourant = homologation.dossierCourant();
+    const dureeValidite = dossierCourant.descriptionDureeValidite();
+    const dateHomologation = dossierCourant.descriptionDateHomologation();
+
+  p.
+    La décision d'homologation de sécurité a été prise le
+    #[b= dateHomologation] pour une durée de #[b= dureeValidite]. #[br]
+    #[br]
+    En cliquant sur « #{LABEL_BOUTON} », vous confirmez avoir renseigné
+    l'exactitude des informations fournies dans le document de Décision
+    d'homologation de sécurité.
 
 block bouton-etape
-  button(type = 'button', data-id-homologation = homologation.id, data-id-etape = idEtape).bouton#final Enregistrer la décision
+  button(type = 'button', data-id-homologation = homologation.id, data-id-etape = idEtape).bouton#final= LABEL_BOUTON
