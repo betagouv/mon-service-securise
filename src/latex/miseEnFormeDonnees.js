@@ -12,6 +12,7 @@ const caracteresSpeciauxLatex = [
   { special: '}', latex: '\\}' },
   { special: '~', latex: '\\textasciitilde' },
   { special: '^', latex: '\\textasciicircum' },
+  { special: '\r', latex: '\\\\' },
 ];
 
 const echappeCaracteresSpeciauxLatex = (texte) => caracteresSpeciauxLatex.reduce(
