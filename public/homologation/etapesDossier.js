@@ -1,5 +1,7 @@
 import { brancheValidation, declencheValidation } from '../modules/interactions/validation.js';
 
+let formulaireDejaSoumis = false;
+
 const action = (idEtape, idHomologation) => {
   let resultat = Promise.resolve();
 
@@ -19,22 +21,22 @@ const action = (idEtape, idHomologation) => {
   return resultat;
 };
 
-const brancheComportemenFormulaire = (
-  selecteurFormulaire,
-  idHomologation,
-  idEtape,
-  idEtapeSuivante
-) => {
-  brancheValidation(selecteurFormulaire);
+const brancheComportemenFormulaire = (selecteur, idHomologation, idEtape, idEtapeSuivante) => {
+  brancheValidation(selecteur);
 
-  $(selecteurFormulaire).on('submit', (e) => {
+  $(selecteur).on('submit', (e) => {
     e.preventDefault();
-    action(idEtape, idHomologation)
-      .then(() => (
-        window.location = idEtapeSuivante
-          ? `/homologation/${idHomologation}/dossier/edition/etape/${idEtapeSuivante}`
-          : `/homologation/${idHomologation}/dossiers`
-      ));
+
+    if (!formulaireDejaSoumis) {
+      formulaireDejaSoumis = true;
+
+      action(idEtape, idHomologation)
+        .then(() => (
+          window.location = idEtapeSuivante
+            ? `/homologation/${idHomologation}/dossier/edition/etape/${idEtapeSuivante}`
+            : `/homologation/${idHomologation}/dossiers`
+        ));
+    }
   });
 };
 
