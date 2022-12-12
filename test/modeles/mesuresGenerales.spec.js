@@ -210,6 +210,16 @@ describe('La liste des mesures générales', () => {
       expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).to.equal('Modalités de la mesure');
     });
 
+    it('ordonne les statuts comme attendu', () => {
+      const mesures = new MesuresGenerales({ mesuresGenerales: [
+        { id: 'mesure1', statut: 'fait' },
+        { id: 'mesure2', statut: 'nonFait' },
+        { id: 'mesure3', statut: 'enCours' },
+      ] }, referentiel);
+
+      expect(Object.keys(mesures.parStatutEtCategorie())).to.eql(['enCours', 'nonFait', 'fait']);
+    });
+
     it('retourne les mesures indispensables avant les mesures recommandées', () => {
       const mesures = new MesuresGenerales({ mesuresGenerales: [
         { id: 'mesure1', statut: 'fait' },

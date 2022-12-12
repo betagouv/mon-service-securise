@@ -8,7 +8,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
     super(MesureSpecifique, { items: mesuresSpecifiques }, referentiel);
   }
 
-  parStatutEtCategorie(accumulateur = { fait: {}, enCours: {}, nonFait: {} }) {
+  parStatutEtCategorie(accumulateur = MesureSpecifique.accumulateurInitialStatuts(true)) {
     return this.toutes().reduce((acc, mesure) => {
       if (!mesure.statut || !mesure.categorie) return acc;
       acc[mesure.statut][mesure.categorie] ||= [];

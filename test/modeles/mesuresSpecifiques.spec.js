@@ -49,6 +49,19 @@ describe('La liste des mesures spécifiques', () => {
     expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).to.equal('Modalités');
   });
 
+  elle("ordonne les status comme précisé par l'accumulateur", () => {
+    const mesures = new MesuresSpecifiques({
+      mesuresSpecifiques: [
+        { description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1' },
+        { description: 'Mesure Spécifique 2', statut: 'nonFait', categorie: 'categorie1' },
+        { description: 'Mesure Spécifique 3', statut: 'enCours', categorie: 'categorie1' },
+      ],
+    },
+    referentiel);
+
+    expect(Object.keys(mesures.parStatutEtCategorie())).to.eql(['enCours', 'nonFait', 'fait']);
+  });
+
   elle('exclut les mesures sans statut', () => {
     const mesures = new MesuresSpecifiques({
       mesuresSpecifiques: [
