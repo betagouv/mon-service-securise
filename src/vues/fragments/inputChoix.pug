@@ -28,7 +28,7 @@ mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, message
         br
     .message-erreur=messageErreur
 
-mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur, requis })
+mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur, exempleOui, exempleNon, requis })
   +inputChoix({
     nom,
     titre,
@@ -36,5 +36,5 @@ mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur, requis })
     messageErreur,
     requis,
     type: 'radio',
-    items: { oui: { description: 'Oui' }, non: { description: 'Non' } },
+    items: { oui: { description: 'Oui', exemple: exempleOui }, non: { description: 'Non', exemple: exempleNon } },
   })

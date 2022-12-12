@@ -1,0 +1,11 @@
+#risqueJuridiqueFinancierReputationnel :is(.exemple, .exemple + br) {
+  display: none;
+}
+
+#risqueJuridiqueFinancierReputationnel input[value = 'oui'] ~ .exemple::before {
+  display: none;
+}
+
+#risqueJuridiqueFinancierReputationnel input[value = 'oui']:checked ~ :is(.exemple, .exemple + br) {
+  display: inline-block;
+}
