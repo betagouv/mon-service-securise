@@ -41,4 +41,4 @@ const genereAnnexes = (donneesMesures, donneesRisques) => {
     .then((pdf) => Buffer.from(pdf.buffer, 'binary'));
 };
 
-module.exports = { genereAnnexeMesures, genereAnnexeRisques, genereAnnexes };
+module.exports = { genereAnnexes };
