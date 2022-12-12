@@ -32,8 +32,7 @@ block zone-principale
     block formulaire
 
     .boutons
-      .bouton.blanc
-        a(href = `/homologation/${homologation.id}`) Revenir à la synthèse
+      a(href = `/homologation/${homologation.id}`): .bouton.blanc Revenir à la synthèse
       block bouton-etape
 
   script(type = 'module', src = '/statique/homologation/etapesDossier.js')
