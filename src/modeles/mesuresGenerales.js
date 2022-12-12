@@ -24,10 +24,13 @@ class MesuresGenerales extends ElementsConstructibles {
       return acc;
     };
 
+    const statutFaitALaFin = true;
+    const accumulateur = MesureGenerale.accumulateurInitialStatuts(statutFaitALaFin);
+
     return this.toutes()
       .filter((mesure) => mesure.statutRenseigne())
       .sort((m, _) => (m.estIndispensable() ? -1 : 1))
-      .reduce(rangeMesureParStatut, { fait: {}, enCours: {}, nonFait: {} });
+      .reduce(rangeMesureParStatut, accumulateur);
   }
 
   statistiques(mesuresPersonnalisees) {

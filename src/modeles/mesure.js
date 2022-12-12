@@ -21,7 +21,20 @@ class Mesure extends InformationsHomologation {
     return false;
   }
 
-  static statutsPossibles() { return Object.values(STATUTS); }
+  static accumulateurInitialStatuts(statutFaitALaFin = false) {
+    return Mesure.statutsPossibles(statutFaitALaFin)
+      .reduce((acc, s) => ({ ...acc, [s]: {} }), {});
+  }
+
+  static statutsPossibles(statutFaitALaFin = false) {
+    const resultat = Object.values(STATUTS);
+
+    if (statutFaitALaFin) {
+      const [statutFait, ...reste] = resultat;
+      return [...reste, statutFait];
+    }
+    return resultat;
+  }
 
   static statutRenseigne(statut) {
     return Object.keys(STATUTS)

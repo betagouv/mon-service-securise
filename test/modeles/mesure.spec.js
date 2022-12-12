@@ -5,8 +5,15 @@ const Mesure = require('../../src/modeles/mesure');
 const elle = it;
 
 describe('Une mesure', () => {
-  elle('connaît ses statuts possibles', () => {
-    expect(Mesure.statutsPossibles()).to.eql(['fait', 'enCours', 'nonFait']);
+  describe('sur demande des statuts possibles', () => {
+    elle('retourne les statuts avec `fait` en premier par défaut', () => {
+      expect(Mesure.statutsPossibles()).to.eql(['fait', 'enCours', 'nonFait']);
+    });
+
+    elle('peut retourner les statuts avec `fait` en dernier si on le spécifie', () => {
+      const statutFaitALaFin = true;
+      expect(Mesure.statutsPossibles(statutFaitALaFin)).to.eql(['enCours', 'nonFait', 'fait']);
+    });
   });
 
   elle("ne tient pas compte du statut s'il n'est pas renseigné", (done) => {
