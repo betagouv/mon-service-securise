@@ -9,7 +9,7 @@ block formulaire
       ul.documents
         li: +document({ url: '/statique/assets/pdf/dossierDecision.pdf', description: "Décision d'homologation de sécurité (modèle)" })
         li: +document({ url: `/homologation/${homologation.id}/syntheseSecurite`, description: "Synthèse de l'état de sécurité du service" })
-        li: +document({ url: `/pdf/${homologation.id}/annexeMesures.pdf`, description: 'Annexes' })
+        li: +document({ url: `/pdf/${homologation.id}/annexes.pdf`, description: 'Annexes' })
     li.
       Remplir la décision d'homologation de sécurité avec l'ensemble des
       personnes concernées.
