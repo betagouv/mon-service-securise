@@ -14,6 +14,10 @@ class Dossiers extends ElementsConstructibles {
     return this.items.find((i) => !i.finalise);
   }
 
+  finalises() {
+    return this.items.filter((i) => i.finalise);
+  }
+
   static valide({ dossiers }) {
     const nombreDossiersNonFinalises = dossiers
       .filter((d) => !d.finalise)
