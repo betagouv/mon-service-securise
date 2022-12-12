@@ -54,10 +54,17 @@ describe("Un dossier d'homologation", () => {
     }
   });
 
-  it('connaît la description de sa durée de validité', () => {
-    referentiel.recharge({ echeancesRenouvellement: { unAn: { description: '1 an' } } });
-    const dossier = new Dossier({ dureeValidite: 'unAn' }, referentiel);
-    expect(dossier.descriptionDureeValidite()).to.equal('1 an');
+  describe('sur demande de la description de la durée de validité', () => {
+    it('retourne la description provenant du référentiel', () => {
+      referentiel.recharge({ echeancesRenouvellement: { unAn: { description: '1 an' } } });
+      const dossier = new Dossier({ dureeValidite: 'unAn' }, referentiel);
+      expect(dossier.descriptionDureeValidite()).to.equal('1 an');
+    });
+
+    it("retourne une chaîne vide si la durée de validité n'est pas renseignée", () => {
+      const dossier = new Dossier();
+      expect(dossier.descriptionDureeValidite()).to.equal('');
+    });
   });
 
   it("présente la date d'homologation localisée en français", () => {
@@ -68,6 +75,27 @@ describe("Un dossier d'homologation", () => {
   it("présente une chaîne vide s'il n'y a pas de date d'homologation renseignée", () => {
     const dossier = new Dossier();
     expect(dossier.descriptionDateHomologation()).to.equal('');
+  });
+
+  describe('sur demande de la date de prochaine homologation', () => {
+    beforeEach(() => referentiel.recharge(
+      { echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } }
+    ));
+
+    it('retourne la date localisée en français', () => {
+      const dossier = new Dossier({ dateHomologation: '2022-11-27', dureeValidite: 'unAn' }, referentiel);
+      expect(dossier.descriptionProchaineDateHomologation()).to.equal('27/11/2023');
+    });
+
+    it("retourne une chaîne vide si la date n'est renseignée", () => {
+      const dossier = new Dossier({ dureeValidite: 'unAn' }, referentiel);
+      expect(dossier.descriptionProchaineDateHomologation()).to.equal('');
+    });
+
+    it("retourne une chaîne vide si la durée de validité n'est pas renseignée", () => {
+      const dossier = new Dossier({ dateHomologation: '2022-11-27' });
+      expect(dossier.descriptionProchaineDateHomologation()).to.equal('');
+    });
   });
 
   describe('sur vérification que ce dossier est complet', () => {
