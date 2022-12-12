@@ -25,8 +25,12 @@ block append styles
 block zone-principale
   form.homologation
     h1.action Homologuer
+
     if idEtape
       +barre-progression({ idEtape })
+    else
+      h2 Réalisez et suivez les homologations de sécurité pour votre service
+
     hr
 
     block formulaire

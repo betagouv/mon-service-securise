@@ -1,3 +1,8 @@
+h2 {
+  font-size: 1em;
+  font-weight: normal;
+}
+
 hr {
   width: 100%;
 
@@ -98,6 +103,21 @@ ul.documents {
   background-repeat: no-repeat;
 
   transform: translateY(0.2em);
+}
+
+.dossier {
+  display: flex;
+  justify-content: space-between;
+
+  margin: 1em 0;
+  padding: 1.5em 2em;
+  border: solid 1px var(--bordure-foncee);
+  border-radius: 3px;
+}
+
+.dossier .statut {
+  margin-bottom: 0.5em;
+  font-weight: bold;
 }
 
 .boutons {
