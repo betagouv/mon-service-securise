@@ -25,4 +25,12 @@ describe('Les dossiers liés à un service', () => {
     expect(dossierCourant).to.be.a(Dossier);
     expect(dossierCourant.id).to.equal('2');
   });
+
+  ils('retournent comme dossiers finalisés ceux qui ne sont pas le dossier courant', () => {
+    const dossiers = new Dossiers({ dossiers: [{ id: '1', finalise: true }, { id: '2' }] });
+
+    const dossiersFinalises = dossiers.finalises();
+    expect(dossiersFinalises.length).to.equal(1);
+    expect(dossiersFinalises[0].id).to.equal('1');
+  });
 });
