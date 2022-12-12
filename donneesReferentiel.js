@@ -616,10 +616,10 @@ module.exports = {
   },
 
   echeancesRenouvellement: {
-    sixMois: { description: '6 mois', expiration: expiration('six mois') },
-    unAn: { description: '1 an', expiration: expiration('un an') },
-    deuxAns: { description: '2 ans', expiration: expiration('deux ans') },
-    troisAns: { description: '3 ans', expiration: expiration('trois ans') },
+    sixMois: { nbMoisDecalage: 6, description: '6 mois', expiration: expiration('six mois') },
+    unAn: { nbMoisDecalage: 12, description: '1 an', expiration: expiration('un an') },
+    deuxAns: { nbMoisDecalage: 24, description: '2 ans', expiration: expiration('deux ans') },
+    troisAns: { nbMoisDecalage: 36, description: '3 ans', expiration: expiration('trois ans') },
   },
 
   etapesParcoursHomologation: [

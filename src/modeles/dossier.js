@@ -1,7 +1,7 @@
 const InformationsHomologation = require('./informationsHomologation');
 const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../erreurs');
 const Referentiel = require('../referentiel');
-const { dateInvalide } = require('../utilitaires/date');
+const { ajouteMoisADate, dateEnFrancais, dateInvalide } = require('../utilitaires/date');
 
 class Dossier extends InformationsHomologation {
   constructor(donneesDossier = {}, referentiel = Referentiel.creeReferentielVide()) {
@@ -19,12 +19,26 @@ class Dossier extends InformationsHomologation {
       return '';
     }
 
-    const date = new Date(this.dateHomologation);
-    return date.toLocaleString('fr-FR', { dateStyle: 'short' });
+    return dateEnFrancais(this.dateHomologation);
   }
 
   descriptionDureeValidite() {
+    if (!this.dureeValidite) {
+      return '';
+    }
+
     return this.referentiel.descriptionEcheanceRenouvellement(this.dureeValidite);
+  }
+
+  descriptionProchaineDateHomologation() {
+    if (!this.dateHomologation || !this.dureeValidite) {
+      return '';
+    }
+
+    const date = new Date(this.dateHomologation);
+    const nbMois = this.referentiel.nbMoisDecalage(this.dureeValidite);
+
+    return dateEnFrancais(ajouteMoisADate(nbMois, date));
   }
 
   estComplet() {
