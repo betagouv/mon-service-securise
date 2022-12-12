@@ -1,7 +1,37 @@
 extends ./formulaireEtapier
 
+mixin dossier({ statut, dossier, idHomologation })
+  -
+    const duree = dossier.descriptionDureeValidite()
+    const prochaineHomologation = dossier.descriptionProchaineDateHomologation()
+
+  .dossier
+    .contenu-dossier
+      .statut= statut
+      div= `Durée : ${duree}`
+      div= `Prochaine homologation : ${prochaineHomologation}`
+    if idHomologation
+      nav
+        a(href = `/homologation/${idHomologation}/dossier/edition/etape/1`) Consulter
+
+mixin dossierFinalise({ dossier })
+  +dossier({ statut: 'Homologation finalisée', dossier })
+
+mixin dossierCourant({ ...donnees })
+  +dossier({ statut: 'Homologation en cours', ...donnees })
+
 block formulaire
-  // rien pour l'instant
+  -
+    const { dossiers } = homologation
+    const dossiersFinalises = dossiers.finalises();
+    const dossierCourant = dossiers.dossierCourant()
+
+  .dossiers
+    if dossierCourant
+      +dossierCourant({ dossier: dossierCourant, idHomologation: homologation.id })
+
+    each dossier in dossiersFinalises
+      +dossierFinalise({ dossier })
 
 block bouton-etape
   button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape-suivante = 1) Nouvelle homologation
