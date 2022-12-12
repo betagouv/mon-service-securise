@@ -2,6 +2,7 @@ const axios = require('axios');
 const expect = require('expect.js');
 
 const testeurMSS = require('./testeurMSS');
+const Homologation = require('../../src/modeles/homologation');
 
 describe('Le serveur MSS des routes /homologation/*', () => {
   const testeur = testeurMSS();
@@ -134,6 +135,9 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({ etapesParcoursHomologation: [{ numero: 1 }] });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
+      testeur.depotDonnees().homologation = () => Promise.resolve(
+        new Homologation({ id: '456', descriptionService: { nomService: 'un service' } })
+      );
     });
 
     it('redirige vers `/homologation/:id/dossier/edition/etape/1`', (done) => {
@@ -148,6 +152,9 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({ etapesParcoursHomologation: [{ numero: 1 }] });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
+      testeur.depotDonnees().homologation = () => Promise.resolve(
+        new Homologation({ id: '456', descriptionService: { nomService: 'un service' } })
+      );
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -178,6 +185,23 @@ describe('Le serveur MSS des routes /homologation/*', () => {
 
       axios('http://localhost:1234/homologation/456/dossier/edition/etape/1')
         .then(() => expect(dossierAjoute).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("recharge l'homologation avant de servir la vue", (done) => {
+      let chargementsHomologation = 0;
+      testeur.depotDonnees().homologation = () => {
+        try {
+          chargementsHomologation += 1;
+          return Promise.resolve(new Homologation({ id: '456', descriptionService: { nomService: 'un service' } }));
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios('http://localhost:1234/homologation/456/dossier/edition/etape/1')
+        .then(() => expect(chargementsHomologation).to.equal(1))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });
