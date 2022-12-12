@@ -13,6 +13,12 @@ describe('La mise en forme de données', () => {
         '\\textbackslash \\& \\% \\textdollar \\# \\_ \\{ \\} \\textasciitilde \\textasciicircum'
       );
     });
+
+    it('échappe les sauts de lignes', () => {
+      expect(miseEnFormeLatex('Un texte\r\navec un saut de ligne')).to.equal(
+        'Un texte\\\\\navec un saut de ligne'
+      );
+    });
   });
 
   describe("sur une demande de mise en forme d'un objet", () => {
