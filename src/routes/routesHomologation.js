@@ -103,7 +103,8 @@ const routesHomologation = (
       reponse.status(404).send('Étape inconnue');
     } else {
       depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id)
-        .then(() => reponse.render(`homologation/etapeDossier/${idEtape}`, { referentiel, homologation, idEtape }))
+        .then(() => depotDonnees.homologation(homologation.id))
+        .then((h) => reponse.render(`homologation/etapeDossier/${idEtape}`, { referentiel, homologation: h, idEtape }))
         .catch(suite);
     }
   });
