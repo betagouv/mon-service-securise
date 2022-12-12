@@ -4,7 +4,7 @@ main {
 
 .introduction {
   display: flex;
-  column-gap: 3em;
+  column-gap: 1em;
 
   margin: 5em auto 3em auto;
 
@@ -68,11 +68,11 @@ main {
 }
 
 .presentation {
-  flex: 2;
+  flex: 1;
 }
 
 .image-intro-mss {
-  flex: 1;
+  flex: 0.9;
 
   background-image: url(../images/image_intro_mss.svg);
   background-repeat: no-repeat;
