@@ -16,11 +16,12 @@ const envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) =
   'MonServiceSécurisé – Activation du compte',
   `Bonjour, <br/><br/>
   
-Suite à votre demande de création de compte, cliquez sur le lien d'activation pour
-finaliser votre inscription : <br/>
+Merci de votre intérêt pour notre outil MonServiceSécurisé. 
+Pour finaliser votre inscription et accéder à toutes les fonctionnalités de notre service, cliquez sur le lien d'activation ci-dessous : <br/>
 ${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse} <br/><br/>
 
-Nous vous remercions pour l'intérêt que vous portez à notre service. <br/><br/>
+Nous espérons que vous apprécierez votre expérience sur notre site et que nos outils vous seront utiles. <br/><br/>
+Contactez-nous à cette adresse support@monservicesecurise.beta.gouv.fr si vous avez la moindre question.
 
 L'équipe MonServiceSécurisé`
 );
@@ -63,10 +64,13 @@ const envoieMessageReinitialisationMotDePasse = (destinataire, idResetMotDePasse
   'MonServiceSécurisé – Changement du mot de passe',
   `Bonjour, <br/><br/>
 
-Suite à votre demande de réinitialisation du mot de passe, cliquez sur ce lien pour en définir un nouveau : <br/>
+Vous avez demandé à réinitialiser votre mot de passe pour accéder à votre compte MonServiceSécurisé. 
+Cliquez sur le lien ci-dessous pour en définir un nouveau :
+ : <br/>
 ${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse} <br/><br/>
 
-Si vous n'êtes pas l'origine de cette demande, votre compte est sécurisé et vous pouvez ignorer cet e-mail. <br/><br/>
+Si vous n'avez pas fait cette demande, votre compte est toujours sécurisé et vous pouvez ignorer cet e-mail.
+Si vous avez des questions, n'hésitez pas à nous contacter à cette adresse support@monservicesecurise.beta.gouv.fr <br/><br/>
 
 N'hésitez pas à nous contacter pour toutes précisions. <br/><br/>
 
