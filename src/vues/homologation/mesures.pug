@@ -12,6 +12,7 @@ mixin inputMesure({ nom, titre, indispensable })
 
 block append styles
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
 block formulaire
   form.homologation#mesures
@@ -48,7 +49,7 @@ block formulaire
                   h1= donnees.description
                   p!= donnees.descriptionLongue
 
-    .bouton(idHomologation = homologation.id) Enregistrer &nbsp;&nbsp;›
+    button.bouton(idHomologation = homologation.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donnees-mesures-generales', type = 'application/json').
     !{JSON.stringify(homologation.mesures.toJSON().mesuresGenerales || [])}

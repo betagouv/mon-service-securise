@@ -1,5 +1,6 @@
 import arrangeParametresMesures from '../modules/arrangeParametresMesures.mjs';
 import brancheFiltresMesures from '../modules/interactions/brancheFiltresMesures.mjs';
+import { brancheConteneur, brancheValidation, declencheValidation } from '../modules/interactions/validation.js';
 import parametres from '../modules/parametres.mjs';
 import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
 import texteHTML from '../modules/texteHTML.js';
@@ -49,26 +50,34 @@ $(() => {
     `)).join('');
 
     const referentielStatutsMesures = JSON.parse($('#referentiel-statuts-mesures').text());
-    const statuts = Object.keys(referentielStatutsMesures).map((s) => `
+    let statuts = Object.keys(referentielStatutsMesures).map((s) => `
 <input id="statut-${s}-mesure-specifique-${index}"
        name="statut-mesure-specifique-${index}"
        value="${s}"
        ${s === statut ? 'checked' : ''}
-       type="radio">
+       type="radio"
+       required>
 <label for="statut-${s}-mesure-specifique-${index}">${referentielStatutsMesures[s]}</label>
 <br>
     `).join('');
+    statuts = `<div class="requis">${statuts}<div class="message-erreur">Ce champ est obligatoire. Veuillez le renseigner.</div></div>`;
 
     return `
-<input id="description-mesure-specifique-${index}"
-       name="description-mesure-specifique-${index}"
-       placeholder="Description de la mesure"
-       value="${description}">
-<div class="selecteur-options">
-  <select id="categorie-mesure-specifique-${index}" name="categorie-mesure-specifique-${index}">
+<div class="requis">
+  <input id="description-mesure-specifique-${index}"
+        name="description-mesure-specifique-${index}"
+        placeholder="Description de la mesure"
+        value="${description}"
+        required>
+  <div class="message-erreur">L'intitulé est obligatoire. Veuillez le renseigner.</div>
+</div>
+
+<div class="requis selecteur-options">
+  <select id="categorie-mesure-specifique-${index}" name="categorie-mesure-specifique-${index}" required>
     <option value="">--Catégorie--</option>
     ${options}
   </select>
+  <div class="message-erreur">Ce champ est obligatoire. Veuillez sélectionner une entrée.</div>
 </div>
 
 ${statuts}
@@ -84,6 +93,7 @@ ${statuts}
     zoneSaisieMesureSpecifique,
     () => (indexMaxMesuresSpecifiques += 1),
     { ordreInverse: true },
+    brancheConteneur,
   );
 
   const peupleMesuresSpecifiques = (...params) => (
@@ -100,10 +110,17 @@ ${statuts}
   indexMaxMesuresSpecifiques = peupleMesuresSpecifiques('#mesures-specifiques', '#donnees-mesures-specifiques');
   brancheAjoutMesureSpecifique('.nouvel-item', '#mesures-specifiques');
 
+  brancheValidation('form#mesures');
+
   const $bouton = $('.bouton[idHomologation]');
   const identifiantHomologation = $bouton.attr('idHomologation');
 
   $bouton.on('click', () => {
+    declencheValidation('form#mesures');
+  });
+  
+  $('form#mesures').on('submit', (evenement) => {
+    evenement.preventDefault();
     const params = parametres('form#mesures');
     arrangeParametresMesures(params);
 
