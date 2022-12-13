@@ -24,35 +24,6 @@
   margin-bottom: -1em;
 }
 
-select {
-  box-sizing: border-box;
-  width: 100%;
-  margin-top: 0.3em;
-  padding: 0.8em;
-  border: solid 1px var(--liseres);
-  border-radius: 5px;
-  background: var(--fond-pale);
-  font-family: Marianne;
-
-  appearance: none;
-}
-
-.departements {
-  position: relative;
-}
-
-.departements::after {
-  content: "";
-  top: 14px;
-  right: 15px;
-  position: absolute;
-  border-bottom: 1.5px black solid;
-  border-right: 1.5px black solid;
-  width: 0.5em;
-  height: 0.5em;
-  transform: rotate(45deg);
-}
-
 .affichage-simple {
   margin-bottom: 2em;
 }

@@ -121,7 +121,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
       .requis(data-nom = 'departementEntitePublique')
         label Département où est localisée cette entité
           br
-          .departements
+          .selecteur-options
             select(id = 'departementEntitePublique', name = 'departementEntitePublique', required, title = '')
               option(value = '') - Sélectionnez un département -
               each departement in departements

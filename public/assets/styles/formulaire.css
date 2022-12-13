@@ -152,7 +152,32 @@ textarea {
 
 select {
   display: block;
-  margin: 1em 0;
+  box-sizing: border-box;
+  margin: 0.3em 0 1em 0;
+  padding: 0.8em;
+  border: solid 1px var(--liseres);
+  border-radius: 5px;
+  width: 100%;
+  background: var(--fond-pale);
+  font-family: Marianne;
+
+  appearance: none;
+}
+
+.selecteur-options {
+  position: relative;
+}
+
+.selecteur-options::after {
+  content: "";
+  top: 0.98em;
+  right: 1.05em;
+  position: absolute;
+  border-bottom: 1.5px black solid;
+  border-right: 1.5px black solid;
+  width: 0.5em;
+  height: 0.5em;
+  transform: rotate(45deg);
 }
 
 .case-a-cocher {
