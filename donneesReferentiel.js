@@ -345,7 +345,7 @@ module.exports = {
       descriptionLongue: "Configurer le service en vue de limiter, au strict nécessaire, ses interconnexions avec d'autres systèmes d'information et tenir une cartographie à jour de l'ensemble de ces interconnexions.<br>Cette mesure permet de réduire le risque de propagation d'une cyberattaque de ces systèmes vers le service et inversement.",
     },
     listeComptesPrivilegies: {
-      description: "Disposer d'une liste à jour des comptes disposant d'un d'accès privilégié au service",
+      description: "Disposer d'une liste à jour des comptes disposant d'un accès privilégié au service",
       categorie: 'gouvernance',
       indispensable: true,
       descriptionLongue: "Disposer et tenir à jour une liste des comptes disposant d'un accès administrateur au service, les personnes associées et la nature de leur(s) accès. Sont concernés par cette mesure les administrateurs techniques (ex. accès à la configuration de l'hébergement du service) et les administrateurs métiers (ex. agent public ayant un droit de modification des informations affichées sur le service). <br>Cette mesure permet de gérer la liste des comptes disposant d'un accès privilégié en vue d'en limiter le nombre au strict nécessaire et ainsi réduire le risque que des comptes non nécessaires soient détournés par un acteur malveillant.",
