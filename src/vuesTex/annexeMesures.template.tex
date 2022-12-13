@@ -15,6 +15,7 @@
 \usepackage{xcolor,multicol,setspace}
 \definecolor{blanc}{rgb}{1, 1, 1}
 \definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
+\definecolor{bleu_clair}{rgb}{0.89, 0.93, 1}
 \definecolor{gris}{rgb}{0.37, 0.37, 0.37}
 \definecolor{gris_clair}{rgb}{0.96, 0.96, 0.96}
 \definecolor{lisere}{rgb}{0.71, 0.76, 0.82}
@@ -44,7 +45,7 @@
     \pagebreak[4]\begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt]
       \vspace{-16.5pt}\hspace{-3pt}\raisebox{10pt}{\colorbox{blanc}{\textbf{__= donnees.statuts[statut]__}}}
     __~ Object.keys(donnees.mesuresParStatut[statut]) :categorie __
-      \nopagebreak[1]\MakeUppercase{__= donnees.categories[categorie] __}
+      \nopagebreak[1]\colorbox{bleu_clair!100}{\textcolor{bleu}{\MakeUppercase{__= donnees.categories[categorie] __}}}
       __? donnees.mesuresParStatut[statut][categorie]
           && donnees.mesuresParStatut[statut][categorie].length __
         \nopagebreak[4]\begin{itemize}[labelsep=0em, align=center]
