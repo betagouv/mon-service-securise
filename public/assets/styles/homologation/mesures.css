@@ -91,6 +91,14 @@ form#mesures .decoration {
   margin-bottom: 2em;
 }
 
+.specifiques .requis {
+  position: relative;
+}
+
+.specifiques .item-ajoute {
+  padding-left: 2em;
+}
+
 .specifiques .selecteur-options {
   min-width: 25%;
   width: -moz-fit-content;
