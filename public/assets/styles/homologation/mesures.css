@@ -91,18 +91,21 @@ form#mesures .decoration {
   margin-bottom: 2em;
 }
 
-.specifiques .requis {
-  position: relative;
+.specifiques .propriete-specifique {
+  margin-bottom: 1em;
 }
 
 .specifiques .item-ajoute {
-  padding-left: 2em;
+  padding: 1em 2em;
 }
 
-.specifiques .selecteur-options {
-  min-width: 25%;
-  width: -moz-fit-content;
-  width: fit-content;
+.specifiques .nom-champ {
+  display: block;
+  font-weight: bold;
+}
+
+form#mesures .specifiques input[type='radio'] {
+  margin-left: 0;
 }
 
 #mesures-specifiques {

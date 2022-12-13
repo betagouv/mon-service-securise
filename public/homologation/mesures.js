@@ -42,49 +42,55 @@ $(() => {
   const zoneSaisieMesureSpecifique = (index, donnees = {}) => {
     const { description = '', categorie = '', statut = '', modalites = '' } = donnees;
 
-    const referentielCategoriesMesures = JSON.parse($('#referentiel-categories-mesures').text());
-    const options = Object.keys(referentielCategoriesMesures).map((c) => (`
-<option value="${c}"${c === categorie ? ' selected' : ''}>
-  ${referentielCategoriesMesures[c]}
-</option>
-    `)).join('');
-
-    const referentielStatutsMesures = JSON.parse($('#referentiel-statuts-mesures').text());
-    let statuts = Object.keys(referentielStatutsMesures).map((s) => `
-<input id="statut-${s}-mesure-specifique-${index}"
-       name="statut-mesure-specifique-${index}"
-       value="${s}"
-       ${s === statut ? 'checked' : ''}
+    const choixParBoutonsRadios = (referentielChamp, nomChamp, label, valeur) => {
+      let boutonsRadios = Object.keys(referentielChamp).map((champ) => `
+<input id="${nomChamp}-${champ}-mesure-specifique-${index}"
+       name="${nomChamp}-mesure-specifique-${index}"
+       value="${champ}"
+       ${champ === valeur ? 'checked' : ''}
        type="radio"
        required>
-<label for="statut-${s}-mesure-specifique-${index}">${referentielStatutsMesures[s]}</label>
+<label for="${nomChamp}-${champ}-mesure-specifique-${index}">${referentielChamp[champ]}</label>
 <br>
     `).join('');
-    statuts = `<div class="requis">${statuts}<div class="message-erreur">Ce champ est obligatoire. Veuillez le renseigner.</div></div>`;
+      boutonsRadios = `
+<div class="requis propriete-specifique">
+  <span class="nom-champ">${label}</span>
+  ${boutonsRadios}
+  <div class="message-erreur">Ce champ est obligatoire. Veuillez le renseigner.</div>
+</div>
+      `;
+      return boutonsRadios;
+    };
+    const referentielCategoriesMesures = JSON.parse($('#referentiel-categories-mesures').text());
+    const categories = choixParBoutonsRadios(referentielCategoriesMesures, 'categorie', 'Catégorie', categorie);
+
+    const referentielStatutsMesures = JSON.parse($('#referentiel-statuts-mesures').text());
+    const statuts = choixParBoutonsRadios(referentielStatutsMesures, 'statut', 'Niveau de mise en œuvre', statut);
 
     return `
-<div class="requis">
-  <input id="description-mesure-specifique-${index}"
-        name="description-mesure-specifique-${index}"
-        placeholder="Description de la mesure"
-        value="${description}"
-        required>
-  <div class="message-erreur">L'intitulé est obligatoire. Veuillez le renseigner.</div>
+<div class="requis propriete-specifique">
+  <label for="description-mesure-specifique-${index}" class="nom-champ">
+    Intitulé
+    <input id="description-mesure-specifique-${index}"
+          name="description-mesure-specifique-${index}"
+          placeholder="Description de la mesure"
+          value="${description}"
+          required>
+    <div class="message-erreur">L'intitulé est obligatoire. Veuillez le renseigner.</div>
+  </label>
 </div>
 
-<div class="requis selecteur-options">
-  <select id="categorie-mesure-specifique-${index}" name="categorie-mesure-specifique-${index}" required>
-    <option value="">--Catégorie--</option>
-    ${options}
-  </select>
-  <div class="message-erreur">Ce champ est obligatoire. Veuillez sélectionner une entrée.</div>
-</div>
+${categories}
 
 ${statuts}
 
-<textarea id="modalites-mesure-specifique-${index}"
-          name="modalites-mesure-specifique-${index}"
-          placeholder="Modalités de mise en œuvre (facultatif)">${modalites}</textarea>
+<label for="modalites-mesure-specifique-${index}" class="nom-champ propriete-specifique">
+  Précisions sur la mesure dans le cadre de votre organisation
+  <textarea id="modalites-mesure-specifique-${index}"
+            name="modalites-mesure-specifique-${index}"
+            placeholder="Modalités de mise en œuvre (facultatif)">${modalites}</textarea>
+</label>
       `;
   };
 
@@ -118,7 +124,7 @@ ${statuts}
   $bouton.on('click', () => {
     declencheValidation('form#mesures');
   });
-  
+
   $('form#mesures').on('submit', (evenement) => {
     evenement.preventDefault();
     const params = parametres('form#mesures');
