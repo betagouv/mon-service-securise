@@ -5,7 +5,9 @@ const brancheSuppressionElement = () => {
   });
 };
 
-const afficheZoneSaisieItem = (selecteur, zoneSaisie, ordreInverse) => {
+const afficheZoneSaisieItem = (
+  selecteur, zoneSaisie, ordreInverse, actionSurZoneSaisieApresAjout = () => {}
+) => {
   const $conteneurSaisieItem = $(`
 <label class="item-ajoute">
   <div class="icone-suppression"></div>
@@ -17,16 +19,23 @@ const afficheZoneSaisieItem = (selecteur, zoneSaisie, ordreInverse) => {
   brancheSuppressionElement();
 
   $conteneurSaisieItem.append(zoneSaisie);
+
+  actionSurZoneSaisieApresAjout($conteneurSaisieItem);
 };
 
 const brancheAjoutItem = (
   selecteurAction, selecteurConteneur, cbZoneSaisie, cbIncrementeIndex,
-  options = { ordreInverse: false },
+  options = { ordreInverse: false }, actionSurZoneSaisieApresAjout
 ) => {
-  $(selecteurAction).click((e) => {
+  $(selecteurAction).on('click', (e) => {
     e.preventDefault();
     const index = cbIncrementeIndex();
-    afficheZoneSaisieItem(selecteurConteneur, cbZoneSaisie(index, {}), options.ordreInverse);
+    afficheZoneSaisieItem(
+      selecteurConteneur,
+      cbZoneSaisie(index, {}),
+      options.ordreInverse,
+      actionSurZoneSaisieApresAjout
+    );
   });
 };
 
