@@ -64,11 +64,12 @@ $(() => {
        name="description-mesure-specifique-${index}"
        placeholder="Description de la mesure"
        value="${description}">
-
-<select id="categorie-mesure-specifique-${index}" name="categorie-mesure-specifique-${index}">
-  <option value="">--Catégorie--</option>
-  ${options}
-</select>
+<div class="selecteur-options">
+  <select id="categorie-mesure-specifique-${index}" name="categorie-mesure-specifique-${index}">
+    <option value="">--Catégorie--</option>
+    ${options}
+  </select>
+</div>
 
 ${statuts}
 
