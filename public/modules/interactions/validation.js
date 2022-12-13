@@ -1,13 +1,7 @@
 const EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE = 'afficheErreursSiNecessaire';
 
-const brancheValidation = (selecteurFormulaire) => {
-  $(selecteurFormulaire).on(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE, (evenement) => {
-    if (!evenement.target.reportValidity()) {
-      $('.intouche', selecteurFormulaire).removeClass('intouche');
-    }
-  });
-
-  $('input, select', selecteurFormulaire).each((_index, champ) => {
+const brancheConteneur = (selecteurConteneur) => {
+  $('input, select', selecteurConteneur).each((_index, champ) => {
     $(champ).addClass('intouche');
     $(champ).on('input', () => {
       $(champ).removeClass('intouche');
@@ -21,8 +15,18 @@ const brancheValidation = (selecteurFormulaire) => {
   });
 };
 
+const brancheValidation = (selecteurFormulaire) => {
+  $(selecteurFormulaire).on(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE, (evenement) => {
+    if (!evenement.target.reportValidity()) {
+      $('.intouche', selecteurFormulaire).removeClass('intouche');
+    }
+  });
+
+  brancheConteneur(selecteurFormulaire);
+};
+
 const declencheValidation = (selecteurFormulaire) => {
   $(selecteurFormulaire).trigger(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE);
 };
 
-export { brancheValidation, declencheValidation };
+export { brancheConteneur, brancheValidation, declencheValidation };
