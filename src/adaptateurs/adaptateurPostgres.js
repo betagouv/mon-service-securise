@@ -11,6 +11,34 @@ const nouvelAdaptateur = (env) => {
 
   const nomPropriete = (colonne) => (CORRESPONDANCE_COLONNES_PROPRIETES[colonne] || colonne);
 
+  const ajouteIntervenantsAHomologations = (lignes) => lignes
+    .reduce((acc, ligne) => {
+      const homologationDejaExistante = acc.find((h) => h.id === ligne.idHomologation);
+      const nouvelleLigne = homologationDejaExistante || {
+        id: ligne.idHomologation, ...ligne.donneesHomologation,
+      };
+      nouvelleLigne.contributeurs ||= [];
+
+      const intervenant = {
+        id: ligne.idUtilisateur,
+        dateCreation: ligne.dateCreationUtilisateur,
+        ...ligne.donneesUtilisateur,
+      };
+
+      switch (ligne.type) {
+        case 'contributeur':
+          nouvelleLigne.contributeurs.push(intervenant);
+          break;
+        case 'createur':
+          nouvelleLigne.createur = intervenant;
+          break;
+        default: // ne fais rien
+      }
+
+      if (!homologationDejaExistante) acc.push(nouvelleLigne);
+      return acc;
+    }, []);
+
   const ajouteLigneDansTable = (nomTable, id, donnees) => knex(nomTable)
     .insert({ id, donnees });
 
@@ -81,33 +109,7 @@ const nouvelAdaptateur = (env) => {
       donneesUtilisateur: 'u.donnees',
       type: knex.raw("a2.donnees->>'type'"),
     })
-    .then((lignes) => lignes
-      .reduce((acc, ligne) => {
-        const homologationDejaExistante = acc.find((h) => h.id === ligne.idHomologation);
-        const nouvelleLigne = homologationDejaExistante || {
-          id: ligne.idHomologation, ...ligne.donneesHomologation,
-        };
-        nouvelleLigne.contributeurs ||= [];
-
-        const intervenant = {
-          id: ligne.idUtilisateur,
-          dateCreation: ligne.dateCreationUtilisateur,
-          ...ligne.donneesUtilisateur,
-        };
-
-        switch (ligne.type) {
-          case 'contributeur':
-            nouvelleLigne.contributeurs.push(intervenant);
-            break;
-          case 'createur':
-            nouvelleLigne.createur = intervenant;
-            break;
-          default: // ne fais rien
-        }
-
-        if (!homologationDejaExistante) acc.push(nouvelleLigne);
-        return acc;
-      }, []));
+    .then(ajouteIntervenantsAHomologations);
 
   const metsAJourHomologation = (...params) => metsAJourTable('homologations', ...params);
   const metsAJourService = (...params) => metsAJourTable('services', ...params);
@@ -178,8 +180,15 @@ const nouvelAdaptateur = (env) => {
     .join('homologations', knex.raw("(autorisations.donnees->>'idHomologation')::uuid"), 'homologations.id')
     .whereRaw('utilisateurs.date_creation < ?', date.toISOString())
     .whereRaw(knex.raw("autorisations.donnees->>'type' = 'createur'"))
-    .select('homologations.*')
-    .then((lignes) => lignes.map(convertisLigneEnObjet));
+    .select({
+      idHomologation: 'homologations.id',
+      donneesHomologation: 'homologations.donnees',
+      idUtilisateur: 'utilisateurs.id',
+      dateCreationUtilisateur: 'utilisateurs.date_creation',
+      donneesUtilisateur: 'utilisateurs.donnees',
+      type: knex.raw("autorisations.donnees->>'type'"),
+    })
+    .then(ajouteIntervenantsAHomologations);
 
   return {
     ajouteAutorisation,
