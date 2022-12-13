@@ -43,7 +43,7 @@ class ConsoleAdministration {
     };
 
     const evenementPourHomologation = (h) => new EvenementNouveauServiceCree(
-      { idUtilisateur: h.createur.id },
+      { idService: h.id, idUtilisateur: h.createur.id },
       { date: jourSuivant(h.createur.dateCreation) }
     ).toJSON();
 

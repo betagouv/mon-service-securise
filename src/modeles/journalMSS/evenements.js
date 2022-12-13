@@ -1,6 +1,6 @@
 const AdaptateurChiffrement = require('../../adaptateurs/adaptateurChiffrement');
 
-const { ErreurIdentifiantUtilisateurManquant } = require('./erreurs');
+const { ErreurIdentifiantServiceManquant, ErreurIdentifiantUtilisateurManquant } = require('./erreurs');
 
 class Evenements {
   constructor(type, donnees, date) {
@@ -26,6 +26,7 @@ class EvenementNouveauServiceCree extends Evenements {
     } = options;
 
     const valide = () => {
+      if (!donnees.idService) throw new ErreurIdentifiantServiceManquant();
       if (!donnees.idUtilisateur) throw new ErreurIdentifiantUtilisateurManquant();
     };
 
@@ -33,7 +34,10 @@ class EvenementNouveauServiceCree extends Evenements {
 
     super(
       'NOUVEAU_SERVICE_CREE',
-      { idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur) },
+      {
+        idService: adaptateurChiffrement.hacheSha256(donnees.idService),
+        idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur),
+      },
       date
     );
   }
