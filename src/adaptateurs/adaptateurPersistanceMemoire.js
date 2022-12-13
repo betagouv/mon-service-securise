@@ -152,9 +152,16 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
       .then((transferts) => Promise.all(transferts))
   );
 
-  const utilisateursCreesAvantLe = (date) => Promise.resolve(
-    donnees.utilisateurs.filter((u) => date - new Date(u.dateCreation) > 0)
-  );
+  const homologationsPourUtilisateursCreesAvantLe = (date) => {
+    const idsHomologationsPourCreateurs = donnees.utilisateurs
+      .filter((u) => date - new Date(u.dateCreation) > 0)
+      .map((u) => autorisationsCreation(u.id));
+
+    return Promise.all(idsHomologationsPourCreateurs)
+      .then((resultat) => resultat.flat())
+      .then((ids) => ids.map(homologation))
+      .then((hs) => Promise.all(hs));
+  };
 
   return {
     ajouteAutorisation,
@@ -184,7 +191,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,
-    utilisateursCreesAvantLe,
+    homologationsPourUtilisateursCreesAvantLe,
   };
 };
 

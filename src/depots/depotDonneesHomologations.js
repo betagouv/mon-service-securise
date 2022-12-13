@@ -143,15 +143,9 @@ const creeDepot = (config = {}) => {
       .map((h) => new Homologation(h, referentiel))
       .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService())));
 
-  const homologationsCreeesAvantLe = (date) => {
-    const homologationsCreeesPar = (utilisateurs) => utilisateurs
-      .map((u) => homologations(u.id).then((hs) => hs.filter((h) => h.createur.id === u.id)));
-
-    return adaptateurPersistance
-      .utilisateursCreesAvantLe(date)
-      .then((utilisateurs) => Promise.all(homologationsCreeesPar(utilisateurs)))
-      .then((toutesHomologations) => toutesHomologations.flatMap((h) => h));
-  };
+  const homologationsCreeesAvantLe = (date) => adaptateurPersistance
+    .homologationsPourUtilisateursCreesAvantLe(date)
+    .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
 
   const metsAJourDossierCourant = (idHomologation, dossier) => (
     ajouteDossierCourantSiNecessaire(idHomologation)
