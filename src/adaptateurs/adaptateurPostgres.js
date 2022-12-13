@@ -173,8 +173,12 @@ const nouvelAdaptateur = (env) => {
       donnees: knex.raw("(jsonb_set(donnees::jsonb, '{ idUtilisateur }', '??'))::json", idUtilisateurCible),
     });
 
-  const utilisateursCreesAvantLe = (date) => knex('utilisateurs')
-    .whereRaw('date_creation < ?', date.toISOString())
+  const homologationsPourUtilisateursCreesAvantLe = (date) => knex('autorisations')
+    .join('utilisateurs', knex.raw("(autorisations.donnees->>'idUtilisateur')::uuid"), 'utilisateurs.id')
+    .join('homologations', knex.raw("(autorisations.donnees->>'idHomologation')::uuid"), 'homologations.id')
+    .whereRaw('utilisateurs.date_creation < ?', date.toISOString())
+    .whereRaw(knex.raw("autorisations.donnees->>'type' = 'createur'"))
+    .select('homologations.*')
     .then((lignes) => lignes.map(convertisLigneEnObjet));
 
   return {
@@ -207,7 +211,7 @@ const nouvelAdaptateur = (env) => {
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,
-    utilisateursCreesAvantLe,
+    homologationsPourUtilisateursCreesAvantLe,
   };
 };
 

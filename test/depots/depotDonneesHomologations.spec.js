@@ -715,10 +715,7 @@ describe('Le dépôt de données des homologations', () => {
           { id: 'JANVIER', dateCreation: '2022-01-15 13:30:00', email: 'j@example.com' },
           { id: 'FEVRIER', dateCreation: '2022-02-15 13:30:00', email: 'f@example.com' },
         ],
-        homologations: [
-          { id: '123', idUtilisateur: 'JANVIER' },
-          { id: '789', idUtilisateur: 'FEVRIER' },
-        ],
+        homologations: [{ id: '123' }, { id: '789' }],
         autorisations: [
           { idUtilisateur: 'JANVIER', idHomologation: '123', type: 'createur' },
           { idUtilisateur: 'FEVRIER', idHomologation: '789', type: 'createur' },
