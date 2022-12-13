@@ -36,6 +36,9 @@
 
 \renewcommand{\headrulewidth}{0pt}
 
+\usepackage{mathtools}
+\SetLabelAlign{center}{\clap{#1}}
+
 \begin{document}
   __~ Object.keys(donnees.mesuresParStatut) :statut __
     \pagebreak[4]\begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt]
@@ -44,7 +47,7 @@
       \nopagebreak[1]\MakeUppercase{__= donnees.categories[categorie] __}
       __? donnees.mesuresParStatut[statut][categorie]
           && donnees.mesuresParStatut[statut][categorie].length __
-        \nopagebreak[4]\begin{itemize}[leftmargin=1.5em]
+        \nopagebreak[4]\begin{itemize}[labelsep=0em, align=center]
           __~ donnees.mesuresParStatut[statut][categorie] :mesure __%
             __? mesure.indispensable__
               \item[{\includeinkscape[height=9pt]{etoile}}]

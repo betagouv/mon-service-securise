@@ -5,6 +5,7 @@ environ
 etoolbox
 fancyhdr
 koma-script
+mathtools
 nopageno
 pdfcol
 pgf
