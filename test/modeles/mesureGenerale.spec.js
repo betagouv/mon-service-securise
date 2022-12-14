@@ -82,8 +82,7 @@ describe('Une mesure de sécurité', () => {
   it('peut être rendue indispensable, même si le référentiel dit le contraire', () => {
     expect(referentiel.mesureIndispensable('identifiantMesure')).to.be(false);
 
-    const mesureRendueIndispensable = true;
-    const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: 'fait' }, referentiel, mesureRendueIndispensable);
+    const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: 'fait', rendueIndispensable: true }, referentiel);
     expect(mesure.estIndispensable()).to.be(true);
   });
 

@@ -150,6 +150,18 @@ describe('Une homologation', () => {
     expect(homologation.risquesSpecifiques().nombre()).to.equal(1);
   });
 
+  it('se construit en renseignant le caractère indispensable des mesures générales grâce aux mesures personnalisées', () => {
+    const moteur = { mesures: () => ({ m1: { indispensable: true } }) };
+    const referentiel = Referentiel.creeReferentiel({ mesures: { m1: {} } });
+
+    const homologation = new Homologation({
+      id: '123',
+      mesuresGenerales: [{ id: 'm1' }],
+    }, referentiel, moteur);
+
+    expect(homologation.mesures.mesuresGenerales.toutes().find((mesure) => mesure.id === 'm1').rendueIndispensable).to.be(true);
+  });
+
   it('connaît ses mesures spécifiques', () => {
     const homologation = new Homologation({
       id: '123',
