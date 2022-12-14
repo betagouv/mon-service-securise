@@ -189,7 +189,8 @@
 
 .telechargement-pdfs {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: flex-end;
 
   margin-top: 2em;
 }
@@ -197,14 +198,9 @@
 .telechargement-pdfs .bouton {
   font-weight: bold;
   margin-bottom: 1em;
+  margin-left: 1em;
   padding-left: 1.85em;
   padding-right: 1.85em;
-}
-
-.telechargement-pdfs .ancienne-version {
-  text-align: right;
-
-  font-size: 0.85em;
 }
 
 a.nouvel-onglet::after {

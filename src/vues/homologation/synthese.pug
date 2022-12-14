@@ -55,7 +55,11 @@ block zone-principale
         target = `blank`,
         rel = ``
       ) Télécharger la synthèse
-      a.ancienne-version.vers-complements(href = `/homologation/${service.id}/decision`) Télécharger les annexes (+ synthèse 1ère version)
+      a.bouton.nouvel-onglet(
+        href = `/pdf/${service.id}/annexes.pdf`,
+        target = `blank`,
+        rel = ``
+      ) Télécharger les annexes
 
 block cartes-informations
   - const indiceCyber = service.indiceCyber()
@@ -64,3 +68,4 @@ block cartes-informations
   +carteInformations({ titre: 'Pour les services référencés avant le 12/10/2022' })
     .liens
       a.vers-complements(href = `/homologation/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »
+      a.vers-complements(href = `/homologation/${service.id}/decision`) Télécharger les annexes 1ère version
