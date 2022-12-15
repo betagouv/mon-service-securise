@@ -3,6 +3,7 @@ block append styles
 
 mixin scoreIndiceCyber(formatIndiceCyber, noteObtenue, noteMax)
   .logo-indice-cyber
+    img(src='/statique/assets/images/logo_indice_cyber.png')
     div(class = `disque couleur-indice-cyber-${Math.floor(noteObtenue)}`)
     div(class = `curseur position-${Math.floor(noteObtenue)}`)
     span.note= formatIndiceCyber(noteObtenue)
