@@ -15,21 +15,14 @@ header {
 
 .bloc-marque :is(.marianne, .devise) {
   width: 45%;
-
-  background-repeat: no-repeat;
-  background-size: contain;
 }
 
 .bloc-marque .marianne {
   height: 10px;
-
-  background-image: url(../images/marianne.svg);
 }
 
 .bloc-marque .devise {
   height: 20px;
-
-  background-image: url(../images/devise.svg);
 }
 
 .bloc-marque .republique-francaise {
@@ -45,25 +38,12 @@ header {
   width: 12.1em;
   height: 4.35em;
   align-self: center;
-
-  background-image: url(../images/logo_mss.svg);
-  background-origin: content-box;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-
-  color: var(--bleu-anssi);
 }
 
 .logo-anssi {
   width: 60px;
   height: 60px;
-
   margin-left: 1.5em;
-
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url(../images/logo_anssi.png);
 }
 
 h1 {
