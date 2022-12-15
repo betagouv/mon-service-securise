@@ -36,10 +36,6 @@ class Mesures extends InformationsHomologation {
     return this.nombreMesuresPersonnalisees();
   }
 
-  nonSaisies() {
-    return this.mesuresGenerales.nonSaisies();
-  }
-
   parStatutEtCategorie() {
     const mesuresGeneralesParStatut = this.mesuresGenerales.parStatutEtCategorie();
     return this.mesuresSpecifiques.parStatutEtCategorie(mesuresGeneralesParStatut);
