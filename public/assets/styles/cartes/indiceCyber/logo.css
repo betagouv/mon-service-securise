@@ -7,14 +7,14 @@
   margin: 0 auto;
   width: 100%;
   height: 100%;
-
-  background-image: url(../../../images/logo_indice_cyber.svg);
-  background-repeat: no-repeat;
-  background-size: 100%;
 }
 
 .logo-indice-cyber > * {
   position: absolute;
+}
+
+.logo-indice-cyber img {
+  width: 100%;
 }
 
 .logo-indice-cyber .disque {
