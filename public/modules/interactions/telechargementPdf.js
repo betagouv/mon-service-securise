@@ -11,7 +11,7 @@ const telechargementPdf = (nomDocumentPdfCible) => () => {
 
   const construisPDF = $.map($('.page'), ($p) => $p)
     .reduce((acc, $page) => (
-      acc.then(() => html2canvas($page, { logging: false }).then(ajoutePageAvecImage))
+      acc.then(() => html2canvas($page, { logging: false, scale: 4 }).then(ajoutePageAvecImage))
     ), Promise.resolve());
 
   construisPDF.then(() => {
