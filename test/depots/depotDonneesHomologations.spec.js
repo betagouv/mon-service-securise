@@ -708,60 +708,6 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  describe('sur demande des homologations créées avant une certaine date', () => {
-    it("retrouve les homologations en utilisant la date d'inscription de leur créateur", (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [
-          { id: 'JANVIER', dateCreation: '2022-01-15 13:30:00', email: 'j@example.com' },
-          { id: 'FEVRIER', dateCreation: '2022-02-15 13:30:00', email: 'f@example.com' },
-        ],
-        homologations: [{ id: '123' }, { id: '789' }],
-        autorisations: [
-          { idUtilisateur: 'JANVIER', idHomologation: '123', type: 'createur' },
-          { idUtilisateur: 'FEVRIER', idHomologation: '789', type: 'createur' },
-        ],
-      });
-
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-
-      depot.homologationsCreeesAvantLe(new Date('2022-01-30 10:00:00'))
-        .then((h) => {
-          expect(h.length).to.be(1);
-          expect(h[0].id).to.equal('123');
-          done();
-        })
-        .catch(done);
-    });
-
-    it('retient uniquement les homologations trouvées via un créateur', (done) => {
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [
-          { id: 'JANVIER-1', dateCreation: '2022-01-15', email: 'j1@example.com' },
-          { id: 'JANVIER-2', dateCreation: '2022-01-17', email: 'j2@example.com' },
-        ],
-        homologations: [
-          { id: '123', idUtilisateur: 'JANVIER-1', descriptionService: { nomService: 'Celui de J1' } },
-          { id: '789', idUtilisateur: 'JANVIER-2', descriptionService: { nomService: 'Celui de J2' } },
-        ],
-        autorisations: [
-          { idUtilisateur: 'JANVIER-1', idHomologation: '123', type: 'createur' },
-          { idUtilisateur: 'JANVIER-2', idHomologation: '789', type: 'createur' },
-          { idUtilisateur: 'JANVIER-1', idHomologation: '789', type: 'contributeur' },
-        ],
-      });
-
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-
-      depot.homologationsCreeesAvantLe(new Date('2022-01-30'))
-        .then((hs) => {
-          expect(hs.length).to.be(2);
-          expect(hs.map((h) => h.id)).to.eql(['123', '789']);
-          done();
-        })
-        .catch(done);
-    });
-  });
-
   describe("sur demande d'ajout d'un dossier courant si nécessaire", () => {
     let adaptateurUUID;
 
