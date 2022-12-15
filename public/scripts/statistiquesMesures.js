@@ -14,8 +14,6 @@ const dessineCamembert = ($canevas, {
 }) => {
   const mesuresARemplir = totalMesures - mesuresEnCours - mesuresNonFaites - mesuresFaites;
   const donnees = [mesuresEnCours, mesuresNonFaites, mesuresARemplir, mesuresFaites];
-  const offsetMesuresFaites = mesuresARemplir ? 20 : 0;
-  const labelOffsetMesuresFaites = mesuresARemplir ? -20 : 15;
 
   /* eslint-disable no-new */
   new Chart(
@@ -48,7 +46,7 @@ const dessineCamembert = ($canevas, {
           },
           {
             data: donnees,
-            offset: [0, 0, 0, offsetMesuresFaites],
+            offset: [0, 0, 0, 20],
             radius: '180%',
             backgroundColor: [
               PALETTE.BLEU_MOYEN,
@@ -60,7 +58,7 @@ const dessineCamembert = ($canevas, {
               color: [PALETTE.BLANC, PALETTE.BLEU_FONCE, PALETTE.BLEU_FONCE, PALETTE.BLANC],
               font: { weight: 'bold' },
               align: 'start',
-              offset: [-15, -15, -15, labelOffsetMesuresFaites],
+              offset: [-15, -15, -15, -20],
               formatter: (valeur) => (valeur || ''),
             },
           },
