@@ -148,7 +148,7 @@ const nouvelAdaptateur = (env) => {
     .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
     .then((rows) => rows.map(convertisLigneEnObjet));
 
-  const autorisationsCreation = (idUtilisateur, idsHomologationsAExclure = []) => knex('autorisations')
+  const idsHomologationsCreeesParUtilisateur = (idUtilisateur, idsHomologationsAExclure = []) => knex('autorisations')
     .whereRaw("donnees->>'idUtilisateur'=? AND donnees->>'type'='createur'", idUtilisateur)
     .whereNotIn(knex.raw("donnees->>'idHomologation'"), idsHomologationsAExclure)
     .select({ idHomologation: knex.raw("donnees->>'idHomologation'") })
@@ -184,10 +184,10 @@ const nouvelAdaptateur = (env) => {
     autorisation,
     autorisationPour,
     autorisations,
-    autorisationsCreation,
     homologation,
     homologationAvecNomService,
     homologations,
+    idsHomologationsCreeesParUtilisateur,
     metsAJourHomologation,
     metsAJourService,
     metsAJourUtilisateur,

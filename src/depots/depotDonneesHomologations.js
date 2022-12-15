@@ -193,7 +193,8 @@ const creeDepot = (config = {}) => {
     ]));
 
   const supprimeHomologationsCreeesPar = (idUtilisateur, idsHomologationsAConserver = []) => (
-    adaptateurPersistance.autorisationsCreation(idUtilisateur, idsHomologationsAConserver)
+    adaptateurPersistance
+      .idsHomologationsCreeesParUtilisateur(idUtilisateur, idsHomologationsAConserver)
       .then((idsHomologations) => Promise.all(idsHomologations.map(supprimeHomologation)))
   );
 
