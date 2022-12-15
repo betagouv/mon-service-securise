@@ -143,10 +143,6 @@ const creeDepot = (config = {}) => {
       .map((h) => new Homologation(h, referentiel))
       .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService())));
 
-  const homologationsCreeesAvantLe = (date) => adaptateurPersistance
-    .homologationsPourUtilisateursCreesAvantLe(date)
-    .then((hs) => hs.map((h) => new Homologation(h, referentiel)));
-
   const metsAJourDossierCourant = (idHomologation, dossier) => (
     ajouteDossierCourantSiNecessaire(idHomologation)
       .then((d) => {
@@ -211,7 +207,6 @@ const creeDepot = (config = {}) => {
     homologation,
     homologationExiste,
     homologations,
-    homologationsCreeesAvantLe,
     metsAJourDossierCourant,
     nouvelleHomologation,
     remplaceMesuresSpecifiquesPourHomologation,
