@@ -1,6 +1,11 @@
 const AdaptateurChiffrement = require('../../adaptateurs/adaptateurChiffrement');
 
-const { ErreurIdentifiantServiceManquant, ErreurIdentifiantUtilisateurManquant } = require('./erreurs');
+const {
+  ErreurIdentifiantServiceManquant,
+  ErreurIdentifiantUtilisateurManquant,
+  ErreurNombreMesuresCompletesManquant,
+  ErreurNombreTotalMesuresManquant,
+} = require('./erreurs');
 
 class Evenement {
   constructor(type, donnees, date) {
@@ -43,4 +48,30 @@ class EvenementNouveauServiceCree extends Evenement {
   }
 }
 
-module.exports = { EvenementNouveauServiceCree };
+class EvenementCompletudeServiceModifiee extends Evenement {
+  constructor(donnees, options = {}) {
+    const {
+      date = Date.now(),
+      adaptateurChiffrement = AdaptateurChiffrement,
+    } = options;
+
+    const valide = () => {
+      if (!donnees.idService) throw new ErreurIdentifiantServiceManquant();
+      if (!donnees.nombreTotalMesures) throw new ErreurNombreTotalMesuresManquant();
+      if (!donnees.nombreMesuresCompletes) throw new ErreurNombreMesuresCompletesManquant();
+    };
+
+    valide();
+
+    super(
+      'COMPLETUDE_SERVICE_MODIFIEE',
+      { ...donnees, idService: adaptateurChiffrement.hacheSha256(donnees.idService) },
+      date
+    );
+  }
+}
+
+module.exports = {
+  EvenementNouveauServiceCree,
+  EvenementCompletudeServiceModifiee,
+};
