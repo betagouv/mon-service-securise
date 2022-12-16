@@ -18,18 +18,32 @@ const middleware = (configuration = {}) => {
     const csp = () => {
       const fournisseursContenu = {
         mss: {
+          connectSrc: "'self'",
           defaultSrc: "'self'",
+          fontSrc: "'self'",
           imgSrc: "'self' data:",
-          styleSrc: nonce ? `style-src 'self' 'nonce-${nonce}'` : '',
+          styleSrc: `'self' ${nonce ? `'nonce-${nonce}'` : ''}`,
           scriptsSrc: "'self'",
         },
+        crisp: {
+          // Liste obtenue de https://docs.crisp.chat/guides/others/whitelisting-our-systems/crisp-domain-names/
+          connectSrc: 'https://client.crisp.chat https://storage.crisp.chat wss://client.relay.crisp.chat wss://stream.relay.crisp.chat',
+          imgSrc: 'https://client.crisp.chat https://image.crisp.chat https://storage.crisp.chat',
+          fontSrc: 'https://client.crisp.chat',
+          mediaSrc: 'https://client.crisp.chat',
+          scriptSrc: 'https://client.crisp.chat https://settings.crisp.chat',
+          styleSrc: "'unsafe-inline' https://client.crisp.chat",
+        },
       };
-      const { mss } = fournisseursContenu;
+      const { mss, crisp } = fournisseursContenu;
       const politiques = [
+        ['connect-src', `${mss.connectSrc} ${crisp.connectSrc}`],
         ['default-src', `${mss.defaultSrc}`],
-        ['img-src', `${mss.imgSrc}`],
-        ['style-src', `${mss.styleSrc}`],
-        ['script-src', `${mss.scriptsSrc}`],
+        ['font-src', `${mss.fontSrc} ${crisp.fontSrc}`],
+        ['img-src', `${mss.imgSrc} ${crisp.imgSrc}`],
+        ['media-src', `${crisp.mediaSrc}`],
+        ['script-src', `${mss.scriptsSrc} ${crisp.scriptSrc}`],
+        ['style-src', `${mss.styleSrc} ${crisp.styleSrc}`],
       ];
       return politiques.map(([nom, valeur]) => `${nom} ${valeur}`).join(';');
     };

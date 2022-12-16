@@ -299,7 +299,7 @@ describe('Le middleware MSS', () => {
       verifieHeaderAvecNonce(
         '12345',
         'content-security-policy',
-        "style-src 'self' 'nonce-12345';",
+        "style-src 'self' 'nonce-12345' 'unsafe-inline' https://client.crisp.chat",
         done,
       );
     });
@@ -320,12 +320,24 @@ describe('Le middleware MSS', () => {
       verifiePositionnementHeader('content-security-policy', "default-src 'self'", done);
     });
 
-    it("autorise le chargement des images dont l'URL commence par `data:`", (done) => {
-      verifiePositionnementHeader('content-security-policy', "img-src 'self' data:;", done);
+    it("autorise l'utilisation d'APIs hébergées par les domaines « MSS » et « Crisp »", (done) => {
+      verifiePositionnementHeader('content-security-policy', "connect-src 'self' https://client.crisp.chat https://storage.crisp.chat wss://client.relay.crisp.chat wss://stream.relay.crisp.chat;", done);
     });
 
-    it('autorise le chargement de tous les scripts du domaine (et uniquement ceux-là)', (done) => {
-      verifiePositionnementHeader('content-security-policy', "script-src 'self'", done);
+    it('autorise le chargement de polices de caractères des domaines « MSS » et « Crisp »', (done) => {
+      verifiePositionnementHeader('content-security-policy', "font-src 'self' https://client.crisp.chat;", done);
+    });
+
+    it("autorise le chargement d'images des domaines « MSS » et « Crisp » ou dont l'URL commence par data:", (done) => {
+      verifiePositionnementHeader('content-security-policy', "img-src 'self' data: https://client.crisp.chat https://image.crisp.chat https://storage.crisp.chat;", done);
+    });
+
+    it('autorise le chargement de médias du domaine « Crisp »', (done) => {
+      verifiePositionnementHeader('content-security-policy', 'media-src https://client.crisp.chat;', done);
+    });
+
+    it('autorise le chargement de scripts des domaines « MSS » et « Crisp »', (done) => {
+      verifiePositionnementHeader('content-security-policy', "script-src 'self' https://client.crisp.chat https://settings.crisp.chat;", done);
     });
 
     it('interdit le chargement de la page dans une iFrame', (done) => {
