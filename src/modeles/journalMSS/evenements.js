@@ -23,12 +23,14 @@ class Evenement {
   }
 }
 
+const optionsParDefaut = (options) => ({
+  date: options.date ?? Date.now(),
+  adaptateurChiffrement: options.adaptateurChiffrement ?? AdaptateurChiffrement,
+});
+
 class EvenementNouveauServiceCree extends Evenement {
   constructor(donnees, options = {}) {
-    const {
-      date = Date.now(),
-      adaptateurChiffrement = AdaptateurChiffrement,
-    } = options;
+    const { date, adaptateurChiffrement } = optionsParDefaut(options);
 
     const valide = () => {
       if (!donnees.idService) throw new ErreurIdentifiantServiceManquant();
@@ -50,10 +52,7 @@ class EvenementNouveauServiceCree extends Evenement {
 
 class EvenementCompletudeServiceModifiee extends Evenement {
   constructor(donnees, options = {}) {
-    const {
-      date = Date.now(),
-      adaptateurChiffrement = AdaptateurChiffrement,
-    } = options;
+    const { date, adaptateurChiffrement } = optionsParDefaut(options);
 
     const valide = () => {
       if (!donnees.idService) throw new ErreurIdentifiantServiceManquant();
