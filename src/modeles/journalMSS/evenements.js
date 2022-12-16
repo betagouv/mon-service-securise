@@ -2,7 +2,7 @@ const AdaptateurChiffrement = require('../../adaptateurs/adaptateurChiffrement')
 
 const { ErreurIdentifiantServiceManquant, ErreurIdentifiantUtilisateurManquant } = require('./erreurs');
 
-class Evenements {
+class Evenement {
   constructor(type, donnees, date) {
     this.type = type;
     this.donnees = donnees;
@@ -18,7 +18,7 @@ class Evenements {
   }
 }
 
-class EvenementNouveauServiceCree extends Evenements {
+class EvenementNouveauServiceCree extends Evenement {
   constructor(donnees, options = {}) {
     const {
       date = Date.now(),
