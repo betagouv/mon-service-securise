@@ -55,6 +55,9 @@ main {
 }
 
 .introduction nav {
+  display: flex;
+  column-gap: 1em;
+
   font-size: 1.11em;
 }
 
@@ -63,7 +66,22 @@ main {
   padding: 0.5em 1.5em;
 
   border-radius: 0.25em;
+}
+
+.introduction nav .inscription {
+  background-color: var(--bleu-mise-en-avant);
   font-weight: 300;
+}
+
+.introduction nav .presse {
+  color: var(--bleu-mise-en-avant);
+  border-color: var(--bleu-mise-en-avant);
+  background-color: #ffffff;
+}
+
+.introduction nav .presse::after {
+  transform: translateX(0.2em);
+
   background-color: var(--bleu-mise-en-avant);
 }
 
