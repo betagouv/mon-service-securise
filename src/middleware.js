@@ -14,14 +14,28 @@ const middleware = (configuration = {}) => {
 
   const positionneHeaders = (requete, reponse, suite) => {
     const { nonce } = requete;
-    const politiqueCommuneSecuriteContenus = "default-src 'self'; img-src 'self' data:;";
-    const politiqueSecuriteStyles = nonce
-      ? `style-src 'self' 'nonce-${nonce}';`
-      : '';
-    const politiqueSecuriteScripts = "script-src 'self'";
+
+    const csp = () => {
+      const fournisseursContenu = {
+        mss: {
+          defaultSrc: "'self'",
+          imgSrc: "'self' data:",
+          styleSrc: nonce ? `style-src 'self' 'nonce-${nonce}'` : '',
+          scriptsSrc: "'self'",
+        },
+      };
+      const { mss } = fournisseursContenu;
+      const politiques = [
+        ['default-src', `${mss.defaultSrc}`],
+        ['img-src', `${mss.imgSrc}`],
+        ['style-src', `${mss.styleSrc}`],
+        ['script-src', `${mss.scriptsSrc}`],
+      ];
+      return politiques.map(([nom, valeur]) => `${nom} ${valeur}`).join(';');
+    };
+
     reponse.set({
-      'content-security-policy':
-        `${politiqueCommuneSecuriteContenus} ${politiqueSecuriteStyles} ${politiqueSecuriteScripts}`,
+      'content-security-policy': csp(),
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'no-referrer',
