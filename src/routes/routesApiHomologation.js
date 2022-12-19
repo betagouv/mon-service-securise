@@ -8,6 +8,7 @@ const Dossier = require('../modeles/dossier');
 const FonctionnalitesSpecifiques = require('../modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('../modeles/donneesSensiblesSpecifiques');
 const MesureGenerale = require('../modeles/mesureGenerale');
+const MesureSpecifique = require('../modeles/mesureSpecifique');
 const MesuresSpecifiques = require('../modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('../modeles/partiesPrenantes/partiesPrenantes');
 const PointsAcces = require('../modeles/pointsAcces');
@@ -102,9 +103,8 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
           return new MesureGenerale({ id: idMesure, statut, modalites }, referentiel);
         });
 
-      const aPersister = mesuresSpecifiques.filter(
-        (m) => m?.description || m?.categorie || m?.statut || m?.modalites
-      );
+      const aPersister = mesuresSpecifiques
+        .filter(MesureSpecifique.toutesProprietesObligatoiresRenseignees);
       const specifiques = new MesuresSpecifiques(
         { mesuresSpecifiques: aPersister },
         referentiel,

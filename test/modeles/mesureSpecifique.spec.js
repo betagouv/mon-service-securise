@@ -26,6 +26,17 @@ describe('Une mesure spécifique', () => {
     expect(mesure.modalites).to.equal('Des modalités de mise en œuvre');
   });
 
+  elle('connaît ses propriétés obligatoires', () => {
+    expect(MesureSpecifique.proprietesObligatoires()).to.eql(['description', 'categorie', 'statut']);
+  });
+
+  elle('peut dire si un objet a toutes les propriétés obligatoires renseignées', () => {
+    const mesure = { description: 'description', statut: 'fait', categorie: 'categorie' };
+    const mesureIncomplete = { statut: 'statut' };
+    expect(MesureSpecifique.toutesProprietesObligatoiresRenseignees(mesure)).to.be(true);
+    expect(MesureSpecifique.toutesProprietesObligatoiresRenseignees(mesureIncomplete)).to.be(false);
+  });
+
   elle('ne tient pas compte du champ `modalites` pour déterminer le statut de saisie', () => {
     const mesure = new MesureSpecifique({
       description: 'Une mesure spécifique',
