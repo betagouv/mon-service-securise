@@ -6,7 +6,7 @@ const {
 } = require('../erreurs');
 const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
-const { EvenementNouveauServiceCree } = require('../modeles/journalMSS/evenements');
+const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
 
 const creeDepot = (config = {}) => {
   const { adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel } = config;
