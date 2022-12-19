@@ -195,6 +195,11 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
   describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteMesuresAHomologation = () => Promise.resolve();
+      testeur.referentiel().recharge({
+        categoriesMesures: { uneCategorie: 'Une catégorie' },
+        mesures: { identifiantMesure: {} },
+        statutsMesures: { fait: 'Fait' },
+      });
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -220,10 +225,6 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it("demande au dépôt d'associer les mesures à l'homologation", (done) => {
-      testeur.referentiel().recharge({
-        mesures: { identifiantMesure: {} },
-        categoriesMesures: { uneCategorie: 'Une catégorie' },
-      });
       let mesuresAjoutees = false;
 
       testeur.depotDonnees().ajouteMesuresAHomologation = (
@@ -247,7 +248,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         mesuresGenerales: {
           identifiantMesure: { statut: 'fait', modalites: "Des modalités d'application" },
         },
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique', categorie: 'uneCategorie' }],
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique', categorie: 'uneCategorie', statut: 'fait' }],
       })
         .then((reponse) => {
           expect(mesuresAjoutees).to.be(true);
@@ -267,7 +268,29 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       };
 
       const mesuresSpecifiques = [];
-      mesuresSpecifiques[2] = { description: 'Une mesure spécifique' };
+      mesuresSpecifiques[2] = { description: 'Une mesure spécifique', categorie: 'uneCategorie', statut: 'fait' };
+
+      axios.post('http://localhost:1234/api/homologation/456/mesures', { mesuresSpecifiques })
+        .then(() => expect(mesuresRemplacees).to.be(true))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("filtre les mesures spécifiques qui n'ont pas les propriétés requises", (done) => {
+      let mesuresRemplacees = false;
+      testeur.depotDonnees().ajouteMesuresAHomologation = (_id, _generales, specifiques) => {
+        expect(specifiques.nombre()).to.equal(1);
+        mesuresRemplacees = true;
+        return Promise.resolve();
+      };
+
+      const mesuresSpecifiques = [
+        { description: 'Mesure bien renseignée', categorie: 'uneCategorie', statut: 'fait' },
+        { categorie: 'uneCategorie', statut: 'fait' },
+        { description: 'Mesure sans catégorie', statut: 'fait' },
+        { description: 'Mesure sans statut', categorie: 'uneCategorie' },
+        { modalites: 'Modalités' },
+      ];
 
       axios.post('http://localhost:1234/api/homologation/456/mesures', { mesuresSpecifiques })
         .then(() => expect(mesuresRemplacees).to.be(true))
