@@ -10,9 +10,11 @@ class EvenementCompletudeServiceModifiee extends Evenement {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
     const valide = () => {
-      if (!donnees.idService) throw new ErreurIdentifiantServiceManquant();
-      if (!donnees.nombreTotalMesures) throw new ErreurNombreTotalMesuresManquant();
-      if (!donnees.nombreMesuresCompletes) throw new ErreurNombreMesuresCompletesManquant();
+      const manque = (donnee) => typeof donnee === 'undefined';
+
+      if (manque(donnees.idService)) throw new ErreurIdentifiantServiceManquant();
+      if (manque(donnees.nombreTotalMesures)) throw new ErreurNombreTotalMesuresManquant();
+      if (manque(donnees.nombreMesuresCompletes)) throw new ErreurNombreMesuresCompletesManquant();
     };
 
     valide();
