@@ -17,13 +17,14 @@ const CHEMINS_BIBLIOTHEQUES = {
 const routesBibliotheques = () => {
   const routes = express.Router();
 
-  routes.get('/:nomBibliotheque', (requete, reponse) => {
+  routes.get('/:nomBibliotheque', (requete, reponse, suite) => {
     const { nomBibliotheque } = requete.params;
     const chemin = CHEMINS_BIBLIOTHEQUES[nomBibliotheque];
 
     if (chemin) {
       axios.get(CHEMINS_BIBLIOTHEQUES[requete.params.nomBibliotheque])
-        .then((reponseDepot) => reponse.type('text/javascript').send(reponseDepot.data));
+        .then((reponseDepot) => reponse.type('text/javascript').send(reponseDepot.data))
+        .catch(suite);
     } else {
       reponse.status(404).send(`Bibliothèque inconnue : ${nomBibliotheque}`);
     }
