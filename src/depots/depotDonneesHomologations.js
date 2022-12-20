@@ -6,6 +6,7 @@ const {
 } = require('../erreurs');
 const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
+const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
 
 const creeDepot = (config = {}) => {
@@ -173,6 +174,12 @@ const creeDepot = (config = {}) => {
       }))
       .then(() => adaptateurJournalMSS.consigneEvenement(
         new EvenementNouveauServiceCree({ idService: idHomologation, idUtilisateur }).toJSON()
+      ))
+      .then(() => homologation(idHomologation))
+      .then((h) => adaptateurJournalMSS.consigneEvenement(
+        new EvenementCompletudeServiceModifiee({
+          idService: idHomologation, ...h.completudeMesures(),
+        }).toJSON()
       ))
       .then(() => idHomologation);
   };

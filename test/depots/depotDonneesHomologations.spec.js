@@ -545,13 +545,31 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     describe("le journal MSS est utilisé pour consigner l'enregistrement", () => {
-      it('avec un événement typé', (done) => {
+      const verifieRecuEvenementDeType = (typeAttendu, evenements) => (
+        expect(evenements.map((e) => e.type)).to.contain(typeAttendu)
+      );
+
+      it('avec un événement typé signalant le nouveau service créé', (done) => {
+        const evenements = [];
         adaptateurJournalMSS.consigneEvenement = (evenement) => {
-          expect(evenement.type).to.equal('NOUVEAU_SERVICE_CREE');
-          done();
+          evenements.push(evenement);
         };
 
         depot.nouvelleHomologation('123', { nomService: 'Super Service' })
+          .then(() => verifieRecuEvenementDeType('NOUVEAU_SERVICE_CREE', evenements))
+          .then(() => done())
+          .catch(done);
+      });
+
+      it('avec un événement typé signalant une modification de complétude', (done) => {
+        const evenements = [];
+        adaptateurJournalMSS.consigneEvenement = (evenement) => {
+          evenements.push(evenement);
+        };
+
+        depot.nouvelleHomologation('123', { nomService: 'Super Service' })
+          .then(() => verifieRecuEvenementDeType('COMPLETUDE_SERVICE_MODIFIEE', evenements))
+          .then(() => done())
           .catch(done);
       });
     });
