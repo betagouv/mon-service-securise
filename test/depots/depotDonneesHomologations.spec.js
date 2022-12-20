@@ -284,6 +284,8 @@ describe('Le dépôt de données des homologations', () => {
 
   describe("sur demande de mise à jour de la description du service d'une homologation", () => {
     let adaptateurPersistance;
+    let adaptateurJournalMSS;
+    let depot;
 
     beforeEach(() => {
       const donneesHomologation = { id: '123', descriptionService: { nomService: 'Super Service', presentation: 'Une présentation' } };
@@ -293,11 +295,12 @@ describe('Le dépôt de données des homologations', () => {
         homologations: [copie(donneesHomologation)],
         services: [copie(donneesHomologation)],
       });
+      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+
+      depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, adaptateurJournalMSS });
     });
 
     it("met à jour la description du service d'une homologation", (done) => {
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-
       const description = new DescriptionService({ nomService: 'Nouveau Nom' });
       depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .then(() => depot.homologation('123'))
@@ -309,7 +312,6 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("met à jour la description de service dans l'objet métier service", (done) => {
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
       const depotServices = DepotDonneesServices.creeDepot({ adaptateurPersistance });
 
       const description = new DescriptionService({ nomService: 'Nouveau Nom' });
@@ -323,8 +325,6 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('lève une exception si le nom du service est absent', (done) => {
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-
       const description = new DescriptionService({ nomService: '' });
       depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .then(() => done(
@@ -339,8 +339,6 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("ne détecte pas de doublon sur le nom de service pour l'homologation en cours de mise à jour", (done) => {
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-
       const description = new DescriptionService({ nomService: 'Super Service', presentation: 'Une autre présentation' });
       depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .then(() => depot.homologation('123'))
@@ -348,6 +346,17 @@ describe('Le dépôt de données des homologations', () => {
           expect(descriptionService.presentation).to.equal('Une autre présentation');
           done();
         })
+        .catch(done);
+    });
+
+    it('consigne un événement de changement de complétude du service', (done) => {
+      adaptateurJournalMSS.consigneEvenement = (evenement) => {
+        expect(evenement.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
+        done();
+      };
+
+      const description = new DescriptionService({ nomService: 'Nouveau Nom' });
+      depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .catch(done);
     });
   });

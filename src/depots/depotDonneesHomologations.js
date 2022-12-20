@@ -128,6 +128,12 @@ const creeDepot = (config = {}) => {
       .then((h) => (
         valideDescriptionService(idUtilisateur, infos, h.id)
           .then(() => metsAJourDescriptionServiceHomologation(h, infos))
+          .then(() => homologation(idHomologation))
+          .then((hAJour) => adaptateurJournalMSS.consigneEvenement(
+            new EvenementCompletudeServiceModifiee({
+              idService: idHomologation, ...hAJour.completudeMesures(),
+            }).toJSON()
+          ))
       ))
   );
 
