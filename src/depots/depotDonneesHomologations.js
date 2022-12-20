@@ -172,15 +172,17 @@ const creeDepot = (config = {}) => {
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
         idUtilisateur, idHomologation, idService: idHomologation, type: 'createur',
       }))
-      .then(() => adaptateurJournalMSS.consigneEvenement(
-        new EvenementNouveauServiceCree({ idService: idHomologation, idUtilisateur }).toJSON()
-      ))
       .then(() => homologation(idHomologation))
-      .then((h) => adaptateurJournalMSS.consigneEvenement(
-        new EvenementCompletudeServiceModifiee({
-          idService: idHomologation, ...h.completudeMesures(),
-        }).toJSON()
-      ))
+      .then((h) => Promise.all([
+        adaptateurJournalMSS.consigneEvenement(
+          new EvenementNouveauServiceCree({ idService: h.id, idUtilisateur }).toJSON()
+        ),
+        adaptateurJournalMSS.consigneEvenement(
+          new EvenementCompletudeServiceModifiee({
+            idService: h.id, ...h.completudeMesures(),
+          }).toJSON()
+        ),
+      ]))
       .then(() => idHomologation);
   };
 
