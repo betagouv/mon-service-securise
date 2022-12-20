@@ -22,8 +22,8 @@ const routesBibliotheques = () => {
     const chemin = CHEMINS_BIBLIOTHEQUES[nomBibliotheque];
 
     if (chemin) {
-      axios.get(CHEMINS_BIBLIOTHEQUES[requete.params.nomBibliotheque])
-        .then((reponseDepot) => reponse.type('text/javascript').send(reponseDepot.data))
+      axios.get(chemin)
+        .then((reponseServeur) => reponse.type('text/javascript').send(reponseServeur.data))
         .catch(suite);
     } else {
       reponse.status(404).send(`Bibliothèque inconnue : ${nomBibliotheque}`);
