@@ -1,4 +1,4 @@
-import { brancheValidation, declencheValidation } from '../modules/interactions/validation.js';
+import { brancheValidation, declencheValidation } from '../modules/interactions/validation.mjs';
 
 let formulaireDejaSoumis = false;
 

@@ -1,4 +1,4 @@
-import { brancheValidation, declencheValidation } from './validation.js';
+import { brancheValidation, declencheValidation } from './validation.mjs';
 import convertisReponseOuiNon from '../convertisReponseOuiNon.mjs';
 
 const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => {
