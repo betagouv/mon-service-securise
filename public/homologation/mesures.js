@@ -1,6 +1,6 @@
 import arrangeParametresMesures from '../modules/arrangeParametresMesures.mjs';
 import brancheFiltresMesures from '../modules/interactions/brancheFiltresMesures.mjs';
-import { brancheConteneur, brancheValidation, declencheValidation } from '../modules/interactions/validation.js';
+import { brancheConteneur, brancheValidation, declencheValidation } from '../modules/interactions/validation.mjs';
 import parametres from '../modules/parametres.mjs';
 import { brancheAjoutItem, peupleListeItems } from '../modules/saisieListeItems.js';
 import texteHTML from '../modules/texteHTML.js';

@@ -1,12 +1,14 @@
+import brancheValidationCasesACocher from './brancheValidationCasesACocher.mjs';
+
 const EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE = 'afficheErreursSiNecessaire';
 
 const brancheConteneur = (selecteurConteneur) => {
-  $('input, select', selecteurConteneur).each((_index, champ) => {
+  $('input, select, textarea', selecteurConteneur).each((_index, champ) => {
     $(champ).addClass('intouche');
     $(champ).on('input', () => {
       $(champ).removeClass('intouche');
     });
-    if (champ.type === 'radio') {
+    if (champ.type === 'radio' || champ.type === 'checkbox') {
       $(champ).on('change', (evenement) => $(evenement.target).siblings().removeClass('intouche'));
     }
     $(champ).on('invalid', (evenement) => {
@@ -23,6 +25,7 @@ const brancheValidation = (selecteurFormulaire) => {
   });
 
   brancheConteneur(selecteurFormulaire);
+  brancheValidationCasesACocher();
 };
 
 const declencheValidation = (selecteurFormulaire) => {
