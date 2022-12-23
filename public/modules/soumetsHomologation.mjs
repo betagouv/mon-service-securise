@@ -1,4 +1,5 @@
 import adaptateurAjaxAxios from './adaptateurAjaxAxios.mjs';
+import { brancheValidation, declencheValidation } from './interactions/validation.mjs';
 
 const initialiseComportementFormulaire = (
   selecteurFormulaire,
@@ -13,6 +14,7 @@ const initialiseComportementFormulaire = (
     : { method: 'post', url: '/api/homologation' };
   const $form = $(selecteurFormulaire);
 
+  brancheValidation(selecteurFormulaire);
   $form.on('submit', ((evenement) => {
     evenement.preventDefault();
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
@@ -25,7 +27,9 @@ const initialiseComportementFormulaire = (
       .then(redirigeVersSynthese);
   }));
 
-  $bouton.on('click', () => $form.trigger('submit'));
+  $bouton.on('click', () => {
+    declencheValidation(selecteurFormulaire);
+  });
 };
 
 export default initialiseComportementFormulaire;

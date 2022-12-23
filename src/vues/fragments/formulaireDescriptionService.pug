@@ -118,8 +118,8 @@ mixin formulaireDescriptionService(idHomologation)
       })
 
     if idHomologation
-      .bouton#diagnostic(idHomologation = idHomologation) Enregistrer
+      button.bouton#diagnostic(idHomologation = idHomologation) Enregistrer
     else
-      .bouton#diagnostic Valider
+      button.bouton#diagnostic Valider
 
   script(type = 'module', src = '/statique/homologation/descriptionService.js')
