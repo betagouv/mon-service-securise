@@ -93,8 +93,8 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   ),
   (requete, reponse, suite) => {
     const { mesuresSpecifiques = [], mesuresGenerales = {} } = requete.body;
-
     const idHomologation = requete.homologation.id;
+
     try {
       const generales = Object.keys(mesuresGenerales)
         .map((idMesure) => {
@@ -102,20 +102,15 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
           return new MesureGenerale({ id: idMesure, statut, modalites }, referentiel);
         });
 
-      depotDonnees.ajouteMesuresGeneralesAHomologation(idHomologation, generales)
-        .then(() => {
-          const aPersister = mesuresSpecifiques.filter(
-            (m) => m?.description || m?.categorie || m?.statut || m?.modalites
-          );
+      const aPersister = mesuresSpecifiques.filter(
+        (m) => m?.description || m?.categorie || m?.statut || m?.modalites
+      );
+      const specifiques = new MesuresSpecifiques(
+        { mesuresSpecifiques: aPersister },
+        referentiel,
+      );
 
-          const listeMesures = new MesuresSpecifiques({
-            mesuresSpecifiques: aPersister,
-          }, referentiel);
-          return depotDonnees.remplaceMesuresSpecifiquesPourHomologation(
-            idHomologation,
-            listeMesures,
-          );
-        })
+      depotDonnees.ajouteMesuresAHomologation(idHomologation, generales, specifiques)
         .then(() => reponse.send({ idHomologation }))
         .catch(suite);
     } catch {
