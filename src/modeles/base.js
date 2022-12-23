@@ -1,3 +1,18 @@
+const proprietePresente = (valeur) => {
+  if (Array.isArray(valeur)) {
+    return valeur.length && valeur.every((item) => proprietePresente(item));
+  }
+
+  switch (typeof valeur) {
+    case 'undefined': return false;
+    case 'boolean': return true;
+    case 'string': return valeur.length > 0;
+    case 'number': return !Number.isNaN(valeur);
+    case 'object': return valeur !== null && Object.keys(valeur).length !== 0;
+    default: return false;
+  }
+};
+
 class Base {
   constructor(proprietes = {}) {
     const {
@@ -49,6 +64,15 @@ class Base {
     });
 
     return resultat;
+  }
+
+  static proprietesObligatoires() {
+    return [];
+  }
+
+  static proprietesObligatoiresRenseignees(donnees) {
+    return this.proprietesObligatoires()
+      .every((propriete) => proprietePresente(donnees?.[propriete]));
   }
 }
 
