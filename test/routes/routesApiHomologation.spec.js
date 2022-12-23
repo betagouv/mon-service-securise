@@ -193,9 +193,10 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
   });
 
   describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
-    beforeEach(() => (
-      testeur.depotDonnees().remplaceMesuresSpecifiquesPourHomologation = () => Promise.resolve()
-    ));
+    beforeEach(() => {
+      testeur.depotDonnees().ajouteMesuresGeneralesAHomologation = () => Promise.resolve();
+      testeur.depotDonnees().remplaceMesuresSpecifiquesPourHomologation = () => Promise.resolve();
+    });
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation({
@@ -221,14 +222,14 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
     it("demande au dépôt d'associer les mesures générales à l'homologation", (done) => {
       testeur.referentiel().recharge({ mesures: { identifiantMesure: {} } });
-      let mesureAjoutee = false;
+      let mesuresAjoutees = false;
 
-      testeur.depotDonnees().ajouteMesureGeneraleAHomologation = (idHomologation, mesure) => {
+      testeur.depotDonnees().ajouteMesuresGeneralesAHomologation = (idHomologation, [mesure]) => {
         expect(idHomologation).to.equal('456');
         expect(mesure.id).to.equal('identifiantMesure');
         expect(mesure.statut).to.equal('fait');
         expect(mesure.modalites).to.equal("Des modalités d'application");
-        mesureAjoutee = true;
+        mesuresAjoutees = true;
         return Promise.resolve();
       };
 
@@ -238,7 +239,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         },
       })
         .then((reponse) => {
-          expect(mesureAjoutee).to.be(true);
+          expect(mesuresAjoutees).to.be(true);
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();

@@ -96,19 +96,13 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
 
     const idHomologation = requete.homologation.id;
     try {
-      const ajouts = Object.keys(mesuresGenerales).reduce((acc, im) => {
-        const mesure = new MesureGenerale({
-          id: im,
-          statut: mesuresGenerales[im].statut,
-          modalites: mesuresGenerales[im].modalites,
-        }, referentiel);
+      const generales = Object.keys(mesuresGenerales)
+        .map((idMesure) => {
+          const { modalites, statut } = mesuresGenerales[idMesure];
+          return new MesureGenerale({ id: idMesure, statut, modalites }, referentiel);
+        });
 
-        return acc.then(
-          () => depotDonnees.ajouteMesureGeneraleAHomologation(idHomologation, mesure)
-        );
-      }, Promise.resolve());
-
-      ajouts
+      depotDonnees.ajouteMesuresGeneralesAHomologation(idHomologation, generales)
         .then(() => {
           const aPersister = mesuresSpecifiques.filter(
             (m) => m?.description || m?.categorie || m?.statut || m?.modalites

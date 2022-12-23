@@ -95,9 +95,15 @@ const creeDepot = (config = {}) => {
       return Promise.resolve(h.dossierCourant());
     });
 
-  const ajouteMesureGeneraleAHomologation = (...params) => (
-    ajouteAItemsDansHomologation('mesuresGenerales', ...params)
-  );
+  const ajouteMesuresGeneralesAHomologation = (idHomologation, mesures) => (
+    mesures.reduce(
+      (acc, mesure) => acc.then(() => ajouteAItemsDansHomologation('mesuresGenerales', idHomologation, mesure)),
+      Promise.resolve()
+    ))
+    .then(() => homologation(idHomologation))
+    .then((h) => adaptateurJournalMSS.consigneEvenement(
+      new EvenementCompletudeServiceModifiee({ idService: h.id, ...h.completudeMesures() }).toJSON()
+    ));
 
   const ajouteRisqueGeneralAHomologation = (...params) => (
     ajouteAItemsDansHomologation('risquesGeneraux', ...params)
@@ -217,7 +223,7 @@ const creeDepot = (config = {}) => {
     ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteDossierCourantSiNecessaire,
-    ajouteMesureGeneraleAHomologation,
+    ajouteMesuresGeneralesAHomologation,
     ajouteRisqueGeneralAHomologation,
     ajouteRolesResponsabilitesAHomologation,
     homologation,
