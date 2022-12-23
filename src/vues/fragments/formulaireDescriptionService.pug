@@ -79,6 +79,7 @@ mixin formulaireDescriptionService(idHomologation)
         type: 'checkbox',
         nom: 'fonctionnalites',
         titre: 'Fonctionnalité(s) offerte(s)',
+        description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
         items: referentiel.fonctionnalites(),
         objetDonnees: homologation.descriptionService,
       })
@@ -95,6 +96,7 @@ mixin formulaireDescriptionService(idHomologation)
         type: 'checkbox',
         nom: 'donneesCaracterePersonnel',
         titre: 'Données à caractère personnel et autres données sensibles stockées par le service',
+        description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
         items: referentiel.donneesCaracterePersonnel(),
         objetDonnees: homologation.descriptionService,
       })

@@ -4,6 +4,11 @@
   margin: 0 0 1em;
 }
 
+.titre ~ .description {
+  font-weight: normal;
+  font-size: 0.9em;
+}
+
 #risqueJuridiqueFinancierReputationnel :is(.exemple, .exemple + br) {
   display: none;
 }

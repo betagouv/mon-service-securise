@@ -1,4 +1,4 @@
-mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, messageErreur, decoration, requis = false })
+mixin inputChoix({ type, nom, titre, description, items, objetDonnees = homologation, messageErreur, decoration, requis = false })
   - let valeursSelectionnees = objetDonnees[nom]
   - if (typeof valeursSelectionnees === 'boolean') valeursSelectionnees = (valeursSelectionnees ? 'oui' : 'non')
   - const requisGroupe = requis && type === 'checkbox' && Object.keys(items).length > 1
@@ -9,6 +9,8 @@ mixin inputChoix({ type, nom, titre, items, objetDonnees = homologation, message
     .titre= titre
       if decoration
         .decoration !{decoration}
+    if description
+      .description= description
     each donnees, identifiant in items
       - const { description, exemple } = donnees
       - const identifiantInput = `${nom}-${identifiant}`
