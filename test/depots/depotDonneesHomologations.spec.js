@@ -135,6 +135,8 @@ describe('Le dépôt de données des homologations', () => {
 
   describe("sur demande d'association de mesures spécifiques à un service", () => {
     let adaptateurPersistance;
+    let adaptateurJournalMSS;
+    let depot;
 
     beforeEach(() => {
       const donneesHomologation = { id: '123', descriptionService: { nomService: 'nom' } };
@@ -142,12 +144,13 @@ describe('Le dépôt de données des homologations', () => {
         homologations: [copie(donneesHomologation)],
         services: [copie(donneesHomologation)],
       });
+      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+      depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, adaptateurJournalMSS });
     });
 
     it("associe les mesures spécifiques à l'homologation", (done) => {
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-
       const mesures = new MesuresSpecifiques({ mesuresSpecifiques: [{ description: 'Une mesure spécifique' }] });
+
       depot.remplaceMesuresSpecifiquesPourHomologation('123', mesures)
         .then(() => depot.homologation('123'))
         .then(({ mesures: { mesuresSpecifiques } }) => {
@@ -160,10 +163,9 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('associe les mesures spécifiques au service', (done) => {
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
       const depotServices = DepotDonneesServices.creeDepot({ adaptateurPersistance });
-
       const mesures = new MesuresSpecifiques({ mesuresSpecifiques: [{ description: 'Une mesure spécifique' }] });
+
       depot.remplaceMesuresSpecifiquesPourHomologation('123', mesures)
         .then(() => depotServices.service('123'))
         .then(({ mesures: { mesuresSpecifiques } }) => {
@@ -172,6 +174,17 @@ describe('Le dépôt de données des homologations', () => {
           expect(mesuresSpecifiques.item(0).description).to.equal('Une mesure spécifique');
           done();
         })
+        .catch(done);
+    });
+
+    it('consigne un événement de changement de complétude du service', (done) => {
+      adaptateurJournalMSS.consigneEvenement = (evenement) => {
+        expect(evenement.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
+        done();
+      };
+      const mesures = new MesuresSpecifiques({ mesuresSpecifiques: [{ description: 'Une mesure spécifique' }] });
+
+      depot.remplaceMesuresSpecifiquesPourHomologation('123', mesures)
         .catch(done);
     });
   });

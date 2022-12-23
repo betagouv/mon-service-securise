@@ -198,8 +198,15 @@ const creeDepot = (config = {}) => {
       .then(() => idHomologation);
   };
 
-  const remplaceMesuresSpecifiquesPourHomologation = (...params) => (
-    remplaceProprieteHomologation('mesuresSpecifiques', ...params)
+  const remplaceMesuresSpecifiquesPourHomologation = (idHomologation, mesures) => (
+    remplaceProprieteHomologation('mesuresSpecifiques', idHomologation, mesures)
+      .then(() => homologation(idHomologation))
+      .then((h) => adaptateurJournalMSS.consigneEvenement(
+        new EvenementCompletudeServiceModifiee({
+          idService: h.id,
+          ...h.completudeMesures(),
+        }).toJSON()
+      ))
   );
 
   const remplaceRisquesSpecifiquesPourHomologation = (...params) => (
