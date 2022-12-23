@@ -180,7 +180,8 @@ describe('Le dépôt de données des homologations', () => {
     let valideMesure;
 
     const referentiel = Referentiel.creeReferentiel({
-      mesures: { identifiantMesure: {} },
+      categoriesMesures: { gouvernance: 'Gouvernance' },
+      mesures: { identifiantMesure: { categorie: 'gouvernance' } },
       reglesPersonnalisation: { mesuresBase: ['identifiantMesure'] },
     });
 
@@ -216,8 +217,10 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    describe("sur demande d'association d'une mesure à une homologation", () => {
+    describe("sur demande d'association de mesures à une homologation", () => {
       let adaptateurPersistance;
+      let adaptateurJournalMSS;
+      let depot;
 
       beforeEach(() => {
         const donneesHomologation = { id: '123', descriptionService: { nomService: 'Un service' } };
@@ -225,13 +228,17 @@ describe('Le dépôt de données des homologations', () => {
           homologations: [copie(donneesHomologation)],
           services: [copie(donneesHomologation)],
         });
+        adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+
+        depot = DepotDonneesHomologations.creeDepot({
+          adaptateurPersistance, adaptateurJournalMSS, referentiel,
+        });
       });
 
-      it("associe la mesure à l'homologation", (done) => {
-        const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
+      it("associe les mesures à l'homologation", (done) => {
         const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
 
-        depot.ajouteMesureGeneraleAHomologation('123', mesure)
+        depot.ajouteMesuresGeneralesAHomologation('123', [mesure])
           .then(() => depot.homologation('123'))
           .then(({ mesures: { mesuresGenerales } }) => {
             expect(mesuresGenerales.nombre()).to.equal(1);
@@ -241,19 +248,30 @@ describe('Le dépôt de données des homologations', () => {
           .catch(done);
       });
 
-      it('associe la mesure au service', (done) => {
+      it('associe les mesures au service', (done) => {
         const config = { adaptateurPersistance, referentiel };
-        const depot = DepotDonneesHomologations.creeDepot(config);
         const depotServices = DepotDonneesServices.creeDepot(config);
         const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
 
-        depot.ajouteMesureGeneraleAHomologation('123', mesure)
+        depot.ajouteMesuresGeneralesAHomologation('123', [mesure])
           .then(() => depotServices.service('123'))
           .then(({ mesures: { mesuresGenerales } }) => {
             expect(mesuresGenerales.nombre()).to.equal(1);
             expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
             done();
           })
+          .catch(done);
+      });
+
+      it('consigne un événement de changement de complétude du service', (done) => {
+        adaptateurJournalMSS.consigneEvenement = (evenement) => {
+          expect(evenement.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
+          done();
+        };
+
+        const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
+
+        depot.ajouteMesuresGeneralesAHomologation('123', [mesure])
           .catch(done);
       });
     });
@@ -268,10 +286,13 @@ describe('Le dépôt de données des homologations', () => {
         homologations: [copie(donneesHomologation)],
         services: [copie(donneesHomologation)],
       });
-      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
+      const adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance, adaptateurJournalMSS, referentiel,
+      });
 
       const mesure = new MesureGenerale({ id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT });
-      depot.ajouteMesureGeneraleAHomologation('123', mesure)
+      depot.ajouteMesuresGeneralesAHomologation('123', [mesure])
         .then(() => depot.homologation('123'))
         .then(({ mesures: { mesuresGenerales } }) => {
           expect(mesuresGenerales.nombre()).to.equal(1);
