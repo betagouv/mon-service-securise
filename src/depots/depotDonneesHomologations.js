@@ -99,11 +99,23 @@ const creeDepot = (config = {}) => {
     mesures.reduce(
       (acc, mesure) => acc.then(() => ajouteAItemsDansHomologation('mesuresGenerales', idHomologation, mesure)),
       Promise.resolve()
-    ))
-    .then(() => homologation(idHomologation))
-    .then((h) => adaptateurJournalMSS.consigneEvenement(
-      new EvenementCompletudeServiceModifiee({ idService: h.id, ...h.completudeMesures() }).toJSON()
     ));
+
+  const remplaceMesuresSpecifiquesPourHomologation = (...params) => (
+    remplaceProprieteHomologation('mesuresSpecifiques', ...params)
+  );
+
+  const ajouteMesuresAHomologation = (idHomologation, generales, specifiques) => (
+    ajouteMesuresGeneralesAHomologation(idHomologation, generales)
+      .then(() => remplaceMesuresSpecifiquesPourHomologation(idHomologation, specifiques))
+      .then(() => homologation(idHomologation))
+      .then((h) => adaptateurJournalMSS.consigneEvenement(
+        new EvenementCompletudeServiceModifiee({
+          idService: h.id,
+          ...h.completudeMesures(),
+        }).toJSON()
+      ))
+  );
 
   const ajouteRisqueGeneralAHomologation = (...params) => (
     ajouteAItemsDansHomologation('risquesGeneraux', ...params)
@@ -198,17 +210,6 @@ const creeDepot = (config = {}) => {
       .then(() => idHomologation);
   };
 
-  const remplaceMesuresSpecifiquesPourHomologation = (idHomologation, mesures) => (
-    remplaceProprieteHomologation('mesuresSpecifiques', idHomologation, mesures)
-      .then(() => homologation(idHomologation))
-      .then((h) => adaptateurJournalMSS.consigneEvenement(
-        new EvenementCompletudeServiceModifiee({
-          idService: h.id,
-          ...h.completudeMesures(),
-        }).toJSON()
-      ))
-  );
-
   const remplaceRisquesSpecifiquesPourHomologation = (...params) => (
     remplaceProprieteHomologation('risquesSpecifiques', ...params)
   );
@@ -230,7 +231,7 @@ const creeDepot = (config = {}) => {
     ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteDossierCourantSiNecessaire,
-    ajouteMesuresGeneralesAHomologation,
+    ajouteMesuresAHomologation,
     ajouteRisqueGeneralAHomologation,
     ajouteRolesResponsabilitesAHomologation,
     homologation,
@@ -238,7 +239,6 @@ const creeDepot = (config = {}) => {
     homologations,
     metsAJourDossierCourant,
     nouvelleHomologation,
-    remplaceMesuresSpecifiquesPourHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,

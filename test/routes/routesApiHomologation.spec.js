@@ -194,8 +194,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
   describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
     beforeEach(() => {
-      testeur.depotDonnees().ajouteMesuresGeneralesAHomologation = () => Promise.resolve();
-      testeur.depotDonnees().remplaceMesuresSpecifiquesPourHomologation = () => Promise.resolve();
+      testeur.depotDonnees().ajouteMesuresAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -220,15 +219,26 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       );
     });
 
-    it("demande au dépôt d'associer les mesures générales à l'homologation", (done) => {
-      testeur.referentiel().recharge({ mesures: { identifiantMesure: {} } });
+    it("demande au dépôt d'associer les mesures à l'homologation", (done) => {
+      testeur.referentiel().recharge({
+        mesures: { identifiantMesure: {} },
+        categoriesMesures: { uneCategorie: 'Une catégorie' },
+      });
       let mesuresAjoutees = false;
 
-      testeur.depotDonnees().ajouteMesuresGeneralesAHomologation = (idHomologation, [mesure]) => {
+      testeur.depotDonnees().ajouteMesuresAHomologation = (
+        idHomologation,
+        [generale],
+        specifiques,
+      ) => {
         expect(idHomologation).to.equal('456');
-        expect(mesure.id).to.equal('identifiantMesure');
-        expect(mesure.statut).to.equal('fait');
-        expect(mesure.modalites).to.equal("Des modalités d'application");
+        expect(generale.id).to.equal('identifiantMesure');
+        expect(generale.statut).to.equal('fait');
+        expect(generale.modalites).to.equal("Des modalités d'application");
+
+        expect(specifiques.nombre()).to.equal(1);
+        expect(specifiques.item(0).description).to.equal('Une mesure spécifique');
+
         mesuresAjoutees = true;
         return Promise.resolve();
       };
@@ -237,6 +247,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         mesuresGenerales: {
           identifiantMesure: { statut: 'fait', modalites: "Des modalités d'application" },
         },
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique', categorie: 'uneCategorie' }],
       })
         .then((reponse) => {
           expect(mesuresAjoutees).to.be(true);
@@ -247,31 +258,10 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         .catch(done);
     });
 
-    it("demande au dépôt d'associer les mesures spécifiques à l'homologation", (done) => {
-      let mesuresRemplacees = false;
-      testeur.depotDonnees().remplaceMesuresSpecifiquesPourHomologation = (
-        idHomologation, mesures
-      ) => {
-        expect(idHomologation).to.equal('456');
-        expect(mesures.nombre()).to.equal(1);
-        expect(mesures.item(0).description).to.equal('Une mesure spécifique');
-        mesuresRemplacees = true;
-        return Promise.resolve();
-      };
-
-      testeur.referentiel().recharge({ categoriesMesures: { uneCategorie: 'Une catégorie' } });
-      axios.post('http://localhost:1234/api/homologation/456/mesures', {
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique', categorie: 'uneCategorie' }],
-      })
-        .then(() => expect(mesuresRemplacees).to.be(true))
-        .then(() => done())
-        .catch(done);
-    });
-
     it('filtre les mesures spécifiques vides', (done) => {
       let mesuresRemplacees = false;
-      testeur.depotDonnees().remplaceMesuresSpecifiquesPourHomologation = (_, mesures) => {
-        expect(mesures.nombre()).to.equal(1);
+      testeur.depotDonnees().ajouteMesuresAHomologation = (_id, _generales, specifiques) => {
+        expect(specifiques.nombre()).to.equal(1);
         mesuresRemplacees = true;
         return Promise.resolve();
       };
