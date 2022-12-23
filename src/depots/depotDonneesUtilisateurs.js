@@ -7,6 +7,7 @@ const {
   ErreurUtilisateurExistant,
 } = require('../erreurs');
 const Utilisateur = require('../modeles/utilisateur');
+const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
 const creeDepot = (config = {}) => {
   const {
@@ -97,12 +98,13 @@ const creeDepot = (config = {}) => {
       .then(() => utilisateur(utilisateurAModifier.id))
   );
 
-  const supprimeUtilisateur = (id) => depotHomologations.homologations(id)
-    .then((hs) => hs.map((h) => Promise.all([
+  const supprimeUtilisateur = (id) => avecPMapPourChaqueElement(
+    depotHomologations.homologations(id),
+    (h) => Promise.all([
       adaptateurPersistance.supprimeHomologation(h.id),
       adaptateurPersistance.supprimeService(h.id),
-    ])))
-    .then((suppressions) => Promise.all(suppressions))
+    ]),
+  )
     .then(() => adaptateurPersistance.supprimeUtilisateur(id));
 
   const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => (
