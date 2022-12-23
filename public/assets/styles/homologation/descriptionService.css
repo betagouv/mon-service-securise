@@ -1,3 +1,9 @@
+.mention {
+  display: flex;
+  justify-content: end;
+  margin: 0 0 1em;
+}
+
 #risqueJuridiqueFinancierReputationnel :is(.exemple, .exemple + br) {
   display: none;
 }
