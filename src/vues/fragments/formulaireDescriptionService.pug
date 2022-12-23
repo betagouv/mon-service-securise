@@ -10,38 +10,51 @@ mixin formulaireDescriptionService(idHomologation)
     p.
       Précisez les caractéristiques de votre service pour obtenir des recommandations personnalisées de l'ANSSI.
     section
-      label Nom du service numérique à homologuer
-        br
-        input(
-          id = 'nom-service',
-          name = 'nomService',
-          type = 'text',
-          value != homologation.nomService(),
-        )
+      .mention champ obligatoire
+      .requis
+        label Nom du service numérique à homologuer
+          br
+          input(
+            id = 'nom-service',
+            name = 'nomService',
+            type = 'text',
+            value != homologation.nomService(),
+            required
+          )
+          .message-erreur Le nom est obligatoire. Veuillez le renseigner.
 
-      +inputChoix({
-        type: 'checkbox',
-        nom: 'typeService',
-        titre: 'Type(s)',
-        items: referentiel.typesService(),
-        objetDonnees: homologation.descriptionService,
-      })
+      .requis
+        +inputChoix({
+          type: 'checkbox',
+          nom: 'typeService',
+          titre: 'Type(s)',
+          items: referentiel.typesService(),
+          objetDonnees: homologation.descriptionService,
+          messageErreur: 'Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.',
+          requis: true,
+        })
 
-      +inputChoix({
-        type: 'radio',
-        nom: 'provenanceService',
-        titre: 'Provenance',
-        items: referentiel.provenancesService(),
-        objetDonnees: homologation.descriptionService,
-      })
+      .requis
+        +inputChoix({
+          type: 'radio',
+          nom: 'provenanceService',
+          titre: 'Provenance',
+          items: referentiel.provenancesService(),
+          objetDonnees: homologation.descriptionService,
+          messageErreur: 'La provenance est obligatoire. Veuillez cocher une option.',
+          requis: true,
+        })
 
-      +inputChoix({
-        type: 'radio',
-        nom: 'statutDeploiement',
-        titre: 'Statut',
-        items: referentiel.statutsDeploiement(),
-        objetDonnees: homologation.descriptionService,
-      })
+      .requis
+        +inputChoix({
+          type: 'radio',
+          nom: 'statutDeploiement',
+          titre: 'Statut',
+          items: referentiel.statutsDeploiement(),
+          objetDonnees: homologation.descriptionService,
+          messageErreur: 'Le statut est obligatoire. Veuillez cocher une option.',
+          requis: true,
+        })
 
       label Présentation
         textarea(
@@ -94,28 +107,36 @@ mixin formulaireDescriptionService(idHomologation)
       })
 
     section
-      +inputChoix({
-        type: 'radio',
-        nom: 'localisationDonnees',
-        titre: 'Localisation des données',
-        items: referentiel.localisationsDonnees(),
-        objetDonnees: homologation.descriptionService,
-      })
+      .requis
+        +inputChoix({
+          type: 'radio',
+          nom: 'localisationDonnees',
+          titre: 'Localisation des données',
+          items: referentiel.localisationsDonnees(),
+          objetDonnees: homologation.descriptionService,
+          messageErreur: 'La localisation des données est obligatoire. Veuillez cocher une option.',
+          requis: true,
+        })
 
-      +inputChoix({
-        type: 'radio',
-        nom: 'delaiAvantImpactCritique',
-        titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
-        items: referentiel.delaisAvantImpactCritique(),
-        objetDonnees: homologation.descriptionService,
-      })
-
-      +inputOuiNon({
-        nom: 'risqueJuridiqueFinancierReputationnel',
-        titre: 'Une atteinte à la sécurité ou au bon fonctionnement du service pourrait entraîner un impact critique sur les plans juridique, financier ou réputationnel',
-        objetDonnees: homologation.descriptionService,
-        exempleOui: "Les mesures de sécurité à mettre en œuvre, proposées dans l'étape suivante « Sécuriser », seront renforcées (ex : réaliser un audit de sécurité, une analyse Ebios, …).",
-      })
+      .requis
+        +inputChoix({
+          type: 'radio',
+          nom: 'delaiAvantImpactCritique',
+          titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
+          items: referentiel.delaisAvantImpactCritique(),
+          objetDonnees: homologation.descriptionService,
+          messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+          requis: true,
+        })
+      .requis
+        +inputOuiNon({
+          nom: 'risqueJuridiqueFinancierReputationnel',
+          titre: 'Une atteinte à la sécurité ou au bon fonctionnement du service pourrait entraîner un impact critique sur les plans juridique, financier ou réputationnel',
+          objetDonnees: homologation.descriptionService,
+          exempleOui: "Les mesures de sécurité à mettre en œuvre, proposées dans l'étape suivante « Sécuriser », seront renforcées (ex : réaliser un audit de sécurité, une analyse Ebios, …).",
+          messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+          requis: true,
+        })
 
     if idHomologation
       button.bouton#diagnostic(idHomologation = idHomologation) Enregistrer
