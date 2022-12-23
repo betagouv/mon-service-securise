@@ -13,7 +13,7 @@ describe("L'initialisation du comportement du formulaire", () => {
       const dom = new JSDOM(`
         <form class="formulaire">
           <input name="champ-1" value="valeur 1">
-          <div class="bouton"></div>
+          <button class="bouton"></button>
         </form>
       `);
       global.$ = jquery(dom.window);
