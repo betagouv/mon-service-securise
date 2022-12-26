@@ -1,5 +1,18 @@
-const DepotDonnees = require('./src/depotDonnees');
 const fabriqueAdaptateurPersistance = require('./src/adaptateurs/fabriqueAdaptateurPersistance');
+const DepotDonnees = require('./src/depotDonnees');
+const DescriptionService = require('./src/modeles/descriptionService');
+const Referentiel = require('./src/referentiel');
+
+const referentiel = Referentiel.creeReferentiel();
+const descriptionService = new DescriptionService({
+  delaiAvantImpactCritique: 'plusUneJournee',
+  localisationDonnees: 'france',
+  nomService: 'Dossier de test',
+  provenanceService: 'developpement',
+  risqueJuridiqueFinancierReputationnel: false,
+  statutDeploiement: 'enLigne',
+  typeService: 'siteInternet',
+}, referentiel);
 
 const creeDonnees = (depotDonnees) => depotDonnees
   .nouvelUtilisateur({
@@ -11,7 +24,7 @@ const creeDonnees = (depotDonnees) => depotDonnees
   .then((u) => (
     depotDonnees.metsAJourMotDePasse(u.id, process.env.MOT_DE_PASSE_UTILISATEUR_DEMO)
   ))
-  .then((u) => depotDonnees.nouvelleHomologation(u.id, { nomService: 'Dossier de test' }));
+  .then((u) => depotDonnees.nouvelleHomologation(u.id, descriptionService.toJSON()));
 
 if (process.env.CREATION_UTILISATEUR_DEMO) {
   const adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV);

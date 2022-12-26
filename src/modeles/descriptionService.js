@@ -58,6 +58,18 @@ class DescriptionService extends InformationsHomologation {
     return this.pointsAcces.nombre();
   }
 
+  static proprietesObligatoires() {
+    return [
+      'delaiAvantImpactCritique',
+      'localisationDonnees',
+      'nomService',
+      'provenanceService',
+      'risqueJuridiqueFinancierReputationnel',
+      'statutDeploiement',
+      'typeService',
+    ];
+  }
+
   static valide(donnees, referentiel) {
     const { statutDeploiement, localisationDonnees } = donnees;
 

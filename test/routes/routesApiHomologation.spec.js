@@ -3,7 +3,7 @@ const expect = require('expect.js');
 
 const testeurMSS = require('./testeurMSS');
 
-const { ErreurModele, ErreurNomServiceManquant, ErreurNomServiceDejaExistant } = require('../../src/erreurs');
+const { ErreurModele, ErreurDonneesObligatoiresManquantes, ErreurNomServiceDejaExistant } = require('../../src/erreurs');
 const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 
@@ -61,7 +61,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si données insuffisantes pour création homologation', (done) => {
-      testeur.depotDonnees().nouvelleHomologation = () => Promise.reject(new ErreurNomServiceManquant('oups'));
+      testeur.depotDonnees().nouvelleHomologation = () => Promise.reject(new ErreurDonneesObligatoiresManquantes('oups'));
 
       testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',

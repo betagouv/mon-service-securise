@@ -1,9 +1,10 @@
 const {
+  ErreurDonneesObligatoiresManquantes,
   ErreurDossierNonFinalisable,
   ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
-  ErreurNomServiceManquant,
 } = require('../erreurs');
+const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
 const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
@@ -127,9 +128,11 @@ const creeDepot = (config = {}) => {
       .then((h) => !!h)
   );
 
-  const valideDescriptionService = (idUtilisateur, { nomService }, idHomologationMiseAJour) => {
-    if (typeof nomService !== 'string' || !nomService) {
-      return Promise.reject(new ErreurNomServiceManquant('Le nom du service ne peut pas être vide'));
+  const valideDescriptionService = (idUtilisateur, donnees, idHomologationMiseAJour) => {
+    const { nomService } = donnees;
+
+    if (!DescriptionService.proprietesObligatoiresRenseignees(donnees)) {
+      return Promise.reject(new ErreurDonneesObligatoiresManquantes('Certaines données obligatoires ne sont pas renseignées'));
     }
 
     return homologationExiste(idUtilisateur, nomService, idHomologationMiseAJour)
