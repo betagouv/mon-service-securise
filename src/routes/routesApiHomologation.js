@@ -104,7 +104,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
         });
 
       const aPersister = mesuresSpecifiques
-        .filter(MesureSpecifique.toutesProprietesObligatoiresRenseignees);
+        .filter((mesure) => MesureSpecifique.proprietesObligatoiresRenseignees(mesure));
       const specifiques = new MesuresSpecifiques(
         { mesuresSpecifiques: aPersister },
         referentiel,
