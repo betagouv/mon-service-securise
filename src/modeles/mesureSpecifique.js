@@ -27,10 +27,6 @@ class MesureSpecifique extends Mesure {
     return ['description', 'categorie', 'statut'];
   }
 
-  static toutesProprietesObligatoiresRenseignees(mesure) {
-    return MesureSpecifique.proprietesObligatoires().every((propriete) => mesure?.[propriete]);
-  }
-
   static valide({ categorie, statut }, referentiel) {
     super.valide({ statut });
 
