@@ -262,7 +262,7 @@ describe('Le dépôt de données des homologations', () => {
       const donneesHomologation = {
         id: '123',
         descriptionService: { nomService: 'nom' },
-        mesures: [{ id: 'identifiantMesure', statut: MesureGenerale.STATUT_EN_COURS }],
+        mesuresGenerales: [{ id: 'identifiantMesure', statut: MesureGenerale.STATUT_EN_COURS }],
       };
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         homologations: [copie(donneesHomologation)],
