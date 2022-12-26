@@ -20,6 +20,6 @@ mixin indiceCyber({ referentiel, indiceCyber })
     p: +descriptionIndiceCyber()
     p: +lienNouvelOnglet('/questionsFrequentes#indice-cyber', 'En savoir plus')
 
-  +carteInformations({ titre: 'Indice cyber', sousTitre: "Évalué par l'ANSSI", details: 'detailsIndiceCyber' })
+  +carteInformations({ titre: 'Indice cyber', details: 'detailsIndiceCyber' })
     .score-indice-cyber
       +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, noteMax)
