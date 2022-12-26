@@ -3,10 +3,10 @@ const expect = require('expect.js');
 const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
 
 const {
+  ErreurDonneesObligatoiresManquantes,
   ErreurDossierNonFinalisable,
   ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
-  ErreurNomServiceManquant,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
@@ -19,7 +19,6 @@ const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../../src/modeles/avisExpertCyber');
-const DescriptionService = require('../../src/modeles/descriptionService');
 const Dossier = require('../../src/modeles/dossier');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
@@ -340,15 +339,18 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it('lève une exception si le nom du service est absent', (done) => {
-      const description = new DescriptionService({ nomService: '' });
-      depot.ajouteDescriptionServiceAHomologation('999', '123', description)
+    it('lève une exception si des propriétés obligatoires ne sont pas renseignées', (done) => {
+      const descriptionIncomplete = uneDescriptionValide(referentiel)
+        .avecNomService('')
+        .construis();
+
+      depot.ajouteDescriptionServiceAHomologation('999', '123', descriptionIncomplete)
         .then(() => done(
           'La mise à jour de la description du service aurait dû lever une exception'
         ))
         .catch((e) => {
-          expect(e).to.be.an(ErreurNomServiceManquant);
-          expect(e.message).to.equal('Le nom du service ne peut pas être vide');
+          expect(e).to.be.an(ErreurDonneesObligatoiresManquantes);
+          expect(e.message).to.equal('Certaines données obligatoires ne sont pas renseignées');
           done();
         })
         .catch(done);
@@ -635,15 +637,15 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
 
-    it('lève une exception si le nom du service est manquant', (done) => {
-      const donneesDescriptionService = uneDescriptionValide(referentiel)
+    it('lève une exception si une propriété obligatoire de la description du service est manquante', (done) => {
+      const donneesDescriptionServiceIncompletes = uneDescriptionValide(referentiel)
         .avecNomService('')
         .construis()
         .toJSON();
 
-      depot.nouvelleHomologation('123', donneesDescriptionService)
+      depot.nouvelleHomologation('123', donneesDescriptionServiceIncompletes)
         .then(() => done("La création de l'homologation aurait dû lever une exception"))
-        .catch((e) => expect(e).to.be.an(ErreurNomServiceManquant))
+        .catch((e) => expect(e).to.be.an(ErreurDonneesObligatoiresManquantes))
         .then(() => done())
         .catch(done);
     });

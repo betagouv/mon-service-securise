@@ -46,6 +46,18 @@ describe('La description du service', () => {
     expect(descriptionService.nombrePointsAcces()).to.equal(1);
   });
 
+  elle('connaît ses propriétés obligatoires', () => {
+    expect(DescriptionService.proprietesObligatoires()).to.eql([
+      'delaiAvantImpactCritique',
+      'localisationDonnees',
+      'nomService',
+      'provenanceService',
+      'risqueJuridiqueFinancierReputationnel',
+      'statutDeploiement',
+      'typeService',
+    ]);
+  });
+
   elle('décrit le type service', () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: {
