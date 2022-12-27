@@ -26,37 +26,12 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
   ]),
   (requete, reponse, suite) => {
-    const {
-      nomService,
-      typeService,
-      provenanceService,
-      fonctionnalites,
-      fonctionnalitesSpecifiques,
-      donneesCaracterePersonnel,
-      donneesSensiblesSpecifiques,
-      delaiAvantImpactCritique,
-      localisationDonnees,
-      presentation,
-      pointsAcces,
-      risqueJuridiqueFinancierReputationnel,
-      statutDeploiement,
-    } = requete.body;
-
-    depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
-      nomService,
-      typeService,
-      provenanceService,
-      fonctionnalites,
-      fonctionnalitesSpecifiques,
-      donneesCaracterePersonnel,
-      donneesSensiblesSpecifiques,
-      delaiAvantImpactCritique,
-      localisationDonnees,
-      presentation,
-      pointsAcces,
-      risqueJuridiqueFinancierReputationnel,
-      statutDeploiement,
-    })
+    Promise.resolve()
+      .then(() => new DescriptionService(requete.body, referentiel))
+      .then((description) => depotDonnees.nouvelleHomologation(
+        requete.idUtilisateurCourant,
+        description.toJSON(),
+      ))
       .then((idHomologation) => reponse.json({ idHomologation }))
       .catch((e) => {
         if (e instanceof ErreurModele) reponse.status(422).send(e.message);
@@ -70,12 +45,13 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
   ]),
   (requete, reponse, suite) => {
-    const descriptionService = new DescriptionService(requete.body, referentiel);
-    depotDonnees.ajouteDescriptionServiceAHomologation(
-      requete.idUtilisateurCourant,
-      requete.params.id,
-      descriptionService
-    )
+    Promise.resolve()
+      .then(() => new DescriptionService(requete.body, referentiel))
+      .then((descriptionService) => depotDonnees.ajouteDescriptionServiceAHomologation(
+        requete.idUtilisateurCourant,
+        requete.params.id,
+        descriptionService,
+      ))
       .then(() => reponse.send({ idHomologation: requete.homologation.id }))
       .catch((e) => {
         if (e instanceof ErreurModele) {

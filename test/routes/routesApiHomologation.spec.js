@@ -3,6 +3,7 @@ const expect = require('expect.js');
 
 const testeurMSS = require('./testeurMSS');
 
+const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
 const { ErreurModele, ErreurDonneesObligatoiresManquantes, ErreurNomServiceDejaExistant } = require('../../src/erreurs');
 const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
@@ -60,6 +61,14 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         .catch(done);
     });
 
+    it('retourne une erreur HTTP 422 si les données de description de service sont invalides', (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(422, 'Le statut de déploiement "statutInvalide" est invalide', {
+        method: 'post',
+        url: 'http://localhost:1234/api/homologation',
+        data: { statutDeploiement: 'statutInvalide' },
+      }, done);
+    });
+
     it('retourne une erreur HTTP 422 si données insuffisantes pour création homologation', (done) => {
       testeur.depotDonnees().nouvelleHomologation = () => Promise.reject(new ErreurDonneesObligatoiresManquantes('oups'));
 
@@ -82,34 +91,23 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
     it("demande au dépôt de données d'enregistrer les nouvelles homologations", (done) => {
       testeur.middleware().reinitialise('123');
+      const donneesDescriptionService = uneDescriptionValide(testeur.referentiel())
+        .construis()
+        .toJSON();
 
       testeur.depotDonnees().nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
         expect(idUtilisateur).to.equal('123');
-        expect(donneesHomologation).to.eql({
-          nomService: 'Super Service',
-          typeService: undefined,
-          provenanceService: undefined,
-          fonctionnalites: undefined,
-          fonctionnalitesSpecifiques: undefined,
-          donneesCaracterePersonnel: undefined,
-          donneesSensiblesSpecifiques: undefined,
-          delaiAvantImpactCritique: undefined,
-          localisationDonnees: undefined,
-          presentation: undefined,
-          pointsAcces: undefined,
-          risqueJuridiqueFinancierReputationnel: undefined,
-          statutDeploiement: undefined,
-        });
+        expect(donneesHomologation).to.eql(donneesDescriptionService);
         return Promise.resolve('456');
       };
 
-      axios.post('http://localhost:1234/api/homologation', { nomService: 'Super Service' })
+      axios.post('http://localhost:1234/api/homologation', donneesDescriptionService)
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
           done();
         })
-        .catch(done);
+        .catch((e) => done(e.response?.data || e));
     });
   });
   describe('quand requête PUT sur `/api/homologation/:id`', () => {
@@ -179,7 +177,15 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         .catch(done);
     });
 
-    it('retourne une erreur HTTP 422 si la validation des données échoue', (done) => {
+    it('retourne une erreur HTTP 422 si le validateur du modèle échoue', (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(422, 'Le statut de déploiement "statutInvalide" est invalide', {
+        method: 'put',
+        url: 'http://localhost:1234/api/homologation/456',
+        data: { statutDeploiement: 'statutInvalide' },
+      }, done);
+    });
+
+    it('retourne une erreur HTTP 422 si la validation des propriétés obligatoires échoue', (done) => {
       testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () => Promise.reject(
         new ErreurNomServiceDejaExistant('oups')
       );
