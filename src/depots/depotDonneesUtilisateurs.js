@@ -4,10 +4,11 @@ const adaptateurUUIDParDefaut = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
 const {
   ErreurEmailManquant,
+  ErreurSuppressionImpossible,
   ErreurUtilisateurExistant,
+  ErreurUtilisateurInexistant,
 } = require('../erreurs');
 const Utilisateur = require('../modeles/utilisateur');
-const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
 const creeDepot = (config = {}) => {
   const {
@@ -15,7 +16,6 @@ const creeDepot = (config = {}) => {
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = adaptateurUUIDParDefaut,
-    depotHomologations,
   } = config;
 
   const utilisateur = (identifiant) => adaptateurPersistance.utilisateur(identifiant)
@@ -98,14 +98,26 @@ const creeDepot = (config = {}) => {
       .then(() => utilisateur(utilisateurAModifier.id))
   );
 
-  const supprimeUtilisateur = (id) => avecPMapPourChaqueElement(
-    depotHomologations.homologations(id),
-    (h) => Promise.all([
-      adaptateurPersistance.supprimeHomologation(h.id),
-      adaptateurPersistance.supprimeService(h.id),
-    ]),
-  )
-    .then(() => adaptateurPersistance.supprimeUtilisateur(id));
+  const supprimeUtilisateur = (...params) => {
+    const verifieUtilisateurExistant = (id) => adaptateurPersistance.utilisateur(id)
+      .then((u) => {
+        if (typeof u === 'undefined') {
+          throw new ErreurUtilisateurInexistant(`L'utilisateur "${id}" n'existe pas`);
+        }
+      });
+
+    const verifieUtilisateurPasCreateur = (id) => adaptateurPersistance.nbAutorisationsCreateur(id)
+      .then((nb) => {
+        if (nb > 0) {
+          throw new ErreurSuppressionImpossible(`Suppression impossible : l'utilisateur "${id}" a créé des services`);
+        }
+      });
+
+    return verifieUtilisateurExistant(...params)
+      .then(() => verifieUtilisateurPasCreateur(...params))
+      .then(() => adaptateurPersistance.supprimeAutorisationsContribution(...params))
+      .then(() => adaptateurPersistance.supprimeUtilisateur(...params));
+  };
 
   const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => (
     adaptateurPersistance.metsAJourUtilisateur(utilisateurAModifier.id, { cguAcceptees: true })

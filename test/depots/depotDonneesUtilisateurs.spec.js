@@ -3,15 +3,15 @@ const expect = require('expect.js');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const {
   ErreurEmailManquant,
+  ErreurSuppressionImpossible,
   ErreurUtilisateurExistant,
+  ErreurUtilisateurInexistant,
 } = require('../../src/erreurs');
 const Utilisateur = require('../../src/modeles/utilisateur');
-
-const copie = require('../../src/utilitaires/copie');
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
@@ -385,46 +385,50 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   describe("sur demande de suppression d'un utilisateur", () => {
-    it("supprime les homologations associées à l'utilisateur", (done) => {
+    it("lève une exception si l'utilisateur a créé des services", (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
         homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
       });
-      const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurChiffrement,
-        adaptateurPersistance,
-        depotHomologations,
-      });
+      const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
 
       depot.supprimeUtilisateur('999')
-        .then(() => depotHomologations.homologation('123'))
-        .then((h) => expect(h).to.be(undefined))
-        .then(() => done())
+        .then(() => done('La tentative de suppression aurait dû lever une exception'))
+        .catch((erreur) => {
+          expect(erreur).to.be.an(ErreurSuppressionImpossible);
+          expect(erreur.message).to.equal("Suppression impossible : l'utilisateur \"999\" a créé des services");
+          done();
+        })
         .catch(done);
     });
 
-    it("supprime les services en copie des homologations associées à l'utilisateur", (done) => {
-      const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
+    it("lève une exception si l'utilisateur n'existe pas", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
+      const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+
+      depot.supprimeUtilisateur('999')
+        .then(() => done('La tentative de suppression aurait dû lever une exception'))
+        .catch((erreur) => {
+          expect(erreur).to.be.an(ErreurUtilisateurInexistant);
+          expect(erreur.message).to.equal("L'utilisateur \"999\" n'existe pas");
+          done();
+        })
+        .catch(done);
+    });
+
+    it('supprime les autorisations de contribution pour cet utilisateur', (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [copie(donneesHomologations)],
-        services: [copie(donneesHomologations)],
-        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'contributeur' }],
       });
-      const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurChiffrement,
-        adaptateurPersistance,
-        depotHomologations,
-      });
+      const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+      const depotAutorisations = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
 
-      adaptateurPersistance.service('123')
-        .then((s) => expect(s).to.be.an(Object))
-        .then(() => depot.supprimeUtilisateur('999'))
-        .then(() => adaptateurPersistance.service('123'))
-        .then((h) => expect(h).to.be(undefined))
+      depot.supprimeUtilisateur('999')
+        .then(() => depotAutorisations.autorisations('999'))
+        .then((autorisations) => expect(autorisations.length).to.equal(0))
         .then(() => done())
         .catch(done);
     });
@@ -433,12 +437,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
       });
-      const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurChiffrement,
-        adaptateurPersistance,
-        depotHomologations,
-      });
+      const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
 
       depot.supprimeUtilisateur('999')
         .then(() => depot.utilisateur('999'))

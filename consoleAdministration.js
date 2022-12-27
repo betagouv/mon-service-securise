@@ -32,6 +32,10 @@ class ConsoleAdministration {
       idsHomologationsAConserver
     );
   }
+
+  supprimeUtilisateur(id) {
+    return this.depotDonnees.supprimeUtilisateur(id);
+  }
 }
 
 module.exports = ConsoleAdministration;
