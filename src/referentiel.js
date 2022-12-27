@@ -1,6 +1,26 @@
 const { ErreurDonneesReferentielIncorrectes } = require('./erreurs');
 const donneesParDefaut = require('../donneesReferentiel');
 
+const donneesReferentielVide = {
+  actionsSaisie: {},
+  categoriesMesures: {},
+  indiceCyber: {},
+  delaisAvantImpactCritique: {},
+  donneesCaracterePersonnel: {},
+  echeancesRenouvellement: {},
+  etapesParcoursHomologation: [],
+  fonctionnalites: {},
+  localisationsDonnees: {},
+  mesures: {},
+  risques: {},
+  typesService: {},
+  niveauxGravite: {},
+  provenancesService: {},
+  seuilsCriticites: [],
+  statutsDeploiement: {},
+  statutsMesures: {},
+};
+
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   let donnees = donneesReferentiel;
 
@@ -144,7 +164,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   };
 
   const recharge = (nouvellesDonnees) => {
-    donnees = nouvellesDonnees;
+    donnees = { ...donneesReferentielVide, ...nouvellesDonnees };
     valideDonnees();
   };
 
@@ -212,24 +232,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   };
 };
 
-const creeReferentielVide = () => creeReferentiel({
-  actionsSaisie: {},
-  categoriesMesures: {},
-  indiceCyber: {},
-  delaisAvantImpactCritique: {},
-  donneesCaracterePersonnel: {},
-  echeancesRenouvellement: {},
-  etapesParcoursHomologation: [],
-  fonctionnalites: {},
-  localisationsDonnees: {},
-  mesures: {},
-  risques: {},
-  typesService: {},
-  niveauxGravite: {},
-  provenancesService: {},
-  seuilsCriticites: [],
-  statutsDeploiement: {},
-  statutsMesures: {},
-});
+const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);
 
 module.exports = { creeReferentiel, creeReferentielVide };

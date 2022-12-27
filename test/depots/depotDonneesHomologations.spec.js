@@ -1,5 +1,7 @@
 const expect = require('expect.js');
 
+const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
+
 const {
   ErreurDossierNonFinalisable,
   ErreurHomologationInexistante,
@@ -289,6 +291,7 @@ describe('Le dépôt de données des homologations', () => {
     let adaptateurPersistance;
     let adaptateurJournalMSS;
     let depot;
+    let referentiel;
 
     beforeEach(() => {
       const donneesHomologation = { id: '123', descriptionService: { nomService: 'Super Service', presentation: 'Une présentation' } };
@@ -299,12 +302,20 @@ describe('Le dépôt de données des homologations', () => {
         services: [copie(donneesHomologation)],
       });
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+      referentiel = Referentiel.creeReferentielVide();
 
-      depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, adaptateurJournalMSS });
+      depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        adaptateurJournalMSS,
+        referentiel,
+      });
     });
 
     it("met à jour la description du service d'une homologation", (done) => {
-      const description = new DescriptionService({ nomService: 'Nouveau Nom' });
+      const description = uneDescriptionValide(referentiel)
+        .avecNomService('Nouveau Nom')
+        .construis();
+
       depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .then(() => depot.homologation('123'))
         .then(({ descriptionService }) => {
@@ -315,9 +326,11 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("met à jour la description de service dans l'objet métier service", (done) => {
-      const depotServices = DepotDonneesServices.creeDepot({ adaptateurPersistance });
+      const depotServices = DepotDonneesServices.creeDepot({ adaptateurPersistance, referentiel });
+      const description = uneDescriptionValide(referentiel)
+        .avecNomService('Nouveau Nom')
+        .construis();
 
-      const description = new DescriptionService({ nomService: 'Nouveau Nom' });
       depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .then(() => depotServices.service('123'))
         .then(({ descriptionService }) => {
@@ -342,7 +355,10 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("ne détecte pas de doublon sur le nom de service pour l'homologation en cours de mise à jour", (done) => {
-      const description = new DescriptionService({ nomService: 'Super Service', presentation: 'Une autre présentation' });
+      const description = uneDescriptionValide(referentiel)
+        .avecPresentation('Une autre présentation')
+        .construis();
+
       depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .then(() => depot.homologation('123'))
         .then(({ descriptionService }) => {
@@ -358,7 +374,8 @@ describe('Le dépôt de données des homologations', () => {
         done();
       };
 
-      const description = new DescriptionService({ nomService: 'Nouveau Nom' });
+      const description = uneDescriptionValide(referentiel)
+        .construis();
       depot.ajouteDescriptionServiceAHomologation('999', '123', description)
         .catch(done);
     });
@@ -482,6 +499,7 @@ describe('Le dépôt de données des homologations', () => {
     let adaptateurPersistance;
     let adaptateurUUID;
     let depot;
+    let referentiel;
 
     beforeEach(() => {
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
@@ -492,16 +510,22 @@ describe('Le dépôt de données des homologations', () => {
         autorisations: [],
       });
       adaptateurUUID = { genereUUID: () => 'unUUID' };
+      referentiel = Referentiel.creeReferentielVide();
 
       depot = DepotDonneesHomologations.creeDepot({
-        adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID,
+        adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel,
       });
     });
 
     it('ajoute la nouvelle homologation au dépôt', (done) => {
+      const donneesDescriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Super Service')
+        .construis()
+        .toJSON();
+
       depot.homologations('123')
         .then((homologations) => expect(homologations.length).to.equal(0))
-        .then(() => depot.nouvelleHomologation('123', { nomService: 'Super Service' }))
+        .then(() => depot.nouvelleHomologation('123', donneesDescriptionService))
         .then(() => depot.homologations('123'))
         .then((homologations) => {
           expect(homologations.length).to.equal(1);
@@ -514,7 +538,12 @@ describe('Le dépôt de données des homologations', () => {
     it("génère un UUID pour l'homologation créée", (done) => {
       adaptateurUUID.genereUUID = () => '11111111-1111-1111-1111-111111111111';
 
-      depot.nouvelleHomologation('123', { nomService: 'Super Service' })
+      const donneesDescriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Super Service')
+        .construis()
+        .toJSON();
+
+      depot.nouvelleHomologation('123', donneesDescriptionService)
         .then((idHomologation) => expect(idHomologation).to.equal(
           '11111111-1111-1111-1111-111111111111'
         ))
@@ -527,9 +556,17 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('ajoute en copie un nouveau service au dépôt', (done) => {
-      const depotDonneesServices = DepotDonneesServices.creeDepot({ adaptateurPersistance });
+      const depotDonneesServices = DepotDonneesServices.creeDepot({
+        adaptateurPersistance,
+        referentiel,
+      });
 
-      depot.nouvelleHomologation('123', { nomService: 'Super Service' })
+      const donneesDescriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Super Service')
+        .construis()
+        .toJSON();
+
+      depot.nouvelleHomologation('123', donneesDescriptionService)
         .then((idHomologation) => depotDonneesServices.service(idHomologation))
         .then((service) => {
           expect(service.nomService()).to.equal('Super Service');
@@ -540,9 +577,13 @@ describe('Le dépôt de données des homologations', () => {
 
     it("déclare un accès entre l'utilisateur et l'homologation", (done) => {
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
+      const donneesDescriptionService = uneDescriptionValide(referentiel)
+        .construis()
+        .toJSON();
+
       depotAutorisations.autorisations('123')
         .then((as) => expect(as.length).to.equal(0))
-        .then(() => depot.nouvelleHomologation('123', { nomService: 'SuperService' }))
+        .then(() => depot.nouvelleHomologation('123', donneesDescriptionService))
         .then(() => depotAutorisations.autorisations('123'))
         .then((as) => {
           expect(as.length).to.equal(1);
@@ -557,9 +598,17 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     describe("le journal MSS est utilisé pour consigner l'enregistrement", () => {
+      let donneesDescriptionService;
+
       const verifieRecuEvenementDeType = (typeAttendu, evenements) => (
         expect(evenements.map((e) => e.type)).to.contain(typeAttendu)
       );
+
+      beforeEach(() => (
+        donneesDescriptionService = uneDescriptionValide(referentiel)
+          .construis()
+          .toJSON()
+      ));
 
       it('avec un événement typé signalant le nouveau service créé', (done) => {
         const evenements = [];
@@ -567,7 +616,7 @@ describe('Le dépôt de données des homologations', () => {
           evenements.push(evenement);
         };
 
-        depot.nouvelleHomologation('123', { nomService: 'Super Service' })
+        depot.nouvelleHomologation('123', donneesDescriptionService)
           .then(() => verifieRecuEvenementDeType('NOUVEAU_SERVICE_CREE', evenements))
           .then(() => done())
           .catch(done);
@@ -579,7 +628,7 @@ describe('Le dépôt de données des homologations', () => {
           evenements.push(evenement);
         };
 
-        depot.nouvelleHomologation('123', { nomService: 'Super Service' })
+        depot.nouvelleHomologation('123', donneesDescriptionService)
           .then(() => verifieRecuEvenementDeType('COMPLETUDE_SERVICE_MODIFIEE', evenements))
           .then(() => done())
           .catch(done);
@@ -587,7 +636,12 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('lève une exception si le nom du service est manquant', (done) => {
-      depot.nouvelleHomologation('123', { nomService: '' })
+      const donneesDescriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('')
+        .construis()
+        .toJSON();
+
+      depot.nouvelleHomologation('123', donneesDescriptionService)
         .then(() => done("La création de l'homologation aurait dû lever une exception"))
         .catch((e) => expect(e).to.be.an(ErreurNomServiceManquant))
         .then(() => done())
@@ -595,12 +649,17 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('lève une exception si le nom du service existe déjà pour une autre homologation', (done) => {
-      depot.nouvelleHomologation('123', { nomService: 'Un nom' })
-        .then(() => depot.nouvelleHomologation('123', { nomService: 'Un nom' }))
+      const donneesDescriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Nom service')
+        .construis()
+        .toJSON();
+
+      depot.nouvelleHomologation('123', donneesDescriptionService)
+        .then(() => depot.nouvelleHomologation('123', donneesDescriptionService))
         .then(() => done("La création de l'homologation aurait dû lever une exception"))
         .catch((e) => {
           expect(e).to.be.an(ErreurNomServiceDejaExistant);
-          expect(e.message).to.equal('Le nom du service "Un nom" existe déjà pour une autre homologation');
+          expect(e.message).to.equal('Le nom du service "Nom service" existe déjà pour une autre homologation');
           done();
         })
         .catch(done);
