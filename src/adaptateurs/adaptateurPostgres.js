@@ -115,9 +115,6 @@ const nouvelAdaptateur = (env) => {
   const metsAJourService = (...params) => metsAJourTable('services', ...params);
   const metsAJourUtilisateur = (...params) => metsAJourTable('utilisateurs', ...params);
 
-  const nbUtilisateurs = () => knex('utilisateurs').count()
-    .then((rows) => rows[0]['count(*)']);
-
   const supprimeHomologation = (...params) => supprimeEnregistrement('homologations', ...params);
   const supprimeService = (...params) => supprimeEnregistrement('services', ...params);
   const supprimeUtilisateur = (...params) => supprimeEnregistrement('utilisateurs', ...params);
@@ -203,7 +200,6 @@ const nouvelAdaptateur = (env) => {
     metsAJourService,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
-    nbUtilisateurs,
     service,
     supprimeAutorisation,
     supprimeAutorisations,
