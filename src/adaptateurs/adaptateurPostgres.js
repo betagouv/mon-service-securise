@@ -156,6 +156,12 @@ const nouvelAdaptateur = (env) => {
 
   const ajouteAutorisation = (...params) => ajouteLigneDansTable('autorisations', ...params);
 
+  const nbAutorisationsCreateur = (idUtilisateur) => knex('autorisations')
+    .count('id')
+    .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
+    .whereRaw("donnees->>'type'='createur'")
+    .then(([{ count }]) => parseInt(count, 10));
+
   const supprimeAutorisation = (idUtilisateur, idHomologation) => knex('autorisations')
     .whereRaw(
       "donnees->>'idUtilisateur'=? and donnees->>'idHomologation'=?",
@@ -164,6 +170,11 @@ const nouvelAdaptateur = (env) => {
     .del();
 
   const supprimeAutorisations = () => knex('autorisations').del();
+
+  const supprimeAutorisationsContribution = (idUtilisateur) => knex('autorisations')
+    .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
+    .whereRaw("donnees->>'type'='contributeur'")
+    .del();
 
   const supprimeAutorisationsHomologation = (idHomologation) => knex('autorisations')
     .whereRaw("donnees->>'idHomologation'=?", idHomologation)
@@ -191,10 +202,12 @@ const nouvelAdaptateur = (env) => {
     metsAJourHomologation,
     metsAJourService,
     metsAJourUtilisateur,
+    nbAutorisationsCreateur,
     nbUtilisateurs,
     service,
     supprimeAutorisation,
     supprimeAutorisations,
+    supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
     supprimeHomologation,
     supprimeService,

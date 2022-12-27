@@ -133,6 +133,12 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     return Promise.resolve();
   };
 
+  const nbAutorisationsCreateur = (idUtilisateur) => Promise.resolve(
+    donnees.autorisations
+      .filter((a) => a.idUtilisateur === idUtilisateur && a.type === 'createur')
+      .length
+  );
+
   const supprimeAutorisation = (idUtilisateur, idHomologation) => {
     donnees.autorisations = donnees.autorisations
       .filter((a) => a.idUtilisateur !== idUtilisateur && a.idHomologation !== idHomologation);
@@ -140,6 +146,12 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
   };
 
   const supprimeAutorisations = () => Promise.resolve(donnees.autorisations = []);
+
+  const supprimeAutorisationsContribution = (idUtilisateur) => {
+    donnees.autorisations = donnees.autorisations
+      .filter((a) => a.idUtilisateur !== idUtilisateur && a.type !== 'contributeur');
+    return Promise.resolve();
+  };
 
   const supprimeAutorisationsHomologation = (idHomologation) => {
     donnees.autorisations = donnees.autorisations
@@ -168,9 +180,11 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     metsAJourHomologation,
     metsAJourService,
     metsAJourUtilisateur,
+    nbAutorisationsCreateur,
     service,
     supprimeAutorisation,
     supprimeAutorisations,
+    supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
     supprimeHomologation,
     supprimeHomologations,

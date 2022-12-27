@@ -27,6 +27,7 @@ class ErreurProprieteManquante extends ErreurModele {}
 class ErreurRisqueInconnu extends ErreurModele {}
 class ErreurStatutDeploiementInvalide extends ErreurModele {}
 class ErreurStatutMesureInvalide extends ErreurModele {}
+class ErreurSuppressionImpossible extends Error {}
 class ErreurTentativeSuppressionCreateur extends ErreurModele {}
 class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
@@ -68,6 +69,7 @@ module.exports = {
   ErreurRisqueInconnu,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
+  ErreurSuppressionImpossible,
   ErreurTentativeSuppressionCreateur,
   ErreurTypeInconnu,
   ErreurUtilisateurExistant,
