@@ -21,11 +21,11 @@ $(() => {
   );
 
   const $bouton = $('.bouton[idHomologation]');
-  const identifiantHomologation = $bouton.attr('idHomologation');
+  const identifiantService = $bouton.attr('idHomologation');
 
   $bouton.click(() => {
     const params = parametres('form#avis-expert-cyber');
-    axios.post(`/api/service/${identifiantHomologation}/avisExpertCyber`, params)
-      .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
+    axios.post(`/api/service/${identifiantService}/avisExpertCyber`, params)
+      .then((reponse) => (window.location = `/homologation/${reponse.data.idService}`));
   });
 });

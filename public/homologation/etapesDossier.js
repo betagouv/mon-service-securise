@@ -2,7 +2,7 @@ import { brancheValidation, declencheValidation } from '../modules/interactions/
 
 let formulaireDejaSoumis = false;
 
-const action = (idEtape, idHomologation) => {
+const action = (idEtape, idService) => {
   let resultat = Promise.resolve();
 
   if (idEtape === 2) {
@@ -11,17 +11,17 @@ const action = (idEtape, idHomologation) => {
       dureeValidite: $('input[name="dureeValidite"]:checked').val(),
     };
 
-    resultat = axios.put(`/api/service/${idHomologation}/dossier`, donnees);
+    resultat = axios.put(`/api/service/${idService}/dossier`, donnees);
   }
 
   if (idEtape === 3) {
-    resultat = axios.put(`/api/service/${idHomologation}/dossier`, { finalise: true });
+    resultat = axios.put(`/api/service/${idService}/dossier`, { finalise: true });
   }
 
   return resultat;
 };
 
-const brancheComportemenFormulaire = (selecteur, idHomologation, idEtape, idEtapeSuivante) => {
+const brancheComportemenFormulaire = (selecteur, idService, idEtape, idEtapeSuivante) => {
   brancheValidation(selecteur);
 
   $(selecteur).on('submit', (e) => {
@@ -30,11 +30,11 @@ const brancheComportemenFormulaire = (selecteur, idHomologation, idEtape, idEtap
     if (!formulaireDejaSoumis) {
       formulaireDejaSoumis = true;
 
-      action(idEtape, idHomologation)
+      action(idEtape, idService)
         .then(() => (
           window.location = idEtapeSuivante
-            ? `/homologation/${idHomologation}/dossier/edition/etape/${idEtapeSuivante}`
-            : `/homologation/${idHomologation}/dossiers`
+            ? `/homologation/${idService}/dossier/edition/etape/${idEtapeSuivante}`
+            : `/homologation/${idService}/dossiers`
         ));
     }
   });
@@ -44,11 +44,11 @@ $(() => {
   const $boutonSuivant = $('.bouton#suivant');
 
   const selecteurFormulaire = 'form';
-  const idHomologation = $boutonSuivant.data('id-homologation');
+  const idService = $boutonSuivant.data('id-homologation');
   const idEtape = $boutonSuivant.data('id-etape');
   const idEtapeSuivante = $boutonSuivant.data('id-etape-suivante');
 
-  brancheComportemenFormulaire(selecteurFormulaire, idHomologation, idEtape, idEtapeSuivante);
+  brancheComportemenFormulaire(selecteurFormulaire, idService, idEtape, idEtapeSuivante);
 
   $boutonSuivant.on('click', () => declencheValidation(selecteurFormulaire));
 });

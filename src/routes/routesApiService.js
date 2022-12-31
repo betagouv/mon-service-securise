@@ -17,7 +17,7 @@ const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../modeles/rolesResponsabilites');
 const { dateInvalide } = require('../utilitaires/date');
 
-const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
+const routesApiService = (middleware, depotDonnees, referentiel) => {
   const routes = express.Router();
 
   routes.post('/', middleware.verificationAcceptationCGU, middleware.aseptise('nomService'), middleware.aseptiseListes([
@@ -32,7 +32,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
         requete.idUtilisateurCourant,
         description.toJSON(),
       ))
-      .then((idHomologation) => reponse.json({ idHomologation }))
+      .then((idService) => reponse.json({ idService }))
       .catch((e) => {
         if (e instanceof ErreurModele) reponse.status(422).send(e.message);
         else suite(e);
@@ -52,7 +52,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
         requete.params.id,
         descriptionService,
       ))
-      .then(() => reponse.send({ idHomologation: requete.homologation.id }))
+      .then(() => reponse.send({ idService: requete.homologation.id }))
       .catch((e) => {
         if (e instanceof ErreurModele) {
           reponse.status(422).send(e.message);
@@ -70,7 +70,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   ),
   (requete, reponse, suite) => {
     const { mesuresSpecifiques = [], mesuresGenerales = {} } = requete.body;
-    const idHomologation = requete.homologation.id;
+    const idService = requete.homologation.id;
 
     try {
       const generales = Object.keys(mesuresGenerales)
@@ -86,8 +86,8 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
         referentiel,
       );
 
-      depotDonnees.ajouteMesuresAHomologation(idHomologation, generales, specifiques)
-        .then(() => reponse.send({ idHomologation }))
+      depotDonnees.ajouteMesuresAHomologation(idService, generales, specifiques)
+        .then(() => reponse.send({ idService }))
         .catch(suite);
     } catch {
       reponse.status(422).send('Données invalides');
@@ -102,10 +102,10 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     ]),
     (requete, reponse) => {
       const rolesResponsabilites = new RolesResponsabilites(requete.body);
-      const idHomologation = requete.homologation.id;
+      const idService = requete.homologation.id;
       depotDonnees.ajouteRolesResponsabilitesAHomologation(
-        idHomologation, rolesResponsabilites
-      ).then(() => reponse.send({ idHomologation }));
+        idService, rolesResponsabilites
+      ).then(() => reponse.send({ idService }));
     });
 
   routes.post('/:id/risques', middleware.trouveHomologation, middleware.aseptise(
@@ -117,7 +117,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   (requete, reponse, suite) => {
     const { risquesSpecifiques = [], ...params } = requete.body;
     const prefixeAttributRisque = /^(commentaire|niveauGravite)-/;
-    const idHomologation = requete.homologation.id;
+    const idService = requete.homologation.id;
 
     try {
       const donneesRisques = Object.keys(params)
@@ -133,10 +133,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
       const ajouts = Object.values(donneesRisques)
         .reduce((acc, donnees) => {
           const risque = new RisqueGeneral(donnees, referentiel);
-          return acc.then(() => depotDonnees.ajouteRisqueGeneralAHomologation(
-            idHomologation,
-            risque,
-          ));
+          return acc.then(() => depotDonnees.ajouteRisqueGeneralAHomologation(idService, risque));
         }, Promise.resolve());
 
       ajouts
@@ -148,10 +145,10 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
           }, referentiel);
 
           return depotDonnees.remplaceRisquesSpecifiquesPourHomologation(
-            idHomologation, listeRisquesSpecifiques,
+            idService, listeRisquesSpecifiques,
           );
         })
-        .then(() => reponse.send({ idHomologation }))
+        .then(() => reponse.send({ idService }))
         .catch(suite);
     } catch {
       reponse.status(422).send('Données invalides');
@@ -162,7 +159,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     try {
       const avisExpert = new AvisExpertCyber(requete.body, referentiel);
       depotDonnees.ajouteAvisExpertCyberAHomologation(requete.params.id, avisExpert)
-        .then(() => reponse.send({ idHomologation: requete.params.id }));
+        .then(() => reponse.send({ idService: requete.params.id }));
     } catch {
       reponse.status(422).send('Données invalides');
     }
@@ -173,7 +170,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     middleware.aseptise('dateHomologation', 'dureeValidite'),
     middleware.trouveHomologation,
     (requete, reponse, suite) => {
-      const idHomologation = requete.homologation.id;
+      const idService = requete.homologation.id;
       const { dateHomologation, dureeValidite, finalise = false } = requete.body;
 
       const seulementDonneesRecues = () => {
@@ -195,8 +192,8 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
         reponse.status(422).send('Durée de validité manquante');
       } else {
         const dossier = new Dossier(seulementDonneesRecues(), referentiel);
-        depotDonnees.metsAJourDossierCourant(idHomologation, dossier)
-          .then(() => reponse.send({ idHomologation }))
+        depotDonnees.metsAJourDossierCourant(idService, dossier)
+          .then(() => reponse.send({ idService }))
           .catch(suite);
       }
     }
@@ -206,7 +203,7 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
     middleware.verificationAcceptationCGU,
     (requete, reponse, suite) => {
       const { idUtilisateurCourant } = requete;
-      const idHomologation = requete.params.id;
+      const idService = requete.params.id;
       const { idContributeur } = requete.body;
 
       const verifiePermissionSuppressionContributeur = (...params) => depotDonnees
@@ -217,12 +214,12 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
             : Promise.reject(new EchecAutorisation())
         ));
 
-      verifiePermissionSuppressionContributeur(idUtilisateurCourant, idHomologation)
-        .then(() => depotDonnees.supprimeContributeur(idContributeur, idHomologation))
-        .then(() => reponse.send(`Contributeur "${idContributeur}" supprimé pour l'homologation "${idHomologation}"`))
+      verifiePermissionSuppressionContributeur(idUtilisateurCourant, idService)
+        .then(() => depotDonnees.supprimeContributeur(idContributeur, idService))
+        .then(() => reponse.send(`Contributeur "${idContributeur}" supprimé pour l'homologation "${idService}"`))
         .catch((e) => {
           if (e instanceof EchecAutorisation) {
-            reponse.status(403).send(`Droits insuffisants pour supprimer un collaborateur de l'homologation "${idHomologation}"`);
+            reponse.status(403).send(`Droits insuffisants pour supprimer un collaborateur du service "${idService}"`);
           } else if (e instanceof ErreurModele) {
             reponse.status(422).send(e.message);
           } else {
@@ -234,4 +231,4 @@ const routesApiHomologation = (middleware, depotDonnees, referentiel) => {
   return routes;
 };
 
-module.exports = routesApiHomologation;
+module.exports = routesApiService;
