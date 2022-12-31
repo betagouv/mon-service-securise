@@ -130,7 +130,7 @@ ${statuts}
     const params = parametres('form#mesures');
     arrangeParametresMesures(params);
 
-    axios.post(`/api/homologation/${identifiantHomologation}/mesures`, params)
+    axios.post(`/api/service/${identifiantHomologation}/mesures`, params)
       .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
   });
 });

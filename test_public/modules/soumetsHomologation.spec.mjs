@@ -38,7 +38,7 @@ describe("L'initialisation du comportement du formulaire", () => {
       evenementsDifferes.resolveWith($('.bouton').trigger('click'))
         .then(() => {
           expect(ajaxRequete.method).to.equal('post');
-          expect(ajaxRequete.url).to.equal('/api/homologation');
+          expect(ajaxRequete.url).to.equal('/api/service');
           expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
         })
         .then(() => done())
@@ -54,7 +54,7 @@ describe("L'initialisation du comportement du formulaire", () => {
       evenementsDifferes.resolveWith($('.bouton').trigger('click'))
         .then(() => {
           expect(ajaxRequete.method).to.equal('put');
-          expect(ajaxRequete.url).to.equal('/api/homologation/12345');
+          expect(ajaxRequete.url).to.equal('/api/service/12345');
           expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
         })
         .then(() => done())

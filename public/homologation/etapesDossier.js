@@ -11,11 +11,11 @@ const action = (idEtape, idHomologation) => {
       dureeValidite: $('input[name="dureeValidite"]:checked').val(),
     };
 
-    resultat = axios.put(`/api/homologation/${idHomologation}/dossier`, donnees);
+    resultat = axios.put(`/api/service/${idHomologation}/dossier`, donnees);
   }
 
   if (idEtape === 3) {
-    resultat = axios.put(`/api/homologation/${idHomologation}/dossier`, { finalise: true });
+    resultat = axios.put(`/api/service/${idHomologation}/dossier`, { finalise: true });
   }
 
   return resultat;

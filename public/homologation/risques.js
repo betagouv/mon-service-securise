@@ -75,7 +75,7 @@ $(() => {
       '^(description|niveauGravite|commentaire)-risque-specifique-',
     );
 
-    axios.post(`/api/homologation/${identifiantHomologation}/risques`, params)
+    axios.post(`/api/service/${identifiantHomologation}/risques`, params)
       .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
   });
 });
