@@ -9,7 +9,7 @@ const {
   ErreurModele,
   ErreurUtilisateurExistant,
 } = require('../erreurs');
-const routesApiHomologation = require('./routesApiHomologation');
+const routesApiService = require('./routesApiService');
 const Utilisateur = require('../modeles/utilisateur');
 
 const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
@@ -83,7 +83,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .then((homologations) => reponse.json({ homologations }));
   });
 
-  routes.use('/homologation', routesApiHomologation(middleware, depotDonnees, referentiel));
+  routes.use('/service', routesApiService(middleware, depotDonnees, referentiel));
 
   routes.get('/seuilCriticite', middleware.verificationAcceptationCGU, (requete, reponse) => {
     const {

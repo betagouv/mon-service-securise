@@ -10,8 +10,8 @@ const initialiseComportementFormulaire = (
   const $bouton = $(selecteurBouton);
   const identifiantHomologation = $bouton.attr('idHomologation');
   const requete = identifiantHomologation
-    ? { method: 'put', url: `/api/homologation/${identifiantHomologation}` }
-    : { method: 'post', url: '/api/homologation' };
+    ? { method: 'put', url: `/api/service/${identifiantHomologation}` }
+    : { method: 'post', url: '/api/service' };
   const $form = $(selecteurFormulaire);
 
   brancheValidation(selecteurFormulaire);

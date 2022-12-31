@@ -8,34 +8,34 @@ const { ErreurModele, ErreurDonneesObligatoiresManquantes, ErreurNomServiceDejaE
 const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 
-describe('Le serveur MSS des routes /api/homologation/*', () => {
+describe('Le serveur MSS des routes /api/service/*', () => {
   const testeur = testeurMSS();
 
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
 
-  describe('quand requête POST sur `/api/homologation`', () => {
+  describe('quand requête POST sur `/api/service`', () => {
     beforeEach(() => {
       testeur.depotDonnees().nouvelleHomologation = () => Promise.resolve();
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        { method: 'post', url: 'http://localhost:1234/api/homologation' }, done
+        { method: 'post', url: 'http://localhost:1234/api/service' }, done
       );
     });
 
     it('aseptise les paramètres', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         ['nomService'],
-        { method: 'post', url: 'http://localhost:1234/api/homologation' },
+        { method: 'post', url: 'http://localhost:1234/api/service' },
         done
       );
     });
 
     it("aseptise la liste des points d'accès ainsi que son contenu", (done) => {
-      axios.post('http://localhost:1234/api/homologation', {})
+      axios.post('http://localhost:1234/api/service', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('pointsAcces', ['description']);
           done();
@@ -44,7 +44,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it('aseptise la liste des fonctionnalités spécifiques ainsi que son contenu', (done) => {
-      axios.post('http://localhost:1234/api/homologation', {})
+      axios.post('http://localhost:1234/api/service', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
           done();
@@ -53,7 +53,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
-      axios.post('http://localhost:1234/api/homologation', {})
+      axios.post('http://localhost:1234/api/service', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
           done();
@@ -64,7 +64,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it('retourne une erreur HTTP 422 si les données de description de service sont invalides', (done) => {
       testeur.verifieRequeteGenereErreurHTTP(422, 'Le statut de déploiement "statutInvalide" est invalide', {
         method: 'post',
-        url: 'http://localhost:1234/api/homologation',
+        url: 'http://localhost:1234/api/service',
         data: { statutDeploiement: 'statutInvalide' },
       }, done);
     });
@@ -74,7 +74,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
-        url: 'http://localhost:1234/api/homologation',
+        url: 'http://localhost:1234/api/service',
         data: {},
       }, done);
     });
@@ -84,7 +84,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
-        url: 'http://localhost:1234/api/homologation',
+        url: 'http://localhost:1234/api/service',
         data: { nomService: 'Un nom déjà existant' },
       }, done);
     });
@@ -101,7 +101,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         return Promise.resolve('456');
       };
 
-      axios.post('http://localhost:1234/api/homologation', donneesDescriptionService)
+      axios.post('http://localhost:1234/api/service', donneesDescriptionService)
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
@@ -110,27 +110,27 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
   });
-  describe('quand requête PUT sur `/api/homologation/:id`', () => {
+  describe('quand requête PUT sur `/api/service/:id`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        { method: 'put', url: 'http://localhost:1234/api/homologation/456' }, done
+        { method: 'put', url: 'http://localhost:1234/api/service/456' }, done
       );
     });
 
     it('aseptise les paramètres', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         ['nomService'],
-        { method: 'put', url: 'http://localhost:1234/api/homologation/456' },
+        { method: 'put', url: 'http://localhost:1234/api/service/456' },
         done
       );
     });
 
     it("aseptise la liste des points d'accès ainsi que son contenu", (done) => {
-      axios.put('http://localhost:1234/api/homologation/456', {})
+      axios.put('http://localhost:1234/api/service/456', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('pointsAcces', ['description']);
           done();
@@ -139,7 +139,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it('aseptise la liste des fonctionnalités spécifiques ainsi que son contenu', (done) => {
-      axios.put('http://localhost:1234/api/homologation/456', {})
+      axios.put('http://localhost:1234/api/service/456', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('fonctionnalitesSpecifiques', ['description']);
           done();
@@ -148,7 +148,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
-      axios.put('http://localhost:1234/api/homologation/456', {})
+      axios.put('http://localhost:1234/api/service/456', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('donneesSensiblesSpecifiques', ['description']);
           done();
@@ -168,7 +168,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         }
       );
 
-      axios.put('http://localhost:1234/api/homologation/456', { nomService: 'Nouveau Nom' })
+      axios.put('http://localhost:1234/api/service/456', { nomService: 'Nouveau Nom' })
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idHomologation: '456' });
@@ -180,7 +180,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it('retourne une erreur HTTP 422 si le validateur du modèle échoue', (done) => {
       testeur.verifieRequeteGenereErreurHTTP(422, 'Le statut de déploiement "statutInvalide" est invalide', {
         method: 'put',
-        url: 'http://localhost:1234/api/homologation/456',
+        url: 'http://localhost:1234/api/service/456',
         data: { statutDeploiement: 'statutInvalide' },
       }, done);
     });
@@ -192,13 +192,13 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'put',
-        url: 'http://localhost:1234/api/homologation/456',
+        url: 'http://localhost:1234/api/service/456',
         data: { nomService: 'service déjà existant' },
       }, done);
     });
   });
 
-  describe('quand requête POST sur `/api/homologation/:id/mesures', () => {
+  describe('quand requête POST sur `/api/service/:id/mesures', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteMesuresAHomologation = () => Promise.resolve();
       testeur.referentiel().recharge({
@@ -211,7 +211,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/mesures',
+        url: 'http://localhost:1234/api/service/456/mesures',
       }, done);
     });
 
@@ -225,7 +225,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
           'mesuresSpecifiques.*.statut',
           'mesuresSpecifiques.*.modalites',
         ],
-        { method: 'post', url: 'http://localhost:1234/api/homologation/456/mesures' },
+        { method: 'post', url: 'http://localhost:1234/api/service/456/mesures' },
         done
       );
     });
@@ -250,7 +250,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         return Promise.resolve();
       };
 
-      axios.post('http://localhost:1234/api/homologation/456/mesures', {
+      axios.post('http://localhost:1234/api/service/456/mesures', {
         mesuresGenerales: {
           identifiantMesure: { statut: 'fait', modalites: "Des modalités d'application" },
         },
@@ -276,7 +276,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       const mesuresSpecifiques = [];
       mesuresSpecifiques[2] = { description: 'Une mesure spécifique', categorie: 'uneCategorie', statut: 'fait' };
 
-      axios.post('http://localhost:1234/api/homologation/456/mesures', { mesuresSpecifiques })
+      axios.post('http://localhost:1234/api/service/456/mesures', { mesuresSpecifiques })
         .then(() => expect(mesuresRemplacees).to.be(true))
         .then(() => done())
         .catch(done);
@@ -298,7 +298,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         { modalites: 'Modalités' },
       ];
 
-      axios.post('http://localhost:1234/api/homologation/456/mesures', { mesuresSpecifiques })
+      axios.post('http://localhost:1234/api/service/456/mesures', { mesuresSpecifiques })
         .then(() => expect(mesuresRemplacees).to.be(true))
         .then(() => done())
         .catch(done);
@@ -307,13 +307,13 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
       testeur.verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
         method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/mesures',
+        url: 'http://localhost:1234/api/service/456/mesures',
         data: { mesuresGenerales: { identifiantInvalide: { statut: 'statutInvalide' } } },
       }, done);
     });
   });
 
-  describe('quand requête POST sur `/api/homologation/:id/rolesResponsabilites`', () => {
+  describe('quand requête POST sur `/api/service/:id/rolesResponsabilites`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = () => Promise.resolve();
       testeur.depotDonnees().ajouteEntitesExternesAHomologation = () => Promise.resolve();
@@ -322,7 +322,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/rolesResponsabilites',
+        url: 'http://localhost:1234/api/service/456/rolesResponsabilites',
       }, done);
     });
 
@@ -336,7 +336,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         return Promise.resolve();
       };
 
-      axios.post('http://localhost:1234/api/homologation/456/rolesResponsabilites', {
+      axios.post('http://localhost:1234/api/service/456/rolesResponsabilites', {
         autoriteHomologation: 'Jean Dupont',
       })
         .then((reponse) => {
@@ -349,7 +349,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it("aseptise la liste des acteurs de l'homologation ainsi que son contenu", (done) => {
-      axios.post('http://localhost:1234/api/homologation/456/rolesResponsabilites', {})
+      axios.post('http://localhost:1234/api/service/456/rolesResponsabilites', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('acteursHomologation', ['role', 'nom', 'fonction']);
           done();
@@ -358,7 +358,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
 
     it('aseptise la liste des parties prenantes ainsi que son contenu', (done) => {
-      axios.post('http://localhost:1234/api/homologation/456/rolesResponsabilites', {})
+      axios.post('http://localhost:1234/api/service/456/rolesResponsabilites', {})
         .then(() => {
           testeur.middleware().verifieAseptisationListe('partiesPrenantes', ['nom', 'natureAcces', 'pointContact']);
           done();
@@ -367,7 +367,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
   });
 
-  describe('quand requête POST sur `/api/homologation/:id/risques`', () => {
+  describe('quand requête POST sur `/api/service/:id/risques`', () => {
     beforeEach(() => {
       testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = () => Promise.resolve();
     });
@@ -375,7 +375,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/risques',
+        url: 'http://localhost:1234/api/service/456/risques',
       }, done);
     });
 
@@ -387,7 +387,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
           'risquesSpecifiques.*.niveauGravite',
           'risquesSpecifiques.*.commentaire',
         ],
-        { method: 'post', url: 'http://localhost:1234/api/homologation/456/risques' },
+        { method: 'post', url: 'http://localhost:1234/api/service/456/risques' },
         done
       );
     });
@@ -412,7 +412,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         }
       };
 
-      axios.post('http://localhost:1234/api/homologation/456/risques', {
+      axios.post('http://localhost:1234/api/service/456/risques', {
         'commentaire-unRisque': 'Un commentaire',
         'niveauGravite-unRisque': 'unNiveau',
       })
@@ -438,7 +438,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         return Promise.resolve();
       };
 
-      axios.post('http://localhost:1234/api/homologation/456/risques', {
+      axios.post('http://localhost:1234/api/service/456/risques', {
         risquesSpecifiques: [{ description: 'Un risque spécifique', commentaire: 'Un commentaire' }],
       })
         .then(() => expect(risquesRemplaces).to.be(true))
@@ -460,7 +460,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
       risquesSpecifiques[2] = { description: 'Un risque spécifique' };
       risquesSpecifiques[5] = { niveauGravite: 'unNiveau' };
 
-      axios.post('http://localhost:1234/api/homologation/456/risques', { risquesSpecifiques })
+      axios.post('http://localhost:1234/api/service/456/risques', { risquesSpecifiques })
         .then(() => expect(risquesRemplaces).to.be(true))
         .then(() => done())
         .catch(done);
@@ -469,13 +469,13 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
       testeur.verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
         method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/risques',
+        url: 'http://localhost:1234/api/service/456/risques',
         data: { 'commentaire-unRisqueInvalide': 'Un commentaire' },
       }, done);
     });
   });
 
-  describe('quand requête POST sur `/api/homologation/:id/avisExpertCyber`', () => {
+  describe('quand requête POST sur `/api/service/:id/avisExpertCyber`', () => {
     beforeEach(() => (
       testeur.depotDonnees().ajouteAvisExpertCyberAHomologation = () => Promise.resolve()
     ));
@@ -483,7 +483,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/avisExpertCyber',
+        url: 'http://localhost:1234/api/service/456/avisExpertCyber',
       }, done);
     });
 
@@ -497,7 +497,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         return Promise.resolve();
       };
 
-      axios.post('http://localhost:1234/api/homologation/456/avisExpertCyber', {
+      axios.post('http://localhost:1234/api/service/456/avisExpertCyber', {
         commentaire: 'Un commentaire',
       })
         .then((reponse) => {
@@ -512,13 +512,13 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
       testeur.verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
         method: 'post',
-        url: 'http://localhost:1234/api/homologation/456/avisExpertCyber',
+        url: 'http://localhost:1234/api/service/456/avisExpertCyber',
         data: { avis: 'avisInvalide' },
       }, done);
     });
   });
 
-  describe('quand requête PUT sur `/api/homologation/:id/dossier`', () => {
+  describe('quand requête PUT sur `/api/service/:id/dossier`', () => {
     beforeEach(() => {
       testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
       testeur.referentiel().recharge({ echeancesRenouvellement: { unAn: {} } });
@@ -527,7 +527,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it('aseptise les paramètres', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         ['dateHomologation', 'dureeValidite'],
-        { method: 'put', url: 'http://localhost:1234/api/homologation/456/dossier' },
+        { method: 'put', url: 'http://localhost:1234/api/service/456/dossier' },
         done
       );
     });
@@ -535,7 +535,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'put',
-        url: 'http://localhost:1234/api/homologation/456/dossier',
+        url: 'http://localhost:1234/api/service/456/dossier',
       }, done);
     });
 
@@ -554,7 +554,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         }
       };
 
-      axios.put('http://localhost:1234/api/homologation/456/dossier', {
+      axios.put('http://localhost:1234/api/service/456/dossier', {
         dateHomologation: '2022-12-01',
         dureeValidite: 'unAn',
       })
@@ -569,7 +569,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it("retourne une erreur HTTP 422 s'il manque la date d'homologation", (done) => {
       testeur.verifieRequeteGenereErreurHTTP(422, "Date d'homologation manquante", {
         method: 'put',
-        url: 'http://localhost:1234/api/homologation/456/dossier',
+        url: 'http://localhost:1234/api/service/456/dossier',
         data: { dureeValidite: 'unAn' },
       }, done);
     });
@@ -577,7 +577,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it("retourne une erreur HTTP 422 s'il manque la durée de validité", (done) => {
       testeur.verifieRequeteGenereErreurHTTP(422, 'Durée de validité manquante', {
         method: 'put',
-        url: 'http://localhost:1234/api/homologation/456/dossier',
+        url: 'http://localhost:1234/api/service/456/dossier',
         data: { dateHomologation: '2022-12-01' },
       }, done);
     });
@@ -595,7 +595,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         }
       };
 
-      axios.put('http://localhost:1234/api/homologation/456/dossier', { finalise: true })
+      axios.put('http://localhost:1234/api/service/456/dossier', { finalise: true })
         .then((reponse) => {
           expect(dossierFinalise).to.be(true);
           expect(reponse.data).to.eql({ idHomologation: '456' });
@@ -605,7 +605,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     });
   });
 
-  describe('quand requête DELETE sur `/api/homologation/:id/autorisationContributeur`', () => {
+  describe('quand requête DELETE sur `/api/service/:id/autorisationContributeur`', () => {
     beforeEach(() => {
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(new AutorisationCreateur());
       testeur.depotDonnees().supprimeContributeur = () => Promise.resolve();
@@ -614,7 +614,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
     it('vérifie que les CGU sont acceptées', (done) => {
       testeur.middleware().verifieRequeteExigeAcceptationCGU({
         method: 'delete',
-        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+        url: 'http://localhost:1234/api/service/123/autorisationContributeur',
       }, done);
     });
 
@@ -634,7 +634,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
         }
       };
 
-      axios.delete('http://localhost:1234/api/homologation/123/autorisationContributeur')
+      axios.delete('http://localhost:1234/api/service/123/autorisationContributeur')
         .then(() => expect(autorisationVerifiee).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
@@ -646,7 +646,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(403, "Droits insuffisants pour supprimer un collaborateur de l'homologation \"123\"", {
         method: 'delete',
-        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+        url: 'http://localhost:1234/api/service/123/autorisationContributeur',
       }, done);
     });
 
@@ -657,7 +657,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(403, "Droits insuffisants pour supprimer un collaborateur de l'homologation \"123\"", {
         method: 'delete',
-        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+        url: 'http://localhost:1234/api/service/123/autorisationContributeur',
       }, done);
     });
 
@@ -678,7 +678,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
       axios({
         method: 'delete',
-        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+        url: 'http://localhost:1234/api/service/123/autorisationContributeur',
         data: { idContributeur: '000' },
       })
         .then((reponse) => {
@@ -695,7 +695,7 @@ describe('Le serveur MSS des routes /api/homologation/*', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
         method: 'delete',
-        url: 'http://localhost:1234/api/homologation/123/autorisationContributeur',
+        url: 'http://localhost:1234/api/service/123/autorisationContributeur',
       }, done);
     });
   });
