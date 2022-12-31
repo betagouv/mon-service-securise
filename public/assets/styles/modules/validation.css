@@ -7,14 +7,18 @@
   margin-right: .4em;
 }
 
+.requis::before {
+  position: absolute;
+  left: -1em;
+}
+
 .mention::before, .requis::before {
   content: "*";
   color: var(--rose-anssi);
 }
 
-.requis::before {
-  position: absolute;
-  left: -1em;
+form.champ-unique .requis::before {
+  content: "";
 }
 
 .requis {

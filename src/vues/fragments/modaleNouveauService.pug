@@ -10,7 +10,7 @@ mixin modaleNouveauService
       .fermeture-modale
       .contenu-modale
         h1 Nouveau service
-        form(action = "/homologation/creation", method = "GET")
+        form.champ-unique(action = "/homologation/creation", method = "GET")
           .case-a-cocher.requis
             input(id = 'attestation', name = 'attestation', type = 'checkbox', required, title = '')
             label(for = 'attestation')
