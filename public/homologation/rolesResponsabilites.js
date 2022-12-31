@@ -27,12 +27,12 @@ $(() => {
   });
 
   const $bouton = $('.bouton[idHomologation]');
-  const identifiantHomologation = $bouton.attr('idHomologation');
+  const identifiantService = $bouton.attr('idHomologation');
 
   $bouton.on('click', () => {
     const params = tousLesParametres('form#roles-responsabilites');
 
-    axios.post(`/api/service/${identifiantHomologation}/rolesResponsabilites`, params)
-      .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
+    axios.post(`/api/service/${identifiantService}/rolesResponsabilites`, params)
+      .then((reponse) => (window.location = `/homologation/${reponse.data.idService}`));
   });
 });

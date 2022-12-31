@@ -66,7 +66,7 @@ $(() => {
   brancheAjoutRisqueSpecifique('.nouvel-item', '#risques-specifiques');
 
   const $bouton = $('.bouton[idHomologation]');
-  const identifiantHomologation = $bouton.attr('idHomologation');
+  const identifiantService = $bouton.attr('idHomologation');
 
   $bouton.click(() => {
     const params = parametresAvecItemsExtraits(
@@ -75,7 +75,7 @@ $(() => {
       '^(description|niveauGravite|commentaire)-risque-specifique-',
     );
 
-    axios.post(`/api/service/${identifiantHomologation}/risques`, params)
-      .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
+    axios.post(`/api/service/${identifiantService}/risques`, params)
+      .then((reponse) => (window.location = `/homologation/${reponse.data.idService}`));
   });
 });

@@ -119,7 +119,7 @@ ${statuts}
   brancheValidation('form#mesures');
 
   const $bouton = $('.bouton[idHomologation]');
-  const identifiantHomologation = $bouton.attr('idHomologation');
+  const identifiantService = $bouton.attr('idHomologation');
 
   $bouton.on('click', () => {
     declencheValidation('form#mesures');
@@ -130,7 +130,7 @@ ${statuts}
     const params = parametres('form#mesures');
     arrangeParametresMesures(params);
 
-    axios.post(`/api/service/${identifiantHomologation}/mesures`, params)
-      .then((reponse) => (window.location = `/homologation/${reponse.data.idHomologation}`));
+    axios.post(`/api/service/${identifiantService}/mesures`, params)
+      .then((reponse) => (window.location = `/homologation/${reponse.data.idService}`));
   });
 });

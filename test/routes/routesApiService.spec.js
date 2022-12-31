@@ -69,7 +69,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       }, done);
     });
 
-    it('retourne une erreur HTTP 422 si données insuffisantes pour création homologation', (done) => {
+    it('retourne une erreur HTTP 422 si données insuffisantes pour création service', (done) => {
       testeur.depotDonnees().nouvelleHomologation = () => Promise.reject(new ErreurDonneesObligatoiresManquantes('oups'));
 
       testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
@@ -89,22 +89,22 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       }, done);
     });
 
-    it("demande au dépôt de données d'enregistrer les nouvelles homologations", (done) => {
+    it("demande au dépôt de données d'enregistrer les nouveaux service", (done) => {
       testeur.middleware().reinitialise('123');
       const donneesDescriptionService = uneDescriptionValide(testeur.referentiel())
         .construis()
         .toJSON();
 
-      testeur.depotDonnees().nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
+      testeur.depotDonnees().nouvelleHomologation = (idUtilisateur, donneesService) => {
         expect(idUtilisateur).to.equal('123');
-        expect(donneesHomologation).to.eql(donneesDescriptionService);
+        expect(donneesService).to.eql(donneesDescriptionService);
         return Promise.resolve('456');
       };
 
       axios.post('http://localhost:1234/api/service', donneesDescriptionService)
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
+          expect(reponse.data).to.eql({ idService: '456' });
           done();
         })
         .catch((e) => done(e.response?.data || e));
@@ -115,7 +115,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () => Promise.resolve();
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation(
         { method: 'put', url: 'http://localhost:1234/api/service/456' }, done
       );
@@ -156,13 +156,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch(done);
     });
 
-    it("demande au dépôt de données de mettre à jour l'homologation", (done) => {
+    it('demande au dépôt de données de mettre à jour le service', (done) => {
       testeur.middleware().reinitialise('123');
 
       testeur.depotDonnees().ajouteDescriptionServiceAHomologation = (
-        (idUtilisateur, idHomologation, infosGenerales) => {
+        (idUtilisateur, idService, infosGenerales) => {
           expect(idUtilisateur).to.equal('123');
-          expect(idHomologation).to.equal('456');
+          expect(idService).to.equal('456');
           expect(infosGenerales.nomService).to.equal('Nouveau Nom');
           return Promise.resolve();
         }
@@ -171,7 +171,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       axios.put('http://localhost:1234/api/service/456', { nomService: 'Nouveau Nom' })
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
+          expect(reponse.data).to.eql({ idService: '456' });
           done();
         })
         .catch(done);
@@ -208,7 +208,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/service/456/mesures',
@@ -230,15 +230,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("demande au dépôt d'associer les mesures à l'homologation", (done) => {
+    it("demande au dépôt d'associer les mesures au service", (done) => {
       let mesuresAjoutees = false;
 
       testeur.depotDonnees().ajouteMesuresAHomologation = (
-        idHomologation,
+        idService,
         [generale],
         specifiques,
       ) => {
-        expect(idHomologation).to.equal('456');
+        expect(idService).to.equal('456');
         expect(generale.id).to.equal('identifiantMesure');
         expect(generale.statut).to.equal('fait');
         expect(generale.modalites).to.equal("Des modalités d'application");
@@ -259,7 +259,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .then((reponse) => {
           expect(mesuresAjoutees).to.be(true);
           expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
+          expect(reponse.data).to.eql({ idService: '456' });
           done();
         })
         .catch(done);
@@ -319,18 +319,18 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().ajouteEntitesExternesAHomologation = () => Promise.resolve();
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/service/456/rolesResponsabilites',
       }, done);
     });
 
-    it("demande au dépôt d'associer les rôles et responsabilités à l'homologation", (done) => {
+    it("demande au dépôt d'associer les rôles et responsabilités au service", (done) => {
       let rolesResponsabilitesAjoutees = false;
 
-      testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = (idHomologation, role) => {
-        expect(idHomologation).to.equal('456');
+      testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = (idService, role) => {
+        expect(idService).to.equal('456');
         expect(role.autoriteHomologation).to.equal('Jean Dupont');
         rolesResponsabilitesAjoutees = true;
         return Promise.resolve();
@@ -342,7 +342,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .then((reponse) => {
           expect(rolesResponsabilitesAjoutees).to.be(true);
           expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
+          expect(reponse.data).to.eql({ idService: '456' });
           done();
         })
         .catch(done);
@@ -372,7 +372,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = () => Promise.resolve();
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/service/456/risques',
@@ -392,16 +392,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("demande au dépôt d'associer les risques généraux à l'homologation", (done) => {
+    it("demande au dépôt d'associer les risques généraux au service", (done) => {
       testeur.referentiel().recharge({
         risques: { unRisque: {} },
         niveauxGravite: { unNiveau: {} },
       });
       let risqueAjoute = false;
 
-      testeur.depotDonnees().ajouteRisqueGeneralAHomologation = (idHomologation, risque) => {
+      testeur.depotDonnees().ajouteRisqueGeneralAHomologation = (idService, risque) => {
         try {
-          expect(idHomologation).to.equal('456');
+          expect(idService).to.equal('456');
           expect(risque.id).to.equal('unRisque');
           expect(risque.commentaire).to.equal('Un commentaire');
           expect(risque.niveauGravite).to.equal('unNiveau');
@@ -419,18 +419,18 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .then((reponse) => {
           expect(risqueAjoute).to.be(true);
           expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
+          expect(reponse.data).to.eql({ idService: '456' });
           done();
         })
         .catch(done);
     });
 
-    it("demande au dépôt d'associer les risques spécifiques à l'homologation", (done) => {
+    it("demande au dépôt d'associer les risques spécifiques au service", (done) => {
       let risquesRemplaces = false;
       testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = (
-        idHomologation, risques
+        idService, risques
       ) => {
-        expect(idHomologation).to.equal('456');
+        expect(idService).to.equal('456');
         expect(risques.nombre()).to.equal(1);
         expect(risques.item(0).description).to.equal('Un risque spécifique');
         expect(risques.item(0).commentaire).to.equal('Un commentaire');
@@ -480,18 +480,18 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().ajouteAvisExpertCyberAHomologation = () => Promise.resolve()
     ));
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'post',
         url: 'http://localhost:1234/api/service/456/avisExpertCyber',
       }, done);
     });
 
-    it("demande au dépôt d'associer l'avis d'expert à l'homologation", (done) => {
+    it("demande au dépôt d'associer l'avis d'expert au service", (done) => {
       let avisAjoute = false;
 
-      testeur.depotDonnees().ajouteAvisExpertCyberAHomologation = (idHomologation, avis) => {
-        expect(idHomologation).to.equal('456');
+      testeur.depotDonnees().ajouteAvisExpertCyberAHomologation = (idService, avis) => {
+        expect(idService).to.equal('456');
         expect(avis.commentaire).to.equal('Un commentaire');
         avisAjoute = true;
         return Promise.resolve();
@@ -503,7 +503,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .then((reponse) => {
           expect(avisAjoute).to.be(true);
           expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
+          expect(reponse.data).to.eql({ idService: '456' });
           done();
         })
         .catch(done);
@@ -532,7 +532,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation({
         method: 'put',
         url: 'http://localhost:1234/api/service/456/dossier',
@@ -541,9 +541,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('demande au dépôt de persister les données du dossier', (done) => {
       let dossierSauve = false;
-      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+      testeur.depotDonnees().metsAJourDossierCourant = (idService, dossier) => {
         try {
-          expect(idHomologation).to.equal('456');
+          expect(idService).to.equal('456');
           expect(dossier.dateHomologation).to.equal('2022-12-01');
           expect(dossier.dureeValidite).to.equal('unAn');
           dossierSauve = true;
@@ -560,7 +560,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       })
         .then((reponse) => {
           expect(dossierSauve).to.be(true);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
+          expect(reponse.data).to.eql({ idService: '456' });
           done();
         })
         .catch((e) => done(e.response?.data || e));
@@ -584,9 +584,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('finalise le dossier si le paramètre est présent dans la requête', (done) => {
       let dossierFinalise = false;
-      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation) => {
+      testeur.depotDonnees().metsAJourDossierCourant = (idService) => {
         try {
-          expect(idHomologation).to.equal('456');
+          expect(idService).to.equal('456');
           dossierFinalise = true;
 
           return Promise.resolve();
@@ -598,7 +598,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       axios.put('http://localhost:1234/api/service/456/dossier', { finalise: true })
         .then((reponse) => {
           expect(dossierFinalise).to.be(true);
-          expect(reponse.data).to.eql({ idHomologation: '456' });
+          expect(reponse.data).to.eql({ idService: '456' });
           done();
         })
         .catch((e) => done(e.response?.data || e));
@@ -618,14 +618,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       }, done);
     });
 
-    it("demande au dépôt de vérifier l'autorisation d'accès à l'homologation pour l'utilisateur courant", (done) => {
+    it("demande au dépôt de vérifier l'autorisation d'accès au service pour l'utilisateur courant", (done) => {
       let autorisationVerifiee = false;
 
       testeur.middleware().reinitialise('999');
-      testeur.depotDonnees().autorisationPour = (idUtilisateur, idHomologation) => {
+      testeur.depotDonnees().autorisationPour = (idUtilisateur, idService) => {
         try {
           expect(idUtilisateur).to.equal('999');
-          expect(idHomologation).to.equal('123');
+          expect(idService).to.equal('123');
           autorisationVerifiee = true;
 
           return Promise.resolve(new AutorisationCreateur());
@@ -640,34 +640,34 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
-    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès à l'homologation", (done) => {
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
       const autorisationNonTrouvee = undefined;
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisationNonTrouvee);
 
-      testeur.verifieRequeteGenereErreurHTTP(403, "Droits insuffisants pour supprimer un collaborateur de l'homologation \"123\"", {
+      testeur.verifieRequeteGenereErreurHTTP(403, 'Droits insuffisants pour supprimer un collaborateur du service "123"', {
         method: 'delete',
         url: 'http://localhost:1234/api/service/123/autorisationContributeur',
       }, done);
     });
 
-    it("retourne une erreur HTTP 403 si l'utilisateur courant est simple contributeur de l'homologation", (done) => {
+    it("retourne une erreur HTTP 403 si l'utilisateur courant est simple contributeur du service", (done) => {
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(
         new AutorisationContributeur()
       );
 
-      testeur.verifieRequeteGenereErreurHTTP(403, "Droits insuffisants pour supprimer un collaborateur de l'homologation \"123\"", {
+      testeur.verifieRequeteGenereErreurHTTP(403, 'Droits insuffisants pour supprimer un collaborateur du service "123"', {
         method: 'delete',
         url: 'http://localhost:1234/api/service/123/autorisationContributeur',
       }, done);
     });
 
-    it("demande au dépôt de supprimer l'accès à l'homologation pour le contributeur", (done) => {
+    it("demande au dépôt de supprimer l'accès au service pour le contributeur", (done) => {
       let contributeurSupprime = false;
 
-      testeur.depotDonnees().supprimeContributeur = (idContributeur, idHomologation) => {
+      testeur.depotDonnees().supprimeContributeur = (idContributeur, idService) => {
         try {
           expect(idContributeur).to.equal('000');
-          expect(idHomologation).to.equal('123');
+          expect(idService).to.equal('123');
           contributeurSupprime = true;
 
           return Promise.resolve();

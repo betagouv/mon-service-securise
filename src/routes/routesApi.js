@@ -18,12 +18,12 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
     .catch(() => depotDonnees.supprimeUtilisateur(utilisateur.id)
       .then(() => Promise.reject(new EchecEnvoiMessage())));
 
-  const envoieMessageInvitationInscription = (emetteur, contributeur, homologation) => (
+  const envoieMessageInvitationInscription = (emetteur, contributeur, service) => (
     verifieSuccesEnvoiMessage(
       adaptateurMail.envoieMessageInvitationInscription(
         contributeur.email,
         emetteur.prenomNom(),
-        homologation.nomService(),
+        service.nomService(),
         contributeur.idResetMotDePasse,
       ),
       contributeur,
@@ -37,12 +37,12 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       utilisateur,
     ));
 
-  const envoieMessageInvitationContribution = (emetteur, contributeur, homologation) => (
+  const envoieMessageInvitationContribution = (emetteur, contributeur, service) => (
     adaptateurMail.envoieMessageInvitationContribution(
       contributeur.email,
       emetteur.prenomNom(),
-      homologation.nomService(),
-      homologation.id,
+      service.nomService(),
+      service.id,
     )
       .then(() => contributeur)
   );
@@ -79,8 +79,8 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
 
   routes.get('/homologations', middleware.verificationAcceptationCGU, (requete, reponse) => {
     depotDonnees.homologations(requete.idUtilisateurCourant)
-      .then((homologations) => homologations.map((h) => h.toJSON()))
-      .then((homologations) => reponse.json({ homologations }));
+      .then((services) => services.map((s) => s.toJSON()))
+      .then((services) => reponse.json({ homologations: services }));
   });
 
   routes.use('/service', routesApiService(middleware, depotDonnees, referentiel));
@@ -251,10 +251,10 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
           depotDonnees.utilisateur(idUtilisateur),
           depotDonnees.homologation(idHomologation),
         ])
-          .then(([emetteur, homologation]) => (
+          .then(([emetteur, service]) => (
             contributeurExistant
-              ? envoieMessageInvitationContribution(emetteur, contributeurAInformer, homologation)
-              : envoieMessageInvitationInscription(emetteur, contributeurAInformer, homologation)
+              ? envoieMessageInvitationContribution(emetteur, contributeurAInformer, service)
+              : envoieMessageInvitationInscription(emetteur, contributeurAInformer, service)
           ))
       );
 

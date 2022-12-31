@@ -8,9 +8,9 @@ const initialiseComportementFormulaire = (
   adaptateurAjax = adaptateurAjaxAxios
 ) => {
   const $bouton = $(selecteurBouton);
-  const identifiantHomologation = $bouton.attr('idHomologation');
-  const requete = identifiantHomologation
-    ? { method: 'put', url: `/api/service/${identifiantHomologation}` }
+  const identifiantService = $bouton.attr('idHomologation');
+  const requete = identifiantService
+    ? { method: 'put', url: `/api/service/${identifiantService}` }
     : { method: 'post', url: '/api/service' };
   const $form = $(selecteurFormulaire);
 
@@ -19,8 +19,8 @@ const initialiseComportementFormulaire = (
     evenement.preventDefault();
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
-    const redirigeVersSynthese = ({ data: { idHomologation } }) => (
-      window.location = `/homologation/${idHomologation}`
+    const redirigeVersSynthese = ({ data: { idService } }) => (
+      window.location = `/homologation/${idService}`
     );
 
     adaptateurAjax.execute(requete)

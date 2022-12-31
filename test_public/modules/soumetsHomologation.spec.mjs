@@ -27,11 +27,11 @@ describe("L'initialisation du comportement du formulaire", () => {
     beforeEach(() => {
       adaptateurAjax.execute = (requete) => {
         ajaxRequete = requete;
-        return Promise.resolve({ data: { idHomologation: '123' } });
+        return Promise.resolve({ data: { idService: '123' } });
       };
     });
 
-    it("envoie au serveur les données de l'homologation à créer", (done) => {
+    it('envoie au serveur les données du service à créer', (done) => {
       const evenementsDifferes = $.Deferred();
       initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
 
@@ -45,7 +45,7 @@ describe("L'initialisation du comportement du formulaire", () => {
         .catch(done);
     });
 
-    it("envoie au serveur les données de l'homologation à modifier", (done) => {
+    it('envoie au serveur les données du service à modifier', (done) => {
       const evenementsDifferes = $.Deferred();
       $('.bouton').attr('idHomologation', '12345');
 
@@ -61,7 +61,7 @@ describe("L'initialisation du comportement du formulaire", () => {
         .catch(done);
     });
 
-    it("renvoie vers la synthèse de l'homologation", (done) => {
+    it('renvoie vers la synthèse du service', (done) => {
       const evenementsDifferes = $.Deferred();
       initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
 
