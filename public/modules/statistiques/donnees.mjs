@@ -40,6 +40,11 @@ const donnees = {
   '2022-11-07': { utilisateurs: 422, pourcentageUtilisateursEnPlus: 9, dossiers: 240 },
   '2022-11-14': { utilisateurs: 440, pourcentageUtilisateursEnPlus: 4, dossiers: 249 },
   '2022-11-24': { utilisateurs: 508, pourcentageUtilisateursEnPlus: 15, dossiers: 285 },
+  '2022-12-05': { utilisateurs: 543, pourcentageUtilisateursEnPlus: 7, dossiers: 298 },
+  '2022-12-12': { utilisateurs: 576, pourcentageUtilisateursEnPlus: 6, dossiers: 311 },
+  '2022-12-19': { utilisateurs: 918, pourcentageUtilisateursEnPlus: 59, dossiers: 441 },
+  '2022-12-26': { utilisateurs: 1005, pourcentageUtilisateursEnPlus: 9, dossiers: 474 },
+  '2023-01-02': { utilisateurs: 1057, pourcentageUtilisateursEnPlus: 5, dossiers: 494 },
 };
 
 export default donnees;
