@@ -5,7 +5,7 @@ block append styles
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
 block main
-  form.etroit
+  form.etroit#connexion
     h1 Connectez-vous
     p.sous-titre ou&nbsp;
       a(href='/inscription') créez votre compte
@@ -18,6 +18,6 @@ block main
         input(id='mot-de-passe', type='password')
       .message-erreur L'email et le mot de passe saisis ne correspondent à aucun compte. Veuillez renseigner les identifiants d'un compte existant.
       a(href='/reinitialisationMotDePasse' class='texte-normal') mot de passe oublié
-    .bouton Valider
+    button.bouton Valider
 
   script(src='/statique/connexion.js')

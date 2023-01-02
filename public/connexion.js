@@ -1,7 +1,7 @@
 $(() => {
   const $inputs = $('input');
   const $erreur = $('.message-erreur');
-  const $bouton = $('.bouton');
+  const $form = $('#connexion');
 
   const rendsAffichageNeutre = () => {
     $erreur.hide();
@@ -13,7 +13,8 @@ $(() => {
   $inputs.addClass('intouche');
   $inputs.on('input', rendsAffichageNeutre);
 
-  $bouton.on('click', () => {
+  $form.on('submit', (e) => {
+    e.preventDefault();
     const login = $('#login').val();
     const motDePasse = $('#mot-de-passe').val();
     axios.post('/api/token', { login, motDePasse })
