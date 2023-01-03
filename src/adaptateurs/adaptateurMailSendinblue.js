@@ -1,28 +1,29 @@
 const axios = require('axios');
 
-function envoieEmail(destinataire, sujet, corpsHtml) {
-  return axios.post('https://api.sendinblue.com/v3/smtp/email',
-    {
-      sender: { email: process.env.ADRESSE_MAIL_CONTACT },
-      to: [{ email: destinataire }],
-      subject: sujet,
-      htmlContent: `<html><head></head><body><p>${corpsHtml}</p></body></html>`,
-    },
-    { headers: { 'api-key': process.env.CLEF_API_SENDINBLUE } });
-}
+const envoieEmailAvecTemplate = (
+  destinataire, idTemplate, params
+) => (axios.post('https://api.sendinblue.com/v3/smtp/email',
+  {
+    to: [{ email: destinataire }],
+    templateId: idTemplate,
+    params,
+  },
+  { headers: {
+    'api-key': process.env.SENDINBLUE_CLEF_API,
+    accept: 'application/json',
+    'content-type': 'application/json',
+  } })
+);
 
-const envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) => envoieEmail(
+const envoieMessageFinalisationInscription = (
+  destinataire, idResetMotDePasse, prenom
+) => envoieEmailAvecTemplate(
   destinataire,
-  'MonServiceSécurisé – Activation du compte',
-  `Bonjour, <br/><br/>
-
-Suite à votre demande de création de compte, cliquez sur le lien d'activation pour
-finaliser votre inscription : <br/>
-${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse} <br/><br/>
-
-Nous vous remercions pour l'intérêt que vous portez à notre service. <br/><br/>
-
-L'équipe MonServiceSécurisé`
+  parseInt(process.env.SENDINBLUE_TEMPLATE_FINALISATION_INSCRIPTION, 10),
+  {
+    PRENOM: prenom,
+    URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
+  }
 );
 
 const envoieMessageInvitationContribution = (
