@@ -17,7 +17,7 @@ mixin outilComplementaire({ id, nom, description, lien })
     .titre-outil
       .icone-outil
       h3= nom
-    .description #{description} #[a.vers-complements(href = lien.url)= lien.texte]
+    .description #{description} #[a.avec-chevron(href = lien.url)= lien.texte]
 
 block append styles
   link(href = '/statique/assets/styles/homologation/synthese.css', rel = 'stylesheet')
@@ -67,5 +67,5 @@ block cartes-informations
 
   +carteInformations({ titre: 'Pour les services référencés avant le 12/10/2022' })
     .liens
-      a.vers-complements(href = `/homologation/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »
-      a.vers-complements(href = `/homologation/${service.id}/decision`) Télécharger les annexes 1ère version
+      a.avec-chevron(href = `/homologation/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »
+      a.avec-chevron(href = `/homologation/${service.id}/decision`) Télécharger les annexes 1ère version
