@@ -316,14 +316,16 @@ describe('Une homologation', () => {
     expect(nombre).to.equal(42);
   });
 
-  it('délègue aux statistiques le calcul de la complétude des mesures', () => {
-    const completudeVide = {};
+  it('délègue aux statistiques et aux mesures le calcul de la complétude des mesures', () => {
+    const donneesCompletude = { nombreTotalMesures: 10, nombreMesuresCompletes: 8 };
+    const detailVide = [];
     const homologation = new Homologation({});
-    homologation.statistiquesMesures = () => ({ completude: () => completudeVide });
+    homologation.statistiquesMesures = () => ({ completude: () => donneesCompletude });
+    homologation.mesures = { statutsMesuresPersonnalisees: () => detailVide };
 
     const completude = homologation.completudeMesures();
 
-    expect(completude).to.be(completudeVide);
+    expect(completude).to.eql({ ...donneesCompletude, detailMesures: detailVide });
   });
 
   it('délègue aux mesures le calcul du nombre de mesures spécifiques', () => {
