@@ -1,13 +1,20 @@
 extends mssConnecte
+include ./fragments/texteTronque
 
 block append styles
   link(href = '/statique/assets/styles/deuxColonnes.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/filAriane.css', rel = 'stylesheet')
 
 block retour
-  - let lienRetour = '/';
-  - if (homologation) lienRetour = '/espacePersonnel';
-  - if (homologation && homologation.id) lienRetour = `/homologation/${homologation.id}`;
-  a(href = lienRetour) ‹&nbsp;&nbsp;Retour
+  - const s = homologation || service
+  if s
+    nav.fil-ariane
+      a.avec-chevron(href = '/espacePersonnel') Espace personnel
+      if s.id
+        a.avec-chevron(href = `/homologation/${s.id}`)
+          +texteTronque({ texte: s.nomService() })
+
+      block filArianeNoeudFinal
 
 block main
   .corps.marges-fixes
