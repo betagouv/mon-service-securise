@@ -19,14 +19,17 @@ describe('Le branchement des filtres dans la page des mesures', () => {
       </div>
 
       <div class="mesures-specifiques">
-        <div id= "mesure-specifique-defaut" class="mesure-specifique">
-          <select><option value="" selected>Catégorie non spécifiée</option></select>
+        <div id="mesure-specifique-defaut" class="mesure-specifique">
+          <input type="radio" id="categorie-A" name="categorie-mesure-specifique-defaut" value="A">Catégorie A
+          <input type="radio" id="categorie-B" name="categorie-mesure-specifique-defaut" value="B">Catégorie B
         </div>
-        <div id= "mesure-specifique-A" class="mesure-specifique">
-          <select><option value="A" selected>Catégorie A</option></select>
+        <div id="mesure-specifique-A" class="mesure-specifique">
+          <input type="radio" id="categorie-A" name="categorie-mesure-specifique-A" value="A" checked>Catégorie A
+          <input type="radio" id="categorie-B" name="categorie-mesure-specifique-A" value="B">Catégorie B
         </div>
-        <div id= "mesure-specifique-B" class="mesure-specifique">
-          <select><option value="B" selected>Catégorie B</option></select>
+        <div id="mesure-specifique-B" class="mesure-specifique">
+          <input type="radio" id="categorie-A" name="categorie-mesure-specifique-B" value="A">Catégorie A
+          <input type="radio" id="categorie-B" name="categorie-mesure-specifique-B" value="B" checked>Catégorie B
         </div>
       </div>
     `;
