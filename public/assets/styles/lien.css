@@ -17,3 +17,22 @@ a.nouvel-onglet::after {
 a.nouvel-onglet {
   display: inline-block;
 }
+
+a.avec-chevron {
+  margin-right: 0.18em;
+}
+
+a.avec-chevron::after {
+  content: '';
+  display: inline-block;
+
+  width: 0.4em;
+  height: 0.4em;
+  margin-left: 0.2em;
+
+  border: 2px var(--bleu-mise-en-avant) solid;
+  border-left: 0;
+  border-bottom: 0;
+
+  transform: rotate(0.12turn) translateY(-0.05em);
+}
