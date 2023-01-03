@@ -1,9 +1,3 @@
-.mention {
-  display: flex;
-  justify-content: end;
-  margin: 0 0 1em;
-}
-
 .titre ~ .description {
   font-weight: normal;
   font-size: 0.9em;

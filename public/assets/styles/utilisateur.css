@@ -20,8 +20,8 @@
   padding: 1em 1em 1em 0.8em;
 }
 
-.mention {
-  margin-bottom: -1em;
+section:first-of-type {
+  padding-top: 1em;
 }
 
 .affichage-simple {
