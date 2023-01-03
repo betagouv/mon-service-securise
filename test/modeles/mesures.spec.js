@@ -148,4 +148,35 @@ describe('Les mesures liées à une homologation', () => {
       expect(mesures.parStatutEtCategorie().fait.categorie1).to.eql([{ description: 'mesure1', indispensable: true }, { description: 'Mesure Spécifique 1' }]);
     });
   });
+
+  describe('sur demande des statuts des mesures personnalisées', () => {
+    let referentiel;
+
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        mesures: { mesure1: {}, mesure2: {} },
+      });
+    });
+
+    elles('donnent les statuts des mesures personnalisées', () => {
+      const mesure = new Mesures(
+        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
+        referentiel,
+        { mesure1: {} }
+      );
+
+      expect(mesure.statutsMesuresPersonnalisees()).to.eql([{ idMesure: 'mesure1', statut: 'fait' }]);
+    });
+
+    elles('ignorent les mesures générales qui ne sont pas des mesures personnalisées', () => {
+      const seulementMesure1 = { mesure1: {} };
+      const mesure = new Mesures(
+        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }, { id: 'mesure2', statut: 'fait' }] },
+        referentiel,
+        seulementMesure1
+      );
+
+      expect(mesure.statutsMesuresPersonnalisees()).to.eql([{ idMesure: 'mesure1', statut: 'fait' }]);
+    });
+  });
 });

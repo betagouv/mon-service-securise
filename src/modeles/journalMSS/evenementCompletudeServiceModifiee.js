@@ -1,5 +1,6 @@
 const Evenement = require('./evenement');
 const {
+  ErreurDetailMesuresManquant,
   ErreurIdentifiantServiceManquant,
   ErreurNombreMesuresCompletesManquant,
   ErreurNombreTotalMesuresManquant,
@@ -15,6 +16,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       if (manque(donnees.idService)) throw new ErreurIdentifiantServiceManquant();
       if (manque(donnees.nombreTotalMesures)) throw new ErreurNombreTotalMesuresManquant();
       if (manque(donnees.nombreMesuresCompletes)) throw new ErreurNombreMesuresCompletesManquant();
+      if (manque(donnees.detailMesures)) throw new ErreurDetailMesuresManquant();
     };
 
     valide();

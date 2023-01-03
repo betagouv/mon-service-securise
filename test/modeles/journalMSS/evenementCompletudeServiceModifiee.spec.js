@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 const EvenementCompletudeServiceModifiee = require('../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee');
 const {
+  ErreurDetailMesuresManquant,
   ErreurIdentifiantServiceManquant,
   ErreurNombreTotalMesuresManquant,
   ErreurNombreMesuresCompletesManquant,
@@ -11,7 +12,7 @@ describe('Un événement de complétude modifiée', () => {
 
   it("chiffre l'identifiant du service qui lui est donné", () => {
     const evenement = new EvenementCompletudeServiceModifiee(
-      { idService: 'abc', nombreTotalMesures: 54, nombreMesuresCompletes: 38 },
+      { idService: 'abc', nombreTotalMesures: 54, nombreMesuresCompletes: 38, detailMesures: [] },
       { adaptateurChiffrement: hacheEnMajuscules }
     );
 
@@ -20,7 +21,7 @@ describe('Un événement de complétude modifiée', () => {
 
   it('sait se convertir en JSON', () => {
     const evenement = new EvenementCompletudeServiceModifiee(
-      { idService: 'abc', nombreTotalMesures: 54, nombreMesuresCompletes: 38 },
+      { idService: 'abc', nombreTotalMesures: 54, nombreMesuresCompletes: 38, detailMesures: [{ idMesure: 'analyseRisques', statut: 'fait' }] },
       { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
     );
 
@@ -30,6 +31,9 @@ describe('Un événement de complétude modifiée', () => {
         idService: 'ABC',
         nombreTotalMesures: 54,
         nombreMesuresCompletes: 38,
+        detailMesures: [
+          { idMesure: 'analyseRisques', statut: 'fait' },
+        ],
       },
       date: '17/11/2022',
     });
@@ -38,7 +42,7 @@ describe('Un événement de complétude modifiée', () => {
   it("exige que l'identifiant du service soit renseigné", (done) => {
     try {
       new EvenementCompletudeServiceModifiee(
-        { nombreTotalMesures: 54, nombreMesuresCompletes: 38 },
+        { nombreTotalMesures: 54, nombreMesuresCompletes: 38, detailMesures: [] },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
@@ -52,7 +56,7 @@ describe('Un événement de complétude modifiée', () => {
   it('exige que le nombre total de mesures soit renseigné', (done) => {
     try {
       new EvenementCompletudeServiceModifiee(
-        { idService: 'abc', nombreMesuresCompletes: 38 },
+        { idService: 'abc', nombreMesuresCompletes: 38, detailMesures: [] },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
@@ -66,13 +70,27 @@ describe('Un événement de complétude modifiée', () => {
   it('exige que le nombre de mesures complètes soit renseigné', (done) => {
     try {
       new EvenementCompletudeServiceModifiee(
-        { idService: 'abc', nombreTotalMesures: 54 },
+        { idService: 'abc', nombreTotalMesures: 54, detailMesures: [] },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
       done(Error("L'instanciation de l'événement aurait dû lever une exception"));
     } catch (e) {
       expect(e).to.be.an(ErreurNombreMesuresCompletesManquant);
+      done();
+    }
+  });
+
+  it('exige que le detail des mesures soit renseigné', (done) => {
+    try {
+      new EvenementCompletudeServiceModifiee(
+        { idService: 'abc', nombreTotalMesures: 54, nombreMesuresCompletes: 42 },
+        { adaptateurChiffrement: hacheEnMajuscules }
+      );
+
+      done(Error("L'instanciation de l'événement aurait dû lever une exception"));
+    } catch (e) {
+      expect(e).to.be.an(ErreurDetailMesuresManquant);
       done();
     }
   });

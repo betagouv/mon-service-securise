@@ -57,6 +57,15 @@ class Mesures extends InformationsHomologation {
 
     return statutSaisieMesures;
   }
+
+  statutsMesuresPersonnalisees() {
+    const personnalisees = ({ id: idMesure }) => (
+      Object.keys(this.mesuresPersonnalisees).includes(idMesure)
+    );
+    return this.mesuresGenerales.items
+      .filter(personnalisees)
+      .map((i) => ({ idMesure: i.id, statut: i.statut }));
+  }
 }
 
 module.exports = Mesures;
