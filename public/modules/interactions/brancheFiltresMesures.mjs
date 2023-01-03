@@ -1,7 +1,11 @@
 const CLASSE_ELEMENT_INVISIBLE = 'invisible';
 
-const mesureSpecifiqueDeCategorie = (elementMesureSpecifique, categorieFiltre) => !categorieFiltre
-  || $(`option[value="${categorieFiltre}"]:selected, option[value=""]:selected`, elementMesureSpecifique).length === 1;
+const mesureSpecifiqueDeCategorie = (elementMesureSpecifique, categorieFiltre) => {
+  const $categories = $("input:radio[name^='categorie-']", elementMesureSpecifique);
+  return !categorieFiltre
+    || $categories.filter(`[value="${categorieFiltre}"]:checked`).length === 1
+    || $categories.length === $categories.not(':checked').length;
+};
 
 const mesureGeneraleDeCategorie = (elementMesure, categorieFiltre) => !categorieFiltre
   || $(elementMesure).hasClass(categorieFiltre);
