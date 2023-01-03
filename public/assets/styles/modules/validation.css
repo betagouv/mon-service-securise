@@ -1,6 +1,11 @@
 .mention {
-  align-self: end;
-  margin-top: 2em;
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1em;
+}
+
+:is(h1, hr) + .mention {
+  margin: 2em 0 0;
 }
 
 .mention::before {

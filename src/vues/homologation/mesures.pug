@@ -29,6 +29,7 @@ block formulaire
         each categorie, identifiant in referentiel.categoriesMesures()
           a(id = identifiant)= categorie
 
+      .mention champ obligatoire
       .specifiques
         a.nouvel-item Ajouter une mesure spécifique
         #mesures-specifiques
