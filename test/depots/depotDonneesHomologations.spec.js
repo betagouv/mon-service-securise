@@ -63,6 +63,45 @@ describe('Le dépôt de données des homologations', () => {
       .catch(done);
   });
 
+  it('connaît toutes les homologations enregistrées dans MSS', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      homologations: [
+        { id: '123', descriptionService: { nomService: 'Super Service' } },
+        { id: '789', descriptionService: { nomService: 'Autre service' } },
+      ],
+      utilisateurs: [
+        { id: '456', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' },
+        { id: '999', prenom: 'Karine', nom: 'Durand', email: 'k.d@mail.fr' },
+      ],
+      autorisations: [
+        { idUtilisateur: '456', idHomologation: '123', type: 'createur' },
+        { idUtilisateur: '999', idHomologation: '789', type: 'createur' },
+      ],
+    });
+
+    const referentiel = Referentiel.creeReferentielVide();
+    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
+
+    depot.toutesHomologations()
+      .then((homologations) => {
+        expect(homologations.length).to.equal(2);
+
+        const verifieHomologation = (h, idAttendu, idCreateurAttendu) => {
+          expect(h).to.be.a(Homologation);
+          expect(h.id).to.equal(idAttendu);
+          expect(h.referentiel).to.equal(referentiel);
+          expect(h.createur).to.be.ok();
+          expect(h.createur.id).to.equal(idCreateurAttendu);
+        };
+
+        const [a, b] = homologations;
+        verifieHomologation(a, '123', '456');
+        verifieHomologation(b, '789', '999');
+        done();
+      })
+      .catch(done);
+  });
+
   it('trie les homologations par ordre alphabétique du nom du service', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [
