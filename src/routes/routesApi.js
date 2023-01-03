@@ -31,7 +31,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   const envoieMessageFinalisationInscription = (utilisateur) => (
     verifieSuccesEnvoiMessage(
       adaptateurMail.envoieMessageFinalisationInscription(
-        utilisateur.email, utilisateur.idResetMotDePasse,
+        utilisateur.email, utilisateur.idResetMotDePasse, utilisateur.prenom,
       ),
       utilisateur,
     ));
