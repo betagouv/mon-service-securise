@@ -1,0 +1,6 @@
+mixin texteTronque({ tailleLimite = 40, texte })
+  -
+    const longueurInitiale = texte.length;
+    let resultat = texte.substring(0, tailleLimite);
+    if (resultat.length < longueurInitiale) resultat += '…';
+  span!= resultat

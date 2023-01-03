@@ -1,0 +1,11 @@
+nav.fil-ariane {
+  display: flex;
+  column-gap: 0.4em;
+
+  color: var(--bleu-mise-en-avant);
+}
+
+.fil-ariane a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

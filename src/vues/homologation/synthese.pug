@@ -1,5 +1,6 @@
 extends ../deuxColonnes
 include ../cartes/indiceCyber
+include ../fragments/texteTronque
 
 mixin action({ id, description, indisponible, sousTitre, url, statut })
   a(
@@ -23,7 +24,9 @@ block append styles
   link(href = '/statique/assets/styles/homologation/synthese.css', rel = 'stylesheet')
 
 block retour
-  a(href = '/espacePersonnel') ‹&nbsp;&nbsp;Mon espace personnel
+  nav.fil-ariane
+    a.avec-chevron(href = '/espacePersonnel') Espace personnel
+    div: +texteTronque({ texte: service.nomService() })
 
 block zone-principale
   .details-service
