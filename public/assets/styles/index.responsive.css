@@ -1,0 +1,49 @@
+@media screen and (max-width: 1247px) {
+  body {
+    min-width: unset;
+  }
+
+  .introduction {
+    width: unset;
+    max-width: 90%;
+  }
+
+  .image-intro-mss {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1247px) and (min-width: 768px) {
+  .introduction {
+    margin: 8em auto 12em;
+  }
+
+  .presentation p br {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .introduction {
+    margin: 4em auto 7em;
+  }
+
+  .introduction h1 {
+    font-size: 2em;
+  }
+
+  .introduction :is(h2, .etiquette, p, nav) {
+    font-size: 1em;
+  }
+
+  .introduction h3 {
+    font-size: 1.15em;
+  }
+
+  .introduction nav {
+    flex-direction: column;
+    row-gap: 1em;
+
+    text-align: center;
+  }
+}
