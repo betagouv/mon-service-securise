@@ -3,10 +3,6 @@
     min-width: unset;
   }
 
-  .marges-fixes {
-    width: 100vw;
-  }
-
   .introduction {
     width: unset;
     max-width: 90%;
@@ -28,18 +24,6 @@
 }
 
 @media screen and (max-width: 767px) {
-  header, header nav {
-    flex-wrap: wrap;
-  }
-
-  header > :not(nav) {
-    font-size: 0.7em;
-  }
-
-  header nav {
-    flex-direction: column;
-  }
-
   .introduction {
     margin: 4em auto 7em;
   }
