@@ -28,19 +28,14 @@ const envoieMessageFinalisationInscription = (
 
 const envoieMessageInvitationContribution = (
   destinataire, prenomNomEmetteur, nomService, idHomologation
-) => envoieEmail(
+) => envoieEmailAvecTemplate(
   destinataire,
-  'MonServiceSécurisé – Invitation à contribuer',
-  `Bonjour, <br/><br/>
-
-${prenomNomEmetteur} vous invite à rejoindre le dossier d'homologation de sécurité « ${nomService} ». <br/>
-Pour découvrir et commencer à contribuer au projet : <br/>
-- allez dans votre espace personnel <br/>
-- ou cliquez sur ce lien : ${process.env.URL_BASE_MSS}/homologation/${idHomologation} <br/><br/>
-
-Nous vous remercions pour l'intérêt que vous portez à notre service. <br/><br/>
-
-L'équipe MonServiceSécurisé`
+  parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
+  {
+    PRENOM: prenomNomEmetteur,
+    NOM_SERVICE: nomService,
+    URL: `${process.env.URL_BASE_MSS}/homologation/${idHomologation}`,
+  }
 );
 
 const envoieMessageInvitationInscription = (
