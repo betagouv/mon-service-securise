@@ -40,18 +40,14 @@ const envoieMessageInvitationContribution = (
 
 const envoieMessageInvitationInscription = (
   destinataire, prenomNomEmetteur, nomService, idResetMotDePasse,
-) => envoieEmail(
+) => envoieEmailAvecTemplate(
   destinataire,
-  'MonServiceSécurisé – Invitation à contribuer',
-  `Bonjour, <br/><br/>
-
-${prenomNomEmetteur} vous invite à rejoindre le dossier d'homologation de sécurité « ${nomService} ». <br/>
-Votre compte personnel a été créé pour découvrir et commencer à contribuer au projet. <br/>
-Cliquez sur ce lien pour finaliser votre inscription : ${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse} <br/><br/>
-
-Nous vous remercions pour l'intérêt que vous portez à notre service. <br/><br/>
-
-L'équipe MonServiceSécurisé`
+  parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION, 10),
+  {
+    PRENOM: prenomNomEmetteur,
+    NOM_SERVICE: nomService,
+    URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
+  }
 );
 
 const envoieMessageReinitialisationMotDePasse = (destinataire, idResetMotDePasse) => envoieEmail(
