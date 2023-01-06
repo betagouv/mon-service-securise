@@ -1,0 +1,52 @@
+@media screen and (max-width: 1247px) {
+  footer .marges-fixes {
+    width: 100vw;
+    max-width: 90%;
+  }
+  
+  footer .infos-mss {
+    flex-grow: 2;
+  }
+
+  footer .infos-mss .liens {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  footer nav ul {
+    flex-wrap: wrap;
+    row-gap: 1em;
+  }
+}
+
+@media screen and (max-width: 1247px) and (min-width: 768px) {
+  footer .infos-mss .liens {
+    width: fit-content;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  footer .bandeau-mss {
+    flex-direction: column;
+  }
+
+  footer .bandeau-mss .bloc-france {
+    align-self: flex-start;
+  }
+
+  footer .bandeau-mss .bloc-france .marianne {
+    height: 0.7em;
+  }
+
+  footer .infos-mss .liens {
+    padding-left: 0.7em;
+  }
+
+  footer .infos-mss .liens a {
+    padding: 0.15em 0;
+  }
+
+  footer .infos-mss .liens :nth-child(2n) {
+    padding-left: 0.2em;
+  }
+}
