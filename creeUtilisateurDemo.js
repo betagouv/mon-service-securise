@@ -11,7 +11,7 @@ const descriptionService = new DescriptionService({
   provenanceService: 'developpement',
   risqueJuridiqueFinancierReputationnel: false,
   statutDeploiement: 'enLigne',
-  typeService: 'siteInternet',
+  typeService: ['siteInternet'],
 }, referentiel);
 
 const creeDonnees = (depotDonnees) => depotDonnees
