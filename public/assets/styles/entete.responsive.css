@@ -1,0 +1,121 @@
+@media screen and (max-width: 1247px) {
+  header.marges-fixes {
+    width: 100vw;
+    max-width: 90%;
+    column-gap: unset;
+  }
+
+  header nav:not(.visible) {
+    display: none;
+  }
+
+  header .sandwich {
+    background-image: url('../images/icone_sandwich.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 1.5em;
+    height: 1.5em;
+    cursor: pointer;
+  }
+
+  header nav.visible {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    row-gap: 1em;
+  }
+
+  header nav.visible .bouton-fermer {
+    display: block;
+    align-self: flex-end;
+    margin: 1em 5% 1em 0;
+    width: fit-content;
+    border: 0;
+    color: var(--systeme-design-etat-bleu);
+    cursor: pointer;
+  }
+
+  header nav.visible .bouton-fermer::after {
+    content: '';
+    display: inline-block;
+    width: 1.1em;
+    height: 1.2em;
+    margin-left: 0.3em;
+  
+    background-color: var(--systeme-design-etat-bleu);
+    -webkit-mask: url(../images/icone_fermer.svg) no-repeat center;
+    mask: url(../images/icone_fermer.svg) no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+
+    transform: translateY(0.3em);
+  }
+
+  header nav.visible :is(a, .nom-utilisateur-courant) {
+    padding: 0.3em 0 0.6em;
+    border-bottom: 1px var(--liseres) solid;
+  }
+
+  header nav.visible > :is(a, .utilisateur-courant) {
+    width: 90%;
+  }
+
+  header nav.visible .utilisateur-courant {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  
+  header nav.visible .utilisateur-courant .connexion {
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+    width: 100%;
+    margin: 1em 0;
+  }
+
+  header nav.visible .utilisateur-courant .inscription {
+    width: 100%;
+  }
+
+  header nav.visible .nom-utilisateur-courant {
+    align-self: flex-start;
+    width: 100%;
+  }
+
+  header nav.visible .nom-utilisateur-courant + .menu {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header nav.visible .nom-utilisateur-courant + .menu a {
+    font-size: 1em;
+    line-height: 2em;
+    border: 0;
+  }
+}
+
+@media screen and (max-width: 1247px) and (min-width: 768px) {
+  header nav.visible .bouton-fermer {
+    margin-top: 3em;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  header {
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  header :is(.logo-anssi, .logo-mss) {
+    display: none;
+  }
+}
