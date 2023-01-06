@@ -60,24 +60,15 @@ const envoieMessageReinitialisationMotDePasse = (
   }
 );
 
-const envoieNotificationTentativeReinscription = (destinataire) => envoieEmail(
+const envoieNotificationTentativeReinscription = (
+  destinataire
+) => envoieEmailAvecTemplate(
   destinataire,
-  'MonServiceSécurisé - Tentative de réinscription',
-  `Bonjour, <br/><br/>
-
-Lors de la création de votre compte utilisateur sur MonServiceSécurisé, l'e-mail que vous avez renseigné est déjà associé à un compte existant. <br/><br/>
-
-Si vous souhaitez en créer un nouveau, cliquez sur ce lien : <br/>
-${process.env.URL_BASE_MSS}/inscription <br/><br/>
-
-Si vous souhaitez réinitialiser votre mot de passe, cliquez sur ce lien : <br/>
-${process.env.URL_BASE_MSS}/reinitialisationMotDePasse <br/><br/>
-
-Si vous n'êtes pas l'origine de cette demande, votre compte est sécurisé et vous pouvez ignorer cet e-mail. <br/><br/>
-
-N'hésitez pas à nous contacter pour toutes précisions. <br/><br/>
-
-L'équipe MonServiceSécurisé`
+  parseInt(process.env.SENDINBLUE_TEMPLATE_TENTATIVE_REINSCRIPTION, 10),
+  {
+    URL_INSCRIPTION: `${process.env.URL_BASE_MSS}/inscription`,
+    URL_REINITIALISATION_MOT_DE_PASSE: `${process.env.URL_BASE_MSS}/reinitialisationMotDePasse`,
+  }
 );
 
 module.exports = {
