@@ -9,6 +9,7 @@ const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
 const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
+const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
 const creeDepot = (config = {}) => {
@@ -223,7 +224,11 @@ const creeDepot = (config = {}) => {
     .then(() => Promise.all([
       adaptateurPersistance.supprimeHomologation(idHomologation),
       adaptateurPersistance.supprimeService(idHomologation),
-    ]));
+    ]))
+    .then(() => adaptateurJournalMSS.consigneEvenement(
+      new EvenementServiceSupprime({ idService: idHomologation })
+        .toJSON()
+    ));
 
   const supprimeHomologationsCreeesPar = (idUtilisateur, idsHomologationsAConserver = []) => (
     avecPMapPourChaqueElement(
