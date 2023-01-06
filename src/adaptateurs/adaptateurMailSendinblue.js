@@ -50,19 +50,14 @@ const envoieMessageInvitationInscription = (
   }
 );
 
-const envoieMessageReinitialisationMotDePasse = (destinataire, idResetMotDePasse) => envoieEmail(
+const envoieMessageReinitialisationMotDePasse = (
+  destinataire, idResetMotDePasse
+) => envoieEmailAvecTemplate(
   destinataire,
-  'MonServiceSécurisé – Changement du mot de passe',
-  `Bonjour, <br/><br/>
-
-Suite à votre demande de réinitialisation du mot de passe, cliquez sur ce lien pour en définir un nouveau : <br/>
-${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse} <br/><br/>
-
-Si vous n'êtes pas l'origine de cette demande, votre compte est sécurisé et vous pouvez ignorer cet e-mail. <br/><br/>
-
-N'hésitez pas à nous contacter pour toutes précisions. <br/><br/>
-
-L'équipe MonServiceSécurisé`
+  parseInt(process.env.SENDINBLUE_TEMPLATE_REINITIALISATION_MOT_DE_PASSE, 10),
+  {
+    URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
+  }
 );
 
 const envoieNotificationTentativeReinscription = (destinataire) => envoieEmail(
