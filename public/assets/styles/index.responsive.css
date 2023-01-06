@@ -28,7 +28,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  header, header nav, footer .bandeau-mss, footer .infos-mss .liens, footer nav ul {
+  header, header nav {
     flex-wrap: wrap;
   }
 
