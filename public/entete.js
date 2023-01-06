@@ -1,3 +1,5 @@
+import brancheMenuSandwich from './modules/interactions/brancheMenuSandwich.js';
+
 $(() => {
   const creeBoutonConnexion = () => $(`
 <a href="/inscription" class="inscription">Inscription</a>
@@ -34,6 +36,8 @@ $(() => {
     const $bouton = creeBoutonConnexion();
     $conteneur.append($bouton);
   };
+
+  brancheMenuSandwich();
 
   axios.get('/api/utilisateurCourant')
     .then((reponse) => ajouteUtilisateurCourantDans('.utilisateur-courant', reponse.data.utilisateur))

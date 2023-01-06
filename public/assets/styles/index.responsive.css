@@ -3,6 +3,10 @@
     min-width: unset;
   }
 
+  .sans-ascenseur {
+    overflow: hidden;
+  }
+
   .introduction {
     width: unset;
     max-width: 90%;
