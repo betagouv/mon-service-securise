@@ -29,7 +29,6 @@ module.exports = {
       exports: 'always-multiline',
       functions: 'ignore',
     }],
-    'default-param-last': 'off',
     'function-call-argument-newline': 'off',
     'function-paren-newline': 'off',
     'mocha/no-exclusive-tests': 'error',

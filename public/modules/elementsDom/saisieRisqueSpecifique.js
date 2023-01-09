@@ -54,7 +54,7 @@ const $textareaCommentaire = (index, commentaire) => (
   `)
 );
 
-const $saisieRisqueSpecifique = (index, donnees = {}, niveaux, couleurs) => {
+const $saisieRisqueSpecifique = (index, niveaux, couleurs, donnees = {}) => {
   const { description = '', niveauGravite = '', commentaire = '' } = donnees;
 
   const $conteneur = $('<div class="saisie-risque-specifique"><div class="synthese"></div></div>');

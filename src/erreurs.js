@@ -33,7 +33,7 @@ class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
-  constructor(message = '', idUtilisateur) {
+  constructor(message, idUtilisateur) {
     super(message);
     this.idUtilisateur = idUtilisateur;
   }

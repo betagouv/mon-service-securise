@@ -39,8 +39,8 @@ $(() => {
     });
   };
 
-  const zoneSaisieRisqueSpecifique = (...params) => (
-    $saisieRisqueSpecifique(...params, NIVEAUX_GRAVITE, COULEURS)
+  const zoneSaisieRisqueSpecifique = (index, donnees) => (
+    $saisieRisqueSpecifique(index, NIVEAUX_GRAVITE, COULEURS, donnees)
   );
 
   const brancheAjoutRisqueSpecifique = (...params) => brancheAjoutItem(
