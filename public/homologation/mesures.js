@@ -98,8 +98,8 @@ ${statuts}
     ...params,
     zoneSaisieMesureSpecifique,
     () => (indexMaxMesuresSpecifiques += 1),
-    { ordreInverse: true },
     brancheConteneur,
+    { ordreInverse: true },
   );
 
   const peupleMesuresSpecifiques = (...params) => (

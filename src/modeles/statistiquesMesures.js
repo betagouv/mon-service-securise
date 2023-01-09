@@ -1,6 +1,5 @@
 const Mesure = require('./mesure');
 
-const Referentiel = require('../referentiel');
 const { ErreurCategorieInconnue, ErreurDonneesStatistiques } = require('../erreurs');
 
 const categories = Object.keys;
@@ -47,7 +46,7 @@ class StatistiquesMesures {
       .reduce((acc, categorie) => ({ ...acc, [categorie]: statsInitiales() }), {});
   }
 
-  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide(), mesuresSpecifiques) {
+  constructor(donnees, referentiel, mesuresSpecifiques) {
     valide(donnees, referentiel);
     this.donnees = donnees;
     this.referentiel = referentiel;

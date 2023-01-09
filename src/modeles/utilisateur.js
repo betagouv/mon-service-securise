@@ -8,7 +8,7 @@ const valide = (donnees) => {
 };
 
 class Utilisateur extends Base {
-  constructor(donnees = {}, adaptateurJWT) {
+  constructor(donnees = {}, { adaptateurJWT } = {}) {
     super({
       proprietesAtomiquesRequises: [
         'dateCreation',

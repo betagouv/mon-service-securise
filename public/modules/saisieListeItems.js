@@ -25,7 +25,7 @@ const afficheZoneSaisieItem = (
 
 const brancheAjoutItem = (
   selecteurAction, selecteurConteneur, cbZoneSaisie, cbIncrementeIndex,
-  options = { ordreInverse: false }, actionSurZoneSaisieApresAjout
+  actionSurZoneSaisieApresAjout, options = { ordreInverse: false },
 ) => {
   $(selecteurAction).on('click', (e) => {
     e.preventDefault();

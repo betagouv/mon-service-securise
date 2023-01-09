@@ -1,8 +1,9 @@
 const InformationsHomologation = require('./informationsHomologation');
 const NiveauGravite = require('./niveauGravite');
+const Referentiel = require('../referentiel');
 
 class Risque extends InformationsHomologation {
-  constructor(donneesRisque = {}, referentiel) {
+  constructor(donneesRisque = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
       proprietesAtomiquesRequises: ['niveauGravite'],
       proprietesAtomiquesFacultatives: ['commentaire'],

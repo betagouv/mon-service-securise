@@ -19,7 +19,7 @@ const creeDepot = (config = {}) => {
   } = config;
 
   const utilisateur = (identifiant) => adaptateurPersistance.utilisateur(identifiant)
-    .then((u) => (u ? new Utilisateur(u, adaptateurJWT) : undefined));
+    .then((u) => (u ? new Utilisateur(u, { adaptateurJWT }) : undefined));
 
   const nouvelUtilisateur = (donneesUtilisateur) => new Promise((resolve, reject) => {
     const { email } = donneesUtilisateur;
@@ -46,7 +46,7 @@ const creeDepot = (config = {}) => {
   });
 
   const utilisateurAFinaliser = (idReset) => adaptateurPersistance.utilisateurAvecIdReset(idReset)
-    .then((u) => (u ? new Utilisateur(u, adaptateurJWT) : undefined));
+    .then((u) => (u ? new Utilisateur(u, { adaptateurJWT }) : undefined));
 
   const utilisateurAuthentifie = (login, motDePasse) => (
     adaptateurPersistance.utilisateurAvecEmail(login)
@@ -58,7 +58,7 @@ const creeDepot = (config = {}) => {
 
         return adaptateurChiffrement.compare(motDePasse, motDePasseStocke)
           .then((authentificationReussie) => (authentificationReussie
-            ? new Utilisateur(u, adaptateurJWT)
+            ? new Utilisateur(u, { adaptateurJWT })
             : echecAuthentification
           ));
       })
