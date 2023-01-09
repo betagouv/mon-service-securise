@@ -54,7 +54,7 @@ const creeDepot = (config = {}) => {
         const motDePasseStocke = u && u.motDePasse;
         const echecAuthentification = undefined;
 
-        if (!motDePasseStocke) return new Promise((resolve) => resolve(echecAuthentification));
+        if (!motDePasseStocke) return Promise.resolve(echecAuthentification);
 
         return adaptateurChiffrement.compare(motDePasse, motDePasseStocke)
           .then((authentificationReussie) => (authentificationReussie
