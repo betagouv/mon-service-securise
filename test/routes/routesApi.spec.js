@@ -177,8 +177,10 @@ describe('Le serveur MSS des routes /api/*', () => {
       donneesRequete.prenom = '';
 
       testeur.verifieRequeteGenereErreurHTTP(
-        422, "La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété \"prenom\" est requise",
-        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
+        422,
+        "La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété \"prenom\" est requise",
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
+        done
       );
     });
 
@@ -230,8 +232,10 @@ describe('Le serveur MSS des routes /api/*', () => {
 
       it('retourne une erreur HTTP 424', (done) => {
         testeur.verifieRequeteGenereErreurHTTP(
-          424, "L'envoi de l'email de finalisation d'inscription a échoué",
-          { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
+          424,
+          "L'envoi de l'email de finalisation d'inscription a échoué",
+          { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
+          done
         );
       });
 
@@ -279,8 +283,10 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.depotDonnees().nouvelUtilisateur = () => Promise.reject(new ErreurEmailManquant('oups'));
 
       testeur.verifieRequeteGenereErreurHTTP(
-        422, 'oups',
-        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
+        422,
+        'oups',
+        { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
+        done
       );
     });
   });
@@ -411,8 +417,10 @@ describe('Le serveur MSS des routes /api/*', () => {
       donneesRequete.prenom = '';
 
       testeur.verifieRequeteGenereErreurHTTP(
-        422, "La mise à jour de l'utilisateur a échoué car les paramètres sont invalides. La propriété \"prenom\" est requise",
-        { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete }, done
+        422,
+        "La mise à jour de l'utilisateur a échoué car les paramètres sont invalides. La propriété \"prenom\" est requise",
+        { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
+        done
       );
     });
 
@@ -1037,7 +1045,8 @@ describe('Le serveur MSS des routes /api/*', () => {
       };
 
       testeur.verifieRequeteGenereErreurHTTP(
-        422, 'oups',
+        422,
+        'oups',
         { method: 'post', url: 'http://localhost:1234/api/autorisation', data: {} },
         done
       );
