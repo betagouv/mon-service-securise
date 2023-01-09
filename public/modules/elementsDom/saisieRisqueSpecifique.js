@@ -71,4 +71,4 @@ const $saisieRisqueSpecifique = (index, niveaux, couleurs, donnees = {}) => {
   return $conteneur;
 };
 
-export { $saisieRisqueSpecifique as default };
+export default $saisieRisqueSpecifique;
