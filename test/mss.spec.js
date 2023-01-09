@@ -100,8 +100,10 @@ describe('Le serveur MSS', () => {
       testeur.depotDonnees().utilisateurAFinaliser = () => Promise.resolve(undefined);
 
       testeur.verifieRequeteGenereErreurHTTP(
-        404, "Identifiant d'initialisation de mot de passe \"999\" inconnu",
-        'http://localhost:1234/initialisationMotDePasse/999', done
+        404,
+        "Identifiant d'initialisation de mot de passe \"999\" inconnu",
+        'http://localhost:1234/initialisationMotDePasse/999',
+        done
       );
     });
   });

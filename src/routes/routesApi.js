@@ -102,7 +102,8 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   });
 
   routes.post('/utilisateur',
-    middleware.aseptise(...Utilisateur.nomsProprietesBase()), (requete, reponse, suite) => {
+    middleware.aseptise(...Utilisateur.nomsProprietesBase()),
+    (requete, reponse, suite) => {
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
       donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       donnees.email = requete.body.email?.toLowerCase();

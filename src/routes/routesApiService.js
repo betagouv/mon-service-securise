@@ -24,8 +24,7 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
     { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
     { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
     { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
-  ]),
-  (requete, reponse, suite) => {
+  ]), (requete, reponse, suite) => {
     Promise.resolve()
       .then(() => new DescriptionService(requete.body, referentiel))
       .then((description) => depotDonnees.nouvelleHomologation(
@@ -43,8 +42,7 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
     { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
     { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
     { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
-  ]),
-  (requete, reponse, suite) => {
+  ]), (requete, reponse, suite) => {
     Promise.resolve()
       .then(() => new DescriptionService(requete.body, referentiel))
       .then((descriptionService) => depotDonnees.ajouteDescriptionServiceAHomologation(
@@ -67,8 +65,7 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
     'mesuresSpecifiques.*.categorie',
     'mesuresSpecifiques.*.statut',
     'mesuresSpecifiques.*.modalites',
-  ),
-  (requete, reponse, suite) => {
+  ), (requete, reponse, suite) => {
     const { mesuresSpecifiques = [], mesuresGenerales = {} } = requete.body;
     const idService = requete.homologation.id;
 
@@ -113,8 +110,7 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
     'risquesSpecifiques.*.description',
     'risquesSpecifiques.*.niveauGravite',
     'risquesSpecifiques.*.commentaire',
-  ),
-  (requete, reponse, suite) => {
+  ), (requete, reponse, suite) => {
     const { risquesSpecifiques = [], ...params } = requete.body;
     const prefixeAttributRisque = /^(commentaire|niveauGravite)-/;
     const idService = requete.homologation.id;
