@@ -1,6 +1,8 @@
 doctype html
 meta(charset='utf-8')
 link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
-script(src = '/statique/scripts/matomo.js')
 
 block page
+
+if process.env.ID_MATOMO
+    script(src='/statique/scripts/matomo.js', id='script-matomo' data-id-matomo=process.env.ID_MATOMO)
