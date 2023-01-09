@@ -5,7 +5,7 @@
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   _paq.push(['setTrackerUrl', '/bibliotheques/evenementMatomo']);
-  _paq.push(['setSiteId', '273']);
+  _paq.push(['setSiteId', $('#script-matomo').data('id-matomo')]);
 
   const g = document.createElement('script');
   g.async = true;
