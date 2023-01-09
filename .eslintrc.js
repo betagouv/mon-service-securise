@@ -29,8 +29,13 @@ module.exports = {
       exports: 'always-multiline',
       functions: 'ignore',
     }],
+    'default-param-last': 'off',
+    'function-call-argument-newline': 'off',
+    'function-paren-newline': 'off',
     'mocha/no-exclusive-tests': 'error',
     'no-param-reassign': ['error', { props: false }],
+    'no-promise-executor-return': 'off',
+    'no-restricted-exports': 'off',
     'no-return-assign': ['error', 'except-parens'],
     'no-underscore-dangle': ['error', { allow: ['_paq'] }],
     'no-unused-vars': ['error', {
