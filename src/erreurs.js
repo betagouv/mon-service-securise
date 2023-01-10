@@ -15,7 +15,6 @@ class ErreurDossierNonFinalisable extends ErreurModele {}
 class ErreurDossiersInvalides extends ErreurModele {}
 class ErreurDureeValiditeInvalide extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
-class ErreurCGUNonAcceptees extends Error {}
 class ErreurHomologationInexistante extends ErreurModele {}
 class ErreurIdentifiantActionSaisieInvalide extends ErreurModele {}
 class ErreurIdentifiantActionSaisieManquant extends ErreurModele {}
@@ -56,7 +55,6 @@ module.exports = {
   ErreurDossiersInvalides,
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
-  ErreurCGUNonAcceptees,
   ErreurHomologationInexistante,
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,

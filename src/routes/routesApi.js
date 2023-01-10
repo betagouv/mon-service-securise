@@ -5,7 +5,6 @@ const {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
-  ErreurCGUNonAcceptees,
   ErreurModele,
   ErreurUtilisateurExistant,
 } = require('../erreurs');
@@ -182,12 +181,10 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   routes.put('/utilisateur',
     middleware.verificationJWT,
     middleware.aseptise([...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email')]),
+    metsAJourMotDePasse,
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
-      const cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
-      const { motDePasse } = requete.body;
-      const motDePasseValide = (typeof motDePasse === 'string' && motDePasse);
 
       const { donneesInvalides, messageErreur } = messageErreurDonneesUtilisateur(donnees, true);
       if (donneesInvalides) {
@@ -197,34 +194,9 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
         return;
       }
 
-      depotDonnees.utilisateur(idUtilisateur)
-        .then((utilisateur) => {
-          if (utilisateur.accepteCGU() || cguAcceptees) {
-            return utilisateur;
-          }
-          throw new ErreurCGUNonAcceptees();
-        })
-        .then((utilisateur) => {
-          if (motDePasseValide) {
-            return depotDonnees.metsAJourMotDePasse(utilisateur.id, motDePasse);
-          }
-          return utilisateur;
-        })
-        .then((utilisateur) => depotDonnees.metsAJourUtilisateur(utilisateur.id, donnees))
-        .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
-        .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
-        .then((utilisateur) => {
-          const token = utilisateur.genereToken();
-          requete.session.token = token;
-          reponse.json({ idUtilisateur: utilisateur.id });
-        })
-        .catch((erreur) => {
-          if (erreur instanceof ErreurCGUNonAcceptees) {
-            reponse.status(422).send('CGU non acceptées');
-          } else {
-            suite(erreur);
-          }
-        });
+      depotDonnees.metsAJourUtilisateur(idUtilisateur, donnees)
+        .then(() => reponse.json({ idUtilisateur }))
+        .catch(suite);
     });
 
   routes.get('/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {
