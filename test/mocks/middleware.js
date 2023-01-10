@@ -29,6 +29,7 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
 };
 
 let authentificationBasiqueMenee = false;
+let cguAcceptees;
 let expirationCookieRepoussee = false;
 let headersAvecNoncePositionnes = false;
 let headersPositionnes = false;
@@ -41,8 +42,9 @@ let verificationJWTMenee = false;
 let verificationCGUMenee = false;
 
 const middlewareFantaisie = {
-  reinitialise: (idUtilisateur) => {
+  reinitialise: (idUtilisateur, acceptationCGU = true) => {
     authentificationBasiqueMenee = false;
+    cguAcceptees = acceptationCGU;
     expirationCookieRepoussee = false;
     headersAvecNoncePositionnes = false;
     headersPositionnes = false;
@@ -98,6 +100,7 @@ const middlewareFantaisie = {
 
   trouveHomologation: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
+    requete.cguAcceptees = cguAcceptees;
     requete.homologation = new Homologation({
       id: '456',
       descriptionService: { nomService: 'un service' },
@@ -108,12 +111,14 @@ const middlewareFantaisie = {
 
   verificationJWT: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
+    requete.cguAcceptees = cguAcceptees;
     verificationJWTMenee = true;
     suite();
   },
 
   verificationAcceptationCGU: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
+    requete.cguAcceptees = cguAcceptees;
     verificationCGUMenee = true;
     suite();
   },
