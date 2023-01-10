@@ -147,7 +147,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .catch(suite);
   });
 
-  routes.put('/motDePasse', middleware.verificationJWT, (requete, reponse, suite) => {
+  const metsAJourMotDePasse = (requete, reponse, suite) => {
     const idUtilisateur = requete.idUtilisateurCourant;
     const cguDejaAcceptees = requete.cguAcceptees;
     const cguEnCoursDAcceptation = valeurBooleenne(requete.body.cguAcceptees);
@@ -155,7 +155,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
     const motDePasseInvalide = !(typeof motDePasse === 'string' && motDePasse);
 
     if (motDePasseInvalide) {
-      reponse.status(204).end();
+      suite();
       return;
     }
 
@@ -169,9 +169,14 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
       .then((utilisateur) => {
         requete.session.token = utilisateur.genereToken();
-        reponse.json({ idUtilisateur });
+        suite();
       })
       .catch(suite);
+  };
+
+  routes.put('/motDePasse', middleware.verificationJWT, metsAJourMotDePasse, (requete, reponse) => {
+    const idUtilisateur = requete.idUtilisateurCourant;
+    reponse.json({ idUtilisateur });
   });
 
   routes.put('/utilisateur',

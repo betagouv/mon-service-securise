@@ -414,7 +414,6 @@ describe('Le serveur MSS des routes /api/*', () => {
       };
 
       axios.put('http://localhost:1234/api/motDePasse', { motDePasse: '' })
-        .then((reponse) => expect(reponse.status).to.equal(204))
         .then(() => expect(motDePasseMisAJour).to.be(false))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
