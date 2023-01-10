@@ -7,7 +7,9 @@ const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement')
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
 const adaptateurEquations = require('./src/adaptateurs/adaptateurEquations');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
-const adaptateurMail = require('./src/adaptateurs/adaptateurMailSendinblue');
+const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPI()
+  ? require('./src/adaptateurs/adaptateurMailSendinblue')
+  : require('./src/adaptateurs/adaptateurMailSurConsole');
 const adaptateurPdfLatex = require('./src/adaptateurs/adaptateurPdfLatex');
 
 const port = process.env.PORT || 3000;

@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const envoieEmailAvecTemplate = (
+const envoieEmail = (
   destinataire, idTemplate, params
 ) => (axios.post('https://api.sendinblue.com/v3/smtp/email',
   {
@@ -17,7 +17,7 @@ const envoieEmailAvecTemplate = (
 
 const envoieMessageFinalisationInscription = (
   destinataire, idResetMotDePasse, prenom
-) => envoieEmailAvecTemplate(
+) => envoieEmail(
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_FINALISATION_INSCRIPTION, 10),
   {
@@ -28,7 +28,7 @@ const envoieMessageFinalisationInscription = (
 
 const envoieMessageInvitationContribution = (
   destinataire, prenomNomEmetteur, nomService, idHomologation
-) => envoieEmailAvecTemplate(
+) => envoieEmail(
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
   {
@@ -40,7 +40,7 @@ const envoieMessageInvitationContribution = (
 
 const envoieMessageInvitationInscription = (
   destinataire, prenomNomEmetteur, nomService, idResetMotDePasse,
-) => envoieEmailAvecTemplate(
+) => envoieEmail(
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION, 10),
   {
@@ -52,7 +52,7 @@ const envoieMessageInvitationInscription = (
 
 const envoieMessageReinitialisationMotDePasse = (
   destinataire, idResetMotDePasse
-) => envoieEmailAvecTemplate(
+) => envoieEmail(
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_REINITIALISATION_MOT_DE_PASSE, 10),
   {
@@ -62,7 +62,7 @@ const envoieMessageReinitialisationMotDePasse = (
 
 const envoieNotificationTentativeReinscription = (
   destinataire
-) => envoieEmailAvecTemplate(
+) => envoieEmail(
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_TENTATIVE_REINSCRIPTION, 10),
   {
