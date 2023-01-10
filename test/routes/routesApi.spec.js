@@ -360,6 +360,162 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
   });
 
+  describe('quand requête PUT sur `/api/motDePasse`', () => {
+    let utilisateur;
+
+    beforeEach(() => {
+      utilisateur = { id: '123', genereToken: () => 'un token' };
+
+      const depotDonnees = testeur.depotDonnees();
+      depotDonnees.metsAJourMotDePasse = () => Promise.resolve(utilisateur);
+      depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () => Promise.resolve(utilisateur);
+      depotDonnees.valideAcceptationCGUPourUtilisateur = () => Promise.resolve(utilisateur);
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeJWT(
+        { method: 'put', url: 'http://localhost:1234/api/motDePasse' },
+        done,
+      );
+    });
+
+    it('met à jour le mot de passe', (done) => {
+      let motDePasseMisAJour = false;
+
+      expect(utilisateur.id).to.equal('123');
+      testeur.middleware().reinitialise(utilisateur.id);
+      testeur.depotDonnees().metsAJourMotDePasse = (idUtilisateur, motDePasse) => {
+        try {
+          expect(idUtilisateur).to.equal('123');
+          expect(motDePasse).to.equal('mdp_12345');
+          motDePasseMisAJour = true;
+          return Promise.resolve(utilisateur);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345' })
+        .then((reponse) => {
+          expect(motDePasseMisAJour).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idUtilisateur: '123' });
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("ne fait rien si aucun nouveau mot de passe n'est renseigné", (done) => {
+      let motDePasseMisAJour = false;
+
+      testeur.depotDonnees().metsAJourMotDePasse = () => {
+        motDePasseMisAJour = true;
+        return Promise.resolve();
+      };
+
+      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: '' })
+        .then((reponse) => expect(reponse.status).to.equal(204))
+        .then(() => expect(motDePasseMisAJour).to.be(false))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it('pose un nouveau cookie', (done) => {
+      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345' })
+        .then((reponse) => testeur.verifieJetonDepose(reponse, done))
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("invalide l'identifiant de réinitialisation de mot de passe", (done) => {
+      let idResetSupprime = false;
+
+      expect(utilisateur.id).to.equal('123');
+      testeur.depotDonnees().supprimeIdResetMotDePassePourUtilisateur = (u) => {
+        try {
+          expect(u.id).to.equal('123');
+          idResetSupprime = true;
+          return Promise.resolve(u);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345' })
+        .then(() => expect(idResetSupprime).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    describe("si les CGU n'ont pas déjà été acceptées", () => {
+      beforeEach(() => {
+        const cguNonAcceptees = false;
+        testeur.middleware().reinitialise(utilisateur.id, cguNonAcceptees);
+      });
+
+      describe("et que l'utilisateur n'est pas en train de les accepter", () => {
+        it('renvoie une erreur HTTP 422', (done) => {
+          testeur.verifieRequeteGenereErreurHTTP(422, 'CGU non acceptées', {
+            method: 'put',
+            url: 'http://localhost:1234/api/motDePasse',
+            data: { motDePasse: 'mdp_12345' },
+          }, done);
+        });
+
+        it('ne met pas le mot de passe à jour', (done) => {
+          let motDePasseMisAJour = false;
+          testeur.depotDonnees().metsAJourMotDePasse = () => {
+            motDePasseMisAJour = true;
+            return Promise.resolve(utilisateur);
+          };
+
+          axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345' })
+            .then(() => expect(motDePasseMisAJour).to.be(false))
+            .then(() => done('La tentative de mise à jour aurait dû retourner une erreur HTTP'))
+            .catch(() => {
+              expect(motDePasseMisAJour).to.be(false);
+              done();
+            })
+            .catch((e) => done(e.response?.data || e));
+        });
+      });
+
+      describe("et que l'utilisateur est en train de les accepter", () => {
+        it("demande au dépôt d'enregistrer que les CGU sont acceptées", (done) => {
+          let acceptationCGUEnregistree = false;
+
+          expect(utilisateur.id).to.equal('123');
+          testeur.depotDonnees().valideAcceptationCGUPourUtilisateur = (u) => {
+            try {
+              expect(u.id).to.equal('123');
+              acceptationCGUEnregistree = true;
+              return Promise.resolve(u);
+            } catch (e) {
+              return Promise.reject(e);
+            }
+          };
+
+          axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345', cguAcceptees: 'true' })
+            .then(() => expect(acceptationCGUEnregistree).to.be(true))
+            .then(() => done())
+            .catch((e) => done(e.response?.data || e));
+        });
+
+        it('met à jour le mot de passe', (done) => {
+          let motDePasseMisAJour = false;
+          testeur.depotDonnees().metsAJourMotDePasse = () => {
+            motDePasseMisAJour = true;
+            return Promise.resolve(utilisateur);
+          };
+
+          axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345', cguAcceptees: 'true' })
+            .then(() => expect(motDePasseMisAJour).to.be(true))
+            .then(() => done())
+            .catch((e) => done(e.response?.data || e));
+        });
+      });
+    });
+  });
+
   describe('quand requête PUT sur `/api/utilisateur`', () => {
     let utilisateur;
     let donneesRequete;

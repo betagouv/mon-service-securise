@@ -147,6 +147,33 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .catch(suite);
   });
 
+  routes.put('/motDePasse', middleware.verificationJWT, (requete, reponse, suite) => {
+    const idUtilisateur = requete.idUtilisateurCourant;
+    const cguDejaAcceptees = requete.cguAcceptees;
+    const cguEnCoursDAcceptation = valeurBooleenne(requete.body.cguAcceptees);
+    const { motDePasse } = requete.body;
+    const motDePasseInvalide = !(typeof motDePasse === 'string' && motDePasse);
+
+    if (motDePasseInvalide) {
+      reponse.status(204).end();
+      return;
+    }
+
+    if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
+      reponse.status(422).send('CGU non acceptées');
+      return;
+    }
+
+    depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
+      .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
+      .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
+      .then((utilisateur) => {
+        requete.session.token = utilisateur.genereToken();
+        reponse.json({ idUtilisateur });
+      })
+      .catch(suite);
+  });
+
   routes.put('/utilisateur',
     middleware.verificationJWT,
     middleware.aseptise([...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email')]),
