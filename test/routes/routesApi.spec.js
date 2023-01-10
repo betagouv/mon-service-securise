@@ -726,7 +726,10 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     describe("lorsque utilisateur n'a pas encore accepté les CGU", () => {
-      beforeEach(() => (utilisateur.accepteCGU = () => false));
+      beforeEach(() => {
+        const cguNonAcceptees = false;
+        testeur.middleware().reinitialise(utilisateur.id, cguNonAcceptees);
+      });
 
       it('met à jour le mot de passe si case CGU cochée dans formulaire', (done) => {
         let motDePasseMisAJour = false;
