@@ -185,38 +185,41 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
 
       const { donneesInvalides, messageErreur } = messageErreurDonneesUtilisateur(donnees, true);
       if (donneesInvalides) {
-        reponse.status(422).send(`La mise à jour de l'utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`);
-      } else {
-        const motDePasseValide = (valeur) => (typeof valeur === 'string' && valeur);
-        depotDonnees.utilisateur(idUtilisateur)
-          .then((utilisateur) => {
-            if (utilisateur.accepteCGU() || cguAcceptees) {
-              return utilisateur;
-            }
-            throw new ErreurCGUNonAcceptees();
-          })
-          .then((utilisateur) => {
-            if (motDePasseValide(motDePasse)) {
-              return depotDonnees.metsAJourMotDePasse(utilisateur.id, motDePasse);
-            }
-            return utilisateur;
-          })
-          .then((utilisateur) => depotDonnees.metsAJourUtilisateur(utilisateur.id, donnees))
-          .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
-          .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
-          .then((utilisateur) => {
-            const token = utilisateur.genereToken();
-            requete.session.token = token;
-            reponse.json({ idUtilisateur: utilisateur.id });
-          })
-          .catch((erreur) => {
-            if (erreur instanceof ErreurCGUNonAcceptees) {
-              reponse.status(422).send('CGU non acceptées');
-            } else {
-              suite(erreur);
-            }
-          });
+        reponse.status(422).send(
+          `La mise à jour de l'utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`
+        );
+        return;
       }
+
+      const motDePasseValide = (valeur) => (typeof valeur === 'string' && valeur);
+      depotDonnees.utilisateur(idUtilisateur)
+        .then((utilisateur) => {
+          if (utilisateur.accepteCGU() || cguAcceptees) {
+            return utilisateur;
+          }
+          throw new ErreurCGUNonAcceptees();
+        })
+        .then((utilisateur) => {
+          if (motDePasseValide(motDePasse)) {
+            return depotDonnees.metsAJourMotDePasse(utilisateur.id, motDePasse);
+          }
+          return utilisateur;
+        })
+        .then((utilisateur) => depotDonnees.metsAJourUtilisateur(utilisateur.id, donnees))
+        .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
+        .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
+        .then((utilisateur) => {
+          const token = utilisateur.genereToken();
+          requete.session.token = token;
+          reponse.json({ idUtilisateur: utilisateur.id });
+        })
+        .catch((erreur) => {
+          if (erreur instanceof ErreurCGUNonAcceptees) {
+            reponse.status(422).send('CGU non acceptées');
+          } else {
+            suite(erreur);
+          }
+        });
     });
 
   routes.get('/utilisateurCourant', middleware.verificationJWT, (requete, reponse) => {
