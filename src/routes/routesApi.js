@@ -182,6 +182,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
       const cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       const { motDePasse } = requete.body;
+      const motDePasseValide = (typeof motDePasse === 'string' && motDePasse);
 
       const { donneesInvalides, messageErreur } = messageErreurDonneesUtilisateur(donnees, true);
       if (donneesInvalides) {
@@ -191,7 +192,6 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
         return;
       }
 
-      const motDePasseValide = (valeur) => (typeof valeur === 'string' && valeur);
       depotDonnees.utilisateur(idUtilisateur)
         .then((utilisateur) => {
           if (utilisateur.accepteCGU() || cguAcceptees) {
@@ -200,7 +200,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
           throw new ErreurCGUNonAcceptees();
         })
         .then((utilisateur) => {
-          if (motDePasseValide(motDePasse)) {
+          if (motDePasseValide) {
             return depotDonnees.metsAJourMotDePasse(utilisateur.id, motDePasse);
           }
           return utilisateur;
