@@ -14,9 +14,12 @@ const dessineCamembert = ($canevas, {
 }) => {
   const mesuresARemplir = totalMesures - mesuresEnCours - mesuresNonFaites - mesuresFaites;
   const donnees = [mesuresEnCours, mesuresNonFaites, mesuresARemplir, mesuresFaites];
-  const encoreMesuresAFaire = mesuresEnCours > 0 || mesuresNonFaites > 0 || mesuresARemplir > 0;
-  const decalageMesuresFaites = encoreMesuresAFaire ? 20 : 0;
-  const decalageLabelMesuresFaites = encoreMesuresAFaire ? -20 : 15;
+
+  const toutesMesures = (nombreDuStatut) => totalMesures > 0 && totalMesures === nombreDuStatut;
+  const decalageLabel = (statutUnique) => (statutUnique ? 10 : -15);
+
+  const decalageMesuresFaites = toutesMesures(mesuresFaites) ? 0 : 20;
+  const decalageLabelMesuresFaites = toutesMesures(mesuresFaites) ? 15 : -20;
 
   /* eslint-disable no-new */
   new Chart(
@@ -61,7 +64,12 @@ const dessineCamembert = ($canevas, {
               color: [PALETTE.BLANC, PALETTE.BLEU_FONCE, PALETTE.BLEU_FONCE, PALETTE.BLANC],
               font: { weight: 'bold' },
               align: 'start',
-              offset: [-15, -15, -15, decalageLabelMesuresFaites],
+              offset: [
+                decalageLabel(toutesMesures(mesuresEnCours)),
+                decalageLabel(toutesMesures(mesuresNonFaites)),
+                decalageLabel(toutesMesures(mesuresARemplir)),
+                decalageLabelMesuresFaites,
+              ],
               formatter: (valeur) => (valeur || ''),
             },
           },
