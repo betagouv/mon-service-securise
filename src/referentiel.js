@@ -40,6 +40,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const etapesParcoursHomologation = () => donnees.etapesParcoursHomologation || [];
   const identifiantsEcheancesRenouvellement = () => Object.keys(echeancesRenouvellement());
   const fonctionnalites = () => donnees.fonctionnalites;
+  const descriptionFonctionnalite = (id) => fonctionnalites()[id]?.description;
+  const descriptionsFonctionnalites = (ids) => ids
+    ?.map((id) => descriptionFonctionnalite(id))
+    .filter((id) => id !== undefined);
   const localisationsDonnees = () => donnees.localisationsDonnees;
   const identifiantsLocalisationsDonnees = () => Object.keys(localisationsDonnees());
   const mesureIndispensable = (idMesure) => !!donnees.mesures[idMesure].indispensable;
@@ -191,8 +195,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionCategorie,
     descriptionEcheanceRenouvellement,
     descriptionExpiration,
+    descriptionFonctionnalite,
     descriptionRisque,
     descriptionStatutMesure,
+    descriptionsFonctionnalites,
     donneesCaracterePersonnel,
     echeancesRenouvellement,
     etapeExiste,
