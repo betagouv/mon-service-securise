@@ -1,45 +1,23 @@
 \documentclass[9pt, a4paper]{article}
-\usepackage[french]{babel}
-\usepackage[T1]{fontenc}
 
-\usepackage{array}
-\usepackage{enumitem}
-\usepackage[a4paper, margin=10mm, includehead, includefoot, headheight=15mm]{geometry}
-
-\usepackage[scaled]{helvet}
-\renewcommand*\familydefault{\sfdefault}
-
-\usepackage{xcolor,multicol,setspace}
-\definecolor{blanc}{rgb}{1, 1, 1}
-\definecolor{bleu}{rgb}{0.03, 0.25, 0.42}
-\definecolor{gris}{rgb}{0.37, 0.37, 0.37}
-\definecolor{lisere}{rgb}{0.71, 0.76, 0.82}
-\definecolor{rouge}{HTML}{e32630}
-\definecolor{orange}{HTML}{ff9940}
-\definecolor{jaune}{HTML}{fcdf41}
-\definecolor{vert}{HTML}{4cb963}
+\newcommand{\vuesTex}[1]{__=donnees.CHEMIN_BASE_ABSOLU__/src/vuesTex/#1}
+\input{\vuesTex{fragments/definitionDocument}}
+\input{\vuesTex{fragments/couleurs}}
+\input{\vuesTex{macros/boiteGrise}}
+\input{\vuesTex{macros/entetePiedPage}}
 
 \doublespacing
 
-\usepackage{tcolorbox}
-\tcbuselibrary{breakable}
-
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{
-    \large\textbf{RISQUES DE SÉCURITÉ}
-    \\\small\textcolor{gris}{Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.}
+\entete{RISQUES DE SÉCURITÉ}{
+  \textcolor{gris}{Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.}
 }
-\fancyfoot[L]{\small{\textcolor{bleu}{\textbf{MonServiceSécurisé -}} __= donnees.nomService __}}
-\fancyfoot[R]{\thepage}
+\piedpage{\small{\textcolor{bleu}{\textbf{MonServiceSécurisé -}} __= donnees.nomService __}}
 
 \renewcommand{\headrulewidth}{0pt}
 
 \begin{document}
   __~ donnees.niveauxGravite :niveau __
-    \begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt, top=20pt]
-      \vspace{-31pt}\hspace{-3pt}{\colorbox{blanc}{\textbf{__= niveau.description __}}}
+    \boitegrisenormale{__= niveau.description __}{
       \nopagebreak[4]\singlespacing\textcolor{gris}{__= niveau.descriptionLongue __}
       __? donnees.risquesParNiveauGravite[niveau.identifiant] && donnees.risquesParNiveauGravite[niveau.identifiant].length __
         \begin{itemize}[leftmargin=1.5em]
@@ -55,7 +33,7 @@
           __~__%
         \end{itemize}
       __?__
-    \end{tcolorbox}
+    }
     \vskip 5mm
   __~__
 \end{document}

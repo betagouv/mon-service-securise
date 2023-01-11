@@ -1,0 +1,15 @@
+% Dépendance à '../fragments/couleurs.tex
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+% Arguments : #1 taille marge basse, #2 taille du décalage du contenu, #3 titre, #4 contenu
+\newcommand{\boitegrise}[4]{
+  \begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=#1, top=20pt]
+    \vspace{-31pt}\hspace{-3pt}\raisebox{#2}{\colorbox{blanc}{\textbf{#3}}}
+    #4
+  \end{tcolorbox}
+}
+
+\newcommand{\boitegrisenormale}[2]{\boitegrise{20pt}{0pt}{#1}{#2}}
+\newcommand{\boitegriseespacee}[2]{\boitegrise{20pt}{10pt}{#1}{#2}}
+\newcommand{\boitegrisevide}[2]{\boitegrise{10pt}{20pt}{#1}{#2}}
