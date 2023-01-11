@@ -16,6 +16,8 @@ const generationPdfLatex = (cheminFichierTex, donnees = {}) => fsPromises
     return pdflatex(texConfectionne);
   });
 
+const genereAnnexeDescription = () => generationPdfLatex('src/vuesTex/annexeDescription.template.tex');
+
 const genereAnnexeMesures = (donnees) => generationPdfLatex('src/vuesTex/annexeMesures.template.tex', donnees);
 
 const genereAnnexeRisques = (donnees) => generationPdfLatex('src/vuesTex/annexeRisques.template.tex', donnees);
@@ -41,4 +43,4 @@ const genereAnnexes = (donneesMesures, donneesRisques) => {
     .then((pdf) => Buffer.from(pdf.buffer, 'binary'));
 };
 
-module.exports = { genereAnnexes };
+module.exports = { genereAnnexes, genereAnnexeDescription };

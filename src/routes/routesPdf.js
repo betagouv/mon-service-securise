@@ -16,6 +16,15 @@ const routesPdf = (middleware, adaptateurPdf) => {
       .catch(suite);
   });
 
+  routes.get('/:id/annexeDescription.pdf', (_requete, reponse, suite) => {
+    adaptateurPdf.genereAnnexeDescription()
+      .then((pdf) => {
+        reponse.contentType('application/pdf');
+        reponse.send(pdf);
+      })
+      .catch(suite);
+  });
+
   return routes;
 };
 
