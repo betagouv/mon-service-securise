@@ -9,6 +9,7 @@ const Mesures = require('./mesures');
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
+const VueAnnexePDFDescription = require('./objetsVues/vueAnnexePDFDescription');
 const VueAnnexePDFMesures = require('./objetsVues/vueAnnexePDFMesures');
 const VueAnnexePDFRisques = require('./objetsVues/vueAnnexePDFRisques');
 
@@ -189,6 +190,10 @@ class Homologation {
       contributeurs: this.contributeurs.map((c) => c.toJSON()),
       nomService: this.nomService(),
     };
+  }
+
+  vueAnnexePDFDescription() {
+    return new VueAnnexePDFDescription(this);
   }
 
   vueAnnexePDFMesures() {

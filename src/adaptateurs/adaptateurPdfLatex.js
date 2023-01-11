@@ -16,7 +16,7 @@ const generationPdfLatex = (cheminFichierTex, donnees = {}) => fsPromises
     return pdflatex(texConfectionne);
   });
 
-const genereAnnexeDescription = () => generationPdfLatex('src/vuesTex/annexeDescription.template.tex');
+const genereAnnexeDescription = (donnees) => generationPdfLatex('src/vuesTex/annexeDescription.template.tex', donnees);
 
 const genereAnnexeMesures = (donnees) => generationPdfLatex('src/vuesTex/annexeMesures.template.tex', donnees);
 

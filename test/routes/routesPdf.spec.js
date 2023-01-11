@@ -51,6 +51,13 @@ describe('Le serveur MSS des routes /pdf/*', () => {
       testeur.adaptateurPdf().genereAnnexeDescription = () => Promise.resolve('Pdf annexe description');
     });
 
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheHomologation(
+        'http://localhost:1234/pdf/456/annexeDescription.pdf',
+        done,
+      );
+    });
+
     it('sert un fichier de type pdf', (done) => {
       verifieTypeFichierServiEstPDF('http://localhost:1234/pdf/456/annexeDescription.pdf', done);
     });

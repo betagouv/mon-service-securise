@@ -2,6 +2,16 @@
 
 \newcommand{\vuesTex}[1]{__=donnees.CHEMIN_BASE_ABSOLU__/src/vuesTex/#1}
 \input{\vuesTex{fragments/definitionDocument}}
+\input{\vuesTex{fragments/couleurs}}
+\input{\vuesTex{macros/entetePiedPage}}
+
+
+\entete{\MakeUppercase{Description détaillée}}{
+  \textcolor{gris}{Toutes les caractéristiques du service numérique et ses besoins de sécurité.}
+  }
+  \piedpage{\small{\textcolor{bleu}{\textbf{MonServiceSécurisé -}} __= donnees.nomService __}}
+  
+\renewcommand{\headrulewidth}{0pt}
 
 \begin{document}
   \MakeUppercase{Annexe description}
