@@ -103,6 +103,31 @@ describe('Le référentiel', () => {
     expect(referentiel.fonctionnalites()).to.eql({ uneClef: 'une valeur' });
   });
 
+  it('sait décrire une fonctionnalité', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      fonctionnalites: { uneClef: { description: 'Une description' } },
+    });
+
+    expect(referentiel.descriptionFonctionnalite('uneClef')).to.equal('Une description');
+  });
+
+  it('sait décrire des fonctionnalités', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      fonctionnalites: {
+        clef1: { description: 'Description 1' },
+        clef2: { description: 'Description 2' },
+      },
+    });
+
+    expect(referentiel.descriptionsFonctionnalites(['clef1', 'clef2'])).to.eql(['Description 1', 'Description 2']);
+  });
+
+  it("sait décrire des fonctionnalités en restant robuste quand une fonctionnalité n'est pas dans le référentiel", () => {
+    const referentiel = Referentiel.creeReferentielVide();
+
+    expect(referentiel.descriptionsFonctionnalites(['clef'])).to.eql([]);
+  });
+
   it('connaît la liste des données à caractère personnel', () => {
     const referentiel = Referentiel.creeReferentiel({
       donneesCaracterePersonnel: { uneClef: 'une valeur' },

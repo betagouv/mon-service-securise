@@ -6,6 +6,10 @@ class ItemsAvecDescription extends ElementsConstructibles {
     super(ItemAvecDescription, items);
   }
 
+  descriptions() {
+    return this.tous().map((item) => item.description);
+  }
+
   static proprietesItem() {
     return ItemAvecDescription.proprietes();
   }

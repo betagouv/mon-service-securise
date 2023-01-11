@@ -193,7 +193,7 @@ class Homologation {
   }
 
   vueAnnexePDFDescription() {
-    return new VueAnnexePDFDescription(this);
+    return new VueAnnexePDFDescription(this, this.referentiel);
   }
 
   vueAnnexePDFMesures() {
