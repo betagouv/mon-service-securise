@@ -46,4 +46,28 @@ describe('Le serveur MSS des routes /pdf/*', () => {
         .catch(done);
     });
   });
+  describe('quand requête GET sur `/pdf/:id/annexeDescription.pdf`', () => {
+    beforeEach(() => {
+      testeur.adaptateurPdf().genereAnnexeDescription = () => Promise.resolve('Pdf annexe description');
+    });
+
+    it('sert un fichier de type pdf', (done) => {
+      verifieTypeFichierServiEstPDF('http://localhost:1234/pdf/456/annexeDescription.pdf', done);
+    });
+
+    it('utilise un adaptateur de pdf pour la génération', (done) => {
+      let adaptateurPdfAppele = false;
+      testeur.adaptateurPdf().genereAnnexeDescription = () => {
+        adaptateurPdfAppele = true;
+        return Promise.resolve('Pdf annexe description');
+      };
+
+      axios.get('http://localhost:1234/pdf/456/annexeDescription.pdf')
+        .then(() => {
+          expect(adaptateurPdfAppele).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+  });
 });
