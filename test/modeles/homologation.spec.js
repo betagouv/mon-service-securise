@@ -5,8 +5,9 @@ const InformationsHomologation = require('../../src/modeles/informationsHomologa
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const Utilisateur = require('../../src/modeles/utilisateur');
-const VueAnnexePDFRisques = require('../../src/modeles/objetsVues/vueAnnexePDFRisques');
+const VueAnnexePDFDescription = require('../../src/modeles/objetsVues/vueAnnexePDFDescription');
 const VueAnnexePDFMesures = require('../../src/modeles/objetsVues/vueAnnexePDFMesures');
+const VueAnnexePDFRisques = require('../../src/modeles/objetsVues/vueAnnexePDFRisques');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
@@ -389,6 +390,16 @@ describe('Une homologation', () => {
     }, referentiel);
 
     expect(homologation.descriptionLocalisationDonnees()).to.equal('France');
+  });
+
+  it("récupère un objet de vue pour le pdf de l'annexe de la description", () => {
+    const homologation = new Homologation({
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'nom' },
+    });
+
+    expect(homologation.vueAnnexePDFDescription()).to.be.a(VueAnnexePDFDescription);
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des risques", () => {
