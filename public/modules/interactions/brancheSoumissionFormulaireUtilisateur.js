@@ -23,6 +23,7 @@ const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => 
   $(`${selecteurFormulaire} button[type = 'submit']`).on('click', () => {
     declencheValidation(selecteurFormulaire);
   });
+
   $(selecteurFormulaire).on('submit', (evenement) => {
     evenement.preventDefault();
 
@@ -35,6 +36,7 @@ const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => 
         }
         return { ...acc, [clef]: obtentionDonnees[clef]() };
       }, {});
+
     action(donnees);
   });
 };
