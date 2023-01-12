@@ -379,6 +379,14 @@ describe('Le serveur MSS des routes /api/*', () => {
       );
     });
 
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['cguAcceptees'],
+        { method: 'put', url: 'http://localhost:1234/api/motDePasse', data: { motDePasse: 'mdp', cguAcceptees: true } },
+        done
+      );
+    });
+
     it('met à jour le mot de passe', (done) => {
       let motDePasseMisAJour = false;
 
@@ -405,7 +413,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
-    it("ne fait rien si aucun nouveau mot de passe n'est renseigné", (done) => {
+    it("ne fait rien si aucun nouveau mot de passe n'est renseigné (possible tant que le changement de MDP se fait sur la page profil utilisateur)", (done) => {
       let motDePasseMisAJour = false;
 
       testeur.depotDonnees().metsAJourMotDePasse = () => {
@@ -413,10 +421,19 @@ describe('Le serveur MSS des routes /api/*', () => {
         return Promise.resolve();
       };
 
-      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: '' })
+      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: undefined })
+        .then((reponse) => expect(reponse.status).to.equal(204))
         .then(() => expect(motDePasseMisAJour).to.be(false))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
+    });
+
+    it('retourne une erreur HTTP 422 si le mot de passe est invalide', (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(422, 'Mot de passe invalide', {
+        method: 'put',
+        url: 'http://localhost:1234/api/motDePasse',
+        data: { motDePasse: '' },
+      }, done);
     });
 
     it('pose un nouveau cookie', (done) => {
@@ -520,7 +537,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     let donneesRequete;
 
     beforeEach(() => {
-      utilisateur = { id: '123', genereToken: () => 'un token', accepteCGU: () => true };
+      utilisateur = { id: '123' };
 
       donneesRequete = {
         prenom: 'Jean',
@@ -531,17 +548,12 @@ describe('Le serveur MSS des routes /api/*', () => {
         poste: "Chargé des systèmes d'informations",
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
-        motDePasse: 'mdp_12345',
-        cguAcceptees: 'true',
       };
 
       testeur.referentiel().departement = () => 'Paris';
       const depotDonnees = testeur.depotDonnees();
-      depotDonnees.metsAJourMotDePasse = () => Promise.resolve(utilisateur);
       depotDonnees.metsAJourUtilisateur = () => Promise.resolve(utilisateur);
       depotDonnees.utilisateur = () => Promise.resolve(utilisateur);
-      depotDonnees.valideAcceptationCGUPourUtilisateur = () => Promise.resolve(utilisateur);
-      depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () => Promise.resolve(utilisateur);
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -550,7 +562,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       );
     });
 
-    it('aseptise les paramètres de la requête (mais pas le mot de passe)', (done) => {
+    it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         [
           'prenom',
@@ -579,193 +591,83 @@ describe('Le serveur MSS des routes /api/*', () => {
       );
     });
 
-    describe("lorsque l'utilisateur a déjà accepté les CGU", () => {
-      it("met à jour le mot de passe de l'utilisateur", (done) => {
-        let motDePasseMisAJour = false;
+    it('convertit le RSSI en booléen', (done) => {
+      testeur.middleware().reinitialise(utilisateur.id);
 
-        testeur.middleware().reinitialise(utilisateur.id);
-        testeur.depotDonnees().metsAJourMotDePasse = (idUtilisateur, motDePasse) => {
-          try {
-            expect(idUtilisateur).to.equal('123');
-            expect(motDePasse).to.equal('mdp_12345');
-            motDePasseMisAJour = true;
-            return Promise.resolve(utilisateur);
-          } catch (e) {
-            return Promise.reject(e);
-          }
-        };
+      testeur.depotDonnees().metsAJourUtilisateur = (id, { rssi }) => {
+        try {
+          expect(id).to.equal('123');
+          expect(rssi).to.equal(false);
+          return Promise.resolve(utilisateur);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
 
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then((reponse) => {
-            expect(motDePasseMisAJour).to.be(true);
-            expect(reponse.status).to.equal(200);
-            expect(reponse.data).to.eql({ idUtilisateur: '123' });
-            done();
-          })
-          .catch((e) => done(e.response?.data || e));
-      });
+      donneesRequete.rssi = 'false';
 
-      it('convertit le RSSI en booléen', (done) => {
-        testeur.middleware().reinitialise(utilisateur.id);
-
-        testeur.depotDonnees().metsAJourUtilisateur = (id, { rssi }) => {
-          try {
-            expect(id).to.equal('123');
-            expect(rssi).to.equal(false);
-            return Promise.resolve(utilisateur);
-          } catch (e) {
-            return Promise.reject(e);
-          }
-        };
-
-        donneesRequete.rssi = 'false';
-
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then((reponse) => {
-            expect(reponse.status).to.equal(200);
-            expect(reponse.data).to.eql({ idUtilisateur: '123' });
-            done();
-          })
-          .catch((e) => done(e.response?.data || e));
-      });
-
-      it('convertit le délégué à la protection des données en booléen', (done) => {
-        testeur.middleware().reinitialise(utilisateur.id);
-
-        testeur.depotDonnees().metsAJourUtilisateur = (id, { delegueProtectionDonnees }) => {
-          try {
-            expect(id).to.equal('123');
-            expect(delegueProtectionDonnees).to.equal(true);
-            return Promise.resolve(utilisateur);
-          } catch (e) {
-            return Promise.reject(e);
-          }
-        };
-
-        donneesRequete.delegueProtectionDonnees = 'true';
-
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then((reponse) => {
-            expect(reponse.status).to.equal(200);
-            expect(reponse.data).to.eql({ idUtilisateur: '123' });
-            done();
-          })
-          .catch((e) => done(e.response?.data || e));
-      });
-
-      it("met à jour les autres informations de l'utilisateur", (done) => {
-        let infosMisesAJour = false;
-
-        testeur.middleware().reinitialise(utilisateur.id);
-
-        testeur.depotDonnees().metsAJourUtilisateur = (id, donnees) => {
-          try {
-            expect(id).to.equal('123');
-            expect(donnees.prenom).to.equal('Jean');
-            expect(donnees.nom).to.equal('Dupont');
-            expect(donnees.telephone).to.equal('0100000000');
-            expect(donnees.poste).to.equal("Chargé des systèmes d'informations");
-            expect(donnees.nomEntitePublique).to.equal('Ville de Paris');
-            expect(donnees.departementEntitePublique).to.equal('75');
-            infosMisesAJour = true;
-            return Promise.resolve(utilisateur);
-          } catch (e) {
-            return Promise.reject(e);
-          }
-        };
-
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then((reponse) => {
-            expect(infosMisesAJour).to.be(true);
-            expect(reponse.status).to.equal(200);
-            expect(reponse.data).to.eql({ idUtilisateur: '123' });
-            done();
-          })
-          .catch((e) => done(e.response?.data || e));
-      });
-
-      it('pose un nouveau cookie', (done) => {
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then((reponse) => testeur.verifieJetonDepose(reponse, done))
-          .catch(done);
-      });
-
-      it("invalide l'identifiant de reset", (done) => {
-        let idResetSupprime = false;
-
-        expect(utilisateur.id).to.equal('123');
-        testeur.depotDonnees().supprimeIdResetMotDePassePourUtilisateur = (u) => {
-          expect(u.id).to.equal('123');
-          idResetSupprime = true;
-          return Promise.resolve(u);
-        };
-
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then(() => {
-            expect(idResetSupprime).to.be(true);
-            done();
-          })
-          .catch(done);
-      });
-
-      it("ne met pas à jour le mot de passe s'il est vide", (done) => {
-        let motDePasseMisAJour = false;
-
-        testeur.depotDonnees().metsAJourMotDePasse = () => {
-          motDePasseMisAJour = true;
-          return Promise.resolve();
-        };
-
-        donneesRequete.motDePasse = '';
-
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then(() => expect(motDePasseMisAJour).to.be(false))
-          .then(() => done())
-          .catch(done);
-      });
+      axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idUtilisateur: '123' });
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
     });
 
-    describe("lorsque utilisateur n'a pas encore accepté les CGU", () => {
-      beforeEach(() => {
-        const cguNonAcceptees = false;
-        testeur.middleware().reinitialise(utilisateur.id, cguNonAcceptees);
-      });
+    it('convertit le délégué à la protection des données en booléen', (done) => {
+      testeur.middleware().reinitialise(utilisateur.id);
 
-      it('met à jour le mot de passe si case CGU cochée dans formulaire', (done) => {
-        let motDePasseMisAJour = false;
-        testeur.depotDonnees().metsAJourMotDePasse = () => {
-          motDePasseMisAJour = true;
+      testeur.depotDonnees().metsAJourUtilisateur = (id, { delegueProtectionDonnees }) => {
+        try {
+          expect(id).to.equal('123');
+          expect(delegueProtectionDonnees).to.equal(true);
           return Promise.resolve(utilisateur);
-        };
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
 
-        expect(motDePasseMisAJour).to.be(false);
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then(() => expect(motDePasseMisAJour).to.be(true))
-          .then(() => done())
-          .catch(done);
-      });
+      donneesRequete.delegueProtectionDonnees = 'true';
 
-      it("indique que l'utilisateur a coché la case CGU dans le formulaire", (done) => {
-        testeur.middleware().reinitialise(utilisateur.id);
+      axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idUtilisateur: '123' });
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
 
-        testeur.depotDonnees().valideAcceptationCGUPourUtilisateur = (u) => {
-          expect(u.id).to.equal('123');
-          return Promise.resolve(u);
-        };
+    it("met à jour les autres informations de l'utilisateur", (done) => {
+      let infosMisesAJour = false;
 
-        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then(() => done())
-          .catch(done);
-      });
+      testeur.middleware().reinitialise(utilisateur.id);
 
-      it("retourne une erreur HTTP 422 si la case CGU du formulaire n'est pas cochée", (done) => {
-        donneesRequete.cguAcceptees = 'false';
-        testeur.verifieRequeteGenereErreurHTTP(422, 'CGU non acceptées', {
-          method: 'put',
-          url: 'http://localhost:1234/api/utilisateur',
-          data: donneesRequete,
-        }, done);
-      });
+      testeur.depotDonnees().metsAJourUtilisateur = (id, donnees) => {
+        try {
+          expect(id).to.equal('123');
+          expect(donnees.prenom).to.equal('Jean');
+          expect(donnees.nom).to.equal('Dupont');
+          expect(donnees.telephone).to.equal('0100000000');
+          expect(donnees.poste).to.equal("Chargé des systèmes d'informations");
+          expect(donnees.nomEntitePublique).to.equal('Ville de Paris');
+          expect(donnees.departementEntitePublique).to.equal('75');
+          infosMisesAJour = true;
+          return Promise.resolve(utilisateur);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then((reponse) => {
+          expect(infosMisesAJour).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idUtilisateur: '123' });
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
     });
   });
 

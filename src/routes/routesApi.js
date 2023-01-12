@@ -146,42 +146,45 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .catch(suite);
   });
 
-  const metsAJourMotDePasse = (requete, reponse, suite) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
-    const cguDejaAcceptees = requete.cguAcceptees;
-    const cguEnCoursDAcceptation = valeurBooleenne(requete.body.cguAcceptees);
-    const { motDePasse } = requete.body;
-    const motDePasseInvalide = !(typeof motDePasse === 'string' && motDePasse);
+  routes.put('/motDePasse',
+    middleware.verificationJWT,
+    middleware.aseptise('cguAcceptees'),
+    (requete, reponse, suite) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const cguDejaAcceptees = requete.cguAcceptees;
+      const cguEnCoursDAcceptation = valeurBooleenne(requete.body.cguAcceptees);
+      const { motDePasse } = requete.body;
 
-    if (motDePasseInvalide) {
-      suite();
-      return;
-    }
+      const pasDeMotDePasse = motDePasse === undefined;
+      if (pasDeMotDePasse) {
+        reponse.status(204).send();
+        return;
+      }
 
-    if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
-      reponse.status(422).send('CGU non acceptées');
-      return;
-    }
+      const motDePasseInvalide = !(typeof motDePasse === 'string' && motDePasse);
+      if (motDePasseInvalide) {
+        reponse.status(422).send('Mot de passe invalide');
+        return;
+      }
 
-    depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
-      .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
-      .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
-      .then((utilisateur) => {
-        requete.session.token = utilisateur.genereToken();
-        suite();
-      })
-      .catch(suite);
-  };
+      if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
+        reponse.status(422).send('CGU non acceptées');
+        return;
+      }
 
-  routes.put('/motDePasse', middleware.verificationJWT, metsAJourMotDePasse, (requete, reponse) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
-    reponse.json({ idUtilisateur });
-  });
+      depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse)
+        .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
+        .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
+        .then((utilisateur) => {
+          requete.session.token = utilisateur.genereToken();
+          reponse.json({ idUtilisateur });
+        })
+        .catch(suite);
+    });
 
   routes.put('/utilisateur',
     middleware.verificationJWT,
     middleware.aseptise([...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email')]),
-    metsAJourMotDePasse,
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
