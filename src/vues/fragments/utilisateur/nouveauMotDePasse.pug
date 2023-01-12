@@ -3,3 +3,9 @@ mixin nouveauMotDePasse
   label Nouveau mot de passe
     .infos-complementaires (Si vous laissez ce champ vide, le mot de passe ne sera pas modifié.)
     input(id='mot-de-passe', name = 'motDePasse', type='password')
+
+  label Confirmez mot de passe
+    input(id='mot-de-passe-confirmation', name = 'motDePasseConfirmation', type='password')
+    .message-erreur Les deux mots de passe sont différents
+
+  script(type = 'module', src = '/statique/modules/interactions/brancheValidationMotDePasse.js')
