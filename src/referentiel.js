@@ -37,6 +37,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const descriptionEcheanceRenouvellement = (id) => echeancesRenouvellement()[id]?.description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
+  const descriptionDonneesCaracterePersonnel = (id) => donneesCaracterePersonnel()[id]?.description;
+  const descriptionsDonneesCaracterePersonnel = (ids) => ids
+    ?.map((id) => descriptionDonneesCaracterePersonnel(id))
+    .filter((id) => id !== undefined);
   const etapesParcoursHomologation = () => donnees.etapesParcoursHomologation || [];
   const identifiantsEcheancesRenouvellement = () => Object.keys(echeancesRenouvellement());
   const fonctionnalites = () => donnees.fonctionnalites;
@@ -193,11 +197,13 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     departements,
     descriptionActionSaisie,
     descriptionCategorie,
+    descriptionDonneesCaracterePersonnel,
     descriptionEcheanceRenouvellement,
     descriptionExpiration,
     descriptionFonctionnalite,
     descriptionRisque,
     descriptionStatutMesure,
+    descriptionsDonneesCaracterePersonnel,
     descriptionsFonctionnalites,
     donneesCaracterePersonnel,
     echeancesRenouvellement,

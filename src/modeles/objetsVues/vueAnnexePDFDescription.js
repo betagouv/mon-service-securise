@@ -15,11 +15,23 @@ class VueAnnexePDFDescription {
       .fonctionnalitesSpecifiques
       .descriptions();
 
+    const donneesStockees = this.referentiel.descriptionsDonneesCaracterePersonnel(
+      this.homologation.descriptionService.donneesCaracterePersonnel
+    );
+    const donneesStockeesSpecifiques = this.homologation
+      .descriptionService
+      .donneesSensiblesSpecifiques
+      .descriptions();
+
     return {
       nomService: this.homologation.nomService(),
       fonctionnalites: [
         ...fonctionnalites,
         ...fonctionnalitesSpecifiques,
+      ],
+      donneesStockees: [
+        ...donneesStockees,
+        ...donneesStockeesSpecifiques,
       ],
     };
   }
