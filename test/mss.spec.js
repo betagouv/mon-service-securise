@@ -55,9 +55,19 @@ describe('Le serveur MSS', () => {
         .catch((e) => done(e.response?.data || e));
     });
   });
+
   describe('quand requête GET sur `/connexion`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
       testeur.middleware().verifieRequeteExigeSuppressionCookie('http://localhost:1234/connexion', done);
+    });
+  });
+
+  describe('quand GET sur /motDePasse/edition', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      const utilisateur = { accepteCGU: () => true };
+      testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateur);
+
+      testeur.middleware().verifieRequeteExigeJWT('http://localhost:1234/motDePasse/edition', done);
     });
   });
 
