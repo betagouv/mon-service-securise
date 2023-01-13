@@ -38,7 +38,7 @@ main a {
 }
 
 section {
-  padding: 2em 0;
+  padding: 0.5em 0;
   border-top: solid 1px var(--liseres);
 
   text-align: left;
@@ -88,6 +88,7 @@ section:last-of-type {
 
 .etroit .sous-titre {
   margin: 0;
+  padding-bottom: 2em;
 }
 
 .etroit .description {
