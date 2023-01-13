@@ -7,15 +7,21 @@ block append styles
 block main
   form.etroit#connexion
     h1 Connectez-vous
-    p.sous-titre ou&nbsp;
+    p.sous-titre
+      span ou&nbsp;
       a(href='/inscription') créez votre compte
+
+    .mention champ obligatoire
+
     section
-      label E-mail
-        br
-        input(id='login', type='email', placeholder='ex: jean.dupont@domaine.fr')
-      label Mot de passe
-        br
-        input(id='mot-de-passe', type='password')
+      .requis
+        label E-mail
+          br
+          input(id='login', type='email', placeholder='ex: jean.dupont@domaine.fr')
+      .requis
+        label Mot de passe
+          br
+          input(id='mot-de-passe', type='password')
       .message-erreur L'email et le mot de passe saisis ne correspondent à aucun compte. Veuillez renseigner les identifiants d'un compte existant.
       a(href='/reinitialisationMotDePasse' class='texte-normal') mot de passe oublié
     button.bouton Valider
