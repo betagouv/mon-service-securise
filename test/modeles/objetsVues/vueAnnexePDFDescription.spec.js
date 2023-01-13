@@ -11,6 +11,11 @@ describe("L'objet de vue de l'annexe de description", () => {
         description: 'Une fonctionnalité',
       },
     },
+    donneesCaracterePersonnel: {
+      desDonnees: {
+        description: 'Des données',
+      },
+    },
   };
   const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
   const homologation = new Homologation({
@@ -20,6 +25,8 @@ describe("L'objet de vue de l'annexe de description", () => {
       nomService: 'Nom Service',
       fonctionnalites: ['uneFonctionnalite'],
       fonctionnalitesSpecifiques: [{ description: 'Une fonctionnalité spécifique' }],
+      donneesCaracterePersonnel: ['desDonnees'],
+      donneesSensiblesSpecifiques: [{ description: 'Des données spécifiques' }],
     },
   }, referentiel);
 
@@ -48,5 +55,23 @@ describe("L'objet de vue de l'annexe de description", () => {
 
     expect(donnees).to.have.key('fonctionnalites');
     expect(donnees.fonctionnalites).to.contain('Une fonctionnalité spécifique');
+  });
+
+  it('fournit la liste des données stockées', () => {
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation, referentiel);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees).to.have.key('donneesStockees');
+    expect(donnees.donneesStockees[0]).to.equal('Des données');
+  });
+
+  it('ajoute les données spécifiques à la liste des données stockées', () => {
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation, referentiel);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees).to.have.key('donneesStockees');
+    expect(donnees.donneesStockees).to.contain('Des données spécifiques');
   });
 });

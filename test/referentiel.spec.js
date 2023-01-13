@@ -136,6 +136,31 @@ describe('Le référentiel', () => {
     expect(referentiel.donneesCaracterePersonnel()).to.eql({ uneClef: 'une valeur' });
   });
 
+  it('sait décrire un type de données à caractère personnel', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      donneesCaracterePersonnel: { uneClef: { description: 'Une description' } },
+    });
+
+    expect(referentiel.descriptionDonneesCaracterePersonnel('uneClef')).to.equal('Une description');
+  });
+
+  it('sait décrire des types de données à caractère personnel', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      donneesCaracterePersonnel: {
+        clef1: { description: 'Description 1' },
+        clef2: { description: 'Description 2' },
+      },
+    });
+
+    expect(referentiel.descriptionsDonneesCaracterePersonnel(['clef1', 'clef2'])).to.eql(['Description 1', 'Description 2']);
+  });
+
+  it("sait décrire des types de données à caractère personnel en restant robuste quand un type n'est pas dans le référentiel", () => {
+    const referentiel = Referentiel.creeReferentielVide();
+
+    expect(referentiel.descriptionsDonneesCaracterePersonnel(['clef'])).to.eql([]);
+  });
+
   it('connaît la liste des délais avant impact critique', () => {
     const referentiel = Referentiel.creeReferentiel({
       delaisAvantImpactCritique: { uneClef: 'une valeur' },
