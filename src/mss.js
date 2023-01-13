@@ -64,6 +64,12 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
     reponse.render('connexion');
   });
 
+  app.get('/motDePasse/edition', middleware.verificationJWT, (requete, reponse) => {
+    const idUtilisateur = requete.idUtilisateurCourant;
+    depotDonnees.utilisateur(idUtilisateur)
+      .then((utilisateur) => reponse.render('motDePasse/edition', { utilisateur }));
+  });
+
   app.get('/questionsFrequentes', (_requete, reponse) => {
     adaptateurEquations.indiceCyber()
       .then((svg) => reponse.render('questionsFrequentes', { formuleIndiceCyber: svg }));
