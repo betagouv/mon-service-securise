@@ -1,6 +1,7 @@
 .avertissement {
   display: flex;
-  margin-top: 2em;
+  margin-top: 1em;
+  margin-bottom: 2em;
   border: 1px var(--bleu-anssi) solid;
   border-radius: 5px;
   text-align: left;
