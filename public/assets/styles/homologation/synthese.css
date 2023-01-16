@@ -184,6 +184,10 @@
   padding-right: 1.85em;
 }
 
-a.nouvel-onglet::after {
+.cartes-informations a.nouvel-onglet::after {
+  background-color: var(--bleu-mise-en-avant);
+}
+
+.zone-principale a.nouvel-onglet::after {
   background-color: white;
 }
