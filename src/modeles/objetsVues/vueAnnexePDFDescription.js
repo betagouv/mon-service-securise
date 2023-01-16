@@ -23,6 +23,11 @@ class VueAnnexePDFDescription {
       .donneesSensiblesSpecifiques
       .descriptions();
 
+    const dureeDysfonctionnementMaximumAcceptable = this.referentiel
+      .descriptionDelaiAvantImpactCritique(
+        this.homologation.descriptionService.delaiAvantImpactCritique
+      );
+
     return {
       nomService: this.homologation.nomService(),
       fonctionnalites: [
@@ -33,6 +38,7 @@ class VueAnnexePDFDescription {
         ...donneesStockees,
         ...donneesStockeesSpecifiques,
       ],
+      dureeDysfonctionnementMaximumAcceptable,
     };
   }
 }

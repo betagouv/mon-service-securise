@@ -169,6 +169,20 @@ describe('Le référentiel', () => {
     expect(referentiel.delaisAvantImpactCritique()).to.eql({ uneClef: 'une valeur' });
   });
 
+  it('sait décrire un délai avant impact critique', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      delaisAvantImpactCritique: { uneClef: { description: 'une valeur' } },
+    });
+
+    expect(referentiel.descriptionDelaiAvantImpactCritique('uneClef')).to.equal('une valeur');
+  });
+
+  it("reste robuste quand le délai avant impact critique n'est pas dans le référentiel", () => {
+    const referentiel = Referentiel.creeReferentielVide();
+
+    expect(referentiel.descriptionDelaiAvantImpactCritique('uneClef')).to.equal(undefined);
+  });
+
   describe('sur demande de la liste des mesures', () => {
     it('retourne la liste', () => {
       const referentiel = Referentiel.creeReferentiel({
