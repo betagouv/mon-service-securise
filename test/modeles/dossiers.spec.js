@@ -3,10 +3,13 @@ const expect = require('expect.js');
 const { ErreurDossiersInvalides } = require('../../src/erreurs');
 const Dossier = require('../../src/modeles/dossier');
 const Dossiers = require('../../src/modeles/dossiers');
+const Referentiel = require('../../src/referentiel');
 
 const ils = it;
 
 describe('Les dossiers liés à un service', () => {
+  const referentiel = Referentiel.creeReferentielVide();
+
   ils("exigent qu'il n'y ait qu'un seul dossier maximum non finalisé", (done) => {
     try {
       new Dossiers({ dossiers: [{ id: '1', finalise: true }, { id: '2' }, { id: '3' }] });
@@ -32,5 +35,34 @@ describe('Les dossiers liés à un service', () => {
     const dossiersFinalises = dossiers.finalises();
     expect(dossiersFinalises.length).to.equal(1);
     expect(dossiersFinalises[0].id).to.equal('1');
+  });
+
+  ils('retournent comme dossier actif le premier dossier actif trouvé', () => {
+    referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
+    const adaptateurHorloge = { maintenant: () => new Date(2023, 2, 1) };
+    const dossiers = new Dossiers(
+      {
+        dossiers: [
+          { id: '1', finalise: true, dateHomologation: '2022-01-01', dureeValidite: 'unAn' },
+          { id: '2', finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' },
+        ],
+      }, referentiel, adaptateurHorloge
+    );
+
+    const dossierActif = dossiers.dossierActif();
+    expect(dossierActif.id).to.equal('2');
+  });
+
+  ils("retournent une valeur indéfinie si aucun dossier actif n'est trouvé", () => {
+    const dossiers = new Dossiers(
+      {
+        dossiers: [
+          { id: '1', finalise: true },
+        ],
+      }
+    );
+
+    const dossierActif = dossiers.dossierActif();
+    expect(dossierActif).to.equal(undefined);
   });
 });

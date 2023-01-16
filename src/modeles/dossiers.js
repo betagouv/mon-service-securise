@@ -14,6 +14,10 @@ class Dossiers extends ElementsConstructibles {
     return this.items.find((i) => !i.finalise);
   }
 
+  dossierActif() {
+    return this.finalises().find((d) => d.estActif());
+  }
+
   finalises() {
     return this.items.filter((i) => i.finalise);
   }
