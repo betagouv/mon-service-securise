@@ -5,10 +5,11 @@ const routesPdf = (middleware, adaptateurPdf) => {
 
   routes.get('/:id/annexes.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
+    const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
     const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
     const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
 
-    adaptateurPdf.genereAnnexes({ donneesMesures, donneesRisques })
+    adaptateurPdf.genereAnnexes({ donneesDescription, donneesMesures, donneesRisques })
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);
