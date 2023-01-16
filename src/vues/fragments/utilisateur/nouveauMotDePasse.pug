@@ -2,6 +2,7 @@ mixin nouveauMotDePasse
   label Nouveau mot de passe
     .infos-complementaires (Si vous laissez ce champ vide, le mot de passe ne sera pas modifié.)
     input(id='mot-de-passe', name = 'motDePasse', type='password')
+    .message-erreur Le mot de passe n'est pas assez robuste
 
   label Confirmez mot de passe
     input(id='mot-de-passe-confirmation', name = 'motDePasseConfirmation', type='password')

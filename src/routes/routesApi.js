@@ -10,6 +10,7 @@ const {
 } = require('../erreurs');
 const routesApiService = require('./routesApiService');
 const Utilisateur = require('../modeles/utilisateur');
+const { resultatValidation, valideMotDePasse } = require('../validationMotDePasse');
 
 const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) => promesseEnvoiMessage
@@ -169,6 +170,11 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
 
       if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
         reponse.status(422).send('CGU non acceptées');
+        return;
+      }
+
+      if (valideMotDePasse(motDePasse) !== resultatValidation.MOT_DE_PASSE_VALIDE) {
+        reponse.status(422).send('Mot de passe trop simple');
         return;
       }
 

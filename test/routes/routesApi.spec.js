@@ -395,7 +395,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.depotDonnees().metsAJourMotDePasse = (idUtilisateur, motDePasse) => {
         try {
           expect(idUtilisateur).to.equal('123');
-          expect(motDePasse).to.equal('mdp_12345');
+          expect(motDePasse).to.equal('mdp_ABC12345');
           motDePasseMisAJour = true;
           return Promise.resolve(utilisateur);
         } catch (e) {
@@ -403,7 +403,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         }
       };
 
-      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345' })
+      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_ABC12345' })
         .then((reponse) => {
           expect(motDePasseMisAJour).to.be(true);
           expect(reponse.status).to.equal(200);
@@ -436,8 +436,16 @@ describe('Le serveur MSS des routes /api/*', () => {
       }, done);
     });
 
+    it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(422, 'Mot de passe trop simple', {
+        method: 'put',
+        url: 'http://localhost:1234/api/motDePasse',
+        data: { motDePasse: '1234' },
+      }, done);
+    });
+
     it('pose un nouveau cookie', (done) => {
-      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345' })
+      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_ABC12345' })
         .then((reponse) => testeur.verifieJetonDepose(reponse, done))
         .catch((e) => done(e.response?.data || e));
     });
@@ -456,7 +464,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         }
       };
 
-      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345' })
+      axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_ABC12345' })
         .then(() => expect(idResetSupprime).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
@@ -510,7 +518,7 @@ describe('Le serveur MSS des routes /api/*', () => {
             }
           };
 
-          axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345', cguAcceptees: 'true' })
+          axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_ABC12345', cguAcceptees: 'true' })
             .then(() => expect(acceptationCGUEnregistree).to.be(true))
             .then(() => done())
             .catch((e) => done(e.response?.data || e));
@@ -523,7 +531,7 @@ describe('Le serveur MSS des routes /api/*', () => {
             return Promise.resolve(utilisateur);
           };
 
-          axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_12345', cguAcceptees: 'true' })
+          axios.put('http://localhost:1234/api/motDePasse', { motDePasse: 'mdp_ABC12345', cguAcceptees: 'true' })
             .then(() => expect(motDePasseMisAJour).to.be(true))
             .then(() => done())
             .catch((e) => done(e.response?.data || e));
