@@ -47,7 +47,7 @@
     width: 1.1em;
     height: 1.2em;
     margin-left: 0.3em;
-  
+
     background-color: var(--systeme-design-etat-bleu);
     -webkit-mask: url(../images/icone_fermer.svg) no-repeat center;
     mask: url(../images/icone_fermer.svg) no-repeat center;
@@ -70,7 +70,7 @@
     display: flex;
     flex-direction: column-reverse;
   }
-  
+
   header nav.visible .utilisateur-courant .connexion {
     border-top: 0;
     border-right: 0;
