@@ -65,6 +65,26 @@ block zone-principale
       ) Télécharger les annexes
 
 block cartes-informations
+  - const dossierActif = service.dossiers.dossierActif()
+
+  +carteInformations({titre: "Statut d'homologation" })
+    if dossierActif
+      .statut.statut-homologue
+        span.pastille
+        span Service homologué
+      .dates-statut.
+        Date d'homologation : #{dossierActif.descriptionDateHomologation()}
+      .dates-statut.
+        Valable jusqu'au : #{dossierActif.descriptionProchaineDateHomologation()}
+    else
+      .statut.statut-non-homologue
+        span.pastille
+        span Service non homologué
+      .dates-statut.
+        Date d'homologation : non renseignée
+      .dates-statut.
+        Valable jusqu'au : non renseigné
+
   - const indiceCyber = service.indiceCyber()
   +indiceCyber({ referentiel, indiceCyber })
 

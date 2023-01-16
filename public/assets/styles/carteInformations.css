@@ -12,6 +12,7 @@
   display: inline;
 
   font-size: 0.9em;
+  font-weight: bold;
 }
 
 .carte h2 {
@@ -92,5 +93,41 @@
 
 .carte .details, .carte .moins-details {
   display: none;
+}
+
+
+.carte .statut {
+  border-radius: 1.5em;
+  padding: 0.25em 0 0.75em 0;
+  margin: 1.75em 0;
+  font-size: 0.85em;
+  font-weight: bold;
+  width: 100%;
+}
+
+.carte .statut-non-homologue {
+  color: var(--statut-non-homologue);
+  background-color: var(--statut-non-homologue-arriere-plan);
+}
+.carte .statut-homologue {
+  color: var(--statut-homologue);
+  background-color: var(--statut-homologue-arriere-plan);
+}
+
+.carte .pastille {
+  position: relative;
+  bottom: -0.4em;
+  height: 1.53em;
+  padding: 0 0.5em 0 1em;
+}
+.carte .statut-non-homologue .pastille {
+  content: url(../images/icone_ko_pastille_rose.svg);
+}
+.carte .statut-homologue .pastille {
+  content: url(../images/icone_ok_pastille_verte.svg);
+}
+
+.carte .dates-statut {
+  font-size: 0.696em;
 }
 

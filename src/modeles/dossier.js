@@ -2,9 +2,14 @@ const InformationsHomologation = require('./informationsHomologation');
 const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../erreurs');
 const Referentiel = require('../referentiel');
 const { ajouteMoisADate, dateEnFrancais, dateInvalide } = require('../utilitaires/date');
+const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
 
 class Dossier extends InformationsHomologation {
-  constructor(donneesDossier = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    donneesDossier = {},
+    referentiel = Referentiel.creeReferentielVide(),
+    adaptateurHorloge = adaptateurHorlogeParDefaut
+  ) {
     donneesDossier.finalise = !!donneesDossier.finalise;
 
     super({ proprietesAtomiquesFacultatives: ['id', 'dateHomologation', 'dureeValidite', 'finalise'] });
@@ -12,6 +17,7 @@ class Dossier extends InformationsHomologation {
     this.renseigneProprietes(donneesDossier);
 
     this.referentiel = referentiel;
+    this.adaptateurHorloge = adaptateurHorloge;
   }
 
   descriptionDateHomologation() {
@@ -30,19 +36,29 @@ class Dossier extends InformationsHomologation {
     return this.referentiel.descriptionEcheanceRenouvellement(this.dureeValidite);
   }
 
+  dateProchaineHomologation() {
+    const date = new Date(this.dateHomologation);
+    const nbMois = this.referentiel.nbMoisDecalage(this.dureeValidite);
+
+    return ajouteMoisADate(nbMois, date);
+  }
+
   descriptionProchaineDateHomologation() {
     if (!this.dateHomologation || !this.dureeValidite) {
       return '';
     }
 
-    const date = new Date(this.dateHomologation);
-    const nbMois = this.referentiel.nbMoisDecalage(this.dureeValidite);
-
-    return dateEnFrancais(ajouteMoisADate(nbMois, date));
+    return dateEnFrancais(this.dateProchaineHomologation());
   }
 
   estComplet() {
     return !!this.dateHomologation && !!this.dureeValidite;
+  }
+
+  estActif() {
+    const maintenant = this.adaptateurHorloge.maintenant();
+    return new Date(this.dateHomologation) < maintenant
+      && maintenant < this.dateProchaineHomologation();
   }
 
   static valide({ dateHomologation, dureeValidite }, referentiel) {

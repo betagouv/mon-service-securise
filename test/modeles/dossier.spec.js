@@ -116,4 +116,39 @@ describe("Un dossier d'homologation", () => {
       expect(dossierComplet.estComplet()).to.be(true);
     });
   });
+
+  describe('sur demande du caractère actif du dossier', () => {
+    it("retourne `false` si le dossier n'est pas complet", () => {
+      const dossier = new Dossier({ estComplet: () => (false) }, referentiel);
+      expect(dossier.estActif()).to.equal(false);
+    });
+
+    it("retourne `false` si la date du jour n'est pas comprise entre la date d'homologation et la prochaine date d'homologation", () => {
+      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
+      const adaptateurHorloge = { maintenant: () => new Date(2025, 1, 1) };
+      const dossier = new Dossier({ id: '2', finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' }, referentiel, adaptateurHorloge);
+      expect(dossier.estActif()).to.equal(false);
+    });
+
+    it("retourne `true` si la date du jour est la date d'homologation", () => {
+      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
+      const adaptateurHorloge = { maintenant: () => new Date(2023, 1, 1) };
+      const dossier = new Dossier({ id: '2', finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' }, referentiel, adaptateurHorloge);
+      expect(dossier.estActif()).to.equal(true);
+    });
+
+    it("retourne `true` si la date du jour est comprise entre la date d'homologation et la prochaine date d'homologation", () => {
+      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
+      const adaptateurHorloge = { maintenant: () => new Date(2023, 2, 1) };
+      const dossier = new Dossier({ id: '2', finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' }, referentiel, adaptateurHorloge);
+      expect(dossier.estActif()).to.equal(true);
+    });
+
+    it("retourne `true` si la date du jour est la date dernière date d'homologation", () => {
+      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
+      const adaptateurHorloge = { maintenant: () => new Date(2024, 1, 1) };
+      const dossier = new Dossier({ id: '2', finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' }, referentiel, adaptateurHorloge);
+      expect(dossier.estActif()).to.equal(false);
+    });
+  });
 });
