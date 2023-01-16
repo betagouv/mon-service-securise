@@ -36,6 +36,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement || [];
   const descriptionEcheanceRenouvellement = (id) => echeancesRenouvellement()[id]?.description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
+  const descriptionDelaiAvantImpactCritique = (id) => delaisAvantImpactCritique()[id]?.description;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
   const descriptionDonneesCaracterePersonnel = (id) => donneesCaracterePersonnel()[id]?.description;
   const descriptionsDonneesCaracterePersonnel = (ids) => ids
@@ -197,6 +198,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     departements,
     descriptionActionSaisie,
     descriptionCategorie,
+    descriptionDelaiAvantImpactCritique,
     descriptionDonneesCaracterePersonnel,
     descriptionEcheanceRenouvellement,
     descriptionExpiration,

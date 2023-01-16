@@ -16,6 +16,9 @@ describe("L'objet de vue de l'annexe de description", () => {
         description: 'Des données',
       },
     },
+    delaisAvantImpactCritique: {
+      unJour: { description: 'Un jour' },
+    },
   };
   const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
   const homologation = new Homologation({
@@ -27,6 +30,7 @@ describe("L'objet de vue de l'annexe de description", () => {
       fonctionnalitesSpecifiques: [{ description: 'Une fonctionnalité spécifique' }],
       donneesCaracterePersonnel: ['desDonnees'],
       donneesSensiblesSpecifiques: [{ description: 'Des données spécifiques' }],
+      delaiAvantImpactCritique: 'unJour',
     },
   }, referentiel);
 
@@ -73,5 +77,14 @@ describe("L'objet de vue de l'annexe de description", () => {
 
     expect(donnees).to.have.key('donneesStockees');
     expect(donnees.donneesStockees).to.contain('Des données spécifiques');
+  });
+
+  it('fournit la durée maximale acceptable de dysfonctionnement grave', () => {
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation, referentiel);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees).to.have.key('dureeDysfonctionnementMaximumAcceptable');
+    expect(donnees.dureeDysfonctionnementMaximumAcceptable).to.equal('Un jour');
   });
 });
