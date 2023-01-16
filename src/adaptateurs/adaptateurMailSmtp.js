@@ -121,10 +121,10 @@ const envoieNotificationTentativeReinscription = (destinataire) => {
 
 Lors de la création de votre compte utilisateur sur MonServiceSécurisé, l'e-mail que vous avez renseigné est déjà associé à un compte existant.
 
-Si vous souhaitez en créer un nouveau, cliquez sur ce lien :  
+Si vous souhaitez en créer un nouveau, cliquez sur ce lien :
 ${process.env.URL_BASE_MSS}/inscription
 
-Si vous souhaitez réinitialiser votre mot de passe, cliquez sur ce lien :  
+Si vous souhaitez réinitialiser votre mot de passe, cliquez sur ce lien :
 ${process.env.URL_BASE_MSS}/reinitialisationMotDePasse
 
 Si vous n'êtes pas l'origine de cette demande, votre compte est sécurisé et vous pouvez ignorer cet e-mail.

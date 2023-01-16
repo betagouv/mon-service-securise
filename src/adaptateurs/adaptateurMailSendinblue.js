@@ -15,7 +15,7 @@ const envoieMessageFinalisationInscription = (destinataire, idResetMotDePasse) =
   destinataire,
   'MonServiceSécurisé – Activation du compte',
   `Bonjour, <br/><br/>
-  
+
 Suite à votre demande de création de compte, cliquez sur le lien d'activation pour
 finaliser votre inscription : <br/>
 ${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse} <br/><br/>
@@ -80,10 +80,10 @@ const envoieNotificationTentativeReinscription = (destinataire) => envoieEmail(
 
 Lors de la création de votre compte utilisateur sur MonServiceSécurisé, l'e-mail que vous avez renseigné est déjà associé à un compte existant. <br/><br/>
 
-Si vous souhaitez en créer un nouveau, cliquez sur ce lien : <br/>  
+Si vous souhaitez en créer un nouveau, cliquez sur ce lien : <br/>
 ${process.env.URL_BASE_MSS}/inscription <br/><br/>
 
-Si vous souhaitez réinitialiser votre mot de passe, cliquez sur ce lien : <br/>  
+Si vous souhaitez réinitialiser votre mot de passe, cliquez sur ce lien : <br/>
 ${process.env.URL_BASE_MSS}/reinitialisationMotDePasse <br/><br/>
 
 Si vous n'êtes pas l'origine de cette demande, votre compte est sécurisé et vous pouvez ignorer cet e-mail. <br/><br/>
