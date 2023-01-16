@@ -32,8 +32,11 @@ const genereAnnexeMesures = (donnees) => generationPdfLatex('src/vuesTex/annexeM
 
 const genereAnnexeRisques = (donnees) => generationPdfLatex('src/vuesTex/annexeRisques.template.tex', donnees);
 
-const genereAnnexes = ({ donneesMesures, donneesRisques }) => (
-  ajoutePdf(PDFDocument.create(), genereAnnexeMesures(donneesMesures))
+const genereAnnexes = ({ donneesDescription, donneesMesures, donneesRisques }) => (
+  ajoutePdf(PDFDocument.create(), genereAnnexeDescription(donneesDescription))
+    .then((pdfFusion) => ajoutePdf(
+      Promise.resolve(pdfFusion), genereAnnexeMesures(donneesMesures)
+    ))
     .then((pdfFusion) => ajoutePdf(
       Promise.resolve(pdfFusion), genereAnnexeRisques(donneesRisques)
     ))
