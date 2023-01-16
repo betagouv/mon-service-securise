@@ -17,18 +17,6 @@ const routesPdf = (middleware, adaptateurPdf) => {
       .catch(suite);
   });
 
-  routes.get('/:id/annexeDescription.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
-    const { homologation } = requete;
-    const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
-
-    adaptateurPdf.genereAnnexeDescription(donneesDescription)
-      .then((pdf) => {
-        reponse.contentType('application/pdf');
-        reponse.send(pdf);
-      })
-      .catch(suite);
-  });
-
   return routes;
 };
 
