@@ -8,7 +8,7 @@ const routesPdf = (middleware, adaptateurPdf) => {
     const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
     const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
 
-    adaptateurPdf.genereAnnexes(donneesMesures, donneesRisques)
+    adaptateurPdf.genereAnnexes({ donneesMesures, donneesRisques })
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);
