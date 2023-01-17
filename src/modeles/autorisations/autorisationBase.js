@@ -7,6 +7,7 @@ class AutorisationBase extends Base {
 
     this.permissionAjoutContributeur = false;
     this.permissionSuppressionContributeur = false;
+    this.permissionSuppressionService = false;
   }
 }
 

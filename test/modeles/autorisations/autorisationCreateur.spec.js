@@ -12,4 +12,9 @@ describe("Une autorisation d'accès en tant que créateur", () => {
     const autorisation = new AutorisationCreateur();
     expect(autorisation.permissionSuppressionContributeur).to.be(true);
   });
+
+  it('permet de supprimer un service', () => {
+    const autorisation = new AutorisationCreateur();
+    expect(autorisation.permissionSuppressionService).to.be(true);
+  });
 });
