@@ -699,4 +699,88 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       }, done);
     });
   });
+
+  describe('quand requête DELETE sur `/api/service/:id`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(new AutorisationCreateur());
+      testeur.depotDonnees().supprimeHomologation = () => Promise.resolve();
+    });
+
+    it('vérifie que les CGU sont acceptées', (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU({
+        method: 'delete',
+        url: 'http://localhost:1234/api/service/123',
+      }, done);
+    });
+
+    it("demande au dépôt de vérifier l'autorisation d'accès au service pour l'utilisateur courant", (done) => {
+      let autorisationVerifiee = false;
+
+      testeur.middleware().reinitialise('999');
+      testeur.depotDonnees().autorisationPour = (idUtilisateur, idService) => {
+        try {
+          expect(idUtilisateur).to.equal('999');
+          expect(idService).to.equal('123');
+          autorisationVerifiee = true;
+
+          return Promise.resolve(new AutorisationCreateur());
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios.delete('http://localhost:1234/api/service/123')
+        .then(() => expect(autorisationVerifiee).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
+      const autorisationNonTrouvee = undefined;
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisationNonTrouvee);
+
+      testeur.verifieRequeteGenereErreurHTTP(403, 'Droits insuffisants pour supprimer le service', {
+        method: 'delete',
+        url: 'http://localhost:1234/api/service/123',
+      }, done);
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas les droits de suppression du service", (done) => {
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(
+        new AutorisationContributeur()
+      );
+
+      testeur.verifieRequeteGenereErreurHTTP(403, 'Droits insuffisants pour supprimer le service', {
+        method: 'delete',
+        url: 'http://localhost:1234/api/service/123',
+      }, done);
+    });
+
+    it('demande au dépôt de supprimer le service', (done) => {
+      let serviceSupprime = false;
+
+      testeur.depotDonnees().supprimeHomologation = (idService) => {
+        try {
+          expect(idService).to.equal('123');
+          serviceSupprime = true;
+
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios({
+        method: 'delete',
+        url: 'http://localhost:1234/api/service/123',
+      })
+        .then((reponse) => {
+          expect(serviceSupprime).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.equal('Service supprimé');
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
 });

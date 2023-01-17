@@ -12,4 +12,9 @@ describe('Une autorisation de base', () => {
     const autorisation = new AutorisationBase();
     expect(autorisation.permissionSuppressionContributeur).to.be(false);
   });
+
+  it('ne permet pas de supprimer un service', () => {
+    const autorisation = new AutorisationBase();
+    expect(autorisation.permissionSuppressionService).to.be(false);
+  });
 });

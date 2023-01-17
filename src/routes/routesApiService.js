@@ -224,6 +224,30 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
         });
     });
 
+  routes.delete('/:id', middleware.verificationAcceptationCGU, (requete, reponse) => {
+    const verifiePermissionSuppressionService = (idUtilisateur, idService) => depotDonnees
+      .autorisationPour(idUtilisateur, idService)
+      .then((autorisation) => (
+        autorisation?.permissionSuppressionService
+          ? Promise.resolve()
+          : Promise.reject(new EchecAutorisation())
+      ));
+
+    const { idUtilisateurCourant } = requete;
+    const idService = requete.params.id;
+
+    verifiePermissionSuppressionService(idUtilisateurCourant, idService)
+      .then(() => depotDonnees.supprimeHomologation(idService))
+      .then(() => reponse.send('Service supprimé'))
+      .catch((e) => {
+        if (e instanceof EchecAutorisation) {
+          reponse.status(403).send('Droits insuffisants pour supprimer le service');
+        } else {
+          suite(e);
+        }
+      });
+  });
+
   return routes;
 };
 
