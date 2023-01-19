@@ -1,0 +1,23 @@
+.modale-suppression-service .modale {
+  width: 400px;
+  padding: 3em 5em 1em 5em ;
+}
+
+.modale-suppression-service .modale h1 {
+  padding: 0;
+}
+
+.modale-suppression-service .modale .avertissement {
+  display: flex;
+  background-color: var(--fond-composant-secondaire);
+  border-radius: 0.3em;
+  margin-top: 2em;
+  padding: 1em;
+}
+
+.modale-suppression-service .modale .avertissement::before {
+  content: '\01F449\01F3FC';
+  display: block;
+  margin-right: 1em;
+  font-size: 1.1em;
+}
