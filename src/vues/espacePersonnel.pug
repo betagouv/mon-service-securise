@@ -1,11 +1,13 @@
 extends mssConnecte
 include fragments/modaleNouveauService
+include fragments/modales/modaleSuppressionService
 
 block append styles
   link(href = '/statique/assets/styles/espacePersonnel.css', rel = 'stylesheet')
 
 block main
   +modaleNouveauService
+  +modaleSuppressionService
 
   a(href = './nouvellesFonctionnalites').bandeau-nouveautes
     p.marges-fixes.
