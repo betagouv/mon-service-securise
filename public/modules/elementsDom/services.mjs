@@ -39,6 +39,8 @@ const $serviceExistant = (
     return resultat;
   };
 
+  const utilisateurCreateur = () => idUtilisateur === donneesService.createur.id;
+
   const $pastille = (classePastille, donneesUtilisateur, proprietaire = false) => $(`
 <div class="${classePastille}" title="${descriptionContributeur(donneesUtilisateur, proprietaire)}">
   <div class="initiales">${donneesUtilisateur.initiales}</div>
@@ -54,7 +56,14 @@ const $serviceExistant = (
   const classePastilles = 'pastilles';
 
   const $element = $(`
-<a class="service" href="/homologation/${donneesService.id}">
+<a
+  class="service"
+  href="/homologation/${donneesService.id}"
+  data-id="${donneesService.id}"
+  data-nom="${donneesService.nomService}"
+>
+  <div class="masque invisible"></div>
+  <div class="menu-contextuel"></div>
   <div class="titre-service">${donneesService.nomService}</div>
   <div class="contributeurs">
     <p>Contributeurs</p>
@@ -62,6 +71,13 @@ const $serviceExistant = (
   </div>
 </a>
   `);
+
+  if (utilisateurCreateur()) {
+    $('.menu-contextuel', $element).append(`
+      <div class="menu-contextuel-titre"></div>
+      <div class="menu-contextuel-options invisible">Supprimer</div>
+    `);
+  }
 
   if (utilisateurCourantPeutAjouterContributeurs()) {
     $(`.${classePastilles}`, $element).append($(`
