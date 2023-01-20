@@ -16,6 +16,8 @@
   flex-direction: column;
   justify-content: space-around;
 
+  position: relative;
+
   min-width: 0;
   height: 12em;
   padding: 2em;
@@ -30,6 +32,78 @@
 .service:hover {
   border-color: var(--bleu-mise-en-avant-20-pc);
   background-color: inherit;
+}
+
+.service .menu-contextuel {
+  align-self: flex-end;
+  position: relative;
+  margin: -2em -1em 0 0;
+  z-index: 2;
+}
+
+.service .menu-contextuel-titre {
+  width: 1em;
+  height: 1em;
+  padding: 0.7em;
+  border-radius: 0.3em;
+  background-image: url(../images/points_horizontal.svg);
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.service .menu-contextuel-titre:hover {
+  background-color: var(--systeme-design-etat-gris-survol);
+}
+
+.service .menu-contextuel-options {
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap: 0.5em;
+  margin-top: 0.5em;
+  padding: 1em 1.5em;
+  border-radius: 0.3em;
+  background-color: #fff;
+  color: var(--bleu-mise-en-avant);
+}
+
+.service .menu-contextuel-options:hover {
+  background-color: var(--systeme-design-etat-gris-survol);
+  color: var(--bleu-anssi);
+}
+
+.service .menu-contextuel-options::before {
+  content: '';
+  width: 1.3em;
+  
+  background-color: var(--bleu-mise-en-avant);
+  -webkit-mask: url(../images/icone_poubelle.svg) no-repeat center;
+  mask: url(../images/icone_poubelle.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.service .menu-contextuel-options:hover::before {
+  background-color: var(--bleu-anssi);
+}
+
+.service .menu-contextuel-options.invisible {
+  display: none;
+}
+
+.service .masque {
+  background: #0000007A;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  border-radius: 0.3em;
+  cursor: not-allowed;
 }
 
 .service p {

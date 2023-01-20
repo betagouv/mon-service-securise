@@ -2,6 +2,7 @@ import { $services, $modaleNouveauContributeur } from './modules/elementsDom/ser
 import { brancheModale, initialiseComportementModale } from './modules/interactions/modale.mjs';
 import brancheComportementPastilles from './modules/interactions/pastilles.js';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
+import brancheMenuContextuelService from './modules/interactions/brancheMenuContextuelService.js';
 
 $(() => {
   const $modaleSuppression = $('.modale-suppression-service');
@@ -10,12 +11,8 @@ $(() => {
     $('.nom-service', $modaleSuppression).text(nomService);
 
     const $bouton = $('.bouton-suppression-service', $modaleSuppression);
-    $bouton.on('click', () => {
-      axios.delete(`/api/service/${idService}`).then(() => window.location.reload());
-    });
-    $modaleSuppression.on('fermeModale', () => {
-      $bouton.off();
-    });
+    $bouton.on('click', () => axios.delete(`/api/service/${idService}`).then(() => window.location.reload()));
+    $modaleSuppression.on('fermeModale', () => $bouton.off());
     $modaleSuppression.trigger('afficheModale');
   });
 
@@ -35,6 +32,7 @@ $(() => {
     $('main').append($modaleNouveauContributeur());
     brancheModale('.ajout-contributeur', '#rideau-nouveau-contributeur');
     brancheComportementSaisieContributeur('.ajout-contributeur');
+    $('.service').each((_index, service) => brancheMenuContextuelService($(service)));
 
     brancheModale('#nouveau-service', '#modale-nouveau-service');
   };
