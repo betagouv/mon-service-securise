@@ -55,6 +55,11 @@ const $serviceExistant = (
 
   const $element = $(`
 <a class="service" href="/homologation/${donneesService.id}">
+  <div class="masque invisible"></div>
+  <div class="options">
+    <div class="options-menu"></div>
+    <div class="options-liste invisible">Supprimer</div>
+  </div>
   <div class="titre-service">${donneesService.nomService}</div>
   <div class="contributeurs">
     <p>Contributeurs</p>

@@ -2,6 +2,7 @@ import { $services, $modaleNouveauContributeur } from './modules/elementsDom/ser
 import { brancheModale, initialiseComportementModale } from './modules/interactions/modale.mjs';
 import brancheComportementPastilles from './modules/interactions/pastilles.js';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
+import brancheMenuContextuelService from './modules/interactions/brancheMenuContextuelService.js';
 
 $(() => {
   const $modaleSuppression = $('.modale-suppression-service');
@@ -35,6 +36,7 @@ $(() => {
     $('main').append($modaleNouveauContributeur());
     brancheModale('.ajout-contributeur', '#rideau-nouveau-contributeur');
     brancheComportementSaisieContributeur('.ajout-contributeur');
+    brancheMenuContextuelService('.options');
 
     brancheModale('#nouveau-service', '#modale-nouveau-service');
   };

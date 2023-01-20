@@ -16,6 +16,8 @@
   flex-direction: column;
   justify-content: space-around;
 
+  position: relative;
+
   min-width: 0;
   height: 12em;
   padding: 2em;
@@ -55,7 +57,7 @@
   justify-content: center;
 }
 
-.pastilles > div {
+.pastilles>div {
   width: 2em;
   height: 2em;
 }
@@ -99,7 +101,8 @@
   background-image: url(../images/pastille_bleu_anssi.svg);
 }
 
-.initiales, .nombre-contributeurs-supplementaires {
+.initiales,
+.nombre-contributeurs-supplementaires {
   font-size: 0.8em;
   transform: translateY(-0.1em);
 }
@@ -163,4 +166,74 @@
   font-size: .95em;
   text-transform: uppercase;
   text-align: left;
+}
+
+.service.inactif {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.service .options {
+  align-self: flex-end;
+  position: relative;
+  margin: -2em -1em 0 0;
+  z-index: 11;
+}
+
+.service .options-menu {
+  background-image: url(../images/points_horizontal.svg);
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 1em;
+  height: 1em;
+  padding: 0.7em;
+  border-radius: 0.3em;
+}
+
+.service .options-menu:hover {
+  background-color: var(--systeme-design-etat-gris-survol);
+}
+
+.service .options-liste {
+  background-color: #fff;
+  position: absolute;
+  right: 0;
+  margin-top: 0.5em;
+  color: var(--bleu-mise-en-avant);
+  display: flex;
+  gap: 0.5em;
+  padding: 1em 1.5em;
+  border-radius: 0.3em;
+}
+
+.service .options-liste:hover {
+  background-color: var(--systeme-design-etat-gris-survol);
+  color: #0c5c98;
+}
+
+.service .options-liste::before {
+  content: "";
+  width: 1.3em;
+  background-image: url(../images/icone_poubelle.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.service .options-liste.invisible {
+  display: none;
+}
+
+.masque {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  border-radius: 5px;
+  cursor: not-allowed;
 }
