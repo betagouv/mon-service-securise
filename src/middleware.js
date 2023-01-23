@@ -65,7 +65,7 @@ const middleware = (configuration = {}) => {
 
   const verificationAcceptationCGU = (requete, reponse, suite) => {
     verificationJWT(requete, reponse, () => {
-      if (!requete.cguAcceptees) reponse.redirect('/utilisateur/edition');
+      if (!requete.cguAcceptees) reponse.redirect('/motDePasse/edition');
       else suite();
     });
   };
