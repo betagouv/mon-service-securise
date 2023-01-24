@@ -4,6 +4,14 @@ include ../fragments/formulaireUtilisateur
 include ../fragments/utilisateur/nouveauMotDePasse
 include ../fragments/utilisateur/questionCgu
 
+block append styles
+  link(href = '/statique/assets/styles/filAriane.css', rel = 'stylesheet')
+
+block retour
+  nav.fil-ariane
+    a.avec-chevron(href = '/espacePersonnel') Espace personnel
+    div Profil
+
 block main
   form.etroit.utilisateur#edition
     h1 Profil
