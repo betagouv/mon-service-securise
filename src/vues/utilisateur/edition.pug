@@ -1,8 +1,6 @@
 extends ../mssConnecte
 
 include ../fragments/formulaireUtilisateur
-include ../fragments/utilisateur/nouveauMotDePasse
-include ../fragments/utilisateur/questionCgu
 
 block append styles
   link(href = '/statique/assets/styles/filAriane.css', rel = 'stylesheet')
@@ -20,12 +18,6 @@ block main
       donnees: utilisateur,
       emailLectureSeule: true
     })
-
-    section
-      h2 Changer de mot de passe
-      +nouveauMotDePasse
-      if !utilisateur.accepteCGU()
-        +questionCgu
 
     button(type = 'submit').bouton Enregistrer
 
