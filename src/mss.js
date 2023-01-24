@@ -107,13 +107,12 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
       depotDonnees.utilisateurAFinaliser(idReset)
         .then((utilisateur) => {
           if (!utilisateur) {
-            reponse.status(404)
-              .send(`Identifiant d'initialisation de mot de passe "${idReset}" inconnu`);
-          } else {
-            const token = utilisateur.genereToken();
-            requete.session.token = token;
-            sersFormulaireEditionUtilisateur(requete, reponse);
+            reponse.status(404).send(`Identifiant d'initialisation de mot de passe "${idReset}" inconnu`);
+            return;
           }
+
+          requete.session.token = utilisateur.genereToken();
+          sersFormulaireEditionUtilisateur(requete, reponse);
         });
     });
 
