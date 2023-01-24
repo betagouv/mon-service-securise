@@ -14,15 +14,6 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
   avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
   let serveur;
 
-  const sersFormulaireEditionUtilisateur = (requete, reponse) => {
-    const departements = referentiel.departements();
-    middleware.verificationJWT(requete, reponse, () => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees.utilisateur(idUtilisateur)
-        .then((utilisateur) => reponse.render('utilisateur/edition', { utilisateur, departements }));
-    });
-  };
-
   const app = express();
 
   app.use(express.json());
@@ -112,7 +103,7 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
           }
 
           requete.session.token = utilisateur.genereToken();
-          sersFormulaireEditionUtilisateur(requete, reponse);
+          reponse.render('motDePasse/edition', { utilisateur });
         });
     });
 
@@ -133,8 +124,11 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
 
   app.use('/pdf', routesPdf(middleware, adaptateurPdf));
 
-  app.get('/utilisateur/edition', (requete, reponse) => {
-    sersFormulaireEditionUtilisateur(requete, reponse);
+  app.get('/utilisateur/edition', middleware.verificationJWT, (requete, reponse) => {
+    const departements = referentiel.departements();
+    const idUtilisateur = requete.idUtilisateurCourant;
+    depotDonnees.utilisateur(idUtilisateur)
+      .then((utilisateur) => reponse.render('utilisateur/edition', { utilisateur, departements }));
   });
 
   app.use('/statique', express.static('public'));
