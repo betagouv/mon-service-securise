@@ -145,11 +145,13 @@
   background-repeat: no-repeat;
 }
 
-.bandeau-nouveautes {
+.bandeau-nouveautes, .bandeau-maj-profil {
   display: flex;
   height: 2.7em;
   align-items: center;
+}
 
+.bandeau-nouveautes {
   background-color: var(--rose-anssi);
 }
 
@@ -157,7 +159,19 @@
   background-color: var(--rose-mise-en-avant);
 }
 
-.bandeau-nouveautes p {
+.bandeau-maj-profil {
+  background-color: var(--bleu-mise-en-avant);
+}
+
+.bandeau-maj-profil:hover {
+  background-color: var(--bleu-anssi);
+}
+
+.bandeau-maj-profil.invisible {
+  display: none;
+}
+
+:is(.bandeau-nouveautes, .bandeau-maj-profil) p {
   color: #fff;
   font-weight: bold;
   font-size: .95em;

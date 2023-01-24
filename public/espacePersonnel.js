@@ -39,8 +39,16 @@ $(() => {
     brancheModale('#nouveau-service', '#modale-nouveau-service');
   };
 
+  const afficheBandeauMajProfil = () => {
+    $('.bandeau-maj-profil').removeClass('invisible');
+  };
+
   axios.get('/api/utilisateurCourant')
-    .then((reponse) => reponse.data.utilisateur.id)
-    .then((idUtilisateur) => axios.get('/api/homologations')
-      .then((reponse) => peupleServicesDans('.services', reponse.data.homologations, idUtilisateur)));
+    .then(({ data }) => data.utilisateur)
+    .then((utilisateur) => {
+      axios.get('/api/homologations')
+        .then(({ data }) => peupleServicesDans('.services', data.homologations, utilisateur.id));
+
+      if (!utilisateur.profilEstComplet) afficheBandeauMajProfil();
+    });
 });

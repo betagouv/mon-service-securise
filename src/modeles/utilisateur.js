@@ -113,6 +113,10 @@ class Utilisateur extends Base {
     return [this.prenom, this.nom].join(' ').trim() || this.email;
   }
 
+  profilEstComplet() {
+    return (this.nom?.trim() ?? '') !== '';
+  }
+
   toJSON() {
     return {
       id: this.id,
@@ -125,6 +129,7 @@ class Utilisateur extends Base {
       delegueProtectionDonnees: this.estDelegueProtectionDonnees(),
       nomEntitePublique: this.nomEntitePublique || '',
       departementEntitePublique: this.departementEntitePublique || '',
+      profilEstComplet: this.profilEstComplet(),
     };
   }
 }

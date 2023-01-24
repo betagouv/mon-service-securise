@@ -5,6 +5,18 @@ const Referentiel = require('../../src/referentiel');
 const Utilisateur = require('../../src/modeles/utilisateur');
 
 describe('Un utilisateur', () => {
+  describe("sur demande d'un profil complet ou non", () => {
+    it('considère le profil « complet » dès lors que le nom est renseigné', () => {
+      const utilisateur = new Utilisateur({ nom: 'Dupont', email: 'jean.dupont@mail.fr' });
+      expect(utilisateur.profilEstComplet()).to.be(true);
+    });
+
+    it("considère le profil « incomplet » si le nom n'est pas renseigné", () => {
+      const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
+      expect(utilisateur.profilEstComplet()).to.be(false);
+    });
+  });
+
   describe('sur demande de ses initiales', () => {
     it('renvoie les initiales du prénom et du nom', () => {
       const utilisateur = new Utilisateur({ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' });
@@ -60,6 +72,7 @@ describe('Un utilisateur', () => {
       delegueProtectionDonnees: false,
       nomEntitePublique: 'Ville de Paris',
       departementEntitePublique: '75',
+      profilEstComplet: true,
     });
   });
 
