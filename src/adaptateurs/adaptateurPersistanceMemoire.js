@@ -149,7 +149,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
 
   const supprimeAutorisationsContribution = (idUtilisateur) => {
     donnees.autorisations = donnees.autorisations
-      .filter((a) => a.idUtilisateur !== idUtilisateur && a.type !== 'contributeur');
+      .filter((a) => a.idUtilisateur !== idUtilisateur || a.type !== 'contributeur');
     return Promise.resolve();
   };
 
