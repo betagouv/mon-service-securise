@@ -14,7 +14,7 @@ const brancheMenuContextuelService = ($service) => {
     });
   });
 
-  $('.menu-contextuel-options', $service).on('click', (e) => {
+  $('.menu-contextuel-options .supprimer', $service).on('click', (e) => {
     e.preventDefault();
     const donnees = { idService: $service.data('id'), nomService: $service.data('nom') };
     $service.trigger('modaleSuppression', donnees);

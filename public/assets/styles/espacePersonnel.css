@@ -67,36 +67,43 @@
 .service .menu-contextuel-options {
   position: absolute;
   right: 0;
-  display: flex;
-  gap: 0.5em;
   margin-top: 0.5em;
-  padding: 1em 1.5em;
+  padding: 0.3em;
   border-radius: 0.3em;
   color: var(--bleu-mise-en-avant);
 }
 
-.service .menu-contextuel-options:hover {
+.service .menu-contextuel-options.invisible {
+  display: none;
+}
+
+.service .une-option {
+  display: flex;
+  gap: 0.5em;
+  padding: 1em 1.5em;
+  border-radius: 0.3em;
+}
+
+.service .une-option:hover {
   background-color: var(--systeme-design-etat-gris-survol);
   color: var(--bleu-anssi);
 }
 
-.service .menu-contextuel-options::before {
+.service .une-option:hover::before {
+  background-color: var(--bleu-anssi);
+}
+
+.service .une-option::before {
+  background-color: var(--bleu-mise-en-avant);
   content: '';
   width: 1.3em;
-  
-  background-color: var(--bleu-mise-en-avant);
-  -webkit-mask: url(../images/icone_poubelle.svg) no-repeat center;
-  mask: url(../images/icone_poubelle.svg) no-repeat center;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.service .menu-contextuel-options:hover::before {
-  background-color: var(--bleu-anssi);
-}
-
-.service .menu-contextuel-options.invisible {
-  display: none;
+.service .une-option.supprimer::before {
+  -webkit-mask: url(../images/icone_poubelle.svg) no-repeat center;
+  mask: url(../images/icone_poubelle.svg) no-repeat center;
 }
 
 .service .masque {
