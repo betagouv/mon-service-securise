@@ -1,5 +1,5 @@
+const Middleware = require('./src/http/middleware');
 const DepotDonnees = require('./src/depotDonnees');
-const Middleware = require('./src/middleware');
 const MoteurRegles = require('./src/moteurRegles');
 const MSS = require('./src/mss');
 const Referentiel = require('./src/referentiel');
