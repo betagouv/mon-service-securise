@@ -417,11 +417,17 @@ describe('Le dépôt de données des utilisateurs', () => {
         .catch(done);
     });
 
-    it('supprime les autorisations de contribution pour cet utilisateur', (done) => {
+    it('supprime les autorisations de contribution pour cet utilisateur (mais pas les autres)', (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'un.autre.utilisateur@mail.fr' },
+        ],
         homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'contributeur' }],
+        autorisations: [
+          { idUtilisateur: '999', idHomologation: '123', type: 'contributeur' },
+          { idUtilisateur: '000', idHomologation: '123', type: 'contributeur' },
+        ],
       });
       const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
@@ -429,6 +435,8 @@ describe('Le dépôt de données des utilisateurs', () => {
       depot.supprimeUtilisateur('999')
         .then(() => depotAutorisations.autorisations('999'))
         .then((autorisations) => expect(autorisations.length).to.equal(0))
+        .then(() => depotAutorisations.autorisations('000'))
+        .then((autorisations) => expect(autorisations.length).to.equal(1))
         .then(() => done())
         .catch(done);
     });
