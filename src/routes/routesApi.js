@@ -1,6 +1,7 @@
 const express = require('express');
 
-const { DUREE_SESSION } = require('../configurationServeur');
+const { DUREE_SESSION } = require('../http/configurationServeur');
+const { resultatValidation, valideMotDePasse } = require('../http/validationMotDePasse');
 const {
   EchecAutorisation,
   EchecEnvoiMessage,
@@ -10,7 +11,6 @@ const {
 } = require('../erreurs');
 const routesApiService = require('./routesApiService');
 const Utilisateur = require('../modeles/utilisateur');
-const { resultatValidation, valideMotDePasse } = require('../validationMotDePasse');
 
 const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) => promesseEnvoiMessage

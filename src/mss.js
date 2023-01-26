@@ -1,7 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 
-const { DUREE_SESSION } = require('./configurationServeur');
+const { DUREE_SESSION } = require('./http/configurationServeur');
 const routesApi = require('./routes/routesApi');
 const routesBibliotheques = require('./routes/routesBibliotheques');
 const routesHomologation = require('./routes/routesHomologation');

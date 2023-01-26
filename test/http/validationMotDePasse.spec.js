@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const { resultatValidation, valideMotDePasse } = require('../src/validationMotDePasse');
+const { resultatValidation, valideMotDePasse } = require('../../src/http/validationMotDePasse');
 
 describe('Le validateur de mot de passe', () => {
   it("vérifie que la taille du mot de passe est d'au moins douze caractères", () => {

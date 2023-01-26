@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const Middleware = require('../src/middleware');
+const Middleware = require('../../src/http/middleware');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
