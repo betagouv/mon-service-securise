@@ -470,7 +470,7 @@ module.exports = {
       descriptionLongue: "Créer des comptes d'administration technique et/ou métier, aux seules personnes ayant besoin de disposer de ces accès.<br>Cette mesure permet de limiter le nombre de comptes disposant de privilèges susceptibles d'être usurpés à des fins malveillantes. Cette mesure réduit la « surface d'attaque » du service.",
     },
     limitationCreationComptes: {
-      description: "Autoriser uniquement la création de comptes d'accès nominatifs associés chacun une personne",
+      description: "Autoriser uniquement la création de comptes d'accès nominatifs associés chacun à une personne",
       categorie: 'protection',
       indispensable: true,
       descriptionLongue: "Demander un nom et un prénom pour toute création de compte administrateur et utilisateur et informer chaque personne ne peut pas être partagé<br>Cette mesure permet de réduire le risque de diffusion d'identifiants et de mots de passe à des personnes qui n'auraient pas le droit d'accéder au service ou à certaines de ses fonctions. Cette mesure également à la bonne gestion des comptes d'accès au service.",
