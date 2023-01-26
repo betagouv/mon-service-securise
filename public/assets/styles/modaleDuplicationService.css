@@ -1,0 +1,28 @@
+.modale-duplication-service .modale {
+  width: 400px;
+  padding: 3em 5em 1em 5em ;
+}
+
+.modale-duplication-service .modale h1 {
+  padding: 0;
+}
+
+.modale-duplication-service .nom-service {
+  font-weight: bold;
+}
+
+.modale-duplication-service .modale ul {
+  margin-left: 0.5em;
+}
+
+.modale-duplication-service .modale ul.avec {
+  list-style-type: '✅';
+}
+
+.modale-duplication-service .modale ul.sans {
+  list-style-type: '❌';
+}
+
+.modale-duplication-service .modale li {
+  padding-left: 0.5em;
+}

@@ -76,7 +76,8 @@ const $serviceExistant = (
     $('.menu-contextuel', $element).append(`
       <div class="menu-contextuel-titre"></div>
       <div class="menu-contextuel-options invisible">
-        <div class="une-option supprimer">Supprimer</div>
+        <div class="option dupliquer">Dupliquer</div>
+        <div class="option supprimer">Supprimer</div>
       </div>
     `);
   }

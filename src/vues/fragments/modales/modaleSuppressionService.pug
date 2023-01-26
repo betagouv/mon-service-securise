@@ -8,8 +8,9 @@ mixin modaleSuppressionService()
       .contenu-modale
         h1 Supprimer un service
         p Souhaitez-vous définitivement supprimer le service #[span.nom-service] ?
-        .avertissement.
-          Toutes les données seront effacées.<br>
-          Aucun contributeur ne pourra accéder à ce service.
+        .avertissement
+          .resume.
+            Toutes les données seront effacées.<br>
+            Aucun contributeur ne pourra accéder à ce service.
 
         button(type = 'button').bouton.bouton-suppression-service Valider
