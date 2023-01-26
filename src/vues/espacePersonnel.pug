@@ -1,5 +1,6 @@
 extends mssConnecte
 include fragments/modaleNouveauService
+include fragments/modales/modaleDuplicationService
 include fragments/modales/modaleSuppressionService
 
 block append styles
@@ -7,6 +8,7 @@ block append styles
 
 block main
   +modaleNouveauService
+  +modaleDuplicationService
   +modaleSuppressionService
 
   a(href = './nouvellesFonctionnalites').bandeau-nouveautes

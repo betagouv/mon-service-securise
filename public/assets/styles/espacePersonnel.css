@@ -77,23 +77,23 @@
   display: none;
 }
 
-.service .une-option {
+.service .option {
   display: flex;
   gap: 0.5em;
   padding: 1em 1.5em;
   border-radius: 0.3em;
 }
 
-.service .une-option:hover {
+.service .option:hover {
   background-color: var(--systeme-design-etat-gris-survol);
   color: var(--bleu-anssi);
 }
 
-.service .une-option:hover::before {
+.service .option:hover::before {
   background-color: var(--bleu-anssi);
 }
 
-.service .une-option::before {
+.service .option::before {
   background-color: var(--bleu-mise-en-avant);
   content: '';
   width: 1.3em;
@@ -101,9 +101,14 @@
   mask-size: contain;
 }
 
-.service .une-option.supprimer::before {
+.service .option.supprimer::before {
   -webkit-mask: url(../images/icone_poubelle.svg) no-repeat center;
   mask: url(../images/icone_poubelle.svg) no-repeat center;
+}
+
+.service .option.dupliquer::before {
+  -webkit-mask: url(../images/icone_dupliquer.svg) no-repeat center;
+  mask: url(../images/icone_dupliquer.svg) no-repeat center;
 }
 
 .service .masque {

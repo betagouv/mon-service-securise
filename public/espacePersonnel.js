@@ -16,6 +16,18 @@ $(() => {
     $modaleSuppression.trigger('afficheModale');
   });
 
+  const $modaleDuplication = $('.modale-duplication-service');
+  initialiseComportementModale($modaleDuplication);
+  $('.services').on('modaleDuplication', (_e, { nomService }) => {
+    $('.nom-service', $modaleDuplication).text(nomService);
+
+    const $valider = $('.bouton-duplication-service', $modaleDuplication);
+    $valider.on('click', () => $modaleDuplication.trigger('fermeModale'));
+
+    $modaleDuplication.on('fermeModale', () => $valider.off());
+    $modaleDuplication.trigger('afficheModale');
+  });
+
   const peupleServicesDans = (placeholder, donneesServices, idUtilisateur) => {
     const $conteneurServices = $(placeholder);
     const nombreMaxContributeursDistincts = 2;

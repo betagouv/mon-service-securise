@@ -1,0 +1,26 @@
+block append styles
+  link(href = '/statique/assets/styles/modaleDuplicationService.css', rel = 'stylesheet')
+
+mixin modaleDuplicationService()
+  .rideau.modale-duplication-service
+    .modale
+      .fermeture-modale
+      .contenu-modale
+        h1 Dupliquer un service
+        p Souhaitez-vous dupliquer le service #[span.nom-service] ?
+        .avertissement
+          .resume En dupliquant ce service, les données copiées sont celles des rubriques :
+          div
+            ul.avec
+              li Décrire
+              li Sécuriser
+              li Risques
+              li Contacts utiles
+              li PDF Synthèse de la sécurité du service
+              li PDF Annexes
+
+            ul.sans
+              li Homologuer
+              li PDF Décision d'homologation de sécurité
+
+        button(type = 'button').bouton.bouton-duplication-service Valider
