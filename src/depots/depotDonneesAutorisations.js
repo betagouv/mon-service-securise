@@ -95,8 +95,9 @@ const creeDepot = (config = {}) => {
 
     return verifieUtilisateurExiste(idUtilisateurSource)
       .then(() => verifieUtilisateurExiste(idUtilisateurCible))
+      .then(() => adaptateurPersistance.supprimeAutorisationsContribution(idUtilisateurSource))
       .then(() => adaptateurPersistance
-        .transfereAutorisations(idUtilisateurSource, idUtilisateurCible));
+        .transfereAutorisationsCreation(idUtilisateurSource, idUtilisateurCible));
   };
 
   return {

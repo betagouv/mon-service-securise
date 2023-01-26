@@ -70,14 +70,51 @@ describe('Le dépôt de données des autorisations', () => {
         .catch(done);
     });
 
-    it('effectue le transfert', (done) => {
+    it('effectue le transfert des services créés', (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'autre.utilisateur@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+        homologations: [
+          { id: '123', descriptionService: { nomService: 'Un service créé' } },
+          { id: '456', descriptionService: { nomService: 'Une contribution' } },
+        ],
+        autorisations: [
+          { idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+          { idUtilisateur: '999', idHomologation: '456', type: 'contributeur' },
+        ],
+      });
+      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesAutorisations.creeDepot({
+        adaptateurPersistance, depotUtilisateurs,
+      });
+
+      depot.transfereAutorisations('999', '000')
+        .then(() => depot.autorisations('000'))
+        .then((as) => {
+          expect(as.length).to.equal(1);
+          expect(as[0]).to.be.an(AutorisationCreateur);
+          expect(as[0].idHomologation).to.equal('123');
+          done();
+        })
+        .catch(done);
+    });
+
+    it('supprime les autorisations de contribution', (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'autre.utilisateur@mail.fr' },
+        ],
+        homologations: [
+          { id: '123', descriptionService: { nomService: 'Un service créé' } },
+          { id: '456', descriptionService: { nomService: 'Une contribution' } },
+        ],
+        autorisations: [
+          { idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+          { idUtilisateur: '999', idHomologation: '456', type: 'contributeur' },
+        ],
       });
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
@@ -87,13 +124,7 @@ describe('Le dépôt de données des autorisations', () => {
       depot.transfereAutorisations('999', '000')
         .then(() => depot.autorisations('999'))
         .then((as) => expect(as.length).to.equal(0))
-        .then(() => depot.autorisations('000'))
-        .then((as) => {
-          expect(as.length).to.equal(1);
-          expect(as[0]).to.be.an(AutorisationCreateur);
-          expect(as[0].idHomologation).to.equal('123');
-          done();
-        })
+        .then(() => done())
         .catch(done);
     });
   });

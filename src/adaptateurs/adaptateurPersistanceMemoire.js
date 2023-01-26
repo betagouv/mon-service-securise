@@ -34,9 +34,17 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     return Promise.resolve();
   };
 
-  const autorisations = (idUtilisateur) => Promise.resolve(
-    donnees.autorisations.filter((a) => a.idUtilisateur === idUtilisateur)
-  );
+  const autorisations = (idUtilisateur, filtre = {}) => {
+    const autorisationsUtilisateur = donnees.autorisations
+      .filter((a) => a.idUtilisateur === idUtilisateur);
+
+    const resultat = Object.keys(filtre).reduce(
+      (acc, clef) => acc.filter((a) => a[clef] === filtre[clef]),
+      autorisationsUtilisateur,
+    );
+
+    return Promise.resolve(resultat);
+  };
 
   const intervenantsHomologation = (idHomologation) => donnees.autorisations
     .filter((a) => a.idHomologation === idHomologation)
@@ -159,8 +167,8 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     return Promise.resolve();
   };
 
-  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => (
-    autorisations(idUtilisateurSource)
+  const transfereAutorisationsCreation = (idUtilisateurSource, idUtilisateurCible) => (
+    autorisations(idUtilisateurSource, { type: 'createur' })
       .then((as) => as.map((a) => Promise.resolve(a.idUtilisateur = idUtilisateurCible)))
       .then((transferts) => Promise.all(transferts))
   );
@@ -191,7 +199,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     supprimeService,
     supprimeUtilisateur,
     supprimeUtilisateurs,
-    transfereAutorisations,
+    transfereAutorisationsCreation,
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,

@@ -141,9 +141,17 @@ const nouvelAdaptateur = (env) => {
     .then(convertisLigneEnObjet)
     .catch(() => undefined);
 
-  const autorisations = (idUtilisateur) => knex('autorisations')
-    .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
-    .then((rows) => rows.map(convertisLigneEnObjet));
+  const autorisations = (idUtilisateur, filtre = {}) => {
+    const autorisationsUtilisateur = knex('autorisations')
+      .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur);
+
+    const resultat = Object.keys(filtre).reduce(
+      (acc, clef) => acc.whereRaw(`donnees->>'${clef}'=?`, filtre[clef]),
+      autorisationsUtilisateur,
+    );
+
+    return resultat.then((rows) => rows.map(convertisLigneEnObjet));
+  };
 
   const idsHomologationsCreeesParUtilisateur = (idUtilisateur, idsHomologationsAExclure = []) => knex('autorisations')
     .whereRaw("donnees->>'idUtilisateur'=? AND donnees->>'type'='createur'", idUtilisateur)
@@ -177,8 +185,9 @@ const nouvelAdaptateur = (env) => {
     .whereRaw("donnees->>'idHomologation'=?", idHomologation)
     .del();
 
-  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => knex('autorisations')
+  const transfereAutorisationsCreation = (idUtilisateurSource, idUtilisateurCible) => knex('autorisations')
     .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateurSource)
+    .whereRaw("donnees->>'type'='createur'")
     .update({
       donnees: knex.raw("(jsonb_set(donnees::jsonb, '{ idUtilisateur }', '??'))::json", idUtilisateurCible),
     });
@@ -210,7 +219,7 @@ const nouvelAdaptateur = (env) => {
     supprimeHomologations,
     supprimeUtilisateur,
     supprimeUtilisateurs,
-    transfereAutorisations,
+    transfereAutorisationsCreation,
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,
