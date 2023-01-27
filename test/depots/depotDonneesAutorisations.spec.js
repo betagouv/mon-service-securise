@@ -11,6 +11,7 @@ const {
   ErreurAutorisationInexistante,
   ErreurHomologationInexistante,
   ErreurTentativeSuppressionCreateur,
+  ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
 } = require('../../src/erreurs');
 const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
@@ -70,6 +71,25 @@ describe('Le dépôt de données des autorisations', () => {
         .catch(done);
     });
 
+    it("vérifie que l'utilisateur cible est différent de l'utilisateur source", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+      });
+      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesAutorisations.creeDepot({
+        adaptateurPersistance, depotUtilisateurs,
+      });
+
+      depot.transfereAutorisations('999', '999')
+        .then(() => done('Le transfert aurait dû lever une erreur'))
+        .catch((erreur) => {
+          expect(erreur).to.be.a(ErreurTranfertVersUtilisateurSource);
+          expect(erreur.message).to.equal("Transfert d'un utilisateur vers lui-même interdit");
+          done();
+        })
+        .catch(done);
+    });
+
     it('effectue le transfert', (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
@@ -94,6 +114,64 @@ describe('Le dépôt de données des autorisations', () => {
           expect(as[0].idHomologation).to.equal('123');
           done();
         })
+        .catch(done);
+    });
+
+    it("ne duplique pas les droits de contribution si l'utilisateur cible est déjà contributeur", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'autre.utilisateur@mail.fr' },
+        ],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [
+          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'contributeur' },
+          { id: '789', idUtilisateur: '000', idHomologation: '123', type: 'contributeur' },
+        ],
+      });
+      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesAutorisations.creeDepot({
+        adaptateurPersistance, depotUtilisateurs,
+      });
+
+      depot.transfereAutorisations('999', '000')
+        .then(() => depot.autorisations('999'))
+        .then((as) => expect(as.length).to.equal(0))
+        .then(() => depot.autorisations('000'))
+        .then((as) => {
+          expect(as.length).to.equal(1);
+          expect(as[0].id).to.equal('789');
+        })
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("met à jour les droits si l'utilisateur source est créateur et l'utilisateur cible déjà contributeur", (done) => {
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'autre.utilisateur@mail.fr' },
+        ],
+        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [
+          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+          { id: '789', idUtilisateur: '000', idHomologation: '123', type: 'contributeur' },
+        ],
+      });
+      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
+      const depot = DepotDonneesAutorisations.creeDepot({
+        adaptateurPersistance, depotUtilisateurs,
+      });
+
+      depot.transfereAutorisations('999', '000')
+        .then(() => depot.autorisations('999'))
+        .then((as) => expect(as.length).to.equal(0))
+        .then(() => depot.autorisations('000'))
+        .then((as) => {
+          expect(as.length).to.equal(1);
+          expect(as[0]).to.be.an(AutorisationCreateur);
+        })
+        .then(() => done())
         .catch(done);
     });
   });

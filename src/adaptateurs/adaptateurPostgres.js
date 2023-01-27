@@ -173,8 +173,30 @@ const nouvelAdaptateur = (env) => {
     .whereRaw("donnees->>'type'='contributeur'")
     .del();
 
+  const supprimeAutorisationsContributionDejaPresentes = (idUtilisateurSource, idUtilisateurCible) => knex('autorisations as a1')
+    .join(
+      'autorisations as a2',
+      knex.raw("a1.donnees->>'idHomologation'"),
+      knex.raw("a2.donnees->>'idHomologation'"),
+    )
+    .whereRaw("a1.donnees->>'idUtilisateur'=?", idUtilisateurSource)
+    .whereRaw("a2.donnees->>'idUtilisateur'=?", idUtilisateurCible)
+    .whereRaw("a1.donnees->>'type'='contributeur'")
+    .whereRaw("a2.donnees->>'type'='contributeur'")
+    .del();
+
   const supprimeAutorisationsHomologation = (idHomologation) => knex('autorisations')
     .whereRaw("donnees->>'idHomologation'=?", idHomologation)
+    .del();
+
+  const supprimeDoublonsCreationContribution = (idUtilisateur) => knex('autorisations as a1')
+    .join('autorisations as a2', function jointure() {
+      this.on(knex.raw("a1.donnees->>'idHomologation'"), knex.raw("a2.donnees->>'idHomologation'"))
+        .andOn(knex.raw("a1.donnees->>'idUtilisateur'"), knex.raw("a2.donnees->>'idUtilisateur'"));
+    })
+    .whereRaw("a1.donnees->>'idUtilisateur'=?", idUtilisateur)
+    .whereRaw("a1.donnees->>'type'='contributeur'")
+    .whereRaw("a2.donnees->>'type'='createur'")
     .del();
 
   const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => knex('autorisations')
@@ -204,7 +226,9 @@ const nouvelAdaptateur = (env) => {
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
+    supprimeAutorisationsContributionDejaPresentes,
     supprimeAutorisationsHomologation,
+    supprimeDoublonsCreationContribution,
     supprimeHomologation,
     supprimeService,
     supprimeHomologations,

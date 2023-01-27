@@ -5,6 +5,7 @@ const {
   ErreurAutorisationInexistante,
   ErreurHomologationInexistante,
   ErreurTentativeSuppressionCreateur,
+  ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
 } = require('../erreurs');
 const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
@@ -93,10 +94,20 @@ const creeDepot = (config = {}) => {
         if (!existe) throw new ErreurUtilisateurInexistant(`L'utilisateur "${id}" n'existe pas`);
       });
 
+    const verifieUtilisateursSourceDestinationDifferents = () => {
+      if (idUtilisateurSource === idUtilisateurCible) {
+        throw new ErreurTranfertVersUtilisateurSource("Transfert d'un utilisateur vers lui-même interdit");
+      }
+    };
+
     return verifieUtilisateurExiste(idUtilisateurSource)
       .then(() => verifieUtilisateurExiste(idUtilisateurCible))
+      .then(() => verifieUtilisateursSourceDestinationDifferents())
       .then(() => adaptateurPersistance
-        .transfereAutorisations(idUtilisateurSource, idUtilisateurCible));
+        .supprimeAutorisationsContributionDejaPresentes(idUtilisateurSource, idUtilisateurCible))
+      .then(() => adaptateurPersistance
+        .transfereAutorisations(idUtilisateurSource, idUtilisateurCible))
+      .then(() => adaptateurPersistance.supprimeDoublonsCreationContribution(idUtilisateurCible));
   };
 
   return {
