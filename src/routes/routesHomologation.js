@@ -91,10 +91,6 @@ const routesHomologation = (
     reponse.render('homologation/dossiers', { homologation });
   });
 
-  routes.get('/:id/dossier/nouveau', (requete, reponse) => (
-    reponse.redirect(`/homologation/${requete.params.id}/dossier/edition/etape/1`)
-  ));
-
   routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
     const idEtape = parseInt(requete.params.idEtape, 10);
