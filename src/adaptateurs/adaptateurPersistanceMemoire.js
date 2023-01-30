@@ -153,51 +153,54 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     return Promise.resolve();
   };
 
-  const supprimeAutorisationsContributionDejaPresentes = (
-    idUtilisateurSource,
-    idUtilisateurCible
-  ) => {
-    const autorisationContributionExistante = (idUtilisateur, idHomologation) => (
-      !!donnees.autorisations.find(
-        (a) => a.idUtilisateur === idUtilisateur && a.idHomologation === idHomologation && a.type === 'contributeur'
-      )
-    );
-
-    donnees.autorisations = donnees.autorisations.filter((a) => (
-      a.idUtilisateur !== idUtilisateurSource
-        || a.type !== 'contributeur'
-        || !autorisationContributionExistante(idUtilisateurCible, a.idHomologation)
-    ));
-
-    return Promise.resolve();
-  };
-
   const supprimeAutorisationsHomologation = (idHomologation) => {
     donnees.autorisations = donnees.autorisations
       .filter((a) => a.idHomologation !== idHomologation);
     return Promise.resolve();
   };
 
-  const supprimeDoublonsCreationContribution = (idUtilisateur) => {
-    const idsHomologationsCreees = donnees.autorisations
-      .filter((a) => a.idUtilisateur === idUtilisateur && a.type === 'createur')
-      .map((a) => a.idHomologation);
+  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => {
+    const autorisationContributionExistante = (idUtilisateur, idHomologation) => (
+      !!donnees.autorisations.find(
+        (a) => a.idUtilisateur === idUtilisateur
+          && a.idHomologation === idHomologation
+          && a.type === 'contributeur'
+      )
+    );
 
-    donnees.autorisations = donnees.autorisations
-      .filter((a) => (
-        a.idUtilisateur !== idUtilisateur
-        || a.type !== 'contributeur'
-        || !idsHomologationsCreees.includes(a.idHomologation)
+    const supprimeAutorisationsContributionDejaPresentes = () => {
+      donnees.autorisations = donnees.autorisations.filter((a) => (
+        a.idUtilisateur !== idUtilisateurSource
+          || a.type !== 'contributeur'
+          || !autorisationContributionExistante(idUtilisateurCible, a.idHomologation)
       ));
 
-    return Promise.resolve();
-  };
+      return Promise.resolve();
+    };
 
-  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => (
-    autorisations(idUtilisateurSource)
+    const operationTransfert = () => autorisations(idUtilisateurSource)
       .then((as) => as.map((a) => Promise.resolve(a.idUtilisateur = idUtilisateurCible)))
-      .then((transferts) => Promise.all(transferts))
-  );
+      .then((transferts) => Promise.all(transferts));
+
+    const supprimeDoublonsCreationContribution = (idUtilisateur) => {
+      const idsHomologationsCreees = donnees.autorisations
+        .filter((a) => a.idUtilisateur === idUtilisateur && a.type === 'createur')
+        .map((a) => a.idHomologation);
+
+      donnees.autorisations = donnees.autorisations
+        .filter((a) => (
+          a.idUtilisateur !== idUtilisateur
+          || a.type !== 'contributeur'
+          || !idsHomologationsCreees.includes(a.idHomologation)
+        ));
+
+      return Promise.resolve();
+    };
+
+    return supprimeAutorisationsContributionDejaPresentes(idUtilisateurSource, idUtilisateurCible)
+      .then(operationTransfert)
+      .then(() => supprimeDoublonsCreationContribution(idUtilisateurCible));
+  };
 
   return {
     ajouteAutorisation,
@@ -219,9 +222,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
-    supprimeAutorisationsContributionDejaPresentes,
     supprimeAutorisationsHomologation,
-    supprimeDoublonsCreationContribution,
     supprimeHomologation,
     supprimeHomologations,
     supprimeService,
