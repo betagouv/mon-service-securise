@@ -4,6 +4,7 @@ const {
   ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
 } = require('../erreurs');
+const copie = require('../utilitaires/copie');
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
@@ -199,6 +200,21 @@ const creeDepot = (config = {}) => {
       .then(() => idHomologation);
   };
 
+  const dupliqueHomologation = (idHomologation) => adaptateurPersistance
+    .homologation(idHomologation)
+    .then((homologationTrouvee) => {
+      const donneesHomologation = copie(homologationTrouvee);
+
+      donneesHomologation.descriptionService.nomService += ' - Copie';
+      delete donneesHomologation.id;
+      delete donneesHomologation.dossiers;
+      delete donneesHomologation.contributeurs;
+      delete donneesHomologation.createur;
+
+      return adaptateurPersistance.idCreateurHomologation(idHomologation)
+        .then((idUtilisateur) => nouvelleHomologationComplete(idUtilisateur, donneesHomologation));
+    });
+
   const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
     .then((hs) => hs
       .map((h) => new Homologation(h, referentiel))
@@ -258,6 +274,7 @@ const creeDepot = (config = {}) => {
     ajouteMesuresAHomologation,
     ajouteRisqueGeneralAHomologation,
     ajouteRolesResponsabilitesAHomologation,
+    dupliqueHomologation,
     homologation,
     homologationExiste,
     homologations,

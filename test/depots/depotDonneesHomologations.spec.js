@@ -12,6 +12,7 @@ const Referentiel = require('../../src/referentiel');
 
 const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
+const AdaptateurUUID = require('../../src/adaptateurs/adaptateurUUID');
 
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
@@ -1035,6 +1036,131 @@ describe('Le dépôt de données des homologations', () => {
         .then(() => adaptateurPersistance.homologation('123'))
         .then((h) => expect(h).to.be.an(Object))
         .then(() => done())
+        .catch(done);
+    });
+  });
+
+  describe('sur une demande de duplication de service', () => {
+    let adaptateurJournalMSS;
+    let adaptateurPersistance;
+    let depot;
+    let referentiel;
+
+    beforeEach(() => {
+      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }, { id: '1234', email: 'jean.contributeur@mail.fr' }],
+        homologations: [{ id: '123-1', descriptionService: { nomService: 'Service à dupliquer' }, dossiers: [{ id: '1', finalise: true }] }],
+        services: [{ id: '123-1', descriptionService: { nomService: 'Service à dupliquer' }, dossiers: [{ id: '1', finalise: true }] }],
+        autorisations: [
+          { idUtilisateur: '123', idHomologation: '123-1', idService: '123-1', type: 'createur' },
+          { idUtilisateur: '1234', idHomologation: '123-1', idService: '123-1', type: 'contributeur' },
+        ],
+      });
+      referentiel = Referentiel.creeReferentielVide();
+
+      depot = DepotDonneesHomologations.creeDepot({
+        adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID: AdaptateurUUID, referentiel,
+      });
+    });
+
+    it('enregistre la nouvelle homologation avec un nom suffixé de Copie', (done) => {
+      depot.dupliqueHomologation('123-1')
+        .then(() => depot.homologations('123'))
+        .then((homologations) => {
+          expect(homologations.length).to.equal(2);
+          expect(homologations[1].nomService()).to.equal('Service à dupliquer - Copie');
+          done();
+        })
+        .catch(done);
+    });
+
+    it('enregistre la nouvelle homologation sans conserver les contributeurs dans les données', (done) => {
+      let homologationAjoutee = false;
+      const { ajouteHomologation } = adaptateurPersistance;
+      adaptateurPersistance.ajouteHomologation = (id, donneesHomologation) => {
+        expect(donneesHomologation.contributeurs).to.equal(undefined);
+        homologationAjoutee = true;
+
+        return ajouteHomologation(id, donneesHomologation);
+      };
+
+      depot.dupliqueHomologation('123-1')
+        .then(() => depot.homologations('123'))
+        .then((homologations) => {
+          expect(homologations.length).to.equal(2);
+          expect(homologationAjoutee).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('enregistre la nouvelle homologation sans conserver le créateur dans les données', (done) => {
+      let homologationAjoutee = false;
+      const { ajouteHomologation } = adaptateurPersistance;
+      adaptateurPersistance.ajouteHomologation = (id, donneesHomologation) => {
+        expect(donneesHomologation.createur).to.equal(undefined);
+        homologationAjoutee = true;
+
+        return ajouteHomologation(id, donneesHomologation);
+      };
+
+      depot.dupliqueHomologation('123-1')
+        .then(() => depot.homologations('123'))
+        .then((homologations) => {
+          expect(homologations.length).to.equal(2);
+          expect(homologationAjoutee).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("enregistre la nouvelle homologation sans conserver l'ancien id dans les données", (done) => {
+      let homologationAjoutee = false;
+      const { ajouteHomologation } = adaptateurPersistance;
+      adaptateurPersistance.ajouteHomologation = (id, donneesHomologation) => {
+        expect(donneesHomologation.id).to.equal(undefined);
+        homologationAjoutee = true;
+
+        return ajouteHomologation(id, donneesHomologation);
+      };
+
+      depot.dupliqueHomologation('123-1')
+        .then(() => depot.homologations('123'))
+        .then((homologations) => {
+          expect(homologations.length).to.equal(2);
+          expect(homologationAjoutee).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("enregistre la nouvelle homologation sans conserver les dossiers d'homologation", (done) => {
+      depot.dupliqueHomologation('123-1')
+        .then(() => depot.homologations('123'))
+        .then((homologations) => {
+          expect(homologations.length).to.equal(2);
+          const homologationCopiee = homologations.find((homologation) => homologation.nomService() === 'Service à dupliquer - Copie');
+          expect(homologationCopiee.dossiers.nombre()).to.equal(0);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('lêve une erreur quand le nom avec suffixe `- Copie` exite déjà', (done) => {
+      const donneesDescriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Service à dupliquer - Copie')
+        .construis()
+        .toJSON();
+
+      depot.nouvelleHomologation('123', donneesDescriptionService)
+        .then(() => depot.dupliqueHomologation('123-1'))
+        .then(() => done("La création de l'homologation aurait dû lever une exception"))
+        .catch((e) => {
+          expect(e).to.be.an(ErreurNomServiceDejaExistant);
+          expect(e.message).to.equal('Le nom du service "Service à dupliquer - Copie" existe déjà pour une autre homologation');
+          done();
+        })
         .catch(done);
     });
   });
