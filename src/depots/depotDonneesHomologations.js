@@ -129,6 +129,16 @@ const creeDepot = (config = {}) => {
       .then((h) => !!h)
   );
 
+  const valideNomHomologation = (idUtilisateur, nomService, idHomologationMiseAJour) => (
+    homologationExiste(idUtilisateur, nomService, idHomologationMiseAJour)
+      .then((homologationExistante) => (
+        homologationExistante
+          ? Promise.reject(new ErreurNomServiceDejaExistant(
+            `Le nom du service "${nomService}" existe déjà pour une autre homologation`
+          ))
+          : Promise.resolve()
+      )));
+
   const valideDescriptionService = (idUtilisateur, donnees, idHomologationMiseAJour) => {
     const { nomService } = donnees;
 
@@ -136,14 +146,7 @@ const creeDepot = (config = {}) => {
       return Promise.reject(new ErreurDonneesObligatoiresManquantes('Certaines données obligatoires ne sont pas renseignées'));
     }
 
-    return homologationExiste(idUtilisateur, nomService, idHomologationMiseAJour)
-      .then((homologationExistante) => (
-        homologationExistante
-          ? Promise.reject(new ErreurNomServiceDejaExistant(
-            `Le nom du service "${nomService}" existe déjà pour une autre homologation`
-          ))
-          : Promise.resolve()
-      ));
+    return valideNomHomologation(idUtilisateur, nomService, idHomologationMiseAJour);
   };
 
   const ajouteDescriptionServiceAHomologation = (idUtilisateur, idHomologation, infos) => (
@@ -168,6 +171,34 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteHomologation('avisExpertCyber', ...params)
   );
 
+  const nouvelleHomologationComplete = (idUtilisateur, donneesHomologation) => {
+    const idHomologation = adaptateurUUID.genereUUID();
+    const idAutorisation = adaptateurUUID.genereUUID();
+
+    return valideNomHomologation(
+      idUtilisateur, donneesHomologation.descriptionService.nomService, idHomologation
+    )
+      .then(() => Promise.all([
+        adaptateurPersistance.ajouteHomologation(idHomologation, donneesHomologation),
+        adaptateurPersistance.ajouteService(idHomologation, donneesHomologation),
+      ]))
+      .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
+        idUtilisateur, idHomologation, idService: idHomologation, type: 'createur',
+      }))
+      .then(() => homologation(idHomologation))
+      .then((h) => Promise.all([
+        adaptateurJournalMSS.consigneEvenement(
+          new EvenementNouveauServiceCree({ idService: h.id, idUtilisateur }).toJSON()
+        ),
+        adaptateurJournalMSS.consigneEvenement(
+          new EvenementCompletudeServiceModifiee({
+            idService: h.id, ...h.completudeMesures(),
+          }).toJSON()
+        ),
+      ]))
+      .then(() => idHomologation);
+  };
+
   const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
     .then((hs) => hs
       .map((h) => new Homologation(h, referentiel))
@@ -186,33 +217,13 @@ const creeDepot = (config = {}) => {
   );
 
   const nouvelleHomologation = (idUtilisateur, donneesDescriptionService) => {
-    const idHomologation = adaptateurUUID.genereUUID();
-    const idAutorisation = adaptateurUUID.genereUUID();
     const donnees = {
       idUtilisateur,
       descriptionService: donneesDescriptionService,
     };
 
     return valideDescriptionService(idUtilisateur, donneesDescriptionService)
-      .then(() => Promise.all([
-        adaptateurPersistance.ajouteHomologation(idHomologation, donnees),
-        adaptateurPersistance.ajouteService(idHomologation, donnees),
-      ]))
-      .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
-        idUtilisateur, idHomologation, idService: idHomologation, type: 'createur',
-      }))
-      .then(() => homologation(idHomologation))
-      .then((h) => Promise.all([
-        adaptateurJournalMSS.consigneEvenement(
-          new EvenementNouveauServiceCree({ idService: h.id, idUtilisateur }).toJSON()
-        ),
-        adaptateurJournalMSS.consigneEvenement(
-          new EvenementCompletudeServiceModifiee({
-            idService: h.id, ...h.completudeMesures(),
-          }).toJSON()
-        ),
-      ]))
-      .then(() => idHomologation);
+      .then(() => nouvelleHomologationComplete(idUtilisateur, donnees));
   };
 
   const remplaceRisquesSpecifiquesPourHomologation = (...params) => (
