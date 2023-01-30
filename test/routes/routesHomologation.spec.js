@@ -131,23 +131,6 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/dossier/nouveau`', () => {
-    beforeEach(() => {
-      testeur.referentiel().recharge({ etapesParcoursHomologation: [{ numero: 1 }] });
-      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
-      testeur.depotDonnees().homologation = () => Promise.resolve(
-        new Homologation({ id: '456', descriptionService: { nomService: 'un service' } })
-      );
-    });
-
-    it('redirige vers `/homologation/:id/dossier/edition/etape/1`', (done) => {
-      axios('http://localhost:1234/homologation/456/dossier/nouveau')
-        .then((reponse) => expect(reponse.request.res.responseUrl).to.equal('http://localhost:1234/homologation/456/dossier/edition/etape/1'))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
-    });
-  });
-
   describe('quand requête GET sur `/homologation/:id/dossier/edition/etape/:idEtape`', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({ etapesParcoursHomologation: [{ numero: 1 }] });
