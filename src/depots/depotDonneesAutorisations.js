@@ -104,10 +104,7 @@ const creeDepot = (config = {}) => {
       .then(() => verifieUtilisateurExiste(idUtilisateurCible))
       .then(() => verifieUtilisateursSourceDestinationDifferents())
       .then(() => adaptateurPersistance
-        .supprimeAutorisationsContributionDejaPresentes(idUtilisateurSource, idUtilisateurCible))
-      .then(() => adaptateurPersistance
-        .transfereAutorisations(idUtilisateurSource, idUtilisateurCible))
-      .then(() => adaptateurPersistance.supprimeDoublonsCreationContribution(idUtilisateurCible));
+        .transfereAutorisations(idUtilisateurSource, idUtilisateurCible));
   };
 
   return {
