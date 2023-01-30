@@ -20,7 +20,7 @@ module.exports = {
       description: 'Sécuriser',
       sousTitre: 'Mettez en œuvre les mesures de sécurité adaptées à votre service.',
     },
-    'dossier/nouveau': {
+    dossiers: {
       position: 2,
       indisponible: true,
       description: 'Homologuer',
