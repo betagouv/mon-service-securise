@@ -14,6 +14,10 @@ class ConsoleAdministration {
     });
   }
 
+  dupliqueHomologation(idHomologation) {
+    return this.depotDonnees.dupliqueHomologation(idHomologation);
+  }
+
   transfereAutorisations(idUtilisateurSource, idUtilisateurCible) {
     return this.depotDonnees.transfereAutorisations(idUtilisateurSource, idUtilisateurCible);
   }
