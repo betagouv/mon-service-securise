@@ -22,7 +22,6 @@ module.exports = {
     },
     dossiers: {
       position: 2,
-      indisponible: true,
       description: 'Homologuer',
       sousTitre: 'Complétez et téléchargez les documents pour homologuer le service.',
     },
