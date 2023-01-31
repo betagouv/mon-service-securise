@@ -9,7 +9,6 @@ const routesHomologation = (
   referentiel,
   depotDonnees,
   moteurRegles,
-  adaptateurEnvironnement,
 ) => {
   const routes = express.Router();
 
@@ -27,12 +26,9 @@ const routesHomologation = (
         { url: `/homologation/${homologation.id}/${id}`, id, ...autresDonnees }
       ));
 
-    const avecAccesEtapier = adaptateurEnvironnement.avecAccesEtapier();
-
     reponse.render('homologation/synthese', {
       InformationsHomologation,
       actionsSaisie,
-      avecAccesEtapier,
       referentiel,
       service: homologation,
     });

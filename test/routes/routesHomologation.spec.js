@@ -12,8 +12,6 @@ describe('Le serveur MSS des routes /homologation/*', () => {
   afterEach(testeur.arrete);
 
   describe('quand requête GET sur `/homologation/:id`', () => {
-    beforeEach(() => (testeur.adaptateurEnvironnement().avecAccesEtapier = () => true));
-
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
         'http://localhost:1234/homologation/456',
