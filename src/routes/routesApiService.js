@@ -224,7 +224,7 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
         });
     });
 
-  routes.delete('/:id', middleware.verificationAcceptationCGU, (requete, reponse) => {
+  routes.delete('/:id', middleware.verificationAcceptationCGU, (requete, reponse, suite) => {
     const verifiePermissionSuppressionService = (idUtilisateur, idService) => depotDonnees
       .autorisationPour(idUtilisateur, idService)
       .then((autorisation) => (
