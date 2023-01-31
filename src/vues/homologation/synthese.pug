@@ -65,10 +65,13 @@ block zone-principale
       ) Télécharger les annexes
 
 block cartes-informations
-  - const dossierActif = service.dossiers.dossierActif()
+  -
+    const dossiers = service.dossiers
+    const statutSaisieDossiers = dossiers.statutSaisie()
+    const dossierActif = dossiers.dossierActif()
 
   +carteInformations({titre: "Statut d'homologation" })
-    if dossierActif
+    if statutSaisieDossiers === InformationsHomologation.COMPLETES
       .statut.statut-homologue
         span.pastille
         span Service homologué
