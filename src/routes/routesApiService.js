@@ -1,7 +1,8 @@
 const express = require('express');
 
-const { EchecAutorisation, ErreurModele } = require('../erreurs');
+const { EchecAutorisation, ErreurModele, ErreurNomServiceDejaExistant } = require('../erreurs');
 const ActeursHomologation = require('../modeles/acteursHomologation');
+const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
@@ -242,6 +243,32 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
       .catch((e) => {
         if (e instanceof EchecAutorisation) {
           reponse.status(403).send('Droits insuffisants pour supprimer le service');
+        } else {
+          suite(e);
+        }
+      });
+  });
+
+  routes.copy('/:id', middleware.verificationAcceptationCGU, (requete, reponse, suite) => {
+    const verifiePermissionDuplicationService = (idUtilisateur, idService) => depotDonnees
+      .autorisationPour(idUtilisateur, idService)
+      .then((autorisation) => (
+        autorisation instanceof AutorisationCreateur
+          ? Promise.resolve()
+          : Promise.reject(new EchecAutorisation())
+      ));
+
+    const { idUtilisateurCourant } = requete;
+    const idService = requete.params.id;
+
+    verifiePermissionDuplicationService(idUtilisateurCourant, idService)
+      .then(() => depotDonnees.dupliqueHomologation(idService))
+      .then(() => reponse.send('Service dupliqué'))
+      .catch((e) => {
+        if (e instanceof EchecAutorisation) {
+          reponse.status(403).send('Droits insuffisants pour dupliquer le service');
+        } else if (e instanceof ErreurNomServiceDejaExistant) {
+          reponse.status(424).send('La duplication a échouée');
         } else {
           suite(e);
         }

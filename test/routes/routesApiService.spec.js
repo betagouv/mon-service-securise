@@ -784,4 +784,101 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
   });
+
+  describe('quand requête COPY sur `/api/service/:id`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().dupliqueHomologation = () => Promise.resolve();
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(new AutorisationCreateur());
+    });
+
+    it('vérifie que les CGU sont acceptées', (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU({
+        method: 'copy',
+        url: 'http://localhost:1234/api/service/123',
+      }, done);
+    });
+
+    it("demande au dépôt de vérifier que l'utilisateur courant a le droit de dupliquer le service", (done) => {
+      let autorisationVerifiee = false;
+
+      testeur.middleware().reinitialise('999');
+      testeur.depotDonnees().autorisationPour = (idUtilisateur, idService) => {
+        try {
+          expect(idUtilisateur).to.equal('999');
+          expect(idService).to.equal('123');
+          autorisationVerifiee = true;
+
+          return Promise.resolve(new AutorisationCreateur());
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios({
+        method: 'copy',
+        url: 'http://localhost:1234/api/service/123',
+      })
+        .then(() => expect(autorisationVerifiee).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
+      const autorisationNonTrouvee = undefined;
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisationNonTrouvee);
+
+      testeur.verifieRequeteGenereErreurHTTP(403, 'Droits insuffisants pour dupliquer le service', {
+        method: 'copy',
+        url: 'http://localhost:1234/api/service/123',
+      }, done);
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'est pas le créateur du service", (done) => {
+      testeur.depotDonnees().autorisationPour = () => Promise.resolve(
+        new AutorisationContributeur()
+      );
+
+      testeur.verifieRequeteGenereErreurHTTP(403, 'Droits insuffisants pour dupliquer le service', {
+        method: 'copy',
+        url: 'http://localhost:1234/api/service/123',
+      }, done);
+    });
+
+    it('retourne une erreur HTTP 424 si le nom cible du service existe déjà', (done) => {
+      testeur.depotDonnees().dupliqueHomologation = () => Promise.reject(new ErreurNomServiceDejaExistant('Le nom existe déjà'));
+
+      testeur.verifieRequeteGenereErreurHTTP(424, 'La duplication a échouée', {
+        method: 'copy',
+        url: 'http://localhost:1234/api/service/123',
+      }, done);
+    });
+
+    it('demande au dépôt de dupliquer le service', (done) => {
+      let serviceDuplique = false;
+
+      testeur.middleware().reinitialise('999');
+      testeur.depotDonnees().dupliqueHomologation = (idService) => {
+        try {
+          expect(idService).to.equal('123');
+          serviceDuplique = true;
+
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios({
+        method: 'copy',
+        url: 'http://localhost:1234/api/service/123',
+      })
+        .then((reponse) => {
+          expect(serviceDuplique).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.equal('Service dupliqué');
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
 });
