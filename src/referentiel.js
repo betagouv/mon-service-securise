@@ -27,7 +27,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const actionsSaisie = () => donnees.actionsSaisie || {};
   const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
   const actionSaisie = (id) => actionsSaisie()[id] || {};
-  const actionSaisieIndisponible = (id) => !!actionSaisie(id)?.indisponible;
   const positionActionSaisie = (id) => actionSaisie(id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
@@ -181,7 +180,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   return {
     actionsSaisie,
-    actionSaisieIndisponible,
     actionSuivante,
     categoriesMesures,
     codeDepartements,

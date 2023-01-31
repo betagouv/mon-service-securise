@@ -27,14 +27,12 @@ describe("Les actions de saisie d'une homologation", () => {
     expect(actions.toJSON()).to.eql([
       {
         id: 'uneAction',
-        indisponible: false,
         description: 'Une description',
         sousTitre: undefined,
         statut: InformationsHomologation.A_SAISIR,
       },
       {
         id: 'actionSuivante',
-        indisponible: false,
         description: "Description de l'action suivante",
         sousTitre: undefined,
         statut: InformationsHomologation.A_SAISIR,
