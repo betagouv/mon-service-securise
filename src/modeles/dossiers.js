@@ -22,6 +22,10 @@ class Dossiers extends ElementsConstructibles {
     return this.items.filter((i) => i.finalise);
   }
 
+  statutSaisie() {
+    return this.dossierActif() ? Dossiers.COMPLETES : Dossiers.A_COMPLETER;
+  }
+
   static valide({ dossiers }) {
     const nombreDossiersNonFinalises = dossiers
       .filter((d) => !d.finalise)
