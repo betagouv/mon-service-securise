@@ -57,7 +57,7 @@ describe('Les dossiers liés à un service', () => {
     });
 
     ils("retournent une valeur indéfinie si aucun dossier actif n'est trouvé", () => {
-      const dossiers = new Dossiers({ dossiers: [{ id: '1', finalise: true }] });
+      const dossiers = new Dossiers({ dossiers: [{ id: '1' }] });
 
       const dossierActif = dossiers.dossierActif();
       expect(dossierActif).to.equal(undefined);
