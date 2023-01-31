@@ -29,7 +29,6 @@ const serveur = MSS.creeServeur(
   middleware,
   referentiel,
   moteurRegles,
-  adaptateurEnvironnement,
   adaptateurEquations,
   adaptateurMail,
   adaptateurPdfLatex,
