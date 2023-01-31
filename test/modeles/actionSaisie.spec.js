@@ -45,18 +45,6 @@ describe('Une action de saisie', () => {
     expect(action.sousTitre()).to.equal('Un sous-titre');
   });
 
-  it('sait si elle est indisponible', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: {}, uneActionIndisponible: { indisponible: true } },
-    });
-
-    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
-    expect(action.indisponible()).to.be(false);
-
-    const actionIndisponible = new ActionSaisie({ id: 'uneActionIndisponible' }, referentiel);
-    expect(actionIndisponible.indisponible()).to.be(true);
-  });
-
   it('connaît son statut', () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: { uneAction: {} },
@@ -69,22 +57,10 @@ describe('Une action de saisie', () => {
     expect(action.statut()).to.equal(InformationsHomologation.COMPLETES);
   });
 
-  it("retourne le statut « À saisir » si l'action est indisponible", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { indisponible: true } },
-    });
-
-    const homologation = new Homologation({});
-    homologation.statutSaisie = () => InformationsHomologation.COMPLETES;
-
-    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, homologation);
-    expect(action.statut()).to.equal(InformationsHomologation.A_SAISIR);
-  });
-
   it('sait se décrire comme un objet JSON', () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: {
-        uneAction: { position: 0, indisponible: true, description: 'Une description', sousTitre: 'Un sous-titre' },
+        uneAction: { position: 0, description: 'Une description', sousTitre: 'Un sous-titre' },
       },
     });
 
@@ -94,7 +70,6 @@ describe('Une action de saisie', () => {
     const action = new ActionSaisie({ id: 'uneAction' }, referentiel, homologation);
     expect(action.toJSON()).to.eql({
       id: 'uneAction',
-      indisponible: true,
       description: 'Une description',
       sousTitre: 'Un sous-titre',
       statut: InformationsHomologation.A_SAISIR,

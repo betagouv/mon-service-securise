@@ -23,10 +23,6 @@
   color: var(--bleu-anssi);
 }
 
-.actions a.indisponible {
-  pointer-events: none;
-}
-
 .action {
   position: relative;
 
@@ -40,26 +36,7 @@
   border-radius: 10px;
 }
 
-.action.indisponible {
-  background: var(--bleu-mise-en-avant-03-pc);
-  color: var(--texte-moyen);
-}
-
-.action.indisponible::after {
-  position: absolute;
-  top: 1em;
-
-  display: inline-block;
-  content: 'BIENTÔT DISPONIBLE';
-
-  padding: 0.1em 0.8em 0.2em;
-  border-radius: 15% / 100%;
-  background: var(--vert-anssi);
-
-  color: #fff;
-}
-
-.action:not(.indisponible):hover {
+.action:hover {
   background: var(--fond-pale);
 }
 
