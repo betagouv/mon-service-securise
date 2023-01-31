@@ -45,27 +45,19 @@ describe('Les dossiers liés à un service', () => {
     ));
 
     ils('retournent le premier dossier actif trouvé', () => {
-      const dossiers = new Dossiers(
-        {
-          dossiers: [
-            { id: '1', finalise: true, dateHomologation: '2022-01-01', dureeValidite: 'unAn' },
-            { id: '2', finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' },
-          ],
-        }, referentiel, adaptateurHorloge
-      );
+      const dossiers = new Dossiers({
+        dossiers: [
+          { id: '1', finalise: true, dateHomologation: '2022-01-01', dureeValidite: 'unAn' },
+          { id: '2', finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' },
+        ],
+      }, referentiel, adaptateurHorloge);
 
       const dossierActif = dossiers.dossierActif();
       expect(dossierActif.id).to.equal('2');
     });
 
     ils("retournent une valeur indéfinie si aucun dossier actif n'est trouvé", () => {
-      const dossiers = new Dossiers(
-        {
-          dossiers: [
-            { id: '1', finalise: true },
-          ],
-        }
-      );
+      const dossiers = new Dossiers({ dossiers: [{ id: '1', finalise: true }] });
 
       const dossierActif = dossiers.dossierActif();
       expect(dossierActif).to.equal(undefined);
