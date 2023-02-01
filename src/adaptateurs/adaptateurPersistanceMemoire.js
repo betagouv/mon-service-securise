@@ -38,6 +38,12 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     donnees.autorisations.filter((a) => a.idUtilisateur === idUtilisateur)
   );
 
+  const idCreateurHomologation = (idHomologation) => Promise.resolve(
+    donnees.autorisations
+      .find((a) => a.idHomologation === idHomologation && a.type === 'createur')
+      ?.idUtilisateur
+  );
+
   const intervenantsHomologation = (idHomologation) => donnees.autorisations
     .filter((a) => a.idHomologation === idHomologation)
     .reduce((acc, a) => {
@@ -213,6 +219,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     homologation,
     homologationAvecNomService,
     homologations,
+    idCreateurHomologation,
     idsHomologationsCreeesParUtilisateur,
     metsAJourHomologation,
     metsAJourService,
