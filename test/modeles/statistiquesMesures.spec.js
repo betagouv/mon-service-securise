@@ -281,7 +281,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
 
     elles('savent calculer la complétude à partir des mesures personnalisées fournies', () => {
       const aucuneSpecifique = new MesuresSpecifiques();
-      const statsUneCategorie = new StatistiquesMesures({
+      const statsDeuxCategories = new StatistiquesMesures({
         une: {
           indispensables: troisRempliesSurDix,
           recommandees: quatreRempliesSurDix,
@@ -298,7 +298,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       referentiel,
       aucuneSpecifique);
 
-      expect(statsUneCategorie.completude()).to.eql({
+      expect(statsDeuxCategories.completude()).to.eql({
         nombreTotalMesures: (10 + 10) * 2,
         nombreMesuresCompletes: (3 + 4) * 2,
       });
