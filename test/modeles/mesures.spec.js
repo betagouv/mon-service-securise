@@ -62,10 +62,10 @@ describe('Les mesures liées à une homologation', () => {
   });
 
   elles("délèguent le calcul de l'indice cyber aux mesures générales", () => {
-    const mesures = new Mesures({}, Referentiel.creeReferentielVide(), ['id1']);
+    const mesures = new Mesures({}, Referentiel.creeReferentielVide(), { id1: { } });
 
     mesures.mesuresGenerales.statistiques = (identifiantsMesuresPersonnalisees) => {
-      expect(identifiantsMesuresPersonnalisees).to.eql(['id1']);
+      expect(identifiantsMesuresPersonnalisees).to.eql({ id1: { } });
       return { indiceCyber: () => 3.7 };
     };
 
@@ -108,7 +108,11 @@ describe('Les mesures liées à une homologation', () => {
     });
 
     elles('récupère les mesures générales triées', () => {
-      const mesures = new Mesures({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel, ['mesure1']);
+      const mesures = new Mesures(
+        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
+        referentiel,
+        { mesure1: { } }
+      );
       mesures.mesuresGenerales.parStatutEtCategorie = () => ({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
 
       expect(mesures.parStatutEtCategorie()).to.eql({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
@@ -116,11 +120,9 @@ describe('Les mesures liées à une homologation', () => {
 
     elles('ajoutent les mesures spécifiques', () => {
       const mesures = new Mesures(
-        {
-          mesuresSpecifiques: [{ description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1' }],
-        },
+        { mesuresSpecifiques: [{ description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1' }] },
         referentiel,
-        ['mesure1']
+        { mesure1: { } },
       );
       mesures.mesuresSpecifiques.parStatutEtCategorie = () => ({ fait: { categorie1: [{ description: 'Mesure Spécifique 1' }] } });
 
@@ -134,7 +136,7 @@ describe('Les mesures liées à une homologation', () => {
           mesuresSpecifiques: [{ description: 'Mesure Spécifique 1', statut: 'fait', categorie: 'categorie1' }],
         },
         referentiel,
-        ['mesure1']
+        { mesure1: { } },
       );
       mesures.mesuresGenerales.parStatutEtCategorie = () => ({ fait: { categorie1: [{ description: 'mesure1', indispensable: true }] } });
       mesures.mesuresSpecifiques.parStatutEtCategorie = (mesuresParStatut) => {
