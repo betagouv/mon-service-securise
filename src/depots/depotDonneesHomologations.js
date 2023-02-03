@@ -19,19 +19,22 @@ const creeDepot = (config = {}) => {
     .then((h) => (h ? new Homologation(h, referentiel) : undefined));
 
   const ajouteAItemsDansHomologation = (nomListeItems, idHomologation, item) => (
-    adaptateurPersistance.homologation(idHomologation)
+    homologation(idHomologation)
       .then((h) => {
-        h[nomListeItems] ||= [];
+        const donneesAPersister = h.donneesAPersister().toutes();
+        donneesAPersister[nomListeItems] ||= [];
 
         const donneesItem = item.toJSON();
-        const itemDejaDansDepot = h[nomListeItems].find((i) => i.id === donneesItem.id);
+        const itemDejaDansDepot = donneesAPersister[nomListeItems]
+          .find((i) => i.id === donneesItem.id);
+
         if (itemDejaDansDepot) {
           Object.assign(itemDejaDansDepot, donneesItem);
         } else {
-          h[nomListeItems].push(donneesItem);
+          donneesAPersister[nomListeItems].push(donneesItem);
         }
 
-        const { id, ...donnees } = h;
+        const { id, ...donnees } = donneesAPersister;
         return Promise.all([
           adaptateurPersistance.metsAJourHomologation(id, donnees),
           adaptateurPersistance.metsAJourService(id, donnees),
@@ -56,7 +59,7 @@ const creeDepot = (config = {}) => {
     const trouveDonneesHomologation = (param) => (
       typeof param === 'object'
         ? Promise.resolve(param)
-        : adaptateurPersistance.homologation(param)
+        : homologation(param).then((h) => h.donneesAPersister().toutes())
     );
 
     return trouveDonneesHomologation(idOuHomologation).then(metsAJour);
@@ -67,12 +70,13 @@ const creeDepot = (config = {}) => {
   );
 
   const remplaceProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
-    adaptateurPersistance.homologation(idHomologation)
+    homologation(idHomologation)
       .then((h) => {
+        const donneesAPersister = h.donneesAPersister().toutes();
         const donneesPropriete = propriete.toJSON();
-        h[nomPropriete] = donneesPropriete;
+        donneesAPersister[nomPropriete] = donneesPropriete;
 
-        const { id, ...donnees } = h;
+        const { id, ...donnees } = donneesAPersister;
         return Promise.all([
           adaptateurPersistance.metsAJourHomologation(id, donnees),
           adaptateurPersistance.metsAJourService(id, donnees),
@@ -146,19 +150,22 @@ const creeDepot = (config = {}) => {
       ));
   };
 
-  const ajouteDescriptionServiceAHomologation = (idUtilisateur, idHomologation, infos) => (
-    adaptateurPersistance.homologation(idHomologation)
-      .then((h) => (
-        valideDescriptionService(idUtilisateur, infos, h.id)
-          .then(() => metsAJourDescriptionServiceHomologation(h, infos))
-          .then(() => homologation(idHomologation))
-          .then((hAJour) => adaptateurJournalMSS.consigneEvenement(
-            new EvenementCompletudeServiceModifiee({
-              idService: idHomologation, ...hAJour.completudeMesures(),
-            }).toJSON()
-          ))
-      ))
-  );
+  const ajouteDescriptionServiceAHomologation = (idUtilisateur, idHomologation, infos) => {
+    const donneesAPersister = (h) => h.donneesAPersister().toutes();
+
+    const consigneEvenement = (h) => adaptateurJournalMSS.consigneEvenement(
+      new EvenementCompletudeServiceModifiee({
+        idService: idHomologation, ...h.completudeMesures(),
+      }).toJSON()
+    );
+
+    const metsAJourHomologation = (h) => valideDescriptionService(idUtilisateur, infos, h.id)
+      .then(() => metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos))
+      .then(() => homologation(idHomologation))
+      .then(consigneEvenement);
+
+    return homologation(idHomologation).then(metsAJourHomologation);
+  };
 
   const ajouteRolesResponsabilitesAHomologation = (...params) => (
     metsAJourProprieteHomologation('rolesResponsabilites', ...params)

@@ -6,6 +6,7 @@ const DescriptionService = require('./descriptionService');
 const Dossiers = require('./dossiers');
 const Mesure = require('./mesure');
 const Mesures = require('./mesures');
+const DonneesPersistanceHomologation = require('./objetsDonnees/donneesPersistanceHomologation');
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
@@ -112,6 +113,20 @@ class Homologation {
     }, {});
   }
 
+  donneesAPersister() {
+    return new DonneesPersistanceHomologation({
+      id: this.id,
+      avisExpertCyber: this.avisExpertCyber.donneesSerialisees(),
+      descriptionService: this.descriptionService.donneesSerialisees(),
+      dossiers: this.dossiers.donneesSerialisees(),
+      mesuresGenerales: this.mesuresGenerales().donneesSerialisees(),
+      mesuresSpecifiques: this.mesuresSpecifiques().donneesSerialisees(),
+      risquesGeneraux: this.risquesGeneraux().donneesSerialisees(),
+      risquesSpecifiques: this.risquesSpecifiques().donneesSerialisees(),
+      rolesResponsabilites: this.rolesResponsabilites.donneesSerialisees(),
+    });
+  }
+
   dossierCourant() {
     return this.dossiers.dossierCourant();
   }
@@ -133,6 +148,8 @@ class Homologation {
   mesuresParStatutEtCategorie() {
     return this.mesures.parStatutEtCategorie();
   }
+
+  mesuresGenerales() { return this.mesures.mesuresGenerales; }
 
   mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }
 
@@ -157,6 +174,10 @@ class Homologation {
   piloteProjet() { return this.rolesResponsabilites.piloteProjet; }
 
   presentation() { return this.descriptionService.presentation; }
+
+  risquesGeneraux() {
+    return this.risques.risquesGeneraux;
+  }
 
   risquesPrincipaux() {
     return this.risques.principaux();

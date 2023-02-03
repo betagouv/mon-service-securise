@@ -31,6 +31,10 @@ class Base {
     return this.proprietesAtomiquesRequises.length === 0;
   }
 
+  donneesSerialisees() {
+    return this.toJSON();
+  }
+
   renseigneProprietes(donnees, referentiel) {
     [...this.proprietesAtomiquesRequises, ...this.proprietesAtomiquesFacultatives]
       .forEach((p) => (this[p] = donnees[p]));
