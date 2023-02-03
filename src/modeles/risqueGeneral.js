@@ -23,6 +23,10 @@ class RisqueGeneral extends Risque {
     };
   }
 
+  donneesSerialisees() {
+    return super.toJSON();
+  }
+
   static valide(donnees, referentiel) {
     const { id } = donnees;
     const identifiantsRisquesRepertories = referentiel.identifiantsRisques();

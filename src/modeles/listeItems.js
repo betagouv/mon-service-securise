@@ -28,6 +28,10 @@ class ListeItems extends InformationsHomologation {
     return this.items.map((i) => i.toJSON());
   }
 
+  donneesSerialisees() {
+    return this.items.map((i) => i.donneesSerialisees());
+  }
+
   tous() {
     return this.items;
   }

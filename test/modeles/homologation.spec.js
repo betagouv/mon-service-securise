@@ -1,5 +1,7 @@
 const expect = require('expect.js');
 
+const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
+
 const Referentiel = require('../../src/referentiel');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 const Homologation = require('../../src/modeles/homologation');
@@ -424,5 +426,67 @@ describe('Une homologation', () => {
     });
 
     expect(homologation.vueAnnexePDFMesures()).to.be.a(VueAnnexePDFMesures);
+  });
+
+  describe('sur requête des données à persister', () => {
+    it("retourne une représentation correcte de l'ensemble de l'Homologation", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        categoriesMesures: {},
+        localisationsDonnees: { uneLocalisation: {} },
+        mesures: { uneMesure: {} },
+        reglesPersonnalisation: { mesuresBase: ['uneMesure'] },
+        risques: { unRisque: {} },
+        statutsDeploiement: { unStatutDeploiement: {} },
+      });
+
+      const homologation = new Homologation({
+        id: 'id-homologation',
+        avisExpertCyber: { avis: 'defavorable' },
+        descriptionService: uneDescriptionValide(Referentiel.creeReferentielVide())
+          .avecNomService('nom-service')
+          .construis()
+          .toJSON(),
+        dossiers: [{ id: '999' }],
+        mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+        risquesGeneraux: [{ id: 'unRisque' }],
+        risquesSpecifiques: [{ description: 'Un risque' }],
+        rolesResponsabilites: {
+          autoriteHomologation: 'Jean Dupont',
+          partiesPrenantes: [{ nom: 'Un hébergeur', type: 'Hebergement' }],
+        },
+      },
+      referentiel);
+
+      expect(homologation.donneesAPersister().toutes()).to.eql({
+        id: 'id-homologation',
+        avisExpertCyber: { avis: 'defavorable' },
+        descriptionService: {
+          delaiAvantImpactCritique: 'unDelai',
+          localisationDonnees: 'uneLocalisation',
+          nomService: 'nom-service',
+          presentation: 'Une présentation',
+          provenanceService: 'uneProvenance',
+          risqueJuridiqueFinancierReputationnel: false,
+          statutDeploiement: 'unStatutDeploiement',
+          donneesCaracterePersonnel: [],
+          fonctionnalites: [],
+          typeService: 'unType',
+          donneesSensiblesSpecifiques: [],
+          fonctionnalitesSpecifiques: [],
+          pointsAcces: [],
+        },
+        dossiers: [{ id: '999', finalise: false }],
+        mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+        risquesGeneraux: [{ id: 'unRisque' }],
+        risquesSpecifiques: [{ description: 'Un risque' }],
+        rolesResponsabilites: {
+          acteursHomologation: [],
+          autoriteHomologation: 'Jean Dupont',
+          partiesPrenantes: [{ nom: 'Un hébergeur', type: 'Hebergement' }],
+        },
+      });
+    });
   });
 });

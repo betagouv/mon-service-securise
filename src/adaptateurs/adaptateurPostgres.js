@@ -1,4 +1,5 @@
 const Knex = require('knex');
+const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
 const config = require('../../knexfile');
 
@@ -10,34 +11,6 @@ const nouvelAdaptateur = (env) => {
   const knex = Knex(config[env]);
 
   const nomPropriete = (colonne) => (CORRESPONDANCE_COLONNES_PROPRIETES[colonne] || colonne);
-
-  const ajouteIntervenantsAHomologations = (lignes) => lignes
-    .reduce((acc, ligne) => {
-      const homologationDejaExistante = acc.find((h) => h.id === ligne.idHomologation);
-      const nouvelleLigne = homologationDejaExistante || {
-        id: ligne.idHomologation, ...ligne.donneesHomologation,
-      };
-      nouvelleLigne.contributeurs ||= [];
-
-      const intervenant = {
-        id: ligne.idUtilisateur,
-        dateCreation: ligne.dateCreationUtilisateur,
-        ...ligne.donneesUtilisateur,
-      };
-
-      switch (ligne.type) {
-        case 'contributeur':
-          nouvelleLigne.contributeurs.push(intervenant);
-          break;
-        case 'createur':
-          nouvelleLigne.createur = intervenant;
-          break;
-        default: // ne fais rien
-      }
-
-      if (!homologationDejaExistante) acc.push(nouvelleLigne);
-      return acc;
-    }, []);
 
   const ajouteLigneDansTable = (nomTable, id, donnees) => knex(nomTable)
     .insert({ id, donnees });
@@ -76,7 +49,38 @@ const nouvelAdaptateur = (env) => {
 
   const arreteTout = () => knex.destroy();
 
-  const homologation = (id) => elementDeTable('homologations', id);
+  const homologation = (id) => {
+    const requeteHomologation = knex('homologations')
+      .where('id', id)
+      .select({ id: 'id', donnees: 'donnees' })
+      .first();
+
+    const requeteCreateur = knex('autorisations as a')
+      .join('utilisateurs as u', knex.raw("(a.donnees->>'idUtilisateur')::uuid"), 'u.id')
+      .whereRaw("(a.donnees->>'idHomologation')::uuid = ? AND a.donnees->>'type' = 'createur'", id)
+      .select({ id: 'u.id', dateCreation: 'u.date_creation', donnees: 'u.donnees' })
+      .first();
+
+    const requeteContributeurs = knex('autorisations as a')
+      .join('utilisateurs as u', knex.raw("(a.donnees->>'idUtilisateur')::uuid"), 'u.id')
+      .whereRaw("(a.donnees->>'idHomologation')::uuid = ? AND a.donnees->>'type' = 'contributeur'", id)
+      .select({ id: 'u.id', dateCreation: 'u.date_creation', donnees: 'u.donnees' });
+
+    return Promise.all([
+      requeteHomologation,
+      requeteCreateur,
+      requeteContributeurs,
+    ]).then(([h, createur, contributeurs]) => ({
+      id: h.id,
+      ...h.donnees,
+      createur: { id: createur.id, dateCreation: createur.dateCreation, ...createur.donnees },
+      contributeurs: contributeurs.map((c) => ({
+        id: c.id,
+        dateCreation: createur.dateCreation,
+        ...c.donnees,
+      })),
+    }));
+  };
 
   const service = (id) => elementDeTable('services', id);
 
@@ -92,24 +96,14 @@ const nouvelAdaptateur = (env) => {
       .catch(() => undefined)
   );
 
-  const homologations = (idUtilisateur) => knex('homologations as h')
-    .join('autorisations as a1', knex.raw("(a1.donnees->>'idHomologation')::uuid"), 'h.id')
-    .join(
-      'autorisations as a2',
-      knex.raw("a1.donnees->>'idHomologation'"),
-      knex.raw("a2.donnees->>'idHomologation'"),
-    )
-    .join('utilisateurs as u', knex.raw("(a2.donnees->>'idUtilisateur')::uuid"), 'u.id')
-    .whereRaw("a1.donnees->>'idUtilisateur'=?", idUtilisateur)
-    .select({
-      idHomologation: 'h.id',
-      donneesHomologation: 'h.donnees',
-      idUtilisateur: 'u.id',
-      dateCreationUtilisateur: 'u.date_creation',
-      donneesUtilisateur: 'u.donnees',
-      type: knex.raw("a2.donnees->>'type'"),
-    })
-    .then(ajouteIntervenantsAHomologations);
+  const homologations = (idUtilisateur) => {
+    const idsHomologations = knex('autorisations')
+      .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
+      .select({ idHomologation: knex.raw("(donnees->>'idHomologation')") })
+      .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
+
+    return avecPMapPourChaqueElement(idsHomologations, homologation);
+  };
 
   const metsAJourHomologation = (...params) => metsAJourTable('homologations', ...params);
   const metsAJourService = (...params) => metsAJourTable('services', ...params);

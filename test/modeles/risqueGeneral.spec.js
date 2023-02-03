@@ -60,4 +60,18 @@ describe('Un risque général', () => {
       done();
     }
   });
+
+  it('sait se sérialiser', () => {
+    const risque = new RisqueGeneral({
+      id: 'unRisque',
+      commentaire: 'Un commentaire',
+      niveauGravite: 'unNiveau',
+    }, referentiel);
+
+    expect(risque.donneesSerialisees()).to.eql({
+      id: 'unRisque',
+      commentaire: 'Un commentaire',
+      niveauGravite: 'unNiveau',
+    });
+  });
 });
