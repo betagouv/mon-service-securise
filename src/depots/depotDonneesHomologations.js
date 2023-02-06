@@ -240,6 +240,11 @@ const creeDepot = (config = {}) => {
     )
   );
 
+  const toutesHomologations = () => (
+    adaptateurPersistance.toutesHomologations()
+      .then((hs) => hs.map((h) => new Homologation(h, referentiel)))
+  );
+
   return {
     ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
@@ -255,6 +260,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,
+    toutesHomologations,
   };
 };
 
