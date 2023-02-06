@@ -177,6 +177,24 @@ const nouvelAdaptateur = (env) => {
     .whereRaw("donnees->>'idHomologation'=?", idHomologation)
     .del();
 
+  const toutesHomologations = () => knex('homologations as h')
+    .join('autorisations as a1', knex.raw("(a1.donnees->>'idHomologation')::uuid"), 'h.id')
+    .join(
+      'autorisations as a2',
+      knex.raw("a1.donnees->>'idHomologation'"),
+      knex.raw("a2.donnees->>'idHomologation'"),
+    )
+    .join('utilisateurs as u', knex.raw("(a2.donnees->>'idUtilisateur')::uuid"), 'u.id')
+    .select({
+      idHomologation: 'h.id',
+      donneesHomologation: 'h.donnees',
+      idUtilisateur: 'u.id',
+      dateCreationUtilisateur: 'u.date_creation',
+      donneesUtilisateur: 'u.donnees',
+      type: knex.raw("a2.donnees->>'type'"),
+    })
+    .then(ajouteIntervenantsAHomologations);
+
   const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => (
     knex.transaction((trx) => {
       const supprimeAutorisationsContributionDejaPresentes = () => knex('autorisations as a1')
@@ -246,6 +264,7 @@ const nouvelAdaptateur = (env) => {
     supprimeHomologations,
     supprimeUtilisateur,
     supprimeUtilisateurs,
+    toutesHomologations,
     transfereAutorisations,
     utilisateur,
     utilisateurAvecEmail,
