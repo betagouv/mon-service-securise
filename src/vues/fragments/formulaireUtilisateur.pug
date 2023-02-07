@@ -105,21 +105,21 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
         )
 
       .requis(data-nom = 'nomEntitePublique')
-        label Nom de votre entité publique
+        label Nom de votre organisation
           br
           input(
             id = 'nomEntitePublique',
             name = 'nomEntitePublique',
             type = 'text',
             value != donnees.nomEntitePublique,
-            placeholder = "ex : Agglomération de Mansart",
+            placeholder = "ex : Agglomération de Mansart, Société Y",
             required,
             title = ''
           )
           .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
 
       .requis(data-nom = 'departementEntitePublique')
-        label Département où est localisée cette entité
+        label Département de votre organisation
           br
           .selecteur-options
             select(id = 'departementEntitePublique', name = 'departementEntitePublique', required, title = '')
