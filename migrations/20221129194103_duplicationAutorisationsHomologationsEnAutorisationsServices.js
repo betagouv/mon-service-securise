@@ -1,9 +1,4 @@
-const pourChaqueLigne = (requete, miseAJour) => import('p-map')
-  .then((module) => {
-    const pMap = module.default;
-
-    return requete.then((lignes) => pMap(lignes, miseAJour, { concurrency: 2 }));
-  });
+const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
 
 exports.up = (knex) => pourChaqueLigne(
   knex('autorisations'),
