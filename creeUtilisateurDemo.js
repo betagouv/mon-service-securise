@@ -24,7 +24,10 @@ const creeDonnees = (depotDonnees) => depotDonnees
   .then((u) => (
     depotDonnees.metsAJourMotDePasse(u.id, process.env.MOT_DE_PASSE_UTILISATEUR_DEMO)
   ))
-  .then((u) => depotDonnees.nouvelleHomologation(u.id, descriptionService.toJSON()));
+  .then((u) => depotDonnees.nouvelleHomologation(
+    u.id,
+    { descriptionService: descriptionService.toJSON() }
+  ));
 
 if (process.env.CREATION_UTILISATEUR_DEMO) {
   const adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV);

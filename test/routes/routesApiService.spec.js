@@ -95,9 +95,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .construis()
         .toJSON();
 
-      testeur.depotDonnees().nouvelleHomologation = (idUtilisateur, donneesService) => {
+      testeur.depotDonnees().nouvelleHomologation = (idUtilisateur, { descriptionService }) => {
         expect(idUtilisateur).to.equal('123');
-        expect(donneesService).to.eql(donneesDescriptionService);
+        expect(descriptionService).to.eql(donneesDescriptionService);
         return Promise.resolve('456');
       };
 
@@ -110,6 +110,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
   });
+
   describe('quand requête PUT sur `/api/service/:id`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () => Promise.resolve();
