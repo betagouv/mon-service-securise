@@ -62,9 +62,11 @@ class Mesures extends InformationsHomologation {
     const personnalisees = ({ id: idMesure }) => (
       Object.keys(this.mesuresPersonnalisees).includes(idMesure)
     );
-    return this.mesuresGenerales.items
+
+    return this.mesuresGenerales.toutes()
       .filter(personnalisees)
-      .map((i) => ({ idMesure: i.id, statut: i.statut }));
+      .filter((m) => m.statut !== '')
+      .map((m) => ({ idMesure: m.id, statut: m.statut }));
   }
 }
 
