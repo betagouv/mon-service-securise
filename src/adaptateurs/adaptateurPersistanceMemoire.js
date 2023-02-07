@@ -159,17 +159,6 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     return Promise.resolve();
   };
 
-  const toutesHomologations = () => {
-    const toutes = donnees.homologations.map((h) => {
-      const intervenants = intervenantsHomologation(h.id);
-      [h.createur] = intervenants.createurs;
-      h.contributeurs = intervenants.contributeurs;
-      return h;
-    });
-
-    return Promise.resolve(toutes);
-  };
-
   const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => {
     const autorisationContributionExistante = (idUtilisateur, idHomologation) => (
       !!donnees.autorisations.find(
@@ -239,7 +228,6 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     supprimeService,
     supprimeUtilisateur,
     supprimeUtilisateurs,
-    toutesHomologations,
     transfereAutorisations,
     utilisateur,
     utilisateurAvecEmail,
