@@ -34,6 +34,10 @@
   background-color: inherit;
 }
 
+.service:hover .menu-contextuel-titre {
+  background-color: var(--fond-pale);
+}
+
 .service .menu-contextuel {
   align-self: flex-end;
   position: relative;
@@ -56,6 +60,10 @@
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
+:is(.service .menu-contextuel-titre, .service .menu-contextuel-options) {
+  background-color: #fff;
+}
+
 .service .menu-contextuel-options {
   position: absolute;
   right: 0;
@@ -64,7 +72,6 @@
   margin-top: 0.5em;
   padding: 1em 1.5em;
   border-radius: 0.3em;
-  background-color: #fff;
   color: var(--bleu-mise-en-avant);
 }
 
