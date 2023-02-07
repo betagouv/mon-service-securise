@@ -18,13 +18,27 @@ $(() => {
 
   const $modaleDuplication = $('.modale-duplication-service');
   initialiseComportementModale($modaleDuplication);
-  $('.services').on('modaleDuplication', (_e, { nomService }) => {
+  $('.services').on('modaleDuplication', (_e, { idService, nomService }) => {
     $('.nom-service', $modaleDuplication).text(nomService);
 
     const $valider = $('.bouton-duplication-service', $modaleDuplication);
-    $valider.on('click', () => $modaleDuplication.trigger('fermeModale'));
+    const $erreurs = $('.message-erreur', $modaleDuplication);
 
-    $modaleDuplication.on('fermeModale', () => $valider.off());
+    $valider.on('click', () => {
+      $erreurs.hide();
+      axios({ method: 'copy', url: `/api/service/${idService}` })
+        .then(() => window.location.reload())
+        .catch((e) => {
+          if (e.response.status !== 424) return;
+
+          $erreurs.text(e.response.data.message).show();
+        });
+    });
+
+    $modaleDuplication.on('fermeModale', () => {
+      $erreurs.hide();
+      $valider.off();
+    });
     $modaleDuplication.trigger('afficheModale');
   });
 
