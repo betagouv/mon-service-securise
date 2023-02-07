@@ -29,7 +29,7 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
       .then(() => new DescriptionService(requete.body, referentiel))
       .then((description) => depotDonnees.nouvelleHomologation(
         requete.idUtilisateurCourant,
-        description.toJSON(),
+        { descriptionService: description.toJSON() },
       ))
       .then((idService) => reponse.json({ idService }))
       .catch((e) => {

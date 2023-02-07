@@ -192,18 +192,14 @@ const creeDepot = (config = {}) => {
       })
   );
 
-  const nouvelleHomologation = (idUtilisateur, donneesDescriptionService) => {
+  const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
     const idHomologation = adaptateurUUID.genereUUID();
     const idAutorisation = adaptateurUUID.genereUUID();
-    const donnees = {
-      idUtilisateur,
-      descriptionService: donneesDescriptionService,
-    };
 
-    return valideDescriptionService(idUtilisateur, donneesDescriptionService)
+    return valideDescriptionService(idUtilisateur, donneesHomologation.descriptionService)
       .then(() => Promise.all([
-        adaptateurPersistance.ajouteHomologation(idHomologation, donnees),
-        adaptateurPersistance.ajouteService(idHomologation, donnees),
+        adaptateurPersistance.ajouteHomologation(idHomologation, donneesHomologation),
+        adaptateurPersistance.ajouteService(idHomologation, donneesHomologation),
       ]))
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
         idUtilisateur, idHomologation, idService: idHomologation, type: 'createur',
