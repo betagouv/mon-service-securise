@@ -159,24 +159,40 @@ describe('Les mesures liées à une homologation', () => {
     });
 
     elles('donnent les statuts des mesures personnalisées', () => {
-      const mesure = new Mesures(
+      const mesures = new Mesures(
         { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
         referentiel,
         { mesure1: {} }
       );
 
-      expect(mesure.statutsMesuresPersonnalisees()).to.eql([{ idMesure: 'mesure1', statut: 'fait' }]);
+      expect(mesures.statutsMesuresPersonnalisees()).to.eql([{ idMesure: 'mesure1', statut: 'fait' }]);
     });
 
     elles('ignorent les mesures générales qui ne sont pas des mesures personnalisées', () => {
       const seulementMesure1 = { mesure1: {} };
-      const mesure = new Mesures(
+      const mesures = new Mesures(
         { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }, { id: 'mesure2', statut: 'fait' }] },
         referentiel,
         seulementMesure1
       );
 
-      expect(mesure.statutsMesuresPersonnalisees()).to.eql([{ idMesure: 'mesure1', statut: 'fait' }]);
+      expect(mesures.statutsMesuresPersonnalisees()).to.eql([{ idMesure: 'mesure1', statut: 'fait' }]);
+    });
+
+    elles("ignorent les mesures dont le statut n'est pas renseigné", () => {
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [{
+            id: 'mesure1',
+            statut: '',
+            modalites: 'Un commentaire laissé sans valoriser le statut',
+          }],
+        },
+        referentiel,
+        { mesure1: {} }
+      );
+
+      expect(mesures.statutsMesuresPersonnalisees()).to.be.empty();
     });
   });
 });
