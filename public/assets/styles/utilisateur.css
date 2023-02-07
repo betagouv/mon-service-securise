@@ -8,17 +8,15 @@
 }
 
 .avertissement::before {
-  content: '';
-  background-image: url(../images/icone_information_bulle.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 2.3em;
-  margin: 1em 0 0 1em;
+  content: '👉';
+  font-size: 1.6em;
+  margin: 0.4em 0 0 0.6em;
 }
 
 .avertissement p {
   margin: 0;
   padding: 1em 1em 1em 0.8em;
+  color: var(--bleu-anssi);
 }
 
 section:first-of-type {
