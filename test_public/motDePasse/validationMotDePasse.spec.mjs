@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import { resultatValidation, valideMotDePasse } from '../../../public/modules/interactions/validationMotDePasse.mjs';
+import { resultatValidation, valideMotDePasse } from '../../public/motDePasse/validationMotDePasse.mjs';
 
 describe('Le validateur de mot de passe', () => {
   it("vérifie que la taille du mot de passe est d'au moins douze caractères", () => {
