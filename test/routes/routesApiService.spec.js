@@ -847,7 +847,24 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('retourne une erreur HTTP 424 si le nom cible du service existe déjà', (done) => {
       testeur.depotDonnees().dupliqueHomologation = () => Promise.reject(new ErreurNomServiceDejaExistant('Le nom existe déjà'));
 
-      testeur.verifieRequeteGenereErreurHTTP(424, 'La duplication a échouée', {
+      testeur.verifieRequeteGenereErreurHTTP(424, {
+        type: 'NOM_DEJA_EXISTANT',
+        message: 'La duplication a échoué car le nom cible existe déjà',
+      }, {
+        method: 'copy',
+        url: 'http://localhost:1234/api/service/123',
+      }, done);
+    });
+
+    it('retourne une erreur HTTP 424 si des données obligatoires ne sont pas renseignées', (done) => {
+      testeur.depotDonnees().dupliqueHomologation = () => Promise.reject(
+        new ErreurDonneesObligatoiresManquantes('Certaines données obligatoires ne sont pas renseignées')
+      );
+
+      testeur.verifieRequeteGenereErreurHTTP(424, {
+        type: 'DONNEES_OBLIGATOIRES_MANQUANTES',
+        message: 'La duplication a échoué car certaines données obligatoires ne sont pas renseignées',
+      }, {
         method: 'copy',
         url: 'http://localhost:1234/api/service/123',
       }, done);

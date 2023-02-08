@@ -1,6 +1,11 @@
 const express = require('express');
 
-const { EchecAutorisation, ErreurModele, ErreurNomServiceDejaExistant } = require('../erreurs');
+const {
+  EchecAutorisation,
+  ErreurModele,
+  ErreurNomServiceDejaExistant,
+  ErreurDonneesObligatoiresManquantes,
+} = require('../erreurs');
 const ActeursHomologation = require('../modeles/acteursHomologation');
 const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
@@ -268,7 +273,12 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
         if (e instanceof EchecAutorisation) {
           reponse.status(403).send('Droits insuffisants pour dupliquer le service');
         } else if (e instanceof ErreurNomServiceDejaExistant) {
-          reponse.status(424).send('La duplication a échouée');
+          reponse.status(424).send({ type: 'NOM_DEJA_EXISTANT', message: 'La duplication a échoué car le nom cible existe déjà' });
+        } else if (e instanceof ErreurDonneesObligatoiresManquantes) {
+          reponse.status(424).send({
+            type: 'DONNEES_OBLIGATOIRES_MANQUANTES',
+            message: 'La duplication a échoué car certaines données obligatoires ne sont pas renseignées',
+          });
         } else {
           suite(e);
         }
