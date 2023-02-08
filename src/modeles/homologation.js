@@ -216,6 +216,12 @@ class Homologation {
     };
   }
 
+  donneesADupliquer() {
+    const donnees = this.donneesAPersister().sauf('dossiers', 'id');
+    donnees.descriptionService.nomService += ' - Copie';
+    return donnees;
+  }
+
   vueAnnexePDFDescription() {
     return new VueAnnexePDFDescription(this, this.referentiel);
   }

@@ -489,4 +489,47 @@ describe('Une homologation', () => {
       });
     });
   });
+
+  describe('sur une demande des données à dupliquer', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    const descriptionService = (nomService, presentation = '') => uneDescriptionValide(referentiel)
+      .avecNomService(nomService)
+      .avecPresentation(presentation)
+      .construis()
+      .toJSON();
+
+    it('retourne les données sans identifiant', () => {
+      const homologation = new Homologation({
+        id: 'id-homologation',
+        descriptionService: descriptionService('nom-service'),
+      }, referentiel);
+
+      const duplicata = homologation.donneesADupliquer();
+
+      expect(duplicata.id).to.be(undefined);
+    });
+
+    it("suffixe le nom de l'homologation dupliquée par « - Copie »", () => {
+      const homologation = new Homologation({
+        id: 'id-homologation',
+        descriptionService: descriptionService('nom-service'),
+      }, referentiel);
+
+      const duplicata = homologation.donneesADupliquer();
+
+      expect(duplicata.descriptionService.nomService).to.equal('nom-service - Copie');
+    });
+
+    it("ne duplique pas les dossiers de l'homologation", () => {
+      const homologation = new Homologation({
+        id: 'id-homologation',
+        descriptionService: descriptionService('nom-service'),
+        dossiers: [{ id: '999' }],
+      }, referentiel);
+
+      const duplicata = homologation.donneesADupliquer();
+
+      expect(duplicata.dossiers).to.be(undefined);
+    });
+  });
 });
