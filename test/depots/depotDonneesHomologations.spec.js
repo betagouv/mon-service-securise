@@ -12,6 +12,7 @@ const Referentiel = require('../../src/referentiel');
 
 const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
+const AdaptateurUUID = require('../../src/adaptateurs/adaptateurUUID');
 
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
@@ -1037,5 +1038,36 @@ describe('Le dépôt de données des homologations', () => {
         .then(() => done())
         .catch(done);
     });
+  });
+
+  it('peut dupliquer une homologation à partir de son identifiant', (done) => {
+    const referentiel = Referentiel.creeReferentielVide();
+
+    const descriptionService = uneDescriptionValide(referentiel)
+      .avecNomService('Service à dupliquer')
+      .construis()
+      .toJSON();
+
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+      homologations: [{ id: '123-1', descriptionService }],
+      services: [{ id: '123-1', descriptionService }],
+      autorisations: [{ idUtilisateur: '123', idHomologation: '123-1', idService: '123-1', type: 'createur' }],
+    });
+
+    const depot = DepotDonneesHomologations.creeDepot({
+      adaptateurJournalMSS: AdaptateurJournalMSSMemoire.nouvelAdaptateur(),
+      adaptateurPersistance,
+      adaptateurUUID: AdaptateurUUID,
+      referentiel,
+    });
+
+    depot.dupliqueHomologation('123-1')
+      .then(() => depot.homologations('123'))
+      .then((homologations) => {
+        expect(homologations.length).to.equal(2);
+        done();
+      })
+      .catch(done);
   });
 });
