@@ -243,6 +243,9 @@ const creeDepot = (config = {}) => {
     )
   );
 
+  const dupliqueHomologation = (idHomologation) => homologation(idHomologation)
+    .then((h) => nouvelleHomologation(h.createur.id, h.donneesADupliquer()));
+
   return {
     ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
@@ -250,6 +253,7 @@ const creeDepot = (config = {}) => {
     ajouteMesuresAHomologation,
     ajouteRisqueGeneralAHomologation,
     ajouteRolesResponsabilitesAHomologation,
+    dupliqueHomologation,
     homologation,
     homologationExiste,
     homologations,
