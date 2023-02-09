@@ -3,6 +3,9 @@ import { brancheModale, initialiseComportementModale } from './modules/interacti
 import brancheComportementPastilles from './modules/interactions/pastilles.js';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
 import brancheMenuContextuelService from './modules/interactions/brancheMenuContextuelService.js';
+import { brancheValidation, declencheValidation } from './modules/interactions/validation.mjs';
+
+const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
 
 $(() => {
   const $modaleSuppression = $('.modale-suppression-service');
@@ -21,22 +24,31 @@ $(() => {
   $('.services').on('modaleDuplication', (_e, { idService, nomService }) => {
     $('.nom-service', $modaleDuplication).text(nomService);
 
+    const selecteurFormulaire = '.modale-duplication-service form';
     const $valider = $('.bouton-duplication-service', $modaleDuplication);
-    const $erreurs = $('.message-erreur', $modaleDuplication);
+    const $erreurServeur = $('.message-erreur-serveur', $modaleDuplication);
 
-    $valider.on('click', () => {
-      $erreurs.hide();
-      axios({ method: 'copy', url: `/api/service/${idService}` })
+    $(selecteurFormulaire).on('submit', (e) => {
+      e.preventDefault();
+      $erreurServeur.hide();
+      const nombreCopies = parseInt($('#nombre-copie').val(), 10) || 1;
+
+      tableauDeLongueur(nombreCopies).reduce((acc) => acc.then(
+        () => axios({ method: 'copy', url: `/api/service/${idService}` })
+      ), Promise.resolve())
         .then(() => window.location.reload())
-        .catch((e) => {
-          if (e.response.status !== 424) return;
+        .catch((exc) => {
+          if (exc.response.status !== 424) return;
 
-          $erreurs.text(e.response.data.message).show();
+          $erreurServeur.text(exc.response.data.message).show();
         });
     });
 
+    brancheValidation(selecteurFormulaire);
+    $(`${selecteurFormulaire} button[type = 'submit']`).on('click', () => declencheValidation(selecteurFormulaire));
+
     $modaleDuplication.on('fermeModale', () => {
-      $erreurs.hide();
+      $erreurServeur.hide();
       $valider.off();
     });
     $modaleDuplication.trigger('afficheModale');

@@ -11,6 +11,21 @@
   font-weight: bold;
 }
 
+.modale-duplication-service h1 + p.description {
+  margin-bottom: 1.5em;
+}
+
+.modale-duplication-service label {
+  margin: 0;
+}
+
+.modale-duplication-service input[type="number"] {
+  margin-top: 0.3em;
+  width: 7em;
+  padding: 0.7em 1em;
+  font-size: 1em;
+}
+
 .modale-duplication-service .modale ul {
   margin-left: 0.5em;
 }
