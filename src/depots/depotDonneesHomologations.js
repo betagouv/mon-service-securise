@@ -243,8 +243,23 @@ const creeDepot = (config = {}) => {
     )
   );
 
-  const dupliqueHomologation = (idHomologation) => homologation(idHomologation)
-    .then((h) => nouvelleHomologation(h.createur.id, h.donneesADupliquer()));
+  const trouveNomDisponible = (idCreateur, nomHomologation) => (
+    homologations(idCreateur).then((hs) => {
+      const noms = hs.map((h) => h.nomService());
+      const nomExiste = (nom) => noms.some((n) => n === nom);
+
+      let index = 1;
+      while (nomExiste(`${nomHomologation} - Copie ${index}`)) index += 1;
+
+      return `${nomHomologation} - Copie ${index}`;
+    })
+  );
+
+  const dupliqueHomologation = (idHomologation) => (
+    homologation(idHomologation)
+      .then((h) => trouveNomDisponible(h.createur.id, h.nomService())
+        .then((nom) => nouvelleHomologation(h.createur.id, h.donneesADupliquer(nom))))
+  );
 
   return {
     ajouteAvisExpertCyberAHomologation,
@@ -262,6 +277,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,
+    trouveNomDisponible,
   };
 };
 

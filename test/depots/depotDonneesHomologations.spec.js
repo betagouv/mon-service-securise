@@ -1040,34 +1040,93 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  it('peut dupliquer une homologation à partir de son identifiant', (done) => {
-    const referentiel = Referentiel.creeReferentielVide();
+  describe("sur demande de duplication d'une homologation", () => {
+    let depot;
 
-    const descriptionService = uneDescriptionValide(referentiel)
-      .avecNomService('Service à dupliquer')
-      .construis()
-      .toJSON();
+    beforeEach(() => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const descriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Service à dupliquer')
+        .construis()
+        .toJSON();
 
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
-      homologations: [{ id: '123-1', descriptionService }],
-      services: [{ id: '123-1', descriptionService }],
-      autorisations: [{ idUtilisateur: '123', idHomologation: '123-1', idService: '123-1', type: 'createur' }],
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123-1', descriptionService }],
+        services: [{ id: '123-1', descriptionService }],
+        autorisations: [{ idUtilisateur: '123', idHomologation: '123-1', idService: '123-1', type: 'createur' }],
+      });
+
+      depot = DepotDonneesHomologations.creeDepot({
+        adaptateurJournalMSS: AdaptateurJournalMSSMemoire.nouvelAdaptateur(),
+        adaptateurPersistance,
+        adaptateurUUID: AdaptateurUUID,
+        referentiel,
+      });
     });
 
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurJournalMSS: AdaptateurJournalMSSMemoire.nouvelAdaptateur(),
-      adaptateurPersistance,
-      adaptateurUUID: AdaptateurUUID,
-      referentiel,
+    it('peut dupliquer une homologation à partir de son identifiant', (done) => {
+      depot.dupliqueHomologation('123-1')
+        .then(() => depot.homologations('123'))
+        .then((homologations) => {
+          expect(homologations.length).to.equal(2);
+          done();
+        })
+        .catch(done);
     });
 
-    depot.dupliqueHomologation('123-1')
-      .then(() => depot.homologations('123'))
-      .then((homologations) => {
-        expect(homologations.length).to.equal(2);
-        done();
-      })
-      .catch(done);
+    it("utilise un nom disponible pour l'homologation dupliquée", (done) => {
+      depot.dupliqueHomologation('123-1')
+        .then(() => depot.dupliqueHomologation('123-1'))
+        .then(() => depot.homologations('123'))
+        .then(([_, h2, h3]) => {
+          expect(h2.nomService()).to.equal('Service à dupliquer - Copie 1');
+          expect(h3.nomService()).to.equal('Service à dupliquer - Copie 2');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('sur une demande de nom disponible pour une homologation à dupliquer', () => {
+    it('utilise le suffixe « - Copie 1 » si le nom suffixé est disponible', (done) => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const descriptionService = uneDescriptionValide(referentiel).avecNomService('A').construis().toJSON();
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123-1', descriptionService }],
+        autorisations: [{ idUtilisateur: '123', idHomologation: '123-1', idService: '123-1', type: 'createur' }],
+      });
+
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        referentiel,
+      });
+
+      depot.trouveNomDisponible('123', 'A')
+        .then((nom) => expect(nom).to.equal('A - Copie 1'))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("augmente l'incrément du suffixe « - Copie » si nécessaire", (done) => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const copie1 = uneDescriptionValide(referentiel).avecNomService('A - Copie 1').construis().toJSON();
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123-1', descriptionService: copie1 }],
+        autorisations: [{ idUtilisateur: '123', idHomologation: '123-1', idService: '123-1', type: 'createur' }],
+      });
+
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        referentiel,
+      });
+
+      depot.trouveNomDisponible('123', 'A')
+        .then((nom) => expect(nom).to.equal('A - Copie 2'))
+        .then(() => done())
+        .catch(done);
+    });
   });
 });

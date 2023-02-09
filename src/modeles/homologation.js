@@ -216,9 +216,9 @@ class Homologation {
     };
   }
 
-  donneesADupliquer() {
+  donneesADupliquer(nomService) {
     const donnees = this.donneesAPersister().sauf('dossiers', 'id');
-    donnees.descriptionService.nomService += ' - Copie';
+    donnees.descriptionService.nomService = nomService;
     return donnees;
   }
 

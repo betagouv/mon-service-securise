@@ -492,38 +492,28 @@ describe('Une homologation', () => {
 
   describe('sur une demande des données à dupliquer', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    const descriptionService = (nomService, presentation = '') => uneDescriptionValide(referentiel)
-      .avecNomService(nomService)
-      .avecPresentation(presentation)
-      .construis()
-      .toJSON();
+    const descriptionService = uneDescriptionValide(referentiel).construis().toJSON();
 
     it('retourne les données sans identifiant', () => {
-      const homologation = new Homologation({
-        id: 'id-homologation',
-        descriptionService: descriptionService('nom-service'),
-      }, referentiel);
+      const homologation = new Homologation({ id: 'id-homologation', descriptionService }, referentiel);
 
       const duplicata = homologation.donneesADupliquer();
 
       expect(duplicata.id).to.be(undefined);
     });
 
-    it("suffixe le nom de l'homologation dupliquée par « - Copie »", () => {
-      const homologation = new Homologation({
-        id: 'id-homologation',
-        descriptionService: descriptionService('nom-service'),
-      }, referentiel);
+    it("utilise le nom d'homologation passé en paramètre", () => {
+      const homologation = new Homologation({ id: 'id-homologation', descriptionService }, referentiel);
 
-      const duplicata = homologation.donneesADupliquer();
+      const duplicata = homologation.donneesADupliquer('Nouveau service');
 
-      expect(duplicata.descriptionService.nomService).to.equal('nom-service - Copie');
+      expect(duplicata.descriptionService.nomService).to.equal('Nouveau service');
     });
 
     it("ne duplique pas les dossiers de l'homologation", () => {
       const homologation = new Homologation({
         id: 'id-homologation',
-        descriptionService: descriptionService('nom-service'),
+        descriptionService,
         dossiers: [{ id: '999' }],
       }, referentiel);
 
