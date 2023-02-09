@@ -5,9 +5,23 @@ mixin modaleDuplicationService()
   .rideau.modale-duplication-service
     .modale
       .fermeture-modale
-      .contenu-modale
+      form.contenu-modale
         h1 Dupliquer un service
-        p Souhaitez-vous dupliquer le service #[span.nom-service] ?
+        p.description Sélectionnez le nombre de copies que vous souhaitez pour le service #[span.nom-service].
+        .requis
+        label Nombre de copies
+          br
+          input(
+            id = 'nombre-copie',
+            name = 'nombre-copie',
+            type = 'number',
+            value = 1,
+            min = 1,
+            max = 100,
+            placeholder = 'ex : 2',
+            required,
+          )
+          .message-erreur Veuillez utiliser une valeur entre 1 et 100.
         .avertissement
           .resume En dupliquant ce service, les données copiées sont celles des rubriques :
           div
@@ -23,6 +37,6 @@ mixin modaleDuplicationService()
               li Homologuer
               li PDF Décision d'homologation de sécurité
 
-        .message-erreur
+        .message-erreur.message-erreur-serveur
 
-        button(type = 'button').bouton.bouton-duplication-service Valider
+        button.bouton.bouton-duplication-service Valider
