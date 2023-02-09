@@ -45,6 +45,12 @@ const donnees = {
   '2022-12-19': { utilisateurs: 918, pourcentageUtilisateursEnPlus: 59, dossiers: 441 },
   '2022-12-26': { utilisateurs: 1005, pourcentageUtilisateursEnPlus: 9, dossiers: 474 },
   '2023-01-02': { utilisateurs: 1057, pourcentageUtilisateursEnPlus: 5, dossiers: 494 },
+  '2023-01-09': { utilisateurs: 1139, pourcentageUtilisateursEnPlus: 8, dossiers: 534 },
+  '2023-01-16': { utilisateurs: 1213, pourcentageUtilisateursEnPlus: 6, dossiers: 571 },
+  '2023-01-23': { utilisateurs: 1260, pourcentageUtilisateursEnPlus: 4, dossiers: 594 },
+  '2023-01-30': { utilisateurs: 1310, pourcentageUtilisateursEnPlus: 4, dossiers: 619 },
+  '2023-02-06': { utilisateurs: 1376, pourcentageUtilisateursEnPlus: 5, dossiers: 651 },
+  '2023-02-09': { utilisateurs: 1414, pourcentageUtilisateursEnPlus: 3, dossiers: 670 },
 };
 
 export default donnees;
