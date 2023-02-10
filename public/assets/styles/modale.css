@@ -107,8 +107,9 @@ body.recouvert {
 .rideau .modale .avertissement .resume::before {
   content: '👉';
   display: block;
-  margin-right: 1em;
+  margin-right: 0.6em;
   font-size: 1.1em;
+  transform: translateY(-0.1em);
 }
 
 .modale.deconnexion {
