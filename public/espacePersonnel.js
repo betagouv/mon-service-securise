@@ -1,21 +1,10 @@
 import { $services, $modaleNouveauContributeur } from './modules/elementsDom/services.mjs';
-import { brancheModale, initialiseComportementModale } from './modules/interactions/modale.mjs';
+import { brancheModale } from './modules/interactions/modale.mjs';
 import brancheComportementPastilles from './modules/interactions/pastilles.js';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
 import brancheMenuContextuelService from './modules/interactions/brancheMenuContextuelService.js';
 
 $(() => {
-  const $modaleSuppression = $('.modale-suppression-service');
-  initialiseComportementModale($modaleSuppression);
-  $('.services').on('modaleSuppression', (_evenement, { idService, nomService }) => {
-    $('.nom-service', $modaleSuppression).text(nomService);
-
-    const $bouton = $('.bouton-suppression-service', $modaleSuppression);
-    $bouton.on('click', () => axios.delete(`/api/service/${idService}`).then(() => window.location.reload()));
-    $modaleSuppression.on('fermeModale', () => $bouton.off());
-    $modaleSuppression.trigger('afficheModale');
-  });
-
   const peupleServicesDans = (placeholder, donneesServices, idUtilisateur) => {
     const $conteneurServices = $(placeholder);
     const nombreMaxContributeursDistincts = 2;
