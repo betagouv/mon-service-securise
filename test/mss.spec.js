@@ -38,24 +38,6 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/questionsFrequentes`', () => {
-    it("génère le SVG pour la formule de calcul de l'indice cyber", (done) => {
-      let svgGenere = false;
-      testeur.adaptateurEquations().indiceCyber = () => {
-        svgGenere = true;
-        return Promise.resolve('FORMULE_CALCUL_INDICE_CYBER');
-      };
-
-      axios.get('http://localhost:1234/questionsFrequentes')
-        .then((reponse) => {
-          expect(svgGenere).to.be(true);
-          expect(reponse.data).to.contain('FORMULE_CALCUL_INDICE_CYBER');
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
-    });
-  });
-
   describe('quand requête GET sur `/connexion`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
       testeur.middleware().verifieRequeteExigeSuppressionCookie('http://localhost:1234/connexion', done);
