@@ -1,6 +1,9 @@
 block append styles
   link(href = '/statique/assets/styles/modaleDuplicationService.css', rel = 'stylesheet')
 
+block append scripts
+  script(type = "module", src = "/statique/scripts/modaleDuplicationService.js")
+
 mixin modaleDuplicationService()
   .rideau.modale-duplication-service
     .modale
