@@ -243,23 +243,36 @@ const creeDepot = (config = {}) => {
     )
   );
 
-  const trouveNomDisponible = (idCreateur, nomHomologation) => (
-    homologations(idCreateur).then((hs) => {
-      const noms = hs.map((h) => h.nomService());
-      const nomExiste = (nom) => noms.some((n) => n === nom);
+  const trouveIndexDisponible = (idCreateur, nomHomologationDupliquee) => {
+    const filtreNomDuplique = new RegExp(`^${nomHomologationDupliquee} (\\d+)$`);
+    const maxMatch = (maxCourant, nomService) => {
+      const index = parseInt(nomService.match(filtreNomDuplique)?.[1], 10);
+      return index > maxCourant ? index : maxCourant;
+    };
+    const indexMax = (hs) => {
+      const resultat = hs
+        .map((h) => h.nomService())
+        .reduce(maxMatch, -Infinity);
 
-      let index = 1;
-      while (nomExiste(`${nomHomologation} - Copie ${index}`)) index += 1;
+      return Math.max(0, resultat) + 1;
+    };
 
-      return `${nomHomologation} - Copie ${index}`;
-    })
-  );
+    return homologations(idCreateur).then(indexMax);
+  };
 
-  const dupliqueHomologation = (idHomologation) => (
-    homologation(idHomologation)
-      .then((h) => trouveNomDisponible(h.createur.id, h.nomService())
-        .then((nom) => nouvelleHomologation(h.createur.id, h.donneesADupliquer(nom))))
-  );
+  const dupliqueHomologation = (idHomologation) => {
+    const duplique = (h) => {
+      const nomHomologationADupliquer = `${h.nomService()} - Copie`;
+      const idCreateur = h.createur.id;
+      const donneesADupliquer = (index) => h.donneesADupliquer(`${nomHomologationADupliquer} ${index}`);
+
+      return trouveIndexDisponible(idCreateur, nomHomologationADupliquer)
+        .then(donneesADupliquer)
+        .then((donnees) => nouvelleHomologation(idCreateur, donnees));
+    };
+
+    return homologation(idHomologation).then(duplique);
+  };
 
   return {
     ajouteAvisExpertCyberAHomologation,
@@ -277,7 +290,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,
-    trouveNomDisponible,
+    trouveIndexDisponible,
   };
 };
 
