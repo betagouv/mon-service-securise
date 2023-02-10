@@ -9,9 +9,15 @@ const routesPdf = require('./routes/routesPdf');
 
 require('dotenv').config();
 
-const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
-  adaptateurEquations, adaptateurMail, adaptateurPdf,
-  avecCookieSecurise = (process.env.NODE_ENV === 'production')) => {
+const creeServeur = (
+  depotDonnees,
+  middleware,
+  referentiel,
+  moteurRegles,
+  adaptateurMail,
+  adaptateurPdf,
+  avecCookieSecurise = (process.env.NODE_ENV === 'production')
+) => {
   let serveur;
 
   const app = express();
@@ -61,9 +67,9 @@ const creeServeur = (depotDonnees, middleware, referentiel, moteurRegles,
       .then((utilisateur) => reponse.render('motDePasse/edition', { utilisateur }));
   });
 
+  // Pour que les utilisateurs ayant cette page en favoris ne soient pas perdus.
   app.get('/questionsFrequentes', (_requete, reponse) => {
-    adaptateurEquations.indiceCyber()
-      .then((svg) => reponse.render('questionsFrequentes', { formuleIndiceCyber: svg }));
+    reponse.redirect('https://aide.monservicesecurise.beta.gouv.fr');
   });
 
   app.get('/mentionsLegales', (_requete, reponse) => {
