@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": "16",
-    "npm": "8"
+    "node": "18",
+    "npm": "9"
   },
   "scripts": {
     "build": "knex migrate:latest && npm test && npm run cree-utilisateur-demo",
