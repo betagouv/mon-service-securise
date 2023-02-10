@@ -1088,14 +1088,14 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  describe('sur une demande de nom disponible pour une homologation à dupliquer', () => {
-    it('utilise le suffixe « - Copie 1 » si le nom suffixé est disponible', (done) => {
+  describe("sur une demande d'un index de copie disponible pour une homologation à dupliquer", () => {
+    it("utilise l'index 1 si disponible", (done) => {
       const referentiel = Referentiel.creeReferentielVide();
       const descriptionService = uneDescriptionValide(referentiel).avecNomService('A').construis().toJSON();
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123-1', descriptionService }],
-        autorisations: [{ idUtilisateur: '123', idHomologation: '123-1', idService: '123-1', type: 'createur' }],
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123', descriptionService }],
+        autorisations: [{ idUtilisateur: '999', idHomologation: '123', idService: '123', type: 'createur' }],
       });
 
       const depot = DepotDonneesHomologations.creeDepot({
@@ -1103,19 +1103,19 @@ describe('Le dépôt de données des homologations', () => {
         referentiel,
       });
 
-      depot.trouveNomDisponible('123', 'A')
-        .then((nom) => expect(nom).to.equal('A - Copie 1'))
+      depot.trouveIndexDisponible('999', 'A - UnSuffixe')
+        .then((index) => expect(index).to.equal(1))
         .then(() => done())
         .catch(done);
     });
 
-    it("augmente l'incrément du suffixe « - Copie » si nécessaire", (done) => {
+    it("incrémente l'index si nécessaire", (done) => {
       const referentiel = Referentiel.creeReferentielVide();
-      const copie1 = uneDescriptionValide(referentiel).avecNomService('A - Copie 1').construis().toJSON();
+      const copie1 = uneDescriptionValide(referentiel).avecNomService('A - UnSuffixe 1').construis().toJSON();
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123-1', descriptionService: copie1 }],
-        autorisations: [{ idUtilisateur: '123', idHomologation: '123-1', idService: '123-1', type: 'createur' }],
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123', descriptionService: copie1 }],
+        autorisations: [{ idUtilisateur: '999', idHomologation: '123', idService: '123', type: 'createur' }],
       });
 
       const depot = DepotDonneesHomologations.creeDepot({
@@ -1123,8 +1123,32 @@ describe('Le dépôt de données des homologations', () => {
         referentiel,
       });
 
-      depot.trouveNomDisponible('123', 'A')
-        .then((nom) => expect(nom).to.equal('A - Copie 2'))
+      depot.trouveIndexDisponible('999', 'A - UnSuffixe')
+        .then((index) => expect(index).to.equal(2))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("incrémente l'index le plus élevé", (done) => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const original = uneDescriptionValide(referentiel).avecNomService('A').construis().toJSON();
+      const duplication = uneDescriptionValide(referentiel).avecNomService('A - UnSuffixe 2').construis().toJSON();
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123', descriptionService: original }, { id: '456', descriptionService: duplication }],
+        autorisations: [
+          { idUtilisateur: '999', idHomologation: '123', idService: '123', type: 'createur' },
+          { idUtilisateur: '999', idHomologation: '456', idService: '456', type: 'createur' },
+        ],
+      });
+
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        referentiel,
+      });
+
+      depot.trouveIndexDisponible('999', 'A - UnSuffixe')
+        .then((index) => expect(index).to.equal(3))
         .then(() => done())
         .catch(done);
     });
