@@ -1,4 +1,4 @@
-import { brancheValidation, declencheValidation } from '../modules/interactions/validation.mjs';
+import { brancheValidation } from '../modules/interactions/validation.mjs';
 import { initialiseComportementModale } from '../modules/interactions/modale.mjs';
 
 const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
@@ -11,13 +11,14 @@ $(() => {
   const $erreurServeur = $('.message-erreur-serveur', $modaleDuplication);
 
   brancheValidation(selecteurFormulaire);
-  $(`${selecteurFormulaire} button[type = 'submit']`).on('click', () => declencheValidation(selecteurFormulaire));
 
   $modaleDuplication.on('fermeModale', () => $erreurServeur.hide());
 
   let idServiceCourant;
 
-  $(selecteurFormulaire).on('submit', (e) => {
+  $(selecteurFormulaire).one('submit', (e) => {
+    $('button', $(selecteurFormulaire)).prop('disabled', true);
+
     e.preventDefault();
     $erreurServeur.hide();
     const nombreCopies = parseInt($('#nombre-copie').val(), 10) || 1;
