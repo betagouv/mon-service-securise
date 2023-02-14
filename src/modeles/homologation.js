@@ -79,6 +79,7 @@ class Homologation {
     return {
       ...this.statistiquesMesures().completude(),
       detailMesures: this.mesures.statutsMesuresPersonnalisees(),
+      indiceCyber: this.indiceCyber(),
     };
   }
 
