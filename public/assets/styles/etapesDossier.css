@@ -15,29 +15,47 @@ section {
 }
 
 .etapes {
+  --taille-bordure-etape: 2px;
+
   margin-top: 3em;
   display: flex;
 }
 
-.etape {
-  display: flex;
-  align-items: center;
+.etape:first-of-type {
+  margin-left: -2em;
 }
 
-.etape:not(:last-of-type):after {
+.etape .libelle-etape {
+ margin-top: 0.4em;
+ text-align: center;
+ color: var(--texte-fonce);
+}
+
+.etape .numero-etape {
+  position: relative;
+  margin: 0 calc(3em + var(--taille-bordure-etape));
+}
+
+.etape .numero-etape::after, .etape .numero-etape::before {
   content: '';
   display: block;
-  width: 1.5em;
-  height: 0px;
-
-  margin: 0 1em;
+  position: absolute;
+  top: 0.93em;
+  width: 3em;
   border: solid 1.5px var(--bordure-foncee);
   background: var(--bordure-foncee);
 }
 
-.etape.passee a {
-  display: flex;
-  align-items: center;
+.etape .numero-etape::after {
+  left: calc(2em + var(--taille-bordure-etape));
+}
+
+.etape .numero-etape::before {
+  right: calc(2em + var(--taille-bordure-etape));
+}
+
+.etape:first-of-type .numero-etape::before, .etape:last-of-type .numero-etape::after {
+  display: none;
 }
 
 form .numero-etape {
@@ -46,16 +64,27 @@ form .numero-etape {
 
   margin-right: 0.5em;
   border-radius: 50%;
-  border: solid 2px;
+  border: solid var(--taille-bordure-etape);
 
   text-align: center;
   line-height: 1.9;
 }
 
 .etape.passee .numero-etape {
-  border-color: var(--bleu-mise-en-avant);
   background: var(--bleu-mise-en-avant);
+  border-color: var(--bleu-mise-en-avant);
   color: #fff;
+}
+
+.etape.passee .coche {
+  width: 2em;
+  height: 2em;
+  background: url(../images/icone_coche_blanche.svg) no-repeat center;
+}
+
+.etape.passee .numero-etape::after, .etape:is(.passee, .courante) .numero-etape::before {
+  border-color: var(--bleu-mise-en-avant);
+  background-color: var(--bleu-mise-en-avant);
 }
 
 .etape.courante .numero-etape {
