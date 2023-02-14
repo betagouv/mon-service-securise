@@ -35,7 +35,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
   };
 
   const autorisations = (idUtilisateur) => Promise.resolve(
-    donnees.autorisations.filter((a) => a.idUtilisateur === idUtilisateur)
+    donnees.autorisations.filter((a) => (typeof idUtilisateur !== 'undefined' ? a.idUtilisateur === idUtilisateur : true))
   );
 
   const intervenantsHomologation = (idHomologation) => donnees.autorisations
