@@ -1,9 +1,9 @@
 const nouvelAdaptateur = () => {
-  const donnees = { evenements: [] };
-
   const consigneEvenement = (donneesEvenements) => {
-    donnees.evenements.push(donneesEvenements);
+    /* eslint-disable no-console */
+    console.log(`[JOURNAL MSS] Nouvel événement\n${JSON.stringify(donneesEvenements)}`);
     return Promise.resolve();
+    /* eslint-enable no-console */
   };
 
   return {
