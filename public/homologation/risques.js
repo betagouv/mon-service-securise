@@ -76,6 +76,6 @@ $(() => {
     );
 
     axios.post(`/api/service/${identifiantService}/risques`, params)
-      .then((reponse) => (window.location = `/homologation/${reponse.data.idService}`));
+      .then((reponse) => (window.location = `/service/${reponse.data.idService}`));
   });
 });

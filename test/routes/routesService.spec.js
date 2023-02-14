@@ -4,69 +4,69 @@ const expect = require('expect.js');
 const testeurMSS = require('./testeurMSS');
 const Homologation = require('../../src/modeles/homologation');
 
-describe('Le serveur MSS des routes /homologation/*', () => {
+describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
 
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
 
-  describe('quand requête GET sur `/homologation/:id`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+  describe('quand requête GET sur `/service/:id`', () => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456',
+        'http://localhost:1234/service/456',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/descriptionService`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+  describe('quand requête GET sur `/service/:id/descriptionService`', () => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/descriptionService',
+        'http://localhost:1234/service/456/descriptionService',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/decision`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+  describe('quand requête GET sur `/service/:id/decision`', () => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/decision',
+        'http://localhost:1234/service/456/decision',
         done,
       );
     });
 
     it('sert la page avec un nonce', (done) => {
       testeur.middleware().verifieRequetePositionneHeadersAvecNonce(
-        'http://localhost:1234/homologation/456/decision',
+        'http://localhost:1234/service/456/decision',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/syntheseSecurite`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+  describe('quand requête GET sur `/service/:id/syntheseSecurite`', () => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/syntheseSecurite',
+        'http://localhost:1234/service/456/syntheseSecurite',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/syntheseSecurite/annexes/mesures`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+  describe('quand requête GET sur `/service/:id/syntheseSecurite/annexes/mesures`', () => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/syntheseSecurite/annexes/mesures',
+        'http://localhost:1234/service/456/syntheseSecurite/annexes/mesures',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/mesures`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+  describe('quand requête GET sur `/service/:id/mesures`', () => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/mesures',
+        'http://localhost:1234/service/456/mesures',
         done
       );
     });
@@ -86,50 +86,50 @@ describe('Le serveur MSS des routes /homologation/*', () => {
         return {};
       };
 
-      axios('http://localhost:1234/homologation/456/mesures')
+      axios('http://localhost:1234/service/456/mesures')
         .then(() => expect(moteurInterroge).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });
   });
 
-  describe('quand requete GET sur `/homologation/:id/rolesResponsabilites`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+  describe('quand requete GET sur `/service/:id/rolesResponsabilites`', () => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/rolesResponsabilites',
+        'http://localhost:1234/service/456/rolesResponsabilites',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/risques`', () => {
+  describe('quand requête GET sur `/service/:id/risques`', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/risques',
+        'http://localhost:1234/service/456/risques',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/avisExpertCyber`', () => {
+  describe('quand requête GET sur `/service/:id/avisExpertCyber`', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/avisExpertCyber',
+        'http://localhost:1234/service/456/avisExpertCyber',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/dossiers`', () => {
+  describe('quand requête GET sur `/service/:id/dossiers`', () => {
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/dossiers',
+        'http://localhost:1234/service/456/dossiers',
         done,
       );
     });
   });
 
-  describe('quand requête GET sur `/homologation/:id/dossier/edition/etape/:idEtape`', () => {
+  describe('quand requête GET sur `/service/:id/dossier/edition/etape/:idEtape`', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({ etapesParcoursHomologation: [{ numero: 1 }] });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
@@ -140,7 +140,7 @@ describe('Le serveur MSS des routes /homologation/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheHomologation(
-        'http://localhost:1234/homologation/456/dossier/edition/etape/1',
+        'http://localhost:1234/service/456/dossier/edition/etape/1',
         done,
       );
     });
@@ -148,7 +148,7 @@ describe('Le serveur MSS des routes /homologation/*', () => {
     it("répond avec une erreur HTTP 404 si l'identifiant d'étape n'est pas connu du référentiel", (done) => {
       testeur.verifieRequeteGenereErreurHTTP(404, 'Étape inconnue', {
         method: 'get',
-        url: 'http://localhost:1234/homologation/456/dossier/edition/etape/2',
+        url: 'http://localhost:1234/service/456/dossier/edition/etape/2',
       }, done);
     });
 
@@ -164,7 +164,7 @@ describe('Le serveur MSS des routes /homologation/*', () => {
         }
       };
 
-      axios('http://localhost:1234/homologation/456/dossier/edition/etape/1')
+      axios('http://localhost:1234/service/456/dossier/edition/etape/1')
         .then(() => expect(dossierAjoute).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
@@ -181,7 +181,7 @@ describe('Le serveur MSS des routes /homologation/*', () => {
         }
       };
 
-      axios('http://localhost:1234/homologation/456/dossier/edition/etape/1')
+      axios('http://localhost:1234/service/456/dossier/edition/etape/1')
         .then(() => expect(chargementsHomologation).to.equal(1))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));

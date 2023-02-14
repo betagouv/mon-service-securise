@@ -131,6 +131,6 @@ ${statuts}
     arrangeParametresMesures(params);
 
     axios.post(`/api/service/${identifiantService}/mesures`, params)
-      .then((reponse) => (window.location = `/homologation/${reponse.data.idService}`));
+      .then((reponse) => (window.location = `/service/${reponse.data.idService}`));
   });
 });

@@ -33,8 +33,8 @@ const brancheComportemenFormulaire = (selecteur, idService, idEtape, idEtapeSuiv
       action(idEtape, idService)
         .then(() => (
           window.location = idEtapeSuivante
-            ? `/homologation/${idService}/dossier/edition/etape/${idEtapeSuivante}`
-            : `/homologation/${idService}/dossiers`
+            ? `/service/${idService}/dossier/edition/etape/${idEtapeSuivante}`
+            : `/service/${idService}/dossiers`
         ));
     }
   });

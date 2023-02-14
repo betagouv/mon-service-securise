@@ -66,7 +66,7 @@ describe("L'initialisation du comportement du formulaire", () => {
       initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
 
       evenementsDifferes.resolveWith($('.bouton').trigger('click'))
-        .then(() => expect(window.location).to.equal('/homologation/123'))
+        .then(() => expect(window.location).to.equal('/service/123'))
         .then(() => done())
         .catch(done);
     });

@@ -23,7 +23,7 @@ const routesHomologation = (
     const actionsSaisie = new ActionsSaisie(referentiel, homologation)
       .toJSON()
       .map(({ id, ...autresDonnees }) => (
-        { url: `/homologation/${homologation.id}/${id}`, id, ...autresDonnees }
+        { url: `/service/${homologation.id}/${id}`, id, ...autresDonnees }
       ));
 
     reponse.render('homologation/synthese', {

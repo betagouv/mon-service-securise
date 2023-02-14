@@ -11,7 +11,7 @@ block retour
     nav.fil-ariane
       a.avec-chevron(href = '/espacePersonnel') Espace personnel
       if s.id
-        a.avec-chevron(href = `/homologation/${s.id}`)
+        a.avec-chevron(href = `/service/${s.id}`)
           +texteTronque({ texte: s.nomService() })
 
       block filArianeNoeudFinal

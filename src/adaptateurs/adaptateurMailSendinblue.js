@@ -34,7 +34,7 @@ const envoieMessageInvitationContribution = (
   {
     PRENOM: prenomNomEmetteur,
     NOM_SERVICE: nomService,
-    URL: `${process.env.URL_BASE_MSS}/homologation/${idHomologation}`,
+    URL: `${process.env.URL_BASE_MSS}/service/${idHomologation}`,
   }
 );
 
