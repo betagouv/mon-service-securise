@@ -26,6 +26,6 @@ $(() => {
   $bouton.click(() => {
     const params = parametres('form#avis-expert-cyber');
     axios.post(`/api/service/${identifiantService}/avisExpertCyber`, params)
-      .then((reponse) => (window.location = `/homologation/${reponse.data.idService}`));
+      .then((reponse) => (window.location = `/service/${reponse.data.idService}`));
   });
 });

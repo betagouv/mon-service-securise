@@ -12,7 +12,7 @@ mixin dossier({ statut, dossier, idHomologation })
       div= `Prochaine homologation : ${prochaineHomologation}`
     if idHomologation
       nav
-        a(href = `/homologation/${idHomologation}/dossier/edition/etape/1`) Consulter
+        a(href = `/service/${idHomologation}/dossier/edition/etape/1`) Consulter
 
 mixin dossierFinalise({ dossier })
   +dossier({ statut: 'Homologation finalisée', dossier })

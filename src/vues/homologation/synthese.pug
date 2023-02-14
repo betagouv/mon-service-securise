@@ -40,18 +40,18 @@ block zone-principale
           id: 'risques',
           nom: 'Risques',
           description: 'Cartographiez les impacts potentiels des risques de sécurité les plus courants.',
-          lien: { url: `/homologation/${service.id}/risques`, texte: 'Remplir'}
+          lien: { url: `/service/${service.id}/risques`, texte: 'Remplir'}
         })
         +outilComplementaire({
           id: 'contactsUtiles',
           nom: 'Contacts utiles',
           description: 'Créez la liste des personne contribuant au fonctionnement du service à contacter en cas de besoin.',
-          lien: { url: `/homologation/${service.id}/rolesResponsabilites`, texte: 'Compléter' }
+          lien: { url: `/service/${service.id}/rolesResponsabilites`, texte: 'Compléter' }
         })
 
     .telechargement-pdfs
       a.bouton.nouvel-onglet(
-        href = `/homologation/${service.id}/syntheseSecurite`,
+        href = `/service/${service.id}/syntheseSecurite`,
         target = `blank`,
         rel = ``
       ) Télécharger la synthèse
@@ -90,5 +90,5 @@ block cartes-informations
 
   +carteInformations({ titre: 'Pour les services référencés avant le 12/10/2022' })
     .liens
-      a.avec-chevron(href = `/homologation/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »
-      a.avec-chevron(href = `/homologation/${service.id}/decision`) Télécharger les annexes 1ère version
+      a.avec-chevron(href = `/service/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »
+      a.avec-chevron(href = `/service/${service.id}/decision`) Télécharger les annexes 1ère version

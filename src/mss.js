@@ -4,7 +4,7 @@ const express = require('express');
 const { DUREE_SESSION } = require('./http/configurationServeur');
 const routesApi = require('./routes/routesApi');
 const routesBibliotheques = require('./routes/routesBibliotheques');
-const routesHomologation = require('./routes/routesHomologation');
+const routesService = require('./routes/routesService');
 const routesPdf = require('./routes/routesPdf');
 
 require('dotenv').config();
@@ -126,7 +126,7 @@ const creeServeur = (
 
   app.use('/bibliotheques', routesBibliotheques());
 
-  app.use('/homologation', routesHomologation(middleware, referentiel, depotDonnees, moteurRegles));
+  app.use('/service', routesService(middleware, referentiel, depotDonnees, moteurRegles));
 
   app.use('/pdf', routesPdf(middleware, adaptateurPdf));
 

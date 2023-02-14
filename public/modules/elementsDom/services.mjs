@@ -58,7 +58,7 @@ const $serviceExistant = (
   const $element = $(`
 <a
   class="service"
-  href="/homologation/${donneesService.id}"
+  href="/service/${donneesService.id}"
   data-id="${donneesService.id}"
   data-nom="${donneesService.nomService}"
 >

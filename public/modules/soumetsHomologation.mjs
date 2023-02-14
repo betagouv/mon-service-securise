@@ -20,7 +20,7 @@ const initialiseComportementFormulaire = (
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
     const redirigeVersSynthese = ({ data: { idService } }) => (
-      window.location = `/homologation/${idService}`
+      window.location = `/service/${idService}`
     );
 
     adaptateurAjax.execute(requete)
