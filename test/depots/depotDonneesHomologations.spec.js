@@ -64,6 +64,18 @@ describe('Le dépôt de données des homologations', () => {
       .catch(done);
   });
 
+  it("utilise l'adaptateur de persistance sans `idUtilisateur` pour récupérer toutes les homologations du système", (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
+    adaptateurPersistance.homologations = (idUtilisateur) => {
+      expect(idUtilisateur).to.be(undefined);
+      done();
+    };
+
+    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+
+    depot.toutesHomologations();
+  });
+
   it('trie les homologations par ordre alphabétique du nom du service', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       homologations: [

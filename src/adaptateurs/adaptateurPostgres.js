@@ -97,8 +97,13 @@ const nouvelAdaptateur = (env) => {
   );
 
   const homologations = (idUtilisateur) => {
-    const idsHomologations = knex('autorisations')
-      .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
+    let autorisations = knex('autorisations');
+
+    if (typeof idUtilisateur !== 'undefined') {
+      autorisations = autorisations.whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur);
+    }
+
+    const idsHomologations = autorisations
       .select({ idHomologation: knex.raw("(donnees->>'idHomologation')") })
       .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
 

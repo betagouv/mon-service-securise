@@ -180,6 +180,8 @@ const creeDepot = (config = {}) => {
       .map((h) => new Homologation(h, referentiel))
       .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService())));
 
+  const toutesHomologations = () => homologations();
+
   const metsAJourDossierCourant = (idHomologation, dossier) => (
     ajouteDossierCourantSiNecessaire(idHomologation)
       .then((d) => {
@@ -290,6 +292,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,
+    toutesHomologations,
     trouveIndexDisponible,
   };
 };
