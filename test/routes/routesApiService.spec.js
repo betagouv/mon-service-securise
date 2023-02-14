@@ -117,7 +117,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         { method: 'put', url: 'http://localhost:1234/api/service/456' }, done
       );
     });
@@ -210,7 +210,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation({
+      testeur.middleware().verifieRechercheService({
         method: 'post',
         url: 'http://localhost:1234/api/service/456/mesures',
       }, done);
@@ -321,7 +321,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation({
+      testeur.middleware().verifieRechercheService({
         method: 'post',
         url: 'http://localhost:1234/api/service/456/rolesResponsabilites',
       }, done);
@@ -374,7 +374,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation({
+      testeur.middleware().verifieRechercheService({
         method: 'post',
         url: 'http://localhost:1234/api/service/456/risques',
       }, done);
@@ -482,7 +482,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     ));
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation({
+      testeur.middleware().verifieRechercheService({
         method: 'post',
         url: 'http://localhost:1234/api/service/456/avisExpertCyber',
       }, done);
@@ -534,7 +534,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation({
+      testeur.middleware().verifieRechercheService({
         method: 'put',
         url: 'http://localhost:1234/api/service/456/dossier',
       }, done);

@@ -13,7 +13,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456',
         done,
       );
@@ -22,7 +22,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/descriptionService`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/descriptionService',
         done,
       );
@@ -31,7 +31,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/decision`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/decision',
         done,
       );
@@ -47,7 +47,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/syntheseSecurite`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/syntheseSecurite',
         done,
       );
@@ -56,7 +56,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/syntheseSecurite/annexes/mesures`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/syntheseSecurite/annexes/mesures',
         done,
       );
@@ -65,7 +65,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/mesures`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/mesures',
         done
       );
@@ -95,7 +95,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requete GET sur `/service/:id/rolesResponsabilites`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/rolesResponsabilites',
         done,
       );
@@ -104,7 +104,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/risques`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/risques',
         done,
       );
@@ -113,7 +113,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/avisExpertCyber`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/avisExpertCyber',
         done,
       );
@@ -122,7 +122,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/dossiers`', () => {
     it("recherche l'homologation correspondante", (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/dossiers',
         done,
       );
@@ -139,7 +139,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
 
     it("recherche l'homologation correspondante", (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/dossier/edition/etape/1',
         done,
       );
