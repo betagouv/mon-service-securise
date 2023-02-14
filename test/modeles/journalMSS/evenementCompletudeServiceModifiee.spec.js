@@ -1,4 +1,5 @@
 const expect = require('expect.js');
+const ConstructeurEvenementCompletudeServiceModifiee = require('./constructeurEvenementCompletudeServiceModifiee');
 const EvenementCompletudeServiceModifiee = require('../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee');
 const {
   ErreurDetailMesuresManquant,
@@ -9,15 +10,18 @@ const {
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de complétude modifiée', () => {
+  const unEvenement = () => new ConstructeurEvenementCompletudeServiceModifiee();
+
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
 
   it("chiffre l'identifiant du service qui lui est donné", () => {
-    const evenement = new EvenementCompletudeServiceModifiee(
-      { idService: 'abc', nombreTotalMesures: 54, nombreMesuresCompletes: 38, detailMesures: [], indiceCyber: {} },
-      { adaptateurChiffrement: hacheEnMajuscules }
-    );
+    const evenement = unEvenement()
+      .avecIdService('abc')
+      .quiChiffreAvec(hacheEnMajuscules)
+      .construis()
+      .toJSON();
 
-    expect(evenement.toJSON().donnees.idService).to.be('ABC');
+    expect(evenement.donnees.idService).to.be('ABC');
   });
 
   it('sait se convertir en JSON', () => {
@@ -48,19 +52,12 @@ describe('Un événement de complétude modifiée', () => {
   });
 
   it("range les données de l'indice cyber par catégorie", () => {
-    const indiceCyber = { total: 4.1, gouvernance: 3.8 };
-    const evenement = new EvenementCompletudeServiceModifiee(
-      {
-        idService: 'abc',
-        nombreTotalMesures: 1,
-        nombreMesuresCompletes: 1,
-        detailMesures: [],
-        indiceCyber,
-      },
-      { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
-    );
+    const evenement = unEvenement()
+      .avecIndiceCyber({ total: 4.1, gouvernance: 3.8 })
+      .construis()
+      .toJSON();
 
-    expect(evenement.toJSON().donnees.detailIndiceCyber).to.eql([
+    expect(evenement.donnees.detailIndiceCyber).to.eql([
       { categorie: 'total', indice: 4.1 },
       { categorie: 'gouvernance', indice: 3.8 },
     ]);
@@ -68,10 +65,7 @@ describe('Un événement de complétude modifiée', () => {
 
   it("exige que l'identifiant du service soit renseigné", (done) => {
     try {
-      new EvenementCompletudeServiceModifiee(
-        { nombreTotalMesures: 54, nombreMesuresCompletes: 38, detailMesures: [], indiceCyber: {} },
-        { adaptateurChiffrement: hacheEnMajuscules }
-      );
+      unEvenement().sans('idService').construis();
 
       done(Error("L'instanciation de l'événement aurait dû lever une exception"));
     } catch (e) {
@@ -82,10 +76,7 @@ describe('Un événement de complétude modifiée', () => {
 
   it('exige que le nombre total de mesures soit renseigné', (done) => {
     try {
-      new EvenementCompletudeServiceModifiee(
-        { idService: 'abc', nombreMesuresCompletes: 38, detailMesures: [], indiceCyber: {} },
-        { adaptateurChiffrement: hacheEnMajuscules }
-      );
+      unEvenement().sans('nombreTotalMesures').construis();
 
       done(Error("L'instanciation de l'événement aurait dû lever une exception"));
     } catch (e) {
@@ -96,10 +87,7 @@ describe('Un événement de complétude modifiée', () => {
 
   it('exige que le nombre de mesures complètes soit renseigné', (done) => {
     try {
-      new EvenementCompletudeServiceModifiee(
-        { idService: 'abc', nombreTotalMesures: 54, detailMesures: [], indiceCyber: {} },
-        { adaptateurChiffrement: hacheEnMajuscules }
-      );
+      unEvenement().sans('nombreMesuresCompletes').construis();
 
       done(Error("L'instanciation de l'événement aurait dû lever une exception"));
     } catch (e) {
@@ -110,10 +98,7 @@ describe('Un événement de complétude modifiée', () => {
 
   it('exige que le detail des mesures soit renseigné', (done) => {
     try {
-      new EvenementCompletudeServiceModifiee(
-        { idService: 'abc', nombreTotalMesures: 54, nombreMesuresCompletes: 42, indiceCyber: {} },
-        { adaptateurChiffrement: hacheEnMajuscules }
-      );
+      unEvenement().sans('detailMesures').construis();
 
       done(Error("L'instanciation de l'événement aurait dû lever une exception"));
     } catch (e) {
@@ -124,10 +109,7 @@ describe('Un événement de complétude modifiée', () => {
 
   it("exige que l'indice cyber soit renseigné", (done) => {
     try {
-      new EvenementCompletudeServiceModifiee(
-        { idService: 'abc', nombreTotalMesures: 54, nombreMesuresCompletes: 42, detailMesures: [] },
-        { adaptateurChiffrement: hacheEnMajuscules }
-      );
+      unEvenement().sans('indiceCyber').construis();
 
       done(Error("L'instanciation de l'événement aurait dû lever une exception"));
     } catch (e) {
