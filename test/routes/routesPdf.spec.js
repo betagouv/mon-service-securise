@@ -20,8 +20,8 @@ describe('Le serveur MSS des routes /pdf/*', () => {
       testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('Pdf annexes');
     });
 
-    it("recherche l'homologation correspondante", (done) => {
-      testeur.middleware().verifieRechercheHomologation(
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
         'http://localhost:1234/pdf/456/annexes.pdf',
         done,
       );

@@ -137,7 +137,7 @@ const middlewareFantaisie = {
     }, ...params);
   },
 
-  verifieRechercheHomologation: (...params) => {
+  verifieRechercheService: (...params) => {
     verifieRequeteChangeEtat({ lectureEtat: () => rechercheHomologationEffectuee }, ...params);
   },
 
