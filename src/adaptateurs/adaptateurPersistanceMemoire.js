@@ -34,9 +34,15 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     return Promise.resolve();
   };
 
-  const autorisations = (idUtilisateur) => Promise.resolve(
-    donnees.autorisations.filter((a) => (typeof idUtilisateur !== 'undefined' ? a.idUtilisateur === idUtilisateur : true))
-  );
+  const autorisations = (idUtilisateur) => {
+    const seulementUnUtilisateur = typeof idUtilisateur !== 'undefined';
+
+    const filtre = seulementUnUtilisateur
+      ? (a) => a.idUtilisateur === idUtilisateur
+      : (a) => a.type === 'createur';
+
+    return Promise.resolve(donnees.autorisations.filter(filtre));
+  };
 
   const intervenantsHomologation = (idHomologation) => donnees.autorisations
     .filter((a) => a.idHomologation === idHomologation)
