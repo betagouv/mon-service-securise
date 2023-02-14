@@ -4,6 +4,7 @@ const {
   ErreurIdentifiantServiceManquant,
   ErreurNombreMesuresCompletesManquant,
   ErreurNombreTotalMesuresManquant,
+  ErreurIndiceCyberManquant,
 } = require('./erreurs');
 
 class EvenementCompletudeServiceModifiee extends Evenement {
@@ -17,13 +18,23 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       if (manque(donnees.nombreTotalMesures)) throw new ErreurNombreTotalMesuresManquant();
       if (manque(donnees.nombreMesuresCompletes)) throw new ErreurNombreMesuresCompletesManquant();
       if (manque(donnees.detailMesures)) throw new ErreurDetailMesuresManquant();
+      if (manque(donnees.indiceCyber)) throw new ErreurIndiceCyberManquant();
     };
+
+    const enTableau = (donneesIndiceCyber) => Object.entries(donneesIndiceCyber)
+      .reduce((acc, [categorie, indice]) => ([...acc, { categorie, indice }]), []);
 
     valide();
 
+    const { idService, indiceCyber, ...donneesBrutes } = donnees;
+
     super(
       'COMPLETUDE_SERVICE_MODIFIEE',
-      { ...donnees, idService: adaptateurChiffrement.hacheSha256(donnees.idService) },
+      {
+        idService: adaptateurChiffrement.hacheSha256(idService),
+        detailIndiceCyber: enTableau(indiceCyber),
+        ...donneesBrutes,
+      },
       date
     );
   }
