@@ -1,4 +1,5 @@
 const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../erreurs');
+const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
 const Etape = require('./etape');
 const { ajouteMoisADate, dateEnFrancais, dateInvalide } = require('../utilitaires/date');
 const Referentiel = require('../referentiel');
@@ -6,11 +7,13 @@ const Referentiel = require('../referentiel');
 class EtapeDate extends Etape {
   constructor(
     { dateHomologation, dureeValidite } = {},
-    referentiel = Referentiel.creeReferentielVide()
+    referentiel = Referentiel.creeReferentielVide(),
+    adaptateurHorloge = adaptateurHorlogeParDefaut
   ) {
     super({ proprietesAtomiquesFacultatives: ['dateHomologation', 'dureeValidite'] }, referentiel);
     EtapeDate.valide({ dateHomologation, dureeValidite }, referentiel);
     this.renseigneProprietes({ dateHomologation, dureeValidite });
+    this.adaptateurHorloge = adaptateurHorloge;
   }
 
   descriptionDateHomologation() {
@@ -46,6 +49,12 @@ class EtapeDate extends Etape {
 
   estComplete() {
     return !!this.dateHomologation && !!this.dureeValidite;
+  }
+
+  periodeHomologationEstEnCours() {
+    const maintenant = this.adaptateurHorloge.maintenant();
+    return new Date(this.dateHomologation) < maintenant
+      && maintenant < this.dateProchaineHomologation();
   }
 
   static valide({ dateHomologation, dureeValidite }, referentiel) {
