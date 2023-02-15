@@ -1,8 +1,7 @@
-const InformationsHomologation = require('./informationsHomologation');
-const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../erreurs');
-const Referentiel = require('../referentiel');
-const { ajouteMoisADate, dateEnFrancais, dateInvalide } = require('../utilitaires/date');
 const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
+const EtapeDate = require('./etapeDate');
+const InformationsHomologation = require('./informationsHomologation');
+const Referentiel = require('../referentiel');
 
 class Dossier extends InformationsHomologation {
   constructor(
@@ -13,67 +12,40 @@ class Dossier extends InformationsHomologation {
     donneesDossier.finalise = !!donneesDossier.finalise;
 
     super({ proprietesAtomiquesFacultatives: ['id', 'dateHomologation', 'dureeValidite', 'finalise'] });
-    Dossier.valide(donneesDossier, referentiel);
     this.renseigneProprietes(donneesDossier);
 
-    this.referentiel = referentiel;
+    this.etapeDate = new EtapeDate(
+      { dateHomologation: this.dateHomologation, dureeValidite: this.dureeValidite },
+      referentiel
+    );
+
     this.adaptateurHorloge = adaptateurHorloge;
   }
 
   descriptionDateHomologation() {
-    if (!this.dateHomologation) {
-      return '';
-    }
-
-    return dateEnFrancais(this.dateHomologation);
+    return this.etapeDate.descriptionDateHomologation();
   }
 
   descriptionDureeValidite() {
-    if (!this.dureeValidite) {
-      return '';
-    }
-
-    return this.referentiel.descriptionEcheanceRenouvellement(this.dureeValidite);
+    return this.etapeDate.descriptionDureeValidite();
   }
 
   dateProchaineHomologation() {
-    const date = new Date(this.dateHomologation);
-    const nbMois = this.referentiel.nbMoisDecalage(this.dureeValidite);
-
-    return ajouteMoisADate(nbMois, date);
+    return this.etapeDate.dateProchaineHomologation();
   }
 
   descriptionProchaineDateHomologation() {
-    if (!this.dateHomologation || !this.dureeValidite) {
-      return '';
-    }
-
-    return dateEnFrancais(this.dateProchaineHomologation());
+    return this.etapeDate.descriptionProchaineDateHomologation();
   }
 
   estComplet() {
-    return !!this.dateHomologation && !!this.dureeValidite;
+    return this.etapeDate.estComplete();
   }
 
   estActif() {
     const maintenant = this.adaptateurHorloge.maintenant();
     return new Date(this.dateHomologation) < maintenant
       && maintenant < this.dateProchaineHomologation();
-  }
-
-  static valide({ dateHomologation, dureeValidite }, referentiel) {
-    const identifiantsDureesHomologation = referentiel.identifiantsEcheancesRenouvellement();
-    if (dureeValidite && !identifiantsDureesHomologation.includes(dureeValidite)) {
-      throw new ErreurDureeValiditeInvalide(
-        `La durée de validité "${dureeValidite}" est invalide`
-      );
-    }
-
-    if (dateHomologation && dateInvalide(dateHomologation)) {
-      throw new ErreurDateHomologationInvalide(
-        `La date "${dateHomologation}" est invalide`
-      );
-    }
   }
 }
 
