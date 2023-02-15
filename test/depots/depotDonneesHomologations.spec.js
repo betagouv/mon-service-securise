@@ -1077,6 +1077,17 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
 
+    it("reste robuste quand l'homologation n'est pas trouvée", (done) => {
+      depot.dupliqueHomologation('id-invalide')
+        .then(() => done('La tentative de duplication aurait dû lever une exception'))
+        .catch((e) => {
+          expect(e).to.be.an(ErreurHomologationInexistante);
+          expect(e.message).to.equal('Homologation "id-invalide" non trouvée');
+          done();
+        })
+        .catch(done);
+    });
+
     it('peut dupliquer une homologation à partir de son identifiant', (done) => {
       depot.dupliqueHomologation('123-1')
         .then(() => depot.homologations('123'))

@@ -273,7 +273,11 @@ const creeDepot = (config = {}) => {
         .then((donnees) => nouvelleHomologation(idCreateur, donnees));
     };
 
-    return homologation(idHomologation).then(duplique);
+    return homologation(idHomologation)
+      .then((h) => (typeof h === 'undefined' ? Promise.reject(new ErreurHomologationInexistante(
+        `Homologation "${idHomologation}" non trouvée`
+      )) : h))
+      .then(duplique);
   };
 
   return {
