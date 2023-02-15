@@ -19,7 +19,7 @@ block formulaire
     .requis
       label Date d'homologation
         .infos-complementaires Cette date correspond à la date de signature de l'autorité d'homologation.
-        input(id = 'date-homologation' nom = 'dateHomologation', type = 'date', required, value = dossierCourant.dateHomologation)
+        input(id = 'date-homologation' nom = 'dateHomologation', type = 'date', required, value = dossierCourant.etapeDate.dateHomologation)
         .message-erreur Ce champ est obligatoire. Veuillez saisir une date.
 
     .requis
@@ -28,7 +28,7 @@ block formulaire
         nom: 'dureeValidite',
         items: referentiel.echeancesRenouvellement(),
         titre: "Durée de validité de l'homologation",
-        objetDonnees: dossierCourant,
+        objetDonnees: dossierCourant.etapeDate,
         messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
         requis: true,
       })

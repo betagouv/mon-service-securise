@@ -11,15 +11,17 @@ class Dossier extends InformationsHomologation {
   ) {
     donneesDossier.finalise = !!donneesDossier.finalise;
 
-    super({ proprietesAtomiquesFacultatives: ['id', 'dateHomologation', 'dureeValidite', 'finalise'] });
+    super({ proprietesAtomiquesFacultatives: ['id', 'finalise'] });
     this.renseigneProprietes(donneesDossier);
 
     this.etapeDate = new EtapeDate(
-      { dateHomologation: this.dateHomologation, dureeValidite: this.dureeValidite },
-      referentiel
+      {
+        dateHomologation: donneesDossier.dateHomologation,
+        dureeValidite: donneesDossier.dureeValidite,
+      },
+      referentiel,
+      adaptateurHorloge
     );
-
-    this.adaptateurHorloge = adaptateurHorloge;
   }
 
   descriptionDateHomologation() {
@@ -44,9 +46,14 @@ class Dossier extends InformationsHomologation {
 
   estActif() {
     if (!this.estComplet()) return false;
-    const maintenant = this.adaptateurHorloge.maintenant();
-    return new Date(this.dateHomologation) < maintenant
-      && maintenant < this.dateProchaineHomologation();
+    return this.etapeDate.periodeHomologationEstEnCours();
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      ...this.etapeDate.toJSON(),
+    };
   }
 }
 
