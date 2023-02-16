@@ -1,6 +1,6 @@
 extends ./formulaireEtapier
 
-mixin dossier({ statut, dossier, idHomologation })
+mixin dossier({ statut, dossier, idService })
   -
     const duree = dossier.descriptionDureeValidite()
     const prochaineHomologation = dossier.descriptionProchaineDateHomologation()
@@ -10,9 +10,9 @@ mixin dossier({ statut, dossier, idHomologation })
       .statut= statut
       div= `Durée : ${duree}`
       div= `Prochaine homologation : ${prochaineHomologation}`
-    if idHomologation
+    if idService
       nav
-        a(href = `/service/${idHomologation}/dossier/edition/etape/1`) Consulter
+        a(href = `/service/${idService}/dossier/edition/etape/1`) Consulter
 
 mixin dossierFinalise({ dossier })
   +dossier({ statut: 'Homologation finalisée', dossier })
@@ -28,7 +28,7 @@ block formulaire
 
   .dossiers
     if dossierCourant
-      +dossierCourant({ dossier: dossierCourant, idHomologation: homologation.id })
+      +dossierCourant({ dossier: dossierCourant, idService: homologation.id })
 
     each dossier in dossiersFinalises
       +dossierFinalise({ dossier })

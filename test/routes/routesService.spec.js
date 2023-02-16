@@ -103,7 +103,7 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('quand requête GET sur `/service/:id/risques`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/risques',
         done,
@@ -112,7 +112,7 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('quand requête GET sur `/service/:id/avisExpertCyber`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/avisExpertCyber',
         done,
@@ -121,7 +121,7 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('quand requête GET sur `/service/:id/dossiers`', () => {
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/dossiers',
         done,
@@ -138,7 +138,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       );
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         'http://localhost:1234/service/456/dossier/edition/etape/1',
         done,
@@ -152,11 +152,11 @@ describe('Le serveur MSS des routes /service/*', () => {
       }, done);
     });
 
-    it("ajoute un dossier courant à l'homologation si nécessaire", (done) => {
+    it('ajoute un dossier courant au service si nécessaire', (done) => {
       let dossierAjoute = false;
-      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = (idHomologation) => {
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = (idService) => {
         try {
-          expect(idHomologation).to.equal('456');
+          expect(idService).to.equal('456');
           dossierAjoute = true;
           return Promise.resolve();
         } catch (e) {
@@ -170,11 +170,11 @@ describe('Le serveur MSS des routes /service/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
-    it("recharge l'homologation avant de servir la vue", (done) => {
-      let chargementsHomologation = 0;
+    it('recharge le service avant de servir la vue', (done) => {
+      let chargementsService = 0;
       testeur.depotDonnees().homologation = () => {
         try {
-          chargementsHomologation += 1;
+          chargementsService += 1;
           return Promise.resolve(new Homologation({ id: '456', descriptionService: { nomService: 'un service' } }));
         } catch (e) {
           return Promise.reject(e);
@@ -182,7 +182,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       };
 
       axios('http://localhost:1234/service/456/dossier/edition/etape/1')
-        .then(() => expect(chargementsHomologation).to.equal(1))
+        .then(() => expect(chargementsService).to.equal(1))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });

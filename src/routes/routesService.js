@@ -4,7 +4,7 @@ const ActionsSaisie = require('../modeles/actionsSaisie');
 const Homologation = require('../modeles/homologation');
 const InformationsHomologation = require('../modeles/informationsHomologation');
 
-const routesHomologation = (
+const routesService = (
   middleware,
   referentiel,
   depotDonnees,
@@ -104,4 +104,4 @@ const routesHomologation = (
   return routes;
 };
 
-module.exports = routesHomologation;
+module.exports = routesService;

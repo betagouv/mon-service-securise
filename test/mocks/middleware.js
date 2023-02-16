@@ -36,7 +36,7 @@ let headersPositionnes = false;
 let idUtilisateurCourant;
 let listesAseptisees = [];
 let parametresAseptises = [];
-let rechercheHomologationEffectuee = false;
+let rechercheServiceEffectuee = false;
 let suppressionCookieEffectuee = false;
 let verificationJWTMenee = false;
 let verificationCGUMenee = false;
@@ -51,7 +51,7 @@ const middlewareFantaisie = {
     idUtilisateurCourant = idUtilisateur;
     listesAseptisees = [];
     parametresAseptises = [];
-    rechercheHomologationEffectuee = false;
+    rechercheServiceEffectuee = false;
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
     verificationCGUMenee = false;
@@ -105,7 +105,7 @@ const middlewareFantaisie = {
       id: '456',
       descriptionService: { nomService: 'un service' },
     });
-    rechercheHomologationEffectuee = true;
+    rechercheServiceEffectuee = true;
     suite();
   },
 
@@ -138,7 +138,7 @@ const middlewareFantaisie = {
   },
 
   verifieRechercheService: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => rechercheHomologationEffectuee }, ...params);
+    verifieRequeteChangeEtat({ lectureEtat: () => rechercheServiceEffectuee }, ...params);
   },
 
   verifieRequeteExigeAcceptationCGU: (...params) => {
