@@ -441,6 +441,7 @@ describe('Une homologation', () => {
     it("retourne une représentation correcte de l'ensemble de l'Homologation", () => {
       const referentiel = Referentiel.creeReferentiel({
         categoriesMesures: {},
+        echeancesRenouvellement: { unAn: {} },
         localisationsDonnees: { uneLocalisation: {} },
         mesures: { uneMesure: {} },
         reglesPersonnalisation: { mesuresBase: ['uneMesure'] },
@@ -455,7 +456,7 @@ describe('Une homologation', () => {
           .avecNomService('nom-service')
           .construis()
           .toJSON(),
-        dossiers: [{ id: '999' }],
+        dossiers: [{ id: '999', dateHomologation: '2023-02-16', dureeValidite: 'unAn' }],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
         risquesGeneraux: [{ id: 'unRisque' }],
@@ -485,7 +486,9 @@ describe('Une homologation', () => {
           fonctionnalitesSpecifiques: [],
           pointsAcces: [],
         },
-        dossiers: [{ id: '999', finalise: false }],
+        dossiers: [
+          { id: '999', dateHomologation: '2023-02-16', dureeValidite: 'unAn', finalise: false },
+        ],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
         risquesGeneraux: [{ id: 'unRisque' }],
