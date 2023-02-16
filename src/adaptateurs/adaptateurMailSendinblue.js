@@ -27,14 +27,14 @@ const envoieMessageFinalisationInscription = (
 );
 
 const envoieMessageInvitationContribution = (
-  destinataire, prenomNomEmetteur, nomService, idHomologation
+  destinataire, prenomNomEmetteur, nomService, idService
 ) => envoieEmail(
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
   {
     PRENOM: prenomNomEmetteur,
     NOM_SERVICE: nomService,
-    URL: `${process.env.URL_BASE_MSS}/service/${idHomologation}`,
+    URL: `${process.env.URL_BASE_MSS}/service/${idService}`,
   }
 );
 
