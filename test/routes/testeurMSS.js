@@ -52,7 +52,8 @@ const testeurMss = () => {
           false,
         );
         serveur.ecoute(1234, done);
-      });
+      })
+      .catch(done);
   };
 
   const arrete = () => (serveur.arreteEcoute());
