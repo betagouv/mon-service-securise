@@ -43,6 +43,7 @@ class Dossier extends InformationsHomologation {
   }
 
   estActif() {
+    if (!this.estComplet()) return false;
     const maintenant = this.adaptateurHorloge.maintenant();
     return new Date(this.dateHomologation) < maintenant
       && maintenant < this.dateProchaineHomologation();
