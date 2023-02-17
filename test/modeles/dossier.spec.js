@@ -32,7 +32,8 @@ describe("Un dossier d'homologation", () => {
 
   describe('sur demande du caractère actif du dossier', () => {
     it("retourne `false` si le dossier n'est pas complet", () => {
-      const dossier = new Dossier({ estComplet: () => (false) }, referentiel);
+      const adaptateurHorloge = { maintenant: () => new Date(2023, 1, 1) };
+      const dossier = new Dossier({ id: '2', finalise: true, dateHomologation: '2023-01-01' }, referentiel, adaptateurHorloge);
       expect(dossier.estActif()).to.equal(false);
     });
 
