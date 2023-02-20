@@ -1,8 +1,8 @@
 const expect = require('expect.js');
 
-const EtapeDate = require('../../src/modeles/etapeDate');
-const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
+const EtapeDate = require('../../../src/modeles/etapes/etapeDate');
+const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../../../src/erreurs');
+const Referentiel = require('../../../src/referentiel');
 
 describe('Une étape date', () => {
   const referentiel = Referentiel.creeReferentielVide();

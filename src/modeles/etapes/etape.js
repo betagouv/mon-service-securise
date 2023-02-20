@@ -1,4 +1,4 @@
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsHomologation = require('../informationsHomologation');
 
 class Etape extends InformationsHomologation {
   constructor(donnees, referentiel) {

@@ -1,5 +1,5 @@
 const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
-const EtapeDate = require('./etapeDate');
+const EtapeDate = require('./etapes/etapeDate');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
 
