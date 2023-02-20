@@ -59,15 +59,18 @@ section {
 }
 
 form .numero-etape {
-  width: 2em;
-  height: 2em;
-
   margin-right: 0.5em;
-  border-radius: 50%;
   border: solid var(--taille-bordure-etape);
 
   text-align: center;
   line-height: 1.9;
+}
+
+.etape .numero-etape, .etape.passee .coche {
+  width: 2em;
+  height: 2em;
+
+  border-radius: 50%;
 }
 
 .etape.passee .numero-etape {
@@ -77,9 +80,23 @@ form .numero-etape {
 }
 
 .etape.passee .coche {
-  width: 2em;
-  height: 2em;
+  display: block;
   background: url(../images/icone_coche_blanche.svg) no-repeat center;
+}
+
+.etape.passee .numero-etape:hover {
+  background-color: var(--bleu-survol);
+  border-color: var(--bleu-survol);
+}
+
+.etape.passee .numero-etape:active {
+  background-color: var(--bleu-anssi);
+  border-color: var(--bleu-anssi);
+}
+
+.etape.passee .coche:focus {
+  outline: 0.17em solid var(--systeme-design-etat-bleu-bordure-focus);
+  outline-offset: 0.3em;
 }
 
 .etape.passee .numero-etape::after, .etape:is(.passee, .courante) .numero-etape::before {
