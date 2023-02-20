@@ -1,8 +1,8 @@
-const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../erreurs');
-const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
+const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../../erreurs');
+const adaptateurHorlogeParDefaut = require('../../adaptateurs/adaptateurHorloge');
 const Etape = require('./etape');
-const { ajouteMoisADate, dateEnFrancais, dateInvalide } = require('../utilitaires/date');
-const Referentiel = require('../referentiel');
+const { ajouteMoisADate, dateEnFrancais, dateInvalide } = require('../../utilitaires/date');
+const Referentiel = require('../../referentiel');
 
 class EtapeDate extends Etape {
   constructor(
