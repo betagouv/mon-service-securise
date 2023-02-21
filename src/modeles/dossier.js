@@ -1,8 +1,10 @@
 const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
 const Autorite = require('./etapes/autorite');
+const DatesTelechargements = require('./etapes/datesTelechargements');
 const Decision = require('./etapes/decision');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
+const { ErreurDossierDejaFinalise } = require('../erreurs');
 
 class Dossier extends InformationsHomologation {
   constructor(
@@ -21,6 +23,10 @@ class Dossier extends InformationsHomologation {
       adaptateurHorloge
     );
     this.autorite = new Autorite(donneesDossier.autorite);
+    this.datesTelechargements = new DatesTelechargements(
+      donneesDossier.datesTelechargements ?? {},
+      referentiel
+    );
   }
 
   descriptionDateHomologation() {
@@ -39,6 +45,12 @@ class Dossier extends InformationsHomologation {
     return this.decision.descriptionProchaineDateHomologation();
   }
 
+  enregistreDateTelechargement(nomDocument, date) {
+    if (this.finalise) throw new ErreurDossierDejaFinalise();
+
+    this.datesTelechargements.enregistreDateTelechargement(nomDocument, date);
+  }
+
   estComplet() {
     return this.decision.estComplete();
   }
@@ -53,6 +65,7 @@ class Dossier extends InformationsHomologation {
       ...super.toJSON(),
       decision: this.decision.toJSON(),
       autorite: this.autorite.toJSON(),
+      datesTelechargements: this.datesTelechargements.toJSON(),
     };
   }
 }

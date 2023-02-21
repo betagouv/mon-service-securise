@@ -627,6 +627,12 @@ module.exports = {
     { numero: 3, libelle: 'Récapitulatif' },
   ],
 
+  documentsHomologation: {
+    annexes: { description: 'Annexes' },
+    decision: { description: "Décision d'homologation de sécurité (modèle)" },
+    synthese: { description: "Synthèse de l'état de sécurité du service" },
+  },
+
   reglesPersonnalisation: {
     clefsDescriptionServiceAConsiderer: [
       'typeService',
