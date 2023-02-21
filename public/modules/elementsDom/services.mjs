@@ -112,10 +112,10 @@ const $serviceExistant = (
 };
 
 const $nouveauService = () => $(`
-<a class="nouveau service" href="/homologation/creation" id="nouveau-service">
+<div class="nouveau service" id="nouveau-service">
   <div class="icone-ajout"></div>
   <div>Nouveau service</div>
-</a>
+</div>
 `);
 
 const $services = (donneesServices, ...params) => (
