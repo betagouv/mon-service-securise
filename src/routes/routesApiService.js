@@ -22,7 +22,7 @@ const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../modeles/rolesResponsabilites');
 const { dateInvalide } = require('../utilitaires/date');
 
-const routesApiService = (middleware, depotDonnees, referentiel) => {
+const routesApiService = (middleware, depotDonnees, referentiel, adaptateurHorloge) => {
   const routes = express.Router();
 
   routes.post('/', middleware.verificationAcceptationCGU, middleware.aseptise('nomService'), middleware.aseptiseListes([
@@ -199,6 +199,41 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
       }
     }
   );
+
+  routes.get('/:id/dossier/etape/decision/:idDocument', middleware.trouveHomologation, (requete, reponse, suite) => {
+    const { homologation } = requete;
+    const dossierCourant = homologation.dossierCourant();
+    const { idDocument } = requete.params;
+
+    if (!dossierCourant) {
+      reponse.status(404).send('Homologation sans dossier courant');
+      return;
+    }
+
+    if (!['decision', 'synthese', 'annexes'].includes(idDocument)) {
+      reponse.status(422).send('Identifiant de document invalide');
+      return;
+    }
+
+    const renvoiLeDocument = () => {
+      switch (idDocument) {
+        case 'decision':
+          return reponse.download('public/assets/pdf/dossierDecision.pdf');
+        case 'annexes':
+          return reponse.redirect(`/pdf/${homologation.id}/annexes.pdf`);
+        case 'synthese':
+          return reponse.redirect(`/service/${homologation.id}/syntheseSecurite`);
+        default:
+          return undefined;
+      }
+    };
+
+    const dateTelechargement = adaptateurHorloge.maintenant();
+    dossierCourant.enregistreDateTelechargement(idDocument, dateTelechargement);
+    depotDonnees.metsAJourDossierCourant(homologation.id, dossierCourant)
+      .then(renvoiLeDocument)
+      .catch(suite);
+  });
 
   routes.delete('/:id/autorisationContributeur',
     middleware.verificationAcceptationCGU,
