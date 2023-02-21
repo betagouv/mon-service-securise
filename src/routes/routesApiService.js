@@ -175,13 +175,13 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
       const { dateHomologation, dureeValidite, finalise = false } = requete.body;
 
       const seulementDonneesRecues = () => {
-        const donneesDossier = { finalise };
+        const donneesDossier = { finalise, decision: {} };
 
         if (dateHomologation) {
-          donneesDossier.dateHomologation = dateHomologation;
+          donneesDossier.decision.dateHomologation = dateHomologation;
         }
         if (dureeValidite) {
-          donneesDossier.dureeValidite = dureeValidite;
+          donneesDossier.decision.dureeValidite = dureeValidite;
         }
 
         return donneesDossier;

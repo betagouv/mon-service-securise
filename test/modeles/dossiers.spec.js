@@ -47,8 +47,8 @@ describe('Les dossiers liés à un service', () => {
     ils('retournent le premier dossier actif trouvé', () => {
       const dossiers = new Dossiers({
         dossiers: [
-          { id: '1', finalise: true, dateHomologation: '2022-01-01', dureeValidite: 'unAn' },
-          { id: '2', finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' },
+          { id: '1', finalise: true, decision: { dateHomologation: '2022-01-01', dureeValidite: 'unAn' } },
+          { id: '2', finalise: true, decision: { dateHomologation: '2023-01-01', dureeValidite: 'unAn' } },
         ],
       }, referentiel, adaptateurHorloge);
 
@@ -65,7 +65,7 @@ describe('Les dossiers liés à un service', () => {
 
     ils("considèrent que l'action de saisie est terminée s'il existe un dossier actif", () => {
       const dossiers = new Dossiers({
-        dossiers: [{ finalise: true, dateHomologation: '2023-01-01', dureeValidite: 'unAn' }],
+        dossiers: [{ finalise: true, decision: { dateHomologation: '2023-01-01', dureeValidite: 'unAn' } }],
       }, referentiel, adaptateurHorloge);
 
       expect(dossiers.statutSaisie()).to.equal(Dossiers.COMPLETES);
@@ -73,7 +73,7 @@ describe('Les dossiers liés à un service', () => {
 
     ils("considèrent que l'action de saisie est à compléter s'il n'existe pas de dossier actif", () => {
       const dossiers = new Dossiers({
-        dossiers: [{ id: '1', finalise: true, dateHomologation: '2020-01-01', dureeValidite: 'unAn' }],
+        dossiers: [{ id: '1', finalise: true, decision: { dateHomologation: '2020-01-01', dureeValidite: 'unAn' } }],
       }, referentiel, adaptateurHorloge);
 
       expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);

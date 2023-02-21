@@ -456,7 +456,8 @@ describe('Une homologation', () => {
           .avecNomService('nom-service')
           .construis()
           .toJSON(),
-        dossiers: [{ id: '999', dateHomologation: '2023-02-16', dureeValidite: 'unAn' }],
+        dossiers: [{ id: '999',
+          decision: { dateHomologation: '2023-02-16', dureeValidite: 'unAn' } }],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
         risquesGeneraux: [{ id: 'unRisque' }],
@@ -487,7 +488,9 @@ describe('Une homologation', () => {
           pointsAcces: [],
         },
         dossiers: [
-          { id: '999', dateHomologation: '2023-02-16', dureeValidite: 'unAn', finalise: false },
+          { id: '999',
+            decision: { dateHomologation: '2023-02-16', dureeValidite: 'unAn' },
+            finalise: false },
         ],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],

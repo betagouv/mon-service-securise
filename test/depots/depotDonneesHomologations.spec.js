@@ -922,7 +922,7 @@ describe('Le dépôt de données des homologations', () => {
       const donneesHomologations = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
-        dossiers: [{ id: '999', dateHomologation: '2022-07-14', dureeValidite: 'sixMois', finalise: true }],
+        dossiers: [{ id: '999', decision: { dateHomologation: '2022-07-14', dureeValidite: 'sixMois' }, finalise: true }],
       };
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         homologations: [copie(donneesHomologations)],
@@ -933,7 +933,7 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurUUID,
         referentiel,
       });
-      const dossier = new Dossier({ dateHomologation: '2022-12-01', dureeValidite: 'unAn' }, referentiel);
+      const dossier = new Dossier({ decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' } }, referentiel);
 
       depot.metsAJourDossierCourant('123', dossier)
         .then(() => depot.homologation('123'))
@@ -951,7 +951,7 @@ describe('Le dépôt de données des homologations', () => {
       const donneesHomologations = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
-        dossiers: [{ id: '999', dateHomologation: '2022-12-01', dureeValidite: 'unAn' }],
+        dossiers: [{ id: '999', decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' } }],
       };
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         homologations: [copie(donneesHomologations)],
@@ -962,7 +962,7 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurUUID,
         referentiel,
       });
-      const dossier = new Dossier({ dateHomologation: '2022-11-30', dureeValidite: 'sixMois' }, referentiel);
+      const dossier = new Dossier({ decision: { dateHomologation: '2022-11-30', dureeValidite: 'sixMois' } }, referentiel);
 
       depot.metsAJourDossierCourant('123', dossier)
         .then(() => depot.homologation('123'))
