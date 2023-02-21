@@ -2,6 +2,7 @@ const axios = require('axios');
 const expect = require('expect.js');
 
 const { depotVide } = require('../depots/depotVide');
+const adaptateurHorlogeParDefaut = require('../../src/adaptateurs/adaptateurHorloge');
 const MoteurRegles = require('../../src/moteurRegles');
 const MSS = require('../../src/mss');
 const Referentiel = require('../../src/referentiel');
@@ -9,6 +10,7 @@ const Referentiel = require('../../src/referentiel');
 const middleware = require('../mocks/middleware');
 
 const testeurMss = () => {
+  let adaptateurHorloge;
   let adaptateurMail;
   let adaptateurPdf;
   let depotDonnees;
@@ -34,6 +36,7 @@ const testeurMss = () => {
   };
 
   const initialise = (done) => {
+    adaptateurHorloge = adaptateurHorlogeParDefaut;
     adaptateurMail = {};
     adaptateurPdf = {};
     middleware.reinitialise({});
@@ -49,6 +52,7 @@ const testeurMss = () => {
           moteurRegles,
           adaptateurMail,
           adaptateurPdf,
+          adaptateurHorloge,
           false,
         );
         serveur.ecoute(1234, done);
@@ -59,6 +63,7 @@ const testeurMss = () => {
   const arrete = () => (serveur.arreteEcoute());
 
   return {
+    adaptateurHorloge: () => adaptateurHorloge,
     adaptateurMail: () => adaptateurMail,
     adaptateurPdf: () => adaptateurPdf,
     depotDonnees: () => depotDonnees,

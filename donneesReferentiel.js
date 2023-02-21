@@ -628,9 +628,18 @@ module.exports = {
   ],
 
   documentsHomologation: {
-    annexes: { description: 'Annexes' },
-    decision: { description: "Décision d'homologation de sécurité (modèle)" },
-    synthese: { description: "Synthèse de l'état de sécurité du service" },
+    decision: {
+      description: "Décision d'homologation de sécurité (modèle)",
+      urlTelechargement: '/statique/assets/pdf/dossierDecision.pdf',
+    },
+    synthese: {
+      description: "Synthèse de l'état de sécurité du service",
+      urlTelechargement: '/service/:idHomologation/syntheseSecurite',
+    },
+    annexes: {
+      description: 'Annexes',
+      urlTelechargement: '/pdf/:idHomologation/annexes.pdf',
+    },
   },
 
   reglesPersonnalisation: {

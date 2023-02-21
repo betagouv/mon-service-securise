@@ -12,7 +12,7 @@ const {
 const routesApiService = require('./routesApiService');
 const Utilisateur = require('../modeles/utilisateur');
 
-const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
+const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) => promesseEnvoiMessage
     .then(() => utilisateur)
     .catch(() => depotDonnees.supprimeUtilisateur(utilisateur.id)
@@ -83,7 +83,7 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
       .then((services) => reponse.json({ homologations: services }));
   });
 
-  routes.use('/service', routesApiService(middleware, depotDonnees, referentiel));
+  routes.use('/service', routesApiService(middleware, depotDonnees, referentiel, adaptateurHorloge));
 
   routes.get('/seuilCriticite', middleware.verificationAcceptationCGU, (requete, reponse) => {
     const {

@@ -1,15 +1,15 @@
 extends ../formulaireEtapier
 
-mixin document({ url, description })
-  a(href = url, target='_blank', rel='noopener')= description
+mixin document({ nom, description })
+  a(href = `/api/service/${homologation.id}/dossier/etape/decision/${nom}`, target = '_blank', rel = 'noopener')= description
 
 block formulaire
   ul.consignes
     li Télécharger les documents ci-dessous :
       ul.documents
-        li: +document({ url: '/statique/assets/pdf/dossierDecision.pdf', description: "Décision d'homologation de sécurité (modèle)" })
-        li: +document({ url: `/service/${homologation.id}/syntheseSecurite`, description: "Synthèse de l'état de sécurité du service" })
-        li: +document({ url: `/pdf/${homologation.id}/annexes.pdf`, description: 'Annexes' })
+        li: +document({ nom: 'decision', description: "Décision d'homologation de sécurité (modèle)"})
+        li: +document({ nom: 'synthese', description: "Synthèse de l'état de sécurité du service" })
+        li: +document({ nom: 'annexes', description: 'Annexes' })
     li.
       Remplir la décision d'homologation de sécurité avec l'ensemble des
       personnes concernées.
