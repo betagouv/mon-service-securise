@@ -7,6 +7,7 @@ const uneDescriptionValide = require('../constructeurs/constructeurDescriptionSe
 const { ErreurModele, ErreurDonneesObligatoiresManquantes, ErreurNomServiceDejaExistant } = require('../../src/erreurs');
 const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
+const Homologation = require('../../src/modeles/homologation');
 
 describe('Le serveur MSS des routes /api/service/*', () => {
   const testeur = testeurMSS();
@@ -603,6 +604,80 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           done();
         })
         .catch((e) => done(e.response?.data || e));
+    });
+  });
+
+  describe('quand requête PUT sur `/api/service/:id/dossier/etape/decision/:idDocument', () => {
+    beforeEach(() => {
+      const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
+      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.referentiel().recharge({
+        documentsHomologation: {
+          decision: { urlTelechargement: '/public/assets/dossierDecision.pdf' },
+        },
+      });
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheService(
+        { url: 'http://localhost:1234/api/service/456/dossier/etape/decision/decision', method: 'put' },
+        done,
+      );
+    });
+
+    it('utilise le dépôt pour enregistrer la date du téléchargement', (done) => {
+      let depotAppele = false;
+      const maintenant = new Date('2023-02-21');
+
+      testeur.adaptateurHorloge().maintenant = () => maintenant;
+
+      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+        depotAppele = true;
+        expect(idHomologation).to.equal('456');
+        expect(dossier.datesTelechargements.decision).to.equal(maintenant);
+        return Promise.resolve();
+      };
+
+      axios.put('http://localhost:1234/api/service/456/dossier/etape/decision/decision')
+        .then(() => expect(depotAppele).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("reste robuste lorsque l'homologation n'a pas de dossier courant", (done) => {
+      const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
+
+      axios.put('http://localhost:1234/api/service/456/dossier/etape/decision/decision')
+        .catch(({ response }) => {
+          expect(response.status).to.be(404);
+          expect(response.data).to.equal('Homologation sans dossier courant');
+          done();
+        })
+        .catch(done);
+    });
+
+    it("reste robuste en cas d'erreur inattendue", (done) => {
+      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.reject(new Error('Boom'));
+
+      axios.put('http://localhost:1234/api/service/456/dossier/etape/decision/decision')
+        .then(() => done('Le serveur aurait dû lever une exception'))
+        .catch((e) => {
+          expect(e.response.status).to.be(500);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("reste robuste si l'id de document ne correspond pas à un document connu", (done) => {
+      axios.put('http://localhost:1234/api/service/456/dossier/etape/decision/mauvaisId')
+        .catch(({ response }) => {
+          expect(response.status).to.be(422);
+          expect(response.data).to.equal('Identifiant de document invalide');
+          done();
+        })
+        .catch(done);
     });
   });
 

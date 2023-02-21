@@ -528,6 +528,34 @@ describe('Le référentiel', () => {
       { id: 'annexes', description: 'les annexes' }]);
   });
 
+  describe("sur demande d'une URL de document d'homologation", () => {
+    it("sait construire l'URL d'un document d'homologation", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        documentsHomologation: {
+          decision: { urlTelechargement: '/pdf/:idHomologation/decision.pdf' },
+        },
+      });
+
+      expect(referentiel.urlDocumentHomologation('decision', '123')).to.eql('/pdf/123/decision.pdf');
+    });
+
+    it("reste robuste si l'identifiant du document est inconnu", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        documentsHomologation: { },
+      });
+
+      expect(referentiel.urlDocumentHomologation('decision', '123')).to.be(undefined);
+    });
+
+    it("reste robuste si le document n'est pas associé à une URL", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        documentsHomologation: { decision: { } },
+      });
+
+      expect(referentiel.urlDocumentHomologation('decision', '123')).to.be(undefined);
+    });
+  });
+
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.typesService()).to.eql({});

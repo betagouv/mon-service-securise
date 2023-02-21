@@ -22,7 +22,7 @@ const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../modeles/rolesResponsabilites');
 const { dateInvalide } = require('../utilitaires/date');
 
-const routesApiService = (middleware, depotDonnees, referentiel) => {
+const routesApiService = (middleware, depotDonnees, referentiel, adaptateurHorloge) => {
   const routes = express.Router();
 
   routes.post('/', middleware.verificationAcceptationCGU, middleware.aseptise('nomService'), middleware.aseptiseListes([
@@ -199,6 +199,27 @@ const routesApiService = (middleware, depotDonnees, referentiel) => {
       }
     }
   );
+
+  routes.put('/:id/dossier/etape/decision/:idDocument', middleware.trouveHomologation, (requete, reponse, suite) => {
+    const { homologation } = requete;
+    const dossierCourant = homologation.dossierCourant();
+    if (!dossierCourant) {
+      reponse.status(404).send('Homologation sans dossier courant');
+      return;
+    }
+
+    const { idDocument } = requete.params;
+    if (!referentiel.estDocumentHomologation(idDocument)) {
+      reponse.status(422).send('Identifiant de document invalide');
+      return;
+    }
+
+    const dateTelechargement = adaptateurHorloge.maintenant();
+    dossierCourant.enregistreDateTelechargement(idDocument, dateTelechargement);
+    depotDonnees.metsAJourDossierCourant(homologation.id, dossierCourant)
+      .then(() => reponse.sendStatus(204))
+      .catch(suite);
+  });
 
   routes.delete('/:id/autorisationContributeur',
     middleware.verificationAcceptationCGU,
