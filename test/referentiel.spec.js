@@ -515,6 +515,19 @@ describe('Le référentiel', () => {
     expect(referentiel.codeDepartements()).to.equal(undefined);
   });
 
+  it("connaît la liste des documents d'homologation", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      documentsHomologation: {
+        decision: { description: 'la decision' },
+        annexes: { description: 'les annexes' },
+      },
+    });
+
+    expect(referentiel.tousDocumentsHomologation()).to.eql([
+      { id: 'decision', description: 'la decision' },
+      { id: 'annexes', description: 'les annexes' }]);
+  });
+
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.typesService()).to.eql({});

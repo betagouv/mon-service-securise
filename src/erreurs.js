@@ -8,9 +8,11 @@ class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurDateHomologationInvalide extends ErreurModele {}
 class ErreurDateRenouvellementInvalide extends ErreurModele {}
 class ErreurDepartementInconnu extends ErreurModele {}
+class ErreurDocumentHomologationInconnu extends ErreurModele {}
 class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
+class ErreurDossierDejaFinalise extends ErreurModele {}
 class ErreurDossierNonFinalisable extends ErreurModele {}
 class ErreurDossiersInvalides extends ErreurModele {}
 class ErreurDureeValiditeInvalide extends ErreurModele {}
@@ -49,9 +51,11 @@ module.exports = {
   ErreurDateHomologationInvalide,
   ErreurDateRenouvellementInvalide,
   ErreurDepartementInconnu,
+  ErreurDocumentHomologationInconnu,
   ErreurDonneesObligatoiresManquantes,
   ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
+  ErreurDossierDejaFinalise,
   ErreurDossierNonFinalisable,
   ErreurDossiersInvalides,
   ErreurDureeValiditeInvalide,

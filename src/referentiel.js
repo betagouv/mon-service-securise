@@ -6,6 +6,7 @@ const donneesReferentielVide = {
   categoriesMesures: {},
   indiceCyber: {},
   delaisAvantImpactCritique: {},
+  documentsHomologation: {},
   donneesCaracterePersonnel: {},
   echeancesRenouvellement: {},
   etapesParcoursHomologation: [],
@@ -33,6 +34,12 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
   const descriptionActionSaisie = (id) => actionSaisie(id).description;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement || [];
+  const estDocumentHomologation = (idDocument) => (
+    donnees.documentsHomologation[idDocument] !== undefined
+  );
+  const tousDocumentsHomologation = () => Object
+    .entries(donnees.documentsHomologation || {})
+    .map(([id, document]) => ({ id, ...document }));
   const descriptionEcheanceRenouvellement = (id) => echeancesRenouvellement()[id]?.description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const descriptionDelaiAvantImpactCritique = (id) => delaisAvantImpactCritique()[id]?.description;
@@ -207,6 +214,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionsFonctionnalites,
     donneesCaracterePersonnel,
     echeancesRenouvellement,
+    estDocumentHomologation,
+    tousDocumentsHomologation,
     etapeExiste,
     etapesParcoursHomologation,
     fonctionnalites,
