@@ -14,6 +14,10 @@ describe("Un dossier d'homologation", () => {
         dateHomologation: '2022-12-01',
         dureeValidite: 'unAn',
       },
+      autorite: {
+        nom: 'Jean Courage',
+        fonction: 'Responsable',
+      },
       finalise: true },
     referentiel);
 
@@ -21,6 +25,10 @@ describe("Un dossier d'homologation", () => {
       decision: {
         dateHomologation: '2022-12-01',
         dureeValidite: 'unAn',
+      },
+      autorite: {
+        nom: 'Jean Courage',
+        fonction: 'Responsable',
       },
       finalise: true };
     expect(dossier.toJSON()).to.eql(jsonDossier);

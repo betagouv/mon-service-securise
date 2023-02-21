@@ -457,6 +457,7 @@ describe('Une homologation', () => {
           .construis()
           .toJSON(),
         dossiers: [{ id: '999',
+          autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
           decision: { dateHomologation: '2023-02-16', dureeValidite: 'unAn' } }],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
@@ -489,6 +490,7 @@ describe('Une homologation', () => {
         },
         dossiers: [
           { id: '999',
+            autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
             decision: { dateHomologation: '2023-02-16', dureeValidite: 'unAn' },
             finalise: false },
         ],
