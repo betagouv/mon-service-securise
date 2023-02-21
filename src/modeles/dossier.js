@@ -1,4 +1,5 @@
 const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
+const Autorite = require('./etapes/autorite');
 const Decision = require('./etapes/decision');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
@@ -23,6 +24,7 @@ class Dossier extends InformationsHomologation {
       referentiel,
       adaptateurHorloge
     );
+    this.autorite = new Autorite(donneesDossier.autorite);
   }
 
   descriptionDateHomologation() {
@@ -54,6 +56,7 @@ class Dossier extends InformationsHomologation {
     return {
       ...super.toJSON(),
       decision: this.decision.toJSON(),
+      autorite: this.autorite.toJSON(),
     };
   }
 }
