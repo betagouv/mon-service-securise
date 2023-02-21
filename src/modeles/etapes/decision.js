@@ -4,14 +4,14 @@ const Etape = require('./etape');
 const { ajouteMoisADate, dateEnFrancais, dateInvalide } = require('../../utilitaires/date');
 const Referentiel = require('../../referentiel');
 
-class EtapeDate extends Etape {
+class Decision extends Etape {
   constructor(
     { dateHomologation, dureeValidite } = {},
     referentiel = Referentiel.creeReferentielVide(),
     adaptateurHorloge = adaptateurHorlogeParDefaut
   ) {
     super({ proprietesAtomiquesFacultatives: ['dateHomologation', 'dureeValidite'] }, referentiel);
-    EtapeDate.valide({ dateHomologation, dureeValidite }, referentiel);
+    Decision.valide({ dateHomologation, dureeValidite }, referentiel);
     this.renseigneProprietes({ dateHomologation, dureeValidite });
     this.adaptateurHorloge = adaptateurHorloge;
   }
@@ -73,4 +73,4 @@ class EtapeDate extends Etape {
   }
 }
 
-module.exports = EtapeDate;
+module.exports = Decision;
