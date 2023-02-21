@@ -1,5 +1,5 @@
 const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
-const EtapeDate = require('./etapes/etapeDate');
+const Decision = require('./etapes/decision');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
 
@@ -14,7 +14,7 @@ class Dossier extends InformationsHomologation {
     super({ proprietesAtomiquesFacultatives: ['id', 'finalise'] });
     this.renseigneProprietes(donneesDossier);
 
-    this.etapeDate = new EtapeDate(
+    this.decision = new Decision(
       {
         dateHomologation: donneesDossier.dateHomologation,
         dureeValidite: donneesDossier.dureeValidite,
@@ -25,34 +25,34 @@ class Dossier extends InformationsHomologation {
   }
 
   descriptionDateHomologation() {
-    return this.etapeDate.descriptionDateHomologation();
+    return this.decision.descriptionDateHomologation();
   }
 
   descriptionDureeValidite() {
-    return this.etapeDate.descriptionDureeValidite();
+    return this.decision.descriptionDureeValidite();
   }
 
   dateProchaineHomologation() {
-    return this.etapeDate.dateProchaineHomologation();
+    return this.decision.dateProchaineHomologation();
   }
 
   descriptionProchaineDateHomologation() {
-    return this.etapeDate.descriptionProchaineDateHomologation();
+    return this.decision.descriptionProchaineDateHomologation();
   }
 
   estComplet() {
-    return this.etapeDate.estComplete();
+    return this.decision.estComplete();
   }
 
   estActif() {
     if (!this.estComplet()) return false;
-    return this.etapeDate.periodeHomologationEstEnCours();
+    return this.decision.periodeHomologationEstEnCours();
   }
 
   toJSON() {
     return {
       ...super.toJSON(),
-      ...this.etapeDate.toJSON(),
+      ...this.decision.toJSON(),
     };
   }
 }

@@ -545,8 +545,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().metsAJourDossierCourant = (idService, dossier) => {
         try {
           expect(idService).to.equal('456');
-          expect(dossier.etapeDate.dateHomologation).to.equal('2022-12-01');
-          expect(dossier.etapeDate.dureeValidite).to.equal('unAn');
+          expect(dossier.decision.dateHomologation).to.equal('2022-12-01');
+          expect(dossier.decision.dureeValidite).to.equal('unAn');
           dossierSauve = true;
 
           return Promise.resolve();

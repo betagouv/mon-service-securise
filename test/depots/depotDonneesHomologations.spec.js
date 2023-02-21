@@ -940,8 +940,8 @@ describe('Le dépôt de données des homologations', () => {
         .then((h) => {
           expect(h.nombreDossiers()).to.equal(2);
           const dossierCourant = h.dossierCourant();
-          expect(dossierCourant.etapeDate.dateHomologation).to.equal('2022-12-01');
-          expect(dossierCourant.etapeDate.dureeValidite).to.equal('unAn');
+          expect(dossierCourant.decision.dateHomologation).to.equal('2022-12-01');
+          expect(dossierCourant.decision.dureeValidite).to.equal('unAn');
           done();
         })
         .catch(done);
@@ -969,8 +969,8 @@ describe('Le dépôt de données des homologations', () => {
         .then((h) => {
           expect(h.nombreDossiers()).to.equal(1);
           const dossierCourant = h.dossierCourant();
-          expect(dossierCourant.etapeDate.dateHomologation).to.equal('2022-11-30');
-          expect(dossierCourant.etapeDate.dureeValidite).to.equal('sixMois');
+          expect(dossierCourant.decision.dateHomologation).to.equal('2022-11-30');
+          expect(dossierCourant.decision.dureeValidite).to.equal('sixMois');
           done();
         })
         .catch(done);
