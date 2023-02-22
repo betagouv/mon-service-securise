@@ -77,10 +77,10 @@ const routesApi = (middleware, adaptateurMail, depotDonnees, referentiel) => {
 
   const routes = express.Router();
 
-  routes.get('/homologations', middleware.verificationAcceptationCGU, (requete, reponse) => {
+  routes.get('/services', middleware.verificationAcceptationCGU, (requete, reponse) => {
     depotDonnees.homologations(requete.idUtilisateurCourant)
       .then((services) => services.map((s) => s.toJSON()))
-      .then((services) => reponse.json({ homologations: services }));
+      .then((services) => reponse.json({ services }));
   });
 
   routes.use('/service', routesApiService(middleware, depotDonnees, referentiel));
