@@ -23,10 +23,10 @@ describe('Le serveur MSS des routes /api/*', () => {
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
-      const homologation = { toJSON: () => ({ id: '456' }) };
+      const service = { toJSON: () => ({ id: '456' }) };
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');
-        return Promise.resolve([homologation]);
+        return Promise.resolve([service]);
       };
 
       axios.get('http://localhost:1234/api/services')
