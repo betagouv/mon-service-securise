@@ -185,7 +185,11 @@ const creeDepot = (config = {}) => {
   const metsAJourDossierCourant = (idHomologation, dossier) => (
     ajouteDossierCourantSiNecessaire(idHomologation)
       .then((d) => {
-        const donneesDossier = { ...d.toJSON(), ...dossier.toJSON() };
+        const donnees = Object.keys(dossier.toJSON())
+          .filter((clef) => (
+            dossier.toJSON()[clef] && (typeof dossier.toJSON()[clef] === 'object' ? Object.keys(dossier.toJSON()[clef]).length > 0 : true)))
+          .reduce((acc, clef) => ({ ...acc, [clef]: dossier.toJSON()[clef] }), {});
+        const donneesDossier = { ...d.toJSON(), ...donnees };
         const dossierMisAJour = new Dossier(donneesDossier, referentiel);
         if (dossierMisAJour.finalise && !dossierMisAJour.estComplet()) {
           throw new ErreurDossierNonFinalisable("Le dossier n'est pas complet et ne peut pas être finalisé");
