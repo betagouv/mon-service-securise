@@ -12,15 +12,15 @@ describe('Le serveur MSS des routes /api/*', () => {
 
   afterEach(testeur.arrete);
 
-  describe('quand requête GET sur `/api/homologations`', () => {
+  describe('quand requête GET sur `/api/services`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        'http://localhost:1234/api/homologations',
+        'http://localhost:1234/api/services',
         done,
       );
     });
 
-    it("interroge le dépôt de données pour récupérer les homologations de l'utilisateur", (done) => {
+    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
       const homologation = { toJSON: () => ({ id: '456' }) };
@@ -29,13 +29,13 @@ describe('Le serveur MSS des routes /api/*', () => {
         return Promise.resolve([homologation]);
       };
 
-      axios.get('http://localhost:1234/api/homologations')
+      axios.get('http://localhost:1234/api/services')
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
 
-          const { homologations } = reponse.data;
-          expect(homologations.length).to.equal(1);
-          expect(homologations[0].id).to.equal('456');
+          const { services } = reponse.data;
+          expect(services.length).to.equal(1);
+          expect(services[0].id).to.equal('456');
           done();
         })
         .catch(done);

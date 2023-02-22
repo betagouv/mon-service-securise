@@ -33,8 +33,8 @@ $(() => {
   axios.get('/api/utilisateurCourant')
     .then(({ data }) => data.utilisateur)
     .then((utilisateur) => {
-      axios.get('/api/homologations')
-        .then(({ data }) => peupleServicesDans('.services', data.homologations, utilisateur.id));
+      axios.get('/api/services')
+        .then(({ data }) => peupleServicesDans('.services', data.services, utilisateur.id));
 
       if (!utilisateur.profilEstComplet) afficheBandeauMajProfil();
     });
