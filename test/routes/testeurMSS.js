@@ -36,7 +36,7 @@ const testeurMss = () => {
   const initialise = (done) => {
     adaptateurMail = {};
     adaptateurPdf = {};
-    middleware.reinitialise();
+    middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()

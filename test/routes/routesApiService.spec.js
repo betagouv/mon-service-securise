@@ -90,7 +90,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("demande au dépôt de données d'enregistrer les nouveaux service", (done) => {
-      testeur.middleware().reinitialise('123');
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
       const donneesDescriptionService = uneDescriptionValide(testeur.referentiel())
         .construis()
         .toJSON();
@@ -158,7 +158,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('demande au dépôt de données de mettre à jour le service', (done) => {
-      testeur.middleware().reinitialise('123');
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
       testeur.depotDonnees().ajouteDescriptionServiceAHomologation = (
         (idUtilisateur, idService, infosGenerales) => {
@@ -622,7 +622,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("demande au dépôt de vérifier l'autorisation d'accès au service pour l'utilisateur courant", (done) => {
       let autorisationVerifiee = false;
 
-      testeur.middleware().reinitialise('999');
+      testeur.middleware().reinitialise({ idUtilisateur: '999' });
       testeur.depotDonnees().autorisationPour = (idUtilisateur, idService) => {
         try {
           expect(idUtilisateur).to.equal('999');
@@ -717,7 +717,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("demande au dépôt de vérifier l'autorisation d'accès au service pour l'utilisateur courant", (done) => {
       let autorisationVerifiee = false;
 
-      testeur.middleware().reinitialise('999');
+      testeur.middleware().reinitialise({ idUtilisateur: '999' });
       testeur.depotDonnees().autorisationPour = (idUtilisateur, idService) => {
         try {
           expect(idUtilisateur).to.equal('999');
@@ -801,7 +801,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("demande au dépôt de vérifier que l'utilisateur courant a le droit de dupliquer le service", (done) => {
       let autorisationVerifiee = false;
 
-      testeur.middleware().reinitialise('999');
+      testeur.middleware().reinitialise({ idUtilisateur: '999' });
       testeur.depotDonnees().autorisationPour = (idUtilisateur, idService) => {
         try {
           expect(idUtilisateur).to.equal('999');
@@ -861,7 +861,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('demande au dépôt de dupliquer le service', (done) => {
       let serviceDuplique = false;
 
-      testeur.middleware().reinitialise('999');
+      testeur.middleware().reinitialise({ idUtilisateur: '999' });
       testeur.depotDonnees().dupliqueHomologation = (idService) => {
         try {
           expect(idService).to.equal('123');
