@@ -14,7 +14,7 @@ const routesService = (
 
   routes.get('/creation', middleware.verificationAcceptationCGU, (_requete, reponse) => {
     const homologation = new Homologation({});
-    reponse.render('homologation/creation', { referentiel, homologation });
+    reponse.render('service/creation', { referentiel, homologation });
   });
 
   routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
@@ -26,7 +26,7 @@ const routesService = (
         { url: `/service/${homologation.id}/${id}`, id, ...autresDonnees }
       ));
 
-    reponse.render('homologation/synthese', {
+    reponse.render('service/synthese', {
       InformationsHomologation,
       actionsSaisie,
       referentiel,
@@ -39,52 +39,52 @@ const routesService = (
     middleware.positionneHeadersAvecNonce,
     (requete, reponse) => {
       const { homologation, nonce } = requete;
-      reponse.render('homologation/decision', { homologation, referentiel, nonce });
+      reponse.render('service/decision', { homologation, referentiel, nonce });
     });
 
   routes.get('/:id/syntheseSecurite',
     middleware.trouveHomologation,
     (requete, reponse) => {
       const { homologation } = requete;
-      reponse.render('homologation/syntheseSecurite', { homologation, referentiel });
+      reponse.render('service/syntheseSecurite', { homologation, referentiel });
     });
 
   routes.get('/:id/syntheseSecurite/annexes/mesures',
     middleware.trouveHomologation,
     (requete, reponse) => {
       const { homologation } = requete;
-      reponse.render('homologation/annexes/mesures', { homologation, referentiel });
+      reponse.render('service/annexes/mesures', { homologation, referentiel });
     });
 
   routes.get('/:id/descriptionService', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/descriptionService', { referentiel, homologation });
+    reponse.render('service/descriptionService', { referentiel, homologation });
   });
 
   routes.get('/:id/mesures', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
     const mesures = moteurRegles.mesures(homologation.descriptionService);
-    reponse.render('homologation/mesures', { referentiel, homologation, mesures });
+    reponse.render('service/mesures', { referentiel, homologation, mesures });
   });
 
   routes.get('/:id/rolesResponsabilites', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/rolesResponsabilites', { homologation });
+    reponse.render('service/rolesResponsabilites', { homologation });
   });
 
   routes.get('/:id/risques', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/risques', { referentiel, homologation });
+    reponse.render('service/risques', { referentiel, homologation });
   });
 
   routes.get('/:id/avisExpertCyber', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/avisExpertCyber', { referentiel, homologation });
+    reponse.render('service/avisExpertCyber', { referentiel, homologation });
   });
 
   routes.get('/:id/dossiers', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/dossiers', { homologation, premiereEtapeParcours: referentiel.premiereEtapeParcours() });
+    reponse.render('service/dossiers', { homologation, premiereEtapeParcours: referentiel.premiereEtapeParcours() });
   });
 
   routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse, suite) => {
@@ -96,7 +96,7 @@ const routesService = (
     } else {
       depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id)
         .then(() => depotDonnees.homologation(homologation.id))
-        .then((h) => reponse.render(`homologation/etapeDossier/${idEtape}`, { referentiel, homologation: h, idEtape }))
+        .then((h) => reponse.render(`service/etapeDossier/${idEtape}`, { referentiel, homologation: h, idEtape }))
         .catch(suite);
     }
   });
