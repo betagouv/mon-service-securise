@@ -33,6 +33,7 @@ let cguAcceptees;
 let expirationCookieRepoussee = false;
 let headersAvecNoncePositionnes = false;
 let headersPositionnes = false;
+let homologationTrouvee;
 let idUtilisateurCourant;
 let listesAseptisees = [];
 let parametresAseptises = [];
@@ -42,12 +43,17 @@ let verificationJWTMenee = false;
 let verificationCGUMenee = false;
 
 const middlewareFantaisie = {
-  reinitialise: (idUtilisateur, acceptationCGU = true) => {
+  reinitialise: ({
+    idUtilisateur,
+    acceptationCGU = true,
+    homologationARenvoyer = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } }),
+  }) => {
     authentificationBasiqueMenee = false;
     cguAcceptees = acceptationCGU;
     expirationCookieRepoussee = false;
     headersAvecNoncePositionnes = false;
     headersPositionnes = false;
+    homologationTrouvee = homologationARenvoyer;
     idUtilisateurCourant = idUtilisateur;
     listesAseptisees = [];
     parametresAseptises = [];
@@ -101,10 +107,7 @@ const middlewareFantaisie = {
   trouveHomologation: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
-    requete.homologation = new Homologation({
-      id: '456',
-      descriptionService: { nomService: 'un service' },
-    });
+    requete.homologation = homologationTrouvee;
     rechercheServiceEffectuee = true;
     suite();
   },

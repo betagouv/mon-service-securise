@@ -21,7 +21,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it("interroge le dépôt de données pour récupérer les homologations de l'utilisateur", (done) => {
-      testeur.middleware().reinitialise('123');
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
       const homologation = { toJSON: () => ({ id: '456' }) };
       testeur.depotDonnees().homologations = (idUtilisateur) => {
@@ -391,7 +391,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       let motDePasseMisAJour = false;
 
       expect(utilisateur.id).to.equal('123');
-      testeur.middleware().reinitialise(utilisateur.id);
+      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
       testeur.depotDonnees().metsAJourMotDePasse = (idUtilisateur, motDePasse) => {
         try {
           expect(idUtilisateur).to.equal('123');
@@ -473,7 +473,10 @@ describe('Le serveur MSS des routes /api/*', () => {
     describe("si les CGU n'ont pas déjà été acceptées", () => {
       beforeEach(() => {
         const cguNonAcceptees = false;
-        testeur.middleware().reinitialise(utilisateur.id, cguNonAcceptees);
+        testeur.middleware().reinitialise({
+          idUtilisateur: utilisateur.id,
+          acceptationCGU: cguNonAcceptees,
+        });
       });
 
       describe("et que l'utilisateur n'est pas en train de les accepter", () => {
@@ -600,7 +603,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it('convertit le RSSI en booléen', (done) => {
-      testeur.middleware().reinitialise(utilisateur.id);
+      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
 
       testeur.depotDonnees().metsAJourUtilisateur = (id, { rssi }) => {
         try {
@@ -624,7 +627,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it('convertit le délégué à la protection des données en booléen', (done) => {
-      testeur.middleware().reinitialise(utilisateur.id);
+      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
 
       testeur.depotDonnees().metsAJourUtilisateur = (id, { delegueProtectionDonnees }) => {
         try {
@@ -650,7 +653,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     it("met à jour les autres informations de l'utilisateur", (done) => {
       let infosMisesAJour = false;
 
-      testeur.middleware().reinitialise(utilisateur.id);
+      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
 
       testeur.depotDonnees().metsAJourUtilisateur = (id, donnees) => {
         try {
@@ -687,7 +690,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it("renvoie l'utilisateur correspondant à l'identifiant", (done) => {
-      testeur.middleware().reinitialise('123');
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
       const depotDonnees = testeur.depotDonnees();
       depotDonnees.utilisateur = (idUtilisateur) => {
@@ -711,7 +714,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it("répond avec un code 401 quand il n'y a pas d'identifiant", (done) => {
-      testeur.middleware().reinitialise('');
+      testeur.middleware().reinitialise({ idUtilisateur: '' });
 
       axios.get('http://localhost:1234/api/utilisateurCourant')
         .then(() => {
@@ -797,7 +800,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     const utilisateur = { id: '999', genereToken: () => 'un token', accepteCGU: () => true };
 
     beforeEach(() => {
-      testeur.middleware().reinitialise('456');
+      testeur.middleware().reinitialise({ idUtilisateur: '456' });
       autorisation.permissionAjoutContributeur = true;
 
       testeur.depotDonnees().autorisationExiste = () => Promise.resolve(false);
@@ -1035,7 +1038,7 @@ describe('Le serveur MSS des routes /api/*', () => {
 
       it("envoie un mail d'invitation au contributeur créé", (done) => {
         let messageEnvoye = false;
-        testeur.middleware().reinitialise('456');
+        testeur.middleware().reinitialise({ idUtilisateur: '456' });
 
         testeur.depotDonnees().utilisateur = (id) => {
           try {
