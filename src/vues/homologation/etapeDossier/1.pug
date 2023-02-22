@@ -1,7 +1,13 @@
 extends ../formulaireEtapier
 
 mixin document({ nom, description })
+  -
+    const formatDate = new Intl.DateTimeFormat('fr-FR', {dateStyle: 'short', timeStyle: 'short'});
+    const datesTelechargements = homologation.dossierCourant()?.datesTelechargements;
   a(href = `/api/service/${homologation.id}/dossier/etape/decision/${nom}`, target = '_blank', rel = 'noopener')= description
+  if(datesTelechargements && datesTelechargements[nom])
+    .date-telechargement téléchargé le #{formatDate.format(datesTelechargements[nom])}
+
 
 block formulaire
   ul.consignes

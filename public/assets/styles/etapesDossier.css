@@ -26,9 +26,9 @@ section {
 }
 
 .etape .libelle-etape {
- margin-top: 0.4em;
- text-align: center;
- color: var(--texte-fonce);
+  margin-top: 0.4em;
+  text-align: center;
+  color: var(--texte-fonce);
 }
 
 .etape .numero-etape {
@@ -126,6 +126,11 @@ form .numero-etape {
 ul.documents {
   margin: 0;
   padding: 0;
+}
+
+.documents .date-telechargement {
+  color: #000;
+  margin-left: 1.5em;
 }
 
 .documents li {
