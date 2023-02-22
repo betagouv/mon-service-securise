@@ -26,9 +26,9 @@ section {
 }
 
 .etape .libelle-etape {
- margin-top: 0.4em;
- text-align: center;
- color: var(--texte-fonce);
+  margin-top: 0.4em;
+  text-align: center;
+  color: var(--texte-fonce);
 }
 
 .etape .numero-etape {
@@ -120,35 +120,31 @@ form .numero-etape {
 }
 
 .consignes > li {
-  padding: 1em 0;
+  padding: 0 0 1em 0;
 }
 
 ul.documents {
-  margin: 0;
-  padding: 0;
+  margin: 1em 0 0 0;
+  padding: 0 0 0 2em;
 }
 
 .documents li {
-  list-style: none;
-  position: relative;
+  list-style: url('../images/icone_telechargement.svg');
 
   margin: 0.5em 0;
-  padding-left: 0.5em;
 }
 
-.documents li::before {
-  content: '';
+.documents .document-homologation {
   display: inline-block;
-  position: relative;
-  left: -0.5em;
-  width: 1.5em;
-  height: 1.5em;
+  cursor: pointer;
+  color: var(--bleu-mise-en-avant);
+  transform: translateY(-0.3em);
+}
 
-  background-image: url('../images/icone_telechargement.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-
-  transform: translateY(0.2em);
+.documents .date-telechargement {
+  margin-left: 0.6em;
+  font-size: 0.9em;
+  color: var(--texte-fonce);
 }
 
 .dossier {

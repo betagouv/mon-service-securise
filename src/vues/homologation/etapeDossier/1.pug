@@ -1,15 +1,30 @@
 extends ../formulaireEtapier
 
-mixin document({ nom, description })
-  a(href = `/api/service/${homologation.id}/dossier/etape/decision/${nom}`, target = '_blank', rel = 'noopener')= description
+mixin document({ nom, description, dateTelechargement })
+  - const dateFr = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Europe/Paris' });
+
+  a.document-homologation(
+    href= referentiel.urlDocumentHomologation(nom, homologation.id)
+    data-action-enregistrement = `/api/service/${homologation.id}/dossier/etape/decision/${nom}`
+    target='_blank'
+    rel='noopener'
+    )
+    | #{description}
+    if (dateTelechargement)
+      span.date-telechargement téléchargé le #{dateFr.format(dateTelechargement)}
 
 block formulaire
+  - const datesTelechargements = homologation.dossierCourant()?.datesTelechargements;
+
   ul.consignes
     li Télécharger les documents ci-dessous :
       ul.documents
-        li: +document({ nom: 'decision', description: "Décision d'homologation de sécurité (modèle)"})
-        li: +document({ nom: 'synthese', description: "Synthèse de l'état de sécurité du service" })
-        li: +document({ nom: 'annexes', description: 'Annexes' })
+        each document in referentiel.tousDocumentsHomologation()
+          li: +document({
+            nom: document.id,
+            description: document.description,
+            dateTelechargement: datesTelechargements[document.id]
+          })
     li.
       Remplir la décision d'homologation de sécurité avec l'ensemble des
       personnes concernées.
@@ -20,5 +35,8 @@ block formulaire
       Reconnectez-vous ensuite pour renseigner la date de signature et la
       durée de validité de l'homologation dans la dernière étape <b>Date</b>.
 
+  script(type = "module", src = "/statique/homologation/etapes/1.js")
+
 block bouton-etape
   button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape = idEtape, data-id-etape-suivante = idEtape + 1) Suivant
+
