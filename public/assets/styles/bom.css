@@ -1,0 +1,149 @@
+.bom {
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+  z-index: 10;
+}
+
+.bom :is(.bom-vignette, .bom-titre) {
+  cursor: pointer;
+}
+
+.bom .bom-vignette {
+  width: 4.5em;
+  height: 4.5em;
+  background-image: url(../images/vignette_bom_survol.svg);
+  background-image: url(../images/vignette_bom.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.bom:hover .bom-vignette {
+  background-image: url(../images/vignette_bom_survol.svg);
+}
+
+.bom .bom-titre {
+  width: 3.6em;
+  margin: auto;
+  padding-bottom: 0.1em;
+  background-color: var(--bleu-mise-en-avant);
+  border-radius: 20% / 50%;
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.bom:hover .bom-titre {
+  background-color: var(--bleu-survol);
+}
+
+.bom .bom-modale {
+  display: none;
+  background-color: #fff;
+  border-radius: 1em;
+  width: 316px;
+  position: relative;
+}
+
+.bom .bom-modale .fermeture {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  width: 0.8em;
+  height: 0.8em;
+  padding: 0.3em;
+  border-radius: 0.2em;
+  background-image: url(../images/icone_croix_blanche.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.bom .bom-modale .fermeture:hover {
+  background-color: #fff;
+  background-image: url(../images/icone_croix_bleue.svg);
+}
+
+.bom .bom-modale .bandeau-titre {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100px;
+  padding-left: 6em;
+  border-radius: 1em 1em 0 0;
+  color: #fff;
+  text-align: left;
+  background-image: url(../images/entete_fenetre_bom.svg);
+  background-repeat: no-repeat;
+  background-position-y: -2px;
+  background-size: auto calc(100% + 2px);
+}
+
+.bom .bandeau-titre .nom-produit {
+  padding-bottom: 0.5em;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.bom .bom-modale .contenu {
+  text-align: left;
+  padding: 1.7em 1.3em;
+}
+
+.bom .bom-modale .contenu p {
+  margin: 0;
+}
+
+.bom .bom-modale .contenu ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.bom .bom-modale .contenu li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.15em var(--liseres) solid;
+  padding: 0.7em 0;
+  cursor: pointer;
+}
+
+.bom .bom-modale .contenu a:last-of-type li {
+  border-bottom: 0;
+}
+
+.bom .bom-modale .contenu li::after {
+  content: '';
+  display: block;
+  flex-shrink: 0;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 0.3em;
+  background-image: url(../images/forme_chevron_blanc.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--bleu-mise-en-avant);
+}
+
+.bom .bom-modale .contenu :is(a:hover, a:active) {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.bom .bom-modale .contenu a:hover {
+  color: var(--bleu-survol);
+}
+
+.bom .bom-modale .contenu li:hover::after {
+  background-color: var(--bleu-survol);
+}
+
+
+.bom .bom-modale .contenu a:active {
+  color: var(--bleu-anssi);
+}
+
+.bom .bom-modale .contenu li:active::after {
+  background-color: var(--bleu-anssi);
+}
