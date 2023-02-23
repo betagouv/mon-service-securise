@@ -13,6 +13,7 @@ block page
     link(href='/statique/assets/styles/mss.css', rel='stylesheet')
     link(href='/statique/assets/styles/entete.css', rel='stylesheet')
     link(href='/statique/assets/styles/piedPage.css', rel='stylesheet')
+    link(href='/statique/assets/styles/bom.css', rel='stylesheet')
 
   title MonServiceSécurisé
 
@@ -32,6 +33,7 @@ block page
     .retour.marges-fixes
       block retour
     block main
+    block bom
 
   footer
     block footer-bandeau-mss
@@ -68,3 +70,4 @@ block page
           a(href = '/statistiques') Statistiques d'utilisation
 
   script(type = 'module', src = '/statique/entete.js')
+  script(type = 'module', src = '/statique/scripts/bom.js')
