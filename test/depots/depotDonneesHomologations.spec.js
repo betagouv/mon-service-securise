@@ -976,6 +976,38 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
+    it('fusionne les données déjà stockées et les données de la mise à jour', (done) => {
+      const decision = { dateHomologation: '2022-12-01', dureeValidite: 'unAn' };
+      const donneesDossierAvecDecision = { id: '999', decision };
+      const donneesService = {
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
+        dossiers: [donneesDossierAvecDecision],
+      };
+
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [copie(donneesService)],
+        services: [copie(donneesService)],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        adaptateurUUID,
+        referentiel,
+      });
+
+      const autorite = { nom: 'Jean', fonction: 'RSSI' };
+      const rajouteAutorite = new Dossier({ autorite }, referentiel);
+      depot.metsAJourDossierCourant('123', rajouteAutorite)
+        .then(() => depot.homologation('123'))
+        .then((h) => {
+          const donneesDossierCourant = h.dossierCourant().toJSON();
+          expect(donneesDossierCourant.decision).to.eql(decision);
+          expect(donneesDossierCourant.autorite).to.eql(autorite);
+          done();
+        })
+        .catch(done);
+    });
+
     describe('avec demande de finalisation du dossier', () => {
       it('vérifie que la finalisation est possible', (done) => {
         const donneesHomologations = {

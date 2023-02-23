@@ -10,6 +10,7 @@ const Homologation = require('../modeles/homologation');
 const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
+const { fusionneJSON } = require('../utilitaires/fusionJSON');
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
 const creeDepot = (config = {}) => {
@@ -185,7 +186,7 @@ const creeDepot = (config = {}) => {
   const metsAJourDossierCourant = (idHomologation, dossier) => (
     ajouteDossierCourantSiNecessaire(idHomologation)
       .then((d) => {
-        const donneesDossier = { ...d.toJSON(), ...dossier.toJSON() };
+        const donneesDossier = fusionneJSON(d.toJSON(), dossier.toJSON());
         const dossierMisAJour = new Dossier(donneesDossier, referentiel);
         if (dossierMisAJour.finalise && !dossierMisAJour.estComplet()) {
           throw new ErreurDossierNonFinalisable("Le dossier n'est pas complet et ne peut pas être finalisé");
