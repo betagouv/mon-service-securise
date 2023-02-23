@@ -410,7 +410,7 @@ module.exports = {
       description: "Dissocier les rôles d'administration entre eux",
       categorie: 'protection',
       indispensable: true,
-      descriptionLongue: "Lors de la création ou de la modification des privilèges associés à un compte d'administration, limiter ces derniers aux seuls privilèges nécessaires au rôle d'administration visé (ex. limiter aux seules fonctions d'administration de la base de données).<br>Cette mesure permet de réduire la capacité d'action d'un acteur malveillant qui parviendrait à usurper un compte administrateur et ainsi de limiter sa capacité de nuisance.",
+      descriptionLongue: "Créer des comptes d'accès d'administration différents dotés de privilèges distincts, pour les personnes devant assurer plusieurs rôles d'administration, que ceux-ci soit techniques (ex. développement, hébergement) et/ou métiers (ex. création de contenus).<br>Cette mesure permet de limiter la capacité d'action d'acteurs malveillants qui parviendraient à usurper un compte d'administration.",
     },
     configurationMinimaliste: {
       description: 'Installer uniquement les fonctionnalités nécessaires aux finalités du service',
