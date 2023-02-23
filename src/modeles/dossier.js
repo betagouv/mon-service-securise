@@ -15,12 +15,8 @@ class Dossier extends InformationsHomologation {
     super({ proprietesAtomiquesFacultatives: ['id', 'finalise'] });
     this.renseigneProprietes(donneesDossier);
 
-    const donneesDecision = donneesDossier.decision || {
-      dateHomologation: donneesDossier.dateHomologation,
-      dureeValidite: donneesDossier.dureeValidite,
-    };
     this.decision = new Decision(
-      donneesDecision,
+      donneesDossier.decision,
       referentiel,
       adaptateurHorloge
     );
