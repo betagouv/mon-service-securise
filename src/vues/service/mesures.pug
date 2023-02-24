@@ -6,7 +6,7 @@ mixin inputMesure({ nom, titre, indispensable })
     type: 'radio',
     nom: nom,
     titre: titre,
-    items: homologation.descriptionStatutsMesures(),
+    items: service.descriptionStatutsMesures(),
     decoration: indispensable ? '<div class="mention-anssi mesure-indispensable">Indispensable</div>' : '',
   })
 
@@ -53,13 +53,13 @@ block formulaire
                   h1= donnees.description
                   p!= donnees.descriptionLongue
 
-    button.bouton(idHomologation = homologation.id) Enregistrer &nbsp;&nbsp;›
+    button.bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donnees-mesures-generales', type = 'application/json').
-    !{JSON.stringify(homologation.mesures.toJSON().mesuresGenerales || [])}
+    !{JSON.stringify(service.mesures.toJSON().mesuresGenerales || [])}
 
   script(id = 'donnees-mesures-specifiques', type = 'application/json').
-    !{JSON.stringify(homologation.mesures.toJSON().mesuresSpecifiques || [])}
+    !{JSON.stringify(service.mesures.toJSON().mesuresSpecifiques || [])}
 
   script(id = 'referentiel-categories-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.categoriesMesures())}

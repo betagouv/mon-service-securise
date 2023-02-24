@@ -4,8 +4,8 @@ mixin document({ nom, description, dateTelechargement })
   - const dateFr = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Europe/Paris' });
 
   a.document-homologation(
-    href= referentiel.urlDocumentHomologation(nom, homologation.id)
-    data-action-enregistrement = `/api/service/${homologation.id}/dossier/etape/decision/${nom}`
+    href= referentiel.urlDocumentHomologation(nom, service.id)
+    data-action-enregistrement = `/api/service/${service.id}/dossier/etape/decision/${nom}`
     target='_blank'
     rel='noopener'
     )
@@ -17,7 +17,7 @@ mixin document({ nom, description, dateTelechargement })
   .message-erreur Vous devez télécharger ce document pour pouvoir passer à l'étape suivante.
 
 block formulaire
-  - const datesTelechargements = homologation.dossierCourant()?.datesTelechargements;
+  - const datesTelechargements = service.dossierCourant()?.datesTelechargements;
 
   ul.consignes
     li Télécharger les documents ci-dessous :
@@ -42,7 +42,7 @@ block formulaire
 
 block bouton-etape
   button.bouton#suivant(
-    data-id-homologation = homologation.id,
+    data-id-homologation = service.id,
     data-id-etape = idEtape,
     data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
     ) Suivant

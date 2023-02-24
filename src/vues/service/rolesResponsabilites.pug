@@ -43,38 +43,38 @@ block formulaire
         })
 
         +elementsAjoutablesActeurHomologation({
-          donnees: homologation.rolesResponsabilites.acteursHomologation.toJSON(),
+          donnees: service.rolesResponsabilites.acteursHomologation.toJSON(),
         })
 
       .onglet#parties-prenantes
         +inputPartiePrenante({
           categorie: 'Hébergement du service',
           nomParametre: 'hebergement',
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.hebergement(),
+          donnees: service.rolesResponsabilites.partiesPrenantes.hebergement(),
         })
 
         +inputPartiePrenante({
           categorie: 'Développement / fourniture du service',
           nomParametre: 'developpementFourniture',
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.developpementFourniture(),
+          donnees: service.rolesResponsabilites.partiesPrenantes.developpementFourniture(),
         })
 
         +inputPartiePrenante({
           categorie: 'Maintenance du service',
           nomParametre: 'maintenanceService',
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.maintenanceService(),
+          donnees: service.rolesResponsabilites.partiesPrenantes.maintenanceService(),
         })
 
         +inputPartiePrenante({
           categorie: 'Gestion de la sécurité du service',
           nomParametre: 'securiteService',
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.securiteService(),
+          donnees: service.rolesResponsabilites.partiesPrenantes.securiteService(),
         })
 
         +elementsAjoutablesPartiePrenante({
-          donnees: homologation.rolesResponsabilites.partiesPrenantes.specifiques(),
+          donnees: service.rolesResponsabilites.partiesPrenantes.specifiques(),
         })
 
-    .bouton(idHomologation = homologation.id) Enregistrer &nbsp;&nbsp;›
+    .bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
 
   script(type = 'module', src = '/statique/homologation/rolesResponsabilites.js')

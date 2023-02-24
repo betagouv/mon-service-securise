@@ -22,19 +22,19 @@ mixin dossierCourant({ ...donnees })
 
 block formulaire
   -
-    const { dossiers } = homologation
+    const { dossiers } = service
     const dossiersFinalises = dossiers.finalises();
     const dossierCourant = dossiers.dossierCourant()
 
   .dossiers
     if dossierCourant
-      +dossierCourant({ dossier: dossierCourant, idService: homologation.id })
+      +dossierCourant({ dossier: dossierCourant, idService: service.id })
 
     each dossier in dossiersFinalises
       +dossierFinalise({ dossier })
 
 block bouton-etape
   button.bouton#suivant(
-    data-id-homologation = homologation.id,
+    data-id-homologation = service.id,
     data-id-etape-suivante = premiereEtapeParcours.id
     ) Nouvelle homologation

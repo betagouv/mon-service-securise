@@ -59,22 +59,22 @@ block append page
       h1.bleu Décision d'homologation de sécurité
 
       section.introduction
-        h2!= homologation.nomService()
+        h2!= service.nomService()
         dl
           dt Type :
-          dd= homologation.descriptionTypeService()
+          dd= service.descriptionTypeService()
           dt Objet :
-          dd= homologation.presentation()
+          dd= service.presentation()
           dt Développé par :
-          dd!= homologation.structureDeveloppement()
+          dd!= service.structureDeveloppement()
           dt Hébergement et localisation des données :
-          dd!= `${homologation.hebergeur()}, ${homologation.descriptionLocalisationDonnees()}`
+          dd!= `${service.hebergeur()}, ${service.descriptionLocalisationDonnees()}`
 
       section.risques
         h2 Principaux risques de sécurité identifiés
         p Détails en annexe
         ul
-          each risque in homologation.risquesPrincipaux()
+          each risque in service.risquesPrincipaux()
             li.
               !{risque.descriptionRisque()} <br>
               (niveau de gravité : #{risque.descriptionNiveauGravite()})
@@ -87,7 +87,7 @@ block append page
           .enCours En cours
           .fait Fait
 
-        - const statistiquesMesures = homologation.statistiquesMesures()
+        - const statistiquesMesures = service.statistiquesMesures()
         - const categories = statistiquesMesures.categories()
         ul
           if categories.length === 0
@@ -115,11 +115,11 @@ block append page
         +avisExpertCyber
         dl
           dt Expert cybersécurité :
-          dd= homologation.rolesResponsabilites.descriptionExpertCybersecurite()
+          dd= service.rolesResponsabilites.descriptionExpertCybersecurite()
 
           dt Recommandations additionnelles :
-          if homologation.avisExpertCyber.commentaire
-            dd= homologation.avisExpertCyber.commentaire
+          if service.avisExpertCyber.commentaire
+            dd= service.avisExpertCyber.commentaire
           else
             dd Aucune
 
@@ -127,8 +127,8 @@ block append page
         h2 Équipe
         dl
           dt Décision d'homologation préparée par :
-          dd= homologation.descriptionEquipePreparation()
-          each acteur in homologation.gouvernance()
+          dd= service.descriptionEquipePreparation()
+          each acteur in service.gouvernance()
             dt #{acteur.role} :
             dd= acteur.description
 
@@ -136,7 +136,7 @@ block append page
         h2 Calendrier
         dl
           dt Date de renouvellement de l'homologation :
-          dd= homologation.descriptionExpiration()
+          dd= service.descriptionExpiration()
 
   .page
     main
@@ -144,7 +144,7 @@ block append page
         h2 Décision d'homologation
         dl
           dt Autorité d'homologation :
-          dd= homologation.descriptionAutoriteHomologation()
+          dd= service.descriptionAutoriteHomologation()
         p.signature Lu et approuvé | date | signature
         ul
           li Conformité au référentiel général de sécurité (RGS)
@@ -159,7 +159,7 @@ block append page
           dossier et ses pièces jointes. Vous validez son maintien ou sa mise en
           service, dont la sécurité devra être maintenue dans la durée. Une fois
           signée, la décision d'homologation pourra être publiée sur
-          MonServiceSécurisé et sur « !{homologation.nomService()} ».
+          MonServiceSécurisé et sur « !{service.nomService()} ».
           MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus
           responsables d'incidents de sécurité susceptibles d'affecter le service
           numérique homologué et des conséquences qui pourraient en découler.
@@ -168,13 +168,13 @@ block append page
 
   +risquesPagines({
     titreAnnexe: 'Annexe 1 - Détail des risques',
-    donnees: homologation.risques.pagines(15)
+    donnees: service.risques.pagines(15)
   })
 
   +mesuresPaginees({
     titreAnnexe: 'Annexe 2 – Détail des mesures de sécurité',
     titreSection: 'Mesures de gouvernance',
-    donnees: homologation.mesures.paginees(25)
+    donnees: service.mesures.paginees(25)
   })
 
   script(type = 'module', src = '/statique/homologation/decision.js')

@@ -5,9 +5,9 @@ block append styles
   link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
 
 block nom-service
-  if (homologation)
+  if (service)
     .nom-service
-      h1!= homologation.nomService()
+      h1!= service.nomService()
 
 block zone-principale
   .formulaire

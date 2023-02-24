@@ -20,7 +20,7 @@ block formulaire
           favorable: { description: 'Avis favorable' },
           defavorable: { description: 'Avis défavorable' },
         },
-        objetDonnees: homologation.avisExpertCyber,
+        objetDonnees: service.avisExpertCyber,
       })
 
       +inputChoix({
@@ -28,15 +28,15 @@ block formulaire
         nom: 'dateRenouvellement',
         titre: "Renouvellement de l'homologation",
         items: referentiel.echeancesRenouvellement(),
-        objetDonnees: homologation.avisExpertCyber,
+        objetDonnees: service.avisExpertCyber,
       })
 
       label Commentaires et recommandations
         textarea(
           id = 'commentaire', name = 'commentaire', placeholder = "Précisez l'avis rendu sur l'homologation",
-        )= homologation.avisExpertCyber.commentaire
+        )= service.avisExpertCyber.commentaire
 
 
-    .bouton(idHomologation = homologation.id) Enregistrer &nbsp;&nbsp;›
+    .bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
 
   script(type = 'module', src = '/statique/homologation/avisExpertCyber.js')
