@@ -3,7 +3,7 @@ extends ../formulaireEtapier
 block formulaire
   -
     const LABEL_BOUTON = 'Enregistrer la décision';
-    const dossierCourant = homologation.dossierCourant();
+    const dossierCourant = service.dossierCourant();
     const dureeValidite = dossierCourant.descriptionDureeValidite();
     const dateHomologation = dossierCourant.descriptionDateHomologation();
 
@@ -16,4 +16,4 @@ block formulaire
     d'homologation de sécurité.
 
 block bouton-etape
-  button(type = 'submit', data-id-homologation = homologation.id, data-id-etape = idEtape).bouton#suivant= LABEL_BOUTON
+  button(type = 'submit', data-id-homologation = service.id, data-id-etape = idEtape).bouton#suivant= LABEL_BOUTON

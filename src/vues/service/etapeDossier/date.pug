@@ -6,7 +6,7 @@ block append styles
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
 block formulaire
-  - const dossierCourant = homologation.dossierCourant()
+  - const dossierCourant = service.dossierCourant()
 
   .mention champ obligatoire
 
@@ -34,7 +34,7 @@ block formulaire
 
 block bouton-etape
   button.bouton#suivant(
-    data-id-homologation = homologation.id,
+    data-id-homologation = service.id,
     data-id-etape = idEtape,
     data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
     ) Suivant

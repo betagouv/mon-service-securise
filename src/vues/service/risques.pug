@@ -44,14 +44,14 @@ block formulaire
       #risques-specifiques
       a.nouvel-item Ajouter un risque spécifique
 
-    .bouton(idHomologation = homologation.id) Enregistrer &nbsp;&nbsp;›
+    .bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donnees-referentiel-niveaux-gravite-risque', type = 'application/json').
     !{JSON.stringify(referentiel.niveauxGravite())}
   script(id = 'donnees-risques-generaux', type = 'application/json').
-    !{JSON.stringify(homologation.risques.toJSON().risquesGeneraux || [])}
+    !{JSON.stringify(service.risques.toJSON().risquesGeneraux || [])}
   script(id = 'donnees-risques-specifiques', type = 'application/json').
-    !{JSON.stringify(homologation.risques.toJSON().risquesSpecifiques || [])}
+    !{JSON.stringify(service.risques.toJSON().risquesSpecifiques || [])}
   script(type = 'module', src = '/statique/homologation/risques.js')
 
 block cartes-informations

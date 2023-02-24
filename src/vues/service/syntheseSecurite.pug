@@ -21,26 +21,26 @@ block append page
       img.logo-anssi(src='/statique/assets/images/logo_anssi.png')
 
     h1 Synthèse de la sécurité du service
-    .nom-service!= homologation.nomService()
+    .nom-service!= service.nomService()
 
     .synthese
       section.description
         h2 Résumé
         dl
           dt Type :
-          dd= homologation.descriptionTypeService()
+          dd= service.descriptionTypeService()
         dl
           dt Données stockées :
-          dd( class = `localisation-donnees ${homologation.localisationDonnees()}`)= homologation.descriptionLocalisationDonnees()
+          dd( class = `localisation-donnees ${service.localisationDonnees()}`)= service.descriptionLocalisationDonnees()
         dl
           dt Statut :
-          dd= homologation.descriptionStatutDeploiement()
+          dd= service.descriptionStatutDeploiement()
 
         dl.presentation
           dt Présentation :
-          dd= homologation.presentation()
+          dd= service.presentation()
       section.indice-cyber
-        - const indiceCyber = homologation.indiceCyber();
+        - const indiceCyber = service.indiceCyber();
         - const noteMax = referentiel.indiceCyberNoteMax()
         - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
 
@@ -60,23 +60,23 @@ block append page
             id: 'mesures-indispensables',
             titre: 'Indispensables',
             styleTitre: 'important',
-            statistiques: homologation.statistiquesMesuresIndispensables(),
+            statistiques: service.statistiquesMesuresIndispensables(),
           })
           +statistiquesMesures({
             id: 'mesures-recommandees',
             titre: 'Recommandées',
-            statistiques: homologation.statistiquesMesuresRecommandees(),
+            statistiques: service.statistiquesMesuresRecommandees(),
           })
-        +totalMesures(homologation.nombreTotalMesuresGenerales())
+        +totalMesures(service.nombreTotalMesuresGenerales())
 
         h3 Par catégorie
         .statistiques-par-categorie
-          - const faites = (idCategorie) => homologation.statistiquesMesures().misesEnOeuvre(idCategorie)
-          - const enCours = (idCategorie) => homologation.statistiquesMesures().enCours(idCategorie)
-          - const nonFaites = (idCategorie) => homologation.statistiquesMesures().nonFaites(idCategorie)
-          - const aRemplir = (idCategorie) => homologation.statistiquesMesures().aRemplir(idCategorie)
+          - const faites = (idCategorie) => service.statistiquesMesures().misesEnOeuvre(idCategorie)
+          - const enCours = (idCategorie) => service.statistiquesMesures().enCours(idCategorie)
+          - const nonFaites = (idCategorie) => service.statistiquesMesures().nonFaites(idCategorie)
+          - const aRemplir = (idCategorie) => service.statistiquesMesures().aRemplir(idCategorie)
 
-          each idCategorie in homologation.statistiquesMesures().categories()
+          each idCategorie in service.statistiquesMesures().categories()
             .categorie
               h4= referentiel.descriptionCategorie(idCategorie)
               .graphique
@@ -88,7 +88,7 @@ block append page
                   .statut.non-faites= nonFaites(idCategorie)
                 if aRemplir(idCategorie)
                   .statut.a-remplir= aRemplir(idCategorie)
-        +totalMesures(homologation.nombreTotalMesuresGenerales(), homologation.nombreMesuresSpecifiques())
+        +totalMesures(service.nombreTotalMesuresGenerales(), service.nombreMesuresSpecifiques())
 
     footer
       .infos-indice-cyber
@@ -98,6 +98,6 @@ block append page
 
       .nature-document
         span.nom-mss MonServiceSécurisé – 
-        span Homologation de sécurité du service « #{homologation.nomService()} »
+        span Homologation de sécurité du service « #{service.nomService()} »
 
   script(type = 'module', src = '/statique/homologation/syntheseSecurite.js')

@@ -1,4 +1,4 @@
-mixin inputChoix({ type, nom, titre, description, items, objetDonnees = homologation, messageErreur, decoration, requis = false })
+mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service, messageErreur, decoration, requis = false })
   - let valeursSelectionnees = objetDonnees[nom]
   - if (typeof valeursSelectionnees === 'boolean') valeursSelectionnees = (valeursSelectionnees ? 'oui' : 'non')
   - const requisGroupe = requis && type === 'checkbox' && Object.keys(items).length > 1

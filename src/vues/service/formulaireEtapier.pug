@@ -15,7 +15,7 @@ mixin barre-progression({ numeroEtapeCourante })
       .etape(class = classeEtape)
         if classeEtape === 'passee'
           .numero-etape
-            a(href = `/service/${homologation.id}/dossier/edition/etape/${etape.id}`).coche
+            a(href = `/service/${service.id}/dossier/edition/etape/${etape.id}`).coche
           .libelle-etape= etape.libelle
         else
           +descriptionEtape({ etape })
@@ -41,7 +41,7 @@ block zone-principale
     block formulaire
 
     .boutons
-      a(href = `/service/${homologation.id}`): .bouton.blanc Revenir à la synthèse
+      a(href = `/service/${service.id}`): .bouton.blanc Revenir à la synthèse
       block bouton-etape
 
   script(type = 'module', src = '/statique/homologation/etapesDossier.js')

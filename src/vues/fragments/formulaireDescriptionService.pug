@@ -18,7 +18,7 @@ mixin formulaireDescriptionService(idHomologation)
             id = 'nom-service',
             name = 'nomService',
             type = 'text',
-            value != homologation.nomService(),
+            value != service.nomService(),
             required
           )
           .message-erreur Le nom est obligatoire. Veuillez le renseigner.
@@ -29,7 +29,7 @@ mixin formulaireDescriptionService(idHomologation)
           nom: 'typeService',
           titre: 'Type(s)',
           items: referentiel.typesService(),
-          objetDonnees: homologation.descriptionService,
+          objetDonnees: service.descriptionService,
           messageErreur: 'Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.',
           requis: true,
         })
@@ -40,7 +40,7 @@ mixin formulaireDescriptionService(idHomologation)
           nom: 'provenanceService',
           titre: 'Provenance',
           items: referentiel.provenancesService(),
-          objetDonnees: homologation.descriptionService,
+          objetDonnees: service.descriptionService,
           messageErreur: 'La provenance est obligatoire. Veuillez cocher une option.',
           requis: true,
         })
@@ -51,7 +51,7 @@ mixin formulaireDescriptionService(idHomologation)
           nom: 'statutDeploiement',
           titre: 'Statut',
           items: referentiel.statutsDeploiement(),
-          objetDonnees: homologation.descriptionService,
+          objetDonnees: service.descriptionService,
           messageErreur: 'Le statut est obligatoire. Veuillez cocher une option.',
           requis: true,
         })
@@ -61,7 +61,7 @@ mixin formulaireDescriptionService(idHomologation)
           id = 'presentation',
           name = 'presentation',
           placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
-        )= homologation.descriptionService.presentation
+        )= service.descriptionService.presentation
 
       label Accès
         br
@@ -69,7 +69,7 @@ mixin formulaireDescriptionService(idHomologation)
           identifiantConteneur: 'points-acces',
           nom: 'point-acces',
           valeurExemple: 'exemple : https://www.adresse.fr, App Store, Play Store…',
-          donnees: homologation.descriptionService.pointsAcces.toJSON(),
+          donnees: service.descriptionService.pointsAcces.toJSON(),
           texteLienAjouter: 'Ajouter un accès',
           zoneSaisieVideVisible: true,
         })
@@ -81,13 +81,13 @@ mixin formulaireDescriptionService(idHomologation)
         titre: 'Fonctionnalité(s) offerte(s)',
         description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
         items: referentiel.fonctionnalites(),
-        objetDonnees: homologation.descriptionService,
+        objetDonnees: service.descriptionService,
       })
 
       +elementsAjoutablesDescription({
         identifiantConteneur: 'fonctionnalites-specifiques',
         nom: 'fonctionnalite',
-        donnees: homologation.descriptionService.fonctionnalitesSpecifiques.toJSON(),
+        donnees: service.descriptionService.fonctionnalitesSpecifiques.toJSON(),
         texteLienAjouter: 'Ajouter une fonctionnalité',
       })
 
@@ -98,13 +98,13 @@ mixin formulaireDescriptionService(idHomologation)
         titre: 'Données à caractère personnel et autres données sensibles stockées par le service',
         description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
         items: referentiel.donneesCaracterePersonnel(),
-        objetDonnees: homologation.descriptionService,
+        objetDonnees: service.descriptionService,
       })
 
       +elementsAjoutablesDescription({
         identifiantConteneur: 'donnees-sensibles-specifiques',
         nom: 'donnees-sensibles',
-        donnees: homologation.descriptionService.donneesSensiblesSpecifiques.toJSON(),
+        donnees: service.descriptionService.donneesSensiblesSpecifiques.toJSON(),
         texteLienAjouter: 'Ajouter des données',
       })
 
@@ -115,7 +115,7 @@ mixin formulaireDescriptionService(idHomologation)
           nom: 'localisationDonnees',
           titre: 'Localisation des données',
           items: referentiel.localisationsDonnees(),
-          objetDonnees: homologation.descriptionService,
+          objetDonnees: service.descriptionService,
           messageErreur: 'La localisation des données est obligatoire. Veuillez cocher une option.',
           requis: true,
         })
@@ -126,7 +126,7 @@ mixin formulaireDescriptionService(idHomologation)
           nom: 'delaiAvantImpactCritique',
           titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
           items: referentiel.delaisAvantImpactCritique(),
-          objetDonnees: homologation.descriptionService,
+          objetDonnees: service.descriptionService,
           messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
           requis: true,
         })
@@ -134,7 +134,7 @@ mixin formulaireDescriptionService(idHomologation)
         +inputOuiNon({
           nom: 'risqueJuridiqueFinancierReputationnel',
           titre: 'Une atteinte à la sécurité ou au bon fonctionnement du service pourrait entraîner un impact critique sur les plans juridique, financier ou réputationnel',
-          objetDonnees: homologation.descriptionService,
+          objetDonnees: service.descriptionService,
           exempleOui: "Les mesures de sécurité à mettre en œuvre, proposées dans l'étape suivante « Sécuriser », seront renforcées (ex : réaliser un audit de sécurité approfondi, une analyse de risque Ebios Risk Manager, …).",
           messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
           requis: true,
