@@ -52,20 +52,40 @@ describe('Le serveur MSS des routes /pdf/*', () => {
       testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('Pdf decision');
     });
 
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        'http://localhost:1234/pdf/456/dossierDecision.pdf',
+        done,
+      );
+    });
+
     it('sert un fichier de type pdf', (done) => {
       verifieTypeFichierServiEstPDF('http://localhost:1234/pdf/456/dossierDecision.pdf', done);
     });
 
     it('utilise un adaptateur de pdf pour la génération', (done) => {
       let adaptateurPdfAppele = false;
-      testeur.adaptateurPdf().genereDossierDecision = () => {
+      testeur.adaptateurPdf().genereDossierDecision = (donnees) => {
         adaptateurPdfAppele = true;
+        expect(donnees.nomService).to.equal('un service');
         return Promise.resolve('Pdf dossier décision');
       };
 
       axios.get('http://localhost:1234/pdf/456/dossierDecision.pdf')
         .then(() => {
           expect(adaptateurPdfAppele).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("reste robuste en cas d'échec de génération de pdf", (done) => {
+      testeur.adaptateurPdf().genereDossierDecision = () => Promise.reject();
+
+      axios.get('http://localhost:1234/pdf/456/dossierDecision.pdf')
+        .then(() => done('La génération aurait dû lever une erreur'))
+        .catch((e) => {
+          expect(e.response.status).to.equal(424);
           done();
         })
         .catch(done);

@@ -44,8 +44,19 @@ const genereAnnexes = ({ donneesDescription, donneesMesures, donneesRisques }) =
     .then((pdf) => Buffer.from(pdf.buffer, 'binary'))
 );
 
-const genereDossierDecision = () => fsPromises
+const genereDossierDecision = (donnees) => fsPromises
   .readFile('public/assets/pdf/dossierDecision.pdf')
+  .then((donneesFichier) => PDFDocument.load(donneesFichier))
+  .then((pdfDocument) => {
+    const formulaire = pdfDocument.getForm();
+
+    const champNomService = formulaire.getTextField('nom_du_service');
+    champNomService.setText(donnees.nomService);
+    champNomService.enableReadOnly();
+
+    return pdfDocument;
+  })
+  .then((pdfDocument) => pdfDocument.save({ updateFieldAppearances: false }))
   .then((pdf) => Buffer.from(pdf.buffer, 'binary'));
 
 module.exports = { genereAnnexes, genereDossierDecision };
