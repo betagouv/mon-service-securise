@@ -46,4 +46,29 @@ describe('Le serveur MSS des routes /pdf/*', () => {
         .catch(done);
     });
   });
+
+  describe('quand requête GET sur `/pdf/:id/dossierDecision.pdf`', () => {
+    beforeEach(() => {
+      testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('Pdf decision');
+    });
+
+    it('sert un fichier de type pdf', (done) => {
+      verifieTypeFichierServiEstPDF('http://localhost:1234/pdf/456/dossierDecision.pdf', done);
+    });
+
+    it('utilise un adaptateur de pdf pour la génération', (done) => {
+      let adaptateurPdfAppele = false;
+      testeur.adaptateurPdf().genereDossierDecision = () => {
+        adaptateurPdfAppele = true;
+        return Promise.resolve('Pdf dossier décision');
+      };
+
+      axios.get('http://localhost:1234/pdf/456/dossierDecision.pdf')
+        .then(() => {
+          expect(adaptateurPdfAppele).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+  });
 });

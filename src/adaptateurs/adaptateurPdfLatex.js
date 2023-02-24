@@ -44,4 +44,8 @@ const genereAnnexes = ({ donneesDescription, donneesMesures, donneesRisques }) =
     .then((pdf) => Buffer.from(pdf.buffer, 'binary'))
 );
 
-module.exports = { genereAnnexes };
+const genereDossierDecision = () => fsPromises
+  .readFile('public/assets/pdf/dossierDecision.pdf')
+  .then((pdf) => Buffer.from(pdf.buffer, 'binary'));
+
+module.exports = { genereAnnexes, genereDossierDecision };

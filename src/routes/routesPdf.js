@@ -17,6 +17,15 @@ const routesPdf = (middleware, adaptateurPdf) => {
       .catch(suite);
   });
 
+  routes.get('/:id/dossierDecision.pdf', (_requete, reponse, suite) => {
+    adaptateurPdf.genereDossierDecision()
+      .then((pdf) => {
+        reponse.contentType('application/pdf');
+        reponse.send(pdf);
+      })
+      .catch(suite);
+  });
+
   return routes;
 };
 
