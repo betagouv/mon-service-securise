@@ -622,9 +622,9 @@ module.exports = {
   },
 
   etapesParcoursHomologation: [
-    { numero: 1, libelle: 'Décision' },
-    { numero: 2, libelle: 'Date' },
-    { numero: 3, libelle: 'Récapitulatif' },
+    { numero: 1, libelle: 'Décision', id: 'decision' },
+    { numero: 2, libelle: 'Date', id: 'date' },
+    { numero: 3, libelle: 'Récapitulatif', id: 'recapitulatif' },
   ],
 
   documentsHomologation: {

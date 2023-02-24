@@ -89,7 +89,7 @@ const routesService = (
 
   routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
-    const idEtape = parseInt(requete.params.idEtape, 10);
+    const { idEtape } = requete.params;
 
     if (!referentiel.etapeExiste(idEtape)) {
       reponse.status(404).send('Étape inconnue');

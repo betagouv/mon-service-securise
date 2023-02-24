@@ -38,8 +38,11 @@ block formulaire
       Reconnectez-vous ensuite pour renseigner la date de signature et la
       durée de validité de l'homologation dans la dernière étape <b>Date</b>.
 
-  script(type = "module", src = "/statique/homologation/etapes/1.js")
+  script(type = "module", src = "/statique/homologation/etapes/decision.js")
 
 block bouton-etape
-  button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape = idEtape, data-id-etape-suivante = idEtape + 1) Suivant
-
+  button.bouton#suivant(
+    data-id-homologation = homologation.id,
+    data-id-etape = idEtape,
+    data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
+    ) Suivant

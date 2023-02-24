@@ -5,7 +5,7 @@ let formulaireDejaSoumis = false;
 const action = (idEtape, idService) => {
   let resultat = Promise.resolve();
 
-  if (idEtape === 2) {
+  if (idEtape === 'date') {
     const donnees = {
       dateHomologation: $('#date-homologation').val(),
       dureeValidite: $('input[name="dureeValidite"]:checked').val(),
@@ -14,7 +14,7 @@ const action = (idEtape, idService) => {
     resultat = axios.put(`/api/service/${idService}/dossier`, donnees);
   }
 
-  if (idEtape === 3) {
+  if (idEtape === 'recapitulatif') {
     resultat = axios.put(`/api/service/${idService}/dossier`, { finalise: true });
   }
 

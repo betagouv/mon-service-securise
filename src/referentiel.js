@@ -168,9 +168,18 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return criticiteMax(criticiteMaxFonctionnalites, criticiteMaxDonnees, criticiteDelai(idDelai));
   };
 
-  const etapeExiste = (numero) => etapesParcoursHomologation()
-    .map((e) => e.numero)
-    .includes(numero);
+  const etapeExiste = (idEtape) => etapesParcoursHomologation()
+    .map((e) => e.id)
+    .includes(idEtape);
+
+  const numeroEtape = (idEtape) => etapesParcoursHomologation()
+    .find((e) => e.id === idEtape)
+    ?.numero;
+
+  const idEtapeSuivante = (idEtape) => {
+    const numeroSuivant = numeroEtape(idEtape) + 1;
+    return etapesParcoursHomologation().find((e) => e.numero === numeroSuivant).id;
+  };
 
   const valideDonnees = () => {
     const sommeCoefficients = coefficientIndiceCyberMesuresIndispensables()
@@ -232,6 +241,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     identifiantsMesures,
     identifiantsNiveauxGravite,
     identifiantsRisques,
+    idEtapeSuivante,
     infosNiveauxGravite,
     infosNiveauxGraviteConcernes,
     localisationDonnees,
@@ -242,6 +252,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbMoisDecalage,
     niveauGravite,
     niveauxGravite,
+    numeroEtape,
     positionActionSaisie,
     provenancesService,
     recharge,
@@ -258,7 +269,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     typesService,
   };
 };
-
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);
 
 module.exports = { creeReferentiel, creeReferentielVide };

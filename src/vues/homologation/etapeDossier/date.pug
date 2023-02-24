@@ -33,4 +33,8 @@ block formulaire
       })
 
 block bouton-etape
-  button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape = idEtape, data-id-etape-suivante = idEtape + 1) Suivant
+  button.bouton#suivant(
+    data-id-homologation = homologation.id,
+    data-id-etape = idEtape,
+    data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
+    ) Suivant
