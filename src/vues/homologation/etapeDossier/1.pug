@@ -13,6 +13,9 @@ mixin document({ nom, description, dateTelechargement })
     if (dateTelechargement)
       span.date-telechargement téléchargé le #{dateFr.format(dateTelechargement)}
 
+  input(type='text' required value=dateTelechargement)
+  .message-erreur Vous devez télécharger ce document pour pouvoir passer à l'étape suivante.
+
 block formulaire
   - const datesTelechargements = homologation.dossierCourant()?.datesTelechargements;
 

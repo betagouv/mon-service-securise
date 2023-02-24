@@ -147,6 +147,14 @@ ul.documents {
   color: var(--texte-fonce);
 }
 
+.documents li input[type=text] {
+  display: none;
+}
+
+.documents li .message-erreur {
+  margin-top: 0;
+}
+
 .dossier {
   display: flex;
   justify-content: space-between;
