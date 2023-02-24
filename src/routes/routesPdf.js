@@ -17,13 +17,18 @@ const routesPdf = (middleware, adaptateurPdf) => {
       .catch(suite);
   });
 
-  routes.get('/:id/dossierDecision.pdf', (_requete, reponse, suite) => {
-    adaptateurPdf.genereDossierDecision()
+  routes.get('/:id/dossierDecision.pdf', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+    const donnees = { nomService: homologation.nomService() };
+
+    adaptateurPdf.genereDossierDecision(donnees)
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);
       })
-      .catch(suite);
+      .catch(() => {
+        reponse.sendStatus(424);
+      });
   });
 
   return routes;
