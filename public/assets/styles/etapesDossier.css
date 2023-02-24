@@ -142,7 +142,6 @@ ul.documents {
 }
 
 .documents .date-telechargement {
-  margin-left: 0.6em;
   font-size: 0.9em;
   color: var(--texte-fonce);
 }
