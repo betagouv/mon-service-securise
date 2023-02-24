@@ -84,7 +84,7 @@ const routesService = (
 
   routes.get('/:id/dossiers', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('homologation/dossiers', { homologation });
+    reponse.render('homologation/dossiers', { homologation, premiereEtapeParcours: referentiel.premiereEtapeParcours() });
   });
 
   routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse, suite) => {

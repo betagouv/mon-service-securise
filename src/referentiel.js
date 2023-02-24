@@ -168,6 +168,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return criticiteMax(criticiteMaxFonctionnalites, criticiteMaxDonnees, criticiteDelai(idDelai));
   };
 
+  const premiereEtapeParcours = () => etapesParcoursHomologation().find((e) => e.numero === 1);
+
   const etapeExiste = (idEtape) => etapesParcoursHomologation()
     .map((e) => e.id)
     .includes(idEtape);
@@ -254,6 +256,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauxGravite,
     numeroEtape,
     positionActionSaisie,
+    premiereEtapeParcours,
     provenancesService,
     recharge,
     reglesPersonnalisation,
