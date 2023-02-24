@@ -40,7 +40,7 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.enregistreDateTelechargement(new Date()))
+      expect(() => dossierFinalise.enregistreDateTelechargement('decision', new Date()))
         .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
     });
 
