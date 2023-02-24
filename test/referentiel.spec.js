@@ -528,6 +528,15 @@ describe('Le référentiel', () => {
       { id: 'annexes', description: 'les annexes' }]);
   });
 
+  it('connaît la première étape du parcours Homologation', () => {
+    const premiereEtape = { id: 'premiere', numero: 1 };
+    const referentiel = Referentiel.creeReferentiel({
+      etapesParcoursHomologation: [premiereEtape],
+    });
+
+    expect(referentiel.premiereEtapeParcours()).to.equal(premiereEtape);
+  });
+
   describe("sur demande du numéro d'une étape du parcours Homologation", () => {
     it("sait retrouver le numéro d'une étape à partir de son ID", () => {
       const referentiel = Referentiel.creeReferentiel({
