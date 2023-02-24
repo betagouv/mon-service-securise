@@ -131,7 +131,9 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/dossier/edition/etape/:idEtape`', () => {
     beforeEach(() => {
-      testeur.referentiel().recharge({ etapesParcoursHomologation: [{ numero: 1 }] });
+      testeur.referentiel().recharge({
+        etapesParcoursHomologation: [{ numero: 1, id: 'decision' }, { numero: 2, id: 'deuxieme' }],
+      });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
       testeur.depotDonnees().homologation = () => Promise.resolve(
         new Homologation({ id: '456', descriptionService: { nomService: 'un service' } })
@@ -140,7 +142,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/dossier/edition/etape/1',
+        'http://localhost:1234/service/456/dossier/edition/etape/decision',
         done,
       );
     });
@@ -148,7 +150,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     it("répond avec une erreur HTTP 404 si l'identifiant d'étape n'est pas connu du référentiel", (done) => {
       testeur.verifieRequeteGenereErreurHTTP(404, 'Étape inconnue', {
         method: 'get',
-        url: 'http://localhost:1234/service/456/dossier/edition/etape/2',
+        url: 'http://localhost:1234/service/456/dossier/edition/etape/inconnue',
       }, done);
     });
 
@@ -164,7 +166,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         }
       };
 
-      axios('http://localhost:1234/service/456/dossier/edition/etape/1')
+      axios('http://localhost:1234/service/456/dossier/edition/etape/decision')
         .then(() => expect(dossierAjoute).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
@@ -181,7 +183,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         }
       };
 
-      axios('http://localhost:1234/service/456/dossier/edition/etape/1')
+      axios('http://localhost:1234/service/456/dossier/edition/etape/decision')
         .then(() => expect(chargementsService).to.equal(1))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));

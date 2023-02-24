@@ -528,6 +528,34 @@ describe('Le référentiel', () => {
       { id: 'annexes', description: 'les annexes' }]);
   });
 
+  describe("sur demande du numéro d'une étape du parcours Homologation", () => {
+    it("sait retrouver le numéro d'une étape à partir de son ID", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesParcoursHomologation: [{ id: 'premiere', numero: 1 }],
+      });
+
+      expect(referentiel.numeroEtape('premiere')).to.be(1);
+    });
+
+    it("reste robuste lorsque l'ID de l'étape n'existe pas", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesParcoursHomologation: [{ id: 'premiere', numero: 1 }],
+      });
+
+      expect(referentiel.numeroEtape('inconnue')).to.be(undefined);
+    });
+  });
+
+  describe("sur demande de l'ID d'une « étape suivante » du parcours Homologation", () => {
+    it("sait retrouver l'ID de l'étape suivant une étape donnée", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesParcoursHomologation: [{ id: 'premiere', numero: 1 }, { id: 'deuxieme', numero: 2 }],
+      });
+
+      expect(referentiel.idEtapeSuivante('premiere')).to.equal('deuxieme');
+    });
+  });
+
   describe("sur demande d'une URL de document d'homologation", () => {
     it("sait construire l'URL d'un document d'homologation", () => {
       const referentiel = Referentiel.creeReferentiel({

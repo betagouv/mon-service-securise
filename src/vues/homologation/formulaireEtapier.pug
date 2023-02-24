@@ -4,18 +4,18 @@ mixin descriptionEtape({ etape })
   .numero-etape= etape.numero
   .libelle-etape= etape.libelle
 
-mixin barre-progression({ idEtape })
+mixin barre-progression({ numeroEtapeCourante })
   .etapes
     each etape in referentiel.etapesParcoursHomologation()
       -
         let classeEtape = 'courante';
-        if (etape.numero < idEtape) classeEtape = 'passee';
-        if (etape.numero > idEtape) classeEtape = 'future';
+        if (etape.numero < numeroEtapeCourante) classeEtape = 'passee';
+        if (etape.numero > numeroEtapeCourante) classeEtape = 'future';
 
       .etape(class = classeEtape)
         if classeEtape === 'passee'
           .numero-etape
-            a(href = `/service/${homologation.id}/dossier/edition/etape/${etape.numero}`).coche
+            a(href = `/service/${homologation.id}/dossier/edition/etape/${etape.id}`).coche
           .libelle-etape= etape.libelle
         else
           +descriptionEtape({ etape })
@@ -32,7 +32,7 @@ block zone-principale
     h1.action Homologuer
 
     if idEtape
-      +barre-progression({ idEtape })
+      +barre-progression({ numeroEtapeCourante: referentiel.numeroEtape(idEtape) })
     else
       h2 Réalisez et suivez les homologations de sécurité pour votre service
 

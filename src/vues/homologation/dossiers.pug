@@ -12,7 +12,7 @@ mixin dossier({ statut, dossier, idService })
       div= `Prochaine homologation : ${prochaineHomologation}`
     if idService
       nav
-        a(href = `/service/${idService}/dossier/edition/etape/1`) Consulter
+        a(href = `/service/${idService}/dossier/edition/etape/decision`) Consulter
 
 mixin dossierFinalise({ dossier })
   +dossier({ statut: 'Homologation finalisée', dossier })
@@ -34,4 +34,4 @@ block formulaire
       +dossierFinalise({ dossier })
 
 block bouton-etape
-  button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape-suivante = 1) Nouvelle homologation
+  button.bouton#suivant(data-id-homologation = homologation.id, data-id-etape-suivante = 'decision') Nouvelle homologation
