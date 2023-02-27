@@ -5,7 +5,6 @@ const { DUREE_SESSION } = require('./http/configurationServeur');
 const routesApi = require('./routes/routesApi');
 const routesBibliotheques = require('./routes/routesBibliotheques');
 const routesService = require('./routes/routesService');
-const routesPdf = require('./routes/routesPdf');
 
 require('dotenv').config();
 
@@ -123,13 +122,11 @@ const creeServeur = (
     reponse.render('espacePersonnel');
   });
 
-  app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge));
+  app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf));
 
   app.use('/bibliotheques', routesBibliotheques());
 
   app.use('/service', routesService(middleware, referentiel, depotDonnees, moteurRegles));
-
-  app.use('/pdf', routesPdf(middleware, adaptateurPdf));
 
   app.get('/utilisateur/edition', middleware.verificationJWT, (requete, reponse) => {
     const departements = referentiel.departements();

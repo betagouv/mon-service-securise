@@ -1,9 +1,9 @@
 const express = require('express');
 
-const routesPdf = (middleware, adaptateurPdf) => {
+const routesApiServicePdf = (middleware, adaptateurPdf) => {
   const routes = express.Router();
 
-  routes.get('/:id/annexes.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
+  routes.get('/:id/pdf/annexes.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
     const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
     const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
@@ -17,7 +17,7 @@ const routesPdf = (middleware, adaptateurPdf) => {
       .catch(suite);
   });
 
-  routes.get('/:id/dossierDecision.pdf', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
     const donnees = { nomService: homologation.nomService() };
 
@@ -34,4 +34,4 @@ const routesPdf = (middleware, adaptateurPdf) => {
   return routes;
 };
 
-module.exports = routesPdf;
+module.exports = routesApiServicePdf;
