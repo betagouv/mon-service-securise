@@ -43,7 +43,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const urlDocumentHomologation = (idDocument, idHomologation) => (
     donnees.documentsHomologation[idDocument]
       ?.urlTelechargement
-      ?.replace(':idHomologation', idHomologation)
+      ?.replace(':idService', idHomologation)
   );
   const descriptionEcheanceRenouvellement = (id) => echeancesRenouvellement()[id]?.description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;

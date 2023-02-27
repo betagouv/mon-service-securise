@@ -569,7 +569,7 @@ describe('Le référentiel', () => {
     it("sait construire l'URL d'un document d'homologation", () => {
       const referentiel = Referentiel.creeReferentiel({
         documentsHomologation: {
-          decision: { urlTelechargement: '/pdf/:idHomologation/decision.pdf' },
+          decision: { urlTelechargement: '/pdf/:idService/decision.pdf' },
         },
       });
 
