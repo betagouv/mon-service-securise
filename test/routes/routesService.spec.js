@@ -54,15 +54,6 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/service/:id/syntheseSecurite/annexes/mesures`', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/syntheseSecurite/annexes/mesures',
-        done,
-      );
-    });
-  });
-
   describe('quand requête GET sur `/service/:id/mesures`', () => {
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(

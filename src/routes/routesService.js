@@ -49,13 +49,6 @@ const routesService = (
       reponse.render('service/syntheseSecurite', { service: homologation, referentiel });
     });
 
-  routes.get('/:id/syntheseSecurite/annexes/mesures',
-    middleware.trouveHomologation,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('service/annexes/mesures', { service: homologation, referentiel });
-    });
-
   routes.get('/:id/descriptionService', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/descriptionService', { referentiel, service: homologation });
