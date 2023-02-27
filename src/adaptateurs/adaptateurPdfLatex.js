@@ -26,11 +26,11 @@ const ajoutePdf = (accumulateurPdf, pdfAAjouter) => accumulateurPdf
       return pdfFusion;
     }));
 
-const genereAnnexeDescription = (donnees) => generationPdfLatex('src/vuesTex/annexeDescription.template.tex', donnees);
+const genereAnnexeDescription = (donnees) => generationPdfLatex('src/pdf/latex/annexeDescription.template.tex', donnees);
 
-const genereAnnexeMesures = (donnees) => generationPdfLatex('src/vuesTex/annexeMesures.template.tex', donnees);
+const genereAnnexeMesures = (donnees) => generationPdfLatex('src/pdf/latex/annexeMesures.template.tex', donnees);
 
-const genereAnnexeRisques = (donnees) => generationPdfLatex('src/vuesTex/annexeRisques.template.tex', donnees);
+const genereAnnexeRisques = (donnees) => generationPdfLatex('src/pdf/latex/annexeRisques.template.tex', donnees);
 
 const genereAnnexes = ({ donneesDescription, donneesMesures, donneesRisques }) => (
   ajoutePdf(PDFDocument.create(), genereAnnexeDescription(donneesDescription))
