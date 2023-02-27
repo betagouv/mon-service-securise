@@ -45,7 +45,7 @@ const genereAnnexes = ({ donneesDescription, donneesMesures, donneesRisques }) =
 );
 
 const genereDossierDecision = (donnees) => fsPromises
-  .readFile('public/assets/pdf/dossierDecision.pdf')
+  .readFile('src/pdf/modeles/dossierDecision.pdf')
   .then((donneesFichier) => PDFDocument.load(donneesFichier))
   .then((pdfDocument) => {
     const formulaire = pdfDocument.getForm();
