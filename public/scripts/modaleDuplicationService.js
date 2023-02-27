@@ -8,6 +8,7 @@ $(() => {
   initialiseComportementModale($modaleDuplication);
 
   const selecteurFormulaire = '.modale-duplication-service form';
+  const $boutonValidation = $('button', $(selecteurFormulaire));
   const $erreurServeur = $('.message-erreur-serveur', $modaleDuplication);
 
   brancheValidation(selecteurFormulaire);
@@ -17,7 +18,7 @@ $(() => {
   let idServiceCourant;
 
   $(selecteurFormulaire).one('submit', (e) => {
-    $('button', $(selecteurFormulaire)).prop('disabled', true);
+    $boutonValidation.addClass('occupe');
 
     e.preventDefault();
     $erreurServeur.hide();
@@ -26,8 +27,12 @@ $(() => {
     tableauDeLongueur(nombreCopies).reduce((acc) => acc.then(
       () => axios({ method: 'copy', url: `/api/service/${idServiceCourant}` })
     ), Promise.resolve())
-      .then(() => window.location.reload())
+      .then(() => {
+        $boutonValidation.removeClass('occupe');
+        window.location.reload();
+      })
       .catch((exc) => {
+        $boutonValidation.removeClass('occupe');
         if (exc.response.status !== 424) return;
 
         $erreurServeur.text(exc.response.data.message).show();
