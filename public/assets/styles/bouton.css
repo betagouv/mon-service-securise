@@ -29,3 +29,8 @@ button {
   background-color: var(--gris-inactif);
   border-color: var(--gris-inactif);
 }
+
+.bouton.occupe {
+  background-color: var(--bleu-anssi);
+  cursor: wait;
+}
