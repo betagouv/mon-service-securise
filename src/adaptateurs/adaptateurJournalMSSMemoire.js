@@ -1,9 +1,13 @@
+const adaptateurEnvironnement = require('./adaptateurEnvironnement');
+
 const nouvelAdaptateur = () => {
   const consigneEvenement = (donneesEvenements) => {
     /* eslint-disable no-console */
-    console.log(`[JOURNAL MSS] Nouvel événement\n${JSON.stringify(donneesEvenements)}`);
-    return Promise.resolve();
+    const logDansConsole = adaptateurEnvironnement.journalMSS().logEvenementDansConsole();
+    if (logDansConsole) console.log(`[JOURNAL MSS] Nouvel événement\n${JSON.stringify(donneesEvenements)}`);
     /* eslint-enable no-console */
+
+    return Promise.resolve();
   };
 
   return {
