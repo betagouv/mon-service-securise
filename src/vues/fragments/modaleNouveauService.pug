@@ -10,7 +10,7 @@ mixin modaleNouveauService
       .fermeture-modale
       .contenu-modale
         h1 Nouveau service
-        form.champ-unique(action = "/service/creation", method = "GET")
+        form.champ-unique(action = '/service/creation', method = 'GET')
           .case-a-cocher.requis
             input(id = 'attestation', name = 'attestation', type = 'checkbox', required, title = '')
             label(for = 'attestation')
@@ -19,6 +19,7 @@ mixin modaleNouveauService
               | aux besoins de sécurité élevés.
               |
               +lienNouvelOnglet('https://aide.monservicesecurise.beta.gouv.fr/fr/article/quels-services-ne-peuvent-pas-etre-references-sur-monservicesecurise-ey6mt1', 'En savoir plus')
-          button.confirmation(type = "submit").bouton Continuer
+            .message.message-erreur Ce champs est obligatoire. Veuillez le cocher.
+          button.bouton.confirmation Continuer
 
-  script(type = 'module', src = '/statique/modules/modaleNouveauService.js')
+  script(type = 'module', src = '/statique/scripts/modaleNouveauService.js')
