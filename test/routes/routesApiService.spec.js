@@ -612,11 +612,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
       testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
-      testeur.referentiel().recharge({
-        documentsHomologation: {
-          decision: { urlTelechargement: '/public/assets/dossierDecision.pdf' },
-        },
-      });
+      testeur.referentiel().recharge({ documentsHomologation: { decision: {} } });
     });
 
     it("recherche l'homologation correspondante", (done) => {
