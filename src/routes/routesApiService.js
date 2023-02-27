@@ -1,5 +1,6 @@
 const express = require('express');
 
+const routesApiServicePdf = require('./routesApiServicePdf');
 const {
   EchecAutorisation,
   ErreurModele,
@@ -22,8 +23,16 @@ const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../modeles/rolesResponsabilites');
 const { dateInvalide } = require('../utilitaires/date');
 
-const routesApiService = (middleware, depotDonnees, referentiel, adaptateurHorloge) => {
+const routesApiService = (
+  middleware,
+  depotDonnees,
+  referentiel,
+  adaptateurHorloge,
+  adaptateurPdf
+) => {
   const routes = express.Router();
+
+  routes.use(routesApiServicePdf(middleware, adaptateurPdf));
 
   routes.post('/', middleware.verificationAcceptationCGU, middleware.aseptise('nomService'), middleware.aseptiseListes([
     { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },

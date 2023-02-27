@@ -56,7 +56,7 @@ block zone-principale
         rel = ``
       ) Télécharger la synthèse
       a.bouton.nouvel-onglet(
-        href = `/pdf/${service.id}/annexes.pdf`,
+        href = referentiel.urlDocumentHomologation('annexes', service.id),
         target = `blank`,
         rel = ``
       ) Télécharger les annexes

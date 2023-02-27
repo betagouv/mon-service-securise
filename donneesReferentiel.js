@@ -630,7 +630,7 @@ module.exports = {
   documentsHomologation: {
     decision: {
       description: "Décision d'homologation de sécurité (modèle)",
-      urlTelechargement: '/pdf/:idHomologation/dossierDecision.pdf',
+      urlTelechargement: '/api/service/:idHomologation/pdf/dossierDecision.pdf',
     },
     synthese: {
       description: "Synthèse de l'état de sécurité du service",
@@ -638,7 +638,7 @@ module.exports = {
     },
     annexes: {
       description: 'Annexes',
-      urlTelechargement: '/pdf/:idHomologation/annexes.pdf',
+      urlTelechargement: '/api/service/:idHomologation/pdf/annexes.pdf',
     },
   },
 
