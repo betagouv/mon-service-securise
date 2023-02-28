@@ -209,7 +209,7 @@ const routesApiService = (
     }
   );
 
-  routes.put('/:id/dossier/etape/decision/:idDocument', middleware.trouveHomologation, (requete, reponse, suite) => {
+  routes.put('/:id/dossier/document/:idDocument', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
     const dossierCourant = homologation.dossierCourant();
     if (!dossierCourant) {
