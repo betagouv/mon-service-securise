@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 
+const { unDossier } = require('../constructeurs/constructeurDossier');
 const Dossier = require('../../src/modeles/dossier');
 const Referentiel = require('../../src/referentiel');
 const { ErreurDossierDejaFinalise } = require('../../src/erreurs');
@@ -76,37 +77,47 @@ describe("Un dossier d'homologation", () => {
 
   describe('sur demande du caractère actif du dossier', () => {
     it("retourne `false` si le dossier n'est pas complet", () => {
-      const adaptateurHorloge = { maintenant: () => new Date(2023, 1, 1) };
-      const dossier = new Dossier({ id: '2', finalise: true, decision: { dateHomologation: '2023-01-01' } }, referentiel, adaptateurHorloge);
+      const dossier = unDossier().sansDecision().construit();
       expect(dossier.estActif()).to.equal(false);
     });
 
     it("retourne `false` si la date du jour n'est pas comprise entre la date d'homologation et la prochaine date d'homologation", () => {
       referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
-      const adaptateurHorloge = { maintenant: () => new Date(2025, 1, 1) };
-      const dossier = new Dossier({ id: '2', finalise: true, decision: { dateHomologation: '2023-01-01', dureeValidite: 'unAn' } }, referentiel, adaptateurHorloge);
+      const dossier = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstExpire()
+        .construit();
       expect(dossier.estActif()).to.equal(false);
     });
 
     it("retourne `true` si la date du jour est la date d'homologation", () => {
       referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
-      const adaptateurHorloge = { maintenant: () => new Date(2023, 1, 1) };
-      const dossier = new Dossier({ id: '2', finalise: true, decision: { dateHomologation: '2023-01-01', dureeValidite: 'unAn' } }, referentiel, adaptateurHorloge);
-      expect(dossier.estActif()).to.equal(true);
+      const aujourdhui = new Date(2023, 1, 1);
+      const adaptateurHorloge = { maintenant: () => aujourdhui };
+      const dossierPremierJourActif = unDossier(referentiel, adaptateurHorloge)
+        .quiEstComplet()
+        .avecDateHomologation(new Date('2023-01-01'))
+        .construit();
+      expect(dossierPremierJourActif.estActif()).to.equal(true);
     });
 
     it("retourne `true` si la date du jour est comprise entre la date d'homologation et la prochaine date d'homologation", () => {
       referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
-      const adaptateurHorloge = { maintenant: () => new Date(2023, 2, 1) };
-      const dossier = new Dossier({ id: '2', finalise: true, decision: { dateHomologation: '2023-01-01', dureeValidite: 'unAn' } }, referentiel, adaptateurHorloge);
-      expect(dossier.estActif()).to.equal(true);
+      const dossierActifDepuis10Jours = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstActif(10)
+        .construit();
+      expect(dossierActifDepuis10Jours.estActif()).to.equal(true);
     });
 
     it("retourne `true` si la date du jour est la date dernière date d'homologation", () => {
       referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
       const adaptateurHorloge = { maintenant: () => new Date(2024, 1, 1) };
-      const dossier = new Dossier({ id: '2', finalise: true, decision: { dateHomologation: '2023-01-01', dureeValidite: 'unAn' } }, referentiel, adaptateurHorloge);
-      expect(dossier.estActif()).to.equal(false);
+      const dossierDernierJourActif = unDossier(referentiel, adaptateurHorloge)
+        .quiEstComplet()
+        .avecDateHomologation(new Date('2023-01-01'))
+        .construit();
+      expect(dossierDernierJourActif.estActif()).to.equal(false);
     });
   });
 });

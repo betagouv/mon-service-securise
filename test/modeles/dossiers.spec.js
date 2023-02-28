@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 
+const { ConstructeurDossierFantaisie } = require('../constructeurs/constructeurDossier');
 const { ErreurDossiersInvalides } = require('../../src/erreurs');
 const Dossier = require('../../src/modeles/dossier');
 const Dossiers = require('../../src/modeles/dossiers');
@@ -39,21 +40,23 @@ describe('Les dossiers liés à un service', () => {
 
   describe('concernant le dossier actif', () => {
     const adaptateurHorloge = { maintenant: () => new Date(2023, 2, 1) };
+    const unDossierComplet = (id) => new ConstructeurDossierFantaisie(id, referentiel)
+      .quiEstComplet();
 
     beforeEach(() => (
       referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } })
     ));
 
-    ils('retournent le premier dossier actif trouvé', () => {
+    ils("retournent le premier dossier actif trouvé, sans se soucier des dates d'expiration", () => {
       const dossiers = new Dossiers({
         dossiers: [
-          { id: '1', finalise: true, decision: { dateHomologation: '2022-01-01', dureeValidite: 'unAn' } },
-          { id: '2', finalise: true, decision: { dateHomologation: '2023-01-01', dureeValidite: 'unAn' } },
+          unDossierComplet('actif-depuis-10-jours').quiEstActif(10).donnees,
+          unDossierComplet('actif-depuis-hier').quiEstActif(1).donnees,
         ],
       }, referentiel, adaptateurHorloge);
 
       const dossierActif = dossiers.dossierActif();
-      expect(dossierActif.id).to.equal('2');
+      expect(dossierActif.id).to.equal('actif-depuis-10-jours');
     });
 
     ils("retournent une valeur indéfinie si aucun dossier actif n'est trouvé", () => {
@@ -65,7 +68,7 @@ describe('Les dossiers liés à un service', () => {
 
     ils("considèrent que l'action de saisie est terminée s'il existe un dossier actif", () => {
       const dossiers = new Dossiers({
-        dossiers: [{ finalise: true, decision: { dateHomologation: '2023-01-01', dureeValidite: 'unAn' } }],
+        dossiers: [unDossierComplet().quiEstActif().donnees],
       }, referentiel, adaptateurHorloge);
 
       expect(dossiers.statutSaisie()).to.equal(Dossiers.COMPLETES);
@@ -73,7 +76,7 @@ describe('Les dossiers liés à un service', () => {
 
     ils("considèrent que l'action de saisie est à compléter s'il n'existe pas de dossier actif", () => {
       const dossiers = new Dossiers({
-        dossiers: [{ id: '1', finalise: true, decision: { dateHomologation: '2020-01-01', dureeValidite: 'unAn' } }],
+        dossiers: [unDossierComplet().quiEstExpire().donnees],
       }, referentiel, adaptateurHorloge);
 
       expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
