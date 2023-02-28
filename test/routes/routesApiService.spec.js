@@ -607,6 +607,59 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur /api/service/:id/dossier/autorite', () => {
+    beforeEach(() => {
+      const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
+      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheService(
+        { url: 'http://localhost:1234/api/service/456/dossier/autorite', method: 'put' },
+        done,
+      );
+    });
+
+    it('aseptise les paramètres reçus', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['nom', 'fonction'],
+        { url: 'http://localhost:1234/api/service/456/dossier/autorite', method: 'put' },
+        done
+      );
+    });
+
+    it("utilise le dépôt pour enregistrer l'autorité d'homologation", (done) => {
+      let depotAppele = false;
+
+      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+        depotAppele = true;
+        expect(idHomologation).to.equal('456');
+        expect(dossier.autorite.nom).to.equal('Jean Dupond');
+        expect(dossier.autorite.fonction).to.equal('RSSI');
+        return Promise.resolve();
+      };
+
+      axios.put('http://localhost:1234/api/service/456/dossier/autorite', { nom: 'Jean Dupond', fonction: 'RSSI' })
+        .then(() => expect(depotAppele).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("reste robuste lorsque l'homologation n'a pas de dossier courant", (done) => {
+      const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
+
+      axios.put('http://localhost:1234/api/service/456/dossier/autorite')
+        .catch(({ response }) => {
+          expect(response.status).to.be(404);
+          expect(response.data).to.equal('Homologation sans dossier courant');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
   describe('quand requête PUT sur `/api/service/:id/dossier/document/:idDocument', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
