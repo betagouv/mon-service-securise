@@ -607,7 +607,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête PUT sur `/api/service/:id/dossier/etape/decision/:idDocument', () => {
+  describe('quand requête PUT sur `/api/service/:id/dossier/document/:idDocument', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
@@ -617,7 +617,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/dossier/etape/decision/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/dossier/document/decision', method: 'put' },
         done,
       );
     });
@@ -635,7 +635,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return Promise.resolve();
       };
 
-      axios.put('http://localhost:1234/api/service/456/dossier/etape/decision/decision')
+      axios.put('http://localhost:1234/api/service/456/dossier/document/decision')
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
@@ -645,7 +645,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
 
-      axios.put('http://localhost:1234/api/service/456/dossier/etape/decision/decision')
+      axios.put('http://localhost:1234/api/service/456/dossier/document/decision')
         .catch(({ response }) => {
           expect(response.status).to.be(404);
           expect(response.data).to.equal('Homologation sans dossier courant');
@@ -657,7 +657,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("reste robuste en cas d'erreur inattendue", (done) => {
       testeur.depotDonnees().metsAJourDossierCourant = () => Promise.reject(new Error('Boom'));
 
-      axios.put('http://localhost:1234/api/service/456/dossier/etape/decision/decision')
+      axios.put('http://localhost:1234/api/service/456/dossier/document/decision')
         .then(() => done('Le serveur aurait dû lever une exception'))
         .catch((e) => {
           expect(e.response.status).to.be(500);
@@ -667,7 +667,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("reste robuste si l'id de document ne correspond pas à un document connu", (done) => {
-      axios.put('http://localhost:1234/api/service/456/dossier/etape/decision/mauvaisId')
+      axios.put('http://localhost:1234/api/service/456/dossier/document/mauvaisId')
         .catch(({ response }) => {
           expect(response.status).to.be(422);
           expect(response.data).to.equal('Identifiant de document invalide');
