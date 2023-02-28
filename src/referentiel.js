@@ -20,6 +20,7 @@ const donneesReferentielVide = {
   seuilsCriticites: [],
   statutsDeploiement: {},
   statutsMesures: {},
+  tranchesIndicesCybers: [],
 };
 
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
@@ -99,6 +100,13 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   );
 
   const indiceCyberNoteMax = () => donnees.indiceCyber?.noteMax || 10;
+
+  const trancheIndiceCyber = (indiceCyber) => donnees.tranchesIndicesCybers.find((tranche) => (
+    indiceCyber >= tranche.borneInferieure && (
+      tranche.borneSuperieureIncluse
+        ? indiceCyber <= tranche.borneSuperieure
+        : indiceCyber < tranche.borneSuperieure
+    ))) || {};
 
   const actionSuivante = (id) => {
     const position = positionActionSaisie(id);
@@ -268,6 +276,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     statutsDeploiement,
     statutDeploiementValide,
     statutsMesures,
+    trancheIndiceCyber,
     typeService,
     typesService,
   };
