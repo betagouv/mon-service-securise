@@ -53,8 +53,8 @@ class Decision extends Etape {
 
   periodeHomologationEstEnCours() {
     const maintenant = this.adaptateurHorloge.maintenant();
-    return new Date(this.dateHomologation) < maintenant
-      && maintenant < this.dateProchaineHomologation();
+    return new Date(this.dateHomologation) <= maintenant
+      && maintenant <= this.dateProchaineHomologation();
   }
 
   static valide({ dateHomologation, dureeValidite }, referentiel) {
