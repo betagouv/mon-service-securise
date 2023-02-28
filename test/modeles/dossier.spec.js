@@ -55,10 +55,22 @@ describe("Un dossier d'homologation", () => {
   });
 
   describe('sur vérification que ce dossier est complet', () => {
-    it("retourne le caractère de l'étape date", () => {
-      referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
-      const dossierComplet = new Dossier({ decision: { dateHomologation: '2022-11-27', dureeValidite: 'unAn' } }, referentiel);
-      expect(dossierComplet.estComplet()).to.be(true);
+    it('demande à chaque étape si elle est complète', () => {
+      const etapesInterrogees = [];
+      const bouchonneEtape = (etape) => ({
+        estComplete: () => {
+          etapesInterrogees.push(etape);
+          return true;
+        },
+      });
+
+      const dossier = new Dossier();
+      dossier.decision = { ...bouchonneEtape('decision') };
+      dossier.datesTelechargements = { ...bouchonneEtape('datesTelechargements') };
+
+      dossier.estComplet();
+
+      expect(etapesInterrogees).to.eql(['decision', 'datesTelechargements']);
     });
   });
 
