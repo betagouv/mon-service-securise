@@ -52,7 +52,7 @@ class Dossier extends InformationsHomologation {
   }
 
   estComplet() {
-    return this.decision.estComplete();
+    return this.decision.estComplete() && this.datesTelechargements.estComplete();
   }
 
   estActif() {
