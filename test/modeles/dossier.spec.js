@@ -92,11 +92,11 @@ describe("Un dossier d'homologation", () => {
 
     it("retourne `true` si la date du jour est la date d'homologation", () => {
       referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
-      const aujourdhui = new Date(2023, 1, 1);
+      const aujourdhui = new Date();
       const adaptateurHorloge = { maintenant: () => aujourdhui };
       const dossierPremierJourActif = unDossier(referentiel, adaptateurHorloge)
         .quiEstComplet()
-        .avecDateHomologation(new Date('2023-01-01'))
+        .avecDateHomologation(aujourdhui)
         .construit();
       expect(dossierPremierJourActif.estActif()).to.equal(true);
     });
@@ -112,12 +112,12 @@ describe("Un dossier d'homologation", () => {
 
     it("retourne `true` si la date du jour est la date dernière date d'homologation", () => {
       referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
-      const adaptateurHorloge = { maintenant: () => new Date(2024, 1, 1) };
+      const adaptateurHorloge = { maintenant: () => new Date('2024-01-01') };
       const dossierDernierJourActif = unDossier(referentiel, adaptateurHorloge)
         .quiEstComplet()
         .avecDateHomologation(new Date('2023-01-01'))
         .construit();
-      expect(dossierDernierJourActif.estActif()).to.equal(false);
+      expect(dossierDernierJourActif.estActif()).to.equal(true);
     });
   });
 });
