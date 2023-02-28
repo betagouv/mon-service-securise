@@ -209,6 +209,21 @@ const routesApiService = (
     }
   );
 
+  routes.put('/:id/dossier/autorite', middleware.trouveHomologation, middleware.aseptise('nom', 'fonction'), (requete, reponse, suite) => {
+    const { homologation } = requete;
+    const dossierCourant = homologation.dossierCourant();
+    if (!dossierCourant) {
+      reponse.status(404).send('Homologation sans dossier courant');
+      return;
+    }
+
+    const { body: { nom, fonction } } = requete;
+    dossierCourant.enregistreAutoriteHomologation(nom, fonction);
+    depotDonnees.metsAJourDossierCourant(homologation.id, dossierCourant)
+      .then(() => reponse.sendStatus(204))
+      .catch(suite);
+  });
+
   routes.put('/:id/dossier/document/:idDocument', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
     const dossierCourant = homologation.dossierCourant();
