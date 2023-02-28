@@ -80,6 +80,7 @@ const routesService = (
     reponse.render('service/dossiers', {
       service: homologation,
       premiereEtapeParcours: referentiel.premiereEtapeParcours(),
+      referentiel,
     });
   });
 

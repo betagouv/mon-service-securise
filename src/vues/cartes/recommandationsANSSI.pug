@@ -1,0 +1,22 @@
+include ../carteInformations
+
+block append styles
+  link(href = '/statique/assets/styles/cartes/recommandationsANSSI.css', rel = 'stylesheet')
+
+mixin recommandationsANSSI({ referentiel, noteObtenue })
+  mixin recommandation-detail
+      .recommandation-detail.
+        La recommandation de l'ANSSI sur l'homologation de sécurité d'un service numérique et sa durée de validité est indicative. 
+        La responsabilité de la décision d'homologation incombe à l'autorité d'homologation de chaque organisation.
+
+  +carteInformations({ titre: "Recommandation de l'ANSSI sur l’homologation", details: 'recommandation-detail' })
+    - const noteMaximale = referentiel.indiceCyberNoteMax()
+    - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
+
+    .contenu
+      p L'indice cyber est de :
+      .indice-total
+        span.note= formatIndiceCyber(noteObtenue)
+        span.note-max= `/${noteMaximale}`
+      p= referentiel.trancheIndiceCyber(noteObtenue).recommandationANSSI
+      p= referentiel.trancheIndiceCyber(noteObtenue).recommandationANSSIComplement
