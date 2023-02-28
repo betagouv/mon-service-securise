@@ -45,6 +45,12 @@ class Dossier extends InformationsHomologation {
     return this.decision.descriptionProchaineDateHomologation();
   }
 
+  enregistreAutoriteHomologation(nom, fonction) {
+    if (this.finalise) throw new ErreurDossierDejaFinalise();
+
+    this.autorite.enregistreAutoriteHomologation(nom, fonction);
+  }
+
   enregistreDateTelechargement(nomDocument, date) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
