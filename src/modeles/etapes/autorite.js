@@ -6,6 +6,11 @@ class Autorite extends Etape {
     this.renseigneProprietes({ nom, fonction });
   }
 
+  enregistreAutoriteHomologation(nom, fonction) {
+    this.nom = nom;
+    this.fonction = fonction;
+  }
+
   estComplete() {
     return !!(this.nom && this.fonction);
   }

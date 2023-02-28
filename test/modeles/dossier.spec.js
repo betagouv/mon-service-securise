@@ -37,6 +37,24 @@ describe("Un dossier d'homologation", () => {
     expect(dossier.finalise).to.be(false);
   });
 
+  describe("sur demande d'enregistrement de l'autorité d'homolgation", () => {
+    it('jette une erreur si le dossier est déjà finalisé', () => {
+      const dossierFinalise = new Dossier({ finalise: true });
+
+      expect(() => dossierFinalise.enregistreAutoriteHomologation('Jean Dupond', 'RSSI'))
+        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+    });
+
+    it("met à jour l'autorité d'homologation avec les données fournies", () => {
+      const dossier = new Dossier();
+
+      dossier.enregistreAutoriteHomologation('Jean Dupond', 'RSSI');
+
+      expect(dossier.autorite.nom).to.equal('Jean Dupond');
+      expect(dossier.autorite.fonction).to.equal('RSSI');
+    });
+  });
+
   describe("sur demande d'enregistrement d'une date de téléchargement", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
