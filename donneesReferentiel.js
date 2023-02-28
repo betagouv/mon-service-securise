@@ -9,6 +9,41 @@ module.exports = {
     noteMax: 5,
   },
 
+  tranchesIndicesCybers: [
+    {
+      borneInferieure: 0,
+      borneSuperieure: 2,
+      recommandationANSSI: `L'ANSSI recommande de poursuivre le renforcement de la
+      sécurité du service numérique et déconseille son homologation.`,
+      recommandationANSSIComplement: `Dans le cas où une décision d'homologation serait prise,
+      l'ANSSI recommande de limiter sa durée de validité à 6 mois maximum.`,
+    },
+    {
+      borneInferieure: 2,
+      borneSuperieure: 3,
+      recommandationANSSI: `L'ANSSI recommande de poursuivre le renforcement
+      de la sécurité de votre service.`,
+      recommandationANSSIComplement: `Dans le cas où une décision d'homologation serait prise,
+      l'ANSSI recommande de limiter sa durée de validité à 1 an.`,
+    },
+    {
+      borneInferieure: 3,
+      borneSuperieure: 4,
+      recommandationANSSI: `L'ANSSI recommande de poursuivre le renforcement
+      de la sécurité de votre service.`,
+      recommandationANSSIComplement: `Dans le cas où une décision d'homologation serait prise,
+      l'ANSSI recommande de limiter sa durée de validité à 2 ans.`,
+    },
+    {
+      borneInferieure: 4,
+      borneSuperieure: 5,
+      borneSuperieureIncluse: true,
+      recommandationANSSI: `Dans le cas où une décision d'homologation serait prise,
+      l'ANSSI considère que sa durée de validité peut aller jusqu'à 3 ans.`,
+      recommandationANSSIComplement: 'Une revue régulière des mesures de sécurité est recommandée.',
+    },
+  ],
+
   actionsSaisie: {
     descriptionService: {
       position: 0,

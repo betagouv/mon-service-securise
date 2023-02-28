@@ -603,4 +603,37 @@ describe('Le référentiel', () => {
     referentiel.recharge({ typesService: { uneClef: 'une valeur' } });
     expect(referentiel.typesService()).to.eql({ uneClef: 'une valeur' });
   });
+
+  describe("sur une demande de tranche de l'indice cyber", () => {
+    it("récupère la tranche dans laquelle l'indice est compris", () => {
+      const tranche = { borneInferieure: 0, borneSuperieure: 2 };
+      const referentiel = Referentiel.creeReferentiel({ tranchesIndicesCybers: [tranche] });
+
+      expect(referentiel.trancheIndiceCyber(1)).to.eql(tranche);
+      expect(referentiel.trancheIndiceCyber(0)).to.eql(tranche);
+
+      expect(referentiel.trancheIndiceCyber(2)).to.not.eql(tranche);
+    });
+
+    it("récupère la tranche dans laquelle l'indice est égale à la borne supérieure quand elle est inclue", () => {
+      const tranche = { borneInferieure: 0, borneSuperieure: 2, borneSuperieureIncluse: true };
+      const referentiel = Referentiel.creeReferentiel({ tranchesIndicesCybers: [tranche] });
+
+      expect(referentiel.trancheIndiceCyber(2)).to.eql(tranche);
+    });
+
+    it("reste robuste quand il n'y a pas d'indice", () => {
+      const tranche = { borneInferieure: 0, borneSuperieure: 2 };
+      const referentiel = Referentiel.creeReferentiel({ tranchesIndicesCybers: [tranche] });
+
+      expect(referentiel.trancheIndiceCyber()).to.eql({});
+    });
+
+    it("reste robuste quand l'indice n'est pas dans une tranche", () => {
+      const tranche = { borneInferieure: 0, borneSuperieure: 2 };
+      const referentiel = Referentiel.creeReferentiel({ tranchesIndicesCybers: [tranche] });
+
+      expect(referentiel.trancheIndiceCyber(6)).to.eql({});
+    });
+  });
 });
