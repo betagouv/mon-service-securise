@@ -5,16 +5,21 @@ let formulaireDejaSoumis = false;
 const action = (idEtape, idService) => {
   let resultat = Promise.resolve();
 
-  if (idEtape === 'date') {
+  if (idEtape === 'autorite') {
+    const donnees = {
+      nom: $('#nom-prenom').val(),
+      fonction: $('#fonction').val(),
+    };
+
+    resultat = axios.put(`/api/service/${idService}/dossier/autorite`, donnees);
+  } else if (idEtape === 'date') {
     const donnees = {
       dateHomologation: $('#date-homologation').val(),
       dureeValidite: $('input[name="dureeValidite"]:checked').val(),
     };
 
     resultat = axios.put(`/api/service/${idService}/dossier`, donnees);
-  }
-
-  if (idEtape === 'recapitulatif') {
+  } else if (idEtape === 'recapitulatif') {
     resultat = axios.put(`/api/service/${idService}/dossier`, { finalise: true });
   }
 
