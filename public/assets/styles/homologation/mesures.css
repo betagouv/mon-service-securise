@@ -118,12 +118,18 @@ form#mesures .specifiques input[type='radio'] {
 }
 
 .enregistrement {
-  bottom: 8em;
+  bottom: 3em;
   display: flex;
-  width: 100%;
+  width: calc(100% + 7em);
+  margin-left: -7em;
+  padding-right: 7em;
   border-top-width: 2px;
   border-top-style: solid;
   border-image: linear-gradient(-45deg, #5cc7ff33, #3788d733, #2c57aa33, #6b24dd33, #a826b333) 1;
+}
+
+.enregistrement .bouton {
+  margin: 1em 0 1em auto;
 }
 
 footer {
