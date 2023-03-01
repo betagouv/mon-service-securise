@@ -13,18 +13,17 @@ block formulaire
 
   .requis
     label Prénom Nom
-      input(id = 'nom-prenom' nom = 'nomPrénom', type = 'text', placeholder = 'ex: Louis Martin', required, value = dossierCourant.autorite.nom)
+      input(id = 'nom-prenom' nom = 'nomPrénom', type = 'text', placeholder = 'ex: Louis Martin', required, value != dossierCourant.autorite.nom)
       .message-erreur Le prénom nom est obligatoire. Veuillez renseigner des lettres. Les chiffres ne sont pas autorisés. 
 
   .requis
     label Fonction
-      input(id = 'fonction' nom = 'fonction', type = 'text', placeholder = 'ex : Maire et membre du conseil communautaire de l’Agglomération de Mansart', required, value = dossierCourant.autorite.fonction)
+      input(id = 'fonction' nom = 'fonction', type = 'text', placeholder = "ex : Maire et membre du conseil communautaire de l'Agglomération de Mansart", required, value != dossierCourant.autorite.fonction)
       .message-erreur La fonction est obligatoire. Veuillez la renseigner. 
-  //script(type = "module", src = "/statique/homologation/etapes/decision.js")
 
 block bouton-etape
   button.bouton#suivant(
-    data-id-homologation = service.id,
-    data-id-etape = idEtape,
-    data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
+      data-id-homologation = service.id,
+      data-id-etape = idEtape,
+      data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
     ) Suivant

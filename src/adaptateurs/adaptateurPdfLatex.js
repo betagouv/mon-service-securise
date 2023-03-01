@@ -1,4 +1,5 @@
 const fsPromises = require('fs/promises');
+const { decode } = require('html-entities');
 const pdflatex = require('node-pdflatex').default;
 const { PDFDocument } = require('pdf-lib');
 
@@ -44,15 +45,23 @@ const genereAnnexes = ({ donneesDescription, donneesMesures, donneesRisques }) =
     .then((pdf) => Buffer.from(pdf.buffer, 'binary'))
 );
 
+const ecritLeChamp = (formulaire, idChamp, contenu) => {
+  const champ = formulaire.getTextField(idChamp);
+  if (champ !== undefined && contenu !== undefined) {
+    champ.setText(decode(contenu));
+    champ.enableReadOnly();
+  }
+};
+
 const genereDossierDecision = (donnees) => fsPromises
   .readFile('src/pdf/modeles/dossierDecision.pdf')
   .then((donneesFichier) => PDFDocument.load(donneesFichier))
   .then((pdfDocument) => {
     const formulaire = pdfDocument.getForm();
 
-    const champNomService = formulaire.getTextField('nom_du_service');
-    champNomService.setText(donnees.nomService);
-    champNomService.enableReadOnly();
+    ecritLeChamp(formulaire, 'nom_du_service', donnees.nomService);
+    ecritLeChamp(formulaire, 'autorite_prenom_nom', donnees.nomPrenomAutorite);
+    ecritLeChamp(formulaire, 'autorite_fonction', donnees.fonctionAutorite);
 
     return pdfDocument;
   })

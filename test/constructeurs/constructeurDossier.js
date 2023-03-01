@@ -23,6 +23,11 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  avecAutorite(nom, fonction) {
+    this.donnees.autorite = { nom, fonction };
+    return this;
+  }
+
   quiEstComplet() {
     this.donnees.finalise = true;
     this.donnees.decision = { dateHomologation: '2023-01-01', dureeValidite: 'unAn' };
