@@ -111,3 +111,26 @@ form#mesures .specifiques input[type='radio'] {
 #mesures-specifiques {
   margin-top: 2em;
 }
+
+.enregistrement, footer {
+  position: sticky;
+  background-color: #fff;
+}
+
+.enregistrement {
+  bottom: 8em;
+  display: flex;
+  width: 100%;
+  border-top-width: 2px;
+  border-top-style: solid;
+  border-image: linear-gradient(-45deg, #5cc7ff33, #3788d733, #2c57aa33, #6b24dd33, #a826b333) 1;
+}
+
+footer {
+  bottom: 0;
+  border-top: solid 2px var(--systeme-design-etat-bleu);
+}
+
+main {
+  border-bottom: 0;
+}

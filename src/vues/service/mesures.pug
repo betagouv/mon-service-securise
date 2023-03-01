@@ -52,8 +52,8 @@ block formulaire
                   .fermeture-modale
                   h1= donnees.description
                   p!= donnees.descriptionLongue
-
-    button.bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
+    .enregistrement
+      button.bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donnees-mesures-generales', type = 'application/json').
     !{JSON.stringify(service.mesures.toJSON().mesuresGenerales || [])}
