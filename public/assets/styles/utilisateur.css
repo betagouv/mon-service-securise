@@ -26,3 +26,9 @@ section:first-of-type {
 .affichage-simple {
   margin-bottom: 2em;
 }
+
+label .information {
+  margin-top: 0.2em;
+  font-size: 0.9em;
+  font-weight: normal;
+}
