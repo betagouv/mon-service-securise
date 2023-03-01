@@ -96,8 +96,8 @@ describe("Un dossier d'homologation", () => {
   });
 
   describe('sur demande du caractère actif du dossier', () => {
-    it("retourne `false` si le dossier n'est pas complet", () => {
-      const dossier = unDossier().sansDecision().construit();
+    it("retourne `false` si le dossier n'est pas finalise", () => {
+      const dossier = unDossier(referentiel).quiEstActif().construit();
       expect(dossier.estActif()).to.equal(false);
     });
 
