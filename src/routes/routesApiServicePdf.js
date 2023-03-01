@@ -19,7 +19,11 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
 
   routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
-    const donnees = { nomService: homologation.nomService() };
+    const donnees = {
+      nomService: homologation.nomService(),
+      nomPrenomAutorite: homologation.dossierCourant().autorite.nom,
+      fonctionAutorite: homologation.dossierCourant().autorite.fonction,
+    };
 
     adaptateurPdf.genereDossierDecision(donnees)
       .then((pdf) => {

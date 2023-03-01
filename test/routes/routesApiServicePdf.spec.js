@@ -2,6 +2,9 @@ const expect = require('expect.js');
 const axios = require('axios');
 
 const testeurMSS = require('./testeurMSS');
+const { unDossier } = require('../constructeurs/constructeurDossier');
+const Homologation = require('../../src/modeles/homologation');
+const Referentiel = require('../../src/referentiel');
 
 describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
   const testeur = testeurMSS();
@@ -48,8 +51,18 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
   });
 
   describe('quand requête GET sur `/api/service/:id/pdf/dossierDecision.pdf`', () => {
+    const referentiel = Referentiel
+      .creeReferentiel({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
+
     beforeEach(() => {
       testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('Pdf decision');
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: new Homologation({
+          id: '456',
+          descriptionService: { nomService: 'un service' },
+          dossiers: [unDossier(referentiel).quiEstActif().avecAutorite('Jean Dupond', 'RSSI').donnees],
+        }, referentiel),
+      });
     });
 
     it('recherche le service correspondant', (done) => {
@@ -68,6 +81,8 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.adaptateurPdf().genereDossierDecision = (donnees) => {
         adaptateurPdfAppele = true;
         expect(donnees.nomService).to.equal('un service');
+        expect(donnees.nomPrenomAutorite).to.equal('Jean Dupond');
+        expect(donnees.fonctionAutorite).to.equal('RSSI');
         return Promise.resolve('Pdf dossier décision');
       };
 
