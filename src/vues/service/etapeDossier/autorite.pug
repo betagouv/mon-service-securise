@@ -1,0 +1,30 @@
+extends ../formulaireEtapier
+
+block formulaire
+  - const dossierCourant = service.dossierCourant()
+
+  section
+    p.
+      Complétez les informations sur la personne physique au sein de votre entité 
+      qui sera chargée de prendre la décision d'homologation de sécurité 
+      (ex: maire, directeur général, etc). #[a.nouvel-onglet(href="https://aide.monservicesecurise.beta.gouv.fr/fr/article/qui-est-responsable-de-la-decision-dhomologation-de-securite-igjzha/") En savoir plus]
+
+  .mention champ obligatoire
+
+  .requis
+    label Prénom Nom
+      input(id = 'nom-prenom' nom = 'nomPrénom', type = 'text', placeholder = 'ex: Louis Martin', required, value = dossierCourant.autorite.nom)
+      .message-erreur Le prénom nom est obligatoire. Veuillez renseigner des lettres. Les chiffres ne sont pas autorisés. 
+
+  .requis
+    label Fonction
+      input(id = 'fonction' nom = 'fonction', type = 'text', placeholder = 'ex : Maire et membre du conseil communautaire de l’Agglomération de Mansart', required, value = dossierCourant.autorite.fonction)
+      .message-erreur La fonction est obligatoire. Veuillez la renseigner. 
+  //script(type = "module", src = "/statique/homologation/etapes/decision.js")
+
+block bouton-etape
+  button.bouton#suivant(
+    data-id-homologation = service.id,
+    data-id-etape = idEtape,
+    data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
+    ) Suivant

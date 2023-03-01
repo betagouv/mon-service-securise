@@ -83,13 +83,15 @@ describe("Un dossier d'homologation", () => {
         },
       });
 
+      const etapes = ['decision', 'datesTelechargements', 'autorite'];
       const dossier = new Dossier();
-      dossier.decision = { ...bouchonneEtape('decision') };
-      dossier.datesTelechargements = { ...bouchonneEtape('datesTelechargements') };
+      etapes.forEach((etape) => {
+        dossier[etape] = { ...bouchonneEtape(etape) };
+      });
 
       dossier.estComplet();
 
-      expect(etapesInterrogees).to.eql(['decision', 'datesTelechargements']);
+      expect(etapesInterrogees).to.eql(etapes);
     });
   });
 
