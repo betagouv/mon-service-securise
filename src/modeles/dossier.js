@@ -64,8 +64,7 @@ class Dossier extends InformationsHomologation {
   }
 
   estActif() {
-    if (!this.estComplet()) return false;
-    return this.decision.periodeHomologationEstEnCours();
+    return this.finalise && this.decision.periodeHomologationEstEnCours();
   }
 
   toJSON() {
