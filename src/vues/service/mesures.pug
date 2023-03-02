@@ -53,7 +53,7 @@ block formulaire
                   h1= donnees.description
                   p!= donnees.descriptionLongue
     .enregistrement
-      button.bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
+      button.bouton(idHomologation = service.id) Enregistrer
 
   script(id = 'donnees-mesures-generales', type = 'application/json').
     !{JSON.stringify(service.mesures.toJSON().mesuresGenerales || [])}
