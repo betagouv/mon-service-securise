@@ -44,7 +44,10 @@ describe('Les dossiers liés à un service', () => {
       .quiEstComplet();
 
     beforeEach(() => (
-      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } })
+      referentiel.recharge({
+        echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
+        statutAvisDossierHomologation: { favorable: {} },
+      })
     ));
 
     ils("retournent le premier dossier actif trouvé, sans se soucier des dates d'expiration", () => {

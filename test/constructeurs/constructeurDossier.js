@@ -23,6 +23,11 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  avecDateTelechargement(idDocument, date) {
+    this.donnees.datesTelechargements[idDocument] = date.toISOString();
+    return this;
+  }
+
   avecAutorite(nom, fonction) {
     this.donnees.autorite = { nom, fonction };
     return this;
@@ -30,6 +35,7 @@ class ConstructeurDossierFantaisie {
 
   quiEstComplet() {
     this.donnees.finalise = true;
+    this.donnees.avis = [{ prenomNom: 'Jean Dupond', dureeValidite: 'unAn', statut: 'favorable' }];
     this.donnees.decision = { dateHomologation: '2023-01-01', dureeValidite: 'unAn' };
     this.donnees.datesTelechargements = this.referentiel
       .tousDocumentsHomologation()
