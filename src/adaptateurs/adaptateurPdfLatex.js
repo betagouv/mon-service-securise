@@ -45,7 +45,7 @@ const genereAnnexes = ({ donneesDescription, donneesMesures, donneesRisques }) =
     .then((pdf) => Buffer.from(pdf.buffer, 'binary'))
 );
 
-const ecritLeChamp = (formulaire, idChamp, contenu) => {
+const ecrisLeChamp = (formulaire, idChamp, contenu) => {
   const champ = formulaire.getTextField(idChamp);
   if (champ !== undefined && contenu !== undefined) {
     champ.setText(decode(contenu));
@@ -59,9 +59,9 @@ const genereDossierDecision = (donnees) => fsPromises
   .then((pdfDocument) => {
     const formulaire = pdfDocument.getForm();
 
-    ecritLeChamp(formulaire, 'nom_du_service', donnees.nomService);
-    ecritLeChamp(formulaire, 'autorite_prenom_nom', donnees.nomPrenomAutorite);
-    ecritLeChamp(formulaire, 'autorite_fonction', donnees.fonctionAutorite);
+    ecrisLeChamp(formulaire, 'nom_du_service', donnees.nomService);
+    ecrisLeChamp(formulaire, 'autorite_prenom_nom', donnees.nomPrenomAutorite);
+    ecrisLeChamp(formulaire, 'autorite_fonction', donnees.fonctionAutorite);
 
     return pdfDocument;
   })
