@@ -115,6 +115,11 @@ form .numero-etape {
   color: var(--texte-moyen-fonce);
 }
 
+section.autorite {
+  padding: 1em 0 0 0;
+  border: 0;
+}
+
 .consignes {
   padding: 1em 0 1em 1em;
 }
