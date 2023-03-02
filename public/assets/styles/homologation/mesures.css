@@ -120,6 +120,8 @@ form#mesures .specifiques input[type='radio'] {
 .enregistrement {
   bottom: 3em;
   display: flex;
+  justify-content: flex-end;
+  column-gap: 1.7em;
   width: calc(100% + 7em);
   margin-left: -7em;
   padding: 1.4em 7em 1.4em 0;
@@ -128,10 +130,26 @@ form#mesures .specifiques input[type='radio'] {
   border-image: linear-gradient(-45deg, #5cc7ff33, #3788d733, #2c57aa33, #6b24dd33, #a826b333) 1;
 }
 
-.enregistrement button {
-  margin: 0 0 0 auto;
+.enregistrement .bouton {
+  margin: 0;
   padding: 0.7em 1.2em;
 }
+
+.enregistrement .nouvel-item {
+  display: flex;
+  align-items: center;
+  padding-left: 0.8em;
+}
+
+.enregistrement .nouvel-item::before {
+  content: '';
+  display: block;
+  width: 1.4em;
+  height: 1.4em;
+  margin-right: 0.4em;
+  background: url(../../images/icone_plus_pastille_bleue.svg) center/contain;
+}
+
 
 footer {
   bottom: 0;

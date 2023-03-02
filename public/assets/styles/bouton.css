@@ -34,3 +34,9 @@ button {
   background-color: var(--bleu-anssi);
   cursor: wait;
 }
+
+.bouton.bouton-secondaire {
+  color: var(--bleu-mise-en-avant);
+  border-color: var(--bleu-mise-en-avant);
+  background-color: #fff;
+}
