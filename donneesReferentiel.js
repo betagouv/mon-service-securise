@@ -62,6 +62,12 @@ module.exports = {
     },
   },
 
+  statutAvisDossierHomologation: {
+    favorable: { description: 'Favorable' },
+    favorableAvecReserve: { description: 'Favorable avec réserve' },
+    defavorable: { description: 'Défavorable' },
+  },
+
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
 
   typesService: {

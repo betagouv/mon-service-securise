@@ -29,6 +29,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const actionsSaisie = () => donnees.actionsSaisie || {};
   const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
   const actionSaisie = (id) => actionsSaisie()[id] || {};
+  const statutAvisDossierHomologation = () => donnees.statutAvisDossierHomologation || {};
   const positionActionSaisie = (id) => actionSaisie(id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
@@ -56,6 +57,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     .filter((id) => id !== undefined);
   const etapesParcoursHomologation = () => donnees.etapesParcoursHomologation || [];
   const identifiantsEcheancesRenouvellement = () => Object.keys(echeancesRenouvellement());
+  const estIdentifiantEcheanceRenouvellementConnu = (idEcheance) => (
+    identifiantsEcheancesRenouvellement().includes(idEcheance)
+  );
+  const identifiantsStatutAvisDossierHomologation = () => Object
+    .keys(statutAvisDossierHomologation());
+  const estIdentifiantStatutAvisDossierHomologationConnu = (idStatut) => (
+    identifiantsStatutAvisDossierHomologation().includes(idStatut)
+  );
   const fonctionnalites = () => donnees.fonctionnalites;
   const descriptionFonctionnalite = (id) => fonctionnalites()[id]?.description;
   const descriptionsFonctionnalites = (ids) => ids
@@ -239,6 +248,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donneesCaracterePersonnel,
     echeancesRenouvellement,
     estDocumentHomologation,
+    estIdentifiantEcheanceRenouvellementConnu,
+    estIdentifiantStatutAvisDossierHomologationConnu,
     tousDocumentsHomologation,
     urlDocumentHomologation,
     etapeExiste,
@@ -246,6 +257,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     fonctionnalites,
     identifiantsActionsSaisie,
     identifiantsCategoriesMesures,
+    identifiantsStatutAvisDossierHomologation,
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
@@ -273,6 +285,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     seuilsCriticites,
     descriptionStatutDeploiement,
     sousTitreActionSaisie,
+    statutAvisDossierHomologation,
     statutsDeploiement,
     statutDeploiementValide,
     statutsMesures,
