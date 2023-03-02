@@ -11,6 +11,7 @@ describe("Un dossier d'homologation", () => {
   beforeEach(() => referentiel.recharge({
     echeancesRenouvellement: { unAn: {} },
     documentsHomologation: { decision: {} },
+    statutAvisDossierHomologation: { favorable: {} },
   }));
 
   it('sait se convertir en JSON', () => {
@@ -19,6 +20,7 @@ describe("Un dossier d'homologation", () => {
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
       datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
+      avis: [{ prenomNom: 'Jean Dupond', dureeValidite: 'unAn', statut: 'favorable' }],
       finalise: true,
     },
     referentiel);
@@ -28,6 +30,7 @@ describe("Un dossier d'homologation", () => {
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
       datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
+      avis: [{ prenomNom: 'Jean Dupond', dureeValidite: 'unAn', statut: 'favorable' }],
       finalise: true,
     });
   });
@@ -96,13 +99,19 @@ describe("Un dossier d'homologation", () => {
   });
 
   describe('sur demande du caractère actif du dossier', () => {
+    beforeEach(() => {
+      referentiel.recharge({
+        echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
+        statutAvisDossierHomologation: { favorable: {} },
+      });
+    });
+
     it("retourne `false` si le dossier n'est pas finalisé", () => {
       const dossier = unDossier(referentiel).quiEstActif().construit();
       expect(dossier.estActif()).to.equal(false);
     });
 
     it("retourne `false` si la date du jour n'est pas comprise entre la date d'homologation et la prochaine date d'homologation", () => {
-      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
       const dossier = unDossier(referentiel)
         .quiEstComplet()
         .quiEstExpire()
@@ -111,7 +120,6 @@ describe("Un dossier d'homologation", () => {
     });
 
     it("retourne `true` si la date du jour est la date d'homologation", () => {
-      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
       const aujourdhui = new Date();
       const adaptateurHorloge = { maintenant: () => aujourdhui };
       const dossierPremierJourActif = unDossier(referentiel, adaptateurHorloge)
@@ -122,7 +130,6 @@ describe("Un dossier d'homologation", () => {
     });
 
     it("retourne `true` si la date du jour est comprise entre la date d'homologation et la prochaine date d'homologation", () => {
-      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
       const dossierActifDepuis10Jours = unDossier(referentiel)
         .quiEstComplet()
         .quiEstActif(10)
@@ -131,7 +138,6 @@ describe("Un dossier d'homologation", () => {
     });
 
     it("retourne `true` si la date du jour est la date dernière date d'homologation", () => {
-      referentiel.recharge({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
       const adaptateurHorloge = { maintenant: () => new Date('2024-01-01') };
       const dossierDernierJourActif = unDossier(referentiel, adaptateurHorloge)
         .quiEstComplet()

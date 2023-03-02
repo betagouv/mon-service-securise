@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 
 const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
+const { unDossier } = require('../constructeurs/constructeurDossier');
 
 const Referentiel = require('../../src/referentiel');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
@@ -448,8 +449,10 @@ describe('Une homologation', () => {
         reglesPersonnalisation: { mesuresBase: ['uneMesure'] },
         risques: { unRisque: {} },
         statutsDeploiement: { unStatutDeploiement: {} },
+        statutAvisDossierHomologation: { favorable: {} },
       });
 
+      const aujourdhui = new Date();
       const homologation = new Homologation({
         id: 'id-homologation',
         avisExpertCyber: { avis: 'defavorable' },
@@ -457,12 +460,11 @@ describe('Une homologation', () => {
           .avecNomService('nom-service')
           .construis()
           .toJSON(),
-        dossiers: [{
-          id: '999',
-          autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
-          decision: { dateHomologation: '2023-02-16', dureeValidite: 'unAn' },
-          datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
-        }],
+        dossiers: [{ ...unDossier(referentiel)
+          .quiEstComplet()
+          .avecDateHomologation(aujourdhui)
+          .avecDateTelechargement('decision', aujourdhui)
+          .donnees }],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
         risquesGeneraux: [{ id: 'unRisque' }],
@@ -493,11 +495,12 @@ describe('Une homologation', () => {
           pointsAcces: [],
         },
         dossiers: [{
-          id: '999',
-          autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
-          decision: { dateHomologation: '2023-02-16', dureeValidite: 'unAn' },
-          datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
-          finalise: false,
+          id: '1',
+          avis: [{ prenomNom: 'Jean Dupond', dureeValidite: 'unAn', statut: 'favorable' }],
+          autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
+          decision: { dateHomologation: aujourdhui.toISOString(), dureeValidite: 'unAn' },
+          datesTelechargements: { decision: aujourdhui.toISOString() },
+          finalise: true,
         }],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
