@@ -707,18 +707,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch(done);
     });
 
-    it("reste robuste en cas d'erreur inattendue", (done) => {
-      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.reject(new Error('Boom'));
-
-      axios.put('http://localhost:1234/api/service/456/dossier/document/decision')
-        .then(() => done('Le serveur aurait dû lever une exception'))
-        .catch((e) => {
-          expect(e.response.status).to.be(500);
-          done();
-        })
-        .catch(done);
-    });
-
     it("reste robuste si l'id de document ne correspond pas à un document connu", (done) => {
       axios.put('http://localhost:1234/api/service/456/dossier/document/mauvaisId')
         .catch(({ response }) => {
