@@ -34,7 +34,6 @@ block formulaire
 
       .mention champ obligatoire
       .specifiques
-        a.nouvel-item Ajouter une mesure spécifique
         #mesures-specifiques
 
       .mesures
@@ -53,6 +52,7 @@ block formulaire
                   h1= donnees.description
                   p!= donnees.descriptionLongue
     .enregistrement
+      button.bouton.bouton-secondaire.nouvel-item(type = 'button') Ajouter une mesure spécifique
       button.bouton(idHomologation = service.id) Enregistrer
 
   script(id = 'donnees-mesures-generales', type = 'application/json').
