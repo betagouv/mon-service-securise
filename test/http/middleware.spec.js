@@ -371,6 +371,16 @@ describe('Le middleware MSS', () => {
         done();
       });
     });
+
+    it("renvoie une 400 si l'élément aseptisé n'est pas un tableau", (done) => {
+      const middleware = Middleware();
+
+      prepareVerificationReponse(reponse, 400, '[proprieteNonTableau] devrait être un tableau', done);
+      const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
+
+      requete.body.proprieteNonTableau = {};
+      middleware.aseptiseListe('proprieteNonTableau', [])(requete, reponse, suite);
+    });
   });
 
   describe("sur une demande d'aseptisation de plusieurs listes", () => {

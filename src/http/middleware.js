@@ -106,6 +106,15 @@ const middleware = (configuration = {}) => {
 
   const aseptiseListes = (listes) => (
     (requete, reponse, suite) => {
+      const nonTableau = listes
+        .filter(({ nom }) => !Array.isArray(requete.body[nom]))
+        .map((p) => p.nom);
+
+      if (nonTableau.length > 0) {
+        reponse.status(400).send(`[${nonTableau.join(', ')}] devrait être un tableau`);
+        return () => {};
+      }
+
       listes.forEach(({ nom, proprietes }) => {
         requete.body[nom] &&= requete.body[nom].filter(
           (element) => proprietes.some((propriete) => element && element[propriete])
