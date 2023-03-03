@@ -8,6 +8,7 @@ const {
 } = require('../erreurs');
 const ActeursHomologation = require('../modeles/acteursHomologation');
 const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
+const Avis = require('../modeles/avis');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
@@ -244,6 +245,29 @@ const routesApiService = (
       .then(() => reponse.sendStatus(204))
       .catch(suite);
   });
+
+  routes.put('/:id/dossier/avis',
+    middleware.trouveHomologation,
+    middleware.aseptiseListes([{ nom: 'avis', proprietes: Avis.proprietes() }]),
+    (requete, reponse, suite) => {
+      const { body: { avis } } = requete;
+      if (!avis) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      const { homologation } = requete;
+      const dossierCourant = homologation.dossierCourant();
+      if (!dossierCourant) {
+        reponse.status(404).send('Homologation sans dossier courant');
+        return;
+      }
+
+      dossierCourant.enregistreAvis(avis);
+      depotDonnees.metsAJourDossierCourant(homologation.id, dossierCourant)
+        .then(() => reponse.sendStatus(204))
+        .catch(suite);
+    });
 
   routes.delete('/:id/autorisationContributeur',
     middleware.verificationAcceptationCGU,

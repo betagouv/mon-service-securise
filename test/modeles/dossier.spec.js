@@ -76,6 +76,24 @@ describe("Un dossier d'homologation", () => {
     });
   });
 
+  describe("sur demande d'enregistrement des avis", () => {
+    it('jette une erreur si le dossier est déjà finalisé', () => {
+      const dossierFinalise = new Dossier({ finalise: true });
+
+      expect(() => dossierFinalise.enregistreAvis([]))
+        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+    });
+
+    it('remplace les avis par ceux fournis', () => {
+      const dossier = new Dossier({}, referentiel);
+      const avisComplet = { prenomNom: 'Jean Dupond', statut: 'favorable', dureeValidite: 'unAn' };
+
+      dossier.enregistreAvis([avisComplet]);
+
+      expect(dossier.avis.avis[0].toJSON()).to.eql(avisComplet);
+    });
+  });
+
   describe('sur vérification que ce dossier est complet', () => {
     it('demande à chaque étape si elle est complète', () => {
       const etapesInterrogees = [];
