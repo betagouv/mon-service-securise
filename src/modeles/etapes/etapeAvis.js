@@ -5,9 +5,13 @@ const { creeReferentielVide } = require('../../referentiel');
 
 class EtapeAvis extends Etape {
   constructor({ avis = [] } = {}, referentiel = creeReferentielVide()) {
-    super();
+    super({}, referentiel);
 
-    this.avis = avis.map((a) => new Avis(a, referentiel));
+    this.enregistreAvis(avis);
+  }
+
+  enregistreAvis(avis) {
+    this.avis = avis.map((a) => new Avis(a, this.referentiel));
   }
 
   estComplete() {

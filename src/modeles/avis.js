@@ -5,12 +5,24 @@ const Referentiel = require('../referentiel');
 class Avis extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
-      proprietesAtomiquesRequises: ['prenomNom', 'statut', 'dureeValidite'],
-      proprietesAtomiquesFacultatives: ['commentaires'],
+      proprietesAtomiquesRequises: Avis.proprietesAtomiquesRequises(),
+      proprietesAtomiquesFacultatives: Avis.proprietesAtomiquesFacultatives(),
     });
 
     Avis.valide(donnees, referentiel);
     this.renseigneProprietes(donnees);
+  }
+
+  static proprietesAtomiquesRequises() {
+    return ['prenomNom', 'statut', 'dureeValidite'];
+  }
+
+  static proprietesAtomiquesFacultatives() {
+    return ['commentaires'];
+  }
+
+  static proprietes() {
+    return [...Avis.proprietesAtomiquesRequises(), ...Avis.proprietesAtomiquesFacultatives()];
   }
 
   static valide({ dureeValidite, statut }, referentiel) {

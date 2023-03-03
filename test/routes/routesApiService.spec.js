@@ -718,6 +718,75 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur /api/service/:id/dossier/avis', () => {
+    beforeEach(() => {
+      const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] }, testeur.referentiel());
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
+      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.referentiel().recharge({
+        echeancesRenouvellement: { unAn: {} },
+        statutAvisDossierHomologation: { favorable: {} },
+      });
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheService(
+        { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' },
+        done,
+      );
+    });
+
+    it('aseptise la liste des avis', (done) => {
+      axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [] })
+        .then(() => {
+          testeur.middleware().verifieAseptisationListe('avis', ['prenomNom', 'statut', 'dureeValidite', 'commentaires']);
+          done();
+        })
+        .catch(done);
+    });
+
+    it("renvoie une 400 si aucun avis n'est envoyé", (done) => {
+      axios.put('http://localhost:1234/api/service/456/dossier/avis', {})
+        .then(() => {
+          done('Une erreur aurait du être renvoyée');
+        })
+        .catch((e) => {
+          expect(e.response.status).to.be(400);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('utilise le dépôt pour enregistrer les avis', (done) => {
+      let depotAppele = false;
+      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+        depotAppele = true;
+        expect(idHomologation).to.equal('456');
+        expect(dossier.avis.avis.length).to.equal(1);
+        expect(dossier.avis.avis[0].donneesSerialisees()).to.eql({ prenomNom: 'Jean Dupond', statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' });
+        return Promise.resolve();
+      };
+
+      axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [{ prenomNom: 'Jean Dupond', statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' }] })
+        .then(() => expect(depotAppele).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("reste robuste lorsque l'homologation n'a pas de dossier courant", (done) => {
+      const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
+
+      axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [] })
+        .catch(({ response }) => {
+          expect(response.status).to.be(404);
+          expect(response.data).to.equal('Homologation sans dossier courant');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
   describe('quand requête DELETE sur `/api/service/:id/autorisationContributeur`', () => {
     beforeEach(() => {
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(new AutorisationCreateur());
