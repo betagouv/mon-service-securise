@@ -163,6 +163,7 @@ describe('Le middleware MSS', () => {
       depotDonnees.homologation = (id) => {
         expect(id).to.equal('123');
         done();
+        return Promise.resolve();
       };
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
