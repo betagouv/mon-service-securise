@@ -3,8 +3,8 @@ const { decode } = require('html-entities');
 const pdflatex = require('node-pdflatex').default;
 const { PDFDocument } = require('pdf-lib');
 
-const fabriquantGabarit = require('../latex/fabriquantGabarit');
-const { miseEnFormeLatex } = require('../latex/miseEnFormeDonnees');
+const fabriquantGabarit = require('../pdf/latex/fabriquantGabarit');
+const { miseEnFormeLatex } = require('../pdf/latex/miseEnFormeDonnees');
 
 const generationPdfLatex = (cheminFichierTex, donnees = {}) => fsPromises
   .readFile(cheminFichierTex)

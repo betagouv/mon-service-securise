@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 
-const { miseEnForme, miseEnFormeLatex } = require('../../src/latex/miseEnFormeDonnees');
+const { miseEnForme, miseEnFormeLatex } = require('../../../src/pdf/latex/miseEnFormeDonnees');
 
 describe('La mise en forme de données', () => {
   describe('pour le LaTeX', () => {

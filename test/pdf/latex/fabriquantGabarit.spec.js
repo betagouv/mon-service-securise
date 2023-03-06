@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 
-const { confectionne } = require('../../src/latex/fabriquantGabarit');
+const { confectionne } = require('../../../src/pdf/latex/fabriquantGabarit');
 
 describe('Le fabriquant avec gabarit', () => {
   it("confectionne à partir d'un gabarit et de données", () => {
