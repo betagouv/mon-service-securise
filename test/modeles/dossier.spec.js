@@ -20,7 +20,7 @@ describe("Un dossier d'homologation", () => {
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
       datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
-      avis: [{ prenomNom: 'Jean Dupond', dureeValidite: 'unAn', statut: 'favorable' }],
+      avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
       finalise: true,
     },
     referentiel);
@@ -30,7 +30,7 @@ describe("Un dossier d'homologation", () => {
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
       datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
-      avis: [{ prenomNom: 'Jean Dupond', dureeValidite: 'unAn', statut: 'favorable' }],
+      avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
       finalise: true,
     });
   });
@@ -86,7 +86,7 @@ describe("Un dossier d'homologation", () => {
 
     it('remplace les avis par ceux fournis', () => {
       const dossier = new Dossier({}, referentiel);
-      const avisComplet = { prenomNom: 'Jean Dupond', statut: 'favorable', dureeValidite: 'unAn' };
+      const avisComplet = { collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn' };
 
       dossier.enregistreAvis([avisComplet]);
 

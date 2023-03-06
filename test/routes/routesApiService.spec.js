@@ -739,10 +739,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('aseptise la liste des avis', (done) => {
       axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [] })
         .then(() => {
-          testeur.middleware().verifieAseptisationListe('avis', ['prenomNom', 'statut', 'dureeValidite', 'commentaires']);
+          testeur.middleware().verifieAseptisationListe('avis', ['statut', 'dureeValidite', 'commentaires']);
           done();
         })
         .catch(done);
+    });
+
+    it('aseptise les collaborateurs mentionnés dans les avis', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['avis.*.collaborateurs.*'], { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' }, done
+      );
     });
 
     it("renvoie une 400 si aucun avis n'est envoyé", (done) => {
@@ -763,11 +769,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.avis.avis.length).to.equal(1);
-        expect(dossier.avis.avis[0].donneesSerialisees()).to.eql({ prenomNom: 'Jean Dupond', statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' });
+        expect(dossier.avis.avis[0].donneesSerialisees()).to.eql({ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' });
         return Promise.resolve();
       };
 
-      axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [{ prenomNom: 'Jean Dupond', statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' }] })
+      axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [{ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' }] })
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));

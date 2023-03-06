@@ -11,10 +11,23 @@ describe("Un avis sur un dossier d'homologation", () => {
     echeancesRenouvellement: { unAn: {} },
   });
 
-  it('est complet si tous les champs requis sont remplis', () => {
-    const avis = new Avis({ prenomNom: 'Jean Dupond', statut: 'favorable', dureeValidite: 'unAn' }, referentiel);
+  it('est complet si toutes les informations sont remplies', () => {
+    const avis = new Avis({ statut: 'favorable', dureeValidite: 'unAn', collaborateurs: ['Jean Dupond'] }, referentiel);
 
     expect(avis.statutSaisie()).to.be(InformationsHomologation.COMPLETES);
+  });
+
+  it("est incomplet si la liste des collaborateurs n'est pas remplie", () => {
+    const verifieAvecCollaborateurs = (collaborateurs) => {
+      const avis = new Avis({ statut: 'favorable', dureeValidite: 'unAn', collaborateurs }, referentiel);
+      expect(avis.statutSaisie()).to.be(InformationsHomologation.A_COMPLETER);
+    };
+
+    verifieAvecCollaborateurs([null]);
+    verifieAvecCollaborateurs(['']);
+    verifieAvecCollaborateurs([]);
+    verifieAvecCollaborateurs([undefined]);
+    verifieAvecCollaborateurs(undefined);
   });
 
   it('est invalide si la durée de validité est inconnue dans le référentiel', () => {

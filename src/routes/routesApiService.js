@@ -248,7 +248,8 @@ const routesApiService = (
 
   routes.put('/:id/dossier/avis',
     middleware.trouveHomologation,
-    middleware.aseptiseListes([{ nom: 'avis', proprietes: Avis.proprietes() }]),
+    middleware.aseptiseListes([{ nom: 'avis', proprietes: [...Avis.proprietesAtomiquesRequises(), ...Avis.proprietesAtomiquesFacultatives()] }]),
+    middleware.aseptise('avis.*.collaborateurs.*'),
     (requete, reponse, suite) => {
       const { body: { avis } } = requete;
       if (!avis) {
