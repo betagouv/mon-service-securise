@@ -7,6 +7,7 @@ class Avis extends InformationsHomologation {
     super({
       proprietesAtomiquesRequises: Avis.proprietesAtomiquesRequises(),
       proprietesAtomiquesFacultatives: Avis.proprietesAtomiquesFacultatives(),
+      proprietesListes: Avis.proprietesListes(),
     });
 
     Avis.valide(donnees, referentiel);
@@ -14,15 +15,15 @@ class Avis extends InformationsHomologation {
   }
 
   static proprietesAtomiquesRequises() {
-    return ['prenomNom', 'statut', 'dureeValidite'];
+    return ['statut', 'dureeValidite'];
   }
 
   static proprietesAtomiquesFacultatives() {
     return ['commentaires'];
   }
 
-  static proprietes() {
-    return [...Avis.proprietesAtomiquesRequises(), ...Avis.proprietesAtomiquesFacultatives()];
+  static proprietesListes() {
+    return ['collaborateurs'];
   }
 
   static valide({ dureeValidite, statut }, referentiel) {
@@ -31,6 +32,24 @@ class Avis extends InformationsHomologation {
     }
     if (!referentiel.estIdentifiantStatutAvisDossierHomologationConnu(statut)) {
       throw new ErreurAvisInvalide(`L'avis "${statut}" est invalide`);
+    }
+  }
+
+  statutSaisie() {
+    const statutSaisieProprietesAtomiques = super.statutSaisie();
+    const collaborateursSaisis = this.collaborateurs.length > 0
+      && this.collaborateurs.every((c) => !!c);
+    switch (statutSaisieProprietesAtomiques) {
+      case InformationsHomologation.COMPLETES:
+        return collaborateursSaisis
+          ? InformationsHomologation.COMPLETES
+          : InformationsHomologation.A_COMPLETER;
+      case InformationsHomologation.A_SAISIR:
+        return collaborateursSaisis
+          ? InformationsHomologation.A_COMPLETER
+          : InformationsHomologation.A_SAISIR;
+      default:
+        return InformationsHomologation.A_COMPLETER;
     }
   }
 }

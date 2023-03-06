@@ -12,13 +12,13 @@ describe('Une étape « Avis »', () => {
 
     const etape = new EtapeAvis({
       avis: [
-        { prenomNom: 'Jean Durand', statut: 'favorable', dureeValidite: 'unAn', commentaires: 'OK pour moi' },
+        { collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'OK pour moi' },
       ],
     }, referentiel);
 
     expect(etape.toJSON()).to.eql({
       avis: [
-        { prenomNom: 'Jean Durand', statut: 'favorable', dureeValidite: 'unAn', commentaires: 'OK pour moi' },
+        { collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'OK pour moi' },
       ],
     });
   });
@@ -52,7 +52,7 @@ describe('Une étape « Avis »', () => {
         statutAvisDossierHomologation: { favorable: { } },
       });
       const avecAvisSaisis = new EtapeAvis(
-        { avis: [{ prenomNom: 'Jean Durand', statut: 'favorable', dureeValidite: 'unAn' }] },
+        { avis: [{ collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn' }] },
         referentiel
       );
 
