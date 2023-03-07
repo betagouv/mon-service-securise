@@ -14,6 +14,7 @@ const creeServeur = (
   referentiel,
   moteurRegles,
   adaptateurMail,
+  adaptateurPdfHtml,
   adaptateurPdf,
   adaptateurHorloge,
   avecCookieSecurise = (process.env.NODE_ENV === 'production'),
@@ -122,7 +123,7 @@ const creeServeur = (
     reponse.render('espacePersonnel');
   });
 
-  app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf));
+  app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf, adaptateurPdfHtml));
 
   app.use('/bibliotheques', routesBibliotheques());
 

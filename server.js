@@ -10,6 +10,7 @@ const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPI()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
   : require('./src/adaptateurs/adaptateurMailSurConsole');
+const adaptateurPdfHtml = require('./src/adaptateurs/adaptateurPdfHtml');
 const adaptateurPdfLatex = require('./src/adaptateurs/adaptateurPdfLatex');
 
 const port = process.env.PORT || 3000;
@@ -30,6 +31,7 @@ const serveur = MSS.creeServeur(
   referentiel,
   moteurRegles,
   adaptateurMail,
+  adaptateurPdfHtml,
   adaptateurPdfLatex,
   adaptateurHorloge
 );
