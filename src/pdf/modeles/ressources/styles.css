@@ -7,10 +7,15 @@ body {
     break-inside: avoid;
 }
 
+.saut-page {
+    page-break-after: always;
+}
+
 fieldset {
     border: 2px solid #B5C1D2;
     border-radius: 10px;
     margin-bottom: 32px;
+    padding: 8px 16px;
 }
 
 fieldset legend {
@@ -23,15 +28,45 @@ fieldset legend {
 
 fieldset ul {
     list-style: none;
+    padding-left: 0;
+}
+
+fieldset ul li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    flex-wrap: 0;
 }
 
 fieldset ul li::before {
-    content: '\2022';
-    color: #0F7AC7;
-    font-size: 16px;
-    font-weight: bold;
+    content: '';
     display: inline-block;
-    width: 8px;
-    padding-right: 8px;
-    margin-left: -32px;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: var(--point-bleu);
+    transform: translateY(2px) scale(0.4);
+    flex-shrink: 0;
+}
+
+fieldset ul li.etoile::before {
+    background-image: var(--etoile-orange);
+    transform: scale(1);
+}
+
+.categorie {
+    text-transform: uppercase;
+    color: #08416A;
+    background: #E4EFFF;
+    border-radius: 4px;
+    display: inline-block;
+    font-weight: bold;
+    padding: 2px 8px;
+    margin-bottom: 0;
+}
+
+.mesure-modalite {
+    color: #667892;
 }
