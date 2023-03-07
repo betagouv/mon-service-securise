@@ -1,5 +1,7 @@
 const express = require('express');
 
+const { genereAnnexesAvisDossierDecision } = require('../adaptateurs/adaptateurPdf');
+
 const routesApiServicePdf = (middleware, adaptateurPdf) => {
   const routes = express.Router();
 
@@ -34,6 +36,13 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
       .catch(() => {
         reponse.sendStatus(424);
       });
+  });
+
+  routes.get('/:id/pdf/poc.pdf', (_requete, reponse) => {
+    genereAnnexesAvisDossierDecision().then((pdf) => {
+      reponse.contentType('application/pdf');
+      reponse.send(pdf);
+    });
   });
 
   return routes;
