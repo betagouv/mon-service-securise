@@ -20,7 +20,9 @@ const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
   routes.get('/:id/pdf/annexes', middleware.trouveHomologation, middleware.positionneHeadersAvecNonceEtFonts, (requete, reponse, suite) => {
     const { homologation, nonce } = requete;
     const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
-    adaptateurPdfHtml.genereAnnexes({ donneesDescription, nonce })
+    const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
+
+    adaptateurPdfHtml.genereAnnexes({ donneesDescription, donneesMesures, nonce })
       .then((html) => {
         reponse.contentType('text/html');
         reponse.send(html);

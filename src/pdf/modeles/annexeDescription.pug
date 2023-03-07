@@ -1,5 +1,3 @@
-extends annexes.pug
-
 mixin bloc-description(liste, legende)
   if liste.length
     fieldset.bloc-indivisible
@@ -8,7 +6,6 @@ mixin bloc-description(liste, legende)
         each item in liste
           li= item 
 
-block page
-  +bloc-description(donnees.fonctionnalites, 'Fonctionnalités offertes')
-  +bloc-description(donnees.donneesStockees, 'Données stockées')
-  +bloc-description([donnees.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')
++bloc-description(donneesDescription.fonctionnalites, 'Fonctionnalités offertes')
++bloc-description(donneesDescription.donneesStockees, 'Données stockées')
++bloc-description([donneesDescription.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')
