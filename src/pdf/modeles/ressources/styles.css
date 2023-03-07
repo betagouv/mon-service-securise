@@ -1,0 +1,37 @@
+body {
+    font-family: 'Marianne';
+    font-size: 12px;
+}
+
+.bloc-indivisible {
+    break-inside: avoid;
+}
+
+fieldset {
+    border: 2px solid #B5C1D2;
+    border-radius: 10px;
+    margin-bottom: 32px;
+}
+
+fieldset legend {
+    background: #EFEFEF;
+    color: #08416A;
+    font-weight: bold;
+    border-radius: 20px;
+    padding: 2px 12px;
+}
+
+fieldset ul {
+    list-style: none;
+}
+
+fieldset ul li::before {
+    content: '\2022';
+    color: #0F7AC7;
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-block;
+    width: 8px;
+    padding-right: 8px;
+    margin-left: -32px;
+}
