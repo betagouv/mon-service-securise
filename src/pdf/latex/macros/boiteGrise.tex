@@ -10,6 +10,13 @@
   \end{tcolorbox}
 }
 
+% Arguments : #1 le contenu de la boite
+\newcommand{\boitegrisesanstitre}[1]{
+  \begin{tcolorbox}[breakable, colback=white, colframe=lisere, boxrule=1px, bottom=20pt, top=20pt]
+    #1
+  \end{tcolorbox}
+}
+
 \newcommand{\boitegrisenormale}[2]{\boitegrise{20pt}{0pt}{#1}{#2}}
 \newcommand{\boitegriseespacee}[2]{\boitegrise{20pt}{10pt}{#1}{#2}}
 \newcommand{\boitegrisevide}[1]{\boitegrise{10pt}{20pt}{#1}}

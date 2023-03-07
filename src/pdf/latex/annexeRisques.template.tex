@@ -5,6 +5,8 @@
 \input{\vuesTex{fragments/couleurs}}
 \input{\vuesTex{macros/boiteGrise}}
 \input{\vuesTex{macros/entetePiedPage}}
+\input{\vuesTex{macros/representationcriticite}}
+\usepackage{array}
 
 \doublespacing
 
@@ -16,24 +18,32 @@
 \renewcommand{\headrulewidth}{0pt}
 
 \begin{document}
-  __~ donnees.niveauxGravite :niveau __
-    \boitegrisenormale{__= niveau.description __}{
-      \nopagebreak[4]\singlespacing\textcolor{gris}{__= niveau.descriptionLongue __}
+  \boitegrisesanstitre{
+    \singlespacing
+    __~ donnees.niveauxGravite :niveau:indexNiveaux __
       __? donnees.risquesParNiveauGravite[niveau.identifiant] && donnees.risquesParNiveauGravite[niveau.identifiant].length __
-        \begin{itemize}[leftmargin=1.5em]
+        __? indexNiveaux !== 0 __%
+          \noindent{\color{lisere} \rule{\linewidth}{1px}}
+          \vskip 5mm
+        __?__%
+        \nopagebreak[1]\begin{tabular}{p{1.7cm} p{0.85\linewidth}}
           __~ donnees.risquesParNiveauGravite[niveau.identifiant] :risque __%
-            \item[\textcolor{__= niveau.couleur __}{\textbullet}]
+            \representationcriticite__=String.fromCharCode(64 + niveau.position + 1)__{__= niveau.description __}{__= niveau.couleur __} 
+            & \textbf{__= risque.description __}
+            __? donnees.referentiel.definitionRisque(risque.id) __%
               \vskip 2mm
-              __= risque.description __
-              __? risque.commentaire __
-                \nopagebreak[4]\item[]
-                \parbox{\linewidth}{\textcolor{gris}{__= risque.commentaire __}}
-                \vskip 3mm
-              __?__%
+              __= donnees.referentiel.definitionRisque(risque.id) __%
+            __?__%
+            __? risque.commentaire __%
+              \newline
+              \vskip 1mm
+              \textcolor{gris}{\textbf{Commentaire :} __= risque.commentaire __}
+            __?__%
+            \vskip 1mm
+            \\[1cm]
           __~__%
-        \end{itemize}
-      __?__
-    }
-    \vskip 5mm
-  __~__
+        \end{tabular}
+      __?__%
+    __~__
+  }
 \end{document}

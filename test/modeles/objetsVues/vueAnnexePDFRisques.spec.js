@@ -30,20 +30,16 @@ describe("L'objet de vue des descriptions des risques", () => {
     risques: { unRisque: { description: 'Une description' } },
   };
 
+  const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
+
   const homologation = new Homologation({
     id: '123',
     idUtilisateur: '456',
     descriptionService: { nomService: 'Nom Service' },
     risquesGeneraux: [{ id: 'unRisque', niveauGravite: 'grave' }],
-  }, Referentiel.creeReferentiel(donneesReferentiel));
+  }, referentiel);
 
   describe('avec des informations de niveaux de gravité dans le référentiel', () => {
-    let referentiel;
-
-    beforeEach(() => {
-      referentiel = Referentiel.creeReferentiel(donneesReferentiel);
-    });
-
     it('utilise les informations du référentiel', () => {
       const vueAnnexePDFRisques = new VueAnnexePDFRisques(homologation, referentiel);
 
@@ -92,5 +88,14 @@ describe("L'objet de vue des descriptions des risques", () => {
     expect(donnees.risquesParNiveauGravite).to.have.key('grave');
     expect(donnees.risquesParNiveauGravite.grave.length).to.equal(1);
     expect(donnees.risquesParNiveauGravite.grave[0].description).to.equal('Une description');
+  });
+
+  it('ajoute le référentiel complet', () => {
+    const vueAnnexePDFRisques = new VueAnnexePDFRisques(homologation, referentiel);
+
+    const donnees = vueAnnexePDFRisques.donnees();
+
+    expect(donnees).to.have.key('referentiel');
+    expect(donnees.referentiel).to.eql(referentiel);
   });
 });

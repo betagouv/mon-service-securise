@@ -1,0 +1,17 @@
+% Dépendance à '../fragments/couleurs.tex
+
+% Arguments : #1 La description de la criticité, #2-#6 les couleurs des points
+\newcommand{\representationcriticite}[6]{
+  \textcolor{#2}{\LARGE{\textbullet}}
+  \textcolor{#3}{\LARGE{\textbullet}}
+  \textcolor{#4}{\LARGE{\textbullet}}
+  \textcolor{#5}{\LARGE{\textbullet}}
+  \textcolor{#6}{\LARGE{\textbullet}}
+  \newline #1
+}
+
+\newcommand{\representationcriticiteA}[2]{\representationcriticite{#1}{#2}{lisere}{lisere}{lisere}{lisere}}
+\newcommand{\representationcriticiteB}[2]{\representationcriticite{#1}{#2}{#2}{lisere}{lisere}{lisere}}
+\newcommand{\representationcriticiteC}[2]{\representationcriticite{#1}{#2}{#2}{#2}{lisere}{lisere}}
+\newcommand{\representationcriticiteD}[2]{\representationcriticite{#1}{#2}{#2}{#2}{#2}{lisere}}
+\newcommand{\representationcriticiteE}[2]{\representationcriticite{#1}{#2}{#2}{#2}{#2}{#2}}
