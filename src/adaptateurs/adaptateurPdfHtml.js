@@ -1,5 +1,6 @@
-const genereAnnexes = () => Promise.resolve('<h1>Annexe du service</h1>');
+const pug = require('pug');
 
-const genereDossierDecision = () => Promise.resolve('<h1>Dossier de décision</h1>');
+const genereAnnexes = () => Promise.resolve(pug.compileFile('src/pdf/modeles/annexes.pug')());
+const genereDossierDecision = () => Promise.resolve(pug.compileFile('src/pdf/modeles/dossierDecision.pug')());
 
 module.exports = { genereAnnexes, genereDossierDecision };
