@@ -1,6 +1,6 @@
 const express = require('express');
 
-const routesApiServicePdf = (middleware, adaptateurPdf) => {
+const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
   const routes = express.Router();
 
   routes.get('/:id/pdf/annexes.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
@@ -17,6 +17,15 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
       .catch(suite);
   });
 
+  routes.get('/:id/pdf/annexes', (_requete, reponse, suite) => {
+    adaptateurPdfHtml.genereAnnexes()
+      .then((html) => {
+        reponse.contentType('text/html');
+        reponse.send(html);
+      })
+      .catch(suite);
+  });
+
   routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
     const donnees = {
@@ -29,6 +38,17 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
       .then((pdf) => {
         reponse.contentType('application/pdf');
         reponse.send(pdf);
+      })
+      .catch(() => {
+        reponse.sendStatus(424);
+      });
+  });
+
+  routes.get('/:id/pdf/dossierDecision', (_requete, reponse) => {
+    adaptateurPdfHtml.genereDossierDecision()
+      .then((html) => {
+        reponse.contentType('text/html');
+        reponse.send(html);
       })
       .catch(() => {
         reponse.sendStatus(424);
