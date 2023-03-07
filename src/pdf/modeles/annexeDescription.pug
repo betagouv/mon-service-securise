@@ -1,0 +1,11 @@
+mixin bloc-description(liste, legende)
+  if liste.length
+    fieldset
+      legend= legende 
+      ul
+        each item in liste
+          li= item
+
++bloc-description(donnees.fonctionnalites, 'Fonctionnalités offertes')
++bloc-description(donnees.donneesStockees, 'Données stockées')
++bloc-description([donnees.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')

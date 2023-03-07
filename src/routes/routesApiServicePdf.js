@@ -17,8 +17,10 @@ const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
       .catch(suite);
   });
 
-  routes.get('/:id/pdf/annexes', (_requete, reponse, suite) => {
-    adaptateurPdfHtml.genereAnnexes()
+  routes.get('/:id/pdf/annexes', middleware.trouveHomologation, (requete, reponse, suite) => {
+    const { homologation } = requete;
+    const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
+    adaptateurPdfHtml.genereAnnexes({ donneesDescription })
       .then((html) => {
         reponse.contentType('text/html');
         reponse.send(html);

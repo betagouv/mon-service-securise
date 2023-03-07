@@ -60,6 +60,13 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.adaptateurPdfHtml().genereAnnexes = () => Promise.resolve('Pdf annexes');
     });
 
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        'http://localhost:1234/api/service/456/pdf/annexes',
+        done,
+      );
+    });
+
     it('sert un fichier de type html', (done) => {
       verifieTypeFichierServiEstHtml('http://localhost:1234/api/service/456/pdf/annexes', done);
     });
