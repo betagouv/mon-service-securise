@@ -65,6 +65,13 @@ const genereDossierDecision = (donnees) => fsPromises
 
     return pdfDocument;
   })
+  .then((pdfDocument) => {
+    if (donnees.avis.length !== 0) {
+      pdfDocument.removePage(2);
+      pdfDocument.removePage(1);
+    }
+    return pdfDocument;
+  })
   .then((pdfDocument) => pdfDocument.save({ updateFieldAppearances: false }))
   .then((pdf) => Buffer.from(pdf.buffer, 'binary'));
 

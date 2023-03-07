@@ -23,6 +23,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
       nomService: homologation.nomService(),
       nomPrenomAutorite: homologation.dossierCourant().autorite.nom,
       fonctionAutorite: homologation.dossierCourant().autorite.fonction,
+      ...homologation.dossierCourant().avis.toJSON(),
     };
 
     adaptateurPdf.genereDossierDecision(donnees)
