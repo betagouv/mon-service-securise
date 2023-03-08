@@ -9,9 +9,9 @@ mixin bloc-mesure(mesuresParCategorie, legende)
           each mesure in mesuresParCategorie[categorie]
             li(class=mesure.indispensable ? "etoile" : "")
               .mesure-contenu
-                .mesure-description= mesure.description
+                .mesure-description!= mesure.description
                 if mesure.modalites
-                  .mesure-modalite= mesure.modalites
+                  .mesure-modalite!= mesure.modalites
     .saut-page
 
 +bloc-mesure(donneesMesures.mesuresParStatut.enCours, donneesMesures.statuts.enCours)
