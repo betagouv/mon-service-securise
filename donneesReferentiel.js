@@ -285,18 +285,22 @@ module.exports = {
         une attaque de type rançongiciel, contre la fausse-promesse de leur restitution en cas de paiement d'une rançon.
         Cette attaque est l'une des plus courantes et a déjà frappé de nombreuses collectivités et entités publiques.</li>
       `,
+      definition: "L'indisponibilité du service numérique signifie que certaines fonctionnalités ou que la totalité du service n'est plus accessible aux usagers et/ou aux agents publics.",
     },
     donneesModifiees: {
       description: "Suppression ou modification d'informations concernant des usagers ou des agents publics",
       descriptionLongue: "Ce risque signifie que des informations appartenant à des usagers ou à des agents publics sont supprimées en partie ou en totalité par un attaquant ou sont modifiées en leur avantage ou en leur défaveur.<br>Par exemple : <li>Des documents téléversés par des usagers dans le cadre d'une démarche en ligne sont supprimés en partie ou en totalité.</li><li>Un élève modifie ses notes sur un espace numérique de travail (ENT) après avoir dérobé ou deviné l'identifiant et le mot de passe d'un enseignant.</li>",
+      definition: 'Ce risque signifie que des informations appartenant à des usagers ou à des agents publics sont supprimées en partie ou en totalité par un attaquant ou sont modifiées en leur avantage ou en leur défaveur.',
     },
     divulgationDonnees: {
       description: "Divulgation publique d'informations dérobées concernant des usagers ou des agents publics",
       descriptionLongue: "Ce risque signifie que des informations concernant des usagers ou des agents publics, traitées dans le cadre du service numérique, sont dérobées par un attaquant puis rendues publiques pour porter préjudice aux personnes concernées et/ou nuire à la réputation de l'entité. <br>Par exemple :<li>La liste de bénéficiaires d'une aide publique et de leurs coordonnées est divulguée sur internet.</li> <li>L'adresse mail des personnes ayant signalé des incivilités sur la voirie via une application dédiée est divulguée sur internet.</li><li>La divulgation des votes des habitants d'une commune s'étant exprimés dans le cadre d'une consultation publique en ligne.</li>",
+      definition: "Ce risque signifie que des informations concernant des usagers ou des agents publics, traitées dans le cadre du service numérique, sont dérobées par un attaquant puis rendues publiques pour porter préjudice aux personnes concernées et/ou nuire à la réputation de l'entité.",
     },
     defigurationSiteWeb: {
       description: "Défiguration visible de l'apparence du service numérique",
       descriptionLongue: "La défiguration d'un service numérique signifie que son apparence est modifiée de manière visible par l'ajout de messages ou d'images, le plus souvent à caractère idéologique, ou à des fins de simples détérioration en vue de nuire à la réputation de l'entité publique.<br>Par exemple :<li>Une image satirique apparaît sur la page d'accueil d'un service numérique.</li><li>Des messages de protestation contre la politique d'une collectivité sont insérés sur plusieurs pages du service numérique.</li>",
+      definition: "La défiguration d'un service numérique signifie que son apparence est modifiée de manière visible par l'ajout de messages ou d'images, le plus souvent à caractère idéologique, ou à des fins de simples détérioration en vue de nuire à la réputation de l'entité publique.",
     },
     arnaques: {
       description: "Vol d'informations concernant des usagers ou des agents publics à des fins d'escroquerie",
@@ -310,14 +314,20 @@ module.exports = {
         <a href="https://www.cybermalveillance.gouv.fr/tous-nos-contenus/fiches-reflexes/hameconnage-phishing">hameçonnage</a>.</li>
         <li>Des documents officiels d'identité sont volés à des fins d'usurpation d'identité.</li>
       `,
+      definition: `
+        Ce risque signifie que des informations traitées dans le cadre du service numérique sont dérobées par un attaquant,
+        le plus souvent à des fins d'usurpation d'identité ou de gain financier.
+      `,
     },
     logicielsMalveillants: {
       description: "Détournement de l'usage du service numérique en vue de conduire des activités non prévues pour ce dernier",
       descriptionLongue: "Ce risque signifie que le service numérique est utilisé de manière discrète et illicite afin de conduire des activités ne correspondant pas à sa finalité, la plupart du temps à des fins de gain financier.<br>Par exemple :<li>La puissance d'un service numérique est utilisée dans le but de mener une activité de minage de cryptomonnaie.</li><li>Un logiciel malveillant est introduit sur la page d'accueil d'un service numérique afin d'infecter les équipements informatiques des usagers et/ou des agents publics en vue d'accéder à leurs données ou de mener une autre attaque (ex.rançongiciel).</li>",
+      definition: 'Ce risque signifie que le service numérique est utilisé de manière discrète et illicite afin de conduire des activités ne correspondant pas à sa finalité, la plupart du temps à des fins de gain financier.',
     },
     surveillance: {
       description: "Vol de données ou interception d'échanges à des fins de renseignement",
       descriptionLongue: "Ce risque signifie que des échanges entre agents publics ou avec des usagers sont interceptés ou que des documents sont dérobés, le plus souvent à des fins de renseignement économique ou politique.<br> Par exemple :<li>Des documents concernant des candidatures à un marché public avant la date finale de dépôt des dossiers sont dérobés par des concurrents afin d'en tirer un avantage concurrentiel.</li><li>Des échanges entre agents publics et entreprises technologiques sont interceptés via la messagerie d'une plateforme permettant l'attribution d'aides publiques, à des fins d'intelligence économique.</li>",
+      definition: 'Ce risque signifie que des échanges entre agents publics ou avec des usagers sont interceptés ou que des documents sont dérobés, le plus souvent à des fins de renseignement économique ou politique.',
     },
   },
 

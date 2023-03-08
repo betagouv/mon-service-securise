@@ -86,6 +86,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
   const risque = (id) => risques()[id] || {};
+  const definitionRisque = (idRisque) => risque(idRisque).definition;
   const descriptionRisque = (idRisque) => risque(idRisque).description;
   const seuilsCriticites = () => donnees.seuilsCriticites;
   const sousTitreActionSaisie = (id) => actionSaisie(id)?.sousTitre;
@@ -231,6 +232,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     criticiteFonctionnalite,
     criticiteMax,
     indiceCyberNoteMax,
+    definitionRisque,
     delaisAvantImpactCritique,
     departement,
     departements,
