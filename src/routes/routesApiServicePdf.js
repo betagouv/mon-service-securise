@@ -21,8 +21,15 @@ const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
     const { homologation, nonce } = requete;
     const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
     const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
+    const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
 
-    adaptateurPdfHtml.genereAnnexes({ donneesDescription, donneesMesures, nonce })
+    adaptateurPdfHtml.genereAnnexes({
+      donneesDescription,
+      donneesMesures,
+      donneesRisques,
+      referentiel: homologation.referentiel,
+      nonce,
+    })
       .then((html) => {
         reponse.contentType('text/html');
         reponse.send(html);

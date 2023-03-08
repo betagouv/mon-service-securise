@@ -3,6 +3,10 @@ body {
     font-size: 12px;
 }
 
+p {
+    margin: 0;
+}
+
 .bloc-indivisible {
     break-inside: avoid;
 }
@@ -31,14 +35,14 @@ fieldset ul {
     padding-left: 0;
 }
 
-fieldset ul li {
+fieldset ul.liste-puce li {
     display: flex;
     align-items: flex-start;
     margin-bottom: 8px;
     flex-wrap: 0;
 }
 
-fieldset ul li::before {
+fieldset ul.liste-puce li::before {
     content: '';
     display: inline-block;
     width: 16px;
@@ -51,7 +55,7 @@ fieldset ul li::before {
     flex-shrink: 0;
 }
 
-fieldset ul li.etoile::before {
+fieldset ul.liste-puce li.etoile::before {
     background-image: var(--etoile-orange);
     transform: scale(1);
 }
@@ -64,9 +68,78 @@ fieldset ul li.etoile::before {
     display: inline-block;
     font-weight: bold;
     padding: 2px 8px;
-    margin-bottom: 0;
+    margin: 8px 0 0;
 }
 
 .mesure-modalite {
     color: #667892;
+}
+
+.non-renseignees p {
+    margin: 8px 0;
+}
+
+.niveau {
+    color: #08416A;
+}
+
+.rond {
+    width: 8px;
+    height: 8px;
+    margin-right: 2px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.rond.gris {
+    background: #CECECE;
+}
+
+.rond.rouge {
+    background: #E32630;
+}
+
+.rond.orange {
+    background: #FF9940;
+}
+
+.rond.jaune {
+    background: #FCDF41;
+}
+
+.rond.vert {
+    background: #4CB963;
+}
+
+.risques hr {
+    border: none;
+    border-bottom: 1px solid #B5C1D2;
+}
+
+.risques hr:last-of-type {
+    display: none;
+}
+
+.bloc-risque {
+    display: grid;
+    grid-template-columns: 78px auto;
+    padding: 8px 0;
+}
+
+.contenu-risque .definition {
+    margin-top: 8px;
+}
+
+.contenu-risque .definition,
+.contenu-risque .commentaire {
+    font-size: 11px;
+}
+
+.contenu-risque .description {
+    font-weight: bold;
+}
+
+.contenu-risque .commentaire {
+    color: #64748B;
+    margin-top: 18px;
 }

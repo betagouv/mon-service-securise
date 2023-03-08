@@ -1,7 +1,13 @@
 const pug = require('pug');
 
-const genereAnnexes = ({ donneesDescription, donneesMesures, nonce }) => (
-  Promise.resolve(pug.compileFile('src/pdf/modeles/annexes.pug')({ donneesDescription, donneesMesures, nonce }))
+const genereAnnexes = ({
+  donneesDescription,
+  donneesMesures,
+  donneesRisques,
+  referentiel,
+  nonce,
+}) => (
+  Promise.resolve(pug.compileFile('src/pdf/modeles/annexes.pug')({ donneesDescription, donneesMesures, donneesRisques, referentiel, nonce }))
 );
 const genereDossierDecision = () => Promise.resolve(pug.compileFile('src/pdf/modeles/dossierDecision.pug')());
 
