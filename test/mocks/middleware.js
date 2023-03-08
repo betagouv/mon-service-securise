@@ -94,6 +94,11 @@ const middlewareFantaisie = {
     suite();
   },
 
+  positionneHeadersAvecNonceEtFonts: (_requete, _reponse, suite) => {
+    headersAvecNoncePositionnes = true;
+    suite();
+  },
+
   repousseExpirationCookie: (_requete, _reponse, suite) => {
     expirationCookieRepoussee = true;
     suite();

@@ -12,16 +12,17 @@ const middleware = (configuration = {}) => {
     unauthorizedResponse: () => pug.renderFile('src/vues/accesRefuse.pug'),
   });
 
-  const positionneHeaders = (requete, reponse, suite) => {
+  const positionneHeaders = (requete, reponse, suite, avecFonts = false) => {
     const { nonce } = requete;
     const politiqueCommuneSecuriteContenus = "default-src 'self'; img-src 'self' data:;";
     const politiqueSecuriteStyles = nonce
       ? `style-src 'self' 'nonce-${nonce}';`
       : '';
+    const politiqueSecuriteFonts = avecFonts ? "font-src 'self' data:;" : '';
     const politiqueSecuriteScripts = "script-src 'self'";
     reponse.set({
       'content-security-policy':
-        `${politiqueCommuneSecuriteContenus} ${politiqueSecuriteStyles} ${politiqueSecuriteScripts}`,
+        `${politiqueCommuneSecuriteContenus} ${politiqueSecuriteStyles} ${politiqueSecuriteFonts} ${politiqueSecuriteScripts}`,
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'no-referrer',
@@ -36,6 +37,14 @@ const middleware = (configuration = {}) => {
       positionneHeaders(requete, reponse, suite);
     })
     .catch(suite);
+
+  const positionneHeadersAvecNonceEtFonts = (requete, reponse, suite) => (
+    adaptateurChiffrement.nonce()
+      .then((n) => {
+        requete.nonce = n;
+        positionneHeaders(requete, reponse, suite, true);
+      })
+      .catch(suite));
 
   const repousseExpirationCookie = (requete, _reponse, suite) => {
     requete.session.maintenant = Math.floor(Date.now() / 60_000);
@@ -138,6 +147,7 @@ const middleware = (configuration = {}) => {
     authentificationBasique,
     positionneHeaders,
     positionneHeadersAvecNonce,
+    positionneHeadersAvecNonceEtFonts,
     repousseExpirationCookie,
     suppressionCookie,
     trouveHomologation,
