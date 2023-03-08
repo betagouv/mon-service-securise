@@ -1,0 +1,24 @@
+mixin niveau-criticite(idNiveau)
+  -
+    const niveau = referentiel.niveauGravite(idNiveau);
+    const nombreRonds = niveau.position + 1;
+    const tableauRonds = [...new Array(nombreRonds).fill(niveau.couleur), ...new Array(5 - nombreRonds).fill("gris")]
+  each couleur in tableauRonds
+    .rond(class = couleur)
+
+fieldset.bloc-indivisible
+  ul.risques
+    each niveau in donneesRisques.niveauxGravite
+      if donneesRisques.risquesParNiveauGravite[niveau.identifiant]
+        each risque in donneesRisques.risquesParNiveauGravite[niveau.identifiant]
+          li.bloc-risque
+            .contenu-niveau
+              +niveau-criticite(niveau.identifiant)
+              p.niveau= niveau.description
+            .contenu-risque
+              p.description!= risque.description
+              if referentiel.definitionRisque(risque.id)
+                p.definition= referentiel.definitionRisque(risque.id)
+              if risque.commentaire
+                p.commentaire #[strong Commentaire :] !{risque.commentaire}
+        hr
