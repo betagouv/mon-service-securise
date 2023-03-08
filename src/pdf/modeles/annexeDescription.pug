@@ -4,7 +4,7 @@ mixin bloc-description(liste, legende)
       legend= legende 
       ul
         each item in liste
-          li= item 
+          li!= item 
 
 +bloc-description(donneesDescription.fonctionnalites, 'Fonctionnalités offertes')
 +bloc-description(donneesDescription.donneesStockees, 'Données stockées')
