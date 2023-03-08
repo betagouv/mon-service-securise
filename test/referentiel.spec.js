@@ -250,12 +250,20 @@ describe('Le référentiel', () => {
     expect(referentiel.risques()).to.eql({ uneClef: 'une valeur' });
   });
 
-  it('connaît la liste des identifiants des risques repertoriés', () => {
+  it('connaît la liste des identifiants des risques répertoriés', () => {
     const referentiel = Referentiel.creeReferentiel({
       risques: { unRisque: {}, unAutreRisque: {} },
     });
 
     expect(referentiel.identifiantsRisques()).to.eql(['unRisque', 'unAutreRisque']);
+  });
+
+  it("sait retrouver la définition d'un risque répertorié", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      risques: { unRisque: { definition: 'Une définition' } },
+    });
+
+    expect(referentiel.definitionRisque('unRisque')).to.equal('Une définition');
   });
 
   it('connaît la liste des identifiants de mesures répertoriées', () => {
