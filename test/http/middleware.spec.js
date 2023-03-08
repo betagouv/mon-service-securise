@@ -306,6 +306,39 @@ describe('Le middleware MSS', () => {
     });
   });
 
+  describe('sur demande positionnement headers avec un nonce et fonts', () => {
+    const verifieHeaderAvecNonceEtFonts = (nonce, nomHeader, regExpValeurAttendue, suite) => {
+      const adaptateurChiffrement = { nonce: () => Promise.resolve(nonce) };
+      const middleware = Middleware({ adaptateurChiffrement });
+
+      middleware.positionneHeadersAvecNonceEtFonts(requete, reponse, () => {
+        verifieValeurHeader(nomHeader, regExpValeurAttendue, reponse);
+        suite();
+      });
+    };
+
+    it('ajoute un nonce dans la requête', (done) => {
+      const adaptateurChiffrement = { nonce: () => Promise.resolve('12345') };
+      const middleware = Middleware({ adaptateurChiffrement });
+
+      middleware.positionneHeadersAvecNonceEtFonts(requete, reponse, (e) => {
+        if (e) return done(e);
+
+        expect(requete.nonce).to.equal('12345');
+        return done();
+      });
+    });
+
+    it('autorise le chargement des styles avec ce nonce et les fonts autorisées pour data', (done) => {
+      verifieHeaderAvecNonceEtFonts(
+        '12345',
+        'content-security-policy',
+        "style-src 'self' 'nonce-12345'; font-src 'self' data:;",
+        done,
+      );
+    });
+  });
+
   describe('sur demande positionnement des headers', () => {
     beforeEach(() => (requete.nonce = undefined));
 
