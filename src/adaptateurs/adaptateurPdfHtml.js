@@ -13,7 +13,7 @@ const formatPdfA4 = (enteteHtml, piedPageHtml) => ({
 const generePdf = async (contenuHtml, enteteHtml, piedPageHtml) => {
   let browser = null;
   try {
-    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--font-render-hinting=none'] });
     const page = await browser.newPage();
     await page.setContent(contenuHtml);
     return await page.pdf(formatPdfA4(enteteHtml, piedPageHtml));
