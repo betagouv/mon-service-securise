@@ -1,3 +1,5 @@
+extends base
+
 mixin bloc-description(liste, legende)
   if liste.length
     +boite-grise(legende)
@@ -5,6 +7,7 @@ mixin bloc-description(liste, legende)
         each item in liste
           li!= item 
 
-+bloc-description(donneesDescription.fonctionnalites, 'Fonctionnalités offertes')
-+bloc-description(donneesDescription.donneesStockees, 'Données stockées')
-+bloc-description([donneesDescription.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')
+block page
+  +bloc-description(donneesDescription.fonctionnalites, 'Fonctionnalités offertes')
+  +bloc-description(donneesDescription.donneesStockees, 'Données stockées')
+  +bloc-description([donneesDescription.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')
