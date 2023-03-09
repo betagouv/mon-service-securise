@@ -1,7 +1,6 @@
 FROM node:18
 
 RUN apt-get update && \
-    apt-get install --yes texlive-latex-extra texlive-lang-european texlive-lang-french && \
     apt-get install --yes chromium
 
 RUN npm install -g npm
