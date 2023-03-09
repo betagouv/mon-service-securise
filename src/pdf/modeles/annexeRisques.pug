@@ -1,3 +1,5 @@
+extends base
+
 mixin niveau-criticite(idNiveau)
   -
     const niveau = referentiel.niveauGravite(idNiveau);
@@ -6,19 +8,20 @@ mixin niveau-criticite(idNiveau)
   each couleur in tableauRonds
     .rond(class = couleur)
 
-+boite-grise
-  ul.risques
-    each niveau in donneesRisques.niveauxGravite
-      if donneesRisques.risquesParNiveauGravite[niveau.identifiant]
-        each risque in donneesRisques.risquesParNiveauGravite[niveau.identifiant]
-          li.bloc-risque.bloc-indivisible
-            .contenu-niveau
-              +niveau-criticite(niveau.identifiant)
-              p.niveau= niveau.description
-            .contenu-risque
-              p.description!= risque.description
-              if referentiel.definitionRisque(risque.id)
-                p.definition= referentiel.definitionRisque(risque.id)
-              if risque.commentaire
-                p.commentaire #[strong Commentaire :] !{risque.commentaire}
-        hr
+block page
+  +boite-grise
+    ul.risques
+      each niveau in donneesRisques.niveauxGravite
+        if donneesRisques.risquesParNiveauGravite[niveau.identifiant]
+          each risque in donneesRisques.risquesParNiveauGravite[niveau.identifiant]
+            li.bloc-risque.bloc-indivisible
+              .contenu-niveau
+                +niveau-criticite(niveau.identifiant)
+                p.niveau= niveau.description
+              .contenu-risque
+                p.description!= risque.description
+                if referentiel.definitionRisque(risque.id)
+                  p.definition= referentiel.definitionRisque(risque.id)
+                if risque.commentaire
+                  p.commentaire #[strong Commentaire :] !{risque.commentaire}
+          hr
