@@ -2,11 +2,11 @@ mixin niveau-criticite(idNiveau)
   -
     const niveau = referentiel.niveauGravite(idNiveau);
     const nombreRonds = niveau.position + 1;
-    const tableauRonds = [...new Array(nombreRonds).fill(niveau.couleur), ...new Array(5 - nombreRonds).fill("gris")]
+    const tableauRonds = [...new Array(nombreRonds).fill(niveau.couleur), ...new Array(5 - nombreRonds).fill('gris')]
   each couleur in tableauRonds
     .rond(class = couleur)
 
-fieldset.bloc-indivisible
++boite-grise
   ul.risques
     each niveau in donneesRisques.niveauxGravite
       if donneesRisques.risquesParNiveauGravite[niveau.identifiant]
