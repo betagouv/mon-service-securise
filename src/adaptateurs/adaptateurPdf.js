@@ -1,3 +1,5 @@
+const fsPromises = require('fs/promises');
+const { decode } = require('html-entities');
 const { PDFDocument } = require('pdf-lib');
 const pug = require('pug');
 const puppeteer = require('puppeteer');
@@ -75,11 +77,27 @@ const genereAnnexes = async ({
   return fusionnePdfs([annexeDescription, annexeMesures, annexeRisques]);
 };
 
-const genereDossierDecision = async () => {
-  const genereDossierHtml = pug.compileFile('src/pdf/modeles/dossierDecision.pug');
-  const dossierHtml = genereDossierHtml();
-  const pdf = await generePdf(dossierHtml, '<div></div>', '<div></div>');
-  return pdf;
+const ecrisLeChamp = (formulaire, idChamp, contenu) => {
+  const champ = formulaire.getTextField(idChamp);
+  if (champ !== undefined && contenu !== undefined) {
+    champ.setText(decode(contenu));
+    champ.enableReadOnly();
+  }
 };
+
+const genereDossierDecision = (donnees) => fsPromises
+  .readFile('src/pdf/modeles/dossierDecision.pdf')
+  .then((donneesFichier) => PDFDocument.load(donneesFichier))
+  .then((pdfDocument) => {
+    const formulaire = pdfDocument.getForm();
+
+    ecrisLeChamp(formulaire, 'nom_du_service', donnees.nomService);
+    ecrisLeChamp(formulaire, 'autorite_prenom_nom', donnees.nomPrenomAutorite);
+    ecrisLeChamp(formulaire, 'autorite_fonction', donnees.fonctionAutorite);
+
+    return pdfDocument;
+  })
+  .then((pdfDocument) => pdfDocument.save({ updateFieldAppearances: false }))
+  .then((pdf) => Buffer.from(pdf.buffer, 'binary'));
 
 module.exports = { genereAnnexes, genereDossierDecision };

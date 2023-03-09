@@ -13,7 +13,6 @@ const testeurMss = () => {
   let adaptateurHorloge;
   let adaptateurMail;
   let adaptateurPdf;
-  let adaptateurPdfHtml;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -39,7 +38,6 @@ const testeurMss = () => {
   const initialise = (done) => {
     adaptateurHorloge = adaptateurHorlogeParDefaut;
     adaptateurMail = {};
-    adaptateurPdfHtml = {};
     adaptateurPdf = {};
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
@@ -53,7 +51,6 @@ const testeurMss = () => {
           referentiel,
           moteurRegles,
           adaptateurMail,
-          adaptateurPdfHtml,
           adaptateurPdf,
           adaptateurHorloge,
           false,
@@ -69,7 +66,6 @@ const testeurMss = () => {
     adaptateurHorloge: () => adaptateurHorloge,
     adaptateurMail: () => adaptateurMail,
     adaptateurPdf: () => adaptateurPdf,
-    adaptateurPdfHtml: () => adaptateurPdfHtml,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,
