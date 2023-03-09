@@ -1,7 +1,6 @@
 mixin bloc-description(liste, legende)
   if liste.length
-    fieldset.bloc-indivisible
-      legend= legende 
+    +boite-grise(legende)
       ul.liste-puce
         each item in liste
           li!= item 

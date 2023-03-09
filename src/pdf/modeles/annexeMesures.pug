@@ -1,8 +1,7 @@
 mixin bloc-mesure(mesuresParCategorie, legende)
   - const categories = Object.keys(mesuresParCategorie);
   if categories.length
-    fieldset.bloc-indivisible
-      legend= legende
+    +boite-grise(legende)
       each categorie in categories
         p.categorie= donneesMesures.categories[categorie]
         ul.liste-puce
@@ -18,6 +17,8 @@ mixin bloc-mesure(mesuresParCategorie, legende)
 +bloc-mesure(donneesMesures.mesuresParStatut.nonFait, donneesMesures.statuts.nonFait)
 +bloc-mesure(donneesMesures.mesuresParStatut.fait, donneesMesures.statuts.fait)
 if donneesMesures.nbMesuresARemplirToutesCategories > 0
-  fieldset.bloc-indivisible.non-renseignees
-    legend Non renseignées
-    p= `Il reste ${donneesMesures.nbMesuresARemplirToutesCategories} mesure${donneesMesures.nbMesuresARemplirToutesCategories > 1 ? 's': ''} à compléter pour obtenir 100% des mesures de sécurité proposées par l'ANSSI remplies.`
+  +boite-grise('Non renseignées', 'non-renseignees')
+    p.
+      Il reste #{donneesMesures.nbMesuresARemplirToutesCategories}
+      mesure#{donneesMesures.nbMesuresARemplirToutesCategories > 1 ? 's': ''} 
+      à compléter pour obtenir 100% des mesures de sécurité proposées par l'ANSSI remplies.
