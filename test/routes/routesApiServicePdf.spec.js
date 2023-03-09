@@ -67,8 +67,8 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    it('sert un fichier de type html', (done) => {
-      verifieTypeFichierServiEstHtml('http://localhost:1234/api/service/456/pdf/annexes', done);
+    it('sert un fichier PDF', (done) => {
+      verifieTypeFichierServiEstPDF('http://localhost:1234/api/service/456/pdf/annexes', done);
     });
 
     it('utilise un adaptateur de pdf pour la génération', (done) => {

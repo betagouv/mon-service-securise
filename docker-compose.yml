@@ -28,9 +28,13 @@ services:
 
   web:
     <<: *configuration-base
-    command: bash -c "npx knex migrate:latest && npx nodemon server.js"
+    command: bash -c "export PUPPETEER_EXECUTABLE_PATH=$$(which chromium) && npx knex migrate:latest && npx nodemon server.js"
     environment:
       - NODE_ENV=development
+      # Sur Mac M1 le téléchargement de Chromium échoue, car aucune version compatible `arm64`.
+      # Donc, on ordonne à Puppeteer de nous laisser gérer le téléchargement.
+      # Il est fait dans le Dockerfile en `apt-get`.
+      - PUPPETEER_SKIP_DOWNLOAD=true
     networks:
       - mss-network
     ports:
