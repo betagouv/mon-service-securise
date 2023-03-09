@@ -30,10 +30,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
       referentiel: homologation.referentiel,
       nonce,
     })
-      .then((html) => {
-        reponse.contentType('text/html');
-        reponse.send(html);
-      })
+      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
       .catch(suite);
   });
 
@@ -57,13 +54,8 @@ const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
 
   routes.get('/:id/pdf/dossierDecision', (_requete, reponse) => {
     adaptateurPdfHtml.genereDossierDecision()
-      .then((html) => {
-        reponse.contentType('text/html');
-        reponse.send(html);
-      })
-      .catch(() => {
-        reponse.sendStatus(424);
-      });
+      .then((html) => reponse.contentType('text/html').send(html))
+      .catch(() => reponse.sendStatus(424));
   });
 
   return routes;
