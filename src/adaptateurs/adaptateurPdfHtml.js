@@ -43,6 +43,7 @@ const fusionnePdfs = async (pdfs) => {
 const genereAnnexes = async ({
   donneesDescription,
   donneesMesures,
+  donneesRisques,
   referentiel,
 }) => {
   const generePiedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug');
@@ -63,7 +64,15 @@ const genereAnnexes = async ({
     generePiedPage({ nomService: donneesDescription.nomService })
   );
 
-  return fusionnePdfs([annexeDescription, annexeMesures]);
+  const genereAnnexeRisques = pug.compileFile('src/pdf/modeles/annexeRisques.pug');
+  const genereEnteteRisques = pug.compileFile('src/pdf/modeles/annexeRisques.entete.pug');
+  const annexeRisques = await generePdf(
+    genereAnnexeRisques({ donneesRisques, referentiel }),
+    genereEnteteRisques(),
+    generePiedPage({ nomService: donneesDescription.nomService })
+  );
+
+  return fusionnePdfs([annexeDescription, annexeMesures, annexeRisques]);
 };
 
 const genereDossierDecision = async () => {
