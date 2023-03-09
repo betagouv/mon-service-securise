@@ -11,7 +11,7 @@ mixin niveau-criticite(idNiveau)
     each niveau in donneesRisques.niveauxGravite
       if donneesRisques.risquesParNiveauGravite[niveau.identifiant]
         each risque in donneesRisques.risquesParNiveauGravite[niveau.identifiant]
-          li.bloc-risque
+          li.bloc-risque.bloc-indivisible
             .contenu-niveau
               +niveau-criticite(niveau.identifiant)
               p.niveau= niveau.description

@@ -6,7 +6,7 @@ mixin bloc-mesure(mesuresParCategorie, legende)
         p.categorie= donneesMesures.categories[categorie]
         ul.liste-puce
           each mesure in mesuresParCategorie[categorie]
-            li(class=mesure.indispensable ? "etoile" : "")
+            li.bloc-indivisible(class = mesure.indispensable ? "etoile" : "")
               .mesure-contenu
                 .mesure-description!= mesure.description
                 if mesure.modalites
