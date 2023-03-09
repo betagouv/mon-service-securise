@@ -38,14 +38,6 @@ const middleware = (configuration = {}) => {
     })
     .catch(suite);
 
-  const positionneHeadersAvecNonceEtFonts = (requete, reponse, suite) => (
-    adaptateurChiffrement.nonce()
-      .then((n) => {
-        requete.nonce = n;
-        positionneHeaders(requete, reponse, suite, true);
-      })
-      .catch(suite));
-
   const repousseExpirationCookie = (requete, _reponse, suite) => {
     requete.session.maintenant = Math.floor(Date.now() / 60_000);
     suite();
@@ -147,7 +139,6 @@ const middleware = (configuration = {}) => {
     authentificationBasique,
     positionneHeaders,
     positionneHeadersAvecNonce,
-    positionneHeadersAvecNonceEtFonts,
     repousseExpirationCookie,
     suppressionCookie,
     trouveHomologation,
