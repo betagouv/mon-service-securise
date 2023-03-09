@@ -48,33 +48,19 @@ const genereAnnexes = async ({
   donneesRisques,
   referentiel,
 }) => {
-  const generePiedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug');
-
-  const genereAnnexeDescription = pug.compileFile('src/pdf/modeles/annexeDescription.pug');
-  const genereEnteteDescription = pug.compileFile('src/pdf/modeles/annexeDescription.entete.pug');
-  const annexeDescription = await generePdf(
-    genereAnnexeDescription({ donneesDescription }),
-    genereEnteteDescription(),
-    generePiedPage({ nomService: donneesDescription.nomService })
+  const genereAnnexe = async (pugCorps, paramsCorps) => generePdf(
+    pug.compileFile(`src/pdf/modeles/${pugCorps}.pug`)(paramsCorps),
+    pug.compileFile(`src/pdf/modeles/${pugCorps}.entete.pug`)(),
+    pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService: donneesDescription.nomService })
   );
 
-  const genereAnnexeMesures = pug.compileFile('src/pdf/modeles/annexeMesures.pug');
-  const genereEnteteMesures = pug.compileFile('src/pdf/modeles/annexeMesures.entete.pug');
-  const annexeMesures = await generePdf(
-    genereAnnexeMesures({ donneesMesures, referentiel }),
-    genereEnteteMesures(),
-    generePiedPage({ nomService: donneesDescription.nomService })
-  );
+  const [description, mesures, risques] = await Promise.all([
+    genereAnnexe('annexeDescription', { donneesDescription }),
+    genereAnnexe('annexeMesures', { donneesMesures, referentiel }),
+    genereAnnexe('annexeRisques', { donneesRisques, referentiel }),
+  ]);
 
-  const genereAnnexeRisques = pug.compileFile('src/pdf/modeles/annexeRisques.pug');
-  const genereEnteteRisques = pug.compileFile('src/pdf/modeles/annexeRisques.entete.pug');
-  const annexeRisques = await generePdf(
-    genereAnnexeRisques({ donneesRisques, referentiel }),
-    genereEnteteRisques(),
-    generePiedPage({ nomService: donneesDescription.nomService })
-  );
-
-  return fusionnePdfs([annexeDescription, annexeMesures, annexeRisques]);
+  return fusionnePdfs([description, mesures, risques]);
 };
 
 const ecrisLeChamp = (formulaire, idChamp, contenu) => {
