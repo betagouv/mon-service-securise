@@ -18,8 +18,7 @@ const routesApi = (
   depotDonnees,
   referentiel,
   adaptateurHorloge,
-  adaptateurPdf,
-  adaptateurPdfHtml
+  adaptateurPdf
 ) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) => promesseEnvoiMessage
     .then(() => utilisateur)
@@ -91,7 +90,7 @@ const routesApi = (
       .then((services) => reponse.json({ services }));
   });
 
-  routes.use('/service', routesApiService(middleware, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf, adaptateurPdfHtml));
+  routes.use('/service', routesApiService(middleware, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf));
 
   routes.get('/seuilCriticite', middleware.verificationAcceptationCGU, (requete, reponse) => {
     const {

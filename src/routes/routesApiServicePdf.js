@@ -1,29 +1,15 @@
 const express = require('express');
 
-const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
+const routesApiServicePdf = (middleware, adaptateurPdf) => {
   const routes = express.Router();
 
   routes.get('/:id/pdf/annexes.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
     const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
-    const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
-    const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
-
-    adaptateurPdf.genereAnnexes({ donneesDescription, donneesMesures, donneesRisques })
-      .then((pdf) => {
-        reponse.contentType('application/pdf');
-        reponse.send(pdf);
-      })
-      .catch(suite);
-  });
-
-  routes.get('/:id/pdf/annexes', middleware.trouveHomologation, (requete, reponse, suite) => {
-    const { homologation } = requete;
-    const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
     const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
     const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
 
-    adaptateurPdfHtml.genereAnnexes({
+    adaptateurPdf.genereAnnexes({
       donneesDescription,
       donneesMesures,
       donneesRisques,
@@ -49,12 +35,6 @@ const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
       .catch(() => {
         reponse.sendStatus(424);
       });
-  });
-
-  routes.get('/:id/pdf/dossierDecision', (_requete, reponse) => {
-    adaptateurPdfHtml.genereDossierDecision()
-      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-      .catch(() => reponse.sendStatus(424));
   });
 
   return routes;
