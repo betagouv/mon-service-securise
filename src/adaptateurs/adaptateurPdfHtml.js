@@ -1,3 +1,4 @@
+const { PDFDocument } = require('pdf-lib');
 const pug = require('pug');
 const puppeteer = require('puppeteer');
 
@@ -22,23 +23,47 @@ const generePdf = async (contenuHtml, enteteHtml, piedPageHtml) => {
   }
 };
 
+const fusionnePdfs = async (pdfs) => {
+  /* eslint-disable no-await-in-loop */
+  /* eslint-disable no-restricted-syntax */
+  const fusion = await PDFDocument.create();
+
+  for (const source of pdfs) {
+    const document = await PDFDocument.load(source);
+    const copie = await fusion.copyPages(document, document.getPageIndices());
+    copie.forEach((page) => fusion.addPage(page));
+  }
+
+  const pdfFinal = await fusion.save();
+  return Buffer.from(pdfFinal.buffer, 'binary');
+  /* eslint-enable no-await-in-loop */
+  /* eslint-enable no-restricted-syntax */
+};
+
 const genereAnnexes = async ({
   donneesDescription,
   donneesMesures,
-  donneesRisques,
   referentiel,
 }) => {
-  const genereAnnexesHtml = pug.compileFile('src/pdf/modeles/annexeDescription.pug');
-  const genereEntete = pug.compileFile('src/pdf/modeles/annexeDescription.entete.pug');
-  const generePiedPage = pug.compileFile('src/pdf/modeles/annexeDescription.piedpage.pug');
+  const generePiedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug');
 
-  const pdf = await generePdf(
-    genereAnnexesHtml({ donneesDescription, donneesMesures, donneesRisques, referentiel }),
-    genereEntete(),
+  const genereAnnexeDescription = pug.compileFile('src/pdf/modeles/annexeDescription.pug');
+  const genereEnteteDescription = pug.compileFile('src/pdf/modeles/annexeDescription.entete.pug');
+  const annexeDescription = await generePdf(
+    genereAnnexeDescription({ donneesDescription }),
+    genereEnteteDescription(),
     generePiedPage({ nomService: donneesDescription.nomService })
   );
 
-  return pdf;
+  const genereAnnexeMesures = pug.compileFile('src/pdf/modeles/annexeMesures.pug');
+  const genereEnteteMesures = pug.compileFile('src/pdf/modeles/annexeMesures.entete.pug');
+  const annexeMesures = await generePdf(
+    genereAnnexeMesures({ donneesMesures, referentiel }),
+    genereEnteteMesures(),
+    generePiedPage({ nomService: donneesDescription.nomService })
+  );
+
+  return fusionnePdfs([annexeDescription, annexeMesures]);
 };
 
 const genereDossierDecision = async () => {

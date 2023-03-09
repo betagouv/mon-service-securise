@@ -24,3 +24,11 @@
   font-size: 8px;
   color: #5E5E5E;
 }
+
+.entete img.indispensable {
+  content: var(--etoile-orange);
+  width: 15px;
+  height: 15px;
+  margin-left: 1px;
+  transform: translateY(3px);
+}

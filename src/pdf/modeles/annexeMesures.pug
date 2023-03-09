@@ -1,3 +1,5 @@
+extends base
+
 mixin bloc-mesure(mesuresParCategorie, legende)
   - const categories = Object.keys(mesuresParCategorie);
   if categories.length
@@ -13,12 +15,13 @@ mixin bloc-mesure(mesuresParCategorie, legende)
                   .mesure-modalite!= mesure.modalites
     .saut-page
 
-+bloc-mesure(donneesMesures.mesuresParStatut.enCours, donneesMesures.statuts.enCours)
-+bloc-mesure(donneesMesures.mesuresParStatut.nonFait, donneesMesures.statuts.nonFait)
-+bloc-mesure(donneesMesures.mesuresParStatut.fait, donneesMesures.statuts.fait)
-if donneesMesures.nbMesuresARemplirToutesCategories > 0
-  +boite-grise('Non renseignées', 'non-renseignees')
-    p.
-      Il reste #{donneesMesures.nbMesuresARemplirToutesCategories}
-      mesure#{donneesMesures.nbMesuresARemplirToutesCategories > 1 ? 's': ''} 
-      à compléter pour obtenir 100% des mesures de sécurité proposées par l'ANSSI remplies.
+block page
+  +bloc-mesure(donneesMesures.mesuresParStatut.enCours, donneesMesures.statuts.enCours)
+  +bloc-mesure(donneesMesures.mesuresParStatut.nonFait, donneesMesures.statuts.nonFait)
+  +bloc-mesure(donneesMesures.mesuresParStatut.fait, donneesMesures.statuts.fait)
+  if donneesMesures.nbMesuresARemplirToutesCategories > 0
+    +boite-grise('Non renseignées', 'non-renseignees')
+      p.
+        Il reste #{donneesMesures.nbMesuresARemplirToutesCategories}
+        mesure#{donneesMesures.nbMesuresARemplirToutesCategories > 1 ? 's': ''} 
+        à compléter pour obtenir 100% des mesures de sécurité proposées par l'ANSSI remplies.
