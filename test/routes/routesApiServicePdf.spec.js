@@ -14,11 +14,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     .then(() => done())
     .catch(done);
 
-  const verifieTypeFichierServiEstHtml = (url, done) => axios.get(url)
-    .then((reponse) => expect(reponse.headers['content-type']).to.contain('text/html'))
-    .then(() => done())
-    .catch(done);
-
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
@@ -149,8 +144,8 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.adaptateurPdfHtml().genereDossierDecision = () => Promise.resolve('Pdf decision');
     });
 
-    it('sert un fichier de type html', (done) => {
-      verifieTypeFichierServiEstHtml('http://localhost:1234/api/service/456/pdf/dossierDecision', done);
+    it('sert un fichier PDF', (done) => {
+      verifieTypeFichierServiEstPDF('http://localhost:1234/api/service/456/pdf/dossierDecision', done);
     });
 
     it('utilise un adaptateur de pdf pour la génération', (done) => {

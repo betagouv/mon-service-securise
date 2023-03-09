@@ -29,6 +29,18 @@ const genereAnnexes = async ({
   return pdf;
 };
 
-const genereDossierDecision = () => Promise.resolve(pug.compileFile('src/pdf/modeles/dossierDecision.pug')());
+const genereDossierDecision = async () => {
+  const genereDossierHtml = pug.compileFile('src/pdf/modeles/dossierDecision.pug');
+  const dossierHtml = genereDossierHtml();
+
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+  const page = await browser.newPage();
+
+  await page.setContent(dossierHtml);
+  const pdf = await page.pdf(optionsFormatPdf());
+  await browser.close();
+
+  return pdf;
+};
 
 module.exports = { genereAnnexes, genereDossierDecision };

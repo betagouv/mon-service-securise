@@ -54,7 +54,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf, adaptateurPdfHtml) => {
 
   routes.get('/:id/pdf/dossierDecision', (_requete, reponse) => {
     adaptateurPdfHtml.genereDossierDecision()
-      .then((html) => reponse.contentType('text/html').send(html))
+      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
       .catch(() => reponse.sendStatus(424));
   });
 
