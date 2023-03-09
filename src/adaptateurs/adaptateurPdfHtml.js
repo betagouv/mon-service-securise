@@ -25,11 +25,10 @@ const genereAnnexes = async ({
   donneesMesures,
   donneesRisques,
   referentiel,
-  nonce,
 }) => {
   const genereAnnexesHtml = pug.compileFile('src/pdf/modeles/annexes.pug');
   const annexesHtml = genereAnnexesHtml(
-    { donneesDescription, donneesMesures, donneesRisques, referentiel, nonce }
+    { donneesDescription, donneesMesures, donneesRisques, referentiel }
   );
   const pdf = await generePdf(annexesHtml);
   return pdf;
