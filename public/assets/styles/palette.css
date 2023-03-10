@@ -6,7 +6,6 @@
   --bleu-mise-en-avant-03-pc: #0f7ac708;
   --bleu-mise-en-avant-20-pc: #0f7ac730;
   --rose-anssi: #ff6584;
-  --rose-mise-en-avant: #f15172;
   --gris-fonce: #2f3a43;
   --gris-inactif: #929292;
   --fond-composant-secondaire: #0f7ac71a;
@@ -20,6 +19,7 @@
   --liseres: #ebedf0;
   --fond-pale: #fafbfc;
   --fond-gris-clair: var(--liseres);
+  --fond-gris-pale: #f1f5f9;
 
   --pdf-bleu-clair: #e4efff;
 

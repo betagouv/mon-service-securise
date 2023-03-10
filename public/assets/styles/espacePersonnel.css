@@ -248,14 +248,12 @@
 }
 
 .bandeau-nouveautes {
-  background-color: var(--rose-anssi);
-}
-
-.bandeau-nouveautes:hover {
-  background-color: var(--rose-mise-en-avant);
+  color: var(--bleu-anssi);
+  background-color: var(--fond-gris-pale);
 }
 
 .bandeau-maj-profil {
+  color: #fff;
   background-color: var(--bleu-mise-en-avant);
 }
 
@@ -268,9 +266,7 @@
 }
 
 :is(.bandeau-nouveautes, .bandeau-maj-profil) p {
-  color: #fff;
   font-weight: bold;
   font-size: .95em;
-  text-transform: uppercase;
   text-align: left;
 }
