@@ -252,9 +252,17 @@
   background-color: var(--fond-gris-pale);
 }
 
+.bandeau-nouveautes p::after {
+  background-color: var(--bleu-anssi);
+}
+
 .bandeau-maj-profil {
   color: #fff;
   background-color: var(--bleu-mise-en-avant);
+}
+
+.bandeau-maj-profil p::after {
+  background-color: #fff;
 }
 
 .bandeau-maj-profil:hover {
@@ -266,7 +274,21 @@
 }
 
 :is(.bandeau-nouveautes, .bandeau-maj-profil) p {
+  display: flex;
+  align-items: center;
   font-weight: bold;
   font-size: .95em;
   text-align: left;
+}
+
+:is(.bandeau-nouveautes, .bandeau-maj-profil) p::after {
+  display: block;
+  content: '';
+  width: 1em;
+  height: 1em;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
+  mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
+  transform: translateX(0.3em) translateY(0.08em) scale(0.95);
 }
