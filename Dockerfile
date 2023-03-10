@@ -1,7 +1,7 @@
 FROM node:18
 
 RUN apt-get update && \
-    apt-get install --yes chromium
+    apt-get install --yes chromium fonts-noto-color-emoji
 
 RUN npm install -g npm
 
