@@ -54,13 +54,17 @@ const genereAnnexes = async ({
     pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService: donneesDescription.nomService })
   );
 
+  const risquesPresents = Object.keys(donneesRisques.risquesParNiveauGravite).length > 0;
+
   const [description, mesures, risques] = await Promise.all([
     genereAnnexe('annexeDescription', { donneesDescription }),
     genereAnnexe('annexeMesures', { donneesMesures, referentiel }),
-    genereAnnexe('annexeRisques', { donneesRisques, referentiel }),
+    risquesPresents ? genereAnnexe('annexeRisques', { donneesRisques, referentiel }) : null,
   ]);
 
-  return fusionnePdfs([description, mesures, risques]);
+  return fusionnePdfs(risquesPresents
+    ? [description, mesures, risques]
+    : [description, mesures]);
 };
 
 const ecrisLeChamp = (formulaire, idChamp, contenu) => {
