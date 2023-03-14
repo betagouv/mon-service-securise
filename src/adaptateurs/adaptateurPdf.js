@@ -2,7 +2,7 @@ const fsPromises = require('fs/promises');
 const { decode } = require('html-entities');
 const { PDFDocument } = require('pdf-lib');
 const pug = require('pug');
-const puppeteer = require('puppeteer');
+const { lanceNavigateur } = require('./adaptateurPdf.puppeteer');
 
 const formatPdfA4 = (enteteHtml, piedPageHtml) => ({
   format: 'A4',
@@ -16,13 +16,13 @@ const formatPdfA4 = (enteteHtml, piedPageHtml) => ({
 const generePdfs = async (pagesHtml) => {
   /* eslint-disable no-await-in-loop */
   /* eslint-disable no-restricted-syntax */
-  let browser = null;
+  let navigateur = null;
   try {
-    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--font-render-hinting=none'] });
+    navigateur = await lanceNavigateur();
 
     const pagesPdf = [];
     for (const { corps, entete, piedPage } of pagesHtml) {
-      const page = await browser.newPage();
+      const page = await navigateur.newPage();
       await page.setContent(corps);
       const pdf = await page.pdf(formatPdfA4(entete, piedPage));
       pagesPdf.push(pdf);
@@ -30,7 +30,7 @@ const generePdfs = async (pagesHtml) => {
 
     return pagesPdf;
   } finally {
-    if (browser !== null) await browser.close();
+    if (navigateur !== null) await navigateur.close();
   }
   /* eslint-enable no-await-in-loop */
   /* eslint-enable no-restricted-syntax */
