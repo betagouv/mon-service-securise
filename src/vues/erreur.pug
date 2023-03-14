@@ -1,0 +1,14 @@
+extends mssDeconnecte
+
+block append styles
+  link(href='/statique/assets/styles/index.css', rel='stylesheet')
+  link(href='/statique/assets/styles/index.responsive.css', rel='stylesheet')
+  link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
+  link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
+
+block main
+  .marges-fixes
+    h1 Désolé, une erreur est survenue
+    p Nos équipes techniques ont été mises au courant.
+    p N'hésitez pas à utiliser le bouton « Aide » en bas à droite de votre écran pour obtenir de l'assistance.
+    a.bouton(href = '/') Retourner à l'accueil
