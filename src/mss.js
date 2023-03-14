@@ -16,11 +16,15 @@ const creeServeur = (
   adaptateurMail,
   adaptateurPdf,
   adaptateurHorloge,
+  adaptateurGestionErreur,
   avecCookieSecurise = (process.env.NODE_ENV === 'production'),
 ) => {
   let serveur;
 
   const app = express();
+
+  adaptateurGestionErreur.initialise();
+  app.use(adaptateurGestionErreur.controleurRequetes());
 
   app.use(express.json());
 
@@ -136,6 +140,8 @@ const creeServeur = (
   });
 
   app.use('/statique', express.static('public'));
+
+  app.use(adaptateurGestionErreur.controleurErreurs());
 
   const ecoute = (port, succes) => {
     serveur = app.listen(port, succes);

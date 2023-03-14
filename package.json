@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/betagouv/mon-service-securise#readme",
   "dependencies": {
+    "@sentry/node": "^7.43.0",
     "axios": "^0.27.2",
     "bcrypt": "^5.1.0",
     "cookie-session": "^2.0.0",
