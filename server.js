@@ -5,6 +5,9 @@ const MSS = require('./src/mss');
 const Referentiel = require('./src/referentiel');
 const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
+const adaptateurGestionErreur = adaptateurEnvironnement.sentry().dsn()
+  ? require('./src/adaptateurs/adaptateurGestionErreurSentry')
+  : require('./src/adaptateurs/adaptateurGestionErreurVide');
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPI()
@@ -31,7 +34,8 @@ const serveur = MSS.creeServeur(
   moteurRegles,
   adaptateurMail,
   adaptateurPdf,
-  adaptateurHorloge
+  adaptateurHorloge,
+  adaptateurGestionErreur,
 );
 
 serveur.ecoute(port, () => {
