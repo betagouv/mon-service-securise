@@ -13,16 +13,27 @@ const formatPdfA4 = (enteteHtml, piedPageHtml) => ({
   margin: { bottom: '2cm', left: '1cm', right: '1cm', top: '23mm' },
 });
 
-const generePdf = async (contenuHtml, enteteHtml, piedPageHtml) => {
+const generePdfs = async (pagesHtml) => {
+  /* eslint-disable no-await-in-loop */
+  /* eslint-disable no-restricted-syntax */
   let browser = null;
   try {
     browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--font-render-hinting=none'] });
-    const page = await browser.newPage();
-    await page.setContent(contenuHtml);
-    return await page.pdf(formatPdfA4(enteteHtml, piedPageHtml));
+
+    const pagesPdf = [];
+    for (const { corps, entete, piedPage } of pagesHtml) {
+      const page = await browser.newPage();
+      await page.setContent(corps);
+      const pdf = await page.pdf(formatPdfA4(entete, piedPage));
+      pagesPdf.push(pdf);
+    }
+
+    return pagesPdf;
   } finally {
     if (browser !== null) await browser.close();
   }
+  /* eslint-enable no-await-in-loop */
+  /* eslint-enable no-restricted-syntax */
 };
 
 const fusionnePdfs = async (pdfs) => {
@@ -48,23 +59,27 @@ const genereAnnexes = async ({
   donneesRisques,
   referentiel,
 }) => {
-  const genereAnnexe = async (pugCorps, paramsCorps) => generePdf(
-    pug.compileFile(`src/pdf/modeles/${pugCorps}.pug`)(paramsCorps),
-    pug.compileFile(`src/pdf/modeles/${pugCorps}.entete.pug`)(),
-    pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService: donneesDescription.nomService })
-  );
+  const genereHtml = async (pugCorps, paramsCorps) => {
+    const piedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService: donneesDescription.nomService });
+    return Promise.all([
+      pug.compileFile(`src/pdf/modeles/${pugCorps}.pug`)(paramsCorps),
+      pug.compileFile(`src/pdf/modeles/${pugCorps}.entete.pug`)(),
+    ]).then(([corps, entete]) => ({ corps, entete, piedPage }));
+  };
 
   const risquesPresents = Object.keys(donneesRisques.risquesParNiveauGravite).length > 0;
 
   const [description, mesures, risques] = await Promise.all([
-    genereAnnexe('annexeDescription', { donneesDescription }),
-    genereAnnexe('annexeMesures', { donneesMesures, referentiel }),
-    risquesPresents ? genereAnnexe('annexeRisques', { donneesRisques, referentiel }) : null,
+    genereHtml('annexeDescription', { donneesDescription }),
+    genereHtml('annexeMesures', { donneesMesures, referentiel }),
+    risquesPresents ? genereHtml('annexeRisques', { donneesRisques, referentiel }) : null,
   ]);
 
-  return fusionnePdfs(risquesPresents
+  const pdfs = await generePdfs(risquesPresents
     ? [description, mesures, risques]
     : [description, mesures]);
+
+  return fusionnePdfs(pdfs);
 };
 
 const ecrisLeChamp = (formulaire, idChamp, contenu) => {

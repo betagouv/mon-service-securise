@@ -19,6 +19,27 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
       .catch(suite);
   });
 
+  routes.get('/:id/pdf-perf/annexes.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
+    const { homologation } = requete;
+    const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
+    const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
+    const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
+
+    const hrstart = process.hrtime();
+    adaptateurPdf.genereAnnexes({
+      donneesDescription,
+      donneesMesures,
+      donneesRisques,
+      referentiel: homologation.referentiel,
+    })
+      .then((pdf) => {
+        const hrend = process.hrtime(hrstart);
+        console.info('Execution time (hr): %ds %dms', hrend[0], hrend[1] / 1000000);
+        reponse.contentType('application/pdf').send(pdf);
+      })
+      .catch(suite);
+  });
+
   routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
     const donnees = {
