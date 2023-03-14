@@ -143,6 +143,10 @@ const creeServeur = (
 
   app.use(adaptateurGestionErreur.controleurErreurs());
 
+  app.use((_erreur, _requete, reponse, _suite) => {
+    reponse.render('erreur');
+  });
+
   const ecoute = (port, succes) => {
     serveur = app.listen(port, succes);
   };
