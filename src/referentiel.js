@@ -286,6 +286,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     seuilsCriticites,
     descriptionStatutDeploiement,
     sousTitreActionSaisie,
+    statutsAvisDossierHomologation,
     statutsDeploiement,
     statutDeploiementValide,
     statutsMesures,
