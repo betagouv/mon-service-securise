@@ -1,12 +1,3 @@
-doctype html
-meta(charset='utf-8')
-meta(name = 'viewport', content = 'width=device-width')
-
-style
-  include ressources/fonts.css
-  include ressources/images.css
-  include ressources/styles.css
-
 mixin boite-grise(titre, classe)
   table.boite-grise(class = classe)
     thead: tr: th
@@ -18,4 +9,16 @@ mixin boite-grise(titre, classe)
       block
     tfoot: tr: th: .bordure-pied-table
 
-block page
+doctype html
+html(lang = 'fr')
+  head
+    meta(charset='utf-8')
+    meta(name = 'viewport', content = 'width=device-width')
+    title Document PDF
+
+    style
+      include ressources/fonts.css
+      include ressources/images.css
+      include ressources/styles.css
+
+  block page
