@@ -33,6 +33,11 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  avecAvis(avis) {
+    this.donnees.avis = avis;
+    return this;
+  }
+
   quiEstComplet() {
     this.donnees.finalise = true;
     this.donnees.avis = [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }];

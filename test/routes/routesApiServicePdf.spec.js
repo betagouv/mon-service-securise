@@ -52,7 +52,10 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
   describe('quand requête GET sur `/api/service/:id/pdf/dossierDecision.pdf`', () => {
     const referentiel = Referentiel
-      .creeReferentiel({ echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } } });
+      .creeReferentiel({
+        echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
+        statutAvisDossierHomologation: { favorable: {} },
+      });
 
     beforeEach(() => {
       testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('Pdf decision');
@@ -60,7 +63,13 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         homologationARenvoyer: new Homologation({
           id: '456',
           descriptionService: { nomService: 'un service' },
-          dossiers: [unDossier(referentiel).quiEstActif().avecAutorite('Jean Dupond', 'RSSI').donnees],
+          dossiers: [
+            unDossier(referentiel)
+              .quiEstActif()
+              .avecAutorite('Jean Dupond', 'RSSI')
+              .avecAvis([{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }])
+              .donnees,
+          ],
         }, referentiel),
       });
     });
@@ -83,6 +92,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         expect(donnees.nomService).to.equal('un service');
         expect(donnees.nomPrenomAutorite).to.equal('Jean Dupond');
         expect(donnees.fonctionAutorite).to.equal('RSSI');
+        expect(donnees.avis).to.eql([{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }]);
         return Promise.resolve('Pdf dossier décision');
       };
 
