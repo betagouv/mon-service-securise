@@ -54,7 +54,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     const referentiel = Referentiel
       .creeReferentiel({
         echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
-        statutAvisDossierHomologation: { favorable: {} },
+        statutsAvisDossierHomologation: { favorable: {} },
       });
 
     beforeEach(() => {

@@ -90,19 +90,31 @@ const ecrisLeChamp = (formulaire, idChamp, contenu) => {
   }
 };
 
-const genereDossierDecision = (donnees) => fsPromises
-  .readFile('src/pdf/modeles/dossierDecision.pdf')
-  .then((donneesFichier) => PDFDocument.load(donneesFichier))
-  .then((pdfDocument) => {
-    const formulaire = pdfDocument.getForm();
+const genereDossierDecision = async (donnees) => {
+  const fichierPdf = await fsPromises.readFile('src/pdf/modeles/dossierDecision.pdf');
+  const documentPdf = await PDFDocument.load(fichierPdf);
+  const formulaire = documentPdf.getForm();
 
-    ecrisLeChamp(formulaire, 'nom_du_service', donnees.nomService);
-    ecrisLeChamp(formulaire, 'autorite_prenom_nom', donnees.nomPrenomAutorite);
-    ecrisLeChamp(formulaire, 'autorite_fonction', donnees.fonctionAutorite);
+  ecrisLeChamp(formulaire, 'nom_du_service', donnees.nomService);
+  ecrisLeChamp(formulaire, 'autorite_prenom_nom', donnees.nomPrenomAutorite);
+  ecrisLeChamp(formulaire, 'autorite_fonction', donnees.fonctionAutorite);
 
-    return pdfDocument;
-  })
-  .then((pdfDocument) => pdfDocument.save({ updateFieldAppearances: false }))
-  .then((pdf) => Buffer.from(pdf.buffer, 'binary'));
+  const pdfDecision = await documentPdf.save({ updateFieldAppearances: false });
+
+  if (donnees.avis.length === 0) {
+    return Buffer.from(pdfDecision.buffer, 'binary');
+  }
+
+  const premierePage = await documentPdf.save({ updateFieldAppearances: false });
+
+  const [entete, corps, piedPage] = await Promise.all([
+    pug.compileFile('src/pdf/modeles/annexeAvis.entete.pug')(),
+    pug.compileFile('src/pdf/modeles/annexeAvis.pug')({ donnees }),
+    pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService: donnees.nomService }),
+  ]);
+  const annexeAvis = await generePdfs([{ entete, corps, piedPage }]);
+
+  return fusionnePdfs([premierePage, ...annexeAvis]);
+};
 
 module.exports = { genereAnnexes, genereDossierDecision };

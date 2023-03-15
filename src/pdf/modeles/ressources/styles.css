@@ -83,7 +83,7 @@ p {
   display: flex;
   align-items: flex-start;
   margin-bottom: 8px;
-  flex-wrap: 0;
+  flex-wrap: nowrap;
 }
 
 .boite-grise ul.liste-puce li::before {
@@ -186,4 +186,35 @@ p {
 .contenu-risque .commentaire {
   color: #64748B;
   margin-top: 18px;
+}
+
+.avis .collaborateurs {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.avis .collaborateurs img {
+  content: var(--collaborateurs);
+  width: 40px;
+  height: 40px;
+  margin-right: 4px;
+  transform: translateY(2px);
+  flex-shrink: 0;
+}
+
+.avis .statut {
+  margin: 8px 0;
+}
+
+.avis .statut span {
+  font-weight: bold;
+  color: #0F7AC7;
+  font-size: 13px;
+}
+
+.avis .commentaire::before {
+  content: 'Commentaire : ';
+  font-weight: bold;
+  color: #8A8A8A;
 }

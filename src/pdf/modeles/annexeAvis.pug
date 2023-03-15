@@ -1,0 +1,15 @@
+extends base
+
+block page
+  -
+    const statuts = donnees.referentiel.statutsAvisDossierHomologation()
+  each avis, index in donnees.avis
+    +boite-grise(`Avis ${index + 1}`, 'avis')
+      .collaborateurs
+        img(alt='icone de collaborateurs')
+        span!= avis.collaborateurs.join(', ') + '.'
+      .statut
+        span= statuts[avis.statut].description
+      if avis.commentaires && avis.commentaires !== ''  
+        .commentaire
+          span!= avis.commentaires
