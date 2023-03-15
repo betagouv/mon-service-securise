@@ -292,6 +292,16 @@ describe('Le référentiel', () => {
     );
   });
 
+  it("connaît les statuts des avis de dossier d'homologation", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      statutsAvisDossierHomologation: { favorable: { description: 'Favorable' }, defavorable: { description: 'Défavorable' } },
+    });
+
+    expect(referentiel.statutsAvisDossierHomologation()).to.eql(
+      { favorable: { description: 'Favorable' }, defavorable: { description: 'Défavorable' } }
+    );
+  });
+
   it("sait si un identifiant fait partie de la liste des statuts d'avis de dossier d'homologation", () => {
     const referentiel = Referentiel.creeReferentiel({
       statutsAvisDossierHomologation: { favorable: { } },

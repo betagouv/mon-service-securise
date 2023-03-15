@@ -1,0 +1,65 @@
+include ../inputChoix
+
+mixin unAvis(donneesUnAvis = {}, index = 0)
+  .item-ajoute
+    .icone-suppression
+    div(id = `element-un-avis-${index}`)
+      .cartouche: h3 Avis n°#{index + 1}
+      .contenu
+        .requis
+          label.champ-texte Prénom Nom du collaborateur métier ou technique renseignant l'avis
+            input(
+              id = `prenomNom-un-avis-${index}`,
+              name = `prenomNom-un-avis-${index}`,
+              type = 'text',
+              placeholder = 'ex: Louis Martin',
+              required,
+              pattern = '^\\D+$',
+              value = donneesUnAvis.collaborateurs ? donneesUnAvis.collaborateurs.toString() : '',
+            )
+            .message-erreur Le prénom nom est obligatoire. Veuillez renseigner des lettres. Les chiffres ne sont pas autorisés.
+
+        - donneesUnAvis[`statut-un-avis-${index}`] = donneesUnAvis.statut
+        .requis
+          +inputChoix({
+              type: 'radio',
+              nom: `statut-un-avis-${index}`,
+              titre: 'Statut',
+              items: referentiel.statutsAvisDossierHomologation(),
+              requis: true,
+              messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+              objetDonnees: donneesUnAvis,
+            })
+
+        - donneesUnAvis[`dureeValidite-un-avis-${index}`] = donneesUnAvis.dureeValidite
+        .requis
+          +inputChoix({
+              type: 'radio',
+              nom: `dureeValidite-un-avis-${index}`,
+              titre: "Durée proposée de validité de l'homologation",
+              items: referentiel.echeancesRenouvellement(),
+              requis: true,
+              messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+              objetDonnees: donneesUnAvis,
+            })
+
+        label.texte-libre Commentaires et recommandations
+          textarea(
+            rows = '10',
+            id = `commentaires-un-avis-${index}`,
+            name = `commentaires-un-avis-${index}`,
+            placeholder = 'ex : favorable pour la mise en ligne sous réserve que certaines mesures soient réalisées dans 1 mois.',
+          )= donneesUnAvis.commentaires
+
+mixin elementsAjoutablesAvis(donneesAvis = [])
+  .elements-ajoutables#avis
+    - 
+      if (Array.isArray(donneesAvis) && donneesAvis.length === 0) {
+        donneesAvis.push({})
+      }
+    each donneesUnAvis, index in donneesAvis 
+      +unAvis(donneesUnAvis, index)
+
+  a(class = 'nouvel-item', id = 'ajout-element-un-avis') Ajouter un avis
+
+  script(type = 'module', src = '/statique/modules/elementsAjoutables.js')

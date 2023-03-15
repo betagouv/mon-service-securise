@@ -1,0 +1,22 @@
+extends ../formulaireEtapier
+include ../../fragments/elementsAjoutables/elementsAjoutablesAvis
+
+block append styles
+  link(href = '/statique/assets/styles/etapesDossier/avis.css', rel = 'stylesheet')
+
+block formulaire
+  section.description
+    p.
+      Renseignez un ou plusieurs avis sur la sécurité du service pour aider l'autorité d'homologation à prendre sa décision.
+      Nous vous recommandons au moins un avis groupé.
+
+    .mention champ obligatoire
+
+  +elementsAjoutablesAvis(service.dossierCourant().avis.avis)
+
+block bouton-etape
+  button.bouton#suivant(
+      data-id-homologation = service.id,
+      data-id-etape = idEtape,
+      data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
+    ) Suivant

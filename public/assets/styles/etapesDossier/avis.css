@@ -1,0 +1,57 @@
+section.description {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+section.description p {
+  margin-bottom: 2em;
+}
+
+.elements-ajoutables .item-ajoute {
+  padding: 0;
+}
+
+.elements-ajoutables .cartouche {
+  border-bottom: 1px var(--liseres) solid;
+  width: 100%;
+  padding: 2em;
+  box-sizing: border-box;
+}
+
+.elements-ajoutables .cartouche h3 {
+  color: var(--bleu-anssi);
+  font-weight: bold;
+  margin: 0;
+}
+
+.elements-ajoutables .contenu {
+  padding: 2em;
+}
+
+.elements-ajoutables .contenu label {
+  font-weight: bold;
+}
+
+.elements-ajoutables .contenu .requis:first-of-type {
+  margin-bottom: 2em;
+}
+
+.elements-ajoutables .contenu label.champ-texte {
+  width: 100%;
+}
+
+.elements-ajoutables .contenu fieldset label {
+  font-weight: normal;
+}
+
+.elements-ajoutables .contenu fieldset {
+  margin: 0;
+}
+
+.elements-ajoutables .contenu label.texte-libre {
+  width: 100%;
+}
+
+.elements-ajoutables .contenu textarea {
+  height: 6em;
+}
