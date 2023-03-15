@@ -105,5 +105,18 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         })
         .catch(done);
     });
+
+    it("reste robuste lorsque l'homologation n'a pas de dossier courant", (done) => {
+      const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
+
+      axios.get('http://localhost:1234/api/service/456/pdf/dossierDecision.pdf')
+        .catch(({ response }) => {
+          expect(response.status).to.be(404);
+          expect(response.data).to.equal('Homologation sans dossier courant');
+          done();
+        })
+        .catch(done);
+    });
   });
 });

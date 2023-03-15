@@ -21,10 +21,16 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
 
   routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveHomologation, (requete, reponse) => {
     const { homologation } = requete;
+    const dossierCourant = homologation.dossierCourant();
+    if (!dossierCourant) {
+      reponse.status(404).send('Homologation sans dossier courant');
+      return;
+    }
+
     const donnees = {
       nomService: homologation.nomService(),
-      nomPrenomAutorite: homologation.dossierCourant().autorite.nom,
-      fonctionAutorite: homologation.dossierCourant().autorite.fonction,
+      nomPrenomAutorite: dossierCourant.autorite.nom,
+      fonctionAutorite: dossierCourant.autorite.fonction,
     };
 
     adaptateurPdf.genereDossierDecision(donnees)
