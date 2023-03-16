@@ -12,6 +12,10 @@ const $modaleNouveauContributeur = () => $(`
                placeholder="ex. jean.dupont@mail.fr">
         <input id="idService" name="idService" type="hidden">
       </div>
+      <div class="message-erreur" id="invitation-deja-envoyee">
+        Cet e-mail a déjà été utilisé. Veuillez en saisir un autre. <br>
+        Si vous souhaitez renvoyer une invitation, merci de nous contacter à <a href="mailto:support@monservicesecurise.beta.gouv.fr">support@monservicesecurise.beta.gouv.fr</a>.
+      </div>
       <div class="confirmation">
         <a class="bouton" id="nouveau-contributeur">Envoyer</a>
       </div>

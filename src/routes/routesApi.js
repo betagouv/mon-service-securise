@@ -296,6 +296,8 @@ const routesApi = (
         .catch((e) => {
           if (e instanceof EchecAutorisation) {
             reponse.status(403).send("Ajout non autorisé d'un contributeur");
+          } else if (e instanceof ErreurAutorisationExisteDeja) {
+            reponse.status(422).json({ erreur: { code: 'INVITATION_DEJA_ENVOYEE' } });
           } else if (e instanceof EchecEnvoiMessage) {
             reponse.status(424).send("L'envoi de l'email de finalisation d'inscription a échoué");
           } else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
