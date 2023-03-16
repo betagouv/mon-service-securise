@@ -983,6 +983,19 @@ describe('Le serveur MSS des routes /api/*', () => {
             })
             .catch((e) => done(e.response?.data || e));
         });
+
+        it("renvoie une erreur explicite à propos de l'invitation déjà envoyée", (done) => {
+          axios.post('http://localhost:1234/api/autorisation', {
+            emailContributeur: 'jean.dupont@mail.fr',
+            idHomologation: '123',
+          })
+            .then(() => done('Le serveur aurait dû lever une erreur HTTP'))
+            .catch((e) => {
+              expect(e.response.data).to.eql({ erreur: { code: 'INVITATION_DEJA_ENVOYEE' } });
+              done();
+            })
+            .catch((e) => done(e.response?.data || e));
+        });
       });
     });
 
