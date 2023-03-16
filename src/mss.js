@@ -18,6 +18,7 @@ const creeServeur = (
   adaptateurHorloge,
   adaptateurGestionErreur,
   avecCookieSecurise = (process.env.NODE_ENV === 'production'),
+  avecPageErreur = (process.env.NODE_ENV === 'production'),
 ) => {
   let serveur;
 
@@ -143,9 +144,11 @@ const creeServeur = (
 
   app.use(adaptateurGestionErreur.controleurErreurs());
 
-  app.use((_erreur, _requete, reponse, _suite) => {
-    reponse.render('erreur');
-  });
+  if (avecPageErreur) {
+    app.use((_erreur, _requete, reponse, _suite) => {
+      reponse.render('erreur');
+    });
+  }
 
   const ecoute = (port, succes) => {
     serveur = app.listen(port, succes);
