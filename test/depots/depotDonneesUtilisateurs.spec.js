@@ -85,14 +85,17 @@ describe('Le dépôt de données des utilisateurs', () => {
 
   describe('sur demande de mise à jour des informations du profil utilisateur', () => {
     let depot;
+    let adaptateurJournalMSS;
 
     beforeEach(() => {
+      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
       });
 
       depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurChiffrement,
+        adaptateurJournalMSS,
         adaptateurPersistance,
       });
     });
@@ -119,6 +122,16 @@ describe('Le dépôt de données des utilisateurs', () => {
           done();
         })
         .catch(done);
+    });
+
+    it('consigne un événement de profil utilisateur modifié', (done) => {
+      adaptateurJournalMSS.consigneEvenement = (evenenement) => {
+        expect(evenenement.type).to.equal('PROFIL_UTILISATEUR_MODIFIE');
+        done();
+        return Promise.resolve();
+      };
+
+      depot.metsAJourUtilisateur('123', { prenom: 'Jérôme', nom: 'Dubois' });
     });
   });
 

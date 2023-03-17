@@ -85,7 +85,10 @@ const creeDepot = (config = {}) => {
   const metsAJourUtilisateur = (id, donnees) => {
     delete donnees.motDePasse;
     return adaptateurPersistance.metsAJourUtilisateur(id, donnees)
-      .then(() => utilisateur(id));
+      .then(() => adaptateurJournalMSS.consigneEvenement(
+        new EvenementProfilUtilisateurModifie({ idUtilisateur: id, ...donnees }).toJSON()
+      )
+        .then(() => utilisateur(id)));
   };
 
   const reinitialiseMotDePasse = (email) => adaptateurPersistance.utilisateurAvecEmail(email)
