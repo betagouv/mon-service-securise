@@ -2,6 +2,7 @@ const expect = require('expect.js');
 
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
+const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
@@ -236,18 +237,21 @@ describe('Le dépôt de données des utilisateurs', () => {
 
     describe("quand l'utilisateur n'existe pas déjà", () => {
       const adaptateurHorloge = {};
+      let adaptateurJournalMSS;
       let adaptateurPersistance;
 
       beforeEach(() => {
         let compteurId = 0;
         const adaptateurUUID = { genereUUID: () => { compteurId += 1; return `${compteurId}`; } };
         adaptateurHorloge.maintenant = () => new Date(2000, 1, 1, 12, 0);
+        adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
         adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
           { utilisateurs: [] },
           adaptateurHorloge,
         );
         depot = DepotDonneesUtilisateurs.creeDepot({
           adaptateurChiffrement,
+          adaptateurJournalMSS,
           adaptateurJWT,
           adaptateurPersistance,
           adaptateurUUID,
@@ -303,6 +307,16 @@ describe('Le dépôt de données des utilisateurs', () => {
             done();
           })
           .catch(done);
+      });
+
+      it('consigne un événement de profil utilisateur modifié', (done) => {
+        adaptateurJournalMSS.consigneEvenement = (evenement) => {
+          expect(evenement.type).to.equal('PROFIL_UTILISATEUR_MODIFIE');
+          done();
+          return Promise.resolve();
+        };
+
+        depot.nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' });
       });
     });
 
