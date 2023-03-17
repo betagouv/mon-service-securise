@@ -725,7 +725,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
       testeur.referentiel().recharge({
         echeancesRenouvellement: { unAn: {} },
-        statutAvisDossierHomologation: { favorable: {} },
+        statutsAvisDossierHomologation: { favorable: {} },
       });
     });
 

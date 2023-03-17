@@ -294,7 +294,7 @@ describe('Le référentiel', () => {
 
   it("sait si un identifiant fait partie de la liste des statuts d'avis de dossier d'homologation", () => {
     const referentiel = Referentiel.creeReferentiel({
-      statutAvisDossierHomologation: { favorable: { } },
+      statutsAvisDossierHomologation: { favorable: { } },
     });
 
     expect(referentiel.estIdentifiantStatutAvisDossierHomologationConnu('favorable')).to.be(true);

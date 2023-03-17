@@ -11,7 +11,7 @@ describe("Un dossier d'homologation", () => {
   beforeEach(() => referentiel.recharge({
     echeancesRenouvellement: { unAn: {} },
     documentsHomologation: { decision: {} },
-    statutAvisDossierHomologation: { favorable: {} },
+    statutsAvisDossierHomologation: { favorable: {} },
   }));
 
   it('sait se convertir en JSON', () => {
@@ -120,7 +120,7 @@ describe("Un dossier d'homologation", () => {
     beforeEach(() => {
       referentiel.recharge({
         echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
-        statutAvisDossierHomologation: { favorable: {} },
+        statutsAvisDossierHomologation: { favorable: {} },
       });
     });
 
