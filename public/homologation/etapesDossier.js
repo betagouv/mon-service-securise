@@ -1,8 +1,9 @@
 import { brancheValidation, declencheValidation } from '../modules/interactions/validation.mjs';
+import soumissionEtapeAvis from '../modules/soumissionEtapeAvis.mjs';
 
 let formulaireDejaSoumis = false;
 
-const action = (idEtape, idService) => {
+const action = (idEtape, idService, selecteurFormulaire) => {
   let resultat = Promise.resolve();
 
   if (idEtape === 'autorite') {
@@ -12,6 +13,8 @@ const action = (idEtape, idService) => {
     };
 
     resultat = axios.put(`/api/service/${idService}/dossier/autorite`, donnees);
+  } else if (idEtape === 'avis') {
+    resultat = soumissionEtapeAvis(selecteurFormulaire, idService);
   } else if (idEtape === 'date') {
     const donnees = {
       dateHomologation: $('#date-homologation').val(),
@@ -35,7 +38,7 @@ const brancheComportemenFormulaire = (selecteur, idService, idEtape, idEtapeSuiv
     if (!formulaireDejaSoumis) {
       formulaireDejaSoumis = true;
 
-      action(idEtape, idService)
+      action(idEtape, idService, selecteur)
         .then(() => (
           window.location = idEtapeSuivante
             ? `/service/${idService}/dossier/edition/etape/${idEtapeSuivante}`
