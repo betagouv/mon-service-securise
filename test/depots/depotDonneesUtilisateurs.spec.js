@@ -200,6 +200,29 @@ describe('Le dépôt de données des utilisateurs', () => {
       .catch(done);
   });
 
+  it('retourne tous les utilisateurs enregistrés', (done) => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      utilisateurs: [
+        { id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', motDePasse: 'XXX' },
+        { id: '456', prenom: 'Murielle', nom: 'Renard', email: 'mr@mail.fr', motDePasse: 'ZZZ' },
+      ],
+    });
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance,
+    });
+
+    depot.tousUtilisateurs()
+      .then((tous) => {
+        expect(tous.map((u) => u.id)).to.eql(['123', '456']);
+        expect(tous[0]).to.be.an(Utilisateur);
+        expect(tous[1]).to.be.an(Utilisateur);
+        done();
+      })
+      .catch(done);
+  });
+
   it("retourne l'utilisateur avec sa date de création", (done) => {
     const date = new Date(2000, 1, 1, 12, 0);
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({

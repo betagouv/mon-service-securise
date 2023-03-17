@@ -128,6 +128,11 @@ const creeDepot = (config = {}) => {
       .then(() => adaptateurPersistance.supprimeUtilisateur(...params));
   };
 
+  const tousUtilisateurs = () => (
+    adaptateurPersistance.tousUtilisateurs()
+      .then((tous) => tous.map((u) => new Utilisateur(u, { adaptateurJWT })))
+  );
+
   const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => (
     adaptateurPersistance.metsAJourUtilisateur(utilisateurAModifier.id, { cguAcceptees: true })
       .then(() => utilisateur(utilisateurAModifier.id))
@@ -140,6 +145,7 @@ const creeDepot = (config = {}) => {
     reinitialiseMotDePasse,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeUtilisateur,
+    tousUtilisateurs,
     utilisateur,
     utilisateurAFinaliser,
     utilisateurAuthentifie,

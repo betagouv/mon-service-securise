@@ -6,6 +6,7 @@ const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
 const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
 const EvenementCompletudeServiceModifiee = require('./src/modeles/journalMSS/evenementCompletudeServiceModifiee');
+const EvenementProfilUtilisateurModifie = require('./src/modeles/journalMSS/evenementProfilUtilisateurModifie');
 const { avecPMapPourChaqueElement } = require('./src/utilitaires/pMap');
 
 class ConsoleAdministration {
@@ -16,6 +17,15 @@ class ConsoleAdministration {
       adaptateurJWT, adaptateurPersistance, adaptateurUUID, referentiel,
     });
     this.adaptateurJournalMSS = fabriqueAdaptateurJournalMSS();
+
+    this.journalConsole = {
+      consigneEvenement: (evenement) => {
+        /* eslint-disable no-console */
+        console.log(`${JSON.stringify(evenement)}\n---------------`);
+        return Promise.resolve();
+        /* eslint-enable no-console */
+      },
+    };
   }
 
   dupliqueHomologation(idHomologation) {
@@ -46,20 +56,21 @@ class ConsoleAdministration {
   }
 
   genereTousEvenementsCompletude(persisteEvenements = false) {
-    const journalConsole = {
-      consigneEvenement: (evenement) => {
-        /* eslint-disable no-console */
-        console.log(`${JSON.stringify(evenement)}\n---------------`);
-        return Promise.resolve();
-        /* eslint-enable no-console */
-      },
-    };
-
-    const journal = (persisteEvenements ? this.adaptateurJournalMSS : journalConsole);
+    const journal = (persisteEvenements ? this.adaptateurJournalMSS : this.journalConsole);
 
     const evenements = this.depotDonnees.toutesHomologations()
       .then((hs) => hs.map((h) => ({ idService: h.id, ...h.completudeMesures() })))
       .then((stats) => stats.map((s) => new EvenementCompletudeServiceModifiee(s).toJSON()));
+
+    return avecPMapPourChaqueElement(evenements, journal.consigneEvenement);
+  }
+
+  genereTousEvenementsProfilUtilisateur(persisteEvenements = false) {
+    const journal = (persisteEvenements ? this.adaptateurJournalMSS : this.journalConsole);
+
+    const evenements = this.depotDonnees.tousUtilisateurs()
+      .then((tous) => tous.map(({ id, ...donnees }) => ({ idUtilisateur: id, ...donnees })))
+      .then((donnees) => donnees.map((d) => new EvenementProfilUtilisateurModifie(d).toJSON()));
 
     return avecPMapPourChaqueElement(evenements, journal.consigneEvenement);
   }
