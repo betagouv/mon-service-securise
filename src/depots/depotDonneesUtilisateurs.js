@@ -8,11 +8,13 @@ const {
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
 } = require('../erreurs');
+const EvenementProfilUtilisateurModifie = require('../modeles/journalMSS/evenementProfilUtilisateurModifie');
 const Utilisateur = require('../modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement = adaptateurChiffrementParDefaut,
+    adaptateurJournalMSS,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = adaptateurUUIDParDefaut,
@@ -40,7 +42,11 @@ const creeDepot = (config = {}) => {
             donneesUtilisateur.motDePasse = hash;
 
             adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur)
-              .then(() => resolve(utilisateur(id)));
+              .then(() => adaptateurJournalMSS.consigneEvenement(
+                new EvenementProfilUtilisateurModifie(
+                  { idUtilisateur: id, ...donneesUtilisateur }
+                ).toJSON()
+              ).then(() => resolve(utilisateur(id))));
           });
       });
   });

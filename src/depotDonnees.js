@@ -21,7 +21,7 @@ const creeDepot = (config = {}) => {
   });
 
   const depotUtilisateurs = depotDonneesUtilisateurs.creeDepot({
-    adaptateurJWT, adaptateurPersistance, adaptateurUUID, depotHomologations,
+    adaptateurJournalMSS, adaptateurJWT, adaptateurPersistance, adaptateurUUID, depotHomologations,
   });
 
   const depotAutorisations = depotDonneesAutorisations.creeDepot({
