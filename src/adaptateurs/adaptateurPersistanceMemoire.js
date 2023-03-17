@@ -115,6 +115,8 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset)
   );
 
+  const tousUtilisateurs = () => Promise.resolve(donnees.utilisateurs);
+
   const autorisation = (id) => Promise.resolve(
     donnees.autorisations.find((a) => a.id === id)
   );
@@ -235,6 +237,7 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     supprimeUtilisateur,
     supprimeUtilisateurs,
     transfereAutorisations,
+    tousUtilisateurs,
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,

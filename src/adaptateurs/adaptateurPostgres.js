@@ -129,6 +129,7 @@ const nouvelAdaptateur = (env) => {
   const utilisateurAvecIdReset = (idReset) => elementDeTableAvec(
     'utilisateurs', 'idResetMotDePasse', idReset
   );
+  const tousUtilisateurs = () => knex('utilisateurs').then((tous) => tous.map(convertisLigneEnObjet));
 
   const autorisation = (id) => elementDeTable('autorisations', id);
 
@@ -246,6 +247,7 @@ const nouvelAdaptateur = (env) => {
     supprimeHomologations,
     supprimeUtilisateur,
     supprimeUtilisateurs,
+    tousUtilisateurs,
     transfereAutorisations,
     utilisateur,
     utilisateurAvecEmail,
