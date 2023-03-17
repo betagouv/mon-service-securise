@@ -62,7 +62,7 @@ module.exports = {
     },
   },
 
-  statutAvisDossierHomologation: {
+  statutsAvisDossierHomologation: {
     favorable: { description: 'Favorable' },
     favorableAvecReserve: { description: 'Favorable avec réserve' },
     defavorable: { description: 'Défavorable' },

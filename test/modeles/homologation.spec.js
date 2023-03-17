@@ -449,7 +449,7 @@ describe('Une homologation', () => {
         reglesPersonnalisation: { mesuresBase: ['uneMesure'] },
         risques: { unRisque: {} },
         statutsDeploiement: { unStatutDeploiement: {} },
-        statutAvisDossierHomologation: { favorable: {} },
+        statutsAvisDossierHomologation: { favorable: {} },
       });
 
       const aujourdhui = new Date();

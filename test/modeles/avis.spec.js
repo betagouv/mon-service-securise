@@ -7,7 +7,7 @@ const Referentiel = require('../../src/referentiel');
 
 describe("Un avis sur un dossier d'homologation", () => {
   const referentiel = Referentiel.creeReferentiel({
-    statutAvisDossierHomologation: { favorable: {} },
+    statutsAvisDossierHomologation: { favorable: {} },
     echeancesRenouvellement: { unAn: {} },
   });
 

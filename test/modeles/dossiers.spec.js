@@ -46,7 +46,7 @@ describe('Les dossiers liés à un service', () => {
     beforeEach(() => (
       referentiel.recharge({
         echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
-        statutAvisDossierHomologation: { favorable: {} },
+        statutsAvisDossierHomologation: { favorable: {} },
       })
     ));
 

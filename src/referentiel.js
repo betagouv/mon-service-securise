@@ -29,7 +29,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const actionsSaisie = () => donnees.actionsSaisie || {};
   const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
   const actionSaisie = (id) => actionsSaisie()[id] || {};
-  const statutAvisDossierHomologation = () => donnees.statutAvisDossierHomologation || {};
+  const statutsAvisDossierHomologation = () => donnees.statutsAvisDossierHomologation || {};
   const positionActionSaisie = (id) => actionSaisie(id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
@@ -61,7 +61,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     identifiantsEcheancesRenouvellement().includes(idEcheance)
   );
   const identifiantsStatutAvisDossierHomologation = () => Object
-    .keys(statutAvisDossierHomologation());
+    .keys(statutsAvisDossierHomologation());
   const estIdentifiantStatutAvisDossierHomologationConnu = (idStatut) => (
     identifiantsStatutAvisDossierHomologation().includes(idStatut)
   );

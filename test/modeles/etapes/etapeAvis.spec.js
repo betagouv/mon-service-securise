@@ -7,7 +7,7 @@ describe('Une étape « Avis »', () => {
   it('sait se convertir en JSON ', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: {} },
-      statutAvisDossierHomologation: { favorable: { } },
+      statutsAvisDossierHomologation: { favorable: { } },
     });
 
     const etape = new EtapeAvis({
@@ -38,7 +38,7 @@ describe('Une étape « Avis »', () => {
     it("n'est pas complète dès qu'un avis n'est pas saisi", () => {
       const referentiel = Referentiel.creeReferentiel({
         echeancesRenouvellement: { unAn: {} },
-        statutAvisDossierHomologation: { favorable: { } },
+        statutsAvisDossierHomologation: { favorable: { } },
       });
       const sansPrenomNom = { statut: 'favorable', dureeValidite: 'unAn' };
       const avecAvisNonSaisis = new EtapeAvis({ avis: [sansPrenomNom] }, referentiel);
@@ -49,7 +49,7 @@ describe('Une étape « Avis »', () => {
     it('est complète si tous les avis sont saisis', () => {
       const referentiel = Referentiel.creeReferentiel({
         echeancesRenouvellement: { unAn: {} },
-        statutAvisDossierHomologation: { favorable: { } },
+        statutsAvisDossierHomologation: { favorable: { } },
       });
       const avecAvisSaisis = new EtapeAvis(
         { avis: [{ collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn' }] },
