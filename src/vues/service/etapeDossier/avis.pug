@@ -14,6 +14,8 @@ block formulaire
 
   +elementsAjoutablesAvis(service.dossierCourant().avis.avis)
 
+  script(type = "module", src = "/statique/homologation/etapes/avis.js")
+
 block bouton-etape
   button.bouton#suivant(
       data-id-homologation = service.id,
