@@ -33,6 +33,8 @@ block formulaire
     each dossier in dossiersFinalises
       +dossierFinalise({ dossier })
 
+    script(type = "module", src = "/statique/homologation/etapes/dossiers.js")
+
 block bouton-etape
   button.bouton#suivant(
     data-id-homologation = service.id,

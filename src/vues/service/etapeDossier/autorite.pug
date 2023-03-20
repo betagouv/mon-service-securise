@@ -21,6 +21,8 @@ block formulaire
       input(id = 'fonction' nom = 'fonction', type = 'text', placeholder = "ex : Maire et membre du conseil communautaire de l'Agglomération de Mansart", required, value != dossierCourant.autorite.fonction)
       .message-erreur La fonction est obligatoire. Veuillez la renseigner. 
 
+  script(type = "module", src = "/statique/homologation/etapes/autorite.js")
+
 block bouton-etape
   button.bouton#suivant(
       data-id-homologation = service.id,

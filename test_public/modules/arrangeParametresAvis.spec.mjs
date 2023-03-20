@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import { arrangeParametresAvis } from '../../public/modules/soumissionEtapeAvis.mjs';
+import arrangeParametresAvis from '../../public/modules/arrangeParametresAvis.mjs';
 
 describe("Une demande d'arrangement des paramètres des avis", () => {
   it('range les avis dans un tableau', () => {
