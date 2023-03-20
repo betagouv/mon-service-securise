@@ -70,7 +70,10 @@ class ConsoleAdministration {
 
     const evenements = this.depotDonnees.tousUtilisateurs()
       .then((tous) => tous.map(({ id, ...donnees }) => ({ idUtilisateur: id, ...donnees })))
-      .then((donnees) => donnees.map((d) => new EvenementProfilUtilisateurModifie(d).toJSON()));
+      .then((donnees) => donnees.map((d) => new EvenementProfilUtilisateurModifie(d).toJSON()))
+      .then((evenementsBruts) => evenementsBruts.map(({ donnees, ...reste }) => (
+        { donnees: { ...donnees, genereParAdministrateur: true }, ...reste }
+      )));
 
     return avecPMapPourChaqueElement(evenements, journal.consigneEvenement);
   }
