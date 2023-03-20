@@ -1,3 +1,8 @@
+html {
+  font-family: 'Marianne';
+  font-size: 12px;
+}
+
 .entete {
   display: flex;
   flex-direction: row;
