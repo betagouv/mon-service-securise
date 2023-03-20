@@ -1,3 +1,5 @@
+import brancheComportemenFormulaireEtape from './formulaireEtape.js';
+
 $(() => {
   const brancheTelechargements = () => {
     const $liens = $('.document-homologation', 'form .documents');
@@ -9,4 +11,5 @@ $(() => {
   };
 
   brancheTelechargements();
+  brancheComportemenFormulaireEtape(() => Promise.resolve());
 });

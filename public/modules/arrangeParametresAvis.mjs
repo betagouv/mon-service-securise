@@ -1,4 +1,4 @@
-import parametres, { modifieParametresAvecItemsExtraits } from './parametres.mjs';
+import { modifieParametresAvecItemsExtraits } from './parametres.mjs';
 
 const integreCollaborateursDansAvis = (avis = []) => avis.map((unAvis) => {
   if (!unAvis.prenomNom) {
@@ -19,15 +19,4 @@ const arrangeParametresAvis = (params) => {
   return params;
 };
 
-const soumissionEtapeAvis = (selecteurFormulaire, idService) => {
-  const tousLesParametres = (selecteur) => {
-    const params = parametres(selecteur);
-
-    return arrangeParametresAvis(params);
-  };
-
-  return axios.put(`/api/service/${idService}/dossier/avis`, tousLesParametres(selecteurFormulaire));
-};
-
-export { arrangeParametresAvis };
-export default soumissionEtapeAvis;
+export default arrangeParametresAvis;
