@@ -1,6 +1,6 @@
 const express = require('express');
 
-const routesApiServicePdf = (middleware, adaptateurPdf) => {
+const routesApiServicePdf = (middleware, adaptateurPdf, referentiel) => {
   const routes = express.Router();
 
   routes.get('/:id/pdf/annexes.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
@@ -13,7 +13,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
       donneesDescription,
       donneesMesures,
       donneesRisques,
-      referentiel: homologation.referentiel,
+      referentiel,
     })
       .then((pdf) => reponse.contentType('application/pdf').send(pdf))
       .catch(suite);
@@ -31,7 +31,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf) => {
       nomService: homologation.nomService(),
       nomPrenomAutorite: dossierCourant.autorite.nom,
       fonctionAutorite: dossierCourant.autorite.fonction,
-      referentiel: homologation.referentiel,
+      referentiel,
       ...dossierCourant.avis.toJSON(),
     };
 
