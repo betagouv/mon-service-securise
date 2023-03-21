@@ -14,14 +14,15 @@ const middleware = (configuration = {}) => {
 
   const positionneHeaders = (requete, reponse, suite) => {
     const { nonce } = requete;
-    const politiqueCommuneSecuriteContenus = "default-src 'self'; img-src 'self' data:;";
-    const politiqueSecuriteStyles = nonce
-      ? `style-src 'self' 'nonce-${nonce}';`
-      : '';
-    const politiqueSecuriteScripts = "script-src 'self'";
+
+    const defaultCsp = "default-src 'self'";
+    const imgCsp = "img-src 'self' data:";
+    const styleCsp = nonce ? `style-src 'self' 'nonce-${nonce}'` : '';
+    const scriptCsp = "script-src 'self'";
+    const toutesCsp = [defaultCsp, imgCsp, styleCsp, scriptCsp].filter((csp) => csp !== '');
+
     reponse.set({
-      'content-security-policy':
-        `${politiqueCommuneSecuriteContenus} ${politiqueSecuriteStyles} ${politiqueSecuriteScripts}`,
+      'content-security-policy': `${toutesCsp.join('; ')}`,
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'no-referrer',
