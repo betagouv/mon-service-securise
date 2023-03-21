@@ -329,6 +329,19 @@ describe('Le middleware MSS', () => {
       verifiePositionnementHeader('content-security-policy', "script-src 'self'", done);
     });
 
+    it('autorise le chargements des i-frames venant du domaine du « Journal MSS »', (done) => {
+      const adaptateurEnvironnement = {
+        statistiques: () => ({ domaineMetabaseMSS: () => 'https://journal-mss.fr/' }),
+      };
+
+      const middleware = Middleware({ adaptateurEnvironnement });
+
+      middleware.positionneHeaders(requete, reponse, () => {
+        verifieValeurHeader('content-security-policy', 'frame-src https://journal-mss.fr/', reponse);
+        done();
+      });
+    });
+
     it('interdit le chargement de la page dans une iFrame', (done) => {
       verifiePositionnementHeader('x-frame-options', /^deny$/, done);
     });

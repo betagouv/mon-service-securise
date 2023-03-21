@@ -21,6 +21,7 @@ const moteurRegles = new MoteurRegles(referentiel);
 const depotDonnees = DepotDonnees.creeDepot();
 const middleware = Middleware({
   adaptateurChiffrement,
+  adaptateurEnvironnement,
   adaptateurJWT,
   depotDonnees,
   login: process.env.LOGIN_ADMIN,
