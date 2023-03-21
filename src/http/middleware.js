@@ -12,17 +12,16 @@ const middleware = (configuration = {}) => {
     unauthorizedResponse: () => pug.renderFile('src/vues/accesRefuse.pug'),
   });
 
-  const positionneHeaders = (requete, reponse, suite, avecFonts = false) => {
+  const positionneHeaders = (requete, reponse, suite) => {
     const { nonce } = requete;
     const politiqueCommuneSecuriteContenus = "default-src 'self'; img-src 'self' data:;";
     const politiqueSecuriteStyles = nonce
       ? `style-src 'self' 'nonce-${nonce}';`
       : '';
-    const politiqueSecuriteFonts = avecFonts ? "font-src 'self' data:;" : '';
     const politiqueSecuriteScripts = "script-src 'self'";
     reponse.set({
       'content-security-policy':
-        `${politiqueCommuneSecuriteContenus} ${politiqueSecuriteStyles} ${politiqueSecuriteFonts} ${politiqueSecuriteScripts}`,
+        `${politiqueCommuneSecuriteContenus} ${politiqueSecuriteStyles} ${politiqueSecuriteScripts}`,
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'no-referrer',
