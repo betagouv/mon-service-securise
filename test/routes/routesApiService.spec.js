@@ -654,6 +654,76 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur /api/service/:id/dossier/decision', () => {
+    beforeEach(() => {
+      const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
+      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.referentiel().recharge({ echeancesRenouvellement: { unAn: {} } });
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheService(
+        { url: 'http://localhost:1234/api/service/456/dossier/decision', method: 'put' },
+        done,
+      );
+    });
+
+    it('recherche le dossier courant correspondant', (done) => {
+      testeur.middleware().verifieRechercheDossierCourant(
+        { url: 'http://localhost:1234/api/service/456/dossier/decision', method: 'put' },
+        done,
+      );
+    });
+
+    it('aseptise les paramètres reçus', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['dateHomologation', 'dureeValidite'],
+        { url: 'http://localhost:1234/api/service/456/dossier/decision', method: 'put' },
+        done
+      );
+    });
+
+    it("renvoie une erreur 422 si la date d'homologation est invalide", (done) => {
+      axios.put('http://localhost:1234/api/service/456/dossier/decision', { dateHomologation: 'dateInvalide', dureeValidite: 'unAn' })
+        .then(() => done('Une erreur aurait dû être levée'))
+        .catch((e) => {
+          expect(e.response.status).to.be(422);
+          expect(e.response.data).to.be("Date d'homologation invalide");
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it('renvoie une erreur 422 si la durée de validité est inconnue du référentiel', (done) => {
+      axios.put('http://localhost:1234/api/service/456/dossier/decision', { dateHomologation: new Date(), dureeValidite: 'dureeInconnue' })
+        .then(() => done('Une erreur aurait dû être levée'))
+        .catch((e) => {
+          expect(e.response.status).to.be(422);
+          expect(e.response.data).to.be('Durée de validité invalide');
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("utilise le dépôt pour enregistrer la décision d'homologation", (done) => {
+      let depotAppele = false;
+
+      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+        depotAppele = true;
+        expect(idHomologation).to.equal('456');
+        expect(dossier.decision.dateHomologation).to.equal('2023-01-01');
+        expect(dossier.decision.dureeValidite).to.equal('unAn');
+        return Promise.resolve();
+      };
+
+      axios.put('http://localhost:1234/api/service/456/dossier/decision', { dateHomologation: '2023-01-01', dureeValidite: 'unAn' })
+        .then(() => expect(depotAppele).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
+
   describe('quand requête PUT sur `/api/service/:id/dossier/document/:idDocument', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
