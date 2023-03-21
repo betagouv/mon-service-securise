@@ -47,6 +47,11 @@ class Decision extends Etape {
     return dateEnFrancais(this.dateProchaineHomologation());
   }
 
+  enregistre(dateHomologation, dureeValidite) {
+    this.dateHomologation = dateHomologation;
+    this.dureeValidite = dureeValidite;
+  }
+
   estComplete() {
     return !!this.dateHomologation && !!this.dureeValidite;
   }

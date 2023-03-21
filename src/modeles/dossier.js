@@ -67,6 +67,12 @@ class Dossier extends InformationsHomologation {
     this.datesTelechargements.enregistreDateTelechargement(nomDocument, date);
   }
 
+  enregistreDecision(dateHomologation, dureeHomologation) {
+    if (this.finalise) throw new ErreurDossierDejaFinalise();
+
+    this.decision.enregistre(dateHomologation, dureeHomologation);
+  }
+
   estComplet() {
     return this.decision.estComplete()
       && this.datesTelechargements.estComplete()
