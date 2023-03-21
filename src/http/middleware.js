@@ -1,9 +1,18 @@
 const basicAuth = require('express-basic-auth');
 const pug = require('pug');
 const { check } = require('express-validator');
+const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
 
 const middleware = (configuration = {}) => {
-  const { depotDonnees, adaptateurChiffrement, adaptateurJWT, login, motDePasse } = configuration;
+  const
+    {
+      depotDonnees,
+      adaptateurChiffrement,
+      adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
+      adaptateurJWT,
+      login,
+      motDePasse,
+    } = configuration;
 
   const authentificationBasique = basicAuth({
     challenge: true,
@@ -19,7 +28,10 @@ const middleware = (configuration = {}) => {
     const imgCsp = "img-src 'self' data:";
     const styleCsp = nonce ? `style-src 'self' 'nonce-${nonce}'` : '';
     const scriptCsp = "script-src 'self'";
-    const toutesCsp = [defaultCsp, imgCsp, styleCsp, scriptCsp].filter((csp) => csp !== '');
+    const frameCsp = adaptateurEnvironnement.statistiques().domaineMetabaseMSS()
+      ? `frame-src ${adaptateurEnvironnement.statistiques().domaineMetabaseMSS()}` : '';
+
+    const toutesCsp = [defaultCsp, imgCsp, styleCsp, scriptCsp, frameCsp].filter((csp) => csp !== '');
 
     reponse.set({
       'content-security-policy': `${toutesCsp.join('; ')}`,
