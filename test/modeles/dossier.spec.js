@@ -58,6 +58,25 @@ describe("Un dossier d'homologation", () => {
     });
   });
 
+  describe("sur demande d'enregistrement de la décision d'homologation", () => {
+    it('jette une erreur si le dossier est déjà finalisé', () => {
+      const dossierFinalise = new Dossier({ finalise: true });
+
+      expect(() => dossierFinalise.enregistreDecision(new Date(), 'unAn'))
+        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+    });
+
+    it('met à jour la décision du dossier avec les informations fournies', () => {
+      const dossier = new Dossier();
+      const maintenant = new Date();
+
+      dossier.enregistreDecision(maintenant, 'unAn');
+
+      expect(dossier.decision.dateHomologation).to.equal(maintenant);
+      expect(dossier.decision.dureeValidite).to.equal('unAn');
+    });
+  });
+
   describe("sur demande d'enregistrement d'une date de téléchargement", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
