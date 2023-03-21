@@ -5,7 +5,7 @@ const Decision = require('./etapes/decision');
 const EtapeAvis = require('./etapes/etapeAvis');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
-const { ErreurDossierDejaFinalise } = require('../erreurs');
+const { ErreurDossierDejaFinalise, ErreurDossierNonFinalisable } = require('../erreurs');
 
 class Dossier extends InformationsHomologation {
   constructor(
@@ -73,14 +73,27 @@ class Dossier extends InformationsHomologation {
     this.decision.enregistre(dateHomologation, dureeHomologation);
   }
 
+  enregistreFinalisation() {
+    if (!this.estComplet()) {
+      const etapesIncompletes = Dossier
+        .etapesObligatoires()
+        .filter((etape) => !this[etape].estComplete());
+      throw new ErreurDossierNonFinalisable('Ce dossier comporte des étapes incomplètes.', etapesIncompletes);
+    }
+
+    this.finalise = true;
+  }
+
   estComplet() {
-    return this.decision.estComplete()
-      && this.datesTelechargements.estComplete()
-      && this.autorite.estComplete();
+    return Dossier.etapesObligatoires().every((etape) => this[etape].estComplete());
   }
 
   estActif() {
     return this.finalise && this.decision.periodeHomologationEstEnCours();
+  }
+
+  static etapesObligatoires() {
+    return ['decision', 'datesTelechargements', 'autorite'];
   }
 
   toJSON() {

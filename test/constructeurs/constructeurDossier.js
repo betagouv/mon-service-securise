@@ -63,6 +63,11 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  quiEstNonFinalise() {
+    this.donnees.finalise = false;
+    return this;
+  }
+
   construit() {
     return new Dossier(this.donnees, this.referentiel, this.adaptateurHorloge);
   }

@@ -13,7 +13,12 @@ class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
 class ErreurDossierDejaFinalise extends ErreurModele {}
-class ErreurDossierNonFinalisable extends ErreurModele {}
+class ErreurDossierNonFinalisable extends ErreurModele {
+  constructor(message, etapesIncompletes) {
+    super(message);
+    this.etapesIncompletes = etapesIncompletes;
+  }
+}
 class ErreurDossiersInvalides extends ErreurModele {}
 class ErreurDureeValiditeInvalide extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}

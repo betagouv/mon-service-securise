@@ -3,7 +3,7 @@ const expect = require('expect.js');
 const { unDossier } = require('../constructeurs/constructeurDossier');
 const Dossier = require('../../src/modeles/dossier');
 const Referentiel = require('../../src/referentiel');
-const { ErreurDossierDejaFinalise } = require('../../src/erreurs');
+const { ErreurDossierDejaFinalise, ErreurDossierNonFinalisable } = require('../../src/erreurs');
 
 describe("Un dossier d'homologation", () => {
   const referentiel = Referentiel.creeReferentielVide();
@@ -181,6 +181,30 @@ describe("Un dossier d'homologation", () => {
         .avecDateHomologation(new Date('2023-01-01'))
         .construit();
       expect(dossierDernierJourActif.estActif()).to.equal(true);
+    });
+  });
+
+  describe('sur demande de finalisation du dossier', () => {
+    it("jette une erreur contenant la liste des étapes incomplètes si le dossier n'est pas complet", () => {
+      referentiel.recharge({ documentsHomologation: { unDocument: {} } });
+      const dossier = new Dossier({}, referentiel);
+
+      expect(() => dossier.enregistreFinalisation()).to.throwError((e) => {
+        expect(e).to.be.an(ErreurDossierNonFinalisable);
+        expect(e.message).to.equal('Ce dossier comporte des étapes incomplètes.');
+        expect(e.etapesIncompletes).to.eql(['decision', 'datesTelechargements', 'autorite']);
+      });
+    });
+    it("enregistre la finalisation s'il est complet", () => {
+      referentiel.recharge({
+        echeancesRenouvellement: { unAn: {} },
+        documentsHomologation: { decision: {} },
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+      const dossierComplet = unDossier(referentiel).quiEstComplet().quiEstNonFinalise().construit();
+
+      dossierComplet.enregistreFinalisation();
+      expect(dossierComplet.finalise).to.be(true);
     });
   });
 });
