@@ -220,6 +220,30 @@ const routesApiService = (
       .catch(suite);
   });
 
+  routes.put('/:id/dossier/decision',
+    middleware.trouveHomologation,
+    middleware.trouveDossierCourant,
+    middleware.aseptise('dateHomologation', 'dureeValidite'),
+    (requete, reponse, suite) => {
+      const { dateHomologation, dureeValidite } = requete.body;
+      if (dateInvalide(dateHomologation)) {
+        reponse.status(422).send("Date d'homologation invalide");
+        return;
+      }
+
+      if (!referentiel.estIdentifiantEcheanceRenouvellementConnu(dureeValidite)) {
+        reponse.status(422).send('Durée de validité invalide');
+        return;
+      }
+
+      const { homologation, dossierCourant } = requete;
+
+      dossierCourant.enregistreDecision(dateHomologation, dureeValidite);
+      depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
+        .then(() => reponse.sendStatus(204))
+        .catch(suite);
+    });
+
   routes.put('/:id/dossier/document/:idDocument', middleware.trouveHomologation, middleware.trouveDossierCourant, (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
