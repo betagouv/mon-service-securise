@@ -1,0 +1,56 @@
+.selectize-control {
+  margin-top: 0.3em;
+  font-family: Marianne;
+}
+
+.selectize-control .selectize-input {
+  background: var(--fond-pale);
+  padding: 0.8em;
+  font-size: 1em;
+  border: solid 1px var(--liseres);
+  border-radius: 5px;
+  box-shadow: none;
+}
+
+.selectize-control .selectize-input.focus {
+  box-shadow: none;
+}
+
+.selectized + .selectize-control .selectize-input :is(.item, .item[data-value].active) {
+  background: #fff;
+  box-shadow: none;
+  border-radius: 0.3em;
+  border-color: #000;
+  padding-bottom: 0.3em;
+  color: var(--texte-fonce);
+  text-shadow: none;
+  font-weight: normal;
+}
+
+.selectize-control .selectize-input .item a.remove {
+  border-left: none;
+}
+
+.selectize-control .selectize-dropdown {
+  font-weight: normal;
+  font-size: 1em;
+  color: var(--texte-fonce);
+  box-shadow: none;
+  border-color: var(--liseres);
+}
+
+.selectize-control .selectize-dropdown .active:not(.selected) {
+  background-color: #fff;
+}
+
+.selectized:not(.intouche, [required]) ~ .message-erreur {
+  display: block;
+}
+
+.selectized:not(.intouche, [required]) + .selectize-control .selectize-input {
+  border-color: var(--rose-anssi);
+}
+
+.selectized[required]:not(.intouche) + .selectize-control .selectize-input {
+  border-color: var(--bleu-mise-en-avant);
+}
