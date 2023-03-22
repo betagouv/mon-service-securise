@@ -280,6 +280,18 @@ const routesApiService = (
         .catch(suite);
     });
 
+  routes.post('/:id/dossier/finalise',
+    middleware.trouveHomologation,
+    middleware.trouveDossierCourant,
+    (requete, reponse, suite) => {
+      const { homologation, dossierCourant } = requete;
+
+      dossierCourant.enregistreFinalisation();
+      depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
+        .then(() => reponse.sendStatus(204))
+        .catch(suite);
+    });
+
   routes.delete('/:id/autorisationContributeur',
     middleware.verificationAcceptationCGU,
     (requete, reponse, suite) => {
