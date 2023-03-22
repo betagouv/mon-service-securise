@@ -105,6 +105,18 @@ const middleware = (configuration = {}) => {
       .catch(() => reponse.status(422).send("L'homologation n'a pas pu être récupérée")));
   };
 
+  const trouveDossierCourant = (requete, reponse, suite) => {
+    if (!requete.homologation) throw new Error('Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveHomologation` ?');
+
+    const dossierCourant = requete.homologation.dossierCourant();
+    if (!dossierCourant) {
+      reponse.status(404).send('Homologation sans dossier courant');
+    } else {
+      requete.dossierCourant = dossierCourant;
+      suite();
+    }
+  };
+
   const aseptise = (...nomsParametres) => ((requete, _reponse, suite) => {
     const paramsTableauxVides = Object.keys(requete.body)
       .filter((p) => (Array.isArray(requete.body[p]) && requete.body[p].length === 0));
@@ -154,6 +166,7 @@ const middleware = (configuration = {}) => {
     repousseExpirationCookie,
     suppressionCookie,
     trouveHomologation,
+    trouveDossierCourant,
     verificationAcceptationCGU,
     verificationJWT,
   };

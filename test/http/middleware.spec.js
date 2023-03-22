@@ -216,6 +216,48 @@ describe('Le middleware MSS', () => {
     });
   });
 
+  describe("sur recherche du dossier courant d'une homologation existante", () => {
+    it("renvoie une erreur HTTP 404 si l'homologation n'a pas de dossier courant'", (done) => {
+      const homologation = {
+        dossierCourant: () => null,
+      };
+      requete.homologation = homologation;
+      const middleware = Middleware();
+
+      prepareVerificationReponse(reponse, 404, 'Homologation sans dossier courant', done);
+
+      const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
+      middleware.trouveDossierCourant(requete, reponse, suite);
+    });
+
+    it("jette une erreur technique si l'homologation n'est pas présente dans la requête", (done) => {
+      requete.homologation = null;
+      const middleware = Middleware();
+
+      expect(() => middleware.trouveDossierCourant(requete, reponse)).to.throwError((e) => {
+        expect(e.message).to.equal('Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveHomologation` ?');
+        done();
+      });
+    });
+
+    it('retourne le dossier courant trouvé et appelle le middleware suivant', (done) => {
+      const dossierCourant = {};
+      const homologation = {
+        dossierCourant: () => dossierCourant,
+      };
+
+      requete.homologation = homologation;
+      const middleware = Middleware();
+
+      middleware.trouveDossierCourant(requete, reponse, () => {
+        try {
+          expect(requete.dossierCourant).to.eql(dossierCourant);
+          done();
+        } catch (e) { done(e); }
+      });
+    });
+  });
+
   describe("sur demande d'aseptisation", () => {
     it('supprime les espaces au début et à la fin du paramètre', (done) => {
       const middleware = Middleware();
