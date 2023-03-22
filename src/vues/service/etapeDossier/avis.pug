@@ -3,6 +3,8 @@ include ../../fragments/elementsAjoutables/elementsAjoutablesAvis
 
 block append styles
   link(href = '/statique/assets/styles/etapesDossier/avis.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/etapesDossier/avis.selectize.css', rel = 'stylesheet')
+  link(href = '/styles/selectize.default.min.css', rel = 'stylesheet')
 
 block formulaire
   section.description
@@ -15,6 +17,7 @@ block formulaire
   +elementsAjoutablesAvis(service.dossierCourant().avis.avis)
 
   script(type = "module", src = "/statique/homologation/etapes/avis.js")
+  script(src = "/bibliotheques/selectize.min.js")
 
 block bouton-etape
   button.bouton#suivant(

@@ -25,10 +25,10 @@ const parametres = (selecteurFormulaire) => {
       return acc;
     }, {});
 
-  const nomsParamsMultiples = nomsInput(`${selecteurFormulaire} input[type="checkbox"]`);
+  const nomsParamsMultiples = nomsInput(`${selecteurFormulaire} input[type="checkbox"], ${selecteurFormulaire} select[multiple='multiple']`);
   nomsParamsMultiples.forEach((n) => (params[n] = params[n] || []));
 
-  const nomsParamsAtomiques = nomsInput(`${selecteurFormulaire} input[type!="checkbox"], ${selecteurFormulaire} textarea, ${selecteurFormulaire} select`);
+  const nomsParamsAtomiques = nomsInput(`${selecteurFormulaire} input[type!="checkbox"], ${selecteurFormulaire} textarea, ${selecteurFormulaire} select[multiple!='multiple']`);
   return avecPremierElementCommeValeurs(params, nomsParamsAtomiques);
 };
 
