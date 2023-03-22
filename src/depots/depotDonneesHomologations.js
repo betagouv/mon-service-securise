@@ -1,6 +1,5 @@
 const {
   ErreurDonneesObligatoiresManquantes,
-  ErreurDossierNonFinalisable,
   ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
 } = require('../erreurs');
@@ -10,7 +9,6 @@ const Homologation = require('../modeles/homologation');
 const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
-const { fusionneJSON } = require('../utilitaires/fusionJSON');
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
 const creeDepot = (config = {}) => {
@@ -183,16 +181,8 @@ const creeDepot = (config = {}) => {
 
   const toutesHomologations = () => homologations();
 
-  const metsAJourDossierCourant = (idHomologation, dossier) => (
-    ajouteDossierCourantSiNecessaire(idHomologation)
-      .then((d) => {
-        const donneesDossier = fusionneJSON(d.toJSON(), dossier.toJSON());
-        const dossierMisAJour = new Dossier(donneesDossier, referentiel);
-        if (dossierMisAJour.finalise && !dossierMisAJour.estComplet()) {
-          throw new ErreurDossierNonFinalisable("Le dossier n'est pas complet et ne peut pas être finalisé");
-        }
-        return ajouteAItemsDansHomologation('dossiers', idHomologation, dossierMisAJour);
-      })
+  const enregistreDossierCourant = (idHomologation, dossier) => (
+    ajouteAItemsDansHomologation('dossiers', idHomologation, dossier)
   );
 
   const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
@@ -292,7 +282,7 @@ const creeDepot = (config = {}) => {
     homologation,
     homologationExiste,
     homologations,
-    metsAJourDossierCourant,
+    enregistreDossierCourant,
     nouvelleHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,

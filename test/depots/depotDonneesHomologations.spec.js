@@ -4,7 +4,6 @@ const uneDescriptionValide = require('../constructeurs/constructeurDescriptionSe
 
 const {
   ErreurDonneesObligatoiresManquantes,
-  ErreurDossierNonFinalisable,
   ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
 } = require('../../src/erreurs');
@@ -910,7 +909,7 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  describe('sur demande de mise à jour du dossier courant', () => {
+  describe("sur demande d'enregistrement du dossier courant", () => {
     let adaptateurUUID;
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { sixMois: {}, unAn: {} },
@@ -918,11 +917,10 @@ describe('Le dépôt de données des homologations', () => {
 
     beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
 
-    it("crée le dossier s'il n'existe pas déjà un dossier non-finalisé", (done) => {
+    it('enregistre le dossier courant', (done) => {
       const donneesHomologations = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
-        dossiers: [{ id: '999', decision: { dateHomologation: '2022-07-14', dureeValidite: 'sixMois' }, finalise: true }],
       };
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         homologations: [copie(donneesHomologations)],
@@ -933,38 +931,9 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurUUID,
         referentiel,
       });
-      const dossier = new Dossier({ decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' } }, referentiel);
+      const dossier = new Dossier({ id: '999', decision: { dateHomologation: '2022-11-30', dureeValidite: 'sixMois' } }, referentiel);
 
-      depot.metsAJourDossierCourant('123', dossier)
-        .then(() => depot.homologation('123'))
-        .then((h) => {
-          expect(h.nombreDossiers()).to.equal(2);
-          const dossierCourant = h.dossierCourant();
-          expect(dossierCourant.decision.dateHomologation).to.equal('2022-12-01');
-          expect(dossierCourant.decision.dureeValidite).to.equal('unAn');
-          done();
-        })
-        .catch(done);
-    });
-
-    it("met à jour le dossier courant s'il existe", (done) => {
-      const donneesHomologations = {
-        id: '123',
-        descriptionService: { nomService: 'Un service' },
-        dossiers: [{ id: '999', decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' } }],
-      };
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        homologations: [copie(donneesHomologations)],
-        services: [copie(donneesHomologations)],
-      });
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        adaptateurUUID,
-        referentiel,
-      });
-      const dossier = new Dossier({ decision: { dateHomologation: '2022-11-30', dureeValidite: 'sixMois' } }, referentiel);
-
-      depot.metsAJourDossierCourant('123', dossier)
+      depot.enregistreDossierCourant('123', dossier)
         .then(() => depot.homologation('123'))
         .then((h) => {
           expect(h.nombreDossiers()).to.equal(1);
@@ -976,7 +945,35 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it('fusionne les données déjà stockées et les données de la mise à jour', (done) => {
+    it("n'écrase pas les autres dossiers si l'ID est différent", (done) => {
+      const donneesHomologations = {
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
+        dossiers: [{ id: '888', finalise: true }],
+      };
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        homologations: [copie(donneesHomologations)],
+        services: [copie(donneesHomologations)],
+      });
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        adaptateurUUID,
+        referentiel,
+      });
+      const dossier = new Dossier({ id: '999' }, referentiel);
+
+      depot.enregistreDossierCourant('123', dossier)
+        .then(() => depot.homologation('123'))
+        .then((h) => {
+          expect(h.nombreDossiers()).to.equal(2);
+          expect(h.dossiers.item(0).id).to.equal('888');
+          expect(h.dossiers.item(1).id).to.equal('999');
+          done();
+        })
+        .catch(done);
+    });
+
+    it('écrase les données déjà stockées avec les nouvelles données', (done) => {
       const decision = { dateHomologation: '2022-12-01', dureeValidite: 'unAn' };
       const donneesDossierAvecDecision = { id: '999', decision };
       const donneesService = {
@@ -989,52 +986,21 @@ describe('Le dépôt de données des homologations', () => {
         homologations: [copie(donneesService)],
         services: [copie(donneesService)],
       });
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        adaptateurUUID,
-        referentiel,
-      });
+      const depot = DepotDonneesHomologations.creeDepot(
+        { adaptateurPersistance, adaptateurUUID, referentiel }
+      );
 
       const autorite = { nom: 'Jean', fonction: 'RSSI' };
-      const rajouteAutorite = new Dossier({ autorite }, referentiel);
-      depot.metsAJourDossierCourant('123', rajouteAutorite)
+      const seulementAutorite = new Dossier({ autorite, id: '999' }, referentiel);
+      depot.enregistreDossierCourant('123', seulementAutorite)
         .then(() => depot.homologation('123'))
         .then((h) => {
           const donneesDossierCourant = h.dossierCourant().toJSON();
-          expect(donneesDossierCourant.decision).to.eql(decision);
           expect(donneesDossierCourant.autorite).to.eql(autorite);
+          expect(donneesDossierCourant.decision).to.eql({});
           done();
         })
         .catch(done);
-    });
-
-    describe('avec demande de finalisation du dossier', () => {
-      it('vérifie que la finalisation est possible', (done) => {
-        const donneesHomologations = {
-          id: '123',
-          descriptionService: { nomService: 'Un service' },
-          dossiers: [{ id: '999' }],
-        };
-        const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          homologations: [copie(donneesHomologations)],
-          services: [copie(donneesHomologations)],
-        });
-        const depot = DepotDonneesHomologations.creeDepot({
-          adaptateurPersistance,
-          adaptateurUUID,
-          referentiel,
-        });
-        const dossier = new Dossier({ finalise: true }, referentiel);
-
-        depot.metsAJourDossierCourant('123', dossier)
-          .then(() => done('La mise à jour aurait dû lever une exception'))
-          .catch((e) => {
-            expect(e).to.be.an(ErreurDossierNonFinalisable);
-            expect(e.message).to.equal("Le dossier n'est pas complet et ne peut pas être finalisé");
-            done();
-          })
-          .catch(done);
-      });
     });
   });
 
