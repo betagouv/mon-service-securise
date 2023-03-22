@@ -11,6 +11,7 @@ const CHEMINS_BIBLIOTHEQUES = {
     'jspdf.umd.min.js': 'https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js',
     'piwik.js': 'https://stats.data.gouv.fr/piwik.js',
     'purify.min.js': 'https://unpkg.com/dompurify/dist/purify.min.js',
+    'selectize.min.js': 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js',
   },
   post: {
     evenementMatomo: 'https://stats.data.gouv.fr/piwik.php',
