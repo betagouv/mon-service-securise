@@ -213,9 +213,10 @@ describe("Un dossier d'homologation", () => {
       expect(() => dossier.enregistreFinalisation()).to.throwError((e) => {
         expect(e).to.be.an(ErreurDossierNonFinalisable);
         expect(e.message).to.equal('Ce dossier comporte des étapes incomplètes.');
-        expect(e.etapesIncompletes).to.eql(['decision', 'datesTelechargements', 'autorite']);
+        expect(e.etapesIncompletes).to.eql(['decision', 'datesTelechargements', 'autorite', 'avis']);
       });
     });
+
     it("enregistre la finalisation s'il est complet", () => {
       referentiel.recharge({
         echeancesRenouvellement: { unAn: {} },

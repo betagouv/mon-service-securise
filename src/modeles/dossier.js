@@ -102,7 +102,7 @@ class Dossier extends InformationsHomologation {
   }
 
   static etapesObligatoires() {
-    return ['decision', 'datesTelechargements', 'autorite'];
+    return ['decision', 'datesTelechargements', 'autorite', 'avis'];
   }
 
   toJSON() {
