@@ -11,7 +11,6 @@ const AutorisationCreateur = require('../modeles/autorisations/autorisationCreat
 const Avis = require('../modeles/avis');
 const AvisExpertCyber = require('../modeles/avisExpertCyber');
 const DescriptionService = require('../modeles/descriptionService');
-const Dossier = require('../modeles/dossier');
 const FonctionnalitesSpecifiques = require('../modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('../modeles/donneesSensiblesSpecifiques');
 const MesureGenerale = require('../modeles/mesureGenerale');
@@ -175,40 +174,6 @@ const routesApiService = (
       reponse.status(422).send('Données invalides');
     }
   });
-
-  routes.put(
-    '/:id/dossier',
-    middleware.aseptise('dateHomologation', 'dureeValidite'),
-    middleware.trouveHomologation,
-    (requete, reponse, suite) => {
-      const idService = requete.homologation.id;
-      const { dateHomologation, dureeValidite, finalise = false } = requete.body;
-
-      const seulementDonneesRecues = () => {
-        const donneesDossier = { finalise, decision: {} };
-
-        if (dateHomologation) {
-          donneesDossier.decision.dateHomologation = dateHomologation;
-        }
-        if (dureeValidite) {
-          donneesDossier.decision.dureeValidite = dureeValidite;
-        }
-
-        return donneesDossier;
-      };
-
-      if (!finalise && dateInvalide(dateHomologation)) {
-        reponse.status(422).send("Date d'homologation manquante");
-      } else if (!finalise && !dureeValidite) {
-        reponse.status(422).send('Durée de validité manquante');
-      } else {
-        const dossier = new Dossier(seulementDonneesRecues(), referentiel);
-        depotDonnees.metsAJourDossierCourant(idService, dossier)
-          .then(() => reponse.send({ idService }))
-          .catch(suite);
-      }
-    }
-  );
 
   routes.put('/:id/dossier/autorite', middleware.trouveHomologation, middleware.trouveDossierCourant, middleware.aseptise('nom', 'fonction'), (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
