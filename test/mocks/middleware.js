@@ -38,6 +38,7 @@ let idUtilisateurCourant;
 let listesAseptisees = [];
 let parametresAseptises = [];
 let rechercheServiceEffectuee = false;
+let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
 let verificationJWTMenee = false;
 let verificationCGUMenee = false;
@@ -58,6 +59,7 @@ const middlewareFantaisie = {
     listesAseptisees = [];
     parametresAseptises = [];
     rechercheServiceEffectuee = false;
+    rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
     verificationCGUMenee = false;
@@ -112,6 +114,12 @@ const middlewareFantaisie = {
     suite();
   },
 
+  trouveDossierCourant: (requete, _reponse, suite) => {
+    requete.dossierCourant = requete.homologation.dossierCourant();
+    rechercheDossierCourantEffectuee = true;
+    suite();
+  },
+
   verificationJWT: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
@@ -142,6 +150,10 @@ const middlewareFantaisie = {
 
   verifieRechercheService: (...params) => {
     verifieRequeteChangeEtat({ lectureEtat: () => rechercheServiceEffectuee }, ...params);
+  },
+
+  verifieRechercheDossierCourant: (...params) => {
+    verifieRequeteChangeEtat({ lectureEtat: () => rechercheDossierCourantEffectuee }, ...params);
   },
 
   verifieRequeteExigeAcceptationCGU: (...params) => {
