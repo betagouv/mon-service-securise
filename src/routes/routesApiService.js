@@ -180,7 +180,7 @@ const routesApiService = (
 
     const { body: { nom, fonction } } = requete;
     dossierCourant.enregistreAutoriteHomologation(nom, fonction);
-    depotDonnees.metsAJourDossierCourant(homologation.id, dossierCourant)
+    depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
       .then(() => reponse.sendStatus(204))
       .catch(suite);
   });
@@ -220,7 +220,7 @@ const routesApiService = (
 
     const dateTelechargement = adaptateurHorloge.maintenant();
     dossierCourant.enregistreDateTelechargement(idDocument, dateTelechargement);
-    depotDonnees.metsAJourDossierCourant(homologation.id, dossierCourant)
+    depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
       .then(() => reponse.sendStatus(204))
       .catch(suite);
   });
@@ -240,7 +240,7 @@ const routesApiService = (
       const { homologation, dossierCourant } = requete;
 
       dossierCourant.enregistreAvis(avis);
-      depotDonnees.metsAJourDossierCourant(homologation.id, dossierCourant)
+      depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     });

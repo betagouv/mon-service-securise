@@ -525,7 +525,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.depotDonnees().enregistreDossierCourant = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -553,7 +553,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("utilise le dépôt pour enregistrer l'autorité d'homologation", (done) => {
       let depotAppele = false;
 
-      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+      testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.autorite.nom).to.equal('Jean Dupond');
@@ -572,7 +572,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.depotDonnees().enregistreDossierCourant = () => Promise.resolve();
       testeur.referentiel().recharge({ echeancesRenouvellement: { unAn: {} } });
     });
 
@@ -623,7 +623,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("utilise le dépôt pour enregistrer la décision d'homologation", (done) => {
       let depotAppele = false;
 
-      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+      testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.decision.dateHomologation).to.equal('2023-01-01');
@@ -642,7 +642,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.depotDonnees().enregistreDossierCourant = () => Promise.resolve();
       testeur.referentiel().recharge({ documentsHomologation: { decision: {} } });
     });
 
@@ -666,7 +666,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
       testeur.adaptateurHorloge().maintenant = () => maintenant;
 
-      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+      testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.datesTelechargements.decision).to.equal(maintenant);
@@ -694,7 +694,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] }, testeur.referentiel());
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.depotDonnees().enregistreDossierCourant = () => Promise.resolve();
       testeur.referentiel().recharge({
         echeancesRenouvellement: { unAn: {} },
         statutsAvisDossierHomologation: { favorable: {} },
@@ -744,7 +744,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('utilise le dépôt pour enregistrer les avis', (done) => {
       let depotAppele = false;
-      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+      testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.avis.avis.length).to.equal(1);
@@ -774,7 +774,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         testeur.referentiel()
       );
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().metsAJourDossierCourant = () => Promise.resolve();
+      testeur.depotDonnees().enregistreDossierCourant = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -793,7 +793,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('utilise le dépôt pour finaliser le dossier', (done) => {
       let depotAppele = false;
-      testeur.depotDonnees().metsAJourDossierCourant = (idHomologation, dossier) => {
+      testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.finalise).to.be(true);
