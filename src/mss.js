@@ -5,6 +5,7 @@ const { DUREE_SESSION } = require('./http/configurationServeur');
 const routesApi = require('./routes/routesApi');
 const routesBibliotheques = require('./routes/routesBibliotheques');
 const routesService = require('./routes/routesService');
+const routesStyles = require('./routes/routesStyles');
 
 require('dotenv').config();
 
@@ -132,6 +133,8 @@ const creeServeur = (
   app.use('/bibliotheques', routesBibliotheques());
 
   app.use('/service', routesService(middleware, referentiel, depotDonnees, moteurRegles));
+
+  app.use('/styles', routesStyles());
 
   app.get('/utilisateur/edition', middleware.verificationJWT, (requete, reponse) => {
     const departements = referentiel.departements();
