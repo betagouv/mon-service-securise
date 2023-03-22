@@ -81,6 +81,13 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
+    it('recherche le dossier courant correspondant', (done) => {
+      testeur.middleware().verifieRechercheDossierCourant(
+        'http://localhost:1234/api/service/456/pdf/dossierDecision.pdf',
+        done,
+      );
+    });
+
     it('sert un fichier de type pdf', (done) => {
       verifieTypeFichierServiEstPDF('http://localhost:1234/api/service/456/pdf/dossierDecision.pdf', done);
     });
@@ -111,19 +118,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         .then(() => done('La génération aurait dû lever une erreur'))
         .catch((e) => {
           expect(e.response.status).to.equal(424);
-          done();
-        })
-        .catch(done);
-    });
-
-    it("reste robuste lorsque l'homologation n'a pas de dossier courant", (done) => {
-      const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
-      testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
-
-      axios.get('http://localhost:1234/api/service/456/pdf/dossierDecision.pdf')
-        .catch(({ response }) => {
-          expect(response.status).to.be(404);
-          expect(response.data).to.equal('Homologation sans dossier courant');
           done();
         })
         .catch(done);

@@ -621,6 +621,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
+    it('recherche le dossier courant correspondant', (done) => {
+      testeur.middleware().verifieRechercheDossierCourant(
+        { url: 'http://localhost:1234/api/service/456/dossier/autorite', method: 'put' },
+        done,
+      );
+    });
+
     it('aseptise les paramètres reçus', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         ['nom', 'fonction'],
@@ -645,19 +652,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });
-
-    it("reste robuste lorsque l'homologation n'a pas de dossier courant", (done) => {
-      const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
-      testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
-
-      axios.put('http://localhost:1234/api/service/456/dossier/autorite')
-        .catch(({ response }) => {
-          expect(response.status).to.be(404);
-          expect(response.data).to.equal('Homologation sans dossier courant');
-          done();
-        })
-        .catch(done);
-    });
   });
 
   describe('quand requête PUT sur `/api/service/:id/dossier/document/:idDocument', () => {
@@ -670,6 +664,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
+        { url: 'http://localhost:1234/api/service/456/dossier/document/decision', method: 'put' },
+        done,
+      );
+    });
+
+    it('recherche le dossier courant correspondant', (done) => {
+      testeur.middleware().verifieRechercheDossierCourant(
         { url: 'http://localhost:1234/api/service/456/dossier/document/decision', method: 'put' },
         done,
       );
@@ -692,19 +693,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
-    });
-
-    it("reste robuste lorsque l'homologation n'a pas de dossier courant", (done) => {
-      const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
-      testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
-
-      axios.put('http://localhost:1234/api/service/456/dossier/document/decision')
-        .catch(({ response }) => {
-          expect(response.status).to.be(404);
-          expect(response.data).to.equal('Homologation sans dossier courant');
-          done();
-        })
-        .catch(done);
     });
 
     it("reste robuste si l'id de document ne correspond pas à un document connu", (done) => {
@@ -731,6 +719,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
+        { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' },
+        done,
+      );
+    });
+
+    it('recherche le dossier courant correspondant', (done) => {
+      testeur.middleware().verifieRechercheDossierCourant(
         { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' },
         done,
       );
@@ -777,19 +772,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
-    });
-
-    it("reste robuste lorsque l'homologation n'a pas de dossier courant", (done) => {
-      const homologationSansDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
-      testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
-
-      axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [] })
-        .catch(({ response }) => {
-          expect(response.status).to.be(404);
-          expect(response.data).to.equal('Homologation sans dossier courant');
-          done();
-        })
-        .catch(done);
     });
   });
 
