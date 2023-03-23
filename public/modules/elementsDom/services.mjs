@@ -115,19 +115,11 @@ const $serviceExistant = (
   return $element;
 };
 
-const $nouveauService = () => $(`
-<div class="nouveau service" id="nouveau-service">
-  <div class="icone-ajout"></div>
-  <div>Nouveau service</div>
-</div>
-`);
-
 const $services = (donneesServices, ...params) => (
   donneesServices.reduce(($acc, donneesService) => {
     const $service = $serviceExistant(donneesService, ...params);
     return $acc.append($service);
   }, $(document.createDocumentFragment()))
-    .append($nouveauService())
 );
 
 export { $services, $modaleNouveauContributeur };
