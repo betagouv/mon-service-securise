@@ -1,8 +1,22 @@
 .suivi-services h1 {
-  padding: 1em 0;
+  margin: 0;
+  padding: 0 0 0.5em;
 
   text-align: left;
   color: var(--texte-fonce);
+  font-size: 2.6em;
+  font-weight: 800;
+}
+
+.suivi-services h2 {
+  margin: 0;
+  padding: 2em 0 0;
+
+  text-align: left;
+  color: var(--bleu-anssi);
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 1.15em;
 }
 
 .services {

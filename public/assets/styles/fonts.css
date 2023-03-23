@@ -33,3 +33,9 @@
   src: url(../fonts/Marianne-Bold_Italic.woff2) format("woff2"), url(../fonts/Marianne-Bold_Italic.woff) format("woff");
   font-weight: 700;
   font-style: italic; }
+
+@font-face {
+  font-family: Marianne;
+  src: url(../fonts/Marianne-ExtraBold.woff2) format("woff2"), url(../fonts/Marianne-ExtraBold.woff) format("woff");
+  font-weight: 800;
+  font-style: normal; }
