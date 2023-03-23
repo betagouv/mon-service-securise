@@ -30,9 +30,9 @@ describe('Une étape « Avis »', () => {
   });
 
   describe("sur vérification que l'étape est complète", () => {
-    it("n'est pas complète s'il n'y a aucun avis", () => {
+    it("est complète s'il n'y a aucun avis", () => {
       const aucunAvis = new EtapeAvis();
-      expect(aucunAvis.estComplete()).to.be(false);
+      expect(aucunAvis.estComplete()).to.be(true);
     });
 
     it("n'est pas complète dès qu'un avis n'est pas saisi", () => {

@@ -15,8 +15,7 @@ class EtapeAvis extends Etape {
   }
 
   estComplete() {
-    return this.avis.length > 0
-        && this.avis.every((a) => a.statutSaisie() === InformationsHomologation.COMPLETES);
+    return this.avis.every((a) => a.statutSaisie() === InformationsHomologation.COMPLETES);
   }
 
   toJSON() {
