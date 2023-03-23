@@ -17,7 +17,8 @@ block formulaire
   script(type = "module", src = "/statique/homologation/etapes/avis.js")
 
 block bouton-etape
-  button.bouton#suivant(
+    a(class = 'nouvel-item bouton bouton-secondaire', id = 'ajout-element-un-avis') Ajouter un avis
+    button.bouton#suivant(
       data-id-homologation = service.id,
       data-id-etape = idEtape,
       data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)

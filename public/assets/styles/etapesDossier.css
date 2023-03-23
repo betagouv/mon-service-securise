@@ -190,8 +190,15 @@ ul.documents {
   margin-left: 7em;
 }
 
+.boutons-etape {
+  display: flex;
+  align-items: center;
+  column-gap: 1.5em;
+}
+
 .bouton {
   margin: 0;
+  padding: 0.5em 1.3em;
 }
 
 .bouton.blanc {
