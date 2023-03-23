@@ -112,13 +112,10 @@ form#mesures .specifiques input[type='radio'] {
   margin-top: 2em;
 }
 
-.enregistrement, footer {
+.enregistrement {
   position: sticky;
   background-color: #fff;
-}
-
-.enregistrement {
-  bottom: 3em;
+  bottom: 0;
   display: flex;
   justify-content: flex-end;
   column-gap: 1.7em;
