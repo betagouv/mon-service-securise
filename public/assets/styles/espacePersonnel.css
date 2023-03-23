@@ -56,7 +56,8 @@
   background-position: center;
 }
 
-.service .menu-contextuel-ouvert .menu-contextuel-titre, .service .menu-contextuel-titre:hover {
+.service .menu-contextuel-ouvert .menu-contextuel-titre,
+.service .menu-contextuel-titre:hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
@@ -149,7 +150,7 @@
   justify-content: center;
 }
 
-.pastilles > div {
+.pastilles>div {
   width: 2em;
   height: 2em;
 }
@@ -193,7 +194,8 @@
   background-image: url(../images/pastille_bleu_anssi.svg);
 }
 
-.initiales, .nombre-contributeurs-supplementaires {
+.initiales,
+.nombre-contributeurs-supplementaires {
   font-size: 0.8em;
   transform: translateY(-0.1em);
 }
@@ -241,19 +243,10 @@
   background-repeat: no-repeat;
 }
 
-.bandeau-nouveautes, .bandeau-maj-profil {
+.bandeau-maj-profil {
   display: flex;
   height: 2.7em;
   align-items: center;
-}
-
-.bandeau-nouveautes {
-  color: var(--bleu-anssi);
-  background-color: var(--fond-gris-pale);
-}
-
-.bandeau-nouveautes p::after {
-  background-color: var(--bleu-anssi);
 }
 
 .bandeau-maj-profil {
@@ -273,7 +266,7 @@
   display: none;
 }
 
-:is(.bandeau-nouveautes, .bandeau-maj-profil) p {
+.bandeau-maj-profil p {
   display: flex;
   align-items: center;
   font-weight: bold;
@@ -281,7 +274,7 @@
   text-align: left;
 }
 
-:is(.bandeau-nouveautes, .bandeau-maj-profil) p::after {
+.bandeau-maj-profil p::after {
   display: block;
   content: '';
   width: 1em;
