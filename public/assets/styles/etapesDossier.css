@@ -184,8 +184,10 @@ ul.documents {
 
 .boutons {
   display: flex;
-  justify-content: flex-end;
-  column-gap: 2em;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 7em;
 }
 
 .bouton {
