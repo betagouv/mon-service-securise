@@ -74,13 +74,18 @@ label.exemple {
   color: var(--texte-clair);
 }
 
-a.nouvel-item {
-  padding-left: 2em;
-  background-image: url(../../images/icone_ajout_bleue.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
+.nouvel-item {
+  display: flex;
+  align-items: center;
+}
 
-  font-weight: normal;
+.nouvel-item::before {
+  content: '';
+  display: block;
+  width: 1.4em;
+  height: 1.4em;
+  margin-right: 0.4em;
+  background: url(../../images/icone_plus_pastille_bleue.svg) center/contain;
 }
 
 .item-ajoute {
