@@ -19,10 +19,40 @@
   font-size: 1.15em;
 }
 
+.suivi-services .nouveau-service {
+  background: var(--bleu-mise-en-avant);
+  color: #fff;
+  cursor: pointer;
+  width: fit-content;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15em;
+  margin-left: auto;
+  margin-right: 0;
+  padding: 0.6em 1em;
+}
+
+.suivi-services .nouveau-service::before {
+  content: '';
+  background: url('../images/icone_plus.svg') no-repeat ;
+  background-size: contain;
+  width: 1.4em;
+  height: 1.4em;
+  padding-right: 0.5em;
+}
+
+.entete-suivi-services {
+  background: #FFFFFF;
+  padding-bottom: 2em;
+}
+
 .services {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 1em;
+  margin-top: 2em;
 }
 
 .service {
@@ -224,6 +254,7 @@
 
 .nouveau.service {
   cursor: pointer;
+  user-select: none;
 
   color: var(--bleu-mise-en-avant);
   font-weight: bold;

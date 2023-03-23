@@ -15,9 +15,12 @@ block main
     p.marges-fixes.
       Mettez à jour vos informations
 
-  .suivi-services.marges-fixes
-    h2 Espace personnel
-    h1 Mes services
-    .services
+  .suivi-services
+      .entete-suivi-services
+        .marges-fixes
+          h2 Espace personnel
+          h1 Mes services
+          .nouveau-service#nouveau-service Nouveau service
+      .services.marges-fixes
 
   script(type = "module", src = "/statique/espacePersonnel.js")
