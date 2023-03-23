@@ -127,3 +127,18 @@ a.nouvel-item {
   background-color: var(--rouge-anssi);
   background-image: url(../../images/icone_fermer_blanche.svg);
 }
+
+.enregistrement {
+  position: sticky;
+  background-color: #fff;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 1.7em;
+  width: calc(100% + 7em);
+  margin-left: -7em;
+  padding: 1.4em 7em 1.4em 0;
+  border-top-width: 2px;
+  border-top-style: solid;
+  border-image: linear-gradient(-45deg, #5cc7ff33, #3788d733, #2c57aa33, #6b24dd33, #a826b333) 1;
+}
