@@ -12,7 +12,8 @@ header a {
   color: var(--bleu-anssi);
 }
 
-header nav, .utilisateur-courant {
+header nav,
+.utilisateur-courant {
   display: flex;
   column-gap: 0.4em;
   align-items: center;
@@ -26,7 +27,8 @@ header nav :is(.sandwich, .bouton-fermer) {
   display: none;
 }
 
-header nav a, .nom-utilisateur-courant {
+header nav a,
+.nom-utilisateur-courant {
   padding: 0.3em 0.85em;
 
   color: var(--systeme-design-etat-bleu);
@@ -40,7 +42,8 @@ header nav a, .nom-utilisateur-courant {
   background-color: var(--systeme-design-etat-gris-actif);
 }
 
-.marianne, .devise {
+.marianne,
+.devise {
   width: 45%;
 
   background-repeat: no-repeat;
@@ -170,4 +173,54 @@ header nav a, .nom-utilisateur-courant {
 
   color: var(--systeme-design-etat-bleu);
   font-size: 0.9em;
+}
+
+.bandeau-nouveautes {
+  display: flex;
+  height: 2.7em;
+  align-items: center;
+}
+
+.bandeau-nouveautes {
+  position: relative;
+  color: var(--gris-fonce);
+  background-color: var(--fond-gris-pale);
+  height: 2em;
+  border-radius: 8px;
+  margin-right: 2em;
+}
+
+.bandeau-nouveautes p::after {
+  background-color: var(--gris-fonce);
+}
+
+.bandeau-nouveautes img {
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+}
+
+.bandeau-nouveautes p {
+  justify-content: center;
+  padding: 0 1em;
+}
+
+.bandeau-nouveautes p {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: .95em;
+  text-align: left;
+}
+
+.bandeau-nouveautes p::after {
+  display: block;
+  content: '';
+  width: 1em;
+  height: 1em;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
+  mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
+  transform: translateX(0.3em) translateY(0.08em) scale(0.95);
 }
