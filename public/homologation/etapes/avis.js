@@ -4,13 +4,16 @@ import { brancheConteneur } from '../../modules/interactions/validation.mjs';
 import brancheElementsAjoutables from '../../modules/brancheElementsAjoutables.js';
 import parametres from '../../modules/parametres.mjs';
 
-const templateZoneDeSaisie = (template) => (index) => (
-  $(template.replace('INDEX_AVIS', index + 1).replaceAll('INDEX', index))
-);
-
-const soumissionEtapeAvis = (selecteurFormulaire) => (idService) => (
-  axios.put(`/api/service/${idService}/dossier/avis`, { ...arrangeParametresAvis(parametres(selecteurFormulaire)), avecAvis: true })
-);
+const soumissionEtapeAvis = (selecteurFormulaire) => (idService) => {
+  const $radioAvisSelectionne = $('input:radio:checked', 'fieldset#avecAvis');
+  const avecAvis = $radioAvisSelectionne.val() === '0';
+  return (
+    axios.put(
+      `/api/service/${idService}/dossier/avis`,
+      { ...arrangeParametresAvis(parametres(selecteurFormulaire)), avecAvis }
+    )
+  );
+};
 
 const brancheCollaborateursEtiquettes = (conteneurSaisieItem) => {
   $("[id^='collaborateurs-un-avis-']", conteneurSaisieItem).selectize({
@@ -24,7 +27,28 @@ const brancheCollaborateursEtiquettes = (conteneurSaisieItem) => {
   });
 };
 
+const brancheBoutonsRadio = () => {
+  const $conteneurRadioBouton = $('fieldset#avecAvis');
+
+  $conteneurRadioBouton.on('change', (e) => {
+    const avecAvis = $(e.target).val() === '0';
+
+    if (avecAvis) {
+      $('#ajout-element-un-avis').removeClass('invisible').click();
+    } else {
+      $('.elements-ajoutables#avis').empty();
+      $('#ajout-element-un-avis').addClass('invisible');
+    }
+  });
+};
+
+const templateZoneDeSaisie = (template) => (index) => (
+  $(template.replace('INDEX_AVIS', index + 1).replaceAll('INDEX', index))
+);
+
 $(() => {
+  brancheBoutonsRadio();
+
   const template = $('#element-ajoutable-template').get(0).innerHTML;
   $('#element-ajoutable-template').remove();
   const actionSurZoneSaisieApresAjout = ($conteneurSaisieItem) => {

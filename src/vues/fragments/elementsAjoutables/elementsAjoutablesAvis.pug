@@ -61,10 +61,6 @@ mixin elementsAjoutablesAvis(donneesAvis = [])
     #element-ajoutable-template.invisible
       +zoneSaisieUnAvis({}, 'INDEX', 'INDEX_AVIS')
 
-    - 
-      if (Array.isArray(donneesAvis) && donneesAvis.length === 0) {
-        donneesAvis.push({})
-      }
     each donneesUnAvis, index in donneesAvis 
       +unAvis(donneesUnAvis, index)
 

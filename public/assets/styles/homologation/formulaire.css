@@ -89,6 +89,10 @@ label.exemple {
   background-size: contain;
 }
 
+.nouvel-item.invisible {
+  display: none;
+}
+
 .item-ajoute {
   position: relative;
 
