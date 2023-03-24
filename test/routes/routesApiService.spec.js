@@ -724,9 +724,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch(done);
     });
 
-    it('aseptise les collaborateurs mentionnés dans les avis', (done) => {
+    it('aseptise les collaborateurs mentionnés dans les avis et le paramètres "avecAvis"', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['avis.*.collaborateurs.*'], { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' }, done
+        ['avis.*.collaborateurs.*', 'avecAvis'], { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' }, done
       );
     });
 
@@ -742,20 +742,39 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch(done);
     });
 
-    it('utilise le dépôt pour enregistrer les avis', (done) => {
-      let depotAppele = false;
-      testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
-        depotAppele = true;
-        expect(idHomologation).to.equal('456');
-        expect(dossier.avis.avis.length).to.equal(1);
-        expect(dossier.avis.avis[0].donneesSerialisees()).to.eql({ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' });
-        return Promise.resolve();
-      };
+    describe('utilise le dépôt pour enregistrer les avis', () => {
+      it('quand il y a des avis', (done) => {
+        let depotAppele = false;
+        testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
+          depotAppele = true;
+          expect(idHomologation).to.equal('456');
+          expect(dossier.avis.avis.length).to.equal(1);
+          expect(dossier.avis.avecAvis).to.be(true);
+          expect(dossier.avis.avis[0].donneesSerialisees()).to.eql({ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' });
+          return Promise.resolve();
+        };
 
-      axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [{ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' }] })
-        .then(() => expect(depotAppele).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+        axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [{ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' }], avecAvis: 'true' })
+          .then(() => expect(depotAppele).to.be(true))
+          .then(() => done())
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it("quand il n'y a pas d'avis", (done) => {
+        let depotAppele = false;
+        testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
+          depotAppele = true;
+          expect(idHomologation).to.equal('456');
+          expect(dossier.avis.avis.length).to.equal(0);
+          expect(dossier.avis.avecAvis).to.be(false);
+          return Promise.resolve();
+        };
+
+        axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [], avecAvis: 'false' })
+          .then(() => expect(depotAppele).to.be(true))
+          .then(() => done())
+          .catch((e) => done(e.response?.data || e));
+      });
     });
   });
 

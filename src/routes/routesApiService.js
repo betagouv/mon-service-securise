@@ -22,6 +22,7 @@ const RisqueGeneral = require('../modeles/risqueGeneral');
 const RisquesSpecifiques = require('../modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../modeles/rolesResponsabilites');
 const { dateInvalide } = require('../utilitaires/date');
+const { valeurBooleenne } = require('../utilitaires/aseptisation');
 
 const routesApiService = (
   middleware,
@@ -229,7 +230,7 @@ const routesApiService = (
     middleware.trouveHomologation,
     middleware.trouveDossierCourant,
     middleware.aseptiseListes([{ nom: 'avis', proprietes: [...Avis.proprietesAtomiquesRequises(), ...Avis.proprietesAtomiquesFacultatives()] }]),
-    middleware.aseptise('avis.*.collaborateurs.*'),
+    middleware.aseptise('avis.*.collaborateurs.*', 'avecAvis'),
     (requete, reponse, suite) => {
       const { body: { avis } } = requete;
       if (!avis) {
@@ -238,8 +239,11 @@ const routesApiService = (
       }
 
       const { homologation, dossierCourant } = requete;
+      const avecAvis = valeurBooleenne(requete.body.avecAvis);
 
-      dossierCourant.enregistreAvis(avis);
+      if (avecAvis) dossierCourant.enregistreAvis(avis);
+      else dossierCourant.declareSansAvis();
+
       depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
         .then(() => reponse.sendStatus(204))
         .catch(suite);

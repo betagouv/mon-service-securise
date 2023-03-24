@@ -8,14 +8,9 @@ const templateZoneDeSaisie = (template) => (index) => (
   $(template.replace('INDEX_AVIS', index + 1).replaceAll('INDEX', index))
 );
 
-const soumissionEtapeAvis = (selecteurFormulaire) => (idService) => {
-  const tousLesParametres = (selecteur) => {
-    const params = parametres(selecteur);
-
-    return arrangeParametresAvis(params);
-  };
-  return axios.put(`/api/service/${idService}/dossier/avis`, tousLesParametres(selecteurFormulaire));
-};
+const soumissionEtapeAvis = (selecteurFormulaire) => (idService) => (
+  axios.put(`/api/service/${idService}/dossier/avis`, { ...arrangeParametresAvis(parametres(selecteurFormulaire)), avecAvis: true })
+);
 
 const brancheCollaborateursEtiquettes = (conteneurSaisieItem) => {
   $("[id^='collaborateurs-un-avis-']", conteneurSaisieItem).selectize({
