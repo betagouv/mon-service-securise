@@ -30,7 +30,10 @@ class Dossier extends InformationsHomologation {
       donneesDossier.datesTelechargements ?? {},
       referentiel
     );
-    this.avis = new EtapeAvis({ avis: donneesDossier.avis }, referentiel);
+    this.avis = new EtapeAvis({
+      avis: donneesDossier.avis,
+      avecAvis: donneesDossier.avecAvis,
+    }, referentiel);
   }
 
   descriptionDateHomologation() {

@@ -40,6 +40,7 @@ class ConstructeurDossierFantaisie {
 
   quiEstComplet() {
     this.donnees.finalise = true;
+    this.donnees.avecAvis = true;
     this.donnees.avis = [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }];
     this.donnees.decision = { dateHomologation: '2023-01-01', dureeValidite: 'unAn' };
     this.donnees.datesTelechargements = this.referentiel

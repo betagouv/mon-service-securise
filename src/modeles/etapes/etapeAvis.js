@@ -4,22 +4,35 @@ const InformationsHomologation = require('../informationsHomologation');
 const { creeReferentielVide } = require('../../referentiel');
 
 class EtapeAvis extends Etape {
-  constructor({ avis = [] } = {}, referentiel = creeReferentielVide()) {
-    super({}, referentiel);
+  constructor({ avis = [], avecAvis = null } = {}, referentiel = creeReferentielVide()) {
+    super({ proprietesAtomiquesRequises: ['avecAvis'] }, referentiel);
 
-    this.enregistreAvis(avis);
-  }
-
-  enregistreAvis(avis) {
+    this.renseigneProprietes({ avecAvis });
     this.avis = avis.map((a) => new Avis(a, this.referentiel));
   }
 
+  enregistreAvis(avis) {
+    this.avecAvis = true;
+    this.avis = avis.map((a) => new Avis(a, this.referentiel));
+  }
+
+  declareSansAvis() {
+    this.avecAvis = false;
+    this.avis = [];
+  }
+
   estComplete() {
-    return this.avis.every((a) => a.statutSaisie() === InformationsHomologation.COMPLETES);
+    if (this.avecAvis === null) return false;
+    return this.avecAvis
+      ? this.avis.every((a) => a.statutSaisie() === InformationsHomologation.COMPLETES)
+      : true;
   }
 
   toJSON() {
-    return { avis: this.avis.map((a) => a.toJSON()) };
+    return {
+      avis: this.avis.map((a) => a.toJSON()),
+      avecAvis: this.avecAvis,
+    };
   }
 }
 
