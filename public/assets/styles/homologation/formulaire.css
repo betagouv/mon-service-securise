@@ -135,6 +135,7 @@ label.exemple {
 
 .enregistrement {
   position: sticky;
+  z-index: 10;
   background-color: #fff;
   bottom: 0;
   display: flex;
