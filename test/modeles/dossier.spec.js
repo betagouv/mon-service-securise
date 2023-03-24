@@ -112,6 +112,25 @@ describe("Un dossier d'homologation", () => {
       dossier.enregistreAvis([avisComplet]);
 
       expect(dossier.avis.avis[0].toJSON()).to.eql(avisComplet);
+      expect(dossier.avis.avecAvis).to.be(true);
+    });
+  });
+
+  describe('sur demande de déclaration sans avis', () => {
+    it('jette une erreur si le dossier est déjà finalisé', () => {
+      const dossierFinalise = new Dossier({ finalise: true });
+
+      expect(() => dossierFinalise.declareSansAvis())
+        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+    });
+
+    it('efface les avis existants', () => {
+      const dossier = new Dossier({ avis: [{ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn' }], avecAvis: true }, referentiel);
+
+      dossier.declareSansAvis();
+
+      expect(dossier.avis.avecAvis).to.be(false);
+      expect(dossier.avis.avis).to.eql([]);
     });
   });
 
