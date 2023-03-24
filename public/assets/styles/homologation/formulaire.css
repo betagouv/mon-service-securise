@@ -85,7 +85,8 @@ label.exemple {
   width: 1.4em;
   height: 1.4em;
   margin-right: 0.4em;
-  background: url(../../images/icone_plus_pastille_bleue.svg) center/contain;
+  background: url(../../images/icone_plus_pastille_bleue.svg) no-repeat center;
+  background-size: contain;
 }
 
 .item-ajoute {
