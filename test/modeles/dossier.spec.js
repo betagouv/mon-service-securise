@@ -20,6 +20,7 @@ describe("Un dossier d'homologation", () => {
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
       datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
+      avecAvis: true,
       avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
       finalise: true,
     },
@@ -30,6 +31,7 @@ describe("Un dossier d'homologation", () => {
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
       datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
+      avecAvis: true,
       avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
       finalise: true,
     });
