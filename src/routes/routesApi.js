@@ -1,5 +1,6 @@
 const express = require('express');
 
+const { valeurBooleenne } = require('../utilitaires/aseptisation');
 const { DUREE_SESSION } = require('../http/configurationServeur');
 const { resultatValidation, valideMotDePasse } = require('../http/validationMotDePasse');
 const {
@@ -53,14 +54,6 @@ const routesApi = (
     )
       .then(() => contributeur)
   );
-
-  const valeurBooleenne = (valeur) => {
-    switch (valeur) {
-      case 'true': return true;
-      case 'false': return false;
-      default: return undefined;
-    }
-  };
 
   const obtentionDonneesDeBaseUtilisateur = (corps) => ({
     prenom: corps.prenom,
