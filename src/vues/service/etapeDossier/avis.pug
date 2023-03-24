@@ -10,10 +10,21 @@ block append styles
 block formulaire
   section.description
     p.
-      Renseignez un ou plusieurs avis sur la sécurité du service pour aider l'autorité d'homologation à prendre sa décision.
-      Nous vous recommandons au moins un avis groupé.
+      Renseignez, si vous le souhaitez, un ou plusieurs avis sur la sécurité du service pour aider
+      l'autorité d'homologation à prendre sa décision. Nous vous recommandons au moins un avis groupé.
 
-    .mention champ obligatoire
+  -
+    const avis = service.dossierCourant().avis
+    const avecAvisRadio = { avecAvis: avis.avecAvis === null ? null : avis.avecAvis ? 0 : 1 }
+
+  +inputChoix({
+    type: 'radio',
+    nom: 'avecAvis',
+    items: [{ description: 'Renseigner un ou plusieurs avis' }, { description: 'Aucun avis à renseigner' }],
+    objetDonnees: avecAvisRadio,
+    messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
+    requis: true,
+  })
 
   +elementsAjoutablesAvis(service.dossierCourant().avis.avis)
 
@@ -21,7 +32,13 @@ block formulaire
   script(src = "/bibliotheques/selectize.min.js")
 
 block bouton-etape
-    a(class = 'nouvel-item bouton bouton-secondaire', id = 'ajout-element-un-avis') Ajouter un avis
+    -
+      const afficheBoutonAjout = service.dossierCourant().avis.avecAvis === true
+      const cssAffichage = afficheBoutonAjout ? '' : 'invisible'
+    a(
+      class = `nouvel-item bouton bouton-secondaire ${cssAffichage}`
+      id = 'ajout-element-un-avis'
+    ) Ajouter un avis
     button.bouton#suivant(
       data-id-homologation = service.id,
       data-id-etape = idEtape,
