@@ -53,26 +53,26 @@ const fusionnePdfs = async (pdfs) => {
   /* eslint-enable no-restricted-syntax */
 };
 
+const genereHtml = async (pugCorps, paramsCorps, nomService) => {
+  const piedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService });
+  return Promise.all([
+    pug.compileFile(`src/pdf/modeles/${pugCorps}.pug`)(paramsCorps),
+    pug.compileFile(`src/pdf/modeles/${pugCorps}.entete.pug`)(),
+  ]).then(([corps, entete]) => ({ corps, entete, piedPage }));
+};
+
 const genereAnnexes = async ({
   donneesDescription,
   donneesMesures,
   donneesRisques,
   referentiel,
 }) => {
-  const genereHtml = async (pugCorps, paramsCorps) => {
-    const piedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService: donneesDescription.nomService });
-    return Promise.all([
-      pug.compileFile(`src/pdf/modeles/${pugCorps}.pug`)(paramsCorps),
-      pug.compileFile(`src/pdf/modeles/${pugCorps}.entete.pug`)(),
-    ]).then(([corps, entete]) => ({ corps, entete, piedPage }));
-  };
-
   const risquesPresents = Object.keys(donneesRisques.risquesParNiveauGravite).length > 0;
 
   const [description, mesures, risques] = await Promise.all([
-    genereHtml('annexeDescription', { donneesDescription }),
-    genereHtml('annexeMesures', { donneesMesures, referentiel }),
-    risquesPresents ? genereHtml('annexeRisques', { donneesRisques, referentiel }) : null,
+    genereHtml('annexeDescription', { donneesDescription }, donneesDescription.nomService),
+    genereHtml('annexeMesures', { donneesMesures, referentiel }, donneesDescription.nomService),
+    risquesPresents ? genereHtml('annexeRisques', { donneesRisques, referentiel }, donneesDescription.nomService) : null,
   ]);
 
   const pdfs = await generePdfs(risquesPresents
@@ -101,20 +101,17 @@ const genereDossierDecision = async (donnees) => {
 
   const pdfDecision = await documentPdf.save({ updateFieldAppearances: false });
 
-  if (donnees.avis.length === 0) {
-    return Buffer.from(pdfDecision.buffer, 'binary');
-  }
+  const avisPresent = donnees.avis.length > 0;
+  const documentsPresent = donnees.documents.length > 0;
 
-  const premierePage = await documentPdf.save({ updateFieldAppearances: false });
-
-  const [entete, corps, piedPage] = await Promise.all([
-    pug.compileFile('src/pdf/modeles/annexeAvis.entete.pug')(),
-    pug.compileFile('src/pdf/modeles/annexeAvis.pug')({ donnees }),
-    pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService: donnees.nomService }),
+  const annexes = await Promise.all([
+    avisPresent ? genereHtml('annexeAvis', { donnees }, donnees.nomService) : null,
+    documentsPresent ? genereHtml('annexeDocuments', { donnees }, donnees.nomService) : null,
   ]);
-  const annexeAvis = await generePdfs([{ entete, corps, piedPage }]);
 
-  return fusionnePdfs([premierePage, ...annexeAvis]);
+  const pdfs = await generePdfs(annexes.filter((a) => a !== null));
+
+  return fusionnePdfs([pdfDecision, ...pdfs]);
 };
 
 module.exports = { genereAnnexes, genereDossierDecision };

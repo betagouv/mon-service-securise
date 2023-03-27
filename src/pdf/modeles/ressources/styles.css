@@ -218,3 +218,8 @@ p {
   font-weight: bold;
   color: #8A8A8A;
 }
+
+.documents ul {
+  list-style: disc;
+  padding-left: 2em;
+}
