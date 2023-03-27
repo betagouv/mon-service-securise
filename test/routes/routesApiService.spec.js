@@ -638,7 +638,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête PUT sur `/api/service/:id/dossier/document/:idDocument', () => {
+  describe('quand requête PUT sur `/api/service/:id/dossier/telechargement/:idDocument', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
@@ -648,14 +648,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/dossier/document/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/dossier/telechargement/decision', method: 'put' },
         done,
       );
     });
 
     it('recherche le dossier courant correspondant', (done) => {
       testeur.middleware().verifieRechercheDossierCourant(
-        { url: 'http://localhost:1234/api/service/456/dossier/document/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/dossier/telechargement/decision', method: 'put' },
         done,
       );
     });
@@ -673,14 +673,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return Promise.resolve();
       };
 
-      axios.put('http://localhost:1234/api/service/456/dossier/document/decision')
+      axios.put('http://localhost:1234/api/service/456/dossier/telechargement/decision')
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });
 
     it("reste robuste si l'id de document ne correspond pas à un document connu", (done) => {
-      axios.put('http://localhost:1234/api/service/456/dossier/document/mauvaisId')
+      axios.put('http://localhost:1234/api/service/456/dossier/telechargement/mauvaisId')
         .catch(({ response }) => {
           expect(response.status).to.be(422);
           expect(response.data).to.equal('Identifiant de document invalide');
