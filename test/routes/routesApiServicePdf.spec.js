@@ -68,6 +68,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
               .quiEstActif()
               .avecAutorite('Jean Dupond', 'RSSI')
               .avecAvis([{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }])
+              .avecDocuments(['unDocument'])
               .donnees,
           ],
         }, referentiel),
@@ -100,6 +101,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         expect(donnees.nomPrenomAutorite).to.equal('Jean Dupond');
         expect(donnees.fonctionAutorite).to.equal('RSSI');
         expect(donnees.avis).to.eql([{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }]);
+        expect(donnees.documents).to.eql(['unDocument']);
         return Promise.resolve('Pdf dossier décision');
       };
 
