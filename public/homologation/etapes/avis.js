@@ -4,7 +4,7 @@ import { brancheConteneur } from '../../modules/interactions/validation.mjs';
 import brancheElementsAjoutables from '../../modules/brancheElementsAjoutables.js';
 import parametres from '../../modules/parametres.mjs';
 
-const estValeurAvecAvis = (valeur) => valeur === '0';
+const estValeurAvecAvis = (valeur) => valeur === '1';
 
 const soumissionEtapeAvis = (selecteurFormulaire) => (idService) => {
   const $radioAvisSelectionne = $('input:radio:checked', 'fieldset#avecAvis');

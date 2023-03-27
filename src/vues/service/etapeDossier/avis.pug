@@ -15,12 +15,12 @@ block formulaire
 
   -
     const avis = service.dossierCourant().avis
-    const avecAvisRadio = { avecAvis: avis.avecAvis === null ? null : avis.avecAvis ? 0 : 1 }
+    const avecAvisRadio = { avecAvis: avis.avecAvis === null ? null : avis.avecAvis ? 1 : 0 }
 
   +inputChoix({
     type: 'radio',
     nom: 'avecAvis',
-    items: [{ description: 'Renseigner un ou plusieurs avis' }, { description: 'Aucun avis à renseigner' }],
+    items: [{ description: 'Aucun avis à renseigner' }, { description: 'Renseigner un ou plusieurs avis' }],
     objetDonnees: avecAvisRadio,
     messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
     requis: true,
