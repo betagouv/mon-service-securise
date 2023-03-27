@@ -38,6 +38,11 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  avecDocuments(documents) {
+    this.donnees.documents = documents;
+    return this;
+  }
+
   quiEstComplet() {
     this.donnees.finalise = true;
     this.donnees.avecAvis = true;
