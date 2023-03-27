@@ -24,6 +24,19 @@ mixin formulaireDescriptionService(idHomologation)
           .message-erreur Le nom est obligatoire. Veuillez le renseigner.
 
       .requis
+        label Organisation responsable du service numérique
+          br
+          input(
+            id = 'organisations-responsables',
+            name = 'organisationsResponsables',
+            type = 'text',
+            placeholder = 'ex : Agglomération de Mansart',
+            value != service.descriptionService.organisationsResponsables.toString(),
+            required
+          )
+          .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
+
+      .requis
         +inputChoix({
           type: 'checkbox',
           nom: 'typeService',
