@@ -778,6 +778,79 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur /api/service/:id/dossier/documents', () => {
+    beforeEach(() => {
+      const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] }, testeur.referentiel());
+      testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
+      testeur.depotDonnees().enregistreDossierCourant = () => Promise.resolve();
+    });
+
+    it("recherche l'homologation correspondante", (done) => {
+      testeur.middleware().verifieRechercheService(
+        { url: 'http://localhost:1234/api/service/456/dossier/documents', method: 'put' },
+        done,
+      );
+    });
+
+    it('recherche le dossier courant correspondant', (done) => {
+      testeur.middleware().verifieRechercheDossierCourant(
+        { url: 'http://localhost:1234/api/service/456/dossier/documents', method: 'put' },
+        done,
+      );
+    });
+
+    it('aseptise la liste des documents et le paramètres "avecDocuments"', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['documents.*', 'avecDocuments'], { url: 'http://localhost:1234/api/service/456/dossier/documents', method: 'put' }, done
+      );
+    });
+
+    it("renvoie une 400 si aucun document n'est envoyé", (done) => {
+      axios.put('http://localhost:1234/api/service/456/dossier/documents', {})
+        .then(() => done('Une erreur aurait du être renvoyée'))
+        .catch((e) => {
+          expect(e.response.status).to.be(400);
+          done();
+        })
+        .catch(done);
+    });
+
+    describe('utilise le dépôt pour enregistrer les documents', () => {
+      it('quand il y a des documents', (done) => {
+        let depotAppele = false;
+        testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
+          depotAppele = true;
+          expect(idHomologation).to.equal('456');
+          expect(dossier.documents.documents.length).to.equal(1);
+          expect(dossier.documents.avecDocuments).to.be(true);
+          expect(dossier.documents.documents[0]).to.eql('unDocument');
+          return Promise.resolve();
+        };
+
+        axios.put('http://localhost:1234/api/service/456/dossier/documents', { documents: ['unDocument'], avecDocuments: 'true' })
+          .then(() => expect(depotAppele).to.be(true))
+          .then(() => done())
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it("quand il n'y a pas de document", (done) => {
+        let depotAppele = false;
+        testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
+          depotAppele = true;
+          expect(idHomologation).to.equal('456');
+          expect(dossier.documents.documents.length).to.equal(0);
+          expect(dossier.documents.avecDocuments).to.be(false);
+          return Promise.resolve();
+        };
+
+        axios.put('http://localhost:1234/api/service/456/dossier/documents', { documents: [], avecDocuments: 'false' })
+          .then(() => expect(depotAppele).to.be(true))
+          .then(() => done())
+          .catch((e) => done(e.response?.data || e));
+      });
+    });
+  });
+
   describe('quand requête POST sur /api/service/:id/dossier/finalise', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({
