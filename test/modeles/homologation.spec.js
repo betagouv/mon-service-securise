@@ -493,6 +493,7 @@ describe('Une homologation', () => {
           donneesSensiblesSpecifiques: [],
           fonctionnalitesSpecifiques: [],
           pointsAcces: [],
+          organisationsResponsables: [],
         },
         dossiers: [{
           id: '1',

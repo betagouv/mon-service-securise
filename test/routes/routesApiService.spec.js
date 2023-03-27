@@ -30,7 +30,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les paramètres', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['nomService'],
+        ['nomService', 'organisationsResponsables.*'],
         { method: 'post', url: 'http://localhost:1234/api/service' },
         done
       );
@@ -126,7 +126,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les paramètres', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['nomService'],
+        ['nomService', 'organisationsResponsables.*'],
         { method: 'put', url: 'http://localhost:1234/api/service/456' },
         done
       );

@@ -23,6 +23,7 @@ describe('La description du service', () => {
       localisationDonnees: 'france',
       typeService: ['unType'],
       nomService: 'Super Service',
+      organisationsResponsables: ['Une organisation'],
       pointsAcces: [{ description: 'Une description' }],
       presentation: 'Une présentation du service',
       provenanceService: 'uneProvenance',
@@ -36,6 +37,7 @@ describe('La description du service', () => {
     expect(descriptionService.localisationDonnees).to.equal('france');
     expect(descriptionService.typeService).to.eql(['unType']);
     expect(descriptionService.nomService).to.equal('Super Service');
+    expect(descriptionService.organisationsResponsables).to.eql(['Une organisation']);
     expect(descriptionService.presentation).to.equal('Une présentation du service');
     expect(descriptionService.provenanceService).to.eql('uneProvenance');
     expect(descriptionService.risqueJuridiqueFinancierReputationnel).to.be(true);

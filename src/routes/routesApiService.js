@@ -35,7 +35,7 @@ const routesApiService = (
 
   routes.use(routesApiServicePdf(middleware, adaptateurPdf, referentiel));
 
-  routes.post('/', middleware.verificationAcceptationCGU, middleware.aseptise('nomService'), middleware.aseptiseListes([
+  routes.post('/', middleware.verificationAcceptationCGU, middleware.aseptise('nomService', 'organisationsResponsables.*'), middleware.aseptiseListes([
     { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
     { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
     { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
@@ -53,7 +53,7 @@ const routesApiService = (
       });
   });
 
-  routes.put('/:id', middleware.trouveHomologation, middleware.aseptise('nomService'), middleware.aseptiseListes([
+  routes.put('/:id', middleware.trouveHomologation, middleware.aseptise('nomService', 'organisationsResponsables.*'), middleware.aseptiseListes([
     { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
     { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
     { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
