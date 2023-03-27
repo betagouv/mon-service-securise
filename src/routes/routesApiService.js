@@ -249,6 +249,28 @@ const routesApiService = (
         .catch(suite);
     });
 
+  routes.put('/:id/dossier/document',
+    middleware.trouveHomologation,
+    middleware.trouveDossierCourant,
+    middleware.aseptise('documents.*', 'avecDocument'),
+    (requete, reponse, suite) => {
+      const { body: { documents } } = requete;
+      if (!documents) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      const { homologation, dossierCourant } = requete;
+      const avecDocument = valeurBooleenne(requete.body.avecDocument);
+
+      if (avecDocument) dossierCourant.enregistreDocuments(documents);
+      else dossierCourant.declareSansDocument();
+
+      depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
+        .then(() => reponse.sendStatus(204))
+        .catch(suite);
+    });
+
   routes.post('/:id/dossier/finalise',
     middleware.trouveHomologation,
     middleware.trouveDossierCourant,
