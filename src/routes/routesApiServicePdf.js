@@ -28,7 +28,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf, referentiel) => {
       fonctionAutorite: dossierCourant.autorite.fonction,
       referentiel,
       ...dossierCourant.avis.toJSON(),
-      ...dossierCourant.document.toJSON(),
+      ...dossierCourant.documents.toJSON(),
     };
 
     adaptateurPdf.genereDossierDecision(donnees)
