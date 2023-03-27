@@ -138,6 +138,43 @@ describe("Un dossier d'homologation", () => {
     });
   });
 
+  describe("sur demande d'enregistrement des documents", () => {
+    it('jette une erreur si le dossier est déjà finalisé', () => {
+      const dossierFinalise = new Dossier({ finalise: true });
+
+      expect(() => dossierFinalise.enregistreDocuments([]))
+        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+    });
+
+    it('remplace les documents par ceux fournis', () => {
+      const dossier = new Dossier({}, referentiel);
+      const documents = ['unDocument'];
+
+      dossier.enregistreDocuments(documents);
+
+      expect(dossier.documents.documents).to.eql(documents);
+      expect(dossier.documents.avecDocuments).to.be(true);
+    });
+  });
+
+  describe('sur demande de déclaration sans document', () => {
+    it('jette une erreur si le dossier est déjà finalisé', () => {
+      const dossierFinalise = new Dossier({ finalise: true });
+
+      expect(() => dossierFinalise.declareSansDocument())
+        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+    });
+
+    it('efface les documents existants', () => {
+      const dossier = new Dossier({ documents: ['unDocument'], avecDocuments: true }, referentiel);
+
+      dossier.declareSansDocument();
+
+      expect(dossier.documents.avecDocuments).to.be(false);
+      expect(dossier.documents.documents).to.eql([]);
+    });
+  });
+
   describe('sur vérification que ce dossier est complet', () => {
     it('demande à chaque étape si elle est complète', () => {
       const etapesInterrogees = [];

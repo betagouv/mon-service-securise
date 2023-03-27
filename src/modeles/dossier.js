@@ -2,7 +2,7 @@ const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
 const Autorite = require('./etapes/autorite');
 const DatesTelechargements = require('./etapes/datesTelechargements');
 const Decision = require('./etapes/decision');
-const Document = require('./etapes/document');
+const Documents = require('./etapes/documents');
 const EtapeAvis = require('./etapes/etapeAvis');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
@@ -35,9 +35,9 @@ class Dossier extends InformationsHomologation {
       avis: donneesDossier.avis,
       avecAvis: donneesDossier.avecAvis,
     }, referentiel);
-    this.documents = new Document({
+    this.documents = new Documents({
       documents: donneesDossier.documents,
-      avecDocument: donneesDossier.avecDocument,
+      avecDocuments: donneesDossier.avecDocuments,
     });
   }
 
@@ -73,6 +73,18 @@ class Dossier extends InformationsHomologation {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
     this.avis.enregistreAvis(avis);
+  }
+
+  declareSansDocument() {
+    if (this.finalise) throw new ErreurDossierDejaFinalise();
+
+    this.documents.declareSansDocument();
+  }
+
+  enregistreDocuments(documents) {
+    if (this.finalise) throw new ErreurDossierDejaFinalise();
+
+    this.documents.enregistreDocuments(documents);
   }
 
   enregistreDateTelechargement(nomDocument, date) {
