@@ -127,7 +127,7 @@ label.exemple {
   background-image: url(../../images/icone_fermer.svg);
   background-repeat: no-repeat;
   background-size: 50%;
-  background-position: center;
+  background-position: center 0.23em;
 }
 
 .icone-suppression:hover {
