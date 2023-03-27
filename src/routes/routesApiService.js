@@ -210,7 +210,7 @@ const routesApiService = (
         .catch(suite);
     });
 
-  routes.put('/:id/dossier/document/:idDocument', middleware.trouveHomologation, middleware.trouveDossierCourant, (requete, reponse, suite) => {
+  routes.put('/:id/dossier/telechargement/:idDocument', middleware.trouveHomologation, middleware.trouveDossierCourant, (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
     const { idDocument } = requete.params;
