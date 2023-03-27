@@ -4,9 +4,11 @@ import { brancheConteneur } from '../../modules/interactions/validation.mjs';
 import brancheElementsAjoutables from '../../modules/brancheElementsAjoutables.js';
 import parametres from '../../modules/parametres.mjs';
 
+const estValeurAvecAvis = (valeur) => valeur === '0';
+
 const soumissionEtapeAvis = (selecteurFormulaire) => (idService) => {
   const $radioAvisSelectionne = $('input:radio:checked', 'fieldset#avecAvis');
-  const avecAvis = $radioAvisSelectionne.val() === '0';
+  const avecAvis = estValeurAvecAvis($radioAvisSelectionne.val());
   return (
     axios.put(
       `/api/service/${idService}/dossier/avis`,
@@ -31,7 +33,7 @@ const brancheBoutonsRadio = () => {
   const $conteneurRadioBouton = $('fieldset#avecAvis');
 
   $conteneurRadioBouton.on('change', (e) => {
-    const avecAvis = $(e.target).val() === '0';
+    const avecAvis = estValeurAvecAvis($(e.target).val());
 
     if (avecAvis) {
       $('#ajout-element-un-avis').removeClass('invisible').click();
