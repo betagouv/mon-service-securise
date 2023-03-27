@@ -498,6 +498,8 @@ describe('Une homologation', () => {
           id: '1',
           avecAvis: true,
           avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
+          avecDocuments: true,
+          documents: ['unDocument'],
           autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
           decision: { dateHomologation: aujourdhui.toISOString(), dureeValidite: 'unAn' },
           datesTelechargements: { decision: aujourdhui.toISOString() },

@@ -22,6 +22,8 @@ describe("Un dossier d'homologation", () => {
       datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
       avecAvis: true,
       avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
+      avecDocuments: true,
+      documents: ['unDocument'],
       finalise: true,
     },
     referentiel);
@@ -33,6 +35,8 @@ describe("Un dossier d'homologation", () => {
       datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
       avecAvis: true,
       avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
+      avecDocuments: true,
+      documents: ['unDocument'],
       finalise: true,
     });
   });
