@@ -2,6 +2,7 @@ const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
 const Autorite = require('./etapes/autorite');
 const DatesTelechargements = require('./etapes/datesTelechargements');
 const Decision = require('./etapes/decision');
+const Document = require('./etapes/document');
 const EtapeAvis = require('./etapes/etapeAvis');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
@@ -34,6 +35,10 @@ class Dossier extends InformationsHomologation {
       avis: donneesDossier.avis,
       avecAvis: donneesDossier.avecAvis,
     }, referentiel);
+    this.documents = new Document({
+      documents: donneesDossier.documents,
+      avecDocument: donneesDossier.avecDocument,
+    });
   }
 
   descriptionDateHomologation() {
@@ -112,6 +117,7 @@ class Dossier extends InformationsHomologation {
       autorite: this.autorite.toJSON(),
       datesTelechargements: this.datesTelechargements.toJSON(),
       ...this.avis.toJSON(),
+      ...this.documents.toJSON(),
     };
   }
 }
