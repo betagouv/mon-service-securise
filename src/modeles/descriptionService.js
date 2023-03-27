@@ -20,6 +20,7 @@ class DescriptionService extends InformationsHomologation {
       proprietesListes: [
         'donneesCaracterePersonnel',
         'fonctionnalites',
+        'organisationsResponsables',
         'typeService',
       ],
       listesAgregats: {
