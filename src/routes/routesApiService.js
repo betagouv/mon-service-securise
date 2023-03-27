@@ -249,10 +249,10 @@ const routesApiService = (
         .catch(suite);
     });
 
-  routes.put('/:id/dossier/document',
+  routes.put('/:id/dossier/documents',
     middleware.trouveHomologation,
     middleware.trouveDossierCourant,
-    middleware.aseptise('documents.*', 'avecDocument'),
+    middleware.aseptise('documents.*', 'avecDocuments'),
     (requete, reponse, suite) => {
       const { body: { documents } } = requete;
       if (!documents) {
@@ -261,9 +261,9 @@ const routesApiService = (
       }
 
       const { homologation, dossierCourant } = requete;
-      const avecDocument = valeurBooleenne(requete.body.avecDocument);
+      const avecDocuments = valeurBooleenne(requete.body.avecDocuments);
 
-      if (avecDocument) dossierCourant.enregistreDocuments(documents);
+      if (avecDocuments) dossierCourant.enregistreDocuments(documents);
       else dossierCourant.declareSansDocument();
 
       depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
