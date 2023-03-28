@@ -48,7 +48,7 @@ const brancheBoutonsRadio = () => {
     const plusAucunAvis = $('.elements-ajoutables#avis').is(':empty');
 
     // `.change()` pour déclencher les handlers branchés sur le radio.
-    if (plusAucunAvis) $('#avecAvis-1').prop('checked', true).change();
+    if (plusAucunAvis) $('#avecAvis-0').prop('checked', true).change();
   });
 };
 
