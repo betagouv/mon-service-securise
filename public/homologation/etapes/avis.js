@@ -2,6 +2,7 @@ import arrangeParametresAvis from '../../modules/arrangeParametresAvis.mjs';
 import brancheComportemenFormulaireEtape from './formulaireEtape.js';
 import { brancheConteneur } from '../../modules/interactions/validation.mjs';
 import brancheElementsAjoutables from '../../modules/brancheElementsAjoutables.js';
+import { EVENEMENT_SUPPRESSION_ELEMENT } from '../../modules/saisieListeItems.js';
 import parametres from '../../modules/parametres.mjs';
 
 const estValeurAvecAvis = (valeur) => valeur === '1';
@@ -41,6 +42,13 @@ const brancheBoutonsRadio = () => {
       $('.elements-ajoutables#avis').empty();
       $('#ajout-element-un-avis').addClass('invisible');
     }
+  });
+
+  $('body').on(EVENEMENT_SUPPRESSION_ELEMENT, () => {
+    const plusAucunAvis = $('.elements-ajoutables#avis').is(':empty');
+
+    // `.change()` pour déclencher les handlers branchés sur le radio.
+    if (plusAucunAvis) $('#avecAvis-1').prop('checked', true).change();
   });
 };
 

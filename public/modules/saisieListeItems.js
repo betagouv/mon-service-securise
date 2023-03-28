@@ -1,7 +1,10 @@
+const EVENEMENT_SUPPRESSION_ELEMENT = 'suppressionElement';
+
 const brancheSuppressionElement = () => {
   $('.icone-suppression').click((e) => {
     e.preventDefault();
     $(e.target).parent().remove();
+    $('body').trigger(EVENEMENT_SUPPRESSION_ELEMENT);
   });
 };
 
@@ -57,4 +60,5 @@ export {
   brancheAjoutItem,
   peupleListeItems,
   brancheSuppressionElement,
+  EVENEMENT_SUPPRESSION_ELEMENT,
 };
