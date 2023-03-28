@@ -21,4 +21,9 @@ html(lang = 'fr')
       include ressources/images.css
       include ressources/styles.css
 
-  block page
+  body
+    block page
+    //- On intègre ces divs pour forcer le chargement des polices avant le rendu PDF
+    //- https://github.com/puppeteer/puppeteer/issues/422#issuecomment-759424240
+    .police-marianne &nbsp;
+    .police-marianne-gras &nbsp;

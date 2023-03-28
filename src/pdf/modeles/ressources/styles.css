@@ -1,3 +1,13 @@
+.police-marianne {
+  font-family: 'Marianne';
+  font-weight: normal;
+}
+
+.police-marianne-gras {
+  font-family: 'Marianne';
+  font-weight: bold;
+}
+
 body {
   font-family: 'Marianne';
   font-size: 12px;
