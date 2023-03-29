@@ -3,6 +3,13 @@ extends base
 block page
   -
     const statuts = donnees.referentiel.statutsAvisDossierHomologation()
+    const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
+    const noteObtenue = formatIndiceCyber(donnees.indiceCyberTotal)
+    const noteMaximale = donnees.referentiel.indiceCyberNoteMax()
+  +boite-grise("Recommandation ANSSI", 'recommandation-anssi')
+    p.note= `L'indice cyber est du service numérique est de ${noteObtenue}/${noteMaximale}`
+    p.recommandation= donnees.referentiel.trancheIndiceCyber(donnees.indiceCyberTotal).recommandationANSSI
+    p.complement= donnees.referentiel.trancheIndiceCyber(donnees.indiceCyberTotal).recommandationANSSIComplement
   each avis, index in donnees.avis
     +boite-grise(`Avis ${index + 1}`, 'avis')
       .collaborateurs
