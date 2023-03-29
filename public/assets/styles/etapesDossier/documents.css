@@ -1,0 +1,73 @@
+fieldset#documents {
+  border: 1px solid var(--liseres-fonce);
+  border-radius: 4px;
+  padding: .5em 2em;
+}
+
+fieldset#documents p.requis {
+  margin-bottom: .5em;
+}
+
+.ajout-documents {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .5em;
+  padding-bottom: 1.5em;
+}
+
+.ajout-documents input {
+  height: 2.5em;
+  transform: translateY(-2px);
+  border-color: var(--liseres-fonce) !important;
+}
+
+.ajout-documents .button {
+  background: var(--vert-anssi);
+  border-radius: 5px;
+  width: 3em;
+  height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#liste-documents {
+  list-style: none;
+  padding-left: 0;
+}
+
+.element-document {
+  background: #F1F8FF;
+  height: 2.8em;
+  margin-bottom: .5em;
+  padding: 0 1em 0 .5em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
+.element-document .bouton-supprimer {
+  width: 16px;
+  height: 16px;
+  background: url('/statique/assets/images/icone_croix_noire.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.element-document .contenu {
+  display: flex;
+}
+
+.element-document .contenu::before {
+  content: '';
+  background: url('/statique/assets/images/icone_document.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  margin: 0 .5em;
+}

@@ -1,0 +1,50 @@
+extends ../formulaireEtapier
+include ../../fragments/inputChoix
+include ../../cartes/recommandationsANSSI
+
+block append styles
+  link(href = '/statique/assets/styles/etapesDossier/documents.css', rel = 'stylesheet')
+
+block formulaire
+  section.description
+    p.
+      Référencer, si vous le souhaitez, un ou plusieurs documents 
+      que vous prévoyez de présenter à l'autorité d'homologation. 
+      Cette liste apparaîtra en annexe du PDF de décision d'homologation de sécurité.
+
+  -
+    const documents = service.dossierCourant().documents
+    const avecDocumentsRadio = { avecDocuments: documents.avecDocuments === null ? null : documents.avecDocuments ? 1 : 0 }
+
+  +inputChoix({
+    type: 'radio',
+    nom: 'avecDocuments',
+    items: [{ description: 'Aucun document à référencer' }, { description: 'Référencer un ou plusieurs documents' }],
+    objetDonnees: avecDocumentsRadio,
+    messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
+    requis: true,
+  })
+
+  fieldset#documents
+    p.requis Titre et informations utiles
+    .ajout-documents
+      input#champ-titre-document(type="text", placeholder="ex : Analyse Ebios juin 2022")
+      .button#ajout-document
+        img(src="/statique/assets/images/fleche_pointe_bas.svg")
+    ul#liste-documents
+      each document in documents.documents
+        li.element-document(data-document=document)
+          .contenu!= document
+          .bouton-supprimer
+
+  script(type = "module", src = "/statique/homologation/etapes/documents.js")
+
+block bouton-etape
+    button.bouton#suivant(
+      data-id-homologation = service.id,
+      data-id-etape = idEtape,
+      data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
+    ) Suivant
+
+block cartes-informations
+  +recommandationsANSSI({ referentiel, noteObtenue: service.indiceCyber().total })
