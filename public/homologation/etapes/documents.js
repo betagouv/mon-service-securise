@@ -7,9 +7,11 @@ const montreListeDocuments = ($element) => {
 
   if (avecDocuments) {
     $('#documents').removeClass('invisible');
+    $('#au-moins-un-document').attr('required', 'true');
   } else {
     $('#liste-documents').empty();
     $('#documents').addClass('invisible');
+    $('#au-moins-un-document').removeAttr('required');
   }
 };
 
@@ -25,7 +27,12 @@ const brancheBoutonsRadio = () => {
 
 const brancheBoutonSupprimer = ($element) => {
   $element.on('click', (e) => {
+    const $listeDocuments = $('#liste-documents');
+    const $auMoinsUnDocument = $('#au-moins-un-document');
     $(e.target).parent().remove();
+    if ($listeDocuments.children().length === 0) {
+      $auMoinsUnDocument.val('');
+    }
   });
 };
 
@@ -33,6 +40,7 @@ const brancheBoutonAjoutDocument = () => {
   const $boutonAjoutDocument = $('#ajout-document');
   const $champTitreDocument = $('#champ-titre-document');
   const $listeDocuments = $('#liste-documents');
+  const $auMoinsUnDocument = $('#au-moins-un-document');
 
   $boutonAjoutDocument.on('click', () => {
     const titreDocument = $champTitreDocument.val().trim();
@@ -48,6 +56,7 @@ const brancheBoutonAjoutDocument = () => {
       $elementListe.append($paragraphe).append($boutonSupprimer);
       $listeDocuments.append($elementListe);
       $champTitreDocument.val('');
+      $auMoinsUnDocument.val('OK');
     }
   });
 };
