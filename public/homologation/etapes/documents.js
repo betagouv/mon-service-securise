@@ -25,7 +25,12 @@ const brancheBoutonsRadio = () => {
 
 const brancheBoutonSupprimer = ($element) => {
   $element.on('click', (e) => {
+    const $listeDocuments = $('#liste-documents');
+    const $auMoinsUnDocument = $('#au-moins-un-document');
     $(e.target).parent().remove();
+    if ($listeDocuments.children().length === 0) {
+      $auMoinsUnDocument.val('');
+    }
   });
 };
 
@@ -33,6 +38,7 @@ const brancheBoutonAjoutDocument = () => {
   const $boutonAjoutDocument = $('#ajout-document');
   const $champTitreDocument = $('#champ-titre-document');
   const $listeDocuments = $('#liste-documents');
+  const $auMoinsUnDocument = $('#au-moins-un-document');
 
   $boutonAjoutDocument.on('click', () => {
     const titreDocument = $champTitreDocument.val().trim();
@@ -48,6 +54,7 @@ const brancheBoutonAjoutDocument = () => {
       $elementListe.append($paragraphe).append($boutonSupprimer);
       $listeDocuments.append($elementListe);
       $champTitreDocument.val('');
+      $auMoinsUnDocument.val('OK');
     }
   });
 };
@@ -71,6 +78,13 @@ const soumissionEtapeDocuments = (selecteurFormulaire) => (idService) => {
   if (avecDocuments) {
     documents = $('.element-document', selecteurFormulaire).toArray().map((element) => $(element).attr('data-document'));
   }
+
+  // if (avecDocuments && documents.length === 0) {
+  //   $('#champ-titre-document', selecteurFormulaire).get(0).setCustomValidity('Invalid field.');
+  //   $(selecteurFormulaire).get(0).reportValidity();
+  //   // $('.message-erreur').show();
+  // }
+  // console.log($(selecteurFormulaire).get(0).reportValidity());
 
   return (
     axios.put(

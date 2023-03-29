@@ -31,6 +31,9 @@ block formulaire
       input#champ-titre-document(type="text", placeholder="ex : Analyse Ebios juin 2022")
       .button#ajout-document
         img(src="/statique/assets/images/fleche_pointe_bas.svg")
+    div
+      input(id='au-moins-un-document', class="invisible", type='text', required, value=documents.documents.length > 0 ? "OK" : "")
+      .message-erreur Ce champs est obligatoire. Veuillez le renseigner. 
     ul#liste-documents
       each document in documents.documents
         li.element-document(data-document=document)
