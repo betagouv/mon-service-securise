@@ -101,11 +101,10 @@ const genereDossierDecision = async (donnees) => {
 
   const pdfDecision = await documentPdf.save({ updateFieldAppearances: false });
 
-  const avisPresent = donnees.avis.length > 0;
   const documentsPresent = donnees.documents.length > 0;
 
   const annexes = await Promise.all([
-    avisPresent ? genereHtml('annexeAvis', { donnees }, donnees.nomService) : null,
+    genereHtml('annexeAvis', { donnees }, donnees.nomService),
     documentsPresent ? genereHtml('annexeDocuments', { donnees }, donnees.nomService) : null,
   ]);
 

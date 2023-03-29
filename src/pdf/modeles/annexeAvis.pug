@@ -10,13 +10,17 @@ block page
     p.note= `L'indice cyber est du service numérique est de ${noteObtenue}/${noteMaximale}`
     p.recommandation= donnees.referentiel.trancheIndiceCyber(donnees.indiceCyberTotal).recommandationANSSI
     p.complement= donnees.referentiel.trancheIndiceCyber(donnees.indiceCyberTotal).recommandationANSSIComplement
-  each avis, index in donnees.avis
-    +boite-grise(`Avis ${index + 1}`, 'avis')
-      .collaborateurs
-        img(alt='icone de collaborateurs')
-        span!= avis.collaborateurs.join(', ') + '.'
-      .statut
-        span= statuts[avis.statut].description
-      if avis.commentaires && avis.commentaires !== ''  
-        .commentaire
-          span!= avis.commentaires
+  if donnees.avis.length === 0
+    +boite-grise('Avis', 'avis')
+      p Aucun avis n'a été renseigné par l'équipe.
+  else
+    each avis, index in donnees.avis
+      +boite-grise(`Avis ${index + 1}`, 'avis')
+        .collaborateurs
+          img(alt='icone de collaborateurs')
+          span!= avis.collaborateurs.join(', ') + '.'
+        .statut
+          span= statuts[avis.statut].description
+        if avis.commentaires && avis.commentaires !== ''  
+          .commentaire
+            span!= avis.commentaires
