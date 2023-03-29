@@ -12,6 +12,7 @@ const {
 } = require('../erreurs');
 const routesApiService = require('./routesApiService');
 const Utilisateur = require('../modeles/utilisateur');
+const vueEspacePersonnel = require('../modeles/objetsVues/vueEspacePersonnel');
 
 const routesApi = (
   middleware,
@@ -79,8 +80,8 @@ const routesApi = (
 
   routes.get('/services', middleware.verificationAcceptationCGU, (requete, reponse) => {
     depotDonnees.homologations(requete.idUtilisateurCourant)
-      .then((services) => services.map((s) => s.toJSON()))
-      .then((services) => reponse.json({ services }));
+      .then((services) => vueEspacePersonnel.donnees(services))
+      .then((donnees) => reponse.json(donnees));
   });
 
   routes.use('/service', routesApiService(middleware, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf));
