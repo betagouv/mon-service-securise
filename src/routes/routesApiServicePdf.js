@@ -26,6 +26,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf, referentiel) => {
       nomService: homologation.nomService(),
       nomPrenomAutorite: dossierCourant.autorite.nom,
       fonctionAutorite: dossierCourant.autorite.fonction,
+      indiceCyberTotal: homologation.indiceCyber().total,
       referentiel,
       ...dossierCourant.avis.toJSON(),
       ...dossierCourant.documents.toJSON(),

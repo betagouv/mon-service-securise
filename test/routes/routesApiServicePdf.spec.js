@@ -59,20 +59,20 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
     beforeEach(() => {
       testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('Pdf decision');
-      testeur.middleware().reinitialise({
-        homologationARenvoyer: new Homologation({
-          id: '456',
-          descriptionService: { nomService: 'un service' },
-          dossiers: [
-            unDossier(referentiel)
-              .quiEstActif()
-              .avecAutorite('Jean Dupond', 'RSSI')
-              .avecAvis([{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }])
-              .avecDocuments(['unDocument'])
-              .donnees,
-          ],
-        }, referentiel),
-      });
+      const homologationARenvoyer = new Homologation({
+        id: '456',
+        descriptionService: { nomService: 'un service' },
+        dossiers: [
+          unDossier(referentiel)
+            .quiEstActif()
+            .avecAutorite('Jean Dupond', 'RSSI')
+            .avecAvis([{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }])
+            .avecDocuments(['unDocument'])
+            .donnees,
+        ],
+      }, referentiel);
+      homologationARenvoyer.mesures.indiceCyber = () => 3.5;
+      testeur.middleware().reinitialise({ homologationARenvoyer });
     });
 
     it('recherche le service correspondant', (done) => {
