@@ -233,3 +233,26 @@ p {
   list-style: disc;
   padding-left: 2em;
 }
+
+.recommandation-anssi {
+  color: #0C5C98;
+}
+
+.recommandation-anssi tbody,
+.recommandation-anssi tfoot,
+.recommandation-anssi .bordure-titre {
+  background: #EFF6FF;
+}
+
+.recommandation-anssi .note,
+.recommandation-anssi .recommandation {
+  font-weight: bold;
+}
+
+.recommandation-anssi .note {
+  margin-top: 1em;
+}
+
+.recommandation-anssi .complement {
+  margin: 1em 0;
+}
