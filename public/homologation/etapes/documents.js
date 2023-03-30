@@ -11,7 +11,7 @@ const montreListeDocuments = ($element) => {
   } else {
     $('#liste-documents').empty();
     $('#documents').addClass('invisible');
-    $('#au-moins-un-document').removeAttr('required');
+    $('#au-moins-un-document').removeAttr('required').val('');
   }
 };
 
