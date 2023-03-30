@@ -6,15 +6,16 @@ const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
 const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
 const EvenementCompletudeServiceModifiee = require('./src/modeles/journalMSS/evenementCompletudeServiceModifiee');
+const EvenementNouvelleHomologationCreee = require('./src/modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementProfilUtilisateurModifie = require('./src/modeles/journalMSS/evenementProfilUtilisateurModifie');
 const { avecPMapPourChaqueElement } = require('./src/utilitaires/pMap');
 
 class ConsoleAdministration {
   constructor(environnementNode = (process.env.NODE_ENV || 'development')) {
     const adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur(environnementNode);
-    const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
+    this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
     this.depotDonnees = DepotDonnees.creeDepot({
-      adaptateurJWT, adaptateurPersistance, adaptateurUUID, referentiel,
+      adaptateurJWT, adaptateurPersistance, adaptateurUUID, referentiel: this.referentiel,
     });
     this.adaptateurJournalMSS = fabriqueAdaptateurJournalMSS();
 
@@ -76,6 +77,35 @@ class ConsoleAdministration {
       )));
 
     return avecPMapPourChaqueElement(evenements, journal.consigneEvenement);
+  }
+
+  async genereTousEvenementsNouvelleHomologation(persisteEvenements = false) {
+    const journal = (persisteEvenements ? this.adaptateurJournalMSS : this.journalConsole);
+
+    const toutes = await this.depotDonnees.toutesHomologations();
+    const dossiersParService = toutes.map((h) => ({
+      idService: h.id,
+      finalises: h.dossiers.finalises(),
+    }));
+
+    const evenements = dossiersParService.map(
+      ({ idService, finalises }) => finalises.map(
+        (f) => new EvenementNouvelleHomologationCreee({
+          idService,
+          dateHomologation: f.decision.dateHomologation,
+          dureeHomologationMois: this.referentiel.nbMoisDecalage(f.decision.dureeValidite),
+        },
+        { date: new Date(f.decision.dateHomologation) })
+          .toJSON()
+      )
+    )
+      .flat()
+      .map(({ donnees, ...reste }) => ({
+        donnees: { ...donnees, genereParAdministrateur: true },
+        ...reste,
+      }));
+
+    return avecPMapPourChaqueElement(Promise.resolve(evenements), journal.consigneEvenement);
   }
 }
 
