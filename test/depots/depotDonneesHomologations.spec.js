@@ -1005,31 +1005,34 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   describe("sur demande de finalisation d'un dossier", () => {
-    let adaptateurUUID;
     let adaptateurJournalMSS;
+    let adaptateurPersistance;
+    let adaptateurUUID;
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { sixMois: { nbMoisDecalage: 6 }, unAn: {} },
     });
 
     beforeEach(() => {
-      adaptateurUUID = { genereUUID: () => 'un UUID' };
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-    });
 
-    it('enregistre le dossier passé en paramètre', (done) => {
       const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         homologations: [copie(donneesHomologations)],
         services: [copie(donneesHomologations)],
       });
+
+      adaptateurUUID = { genereUUID: () => 'un UUID' };
+    });
+
+    it('enregistre le dossier passé en paramètre', (done) => {
       const depot = DepotDonneesHomologations.creeDepot(
         { adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel }
       );
-
       const dossier = new Dossier(
         { id: '999', decision: { dateHomologation: '2022-11-30', dureeValidite: 'sixMois' } },
         referentiel
       );
+
       depot.finaliseDossier('123', dossier)
         .then(() => depot.homologation('123'))
         .then((h) => expect(h.nombreDossiers()).to.equal(1))
@@ -1045,16 +1048,9 @@ describe('Le dépôt de données des homologations', () => {
         done();
         return Promise.resolve();
       };
-
-      const donneesHomologations = { id: '123', descriptionService: { nomService: 'Un service' } };
-      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        homologations: [copie(donneesHomologations)],
-        services: [copie(donneesHomologations)],
-      });
       const depot = DepotDonneesHomologations.creeDepot(
         { adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel }
       );
-
       const dossier = new Dossier(
         { id: '999', decision: { dateHomologation: '2022-11-30', dureeValidite: 'sixMois' } },
         referentiel
