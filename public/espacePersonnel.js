@@ -2,6 +2,7 @@ import { $services, $modaleNouveauContributeur } from './modules/elementsDom/ser
 import { brancheModale } from './modules/interactions/modale.mjs';
 import brancheComportementPastilles from './modules/interactions/pastilles.js';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
+import brancheFiltres from './modules/brancheFiltres.mjs';
 import brancheMenuContextuelService from './modules/interactions/brancheMenuContextuelService.js';
 
 $(() => {
@@ -34,7 +35,10 @@ $(() => {
     .then(({ data }) => data.utilisateur)
     .then((utilisateur) => {
       axios.get('/api/services')
-        .then(({ data }) => peupleServicesDans('.services', data.services, utilisateur.id));
+        .then(({ data }) => {
+          brancheFiltres(data.donneesFiltres);
+          peupleServicesDans('.services', data.services, utilisateur.id);
+        });
 
       if (!utilisateur.profilEstComplet) afficheBandeauMajProfil();
     });

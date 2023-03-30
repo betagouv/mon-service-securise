@@ -21,9 +21,11 @@
 
 .suivi-services .nouveau-service {
   background: var(--bleu-mise-en-avant);
+  flex-shrink: 0;
   color: #fff;
   cursor: pointer;
   width: fit-content;
+  height: fit-content;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -46,6 +48,26 @@
 .entete-suivi-services {
   background: #FFFFFF;
   padding-bottom: 2em;
+}
+
+.entete-suivi-services .actions {
+  display: flex;
+}
+
+.entete-suivi-services .filtres {
+  display: flex;
+  align-items: center;
+}
+
+.entete-suivi-services .filtres label {
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.entete-suivi-services .filtres .filtre.selectize-control {
+  margin: 0 2em;
+  text-align: left;
+  min-width: 20em;
 }
 
 .services {
