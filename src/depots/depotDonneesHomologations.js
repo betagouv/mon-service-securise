@@ -8,6 +8,7 @@ const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
 const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
+const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
@@ -185,6 +186,19 @@ const creeDepot = (config = {}) => {
     ajouteAItemsDansHomologation('dossiers', idHomologation, dossier)
   );
 
+  const finaliseDossier = (idHomologation, dossier) => (
+    enregistreDossierCourant(idHomologation, dossier)
+      .then(() => {
+        const evenement = new EvenementNouvelleHomologationCreee({
+          idService: idHomologation,
+          dateHomologation: dossier.decision.dateHomologation,
+          dureeHomologationMois: referentiel.nbMoisDecalage(dossier.decision.dureeValidite),
+        });
+
+        return adaptateurJournalMSS.consigneEvenement(evenement.toJSON());
+      })
+  );
+
   const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
     const idHomologation = adaptateurUUID.genereUUID();
     const idAutorisation = adaptateurUUID.genereUUID();
@@ -279,6 +293,7 @@ const creeDepot = (config = {}) => {
     ajouteRisqueGeneralAHomologation,
     ajouteRolesResponsabilitesAHomologation,
     dupliqueHomologation,
+    finaliseDossier,
     homologation,
     homologationExiste,
     homologations,
