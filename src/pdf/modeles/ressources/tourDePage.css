@@ -19,23 +19,24 @@ html {
 }
 
 .entete h2 {
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
   margin: 0;
   padding: 0;
 }
 
 .entete .sous-titre {
-  font-size: 8px;
+  font-size: 9px;
   color: #5E5E5E;
+  font-weight: 500;
 }
 
 .entete img.indispensable {
   content: var(--etoile-orange);
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
   margin-left: 1px;
-  transform: translateY(3px);
+  transform: translateY(1px);
 }
 
 .piedpage {
@@ -49,6 +50,7 @@ html {
 
 .piedpage .mss {
   color: #08416A;
+  font-weight: bold;
 }
 
 .piedpage .pagination {

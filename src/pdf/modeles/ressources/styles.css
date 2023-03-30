@@ -26,7 +26,6 @@ p {
 }
 
 .boite-grise {
-  margin-bottom: 32px;
   width: 100%;
   border-collapse: collapse;
 }
@@ -48,10 +47,15 @@ p {
   border-radius: 20px;
   padding: 2px 12px;
   margin-left: 16px;
+  border: 1px solid #B5C1D2;
+}
+
+.boite-grise .titre p {
+  transform: translateY(-2px);
 }
 
 .boite-grise .bordure-titre {
-  border: 2px #B5C1D2 solid;
+  border: 1px #B5C1D2 solid;
   border-bottom: 0;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -59,6 +63,7 @@ p {
   width: 100%;
   height: 11px;
   margin: -11px 0 0 0;
+  padding-bottom: 24px;
 }
 
 .boite-grise tbody td {
@@ -68,20 +73,20 @@ p {
 .boite-grise .contenu {
   box-sizing: border-box;
   width: 100%;
-  padding: 8px 16px;
-  margin-top: -1px;
-  border: 2px #B5C1D2 solid;
+  padding: 8px 24px;
+  margin-top: -16px;
+  border: 1px #B5C1D2 solid;
   border-top: none;
   border-bottom: none;
 }
 
 .boite-grise .bordure-pied-table {
-  border: 2px #B5C1D2 solid;
+  border: 1px #B5C1D2 solid;
   border-top: 0;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   height: 10px;
-  margin-top: -2px;
+  margin-top: -4px;
 }
 
 .boite-grise ul {
@@ -111,7 +116,7 @@ p {
 
 .boite-grise ul.liste-puce li.etoile::before {
   background-image: var(--etoile-orange);
-  transform: scale(1);
+  transform: scale(0.8);
 }
 
 .categorie {
@@ -125,12 +130,20 @@ p {
   margin: 8px 0 0;
 }
 
+.mesure-description {
+  font-weight: 500;
+}
+
 .mesure-modalite {
   color: #667892;
 }
 
-.non-renseignees p {
-  margin: 8px 0;
+.non-renseignees div {
+  padding: 8px 0 0 0;
+}
+
+.contenu-niveau {
+  margin-left: 8px;
 }
 
 .niveau {
@@ -182,11 +195,6 @@ p {
 
 .contenu-risque .definition {
   margin-top: 8px;
-}
-
-.contenu-risque .definition,
-.contenu-risque .commentaire {
-  font-size: 11px;
 }
 
 .contenu-risque .description {
