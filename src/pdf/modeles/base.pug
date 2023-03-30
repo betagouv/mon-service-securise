@@ -3,7 +3,8 @@ mixin boite-grise(titre, classe)
     thead: tr: th
       .decalage-titre
       if titre
-        .titre= titre
+        .titre
+          p= titre
       .bordure-titre
     tbody: tr: td.bloc-indivisible: .contenu
       block
