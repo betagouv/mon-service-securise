@@ -866,7 +866,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         testeur.referentiel()
       );
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().enregistreDossierCourant = () => Promise.resolve();
+      testeur.depotDonnees().finaliseDossier = () => Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -885,7 +885,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('utilise le dépôt pour finaliser le dossier', (done) => {
       let depotAppele = false;
-      testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
+      testeur.depotDonnees().finaliseDossier = (idHomologation, dossier) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.finalise).to.be(true);

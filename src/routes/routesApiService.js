@@ -278,7 +278,7 @@ const routesApiService = (
       const { homologation, dossierCourant } = requete;
 
       dossierCourant.enregistreFinalisation();
-      depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
+      depotDonnees.finaliseDossier(homologation.id, dossierCourant)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     });
