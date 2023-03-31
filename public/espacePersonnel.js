@@ -20,6 +20,22 @@ const filtreEspacePersonnel = {
         option: (option) => `<div class="option">${option.valeur}</div>`,
       },
       sortField: [{ field: 'valeur', direction: 'asc' }],
+      onChange: (value) => filtreEspacePersonnel.filtreLesServices(value),
+    });
+  },
+
+  filtreLesServices: (organisationsChoisies) => {
+    $('.service').each((_, service) => {
+      const $service = $(service);
+
+      const organisationsDuService = Object.entries($service.data())
+        .filter(([cle]) => cle.startsWith('organisationResponsable-'))
+        .map(([_cle, valeur]) => valeur);
+
+      const pasDeFiltre = organisationsChoisies.length === 0;
+      const correspondance = organisationsChoisies.every((o) => organisationsDuService.includes(o));
+      if (pasDeFiltre || correspondance) $service.show();
+      else $service.hide();
     });
   },
 };
