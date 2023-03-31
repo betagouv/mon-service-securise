@@ -1,9 +1,13 @@
 const donnees = (services) => ({
   services: services
-    .map((s) => s.toJSON())
+    .map((s) => ({
+      ...s.toJSON(),
+      organisationsResponsables: s.descriptionService.organisationsResponsables,
+    }))
     .map((json) => ({
       id: json.id,
       nomService: json.nomService,
+      organisationsResponsables: json.organisationsResponsables ?? [],
       createur: {
         id: json.createur.id,
         prenomNom: json.createur.prenomNom,

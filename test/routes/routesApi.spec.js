@@ -4,6 +4,7 @@ const expect = require('expect.js');
 const { ErreurEmailManquant, ErreurModele, ErreurUtilisateurExistant } = require('../../src/erreurs');
 
 const testeurMSS = require('./testeurMSS');
+const Service = require('../../src/modeles/service');
 
 describe('Le serveur MSS des routes /api/*', () => {
   const testeur = testeurMSS();
@@ -23,10 +24,14 @@ describe('Le serveur MSS des routes /api/*', () => {
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
-      const service = { toJSON: () => ({ id: '456' }) };
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');
-        return Promise.resolve([service]);
+        return Promise.resolve([
+          new Service({
+            id: '456',
+            descriptionService: { nomService: 'Un service', organisationsResponsables: [] },
+            createur: { email: 'email.createur@mail.fr' },
+          })]);
       };
 
       axios.get('http://localhost:1234/api/services')
