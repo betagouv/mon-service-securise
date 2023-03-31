@@ -5,6 +5,8 @@ include fragments/modales/modaleSuppressionService
 
 block append styles
   link(href = '/statique/assets/styles/espacePersonnel.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
+  link(href = '/styles/selectize.default.min.css', rel = 'stylesheet')
 
 block main
   +modaleNouveauService
@@ -18,9 +20,20 @@ block main
   .suivi-services
       .entete-suivi-services
         .marges-fixes
-          h2 Espace personnel
-          h1 Mes services
-          .nouveau-service#nouveau-service Nouveau service
+          .titres
+            h2 Espace personnel
+            h1 Mes services
+          .actions
+            .filtres
+              label(for = 'filtre') Rechercher et filtrer
+              select.filtre.invisible.intouche(
+                id = 'filtre',
+                name = 'filtre',
+                placeHolder = 'ex : Commune Jolie, département Z, …',
+                multiple
+              )
+            .nouveau-service#nouveau-service Nouveau service
       .services.marges-fixes
 
+  script(src = "/bibliotheques/selectize.min.js")
   script(type = "module", src = "/statique/espacePersonnel.js")
