@@ -12,6 +12,7 @@ const descriptionService = new DescriptionService({
   risqueJuridiqueFinancierReputationnel: false,
   statutDeploiement: 'enLigne',
   typeService: ['siteInternet'],
+  organisationsResponsables: ['Agglomération de Mansart'],
 }, referentiel);
 
 const creeDonnees = (depotDonnees) => depotDonnees
