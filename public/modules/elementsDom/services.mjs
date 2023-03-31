@@ -76,6 +76,10 @@ const $serviceExistant = (
 </a>
   `);
 
+  donneesService.organisationsResponsables.forEach(
+    (orga, i) => $element.attr(`data-organisation-responsable-${i}`, orga)
+  );
+
   if (utilisateurCreateur()) {
     $('.menu-contextuel', $element).append(`
       <div class="menu-contextuel-titre"></div>

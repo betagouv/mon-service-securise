@@ -12,7 +12,13 @@ describe("Le composant services de l'espace personnel", () => {
     global.$ = jquery(dom.window);
     global.document = dom.window.document;
 
-    donneesService = { id: '789', createur: { id: '123' }, nomService: 'Un service' };
+    donneesService = {
+      id: '789',
+      createur: { id: '123' },
+      contributeurs: [],
+      nomService: 'Un service',
+      organisationsResponsables: [],
+    };
     donneesServices = [donneesService];
   });
 
@@ -56,5 +62,16 @@ describe("Le composant services de l'espace personnel", () => {
     const $premierService = $('.service').eq(0);
     const $contributeursSupplementaires = $('.pastille.contributeurs-supplementaires', $premierService);
     expect($contributeursSupplementaires.length).to.equal(0);
+  });
+
+  it('ajoute les attributs `data-organisation-responsable` du service', () => {
+    donneesService.organisationsResponsables = ['ANSSI', 'Ministère'];
+
+    const $resultat = $services(donneesServices, '', '', 1);
+
+    $('.services').append($resultat);
+    const $premierService = $('.service').eq(0);
+    expect($premierService.data('organisation-responsable-0')).to.equal('ANSSI');
+    expect($premierService.data('organisation-responsable-1')).to.equal('Ministère');
   });
 });
