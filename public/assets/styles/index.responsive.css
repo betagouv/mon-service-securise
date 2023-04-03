@@ -12,6 +12,10 @@
     max-width: 90%;
   }
 
+  .introduction p {
+    padding: 0;
+  }
+
   .image-intro-mss {
     display: none;
   }

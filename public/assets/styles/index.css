@@ -6,7 +6,7 @@ main {
   display: flex;
   column-gap: 1em;
 
-  margin: 5em auto 3em auto;
+  margin: 8em auto 11em auto;
 
   text-align: left;
 }
@@ -23,7 +23,7 @@ main {
   margin: 0 0 2.58em 0;
 
   color: var(--bleu-anssi);
-  font-size: 1.68em;
+  font-size: 1.53em;
   font-weight: normal;
 }
 
@@ -43,15 +43,16 @@ main {
   margin: 0.36em 0 0 0;
 
   color: var(--bleu-anssi);
-  font-size: 1.55em;
+  font-size: 1.25em;
 }
 
 .introduction p {
   margin: 2em 0 1.6em 0;
+  padding-right: 5em;
 
   color: var(--bleu-anssi);
   line-height: 1.36em;
-  font-size: 1.4em;
+  font-size: 1.11em;
 }
 
 .introduction nav {
@@ -94,5 +95,5 @@ main {
 
   background-image: url(../images/image_intro_mss.svg);
   background-repeat: no-repeat;
-  background-size: contain;
+  background-position: center;
 }
