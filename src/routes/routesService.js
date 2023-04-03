@@ -12,9 +12,21 @@ const routesService = (
 ) => {
   const routes = express.Router();
 
-  routes.get('/creation', middleware.verificationAcceptationCGU, (_requete, reponse) => {
-    const service = new Homologation({});
-    reponse.render('service/creation', { referentiel, service });
+  routes.get('/creation', middleware.verificationAcceptationCGU, (requete, reponse, suite) => {
+    const { idUtilisateurCourant } = requete;
+    depotDonnees.utilisateur(idUtilisateurCourant)
+      .then((utilisateur) => {
+        const donneesService = {};
+        if (utilisateur.nomEntitePublique) {
+          donneesService.descriptionService = {
+            organisationsResponsables: [utilisateur.nomEntitePublique],
+          };
+        }
+
+        const service = new Homologation(donneesService);
+        reponse.render('service/creation', { referentiel, service });
+      })
+      .catch(suite);
   });
 
   routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
