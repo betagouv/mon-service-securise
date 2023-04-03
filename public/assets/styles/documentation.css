@@ -80,3 +80,7 @@
   font-weight: bold;
   color: var(--bleu-anssi);
 }
+
+.date-mise-en-vigueur {
+  margin-bottom: 2.5em;
+}
