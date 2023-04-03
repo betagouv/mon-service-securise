@@ -5,6 +5,7 @@ const initialiseComportementFormulaire = (
   selecteurFormulaire,
   selecteurBouton,
   fonctionExtractionParametres,
+  callbackErreur = () => {},
   adaptateurAjax = adaptateurAjaxAxios
 ) => {
   const $bouton = $(selecteurBouton);
@@ -24,7 +25,8 @@ const initialiseComportementFormulaire = (
     );
 
     adaptateurAjax.execute(requete)
-      .then(redirigeVersSynthese);
+      .then(redirigeVersSynthese)
+      .catch(callbackErreur);
   }));
 
   $bouton.on('click', () => {
