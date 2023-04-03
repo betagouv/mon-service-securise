@@ -683,7 +683,7 @@ module.exports = {
 
   documentsHomologation: {
     decision: {
-      description: "Décision d'homologation de sécurité (modèle)",
+      description: "Décision d'homologation de sécurité",
       urlTelechargement: '/api/service/:idService/pdf/dossierDecision.pdf',
     },
     synthese: {
