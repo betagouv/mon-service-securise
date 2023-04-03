@@ -1,5 +1,3 @@
-const fsPromises = require('fs/promises');
-const { decode } = require('html-entities');
 const { PDFDocument } = require('pdf-lib');
 const pug = require('pug');
 const { lanceNavigateur } = require('./adaptateurPdf.puppeteer');
@@ -82,35 +80,18 @@ const genereAnnexes = async ({
   return fusionnePdfs(pdfs);
 };
 
-const ecrisLeChamp = (formulaire, idChamp, contenu) => {
-  const champ = formulaire.getTextField(idChamp);
-  if (champ !== undefined && contenu !== undefined) {
-    champ.setText(decode(contenu));
-    champ.enableReadOnly();
-  }
-};
-
 const genereDossierDecision = async (donnees) => {
-  const fichierPdf = await fsPromises.readFile('src/pdf/modeles/dossierDecision.pdf');
-  const documentPdf = await PDFDocument.load(fichierPdf);
-  const formulaire = documentPdf.getForm();
-
-  ecrisLeChamp(formulaire, 'nom_du_service', donnees.nomService);
-  ecrisLeChamp(formulaire, 'autorite_prenom_nom', donnees.nomPrenomAutorite);
-  ecrisLeChamp(formulaire, 'autorite_fonction', donnees.fonctionAutorite);
-
-  const pdfDecision = await documentPdf.save({ updateFieldAppearances: false });
-
   const documentsPresent = donnees.documents.length > 0;
 
-  const annexes = await Promise.all([
+  const htmls = await Promise.all([
+    genereHtml('dossierDecision', { donnees }, donnees.nomService),
     genereHtml('annexeAvis', { donnees }, donnees.nomService),
     documentsPresent ? genereHtml('annexeDocuments', { donnees }, donnees.nomService) : null,
   ]);
 
-  const pdfs = await generePdfs(annexes.filter((a) => a !== null));
+  const pdfs = await generePdfs(htmls.filter((a) => a !== null));
 
-  return fusionnePdfs([pdfDecision, ...pdfs]);
+  return fusionnePdfs(pdfs);
 };
 
 module.exports = { genereAnnexes, genereDossierDecision };

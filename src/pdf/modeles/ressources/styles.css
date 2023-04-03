@@ -272,3 +272,168 @@ p {
 .recommandation-anssi .complement {
   margin: 1em 0;
 }
+
+.dossier-decision {
+  padding-top: 16px;
+}
+
+.dossier-decision h1 {
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.dossier-decision .separateur {
+  width: 30px;
+  height: 1px;
+  background-color: black;
+  border-radius: 20px;
+}
+
+.dossier-decision h2 {
+  color: #5E5E5E;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+  margin-top: 16px;
+}
+
+.dossier-decision h3 {
+  color: #08416A;
+  font-weight: 500;
+  margin: 0;
+  margin-top: 4px;
+  margin-bottom: 64px;
+}
+
+.dossier-decision .bloc-bordure {
+  padding: 0.5cm;
+  border: 1px solid #B5C1D2;
+  border-radius: 4px;
+}
+
+.dossier-decision h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.dossier-decision .autorite {
+  color: #0C5C98;
+}
+
+.dossier-decision ol {
+  list-style: none;
+  counter-reset: item;
+  padding-left: 0;
+  margin-bottom: 32px;
+}
+
+.dossier-decision li {
+  counter-increment: item;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: 500;
+}
+
+.dossier-decision li:before {
+  content: counter(item);
+  background: #EFEFEF;
+  border-radius: 2px;
+  width: 24px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  padding: 0;
+  font-weight: bold;
+}
+
+.dossier-decision .duree-validite {
+  margin-top: 16px;
+}
+
+.dossier-decision .duree-validite .label {
+  font-weight: bold;
+  display: flex;
+}
+
+.dossier-decision .discret {
+  font-weight: 400;
+  color: #5E5E5E;
+}
+
+.dossier-decision .durees {
+  display: flex;
+  justify-content: space-between;
+  width: 7cm;
+  margin-left: 0.5cm;
+}
+
+.dossier-decision .durees span::before {
+  content: '';
+  border: 1px solid #5E5E5E;
+  display: inline-block;
+  border-radius: 2px;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  transform: translateY(2px);
+}
+
+.dossier-decision .bloc-bordure.commentaires,
+.dossier-decision .bloc-bordure.date-signature {
+  padding: 2mm;
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+.dossier-decision .bloc-bordure.commentaires {
+  height: 6cm;
+}
+
+.dossier-decision .bloc-bordure.date-signature {
+  height: 2.5cm;
+}
+
+.dossier-decision .bloc-bordure.date-signature .label {
+  margin-bottom: 8px;
+}
+
+.dossier-decision .conteneur-rgs-rgpd {
+  display: flex;
+  margin-top: 16px;
+  gap: 16px;
+}
+
+.dossier-decision .conteneur-images {
+  display: flex;
+  gap: 8px;
+}
+
+.dossier-decision .icone-rgs,
+.dossier-decision .icone-rgpd {
+  width: 46px;
+}
+
+.dossier-decision .icone-rgs {
+  content: var(--icone-rgs);
+}
+
+.dossier-decision .icone-rgpd {
+  content: var(--icone-rgpd);
+}
+
+.dossier-decision .conteneur-texte {
+  font-weight: bold;
+  font-size: 9px;
+}
+
+.dossier-decision .conteneur-responsabilite {
+  font-size: 9px;
+  font-weight: 500;
+  color: #5E5E5E;
+  margin-top: 16px;
+}
