@@ -1,5 +1,4 @@
-extends ../formulaireEtapier
-include ../../cartes/recommandationsANSSI
+extends ../formulaireEtapierRecommandation
 
 mixin document({ nom, description, dateTelechargement })
   - const dateFr = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Europe/Paris' });
@@ -47,6 +46,3 @@ block bouton-etape
     data-id-etape = idEtape,
     data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
     ) Suivant
-
-block cartes-informations
-  +recommandationsANSSI({ referentiel, noteObtenue: service.indiceCyber().total })

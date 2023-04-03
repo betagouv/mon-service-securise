@@ -1,0 +1,5 @@
+extends ./formulaireEtapier
+include ../cartes/recommandationsANSSI
+
+block cartes-informations
+  +recommandationsANSSI({ referentiel, noteObtenue: service.indiceCyber().total })

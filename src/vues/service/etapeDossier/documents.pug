@@ -1,6 +1,5 @@
-extends ../formulaireEtapier
+extends ../formulaireEtapierRecommandation
 include ../../fragments/inputChoix
-include ../../cartes/recommandationsANSSI
 
 block append styles
   link(href = '/statique/assets/styles/etapesDossier/documents.css', rel = 'stylesheet')
@@ -48,6 +47,3 @@ block bouton-etape
       data-id-etape = idEtape,
       data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
     ) Suivant
-
-block cartes-informations
-  +recommandationsANSSI({ referentiel, noteObtenue: service.indiceCyber().total })
