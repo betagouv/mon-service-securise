@@ -61,3 +61,35 @@ html {
   margin-left: 1px;
   margin-right: 1px;
 }
+
+.entete-dossier-decision {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 2mm;
+  margin: 1mm 1cm 0 1cm;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 12px;
+}
+
+.entete-dossier-decision .republique-francaise {
+  width: 40px;
+  content: var(--republique-francaise);
+}
+
+.entete-dossier-decision .logos {
+  display: flex;
+  column-gap: 16px;
+}
+
+.entete-dossier-decision .logo-mss {
+  width: 100px;
+  content: var(--logo-mss);
+}
+
+.entete-dossier-decision .logo-anssi {
+  width: 36px;
+  content: var(--logo-anssi);
+}

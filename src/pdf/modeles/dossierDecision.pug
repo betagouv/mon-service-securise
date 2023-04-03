@@ -1,1 +1,58 @@
-h1 Dossier de décision
+extends base
+
+block page
+  .dossier-decision
+    h1 Décision d'homologation de sécurité
+    .separateur
+    h2!=(donnees.organisationResponsable)
+    h3!=(donnees.nomService)
+    .bloc-bordure
+      h4 Considérant
+      ol
+        li La synthèse de la sécurité du service, élaborée à partir des déclarations de l'équipe.
+        li L'ensemble des documents joints à la synthèse de sécurité, présentés en amont de cette décision.
+        li Le ou les avis émis par l'équipe ayant participé à préparer la présente décision.
+      h4
+        span L'autorité d'homologation, 
+        span.autorite!= `${donnees.nomPrenomAutorite}, ${donnees.fonctionAutorite}, `
+        span approuve l'homologation de la sécurité du service :
+      .duree-validite
+          .label
+              span Pour une durée de
+              span.discret &nbsp;(veuillez cocher une case)&nbsp;
+              span :
+              .durees
+                  span 6 mois
+                  span 1 an
+                  span 2 ans
+                  span 3 ans
+      .bloc-bordure.commentaires
+        .label
+            span Commentaire
+            span.discret &nbsp;(veuillez compléter de manière manuscrite)&nbsp;
+            span :
+      .bloc-bordure.date-signature
+        .label
+            span Date
+            span.discret &nbsp;(veuillez compléter de manière manuscrite)&nbsp;
+            span :
+        .label
+            span Signature
+            span.discret &nbsp;(veuillez signer précédé de la mention "Lu et approuvé")&nbsp;
+            span :
+      .conteneur-rgs-rgpd
+        .conteneur-images
+          img.icone-rgs
+          img.icone-rgpd
+        .conteneur-texte
+          p. 
+            L'homologation de sécurité d'un service public numérique est une obligation 
+            du référentiel général de sécurité et du décret n°2022-513 du 8 avril 2022 
+            relatif à la sécurité numérique du système d'information et de communication 
+            de l'Etat et de ses établissements publics. L'homologation de sécurité 
+            participe également à la mise en conformité avec l'article 32 du règlement 
+            européen de la protection des données à caractère personnel relatif à la sécurité des données
+      .conteneur-responsabilite
+        p. 
+          MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus responsables d'incidents 
+          de sécurité susceptibles d'affecter le service numérique et des conséquences qui pourraient en découler.
