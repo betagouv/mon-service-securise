@@ -24,7 +24,7 @@ mixin zoneSaisieUnAvis(donneesUnAvis = {}, index = 0, indexAvis = index + 1)
         +inputChoix({
             type: 'radio',
             nom: `statut-un-avis-${index}`,
-            titre: 'Statut',
+            titre: "Avis sur l'homologation du service",
             items: referentiel.statutsAvisDossierHomologation(),
             requis: true,
             messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
