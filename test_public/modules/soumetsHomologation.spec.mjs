@@ -23,6 +23,7 @@ describe("L'initialisation du comportement du formulaire", () => {
 
     let ajaxRequete;
     const adaptateurAjax = {};
+    const callbackErreurParDefaut = () => {};
 
     beforeEach(() => {
       adaptateurAjax.execute = (requete) => {
@@ -33,7 +34,7 @@ describe("L'initialisation du comportement du formulaire", () => {
 
     it('envoie au serveur les données du service à créer', (done) => {
       const evenementsDifferes = $.Deferred();
-      initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
+      initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, callbackErreurParDefaut, adaptateurAjax);
 
       evenementsDifferes.resolveWith($('.bouton').trigger('click'))
         .then(() => {
@@ -49,7 +50,7 @@ describe("L'initialisation du comportement du formulaire", () => {
       const evenementsDifferes = $.Deferred();
       $('.bouton').attr('idHomologation', '12345');
 
-      initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
+      initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, callbackErreurParDefaut, adaptateurAjax);
 
       evenementsDifferes.resolveWith($('.bouton').trigger('click'))
         .then(() => {
@@ -63,10 +64,27 @@ describe("L'initialisation du comportement du formulaire", () => {
 
     it('renvoie vers la synthèse du service', (done) => {
       const evenementsDifferes = $.Deferred();
-      initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, adaptateurAjax);
+      initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, callbackErreurParDefaut, adaptateurAjax);
 
       evenementsDifferes.resolveWith($('.bouton').trigger('click'))
         .then(() => expect(window.location).to.equal('/service/123'))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("exécute la callback d'erreur en cas d'erreur", (done) => {
+      const evenementsDifferes = $.Deferred();
+      const adaptateurAjaxErreur = {
+        execute: () => Promise.reject(),
+      };
+      let callbackErreurAppele = false;
+      const callbackErreur = () => {
+        callbackErreurAppele = true;
+      };
+      initialiseComportementFormulaire('.formulaire', '.bouton', fonctionExtractionParametres, callbackErreur, adaptateurAjaxErreur);
+
+      evenementsDifferes.resolveWith($('.bouton').trigger('click'))
+        .then(() => expect(callbackErreurAppele).to.be(true))
         .then(() => done())
         .catch(done);
     });
