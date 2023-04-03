@@ -1,11 +1,19 @@
 .police-marianne {
   font-family: 'Marianne';
   font-weight: normal;
+  font-size: 1px;
+}
+
+.police-marianne-moyen {
+  font-family: 'Marianne';
+  font-weight: 500;
+  font-size: 1px;
 }
 
 .police-marianne-gras {
   font-family: 'Marianne';
   font-weight: bold;
+  font-size: 1px;
 }
 
 body {
