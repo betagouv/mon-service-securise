@@ -11,6 +11,24 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   afterEach(testeur.arrete);
 
+  describe('quand requête GET sur `/service/creation `', () => {
+    it("Récupère dans le dépôt le nom de l'organisation de l'utilisateur", (done) => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      let depotDonneesUtilisateursAppelle = false;
+
+      testeur.depotDonnees().utilisateur = (idUtilisateur) => {
+        expect(idUtilisateur).to.equal('123');
+        depotDonneesUtilisateursAppelle = true;
+        return Promise.resolve({ id: idUtilisateur, nomEntitePublique: 'une entité' });
+      };
+
+      axios('http://localhost:1234/service/creation')
+        .then(() => expect(depotDonneesUtilisateursAppelle).to.be(true))
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
+
   describe('quand requête GET sur `/service/:id`', () => {
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
