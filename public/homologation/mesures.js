@@ -94,11 +94,17 @@ ${statuts}
       `;
   };
 
+  const actionSurZoneSaisieApresAjout = ($conteneurSaisieItem) => {
+    brancheConteneur($conteneurSaisieItem);
+    $("input[name^='description-mesure-specifique-']", $conteneurSaisieItem).get(0)
+      .scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
   const brancheAjoutMesureSpecifique = (...params) => brancheAjoutItem(
     ...params,
     zoneSaisieMesureSpecifique,
     () => (indexMaxMesuresSpecifiques += 1),
-    brancheConteneur,
+    actionSurZoneSaisieApresAjout,
     { ordreInverse: true },
   );
 
