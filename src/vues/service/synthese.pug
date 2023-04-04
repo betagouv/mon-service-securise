@@ -5,7 +5,18 @@ include ../fragments/texteTronque
 mixin action({ id, description, sousTitre, url, statut })
   a(href = url)
     .action(class = `${id}`)
-      .statut(class = (statut === InformationsHomologation.COMPLETES ? 'faite' : ''))
+      -
+        const statutSaisie = (statut) => {
+          switch (statut) {
+            case InformationsHomologation.COMPLETES:
+              return 'faite';
+            case InformationsHomologation.A_COMPLETER:
+              return 'en-cours';
+            default:
+              return '';
+          }
+        }
+      .statut(class = statutSaisie(statut))
       div(class = `icone-action`)
       h2= description
       .sous-titre= sousTitre
