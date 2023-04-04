@@ -50,14 +50,20 @@
   top: 1em;
   right: 1em;
 
-  width: 1.3em;
-  height: 1.3em;
+  width: 1.5em;
+  height: 1.5em;
   background-size: 100%;
   background-repeat: no-repeat;
+  background-position: center;
 }
 
 .action .statut.faite {
   background-image: url(../../images/icone_ok_pastille_verte.svg);
+  background-size: 85%;
+}
+
+.action .statut.en-cours {
+  background-image: url(../../images/icone_crayon_pastille_bleue.svg);
 }
 
 .icone-action {
