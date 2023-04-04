@@ -95,30 +95,30 @@
   display: none;
 }
 
-
 .carte .statut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 0.5em;
+  width: fit-content;
+  margin: 1em 0;
+  padding: 0.5em 1em;
   border-radius: 1.5em;
-  padding: 0.25em 0 0.75em 0;
-  margin: 1.75em 0;
-  font-size: 0.85em;
+  font-size: 0.9em;
   font-weight: bold;
-  width: 100%;
+  color: var(--gris-fonce);
+  white-space: nowrap;
 }
 
 .carte .statut-non-homologue {
-  color: var(--statut-non-homologue);
   background-color: var(--statut-non-homologue-arriere-plan);
 }
 .carte .statut-homologue {
-  color: var(--statut-homologue);
   background-color: var(--statut-homologue-arriere-plan);
 }
 
 .carte .pastille {
-  position: relative;
-  bottom: -0.4em;
-  height: 1.53em;
-  padding: 0 0.5em 0 1em;
+  height: 1.5em;
 }
 .carte .statut-non-homologue .pastille {
   content: url(../images/icone_ko_pastille_rose.svg);
