@@ -4,7 +4,7 @@
   margin-bottom: 1em;
 }
 
-:is(h1, hr) + .mention {
+:is(h1, hr)+.mention {
   margin: 2em 0 0;
 }
 
@@ -17,7 +17,8 @@
   left: -1em;
 }
 
-.mention::before, .requis::before {
+.mention::before,
+.requis::before {
   content: "*";
   color: var(--rose-anssi);
 }
@@ -30,7 +31,8 @@ form.champ-unique .requis::before {
   position: relative;
 }
 
-.message-erreur {
+.message-erreur,
+.message-erreur-specifique {
   position: relative;
   display: none;
 
@@ -41,7 +43,8 @@ form.champ-unique .requis::before {
   font-weight: normal;
 }
 
-.message-erreur::before {
+.message-erreur::before,
+.message-erreur-specifique::before {
   content: '';
 
   position: absolute;
@@ -55,11 +58,11 @@ form.champ-unique .requis::before {
   transform: translateY(0.35em);
 }
 
-.requis[data-nom = 'cguAcceptees'] {
+.requis[data-nom='cguAcceptees'] {
   margin-bottom: 2em;
 }
 
-:is(input, select, textarea):not(.intouche):valid{
+:is(input, select, textarea):not(.intouche):valid {
   border-color: var(--bleu-mise-en-avant);
 }
 
@@ -79,6 +82,6 @@ input[type="radio"]:not(.intouche):invalid {
   outline-color: var(--rose-anssi);
 }
 
-:is(input, select, textarea):not(.intouche):invalid ~ .message-erreur {
+:is(input, select, textarea):not(.intouche):invalid~.message-erreur {
   display: block;
 }
