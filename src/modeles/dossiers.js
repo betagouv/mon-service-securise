@@ -4,7 +4,7 @@ const { ErreurDossiersInvalides } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 class Dossiers extends ElementsConstructibles {
-  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(donnees = { dossiers: [] }, referentiel = Referentiel.creeReferentielVide()) {
     const { dossiers } = donnees;
     Dossiers.valide(donnees);
     super(Dossier, { items: dossiers }, referentiel);
@@ -23,6 +23,9 @@ class Dossiers extends ElementsConstructibles {
   }
 
   statutSaisie() {
+    if (this.nombre() === 0) {
+      return Dossiers.A_SAISIR;
+    }
     return this.dossierActif() ? Dossiers.COMPLETES : Dossiers.A_COMPLETER;
   }
 
