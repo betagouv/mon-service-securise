@@ -84,7 +84,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
       testeur.depotDonnees().nouvelleHomologation = () => Promise.reject(new ErreurNomServiceDejaExistant('oups'));
 
-      testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
+      testeur.verifieRequeteGenereErreurHTTP(422, { erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } }, {
         method: 'post',
         url: 'http://localhost:1234/api/service',
         data: { nomService: 'Un nom déjà existant' },
