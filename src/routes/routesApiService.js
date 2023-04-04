@@ -5,6 +5,7 @@ const {
   EchecAutorisation,
   ErreurModele,
   ErreurDonneesObligatoiresManquantes,
+  ErreurNomServiceDejaExistant,
 } = require('../erreurs');
 const ActeursHomologation = require('../modeles/acteursHomologation');
 const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
@@ -48,7 +49,8 @@ const routesApiService = (
       ))
       .then((idService) => reponse.json({ idService }))
       .catch((e) => {
-        if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+        if (e instanceof ErreurNomServiceDejaExistant) reponse.status(422).json({ erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } });
+        else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
         else suite(e);
       });
   });
