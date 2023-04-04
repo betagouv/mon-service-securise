@@ -84,5 +84,11 @@ describe('Les dossiers liés à un service', () => {
 
       expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
     });
+
+    ils("considèrent que l'action de saisie est à saisir s'il n'existe pas de dossier", () => {
+      const dossiers = new Dossiers();
+
+      expect(dossiers.statutSaisie()).to.equal(Dossiers.A_SAISIR);
+    });
   });
 });
