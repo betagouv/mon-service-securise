@@ -11,6 +11,7 @@ const Referentiel = require('../../src/referentiel');
 const middleware = require('../mocks/middleware');
 
 const testeurMss = () => {
+  let adaptateurAnnuaire;
   let adaptateurHorloge;
   let adaptateurMail;
   let adaptateurPdf;
@@ -37,6 +38,7 @@ const testeurMss = () => {
   };
 
   const initialise = (done) => {
+    adaptateurAnnuaire = {};
     adaptateurHorloge = adaptateurHorlogeParDefaut;
     adaptateurMail = {};
     adaptateurPdf = {};
@@ -55,6 +57,7 @@ const testeurMss = () => {
           adaptateurPdf,
           adaptateurHorloge,
           adaptateurGestionErreurVide,
+          adaptateurAnnuaire,
           false,
         );
         serveur.ecoute(1234, done);
@@ -65,6 +68,7 @@ const testeurMss = () => {
   const arrete = () => (serveur.arreteEcoute());
 
   return {
+    adaptateurAnnuaire: () => adaptateurAnnuaire,
     adaptateurHorloge: () => adaptateurHorloge,
     adaptateurMail: () => adaptateurMail,
     adaptateurPdf: () => adaptateurPdf,

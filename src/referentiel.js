@@ -98,6 +98,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const departements = () => donneesReferentiel.departements || [];
   const codeDepartements = () => donneesReferentiel
     .departements?.map((departement) => departement.code);
+  const estCodeDepartement = (code) => codeDepartements().includes(code);
   const departement = (code) => donneesReferentiel
     .departements?.find((unDepartement) => unDepartement.code === code)?.nom;
 
@@ -254,6 +255,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionsFonctionnalites,
     donneesCaracterePersonnel,
     echeancesRenouvellement,
+    estCodeDepartement,
     estDocumentHomologation,
     estIdentifiantEcheanceRenouvellementConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
