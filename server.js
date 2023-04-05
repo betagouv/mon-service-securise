@@ -3,6 +3,7 @@ const DepotDonnees = require('./src/depotDonnees');
 const MoteurRegles = require('./src/moteurRegles');
 const MSS = require('./src/mss');
 const Referentiel = require('./src/referentiel');
+const adaptateurAnnuaire = require('./src/adaptateurs/adaptateurAnnuaire');
 const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
 const adaptateurGestionErreur = adaptateurEnvironnement.sentry().dsn()
@@ -37,6 +38,7 @@ const serveur = MSS.creeServeur(
   adaptateurPdf,
   adaptateurHorloge,
   adaptateurGestionErreur,
+  adaptateurAnnuaire,
 );
 
 serveur.ecoute(port, () => {

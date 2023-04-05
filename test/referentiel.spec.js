@@ -535,6 +535,17 @@ describe('Le référentiel', () => {
     expect(referentiel.codeDepartements()).to.eql(['01', '02']);
   });
 
+  it('sait si un code de département est dans la liste des codes des départements', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      departements: [
+        { nom: 'Ain', code: '01' },
+      ],
+    });
+
+    expect(referentiel.estCodeDepartement('01')).to.eql(true);
+    expect(referentiel.estCodeDepartement('02')).to.eql(false);
+  });
+
   it("trouve le nom d'un département grace à son code", () => {
     const referentiel = Referentiel.creeReferentiel({
       departements: [{ nom: 'Ain', code: '01' }],
