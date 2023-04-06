@@ -1,3 +1,18 @@
+const uneSuggestion = (departement, nom) => ({ departement, nom, label: `${nom} (${departement})` });
+
+const preRemplirSiModeEdition = () => {
+  const nom = $('#nomEntitePublique').val();
+  const departement = $('#departementEntitePublique').val();
+  const enModeEdition = !!nom && !!departement;
+
+  if (!enModeEdition) return;
+
+  const $champSelectize = $('#nomEntitePublique-selectize')[0].selectize;
+  $champSelectize.addOption(uneSuggestion(departement, nom));
+  const modeSilencieux = true;
+  $champSelectize.setValue(`${nom} (${departement})`, modeSilencieux);
+};
+
 const rechercheSuggestions = (recherche, callback) => {
   if (recherche.length < 2) {
     callback([]);
@@ -6,11 +21,9 @@ const rechercheSuggestions = (recherche, callback) => {
 
   axios.get('/api/annuaire/suggestions', { params: { recherche } })
     .then((reponse) => {
-      const suggestions = reponse.data.suggestions.map(({ departement, nom }) => ({
-        departement,
-        nom,
-        label: `${nom} (${departement})`,
-      }));
+      const suggestions = reponse.data.suggestions
+        .map(({ departement, nom }) => uneSuggestion(departement, nom));
+
       callback(suggestions);
     });
 };
@@ -41,4 +54,6 @@ $(() => {
       $('#departementEntitePublique').val('');
     },
   });
+
+  preRemplirSiModeEdition();
 });
