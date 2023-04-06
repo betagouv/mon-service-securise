@@ -30,6 +30,7 @@ const rechercheSuggestions = (recherche, callback) => {
 
 $(() => {
   const $champSelectize = $('#nomEntitePublique-selectize').selectize({
+    plugins: ['aucun_resultat'],
     options: [],
     valueField: 'label',
     labelField: 'label',
