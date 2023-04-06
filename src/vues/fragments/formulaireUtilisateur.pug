@@ -92,8 +92,8 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             required,
           )
           .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
-          input(type='hidden' name='nomEntitePublique' id='nomEntitePublique')
-          input(type='hidden' name='departementEntitePublique' id='departementEntitePublique')
+          input(type='hidden' name='nomEntitePublique' id='nomEntitePublique' value != donnees.nomEntitePublique)
+          input(type='hidden' name='departementEntitePublique' id='departementEntitePublique' value != donnees.departementEntitePublique)
 
       .requis(data-nom = 'rssi')
         +inputOuiNon({
