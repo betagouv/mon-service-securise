@@ -21,7 +21,7 @@
   box-shadow: none;
 }
 
-.selectized + .selectize-control.multi .selectize-input :is(.item, .item[data-value].active) {
+.selectized+.selectize-control.multi .selectize-input :is(.item, .item[data-value].active) {
   background: #fff;
   box-shadow: none;
   border-radius: 0.3em;
@@ -32,7 +32,7 @@
   font-weight: normal;
 }
 
-.selectized + .selectize-control.single .selectize-input :is(.item, .item[data-value].active) {
+.selectized+.selectize-control.single .selectize-input :is(.item, .item[data-value].active) {
   box-shadow: none;
   border-radius: 0.3em;
   border-color: #000;
@@ -57,27 +57,33 @@
   background-color: #fff;
 }
 
-.selectized + .selectize-control.single .selectize-dropdown .selected {
+.selectized+.selectize-control.single .selectize-dropdown .selected {
   background-color: transparent;
   color: var(--bleu-mise-en-avant);
 }
 
-.selectized + .selectize-control.single .selectize-dropdown .option:hover {
+.selectized+.selectize-control.single .selectize-dropdown .option:hover {
   background-color: var(--fond-gris-pale);
 }
 
-.selectized:not(.intouche, [required]) ~ .message-erreur {
+.selectized:not(.intouche, [required])~.message-erreur {
   display: block;
 }
 
-.selectized:not(.intouche, [required]) + .selectize-control:is(.multi, .single) .selectize-input {
+.selectized:not(.intouche, [required])+.selectize-control:is(.multi, .single) .selectize-input {
   border-color: var(--rose-anssi);
 }
 
-.selectized[required]:not(.intouche) + .selectize-control:is(.multi, .single) .selectize-input {
+.selectized[required]:not(.intouche)+.selectize-control:is(.multi, .single) .selectize-input {
   border-color: var(--bleu-mise-en-avant);
 }
 
 .selectize-control.single .selectize-input:after {
   display: none;
+}
+
+.no-results {
+  color: #667892;
+  font-weight: bold;
+  font-size: 12px;
 }
