@@ -1,22 +1,27 @@
-.selectize-control {
+.selectize-control:is(.multi, .single) {
   margin-top: 0.3em;
   font-family: Marianne;
 }
 
-.selectize-control .selectize-input {
+.selectize-control:is(.multi, .single) .selectize-input {
   background: var(--fond-pale);
   padding: 0.8em;
   font-size: 1em;
   border: solid 1px var(--liseres);
   border-radius: 5px;
   box-shadow: none;
+  cursor: text;
 }
 
-.selectize-control .selectize-input.focus {
+.selectize-control:is(.multi, .single) .selectize-input input {
+  cursor: text;
+}
+
+.selectize-control:is(.multi, .single) .selectize-input.focus {
   box-shadow: none;
 }
 
-.selectized + .selectize-control .selectize-input :is(.item, .item[data-value].active) {
+.selectized + .selectize-control.multi .selectize-input :is(.item, .item[data-value].active) {
   background: #fff;
   box-shadow: none;
   border-radius: 0.3em;
@@ -27,11 +32,20 @@
   font-weight: normal;
 }
 
-.selectize-control .selectize-input .item a.remove {
+.selectized + .selectize-control.single .selectize-input :is(.item, .item[data-value].active) {
+  box-shadow: none;
+  border-radius: 0.3em;
+  border-color: #000;
+  color: var(--texte-fonce);
+  text-shadow: none;
+  font-weight: normal;
+}
+
+.selectize-control.multi .selectize-input .item a.remove {
   border-left: none;
 }
 
-.selectize-control .selectize-dropdown {
+.selectize-control:is(.multi, .single) .selectize-dropdown {
   font-weight: normal;
   font-size: 1em;
   color: var(--texte-fonce);
@@ -39,18 +53,31 @@
   border-color: var(--liseres);
 }
 
-.selectize-control .selectize-dropdown .active:not(.selected) {
+.selectize-control:is(.multi, .single) .selectize-dropdown .active:not(.selected) {
   background-color: #fff;
+}
+
+.selectized + .selectize-control.single .selectize-dropdown .selected {
+  background-color: transparent;
+  color: var(--bleu-mise-en-avant);
+}
+
+.selectized + .selectize-control.single .selectize-dropdown .option:hover {
+  background-color: var(--fond-gris-pale);
 }
 
 .selectized:not(.intouche, [required]) ~ .message-erreur {
   display: block;
 }
 
-.selectized:not(.intouche, [required]) + .selectize-control .selectize-input {
+.selectized:not(.intouche, [required]) + .selectize-control:is(.multi, .single) .selectize-input {
   border-color: var(--rose-anssi);
 }
 
-.selectized[required]:not(.intouche) + .selectize-control .selectize-input {
+.selectized[required]:not(.intouche) + .selectize-control:is(.multi, .single) .selectize-input {
   border-color: var(--bleu-mise-en-avant);
+}
+
+.selectize-control.single .selectize-input:after {
+  display: none;
 }

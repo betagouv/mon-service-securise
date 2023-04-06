@@ -4,6 +4,12 @@ block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/utilisateur.css', rel = 'stylesheet')
+  link(href = '/styles/selectize.default.min.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
+
+block append scripts
+  script(src = "/bibliotheques/selectize.min.js")
+  script(src = "/statique/utilisateur/suggestionEntite.js")
 
 mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
   .mention champ obligatoire
@@ -77,6 +83,18 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
         )
         .message-erreur Le numéro de téléphone doit respecter le format 0000000000.
 
+      .requis
+        label(for = 'nomEntitePublique-selectize') Nom de votre organisation
+          select(
+            id = 'nomEntitePublique-selectize',
+            name = 'nomEntitePublique-selectize',
+            placeHolder = 'ex : Agglomération de Mansart, Société Y',
+            required,
+          )
+          .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
+          input(type='hidden' name='nomEntitePublique' id='nomEntitePublique')
+          input(type='hidden' name='departementEntitePublique' id='departementEntitePublique')
+
       .requis(data-nom = 'rssi')
         +inputOuiNon({
           nom: 'rssi',
@@ -103,28 +121,3 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           value != donnees.poste,
           placeholder = "ex : Cheffe/Chef de projet maîtrise d'ouvrage"
         )
-
-      .requis(data-nom = 'nomEntitePublique')
-        label Nom de votre organisation
-          br
-          input(
-            id = 'nomEntitePublique',
-            name = 'nomEntitePublique',
-            type = 'text',
-            value != donnees.nomEntitePublique,
-            placeholder = "ex : Agglomération de Mansart, Société Y",
-            required,
-            title = ''
-          )
-          .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
-
-      .requis(data-nom = 'departementEntitePublique')
-        label Département de votre organisation
-          br
-          .selecteur-options
-            select(id = 'departementEntitePublique', name = 'departementEntitePublique', required, title = '')
-              option(value = '') - Sélectionnez un département -
-              each departement in departements
-                option(value = departement.code, selected = departement.code === donnees.departementEntitePublique).
-                  #{departement.code} #{departement.nom}
-            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
