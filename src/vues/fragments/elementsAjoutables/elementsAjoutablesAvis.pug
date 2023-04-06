@@ -49,7 +49,7 @@ mixin zoneSaisieUnAvis(donneesUnAvis = {}, index = 0, indexAvis = index + 1)
           id = `commentaires-un-avis-${index}`,
           name = `commentaires-un-avis-${index}`,
           placeholder = 'ex : favorable pour la mise en ligne sous réserve que certaines mesures soient réalisées dans 1 mois.',
-        )= donneesUnAvis.commentaires
+        )!= donneesUnAvis.commentaires
 
 mixin unAvis(donneesUnAvis = {}, index = 0)
   .item-ajoute
