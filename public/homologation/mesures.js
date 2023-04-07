@@ -12,7 +12,7 @@ $(() => {
 
   const $conteneurModalites = (nom) => {
     const $conteneur = $('<div class="informations-additionnelles"></div>');
-    const $lien = $('<a class="informations-additionnelles">Précisez les modalités de mise en œuvre (facultatif)</a>');
+    const $lien = $('<a class="informations-additionnelles">Commentaires (facultatif)</a>');
     const $zoneSaisie = $(`<textarea id=${nom} name=${nom}></textarea>`);
     $zoneSaisie.hide();
 
