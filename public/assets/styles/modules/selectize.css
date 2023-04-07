@@ -53,6 +53,13 @@
   border-color: var(--liseres);
 }
 
+.selectize-control:is(.single) .selectize-dropdown {
+  border: 1px solid var(--bleu-survol);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  transform: translateY(-3px);
+}
+
 .selectize-control:is(.multi, .single) .selectize-dropdown .active:not(.selected) {
   background-color: #fff;
 }
