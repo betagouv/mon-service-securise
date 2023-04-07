@@ -60,6 +60,10 @@
   transform: translateY(-3px);
 }
 
+.selectize-control:is(.single):is(.chargement-en-cours)+.icone-chargement {
+  display: inline-block;
+}
+
 .selectize-control:is(.multi, .single) .selectize-dropdown .active:not(.selected) {
   background-color: #fff;
 }

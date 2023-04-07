@@ -92,6 +92,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             placeHolder = 'ex : Agglomération de Mansart, Société Y',
             required,
           )
+          .icone-chargement
           .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
           input(type='hidden' name='nomEntitePublique' id='nomEntitePublique' value != donnees.nomEntitePublique)
           input(type='hidden' name='departementEntitePublique' id='departementEntitePublique' value != donnees.departementEntitePublique)
