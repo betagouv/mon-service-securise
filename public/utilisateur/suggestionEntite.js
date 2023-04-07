@@ -35,6 +35,7 @@ $(() => {
     valueField: 'label',
     labelField: 'label',
     searchField: 'label',
+    loadingClass: 'chargement-en-cours',
     maxItems: 1,
     render: {
       item: (item, escape) => `<div class="item" data-nom="${item.nom}" data-departement="${item.departement}">

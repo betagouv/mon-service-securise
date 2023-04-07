@@ -240,3 +240,35 @@ select {
   background: var(--fond-gris-pale);
   color: var(--bleu-mise-en-avant);
 }
+
+.icone-chargement {
+  display: none;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 1em;
+  transform: translateY(-2.2em);
+  z-index: 10;
+}
+
+.icone-chargement::after {
+  content: " ";
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border-radius: 50%;
+  border: 2px solid var(--gris-fonce);
+  border-color: var(--gris-fonce) transparent var(--gris-fonce) transparent;
+  animation: rotation 1.2s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
