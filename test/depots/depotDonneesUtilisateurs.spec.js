@@ -345,14 +345,17 @@ describe('Le dépôt de données des utilisateurs', () => {
           .catch(done);
       });
 
-      it('consigne un événement de profil utilisateur modifié', (done) => {
+      it("consigne des événements traçants l'inscription de l'utilisateur", (done) => {
+        const evenementConsignes = [];
         adaptateurJournalMSS.consigneEvenement = (evenement) => {
-          expect(evenement.type).to.equal('PROFIL_UTILISATEUR_MODIFIE');
-          done();
+          evenementConsignes.push(evenement);
           return Promise.resolve();
         };
 
-        depot.nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' });
+        depot.nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' })
+          .then(() => expect(evenementConsignes.map((e) => e.type)).to.eql(['NOUVEL_UTILISATEUR_INSCRIT', 'PROFIL_UTILISATEUR_MODIFIE']))
+          .then(() => done())
+          .catch(done);
       });
     });
 

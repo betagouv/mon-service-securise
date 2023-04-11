@@ -8,6 +8,7 @@ const {
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
 } = require('../erreurs');
+const EvenementNouvelUtilisateurInscrit = require('../modeles/journalMSS/evenementNouvelUtilisateurInscrit');
 const EvenementProfilUtilisateurModifie = require('../modeles/journalMSS/evenementProfilUtilisateurModifie');
 const Utilisateur = require('../modeles/utilisateur');
 
@@ -42,6 +43,9 @@ const creeDepot = (config = {}) => {
             donneesUtilisateur.motDePasse = hash;
 
             adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur)
+              .then(() => adaptateurJournalMSS.consigneEvenement(
+                new EvenementNouvelUtilisateurInscrit({ idUtilisateur: id }).toJSON()
+              ))
               .then(() => adaptateurJournalMSS.consigneEvenement(
                 new EvenementProfilUtilisateurModifie(
                   { idUtilisateur: id, ...donneesUtilisateur }
