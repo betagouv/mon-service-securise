@@ -2,17 +2,22 @@ extends ./formulaireEtapier
 
 mixin dossier({ statut, dossier, idService })
   -
-    const duree = dossier.descriptionDureeValidite()
-    const prochaineHomologation = dossier.descriptionProchaineDateHomologation()
+    const etapeCourante = dossier.etapeCourante()
+    const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante) - 1
+    const nombreTotalEtapes = referentiel.derniereEtapeParcours().numero
 
   .dossier
     .contenu-dossier
       .statut= statut
-      div= `Durée : ${duree}`
-      div= `Prochaine homologation : ${prochaineHomologation}`
+      .details
+        if dossier.finalise
+          div= `Durée : ${dossier.descriptionDureeValidite()}`
+          div= `Prochaine homologation : ${dossier.descriptionProchaineDateHomologation()}`
+        else
+          div= `Étapes complétées : ${numeroDerniereEtapeCompletee} / ${nombreTotalEtapes}`
     if idService
       nav
-        a(href = `/service/${idService}/dossier/edition/etape/${premiereEtapeParcours.id}`) Consulter
+        a(href = `/service/${idService}/dossier/edition/etape/${etapeCourante}`) Consulter
 
 mixin dossierFinalise({ dossier })
   +dossier({ statut: 'Homologation finalisée', dossier })
