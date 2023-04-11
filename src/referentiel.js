@@ -188,6 +188,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const premiereEtapeParcours = () => etapesParcoursHomologation().find((e) => e.numero === 1);
 
+  const derniereEtapeParcours = () => etapesParcoursHomologation()
+    .find((e) => e.numero === Math.max(
+      ...etapesParcoursHomologation().map(({ numero }) => numero)
+    ));
+
   const etapeExiste = (idEtape) => etapesParcoursHomologation()
     .map((e) => e.id)
     .includes(idEtape);
@@ -254,6 +259,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estIdentifiantStatutAvisDossierHomologationConnu,
     tousDocumentsHomologation,
     urlDocumentHomologation,
+    derniereEtapeParcours,
     etapeExiste,
     etapesParcoursHomologation,
     fonctionnalites,
