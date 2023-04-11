@@ -677,7 +677,7 @@ module.exports = {
     { numero: 2, libelle: 'Avis', id: 'avis' },
     { numero: 3, libelle: 'Documents', id: 'documents' },
     { numero: 4, libelle: 'Décision', id: 'decision' },
-    { numero: 5, libelle: 'Date', id: 'date' },
+    { numero: 5, libelle: 'Date', id: 'datesTelechargements' },
     { numero: 6, libelle: 'Récapitulatif', id: 'recapitulatif' },
   ],
 
