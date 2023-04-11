@@ -182,6 +182,10 @@ ul.documents {
   font-weight: bold;
 }
 
+.dossier .details {
+  color: var(--bleu-anssi);
+}
+
 .boutons {
   display: flex;
   flex: 1;
