@@ -6,7 +6,7 @@ const Documents = require('./etapes/documents');
 const EtapeAvis = require('./etapes/etapeAvis');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
-const { ErreurDossierDejaFinalise, ErreurDossierNonFinalisable } = require('../erreurs');
+const { ErreurDossierDejaFinalise, ErreurDossierNonFinalisable, ErreurDossierEtapeInconnue } = require('../erreurs');
 
 class Dossier extends InformationsHomologation {
   constructor(
@@ -20,6 +20,7 @@ class Dossier extends InformationsHomologation {
       proprietesAtomiquesFacultatives: ['id', 'finalise'],
     });
     this.renseigneProprietes(donneesDossier, referentiel);
+    this.referentiel = referentiel;
 
     this.decision = new Decision(
       donneesDossier.decision,
@@ -116,6 +117,24 @@ class Dossier extends InformationsHomologation {
 
   estActif() {
     return this.finalise && this.decision.periodeHomologationEstEnCours();
+  }
+
+  etapeCourante() {
+    if (this.estComplet()) return this.referentiel.derniereEtapeParcours().id;
+
+    const etapesOrdonnees = this.referentiel
+      .etapesParcoursHomologation()
+      .sort((e1, e2) => e1.numero - e2.numero);
+
+    const premiereNonComplete = etapesOrdonnees.find((e) => {
+      try {
+        return !this[e.id].estComplete();
+      } catch {
+        throw new ErreurDossierEtapeInconnue(e.id);
+      }
+    });
+
+    return premiereNonComplete.id;
   }
 
   static etapesObligatoires() {

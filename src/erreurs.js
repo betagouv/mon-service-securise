@@ -13,6 +13,12 @@ class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
 class ErreurDossierDejaFinalise extends ErreurModele {}
+class ErreurDossierEtapeInconnue extends ErreurModele {
+  constructor(etapeInconnue) {
+    super(`L'étape ${etapeInconnue} n'est pas une propriété du dossier.`);
+    this.etapeInconnue = etapeInconnue;
+  }
+}
 class ErreurDossierNonFinalisable extends ErreurModele {
   constructor(message, etapesIncompletes) {
     super(message);
@@ -61,6 +67,7 @@ module.exports = {
   ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
   ErreurDossierDejaFinalise,
+  ErreurDossierEtapeInconnue,
   ErreurDossierNonFinalisable,
   ErreurDossiersInvalides,
   ErreurDureeValiditeInvalide,

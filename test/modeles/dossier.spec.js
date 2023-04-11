@@ -1,9 +1,10 @@
 const expect = require('expect.js');
 
 const { unDossier } = require('../constructeurs/constructeurDossier');
+const donneesReferentiel = require('../../donneesReferentiel');
 const Dossier = require('../../src/modeles/dossier');
 const Referentiel = require('../../src/referentiel');
-const { ErreurDossierDejaFinalise, ErreurDossierNonFinalisable } = require('../../src/erreurs');
+const { ErreurDossierDejaFinalise, ErreurDossierNonFinalisable, ErreurDossierEtapeInconnue } = require('../../src/erreurs');
 
 describe("Un dossier d'homologation", () => {
   const referentiel = Referentiel.creeReferentielVide();
@@ -268,6 +269,53 @@ describe("Un dossier d'homologation", () => {
 
       dossierComplet.enregistreFinalisation();
       expect(dossierComplet.finalise).to.be(true);
+    });
+  });
+
+  describe("sur demande de l'étape courante", () => {
+    beforeEach(() => {
+      referentiel.recharge({
+        echeancesRenouvellement: { unAn: {} },
+        // Ici, on référence la PROD à dessein, car on veut s'assurer que le code de `Dossier`
+        // et les données du référentiel sont synchronisées.
+        etapesParcoursHomologation: donneesReferentiel.etapesParcoursHomologation,
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+    });
+
+    it("renvoie la première etape si le dossier vient d'être créé", () => {
+      const nouveauDossier = new Dossier({}, referentiel);
+
+      expect(nouveauDossier.etapeCourante()).to.equal('autorite');
+    });
+
+    it("renvoie l'étape « Récapitulatif » si toutes les étapes précédentes sont complètes", () => {
+      const dossierComplet = unDossier(referentiel).quiEstComplet().construit();
+
+      expect(dossierComplet.etapeCourante()).to.equal('recapitulatif');
+    });
+
+    it("renvoie l'étape qui suit la dernière étape complète", () => {
+      const etapeUneComplete = unDossier(referentiel).avecAutorite('Jean', 'RSSI').construit();
+
+      expect(etapeUneComplete.etapeCourante()).to.equal('avis');
+    });
+
+    it('jette une erreur si les données du référentiel et les propriété du dossier ne correspondent pas', () => {
+      referentiel.recharge({
+        echeancesRenouvellement: { unAn: {} },
+        etapesParcoursHomologation: [
+          { numero: 1, libelle: 'Étape inconnue', id: 'etapeInconnue' },
+        ],
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+
+      const dossierDesynchronise = new Dossier({}, referentiel);
+
+      expect(() => dossierDesynchronise.etapeCourante()).to.throwError((e) => {
+        expect(e).to.be.an(ErreurDossierEtapeInconnue);
+        expect(e.etapeInconnue).to.equal('etapeInconnue');
+      });
     });
   });
 });
