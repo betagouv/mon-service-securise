@@ -7,7 +7,7 @@ const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
 const EvenementCompletudeServiceModifiee = require('./src/modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouvelleHomologationCreee = require('./src/modeles/journalMSS/evenementNouvelleHomologationCreee');
-const EvenementProfilUtilisateurModifie = require('./src/modeles/journalMSS/evenementProfilUtilisateurModifie');
+const EvenementNouvelUtilisateurInscrit = require('./src/modeles/journalMSS/evenementNouvelUtilisateurInscrit');
 const { avecPMapPourChaqueElement } = require('./src/utilitaires/pMap');
 
 class ConsoleAdministration {
@@ -66,12 +66,16 @@ class ConsoleAdministration {
     return avecPMapPourChaqueElement(evenements, journal.consigneEvenement);
   }
 
-  genereTousEvenementsProfilUtilisateur(persisteEvenements = false) {
+  genereTousEvenementsNouvelUtilisateurInscrit(persisteEvenements = false) {
     const journal = (persisteEvenements ? this.adaptateurJournalMSS : this.journalConsole);
 
     const evenements = this.depotDonnees.tousUtilisateurs()
-      .then((tous) => tous.map(({ id, ...donnees }) => ({ idUtilisateur: id, ...donnees })))
-      .then((donnees) => donnees.map((d) => new EvenementProfilUtilisateurModifie(d).toJSON()))
+      .then((tous) => tous.map(({ id, dateCreation }) => (
+        new EvenementNouvelUtilisateurInscrit(
+          { idUtilisateur: id },
+          { date: dateCreation }
+        ).toJSON()
+      )))
       .then((evenementsBruts) => evenementsBruts.map(({ donnees, ...reste }) => (
         { donnees: { ...donnees, genereParAdministrateur: true }, ...reste }
       )));
