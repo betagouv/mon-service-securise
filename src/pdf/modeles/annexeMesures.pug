@@ -5,7 +5,7 @@ mixin bloc-mesure(mesuresParCategorie, legende)
   if categories.length
     +boite-grise(legende)
       each categorie in categories
-        p.categorie= donneesMesures.categories[categorie]
+        p.categorie-mesures= donneesMesures.categories[categorie]
         ul.liste-puce
           each mesure in mesuresParCategorie[categorie]
             li.bloc-indivisible(class = mesure.indispensable ? "etoile" : "")
