@@ -94,4 +94,10 @@ const genereDossierDecision = async (donnees) => {
   return fusionnePdfs(pdfs);
 };
 
-module.exports = { genereAnnexes, genereDossierDecision };
+const genereSyntheseSecurite = async (donnees) => {
+  const html = await genereHtml('syntheseSecurite', { donnees }, donnees.nomService);
+  const pdf = await generePdfs([html]);
+  return fusionnePdfs(pdf);
+};
+
+module.exports = { genereAnnexes, genereDossierDecision, genereSyntheseSecurite };
