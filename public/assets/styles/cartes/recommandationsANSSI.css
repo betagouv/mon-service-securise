@@ -2,19 +2,15 @@
   font-size: 0.9em;
 }
 
-.carte .contenu p:first-of-type {
-  margin-bottom: 0.5em;
+.carte .contenu p {
+  border-radius: 0.3em;
+  background-color: var(--fond-bleu-pale);
+  padding: 1em;
+  margin: 1.2em 0;
 }
 
-.carte .indice-total {
-  margin-bottom: 1.3em;
-  color: var(--bleu-mise-en-avant);
-  font-weight: bold;
-  font-size: 1.3em;
-}
-
-.carte .indice-total .note {
-  font-size: 1.2em;
+.carte .contenu p.deconseillee {
+  background-color: var(--fond-ocre-pale);
 }
 
 .carte .details {

@@ -17,6 +17,7 @@ module.exports = {
       sécurité du service numérique et déconseille son homologation.`,
       recommandationANSSIComplement: `En cas de décision d'homologation,
       l'ANSSI recommande de limiter sa durée de validité à 6 mois maximum.`,
+      deconseillee: true,
     },
     {
       borneInferieure: 2,
