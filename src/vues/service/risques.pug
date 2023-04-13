@@ -52,7 +52,7 @@ block formulaire
     !{JSON.stringify(service.risques.toJSON().risquesGeneraux || [])}
   script(id = 'donnees-risques-specifiques', type = 'application/json').
     !{JSON.stringify(service.risques.toJSON().risquesSpecifiques || [])}
-  script(type = 'module', src = '/statique/homologation/risques.js')
+  script(type = 'module', src = '/statique/service/risques.js')
 
 block cartes-informations
   mixin detailsRisques
