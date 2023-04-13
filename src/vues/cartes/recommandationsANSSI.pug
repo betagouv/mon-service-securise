@@ -4,9 +4,12 @@ block append styles
   link(href = '/statique/assets/styles/cartes/recommandationsANSSI.css', rel = 'stylesheet')
 
 mixin recommandationsANSSI({ referentiel, noteObtenue })
-  - const trancheIndiceCyber = referentiel.trancheIndiceCyber(noteObtenue)
+  -
+    const trancheIndiceCyber = referentiel.trancheIndiceCyber(noteObtenue)
+    let complement = trancheIndiceCyber.recommandationANSSIComplement
+    complement = complement?.length > 1 ? complement[0].toLowerCase() + complement.slice(1) : ''
   mixin recommandation-detail
-      p= trancheIndiceCyber.recommandationANSSIComplement
+      p Compte-tenu de l'indice cyber évalué, #{complement}
       .recommandation-detail.
         La recommandation de l'ANSSI sur l'homologation de sécurité d'un service numérique et sa durée de validité est indicative. 
         La responsabilité de la décision d'homologation incombe à l'autorité d'homologation de chaque organisation.
