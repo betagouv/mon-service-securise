@@ -1,4 +1,4 @@
-import brancheComportemenFormulaireEtape from './formulaireEtape.js';
+import brancheComportemenFormulaireEtape from '../formulaireEtape.js';
 
 $(() => {
   brancheComportemenFormulaireEtape((idService) => {

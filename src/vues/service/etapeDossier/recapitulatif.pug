@@ -14,7 +14,7 @@ block formulaire
     En cliquant sur « #{LABEL_BOUTON} », vous confirmez avoir renseigné
     l'exactitude des informations fournies dans le document de Décision
     d'homologation de sécurité.
-  script(type = "module", src = "/statique/homologation/etapes/recapitulatif.js")
+  script(type = "module", src = "/statique/service/homologation/etapes/recapitulatif.js")
 
 block bouton-etape
   button(type = 'submit', data-id-homologation = service.id, data-id-etape = idEtape).bouton#suivant= LABEL_BOUTON
