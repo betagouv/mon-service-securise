@@ -1,7 +1,7 @@
 const { departements } = require('./donneesReferentielDepartements');
 
-const complementRecommandationPoursuiteRenforcement = `Compte-tenu de l'indice cyber évalué,
-  l'ANSSI recommande la poursuite du renforcement de la sécurité du service numérique.`;
+const recommandationPoursuiteRenforcement = "L'ANSSI recommande la poursuite du renforcement de la sécurité du service numérique.";
+
 const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)} après signature de la présente homologation`;
 
 module.exports = {
@@ -16,28 +16,27 @@ module.exports = {
       borneInferieure: 0,
       borneSuperieure: 2,
       recommandationANSSI: "L'homologation du service est déconseillée ou devrait être limitée à <b>6 mois</b>.",
-      recommandationANSSIComplement: `Compte-tenu de l'indice cyber évalué, l'ANSSI recommande de renforcer
-        la sécurité du service numérique avant de procéder à son homologation.`,
+      recommandationANSSIComplement: "L'ANSSI recommande de renforcer la sécurité du service numérique avant de procéder à son homologation.",
       deconseillee: true,
     },
     {
       borneInferieure: 2,
       borneSuperieure: 3,
       recommandationANSSI: "La durée d'homologation du service devrait être limitée à <b>1 an</b>.",
-      recommandationANSSIComplement: complementRecommandationPoursuiteRenforcement,
+      recommandationANSSIComplement: recommandationPoursuiteRenforcement,
     },
     {
       borneInferieure: 3,
       borneSuperieure: 4,
       recommandationANSSI: "La durée d'homologation du service peut aller jusqu'à <b>2 ans</b>.",
-      recommandationANSSIComplement: complementRecommandationPoursuiteRenforcement,
+      recommandationANSSIComplement: recommandationPoursuiteRenforcement,
     },
     {
       borneInferieure: 4,
       borneSuperieure: 5,
       borneSuperieureIncluse: true,
       recommandationANSSI: "La durée d'homologation du service peut aller jusqu'à <b>3 ans</b>.",
-      recommandationANSSIComplement: complementRecommandationPoursuiteRenforcement,
+      recommandationANSSIComplement: recommandationPoursuiteRenforcement,
     },
   ],
 
