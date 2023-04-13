@@ -1,5 +1,6 @@
 extends ../deuxColonnes
 include ../cartes/indiceCyber
+include ../cartes/recommandationsANSSI
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
 
@@ -99,6 +100,8 @@ block cartes-informations
 
   - const indiceCyber = service.indiceCyber()
   +indiceCyber({ referentiel, indiceCyber })
+
+  +recommandationsANSSI({ referentiel, noteObtenue: indiceCyber.total })
 
   +carteInformations({ titre: 'Pour les services référencés avant le 12/10/2022' })
     .liens
