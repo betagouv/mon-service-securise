@@ -1,6 +1,10 @@
 extends ./formulaireEtapier
+include ../cartes/indiceCyber
 include ../cartes/recommandationsANSSI
 include ../fragments/cartesInformations
 
 block cartes-informations
-  +recommandationsANSSI({ referentiel, noteObtenue: service.indiceCyber().total })
+  - const indiceCyber = service.indiceCyber()
+  +indiceCyber({ referentiel, indiceCyber })
+
+  +recommandationsANSSI({ referentiel, noteObtenue: indiceCyber.total })
