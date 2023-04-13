@@ -13,4 +13,4 @@ mixin recommandationsANSSI({ referentiel, noteObtenue })
 
   +carteInformations({ titre: "Recommandation ANSSI", details: 'recommandation-detail' })
     .contenu
-      p(class = trancheIndiceCyber.deconseillee ? 'deconseillee' : '')= trancheIndiceCyber.recommandationANSSI
+      p(class = trancheIndiceCyber.deconseillee ? 'deconseillee' : '')!= trancheIndiceCyber.recommandationANSSI
