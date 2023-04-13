@@ -95,7 +95,7 @@ const genereDossierDecision = async (donnees) => {
 };
 
 const genereSyntheseSecurite = async (donnees) => {
-  const html = await genereHtml('syntheseSecurite', { donnees }, donnees.nomService);
+  const html = await genereHtml('syntheseSecurite', { donnees }, donnees.service.nomService());
   const pdf = await generePdfs([html]);
   return fusionnePdfs(pdf);
 };

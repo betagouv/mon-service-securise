@@ -1,4 +1,5 @@
 const express = require('express');
+const { genereGradientConique } = require('../pdf/graphiques/camembert');
 
 const routesApiServicePdf = (middleware, adaptateurPdf, referentiel) => {
   const routes = express.Router();
@@ -41,6 +42,25 @@ const routesApiServicePdf = (middleware, adaptateurPdf, referentiel) => {
       .catch(() => {
         reponse.sendStatus(424);
       });
+  });
+
+  routes.get('/:id/pdf/syntheseSecurite.pdf', middleware.trouveHomologation, (requete, reponse) => {
+    const { homologation } = requete;
+
+    const donnees = {
+      service: homologation,
+      camembertIndispensables: genereGradientConique(
+        homologation.statistiquesMesuresIndispensables()
+      ),
+      camembertRecommandees: genereGradientConique(
+        homologation.statistiquesMesuresRecommandees()
+      ),
+      referentiel,
+    };
+
+    adaptateurPdf.genereSyntheseSecurite(donnees)
+      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
+      .catch(() => reponse.sendStatus(424));
   });
 
   return routes;

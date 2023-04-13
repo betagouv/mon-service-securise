@@ -125,4 +125,62 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         .catch(done);
     });
   });
+
+  describe('quand requête GET sur `/api/service/:id/pdf/syntheseSecurite.pdf`', () => {
+    const referentiel = Referentiel
+      .creeReferentiel({
+        categoriesMesures: { uneCategorie: {} },
+        localisationsDonnees: { uneLocalisation: { description: 'France' } },
+        statutsDeploiement: { unStatutDeploiement: { description: 'Statut de déploiement' } },
+        typesService: { unType: { description: 'Type de service' } },
+        mesures: { uneMesure: { categorie: 'uneCategorie' } },
+        reglesPersonnalisation: { mesuresBase: ['uneMesure'] },
+      });
+    const homologationARenvoyer = new Homologation({ id: '456' }, referentiel);
+
+    beforeEach(() => {
+      testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.resolve('Pdf synthèse sécurité');
+      testeur.middleware().reinitialise({ homologationARenvoyer });
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        'http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf',
+        done,
+      );
+    });
+
+    it('sert un fichier de type pdf', (done) => {
+      verifieTypeFichierServiEstPDF('http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf', done);
+    });
+
+    it('utilise un adaptateur de pdf pour la génération', (done) => {
+      let adaptateurPdfAppele = false;
+      testeur.adaptateurPdf().genereSyntheseSecurite = (donnees) => {
+        adaptateurPdfAppele = true;
+        expect(donnees.service).to.eql(homologationARenvoyer);
+        expect(donnees.referentiel).to.eql(testeur.referentiel());
+        return Promise.resolve('Pdf synthèse sécurité');
+      };
+
+      axios.get('http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf')
+        .then(() => {
+          expect(adaptateurPdfAppele).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("reste robuste en cas d'échec de génération de pdf", (done) => {
+      testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.reject();
+
+      axios.get('http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf')
+        .then(() => done('La génération aurait dû lever une erreur'))
+        .catch((e) => {
+          expect(e.response.status).to.equal(424);
+          done();
+        })
+        .catch(done);
+    });
+  });
 });
