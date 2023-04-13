@@ -1,5 +1,7 @@
 const { departements } = require('./donneesReferentielDepartements');
 
+const complementRecommandationPoursuiteRenforcement = `Compte-tenu de l'indice cyber évalué,
+  l'ANSSI recommande la poursuite du renforcement de la sécurité du service numérique.`;
 const expiration = (duree) => `${duree.charAt(0).toUpperCase()}${duree.slice(1)} après signature de la présente homologation`;
 
 module.exports = {
@@ -13,35 +15,29 @@ module.exports = {
     {
       borneInferieure: 0,
       borneSuperieure: 2,
-      recommandationANSSI: `L'ANSSI recommande de poursuivre le renforcement de la
-      sécurité du service numérique et déconseille son homologation.`,
-      recommandationANSSIComplement: `En cas de décision d'homologation,
-      l'ANSSI recommande de limiter sa durée de validité à 6 mois maximum.`,
+      recommandationANSSI: "L'homologation du service est déconseillée ou devrait être limitée à <b>6 mois</b>.",
+      recommandationANSSIComplement: `Compte-tenu de l'indice cyber évalué, l'ANSSI recommande de renforcer
+        la sécurité du service numérique avant de procéder à son homologation.`,
       deconseillee: true,
     },
     {
       borneInferieure: 2,
       borneSuperieure: 3,
-      recommandationANSSI: `L'ANSSI recommande de poursuivre le renforcement
-      de la sécurité de votre service.`,
-      recommandationANSSIComplement: `En cas de décision d'homologation,
-      l'ANSSI recommande de limiter sa durée de validité à 1 an.`,
+      recommandationANSSI: "La durée d'homologation du service devrait être limitée à <b>1 an</b>.",
+      recommandationANSSIComplement: complementRecommandationPoursuiteRenforcement,
     },
     {
       borneInferieure: 3,
       borneSuperieure: 4,
-      recommandationANSSI: `L'ANSSI recommande de poursuivre le renforcement
-      de la sécurité de votre service.`,
-      recommandationANSSIComplement: `En cas de décision d'homologation,
-      l'ANSSI recommande de limiter sa durée de validité à 2 ans.`,
+      recommandationANSSI: "La durée d'homologation du service peut aller jusqu'à <b>2 ans</b>.",
+      recommandationANSSIComplement: complementRecommandationPoursuiteRenforcement,
     },
     {
       borneInferieure: 4,
       borneSuperieure: 5,
       borneSuperieureIncluse: true,
-      recommandationANSSI: `En cas de décision d'homologation,
-      l'ANSSI considère que sa durée de validité peut aller jusqu'à 3 ans.`,
-      recommandationANSSIComplement: 'Une revue régulière des mesures de sécurité est recommandée.',
+      recommandationANSSI: "La durée d'homologation du service peut aller jusqu'à <b>3 ans</b>.",
+      recommandationANSSIComplement: complementRecommandationPoursuiteRenforcement,
     },
   ],
 
