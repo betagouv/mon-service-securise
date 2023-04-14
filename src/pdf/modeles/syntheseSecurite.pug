@@ -2,7 +2,8 @@ extends base
 
 mixin chiffre(texte, angle, classe)
   - const rayon = '3em';
-  .chiffre(class=classe,style=`top: calc(${rayon} * cos(180deg - ${angle}deg)); left: calc(${rayon} * sin(180deg - ${angle}deg));`)!= texte
+  if(texte !== 0)
+    .chiffre(class=classe, style=`top: calc(${rayon} * cos(180deg - ${angle}deg)); left: calc(${rayon} * sin(180deg - ${angle}deg));`)!= texte
 
 mixin statistiquesMesures({ id, statistiques = {},  camembert = {}})
   - const { total = 0, enCours = 0, nonFait = 0, fait = 0, restant = 0 } = statistiques
