@@ -1,5 +1,6 @@
 extends ./formulaireEtapier
 include ../cartes/recommandationsANSSI
+include ../fragments/cartesInformations
 
 block cartes-informations
   +recommandationsANSSI({ referentiel, noteObtenue: service.indiceCyber().total })
