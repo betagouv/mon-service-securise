@@ -68,6 +68,11 @@
   background-color: #fff;
 }
 
+.selectize-control:is(.multi, .single) .selectize-dropdown .option:last-of-type {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
 .selectized+.selectize-control.single .selectize-dropdown .selected {
   background-color: transparent;
   color: var(--bleu-mise-en-avant);
