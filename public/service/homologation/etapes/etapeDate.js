@@ -7,6 +7,6 @@ $(() => {
       dureeValidite: $('input[name="dureeValidite"]:checked').val(),
     };
 
-    return axios.put(`/api/service/${idService}/dossier/decision`, donnees);
+    return axios.put(`/api/service/${idService}/homologation/decision`, donnees);
   });
 });

@@ -178,7 +178,7 @@ const routesApiService = (
     }
   });
 
-  routes.put('/:id/dossier/autorite', middleware.trouveHomologation, middleware.trouveDossierCourant, middleware.aseptise('nom', 'fonction'), (requete, reponse, suite) => {
+  routes.put('/:id/homologation/autorite', middleware.trouveHomologation, middleware.trouveDossierCourant, middleware.aseptise('nom', 'fonction'), (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
     const { body: { nom, fonction } } = requete;
@@ -188,7 +188,7 @@ const routesApiService = (
       .catch(suite);
   });
 
-  routes.put('/:id/dossier/decision',
+  routes.put('/:id/homologation/decision',
     middleware.trouveHomologation,
     middleware.trouveDossierCourant,
     middleware.aseptise('dateHomologation', 'dureeValidite'),
@@ -212,7 +212,7 @@ const routesApiService = (
         .catch(suite);
     });
 
-  routes.put('/:id/dossier/telechargement/:idDocument', middleware.trouveHomologation, middleware.trouveDossierCourant, (requete, reponse, suite) => {
+  routes.put('/:id/homologation/telechargement/:idDocument', middleware.trouveHomologation, middleware.trouveDossierCourant, (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
     const { idDocument } = requete.params;
@@ -228,7 +228,7 @@ const routesApiService = (
       .catch(suite);
   });
 
-  routes.put('/:id/dossier/avis',
+  routes.put('/:id/homologation/avis',
     middleware.trouveHomologation,
     middleware.trouveDossierCourant,
     middleware.aseptiseListes([{ nom: 'avis', proprietes: [...Avis.proprietesAtomiquesRequises(), ...Avis.proprietesAtomiquesFacultatives()] }]),
@@ -251,7 +251,7 @@ const routesApiService = (
         .catch(suite);
     });
 
-  routes.put('/:id/dossier/documents',
+  routes.put('/:id/homologation/documents',
     middleware.trouveHomologation,
     middleware.trouveDossierCourant,
     middleware.aseptise('documents.*', 'avecDocuments'),
@@ -273,7 +273,7 @@ const routesApiService = (
         .catch(suite);
     });
 
-  routes.post('/:id/dossier/finalise',
+  routes.post('/:id/homologation/finalise',
     middleware.trouveHomologation,
     middleware.trouveDossierCourant,
     (requete, reponse, suite) => {

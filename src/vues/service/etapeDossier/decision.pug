@@ -5,7 +5,7 @@ mixin document({ nom, description, dateTelechargement })
 
   a.document-homologation(
     href= referentiel.urlDocumentHomologation(nom, service.id)
-    data-action-enregistrement = `/api/service/${service.id}/dossier/telechargement/${nom}`
+    data-action-enregistrement = `/api/service/${service.id}/homologation/telechargement/${nom}`
     target='_blank'
     rel='noopener'
     )

@@ -80,7 +80,7 @@ const soumissionEtapeDocuments = (selecteurFormulaire) => (idService) => {
 
   return (
     axios.put(
-      `/api/service/${idService}/dossier/documents`,
+      `/api/service/${idService}/homologation/documents`,
       { documents, avecDocuments }
     )
   );

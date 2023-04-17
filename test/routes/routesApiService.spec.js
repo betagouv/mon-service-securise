@@ -521,7 +521,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête PUT sur /api/service/:id/dossier/autorite', () => {
+  describe('quand requête PUT sur /api/service/:id/homologation/autorite', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
@@ -530,14 +530,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/dossier/autorite', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/autorite', method: 'put' },
         done,
       );
     });
 
     it('recherche le dossier courant correspondant', (done) => {
       testeur.middleware().verifieRechercheDossierCourant(
-        { url: 'http://localhost:1234/api/service/456/dossier/autorite', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/autorite', method: 'put' },
         done,
       );
     });
@@ -545,7 +545,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('aseptise les paramètres reçus', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         ['nom', 'fonction'],
-        { url: 'http://localhost:1234/api/service/456/dossier/autorite', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/autorite', method: 'put' },
         done
       );
     });
@@ -561,14 +561,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return Promise.resolve();
       };
 
-      axios.put('http://localhost:1234/api/service/456/dossier/autorite', { nom: 'Jean Dupond', fonction: 'RSSI' })
+      axios.put('http://localhost:1234/api/service/456/homologation/autorite', { nom: 'Jean Dupond', fonction: 'RSSI' })
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });
   });
 
-  describe('quand requête PUT sur /api/service/:id/dossier/decision', () => {
+  describe('quand requête PUT sur /api/service/:id/homologation/decision', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
@@ -578,14 +578,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/dossier/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/decision', method: 'put' },
         done,
       );
     });
 
     it('recherche le dossier courant correspondant', (done) => {
       testeur.middleware().verifieRechercheDossierCourant(
-        { url: 'http://localhost:1234/api/service/456/dossier/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/decision', method: 'put' },
         done,
       );
     });
@@ -593,13 +593,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('aseptise les paramètres reçus', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         ['dateHomologation', 'dureeValidite'],
-        { url: 'http://localhost:1234/api/service/456/dossier/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/decision', method: 'put' },
         done
       );
     });
 
     it("renvoie une erreur 422 si la date d'homologation est invalide", (done) => {
-      axios.put('http://localhost:1234/api/service/456/dossier/decision', { dateHomologation: 'dateInvalide', dureeValidite: 'unAn' })
+      axios.put('http://localhost:1234/api/service/456/homologation/decision', { dateHomologation: 'dateInvalide', dureeValidite: 'unAn' })
         .then(() => done('Une erreur aurait dû être levée'))
         .catch((e) => {
           expect(e.response.status).to.be(422);
@@ -610,7 +610,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('renvoie une erreur 422 si la durée de validité est inconnue du référentiel', (done) => {
-      axios.put('http://localhost:1234/api/service/456/dossier/decision', { dateHomologation: new Date(), dureeValidite: 'dureeInconnue' })
+      axios.put('http://localhost:1234/api/service/456/homologation/decision', { dateHomologation: new Date(), dureeValidite: 'dureeInconnue' })
         .then(() => done('Une erreur aurait dû être levée'))
         .catch((e) => {
           expect(e.response.status).to.be(422);
@@ -631,14 +631,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return Promise.resolve();
       };
 
-      axios.put('http://localhost:1234/api/service/456/dossier/decision', { dateHomologation: '2023-01-01', dureeValidite: 'unAn' })
+      axios.put('http://localhost:1234/api/service/456/homologation/decision', { dateHomologation: '2023-01-01', dureeValidite: 'unAn' })
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });
   });
 
-  describe('quand requête PUT sur `/api/service/:id/dossier/telechargement/:idDocument', () => {
+  describe('quand requête PUT sur `/api/service/:id/homologation/telechargement/:idDocument', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
@@ -648,14 +648,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/dossier/telechargement/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/telechargement/decision', method: 'put' },
         done,
       );
     });
 
     it('recherche le dossier courant correspondant', (done) => {
       testeur.middleware().verifieRechercheDossierCourant(
-        { url: 'http://localhost:1234/api/service/456/dossier/telechargement/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/telechargement/decision', method: 'put' },
         done,
       );
     });
@@ -673,14 +673,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return Promise.resolve();
       };
 
-      axios.put('http://localhost:1234/api/service/456/dossier/telechargement/decision')
+      axios.put('http://localhost:1234/api/service/456/homologation/telechargement/decision')
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });
 
     it("reste robuste si l'id de document ne correspond pas à un document connu", (done) => {
-      axios.put('http://localhost:1234/api/service/456/dossier/telechargement/mauvaisId')
+      axios.put('http://localhost:1234/api/service/456/homologation/telechargement/mauvaisId')
         .catch(({ response }) => {
           expect(response.status).to.be(422);
           expect(response.data).to.equal('Identifiant de document invalide');
@@ -690,7 +690,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête PUT sur /api/service/:id/dossier/avis', () => {
+  describe('quand requête PUT sur /api/service/:id/homologation/avis', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] }, testeur.referentiel());
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
@@ -703,20 +703,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/avis', method: 'put' },
         done,
       );
     });
 
     it('recherche le dossier courant correspondant', (done) => {
       testeur.middleware().verifieRechercheDossierCourant(
-        { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/avis', method: 'put' },
         done,
       );
     });
 
     it('aseptise la liste des avis', (done) => {
-      axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [] })
+      axios.put('http://localhost:1234/api/service/456/homologation/avis', { avis: [] })
         .then(() => {
           testeur.middleware().verifieAseptisationListe('avis', ['statut', 'dureeValidite', 'commentaires']);
           done();
@@ -726,12 +726,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les collaborateurs mentionnés dans les avis et le paramètres "avecAvis"', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['avis.*.collaborateurs.*', 'avecAvis'], { url: 'http://localhost:1234/api/service/456/dossier/avis', method: 'put' }, done
+        ['avis.*.collaborateurs.*', 'avecAvis'], { url: 'http://localhost:1234/api/service/456/homologation/avis', method: 'put' }, done
       );
     });
 
     it("renvoie une 400 si aucun avis n'est envoyé", (done) => {
-      axios.put('http://localhost:1234/api/service/456/dossier/avis', {})
+      axios.put('http://localhost:1234/api/service/456/homologation/avis', {})
         .then(() => {
           done('Une erreur aurait du être renvoyée');
         })
@@ -754,7 +754,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           return Promise.resolve();
         };
 
-        axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [{ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' }], avecAvis: 'true' })
+        axios.put('http://localhost:1234/api/service/456/homologation/avis', { avis: [{ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'Ok' }], avecAvis: 'true' })
           .then(() => expect(depotAppele).to.be(true))
           .then(() => done())
           .catch((e) => done(e.response?.data || e));
@@ -770,7 +770,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           return Promise.resolve();
         };
 
-        axios.put('http://localhost:1234/api/service/456/dossier/avis', { avis: [], avecAvis: 'false' })
+        axios.put('http://localhost:1234/api/service/456/homologation/avis', { avis: [], avecAvis: 'false' })
           .then(() => expect(depotAppele).to.be(true))
           .then(() => done())
           .catch((e) => done(e.response?.data || e));
@@ -778,7 +778,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête PUT sur /api/service/:id/dossier/documents', () => {
+  describe('quand requête PUT sur /api/service/:id/homologation/documents', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] }, testeur.referentiel());
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
@@ -787,26 +787,26 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/dossier/documents', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/documents', method: 'put' },
         done,
       );
     });
 
     it('recherche le dossier courant correspondant', (done) => {
       testeur.middleware().verifieRechercheDossierCourant(
-        { url: 'http://localhost:1234/api/service/456/dossier/documents', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/documents', method: 'put' },
         done,
       );
     });
 
     it('aseptise la liste des documents et le paramètres "avecDocuments"', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['documents.*', 'avecDocuments'], { url: 'http://localhost:1234/api/service/456/dossier/documents', method: 'put' }, done
+        ['documents.*', 'avecDocuments'], { url: 'http://localhost:1234/api/service/456/homologation/documents', method: 'put' }, done
       );
     });
 
     it("renvoie une 400 si aucun document n'est envoyé", (done) => {
-      axios.put('http://localhost:1234/api/service/456/dossier/documents', {})
+      axios.put('http://localhost:1234/api/service/456/homologation/documents', {})
         .then(() => done('Une erreur aurait du être renvoyée'))
         .catch((e) => {
           expect(e.response.status).to.be(400);
@@ -827,7 +827,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           return Promise.resolve();
         };
 
-        axios.put('http://localhost:1234/api/service/456/dossier/documents', { documents: ['unDocument'], avecDocuments: 'true' })
+        axios.put('http://localhost:1234/api/service/456/homologation/documents', { documents: ['unDocument'], avecDocuments: 'true' })
           .then(() => expect(depotAppele).to.be(true))
           .then(() => done())
           .catch((e) => done(e.response?.data || e));
@@ -843,7 +843,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           return Promise.resolve();
         };
 
-        axios.put('http://localhost:1234/api/service/456/dossier/documents', { documents: [], avecDocuments: 'false' })
+        axios.put('http://localhost:1234/api/service/456/homologation/documents', { documents: [], avecDocuments: 'false' })
           .then(() => expect(depotAppele).to.be(true))
           .then(() => done())
           .catch((e) => done(e.response?.data || e));
@@ -851,7 +851,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête POST sur /api/service/:id/dossier/finalise', () => {
+  describe('quand requête POST sur /api/service/:id/homologation/finalise', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({
         echeancesRenouvellement: { unAn: {} },
@@ -871,14 +871,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/dossier/finalise', method: 'post' },
+        { url: 'http://localhost:1234/api/service/456/homologation/finalise', method: 'post' },
         done,
       );
     });
 
     it('recherche le dossier courant correspondant', (done) => {
       testeur.middleware().verifieRechercheDossierCourant(
-        { url: 'http://localhost:1234/api/service/456/dossier/finalise', method: 'post' },
+        { url: 'http://localhost:1234/api/service/456/homologation/finalise', method: 'post' },
         done,
       );
     });
@@ -892,7 +892,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return Promise.resolve();
       };
 
-      axios.post('http://localhost:1234/api/service/456/dossier/finalise')
+      axios.post('http://localhost:1234/api/service/456/homologation/finalise')
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
