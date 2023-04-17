@@ -97,6 +97,10 @@
   border-color: var(--rose-anssi);
 }
 
+.selectized:not(.intouche, [required])+.selectize-control:is(.multi, .single) .selectize-input.has-items {
+  border-color: var(--bleu-mise-en-avant);
+}
+
 .selectized[required]:not(.intouche)+.selectize-control:is(.multi, .single) .selectize-input {
   border-color: var(--bleu-mise-en-avant);
 }
