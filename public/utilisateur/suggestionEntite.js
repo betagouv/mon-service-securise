@@ -33,6 +33,7 @@ $(() => {
     searchField: 'label',
     loadingClass: 'chargement-en-cours',
     maxItems: 1,
+    normalize: true,
     render: {
       item: (item, escape) => `<div class="item" data-nom="${item.nom}" data-departement="${item.departement}">
                                     ${escape(item.label)}
