@@ -8,6 +8,8 @@ block append styles
   link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
 
 block append scripts
+  script(id = 'donnees-departements', type = 'application/json').
+    !{JSON.stringify(departements || [])}
   script(src = "/bibliotheques/selectize.min.js")
   script(src = "/statique/plugins/selectize.aucun-resultat.js")
   script(src = "/statique/utilisateur/suggestionEntite.js")
@@ -83,6 +85,13 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           title = ''
         )
         .message-erreur Le numéro de téléphone doit respecter le format 0000000000.
+
+      label(for = 'departementEntitePublique-selectize') Département de votre organisation
+        select(
+          id = 'departementEntitePublique-selectize',
+          name = 'departementEntitePublique-selectize',
+          placeHolder = 'ex : 33, Morbihan',
+        )
 
       .requis
         label(for = 'nomEntitePublique-selectize') Nom de votre organisation

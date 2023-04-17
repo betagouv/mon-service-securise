@@ -1,25 +1,16 @@
 const uneSuggestion = (departement, nom) => ({ departement, nom, label: `${nom} (${departement})` });
 
-const preRemplirSiModeEdition = () => {
-  const nom = $('#nomEntitePublique').val();
-  const departement = $('#departementEntitePublique').val();
-  const enModeEdition = !!nom && !!departement;
-
-  if (!enModeEdition) return;
-
-  const $champSelectize = $('#nomEntitePublique-selectize')[0].selectize;
-  $champSelectize.addOption(uneSuggestion(departement, nom));
-  const modeSilencieux = true;
-  $champSelectize.setValue(`${nom} (${departement})`, modeSilencieux);
-};
-
 const rechercheSuggestions = (recherche, callback) => {
   if (recherche.length < 2) {
     callback([]);
     return;
   }
 
-  axios.get('/api/annuaire/suggestions', { params: { recherche } })
+  const parametresRequete = { params: { recherche } };
+  const departementSelectionne = $('#departementEntitePublique-selectize').val();
+  if (departementSelectionne !== '') parametresRequete.params.departement = departementSelectionne;
+
+  axios.get('/api/annuaire/suggestions', parametresRequete)
     .then((reponse) => {
       const suggestions = reponse.data.suggestions
         .map(({ departement, nom }) => uneSuggestion(departement, nom));
@@ -29,9 +20,14 @@ const rechercheSuggestions = (recherche, callback) => {
 };
 
 $(() => {
+  const nom = $('#nomEntitePublique').val();
+  const departement = $('#departementEntitePublique').val();
+  const enModeEdition = !!nom && !!departement;
+
   const $champSelectize = $('#nomEntitePublique-selectize').selectize({
     plugins: ['aucun_resultat'],
-    options: [],
+    options: enModeEdition ? [uneSuggestion(departement, nom)] : [],
+    items: enModeEdition ? [`${nom} (${departement})`] : [],
     valueField: 'label',
     labelField: 'label',
     searchField: 'label',
@@ -55,7 +51,30 @@ $(() => {
       $('#nomEntitePublique').val('');
       $('#departementEntitePublique').val('');
     },
+    score: () => {
+      const aucunFiltrage = () => 1;
+      return aucunFiltrage;
+    },
   });
 
-  preRemplirSiModeEdition();
+  const departements = JSON.parse($('#donnees-departements').text());
+  $('#departementEntitePublique-selectize').selectize({
+    plugins: ['aucun_resultat'],
+    options: departements.map((d) => ({ ...d, label: `${d.nom} (${d.code})` })),
+    items: enModeEdition ? [departement] : [],
+    valueField: 'code',
+    labelField: 'label',
+    searchField: 'label',
+    maxItems: 1,
+    render: {
+      item: (item, escape) => `<div class="item" data-departement="${item.code}">${escape(item.label)}</div>`,
+      option: (option, escape) => `<div class="option">${escape(option.label)}</div>`,
+    },
+    onItemAdd: (_value, $item) => {
+      const departementActuel = $('#departementEntitePublique').val();
+      const nouveauDepartement = $item.data('departement').toString();
+      if (nouveauDepartement !== departementActuel) $champSelectize[0].selectize.clear();
+      $('#departementEntitePublique').val(nouveauDepartement);
+    },
+  });
 });
