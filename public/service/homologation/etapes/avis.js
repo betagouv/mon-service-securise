@@ -12,7 +12,7 @@ const soumissionEtapeAvis = (selecteurFormulaire) => (idService) => {
   const avecAvis = estValeurAvecAvis($radioAvisSelectionne.val());
   return (
     axios.put(
-      `/api/service/${idService}/dossier/avis`,
+      `/api/service/${idService}/homologation/avis`,
       { ...arrangeParametresAvis(parametres(selecteurFormulaire)), avecAvis }
     )
   );
