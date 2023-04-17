@@ -96,7 +96,7 @@ const routesService = (
     });
   });
 
-  routes.get('/:id/dossier/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse, suite) => {
+  routes.get('/:id/homologation/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse, suite) => {
     const { homologation } = requete;
     const { idEtape } = requete.params;
 

@@ -15,7 +15,7 @@ mixin barre-progression({ numeroEtapeCourante })
       .etape(class = classeEtape)
         if classeEtape === 'passee'
           .numero-etape
-            a(href = `/service/${service.id}/dossier/edition/etape/${etape.id}`).coche
+            a(href = `/service/${service.id}/homologation/edition/etape/${etape.id}`).coche
           .libelle-etape= etape.libelle
         else
           +descriptionEtape({ etape })

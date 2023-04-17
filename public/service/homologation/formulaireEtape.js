@@ -20,7 +20,7 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
       actionSoumission(idService, selecteurFormulaire)
         .then(() => (
           window.location = idEtapeSuivante
-            ? `/service/${idService}/dossier/edition/etape/${idEtapeSuivante}`
+            ? `/service/${idService}/homologation/edition/etape/${idEtapeSuivante}`
             : `/service/${idService}/dossiers`
         ));
     }
