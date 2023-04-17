@@ -17,7 +17,7 @@ mixin dossier({ statut, dossier, idService })
           div= `Étapes complétées : ${numeroDerniereEtapeCompletee} / ${nombreTotalEtapes}`
     if idService
       nav
-        a(href = `/service/${idService}/dossier/edition/etape/${etapeCourante}`) Consulter
+        a(href = `/service/${idService}/homologation/edition/etape/${etapeCourante}`) Consulter
 
 mixin dossierFinalise({ dossier })
   +dossier({ statut: 'Homologation finalisée', dossier })
