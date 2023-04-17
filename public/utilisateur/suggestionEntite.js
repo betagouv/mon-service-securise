@@ -73,7 +73,10 @@ $(() => {
     onItemAdd: (_value, $item) => {
       const departementActuel = $('#departementEntitePublique').val();
       const nouveauDepartement = $item.data('departement').toString();
-      if (nouveauDepartement !== departementActuel) $champSelectize[0].selectize.clear();
+      if (nouveauDepartement !== departementActuel) {
+        $champSelectize[0].selectize.clear();
+        $champSelectize[0].selectize.clearOptions();
+      }
       $('#departementEntitePublique').val(nouveauDepartement);
     },
   });
