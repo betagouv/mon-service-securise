@@ -12,6 +12,7 @@ describe("L'objet d'API de `GET /services`", () => {
       { id: 'B', email: 'email.contributeur1@mail.fr', prenom: 'Jean' },
     ],
   });
+  unService.indiceCyber = () => ({ total: 3.51 });
 
   it('fournit les données nécessaires', () => {
     const services = [unService];
@@ -26,6 +27,7 @@ describe("L'objet d'API de `GET /services`", () => {
             contributeurs: [
               { id: 'B', prenomNom: 'Jean', initiales: 'J', cguAcceptees: false },
             ],
+            indiceCyber: 3.5,
           }],
       }
     );

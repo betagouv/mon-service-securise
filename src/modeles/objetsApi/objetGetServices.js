@@ -3,6 +3,7 @@ const donnees = (services) => ({
     .map((s) => ({
       ...s.toJSON(),
       organisationsResponsables: s.descriptionService.organisationsResponsables,
+      indiceCyber: s.indiceCyber().total.toFixed(1),
     }))
     .map((json) => ({
       id: json.id,
@@ -19,6 +20,7 @@ const donnees = (services) => ({
         initiales: c.initiales,
         cguAcceptees: c.cguAcceptees,
       })),
+      indiceCyber: json.indiceCyber,
     })),
 });
 
