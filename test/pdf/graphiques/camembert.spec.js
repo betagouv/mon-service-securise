@@ -41,5 +41,46 @@ describe('Les graphiques camembert', () => {
       verifieAngleMinimum({ enCours: 0, nonFait: 0, fait: 100, restant: 1 }, 'restant');
       verifieAngleMinimum({ enCours: 0, nonFait: 0, fait: 1, restant: 100 }, 'fait');
     });
+
+    it("s'assurent que les « débuts » et « fins » des angles minimum ne se chevauchent pas", () => {
+      const statistiques = { enCours: 1, nonFait: 1, restant: 1, fait: 47 };
+
+      const { angles } = genereGradientConique(statistiques);
+
+      const verifieDebutFin = (debut, fin, idStatut) => {
+        expect(angles[idStatut].debut).to.equal(debut);
+        expect(angles[idStatut].fin).to.equal(fin);
+      };
+
+      verifieDebutFin(0, 20, 'enCours');
+      verifieDebutFin(20, 40, 'nonFait');
+      verifieDebutFin(40, 60, 'restant');
+    });
+
+    it("s'assurent de ne pas dépasser 360 degrés, même en cas d'utilisation d'angle(s) minimum(s) au début du camembert", () => {
+      const statistiques = { enCours: 1, nonFait: 1, restant: 1, fait: 47 };
+
+      expect(genereGradientConique(statistiques)).to.eql({
+        angles: {
+          enCours: { debut: 0, milieu: 10, fin: 20 },
+          nonFait: { debut: 20, milieu: 30, fin: 40 },
+          restant: { debut: 40, milieu: 50, fin: 60 },
+          fait: { debut: 60, milieu: 210, fin: 360 },
+        },
+      });
+    });
+
+    it("s'assurent de ne pas dépasser 360 degrés, même en cas d'utilisation d'angle(s) minimum(s) à la fin du camembert", () => {
+      const statistiques = { enCours: 47, nonFait: 1, restant: 2, fait: 2 };
+
+      expect(genereGradientConique(statistiques)).to.eql({
+        angles: {
+          enCours: { debut: 0, milieu: 150, fin: 300 },
+          nonFait: { debut: 300, milieu: 310, fin: 320 },
+          restant: { debut: 320, milieu: 330, fin: 340 },
+          fait: { debut: 340, milieu: 350, fin: 360 },
+        },
+      });
+    });
   });
 });
