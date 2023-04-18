@@ -16,7 +16,7 @@ describe('Les graphiques camembert', () => {
       });
     });
 
-    it("retournent un seul angle valant 360 degrés quand il n'y a qu'un seul statut", () => {
+    it("retournent un seul angle valant 360 degrés quand il n'y a qu'un seul statut possédant une valeur", () => {
       const statistiques = { enCours: 0, nonFait: 5, fait: 0, restant: 0 };
 
       expect(genereGradientConique(statistiques)).to.eql({
@@ -29,11 +29,11 @@ describe('Les graphiques camembert', () => {
       });
     });
 
-    it("s'assurent qu'une portion avec valeur fasse au moins 10 degrés pour rester visible", () => {
+    it("s'assurent qu'une portion avec valeur fasse au moins 20 degrés pour rester visible", () => {
       const verifieAngleMinimum = (statistiques, identifiantStatut) => {
         const { angles } = genereGradientConique(statistiques);
         const { debut, fin } = angles[identifiantStatut];
-        expect(fin - debut).to.equal(10);
+        expect(fin - debut).to.equal(20);
       };
 
       verifieAngleMinimum({ enCours: 1, nonFait: 0, fait: 100, restant: 0 }, 'enCours');
