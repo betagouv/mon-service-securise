@@ -55,7 +55,7 @@ const routesApiService = (
       });
   });
 
-  routes.put('/:id', middleware.trouveHomologation, middleware.aseptise('nomService', 'organisationsResponsables.*'), middleware.aseptiseListes([
+  routes.put('/:id', middleware.trouveService, middleware.aseptise('nomService', 'organisationsResponsables.*'), middleware.aseptiseListes([
     { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
     { nom: 'fonctionnalitesSpecifiques', proprietes: FonctionnalitesSpecifiques.proprietesItem() },
     { nom: 'donneesSensiblesSpecifiques', proprietes: DonneesSensiblesSpecifiques.proprietesItem() },
@@ -75,7 +75,7 @@ const routesApiService = (
       });
   });
 
-  routes.post('/:id/mesures', middleware.trouveHomologation, middleware.aseptise(
+  routes.post('/:id/mesures', middleware.trouveService, middleware.aseptise(
     'mesuresGenerales.*.statut',
     'mesuresGenerales.*.modalites',
     'mesuresSpecifiques.*.description',
@@ -109,7 +109,7 @@ const routesApiService = (
   });
 
   routes.post('/:id/rolesResponsabilites',
-    middleware.trouveHomologation,
+    middleware.trouveService,
     middleware.aseptiseListes([
       { nom: 'acteursHomologation', proprietes: ActeursHomologation.proprietesItem() },
       { nom: 'partiesPrenantes', proprietes: PartiesPrenantes.proprietesItem() },
@@ -122,7 +122,7 @@ const routesApiService = (
       ).then(() => reponse.send({ idService }));
     });
 
-  routes.post('/:id/risques', middleware.trouveHomologation, middleware.aseptise(
+  routes.post('/:id/risques', middleware.trouveService, middleware.aseptise(
     '*',
     'risquesSpecifiques.*.description',
     'risquesSpecifiques.*.niveauGravite',
@@ -168,17 +168,17 @@ const routesApiService = (
     }
   });
 
-  routes.post('/:id/avisExpertCyber', middleware.trouveHomologation, (requete, reponse) => {
+  routes.post('/:id/avisExpertCyber', middleware.trouveService, (requete, reponse) => {
     try {
       const avisExpert = new AvisExpertCyber(requete.body, referentiel);
-      depotDonnees.ajouteAvisExpertCyberAHomologation(requete.params.id, avisExpert)
-        .then(() => reponse.send({ idService: requete.params.id }));
+      depotDonnees.ajouteAvisExpertCyberAHomologation(requete.homologation.id, avisExpert)
+        .then(() => reponse.send({ idService: requete.homologation.id }));
     } catch {
       reponse.status(422).send('Données invalides');
     }
   });
 
-  routes.put('/:id/homologation/autorite', middleware.trouveHomologation, middleware.trouveDossierCourant, middleware.aseptise('nom', 'fonction'), (requete, reponse, suite) => {
+  routes.put('/:id/homologation/autorite', middleware.trouveService, middleware.trouveDossierCourant, middleware.aseptise('nom', 'fonction'), (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
     const { body: { nom, fonction } } = requete;
@@ -189,7 +189,7 @@ const routesApiService = (
   });
 
   routes.put('/:id/homologation/decision',
-    middleware.trouveHomologation,
+    middleware.trouveService,
     middleware.trouveDossierCourant,
     middleware.aseptise('dateHomologation', 'dureeValidite'),
     (requete, reponse, suite) => {
@@ -212,7 +212,7 @@ const routesApiService = (
         .catch(suite);
     });
 
-  routes.put('/:id/homologation/telechargement/:idDocument', middleware.trouveHomologation, middleware.trouveDossierCourant, (requete, reponse, suite) => {
+  routes.put('/:id/homologation/telechargement/:idDocument', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
     const { idDocument } = requete.params;
@@ -229,7 +229,7 @@ const routesApiService = (
   });
 
   routes.put('/:id/homologation/avis',
-    middleware.trouveHomologation,
+    middleware.trouveService,
     middleware.trouveDossierCourant,
     middleware.aseptiseListes([{ nom: 'avis', proprietes: [...Avis.proprietesAtomiquesRequises(), ...Avis.proprietesAtomiquesFacultatives()] }]),
     middleware.aseptise('avis.*.collaborateurs.*', 'avecAvis'),
@@ -252,7 +252,7 @@ const routesApiService = (
     });
 
   routes.put('/:id/homologation/documents',
-    middleware.trouveHomologation,
+    middleware.trouveService,
     middleware.trouveDossierCourant,
     middleware.aseptise('documents.*', 'avecDocuments'),
     (requete, reponse, suite) => {
@@ -274,7 +274,7 @@ const routesApiService = (
     });
 
   routes.post('/:id/homologation/finalise',
-    middleware.trouveHomologation,
+    middleware.trouveService,
     middleware.trouveDossierCourant,
     (requete, reponse, suite) => {
       const { homologation, dossierCourant } = requete;

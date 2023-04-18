@@ -75,7 +75,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       let moteurInterroge = false;
       const requete = {};
 
-      testeur.middleware().trouveHomologation(requete, undefined, () => {
+      testeur.middleware().trouveService(requete, undefined, () => {
         const { nomService } = requete.homologation.descriptionService;
         expect(nomService).to.equal('un service'); // sanity check
       });

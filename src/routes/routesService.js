@@ -29,7 +29,7 @@ const routesService = (
       .catch(suite);
   });
 
-  routes.get('/:id', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
 
     const actionsSaisie = new ActionsSaisie(referentiel, homologation)
@@ -47,40 +47,40 @@ const routesService = (
   });
 
   routes.get('/:id/decision',
-    middleware.trouveHomologation,
+    middleware.trouveService,
     middleware.positionneHeadersAvecNonce,
     (requete, reponse) => {
       const { homologation, nonce } = requete;
       reponse.render('service/decision', { service: homologation, referentiel, nonce });
     });
 
-  routes.get('/:id/descriptionService', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/descriptionService', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/descriptionService', { referentiel, service: homologation });
   });
 
-  routes.get('/:id/mesures', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/mesures', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     const mesures = moteurRegles.mesures(homologation.descriptionService);
     reponse.render('service/mesures', { referentiel, service: homologation, mesures });
   });
 
-  routes.get('/:id/rolesResponsabilites', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/rolesResponsabilites', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/rolesResponsabilites', { service: homologation });
   });
 
-  routes.get('/:id/risques', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/risques', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/risques', { referentiel, service: homologation });
   });
 
-  routes.get('/:id/avisExpertCyber', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/avisExpertCyber', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/avisExpertCyber', { referentiel, service: homologation });
   });
 
-  routes.get('/:id/dossiers', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/dossiers', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/dossiers', {
       service: homologation,
@@ -89,7 +89,7 @@ const routesService = (
     });
   });
 
-  routes.get('/:id/homologation/edition/etape/:idEtape', middleware.trouveHomologation, (requete, reponse, suite) => {
+  routes.get('/:id/homologation/edition/etape/:idEtape', middleware.trouveService, (requete, reponse, suite) => {
     const { homologation } = requete;
     const { idEtape } = requete.params;
 

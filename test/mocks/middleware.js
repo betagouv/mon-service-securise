@@ -106,7 +106,7 @@ const middlewareFantaisie = {
     suite();
   },
 
-  trouveHomologation: (requete, _reponse, suite) => {
+  trouveService: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
     requete.homologation = homologationTrouvee;

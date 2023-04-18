@@ -4,7 +4,7 @@ const { genereGradientConique } = require('../pdf/graphiques/camembert');
 const routesApiServicePdf = (middleware, adaptateurPdf, referentiel) => {
   const routes = express.Router();
 
-  routes.get('/:id/pdf/annexes.pdf', middleware.trouveHomologation, (requete, reponse, suite) => {
+  routes.get('/:id/pdf/annexes.pdf', middleware.trouveService, (requete, reponse, suite) => {
     const { homologation } = requete;
     const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
     const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
@@ -20,7 +20,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf, referentiel) => {
       .catch(suite);
   });
 
-  routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveHomologation, middleware.trouveDossierCourant, (requete, reponse) => {
+  routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse) => {
     const { homologation, dossierCourant } = requete;
 
     const donnees = {
@@ -44,7 +44,7 @@ const routesApiServicePdf = (middleware, adaptateurPdf, referentiel) => {
       });
   });
 
-  routes.get('/:id/pdf/syntheseSecurite.pdf', middleware.trouveHomologation, (requete, reponse) => {
+  routes.get('/:id/pdf/syntheseSecurite.pdf', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
 
     const donnees = {

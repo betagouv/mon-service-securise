@@ -83,18 +83,18 @@ const middleware = (configuration = {}) => {
     });
   };
 
-  const trouveHomologation = (requete, reponse, suite) => {
-    const idHomologation = requete.params.id;
+  const trouveService = (requete, reponse, suite) => {
+    const idService = requete.params.id;
 
-    verificationAcceptationCGU(requete, reponse, () => depotDonnees.homologation(idHomologation)
+    verificationAcceptationCGU(requete, reponse, () => depotDonnees.homologation(idService)
       .then((homologation) => {
         const idUtilisateur = requete.idUtilisateurCourant;
 
-        if (!homologation) reponse.status(404).send('Homologation non trouvée');
+        if (!homologation) reponse.status(404).send('Service non trouvé');
         else {
-          depotDonnees.accesAutorise(idUtilisateur, idHomologation)
+          depotDonnees.accesAutorise(idUtilisateur, idService)
             .then((accesAutorise) => {
-              if (!accesAutorise) reponse.status(403).send("Accès à l'homologation refusé");
+              if (!accesAutorise) reponse.status(403).send('Accès au service refusé');
               else {
                 requete.homologation = homologation;
                 suite();
@@ -102,11 +102,11 @@ const middleware = (configuration = {}) => {
             });
         }
       })
-      .catch(() => reponse.status(422).send("L'homologation n'a pas pu être récupérée")));
+      .catch(() => reponse.status(422).send("Le service n'a pas pu être récupéré")));
   };
 
   const trouveDossierCourant = (requete, reponse, suite) => {
-    if (!requete.homologation) throw new Error('Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveHomologation` ?');
+    if (!requete.homologation) throw new Error('Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveService` ?');
 
     const dossierCourant = requete.homologation.dossierCourant();
     if (!dossierCourant) {
@@ -165,7 +165,7 @@ const middleware = (configuration = {}) => {
     positionneHeadersAvecNonce,
     repousseExpirationCookie,
     suppressionCookie,
-    trouveHomologation,
+    trouveService,
     trouveDossierCourant,
     verificationAcceptationCGU,
     verificationJWT,

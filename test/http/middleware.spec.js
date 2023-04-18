@@ -168,46 +168,46 @@ describe('Le middleware MSS', () => {
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       requete.params = { id: '123' };
-      middleware.trouveHomologation(requete, reponse);
+      middleware.trouveService(requete, reponse);
     });
 
-    it('renvoie une erreur HTTP 404 si homologation non trouvée', (done) => {
+    it('renvoie une erreur HTTP 404 si service non trouvée', (done) => {
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-      prepareVerificationReponse(reponse, 404, 'Homologation non trouvée', done);
+      prepareVerificationReponse(reponse, 404, 'Service non trouvé', done);
 
       const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveHomologation(requete, reponse, suite);
+      middleware.trouveService(requete, reponse, suite);
     });
 
-    it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès à l'homologation", (done) => {
+    it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
       depotDonnees.homologation = () => Promise.resolve({});
       depotDonnees.accesAutorise = () => Promise.resolve(false);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-      prepareVerificationReponse(reponse, 403, "Accès à l'homologation refusé", done);
+      prepareVerificationReponse(reponse, 403, 'Accès au service refusé', done);
 
       const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveHomologation(requete, reponse, suite);
+      middleware.trouveService(requete, reponse, suite);
     });
 
-    it("retourne une erreur HTTP 422 si l'homologation n'a pas pu être instanciée", (done) => {
+    it("retourne une erreur HTTP 422 si le service n'a pas pu être instanciée", (done) => {
       depotDonnees.homologation = () => Promise.reject(new Error('oups'));
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-      prepareVerificationReponse(reponse, 422, "L'homologation n'a pas pu être récupérée", done);
+      prepareVerificationReponse(reponse, 422, "Le service n'a pas pu être récupéré", done);
 
       const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveHomologation(requete, reponse, suite);
+      middleware.trouveService(requete, reponse, suite);
     });
 
-    it("retourne l'homologation trouvée et appelle le middleware suivant", (done) => {
+    it('retourne le service trouvé et appelle le middleware suivant', (done) => {
       const homologation = {};
       depotDonnees.homologation = () => Promise.resolve(homologation);
       depotDonnees.accesAutorise = () => Promise.resolve(true);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-      middleware.trouveHomologation(requete, reponse, () => {
+      middleware.trouveService(requete, reponse, () => {
         try {
           expect(requete.homologation).to.equal(homologation);
           done();
@@ -235,7 +235,7 @@ describe('Le middleware MSS', () => {
       const middleware = Middleware();
 
       expect(() => middleware.trouveDossierCourant(requete, reponse)).to.throwError((e) => {
-        expect(e.message).to.equal('Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveHomologation` ?');
+        expect(e.message).to.equal('Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveService` ?');
         done();
       });
     });
