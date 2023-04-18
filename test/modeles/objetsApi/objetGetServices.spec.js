@@ -28,6 +28,7 @@ describe("L'objet d'API de `GET /services`", () => {
               { id: 'B', prenomNom: 'Jean', initiales: 'J', cguAcceptees: false },
             ],
             indiceCyber: 3.5,
+            statutHomologation: 'aSaisir',
           }],
       }
     );
