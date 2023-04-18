@@ -1,5 +1,5 @@
 const genereGradientConique = (statistiques) => {
-  const ANGLE_MINIMUM = 10;
+  const ANGLE_MINIMUM = 20;
 
   const fixeDebutFin = (debut, fin) => {
     const avecValeur = debut !== fin;
