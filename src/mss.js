@@ -129,6 +129,10 @@ const creeServeur = (
     reponse.render('espacePersonnel');
   });
 
+  app.get('/tableauDeBord', middleware.verificationAcceptationCGU, (_requete, reponse) => {
+    reponse.render('tableauDeBord');
+  });
+
   app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf, adaptateurAnnuaire));
 
   app.use('/bibliotheques', routesBibliotheques());
