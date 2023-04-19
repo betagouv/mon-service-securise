@@ -64,7 +64,22 @@ const genereGradientConique = (statistiques) => {
     ? anglesInitiaux
     : recalculPourFin360(anglesInitiaux);
 
-  return { angles: anglesFinaux };
+  const seulementStatistiquesConcernes = {
+    enCours: statistiques.enCours,
+    nonFait: statistiques.nonFait,
+    restant: statistiques.restant,
+    fait: statistiques.fait,
+  };
+  const contientUneValeurUnique = Object
+    .values(seulementStatistiquesConcernes)
+    .filter((v) => v !== 0).length === 1;
+  const unique = contientUneValeurUnique
+    ? Object
+      .keys(seulementStatistiquesConcernes)
+      .find((cle) => seulementStatistiquesConcernes[cle] !== 0)
+    : null;
+
+  return { angles: anglesFinaux, unique };
 };
 
 module.exports = { genereGradientConique };
