@@ -82,7 +82,38 @@ const nouvelAdaptateur = (env) => {
     }));
   };
 
-  const service = (id) => elementDeTable('services', id);
+  const service = (id) => {
+    const requeteService = knex('services')
+      .where('id', id)
+      .select({ id: 'id', donnees: 'donnees' })
+      .first();
+
+    const requeteCreateur = knex('autorisations as a')
+      .join('utilisateurs as u', knex.raw("(a.donnees->>'idUtilisateur')::uuid"), 'u.id')
+      .whereRaw("(a.donnees->>'idService')::uuid = ? AND a.donnees->>'type' = 'createur'", id)
+      .select({ id: 'u.id', dateCreation: 'u.date_creation', donnees: 'u.donnees' })
+      .first();
+
+    const requeteContributeurs = knex('autorisations as a')
+      .join('utilisateurs as u', knex.raw("(a.donnees->>'idUtilisateur')::uuid"), 'u.id')
+      .whereRaw("(a.donnees->>'idService')::uuid = ? AND a.donnees->>'type' = 'contributeur'", id)
+      .select({ id: 'u.id', dateCreation: 'u.date_creation', donnees: 'u.donnees' });
+
+    return Promise.all([
+      requeteService,
+      requeteCreateur,
+      requeteContributeurs,
+    ]).then(([s, createur, contributeurs]) => ({
+      id: s.id,
+      ...s.donnees,
+      createur: { id: createur.id, dateCreation: createur.dateCreation, ...createur.donnees },
+      contributeurs: contributeurs.map((c) => ({
+        id: c.id,
+        dateCreation: createur.dateCreation,
+        ...c.donnees,
+      })),
+    }));
+  };
 
   const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour = '') => (
     knex('homologations')
@@ -91,6 +122,18 @@ const nouvelAdaptateur = (env) => {
       .whereRaw('not homologations.id::text=?', idHomologationMiseAJour)
       .whereRaw("homologations.donnees#>>'{descriptionService,nomService}'=?", nomService)
       .select('homologations.*')
+      .first()
+      .then(convertisLigneEnObjet)
+      .catch(() => undefined)
+  );
+
+  const serviceAvecNomService = (idUtilisateur, nomService, idServiceMiseAJour = '') => (
+    knex('services')
+      .join('autorisations', knex.raw("(autorisations.donnees->>'idService')::uuid"), 'services.id')
+      .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
+      .whereRaw('not services.id::text=?', idServiceMiseAJour)
+      .whereRaw("services.donnees#>>'{descriptionService,nomService}'=?", nomService)
+      .select('services.*')
       .first()
       .then(convertisLigneEnObjet)
       .catch(() => undefined)
@@ -109,6 +152,21 @@ const nouvelAdaptateur = (env) => {
       .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
 
     return avecPMapPourChaqueElement(idsHomologations, homologation);
+  };
+
+  const services = (idUtilisateur) => {
+    const seulementUnUtilisateur = typeof idUtilisateur !== 'undefined';
+
+    const filtre = seulementUnUtilisateur
+      ? ["(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur]
+      : ["(donnees->>'type') = 'createur'"];
+
+    const idsServices = knex('autorisations')
+      .whereRaw(...filtre)
+      .select({ idService: knex.raw("(donnees->>'idService')") })
+      .then((lignes) => lignes.map(({ idService }) => idService));
+
+    return avecPMapPourChaqueElement(idsServices, service);
   };
 
   const metsAJourHomologation = (...params) => metsAJourTable('homologations', ...params);
@@ -152,6 +210,12 @@ const nouvelAdaptateur = (env) => {
     .select({ idHomologation: knex.raw("donnees->>'idHomologation'") })
     .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
 
+  const idsServicesCreesParUtilisateur = (idUtilisateur, idsServicesAExclure = []) => knex('autorisations')
+    .whereRaw("donnees->>'idUtilisateur'=? AND donnees->>'type'='createur'", idUtilisateur)
+    .whereNotIn(knex.raw("donnees->>'idServices'"), idsServicesAExclure)
+    .select({ idService: knex.raw("donnees->>'idService'") })
+    .then((lignes) => lignes.map(({ idService }) => idService));
+
   const ajouteAutorisation = (...params) => ajouteLigneDansTable('autorisations', ...params);
 
   const nbAutorisationsCreateur = (idUtilisateur) => knex('autorisations')
@@ -176,6 +240,10 @@ const nouvelAdaptateur = (env) => {
 
   const supprimeAutorisationsHomologation = (idHomologation) => knex('autorisations')
     .whereRaw("donnees->>'idHomologation'=?", idHomologation)
+    .del();
+
+  const supprimeAutorisationsService = (idService) => knex('autorisations')
+    .whereRaw("donnees->>'idService'=?", idService)
     .del();
 
   const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => (
@@ -233,15 +301,19 @@ const nouvelAdaptateur = (env) => {
     homologationAvecNomService,
     homologations,
     idsHomologationsCreeesParUtilisateur,
+    idsServicesCreesParUtilisateur,
     metsAJourHomologation,
     metsAJourService,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
     service,
+    serviceAvecNomService,
+    services,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
+    supprimeAutorisationsService,
     supprimeHomologation,
     supprimeService,
     supprimeHomologations,
