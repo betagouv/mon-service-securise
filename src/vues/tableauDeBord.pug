@@ -1,0 +1,40 @@
+extends mssConnecte
+include fragments/modaleNouveauService
+
+block append styles
+  link(href = '/statique/assets/styles/tableauDeBord.css', rel = 'stylesheet')
+
+block main
+  +modaleNouveauService
+
+  a(href = './utilisateur/edition').bandeau-maj-profil.invisible
+    p.marges-fixes.
+      Mettez à jour vos informations
+
+  .suivi-services
+    .entete-suivi-services
+      .marges-fixes
+        .titres
+          h1 Mes services
+        .actions
+          label(for='recherche-service') Rechercher
+            input#recherche-service(type='text', placeHolder='ex : Superservice, département Z,...')
+          .nouveau-service#nouveau-service Nouveau service
+    .services.marges-fixes
+      table.tableau-services
+        colgroup
+          col(class='nom-service')
+          col(class='nombre-contributeurs')
+          col(class='indice-cyber')
+          col(class='statut-homologation')
+          col(class='actions')
+        thead
+          tr
+            th.entete-selection
+            th.entete-contributeurs(data-colonne='nombreContributeurs') Contributeur(s)
+            th(data-colonne='indiceCyber') Indice Cyber
+            th(data-colonne='statutHomologation') Homologation
+            th 
+        tbody.contenu-tableau-services
+
+  script(type = 'module', src = '/statique/tableauDeBord.js')
