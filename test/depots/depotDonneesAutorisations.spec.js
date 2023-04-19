@@ -4,7 +4,7 @@ const { depotVide } = require('./depotVide');
 
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+const DepotDonneesHomologationsServices = require('../../src/depots/depotDonneesHomologationsServices');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const {
   ErreurAutorisationExisteDeja,
@@ -238,7 +238,9 @@ describe('Le dépôt de données des autorisations', () => {
           { id: '000', email: 'contributeur@mail.fr' },
         ],
       });
-      const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depotHomologations = DepotDonneesHomologationsServices.creeDepot(
+        { adaptateurPersistance }
+      );
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance, depotHomologations, depotUtilisateurs,
@@ -260,9 +262,12 @@ describe('Le dépôt de données des autorisations', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
         ],
         homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
       });
-      const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depotHomologations = DepotDonneesHomologationsServices.creeDepot(
+        { adaptateurPersistance }
+      );
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance, depotHomologations, depotUtilisateurs,
@@ -285,10 +290,13 @@ describe('Le dépôt de données des autorisations', () => {
           { id: '000', email: 'contributeur@mail.fr' },
         ],
         homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
       });
       adaptateurUUID.genereUUID = () => '789';
-      const depotHomologations = DepotDonneesHomologations.creeDepot({ adaptateurPersistance });
+      const depotHomologations = DepotDonneesHomologationsServices.creeDepot(
+        { adaptateurPersistance }
+      );
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance, adaptateurUUID, depotHomologations, depotUtilisateurs,

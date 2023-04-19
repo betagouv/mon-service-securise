@@ -2,24 +2,24 @@ const expect = require('expect.js');
 
 const Referentiel = require('../../src/referentiel');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
-const Service = require('../../src/modeles/service');
+const DepotDonneesHomologations = require('../../src/depots/depotDonneesServices');
+const Homologation = require('../../src/modeles/homologation');
 
-describe('Le dépôt de données des services', () => {
-  it('peut retrouver un service à partir de son identifiant', (done) => {
+describe('Le dépôt de données des homologations', () => {
+  it('peut retrouver une homologation à partir de son identifiant', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-      services: [
+      homologations: [
         { id: '789', descriptionService: { nomService: 'nom' } },
       ],
     });
     const referentiel = Referentiel.creeReferentielVide();
-    const depot = DepotDonneesServices.creeDepot({ adaptateurPersistance, referentiel });
+    const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
 
-    depot.service('789')
-      .then((service) => {
-        expect(service).to.be.a(Service);
-        expect(service.id).to.equal('789');
-        expect(service.referentiel).to.equal(referentiel);
+    depot.homologation('789')
+      .then((homologation) => {
+        expect(homologation).to.be.a(Homologation);
+        expect(homologation.id).to.equal('789');
+        expect(homologation.referentiel).to.equal(referentiel);
         done();
       })
       .catch(done);

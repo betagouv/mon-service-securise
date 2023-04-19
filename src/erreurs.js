@@ -37,6 +37,7 @@ class ErreurNiveauGraviteInconnu extends ErreurModele {}
 class ErreurNomServiceDejaExistant extends ErreurModele {}
 class ErreurProprieteManquante extends ErreurModele {}
 class ErreurRisqueInconnu extends ErreurModele {}
+class ErreurServiceInexistant extends ErreurModele {}
 class ErreurStatutDeploiementInvalide extends ErreurModele {}
 class ErreurStatutMesureInvalide extends ErreurModele {}
 class ErreurSuppressionImpossible extends Error {}
@@ -73,6 +74,7 @@ module.exports = {
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
   ErreurHomologationInexistante,
+  ErreurServiceInexistant,
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,
   ErreurLocalisationDonneesInvalide,

@@ -1,12 +1,12 @@
-const Service = require('../modeles/service');
+const Homologation = require('../modeles/homologation');
 
 const creeDepot = (config = {}) => {
   const { adaptateurPersistance, referentiel } = config;
-  const service = (idService) => adaptateurPersistance.service(idService)
-    .then((s) => (s ? new Service(s, referentiel) : undefined));
+  const homologation = (idService) => adaptateurPersistance.homologation(idService)
+    .then((s) => (s ? new Homologation(s, referentiel) : undefined));
 
   return {
-    service,
+    homologation,
   };
 };
 

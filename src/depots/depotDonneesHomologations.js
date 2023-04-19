@@ -1,11 +1,11 @@
 const {
   ErreurDonneesObligatoiresManquantes,
-  ErreurHomologationInexistante,
   ErreurNomServiceDejaExistant,
+  ErreurServiceInexistant,
 } = require('../erreurs');
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
-const Homologation = require('../modeles/homologation');
+const Service = require('../modeles/service');
 const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
 const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenementNouvelleHomologationCreee');
@@ -15,11 +15,11 @@ const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 const creeDepot = (config = {}) => {
   const { adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel } = config;
 
-  const homologation = (idHomologation) => adaptateurPersistance.homologation(idHomologation)
-    .then((h) => (h ? new Homologation(h, referentiel) : undefined));
+  const service = (idService) => adaptateurPersistance.service(idService)
+    .then((S) => (S ? new Service(S, referentiel) : undefined));
 
-  const ajouteAItemsDansHomologation = (nomListeItems, idHomologation, item) => (
-    homologation(idHomologation)
+  const ajouteAItemsDansService = (nomListeItems, idService, item) => (
+    service(idService)
       .then((h) => {
         const donneesAPersister = h.donneesAPersister().toutes();
         donneesAPersister[nomListeItems] ||= [];
@@ -42,37 +42,37 @@ const creeDepot = (config = {}) => {
       })
   );
 
-  const metsAJourProprieteHomologation = (nomPropriete, idOuHomologation, propriete) => {
-    const metsAJour = (h) => {
-      h[nomPropriete] ||= {};
+  const metsAJourProprieteService = (nomPropriete, idOuService, propriete) => {
+    const metsAJour = (s) => {
+      s[nomPropriete] ||= {};
 
       const donneesPropriete = propriete.toJSON();
-      Object.assign(h[nomPropriete], donneesPropriete);
+      Object.assign(s[nomPropriete], donneesPropriete);
 
-      const { id, ...donnees } = h;
+      const { id, ...donnees } = s;
       return Promise.all([
         adaptateurPersistance.metsAJourHomologation(id, donnees),
         adaptateurPersistance.metsAJourService(id, donnees),
       ]);
     };
 
-    const trouveDonneesHomologation = (param) => (
+    const trouveDonneesService = (param) => (
       typeof param === 'object'
         ? Promise.resolve(param)
-        : homologation(param).then((h) => h.donneesAPersister().toutes())
+        : service(param).then((h) => h.donneesAPersister().toutes())
     );
 
-    return trouveDonneesHomologation(idOuHomologation).then(metsAJour);
+    return trouveDonneesService(idOuService).then(metsAJour);
   };
 
-  const metsAJourDescriptionServiceHomologation = (homologationCible, informations) => (
-    metsAJourProprieteHomologation('descriptionService', homologationCible, informations)
+  const metsAJourDescriptionServiceService = (serviceCible, informations) => (
+    metsAJourProprieteService('descriptionService', serviceCible, informations)
   );
 
-  const remplaceProprieteHomologation = (nomPropriete, idHomologation, propriete) => (
-    homologation(idHomologation)
-      .then((h) => {
-        const donneesAPersister = h.donneesAPersister().toutes();
+  const remplaceProprieteService = (nomPropriete, idService, propriete) => (
+    service(idService)
+      .then((s) => {
+        const donneesAPersister = s.donneesAPersister().toutes();
         const donneesPropriete = propriete.toJSON();
         donneesAPersister[nomPropriete] = donneesPropriete;
 
@@ -84,38 +84,38 @@ const creeDepot = (config = {}) => {
       })
   );
 
-  const ajouteDossierCourantSiNecessaire = (idHomologation) => homologation(idHomologation)
-    .then((h) => {
-      if (typeof h === 'undefined') {
-        return Promise.reject(new ErreurHomologationInexistante(
-          `Homologation "${idHomologation}" non trouvée`
+  const ajouteDossierCourantSiNecessaire = (idService) => service(idService)
+    .then((s) => {
+      if (typeof s === 'undefined') {
+        return Promise.reject(new ErreurServiceInexistant(
+          `Service "${idService}" non trouvée`
         ));
       }
 
-      if (!h.dossierCourant()) {
+      if (!s.dossierCourant()) {
         const idDossier = adaptateurUUID.genereUUID();
         const dossier = new Dossier({ id: idDossier });
-        return ajouteAItemsDansHomologation('dossiers', idHomologation, dossier)
+        return ajouteAItemsDansService('dossiers', idService, dossier)
           .then(() => dossier);
       }
 
-      return Promise.resolve(h.dossierCourant());
+      return Promise.resolve(s.dossierCourant());
     });
 
-  const ajouteMesuresGeneralesAHomologation = (idHomologation, mesures) => (
+  const ajouteMesuresGeneralesAService = (idService, mesures) => (
     mesures.reduce(
-      (acc, mesure) => acc.then(() => ajouteAItemsDansHomologation('mesuresGenerales', idHomologation, mesure)),
+      (acc, mesure) => acc.then(() => ajouteAItemsDansService('mesuresGenerales', idService, mesure)),
       Promise.resolve()
     ));
 
-  const remplaceMesuresSpecifiquesPourHomologation = (...params) => (
-    remplaceProprieteHomologation('mesuresSpecifiques', ...params)
+  const remplaceMesuresSpecifiquesPourService = (...params) => (
+    remplaceProprieteService('mesuresSpecifiques', ...params)
   );
 
-  const ajouteMesuresAHomologation = (idHomologation, generales, specifiques) => (
-    ajouteMesuresGeneralesAHomologation(idHomologation, generales)
-      .then(() => remplaceMesuresSpecifiquesPourHomologation(idHomologation, specifiques))
-      .then(() => homologation(idHomologation))
+  const ajouteMesuresAService = (idService, generales, specifiques) => (
+    ajouteMesuresGeneralesAService(idService, generales)
+      .then(() => remplaceMesuresSpecifiquesPourService(idService, specifiques))
+      .then(() => service(idService))
       .then((h) => adaptateurJournalMSS.consigneEvenement(
         new EvenementCompletudeServiceModifiee({
           idService: h.id,
@@ -124,73 +124,73 @@ const creeDepot = (config = {}) => {
       ))
   );
 
-  const ajouteRisqueGeneralAHomologation = (...params) => (
-    ajouteAItemsDansHomologation('risquesGeneraux', ...params)
+  const ajouteRisqueGeneralAService = (...params) => (
+    ajouteAItemsDansService('risquesGeneraux', ...params)
   );
 
-  const homologationExiste = (...params) => (
-    adaptateurPersistance.homologationAvecNomService(...params)
-      .then((h) => !!h)
+  const serviceExiste = (...params) => (
+    adaptateurPersistance.serviceAvecNomService(...params)
+      .then((s) => !!s)
   );
 
-  const valideDescriptionService = (idUtilisateur, donnees, idHomologationMiseAJour) => {
+  const valideDescriptionService = (idUtilisateur, donnees, idServiceMiseAJour) => {
     const { nomService } = donnees;
 
     if (!DescriptionService.proprietesObligatoiresRenseignees(donnees)) {
       return Promise.reject(new ErreurDonneesObligatoiresManquantes('Certaines données obligatoires ne sont pas renseignées'));
     }
 
-    return homologationExiste(idUtilisateur, nomService, idHomologationMiseAJour)
-      .then((homologationExistante) => (
-        homologationExistante
+    return serviceExiste(idUtilisateur, nomService, idServiceMiseAJour)
+      .then((serviceExistante) => (
+        serviceExistante
           ? Promise.reject(new ErreurNomServiceDejaExistant(
-            `Le nom du service "${nomService}" existe déjà pour une autre homologation`
+            `Le nom "${nomService}" existe déjà pour un autre service`
           ))
           : Promise.resolve()
       ));
   };
 
-  const ajouteDescriptionServiceAHomologation = (idUtilisateur, idHomologation, infos) => {
+  const ajouteDescriptionServiceAService = (idUtilisateur, idService, infos) => {
     const donneesAPersister = (h) => h.donneesAPersister().toutes();
 
     const consigneEvenement = (h) => adaptateurJournalMSS.consigneEvenement(
       new EvenementCompletudeServiceModifiee({
-        idService: idHomologation, ...h.completudeMesures(),
+        idService, ...h.completudeMesures(),
       }).toJSON()
     );
 
-    const metsAJourHomologation = (h) => valideDescriptionService(idUtilisateur, infos, h.id)
-      .then(() => metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos))
-      .then(() => homologation(idHomologation))
+    const metsAJourService = (s) => valideDescriptionService(idUtilisateur, infos, s.id)
+      .then(() => metsAJourDescriptionServiceService(donneesAPersister(s), infos))
+      .then(() => service(idService))
       .then(consigneEvenement);
 
-    return homologation(idHomologation).then(metsAJourHomologation);
+    return service(idService).then(metsAJourService);
   };
 
-  const ajouteRolesResponsabilitesAHomologation = (...params) => (
-    metsAJourProprieteHomologation('rolesResponsabilites', ...params)
+  const ajouteRolesResponsabilitesAService = (...params) => (
+    metsAJourProprieteService('rolesResponsabilites', ...params)
   );
 
-  const ajouteAvisExpertCyberAHomologation = (...params) => (
-    metsAJourProprieteHomologation('avisExpertCyber', ...params)
+  const ajouteAvisExpertCyberAService = (...params) => (
+    metsAJourProprieteService('avisExpertCyber', ...params)
   );
 
-  const homologations = (idUtilisateur) => adaptateurPersistance.homologations(idUtilisateur)
-    .then((hs) => hs
-      .map((h) => new Homologation(h, referentiel))
-      .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService())));
+  const services = (idUtilisateur) => adaptateurPersistance.services(idUtilisateur)
+    .then((lesServices) => lesServices
+      .map((s) => new Service(s, referentiel))
+      .sort((s1, s2) => s1.nomService().localeCompare(s2.nomService())));
 
-  const toutesHomologations = () => homologations();
+  const tousServices = () => services();
 
-  const enregistreDossierCourant = (idHomologation, dossier) => (
-    ajouteAItemsDansHomologation('dossiers', idHomologation, dossier)
+  const enregistreDossierCourant = (idService, dossier) => (
+    ajouteAItemsDansService('dossiers', idService, dossier)
   );
 
-  const finaliseDossier = (idHomologation, dossier) => (
-    enregistreDossierCourant(idHomologation, dossier)
+  const finaliseDossier = (idService, dossier) => (
+    enregistreDossierCourant(idService, dossier)
       .then(() => {
         const evenement = new EvenementNouvelleHomologationCreee({
-          idService: idHomologation,
+          idService,
           dateHomologation: dossier.decision.dateHomologation,
           dureeHomologationMois: referentiel.nbMoisDecalage(dossier.decision.dureeValidite),
         });
@@ -199,54 +199,54 @@ const creeDepot = (config = {}) => {
       })
   );
 
-  const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
-    const idHomologation = adaptateurUUID.genereUUID();
+  const nouveauService = (idUtilisateur, donneesService) => {
+    const idService = adaptateurUUID.genereUUID();
     const idAutorisation = adaptateurUUID.genereUUID();
 
-    return valideDescriptionService(idUtilisateur, donneesHomologation.descriptionService)
+    return valideDescriptionService(idUtilisateur, donneesService.descriptionService)
       .then(() => Promise.all([
-        adaptateurPersistance.ajouteHomologation(idHomologation, donneesHomologation),
-        adaptateurPersistance.ajouteService(idHomologation, donneesHomologation),
+        adaptateurPersistance.ajouteHomologation(idService, donneesService),
+        adaptateurPersistance.ajouteService(idService, donneesService),
       ]))
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
-        idUtilisateur, idHomologation, idService: idHomologation, type: 'createur',
+        idUtilisateur, idHomologation: idService, idService, type: 'createur',
       }))
-      .then(() => homologation(idHomologation))
-      .then((h) => Promise.all([
+      .then(() => service(idService))
+      .then((s) => Promise.all([
         adaptateurJournalMSS.consigneEvenement(
-          new EvenementNouveauServiceCree({ idService: h.id, idUtilisateur }).toJSON()
+          new EvenementNouveauServiceCree({ idService: s.id, idUtilisateur }).toJSON()
         ),
         adaptateurJournalMSS.consigneEvenement(
           new EvenementCompletudeServiceModifiee({
-            idService: h.id, ...h.completudeMesures(),
+            idService: s.id, ...s.completudeMesures(),
           }).toJSON()
         ),
       ]))
-      .then(() => idHomologation);
+      .then(() => idService);
   };
 
-  const remplaceRisquesSpecifiquesPourHomologation = (...params) => (
-    remplaceProprieteHomologation('risquesSpecifiques', ...params)
+  const remplaceRisquesSpecifiquesPourService = (...params) => (
+    remplaceProprieteService('risquesSpecifiques', ...params)
   );
 
-  const supprimeHomologation = (idHomologation) => adaptateurPersistance
-    .supprimeAutorisationsHomologation(idHomologation)
+  const supprimeService = (idService) => adaptateurPersistance
+    .supprimeAutorisationsService(idService)
     .then(() => Promise.all([
-      adaptateurPersistance.supprimeHomologation(idHomologation),
-      adaptateurPersistance.supprimeService(idHomologation),
+      adaptateurPersistance.supprimeHomologation(idService),
+      adaptateurPersistance.supprimeService(idService),
     ]))
     .then(() => adaptateurJournalMSS.consigneEvenement(
-      new EvenementServiceSupprime({ idService: idHomologation })
+      new EvenementServiceSupprime({ idService })
         .toJSON()
     ));
 
-  const supprimeHomologationsCreeesPar = (idUtilisateur, idsHomologationsAConserver = []) => (
+  const supprimeServicesCreesPar = (idUtilisateur, idsServicesAConserver = []) => (
     avecPMapPourChaqueElement(
-      adaptateurPersistance.idsHomologationsCreeesParUtilisateur(
+      adaptateurPersistance.idsServicesCreesParUtilisateur(
         idUtilisateur,
-        idsHomologationsAConserver,
+        idsServicesAConserver,
       ),
-      supprimeHomologation,
+      supprimeService,
     )
   );
 
@@ -264,45 +264,45 @@ const creeDepot = (config = {}) => {
       return Math.max(0, resultat) + 1;
     };
 
-    return homologations(idCreateur).then(indexMax);
+    return services(idCreateur).then(indexMax);
   };
 
-  const dupliqueHomologation = (idHomologation) => {
-    const duplique = (h) => {
-      const nomHomologationADupliquer = `${h.nomService()} - Copie`;
-      const idCreateur = h.createur.id;
-      const donneesADupliquer = (index) => h.donneesADupliquer(`${nomHomologationADupliquer} ${index}`);
+  const dupliqueService = (idService) => {
+    const duplique = (s) => {
+      const nomServiceADupliquer = `${s.nomService()} - Copie`;
+      const idCreateur = s.createur.id;
+      const donneesADupliquer = (index) => s.donneesADupliquer(`${nomServiceADupliquer} ${index}`);
 
-      return trouveIndexDisponible(idCreateur, nomHomologationADupliquer)
+      return trouveIndexDisponible(idCreateur, nomServiceADupliquer)
         .then(donneesADupliquer)
-        .then((donnees) => nouvelleHomologation(idCreateur, donnees));
+        .then((donnees) => nouveauService(idCreateur, donnees));
     };
 
-    return homologation(idHomologation)
-      .then((h) => (typeof h === 'undefined' ? Promise.reject(new ErreurHomologationInexistante(
-        `Homologation "${idHomologation}" non trouvée`
-      )) : h))
+    return service(idService)
+      .then((s) => (typeof s === 'undefined' ? Promise.reject(new ErreurServiceInexistant(
+        `Service "${idService}" non trouvé`
+      )) : s))
       .then(duplique);
   };
 
   return {
-    ajouteAvisExpertCyberAHomologation,
-    ajouteDescriptionServiceAHomologation,
+    ajouteAvisExpertCyberAService,
+    ajouteDescriptionServiceAService,
     ajouteDossierCourantSiNecessaire,
-    ajouteMesuresAHomologation,
-    ajouteRisqueGeneralAHomologation,
-    ajouteRolesResponsabilitesAHomologation,
-    dupliqueHomologation,
+    ajouteMesuresAService,
+    ajouteRisqueGeneralAService,
+    ajouteRolesResponsabilitesAService,
+    dupliqueService,
     finaliseDossier,
-    homologation,
-    homologationExiste,
-    homologations,
+    serviceExiste,
     enregistreDossierCourant,
-    nouvelleHomologation,
-    remplaceRisquesSpecifiquesPourHomologation,
-    supprimeHomologation,
-    supprimeHomologationsCreeesPar,
-    toutesHomologations,
+    nouveauService,
+    remplaceRisquesSpecifiquesPourService,
+    service,
+    services,
+    supprimeService,
+    supprimeServicesCreesPar,
+    tousServices,
     trouveIndexDisponible,
   };
 };

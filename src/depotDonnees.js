@@ -4,7 +4,7 @@ const fabriqueAdaptateurJournalMSS = require('./adaptateurs/fabriqueAdaptateurJo
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const Referentiel = require('./referentiel');
 const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
-const depotDonneesHomologations = require('./depots/depotDonneesHomologations');
+const depotDonneesHomologationsServices = require('./depots/depotDonneesHomologationsServices');
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 
 const creeDepot = (config = {}) => {
@@ -16,7 +16,7 @@ const creeDepot = (config = {}) => {
     referentiel = Referentiel.creeReferentiel(),
   } = config;
 
-  const depotHomologations = depotDonneesHomologations.creeDepot({
+  const depotHomologations = depotDonneesHomologationsServices.creeDepot({
     adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel,
   });
 
