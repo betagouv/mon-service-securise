@@ -463,7 +463,7 @@ p {
 }
 
 .synthese-securite fieldset .contenu {
-  padding-left: 1em;
+  padding: 0 1em;
 }
 
 .synthese-securite .resume :is(dt, dd) {
