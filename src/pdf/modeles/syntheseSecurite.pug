@@ -1,11 +1,11 @@
 extends base
 
-mixin chiffre(texte, angle, classe)
-  - const rayon = '3em';
+mixin chiffre(texte, angle, classe, estUnique)
+  - const rayon = estUnique ? '0' : '3em';
   if(texte !== 0)
     .chiffre(class=classe, style=`top: calc(${rayon} * cos(180deg - ${angle}deg)); left: calc(${rayon} * sin(180deg - ${angle}deg));`)!= texte
 
-mixin statistiquesMesures({ id, statistiques = {},  camembert = {}})
+mixin statistiquesMesures({ id, statistiques = {},  camembert = {}, unique = null})
   - const { total = 0, enCours = 0, nonFait = 0, fait = 0, restant = 0 } = statistiques
   - const chaineGradientConique = `background: conic-gradient(#75A1E8 ${camembert.enCours.debut}deg ${camembert.enCours.fin}deg, #D0E0F6 ${camembert.nonFait.debut}deg ${camembert.nonFait.fin}deg, #FFFFFF ${camembert.restant.debut}deg ${camembert.restant.fin}deg, transparent ${camembert.restant.fin}deg 360deg);`;
   - const chaineGradientConiqueFait = `background: conic-gradient(transparent 0deg ${camembert.fait.debut}deg, #0A4C8C ${camembert.fait.debut}deg ${camembert.fait.fin}deg);`;
@@ -17,11 +17,11 @@ mixin statistiquesMesures({ id, statistiques = {},  camembert = {}})
         .camembert.bordure-reste-a-faire(style=`background: conic-gradient(#0F7AC7 0deg ${camembert.restant.fin}deg, transparent ${camembert.restant.fin}deg 360deg);`)
         .camembert.masque-reste-a-faire
         .camembert(style=chaineGradientConique)
-        +chiffre(enCours, camembert.enCours.milieu, 'en-cours')
-        +chiffre(nonFait, camembert.nonFait.milieu, 'non-fait')
-        +chiffre(restant, camembert.restant.milieu, 'restant')
+        +chiffre(enCours, camembert.enCours.milieu, 'en-cours', unique === 'enCours')
+        +chiffre(nonFait, camembert.nonFait.milieu, 'non-fait', unique === 'nonFait')
+        +chiffre(restant, camembert.restant.milieu, 'restant', unique === 'restant')
         .camembert.fait(style=`${chaineGradientConiqueFait}; ${styleDecalageCamemberFait}`)
-        +chiffre(fait, camembert.fait.milieu, 'fait')
+        +chiffre(fait, camembert.fait.milieu, 'fait', unique == 'fait')
       .fleche
       .mesures-restantes
         p Il reste
@@ -103,6 +103,7 @@ block page
                   id: 'mesures-indispensables',
                   statistiques: service.statistiquesMesuresIndispensables(),
                   camembert: camembertIndispensables.angles,
+                  unique: camembertIndispensables.unique,
                 })
               .recommandees.conteneur
                 p.titre Recommandées
@@ -110,6 +111,7 @@ block page
                   id: 'mesures-recommandees',
                   statistiques: service.statistiquesMesuresRecommandees(),
                   camembert: camembertRecommandees.angles,
+                  unique: camembertRecommandees.unique,
                 })
               +totalMesures(service.nombreTotalMesuresGenerales())
           p.type Par catégorie

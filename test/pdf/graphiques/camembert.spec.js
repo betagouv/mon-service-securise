@@ -13,6 +13,7 @@ describe('Les graphiques camembert', () => {
           restant: { debut: 180, milieu: 225, fin: 270 },
           fait: { debut: 270, milieu: 315, fin: 360 },
         },
+        unique: null,
       });
     });
 
@@ -26,6 +27,7 @@ describe('Les graphiques camembert', () => {
           restant: { debut: 360, milieu: 360, fin: 360 },
           fait: { debut: 360, milieu: 360, fin: 360 },
         },
+        unique: 'nonFait',
       });
     });
 
@@ -67,6 +69,7 @@ describe('Les graphiques camembert', () => {
           restant: { debut: 40, milieu: 50, fin: 60 },
           fait: { debut: 60, milieu: 210, fin: 360 },
         },
+        unique: null,
       });
     });
 
@@ -80,7 +83,20 @@ describe('Les graphiques camembert', () => {
           restant: { debut: 320, milieu: 330, fin: 340 },
           fait: { debut: 340, milieu: 350, fin: 360 },
         },
+        unique: null,
       });
+    });
+
+    it("s'assurent que le champs 'unique' est null si il y a au moins 2 portions non nulles", () => {
+      const statistiques = { enCours: 1, nonFait: 1, restant: 0, fait: 0 };
+
+      expect(genereGradientConique(statistiques).unique).to.equal(null);
+    });
+
+    it("s'assurent que le champs 'unique' porte la clé de la portion si une seule portion est présente", () => {
+      const statistiques = { enCours: 1, nonFait: 0, restant: 0, fait: 0 };
+
+      expect(genereGradientConique(statistiques).unique).to.equal('enCours');
     });
   });
 });
