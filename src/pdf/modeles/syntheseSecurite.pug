@@ -66,8 +66,10 @@ block page
             dt Statut :
             dd= service.descriptionStatutDeploiement()
           dl
+          - const presentation = service.presentation();
+          - const tailleMaximale = 500;
             dt Présentation :
-            dd= service.presentation()
+            dd= presentation.length > tailleMaximale ? presentation.substring(0, tailleMaximale) + '…' : presentation
       fieldset(class='indice-cyber')
         - const indiceCyber = service.indiceCyber();
         - const noteMax = referentiel.indiceCyberNoteMax()
