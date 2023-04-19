@@ -83,6 +83,12 @@ const tableauDesServices = {
   },
 };
 
+const remplisCartesInformations = (resume) => {
+  $('#nombre-services').text(resume.nombreServices);
+  $('#nombre-services-homologues').text(resume.nombreServicesHomologues);
+  $('#indice-cyber-moyen').text(resume.indiceCyberMoyen.toFixed(1));
+};
+
 $(() => {
   const afficheBandeauMajProfil = () => {
     $('.bandeau-maj-profil').removeClass('invisible');
@@ -95,6 +101,7 @@ $(() => {
     .then((utilisateur) => {
       axios.get('/api/services')
         .then(({ data }) => {
+          remplisCartesInformations(data.resume);
           tableauDesServices.fixeDonnees(data.services);
           tableauDesServices.afficheDonnees();
         });

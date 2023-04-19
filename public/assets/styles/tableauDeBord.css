@@ -45,6 +45,7 @@
 .entete-suivi-services {
   background-image: url('/statique/assets/images/fond_entete_tableau_de_bord.svg');
   background-repeat: no-repeat;
+  padding-bottom: 3em;
 }
 
 .entete-suivi-services .titres {
@@ -60,12 +61,77 @@ label[for='recherche-service'] {
   font-weight: bold;
 }
 
+.bandeau-info-action {
+  display: flex;
+  margin-top: 3em;
+}
+
+.informations {
+  flex-grow: 1;
+  display: flex;
+  gap: 0.3em;
+}
+
+.carte {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+  gap: 1em;
+}
+
+.carte .conteneur-image {
+  width: 2em;
+  background: #F1F5F9;
+  border-radius: 50%;
+  width: 2.8em;
+  height: 2.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carte .conteneur-image.vert {
+  background: #D4F4DB;
+}
+
+.carte .conteneur-image.bleu {
+  background: #DBEEFF;
+}
+
+.carte .conteneur-texte {
+  text-align: left;
+}
+
+.carte .conteneur-texte dd {
+  margin-left: 0;
+}
+
+.carte .conteneur-texte .nombre {
+  font-size: 1.7em;
+  font-weight: bold;
+}
+
+#nombre-services {
+  color: #7025DA;
+}
+
+#nombre-services-homologues {
+  color: #0E972B;
+}
+
+#indice-cyber-moyen {
+  color: #0079D0;
+}
+
 .actions {
   display: flex;
   gap: 1em;
-  align-items: center;
+  align-items: start;
   justify-content: end;
-  padding-bottom: 5em;
+  flex-grow: 1;
 }
 
 #recherche-service {
