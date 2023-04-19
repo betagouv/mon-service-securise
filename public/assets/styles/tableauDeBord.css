@@ -1,0 +1,237 @@
+.bandeau-maj-profil {
+  display: flex;
+  height: 2.7em;
+  align-items: center;
+  color: #fff;
+  background-color: var(--bleu-mise-en-avant);
+}
+
+.bandeau-maj-profil p::after {
+  background-color: #fff;
+}
+
+.bandeau-maj-profil:hover {
+  background-color: var(--bleu-anssi);
+}
+
+.bandeau-maj-profil.invisible {
+  display: none;
+}
+
+.bandeau-maj-profil p {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: .95em;
+  text-align: left;
+}
+
+.bandeau-maj-profil p::after {
+  display: block;
+  content: '';
+  width: 1em;
+  height: 1em;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
+  mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
+  transform: translateX(0.3em) translateY(0.08em) scale(0.95);
+}
+
+.services {
+  display: flex;
+}
+
+.entete-suivi-services {
+  background-image: url('/statique/assets/images/fond_entete_tableau_de_bord.svg');
+  background-repeat: no-repeat;
+}
+
+.entete-suivi-services .titres {
+  padding-top: 3em;
+}
+
+.entete-suivi-services .titres h1 {
+  text-align: left;
+  margin: 0;
+}
+
+label[for='recherche-service'] {
+  font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  justify-content: end;
+  padding-bottom: 5em;
+}
+
+#recherche-service {
+  margin-left: 1em;
+  padding: 0.7em;
+  border-radius: 6px;
+  border: 1px solid #CBD5E1;
+  min-width: 220px;
+}
+
+#nouveau-service {
+  background: var(--bleu-mise-en-avant);
+  color: #fff;
+  cursor: pointer;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6em 1em;
+}
+
+.tableau-services {
+  flex: 1;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.tableau-services colgroup .nom-service {
+  width: 40%;
+}
+
+.tableau-services thead th {
+  user-select: none;
+  padding: 1em 1.5em;
+}
+
+.tableau-services thead th:not(:first-child):not(:last-child) {
+  cursor: pointer;
+}
+
+.tableau-services thead .entete-selection {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.tableau-services thead th::after {
+  content: '\00a0\00a0\00a0';
+  margin-left: .3em;
+}
+
+.tableau-services thead th[data-direction="1"]::after {
+  content: '↑';
+}
+
+.tableau-services thead th[data-direction="2"]::after {
+  content: '↓';
+}
+
+.tableau-services thead tr th {
+  background: #DBECF1;
+}
+
+.tableau-services thead tr th:first-of-type {
+  background: none;
+}
+
+.tableau-services thead tr th:last-of-type {
+  border-top-right-radius: 8px;
+}
+
+.tableau-services th.entete-contributeurs {
+  clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.tableau-services td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 0.7em 1.5em;
+  border: 1px solid #CBD5E1;
+  border-style: solid none none none;
+}
+
+.tableau-services tbody tr:first-of-type td:first-of-type {
+  border-top-left-radius: 8px;
+}
+
+.tableau-services tbody tr:last-of-type td {
+  border-bottom-style: solid;
+}
+
+.tableau-services tbody tr:last-of-type td:first-of-type {
+  border-bottom-left-radius: 8px;
+}
+
+.tableau-services tbody tr:last-of-type td:last-of-type {
+  border-bottom-right-radius: 8px;
+}
+
+.tableau-services tbody tr td:first-of-type {
+  border-left-style: solid;
+}
+
+.tableau-services tbody tr td:last-of-type {
+  border-right-style: solid;
+}
+
+.tableau-services td>div {
+  display: inline-block;
+  font-weight: 500;
+}
+
+.tableau-services td.cellule-noms {
+  display: flex;
+  align-items: center;
+}
+
+.tableau-services td .conteneur-noms {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.tableau-services td .nom-service {
+  color: #2F3A43;
+}
+
+.tableau-services td .nom-organisation {
+  color: #667892;
+  font-weight: normal;
+}
+
+.tableau-services td .contributeurs {
+  background: #DBEEFF;
+  border-radius: 4px;
+  width: fit-content;
+  padding: 0.2em 0.5em;
+}
+
+.tableau-services td .contributeurs::before {
+  display: inline-block;
+  content: '';
+  background-image: url('/statique/assets/images/icone_contributeurs.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 0.3em;
+}
+
+.tableau-services td .statut-homologation {
+  border-radius: 40px;
+  padding: 0.3em 0.7em;
+}
+
+.tableau-services td .statut-homologation.statut-aSaisir {
+  background: #E9DDFF;
+}
+
+.tableau-services td .statut-homologation.statut-aCompleter {
+  background: #DBEEFF;
+}
+
+.tableau-services td .statut-homologation.statut-completes {
+  background: #D4F4DB;
+}
