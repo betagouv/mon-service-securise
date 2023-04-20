@@ -105,6 +105,10 @@ label[for='recherche-service'] {
   text-align: left;
 }
 
+.carte .conteneur-texte dl {
+  margin: 0;
+}
+
 .carte .conteneur-texte dd {
   margin-left: 0;
 }
@@ -300,4 +304,73 @@ label[for='recherche-service'] {
 
 .tableau-services td .statut-homologation.statut-completes {
   background: #D4F4DB;
+}
+
+.tableau-services .cellule-actions {
+  position: relative;
+}
+
+.tableau-services .menu-flotant {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #667892;
+  border-radius: 5px;
+  text-align: left;
+  padding: 0.2em;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.tableau-services .menu-flotant.invisible {
+  display: none;
+}
+
+.tableau-services .menu-flotant hr {
+  width: 100%;
+  border: 1px solid #CBD5E1;
+  border-style: solid none none none;
+}
+
+.tableau-services .menu-flotant a {
+  padding: 0.5em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  user-select: none;
+}
+
+.tableau-services .menu-flotant a:hover {
+  background: #F1F5F9;
+  color: #0C5C98;
+}
+
+.tableau-services .action-menu-flotant {
+  cursor: pointer;
+  position: relative;
+  width: 2em;
+  height: 2em;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableau-services .action-menu-flotant.actif {
+  background: #F1F5F9;
+  border-color: #08416A;
+}
+
+.tableau-services .action-menu-flotant img {
+  pointer-events: none;
+}
+
+.tableau-services .action-menu-flotant.actif img {
+  content: url('/statique/assets/images/points_horizontal_bleu_fonce.svg');
+}
+
+.tableau-services .menu-flotant.liens-services {
+  top: -1px;
+  right: calc(2em + 2px);
 }
