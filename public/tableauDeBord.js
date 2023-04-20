@@ -73,7 +73,19 @@ const tableauDesServices = {
       $ligne.append($(`<td><div class='contributeurs' title='${metEnFormeContributeurs(service)}'>${service.nombreContributeurs}</div></td>`));
       $ligne.append($(`<td>${parseFloat(service.indiceCyber) === 0 ? '-' : service.indiceCyber}</td>`));
       $ligne.append($(`<td><div class='statut-homologation statut-${service.statutHomologation}'>${STATUS_HOMOLOGATION[service.statutHomologation]}</div></td>`));
-      $ligne.append($('<td>...</td>'));
+      const $menuFlotant = $(`<div class='menu-flotant liens-services invisible' data-id-service='${service.id}'>
+                                <a href='/service/${service.id}/descriptionService'>Décrire</a>
+                                <a href='/service/${service.id}/mesures'>Sécuriser</a>
+                                <a href='/service/${service.id}/dossiers'>Homologuer</a>
+                                <hr>
+                                <a href='/service/${service.id}/risques'>Risques</a>
+                                <a href='/service/${service.id}/rolesResponsabilites'>Contacts utiles</a>
+                              </div>`);
+      const $boutonMenuFlotant = $(`<div class='action-menu-flotant' data-id-service='${service.id}'><img src='/statique/assets/images/points_horizontal_bleu.svg'></div>`);
+      const $celluleActions = $("<td class='cellule-actions'></td>");
+      $boutonMenuFlotant.append($menuFlotant);
+      $celluleActions.append($boutonMenuFlotant);
+      $ligne.append($celluleActions);
 
       tableauDesServices.$tableau.append($ligne);
     });
@@ -87,6 +99,22 @@ const remplisCartesInformations = (resume) => {
   $('#nombre-services').text(resume.nombreServices);
   $('#nombre-services-homologues').text(resume.nombreServicesHomologues);
   $('#indice-cyber-moyen').text(resume.indiceCyberMoyen.toFixed(1));
+};
+
+const gestionnaireEvenements = {
+  gereMenuFlotantLienService: ($bouton) => {
+    const doitOuvrirMenu = !$bouton.hasClass('actif');
+    gestionnaireEvenements.fermeToutMenuFlottant();
+    if (doitOuvrirMenu) {
+      const idService = $bouton.data('id-service');
+      $bouton.addClass('actif');
+      $(`.menu-flotant.liens-services[data-id-service='${idService}']`).removeClass('invisible');
+    }
+  },
+  fermeToutMenuFlottant: () => {
+    $('.action-menu-flotant').removeClass('actif');
+    $('.menu-flotant').addClass('invisible');
+  },
 };
 
 $(() => {
@@ -116,5 +144,14 @@ $(() => {
   $('.tableau-services thead th:not(:first):not(:last)').on('click', (e) => {
     const colonne = $(e.target).data('colonne');
     tableauDesServices.modifieTri(colonne);
+  });
+
+  $('.tableau-services').on('click', (e) => {
+    const $elementClique = $(e.target);
+    if ($elementClique.hasClass('action-menu-flotant')) {
+      gestionnaireEvenements.gereMenuFlotantLienService($elementClique);
+    } else {
+      gestionnaireEvenements.fermeToutMenuFlottant();
+    }
   });
 });
