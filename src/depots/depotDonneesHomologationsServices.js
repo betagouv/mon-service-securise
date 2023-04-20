@@ -1,4 +1,4 @@
-const depotDonneesServices = require('./depotDonneesHomologations');
+const depotDonneesServices = require('./depotDonneesServices');
 
 const creeDepot = (config = {}) => {
   const depotServices = depotDonneesServices.creeDepot(config);
