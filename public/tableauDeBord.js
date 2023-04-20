@@ -12,6 +12,7 @@ const metEnFormeContributeurs = (service) => [service.createur.prenomNom, ...ser
 const tableauDesServices = {
   $tableau: $('.contenu-tableau-services'),
   donnees: [],
+  nombreServices: 0,
   servicesSelectionnes: new Set(),
   termeRecherche: '',
   tri: {
@@ -38,6 +39,15 @@ const tableauDesServices = {
       });
     tableauDesServices.remplisTableau(donneesAAfficher);
   },
+  basculeSelectionService: (idService, statut) => {
+    if (statut) {
+      tableauDesServices.servicesSelectionnes.add(idService);
+      $(`.ligne-service[data-id-service='${idService}']`).addClass('selectionne');
+    } else {
+      tableauDesServices.servicesSelectionnes.delete(idService);
+      $(`.ligne-service[data-id-service='${idService}']`).removeClass('selectionne');
+    }
+  },
   fixeDonnees: (donnees) => {
     tableauDesServices.donnees = donnees.map((d) => ({
       ...d,
@@ -62,12 +72,16 @@ const tableauDesServices = {
   },
   remplisTableau: (donnees) => {
     donnees.forEach((service) => {
-      const $ligne = $('<tr></tr>');
+      const estSelectionne = tableauDesServices.servicesSelectionnes.has(service.id);
+      const $ligne = $(`<tr class='ligne-service ${estSelectionne ? 'selectionne' : ''}' data-id-service='${service.id}'></tr>`);
       const $celluleNoms = $("<td class='cellule-noms'></td>");
+      const $inputSelection = $("<input class='selection-service' type='checkbox' >");
+      $inputSelection.prop('checked', estSelectionne);
       const $nomService = $(`<a class='conteneur-noms' href='/service/${service.id}'>
                               <div class='nom-service'>${service.nomService}</div>
                               <div class='nom-organisation'>${service.organisationsResponsables[0]}</div>
                             </a>`);
+      $celluleNoms.append($inputSelection);
       $celluleNoms.append($nomService);
       $ligne.append($celluleNoms);
       $ligne.append($(`<td><div class='contributeurs' title='${metEnFormeContributeurs(service)}'>${service.nombreContributeurs}</div></td>`));
@@ -78,7 +92,7 @@ const tableauDesServices = {
       // que les maquettes Figma prennent en compte l'accés à la synthèse
 
       // eslint-disable-next-line no-unused-vars
-      const $menuFlotant = $(`<div class='menu-flotant liens-services invisible' data-id-service='${service.id}'>
+      const $menuFlotant = $(`<div class='menu-flotant liens-services invisible'>
                                 <a href='/service/${service.id}/descriptionService'>Décrire</a>
                                 <a href='/service/${service.id}/mesures'>Sécuriser</a>
                                 <a href='/service/${service.id}/dossiers'>Homologuer</a>
@@ -87,7 +101,7 @@ const tableauDesServices = {
                                 <a href='/service/${service.id}/rolesResponsabilites'>Contacts utiles</a>
                               </div>`);
       // eslint-disable-next-line no-unused-vars
-      const $boutonMenuFlotant = $(`<div class='action-lien action-liens-services' data-id-service='${service.id}'><img src='/statique/assets/images/points_horizontal_bleu.svg'></div>`);
+      const $boutonMenuFlotant = $("<div class='action-lien action-liens-services'><img src='/statique/assets/images/points_horizontal_bleu.svg'></div>");
 
       const $boutonLienSynthese = $(`<a class='action-lien action-lien-synthese' href='/service/${service.id}'><img src='/statique/assets/images/forme_chevron_bleu.svg'></a>`);
       const $celluleActions = $("<td class='cellule-actions'></td>");
@@ -109,17 +123,61 @@ const remplisCartesInformations = (resume) => {
 };
 
 const gestionnaireEvenements = {
+  gereMenuAction: ($bouton) => {
+    const doitOuvrirMenu = !$bouton.parents('.conteneur-selection-services').hasClass('actif');
+    gestionnaireEvenements.fermeToutMenuFlottant();
+    if (doitOuvrirMenu) {
+      $bouton.parents('.conteneur-selection-services').addClass('actif');
+      $('.menu-flotant.actions-services').removeClass('invisible');
+    } else {
+      $bouton.parents('.conteneur-selection-services').removeClass('actif');
+      $('.menu-flotant.actions-services').addClass('invisible');
+    }
+  },
   gereMenuFlotantLienService: ($bouton) => {
     const doitOuvrirMenu = !$bouton.hasClass('actif');
     gestionnaireEvenements.fermeToutMenuFlottant();
     if (doitOuvrirMenu) {
-      const idService = $bouton.data('id-service');
+      const idService = $bouton.parents('.ligne-service').data('id-service');
       $bouton.addClass('actif');
-      $(`.menu-flotant.liens-services[data-id-service='${idService}']`).removeClass('invisible');
+      $(`.ligne-service[data-id-service='${idService}'] .menu-flotant.liens-services`).removeClass('invisible');
     }
   },
+  gereSelectionService: ($checkbox) => {
+    const selectionne = $checkbox.is(':checked');
+    const idService = $checkbox.parents('.ligne-service').data('id-service');
+    tableauDesServices.basculeSelectionService(idService, selectionne);
+
+    const nbServiceSelectionnes = tableauDesServices.servicesSelectionnes.size;
+    const $checkboxTousServices = $('.checkbox-selection-tous-services');
+    if (nbServiceSelectionnes === tableauDesServices.nombreServices) {
+      $checkboxTousServices.removeClass('selection-partielle');
+      $checkboxTousServices.prop('checked', true);
+      $('.texte-nombre-service').text('Tous sélectionnés');
+    } else if (nbServiceSelectionnes === 0) {
+      $checkboxTousServices.removeClass('selection-partielle');
+      $checkboxTousServices.prop('checked', false);
+      $('.texte-nombre-service').text('0 sélectionné');
+    } else {
+      $checkboxTousServices.addClass('selection-partielle');
+      $checkboxTousServices.prop('checked', false);
+      $('.texte-nombre-service').text(`${nbServiceSelectionnes} sélectionné${nbServiceSelectionnes > 1 ? 's' : ''}`);
+    }
+  },
+  gereSelectionTousServices: ($checkbox) => {
+    const selectionne = $checkbox.is(':checked');
+    $checkbox.removeClass('selection-partielle');
+
+    $('.selection-service').each((_, input) => {
+      const $checkboxService = $(input);
+      tableauDesServices.basculeSelectionService($checkboxService.parents('.ligne-service').data('id-service'), selectionne);
+      $checkboxService.prop('checked', selectionne);
+    });
+    $('.texte-nombre-service').text(selectionne ? 'Tous sélectionnés' : '0 sélectionné');
+  },
   fermeToutMenuFlottant: () => {
-    $('.action-menu-flotant').removeClass('actif');
+    $('.action-lien').removeClass('actif');
+    $('.conteneur-selection-services').removeClass('actif');
     $('.menu-flotant').addClass('invisible');
   },
 };
@@ -137,6 +195,7 @@ $(() => {
       axios.get('/api/services')
         .then(({ data }) => {
           remplisCartesInformations(data.resume);
+          tableauDesServices.nombreServices = data.resume.nombreServices;
           tableauDesServices.fixeDonnees(data.services);
           tableauDesServices.afficheDonnees();
         });
@@ -155,8 +214,14 @@ $(() => {
 
   $('.tableau-services').on('click', (e) => {
     const $elementClique = $(e.target);
-    if ($elementClique.hasClass('action-menu-flotant')) {
+    if ($elementClique.hasClass('action-liens-services')) {
       gestionnaireEvenements.gereMenuFlotantLienService($elementClique);
+    } else if ($elementClique.hasClass('selection-service')) {
+      gestionnaireEvenements.gereSelectionService($elementClique);
+    } else if ($elementClique.hasClass('checkbox-selection-tous-services')) {
+      gestionnaireEvenements.gereSelectionTousServices($elementClique);
+    } else if ($elementClique.hasClass('texte-nombre-service')) {
+      gestionnaireEvenements.gereMenuAction($elementClique);
     } else {
       gestionnaireEvenements.fermeToutMenuFlottant();
     }

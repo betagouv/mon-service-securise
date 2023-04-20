@@ -11,6 +11,11 @@ mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLign
         dd!= textePremiereLigne
         dd!= texteDeuxiemeLigne
 
+mixin actionAvecIcone(sourceImage, texteAction)
+  .action
+    img(src=sourceImage)
+    p!= texteAction 
+
 block append styles
   link(href = '/statique/assets/styles/tableauDeBord.css', rel = 'stylesheet')
 
@@ -42,6 +47,15 @@ block main
         thead
           tr
             th.entete-selection
+              .conteneur-selection-services
+                input.checkbox-selection-tous-services(type='checkbox')
+                .texte-nombre-service 0 sélectionné
+                img.fleche-droite(src='/statique/assets/images/fleche_pointe_droite.svg')
+                .menu-flotant.actions-services.invisible
+                  +actionAvecIcone('/statique/assets/images/icone_ajout_contributeur.svg', 'Inviter contributeur(s)')
+                  hr
+                  +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer')
+                  +actionAvecIcone('/statique/assets/images/icone_supprimer.svg', 'Supprimer')
             th.entete-contributeurs(data-colonne='nombreContributeurs') Contributeur(s)
             th(data-colonne='indiceCyber') Indice Cyber
             th(data-colonne='statutHomologation') Homologation
