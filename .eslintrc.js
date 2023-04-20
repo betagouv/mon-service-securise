@@ -11,8 +11,6 @@ module.exports = {
   ],
   globals: {
     axios: 'readonly',
-    Chart: 'readonly',
-    ChartDataLabels: 'readonly',
     html2canvas: 'readonly',
     jspdf: 'readonly',
     moment: 'readonly',
