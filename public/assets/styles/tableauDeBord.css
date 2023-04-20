@@ -172,11 +172,15 @@ label[for='recherche-service'] {
 
 .tableau-services thead th {
   user-select: none;
-  padding: 1em 1.5em;
+  padding: 0.7em 1.5em;
 }
 
 .tableau-services thead th:not(:first-child):not(:last-child) {
   cursor: pointer;
+}
+
+.tableau-services thead th:first-child {
+  padding: 0;
 }
 
 .tableau-services thead .entete-selection {
@@ -197,6 +201,7 @@ label[for='recherche-service'] {
 .tableau-services thead th[data-direction="2"]::after {
   content: '↓';
 }
+
 
 .tableau-services thead tr th {
   background: #DBECF1;
@@ -222,6 +227,10 @@ label[for='recherche-service'] {
   border-style: solid none none none;
 }
 
+.tableau-services tbody tr.selectionne {
+  background: #EFF6FF;
+}
+
 .tableau-services tbody tr:first-of-type td:first-of-type {
   border-top-left-radius: 8px;
 }
@@ -245,6 +254,7 @@ label[for='recherche-service'] {
 .tableau-services tbody tr td:last-of-type {
   border-right-style: solid;
 }
+
 
 .tableau-services td>div {
   display: inline-block;
@@ -333,14 +343,15 @@ label[for='recherche-service'] {
   border-style: solid none none none;
 }
 
-.tableau-services .menu-flotant a {
+.tableau-services .menu-flotant :is(a, .action) {
   padding: 0.5em;
   border-radius: 4px;
   font-size: 0.9em;
   user-select: none;
+  cursor: pointer;
 }
 
-.tableau-services .menu-flotant a:hover {
+.tableau-services .menu-flotant :is(a, .action):hover {
   background: #F1F5F9;
   color: #0C5C98;
 }
@@ -355,6 +366,7 @@ label[for='recherche-service'] {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #fff;
 }
 
 .tableau-services .action-lien.actif {
@@ -373,4 +385,74 @@ label[for='recherche-service'] {
 .tableau-services .menu-flotant.liens-services {
   top: -1px;
   right: calc(2em + 2px);
+}
+
+.tableau-services .selection-service {
+  cursor: pointer;
+}
+
+.tableau-services .checkbox-selection-tous-services {
+  transform: translateY(0);
+}
+
+.tableau-services .checkbox-selection-tous-services.selection-partielle {
+  background-color: var(--bleu-mise-en-avant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableau-services .checkbox-selection-tous-services.selection-partielle::before {
+  content: '';
+  width: 0.6em;
+  height: 2px;
+  background: white;
+  border-radius: 8px;
+}
+
+.tableau-services .conteneur-selection-services {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tableau-services .texte-nombre-service {
+  cursor: pointer;
+}
+
+.tableau-services .fleche-droite {
+  transform: translateY(1px);
+}
+
+.tableau-services .actions-services {
+  position: absolute;
+  right: 0;
+  top: -1px;
+  transform: translateX(100%);
+  border-top-left-radius: 0;
+}
+
+.tableau-services .action {
+  display: flex;
+  flex-shrink: none;
+  align-items: center;
+  color: #0079D0;
+}
+
+.tableau-services .action p {
+  margin: 0;
+  margin-left: 0.5em;
+}
+
+.tableau-services .conteneur-selection-services {
+  border: 1px solid transparent;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+  padding: 0.5em 1.5em;
+  margin-bottom: 0.2em;
+}
+
+.tableau-services .conteneur-selection-services.actif {
+  background: #F1F5F9;
+  border: 1px solid #08416A;
 }
