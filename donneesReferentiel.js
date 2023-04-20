@@ -684,7 +684,7 @@ module.exports = {
     },
     synthese: {
       description: "Synthèse de l'état de sécurité du service",
-      urlTelechargement: '/service/:idService/syntheseSecurite',
+      urlTelechargement: '/api/service/:idService/pdf/syntheseSecurite.pdf',
     },
     annexes: {
       description: 'Annexes',
