@@ -115,18 +115,6 @@ const nouvelAdaptateur = (env) => {
     }));
   };
 
-  const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour = '') => (
-    knex('homologations')
-      .join('autorisations', knex.raw("(autorisations.donnees->>'idHomologation')::uuid"), 'homologations.id')
-      .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
-      .whereRaw('not homologations.id::text=?', idHomologationMiseAJour)
-      .whereRaw("homologations.donnees#>>'{descriptionService,nomService}'=?", nomService)
-      .select('homologations.*')
-      .first()
-      .then(convertisLigneEnObjet)
-      .catch(() => undefined)
-  );
-
   const serviceAvecNomService = (idUtilisateur, nomService, idServiceMiseAJour = '') => (
     knex('services')
       .join('autorisations', knex.raw("(autorisations.donnees->>'idService')::uuid"), 'services.id')
@@ -138,21 +126,6 @@ const nouvelAdaptateur = (env) => {
       .then(convertisLigneEnObjet)
       .catch(() => undefined)
   );
-
-  const homologations = (idUtilisateur) => {
-    const seulementUnUtilisateur = typeof idUtilisateur !== 'undefined';
-
-    const filtre = seulementUnUtilisateur
-      ? ["(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur]
-      : ["(donnees->>'type') = 'createur'"];
-
-    const idsHomologations = knex('autorisations')
-      .whereRaw(...filtre)
-      .select({ idHomologation: knex.raw("(donnees->>'idHomologation')") })
-      .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
-
-    return avecPMapPourChaqueElement(idsHomologations, homologation);
-  };
 
   const services = (idUtilisateur) => {
     const seulementUnUtilisateur = typeof idUtilisateur !== 'undefined';
@@ -178,6 +151,7 @@ const nouvelAdaptateur = (env) => {
   const supprimeUtilisateur = (...params) => supprimeEnregistrement('utilisateurs', ...params);
 
   const supprimeHomologations = () => knex('homologations').del();
+  const supprimeServices = () => knex('services').del();
 
   const supprimeUtilisateurs = () => knex('utilisateurs').del();
 
@@ -203,12 +177,6 @@ const nouvelAdaptateur = (env) => {
   const autorisations = (idUtilisateur) => knex('autorisations')
     .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
     .then((rows) => rows.map(convertisLigneEnObjet));
-
-  const idsHomologationsCreeesParUtilisateur = (idUtilisateur, idsHomologationsAExclure = []) => knex('autorisations')
-    .whereRaw("donnees->>'idUtilisateur'=? AND donnees->>'type'='createur'", idUtilisateur)
-    .whereNotIn(knex.raw("donnees->>'idHomologation'"), idsHomologationsAExclure)
-    .select({ idHomologation: knex.raw("donnees->>'idHomologation'") })
-    .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
 
   const idsServicesCreesParUtilisateur = (idUtilisateur, idsServicesAExclure = []) => knex('autorisations')
     .whereRaw("donnees->>'idUtilisateur'=? AND donnees->>'type'='createur'", idUtilisateur)
@@ -236,10 +204,6 @@ const nouvelAdaptateur = (env) => {
   const supprimeAutorisationsContribution = (idUtilisateur) => knex('autorisations')
     .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
     .whereRaw("donnees->>'type'='contributeur'")
-    .del();
-
-  const supprimeAutorisationsHomologation = (idHomologation) => knex('autorisations')
-    .whereRaw("donnees->>'idHomologation'=?", idHomologation)
     .del();
 
   const supprimeAutorisationsService = (idService) => knex('autorisations')
@@ -298,9 +262,6 @@ const nouvelAdaptateur = (env) => {
     autorisationPour,
     autorisations,
     homologation,
-    homologationAvecNomService,
-    homologations,
-    idsHomologationsCreeesParUtilisateur,
     idsServicesCreesParUtilisateur,
     metsAJourHomologation,
     metsAJourService,
@@ -312,11 +273,11 @@ const nouvelAdaptateur = (env) => {
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
-    supprimeAutorisationsHomologation,
     supprimeAutorisationsService,
     supprimeHomologation,
-    supprimeService,
     supprimeHomologations,
+    supprimeService,
+    supprimeServices,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tousUtilisateurs,

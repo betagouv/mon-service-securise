@@ -78,22 +78,10 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     return Promise.resolve(serviceTrouve);
   };
 
-  const homologations = (idUtilisateur) => autorisations(idUtilisateur)
-    .then((as) => Promise.all(
-      as.map(({ idHomologation }) => homologation(idHomologation))
-    ));
-
   const services = (idUtilisateur) => autorisations(idUtilisateur)
     .then((as) => Promise.all(
       as.map(({ idService }) => service(idService))
     ));
-
-  const homologationAvecNomService = (idUtilisateur, nomService, idHomologationMiseAJour) => (
-    homologations(idUtilisateur)
-      .then((hs) => hs.find((h) => (
-        h.id !== idHomologationMiseAJour && h.descriptionService?.nomService === nomService
-      )))
-  );
 
   const serviceAvecNomService = (idUtilisateur, nomService, idServiceMiseAJour) => (
     services(idUtilisateur)
@@ -114,6 +102,11 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
   };
 
   const supprimeService = (...params) => supprimeEnregistrement('services', ...params);
+
+  const supprimeServices = () => {
+    donnees.services = [];
+    return Promise.resolve();
+  };
 
   const supprimeUtilisateur = (...params) => supprimeEnregistrement('utilisateurs', ...params);
 
@@ -139,16 +132,6 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
   const autorisation = (id) => Promise.resolve(
     donnees.autorisations.find((a) => a.id === id)
   );
-
-  const idsHomologationsCreeesParUtilisateur = (idUtilisateur, idsHomologationsAExclure = []) => (
-    Promise.resolve(
-      donnees.autorisations
-        .filter((as) => (
-          as.idUtilisateur === idUtilisateur
-          && as.type === 'createur'
-          && !idsHomologationsAExclure.includes(as.idHomologation)))
-        .map((a) => a.idHomologation)
-    ));
 
   const idsServicesCreesParUtilisateur = (idUtilisateur, idsServicesAExclure = []) => (
     Promise.resolve(
@@ -187,12 +170,6 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
   const supprimeAutorisationsContribution = (idUtilisateur) => {
     donnees.autorisations = donnees.autorisations
       .filter((a) => a.idUtilisateur !== idUtilisateur || a.type !== 'contributeur');
-    return Promise.resolve();
-  };
-
-  const supprimeAutorisationsHomologation = (idHomologation) => {
-    donnees.autorisations = donnees.autorisations
-      .filter((a) => a.idHomologation !== idHomologation);
     return Promise.resolve();
   };
 
@@ -254,9 +231,6 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     autorisationPour,
     autorisations,
     homologation,
-    homologationAvecNomService,
-    homologations,
-    idsHomologationsCreeesParUtilisateur,
     idsServicesCreesParUtilisateur,
     metsAJourHomologation,
     metsAJourService,
@@ -268,11 +242,11 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
-    supprimeAutorisationsHomologation,
     supprimeAutorisationsService,
     supprimeHomologation,
     supprimeHomologations,
     supprimeService,
+    supprimeServices,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     transfereAutorisations,
