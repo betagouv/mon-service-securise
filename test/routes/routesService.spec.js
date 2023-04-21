@@ -139,7 +139,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         etapesParcoursHomologation: [{ numero: 1, id: 'decision' }, { numero: 2, id: 'deuxieme' }],
       });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
-      testeur.depotDonnees().homologation = () => Promise.resolve(
+      testeur.depotDonnees().service = () => Promise.resolve(
         new Homologation({ id: '456', descriptionService: { nomService: 'un service' } })
       );
     });
@@ -178,7 +178,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
     it('recharge le service avant de servir la vue', (done) => {
       let chargementsService = 0;
-      testeur.depotDonnees().homologation = () => {
+      testeur.depotDonnees().service = () => {
         try {
           chargementsService += 1;
           return Promise.resolve(new Homologation({ id: '456', descriptionService: { nomService: 'un service' } }));

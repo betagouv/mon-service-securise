@@ -97,7 +97,7 @@ const routesService = (
       reponse.status(404).send('Étape inconnue');
     } else {
       depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id)
-        .then(() => depotDonnees.homologation(homologation.id))
+        .then(() => depotDonnees.service(homologation.id))
         .then((h) => reponse.render(`service/etapeDossier/${idEtape}`, { referentiel, service: h, idEtape }))
         .catch(suite);
     }

@@ -80,7 +80,7 @@ const routesApi = (
   const routes = express.Router();
 
   routes.get('/services', middleware.verificationAcceptationCGU, (requete, reponse) => {
-    depotDonnees.homologations(requete.idUtilisateurCourant)
+    depotDonnees.services(requete.idUtilisateurCourant)
       .then((services) => objetGetServices.donnees(services))
       .then((donnees) => reponse.json(donnees));
   });
@@ -268,7 +268,7 @@ const routesApi = (
       const informeContributeur = (contributeurAInformer, contributeurExistant) => (
         Promise.all([
           depotDonnees.utilisateur(idUtilisateur),
-          depotDonnees.homologation(idHomologation),
+          depotDonnees.service(idHomologation),
         ])
           .then(([emetteur, service]) => (
             contributeurExistant
@@ -286,7 +286,7 @@ const routesApi = (
       verifiePermission(idUtilisateur, idHomologation)
         .then(() => depotDonnees.utilisateurAvecEmail(emailContributeur))
         .then(inviteContributeur)
-        .then((c) => depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation))
+        .then((c) => depotDonnees.ajouteContributeurAService(c.id, idHomologation))
         .then(() => reponse.send(''))
         .catch((e) => {
           if (e instanceof EchecAutorisation) {

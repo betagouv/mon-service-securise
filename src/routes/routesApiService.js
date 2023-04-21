@@ -43,7 +43,7 @@ const routesApiService = (
   ]), (requete, reponse, suite) => {
     Promise.resolve()
       .then(() => new DescriptionService(requete.body, referentiel))
-      .then((description) => depotDonnees.nouvelleHomologation(
+      .then((description) => depotDonnees.nouveauService(
         requete.idUtilisateurCourant,
         { descriptionService: description.toJSON() },
       ))
@@ -62,7 +62,7 @@ const routesApiService = (
   ]), (requete, reponse, suite) => {
     Promise.resolve()
       .then(() => new DescriptionService(requete.body, referentiel))
-      .then((descriptionService) => depotDonnees.ajouteDescriptionServiceAHomologation(
+      .then((descriptionService) => depotDonnees.ajouteDescriptionServiceAService(
         requete.idUtilisateurCourant,
         requete.params.id,
         descriptionService,
@@ -100,7 +100,7 @@ const routesApiService = (
         referentiel,
       );
 
-      depotDonnees.ajouteMesuresAHomologation(idService, generales, specifiques)
+      depotDonnees.ajouteMesuresAService(idService, generales, specifiques)
         .then(() => reponse.send({ idService }))
         .catch(suite);
     } catch {
@@ -117,7 +117,7 @@ const routesApiService = (
     (requete, reponse) => {
       const rolesResponsabilites = new RolesResponsabilites(requete.body);
       const idService = requete.homologation.id;
-      depotDonnees.ajouteRolesResponsabilitesAHomologation(
+      depotDonnees.ajouteRolesResponsabilitesAService(
         idService, rolesResponsabilites
       ).then(() => reponse.send({ idService }));
     });
@@ -146,7 +146,7 @@ const routesApiService = (
       const ajouts = Object.values(donneesRisques)
         .reduce((acc, donnees) => {
           const risque = new RisqueGeneral(donnees, referentiel);
-          return acc.then(() => depotDonnees.ajouteRisqueGeneralAHomologation(idService, risque));
+          return acc.then(() => depotDonnees.ajouteRisqueGeneralAService(idService, risque));
         }, Promise.resolve());
 
       ajouts
@@ -157,7 +157,7 @@ const routesApiService = (
             risquesSpecifiques: aPersister,
           }, referentiel);
 
-          return depotDonnees.remplaceRisquesSpecifiquesPourHomologation(
+          return depotDonnees.remplaceRisquesSpecifiquesPourService(
             idService, listeRisquesSpecifiques,
           );
         })
@@ -171,7 +171,7 @@ const routesApiService = (
   routes.post('/:id/avisExpertCyber', middleware.trouveService, (requete, reponse) => {
     try {
       const avisExpert = new AvisExpertCyber(requete.body, referentiel);
-      depotDonnees.ajouteAvisExpertCyberAHomologation(requete.homologation.id, avisExpert)
+      depotDonnees.ajouteAvisExpertCyberAService(requete.homologation.id, avisExpert)
         .then(() => reponse.send({ idService: requete.homologation.id }));
     } catch {
       reponse.status(422).send('Données invalides');
@@ -327,7 +327,7 @@ const routesApiService = (
     const idService = requete.params.id;
 
     verifiePermissionSuppressionService(idUtilisateurCourant, idService)
-      .then(() => depotDonnees.supprimeHomologation(idService))
+      .then(() => depotDonnees.supprimeService(idService))
       .then(() => reponse.send('Service supprimé'))
       .catch((e) => {
         if (e instanceof EchecAutorisation) {
@@ -351,7 +351,7 @@ const routesApiService = (
     const idService = requete.params.id;
 
     verifiePermissionDuplicationService(idUtilisateurCourant, idService)
-      .then(() => depotDonnees.dupliqueHomologation(idService))
+      .then(() => depotDonnees.dupliqueService(idService))
       .then(() => reponse.send('Service dupliqué'))
       .catch((e) => {
         if (e instanceof EchecAutorisation) {

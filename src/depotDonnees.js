@@ -4,7 +4,6 @@ const fabriqueAdaptateurJournalMSS = require('./adaptateurs/fabriqueAdaptateurJo
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const Referentiel = require('./referentiel');
 const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
-const depotDonneesHomologationsServices = require('./depots/depotDonneesHomologationsServices');
 const depotDonneesServices = require('./depots/depotDonneesServices');
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 
@@ -16,10 +15,6 @@ const creeDepot = (config = {}) => {
     adaptateurUUID = adaptateurUUIDParDefaut,
     referentiel = Referentiel.creeReferentiel(),
   } = config;
-
-  const depotHomologations = depotDonneesHomologationsServices.creeDepot({
-    adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel,
-  });
 
   const depotServices = depotDonneesServices.creeDepot({
     adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel,
@@ -34,24 +29,24 @@ const creeDepot = (config = {}) => {
   });
 
   const {
-    ajouteAvisExpertCyberAHomologation,
-    ajouteDescriptionServiceAHomologation,
+    ajouteAvisExpertCyberAService,
+    ajouteDescriptionServiceAService,
     ajouteDossierCourantSiNecessaire,
-    ajouteMesuresAHomologation,
-    ajouteRisqueGeneralAHomologation,
-    ajouteRolesResponsabilitesAHomologation,
-    dupliqueHomologation,
+    ajouteMesuresAService,
+    ajouteRisqueGeneralAService,
+    ajouteRolesResponsabilitesAService,
+    dupliqueService,
     finaliseDossier,
-    homologation,
-    homologationExiste,
-    homologations,
+    service,
+    serviceExiste,
+    services,
     enregistreDossierCourant,
-    nouvelleHomologation,
-    remplaceRisquesSpecifiquesPourHomologation,
-    supprimeHomologation,
-    supprimeHomologationsCreeesPar,
-    toutesHomologations,
-  } = depotHomologations;
+    nouveauService,
+    remplaceRisquesSpecifiquesPourService,
+    supprimeService,
+    supprimeServicesCreesPar,
+    tousServices,
+  } = depotServices;
 
   const {
     metsAJourMotDePasse,
@@ -69,9 +64,9 @@ const creeDepot = (config = {}) => {
     valideAcceptationCGUPourUtilisateur,
   } = depotUtilisateurs;
 
-  const ajouteContributeurAHomologation = depotAutorisations.ajouteContributeurAService;
   const {
     accesAutorise,
+    ajouteContributeurAService,
     autorisation,
     autorisationExiste,
     autorisationPour,
@@ -82,36 +77,36 @@ const creeDepot = (config = {}) => {
 
   return {
     accesAutorise,
-    ajouteAvisExpertCyberAHomologation,
-    ajouteContributeurAHomologation,
-    ajouteDescriptionServiceAHomologation,
+    ajouteAvisExpertCyberAService,
+    ajouteContributeurAService,
+    ajouteDescriptionServiceAService,
     ajouteDossierCourantSiNecessaire,
-    ajouteMesuresAHomologation,
-    ajouteRisqueGeneralAHomologation,
-    ajouteRolesResponsabilitesAHomologation,
+    ajouteMesuresAService,
+    ajouteRisqueGeneralAService,
+    ajouteRolesResponsabilitesAService,
     autorisation,
     autorisationExiste,
     autorisationPour,
     autorisations,
-    dupliqueHomologation,
-    homologation,
-    homologationExiste,
-    homologations,
+    dupliqueService,
     enregistreDossierCourant,
     finaliseDossier,
     metsAJourMotDePasse,
     metsAJourUtilisateur,
-    nouvelleHomologation,
+    nouveauService,
     nouvelUtilisateur,
     reinitialiseMotDePasse,
-    remplaceRisquesSpecifiquesPourHomologation,
+    remplaceRisquesSpecifiquesPourService,
+    service,
+    serviceExiste,
+    services,
     supprimeContributeur,
-    supprimeHomologation,
-    supprimeHomologationsCreeesPar,
     supprimeIdResetMotDePassePourUtilisateur,
+    supprimeService,
+    supprimeServicesCreesPar,
     supprimeUtilisateur,
+    tousServices,
     tousUtilisateurs,
-    toutesHomologations,
     transfereAutorisations,
     utilisateur,
     utilisateurAFinaliser,

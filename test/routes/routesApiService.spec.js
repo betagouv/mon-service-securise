@@ -19,7 +19,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().nouvelleHomologation = () => Promise.resolve();
+      testeur.depotDonnees().nouveauService = () => Promise.resolve();
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -72,7 +72,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si données insuffisantes pour création service', (done) => {
-      testeur.depotDonnees().nouvelleHomologation = () => Promise.reject(new ErreurDonneesObligatoiresManquantes('oups'));
+      testeur.depotDonnees().nouveauService = () => Promise.reject(new ErreurDonneesObligatoiresManquantes('oups'));
 
       testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
@@ -82,7 +82,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
-      testeur.depotDonnees().nouvelleHomologation = () => Promise.reject(new ErreurNomServiceDejaExistant('oups'));
+      testeur.depotDonnees().nouveauService = () => Promise.reject(new ErreurNomServiceDejaExistant('oups'));
 
       testeur.verifieRequeteGenereErreurHTTP(422, { erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } }, {
         method: 'post',
@@ -97,7 +97,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .construis()
         .toJSON();
 
-      testeur.depotDonnees().nouvelleHomologation = (idUtilisateur, { descriptionService }) => {
+      testeur.depotDonnees().nouveauService = (idUtilisateur, { descriptionService }) => {
         expect(idUtilisateur).to.equal('123');
         expect(descriptionService).to.eql(donneesDescriptionService);
         return Promise.resolve('456');
@@ -115,7 +115,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur `/api/service/:id`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () => Promise.resolve();
+      testeur.depotDonnees().ajouteDescriptionServiceAService = () => Promise.resolve();
     });
 
     it('recherche le service correspondant', (done) => {
@@ -162,7 +162,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('demande au dépôt de données de mettre à jour le service', (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation = (
+      testeur.depotDonnees().ajouteDescriptionServiceAService = (
         (idUtilisateur, idService, infosGenerales) => {
           expect(idUtilisateur).to.equal('123');
           expect(idService).to.equal('456');
@@ -189,7 +189,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si la validation des propriétés obligatoires échoue', (done) => {
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () => Promise.reject(
+      testeur.depotDonnees().ajouteDescriptionServiceAService = () => Promise.reject(
         new ErreurNomServiceDejaExistant('oups')
       );
 
@@ -203,7 +203,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/:id/mesures', () => {
     beforeEach(() => {
-      testeur.depotDonnees().ajouteMesuresAHomologation = () => Promise.resolve();
+      testeur.depotDonnees().ajouteMesuresAService = () => Promise.resolve();
       testeur.referentiel().recharge({
         categoriesMesures: { uneCategorie: 'Une catégorie' },
         mesures: { identifiantMesure: {} },
@@ -236,7 +236,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("demande au dépôt d'associer les mesures au service", (done) => {
       let mesuresAjoutees = false;
 
-      testeur.depotDonnees().ajouteMesuresAHomologation = (
+      testeur.depotDonnees().ajouteMesuresAService = (
         idService,
         [generale],
         specifiques,
@@ -270,7 +270,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('filtre les mesures spécifiques vides', (done) => {
       let mesuresRemplacees = false;
-      testeur.depotDonnees().ajouteMesuresAHomologation = (_id, _generales, specifiques) => {
+      testeur.depotDonnees().ajouteMesuresAService = (_id, _generales, specifiques) => {
         expect(specifiques.nombre()).to.equal(1);
         mesuresRemplacees = true;
         return Promise.resolve();
@@ -287,7 +287,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("filtre les mesures spécifiques qui n'ont pas les propriétés requises", (done) => {
       let mesuresRemplacees = false;
-      testeur.depotDonnees().ajouteMesuresAHomologation = (_id, _generales, specifiques) => {
+      testeur.depotDonnees().ajouteMesuresAService = (_id, _generales, specifiques) => {
         expect(specifiques.nombre()).to.equal(1);
         mesuresRemplacees = true;
         return Promise.resolve();
@@ -318,7 +318,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/:id/rolesResponsabilites`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = () => Promise.resolve();
+      testeur.depotDonnees().ajouteRolesResponsabilitesAService = () => Promise.resolve();
       testeur.depotDonnees().ajouteEntitesExternesAHomologation = () => Promise.resolve();
     });
 
@@ -332,7 +332,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("demande au dépôt d'associer les rôles et responsabilités au service", (done) => {
       let rolesResponsabilitesAjoutees = false;
 
-      testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = (idService, role) => {
+      testeur.depotDonnees().ajouteRolesResponsabilitesAService = (idService, role) => {
         expect(idService).to.equal('456');
         expect(role.autoriteHomologation).to.equal('Jean Dupont');
         rolesResponsabilitesAjoutees = true;
@@ -372,7 +372,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/:id/risques`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = () => Promise.resolve();
+      testeur.depotDonnees().remplaceRisquesSpecifiquesPourService = () => Promise.resolve();
     });
 
     it('recherche le service correspondant', (done) => {
@@ -402,7 +402,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
       let risqueAjoute = false;
 
-      testeur.depotDonnees().ajouteRisqueGeneralAHomologation = (idService, risque) => {
+      testeur.depotDonnees().ajouteRisqueGeneralAService = (idService, risque) => {
         try {
           expect(idService).to.equal('456');
           expect(risque.id).to.equal('unRisque');
@@ -430,7 +430,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("demande au dépôt d'associer les risques spécifiques au service", (done) => {
       let risquesRemplaces = false;
-      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = (
+      testeur.depotDonnees().remplaceRisquesSpecifiquesPourService = (
         idService, risques
       ) => {
         expect(idService).to.equal('456');
@@ -453,7 +453,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.referentiel().recharge({ niveauxGravite: { unNiveau: {} } });
 
       let risquesRemplaces = false;
-      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = (_, risques) => {
+      testeur.depotDonnees().remplaceRisquesSpecifiquesPourService = (_, risques) => {
         expect(risques.nombre()).to.equal(2);
         risquesRemplaces = true;
         return Promise.resolve();
@@ -480,7 +480,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/:id/avisExpertCyber`', () => {
     beforeEach(() => (
-      testeur.depotDonnees().ajouteAvisExpertCyberAHomologation = () => Promise.resolve()
+      testeur.depotDonnees().ajouteAvisExpertCyberAService = () => Promise.resolve()
     ));
 
     it('recherche le service correspondant', (done) => {
@@ -493,7 +493,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("demande au dépôt d'associer l'avis d'expert au service", (done) => {
       let avisAjoute = false;
 
-      testeur.depotDonnees().ajouteAvisExpertCyberAHomologation = (idService, avis) => {
+      testeur.depotDonnees().ajouteAvisExpertCyberAService = (idService, avis) => {
         expect(idService).to.equal('456');
         expect(avis.commentaire).to.equal('Un commentaire');
         avisAjoute = true;
@@ -997,7 +997,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   describe('quand requête DELETE sur `/api/service/:id`', () => {
     beforeEach(() => {
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(new AutorisationCreateur());
-      testeur.depotDonnees().supprimeHomologation = () => Promise.resolve();
+      testeur.depotDonnees().supprimeService = () => Promise.resolve();
     });
 
     it('vérifie que les CGU sont acceptées', (done) => {
@@ -1053,7 +1053,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('demande au dépôt de supprimer le service', (done) => {
       let serviceSupprime = false;
 
-      testeur.depotDonnees().supprimeHomologation = (idService) => {
+      testeur.depotDonnees().supprimeService = (idService) => {
         try {
           expect(idService).to.equal('123');
           serviceSupprime = true;
@@ -1080,7 +1080,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête COPY sur `/api/service/:id`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().dupliqueHomologation = () => Promise.resolve();
+      testeur.depotDonnees().dupliqueService = () => Promise.resolve();
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(new AutorisationCreateur());
     });
 
@@ -1138,7 +1138,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 424 si des données obligatoires ne sont pas renseignées', (done) => {
-      testeur.depotDonnees().dupliqueHomologation = () => Promise.reject(
+      testeur.depotDonnees().dupliqueService = () => Promise.reject(
         new ErreurDonneesObligatoiresManquantes('Certaines données obligatoires ne sont pas renseignées')
       );
 
@@ -1155,7 +1155,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       let serviceDuplique = false;
 
       testeur.middleware().reinitialise({ idUtilisateur: '999' });
-      testeur.depotDonnees().dupliqueHomologation = (idService) => {
+      testeur.depotDonnees().dupliqueService = (idService) => {
         try {
           expect(idService).to.equal('123');
           serviceDuplique = true;

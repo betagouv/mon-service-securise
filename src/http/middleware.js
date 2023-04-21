@@ -86,7 +86,7 @@ const middleware = (configuration = {}) => {
   const trouveService = (requete, reponse, suite) => {
     const idService = requete.params.id;
 
-    verificationAcceptationCGU(requete, reponse, () => depotDonnees.homologation(idService)
+    verificationAcceptationCGU(requete, reponse, () => depotDonnees.service(idService)
       .then((homologation) => {
         const idUtilisateur = requete.idUtilisateurCourant;
 

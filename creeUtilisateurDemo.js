@@ -25,7 +25,7 @@ const creeDonnees = (depotDonnees) => depotDonnees
   .then((u) => (
     depotDonnees.metsAJourMotDePasse(u.id, process.env.MOT_DE_PASSE_UTILISATEUR_DEMO)
   ))
-  .then((u) => depotDonnees.nouvelleHomologation(
+  .then((u) => depotDonnees.nouveauService(
     u.id,
     { descriptionService: descriptionService.toJSON() }
   ));

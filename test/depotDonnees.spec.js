@@ -3,17 +3,17 @@ const expect = require('expect.js');
 const { depotVide } = require('./depots/depotVide');
 
 describe('Le dépôt de données vide', () => {
-  it('ne retourne aucune homologation pour un utilisateur donné', (done) => {
+  it('ne retourne aucun service pour un utilisateur donné', (done) => {
     depotVide()
-      .then((depot) => depot.homologations('456'))
+      .then((depot) => depot.services('456'))
       .then((hs) => expect(hs).to.eql([]))
       .then(() => done())
       .catch(done);
   });
 
-  it('ne retourne rien si on cherche une homologation à partir de son identifiant', (done) => {
+  it('ne retourne rien si on cherche un service à partir de son identifiant', (done) => {
     depotVide()
-      .then((depot) => depot.homologation('123'))
+      .then((depot) => depot.service('123'))
       .then((h) => expect(h).to.be(undefined))
       .then(() => done())
       .catch(done);

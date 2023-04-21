@@ -29,8 +29,8 @@ class ConsoleAdministration {
     };
   }
 
-  dupliqueHomologation(idHomologation) {
-    return this.depotDonnees.dupliqueHomologation(idHomologation);
+  dupliqueHomologation(idService) {
+    return this.depotDonnees.dupliqueService(idService);
   }
 
   transfereAutorisations(idUtilisateurSource, idUtilisateurCible) {
@@ -41,14 +41,14 @@ class ConsoleAdministration {
     return this.depotDonnees.supprimeContributeur(idContributeur, idHomologation);
   }
 
-  supprimeHomologation(idHomologation) {
-    return this.depotDonnees.supprimeHomologation(idHomologation);
+  supprimeHomologation(idService) {
+    return this.depotDonnees.supprimeService(idService);
   }
 
-  supprimeHomologationsDeUtilisateur(idUtilisateur, idsHomologationsAConserver) {
-    return this.depotDonnees.supprimeHomologationsCreeesPar(
+  supprimeHomologationsDeUtilisateur(idUtilisateur, idsServicesAConserver) {
+    return this.depotDonnees.supprimeServicesCreesPar(
       idUtilisateur,
-      idsHomologationsAConserver
+      idsServicesAConserver
     );
   }
 
@@ -59,7 +59,7 @@ class ConsoleAdministration {
   genereTousEvenementsCompletude(persisteEvenements = false) {
     const journal = (persisteEvenements ? this.adaptateurJournalMSS : this.journalConsole);
 
-    const evenements = this.depotDonnees.toutesHomologations()
+    const evenements = this.depotDonnees.tousServices()
       .then((hs) => hs.map((h) => ({ idService: h.id, ...h.completudeMesures() })))
       .then((stats) => stats.map((s) => new EvenementCompletudeServiceModifiee(s).toJSON()));
 
@@ -86,7 +86,7 @@ class ConsoleAdministration {
   async genereTousEvenementsNouvelleHomologation(persisteEvenements = false) {
     const journal = (persisteEvenements ? this.adaptateurJournalMSS : this.journalConsole);
 
-    const toutes = await this.depotDonnees.toutesHomologations();
+    const toutes = await this.depotDonnees.tousServices();
     const dossiersParService = toutes.map((h) => ({
       idService: h.id,
       finalises: h.dossiers.finalises(),

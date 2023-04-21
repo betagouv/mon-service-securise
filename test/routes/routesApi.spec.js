@@ -24,7 +24,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
-      testeur.depotDonnees().homologations = (idUtilisateur) => {
+      testeur.depotDonnees().services = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');
         return Promise.resolve([
           new Service({
@@ -811,13 +811,13 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.depotDonnees().autorisationExiste = () => Promise.resolve(false);
       testeur.depotDonnees().autorisationPour = () => Promise.resolve(autorisation);
       testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateur);
-      testeur.depotDonnees().ajouteContributeurAHomologation = () => Promise.resolve();
+      testeur.depotDonnees().ajouteContributeurAService = () => Promise.resolve();
 
       const utilisateurCourant = { prenomNom: () => '' };
       testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateurCourant);
 
-      const homologation = { nomService: () => '' };
-      testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
+      const service = { nomService: () => '' };
+      testeur.depotDonnees().service = () => Promise.resolve(service);
 
       testeur.adaptateurMail().envoieMessageInvitationContribution = () => Promise.resolve();
     });
@@ -890,8 +890,8 @@ describe('Le serveur MSS des routes /api/*', () => {
         const utilisateurCourant = { prenomNom: () => 'Utilisateur Courant' };
         testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateurCourant);
 
-        const homologation = { id: '123', nomService: () => 'Nom Service' };
-        testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
+        const service = { id: '123', nomService: () => 'Nom Service' };
+        testeur.depotDonnees().service = () => Promise.resolve(service);
       });
 
       describe('avec un email en majuscules', () => {
@@ -1067,7 +1067,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           }
         };
 
-        testeur.depotDonnees().homologation = (id) => {
+        testeur.depotDonnees().service = (id) => {
           try {
             expect(id).to.equal('123');
             return Promise.resolve({ nomService: () => 'Nom Service' });
@@ -1104,7 +1104,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it("demande au dépôt de données d'ajouter l'autorisation", (done) => {
-      testeur.depotDonnees().ajouteContributeurAHomologation = (
+      testeur.depotDonnees().ajouteContributeurAService = (
         (idContributeur, idHomologation) => {
           try {
             expect(utilisateur.id).to.equal('999');
@@ -1129,7 +1129,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si le dépôt a levé une `ErreurModele`', (done) => {
-      testeur.depotDonnees().ajouteContributeurAHomologation = () => {
+      testeur.depotDonnees().ajouteContributeurAService = () => {
         throw new ErreurModele('oups');
       };
 
