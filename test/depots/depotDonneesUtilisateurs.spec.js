@@ -441,8 +441,8 @@ describe('Le dépôt de données des utilisateurs', () => {
     it("lève une exception si l'utilisateur a créé des services", (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [{ idUtilisateur: '999', idService: '123', type: 'createur' }],
       });
       const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
 
@@ -476,10 +476,10 @@ describe('Le dépôt de données des utilisateurs', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'un.autre.utilisateur@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [
-          { idUtilisateur: '999', idHomologation: '123', type: 'contributeur' },
-          { idUtilisateur: '000', idHomologation: '123', type: 'contributeur' },
+          { idUtilisateur: '999', idService: '123', type: 'contributeur' },
+          { idUtilisateur: '000', idService: '123', type: 'contributeur' },
         ],
       });
       const depot = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
