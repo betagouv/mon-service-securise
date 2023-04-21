@@ -5,6 +5,7 @@ const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurP
 const Referentiel = require('./referentiel');
 const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
 const depotDonneesHomologationsServices = require('./depots/depotDonneesHomologationsServices');
+const depotDonneesServices = require('./depots/depotDonneesServices');
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 
 const creeDepot = (config = {}) => {
@@ -20,12 +21,16 @@ const creeDepot = (config = {}) => {
     adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel,
   });
 
+  const depotServices = depotDonneesServices.creeDepot({
+    adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel,
+  });
+
   const depotUtilisateurs = depotDonneesUtilisateurs.creeDepot({
     adaptateurJournalMSS, adaptateurJWT, adaptateurPersistance, adaptateurUUID, depotHomologations,
   });
 
   const depotAutorisations = depotDonneesAutorisations.creeDepot({
-    adaptateurPersistance, adaptateurUUID, depotHomologations, depotUtilisateurs,
+    adaptateurPersistance, adaptateurUUID, depotServices, depotUtilisateurs,
   });
 
   const {
@@ -64,9 +69,9 @@ const creeDepot = (config = {}) => {
     valideAcceptationCGUPourUtilisateur,
   } = depotUtilisateurs;
 
+  const ajouteContributeurAHomologation = depotAutorisations.ajouteContributeurAService;
   const {
     accesAutorise,
-    ajouteContributeurAHomologation,
     autorisation,
     autorisationExiste,
     autorisationPour,

@@ -160,9 +160,9 @@ const nouvelAdaptateur = (donnees = {}, adaptateurHorloge = adaptateurHorlogePar
         .map((a) => a.idService)
     ));
 
-  const autorisationPour = (idUtilisateur, idHomologation) => Promise.resolve(
+  const autorisationPour = (idUtilisateur, idService) => Promise.resolve(
     donnees.autorisations
-      .find((a) => a.idUtilisateur === idUtilisateur && a.idHomologation === idHomologation)
+      .find((a) => a.idUtilisateur === idUtilisateur && a.idService === idService)
   );
 
   const ajouteAutorisation = (id, donneesAutorisation) => {

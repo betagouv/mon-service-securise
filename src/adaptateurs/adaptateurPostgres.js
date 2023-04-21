@@ -191,10 +191,10 @@ const nouvelAdaptateur = (env) => {
 
   const autorisation = (id) => elementDeTable('autorisations', id);
 
-  const autorisationPour = (idUtilisateur, idHomologation) => knex('autorisations')
+  const autorisationPour = (idUtilisateur, idService) => knex('autorisations')
     .whereRaw(
-      "donnees->>'idUtilisateur'=? and donnees->>'idHomologation'=?",
-      [idUtilisateur, idHomologation],
+      "donnees->>'idUtilisateur'=? and donnees->>'idService'=?",
+      [idUtilisateur, idService],
     )
     .first()
     .then(convertisLigneEnObjet)

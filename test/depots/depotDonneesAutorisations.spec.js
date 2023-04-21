@@ -4,12 +4,12 @@ const { depotVide } = require('./depotVide');
 
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesHomologationsServices = require('../../src/depots/depotDonneesHomologationsServices');
+const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
-  ErreurHomologationInexistante,
+  ErreurServiceInexistant,
   ErreurTentativeSuppressionCreateur,
   ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
@@ -18,10 +18,10 @@ const AutorisationContributeur = require('../../src/modeles/autorisations/autori
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 
 describe('Le dépôt de données des autorisations', () => {
-  it("vérifie que l'utilisateur a accès à l'homologation", (done) => {
+  it("vérifie que l'utilisateur a accès au service", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       autorisations: [
-        { idUtilisateur: '456', idHomologation: '123', type: 'createur' },
+        { idUtilisateur: '456', idService: '123', type: 'createur' },
       ],
     });
 
@@ -96,8 +96,8 @@ describe('Le dépôt de données des autorisations', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'autre.utilisateur@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-        autorisations: [{ idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [{ idUtilisateur: '999', idService: '123', type: 'createur' }],
       });
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
@@ -111,7 +111,7 @@ describe('Le dépôt de données des autorisations', () => {
         .then((as) => {
           expect(as.length).to.equal(1);
           expect(as[0]).to.be.an(AutorisationCreateur);
-          expect(as[0].idHomologation).to.equal('123');
+          expect(as[0].idService).to.equal('123');
           done();
         })
         .catch(done);
@@ -123,10 +123,10 @@ describe('Le dépôt de données des autorisations', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'autre.utilisateur@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [
-          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'contributeur' },
-          { id: '789', idUtilisateur: '000', idHomologation: '123', type: 'contributeur' },
+          { id: '456', idUtilisateur: '999', idService: '123', type: 'contributeur' },
+          { id: '789', idUtilisateur: '000', idService: '123', type: 'contributeur' },
         ],
       });
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
@@ -152,10 +152,10 @@ describe('Le dépôt de données des autorisations', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'autre.utilisateur@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [
-          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' },
-          { id: '789', idUtilisateur: '000', idHomologation: '123', type: 'contributeur' },
+          { id: '456', idUtilisateur: '999', idService: '123', type: 'createur' },
+          { id: '789', idUtilisateur: '000', idService: '123', type: 'contributeur' },
         ],
       });
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
@@ -180,8 +180,8 @@ describe('Le dépôt de données des autorisations', () => {
     it("retourne l'autorisation persistée", (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-        autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [{ id: '456', idUtilisateur: '999', idService: '123', type: 'createur' }],
       });
       const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
 
@@ -190,7 +190,7 @@ describe('Le dépôt de données des autorisations', () => {
           expect(a).to.be.an(AutorisationCreateur);
           expect(a.id).to.equal('456');
           expect(a.idUtilisateur).to.equal('999');
-          expect(a.idHomologation).to.equal('123');
+          expect(a.idService).to.equal('123');
           done();
         })
         .catch(done);
@@ -205,7 +205,7 @@ describe('Le dépôt de données des autorisations', () => {
     });
   });
 
-  describe("sur demande d'ajout d'un contributeur à une homologation", () => {
+  describe("sur demande d'ajout d'un contributeur à un service", () => {
     const adaptateurUUID = { genereUUID: () => {} };
 
     it('lève une erreur si le contributeur est inexistant', (done) => {
@@ -213,15 +213,15 @@ describe('Le dépôt de données des autorisations', () => {
         utilisateurs: [
           { id: '999', email: 'jean.dupont@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-        autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        autorisations: [{ id: '456', idUtilisateur: '999', idService: '123', type: 'createur' }],
       });
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance, depotUtilisateurs,
       });
 
-      depot.ajouteContributeurAHomologation('000', '123')
+      depot.ajouteContributeurAService('000', '123')
         .then(() => done("L'ajout aurait du lever une erreur"))
         .catch((erreur) => {
           expect(erreur).to.be.a(ErreurUtilisateurInexistant);
@@ -231,26 +231,26 @@ describe('Le dépôt de données des autorisations', () => {
         .catch(done);
     });
 
-    it("lève une erreur si l'homologation est inexistante", (done) => {
+    it('lève une erreur si le service est inexistant', (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'contributeur@mail.fr' },
         ],
       });
-      const depotHomologations = DepotDonneesHomologationsServices.creeDepot(
+      const depotServices = DepotDonneesServices.creeDepot(
         { adaptateurPersistance }
       );
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance, depotHomologations, depotUtilisateurs,
+        adaptateurPersistance, depotServices, depotUtilisateurs,
       });
 
-      depot.ajouteContributeurAHomologation('000', '123')
+      depot.ajouteContributeurAService('000', '123')
         .then(() => done("L'ajout aurait du lever une erreur"))
         .catch((erreur) => {
-          expect(erreur).to.be.a(ErreurHomologationInexistante);
-          expect(erreur.message).to.equal("L'homologation \"123\" n'existe pas");
+          expect(erreur).to.be.a(ErreurServiceInexistant);
+          expect(erreur.message).to.equal("Le service \"123\" n'existe pas");
           done();
         })
         .catch(done);
@@ -263,17 +263,17 @@ describe('Le dépôt de données des autorisations', () => {
         ],
         homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-        autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+        autorisations: [{ id: '456', idUtilisateur: '999', idService: '123', type: 'createur' }],
       });
-      const depotHomologations = DepotDonneesHomologationsServices.creeDepot(
+      const depotServices = DepotDonneesServices.creeDepot(
         { adaptateurPersistance }
       );
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance, depotHomologations, depotUtilisateurs,
+        adaptateurPersistance, depotServices, depotUtilisateurs,
       });
 
-      depot.ajouteContributeurAHomologation('999', '123')
+      depot.ajouteContributeurAService('999', '123')
         .then(() => done("L'ajout aurait du lever une erreur"))
         .catch((erreur) => {
           expect(erreur).to.be.a(ErreurAutorisationExisteDeja);
@@ -291,22 +291,22 @@ describe('Le dépôt de données des autorisations', () => {
         ],
         homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-        autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+        autorisations: [{ id: '456', idUtilisateur: '999', idService: '123', type: 'createur' }],
       });
       adaptateurUUID.genereUUID = () => '789';
-      const depotHomologations = DepotDonneesHomologationsServices.creeDepot(
+      const depotServices = DepotDonneesServices.creeDepot(
         { adaptateurPersistance }
       );
       const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({ adaptateurPersistance });
       const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance, adaptateurUUID, depotHomologations, depotUtilisateurs,
+        adaptateurPersistance, adaptateurUUID, depotServices, depotUtilisateurs,
       });
 
-      depot.ajouteContributeurAHomologation('000', '123')
+      depot.ajouteContributeurAService('000', '123')
         .then(() => depot.autorisation('789'))
         .then((a) => {
           expect(a).to.be.a(AutorisationContributeur);
-          expect(a.idHomologation).to.equal('123');
+          expect(a.idService).to.equal('123');
           expect(a.idService).to.equal('123');
           expect(a.idUtilisateur).to.equal('000');
           done();
@@ -315,11 +315,11 @@ describe('Le dépôt de données des autorisations', () => {
     });
   });
 
-  it("connaît l'autorisation pour un utilisateur et une homologation donnée", (done) => {
+  it("connaît l'autorisation pour un utilisateur et un service donnée", (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-      homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-      autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+      services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+      autorisations: [{ id: '456', idUtilisateur: '999', idService: '123', type: 'createur' }],
     });
     const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
     depot.autorisationPour('999', '123')
@@ -334,8 +334,8 @@ describe('Le dépôt de données des autorisations', () => {
   it('sait si une autorisation existe', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-      homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
-      autorisations: [{ id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' }],
+      services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+      autorisations: [{ id: '456', idUtilisateur: '999', idService: '123', type: 'createur' }],
     });
     const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
 
@@ -356,9 +356,9 @@ describe('Le dépôt de données des autorisations', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'annie.dubois@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [
-          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+          { id: '456', idUtilisateur: '999', idService: '123', type: 'createur' },
         ],
       });
       const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
@@ -367,20 +367,20 @@ describe('Le dépôt de données des autorisations', () => {
         .then(() => done('La demande de suppression aurait dû lever une erreur'))
         .catch((e) => {
           expect(e).to.be.an(ErreurAutorisationInexistante);
-          expect(e.message).to.equal("L'utilisateur \"000\" n'est pas contributeur de l'homologation \"123\"");
+          expect(e.message).to.equal("L'utilisateur \"000\" n'est pas contributeur du service \"123\"");
           done();
         })
         .catch(done);
     });
 
-    it("vérifie qu'il s'agit bien d'un contributeur et non du créateur de l'homologation", (done) => {
+    it("vérifie qu'il s'agit bien d'un contributeur et non du créateur du service", (done) => {
       const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
           { id: '999', email: 'jean.dupont@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [
-          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+          { id: '456', idUtilisateur: '999', idService: '123', type: 'createur' },
         ],
       });
       const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });
@@ -389,7 +389,7 @@ describe('Le dépôt de données des autorisations', () => {
         .then(() => done('La demande de suppression aurait dû lever une erreur'))
         .catch((e) => {
           expect(e).to.be.an(ErreurTentativeSuppressionCreateur);
-          expect(e.message).to.equal("Suppression impossible : l'utilisateur \"999\" est le propriétaire de l'homologation \"123\"");
+          expect(e.message).to.equal("Suppression impossible : l'utilisateur \"999\" est le propriétaire du service \"123\"");
           done();
         })
         .catch(done);
@@ -401,10 +401,10 @@ describe('Le dépôt de données des autorisations', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'contributeur@mail.fr' },
         ],
-        homologations: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
+        services: [{ id: '123', descriptionService: { nomService: 'Un service' } }],
         autorisations: [
-          { id: '456', idUtilisateur: '999', idHomologation: '123', type: 'createur' },
-          { id: '789', idUtilisateur: '000', idHomologation: '123', type: 'contributeur' },
+          { id: '456', idUtilisateur: '999', idService: '123', type: 'createur' },
+          { id: '789', idUtilisateur: '000', idService: '123', type: 'contributeur' },
         ],
       });
       const depot = DepotDonneesAutorisations.creeDepot({ adaptateurPersistance });

@@ -3,7 +3,7 @@ const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateur
 const {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
-  ErreurHomologationInexistante,
+  ErreurServiceInexistant,
   ErreurTentativeSuppressionCreateur,
   ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
@@ -15,15 +15,15 @@ const creeDepot = (config = {}) => {
   const {
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = adaptateurUUIDParDefaut,
-    depotHomologations,
+    depotServices,
     depotUtilisateurs,
   } = config;
 
   const autorisations = (idUtilisateur) => adaptateurPersistance.autorisations(idUtilisateur)
     .then((as) => as.map((a) => FabriqueAutorisation.fabrique(a)));
 
-  const accesAutorise = (idUtilisateur, idHomologation) => autorisations(idUtilisateur)
-    .then((as) => as.some((a) => a.idHomologation === idHomologation));
+  const accesAutorise = (idUtilisateur, idService) => autorisations(idUtilisateur)
+    .then((as) => as.some((a) => a.idService === idService));
 
   const autorisation = (id) => adaptateurPersistance.autorisation(id)
     .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
@@ -34,15 +34,15 @@ const creeDepot = (config = {}) => {
   const autorisationExiste = (...params) => autorisationPour(...params)
     .then((a) => !!a);
 
-  const ajouteContributeurAHomologation = (idContributeur, idHomologation) => {
+  const ajouteContributeurAService = (idContributeur, idService) => {
     const verifieUtilisateurExiste = (id) => depotUtilisateurs.utilisateurExiste(id)
       .then((existe) => {
         if (!existe) throw new ErreurUtilisateurInexistant(`Le contributeur "${id}" n'existe pas`);
       });
 
-    const verifieHomologationExiste = (id) => depotHomologations.homologation(idHomologation)
+    const verifieServiceExiste = (id) => depotServices.service(idService)
       .then((h) => {
-        if (!h) throw new ErreurHomologationInexistante(`L'homologation "${id}" n'existe pas`);
+        if (!h) throw new ErreurServiceInexistant(`Le service "${id}" n'existe pas`);
       });
 
     const verifieAutorisationInexistante = (...params) => autorisationExiste(...params)
@@ -53,31 +53,31 @@ const creeDepot = (config = {}) => {
     const idAutorisation = adaptateurUUID.genereUUID();
 
     return verifieUtilisateurExiste(idContributeur)
-      .then(() => verifieHomologationExiste(idHomologation))
-      .then(() => verifieAutorisationInexistante(idContributeur, idHomologation))
+      .then(() => verifieServiceExiste(idService))
+      .then(() => verifieAutorisationInexistante(idContributeur, idService))
       .then(() => adaptateurPersistance.ajouteAutorisation(idAutorisation, {
-        idUtilisateur: idContributeur, idHomologation, idService: idHomologation, type: 'contributeur',
+        idUtilisateur: idContributeur, idHomologation: idService, idService, type: 'contributeur',
       }));
   };
 
   const supprimeContributeur = (...params) => {
-    const verifieAutorisationExiste = (idContributeur, idHomologation) => (
-      autorisationExiste(idContributeur, idHomologation)
+    const verifieAutorisationExiste = (idContributeur, idService) => (
+      autorisationExiste(idContributeur, idService)
         .then((existe) => {
           if (!existe) {
             throw new ErreurAutorisationInexistante(
-              `L'utilisateur "${idContributeur}" n'est pas contributeur de l'homologation "${idHomologation}"`
+              `L'utilisateur "${idContributeur}" n'est pas contributeur du service "${idService}"`
             );
           }
         })
     );
 
-    const verifieSuppressionPermise = (idContributeur, idHomologation) => (
-      autorisationPour(idContributeur, idHomologation)
+    const verifieSuppressionPermise = (idContributeur, idService) => (
+      autorisationPour(idContributeur, idService)
         .then((a) => {
           if (a.constructor.name === AutorisationCreateur.name) {
             throw new ErreurTentativeSuppressionCreateur(
-              `Suppression impossible : l'utilisateur "${idContributeur}" est le propriétaire de l'homologation "${idHomologation}"`
+              `Suppression impossible : l'utilisateur "${idContributeur}" est le propriétaire du service "${idService}"`
             );
           }
         })
@@ -109,7 +109,7 @@ const creeDepot = (config = {}) => {
 
   return {
     accesAutorise,
-    ajouteContributeurAHomologation,
+    ajouteContributeurAService,
     autorisation,
     autorisationExiste,
     autorisationPour,

@@ -28,7 +28,6 @@ class ErreurDossierNonFinalisable extends ErreurModele {
 class ErreurDossiersInvalides extends ErreurModele {}
 class ErreurDureeValiditeInvalide extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
-class ErreurHomologationInexistante extends ErreurModele {}
 class ErreurIdentifiantActionSaisieInvalide extends ErreurModele {}
 class ErreurIdentifiantActionSaisieManquant extends ErreurModele {}
 class ErreurLocalisationDonneesInvalide extends ErreurModele {}
@@ -73,7 +72,6 @@ module.exports = {
   ErreurDossiersInvalides,
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
-  ErreurHomologationInexistante,
   ErreurServiceInexistant,
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,
