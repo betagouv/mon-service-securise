@@ -64,10 +64,10 @@ const tableauDesServices = {
     donnees.forEach((service) => {
       const $ligne = $('<tr></tr>');
       const $celluleNoms = $("<td class='cellule-noms'></td>");
-      const $nomService = $(`<div class='conteneur-noms'>
+      const $nomService = $(`<a class='conteneur-noms' href='/service/${service.id}'>
                               <div class='nom-service'>${service.nomService}</div>
                               <div class='nom-organisation'>${service.organisationsResponsables[0]}</div>
-                            </div>`);
+                            </a>`);
       $celluleNoms.append($nomService);
       $ligne.append($celluleNoms);
       $ligne.append($(`<td><div class='contributeurs' title='${metEnFormeContributeurs(service)}'>${service.nombreContributeurs}</div></td>`));
