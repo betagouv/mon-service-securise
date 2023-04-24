@@ -345,7 +345,7 @@ label[for='recherche-service'] {
   color: #0C5C98;
 }
 
-.tableau-services .action-menu-flotant {
+.tableau-services .action-lien {
   cursor: pointer;
   position: relative;
   width: 2em;
@@ -357,16 +357,16 @@ label[for='recherche-service'] {
   justify-content: center;
 }
 
-.tableau-services .action-menu-flotant.actif {
+.tableau-services .action-lien.actif {
   background: #F1F5F9;
   border-color: #08416A;
 }
 
-.tableau-services .action-menu-flotant img {
+.tableau-services .action-lien img {
   pointer-events: none;
 }
 
-.tableau-services .action-menu-flotant.actif img {
+.tableau-services .action-liens-services.actif img {
   content: url('/statique/assets/images/points_horizontal_bleu_fonce.svg');
 }
 
