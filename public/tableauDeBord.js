@@ -73,6 +73,11 @@ const tableauDesServices = {
       $ligne.append($(`<td><div class='contributeurs' title='${metEnFormeContributeurs(service)}'>${service.nombreContributeurs}</div></td>`));
       $ligne.append($(`<td>${parseFloat(service.indiceCyber) === 0 ? '-' : service.indiceCyber}</td>`));
       $ligne.append($(`<td><div class='statut-homologation statut-${service.statutHomologation}'>${STATUS_HOMOLOGATION[service.statutHomologation]}</div></td>`));
+
+      // Le menu flotant et son bouton sont mis de coté en attendant
+      // que les maquettes Figma prennent en compte l'accés à la synthèse
+
+      // eslint-disable-next-line no-unused-vars
       const $menuFlotant = $(`<div class='menu-flotant liens-services invisible' data-id-service='${service.id}'>
                                 <a href='/service/${service.id}/descriptionService'>Décrire</a>
                                 <a href='/service/${service.id}/mesures'>Sécuriser</a>
@@ -81,10 +86,12 @@ const tableauDesServices = {
                                 <a href='/service/${service.id}/risques'>Risques</a>
                                 <a href='/service/${service.id}/rolesResponsabilites'>Contacts utiles</a>
                               </div>`);
-      const $boutonMenuFlotant = $(`<div class='action-menu-flotant' data-id-service='${service.id}'><img src='/statique/assets/images/points_horizontal_bleu.svg'></div>`);
+      // eslint-disable-next-line no-unused-vars
+      const $boutonMenuFlotant = $(`<div class='action-lien action-liens-services' data-id-service='${service.id}'><img src='/statique/assets/images/points_horizontal_bleu.svg'></div>`);
+
+      const $boutonLienSynthese = $(`<a class='action-lien action-lien-synthese' href='/service/${service.id}'><img src='/statique/assets/images/forme_chevron_bleu.svg'></a>`);
       const $celluleActions = $("<td class='cellule-actions'></td>");
-      $boutonMenuFlotant.append($menuFlotant);
-      $celluleActions.append($boutonMenuFlotant);
+      $celluleActions.append($boutonLienSynthese);
       $ligne.append($celluleActions);
 
       tableauDesServices.$tableau.append($ligne);
