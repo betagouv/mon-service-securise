@@ -25,7 +25,6 @@ $(() => {
   const enModeEdition = !!nom && !!departement;
 
   const $champSelectize = $('#nomEntitePublique-selectize').selectize({
-    plugins: ['aucun_resultat'],
     options: enModeEdition ? [uneSuggestion(departement, nom)] : [],
     items: enModeEdition ? [`${nom} (${departement})`] : [],
     valueField: 'label',
