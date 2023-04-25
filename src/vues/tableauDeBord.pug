@@ -11,8 +11,8 @@ mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLign
         dd!= textePremiereLigne
         dd!= texteDeuxiemeLigne
 
-mixin actionAvecIcone(sourceImage, texteAction)
-  .action
+mixin actionAvecIcone(sourceImage, texteAction, action)
+  .action(data-action=action)
     img(src=sourceImage)
     p!= texteAction 
 
@@ -52,14 +52,39 @@ block main
                 .texte-nombre-service 0 sélectionné
                 img.fleche-droite(src='/statique/assets/images/fleche_pointe_droite.svg')
                 .menu-flotant.actions-services.invisible
-                  +actionAvecIcone('/statique/assets/images/icone_ajout_contributeur.svg', 'Inviter contributeur(s)')
-                  hr
-                  +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer')
-                  +actionAvecIcone('/statique/assets/images/icone_supprimer.svg', 'Supprimer')
+                  +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer', 'duplication')
             th.entete-contributeurs(data-colonne='nombreContributeurs') Contributeur(s)
             th(data-colonne='indiceCyber') Indice Cyber
             th(data-colonne='statutHomologation') Homologation
             th 
         tbody.contenu-tableau-services
+    .tirroir
+      .entete-tirroir
+        img.image-entete(src='/statique/assets/images/fond_entete_tirroir.svg')
+        .par-dessus
+          .fermeture-tirroir.croix-fermeture ✕
+          h3.titre-tirroir
+          p.texte-tirroir
+      .contenu-tirroir
+        .bloc-contenu#contenu-invitation Mon invitation
+        .bloc-contenu#contenu-duplication
+          p Saisir le nombre de copies souhaitées.
+          label Nombre de copies
+            br
+            input(
+              id = 'nombre-copie',
+              name = 'nombre-copie',
+              type = 'number',
+              value = 1,
+              min = 1,
+              max = 100,
+              placeholder = 'ex : 2',
+              required,
+            )
+            .message-erreur Veuillez utiliser une valeur entre 1 et 100.
+          .conteneur-actions
+            button.bouton.bouton-secondaire.fermeture-tirroir Annuler
+            button.bouton#action-duplication Valider
+        .bloc-contenu#contenu-suppression Ma suppression
 
   script(type = 'module', src = '/statique/tableauDeBord.js')

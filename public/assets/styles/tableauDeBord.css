@@ -274,6 +274,7 @@ label[for='recherche-service'] {
 
 .tableau-services td .nom-service {
   color: #2F3A43;
+  font-weight: 500;
 }
 
 .tableau-services td .nom-organisation {
@@ -439,6 +440,10 @@ label[for='recherche-service'] {
   color: #0079D0;
 }
 
+.tableau-services .action :is(img, p) {
+  pointer-events: none;
+}
+
 .tableau-services .action p {
   margin: 0;
   margin-left: 0.5em;
@@ -455,4 +460,103 @@ label[for='recherche-service'] {
 .tableau-services .conteneur-selection-services.actif {
   background: #F1F5F9;
   border: 1px solid #08416A;
+}
+
+.suivi-services {
+  position: relative;
+  height: 100%;
+}
+
+.suivi-services .tirroir {
+  background: #fff;
+  height: calc(100% + 5em);
+  position: absolute;
+  left: 100vw;
+  top: 0;
+  width: 32em;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: -10px 0px 34px 0px #00000026;
+}
+
+.suivi-services .tirroir.ouvert {
+  transform: translateX(-100%);
+}
+
+.suivi-services .entete-tirroir {
+  position: relative;
+  background: #DBECF1;
+  text-align: left;
+  padding: 0 2em;
+}
+
+.entete-tirroir .image-entete {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.entete-tirroir .par-dessus {
+  position: relative;
+}
+
+.suivi-services .titre-tirroir {
+  font-size: 1.6em;
+  margin: 0;
+  padding-top: 30px;
+}
+
+.suivi-services .texte-tirroir {
+  margin: 0;
+  padding-top: 0.8em;
+  font-weight: 500;
+  padding-bottom: 30px;
+}
+
+.suivi-services .croix-fermeture {
+  position: absolute;
+  top: 20px;
+  right: 2em;
+  font-weight: bold;
+  background: #fff;
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.suivi-services .contenu-tirroir {
+  text-align: left;
+  padding: 0 2em;
+}
+
+.contenu-tirroir .bouton {
+  padding: 0.5em 1em;
+  margin: 0;
+}
+
+#contenu-duplication p {
+  font-weight: 500;
+  margin-bottom: 2em;
+}
+
+#contenu-duplication label {
+  font-weight: bold;
+}
+
+#contenu-duplication input {
+  padding: 0.7em 1em;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  margin-top: 1em;
+  width: 6em;
+}
+
+#contenu-duplication .conteneur-actions {
+  padding-top: 3em;
+  display: flex;
+  justify-content: end;
+  gap: 1em;
 }
