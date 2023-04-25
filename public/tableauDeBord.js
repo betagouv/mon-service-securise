@@ -105,7 +105,7 @@ const tableauDesServices = {
 const remplisCartesInformations = (resume) => {
   $('#nombre-services').text(resume.nombreServices);
   $('#nombre-services-homologues').text(resume.nombreServicesHomologues);
-  $('#indice-cyber-moyen').text(resume.indiceCyberMoyen.toFixed(1));
+  $('#indice-cyber-moyen').text(resume.indiceCyberMoyen?.toFixed(1) ?? '-');
 };
 
 const gestionnaireEvenements = {
