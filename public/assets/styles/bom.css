@@ -43,6 +43,21 @@
   border-radius: 1em;
   width: 316px;
   position: relative;
+  background-clip: padding-box;
+  border: solid 1px transparent;
+}
+
+.bom .bom-modale::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -1px;
+  border-radius: inherit;
+  background: linear-gradient(#513AC8, #8C26C7);
 }
 
 .bom .bom-modale .fermeture {
@@ -70,7 +85,7 @@
   justify-content: flex-end;
   height: 100px;
   padding-left: 6em;
-  border-radius: 1em 1em 0 0;
+  border-radius: 0.8em 0.8em 0 0;
   color: #fff;
   text-align: left;
   background-image: url(../images/entete_fenetre_bom.svg);
