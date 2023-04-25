@@ -28,8 +28,7 @@ block formulaire
     p.requis Titre et informations utiles
     .ajout-documents
       input#champ-titre-document(type='text', placeholder='ex : Analyse Ebios juin 2022')
-      .button#ajout-document
-        img(src='/statique/assets/images/fleche_pointe_bas.svg')
+      button.bouton.bouton-secondaire#ajout-document(type='button') Ajouter
     div
       input(id='au-moins-un-document', class='invisible', type='text', required, value=documents.documents.length > 0 ? 'OK' : '')
       .message-erreur Ce champ est obligatoire. Veuillez le renseigner. 
