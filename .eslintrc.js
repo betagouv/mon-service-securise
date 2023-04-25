@@ -31,7 +31,7 @@ module.exports = {
     'mocha/no-exclusive-tests': 'error',
     'no-param-reassign': ['error', { props: false }],
     'no-return-assign': ['error', 'except-parens'],
-    'no-underscore-dangle': ['error', { allow: ['_paq'] }],
+    'no-underscore-dangle': ['error', { allow: ['_paq', '_mtm'] }],
     'no-unused-vars': ['error', {
       args: 'all',
       argsIgnorePattern: '^_',
