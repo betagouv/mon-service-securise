@@ -6,6 +6,7 @@ const STATUS_HOMOLOGATION = {
   aCompleter: 'À finaliser',
   completes: 'Réalisée',
 };
+const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
 
 const metEnFormeContributeurs = (service) => [service.createur.prenomNom, ...service.contributeurs.map((c) => c.prenomNom)].join('\n');
 
@@ -122,8 +123,41 @@ const remplisCartesInformations = (resume) => {
   $('#indice-cyber-moyen').text(resume.indiceCyberMoyen?.toFixed(1) ?? '-');
 };
 
+const gestionnaireTirroir = {
+  contenuTexte: {
+    duplication: {
+      titre: 'Dupliquer',
+      texte: 'Copier autant de fois que nécessaire les services sélectionnés. Toutes les données saisies apparaîtront dans les nouveaux services créés, hormis celles de la rubrique Homologuer.',
+      initialise: () => {
+        $('#nombre-copie').val(1);
+      },
+    },
+  },
+  afficheContenuAction: (identifiantAction) => {
+    const { titre, texte, initialise } = gestionnaireTirroir.contenuTexte[identifiantAction];
+    $('.titre-tirroir').text(titre);
+    $('.texte-tirroir').text(texte);
+    $('.bloc-contenu').hide();
+    $(`#contenu-${identifiantAction}`).show();
+    initialise();
+    gestionnaireTirroir.basculeOuvert(true);
+  },
+  basculeOuvert: (statut) => {
+    if (statut) {
+      $('.tirroir').addClass('ouvert');
+    } else {
+      $('.tirroir').removeClass('ouvert');
+    }
+  },
+};
+
 const gestionnaireEvenements = {
+  gereAction: ($action) => {
+    gestionnaireTirroir.afficheContenuAction($action.data('action'));
+    gestionnaireEvenements.fermeToutMenuFlottant();
+  },
   gereMenuAction: ($bouton) => {
+    if (tableauDesServices.servicesSelectionnes.size === 0) return;
     const doitOuvrirMenu = !$bouton.parents('.conteneur-selection-services').hasClass('actif');
     gestionnaireEvenements.fermeToutMenuFlottant();
     if (doitOuvrirMenu) {
@@ -163,6 +197,7 @@ const gestionnaireEvenements = {
       $checkboxTousServices.prop('checked', false);
       $('.texte-nombre-service').text(`${nbServiceSelectionnes} sélectionné${nbServiceSelectionnes > 1 ? 's' : ''}`);
     }
+    gestionnaireTirroir.basculeOuvert(false);
   },
   gereSelectionTousServices: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
@@ -174,6 +209,7 @@ const gestionnaireEvenements = {
       $checkboxService.prop('checked', selectionne);
     });
     $('.texte-nombre-service').text(selectionne ? 'Tous sélectionnés' : '0 sélectionné');
+    gestionnaireTirroir.basculeOuvert(false);
   },
   fermeToutMenuFlottant: () => {
     $('.action-lien').removeClass('actif');
@@ -182,13 +218,11 @@ const gestionnaireEvenements = {
   },
 };
 
-$(() => {
-  const afficheBandeauMajProfil = () => {
-    $('.bandeau-maj-profil').removeClass('invisible');
-  };
+const afficheBandeauMajProfil = () => {
+  $('.bandeau-maj-profil').removeClass('invisible');
+};
 
-  brancheModale('#nouveau-service', '#modale-nouveau-service');
-
+const recupereServices = () => {
   axios.get('/api/utilisateurCourant')
     .then(({ data }) => data.utilisateur)
     .then((utilisateur) => {
@@ -202,6 +236,37 @@ $(() => {
 
       if (!utilisateur.profilEstComplet) afficheBandeauMajProfil();
     });
+};
+
+const gestionnaireActions = {
+  brancheComportements: () => {
+    $('#action-duplication').on('click', () => {
+      const $nombreCopie = $('#nombre-copie');
+      if ($nombreCopie.is(':valid')) {
+        $nombreCopie.prop('disabled', true);
+        $('#action-duplication').prop('disabled', true);
+
+        const nombreCopies = parseInt($nombreCopie.val(), 10) || 1;
+        const promesses = [...tableauDesServices.servicesSelectionnes].map((idService) => (
+          tableauDeLongueur(nombreCopies).reduce((acc) => acc.then(
+            () => axios({ method: 'copy', url: `/api/service/${idService}` })
+          ), Promise.resolve())
+        ));
+        Promise.all(promesses).then(() => {
+          $nombreCopie.prop('disabled', false);
+          $('#action-duplication').prop('disabled', false);
+          gestionnaireTirroir.basculeOuvert(false);
+          recupereServices();
+        });
+      }
+    });
+  },
+};
+
+$(() => {
+  brancheModale('#nouveau-service', '#modale-nouveau-service');
+
+  recupereServices();
 
   $('#recherche-service').on('input', (e) => {
     tableauDesServices.modifieRecherche($(e.target).val());
@@ -222,8 +287,16 @@ $(() => {
       gestionnaireEvenements.gereSelectionTousServices($elementClique);
     } else if ($elementClique.hasClass('texte-nombre-service')) {
       gestionnaireEvenements.gereMenuAction($elementClique);
+    } else if ($elementClique.hasClass('action')) {
+      gestionnaireEvenements.gereAction($elementClique);
     } else {
       gestionnaireEvenements.fermeToutMenuFlottant();
     }
   });
+
+  $('.tirroir .fermeture-tirroir').on('click', () => {
+    gestionnaireTirroir.basculeOuvert(false);
+  });
+
+  gestionnaireActions.brancheComportements();
 });
