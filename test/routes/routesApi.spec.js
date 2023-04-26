@@ -121,6 +121,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           'delegueProtectionDonnees',
           'nomEntitePublique',
           'departementEntitePublique',
+          'infolettreAcceptee',
         ],
         { method: 'post', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
         done
@@ -610,6 +611,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           'delegueProtectionDonnees',
           'nomEntitePublique',
           'departementEntitePublique',
+          'infolettreAcceptee',
         ],
         { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
         done
