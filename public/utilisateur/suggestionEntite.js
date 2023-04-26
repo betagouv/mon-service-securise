@@ -25,6 +25,7 @@ $(() => {
   const enModeEdition = !!nom && !!departement;
 
   const $champSelectize = $('#nomEntitePublique-selectize').selectize({
+    plugins: ['clear_button'],
     options: enModeEdition ? [uneSuggestion(departement, nom)] : [],
     items: enModeEdition ? [`${nom} (${departement})`] : [],
     valueField: 'label',
@@ -59,7 +60,7 @@ $(() => {
 
   const departements = JSON.parse($('#donnees-departements').text());
   $('#departementEntitePublique-selectize').selectize({
-    plugins: ['aucun_resultat'],
+    plugins: ['aucun_resultat', 'clear_button'],
     options: departements.map((d) => ({ ...d, label: `${d.nom} (${d.code})` })),
     items: enModeEdition ? [departement] : [],
     valueField: 'code',

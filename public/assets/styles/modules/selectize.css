@@ -146,3 +146,26 @@
 .selectize-dropdown .option-ajout.active {
   color: #0079D0;
 }
+
+.selectize-control.plugin-clear_button .clear {
+  visibility: hidden;
+  font-size: 1em;
+  opacity: 1;
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.selectize-control.plugin-clear_button.single .clear {
+  right: 0;
+}
+
+.selectize-control.plugin-clear_button .clear::before {
+  content: '';
+  width: 1.4em;
+  height: 1.4em;
+  background-image: url('/statique/assets/images/icone_supprimer_gris.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: translateY(3px);
+  visibility: visible;
+}
