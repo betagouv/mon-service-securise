@@ -74,6 +74,7 @@ const routesApi = (
     poste: corps.poste,
     nomEntitePublique: corps.nomEntitePublique,
     departementEntitePublique: corps.departementEntitePublique,
+    infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
   });
 
   const messageErreurDonneesUtilisateur = (donneesRequete, utilisateurExistant = false) => {
