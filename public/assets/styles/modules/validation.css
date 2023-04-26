@@ -59,7 +59,7 @@ form.champ-unique .requis::before {
 }
 
 .requis[data-nom='cguAcceptees'] {
-  margin-bottom: 2em;
+  margin: 2em 0;
 }
 
 :is(input, select, textarea):not(.intouche):valid {

@@ -135,3 +135,11 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           value != donnees.poste,
           placeholder = "ex : Cheffe/Chef de projet maîtrise d'ouvrage"
         )
+
+      input(
+        id = 'infolettreAcceptee',
+        name = 'infolettreAcceptee',
+        checked = donnees.infolettreAcceptee,
+        type = 'checkbox'
+      )
+      label.label-checkbox(for = 'infolettreAcceptee') J'accepte de recevoir la lettre d'information MonServiceSécurisé.
