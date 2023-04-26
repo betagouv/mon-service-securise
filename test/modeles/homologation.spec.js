@@ -68,6 +68,7 @@ describe('Une homologation', () => {
         nomEntitePublique: '',
         departementEntitePublique: '',
         profilEstComplet: true,
+        infolettreAcceptee: false,
       },
       contributeurs: [{
         id: '999',
@@ -81,6 +82,7 @@ describe('Une homologation', () => {
         nomEntitePublique: '',
         departementEntitePublique: '',
         profilEstComplet: true,
+        infolettreAcceptee: false,
       }],
     });
   });

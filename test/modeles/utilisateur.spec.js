@@ -59,6 +59,7 @@ describe('Un utilisateur', () => {
       delegueProtectionDonnees: false,
       nomEntitePublique: 'Ville de Paris',
       departementEntitePublique: '75',
+      infolettreAcceptee: true,
     });
 
     expect(utilisateur.toJSON()).to.eql({
@@ -73,6 +74,7 @@ describe('Un utilisateur', () => {
       nomEntitePublique: 'Ville de Paris',
       departementEntitePublique: '75',
       profilEstComplet: true,
+      infolettreAcceptee: true,
     });
   });
 
@@ -106,6 +108,14 @@ describe('Un utilisateur', () => {
     expect(autreUtilisateur.accepteCGU()).to.be(false);
   });
 
+  it("sait détecter si l'infolettre a été acceptée", () => {
+    const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr', infolettreAcceptee: true });
+    expect(utilisateur.accepteInfolettre()).to.be(true);
+
+    const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
+    expect(autreUtilisateur.accepteInfolettre()).to.be(false);
+  });
+
   it("exige que l'adresse électronique soit renseignée", (done) => {
     try {
       new Utilisateur({ prenom: 'Jean', nom: 'Dupont' });
@@ -136,6 +146,7 @@ describe('Un utilisateur', () => {
       'delegueProtectionDonnees',
       'nomEntitePublique',
       'departementEntitePublique',
+      'infolettreAcceptee',
     ];
     expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
   });
@@ -168,6 +179,7 @@ describe('Un utilisateur', () => {
         delegueProtectionDonnees: false,
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
+        infolettreAcceptee: true,
       };
     });
 
@@ -211,6 +223,10 @@ describe('Un utilisateur', () => {
 
     it("exige que l'information de délégué à la protection des données soit renseignée", (done) => {
       verifiePresencePropriete('delegueProtectionDonnees', 'délégué à la protection des données', done);
+    });
+
+    it("exige que l'information d'acceptation de l'infolettre soit renseignée", (done) => {
+      verifiePresencePropriete('infolettreAcceptee', 'infolettre acceptée', done);
     });
 
     it('exige un département présent dans le référentiel', (done) => {

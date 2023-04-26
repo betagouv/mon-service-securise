@@ -24,6 +24,7 @@ class Utilisateur extends Base {
         'delegueProtectionDonnees',
         'nomEntitePublique',
         'departementEntitePublique',
+        'infolettreAcceptee',
       ],
     });
     valide(donnees);
@@ -66,7 +67,7 @@ class Utilisateur extends Base {
       validePresenceProprietes(['email']);
     }
     validePresenceProprietes(['prenom', 'nom', 'nomEntitePublique', 'departementEntitePublique']);
-    validePresenceProprietesBooleenes(['rssi', 'delegueProtectionDonnees']);
+    validePresenceProprietesBooleenes(['rssi', 'delegueProtectionDonnees', 'infolettreAcceptee']);
     valideDepartement(donnees.departementEntitePublique, referentiel);
   }
 
@@ -82,11 +83,16 @@ class Utilisateur extends Base {
       'delegueProtectionDonnees',
       'nomEntitePublique',
       'departementEntitePublique',
+      'infolettreAcceptee',
     ];
   }
 
   accepteCGU() {
     return !!this.cguAcceptees;
+  }
+
+  accepteInfolettre() {
+    return !!this.infolettreAcceptee;
   }
 
   estRSSI() {
@@ -130,6 +136,7 @@ class Utilisateur extends Base {
       nomEntitePublique: this.nomEntitePublique || '',
       departementEntitePublique: this.departementEntitePublique || '',
       profilEstComplet: this.profilEstComplet(),
+      infolettreAcceptee: this.accepteInfolettre(),
     };
   }
 }
