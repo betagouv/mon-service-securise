@@ -33,11 +33,13 @@ $(() => {
     loadingClass: 'chargement-en-cours',
     maxItems: 1,
     normalize: true,
+    create: (input) => ({ nom: input, label: input }),
     render: {
       item: (item, escape) => `<div class="item" data-nom="${item.nom}" data-departement="${item.departement}">
                                     ${escape(item.label)}
                                </div>`,
       option: (option, escape) => `<div class="option">${escape(option.label)}</div>`,
+      option_create: () => '<div class="create option-ajout">Ajouter mon organisation</div>',
     },
     load: (recherche, callback) => {
       $champSelectize[0].selectize.clearOptions();
@@ -45,11 +47,9 @@ $(() => {
     },
     onItemAdd: (_value, $item) => {
       $('#nomEntitePublique').val($item.data('nom'));
-      $('#departementEntitePublique').val($item.data('departement'));
     },
     onItemRemove: () => {
       $('#nomEntitePublique').val('');
-      $('#departementEntitePublique').val('');
     },
     score: () => {
       const aucunFiltrage = () => 1;
@@ -71,13 +71,7 @@ $(() => {
       option: (option, escape) => `<div class="option">${escape(option.label)}</div>`,
     },
     onItemAdd: (_value, $item) => {
-      const departementActuel = $('#departementEntitePublique').val();
-      const nouveauDepartement = $item.data('departement').toString();
-      if (nouveauDepartement !== departementActuel) {
-        $champSelectize[0].selectize.clear();
-        $champSelectize[0].selectize.clearOptions();
-      }
-      $('#departementEntitePublique').val(nouveauDepartement);
+      $('#departementEntitePublique').val($item.data('departement').toString());
     },
   });
 });

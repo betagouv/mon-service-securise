@@ -88,6 +88,7 @@
   background-image: url('/statique/assets/images/icone_ok_pastille_bleue.svg');
   background-size: contain;
   background-repeat: no-repeat;
+  flex-shrink: 0;
 }
 
 .selectized+.selectize-control.single .selectize-dropdown .option:hover {
@@ -118,4 +119,30 @@
   color: #667892;
   font-weight: bold;
   font-size: 12px;
+}
+
+.selectize-dropdown .option-ajout {
+  padding: 0.6em;
+  color: #0079D0;
+  font-weight: bold;
+  font-size: 0.9em;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.selectize-dropdown .option-ajout::before {
+  content: '';
+  width: 1.3em;
+  height: 1.3em;
+  background-image: url('/statique/assets/images/icone_ajout_pastille_bleue.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+  transform: translateY(1px);
+}
+
+.selectize-dropdown .option-ajout.active {
+  color: #0079D0;
 }

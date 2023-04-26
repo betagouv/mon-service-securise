@@ -86,12 +86,16 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
         )
         .message-erreur Le numéro de téléphone doit respecter le format 0000000000.
 
-      label(for = 'departementEntitePublique-selectize') Département de votre organisation
-        select(
-          id = 'departementEntitePublique-selectize',
-          name = 'departementEntitePublique-selectize',
-          placeHolder = 'ex : 33, Morbihan',
-        )
+      .requis
+        label(for = 'departementEntitePublique-selectize') Département de votre organisation
+          select(
+            id = 'departementEntitePublique-selectize',
+            name = 'departementEntitePublique-selectize',
+            placeHolder = 'ex : 33, Morbihan',
+            required,
+          )
+          .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
+          input(type='hidden' name='departementEntitePublique' id='departementEntitePublique' value != donnees.departementEntitePublique)
 
       .requis
         label(for = 'nomEntitePublique-selectize') Nom de votre organisation
@@ -104,7 +108,6 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           .icone-chargement
           .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
           input(type='hidden' name='nomEntitePublique' id='nomEntitePublique' value != donnees.nomEntitePublique)
-          input(type='hidden' name='departementEntitePublique' id='departementEntitePublique' value != donnees.departementEntitePublique)
 
       .requis(data-nom = 'rssi')
         +inputOuiNon({
