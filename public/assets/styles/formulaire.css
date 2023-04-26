@@ -272,3 +272,13 @@ select {
     transform: rotate(360deg);
   }
 }
+
+input[type="checkbox"]+label.label-checkbox {
+  width: 80%;
+  margin: 0;
+}
+
+#infolettreAcceptee {
+  vertical-align: top;
+  cursor: pointer;
+}

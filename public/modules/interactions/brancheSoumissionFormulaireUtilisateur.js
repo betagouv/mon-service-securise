@@ -17,6 +17,7 @@ const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => 
     departementEntitePublique: () => $('#departementEntitePublique').val(),
     motDePasse: () => $('#mot-de-passe').val(),
     cguAcceptees: () => reponseAcceptee('cguAcceptees'),
+    infolettreAcceptee: () => $('#infolettreAcceptee').is(':checked'),
   };
 
   brancheValidation(selecteurFormulaire);
