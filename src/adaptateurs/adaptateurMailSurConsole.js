@@ -5,6 +5,16 @@ const creeContact = (...args) => {
   return Promise.resolve();
 };
 
+const desinscrisInfolettre = (...args) => {
+  console.log("Désinscription de l'infolettre MSS", args);
+  return Promise.resolve();
+};
+
+const inscrisInfolettre = (...args) => {
+  console.log("Inscription à l'infolettre MSS", args);
+  return Promise.resolve();
+};
+
 const envoieMessageFinalisationInscription = (...args) => {
   console.log("Envoie de l'email de finalisation de l'inscription", args);
   return Promise.resolve();
@@ -34,6 +44,8 @@ const envoieNotificationTentativeReinscription = (...args) => {
 
 module.exports = {
   creeContact,
+  desinscrisInfolettre,
+  inscrisInfolettre,
   envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,

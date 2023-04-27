@@ -602,6 +602,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         poste: "Chargé des systèmes d'informations",
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
+        infolettreAcceptee: 'true',
       };
 
       testeur.referentiel().departement = () => 'Paris';
@@ -670,6 +671,30 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
+    it("convertit l'infolettre acceptée en valeur booléenne", (done) => {
+      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
+
+      testeur.depotDonnees().metsAJourUtilisateur = (id, { infolettreAcceptee }) => {
+        try {
+          expect(id).to.equal('123');
+          expect(infolettreAcceptee).to.equal(false);
+          return Promise.resolve(utilisateur);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      donneesRequete.infolettreAcceptee = 'false';
+
+      axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idUtilisateur: '123' });
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
     it('convertit le délégué à la protection des données en booléen', (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
 
@@ -723,6 +748,86 @@ describe('Le serveur MSS des routes /api/*', () => {
           done();
         })
         .catch((e) => done(e.response?.data || e));
+    });
+
+    describe("sur demande de recherche de l'utilisateur", () => {
+      it("demande au dépôt de retrouver l'utilisateur", (done) => {
+        let depotAppele = false;
+        testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
+
+        testeur.depotDonnees().utilisateur = (idUtilisateur) => {
+          expect(idUtilisateur).to.eql(123);
+          depotAppele = true;
+          return Promise.resolve(utilisateur);
+        };
+
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+          .then(() => {
+            expect(depotAppele).to.be(true);
+            done();
+          })
+          .catch(done);
+      });
+
+      it("jette une erreur si l'utilisateur n'existe pas", (done) => {
+        testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
+        testeur.depotDonnees().utilisateur = () => Promise.resolve(undefined);
+
+        testeur.verifieRequeteGenereErreurHTTP(
+          422,
+          "L'utilisateur '123' est introuvable.",
+          { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
+          done
+        );
+      });
+
+      it("inscrit l'utilisateur à l'infolettre si il l'a demandé", (done) => {
+        let inscriptionAppelee = false;
+        donneesRequete.infolettreAcceptee = 'true';
+        utilisateur.email = 'jean.dupont@mail.fr';
+        testeur.depotDonnees().utilisateur = () => (
+          Promise.resolve({ ...utilisateur, infolettreAcceptee: false })
+        );
+
+        testeur.adaptateurMail().inscrisInfolettre = (
+          (destinataire) => {
+            inscriptionAppelee = true;
+            expect(destinataire).to.equal('jean.dupont@mail.fr');
+            return Promise.resolve();
+          }
+        );
+
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+          .then(() => {
+            expect(inscriptionAppelee).to.be(true);
+            done();
+          })
+          .catch(done);
+      });
+
+      it("désinscrit l'utilisateur à l'infolettre si il l'a demandé", (done) => {
+        let desinscriptionAppelee = false;
+        donneesRequete.infolettreAcceptee = 'false';
+        utilisateur.email = 'jean.dupont@mail.fr';
+        testeur.depotDonnees().utilisateur = () => (
+          Promise.resolve({ ...utilisateur, infolettreAcceptee: true })
+        );
+
+        testeur.adaptateurMail().desinscrisInfolettre = (
+          (destinataire) => {
+            desinscriptionAppelee = true;
+            expect(destinataire).to.equal('jean.dupont@mail.fr');
+            return Promise.resolve();
+          }
+        );
+
+        axios.put('http://localhost:1234/api/utilisateur', donneesRequete)
+          .then(() => {
+            expect(desinscriptionAppelee).to.be(true);
+            done();
+          })
+          .catch(done);
+      });
     });
   });
 
