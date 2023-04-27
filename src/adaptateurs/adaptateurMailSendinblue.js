@@ -9,6 +9,17 @@ const enteteJSON = {
 };
 const urlBase = 'https://api.sendinblue.com/v3';
 
+const basculeInfolettre = (
+  destinataire,
+  etat
+) => (axios.put(`${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
+  { emailBlacklisted: etat },
+  enteteJSON)
+);
+
+const desinscrisInfolettre = (destinataire) => basculeInfolettre(destinataire, true);
+const inscrisInfolettre = (destinataire) => basculeInfolettre(destinataire, false);
+
 const creeContact = (
   destinataire, prenom, nom, bloqueEmails
 ) => (axios.post(`${urlBase}/contacts`,
@@ -92,6 +103,8 @@ const envoieNotificationTentativeReinscription = (
 
 module.exports = {
   creeContact,
+  desinscrisInfolettre,
+  inscrisInfolettre,
   envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,

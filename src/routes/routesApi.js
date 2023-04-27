@@ -215,6 +215,26 @@ const routesApi = (
         return;
       }
 
+      depotDonnees.utilisateur(idUtilisateur)
+        .then((utilisateur) => {
+          if (!utilisateur) {
+            reponse.status(422).send(
+              `L'utilisateur '${idUtilisateur}' est introuvable.`
+            );
+            return;
+          }
+          const acceptationInfolettreActuelle = utilisateur.infolettreAcceptee;
+          const nouvelleAcceptationInfolettre = donnees.infolettreAcceptee;
+          const doitInscrire = !acceptationInfolettreActuelle && nouvelleAcceptationInfolettre;
+          const doitDesinscrire = acceptationInfolettreActuelle && !nouvelleAcceptationInfolettre;
+
+          if (doitInscrire) {
+            adaptateurMail.inscrisInfolettre(utilisateur.email);
+          } else if (doitDesinscrire) {
+            adaptateurMail.desinscrisInfolettre(utilisateur.email);
+          }
+        });
+
       depotDonnees.metsAJourUtilisateur(idUtilisateur, donnees)
         .then(() => reponse.json({ idUtilisateur }))
         .catch(suite);
