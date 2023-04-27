@@ -1,5 +1,10 @@
 /* eslint-disable no-console */
 
+const creeContact = (...args) => {
+  console.log("Création d'un contact email", args);
+  return Promise.resolve();
+};
+
 const envoieMessageFinalisationInscription = (...args) => {
   console.log("Envoie de l'email de finalisation de l'inscription", args);
   return Promise.resolve();
@@ -28,6 +33,7 @@ const envoieNotificationTentativeReinscription = (...args) => {
 /* eslint-enable no-console */
 
 module.exports = {
+  creeContact,
   envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,

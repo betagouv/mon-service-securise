@@ -28,6 +28,14 @@ const routesApi = (
     .catch(() => depotDonnees.supprimeUtilisateur(utilisateur.id)
       .then(() => Promise.reject(new EchecEnvoiMessage())));
 
+  const creeContactEmail = (utilisateur) => (
+    verifieSuccesEnvoiMessage(
+      adaptateurMail.creeContact(
+        utilisateur.email, utilisateur.prenom, utilisateur.nom,
+      ),
+      utilisateur,
+    ));
+
   const envoieMessageInvitationInscription = (emetteur, contributeur, service) => (
     verifieSuccesEnvoiMessage(
       adaptateurMail.envoieMessageInvitationInscription(
@@ -115,6 +123,7 @@ const routesApi = (
         reponse.status(422).send(`La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`);
       } else {
         depotDonnees.nouvelUtilisateur(donnees)
+          .then(creeContactEmail)
           .then(envoieMessageFinalisationInscription)
           .catch((erreur) => {
             if (erreur instanceof ErreurUtilisateurExistant) {
