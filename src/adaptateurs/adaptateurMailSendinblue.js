@@ -10,10 +10,11 @@ const enteteJSON = {
 const urlBase = 'https://api.sendinblue.com/v3';
 
 const creeContact = (
-  destinataire, prenom, nom
+  destinataire, prenom, nom, bloqueEmails
 ) => (axios.post(`${urlBase}/contacts`,
   {
     email: destinataire,
+    emailBlacklisted: bloqueEmails,
     attributes: {
       PRENOM: prenom,
       NOM: nom,

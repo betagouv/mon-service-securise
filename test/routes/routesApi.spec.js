@@ -227,16 +227,18 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
-    it('crée un contact email ', (done) => {
+    it('crée un contact email', (done) => {
       utilisateur.email = 'jean.dupont@mail.fr';
       utilisateur.prenom = 'Jean';
       utilisateur.nom = 'Dupont';
+      utilisateur.infolettreAcceptee = false;
 
       testeur.adaptateurMail().creeContact = (
-        (destinataire, prenom, nom) => {
+        (destinataire, prenom, nom, bloqueEmails) => {
           expect(destinataire).to.equal('jean.dupont@mail.fr');
           expect(prenom).to.equal('Jean');
           expect(nom).to.equal('Dupont');
+          expect(bloqueEmails).to.equal(true);
           return Promise.resolve();
         }
       );

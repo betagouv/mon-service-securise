@@ -31,7 +31,7 @@ const routesApi = (
   const creeContactEmail = (utilisateur) => (
     verifieSuccesEnvoiMessage(
       adaptateurMail.creeContact(
-        utilisateur.email, utilisateur.prenom, utilisateur.nom,
+        utilisateur.email, utilisateur.prenom, utilisateur.nom, !utilisateur.infolettreAcceptee
       ),
       utilisateur,
     ));
