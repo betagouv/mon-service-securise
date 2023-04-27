@@ -101,6 +101,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       };
 
       testeur.referentiel().departement = () => 'Paris';
+      testeur.adaptateurMail().creeContact = () => Promise.resolve();
       testeur.adaptateurMail().envoieMessageFinalisationInscription = () => Promise.resolve();
       testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse = () => Promise.resolve();
 
@@ -208,6 +209,25 @@ describe('Le serveur MSS des routes /api/*', () => {
           done();
         })
         .catch(done);
+    });
+
+    it('crée un contact email ', (done) => {
+      utilisateur.email = 'jean.dupont@mail.fr';
+      utilisateur.prenom = 'Jean';
+      utilisateur.nom = 'Dupont';
+
+      testeur.adaptateurMail().creeContact = (
+        (destinataire, prenom, nom) => {
+          expect(destinataire).to.equal('jean.dupont@mail.fr');
+          expect(prenom).to.equal('Jean');
+          expect(nom).to.equal('Dupont');
+          return Promise.resolve();
+        }
+      );
+
+      axios.post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
     });
 
     it("envoie un message de notification à l'utilisateur créé", (done) => {

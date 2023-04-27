@@ -1,18 +1,36 @@
 const axios = require('axios');
 
+const enteteJSON = {
+  headers: {
+    'api-key': process.env.SENDINBLUE_CLEF_API,
+    accept: 'application/json',
+    'content-type': 'application/json',
+  },
+};
+const urlBase = 'https://api.sendinblue.com/v3';
+
+const creeContact = (
+  destinataire, prenom, nom
+) => (axios.post(`${urlBase}/contacts`,
+  {
+    email: destinataire,
+    attributes: {
+      PRENOM: prenom,
+      NOM: nom,
+    },
+  },
+  enteteJSON)
+);
+
 const envoieEmail = (
   destinataire, idTemplate, params
-) => (axios.post('https://api.sendinblue.com/v3/smtp/email',
+) => (axios.post(`${urlBase}/smtp/email`,
   {
     to: [{ email: destinataire }],
     templateId: idTemplate,
     params,
   },
-  { headers: {
-    'api-key': process.env.SENDINBLUE_CLEF_API,
-    accept: 'application/json',
-    'content-type': 'application/json',
-  } })
+  enteteJSON)
 );
 
 const envoieMessageFinalisationInscription = (
@@ -72,6 +90,7 @@ const envoieNotificationTentativeReinscription = (
 );
 
 module.exports = {
+  creeContact,
   envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
