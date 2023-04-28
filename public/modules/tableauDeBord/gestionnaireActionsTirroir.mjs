@@ -24,11 +24,6 @@ const gestionnaireActionsTirroir = {
       });
     }
   },
-  brancheComportements: () => {
-    $('#action-duplication').on('click', () => {
-      gestionnaireActionsTirroir.duplique();
-    });
-  },
 };
 
 export default gestionnaireActionsTirroir;
