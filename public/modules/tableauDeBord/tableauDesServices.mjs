@@ -5,7 +5,13 @@ const STATUS_HOMOLOGATION = {
   completes: 'Réalisée',
 };
 
+const afficheBandeauMajProfil = () => $('.bandeau-maj-profil').removeClass('invisible');
 const metEnFormeContributeurs = (service) => [service.createur.prenomNom, ...service.contributeurs.map((c) => c.prenomNom)].join('\n');
+const remplisCartesInformations = (resume) => {
+  $('#nombre-services').text(resume.nombreServices);
+  $('#nombre-services-homologues').text(resume.nombreServicesHomologues);
+  $('#indice-cyber-moyen').text(resume.indiceCyberMoyen?.toFixed(1) ?? '-');
+};
 
 const tableauDesServices = {
   $tableau: $('.contenu-tableau-services'),
@@ -67,6 +73,21 @@ const tableauDesServices = {
 
     $('.tableau-services thead th').attr('data-direction', 0);
     $(`.tableau-services thead th[data-colonne="${colonne}"]`).attr('data-direction', direction);
+  },
+  recupereServices: () => {
+    axios.get('/api/utilisateurCourant')
+      .then(({ data }) => data.utilisateur)
+      .then((utilisateur) => {
+        axios.get('/api/services')
+          .then(({ data }) => {
+            remplisCartesInformations(data.resume);
+            tableauDesServices.nombreServices = data.resume.nombreServices;
+            tableauDesServices.fixeDonnees(data.services);
+            tableauDesServices.afficheDonnees();
+          });
+
+        if (!utilisateur.profilEstComplet) afficheBandeauMajProfil();
+      });
   },
   remplisTableau: (donnees) => {
     donnees.forEach((service) => {
