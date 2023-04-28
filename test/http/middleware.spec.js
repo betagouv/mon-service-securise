@@ -465,4 +465,25 @@ describe('Le middleware MSS', () => {
       });
     });
   });
+
+  describe("sur demande de filtrage d'adresse IP", () => {
+    it("jette une erreur 401 si l'adresse IP n'est pas valide", (done) => {
+      const middleware = Middleware();
+      requete.ip = '192.168.1.1';
+
+      const suite = () => done("Le middleware suivant n'aurait pas dû être appelé");
+      prepareVerificationReponse(reponse, 401, 'Non autorisé', done);
+
+      middleware.verificationAddresseIP(['192.168.0.1/24'])(requete, reponse, suite);
+    });
+
+    it("passe au middleware suivant si l'adresse est valide", (done) => {
+      const middleware = Middleware();
+      requete.ip = '192.168.0.1';
+
+      middleware.verificationAddresseIP(['192.168.0.1/24'])(requete, reponse, () => {
+        done();
+      });
+    });
+  });
 });

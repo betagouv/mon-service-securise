@@ -1,3 +1,4 @@
+const controlAcces = require('express-ip-access-control');
 const basicAuth = require('express-basic-auth');
 const pug = require('pug');
 const { check } = require('express-validator');
@@ -156,6 +157,15 @@ const middleware = (configuration = {}) => {
     aseptiseListes([{ nom: nomListe, proprietes: proprietesParametre }])
   );
 
+  const verificationAddresseIP = (listeAddressesIPsAutorisee) => controlAcces({
+    mode: 'allow',
+    allows: listeAddressesIPsAutorisee,
+    forceConnectionAddress: false,
+    log: false,
+    statusCode: 401,
+    message: 'Non autorisé',
+  });
+
   return {
     aseptise,
     aseptiseListe,
@@ -168,6 +178,7 @@ const middleware = (configuration = {}) => {
     trouveService,
     trouveDossierCourant,
     verificationAcceptationCGU,
+    verificationAddresseIP,
     verificationJWT,
   };
 };
