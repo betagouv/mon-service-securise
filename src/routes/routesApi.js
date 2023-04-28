@@ -292,7 +292,7 @@ const routesApi = (
       const creeContributeurSiNecessaire = (contributeurExistant) => (
         contributeurExistant
           ? Promise.resolve(contributeurExistant)
-          : depotDonnees.nouvelUtilisateur({ email: emailContributeur })
+          : depotDonnees.nouvelUtilisateur({ email: emailContributeur, infolettreAcceptee: false })
             .then(creeContactEmail)
       );
 
