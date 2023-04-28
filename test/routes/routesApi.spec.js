@@ -1155,6 +1155,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         let utilisateurInexistant;
         testeur.depotDonnees().utilisateurAvecEmail = () => Promise.resolve(utilisateurInexistant);
         testeur.adaptateurMail().envoieMessageInvitationInscription = () => Promise.resolve();
+        testeur.adaptateurMail().creeContact = () => Promise.resolve();
 
         contributeurCree = { id: '789', email: 'jean.dupont@mail.fr', idResetMotDePasse: 'reset' };
         testeur.depotDonnees().nouvelUtilisateur = () => Promise.resolve(contributeurCree);
@@ -1180,6 +1181,28 @@ describe('Le serveur MSS des routes /api/*', () => {
             expect(nouveauContributeurCree).to.be(true);
             done();
           })
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it('crée un contact email', (done) => {
+        utilisateur.email = 'jean.dupont@mail.fr';
+        utilisateur.infolettreAcceptee = false;
+
+        testeur.adaptateurMail().creeContact = (
+          (destinataire, prenom, nom, bloqueEmails) => {
+            expect(destinataire).to.equal('jean.dupont@mail.fr');
+            expect(prenom).to.equal('');
+            expect(nom).to.equal('');
+            expect(bloqueEmails).to.equal(true);
+            return Promise.resolve();
+          }
+        );
+
+        axios.post('http://localhost:1234/api/autorisation', {
+          emailContributeur: 'jean.dupont@mail.fr',
+          idHomologation: '123',
+        })
+          .then(() => done())
           .catch((e) => done(e.response?.data || e));
       });
 

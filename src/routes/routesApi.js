@@ -31,7 +31,7 @@ const routesApi = (
   const creeContactEmail = (utilisateur) => (
     verifieSuccesEnvoiMessage(
       adaptateurMail.creeContact(
-        utilisateur.email, utilisateur.prenom, utilisateur.nom, !utilisateur.infolettreAcceptee
+        utilisateur.email, utilisateur.prenom ?? '', utilisateur.nom ?? '', !utilisateur.infolettreAcceptee
       ),
       utilisateur,
     ));
@@ -293,6 +293,7 @@ const routesApi = (
         contributeurExistant
           ? Promise.resolve(contributeurExistant)
           : depotDonnees.nouvelUtilisateur({ email: emailContributeur })
+            .then(creeContactEmail)
       );
 
       const informeContributeur = (contributeurAInformer, contributeurExistant) => (
