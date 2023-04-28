@@ -354,7 +354,7 @@ const routesApi = (
       .then((suggestions) => reponse.status(200).json({ suggestions }));
   });
 
-  routes.post('/desinscriptionInfolettre', (requete, reponse, suite) => {
+  routes.post('/desinscriptionInfolettre', middleware.verificationAddresseIP(['185.107.232.1/24', '1.179.112.1/20']), (requete, reponse, suite) => {
     const { event: typeEvenement, email } = requete.body;
 
     if (typeEvenement !== 'unsubscribe') {
