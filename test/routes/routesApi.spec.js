@@ -1185,9 +1185,6 @@ describe('Le serveur MSS des routes /api/*', () => {
       });
 
       it('crée un contact email', (done) => {
-        utilisateur.email = 'jean.dupont@mail.fr';
-        utilisateur.infolettreAcceptee = false;
-
         testeur.adaptateurMail().creeContact = (
           (destinataire, prenom, nom, bloqueEmails) => {
             expect(destinataire).to.equal('jean.dupont@mail.fr');
