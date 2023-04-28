@@ -1,4 +1,5 @@
 import { brancheModale } from './modules/interactions/modale.mjs';
+import gestionnaireTirroir from './modules/tableauDeBord/gestionnaireTirroir.mjs';
 
 const [AUCUNE, ASC] = [0, 1];
 const STATUS_HOMOLOGATION = {
@@ -121,34 +122,6 @@ const remplisCartesInformations = (resume) => {
   $('#nombre-services').text(resume.nombreServices);
   $('#nombre-services-homologues').text(resume.nombreServicesHomologues);
   $('#indice-cyber-moyen').text(resume.indiceCyberMoyen?.toFixed(1) ?? '-');
-};
-
-const gestionnaireTirroir = {
-  contenuTexte: {
-    duplication: {
-      titre: 'Dupliquer',
-      texte: 'Copier autant de fois que nécessaire les services sélectionnés. Toutes les données saisies apparaîtront dans les nouveaux services créés, hormis celles de la rubrique Homologuer.',
-      initialise: () => {
-        $('#nombre-copie').val(1);
-      },
-    },
-  },
-  afficheContenuAction: (identifiantAction) => {
-    const { titre, texte, initialise } = gestionnaireTirroir.contenuTexte[identifiantAction];
-    $('.titre-tirroir').text(titre);
-    $('.texte-tirroir').text(texte);
-    $('.bloc-contenu').hide();
-    $(`#contenu-${identifiantAction}`).show();
-    initialise();
-    gestionnaireTirroir.basculeOuvert(true);
-  },
-  basculeOuvert: (statut) => {
-    if (statut) {
-      $('.tirroir').addClass('ouvert');
-    } else {
-      $('.tirroir').removeClass('ouvert');
-    }
-  },
 };
 
 const gestionnaireEvenements = {
