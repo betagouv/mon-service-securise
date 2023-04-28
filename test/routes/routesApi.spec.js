@@ -1399,6 +1399,14 @@ describe('Le serveur MSS des routes /api/*', () => {
       );
     });
 
+    it("vérifie l'adresse IP de la requête", (done) => {
+      testeur.middleware().verifieAdresseIP(
+        ['185.107.232.1/24', '1.179.112.1/20'],
+        { method: 'post', url: 'http://localhost:1234/api/desinscriptionInfolettre', data: donneesRequete },
+        done
+      );
+    });
+
     it("désabonne l'utilisateur de l'infolettre", (done) => {
       const utilisateur = { id: '123', infolettreAcceptee: true };
       testeur.depotDonnees().utilisateurAvecEmail = (email) => {

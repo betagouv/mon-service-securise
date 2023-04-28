@@ -36,6 +36,7 @@ let headersPositionnes = false;
 let homologationTrouvee;
 let idUtilisateurCourant;
 let listesAseptisees = [];
+let listeAdressesIPsAutorisee = [];
 let parametresAseptises = [];
 let rechercheServiceEffectuee = false;
 let rechercheDossierCourantEffectuee = false;
@@ -57,6 +58,7 @@ const middlewareFantaisie = {
     homologationTrouvee = homologationARenvoyer;
     idUtilisateurCourant = idUtilisateur;
     listesAseptisees = [];
+    listeAdressesIPsAutorisee = [];
     parametresAseptises = [];
     rechercheServiceEffectuee = false;
     rechercheDossierCourantEffectuee = false;
@@ -134,6 +136,11 @@ const middlewareFantaisie = {
     suite();
   },
 
+  verificationAddresseIP: (listeAdressesIPs) => (_requete, _reponse, suite) => {
+    listeAdressesIPsAutorisee = listeAdressesIPs;
+    suite();
+  },
+
   verifieAseptisationListe: (nom, proprietesParametre) => {
     expect(listesAseptisees.some((liste) => liste?.nom === nom)).to.be(true);
     const listeRecherche = listesAseptisees.find((liste) => liste.nom === nom);
@@ -145,6 +152,14 @@ const middlewareFantaisie = {
       lectureEtat: () => parametresAseptises,
       etatInitial: [],
       etatFinal: nomsParametres,
+    }, ...params);
+  },
+
+  verifieAdresseIP: (listeAdressesIp, ...params) => {
+    verifieRequeteChangeEtat({
+      lectureEtat: () => listeAdressesIPsAutorisee,
+      etatInitial: [],
+      etatFinal: listeAdressesIp,
     }, ...params);
   },
 
