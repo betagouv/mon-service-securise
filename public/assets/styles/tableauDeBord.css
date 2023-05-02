@@ -456,6 +456,15 @@ label[for='recherche-service'] {
   color: #0079D0;
 }
 
+.tableau-services .action.inactif {
+  color: var(--gris-inactif);
+  pointer-events: none;
+}
+
+.tableau-services .action.inactif img {
+  filter: grayscale(1);
+}
+
 .tableau-services .action :is(img, p) {
   pointer-events: none;
 }
