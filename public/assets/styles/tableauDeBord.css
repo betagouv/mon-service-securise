@@ -566,11 +566,11 @@ label[for='recherche-service'] {
   margin-bottom: 2em;
 }
 
-#contenu-duplication label {
+:is(#contenu-duplication, #contenu-invitation) label {
   font-weight: bold;
 }
 
-#contenu-duplication input {
+:is(#contenu-duplication, #contenu-invitation) input {
   padding: 0.7em 1em;
   border: 1px solid #CBD5E1;
   border-radius: 6px;
@@ -578,7 +578,11 @@ label[for='recherche-service'] {
   width: 6em;
 }
 
-:is(#contenu-duplication, #contenu-suppression) .conteneur-actions {
+#contenu-invitation input {
+  width: 28em;
+}
+
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation) .conteneur-actions {
   padding-top: 3em;
   display: flex;
   justify-content: end;

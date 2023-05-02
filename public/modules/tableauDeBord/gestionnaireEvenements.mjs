@@ -39,6 +39,10 @@ const gestionnaireEvenements = {
     $('#action-suppression').on('click', () => {
       gestionnaireActionsTirroir.supprime();
     });
+
+    $('#action-invitation').on('click', () => {
+      gestionnaireActionsTirroir.invite();
+    });
   },
   afficheTiroirAction: ($action) => {
     gestionnaireTirroir.afficheContenuAction($action.data('action'));
