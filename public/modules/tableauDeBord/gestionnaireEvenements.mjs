@@ -35,6 +35,10 @@ const gestionnaireEvenements = {
     $('#action-duplication').on('click', () => {
       gestionnaireActionsTirroir.duplique();
     });
+
+    $('#action-suppression').on('click', () => {
+      gestionnaireActionsTirroir.supprime();
+    });
   },
   afficheTiroirAction: ($action) => {
     gestionnaireTirroir.afficheContenuAction($action.data('action'));

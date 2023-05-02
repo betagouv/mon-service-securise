@@ -57,6 +57,7 @@ block main
                 img.fleche-droite(src='/statique/assets/images/fleche_pointe_droite.svg')
                 .menu-flotant.actions-services.invisible
                   +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer', 'duplication')
+                  +actionAvecIcone('/statique/assets/images/icone_supprimer.svg', 'Supprimer', 'suppression')
             th.entete-contributeurs(data-colonne='nombreContributeurs') Contributeur(s)
             th(data-colonne='indiceCyber') Indice Cyber
             th(data-colonne='statutHomologation') Homologation
@@ -89,6 +90,19 @@ block main
           .conteneur-actions
             button.bouton.bouton-secondaire.fermeture-tirroir Annuler
             button.bouton#action-duplication Valider
-        .bloc-contenu#contenu-suppression Ma suppression
+        .bloc-contenu#contenu-suppression
+          p 
+            span Souhaitez-vous vraiment supprimer 
+            span#nombre-service-suppression
+            span ?
+          .banniere-avertissement
+            img(src='/statique/assets/images/icone_danger.svg')
+            .contenu-texte-avertissement
+              strong Cette action est irréversible
+              p Les données seront définitivement effacées. Les contributeurs n'auront plus accès à ce service.
+          .conteneur-actions
+            button.bouton.bouton-secondaire.fermeture-tirroir Non, j'annule
+            button.bouton#action-suppression Je confirme la suppression
+
 
   script(type = 'module', src = '/statique/tableauDeBord.js')

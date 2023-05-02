@@ -24,6 +24,17 @@ const gestionnaireActionsTirroir = {
       });
     }
   },
+  supprime: () => {
+    $('#action-suppression').prop('disabled', true);
+    const suppressions = [...tableauDesServices.servicesSelectionnes].map((idService) => axios.delete(`/api/service/${idService}`));
+    Promise.all(suppressions).then(() => {
+      $('#action-suppression').prop('disabled', false);
+      gestionnaireTirroir.basculeOuvert(false);
+      tableauDesServices.recupereServices();
+      tableauDesServices.servicesSelectionnes.clear();
+      tableauDesServices.afficheEtatSelection();
+    });
+  },
 };
 
 export default gestionnaireActionsTirroir;
