@@ -55,6 +55,14 @@ const gestionnaireEvenements = {
     if (doitOuvrirMenu) {
       $bouton.parents('.conteneur-selection-services').addClass('actif');
       $('.menu-flotant.actions-services').removeClass('invisible');
+      const auMoinsUnNonCreateur = [...tableauDesServices.servicesSelectionnes]
+        .map((idService) => tableauDesServices.donnees.find((service) => service.id === idService))
+        .some((service) => !service.estCreateur);
+      if (auMoinsUnNonCreateur) {
+        $('.actions-services .action').addClass('inactif');
+      } else {
+        $('.actions-services .action').removeClass('inactif');
+      }
     } else {
       $bouton.parents('.conteneur-selection-services').removeClass('actif');
       $('.menu-flotant.actions-services').addClass('invisible');
