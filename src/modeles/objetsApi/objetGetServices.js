@@ -1,4 +1,4 @@
-const donnees = (services) => {
+const donnees = (services, idUtilisateur) => {
   const servicesAvecIndiceCyber = services
     .filter((s) => s.indiceCyber().total > 0);
 
@@ -28,6 +28,7 @@ const donnees = (services) => {
         indiceCyber: json.indiceCyber,
         statutHomologation: json.statutHomologation,
         nombreContributeurs: json.contributeurs.length + 1,
+        estCreateur: json.createur.id === idUtilisateur,
       })),
     resume: {
       nombreServices: services.length,

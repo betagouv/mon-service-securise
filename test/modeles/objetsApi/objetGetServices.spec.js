@@ -25,7 +25,7 @@ describe("L'objet d'API de `GET /services`", () => {
 
   it('fournit les données nécessaires', () => {
     const services = [unService];
-    expect(vueEspacePersonnel.donnees(services).services).to.eql(
+    expect(vueEspacePersonnel.donnees(services, 'A').services).to.eql(
       [{
         id: '123',
         nomService: 'Un service',
@@ -37,6 +37,7 @@ describe("L'objet d'API de `GET /services`", () => {
         indiceCyber: 3.5,
         statutHomologation: 'aSaisir',
         nombreContributeurs: 1 + 1,
+        estCreateur: true,
       }],
     );
   });

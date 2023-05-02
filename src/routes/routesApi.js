@@ -90,7 +90,7 @@ const routesApi = (
 
   routes.get('/services', middleware.verificationAcceptationCGU, (requete, reponse) => {
     depotDonnees.homologations(requete.idUtilisateurCourant)
-      .then((services) => objetGetServices.donnees(services))
+      .then((services) => objetGetServices.donnees(services, requete.idUtilisateurCourant))
       .then((donnees) => reponse.json(donnees));
   });
 

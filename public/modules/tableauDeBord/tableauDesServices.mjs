@@ -109,7 +109,12 @@ const tableauDesServices = {
       $celluleNoms.append($inputSelection);
       $celluleNoms.append($nomService);
       $ligne.append($celluleNoms);
-      $ligne.append($(`<td><div class='contributeurs' title='${metEnFormeContributeurs(service)}'>${service.nombreContributeurs}</div></td>`));
+      const $celluleCollaborateur = $('<td></td>');
+      const $conteneurCollaborateur = $(`<div class='conteneur-collaborateur ${service.estCreateur ? 'createur' : ''}'></div>`);
+      const $nombreContributeurs = $(`<div class='contributeurs' title='${metEnFormeContributeurs(service)}'>${service.nombreContributeurs}</div>`);
+      $conteneurCollaborateur.append($nombreContributeurs);
+      $celluleCollaborateur.append($conteneurCollaborateur);
+      $ligne.append($celluleCollaborateur);
       $ligne.append($(`<td>${parseFloat(service.indiceCyber) === 0 ? '-' : service.indiceCyber}</td>`));
       $ligne.append($(`<td><div class='statut-homologation statut-${service.statutHomologation}'>${STATUS_HOMOLOGATION[service.statutHomologation]}</div></td>`));
 
