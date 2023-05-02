@@ -81,6 +81,10 @@ const tableauDesServices = {
     $('.tableau-services thead th').attr('data-direction', 0);
     $(`.tableau-services thead th[data-colonne="${colonne}"]`).attr('data-direction', direction);
   },
+  nomDuService: (idService) => tableauDesServices
+    .donnees
+    .find((service) => service.id === idService)
+    ?.nomService,
   recupereServices: () => {
     axios.get('/api/utilisateurCourant')
       .then(() => axios.get('/api/services')

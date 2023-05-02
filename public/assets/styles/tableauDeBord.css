@@ -555,9 +555,23 @@ label[for='recherche-service'] {
   width: 6em;
 }
 
-#contenu-duplication .conteneur-actions {
+:is(#contenu-duplication, #contenu-suppression) .conteneur-actions {
   padding-top: 3em;
   display: flex;
   justify-content: end;
   gap: 1em;
+}
+
+.banniere-avertissement {
+  display: flex;
+  border: 1px solid #FAA72C;
+  border-radius: 4px;
+  background: #FFF2DE;
+  padding: 0.7em 1em;
+  gap: 1em;
+}
+
+.banniere-avertissement p {
+  margin: 0;
+  font-weight: 500;
 }
