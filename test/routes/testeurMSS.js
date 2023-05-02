@@ -4,6 +4,7 @@ const expect = require('expect.js');
 const { depotVide } = require('../depots/depotVide');
 const adaptateurGestionErreurVide = require('../../src/adaptateurs/adaptateurGestionErreurVide');
 const adaptateurHorlogeParDefaut = require('../../src/adaptateurs/adaptateurHorloge');
+const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoire');
 const MoteurRegles = require('../../src/moteurRegles');
 const MSS = require('../../src/mss');
 const Referentiel = require('../../src/referentiel');
@@ -40,9 +41,7 @@ const testeurMss = () => {
   const initialise = (done) => {
     adaptateurAnnuaire = {};
     adaptateurHorloge = adaptateurHorlogeParDefaut;
-    adaptateurMail = {
-      inscrisInfolettre: () => {},
-    };
+    adaptateurMail = adaptateurMailMemoire;
     adaptateurPdf = {};
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
