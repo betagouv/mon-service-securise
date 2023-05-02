@@ -1,3 +1,7 @@
+const emailMemoire = () => ({
+  logEmailDansConsole: () => process.env.AVEC_EMAIL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
+});
+
 const journalMSS = () => ({
   logEvenementDansConsole: () => process.env.AVEC_JOURNAL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
 });
@@ -17,4 +21,4 @@ const statistiques = () => ({
     : ''),
 });
 
-module.exports = { journalMSS, sendinblue, sentry, statistiques };
+module.exports = { emailMemoire, journalMSS, sendinblue, sentry, statistiques };
