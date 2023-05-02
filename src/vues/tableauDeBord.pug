@@ -56,6 +56,8 @@ block main
                 .texte-nombre-service 0 sélectionné
                 img.fleche-droite(src='/statique/assets/images/fleche_pointe_droite.svg')
                 .menu-flotant.actions-services.invisible
+                  +actionAvecIcone('/statique/assets/images/icone_ajout_contributeur.svg', 'Inviter contributeur(s)', 'invitation')
+                  hr
                   +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer', 'duplication')
                   +actionAvecIcone('/statique/assets/images/icone_supprimer.svg', 'Supprimer', 'suppression')
             th.entete-contributeurs(data-colonne='nombreContributeurs') Contributeur(s)
@@ -71,7 +73,20 @@ block main
           h3.titre-tirroir
           p.texte-tirroir
       .contenu-tirroir
-        .bloc-contenu#contenu-invitation Mon invitation
+        .bloc-contenu#contenu-invitation
+          p Saisir l'e-mail de la personne à inviter.
+          label Ajouter
+            br
+            input(
+              id = 'email-invitation-collaboration',
+              name = 'email-invitation-collaboration',
+              type = 'email',
+              placeholder = 'ex : e.leroy@domaine.fr',
+              required,
+            )
+          .conteneur-actions
+            button.bouton.bouton-secondaire.fermeture-tirroir Annuler
+            button.bouton#action-invitation Envoyer une invitation
         .bloc-contenu#contenu-duplication
           p Saisir le nombre de copies souhaitées.
           label Nombre de copies

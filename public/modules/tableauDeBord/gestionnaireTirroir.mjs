@@ -8,6 +8,13 @@ const contenuActions = {
       $('#nombre-copie').val(1);
     },
   },
+  invitation: {
+    titre: 'Inviter des contributeurs 1/2',
+    texte: 'Créer des équipes de travail avec autant de personnes souhaitées.',
+    initialise: () => {
+      // $('#nombre-copie').val(1);
+    },
+  },
   suppression: {
     titre: 'Supprimer',
     texte: 'Effacer toutes les données saisies et tous les résultats proposés par MonServiceSécurisé pour les services sélectionnés. Seuls les propriétaires peuvent supprimer.',

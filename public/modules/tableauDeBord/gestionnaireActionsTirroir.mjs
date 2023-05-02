@@ -24,6 +24,19 @@ const gestionnaireActionsTirroir = {
       });
     }
   },
+  invite: () => {
+    const $emailInvite = $('#email-invitation-collaboration');
+    if ($emailInvite.is(':valid')) {
+      $('#action-invitation').prop('disabled', true);
+      const emailContributeur = $emailInvite.val();
+      const invitations = [...tableauDesServices.servicesSelectionnes].map((idService) => axios.post('/api/autorisation', { emailContributeur, idHomologation: idService }));
+      Promise.all(invitations).then(() => {
+        $('#action-invitation').prop('disabled', false);
+        gestionnaireTirroir.basculeOuvert(false);
+        tableauDesServices.recupereServices();
+      });
+    }
+  },
   supprime: () => {
     $('#action-suppression').prop('disabled', true);
     const suppressions = [...tableauDesServices.servicesSelectionnes].map((idService) => axios.delete(`/api/service/${idService}`));
