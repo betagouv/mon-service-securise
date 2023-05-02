@@ -56,6 +56,11 @@ class ConsoleAdministration {
     return this.depotDonnees.supprimeUtilisateur(id);
   }
 
+  supprimeCompteUtilisateur(idUtilisateur) {
+    return this.depotDonnees.supprimeHomologationsCreeesPar(idUtilisateur)
+      .then(() => this.depotDonnees.supprimeUtilisateur(idUtilisateur));
+  }
+
   genereTousEvenementsCompletude(persisteEvenements = false) {
     const journal = (persisteEvenements ? this.adaptateurJournalMSS : this.journalConsole);
 
