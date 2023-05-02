@@ -12,8 +12,13 @@ const contenuActions = {
     titre: 'Inviter des contributeurs 1/2',
     texte: 'Créer des équipes de travail avec autant de personnes souhaitées.',
     initialise: () => {
-      // $('#nombre-copie').val(1);
+      $('#email-invitation-collaboration').val('');
     },
+  },
+  invitation2: {
+    titre: 'Inviter des contributeurs 2/2',
+    texte: 'Créer des équipes de travail avec autant de personnes souhaitées.',
+    initialise: () => { },
   },
   suppression: {
     titre: 'Supprimer',
