@@ -310,6 +310,21 @@ label[for='recherche-service'] {
   margin-right: 0.3em;
 }
 
+.tableau-services td .conteneur-collaborateur::before {
+  display: inline-block;
+  content: '';
+  background-image: url('/statique/assets/images/icone_createur_collaboration.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 1.4em;
+  height: 1.4em;
+  margin-right: 0.3em;
+}
+
+.tableau-services td .conteneur-collaborateur:not(.createur)::before {
+  opacity: 0;
+}
+
 .tableau-services td .statut-homologation {
   border-radius: 40px;
   padding: 0.3em 0.7em;
@@ -461,6 +476,13 @@ label[for='recherche-service'] {
 .tableau-services .conteneur-selection-services.actif {
   background: #F1F5F9;
   border: 1px solid #08416A;
+}
+
+.tableau-services .conteneur-collaborateur {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  justify-content: center;
 }
 
 .suivi-services {
