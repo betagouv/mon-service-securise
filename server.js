@@ -13,7 +13,7 @@ const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPI()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
-  : require('./src/adaptateurs/adaptateurMailSurConsole');
+  : require('./src/adaptateurs/adaptateurMailMemoire');
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
 
 const port = process.env.PORT || 3000;

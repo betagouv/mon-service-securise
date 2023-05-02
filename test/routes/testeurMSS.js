@@ -40,7 +40,9 @@ const testeurMss = () => {
   const initialise = (done) => {
     adaptateurAnnuaire = {};
     adaptateurHorloge = adaptateurHorlogeParDefaut;
-    adaptateurMail = {};
+    adaptateurMail = {
+      inscrisInfolettre: () => {},
+    };
     adaptateurPdf = {};
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
