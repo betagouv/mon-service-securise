@@ -32,8 +32,8 @@ const gestionnaireActionsTirroir = {
       const invitations = [...tableauDesServices.servicesSelectionnes].map((idService) => axios.post('/api/autorisation', { emailContributeur, idHomologation: idService }));
       Promise.all(invitations).then(() => {
         $('#action-invitation').prop('disabled', false);
-        gestionnaireTirroir.basculeOuvert(false);
         tableauDesServices.recupereServices();
+        gestionnaireTirroir.afficheContenuAction('invitation2');
       });
     }
   },

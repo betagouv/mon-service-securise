@@ -602,3 +602,12 @@ label[for='recherche-service'] {
   margin: 0;
   font-weight: 500;
 }
+
+#contenu-invitation2 {
+  text-align: center;
+  padding-top: 2em;
+}
+
+#contenu-invitation2 button {
+  margin-top: 2em;
+}
