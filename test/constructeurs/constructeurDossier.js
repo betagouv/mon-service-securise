@@ -23,8 +23,8 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
-  avecDateTelechargement(idDocument, date) {
-    this.donnees.datesTelechargements[idDocument] = date.toISOString();
+  avecDateTelechargement(date) {
+    this.donnees.dateTelechargement.date = new Date(date).toISOString();
     return this;
   }
 
@@ -50,9 +50,7 @@ class ConstructeurDossierFantaisie {
     this.donnees.avecDocuments = true;
     this.donnees.documents = ['unDocument'];
     this.donnees.decision = { dateHomologation: '2023-01-01', dureeValidite: 'unAn' };
-    this.donnees.datesTelechargements = this.referentiel
-      .tousDocumentsHomologation()
-      .reduce((acc, { id }) => ({ ...acc, [id]: new Date() }), {});
+    this.donnees.dateTelechargement = { date: new Date() };
     this.donnees.autorite = { nom: 'Jean Dupond', fonction: 'RSSI' };
     return this;
   }

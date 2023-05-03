@@ -1,6 +1,6 @@
 const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
 const Autorite = require('./etapes/autorite');
-const DatesTelechargements = require('./etapes/datesTelechargements');
+const DateTelechargement = require('./etapes/dateTelechargement');
 const Decision = require('./etapes/decision');
 const Documents = require('./etapes/documents');
 const EtapeAvis = require('./etapes/etapeAvis');
@@ -28,10 +28,7 @@ class Dossier extends InformationsHomologation {
       adaptateurHorloge
     );
     this.autorite = new Autorite(donneesDossier.autorite);
-    this.datesTelechargements = new DatesTelechargements(
-      donneesDossier.datesTelechargements ?? {},
-      referentiel
-    );
+    this.dateTelechargement = new DateTelechargement(donneesDossier.dateTelechargement);
     this.avis = new EtapeAvis({
       avis: donneesDossier.avis,
       avecAvis: donneesDossier.avecAvis,
@@ -88,10 +85,10 @@ class Dossier extends InformationsHomologation {
     this.documents.enregistreDocuments(documents);
   }
 
-  enregistreDateTelechargement(nomDocument, date) {
+  enregistreDateTelechargement(date) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
-    this.datesTelechargements.enregistreDateTelechargement(nomDocument, date);
+    this.dateTelechargement.enregistreDateTelechargement(date);
   }
 
   enregistreDecision(dateHomologation, dureeHomologation) {
@@ -138,7 +135,7 @@ class Dossier extends InformationsHomologation {
   }
 
   static etapesObligatoires() {
-    return ['decision', 'datesTelechargements', 'autorite', 'avis', 'documents'];
+    return ['decision', 'dateTelechargement', 'autorite', 'avis', 'documents'];
   }
 
   toJSON() {
@@ -146,7 +143,7 @@ class Dossier extends InformationsHomologation {
       ...super.toJSON(),
       decision: this.decision.toJSON(),
       autorite: this.autorite.toJSON(),
-      datesTelechargements: this.datesTelechargements.toJSON(),
+      dateTelechargement: this.dateTelechargement.toJSON(),
       ...this.avis.toJSON(),
       ...this.documents.toJSON(),
     };

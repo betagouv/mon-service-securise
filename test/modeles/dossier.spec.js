@@ -20,7 +20,7 @@ describe("Un dossier d'homologation", () => {
       id: '123',
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
-      datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
+      dateTelechargement: { date: '2023-01-01T00:00:00.000Z' },
       avecAvis: true,
       avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
       avecDocuments: true,
@@ -33,7 +33,7 @@ describe("Un dossier d'homologation", () => {
       id: '123',
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
-      datesTelechargements: { decision: '2023-01-01T00:00:00.000Z' },
+      dateTelechargement: { date: '2023-01-01T00:00:00.000Z' },
       avecAvis: true,
       avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
       avecDocuments: true,
@@ -92,13 +92,13 @@ describe("Un dossier d'homologation", () => {
         .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
     });
 
-    it('met à jour la date de téléchargement du document concerné avec la date fournie', () => {
+    it("met à jour la date de téléchargement des documents d'homologation avec la date fournie", () => {
       const dossier = new Dossier();
       const maintenant = new Date();
 
-      dossier.enregistreDateTelechargement('decision', maintenant);
+      dossier.enregistreDateTelechargement(maintenant);
 
-      expect(dossier.datesTelechargements.decision).to.equal(maintenant);
+      expect(dossier.dateTelechargement.date).to.equal(maintenant);
     });
   });
 
@@ -186,7 +186,7 @@ describe("Un dossier d'homologation", () => {
         },
       });
 
-      const etapes = ['decision', 'datesTelechargements', 'autorite'];
+      const etapes = ['decision', 'dateTelechargement', 'autorite'];
       const dossier = new Dossier();
       etapes.forEach((etape) => {
         dossier[etape] = { ...bouchonneEtape(etape) };
@@ -255,7 +255,7 @@ describe("Un dossier d'homologation", () => {
       expect(() => dossier.enregistreFinalisation()).to.throwError((e) => {
         expect(e).to.be.an(ErreurDossierNonFinalisable);
         expect(e.message).to.equal('Ce dossier comporte des étapes incomplètes.');
-        expect(e.etapesIncompletes).to.eql(['decision', 'datesTelechargements', 'autorite', 'avis', 'documents']);
+        expect(e.etapesIncompletes).to.eql(['decision', 'dateTelechargement', 'autorite', 'avis', 'documents']);
       });
     });
 
