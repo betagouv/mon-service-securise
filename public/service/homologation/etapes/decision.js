@@ -1,15 +1,15 @@
 import brancheComportemenFormulaireEtape from '../formulaireEtape.js';
 
 $(() => {
-  const brancheTelechargements = () => {
-    const $liens = $('.document-homologation', 'form .documents');
+  const brancheTelechargement = () => {
+    const $lien = $('.document-homologation', 'form');
 
-    $liens.on('click', ({ target }) => (
+    $lien.on('click', ({ target }) => (
       axios.put($(target).data('action-enregistrement'))
         .then(() => window.location.reload())
     ));
   };
 
-  brancheTelechargements();
+  brancheTelechargement();
   brancheComportemenFormulaireEtape(() => Promise.resolve());
 });
