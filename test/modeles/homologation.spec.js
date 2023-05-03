@@ -465,7 +465,7 @@ describe('Une homologation', () => {
         dossiers: [{ ...unDossier(referentiel)
           .quiEstComplet()
           .avecDateHomologation(aujourdhui)
-          .avecDateTelechargement('decision', aujourdhui)
+          .avecDateTelechargement(aujourdhui)
           .donnees }],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
@@ -505,7 +505,7 @@ describe('Une homologation', () => {
           documents: ['unDocument'],
           autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
           decision: { dateHomologation: aujourdhui.toISOString(), dureeValidite: 'unAn' },
-          datesTelechargements: { decision: aujourdhui.toISOString() },
+          dateTelechargement: { date: aujourdhui.toISOString() },
           finalise: true,
         }],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
