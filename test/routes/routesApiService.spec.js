@@ -638,7 +638,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête PUT sur `/api/service/:id/homologation/telechargement/:idDocument', () => {
+  describe('quand requête PUT sur `/api/service/:id/homologation/telechargement', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({ id: '456', descriptionService: { nomService: 'un service' }, dossiers: [{ id: '999' }] });
       testeur.middleware().reinitialise({ homologationARenvoyer: homologationAvecDossier });
@@ -648,14 +648,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
-        { url: 'http://localhost:1234/api/service/456/homologation/telechargement/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/telechargement', method: 'put' },
         done,
       );
     });
 
     it('recherche le dossier courant correspondant', (done) => {
       testeur.middleware().verifieRechercheDossierCourant(
-        { url: 'http://localhost:1234/api/service/456/homologation/telechargement/decision', method: 'put' },
+        { url: 'http://localhost:1234/api/service/456/homologation/telechargement', method: 'put' },
         done,
       );
     });
@@ -669,24 +669,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().enregistreDossierCourant = (idHomologation, dossier) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
-        expect(dossier.datesTelechargements.decision).to.equal(maintenant);
+        expect(dossier.dateTelechargement.date).to.equal(maintenant);
         return Promise.resolve();
       };
 
-      axios.put('http://localhost:1234/api/service/456/homologation/telechargement/decision')
+      axios.put('http://localhost:1234/api/service/456/homologation/telechargement')
         .then(() => expect(depotAppele).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
-    });
-
-    it("reste robuste si l'id de document ne correspond pas à un document connu", (done) => {
-      axios.put('http://localhost:1234/api/service/456/homologation/telechargement/mauvaisId')
-        .catch(({ response }) => {
-          expect(response.status).to.be(422);
-          expect(response.data).to.equal('Identifiant de document invalide');
-          done();
-        })
-        .catch(done);
     });
   });
 
