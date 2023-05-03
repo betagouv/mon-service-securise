@@ -39,14 +39,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const estDocumentHomologation = (idDocument) => (
     donnees.documentsHomologation[idDocument] !== undefined
   );
-  const tousDocumentsHomologation = () => Object
-    .entries(donnees.documentsHomologation || {})
-    .map(([id, document]) => ({ id, ...document }));
-  const urlDocumentHomologation = (idDocument, idHomologation) => (
-    donnees.documentsHomologation[idDocument]
-      ?.urlTelechargement
-      ?.replace(':idService', idHomologation)
-  );
   const descriptionEcheanceRenouvellement = (id) => echeancesRenouvellement()[id]?.description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
   const descriptionDelaiAvantImpactCritique = (id) => delaisAvantImpactCritique()[id]?.description;
@@ -259,8 +251,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estDocumentHomologation,
     estIdentifiantEcheanceRenouvellementConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
-    tousDocumentsHomologation,
-    urlDocumentHomologation,
     derniereEtapeParcours,
     etapeExiste,
     etapesParcoursHomologation,

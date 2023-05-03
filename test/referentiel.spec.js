@@ -562,19 +562,6 @@ describe('Le référentiel', () => {
     expect(referentiel.codeDepartements()).to.equal(undefined);
   });
 
-  it("connaît la liste des documents d'homologation", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      documentsHomologation: {
-        decision: { description: 'la decision' },
-        annexes: { description: 'les annexes' },
-      },
-    });
-
-    expect(referentiel.tousDocumentsHomologation()).to.eql([
-      { id: 'decision', description: 'la decision' },
-      { id: 'annexes', description: 'les annexes' }]);
-  });
-
   it('connaît la première étape du parcours Homologation', () => {
     const premiereEtape = { id: 'premiere', numero: 1 };
     const referentiel = Referentiel.creeReferentiel({
@@ -609,34 +596,6 @@ describe('Le référentiel', () => {
       });
 
       expect(referentiel.idEtapeSuivante('premiere')).to.equal('deuxieme');
-    });
-  });
-
-  describe("sur demande d'une URL de document d'homologation", () => {
-    it("sait construire l'URL d'un document d'homologation", () => {
-      const referentiel = Referentiel.creeReferentiel({
-        documentsHomologation: {
-          decision: { urlTelechargement: '/pdf/:idService/decision.pdf' },
-        },
-      });
-
-      expect(referentiel.urlDocumentHomologation('decision', '123')).to.eql('/pdf/123/decision.pdf');
-    });
-
-    it("reste robuste si l'identifiant du document est inconnu", () => {
-      const referentiel = Referentiel.creeReferentiel({
-        documentsHomologation: { },
-      });
-
-      expect(referentiel.urlDocumentHomologation('decision', '123')).to.be(undefined);
-    });
-
-    it("reste robuste si le document n'est pas associé à une URL", () => {
-      const referentiel = Referentiel.creeReferentiel({
-        documentsHomologation: { decision: { } },
-      });
-
-      expect(referentiel.urlDocumentHomologation('decision', '123')).to.be(undefined);
     });
   });
 
