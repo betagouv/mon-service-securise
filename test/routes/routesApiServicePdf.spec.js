@@ -14,6 +14,16 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     .then(() => done())
     .catch(done);
 
+  const verifieTypeFichierServiEstZIP = (url, done) => axios.get(url)
+    .then((reponse) => expect(reponse.headers['content-type']).to.contain('application/zip'))
+    .then(() => done())
+    .catch(done);
+
+  const verifieNomFichierServi = (url, nom, done) => axios.get(url)
+    .then((reponse) => expect(reponse.headers['content-disposition']).to.contain(`filename="${nom}"`))
+    .then(() => done())
+    .catch(done);
+
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
@@ -175,6 +185,87 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.reject();
 
       axios.get('http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf')
+        .then(() => done('La génération aurait dû lever une erreur'))
+        .catch((e) => {
+          expect(e.response.status).to.equal(424);
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('quand requête GET sur `/api/service/:id/pdf/documentsHomologation.zip`', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    const homologationARenvoyer = new Homologation({
+      id: '456',
+      descriptionService: { nomService: 'un service' },
+      dossiers: [unDossier(referentiel).donnees],
+    }, referentiel);
+    homologationARenvoyer.mesures.indiceCyber = () => 3.5;
+
+    beforeEach(() => {
+      testeur.adaptateurPdf().genereArchiveTousDocuments = () => Promise.resolve('Archive ZIP');
+      testeur.middleware().reinitialise({ homologationARenvoyer });
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
+        done,
+      );
+    });
+
+    it('recherche le dossier courant correspondant', (done) => {
+      testeur.middleware().verifieRechercheDossierCourant(
+        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
+        done,
+      );
+    });
+
+    it('sert un fichier de type zip', (done) => {
+      verifieTypeFichierServiEstZIP('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip', done);
+    });
+
+    it('sert un fichier dont le nom contient la date du jour en format court', (done) => {
+      testeur.adaptateurHorloge().maintenant = () => new Date(2023, 0, 28);
+
+      verifieNomFichierServi('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip', 'MSS_decision_20230128.zip', done);
+    });
+
+    it('utilise un adaptateur de pdf pour la génération', (done) => {
+      let adaptateurPdfAppele = false;
+      testeur.adaptateurPdf().genereArchiveTousDocuments = () => {
+        adaptateurPdfAppele = true;
+        return Promise.resolve('Archive ZIP');
+      };
+
+      axios.get('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip')
+        .then(() => {
+          expect(adaptateurPdfAppele).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("utilise un adaptateur d'horloge pour la génération du nom", (done) => {
+      let adaptateurHorlogeAppele = false;
+      testeur.adaptateurHorloge().maintenant = () => {
+        adaptateurHorlogeAppele = true;
+        return new Date();
+      };
+
+      axios.get('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip')
+        .then(() => {
+          expect(adaptateurHorlogeAppele).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("reste robuste en cas d'échec de génération de pdf", (done) => {
+      testeur.adaptateurPdf().genereArchiveTousDocuments = () => Promise.reject();
+
+      axios.get('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip')
         .then(() => done('La génération aurait dû lever une erreur'))
         .catch((e) => {
           expect(e.response.status).to.equal(424);
