@@ -212,17 +212,11 @@ const routesApiService = (
         .catch(suite);
     });
 
-  routes.put('/:id/homologation/telechargement/:idDocument', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
+  routes.put('/:id/homologation/telechargement', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
-    const { idDocument } = requete.params;
-    if (!referentiel.estDocumentHomologation(idDocument)) {
-      reponse.status(422).send('Identifiant de document invalide');
-      return;
-    }
-
     const dateTelechargement = adaptateurHorloge.maintenant();
-    dossierCourant.enregistreDateTelechargement(idDocument, dateTelechargement);
+    dossierCourant.enregistreDateTelechargement(dateTelechargement);
     depotDonnees.enregistreDossierCourant(homologation.id, dossierCourant)
       .then(() => reponse.sendStatus(204))
       .catch(suite);
