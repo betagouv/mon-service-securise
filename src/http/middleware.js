@@ -3,6 +3,7 @@ const basicAuth = require('express-basic-auth');
 const pug = require('pug');
 const { check } = require('express-validator');
 const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
+const { CSP_BIBLIOTHEQUES } = require('../routes/routesBibliotheques');
 
 const middleware = (configuration = {}) => {
   const
@@ -26,13 +27,15 @@ const middleware = (configuration = {}) => {
     const { nonce } = requete;
 
     const defaultCsp = "default-src 'self'";
+    const connectCsp = `connect-src 'self' ${CSP_BIBLIOTHEQUES.matomo.connect}`;
     const imgCsp = "img-src 'self' data:";
+
     const styleCsp = nonce ? `style-src 'self' 'nonce-${nonce}'` : '';
     const scriptCsp = "script-src 'self'";
     const frameCsp = adaptateurEnvironnement.statistiques().domaineMetabaseMSS()
       ? `frame-src ${adaptateurEnvironnement.statistiques().domaineMetabaseMSS()}` : '';
 
-    const toutesCsp = [defaultCsp, imgCsp, styleCsp, scriptCsp, frameCsp].filter((csp) => csp !== '');
+    const toutesCsp = [defaultCsp, connectCsp, imgCsp, styleCsp, scriptCsp, frameCsp].filter((csp) => csp !== '');
 
     reponse.set({
       'content-security-policy': `${toutesCsp.join('; ')}`,

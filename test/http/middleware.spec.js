@@ -371,6 +371,10 @@ describe('Le middleware MSS', () => {
       verifiePositionnementHeader('content-security-policy', "script-src 'self'", done);
     });
 
+    it('autorise la connexion vers MSS et stats.data.gouv (pour Matomo)', (done) => {
+      verifiePositionnementHeader('content-security-policy', "connect-src 'self' https://stats.data.gouv.fr/piwik.php", done);
+    });
+
     it('autorise le chargements des i-frames venant du domaine du « Journal MSS »', (done) => {
       const adaptateurEnvironnement = {
         statistiques: () => ({ domaineMetabaseMSS: () => 'https://journal-mss.fr/' }),

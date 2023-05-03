@@ -17,6 +17,10 @@ const CHEMINS_BIBLIOTHEQUES = {
   },
 };
 
+const CSP_BIBLIOTHEQUES = {
+  matomo: { connect: 'https://stats.data.gouv.fr/piwik.php' },
+};
+
 const routesBibliotheques = () => {
   const routes = express.Router();
 
@@ -38,4 +42,4 @@ const routesBibliotheques = () => {
   return routes;
 };
 
-module.exports = routesBibliotheques;
+module.exports = { routesBibliotheques, CSP_BIBLIOTHEQUES };

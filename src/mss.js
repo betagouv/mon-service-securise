@@ -3,7 +3,7 @@ const express = require('express');
 
 const { DUREE_SESSION } = require('./http/configurationServeur');
 const routesApi = require('./routes/routesApi');
-const routesBibliotheques = require('./routes/routesBibliotheques');
+const { routesBibliotheques } = require('./routes/routesBibliotheques');
 const routesService = require('./routes/routesService');
 const routesStyles = require('./routes/routesStyles');
 
