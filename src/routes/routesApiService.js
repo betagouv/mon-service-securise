@@ -34,7 +34,7 @@ const routesApiService = (
 ) => {
   const routes = express.Router();
 
-  routes.use(routesApiServicePdf(middleware, adaptateurPdf, referentiel));
+  routes.use(routesApiServicePdf(middleware, adaptateurHorloge, adaptateurPdf, referentiel));
 
   routes.post('/', middleware.verificationAcceptationCGU, middleware.aseptise('nomService', 'organisationsResponsables.*'), middleware.aseptiseListes([
     { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
