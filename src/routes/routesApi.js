@@ -284,7 +284,14 @@ const routesApi = (
         contributeurExistant
           ? Promise.resolve(contributeurExistant)
           : depotDonnees.nouvelUtilisateur({ email: emailContributeur, infolettreAcceptee: false })
-            .then(creeContactEmail)
+            .then((utilisateur) => adaptateurMail
+              .creeContact(emailContributeur, '', '', true)
+              .then(() => utilisateur)
+              .catch((e) => {
+                if (e.response.data.message === 'Contact already exist') return utilisateur;
+                throw e;
+              }))
+
       );
 
       const informeContributeur = (contributeurAInformer, contributeurExistant) => (
