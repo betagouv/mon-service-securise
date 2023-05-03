@@ -673,24 +673,9 @@ module.exports = {
     { numero: 2, libelle: 'Avis', id: 'avis' },
     { numero: 3, libelle: 'Documents', id: 'documents' },
     { numero: 4, libelle: 'Décision', id: 'decision' },
-    { numero: 5, libelle: 'Date', id: 'datesTelechargements' },
+    { numero: 5, libelle: 'Date', id: 'dateTelechargement' },
     { numero: 6, libelle: 'Récapitulatif', id: 'recapitulatif' },
   ],
-
-  documentsHomologation: {
-    decision: {
-      description: "Décision d'homologation de sécurité",
-      urlTelechargement: '/api/service/:idService/pdf/dossierDecision.pdf',
-    },
-    synthese: {
-      description: "Synthèse de l'état de sécurité du service",
-      urlTelechargement: '/api/service/:idService/pdf/syntheseSecurite.pdf',
-    },
-    annexes: {
-      description: 'Annexes',
-      urlTelechargement: '/api/service/:idService/pdf/annexes.pdf',
-    },
-  },
 
   reglesPersonnalisation: {
     clefsDescriptionServiceAConsiderer: [
