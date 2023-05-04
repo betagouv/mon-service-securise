@@ -19,11 +19,8 @@ const gestionnaireTirroir = {
     gestionnaireTirroir.basculeOuvert(true);
   },
   basculeOuvert: (statut) => {
-    if (statut) {
-      $('.tirroir').addClass('ouvert');
-    } else {
-      $('.tirroir').removeClass('ouvert');
-    }
+    if (statut) $('.tirroir').addClass('ouvert');
+    else $('.tirroir').removeClass('ouvert');
   },
 };
 
