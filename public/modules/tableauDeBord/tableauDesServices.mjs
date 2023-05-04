@@ -19,10 +19,7 @@ const tableauDesServices = {
   nombreServices: 0,
   servicesSelectionnes: new Set(),
   termeRecherche: '',
-  tri: {
-    colonne: null,
-    direction: AUCUNE,
-  },
+  tri: { colonne: null, direction: AUCUNE },
   afficheDonnees: () => {
     tableauDesServices.videTableau();
     const donneesAAfficher = tableauDesServices.donnees
@@ -42,6 +39,23 @@ const tableauDesServices = {
         return serviceA[colonne] - serviceB[colonne];
       });
     tableauDesServices.remplisTableau(donneesAAfficher);
+  },
+  afficheEtatSelection: () => {
+    const nbServiceSelectionnes = tableauDesServices.servicesSelectionnes.size;
+    const $checkboxTousServices = $('.checkbox-selection-tous-services');
+    if (nbServiceSelectionnes === tableauDesServices.nombreServices) {
+      $checkboxTousServices.removeClass('selection-partielle');
+      $checkboxTousServices.prop('checked', true);
+      $('.texte-nombre-service').text('Tous sélectionnés');
+    } else if (nbServiceSelectionnes === 0) {
+      $checkboxTousServices.removeClass('selection-partielle');
+      $checkboxTousServices.prop('checked', false);
+      $('.texte-nombre-service').text('0 sélectionné');
+    } else {
+      $checkboxTousServices.addClass('selection-partielle');
+      $checkboxTousServices.prop('checked', false);
+      $('.texte-nombre-service').text(`${nbServiceSelectionnes} sélectionné${nbServiceSelectionnes > 1 ? 's' : ''}`);
+    }
   },
   basculeSelectionService: (idService, statut) => {
     if (statut) {

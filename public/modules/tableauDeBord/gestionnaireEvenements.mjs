@@ -56,22 +56,7 @@ const gestionnaireEvenements = {
     const selectionne = $checkbox.is(':checked');
     const idService = $checkbox.parents('.ligne-service').data('id-service');
     tableauDesServices.basculeSelectionService(idService, selectionne);
-
-    const nbServiceSelectionnes = tableauDesServices.servicesSelectionnes.size;
-    const $checkboxTousServices = $('.checkbox-selection-tous-services');
-    if (nbServiceSelectionnes === tableauDesServices.nombreServices) {
-      $checkboxTousServices.removeClass('selection-partielle');
-      $checkboxTousServices.prop('checked', true);
-      $('.texte-nombre-service').text('Tous sélectionnés');
-    } else if (nbServiceSelectionnes === 0) {
-      $checkboxTousServices.removeClass('selection-partielle');
-      $checkboxTousServices.prop('checked', false);
-      $('.texte-nombre-service').text('0 sélectionné');
-    } else {
-      $checkboxTousServices.addClass('selection-partielle');
-      $checkboxTousServices.prop('checked', false);
-      $('.texte-nombre-service').text(`${nbServiceSelectionnes} sélectionné${nbServiceSelectionnes > 1 ? 's' : ''}`);
-    }
+    tableauDesServices.afficheEtatSelection();
     gestionnaireTirroir.basculeOuvert(false);
   },
   selectionneTousServices: ($checkbox) => {
@@ -83,7 +68,8 @@ const gestionnaireEvenements = {
       tableauDesServices.basculeSelectionService($checkboxService.parents('.ligne-service').data('id-service'), selectionne);
       $checkboxService.prop('checked', selectionne);
     });
-    $('.texte-nombre-service').text(selectionne ? 'Tous sélectionnés' : '0 sélectionné');
+
+    tableauDesServices.afficheEtatSelection();
     gestionnaireTirroir.basculeOuvert(false);
   },
   fermeMenuFlottant: () => {
