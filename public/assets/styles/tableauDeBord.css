@@ -273,6 +273,7 @@ label[for='recherche-service'] {
 .tableau-services td.cellule-noms {
   display: flex;
   align-items: center;
+  text-align: left;
 }
 
 .tableau-services td .conteneur-noms {
