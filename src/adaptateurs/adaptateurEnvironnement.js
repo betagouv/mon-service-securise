@@ -6,6 +6,10 @@ const journalMSS = () => ({
   logEvenementDansConsole: () => process.env.AVEC_JOURNAL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
 });
 
+const matomo = () => ({
+  urlTagManager: () => process.env.MATOMO_URL_TAG_MANAGER,
+});
+
 const sendinblue = () => ({
   clefAPI: () => process.env.SENDINBLUE_CLEF_API,
 });
@@ -21,4 +25,4 @@ const statistiques = () => ({
     : ''),
 });
 
-module.exports = { emailMemoire, journalMSS, sendinblue, sentry, statistiques };
+module.exports = { emailMemoire, journalMSS, matomo, sendinblue, sentry, statistiques };

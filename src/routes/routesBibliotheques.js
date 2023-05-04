@@ -1,5 +1,6 @@
 const axios = require('axios');
 const express = require('express');
+const adaptateurEnvironnement = require('../adaptateurs/adaptateurEnvironnement');
 
 const CHEMINS_BIBLIOTHEQUES = {
   get: {
@@ -7,7 +8,7 @@ const CHEMINS_BIBLIOTHEQUES = {
     'html2canvas.min.js': 'https://unpkg.com/html2canvas/dist/html2canvas.min.js',
     'jquery-3.6.0.min.js': 'https://code.jquery.com/jquery-3.6.0.min.js',
     'jspdf.umd.min.js': 'https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js',
-    'matomo-tag-manager.js': 'https://stats.data.gouv.fr/js/container_JhsEjxnw.js',
+    'matomo-tag-manager.js': adaptateurEnvironnement.matomo().urlTagManager(),
     'piwik.js': 'https://stats.data.gouv.fr/piwik.js',
     'purify.min.js': 'https://unpkg.com/dompurify/dist/purify.min.js',
     'selectize.min.js': 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js',
