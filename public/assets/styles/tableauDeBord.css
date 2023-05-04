@@ -1,3 +1,11 @@
+:root {
+  --marge-au-dessus-footer: 5em;
+}
+
+main {
+  padding-bottom: 0;
+}
+
 .bandeau-maj-profil {
   display: flex;
   height: 2.7em;
@@ -40,6 +48,7 @@
 
 .services {
   display: flex;
+  padding-bottom: var(--marge-au-dessus-footer);
 }
 
 .entete-suivi-services {
@@ -456,11 +465,12 @@ label[for='recherche-service'] {
 .suivi-services {
   position: relative;
   height: 100%;
+  overflow: hidden;
 }
 
 .suivi-services .tirroir {
   background: #fff;
-  height: calc(100% + 5em);
+  height: calc(100% + var(--marge-au-dessus-footer));
   position: absolute;
   left: 100vw;
   top: 0;
