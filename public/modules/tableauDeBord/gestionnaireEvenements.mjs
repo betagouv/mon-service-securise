@@ -16,15 +16,15 @@ const gestionnaireEvenements = {
     $('.tableau-services').on('click', (e) => {
       const $elementClique = $(e.target);
       if ($elementClique.hasClass('selection-service')) {
-        gestionnaireEvenements.gereSelectionService($elementClique);
+        gestionnaireEvenements.selectionneService($elementClique);
       } else if ($elementClique.hasClass('checkbox-selection-tous-services')) {
-        gestionnaireEvenements.gereSelectionTousServices($elementClique);
+        gestionnaireEvenements.selectionneTousServices($elementClique);
       } else if ($elementClique.hasClass('texte-nombre-service')) {
-        gestionnaireEvenements.gereMenuAction($elementClique);
+        gestionnaireEvenements.afficheMenuAction($elementClique);
       } else if ($elementClique.hasClass('action')) {
-        gestionnaireEvenements.gereAction($elementClique);
+        gestionnaireEvenements.afficheTiroirAction($elementClique);
       } else {
-        gestionnaireEvenements.fermeToutMenuFlottant();
+        gestionnaireEvenements.fermeMenuFlottant();
       }
     });
 
@@ -36,14 +36,14 @@ const gestionnaireEvenements = {
       gestionnaireActionsTirroir.duplique();
     });
   },
-  gereAction: ($action) => {
+  afficheTiroirAction: ($action) => {
     gestionnaireTirroir.afficheContenuAction($action.data('action'));
-    gestionnaireEvenements.fermeToutMenuFlottant();
+    gestionnaireEvenements.fermeMenuFlottant();
   },
-  gereMenuAction: ($bouton) => {
+  afficheMenuAction: ($bouton) => {
     if (tableauDesServices.servicesSelectionnes.size === 0) return;
     const doitOuvrirMenu = !$bouton.parents('.conteneur-selection-services').hasClass('actif');
-    gestionnaireEvenements.fermeToutMenuFlottant();
+    gestionnaireEvenements.fermeMenuFlottant();
     if (doitOuvrirMenu) {
       $bouton.parents('.conteneur-selection-services').addClass('actif');
       $('.menu-flotant.actions-services').removeClass('invisible');
@@ -52,7 +52,7 @@ const gestionnaireEvenements = {
       $('.menu-flotant.actions-services').addClass('invisible');
     }
   },
-  gereSelectionService: ($checkbox) => {
+  selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
     const idService = $checkbox.parents('.ligne-service').data('id-service');
     tableauDesServices.basculeSelectionService(idService, selectionne);
@@ -74,7 +74,7 @@ const gestionnaireEvenements = {
     }
     gestionnaireTirroir.basculeOuvert(false);
   },
-  gereSelectionTousServices: ($checkbox) => {
+  selectionneTousServices: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
     $checkbox.removeClass('selection-partielle');
 
@@ -86,7 +86,7 @@ const gestionnaireEvenements = {
     $('.texte-nombre-service').text(selectionne ? 'Tous sélectionnés' : '0 sélectionné');
     gestionnaireTirroir.basculeOuvert(false);
   },
-  fermeToutMenuFlottant: () => {
+  fermeMenuFlottant: () => {
     $('.action-lien').removeClass('actif');
     $('.conteneur-selection-services').removeClass('actif');
     $('.menu-flotant').addClass('invisible');
