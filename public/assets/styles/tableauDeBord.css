@@ -142,7 +142,7 @@ label[for='recherche-service'] {
 .actions {
   display: flex;
   gap: 1em;
-  align-items: start;
+  align-items: baseline;
   justify-content: end;
   flex-grow: 1;
 }
