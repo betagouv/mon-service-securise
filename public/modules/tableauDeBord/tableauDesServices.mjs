@@ -52,12 +52,6 @@ const tableauDesServices = {
       $(`.ligne-service[data-id-service='${idService}']`).removeClass('selectionne');
     }
   },
-  fixeDonnees: (donnees) => {
-    tableauDesServices.donnees = donnees.map((d) => ({
-      ...d,
-      nombreContributeurs: d.contributeurs.length + 1,
-    }));
-  },
   modifieRecherche: (terme) => {
     tableauDesServices.termeRecherche = terme;
     tableauDesServices.afficheDonnees();
@@ -82,7 +76,7 @@ const tableauDesServices = {
           .then(({ data }) => {
             remplisCartesInformations(data.resume);
             tableauDesServices.nombreServices = data.resume.nombreServices;
-            tableauDesServices.fixeDonnees(data.services);
+            tableauDesServices.donnees = data.services;
             tableauDesServices.afficheDonnees();
           });
 
