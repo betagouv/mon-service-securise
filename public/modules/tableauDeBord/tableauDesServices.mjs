@@ -5,7 +5,6 @@ const STATUS_HOMOLOGATION = {
   completes: 'Réalisée',
 };
 
-const afficheBandeauMajProfil = () => $('.bandeau-maj-profil').removeClass('invisible');
 const metEnFormeContributeurs = (service) => [service.createur.prenomNom, ...service.contributeurs.map((c) => c.prenomNom)].join('\n');
 const remplisCartesInformations = (resume) => {
   $('#nombre-services').text(resume.nombreServices);
@@ -84,18 +83,13 @@ const tableauDesServices = {
   },
   recupereServices: () => {
     axios.get('/api/utilisateurCourant')
-      .then(({ data }) => data.utilisateur)
-      .then((utilisateur) => {
-        axios.get('/api/services')
-          .then(({ data }) => {
-            remplisCartesInformations(data.resume);
-            tableauDesServices.nombreServices = data.resume.nombreServices;
-            tableauDesServices.donnees = data.services;
-            tableauDesServices.afficheDonnees();
-          });
-
-        if (!utilisateur.profilEstComplet) afficheBandeauMajProfil();
-      });
+      .then(() => axios.get('/api/services')
+        .then(({ data }) => {
+          remplisCartesInformations(data.resume);
+          tableauDesServices.nombreServices = data.resume.nombreServices;
+          tableauDesServices.donnees = data.services;
+          tableauDesServices.afficheDonnees();
+        }));
   },
   remplisTableau: (donnees) => {
     donnees.forEach((service) => {
