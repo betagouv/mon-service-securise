@@ -36,6 +36,7 @@ describe("L'objet d'API de `GET /services`", () => {
         ],
         indiceCyber: 3.5,
         statutHomologation: 'aSaisir',
+        nombreContributeurs: 1 + 1,
       }],
     );
   });

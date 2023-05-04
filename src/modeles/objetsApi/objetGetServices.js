@@ -27,6 +27,7 @@ const donnees = (services) => {
         })),
         indiceCyber: json.indiceCyber,
         statutHomologation: json.statutHomologation,
+        nombreContributeurs: json.contributeurs.length + 1,
       })),
     resume: {
       nombreServices: services.length,
