@@ -56,6 +56,7 @@ const gestionnaireEvenements = {
     const selectionne = $checkbox.is(':checked');
     const idService = $checkbox.parents('.ligne-service').data('id-service');
     tableauDesServices.basculeSelectionService(idService, selectionne);
+    gestionnaireEvenements.fermeMenuFlottant();
     tableauDesServices.afficheEtatSelection();
     gestionnaireTirroir.basculeOuvert(false);
   },
@@ -69,6 +70,7 @@ const gestionnaireEvenements = {
       $checkboxService.prop('checked', selectionne);
     });
 
+    gestionnaireEvenements.fermeMenuFlottant();
     tableauDesServices.afficheEtatSelection();
     gestionnaireTirroir.basculeOuvert(false);
   },
