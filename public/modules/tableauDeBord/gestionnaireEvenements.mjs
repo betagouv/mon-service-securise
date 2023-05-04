@@ -15,9 +15,7 @@ const gestionnaireEvenements = {
 
     $('.tableau-services').on('click', (e) => {
       const $elementClique = $(e.target);
-      if ($elementClique.hasClass('action-liens-services')) {
-        gestionnaireEvenements.gereMenuFlotantLienService($elementClique);
-      } else if ($elementClique.hasClass('selection-service')) {
+      if ($elementClique.hasClass('selection-service')) {
         gestionnaireEvenements.gereSelectionService($elementClique);
       } else if ($elementClique.hasClass('checkbox-selection-tous-services')) {
         gestionnaireEvenements.gereSelectionTousServices($elementClique);
@@ -52,15 +50,6 @@ const gestionnaireEvenements = {
     } else {
       $bouton.parents('.conteneur-selection-services').removeClass('actif');
       $('.menu-flotant.actions-services').addClass('invisible');
-    }
-  },
-  gereMenuFlotantLienService: ($bouton) => {
-    const doitOuvrirMenu = !$bouton.hasClass('actif');
-    gestionnaireEvenements.fermeToutMenuFlottant();
-    if (doitOuvrirMenu) {
-      const idService = $bouton.parents('.ligne-service').data('id-service');
-      $bouton.addClass('actif');
-      $(`.ligne-service[data-id-service='${idService}'] .menu-flotant.liens-services`).removeClass('invisible');
     }
   },
   gereSelectionService: ($checkbox) => {

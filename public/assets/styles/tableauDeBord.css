@@ -379,15 +379,6 @@ label[for='recherche-service'] {
   pointer-events: none;
 }
 
-.tableau-services .action-liens-services.actif img {
-  content: url('/statique/assets/images/points_horizontal_bleu_fonce.svg');
-}
-
-.tableau-services .menu-flotant.liens-services {
-  top: -1px;
-  right: calc(2em + 2px);
-}
-
 .tableau-services .selection-service {
   cursor: pointer;
 }
