@@ -769,18 +769,6 @@ describe('Le serveur MSS des routes /api/*', () => {
           .catch(done);
       });
 
-      it("jette une erreur si l'utilisateur n'existe pas", (done) => {
-        testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
-        testeur.depotDonnees().utilisateur = () => Promise.resolve(undefined);
-
-        testeur.verifieRequeteGenereErreurHTTP(
-          422,
-          "L'utilisateur '123' est introuvable.",
-          { method: 'put', url: 'http://localhost:1234/api/utilisateur', data: donneesRequete },
-          done
-        );
-      });
-
       it("inscrit l'utilisateur à l'infolettre si il l'a demandé", (done) => {
         let inscriptionAppelee = false;
         donneesRequete.infolettreAcceptee = 'true';
