@@ -251,16 +251,17 @@ const creeDepot = (config = {}) => {
   );
 
   const trouveIndexDisponible = (idCreateur, nomHomologationDupliquee) => {
-    const filtreNomDuplique = new RegExp(`^${nomHomologationDupliquee} (\\d+)$`);
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
+    const nomCompatibleRegExp = nomHomologationDupliquee.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const filtreNomDuplique = new RegExp(`^${nomCompatibleRegExp} (\\d+)$`);
+
     const maxMatch = (maxCourant, nomService) => {
       const index = parseInt(nomService.match(filtreNomDuplique)?.[1], 10);
       return index > maxCourant ? index : maxCourant;
     };
-    const indexMax = (hs) => {
-      const resultat = hs
-        .map((h) => h.nomService())
-        .reduce(maxMatch, -Infinity);
 
+    const indexMax = (hs) => {
+      const resultat = hs.map((h) => h.nomService()).reduce(maxMatch, -Infinity);
       return Math.max(0, resultat) + 1;
     };
 

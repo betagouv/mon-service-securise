@@ -1229,5 +1229,22 @@ describe('Le dépôt de données des homologations', () => {
         .then(() => done())
         .catch(done);
     });
+
+    it("sait extraire l'index disponible même dans des noms contenant des parenthèses", (done) => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const original = uneDescriptionValide(referentiel).avecNomService('Service A (mairie) - Copie 1').construis().toJSON();
+      const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        homologations: [{ id: '123', descriptionService: original }],
+        autorisations: [{ idUtilisateur: '999', idHomologation: '123', idService: '123', type: 'createur' }],
+      });
+
+      const depot = DepotDonneesHomologations.creeDepot({ adaptateurPersistance, referentiel });
+
+      depot.trouveIndexDisponible('999', 'Service A (mairie) - Copie')
+        .then((index) => expect(index).to.equal(2))
+        .then(() => done())
+        .catch(done);
+    });
   });
 });
