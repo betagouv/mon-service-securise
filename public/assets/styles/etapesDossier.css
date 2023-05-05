@@ -132,35 +132,13 @@ section.autorite {
   padding: 0 0 1em 0;
 }
 
-ul.documents {
-  margin: 1em 0 0 0;
-  padding: 0 0 0 2em;
-}
-
-.documents li {
-  list-style: url('../images/icone_telechargement.svg');
-
-  margin: 0.5em 0;
-}
-
-.documents .document-homologation {
-  display: inline-block;
-  cursor: pointer;
-  color: var(--bleu-mise-en-avant);
-  transform: translateY(-0.3em);
-}
-
-.documents .date-telechargement {
-  font-size: 0.9em;
-  color: var(--texte-fonce);
-}
-
-.documents li input[type=text] {
+.validation-telechargement input[type=text] {
   display: none;
 }
 
-.documents li .message-erreur {
-  margin-top: 0;
+.validation-telechargement .message-erreur {
+  margin-top: 1em;
+  margin-bottom: 0;
 }
 
 .dossiers {
