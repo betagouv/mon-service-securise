@@ -1,6 +1,6 @@
-import gestionnaireTirroir from './gestionnaireTirroir.mjs';
+import gestionnaireTiroir from './gestionnaireTiroir.mjs';
 import tableauDesServices from './tableauDesServices.mjs';
-import gestionnaireActionsTirroir from './gestionnaireActionsTirroir.mjs';
+import gestionnaireActionsTiroir from './gestionnaireActionsTiroir.mjs';
 
 const gestionnaireEvenements = {
   brancheComportement: () => {
@@ -28,24 +28,24 @@ const gestionnaireEvenements = {
       }
     });
 
-    $('.tirroir .fermeture-tirroir').on('click', () => {
-      gestionnaireTirroir.basculeOuvert(false);
+    $('.tiroir .fermeture-tiroir').on('click', () => {
+      gestionnaireTiroir.basculeOuvert(false);
     });
 
     $('#action-duplication').on('click', () => {
-      gestionnaireActionsTirroir.duplique();
+      gestionnaireActionsTiroir.duplique();
     });
 
     $('#action-suppression').on('click', () => {
-      gestionnaireActionsTirroir.supprime();
+      gestionnaireActionsTiroir.supprime();
     });
 
     $('#action-invitation').on('click', () => {
-      gestionnaireActionsTirroir.invite();
+      gestionnaireActionsTiroir.invite();
     });
   },
   afficheTiroirAction: ($action) => {
-    gestionnaireTirroir.afficheContenuAction($action.data('action'));
+    gestionnaireTiroir.afficheContenuAction($action.data('action'));
     gestionnaireEvenements.fermeMenuFlottant();
   },
   afficheMenuAction: ($bouton) => {
@@ -74,7 +74,7 @@ const gestionnaireEvenements = {
     tableauDesServices.basculeSelectionService(idService, selectionne);
     gestionnaireEvenements.fermeMenuFlottant();
     tableauDesServices.afficheEtatSelection();
-    gestionnaireTirroir.basculeOuvert(false);
+    gestionnaireTiroir.basculeOuvert(false);
   },
   selectionneTousServices: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
@@ -88,7 +88,7 @@ const gestionnaireEvenements = {
 
     gestionnaireEvenements.fermeMenuFlottant();
     tableauDesServices.afficheEtatSelection();
-    gestionnaireTirroir.basculeOuvert(false);
+    gestionnaireTiroir.basculeOuvert(false);
   },
   fermeMenuFlottant: () => {
     $('.action-lien').removeClass('actif');

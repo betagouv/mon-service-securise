@@ -500,7 +500,7 @@ label[for='recherche-service'] {
   overflow: hidden;
 }
 
-.suivi-services .tirroir {
+.suivi-services .tiroir {
   background: #fff;
   height: calc(100% + var(--marge-au-dessus-footer));
   position: absolute;
@@ -511,34 +511,34 @@ label[for='recherche-service'] {
   box-shadow: -10px 0px 34px 0px #00000026;
 }
 
-.suivi-services .tirroir.ouvert {
+.suivi-services .tiroir.ouvert {
   transform: translateX(-100%);
 }
 
-.suivi-services .entete-tirroir {
+.suivi-services .entete-tiroir {
   position: relative;
   background: #DBECF1;
   text-align: left;
   padding: 0 2em;
 }
 
-.entete-tirroir .image-entete {
+.entete-tiroir .image-entete {
   position: absolute;
   top: 0;
   right: 0;
 }
 
-.entete-tirroir .par-dessus {
+.entete-tiroir .par-dessus {
   position: relative;
 }
 
-.suivi-services .titre-tirroir {
+.suivi-services .titre-tiroir {
   font-size: 1.6em;
   margin: 0;
   padding-top: 30px;
 }
 
-.suivi-services .texte-tirroir {
+.suivi-services .texte-tiroir {
   margin: 0;
   padding-top: 0.8em;
   font-weight: 500;
@@ -560,12 +560,12 @@ label[for='recherche-service'] {
   border-radius: 4px;
 }
 
-.suivi-services .contenu-tirroir {
+.suivi-services .contenu-tiroir {
   text-align: left;
   padding: 0 2em;
 }
 
-.contenu-tirroir .bouton {
+.contenu-tiroir .bouton {
   padding: 0.5em 1em;
   margin: 0;
 }
