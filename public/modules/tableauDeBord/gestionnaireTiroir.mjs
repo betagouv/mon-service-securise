@@ -36,20 +36,20 @@ const contenuActions = {
   },
 };
 
-const gestionnaireTirroir = {
+const gestionnaireTiroir = {
   afficheContenuAction: (identifiantAction) => {
     const { titre, texte, initialise } = contenuActions[identifiantAction];
-    $('.titre-tirroir').text(titre);
-    $('.texte-tirroir').text(texte);
+    $('.titre-tiroir').text(titre);
+    $('.texte-tiroir').text(texte);
     $('.bloc-contenu').hide();
     $(`#contenu-${identifiantAction}`).show();
     initialise();
-    gestionnaireTirroir.basculeOuvert(true);
+    gestionnaireTiroir.basculeOuvert(true);
   },
   basculeOuvert: (statut) => {
-    if (statut) $('.tirroir').addClass('ouvert');
-    else $('.tirroir').removeClass('ouvert');
+    if (statut) $('.tiroir').addClass('ouvert');
+    else $('.tiroir').removeClass('ouvert');
   },
 };
 
-export default gestionnaireTirroir;
+export default gestionnaireTiroir;

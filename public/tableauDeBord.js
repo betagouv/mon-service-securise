@@ -12,7 +12,7 @@ const afficheBandeauMajProfil = () => axios.get('/api/utilisateurCourant')
 $(() => {
   brancheModale('#nouveau-service', '#modale-nouveau-service');
   afficheBandeauMajProfil();
-  brancheValidation('.tirroir form');
+  brancheValidation('.tiroir form');
   tableauDesServices.recupereServices();
   gestionnaireEvenements.brancheComportement();
 });

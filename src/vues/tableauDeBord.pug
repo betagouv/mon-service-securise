@@ -65,14 +65,14 @@ block main
             th(data-colonne='statutHomologation') Homologation
             th 
         tbody.contenu-tableau-services
-    .tirroir
-      .entete-tirroir
-        img.image-entete(src='/statique/assets/images/fond_entete_tirroir.svg')
+    .tiroir
+      .entete-tiroir
+        img.image-entete(src='/statique/assets/images/fond_entete_tiroir.svg')
         .par-dessus
-          .fermeture-tirroir.croix-fermeture ✕
-          h3.titre-tirroir
-          p.texte-tirroir
-      .contenu-tirroir
+          .fermeture-tiroir.croix-fermeture ✕
+          h3.titre-tiroir
+          p.texte-tiroir
+      .contenu-tiroir
         form.bloc-contenu#contenu-invitation
           p Saisir l'e-mail de la personne à inviter.
           label Ajouter
@@ -86,12 +86,12 @@ block main
             )
             .message-erreur Veuillez saisir une adresse e-mail valide.
           .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tirroir(type='button') Annuler
+            button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
             button.bouton#action-invitation(type='button') Envoyer une invitation
         .bloc-contenu#contenu-invitation-confirmation
           img(src='/statique/assets/images/image_succes_invitation.svg')
           p Un e-mail d'invitation a bien été envoyé.
-          button.bouton.fermeture-tirroir Revenir à la liste des contributeurs
+          button.bouton.fermeture-tiroir Revenir à la liste des contributeurs
         form.bloc-contenu#contenu-duplication
           p Saisir le nombre de copies souhaitées.
           label Nombre de copies
@@ -108,7 +108,7 @@ block main
             )
             .message-erreur Veuillez utiliser une valeur entre 1 et 100.
           .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tirroir(type='button') Annuler
+            button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
             button.bouton#action-duplication(type='button') Valider
         form.bloc-contenu#contenu-suppression
           p 
@@ -121,7 +121,7 @@ block main
               strong Cette action est irréversible
               p Les données seront définitivement effacées. Les contributeurs n'auront plus accès à ce service.
           .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tirroir(type='button') Non, j'annule
+            button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Non, j'annule
             button.bouton#action-suppression(type='button') Je confirme la suppression
 
 

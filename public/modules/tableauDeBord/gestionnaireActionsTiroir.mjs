@@ -1,10 +1,10 @@
 import tableauDesServices from './tableauDesServices.mjs';
-import gestionnaireTirroir from './gestionnaireTirroir.mjs';
+import gestionnaireTiroir from './gestionnaireTiroir.mjs';
 import { declencheValidation } from '../interactions/validation.mjs';
 
 const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
 
-const gestionnaireActionsTirroir = {
+const gestionnaireActionsTiroir = {
   duplique: () => {
     declencheValidation('#contenu-duplication');
     const $nombreCopie = $('#nombre-copie');
@@ -21,7 +21,7 @@ const gestionnaireActionsTirroir = {
       Promise.all(promesses).then(() => {
         $nombreCopie.prop('disabled', false);
         $('#action-duplication').prop('disabled', false);
-        gestionnaireTirroir.basculeOuvert(false);
+        gestionnaireTiroir.basculeOuvert(false);
         tableauDesServices.recupereServices();
       });
     }
@@ -36,7 +36,7 @@ const gestionnaireActionsTirroir = {
       Promise.all(invitations).then(() => {
         $('#action-invitation').prop('disabled', false);
         tableauDesServices.recupereServices();
-        gestionnaireTirroir.afficheContenuAction('invitation-confirmation');
+        gestionnaireTiroir.afficheContenuAction('invitation-confirmation');
       });
     }
   },
@@ -45,11 +45,11 @@ const gestionnaireActionsTirroir = {
     const suppressions = [...tableauDesServices.servicesSelectionnes].map((idService) => axios.delete(`/api/service/${idService}`));
     Promise.all(suppressions).then(() => {
       $('#action-suppression').prop('disabled', false);
-      gestionnaireTirroir.basculeOuvert(false);
+      gestionnaireTiroir.basculeOuvert(false);
       tableauDesServices.servicesSelectionnes.clear();
       tableauDesServices.recupereServices();
     });
   },
 };
 
-export default gestionnaireActionsTirroir;
+export default gestionnaireActionsTiroir;
