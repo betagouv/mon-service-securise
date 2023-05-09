@@ -612,11 +612,11 @@ label[for='recherche-service'] {
   font-weight: 500;
 }
 
-#contenu-invitation2 {
+#contenu-invitation-confirmation {
   text-align: center;
   padding-top: 2em;
 }
 
-#contenu-invitation2 button {
+#contenu-invitation-confirmation button {
   margin-top: 2em;
 }

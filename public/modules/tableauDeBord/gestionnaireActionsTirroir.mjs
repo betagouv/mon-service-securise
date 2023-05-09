@@ -33,7 +33,7 @@ const gestionnaireActionsTirroir = {
       Promise.all(invitations).then(() => {
         $('#action-invitation').prop('disabled', false);
         tableauDesServices.recupereServices();
-        gestionnaireTirroir.afficheContenuAction('invitation2');
+        gestionnaireTirroir.afficheContenuAction('invitation-confirmation');
       });
     }
   },

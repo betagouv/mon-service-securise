@@ -15,7 +15,7 @@ const contenuActions = {
       $('#email-invitation-collaboration').val('');
     },
   },
-  invitation2: {
+  'invitation-confirmation': {
     titre: 'Inviter des contributeurs 2/2',
     texte: 'Créer des équipes de travail avec autant de personnes souhaitées.',
     initialise: () => { },
