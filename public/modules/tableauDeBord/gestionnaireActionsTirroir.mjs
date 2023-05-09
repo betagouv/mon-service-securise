@@ -43,9 +43,8 @@ const gestionnaireActionsTirroir = {
     Promise.all(suppressions).then(() => {
       $('#action-suppression').prop('disabled', false);
       gestionnaireTirroir.basculeOuvert(false);
-      tableauDesServices.recupereServices();
       tableauDesServices.servicesSelectionnes.clear();
-      tableauDesServices.afficheEtatSelection();
+      tableauDesServices.recupereServices();
     });
   },
 };

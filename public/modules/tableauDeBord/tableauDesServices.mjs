@@ -93,6 +93,7 @@ const tableauDesServices = {
           tableauDesServices.nombreServices = data.resume.nombreServices;
           tableauDesServices.donnees = data.services;
           tableauDesServices.afficheDonnees();
+          tableauDesServices.afficheEtatSelection();
         }));
   },
   remplisTableau: (donnees) => {
