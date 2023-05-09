@@ -73,7 +73,7 @@ block main
           h3.titre-tirroir
           p.texte-tirroir
       .contenu-tirroir
-        .bloc-contenu#contenu-invitation
+        form.bloc-contenu#contenu-invitation
           p Saisir l'e-mail de la personne à inviter.
           label Ajouter
             br
@@ -84,14 +84,15 @@ block main
               placeholder = 'ex : e.leroy@domaine.fr',
               required,
             )
+            .message-erreur Veuillez saisir une adresse e-mail valide.
           .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tirroir Annuler
-            button.bouton#action-invitation Envoyer une invitation
+            button.bouton.bouton-secondaire.fermeture-tirroir(type='button') Annuler
+            button.bouton#action-invitation(type='button') Envoyer une invitation
         .bloc-contenu#contenu-invitation-confirmation
           img(src='/statique/assets/images/image_succes_invitation.svg')
           p Un e-mail d'invitation a bien été envoyé.
           button.bouton.fermeture-tirroir Revenir à la liste des contributeurs
-        .bloc-contenu#contenu-duplication
+        form.bloc-contenu#contenu-duplication
           p Saisir le nombre de copies souhaitées.
           label Nombre de copies
             br
@@ -107,21 +108,21 @@ block main
             )
             .message-erreur Veuillez utiliser une valeur entre 1 et 100.
           .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tirroir Annuler
-            button.bouton#action-duplication Valider
-        .bloc-contenu#contenu-suppression
+            button.bouton.bouton-secondaire.fermeture-tirroir(type='button') Annuler
+            button.bouton#action-duplication(type='button') Valider
+        form.bloc-contenu#contenu-suppression
           p 
             span Souhaitez-vous vraiment supprimer 
             span#nombre-service-suppression
             span ?
-          .banniere-avertissement
+          label.banniere-avertissement
             img(src='/statique/assets/images/icone_danger.svg')
             .contenu-texte-avertissement
               strong Cette action est irréversible
               p Les données seront définitivement effacées. Les contributeurs n'auront plus accès à ce service.
           .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tirroir Non, j'annule
-            button.bouton#action-suppression Je confirme la suppression
+            button.bouton.bouton-secondaire.fermeture-tirroir(type='button') Non, j'annule
+            button.bouton#action-suppression(type='button') Je confirme la suppression
 
 
   script(type = 'module', src = '/statique/tableauDeBord.js')
