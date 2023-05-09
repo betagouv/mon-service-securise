@@ -1191,19 +1191,6 @@ describe('Le serveur MSS des routes /api/*', () => {
           .catch((e) => done(e.response?.data || e));
       });
 
-      it('reste robuste si le contact existe déjà dans SendinBlue', (done) => {
-        const erreurSendinBlue = new axios.AxiosError();
-        erreurSendinBlue.response = { data: { message: 'Contact already exist' } };
-        testeur.adaptateurMail().creeContact = () => Promise.reject(erreurSendinBlue);
-
-        axios.post('http://localhost:1234/api/autorisation', {
-          emailContributeur: 'jean.dupont@mail.fr',
-          idHomologation: '123',
-        })
-          .then(() => done())
-          .catch((e) => done(e.response?.data || e));
-      });
-
       it('crée le compte avec un email converti en minuscules', (done) => {
         testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
           const enMinuscules = 'jean.dupont@mail.fr';

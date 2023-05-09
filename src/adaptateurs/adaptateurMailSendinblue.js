@@ -23,14 +23,18 @@ const inscrisInfolettre = (destinataire) => basculeInfolettre(destinataire, fals
 
 const creeContact = (
   destinataire, prenom, nom, bloqueEmails
-) => (axios.post(`${urlBase}/contacts`,
+) => axios.post(`${urlBase}/contacts`,
   {
     email: destinataire,
     emailBlacklisted: bloqueEmails,
     attributes: { PRENOM: decode(prenom), NOM: decode(nom) },
   },
   enteteJSON)
-);
+  .catch((e) => {
+    if (e.response.data.message === 'Contact already exist') return Promise.resolve();
+
+    return Promise.reject(e);
+  });
 
 const envoieEmail = (
   destinataire, idTemplate, params
