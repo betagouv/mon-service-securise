@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { decode } = require('html-entities');
 
 const enteteJSON = {
   headers: {
@@ -26,10 +27,7 @@ const creeContact = (
   {
     email: destinataire,
     emailBlacklisted: bloqueEmails,
-    attributes: {
-      PRENOM: prenom,
-      NOM: nom,
-    },
+    attributes: { PRENOM: decode(prenom), NOM: decode(nom) },
   },
   enteteJSON)
 );
@@ -51,7 +49,7 @@ const envoieMessageFinalisationInscription = (
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_FINALISATION_INSCRIPTION, 10),
   {
-    PRENOM: prenom,
+    PRENOM: decode(prenom),
     URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
   }
 );
@@ -62,8 +60,8 @@ const envoieMessageInvitationContribution = (
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
   {
-    PRENOM: prenomNomEmetteur,
-    NOM_SERVICE: nomService,
+    PRENOM: decode(prenomNomEmetteur),
+    NOM_SERVICE: decode(nomService),
     URL: `${process.env.URL_BASE_MSS}/service/${idService}`,
   }
 );
@@ -74,8 +72,8 @@ const envoieMessageInvitationInscription = (
   destinataire,
   parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION, 10),
   {
-    PRENOM: prenomNomEmetteur,
-    NOM_SERVICE: nomService,
+    PRENOM: decode(prenomNomEmetteur),
+    NOM_SERVICE: decode(nomService),
     URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
   }
 );
