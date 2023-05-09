@@ -1,10 +1,12 @@
 import tableauDesServices from './tableauDesServices.mjs';
 import gestionnaireTirroir from './gestionnaireTirroir.mjs';
+import { declencheValidation } from '../interactions/validation.mjs';
 
 const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
 
 const gestionnaireActionsTirroir = {
   duplique: () => {
+    declencheValidation('#contenu-duplication');
     const $nombreCopie = $('#nombre-copie');
     if ($nombreCopie.is(':valid')) {
       $nombreCopie.prop('disabled', true);
@@ -25,6 +27,7 @@ const gestionnaireActionsTirroir = {
     }
   },
   invite: () => {
+    declencheValidation('#contenu-invitation');
     const $emailInvite = $('#email-invitation-collaboration');
     if ($emailInvite.is(':valid')) {
       $('#action-invitation').prop('disabled', true);
