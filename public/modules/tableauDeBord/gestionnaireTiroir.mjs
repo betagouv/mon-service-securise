@@ -39,6 +39,11 @@ const contenuActions = {
       }
     },
   },
+  telechargement: {
+    titre: 'Télécharger PDF(s)',
+    texte: 'Obtenir en un clic les documents indispensables pour sécuriser et homologuer le service sélectionné.',
+    initialise: () => { },
+  },
 };
 
 const gestionnaireTiroir = {
