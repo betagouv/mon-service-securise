@@ -619,3 +619,34 @@ label[for='recherche-service'] {
 #contenu-invitation-confirmation button {
   margin-top: 2em;
 }
+
+#contenu-export .liste-fichiers {
+  list-style: none;
+  padding-left: 0;
+}
+
+#contenu-export .fichier {
+  padding: 1em 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--liseres-fonce);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+#contenu-export .nom-document p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+#contenu-export .nom-document p::before {
+  content: '';
+  width: 2.8em;
+  height: 2.8em;
+  background-image: url('/statique/assets/images/icone_document_csv.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
