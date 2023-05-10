@@ -111,7 +111,7 @@ const tableauDesServices = {
       $celluleNoms.append($nomService);
       $ligne.append($celluleNoms);
       const $celluleCollaborateur = $('<td></td>');
-      const $conteneurCollaborateur = $(`<div class='conteneur-collaborateur ${service.estCreateur ? 'createur' : ''}'></div>`);
+      const $conteneurCollaborateur = $(`<div class='conteneur-collaborateur ${service.estCreateur ? 'createur' : ''}' title='${service.estCreateur ? 'Service dont je suis propriétaire' : ''}'></div>`);
       const $nombreContributeurs = $(`<div class='contributeurs' title='${metEnFormeContributeurs(service)}'>${service.nombreContributeurs}</div>`);
       $conteneurCollaborateur.append($nombreContributeurs);
       $celluleCollaborateur.append($conteneurCollaborateur);
