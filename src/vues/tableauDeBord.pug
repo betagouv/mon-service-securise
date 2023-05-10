@@ -14,7 +14,17 @@ mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLign
 mixin actionAvecIcone(sourceImage, texteAction, action)
   .action(data-action=action)
     img(src=sourceImage)
-    p!= texteAction 
+    p!= texteAction
+
+mixin documentTelechargeable(nom, description, type, idLien)
+  - const sourceImage = `/statique/assets/images/icone_telechargement_${type.toLowerCase()}.svg`
+  .document-telechargeable
+    .contenu
+      .contenu-texte
+        p.titre-document= nom
+        p.description-document= description
+      img.icone-type-document(src=sourceImage)
+    a.lien-telechargement.bouton(href='', target='_blank', rel='noopener', id=idLien) Télécharger
 
 block append styles
   link(href = '/statique/assets/styles/tableauDeBord.css', rel = 'stylesheet')
@@ -134,6 +144,12 @@ block main
           .conteneur-actions
             button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Non, j'annule
             button.bouton#action-suppression(type='button') Je confirme la suppression
+        form.bloc-contenu#contenu-telechargement
+          p Télécharger le(s) document(s) de votre choix ou l'ensemble.
+          +documentTelechargeable('Synthèse de la sécurité du service', "Ce PDF résume visuellement en 1 page l'état de la sécurité du service.", 'PDF', 'lien-synthese')
+          +documentTelechargeable('Annexes', 'Ce PDF détaille toutes les informations renseignées sur la sécurité du service.', 'PDF', 'lien-annexes')
+          +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est à faire signer auprès de l'autorité d'homologation.", 'PDF', 'lien-decision')
+          +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les 3 PDF(s).', 'ZIP', 'lien-archive')
 
 
   script(type = 'module', src = '/statique/tableauDeBord.js')

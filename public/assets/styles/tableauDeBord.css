@@ -650,3 +650,46 @@ label[for='recherche-service'] {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+#contenu-telechargement p {
+  font-weight: 500;
+}
+
+#contenu-telechargement .document-telechargeable {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+  border: 1px solid var(--liseres-fonce);
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+#contenu-telechargement .document-telechargeable p {
+  margin: 0;
+}
+
+#contenu-telechargement .document-telechargeable .contenu {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 5em;
+}
+
+#contenu-telechargement .document-telechargeable .titre-document {
+  font-weight: bold;
+  color: var(--bleu-anssi);
+  margin-bottom: 0.5em;
+}
+
+#contenu-telechargement .document-telechargeable .description-document {
+  font-size: 0.9em;
+}
+
+#contenu-telechargement .document-telechargeable .lien-telechargement {
+  align-self: flex-end;
+}
+
+#contenu-telechargement .document-telechargeable .icone-type-document {
+  width: 2.8em;
+  height: 2.8em;
+}

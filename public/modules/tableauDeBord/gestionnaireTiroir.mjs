@@ -42,7 +42,14 @@ const contenuActions = {
   telechargement: {
     titre: 'Télécharger PDF(s)',
     texte: 'Obtenir en un clic les documents indispensables pour sécuriser et homologuer le service sélectionné.',
-    initialise: () => { },
+    initialise: () => {
+      const idSelectionne = tableauDesServices.servicesSelectionnes.keys().next().value;
+      const urlBase = `/api/service/${idSelectionne}/pdf/`;
+      $('#lien-synthese').attr('href', `${urlBase}syntheseSecurite.pdf`);
+      $('#lien-annexes').attr('href', `${urlBase}annexes.pdf`);
+      $('#lien-decision').attr('href', `${urlBase}dossierDecision.pdf`);
+      $('#lien-archive').attr('href', `${urlBase}documentsHomologation.zip`);
+    },
   },
 };
 
