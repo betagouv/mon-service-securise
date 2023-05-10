@@ -144,3 +144,29 @@
 .bom .bom-modale .contenu li:active::after {
   background-color: var(--bleu-anssi);
 }
+
+.bom .bom-modale .fermeture {
+  cursor: pointer;
+  display: flex;
+  justify-content: end;
+  padding-right: 1.3em;
+  gap: 0.3em;
+}
+
+.bom .bom-modale .fermeture::after {
+  content: '';
+  flex-shrink: 0;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 5px;
+  border: 1px solid #667892;
+  background-image: url(../images/icone_croix_grise.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.bom .bom-modale .fermeture p {
+  margin: 0 0 1em 0;
+  text-align: right;
+  color: #667892;
+}
