@@ -60,25 +60,6 @@
   background: linear-gradient(#513AC8, #8C26C7);
 }
 
-.bom .bom-modale .fermeture {
-  position: absolute;
-  right: 1em;
-  top: 1em;
-  width: 0.8em;
-  height: 0.8em;
-  padding: 0.3em;
-  border-radius: 0.2em;
-  background-image: url(../images/icone_croix_blanche.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-}
-
-.bom .bom-modale .fermeture:hover {
-  background-color: #fff;
-  background-image: url(../images/icone_croix_bleue.svg);
-}
-
 .bom .bom-modale .bandeau-titre {
   display: flex;
   flex-direction: column;
