@@ -1,6 +1,7 @@
 const express = require('express');
 
 const { valeurBooleenne } = require('../utilitaires/aseptisation');
+const { dateYYYYMMDD } = require('../utilitaires/date');
 const { DUREE_SESSION } = require('../http/configurationServeur');
 const { resultatValidation, valideMotDePasse } = require('../http/validationMotDePasse');
 const {
@@ -21,7 +22,8 @@ const routesApi = (
   referentiel,
   adaptateurHorloge,
   adaptateurPdf,
-  adaptateurAnnuaire
+  adaptateurAnnuaire,
+  adaptateurCsv
 ) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) => promesseEnvoiMessage
     .then(() => utilisateur)
@@ -92,6 +94,23 @@ const routesApi = (
     depotDonnees.homologations(requete.idUtilisateurCourant)
       .then((services) => objetGetServices.donnees(services, requete.idUtilisateurCourant))
       .then((donnees) => reponse.json(donnees));
+  });
+
+  routes.get('/services/export.csv', middleware.verificationAcceptationCGU, middleware.aseptise('idsServices.*'), (requete, reponse) => {
+    const { idsServices = [] } = requete.query;
+
+    depotDonnees.homologations(requete.idUtilisateurCourant)
+      .then((services) => services.filter((service) => idsServices.includes(service.id)))
+      .then((services) => objetGetServices.donnees(services, requete.idUtilisateurCourant))
+      .then((donneesServices) => adaptateurCsv.genereCsvServices(donneesServices))
+      .then((buffer) => {
+        const maintenantFormate = dateYYYYMMDD(adaptateurHorloge.maintenant());
+        reponse
+          .contentType('text/csv;charset=utf-8')
+          .set('Content-Disposition', `attachment; filename="MSS_services_${maintenantFormate}.csv"`)
+          .send(buffer);
+      })
+      .catch(() => reponse.sendStatus(424));
   });
 
   routes.use('/service', routesApiService(middleware, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf));

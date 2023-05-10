@@ -9,6 +9,16 @@ const Service = require('../../src/modeles/service');
 describe('Le serveur MSS des routes /api/*', () => {
   const testeur = testeurMSS();
 
+  const verifieTypeFichierServiEstCSV = (url, done) => axios.get(url)
+    .then((reponse) => expect(reponse.headers['content-type']).to.contain('text/csv'))
+    .then(() => done())
+    .catch(done);
+
+  const verifieNomFichierServi = (url, nom, done) => axios.get(url)
+    .then((reponse) => expect(reponse.headers['content-disposition']).to.contain(`filename="${nom}"`))
+    .then(() => done())
+    .catch(done);
+
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
@@ -41,6 +51,111 @@ describe('Le serveur MSS des routes /api/*', () => {
           const { services } = reponse.data;
           expect(services.length).to.equal(1);
           expect(services[0].id).to.equal('456');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('quand requête GET sur `/api/services/export.csv`', () => {
+    beforeEach(() => {
+      testeur.adaptateurCsv().genereCsvServices = () => Promise.resolve();
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        'http://localhost:1234/api/services/export.csv',
+        done,
+      );
+    });
+
+    it('aseptise les identifiants des services à exporter', (done) => {
+      testeur.middleware().verifieAseptisationParametres(['idsServices.*'],
+        { method: 'get', url: 'http://localhost:1234/api/services/export.csv' },
+        done);
+    });
+
+    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
+      let depotAppele = false;
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+
+      testeur.depotDonnees().homologations = (idUtilisateur) => {
+        expect(idUtilisateur).to.equal('123');
+        depotAppele = true;
+        return Promise.resolve([
+          new Service({
+            id: '456',
+            descriptionService: { nomService: 'Un service', organisationsResponsables: [] },
+            createur: { email: 'email.createur@mail.fr' },
+          })]);
+      };
+
+      axios.get('http://localhost:1234/api/services/export.csv')
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(depotAppele).to.be(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('filtre les services en fonction de la requête', (done) => {
+      testeur.depotDonnees().homologations = () => Promise.resolve([
+        new Service({
+          id: '456',
+          descriptionService: { nomService: 'Un service', organisationsResponsables: [] },
+          createur: { email: 'email.createur@mail.fr' },
+        }),
+        new Service({
+          id: '789',
+          descriptionService: { nomService: 'Un deuxième service', organisationsResponsables: [] },
+          createur: { email: 'email.createur@mail.fr' },
+        }),
+      ]);
+
+      testeur.adaptateurCsv().genereCsvServices = (donneesServices) => {
+        expect(donneesServices.services.length).to.be(1);
+        expect(donneesServices.services[0].id).to.equal('456');
+        done();
+        return Promise.resolve('Fichier CSV');
+      };
+
+      axios.get('http://localhost:1234/api/services/export.csv?idsServices=456')
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it('utilise un adaptateur de CSV pour la génération', (done) => {
+      let adaptateurCsvAppele = false;
+      testeur.adaptateurCsv().genereCsvServices = () => {
+        adaptateurCsvAppele = true;
+        return Promise.resolve('Fichier CSV');
+      };
+
+      axios.get('http://localhost:1234/api/services/export.csv')
+        .then(() => {
+          expect(adaptateurCsvAppele).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it('sert un fichier de type CSV', (done) => {
+      verifieTypeFichierServiEstCSV('http://localhost:1234/api/services/export.csv', done);
+    });
+
+    it('sert un fichier dont le nom contient la date du jour en format court', (done) => {
+      testeur.adaptateurHorloge().maintenant = () => new Date(2023, 0, 28);
+
+      verifieNomFichierServi('http://localhost:1234/api/services/export.csv', 'MSS_services_20230128.csv', done);
+    });
+
+    it("reste robuste en cas d'échec de génération de CSV", (done) => {
+      testeur.adaptateurCsv().genereCsvServices = () => Promise.reject();
+
+      axios.get('http://localhost:1234/api/services/export.csv')
+        .then(() => done('La génération aurait dû lever une erreur'))
+        .catch((e) => {
+          expect(e.response.status).to.equal(424);
           done();
         })
         .catch(done);
