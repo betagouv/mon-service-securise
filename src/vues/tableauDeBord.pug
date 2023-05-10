@@ -11,8 +11,8 @@ mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLign
         dd!= textePremiereLigne
         dd!= texteDeuxiemeLigne
 
-mixin actionAvecIcone(sourceImage, texteAction, action)
-  .action(data-action=action)
+mixin actionAvecIcone(sourceImage, texteAction, action, id)
+  .action(data-action=action, id=id)
     img(src=sourceImage)
     p!= texteAction
 

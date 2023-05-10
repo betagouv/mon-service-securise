@@ -66,6 +66,8 @@ const gestionnaireEvenements = {
         $('.actions-services .action').addClass('inactif');
       } else {
         $('.actions-services .action').removeClass('inactif');
+        const plusDunService = [...tableauDesServices.servicesSelectionnes].length > 1;
+        if (plusDunService) $('#action-flotante-telechargement').addClass('inactif');
       }
     } else {
       $bouton.parents('.conteneur-selection-services').removeClass('actif');
