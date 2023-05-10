@@ -58,6 +58,7 @@ block main
                 .menu-flotant.actions-services.invisible
                   +actionAvecIcone('/statique/assets/images/icone_ajout_contributeur.svg', 'Inviter contributeur(s)', 'invitation')
                   hr
+                  +actionAvecIcone('/statique/assets/images/icone_exporter_service.svg', 'Exporter la sélection', 'export')
                   +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer', 'duplication')
                   +actionAvecIcone('/statique/assets/images/icone_supprimer.svg', 'Supprimer', 'suppression')
             th.entete-contributeurs(data-colonne='nombreContributeurs') Contributeur(s)
@@ -73,6 +74,15 @@ block main
           h3.titre-tiroir
           p.texte-tiroir
       .contenu-tiroir
+        form.bloc-contenu#contenu-export
+          - const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
+          - const maintenant = new Date();
+          - const nomFichierCsv = `MSS_services_${formatDateCourt.format(maintenant).replaceAll('-', '')}.csv`
+          ul.liste-fichiers
+            li.fichier
+              .nom-document
+                p= nomFichierCsv
+              button.bouton#action-export-csv(type='button') Télécharger
         form.bloc-contenu#contenu-invitation
           p Saisir l'e-mail de la personne à inviter.
           label Ajouter

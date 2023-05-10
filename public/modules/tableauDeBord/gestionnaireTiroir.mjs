@@ -8,6 +8,11 @@ const contenuActions = {
       $('#nombre-copie').val(1);
     },
   },
+  export: {
+    titre: 'Exporter la sélection',
+    texte: "Récupérer l'essentiel des données du tableau de bord pour les services sélectionnés.",
+    initialise: () => { },
+  },
   invitation: {
     titre: 'Inviter des contributeurs 1/2',
     texte: 'Créer des équipes de travail avec autant de personnes souhaitées.',
