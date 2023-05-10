@@ -43,6 +43,10 @@ const gestionnaireEvenements = {
     $('#action-invitation').on('click', () => {
       gestionnaireActionsTiroir.invite();
     });
+
+    $('#action-export-csv').on('click', () => {
+      gestionnaireActionsTiroir.exporteCsv();
+    });
   },
   afficheTiroirAction: ($action) => {
     gestionnaireTiroir.afficheContenuAction($action.data('action'));

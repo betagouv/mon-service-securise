@@ -26,6 +26,9 @@ const gestionnaireActionsTiroir = {
       });
     }
   },
+  exporteCsv: () => {
+    window.open(`/api/services/export.csv?idsServices=${encodeURIComponent(JSON.stringify([...tableauDesServices.servicesSelectionnes]))}`, '_blank');
+  },
   invite: () => {
     declencheValidation('#contenu-invitation');
     const $emailInvite = $('#email-invitation-collaboration');
