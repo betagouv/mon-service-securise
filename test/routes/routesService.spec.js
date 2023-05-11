@@ -136,7 +136,7 @@ describe('Le serveur MSS des routes /service/*', () => {
   describe('quand requête GET sur `/service/:id/homologation/edition/etape/:idEtape`', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({
-        etapesParcoursHomologation: [{ numero: 1, id: 'decision' }, { numero: 2, id: 'deuxieme' }],
+        etapesParcoursHomologation: [{ numero: 1, id: 'dateTelechargement' }, { numero: 2, id: 'deuxieme' }],
       });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
       testeur.depotDonnees().homologation = () => Promise.resolve(
@@ -146,7 +146,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/homologation/edition/etape/decision',
+        'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
         done,
       );
     });
@@ -170,7 +170,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         }
       };
 
-      axios('http://localhost:1234/service/456/homologation/edition/etape/decision')
+      axios('http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement')
         .then(() => expect(dossierAjoute).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
@@ -187,7 +187,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         }
       };
 
-      axios('http://localhost:1234/service/456/homologation/edition/etape/decision')
+      axios('http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement')
         .then(() => expect(chargementsService).to.equal(1))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
