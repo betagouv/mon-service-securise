@@ -41,7 +41,9 @@ block formulaire
     script(type = "module", src = "/statique/service/homologation/dossiers.js")
 
 block bouton-etape
+  - const etapeSuivante = dossierCourant?.etapeCourante() ?? premiereEtapeParcours.id
+
   button.bouton#suivant(
     data-id-homologation = service.id,
-    data-id-etape-suivante = premiereEtapeParcours.id
+    data-id-etape-suivante = etapeSuivante
     ) Nouvelle homologation
