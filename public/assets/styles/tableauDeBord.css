@@ -547,8 +547,8 @@ label[for='recherche-service'] {
 
 .suivi-services .croix-fermeture {
   position: absolute;
-  top: 20px;
-  right: 2em;
+  top: 1.8em;
+  right: 0;
   font-weight: bold;
   background: #fff;
   width: 2em;
