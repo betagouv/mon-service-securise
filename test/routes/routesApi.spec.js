@@ -1,6 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
+const { verifieNomFichierServi, verifieTypeFichierServiEstCSV } = require('../aides/verifieFichierServi');
 const { ErreurEmailManquant, ErreurModele, ErreurUtilisateurExistant } = require('../../src/erreurs');
 
 const testeurMSS = require('./testeurMSS');
@@ -8,16 +9,6 @@ const Service = require('../../src/modeles/service');
 
 describe('Le serveur MSS des routes /api/*', () => {
   const testeur = testeurMSS();
-
-  const verifieTypeFichierServiEstCSV = (url, done) => axios.get(url)
-    .then((reponse) => expect(reponse.headers['content-type']).to.contain('text/csv'))
-    .then(() => done())
-    .catch(done);
-
-  const verifieNomFichierServi = (url, nom, done) => axios.get(url)
-    .then((reponse) => expect(reponse.headers['content-disposition']).to.contain(`filename="${nom}"`))
-    .then(() => done())
-    .catch(done);
 
   beforeEach(testeur.initialise);
 
