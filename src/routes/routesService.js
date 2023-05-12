@@ -95,21 +95,22 @@ const routesService = (
 
     if (!referentiel.etapeExiste(idEtape)) {
       reponse.status(404).send('Étape inconnue');
-    } else {
-      depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id)
-        .then(() => depotDonnees.homologation(homologation.id))
-        .then((h) => {
-          const etapeCourante = h.dossierCourant().etapeCourante();
-          const numeroEtapeCourante = referentiel.numeroEtape(etapeCourante);
-          const numeroEtapeDemandee = referentiel.numeroEtape(idEtape);
-          if (numeroEtapeDemandee > numeroEtapeCourante) {
-            reponse.redirect(etapeCourante);
-            return;
-          }
-          reponse.render(`service/etapeDossier/${idEtape}`, { referentiel, service: h, idEtape });
-        })
-        .catch(suite);
+      return;
     }
+
+    depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id)
+      .then(() => depotDonnees.homologation(homologation.id))
+      .then((h) => {
+        const etapeCourante = h.dossierCourant().etapeCourante();
+        const numeroEtapeCourante = referentiel.numeroEtape(etapeCourante);
+        const numeroEtapeDemandee = referentiel.numeroEtape(idEtape);
+        if (numeroEtapeDemandee > numeroEtapeCourante) {
+          reponse.redirect(etapeCourante);
+          return;
+        }
+        reponse.render(`service/etapeDossier/${idEtape}`, { referentiel, service: h, idEtape });
+      })
+      .catch(suite);
   });
 
   return routes;
