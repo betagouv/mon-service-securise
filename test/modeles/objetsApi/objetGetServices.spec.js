@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 
 const Service = require('../../../src/modeles/service');
-const vueEspacePersonnel = require('../../../src/modeles/objetsApi/objetGetServices');
+const objetGetServices = require('../../../src/modeles/objetsApi/objetGetServices');
 
 describe("L'objet d'API de `GET /services`", () => {
   const unService = new Service({
@@ -25,7 +25,7 @@ describe("L'objet d'API de `GET /services`", () => {
 
   it('fournit les données nécessaires', () => {
     const services = [unService];
-    expect(vueEspacePersonnel.donnees(services, 'A').services).to.eql(
+    expect(objetGetServices.donnees(services, 'A').services).to.eql(
       [{
         id: '123',
         nomService: 'Un service',
@@ -48,7 +48,7 @@ describe("L'objet d'API de `GET /services`", () => {
     unAutreService.indiceCyber = () => ({ total: 5 });
 
     const services = [unService, unAutreService];
-    expect(vueEspacePersonnel.donnees(services).resume).to.eql(
+    expect(objetGetServices.donnees(services).resume).to.eql(
       {
         nombreServices: 2,
         nombreServicesHomologues: 1,
@@ -62,7 +62,7 @@ describe("L'objet d'API de `GET /services`", () => {
     unAutreService.indiceCyber = () => ({ total: 0 });
 
     const services = [unService, unAutreService];
-    expect(vueEspacePersonnel.donnees(services).resume).to.eql(
+    expect(objetGetServices.donnees(services).resume).to.eql(
       {
         nombreServices: 2,
         nombreServicesHomologues: 1,
