@@ -149,6 +149,30 @@ describe('Une homologation', () => {
     expect(homologation.dossierCourant().id).to.equal('999');
   });
 
+  describe('sur demande des documents PDF disponibles', () => {
+    it("inclut tous les documents lorsqu'elle a un dossier d'homologation courant", () => {
+      const referentiel = Referentiel.creeReferentielVide();
+
+      const homologationAvecDossier = new Homologation(
+        { id: '123', dossiers: [{ id: '999' }] },
+        referentiel
+      );
+
+      expect(homologationAvecDossier.documentsPdfDisponibles()).to.eql(['annexes', 'syntheseSecurite', 'dossierDecision']);
+    });
+
+    it("exclut le dossier de décision en cas d'absence de dossier d'homologation courant", () => {
+      const referentiel = Referentiel.creeReferentielVide();
+
+      const homologationSansDossier = new Homologation(
+        { id: '123', dossiers: [] },
+        referentiel
+      );
+
+      expect(homologationSansDossier.documentsPdfDisponibles()).to.eql(['annexes', 'syntheseSecurite']);
+    });
+  });
+
   it('connaît ses risques spécifiques', () => {
     const homologation = new Homologation({
       id: '123',
