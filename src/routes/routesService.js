@@ -98,7 +98,16 @@ const routesService = (
     } else {
       depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id)
         .then(() => depotDonnees.homologation(homologation.id))
-        .then((h) => reponse.render(`service/etapeDossier/${idEtape}`, { referentiel, service: h, idEtape }))
+        .then((h) => {
+          const etapeCourante = h.dossierCourant().etapeCourante();
+          const numeroEtapeCourante = referentiel.numeroEtape(etapeCourante);
+          const numeroEtapeDemandee = referentiel.numeroEtape(idEtape);
+          if (numeroEtapeDemandee > numeroEtapeCourante) {
+            reponse.redirect(etapeCourante);
+            return;
+          }
+          reponse.render(`service/etapeDossier/${idEtape}`, { referentiel, service: h, idEtape });
+        })
         .catch(suite);
     }
   });
