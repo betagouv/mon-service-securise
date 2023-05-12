@@ -7,9 +7,9 @@ const adaptateurAnnuaire = require('./src/adaptateurs/adaptateurAnnuaire');
 const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurCsv = require('./src/adaptateurs/adaptateurCsv');
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
-const adaptateurGestionErreur = adaptateurEnvironnement.sentry().dsn()
-  ? require('./src/adaptateurs/adaptateurGestionErreurSentry')
-  : require('./src/adaptateurs/adaptateurGestionErreurVide');
+const { fabriqueAdaptateurGestionErreur } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
+
+const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPI()
