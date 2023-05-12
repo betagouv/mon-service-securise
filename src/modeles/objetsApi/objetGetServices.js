@@ -15,6 +15,7 @@ const donnees = (services, idUtilisateur) => {
         organisationsResponsables: s.descriptionService.organisationsResponsables,
         indiceCyber: s.indiceCyber().total.toFixed(1),
         statutHomologation: s.dossiers.statutSaisie(),
+        documentsPdfDisponibles: s.documentsPdfDisponibles(),
       }))
       .map((json) => ({
         id: json.id,
@@ -38,6 +39,7 @@ const donnees = (services, idUtilisateur) => {
         },
         nombreContributeurs: json.contributeurs.length + 1,
         estCreateur: json.createur.id === idUtilisateur,
+        documentsPdfDisponibles: json.documentsPdfDisponibles,
       })),
     resume: {
       nombreServices: services.length,
