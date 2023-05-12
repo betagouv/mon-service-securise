@@ -122,18 +122,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         })
         .catch((e) => done(e.response?.data || e));
     });
-
-    it("reste robuste en cas d'échec de génération de pdf", (done) => {
-      testeur.adaptateurPdf().genereDossierDecision = () => Promise.reject();
-
-      axios.get('http://localhost:1234/api/service/456/pdf/dossierDecision.pdf')
-        .then(() => done('La génération aurait dû lever une erreur'))
-        .catch((e) => {
-          expect(e.response.status).to.equal(424);
-          done();
-        })
-        .catch(done);
-    });
   });
 
   describe('quand requête GET sur `/api/service/:id/pdf/syntheseSecurite.pdf`', () => {
@@ -179,18 +167,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
           done();
         })
         .catch((e) => done(e.response?.data || e));
-    });
-
-    it("reste robuste en cas d'échec de génération de pdf", (done) => {
-      testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.reject();
-
-      axios.get('http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf')
-        .then(() => done('La génération aurait dû lever une erreur'))
-        .catch((e) => {
-          expect(e.response.status).to.equal(424);
-          done();
-        })
-        .catch(done);
     });
   });
 
@@ -260,18 +236,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
           done();
         })
         .catch((e) => done(e.response?.data || e));
-    });
-
-    it("reste robuste en cas d'échec de génération de pdf", (done) => {
-      testeur.adaptateurPdf().genereArchiveTousDocuments = () => Promise.reject();
-
-      axios.get('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip')
-        .then(() => done('La génération aurait dû lever une erreur'))
-        .catch((e) => {
-          expect(e.response.status).to.equal(424);
-          done();
-        })
-        .catch(done);
     });
   });
 });

@@ -21,7 +21,7 @@ const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, refer
       .catch(suite);
   });
 
-  routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse) => {
+  routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
     const donnees = {
@@ -36,16 +36,11 @@ const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, refer
     };
 
     adaptateurPdf.genereDossierDecision(donnees)
-      .then((pdf) => {
-        reponse.contentType('application/pdf');
-        reponse.send(pdf);
-      })
-      .catch(() => {
-        reponse.sendStatus(424);
-      });
+      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
+      .catch(suite);
   });
 
-  routes.get('/:id/pdf/syntheseSecurite.pdf', middleware.trouveService, (requete, reponse) => {
+  routes.get('/:id/pdf/syntheseSecurite.pdf', middleware.trouveService, (requete, reponse, suite) => {
     const { homologation } = requete;
 
     const donnees = {
@@ -61,10 +56,10 @@ const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, refer
 
     adaptateurPdf.genereSyntheseSecurite(donnees)
       .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-      .catch(() => reponse.sendStatus(424));
+      .catch(suite);
   });
 
-  routes.get('/:id/pdf/documentsHomologation.zip', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse) => {
+  routes.get('/:id/pdf/documentsHomologation.zip', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
     const donnees = {
@@ -96,7 +91,7 @@ const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, refer
           .set('Content-Disposition', `attachment; filename="MSS_decision_${maintenantFormate}.zip"`)
           .send(archive);
       })
-      .catch(() => reponse.sendStatus(424));
+      .catch(suite);
   });
 
   return routes;
