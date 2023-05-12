@@ -1,5 +1,6 @@
 const { EOL } = require('os');
 const { decode } = require('html-entities');
+const { fabriqueAdaptateurGestionErreur } = require('./fabriqueAdaptateurGestionErreur');
 
 const STATUS_HOMOLOGATION = {
   aSaisir: 'À réaliser',
@@ -23,19 +24,24 @@ const ligneDuService = (service) => (
 );
 
 const genereCsvServices = (donneesObjetGetServices) => {
-  const entete = [
-    'Nom du service',
-    'Organisations responsables',
-    'Nombre de collaborateurs',
-    'Est propriétaire ?',
-    'Indice cyber',
-    'Statut homologation',
-  ].join(SEPARATEUR);
+  try {
+    const entete = [
+      'Nom du service',
+      'Organisations responsables',
+      'Nombre de collaborateurs',
+      'Est propriétaire ?',
+      'Indice cyber',
+      'Statut homologation',
+    ].join(SEPARATEUR);
 
-  const contenu = [entete, ...donneesObjetGetServices.services.map(ligneDuService)].join(EOL);
+    const contenu = [entete, ...donneesObjetGetServices.services.map(ligneDuService)].join(EOL);
 
-  const avecBOM = '\uFEFF';
-  return Buffer.from(`${avecBOM}${contenu}`, 'utf-8');
+    const avecBOM = '\uFEFF';
+    return Buffer.from(`${avecBOM}${contenu}`, 'utf-8');
+  } catch (e) {
+    fabriqueAdaptateurGestionErreur().logueErreur(e);
+    throw e;
+  }
 };
 
 module.exports = { genereCsvServices };
