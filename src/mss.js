@@ -20,6 +20,7 @@ const creeServeur = (
   adaptateurGestionErreur,
   adaptateurAnnuaire,
   adaptateurCsv,
+  adaptateurZip,
   avecCookieSecurise = (process.env.NODE_ENV === 'production'),
   avecPageErreur = (process.env.NODE_ENV === 'production'),
 ) => {
@@ -134,7 +135,7 @@ const creeServeur = (
     reponse.render('tableauDeBord');
   });
 
-  app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf, adaptateurAnnuaire, adaptateurCsv));
+  app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf, adaptateurAnnuaire, adaptateurCsv, adaptateurZip));
 
   app.use('/bibliotheques', routesBibliotheques());
 
