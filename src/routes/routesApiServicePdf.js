@@ -2,7 +2,13 @@ const express = require('express');
 const { genereGradientConique } = require('../pdf/graphiques/camembert');
 const { dateYYYYMMDD } = require('../utilitaires/date');
 
-const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, referentiel) => {
+const routesApiServicePdf = (
+  middleware,
+  adaptateurHorloge,
+  adaptateurPdf,
+  adaptateurZip,
+  referentiel
+) => {
   const routes = express.Router();
 
   const generePdfAnnexes = (homologation) => {
@@ -75,28 +81,16 @@ const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, refer
   routes.get('/:id/pdf/documentsHomologation.zip', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
     const { homologation, dossierCourant } = requete;
 
-    const donnees = {
-      donneesDescription: homologation.vueAnnexePDFDescription().donnees(),
-      donneesMesures: homologation.vueAnnexePDFMesures().donnees(),
-      donneesRisques: homologation.vueAnnexePDFRisques().donnees(),
-      nomService: homologation.nomService(),
-      nomPrenomAutorite: dossierCourant.autorite.nom,
-      fonctionAutorite: dossierCourant.autorite.fonction,
-      indiceCyberTotal: homologation.indiceCyber().total,
-      organisationResponsable: homologation.descriptionService.organisationsResponsables[0],
-      service: homologation,
-      camembertIndispensables: genereGradientConique(
-        homologation.statistiquesMesuresIndispensables()
-      ),
-      camembertRecommandees: genereGradientConique(
-        homologation.statistiquesMesuresRecommandees()
-      ),
-      referentiel,
-      ...dossierCourant.avis.toJSON(),
-      ...dossierCourant.documents.toJSON(),
-    };
-
-    adaptateurPdf.genereArchiveTousDocuments(donnees)
+    Promise.all([
+      generePdfAnnexes(homologation),
+      generePdfDossierDecision(homologation, dossierCourant),
+      generePdfSyntheseSecurite(homologation),
+    ])
+      .then(([bufferAnnexes, bufferDossier, bufferSynthese]) => adaptateurZip.genereArchive([
+        { nom: 'Annexes.pdf', buffer: bufferAnnexes },
+        { nom: 'DossierDecison.pdf', buffer: bufferDossier },
+        { nom: 'SyntheseSecurite.pdf', buffer: bufferSynthese },
+      ]))
       .then((archive) => {
         const maintenantFormate = dateYYYYMMDD(adaptateurHorloge.maintenant());
         reponse

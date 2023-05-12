@@ -1,6 +1,5 @@
 const { PDFDocument } = require('pdf-lib');
 const pug = require('pug');
-const JSZip = require('jszip');
 const { lanceNavigateur } = require('./adaptateurPdf.puppeteer');
 const { fabriqueAdaptateurGestionErreur } = require('./fabriqueAdaptateurGestionErreur');
 
@@ -117,26 +116,8 @@ const genereSyntheseSecurite = async (donnees) => {
   }
 };
 
-const genereArchiveTousDocuments = (donnees) => Promise.all([
-  genereAnnexes(donnees),
-  genereDossierDecision(donnees),
-  genereSyntheseSecurite(donnees),
-])
-  .then(([annexes, dossierDecision, syntheseSecurite]) => {
-    const zip = new JSZip();
-    zip.file('Annexes.pdf', annexes, { binary: true });
-    zip.file('DossierDecison.pdf', dossierDecision, { binary: true });
-    zip.file('SyntheseSecurite.pdf', syntheseSecurite, { binary: true });
-    return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE', compressionOptions: { level: 9 } });
-  })
-  .catch((e) => {
-    fabriqueAdaptateurGestionErreur().logueErreur(e);
-    return Promise.reject(e);
-  });
-
 module.exports = {
   genereAnnexes,
   genereDossierDecision,
   genereSyntheseSecurite,
-  genereArchiveTousDocuments,
 };
