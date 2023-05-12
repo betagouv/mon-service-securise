@@ -18,7 +18,7 @@ mixin actionAvecIcone(sourceImage, texteAction, action, id)
 
 mixin documentTelechargeable(nom, description, type, idLien)
   - const sourceImage = `/statique/assets/images/icone_telechargement_${type.toLowerCase()}.svg`
-  .document-telechargeable
+  .document-telechargeable(id= `conteneur-${idLien}`)
     .contenu
       .contenu-texte
         p.titre-document= nom
@@ -149,6 +149,7 @@ block main
           +documentTelechargeable('Synthèse de la sécurité du service', "Ce PDF résume visuellement en 1 page l'état de la sécurité du service.", 'PDF', 'lien-synthese')
           +documentTelechargeable('Annexes', 'Ce PDF détaille toutes les informations renseignées sur la sécurité du service.', 'PDF', 'lien-annexes')
           +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est à faire signer auprès de l'autorité d'homologation.", 'PDF', 'lien-decision')
+          +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF sera disponible dès qu'une homologation sera en cours.", 'PDF', 'lien-decision-indisponible')
           +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les 3 PDF(s).', 'ZIP', 'lien-archive')
 
 

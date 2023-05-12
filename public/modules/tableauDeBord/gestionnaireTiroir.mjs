@@ -49,6 +49,17 @@ const contenuActions = {
       $('#lien-annexes').attr('href', `${urlBase}annexes.pdf`);
       $('#lien-decision').attr('href', `${urlBase}dossierDecision.pdf`);
       $('#lien-archive').attr('href', `${urlBase}documentsHomologation.zip`);
+
+      const donneesService = tableauDesServices.donneesDuService(idSelectionne);
+      const $conteneurDuDisponible = $('#conteneur-lien-decision');
+      const $conteneurDeIndisponible = $('#conteneur-lien-decision-indisponible');
+      if (donneesService.documentsPdfDisponibles.includes('dossierDecision')) {
+        $conteneurDuDisponible.show();
+        $conteneurDeIndisponible.hide();
+      } else {
+        $conteneurDuDisponible.hide();
+        $conteneurDeIndisponible.show();
+      }
     },
   },
 };

@@ -665,6 +665,14 @@ label[for='recherche-service'] {
   margin-bottom: 1em;
 }
 
+#contenu-telechargement #conteneur-lien-decision-indisponible {
+  filter: grayscale(1);
+}
+
+#contenu-telechargement #conteneur-lien-decision-indisponible .lien-telechargement {
+  pointer-events: none;
+}
+
 #contenu-telechargement .document-telechargeable p {
   margin: 0;
 }

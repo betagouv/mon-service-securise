@@ -2,6 +2,7 @@ const expect = require('expect.js');
 
 const Service = require('../../../src/modeles/service');
 const objetGetServices = require('../../../src/modeles/objetsApi/objetGetServices');
+const { unDossier } = require('../../constructeurs/constructeurDossier');
 
 describe("L'objet d'API de `GET /services`", () => {
   const unService = new Service({
@@ -13,6 +14,7 @@ describe("L'objet d'API de `GET /services`", () => {
     ],
   });
   unService.indiceCyber = () => ({ total: 3.51 });
+  unService.dossierCourant = () => unDossier().construit();
 
   const unAutreService = new Service({
     id: '456',
@@ -38,6 +40,7 @@ describe("L'objet d'API de `GET /services`", () => {
         statutHomologation: { libelle: 'À réaliser', id: 'aSaisir' },
         nombreContributeurs: 1 + 1,
         estCreateur: true,
+        documentsPdfDisponibles: ['annexes', 'syntheseSecurite', 'dossierDecision'],
       }],
     );
   });
