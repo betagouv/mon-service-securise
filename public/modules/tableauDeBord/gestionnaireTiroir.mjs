@@ -51,6 +51,7 @@ const contenuActions = {
       $('#lien-archive').attr('href', `${urlBase}documentsHomologation.zip`);
 
       const donneesService = tableauDesServices.donneesDuService(idSelectionne);
+
       const $conteneurDuDisponible = $('#conteneur-lien-decision');
       const $conteneurDeIndisponible = $('#conteneur-lien-decision-indisponible');
       if (donneesService.documentsPdfDisponibles.includes('dossierDecision')) {
@@ -60,6 +61,8 @@ const contenuActions = {
         $conteneurDuDisponible.hide();
         $conteneurDeIndisponible.show();
       }
+
+      $('#nbPdfDisponibles', '#conteneur-lien-archive').text(donneesService.documentsPdfDisponibles.length);
     },
   },
 };
