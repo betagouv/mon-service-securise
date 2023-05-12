@@ -12,4 +12,6 @@ const controleurRequetes = () => Sentry.Handlers.requestHandler();
 
 const controleurErreurs = () => Sentry.Handlers.errorHandler();
 
-module.exports = { initialise, controleurRequetes, controleurErreurs };
+const logueErreur = (erreur) => Sentry.captureException(erreur);
+
+module.exports = { initialise, controleurRequetes, controleurErreurs, logueErreur };
