@@ -30,11 +30,18 @@ const routesApiService = (
   depotDonnees,
   referentiel,
   adaptateurHorloge,
-  adaptateurPdf
+  adaptateurPdf,
+  adaptateurZip
 ) => {
   const routes = express.Router();
 
-  routes.use(routesApiServicePdf(middleware, adaptateurHorloge, adaptateurPdf, referentiel));
+  routes.use(routesApiServicePdf(
+    middleware,
+    adaptateurHorloge,
+    adaptateurPdf,
+    adaptateurZip,
+    referentiel
+  ));
 
   routes.post('/', middleware.verificationAcceptationCGU, middleware.aseptise('nomService', 'organisationsResponsables.*'), middleware.aseptiseListes([
     { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },

@@ -17,6 +17,7 @@ const testeurMss = () => {
   let adaptateurMail;
   let adaptateurPdf;
   let adaptateurCsv;
+  let adaptateurZip;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -43,8 +44,13 @@ const testeurMss = () => {
     adaptateurAnnuaire = {};
     adaptateurHorloge = adaptateurHorlogeParDefaut;
     adaptateurMail = adaptateurMailMemoire;
-    adaptateurPdf = {};
+    adaptateurPdf = {
+      genereAnnexes: () => Promise.resolve('PDF Annexe'),
+      genereDossierDecision: () => Promise.resolve('PDF Dossier decision'),
+      genereSyntheseSecurite: () => Promise.resolve('PDF Synthese securite'),
+    };
     adaptateurCsv = {};
+    adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     moteurRegles = new MoteurRegles(referentiel);
@@ -62,6 +68,7 @@ const testeurMss = () => {
           adaptateurGestionErreurVide,
           adaptateurAnnuaire,
           adaptateurCsv,
+          adaptateurZip,
           false,
         );
         serveur.ecoute(1234, done);
@@ -77,6 +84,7 @@ const testeurMss = () => {
     adaptateurMail: () => adaptateurMail,
     adaptateurPdf: () => adaptateurPdf,
     adaptateurCsv: () => adaptateurCsv,
+    adaptateurZip: () => adaptateurZip,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,

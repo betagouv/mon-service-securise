@@ -16,6 +16,7 @@ const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPI()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
   : require('./src/adaptateurs/adaptateurMailMemoire');
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
+const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
 
 const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
@@ -40,7 +41,8 @@ const serveur = MSS.creeServeur(
   adaptateurHorloge,
   adaptateurGestionErreur,
   adaptateurAnnuaire,
-  adaptateurCsv
+  adaptateurCsv,
+  adaptateurZip
 );
 
 serveur.ecoute(port, () => {
