@@ -22,7 +22,7 @@ mixin documentTelechargeable(nom, description, type, idLien)
     .contenu
       .contenu-texte
         p.titre-document= nom
-        p.description-document= description
+        p.description-document!= description
       img.icone-type-document(src=sourceImage)
     a.lien-telechargement.bouton(href='', target='_blank', rel='noopener', id=idLien) Télécharger
 
@@ -150,7 +150,7 @@ block main
           +documentTelechargeable('Annexes', 'Ce PDF détaille toutes les informations renseignées sur la sécurité du service.', 'PDF', 'lien-annexes')
           +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est à faire signer auprès de l'autorité d'homologation.", 'PDF', 'lien-decision')
           +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF sera disponible dès qu'une homologation sera en cours.", 'PDF', 'lien-decision-indisponible')
-          +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les 3 PDF(s).', 'ZIP', 'lien-archive')
+          +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDF(s).', 'ZIP', 'lien-archive')
 
 
   script(type = 'module', src = '/statique/tableauDeBord.js')
