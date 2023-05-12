@@ -15,10 +15,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
   afterEach(testeur.arrete);
 
   describe('quand requête GET sur `/api/service/:id/pdf/annexes.pdf`', () => {
-    beforeEach(() => {
-      testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('Pdf annexes');
-    });
-
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         'http://localhost:1234/api/service/456/pdf/annexes.pdf',
@@ -54,7 +50,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       });
 
     beforeEach(() => {
-      testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('Pdf decision');
       const homologationARenvoyer = new Homologation({
         id: '456',
         descriptionService: { nomService: 'un service' },
@@ -123,7 +118,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     const homologationARenvoyer = new Homologation({ id: '456' }, referentiel);
 
     beforeEach(() => {
-      testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.resolve('Pdf synthèse sécurité');
       testeur.middleware().reinitialise({ homologationARenvoyer });
     });
 
@@ -166,7 +160,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     homologationARenvoyer.mesures.indiceCyber = () => 3.5;
 
     beforeEach(() => {
-      testeur.adaptateurPdf().genereArchiveTousDocuments = () => Promise.resolve('Archive ZIP');
       testeur.middleware().reinitialise({ homologationARenvoyer });
     });
 
@@ -194,16 +187,23 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       verifieNomFichierServi('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip', 'MSS_decision_20230128.zip', done);
     });
 
-    it('utilise un adaptateur de pdf pour la génération', (done) => {
-      let adaptateurPdfAppele = false;
-      testeur.adaptateurPdf().genereArchiveTousDocuments = () => {
-        adaptateurPdfAppele = true;
-        return Promise.resolve('Archive ZIP');
+    it('utilise un adaptateur de ZIP pour compresser les PDF(s) générés', (done) => {
+      let adaptateurZipAppele = false;
+      testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('PDF A');
+      testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('PDF B');
+      testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.resolve('PDF C');
+      testeur.adaptateurZip().genereArchive = (fichiers) => {
+        expect(fichiers).to.eql([
+          { nom: 'Annexes.pdf', buffer: 'PDF A' },
+          { nom: 'DossierDecison.pdf', buffer: 'PDF B' },
+          { nom: 'SyntheseSecurite.pdf', buffer: 'PDF C' },
+        ]);
+        adaptateurZipAppele = true;
       };
 
       axios.get('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip')
         .then(() => {
-          expect(adaptateurPdfAppele).to.be(true);
+          expect(adaptateurZipAppele).to.be(true);
           done();
         })
         .catch((e) => done(e.response?.data || e));
