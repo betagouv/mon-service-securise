@@ -69,6 +69,7 @@ input[type="radio"] {
   width: 1.6em;
   height: 1.6em;
   transform: translateY(0.4em);
+  flex-shrink: 0;
 }
 
 input[type="checkbox"] {
