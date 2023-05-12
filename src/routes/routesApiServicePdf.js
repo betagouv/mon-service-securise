@@ -5,25 +5,20 @@ const { dateYYYYMMDD } = require('../utilitaires/date');
 const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, referentiel) => {
   const routes = express.Router();
 
-  routes.get('/:id/pdf/annexes.pdf', middleware.trouveService, (requete, reponse, suite) => {
-    const { homologation } = requete;
+  const generePdfAnnexes = (homologation) => {
     const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
     const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
     const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
 
-    adaptateurPdf.genereAnnexes({
+    return adaptateurPdf.genereAnnexes({
       donneesDescription,
       donneesMesures,
       donneesRisques,
       referentiel,
-    })
-      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-      .catch(suite);
-  });
+    });
+  };
 
-  routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
-    const { homologation, dossierCourant } = requete;
-
+  const generePdfDossierDecision = (homologation, dossierCourant) => {
     const donnees = {
       nomService: homologation.nomService(),
       nomPrenomAutorite: dossierCourant.autorite.nom,
@@ -35,14 +30,10 @@ const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, refer
       ...dossierCourant.documents.toJSON(),
     };
 
-    adaptateurPdf.genereDossierDecision(donnees)
-      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-      .catch(suite);
-  });
+    return adaptateurPdf.genereDossierDecision(donnees);
+  };
 
-  routes.get('/:id/pdf/syntheseSecurite.pdf', middleware.trouveService, (requete, reponse, suite) => {
-    const { homologation } = requete;
-
+  const generePdfSyntheseSecurite = (homologation) => {
     const donnees = {
       service: homologation,
       camembertIndispensables: genereGradientConique(
@@ -54,7 +45,29 @@ const routesApiServicePdf = (middleware, adaptateurHorloge, adaptateurPdf, refer
       referentiel,
     };
 
-    adaptateurPdf.genereSyntheseSecurite(donnees)
+    return adaptateurPdf.genereSyntheseSecurite(donnees);
+  };
+
+  routes.get('/:id/pdf/annexes.pdf', middleware.trouveService, (requete, reponse, suite) => {
+    const { homologation } = requete;
+
+    generePdfAnnexes(homologation)
+      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
+      .catch(suite);
+  });
+
+  routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
+    const { homologation, dossierCourant } = requete;
+
+    generePdfDossierDecision(homologation, dossierCourant)
+      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
+      .catch(suite);
+  });
+
+  routes.get('/:id/pdf/syntheseSecurite.pdf', middleware.trouveService, (requete, reponse, suite) => {
+    const { homologation } = requete;
+
+    generePdfSyntheseSecurite(homologation)
       .then((pdf) => reponse.contentType('application/pdf').send(pdf))
       .catch(suite);
   });
