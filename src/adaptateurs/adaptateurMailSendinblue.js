@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { decode } = require('html-entities');
+const { fabriqueAdaptateurGestionErreur } = require('./fabriqueAdaptateurGestionErreur');
 
 const enteteJSON = {
   headers: {
@@ -13,10 +14,13 @@ const urlBase = 'https://api.sendinblue.com/v3';
 const basculeInfolettre = (
   destinataire,
   etat
-) => (axios.put(`${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
+) => axios.put(`${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
   { emailBlacklisted: etat },
   enteteJSON)
-);
+  .catch((e) => {
+    fabriqueAdaptateurGestionErreur().logueErreur(e);
+    return Promise.reject(e);
+  });
 
 const desinscrisInfolettre = (destinataire) => basculeInfolettre(destinataire, true);
 const inscrisInfolettre = (destinataire) => basculeInfolettre(destinataire, false);
@@ -33,19 +37,23 @@ const creeContact = (
   .catch((e) => {
     if (e.response.data.message === 'Contact already exist') return Promise.resolve();
 
+    fabriqueAdaptateurGestionErreur().logueErreur(e);
     return Promise.reject(e);
   });
 
 const envoieEmail = (
   destinataire, idTemplate, params
-) => (axios.post(`${urlBase}/smtp/email`,
+) => axios.post(`${urlBase}/smtp/email`,
   {
     to: [{ email: destinataire }],
     templateId: idTemplate,
     params,
   },
   enteteJSON)
-);
+  .catch((e) => {
+    fabriqueAdaptateurGestionErreur().logueErreur(e);
+    return Promise.reject(e);
+  });
 
 const envoieMessageFinalisationInscription = (
   destinataire, idResetMotDePasse, prenom
