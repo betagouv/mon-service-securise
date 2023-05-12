@@ -114,6 +114,12 @@ class Homologation {
     }, {});
   }
 
+  documentsPdfDisponibles() {
+    const documents = ['annexes', 'syntheseSecurite'];
+    if (this.dossierCourant()) documents.push('dossierDecision');
+    return documents;
+  }
+
   donneesAPersister() {
     return new DonneesPersistanceHomologation({
       id: this.id,
