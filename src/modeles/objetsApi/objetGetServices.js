@@ -1,3 +1,9 @@
+const STATUTS_HOMOLOGATION = {
+  aSaisir: 'À réaliser',
+  aCompleter: 'À finaliser',
+  completes: 'Réalisée',
+};
+
 const donnees = (services, idUtilisateur) => {
   const servicesAvecIndiceCyber = services
     .filter((s) => s.indiceCyber().total > 0);
@@ -26,7 +32,10 @@ const donnees = (services, idUtilisateur) => {
           cguAcceptees: c.cguAcceptees,
         })),
         indiceCyber: json.indiceCyber,
-        statutHomologation: json.statutHomologation,
+        statutHomologation: {
+          libelle: STATUTS_HOMOLOGATION[json.statutHomologation],
+          id: json.statutHomologation,
+        },
         nombreContributeurs: json.contributeurs.length + 1,
         estCreateur: json.createur.id === idUtilisateur,
       })),

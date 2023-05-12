@@ -1,9 +1,4 @@
 const [AUCUNE, ASC] = [0, 1];
-const STATUS_HOMOLOGATION = {
-  aSaisir: 'À réaliser',
-  aCompleter: 'À finaliser',
-  completes: 'Réalisée',
-};
 
 const metEnFormeContributeurs = (service) => [service.createur.prenomNom, ...service.contributeurs.map((c) => c.prenomNom)].join('\n');
 const remplisCartesInformations = (resume) => {
@@ -117,7 +112,7 @@ const tableauDesServices = {
       $celluleCollaborateur.append($conteneurCollaborateur);
       $ligne.append($celluleCollaborateur);
       $ligne.append($(`<td>${parseFloat(service.indiceCyber) === 0 ? '-' : service.indiceCyber}</td>`));
-      $ligne.append($(`<td><div class='statut-homologation statut-${service.statutHomologation}'>${STATUS_HOMOLOGATION[service.statutHomologation]}</div></td>`));
+      $ligne.append($(`<td><div class='statut-homologation statut-${service.statutHomologation.id}'>${service.statutHomologation.libelle}</div></td>`));
 
       const $boutonLienSynthese = $(`<a class='action-lien action-lien-synthese' href='/service/${service.id}'><img src='/statique/assets/images/forme_chevron_bleu.svg'></a>`);
       const $celluleActions = $("<td class='cellule-actions'></td>");

@@ -1,11 +1,6 @@
 const { EOL } = require('os');
 const { decode } = require('html-entities');
 
-const STATUS_HOMOLOGATION = {
-  aSaisir: 'À réaliser',
-  aCompleter: 'À finaliser',
-  completes: 'Réalisée',
-};
 const SEPARATEUR = ';';
 
 const remplaceSeparateurParEspace = (chaine) => chaine.replaceAll(SEPARATEUR, ' ');
@@ -18,7 +13,7 @@ const ligneDuService = (service) => (
     service.nombreContributeurs,
     remplaceBooleen(service.estCreateur),
     service.indiceCyber,
-    STATUS_HOMOLOGATION[service.statutHomologation],
+    service.statutHomologation.libelle,
   ].join(SEPARATEUR)
 );
 
