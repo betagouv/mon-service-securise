@@ -170,13 +170,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    it('recherche le dossier courant correspondant', (done) => {
-      testeur.middleware().verifieRechercheDossierCourant(
-        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
-        done,
-      );
-    });
-
     it('sert un fichier de type zip', (done) => {
       verifieTypeFichierServiEstZIP('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip', done);
     });
@@ -187,26 +180,54 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       verifieNomFichierServi('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip', 'MSS_decision_20230128.zip', done);
     });
 
-    it('utilise un adaptateur de ZIP pour compresser les PDF(s) générés', (done) => {
-      let adaptateurZipAppele = false;
-      testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('PDF A');
-      testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('PDF B');
-      testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.resolve('PDF C');
-      testeur.adaptateurZip().genereArchive = (fichiers) => {
-        expect(fichiers).to.eql([
-          { nom: 'Annexes.pdf', buffer: 'PDF A' },
-          { nom: 'DossierDecison.pdf', buffer: 'PDF B' },
-          { nom: 'SyntheseSecurite.pdf', buffer: 'PDF C' },
-        ]);
-        adaptateurZipAppele = true;
-      };
+    describe("conditionne les documents présents dans l'archive ZIP à l'état du service", () => {
+      it("en fournissant 3 documents si le service a un dossier d'homologation courant", (done) => {
+        let adaptateurZipAppele = false;
+        testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('PDF A');
+        testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.resolve('PDF B');
+        testeur.adaptateurPdf().genereDossierDecision = () => Promise.resolve('PDF C');
+        testeur.adaptateurZip().genereArchive = (fichiers) => {
+          expect(fichiers.length).to.be(3);
+          expect(fichiers[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
+          expect(fichiers[1]).to.eql({ nom: 'SyntheseSecurite.pdf', buffer: 'PDF B' });
+          expect(fichiers[2]).to.eql({ nom: 'DossierDecison.pdf', buffer: 'PDF C' });
+          adaptateurZipAppele = true;
+        };
 
-      axios.get('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip')
-        .then(() => {
-          expect(adaptateurZipAppele).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+        axios.get('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip')
+          .then(() => {
+            expect(adaptateurZipAppele).to.be(true);
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it("en fournissant 2 documents si le service n'a pas de dossier d'homologation courant", (done) => {
+        const homologationSansDossier = new Homologation({
+          id: '456',
+          descriptionService: { nomService: 'un service' },
+          dossiers: [],
+        }, referentiel);
+
+        testeur.middleware().reinitialise({ homologationARenvoyer: homologationSansDossier });
+
+        let adaptateurZipAppele = false;
+        testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('PDF A');
+        testeur.adaptateurPdf().genereSyntheseSecurite = () => Promise.resolve('PDF B');
+        testeur.adaptateurPdf().genereDossierDecision = () => Promise.reject(new Error('Ce document ne devrait pas être généré'));
+        testeur.adaptateurZip().genereArchive = (fichiers) => {
+          expect(fichiers.length).to.be(2);
+          expect(fichiers[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
+          expect(fichiers[1]).to.eql({ nom: 'SyntheseSecurite.pdf', buffer: 'PDF B' });
+          adaptateurZipAppele = true;
+        };
+        axios.get('http://localhost:1234/api/service/456/pdf/documentsHomologation.zip')
+          .then(() => {
+            expect(adaptateurZipAppele).to.be(true);
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
     });
 
     it("utilise un adaptateur d'horloge pour la génération du nom", (done) => {
