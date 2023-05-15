@@ -12,7 +12,11 @@
     "test": "eslint . && mocha",
     "test:mocha": "mocha",
     "test:watch": "nodemon --exec mocha",
-    "start": "node --require dotenv/config server.js"
+    "start": "node --require dotenv/config server.js",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "mocha": {
     "spec": "./test*/**/*.spec.*js"
@@ -55,8 +59,10 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-mocha": "^10.0.3",
     "expect.js": "^0.3.1",
+    "husky": "^8.0.3",
     "jquery": "^3.6.3",
     "jsdom": "^21.1.0",
+    "lint-staged": "^13.2.2",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
     "prettier": "2.8.8"
