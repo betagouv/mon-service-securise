@@ -385,7 +385,7 @@ const routesApi = (
   routes.post(
     '/autorisation',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('emailContributeur'),
+    middleware.aseptise('idHomologation', 'emailContributeur'),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const { idHomologation } = requete.body;

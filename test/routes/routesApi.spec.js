@@ -1279,11 +1279,11 @@ describe('Le serveur MSS des routes /api/*', () => {
         Promise.resolve();
     });
 
-    it("aseptise l'email du contributeur", (done) => {
+    it('aseptise les paramètres de la requête', (done) => {
       testeur
         .middleware()
         .verifieAseptisationParametres(
-          ['emailContributeur'],
+          ['idHomologation', 'emailContributeur'],
           { method: 'post', url: 'http://localhost:1234/api/autorisation' },
           done
         );
