@@ -403,48 +403,6 @@ const routesApiService = (
   );
 
   routes.delete(
-    '/:id/autorisationContributeur',
-    middleware.verificationAcceptationCGU,
-    (requete, reponse, suite) => {
-      const { idUtilisateurCourant } = requete;
-      const idService = requete.params.id;
-      const { idContributeur } = requete.body;
-
-      const verifiePermissionSuppressionContributeur = (...params) =>
-        depotDonnees
-          .autorisationPour(...params)
-          .then((a) =>
-            a?.permissionSuppressionContributeur
-              ? Promise.resolve()
-              : Promise.reject(new EchecAutorisation())
-          );
-
-      verifiePermissionSuppressionContributeur(idUtilisateurCourant, idService)
-        .then(() =>
-          depotDonnees.supprimeContributeur(idContributeur, idService)
-        )
-        .then(() =>
-          reponse.send(
-            `Contributeur "${idContributeur}" supprimé pour l'homologation "${idService}"`
-          )
-        )
-        .catch((e) => {
-          if (e instanceof EchecAutorisation) {
-            reponse
-              .status(403)
-              .send(
-                `Droits insuffisants pour supprimer un collaborateur du service "${idService}"`
-              );
-          } else if (e instanceof ErreurModele) {
-            reponse.status(422).send(e.message);
-          } else {
-            suite(e);
-          }
-        });
-    }
-  );
-
-  routes.delete(
     '/:id',
     middleware.verificationAcceptationCGU,
     (requete, reponse, suite) => {
