@@ -6,12 +6,11 @@ class ListeRisques extends ElementsConstructibles {
   }
 
   parNiveauGravite(accumulateur = {}) {
-    return this.tous()
-      .reduce((acc, risque) => {
-        acc[risque.niveauGravite] ||= [];
-        acc[risque.niveauGravite].push(risque.toJSON());
-        return acc;
-      }, accumulateur);
+    return this.tous().reduce((acc, risque) => {
+      acc[risque.niveauGravite] ||= [];
+      acc[risque.niveauGravite].push(risque.toJSON());
+      return acc;
+    }, accumulateur);
   }
 }
 

@@ -9,7 +9,9 @@ const brancheConteneur = (selecteurConteneur) => {
       $(champ).removeClass('intouche');
     });
     if (champ.type === 'radio' || champ.type === 'checkbox') {
-      $(champ).on('change', (evenement) => $(evenement.target).siblings().removeClass('intouche'));
+      $(champ).on('change', (evenement) =>
+        $(evenement.target).siblings().removeClass('intouche')
+      );
     }
     $(champ).on('invalid', (evenement) => {
       evenement.preventDefault();
@@ -18,11 +20,14 @@ const brancheConteneur = (selecteurConteneur) => {
 };
 
 const brancheValidation = (selecteurFormulaire) => {
-  $(selecteurFormulaire).on(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE, (evenement) => {
-    if (!evenement.target.reportValidity()) {
-      $('.intouche', selecteurFormulaire).removeClass('intouche');
+  $(selecteurFormulaire).on(
+    EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE,
+    (evenement) => {
+      if (!evenement.target.reportValidity()) {
+        $('.intouche', selecteurFormulaire).removeClass('intouche');
+      }
     }
-  });
+  );
 
   brancheConteneur(selecteurFormulaire);
   brancheValidationCasesACocher();

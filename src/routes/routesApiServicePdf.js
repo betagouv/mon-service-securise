@@ -30,7 +30,8 @@ const routesApiServicePdf = (
       nomPrenomAutorite: dossierCourant.autorite.nom,
       fonctionAutorite: dossierCourant.autorite.fonction,
       indiceCyberTotal: homologation.indiceCyber().total,
-      organisationResponsable: homologation.descriptionService.organisationsResponsables[0],
+      organisationResponsable:
+        homologation.descriptionService.organisationsResponsables[0],
       referentiel,
       ...dossierCourant.avis.toJSON(),
       ...dossierCourant.documents.toJSON(),
@@ -54,65 +55,93 @@ const routesApiServicePdf = (
     return adaptateurPdf.genereSyntheseSecurite(donnees);
   };
 
-  routes.get('/:id/pdf/annexes.pdf', middleware.trouveService, (requete, reponse, suite) => {
-    const { homologation } = requete;
+  routes.get(
+    '/:id/pdf/annexes.pdf',
+    middleware.trouveService,
+    (requete, reponse, suite) => {
+      const { homologation } = requete;
 
-    generePdfAnnexes(homologation)
-      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-      .catch(suite);
-  });
+      generePdfAnnexes(homologation)
+        .then((pdf) => reponse.contentType('application/pdf').send(pdf))
+        .catch(suite);
+    }
+  );
 
-  routes.get('/:id/pdf/dossierDecision.pdf', middleware.trouveService, middleware.trouveDossierCourant, (requete, reponse, suite) => {
-    const { homologation, dossierCourant } = requete;
+  routes.get(
+    '/:id/pdf/dossierDecision.pdf',
+    middleware.trouveService,
+    middleware.trouveDossierCourant,
+    (requete, reponse, suite) => {
+      const { homologation, dossierCourant } = requete;
 
-    generePdfDossierDecision(homologation, dossierCourant)
-      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-      .catch(suite);
-  });
+      generePdfDossierDecision(homologation, dossierCourant)
+        .then((pdf) => reponse.contentType('application/pdf').send(pdf))
+        .catch(suite);
+    }
+  );
 
-  routes.get('/:id/pdf/syntheseSecurite.pdf', middleware.trouveService, (requete, reponse, suite) => {
-    const { homologation } = requete;
+  routes.get(
+    '/:id/pdf/syntheseSecurite.pdf',
+    middleware.trouveService,
+    (requete, reponse, suite) => {
+      const { homologation } = requete;
 
-    generePdfSyntheseSecurite(homologation)
-      .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-      .catch(suite);
-  });
+      generePdfSyntheseSecurite(homologation)
+        .then((pdf) => reponse.contentType('application/pdf').send(pdf))
+        .catch(suite);
+    }
+  );
 
-  routes.get('/:id/pdf/documentsHomologation.zip', middleware.trouveService, (requete, reponse, suite) => {
-    const { homologation } = requete;
+  routes.get(
+    '/:id/pdf/documentsHomologation.zip',
+    middleware.trouveService,
+    (requete, reponse, suite) => {
+      const { homologation } = requete;
 
-    const genereUnDocument = (idDocument) => {
-      const references = {
-        annexes: {
-          pdf: () => generePdfAnnexes(homologation),
-          nom: () => 'Annexes.pdf',
-        },
-        dossierDecision: {
-          pdf: () => generePdfDossierDecision(homologation, homologation.dossierCourant()),
-          nom: () => 'DossierDecison.pdf',
-        },
-        syntheseSecurite: {
-          pdf: () => generePdfSyntheseSecurite(homologation),
-          nom: () => 'SyntheseSecurite.pdf',
-        },
+      const genereUnDocument = (idDocument) => {
+        const references = {
+          annexes: {
+            pdf: () => generePdfAnnexes(homologation),
+            nom: () => 'Annexes.pdf',
+          },
+          dossierDecision: {
+            pdf: () =>
+              generePdfDossierDecision(
+                homologation,
+                homologation.dossierCourant()
+              ),
+            nom: () => 'DossierDecison.pdf',
+          },
+          syntheseSecurite: {
+            pdf: () => generePdfSyntheseSecurite(homologation),
+            nom: () => 'SyntheseSecurite.pdf',
+          },
+        };
+
+        return references[idDocument]
+          .pdf()
+          .then((buffer) => ({ nom: references[idDocument].nom(), buffer }));
       };
 
-      return references[idDocument].pdf()
-        .then((buffer) => ({ nom: references[idDocument].nom(), buffer }));
-    };
-
-    Promise.all(
-      homologation.documentsPdfDisponibles().map((d) => genereUnDocument(d))
-    ).then((pdfs) => adaptateurZip.genereArchive(pdfs))
-      .then((archive) => {
-        const maintenantFormate = dateYYYYMMDD(adaptateurHorloge.maintenant());
-        reponse
-          .contentType('application/zip')
-          .set('Content-Disposition', `attachment; filename="MSS_decision_${maintenantFormate}.zip"`)
-          .send(archive);
-      })
-      .catch(suite);
-  });
+      Promise.all(
+        homologation.documentsPdfDisponibles().map((d) => genereUnDocument(d))
+      )
+        .then((pdfs) => adaptateurZip.genereArchive(pdfs))
+        .then((archive) => {
+          const maintenantFormate = dateYYYYMMDD(
+            adaptateurHorloge.maintenant()
+          );
+          reponse
+            .contentType('application/zip')
+            .set(
+              'Content-Disposition',
+              `attachment; filename="MSS_decision_${maintenantFormate}.zip"`
+            )
+            .send(archive);
+        })
+        .catch(suite);
+    }
+  );
 
   return routes;
 };

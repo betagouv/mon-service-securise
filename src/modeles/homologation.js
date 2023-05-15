@@ -25,7 +25,7 @@ class Homologation {
   constructor(
     donnees,
     referentiel = Referentiel.creeReferentielVide(),
-    moteurRegles = new MoteurRegles(referentiel),
+    moteurRegles = new MoteurRegles(referentiel)
   ) {
     const {
       id = '',
@@ -43,7 +43,10 @@ class Homologation {
     this.id = id;
     if (createur.email) this.createur = new Utilisateur(createur);
     this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
-    this.descriptionService = new DescriptionService(descriptionService, referentiel);
+    this.descriptionService = new DescriptionService(
+      descriptionService,
+      referentiel
+    );
     this.dossiers = new Dossiers({ dossiers }, referentiel);
 
     let { mesuresGenerales = [] } = donnees;
@@ -58,22 +61,26 @@ class Homologation {
     this.mesures = new Mesures(
       { mesuresGenerales, mesuresSpecifiques },
       referentiel,
-      mesuresPersonnalisees,
+      mesuresPersonnalisees
     );
 
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
     this.risques = new Risques(
       { risquesGeneraux, risquesSpecifiques },
-      referentiel,
+      referentiel
     );
     this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber, referentiel);
 
     this.referentiel = referentiel;
   }
 
-  autoriteHomologation() { return this.rolesResponsabilites.autoriteHomologation; }
+  autoriteHomologation() {
+    return this.rolesResponsabilites.autoriteHomologation;
+  }
 
-  indiceCyber() { return this.mesures.indiceCyber(); }
+  indiceCyber() {
+    return this.mesures.indiceCyber();
+  }
 
   completudeMesures() {
     return {
@@ -103,9 +110,13 @@ class Homologation {
     return this.descriptionService.descriptionLocalisationDonnees();
   }
 
-  descriptionTypeService() { return this.descriptionService.descriptionTypeService(); }
+  descriptionTypeService() {
+    return this.descriptionService.descriptionTypeService();
+  }
 
-  descriptionStatutDeploiement() { return this.descriptionService.descriptionStatutDeploiement(); }
+  descriptionStatutDeploiement() {
+    return this.descriptionService.descriptionStatutDeploiement();
+  }
 
   descriptionStatutsMesures() {
     return Mesure.statutsPossibles().reduce((acc, s) => {
@@ -138,15 +149,21 @@ class Homologation {
     return this.dossiers.dossierCourant();
   }
 
-  expertCybersecurite() { return this.rolesResponsabilites.expertCybersecurite; }
+  expertCybersecurite() {
+    return this.rolesResponsabilites.expertCybersecurite;
+  }
 
-  fonctionAutoriteHomologation() { return this.rolesResponsabilites.fonctionAutoriteHomologation; }
+  fonctionAutoriteHomologation() {
+    return this.rolesResponsabilites.fonctionAutoriteHomologation;
+  }
 
   gouvernance() {
     return this.rolesResponsabilites.descriptionGouvernance();
   }
 
-  hebergeur() { return this.rolesResponsabilites.descriptionHebergeur(); }
+  hebergeur() {
+    return this.rolesResponsabilites.descriptionHebergeur();
+  }
 
   localisationDonnees() {
     return this.descriptionService.localisationDonnees;
@@ -156,9 +173,13 @@ class Homologation {
     return this.mesures.parStatutEtCategorie();
   }
 
-  mesuresGenerales() { return this.mesures.mesuresGenerales; }
+  mesuresGenerales() {
+    return this.mesures.mesuresGenerales;
+  }
 
-  mesuresSpecifiques() { return this.mesures.mesuresSpecifiques; }
+  mesuresSpecifiques() {
+    return this.mesures.mesuresSpecifiques;
+  }
 
   nombreDossiers() {
     return this.dossiers.nombre();
@@ -176,11 +197,17 @@ class Homologation {
     return this.statistiquesMesures().aRemplirToutesCategories();
   }
 
-  nomService() { return this.descriptionService.nomService; }
+  nomService() {
+    return this.descriptionService.nomService;
+  }
 
-  piloteProjet() { return this.rolesResponsabilites.piloteProjet; }
+  piloteProjet() {
+    return this.rolesResponsabilites.piloteProjet;
+  }
 
-  presentation() { return this.descriptionService.presentation; }
+  presentation() {
+    return this.descriptionService.presentation;
+  }
 
   risquesGeneraux() {
     return this.risques.risquesGeneraux;

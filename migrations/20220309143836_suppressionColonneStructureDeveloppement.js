@@ -1,5 +1,5 @@
-const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) => knex('homologations')
-  .then((lignes) => {
+const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) =>
+  knex('homologations').then((lignes) => {
     const misesAJour = lignes
       .filter(contientDonneesCiblees)
       .map(({ id, donnees }) => {
@@ -11,9 +11,8 @@ const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) => knex('h
     return Promise.all(misesAJour);
   });
 
-const contientCaracteristiquesComplementaires = ({ donnees }) => (
-  donnees?.caracteristiquesComplementaires
-);
+const contientCaracteristiquesComplementaires = ({ donnees }) =>
+  donnees?.caracteristiquesComplementaires;
 
 const supprimeStructureDeveloppement = (donnees) => {
   delete donnees.caracteristiquesComplementaires.structureDeveloppement;
@@ -25,14 +24,20 @@ const contientPartiesPrenantes = ({ donnees }) => donnees?.partiesPrenantes;
 
 const copieNomDeveloppementFourniture = (donnees) => {
   donnees.caracteristiquesComplementaires ||= {};
-  donnees.caracteristiquesComplementaires.structureDeveloppement = donnees
-    .partiesPrenantes
-    ?.partiesPrenantes
-    ?.find((partiePrenante) => partiePrenante.type === 'DeveloppementFourniture')?.nom;
+  donnees.caracteristiquesComplementaires.structureDeveloppement =
+    donnees.partiesPrenantes?.partiesPrenantes?.find(
+      (partiePrenante) => partiePrenante.type === 'DeveloppementFourniture'
+    )?.nom;
 
   return donnees;
 };
 
-exports.up = miseAJour(contientCaracteristiquesComplementaires, supprimeStructureDeveloppement);
+exports.up = miseAJour(
+  contientCaracteristiquesComplementaires,
+  supprimeStructureDeveloppement
+);
 
-exports.down = miseAJour(contientPartiesPrenantes, copieNomDeveloppementFourniture);
+exports.down = miseAJour(
+  contientPartiesPrenantes,
+  copieNomDeveloppementFourniture
+);

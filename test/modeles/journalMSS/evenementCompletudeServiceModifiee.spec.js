@@ -10,7 +10,8 @@ const {
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de complétude modifiée', () => {
-  const unEvenement = () => new ConstructeurEvenementCompletudeServiceModifiee();
+  const unEvenement = () =>
+    new ConstructeurEvenementCompletudeServiceModifiee();
 
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
 
@@ -42,9 +43,7 @@ describe('Un événement de complétude modifiée', () => {
         idService: 'ABC',
         nombreTotalMesures: 54,
         nombreMesuresCompletes: 38,
-        detailMesures: [
-          { idMesure: 'analyseRisques', statut: 'fait' },
-        ],
+        detailMesures: [{ idMesure: 'analyseRisques', statut: 'fait' }],
         detailIndiceCyber: [{ categorie: 'total', indice: 4.1 }],
       },
       date: '17/11/2022',
@@ -67,7 +66,9 @@ describe('Un événement de complétude modifiée', () => {
     try {
       unEvenement().sans('idService').construis();
 
-      done(Error("L'instanciation de l'événement aurait dû lever une exception"));
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurIdentifiantServiceManquant);
       done();
@@ -78,7 +79,9 @@ describe('Un événement de complétude modifiée', () => {
     try {
       unEvenement().sans('nombreTotalMesures').construis();
 
-      done(Error("L'instanciation de l'événement aurait dû lever une exception"));
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurNombreTotalMesuresManquant);
       done();
@@ -89,7 +92,9 @@ describe('Un événement de complétude modifiée', () => {
     try {
       unEvenement().sans('nombreMesuresCompletes').construis();
 
-      done(Error("L'instanciation de l'événement aurait dû lever une exception"));
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurNombreMesuresCompletesManquant);
       done();
@@ -100,7 +105,9 @@ describe('Un événement de complétude modifiée', () => {
     try {
       unEvenement().sans('detailMesures').construis();
 
-      done(Error("L'instanciation de l'événement aurait dû lever une exception"));
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurDetailMesuresManquant);
       done();
@@ -111,7 +118,9 @@ describe('Un événement de complétude modifiée', () => {
     try {
       unEvenement().sans('indiceCyber').construis();
 
-      done(Error("L'instanciation de l'événement aurait dû lever une exception"));
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurIndiceCyberManquant);
       done();

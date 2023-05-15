@@ -8,7 +8,9 @@ describe("Les données de persistance d'une homologation", () => {
       dossiers: [{ id: '999', finalise: false }],
     };
 
-    expect(new DonneesPersistanceHomologation(donneesHomologation).sauf('dossiers')).to.eql({ id: 'id' });
+    expect(
+      new DonneesPersistanceHomologation(donneesHomologation).sauf('dossiers')
+    ).to.eql({ id: 'id' });
   });
 
   it('peuvent exclure plusieurs propriétés', () => {
@@ -17,6 +19,11 @@ describe("Les données de persistance d'une homologation", () => {
       dossiers: [{ id: '999', finalise: false }],
     };
 
-    expect(new DonneesPersistanceHomologation(donneesHomologation).sauf('dossiers', 'id')).to.eql({});
+    expect(
+      new DonneesPersistanceHomologation(donneesHomologation).sauf(
+        'dossiers',
+        'id'
+      )
+    ).to.eql({});
   });
 });

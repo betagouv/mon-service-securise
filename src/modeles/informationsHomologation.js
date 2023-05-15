@@ -10,17 +10,21 @@ const STATUTS_SAISIE = {
 
 class InformationsHomologation extends Base {
   aucunAgregatSaisi() {
-    return Object.keys(this.listesAgregats)
-      .every((l) => this[l].statutSaisie() === InformationsHomologation.A_SAISIR);
+    return Object.keys(this.listesAgregats).every(
+      (l) => this[l].statutSaisie() === InformationsHomologation.A_SAISIR
+    );
   }
 
   auMoinsUnAgregatACompleter() {
-    return Object.keys(this.listesAgregats)
-      .some((l) => this[l].statutSaisie() === InformationsHomologation.A_COMPLETER);
+    return Object.keys(this.listesAgregats).some(
+      (l) => this[l].statutSaisie() === InformationsHomologation.A_COMPLETER
+    );
   }
 
   pagines(nbElementsParPage) {
-    const tousLesElements = Object.keys(this.listesAgregats).flatMap((l) => this[l].tous());
+    const tousLesElements = Object.keys(this.listesAgregats).flatMap((l) =>
+      this[l].tous()
+    );
     return pagination(nbElementsParPage, tousLesElements);
   }
 
@@ -33,7 +37,8 @@ class InformationsHomologation extends Base {
       case InformationsHomologation.A_COMPLETER:
         return InformationsHomologation.A_COMPLETER;
       case InformationsHomologation.COMPLETES:
-        return this.statutSaisieProprietesAtomiques() === InformationsHomologation.COMPLETES
+        return this.statutSaisieProprietesAtomiques() ===
+          InformationsHomologation.COMPLETES
           ? InformationsHomologation.COMPLETES
           : InformationsHomologation.A_COMPLETER;
       default:
@@ -44,18 +49,23 @@ class InformationsHomologation extends Base {
   }
 
   statutSaisieProprietesAtomiques() {
-    const proprietesSaisies = this.proprietesAtomiquesRequises.filter(this.proprieteSaisie, this);
+    const proprietesSaisies = this.proprietesAtomiquesRequises.filter(
+      this.proprieteSaisie,
+      this
+    );
 
     if (this.proprietesAtomiquesRequises.length === proprietesSaisies.length) {
       return InformationsHomologation.COMPLETES;
     }
-    if (proprietesSaisies.length === 0) return InformationsHomologation.A_SAISIR;
+    if (proprietesSaisies.length === 0)
+      return InformationsHomologation.A_SAISIR;
     return InformationsHomologation.A_COMPLETER;
   }
 
   statutSaisieAgregats() {
     if (this.aucunAgregatSaisi()) return InformationsHomologation.A_SAISIR;
-    if (this.auMoinsUnAgregatACompleter()) return InformationsHomologation.A_COMPLETER;
+    if (this.auMoinsUnAgregatACompleter())
+      return InformationsHomologation.A_COMPLETER;
     return InformationsHomologation.COMPLETES;
   }
 }

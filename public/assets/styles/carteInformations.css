@@ -57,7 +57,8 @@
   font-size: 0.8em;
 }
 
-.carte .plus-details, .carte .moins-details {
+.carte .plus-details,
+.carte .moins-details {
   cursor: pointer;
 
   text-align: right;
@@ -66,11 +67,12 @@
   color: var(--bleu-mise-en-avant);
 }
 
-.carte .plus-details::after, .carte .moins-details::after {
+.carte .plus-details::after,
+.carte .moins-details::after {
   content: '';
   display: inline-block;
-  width: .6em;
-  height: .6em;
+  width: 0.6em;
+  height: 0.6em;
   margin-left: 1em;
 
   border: 2px var(--bleu-mise-en-avant) solid;
@@ -91,7 +93,8 @@
   border-left: 0;
 }
 
-.carte .details, .carte .moins-details {
+.carte .details,
+.carte .moins-details {
   display: none;
 }
 
@@ -130,4 +133,3 @@
 .carte .dates-statut {
   font-size: 0.696em;
 }
-

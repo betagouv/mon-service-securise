@@ -10,7 +10,8 @@ class EvenementNouveauServiceCree extends Evenement {
 
     const valide = () => {
       if (!donnees.idService) throw new ErreurIdentifiantServiceManquant();
-      if (!donnees.idUtilisateur) throw new ErreurIdentifiantUtilisateurManquant();
+      if (!donnees.idUtilisateur)
+        throw new ErreurIdentifiantUtilisateurManquant();
     };
 
     valide();

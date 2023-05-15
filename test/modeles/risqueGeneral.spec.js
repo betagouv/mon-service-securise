@@ -7,12 +7,13 @@ const RisqueGeneral = require('../../src/modeles/risqueGeneral');
 describe('Un risque général', () => {
   let referentiel;
 
-  beforeEach(() => (
-    referentiel = Referentiel.creeReferentiel({
-      niveauxGravite: { unNiveau: {} },
-      risques: { unRisque: { description: 'Une description' } },
-    })
-  ));
+  beforeEach(
+    () =>
+      (referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: { unNiveau: {} },
+        risques: { unRisque: { description: 'Une description' } },
+      }))
+  );
 
   it('retourne un JSON avec incluant la description du risque', () => {
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
@@ -20,11 +21,14 @@ describe('Un risque général', () => {
   });
 
   it('sait se décrire', () => {
-    const risque = new RisqueGeneral({
-      id: 'unRisque',
-      commentaire: 'Un commentaire',
-      niveauGravite: 'unNiveau',
-    }, referentiel);
+    const risque = new RisqueGeneral(
+      {
+        id: 'unRisque',
+        commentaire: 'Un commentaire',
+        niveauGravite: 'unNiveau',
+      },
+      referentiel
+    );
 
     expect(risque.id).to.equal('unRisque');
     expect(risque.commentaire).to.equal('Un commentaire');
@@ -47,7 +51,10 @@ describe('Un risque général', () => {
 
   it('retourne un JSON partiel si certaines informations sont inexistantes', () => {
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
-    expect(risque.toJSON()).to.eql({ id: 'unRisque', description: 'Une description' });
+    expect(risque.toJSON()).to.eql({
+      id: 'unRisque',
+      description: 'Une description',
+    });
   });
 
   it('vérifie que le risque est bien répertorié', (done) => {
@@ -56,17 +63,22 @@ describe('Un risque général', () => {
       done('La création du risque aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.a(ErreurRisqueInconnu);
-      expect(e.message).to.equal("Le risque \"identifiantInconnu\" n'est pas répertorié");
+      expect(e.message).to.equal(
+        'Le risque "identifiantInconnu" n\'est pas répertorié'
+      );
       done();
     }
   });
 
   it('sait se sérialiser', () => {
-    const risque = new RisqueGeneral({
-      id: 'unRisque',
-      commentaire: 'Un commentaire',
-      niveauGravite: 'unNiveau',
-    }, referentiel);
+    const risque = new RisqueGeneral(
+      {
+        id: 'unRisque',
+        commentaire: 'Un commentaire',
+        niveauGravite: 'unNiveau',
+      },
+      referentiel
+    );
 
     expect(risque.donneesSerialisees()).to.eql({
       id: 'unRisque',

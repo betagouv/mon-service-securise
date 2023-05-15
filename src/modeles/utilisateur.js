@@ -1,10 +1,15 @@
 const Base = require('./base');
-const { ErreurDepartementInconnu, ErreurEmailManquant, ErreurProprieteManquante } = require('../erreurs');
+const {
+  ErreurDepartementInconnu,
+  ErreurEmailManquant,
+  ErreurProprieteManquante,
+} = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 const valide = (donnees) => {
   const { email } = donnees;
-  if (typeof email !== 'string' || email === '') throw new ErreurEmailManquant();
+  if (typeof email !== 'string' || email === '')
+    throw new ErreurEmailManquant();
 };
 
 class Utilisateur extends Base {
@@ -38,12 +43,17 @@ class Utilisateur extends Base {
     utilisateurExistant = false
   ) {
     const envoieErreurProprieteManquante = (propriete) => {
-      throw new ErreurProprieteManquante(`La propriété "${propriete}" est requise`);
+      throw new ErreurProprieteManquante(
+        `La propriété "${propriete}" est requise`
+      );
     };
 
     const validePresenceProprietes = (proprietes) => {
       proprietes.forEach((propriete) => {
-        if (typeof donnees[propriete] !== 'string' || donnees[propriete] === '') {
+        if (
+          typeof donnees[propriete] !== 'string' ||
+          donnees[propriete] === ''
+        ) {
           envoieErreurProprieteManquante(propriete);
         }
       });
@@ -59,15 +69,26 @@ class Utilisateur extends Base {
 
     const valideDepartement = (codeDepartement) => {
       if (!referentiel.departement(codeDepartement)) {
-        throw new ErreurDepartementInconnu(`Le département identifié par "${codeDepartement}" n'est pas répertorié`);
+        throw new ErreurDepartementInconnu(
+          `Le département identifié par "${codeDepartement}" n'est pas répertorié`
+        );
       }
     };
 
     if (!utilisateurExistant) {
       validePresenceProprietes(['email']);
     }
-    validePresenceProprietes(['prenom', 'nom', 'nomEntitePublique', 'departementEntitePublique']);
-    validePresenceProprietesBooleenes(['rssi', 'delegueProtectionDonnees', 'infolettreAcceptee']);
+    validePresenceProprietes([
+      'prenom',
+      'nom',
+      'nomEntitePublique',
+      'departementEntitePublique',
+    ]);
+    validePresenceProprietesBooleenes([
+      'rssi',
+      'delegueProtectionDonnees',
+      'infolettreAcceptee',
+    ]);
     valideDepartement(donnees.departementEntitePublique, referentiel);
   }
 
@@ -108,11 +129,14 @@ class Utilisateur extends Base {
   }
 
   initiales() {
-    const premiereLettreMajuscule = (s) => (
-      typeof s === 'string' ? s.charAt(0).toUpperCase() : ''
-    );
+    const premiereLettreMajuscule = (s) =>
+      typeof s === 'string' ? s.charAt(0).toUpperCase() : '';
 
-    return `${premiereLettreMajuscule(this.prenom)}${premiereLettreMajuscule(this.nom)}` || '…';
+    return (
+      `${premiereLettreMajuscule(this.prenom)}${premiereLettreMajuscule(
+        this.nom
+      )}` || '…'
+    );
   }
 
   prenomNom() {

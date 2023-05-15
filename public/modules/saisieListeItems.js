@@ -9,7 +9,10 @@ const brancheSuppressionElement = () => {
 };
 
 const afficheZoneSaisieItem = (
-  selecteur, zoneSaisie, ordreInverse, actionSurZoneSaisieApresAjout = () => {}
+  selecteur,
+  zoneSaisie,
+  ordreInverse,
+  actionSurZoneSaisieApresAjout = () => {}
 ) => {
   const $conteneurSaisieItem = $(`
 <label class="item-ajoute">
@@ -27,8 +30,12 @@ const afficheZoneSaisieItem = (
 };
 
 const brancheAjoutItem = (
-  selecteurAction, selecteurConteneur, cbZoneSaisie, cbIncrementeIndex,
-  actionSurZoneSaisieApresAjout, options = { ordreInverse: false },
+  selecteurAction,
+  selecteurConteneur,
+  cbZoneSaisie,
+  cbIncrementeIndex,
+  actionSurZoneSaisieApresAjout,
+  options = { ordreInverse: false }
 ) => {
   $(selecteurAction).on('click', (e) => {
     e.preventDefault();
@@ -46,11 +53,15 @@ const peupleListeItems = (
   selecteurConteneur,
   selecteurDonnees,
   cbZoneSaisie,
-  options = { ordreInverse: false },
+  options = { ordreInverse: false }
 ) => {
   const donneesItems = JSON.parse($(selecteurDonnees).text());
   donneesItems.forEach((donnees, index) => {
-    afficheZoneSaisieItem(selecteurConteneur, cbZoneSaisie(index, donnees), options.ordreInverse);
+    afficheZoneSaisieItem(
+      selecteurConteneur,
+      cbZoneSaisie(index, donnees),
+      options.ordreInverse
+    );
   });
 
   return donneesItems.length;

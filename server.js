@@ -7,7 +7,9 @@ const adaptateurAnnuaire = require('./src/adaptateurs/adaptateurAnnuaire');
 const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurCsv = require('./src/adaptateurs/adaptateurCsv');
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
-const { fabriqueAdaptateurGestionErreur } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const {
+  fabriqueAdaptateurGestionErreur,
+} = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');

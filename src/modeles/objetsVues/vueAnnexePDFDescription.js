@@ -10,34 +10,25 @@ class VueAnnexePDFDescription {
     const fonctionnalites = this.referentiel.descriptionsFonctionnalites(
       this.homologation.descriptionService.fonctionnalites
     );
-    const fonctionnalitesSpecifiques = this.homologation
-      .descriptionService
-      .fonctionnalitesSpecifiques
-      .descriptions();
+    const fonctionnalitesSpecifiques =
+      this.homologation.descriptionService.fonctionnalitesSpecifiques.descriptions();
 
-    const donneesStockees = this.referentiel.descriptionsDonneesCaracterePersonnel(
-      this.homologation.descriptionService.donneesCaracterePersonnel
-    );
-    const donneesStockeesSpecifiques = this.homologation
-      .descriptionService
-      .donneesSensiblesSpecifiques
-      .descriptions();
+    const donneesStockees =
+      this.referentiel.descriptionsDonneesCaracterePersonnel(
+        this.homologation.descriptionService.donneesCaracterePersonnel
+      );
+    const donneesStockeesSpecifiques =
+      this.homologation.descriptionService.donneesSensiblesSpecifiques.descriptions();
 
-    const dureeDysfonctionnementMaximumAcceptable = this.referentiel
-      .descriptionDelaiAvantImpactCritique(
+    const dureeDysfonctionnementMaximumAcceptable =
+      this.referentiel.descriptionDelaiAvantImpactCritique(
         this.homologation.descriptionService.delaiAvantImpactCritique
       );
 
     return {
       nomService: this.homologation.nomService(),
-      fonctionnalites: [
-        ...fonctionnalites,
-        ...fonctionnalitesSpecifiques,
-      ],
-      donneesStockees: [
-        ...donneesStockees,
-        ...donneesStockeesSpecifiques,
-      ],
+      fonctionnalites: [...fonctionnalites, ...fonctionnalitesSpecifiques],
+      donneesStockees: [...donneesStockees, ...donneesStockeesSpecifiques],
       dureeDysfonctionnementMaximumAcceptable,
     };
   }

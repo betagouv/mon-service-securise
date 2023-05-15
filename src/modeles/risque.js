@@ -3,14 +3,20 @@ const NiveauGravite = require('./niveauGravite');
 const Referentiel = require('../referentiel');
 
 class Risque extends InformationsHomologation {
-  constructor(donneesRisque = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    donneesRisque = {},
+    referentiel = Referentiel.creeReferentielVide()
+  ) {
     super({
       proprietesAtomiquesRequises: ['niveauGravite'],
       proprietesAtomiquesFacultatives: ['commentaire'],
     });
 
     this.renseigneProprietes(donneesRisque);
-    this.objetNiveauGravite = new NiveauGravite(this.niveauGravite, referentiel);
+    this.objetNiveauGravite = new NiveauGravite(
+      this.niveauGravite,
+      referentiel
+    );
   }
 
   descriptionNiveauGravite() {

@@ -9,9 +9,10 @@ const avecPremierElementCommeValeurs = (params, nomsParamsAtomiques) => {
   return resultat;
 };
 
-const nomsInput = (selecteurInputs) => $
-  .map($(selecteurInputs), ($i) => $i.name)
-  .filter((nom, index, nomsParams) => nomsParams.indexOf(nom) === index);
+const nomsInput = (selecteurInputs) =>
+  $.map($(selecteurInputs), ($i) => $i.name).filter(
+    (nom, index, nomsParams) => nomsParams.indexOf(nom) === index
+  );
 
 const parametres = (selecteurFormulaire) => {
   const params = $(selecteurFormulaire)
@@ -25,27 +26,36 @@ const parametres = (selecteurFormulaire) => {
       return acc;
     }, {});
 
-  const nomsParamsMultiples = nomsInput(`${selecteurFormulaire} input[type="checkbox"], ${selecteurFormulaire} select[multiple='multiple']`);
+  const nomsParamsMultiples = nomsInput(
+    `${selecteurFormulaire} input[type="checkbox"], ${selecteurFormulaire} select[multiple='multiple']`
+  );
   nomsParamsMultiples.forEach((n) => (params[n] = params[n] || []));
 
-  const nomsParamsAtomiques = nomsInput(`${selecteurFormulaire} input[type!="checkbox"], ${selecteurFormulaire} textarea, ${selecteurFormulaire} select[multiple!='multiple']`);
+  const nomsParamsAtomiques = nomsInput(
+    `${selecteurFormulaire} input[type!="checkbox"], ${selecteurFormulaire} textarea, ${selecteurFormulaire} select[multiple!='multiple']`
+  );
   return avecPremierElementCommeValeurs(params, nomsParamsAtomiques);
 };
 
-const modifieParametresAvecItemsExtraits = (params, nomListeItems, sourceRegExpParamsItem) => {
+const modifieParametresAvecItemsExtraits = (
+  params,
+  nomListeItems,
+  sourceRegExpParamsItem
+) => {
   const donneesItems = { [nomListeItems]: [] };
 
   Object.keys(params)
     .filter((p) => !!p.match(new RegExp(sourceRegExpParamsItem)))
     .forEach((p) => {
       if (params[p]) {
-        const resultat = p.match(new RegExp(`${sourceRegExpParamsItem}([0-9]*)$`));
+        const resultat = p.match(
+          new RegExp(`${sourceRegExpParamsItem}([0-9]*)$`)
+        );
         const propriete = resultat[1];
         let index = resultat[2];
         index = parseInt(index, 10);
-        donneesItems[nomListeItems][index] = (
-          donneesItems[nomListeItems][index] || {}
-        );
+        donneesItems[nomListeItems][index] =
+          donneesItems[nomListeItems][index] || {};
         donneesItems[nomListeItems][index][propriete] = params[p];
       }
       delete params[p];
@@ -54,7 +64,11 @@ const modifieParametresAvecItemsExtraits = (params, nomListeItems, sourceRegExpP
   return Object.assign(params, donneesItems);
 };
 
-const modifieParametresGroupementElements = (params, nomListe, nomParametre) => {
+const modifieParametresGroupementElements = (
+  params,
+  nomListe,
+  nomParametre
+) => {
   const donneesFormatees = {};
 
   Object.keys(params)
@@ -63,27 +77,32 @@ const modifieParametresGroupementElements = (params, nomListe, nomParametre) => 
       if (params[param]) {
         const resultat = param.match(new RegExp(`^${nomParametre}(\\w*)$`));
         const propriete = decapitalise(resultat[1]);
-        donneesFormatees[nomParametre] = (
-          donneesFormatees[nomParametre] || {}
-        );
+        donneesFormatees[nomParametre] = donneesFormatees[nomParametre] || {};
         donneesFormatees[nomParametre][propriete] = params[param];
       }
       delete params[param];
     });
 
-  const listeFormatee = Object.keys(donneesFormatees).map((cle) => (
-    {
-      ...donneesFormatees[cle],
-      type: capitalise(cle),
-    }));
+  const listeFormatee = Object.keys(donneesFormatees).map((cle) => ({
+    ...donneesFormatees[cle],
+    type: capitalise(cle),
+  }));
 
   params[nomListe] = [...(params[nomListe] || []), ...listeFormatee];
   return params;
 };
 
-const parametresAvecItemsExtraits = (selecteurForm, nomListeItems, sourceRegExpParamsItem) => {
+const parametresAvecItemsExtraits = (
+  selecteurForm,
+  nomListeItems,
+  sourceRegExpParamsItem
+) => {
   const params = parametres(selecteurForm);
-  return modifieParametresAvecItemsExtraits(params, nomListeItems, sourceRegExpParamsItem);
+  return modifieParametresAvecItemsExtraits(
+    params,
+    nomListeItems,
+    sourceRegExpParamsItem
+  );
 };
 
 export default parametres;

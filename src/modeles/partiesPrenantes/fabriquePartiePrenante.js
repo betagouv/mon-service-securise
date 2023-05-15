@@ -21,7 +21,9 @@ const fabriquePartiePrenante = {
       throw new ErreurTypeInconnu(`Le type "${type}" est inconnu`);
     }
 
-    const ClassePartiePrenante = partiesPrenantesAutorises.find((classe) => classe.name === type);
+    const ClassePartiePrenante = partiesPrenantesAutorises.find(
+      (classe) => classe.name === type
+    );
     return new ClassePartiePrenante(donnees);
   },
 };

@@ -1,7 +1,6 @@
 version: '3'
 
-x-app:
-  &configuration-base
+x-app: &configuration-base
   build:
     context: .
   env_file:
@@ -22,7 +21,7 @@ services:
 
   test:
     <<: *configuration-base
-    command: "npm run test:watch"
+    command: 'npm run test:watch'
     environment:
       - NODE_ENV=test
 
@@ -38,7 +37,7 @@ services:
     networks:
       - mss-network
     ports:
-      - "${PORT_MSS}:3000"
+      - '${PORT_MSS}:3000'
     depends_on:
       - mss-db
 

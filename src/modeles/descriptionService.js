@@ -1,4 +1,7 @@
-const { ErreurStatutDeploiementInvalide, ErreurLocalisationDonneesInvalide } = require('../erreurs');
+const {
+  ErreurStatutDeploiementInvalide,
+  ErreurLocalisationDonneesInvalide,
+} = require('../erreurs');
 const DonneesSensiblesSpecifiques = require('./donneesSensiblesSpecifiques');
 const FonctionnalitesSpecifiques = require('./fonctionnalitesSpecifiques');
 const InformationsHomologation = require('./informationsHomologation');
@@ -40,7 +43,9 @@ class DescriptionService extends InformationsHomologation {
   }
 
   descriptionStatutDeploiement() {
-    return this.referentiel.descriptionStatutDeploiement(this.statutDeploiement);
+    return this.referentiel.descriptionStatutDeploiement(
+      this.statutDeploiement
+    );
   }
 
   descriptionTypeService() {
@@ -74,14 +79,21 @@ class DescriptionService extends InformationsHomologation {
   static valide(donnees, referentiel) {
     const { statutDeploiement, localisationDonnees } = donnees;
 
-    if (statutDeploiement && !referentiel.statutDeploiementValide(statutDeploiement)) {
+    if (
+      statutDeploiement &&
+      !referentiel.statutDeploiementValide(statutDeploiement)
+    ) {
       throw new ErreurStatutDeploiementInvalide(
         `Le statut de déploiement "${statutDeploiement}" est invalide`
       );
     }
 
-    if (localisationDonnees
-      && !referentiel.identifiantsLocalisationsDonnees().includes(localisationDonnees)) {
+    if (
+      localisationDonnees &&
+      !referentiel
+        .identifiantsLocalisationsDonnees()
+        .includes(localisationDonnees)
+    ) {
       throw new ErreurLocalisationDonneesInvalide(
         `La localisation des données "${localisationDonnees}" est invalide`
       );

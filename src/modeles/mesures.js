@@ -7,7 +7,7 @@ class Mesures extends InformationsHomologation {
   constructor(
     donnees = {},
     referentiel = Referentiel.creeReferentielVide(),
-    mesuresPersonnalisees = {},
+    mesuresPersonnalisees = {}
   ) {
     super({
       listesAgregats: {
@@ -37,8 +37,11 @@ class Mesures extends InformationsHomologation {
   }
 
   parStatutEtCategorie() {
-    const mesuresGeneralesParStatut = this.mesuresGenerales.parStatutEtCategorie();
-    return this.mesuresSpecifiques.parStatutEtCategorie(mesuresGeneralesParStatut);
+    const mesuresGeneralesParStatut =
+      this.mesuresGenerales.parStatutEtCategorie();
+    return this.mesuresSpecifiques.parStatutEtCategorie(
+      mesuresGeneralesParStatut
+    );
   }
 
   statistiques() {
@@ -50,8 +53,10 @@ class Mesures extends InformationsHomologation {
 
   statutSaisie() {
     const statutSaisieMesures = super.statutSaisie();
-    if (statutSaisieMesures === Mesures.COMPLETES
-      && this.nombreMesuresPersonnalisees() !== this.mesuresGenerales.nombre()) {
+    if (
+      statutSaisieMesures === Mesures.COMPLETES &&
+      this.nombreMesuresPersonnalisees() !== this.mesuresGenerales.nombre()
+    ) {
       return Mesures.A_COMPLETER;
     }
 
@@ -59,11 +64,11 @@ class Mesures extends InformationsHomologation {
   }
 
   statutsMesuresPersonnalisees() {
-    const personnalisees = ({ id: idMesure }) => (
-      Object.keys(this.mesuresPersonnalisees).includes(idMesure)
-    );
+    const personnalisees = ({ id: idMesure }) =>
+      Object.keys(this.mesuresPersonnalisees).includes(idMesure);
 
-    return this.mesuresGenerales.toutes()
+    return this.mesuresGenerales
+      .toutes()
       .filter(personnalisees)
       .filter((m) => m.statut !== '')
       .map((m) => ({ idMesure: m.id, statut: m.statut }));

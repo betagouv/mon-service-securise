@@ -4,12 +4,18 @@ const proprietePresente = (valeur) => {
   }
 
   switch (typeof valeur) {
-    case 'undefined': return false;
-    case 'boolean': return true;
-    case 'string': return valeur.length > 0;
-    case 'number': return !Number.isNaN(valeur);
-    case 'object': return valeur !== null && Object.keys(valeur).length !== 0;
-    default: return false;
+    case 'undefined':
+      return false;
+    case 'boolean':
+      return true;
+    case 'string':
+      return valeur.length > 0;
+    case 'number':
+      return !Number.isNaN(valeur);
+    case 'object':
+      return valeur !== null && Object.keys(valeur).length !== 0;
+    default:
+      return false;
   }
 };
 
@@ -36,8 +42,10 @@ class Base {
   }
 
   renseigneProprietes(donnees, referentiel) {
-    [...this.proprietesAtomiquesRequises, ...this.proprietesAtomiquesFacultatives]
-      .forEach((p) => (this[p] = donnees[p]));
+    [
+      ...this.proprietesAtomiquesRequises,
+      ...this.proprietesAtomiquesFacultatives,
+    ].forEach((p) => (this[p] = donnees[p]));
     this.proprietesListes.forEach((p) => (this[p] = donnees[p] || []));
     Object.keys(this.listesAgregats).forEach((l) => {
       const ClasseListeAgregats = this.listesAgregats[l];
@@ -75,8 +83,9 @@ class Base {
   }
 
   static proprietesObligatoiresRenseignees(donnees) {
-    return this.proprietesObligatoires()
-      .every((propriete) => proprietePresente(donnees?.[propriete]));
+    return this.proprietesObligatoires().every((propriete) =>
+      proprietePresente(donnees?.[propriete])
+    );
   }
 }
 

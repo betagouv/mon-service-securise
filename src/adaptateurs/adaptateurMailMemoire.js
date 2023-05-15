@@ -1,7 +1,9 @@
 const adaptateurEnvironnement = require('./adaptateurEnvironnement');
 
 const envoyer = (texte, args) => {
-  const doitLoguer = adaptateurEnvironnement.emailMemoire().logEmailDansConsole();
+  const doitLoguer = adaptateurEnvironnement
+    .emailMemoire()
+    .logEmailDansConsole();
 
   // eslint-disable-next-line no-console
   if (doitLoguer) console.log(texte, args);
@@ -43,7 +45,10 @@ const envoieMessageReinitialisationMotDePasse = (...args) => {
 };
 
 const envoieNotificationTentativeReinscription = (...args) => {
-  envoyer("Envoie de l'email de notification de tentative de réinscription", args);
+  envoyer(
+    "Envoie de l'email de notification de tentative de réinscription",
+    args
+  );
   return Promise.resolve();
 };
 

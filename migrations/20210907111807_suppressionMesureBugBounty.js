@@ -1,5 +1,5 @@
-exports.up = (knex) => knex('homologations')
-  .then((lignes) => {
+exports.up = (knex) =>
+  knex('homologations').then((lignes) => {
     const misesAJour = lignes.map(({ id, donnees }) => {
       donnees.mesures ||= [];
       donnees.mesures = donnees.mesures.filter((m) => m.id !== 'bugBounty');

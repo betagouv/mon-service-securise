@@ -72,8 +72,12 @@ describe("Une demande d'arrangement des paramètres des parties prenantes", () =
       },
     ]);
     expect(parametres).to.not.have.property('developpementFournitureNom');
-    expect(parametres).to.not.have.property('developpementFournitureNatureAcces');
-    expect(parametres).to.not.have.property('developpementFourniturePointContact');
+    expect(parametres).to.not.have.property(
+      'developpementFournitureNatureAcces'
+    );
+    expect(parametres).to.not.have.property(
+      'developpementFourniturePointContact'
+    );
   });
 
   it("intègre l'hébergement dans les parties prenantes", () => {
@@ -154,13 +158,25 @@ describe("Une demande d'arrangement des paramètres des parties prenantes", () =
     arrangeParametresPartiesPrenantes(parametres);
 
     expect(parametres).to.not.have.property('nom-partie-prenante-specifique-1');
-    expect(parametres).to.not.have.property('natureAcces-partie-prenante-specifique-1');
-    expect(parametres).to.not.have.property('pointContact-partie-prenante-specifique-1');
+    expect(parametres).to.not.have.property(
+      'natureAcces-partie-prenante-specifique-1'
+    );
+    expect(parametres).to.not.have.property(
+      'pointContact-partie-prenante-specifique-1'
+    );
     expect(parametres).to.not.have.property('nom-partie-prenante-specifique-2');
-    expect(parametres).to.not.have.property('natureAcces-partie-prenante-specifique-2');
-    expect(parametres).to.not.have.property('pointContact-partie-prenante-specifique-2');
-    expect(parametres.partiesPrenantes.some((objet) => objet?.nom === 'Entité 1')).to.be(true);
-    expect(parametres.partiesPrenantes.some((objet) => objet?.nom === 'Entité 2')).to.be(true);
+    expect(parametres).to.not.have.property(
+      'natureAcces-partie-prenante-specifique-2'
+    );
+    expect(parametres).to.not.have.property(
+      'pointContact-partie-prenante-specifique-2'
+    );
+    expect(
+      parametres.partiesPrenantes.some((objet) => objet?.nom === 'Entité 1')
+    ).to.be(true);
+    expect(
+      parametres.partiesPrenantes.some((objet) => objet?.nom === 'Entité 2')
+    ).to.be(true);
   });
 
   it('intègre les parties prenantes spécifiques avec les autres parties prenantes', () => {
@@ -175,11 +191,17 @@ describe("Une demande d'arrangement des paramètres des parties prenantes", () =
 
     arrangeParametresPartiesPrenantes(parametres);
 
-    expect(parametres.partiesPrenantes.find((objet) => objet?.type === 'PartiePrenanteSpecifique')).to.eql({
+    expect(
+      parametres.partiesPrenantes.find(
+        (objet) => objet?.type === 'PartiePrenanteSpecifique'
+      )
+    ).to.eql({
       nom: 'Entité 1',
       type: 'PartiePrenanteSpecifique',
     });
-    expect(parametres.partiesPrenantes.find((objet) => objet?.type === 'Hebergement')).to.eql({
+    expect(
+      parametres.partiesPrenantes.find((objet) => objet?.type === 'Hebergement')
+    ).to.eql({
       nom: 'lws',
       natureAcces: 'une nature',
       type: 'Hebergement',

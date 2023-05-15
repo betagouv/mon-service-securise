@@ -15,7 +15,9 @@ const VueAnnexePDFRisques = require('../../src/modeles/objetsVues/vueAnnexePDFRi
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
     const homologation = new Homologation({
-      id: '123', idUtilisateur: '456', descriptionService: { nomService: 'Super Service' },
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'Super Service' },
     });
 
     expect(homologation.nomService()).to.equal('Super Service');
@@ -24,7 +26,14 @@ describe('Une homologation', () => {
   it('connaît ses contributrices et contributeurs', () => {
     const homologation = new Homologation({
       id: '123',
-      contributeurs: [{ id: '456', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
+      contributeurs: [
+        {
+          id: '456',
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+        },
+      ],
     });
 
     const { contributeurs } = homologation;
@@ -37,7 +46,13 @@ describe('Une homologation', () => {
 
   it('connaît son créateur', () => {
     const homologation = new Homologation({
-      id: '123', createur: { id: '456', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' },
+      id: '123',
+      createur: {
+        id: '456',
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+      },
     });
 
     const { createur } = homologation;
@@ -48,9 +63,21 @@ describe('Une homologation', () => {
   it('sait se convertir en JSON', () => {
     const homologation = new Homologation({
       id: '123',
-      createur: { id: '456', prenom: 'Bruno', nom: 'Dumans', email: 'bruno.dumans@mail.fr' },
+      createur: {
+        id: '456',
+        prenom: 'Bruno',
+        nom: 'Dumans',
+        email: 'bruno.dumans@mail.fr',
+      },
       descriptionService: { nomService: 'Super Service' },
-      contributeurs: [{ id: '999', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' }],
+      contributeurs: [
+        {
+          id: '999',
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+        },
+      ],
     });
 
     expect(homologation.toJSON()).to.eql({
@@ -70,20 +97,22 @@ describe('Une homologation', () => {
         profilEstComplet: true,
         infolettreAcceptee: false,
       },
-      contributeurs: [{
-        id: '999',
-        cguAcceptees: false,
-        prenomNom: 'Jean Dupont',
-        telephone: '',
-        initiales: 'JD',
-        poste: '',
-        rssi: false,
-        delegueProtectionDonnees: false,
-        nomEntitePublique: '',
-        departementEntitePublique: '',
-        profilEstComplet: true,
-        infolettreAcceptee: false,
-      }],
+      contributeurs: [
+        {
+          id: '999',
+          cguAcceptees: false,
+          prenomNom: 'Jean Dupont',
+          telephone: '',
+          initiales: 'JD',
+          poste: '',
+          rssi: false,
+          delegueProtectionDonnees: false,
+          nomEntitePublique: '',
+          departementEntitePublique: '',
+          profilEstComplet: true,
+          infolettreAcceptee: false,
+        },
+      ],
     });
   });
 
@@ -94,18 +123,26 @@ describe('Une homologation', () => {
         unAutre: { description: 'Un autre' },
       },
     });
-    const homologation = new Homologation({
-      id: '123',
-      idUtilisateur: '456',
-      descriptionService: { nomService: 'nom', typeService: ['unType', 'unAutre'] },
-    }, referentiel);
+    const homologation = new Homologation(
+      {
+        id: '123',
+        idUtilisateur: '456',
+        descriptionService: {
+          nomService: 'nom',
+          typeService: ['unType', 'unAutre'],
+        },
+      },
+      referentiel
+    );
 
     expect(homologation.descriptionTypeService()).to.equal('Un type, Un autre');
   });
 
   it("se comporte correctement si le type service n'est pas présente", () => {
     const homologation = new Homologation({ id: '123' });
-    expect(homologation.descriptionTypeService()).to.equal('Type de service non renseignée');
+    expect(homologation.descriptionTypeService()).to.equal(
+      'Type de service non renseignée'
+    );
   });
 
   it('connaît les rôles et responsabilités de ses acteurs et parties prenantes', () => {
@@ -134,17 +171,36 @@ describe('Une homologation', () => {
   });
 
   it('connaît ses dossiers', () => {
-    const referentiel = Referentiel.creeReferentiel({ echeancesRenouvellement: { unAn: {} } });
-    const homologation = new Homologation({ id: '123', dossiers: [{ id: '999' }] }, referentiel);
+    const referentiel = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { unAn: {} },
+    });
+    const homologation = new Homologation(
+      { id: '123', dossiers: [{ id: '999' }] },
+      referentiel
+    );
 
     expect(homologation.nombreDossiers()).to.equal(1);
   });
 
   it('connaît le dossier courant', () => {
-    const referentiel = Referentiel.creeReferentiel({ echeancesRenouvellement: { unAn: {} } });
-    const homologation = new Homologation({
-      id: '123', dossiers: [{ id: '777', dateHomologation: '2022-12-01', dureeValidite: 'unAn', finalise: true }, { id: '999' }],
-    }, referentiel);
+    const referentiel = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { unAn: {} },
+    });
+    const homologation = new Homologation(
+      {
+        id: '123',
+        dossiers: [
+          {
+            id: '777',
+            dateHomologation: '2022-12-01',
+            dureeValidite: 'unAn',
+            finalise: true,
+          },
+          { id: '999' },
+        ],
+      },
+      referentiel
+    );
 
     expect(homologation.dossierCourant().id).to.equal('999');
   });
@@ -158,7 +214,11 @@ describe('Une homologation', () => {
         referentiel
       );
 
-      expect(homologationAvecDossier.documentsPdfDisponibles()).to.eql(['annexes', 'syntheseSecurite', 'dossierDecision']);
+      expect(homologationAvecDossier.documentsPdfDisponibles()).to.eql([
+        'annexes',
+        'syntheseSecurite',
+        'dossierDecision',
+      ]);
     });
 
     it("exclut le dossier de décision en cas d'absence de dossier d'homologation courant", () => {
@@ -169,7 +229,10 @@ describe('Une homologation', () => {
         referentiel
       );
 
-      expect(homologationSansDossier.documentsPdfDisponibles()).to.eql(['annexes', 'syntheseSecurite']);
+      expect(homologationSansDossier.documentsPdfDisponibles()).to.eql([
+        'annexes',
+        'syntheseSecurite',
+      ]);
     });
   });
 
@@ -186,12 +249,20 @@ describe('Une homologation', () => {
     const moteur = { mesures: () => ({ m1: { indispensable: true } }) };
     const referentiel = Referentiel.creeReferentiel({ mesures: { m1: {} } });
 
-    const homologation = new Homologation({
-      id: '123',
-      mesuresGenerales: [{ id: 'm1' }],
-    }, referentiel, moteur);
+    const homologation = new Homologation(
+      {
+        id: '123',
+        mesuresGenerales: [{ id: 'm1' }],
+      },
+      referentiel,
+      moteur
+    );
 
-    expect(homologation.mesures.mesuresGenerales.toutes().find((mesure) => mesure.id === 'm1').rendueIndispensable).to.be(true);
+    expect(
+      homologation.mesures.mesuresGenerales
+        .toutes()
+        .find((mesure) => mesure.id === 'm1').rendueIndispensable
+    ).to.be(true);
   });
 
   it('connaît ses mesures spécifiques', () => {
@@ -218,11 +289,14 @@ describe('Une homologation', () => {
     const homologation = new Homologation({
       id: '123',
       rolesResponsabilites: {
-        autoriteHomologation: 'Jean Dupont', fonctionAutoriteHomologation: 'Maire',
+        autoriteHomologation: 'Jean Dupont',
+        fonctionAutoriteHomologation: 'Maire',
       },
     });
 
-    expect(homologation.descriptionAutoriteHomologation()).to.equal('Jean Dupont (Maire)');
+    expect(homologation.descriptionAutoriteHomologation()).to.equal(
+      'Jean Dupont (Maire)'
+    );
   });
 
   it('décrit son expiration', () => {
@@ -230,10 +304,13 @@ describe('Une homologation', () => {
       echeancesRenouvellement: { unAn: { expiration: 'Dans un an' } },
     });
 
-    const homologation = new Homologation({
-      id: '123',
-      avisExpertCyber: { dateRenouvellement: 'unAn' },
-    }, referentiel);
+    const homologation = new Homologation(
+      {
+        id: '123',
+        avisExpertCyber: { dateRenouvellement: 'unAn' },
+      },
+      referentiel
+    );
 
     expect(homologation.descriptionExpiration()).to.equal('Dans un an');
   });
@@ -249,43 +326,63 @@ describe('Une homologation', () => {
   });
 
   describe('sur évaluation du statut de saisie des mesures', () => {
-    const referentiel = Referentiel.creeReferentiel({ mesures: { m1: {}, m2: {} } });
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { m1: {}, m2: {} },
+    });
     const moteur = { mesures: () => ({ m1: {}, m2: {} }) };
 
     it('détecte que la liste des mesures reste à saisir', () => {
       const homologation = new Homologation({ id: '123' });
-      expect(homologation.statutSaisie('mesures')).to.equal(InformationsHomologation.A_SAISIR);
+      expect(homologation.statutSaisie('mesures')).to.equal(
+        InformationsHomologation.A_SAISIR
+      );
     });
 
     it('détecte que la liste des mesures est à compléter', () => {
-      const homologation = new Homologation({
-        mesuresGenerales: [{ id: 'm1', statut: MesureGenerale.STATUT_FAIT }],
-      }, referentiel, moteur);
+      const homologation = new Homologation(
+        {
+          mesuresGenerales: [{ id: 'm1', statut: MesureGenerale.STATUT_FAIT }],
+        },
+        referentiel,
+        moteur
+      );
 
-      expect(homologation.statutSaisie('mesures')).to.equal(InformationsHomologation.A_COMPLETER);
+      expect(homologation.statutSaisie('mesures')).to.equal(
+        InformationsHomologation.A_COMPLETER
+      );
     });
 
     it('détecte que la liste des mesures est complète', () => {
-      const homologation = new Homologation({
-        mesuresGenerales: [
-          { id: 'm1', statut: MesureGenerale.STATUT_FAIT },
-          { id: 'm2', statut: MesureGenerale.STATUT_FAIT },
-        ],
-      }, referentiel, moteur);
+      const homologation = new Homologation(
+        {
+          mesuresGenerales: [
+            { id: 'm1', statut: MesureGenerale.STATUT_FAIT },
+            { id: 'm2', statut: MesureGenerale.STATUT_FAIT },
+          ],
+        },
+        referentiel,
+        moteur
+      );
 
-      expect(homologation.statutSaisie('mesures')).to.equal(InformationsHomologation.COMPLETES);
+      expect(homologation.statutSaisie('mesures')).to.equal(
+        InformationsHomologation.COMPLETES
+      );
     });
   });
 
   describe('sur évaluation du statut de saisie des risques', () => {
     it('détecte que la liste des risques reste à vérifier', () => {
       const homologation = new Homologation({ id: '123' });
-      expect(homologation.statutSaisie('risques')).to.equal(InformationsHomologation.A_SAISIR);
+      expect(homologation.statutSaisie('risques')).to.equal(
+        InformationsHomologation.A_SAISIR
+      );
     });
   });
 
   it('connaît son indice cyber', () => {
-    const homologation = new Homologation({ createur: { email: 'bruno.dumans@mail.fr' } });
+    const homologation = new Homologation({
+      createur: { email: 'bruno.dumans@mail.fr' },
+    });
     homologation.mesures.indiceCyber = () => 3.7;
 
     expect(homologation.indiceCyber()).to.equal(3.7);
@@ -350,7 +447,10 @@ describe('Une homologation', () => {
 
     homologation.mesures = {
       statistiques: () => ({
-        completude: () => ({ nombreTotalMesures: 10, nombreMesuresCompletes: 8 }),
+        completude: () => ({
+          nombreTotalMesures: 10,
+          nombreMesuresCompletes: 8,
+        }),
       }),
       statutsMesuresPersonnalisees: () => [],
       indiceCyber: () => ({ total: 4.2 }),
@@ -374,7 +474,9 @@ describe('Une homologation', () => {
   });
 
   it('délègue aux mesures la récupération des mesures par statut et par catégorie', () => {
-    const homologation = new Homologation({ mesuresGenerales: [{ id: 'mesure1', statut: 'enCours' }] });
+    const homologation = new Homologation({
+      mesuresGenerales: [{ id: 'mesure1', statut: 'enCours' }],
+    });
     homologation.mesures.parStatutEtCategorie = () => ({ unStatut: {} });
 
     expect(homologation.mesuresParStatutEtCategorie()).to.eql({ unStatut: {} });
@@ -389,11 +491,14 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Homologation({
-      id: '123',
-      idUtilisateur: '456',
-      descriptionService: { nomService: 'nom', statutDeploiement: 'enLigne' },
-    }, referentiel);
+    const homologation = new Homologation(
+      {
+        id: '123',
+        idUtilisateur: '456',
+        descriptionService: { nomService: 'nom', statutDeploiement: 'enLigne' },
+      },
+      referentiel
+    );
 
     expect(homologation.descriptionStatutDeploiement()).to.equal('En ligne');
   });
@@ -407,11 +512,17 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Homologation({
-      id: '123',
-      idUtilisateur: '456',
-      descriptionService: { nomService: 'nom', localisationDonnees: 'france' },
-    }, referentiel);
+    const homologation = new Homologation(
+      {
+        id: '123',
+        idUtilisateur: '456',
+        descriptionService: {
+          nomService: 'nom',
+          localisationDonnees: 'france',
+        },
+      },
+      referentiel
+    );
 
     expect(homologation.localisationDonnees()).to.equal('france');
   });
@@ -425,11 +536,17 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Homologation({
-      id: '123',
-      idUtilisateur: '456',
-      descriptionService: { nomService: 'nom', localisationDonnees: 'france' },
-    }, referentiel);
+    const homologation = new Homologation(
+      {
+        id: '123',
+        idUtilisateur: '456',
+        descriptionService: {
+          nomService: 'nom',
+          localisationDonnees: 'france',
+        },
+      },
+      referentiel
+    );
 
     expect(homologation.descriptionLocalisationDonnees()).to.equal('France');
   });
@@ -441,7 +558,9 @@ describe('Une homologation', () => {
       descriptionService: { nomService: 'nom' },
     });
 
-    expect(homologation.vueAnnexePDFDescription()).to.be.a(VueAnnexePDFDescription);
+    expect(homologation.vueAnnexePDFDescription()).to.be.a(
+      VueAnnexePDFDescription
+    );
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des risques", () => {
@@ -479,28 +598,35 @@ describe('Une homologation', () => {
       });
 
       const aujourdhui = new Date();
-      const homologation = new Homologation({
-        id: 'id-homologation',
-        avisExpertCyber: { avis: 'defavorable' },
-        descriptionService: uneDescriptionValide(Referentiel.creeReferentielVide())
-          .avecNomService('nom-service')
-          .construis()
-          .toJSON(),
-        dossiers: [{ ...unDossier(referentiel)
-          .quiEstComplet()
-          .avecDateHomologation(aujourdhui)
-          .avecDateTelechargement(aujourdhui)
-          .donnees }],
-        mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
-        risquesGeneraux: [{ id: 'unRisque' }],
-        risquesSpecifiques: [{ description: 'Un risque' }],
-        rolesResponsabilites: {
-          autoriteHomologation: 'Jean Dupont',
-          partiesPrenantes: [{ nom: 'Un hébergeur', type: 'Hebergement' }],
+      const homologation = new Homologation(
+        {
+          id: 'id-homologation',
+          avisExpertCyber: { avis: 'defavorable' },
+          descriptionService: uneDescriptionValide(
+            Referentiel.creeReferentielVide()
+          )
+            .avecNomService('nom-service')
+            .construis()
+            .toJSON(),
+          dossiers: [
+            {
+              ...unDossier(referentiel)
+                .quiEstComplet()
+                .avecDateHomologation(aujourdhui)
+                .avecDateTelechargement(aujourdhui).donnees,
+            },
+          ],
+          mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
+          mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+          risquesGeneraux: [{ id: 'unRisque' }],
+          risquesSpecifiques: [{ description: 'Un risque' }],
+          rolesResponsabilites: {
+            autoriteHomologation: 'Jean Dupont',
+            partiesPrenantes: [{ nom: 'Un hébergeur', type: 'Hebergement' }],
+          },
         },
-      },
-      referentiel);
+        referentiel
+      );
 
       expect(homologation.donneesAPersister().toutes()).to.eql({
         id: 'id-homologation',
@@ -521,17 +647,28 @@ describe('Une homologation', () => {
           pointsAcces: [],
           organisationsResponsables: [],
         },
-        dossiers: [{
-          id: '1',
-          avecAvis: true,
-          avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
-          avecDocuments: true,
-          documents: ['unDocument'],
-          autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
-          decision: { dateHomologation: aujourdhui.toISOString(), dureeValidite: 'unAn' },
-          dateTelechargement: { date: aujourdhui.toISOString() },
-          finalise: true,
-        }],
+        dossiers: [
+          {
+            id: '1',
+            avecAvis: true,
+            avis: [
+              {
+                collaborateurs: ['Jean Dupond'],
+                dureeValidite: 'unAn',
+                statut: 'favorable',
+              },
+            ],
+            avecDocuments: true,
+            documents: ['unDocument'],
+            autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
+            decision: {
+              dateHomologation: aujourdhui.toISOString(),
+              dureeValidite: 'unAn',
+            },
+            dateTelechargement: { date: aujourdhui.toISOString() },
+            finalise: true,
+          },
+        ],
         mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
         risquesGeneraux: [{ id: 'unRisque' }],
@@ -547,10 +684,15 @@ describe('Une homologation', () => {
 
   describe('sur une demande des données à dupliquer', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    const descriptionService = uneDescriptionValide(referentiel).construis().toJSON();
+    const descriptionService = uneDescriptionValide(referentiel)
+      .construis()
+      .toJSON();
 
     it('retourne les données sans identifiant', () => {
-      const homologation = new Homologation({ id: 'id-homologation', descriptionService }, referentiel);
+      const homologation = new Homologation(
+        { id: 'id-homologation', descriptionService },
+        referentiel
+      );
 
       const duplicata = homologation.donneesADupliquer();
 
@@ -558,19 +700,27 @@ describe('Une homologation', () => {
     });
 
     it("utilise le nom d'homologation passé en paramètre", () => {
-      const homologation = new Homologation({ id: 'id-homologation', descriptionService }, referentiel);
+      const homologation = new Homologation(
+        { id: 'id-homologation', descriptionService },
+        referentiel
+      );
 
       const duplicata = homologation.donneesADupliquer('Nouveau service');
 
-      expect(duplicata.descriptionService.nomService).to.equal('Nouveau service');
+      expect(duplicata.descriptionService.nomService).to.equal(
+        'Nouveau service'
+      );
     });
 
     it("ne duplique pas les dossiers de l'homologation", () => {
-      const homologation = new Homologation({
-        id: 'id-homologation',
-        descriptionService,
-        dossiers: [{ id: '999' }],
-      }, referentiel);
+      const homologation = new Homologation(
+        {
+          id: 'id-homologation',
+          descriptionService,
+          dossiers: [{ id: '999' }],
+        },
+        referentiel
+      );
 
       const duplicata = homologation.donneesADupliquer();
 

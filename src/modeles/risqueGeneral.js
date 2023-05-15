@@ -3,7 +3,10 @@ const { ErreurRisqueInconnu } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 class RisqueGeneral extends Risque {
-  constructor(donneesRisque = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    donneesRisque = {},
+    referentiel = Referentiel.creeReferentielVide()
+  ) {
     super(donneesRisque, referentiel);
 
     this.proprietesAtomiquesRequises.push('id');

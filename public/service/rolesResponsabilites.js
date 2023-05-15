@@ -20,11 +20,15 @@ $(() => {
     fonction: { label: 'Fonction' },
   });
 
-  brancheElementsAjoutables('parties-prenantes-specifiques', 'partie-prenante-specifique', {
-    nom: { label: "Nom de l'entité" },
-    natureAcces: { label: "Nature de l'accès au service numérique" },
-    pointContact: { label: 'Point de contact' },
-  });
+  brancheElementsAjoutables(
+    'parties-prenantes-specifiques',
+    'partie-prenante-specifique',
+    {
+      nom: { label: "Nom de l'entité" },
+      natureAcces: { label: "Nature de l'accès au service numérique" },
+      pointContact: { label: 'Point de contact' },
+    }
+  );
 
   const $bouton = $('.bouton[idHomologation]');
   const identifiantService = $bouton.attr('idHomologation');
@@ -32,7 +36,10 @@ $(() => {
   $bouton.on('click', () => {
     const params = tousLesParametres('form#roles-responsabilites');
 
-    axios.post(`/api/service/${identifiantService}/rolesResponsabilites`, params)
-      .then((reponse) => (window.location = `/service/${reponse.data.idService}`));
+    axios
+      .post(`/api/service/${identifiantService}/rolesResponsabilites`, params)
+      .then(
+        (reponse) => (window.location = `/service/${reponse.data.idService}`)
+      );
   });
 });

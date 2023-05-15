@@ -2,7 +2,10 @@ const brancheValidationGroupeCasesACocher = ($groupeCasesACocher) => {
   const $toutesCasesACocher = $('input:checkbox', $groupeCasesACocher);
 
   const verifieEtatCasesACocher = () => {
-    const messageErreur = ($toutesCasesACocher.filter(':checked').length === 0) ? 'Erreur de saisie' : '';
+    const messageErreur =
+      $toutesCasesACocher.filter(':checked').length === 0
+        ? 'Erreur de saisie'
+        : '';
     $toutesCasesACocher.each((_, caseACocher) => {
       caseACocher.setCustomValidity(messageErreur);
       caseACocher.reportValidity();

@@ -15,13 +15,17 @@ describe('La liste des risques', () => {
     });
 
     it('trie les risques selon leur niveau de gravité', () => {
-      const listeRisques = new ListeRisques(Risque, {
-        items: [
-          { commentaire: 'Un risque', niveauGravite: 'grave' },
-          { commentaire: 'Un risque deux', niveauGravite: 'critique' },
-          { commentaire: 'Un risque trois', niveauGravite: 'critique' },
-        ],
-      }, referentiel);
+      const listeRisques = new ListeRisques(
+        Risque,
+        {
+          items: [
+            { commentaire: 'Un risque', niveauGravite: 'grave' },
+            { commentaire: 'Un risque deux', niveauGravite: 'critique' },
+            { commentaire: 'Un risque trois', niveauGravite: 'critique' },
+          ],
+        },
+        referentiel
+      );
 
       const parNiveauGravite = listeRisques.parNiveauGravite();
 
@@ -31,11 +35,13 @@ describe('La liste des risques', () => {
     });
 
     it('ajoute les commentaires des risques', () => {
-      const listeRisques = new ListeRisques(Risque, {
-        items: [
-          { commentaire: 'Un commentaire', niveauGravite: 'grave' },
-        ],
-      }, referentiel);
+      const listeRisques = new ListeRisques(
+        Risque,
+        {
+          items: [{ commentaire: 'Un commentaire', niveauGravite: 'grave' }],
+        },
+        referentiel
+      );
 
       const parNiveauGravite = listeRisques.parNiveauGravite();
 
@@ -44,13 +50,17 @@ describe('La liste des risques', () => {
     });
 
     it('peut utiliser un accumulateur avec des valeurs préexistantes', () => {
-      const listeRisques = new ListeRisques(Risque, {
-        items: [
-          { commentaire: 'Un risque deux', niveauGravite: 'grave' },
-        ],
-      }, referentiel);
+      const listeRisques = new ListeRisques(
+        Risque,
+        {
+          items: [{ commentaire: 'Un risque deux', niveauGravite: 'grave' }],
+        },
+        referentiel
+      );
 
-      const parNiveauGravite = listeRisques.parNiveauGravite({ grave: [{ commentaire: 'Un risque' }] });
+      const parNiveauGravite = listeRisques.parNiveauGravite({
+        grave: [{ commentaire: 'Un risque' }],
+      });
 
       expect(parNiveauGravite.grave.length).to.equal(2);
       expect(parNiveauGravite.grave[0].commentaire).to.equal('Un risque');

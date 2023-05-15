@@ -5,9 +5,10 @@ $(() => {
   const $confirmationMdp = $('#mot-de-passe-confirmation');
 
   const verifieMotDePasse = () => {
-    const erreur = $champMdp.val() !== $confirmationMdp.val()
-      ? 'erreurDoubleSaisieAvecDifference'
-      : '';
+    const erreur =
+      $champMdp.val() !== $confirmationMdp.val()
+        ? 'erreurDoubleSaisieAvecDifference'
+        : '';
     $confirmationMdp.get(0).setCustomValidity(erreur);
   };
 

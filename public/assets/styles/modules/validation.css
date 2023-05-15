@@ -4,12 +4,12 @@
   margin-bottom: 1em;
 }
 
-:is(h1, hr)+.mention {
+:is(h1, hr) + .mention {
   margin: 2em 0 0;
 }
 
 .mention::before {
-  margin-right: .4em;
+  margin-right: 0.4em;
 }
 
 .requis::before {
@@ -19,12 +19,12 @@
 
 .mention::before,
 .requis::before {
-  content: "*";
+  content: '*';
   color: var(--rose-anssi);
 }
 
 form.champ-unique .requis::before {
-  content: "";
+  content: '';
 }
 
 .requis {
@@ -66,22 +66,22 @@ form.champ-unique .requis::before {
   border-color: var(--bleu-mise-en-avant);
 }
 
-input[type="radio"]:not(.intouche):valid {
-  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %230f7ac7; stroke-width: 0.50em" /></svg>')
+input[type='radio']:not(.intouche):valid {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %230f7ac7; stroke-width: 0.50em" /></svg>');
 }
 
 :is(input, select, textarea):not(.intouche):invalid {
   border-color: var(--rose-anssi);
 }
 
-input[type="radio"]:not(.intouche):invalid {
-  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %23ff6584; stroke-width: 0.50em" /></svg>')
+input[type='radio']:not(.intouche):invalid {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %23ff6584; stroke-width: 0.50em" /></svg>');
 }
 
 :is(input, select, textarea):not(.intouche):invalid:focus {
   outline-color: var(--rose-anssi);
 }
 
-:is(input, select, textarea):not(.intouche):invalid~.message-erreur {
+:is(input, select, textarea):not(.intouche):invalid ~ .message-erreur {
   display: block;
 }

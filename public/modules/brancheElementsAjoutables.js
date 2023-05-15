@@ -1,16 +1,13 @@
 import { brancheAjoutItem } from './saisieListeItems.js';
 
 const templateZoneSaisieChampsTextes = (index, nomElement, proprietes) => {
-  const label = (valeurLabel, idInputAssocie) => (
-    valeurLabel ? `<label for="${idInputAssocie}">${valeurLabel}</label>` : ''
-  );
+  const label = (valeurLabel, idInputAssocie) =>
+    valeurLabel ? `<label for="${idInputAssocie}">${valeurLabel}</label>` : '';
 
-  const $inputs = Object
-    .keys(proprietes)
-    .map((cle) => {
-      const id = `${cle}-${nomElement}-${index}`;
-      return $(
-        `${label(proprietes[cle].label, id)}
+  const $inputs = Object.keys(proprietes).map((cle) => {
+    const id = `${cle}-${nomElement}-${index}`;
+    return $(
+      `${label(proprietes[cle].label, id)}
           <input
             id="${id}"
             name="${id}"
@@ -18,8 +15,8 @@ const templateZoneSaisieChampsTextes = (index, nomElement, proprietes) => {
             value="${proprietes[cle].valeur || ''}"
             placeholder="${proprietes[cle].valeurExemple || ''}"
           >`
-      );
-    });
+    );
+  });
   return $(`<div id="element-${nomElement}-${index}"></div>`).append($inputs);
 };
 
@@ -32,13 +29,12 @@ const brancheElementsAjoutables = (
 ) => {
   const indexMax = () => {
     const prefixeIdentifiant = `element-${identifiantElement}`;
-    const tousLesIndex = $(`[id^="${prefixeIdentifiant}"]`)
-      .map((_, element) => parseInt(
-        $(element)
-          .attr('id')
-          .match(`${prefixeIdentifiant}-([0-9]+)`)[1],
+    const tousLesIndex = $(`[id^="${prefixeIdentifiant}"]`).map((_, element) =>
+      parseInt(
+        $(element).attr('id').match(`${prefixeIdentifiant}-([0-9]+)`)[1],
         10
-      ));
+      )
+    );
 
     return Math.max(...tousLesIndex, -1) + 1;
   };
@@ -55,17 +51,16 @@ const brancheElementsAjoutables = (
   );
 };
 
-export const brancheElementsAjoutablesDescription = (identifiantConteneurElements, identifiantElement, valeurExemple = '') => (
-  brancheElementsAjoutables(
-    identifiantConteneurElements,
-    identifiantElement,
-    {
-      description: {
-        valeur: '',
-        valeurExemple,
-      },
-    }
-  )
-);
+export const brancheElementsAjoutablesDescription = (
+  identifiantConteneurElements,
+  identifiantElement,
+  valeurExemple = ''
+) =>
+  brancheElementsAjoutables(identifiantConteneurElements, identifiantElement, {
+    description: {
+      valeur: '',
+      valeurExemple,
+    },
+  });
 
 export default brancheElementsAjoutables;

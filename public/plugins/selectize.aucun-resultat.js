@@ -13,12 +13,12 @@ $(() => {
     options = {
       ...options,
       message: 'Aucun résultat correspond à votre recherche',
-      html: (data) => (
+      html: (data) =>
         `<div class="selectize-dropdown ${data.classNames}">
            <div class="selectize-dropdown-content">
              <div class="no-results">${data.message}</div>
            </div>
-         </div>`),
+         </div>`,
     };
 
     self.displayEmptyResultsMessage = () => {
@@ -33,7 +33,8 @@ $(() => {
 
       function basculeAffichageAucunResultat() {
         original.apply(self, args);
-        if (this.hasOptions || !this.lastQuery) this.$empty_results_container.hide();
+        if (this.hasOptions || !this.lastQuery)
+          this.$empty_results_container.hide();
         else this.displayEmptyResultsMessage();
       }
 
@@ -70,9 +71,9 @@ $(() => {
 
       function initialise() {
         original.apply(self, args);
-        self.$empty_results_container = $(options.html(
-          { ...options, classNames: self.$input.attr('class') }
-        ));
+        self.$empty_results_container = $(
+          options.html({ ...options, classNames: self.$input.attr('class') })
+        );
         self.$empty_results_container.insertBefore(self.$dropdown);
         self.$empty_results_container.hide();
       }

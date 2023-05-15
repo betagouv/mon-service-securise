@@ -1,4 +1,7 @@
-import { brancheValidation, declencheValidation } from '../modules/interactions/validation.mjs';
+import {
+  brancheValidation,
+  declencheValidation,
+} from '../modules/interactions/validation.mjs';
 
 $(() => {
   const $modale = $('#modale-nouveau-service');

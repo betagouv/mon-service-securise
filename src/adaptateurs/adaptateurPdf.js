@@ -1,7 +1,9 @@
 const { PDFDocument } = require('pdf-lib');
 const pug = require('pug');
 const { lanceNavigateur } = require('./adaptateurPdf.puppeteer');
-const { fabriqueAdaptateurGestionErreur } = require('./fabriqueAdaptateurGestionErreur');
+const {
+  fabriqueAdaptateurGestionErreur,
+} = require('./fabriqueAdaptateurGestionErreur');
 
 const formatPdfA4 = (enteteHtml, piedPageHtml) => ({
   format: 'A4',
@@ -53,7 +55,9 @@ const fusionnePdfs = async (pdfs) => {
 };
 
 const genereHtml = async (pugCorps, paramsCorps, nomService) => {
-  const piedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({ nomService });
+  const piedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({
+    nomService,
+  });
   return Promise.all([
     pug.compileFile(`src/pdf/modeles/${pugCorps}.pug`)(paramsCorps),
     pug.compileFile(`src/pdf/modeles/${pugCorps}.entete.pug`)(),
@@ -67,17 +71,32 @@ const genereAnnexes = async ({
   referentiel,
 }) => {
   try {
-    const risquesPresents = Object.keys(donneesRisques.risquesParNiveauGravite).length > 0;
+    const risquesPresents =
+      Object.keys(donneesRisques.risquesParNiveauGravite).length > 0;
 
     const [description, mesures, risques] = await Promise.all([
-      genereHtml('annexeDescription', { donneesDescription }, donneesDescription.nomService),
-      genereHtml('annexeMesures', { donneesMesures, referentiel }, donneesDescription.nomService),
-      risquesPresents ? genereHtml('annexeRisques', { donneesRisques, referentiel }, donneesDescription.nomService) : null,
+      genereHtml(
+        'annexeDescription',
+        { donneesDescription },
+        donneesDescription.nomService
+      ),
+      genereHtml(
+        'annexeMesures',
+        { donneesMesures, referentiel },
+        donneesDescription.nomService
+      ),
+      risquesPresents
+        ? genereHtml(
+            'annexeRisques',
+            { donneesRisques, referentiel },
+            donneesDescription.nomService
+          )
+        : null,
     ]);
 
-    const pdfs = await generePdfs(risquesPresents
-      ? [description, mesures, risques]
-      : [description, mesures]);
+    const pdfs = await generePdfs(
+      risquesPresents ? [description, mesures, risques] : [description, mesures]
+    );
 
     return fusionnePdfs(pdfs);
   } catch (e) {
@@ -93,7 +112,9 @@ const genereDossierDecision = async (donnees) => {
     const htmls = await Promise.all([
       genereHtml('dossierDecision', { donnees }, donnees.nomService),
       genereHtml('annexeAvis', { donnees }, donnees.nomService),
-      documentsPresent ? genereHtml('annexeDocuments', { donnees }, donnees.nomService) : null,
+      documentsPresent
+        ? genereHtml('annexeDocuments', { donnees }, donnees.nomService)
+        : null,
     ]);
 
     const pdfs = await generePdfs(htmls.filter((a) => a !== null));
@@ -107,7 +128,11 @@ const genereDossierDecision = async (donnees) => {
 
 const genereSyntheseSecurite = async (donnees) => {
   try {
-    const html = await genereHtml('syntheseSecurite', { donnees }, donnees.service.nomService());
+    const html = await genereHtml(
+      'syntheseSecurite',
+      { donnees },
+      donnees.service.nomService()
+    );
     const pdf = await generePdfs([html]);
     return fusionnePdfs(pdf);
   } catch (e) {

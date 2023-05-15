@@ -1,5 +1,9 @@
 const Evenement = require('./evenement');
-const { ErreurIdentifiantServiceManquant, ErreurDateHomologationManquante, ErreurDureeHomologationManquante } = require('./erreurs');
+const {
+  ErreurIdentifiantServiceManquant,
+  ErreurDateHomologationManquante,
+  ErreurDureeHomologationManquante,
+} = require('./erreurs');
 
 class EvenementNouvelleHomologationCreee extends Evenement {
   constructor(donnees, options = {}) {
@@ -8,9 +12,12 @@ class EvenementNouvelleHomologationCreee extends Evenement {
     const valide = () => {
       const manque = (donnee) => typeof donnee === 'undefined';
 
-      if (manque(donnees.idService)) throw new ErreurIdentifiantServiceManquant();
-      if (manque(donnees.dateHomologation)) throw new ErreurDateHomologationManquante();
-      if (manque(donnees.dureeHomologationMois)) throw new ErreurDureeHomologationManquante();
+      if (manque(donnees.idService))
+        throw new ErreurIdentifiantServiceManquant();
+      if (manque(donnees.dateHomologation))
+        throw new ErreurDateHomologationManquante();
+      if (manque(donnees.dureeHomologationMois))
+        throw new ErreurDureeHomologationManquante();
     };
 
     valide();

@@ -19,7 +19,10 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur.depotDonnees().utilisateur = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');
         depotDonneesUtilisateursAppelle = true;
-        return Promise.resolve({ id: idUtilisateur, nomEntitePublique: 'une entité' });
+        return Promise.resolve({
+          id: idUtilisateur,
+          nomEntitePublique: 'une entité',
+        });
       };
 
       axios('http://localhost:1234/service/creation')
@@ -31,44 +34,51 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService('http://localhost:1234/service/456', done);
     });
   });
 
   describe('quand requête GET sur `/service/:id/descriptionService`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/descriptionService',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          'http://localhost:1234/service/456/descriptionService',
+          done
+        );
     });
   });
 
   describe('quand requête GET sur `/service/:id/decision`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/decision',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          'http://localhost:1234/service/456/decision',
+          done
+        );
     });
 
     it('sert la page avec un nonce', (done) => {
-      testeur.middleware().verifieRequetePositionneHeadersAvecNonce(
-        'http://localhost:1234/service/456/decision',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRequetePositionneHeadersAvecNonce(
+          'http://localhost:1234/service/456/decision',
+          done
+        );
     });
   });
 
   describe('quand requête GET sur `/service/:id/mesures`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/mesures',
-        done
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          'http://localhost:1234/service/456/mesures',
+          done
+        );
     });
 
     it('interroge le moteur de règles pour obtenir les mesures personnalisées', (done) => {
@@ -95,46 +105,58 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requete GET sur `/service/:id/rolesResponsabilites`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/rolesResponsabilites',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          'http://localhost:1234/service/456/rolesResponsabilites',
+          done
+        );
     });
   });
 
   describe('quand requête GET sur `/service/:id/risques`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/risques',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          'http://localhost:1234/service/456/risques',
+          done
+        );
     });
   });
 
   describe('quand requête GET sur `/service/:id/avisExpertCyber`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/avisExpertCyber',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          'http://localhost:1234/service/456/avisExpertCyber',
+          done
+        );
     });
   });
 
   describe('quand requête GET sur `/service/:id/dossiers`', () => {
     beforeEach(() => {
-      testeur.referentiel().premiereEtapeParcours = () => Promise.resolve({ id: 1 });
+      testeur.referentiel().premiereEtapeParcours = () =>
+        Promise.resolve({ id: 1 });
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/dossiers',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          'http://localhost:1234/service/456/dossiers',
+          done
+        );
     });
   });
 
   describe('quand requête GET sur `/service/:id/homologation/edition/etape/:idEtape`', () => {
-    const homologationARenvoyer = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } });
+    const homologationARenvoyer = new Homologation({
+      id: '456',
+      descriptionService: { nomService: 'un service' },
+    });
     homologationARenvoyer.dossierCourant = () => ({
       etapeCourante: () => 'dateTelechargement',
       dateTelechargement: { date: new Date() },
@@ -142,24 +164,36 @@ describe('Le serveur MSS des routes /service/*', () => {
 
     beforeEach(() => {
       testeur.referentiel().recharge({
-        etapesParcoursHomologation: [{ numero: 1, id: 'dateTelechargement' }, { numero: 2, id: 'deuxieme' }],
+        etapesParcoursHomologation: [
+          { numero: 1, id: 'dateTelechargement' },
+          { numero: 2, id: 'deuxieme' },
+        ],
       });
-      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () => Promise.resolve();
-      testeur.depotDonnees().homologation = () => Promise.resolve(homologationARenvoyer);
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () =>
+        Promise.resolve();
+      testeur.depotDonnees().homologation = () =>
+        Promise.resolve(homologationARenvoyer);
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
-        done,
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
+          done
+        );
     });
 
     it("répond avec une erreur HTTP 404 si l'identifiant d'étape n'est pas connu du référentiel", (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(404, 'Étape inconnue', {
-        method: 'get',
-        url: 'http://localhost:1234/service/456/homologation/edition/etape/inconnue',
-      }, done);
+      testeur.verifieRequeteGenereErreurHTTP(
+        404,
+        'Étape inconnue',
+        {
+          method: 'get',
+          url: 'http://localhost:1234/service/456/homologation/edition/etape/inconnue',
+        },
+        done
+      );
     });
 
     it('ajoute un dossier courant au service si nécessaire', (done) => {
@@ -174,7 +208,9 @@ describe('Le serveur MSS des routes /service/*', () => {
         }
       };
 
-      axios('http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement')
+      axios(
+        'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement'
+      )
         .then(() => expect(dossierAjoute).to.be(true))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
@@ -191,16 +227,22 @@ describe('Le serveur MSS des routes /service/*', () => {
         }
       };
 
-      axios('http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement')
+      axios(
+        'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement'
+      )
         .then(() => expect(chargementsService).to.equal(1))
         .then(() => done())
         .catch((e) => done(e.response?.data || e));
     });
 
     it("redirige vers l'étape en cours si l'étape demandée est postérieure", (done) => {
-      axios('http://localhost:1234/service/456/homologation/edition/etape/deuxieme')
+      axios(
+        'http://localhost:1234/service/456/homologation/edition/etape/deuxieme'
+      )
         .then((reponse) => {
-          expect(reponse.request.res.responseUrl).to.contain('edition/etape/dateTelechargement');
+          expect(reponse.request.res.responseUrl).to.contain(
+            'edition/etape/dateTelechargement'
+          );
         })
         .then(() => done())
         .catch((e) => {

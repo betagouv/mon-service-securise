@@ -16,8 +16,8 @@
 }
 
 .evolutions > li {
- margin-bottom: 1em;
- margin-left: 1.7em;
+  margin-bottom: 1em;
+  margin-left: 1.7em;
 }
 
 .evolutions > li::before {
@@ -49,7 +49,7 @@
 }
 
 .evolutions .astuce::before {
-  content: '👌'
+  content: '👌';
 }
 
 .evolutions ul.ajouts li,

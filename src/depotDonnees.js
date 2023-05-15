@@ -17,15 +17,25 @@ const creeDepot = (config = {}) => {
   } = config;
 
   const depotHomologations = depotDonneesHomologations.creeDepot({
-    adaptateurJournalMSS, adaptateurPersistance, adaptateurUUID, referentiel,
+    adaptateurJournalMSS,
+    adaptateurPersistance,
+    adaptateurUUID,
+    referentiel,
   });
 
   const depotUtilisateurs = depotDonneesUtilisateurs.creeDepot({
-    adaptateurJournalMSS, adaptateurJWT, adaptateurPersistance, adaptateurUUID, depotHomologations,
+    adaptateurJournalMSS,
+    adaptateurJWT,
+    adaptateurPersistance,
+    adaptateurUUID,
+    depotHomologations,
   });
 
   const depotAutorisations = depotDonneesAutorisations.creeDepot({
-    adaptateurPersistance, adaptateurUUID, depotHomologations, depotUtilisateurs,
+    adaptateurPersistance,
+    adaptateurUUID,
+    depotHomologations,
+    depotUtilisateurs,
   });
 
   const {

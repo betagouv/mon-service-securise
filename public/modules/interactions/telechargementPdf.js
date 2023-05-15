@@ -6,13 +6,25 @@ const telechargementPdf = (nomDocumentPdfCible) => () => {
   const ajoutePageAvecImage = (canvas) => {
     const img = canvas.toDataURL('image/jpeg');
     doc.addPage();
-    doc.addImage(img, 'JPEG', 10, 10, 190, 190 * (canvas.height / canvas.width));
+    doc.addImage(
+      img,
+      'JPEG',
+      10,
+      10,
+      190,
+      190 * (canvas.height / canvas.width)
+    );
   };
 
-  const construisPDF = $.map($('.page'), ($p) => $p)
-    .reduce((acc, $page) => (
-      acc.then(() => html2canvas($page, { logging: false, scale: 4 }).then(ajoutePageAvecImage))
-    ), Promise.resolve());
+  const construisPDF = $.map($('.page'), ($p) => $p).reduce(
+    (acc, $page) =>
+      acc.then(() =>
+        html2canvas($page, { logging: false, scale: 4 }).then(
+          ajoutePageAvecImage
+        )
+      ),
+    Promise.resolve()
+  );
 
   construisPDF.then(() => {
     doc.deletePage(1);

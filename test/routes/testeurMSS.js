@@ -25,11 +25,18 @@ const testeurMss = () => {
 
   const verifieJetonDepose = (reponse, suite) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
-    expect(valeurHeader).to.match(/^token=.+; path=\/; expires=.+; samesite=strict; httponly$/);
+    expect(valeurHeader).to.match(
+      /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/
+    );
     suite();
   };
 
-  const verifieRequeteGenereErreurHTTP = (status, messageErreur, requete, suite) => {
+  const verifieRequeteGenereErreurHTTP = (
+    status,
+    messageErreur,
+    requete,
+    suite
+  ) => {
     axios(requete)
       .then(() => suite('Réponse OK inattendue'))
       .catch((erreur) => {
@@ -69,14 +76,14 @@ const testeurMss = () => {
           adaptateurAnnuaire,
           adaptateurCsv,
           adaptateurZip,
-          false,
+          false
         );
         serveur.ecoute(1234, done);
       })
       .catch(done);
   };
 
-  const arrete = () => (serveur.arreteEcoute());
+  const arrete = () => serveur.arreteEcoute();
 
   return {
     adaptateurAnnuaire: () => adaptateurAnnuaire,

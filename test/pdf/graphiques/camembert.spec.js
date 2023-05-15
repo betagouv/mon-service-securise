@@ -1,5 +1,7 @@
 const expect = require('expect.js');
-const { genereGradientConique } = require('../../../src/pdf/graphiques/camembert');
+const {
+  genereGradientConique,
+} = require('../../../src/pdf/graphiques/camembert');
 
 describe('Les graphiques camembert', () => {
   describe('quand ils sont générés via un gradient conique', () => {
@@ -38,10 +40,22 @@ describe('Les graphiques camembert', () => {
         expect(fin - debut).to.equal(20);
       };
 
-      verifieAngleMinimum({ enCours: 1, nonFait: 0, fait: 100, restant: 0 }, 'enCours');
-      verifieAngleMinimum({ enCours: 0, nonFait: 1, fait: 100, restant: 0 }, 'nonFait');
-      verifieAngleMinimum({ enCours: 0, nonFait: 0, fait: 100, restant: 1 }, 'restant');
-      verifieAngleMinimum({ enCours: 0, nonFait: 0, fait: 1, restant: 100 }, 'fait');
+      verifieAngleMinimum(
+        { enCours: 1, nonFait: 0, fait: 100, restant: 0 },
+        'enCours'
+      );
+      verifieAngleMinimum(
+        { enCours: 0, nonFait: 1, fait: 100, restant: 0 },
+        'nonFait'
+      );
+      verifieAngleMinimum(
+        { enCours: 0, nonFait: 0, fait: 100, restant: 1 },
+        'restant'
+      );
+      verifieAngleMinimum(
+        { enCours: 0, nonFait: 0, fait: 1, restant: 100 },
+        'fait'
+      );
     });
 
     it("s'assurent que les « débuts » et « fins » des angles minimum ne se chevauchent pas", () => {

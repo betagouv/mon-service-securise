@@ -4,9 +4,15 @@ const Documents = require('../../../src/modeles/etapes/documents');
 
 describe('Une étape « Documents »', () => {
   it('sait se convertir en JSON ', () => {
-    const etape = new Documents({ documents: ['unDocument'], avecDocuments: true });
+    const etape = new Documents({
+      documents: ['unDocument'],
+      avecDocuments: true,
+    });
 
-    expect(etape.toJSON()).to.eql({ avecDocuments: true, documents: ['unDocument'] });
+    expect(etape.toJSON()).to.eql({
+      avecDocuments: true,
+      documents: ['unDocument'],
+    });
   });
 
   it("sait déclarer l'étape sans document", () => {
@@ -34,7 +40,10 @@ describe('Une étape « Documents »', () => {
     });
 
     it("est complète s'il n'y a aucun document et qu'elle est déclarée sans document", () => {
-      const aucunDocuments = new Documents({ documents: [], avecDocuments: false });
+      const aucunDocuments = new Documents({
+        documents: [],
+        avecDocuments: false,
+      });
       expect(aucunDocuments.estComplete()).to.be(true);
     });
 

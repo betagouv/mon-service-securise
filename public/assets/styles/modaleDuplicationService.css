@@ -1,6 +1,6 @@
 .modale-duplication-service .modale {
   width: 400px;
-  padding: 3em 5em 1em 5em ;
+  padding: 3em 5em 1em 5em;
 }
 
 .modale-duplication-service .modale h1 {
@@ -19,7 +19,7 @@
   margin: 0;
 }
 
-.modale-duplication-service input[type="number"] {
+.modale-duplication-service input[type='number'] {
   margin-top: 0.3em;
   width: 7em;
   padding: 0.7em 1em;

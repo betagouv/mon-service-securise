@@ -1,5 +1,5 @@
-exports.up = (knex) => knex.schema
-  .createTable('services', (table) => {
+exports.up = (knex) =>
+  knex.schema.createTable('services', (table) => {
     table.uuid('id');
     table.primary('id');
     table.json('donnees');

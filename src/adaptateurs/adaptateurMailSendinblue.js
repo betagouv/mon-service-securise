@@ -1,6 +1,8 @@
 const axios = require('axios');
 const { decode } = require('html-entities');
-const { fabriqueAdaptateurGestionErreur } = require('./fabriqueAdaptateurGestionErreur');
+const {
+  fabriqueAdaptateurGestionErreur,
+} = require('./fabriqueAdaptateurGestionErreur');
 
 const enteteJSON = {
   headers: {
@@ -11,105 +13,125 @@ const enteteJSON = {
 };
 const urlBase = 'https://api.sendinblue.com/v3';
 
-const basculeInfolettre = (
-  destinataire,
-  etat
-) => axios.put(`${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
-  { emailBlacklisted: etat },
-  enteteJSON)
-  .catch((e) => {
-    fabriqueAdaptateurGestionErreur().logueErreur(e);
-    return Promise.reject(e);
-  });
+const basculeInfolettre = (destinataire, etat) =>
+  axios
+    .put(
+      `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
+      { emailBlacklisted: etat },
+      enteteJSON
+    )
+    .catch((e) => {
+      fabriqueAdaptateurGestionErreur().logueErreur(e);
+      return Promise.reject(e);
+    });
 
-const desinscrisInfolettre = (destinataire) => basculeInfolettre(destinataire, true);
-const inscrisInfolettre = (destinataire) => basculeInfolettre(destinataire, false);
+const desinscrisInfolettre = (destinataire) =>
+  basculeInfolettre(destinataire, true);
+const inscrisInfolettre = (destinataire) =>
+  basculeInfolettre(destinataire, false);
 
-const creeContact = (
-  destinataire, prenom, nom, bloqueEmails
-) => axios.post(`${urlBase}/contacts`,
-  {
-    email: destinataire,
-    emailBlacklisted: bloqueEmails,
-    attributes: { PRENOM: decode(prenom), NOM: decode(nom) },
-  },
-  enteteJSON)
-  .catch((e) => {
-    if (e.response.data.message === 'Contact already exist') return Promise.resolve();
+const creeContact = (destinataire, prenom, nom, bloqueEmails) =>
+  axios
+    .post(
+      `${urlBase}/contacts`,
+      {
+        email: destinataire,
+        emailBlacklisted: bloqueEmails,
+        attributes: { PRENOM: decode(prenom), NOM: decode(nom) },
+      },
+      enteteJSON
+    )
+    .catch((e) => {
+      if (e.response.data.message === 'Contact already exist')
+        return Promise.resolve();
 
-    fabriqueAdaptateurGestionErreur().logueErreur(e);
-    return Promise.reject(e);
-  });
+      fabriqueAdaptateurGestionErreur().logueErreur(e);
+      return Promise.reject(e);
+    });
 
-const envoieEmail = (
-  destinataire, idTemplate, params
-) => axios.post(`${urlBase}/smtp/email`,
-  {
-    to: [{ email: destinataire }],
-    templateId: idTemplate,
-    params,
-  },
-  enteteJSON)
-  .catch((e) => {
-    fabriqueAdaptateurGestionErreur().logueErreur(e);
-    return Promise.reject(e);
-  });
+const envoieEmail = (destinataire, idTemplate, params) =>
+  axios
+    .post(
+      `${urlBase}/smtp/email`,
+      {
+        to: [{ email: destinataire }],
+        templateId: idTemplate,
+        params,
+      },
+      enteteJSON
+    )
+    .catch((e) => {
+      fabriqueAdaptateurGestionErreur().logueErreur(e);
+      return Promise.reject(e);
+    });
 
 const envoieMessageFinalisationInscription = (
-  destinataire, idResetMotDePasse, prenom
-) => envoieEmail(
   destinataire,
-  parseInt(process.env.SENDINBLUE_TEMPLATE_FINALISATION_INSCRIPTION, 10),
-  {
-    PRENOM: decode(prenom),
-    URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
-  }
-);
+  idResetMotDePasse,
+  prenom
+) =>
+  envoieEmail(
+    destinataire,
+    parseInt(process.env.SENDINBLUE_TEMPLATE_FINALISATION_INSCRIPTION, 10),
+    {
+      PRENOM: decode(prenom),
+      URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
+    }
+  );
 
 const envoieMessageInvitationContribution = (
-  destinataire, prenomNomEmetteur, nomService, idService
-) => envoieEmail(
   destinataire,
-  parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
-  {
-    PRENOM: decode(prenomNomEmetteur),
-    NOM_SERVICE: decode(nomService),
-    URL: `${process.env.URL_BASE_MSS}/service/${idService}`,
-  }
-);
+  prenomNomEmetteur,
+  nomService,
+  idService
+) =>
+  envoieEmail(
+    destinataire,
+    parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
+    {
+      PRENOM: decode(prenomNomEmetteur),
+      NOM_SERVICE: decode(nomService),
+      URL: `${process.env.URL_BASE_MSS}/service/${idService}`,
+    }
+  );
 
 const envoieMessageInvitationInscription = (
-  destinataire, prenomNomEmetteur, nomService, idResetMotDePasse,
-) => envoieEmail(
   destinataire,
-  parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION, 10),
-  {
-    PRENOM: decode(prenomNomEmetteur),
-    NOM_SERVICE: decode(nomService),
-    URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
-  }
-);
+  prenomNomEmetteur,
+  nomService,
+  idResetMotDePasse
+) =>
+  envoieEmail(
+    destinataire,
+    parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION, 10),
+    {
+      PRENOM: decode(prenomNomEmetteur),
+      NOM_SERVICE: decode(nomService),
+      URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
+    }
+  );
 
 const envoieMessageReinitialisationMotDePasse = (
-  destinataire, idResetMotDePasse
-) => envoieEmail(
   destinataire,
-  parseInt(process.env.SENDINBLUE_TEMPLATE_REINITIALISATION_MOT_DE_PASSE, 10),
-  {
-    URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
-  }
-);
+  idResetMotDePasse
+) =>
+  envoieEmail(
+    destinataire,
+    parseInt(process.env.SENDINBLUE_TEMPLATE_REINITIALISATION_MOT_DE_PASSE, 10),
+    {
+      URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
+    }
+  );
 
-const envoieNotificationTentativeReinscription = (
-  destinataire
-) => envoieEmail(
-  destinataire,
-  parseInt(process.env.SENDINBLUE_TEMPLATE_TENTATIVE_REINSCRIPTION, 10),
-  {
-    URL_INSCRIPTION: `${process.env.URL_BASE_MSS}/inscription`,
-    URL_REINITIALISATION_MOT_DE_PASSE: `${process.env.URL_BASE_MSS}/reinitialisationMotDePasse`,
-  }
-);
+const envoieNotificationTentativeReinscription = (destinataire) =>
+  envoieEmail(
+    destinataire,
+    parseInt(process.env.SENDINBLUE_TEMPLATE_TENTATIVE_REINSCRIPTION, 10),
+    {
+      URL_INSCRIPTION: `${process.env.URL_BASE_MSS}/inscription`,
+      URL_REINITIALISATION_MOT_DE_PASSE: `${process.env.URL_BASE_MSS}/reinitialisationMotDePasse`,
+    }
+  );
 
 module.exports = {
   creeContact,

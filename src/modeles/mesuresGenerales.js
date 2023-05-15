@@ -25,7 +25,8 @@ class MesuresGenerales extends ElementsConstructibles {
     };
 
     const statutFaitALaFin = true;
-    const accumulateur = MesureGenerale.accumulateurInitialStatuts(statutFaitALaFin);
+    const accumulateur =
+      MesureGenerale.accumulateurInitialStatuts(statutFaitALaFin);
 
     return this.toutes()
       .filter((mesure) => mesure.statutRenseigne())
@@ -46,7 +47,10 @@ class MesuresGenerales extends ElementsConstructibles {
       if (statut === MesureGenerale.STATUT_FAIT) {
         stats[categorie].misesEnOeuvre += 1;
       }
-      if (statut === MesureGenerale.STATUT_FAIT || statut === MesureGenerale.STATUT_EN_COURS) {
+      if (
+        statut === MesureGenerale.STATUT_FAIT ||
+        statut === MesureGenerale.STATUT_EN_COURS
+      ) {
         stats[categorie].retenues += 1;
       }
 
@@ -58,10 +62,16 @@ class MesuresGenerales extends ElementsConstructibles {
     });
 
     Object.keys(mesuresPersonnalisees)
-      .map((id) => new MesureGenerale(
-        { id, rendueIndispensable: mesuresPersonnalisees[id].indispensable },
-        this.referentiel,
-      ))
+      .map(
+        (id) =>
+          new MesureGenerale(
+            {
+              id,
+              rendueIndispensable: mesuresPersonnalisees[id].indispensable,
+            },
+            this.referentiel
+          )
+      )
       .reduce((acc, mesure) => {
         const { categorie } = this.referentiel.mesure(mesure.id);
         if (mesure.estIndispensable()) acc[categorie].indispensables.total += 1;
@@ -74,7 +84,11 @@ class MesuresGenerales extends ElementsConstructibles {
 
   statutSaisie() {
     if (this.nonSaisies()) return MesuresGenerales.A_SAISIR;
-    if (this.items.every((item) => item.statutSaisie() === MesuresGenerales.COMPLETES)) {
+    if (
+      this.items.every(
+        (item) => item.statutSaisie() === MesuresGenerales.COMPLETES
+      )
+    ) {
       return MesuresGenerales.COMPLETES;
     }
     return MesuresGenerales.A_COMPLETER;

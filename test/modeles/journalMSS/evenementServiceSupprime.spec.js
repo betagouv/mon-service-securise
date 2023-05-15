@@ -1,5 +1,7 @@
 const expect = require('expect.js');
-const { ErreurIdentifiantServiceManquant } = require('../../../src/modeles/journalMSS/erreurs');
+const {
+  ErreurIdentifiantServiceManquant,
+} = require('../../../src/modeles/journalMSS/erreurs');
 const EvenementServiceSupprime = require('../../../src/modeles/journalMSS/evenementServiceSupprime');
 
 describe('Un événement de service supprimé', () => {
@@ -31,7 +33,10 @@ describe('Un événement de service supprimé', () => {
 
   it("exige que l'identifiant du service soit renseigné", (done) => {
     try {
-      new EvenementServiceSupprime({}, { adaptateurChiffrement: hacheEnMajuscules });
+      new EvenementServiceSupprime(
+        {},
+        { adaptateurChiffrement: hacheEnMajuscules }
+      );
       done("L'instanciation de l'événement aurait dû lever une exception");
     } catch (e) {
       expect(e).to.be.an(ErreurIdentifiantServiceManquant);

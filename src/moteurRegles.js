@@ -8,23 +8,31 @@ class MoteurRegles {
   }
 
   mesuresAModifier(descriptionService, mesuresACibler) {
-    const { clefsDescriptionServiceAConsiderer = [], profils = {} } = this.reglesPersonnalisation;
+    const { clefsDescriptionServiceAConsiderer = [], profils = {} } =
+      this.reglesPersonnalisation;
 
     const valeursDescriptionService = clefsDescriptionServiceAConsiderer
       .filter((clef) => descriptionService[clef] !== false)
-      .flatMap((clef) => (
-        (typeof descriptionService[clef] === 'boolean') ? clef : descriptionService[clef]
-      ));
+      .flatMap((clef) =>
+        typeof descriptionService[clef] === 'boolean'
+          ? clef
+          : descriptionService[clef]
+      );
 
-    const mapMesures = Object.keys(profils).map((profil) => new Profil(
-      profils[profil].regles,
-      {
-        ajouter: profils[profil].mesuresAAjouter,
-        retirer: profils[profil].mesuresARetirer,
-        rendreIndispensables: profils[profil].mesuresARendreIndispensables,
-      }
-    )).flatMap((profil) => profil[mesuresACibler](valeursDescriptionService))
-      .reduce((accumulateur, mesure) => ({ ...accumulateur, [mesure]: mesure }), {});
+    const mapMesures = Object.keys(profils)
+      .map(
+        (profil) =>
+          new Profil(profils[profil].regles, {
+            ajouter: profils[profil].mesuresAAjouter,
+            retirer: profils[profil].mesuresARetirer,
+            rendreIndispensables: profils[profil].mesuresARendreIndispensables,
+          })
+      )
+      .flatMap((profil) => profil[mesuresACibler](valeursDescriptionService))
+      .reduce(
+        (accumulateur, mesure) => ({ ...accumulateur, [mesure]: mesure }),
+        {}
+      );
 
     return Object.keys(mapMesures);
   }
@@ -34,7 +42,10 @@ class MoteurRegles {
   }
 
   mesuresARendreIndispensables(descriptionService) {
-    return this.mesuresAModifier(descriptionService, 'mesuresARendreIndispensables');
+    return this.mesuresAModifier(
+      descriptionService,
+      'mesuresARendreIndispensables'
+    );
   }
 
   mesuresARetirer(descriptionService) {
@@ -45,7 +56,9 @@ class MoteurRegles {
     const { mesuresBase = [] } = this.reglesPersonnalisation;
     const mesuresAAjouter = this.mesuresAAjouter(...params);
     const mesuresARetirer = this.mesuresARetirer(...params);
-    const mesuresARendreIndispensables = this.mesuresARendreIndispensables(...params);
+    const mesuresARendreIndispensables = this.mesuresARendreIndispensables(
+      ...params
+    );
 
     const idsMesures = mesuresBase
       .concat(mesuresAAjouter)
@@ -58,15 +71,20 @@ class MoteurRegles {
       return mesure;
     };
 
-    const ajouteEtRendsIndispensable = (idsMesuresReference, accumulateur, idMesure) => (
+    const ajouteEtRendsIndispensable = (
+      idsMesuresReference,
+      accumulateur,
+      idMesure
+    ) =>
       Object.assign(accumulateur, {
         [idMesure]: mesureAvecImportanceAjustee(idsMesuresReference, idMesure),
-      })
-    );
+      });
 
-    return idsMesures.reduce((...parametres) => (
-      ajouteEtRendsIndispensable(mesuresARendreIndispensables, ...parametres)
-    ), {});
+    return idsMesures.reduce(
+      (...parametres) =>
+        ajouteEtRendsIndispensable(mesuresARendreIndispensables, ...parametres),
+      {}
+    );
   }
 }
 

@@ -17,7 +17,8 @@ $(() => {
     e.preventDefault();
     const login = $('#login').val();
     const motDePasse = $('#mot-de-passe').val();
-    axios.post('/api/token', { login, motDePasse })
+    axios
+      .post('/api/token', { login, motDePasse })
       .then(() => (window.location = '/espacePersonnel'))
       .catch((error) => {
         if (error.response.status === 401) {

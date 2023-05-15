@@ -9,7 +9,12 @@ describe('Les règles', () => {
   });
 
   it('savent si elles sont multiples', () => {
-    expect(new Regles([{ presence: ['cle'] }, { presence: ['cleDeux'] }]).sontMultiples()).to.be(true);
+    expect(
+      new Regles([
+        { presence: ['cle'] },
+        { presence: ['cleDeux'] },
+      ]).sontMultiples()
+    ).to.be(true);
   });
 
   it('savent si elles ne sont pas multiples', () => {
@@ -17,6 +22,8 @@ describe('Les règles', () => {
   });
 
   it('peuvent renvoyer une liste de toutes les règles', () => {
-    expect(new Regles([{ presence: ['cle'] }]).toutes()).to.eql([new Regle({ presence: ['cle'] })]);
+    expect(new Regles([{ presence: ['cle'] }]).toutes()).to.eql([
+      new Regle({ presence: ['cle'] }),
+    ]);
   });
 });

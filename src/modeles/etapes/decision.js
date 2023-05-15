@@ -1,7 +1,14 @@
-const { ErreurDateHomologationInvalide, ErreurDureeValiditeInvalide } = require('../../erreurs');
+const {
+  ErreurDateHomologationInvalide,
+  ErreurDureeValiditeInvalide,
+} = require('../../erreurs');
 const adaptateurHorlogeParDefaut = require('../../adaptateurs/adaptateurHorloge');
 const Etape = require('./etape');
-const { ajouteMoisADate, dateEnFrancais, dateInvalide } = require('../../utilitaires/date');
+const {
+  ajouteMoisADate,
+  dateEnFrancais,
+  dateInvalide,
+} = require('../../utilitaires/date');
 const Referentiel = require('../../referentiel');
 
 class Decision extends Etape {
@@ -10,7 +17,12 @@ class Decision extends Etape {
     referentiel = Referentiel.creeReferentielVide(),
     adaptateurHorloge = adaptateurHorlogeParDefaut
   ) {
-    super({ proprietesAtomiquesFacultatives: ['dateHomologation', 'dureeValidite'] }, referentiel);
+    super(
+      {
+        proprietesAtomiquesFacultatives: ['dateHomologation', 'dureeValidite'],
+      },
+      referentiel
+    );
     Decision.valide({ dateHomologation, dureeValidite }, referentiel);
     this.renseigneProprietes({ dateHomologation, dureeValidite });
     this.adaptateurHorloge = adaptateurHorloge;
@@ -29,7 +41,9 @@ class Decision extends Etape {
       return '';
     }
 
-    return this.referentiel.descriptionEcheanceRenouvellement(this.dureeValidite);
+    return this.referentiel.descriptionEcheanceRenouvellement(
+      this.dureeValidite
+    );
   }
 
   dateProchaineHomologation() {
@@ -58,13 +72,19 @@ class Decision extends Etape {
 
   periodeHomologationEstEnCours() {
     const maintenant = this.adaptateurHorloge.maintenant();
-    return new Date(this.dateHomologation) <= maintenant
-      && maintenant <= this.dateProchaineHomologation();
+    return (
+      new Date(this.dateHomologation) <= maintenant &&
+      maintenant <= this.dateProchaineHomologation()
+    );
   }
 
   static valide({ dateHomologation, dureeValidite }, referentiel) {
-    const identifiantsDureesHomologation = referentiel.identifiantsEcheancesRenouvellement();
-    if (dureeValidite && !identifiantsDureesHomologation.includes(dureeValidite)) {
+    const identifiantsDureesHomologation =
+      referentiel.identifiantsEcheancesRenouvellement();
+    if (
+      dureeValidite &&
+      !identifiantsDureesHomologation.includes(dureeValidite)
+    ) {
       throw new ErreurDureeValiditeInvalide(
         `La durée de validité "${dureeValidite}" est invalide`
       );

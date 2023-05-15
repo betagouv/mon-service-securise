@@ -1,5 +1,7 @@
 const expect = require('expect.js');
-const { nouveauStatut } = require('../migrations/20221130100733_suppressionStatutMesureNonConcerne');
+const {
+  nouveauStatut,
+} = require('../migrations/20221130100733_suppressionStatutMesureNonConcerne');
 
 const Statuts = {
   FAIT: 'fait',

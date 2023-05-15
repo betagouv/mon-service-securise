@@ -7,16 +7,22 @@ const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
 describe('Un risque spécifique', () => {
   let referentiel;
 
-  beforeEach(() => (
-    referentiel = Referentiel.creeReferentiel({ niveauxGravite: { unNiveau: {} } })
-  ));
+  beforeEach(
+    () =>
+      (referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: { unNiveau: {} },
+      }))
+  );
 
   it('sait se décrire', () => {
-    const risque = new RisqueSpecifique({
-      description: 'Un risque',
-      commentaire: 'Un commentaire',
-      niveauGravite: 'unNiveau',
-    }, referentiel);
+    const risque = new RisqueSpecifique(
+      {
+        description: 'Un risque',
+        commentaire: 'Un commentaire',
+        niveauGravite: 'unNiveau',
+      },
+      referentiel
+    );
 
     expect(risque.description).to.equal('Un risque');
     expect(risque.commentaire).to.equal('Un commentaire');
@@ -34,7 +40,9 @@ describe('Un risque spécifique', () => {
       done('La création du risque aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.a(ErreurNiveauGraviteInconnu);
-      expect(e.message).to.equal("Le niveau de gravité \"niveauInconnu\" n'est pas répertorié");
+      expect(e.message).to.equal(
+        'Le niveau de gravité "niveauInconnu" n\'est pas répertorié'
+      );
       done();
     }
   });

@@ -13,9 +13,10 @@ const reduitProvenance = (provenances) => {
     return provenances[0];
   }
 
-  if (provenances.length > 1 && (
+  if (
+    provenances.length > 1 &&
     provenances.every((provenance) => PROVENANCES.includes(provenance))
-  )) {
+  ) {
     return 'outilExistant';
   }
 
@@ -32,8 +33,8 @@ const developpeProvenance = (provenance) => {
   return PROVENANCES.includes(provenance) ? [provenance] : [];
 };
 
-const changementDescriptionServicePourTable = (knex, table, changeProvenance) => knex(table)
-  .then((lignes) => {
+const changementDescriptionServicePourTable = (knex, table, changeProvenance) =>
+  knex(table).then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees }) => donnees?.descriptionService)
       .map(({ id, donnees: { descriptionService, ...autresDonnees } }) => {
@@ -47,10 +48,12 @@ const changementDescriptionServicePourTable = (knex, table, changeProvenance) =>
     return Promise.all(misesAJour);
   });
 
-const changementDescriptionService = (changeProvenance) => (knex) => Promise.all(
-  ['homologations', 'services']
-    .map((table) => changementDescriptionServicePourTable(knex, table, changeProvenance))
-);
+const changementDescriptionService = (changeProvenance) => (knex) =>
+  Promise.all(
+    ['homologations', 'services'].map((table) =>
+      changementDescriptionServicePourTable(knex, table, changeProvenance)
+    )
+  );
 
 exports.up = changementDescriptionService(reduitProvenance);
 

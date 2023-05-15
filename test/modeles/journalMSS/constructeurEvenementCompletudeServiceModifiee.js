@@ -34,10 +34,10 @@ class ConstructeurEvenementCompletudeServiceModifiee {
   }
 
   construis() {
-    return new EvenementCompletudeServiceModifiee(
-      this.donnees,
-      { date: this.date, adaptateurChiffrement: this.adaptateurChiffrement }
-    );
+    return new EvenementCompletudeServiceModifiee(this.donnees, {
+      date: this.date,
+      adaptateurChiffrement: this.adaptateurChiffrement,
+    });
   }
 }
 

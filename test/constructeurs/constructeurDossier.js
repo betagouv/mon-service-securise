@@ -46,10 +46,19 @@ class ConstructeurDossierFantaisie {
   quiEstComplet() {
     this.donnees.finalise = true;
     this.donnees.avecAvis = true;
-    this.donnees.avis = [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }];
+    this.donnees.avis = [
+      {
+        collaborateurs: ['Jean Dupond'],
+        dureeValidite: 'unAn',
+        statut: 'favorable',
+      },
+    ];
     this.donnees.avecDocuments = true;
     this.donnees.documents = ['unDocument'];
-    this.donnees.decision = { dateHomologation: '2023-01-01', dureeValidite: 'unAn' };
+    this.donnees.decision = {
+      dateHomologation: '2023-01-01',
+      dureeValidite: 'unAn',
+    };
     this.donnees.dateTelechargement = { date: new Date() };
     this.donnees.autorite = { nom: 'Jean Dupond', fonction: 'RSSI' };
     return this;
@@ -58,14 +67,20 @@ class ConstructeurDossierFantaisie {
   quiEstActif(depuis = 1) {
     const debutActif = new Date();
     debutActif.setDate(debutActif.getDate() - depuis);
-    this.donnees.decision = { dateHomologation: debutActif.toISOString(), dureeValidite: 'unAn' };
+    this.donnees.decision = {
+      dateHomologation: debutActif.toISOString(),
+      dureeValidite: 'unAn',
+    };
     return this;
   }
 
   quiEstExpire() {
     const tresVieux = new Date();
     tresVieux.setDate(tresVieux.getDate() - 400);
-    this.donnees.decision = { dateHomologation: tresVieux.toISOString(), dureeValidite: 'unAn' };
+    this.donnees.decision = {
+      dateHomologation: tresVieux.toISOString(),
+      dureeValidite: 'unAn',
+    };
     return this;
   }
 
@@ -79,6 +94,7 @@ class ConstructeurDossierFantaisie {
   }
 }
 
-const unDossier = (referentiel, adaptateurHorloge) => new ConstructeurDossierFantaisie('1', referentiel, adaptateurHorloge);
+const unDossier = (referentiel, adaptateurHorloge) =>
+  new ConstructeurDossierFantaisie('1', referentiel, adaptateurHorloge);
 
 module.exports = { ConstructeurDossierFantaisie, unDossier };

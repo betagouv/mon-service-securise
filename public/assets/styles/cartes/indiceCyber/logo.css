@@ -44,11 +44,17 @@
 }
 
 .couleur-indice-cyber-4 {
-  background: radial-gradient(var(--argent-brillant-indice-cyber), var(--argent-indice-cyber));
+  background: radial-gradient(
+    var(--argent-brillant-indice-cyber),
+    var(--argent-indice-cyber)
+  );
 }
 
 .couleur-indice-cyber-5 {
-  background: radial-gradient(var(--or-brillant-indice-cyber), var(--or-indice-cyber));
+  background: radial-gradient(
+    var(--or-brillant-indice-cyber),
+    var(--or-indice-cyber)
+  );
 }
 
 .logo-indice-cyber .curseur {
@@ -60,27 +66,27 @@
 }
 
 .curseur.position-0 {
-  transform: rotate(15deg) translateX(-258%)
+  transform: rotate(15deg) translateX(-258%);
 }
 
 .curseur.position-1 {
-  transform: rotate(50deg) translateX(-258%)
+  transform: rotate(50deg) translateX(-258%);
 }
 
 .curseur.position-2 {
-  transform: rotate(86deg) translateX(-258%)
+  transform: rotate(86deg) translateX(-258%);
 }
 
 .curseur.position-3 {
-  transform: rotate(122deg) translateX(-258%)
+  transform: rotate(122deg) translateX(-258%);
 }
 
 .curseur.position-4 {
-  transform: rotate(157deg) translateX(-258%)
+  transform: rotate(157deg) translateX(-258%);
 }
 
 .curseur.position-5 {
-  transform: rotate(180deg) translateX(-258%)
+  transform: rotate(180deg) translateX(-258%);
 }
 
 .logo-indice-cyber :is(.note, .note-max) {

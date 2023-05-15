@@ -55,14 +55,15 @@ form.homologation a.informations-additionnelles {
   font-size: 0.9em;
 }
 
-form.homologation label p, form .decoration {
+form.homologation label p,
+form .decoration {
   margin: 0 0 1em;
   font-weight: 200;
   color: var(--texte-clair);
 }
 
 label.exemple::before {
-  content: 'ex : '
+  content: 'ex : ';
 }
 
 label.exemple {
@@ -151,5 +152,13 @@ label.exemple {
   padding: 1.4em 7em 1.4em 0;
   border-top-width: 2px;
   border-top-style: solid;
-  border-image: linear-gradient(-45deg, #5cc7ff33, #3788d733, #2c57aa33, #6b24dd33, #a826b333) 1;
+  border-image: linear-gradient(
+      -45deg,
+      #5cc7ff33,
+      #3788d733,
+      #2c57aa33,
+      #6b24dd33,
+      #a826b333
+    )
+    1;
 }

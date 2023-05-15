@@ -1,5 +1,5 @@
-const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) => knex('homologations')
-  .then((lignes) => {
+const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) =>
+  knex('homologations').then((lignes) => {
     const misesAJour = lignes
       .filter(contientDonneesCiblees)
       .map(({ id, donnees }) => {
@@ -11,9 +11,8 @@ const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) => knex('h
     return Promise.all(misesAJour);
   });
 
-const contientCaracteristiquesComplementaires = ({ donnees }) => (
-  donnees?.caracteristiquesComplementaires
-);
+const contientCaracteristiquesComplementaires = ({ donnees }) =>
+  donnees?.caracteristiquesComplementaires;
 
 const supprimeEntitesExternes = (donnees) => {
   delete donnees.caracteristiquesComplementaires.entitesExternes;
@@ -21,23 +20,28 @@ const supprimeEntitesExternes = (donnees) => {
   return donnees;
 };
 
-const contientRolesResponsabilites = ({ donnees }) => donnees?.rolesResponsabilites;
+const contientRolesResponsabilites = ({ donnees }) =>
+  donnees?.rolesResponsabilites;
 
 const copieEntitesExternes = (donnees) => {
   donnees.caracteristiquesComplementaires ||= {};
-  donnees.caracteristiquesComplementaires.entitesExternes = donnees
-    .rolesResponsabilites
-    ?.partiesPrenantes
-    ?.filter((partiePrenante) => partiePrenante.type === 'PartiePrenanteSpecifique')
-    ?.map((partiePrenanteSpecifique) => ({
-      nom: partiePrenanteSpecifique.nom,
-      acces: partiePrenanteSpecifique.natureAcces,
-      contact: partiePrenanteSpecifique.pointContact,
-    }));
+  donnees.caracteristiquesComplementaires.entitesExternes =
+    donnees.rolesResponsabilites?.partiesPrenantes
+      ?.filter(
+        (partiePrenante) => partiePrenante.type === 'PartiePrenanteSpecifique'
+      )
+      ?.map((partiePrenanteSpecifique) => ({
+        nom: partiePrenanteSpecifique.nom,
+        acces: partiePrenanteSpecifique.natureAcces,
+        contact: partiePrenanteSpecifique.pointContact,
+      }));
 
   return donnees;
 };
 
-exports.up = miseAJour(contientCaracteristiquesComplementaires, supprimeEntitesExternes);
+exports.up = miseAJour(
+  contientCaracteristiquesComplementaires,
+  supprimeEntitesExternes
+);
 
 exports.down = miseAJour(contientRolesResponsabilites, copieEntitesExternes);

@@ -4,8 +4,10 @@ a.nouvel-onglet::after {
   width: 1.2em;
   height: 1.2em;
 
-  -webkit-mask: url(/statique/assets/images/icone_lien_nouvel_onglet.svg) no-repeat center;
-  mask: url(/statique/assets/images/icone_lien_nouvel_onglet.svg) no-repeat center;
+  -webkit-mask: url(/statique/assets/images/icone_lien_nouvel_onglet.svg)
+    no-repeat center;
+  mask: url(/statique/assets/images/icone_lien_nouvel_onglet.svg) no-repeat
+    center;
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-position-y: 0.1em;

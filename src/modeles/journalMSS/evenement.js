@@ -4,7 +4,8 @@ class Evenement {
   static optionsParDefaut(options) {
     return {
       date: options.date ?? Date.now(),
-      adaptateurChiffrement: options.adaptateurChiffrement ?? AdaptateurChiffrement,
+      adaptateurChiffrement:
+        options.adaptateurChiffrement ?? AdaptateurChiffrement,
     };
   }
 

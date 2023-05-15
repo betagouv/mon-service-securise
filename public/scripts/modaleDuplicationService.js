@@ -24,9 +24,14 @@ $(() => {
     $erreurServeur.hide();
     const nombreCopies = parseInt($('#nombre-copie').val(), 10) || 1;
 
-    tableauDeLongueur(nombreCopies).reduce((acc) => acc.then(
-      () => axios({ method: 'copy', url: `/api/service/${idServiceCourant}` })
-    ), Promise.resolve())
+    tableauDeLongueur(nombreCopies)
+      .reduce(
+        (acc) =>
+          acc.then(() =>
+            axios({ method: 'copy', url: `/api/service/${idServiceCourant}` })
+          ),
+        Promise.resolve()
+      )
       .then(() => {
         $boutonValidation.removeClass('occupe');
         window.location.reload();

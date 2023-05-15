@@ -1,5 +1,8 @@
 const InformationsHomologation = require('./informationsHomologation');
-const { ErreurDureeValiditeInvalide, ErreurAvisInvalide } = require('../erreurs');
+const {
+  ErreurDureeValiditeInvalide,
+  ErreurAvisInvalide,
+} = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 class Avis extends InformationsHomologation {
@@ -28,7 +31,9 @@ class Avis extends InformationsHomologation {
 
   static valide({ dureeValidite, statut }, referentiel) {
     if (!referentiel.estIdentifiantEcheanceRenouvellementConnu(dureeValidite)) {
-      throw new ErreurDureeValiditeInvalide(`La durée de validité "${dureeValidite}" est invalide`);
+      throw new ErreurDureeValiditeInvalide(
+        `La durée de validité "${dureeValidite}" est invalide`
+      );
     }
     if (!referentiel.estIdentifiantStatutAvisDossierHomologationConnu(statut)) {
       throw new ErreurAvisInvalide(`L'avis "${statut}" est invalide`);
@@ -37,8 +42,8 @@ class Avis extends InformationsHomologation {
 
   statutSaisie() {
     const statutSaisieProprietesAtomiques = super.statutSaisie();
-    const collaborateursSaisis = this.collaborateurs.length > 0
-      && this.collaborateurs.every((c) => !!c);
+    const collaborateursSaisis =
+      this.collaborateurs.length > 0 && this.collaborateurs.every((c) => !!c);
     switch (statutSaisieProprietesAtomiques) {
       case InformationsHomologation.COMPLETES:
         return collaborateursSaisis

@@ -1,14 +1,18 @@
 const Mesure = require('./mesure');
 
-const { ErreurCategorieInconnue, ErreurDonneesStatistiques } = require('../erreurs');
+const {
+  ErreurCategorieInconnue,
+  ErreurDonneesStatistiques,
+} = require('../erreurs');
 
 const categories = Object.keys;
 const statistiques = Object.values;
 
 const valide = (donnees, referentiel) => {
   const categoriesRepertoriees = referentiel.identifiantsCategoriesMesures();
-  const categorieNonRepertoriee = categories(donnees)
-    .find((c) => !categoriesRepertoriees.includes(c));
+  const categorieNonRepertoriee = categories(donnees).find(
+    (c) => !categoriesRepertoriees.includes(c)
+  );
 
   if (categorieNonRepertoriee) {
     throw new ErreurCategorieInconnue(
@@ -17,23 +21,25 @@ const valide = (donnees, referentiel) => {
   }
 
   const statistiquesIncoherentes = statistiques(donnees).find(
-    ({ retenues, misesEnOeuvre }) => typeof misesEnOeuvre === 'undefined'
-      || typeof retenues === 'undefined' || misesEnOeuvre > retenues
+    ({ retenues, misesEnOeuvre }) =>
+      typeof misesEnOeuvre === 'undefined' ||
+      typeof retenues === 'undefined' ||
+      misesEnOeuvre > retenues
   );
 
   if (statistiquesIncoherentes) {
     throw new ErreurDonneesStatistiques(
-      'Les mesures mises en œuvre ne peuvent pas être supérieures en nombre aux mesures retenues '
-      + `(nombre inférieur à ${statistiquesIncoherentes.retenues} attendu, `
-      + `${statistiquesIncoherentes.misesEnOeuvre} spécifié)`
+      'Les mesures mises en œuvre ne peuvent pas être supérieures en nombre aux mesures retenues ' +
+        `(nombre inférieur à ${statistiquesIncoherentes.retenues} attendu, ` +
+        `${statistiquesIncoherentes.misesEnOeuvre} spécifié)`
     );
   }
 };
 
 class StatistiquesMesures {
   static donneesAZero(statuts, identifiantsCategoriesMesures) {
-    const statutsAZero = () => statuts
-      .reduce((acc, statut) => ({ ...acc, [statut]: 0 }), { total: 0 });
+    const statutsAZero = () =>
+      statuts.reduce((acc, statut) => ({ ...acc, [statut]: 0 }), { total: 0 });
 
     const statsInitiales = () => ({
       indispensables: statutsAZero(),
@@ -42,8 +48,10 @@ class StatistiquesMesures {
       retenues: 0,
     });
 
-    return identifiantsCategoriesMesures
-      .reduce((acc, categorie) => ({ ...acc, [categorie]: statsInitiales() }), {});
+    return identifiantsCategoriesMesures.reduce(
+      (acc, categorie) => ({ ...acc, [categorie]: statsInitiales() }),
+      {}
+    );
   }
 
   constructor(donnees, referentiel, mesuresSpecifiques) {
@@ -54,17 +62,22 @@ class StatistiquesMesures {
   }
 
   aRemplir(idCategorie) {
-    const total = this.donnees[idCategorie].indispensables.total
-      + this.donnees[idCategorie].recommandees.total;
-    return total
-      - this.misesEnOeuvre(idCategorie)
-      - this.enCours(idCategorie)
-      - this.nonFaites(idCategorie);
+    const total =
+      this.donnees[idCategorie].indispensables.total +
+      this.donnees[idCategorie].recommandees.total;
+    return (
+      total -
+      this.misesEnOeuvre(idCategorie) -
+      this.enCours(idCategorie) -
+      this.nonFaites(idCategorie)
+    );
   }
 
   aRemplirToutesCategories() {
-    return this.categories()
-      .reduce((total, categorie) => total + this.aRemplir(categorie), 0);
+    return this.categories().reduce(
+      (total, categorie) => total + this.aRemplir(categorie),
+      0
+    );
   }
 
   categories() {
@@ -72,13 +85,15 @@ class StatistiquesMesures {
   }
 
   completude() {
-    const nombreTotalMesures = this.indispensables().total
-        + this.recommandees().total
-        + this.mesuresSpecifiques.nombre();
+    const nombreTotalMesures =
+      this.indispensables().total +
+      this.recommandees().total +
+      this.mesuresSpecifiques.nombre();
 
-    const nombreMesuresCompletes = nombreTotalMesures
-        - this.aRemplirToutesCategories()
-        - this.mesuresSpecifiques.nombreDeSansStatut();
+    const nombreMesuresCompletes =
+      nombreTotalMesures -
+      this.aRemplirToutesCategories() -
+      this.mesuresSpecifiques.nombreDeSansStatut();
 
     return { nombreTotalMesures, nombreMesuresCompletes };
   }
@@ -89,12 +104,16 @@ class StatistiquesMesures {
   }
 
   filtreesParType(type) {
-    const totalToutesCategories = (statut) => this.categories()
-      .map((categorie) => (this.donnees[categorie][type][statut]))
-      .reduce((acc, total) => (acc + total), 0);
+    const totalToutesCategories = (statut) =>
+      this.categories()
+        .map((categorie) => this.donnees[categorie][type][statut])
+        .reduce((acc, total) => acc + total, 0);
 
-    const resultat = [...Mesure.statutsPossibles(), 'total']
-      .reduce((acc, statut) => Object.assign(acc, { [statut]: totalToutesCategories(statut) }), {});
+    const resultat = [...Mesure.statutsPossibles(), 'total'].reduce(
+      (acc, statut) =>
+        Object.assign(acc, { [statut]: totalToutesCategories(statut) }),
+      {}
+    );
 
     resultat.restant = resultat.total - resultat.fait;
     return resultat;
@@ -106,19 +125,27 @@ class StatistiquesMesures {
       return indispensables.total + recommandees.total;
     };
 
-    const totalPondere = this.categories().reduce((acc, categorie) => (
-      acc + nbMesures(categorie) * this.score(categorie)
-    ), 0);
+    const totalPondere = this.categories().reduce(
+      (acc, categorie) => acc + nbMesures(categorie) * this.score(categorie),
+      0
+    );
 
-    const nbTotalMesures = this.categories().reduce((acc, categorie) => (
-      acc + nbMesures(categorie)
-    ), 0);
+    const nbTotalMesures = this.categories().reduce(
+      (acc, categorie) => acc + nbMesures(categorie),
+      0
+    );
 
-    const indiceTotal = this.referentiel.indiceCyberNoteMax() * (totalPondere / nbTotalMesures);
+    const indiceTotal =
+      this.referentiel.indiceCyberNoteMax() * (totalPondere / nbTotalMesures);
 
-    return this.categories().reduce((acc, categorie) => Object.assign(acc, {
-      [categorie]: this.referentiel.indiceCyberNoteMax() * this.score(categorie),
-    }), { total: indiceTotal });
+    return this.categories().reduce(
+      (acc, categorie) =>
+        Object.assign(acc, {
+          [categorie]:
+            this.referentiel.indiceCyberNoteMax() * this.score(categorie),
+        }),
+      { total: indiceTotal }
+    );
   }
 
   indispensables() {
@@ -143,24 +170,28 @@ class StatistiquesMesures {
   }
 
   score(idCategorie) {
-    const {
-      indispensables,
-      recommandees,
-    } = this.donnees[idCategorie];
+    const { indispensables, recommandees } = this.donnees[idCategorie];
 
     const indispensablesFaites = indispensables.fait;
     const totalIndispensables = indispensables.total;
     const recommandeesFaites = recommandees.fait;
     const totalRecommandees = recommandees.total;
 
-    if (totalRecommandees === 0) return indispensablesFaites / totalIndispensables;
-    if (totalIndispensables === 0) return recommandeesFaites / totalRecommandees;
+    if (totalRecommandees === 0)
+      return indispensablesFaites / totalIndispensables;
+    if (totalIndispensables === 0)
+      return recommandeesFaites / totalRecommandees;
 
-    const coeffIndispensables = this.referentiel.coefficientIndiceCyberMesuresIndispensables();
-    const coeffRecommandees = this.referentiel.coefficientIndiceCyberMesuresRecommandees();
+    const coeffIndispensables =
+      this.referentiel.coefficientIndiceCyberMesuresIndispensables();
+    const coeffRecommandees =
+      this.referentiel.coefficientIndiceCyberMesuresRecommandees();
 
-    return (coeffIndispensables + coeffRecommandees * (recommandeesFaites / totalRecommandees))
-      * (indispensablesFaites / totalIndispensables);
+    return (
+      (coeffIndispensables +
+        coeffRecommandees * (recommandeesFaites / totalRecommandees)) *
+      (indispensablesFaites / totalIndispensables)
+    );
   }
 
   toJSON() {

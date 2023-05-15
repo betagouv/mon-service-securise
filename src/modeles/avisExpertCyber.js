@@ -1,5 +1,8 @@
 const InformationsHomologation = require('./informationsHomologation');
-const { ErreurAvisInvalide, ErreurDateRenouvellementInvalide } = require('../erreurs');
+const {
+  ErreurAvisInvalide,
+  ErreurDateRenouvellementInvalide,
+} = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 const AVIS = {
@@ -14,8 +17,12 @@ const valide = (donnees, referentiel) => {
     throw new ErreurAvisInvalide(`L'avis "${avis}" est invalide`);
   }
 
-  if (dateRenouvellement
-    && !referentiel.identifiantsEcheancesRenouvellement().includes(dateRenouvellement)) {
+  if (
+    dateRenouvellement &&
+    !referentiel
+      .identifiantsEcheancesRenouvellement()
+      .includes(dateRenouvellement)
+  ) {
     throw new ErreurDateRenouvellementInvalide(
       `Le délai avant renouvellement "${dateRenouvellement}" est invalide`
     );
@@ -38,15 +45,23 @@ class AvisExpertCyber extends InformationsHomologation {
     return this.referentiel.descriptionExpiration(this.dateRenouvellement);
   }
 
-  favorable() { return this.avis === AVIS.FAVORABLE; }
+  favorable() {
+    return this.avis === AVIS.FAVORABLE;
+  }
 
-  defavorable() { return this.avis === AVIS.DEFAVORABLE; }
+  defavorable() {
+    return this.avis === AVIS.DEFAVORABLE;
+  }
 
-  inconnu() { return typeof this.avis === 'undefined'; }
+  inconnu() {
+    return typeof this.avis === 'undefined';
+  }
 
   proprieteSaisie(nomPropriete) {
-    return (nomPropriete === 'dateRenouvellement' && this.defavorable())
-      || super.proprieteSaisie(nomPropriete);
+    return (
+      (nomPropriete === 'dateRenouvellement' && this.defavorable()) ||
+      super.proprieteSaisie(nomPropriete)
+    );
   }
 }
 

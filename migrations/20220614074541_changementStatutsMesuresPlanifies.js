@@ -3,20 +3,39 @@ const metsAJourStatutMesure = (changeStatut) => (mesure) => {
   return mesure;
 };
 
-const changementMesures = (changeStatut) => (knex) => knex('homologations')
-  .then((lignes) => {
+const changementMesures = (changeStatut) => (knex) =>
+  knex('homologations').then((lignes) => {
     const misesAJour = lignes
-      .filter(({ donnees }) => donnees?.mesuresGenerales || donnees?.mesuresSpecifiques)
-      .map(({ id, donnees: { mesuresGenerales, mesuresSpecifiques, ...autresDonnees } }) => knex('homologations')
-        .where({ id })
-        .update({ donnees: {
-          mesuresGenerales: mesuresGenerales?.map(metsAJourStatutMesure(changeStatut)),
-          mesuresSpecifiques: mesuresSpecifiques?.map(metsAJourStatutMesure(changeStatut)),
-          ...autresDonnees,
-        } }));
+      .filter(
+        ({ donnees }) =>
+          donnees?.mesuresGenerales || donnees?.mesuresSpecifiques
+      )
+      .map(
+        ({
+          id,
+          donnees: { mesuresGenerales, mesuresSpecifiques, ...autresDonnees },
+        }) =>
+          knex('homologations')
+            .where({ id })
+            .update({
+              donnees: {
+                mesuresGenerales: mesuresGenerales?.map(
+                  metsAJourStatutMesure(changeStatut)
+                ),
+                mesuresSpecifiques: mesuresSpecifiques?.map(
+                  metsAJourStatutMesure(changeStatut)
+                ),
+                ...autresDonnees,
+              },
+            })
+      );
     return Promise.all(misesAJour);
   });
 
-exports.up = changementMesures((statut) => (statut === 'planifie' ? 'nonFait' : statut));
+exports.up = changementMesures((statut) =>
+  statut === 'planifie' ? 'nonFait' : statut
+);
 
-exports.down = changementMesures((statut) => (statut === 'enCours' ? 'planifie' : statut));
+exports.down = changementMesures((statut) =>
+  statut === 'enCours' ? 'planifie' : statut
+);

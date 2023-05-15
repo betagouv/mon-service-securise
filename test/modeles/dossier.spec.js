@@ -4,30 +4,44 @@ const { unDossier } = require('../constructeurs/constructeurDossier');
 const donneesReferentiel = require('../../donneesReferentiel');
 const Dossier = require('../../src/modeles/dossier');
 const Referentiel = require('../../src/referentiel');
-const { ErreurDossierDejaFinalise, ErreurDossierNonFinalisable, ErreurDossierEtapeInconnue } = require('../../src/erreurs');
+const {
+  ErreurDossierDejaFinalise,
+  ErreurDossierNonFinalisable,
+  ErreurDossierEtapeInconnue,
+} = require('../../src/erreurs');
 
 describe("Un dossier d'homologation", () => {
   const referentiel = Referentiel.creeReferentielVide();
 
-  beforeEach(() => referentiel.recharge({
-    echeancesRenouvellement: { unAn: {} },
-    documentsHomologation: { decision: {} },
-    statutsAvisDossierHomologation: { favorable: {} },
-  }));
+  beforeEach(() =>
+    referentiel.recharge({
+      echeancesRenouvellement: { unAn: {} },
+      documentsHomologation: { decision: {} },
+      statutsAvisDossierHomologation: { favorable: {} },
+    })
+  );
 
   it('sait se convertir en JSON', () => {
-    const dossier = new Dossier({
-      id: '123',
-      decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
-      autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
-      dateTelechargement: { date: '2023-01-01T00:00:00.000Z' },
-      avecAvis: true,
-      avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
-      avecDocuments: true,
-      documents: ['unDocument'],
-      finalise: true,
-    },
-    referentiel);
+    const dossier = new Dossier(
+      {
+        id: '123',
+        decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
+        autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
+        dateTelechargement: { date: '2023-01-01T00:00:00.000Z' },
+        avecAvis: true,
+        avis: [
+          {
+            collaborateurs: ['Jean Dupond'],
+            dureeValidite: 'unAn',
+            statut: 'favorable',
+          },
+        ],
+        avecDocuments: true,
+        documents: ['unDocument'],
+        finalise: true,
+      },
+      referentiel
+    );
 
     expect(dossier.toJSON()).to.eql({
       id: '123',
@@ -35,7 +49,13 @@ describe("Un dossier d'homologation", () => {
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
       dateTelechargement: { date: '2023-01-01T00:00:00.000Z' },
       avecAvis: true,
-      avis: [{ collaborateurs: ['Jean Dupond'], dureeValidite: 'unAn', statut: 'favorable' }],
+      avis: [
+        {
+          collaborateurs: ['Jean Dupond'],
+          dureeValidite: 'unAn',
+          statut: 'favorable',
+        },
+      ],
       avecDocuments: true,
       documents: ['unDocument'],
       finalise: true,
@@ -51,8 +71,9 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.enregistreAutoriteHomologation('Jean Dupond', 'RSSI'))
-        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+      expect(() =>
+        dossierFinalise.enregistreAutoriteHomologation('Jean Dupond', 'RSSI')
+      ).to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
     });
 
     it("met à jour l'autorité d'homologation avec les données fournies", () => {
@@ -69,8 +90,9 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.enregistreDecision(new Date(), 'unAn'))
-        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+      expect(() =>
+        dossierFinalise.enregistreDecision(new Date(), 'unAn')
+      ).to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
     });
 
     it('met à jour la décision du dossier avec les informations fournies', () => {
@@ -88,8 +110,9 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.enregistreDateTelechargement('decision', new Date()))
-        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+      expect(() =>
+        dossierFinalise.enregistreDateTelechargement('decision', new Date())
+      ).to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
     });
 
     it("met à jour la date de téléchargement des documents d'homologation avec la date fournie", () => {
@@ -106,13 +129,18 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.enregistreAvis([]))
-        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+      expect(() => dossierFinalise.enregistreAvis([])).to.throwError((e) =>
+        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      );
     });
 
     it('remplace les avis par ceux fournis', () => {
       const dossier = new Dossier({}, referentiel);
-      const avisComplet = { collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn' };
+      const avisComplet = {
+        collaborateurs: ['Jean Dupond'],
+        statut: 'favorable',
+        dureeValidite: 'unAn',
+      };
 
       dossier.enregistreAvis([avisComplet]);
 
@@ -125,12 +153,25 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.declareSansAvis())
-        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+      expect(() => dossierFinalise.declareSansAvis()).to.throwError((e) =>
+        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      );
     });
 
     it('efface les avis existants', () => {
-      const dossier = new Dossier({ avis: [{ collaborateurs: ['Jean Dupond'], statut: 'favorable', dureeValidite: 'unAn' }], avecAvis: true }, referentiel);
+      const dossier = new Dossier(
+        {
+          avis: [
+            {
+              collaborateurs: ['Jean Dupond'],
+              statut: 'favorable',
+              dureeValidite: 'unAn',
+            },
+          ],
+          avecAvis: true,
+        },
+        referentiel
+      );
 
       dossier.declareSansAvis();
 
@@ -143,8 +184,9 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.enregistreDocuments([]))
-        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+      expect(() => dossierFinalise.enregistreDocuments([])).to.throwError((e) =>
+        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      );
     });
 
     it('remplace les documents par ceux fournis', () => {
@@ -162,12 +204,16 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.declareSansDocument())
-        .to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+      expect(() => dossierFinalise.declareSansDocument()).to.throwError((e) =>
+        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      );
     });
 
     it('efface les documents existants', () => {
-      const dossier = new Dossier({ documents: ['unDocument'], avecDocuments: true }, referentiel);
+      const dossier = new Dossier(
+        { documents: ['unDocument'], avecDocuments: true },
+        referentiel
+      );
 
       dossier.declareSansDocument();
 
@@ -254,8 +300,16 @@ describe("Un dossier d'homologation", () => {
 
       expect(() => dossier.enregistreFinalisation()).to.throwError((e) => {
         expect(e).to.be.an(ErreurDossierNonFinalisable);
-        expect(e.message).to.equal('Ce dossier comporte des étapes incomplètes.');
-        expect(e.etapesIncompletes).to.eql(['decision', 'dateTelechargement', 'autorite', 'avis', 'documents']);
+        expect(e.message).to.equal(
+          'Ce dossier comporte des étapes incomplètes.'
+        );
+        expect(e.etapesIncompletes).to.eql([
+          'decision',
+          'dateTelechargement',
+          'autorite',
+          'avis',
+          'documents',
+        ]);
       });
     });
 
@@ -265,7 +319,10 @@ describe("Un dossier d'homologation", () => {
         documentsHomologation: { decision: {} },
         statutsAvisDossierHomologation: { favorable: {} },
       });
-      const dossierComplet = unDossier(referentiel).quiEstComplet().quiEstNonFinalise().construit();
+      const dossierComplet = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstNonFinalise()
+        .construit();
 
       dossierComplet.enregistreFinalisation();
       expect(dossierComplet.finalise).to.be(true);
@@ -278,7 +335,8 @@ describe("Un dossier d'homologation", () => {
         echeancesRenouvellement: { unAn: {} },
         // Ici, on référence la PROD à dessein, car on veut s'assurer que le code de `Dossier`
         // et les données du référentiel sont synchronisées.
-        etapesParcoursHomologation: donneesReferentiel.etapesParcoursHomologation,
+        etapesParcoursHomologation:
+          donneesReferentiel.etapesParcoursHomologation,
         statutsAvisDossierHomologation: { favorable: {} },
       });
     });
@@ -296,7 +354,9 @@ describe("Un dossier d'homologation", () => {
     });
 
     it("renvoie l'étape qui suit la dernière étape complète", () => {
-      const etapeUneComplete = unDossier(referentiel).avecAutorite('Jean', 'RSSI').construit();
+      const etapeUneComplete = unDossier(referentiel)
+        .avecAutorite('Jean', 'RSSI')
+        .construit();
 
       expect(etapeUneComplete.etapeCourante()).to.equal('avis');
     });

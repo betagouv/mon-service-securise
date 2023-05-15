@@ -1,6 +1,5 @@
 const PartiePrenante = require('./partiePrenante');
 
-class Hebergement extends PartiePrenante {
-}
+class Hebergement extends PartiePrenante {}
 
 module.exports = Hebergement;

@@ -129,11 +129,11 @@
 }
 
 .outil-complementaire.risques .icone-outil {
-  background-image: url(../../images/icone_outils.svg)
+  background-image: url(../../images/icone_outils.svg);
 }
 
 .outil-complementaire.contactsUtiles .icone-outil {
-  background-image: url(../../images/icone_outils_graphiques.svg)
+  background-image: url(../../images/icone_outils_graphiques.svg);
 }
 
 .outil-complementaire .description {

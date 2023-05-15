@@ -5,6 +5,9 @@ const DeveloppementFourniture = require('../../../src/modeles/partiesPrenantes/d
 describe('Un développement / fourniture', () => {
   it('sait se décrire en JSON', () => {
     const developpementFourniture = new DeveloppementFourniture({ nom: 'Mss' });
-    expect(developpementFourniture.toJSON()).to.eql({ type: 'DeveloppementFourniture', nom: 'Mss' });
+    expect(developpementFourniture.toJSON()).to.eql({
+      type: 'DeveloppementFourniture',
+      nom: 'Mss',
+    });
   });
 });

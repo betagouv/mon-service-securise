@@ -24,9 +24,17 @@ describe("Le composant services de l'espace personnel", () => {
 
   it('affiche un nombre maximum fixe de contributeurs distincts', () => {
     const idUtilisateur = donneesService.createur.id;
-    donneesService.contributeurs = [{ id: '999', initiales: 'BB' }, { id: '000', initiales: 'AA' }];
+    donneesService.contributeurs = [
+      { id: '999', initiales: 'BB' },
+      { id: '000', initiales: 'AA' },
+    ];
 
-    const $resultat = $services(donneesServices, idUtilisateur, 'classe-nouveau-contributeur', 1);
+    const $resultat = $services(
+      donneesServices,
+      idUtilisateur,
+      'classe-nouveau-contributeur',
+      1
+    );
     $('.services').append($resultat);
 
     const $premierService = $('.service').eq(0);
@@ -39,16 +47,31 @@ describe("Le composant services de l'espace personnel", () => {
 
   it('affiche une pastille pour tous les autres contributeurs supplémentaires', () => {
     const idUtilisateur = donneesService.createur.id;
-    donneesService.contributeurs = [{ id: '888', initiales: 'AA' }, { id: '999', initiales: 'BB' }, { id: '000', initiales: 'CC' }];
+    donneesService.contributeurs = [
+      { id: '888', initiales: 'AA' },
+      { id: '999', initiales: 'BB' },
+      { id: '000', initiales: 'CC' },
+    ];
 
-    const $resultat = $services(donneesServices, idUtilisateur, 'classe-nouveau-contributeur', 1);
+    const $resultat = $services(
+      donneesServices,
+      idUtilisateur,
+      'classe-nouveau-contributeur',
+      1
+    );
     $('.services').append($resultat);
 
     const $premierService = $('.service').eq(0);
-    const $contributeursSupplementaires = $('.pastille.contributeurs-supplementaires', $premierService);
+    const $contributeursSupplementaires = $(
+      '.pastille.contributeurs-supplementaires',
+      $premierService
+    );
     expect($contributeursSupplementaires.length).to.equal(1);
 
-    const texteContributeursSupplementaires = $contributeursSupplementaires.eq(0).text().trim();
+    const texteContributeursSupplementaires = $contributeursSupplementaires
+      .eq(0)
+      .text()
+      .trim();
     expect(texteContributeursSupplementaires).to.equal('+2');
   });
 
@@ -56,11 +79,19 @@ describe("Le composant services de l'espace personnel", () => {
     const idUtilisateur = donneesService.createur.id;
     donneesService.contributeurs = [{ id: '888', initiales: 'AA' }];
 
-    const $resultat = $services(donneesServices, idUtilisateur, 'classe-nouveau-contributeur', 1);
+    const $resultat = $services(
+      donneesServices,
+      idUtilisateur,
+      'classe-nouveau-contributeur',
+      1
+    );
     $('.services').append($resultat);
 
     const $premierService = $('.service').eq(0);
-    const $contributeursSupplementaires = $('.pastille.contributeurs-supplementaires', $premierService);
+    const $contributeursSupplementaires = $(
+      '.pastille.contributeurs-supplementaires',
+      $premierService
+    );
     expect($contributeursSupplementaires.length).to.equal(0);
   });
 
@@ -71,7 +102,11 @@ describe("Le composant services de l'espace personnel", () => {
 
     $('.services').append($resultat);
     const $premierService = $('.service').eq(0);
-    expect($premierService.data('organisation-responsable-0')).to.equal('ANSSI');
-    expect($premierService.data('organisation-responsable-1')).to.equal('Ministère');
+    expect($premierService.data('organisation-responsable-0')).to.equal(
+      'ANSSI'
+    );
+    expect($premierService.data('organisation-responsable-1')).to.equal(
+      'Ministère'
+    );
   });
 });

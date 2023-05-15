@@ -1,4 +1,7 @@
-import { $services, $modaleNouveauContributeur } from './modules/elementsDom/services.mjs';
+import {
+  $services,
+  $modaleNouveauContributeur,
+} from './modules/elementsDom/services.mjs';
 import { brancheModale } from './modules/interactions/modale.mjs';
 import brancheComportementPastilles from './modules/interactions/pastilles.js';
 import brancheComportementSaisieContributeur from './modules/interactions/saisieContributeur.js';
@@ -11,7 +14,9 @@ const filtreEspacePersonnel = {
     $('#filtre').removeClass('invisible');
     $('#filtre').selectize({
       plugins: ['remove_button'],
-      options: organisationsUniques.map((organisation) => ({ valeur: organisation })),
+      options: organisationsUniques.map((organisation) => ({
+        valeur: organisation,
+      })),
       valueField: 'valeur',
       labelField: 'valeur',
       searchField: 'valeur',
@@ -33,7 +38,9 @@ const filtreEspacePersonnel = {
         .map(([_cle, valeur]) => valeur);
 
       const pasDeFiltre = organisationsChoisies.length === 0;
-      const correspondance = organisationsChoisies.every((o) => organisationsDuService.includes(o));
+      const correspondance = organisationsChoisies.every((o) =>
+        organisationsDuService.includes(o)
+      );
       if (pasDeFiltre || correspondance) $service.show();
       else $service.hide();
     });
@@ -57,7 +64,9 @@ $(() => {
     $('main').append($modaleNouveauContributeur());
     brancheModale('.ajout-contributeur', '#rideau-nouveau-contributeur');
     brancheComportementSaisieContributeur('.ajout-contributeur');
-    $('.service').each((_index, service) => brancheMenuContextuelService($(service)));
+    $('.service').each((_index, service) =>
+      brancheMenuContextuelService($(service))
+    );
 
     brancheModale('#nouveau-service', '#modale-nouveau-service');
   };
@@ -66,16 +75,18 @@ $(() => {
     $('.bandeau-maj-profil').removeClass('invisible');
   };
 
-  axios.get('/api/utilisateurCourant')
+  axios
+    .get('/api/utilisateurCourant')
     .then(({ data }) => data.utilisateur)
     .then((utilisateur) => {
-      axios.get('/api/services')
-        .then(({ data }) => {
-          peupleServicesDans('.services', data.services, utilisateur.id);
+      axios.get('/api/services').then(({ data }) => {
+        peupleServicesDans('.services', data.services, utilisateur.id);
 
-          const toutesOrganisations = data.services.map((s) => s.organisationsResponsables).flat();
-          filtreEspacePersonnel.brancheFiltres(toutesOrganisations);
-        });
+        const toutesOrganisations = data.services
+          .map((s) => s.organisationsResponsables)
+          .flat();
+        filtreEspacePersonnel.brancheFiltres(toutesOrganisations);
+      });
 
       if (!utilisateur.profilEstComplet) afficheBandeauMajProfil();
     });

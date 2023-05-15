@@ -14,7 +14,9 @@ class PartiesPrenantes extends ElementsFabricables {
   }
 
   type(Type) {
-    return this.toutes().find((partiePrenante) => partiePrenante.estDeType(Type))?.toJSON();
+    return this.toutes()
+      .find((partiePrenante) => partiePrenante.estDeType(Type))
+      ?.toJSON();
   }
 
   hebergement() {
@@ -35,7 +37,9 @@ class PartiesPrenantes extends ElementsFabricables {
 
   specifiques() {
     return this.toutes()
-      .filter((partiePrenante) => partiePrenante.estDeType(PartiePrenanteSpecifique))
+      .filter((partiePrenante) =>
+        partiePrenante.estDeType(PartiePrenanteSpecifique)
+      )
       .map((partiePrenante) => partiePrenante.toJSON());
   }
 

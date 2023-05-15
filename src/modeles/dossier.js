@@ -6,7 +6,11 @@ const Documents = require('./etapes/documents');
 const EtapeAvis = require('./etapes/etapeAvis');
 const InformationsHomologation = require('./informationsHomologation');
 const Referentiel = require('../referentiel');
-const { ErreurDossierDejaFinalise, ErreurDossierNonFinalisable, ErreurDossierEtapeInconnue } = require('../erreurs');
+const {
+  ErreurDossierDejaFinalise,
+  ErreurDossierNonFinalisable,
+  ErreurDossierEtapeInconnue,
+} = require('../erreurs');
 
 class Dossier extends InformationsHomologation {
   constructor(
@@ -28,11 +32,16 @@ class Dossier extends InformationsHomologation {
       adaptateurHorloge
     );
     this.autorite = new Autorite(donneesDossier.autorite);
-    this.dateTelechargement = new DateTelechargement(donneesDossier.dateTelechargement);
-    this.avis = new EtapeAvis({
-      avis: donneesDossier.avis,
-      avecAvis: donneesDossier.avecAvis,
-    }, referentiel);
+    this.dateTelechargement = new DateTelechargement(
+      donneesDossier.dateTelechargement
+    );
+    this.avis = new EtapeAvis(
+      {
+        avis: donneesDossier.avis,
+        avecAvis: donneesDossier.avecAvis,
+      },
+      referentiel
+    );
     this.documents = new Documents({
       documents: donneesDossier.documents,
       avecDocuments: donneesDossier.avecDocuments,
@@ -99,17 +108,22 @@ class Dossier extends InformationsHomologation {
 
   enregistreFinalisation() {
     if (!this.estComplet()) {
-      const etapesIncompletes = Dossier
-        .etapesObligatoires()
-        .filter((etape) => !this[etape].estComplete());
-      throw new ErreurDossierNonFinalisable('Ce dossier comporte des étapes incomplètes.', etapesIncompletes);
+      const etapesIncompletes = Dossier.etapesObligatoires().filter(
+        (etape) => !this[etape].estComplete()
+      );
+      throw new ErreurDossierNonFinalisable(
+        'Ce dossier comporte des étapes incomplètes.',
+        etapesIncompletes
+      );
     }
 
     this.finalise = true;
   }
 
   estComplet() {
-    return Dossier.etapesObligatoires().every((etape) => this[etape].estComplete());
+    return Dossier.etapesObligatoires().every((etape) =>
+      this[etape].estComplete()
+    );
   }
 
   estActif() {

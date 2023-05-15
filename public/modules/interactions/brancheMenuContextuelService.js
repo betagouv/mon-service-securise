@@ -5,7 +5,9 @@ const brancheMenuContextuelService = ($service) => {
     const $masqueLocal = $('.masque', $service);
     const $menuContextuelLocal = $('.menu-contextuel', $service);
     $('.masque').not($masqueLocal).addClass('invisible');
-    $('.menu-contextuel').not($menuContextuelLocal).removeClass('menu-contextuel-ouvert');
+    $('.menu-contextuel')
+      .not($menuContextuelLocal)
+      .removeClass('menu-contextuel-ouvert');
 
     $masqueLocal.toggleClass('invisible');
     $menuContextuelLocal.toggleClass('menu-contextuel-ouvert');
@@ -17,13 +19,19 @@ const brancheMenuContextuelService = ($service) => {
 
   $('.menu-contextuel-options .dupliquer', $service).on('click', (e) => {
     e.preventDefault();
-    const donnees = { idService: $service.data('id'), nomService: $service.data('nom') };
+    const donnees = {
+      idService: $service.data('id'),
+      nomService: $service.data('nom'),
+    };
     $service.trigger('modaleDuplication', donnees);
   });
 
   $('.menu-contextuel-options .supprimer', $service).on('click', (e) => {
     e.preventDefault();
-    const donnees = { idService: $service.data('id'), nomService: $service.data('nom') };
+    const donnees = {
+      idService: $service.data('id'),
+      nomService: $service.data('nom'),
+    };
     $service.trigger('modaleSuppression', donnees);
   });
 };

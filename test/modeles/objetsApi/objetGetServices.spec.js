@@ -7,7 +7,10 @@ const { unDossier } = require('../../constructeurs/constructeurDossier');
 describe("L'objet d'API de `GET /services`", () => {
   const unService = new Service({
     id: '123',
-    descriptionService: { nomService: 'Un service', organisationsResponsables: ['Une organisation'] },
+    descriptionService: {
+      nomService: 'Un service',
+      organisationsResponsables: ['Une organisation'],
+    },
     createur: { id: 'A', email: 'email.createur@mail.fr', prenom: 'Jacques' },
     contributeurs: [
       { id: 'B', email: 'email.contributeur1@mail.fr', prenom: 'Jean' },
@@ -18,7 +21,10 @@ describe("L'objet d'API de `GET /services`", () => {
 
   const unAutreService = new Service({
     id: '456',
-    descriptionService: { nomService: 'Un autre service', organisationsResponsables: ['Une organisation'] },
+    descriptionService: {
+      nomService: 'Un autre service',
+      organisationsResponsables: ['Une organisation'],
+    },
     createur: { id: 'A', email: 'email.createur@mail.fr', prenom: 'Jacques' },
     contributeurs: [
       { id: 'B', email: 'email.contributeur1@mail.fr', prenom: 'Jean' },
@@ -27,8 +33,8 @@ describe("L'objet d'API de `GET /services`", () => {
 
   it('fournit les données nécessaires', () => {
     const services = [unService];
-    expect(objetGetServices.donnees(services, 'A').services).to.eql(
-      [{
+    expect(objetGetServices.donnees(services, 'A').services).to.eql([
+      {
         id: '123',
         nomService: 'Un service',
         organisationsResponsables: ['Une organisation'],
@@ -40,9 +46,13 @@ describe("L'objet d'API de `GET /services`", () => {
         statutHomologation: { libelle: 'À réaliser', id: 'aSaisir' },
         nombreContributeurs: 1 + 1,
         estCreateur: true,
-        documentsPdfDisponibles: ['annexes', 'syntheseSecurite', 'dossierDecision'],
-      }],
-    );
+        documentsPdfDisponibles: [
+          'annexes',
+          'syntheseSecurite',
+          'dossierDecision',
+        ],
+      },
+    ]);
   });
 
   it('fournit les données de résumé des services', () => {
@@ -51,13 +61,11 @@ describe("L'objet d'API de `GET /services`", () => {
     unAutreService.indiceCyber = () => ({ total: 5 });
 
     const services = [unService, unAutreService];
-    expect(objetGetServices.donnees(services).resume).to.eql(
-      {
-        nombreServices: 2,
-        nombreServicesHomologues: 1,
-        indiceCyberMoyen: 4.5,
-      }
-    );
+    expect(objetGetServices.donnees(services).resume).to.eql({
+      nombreServices: 2,
+      nombreServicesHomologues: 1,
+      indiceCyberMoyen: 4.5,
+    });
   });
 
   it('ne compte pas les indice cyber nuls pour calculer la moyenne', () => {
@@ -65,12 +73,10 @@ describe("L'objet d'API de `GET /services`", () => {
     unAutreService.indiceCyber = () => ({ total: 0 });
 
     const services = [unService, unAutreService];
-    expect(objetGetServices.donnees(services).resume).to.eql(
-      {
-        nombreServices: 2,
-        nombreServicesHomologues: 1,
-        indiceCyberMoyen: 4,
-      }
-    );
+    expect(objetGetServices.donnees(services).resume).to.eql({
+      nombreServices: 2,
+      nombreServicesHomologues: 1,
+      indiceCyberMoyen: 4,
+    });
   });
 });

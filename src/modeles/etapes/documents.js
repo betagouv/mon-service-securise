@@ -2,7 +2,10 @@ const Etape = require('./etape');
 
 class Documents extends Etape {
   constructor({ documents = [], avecDocuments = null } = {}) {
-    super({ proprietesAtomiquesRequises: ['avecDocuments'], proprietesListes: ['documents'] });
+    super({
+      proprietesAtomiquesRequises: ['avecDocuments'],
+      proprietesListes: ['documents'],
+    });
 
     this.renseigneProprietes({ documents, avecDocuments });
   }
@@ -19,9 +22,7 @@ class Documents extends Etape {
 
   estComplete() {
     if (this.avecDocuments === null) return false;
-    return this.avecDocuments
-      ? this.documents.length > 0
-      : true;
+    return this.avecDocuments ? this.documents.length > 0 : true;
   }
 }
 
