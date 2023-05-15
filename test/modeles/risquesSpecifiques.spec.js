@@ -10,9 +10,11 @@ describe('La liste des risques spécifiques', () => {
   });
 
   it('est composée de risques spécifiques', () => {
-    const risques = new RisquesSpecifiques({ risquesSpecifiques: [
-      { description: 'Un risque spécifique', commentaire: 'Un commentaire' },
-    ] });
+    const risques = new RisquesSpecifiques({
+      risquesSpecifiques: [
+        { description: 'Un risque spécifique', commentaire: 'Un commentaire' },
+      ],
+    });
 
     expect(risques.item(0)).to.be.a(RisqueSpecifique);
   });

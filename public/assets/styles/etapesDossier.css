@@ -40,7 +40,8 @@ section {
   margin: 0 calc(3em + var(--taille-bordure-etape));
 }
 
-.etape .numero-etape::after, .etape .numero-etape::before {
+.etape .numero-etape::after,
+.etape .numero-etape::before {
   content: '';
   display: block;
   position: absolute;
@@ -58,7 +59,8 @@ section {
   right: calc(2em + var(--taille-bordure-etape));
 }
 
-.etape:first-of-type .numero-etape::before, .etape:last-of-type .numero-etape::after {
+.etape:first-of-type .numero-etape::before,
+.etape:last-of-type .numero-etape::after {
   display: none;
 }
 
@@ -70,7 +72,8 @@ form .numero-etape {
   line-height: 1.9;
 }
 
-.etape .numero-etape, .etape.passee .coche {
+.etape .numero-etape,
+.etape.passee .coche {
   width: 2em;
   height: 2em;
 
@@ -103,7 +106,8 @@ form .numero-etape {
   outline-offset: 0.3em;
 }
 
-.etape.passee .numero-etape::after, .etape:is(.passee, .courante) .numero-etape::before {
+.etape.passee .numero-etape::after,
+.etape:is(.passee, .courante) .numero-etape::before {
   border-color: var(--bleu-mise-en-avant);
   background-color: var(--bleu-mise-en-avant);
 }
@@ -132,7 +136,7 @@ section.autorite {
   padding: 0 0 1em 0;
 }
 
-.validation-telechargement input[type=text] {
+.validation-telechargement input[type='text'] {
   display: none;
 }
 

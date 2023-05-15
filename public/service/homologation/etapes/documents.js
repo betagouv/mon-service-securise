@@ -17,7 +17,10 @@ const montreListeDocuments = ($element) => {
 
 const brancheBoutonsRadio = () => {
   const $conteneurRadioBouton = $('fieldset#avecDocuments');
-  const $radioDocumentsSelectionne = $('input:radio:checked', 'fieldset#avecDocuments');
+  const $radioDocumentsSelectionne = $(
+    'input:radio:checked',
+    'fieldset#avecDocuments'
+  );
   montreListeDocuments($radioDocumentsSelectionne);
 
   $conteneurRadioBouton.on('change', (e) => {
@@ -74,16 +77,21 @@ const brancheToucheEntree = () => {
 };
 
 const soumissionEtapeDocuments = (selecteurFormulaire) => (idService) => {
-  const $radioDocumentsSelectionne = $('input:radio:checked', 'fieldset#avecDocuments');
-  const avecDocuments = estValeurAvecDocuments($radioDocumentsSelectionne.val());
-  const documents = $('.element-document', selecteurFormulaire).toArray().map((element) => $(element).attr('data-document'));
-
-  return (
-    axios.put(
-      `/api/service/${idService}/homologation/documents`,
-      { documents, avecDocuments }
-    )
+  const $radioDocumentsSelectionne = $(
+    'input:radio:checked',
+    'fieldset#avecDocuments'
   );
+  const avecDocuments = estValeurAvecDocuments(
+    $radioDocumentsSelectionne.val()
+  );
+  const documents = $('.element-document', selecteurFormulaire)
+    .toArray()
+    .map((element) => $(element).attr('data-document'));
+
+  return axios.put(`/api/service/${idService}/homologation/documents`, {
+    documents,
+    avecDocuments,
+  });
 };
 
 $(() => {

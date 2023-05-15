@@ -4,9 +4,13 @@ const DateTelechargement = require('../../../src/modeles/etapes/dateTelechargeme
 
 describe("La date de téléchargement des documents d'homologation", () => {
   it('sait se convertir en JSON', () => {
-    const dateTelechargement = new DateTelechargement({ date: '2023-02-02T00:00:00.000Z' });
+    const dateTelechargement = new DateTelechargement({
+      date: '2023-02-02T00:00:00.000Z',
+    });
 
-    expect(dateTelechargement.toJSON()).to.eql({ date: '2023-02-02T00:00:00.000Z' });
+    expect(dateTelechargement.toJSON()).to.eql({
+      date: '2023-02-02T00:00:00.000Z',
+    });
   });
 
   describe("sur vérification qu'elle est complète", () => {
@@ -16,7 +20,9 @@ describe("La date de téléchargement des documents d'homologation", () => {
     });
 
     it("retourne `true` s'il y a une date de téléchargement", () => {
-      const dateTelechargement = new DateTelechargement({ date: '2023-02-02T00:00:00.000Z' });
+      const dateTelechargement = new DateTelechargement({
+        date: '2023-02-02T00:00:00.000Z',
+      });
       expect(dateTelechargement.estComplete()).to.be(true);
     });
   });
@@ -24,7 +30,9 @@ describe("La date de téléchargement des documents d'homologation", () => {
   it('sait enregistrer une date de téléchargement', () => {
     const sansTelechargementDecision = new DateTelechargement();
     const date = '2023-02-02T00:00:00.000Z';
-    sansTelechargementDecision.enregistreDateTelechargement('2023-02-02T00:00:00.000Z');
+    sansTelechargementDecision.enregistreDateTelechargement(
+      '2023-02-02T00:00:00.000Z'
+    );
     expect(sansTelechargementDecision.date).to.be(date);
   });
 });

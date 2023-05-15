@@ -1,7 +1,11 @@
-import { brancheValidation, declencheValidation } from '../modules/interactions/validation.mjs';
+import {
+  brancheValidation,
+  declencheValidation,
+} from '../modules/interactions/validation.mjs';
 
 $(() => {
-  const reponseAcceptee = (nom) => ($(`#${nom}:checked`).val() ? true : undefined);
+  const reponseAcceptee = (nom) =>
+    $(`#${nom}:checked`).val() ? true : undefined;
 
   const selecteurFormulaire = 'form.mot-de-passe#edition';
 
@@ -17,7 +21,8 @@ $(() => {
       cguAcceptees: reponseAcceptee('cguAcceptees'),
     };
 
-    axios.put('/api/motDePasse', donnees)
+    axios
+      .put('/api/motDePasse', donnees)
       .then(() => (window.location = '/espacePersonnel'));
   });
 });

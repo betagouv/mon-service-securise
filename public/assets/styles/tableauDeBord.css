@@ -30,7 +30,7 @@ main {
   display: flex;
   align-items: center;
   font-weight: bold;
-  font-size: .95em;
+  font-size: 0.95em;
   text-align: left;
 }
 
@@ -82,8 +82,8 @@ label[for='recherche-service'] {
 }
 
 .carte {
-  background: #FFFFFF;
-  border: 1px solid #CBD5E1;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -93,7 +93,7 @@ label[for='recherche-service'] {
 
 .carte .conteneur-image {
   width: 2em;
-  background: #F1F5F9;
+  background: #f1f5f9;
   border-radius: 50%;
   width: 2.8em;
   height: 2.8em;
@@ -103,11 +103,11 @@ label[for='recherche-service'] {
 }
 
 .carte .conteneur-image.vert {
-  background: #D4F4DB;
+  background: #d4f4db;
 }
 
 .carte .conteneur-image.bleu {
-  background: #DBEEFF;
+  background: #dbeeff;
 }
 
 .carte .conteneur-texte {
@@ -128,15 +128,15 @@ label[for='recherche-service'] {
 }
 
 #nombre-services {
-  color: #7025DA;
+  color: #7025da;
 }
 
 #nombre-services-homologues {
-  color: #0E972B;
+  color: #0e972b;
 }
 
 #indice-cyber-moyen {
-  color: #0079D0;
+  color: #0079d0;
 }
 
 .actions {
@@ -151,7 +151,7 @@ label[for='recherche-service'] {
   margin-left: 1em;
   padding: 0.7em;
   border-radius: 6px;
-  border: 1px solid #CBD5E1;
+  border: 1px solid #cbd5e1;
   min-width: 220px;
 }
 
@@ -200,20 +200,19 @@ label[for='recherche-service'] {
 
 .tableau-services thead th::after {
   content: '\00a0\00a0\00a0';
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 
-.tableau-services thead th[data-direction="1"]::after {
+.tableau-services thead th[data-direction='1']::after {
   content: '↑';
 }
 
-.tableau-services thead th[data-direction="2"]::after {
+.tableau-services thead th[data-direction='2']::after {
   content: '↓';
 }
 
-
 .tableau-services thead tr th {
-  background: #DBECF1;
+  background: #dbecf1;
 }
 
 .tableau-services thead tr th:first-of-type {
@@ -232,12 +231,12 @@ label[for='recherche-service'] {
   vertical-align: middle;
   text-align: center;
   padding: 0.7em 1.5em;
-  border: 1px solid #CBD5E1;
+  border: 1px solid #cbd5e1;
   border-style: solid none none none;
 }
 
 .tableau-services tbody tr.selectionne {
-  background: #EFF6FF;
+  background: #eff6ff;
 }
 
 .tableau-services tbody tr:first-of-type td:first-of-type {
@@ -264,8 +263,7 @@ label[for='recherche-service'] {
   border-right-style: solid;
 }
 
-
-.tableau-services td>div {
+.tableau-services td > div {
   display: inline-block;
   font-weight: 500;
 }
@@ -283,7 +281,7 @@ label[for='recherche-service'] {
 }
 
 .tableau-services td .nom-service {
-  color: #2F3A43;
+  color: #2f3a43;
   font-weight: 500;
 }
 
@@ -293,7 +291,7 @@ label[for='recherche-service'] {
 }
 
 .tableau-services td .contributeurs {
-  background: #DBEEFF;
+  background: #dbeeff;
   border-radius: 4px;
   width: fit-content;
   padding: 0.2em 0.5em;
@@ -331,15 +329,15 @@ label[for='recherche-service'] {
 }
 
 .tableau-services td .statut-homologation.statut-aSaisir {
-  background: #E9DDFF;
+  background: #e9ddff;
 }
 
 .tableau-services td .statut-homologation.statut-aCompleter {
-  background: #DBEEFF;
+  background: #dbeeff;
 }
 
 .tableau-services td .statut-homologation.statut-completes {
-  background: #D4F4DB;
+  background: #d4f4db;
 }
 
 .tableau-services .cellule-actions {
@@ -365,7 +363,7 @@ label[for='recherche-service'] {
 
 .tableau-services .menu-flotant hr {
   width: 100%;
-  border: 1px solid #CBD5E1;
+  border: 1px solid #cbd5e1;
   border-style: solid none none none;
 }
 
@@ -378,8 +376,8 @@ label[for='recherche-service'] {
 }
 
 .tableau-services .menu-flotant :is(a, .action):hover {
-  background: #F1F5F9;
-  color: #0C5C98;
+  background: #f1f5f9;
+  color: #0c5c98;
 }
 
 .tableau-services .action-lien {
@@ -387,7 +385,7 @@ label[for='recherche-service'] {
   position: relative;
   width: 2em;
   height: 2em;
-  border: 1px solid #CBD5E1;
+  border: 1px solid #cbd5e1;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -396,8 +394,8 @@ label[for='recherche-service'] {
 }
 
 .tableau-services .action-lien.actif {
-  background: #F1F5F9;
-  border-color: #08416A;
+  background: #f1f5f9;
+  border-color: #08416a;
 }
 
 .tableau-services .action-lien img {
@@ -419,7 +417,8 @@ label[for='recherche-service'] {
   justify-content: center;
 }
 
-.tableau-services .checkbox-selection-tous-services.selection-partielle::before {
+.tableau-services
+  .checkbox-selection-tous-services.selection-partielle::before {
   content: '';
   width: 0.6em;
   height: 2px;
@@ -453,7 +452,7 @@ label[for='recherche-service'] {
   display: flex;
   flex-shrink: none;
   align-items: center;
-  color: #0079D0;
+  color: #0079d0;
 }
 
 .tableau-services .action.inactif {
@@ -483,8 +482,8 @@ label[for='recherche-service'] {
 }
 
 .tableau-services .conteneur-selection-services.actif {
-  background: #F1F5F9;
-  border: 1px solid #08416A;
+  background: #f1f5f9;
+  border: 1px solid #08416a;
 }
 
 .tableau-services .conteneur-collaborateur {
@@ -517,7 +516,7 @@ label[for='recherche-service'] {
 
 .suivi-services .entete-tiroir {
   position: relative;
-  background: #DBECF1;
+  background: #dbecf1;
   text-align: left;
   padding: 0 2em;
 }
@@ -581,7 +580,7 @@ label[for='recherche-service'] {
 
 :is(#contenu-duplication, #contenu-invitation) input {
   padding: 0.7em 1em;
-  border: 1px solid #CBD5E1;
+  border: 1px solid #cbd5e1;
   border-radius: 6px;
   margin-top: 1em;
   width: 6em;
@@ -591,7 +590,8 @@ label[for='recherche-service'] {
   width: 28em;
 }
 
-:is(#contenu-duplication, #contenu-suppression, #contenu-invitation) .conteneur-actions {
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
+  .conteneur-actions {
   display: flex;
   justify-content: end;
   gap: 1em;
@@ -599,9 +599,9 @@ label[for='recherche-service'] {
 
 .banniere-avertissement {
   display: flex;
-  border: 1px solid #FAA72C;
+  border: 1px solid #faa72c;
   border-radius: 4px;
-  background: #FFF2DE;
+  background: #fff2de;
   padding: 0.7em 1em;
   gap: 1em;
 }
@@ -669,7 +669,9 @@ label[for='recherche-service'] {
   filter: grayscale(1);
 }
 
-#contenu-telechargement #conteneur-lien-decision-indisponible .lien-telechargement {
+#contenu-telechargement
+  #conteneur-lien-decision-indisponible
+  .lien-telechargement {
   pointer-events: none;
 }
 

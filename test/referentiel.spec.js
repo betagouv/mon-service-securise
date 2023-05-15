@@ -6,9 +6,14 @@ const Referentiel = require('../src/referentiel');
 describe('Le référentiel', () => {
   describe('à sa création', () => {
     it("valide que la somme des coefficients pour le calcul de l'incide cyber vaut 1", () => {
-      expect(() => Referentiel.creeReferentiel({
-        indiceCyber: { coefficientIndispensables: 1.2, coefficientRecommandees: 0.8 },
-      })).to.throwException((e) => {
+      expect(() =>
+        Referentiel.creeReferentiel({
+          indiceCyber: {
+            coefficientIndispensables: 1.2,
+            coefficientRecommandees: 0.8,
+          },
+        })
+      ).to.throwException((e) => {
         expect(e).to.be.an(ErreurDonneesReferentielIncorrectes);
         expect(e.message).to.equal(
           "La somme des coefficients pour le calcul de l'indice cyber vaut 2, alors qu'elle aurait dû valoir 1."
@@ -22,9 +27,14 @@ describe('Le référentiel', () => {
 
     it('valide les valeurs des coefficients après la recharge', () => {
       const referentiel = Referentiel.creeReferentielVide();
-      expect(() => referentiel.recharge({
-        indiceCyber: { coefficientIndispensables: 1.2, coefficientRecommandees: 0.8 },
-      })).to.throwException();
+      expect(() =>
+        referentiel.recharge({
+          indiceCyber: {
+            coefficientIndispensables: 1.2,
+            coefficientRecommandees: 0.8,
+          },
+        })
+      ).to.throwException();
     });
   });
 
@@ -42,30 +52,41 @@ describe('Le référentiel', () => {
         api: { description: "API mise à disposition par l'organisation" },
       },
     });
-    expect(referentiel.typeService(['siteInternet', 'api']))
-      .to.equal("Site internet, API mise à disposition par l'organisation");
+    expect(referentiel.typeService(['siteInternet', 'api'])).to.equal(
+      "Site internet, API mise à disposition par l'organisation"
+    );
   });
 
   it('donne une description par défaut si aucun identifiant de type de service', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    expect(referentiel.typeService([])).to.equal('Type de service non renseignée');
+    expect(referentiel.typeService([])).to.equal(
+      'Type de service non renseignée'
+    );
   });
 
   it('sait décrire la localisation des données', () => {
     const referentiel = Referentiel.creeReferentiel({
-      localisationsDonnees: { france: { description: 'Quelque part en France' } },
+      localisationsDonnees: {
+        france: { description: 'Quelque part en France' },
+      },
     });
 
-    expect(referentiel.localisationDonnees('france')).to.equal('Quelque part en France');
+    expect(referentiel.localisationDonnees('france')).to.equal(
+      'Quelque part en France'
+    );
   });
 
   it('donne une description par défaut si pas de localisation des données', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    expect(referentiel.localisationDonnees()).to.equal('Localisation des données non renseignée');
+    expect(referentiel.localisationDonnees()).to.equal(
+      'Localisation des données non renseignée'
+    );
   });
 
   it('connaît la liste des différents types de service possibles', () => {
-    const referentiel = Referentiel.creeReferentiel({ typesService: { uneClef: 'une valeur' } });
+    const referentiel = Referentiel.creeReferentiel({
+      typesService: { uneClef: 'une valeur' },
+    });
     expect(referentiel.typesService()).to.eql({ uneClef: 'une valeur' });
   });
 
@@ -92,7 +113,9 @@ describe('Le référentiel', () => {
       },
     });
 
-    expect(referentiel.descriptionStatutDeploiement('uneClef')).to.equal('Une description');
+    expect(referentiel.descriptionStatutDeploiement('uneClef')).to.equal(
+      'Une description'
+    );
   });
 
   it('connaît la liste des fonctionnalités possibles', () => {
@@ -108,7 +131,9 @@ describe('Le référentiel', () => {
       fonctionnalites: { uneClef: { description: 'Une description' } },
     });
 
-    expect(referentiel.descriptionFonctionnalite('uneClef')).to.equal('Une description');
+    expect(referentiel.descriptionFonctionnalite('uneClef')).to.equal(
+      'Une description'
+    );
   });
 
   it('sait décrire des fonctionnalités', () => {
@@ -119,7 +144,10 @@ describe('Le référentiel', () => {
       },
     });
 
-    expect(referentiel.descriptionsFonctionnalites(['clef1', 'clef2'])).to.eql(['Description 1', 'Description 2']);
+    expect(referentiel.descriptionsFonctionnalites(['clef1', 'clef2'])).to.eql([
+      'Description 1',
+      'Description 2',
+    ]);
   });
 
   it("sait décrire des fonctionnalités en restant robuste quand une fonctionnalité n'est pas dans le référentiel", () => {
@@ -133,15 +161,21 @@ describe('Le référentiel', () => {
       donneesCaracterePersonnel: { uneClef: 'une valeur' },
     });
 
-    expect(referentiel.donneesCaracterePersonnel()).to.eql({ uneClef: 'une valeur' });
+    expect(referentiel.donneesCaracterePersonnel()).to.eql({
+      uneClef: 'une valeur',
+    });
   });
 
   it('sait décrire un type de données à caractère personnel', () => {
     const referentiel = Referentiel.creeReferentiel({
-      donneesCaracterePersonnel: { uneClef: { description: 'Une description' } },
+      donneesCaracterePersonnel: {
+        uneClef: { description: 'Une description' },
+      },
     });
 
-    expect(referentiel.descriptionDonneesCaracterePersonnel('uneClef')).to.equal('Une description');
+    expect(
+      referentiel.descriptionDonneesCaracterePersonnel('uneClef')
+    ).to.equal('Une description');
   });
 
   it('sait décrire des types de données à caractère personnel', () => {
@@ -152,13 +186,17 @@ describe('Le référentiel', () => {
       },
     });
 
-    expect(referentiel.descriptionsDonneesCaracterePersonnel(['clef1', 'clef2'])).to.eql(['Description 1', 'Description 2']);
+    expect(
+      referentiel.descriptionsDonneesCaracterePersonnel(['clef1', 'clef2'])
+    ).to.eql(['Description 1', 'Description 2']);
   });
 
   it("sait décrire des types de données à caractère personnel en restant robuste quand un type n'est pas dans le référentiel", () => {
     const referentiel = Referentiel.creeReferentielVide();
 
-    expect(referentiel.descriptionsDonneesCaracterePersonnel(['clef'])).to.eql([]);
+    expect(referentiel.descriptionsDonneesCaracterePersonnel(['clef'])).to.eql(
+      []
+    );
   });
 
   it('connaît la liste des délais avant impact critique', () => {
@@ -166,7 +204,9 @@ describe('Le référentiel', () => {
       delaisAvantImpactCritique: { uneClef: 'une valeur' },
     });
 
-    expect(referentiel.delaisAvantImpactCritique()).to.eql({ uneClef: 'une valeur' });
+    expect(referentiel.delaisAvantImpactCritique()).to.eql({
+      uneClef: 'une valeur',
+    });
   });
 
   it('sait décrire un délai avant impact critique', () => {
@@ -174,13 +214,17 @@ describe('Le référentiel', () => {
       delaisAvantImpactCritique: { uneClef: { description: 'une valeur' } },
     });
 
-    expect(referentiel.descriptionDelaiAvantImpactCritique('uneClef')).to.equal('une valeur');
+    expect(referentiel.descriptionDelaiAvantImpactCritique('uneClef')).to.equal(
+      'une valeur'
+    );
   });
 
   it("reste robuste quand le délai avant impact critique n'est pas dans le référentiel", () => {
     const referentiel = Referentiel.creeReferentielVide();
 
-    expect(referentiel.descriptionDelaiAvantImpactCritique('uneClef')).to.equal(undefined);
+    expect(referentiel.descriptionDelaiAvantImpactCritique('uneClef')).to.equal(
+      undefined
+    );
   });
 
   describe('sur demande de la liste des mesures', () => {
@@ -194,19 +238,26 @@ describe('Le référentiel', () => {
 
     it('retourne toujours la même liste', () => {
       const referentiel = Referentiel.creeReferentiel({
-        mesures: { idMesure: { attributModifiable: 'Une valeur de référence' } },
+        mesures: {
+          idMesure: { attributModifiable: 'Une valeur de référence' },
+        },
       });
 
       const mesure = referentiel.mesure('idMesure');
       mesure.attributModifiable = 'Une valeur modifiée';
 
-      expect(referentiel.mesures()).to.eql({ idMesure: { attributModifiable: 'Une valeur de référence' } });
+      expect(referentiel.mesures()).to.eql({
+        idMesure: { attributModifiable: 'Une valeur de référence' },
+      });
     });
   });
 
   it('sait si une mesure est indispensable', () => {
     const referentiel = Referentiel.creeReferentiel({
-      mesures: { mesureIndispensable: { indispensable: true }, mesureRecommandee: {} },
+      mesures: {
+        mesureIndispensable: { indispensable: true },
+        mesureRecommandee: {},
+      },
     });
 
     expect(referentiel.mesureIndispensable('mesureIndispensable')).to.be(true);
@@ -234,7 +285,9 @@ describe('Le référentiel', () => {
       categoriesMesures: { uneCategorie: 'une description' },
     });
 
-    expect(referentiel.descriptionCategorie('uneCategorie')).to.equal('une description');
+    expect(referentiel.descriptionCategorie('uneCategorie')).to.equal(
+      'une description'
+    );
   });
 
   it('sait décrire les statuts des mesures', () => {
@@ -242,11 +295,15 @@ describe('Le référentiel', () => {
       statutsMesures: { unStatut: 'Un statut' },
     });
 
-    expect(referentiel.descriptionStatutMesure('unStatut')).to.equal('Un statut');
+    expect(referentiel.descriptionStatutMesure('unStatut')).to.equal(
+      'Un statut'
+    );
   });
 
   it('connaît la liste des risques', () => {
-    const referentiel = Referentiel.creeReferentiel({ risques: { uneClef: 'une valeur' } });
+    const referentiel = Referentiel.creeReferentiel({
+      risques: { uneClef: 'une valeur' },
+    });
     expect(referentiel.risques()).to.eql({ uneClef: 'une valeur' });
   });
 
@@ -255,7 +312,10 @@ describe('Le référentiel', () => {
       risques: { unRisque: {}, unAutreRisque: {} },
     });
 
-    expect(referentiel.identifiantsRisques()).to.eql(['unRisque', 'unAutreRisque']);
+    expect(referentiel.identifiantsRisques()).to.eql([
+      'unRisque',
+      'unAutreRisque',
+    ]);
   });
 
   it("sait retrouver la définition d'un risque répertorié", () => {
@@ -271,7 +331,10 @@ describe('Le référentiel', () => {
       mesures: { uneMesure: {}, uneAutreMesure: {} },
     });
 
-    expect(referentiel.identifiantsMesures()).to.eql(['uneMesure', 'uneAutreMesure']);
+    expect(referentiel.identifiantsMesures()).to.eql([
+      'uneMesure',
+      'uneAutreMesure',
+    ]);
   });
 
   it('connaît la liste des localisations de données', () => {
@@ -279,7 +342,9 @@ describe('Le référentiel', () => {
       localisationsDonnees: { uneClef: 'une valeur' },
     });
 
-    expect(referentiel.localisationsDonnees()).to.eql({ uneClef: 'une valeur' });
+    expect(referentiel.localisationsDonnees()).to.eql({
+      uneClef: 'une valeur',
+    });
   });
 
   it('connaît la liste des identifiants des localisations de données', () => {
@@ -287,28 +352,39 @@ describe('Le référentiel', () => {
       localisationsDonnees: { uneLocalisation: {}, uneAutreLocalisation: {} },
     });
 
-    expect(referentiel.identifiantsLocalisationsDonnees()).to.eql(
-      ['uneLocalisation', 'uneAutreLocalisation']
-    );
+    expect(referentiel.identifiantsLocalisationsDonnees()).to.eql([
+      'uneLocalisation',
+      'uneAutreLocalisation',
+    ]);
   });
 
   it("connaît les statuts des avis de dossier d'homologation", () => {
     const referentiel = Referentiel.creeReferentiel({
-      statutsAvisDossierHomologation: { favorable: { description: 'Favorable' }, defavorable: { description: 'Défavorable' } },
+      statutsAvisDossierHomologation: {
+        favorable: { description: 'Favorable' },
+        defavorable: { description: 'Défavorable' },
+      },
     });
 
-    expect(referentiel.statutsAvisDossierHomologation()).to.eql(
-      { favorable: { description: 'Favorable' }, defavorable: { description: 'Défavorable' } }
-    );
+    expect(referentiel.statutsAvisDossierHomologation()).to.eql({
+      favorable: { description: 'Favorable' },
+      defavorable: { description: 'Défavorable' },
+    });
   });
 
   it("sait si un identifiant fait partie de la liste des statuts d'avis de dossier d'homologation", () => {
     const referentiel = Referentiel.creeReferentiel({
-      statutsAvisDossierHomologation: { favorable: { } },
+      statutsAvisDossierHomologation: { favorable: {} },
     });
 
-    expect(referentiel.estIdentifiantStatutAvisDossierHomologationConnu('favorable')).to.be(true);
-    expect(referentiel.estIdentifiantStatutAvisDossierHomologationConnu('unStatutInconnu')).to.be(false);
+    expect(
+      referentiel.estIdentifiantStatutAvisDossierHomologationConnu('favorable')
+    ).to.be(true);
+    expect(
+      referentiel.estIdentifiantStatutAvisDossierHomologationConnu(
+        'unStatutInconnu'
+      )
+    ).to.be(false);
   });
 
   it('connaît la liste des échéances de renouvellement', () => {
@@ -316,7 +392,9 @@ describe('Le référentiel', () => {
       echeancesRenouvellement: { uneClef: 'une valeur' },
     });
 
-    expect(referentiel.echeancesRenouvellement()).to.eql({ uneClef: 'une valeur' });
+    expect(referentiel.echeancesRenouvellement()).to.eql({
+      uneClef: 'une valeur',
+    });
   });
 
   it('connaît la liste des identifiants de chaque échéance de renouvellement', () => {
@@ -324,7 +402,10 @@ describe('Le référentiel', () => {
       echeancesRenouvellement: { uneEch: {}, uneAutreEch: {} },
     });
 
-    expect(referentiel.identifiantsEcheancesRenouvellement()).to.eql(['uneEch', 'uneAutreEch']);
+    expect(referentiel.identifiantsEcheancesRenouvellement()).to.eql([
+      'uneEch',
+      'uneAutreEch',
+    ]);
   });
 
   it('sait si un identifiant fait partie de la liste des échéances de renouvellement', () => {
@@ -332,20 +413,30 @@ describe('Le référentiel', () => {
       echeancesRenouvellement: { uneEch: {} },
     });
 
-    expect(referentiel.estIdentifiantEcheanceRenouvellementConnu('uneEch')).to.be(true);
-    expect(referentiel.estIdentifiantEcheanceRenouvellementConnu('uneInconnue')).to.be(false);
+    expect(
+      referentiel.estIdentifiantEcheanceRenouvellementConnu('uneEch')
+    ).to.be(true);
+    expect(
+      referentiel.estIdentifiantEcheanceRenouvellementConnu('uneInconnue')
+    ).to.be(false);
   });
 
   it("sait décrire l'échéance de l'homologation", () => {
     const referentiel = Referentiel.creeReferentiel({
-      echeancesRenouvellement: { uneEcheance: { expiration: 'description expiration' } },
+      echeancesRenouvellement: {
+        uneEcheance: { expiration: 'description expiration' },
+      },
     });
 
-    expect(referentiel.descriptionExpiration('uneEcheance')).to.equal('description expiration');
+    expect(referentiel.descriptionExpiration('uneEcheance')).to.equal(
+      'description expiration'
+    );
   });
 
   it('connaît la liste des seuils de criticité', () => {
-    const referentiel = Referentiel.creeReferentiel({ seuilsCriticites: ['fort', 'faible'] });
+    const referentiel = Referentiel.creeReferentiel({
+      seuilsCriticites: ['fort', 'faible'],
+    });
     expect(referentiel.seuilsCriticites()).to.eql(['fort', 'faible']);
   });
 
@@ -353,7 +444,9 @@ describe('Le référentiel', () => {
     const referentiel = Referentiel.creeReferentiel({
       fonctionnalites: { idFonctionnalite: { seuilCriticite: 'unSeuil' } },
     });
-    expect(referentiel.criticiteFonctionnalite('idFonctionnalite')).to.equal('unSeuil');
+    expect(referentiel.criticiteFonctionnalite('idFonctionnalite')).to.equal(
+      'unSeuil'
+    );
   });
 
   it('connaît le seuil de criticité des données conservées par le service', () => {
@@ -387,7 +480,9 @@ describe('Le référentiel', () => {
         },
       });
 
-      expect(referentiel.criticite(['fFaible', 'fMoyen'], [], undefined)).to.equal('moyen');
+      expect(
+        referentiel.criticite(['fFaible', 'fMoyen'], [], undefined)
+      ).to.equal('moyen');
     });
 
     it('tient compte du seuil de criticité max pour les données sauvegardées', () => {
@@ -399,7 +494,9 @@ describe('Le référentiel', () => {
         },
       });
 
-      expect(referentiel.criticite([], ['dFaible', 'dEleve'], undefined)).to.equal('eleve');
+      expect(
+        referentiel.criticite([], ['dFaible', 'dEleve'], undefined)
+      ).to.equal('eleve');
     });
 
     it('tient compte du seuil de criticité du délai avant impact', () => {
@@ -410,18 +507,24 @@ describe('Le référentiel', () => {
         delaisAvantImpactCritique: { dEleve: { seuilCriticite: 'eleve' } },
       });
 
-      expect(referentiel.criticite(['fMoyen'], ['dFaible'], 'dEleve')).to.equal('eleve');
+      expect(referentiel.criticite(['fMoyen'], ['dFaible'], 'dEleve')).to.equal(
+        'eleve'
+      );
     });
   });
 
   it("donne une valeur par défaut pour l'échéance d'homologation", () => {
     const referentiel = Referentiel.creeReferentielVide();
-    expect(referentiel.descriptionExpiration()).to.equal('Information non renseignée');
+    expect(referentiel.descriptionExpiration()).to.equal(
+      'Information non renseignée'
+    );
   });
 
   it('connait les niveaux de gravité des risques', () => {
     const referentiel = Referentiel.creeReferentiel({
-      niveauxGravite: { unNiveau: { position: 0, description: 'Une description' } },
+      niveauxGravite: {
+        unNiveau: { position: 0, description: 'Une description' },
+      },
     });
 
     expect(referentiel.niveauxGravite()).to.eql({
@@ -434,13 +537,19 @@ describe('Le référentiel', () => {
       niveauxGravite: { unNiveau: {}, unAutreNiveau: {} },
     });
 
-    expect(referentiel.identifiantsNiveauxGravite()).to.eql(['unNiveau', 'unAutreNiveau']);
+    expect(referentiel.identifiantsNiveauxGravite()).to.eql([
+      'unNiveau',
+      'unAutreNiveau',
+    ]);
   });
 
   describe('sur demande des infos sur les niveaux de gravité des risques', () => {
     it('retourne les informations', () => {
       const referentiel = Referentiel.creeReferentiel({
-        niveauxGravite: { niveauUn: { position: 0 }, niveauDeux: { position: 1 } },
+        niveauxGravite: {
+          niveauUn: { position: 0 },
+          niveauDeux: { position: 1 },
+        },
       });
 
       expect(referentiel.infosNiveauxGravite()).to.eql([
@@ -451,7 +560,10 @@ describe('Le référentiel', () => {
 
     it("sait retourner les informations dans l'ordre inverse", () => {
       const referentiel = Referentiel.creeReferentiel({
-        niveauxGravite: { niveauUn: { position: 0 }, niveauDeux: { position: 1 } },
+        niveauxGravite: {
+          niveauUn: { position: 0 },
+          niveauDeux: { position: 1 },
+        },
       });
 
       expect(referentiel.infosNiveauxGravite(true)).to.eql([
@@ -471,7 +583,9 @@ describe('Le référentiel', () => {
         },
       });
 
-      const positions = referentiel.infosNiveauxGraviteConcernes(true).map((info) => info.position);
+      const positions = referentiel
+        .infosNiveauxGraviteConcernes(true)
+        .map((info) => info.position);
 
       expect(positions).to.eql([2, 1]);
     });
@@ -485,7 +599,8 @@ describe('Le référentiel', () => {
         },
       });
 
-      const identifiants = referentiel.infosNiveauxGraviteConcernes()
+      const identifiants = referentiel
+        .infosNiveauxGraviteConcernes()
         .map((info) => info.identifiant);
       expect(identifiants).to.eql(['niveauUn', 'niveauDeux', 'niveauTrois']);
     });
@@ -494,7 +609,8 @@ describe('Le référentiel', () => {
   it("connaît l'action de saisie suivante d'une action de saisie donnée", () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: {
-        uneAction: { position: 0 }, actionSuivante: { position: 1 },
+        uneAction: { position: 0 },
+        actionSuivante: { position: 1 },
       },
     });
 
@@ -537,9 +653,7 @@ describe('Le référentiel', () => {
 
   it('sait si un code de département est dans la liste des codes des départements', () => {
     const referentiel = Referentiel.creeReferentiel({
-      departements: [
-        { nom: 'Ain', code: '01' },
-      ],
+      departements: [{ nom: 'Ain', code: '01' }],
     });
 
     expect(referentiel.estCodeDepartement('01')).to.eql(true);
@@ -592,7 +706,10 @@ describe('Le référentiel', () => {
   describe("sur demande de l'ID d'une « étape suivante » du parcours Homologation", () => {
     it("sait retrouver l'ID de l'étape suivant une étape donnée", () => {
       const referentiel = Referentiel.creeReferentiel({
-        etapesParcoursHomologation: [{ id: 'premiere', numero: 1 }, { id: 'deuxieme', numero: 2 }],
+        etapesParcoursHomologation: [
+          { id: 'premiere', numero: 1 },
+          { id: 'deuxieme', numero: 2 },
+        ],
       });
 
       expect(referentiel.idEtapeSuivante('premiere')).to.equal('deuxieme');
@@ -613,7 +730,9 @@ describe('Le référentiel', () => {
   describe("sur une demande de tranche de l'indice cyber", () => {
     it("récupère la tranche dans laquelle l'indice est compris", () => {
       const tranche = { borneInferieure: 0, borneSuperieure: 2 };
-      const referentiel = Referentiel.creeReferentiel({ tranchesIndicesCybers: [tranche] });
+      const referentiel = Referentiel.creeReferentiel({
+        tranchesIndicesCybers: [tranche],
+      });
 
       expect(referentiel.trancheIndiceCyber(1)).to.eql(tranche);
       expect(referentiel.trancheIndiceCyber(0)).to.eql(tranche);
@@ -622,22 +741,32 @@ describe('Le référentiel', () => {
     });
 
     it("récupère la tranche dans laquelle l'indice est égale à la borne supérieure quand elle est inclue", () => {
-      const tranche = { borneInferieure: 0, borneSuperieure: 2, borneSuperieureIncluse: true };
-      const referentiel = Referentiel.creeReferentiel({ tranchesIndicesCybers: [tranche] });
+      const tranche = {
+        borneInferieure: 0,
+        borneSuperieure: 2,
+        borneSuperieureIncluse: true,
+      };
+      const referentiel = Referentiel.creeReferentiel({
+        tranchesIndicesCybers: [tranche],
+      });
 
       expect(referentiel.trancheIndiceCyber(2)).to.eql(tranche);
     });
 
     it("reste robuste quand il n'y a pas d'indice", () => {
       const tranche = { borneInferieure: 0, borneSuperieure: 2 };
-      const referentiel = Referentiel.creeReferentiel({ tranchesIndicesCybers: [tranche] });
+      const referentiel = Referentiel.creeReferentiel({
+        tranchesIndicesCybers: [tranche],
+      });
 
       expect(referentiel.trancheIndiceCyber()).to.eql({});
     });
 
     it("reste robuste quand l'indice n'est pas dans une tranche", () => {
       const tranche = { borneInferieure: 0, borneSuperieure: 2 };
-      const referentiel = Referentiel.creeReferentiel({ tranchesIndicesCybers: [tranche] });
+      const referentiel = Referentiel.creeReferentiel({
+        tranchesIndicesCybers: [tranche],
+      });
 
       expect(referentiel.trancheIndiceCyber(6)).to.eql({});
     });

@@ -11,20 +11,31 @@ describe('Un risque', () => {
       done('La création du risque aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.a(ErreurNiveauGraviteInconnu);
-      expect(e.message).to.equal("Le niveau de gravité \"niveauInconnu\" n'est pas répertorié");
+      expect(e.message).to.equal(
+        'Le niveau de gravité "niveauInconnu" n\'est pas répertorié'
+      );
       done();
     }
   });
 
   it('connaît son importance', () => {
     const referentiel = Referentiel.creeReferentiel({
-      niveauxGravite: { negligeable: { important: false }, significatif: { important: true } },
+      niveauxGravite: {
+        negligeable: { important: false },
+        significatif: { important: true },
+      },
     });
 
-    const risqueNegligeable = new Risque({ niveauGravite: 'negligeable' }, referentiel);
+    const risqueNegligeable = new Risque(
+      { niveauGravite: 'negligeable' },
+      referentiel
+    );
     expect(risqueNegligeable.important()).to.be(false);
 
-    const risqueSignificatif = new Risque({ niveauGravite: 'significatif' }, referentiel);
+    const risqueSignificatif = new Risque(
+      { niveauGravite: 'significatif' },
+      referentiel
+    );
     expect(risqueSignificatif.important()).to.be(true);
   });
 
@@ -40,8 +51,14 @@ describe('Un risque', () => {
     const referentiel = Referentiel.creeReferentiel({
       niveauxGravite: { unNiveau: { description: 'Une description' } },
     });
-    const risque = new Risque({ niveauGravite: 'unNiveau', commentaire: 'Un commentaire' }, referentiel);
+    const risque = new Risque(
+      { niveauGravite: 'unNiveau', commentaire: 'Un commentaire' },
+      referentiel
+    );
 
-    expect(risque.toJSON()).to.eql({ commentaire: 'Un commentaire', niveauGravite: 'unNiveau' });
+    expect(risque.toJSON()).to.eql({
+      commentaire: 'Un commentaire',
+      niveauGravite: 'unNiveau',
+    });
   });
 });

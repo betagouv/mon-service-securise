@@ -46,7 +46,9 @@ describe('Un événement de nouveau service créé', () => {
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(Error("L'instanciation de l'événement aurait dû lever une exception"));
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurIdentifiantUtilisateurManquant);
       done();
@@ -59,7 +61,9 @@ describe('Un événement de nouveau service créé', () => {
         { idUtilisateur: 'DEF' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
-      done(Error("L'instanciation de l'événement aurait dû lever une exception"));
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurIdentifiantServiceManquant);
       done();

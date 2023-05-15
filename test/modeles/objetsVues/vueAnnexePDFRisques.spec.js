@@ -30,12 +30,15 @@ describe("L'objet de vue des descriptions des risques", () => {
     risques: { unRisque: { description: 'Une description' } },
   };
 
-  const homologation = new Homologation({
-    id: '123',
-    idUtilisateur: '456',
-    descriptionService: { nomService: 'Nom Service' },
-    risquesGeneraux: [{ id: 'unRisque', niveauGravite: 'grave' }],
-  }, Referentiel.creeReferentiel(donneesReferentiel));
+  const homologation = new Homologation(
+    {
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'Nom Service' },
+      risquesGeneraux: [{ id: 'unRisque', niveauGravite: 'grave' }],
+    },
+    Referentiel.creeReferentiel(donneesReferentiel)
+  );
 
   describe('avec des informations de niveaux de gravité dans le référentiel', () => {
     let referentiel;
@@ -45,26 +48,42 @@ describe("L'objet de vue des descriptions des risques", () => {
     });
 
     it('utilise les informations du référentiel', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(homologation, referentiel);
+      const vueAnnexePDFRisques = new VueAnnexePDFRisques(
+        homologation,
+        referentiel
+      );
 
       const donnees = vueAnnexePDFRisques.donnees();
 
       expect(donnees).to.have.key('niveauxGravite');
-      const niveauCritique = donnees.niveauxGravite.find((niveau) => niveau.identifiant === 'critique');
-      expect(niveauCritique).to.eql({ identifiant: 'critique', ...donneesReferentiel.niveauxGravite.critique });
+      const niveauCritique = donnees.niveauxGravite.find(
+        (niveau) => niveau.identifiant === 'critique'
+      );
+      expect(niveauCritique).to.eql({
+        identifiant: 'critique',
+        ...donneesReferentiel.niveauxGravite.critique,
+      });
     });
 
     it('ignore le niveau de gravité non concerné', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(homologation, referentiel);
+      const vueAnnexePDFRisques = new VueAnnexePDFRisques(
+        homologation,
+        referentiel
+      );
 
       const { niveauxGravite } = vueAnnexePDFRisques.donnees();
 
       expect(niveauxGravite.length).to.equal(2);
-      expect(niveauxGravite.map((niveaux) => niveaux.description)).to.not.contain('Non concerné');
+      expect(
+        niveauxGravite.map((niveaux) => niveaux.description)
+      ).to.not.contain('Non concerné');
     });
 
     it('trie les niveaux de gravité par position décroissante', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(homologation, referentiel);
+      const vueAnnexePDFRisques = new VueAnnexePDFRisques(
+        homologation,
+        referentiel
+      );
 
       const { niveauxGravite } = vueAnnexePDFRisques.donnees();
 
@@ -91,6 +110,8 @@ describe("L'objet de vue des descriptions des risques", () => {
     expect(donnees).to.have.key('risquesParNiveauGravite');
     expect(donnees.risquesParNiveauGravite).to.have.key('grave');
     expect(donnees.risquesParNiveauGravite.grave.length).to.equal(1);
-    expect(donnees.risquesParNiveauGravite.grave[0].description).to.equal('Une description');
+    expect(donnees.risquesParNiveauGravite.grave[0].description).to.equal(
+      'Une description'
+    );
   });
 });

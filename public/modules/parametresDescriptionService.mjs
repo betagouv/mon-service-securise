@@ -1,5 +1,7 @@
 import listesAvecItemsExtraits from './listesAvecItemsExtraits.mjs';
-import parametres, { modifieParametresAvecItemsExtraits } from './parametres.mjs';
+import parametres, {
+  modifieParametresAvecItemsExtraits,
+} from './parametres.mjs';
 import convertisReponseOuiNon from './convertisReponseOuiNon.mjs';
 
 const extraisParametresDescriptionService = (selecteurFormulaire) => {
@@ -9,10 +11,8 @@ const extraisParametresDescriptionService = (selecteurFormulaire) => {
     params.risqueJuridiqueFinancierReputationnel
   );
 
-  listesAvecItemsExtraits.forEach(
-    ({ cle, sourceRegExpParamsItem }) => (
-      modifieParametresAvecItemsExtraits(params, cle, sourceRegExpParamsItem)
-    )
+  listesAvecItemsExtraits.forEach(({ cle, sourceRegExpParamsItem }) =>
+    modifieParametresAvecItemsExtraits(params, cle, sourceRegExpParamsItem)
   );
 
   if (params.organisationsResponsables) {

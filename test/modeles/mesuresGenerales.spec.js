@@ -8,12 +8,15 @@ const { A_SAISIR, COMPLETES, A_COMPLETER } = MesuresGenerales;
 describe('La liste des mesures générales', () => {
   let referentiel;
 
-  beforeEach(() => (referentiel = {
-    identifiantsCategoriesMesures: () => [],
-    identifiantsMesures: () => [],
-    mesures: () => ({}),
-    mesure: () => ({}),
-  }));
+  beforeEach(
+    () =>
+      (referentiel = {
+        identifiantsCategoriesMesures: () => [],
+        identifiantsMesures: () => [],
+        mesures: () => ({}),
+        mesure: () => ({}),
+      })
+  );
 
   it("est à saisir quand rien n'est saisi", () => {
     const donnees = { mesuresGenerales: [] };
@@ -41,9 +44,8 @@ describe('La liste des mesures générales', () => {
   });
 
   describe('sur demande de statistiques sur les mesures', () => {
-    const creeMesuresGenerales = (donneesMesures) => (
-      new MesuresGenerales({ mesuresGenerales: donneesMesures }, referentiel)
-    );
+    const creeMesuresGenerales = (donneesMesures) =>
+      new MesuresGenerales({ mesuresGenerales: donneesMesures }, referentiel);
 
     beforeEach(() => {
       referentiel.identifiantsCategoriesMesures = () => ['une', 'deux'];
@@ -52,7 +54,8 @@ describe('La liste des mesures générales', () => {
         id2: { categorie: 'une' },
         id3: { categorie: 'deux' },
       });
-      referentiel.identifiantsMesures = () => Object.keys(referentiel.mesures());
+      referentiel.identifiantsMesures = () =>
+        Object.keys(referentiel.mesures());
       referentiel.mesure = (identifiant) => referentiel.mesures()[identifiant];
     });
 
@@ -62,15 +65,21 @@ describe('La liste des mesures générales', () => {
         { id: 'id2', statut: 'fait' },
       ]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {}, id3: {} })
+        .toJSON();
       expect(stats.une.retenues).to.equal(2);
       expect(stats.une.misesEnOeuvre).to.equal(2);
     });
 
     it('initialise les catégories sans mesure renseignée', () => {
-      const mesuresGenerales = creeMesuresGenerales([{ id: 'id1', statut: 'fait' }]);
+      const mesuresGenerales = creeMesuresGenerales([
+        { id: 'id1', statut: 'fait' },
+      ]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {}, id3: {} })
+        .toJSON();
       expect(stats.deux.retenues).to.equal(0);
       expect(stats.deux.misesEnOeuvre).to.equal(0);
     });
@@ -81,7 +90,9 @@ describe('La liste des mesures générales', () => {
         { id: 'id2', statut: 'enCours' },
       ]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {}, id3: {} })
+        .toJSON();
       expect(stats.une.retenues).to.equal(2);
       expect(stats.une.misesEnOeuvre).to.equal(1);
     });
@@ -89,7 +100,9 @@ describe('La liste des mesures générales', () => {
     it('calcule le nombre total de mesures indispensables personnalisées', () => {
       const mesuresGenerales = creeMesuresGenerales([]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {}, id3: {} })
+        .toJSON();
       expect(stats.une.indispensables.total).to.equal(1);
       expect(stats.deux.indispensables.total).to.equal(0);
     });
@@ -97,53 +110,75 @@ describe('La liste des mesures générales', () => {
     it('tient compte des mesures rendues indispensables', () => {
       const mesuresGenerales = creeMesuresGenerales([]);
 
-      const stats = mesuresGenerales.statistiques({ id2: { indispensable: true } }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id2: { indispensable: true } })
+        .toJSON();
       expect(stats.une.indispensables.total).to.equal(1);
     });
 
     it('ignore les mesures indispensables non personnalisées', () => {
       const mesuresGenerales = creeMesuresGenerales([]);
 
-      const stats = mesuresGenerales.statistiques({ id2: {}, id3: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id2: {}, id3: {} })
+        .toJSON();
       expect(stats.une.indispensables.total).to.equal(0);
     });
 
     it('calcule le nombre total de mesures recommandées personnalisées', () => {
       const mesuresGenerales = creeMesuresGenerales([]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {}, id3: {} })
+        .toJSON();
       expect(stats.une.recommandees.total).to.equal(1);
       expect(stats.deux.recommandees.total).to.equal(1);
     });
 
     it('calcule le nombre de mesures indispensables faites', () => {
-      const mesuresGenerales = creeMesuresGenerales([{ id: 'id1', statut: 'fait' }]);
+      const mesuresGenerales = creeMesuresGenerales([
+        { id: 'id1', statut: 'fait' },
+      ]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {} })
+        .toJSON();
       expect(stats.une.indispensables.fait).to.equal(1);
       expect(stats.deux.indispensables.fait).to.equal(0);
     });
 
     it('calcule le nombre de mesures indispensables en cours', () => {
-      const mesuresGenerales = creeMesuresGenerales([{ id: 'id1', statut: 'enCours' }]);
+      const mesuresGenerales = creeMesuresGenerales([
+        { id: 'id1', statut: 'enCours' },
+      ]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {} })
+        .toJSON();
       expect(stats.une.indispensables.enCours).to.equal(1);
       expect(stats.deux.indispensables.enCours).to.equal(0);
     });
 
     it('calcule le nombre de mesures indispensables non faites', () => {
-      const mesuresGenerales = creeMesuresGenerales([{ id: 'id1', statut: 'nonFait' }]);
+      const mesuresGenerales = creeMesuresGenerales([
+        { id: 'id1', statut: 'nonFait' },
+      ]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {} })
+        .toJSON();
       expect(stats.une.indispensables.nonFait).to.equal(1);
       expect(stats.deux.indispensables.nonFait).to.equal(0);
     });
 
     it('calcule le nombre de mesures recommandées faites', () => {
-      const mesuresGenerales = creeMesuresGenerales([{ id: 'id3', statut: 'fait' }]);
+      const mesuresGenerales = creeMesuresGenerales([
+        { id: 'id3', statut: 'fait' },
+      ]);
 
-      const stats = mesuresGenerales.statistiques({ id1: {}, id2: {}, id3: {} }).toJSON();
+      const stats = mesuresGenerales
+        .statistiques({ id1: {}, id2: {}, id3: {} })
+        .toJSON();
       expect(stats.une.recommandees.fait).to.equal(0);
       expect(stats.deux.recommandees.fait).to.equal(1);
     });
@@ -173,54 +208,92 @@ describe('La liste des mesures générales', () => {
     });
 
     it('regroupe par statut les mesures', () => {
-      const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
+      const mesures = new MesuresGenerales(
+        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
+        referentiel
+      );
 
       expect(mesures.parStatutEtCategorie().fait).to.be.ok();
     });
 
     it('regroupe par catégorie les mesures', () => {
-      const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
+      const mesures = new MesuresGenerales(
+        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
+        referentiel
+      );
 
       expect(mesures.parStatutEtCategorie().fait.categorie1.length).to.equal(1);
     });
 
     it("ajoute l'importance de la mesure", () => {
-      const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
+      const mesures = new MesuresGenerales(
+        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
+        referentiel
+      );
 
-      expect(mesures.parStatutEtCategorie().fait.categorie1[0].indispensable).to.be(true);
+      expect(
+        mesures.parStatutEtCategorie().fait.categorie1[0].indispensable
+      ).to.be(true);
     });
 
     it('ajoute la description de la mesure', () => {
-      const mesures = new MesuresGenerales({ mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] }, referentiel);
+      const mesures = new MesuresGenerales(
+        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
+        referentiel
+      );
 
-      expect(mesures.parStatutEtCategorie().fait.categorie1[0].description).to.equal('Mesure une');
+      expect(
+        mesures.parStatutEtCategorie().fait.categorie1[0].description
+      ).to.equal('Mesure une');
     });
 
     it('ajoute les modalités de la mesure', () => {
-      const mesuresGenerales = [{ id: 'mesure1', statut: 'fait', modalites: 'Modalités de la mesure' }];
-      const mesures = new MesuresGenerales({ mesuresGenerales }, referentiel, ['mesure1']);
+      const mesuresGenerales = [
+        { id: 'mesure1', statut: 'fait', modalites: 'Modalités de la mesure' },
+      ];
+      const mesures = new MesuresGenerales({ mesuresGenerales }, referentiel, [
+        'mesure1',
+      ]);
 
-      expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).to.equal('Modalités de la mesure');
+      expect(
+        mesures.parStatutEtCategorie().fait.categorie1[0].modalites
+      ).to.equal('Modalités de la mesure');
     });
 
     it('ordonne les statuts comme attendu', () => {
-      const mesures = new MesuresGenerales({ mesuresGenerales: [
-        { id: 'mesure1', statut: 'fait' },
-        { id: 'mesure2', statut: 'nonFait' },
-        { id: 'mesure3', statut: 'enCours' },
-      ] }, referentiel);
+      const mesures = new MesuresGenerales(
+        {
+          mesuresGenerales: [
+            { id: 'mesure1', statut: 'fait' },
+            { id: 'mesure2', statut: 'nonFait' },
+            { id: 'mesure3', statut: 'enCours' },
+          ],
+        },
+        referentiel
+      );
 
-      expect(Object.keys(mesures.parStatutEtCategorie())).to.eql(['enCours', 'nonFait', 'fait']);
+      expect(Object.keys(mesures.parStatutEtCategorie())).to.eql([
+        'enCours',
+        'nonFait',
+        'fait',
+      ]);
     });
 
     it('retourne les mesures indispensables avant les mesures recommandées', () => {
-      const mesures = new MesuresGenerales({ mesuresGenerales: [
-        { id: 'mesure1', statut: 'fait' },
-        { id: 'mesure2', statut: 'fait' },
-        { id: 'mesure3', statut: 'fait' },
-      ] }, referentiel);
+      const mesures = new MesuresGenerales(
+        {
+          mesuresGenerales: [
+            { id: 'mesure1', statut: 'fait' },
+            { id: 'mesure2', statut: 'fait' },
+            { id: 'mesure3', statut: 'fait' },
+          ],
+        },
+        referentiel
+      );
 
-      expect(mesures.parStatutEtCategorie().fait.categorie1[2].description).to.equal('Mesure deux');
+      expect(
+        mesures.parStatutEtCategorie().fait.categorie1[2].description
+      ).to.equal('Mesure deux');
     });
   });
 });

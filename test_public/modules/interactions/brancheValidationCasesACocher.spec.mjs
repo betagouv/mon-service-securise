@@ -5,9 +5,10 @@ import { JSDOM } from 'jsdom';
 import brancheValidationCasesACocher from '../../../public/modules/interactions/brancheValidationCasesACocher.mjs';
 
 describe('Le branchement de la validation des cases à cocher', () => {
-  const validiteToutesCases = (selecteurGroupe) => (
-    $(`${selecteurGroupe} :checkbox`).get().every((caseACocher) => caseACocher.validity.valid)
-  );
+  const validiteToutesCases = (selecteurGroupe) =>
+    $(`${selecteurGroupe} :checkbox`)
+      .get()
+      .every((caseACocher) => caseACocher.validity.valid);
 
   const verifieToutesValides = (selecteurGroupe) => {
     expect(validiteToutesCases(selecteurGroupe)).to.be(true);

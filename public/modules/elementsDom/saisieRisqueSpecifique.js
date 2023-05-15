@@ -3,19 +3,19 @@ import {
   metsAJourAffichageNiveauGravite,
 } from '../interactions/saisieNiveauGravite.js';
 
-const $inputDescription = (index, description) => (
+const $inputDescription = (index, description) =>
   $(`
 <input id="description-risque-specifique-${index}"
      name="description-risque-specifique-${index}"
      placeholder="Description du risque"
      value="${description}">
-  `)
-);
+  `);
 
-const $disque = (niveau) => $(`<div class="disque" data-niveau="${niveau}"></div>`);
+const $disque = (niveau) =>
+  $(`<div class="disque" data-niveau="${niveau}"></div>`);
 
-const $curseur = (niveaux) => Object.keys(niveaux)
-  .reduce(
+const $curseur = (niveaux) =>
+  Object.keys(niveaux).reduce(
     ($acc, n) => $acc.append($disque(n)),
     $('<div class="curseur"></div>')
   );
@@ -46,27 +46,26 @@ const $saisieNiveauGravite = (index, niveauGravite, niveaux, couleurs) => {
   return $conteneurSaisie;
 };
 
-const $textareaCommentaire = (index, commentaire) => (
+const $textareaCommentaire = (index, commentaire) =>
   $(`
 <textarea id="commentaire-risque-specifique-${index}"
         name="commentaire-risque-specifique-${index}"
         placeholder="Commentaires additionnels (facultatifs)">${commentaire}</textarea>
-  `)
-);
+  `);
 
 const $saisieRisqueSpecifique = (index, niveaux, couleurs, donnees = {}) => {
   const { description = '', niveauGravite = '', commentaire = '' } = donnees;
 
-  const $conteneur = $('<div class="saisie-risque-specifique"><div class="synthese"></div></div>');
+  const $conteneur = $(
+    '<div class="saisie-risque-specifique"><div class="synthese"></div></div>'
+  );
 
   $('.synthese', $conteneur).append(
     $inputDescription(index, description),
-    $saisieNiveauGravite(index, niveauGravite, niveaux, couleurs),
+    $saisieNiveauGravite(index, niveauGravite, niveaux, couleurs)
   );
 
-  $conteneur.append(
-    $textareaCommentaire(index, commentaire),
-  );
+  $conteneur.append($textareaCommentaire(index, commentaire));
 
   return $conteneur;
 };

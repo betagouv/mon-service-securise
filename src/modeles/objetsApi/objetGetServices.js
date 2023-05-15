@@ -5,14 +5,16 @@ const STATUTS_HOMOLOGATION = {
 };
 
 const donnees = (services, idUtilisateur) => {
-  const servicesAvecIndiceCyber = services
-    .filter((s) => s.indiceCyber().total > 0);
+  const servicesAvecIndiceCyber = services.filter(
+    (s) => s.indiceCyber().total > 0
+  );
 
   return {
     services: services
       .map((s) => ({
         ...s.toJSON(),
-        organisationsResponsables: s.descriptionService.organisationsResponsables,
+        organisationsResponsables:
+          s.descriptionService.organisationsResponsables,
         indiceCyber: s.indiceCyber().total.toFixed(1),
         statutHomologation: s.dossiers.statutSaisie(),
         documentsPdfDisponibles: s.documentsPdfDisponibles(),
@@ -43,10 +45,13 @@ const donnees = (services, idUtilisateur) => {
       })),
     resume: {
       nombreServices: services.length,
-      nombreServicesHomologues: services.filter((s) => s.dossiers.statutSaisie() === 'completes').length,
-      indiceCyberMoyen: servicesAvecIndiceCyber
-        .map((s) => s.indiceCyber().total)
-        .reduce((a, b) => a + b, 0) / servicesAvecIndiceCyber.length,
+      nombreServicesHomologues: services.filter(
+        (s) => s.dossiers.statutSaisie() === 'completes'
+      ).length,
+      indiceCyberMoyen:
+        servicesAvecIndiceCyber
+          .map((s) => s.indiceCyber().total)
+          .reduce((a, b) => a + b, 0) / servicesAvecIndiceCyber.length,
     },
   };
 };

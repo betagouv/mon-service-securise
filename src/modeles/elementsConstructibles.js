@@ -5,7 +5,7 @@ class ElementsConstructibles extends ListeItems {
     super(
       (donneesItem) => new ClasseItem(donneesItem, referentiel),
       donnees,
-      referentiel,
+      referentiel
     );
   }
 }

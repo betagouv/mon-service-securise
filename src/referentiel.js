@@ -29,47 +29,56 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const actionsSaisie = () => donnees.actionsSaisie || {};
   const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
   const actionSaisie = (id) => actionsSaisie()[id] || {};
-  const statutsAvisDossierHomologation = () => donnees.statutsAvisDossierHomologation || {};
+  const statutsAvisDossierHomologation = () =>
+    donnees.statutsAvisDossierHomologation || {};
   const positionActionSaisie = (id) => actionSaisie(id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
-  const descriptionCategorie = (idCategorie) => categoriesMesures()[idCategorie];
+  const descriptionCategorie = (idCategorie) =>
+    categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
   const descriptionActionSaisie = (id) => actionSaisie(id).description;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement || [];
-  const estDocumentHomologation = (idDocument) => (
-    donnees.documentsHomologation[idDocument] !== undefined
-  );
-  const descriptionEcheanceRenouvellement = (id) => echeancesRenouvellement()[id]?.description;
+  const estDocumentHomologation = (idDocument) =>
+    donnees.documentsHomologation[idDocument] !== undefined;
+  const descriptionEcheanceRenouvellement = (id) =>
+    echeancesRenouvellement()[id]?.description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
-  const descriptionDelaiAvantImpactCritique = (id) => delaisAvantImpactCritique()[id]?.description;
+  const descriptionDelaiAvantImpactCritique = (id) =>
+    delaisAvantImpactCritique()[id]?.description;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
-  const descriptionDonneesCaracterePersonnel = (id) => donneesCaracterePersonnel()[id]?.description;
-  const descriptionsDonneesCaracterePersonnel = (ids) => ids
-    ?.map((id) => descriptionDonneesCaracterePersonnel(id))
-    .filter((id) => id !== undefined);
-  const etapesParcoursHomologation = () => donnees.etapesParcoursHomologation || [];
-  const identifiantsEcheancesRenouvellement = () => Object.keys(echeancesRenouvellement());
-  const estIdentifiantEcheanceRenouvellementConnu = (idEcheance) => (
-    identifiantsEcheancesRenouvellement().includes(idEcheance)
-  );
-  const identifiantsStatutAvisDossierHomologation = () => Object
-    .keys(statutsAvisDossierHomologation());
-  const estIdentifiantStatutAvisDossierHomologationConnu = (idStatut) => (
-    identifiantsStatutAvisDossierHomologation().includes(idStatut)
-  );
+  const descriptionDonneesCaracterePersonnel = (id) =>
+    donneesCaracterePersonnel()[id]?.description;
+  const descriptionsDonneesCaracterePersonnel = (ids) =>
+    ids
+      ?.map((id) => descriptionDonneesCaracterePersonnel(id))
+      .filter((id) => id !== undefined);
+  const etapesParcoursHomologation = () =>
+    donnees.etapesParcoursHomologation || [];
+  const identifiantsEcheancesRenouvellement = () =>
+    Object.keys(echeancesRenouvellement());
+  const estIdentifiantEcheanceRenouvellementConnu = (idEcheance) =>
+    identifiantsEcheancesRenouvellement().includes(idEcheance);
+  const identifiantsStatutAvisDossierHomologation = () =>
+    Object.keys(statutsAvisDossierHomologation());
+  const estIdentifiantStatutAvisDossierHomologationConnu = (idStatut) =>
+    identifiantsStatutAvisDossierHomologation().includes(idStatut);
   const fonctionnalites = () => donnees.fonctionnalites;
   const descriptionFonctionnalite = (id) => fonctionnalites()[id]?.description;
-  const descriptionsFonctionnalites = (ids) => ids
-    ?.map((id) => descriptionFonctionnalite(id))
-    .filter((id) => id !== undefined);
+  const descriptionsFonctionnalites = (ids) =>
+    ids
+      ?.map((id) => descriptionFonctionnalite(id))
+      .filter((id) => id !== undefined);
   const localisationsDonnees = () => donnees.localisationsDonnees;
-  const identifiantsLocalisationsDonnees = () => Object.keys(localisationsDonnees());
-  const mesureIndispensable = (idMesure) => !!donnees.mesures[idMesure].indispensable;
+  const identifiantsLocalisationsDonnees = () =>
+    Object.keys(localisationsDonnees());
+  const mesureIndispensable = (idMesure) =>
+    !!donnees.mesures[idMesure].indispensable;
   const mesures = () => JSON.parse(JSON.stringify(donnees.mesures));
   const identifiantsMesures = () => Object.keys(mesures());
   const mesure = (id) => mesures()[id];
   const typesService = () => donnees.typesService;
-  const nbMoisDecalage = (idEcheance) => echeancesRenouvellement()[idEcheance]?.nbMoisDecalage;
+  const nbMoisDecalage = (idEcheance) =>
+    echeancesRenouvellement()[idEcheance]?.nbMoisDecalage;
   const niveauxGravite = () => donnees.niveauxGravite || {};
   const niveauGravite = (idNiveau) => niveauxGravite()[idNiveau] || {};
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
@@ -83,49 +92,55 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const seuilsCriticites = () => donnees.seuilsCriticites;
   const sousTitreActionSaisie = (id) => actionSaisie(id)?.sousTitre;
   const statutsDeploiement = () => donnees.statutsDeploiement;
-  const descriptionStatutDeploiement = (idStatut) => statutsDeploiement()[idStatut]?.description;
-  const statutDeploiementValide = (id) => Object.keys(statutsDeploiement()).includes(id);
+  const descriptionStatutDeploiement = (idStatut) =>
+    statutsDeploiement()[idStatut]?.description;
+  const statutDeploiementValide = (id) =>
+    Object.keys(statutsDeploiement()).includes(id);
   const statutsMesures = () => donnees.statutsMesures;
   const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
   const departements = () => donneesReferentiel.departements || [];
-  const codeDepartements = () => donneesReferentiel
-    .departements?.map((departement) => departement.code);
+  const codeDepartements = () =>
+    donneesReferentiel.departements?.map((departement) => departement.code);
   const estCodeDepartement = (code) => codeDepartements().includes(code);
-  const departement = (code) => donneesReferentiel
-    .departements?.find((unDepartement) => unDepartement.code === code)?.nom;
+  const departement = (code) =>
+    donneesReferentiel.departements?.find(
+      (unDepartement) => unDepartement.code === code
+    )?.nom;
 
-  const coefficientIndiceCyberMesuresIndispensables = () => (
-    donnees.indiceCyber?.coefficientIndispensables || 0.5
-  );
+  const coefficientIndiceCyberMesuresIndispensables = () =>
+    donnees.indiceCyber?.coefficientIndispensables || 0.5;
 
-  const coefficientIndiceCyberMesuresRecommandees = () => (
-    donnees.indiceCyber?.coefficientRecommandees || 0.5
-  );
+  const coefficientIndiceCyberMesuresRecommandees = () =>
+    donnees.indiceCyber?.coefficientRecommandees || 0.5;
 
   const indiceCyberNoteMax = () => donnees.indiceCyber?.noteMax || 10;
 
-  const trancheIndiceCyber = (indiceCyber) => donnees.tranchesIndicesCybers.find((tranche) => (
-    indiceCyber >= tranche.borneInferieure && (
-      tranche.borneSuperieureIncluse
-        ? indiceCyber <= tranche.borneSuperieure
-        : indiceCyber < tranche.borneSuperieure
-    ))) || {};
+  const trancheIndiceCyber = (indiceCyber) =>
+    donnees.tranchesIndicesCybers.find(
+      (tranche) =>
+        indiceCyber >= tranche.borneInferieure &&
+        (tranche.borneSuperieureIncluse
+          ? indiceCyber <= tranche.borneSuperieure
+          : indiceCyber < tranche.borneSuperieure)
+    ) || {};
 
   const actionSuivante = (id) => {
     const position = positionActionSaisie(id);
-    return Object.keys(actionsSaisie())
-      .find((a) => positionActionSaisie(a) === position + 1);
+    return Object.keys(actionsSaisie()).find(
+      (a) => positionActionSaisie(a) === position + 1
+    );
   };
 
   const infosNiveauxGravite = (ordreInverse = false) => {
-    const niveaux = Object.keys(niveauxGravite())
-      .map((clef) => ({ identifiant: clef, ...niveauGravite(clef) }));
+    const niveaux = Object.keys(niveauxGravite()).map((clef) => ({
+      identifiant: clef,
+      ...niveauGravite(clef),
+    }));
     return ordreInverse ? niveaux.reverse() : niveaux;
   };
 
-  const infosNiveauxGraviteConcernes = (ordreInverse) => (
-    infosNiveauxGravite(ordreInverse).filter((niveau) => !niveau.nonConcerne)
-  );
+  const infosNiveauxGraviteConcernes = (ordreInverse) =>
+    infosNiveauxGravite(ordreInverse).filter((niveau) => !niveau.nonConcerne);
 
   const descriptionExpiration = (identifiant) => {
     if (!identifiant) return 'Information non renseignée';
@@ -150,17 +165,21 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return seuils[seuils.length - 1];
   };
 
-  const criticiteElement = (nomElement, idElement) => (
-    idElement ? donnees[nomElement][idElement].seuilCriticite : seuilCriticiteMin()
-  );
+  const criticiteElement = (nomElement, idElement) =>
+    idElement
+      ? donnees[nomElement][idElement].seuilCriticite
+      : seuilCriticiteMin();
 
-  const criticiteDelai = (...params) => criticiteElement('delaisAvantImpactCritique', ...params);
-  const criticiteDonnees = (...params) => criticiteElement('donneesCaracterePersonnel', ...params);
-  const criticiteFonctionnalite = (...params) => criticiteElement('fonctionnalites', ...params);
+  const criticiteDelai = (...params) =>
+    criticiteElement('delaisAvantImpactCritique', ...params);
+  const criticiteDonnees = (...params) =>
+    criticiteElement('donneesCaracterePersonnel', ...params);
+  const criticiteFonctionnalite = (...params) =>
+    criticiteElement('fonctionnalites', ...params);
 
   const criticiteMax = (...criticites) => {
     const seuils = seuilsCriticites();
-    const positionMin = Math.min(...(criticites.map((c) => seuils.indexOf(c))));
+    const positionMin = Math.min(...criticites.map((c) => seuils.indexOf(c)));
     return seuils[positionMin];
   };
 
@@ -169,39 +188,50 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     const seuilMin = seuilCriticiteMin();
 
     const criticiteMaxFonctionnalites = idsFonctionnalites.length
-      ? seuils.find((s) => idsFonctionnalites.find((id) => criticiteFonctionnalite(id) === s))
+      ? seuils.find((s) =>
+          idsFonctionnalites.find((id) => criticiteFonctionnalite(id) === s)
+        )
       : seuilMin;
 
     const criticiteMaxDonnees = idsDonnees.length
       ? seuils.find((s) => idsDonnees.find((d) => criticiteDonnees(d) === s))
       : seuilMin;
 
-    return criticiteMax(criticiteMaxFonctionnalites, criticiteMaxDonnees, criticiteDelai(idDelai));
+    return criticiteMax(
+      criticiteMaxFonctionnalites,
+      criticiteMaxDonnees,
+      criticiteDelai(idDelai)
+    );
   };
 
-  const premiereEtapeParcours = () => etapesParcoursHomologation().find((e) => e.numero === 1);
+  const premiereEtapeParcours = () =>
+    etapesParcoursHomologation().find((e) => e.numero === 1);
 
-  const derniereEtapeParcours = () => etapesParcoursHomologation()
-    .find((e) => e.numero === Math.max(
-      ...etapesParcoursHomologation().map(({ numero }) => numero)
-    ));
+  const derniereEtapeParcours = () =>
+    etapesParcoursHomologation().find(
+      (e) =>
+        e.numero ===
+        Math.max(...etapesParcoursHomologation().map(({ numero }) => numero))
+    );
 
-  const etapeExiste = (idEtape) => etapesParcoursHomologation()
-    .map((e) => e.id)
-    .includes(idEtape);
+  const etapeExiste = (idEtape) =>
+    etapesParcoursHomologation()
+      .map((e) => e.id)
+      .includes(idEtape);
 
-  const numeroEtape = (idEtape) => etapesParcoursHomologation()
-    .find((e) => e.id === idEtape)
-    ?.numero;
+  const numeroEtape = (idEtape) =>
+    etapesParcoursHomologation().find((e) => e.id === idEtape)?.numero;
 
   const idEtapeSuivante = (idEtape) => {
     const numeroSuivant = numeroEtape(idEtape) + 1;
-    return etapesParcoursHomologation().find((e) => e.numero === numeroSuivant).id;
+    return etapesParcoursHomologation().find((e) => e.numero === numeroSuivant)
+      .id;
   };
 
   const valideDonnees = () => {
-    const sommeCoefficients = coefficientIndiceCyberMesuresIndispensables()
-      + coefficientIndiceCyberMesuresRecommandees();
+    const sommeCoefficients =
+      coefficientIndiceCyberMesuresIndispensables() +
+      coefficientIndiceCyberMesuresRecommandees();
 
     if (sommeCoefficients !== 1) {
       throw new ErreurDonneesReferentielIncorrectes(

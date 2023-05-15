@@ -1,5 +1,5 @@
-const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) => knex('homologations')
-  .then((lignes) => {
+const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) =>
+  knex('homologations').then((lignes) => {
     const misesAJour = lignes
       .filter(contientDonneesCiblees)
       .map(({ id, donnees }) => {
@@ -11,24 +11,29 @@ const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) => knex('h
     return Promise.all(misesAJour);
   });
 
-const contientCaracteristiquesComplementaires = ({ donnees }) => (
-  donnees.caracteristiquesComplementaires
-);
+const contientCaracteristiquesComplementaires = ({ donnees }) =>
+  donnees.caracteristiquesComplementaires;
 
 const copieDansInformationsGenerales = (donnees) => {
-  donnees.informationsGenerales.localisationDonnees = (
-    donnees.caracteristiquesComplementaires.localisationDonnees
-  );
+  donnees.informationsGenerales.localisationDonnees =
+    donnees.caracteristiquesComplementaires.localisationDonnees;
   return donnees;
 };
 
-const contientInformationsGenerales = ({ donnees }) => donnees.informationsGenerales;
+const contientInformationsGenerales = ({ donnees }) =>
+  donnees.informationsGenerales;
 
 const supprimeDansInformationsGenerales = (donnees) => {
   delete donnees.informationsGenerales.localisationDonnees;
   return donnees;
 };
 
-exports.up = miseAJour(contientCaracteristiquesComplementaires, copieDansInformationsGenerales);
+exports.up = miseAJour(
+  contientCaracteristiquesComplementaires,
+  copieDansInformationsGenerales
+);
 
-exports.down = miseAJour(contientInformationsGenerales, supprimeDansInformationsGenerales);
+exports.down = miseAJour(
+  contientInformationsGenerales,
+  supprimeDansInformationsGenerales
+);

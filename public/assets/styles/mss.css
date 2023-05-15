@@ -9,7 +9,7 @@ body {
 
   min-width: 1200px;
 
-  font-family: "Marianne";
+  font-family: 'Marianne';
 
   display: flex;
   flex-direction: column;
@@ -64,7 +64,8 @@ section:last-of-type {
   display: none;
 }
 
-.zone-principale, .etroit {
+.zone-principale,
+.etroit {
   padding: 4em 7em 2em;
   border-radius: 5px;
   background: #fff;

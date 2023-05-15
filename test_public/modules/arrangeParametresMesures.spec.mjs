@@ -55,7 +55,9 @@ describe("Une demande d'arrangement des paramètres des mesures", () => {
 
     const { mesuresGenerales } = parametres;
     expect(mesuresGenerales).to.have.property('contactSecurite');
-    expect(mesuresGenerales.contactSecurite.modalites).to.equal('Des modalités');
+    expect(mesuresGenerales.contactSecurite.modalites).to.equal(
+      'Des modalités'
+    );
   });
 
   it("n'ajoute pas de paramètres vides dans les mesures", () => {

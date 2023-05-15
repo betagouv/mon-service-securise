@@ -26,8 +26,8 @@
 
   --pdf-bleu-clair: #e4efff;
 
-  --graphique-bleu-moyen:#75a1e8;
-  --graphique-bleu-fonce:#0a4c8c;
+  --graphique-bleu-moyen: #75a1e8;
+  --graphique-bleu-fonce: #0a4c8c;
 
   --vert-anssi: #4cb963;
   --jaune-anssi: #fcdf41;
@@ -43,10 +43,10 @@
   --or-indice-cyber: #d6aa23;
   --or-brillant-indice-cyber: #f4cd5e;
 
-  --statut-homologue: #0E972B;
-  --statut-homologue-arriere-plan: #B8F2C4;
+  --statut-homologue: #0e972b;
+  --statut-homologue-arriere-plan: #b8f2c4;
   --statut-non-homologue: var(--rose-anssi);
-  --statut-non-homologue-arriere-plan: #FFE5F8;
+  --statut-non-homologue-arriere-plan: #ffe5f8;
 
   /* https://www.systeme-de-design.gouv.fr */
   --systeme-design-etat-bleu: #000091;

@@ -1,10 +1,12 @@
-const metsAJourDonnees = (modificationDonnees) => (knex) => knex('homologations')
-  .then((lignes) => {
+const metsAJourDonnees = (modificationDonnees) => (knex) =>
+  knex('homologations').then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees }) => donnees.informationsGenerales)
       .map(({ id, donnees }) => {
         const donneesModifiees = modificationDonnees(donnees);
-        return knex('homologations').where({ id }).update({ donnees: donneesModifiees });
+        return knex('homologations')
+          .where({ id })
+          .update({ donnees: donneesModifiees });
       });
 
     return Promise.all(misesAJour);

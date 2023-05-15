@@ -3,7 +3,10 @@ const { ErreurCategorieInconnue } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 class MesureSpecifique extends Mesure {
-  constructor(donneesMesure = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    donneesMesure = {},
+    referentiel = Referentiel.creeReferentielVide()
+  ) {
     super({
       proprietesAtomiquesRequises: MesureSpecifique.proprietesObligatoires(),
       proprietesAtomiquesFacultatives: ['modalites'],
@@ -30,9 +33,12 @@ class MesureSpecifique extends Mesure {
   static valide({ categorie, statut }, referentiel) {
     super.valide({ statut });
 
-    const identifiantsCategoriesMesures = referentiel.identifiantsCategoriesMesures();
+    const identifiantsCategoriesMesures =
+      referentiel.identifiantsCategoriesMesures();
     if (categorie && !identifiantsCategoriesMesures.includes(categorie)) {
-      throw new ErreurCategorieInconnue(`La catégorie "${categorie}" n'est pas répertoriée`);
+      throw new ErreurCategorieInconnue(
+        `La catégorie "${categorie}" n'est pas répertoriée`
+      );
     }
   }
 }

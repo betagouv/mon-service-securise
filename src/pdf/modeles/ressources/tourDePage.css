@@ -27,7 +27,7 @@ html {
 
 .entete .sous-titre {
   font-size: 9px;
-  color: #5E5E5E;
+  color: #5e5e5e;
   font-weight: 500;
 }
 
@@ -49,12 +49,12 @@ html {
 }
 
 .piedpage .mss {
-  color: #08416A;
+  color: #08416a;
   font-weight: bold;
 }
 
 .piedpage .pagination {
-  display: flex
+  display: flex;
 }
 
 :is(.piedpage .pageNumber, .piedpage .totalPages) {

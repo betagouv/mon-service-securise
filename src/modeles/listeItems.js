@@ -19,7 +19,9 @@ class ListeItems extends InformationsHomologation {
   statutSaisie() {
     if (this.nombre() === 0) return InformationsHomologation.A_SAISIR;
 
-    return this.items.every((i) => i.statutSaisie() === InformationsHomologation.COMPLETES)
+    return this.items.every(
+      (i) => i.statutSaisie() === InformationsHomologation.COMPLETES
+    )
       ? InformationsHomologation.COMPLETES
       : InformationsHomologation.A_COMPLETER;
   }

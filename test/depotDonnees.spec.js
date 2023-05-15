@@ -29,7 +29,9 @@ describe('Le dépôt de données vide', () => {
 
   it("n'authentifie pas l'utilisateur", (done) => {
     depotVide()
-      .then((depot) => depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345'))
+      .then((depot) =>
+        depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
+      )
       .then((utilisateur) => expect(utilisateur).to.be(undefined))
       .then(() => done())
       .catch(done);

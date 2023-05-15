@@ -14,7 +14,8 @@
   gap: 2em;
 }
 
-.synthese .titre, .synthese input[name^=description-risque-specifique] {
+.synthese .titre,
+.synthese input[name^='description-risque-specifique'] {
   flex-basis: 67%;
 }
 
@@ -41,13 +42,13 @@
   width: 1em;
 
   border-radius: 50%;
-  border: solid .5px;
+  border: solid 0.5px;
   border-color: transparent;
   background: var(--liseres);
 }
 
 .disque.cercle {
-  border: solid .5px var(--bleu-anssi);
+  border: solid 0.5px var(--bleu-anssi);
 }
 
 .disque.blanc {

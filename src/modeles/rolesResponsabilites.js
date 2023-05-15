@@ -9,7 +9,9 @@ const descriptionRole = (nomPrenom, fonction) => {
     description.push(fonction ? `(${fonction})` : '(fonction non renseignée)');
   }
 
-  return description.length === 0 ? 'Information non renseignée' : description.join(' ');
+  return description.length === 0
+    ? 'Information non renseignée'
+    : description.join(' ');
 };
 
 class RolesResponsabilites extends InformationsHomologation {
@@ -37,13 +39,19 @@ class RolesResponsabilites extends InformationsHomologation {
   descriptionEquipePreparation() {
     const membresEquipe = [];
     if (this.piloteProjet) membresEquipe.push(this.descriptionPiloteProjet());
-    if (this.expertCybersecurite) membresEquipe.push(this.descriptionExpertCybersecurite());
+    if (this.expertCybersecurite)
+      membresEquipe.push(this.descriptionExpertCybersecurite());
 
-    return membresEquipe.length === 0 ? 'Information non renseignée' : membresEquipe.join(', ');
+    return membresEquipe.length === 0
+      ? 'Information non renseignée'
+      : membresEquipe.join(', ');
   }
 
   descriptionAutoriteHomologation() {
-    return descriptionRole(this.autoriteHomologation, this.fonctionAutoriteHomologation);
+    return descriptionRole(
+      this.autoriteHomologation,
+      this.fonctionAutoriteHomologation
+    );
   }
 
   descriptionPiloteProjet() {
@@ -51,17 +59,23 @@ class RolesResponsabilites extends InformationsHomologation {
   }
 
   descriptionExpertCybersecurite() {
-    return descriptionRole(this.expertCybersecurite, this.fonctionExpertCybersecurite);
+    return descriptionRole(
+      this.expertCybersecurite,
+      this.fonctionExpertCybersecurite
+    );
   }
 
   descriptionDelegueProtectionDonnees() {
     return descriptionRole(
-      this.delegueProtectionDonnees, this.fonctionDelegueProtectionDonnees
+      this.delegueProtectionDonnees,
+      this.fonctionDelegueProtectionDonnees
     );
   }
 
   descriptionHebergeur() {
-    return this.partiesPrenantes.hebergement()?.nom || 'Hébergeur non renseigné';
+    return (
+      this.partiesPrenantes.hebergement()?.nom || 'Hébergeur non renseigné'
+    );
   }
 
   descriptionStructureDeveloppement() {
@@ -70,19 +84,36 @@ class RolesResponsabilites extends InformationsHomologation {
 
   descriptionGouvernance() {
     const acteurDecrit = (role, description) => ({ role, description });
-    const description = (acteur) => acteur.nom + (acteur.fonction ? ` (${acteur.fonction})` : '');
-    const acteursSpecifiques = () => this.acteursHomologation.tous()
-      .map((acteur) => acteurDecrit(acteur.role, description(acteur)));
+    const description = (acteur) =>
+      acteur.nom + (acteur.fonction ? ` (${acteur.fonction})` : '');
+    const acteursSpecifiques = () =>
+      this.acteursHomologation
+        .tous()
+        .map((acteur) => acteurDecrit(acteur.role, description(acteur)));
 
     const acteurs = [
-      acteurDecrit("Autorité d'homologation", this.descriptionAutoriteHomologation()),
-      acteurDecrit('Spécialiste cybersécurité', this.descriptionExpertCybersecurite()),
-      acteurDecrit('Délégué(e) à la protection des données à caractère personnel', this.descriptionDelegueProtectionDonnees()),
-      acteurDecrit('Responsable métier du projet', this.descriptionPiloteProjet()),
+      acteurDecrit(
+        "Autorité d'homologation",
+        this.descriptionAutoriteHomologation()
+      ),
+      acteurDecrit(
+        'Spécialiste cybersécurité',
+        this.descriptionExpertCybersecurite()
+      ),
+      acteurDecrit(
+        'Délégué(e) à la protection des données à caractère personnel',
+        this.descriptionDelegueProtectionDonnees()
+      ),
+      acteurDecrit(
+        'Responsable métier du projet',
+        this.descriptionPiloteProjet()
+      ),
       ...acteursSpecifiques(),
     ];
 
-    return acteurs.filter((acteur) => acteur.description !== 'Information non renseignée');
+    return acteurs.filter(
+      (acteur) => acteur.description !== 'Information non renseignée'
+    );
   }
 }
 

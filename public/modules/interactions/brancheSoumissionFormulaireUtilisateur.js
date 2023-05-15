@@ -1,9 +1,14 @@
 import { brancheValidation, declencheValidation } from './validation.mjs';
 import convertisReponseOuiNon from '../convertisReponseOuiNon.mjs';
 
-const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => {
-  const reponseOuiNon = (nom) => convertisReponseOuiNon($(`input[name="${nom}"]:checked`).val());
-  const reponseAcceptee = (nom) => ($(`#${nom}:checked`).val() ? true : undefined);
+const brancheSoumissionFormulaireUtilisateur = (
+  selecteurFormulaire,
+  action
+) => {
+  const reponseOuiNon = (nom) =>
+    convertisReponseOuiNon($(`input[name="${nom}"]:checked`).val());
+  const reponseAcceptee = (nom) =>
+    $(`#${nom}:checked`).val() ? true : undefined;
 
   const obtentionDonnees = {
     prenom: () => $('#prenom').val(),
@@ -28,15 +33,13 @@ const brancheSoumissionFormulaireUtilisateur = (selecteurFormulaire, action) => 
   $(selecteurFormulaire).on('submit', (evenement) => {
     evenement.preventDefault();
 
-    const donnees = Object
-      .keys(obtentionDonnees)
-      .reduce((acc, clef) => {
-        const valeur = obtentionDonnees[clef]();
-        if (typeof valeur === 'undefined' || valeur === '') {
-          return acc;
-        }
-        return { ...acc, [clef]: obtentionDonnees[clef]() };
-      }, {});
+    const donnees = Object.keys(obtentionDonnees).reduce((acc, clef) => {
+      const valeur = obtentionDonnees[clef]();
+      if (typeof valeur === 'undefined' || valeur === '') {
+        return acc;
+      }
+      return { ...acc, [clef]: obtentionDonnees[clef]() };
+    }, {});
 
     action(donnees);
   });

@@ -57,7 +57,7 @@
   z-index: -1;
   margin: -1px;
   border-radius: inherit;
-  background: linear-gradient(#513AC8, #8C26C7);
+  background: linear-gradient(#513ac8, #8c26c7);
 }
 
 .bom .bom-modale .bandeau-titre {
@@ -135,7 +135,6 @@
 .bom .bom-modale .contenu li:hover::after {
   background-color: var(--bleu-survol);
 }
-
 
 .bom .bom-modale .contenu a:active {
   color: var(--bleu-anssi);

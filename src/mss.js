@@ -21,8 +21,8 @@ const creeServeur = (
   adaptateurAnnuaire,
   adaptateurCsv,
   adaptateurZip,
-  avecCookieSecurise = (process.env.NODE_ENV === 'production'),
-  avecPageErreur = (process.env.NODE_ENV === 'production'),
+  avecCookieSecurise = process.env.NODE_ENV === 'production',
+  avecPageErreur = process.env.NODE_ENV === 'production'
 ) => {
   let serveur;
 
@@ -33,13 +33,15 @@ const creeServeur = (
 
   app.use(express.json());
 
-  app.use(cookieSession({
-    maxAge: DUREE_SESSION,
-    name: 'token',
-    sameSite: true,
-    secret: process.env.SECRET_COOKIE,
-    secure: avecCookieSecurise,
-  }));
+  app.use(
+    cookieSession({
+      maxAge: DUREE_SESSION,
+      name: 'token',
+      sameSite: true,
+      secret: process.env.SECRET_COOKIE,
+      secure: avecCookieSecurise,
+    })
+  );
 
   app.use(middleware.positionneHeaders);
   app.use(middleware.repousseExpirationCookie);
@@ -70,11 +72,18 @@ const creeServeur = (
     reponse.render('connexion');
   });
 
-  app.get('/motDePasse/edition', middleware.verificationJWT, (requete, reponse) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
-    depotDonnees.utilisateur(idUtilisateur)
-      .then((utilisateur) => reponse.render('motDePasse/edition', { utilisateur }));
-  });
+  app.get(
+    '/motDePasse/edition',
+    middleware.verificationJWT,
+    (requete, reponse) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      depotDonnees
+        .utilisateur(idUtilisateur)
+        .then((utilisateur) =>
+          reponse.render('motDePasse/edition', { utilisateur })
+        );
+    }
+  );
 
   // Pour que les utilisateurs ayant cette page en favoris ne soient pas perdus.
   app.get('/questionsFrequentes', (_requete, reponse) => {
@@ -93,9 +102,13 @@ const creeServeur = (
     reponse.render('statistiques');
   });
 
-  app.get('/reinitialisationMotDePasse', middleware.suppressionCookie, (_requete, reponse) => {
-    reponse.render('reinitialisationMotDePasse');
-  });
+  app.get(
+    '/reinitialisationMotDePasse',
+    middleware.suppressionCookie,
+    (_requete, reponse) => {
+      reponse.render('reinitialisationMotDePasse');
+    }
+  );
 
   app.get('/inscription', (_requete, reponse) => {
     const departements = referentiel.departements();
@@ -106,49 +119,89 @@ const creeServeur = (
     reponse.render('activation');
   });
 
-  app.get('/initialisationMotDePasse/:idReset',
+  app.get(
+    '/initialisationMotDePasse/:idReset',
     middleware.aseptise('idReset'),
     (requete, reponse) => {
       const { idReset } = requete.params;
-      depotDonnees.utilisateurAFinaliser(idReset)
-        .then((utilisateur) => {
-          if (!utilisateur) {
-            reponse.status(404).send(`Identifiant d'initialisation de mot de passe "${idReset}" inconnu`);
-            return;
-          }
+      depotDonnees.utilisateurAFinaliser(idReset).then((utilisateur) => {
+        if (!utilisateur) {
+          reponse
+            .status(404)
+            .send(
+              `Identifiant d'initialisation de mot de passe "${idReset}" inconnu`
+            );
+          return;
+        }
 
-          requete.session.token = utilisateur.genereToken();
-          reponse.render('motDePasse/edition', { utilisateur });
-        });
-    });
+        requete.session.token = utilisateur.genereToken();
+        reponse.render('motDePasse/edition', { utilisateur });
+      });
+    }
+  );
 
-  app.get('/admin/inscription', middleware.authentificationBasique, (_requete, reponse) => {
-    const departements = referentiel.departements();
-    reponse.render('admin/inscription', { departements });
-  });
+  app.get(
+    '/admin/inscription',
+    middleware.authentificationBasique,
+    (_requete, reponse) => {
+      const departements = referentiel.departements();
+      reponse.render('admin/inscription', { departements });
+    }
+  );
 
-  app.get('/espacePersonnel', middleware.verificationAcceptationCGU, (_requete, reponse) => {
-    reponse.render('espacePersonnel');
-  });
+  app.get(
+    '/espacePersonnel',
+    middleware.verificationAcceptationCGU,
+    (_requete, reponse) => {
+      reponse.render('espacePersonnel');
+    }
+  );
 
-  app.get('/tableauDeBord', middleware.verificationAcceptationCGU, (_requete, reponse) => {
-    reponse.render('tableauDeBord');
-  });
+  app.get(
+    '/tableauDeBord',
+    middleware.verificationAcceptationCGU,
+    (_requete, reponse) => {
+      reponse.render('tableauDeBord');
+    }
+  );
 
-  app.use('/api', routesApi(middleware, adaptateurMail, depotDonnees, referentiel, adaptateurHorloge, adaptateurPdf, adaptateurAnnuaire, adaptateurCsv, adaptateurZip));
+  app.use(
+    '/api',
+    routesApi(
+      middleware,
+      adaptateurMail,
+      depotDonnees,
+      referentiel,
+      adaptateurHorloge,
+      adaptateurPdf,
+      adaptateurAnnuaire,
+      adaptateurCsv,
+      adaptateurZip
+    )
+  );
 
   app.use('/bibliotheques', routesBibliotheques());
 
-  app.use('/service', routesService(middleware, referentiel, depotDonnees, moteurRegles));
+  app.use(
+    '/service',
+    routesService(middleware, referentiel, depotDonnees, moteurRegles)
+  );
 
   app.use('/styles', routesStyles());
 
-  app.get('/utilisateur/edition', middleware.verificationJWT, (requete, reponse) => {
-    const departements = referentiel.departements();
-    const idUtilisateur = requete.idUtilisateurCourant;
-    depotDonnees.utilisateur(idUtilisateur)
-      .then((utilisateur) => reponse.render('utilisateur/edition', { utilisateur, departements }));
-  });
+  app.get(
+    '/utilisateur/edition',
+    middleware.verificationJWT,
+    (requete, reponse) => {
+      const departements = referentiel.departements();
+      const idUtilisateur = requete.idUtilisateurCourant;
+      depotDonnees
+        .utilisateur(idUtilisateur)
+        .then((utilisateur) =>
+          reponse.render('utilisateur/edition', { utilisateur, departements })
+        );
+    }
+  );
 
   app.use('/statique', express.static('public'));
 

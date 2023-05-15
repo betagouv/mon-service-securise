@@ -1,4 +1,4 @@
-.titre~.description {
+.titre ~ .description {
   font-weight: normal;
   font-size: 0.9em;
 }
@@ -7,11 +7,13 @@
   display: none;
 }
 
-#risqueJuridiqueFinancierReputationnel input[value='oui']~.exemple::before {
+#risqueJuridiqueFinancierReputationnel input[value='oui'] ~ .exemple::before {
   display: none;
 }
 
-#risqueJuridiqueFinancierReputationnel input[value='oui']:checked~ :is(.exemple, .exemple + br) {
+#risqueJuridiqueFinancierReputationnel
+  input[value='oui']:checked
+  ~ :is(.exemple, .exemple + br) {
   display: inline-block;
 }
 

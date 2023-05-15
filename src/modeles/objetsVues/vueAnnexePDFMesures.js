@@ -12,8 +12,8 @@ class VueAnnexePDFMesures {
       categories: this.referentiel.categoriesMesures(),
       nomService: this.homologation.nomService(),
       mesuresParStatut: this.homologation.mesuresParStatutEtCategorie(),
-      nbMesuresARemplirToutesCategories: this.homologation
-        .nombreTotalMesuresARemplirToutesCategories(),
+      nbMesuresARemplirToutesCategories:
+        this.homologation.nombreTotalMesuresARemplirToutesCategories(),
     };
   }
 }

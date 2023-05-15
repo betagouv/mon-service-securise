@@ -7,6 +7,9 @@ $(() => {
       fonction: $('#fonction').val(),
     };
 
-    return axios.put(`/api/service/${idService}/homologation/autorite`, donnees);
+    return axios.put(
+      `/api/service/${idService}/homologation/autorite`,
+      donnees
+    );
   });
 });

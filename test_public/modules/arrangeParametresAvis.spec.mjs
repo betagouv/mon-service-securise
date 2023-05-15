@@ -10,7 +10,10 @@ describe("Une demande d'arrangement des paramètres des avis", () => {
 
     const parametresArranges = arrangeParametresAvis(parametres);
 
-    expect(parametresArranges.avis).to.eql([{ statut: 'defavorable' }, { statut: 'favorable' }]);
+    expect(parametresArranges.avis).to.eql([
+      { statut: 'defavorable' },
+      { statut: 'favorable' },
+    ]);
   });
 
   it('supprime les paramètres après les avoir rangés', () => {

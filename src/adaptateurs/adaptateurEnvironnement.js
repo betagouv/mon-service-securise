@@ -1,9 +1,11 @@
 const emailMemoire = () => ({
-  logEmailDansConsole: () => process.env.AVEC_EMAIL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
+  logEmailDansConsole: () =>
+    process.env.AVEC_EMAIL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
 });
 
 const journalMSS = () => ({
-  logEvenementDansConsole: () => process.env.AVEC_JOURNAL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
+  logEvenementDansConsole: () =>
+    process.env.AVEC_JOURNAL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
 });
 
 const matomo = () => ({
@@ -20,9 +22,17 @@ const sentry = () => ({
 });
 
 const statistiques = () => ({
-  domaineMetabaseMSS: () => (process.env.STATISTIQUES_DOMAINE_METABASE_MSS
-    ? new URL('/', process.env.STATISTIQUES_DOMAINE_METABASE_MSS).toString()
-    : ''),
+  domaineMetabaseMSS: () =>
+    process.env.STATISTIQUES_DOMAINE_METABASE_MSS
+      ? new URL('/', process.env.STATISTIQUES_DOMAINE_METABASE_MSS).toString()
+      : '',
 });
 
-module.exports = { emailMemoire, journalMSS, matomo, sendinblue, sentry, statistiques };
+module.exports = {
+  emailMemoire,
+  journalMSS,
+  matomo,
+  sendinblue,
+  sentry,
+  statistiques,
+};

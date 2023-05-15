@@ -24,7 +24,9 @@ class MesureGenerale extends Mesure {
   }
 
   estIndispensable() {
-    return !!this.donneesReferentiel().indispensable || this.rendueIndispensable;
+    return (
+      !!this.donneesReferentiel().indispensable || this.rendueIndispensable
+    );
   }
 
   estRecommandee() {

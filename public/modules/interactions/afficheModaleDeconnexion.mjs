@@ -1,4 +1,7 @@
-const afficheModaleDeconnexion = (selecteurModaleDeconnexion, selecteurModales) => {
+const afficheModaleDeconnexion = (
+  selecteurModaleDeconnexion,
+  selecteurModales
+) => {
   $(selecteurModales).trigger('fermeModale');
   $(selecteurModaleDeconnexion).trigger('afficheModale');
 };

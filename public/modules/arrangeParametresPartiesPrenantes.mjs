@@ -1,15 +1,28 @@
-import { modifieParametresAvecItemsExtraits, modifieParametresGroupementElements } from './parametres.mjs';
+import {
+  modifieParametresAvecItemsExtraits,
+  modifieParametresGroupementElements,
+} from './parametres.mjs';
 
-const PARTIES_PRENANTES_FIXES = ['developpementFourniture', 'hebergement', 'maintenanceService', 'securiteService'];
+const PARTIES_PRENANTES_FIXES = [
+  'developpementFourniture',
+  'hebergement',
+  'maintenanceService',
+  'securiteService',
+];
 
 const integrePartiesPrenantesSpecifiques = (parametres) => {
   modifieParametresAvecItemsExtraits(
-    parametres, 'partiesPrenantesSpecifiques', '^(nom|natureAcces|pointContact)-partie-prenante-specifique-'
+    parametres,
+    'partiesPrenantesSpecifiques',
+    '^(nom|natureAcces|pointContact)-partie-prenante-specifique-'
   );
 
   parametres.partiesPrenantes = parametres.partiesPrenantes || [];
   parametres.partiesPrenantesSpecifiques
-    .map((partiePrenanteSpecifique) => ({ type: 'PartiePrenanteSpecifique', ...partiePrenanteSpecifique }))
+    .map((partiePrenanteSpecifique) => ({
+      type: 'PartiePrenanteSpecifique',
+      ...partiePrenanteSpecifique,
+    }))
     .forEach((partiePrenanteSpecifique) => {
       parametres.partiesPrenantes.push(partiePrenanteSpecifique);
     });
@@ -18,12 +31,18 @@ const integrePartiesPrenantesSpecifiques = (parametres) => {
 
 export default (parametres) => {
   modifieParametresAvecItemsExtraits(
-    parametres, 'acteursHomologation', '^(role|nom|fonction)-acteur-homologation-'
+    parametres,
+    'acteursHomologation',
+    '^(role|nom|fonction)-acteur-homologation-'
   );
 
   integrePartiesPrenantesSpecifiques(parametres);
 
-  PARTIES_PRENANTES_FIXES.forEach(
-    (identifiant) => modifieParametresGroupementElements(parametres, 'partiesPrenantes', identifiant)
+  PARTIES_PRENANTES_FIXES.forEach((identifiant) =>
+    modifieParametresGroupementElements(
+      parametres,
+      'partiesPrenantes',
+      identifiant
+    )
   );
 };

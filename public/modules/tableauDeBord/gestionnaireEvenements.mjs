@@ -54,20 +54,26 @@ const gestionnaireEvenements = {
   },
   afficheMenuAction: ($bouton) => {
     if (tableauDesServices.servicesSelectionnes.size === 0) return;
-    const doitOuvrirMenu = !$bouton.parents('.conteneur-selection-services').hasClass('actif');
+    const doitOuvrirMenu = !$bouton
+      .parents('.conteneur-selection-services')
+      .hasClass('actif');
     gestionnaireEvenements.fermeMenuFlottant();
     if (doitOuvrirMenu) {
       $bouton.parents('.conteneur-selection-services').addClass('actif');
       $('.menu-flotant.actions-services').removeClass('invisible');
       const auMoinsUnNonCreateur = [...tableauDesServices.servicesSelectionnes]
-        .map((idService) => tableauDesServices.donnees.find((service) => service.id === idService))
+        .map((idService) =>
+          tableauDesServices.donnees.find((service) => service.id === idService)
+        )
         .some((service) => !service.estCreateur);
       if (auMoinsUnNonCreateur) {
         $('.actions-services .action').addClass('inactif');
       } else {
         $('.actions-services .action').removeClass('inactif');
-        const plusDunService = [...tableauDesServices.servicesSelectionnes].length > 1;
-        if (plusDunService) $('#action-flotante-telechargement').addClass('inactif');
+        const plusDunService =
+          [...tableauDesServices.servicesSelectionnes].length > 1;
+        if (plusDunService)
+          $('#action-flotante-telechargement').addClass('inactif');
       }
     } else {
       $bouton.parents('.conteneur-selection-services').removeClass('actif');
@@ -88,7 +94,10 @@ const gestionnaireEvenements = {
 
     $('.selection-service').each((_, input) => {
       const $checkboxService = $(input);
-      tableauDesServices.basculeSelectionService($checkboxService.parents('.ligne-service').data('id-service'), selectionne);
+      tableauDesServices.basculeSelectionService(
+        $checkboxService.parents('.ligne-service').data('id-service'),
+        selectionne
+      );
       $checkboxService.prop('checked', selectionne);
     });
 

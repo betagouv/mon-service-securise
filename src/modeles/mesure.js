@@ -22,8 +22,10 @@ class Mesure extends InformationsHomologation {
   }
 
   static accumulateurInitialStatuts(statutFaitALaFin = false) {
-    return Mesure.statutsPossibles(statutFaitALaFin)
-      .reduce((acc, s) => ({ ...acc, [s]: {} }), {});
+    return Mesure.statutsPossibles(statutFaitALaFin).reduce(
+      (acc, s) => ({ ...acc, [s]: {} }),
+      {}
+    );
   }
 
   static statutsPossibles(statutFaitALaFin = false) {
@@ -44,7 +46,9 @@ class Mesure extends InformationsHomologation {
 
   static valide({ statut }) {
     if (statut && !this.statutsPossibles().includes(statut)) {
-      throw new ErreurStatutMesureInvalide(`Le statut "${statut}" est invalide`);
+      throw new ErreurStatutMesureInvalide(
+        `Le statut "${statut}" est invalide`
+      );
     }
   }
 }

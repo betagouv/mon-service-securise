@@ -1,4 +1,5 @@
-const $modaleNouveauContributeur = () => $(`
+const $modaleNouveauContributeur = () =>
+  $(`
 <div class="rideau" id="rideau-nouveau-contributeur">
   <div class="modale">
     <div class="fermeture-modale"></div>
@@ -43,17 +44,33 @@ const $serviceExistant = (
     return resultat;
   };
 
-  const utilisateurCreateur = () => idUtilisateur === donneesService.createur.id;
+  const utilisateurCreateur = () =>
+    idUtilisateur === donneesService.createur.id;
 
-  const $pastille = (classePastille, donneesUtilisateur, proprietaire = false) => $(`
-<div class="${classePastille}" title="${descriptionContributeur(donneesUtilisateur, proprietaire)}">
+  const $pastille = (
+    classePastille,
+    donneesUtilisateur,
+    proprietaire = false
+  ) =>
+    $(`
+<div class="${classePastille}" title="${descriptionContributeur(
+      donneesUtilisateur,
+      proprietaire
+    )}">
   <div class="initiales">${donneesUtilisateur.initiales}</div>
 </div>
   `);
 
-  const $pastilleContributeursSupplementaires = (contributeursSupplementaires) => $(`
-<div class="pastille contributeurs-supplementaires" title="${contributeursSupplementaires.join('\n')}">
-  <div class="nombre-contributeurs-supplementaires">+${contributeursSupplementaires.length}</div>
+  const $pastilleContributeursSupplementaires = (
+    contributeursSupplementaires
+  ) =>
+    $(`
+<div class="pastille contributeurs-supplementaires" title="${contributeursSupplementaires.join(
+      '\n'
+    )}">
+  <div class="nombre-contributeurs-supplementaires">+${
+    contributeursSupplementaires.length
+  }</div>
 </div>
   `);
 
@@ -76,8 +93,8 @@ const $serviceExistant = (
 </a>
   `);
 
-  donneesService.organisationsResponsables.forEach(
-    (orga, i) => $element.attr(`data-organisation-responsable-${i}`, orga)
+  donneesService.organisationsResponsables.forEach((orga, i) =>
+    $element.attr(`data-organisation-responsable-${i}`, orga)
   );
 
   if (utilisateurCreateur()) {
@@ -91,39 +108,49 @@ const $serviceExistant = (
   }
 
   if (utilisateurCourantPeutAjouterContributeurs()) {
-    $(`.${classePastilles}`, $element).append($(`
+    $(`.${classePastilles}`, $element).append(
+      $(`
 <div class="${classeNouveauContributeur}" data-id-service="${donneesService.id}"></div>
-    `));
+    `)
+    );
   }
 
-  $(`.${classePastilles}`, $element).append($pastille('pastille createur', donneesService.createur, true));
+  $(`.${classePastilles}`, $element).append(
+    $pastille('pastille createur', donneesService.createur, true)
+  );
 
-  donneesService.contributeurs.sort(({ initiales: i1 }, { initiales: i2 }) => i1.localeCompare(i2));
+  donneesService.contributeurs.sort(({ initiales: i1 }, { initiales: i2 }) =>
+    i1.localeCompare(i2)
+  );
 
-  donneesService.contributeurs.slice(0, nombreMaxContributeursDistincts)
+  donneesService.contributeurs
+    .slice(0, nombreMaxContributeursDistincts)
     .forEach((donneesContributeur) => {
-      const classePastilleContributeur = (
-        `pastille contributeur ${donneesContributeur.cguAcceptees ? 'valide' : 'en-attente'}`
-      );
+      const classePastilleContributeur = `pastille contributeur ${
+        donneesContributeur.cguAcceptees ? 'valide' : 'en-attente'
+      }`;
 
-      $(`.${classePastilles}`, $element).append($pastille(classePastilleContributeur, donneesContributeur));
+      $(`.${classePastilles}`, $element).append(
+        $pastille(classePastilleContributeur, donneesContributeur)
+      );
     });
 
   const contributeursSupplementaires = donneesService.contributeurs
     .slice(nombreMaxContributeursDistincts)
     .map((c) => c.prenomNom);
   if (contributeursSupplementaires.length > 0) {
-    $(`.${classePastilles}`, $element).append($pastilleContributeursSupplementaires(contributeursSupplementaires));
+    $(`.${classePastilles}`, $element).append(
+      $pastilleContributeursSupplementaires(contributeursSupplementaires)
+    );
   }
 
   return $element;
 };
 
-const $services = (donneesServices, ...params) => (
+const $services = (donneesServices, ...params) =>
   donneesServices.reduce(($acc, donneesService) => {
     const $service = $serviceExistant(donneesService, ...params);
     return $acc.append($service);
-  }, $(document.createDocumentFragment()))
-);
+  }, $(document.createDocumentFragment()));
 
 export { $services, $modaleNouveauContributeur };

@@ -7,7 +7,9 @@ class DonneesPersistanceHomologation {
 
   sauf(...nomsProprietes) {
     const nouvellesDonnees = copie(this.donnees);
-    nomsProprietes.forEach((nomPropriete) => delete nouvellesDonnees[nomPropriete]);
+    nomsProprietes.forEach(
+      (nomPropriete) => delete nouvellesDonnees[nomPropriete]
+    );
     return nouvellesDonnees;
   }
 

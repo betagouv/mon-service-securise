@@ -6,9 +6,9 @@ const elles = it;
 
 describe('Les fonctionnalités spécifiques', () => {
   elles("se construisent avec le bon nom d'item", () => {
-    const fonctionnalitesSpecifiques = new FonctionnalitesSpecifiques(
-      { fonctionnalitesSpecifiques: [] }
-    );
+    const fonctionnalitesSpecifiques = new FonctionnalitesSpecifiques({
+      fonctionnalitesSpecifiques: [],
+    });
 
     expect(fonctionnalitesSpecifiques.nombre()).to.equal(0);
   });

@@ -6,20 +6,33 @@ const Referentiel = require('../../../src/referentiel');
 describe('Une étape « Avis »', () => {
   const referentiel = Referentiel.creeReferentiel({
     echeancesRenouvellement: { unAn: {} },
-    statutsAvisDossierHomologation: { favorable: { } },
+    statutsAvisDossierHomologation: { favorable: {} },
   });
 
   it('sait se convertir en JSON ', () => {
-    const etape = new EtapeAvis({
-      avis: [
-        { collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'OK pour moi' },
-      ],
-      avecAvis: true,
-    }, referentiel);
+    const etape = new EtapeAvis(
+      {
+        avis: [
+          {
+            collaborateurs: ['Jean Durand'],
+            statut: 'favorable',
+            dureeValidite: 'unAn',
+            commentaires: 'OK pour moi',
+          },
+        ],
+        avecAvis: true,
+      },
+      referentiel
+    );
 
     expect(etape.toJSON()).to.eql({
       avis: [
-        { collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'OK pour moi' },
+        {
+          collaborateurs: ['Jean Durand'],
+          statut: 'favorable',
+          dureeValidite: 'unAn',
+          commentaires: 'OK pour moi',
+        },
       ],
       avecAvis: true,
     });
@@ -33,7 +46,14 @@ describe('Une étape « Avis »', () => {
 
   it("sait déclarer l'étape sans avis", () => {
     const etape = new EtapeAvis({}, referentiel);
-    etape.enregistreAvis([{ collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'OK pour moi' }]);
+    etape.enregistreAvis([
+      {
+        collaborateurs: ['Jean Durand'],
+        statut: 'favorable',
+        dureeValidite: 'unAn',
+        commentaires: 'OK pour moi',
+      },
+    ]);
 
     etape.declareSansAvis();
 
@@ -44,7 +64,14 @@ describe('Une étape « Avis »', () => {
   it('sait enregistrer des avis', () => {
     const etape = new EtapeAvis({}, referentiel);
 
-    etape.enregistreAvis([{ collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn', commentaires: 'OK pour moi' }]);
+    etape.enregistreAvis([
+      {
+        collaborateurs: ['Jean Durand'],
+        statut: 'favorable',
+        dureeValidite: 'unAn',
+        commentaires: 'OK pour moi',
+      },
+    ]);
 
     expect(etape.avecAvis).to.be(true);
   });
@@ -63,17 +90,29 @@ describe('Une étape « Avis »', () => {
     describe("dans le cas où l'étape est déclarée avec avis", () => {
       it("n'est pas complète dès qu'un avis n'est pas saisi", () => {
         const sansPrenomNom = { statut: 'favorable', dureeValidite: 'unAn' };
-        const avecAvisNonSaisis = new EtapeAvis({
-          avis: [sansPrenomNom],
-          avecAvis: true,
-        }, referentiel);
+        const avecAvisNonSaisis = new EtapeAvis(
+          {
+            avis: [sansPrenomNom],
+            avecAvis: true,
+          },
+          referentiel
+        );
 
         expect(avecAvisNonSaisis.estComplete()).to.be(false);
       });
 
       it('est complète si tous les avis sont saisis', () => {
         const avecAvisSaisis = new EtapeAvis(
-          { avis: [{ collaborateurs: ['Jean Durand'], statut: 'favorable', dureeValidite: 'unAn' }], avecAvis: true },
+          {
+            avis: [
+              {
+                collaborateurs: ['Jean Durand'],
+                statut: 'favorable',
+                dureeValidite: 'unAn',
+              },
+            ],
+            avecAvis: true,
+          },
           referentiel
         );
 

@@ -21,18 +21,25 @@ describe("L'objet de vue de l'annexe de description", () => {
     },
   };
   const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
-  const homologation = new Homologation({
-    id: '123',
-    idUtilisateur: '456',
-    descriptionService: {
-      nomService: 'Nom Service',
-      fonctionnalites: ['uneFonctionnalite'],
-      fonctionnalitesSpecifiques: [{ description: 'Une fonctionnalité spécifique' }],
-      donneesCaracterePersonnel: ['desDonnees'],
-      donneesSensiblesSpecifiques: [{ description: 'Des données spécifiques' }],
-      delaiAvantImpactCritique: 'unJour',
+  const homologation = new Homologation(
+    {
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: {
+        nomService: 'Nom Service',
+        fonctionnalites: ['uneFonctionnalite'],
+        fonctionnalitesSpecifiques: [
+          { description: 'Une fonctionnalité spécifique' },
+        ],
+        donneesCaracterePersonnel: ['desDonnees'],
+        donneesSensiblesSpecifiques: [
+          { description: 'Des données spécifiques' },
+        ],
+        delaiAvantImpactCritique: 'unJour',
+      },
     },
-  }, referentiel);
+    referentiel
+  );
 
   it('fournit le nom du service', () => {
     const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation);
@@ -44,7 +51,10 @@ describe("L'objet de vue de l'annexe de description", () => {
   });
 
   it('fournit la liste des fonctionnalités', () => {
-    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation, referentiel);
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(
+      homologation,
+      referentiel
+    );
 
     const donnees = vueAnnexePDFDescription.donnees();
 
@@ -53,7 +63,10 @@ describe("L'objet de vue de l'annexe de description", () => {
   });
 
   it('ajoute à la liste des fonctionnalités les spécifiques', () => {
-    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation, referentiel);
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(
+      homologation,
+      referentiel
+    );
 
     const donnees = vueAnnexePDFDescription.donnees();
 
@@ -62,7 +75,10 @@ describe("L'objet de vue de l'annexe de description", () => {
   });
 
   it('fournit la liste des données stockées', () => {
-    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation, referentiel);
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(
+      homologation,
+      referentiel
+    );
 
     const donnees = vueAnnexePDFDescription.donnees();
 
@@ -71,7 +87,10 @@ describe("L'objet de vue de l'annexe de description", () => {
   });
 
   it('ajoute les données spécifiques à la liste des données stockées', () => {
-    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation, referentiel);
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(
+      homologation,
+      referentiel
+    );
 
     const donnees = vueAnnexePDFDescription.donnees();
 
@@ -80,7 +99,10 @@ describe("L'objet de vue de l'annexe de description", () => {
   });
 
   it('fournit la durée maximale acceptable de dysfonctionnement grave', () => {
-    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation, referentiel);
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(
+      homologation,
+      referentiel
+    );
 
     const donnees = vueAnnexePDFDescription.donnees();
 

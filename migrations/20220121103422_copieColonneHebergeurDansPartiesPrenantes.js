@@ -1,5 +1,5 @@
-const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) => knex('homologations')
-  .then((lignes) => {
+const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) =>
+  knex('homologations').then((lignes) => {
     const misesAJour = lignes
       .filter(contientDonneesCiblees)
       .map(({ id, donnees }) => {
@@ -11,15 +11,16 @@ const miseAJour = (contientDonneesCiblees, actionMiseAJour) => (knex) => knex('h
     return Promise.all(misesAJour);
   });
 
-const contientHebergeur = ({ donnees }) => (
-  donnees?.caracteristiquesComplementaires?.hebergeur
-);
+const contientHebergeur = ({ donnees }) =>
+  donnees?.caracteristiquesComplementaires?.hebergeur;
 
 const copieDansPartiesPrenantes = (donnees) => {
   donnees.partiesPrenantes ||= {};
   donnees.partiesPrenantes.partiesPrenantes ||= [];
-  donnees.partiesPrenantes.partiesPrenantes = donnees.partiesPrenantes.partiesPrenantes
-    .filter((partiePrenante) => partiePrenante.type !== 'Hebergement');
+  donnees.partiesPrenantes.partiesPrenantes =
+    donnees.partiesPrenantes.partiesPrenantes.filter(
+      (partiePrenante) => partiePrenante.type !== 'Hebergement'
+    );
   donnees.partiesPrenantes.partiesPrenantes.push({
     type: 'Hebergement',
     nom: donnees.caracteristiquesComplementaires.hebergeur,
@@ -32,8 +33,10 @@ const contientPartiesPrenantes = ({ donnees }) => donnees.partiesPrenantes;
 
 const supprimeDansPartiesPrenantes = (donnees) => {
   if (donnees.partiesPrenantes.partiesPrenantes) {
-    donnees.partiesPrenantes.partiesPrenantes = donnees.partiesPrenantes.partiesPrenantes
-      .filter((partiePrenante) => partiePrenante.type !== 'Hebergement');
+    donnees.partiesPrenantes.partiesPrenantes =
+      donnees.partiesPrenantes.partiesPrenantes.filter(
+        (partiePrenante) => partiePrenante.type !== 'Hebergement'
+      );
   }
 
   return donnees;
@@ -41,4 +44,7 @@ const supprimeDansPartiesPrenantes = (donnees) => {
 
 exports.up = miseAJour(contientHebergeur, copieDansPartiesPrenantes);
 
-exports.down = miseAJour(contientPartiesPrenantes, supprimeDansPartiesPrenantes);
+exports.down = miseAJour(
+  contientPartiesPrenantes,
+  supprimeDansPartiesPrenantes
+);

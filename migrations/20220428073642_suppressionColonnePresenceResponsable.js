@@ -1,5 +1,5 @@
-exports.up = (knex) => knex('homologations')
-  .then((lignes) => {
+exports.up = (knex) =>
+  knex('homologations').then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees }) => donnees?.descriptionService)
       .map(({ id, donnees: { descriptionService, ...autresDonnees } }) => {

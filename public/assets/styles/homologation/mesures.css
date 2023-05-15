@@ -77,7 +77,7 @@ form#mesures .decoration {
   display: inline-block;
 
   margin-top: 0.2em;
-  padding:  0.2em 0.6em 0.4em;
+  padding: 0.2em 0.6em 0.4em;
 
   background: var(--vert-anssi);
   border-radius: 3px;
@@ -124,7 +124,15 @@ form#mesures .specifiques input[type='radio'] {
   padding: 1.4em 7em 1.4em 0;
   border-top-width: 2px;
   border-top-style: solid;
-  border-image: linear-gradient(-45deg, #5cc7ff33, #3788d733, #2c57aa33, #6b24dd33, #a826b333) 1;
+  border-image: linear-gradient(
+      -45deg,
+      #5cc7ff33,
+      #3788d733,
+      #2c57aa33,
+      #6b24dd33,
+      #a826b333
+    )
+    1;
 }
 
 .enregistrement .bouton {
@@ -146,7 +154,6 @@ form#mesures .specifiques input[type='radio'] {
   margin-right: 0.4em;
   background: url(../../images/icone_plus_pastille_bleue.svg) center/contain;
 }
-
 
 footer {
   bottom: 0;

@@ -43,7 +43,10 @@ describe('Un profil', () => {
     });
 
     it('renseigne négativement quand aucunes des règles sont conformes', () => {
-      const profil = new Profil([{ presence: ['cleUne'] }, { presence: ['cleDeux'] }]);
+      const profil = new Profil([
+        { presence: ['cleUne'] },
+        { presence: ['cleDeux'] },
+      ]);
 
       const estProfil = profil.estProfil(['cle']);
 
@@ -51,7 +54,10 @@ describe('Un profil', () => {
     });
 
     it('renseigne positivement quand au moins une règle est conforme', () => {
-      const profil = new Profil([{ presence: ['cleUne'] }, { presence: ['cleDeux'] }]);
+      const profil = new Profil([
+        { presence: ['cleUne'] },
+        { presence: ['cleDeux'] },
+      ]);
 
       const estProfil = profil.estProfil(['cleDeux']);
 
@@ -61,7 +67,9 @@ describe('Un profil', () => {
 
   describe('sur une demandes de mesures à ajouter', () => {
     it('ne renvoie aucune mesure quand les règles ne sont pas satisfaites', () => {
-      const profil = new Profil([{ presence: ['cleUne'] }], { ajouter: ['mesure'] });
+      const profil = new Profil([{ presence: ['cleUne'] }], {
+        ajouter: ['mesure'],
+      });
 
       const mesures = profil.mesuresAAjouter(['cle']);
 
@@ -69,7 +77,9 @@ describe('Un profil', () => {
     });
 
     it('renvoie les mesures à ajouter quand les règles sont satisfaites', () => {
-      const profil = new Profil([{ presence: ['cleUne'] }], { ajouter: ['mesure'] });
+      const profil = new Profil([{ presence: ['cleUne'] }], {
+        ajouter: ['mesure'],
+      });
 
       const mesures = profil.mesuresAAjouter(['cleUne']);
 
@@ -87,7 +97,9 @@ describe('Un profil', () => {
 
   describe('sur une demandes de mesures à retirer', () => {
     it('ne renvoie aucune mesure quand les règles ne sont pas satisfaites', () => {
-      const profil = new Profil([{ presence: ['cleUne'] }], { retirer: ['mesure'] });
+      const profil = new Profil([{ presence: ['cleUne'] }], {
+        retirer: ['mesure'],
+      });
 
       const mesures = profil.mesuresARetirer(['cle']);
 
@@ -95,7 +107,9 @@ describe('Un profil', () => {
     });
 
     it('renvoie les mesures à ajouter quand les règles sont satisfaites', () => {
-      const profil = new Profil([{ presence: ['cleUne'] }], { retirer: ['mesure'] });
+      const profil = new Profil([{ presence: ['cleUne'] }], {
+        retirer: ['mesure'],
+      });
 
       const mesures = profil.mesuresARetirer(['cleUne']);
 

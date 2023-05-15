@@ -8,7 +8,9 @@ class Etape extends InformationsHomologation {
 
   // eslint-disable-next-line class-methods-use-this
   estComplete() {
-    throw Error('Méthode non implémentée. Elle devrait être redéfinie par héritage.');
+    throw Error(
+      'Méthode non implémentée. Elle devrait être redéfinie par héritage.'
+    );
   }
 }
 

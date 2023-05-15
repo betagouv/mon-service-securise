@@ -21,17 +21,33 @@ describe("L'ensemble des rôles et responsabilités", () => {
 
     expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
     expect(rolesResponsabilites.fonctionAutoriteHomologation).to.equal('Maire');
-    expect(rolesResponsabilites.delegueProtectionDonnees).to.equal('Rémi Fassol');
-    expect(rolesResponsabilites.fonctionDelegueProtectionDonnees).to.equal('DSI');
+    expect(rolesResponsabilites.delegueProtectionDonnees).to.equal(
+      'Rémi Fassol'
+    );
+    expect(rolesResponsabilites.fonctionDelegueProtectionDonnees).to.equal(
+      'DSI'
+    );
     expect(rolesResponsabilites.piloteProjet).to.equal('Sylvie Martin');
-    expect(rolesResponsabilites.fonctionPiloteProjet).to.equal('Responsable métier');
+    expect(rolesResponsabilites.fonctionPiloteProjet).to.equal(
+      'Responsable métier'
+    );
     expect(rolesResponsabilites.expertCybersecurite).to.equal('Anna Dubreuil');
     expect(rolesResponsabilites.fonctionExpertCybersecurite).to.equal('RSSI');
-    expect(rolesResponsabilites.acteursHomologation.item(0).role).to.equal('DSI');
-    expect(rolesResponsabilites.acteursHomologation.item(0).nom).to.equal('John');
-    expect(rolesResponsabilites.acteursHomologation.item(0).fonction).to.equal('Maire');
-    expect(rolesResponsabilites.partiesPrenantes.items[0]).to.be.an(Hebergement);
-    expect(rolesResponsabilites.partiesPrenantes.items[0].nom).to.equal('hébergeur');
+    expect(rolesResponsabilites.acteursHomologation.item(0).role).to.equal(
+      'DSI'
+    );
+    expect(rolesResponsabilites.acteursHomologation.item(0).nom).to.equal(
+      'John'
+    );
+    expect(rolesResponsabilites.acteursHomologation.item(0).fonction).to.equal(
+      'Maire'
+    );
+    expect(rolesResponsabilites.partiesPrenantes.items[0]).to.be.an(
+      Hebergement
+    );
+    expect(rolesResponsabilites.partiesPrenantes.items[0].nom).to.equal(
+      'hébergeur'
+    );
 
     expect(rolesResponsabilites.toJSON()).to.eql({
       autoriteHomologation: 'Jean Dupont',
@@ -60,7 +76,9 @@ describe("L'ensemble des rôles et responsabilités", () => {
     });
 
     it("ne parle pas du responsable du projet si l'information est inexistante", () => {
-      const rolesResponsabilites = new RolesResponsabilites({ expertCybersecurite: 'Anna Dubreuil' });
+      const rolesResponsabilites = new RolesResponsabilites({
+        expertCybersecurite: 'Anna Dubreuil',
+      });
 
       expect(rolesResponsabilites.descriptionEquipePreparation()).to.equal(
         'Anna Dubreuil (fonction non renseignée)'
@@ -68,7 +86,9 @@ describe("L'ensemble des rôles et responsabilités", () => {
     });
 
     it("ne parle pas de l'expert cyber si l'information est inexistante", () => {
-      const rolesResponsabilites = new RolesResponsabilites({ piloteProjet: 'Sylvie Martin' });
+      const rolesResponsabilites = new RolesResponsabilites({
+        piloteProjet: 'Sylvie Martin',
+      });
 
       expect(rolesResponsabilites.descriptionEquipePreparation()).to.equal(
         'Sylvie Martin (fonction non renseignée)'
@@ -77,7 +97,9 @@ describe("L'ensemble des rôles et responsabilités", () => {
 
     it('retourne une valeur par défaut', () => {
       const rolesResponsabilites = new RolesResponsabilites();
-      expect(rolesResponsabilites.descriptionEquipePreparation()).to.equal('Information non renseignée');
+      expect(rolesResponsabilites.descriptionEquipePreparation()).to.equal(
+        'Information non renseignée'
+      );
     });
   });
 
@@ -88,7 +110,9 @@ describe("L'ensemble des rôles et responsabilités", () => {
         fonctionAutoriteHomologation: 'Maire',
       });
 
-      expect(rolesResponsabilites.descriptionAutoriteHomologation()).to.equal('Jean Dupont (Maire)');
+      expect(rolesResponsabilites.descriptionAutoriteHomologation()).to.equal(
+        'Jean Dupont (Maire)'
+      );
     });
 
     it("ne mentionne pas la fonction de l'autorité d'homologation si info inexistante", () => {
@@ -102,7 +126,9 @@ describe("L'ensemble des rôles et responsabilités", () => {
     });
 
     it("ne mentionne pas l'autorité d'homologation si info inexistante", () => {
-      const rolesResponsabilites = new RolesResponsabilites({ fonctionAutoriteHomologation: 'Maire' });
+      const rolesResponsabilites = new RolesResponsabilites({
+        fonctionAutoriteHomologation: 'Maire',
+      });
       expect(rolesResponsabilites.descriptionAutoriteHomologation()).to.equal(
         'Information non renseignée'
       );
@@ -115,7 +141,9 @@ describe("L'ensemble des rôles et responsabilités", () => {
       fonctionPiloteProjet: 'Expert métier',
     });
 
-    expect(rolesResponsabilites.descriptionPiloteProjet()).to.equal('Jean Dupont (Expert métier)');
+    expect(rolesResponsabilites.descriptionPiloteProjet()).to.equal(
+      'Jean Dupont (Expert métier)'
+    );
   });
 
   it("présente les informations relatives à l'expert cybersécurité", () => {
@@ -124,7 +152,9 @@ describe("L'ensemble des rôles et responsabilités", () => {
       fonctionExpertCybersecurite: 'RSSI',
     });
 
-    expect(rolesResponsabilites.descriptionExpertCybersecurite()).to.equal('Jean Dupont (RSSI)');
+    expect(rolesResponsabilites.descriptionExpertCybersecurite()).to.equal(
+      'Jean Dupont (RSSI)'
+    );
   });
 
   it('présente les informations relatives au ou à la déléguée à la protection des données', () => {
@@ -133,88 +163,136 @@ describe("L'ensemble des rôles et responsabilités", () => {
       fonctionDelegueProtectionDonnees: 'DSI',
     });
 
-    expect(rolesResponsabilites.descriptionDelegueProtectionDonnees()).to.equal('Jean Dupont (DSI)');
+    expect(rolesResponsabilites.descriptionDelegueProtectionDonnees()).to.equal(
+      'Jean Dupont (DSI)'
+    );
   });
 
   describe("sur une demande de description de l'hébergeur", () => {
     it("présente le nom de l'hébergement", () => {
-      const rolesResponsabilites = new RolesResponsabilites({ partiesPrenantes: [{ type: 'Hebergement', nom: 'Un hébergeur' }] });
+      const rolesResponsabilites = new RolesResponsabilites({
+        partiesPrenantes: [{ type: 'Hebergement', nom: 'Un hébergeur' }],
+      });
 
-      expect(rolesResponsabilites.descriptionHebergeur()).to.equal('Un hébergeur');
+      expect(rolesResponsabilites.descriptionHebergeur()).to.equal(
+        'Un hébergeur'
+      );
     });
 
     it("retourne une valeur par défaut lorsque l'hébergement n'est pas présent", () => {
       const rolesResponsabilites = new RolesResponsabilites();
 
-      expect(rolesResponsabilites.descriptionHebergeur()).to.equal('Hébergeur non renseigné');
+      expect(rolesResponsabilites.descriptionHebergeur()).to.equal(
+        'Hébergeur non renseigné'
+      );
     });
   });
 
   it('détermine le statut de saisie', () => {
     const rolesResponsabilites = new RolesResponsabilites();
-    expect(rolesResponsabilites.statutSaisie()).to.equal(InformationsHomologation.A_SAISIR);
+    expect(rolesResponsabilites.statutSaisie()).to.equal(
+      InformationsHomologation.A_SAISIR
+    );
   });
 
   describe('sur une demande de description de la structure ayant réalisé le développement', () => {
     it('présente le nom de la structure', () => {
-      const rolesResponsabilites = new RolesResponsabilites({ partiesPrenantes: [{ type: 'DeveloppementFourniture', nom: 'Une structure' }] });
+      const rolesResponsabilites = new RolesResponsabilites({
+        partiesPrenantes: [
+          { type: 'DeveloppementFourniture', nom: 'Une structure' },
+        ],
+      });
 
-      expect(rolesResponsabilites.descriptionStructureDeveloppement()).to.equal('Une structure');
+      expect(rolesResponsabilites.descriptionStructureDeveloppement()).to.equal(
+        'Une structure'
+      );
     });
 
     it("reste robuste lorsque la structure n'est pas présent", () => {
       const rolesResponsabilites = new RolesResponsabilites();
 
-      expect(rolesResponsabilites.descriptionStructureDeveloppement()).to.equal('');
+      expect(rolesResponsabilites.descriptionStructureDeveloppement()).to.equal(
+        ''
+      );
     });
   });
 
   describe('sur une demande de description de la gouvernance', () => {
     it("intègre l'autorité d'homologation", () => {
       const rolesResponsabilites = new RolesResponsabilites({
-        autoriteHomologation: 'Jean Dupont', fonctionAutoriteHomologation: 'Maire',
+        autoriteHomologation: 'Jean Dupont',
+        fonctionAutoriteHomologation: 'Maire',
       });
 
       const gouvernance = rolesResponsabilites.descriptionGouvernance();
-      expect(gouvernance).to.eql([{ role: "Autorité d'homologation", description: 'Jean Dupont (Maire)' }]);
+      expect(gouvernance).to.eql([
+        { role: "Autorité d'homologation", description: 'Jean Dupont (Maire)' },
+      ]);
     });
 
     it('intègre le ou la spécialiste cybersécurité', () => {
       const rolesResponsabilites = new RolesResponsabilites({
-        expertCybersecurite: 'John Dupond', fonctionExpertCybersecurite: 'Spécialiste',
+        expertCybersecurite: 'John Dupond',
+        fonctionExpertCybersecurite: 'Spécialiste',
       });
 
       const gouvernance = rolesResponsabilites.descriptionGouvernance();
-      expect(gouvernance).to.eql([{ role: 'Spécialiste cybersécurité', description: 'John Dupond (Spécialiste)' }]);
+      expect(gouvernance).to.eql([
+        {
+          role: 'Spécialiste cybersécurité',
+          description: 'John Dupond (Spécialiste)',
+        },
+      ]);
     });
 
     it('intègre le délégué ou la délégué à la protection des données à caractère personnel', () => {
       const rolesResponsabilites = new RolesResponsabilites({
-        delegueProtectionDonnees: 'Marie Age', fonctionDelegueProtectionDonnees: 'Déléguée',
+        delegueProtectionDonnees: 'Marie Age',
+        fonctionDelegueProtectionDonnees: 'Déléguée',
       });
 
       const gouvernance = rolesResponsabilites.descriptionGouvernance();
-      expect(gouvernance).to.eql([{ role: 'Délégué(e) à la protection des données à caractère personnel', description: 'Marie Age (Déléguée)' }]);
+      expect(gouvernance).to.eql([
+        {
+          role: 'Délégué(e) à la protection des données à caractère personnel',
+          description: 'Marie Age (Déléguée)',
+        },
+      ]);
     });
 
     it('intègre le ou la responsable métier du projet', () => {
       const rolesResponsabilites = new RolesResponsabilites({
-        piloteProjet: 'Otto Graf', fonctionPiloteProjet: 'Pilote',
+        piloteProjet: 'Otto Graf',
+        fonctionPiloteProjet: 'Pilote',
       });
 
       const gouvernance = rolesResponsabilites.descriptionGouvernance();
-      expect(gouvernance).to.eql([{ role: 'Responsable métier du projet', description: 'Otto Graf (Pilote)' }]);
+      expect(gouvernance).to.eql([
+        {
+          role: 'Responsable métier du projet',
+          description: 'Otto Graf (Pilote)',
+        },
+      ]);
     });
 
     it('intègre les acteurs spécifiques', () => {
       const rolesResponsabilites = new RolesResponsabilites({
         acteursHomologation: [
-          { role: 'Rôle dans le projet', nom: 'Sandra Nicouverture', fonction: 'Fonction' },
+          {
+            role: 'Rôle dans le projet',
+            nom: 'Sandra Nicouverture',
+            fonction: 'Fonction',
+          },
         ],
       });
 
       const gouvernance = rolesResponsabilites.descriptionGouvernance();
-      expect(gouvernance).to.eql([{ role: 'Rôle dans le projet', description: 'Sandra Nicouverture (Fonction)' }]);
+      expect(gouvernance).to.eql([
+        {
+          role: 'Rôle dans le projet',
+          description: 'Sandra Nicouverture (Fonction)',
+        },
+      ]);
     });
 
     it('intègre les acteurs spécifiques sans les fonctions si elles ne sont pas présentes', () => {
@@ -225,7 +303,9 @@ describe("L'ensemble des rôles et responsabilités", () => {
       });
 
       const gouvernance = rolesResponsabilites.descriptionGouvernance();
-      expect(gouvernance).to.eql([{ role: 'Rôle dans le projet', description: 'Yamamoto Kaderate' }]);
+      expect(gouvernance).to.eql([
+        { role: 'Rôle dans le projet', description: 'Yamamoto Kaderate' },
+      ]);
     });
 
     it("n'intègre pas les acteurs non renseignés", () => {

@@ -4,7 +4,10 @@ const { ErreurDossiersInvalides } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 class Dossiers extends ElementsConstructibles {
-  constructor(donnees = { dossiers: [] }, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    donnees = { dossiers: [] },
+    referentiel = Referentiel.creeReferentielVide()
+  ) {
     const { dossiers } = donnees;
     Dossiers.valide(donnees);
     super(Dossier, { items: dossiers }, referentiel);
@@ -30,12 +33,14 @@ class Dossiers extends ElementsConstructibles {
   }
 
   static valide({ dossiers }) {
-    const nombreDossiersNonFinalises = dossiers
-      .filter((d) => !d.finalise)
-      .length;
+    const nombreDossiersNonFinalises = dossiers.filter(
+      (d) => !d.finalise
+    ).length;
 
     if (nombreDossiersNonFinalises > 1) {
-      throw new ErreurDossiersInvalides("Les dossiers ne peuvent pas avoir plus d'un dossier non finalisé");
+      throw new ErreurDossiersInvalides(
+        "Les dossiers ne peuvent pas avoir plus d'un dossier non finalisé"
+      );
     }
   }
 }

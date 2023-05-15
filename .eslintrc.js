@@ -6,9 +6,7 @@ module.exports = {
     jquery: true,
     mocha: true,
   },
-  extends: [
-    'airbnb-base',
-  ],
+  extends: ['airbnb-base', 'prettier'],
   globals: {
     axios: 'readonly',
     html2canvas: 'readonly',
@@ -20,42 +18,38 @@ module.exports = {
   },
   plugins: ['mocha'],
   rules: {
-    'comma-dangle': ['error', {
-      arrays: 'always-multiline',
-      objects: 'always-multiline',
-      imports: 'always-multiline',
-      exports: 'always-multiline',
-      functions: 'ignore',
-    }],
-    'function-paren-newline': ['error', 'consistent'],
     'mocha/no-exclusive-tests': 'error',
     'no-param-reassign': ['error', { props: false }],
     'no-return-assign': ['error', 'except-parens'],
     'no-underscore-dangle': ['error', { allow: ['_paq', '_mtm'] }],
-    'no-unused-vars': ['error', {
-      args: 'all',
-      argsIgnorePattern: '^_',
-      ignoreRestSiblings: true,
-    }],
-    'object-curly-newline': ['error', {
-      ObjectExpression: { consistent: true },
-      ObjectPattern: { consistent: true },
-      ImportDeclaration: { consistent: true },
-      ExportDeclaration: { consistent: true },
-    }],
+    'no-unused-vars': [
+      'error',
+      {
+        args: 'all',
+        argsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+      },
+    ],
   },
-  overrides: [{
-    files: ['public/**/*.*js'],
-    rules: { 'import/extensions': ['error', 'always'] },
-  }, {
-    files: ['test*/**/*.*js'],
-    rules: {
-      'no-new': ['off'],
-      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-      'import/extensions': ['error', { mjs: 'always' }],
+  overrides: [
+    {
+      files: ['public/**/*.*js'],
+      rules: { 'import/extensions': ['error', 'always'] },
     },
-  }, {
-    files: ['src/erreurs.js', 'src/modeles/journalMSS/erreurs.js'],
-    rules: { 'max-classes-per-file': ['off'] },
-  }],
+    {
+      files: ['test*/**/*.*js'],
+      rules: {
+        'no-new': ['off'],
+        'import/no-extraneous-dependencies': [
+          'error',
+          { devDependencies: true },
+        ],
+        'import/extensions': ['error', { mjs: 'always' }],
+      },
+    },
+    {
+      files: ['src/erreurs.js', 'src/modeles/journalMSS/erreurs.js'],
+      rules: { 'max-classes-per-file': ['off'] },
+    },
+  ],
 };

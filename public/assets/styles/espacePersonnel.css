@@ -38,7 +38,7 @@
 
 .suivi-services .nouveau-service::before {
   content: '';
-  background: url('../images/icone_plus.svg') no-repeat ;
+  background: url('../images/icone_plus.svg') no-repeat;
   background-size: contain;
   width: 1.4em;
   height: 1.4em;
@@ -46,7 +46,7 @@
 }
 
 .entete-suivi-services {
-  background: #FFFFFF;
+  background: #ffffff;
   padding-bottom: 2em;
 }
 
@@ -180,7 +180,7 @@
 }
 
 .service .masque {
-  background: #0000007A;
+  background: #0000007a;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -216,7 +216,7 @@
   justify-content: center;
 }
 
-.pastilles>div {
+.pastilles > div {
   width: 2em;
   height: 2em;
 }
@@ -337,7 +337,7 @@
   display: flex;
   align-items: center;
   font-weight: bold;
-  font-size: .95em;
+  font-size: 0.95em;
   text-align: left;
 }
 

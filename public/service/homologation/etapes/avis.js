@@ -10,12 +10,10 @@ const estValeurAvecAvis = (valeur) => valeur === '1';
 const soumissionEtapeAvis = (selecteurFormulaire) => (idService) => {
   const $radioAvisSelectionne = $('input:radio:checked', 'fieldset#avecAvis');
   const avecAvis = estValeurAvecAvis($radioAvisSelectionne.val());
-  return (
-    axios.put(
-      `/api/service/${idService}/homologation/avis`,
-      { ...arrangeParametresAvis(parametres(selecteurFormulaire)), avecAvis }
-    )
-  );
+  return axios.put(`/api/service/${idService}/homologation/avis`, {
+    ...arrangeParametresAvis(parametres(selecteurFormulaire)),
+    avecAvis,
+  });
 };
 
 const brancheCollaborateursEtiquettes = (conteneurSaisieItem) => {
@@ -24,7 +22,10 @@ const brancheCollaborateursEtiquettes = (conteneurSaisieItem) => {
     persist: false,
     plugins: ['remove_button'],
     render: {
-      option_create: (data, escape) => `<div class="create">Ajouter <strong>${escape(data.input)}</strong>&#x2026;</div>`,
+      option_create: (data, escape) =>
+        `<div class="create">Ajouter <strong>${escape(
+          data.input
+        )}</strong>&#x2026;</div>`,
     },
     sortField: [{ field: 'value', direction: 'asc' }],
   });
@@ -52,9 +53,8 @@ const brancheBoutonsRadio = () => {
   });
 };
 
-const templateZoneDeSaisie = (template) => (index) => (
-  $(template.replace('INDEX_AVIS', index + 1).replaceAll('INDEX', index))
-);
+const templateZoneDeSaisie = (template) => (index) =>
+  $(template.replace('INDEX_AVIS', index + 1).replaceAll('INDEX', index));
 
 $(() => {
   brancheBoutonsRadio();
@@ -66,7 +66,13 @@ $(() => {
     brancheConteneur($conteneurSaisieItem);
   };
 
-  brancheElementsAjoutables('avis', 'un-avis', {}, templateZoneDeSaisie(template), actionSurZoneSaisieApresAjout);
+  brancheElementsAjoutables(
+    'avis',
+    'un-avis',
+    {},
+    templateZoneDeSaisie(template),
+    actionSurZoneSaisieApresAjout
+  );
 
   $('#avis .item-ajoute').each((_indice, element) => {
     brancheCollaborateursEtiquettes($(element));

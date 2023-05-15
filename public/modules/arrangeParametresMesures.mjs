@@ -7,18 +7,21 @@ const arrangeParametresMesures = (parametres) => {
   modifieParametresAvecItemsExtraits(
     parametres,
     CLE_MESURES_SPECIFIQUES,
-    '^(description|categorie|statut|modalites)-mesure-specifique-',
+    '^(description|categorie|statut|modalites)-mesure-specifique-'
   );
 
   parametres[CLE_MESURES_GENERALES] = parametres[CLE_MESURES_GENERALES] || {};
 
   parametres[CLE_MESURES_GENERALES] = Object.keys(parametres)
-    .filter((nomParametre) => (
-      nomParametre !== CLE_MESURES_SPECIFIQUES && nomParametre !== CLE_MESURES_GENERALES
-    ))
+    .filter(
+      (nomParametre) =>
+        nomParametre !== CLE_MESURES_SPECIFIQUES &&
+        nomParametre !== CLE_MESURES_GENERALES
+    )
     .reduce((acc, nomParametre) => {
       if (parametres[nomParametre]) {
-        const nomParametreModalites = nomParametre.match(/^modalites-(.*)$/)?.[1];
+        const nomParametreModalites =
+          nomParametre.match(/^modalites-(.*)$/)?.[1];
         if (nomParametreModalites) {
           acc[nomParametreModalites] = acc[nomParametreModalites] || {};
           acc[nomParametreModalites].modalites = parametres[nomParametre];

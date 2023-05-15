@@ -21,126 +21,159 @@ const creeDepot = (config = {}) => {
     adaptateurUUID = adaptateurUUIDParDefaut,
   } = config;
 
-  const utilisateur = (identifiant) => adaptateurPersistance.utilisateur(identifiant)
-    .then((u) => (u ? new Utilisateur(u, { adaptateurJWT }) : undefined));
+  const utilisateur = (identifiant) =>
+    adaptateurPersistance
+      .utilisateur(identifiant)
+      .then((u) => (u ? new Utilisateur(u, { adaptateurJWT }) : undefined));
 
-  const nouvelUtilisateur = (donneesUtilisateur) => new Promise((resolve, reject) => {
-    const { email } = donneesUtilisateur;
-    if (!email) throw new ErreurEmailManquant('Le champ email doit être renseigné');
+  const nouvelUtilisateur = (donneesUtilisateur) =>
+    new Promise((resolve, reject) => {
+      const { email } = donneesUtilisateur;
+      if (!email)
+        throw new ErreurEmailManquant('Le champ email doit être renseigné');
 
-    adaptateurPersistance.utilisateurAvecEmail(email)
-      .then((u) => {
+      adaptateurPersistance.utilisateurAvecEmail(email).then((u) => {
         if (u) {
           return reject(
-            new ErreurUtilisateurExistant('Utilisateur déjà existant pour cette adresse email', u.id)
+            new ErreurUtilisateurExistant(
+              'Utilisateur déjà existant pour cette adresse email',
+              u.id
+            )
           );
         }
 
         const id = adaptateurUUID.genereUUID();
         donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
-        return adaptateurChiffrement.chiffre(adaptateurUUID.genereUUID())
+        return adaptateurChiffrement
+          .chiffre(adaptateurUUID.genereUUID())
           .then((hash) => {
             donneesUtilisateur.motDePasse = hash;
 
-            adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur)
-              .then(() => adaptateurJournalMSS.consigneEvenement(
-                new EvenementNouvelUtilisateurInscrit({ idUtilisateur: id }).toJSON()
-              ))
-              .then(() => adaptateurJournalMSS.consigneEvenement(
-                new EvenementProfilUtilisateurModifie(
-                  { idUtilisateur: id, ...donneesUtilisateur }
-                ).toJSON()
-              ).then(() => resolve(utilisateur(id))));
+            adaptateurPersistance
+              .ajouteUtilisateur(id, donneesUtilisateur)
+              .then(() =>
+                adaptateurJournalMSS.consigneEvenement(
+                  new EvenementNouvelUtilisateurInscrit({
+                    idUtilisateur: id,
+                  }).toJSON()
+                )
+              )
+              .then(() =>
+                adaptateurJournalMSS
+                  .consigneEvenement(
+                    new EvenementProfilUtilisateurModifie({
+                      idUtilisateur: id,
+                      ...donneesUtilisateur,
+                    }).toJSON()
+                  )
+                  .then(() => resolve(utilisateur(id)))
+              );
           });
       });
-  });
+    });
 
-  const utilisateurAFinaliser = (idReset) => adaptateurPersistance.utilisateurAvecIdReset(idReset)
-    .then((u) => (u ? new Utilisateur(u, { adaptateurJWT }) : undefined));
+  const utilisateurAFinaliser = (idReset) =>
+    adaptateurPersistance
+      .utilisateurAvecIdReset(idReset)
+      .then((u) => (u ? new Utilisateur(u, { adaptateurJWT }) : undefined));
 
-  const utilisateurAuthentifie = (login, motDePasse) => (
-    adaptateurPersistance.utilisateurAvecEmail(login)
-      .then((u) => {
-        const motDePasseStocke = u && u.motDePasse;
-        const echecAuthentification = undefined;
+  const utilisateurAuthentifie = (login, motDePasse) =>
+    adaptateurPersistance.utilisateurAvecEmail(login).then((u) => {
+      const motDePasseStocke = u && u.motDePasse;
+      const echecAuthentification = undefined;
 
-        if (!motDePasseStocke) return Promise.resolve(echecAuthentification);
+      if (!motDePasseStocke) return Promise.resolve(echecAuthentification);
 
-        return adaptateurChiffrement.compare(motDePasse, motDePasseStocke)
-          .then((authentificationReussie) => (authentificationReussie
+      return adaptateurChiffrement
+        .compare(motDePasse, motDePasseStocke)
+        .then((authentificationReussie) =>
+          authentificationReussie
             ? new Utilisateur(u, { adaptateurJWT })
             : echecAuthentification
-          ));
-      })
-  );
+        );
+    });
 
   const utilisateurExiste = (id) => utilisateur(id).then((u) => !!u);
 
   const { utilisateurAvecEmail } = adaptateurPersistance;
 
-  const metsAJourMotDePasse = (idUtilisateur, motDePasse) => (
-    adaptateurChiffrement.chiffre(motDePasse)
-      .then((hash) => adaptateurPersistance.metsAJourUtilisateur(
-        idUtilisateur, { motDePasse: hash }
-      ))
-      .then(() => utilisateur(idUtilisateur))
-  );
+  const metsAJourMotDePasse = (idUtilisateur, motDePasse) =>
+    adaptateurChiffrement
+      .chiffre(motDePasse)
+      .then((hash) =>
+        adaptateurPersistance.metsAJourUtilisateur(idUtilisateur, {
+          motDePasse: hash,
+        })
+      )
+      .then(() => utilisateur(idUtilisateur));
 
   const metsAJourUtilisateur = (id, donnees) => {
     delete donnees.motDePasse;
-    return adaptateurPersistance.metsAJourUtilisateur(id, donnees)
-      .then(() => adaptateurJournalMSS.consigneEvenement(
-        new EvenementProfilUtilisateurModifie({ idUtilisateur: id, ...donnees }).toJSON()
-      )
-        .then(() => utilisateur(id)));
+    return adaptateurPersistance.metsAJourUtilisateur(id, donnees).then(() =>
+      adaptateurJournalMSS
+        .consigneEvenement(
+          new EvenementProfilUtilisateurModifie({
+            idUtilisateur: id,
+            ...donnees,
+          }).toJSON()
+        )
+        .then(() => utilisateur(id))
+    );
   };
 
-  const reinitialiseMotDePasse = (email) => adaptateurPersistance.utilisateurAvecEmail(email)
-    .then((u) => {
+  const reinitialiseMotDePasse = (email) =>
+    adaptateurPersistance.utilisateurAvecEmail(email).then((u) => {
       if (!u) return undefined;
 
       const idResetMotDePasse = adaptateurUUID.genereUUID();
-      return adaptateurPersistance.metsAJourUtilisateur(u.id, { idResetMotDePasse })
+      return adaptateurPersistance
+        .metsAJourUtilisateur(u.id, { idResetMotDePasse })
         .then(() => utilisateur(u.id));
     });
 
-  const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) => (
-    adaptateurPersistance.metsAJourUtilisateur(
-      utilisateurAModifier.id, { idResetMotDePasse: undefined }
-    )
-      .then(() => utilisateur(utilisateurAModifier.id))
-  );
+  const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) =>
+    adaptateurPersistance
+      .metsAJourUtilisateur(utilisateurAModifier.id, {
+        idResetMotDePasse: undefined,
+      })
+      .then(() => utilisateur(utilisateurAModifier.id));
 
   const supprimeUtilisateur = (...params) => {
-    const verifieUtilisateurExistant = (id) => adaptateurPersistance.utilisateur(id)
-      .then((u) => {
+    const verifieUtilisateurExistant = (id) =>
+      adaptateurPersistance.utilisateur(id).then((u) => {
         if (typeof u === 'undefined') {
-          throw new ErreurUtilisateurInexistant(`L'utilisateur "${id}" n'existe pas`);
+          throw new ErreurUtilisateurInexistant(
+            `L'utilisateur "${id}" n'existe pas`
+          );
         }
       });
 
-    const verifieUtilisateurPasCreateur = (id) => adaptateurPersistance.nbAutorisationsCreateur(id)
-      .then((nb) => {
+    const verifieUtilisateurPasCreateur = (id) =>
+      adaptateurPersistance.nbAutorisationsCreateur(id).then((nb) => {
         if (nb > 0) {
-          throw new ErreurSuppressionImpossible(`Suppression impossible : l'utilisateur "${id}" a créé des services`);
+          throw new ErreurSuppressionImpossible(
+            `Suppression impossible : l'utilisateur "${id}" a créé des services`
+          );
         }
       });
 
     return verifieUtilisateurExistant(...params)
       .then(() => verifieUtilisateurPasCreateur(...params))
-      .then(() => adaptateurPersistance.supprimeAutorisationsContribution(...params))
+      .then(() =>
+        adaptateurPersistance.supprimeAutorisationsContribution(...params)
+      )
       .then(() => adaptateurPersistance.supprimeUtilisateur(...params));
   };
 
-  const tousUtilisateurs = () => (
-    adaptateurPersistance.tousUtilisateurs()
-      .then((tous) => tous.map((u) => new Utilisateur(u, { adaptateurJWT })))
-  );
+  const tousUtilisateurs = () =>
+    adaptateurPersistance
+      .tousUtilisateurs()
+      .then((tous) => tous.map((u) => new Utilisateur(u, { adaptateurJWT })));
 
-  const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) => (
-    adaptateurPersistance.metsAJourUtilisateur(utilisateurAModifier.id, { cguAcceptees: true })
-      .then(() => utilisateur(utilisateurAModifier.id))
-  );
+  const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) =>
+    adaptateurPersistance
+      .metsAJourUtilisateur(utilisateurAModifier.id, { cguAcceptees: true })
+      .then(() => utilisateur(utilisateurAModifier.id));
 
   return {
     metsAJourMotDePasse,

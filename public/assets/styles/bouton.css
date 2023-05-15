@@ -23,7 +23,7 @@ button {
 
 .bouton:not(:disabled):hover {
   cursor: pointer;
-  opacity: .87;
+  opacity: 0.87;
 }
 
 .bouton:disabled {

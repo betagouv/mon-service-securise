@@ -6,7 +6,9 @@ const messageErreurNomDejaUtilise = {
   affiche: () => {
     $('#nom-deja-utilise').show();
     const $champNomService = $('#nom-service');
-    $champNomService.get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    $champNomService
+      .get(0)
+      .scrollIntoView({ behavior: 'smooth', block: 'center' });
     $champNomService.addClass('invalide');
   },
   masque: () => {
@@ -21,10 +23,9 @@ const brancheComportementMessageErreur = () => {
   });
 };
 
-const estNomServiceDejaUtilise = (reponseErreur) => (
-  reponseErreur.status === 422
-    && reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT'
-);
+const estNomServiceDejaUtilise = (reponseErreur) =>
+  reponseErreur.status === 422 &&
+  reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
 $(() => {
   initialiseComportementFormulaire(
@@ -39,7 +40,17 @@ $(() => {
   );
   brancheComportementMessageErreur();
 
-  brancheElementsAjoutablesDescription('donnees-sensibles-specifiques', 'donnees-sensibles');
-  brancheElementsAjoutablesDescription('fonctionnalites-specifiques', 'fonctionnalite');
-  brancheElementsAjoutablesDescription('points-acces', 'point-acces', 'exemple : https://www.adresse.fr, App Store, Play Store…');
+  brancheElementsAjoutablesDescription(
+    'donnees-sensibles-specifiques',
+    'donnees-sensibles'
+  );
+  brancheElementsAjoutablesDescription(
+    'fonctionnalites-specifiques',
+    'fonctionnalite'
+  );
+  brancheElementsAjoutablesDescription(
+    'points-acces',
+    'point-acces',
+    'exemple : https://www.adresse.fr, App Store, Play Store…'
+  );
 });

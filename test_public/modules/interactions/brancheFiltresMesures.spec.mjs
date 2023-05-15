@@ -38,7 +38,12 @@ describe('Le branchement des filtres dans la page des mesures', () => {
   });
 
   it('change le filtre actif quand on clique dessus', () => {
-    brancheFiltresMesures('actif', 'nav > a', '.mesure-generale', '.mesure-specifique');
+    brancheFiltresMesures(
+      'actif',
+      'nav > a',
+      '.mesure-generale',
+      '.mesure-specifique'
+    );
 
     expect($('#A').hasClass('actif')).to.be(false);
 
@@ -48,7 +53,12 @@ describe('Le branchement des filtres dans la page des mesures', () => {
   });
 
   it('filtre correctement les mesures générales', () => {
-    brancheFiltresMesures('actif', 'nav > a', '.mesure-generale', '.mesure-specifique');
+    brancheFiltresMesures(
+      'actif',
+      'nav > a',
+      '.mesure-generale',
+      '.mesure-specifique'
+    );
 
     expect($('.mesure-generale.invisible').length).to.equal(0);
 
@@ -61,7 +71,12 @@ describe('Le branchement des filtres dans la page des mesures', () => {
   });
 
   it('filtre correctement les mesures spécifiques', () => {
-    brancheFiltresMesures('actif', 'nav > a', '.mesure-generale', '.mesure-specifique');
+    brancheFiltresMesures(
+      'actif',
+      'nav > a',
+      '.mesure-generale',
+      '.mesure-specifique'
+    );
 
     expect($('.mesure-specifique.invisible').length).to.equal(0);
 

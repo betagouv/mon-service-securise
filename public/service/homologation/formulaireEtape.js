@@ -1,4 +1,7 @@
-import { brancheValidation, declencheValidation } from '../../modules/interactions/validation.mjs';
+import {
+  brancheValidation,
+  declencheValidation,
+} from '../../modules/interactions/validation.mjs';
 
 let formulaireDejaSoumis = false;
 
@@ -17,12 +20,12 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
     if (!formulaireDejaSoumis) {
       formulaireDejaSoumis = true;
 
-      actionSoumission(idService, selecteurFormulaire)
-        .then(() => (
-          window.location = idEtapeSuivante
+      actionSoumission(idService, selecteurFormulaire).then(
+        () =>
+          (window.location = idEtapeSuivante
             ? `/service/${idService}/homologation/edition/etape/${idEtapeSuivante}`
-            : `/service/${idService}/dossiers`
-        ));
+            : `/service/${idService}/dossiers`)
+      );
     }
   });
 

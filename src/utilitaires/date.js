@@ -2,8 +2,8 @@ const ajouteMoisADate = (nbMois, chaineDate) => {
   const date = new Date(chaineDate);
   const jour = date.getDate();
 
-  const depassementJourMoisSuivant = () => (date.getDate() !== jour);
-  const reviensFinMoisPrecedent = () => (date.setDate(0));
+  const depassementJourMoisSuivant = () => date.getDate() !== jour;
+  const reviensFinMoisPrecedent = () => date.setDate(0);
 
   date.setMonth(date.getMonth() + nbMois);
   if (depassementJourMoisSuivant()) {
@@ -18,12 +18,21 @@ const dateEnFrancais = (chaineDate) => {
 };
 
 // On utilise le standard canadien pour obtenir le format YYYY-MM-DD
-const dateYYYYMMDD = (date) => Intl.DateTimeFormat('fr-CA', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-}).format(date).replaceAll('-', '');
+const dateYYYYMMDD = (date) =>
+  Intl.DateTimeFormat('fr-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  })
+    .format(date)
+    .replaceAll('-', '');
 
-const dateInvalide = (chaineDate) => Number.isNaN(new Date(chaineDate).valueOf());
+const dateInvalide = (chaineDate) =>
+  Number.isNaN(new Date(chaineDate).valueOf());
 
-module.exports = { ajouteMoisADate, dateEnFrancais, dateInvalide, dateYYYYMMDD };
+module.exports = {
+  ajouteMoisADate,
+  dateEnFrancais,
+  dateInvalide,
+  dateYYYYMMDD,
+};

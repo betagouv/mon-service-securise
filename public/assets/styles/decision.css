@@ -9,7 +9,8 @@ header {
   margin-bottom: 4em;
 }
 
-header .mss, header .anssi {
+header .mss,
+header .anssi {
   display: inline-block;
 }
 
@@ -100,7 +101,8 @@ dl {
   margin: 2em 0 0;
 }
 
-dt, dd {
+dt,
+dd {
   display: inline;
 }
 
@@ -129,7 +131,8 @@ section.risques ul {
   grid-auto-rows: 1fr;
 }
 
-section.risques li, section.detail-risques dt {
+section.risques li,
+section.detail-risques dt {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -197,7 +200,8 @@ section.niveau-securite ul {
   grid-gap: 1em;
 }
 
-.diagnostic-niveau-securite, .avis-expert-cyber {
+.diagnostic-niveau-securite,
+.avis-expert-cyber {
   position: absolute;
   top: 0.8em;
   right: 1em;
@@ -314,7 +318,8 @@ section.detail-mesures .indispensable {
   float: right;
 }
 
-section.detail-mesures .indispensable, .legende.avis-anssi .indispensable:before {
+section.detail-mesures .indispensable,
+.legende.avis-anssi .indispensable:before {
   width: 3em;
   height: 1em;
   background-image: url(../images/icone_clef.svg);
@@ -323,23 +328,26 @@ section.detail-mesures .indispensable, .legende.avis-anssi .indispensable:before
   background-position: 0.2em -0.5em;
 }
 
-section.detail-mesures .statut.fait, .legende .fait:before {
+section.detail-mesures .statut.fait,
+.legende .fait:before {
   background: var(--bleu-mise-en-avant);
 }
 
-section.detail-mesures .statut.enCours, .legende .enCours:before {
+section.detail-mesures .statut.enCours,
+.legende .enCours:before {
   background: var(--bleu-ciel);
 }
 
-section.detail-mesures .statut.nonFait, .legende .nonFait:before {
+section.detail-mesures .statut.nonFait,
+.legende .nonFait:before {
   background: var(--bleu-anssi);
 }
 
 @page print {
   * {
-      -webkit-print-color-adjust: exact !important;
-      color-adjust: exact !important;
-    }
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
 
   main h1.vert:before {
     break-before: page;
@@ -354,15 +362,16 @@ section.detail-mesures .statut.nonFait, .legende .nonFait:before {
 
 @media print {
   * {
-      -webkit-print-color-adjust: exact !important;
-      color-adjust: exact !important;
-    }
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
 
   body {
     margin: 0 auto;
   }
 
-  .ne-pas-imprimer, .ne-pas-imprimer * {
+  .ne-pas-imprimer,
+  .ne-pas-imprimer * {
     display: none;
   }
 

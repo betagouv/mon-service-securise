@@ -2,7 +2,7 @@
   window._mtm = window._mtm || [];
   const { _mtm } = window;
 
-  _mtm.push({ 'mtm.startTime': (new Date().getTime()), event: 'mtm.Start' });
+  _mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
 
   const g = document.createElement('script');
   g.async = true;

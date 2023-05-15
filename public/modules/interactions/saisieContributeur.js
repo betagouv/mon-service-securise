@@ -1,7 +1,6 @@
-const estInvitationDejaEnvoyee = (reponseErreur) => (
-  reponseErreur.status === 422
-    && reponseErreur.data?.erreur?.code === 'INVITATION_DEJA_ENVOYEE'
-);
+const estInvitationDejaEnvoyee = (reponseErreur) =>
+  reponseErreur.status === 422 &&
+  reponseErreur.data?.erreur?.code === 'INVITATION_DEJA_ENVOYEE';
 
 const brancheComportementSaisieContributeur = (selecteurAjoutContributeur) => {
   $(selecteurAjoutContributeur).on('click', (e) => {
@@ -17,7 +16,11 @@ const brancheComportementSaisieContributeur = (selecteurAjoutContributeur) => {
     const emailContributeur = $('input#emailContributeur').val();
     const idService = $('input#idService').val();
 
-    axios.post('/api/autorisation', { emailContributeur, idHomologation: idService })
+    axios
+      .post('/api/autorisation', {
+        emailContributeur,
+        idHomologation: idService,
+      })
       .then(() => (window.location = '/espacePersonnel'))
       .catch(({ response }) => {
         if (estInvitationDejaEnvoyee(response)) {

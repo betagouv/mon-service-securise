@@ -1,5 +1,8 @@
 import adaptateurAjaxAxios from './adaptateurAjaxAxios.mjs';
-import { brancheValidation, declencheValidation } from './interactions/validation.mjs';
+import {
+  brancheValidation,
+  declencheValidation,
+} from './interactions/validation.mjs';
 
 const initialiseComportementFormulaire = (
   selecteurFormulaire,
@@ -16,18 +19,18 @@ const initialiseComportementFormulaire = (
   const $form = $(selecteurFormulaire);
 
   brancheValidation(selecteurFormulaire);
-  $form.on('submit', ((evenement) => {
+  $form.on('submit', (evenement) => {
     evenement.preventDefault();
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
-    const redirigeVersSynthese = ({ data: { idService } }) => (
-      window.location = `/service/${idService}`
-    );
+    const redirigeVersSynthese = ({ data: { idService } }) =>
+      (window.location = `/service/${idService}`);
 
-    adaptateurAjax.execute(requete)
+    adaptateurAjax
+      .execute(requete)
       .then(redirigeVersSynthese)
       .catch(callbackErreur);
-  }));
+  });
 
   $bouton.on('click', () => {
     declencheValidation(selecteurFormulaire);

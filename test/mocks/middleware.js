@@ -4,10 +4,10 @@ const expect = require('expect.js');
 const Homologation = require('../../src/modeles/homologation');
 
 const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
-  const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => (
-    expect(`${[valeurConstatee, ...diagnostics].join(' ')}`)
-      .to.eql(`${[valeurReference, ...diagnostics].join(' ')}`)
-  );
+  const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) =>
+    expect(`${[valeurConstatee, ...diagnostics].join(' ')}`).to.eql(
+      `${[valeurReference, ...diagnostics].join(' ')}`
+    );
 
   const { lectureEtat, etatInitial = false, etatFinal = true } = donneesEtat;
   const suffixeLectureEtat = `(sur appel à ${lectureEtat.toString()})`;
@@ -22,7 +22,12 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
       if (!erreurHTTP || erreurHTTP >= 500) throw e;
 
       const suffixeErreurHTTP = `(sur erreur HTTP ${erreurHTTP})`;
-      verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat, suffixeErreurHTTP);
+      verifieEgalite(
+        lectureEtat(),
+        etatFinal,
+        suffixeLectureEtat,
+        suffixeErreurHTTP
+      );
       done();
     })
     .catch((e) => done(e.response?.data || e));
@@ -48,7 +53,10 @@ const middlewareFantaisie = {
   reinitialise: ({
     idUtilisateur,
     acceptationCGU = true,
-    homologationARenvoyer = new Homologation({ id: '456', descriptionService: { nomService: 'un service' } }),
+    homologationARenvoyer = new Homologation({
+      id: '456',
+      descriptionService: { nomService: 'un service' },
+    }),
   }) => {
     authentificationBasiqueMenee = false;
     cguAcceptees = acceptationCGU;
@@ -67,19 +75,19 @@ const middlewareFantaisie = {
     verificationCGUMenee = false;
   },
 
-  aseptise: (...nomsParametres) => (
+  aseptise:
+    (...nomsParametres) =>
     (_requete, _reponse, suite) => {
       parametresAseptises = nomsParametres;
       suite();
-    }
-  ),
+    },
 
-  aseptiseListes: (listes) => (
-    (_requete, _reponse, suite) => {
-      listes.forEach(({ nom, proprietes }) => listesAseptisees.push({ nom, proprietes }));
-      suite();
-    }
-  ),
+  aseptiseListes: (listes) => (_requete, _reponse, suite) => {
+    listes.forEach(({ nom, proprietes }) =>
+      listesAseptisees.push({ nom, proprietes })
+    );
+    suite();
+  },
 
   authentificationBasique: (_requete, _reponse, suite) => {
     authentificationBasiqueMenee = true;
@@ -148,55 +156,88 @@ const middlewareFantaisie = {
   },
 
   verifieAseptisationParametres: (nomsParametres, ...params) => {
-    verifieRequeteChangeEtat({
-      lectureEtat: () => parametresAseptises,
-      etatInitial: [],
-      etatFinal: nomsParametres,
-    }, ...params);
+    verifieRequeteChangeEtat(
+      {
+        lectureEtat: () => parametresAseptises,
+        etatInitial: [],
+        etatFinal: nomsParametres,
+      },
+      ...params
+    );
   },
 
   verifieAdresseIP: (listeAdressesIp, ...params) => {
-    verifieRequeteChangeEtat({
-      lectureEtat: () => listeAdressesIPsAutorisee,
-      etatInitial: [],
-      etatFinal: listeAdressesIp,
-    }, ...params);
+    verifieRequeteChangeEtat(
+      {
+        lectureEtat: () => listeAdressesIPsAutorisee,
+        etatInitial: [],
+        etatFinal: listeAdressesIp,
+      },
+      ...params
+    );
   },
 
   verifieRechercheService: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => rechercheServiceEffectuee }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => rechercheServiceEffectuee },
+      ...params
+    );
   },
 
   verifieRechercheDossierCourant: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => rechercheDossierCourantEffectuee }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => rechercheDossierCourantEffectuee },
+      ...params
+    );
   },
 
   verifieRequeteExigeAcceptationCGU: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => verificationCGUMenee }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => verificationCGUMenee },
+      ...params
+    );
   },
 
   verifieRequeteExigeAuthentificationBasique: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => authentificationBasiqueMenee }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => authentificationBasiqueMenee },
+      ...params
+    );
   },
 
   verifieRequeteExigeJWT: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => verificationJWTMenee }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => verificationJWTMenee },
+      ...params
+    );
   },
 
   verifieRequeteExigeSuppressionCookie: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => suppressionCookieEffectuee }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => suppressionCookieEffectuee },
+      ...params
+    );
   },
 
   verifieRequetePositionneHeaders: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => headersPositionnes }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => headersPositionnes },
+      ...params
+    );
   },
 
   verifieRequetePositionneHeadersAvecNonce: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => headersAvecNoncePositionnes }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => headersAvecNoncePositionnes },
+      ...params
+    );
   },
 
   verifieRequeteRepousseExpirationCookie: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => expirationCookieRepoussee }, ...params);
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => expirationCookieRepoussee },
+      ...params
+    );
   },
 };
 

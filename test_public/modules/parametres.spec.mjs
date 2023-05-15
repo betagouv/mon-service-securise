@@ -5,7 +5,8 @@ import parametres from '../../public/modules/parametres.mjs';
 
 describe('Les paramètres', () => {
   before(() => {
-    const sourcePage = '<form class="formulaire"><input name="champ-1" value="valeur 1"></form>';
+    const sourcePage =
+      '<form class="formulaire"><input name="champ-1" value="valeur 1"></form>';
     const dom = new JSDOM(sourcePage);
     global.$ = jquery(dom.window);
   });

@@ -7,7 +7,8 @@ class EvenementServiceSupprime extends Evenement {
 
     const valide = () => {
       const manque = (donnee) => typeof donnee === 'undefined';
-      if (manque(donnees.idService)) throw new ErreurIdentifiantServiceManquant();
+      if (manque(donnees.idService))
+        throw new ErreurIdentifiantServiceManquant();
     };
 
     valide();

@@ -28,7 +28,8 @@
   color: var(--texte-fonce);
 }
 
-.documentation p, .documentation ul {
+.documentation p,
+.documentation ul {
   color: var(--texte-fonce);
 }
 
@@ -40,7 +41,8 @@
   color: var(--texte-fonce);
 }
 
-.documentation dd, .documentation dt {
+.documentation dd,
+.documentation dt {
   display: inline;
 }
 

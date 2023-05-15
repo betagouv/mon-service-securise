@@ -30,9 +30,12 @@ class ConstructeurDescriptionService {
     return this;
   }
 
-  construis() { return new DescriptionService(this.donnees, this.referentiel); }
+  construis() {
+    return new DescriptionService(this.donnees, this.referentiel);
+  }
 }
 
-const uneDescriptionValide = (referentiel) => new ConstructeurDescriptionService(referentiel);
+const uneDescriptionValide = (referentiel) =>
+  new ConstructeurDescriptionService(referentiel);
 
 module.exports = uneDescriptionValide;

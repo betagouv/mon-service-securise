@@ -12,7 +12,9 @@ const Referentiel = require('../../src/referentiel');
 
 describe('Une action de saisie', () => {
   it('connaît son identifiant', () => {
-    const referentiel = Referentiel.creeReferentiel({ actionsSaisie: { uneAction: {} } });
+    const referentiel = Referentiel.creeReferentiel({
+      actionsSaisie: { uneAction: {} },
+    });
 
     const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
     expect(action.id).to.equal('uneAction');
@@ -29,7 +31,10 @@ describe('Une action de saisie', () => {
 
   it("connaît l'identifiant de l'action suivante", () => {
     const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { position: 0 }, actionSuivante: { position: 1 } },
+      actionsSaisie: {
+        uneAction: { position: 0 },
+        actionSuivante: { position: 1 },
+      },
     });
 
     const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
@@ -53,21 +58,33 @@ describe('Une action de saisie', () => {
     const homologation = new Homologation({});
     homologation.statutSaisie = () => InformationsHomologation.COMPLETES;
 
-    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, homologation);
+    const action = new ActionSaisie(
+      { id: 'uneAction' },
+      referentiel,
+      homologation
+    );
     expect(action.statut()).to.equal(InformationsHomologation.COMPLETES);
   });
 
   it('sait se décrire comme un objet JSON', () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: {
-        uneAction: { position: 0, description: 'Une description', sousTitre: 'Un sous-titre' },
+        uneAction: {
+          position: 0,
+          description: 'Une description',
+          sousTitre: 'Un sous-titre',
+        },
       },
     });
 
     const homologation = new Homologation({});
     homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
 
-    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, homologation);
+    const action = new ActionSaisie(
+      { id: 'uneAction' },
+      referentiel,
+      homologation
+    );
     expect(action.toJSON()).to.eql({
       id: 'uneAction',
       description: 'Une description',
@@ -82,7 +99,9 @@ describe('Une action de saisie', () => {
       done("La création de l'action de saisie aurait dû lever une erreur");
     } catch (e) {
       expect(e).to.be.a(ErreurIdentifiantActionSaisieManquant);
-      expect(e.message).to.equal("L'identifiant d'action de saisie doit être renseigné");
+      expect(e.message).to.equal(
+        "L'identifiant d'action de saisie doit être renseigné"
+      );
       done();
     }
   });
@@ -93,7 +112,9 @@ describe('Une action de saisie', () => {
       done("La création de l'action de saisie aurait dû lever une erreur");
     } catch (e) {
       expect(e).to.be.a(ErreurIdentifiantActionSaisieInvalide);
-      expect(e.message).to.equal("L'action de saisie \"actionInvalide\" est invalide");
+      expect(e.message).to.equal(
+        'L\'action de saisie "actionInvalide" est invalide'
+      );
       done();
     }
   });

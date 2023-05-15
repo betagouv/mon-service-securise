@@ -17,7 +17,10 @@ describe("Les actions de saisie d'une homologation", () => {
   elles('retournent les infos de chaque action triée par position', () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: {
-        actionSuivante: { position: 1, description: "Description de l'action suivante" },
+        actionSuivante: {
+          position: 1,
+          description: "Description de l'action suivante",
+        },
         uneAction: { position: 0, description: 'Une description' },
       },
     });

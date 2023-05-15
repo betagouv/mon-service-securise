@@ -23,7 +23,13 @@ const brancheComportementSaisieNiveauGravite = ($parent, niveaux, couleurs) => {
     const niveau = $disque.data('niveau');
 
     const { position, description } = niveaux[niveau];
-    metsAJourAffichageNiveauGravite($parent, niveau, couleurs, position, description);
+    metsAJourAffichageNiveauGravite(
+      $parent,
+      niveau,
+      couleurs,
+      position,
+      description
+    );
   });
 };
 

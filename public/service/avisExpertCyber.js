@@ -1,6 +1,10 @@
 import parametres from '../modules/parametres.mjs';
 
-const conditionneAffichageRenouvellement = (selecteurAvis, selecteurRenouvellement, condition) => {
+const conditionneAffichageRenouvellement = (
+  selecteurAvis,
+  selecteurRenouvellement,
+  condition
+) => {
   const $avis = $(selecteurAvis);
   const $fieldsetRenouvellement = $(selecteurRenouvellement).parent();
   $fieldsetRenouvellement.toggle(condition());
@@ -8,7 +12,8 @@ const conditionneAffichageRenouvellement = (selecteurAvis, selecteurRenouvelleme
   $avis.change(() => {
     const fieldsetRenouvellementDoitEtreAffiche = condition();
 
-    if (!fieldsetRenouvellementDoitEtreAffiche) $(selecteurRenouvellement).prop('checked', false);
+    if (!fieldsetRenouvellementDoitEtreAffiche)
+      $(selecteurRenouvellement).prop('checked', false);
     $fieldsetRenouvellement.toggle(fieldsetRenouvellementDoitEtreAffiche);
   });
 };
@@ -25,7 +30,10 @@ $(() => {
 
   $bouton.click(() => {
     const params = parametres('form#avis-expert-cyber');
-    axios.post(`/api/service/${identifiantService}/avisExpertCyber`, params)
-      .then((reponse) => (window.location = `/service/${reponse.data.idService}`));
+    axios
+      .post(`/api/service/${identifiantService}/avisExpertCyber`, params)
+      .then(
+        (reponse) => (window.location = `/service/${reponse.data.idService}`)
+      );
   });
 });

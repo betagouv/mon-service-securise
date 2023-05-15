@@ -1,13 +1,20 @@
 const expect = require('expect.js');
 
-const { ErreurDepartementInconnu, ErreurEmailManquant, ErreurProprieteManquante } = require('../../src/erreurs');
+const {
+  ErreurDepartementInconnu,
+  ErreurEmailManquant,
+  ErreurProprieteManquante,
+} = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const Utilisateur = require('../../src/modeles/utilisateur');
 
 describe('Un utilisateur', () => {
   describe("sur demande d'un profil complet ou non", () => {
     it('considère le profil « complet » dès lors que le nom est renseigné', () => {
-      const utilisateur = new Utilisateur({ nom: 'Dupont', email: 'jean.dupont@mail.fr' });
+      const utilisateur = new Utilisateur({
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+      });
       expect(utilisateur.profilEstComplet()).to.be(true);
     });
 
@@ -19,7 +26,11 @@ describe('Un utilisateur', () => {
 
   describe('sur demande de ses initiales', () => {
     it('renvoie les initiales du prénom et du nom', () => {
-      const utilisateur = new Utilisateur({ prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr' });
+      const utilisateur = new Utilisateur({
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+      });
       expect(utilisateur.initiales()).to.equal('JD');
     });
 
@@ -31,12 +42,18 @@ describe('Un utilisateur', () => {
 
   describe('sur demande du « prénom / nom »', () => {
     it('reste robuste si le nom est absent', () => {
-      const utilisateur = new Utilisateur({ prenom: 'Jean', email: 'jean.dupont@mail.fr' });
+      const utilisateur = new Utilisateur({
+        prenom: 'Jean',
+        email: 'jean.dupont@mail.fr',
+      });
       expect(utilisateur.prenomNom()).to.equal('Jean');
     });
 
     it('reste robuste si le prénom est absent', () => {
-      const utilisateur = new Utilisateur({ nom: 'Dupont', email: 'jean.dupont@mail.fr' });
+      const utilisateur = new Utilisateur({
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+      });
       expect(utilisateur.prenomNom()).to.equal('Dupont');
     });
 
@@ -80,9 +97,16 @@ describe('Un utilisateur', () => {
 
   it('sait générer son JWT', (done) => {
     const adaptateurJWT = {};
-    const utilisateur = new Utilisateur({
-      id: '123', prenom: 'Jean', nom: 'Dupont', email: 'jean.dupont@mail.fr', cguAcceptees: false,
-    }, { adaptateurJWT });
+    const utilisateur = new Utilisateur(
+      {
+        id: '123',
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+        cguAcceptees: false,
+      },
+      { adaptateurJWT }
+    );
 
     adaptateurJWT.genereToken = (idUtilisateur, cguAcceptees, callback) => {
       expect(idUtilisateur).to.equal('123');
@@ -101,7 +125,10 @@ describe('Un utilisateur', () => {
   });
 
   it('sait détecter si les conditions générales ont été acceptées', () => {
-    const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr', cguAcceptees: true });
+    const utilisateur = new Utilisateur({
+      email: 'jean.dupont@mail.fr',
+      cguAcceptees: true,
+    });
     expect(utilisateur.accepteCGU()).to.be(true);
 
     const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
@@ -109,7 +136,10 @@ describe('Un utilisateur', () => {
   });
 
   it("sait détecter si l'infolettre a été acceptée", () => {
-    const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr', infolettreAcceptee: true });
+    const utilisateur = new Utilisateur({
+      email: 'jean.dupont@mail.fr',
+      infolettreAcceptee: true,
+    });
     expect(utilisateur.accepteInfolettre()).to.be(true);
 
     const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
@@ -119,7 +149,9 @@ describe('Un utilisateur', () => {
   it("exige que l'adresse électronique soit renseignée", (done) => {
     try {
       new Utilisateur({ prenom: 'Jean', nom: 'Dupont' });
-      done("La création de l'utilisateur aurait dû lever une ErreurEmailManquant");
+      done(
+        "La création de l'utilisateur aurait dû lever une ErreurEmailManquant"
+      );
     } catch (e) {
       expect(e).to.be.a(ErreurEmailManquant);
       done();
@@ -128,7 +160,12 @@ describe('Un utilisateur', () => {
 
   it('connaît sa date de création', () => {
     const dateCreation = new Date(2000, 1, 1, 12, 0);
-    const utilisateur = new Utilisateur({ dateCreation, prenom: 'Jean', nom: 'Dupont', email: 'email' });
+    const utilisateur = new Utilisateur({
+      dateCreation,
+      prenom: 'Jean',
+      nom: 'Dupont',
+      email: 'email',
+    });
 
     expect(utilisateur.dateCreation).to.be.ok();
     expect(utilisateur.dateCreation).to.eql(dateCreation);
@@ -153,16 +190,20 @@ describe('Un utilisateur', () => {
 
   describe("sur une demande de validation des données d'un utilisateur", () => {
     let donnees;
-    const referentiel = Referentiel.creeReferentiel({ departements: [
-      { nom: 'Ain', code: '01' },
-      { nom: 'Paris', code: '75' },
-    ] });
+    const referentiel = Referentiel.creeReferentiel({
+      departements: [
+        { nom: 'Ain', code: '01' },
+        { nom: 'Paris', code: '75' },
+      ],
+    });
 
     const verifiePresencePropriete = (clef, nom, done) => {
       delete donnees[clef];
       try {
         Utilisateur.valideDonnees(donnees, referentiel);
-        done(`La validation des données d'un utilisateur sans ${nom} aurait du lever une erreur de propriété manquante`);
+        done(
+          `La validation des données d'un utilisateur sans ${nom} aurait du lever une erreur de propriété manquante`
+        );
       } catch (error) {
         expect(error).to.be.a(ErreurProprieteManquante);
         expect(error.message).to.equal(`La propriété "${clef}" est requise`);
@@ -203,18 +244,27 @@ describe('Un utilisateur', () => {
       } catch (erreur) {
         let messageEchec = `La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur : ${erreur.message}`;
         if (erreur instanceof ErreurProprieteManquante) {
-          messageEchec = "La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur de propriété manquante";
+          messageEchec =
+            "La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur de propriété manquante";
         }
         done(messageEchec);
       }
     });
 
     it("exige que le nom de l'entité publique soit renseigné", (done) => {
-      verifiePresencePropriete('nomEntitePublique', "nom de l'entité publique", done);
+      verifiePresencePropriete(
+        'nomEntitePublique',
+        "nom de l'entité publique",
+        done
+      );
     });
 
     it('exige que le département soit renseigné', (done) => {
-      verifiePresencePropriete('departementEntitePublique', "département de l'entité publique", done);
+      verifiePresencePropriete(
+        'departementEntitePublique',
+        "département de l'entité publique",
+        done
+      );
     });
 
     it("exige que l'information de RSSI soit renseignée", (done) => {
@@ -222,21 +272,33 @@ describe('Un utilisateur', () => {
     });
 
     it("exige que l'information de délégué à la protection des données soit renseignée", (done) => {
-      verifiePresencePropriete('delegueProtectionDonnees', 'délégué à la protection des données', done);
+      verifiePresencePropriete(
+        'delegueProtectionDonnees',
+        'délégué à la protection des données',
+        done
+      );
     });
 
     it("exige que l'information d'acceptation de l'infolettre soit renseignée", (done) => {
-      verifiePresencePropriete('infolettreAcceptee', 'infolettre acceptée', done);
+      verifiePresencePropriete(
+        'infolettreAcceptee',
+        'infolettre acceptée',
+        done
+      );
     });
 
     it('exige un département présent dans le référentiel', (done) => {
       donnees.departementEntitePublique = 'codeDepartementInconnu';
       try {
         Utilisateur.valideDonnees(donnees, referentiel);
-        done("La validation des données d'un utilisateur avec un département hors référentiel aurait du lever une erreur");
+        done(
+          "La validation des données d'un utilisateur avec un département hors référentiel aurait du lever une erreur"
+        );
       } catch (error) {
         expect(error).to.be.a(ErreurDepartementInconnu);
-        expect(error.message).to.equal("Le département identifié par \"codeDepartementInconnu\" n'est pas répertorié");
+        expect(error.message).to.equal(
+          'Le département identifié par "codeDepartementInconnu" n\'est pas répertorié'
+        );
         done();
       }
     });

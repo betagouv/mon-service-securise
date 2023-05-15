@@ -1,5 +1,8 @@
 const expect = require('expect.js');
-const { developpeProvenance, reduitProvenance } = require('../migrations/20221102134033_changeProvenanceService');
+const {
+  developpeProvenance,
+  reduitProvenance,
+} = require('../migrations/20221102134033_changeProvenanceService');
 
 describe('La migration de la provenance du service depuis valeurs multiple en valeur simple', () => {
   describe("vers l'avant", () => {
@@ -21,7 +24,9 @@ describe('La migration de la provenance du service depuis valeurs multiple en va
     });
 
     it("choisit outil existant lorsqu'il y a plusieurs provenances", () => {
-      expect(reduitProvenance(['achat', 'developpement'])).to.equal('outilExistant');
+      expect(reduitProvenance(['achat', 'developpement'])).to.equal(
+        'outilExistant'
+      );
     });
   });
 
@@ -31,7 +36,10 @@ describe('La migration de la provenance du service depuis valeurs multiple en va
     });
 
     it('transforme outil existant en développement et achat', () => {
-      expect(developpeProvenance('outilExistant')).to.eql(['developpement', 'achat']);
+      expect(developpeProvenance('outilExistant')).to.eql([
+        'developpement',
+        'achat',
+      ]);
     });
 
     it("préserve la provenance lorsqu'elle est achat ou développement", () => {

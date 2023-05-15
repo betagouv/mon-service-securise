@@ -1,6 +1,6 @@
 function miseAJourInformationsGenerales(modifie) {
-  return (knex) => knex('homologations')
-    .then((lignes) => {
+  return (knex) =>
+    knex('homologations').then((lignes) => {
       const misesAJour = lignes
         .filter(({ donnees }) => donnees.informationsGenerales)
         .map(({ id, donnees: { informationsGenerales, ...autresDonnees } }) => {
