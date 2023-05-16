@@ -1,7 +1,10 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
-
-const { DUREE_SESSION } = require('./http/configurationServeur');
+const { csrf } = require('lusca');
+const {
+  DUREE_SESSION,
+  ENDPOINTS_SANS_CSRF,
+} = require('./http/configurationServeur');
 const routesApi = require('./routes/routesApi');
 const { routesBibliotheques } = require('./routes/routesBibliotheques');
 const routesService = require('./routes/routesService');
@@ -22,7 +25,8 @@ const creeServeur = (
   adaptateurCsv,
   adaptateurZip,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
-  avecPageErreur = process.env.NODE_ENV === 'production'
+  avecPageErreur = process.env.NODE_ENV === 'production',
+  avecProtectionCsrf = process.env.AVEC_PROTECTION_CSRF === 'true'
 ) => {
   let serveur;
 
@@ -42,6 +46,8 @@ const creeServeur = (
       secure: avecCookieSecurise,
     })
   );
+
+  if (avecProtectionCsrf) app.use(csrf({ blocklist: ENDPOINTS_SANS_CSRF }));
 
   app.use(middleware.positionneHeaders);
   app.use(middleware.repousseExpirationCookie);
