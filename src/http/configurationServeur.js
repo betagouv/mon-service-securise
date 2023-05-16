@@ -6,6 +6,7 @@ const ENDPOINTS_SANS_CSRF = [
   { path: '/api/token', type: 'exact' },
   // Pareil pour l'inscription.
   { path: '/api/utilisateur', type: 'exact' },
+  { path: '/api/reinitialisationMotDePasse', type: 'exact' },
   // Les événements Matomo partent vers l'infra beta : on ne fait que passe-plat donc on ne protège pas.
   { path: '/bibliotheques/evenementMatomo', type: 'exact' },
 ];
