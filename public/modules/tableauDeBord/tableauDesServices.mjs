@@ -34,7 +34,7 @@ const tableauDesServices = {
       .sort((serviceA, serviceB) => {
         const { colonne, direction } = tableauDesServices.tri;
         if (colonne === null) return 0;
-        if (direction === null) return 0;
+        if (direction === AUCUNE) return 0;
         if (direction === ASC) return serviceB[colonne] - serviceA[colonne];
         return serviceA[colonne] - serviceB[colonne];
       });
