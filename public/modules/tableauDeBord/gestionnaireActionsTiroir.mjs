@@ -1,5 +1,5 @@
 import tableauDesServices from './tableauDesServices.mjs';
-import gestionnaireTiroir from './gestionnaireTiroir.mjs';
+import { gestionnaireTiroir } from './gestionnaireTiroir.mjs';
 import { declencheValidation } from '../interactions/validation.mjs';
 
 const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];

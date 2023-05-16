@@ -64,6 +64,11 @@ section:last-of-type {
   display: none;
 }
 
+.disparu {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .zone-principale,
 .etroit {
   padding: 4em 7em 2em;
