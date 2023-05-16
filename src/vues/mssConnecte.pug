@@ -19,6 +19,8 @@ block navigation
       p Veuillez vous reconnecter.
       a.bouton(href = '/connexion') Reconnexion
 
+  include csrf.pug
+
   script(type = 'module', src = '/statique/mssConnecte.js')
 
 block bom-contenu

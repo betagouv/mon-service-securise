@@ -1,0 +1,5 @@
+script(id = 'infos-csrf', type = 'application/json').
+  !{JSON.stringify({ token: _csrf })}
+
+block append scripts
+  script(type = 'module', src = '/statique/scripts/csrf.js')
