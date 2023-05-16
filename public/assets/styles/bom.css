@@ -3,6 +3,7 @@
   bottom: 2em;
   right: 2em;
   z-index: 10;
+  transition: opacity 0.2s;
 }
 
 .bom :is(.bom-vignette, .bom-titre) {

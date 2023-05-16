@@ -1,4 +1,4 @@
-import gestionnaireTiroir from './gestionnaireTiroir.mjs';
+import { gestionnaireTiroir } from './gestionnaireTiroir.mjs';
 import tableauDesServices from './tableauDesServices.mjs';
 import gestionnaireActionsTiroir from './gestionnaireActionsTiroir.mjs';
 

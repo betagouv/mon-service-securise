@@ -1,5 +1,7 @@
 import tableauDesServices from './tableauDesServices.mjs';
 
+const EVENEMENT_BASCULE_TIROIR = 'basculeTiroir';
+
 const contenuActions = {
   duplication: {
     titre: 'Dupliquer',
@@ -94,7 +96,8 @@ const gestionnaireTiroir = {
   basculeOuvert: (statut) => {
     if (statut) $('.tiroir').addClass('ouvert');
     else $('.tiroir').removeClass('ouvert');
+    $(document).trigger(EVENEMENT_BASCULE_TIROIR, { ouvert: statut });
   },
 };
 
-export default gestionnaireTiroir;
+export { gestionnaireTiroir, EVENEMENT_BASCULE_TIROIR };
