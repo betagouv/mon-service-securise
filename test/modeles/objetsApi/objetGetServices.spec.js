@@ -11,9 +11,19 @@ describe("L'objet d'API de `GET /services`", () => {
       nomService: 'Un service',
       organisationsResponsables: ['Une organisation'],
     },
-    createur: { id: 'A', email: 'email.createur@mail.fr', prenom: 'Jacques' },
+    createur: {
+      id: 'A',
+      email: 'email.createur@mail.fr',
+      prenom: 'Jacques',
+      poste: 'RSSI',
+    },
     contributeurs: [
-      { id: 'B', email: 'email.contributeur1@mail.fr', prenom: 'Jean' },
+      {
+        id: 'B',
+        email: 'email.contributeur1@mail.fr',
+        prenom: 'Jean',
+        poste: 'Maire',
+      },
     ],
   });
   unService.indiceCyber = () => ({ total: 3.51 });
@@ -38,9 +48,20 @@ describe("L'objet d'API de `GET /services`", () => {
         id: '123',
         nomService: 'Un service',
         organisationsResponsables: ['Une organisation'],
-        createur: { id: 'A', prenomNom: 'Jacques', initiales: 'J' },
+        createur: {
+          id: 'A',
+          prenomNom: 'Jacques',
+          initiales: 'J',
+          poste: 'RSSI',
+        },
         contributeurs: [
-          { id: 'B', prenomNom: 'Jean', initiales: 'J', cguAcceptees: false },
+          {
+            id: 'B',
+            prenomNom: 'Jean',
+            initiales: 'J',
+            cguAcceptees: false,
+            poste: 'Maire',
+          },
         ],
         indiceCyber: 3.5,
         statutHomologation: { libelle: 'À réaliser', id: 'aSaisir' },
