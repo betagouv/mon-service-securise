@@ -295,6 +295,7 @@ label[for='recherche-service'] {
   border-radius: 4px;
   width: fit-content;
   padding: 0.2em 0.5em;
+  cursor: pointer;
 }
 
 .tableau-services td .contributeurs::before {
@@ -702,4 +703,72 @@ label[for='recherche-service'] {
 #contenu-telechargement .document-telechargeable .icone-type-document {
   width: 2.8em;
   height: 2.8em;
+}
+
+#contenu-contributeurs #liste-contributeurs {
+  list-style: none;
+  padding-left: 0;
+}
+
+#contenu-contributeurs #liste-contributeurs li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1em;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 0.5em;
+}
+
+#contenu-contributeurs .contenu-nom-prenom {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+#contenu-contributeurs .initiale {
+  border-radius: 50%;
+  min-width: 2.5em;
+  min-height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+#contenu-contributeurs .initiale.proprietaire {
+  background: #c19616;
+}
+
+#contenu-contributeurs .initiale.contributeur {
+  background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
+}
+
+#contenu-contributeurs .nom-contributeur {
+  font-weight: 500;
+  word-break: break-word;
+}
+
+#contenu-contributeurs .poste-contributeur {
+  font-weight: 500;
+  color: #667892;
+}
+
+#contenu-contributeurs .role {
+  border-radius: 4px;
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 0.9em;
+  line-height: 0.9em;
+  padding: 0.4em 0.5em;
+}
+
+#contenu-contributeurs .role.proprietaire {
+  background: #c19616;
+}
+
+#contenu-contributeurs .role.contributeur {
+  background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
 }

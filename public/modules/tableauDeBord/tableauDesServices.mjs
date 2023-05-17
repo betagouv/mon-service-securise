@@ -143,7 +143,7 @@ const tableauDesServices = {
       const $nombreContributeurs = $(
         `<div class='contributeurs' title='${metEnFormeContributeurs(
           service
-        )}'>${service.nombreContributeurs}</div>`
+        )}' data-action='contributeurs'>${service.nombreContributeurs}</div>`
       );
       $conteneurCollaborateur.append($nombreContributeurs);
       $celluleCollaborateur.append($conteneurCollaborateur);
