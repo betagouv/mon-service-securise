@@ -23,6 +23,11 @@ const gestionnaireEvenements = {
         gestionnaireEvenements.afficheMenuAction($elementClique);
       } else if ($elementClique.hasClass('action')) {
         gestionnaireEvenements.afficheTiroirAction($elementClique);
+      } else if ($elementClique.hasClass('contributeurs')) {
+        const idService = $elementClique
+          .parents('.ligne-service')
+          .data('id-service');
+        gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
       } else {
         gestionnaireEvenements.fermeMenuFlottant();
       }
@@ -48,8 +53,8 @@ const gestionnaireEvenements = {
       gestionnaireActionsTiroir.exporteCsv();
     });
   },
-  afficheTiroirAction: ($action) => {
-    gestionnaireTiroir.afficheContenuAction($action.data('action'));
+  afficheTiroirAction: ($action, ...args) => {
+    gestionnaireTiroir.afficheContenuAction($action.data('action'), ...args);
     gestionnaireEvenements.fermeMenuFlottant();
   },
   afficheMenuAction: ($bouton) => {

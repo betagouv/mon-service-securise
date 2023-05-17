@@ -85,6 +85,8 @@ block main
           h3.titre-tiroir
           p.texte-tiroir
       .contenu-tiroir
+        form.bloc-contenu#contenu-contributeurs
+          ul#liste-contributeurs
         form.bloc-contenu#contenu-export
           - const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
           - const maintenant = new Date();

@@ -2,7 +2,40 @@ import tableauDesServices from './tableauDesServices.mjs';
 
 const EVENEMENT_BASCULE_TIROIR = 'basculeTiroir';
 
+const metEnFormeContributeur = (contributeur, estProprietaire) =>
+  `<li>
+    <div class='contenu-nom-prenom'>
+      <div class='initiale ${
+        estProprietaire ? 'proprietaire' : 'contributeur'
+      }'>${contributeur.initiales}</div>
+      <div class='nom-prenom-poste'>
+        <div class='nom-contributeur'>${contributeur.prenomNom}</div>
+        <div class='poste-contributeur'>${contributeur.poste || '…'}</div>
+      </div>
+    </div>
+    <div class='role ${estProprietaire ? 'proprietaire' : 'contributeur'}'>${
+    estProprietaire ? 'Propriétaire' : 'Collaborateur'
+  }</div>
+  </li>`;
+
 const contenuActions = {
+  contributeurs: {
+    titre: 'Contributeurs',
+    texte:
+      "Découvrir l'équipe de travail du service pour sécuriser et homologuer à tout moment, même en simultané.",
+    initialise: ([idService]) => {
+      const service = tableauDesServices.donneesDuService(idService);
+      const $listeContributeurs = $('#liste-contributeurs');
+
+      $listeContributeurs.empty();
+      $listeContributeurs.append(
+        metEnFormeContributeur(service.createur, true)
+      );
+      service.contributeurs.forEach((contributeur) => {
+        $listeContributeurs.append(metEnFormeContributeur(contributeur, false));
+      });
+    },
+  },
   duplication: {
     titre: 'Dupliquer',
     texte:
@@ -84,13 +117,13 @@ const contenuActions = {
 };
 
 const gestionnaireTiroir = {
-  afficheContenuAction: (identifiantAction) => {
+  afficheContenuAction: (identifiantAction, ...args) => {
     const { titre, texte, initialise } = contenuActions[identifiantAction];
     $('.titre-tiroir').text(titre);
     $('.texte-tiroir').text(texte);
     $('.bloc-contenu').hide();
     $(`#contenu-${identifiantAction}`).show();
-    initialise();
+    initialise(args);
     gestionnaireTiroir.basculeOuvert(true);
   },
   basculeOuvert: (statut) => {
