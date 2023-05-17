@@ -134,8 +134,8 @@
   margin: 0;
 }
 
-.modale.deconnexion .bouton:hover {
-  color: #fff;
+.modale.deconnexion .fermeture-modale {
+  display: none;
 }
 
 .modale.deconnexion .image-deconnexion {
