@@ -34,7 +34,12 @@ header nav a,
   color: var(--systeme-design-etat-bleu);
 }
 
-:is(header nav a, .nom-utilisateur-courant, .logo-anssi, .logo-mss):hover {
+:is(
+    header nav a:not(.bouton),
+    .nom-utilisateur-courant,
+    .logo-anssi,
+    .logo-mss
+  ):hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
