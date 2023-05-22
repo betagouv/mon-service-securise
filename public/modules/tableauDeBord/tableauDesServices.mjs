@@ -8,7 +8,9 @@ const metEnFormeContributeurs = (service) =>
 const remplisCartesInformations = (resume) => {
   $('#nombre-services').text(resume.nombreServices);
   $('#nombre-services-homologues').text(resume.nombreServicesHomologues);
-  $('#indice-cyber-moyen').text(resume.indiceCyberMoyen?.toFixed(1) ?? '-');
+};
+const remplisCarteInformationIndiceCyber = (indiceCyberMoyen) => {
+  $('#indice-cyber-moyen').text(indiceCyberMoyen?.toFixed(1) ?? '-');
 };
 
 const tableauDesServices = {
@@ -100,13 +102,27 @@ const tableauDesServices = {
     tableauDesServices.donneesDuService(idService)?.nomService,
   recupereServices: () => {
     axios.get('/api/utilisateurCourant').then(() =>
-      axios.get('/api/services').then(({ data }) => {
-        remplisCartesInformations(data.resume);
-        tableauDesServices.nombreServices = data.resume.nombreServices;
-        tableauDesServices.donnees = data.services;
-        tableauDesServices.afficheDonnees();
-        tableauDesServices.afficheEtatSelection();
-      })
+      axios
+        .get('/api/services')
+        .then(({ data }) => {
+          remplisCartesInformations(data.resume);
+          tableauDesServices.nombreServices = data.resume.nombreServices;
+          tableauDesServices.donnees = data.services;
+          tableauDesServices.afficheDonnees();
+          tableauDesServices.afficheEtatSelection();
+        })
+        .then(() => axios.get('/api/services/indices-cyber'))
+        .then(({ data }) => {
+          remplisCarteInformationIndiceCyber(data.resume.indiceCyberMoyen);
+          data.services.forEach((service) => {
+            const cible = tableauDesServices.donnees.find(
+              (donneesService) => donneesService.id === service.id
+            );
+            cible.indiceCyber = service.indiceCyber;
+          });
+          tableauDesServices.afficheDonnees();
+          tableauDesServices.afficheEtatSelection();
+        })
     );
   },
   remplisTableau: (donnees) => {
@@ -148,13 +164,14 @@ const tableauDesServices = {
       $conteneurCollaborateur.append($nombreContributeurs);
       $celluleCollaborateur.append($conteneurCollaborateur);
       $ligne.append($celluleCollaborateur);
-      $ligne.append(
-        $(
-          `<td>${
-            parseFloat(service.indiceCyber) === 0 ? '-' : service.indiceCyber
-          }</td>`
-        )
-      );
+
+      let contenuIndiceCyber = service.indiceCyber;
+      if (parseFloat(service.indiceCyber) === 0) {
+        contenuIndiceCyber = '-';
+      } else if (!service.indiceCyber) {
+        contenuIndiceCyber = '<div class="icone-chargement"></div>';
+      }
+      $ligne.append($(`<td>${contenuIndiceCyber}</td>`));
       $ligne.append(
         $(
           `<td><div class='statut-homologation statut-${service.statutHomologation.id}'>${service.statutHomologation.libelle}</div></td>`

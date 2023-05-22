@@ -772,3 +772,8 @@ label[for='recherche-service'] {
 #contenu-contributeurs .role.contributeur {
   background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
 }
+
+.icone-chargement {
+  position: relative;
+  transform: translateY(0);
+}
