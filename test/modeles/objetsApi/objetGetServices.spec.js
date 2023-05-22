@@ -26,7 +26,6 @@ describe("L'objet d'API de `GET /services`", () => {
       },
     ],
   });
-  unService.indiceCyber = () => ({ total: 3.51 });
   unService.dossierCourant = () => unDossier().construit();
 
   const unAutreService = new Service({
@@ -63,7 +62,6 @@ describe("L'objet d'API de `GET /services`", () => {
             poste: 'Maire',
           },
         ],
-        indiceCyber: 3.5,
         statutHomologation: { libelle: 'À réaliser', id: 'aSaisir' },
         nombreContributeurs: 1 + 1,
         estCreateur: true,
@@ -77,27 +75,12 @@ describe("L'objet d'API de `GET /services`", () => {
   });
 
   it('fournit les données de résumé des services', () => {
-    unService.indiceCyber = () => ({ total: 4 });
     unAutreService.dossiers.statutSaisie = () => 'completes';
-    unAutreService.indiceCyber = () => ({ total: 5 });
 
     const services = [unService, unAutreService];
-    expect(objetGetServices.donnees(services).resume).to.eql({
+    expect(objetGetServices.donnees(services, 'A').resume).to.eql({
       nombreServices: 2,
       nombreServicesHomologues: 1,
-      indiceCyberMoyen: 4.5,
-    });
-  });
-
-  it('ne compte pas les indice cyber nuls pour calculer la moyenne', () => {
-    unService.indiceCyber = () => ({ total: 4 });
-    unAutreService.indiceCyber = () => ({ total: 0 });
-
-    const services = [unService, unAutreService];
-    expect(objetGetServices.donnees(services).resume).to.eql({
-      nombreServices: 2,
-      nombreServicesHomologues: 1,
-      indiceCyberMoyen: 4,
     });
   });
 });
