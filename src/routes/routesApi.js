@@ -17,6 +17,7 @@ const {
 const routesApiService = require('./routesApiService');
 const Utilisateur = require('../modeles/utilisateur');
 const objetGetServices = require('../modeles/objetsApi/objetGetServices');
+const objetGetIndicesCyber = require('../modeles/objetsApi/objetGetIndicesCyber');
 
 const routesApi = (
   middleware,
@@ -127,6 +128,17 @@ const routesApi = (
         .then((services) =>
           objetGetServices.donnees(services, requete.idUtilisateurCourant)
         )
+        .then((donnees) => reponse.json(donnees));
+    }
+  );
+
+  routes.get(
+    '/services/indices-cyber',
+    middleware.verificationAcceptationCGU,
+    (requete, reponse) => {
+      depotDonnees
+        .homologations(requete.idUtilisateurCourant)
+        .then((services) => objetGetIndicesCyber.donnees(services))
         .then((donnees) => reponse.json(donnees));
     }
   );

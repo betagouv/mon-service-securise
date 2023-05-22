@@ -62,6 +62,47 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
   });
 
+  describe('quand requête GET sur `/api/services/indices-cyber`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          'http://localhost:1234/api/services/indices-cyber',
+          done
+        );
+    });
+
+    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+
+      testeur.depotDonnees().homologations = (idUtilisateur) => {
+        expect(idUtilisateur).to.equal('123');
+        return Promise.resolve([
+          new Service({
+            id: '456',
+            descriptionService: {
+              nomService: 'Un service',
+              organisationsResponsables: [],
+            },
+            createur: { email: 'email.createur@mail.fr' },
+          }),
+        ]);
+      };
+
+      axios
+        .get('http://localhost:1234/api/services/indices-cyber')
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+
+          const { services } = reponse.data;
+          expect(services.length).to.equal(1);
+          expect(services[0].id).to.equal('456');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
   describe('quand requête GET sur `/api/services/export.csv`', () => {
     beforeEach(() => {
       testeur.adaptateurCsv().genereCsvServices = () => Promise.resolve();
