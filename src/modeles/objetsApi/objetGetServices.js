@@ -27,14 +27,14 @@ const donnees = (services, idUtilisateur) => {
           id: json.createur.id,
           prenomNom: json.createur.prenomNom,
           initiales: json.createur.initiales,
-          poste: json.createur.poste,
+          poste: json.createur.posteDetaille,
         },
         contributeurs: json.contributeurs.map((c) => ({
           id: c.id,
           prenomNom: c.prenomNom,
           initiales: c.initiales,
           cguAcceptees: c.cguAcceptees,
-          poste: c.poste,
+          poste: c.posteDetaille,
         })),
         indiceCyber: json.indiceCyber,
         statutHomologation: {

@@ -5,6 +5,7 @@ const {
   ErreurProprieteManquante,
 } = require('../erreurs');
 const Referentiel = require('../referentiel');
+const { formatteListeFr } = require('../utilitaires/liste');
 
 const valide = (donnees) => {
   const { email } = donnees;
@@ -139,6 +140,13 @@ class Utilisateur extends Base {
     );
   }
 
+  posteDetaille() {
+    const postes = [this.poste];
+    if (this.estRSSI()) postes.push('RSSI');
+    if (this.estDelegueProtectionDonnees()) postes.push('DPO');
+    return formatteListeFr(postes.filter((p) => !!p));
+  }
+
   prenomNom() {
     return [this.prenom, this.nom].join(' ').trim() || this.email;
   }
@@ -155,6 +163,7 @@ class Utilisateur extends Base {
       prenomNom: this.prenomNom(),
       telephone: this.telephone || '',
       poste: this.poste || '',
+      posteDetaille: this.posteDetaille(),
       rssi: this.estRSSI(),
       delegueProtectionDonnees: this.estDelegueProtectionDonnees(),
       nomEntitePublique: this.nomEntitePublique || '',
