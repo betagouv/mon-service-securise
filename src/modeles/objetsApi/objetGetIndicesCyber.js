@@ -18,7 +18,11 @@ const donnees = (services) => {
       ...s,
       indiceCyber: s.indiceCyber.toFixed(1),
     })),
-    resume: { indiceCyberMoyen },
+    resume: {
+      indiceCyberMoyen: Number.isNaN(indiceCyberMoyen)
+        ? '-'
+        : indiceCyberMoyen?.toFixed(1),
+    },
   };
 };
 

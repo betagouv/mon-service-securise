@@ -27,7 +27,7 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
 
     const services = [unService, unAutreService];
     expect(objetGetIndicesCyber.donnees(services).resume).to.eql({
-      indiceCyberMoyen: 4.5,
+      indiceCyberMoyen: '4.5',
     });
   });
 
@@ -36,8 +36,18 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
     unAutreService.indiceCyber = () => ({ total: 0 });
 
     const services = [unService, unAutreService];
-    expect(objetGetIndicesCyber.donnees(services).resume).to.eql({
-      indiceCyberMoyen: 4,
-    });
+    expect(
+      objetGetIndicesCyber.donnees(services).resume.indiceCyberMoyen
+    ).to.be('4.0');
+  });
+
+  it("donne une valeur vide pour l'indice cyber moyen quand la moyenne n'est pas calculable", () => {
+    unService.indiceCyber = () => ({ total: 0 });
+    unAutreService.indiceCyber = () => ({ total: 0 });
+
+    const services = [unService, unAutreService];
+    expect(
+      objetGetIndicesCyber.donnees(services).resume.indiceCyberMoyen
+    ).to.be('-');
   });
 });
