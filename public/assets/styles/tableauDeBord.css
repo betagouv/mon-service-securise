@@ -324,6 +324,10 @@ label[for='recherche-service'] {
   opacity: 0;
 }
 
+.cellule-indice-cyber {
+  line-height: 0;
+}
+
 .tableau-services td .statut-homologation {
   border-radius: 40px;
   padding: 0.3em 0.7em;
@@ -771,9 +775,4 @@ label[for='recherche-service'] {
 
 #contenu-contributeurs .role.contributeur {
   background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
-}
-
-.icone-chargement {
-  position: relative;
-  transform: translateY(0);
 }
