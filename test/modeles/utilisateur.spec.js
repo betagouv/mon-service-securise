@@ -63,6 +63,47 @@ describe('Un utilisateur', () => {
     });
   });
 
+  describe('sur demande de son poste détaillé', () => {
+    it("inclut « RSSI » si l'utilisateur est RSSI", () => {
+      const estRssi = new Utilisateur({
+        email: 'jean.dupont@mail.fr',
+        rssi: true,
+      });
+
+      expect(estRssi.posteDetaille()).to.contain('RSSI');
+    });
+
+    it("inclut « DPO » si l'utilisateur est DPO", () => {
+      const estDpo = new Utilisateur({
+        email: 'jean.dupont@mail.fr',
+        delegueProtectionDonnees: true,
+      });
+
+      expect(estDpo.posteDetaille()).to.contain('DPO');
+    });
+
+    it("inclut le poste déclaré par l'utilisateur", () => {
+      const avecPoste = new Utilisateur({
+        email: 'jean.dupont@mail.fr',
+        poste: 'Maire',
+      });
+
+      expect(avecPoste.posteDetaille()).to.contain('Maire');
+    });
+
+    it('combine toutes les informations disponibles', () => {
+      const toutEnMemeTemps = new Utilisateur({
+        email: 'jean.dupont@mail.fr',
+        rssi: true,
+        delegueProtectionDonnees: true,
+        poste: 'Maire',
+      });
+
+      expect(toutEnMemeTemps.posteDetaille()).to.contain('RSSI');
+      expect(toutEnMemeTemps.posteDetaille()).to.contain('DPO');
+      expect(toutEnMemeTemps.posteDetaille()).to.contain('Maire');
+    });
+  });
   it('sait se convertir en JSON', () => {
     const utilisateur = new Utilisateur({
       id: '123',
@@ -71,7 +112,7 @@ describe('Un utilisateur', () => {
       email: 'jean.dupont@mail.fr',
       telephone: '0100000000',
       motDePasse: 'XXX',
-      poste: 'RSSI',
+      poste: 'Maire',
       rssi: true,
       delegueProtectionDonnees: false,
       nomEntitePublique: 'Ville de Paris',
@@ -85,7 +126,8 @@ describe('Un utilisateur', () => {
       prenomNom: 'Jean Dupont',
       telephone: '0100000000',
       initiales: 'JD',
-      poste: 'RSSI',
+      poste: 'Maire',
+      posteDetaille: 'Maire et RSSI',
       rssi: true,
       delegueProtectionDonnees: false,
       nomEntitePublique: 'Ville de Paris',
