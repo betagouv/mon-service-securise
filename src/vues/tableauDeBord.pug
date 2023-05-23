@@ -46,10 +46,10 @@ block main
             +carteInformation('/statique/assets/images/icone_services_enregistres.svg', '', 'nombre-services', 'Services', 'enregistrés')
             +carteInformation('/statique/assets/images/icone_services_homologues.svg', 'vert', 'nombre-services-homologues', 'Services', 'homologués')
             +carteInformation('/statique/assets/images/icone_indice_cyber_moyen.svg', 'bleu', 'indice-cyber-moyen', 'Indice cyber', 'moyen')
-          .actions
-            label(for='recherche-service') Rechercher
-              input#recherche-service(type='text', placeHolder='ex : Service Z, Agglomération de Mansart,...')
-            .nouveau-service#nouveau-service Nouveau service
+          .nouveau-service#nouveau-service Nouveau service
+        .recherche
+          label(for='recherche-service') Rechercher
+            input#recherche-service(type='text', placeHolder='ex : Service Z, Agglomération de Mansart,...')
     .services.marges-fixes
       table.tableau-services
         colgroup
