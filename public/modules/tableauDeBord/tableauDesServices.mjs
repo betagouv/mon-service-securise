@@ -10,7 +10,7 @@ const remplisCartesInformations = (resume) => {
   $('#nombre-services-homologues').text(resume.nombreServicesHomologues);
 };
 const remplisCarteInformationIndiceCyber = (indiceCyberMoyen) => {
-  $('#indice-cyber-moyen').text(indiceCyberMoyen?.toFixed(1) ?? '-');
+  $('#indice-cyber-moyen').text(indiceCyberMoyen);
 };
 
 const tableauDesServices = {
