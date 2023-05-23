@@ -119,3 +119,15 @@ section:last-of-type {
   margin: 2em 0 2em auto;
   padding: 1em 2em;
 }
+
+.icone-chargement::after {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border-radius: 50%;
+  border: 2px solid var(--gris-fonce);
+  border-color: var(--gris-fonce) transparent var(--gris-fonce) transparent;
+  animation: rotation 1.2s linear infinite;
+}

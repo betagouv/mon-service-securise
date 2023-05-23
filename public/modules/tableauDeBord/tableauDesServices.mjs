@@ -171,7 +171,9 @@ const tableauDesServices = {
       } else if (!service.indiceCyber) {
         contenuIndiceCyber = '<div class="icone-chargement"></div>';
       }
-      $ligne.append($(`<td>${contenuIndiceCyber}</td>`));
+      $ligne.append(
+        $(`<td class="cellule-indice-cyber">${contenuIndiceCyber}</td>`)
+      );
       $ligne.append(
         $(
           `<td><div class='statut-homologation statut-${service.statutHomologation.id}'>${service.statutHomologation.libelle}</div></td>`
