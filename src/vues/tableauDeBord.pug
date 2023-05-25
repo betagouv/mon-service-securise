@@ -12,7 +12,7 @@ mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLign
         dd!= texteDeuxiemeLigne
 
 mixin actionAvecIcone(sourceImage, texteAction, action, id)
-  .action(data-action=action, id=id)
+  .action(data-action=action, id=id, tabindex=0)
     img(src=sourceImage)
     p!= texteAction
 
@@ -61,21 +61,23 @@ block main
         thead
           tr
             th.entete-selection
-              .conteneur-selection-services
-                input.checkbox-selection-tous-services(type='checkbox')
-                .texte-nombre-service 0 sélectionné
-                img.fleche-droite(src='/statique/assets/images/fleche_pointe_droite.svg')
-                .menu-flotant.actions-services.invisible
-                  +actionAvecIcone('/statique/assets/images/icone_ajout_contributeur.svg', 'Inviter contributeur(s)', 'invitation')
-                  +actionAvecIcone('/statique/assets/images/icone_action_telechargement.svg', 'Télécharger PDF(s)', 'telechargement', 'action-flotante-telechargement')
-                  hr
-                  +actionAvecIcone('/statique/assets/images/icone_exporter_service.svg', 'Exporter la sélection', 'export')
-                  +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer', 'duplication')
-                  +actionAvecIcone('/statique/assets/images/icone_supprimer.svg', 'Supprimer', 'suppression')
             th.entete-contributeurs(data-colonne='nombreContributeurs') Contributeur(s)
             th(data-colonne='indiceCyber') Indice Cyber
             th(data-colonne='statutHomologation') Homologation
-            th 
+            th
+          tr#barre-outils
+            th(colspan=5)
+              .conteneur-barre-outils
+                .conteneur-selection-multiple
+                  input.checkbox-selection-tous-services(type='checkbox')
+                  .texte-nombre-service 0 sélectionné
+                hr
+                +actionAvecIcone('/statique/assets/images/icone_ajout_contributeur.svg', 'Inviter contributeur(s)', 'invitation')
+                +actionAvecIcone('/statique/assets/images/icone_action_telechargement.svg', 'Télécharger PDF(s)', 'telechargement', 'action-flotante-telechargement')
+                hr
+                +actionAvecIcone('/statique/assets/images/icone_exporter_service.svg', 'Exporter la sélection', 'export')
+                +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer', 'duplication')
+                +actionAvecIcone('/statique/assets/images/icone_supprimer.svg', 'Supprimer', 'suppression')
         tbody.contenu-tableau-services
     .tiroir
       .entete-tiroir

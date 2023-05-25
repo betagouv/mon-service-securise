@@ -45,14 +45,17 @@ const tableauDesServices = {
   afficheEtatSelection: () => {
     const nbServiceSelectionnes = tableauDesServices.servicesSelectionnes.size;
     const $checkboxTousServices = $('.checkbox-selection-tous-services');
+    const $barreOutils = $('#barre-outils');
     if (nbServiceSelectionnes === tableauDesServices.nombreServices) {
       $checkboxTousServices.removeClass('selection-partielle');
       $checkboxTousServices.prop('checked', true);
       $('.texte-nombre-service').text('Tous sélectionnés');
+      $barreOutils.addClass('visible');
     } else if (nbServiceSelectionnes === 0) {
       $checkboxTousServices.removeClass('selection-partielle');
       $checkboxTousServices.prop('checked', false);
       $('.texte-nombre-service').text('0 sélectionné');
+      $barreOutils.removeClass('visible');
     } else {
       $checkboxTousServices.addClass('selection-partielle');
       $checkboxTousServices.prop('checked', false);
@@ -61,6 +64,7 @@ const tableauDesServices = {
           nbServiceSelectionnes > 1 ? 's' : ''
         }`
       );
+      $barreOutils.addClass('visible');
     }
   },
   basculeSelectionService: (idService, statut) => {

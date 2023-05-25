@@ -199,7 +199,7 @@ label[for='recherche-service'] {
   justify-content: left;
 }
 
-.tableau-services thead th::after {
+.tableau-services thead th:not(:first-of-type)::after {
   content: '\00a0\00a0\00a0';
   margin-left: 0.3em;
 }
@@ -220,7 +220,7 @@ label[for='recherche-service'] {
   background: none;
 }
 
-.tableau-services thead tr th:last-of-type {
+.tableau-services thead tr:not(:last-of-type) th:last-of-type {
   border-top-right-radius: 8px;
 }
 
@@ -238,10 +238,6 @@ label[for='recherche-service'] {
 
 .tableau-services tbody tr.selectionne {
   background: #eff6ff;
-}
-
-.tableau-services tbody tr:first-of-type td:first-of-type {
-  border-top-left-radius: 8px;
 }
 
 .tableau-services tbody tr:last-of-type td {
@@ -437,26 +433,9 @@ label[for='recherche-service'] {
   border-radius: 8px;
 }
 
-.tableau-services .conteneur-selection-services {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
 .tableau-services .texte-nombre-service {
   cursor: pointer;
-}
-
-.tableau-services .fleche-droite {
-  transform: translateY(1px);
-}
-
-.tableau-services .actions-services {
-  position: absolute;
-  right: 0;
-  top: -1px;
-  transform: translateX(100%);
-  border-top-left-radius: 0;
+  font-weight: 500;
 }
 
 .tableau-services .action {
@@ -464,15 +443,7 @@ label[for='recherche-service'] {
   flex-shrink: none;
   align-items: center;
   color: #0079d0;
-}
-
-.tableau-services .action.inactif {
-  color: var(--gris-inactif);
-  pointer-events: none;
-}
-
-.tableau-services .action.inactif img {
-  filter: grayscale(1);
+  font-size: 0.9em;
 }
 
 .tableau-services .action :is(img, p) {
@@ -482,19 +453,6 @@ label[for='recherche-service'] {
 .tableau-services .action p {
   margin: 0;
   margin-left: 0.5em;
-}
-
-.tableau-services .conteneur-selection-services {
-  border: 1px solid transparent;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px;
-  padding: 0.5em 1.5em;
-  margin-bottom: 0.2em;
-}
-
-.tableau-services .conteneur-selection-services.actif {
-  background: #f1f5f9;
-  border: 1px solid #08416a;
 }
 
 .tableau-services .conteneur-collaborateur {
@@ -785,4 +743,60 @@ label[for='recherche-service'] {
 
 #contenu-contributeurs .role.contributeur {
   background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
+}
+
+.tableau-services .conteneur-barre-outils {
+  display: flex;
+  gap: 0.3em;
+  padding: 0 1.5em;
+  max-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: max-height 0.2s, padding 0.2s;
+}
+
+.tableau-services #barre-outils th {
+  border: none;
+}
+
+.tableau-services #barre-outils.visible th {
+  border: 1px solid #cbd5e1;
+  border-style: solid solid none solid;
+}
+
+.tableau-services #barre-outils.visible .conteneur-barre-outils {
+  /* Cette valeur est volontairement trop élevée pour assure l'affichage complet de la barre d'outils */
+  max-height: 4em;
+  padding: 0 1.5em;
+}
+
+.tableau-services .conteneur-barre-outils .action {
+  border-radius: 4px;
+  user-select: none;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0.5em 0.7em;
+}
+
+.tableau-services .conteneur-barre-outils .action:hover {
+  background: #f1f5f9;
+  color: #0c5c98;
+}
+
+.tableau-services .conteneur-selection-multiple {
+  display: flex;
+  padding-top: 0.7em;
+  padding-right: 0.7em;
+  padding-bottom: 0.7em;
+}
+
+.tableau-services .conteneur-barre-outils hr {
+  margin: 0;
+  border: 1px solid #cbd5e1;
+  border-style: none none none solid;
+  margin: 0.2em 0;
+}
+
+.tableau-services .conteneur-barre-outils hr.action {
+  padding: 0;
 }
