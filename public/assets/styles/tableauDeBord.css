@@ -778,6 +778,10 @@ label[for='recherche-service'] {
   padding: 0.5em 0.7em;
 }
 
+.tableau-services .conteneur-barre-outils .action.inactif {
+  display: none;
+}
+
 .tableau-services .conteneur-barre-outils .action:hover {
   background: #f1f5f9;
   color: #0c5c98;
