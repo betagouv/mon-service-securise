@@ -19,8 +19,6 @@ const gestionnaireEvenements = {
         gestionnaireEvenements.selectionneService($elementClique);
       } else if ($elementClique.hasClass('checkbox-selection-tous-services')) {
         gestionnaireEvenements.selectionneTousServices($elementClique);
-      } else if ($elementClique.hasClass('texte-nombre-service')) {
-        gestionnaireEvenements.afficheMenuAction($elementClique);
       } else if ($elementClique.hasClass('action')) {
         gestionnaireEvenements.afficheTiroirAction($elementClique);
       } else if ($elementClique.hasClass('contributeurs')) {
@@ -56,34 +54,6 @@ const gestionnaireEvenements = {
   afficheTiroirAction: ($action, ...args) => {
     gestionnaireTiroir.afficheContenuAction($action.data('action'), ...args);
     gestionnaireEvenements.fermeMenuFlottant();
-  },
-  afficheMenuAction: ($bouton) => {
-    if (tableauDesServices.servicesSelectionnes.size === 0) return;
-    const doitOuvrirMenu = !$bouton
-      .parents('.conteneur-selection-services')
-      .hasClass('actif');
-    gestionnaireEvenements.fermeMenuFlottant();
-    if (doitOuvrirMenu) {
-      $bouton.parents('.conteneur-selection-services').addClass('actif');
-      $('.menu-flotant.actions-services').removeClass('invisible');
-      const auMoinsUnNonCreateur = [...tableauDesServices.servicesSelectionnes]
-        .map((idService) =>
-          tableauDesServices.donnees.find((service) => service.id === idService)
-        )
-        .some((service) => !service.estCreateur);
-      if (auMoinsUnNonCreateur) {
-        $('.actions-services .action').addClass('inactif');
-      } else {
-        $('.actions-services .action').removeClass('inactif');
-        const plusDunService =
-          [...tableauDesServices.servicesSelectionnes].length > 1;
-        if (plusDunService)
-          $('#action-flotante-telechargement').addClass('inactif');
-      }
-    } else {
-      $bouton.parents('.conteneur-selection-services').removeClass('actif');
-      $('.menu-flotant.actions-services').addClass('invisible');
-    }
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
