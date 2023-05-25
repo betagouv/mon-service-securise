@@ -66,6 +66,21 @@ const tableauDesServices = {
       );
       $barreOutils.addClass('visible');
     }
+
+    const auMoinsUnNonCreateur = [...tableauDesServices.servicesSelectionnes]
+      .map((idService) =>
+        tableauDesServices.donnees.find((service) => service.id === idService)
+      )
+      .some((service) => !service.estCreateur);
+    if (auMoinsUnNonCreateur) {
+      $('.conteneur-barre-outils .action').addClass('inactif');
+    } else {
+      $('.conteneur-barre-outils .action').removeClass('inactif');
+      const plusDunService =
+        [...tableauDesServices.servicesSelectionnes].length > 1;
+      if (plusDunService)
+        $('#action-flotante-telechargement').addClass('inactif');
+    }
   },
   basculeSelectionService: (idService, statut) => {
     if (statut) {
