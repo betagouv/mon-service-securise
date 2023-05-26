@@ -225,7 +225,79 @@ label[for='recherche-service'] {
 }
 
 .tableau-services th.entete-contributeurs {
+  background: none;
+  position: relative;
+}
+
+.tableau-services th.entete-contributeurs::before {
+  content: '';
+  position: absolute;
   clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #dbecf1;
+}
+
+.tableau-services th.entete-contributeurs::after {
+  position: relative;
+}
+
+.tableau-services th.entete-contributeurs p {
+  position: relative;
+  margin: 0;
+  display: inline-block;
+}
+
+.tableau-services th.entete-contributeurs .menu-flotant {
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: 0.85em;
+  gap: 0.8em;
+}
+
+.tableau-services th.entete-contributeurs .menu-flotant p {
+  margin: 0;
+}
+
+.tableau-services th.entete-contributeurs .menu-flotant .nom-propriete {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #667892;
+  gap: 0.4em;
+  cursor: initial;
+}
+
+.tableau-services th.entete-contributeurs .menu-flotant input {
+  margin-right: 0.3em;
+}
+
+.tableau-services th.entete-contributeurs .menu-flotant .nom-propriete label {
+  font-weight: 500;
+  color: #2f3a43;
+  cursor: pointer;
+}
+
+.tableau-services .menu-flotant .efface-tri {
+  color: #0079d0;
+  position: absolute;
+  right: 0.85em;
+  top: 0.85em;
+}
+
+.tableau-services .menu-flotant .filtre-mes-services::after {
+  display: inline-block;
+  content: '';
+  background-image: url('/statique/assets/images/icone_createur_collaboration.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 1.7em;
+  height: 1.7em;
+  margin-left: 0.3em;
+  transform: translateY(6px);
 }
 
 .tableau-services td {
@@ -354,7 +426,7 @@ label[for='recherche-service'] {
 .tableau-services .menu-flotant {
   position: absolute;
   background: #fff;
-  border: 1px solid #667892;
+  border: 1px solid #0c5c98;
   border-radius: 5px;
   text-align: left;
   padding: 0.2em;
