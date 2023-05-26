@@ -204,6 +204,15 @@ label[for='recherche-service'] {
   margin-top: -8px;
 }
 
+.tableau-services thead th.triable:not([data-direction='0']) {
+  color: #08416a;
+}
+
+.tableau-services thead th.triable:hover,
+.tableau-services thead th.entete-contributeurs:hover {
+  color: #0c5c98;
+}
+
 .tableau-services thead th.triable[data-direction='0']::after {
   background-image: url('/statique/assets/images/icone_tri_aucun.svg');
 }
@@ -261,6 +270,13 @@ label[for='recherche-service'] {
   position: relative;
   margin: 0;
   display: inline-block;
+}
+
+.tableau-services thead th.entete-contributeurs:not([data-direction='0']),
+.tableau-services
+  thead
+  th.entete-contributeurs[data-filtre-proprietaire='true'] {
+  color: #08416a;
 }
 
 .tableau-services
