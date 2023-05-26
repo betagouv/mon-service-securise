@@ -72,14 +72,14 @@ block main
                 p.efface-tri effacer le tri
                 .nom-propriete Trier
                   label 
-                    input.tri-asc-collaborateurs(type='radio', name='tri-collaborateur')
+                    input.tri-collaborateur(type='radio', name='tri-collaborateur', value=1)
                     p Croissant
                   label
-                    input.tri-desc-collaborateurs(type='radio', name='tri-collaborateur')
+                    input.tri-collaborateur(type='radio', name='tri-collaborateur', value=2)
                     p Décroissant
                 .nom-propriete Filtrer
                   label
-                    input.filtre-proprietaire-collaborateurs(type='checkbox')
+                    input.tri-collaborateur.filtre-proprietaire-collaborateurs(type='checkbox')
                     p.filtre-mes-services Mes services
 
             th(data-colonne='indiceCyber') Indice Cyber

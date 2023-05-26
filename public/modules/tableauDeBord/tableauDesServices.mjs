@@ -20,6 +20,7 @@ const tableauDesServices = {
   servicesSelectionnes: new Set(),
   termeRecherche: '',
   tri: { colonne: null, direction: AUCUNE },
+  filtreSeulementProprietaire: false,
   afficheDonnees: () => {
     tableauDesServices.videTableau();
     const donneesAAfficher = tableauDesServices.donnees
@@ -32,6 +33,11 @@ const tableauDesServices = {
           service.organisationsResponsables[0]
             ?.toLowerCase()
             .includes(tableauDesServices.termeRecherche.toLowerCase())
+      )
+      .filter((service) =>
+        tableauDesServices.filtreSeulementProprietaire
+          ? service.estCreateur
+          : true
       )
       .sort((serviceA, serviceB) => {
         const { colonne, direction } = tableauDesServices.tri;
@@ -89,6 +95,15 @@ const tableauDesServices = {
         $('#action-flotante-telechargement').addClass('inactif');
     }
   },
+  appliqueTriContributeurs: (ordre, filtreEstPropriétaire) => {
+    tableauDesServices.tri = {
+      colonne: 'nombreContributeurs',
+      direction: ordre ?? 0,
+    };
+    tableauDesServices.filtreSeulementProprietaire = filtreEstPropriétaire;
+    tableauDesServices.afficheDonnees();
+    $('.tableau-services thead th').attr('data-direction', 0);
+  },
   basculeSelectionService: (idService, statut) => {
     if (statut) {
       tableauDesServices.servicesSelectionnes.add(idService);
@@ -116,6 +131,7 @@ const tableauDesServices = {
     tableauDesServices.tri = { colonne, direction };
     tableauDesServices.afficheDonnees();
 
+    $('input[name="tri-collaborateur"]').prop('checked', false);
     $('.tableau-services thead th').attr('data-direction', 0);
     $(`.tableau-services thead th[data-colonne="${colonne}"]`).attr(
       'data-direction',

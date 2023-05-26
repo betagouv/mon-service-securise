@@ -8,7 +8,9 @@ const gestionnaireEvenements = {
       tableauDesServices.modifieRecherche($(e.target).val());
     });
 
-    $('.tableau-services thead th:not(:first):not(:last)').on('click', (e) => {
+    $(
+      '.tableau-services thead th:not(:first):not(:last):not(.entete-contributeurs)'
+    ).on('click', (e) => {
       const colonne = $(e.target).data('colonne');
       tableauDesServices.modifieTri(colonne);
     });
@@ -28,8 +30,13 @@ const gestionnaireEvenements = {
           .parents('.ligne-service')
           .data('id-service');
         gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
-      } else {
-        gestionnaireEvenements.fermeMenuFlottant();
+      } else if ($elementClique.hasClass('entete-contributeurs')) {
+        gestionnaireEvenements.afficheTriCollaborateurs();
+      } else if ($elementClique.hasClass('tri-collaborateur')) {
+        gestionnaireEvenements.appliqueTriContributeurs();
+      } else if ($elementClique.hasClass('efface-tri')) {
+        $('input[name="tri-collaborateur"]').prop('checked', false);
+        gestionnaireEvenements.appliqueTriContributeurs();
       }
     });
 
@@ -58,6 +65,23 @@ const gestionnaireEvenements = {
     $action.addClass('actif');
     gestionnaireTiroir.afficheContenuAction($action.data('action'), ...args);
     gestionnaireEvenements.fermeMenuFlottant();
+  },
+  afficheTriCollaborateurs: () => {
+    $('.entete-contributeurs .menu-flotant').toggleClass('invisible');
+  },
+  appliqueTriContributeurs: () => {
+    const ordre = parseInt(
+      $('input[name="tri-collaborateur"]:checked').val(),
+      10
+    );
+    const filtreEstPropriétaire = $(
+      'input.filtre-proprietaire-collaborateurs'
+    ).is(':checked');
+
+    tableauDesServices.appliqueTriContributeurs(
+      Number.isNaN(ordre) ? 0 : ordre,
+      filtreEstPropriétaire
+    );
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
