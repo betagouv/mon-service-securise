@@ -66,7 +66,22 @@ block main
               .conteneur-tous-selection
                 input.checkbox-tous-services(type='checkbox')
                 .texte-tous-service Tous
-            th.entete-contributeurs(data-colonne='nombreContributeurs') Contributeur(s)
+            th.entete-contributeurs(data-colonne='nombreContributeurs')
+              p Contributeur(s)
+              .menu-flotant.invisible
+                p.efface-tri effacer le tri
+                .nom-propriete Trier
+                  label 
+                    input.tri-asc-collaborateurs(type='radio', name='tri-collaborateur')
+                    p Croissant
+                  label
+                    input.tri-desc-collaborateurs(type='radio', name='tri-collaborateur')
+                    p Décroissant
+                .nom-propriete Filtrer
+                  label
+                    input.filtre-proprietaire-collaborateurs(type='checkbox')
+                    p.filtre-mes-services Mes services
+
             th(data-colonne='indiceCyber') Indice Cyber
             th(data-colonne='statutHomologation') Homologation
             th
