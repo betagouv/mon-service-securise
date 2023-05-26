@@ -102,7 +102,7 @@ const tableauDesServices = {
     };
     tableauDesServices.filtreSeulementProprietaire = filtreEstPropriétaire;
     tableauDesServices.afficheDonnees();
-    $('.tableau-services thead th').attr('data-direction', 0);
+    $('.tableau-services thead th.triable').attr('data-direction', 0);
   },
   basculeSelectionService: (idService, statut) => {
     if (statut) {
@@ -132,7 +132,12 @@ const tableauDesServices = {
     tableauDesServices.afficheDonnees();
 
     $('input[name="tri-collaborateur"]').prop('checked', false);
-    $('.tableau-services thead th').attr('data-direction', 0);
+    $('.tableau-services thead th.entete-contributeurs').attr(
+      'data-direction',
+      0
+    );
+
+    $('.tableau-services thead th.triable').attr('data-direction', 0);
     $(`.tableau-services thead th[data-colonne="${colonne}"]`).attr(
       'data-direction',
       direction

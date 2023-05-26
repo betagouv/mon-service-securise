@@ -199,17 +199,28 @@ label[for='recherche-service'] {
   justify-content: left;
 }
 
-.tableau-services thead th:not(:first-of-type)::after {
-  content: '\00a0\00a0\00a0';
-  margin-left: 0.3em;
+.tableau-services thead th.triable::after {
+  content: '';
+  display: inline-block;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 1.7em;
+  height: 1.7em;
+  transform: translateY(7px);
+  margin-top: -8px;
 }
 
-.tableau-services thead th[data-direction='1']::after {
-  content: '↑';
+.tableau-services thead th.triable[data-direction='0']::after {
+  background-image: url('/statique/assets/images/icone_tri_aucun.svg');
 }
 
-.tableau-services thead th[data-direction='2']::after {
-  content: '↓';
+.tableau-services thead th.triable[data-direction='1']::after {
+  background-image: url('/statique/assets/images/icone_tri_croissant.svg');
+}
+
+.tableau-services thead th.triable[data-direction='2']::after {
+  background-image: url('/statique/assets/images/icone_tri_decroissant.svg');
 }
 
 .tableau-services thead tr th {
@@ -242,12 +253,51 @@ label[for='recherche-service'] {
 
 .tableau-services th.entete-contributeurs::after {
   position: relative;
+  content: '';
+  display: inline-block;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 1.7em;
+  height: 1.7em;
+  transform: translateY(7px);
+  margin-top: -8px;
 }
 
 .tableau-services th.entete-contributeurs p {
   position: relative;
   margin: 0;
   display: inline-block;
+}
+
+.tableau-services
+  th.entete-contributeurs[data-direction='0'][data-filtre-proprietaire='false']::after {
+  background-image: url('/statique/assets/images/icone_tri_aucun.svg');
+}
+
+.tableau-services
+  th.entete-contributeurs[data-direction='1'][data-filtre-proprietaire='false']::after {
+  background-image: url('/statique/assets/images/icone_tri_croissant.svg');
+}
+
+.tableau-services
+  th.entete-contributeurs[data-direction='2'][data-filtre-proprietaire='false']::after {
+  background-image: url('/statique/assets/images/icone_tri_decroissant.svg');
+}
+
+.tableau-services
+  th.entete-contributeurs[data-direction='0'][data-filtre-proprietaire='true']::after {
+  background-image: url('/statique/assets/images/icone_filtre_proprietaire.svg');
+}
+
+.tableau-services
+  th.entete-contributeurs[data-direction='1'][data-filtre-proprietaire='true']::after {
+  background-image: url('/statique/assets/images/icone_filtre_proprietaire_croissant.svg');
+}
+
+.tableau-services
+  th.entete-contributeurs[data-direction='2'][data-filtre-proprietaire='true']::after {
+  background-image: url('/statique/assets/images/icone_filtre_proprietaire_decroissant.svg');
 }
 
 .tableau-services th.entete-contributeurs > p:first-of-type {
