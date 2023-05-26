@@ -327,6 +327,11 @@ label[for='recherche-service'] {
 
 .cellule-indice-cyber {
   line-height: 0;
+  font-weight: 500;
+}
+
+.tableau-services .note-totale {
+  font-size: 0.9em;
 }
 
 .tableau-services td .statut-homologation {
