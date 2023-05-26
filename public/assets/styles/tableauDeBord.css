@@ -250,6 +250,10 @@ label[for='recherche-service'] {
   display: inline-block;
 }
 
+.tableau-services th.entete-contributeurs > p:first-of-type {
+  pointer-events: none;
+}
+
 .tableau-services th.entete-contributeurs .menu-flotant {
   top: 100%;
   left: 0;
