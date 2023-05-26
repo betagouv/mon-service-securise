@@ -165,7 +165,7 @@ const tableauDesServices = {
       $celluleCollaborateur.append($conteneurCollaborateur);
       $ligne.append($celluleCollaborateur);
 
-      let contenuIndiceCyber = service.indiceCyber;
+      let contenuIndiceCyber = `${service.indiceCyber}<span class='note-totale'>/5</span>`;
       if (parseFloat(service.indiceCyber) === 0) {
         contenuIndiceCyber = '-';
       } else if (!service.indiceCyber) {
