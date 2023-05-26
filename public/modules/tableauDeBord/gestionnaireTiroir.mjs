@@ -126,10 +126,13 @@ const gestionnaireTiroir = {
     initialise(args);
     gestionnaireTiroir.basculeOuvert(true);
   },
-  basculeOuvert: (statut) => {
-    if (statut) $('.tiroir').addClass('ouvert');
-    else $('.tiroir').removeClass('ouvert');
-    $(document).trigger(EVENEMENT_BASCULE_TIROIR, { ouvert: statut });
+  basculeOuvert: (doitOuvrir) => {
+    if (doitOuvrir) $('.tiroir').addClass('ouvert');
+    else {
+      $('.tiroir').removeClass('ouvert');
+      $('#barre-outils .action').removeClass('actif');
+    }
+    $(document).trigger(EVENEMENT_BASCULE_TIROIR, { ouvert: doitOuvrir });
   },
 };
 
