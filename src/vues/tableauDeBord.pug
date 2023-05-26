@@ -66,7 +66,7 @@ block main
               .conteneur-tous-selection
                 input.checkbox-tous-services(type='checkbox')
                 .texte-tous-service Tous
-            th.entete-contributeurs(data-colonne='nombreContributeurs')
+            th.entete-contributeurs(data-colonne='nombreContributeurs', data-direction='0', data-filtre-proprietaire='false')
               p Contributeur(s)
               .menu-flotant.invisible
                 p.efface-tri effacer le tri
@@ -82,8 +82,8 @@ block main
                     input.tri-collaborateur.filtre-proprietaire-collaborateurs(type='checkbox')
                     p.filtre-mes-services Mes services
 
-            th(data-colonne='indiceCyber') Indice Cyber
-            th(data-colonne='statutHomologation') Homologation
+            th.triable(data-colonne='indiceCyber', data-direction='0') Indice Cyber
+            th.triable(data-colonne='statutHomologation', data-direction='0') Homologation
             th
           tr#barre-outils
             th(colspan=5)

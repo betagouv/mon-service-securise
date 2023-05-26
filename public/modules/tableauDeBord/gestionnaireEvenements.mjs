@@ -8,9 +8,7 @@ const gestionnaireEvenements = {
       tableauDesServices.modifieRecherche($(e.target).val());
     });
 
-    $(
-      '.tableau-services thead th:not(:first):not(:last):not(.entete-contributeurs)'
-    ).on('click', (e) => {
+    $('.tableau-services thead th.triable').on('click', (e) => {
       const colonne = $(e.target).data('colonne');
       tableauDesServices.modifieTri(colonne);
     });
@@ -70,16 +68,22 @@ const gestionnaireEvenements = {
     $('.entete-contributeurs .menu-flotant').toggleClass('invisible');
   },
   appliqueTriContributeurs: () => {
-    const ordre = parseInt(
+    let direction = parseInt(
       $('input[name="tri-collaborateur"]:checked').val(),
       10
     );
+    direction = Number.isNaN(direction) ? 0 : direction;
+
     const filtreEstPropriétaire = $(
       'input.filtre-proprietaire-collaborateurs'
     ).is(':checked');
 
+    $('.entete-contributeurs')
+      .attr('data-direction', direction.toString())
+      .attr('data-filtre-proprietaire', filtreEstPropriétaire);
+
     tableauDesServices.appliqueTriContributeurs(
-      Number.isNaN(ordre) ? 0 : ordre,
+      direction,
       filtreEstPropriétaire
     );
   },
