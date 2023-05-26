@@ -52,6 +52,8 @@ const gestionnaireEvenements = {
     });
   },
   afficheTiroirAction: ($action, ...args) => {
+    $('#barre-outils .action').removeClass('actif');
+    $action.addClass('actif');
     gestionnaireTiroir.afficheContenuAction($action.data('action'), ...args);
     gestionnaireEvenements.fermeMenuFlottant();
   },

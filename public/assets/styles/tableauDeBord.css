@@ -446,6 +446,17 @@ label[for='recherche-service'] {
   font-size: 0.9em;
 }
 
+.tableau-services .action.actif {
+  color: #08416a;
+}
+
+.tableau-services .action.actif img {
+  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) invert(18%) sepia(34%) saturate(2472%)
+    hue-rotate(179deg) brightness(97%) contrast(97%);
+}
+
 .tableau-services .action :is(img, p) {
   pointer-events: none;
 }
@@ -765,7 +776,7 @@ label[for='recherche-service'] {
 }
 
 .tableau-services #barre-outils.visible .conteneur-barre-outils {
-  /* Cette valeur est volontairement trop élevée pour assure l'affichage complet de la barre d'outils */
+  /* Cette valeur est volontairement trop élevée pour assurer l'affichage complet de la barre d'outils */
   max-height: 4em;
   padding: 0 1.5em;
 }
@@ -785,6 +796,13 @@ label[for='recherche-service'] {
 .tableau-services .conteneur-barre-outils .action:hover {
   background: #f1f5f9;
   color: #0c5c98;
+}
+
+.tableau-services .conteneur-barre-outils .action:hover img {
+  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) invert(21%) sepia(46%) saturate(4342%)
+    hue-rotate(190deg) brightness(90%) contrast(91%);
 }
 
 .tableau-services .conteneur-selection-multiple {
