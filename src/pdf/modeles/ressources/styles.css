@@ -20,6 +20,10 @@ html {
   /* On utilise ces règles CSS pour assurer un rendu correct des images et graphiques */
   /* https://github.com/puppeteer/puppeteer/issues/2685#issuecomment-643573422 */
   -webkit-print-color-adjust: exact !important;
+}
+
+.statistiques-mesures,
+.entete {
   -webkit-filter: opacity(1) !important;
 }
 
