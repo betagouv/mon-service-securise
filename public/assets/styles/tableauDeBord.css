@@ -512,7 +512,7 @@ label[for='recherche-service'] {
 
 .suivi-services .tiroir {
   height: 100%;
-  width: 32em;
+  min-width: 32em;
   position: absolute;
   left: 100vw;
   top: 0;
@@ -644,6 +644,7 @@ label[for='recherche-service'] {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  column-gap: 1em;
   border: 1px solid var(--liseres-fonce);
   border-radius: 8px;
   font-weight: 500;
