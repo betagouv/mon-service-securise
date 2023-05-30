@@ -511,14 +511,15 @@ label[for='recherche-service'] {
 }
 
 .suivi-services .tiroir {
-  background: #fff;
-  height: calc(100% + var(--marge-au-dessus-footer));
+  height: 100%;
+  width: 32em;
   position: absolute;
   left: 100vw;
   top: 0;
-  width: 32em;
+  overflow-y: scroll;
   transition: transform 0.2s ease-in-out;
   box-shadow: -10px 0px 34px 0px #00000026;
+  background: #fff;
   visibility: hidden;
 }
 
