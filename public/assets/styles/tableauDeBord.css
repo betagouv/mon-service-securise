@@ -514,10 +514,12 @@ label[for='recherche-service'] {
   width: 32em;
   transition: transform 0.2s ease-in-out;
   box-shadow: -10px 0px 34px 0px #00000026;
+  visibility: hidden;
 }
 
 .suivi-services .tiroir.ouvert {
   transform: translateX(-100%);
+  visibility: visible;
 }
 
 .suivi-services .entete-tiroir {
