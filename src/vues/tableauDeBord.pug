@@ -104,7 +104,6 @@ block main
                 p= nomFichierCsv
               button.bouton#action-export-csv(type='button') Télécharger
         form.bloc-contenu#contenu-invitation
-          p Saisir l'e-mail de la personne à inviter.
           label Ajouter
             br
             input(
@@ -123,8 +122,7 @@ block main
           p Un e-mail d'invitation a bien été envoyé.
           button.bouton.fermeture-tiroir Revenir à la liste des contributeurs
         form.bloc-contenu#contenu-duplication
-          p Saisir le nombre de copies souhaitées.
-          label Nombre de copies
+          label Nombre de copies souhaitées
             br
             input(
               id = 'nombre-copie',
@@ -151,10 +149,9 @@ block main
               strong Cette action est irréversible
               p Les données seront définitivement effacées. Les contributeurs n'auront plus accès à ce service.
           .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Non, j'annule
-            button.bouton#action-suppression(type='button') Je confirme la suppression
+            button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
+            button.bouton#action-suppression(type='button') Confirmer la suppression
         form.bloc-contenu#contenu-telechargement
-          p Télécharger le(s) document(s) de votre choix ou l'ensemble.
           +documentTelechargeable('Synthèse de la sécurité du service', "Ce PDF résume en 1 page l'état de la sécurité du service.", 'PDF', 'lien-synthese')
           +documentTelechargeable('Annexes', 'Ce PDF détaille toutes les informations renseignées sur la sécurité du service.', 'PDF', 'lien-annexes')
           +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est le document de décision pouvant être signé par l'autorité d'homologation.", 'PDF', 'lien-decision', true)

@@ -538,7 +538,7 @@ label[for='recherche-service'] {
 
 .suivi-services .contenu-tiroir {
   text-align: left;
-  padding: 0 2em;
+  padding: 2em 2em;
 }
 
 .contenu-tiroir .bouton {
@@ -560,7 +560,7 @@ label[for='recherche-service'] {
   border: 1px solid #cbd5e1;
   border-radius: 6px;
   margin-top: 1em;
-  width: 6em;
+  width: 8em;
 }
 
 #contenu-invitation input {
@@ -572,6 +572,10 @@ label[for='recherche-service'] {
   display: flex;
   justify-content: end;
   gap: 1em;
+}
+
+#contenu-suppression p {
+  margin: 0 0 1em 0;
 }
 
 .banniere-avertissement {
@@ -600,6 +604,7 @@ label[for='recherche-service'] {
 #contenu-export .liste-fichiers {
   list-style: none;
   padding-left: 0;
+  margin: 0;
 }
 
 #contenu-export .fichier {
