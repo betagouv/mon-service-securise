@@ -204,6 +204,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     );
   };
 
+  const numeroEtape = (idEtape) =>
+    etapesParcoursHomologation().find((e) => e.id === idEtape)?.numero;
+
   const premiereEtapeParcours = () =>
     etapesParcoursHomologation().find((e) => e.numero === 1);
 
@@ -219,13 +222,18 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
       .map((e) => e.id)
       .includes(idEtape);
 
-  const numeroEtape = (idEtape) =>
-    etapesParcoursHomologation().find((e) => e.id === idEtape)?.numero;
-
   const idEtapeSuivante = (idEtape) => {
     const numeroSuivant = numeroEtape(idEtape) + 1;
     return etapesParcoursHomologation().find((e) => e.numero === numeroSuivant)
       .id;
+  };
+
+  const etapeSuffisantePourDossierDecision = (idEtape) => {
+    const numeroEtapeSuffisante = numeroEtape(
+      donnees.etapeNecessairePourDossierDecision
+    );
+    const numeroEtapeCourante = numeroEtape(idEtape);
+    return numeroEtapeCourante >= numeroEtapeSuffisante;
   };
 
   const valideDonnees = () => {
@@ -284,6 +292,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     derniereEtapeParcours,
     etapeExiste,
     etapesParcoursHomologation,
+    etapeSuffisantePourDossierDecision,
     fonctionnalites,
     identifiantsActionsSaisie,
     identifiantsCategoriesMesures,
