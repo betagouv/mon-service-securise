@@ -21,8 +21,8 @@ const metEnFormeContributeur = (contributeur, estProprietaire) =>
 const contenuActions = {
   contributeurs: {
     titre: 'Contributeurs',
-    texte:
-      "Découvrir l'équipe de travail du service pour sécuriser et homologuer à tout moment, même en simultané.",
+    texteSimple:
+      'Gérer la liste des personnes invitées à contribuer au service sélectionné.',
     initialise: ([idService]) => {
       const service = tableauDesServices.donneesDuService(idService);
       const $listeContributeurs = $('#liste-contributeurs');
@@ -38,34 +38,42 @@ const contenuActions = {
   },
   duplication: {
     titre: 'Dupliquer',
-    texte:
-      'Copier autant de fois que nécessaire les services sélectionnés. Toutes les données saisies apparaîtront dans les nouveaux services créés, hormis celles de la rubrique Homologuer.',
+    texteSimple:
+      "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.",
     initialise: () => {
       $('#nombre-copie').val(1);
     },
   },
   export: {
     titre: 'Exporter la sélection',
-    texte:
-      "Récupérer l'essentiel des données du tableau de bord pour les services sélectionnés.",
+    texteSimple:
+      'Télécharger les données du service sélectionné dans le tableau de bord.',
+    texteMultiple:
+      'Télécharger la liste des services sélectionnés dans le tableau de bord.',
     initialise: () => {},
   },
   invitation: {
     titre: 'Inviter des contributeurs 1/2',
-    texte: 'Créer des équipes de travail avec autant de personnes souhaitées.',
+    texteSimple:
+      'Inviter les personnes de votre choix à contribuer à ce service.',
+    texteMultiple:
+      'Inviter les personnes de votre choix à contribuer à ces services.',
     initialise: () => {
       $('#email-invitation-collaboration').val('');
     },
   },
   'invitation-confirmation': {
     titre: 'Inviter des contributeurs 2/2',
-    texte: 'Créer des équipes de travail avec autant de personnes souhaitées.',
+    texteSimple:
+      'Inviter les personnes de votre choix à contribuer à ce service.',
+    texteMultiple:
+      'Inviter les personnes de votre choix à contribuer à ces services.',
     initialise: () => {},
   },
   suppression: {
     titre: 'Supprimer',
-    texte:
-      'Effacer toutes les données saisies et tous les résultats proposés par MonServiceSécurisé pour les services sélectionnés. Seuls les propriétaires peuvent supprimer.',
+    texteSimple: 'Effacer toutes les données du service sélectionné.',
+    texteMultiple: 'Effacer toutes les données des services sélectionnés.',
     initialise: () => {
       const { nomDuService, servicesSelectionnes } = tableauDesServices;
       const nbServicesSelectionnes = servicesSelectionnes.size;
@@ -82,9 +90,11 @@ const contenuActions = {
     },
   },
   telechargement: {
-    titre: 'Télécharger PDF(s)',
-    texte:
-      'Obtenir en un clic les documents indispensables pour sécuriser et homologuer le service sélectionné.',
+    titre: 'Télécharger les PDFs',
+    texteSimple:
+      "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.",
+    texteMultiple:
+      "Obtenir les documents utiles à la sécurisation et à l'homologation des services sélectionnés.",
     initialise: () => {
       const idSelectionne = tableauDesServices.servicesSelectionnes
         .keys()
@@ -116,9 +126,12 @@ const contenuActions = {
 
 const gestionnaireTiroir = {
   afficheContenuAction: (identifiantAction, ...args) => {
-    const { titre, texte, initialise } = contenuActions[identifiantAction];
+    const { titre, texteSimple, texteMultiple, initialise } =
+      contenuActions[identifiantAction];
+    const estSelectionMulitple =
+      tableauDesServices.servicesSelectionnes.size > 1;
     $('.titre-tiroir').text(titre);
-    $('.texte-tiroir').text(texte);
+    $('.texte-tiroir').text(estSelectionMulitple ? texteMultiple : texteSimple);
     $('.bloc-contenu').hide();
     $(`#contenu-${identifiantAction}`).show();
     initialise(args);
