@@ -72,7 +72,7 @@ label[for='recherche-service'] {
 
 .bandeau-info-action {
   display: flex;
-  align-items: center;
+  align-items: start;
   margin-top: 2em;
 }
 
@@ -88,7 +88,7 @@ label[for='recherche-service'] {
   border-radius: 8px;
   display: flex;
   align-items: center;
-  padding: 0.5em 1em;
+  padding: 0.5em 1em 0.8em 1em;
   gap: 1em;
 }
 
@@ -150,23 +150,16 @@ label[for='recherche-service'] {
 
 #recherche-service {
   margin-left: 1em;
-  padding: 0.7em;
+  padding: 0.7em 1em;
   border-radius: 6px;
   border: 1px solid #cbd5e1;
   min-width: 300px;
+  background: var(--fond-pale);
 }
 
 #nouveau-service {
-  background: var(--bleu-mise-en-avant);
-  color: #fff;
-  cursor: pointer;
-  width: fit-content;
-  height: fit-content;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.6em 1em;
+  padding: 0.5em 1em;
+  margin: 0;
 }
 
 .tableau-services {
