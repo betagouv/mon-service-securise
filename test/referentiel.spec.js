@@ -716,6 +716,27 @@ describe('Le référentiel', () => {
     });
   });
 
+  it('sait si une étape est suffisante pour obtenir le dossier de décision', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      etapesParcoursHomologation: [
+        { id: 'premiere', numero: 1 },
+        { id: 'deuxieme', numero: 2 },
+        { id: 'troisieme', numero: 3 },
+      ],
+      etapeNecessairePourDossierDecision: 'deuxieme',
+    });
+
+    expect(referentiel.etapeSuffisantePourDossierDecision('premiere')).to.be(
+      false
+    );
+    expect(referentiel.etapeSuffisantePourDossierDecision('deuxieme')).to.be(
+      true
+    );
+    expect(referentiel.etapeSuffisantePourDossierDecision('troisieme')).to.be(
+      true
+    );
+  });
+
   it('peut être construit sans donnée', () => {
     const referentiel = Referentiel.creeReferentielVide();
     expect(referentiel.typesService()).to.eql({});

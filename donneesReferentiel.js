@@ -825,6 +825,8 @@ module.exports = {
     { numero: 6, libelle: 'Récapitulatif', id: 'recapitulatif' },
   ],
 
+  etapeNecessairePourDossierDecision: 'dateTelechargement',
+
   reglesPersonnalisation: {
     clefsDescriptionServiceAConsiderer: [
       'typeService',
