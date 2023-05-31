@@ -155,10 +155,10 @@ block main
             button.bouton#action-suppression(type='button') Je confirme la suppression
         form.bloc-contenu#contenu-telechargement
           p Télécharger le(s) document(s) de votre choix ou l'ensemble.
-          +documentTelechargeable('Synthèse de la sécurité du service', "Ce PDF résume visuellement en 1 page l'état de la sécurité du service.", 'PDF', 'lien-synthese')
+          +documentTelechargeable('Synthèse de la sécurité du service', "Ce PDF résume en 1 page l'état de la sécurité du service.", 'PDF', 'lien-synthese')
           +documentTelechargeable('Annexes', 'Ce PDF détaille toutes les informations renseignées sur la sécurité du service.', 'PDF', 'lien-annexes')
-          +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est à faire signer auprès de l'autorité d'homologation.", 'PDF', 'lien-decision', true)
-          +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDF(s).', 'ZIP', 'lien-archive')
+          +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est le document de décision pouvant être signé par l'autorité d'homologation.", 'PDF', 'lien-decision', true)
+          +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDFs à télécharger.', 'ZIP', 'lien-archive')
 
 
   script(type = 'module', src = '/statique/tableauDeBord.js')
