@@ -413,7 +413,8 @@ label[for='recherche-service'] {
   cursor: pointer;
 }
 
-.tableau-services .checkbox-selection-tous-services {
+.tableau-services .checkbox-selection-tous-services,
+.tableau-services .checkbox-tous-services {
   transform: translateY(0);
 }
 
@@ -433,8 +434,8 @@ label[for='recherche-service'] {
   border-radius: 8px;
 }
 
-.tableau-services .texte-nombre-service {
-  cursor: pointer;
+.tableau-services .texte-nombre-service,
+.tableau-services .texte-tous-service {
   font-weight: 500;
 }
 
@@ -805,11 +806,16 @@ label[for='recherche-service'] {
     hue-rotate(190deg) brightness(90%) contrast(91%);
 }
 
-.tableau-services .conteneur-selection-multiple {
+.tableau-services .conteneur-selection-multiple,
+.tableau-services .conteneur-tous-selection {
   display: flex;
   padding-top: 0.7em;
   padding-right: 0.7em;
   padding-bottom: 0.7em;
+}
+
+.tableau-services .conteneur-tous-selection {
+  padding-left: 1.5em;
 }
 
 .tableau-services .conteneur-barre-outils hr {

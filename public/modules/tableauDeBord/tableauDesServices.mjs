@@ -46,16 +46,16 @@ const tableauDesServices = {
     const nbServiceSelectionnes = tableauDesServices.servicesSelectionnes.size;
     const $checkboxTousServices = $('.checkbox-selection-tous-services');
     const $barreOutils = $('#barre-outils');
+    const $raccourciTous = $('.conteneur-tous-selection');
+    const $checkboxRaccourciTous = $('.checkbox-tous-services');
     if (nbServiceSelectionnes === tableauDesServices.nombreServices) {
       $checkboxTousServices.removeClass('selection-partielle');
       $checkboxTousServices.prop('checked', true);
       $('.texte-nombre-service').text('Tous sélectionnés');
-      $barreOutils.addClass('visible');
     } else if (nbServiceSelectionnes === 0) {
       $checkboxTousServices.removeClass('selection-partielle');
       $checkboxTousServices.prop('checked', false);
       $('.texte-nombre-service').text('0 sélectionné');
-      $barreOutils.removeClass('visible');
     } else {
       $checkboxTousServices.addClass('selection-partielle');
       $checkboxTousServices.prop('checked', false);
@@ -64,7 +64,14 @@ const tableauDesServices = {
           nbServiceSelectionnes > 1 ? 's' : ''
         }`
       );
+    }
+    if (nbServiceSelectionnes > 0) {
       $barreOutils.addClass('visible');
+      $raccourciTous.fadeOut(200);
+    } else {
+      $barreOutils.removeClass('visible');
+      $checkboxRaccourciTous.prop('checked', false);
+      $raccourciTous.fadeIn(200);
     }
 
     const auMoinsUnNonCreateur = [...tableauDesServices.servicesSelectionnes]

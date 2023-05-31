@@ -19,6 +19,8 @@ const gestionnaireEvenements = {
         gestionnaireEvenements.selectionneService($elementClique);
       } else if ($elementClique.hasClass('checkbox-selection-tous-services')) {
         gestionnaireEvenements.selectionneTousServices($elementClique);
+      } else if ($elementClique.hasClass('checkbox-tous-services')) {
+        gestionnaireEvenements.selectionneTousServices($elementClique);
       } else if ($elementClique.hasClass('action')) {
         gestionnaireEvenements.afficheTiroirAction($elementClique);
       } else if ($elementClique.hasClass('contributeurs')) {
