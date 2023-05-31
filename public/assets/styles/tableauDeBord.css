@@ -643,14 +643,10 @@ label[for='recherche-service'] {
   margin-bottom: 1em;
 }
 
-#contenu-telechargement #conteneur-lien-decision-indisponible {
-  filter: grayscale(1);
-}
-
-#contenu-telechargement
-  #conteneur-lien-decision-indisponible
-  .lien-telechargement {
-  pointer-events: none;
+#contenu-telechargement .lien-indisponible {
+  display: none;
+  text-align: right;
+  color: #08416a;
 }
 
 #contenu-telechargement .document-telechargeable p {
@@ -659,8 +655,7 @@ label[for='recherche-service'] {
 
 #contenu-telechargement .document-telechargeable .contenu {
   display: flex;
-  justify-content: space-between;
-  column-gap: 5em;
+  column-gap: 1em;
 }
 
 #contenu-telechargement .document-telechargeable .titre-document {
