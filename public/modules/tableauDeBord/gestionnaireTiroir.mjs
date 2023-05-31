@@ -97,17 +97,15 @@ const contenuActions = {
 
       const donneesService = tableauDesServices.donneesDuService(idSelectionne);
 
-      const $conteneurDuDisponible = $('#conteneur-lien-decision');
-      const $conteneurDeIndisponible = $(
-        '#conteneur-lien-decision-indisponible'
+      const $conteneurDecision = $('#conteneur-lien-decision');
+      const dossierDecisionDisponible =
+        donneesService.documentsPdfDisponibles.includes('dossierDecision');
+      $('.lien-telechargement', $conteneurDecision).toggle(
+        dossierDecisionDisponible
       );
-      if (donneesService.documentsPdfDisponibles.includes('dossierDecision')) {
-        $conteneurDuDisponible.show();
-        $conteneurDeIndisponible.hide();
-      } else {
-        $conteneurDuDisponible.hide();
-        $conteneurDeIndisponible.show();
-      }
+      $('.lien-indisponible', $conteneurDecision).toggle(
+        !dossierDecisionDisponible
+      );
 
       $('#nbPdfDisponibles', '#conteneur-lien-archive').text(
         donneesService.documentsPdfDisponibles.length
