@@ -199,6 +199,11 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       referentiel
     );
     homologationARenvoyer.mesures.indiceCyber = () => 3.5;
+    homologationARenvoyer.documentsPdfDisponibles = () => [
+      'annexes',
+      'syntheseSecurite',
+      'dossierDecision',
+    ];
 
     beforeEach(() => {
       testeur.middleware().reinitialise({ homologationARenvoyer });

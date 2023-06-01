@@ -208,11 +208,23 @@ describe('Une homologation', () => {
   });
 
   describe('sur demande des documents PDF disponibles', () => {
-    it("inclut tous les documents lorsqu'elle a un dossier d'homologation courant", () => {
-      const referentiel = Referentiel.creeReferentielVide();
+    const referentiel = Referentiel.creeReferentiel({
+      etapesParcoursHomologation: [
+        { id: 'autorite', numero: 1 },
+        { id: 'avis', numero: 2 },
+      ],
+      etapeNecessairePourDossierDecision: 'avis',
+    });
 
+    it("inclut tous les documents lorsqu'elle a un dossier d'homologation courant à une étape suffisante", () => {
       const homologationAvecDossier = new Homologation(
-        { id: '123', dossiers: [{ id: '999' }] },
+        {
+          id: '123',
+          dossiers: [
+            unDossier(referentiel).avecAutorite('Jean Dujardin', 'RSSI')
+              .donnees,
+          ],
+        },
         referentiel
       );
 
@@ -224,10 +236,20 @@ describe('Une homologation', () => {
     });
 
     it("exclut le dossier de décision en cas d'absence de dossier d'homologation courant", () => {
-      const referentiel = Referentiel.creeReferentielVide();
-
       const homologationSansDossier = new Homologation(
         { id: '123', dossiers: [] },
+        referentiel
+      );
+
+      expect(homologationSansDossier.documentsPdfDisponibles()).to.eql([
+        'annexes',
+        'syntheseSecurite',
+      ]);
+    });
+
+    it("exclut le dossier de décision si l'étape courante du dossier d'homologation n'est pas suffisante", () => {
+      const homologationSansDossier = new Homologation(
+        { id: '123', dossiers: [unDossier(referentiel).donnees] },
         referentiel
       );
 
