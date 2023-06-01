@@ -127,7 +127,15 @@ class Homologation {
 
   documentsPdfDisponibles() {
     const documents = ['annexes', 'syntheseSecurite'];
-    if (this.dossierCourant()) documents.push('dossierDecision');
+    const dossierCourant = this.dossierCourant();
+    if (
+      dossierCourant &&
+      this.referentiel.etapeSuffisantePourDossierDecision(
+        dossierCourant.etapeCourante()
+      )
+    ) {
+      documents.push('dossierDecision');
+    }
     return documents;
   }
 
