@@ -152,6 +152,17 @@ const tableauDesServices = {
     );
   },
   remplisTableau: (donnees) => {
+    if (donnees.length === 0) {
+      tableauDesServices.$tableau.append(`
+      <tr>
+        <td colspan='5'>
+          Aucun service ne correspond à la recherche.
+        </td>
+      </tr>
+      `);
+      return;
+    }
+
     donnees.forEach((service) => {
       const estSelectionne = tableauDesServices.servicesSelectionnes.has(
         service.id
