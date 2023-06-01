@@ -9,8 +9,8 @@ const gestionnaireActionsTiroir = {
     declencheValidation('#contenu-duplication');
     const $nombreCopie = $('#nombre-copie');
     if ($nombreCopie.is(':valid')) {
-      $nombreCopie.prop('disabled', true);
-      $('#action-duplication').prop('disabled', true);
+      $('#action-duplication').hide();
+      $('.conteneur-loader').addClass('visible');
 
       const nombreCopies = parseInt($nombreCopie.val(), 10) || 1;
       const promesses = [...tableauDesServices.servicesSelectionnes].map(
@@ -24,10 +24,10 @@ const gestionnaireActionsTiroir = {
           )
       );
       Promise.all(promesses).then(() => {
-        $nombreCopie.prop('disabled', false);
-        $('#action-duplication').prop('disabled', false);
         gestionnaireTiroir.basculeOuvert(false);
         tableauDesServices.recupereServices();
+        $('#action-duplication').show();
+        $('.conteneur-loader').removeClass('visible');
       });
     }
   },
