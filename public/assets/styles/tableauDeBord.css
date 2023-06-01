@@ -551,11 +551,11 @@ label[for='recherche-service'] {
   margin-bottom: 2em;
 }
 
-#contenu-duplication label {
+:is(#contenu-duplication, #contenu-suppression) label {
   margin-bottom: 2em;
 }
 
-#contenu-duplication .conteneur-loader {
+:is(#contenu-duplication, #contenu-suppression) .conteneur-loader {
   border: 1px solid #cbd5e1;
   border-radius: 4px;
   display: none;
@@ -567,15 +567,15 @@ label[for='recherche-service'] {
   margin-bottom: 2em;
 }
 
-#contenu-duplication .conteneur-loader.visible {
+:is(#contenu-duplication, #contenu-suppression) .conteneur-loader.visible {
   display: flex;
 }
 
-#contenu-duplication .titre-loader {
+:is(#contenu-duplication, #contenu-suppression) .titre-loader {
   font-weight: bold;
 }
 
-#contenu-duplication .info-loader {
+:is(#contenu-duplication, #contenu-suppression) .info-loader {
   font-weight: 500;
 }
 

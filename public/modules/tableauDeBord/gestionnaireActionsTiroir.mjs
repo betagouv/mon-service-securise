@@ -9,8 +9,9 @@ const gestionnaireActionsTiroir = {
     declencheValidation('#contenu-duplication');
     const $nombreCopie = $('#nombre-copie');
     if ($nombreCopie.is(':valid')) {
+      const $loader = $('.conteneur-loader', '#contenu-duplication');
       $('#action-duplication').hide();
-      $('.conteneur-loader').addClass('visible');
+      $loader.addClass('visible');
 
       const nombreCopies = parseInt($nombreCopie.val(), 10) || 1;
       const promesses = [...tableauDesServices.servicesSelectionnes].map(
@@ -27,7 +28,7 @@ const gestionnaireActionsTiroir = {
         gestionnaireTiroir.basculeOuvert(false);
         tableauDesServices.recupereServices();
         $('#action-duplication').show();
-        $('.conteneur-loader').removeClass('visible');
+        $loader.removeClass('visible');
       });
     }
   },
@@ -60,7 +61,9 @@ const gestionnaireActionsTiroir = {
     }
   },
   supprime: () => {
-    $('#action-suppression').prop('disabled', true);
+    const $loader = $('.conteneur-loader', '#contenu-suppression');
+    $('#action-suppression').hide();
+    $loader.addClass('visible');
     const suppressions = [...tableauDesServices.servicesSelectionnes].map(
       (idService) => axios.delete(`/api/service/${idService}`)
     );
@@ -69,6 +72,8 @@ const gestionnaireActionsTiroir = {
       gestionnaireTiroir.basculeOuvert(false);
       tableauDesServices.servicesSelectionnes.clear();
       tableauDesServices.recupereServices();
+      $('#action-suppression').show();
+      $loader.removeClass('visible');
     });
   },
 };
