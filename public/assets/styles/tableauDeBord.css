@@ -441,7 +441,7 @@ label[for='recherche-service'] {
   margin-right: 0.3em;
 }
 
-.tableau-services td .conteneur-collaborateur::before {
+.tableau-services td .conteneur-contributeur::before {
   display: inline-block;
   content: '';
   background-image: url('/statique/assets/images/icone_createur_collaboration.svg');
@@ -452,7 +452,7 @@ label[for='recherche-service'] {
   margin-right: 0.3em;
 }
 
-.tableau-services td .conteneur-collaborateur:not(.createur)::before {
+.tableau-services td .conteneur-contributeur:not(.createur)::before {
   opacity: 0;
 }
 
@@ -602,7 +602,7 @@ label[for='recherche-service'] {
   margin-left: 0.5em;
 }
 
-.tableau-services .conteneur-collaborateur {
+.tableau-services .conteneur-contributeur {
   display: flex;
   gap: 0.5em;
   align-items: center;

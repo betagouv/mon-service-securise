@@ -28,7 +28,7 @@ const genereCsvServices = (donneesObjetGetServices) => {
     const entete = [
       'Nom du service',
       'Organisations responsables',
-      'Nombre de collaborateurs',
+      'Nombre de contributeurs',
       'Est propriétaire ?',
       'Indice cyber',
       'Statut homologation',
