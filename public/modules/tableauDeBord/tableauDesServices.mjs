@@ -89,21 +89,6 @@ const tableauDesServices = {
       $checkboxRaccourciTous.prop('checked', false);
       $raccourciTous.fadeIn(200);
     }
-
-    const auMoinsUnNonCreateur = [...tableauDesServices.servicesSelectionnes]
-      .map((idService) =>
-        tableauDesServices.donnees.find((service) => service.id === idService)
-      )
-      .some((service) => !service.estCreateur);
-    if (auMoinsUnNonCreateur) {
-      $('.conteneur-barre-outils .action').addClass('inactif');
-    } else {
-      $('.conteneur-barre-outils .action').removeClass('inactif');
-      const plusDunService =
-        [...tableauDesServices.servicesSelectionnes].length > 1;
-      if (plusDunService)
-        $('#action-flotante-telechargement').addClass('inactif');
-    }
   },
   appliqueTriContributeurs: (ordre, filtreEstProprietaire) => {
     tableauDesServices.tri = { colonne: 'nombreContributeurs', ordre };
@@ -177,7 +162,6 @@ const tableauDesServices = {
             cible.indiceCyber = service.indiceCyber;
           });
           tableauDesServices.afficheDonnees();
-          tableauDesServices.afficheEtatSelection();
         })
     );
   },

@@ -36,6 +36,11 @@ class ActionTelechargement {
       donneesService.documentsPdfDisponibles.length
     );
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  estDisponible({ estSelectionMultiple }) {
+    return !estSelectionMultiple;
+  }
 }
 
 export default ActionTelechargement;

@@ -11,6 +11,11 @@ class ActionExport {
   // eslint-disable-next-line class-methods-use-this
   initialise() {}
 
+  // eslint-disable-next-line class-methods-use-this
+  estDisponible() {
+    return true;
+  }
+
   execute() {
     window.open(
       `/api/services/export.csv?idsServices=${encodeURIComponent(

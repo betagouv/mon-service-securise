@@ -15,6 +15,11 @@ class ActionDuplication {
     $('#nombre-copie').val(1);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  estDisponible({ estSelectionMultiple, seulementCreateur }) {
+    return !estSelectionMultiple && seulementCreateur;
+  }
+
   execute() {
     declencheValidation('#contenu-duplication');
     const $nombreCopie = $('#nombre-copie');

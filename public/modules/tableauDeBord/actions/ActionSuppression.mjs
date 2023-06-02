@@ -24,6 +24,11 @@ class ActionSuppression {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  estDisponible({ estSelectionMultiple, seulementCreateur }) {
+    return !estSelectionMultiple && seulementCreateur;
+  }
+
   execute() {
     const $loader = $('.conteneur-loader', '#contenu-suppression');
     const $actionSuppression = $('#action-suppression');

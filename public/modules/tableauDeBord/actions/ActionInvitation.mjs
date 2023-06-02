@@ -15,6 +15,11 @@ class ActionInvitation {
     $('#email-invitation-collaboration').val('');
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  estDisponible({ estSelectionMultiple, seulementCreateur }) {
+    return !estSelectionMultiple && seulementCreateur;
+  }
+
   execute() {
     declencheValidation('#contenu-invitation');
     const $emailInvite = $('#email-invitation-collaboration');

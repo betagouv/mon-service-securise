@@ -9,6 +9,11 @@ class ActionInvitationConfirmation {
 
   // eslint-disable-next-line class-methods-use-this
   initialise() {}
+
+  // eslint-disable-next-line class-methods-use-this
+  estDisponible() {
+    return true;
+  }
 }
 
 export default ActionInvitationConfirmation;
