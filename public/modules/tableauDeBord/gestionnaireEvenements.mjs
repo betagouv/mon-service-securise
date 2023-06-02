@@ -1,6 +1,8 @@
-import { gestionnaireTiroir } from './gestionnaireTiroir.mjs';
+import {
+  gestionnaireTiroir,
+  registreDesActions,
+} from './gestionnaireTiroir.mjs';
 import tableauDesServices, { ORDRE_DE_TRI } from './tableauDesServices.mjs';
-import gestionnaireActionsTiroir from './gestionnaireActionsTiroir.mjs';
 
 const gestionnaireEvenements = {
   brancheComportement: () => {
@@ -43,20 +45,28 @@ const gestionnaireEvenements = {
     });
 
     $('#action-duplication').on('click', () => {
-      gestionnaireActionsTiroir.duplique();
+      registreDesActions.duplication
+        .execute()
+        .then(() => gestionnaireTiroir.basculeOuvert(false));
     });
 
     $('#action-suppression').on('click', () => {
-      gestionnaireActionsTiroir.supprime();
+      registreDesActions.suppression
+        .execute()
+        .then(() => gestionnaireTiroir.basculeOuvert(false));
     });
 
-    $('#action-invitation').on('click', () => {
-      gestionnaireActionsTiroir.invite();
-    });
+    $('#action-invitation').on('click', () =>
+      registreDesActions.invitation
+        .execute()
+        .then(() =>
+          gestionnaireTiroir.afficheContenuAction('invitation-confirmation')
+        )
+    );
 
-    $('#action-export-csv').on('click', () => {
-      gestionnaireActionsTiroir.exporteCsv();
-    });
+    $('#action-export-csv').on('click', () =>
+      registreDesActions.export.execute()
+    );
   },
   afficheTiroirAction: ($action, ...args) => {
     $('#barre-outils .action').removeClass('actif');

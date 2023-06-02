@@ -1,0 +1,41 @@
+class ActionTelechargement {
+  constructor(tableauDesServices) {
+    this.tableauDesServices = tableauDesServices;
+    this.titre = 'Télécharger les PDFs';
+    this.texteSimple =
+      "Obtenir les documents utiles à la sécurisation et à l'homologation des services sélectionnés.";
+    this.texteMultiple =
+      "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.";
+  }
+
+  initialise() {
+    const idSelectionne = this.tableauDesServices.servicesSelectionnes
+      .keys()
+      .next().value;
+    const urlBase = `/api/service/${idSelectionne}/pdf/`;
+
+    $('#lien-synthese').attr('href', `${urlBase}syntheseSecurite.pdf`);
+    $('#lien-annexes').attr('href', `${urlBase}annexes.pdf`);
+    $('#lien-decision').attr('href', `${urlBase}dossierDecision.pdf`);
+    $('#lien-archive').attr('href', `${urlBase}documentsHomologation.zip`);
+
+    const donneesService =
+      this.tableauDesServices.donneesDuService(idSelectionne);
+
+    const $conteneurDecision = $('#conteneur-lien-decision');
+    const dossierDecisionDisponible =
+      donneesService.documentsPdfDisponibles.includes('dossierDecision');
+    $('.lien-telechargement', $conteneurDecision).toggle(
+      dossierDecisionDisponible
+    );
+    $('.lien-indisponible', $conteneurDecision).toggle(
+      !dossierDecisionDisponible
+    );
+
+    $('#nbPdfDisponibles', '#conteneur-lien-archive').text(
+      donneesService.documentsPdfDisponibles.length
+    );
+  }
+}
+
+export default ActionTelechargement;
