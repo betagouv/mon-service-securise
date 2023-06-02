@@ -33,6 +33,11 @@ class ActionContributeurs {
       $listeContributeurs.append(metEnFormeContributeur(contributeur, false));
     });
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  estDisponible() {
+    return true;
+  }
 }
 
 export default ActionContributeurs;

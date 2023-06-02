@@ -1,7 +1,6 @@
-import {
-  gestionnaireTiroir,
-  registreDesActions,
-} from './gestionnaireTiroir.mjs';
+import gestionnaireBarreOutils from './gestionnaireBarreOutils.mjs';
+import { gestionnaireTiroir } from './gestionnaireTiroir.mjs';
+import registreDesActions from './registreActions.mjs';
 import tableauDesServices, { ORDRE_DE_TRI } from './tableauDesServices.mjs';
 
 const gestionnaireEvenements = {
@@ -99,6 +98,7 @@ const gestionnaireEvenements = {
     tableauDesServices.basculeSelectionService(idService, selectionne);
     gestionnaireEvenements.fermeMenuFlottant();
     tableauDesServices.afficheEtatSelection();
+    gestionnaireBarreOutils.afficheOutils();
     gestionnaireTiroir.basculeOuvert(false);
   },
   selectionneTousServices: ($checkbox) => {
@@ -116,6 +116,7 @@ const gestionnaireEvenements = {
 
     gestionnaireEvenements.fermeMenuFlottant();
     tableauDesServices.afficheEtatSelection();
+    gestionnaireBarreOutils.afficheOutils();
     gestionnaireTiroir.basculeOuvert(false);
   },
   fermeMenuFlottant: () => {
