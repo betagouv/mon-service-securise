@@ -32,8 +32,8 @@ class ActionDuplication {
     if (!$nombreCopie.is(':valid')) return Promise.resolve();
 
     const $loader = $('.conteneur-loader', '#contenu-duplication');
-    $('#action-duplication').hide();
     $loader.addClass('visible');
+    $('#action-duplication').hide();
 
     const nombreCopies = parseInt($nombreCopie.val(), 10) || 1;
     const uneCopie = () =>
