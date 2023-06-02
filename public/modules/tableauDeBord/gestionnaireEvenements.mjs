@@ -32,7 +32,7 @@ const gestionnaireEvenements = {
         gestionnaireEvenements.triContributeurs.affiche();
       } else if ($elementClique.hasClass('tri-collaborateur')) {
         gestionnaireEvenements.triContributeurs.applique();
-      } else if ($elementClique.hasClass('efface-tri')) {
+      } else if ($elementClique.hasClass('efface-tri-contributeurs')) {
         $('input[name="tri-collaborateur"]').prop('checked', false);
         gestionnaireEvenements.triContributeurs.applique();
       }
