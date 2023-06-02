@@ -211,7 +211,7 @@ label[for='recherche-service'] {
   margin-top: -8px;
 }
 
-.tableau-services thead th.triable:not([data-direction='0']) {
+.tableau-services thead th.triable:not([data-ordre='0']) {
   color: #08416a;
 }
 
@@ -220,15 +220,15 @@ label[for='recherche-service'] {
   color: #0c5c98;
 }
 
-.tableau-services thead th.triable[data-direction='0']::after {
+.tableau-services thead th.triable[data-ordre='0']::after {
   background-image: url('/statique/assets/images/icone_tri_aucun.svg');
 }
 
-.tableau-services thead th.triable[data-direction='1']::after {
+.tableau-services thead th.triable[data-ordre='1']::after {
   background-image: url('/statique/assets/images/icone_tri_croissant.svg');
 }
 
-.tableau-services thead th.triable[data-direction='2']::after {
+.tableau-services thead th.triable[data-ordre='2']::after {
   background-image: url('/statique/assets/images/icone_tri_decroissant.svg');
 }
 
@@ -279,7 +279,7 @@ label[for='recherche-service'] {
   display: inline-block;
 }
 
-.tableau-services thead th.entete-contributeurs:not([data-direction='0']),
+.tableau-services thead th.entete-contributeurs:not([data-ordre='0']),
 .tableau-services
   thead
   th.entete-contributeurs[data-filtre-proprietaire='true'] {
@@ -287,32 +287,32 @@ label[for='recherche-service'] {
 }
 
 .tableau-services
-  th.entete-contributeurs[data-direction='0'][data-filtre-proprietaire='false']::after {
+  th.entete-contributeurs[data-ordre='0'][data-filtre-proprietaire='false']::after {
   background-image: url('/statique/assets/images/icone_tri_aucun.svg');
 }
 
 .tableau-services
-  th.entete-contributeurs[data-direction='1'][data-filtre-proprietaire='false']::after {
+  th.entete-contributeurs[data-ordre='1'][data-filtre-proprietaire='false']::after {
   background-image: url('/statique/assets/images/icone_tri_croissant.svg');
 }
 
 .tableau-services
-  th.entete-contributeurs[data-direction='2'][data-filtre-proprietaire='false']::after {
+  th.entete-contributeurs[data-ordre='2'][data-filtre-proprietaire='false']::after {
   background-image: url('/statique/assets/images/icone_tri_decroissant.svg');
 }
 
 .tableau-services
-  th.entete-contributeurs[data-direction='0'][data-filtre-proprietaire='true']::after {
+  th.entete-contributeurs[data-ordre='0'][data-filtre-proprietaire='true']::after {
   background-image: url('/statique/assets/images/icone_filtre_proprietaire.svg');
 }
 
 .tableau-services
-  th.entete-contributeurs[data-direction='1'][data-filtre-proprietaire='true']::after {
+  th.entete-contributeurs[data-ordre='1'][data-filtre-proprietaire='true']::after {
   background-image: url('/statique/assets/images/icone_filtre_proprietaire_croissant.svg');
 }
 
 .tableau-services
-  th.entete-contributeurs[data-direction='2'][data-filtre-proprietaire='true']::after {
+  th.entete-contributeurs[data-ordre='2'][data-filtre-proprietaire='true']::after {
   background-image: url('/statique/assets/images/icone_filtre_proprietaire_decroissant.svg');
 }
 
