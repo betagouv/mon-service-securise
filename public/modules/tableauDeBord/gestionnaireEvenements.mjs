@@ -7,6 +7,7 @@ import tableauDesServices, { ORDRE_DE_TRI } from './tableauDesServices.mjs';
 const gestionnaireEvenements = {
   brancheComportement: () => {
     $('#recherche-service').on('input', (e) => {
+      tableauDesServices.effaceSelection();
       tableauDesServices.modifieRecherche($(e.target).val());
     });
 
@@ -33,6 +34,9 @@ const gestionnaireEvenements = {
       } else if ($elementClique.hasClass('entete-contributeurs')) {
         gestionnaireEvenements.triContributeurs.bascule();
       } else if ($elementClique.hasClass('tri-contributeur')) {
+        gestionnaireEvenements.triContributeurs.applique();
+      } else if ($elementClique.hasClass('filtre-contributeur')) {
+        tableauDesServices.effaceSelection();
         gestionnaireEvenements.triContributeurs.applique();
       } else if ($elementClique.hasClass('efface-tri-contributeurs')) {
         $('input[name="tri-contributeur"]').prop('checked', false);
