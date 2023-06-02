@@ -25,8 +25,8 @@ class ActionSuppression {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  estDisponible({ estSelectionMultiple, seulementCreateur }) {
-    return !estSelectionMultiple && seulementCreateur;
+  estDisponible({ seulementCreateur }) {
+    return seulementCreateur;
   }
 
   execute() {
