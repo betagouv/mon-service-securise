@@ -1,4 +1,13 @@
-const [AUCUNE, ASC] = [0, 1];
+const ORDRE_DE_TRI = {
+  AUCUN: 0,
+  ASC: 1,
+  DESC: 2,
+  suivant: (actuel) => (actuel + 1) % 3,
+  depuisString: (valeur) => {
+    const ordre = parseInt(valeur, 10);
+    return Number.isNaN(ordre) ? ORDRE_DE_TRI.AUCUN : ordre;
+  },
+};
 
 const metEnFormeContributeurs = (service) =>
   [
@@ -19,7 +28,7 @@ const tableauDesServices = {
   nombreServices: 0,
   servicesSelectionnes: new Set(),
   termeRecherche: '',
-  tri: { colonne: null, direction: AUCUNE },
+  tri: { colonne: null, ordre: ORDRE_DE_TRI.AUCUN },
   filtreSeulementProprietaire: false,
   afficheDonnees: () => {
     tableauDesServices.videTableau();
@@ -40,10 +49,11 @@ const tableauDesServices = {
           : true
       )
       .sort((serviceA, serviceB) => {
-        const { colonne, direction } = tableauDesServices.tri;
+        const { colonne, ordre } = tableauDesServices.tri;
         if (colonne === null) return 0;
-        if (direction === AUCUNE) return 0;
-        if (direction === ASC) return serviceB[colonne] - serviceA[colonne];
+        if (ordre === ORDRE_DE_TRI.AUCUN) return 0;
+        if (ordre === ORDRE_DE_TRI.ASC)
+          return serviceB[colonne] - serviceA[colonne];
         return serviceA[colonne] - serviceB[colonne];
       });
     tableauDesServices.remplisTableau(donneesAAfficher);
@@ -96,13 +106,10 @@ const tableauDesServices = {
     }
   },
   appliqueTriContributeurs: (ordre, filtreEstProprietaire) => {
-    tableauDesServices.tri = {
-      colonne: 'nombreContributeurs',
-      direction: ordre ?? 0,
-    };
+    tableauDesServices.tri = { colonne: 'nombreContributeurs', ordre };
     tableauDesServices.filtreSeulementProprietaire = filtreEstProprietaire;
     tableauDesServices.afficheDonnees();
-    $('.tableau-services thead th.triable').attr('data-direction', 0);
+    $('.tableau-services thead th.triable').attr('data-ordre', 0);
   },
   basculeSelectionService: (idService, statut) => {
     if (statut) {
@@ -122,25 +129,22 @@ const tableauDesServices = {
     tableauDesServices.afficheDonnees();
   },
   modifieTri: (colonne) => {
-    const { colonne: colonneActuelle, direction: directionActuelle } =
+    const { colonne: colonneActuelle, ordre: ordreActuel } =
       tableauDesServices.tri;
-    let direction = ASC;
+    let ordre = ORDRE_DE_TRI.ASC;
     if (colonne === colonneActuelle) {
-      direction = (directionActuelle + 1) % 3;
+      ordre = ORDRE_DE_TRI.suivant(ordreActuel);
     }
-    tableauDesServices.tri = { colonne, direction };
+    tableauDesServices.tri = { colonne, ordre };
     tableauDesServices.afficheDonnees();
 
     $('input[name="tri-contributeur"]').prop('checked', false);
-    $('.tableau-services thead th.entete-contributeurs').attr(
-      'data-direction',
-      0
-    );
+    $('.tableau-services thead th.entete-contributeurs').attr('data-ordre', 0);
 
-    $('.tableau-services thead th.triable').attr('data-direction', 0);
+    $('.tableau-services thead th.triable').attr('data-ordre', 0);
     $(`.tableau-services thead th[data-colonne="${colonne}"]`).attr(
-      'data-direction',
-      direction
+      'data-ordre',
+      ordre
     );
   },
   donneesDuService: (idService) =>
@@ -254,3 +258,4 @@ const tableauDesServices = {
 };
 
 export default tableauDesServices;
+export { ORDRE_DE_TRI };

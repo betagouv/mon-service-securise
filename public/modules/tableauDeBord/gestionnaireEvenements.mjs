@@ -1,5 +1,5 @@
 import { gestionnaireTiroir } from './gestionnaireTiroir.mjs';
-import tableauDesServices from './tableauDesServices.mjs';
+import tableauDesServices, { ORDRE_DE_TRI } from './tableauDesServices.mjs';
 import gestionnaireActionsTiroir from './gestionnaireActionsTiroir.mjs';
 
 const gestionnaireEvenements = {
@@ -68,24 +68,19 @@ const gestionnaireEvenements = {
     affiche: () =>
       $('.entete-contributeurs .menu-flotant').toggleClass('invisible'),
     applique: () => {
-      let direction = parseInt(
-        $('input[name="tri-contributeur"]:checked').val(),
-        10
+      const ordre = ORDRE_DE_TRI.depuisString(
+        $('input[name="tri-contributeur"]:checked').val()
       );
-      direction = Number.isNaN(direction) ? 0 : direction;
 
       const filtreEstProprietaire = $(
         'input.filtre-proprietaire-contributeurs'
       ).is(':checked');
 
       $('.entete-contributeurs')
-        .attr('data-direction', direction.toString())
+        .attr('data-ordre', ordre)
         .attr('data-filtre-proprietaire', filtreEstProprietaire);
 
-      tableauDesServices.appliqueTriContributeurs(
-        direction,
-        filtreEstProprietaire
-      );
+      tableauDesServices.appliqueTriContributeurs(ordre, filtreEstProprietaire);
     },
   },
   selectionneService: ($checkbox) => {
