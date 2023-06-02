@@ -14,7 +14,7 @@ const metEnFormeContributeur = (contributeur, estProprietaire) =>
       </div>
     </div>
     <div class='role ${estProprietaire ? 'proprietaire' : 'contributeur'}'>${
-    estProprietaire ? 'Propriétaire' : 'Collaborateur'
+    estProprietaire ? 'Propriétaire' : 'Contributeur'
   }</div>
   </li>`;
 

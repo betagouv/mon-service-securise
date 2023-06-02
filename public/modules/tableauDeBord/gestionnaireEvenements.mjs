@@ -30,10 +30,10 @@ const gestionnaireEvenements = {
         gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
       } else if ($elementClique.hasClass('entete-contributeurs')) {
         gestionnaireEvenements.triContributeurs.affiche();
-      } else if ($elementClique.hasClass('tri-collaborateur')) {
+      } else if ($elementClique.hasClass('tri-contributeur')) {
         gestionnaireEvenements.triContributeurs.applique();
       } else if ($elementClique.hasClass('efface-tri-contributeurs')) {
-        $('input[name="tri-collaborateur"]').prop('checked', false);
+        $('input[name="tri-contributeur"]').prop('checked', false);
         gestionnaireEvenements.triContributeurs.applique();
       }
     });
@@ -69,13 +69,13 @@ const gestionnaireEvenements = {
       $('.entete-contributeurs .menu-flotant').toggleClass('invisible'),
     applique: () => {
       let direction = parseInt(
-        $('input[name="tri-collaborateur"]:checked').val(),
+        $('input[name="tri-contributeur"]:checked').val(),
         10
       );
       direction = Number.isNaN(direction) ? 0 : direction;
 
       const filtreEstProprietaire = $(
-        'input.filtre-proprietaire-collaborateurs'
+        'input.filtre-proprietaire-contributeurs'
       ).is(':checked');
 
       $('.entete-contributeurs')

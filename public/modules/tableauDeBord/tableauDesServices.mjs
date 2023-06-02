@@ -131,7 +131,7 @@ const tableauDesServices = {
     tableauDesServices.tri = { colonne, direction };
     tableauDesServices.afficheDonnees();
 
-    $('input[name="tri-collaborateur"]').prop('checked', false);
+    $('input[name="tri-contributeur"]').prop('checked', false);
     $('.tableau-services thead th.entete-contributeurs').attr(
       'data-direction',
       0
@@ -197,7 +197,7 @@ const tableauDesServices = {
       $ligne.append($celluleNoms);
       const $celluleCollaborateur = $('<td></td>');
       const $conteneurCollaborateur = $(
-        `<div class='conteneur-collaborateur ${
+        `<div class='conteneur-contributeur ${
           service.estCreateur ? 'createur' : ''
         }' title='${
           service.estCreateur ? 'Service dont je suis propriétaire' : ''
