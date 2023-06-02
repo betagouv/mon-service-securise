@@ -95,12 +95,12 @@ const tableauDesServices = {
         $('#action-flotante-telechargement').addClass('inactif');
     }
   },
-  appliqueTriContributeurs: (ordre, filtreEstPropriétaire) => {
+  appliqueTriContributeurs: (ordre, filtreEstProprietaire) => {
     tableauDesServices.tri = {
       colonne: 'nombreContributeurs',
       direction: ordre ?? 0,
     };
-    tableauDesServices.filtreSeulementProprietaire = filtreEstPropriétaire;
+    tableauDesServices.filtreSeulementProprietaire = filtreEstProprietaire;
     tableauDesServices.afficheDonnees();
     $('.tableau-services thead th.triable').attr('data-direction', 0);
   },
