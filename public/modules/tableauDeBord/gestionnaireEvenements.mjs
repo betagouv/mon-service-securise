@@ -29,7 +29,7 @@ const gestionnaireEvenements = {
           .data('id-service');
         gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
       } else if ($elementClique.hasClass('entete-contributeurs')) {
-        gestionnaireEvenements.triContributeurs.affiche();
+        gestionnaireEvenements.triContributeurs.bascule();
       } else if ($elementClique.hasClass('tri-contributeur')) {
         gestionnaireEvenements.triContributeurs.applique();
       } else if ($elementClique.hasClass('efface-tri-contributeurs')) {
@@ -65,8 +65,6 @@ const gestionnaireEvenements = {
     gestionnaireEvenements.fermeMenuFlottant();
   },
   triContributeurs: {
-    affiche: () =>
-      $('.entete-contributeurs .menu-flotant').toggleClass('invisible'),
     applique: () => {
       const ordre = ORDRE_DE_TRI.depuisString(
         $('input[name="tri-contributeur"]:checked').val()
@@ -82,6 +80,8 @@ const gestionnaireEvenements = {
 
       tableauDesServices.appliqueTriContributeurs(ordre, filtreEstProprietaire);
     },
+    bascule: () =>
+      $('.entete-contributeurs .menu-flotant').toggleClass('invisible'),
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
