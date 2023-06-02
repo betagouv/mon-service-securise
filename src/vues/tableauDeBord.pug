@@ -135,27 +135,34 @@ block main
           img(src='/statique/assets/images/image_succes_invitation.svg')
           p Un e-mail d'invitation a bien été envoyé.
           button.bouton.fermeture-tiroir Revenir à la liste des contributeurs
-        form.bloc-contenu#contenu-duplication
-          label Nombre de copies souhaitées
-            br
-            input(
-              id = 'nombre-copie',
-              name = 'nombre-copie',
-              type = 'number',
-              value = 1,
-              min = 1,
-              max = 100,
-              placeholder = 'ex : 2',
-              required,
-            )
-            .message-erreur Veuillez utiliser une valeur entre 1 et 100.
-          .conteneur-loader
-            .icone-chargement
-            .titre-loader Duplication en cours...
-            .info-loader Merci de ne pas rafraîchir la page
-          .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
-            button.bouton#action-duplication(type='button') Valider
+        .bloc-contenu#contenu-duplication
+          form
+            label Nombre de copies souhaitées
+              br
+              input(
+                id = 'nombre-copie',
+                name = 'nombre-copie',
+                type = 'number',
+                value = 1,
+                min = 1,
+                max = 100,
+                placeholder = 'ex : 2',
+                required,
+              )
+              .message-erreur Veuillez utiliser une valeur entre 1 et 100.
+            .conteneur-loader
+              .icone-chargement
+              .titre-loader Duplication en cours...
+              .info-loader Merci de ne pas rafraîchir la page
+            .conteneur-actions
+              button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
+              button.bouton#action-duplication(type='button') Valider
+          .rapport-execution
+            .
+              Le service n'a pas été dupliqué car toutes les informations obligatoires n'ont pas été remplies dans la rubrique « Décrire ».<br>
+              Remplissez ces informations avant de pouvoir dupliquer.
+            .conteneur-actions
+              a.bouton#aller-dans-decrire Aller dans « Décrire »
         form.bloc-contenu#contenu-suppression
           p 
             span Souhaitez-vous vraiment supprimer 

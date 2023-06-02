@@ -12,7 +12,12 @@ class ActionDuplication {
 
   // eslint-disable-next-line class-methods-use-this
   initialise() {
+    $('#contenu-duplication form').show();
     $('#nombre-copie').val(1);
+    const $loader = $('.conteneur-loader', '#contenu-duplication');
+    $loader.removeClass('visible');
+    $('#action-duplication').show();
+    $('#contenu-duplication .rapport-execution').hide();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -39,11 +44,20 @@ class ActionDuplication {
       Promise.resolve()
     );
 
-    return copies.then(() => {
-      this.tableauDesServices.recupereServices();
-      $('#action-duplication').show();
-      $loader.removeClass('visible');
-    });
+    return copies
+      .then(() => this.tableauDesServices.recupereServices())
+      .catch((exc) => {
+        const { data, status } = exc.response;
+
+        if (status === 424 && data.type === 'DONNEES_OBLIGATOIRES_MANQUANTES') {
+          $('#contenu-duplication form').hide();
+          const urlDecrire = `/service/${this.idSelectionne()}/descriptionService`;
+          $('#aller-dans-decrire').attr('href', urlDecrire);
+          $('#contenu-duplication .rapport-execution').show();
+        }
+
+        throw exc;
+      });
   }
 
   idSelectionne() {

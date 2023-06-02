@@ -50,7 +50,8 @@ const gestionnaireEvenements = {
     $('#action-duplication').on('click', () => {
       registreDesActions.duplication
         .execute()
-        .then(() => gestionnaireTiroir.basculeOuvert(false));
+        .then(() => gestionnaireTiroir.basculeOuvert(false))
+        .catch(() => {});
     });
 
     $('#action-suppression').on('click', () => {
