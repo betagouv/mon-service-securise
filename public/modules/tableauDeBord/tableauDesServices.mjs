@@ -149,6 +149,11 @@ const tableauDesServices = {
   },
   donneesDuService: (idService) =>
     tableauDesServices.donnees.find((service) => service.id === idService),
+  effaceSelection: () => {
+    tableauDesServices.servicesSelectionnes.clear();
+    tableauDesServices.afficheEtatSelection();
+    tableauDesServices.afficheDonnees();
+  },
   nomDuService: (idService) =>
     tableauDesServices.donneesDuService(idService)?.nomService,
   recupereServices: () => {
