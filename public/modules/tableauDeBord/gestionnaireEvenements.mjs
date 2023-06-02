@@ -29,12 +29,12 @@ const gestionnaireEvenements = {
           .data('id-service');
         gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
       } else if ($elementClique.hasClass('entete-contributeurs')) {
-        gestionnaireEvenements.afficheTriCollaborateurs();
+        gestionnaireEvenements.triContributeurs.affiche();
       } else if ($elementClique.hasClass('tri-collaborateur')) {
-        gestionnaireEvenements.appliqueTriContributeurs();
+        gestionnaireEvenements.triContributeurs.applique();
       } else if ($elementClique.hasClass('efface-tri')) {
         $('input[name="tri-collaborateur"]').prop('checked', false);
-        gestionnaireEvenements.appliqueTriContributeurs();
+        gestionnaireEvenements.triContributeurs.applique();
       }
     });
 
@@ -64,28 +64,29 @@ const gestionnaireEvenements = {
     gestionnaireTiroir.afficheContenuAction($action.data('action'), ...args);
     gestionnaireEvenements.fermeMenuFlottant();
   },
-  afficheTriCollaborateurs: () => {
-    $('.entete-contributeurs .menu-flotant').toggleClass('invisible');
-  },
-  appliqueTriContributeurs: () => {
-    let direction = parseInt(
-      $('input[name="tri-collaborateur"]:checked').val(),
-      10
-    );
-    direction = Number.isNaN(direction) ? 0 : direction;
+  triContributeurs: {
+    affiche: () =>
+      $('.entete-contributeurs .menu-flotant').toggleClass('invisible'),
+    applique: () => {
+      let direction = parseInt(
+        $('input[name="tri-collaborateur"]:checked').val(),
+        10
+      );
+      direction = Number.isNaN(direction) ? 0 : direction;
 
-    const filtreEstPropriétaire = $(
-      'input.filtre-proprietaire-collaborateurs'
-    ).is(':checked');
+      const filtreEstProprietaire = $(
+        'input.filtre-proprietaire-collaborateurs'
+      ).is(':checked');
 
-    $('.entete-contributeurs')
-      .attr('data-direction', direction.toString())
-      .attr('data-filtre-proprietaire', filtreEstPropriétaire);
+      $('.entete-contributeurs')
+        .attr('data-direction', direction.toString())
+        .attr('data-filtre-proprietaire', filtreEstProprietaire);
 
-    tableauDesServices.appliqueTriContributeurs(
-      direction,
-      filtreEstPropriétaire
-    );
+      tableauDesServices.appliqueTriContributeurs(
+        direction,
+        filtreEstProprietaire
+      );
+    },
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
