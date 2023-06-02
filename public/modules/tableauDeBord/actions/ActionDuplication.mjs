@@ -31,22 +31,23 @@ class ActionDuplication {
     $loader.addClass('visible');
 
     const nombreCopies = parseInt($nombreCopie.val(), 10) || 1;
-    const promesses = [...this.tableauDesServices.servicesSelectionnes].map(
-      (idService) =>
-        tableauDeLongueur(nombreCopies).reduce(
-          (acc) =>
-            acc.then(() =>
-              axios({ method: 'copy', url: `/api/service/${idService}` })
-            ),
-          Promise.resolve()
-        )
+    const uneCopie = () =>
+      axios({ method: 'copy', url: `/api/service/${this.idSelectionne()}` });
+
+    const copies = tableauDeLongueur(nombreCopies).reduce(
+      (acc) => acc.then(() => uneCopie()),
+      Promise.resolve()
     );
 
-    return Promise.all(promesses).then(() => {
+    return copies.then(() => {
       this.tableauDesServices.recupereServices();
       $('#action-duplication').show();
       $loader.removeClass('visible');
     });
+  }
+
+  idSelectionne() {
+    return this.tableauDesServices.servicesSelectionnes.keys().next().value;
   }
 }
 
