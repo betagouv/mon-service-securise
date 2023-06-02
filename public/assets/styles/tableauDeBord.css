@@ -178,7 +178,7 @@ label[for='recherche-service'] {
   padding: 0.7em 1.5em;
 }
 
-.tableau-services thead th:not(:first-child):not(:last-child) {
+.tableau-services thead th[data-colonne] {
   cursor: pointer;
 }
 
