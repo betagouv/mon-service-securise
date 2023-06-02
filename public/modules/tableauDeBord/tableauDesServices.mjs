@@ -29,7 +29,7 @@ const tableauDesServices = {
   servicesSelectionnes: new Set(),
   termeRecherche: '',
   tri: { colonne: null, ordre: ORDRE_DE_TRI.AUCUN },
-  filtreSeulementProprietaire: false,
+  filtre: { seulementProprietaire: false },
   afficheDonnees: () => {
     tableauDesServices.videTableau();
     const donneesAAfficher = tableauDesServices.donnees
@@ -44,7 +44,7 @@ const tableauDesServices = {
             .includes(tableauDesServices.termeRecherche.toLowerCase())
       )
       .filter((service) =>
-        tableauDesServices.filtreSeulementProprietaire
+        tableauDesServices.filtre.seulementProprietaire
           ? service.estCreateur
           : true
       )
@@ -107,7 +107,7 @@ const tableauDesServices = {
   },
   appliqueTriContributeurs: (ordre, filtreEstProprietaire) => {
     tableauDesServices.tri = { colonne: 'nombreContributeurs', ordre };
-    tableauDesServices.filtreSeulementProprietaire = filtreEstProprietaire;
+    tableauDesServices.filtre.seulementProprietaire = filtreEstProprietaire;
     tableauDesServices.afficheDonnees();
     $('.tableau-services thead th.triable').attr('data-ordre', 0);
   },
