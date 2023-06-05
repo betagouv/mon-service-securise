@@ -2,6 +2,7 @@ const express = require('express');
 
 const { valeurBooleenne } = require('../utilitaires/aseptisation');
 const { dateYYYYMMDD } = require('../utilitaires/date');
+const { zipTableaux } = require('../utilitaires/tableau');
 const { DUREE_SESSION } = require('../http/configurationServeur');
 const {
   resultatValidation,
@@ -150,14 +151,26 @@ const routesApi = (
     (requete, reponse) => {
       const { idsServices = [] } = requete.query;
 
+      const donneesCsvServices = (services) => {
+        const servicesSansIndice = objetGetServices.donnees(
+          services,
+          requete.idUtilisateurCourant
+        );
+        const indicesCyber = objetGetIndicesCyber.donnees(services);
+
+        return zipTableaux(
+          servicesSansIndice.services,
+          indicesCyber.services,
+          'id'
+        );
+      };
+
       depotDonnees
         .homologations(requete.idUtilisateurCourant)
         .then((services) =>
           services.filter((service) => idsServices.includes(service.id))
         )
-        .then((services) =>
-          objetGetServices.donnees(services, requete.idUtilisateurCourant)
-        )
+        .then((services) => donneesCsvServices(services))
         .then((donneesServices) =>
           adaptateurCsv.genereCsvServices(donneesServices)
         )

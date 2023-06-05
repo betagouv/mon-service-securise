@@ -23,7 +23,7 @@ const ligneDuService = (service) =>
     service.statutHomologation.libelle,
   ].join(SEPARATEUR);
 
-const genereCsvServices = (donneesObjetGetServices) => {
+const genereCsvServices = (tableauServices) => {
   try {
     const entete = [
       'Nom du service',
@@ -34,10 +34,7 @@ const genereCsvServices = (donneesObjetGetServices) => {
       'Statut homologation',
     ].join(SEPARATEUR);
 
-    const contenu = [
-      entete,
-      ...donneesObjetGetServices.services.map(ligneDuService),
-    ].join(EOL);
+    const contenu = [entete, ...tableauServices.map(ligneDuService)].join(EOL);
 
     const avecBOM = '\uFEFF';
     return Buffer.from(`${avecBOM}${contenu}`, 'utf-8');
