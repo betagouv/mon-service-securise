@@ -141,9 +141,10 @@ class Utilisateur extends Base {
   }
 
   posteDetaille() {
-    const postes = [this.poste];
+    const postes = [];
     if (this.estRSSI()) postes.push('RSSI');
     if (this.estDelegueProtectionDonnees()) postes.push('DPO');
+    postes.push(this.poste);
     return formatteListeFr(postes.filter((p) => !!p));
   }
 
