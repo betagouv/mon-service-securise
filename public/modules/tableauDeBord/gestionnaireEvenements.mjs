@@ -72,6 +72,14 @@ const gestionnaireEvenements = {
     $('#action-export-csv').on('click', () =>
       registreDesActions.export.execute()
     );
+
+    $('#retour-liste-contributeurs').on('click', () => {
+      const idService = [...tableauDesServices.servicesSelectionnes][0];
+
+      $('#barre-outils .action').removeClass('actif');
+      gestionnaireTiroir.afficheContenuAction('contributeurs', idService);
+      gestionnaireEvenements.fermeMenuFlottant();
+    });
   },
   afficheTiroirAction: ($action, ...args) => {
     $('#barre-outils .action').removeClass('actif');
