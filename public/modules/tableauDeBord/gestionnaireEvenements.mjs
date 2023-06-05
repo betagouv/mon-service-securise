@@ -15,6 +15,8 @@ const gestionnaireEvenements = {
       tableauDesServices.modifieTri(colonne);
     });
 
+    $('.contenu-tiroir form').on('submit', (e) => e.preventDefault());
+
     $('.tableau-services').on('click', (e) => {
       const $elementClique = $(e.target);
       if ($elementClique.hasClass('selection-service')) {
