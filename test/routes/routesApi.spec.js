@@ -191,14 +191,36 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it('utilise un adaptateur de CSV pour la génération', (done) => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+
+      testeur.depotDonnees().homologations = () =>
+        Promise.resolve([
+          new Service({
+            id: '456',
+            descriptionService: {
+              nomService: 'Un service',
+              organisationsResponsables: ['ANSSI'],
+            },
+            createur: { id: '123', email: 'email.createur@mail.fr' },
+          }),
+        ]);
+
       let adaptateurCsvAppele = false;
-      testeur.adaptateurCsv().genereCsvServices = () => {
+      testeur.adaptateurCsv().genereCsvServices = (donnees) => {
         adaptateurCsvAppele = true;
+
+        const service = donnees.services[0];
+        expect(service.nomService).to.eql('Un service');
+        expect(service.organisationsResponsables).to.eql(['ANSSI']);
+        expect(service.nombreContributeurs).to.eql(1);
+        expect(service.estCreateur).to.be(true);
+        expect(service.statutHomologation.libelle).to.be('À réaliser');
+
         return Promise.resolve('Fichier CSV');
       };
 
       axios
-        .get('http://localhost:1234/api/services/export.csv')
+        .get('http://localhost:1234/api/services/export.csv?idsServices=456')
         .then(() => {
           expect(adaptateurCsvAppele).to.be(true);
           done();
