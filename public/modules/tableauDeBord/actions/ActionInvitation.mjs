@@ -1,5 +1,9 @@
 import { declencheValidation } from '../../interactions/validation.mjs';
 
+const estInvitationDejaEnvoyee = (reponseErreur) =>
+  reponseErreur.status === 422 &&
+  reponseErreur.data?.erreur?.code === 'INVITATION_DEJA_ENVOYEE';
+
 class ActionInvitation {
   constructor(tableauDesServices) {
     this.tableauDesServices = tableauDesServices;
@@ -13,6 +17,8 @@ class ActionInvitation {
   // eslint-disable-next-line class-methods-use-this
   initialise() {
     $('#email-invitation-collaboration').val('');
+    $('#action-invitation').show();
+    $('.message-erreur#invitation-deja-envoyee').hide();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -26,7 +32,7 @@ class ActionInvitation {
 
     if (!$emailInvite.is(':valid')) return Promise.reject();
 
-    $('#action-invitation').prop('disabled', true);
+    $('#action-invitation').hide();
     const emailContributeur = $emailInvite.val();
     const invitations = [...this.tableauDesServices.servicesSelectionnes].map(
       (idService) =>
@@ -35,10 +41,15 @@ class ActionInvitation {
           idHomologation: idService,
         })
     );
-    return Promise.all(invitations).then(() => {
-      $('#action-invitation').prop('disabled', false);
-      this.tableauDesServices.recupereServices();
-    });
+    return Promise.all(invitations)
+      .then(() => this.tableauDesServices.recupereServices())
+      .catch((e) => {
+        if (estInvitationDejaEnvoyee(e.response)) {
+          $('.message-erreur#invitation-deja-envoyee').show();
+        }
+        $('#action-invitation').show();
+        throw e;
+      });
   }
 }
 
