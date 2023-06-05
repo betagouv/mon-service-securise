@@ -60,13 +60,14 @@ const gestionnaireEvenements = {
         .then(() => gestionnaireTiroir.basculeOuvert(false));
     });
 
-    $('#action-invitation').on('click', () =>
+    $('#action-invitation').on('click', () => {
       registreDesActions.invitation
         .execute()
         .then(() =>
           gestionnaireTiroir.afficheContenuAction('invitation-confirmation')
         )
-    );
+        .catch(() => {});
+    });
 
     $('#action-export-csv').on('click', () =>
       registreDesActions.export.execute()

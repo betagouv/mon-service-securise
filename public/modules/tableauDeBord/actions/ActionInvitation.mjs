@@ -24,7 +24,7 @@ class ActionInvitation {
     declencheValidation('#contenu-invitation');
     const $emailInvite = $('#email-invitation-collaboration');
 
-    if (!$emailInvite.is(':valid')) return Promise.resolve();
+    if (!$emailInvite.is(':valid')) return Promise.reject();
 
     $('#action-invitation').prop('disabled', true);
     const emailContributeur = $emailInvite.val();
