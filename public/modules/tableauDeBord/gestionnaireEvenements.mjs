@@ -67,8 +67,7 @@ const gestionnaireEvenements = {
         .execute()
         .then(() =>
           gestionnaireTiroir.afficheContenuAction('invitation-confirmation')
-        )
-        .catch(() => {});
+        );
     });
 
     $('#action-export-csv').on('click', () =>
@@ -81,6 +80,10 @@ const gestionnaireEvenements = {
       $('#barre-outils .action').removeClass('actif');
       gestionnaireTiroir.afficheContenuAction('contributeurs', idService);
       gestionnaireEvenements.fermeMenuFlottant();
+    });
+
+    $('#email-invitation-collaboration').on('input', () => {
+      $('.message-erreur#invitation-deja-envoyee').hide();
     });
   },
   afficheTiroirAction: ($action, ...args) => {
