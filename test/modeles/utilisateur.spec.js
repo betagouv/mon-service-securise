@@ -36,7 +36,7 @@ describe('Un utilisateur', () => {
 
     it('reste robuste en cas de prénom ou de nom absent', () => {
       const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-      expect(utilisateur.initiales()).to.equal('…');
+      expect(utilisateur.initiales()).to.equal('');
     });
   });
 
