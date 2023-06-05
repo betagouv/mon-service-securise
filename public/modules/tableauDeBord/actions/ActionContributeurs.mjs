@@ -6,7 +6,7 @@ const metEnFormeContributeur = (contributeur, estProprietaire) =>
       }'>${contributeur.initiales}</div>
       <div class='nom-prenom-poste'>
         <div class='nom-contributeur'>${contributeur.prenomNom}</div>
-        <div class='poste-contributeur'>${contributeur.poste || '…'}</div>
+        <div class='poste-contributeur'>${contributeur.poste}</div>
       </div>
     </div>
     <div class='role ${estProprietaire ? 'proprietaire' : 'contributeur'}'>${
