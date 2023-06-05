@@ -136,7 +136,7 @@ class Utilisateur extends Base {
     return (
       `${premiereLettreMajuscule(this.prenom)}${premiereLettreMajuscule(
         this.nom
-      )}` || '…'
+      )}` || ''
     );
   }
 
