@@ -693,7 +693,8 @@ label[for='recherche-service'] {
   margin-bottom: 2em;
 }
 
-:is(#contenu-duplication, #contenu-suppression) .conteneur-loader {
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
+  .conteneur-loader {
   border: 1px solid #cbd5e1;
   border-radius: 4px;
   display: none;
@@ -705,15 +706,18 @@ label[for='recherche-service'] {
   margin-bottom: 2em;
 }
 
-:is(#contenu-duplication, #contenu-suppression) .conteneur-loader.visible {
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
+  .conteneur-loader.visible {
   display: flex;
 }
 
-:is(#contenu-duplication, #contenu-suppression) .titre-loader {
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
+  .titre-loader {
   font-weight: bold;
 }
 
-:is(#contenu-duplication, #contenu-suppression) .info-loader {
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
+  .info-loader {
   font-weight: 500;
 }
 

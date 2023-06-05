@@ -19,6 +19,8 @@ class ActionInvitation {
     $('#email-invitation-collaboration').val('');
     $('#action-invitation').show();
     $('.message-erreur#invitation-deja-envoyee').hide();
+    const $loader = $('.conteneur-loader', '#contenu-invitation');
+    $loader.removeClass('visible');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -32,7 +34,10 @@ class ActionInvitation {
 
     if (!$emailInvite.is(':valid')) return Promise.reject();
 
+    const $loader = $('.conteneur-loader', '#contenu-invitation');
+    $loader.addClass('visible');
     $('#action-invitation').hide();
+
     const emailContributeur = $emailInvite.val();
     const invitations = [...this.tableauDesServices.servicesSelectionnes].map(
       (idService) =>
@@ -48,6 +53,7 @@ class ActionInvitation {
           $('.message-erreur#invitation-deja-envoyee').show();
         }
         $('#action-invitation').show();
+        $loader.removeClass('visible');
         throw e;
       });
   }
