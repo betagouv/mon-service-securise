@@ -22,9 +22,9 @@ const gestionnaireEvenements = {
       if ($elementClique.hasClass('selection-service')) {
         gestionnaireEvenements.selectionneService($elementClique);
       } else if ($elementClique.hasClass('checkbox-selection-tous-services')) {
-        gestionnaireEvenements.selectionneTousServices($elementClique);
+        gestionnaireEvenements.basculeSelectionTousServices($elementClique);
       } else if ($elementClique.hasClass('checkbox-tous-services')) {
-        gestionnaireEvenements.selectionneTousServices($elementClique);
+        gestionnaireEvenements.basculeSelectionTousServices($elementClique);
       } else if ($elementClique.hasClass('action')) {
         gestionnaireEvenements.afficheTiroirAction($elementClique);
       } else if ($elementClique.hasClass('contributeurs')) {
@@ -120,17 +120,23 @@ const gestionnaireEvenements = {
     gestionnaireBarreOutils.afficheOutils();
     gestionnaireTiroir.basculeOuvert(false);
   },
-  selectionneTousServices: ($checkbox) => {
-    const selectionne = $checkbox.is(':checked');
+  basculeSelectionTousServices: ($checkbox) => {
     $checkbox.removeClass('selection-partielle');
+
+    const pasEncoreToutCoche =
+      tableauDesServices.servicesSelectionnes.size !==
+      tableauDesServices.donneesAffichees.length;
+
+    const doitCocherTousService =
+      $checkbox.is(':checked') && pasEncoreToutCoche;
 
     $('.selection-service').each((_, input) => {
       const $checkboxService = $(input);
       tableauDesServices.basculeSelectionService(
         $checkboxService.parents('.ligne-service').data('id-service'),
-        selectionne
+        doitCocherTousService
       );
-      $checkboxService.prop('checked', selectionne);
+      $checkboxService.prop('checked', doitCocherTousService);
     });
 
     gestionnaireEvenements.fermeMenuFlottant();
