@@ -23,6 +23,6 @@ $(() => {
 
     axios
       .put('/api/motDePasse', donnees)
-      .then(() => (window.location = '/espacePersonnel'));
+      .then(() => (window.location = '/tableauDeBord'));
   });
 });

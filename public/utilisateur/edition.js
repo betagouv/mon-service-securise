@@ -5,7 +5,7 @@ $(() => {
   const action = (donnees) =>
     axios
       .put('/api/utilisateur', donnees)
-      .then(() => (window.location = '/espacePersonnel'));
+      .then(() => (window.location = '/tableauDeBord'));
 
   brancheSoumissionFormulaireUtilisateur(selecteurFormulaire, action);
 });

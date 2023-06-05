@@ -150,6 +150,16 @@ describe('Le serveur MSS', () => {
           done
         );
     });
+
+    it('redirige vers le tableau de bord', (done) => {
+      axios
+        .get('http://localhost:1234/espacePersonnel')
+        .then((reponse) => {
+          expect(reponse.request.res.responseUrl).to.contain('tableauDeBord');
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('quand requête GET sur `/utilisateur/edition`', () => {

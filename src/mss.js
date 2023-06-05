@@ -159,7 +159,7 @@ const creeServeur = (
     '/espacePersonnel',
     middleware.verificationAcceptationCGU,
     (_requete, reponse) => {
-      reponse.render('espacePersonnel');
+      reponse.redirect('tableauDeBord');
     }
   );
 
