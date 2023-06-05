@@ -99,9 +99,7 @@ describe('Un utilisateur', () => {
         poste: 'Maire',
       });
 
-      expect(toutEnMemeTemps.posteDetaille()).to.contain('RSSI');
-      expect(toutEnMemeTemps.posteDetaille()).to.contain('DPO');
-      expect(toutEnMemeTemps.posteDetaille()).to.contain('Maire');
+      expect(toutEnMemeTemps.posteDetaille()).to.eql('RSSI, DPO et Maire');
     });
   });
   it('sait se convertir en JSON', () => {
@@ -127,7 +125,7 @@ describe('Un utilisateur', () => {
       telephone: '0100000000',
       initiales: 'JD',
       poste: 'Maire',
-      posteDetaille: 'Maire et RSSI',
+      posteDetaille: 'RSSI et Maire',
       rssi: true,
       delegueProtectionDonnees: false,
       nomEntitePublique: 'Ville de Paris',
