@@ -25,6 +25,7 @@ const remplisCarteInformationIndiceCyber = (indiceCyberMoyen) => {
 const tableauDesServices = {
   $tableau: $('.contenu-tableau-services'),
   donnees: [],
+  donneesAffichees: [],
   nombreServices: 0,
   servicesSelectionnes: new Set(),
   termeRecherche: '',
@@ -32,31 +33,8 @@ const tableauDesServices = {
   filtre: { seulementProprietaire: false },
   afficheDonnees: () => {
     tableauDesServices.videTableau();
-    const donneesAAfficher = tableauDesServices.donnees
-      .filter(
-        (service) =>
-          tableauDesServices.termeRecherche === '' ||
-          service.nomService
-            .toLowerCase()
-            .includes(tableauDesServices.termeRecherche.toLowerCase()) ||
-          service.organisationsResponsables[0]
-            ?.toLowerCase()
-            .includes(tableauDesServices.termeRecherche.toLowerCase())
-      )
-      .filter((service) =>
-        tableauDesServices.filtre.seulementProprietaire
-          ? service.estCreateur
-          : true
-      )
-      .sort((serviceA, serviceB) => {
-        const { colonne, ordre } = tableauDesServices.tri;
-        if (colonne === null) return 0;
-        if (ordre === ORDRE_DE_TRI.AUCUN) return 0;
-        if (ordre === ORDRE_DE_TRI.ASC)
-          return serviceB[colonne] - serviceA[colonne];
-        return serviceA[colonne] - serviceB[colonne];
-      });
-    tableauDesServices.remplisTableau(donneesAAfficher);
+    tableauDesServices.filtreEtTriDonnees();
+    tableauDesServices.remplisTableau();
   },
   afficheEtatSelection: () => {
     const nbServiceSelectionnes = tableauDesServices.servicesSelectionnes.size;
@@ -139,6 +117,32 @@ const tableauDesServices = {
     tableauDesServices.afficheEtatSelection();
     tableauDesServices.afficheDonnees();
   },
+  filtreEtTriDonnees() {
+    tableauDesServices.donneesAffichees = tableauDesServices.donnees
+      .filter(
+        (service) =>
+          tableauDesServices.termeRecherche === '' ||
+          service.nomService
+            .toLowerCase()
+            .includes(tableauDesServices.termeRecherche.toLowerCase()) ||
+          service.organisationsResponsables[0]
+            ?.toLowerCase()
+            .includes(tableauDesServices.termeRecherche.toLowerCase())
+      )
+      .filter((service) =>
+        tableauDesServices.filtre.seulementProprietaire
+          ? service.estCreateur
+          : true
+      )
+      .sort((serviceA, serviceB) => {
+        const { colonne, ordre } = tableauDesServices.tri;
+        if (colonne === null) return 0;
+        if (ordre === ORDRE_DE_TRI.AUCUN) return 0;
+        if (ordre === ORDRE_DE_TRI.ASC)
+          return serviceB[colonne] - serviceA[colonne];
+        return serviceA[colonne] - serviceB[colonne];
+      });
+  },
   nomDuService: (idService) =>
     tableauDesServices.donneesDuService(idService)?.nomService,
   recupereServices: () => {
@@ -165,8 +169,8 @@ const tableauDesServices = {
         })
     );
   },
-  remplisTableau: (donnees) => {
-    if (donnees.length === 0) {
+  remplisTableau: () => {
+    if (tableauDesServices.donneesAffichees.length === 0) {
       tableauDesServices.$tableau.append(`
       <tr>
         <td colspan='5'>
@@ -177,7 +181,7 @@ const tableauDesServices = {
       return;
     }
 
-    donnees.forEach((service) => {
+    tableauDesServices.donneesAffichees.forEach((service) => {
       const estSelectionne = tableauDesServices.servicesSelectionnes.has(
         service.id
       );
