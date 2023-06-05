@@ -544,10 +544,6 @@ label[for='recherche-service'] {
   pointer-events: none;
 }
 
-.tableau-services .selection-service {
-  cursor: pointer;
-}
-
 .tableau-services .checkbox-selection-tous-services,
 .tableau-services .checkbox-tous-services {
   transform: translateY(0);

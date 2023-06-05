@@ -75,6 +75,7 @@ input[type='radio'] {
 input[type='checkbox'] {
   border-radius: 0.15em;
   border: 1px solid var(--gris-fonce);
+  cursor: pointer;
 }
 
 input[type='radio'] {
