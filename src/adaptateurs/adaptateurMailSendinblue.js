@@ -6,7 +6,7 @@ const {
 
 const enteteJSON = {
   headers: {
-    'api-key': process.env.SENDINBLUE_CLEF_API,
+    'api-key': process.env.SENDINBLUE_EMAIL_CLEF_API,
     accept: 'application/json',
     'content-type': 'application/json',
   },

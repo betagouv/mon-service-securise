@@ -14,7 +14,7 @@ const {
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
-const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPI()
+const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
   : require('./src/adaptateurs/adaptateurMailMemoire');
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');

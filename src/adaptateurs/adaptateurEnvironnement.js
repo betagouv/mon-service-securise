@@ -13,7 +13,8 @@ const matomo = () => ({
 });
 
 const sendinblue = () => ({
-  clefAPI: () => process.env.SENDINBLUE_CLEF_API,
+  clefAPIEmail: () => process.env.SENDINBLUE_EMAIL_CLEF_API,
+  clefAPITracking: () => process.env.SENDINBLUE_TRACKING_CLEF_API,
 });
 
 const sentry = () => ({
