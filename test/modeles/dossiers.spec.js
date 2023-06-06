@@ -67,7 +67,7 @@ describe('Les dossiers liés à un service', () => {
     );
 
     ils(
-      "retournent le premier dossier actif trouvé, sans se soucier des dates d'expiration",
+      "retournent le dossier actif dont la date de début d'homologation est la plus récente",
       () => {
         const dossiers = new Dossiers(
           {
@@ -81,7 +81,7 @@ describe('Les dossiers liés à un service', () => {
         );
 
         const dossierActif = dossiers.dossierActif();
-        expect(dossierActif.id).to.equal('actif-depuis-10-jours');
+        expect(dossierActif.id).to.equal('actif-depuis-hier');
       }
     );
 
