@@ -167,6 +167,7 @@ label[for='recherche-service'] {
   border-collapse: separate;
   border-spacing: 0;
   table-layout: fixed;
+  width: 100%;
 }
 
 .tableau-services colgroup .nom-service {
@@ -410,16 +411,25 @@ label[for='recherche-service'] {
   display: flex;
   flex-direction: column;
   align-items: start;
+  max-width: 100%;
 }
 
 .tableau-services td .nom-service {
   color: #2f3a43;
   font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .tableau-services td .nom-organisation {
   color: #667892;
   font-weight: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .tableau-services td .contributeurs {
