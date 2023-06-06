@@ -18,7 +18,13 @@ class Dossiers extends ElementsConstructibles {
   }
 
   dossierActif() {
-    return this.finalises().find((d) => d.estActif());
+    return this.finalises()
+      .filter((d) => d.estActif())
+      .sort(
+        (a, b) =>
+          new Date(b.decision.dateHomologation) -
+          new Date(a.decision.dateHomologation)
+      )[0];
   }
 
   finalises() {
