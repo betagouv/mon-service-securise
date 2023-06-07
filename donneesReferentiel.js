@@ -798,21 +798,25 @@ module.exports = {
       nbMoisDecalage: 6,
       description: '6 mois',
       expiration: expiration('six mois'),
+      nbMoisBientotExpire: 2,
     },
     unAn: {
       nbMoisDecalage: 12,
       description: '1 an',
       expiration: expiration('un an'),
+      nbMoisBientotExpire: 2,
     },
     deuxAns: {
       nbMoisDecalage: 24,
       description: '2 ans',
       expiration: expiration('deux ans'),
+      nbMoisBientotExpire: 4,
     },
     troisAns: {
       nbMoisDecalage: 36,
       description: '3 ans',
       expiration: expiration('trois ans'),
+      nbMoisBientotExpire: 6,
     },
   },
 
