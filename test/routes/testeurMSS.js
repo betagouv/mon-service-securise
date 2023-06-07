@@ -18,6 +18,7 @@ const testeurMss = () => {
   let adaptateurPdf;
   let adaptateurCsv;
   let adaptateurZip;
+  let adaptateurTracking;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -58,6 +59,9 @@ const testeurMss = () => {
     };
     adaptateurCsv = {};
     adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };
+    adaptateurTracking = {
+      envoieTrackingConnexion: () => Promise.resolve(),
+    };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     moteurRegles = new MoteurRegles(referentiel);
@@ -76,6 +80,7 @@ const testeurMss = () => {
           adaptateurAnnuaire,
           adaptateurCsv,
           adaptateurZip,
+          adaptateurTracking,
           false,
           false,
           false
@@ -94,6 +99,7 @@ const testeurMss = () => {
     adaptateurPdf: () => adaptateurPdf,
     adaptateurCsv: () => adaptateurCsv,
     adaptateurZip: () => adaptateurZip,
+    adaptateurTracking: () => adaptateurTracking,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,

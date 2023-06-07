@@ -29,7 +29,8 @@ const routesApi = (
   adaptateurPdf,
   adaptateurAnnuaire,
   adaptateurCsv,
-  adaptateurZip
+  adaptateurZip,
+  adaptateurTracking
 ) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
     promesseEnvoiMessage
@@ -399,6 +400,11 @@ const routesApi = (
         if (utilisateur) {
           const token = utilisateur.genereToken();
           requete.session.token = token;
+          depotDonnees.homologations(utilisateur.id).then((services) =>
+            adaptateurTracking.envoieTrackingConnexion(utilisateur.email, {
+              nombreServices: services.length,
+            })
+          );
           reponse.json({ utilisateur: utilisateur.toJSON() });
         } else {
           reponse.status(401).send("L'authentification a échoué");

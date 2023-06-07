@@ -19,6 +19,11 @@ const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   : require('./src/adaptateurs/adaptateurMailMemoire');
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
 const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
+const adaptateurTracking = adaptateurEnvironnement
+  .sendinblue()
+  .clefAPITracking()
+  ? require('./src/adaptateurs/adaptateurTrackingSendinblue')
+  : require('./src/adaptateurs/adaptateurTrackingMemoire');
 
 const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
@@ -44,7 +49,8 @@ const serveur = MSS.creeServeur(
   adaptateurGestionErreur,
   adaptateurAnnuaire,
   adaptateurCsv,
-  adaptateurZip
+  adaptateurZip,
+  adaptateurTracking
 );
 
 serveur.ecoute(port, () => {

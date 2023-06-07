@@ -1243,6 +1243,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     describe("avec authentification réussie de l'utilisateur", () => {
       beforeEach(() => {
         const utilisateur = {
+          email: 'jean.dupont@mail.fr',
           toJSON: () => ({ prenomNom: 'Jean Dupont' }),
           genereToken: () => 'un token',
         };
@@ -1290,6 +1291,33 @@ describe('Le serveur MSS des routes /api/*', () => {
             done();
           })
           .catch(done);
+      });
+
+      it("utilise l'adaptateur de tracking pour envoyer un événement de connexion", (done) => {
+        let donneesPassees = {};
+        testeur.depotDonnees().homologations = () =>
+          Promise.resolve([{ id: '123' }]);
+        testeur.adaptateurTracking().envoieTrackingConnexion = (
+          destinataire,
+          donneesEvenement
+        ) => {
+          donneesPassees = { destinataire, donneesEvenement };
+          return Promise.resolve();
+        };
+
+        axios
+          .post('http://localhost:1234/api/token', {
+            login: 'jean.dupont@mail.fr',
+            motDePasse: 'mdp_12345',
+          })
+          .then(() => {
+            expect(donneesPassees).to.eql({
+              destinataire: 'jean.dupont@mail.fr',
+              donneesEvenement: { nombreServices: 1 },
+            });
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
       });
     });
 
