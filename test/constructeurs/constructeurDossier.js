@@ -84,6 +84,29 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  quiVaExpirer(dansNJours, dureeValidite) {
+    // Aujourd'hui - (nb de mois de validité) + rajouter nb jours d'expiration
+    // Expire dans 3 jours, valide 1 an : je veux un début à 362 jours dans le passé.
+    const aujourdhui = new Date();
+    const debutActif = new Date(
+      aujourdhui.setMonth(
+        aujourdhui.getMonth() -
+          this.referentiel.echeancesRenouvellement()[dureeValidite]
+            .nbMoisDecalage
+      )
+    );
+    debutActif.setDate(debutActif.getDate() + dansNJours);
+    this.donnees.decision = {
+      dateHomologation: debutActif.toISOString(),
+      dureeValidite,
+    };
+    this.donnees.avis = this.donnees.avis.map((avis) => ({
+      ...avis,
+      dureeValidite,
+    }));
+    return this;
+  }
+
   quiEstNonFinalise() {
     this.donnees.finalise = false;
     return this;
