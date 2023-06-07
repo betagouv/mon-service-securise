@@ -12,6 +12,16 @@ const ils = it;
 
 describe('Les dossiers liés à un service', () => {
   const referentiel = Referentiel.creeReferentielVide();
+  const adaptateurHorloge = { maintenant: () => new Date(2023, 2, 1) };
+  const unDossierComplet = (id) =>
+    new ConstructeurDossierFantaisie(id, referentiel).quiEstComplet();
+
+  beforeEach(() =>
+    referentiel.recharge({
+      echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
+      statutsAvisDossierHomologation: { favorable: {} },
+    })
+  );
 
   ils(
     "exigent qu'il n'y ait qu'un seul dossier maximum non finalisé",
@@ -55,17 +65,6 @@ describe('Les dossiers liés à un service', () => {
   );
 
   describe('concernant le dossier actif', () => {
-    const adaptateurHorloge = { maintenant: () => new Date(2023, 2, 1) };
-    const unDossierComplet = (id) =>
-      new ConstructeurDossierFantaisie(id, referentiel).quiEstComplet();
-
-    beforeEach(() =>
-      referentiel.recharge({
-        echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
-        statutsAvisDossierHomologation: { favorable: {} },
-      })
-    );
-
     ils(
       "retournent le dossier actif dont la date de début d'homologation est la plus récente",
       () => {
@@ -133,5 +132,66 @@ describe('Les dossiers liés à un service', () => {
         expect(dossiers.statutSaisie()).to.equal(Dossiers.A_SAISIR);
       }
     );
+  });
+
+  describe("concernant le statut d'homologation", () => {
+    ils("retournent « À réaliser » si il n'y a aucun dossier", () => {
+      const aucunDossiers = new Dossiers({ dossiers: [] });
+      expect(aucunDossiers.statutHomologation()).to.equal(Dossiers.A_REALISER);
+    });
+
+    ils('retournent « À finaliser » si un dossier est en cours', () => {
+      const dossierEnCours = new Dossiers({ dossiers: [{ id: '1' }] });
+      expect(dossierEnCours.statutHomologation()).to.equal(
+        Dossiers.A_FINALISER
+      );
+    });
+
+    ils('retournent « Réalisée » si un dossier est actif', () => {
+      const dossierActif = new Dossiers(
+        {
+          dossiers: [unDossierComplet().quiEstActif(1).donnees],
+        },
+        referentiel,
+        adaptateurHorloge
+      );
+
+      expect(dossierActif.statutHomologation()).to.equal(Dossiers.REALISEE);
+    });
+
+    ils(
+      'retournent « Bientôt expirée » si le dossier actif est bientôt expiré',
+      () => {
+        referentiel.recharge({
+          echeancesRenouvellement: {
+            sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 2 },
+          },
+          statutsAvisDossierHomologation: { favorable: {} },
+        });
+        const dossierExpirantDans30Jours = new Dossiers(
+          {
+            dossiers: [unDossierComplet().quiVaExpirer(30, 'sixMois').donnees],
+          },
+          referentiel,
+          adaptateurHorloge
+        );
+
+        expect(dossierExpirantDans30Jours.statutHomologation()).to.equal(
+          Dossiers.BIENTOT_EXPIREE
+        );
+      }
+    );
+
+    ils('retournent « Expirée » si un dossier est expiré', () => {
+      const dossierExpire = new Dossiers(
+        {
+          dossiers: [unDossierComplet().quiEstExpire().donnees],
+        },
+        referentiel,
+        adaptateurHorloge
+      );
+
+      expect(dossierExpire.statutHomologation()).to.equal(Dossiers.EXPIREE);
+    });
   });
 });
