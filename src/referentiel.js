@@ -79,6 +79,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const typesService = () => donnees.typesService;
   const nbMoisDecalage = (idEcheance) =>
     echeancesRenouvellement()[idEcheance]?.nbMoisDecalage;
+  const nbMoisBientotExpire = (idEcheance) =>
+    echeancesRenouvellement()[idEcheance]?.nbMoisBientotExpire;
   const niveauxGravite = () => donnees.niveauxGravite || {};
   const niveauGravite = (idNiveau) => niveauxGravite()[idNiveau] || {};
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
@@ -310,6 +312,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     mesureIndispensable,
     mesures,
     nbMoisDecalage,
+    nbMoisBientotExpire,
     niveauGravite,
     niveauxGravite,
     numeroEtape,
