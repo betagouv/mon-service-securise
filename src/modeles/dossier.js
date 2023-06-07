@@ -25,6 +25,7 @@ class Dossier extends InformationsHomologation {
     });
     this.renseigneProprietes(donneesDossier, referentiel);
     this.referentiel = referentiel;
+    this.adaptateurHorloge = adaptateurHorloge;
 
     this.decision = new Decision(
       donneesDossier.decision,
@@ -68,6 +69,18 @@ class Dossier extends InformationsHomologation {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
     this.autorite.enregistreAutoriteHomologation(nom, fonction);
+  }
+
+  estBientotExpire() {
+    const moisBientotExpire = this.referentiel.nbMoisBientotExpire(
+      this.decision.dureeValidite
+    );
+    const dateLimite = new Date(this.dateProchaineHomologation());
+    const premierJourDuBientotExpire =
+      dateLimite.getDate() - moisBientotExpire * 30;
+    dateLimite.setDate(premierJourDuBientotExpire);
+
+    return this.adaptateurHorloge.maintenant() > dateLimite;
   }
 
   declareSansAvis() {

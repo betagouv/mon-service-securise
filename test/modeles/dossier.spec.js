@@ -378,4 +378,36 @@ describe("Un dossier d'homologation", () => {
       });
     });
   });
+
+  describe("sur demande d'une expiration survenant prochainement", () => {
+    it("retourne 'true' si le dossier va bientôt expirer", () => {
+      referentiel.recharge({
+        echeancesRenouvellement: {
+          sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 2 },
+        },
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+      const dossierExpirantDans30Jours = unDossier(referentiel)
+        .quiEstComplet()
+        .quiVaExpirer(30, 'sixMois')
+        .construit();
+
+      expect(dossierExpirantDans30Jours.estBientotExpire()).to.be(true);
+    });
+
+    it("retourne 'false' si le dossier ne va pas bientôt expirer", () => {
+      referentiel.recharge({
+        echeancesRenouvellement: {
+          sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 1 },
+        },
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+      const dossierExpirantDans60Jours = unDossier(referentiel)
+        .quiEstComplet()
+        .quiVaExpirer(60, 'sixMois')
+        .construit();
+
+      expect(dossierExpirantDans60Jours.estBientotExpire()).to.be(false);
+    });
+  });
 });
