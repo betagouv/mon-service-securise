@@ -24,6 +24,7 @@ const creeServeur = (
   adaptateurAnnuaire,
   adaptateurCsv,
   adaptateurZip,
+  adaptateurTracking,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
   avecPageErreur = process.env.NODE_ENV === 'production',
   avecProtectionCsrf = process.env.AVEC_PROTECTION_CSRF === 'true'
@@ -182,7 +183,8 @@ const creeServeur = (
       adaptateurPdf,
       adaptateurAnnuaire,
       adaptateurCsv,
-      adaptateurZip
+      adaptateurZip,
+      adaptateurTracking
     )
   );
 
