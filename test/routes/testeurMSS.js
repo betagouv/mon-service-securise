@@ -10,6 +10,9 @@ const MSS = require('../../src/mss');
 const Referentiel = require('../../src/referentiel');
 
 const middleware = require('../mocks/middleware');
+const {
+  fabriqueCasUsagesVides,
+} = require('../../src/casUsages/fabriqueCasUsagesVides');
 
 const testeurMss = () => {
   let adaptateurAnnuaire;
@@ -20,6 +23,7 @@ const testeurMss = () => {
   let adaptateurZip;
   let adaptateurTracking;
   let depotDonnees;
+  let fabriqueCasUsages;
   let moteurRegles;
   let referentiel;
   let serveur;
@@ -63,9 +67,11 @@ const testeurMss = () => {
       envoieTrackingConnexion: () => Promise.resolve(),
       envoieTrackingInscription: () => Promise.resolve(),
     };
+    fabriqueCasUsages = fabriqueCasUsagesVides();
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     moteurRegles = new MoteurRegles(referentiel);
+
     depotVide()
       .then((depot) => {
         depotDonnees = depot;
@@ -74,6 +80,7 @@ const testeurMss = () => {
           middleware,
           referentiel,
           moteurRegles,
+          fabriqueCasUsages,
           adaptateurMail,
           adaptateurPdf,
           adaptateurHorloge,
@@ -102,6 +109,7 @@ const testeurMss = () => {
     adaptateurZip: () => adaptateurZip,
     adaptateurTracking: () => adaptateurTracking,
     depotDonnees: () => depotDonnees,
+    fabriqueCasUsages: () => fabriqueCasUsages,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,
     referentiel: () => referentiel,

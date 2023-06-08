@@ -29,6 +29,7 @@ const routesApiService = (
   middleware,
   depotDonnees,
   referentiel,
+  fabriqueCasUsages,
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip
@@ -106,6 +107,10 @@ const routesApiService = (
             descriptionService
           )
         )
+        .then(() => {
+          const maj = fabriqueCasUsages.miseAJourDescriptionService();
+          return maj.execute();
+        })
         .then(() => reponse.send({ idService: requete.homologation.id }))
         .catch((e) => {
           if (e instanceof ErreurModele) {
