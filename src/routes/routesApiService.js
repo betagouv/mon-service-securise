@@ -98,19 +98,13 @@ const routesApiService = (
       },
     ]),
     (requete, reponse, suite) => {
-      Promise.resolve()
-        .then(() => new DescriptionService(requete.body, referentiel))
-        .then((descriptionService) =>
-          depotDonnees.ajouteDescriptionServiceAHomologation(
-            requete.idUtilisateurCourant,
-            requete.params.id,
-            descriptionService
-          )
+      fabriqueCasUsages
+        .miseAJourDescriptionService()
+        .execute(
+          requete.homologation,
+          new DescriptionService(requete.body, referentiel),
+          requete.idUtilisateurCourant
         )
-        .then(() => {
-          const maj = fabriqueCasUsages.miseAJourDescriptionService();
-          return maj.execute();
-        })
         .then(() => reponse.send({ idService: requete.homologation.id }))
         .catch((e) => {
           if (e instanceof ErreurModele) {

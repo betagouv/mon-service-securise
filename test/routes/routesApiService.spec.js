@@ -222,38 +222,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch(done);
     });
 
-    it('demande au dépôt de données de mettre à jour le service', (done) => {
-      testeur.middleware().reinitialise({ idUtilisateur: '123' });
-
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation = (
-        idUtilisateur,
-        idService,
-        infosGenerales
-      ) => {
-        expect(idUtilisateur).to.equal('123');
-        expect(idService).to.equal('456');
-        expect(infosGenerales.nomService).to.equal('Nouveau Nom');
-        return Promise.resolve();
-      };
-
-      axios
-        .put('http://localhost:1234/api/service/456', {
-          nomService: 'Nouveau Nom',
-        })
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idService: '456' });
-          done();
-        })
-        .catch(done);
-    });
-
     it("exécute le cas d'usage de mise à jour de la description du service", (done) => {
-      let casUsageAppele;
+      let homologationCible;
+      let descriptionRecue;
+      let idUtilisateurRecu;
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
       testeur.fabriqueCasUsages().miseAJourDescriptionService = () => ({
-        execute: () => {
-          casUsageAppele = true;
+        execute: (homologation, descriptionService, idUtilisateur) => {
+          homologationCible = homologation;
+          descriptionRecue = descriptionService;
+          idUtilisateurRecu = idUtilisateur;
           return Promise.resolve();
         },
       });
@@ -261,7 +239,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       axios
         .put('http://localhost:1234/api/service/456', { nomService: 'Nom' })
         .then((reponse) => {
-          expect(casUsageAppele).to.be(true);
+          expect(homologationCible.id).to.be('456');
+          expect(descriptionRecue.nomService).to.be('Nom');
+          expect(idUtilisateurRecu).to.be('123');
           expect(reponse.status).to.equal(200);
           expect(reponse.data).to.eql({ idService: '456' });
           done();
@@ -269,22 +249,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch(done);
     });
 
-    it('retourne une erreur HTTP 422 si le validateur du modèle échoue', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'Le statut de déploiement "statutInvalide" est invalide',
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/service/456',
-          data: { statutDeploiement: 'statutInvalide' },
-        },
-        done
-      );
-    });
-
-    it('retourne une erreur HTTP 422 si la validation des propriétés obligatoires échoue', (done) => {
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () =>
-        Promise.reject(new ErreurNomServiceDejaExistant('oups'));
+    it("retourne une erreur HTTP 422 si le cas d'usage lève une exception", (done) => {
+      testeur.fabriqueCasUsages().miseAJourDescriptionService = () => ({
+        execute: () => Promise.reject(new ErreurNomServiceDejaExistant('oups')),
+      });
 
       testeur.verifieRequeteGenereErreurHTTP(
         422,

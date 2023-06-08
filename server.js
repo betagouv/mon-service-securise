@@ -8,13 +8,15 @@ const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement')
 const adaptateurCsv = require('./src/adaptateurs/adaptateurCsv');
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
 const {
-  fabriqueCasUsagesVides,
-} = require('./src/casUsages/fabriqueCasUsagesVides');
+  fabriqueCasUsagesReels,
+} = require('./src/casUsages/fabriqueCasUsagesReels');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
+
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
@@ -32,7 +34,10 @@ const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
 const depotDonnees = DepotDonnees.creeDepot();
-const fabriqueCasUsages = fabriqueCasUsagesVides();
+const fabriqueCasUsages = fabriqueCasUsagesReels(
+  depotDonnees,
+  fabriqueAdaptateurJournalMSS()
+);
 const middleware = Middleware({
   adaptateurChiffrement,
   adaptateurEnvironnement,
