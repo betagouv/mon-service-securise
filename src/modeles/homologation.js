@@ -189,6 +189,10 @@ class Homologation {
     return this.mesures.mesuresSpecifiques;
   }
 
+  metsAJourDescription(nouvelleDescription) {
+    this.descriptionService = nouvelleDescription;
+  }
+
   nombreDossiers() {
     return this.dossiers.nombre();
   }

@@ -378,6 +378,15 @@ const creeDepot = (config = {}) => {
       .then(duplique);
   };
 
+  const sauvegardeHomologation = (uneHomologation) => {
+    const donneesAPersister = uneHomologation.donneesAPersister().toutes();
+    const { id, ...donnees } = donneesAPersister;
+    return Promise.all([
+      adaptateurPersistance.metsAJourHomologation(id, donnees),
+      adaptateurPersistance.metsAJourService(id, donnees),
+    ]);
+  };
+
   return {
     ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
@@ -393,6 +402,7 @@ const creeDepot = (config = {}) => {
     enregistreDossierCourant,
     nouvelleHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
+    sauvegardeHomologation,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,
     toutesHomologations,
