@@ -74,6 +74,16 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  quiSeraActif(dans) {
+    const debutActif = new Date();
+    debutActif.setDate(debutActif.getDate() + dans);
+    this.donnees.decision = {
+      dateHomologation: debutActif.toISOString(),
+      dureeValidite: 'unAn',
+    };
+    return this;
+  }
+
   quiEstExpire() {
     const tresVieux = new Date();
     tresVieux.setDate(tresVieux.getDate() - 400);

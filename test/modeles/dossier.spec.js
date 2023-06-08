@@ -410,4 +410,31 @@ describe("Un dossier d'homologation", () => {
       expect(dossierExpirantDans60Jours.estBientotExpire()).to.be(false);
     });
   });
+
+  describe("sur demande d'expiration", () => {
+    beforeEach(() => {
+      referentiel.recharge({
+        echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+    });
+
+    it("retourne 'true' si le dossier est expiré", () => {
+      const dossierExpire = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstExpire()
+        .construit();
+
+      expect(dossierExpire.estExpire()).to.be(true);
+    });
+
+    it("retourne 'false' si le dossier n'est pas expiré", () => {
+      const dossierActif = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstActif()
+        .construit();
+
+      expect(dossierActif.estExpire()).to.be(false);
+    });
+  });
 });

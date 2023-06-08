@@ -71,6 +71,11 @@ class Dossier extends InformationsHomologation {
     this.autorite.enregistreAutoriteHomologation(nom, fonction);
   }
 
+  estExpire() {
+    const dateLimite = new Date(this.dateProchaineHomologation());
+    return this.adaptateurHorloge.maintenant() > dateLimite;
+  }
+
   estBientotExpire() {
     const moisBientotExpire = this.referentiel.nbMoisBientotExpire(
       this.decision.dureeValidite
