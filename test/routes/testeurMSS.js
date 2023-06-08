@@ -61,6 +61,7 @@ const testeurMss = () => {
     adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };
     adaptateurTracking = {
       envoieTrackingConnexion: () => Promise.resolve(),
+      envoieTrackingInscription: () => Promise.resolve(),
     };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();

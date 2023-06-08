@@ -246,6 +246,10 @@ const routesApi = (
           .nouvelUtilisateur(donnees)
           .then(creeContactEmail)
           .then(envoieMessageFinalisationInscription)
+          .then((utilisateur) => {
+            adaptateurTracking.envoieTrackingInscription(utilisateur.email);
+            return utilisateur;
+          })
           .catch((erreur) => {
             if (erreur instanceof ErreurUtilisateurExistant) {
               return adaptateurMail
