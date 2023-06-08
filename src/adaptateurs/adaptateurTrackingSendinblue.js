@@ -19,7 +19,7 @@ const envoieTracking = (destinataire, typeEvenement, donneesEvenement) =>
       {
         email: destinataire,
         event: typeEvenement,
-        eventdata: donneesEvenement,
+        properties: donneesEvenement,
       },
       enteteJSON
     )
