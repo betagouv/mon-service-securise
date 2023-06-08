@@ -158,11 +158,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   });
 
   describe('quand requête PUT sur `/api/service/:id`', () => {
-    beforeEach(() => {
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () =>
-        Promise.resolve();
-    });
-
     it('recherche le service correspondant', (done) => {
       testeur
         .middleware()

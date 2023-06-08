@@ -74,16 +74,6 @@ const creeDepot = (config = {}) => {
     return trouveDonneesHomologation(idOuHomologation).then(metsAJour);
   };
 
-  const metsAJourDescriptionServiceHomologation = (
-    homologationCible,
-    informations
-  ) =>
-    metsAJourProprieteHomologation(
-      'descriptionService',
-      homologationCible,
-      informations
-    );
-
   const remplaceProprieteHomologation = (
     nomPropriete,
     idHomologation,
@@ -191,32 +181,6 @@ const creeDepot = (config = {}) => {
           )
         : Promise.resolve()
     );
-  };
-
-  const ajouteDescriptionServiceAHomologation = (
-    idUtilisateur,
-    idHomologation,
-    infos
-  ) => {
-    const donneesAPersister = (h) => h.donneesAPersister().toutes();
-
-    const consigneEvenement = (h) =>
-      adaptateurJournalMSS.consigneEvenement(
-        new EvenementCompletudeServiceModifiee({
-          idService: idHomologation,
-          ...h.completudeMesures(),
-        }).toJSON()
-      );
-
-    const metsAJourHomologation = (h) =>
-      valideDescriptionService(idUtilisateur, infos, h.id)
-        .then(() =>
-          metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos)
-        )
-        .then(() => homologation(idHomologation))
-        .then(consigneEvenement);
-
-    return homologation(idHomologation).then(metsAJourHomologation);
   };
 
   const ajouteRolesResponsabilitesAHomologation = (...params) =>
@@ -389,7 +353,6 @@ const creeDepot = (config = {}) => {
 
   return {
     ajouteAvisExpertCyberAHomologation,
-    ajouteDescriptionServiceAHomologation,
     ajouteDossierCourantSiNecessaire,
     ajouteMesuresAHomologation,
     ajouteRisqueGeneralAHomologation,
