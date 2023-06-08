@@ -2,8 +2,15 @@ const expect = require('expect.js');
 
 const Service = require('../../../src/modeles/service');
 const objetGetServices = require('../../../src/modeles/objetsApi/objetGetServices');
+const Referentiel = require('../../../src/referentiel');
 
 describe("L'objet d'API de `GET /services`", () => {
+  const referentiel = Referentiel.creeReferentiel({
+    statutsHomologation: {
+      aRealiser: { libelle: 'À réaliser', ordre: 1 },
+    },
+  });
+
   const unService = new Service({
     id: '123',
     descriptionService: {
@@ -40,7 +47,9 @@ describe("L'objet d'API de `GET /services`", () => {
 
   it('fournit les données nécessaires', () => {
     const services = [unService];
-    expect(objetGetServices.donnees(services, 'A').services).to.eql([
+    expect(
+      objetGetServices.donnees(services, 'A', referentiel).services
+    ).to.eql([
       {
         id: '123',
         nomService: 'Un service',
@@ -60,7 +69,11 @@ describe("L'objet d'API de `GET /services`", () => {
             poste: 'Maire',
           },
         ],
-        statutHomologation: { libelle: 'À réaliser', id: 'aSaisir' },
+        statutHomologation: {
+          libelle: 'À réaliser',
+          id: 'aRealiser',
+          ordre: 1,
+        },
         nombreContributeurs: 1 + 1,
         estCreateur: true,
         documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
@@ -72,7 +85,7 @@ describe("L'objet d'API de `GET /services`", () => {
     unAutreService.dossiers.statutSaisie = () => 'completes';
 
     const services = [unService, unAutreService];
-    expect(objetGetServices.donnees(services, 'A').resume).to.eql({
+    expect(objetGetServices.donnees(services, 'A', referentiel).resume).to.eql({
       nombreServices: 2,
       nombreServicesHomologues: 1,
     });

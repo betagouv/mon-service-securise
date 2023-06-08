@@ -128,7 +128,11 @@ const routesApi = (
       depotDonnees
         .homologations(requete.idUtilisateurCourant)
         .then((services) =>
-          objetGetServices.donnees(services, requete.idUtilisateurCourant)
+          objetGetServices.donnees(
+            services,
+            requete.idUtilisateurCourant,
+            referentiel
+          )
         )
         .then((donnees) => reponse.json(donnees));
     }
@@ -155,7 +159,8 @@ const routesApi = (
       const donneesCsvServices = (services) => {
         const servicesSansIndice = objetGetServices.donnees(
           services,
-          requete.idUtilisateurCourant
+          requete.idUtilisateurCourant,
+          referentiel
         );
         const indicesCyber = objetGetIndicesCyber.donnees(services);
 
