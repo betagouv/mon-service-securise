@@ -178,6 +178,10 @@ label[for='recherche-service'] {
   width: 20%;
 }
 
+.tableau-services colgroup :is(.indice-cyber, .statut-homologation) {
+  width: 15%;
+}
+
 .tableau-services thead th {
   user-select: none;
   padding: 0.7em 1.5em;
@@ -484,16 +488,24 @@ label[for='recherche-service'] {
   padding: 0.3em 0.7em;
 }
 
-.tableau-services td .statut-homologation.statut-aSaisir {
+.tableau-services td .statut-homologation.statut-aRealiser {
   background: #e9ddff;
 }
 
-.tableau-services td .statut-homologation.statut-aCompleter {
+.tableau-services td .statut-homologation.statut-aFinaliser {
   background: #dbeeff;
 }
 
-.tableau-services td .statut-homologation.statut-completes {
+.tableau-services td .statut-homologation.statut-realisee {
   background: #d4f4db;
+}
+
+.tableau-services td .statut-homologation.statut-bientotExpiree {
+  background: #fff2de;
+}
+
+.tableau-services td .statut-homologation.statut-expiree {
+  background: #ffdfdf;
 }
 
 .tableau-services .cellule-actions {
