@@ -153,6 +153,9 @@ const tableauDesServices = {
           remplisCartesInformations(data.resume);
           tableauDesServices.nombreServices = data.resume.nombreServices;
           tableauDesServices.donnees = data.services;
+          tableauDesServices.donnees.forEach((service) => {
+            service.ordreStatutHomologation = service.statutHomologation.ordre;
+          });
           tableauDesServices.afficheDonnees();
           tableauDesServices.afficheEtatSelection();
         })
