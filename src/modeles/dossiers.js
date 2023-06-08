@@ -46,7 +46,9 @@ class Dossiers extends ElementsConstructibles {
       if (dossierActif.estBientotExpire()) return Dossiers.BIENTOT_EXPIREE;
       return Dossiers.REALISEE;
     }
-    return Dossiers.EXPIREE;
+    if (this.items.some((dossier) => dossier.estExpire()))
+      return Dossiers.EXPIREE;
+    return Dossiers.A_REALISER;
   }
 
   statutSaisie() {

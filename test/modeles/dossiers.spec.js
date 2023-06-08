@@ -193,5 +193,22 @@ describe('Les dossiers liés à un service', () => {
 
       expect(dossierExpire.statutHomologation()).to.equal(Dossiers.EXPIREE);
     });
+
+    ils(
+      'retournent « À réaliser » dans le cas par défaut, par exemple si la seule homologation présente ne sera valide que dans le futur',
+      () => {
+        const dossierValideDansLeFutur = new Dossiers(
+          {
+            dossiers: [unDossierComplet().quiSeraActif(30).donnees],
+          },
+          referentiel,
+          adaptateurHorloge
+        );
+
+        expect(dossierValideDansLeFutur.statutHomologation()).to.equal(
+          Dossiers.A_REALISER
+        );
+      }
+    );
   });
 });
