@@ -474,6 +474,29 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
+    it("utilise l'adaptateur de tracking pour envoyer un événement d'inscription", (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = () =>
+        Promise.resolve({ email: 'jean.dupont@mail.fr' });
+
+      let donneesPassees = {};
+      testeur.adaptateurTracking().envoieTrackingInscription = (
+        destinataire
+      ) => {
+        donneesPassees = { destinataire };
+        return Promise.resolve();
+      };
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => {
+          expect(donneesPassees).to.eql({
+            destinataire: 'jean.dupont@mail.fr',
+          });
+          done();
+        })
+        .catch(done);
+    });
+
     it('crée un contact email', (done) => {
       utilisateur.email = 'jean.dupont@mail.fr';
       utilisateur.prenom = 'Jean';
