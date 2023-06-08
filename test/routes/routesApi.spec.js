@@ -33,6 +33,11 @@ describe('Le serveur MSS des routes /api/*', () => {
 
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.referentiel().recharge({
+        statutsHomologation: {
+          aRealiser: { libelle: 'À réaliser', ordre: 1 },
+        },
+      });
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');
@@ -106,6 +111,11 @@ describe('Le serveur MSS des routes /api/*', () => {
   describe('quand requête GET sur `/api/services/export.csv`', () => {
     beforeEach(() => {
       testeur.adaptateurCsv().genereCsvServices = () => Promise.resolve();
+      testeur.referentiel().recharge({
+        statutsHomologation: {
+          aRealiser: { libelle: 'À réaliser', ordre: 1 },
+        },
+      });
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {

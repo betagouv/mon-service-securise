@@ -1,15 +1,9 @@
-const STATUTS_HOMOLOGATION = {
-  aSaisir: 'À réaliser',
-  aCompleter: 'À finaliser',
-  completes: 'Réalisée',
-};
-
-const donnees = (services, idUtilisateur) => ({
+const donnees = (services, idUtilisateur, referentiel) => ({
   services: services
     .map((s) => ({
       ...s.toJSON(),
       organisationsResponsables: s.descriptionService.organisationsResponsables,
-      statutHomologation: s.dossiers.statutSaisie(),
+      statutHomologation: s.dossiers.statutHomologation(),
       documentsPdfDisponibles: s.documentsPdfDisponibles(),
     }))
     .map((json) => ({
@@ -30,8 +24,8 @@ const donnees = (services, idUtilisateur) => ({
         poste: c.posteDetaille,
       })),
       statutHomologation: {
-        libelle: STATUTS_HOMOLOGATION[json.statutHomologation],
         id: json.statutHomologation,
+        ...referentiel.statutHomologation(json.statutHomologation),
       },
       nombreContributeurs: json.contributeurs.length + 1,
       estCreateur: json.createur.id === idUtilisateur,
