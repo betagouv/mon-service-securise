@@ -8,6 +8,9 @@ const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement')
 const adaptateurCsv = require('./src/adaptateurs/adaptateurCsv');
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
 const {
+  fabriqueCasUsagesVides,
+} = require('./src/casUsages/fabriqueCasUsagesVides');
+const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
 
@@ -29,6 +32,7 @@ const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
 const depotDonnees = DepotDonnees.creeDepot();
+const fabriqueCasUsages = fabriqueCasUsagesVides();
 const middleware = Middleware({
   adaptateurChiffrement,
   adaptateurEnvironnement,
@@ -43,6 +47,7 @@ const serveur = MSS.creeServeur(
   middleware,
   referentiel,
   moteurRegles,
+  fabriqueCasUsages,
   adaptateurMail,
   adaptateurPdf,
   adaptateurHorloge,

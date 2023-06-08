@@ -248,6 +248,27 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .catch(done);
     });
 
+    it("exécute le cas d'usage de mise à jour de la description du service", (done) => {
+      let casUsageAppele;
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.fabriqueCasUsages().miseAJourDescriptionService = () => ({
+        execute: () => {
+          casUsageAppele = true;
+          return Promise.resolve();
+        },
+      });
+
+      axios
+        .put('http://localhost:1234/api/service/456', { nomService: 'Nom' })
+        .then((reponse) => {
+          expect(casUsageAppele).to.be(true);
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idService: '456' });
+          done();
+        })
+        .catch(done);
+    });
+
     it('retourne une erreur HTTP 422 si le validateur du modèle échoue', (done) => {
       testeur.verifieRequeteGenereErreurHTTP(
         422,

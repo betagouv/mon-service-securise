@@ -25,6 +25,7 @@ const routesApi = (
   adaptateurMail,
   depotDonnees,
   referentiel,
+  fabriqueCasUsages,
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurAnnuaire,
@@ -202,6 +203,7 @@ const routesApi = (
       middleware,
       depotDonnees,
       referentiel,
+      fabriqueCasUsages,
       adaptateurHorloge,
       adaptateurPdf,
       adaptateurZip
