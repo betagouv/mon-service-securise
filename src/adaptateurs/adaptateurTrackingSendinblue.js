@@ -12,7 +12,7 @@ const enteteJSON = {
 };
 const urlBase = 'https://in-automate.sendinblue.com/api/v2';
 
-const envoieTracking = (destinataire, typeEvenement, donneesEvenement) =>
+const envoieTracking = (destinataire, typeEvenement, donneesEvenement = {}) =>
   axios
     .post(
       `${urlBase}/trackEvent`,
@@ -32,4 +32,7 @@ const envoieTracking = (destinataire, typeEvenement, donneesEvenement) =>
 const envoieTrackingConnexion = (destinataire, { nombreServices }) =>
   envoieTracking(destinataire, 'CONNEXION', { nb_services: nombreServices });
 
-module.exports = { envoieTrackingConnexion };
+const envoieTrackingInscription = (destinataire) =>
+  envoieTracking(destinataire, 'INSCRIPTION');
+
+module.exports = { envoieTrackingConnexion, envoieTrackingInscription };
