@@ -77,26 +77,14 @@ block zone-principale
 block cartes-informations
   -
     const dossiers = service.dossiers
-    const statutSaisieDossiers = dossiers.statutSaisie()
+    const idStatutHomologation = dossiers.statutHomologation()
+    const detailStatutHomologation = referentiel.statutHomologation(idStatutHomologation)
     const dossierActif = dossiers.dossierActif()
 
-  +carteInformations({titre: "Statut d'homologation" })
-    if statutSaisieDossiers === InformationsHomologation.COMPLETES
-      .statut.statut-homologue
-        span.pastille
-        span Service homologué
-      .dates-statut.
-        Date d'homologation : #{dossierActif.descriptionDateHomologation()}
-      .dates-statut.
-        Valable jusqu'au : #{dossierActif.descriptionProchaineDateHomologation()}
-    else
-      .statut.statut-non-homologue
-        span.pastille
-        span Service non homologué
-      .dates-statut.
-        Date d'homologation : non renseignée
-      .dates-statut.
-        Valable jusqu'au : non renseigné
+  +carteInformations({titre: "Homologation de sécurité" })
+    .statut.statut-homologation(class=idStatutHomologation, data-id-statut=idStatutHomologation)
+      span= detailStatutHomologation.libelle
+
 
   - const indiceCyber = service.indiceCyber()
   +indiceCyber({ referentiel, indiceCyber })

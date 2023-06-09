@@ -12,7 +12,8 @@
   display: inline;
 
   font-size: 0.9em;
-  font-weight: bold;
+  font-weight: 800;
+  color: #08416a;
 }
 
 .carte h2 {
@@ -132,4 +133,52 @@
 
 .carte .dates-statut {
   font-size: 0.696em;
+}
+
+.carte .statut-homologation::before {
+  content: '';
+  width: 1.6em;
+  height: 1.6em;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.carte .statut-homologation.aRealiser {
+  background: #e9ddff;
+}
+
+.carte .statut-homologation.aRealiser::before {
+  background-image: url('/statique/assets/images/icone_statut_homologation_aRealiser.svg');
+}
+
+.carte .statut-homologation.aFinaliser {
+  background: #dbeeff;
+}
+
+.carte .statut-homologation.aFinaliser::before {
+  background-image: url('/statique/assets/images/icone_statut_homologation_aFinaliser.svg');
+}
+
+.carte .statut-homologation.realisee {
+  background: #d4f4db;
+}
+
+.carte .statut-homologation.realisee::before {
+  background-image: url('/statique/assets/images/icone_statut_homologation_realisee.svg');
+}
+
+.carte .statut-homologation.bientotExpiree {
+  background: #fff2de;
+}
+
+.carte .statut-homologation.bientotExpiree::before {
+  background-image: url('/statique/assets/images/icone_statut_homologation_bientotExpiree.svg');
+}
+
+.carte .statut-homologation.expiree {
+  background: #ffdfdf;
+}
+
+.carte .statut-homologation.expiree::before {
+  background-image: url('/statique/assets/images/icone_statut_homologation_expiree.svg');
 }
