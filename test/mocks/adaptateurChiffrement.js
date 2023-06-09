@@ -4,6 +4,7 @@ const fauxAdaptateurChiffrement = {
     fauxAdaptateurChiffrement
       .chiffre(enClair)
       .then((chaineChiffree) => chaineChiffree === chiffreeReference),
+  encrypte: (donnees) => donnees,
 };
 
 module.exports = fauxAdaptateurChiffrement;

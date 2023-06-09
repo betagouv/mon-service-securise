@@ -30,6 +30,8 @@ const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 const copie = require('../../src/utilitaires/copie');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
+const { toutesValeursEnMajuscules } = require('../aides/manipulationObjets');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -544,6 +546,7 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   describe("sur demande de sauvegarde d'une homologation existante", () => {
+    let adaptateurChiffrement;
     let adaptateurPersistance;
     let depot;
     let referentiel;
@@ -551,8 +554,12 @@ describe('Le dépôt de données des homologations', () => {
     beforeEach(() => {
       const homologation = {
         id: '999',
-        descriptionService: { nomService: 'Service existant' },
+        descriptionService: {
+          nomService: 'Service existant',
+          presentation: 'La présentation',
+        },
       };
+      adaptateurChiffrement = fauxAdaptateurChiffrement;
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
         homologations: [copie(homologation)],
@@ -562,6 +569,7 @@ describe('Le dépôt de données des homologations', () => {
       referentiel = Referentiel.creeReferentielVide();
 
       depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement,
         adaptateurJournalMSS: AdaptateurJournalMSSMemoire.nouvelAdaptateur(),
         adaptateurPersistance,
         adaptateurUUID: { genereUUID: () => 'unUUID' },
@@ -586,6 +594,38 @@ describe('Le dépôt de données des homologations', () => {
           expect(miseAJour.nomService()).to.equal('Service renommé');
           done();
         })
+        .catch(done);
+    });
+
+    it("chiffre les données de description du service via l'adaptateur de chiffrement", (done) => {
+      let chiffrees;
+      let persistees;
+
+      adaptateurChiffrement.encrypte = (donnees) => {
+        chiffrees = donnees;
+        return toutesValeursEnMajuscules(donnees);
+      };
+
+      adaptateurPersistance.metsAJourHomologation = (_, donnees) => {
+        persistees = donnees;
+        return Promise.resolve();
+      };
+
+      depot
+        .homologation('999')
+        .then((h) => depot.sauvegardeHomologation(h))
+        .then(() =>
+          expect(chiffrees).to.eql({
+            nomService: 'Service existant',
+            presentation: 'La présentation',
+          })
+        )
+        .then(() => {
+          const { descriptionService } = persistees;
+          expect(descriptionService.nomService).to.be('SERVICE EXISTANT');
+          expect(descriptionService.presentation).to.be('LA PRÉSENTATION');
+        })
+        .then(() => done())
         .catch(done);
     });
   });

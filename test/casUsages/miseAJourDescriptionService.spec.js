@@ -1,4 +1,5 @@
 const expect = require('expect.js');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const copie = require('../../src/utilitaires/copie');
 const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
@@ -38,6 +39,7 @@ describe("la mise à jour de la description du service d'une homologation", () =
     referentiel = Referentiel.creeReferentielVide();
 
     depot = DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement: fauxAdaptateurChiffrement,
       adaptateurPersistance,
       adaptateurJournalMSS,
       referentiel,

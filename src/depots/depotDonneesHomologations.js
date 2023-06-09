@@ -14,6 +14,7 @@ const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
 const creeDepot = (config = {}) => {
   const {
+    adaptateurChiffrement,
     adaptateurJournalMSS,
     adaptateurPersistance,
     adaptateurUUID,
@@ -342,12 +343,27 @@ const creeDepot = (config = {}) => {
       .then(duplique);
   };
 
+  const chiffreDonneesHomologation = (donnees) => {
+    const { descriptionService } = donnees;
+
+    const descriptionChiffree = adaptateurChiffrement.encrypte({
+      nomService: descriptionService.nomService,
+      presentation: descriptionService.presentation,
+    });
+
+    return {
+      ...donnees,
+      descriptionService: { ...descriptionService, ...descriptionChiffree },
+    };
+  };
+
   const sauvegardeHomologation = (uneHomologation) => {
     const donneesAPersister = uneHomologation.donneesAPersister().toutes();
     const { id, ...donnees } = donneesAPersister;
+    const donneesChiffrees = chiffreDonneesHomologation(donnees);
     return Promise.all([
-      adaptateurPersistance.metsAJourHomologation(id, donnees),
-      adaptateurPersistance.metsAJourService(id, donnees),
+      adaptateurPersistance.metsAJourHomologation(id, donneesChiffrees),
+      adaptateurPersistance.metsAJourService(id, donneesChiffrees),
     ]);
   };
 
