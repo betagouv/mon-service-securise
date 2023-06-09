@@ -80,10 +80,32 @@ block cartes-informations
     const idStatutHomologation = dossiers.statutHomologation()
     const detailStatutHomologation = referentiel.statutHomologation(idStatutHomologation)
     const dossierActif = dossiers.dossierActif()
+    const etapeCourante = dossiers.dossierCourant()?.etapeCourante() ?? referentiel.premiereEtapeParcours().id
+    const dateExpiration = dossiers.finalises().find((dossier) => dossier.estExpire())?.descriptionProchaineDateHomologation();
 
   +carteInformations({titre: "Homologation de sécurité" })
     .statut.statut-homologation(class=idStatutHomologation, data-id-statut=idStatutHomologation)
       span= detailStatutHomologation.libelle
+
+    .informations-complementaires-statut
+      case idStatutHomologation
+        when 'aRealiser'
+          a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Commencer l'homologation
+        when 'aFinaliser'
+          a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Poursuivre l'homologation
+        when 'realisee'
+          .dates-statut.
+            Durée : #{dossierActif.descriptionDureeValidite()}
+          .dates-statut.
+            Valable jusqu'au #{dossierActif.descriptionProchaineDateHomologation()}
+        when 'bientotExpiree'
+          .dates-statut.
+            Expire le #{dossierActif.descriptionProchaineDateHomologation()}
+          a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Renouveler l'homologation
+        when 'expiree'
+          .dates-statut.
+            Expirée depuis le #{dateExpiration}
+          a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Renouveler l'homologation
 
 
   - const indiceCyber = service.indiceCyber()
