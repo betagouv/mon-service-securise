@@ -31,6 +31,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const actionSaisie = (id) => actionsSaisie()[id] || {};
   const statutsAvisDossierHomologation = () =>
     donnees.statutsAvisDossierHomologation || {};
+  const statutHomologation = (idStatut) =>
+    donnees.statutsHomologation[idStatut];
   const positionActionSaisie = (id) => actionSaisie(id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) =>
@@ -329,6 +331,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     statutsAvisDossierHomologation,
     statutsDeploiement,
     statutDeploiementValide,
+    statutHomologation,
     statutsMesures,
     trancheIndiceCyber,
     typeService,

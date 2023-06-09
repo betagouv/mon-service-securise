@@ -372,6 +372,18 @@ describe('Le référentiel', () => {
     });
   });
 
+  it("connaît le statut d'homologation", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      statutsHomologation: {
+        expiree: { libelle: 'Expirée' },
+      },
+    });
+
+    expect(referentiel.statutHomologation('expiree')).to.eql({
+      libelle: 'Expirée',
+    });
+  });
+
   it("sait si un identifiant fait partie de la liste des statuts d'avis de dossier d'homologation", () => {
     const referentiel = Referentiel.creeReferentiel({
       statutsAvisDossierHomologation: { favorable: {} },
