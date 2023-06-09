@@ -543,6 +543,53 @@ describe('Le dépôt de données des homologations', () => {
       .catch(done);
   });
 
+  describe("sur demande de sauvegarde d'une homologation existante", () => {
+    let adaptateurPersistance;
+    let depot;
+    let referentiel;
+
+    beforeEach(() => {
+      const homologation = {
+        id: '999',
+        descriptionService: { nomService: 'Service existant' },
+      };
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+        homologations: [copie(homologation)],
+        services: [copie(homologation)],
+        autorisations: [],
+      });
+      referentiel = Referentiel.creeReferentielVide();
+
+      depot = DepotDonneesHomologations.creeDepot({
+        adaptateurJournalMSS: AdaptateurJournalMSSMemoire.nouvelAdaptateur(),
+        adaptateurPersistance,
+        adaptateurUUID: { genereUUID: () => 'unUUID' },
+        referentiel,
+      });
+    });
+
+    it('met à jour les données stockées', (done) => {
+      const uneDescriptionAvecLeNom = (nomService) =>
+        uneDescriptionValide(referentiel)
+          .avecNomService(nomService)
+          .construis();
+
+      depot
+        .homologation('999')
+        .then((h) => {
+          h.metsAJourDescription(uneDescriptionAvecLeNom('Service renommé'));
+          return depot.sauvegardeHomologation(h);
+        })
+        .then(() => depot.homologation('999'))
+        .then((miseAJour) => {
+          expect(miseAJour.nomService()).to.equal('Service renommé');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
   describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
     let adaptateurJournalMSS;
     let adaptateurPersistance;
