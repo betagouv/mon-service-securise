@@ -34,6 +34,12 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id`', () => {
     it('recherche le service correspondant', (done) => {
+      testeur.referentiel().recharge({
+        statutsHomologation: {
+          aRealiser: { libelle: 'À réalisée' },
+        },
+        etapesParcoursHomologation: [{ numero: 1 }],
+      });
       testeur
         .middleware()
         .verifieRechercheService('http://localhost:1234/service/456', done);
