@@ -132,7 +132,7 @@
 }
 
 .carte .dates-statut {
-  font-size: 0.696em;
+  color: #08416a;
 }
 
 .carte .statut-homologation::before {
@@ -181,4 +181,8 @@
 
 .carte .statut-homologation.expiree::before {
   background-image: url('/statique/assets/images/icone_statut_homologation_expiree.svg');
+}
+
+.carte .informations-complementaires-statut {
+  font-size: 0.8em;
 }
