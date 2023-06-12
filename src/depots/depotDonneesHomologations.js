@@ -45,8 +45,8 @@ const creeDepot = (config = {}) => {
 
       const { id, ...donnees } = donneesAPersister;
       return Promise.all([
-        adaptateurPersistance.metsAJourHomologation(id, donnees),
-        adaptateurPersistance.metsAJourService(id, donnees),
+        adaptateurPersistance.sauvegardeHomologation(id, donnees),
+        adaptateurPersistance.sauvegardeService(id, donnees),
       ]);
     });
 
@@ -63,8 +63,8 @@ const creeDepot = (config = {}) => {
 
       const { id, ...donnees } = h;
       return Promise.all([
-        adaptateurPersistance.metsAJourHomologation(id, donnees),
-        adaptateurPersistance.metsAJourService(id, donnees),
+        adaptateurPersistance.sauvegardeHomologation(id, donnees),
+        adaptateurPersistance.sauvegardeService(id, donnees),
       ]);
     };
 
@@ -98,8 +98,8 @@ const creeDepot = (config = {}) => {
 
       const { id, ...donnees } = donneesAPersister;
       return Promise.all([
-        adaptateurPersistance.metsAJourHomologation(id, donnees),
-        adaptateurPersistance.metsAJourService(id, donnees),
+        adaptateurPersistance.sauvegardeHomologation(id, donnees),
+        adaptateurPersistance.sauvegardeService(id, donnees),
       ]);
     });
 
@@ -264,11 +264,11 @@ const creeDepot = (config = {}) => {
     )
       .then(() =>
         Promise.all([
-          adaptateurPersistance.ajouteHomologation(
+          adaptateurPersistance.sauvegardeHomologation(
             idHomologation,
             donneesHomologation
           ),
-          adaptateurPersistance.ajouteService(
+          adaptateurPersistance.sauvegardeService(
             idHomologation,
             donneesHomologation
           ),

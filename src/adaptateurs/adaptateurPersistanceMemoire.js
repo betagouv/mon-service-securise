@@ -111,6 +111,21 @@ const nouvelAdaptateur = (
   const metsAJourService = (...params) =>
     metsAJourEnregistrement(service, ...params);
 
+  const sauvegardeHomologation = (id, donneesHomologation) => {
+    const dejaConnue =
+      donnees.homologations.find((h) => h.id === id) !== undefined;
+    return dejaConnue
+      ? metsAJourHomologation(id, donneesHomologation)
+      : ajouteHomologation(id, donneesHomologation);
+  };
+
+  const sauvegardeService = (id, donneesService) => {
+    const dejaConnu = donnees.services.find((s) => s.id === id) !== undefined;
+    return dejaConnu
+      ? metsAJourService(id, donneesService)
+      : ajouteService(id, donneesService);
+  };
+
   const supprimeHomologation = (...params) =>
     supprimeEnregistrement('homologations', ...params);
 
@@ -281,8 +296,6 @@ const nouvelAdaptateur = (
 
   return {
     ajouteAutorisation,
-    ajouteHomologation,
-    ajouteService,
     ajouteUtilisateur,
     autorisation,
     autorisationPour,
@@ -292,11 +305,11 @@ const nouvelAdaptateur = (
     homologations,
     idsHomologationsCreeesParUtilisateur,
     lisParcoursUtilisateur,
-    metsAJourHomologation,
-    metsAJourService,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
     sauvegardeParcoursUtilisateur,
+    sauvegardeHomologation,
+    sauvegardeService,
     service,
     supprimeAutorisation,
     supprimeAutorisations,

@@ -230,6 +230,34 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("donnees->>'type'='createur'")
       .then(([{ count }]) => parseInt(count, 10));
 
+  const sauvegardeHomologation = (id, donneesHomologations) => {
+    const testExistence = knex('homologations')
+      .where('id', id)
+      .select({ id: 'id' })
+      .first()
+      .then((ligne) => ligne !== undefined);
+
+    return testExistence.then((dejaConnue) =>
+      dejaConnue
+        ? metsAJourHomologation(id, donneesHomologations)
+        : ajouteHomologation(id, donneesHomologations)
+    );
+  };
+
+  const sauvegardeService = (id, donneesService) => {
+    const testExistence = knex('services')
+      .where('id', id)
+      .select({ id: 'id' })
+      .first()
+      .then((ligne) => ligne !== undefined);
+
+    return testExistence.then((dejaConnu) =>
+      dejaConnu
+        ? metsAJourService(id, donneesService)
+        : ajouteService(id, donneesService)
+    );
+  };
+
   const supprimeAutorisation = (idUtilisateur, idHomologation) =>
     knex('autorisations')
       .whereRaw(
@@ -325,8 +353,6 @@ const nouvelAdaptateur = (env) => {
 
   return {
     ajouteAutorisation,
-    ajouteHomologation,
-    ajouteService,
     ajouteUtilisateur,
     arreteTout,
     autorisation,
@@ -337,10 +363,10 @@ const nouvelAdaptateur = (env) => {
     homologations,
     idsHomologationsCreeesParUtilisateur,
     lisParcoursUtilisateur,
-    metsAJourHomologation,
-    metsAJourService,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
+    sauvegardeHomologation,
+    sauvegardeService,
     service,
     sauvegardeParcoursUtilisateur,
     supprimeAutorisation,
