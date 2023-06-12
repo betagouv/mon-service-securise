@@ -27,6 +27,12 @@ const creeDepot = (config = {}) => {
       .homologation(idHomologation)
       .then((h) => (h ? new Homologation(h, referentiel) : undefined));
 
+  const sauvegardeHomologation = (id, donneesHomologation) =>
+    Promise.all([
+      adaptateurPersistance.sauvegardeHomologation(id, donneesHomologation),
+      adaptateurPersistance.sauvegardeService(id, donneesHomologation),
+    ]);
+
   const ajouteAItemsDansHomologation = (nomListeItems, idHomologation, item) =>
     homologation(idHomologation).then((h) => {
       const donneesAPersister = h.donneesAPersister().toutes();
@@ -44,10 +50,7 @@ const creeDepot = (config = {}) => {
       }
 
       const { id, ...donnees } = donneesAPersister;
-      return Promise.all([
-        adaptateurPersistance.sauvegardeHomologation(id, donnees),
-        adaptateurPersistance.sauvegardeService(id, donnees),
-      ]);
+      return sauvegardeHomologation(id, donnees);
     });
 
   const metsAJourProprieteHomologation = (
@@ -62,10 +65,7 @@ const creeDepot = (config = {}) => {
       Object.assign(h[nomPropriete], donneesPropriete);
 
       const { id, ...donnees } = h;
-      return Promise.all([
-        adaptateurPersistance.sauvegardeHomologation(id, donnees),
-        adaptateurPersistance.sauvegardeService(id, donnees),
-      ]);
+      return sauvegardeHomologation(id, donnees);
     };
 
     const trouveDonneesHomologation = (param) =>
@@ -97,10 +97,7 @@ const creeDepot = (config = {}) => {
       donneesAPersister[nomPropriete] = donneesPropriete;
 
       const { id, ...donnees } = donneesAPersister;
-      return Promise.all([
-        adaptateurPersistance.sauvegardeHomologation(id, donnees),
-        adaptateurPersistance.sauvegardeService(id, donnees),
-      ]);
+      return sauvegardeHomologation(id, donnees);
     });
 
   const ajouteDossierCourantSiNecessaire = (idHomologation) =>
@@ -262,18 +259,7 @@ const creeDepot = (config = {}) => {
       idUtilisateur,
       donneesHomologation.descriptionService
     )
-      .then(() =>
-        Promise.all([
-          adaptateurPersistance.sauvegardeHomologation(
-            idHomologation,
-            donneesHomologation
-          ),
-          adaptateurPersistance.sauvegardeService(
-            idHomologation,
-            donneesHomologation
-          ),
-        ])
-      )
+      .then(() => sauvegardeHomologation(idHomologation, donneesHomologation))
       .then(() =>
         adaptateurPersistance.ajouteAutorisation(idAutorisation, {
           idUtilisateur,
