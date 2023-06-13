@@ -30,6 +30,9 @@ const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 const copie = require('../../src/utilitaires/copie');
+const ConstructeurUtilisateur = require('../constructeurs/constructeurUtilisateur');
+const ConstructeurAutorisation = require('../constructeurs/constructeurAutorisation');
+const ConstructeurService = require('../constructeurs/constructeurService');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -1675,6 +1678,95 @@ describe('Le dépôt de données des homologations', () => {
       depot
         .trouveIndexDisponible('999', 'Service A (mairie) - Copie')
         .then((index) => expect(index).to.equal(2))
+        .then(() => done())
+        .catch(done);
+    });
+  });
+
+  describe('sur une demande de nombre moyen de contributeurs', () => {
+    it("peut retourner le nombre moyen de contributeurs pour les services d'un utilisateur donné", (done) => {
+      const referentiel = Referentiel.creeReferentielVide();
+
+      const proprietaire = new ConstructeurUtilisateur().avecIdUtilisateur(
+        'Propriétaire'
+      ).donnees;
+      const premierContributeur =
+        new ConstructeurUtilisateur().avecIdUtilisateur('A').donnees;
+      const secondContributeur =
+        new ConstructeurUtilisateur().avecIdUtilisateur('B').donnees;
+      const troisiemeContributeur =
+        new ConstructeurUtilisateur().avecIdUtilisateur('B').donnees;
+
+      const premierService = new ConstructeurService()
+        .avecId('123')
+        .avecNomService('un premier service').donnees;
+      const secondService = new ConstructeurService()
+        .avecId('456')
+        .avecNomService('un autre service').donnees;
+
+      const adaptateurPersistance =
+        AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [
+            proprietaire,
+            premierContributeur,
+            secondContributeur,
+            troisiemeContributeur,
+          ],
+          homologations: [premierService, secondService],
+          autorisations: [
+            new ConstructeurAutorisation()
+              .pourUtilisateur(proprietaire.id)
+              .pourService(premierService.id)
+              .enTantQueCreateur().donnees,
+            new ConstructeurAutorisation()
+              .pourUtilisateur(proprietaire.id)
+              .pourService(secondService.id)
+              .enTantQueCreateur().donnees,
+            new ConstructeurAutorisation()
+              .pourUtilisateur(premierContributeur.id)
+              .pourService(premierService.id)
+              .enTantQueContributeur().donnees,
+            new ConstructeurAutorisation()
+              .pourUtilisateur(secondContributeur.id)
+              .pourService(premierService.id)
+              .enTantQueContributeur().donnees,
+            new ConstructeurAutorisation()
+              .pourUtilisateur(troisiemeContributeur.id)
+              .pourService(premierService.id)
+              .enTantQueContributeur().donnees,
+          ],
+        });
+
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        referentiel,
+      });
+
+      depot
+        .nombreMoyenContributeursPourUtilisateur(proprietaire.id)
+        .then((nbMoyenContributeurs) => expect(nbMoyenContributeurs).to.be(1))
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("reste robuste si il n'y a pas de service", (done) => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const proprietaire = new ConstructeurUtilisateur().avecIdUtilisateur(
+        'Propriétaire'
+      ).donnees;
+      const adaptateurPersistance =
+        AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [proprietaire],
+        });
+
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        referentiel,
+      });
+
+      depot
+        .nombreMoyenContributeursPourUtilisateur(proprietaire.id)
+        .then((nbMoyenContributeurs) => expect(nbMoyenContributeurs).to.be(0))
         .then(() => done())
         .catch(done);
     });
