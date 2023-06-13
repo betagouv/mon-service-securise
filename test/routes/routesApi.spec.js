@@ -1776,6 +1776,39 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
+    it("envoie un événement d'invitation contributeur via l'adaptateur de tracking", (done) => {
+      let donneesPassees = {};
+      let idUtilisateurPasse;
+      testeur.depotDonnees().nombreMoyenContributeursPourUtilisateur = (
+        idUtilisateur
+      ) => {
+        idUtilisateurPasse = idUtilisateur;
+        return Promise.resolve(3);
+      };
+      testeur.adaptateurTracking().envoieTrackingInvitationContributeur = (
+        destinataire,
+        donneesEvenement
+      ) => {
+        donneesPassees = { destinataire, donneesEvenement };
+        return Promise.resolve();
+      };
+
+      axios
+        .post('http://localhost:1234/api/autorisation', {
+          emailContributeur: 'jean.dupont@mail.fr',
+          idHomologation: '123',
+        })
+        .then(() => {
+          expect(idUtilisateurPasse).to.be('456');
+          expect(donneesPassees).to.eql({
+            destinataire: 'jean.dupont@mail.fr',
+            donneesEvenement: { nombreMoyenContributeurs: 3 },
+          });
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
     it('retourne une erreur HTTP 422 si le dépôt a levé une `ErreurModele`', (done) => {
       testeur.depotDonnees().ajouteContributeurAHomologation = () => {
         throw new ErreurModele('oups');

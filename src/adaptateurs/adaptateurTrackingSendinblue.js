@@ -37,10 +37,10 @@ const envoieTrackingInscription = (destinataire) =>
 
 const envoieTrackingInvitationContributeur = (
   destinataire,
-  { nombreMoyenContributeur }
+  { nombreMoyenContributeurs }
 ) =>
   envoieTracking(destinataire, 'INVITATION_CONTRIBUTEUR', {
-    nb_moyen_contributeur: nombreMoyenContributeur,
+    nb_moyen_contributeurs: nombreMoyenContributeurs,
   });
 
 module.exports = {

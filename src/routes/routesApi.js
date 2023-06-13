@@ -499,6 +499,16 @@ const routesApi = (
         .then((c) =>
           depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation)
         )
+        .then(() => {
+          depotDonnees
+            .nombreMoyenContributeursPourUtilisateur(idUtilisateur)
+            .then((nombreMoyenContributeurs) =>
+              adaptateurTracking.envoieTrackingInvitationContributeur(
+                emailContributeur,
+                { nombreMoyenContributeurs }
+              )
+            );
+        })
         .then(() => reponse.send(''))
         .catch((e) => {
           if (e instanceof EchecAutorisation) {
