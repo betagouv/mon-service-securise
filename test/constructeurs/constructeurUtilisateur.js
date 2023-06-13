@@ -20,7 +20,7 @@ class ConstructeurUtilisateur {
     };
   }
 
-  avecIdUtilisateur(idUtilisateur) {
+  avecId(idUtilisateur) {
     this.donnees.id = idUtilisateur;
     return this;
   }
@@ -30,4 +30,6 @@ class ConstructeurUtilisateur {
   }
 }
 
-module.exports = ConstructeurUtilisateur;
+const unUtilisateur = () => new ConstructeurUtilisateur();
+
+module.exports = { ConstructeurUtilisateur, unUtilisateur };

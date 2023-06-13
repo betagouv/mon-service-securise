@@ -25,4 +25,6 @@ class ConstructeurService {
   }
 }
 
-module.exports = ConstructeurService;
+const unService = () => new ConstructeurService();
+
+module.exports = { ConstructeurService, unService };

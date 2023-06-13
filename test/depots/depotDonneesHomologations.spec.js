@@ -30,9 +30,14 @@ const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 const copie = require('../../src/utilitaires/copie');
-const ConstructeurUtilisateur = require('../constructeurs/constructeurUtilisateur');
-const ConstructeurAutorisation = require('../constructeurs/constructeurAutorisation');
-const ConstructeurService = require('../constructeurs/constructeurService');
+const {
+  ConstructeurUtilisateur,
+  unUtilisateur,
+} = require('../constructeurs/constructeurUtilisateur');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
+const { unService } = require('../constructeurs/constructeurService');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -1687,20 +1692,15 @@ describe('Le dépôt de données des homologations', () => {
     it("peut retourner le nombre moyen de contributeurs pour les services d'un utilisateur donné", (done) => {
       const referentiel = Referentiel.creeReferentielVide();
 
-      const proprietaire = new ConstructeurUtilisateur().avecIdUtilisateur(
-        'Propriétaire'
-      ).donnees;
-      const premierContributeur =
-        new ConstructeurUtilisateur().avecIdUtilisateur('A').donnees;
-      const secondContributeur =
-        new ConstructeurUtilisateur().avecIdUtilisateur('B').donnees;
-      const troisiemeContributeur =
-        new ConstructeurUtilisateur().avecIdUtilisateur('B').donnees;
+      const proprietaire = unUtilisateur().avecId('Propriétaire').donnees;
+      const premierContributeur = unUtilisateur().avecId('A').donnees;
+      const secondContributeur = unUtilisateur().avecId('B').donnees;
+      const troisiemeContributeur = unUtilisateur().avecId('B').donnees;
 
-      const premierService = new ConstructeurService()
+      const premierService = unService()
         .avecId('123')
         .avecNomService('un premier service').donnees;
-      const secondService = new ConstructeurService()
+      const secondService = unService()
         .avecId('456')
         .avecNomService('un autre service').donnees;
 
@@ -1713,27 +1713,28 @@ describe('Le dépôt de données des homologations', () => {
             troisiemeContributeur,
           ],
           homologations: [premierService, secondService],
+          services: [premierService, secondService],
           autorisations: [
-            new ConstructeurAutorisation()
-              .pourUtilisateur(proprietaire.id)
-              .pourService(premierService.id)
-              .enTantQueCreateur().donnees,
-            new ConstructeurAutorisation()
-              .pourUtilisateur(proprietaire.id)
-              .pourService(secondService.id)
-              .enTantQueCreateur().donnees,
-            new ConstructeurAutorisation()
-              .pourUtilisateur(premierContributeur.id)
-              .pourService(premierService.id)
-              .enTantQueContributeur().donnees,
-            new ConstructeurAutorisation()
-              .pourUtilisateur(secondContributeur.id)
-              .pourService(premierService.id)
-              .enTantQueContributeur().donnees,
-            new ConstructeurAutorisation()
-              .pourUtilisateur(troisiemeContributeur.id)
-              .pourService(premierService.id)
-              .enTantQueContributeur().donnees,
+            uneAutorisation().deCreateurDeService(
+              proprietaire.id,
+              premierService.id
+            ).donnees,
+            uneAutorisation().deCreateurDeService(
+              proprietaire.id,
+              secondService.id
+            ).donnees,
+            uneAutorisation().deContributeurDeService(
+              premierContributeur.id,
+              premierService.id
+            ).donnees,
+            uneAutorisation().deContributeurDeService(
+              secondContributeur.id,
+              premierService.id
+            ).donnees,
+            uneAutorisation().deContributeurDeService(
+              troisiemeContributeur.id,
+              premierService.id
+            ).donnees,
           ],
         });
 
@@ -1751,7 +1752,7 @@ describe('Le dépôt de données des homologations', () => {
 
     it("reste robuste si il n'y a pas de service", (done) => {
       const referentiel = Referentiel.creeReferentielVide();
-      const proprietaire = new ConstructeurUtilisateur().avecIdUtilisateur(
+      const proprietaire = new ConstructeurUtilisateur().avecId(
         'Propriétaire'
       ).donnees;
       const adaptateurPersistance =

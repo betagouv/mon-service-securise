@@ -11,24 +11,19 @@ class ConstructeurAutorisation {
     };
   }
 
-  pourUtilisateur(idUtilisateur) {
-    this.donnees.idUtilisateur = idUtilisateur;
-    return this;
-  }
-
-  pourService(idService) {
-    this.donnees.idHomologation = idService;
-    this.donnees.idService = idService;
-    return this;
-  }
-
-  enTantQueCreateur() {
+  deCreateurDeService(idUtilisateur, idService) {
     this.donnees.type = 'createur';
+    this.donnees.idUtilisateur = idUtilisateur;
+    this.donnees.idService = idService;
+    this.donnees.idHomologation = idService;
     return this;
   }
 
-  enTantQueContributeur() {
+  deContributeurDeService(idUtilisateur, idService) {
     this.donnees.type = 'contributeur';
+    this.donnees.idUtilisateur = idUtilisateur;
+    this.donnees.idService = idService;
+    this.donnees.idHomologation = idService;
     return this;
   }
 
@@ -37,4 +32,6 @@ class ConstructeurAutorisation {
   }
 }
 
-module.exports = ConstructeurAutorisation;
+const uneAutorisation = () => new ConstructeurAutorisation();
+
+module.exports = { uneAutorisation };

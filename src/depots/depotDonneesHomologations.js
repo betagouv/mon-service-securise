@@ -379,15 +379,14 @@ const creeDepot = (config = {}) => {
   };
 
   const nombreMoyenContributeursPourUtilisateur = (idUtilisateur) =>
-    homologations(idUtilisateur).then((_homologations) =>
-      _homologations.length === 0
+    homologations(idUtilisateur).then((hs) =>
+      hs.length === 0
         ? 0
         : Math.floor(
-            _homologations.reduce(
-              (accumulateur, _homologation) =>
-                accumulateur + _homologation.contributeurs.length,
+            hs.reduce(
+              (accumulateur, h) => accumulateur + h.contributeurs.length,
               0
-            ) / _homologations.length
+            ) / hs.length
           )
     );
 
@@ -404,13 +403,13 @@ const creeDepot = (config = {}) => {
     homologationExiste,
     homologations,
     enregistreDossierCourant,
+    nombreMoyenContributeursPourUtilisateur,
     nouvelleHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,
     toutesHomologations,
     trouveIndexDisponible,
-    nombreMoyenContributeursPourUtilisateur,
   };
 };
 
