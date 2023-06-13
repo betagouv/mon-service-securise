@@ -35,4 +35,16 @@ const envoieTrackingConnexion = (destinataire, { nombreServices }) =>
 const envoieTrackingInscription = (destinataire) =>
   envoieTracking(destinataire, 'INSCRIPTION');
 
-module.exports = { envoieTrackingConnexion, envoieTrackingInscription };
+const envoieTrackingInvitationContributeur = (
+  destinataire,
+  { nombreMoyenContributeur }
+) =>
+  envoieTracking(destinataire, 'INVITATION_CONTRIBUTEUR', {
+    nb_moyen_contributeur: nombreMoyenContributeur,
+  });
+
+module.exports = {
+  envoieTrackingConnexion,
+  envoieTrackingInscription,
+  envoieTrackingInvitationContributeur,
+};

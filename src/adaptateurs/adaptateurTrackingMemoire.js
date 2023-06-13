@@ -12,4 +12,11 @@ const envoieTrackingConnexion = (destinataire, donneesEvenement) =>
 const envoieTrackingInscription = (destinataire) =>
   envoieTracking(destinataire, 'INSCRIPTION');
 
-module.exports = { envoieTrackingConnexion, envoieTrackingInscription };
+const envoieTrackingInvitationContributeur = (destinataire, donneesEvenement) =>
+  envoieTracking(destinataire, 'INVITATION_CONTRIBUTEUR', donneesEvenement);
+
+module.exports = {
+  envoieTrackingConnexion,
+  envoieTrackingInscription,
+  envoieTrackingInvitationContributeur,
+};
