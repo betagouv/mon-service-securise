@@ -16,6 +16,7 @@ const donneesReferentielVide = {
   risques: {},
   typesService: {},
   niveauxGravite: {},
+  nouvellesFonctionnalites: [],
   provenancesService: {},
   seuilsCriticites: [],
   statutsDeploiement: {},
@@ -252,6 +253,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     }
   };
 
+  const derniereNouvelleFonctionnalite = () => {
+    const fonctionnalitesDechronologique =
+      donnees.nouvellesFonctionnalites.sort(
+        (a, b) => new Date(b.dateDeDeploiement) - new Date(a.dateDeDeploiement)
+      );
+    return fonctionnalitesDechronologique[0];
+  };
+
   const recharge = (nouvellesDonnees) => {
     donnees = { ...donneesReferentielVide, ...nouvellesDonnees };
     valideDonnees();
@@ -276,6 +285,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     delaisAvantImpactCritique,
     departement,
     departements,
+    derniereNouvelleFonctionnalite,
     descriptionActionSaisie,
     descriptionCategorie,
     descriptionDelaiAvantImpactCritique,

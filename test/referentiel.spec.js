@@ -804,4 +804,17 @@ describe('Le référentiel', () => {
       expect(referentiel.trancheIndiceCyber(6)).to.eql({});
     });
   });
+
+  it('sait renvoyer la dernière nouvelle fonctionnalité en date', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      nouvellesFonctionnalites: [
+        { id: 'nouveauté30Janvier', dateDeDeploiement: '2023-01-30' },
+        { id: 'nouveauté1Février', dateDeDeploiement: '2023-02-01' },
+      ],
+    });
+
+    expect(referentiel.derniereNouvelleFonctionnalite().id).to.equal(
+      'nouveauté1Février'
+    );
+  });
 });
