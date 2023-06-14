@@ -836,6 +836,52 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
 
+    it("l'adaptateur de tracking est utilisé pour envoyer un événement de création de service", (done) => {
+      let donneesPassees = {};
+      const adaptateurTracking = {
+        envoieTrackingNouveauServiceCree: (destinataire, donneesEvenement) => {
+          donneesPassees = { destinataire, donneesEvenement };
+          return Promise.resolve();
+        },
+      };
+      const descriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Un autre service')
+        .construis()
+        .toJSON();
+      const utilisateur = unUtilisateur().avecId('456').donnees;
+      const unServiceExistant = unService(referentiel).avecId('123').donnees;
+      const uneAutorisationExistante = uneAutorisation().deCreateurDeService(
+        utilisateur.id,
+        unServiceExistant.id
+      ).donnees;
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        autorisations: [uneAutorisationExistante],
+        homologations: [unServiceExistant],
+        services: [unServiceExistant],
+        utilisateurs: [utilisateur],
+      });
+      depot = DepotDonneesHomologations.creeDepot({
+        adaptateurJournalMSS,
+        adaptateurPersistance,
+        adaptateurTracking,
+        adaptateurUUID,
+        referentiel,
+      });
+
+      depot
+        .nouvelleHomologation(utilisateur.id, { descriptionService })
+        .then(() => {
+          expect(donneesPassees).to.eql({
+            destinataire: 'jean.dujardin@beta.gouv.com',
+            donneesEvenement: {
+              nombreServices: 2,
+            },
+          });
+        })
+        .then(() => done())
+        .catch(done);
+    });
+
     it('lève une exception si une propriété obligatoire de la description du service est manquante', (done) => {
       const donneesDescriptionServiceIncompletes = uneDescriptionValide(
         referentiel
@@ -1697,10 +1743,10 @@ describe('Le dépôt de données des homologations', () => {
       const secondContributeur = unUtilisateur().avecId('B').donnees;
       const troisiemeContributeur = unUtilisateur().avecId('B').donnees;
 
-      const premierService = unService()
+      const premierService = unService(referentiel)
         .avecId('123')
         .avecNomService('un premier service').donnees;
-      const secondService = unService()
+      const secondService = unService(referentiel)
         .avecId('456')
         .avecNomService('un autre service').donnees;
 

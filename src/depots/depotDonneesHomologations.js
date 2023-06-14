@@ -1,3 +1,4 @@
+const fabriqueAdaptateurTracking = require('../adaptateurs/fabriqueAdaptateurTracking');
 const {
   ErreurDonneesObligatoiresManquantes,
   ErreurHomologationInexistante,
@@ -16,6 +17,7 @@ const creeDepot = (config = {}) => {
   const {
     adaptateurJournalMSS,
     adaptateurPersistance,
+    adaptateurTracking = fabriqueAdaptateurTracking(),
     adaptateurUUID,
     referentiel,
   } = config;
@@ -295,6 +297,12 @@ const creeDepot = (config = {}) => {
               ...h.completudeMesures(),
             }).toJSON()
           ),
+          homologations(idUtilisateur).then((hs) => {
+            adaptateurTracking.envoieTrackingNouveauServiceCree(
+              donneesHomologation.createur.email,
+              { nombreServices: hs.length }
+            );
+          }),
         ])
       )
       .then(() => idHomologation);

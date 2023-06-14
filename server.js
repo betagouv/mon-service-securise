@@ -10,6 +10,7 @@ const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironneme
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
@@ -19,11 +20,8 @@ const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   : require('./src/adaptateurs/adaptateurMailMemoire');
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
 const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
-const adaptateurTracking = adaptateurEnvironnement
-  .sendinblue()
-  .clefAPITracking()
-  ? require('./src/adaptateurs/adaptateurTrackingSendinblue')
-  : require('./src/adaptateurs/adaptateurTrackingMemoire');
+
+const adaptateurTracking = fabriqueAdaptateurTracking();
 
 const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
