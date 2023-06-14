@@ -1,12 +1,12 @@
+const uneDescriptionValide = require('./constructeurDescriptionService');
+const Referentiel = require('../../src/referentiel');
 const Service = require('../../src/modeles/service');
 
 class ConstructeurService {
-  constructor() {
+  constructor(referentiel) {
     this.donnees = {
       id: '',
-      descriptionService: {
-        nomService: '',
-      },
+      descriptionService: uneDescriptionValide(referentiel).donnees,
     };
   }
 
@@ -25,6 +25,7 @@ class ConstructeurService {
   }
 }
 
-const unService = () => new ConstructeurService();
+const unService = (referentiel = Referentiel.creeReferentielVide()) =>
+  new ConstructeurService(referentiel);
 
-module.exports = { ConstructeurService, unService };
+module.exports = { unService };

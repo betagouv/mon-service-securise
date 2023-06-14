@@ -15,6 +15,8 @@ const matomo = () => ({
 const sendinblue = () => ({
   clefAPIEmail: () => process.env.SENDINBLUE_EMAIL_CLEF_API,
   clefAPITracking: () => process.env.SENDINBLUE_TRACKING_CLEF_API,
+  logEvenementsTrackingEnConsole: () =>
+    process.env.AVEC_TRACKING_SENDINGBLUE_QUI_LOG_CONSOLE === 'true',
 });
 
 const sentry = () => ({
