@@ -15,8 +15,12 @@ const envoieTrackingInscription = (destinataire) =>
 const envoieTrackingInvitationContributeur = (destinataire, donneesEvenement) =>
   envoieTracking(destinataire, 'INVITATION_CONTRIBUTEUR', donneesEvenement);
 
+const envoieTrackingNouveauServiceCree = (destinataire, donneesEvenement) =>
+  envoieTracking(destinataire, 'NOUVEAU_SERVICE_CREE', donneesEvenement);
+
 module.exports = {
   envoieTrackingConnexion,
   envoieTrackingInscription,
   envoieTrackingInvitationContributeur,
+  envoieTrackingNouveauServiceCree,
 };
