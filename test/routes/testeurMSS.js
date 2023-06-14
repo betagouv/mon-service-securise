@@ -63,6 +63,7 @@ const testeurMss = () => {
       envoieTrackingConnexion: () => Promise.resolve(),
       envoieTrackingInscription: () => Promise.resolve(),
       envoieTrackingInvitationContributeur: () => Promise.resolve(),
+      envoieTrackingNouveauServiceCree: () => Promise.resolve(),
     };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();

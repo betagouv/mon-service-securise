@@ -43,8 +43,14 @@ const envoieTrackingInvitationContributeur = (
     nb_moyen_contributeurs: nombreMoyenContributeurs,
   });
 
+const envoieTrackingNouveauServiceCree = (destinataire, { nombreServices }) =>
+  envoieTracking(destinataire, 'NOUVEAU_SERVICE_CREE', {
+    nb_services: nombreServices,
+  });
+
 module.exports = {
   envoieTrackingConnexion,
   envoieTrackingInscription,
   envoieTrackingInvitationContributeur,
+  envoieTrackingNouveauServiceCree,
 };
