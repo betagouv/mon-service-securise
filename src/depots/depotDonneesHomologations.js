@@ -28,6 +28,15 @@ const creeDepot = (config = {}) => {
         adaptateurPersistance
           .homologation(idHomologation)
           .then((h) => (h ? new Homologation(h, referentiel) : undefined)),
+      cellesDeUtilisateur: (idUtilisateur) =>
+        adaptateurPersistance
+          .homologations(idUtilisateur)
+          .then((hs) =>
+            hs
+              .map((h) => new Homologation(h, referentiel))
+              .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService()))
+          ),
+      toutes: () => persistance.lis.cellesDeUtilisateur(),
     },
     sauvegarde: (id, donneesHomologation) =>
       Promise.all([
@@ -237,15 +246,9 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteHomologation('avisExpertCyber', ...params);
 
   const homologations = (idUtilisateur) =>
-    adaptateurPersistance
-      .homologations(idUtilisateur)
-      .then((hs) =>
-        hs
-          .map((h) => new Homologation(h, referentiel))
-          .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService()))
-      );
+    persistance.lis.cellesDeUtilisateur(idUtilisateur);
 
-  const toutesHomologations = () => homologations();
+  const toutesHomologations = () => persistance.lis.toutes();
 
   const enregistreDossierCourant = (idHomologation, dossier) =>
     ajouteAItemsDansHomologation('dossiers', idHomologation, dossier);
