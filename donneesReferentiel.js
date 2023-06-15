@@ -15,6 +15,10 @@ module.exports = {
     noteMax: 5,
   },
 
+  nouvellesFonctionnalites: [
+    { id: 'nouveauté', dateDeDeploiement: '2023-01-01' },
+  ],
+
   tranchesIndicesCybers: [
     {
       borneInferieure: 0,

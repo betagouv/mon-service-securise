@@ -1253,6 +1253,12 @@ describe('Le serveur MSS des routes /api/*', () => {
 
   describe('quand requête POST sur `/api/token`', () => {
     it("authentifie l'utilisateur avec le login en minuscules", (done) => {
+      testeur.depotDonnees().lisParcoursUtilisateur = async () => {
+        const p = new ParcoursUtilisateur();
+        p.recupereNouvelleFonctionnalite = () => 'fonctionnalité-bouchon';
+        return p;
+      };
+
       const utilisateur = { toJSON: () => {}, genereToken: () => {} };
 
       testeur.depotDonnees().utilisateurAuthentifie = (login, motDePasse) => {
@@ -1285,6 +1291,12 @@ describe('Le serveur MSS des routes /api/*', () => {
 
         testeur.depotDonnees().utilisateurAuthentifie = () =>
           Promise.resolve(utilisateur);
+
+        testeur.depotDonnees().lisParcoursUtilisateur = async () => {
+          const p = new ParcoursUtilisateur();
+          p.recupereNouvelleFonctionnalite = () => 'fonctionnalité-bouchon';
+          return p;
+        };
       });
 
       it("retourne les informations de l'utilisateur", (done) => {
@@ -1295,8 +1307,8 @@ describe('Le serveur MSS des routes /api/*', () => {
           })
           .then((reponse) => {
             expect(reponse.status).to.equal(200);
-            expect(reponse.data).to.eql({
-              utilisateur: { prenomNom: 'Jean Dupont' },
+            expect(reponse.data.utilisateur).to.eql({
+              prenomNom: 'Jean Dupont',
             });
             done();
           })
@@ -1310,21 +1322,6 @@ describe('Le serveur MSS des routes /api/*', () => {
             motDePasse: 'mdp_12345',
           })
           .then((reponse) => testeur.verifieJetonDepose(reponse, done))
-          .catch(done);
-      });
-
-      it("retourne les infos de l'utilisateur", (done) => {
-        axios
-          .post('http://localhost:1234/api/token', {
-            login: 'jean.dupont@mail.fr',
-            motDePasse: 'mdp_12345',
-          })
-          .then((reponse) => {
-            expect(reponse.data).to.eql({
-              utilisateur: { prenomNom: 'Jean Dupont' },
-            });
-            done();
-          })
           .catch(done);
       });
 
@@ -1376,6 +1373,16 @@ describe('Le serveur MSS des routes /api/*', () => {
         expect(idPasse).to.eql('456');
         expect(donneesPassees.idUtilisateur).to.eql('456');
         expect(donneesPassees.dateDerniereConnexion).not.to.be(undefined);
+      });
+
+      it('retourne la nouvelle fonctionnalité dictée par le parcours utilisateur', async () => {
+        const reponse = await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+        expect(reponse.data.nouvelleFonctionnalite).to.eql(
+          'fonctionnalité-bouchon'
+        );
       });
     });
 
