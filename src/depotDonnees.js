@@ -5,6 +5,7 @@ const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurP
 const Referentiel = require('./referentiel');
 const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
 const depotDonneesHomologations = require('./depots/depotDonneesHomologations');
+const depotDonneesParcoursUtilisateurs = require('./depots/depotDonneesParcoursUtilisateur');
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 
 const creeDepot = (config = {}) => {
@@ -36,6 +37,10 @@ const creeDepot = (config = {}) => {
     adaptateurUUID,
     depotHomologations,
     depotUtilisateurs,
+  });
+
+  const depotParcoursUtilisateurs = depotDonneesParcoursUtilisateurs.creeDepot({
+    adaptateurPersistance,
   });
 
   const {
@@ -86,6 +91,9 @@ const creeDepot = (config = {}) => {
     transfereAutorisations,
   } = depotAutorisations;
 
+  const { lisParcoursUtilisateur, sauvegardeParcoursUtilisateur } =
+    depotParcoursUtilisateurs;
+
   return {
     accesAutorise,
     ajouteAvisExpertCyberAHomologation,
@@ -105,6 +113,7 @@ const creeDepot = (config = {}) => {
     homologations,
     enregistreDossierCourant,
     finaliseDossier,
+    lisParcoursUtilisateur,
     metsAJourMotDePasse,
     metsAJourUtilisateur,
     nombreMoyenContributeursPourUtilisateur,
@@ -112,6 +121,7 @@ const creeDepot = (config = {}) => {
     nouvelUtilisateur,
     reinitialiseMotDePasse,
     remplaceRisquesSpecifiquesPourHomologation,
+    sauvegardeParcoursUtilisateur,
     supprimeContributeur,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,
