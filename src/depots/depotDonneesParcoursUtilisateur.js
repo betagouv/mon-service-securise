@@ -1,13 +1,16 @@
 const ParcoursUtilisateur = require('../modeles/parcoursUtilisateur');
 
 const creeDepot = (config = {}) => {
-  const { adaptateurPersistance } = config;
+  const { adaptateurPersistance, referentiel } = config;
 
   const lisParcoursUtilisateur = async (idUtilisateur) => {
     const parcoursConnu = await adaptateurPersistance.lisParcoursUtilisateur(
       idUtilisateur
     );
-    return new ParcoursUtilisateur(parcoursConnu ?? { idUtilisateur });
+    return new ParcoursUtilisateur(
+      parcoursConnu ?? { idUtilisateur },
+      referentiel
+    );
   };
 
   const sauvegardeParcoursUtilisateur = async (parcoursUtilisateur) => {
