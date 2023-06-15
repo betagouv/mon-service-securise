@@ -14,9 +14,11 @@ block formulaire
       <strong>Décision de l'homologation de sécurité</strong>.
 
     .requis
+      - const maintenant = new Date()
+      - const maintenantFormate = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(maintenant)
       label Date d'homologation
         .infos-complementaires Cette date correspond à la date de signature de l'autorité d'homologation.
-        input(id = 'date-homologation' nom = 'dateHomologation', type = 'date', required, value = dossierCourant.decision.dateHomologation)
+        input(id = 'date-homologation' nom = 'dateHomologation', type = 'date', required, value = dossierCourant.decision.dateHomologation, max = maintenantFormate)
         .message-erreur Ce champ est obligatoire. Veuillez saisir une date.
 
     .requis
