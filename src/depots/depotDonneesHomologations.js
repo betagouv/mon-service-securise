@@ -32,6 +32,11 @@ const creeDepot = (config = {}) => {
         adaptateurPersistance.sauvegardeHomologation(id, donneesHomologation),
         adaptateurPersistance.sauvegardeService(id, donneesHomologation),
       ]),
+    supprime: (idHomologation) =>
+      Promise.all([
+        adaptateurPersistance.supprimeHomologation(idHomologation),
+        adaptateurPersistance.supprimeService(idHomologation),
+      ]),
   };
 
   const homologation = (idHomologation) => persistance.lis(idHomologation);
@@ -303,12 +308,7 @@ const creeDepot = (config = {}) => {
   const supprimeHomologation = (idHomologation) =>
     adaptateurPersistance
       .supprimeAutorisationsHomologation(idHomologation)
-      .then(() =>
-        Promise.all([
-          adaptateurPersistance.supprimeHomologation(idHomologation),
-          adaptateurPersistance.supprimeService(idHomologation),
-        ])
-      )
+      .then(() => persistance.supprime(idHomologation))
       .then(() =>
         adaptateurJournalMSS.consigneEvenement(
           new EvenementServiceSupprime({ idService: idHomologation }).toJSON()
