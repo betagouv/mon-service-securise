@@ -41,6 +41,9 @@ const { unService } = require('../constructeurs/constructeurService');
 const {
   unNouvelAdaptateurMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
+const {
+  unDepotDeDonneesServices,
+} = require('../constructeurs/constructeurDepotDonneesServices');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -862,13 +865,11 @@ describe('Le dépôt de données des homologations', () => {
         .ajouteUnService(unServiceExistant)
         .ajouteUnUtilisateur(utilisateur)
         .construis();
-      depot = DepotDonneesHomologations.creeDepot({
-        adaptateurJournalMSS,
-        adaptateurPersistance,
-        adaptateurTracking,
-        adaptateurUUID,
-        referentiel,
-      });
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecAdaptateurTracking(adaptateurTracking)
+        .avecReferentiel(referentiel)
+        .construis();
 
       depot
         .nouvelleHomologation(utilisateur.id, { descriptionService })
