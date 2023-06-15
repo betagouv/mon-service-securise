@@ -38,6 +38,9 @@ const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
 const { unService } = require('../constructeurs/constructeurService');
+const {
+  unNouvelAdaptateurMemoire,
+} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -854,12 +857,11 @@ describe('Le dépôt de données des homologations', () => {
         utilisateur.id,
         unServiceExistant.id
       ).donnees;
-      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        autorisations: [uneAutorisationExistante],
-        homologations: [unServiceExistant],
-        services: [unServiceExistant],
-        utilisateurs: [utilisateur],
-      });
+      adaptateurPersistance = unNouvelAdaptateurMemoire()
+        .ajouteUneAutorisation(uneAutorisationExistante)
+        .ajouteUnService(unServiceExistant)
+        .ajouteUnUtilisateur(utilisateur)
+        .construis();
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurJournalMSS,
         adaptateurPersistance,
