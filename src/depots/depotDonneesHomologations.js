@@ -37,6 +37,8 @@ const creeDepot = (config = {}) => {
               .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService()))
           ),
       toutes: () => persistance.lis.cellesDeUtilisateur(),
+      celleAvecNomService: (...params) =>
+        adaptateurPersistance.homologationAvecNomService(...params),
     },
     sauvegarde: (id, donneesHomologation) =>
       Promise.all([
@@ -179,9 +181,7 @@ const creeDepot = (config = {}) => {
     ajouteAItemsDansHomologation('risquesGeneraux', ...params);
 
   const homologationExiste = (...params) =>
-    adaptateurPersistance
-      .homologationAvecNomService(...params)
-      .then((h) => !!h);
+    persistance.lis.celleAvecNomService(...params).then((h) => !!h);
 
   const valideDescriptionService = (
     idUtilisateur,
