@@ -23,10 +23,12 @@ const creeDepot = (config = {}) => {
   } = config;
 
   const persistance = {
-    lis: (idHomologation) =>
-      adaptateurPersistance
-        .homologation(idHomologation)
-        .then((h) => (h ? new Homologation(h, referentiel) : undefined)),
+    lis: {
+      une: (idHomologation) =>
+        adaptateurPersistance
+          .homologation(idHomologation)
+          .then((h) => (h ? new Homologation(h, referentiel) : undefined)),
+    },
     sauvegarde: (id, donneesHomologation) =>
       Promise.all([
         adaptateurPersistance.sauvegardeHomologation(id, donneesHomologation),
@@ -39,10 +41,10 @@ const creeDepot = (config = {}) => {
       ]),
   };
 
-  const homologation = (idHomologation) => persistance.lis(idHomologation);
+  const homologation = (idHomologation) => persistance.lis.une(idHomologation);
 
   const ajouteAItemsDansHomologation = (nomListeItems, idHomologation, item) =>
-    persistance.lis(idHomologation).then((h) => {
+    persistance.lis.une(idHomologation).then((h) => {
       const donneesAPersister = h.donneesAPersister().toutes();
       donneesAPersister[nomListeItems] ||= [];
 
@@ -79,7 +81,9 @@ const creeDepot = (config = {}) => {
     const trouveDonneesHomologation = (param) =>
       typeof param === 'object'
         ? Promise.resolve(param)
-        : persistance.lis(param).then((h) => h.donneesAPersister().toutes());
+        : persistance.lis
+            .une(param)
+            .then((h) => h.donneesAPersister().toutes());
 
     return trouveDonneesHomologation(idOuHomologation).then(metsAJour);
   };
@@ -99,7 +103,7 @@ const creeDepot = (config = {}) => {
     idHomologation,
     propriete
   ) =>
-    persistance.lis(idHomologation).then((h) => {
+    persistance.lis.une(idHomologation).then((h) => {
       const donneesAPersister = h.donneesAPersister().toutes();
       const donneesPropriete = propriete.toJSON();
       donneesAPersister[nomPropriete] = donneesPropriete;
@@ -109,7 +113,7 @@ const creeDepot = (config = {}) => {
     });
 
   const ajouteDossierCourantSiNecessaire = (idHomologation) =>
-    persistance.lis(idHomologation).then((h) => {
+    persistance.lis.une(idHomologation).then((h) => {
       if (typeof h === 'undefined') {
         return Promise.reject(
           new ErreurHomologationInexistante(
@@ -152,7 +156,7 @@ const creeDepot = (config = {}) => {
       .then(() =>
         remplaceMesuresSpecifiquesPourHomologation(idHomologation, specifiques)
       )
-      .then(() => persistance.lis(idHomologation))
+      .then(() => persistance.lis.une(idHomologation))
       .then((h) =>
         adaptateurJournalMSS.consigneEvenement(
           new EvenementCompletudeServiceModifiee({
@@ -220,10 +224,10 @@ const creeDepot = (config = {}) => {
         .then(() =>
           metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos)
         )
-        .then(() => persistance.lis(idHomologation))
+        .then(() => persistance.lis.une(idHomologation))
         .then(consigneEvenement);
 
-    return persistance.lis(idHomologation).then(metsAJourHomologation);
+    return persistance.lis.une(idHomologation).then(metsAJourHomologation);
   };
 
   const ajouteRolesResponsabilitesAHomologation = (...params) =>
@@ -276,7 +280,7 @@ const creeDepot = (config = {}) => {
           type: 'createur',
         })
       )
-      .then(() => persistance.lis(idHomologation))
+      .then(() => persistance.lis.une(idHomologation))
       .then((h) =>
         Promise.all([
           adaptateurJournalMSS.consigneEvenement(
@@ -362,8 +366,8 @@ const creeDepot = (config = {}) => {
         .then((donnees) => nouvelleHomologation(idCreateur, donnees));
     };
 
-    return persistance
-      .lis(idHomologation)
+    return persistance.lis
+      .une(idHomologation)
       .then((h) =>
         typeof h === 'undefined'
           ? Promise.reject(
