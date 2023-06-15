@@ -308,6 +308,21 @@ const nouvelAdaptateur = (env) => {
       { doNotRejectOnRollback: false }
     );
 
+  const lisParcoursUtilisateur = async (id) =>
+    elementDeTable('parcours_utilisateurs', id);
+
+  const sauvegardeParcoursUtilisateur = async (id, donnees) => {
+    const ligneExistante =
+      (await knex('parcours_utilisateurs')
+        .where('id', id)
+        .select({ id: 'id' })
+        .first()) !== undefined;
+
+    if (!ligneExistante)
+      await ajouteLigneDansTable('parcours_utilisateurs', id, donnees);
+    else await metsAJourTable('parcours_utilisateurs', id, donnees);
+  };
+
   return {
     ajouteAutorisation,
     ajouteHomologation,
@@ -321,11 +336,13 @@ const nouvelAdaptateur = (env) => {
     homologationAvecNomService,
     homologations,
     idsHomologationsCreeesParUtilisateur,
+    lisParcoursUtilisateur,
     metsAJourHomologation,
     metsAJourService,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
     service,
+    sauvegardeParcoursUtilisateur,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
