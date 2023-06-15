@@ -94,6 +94,7 @@ describe('Le dépôt de données des homologations', () => {
     adaptateurPersistance.homologations = (idUtilisateur) => {
       expect(idUtilisateur).to.be(undefined);
       done();
+      return Promise.resolve([]);
     };
 
     const depot = DepotDonneesHomologations.creeDepot({

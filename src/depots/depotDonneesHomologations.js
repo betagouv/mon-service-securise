@@ -16,28 +16,26 @@ const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 const fabriquePersistance = (adaptateurPersistance, referentiel) => {
   const persistance = {
     lis: {
-      une: (idHomologation) =>
-        adaptateurPersistance
-          .homologation(idHomologation)
-          .then((h) => (h ? new Homologation(h, referentiel) : undefined)),
-      cellesDeUtilisateur: (idUtilisateur) =>
-        adaptateurPersistance
-          .homologations(idUtilisateur)
-          .then((hs) =>
-            hs
-              .map((h) => new Homologation(h, referentiel))
-              .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService()))
-          ),
-      toutes: () => persistance.lis.cellesDeUtilisateur(),
-      celleAvecNomService: (...params) =>
+      une: async (idHomologation) => {
+        const h = await adaptateurPersistance.homologation(idHomologation);
+        return h ? new Homologation(h, referentiel) : undefined;
+      },
+      cellesDeUtilisateur: async (idUtilisateur) => {
+        const hs = await adaptateurPersistance.homologations(idUtilisateur);
+        return hs
+          .map((h) => new Homologation(h, referentiel))
+          .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService()));
+      },
+      toutes: async () => persistance.lis.cellesDeUtilisateur(),
+      celleAvecNomService: async (...params) =>
         adaptateurPersistance.homologationAvecNomService(...params),
     },
-    sauvegarde: (id, donneesHomologation) =>
+    sauvegarde: async (id, donneesHomologation) =>
       Promise.all([
         adaptateurPersistance.sauvegardeHomologation(id, donneesHomologation),
         adaptateurPersistance.sauvegardeService(id, donneesHomologation),
       ]),
-    supprime: (idHomologation) =>
+    supprime: async (idHomologation) =>
       Promise.all([
         adaptateurPersistance.supprimeHomologation(idHomologation),
         adaptateurPersistance.supprimeService(idHomologation),
@@ -358,7 +356,7 @@ const creeDepot = (config = {}) => {
       return Math.max(0, resultat) + 1;
     };
 
-    return homologations(idCreateur).then(indexMax);
+    return p.lis.cellesDeUtilisateur(idCreateur).then(indexMax);
   };
 
   const dupliqueHomologation = (idHomologation) => {
