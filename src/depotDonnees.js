@@ -44,6 +44,7 @@ const creeDepot = (config = {}) => {
 
   const depotParcoursUtilisateurs = depotDonneesParcoursUtilisateurs.creeDepot({
     adaptateurPersistance,
+    referentiel,
   });
 
   const {
