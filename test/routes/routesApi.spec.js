@@ -13,6 +13,7 @@ const {
 
 const testeurMSS = require('./testeurMSS');
 const Service = require('../../src/modeles/service');
+const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
 
 describe('Le serveur MSS des routes /api/*', () => {
   const testeur = testeurMSS();
@@ -1277,6 +1278,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       beforeEach(() => {
         const utilisateur = {
           email: 'jean.dupont@mail.fr',
+          id: '456',
           toJSON: () => ({ prenomNom: 'Jean Dupont' }),
           genereToken: () => 'un token',
         };
@@ -1351,6 +1353,29 @@ describe('Le serveur MSS des routes /api/*', () => {
             done();
           })
           .catch((e) => done(e.response?.data || e));
+      });
+
+      it('utilise le dépôt pour lire et mettre à jour le parcours utilisateur', async () => {
+        let idPasse;
+        let donneesPassees = {};
+        testeur.depotDonnees().lisParcoursUtilisateur = (id) => {
+          idPasse = id;
+          return Promise.resolve(
+            new ParcoursUtilisateur({ idUtilisateur: id })
+          );
+        };
+        testeur.depotDonnees().sauvegardeParcoursUtilisateur = (parcours) => {
+          donneesPassees = parcours.toJSON();
+          return Promise.resolve();
+        };
+
+        await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+        expect(idPasse).to.eql('456');
+        expect(donneesPassees.idUtilisateur).to.eql('456');
+        expect(donneesPassees.dateDerniereConnexion).not.to.be(undefined);
       });
     });
 

@@ -414,6 +414,15 @@ const routesApi = (
               nombreServices: services.length,
             })
           );
+          depotDonnees
+            .lisParcoursUtilisateur(utilisateur.id)
+            .then((parcoursUtilisateur) => {
+              parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
+              return parcoursUtilisateur;
+            })
+            .then((parcoursUtilisateur) =>
+              depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur)
+            );
           reponse.json({ utilisateur: utilisateur.toJSON() });
         } else {
           reponse.status(401).send("L'authentification a échoué");
