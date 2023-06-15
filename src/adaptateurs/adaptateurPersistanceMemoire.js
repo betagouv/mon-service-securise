@@ -8,6 +8,7 @@ const nouvelAdaptateur = (
   donnees.homologations ||= [];
   donnees.services ||= [];
   donnees.autorisations ||= [];
+  donnees.parcoursUtilisateurs ||= [];
 
   const metsAJourEnregistrement = (
     fonctionRecherche,
@@ -264,6 +265,20 @@ const nouvelAdaptateur = (
       .then(() => supprimeDoublonsCreationContribution(idUtilisateurCible));
   };
 
+  const lisParcoursUtilisateur = async (id) =>
+    donnees.parcoursUtilisateurs.find((p) => p.id === id);
+
+  const sauvegardeParcoursUtilisateur = async (
+    id,
+    donneesParcoursUtilisateur
+  ) => {
+    const dejaConnu = donnees.parcoursUtilisateurs.find((p) => p.id === id);
+
+    if (!dejaConnu)
+      donnees.parcoursUtilisateurs.push({ id, ...donneesParcoursUtilisateur });
+    else dejaConnu.donnees = donneesParcoursUtilisateur;
+  };
+
   return {
     ajouteAutorisation,
     ajouteHomologation,
@@ -276,10 +291,12 @@ const nouvelAdaptateur = (
     homologationAvecNomService,
     homologations,
     idsHomologationsCreeesParUtilisateur,
+    lisParcoursUtilisateur,
     metsAJourHomologation,
     metsAJourService,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
+    sauvegardeParcoursUtilisateur,
     service,
     supprimeAutorisation,
     supprimeAutorisations,

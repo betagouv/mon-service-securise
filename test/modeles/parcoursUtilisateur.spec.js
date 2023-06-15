@@ -6,13 +6,11 @@ const Referentiel = require('../../src/referentiel');
 describe('Un parcours utilisateur', () => {
   it('sait se convertir en JSON', () => {
     const unParcours = new ParcoursUtilisateur({
-      id: '123',
       idUtilisateur: '456',
       dateDerniereConnexion: '2023-01-01',
     });
 
     expect(unParcours.toJSON()).to.eql({
-      id: '123',
       idUtilisateur: '456',
       dateDerniereConnexion: '2023-01-01',
     });
@@ -25,7 +23,6 @@ describe('Un parcours utilisateur', () => {
     };
     const unParcours = new ParcoursUtilisateur(
       {
-        id: '123',
         idUtilisateur: '456',
         dateDerniereConnexion: '2023-01-01',
       },
@@ -43,7 +40,7 @@ describe('Un parcours utilisateur', () => {
       const referentiel = Referentiel.creeReferentielVide({
         nouvellesFonctionnalites: [],
       });
-      const unParcours = new ParcoursUtilisateur({ id: '123' }, referentiel);
+      const unParcours = new ParcoursUtilisateur({}, referentiel);
       expect(unParcours.recupereNouvelleFonctionnalite()).to.be(undefined);
     });
 
@@ -54,10 +51,7 @@ describe('Un parcours utilisateur', () => {
         ],
       });
       const unParcours = new ParcoursUtilisateur(
-        {
-          id: '123',
-          dateDerniereConnexion: '2023-01-01',
-        },
+        { dateDerniereConnexion: '2023-01-01' },
         referentiel
       );
       expect(unParcours.recupereNouvelleFonctionnalite()).to.be(undefined);
@@ -73,10 +67,7 @@ describe('Un parcours utilisateur', () => {
         maintenant: () => new Date('2023-01-15'),
       };
       const unParcours = new ParcoursUtilisateur(
-        {
-          id: '123',
-          dateDerniereConnexion: '2023-01-01',
-        },
+        { dateDerniereConnexion: '2023-01-01' },
         referentiel,
         adaptateurHorloge
       );
@@ -93,10 +84,7 @@ describe('Un parcours utilisateur', () => {
         maintenant: () => new Date('2023-02-01'),
       };
       const unParcours = new ParcoursUtilisateur(
-        {
-          id: '123',
-          dateDerniereConnexion: '2023-01-01',
-        },
+        { dateDerniereConnexion: '2023-01-01' },
         referentiel,
         adaptateurHorloge
       );

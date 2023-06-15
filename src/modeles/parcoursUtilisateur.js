@@ -9,11 +9,7 @@ class ParcoursUtilisateur extends Base {
     adaptateurHorloge = adaptateurHorlogeParDefaut
   ) {
     super({
-      proprietesAtomiquesRequises: [
-        'id',
-        'idUtilisateur',
-        'dateDerniereConnexion',
-      ],
+      proprietesAtomiquesRequises: ['idUtilisateur', 'dateDerniereConnexion'],
     });
     this.renseigneProprietes(donnees);
     this.adaptateurHorloge = adaptateurHorloge;
