@@ -26,6 +26,7 @@ class ParcoursUtilisateur extends Base {
     const derniereFonctionnalite =
       this.referentiel.derniereNouvelleFonctionnalite();
     if (!derniereFonctionnalite) return undefined;
+    if (!this.dateDerniereConnexion) return derniereFonctionnalite?.id;
     const dateDerniereConnexion = new Date(this.dateDerniereConnexion);
     const dateDeploiementDerniereFonctionnalite = new Date(
       derniereFonctionnalite.dateDeDeploiement

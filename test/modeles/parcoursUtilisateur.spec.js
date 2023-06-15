@@ -92,5 +92,15 @@ describe('Un parcours utilisateur', () => {
         'nouveauté15Janvier'
       );
     });
+
+    it("renvoie systématiquement la dernière fonctionnalité si il n'y pas de date de dernière connexion", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        nouvellesFonctionnalites: [
+          { id: 'nouveauté', dateDeDeploiement: '2020-01-01' },
+        ],
+      });
+      const unParcours = new ParcoursUtilisateur({}, referentiel);
+      expect(unParcours.recupereNouvelleFonctionnalite()).to.be('nouveauté');
+    });
   });
 });
