@@ -32,7 +32,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
   }
 }
 
-const unNouvelAdaptateurMemoire = () =>
+const unePersistanceMemoire = () =>
   new ConstructeurAdaptateurPersistanceMemoire();
 
-module.exports = { unNouvelAdaptateurMemoire };
+module.exports = { unePersistanceMemoire };

@@ -39,7 +39,7 @@ const {
 } = require('../constructeurs/constructeurAutorisation');
 const { unService } = require('../constructeurs/constructeurService');
 const {
-  unNouvelAdaptateurMemoire,
+  unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
 const {
   unDepotDeDonneesServices,
@@ -860,11 +860,10 @@ describe('Le dépôt de données des homologations', () => {
         utilisateur.id,
         unServiceExistant.id
       ).donnees;
-      adaptateurPersistance = unNouvelAdaptateurMemoire()
+      adaptateurPersistance = unePersistanceMemoire()
         .ajouteUneAutorisation(uneAutorisationExistante)
         .ajouteUnService(unServiceExistant)
-        .ajouteUnUtilisateur(utilisateur)
-        .construis();
+        .ajouteUnUtilisateur(utilisateur);
       depot = unDepotDeDonneesServices()
         .avecAdaptateurPersistance(adaptateurPersistance)
         .avecAdaptateurTracking(adaptateurTracking)

@@ -1,5 +1,5 @@
 const {
-  unNouvelAdaptateurMemoire,
+  unePersistanceMemoire,
 } = require('./constructeurAdaptateurPersistanceMemoire');
 const adaptateurTrackingMemoire = require('../../src/adaptateurs/adaptateurTrackingMemoire');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
@@ -8,15 +8,15 @@ const Referentiel = require('../../src/referentiel');
 
 class ConstructeurDepotDonneesServices {
   constructor() {
-    this.adaptateurPersistance = unNouvelAdaptateurMemoire().construis();
+    this.constructeurAdaptateurPersistance = unePersistanceMemoire();
     this.adaptateurTracking = adaptateurTrackingMemoire;
     this.adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
     this.adaptateurUUID = { genereUUID: () => 'unUUID' };
     this.referentiel = Referentiel.creeReferentielVide();
   }
 
-  avecAdaptateurPersistance(adaptateurPersistance) {
-    this.adaptateurPersistance = adaptateurPersistance;
+  avecAdaptateurPersistance(constructeurAdaptateurPersistance) {
+    this.constructeurAdaptateurPersistance = constructeurAdaptateurPersistance;
     return this;
   }
 
@@ -33,7 +33,7 @@ class ConstructeurDepotDonneesServices {
   construis() {
     return DepotDonneesHomologations.creeDepot({
       adaptateurJournalMSS: this.adaptateurJournalMSS,
-      adaptateurPersistance: this.adaptateurPersistance,
+      adaptateurPersistance: this.constructeurAdaptateurPersistance.construis(),
       adaptateurTracking: this.adaptateurTracking,
       adaptateurUUID: this.adaptateurUUID,
       referentiel: this.referentiel,
