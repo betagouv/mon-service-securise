@@ -417,13 +417,18 @@ const routesApi = (
           depotDonnees
             .lisParcoursUtilisateur(utilisateur.id)
             .then((parcoursUtilisateur) => {
+              const nouvelleFonctionnalite =
+                parcoursUtilisateur.recupereNouvelleFonctionnalite();
               parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
-              return parcoursUtilisateur;
-            })
-            .then((parcoursUtilisateur) =>
-              depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur)
-            );
-          reponse.json({ utilisateur: utilisateur.toJSON() });
+              depotDonnees
+                .sauvegardeParcoursUtilisateur(parcoursUtilisateur)
+                .then(() =>
+                  reponse.json({
+                    utilisateur: utilisateur.toJSON(),
+                    nouvelleFonctionnalite,
+                  })
+                );
+            });
         } else {
           reponse.status(401).send("L'authentification a échoué");
         }
