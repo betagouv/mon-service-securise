@@ -111,6 +111,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donneesReferentiel.departements?.find(
       (unDepartement) => unDepartement.code === code
     )?.nom;
+  const nouvelleFonctionnalite = (id) =>
+    donnees.nouvellesFonctionnalites.find(
+      (fonctionnalite) => fonctionnalite.id === id
+    );
 
   const coefficientIndiceCyberMesuresIndispensables = () =>
     donnees.indiceCyber?.coefficientIndispensables || 0.5;
@@ -327,6 +331,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbMoisBientotExpire,
     niveauGravite,
     niveauxGravite,
+    nouvelleFonctionnalite,
     numeroEtape,
     positionActionSaisie,
     premiereEtapeParcours,
