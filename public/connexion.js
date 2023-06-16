@@ -19,7 +19,13 @@ $(() => {
     const motDePasse = $('#mot-de-passe').val();
     axios
       .post('/api/token', { login, motDePasse })
-      .then(() => (window.location = '/tableauDeBord'))
+      .then((reponse) => {
+        const { nouvelleFonctionnalite } = reponse.data;
+        let url = '/tableauDeBord';
+        if (nouvelleFonctionnalite)
+          url += `?nouvelleFonctionnalite=${nouvelleFonctionnalite}`;
+        window.location = url;
+      })
       .catch((error) => {
         if (error.response.status === 401) {
           afficheAlerte();

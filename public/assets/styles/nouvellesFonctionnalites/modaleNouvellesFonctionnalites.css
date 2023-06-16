@@ -1,0 +1,21 @@
+.modale-nouvelles-fonctionnalites::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.modale-nouvelles-fonctionnalites {
+  width: 792px;
+  height: 576px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  outline: none;
+}
+
+.modale-nouvelles-fonctionnalites .conteneur-fermeture {
+  display: flex;
+  justify-content: end;
+}
+
+.modale-nouvelles-fonctionnalites .bouton-fermeture {
+  cursor: pointer;
+}
