@@ -817,4 +817,14 @@ describe('Le référentiel', () => {
       'nouveauté1Février'
     );
   });
+
+  it('sait renvoyer une nouvelle fonctionnalité via son id', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      nouvellesFonctionnalites: [{ id: 'nouveauté' }],
+    });
+
+    expect(referentiel.nouvelleFonctionnalite('nouveauté')).to.eql({
+      id: 'nouveauté',
+    });
+  });
 });
