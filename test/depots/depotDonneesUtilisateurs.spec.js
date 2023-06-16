@@ -25,11 +25,11 @@ describe('Le dépôt de données des utilisateurs', () => {
 
   it("retourne l'utilisateur authentifié", (done) => {
     adaptateurChiffrement = {
-      chiffre: (chaine) => {
+      hacheBCrypt: (chaine) => {
         expect(chaine).to.equal('mdp_12345');
         return Promise.resolve('12345-chiffré');
       },
-      compare: (chaine1, chaine2) => {
+      compareBCrypt: (chaine1, chaine2) => {
         expect(chaine1).to.equal('mdp_12345');
         expect(chaine2).to.equal('12345-chiffré');
         return Promise.resolve(true);

@@ -45,7 +45,7 @@ const creeDepot = (config = {}) => {
         const id = adaptateurUUID.genereUUID();
         donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
         return adaptateurChiffrement
-          .chiffre(adaptateurUUID.genereUUID())
+          .hacheBCrypt(adaptateurUUID.genereUUID())
           .then((hash) => {
             donneesUtilisateur.motDePasse = hash;
 
@@ -85,7 +85,7 @@ const creeDepot = (config = {}) => {
       if (!motDePasseStocke) return Promise.resolve(echecAuthentification);
 
       return adaptateurChiffrement
-        .compare(motDePasse, motDePasseStocke)
+        .compareBCrypt(motDePasse, motDePasseStocke)
         .then((authentificationReussie) =>
           authentificationReussie
             ? new Utilisateur(u, { adaptateurJWT })
@@ -99,7 +99,7 @@ const creeDepot = (config = {}) => {
 
   const metsAJourMotDePasse = (idUtilisateur, motDePasse) =>
     adaptateurChiffrement
-      .chiffre(motDePasse)
+      .hacheBCrypt(motDePasse)
       .then((hash) =>
         adaptateurPersistance.metsAJourUtilisateur(idUtilisateur, {
           motDePasse: hash,
