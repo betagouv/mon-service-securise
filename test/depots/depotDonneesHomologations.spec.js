@@ -769,17 +769,27 @@ describe('Le dépôt de données des homologations', () => {
         .avecNomService('Service A')
         .deLOrganisation('ANSSI')
         .avecPresentation('Le service fait A & B')
+        .accessiblePar('https://site.fr', 'https://autre.site.fr')
         .construis()
-        .toJSON();
+        .donneesSerialisees();
 
       depot
         .nouvelleHomologation('123', { descriptionService })
         .then(() => {
-          const { nomService, organisationsResponsables, presentation } =
-            donneesPersistees.descriptionService;
+          const {
+            nomService,
+            organisationsResponsables,
+            presentation,
+            pointsAcces,
+          } = donneesPersistees.descriptionService;
+
           expect(nomService).to.equal('Service A - chiffré');
           expect(organisationsResponsables).to.eql(['ANSSI - chiffré']);
           expect(presentation).to.eql('Le service fait A & B - chiffré');
+          expect(pointsAcces).to.eql([
+            { description: 'https://site.fr - chiffré' },
+            { description: 'https://autre.site.fr - chiffré' },
+          ]);
           done();
         })
         .catch(done);

@@ -36,6 +36,11 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  accessiblePar(...pointsAcces) {
+    this.donnees.pointsAcces = pointsAcces.map((p) => ({ description: p }));
+    return this;
+  }
+
   construis() {
     return new DescriptionService(this.donnees, this.referentiel);
   }
