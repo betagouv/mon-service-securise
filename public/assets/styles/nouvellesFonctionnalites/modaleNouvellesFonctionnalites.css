@@ -19,3 +19,76 @@
 .modale-nouvelles-fonctionnalites .bouton-fermeture {
   cursor: pointer;
 }
+
+.modale-nouvelles-fonctionnalites .page {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modale-nouvelles-fonctionnalites .bouton {
+  padding: 0.5em 1em;
+  margin: 0;
+}
+
+.modale-nouvelles-fonctionnalites .conteneur-actions {
+  display: flex;
+  gap: 0.5em;
+  position: absolute;
+  right: 6em;
+  /* Pour center les boutons avec la pagination */
+  bottom: calc(4em - 10px);
+}
+
+.modale-nouvelles-fonctionnalites h1 {
+  color: #0079d0;
+  font-size: 2em;
+  margin-bottom: 0;
+}
+
+.modale-nouvelles-fonctionnalites h2 {
+  color: #08416a;
+  font-size: 1.2em;
+  font-weight: normal;
+  margin-top: 0.5em;
+  margin-bottom: 2em;
+}
+
+.modale-nouvelles-fonctionnalites .illustration {
+  max-height: 290px;
+}
+
+.modale-nouvelles-fonctionnalites .page {
+  display: none;
+}
+
+.modale-nouvelles-fonctionnalites .page[data-numero-page='1'] {
+  display: flex;
+}
+
+.modale-nouvelles-fonctionnalites .pagination {
+  display: flex;
+  gap: 0.5em;
+  position: absolute;
+  left: 6em;
+  bottom: 4em;
+}
+
+.modale-nouvelles-fonctionnalites .pagination .rond {
+  width: 0.85em;
+  height: 0.85em;
+  border: 1px solid #667892;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.modale-nouvelles-fonctionnalites .pagination .rond.actif {
+  background: linear-gradient(180deg, #54b8f6 0%, #3479c9 100%);
+  border: 1px solid transparent;
+}
+
+.modale-nouvelles-fonctionnalites .decouvrir-tableau-de-bord {
+  padding: 0;
+}
