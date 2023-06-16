@@ -20,7 +20,7 @@ describe('Le dépôt de données des utilisateurs', () => {
 
   beforeEach(() => {
     adaptateurJWT = 'Un adaptateur';
-    adaptateurChiffrement = fauxAdaptateurChiffrement;
+    adaptateurChiffrement = fauxAdaptateurChiffrement();
   });
 
   it("retourne l'utilisateur authentifié", (done) => {

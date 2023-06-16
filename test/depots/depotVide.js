@@ -6,7 +6,7 @@ const DepotDonnees = require('../../src/depotDonnees');
 
 const depotVide = (
   config = {
-    adaptateurChiffrement: fauxAdaptateurChiffrement,
+    adaptateurChiffrement: fauxAdaptateurChiffrement(),
     adaptateurJournalMSS: adaptateurJournalMSSMemoire.nouvelAdaptateur(),
     adaptateurPersistance: fabriqueAdaptateurPersistance(),
   }
