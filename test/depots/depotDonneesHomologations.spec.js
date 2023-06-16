@@ -768,16 +768,18 @@ describe('Le dépôt de données des homologations', () => {
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Service A')
         .deLOrganisation('ANSSI')
+        .avecPresentation('Le service fait A & B')
         .construis()
         .toJSON();
 
       depot
         .nouvelleHomologation('123', { descriptionService })
         .then(() => {
-          const { nomService, organisationsResponsables } =
+          const { nomService, organisationsResponsables, presentation } =
             donneesPersistees.descriptionService;
           expect(nomService).to.equal('Service A - chiffré');
           expect(organisationsResponsables).to.eql(['ANSSI - chiffré']);
+          expect(presentation).to.eql('Le service fait A & B - chiffré');
           done();
         })
         .catch(done);

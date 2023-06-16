@@ -26,6 +26,7 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
           descriptionService: {
             ...descriptionService,
             nomService: chiffre(descriptionService.nomService),
+            presentation: chiffre(descriptionService.presentation),
             organisationsResponsables:
               descriptionService.organisationsResponsables.map(
                 adaptateurChiffrement.chiffre
