@@ -1,5 +1,6 @@
 const fauxAdaptateurChiffrement = () => ({
-  hacheBCrypt: (chaine) => Promise.resolve(`${chaine}-chiffré`),
+  chiffre: (chaine) => chaine,
+  hacheBCrypt: (chaine) => Promise.resolve(`${chaine}-haché`),
   compareBCrypt: (enClair, chiffreeReference) =>
     fauxAdaptateurChiffrement()
       .hacheBCrypt(enClair)

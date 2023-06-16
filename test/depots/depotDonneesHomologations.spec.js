@@ -12,6 +12,7 @@ const Referentiel = require('../../src/referentiel');
 const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const AdaptateurUUID = require('../../src/adaptateurs/adaptateurUUID');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
@@ -681,6 +682,7 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
+    let adaptateurChiffrement;
     let adaptateurJournalMSS;
     let adaptateurPersistance;
     let adaptateurUUID;
@@ -688,6 +690,7 @@ describe('Le dépôt de données des homologations', () => {
     let referentiel;
 
     beforeEach(() => {
+      adaptateurChiffrement = fauxAdaptateurChiffrement();
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
@@ -699,6 +702,7 @@ describe('Le dépôt de données des homologations', () => {
       referentiel = Referentiel.creeReferentielVide();
 
       depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement,
         adaptateurJournalMSS,
         adaptateurPersistance,
         adaptateurUUID,
@@ -744,6 +748,33 @@ describe('Le dépôt de données des homologations', () => {
         .then((homologations) => {
           expect(homologations[0].id).to.equal(
             '11111111-1111-1111-1111-111111111111'
+          );
+          done();
+        })
+        .catch(done);
+    });
+
+    it('chiffre les données métier avant de les stocker', (done) => {
+      let donneesPersistees;
+
+      const persistanceReelle = adaptateurPersistance.sauvegardeHomologation;
+      adaptateurPersistance.sauvegardeHomologation = (id, donnees) => {
+        donneesPersistees = donnees;
+        return persistanceReelle(id, donnees);
+      };
+
+      adaptateurChiffrement.chiffre = (chaine) => `${chaine} - chiffré`;
+
+      const descriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Service A')
+        .construis()
+        .toJSON();
+
+      depot
+        .nouvelleHomologation('123', { descriptionService })
+        .then(() => {
+          expect(donneesPersistees.descriptionService.nomService).to.equal(
+            'Service A - chiffré'
           );
           done();
         })

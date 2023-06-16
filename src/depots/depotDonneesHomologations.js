@@ -1,3 +1,4 @@
+const adaptateurChiffrementParDefaut = require('../adaptateurs/adaptateurChiffrement');
 const fabriqueAdaptateurTracking = require('../adaptateurs/fabriqueAdaptateurTracking');
 const {
   ErreurDonneesObligatoiresManquantes,
@@ -13,7 +14,32 @@ const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenem
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
-const fabriquePersistance = (adaptateurPersistance, referentiel) => {
+const fabriqueChiffrement = (adaptateurChiffrement) => {
+  const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
+
+  return {
+    chiffre: {
+      donneesService: (donnees) => {
+        const { descriptionService } = donnees;
+        return {
+          ...donnees,
+          descriptionService: {
+            ...descriptionService,
+            nomService: chiffre(descriptionService.nomService),
+          },
+        };
+      },
+    },
+  };
+};
+
+const fabriquePersistance = (
+  adaptateurPersistance,
+  adaptateurChiffrement,
+  referentiel
+) => {
+  const { chiffre } = fabriqueChiffrement(adaptateurChiffrement);
+
   const persistance = {
     lis: {
       une: async (idHomologation) => {
@@ -30,11 +56,13 @@ const fabriquePersistance = (adaptateurPersistance, referentiel) => {
       celleAvecNomService: async (...params) =>
         adaptateurPersistance.homologationAvecNomService(...params),
     },
-    sauvegarde: async (id, donneesHomologation) =>
-      Promise.all([
-        adaptateurPersistance.sauvegardeHomologation(id, donneesHomologation),
-        adaptateurPersistance.sauvegardeService(id, donneesHomologation),
-      ]),
+    sauvegarde: async (id, donneesService) => {
+      const donneesChiffrees = chiffre.donneesService(donneesService);
+      return Promise.all([
+        adaptateurPersistance.sauvegardeService(id, donneesChiffrees),
+        adaptateurPersistance.sauvegardeHomologation(id, donneesChiffrees),
+      ]);
+    },
     supprime: async (idHomologation) =>
       Promise.all([
         adaptateurPersistance.supprimeHomologation(idHomologation),
@@ -47,6 +75,7 @@ const fabriquePersistance = (adaptateurPersistance, referentiel) => {
 
 const creeDepot = (config = {}) => {
   const {
+    adaptateurChiffrement = adaptateurChiffrementParDefaut,
     adaptateurJournalMSS,
     adaptateurPersistance,
     adaptateurTracking = fabriqueAdaptateurTracking(),
@@ -54,7 +83,11 @@ const creeDepot = (config = {}) => {
     referentiel,
   } = config;
 
-  const p = fabriquePersistance(adaptateurPersistance, referentiel);
+  const p = fabriquePersistance(
+    adaptateurPersistance,
+    adaptateurChiffrement,
+    referentiel
+  );
 
   const homologation = (idHomologation) => p.lis.une(idHomologation);
 
