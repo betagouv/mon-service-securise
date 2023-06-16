@@ -12,6 +12,7 @@ class ConstructeurDescriptionService {
       delaiAvantImpactCritique: 'unDelai',
       localisationDonnees: 'uneLocalisation',
       nomService: 'Nom service',
+      organisationsResponsables: ['ANSSI'],
       presentation: 'Une présentation',
       provenanceService: 'uneProvenance',
       risqueJuridiqueFinancierReputationnel: false,
@@ -27,6 +28,11 @@ class ConstructeurDescriptionService {
 
   avecPresentation(presentation) {
     Object.assign(this.donnees, { presentation });
+    return this;
+  }
+
+  deLOrganisation(organisationResponsable) {
+    this.donnees.organisationsResponsables = [organisationResponsable];
     return this;
   }
 

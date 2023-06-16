@@ -669,7 +669,7 @@ describe('Une homologation', () => {
           donneesSensiblesSpecifiques: [],
           fonctionnalitesSpecifiques: [],
           pointsAcces: [],
-          organisationsResponsables: [],
+          organisationsResponsables: ['ANSSI'],
         },
         dossiers: [
           {
