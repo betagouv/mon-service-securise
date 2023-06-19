@@ -427,18 +427,6 @@ const creeDepot = (config = {}) => {
       .then(duplique);
   };
 
-  const nombreMoyenContributeursPourUtilisateur = (idUtilisateur) =>
-    homologations(idUtilisateur).then((hs) =>
-      hs.length === 0
-        ? 0
-        : Math.floor(
-            hs.reduce(
-              (accumulateur, h) => accumulateur + h.contributeurs.length,
-              0
-            ) / hs.length
-          )
-    );
-
   return {
     ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
@@ -452,7 +440,6 @@ const creeDepot = (config = {}) => {
     homologationExiste,
     homologations,
     enregistreDossierCourant,
-    nombreMoyenContributeursPourUtilisateur,
     nouvelleHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,

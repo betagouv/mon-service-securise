@@ -16,6 +16,7 @@ const {
   ErreurUtilisateurExistant,
 } = require('../erreurs');
 const routesApiService = require('./routesApiService');
+const ServiceTracking = require('../tracking/serviceTracking');
 const Utilisateur = require('../modeles/utilisateur');
 const objetGetServices = require('../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../modeles/objetsApi/objetGetIndicesCyber');
@@ -514,8 +515,11 @@ const routesApi = (
           depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation)
         )
         .then(() => {
-          depotDonnees
-            .nombreMoyenContributeursPourUtilisateur(idUtilisateur)
+          ServiceTracking.creeService()
+            .nombreMoyenContributeursPourUtilisateur(
+              depotDonnees,
+              idUtilisateur
+            )
             .then((nombreMoyenContributeurs) =>
               adaptateurTracking.envoieTrackingInvitationContributeur(
                 emailContributeur,
