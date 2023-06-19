@@ -14,13 +14,14 @@ describe('Le service de tracking des services', () => {
     it("retourne la complétude des services de l'utilisateur", async () => {
       const premierService = unService(referentiel)
         .avecMesures(bouchonneMesures().avecUneCompletude(20, 18).construis())
+        .avecNContributeurs(2)
         .construis();
       const secondService = unService(referentiel)
         .avecMesures(bouchonneMesures().avecUneCompletude(100, 18).construis())
+        .avecNContributeurs(2)
         .construis();
       const depotHomologations = {
         homologations: async () => [premierService, secondService],
-        nombreMoyenContributeursPourUtilisateur: async () => 2,
       };
       const serviceTracking = ServiceTracking.creeService();
 
