@@ -15,7 +15,13 @@ module.exports = {
     noteMax: 5,
   },
 
-  nouvellesFonctionnalites: [],
+  nouvellesFonctionnalites: [
+    {
+      id: 'tableauDeBord',
+      fichierPug: 'tableauDeBord.pug',
+      dateDeDeploiement: '2023-06-20',
+    },
+  ],
 
   tranchesIndicesCybers: [
     {
