@@ -8,14 +8,25 @@ class ConstructeurService {
       id: '',
       descriptionService: uneDescriptionValide(referentiel).donnees,
     };
+    this.mesures = undefined;
+    this.referentiel = referentiel;
   }
 
   construis() {
-    return new Service(this.donnees);
+    const service = new Service(this.donnees, this.referentiel);
+    if (this.mesures !== undefined) {
+      service.mesures = this.mesures;
+    }
+    return service;
   }
 
   avecId(id) {
     this.donnees.id = id;
+    return this;
+  }
+
+  avecMesures(mesures) {
+    this.mesures = mesures;
     return this;
   }
 
