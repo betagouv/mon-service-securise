@@ -10,6 +10,15 @@ const gestionnaireEvenements = {
       tableauDesServices.modifieRecherche($(e.target).val());
     });
 
+    const fermeTriSiClicEnDehors = (e) => {
+      if (
+        !$(e.target).hasClass('entete-contributeurs') &&
+        !$(e.target).parents('.entete-contributeurs').length > 0
+      )
+        gestionnaireEvenements.triContributeurs.ferme();
+    };
+    $(document).on('click', (e) => fermeTriSiClicEnDehors(e));
+
     $('.tableau-services thead th.triable').on('click', (e) => {
       const colonne = $(e.target).data('colonne');
       tableauDesServices.modifieTri(colonne);
@@ -110,6 +119,7 @@ const gestionnaireEvenements = {
     },
     bascule: () =>
       $('.entete-contributeurs .menu-flotant').toggleClass('invisible'),
+    ferme: () => $('.entete-contributeurs .menu-flotant').addClass('invisible'),
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
