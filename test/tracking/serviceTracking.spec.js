@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const ServiceTracking = require('../../src/depots/serviceTracking');
+const ServiceTracking = require('../../src/tracking/serviceTracking');
 const { unService } = require('../constructeurs/constructeurService');
 const { bouchonneMesures } = require('../constructeurs/constructeurMesures');
 const Referentiel = require('../../src/referentiel');
