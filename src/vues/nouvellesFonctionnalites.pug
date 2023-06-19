@@ -5,6 +5,9 @@ block append styles
   link(href = '/statique/assets/styles/nouvellesFonctionnalites.css', rel = 'stylesheet')
 
 block main
+
+  include nouvellesFonctionnalites/modaleNouvellesFonctionnalites.pug
+  
   .marges-fixes
     .documentation
       h1 Nouveautés
@@ -24,6 +27,8 @@ block main
           span Exportez d'un seul clic une liste de vos services au format CSV.
           br
           span Dupliquez vos services simplement pour accélérer la constitution de vos nouveaux dossiers.
+          .conteneur-action
+            button.bouton(data-id-nouvelle-fonctionnalite='tableauDeBord') Voir la version en image
         li
           h4 Dupliquer un service déjà renseigné
           .
@@ -77,3 +82,5 @@ block main
 
       .boutons
         a.bouton(href = '/tableauDeBord') Revenir au tableau de bord
+
+  script(type = 'module', src = '/statique/nouvellesFonctionnalites.js')

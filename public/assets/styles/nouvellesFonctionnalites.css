@@ -85,3 +85,13 @@
   display: flex;
   justify-content: end;
 }
+
+.conteneur-action {
+  display: flex;
+  justify-content: center;
+}
+
+.conteneur-action .bouton {
+  padding: 0.5em 1em;
+  margin: 2em 0;
+}
