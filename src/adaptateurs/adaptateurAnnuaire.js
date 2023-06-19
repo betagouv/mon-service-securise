@@ -21,8 +21,10 @@ const rechercheOrganisation = (terme, departement) =>
         .map((r) => ({ nom: r.nom_complet, departement: r.siege.departement }))
     )
     .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e);
-      return Promise.reject(e);
+      fabriqueAdaptateurGestionErreur().logueErreur(e, {
+        'Erreur renvoyée par API recherche-entreprise': e.response.data,
+      });
+      return Promise.resolve([]);
     });
 
 module.exports = { rechercheOrganisation };

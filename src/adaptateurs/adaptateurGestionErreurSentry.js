@@ -12,7 +12,14 @@ const controleurRequetes = () => Sentry.Handlers.requestHandler();
 
 const controleurErreurs = () => Sentry.Handlers.errorHandler();
 
-const logueErreur = (erreur) => Sentry.captureException(erreur);
+const logueErreur = (erreur, infosDeContexte = {}) => {
+  Sentry.withScope(() => {
+    Object.entries(infosDeContexte).forEach(([cle, valeur]) =>
+      Sentry.setExtra(cle, valeur)
+    );
+    Sentry.captureException(erreur);
+  });
+};
 
 module.exports = {
   initialise,
