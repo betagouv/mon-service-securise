@@ -31,10 +31,7 @@ const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 const copie = require('../../src/utilitaires/copie');
-const {
-  ConstructeurUtilisateur,
-  unUtilisateur,
-} = require('../constructeurs/constructeurUtilisateur');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
@@ -1777,91 +1774,6 @@ describe('Le dépôt de données des homologations', () => {
       depot
         .trouveIndexDisponible('999', 'Service A (mairie) - Copie')
         .then((index) => expect(index).to.equal(2))
-        .then(() => done())
-        .catch(done);
-    });
-  });
-
-  describe('sur une demande de nombre moyen de contributeurs', () => {
-    it("peut retourner le nombre moyen de contributeurs pour les services d'un utilisateur donné", (done) => {
-      const referentiel = Referentiel.creeReferentielVide();
-
-      const proprietaire = unUtilisateur().avecId('Propriétaire').donnees;
-      const premierContributeur = unUtilisateur().avecId('A').donnees;
-      const secondContributeur = unUtilisateur().avecId('B').donnees;
-      const troisiemeContributeur = unUtilisateur().avecId('B').donnees;
-
-      const premierService = unService(referentiel)
-        .avecId('123')
-        .avecNomService('un premier service').donnees;
-      const secondService = unService(referentiel)
-        .avecId('456')
-        .avecNomService('un autre service').donnees;
-
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            proprietaire,
-            premierContributeur,
-            secondContributeur,
-            troisiemeContributeur,
-          ],
-          homologations: [premierService, secondService],
-          services: [premierService, secondService],
-          autorisations: [
-            uneAutorisation().deCreateurDeService(
-              proprietaire.id,
-              premierService.id
-            ).donnees,
-            uneAutorisation().deCreateurDeService(
-              proprietaire.id,
-              secondService.id
-            ).donnees,
-            uneAutorisation().deContributeurDeService(
-              premierContributeur.id,
-              premierService.id
-            ).donnees,
-            uneAutorisation().deContributeurDeService(
-              secondContributeur.id,
-              premierService.id
-            ).donnees,
-            uneAutorisation().deContributeurDeService(
-              troisiemeContributeur.id,
-              premierService.id
-            ).donnees,
-          ],
-        });
-
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        referentiel,
-      });
-
-      depot
-        .nombreMoyenContributeursPourUtilisateur(proprietaire.id)
-        .then((nbMoyenContributeurs) => expect(nbMoyenContributeurs).to.be(1))
-        .then(() => done())
-        .catch(done);
-    });
-
-    it("reste robuste si il n'y a pas de service", (done) => {
-      const referentiel = Referentiel.creeReferentielVide();
-      const proprietaire = new ConstructeurUtilisateur().avecId(
-        'Propriétaire'
-      ).donnees;
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [proprietaire],
-        });
-
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        referentiel,
-      });
-
-      depot
-        .nombreMoyenContributeursPourUtilisateur(proprietaire.id)
-        .then((nbMoyenContributeurs) => expect(nbMoyenContributeurs).to.be(0))
         .then(() => done())
         .catch(done);
     });

@@ -61,4 +61,50 @@ describe('Le service de tracking des services', () => {
       );
     });
   });
+
+  describe('sur une demande de nombre moyen de contributeurs', () => {
+    let referentiel;
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentielVide();
+    });
+
+    it("peut retourner le nombre moyen de contributeurs pour les services d'un utilisateur donné", async () => {
+      let idUtilisateurRecu;
+
+      const serviceAvec3Contributeurs = unService(referentiel)
+        .avecNContributeurs(3)
+        .construis();
+      const serviceSansContributeur = unService(referentiel).construis();
+
+      const depotHomologations = {
+        homologations: async (idUtilisateur) => {
+          idUtilisateurRecu = idUtilisateur;
+          return [serviceAvec3Contributeurs, serviceSansContributeur];
+        },
+      };
+      const serviceTracking = ServiceTracking.creeService();
+
+      const nbMoyenContributeurs =
+        await serviceTracking.nombreMoyenContributeursPourUtilisateur(
+          depotHomologations,
+          'ABC'
+        );
+
+      expect(idUtilisateurRecu).to.be('ABC');
+      expect(nbMoyenContributeurs).to.be(1);
+    });
+
+    it("reste robuste si il n'y a pas de service", async () => {
+      const depotSansHomologations = { homologations: async () => [] };
+      const serviceTracking = ServiceTracking.creeService();
+
+      const nbMoyenContributeurs =
+        await serviceTracking.nombreMoyenContributeursPourUtilisateur(
+          depotSansHomologations,
+          'ABC'
+        );
+
+      expect(nbMoyenContributeurs).to.be(0);
+    });
+  });
 });

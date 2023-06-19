@@ -1811,12 +1811,12 @@ describe('Le serveur MSS des routes /api/*', () => {
     it("envoie un événement d'invitation contributeur via l'adaptateur de tracking", (done) => {
       let donneesPassees = {};
       let idUtilisateurPasse;
-      testeur.depotDonnees().nombreMoyenContributeursPourUtilisateur = (
-        idUtilisateur
-      ) => {
+      testeur.depotDonnees().homologations = (idUtilisateur) => {
         idUtilisateurPasse = idUtilisateur;
-        return Promise.resolve(3);
+        const serviceBouchon3Contributeurs = { contributeurs: ['a', 'b', 'c'] };
+        return Promise.resolve([serviceBouchon3Contributeurs]);
       };
+
       testeur.adaptateurTracking().envoieTrackingInvitationContributeur = (
         destinataire,
         donneesEvenement

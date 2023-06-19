@@ -24,8 +24,26 @@ const creeService = () => {
         }))
       );
 
+  const nombreMoyenContributeursPourUtilisateur = (
+    depotHomologations,
+    idUtilisateur
+  ) =>
+    depotHomologations
+      .homologations(idUtilisateur)
+      .then((hs) =>
+        hs.length === 0
+          ? 0
+          : Math.floor(
+              hs.reduce(
+                (accumulateur, h) => accumulateur + h.contributeurs.length,
+                0
+              ) / hs.length
+            )
+      );
+
   return {
     completudeDesServicesPourUtilisateur,
+    nombreMoyenContributeursPourUtilisateur,
   };
 };
 

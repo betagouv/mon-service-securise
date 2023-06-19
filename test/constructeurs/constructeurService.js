@@ -1,12 +1,14 @@
 const uneDescriptionValide = require('./constructeurDescriptionService');
 const Referentiel = require('../../src/referentiel');
 const Service = require('../../src/modeles/service');
+const { unUtilisateur } = require('./constructeurUtilisateur');
 
 class ConstructeurService {
   constructor(referentiel) {
     this.donnees = {
       id: '',
       descriptionService: uneDescriptionValide(referentiel).donnees,
+      contributeurs: [],
     };
     this.mesures = undefined;
     this.referentiel = referentiel;
@@ -32,6 +34,13 @@ class ConstructeurService {
 
   avecNomService(nomService) {
     this.donnees.descriptionService.nomService = nomService;
+    return this;
+  }
+
+  avecNContributeurs(combien) {
+    for (let i = 0; i < combien; i += 1) {
+      this.donnees.contributeurs.push(unUtilisateur().donnees);
+    }
     return this;
   }
 }
