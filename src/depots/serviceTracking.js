@@ -9,7 +9,7 @@ const creeService = () => {
         depotHomologations.homologations(idUtilisateur).then((hs) => ({
           nbServices: hs.length,
           nbMoyenContributeurs: nombreMoyenContributeurs,
-          tauxCompletudeMoyenTousServices:
+          tauxCompletudeMoyenTousServices: Math.floor(
             (hs.reduce((accumulateur, h) => {
               const completudeMesures = h.completudeMesures();
               return (
@@ -19,7 +19,8 @@ const creeService = () => {
               );
             }, 0) /
               hs.length) *
-            100,
+              100
+          ),
         }))
       );
 
