@@ -763,8 +763,7 @@ label[for='recherche-service'] {
   width: 28em;
 }
 
-:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
-  .conteneur-actions {
+.contenu-tiroir .conteneur-actions {
   display: flex;
   justify-content: end;
   gap: 1em;
@@ -774,7 +773,12 @@ label[for='recherche-service'] {
   margin: 0 0 1em 0;
 }
 
-.banniere-avertissement {
+#contenu-contributeurs .confirmation-suppression .entete {
+  margin: 0 0 1em 0;
+}
+
+.banniere-avertissement,
+.banniere-information {
   display: flex;
   border: 1px solid #faa72c;
   border-radius: 4px;
@@ -783,7 +787,12 @@ label[for='recherche-service'] {
   gap: 1em;
 }
 
-.banniere-avertissement p {
+.banniere-information {
+  background: #dbeeff;
+  border-color: #0079d0;
+}
+
+:is(.banniere-avertissement, .banniere-information) p {
   margin: 0;
   font-weight: 500;
 }
@@ -884,9 +893,8 @@ label[for='recherche-service'] {
 }
 
 #contenu-contributeurs #liste-contributeurs li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   column-gap: 1em;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
@@ -898,6 +906,7 @@ label[for='recherche-service'] {
   display: flex;
   align-items: center;
   gap: 1em;
+  grid-column: 1 / 6;
 }
 
 #contenu-contributeurs .initiale {
@@ -936,6 +945,8 @@ label[for='recherche-service'] {
   font-size: 0.9em;
   line-height: 0.9em;
   padding: 0.4em 0.5em;
+  align-self: center;
+  grid-column: 6 / 7;
 }
 
 #contenu-contributeurs .role.proprietaire {
@@ -1016,4 +1027,79 @@ label[for='recherche-service'] {
 
 .tableau-services .conteneur-barre-outils hr.action {
   padding: 0;
+}
+
+#contenu-contributeurs .actions-contributeurs {
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  padding: 0.1em 0.2em;
+  position: relative;
+  align-self: center;
+  cursor: pointer;
+}
+
+#contenu-contributeurs .actions-contributeurs.invisible {
+  display: flex;
+  visibility: hidden;
+}
+
+#contenu-contributeurs .actions-contributeurs.actif {
+  border-color: #08416a;
+}
+
+#contenu-contributeurs .actions-contributeurs::before {
+  content: '';
+  display: flex;
+  width: 2em;
+  height: 2em;
+  background-image: url('/statique/assets/images/points_horizontal_bleu.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#contenu-contributeurs .actions-contributeurs.actif::before {
+  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) invert(20%) sepia(56%) saturate(1325%)
+    hue-rotate(173deg) brightness(89%) contrast(97%);
+}
+
+#contenu-contributeurs .menu-flotant {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  position: absolute;
+  left: -2px;
+  top: 0;
+  transform: translateX(-100%);
+  white-space: nowrap;
+  background: #ffffff;
+  border: 1px solid #0c5c98;
+  border-radius: 5px;
+}
+
+#contenu-contributeurs #liste-contributeurs .menu-flotant ul {
+  padding-left: 0;
+  padding: 0.2em;
+}
+
+#contenu-contributeurs #liste-contributeurs .menu-flotant li {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0.6em 0.4em;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-radius: 4px;
+}
+
+#contenu-contributeurs #liste-contributeurs .menu-flotant li:hover {
+  background: #f1f5f9;
+  color: #0079d0;
+}
+
+#contenu-contributeurs .menu-flotant.invisible {
+  display: none;
 }

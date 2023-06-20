@@ -83,6 +83,10 @@ const gestionnaireEvenements = {
       registreDesActions.export.execute()
     );
 
+    $('#confirmation-suppression-contributeur').on('click', () =>
+      registreDesActions.contributeurs.execute()
+    );
+
     $('#retour-liste-contributeurs').on('click', () => {
       const idService = [...tableauDesServices.servicesSelectionnes][0];
 

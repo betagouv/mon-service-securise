@@ -108,6 +108,21 @@ block main
       .contenu-tiroir
         form.bloc-contenu#contenu-contributeurs
           ul#liste-contributeurs
+          .confirmation-suppression
+            p.entete 
+              span Souhaitez-vous vraiment retirer les accès de 
+              span#nom-contributeur-suppression
+              span au service 
+              span#nom-service-contributeur-suppression
+              span ?
+            label.banniere-information
+              img(src='/statique/assets/images/icone_information_suppression.svg')
+              .contenu-texte-information
+                strong Cette action est réversible
+                p Vous pourrez ajouter à nouveau cette personne.
+            .conteneur-actions
+              button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
+              button.bouton#confirmation-suppression-contributeur(type='button') Retirer du service
         form.bloc-contenu#contenu-export
           - const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
           - const maintenant = new Date();
