@@ -208,21 +208,6 @@ const creeDepot = (config = {}) => {
   const remplaceMesuresSpecifiquesPourHomologation = (...params) =>
     remplaceProprieteHomologation('mesuresSpecifiques', ...params);
 
-  const ajouteMesuresAHomologation = (idHomologation, generales, specifiques) =>
-    ajouteMesuresGeneralesAHomologation(idHomologation, generales)
-      .then(() =>
-        remplaceMesuresSpecifiquesPourHomologation(idHomologation, specifiques)
-      )
-      .then(() => p.lis.une(idHomologation))
-      .then((h) =>
-        adaptateurJournalMSS.consigneEvenement(
-          new EvenementCompletudeServiceModifiee({
-            idService: h.id,
-            ...h.completudeMesures(),
-          }).toJSON()
-        )
-      );
-
   const ajouteRisqueGeneralAHomologation = (...params) =>
     ajouteAItemsDansHomologation('risquesGeneraux', ...params);
 
@@ -293,6 +278,35 @@ const creeDepot = (config = {}) => {
 
   const homologations = (idUtilisateur) =>
     p.lis.cellesDeUtilisateur(idUtilisateur);
+
+  const ajouteMesuresAHomologation = (idHomologation, generales, specifiques) =>
+    ajouteMesuresGeneralesAHomologation(idHomologation, generales)
+      .then(() =>
+        remplaceMesuresSpecifiquesPourHomologation(idHomologation, specifiques)
+      )
+      .then(() => p.lis.une(idHomologation))
+      .then((h) =>
+        adaptateurJournalMSS
+          .consigneEvenement(
+            new EvenementCompletudeServiceModifiee({
+              idService: h.id,
+              ...h.completudeMesures(),
+            }).toJSON()
+          )
+          .then(() =>
+            serviceTracking
+              .completudeDesServicesPourUtilisateur(
+                { homologations },
+                h.createur.id
+              )
+              .then((tauxCompletude) =>
+                adaptateurTracking.envoieTrackingCompletudeService(
+                  h.createur.email,
+                  tauxCompletude
+                )
+              )
+          )
+      );
 
   const toutesHomologations = () => p.lis.toutes();
 
