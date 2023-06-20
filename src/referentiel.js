@@ -270,6 +270,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     valideDonnees();
   };
 
+  const enrichis = (nouvellesDonnees) => {
+    donnees = { ...donnees, ...nouvellesDonnees };
+    valideDonnees();
+  };
+
   valideDonnees();
 
   return {
@@ -308,6 +313,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estIdentifiantEcheanceRenouvellementConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
     derniereEtapeParcours,
+    enrichis,
     etapeExiste,
     etapesParcoursHomologation,
     etapeSuffisantePourDossierDecision,
