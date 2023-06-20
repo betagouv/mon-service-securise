@@ -1457,7 +1457,7 @@ describe('Le serveur MSS des routes /api/*', () => {
     });
 
     it("vérifie que l'utilisateur a le droit d'ajouter un contributeur", (done) => {
-      let autorisationInterogee = false;
+      let autorisationInterrogee = false;
       testeur.depotDonnees().autorisationPour = (
         idUtilisateur,
         idHomologation
@@ -1467,7 +1467,7 @@ describe('Le serveur MSS des routes /api/*', () => {
 
           expect(idUtilisateur).to.equal('456');
           expect(idHomologation).to.equal('123');
-          autorisationInterogee = true;
+          autorisationInterrogee = true;
           return Promise.resolve(autorisation);
         } catch (e) {
           return Promise.reject(e);
@@ -1480,7 +1480,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           idHomologation: '123',
         })
         .then(() => {
-          expect(autorisationInterogee).to.be(true);
+          expect(autorisationInterrogee).to.be(true);
           done();
         })
         .catch((e) => done(e.response?.data || e));
@@ -1856,6 +1856,136 @@ describe('Le serveur MSS des routes /api/*', () => {
         },
         done
       );
+    });
+  });
+
+  describe('quand requête DELETE sur `/api/autorisation`', () => {
+    const autorisation = { id: '111' };
+
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: '456' });
+      autorisation.permissionSuppressionContributeur = true;
+      testeur.depotDonnees().autorisationPour = () =>
+        Promise.resolve(autorisation);
+      testeur.depotDonnees().supprimeContributeur = () => Promise.resolve();
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['idHomologation', 'idContributeur'],
+          { method: 'delete', url: 'http://localhost:1234/api/autorisation' },
+          done
+        );
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/autorisation',
+        },
+        done
+      );
+    });
+
+    it("vérifie que l'utilisateur a le droit de supprimer un contributeur", (done) => {
+      let autorisationInterrogee = false;
+      testeur.depotDonnees().autorisationPour = (
+        idUtilisateur,
+        idHomologation
+      ) => {
+        try {
+          expect(testeur.middleware().idUtilisateurCourant()).to.equal('456');
+
+          expect(idUtilisateur).to.equal('456');
+          expect(idHomologation).to.equal('123');
+          autorisationInterrogee = true;
+          return Promise.resolve(autorisation);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios
+        .delete('http://localhost:1234/api/autorisation', {
+          params: { idHomologation: '123' },
+        })
+        .then(() => {
+          expect(autorisationInterrogee).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit de supprimer un contributeur", (done) => {
+      autorisation.permissionSuppressionContributeur = false;
+      testeur.depotDonnees().autorisationPour = () =>
+        Promise.resolve(autorisation);
+
+      axios
+        .delete('http://localhost:1234/api/autorisation', {
+          params: { idHomologation: '123' },
+        })
+        .then(() => {
+          done('La requête aurait dû lever une erreur HTTP 403');
+        })
+        .catch((e) => {
+          expect(e.response.status).to.equal(403);
+          expect(e.response.data).to.equal(
+            'Suppression non autorisé pour un contributeur'
+          );
+          done();
+        })
+        .catch(done);
+    });
+
+    it("utilise le dépôt de données pour supprimer l'autorisation du contributeur", (done) => {
+      let depotInterroge = false;
+      testeur.depotDonnees().supprimeContributeur = (
+        idContributeur,
+        idHomologation
+      ) => {
+        depotInterroge = true;
+        expect(idContributeur).to.equal('999');
+        expect(idHomologation).to.equal('123');
+        return Promise.resolve({});
+      };
+
+      axios
+        .delete('http://localhost:1234/api/autorisation', {
+          params: {
+            idHomologation: '123',
+            idContributeur: '999',
+          },
+        })
+        .then(() => {
+          expect(depotInterroge).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("retourne une erreur HTTP 424 si le dépôt ne peut pas supprimer l'autorisation", (done) => {
+      testeur.depotDonnees().supprimeContributeur = () =>
+        Promise.reject(new Error("Un message d'erreur"));
+
+      axios
+        .delete('http://localhost:1234/api/autorisation', {
+          params: {
+            idHomologation: '123',
+            emailContributeur: 'jean.dupont@mail.fr',
+          },
+        })
+        .then(() => {
+          done('La requête aurait dû lever une erreur HTTP 424');
+        })
+        .catch((e) => {
+          expect(e.response.status).to.equal(424);
+          expect(e.response.data).to.equal("Un message d'erreur");
+          done();
+        });
     });
   });
 
