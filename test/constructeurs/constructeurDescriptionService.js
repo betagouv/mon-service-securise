@@ -3,7 +3,7 @@ const DescriptionService = require('../../src/modeles/descriptionService');
 class ConstructeurDescriptionService {
   constructor(referentiel) {
     this.referentiel = referentiel;
-    this.referentiel.recharge({
+    this.referentiel.enrichis({
       statutsDeploiement: { unStatutDeploiement: {} },
       localisationsDonnees: { uneLocalisation: {} },
     });
