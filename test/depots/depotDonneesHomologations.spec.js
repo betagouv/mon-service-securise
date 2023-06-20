@@ -42,6 +42,9 @@ const {
 const {
   unDepotDeDonneesServices,
 } = require('../constructeurs/constructeurDepotDonneesServices');
+const {
+  unAdaptateurTracking,
+} = require('../constructeurs/constructeurAdaptateurTracking');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -889,15 +892,15 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
 
-    it("l'adaptateur de tracking est utilisé pour envoyer un événement de création de service", (done) => {
+    it("l'adaptateur de tracking est utilisé pour envoyer un événement de création de service", async () => {
       let donneesPassees = {};
-      const adaptateurTracking = {
-        envoieTrackingCompletudeService: () => ({}),
-        envoieTrackingNouveauServiceCree: (destinataire, donneesEvenement) => {
-          donneesPassees = { destinataire, donneesEvenement };
-          return Promise.resolve();
-        },
-      };
+      const adaptateurTracking = unAdaptateurTracking()
+        .avecEnvoiTrackingNouveauServiceCree(
+          (destinataire, donneesEvenement) => {
+            donneesPassees = { destinataire, donneesEvenement };
+          }
+        )
+        .construis();
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Un autre service')
         .construis()
@@ -918,29 +921,23 @@ describe('Le dépôt de données des homologations', () => {
         .avecReferentiel(referentiel)
         .construis();
 
-      depot
-        .nouvelleHomologation(utilisateur.id, { descriptionService })
-        .then(() => {
-          expect(donneesPassees).to.eql({
-            destinataire: 'jean.dujardin@beta.gouv.com',
-            donneesEvenement: {
-              nombreServices: 2,
-            },
-          });
-        })
-        .then(() => done())
-        .catch(done);
+      await depot.nouvelleHomologation(utilisateur.id, { descriptionService });
+
+      expect(donneesPassees).to.eql({
+        destinataire: 'jean.dujardin@beta.gouv.com',
+        donneesEvenement: {
+          nombreServices: 2,
+        },
+      });
     });
 
     it("l'adaptateur de tracking est utilisé pour envoyer la completude lors de la création d'un service", async () => {
       let donneesPassees = {};
-      const adaptateurTracking = {
-        envoieTrackingNouveauServiceCree: () => ({}),
-        envoieTrackingCompletudeService: (destinataire, donneesEvenement) => {
+      const adaptateurTracking = unAdaptateurTracking()
+        .avecEnvoiTrackingCompletude((destinataire, donneesEvenement) => {
           donneesPassees = { destinataire, donneesEvenement };
-          return Promise.resolve();
-        },
-      };
+        })
+        .construis();
       const serviceTracking = {
         completudeDesServicesPourUtilisateur: async () => ({
           nombreServices: 2,
