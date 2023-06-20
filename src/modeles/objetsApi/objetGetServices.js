@@ -30,6 +30,9 @@ const donnees = (services, idUtilisateur, referentiel) => ({
       nombreContributeurs: json.contributeurs.length + 1,
       estCreateur: json.createur.id === idUtilisateur,
       documentsPdfDisponibles: json.documentsPdfDisponibles,
+      permissions: {
+        suppressionContributeur: json.createur.id === idUtilisateur,
+      },
     })),
   resume: {
     nombreServices: services.length,
