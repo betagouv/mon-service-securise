@@ -26,13 +26,14 @@ describe('Un parcours utilisateur', () => {
         idUtilisateur: '456',
         dateDerniereConnexion: '2023-01-01',
       },
+      Referentiel.creeReferentielVide(),
       adaptateurHorloge
     );
 
     unParcours.enregistreDerniereConnexionMaintenant();
-    expect(unParcours.toJSON().dateDerniereConnexion).to.equal(
-      dateDeConnexion.toISOString()
-    );
+
+    const dateParcours = unParcours.toJSON().dateDerniereConnexion;
+    expect(dateParcours).to.equal(dateDeConnexion.toISOString());
   });
 
   describe('sur demande de recupération de nouvelle fonctionnalité', () => {
