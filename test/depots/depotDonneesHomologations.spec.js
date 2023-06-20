@@ -892,6 +892,7 @@ describe('Le dépôt de données des homologations', () => {
     it("l'adaptateur de tracking est utilisé pour envoyer un événement de création de service", (done) => {
       let donneesPassees = {};
       const adaptateurTracking = {
+        envoieTrackingCompletudeService: () => ({}),
         envoieTrackingNouveauServiceCree: (destinataire, donneesEvenement) => {
           donneesPassees = { destinataire, donneesEvenement };
           return Promise.resolve();
@@ -929,6 +930,48 @@ describe('Le dépôt de données des homologations', () => {
         })
         .then(() => done())
         .catch(done);
+    });
+
+    it("l'adaptateur de tracking est utilisé pour envoyer la completude lors de la création d'un service", async () => {
+      let donneesPassees = {};
+      const adaptateurTracking = {
+        envoieTrackingNouveauServiceCree: () => ({}),
+        envoieTrackingCompletudeService: (destinataire, donneesEvenement) => {
+          donneesPassees = { destinataire, donneesEvenement };
+          return Promise.resolve();
+        },
+      };
+      const serviceTracking = {
+        completudeDesServicesPourUtilisateur: async () => ({
+          nbServices: 2,
+          nbMoyenContributeurs: 3,
+          tauxCompletudeMoyenTousServices: 12,
+        }),
+      };
+      const descriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Un autre service')
+        .construis()
+        .toJSON();
+      const utilisateur = unUtilisateur().avecId('456').donnees;
+      adaptateurPersistance =
+        unePersistanceMemoire().ajouteUnUtilisateur(utilisateur);
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecAdaptateurTracking(adaptateurTracking)
+        .avecServiceTracking(serviceTracking)
+        .avecReferentiel(referentiel)
+        .construis();
+
+      await depot.nouvelleHomologation(utilisateur.id, { descriptionService });
+
+      expect(donneesPassees).to.eql({
+        destinataire: 'jean.dujardin@beta.gouv.com',
+        donneesEvenement: {
+          nbServices: 2,
+          nbMoyenContributeurs: 3,
+          tauxCompletudeMoyenTousServices: 12,
+        },
+      });
     });
 
     it('lève une exception si une propriété obligatoire de la description du service est manquante', (done) => {

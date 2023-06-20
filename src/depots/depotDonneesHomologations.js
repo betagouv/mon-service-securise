@@ -13,6 +13,7 @@ const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouv
 const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
+const ServiceTracking = require('../tracking/serviceTracking');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -90,6 +91,7 @@ const creeDepot = (config = {}) => {
     adaptateurTracking = fabriqueAdaptateurTracking(),
     adaptateurUUID,
     referentiel,
+    serviceTracking = ServiceTracking.creeService(),
   } = config;
 
   const p = fabriquePersistance(
@@ -348,6 +350,17 @@ const creeDepot = (config = {}) => {
               { nombreServices: hs.length }
             );
           }),
+          serviceTracking
+            .completudeDesServicesPourUtilisateur(
+              { homologations },
+              idUtilisateur
+            )
+            .then((tauxCompletude) =>
+              adaptateurTracking.envoieTrackingCompletudeService(
+                h.createur.email,
+                tauxCompletude
+              )
+            ),
         ])
       )
       .then(() => idHomologation);
