@@ -272,24 +272,6 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("met à jour les données de la mesure générale si elle est déjà associée à l'homologation", (done) => {
-      const donneesHomologation = {
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-        mesuresGenerales: [
-          { id: 'identifiantMesure', statut: MesureGenerale.STATUT_EN_COURS },
-        ],
-      };
-      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        homologations: [copie(donneesHomologation)],
-        services: [copie(donneesHomologation)],
-      });
-      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-      depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        adaptateurJournalMSS,
-        referentiel,
-      });
-
       const generale = new MesureGenerale(
         { id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT },
         referentiel
@@ -352,19 +334,56 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it('consigne un événement de changement de complétude du service', (done) => {
+    it('consigne un événement de changement de complétude du service', async () => {
+      let evenementRecu = {};
       adaptateurJournalMSS.consigneEvenement = (evenement) => {
-        expect(evenement.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
-        done();
+        evenementRecu = evenement;
+        return Promise.resolve();
       };
       const generales = [];
       const specifiques = new MesuresSpecifiques({
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
       });
 
-      depot
-        .ajouteMesuresAHomologation('123', generales, specifiques)
-        .catch(done);
+      await depot.ajouteMesuresAHomologation('123', generales, specifiques);
+
+      expect(evenementRecu.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
+    });
+
+    it("l'adaptateur de tracking est utilisé pour envoyé la complétude lors de modification de mesures", async () => {
+      let donneesPassees = {};
+      const adaptateurTracking = unAdaptateurTracking()
+        .avecEnvoiTrackingCompletude((destinataire, donneesEvenement) => {
+          donneesPassees = { destinataire, donneesEvenement };
+        })
+        .construis();
+      const serviceTracking = {
+        completudeDesServicesPourUtilisateur: async () => ({
+          nbServices: 1,
+          nbMoyenContributeurs: 5,
+          tauxCompletudeMoyenTousServices: 18,
+        }),
+      };
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecAdaptateurTracking(adaptateurTracking)
+        .avecServiceTracking(serviceTracking)
+        .avecReferentiel(referentiel)
+        .construis();
+      const mesures = new MesuresSpecifiques({
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+      });
+
+      await depot.ajouteMesuresAHomologation('123', [], mesures);
+
+      expect(donneesPassees).to.eql({
+        destinataire: 'jean.dujardin@beta.gouv.com',
+        donneesEvenement: {
+          nbServices: 1,
+          nbMoyenContributeurs: 5,
+          tauxCompletudeMoyenTousServices: 18,
+        },
+      });
     });
   });
 
