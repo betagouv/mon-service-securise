@@ -548,6 +548,43 @@ const routesApi = (
     }
   );
 
+  routes.delete(
+    '/autorisation',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('idHomologation', 'idContributeur'),
+    (requete, reponse, suite) => {
+      const verifiePermissionSuppression = (...params) =>
+        depotDonnees
+          .autorisationPour(...params)
+          .then((a) =>
+            a.permissionSuppressionContributeur
+              ? Promise.resolve()
+              : Promise.reject(new EchecAutorisation())
+          );
+
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const { idHomologation, idContributeur } = requete.query;
+
+      verifiePermissionSuppression(idUtilisateur, idHomologation)
+        .then(() => {
+          depotDonnees
+            .supprimeContributeur(idContributeur, idHomologation)
+            .then(() => reponse.sendStatus(200))
+            .catch((e) => {
+              reponse.status(424).send(e.message);
+            });
+        })
+        .catch((e) => {
+          if (e instanceof EchecAutorisation) {
+            reponse
+              .status(403)
+              .send('Suppression non autorisé pour un contributeur');
+          }
+          suite(e);
+        });
+    }
+  );
+
   routes.get('/dureeSession', (_requete, reponse) => {
     reponse.send({ dureeSession: DUREE_SESSION });
   });
