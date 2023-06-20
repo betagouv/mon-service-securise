@@ -209,20 +209,24 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     beforeEach(() => {
-      const donneesHomologation = {
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-      };
-      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        homologations: [copie(donneesHomologation)],
-        services: [copie(donneesHomologation)],
-      });
+      const utilisateur = unUtilisateur().avecId('789').donnees;
+      const autorisation = uneAutorisation().deCreateurDeService(
+        '789',
+        '123'
+      ).donnees;
+      const service = unService(referentiel)
+        .avecId('123')
+        .avecNomService('nom').donnees;
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnService(service)
+        .ajouteUneAutorisation(autorisation)
+        .ajouteUnUtilisateur(utilisateur);
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-      depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        adaptateurJournalMSS,
-        referentiel,
-      });
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecJournalMSS(adaptateurJournalMSS)
+        .construis();
     });
 
     it("associe les mesures générales à l'homologation", (done) => {
@@ -243,7 +247,10 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('associe les mesures générales au service', (done) => {
-      const config = { adaptateurPersistance, referentiel };
+      const config = {
+        adaptateurPersistance: adaptateurPersistance.construis(),
+        referentiel,
+      };
       const depotServices = DepotDonneesServices.creeDepot(config);
       const generale = new MesureGenerale(
         { id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT },
@@ -320,7 +327,8 @@ describe('Le dépôt de données des homologations', () => {
 
     it('associe les mesures spécifiques au service', (done) => {
       const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance,
+        adaptateurPersistance: adaptateurPersistance.construis(),
+        referentiel,
       });
       const generales = [];
       const mesures = new MesuresSpecifiques({
@@ -370,16 +378,12 @@ describe('Le dépôt de données des homologations', () => {
       mesuresGenerales: [{ id: 'identifiantMesure', statut: 'fait' }],
     };
 
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        homologations: [copie(donneesHomologation)],
-        services: [copie(donneesHomologation)],
-      }
-    );
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurPersistance,
-      referentiel,
-    });
+    const adaptateurPersistance =
+      unePersistanceMemoire().ajouteUnService(donneesHomologation);
+    const depot = unDepotDeDonneesServices()
+      .avecAdaptateurPersistance(adaptateurPersistance)
+      .avecReferentiel(referentiel)
+      .construis();
 
     depot
       .homologation('123')
