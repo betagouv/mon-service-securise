@@ -26,7 +26,13 @@ const envoieTrackingInvitationContributeur = (destinataire, donneesEvenement) =>
 const envoieTrackingNouveauServiceCree = (destinataire, donneesEvenement) =>
   envoieTracking(destinataire, 'NOUVEAU_SERVICE_CREE', donneesEvenement);
 
+const envoieTrackingCompletudeService = (destinataire, donneesEvenement) =>
+  envoieTracking(destinataire, 'COMPLETUDE_SERVICE_MODIFIEE', {
+    donneesEvenement,
+  });
+
 module.exports = {
+  envoieTrackingCompletudeService,
   envoieTrackingConnexion,
   envoieTrackingInscription,
   envoieTrackingInvitationContributeur,
