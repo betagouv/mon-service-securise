@@ -20,6 +20,11 @@ class ConstructeurDepotDonneesServices {
     return this;
   }
 
+  avecJournalMSS(adaptateurJournalMSS) {
+    this.adaptateurJournalMSS = adaptateurJournalMSS;
+    return this;
+  }
+
   avecAdaptateurTracking(adaptateurTracking) {
     this.adaptateurTracking = adaptateurTracking;
     return this;
