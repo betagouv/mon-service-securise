@@ -48,9 +48,20 @@ const envoieTrackingNouveauServiceCree = (destinataire, { nombreServices }) =>
     nb_services: nombreServices,
   });
 
+const envoieTrackingCompletudeService = (
+  destinataire,
+  { nombreServices, nombreMoyenContributeurs, tauxCompletudeMoyenTousServices }
+) =>
+  envoieTracking(destinataire, 'COMPLETUDE_SERVICE_MODIFIEE', {
+    nb_services: nombreServices,
+    nb_moyen_contributeurs: nombreMoyenContributeurs,
+    taux_completude_moyen_tous_services: tauxCompletudeMoyenTousServices,
+  });
+
 module.exports = {
   envoieTrackingConnexion,
   envoieTrackingInscription,
   envoieTrackingInvitationContributeur,
   envoieTrackingNouveauServiceCree,
+  envoieTrackingCompletudeService,
 };

@@ -943,8 +943,8 @@ describe('Le dépôt de données des homologations', () => {
       };
       const serviceTracking = {
         completudeDesServicesPourUtilisateur: async () => ({
-          nbServices: 2,
-          nbMoyenContributeurs: 3,
+          nombreServices: 2,
+          nombreMoyenContributeurs: 3,
           tauxCompletudeMoyenTousServices: 12,
         }),
       };
@@ -967,8 +967,8 @@ describe('Le dépôt de données des homologations', () => {
       expect(donneesPassees).to.eql({
         destinataire: 'jean.dujardin@beta.gouv.com',
         donneesEvenement: {
-          nbServices: 2,
-          nbMoyenContributeurs: 3,
+          nombreServices: 2,
+          nombreMoyenContributeurs: 3,
           tauxCompletudeMoyenTousServices: 12,
         },
       });

@@ -32,8 +32,8 @@ describe('Le service de tracking des services', () => {
         );
 
       expect(completude).to.eql({
-        nbServices: 2,
-        nbMoyenContributeurs: 2,
+        nombreServices: 2,
+        nombreMoyenContributeurs: 2,
         tauxCompletudeMoyenTousServices: ((18 / 20 + 18 / 100) * 100) / 2,
       });
     });
