@@ -45,6 +45,9 @@ const {
 const {
   unAdaptateurTracking,
 } = require('../constructeurs/constructeurAdaptateurTracking');
+const {
+  unServiceTracking,
+} = require('../tracking/constructeurServiceTracking');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -427,29 +430,27 @@ describe('Le dépôt de données des homologations', () => {
     let referentiel;
 
     beforeEach(() => {
-      const donneesHomologation = {
-        id: '123',
-        descriptionService: {
-          nomService: 'Super Service',
-          presentation: 'Une présentation',
-        },
-      };
-      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        autorisations: [
-          { idUtilisateur: '999', idHomologation: '123', type: 'createur' },
-        ],
-        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [copie(donneesHomologation)],
-        services: [copie(donneesHomologation)],
-      });
-      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       referentiel = Referentiel.creeReferentielVide();
-
-      depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        adaptateurJournalMSS,
-        referentiel,
-      });
+      const utilisateur = unUtilisateur()
+        .avecId('999')
+        .avecEmail('jean.dupont@mail.fr').donnees;
+      const autorisation = uneAutorisation().deCreateurDeService(
+        '999',
+        '123'
+      ).donnees;
+      const service = unService(referentiel)
+        .avecId('123')
+        .avecNomService('Super Service').donnees;
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnService(service)
+        .ajouteUneAutorisation(autorisation)
+        .ajouteUnUtilisateur(utilisateur);
+      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecJournalMSS(adaptateurJournalMSS)
+        .construis();
     });
 
     it("met à jour la description du service d'une homologation", (done) => {
@@ -469,7 +470,7 @@ describe('Le dépôt de données des homologations', () => {
 
     it("met à jour la description de service dans l'objet métier service", (done) => {
       const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance,
+        adaptateurPersistance: adaptateurPersistance.construis(),
         referentiel,
       });
       const description = uneDescriptionValide(referentiel)
@@ -529,16 +530,56 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it('consigne un événement de changement de complétude du service', (done) => {
+    it('consigne un événement de changement de complétude du service', async () => {
+      let evenementRecu = {};
       adaptateurJournalMSS.consigneEvenement = (evenement) => {
-        expect(evenement.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
-        done();
+        evenementRecu = evenement;
+        return Promise.resolve();
       };
-
       const description = uneDescriptionValide(referentiel).construis();
-      depot
-        .ajouteDescriptionServiceAHomologation('999', '123', description)
-        .catch(done);
+
+      await depot.ajouteDescriptionServiceAHomologation(
+        '999',
+        '123',
+        description
+      );
+
+      expect(evenementRecu.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
+    });
+
+    it("l'adaptateur de tracking est utilisé pour envoyer la completude lors de l'ajout d'une description du service", async () => {
+      let donneesPassees = {};
+      const description = uneDescriptionValide(referentiel).construis();
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecJournalMSS(adaptateurJournalMSS)
+        .avecServiceTracking(
+          unServiceTracking().avecCompletudeDesServices(2, 3, 12).construis()
+        )
+        .avecAdaptateurTracking(
+          unAdaptateurTracking()
+            .avecEnvoiTrackingCompletude((destinataire, donneesEvenement) => {
+              donneesPassees = { destinataire, donneesEvenement };
+            })
+            .construis()
+        )
+        .construis();
+
+      await depot.ajouteDescriptionServiceAHomologation(
+        '999',
+        '123',
+        description
+      );
+
+      expect(donneesPassees).to.eql({
+        destinataire: 'jean.dupont@mail.fr',
+        donneesEvenement: {
+          nbServices: 2,
+          nbMoyenContributeurs: 3,
+          tauxCompletudeMoyenTousServices: 12,
+        },
+      });
     });
   });
 

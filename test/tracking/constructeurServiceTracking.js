@@ -8,6 +8,19 @@ class ConstructeurServiceTracking {
     };
   }
 
+  avecCompletudeDesServices(
+    nbServices,
+    nbMoyenContributeurs,
+    tauxCompletudeMoyenTousServices
+  ) {
+    this.completudeDesServicesPourUtilisateur = {
+      nbServices,
+      nbMoyenContributeurs,
+      tauxCompletudeMoyenTousServices,
+    };
+    return this;
+  }
+
   construis() {
     return {
       nombreMoyenContributeursPourUtilisateur: async () =>
