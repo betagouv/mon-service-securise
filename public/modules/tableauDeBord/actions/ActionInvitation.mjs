@@ -7,7 +7,7 @@ const estInvitationDejaEnvoyee = (reponseErreur) =>
 
 class ActionInvitation extends ActionAbstraite {
   constructor(tableauDesServices) {
-    super(tableauDesServices);
+    super('#contenu-invitation', tableauDesServices);
     this.appliqueContenu({
       titre: 'Inviter des contributeurs 1/2',
       texteSimple:
@@ -17,12 +17,11 @@ class ActionInvitation extends ActionAbstraite {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   initialise() {
     $('#email-invitation-collaboration').val('');
     $('#action-invitation').show();
     $('.message-erreur#invitation-deja-envoyee').hide();
-    const $loader = $('.conteneur-loader', '#contenu-invitation');
+    const $loader = $('.conteneur-loader', this.idConteneur);
     $loader.removeClass('visible');
   }
 
@@ -32,12 +31,12 @@ class ActionInvitation extends ActionAbstraite {
   }
 
   execute() {
-    declencheValidation('#contenu-invitation');
+    declencheValidation(this.idConteneur);
     const $emailInvite = $('#email-invitation-collaboration');
 
     if (!$emailInvite.is(':valid')) return Promise.reject();
 
-    const $loader = $('.conteneur-loader', '#contenu-invitation');
+    const $loader = $('.conteneur-loader', this.idConteneur);
     $loader.addClass('visible');
     $('#action-invitation').hide();
 

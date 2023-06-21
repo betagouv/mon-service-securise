@@ -2,7 +2,7 @@ import ActionAbstraite from './Action.mjs';
 
 class ActionSuppression extends ActionAbstraite {
   constructor(tableauDesServices) {
-    super(tableauDesServices);
+    super('#contenu-suppression', tableauDesServices);
     this.appliqueContenu({
       titre: 'Supprimer',
       texteSimple: 'Effacer toutes les données du service sélectionné.',
@@ -33,7 +33,7 @@ class ActionSuppression extends ActionAbstraite {
   }
 
   execute() {
-    const $loader = $('.conteneur-loader', '#contenu-suppression');
+    const $loader = $('.conteneur-loader', this.idConteneur);
     const $actionSuppression = $('#action-suppression');
 
     $actionSuppression.hide();

@@ -2,7 +2,7 @@ import ActionAbstraite from './Action.mjs';
 
 class ActionInvitationConfirmation extends ActionAbstraite {
   constructor() {
-    super();
+    super('#contenu-invitation-confirmation');
     this.appliqueContenu({
       titre: 'Inviter des contributeurs 2/2',
       texteSimple:

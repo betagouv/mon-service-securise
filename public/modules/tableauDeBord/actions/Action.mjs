@@ -1,11 +1,12 @@
 class ActionAbstraite {
-  constructor(tableauDesServices) {
+  constructor(idConteneur, tableauDesServices) {
     if (this.constructor === ActionAbstraite) {
       throw new TypeError(
         'La classe abstraite "ActionAbstraite" ne peut pas être instanciée directement'
       );
     }
     this.tableauDesServices = tableauDesServices;
+    this.idConteneur = idConteneur;
   }
 
   appliqueContenu({ titre, texteSimple, texteMultiple }) {

@@ -2,7 +2,7 @@ import ActionAbstraite from './Action.mjs';
 
 class ActionTelechargement extends ActionAbstraite {
   constructor(tableauDesServices) {
-    super(tableauDesServices);
+    super('#contenu-telechargement', tableauDesServices);
     this.appliqueContenu({
       titre: 'Télécharger les PDFs',
       texteSimple:

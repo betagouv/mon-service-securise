@@ -49,7 +49,7 @@ const metEnFormeContributeur = (estSupprimable, contributeur, service) =>
 
 class ActionContributeurs extends ActionAbstraite {
   constructor(tableauDesServices) {
-    super(tableauDesServices);
+    super('#contenu-contributeurs', tableauDesServices);
     this.appliqueContenu({
       titre: 'Contributeurs',
       texteSimple:
@@ -63,7 +63,7 @@ class ActionContributeurs extends ActionAbstraite {
     const $listeContributeurs = $('#liste-contributeurs');
 
     $listeContributeurs.show();
-    $('#contenu-contributeurs .confirmation-suppression').hide();
+    $('.confirmation-suppression', this.idConteneur).hide();
 
     $listeContributeurs.empty();
     $listeContributeurs.append(metEnFormeProprietaire(service.createur));
@@ -85,27 +85,21 @@ class ActionContributeurs extends ActionAbstraite {
     return true;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   brancheComportementInteractions() {
-    $('.declencheur-menu-flottant', '#contenu-contributeurs').on(
-      'click',
-      (evenement) => {
-        const $boutonMenu = $(evenement.target);
-        const doitOuvrir = !$boutonMenu.hasClass('actif');
-        $('.declencheur-menu-flottant', '#contenu-contributeurs ').removeClass(
-          'actif'
-        );
-        $('.menu-flotant', '#contenu-contributeurs').addClass('invisible');
+    $('.actions-contributeurs', this.idConteneur).on('click', (evenement) => {
+      const $boutonMenu = $(evenement.target);
+      const doitOuvrir = !$boutonMenu.hasClass('actif');
+      $('.actions-contributeurs', this.idConteneur).removeClass('actif');
+      $('.menu-flotant', this.idConteneur).addClass('invisible');
 
-        if (doitOuvrir) {
-          const $menu = $('.menu-flotant', $boutonMenu);
-          $boutonMenu.toggleClass('actif');
-          $menu.toggleClass('invisible');
-        }
+      if (doitOuvrir) {
+        const $menu = $('.menu-flotant', $boutonMenu);
+        $boutonMenu.toggleClass('actif');
+        $menu.toggleClass('invisible');
       }
-    );
+    });
 
-    $('.action-suppression-contributeur', '#contenu-contributeurs').on(
+    $('.action-suppression-contributeur', this.idConteneur).on(
       'click',
       (evenement) => {
         const $action = $(evenement.target);
@@ -121,7 +115,7 @@ class ActionContributeurs extends ActionAbstraite {
         );
 
         $('#liste-contributeurs').hide();
-        $('.confirmation-suppression', '#contenu-contributeurs').show();
+        $('.confirmation-suppression', this.idConteneur).show();
 
         $('#confirmation-suppression-contributeur')
           .attr('data-id-service', idService)
