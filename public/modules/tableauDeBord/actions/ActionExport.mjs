@@ -1,11 +1,15 @@
-class ActionExport {
+import ActionAbstraite from './Action.mjs';
+
+class ActionExport extends ActionAbstraite {
   constructor(tableauDesServices) {
-    this.tableauDesServices = tableauDesServices;
-    this.titre = 'Exporter la sélection';
-    this.texteSimple =
-      'Télécharger les données du service sélectionné dans le tableau de bord.';
-    this.texteMultiple =
-      'Télécharger la liste des services sélectionnés dans le tableau de bord.';
+    super(tableauDesServices);
+    this.appliqueContenu({
+      titre: 'Exporter la sélection',
+      texteSimple:
+        'Télécharger les données du service sélectionné dans le tableau de bord.',
+      texteMultiple:
+        'Télécharger la liste des services sélectionnés dans le tableau de bord.',
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this

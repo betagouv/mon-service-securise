@@ -1,17 +1,20 @@
+import ActionAbstraite from './Action.mjs';
 import { declencheValidation } from '../../interactions/validation.mjs';
 
 const estInvitationDejaEnvoyee = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'INVITATION_DEJA_ENVOYEE';
 
-class ActionInvitation {
+class ActionInvitation extends ActionAbstraite {
   constructor(tableauDesServices) {
-    this.tableauDesServices = tableauDesServices;
-    this.titre = 'Inviter des contributeurs 1/2';
-    this.texteSimple =
-      'Inviter les personnes de votre choix à contribuer à ce service.';
-    this.texteMultiple =
-      'Inviter les personnes de votre choix à contribuer à ces services.';
+    super(tableauDesServices);
+    this.appliqueContenu({
+      titre: 'Inviter des contributeurs 1/2',
+      texteSimple:
+        'Inviter les personnes de votre choix à contribuer à ce service.',
+      texteMultiple:
+        'Inviter les personnes de votre choix à contribuer à ces services.',
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this

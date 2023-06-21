@@ -1,10 +1,15 @@
-class ActionInvitationConfirmation {
+import ActionAbstraite from './Action.mjs';
+
+class ActionInvitationConfirmation extends ActionAbstraite {
   constructor() {
-    this.titre = 'Inviter des contributeurs 2/2';
-    this.texteSimple =
-      'Inviter les personnes de votre choix à contribuer à ce service.';
-    this.texteMultiple =
-      'Inviter les personnes de votre choix à contribuer à ces services.';
+    super();
+    this.appliqueContenu({
+      titre: 'Inviter des contributeurs 2/2',
+      texteSimple:
+        'Inviter les personnes de votre choix à contribuer à ce service.',
+      texteMultiple:
+        'Inviter les personnes de votre choix à contribuer à ces services.',
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this

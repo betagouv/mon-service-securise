@@ -1,3 +1,5 @@
+import ActionAbstraite from './Action.mjs';
+
 const metEnFormeMenuFlotant = ({ peutSupprimer, service, utilisateur }) => {
   let actions = '';
   if (peutSupprimer)
@@ -45,12 +47,14 @@ const metEnFormeProprietaire = (proprietaire) =>
 const metEnFormeContributeur = (estSupprimable, contributeur, service) =>
   metEnFormeLigne(false, estSupprimable, contributeur, service);
 
-class ActionContributeurs {
+class ActionContributeurs extends ActionAbstraite {
   constructor(tableauDesServices) {
-    this.tableauDesServices = tableauDesServices;
-    this.titre = 'Contributeurs';
-    this.texteSimple =
-      'Gérer la liste des personnes invitées à contribuer au service sélectionné.';
+    super(tableauDesServices);
+    this.appliqueContenu({
+      titre: 'Contributeurs',
+      texteSimple:
+        'Gérer la liste des personnes invitées à contribuer au service sélectionné.',
+    });
   }
 
   initialise(...args) {
