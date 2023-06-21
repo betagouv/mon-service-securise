@@ -58,12 +58,10 @@ class ActionContributeurs extends ActionAbstraite {
   }
 
   initialise(...args) {
+    super.initialise();
     const [idService] = args;
     const service = this.tableauDesServices.donneesDuService(idService);
     const $listeContributeurs = $('#liste-contributeurs');
-
-    $listeContributeurs.show();
-    $('.confirmation-suppression', this.idConteneur).hide();
 
     $listeContributeurs.empty();
     $listeContributeurs.append(metEnFormeProprietaire(service.createur));
@@ -86,18 +84,21 @@ class ActionContributeurs extends ActionAbstraite {
   }
 
   brancheComportementInteractions() {
-    $('.actions-contributeurs', this.idConteneur).on('click', (evenement) => {
-      const $boutonMenu = $(evenement.target);
-      const doitOuvrir = !$boutonMenu.hasClass('actif');
-      $('.actions-contributeurs', this.idConteneur).removeClass('actif');
-      $('.menu-flotant', this.idConteneur).addClass('invisible');
+    $('.declencheur-menu-flottant', this.idConteneur).on(
+      'click',
+      (evenement) => {
+        const $boutonMenu = $(evenement.target);
+        const doitOuvrir = !$boutonMenu.hasClass('actif');
+        $('.declencheur-menu-flottant', this.idConteneur).removeClass('actif');
+        $('.menu-flotant', this.idConteneur).addClass('invisible');
 
-      if (doitOuvrir) {
-        const $menu = $('.menu-flotant', $boutonMenu);
-        $boutonMenu.toggleClass('actif');
-        $menu.toggleClass('invisible');
+        if (doitOuvrir) {
+          const $menu = $('.menu-flotant', $boutonMenu);
+          $boutonMenu.toggleClass('actif');
+          $menu.toggleClass('invisible');
+        }
       }
-    });
+    );
 
     $('.action-suppression-contributeur', this.idConteneur).on(
       'click',
@@ -114,8 +115,8 @@ class ActionContributeurs extends ActionAbstraite {
           `<strong>${nomService}</strong> `
         );
 
-        $('#liste-contributeurs').hide();
-        $('.confirmation-suppression', this.idConteneur).show();
+        this.basculeFormulaire(false);
+        this.basculeConfirmation(true);
 
         $('#confirmation-suppression-contributeur')
           .attr('data-id-service', idService)
@@ -139,8 +140,8 @@ class ActionContributeurs extends ActionAbstraite {
         params: { idHomologation: idService, idContributeur },
       })
       .then(() => {
-        $('#liste-contributeurs').show();
-        $('.confirmation-suppression', '#contenu-contributeurs').hide();
+        this.basculeFormulaire(true);
+        this.basculeConfirmation(false);
 
         $ligneContributeur.fadeOut(200, (element) => $(element).remove());
         this.tableauDesServices.recupereServices();

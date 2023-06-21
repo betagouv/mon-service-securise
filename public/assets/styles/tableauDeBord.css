@@ -723,18 +723,13 @@ label[for='recherche-service'] {
   .conteneur-loader {
   border: 1px solid #cbd5e1;
   border-radius: 4px;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.3em;
   padding: 1em 0;
   margin-bottom: 2em;
-}
-
-:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
-  .conteneur-loader.visible {
-  display: flex;
 }
 
 :is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
@@ -773,7 +768,7 @@ label[for='recherche-service'] {
   margin: 0 0 1em 0;
 }
 
-#contenu-contributeurs .confirmation-suppression .entete {
+#contenu-contributeurs .conteneur-confirmation .entete {
   margin: 0 0 1em 0;
 }
 
@@ -797,12 +792,12 @@ label[for='recherche-service'] {
   font-weight: 500;
 }
 
-#contenu-invitation-confirmation {
+#contenu-invitation .conteneur-rapport {
   text-align: center;
   padding-top: 2em;
 }
 
-#contenu-invitation-confirmation button {
+#contenu-invitation .conteneur-rapport button {
   margin-top: 2em;
 }
 
@@ -1102,4 +1097,12 @@ label[for='recherche-service'] {
 
 #contenu-contributeurs .menu-flotant.invisible {
   display: none;
+}
+
+.invisible {
+  display: none !important;
+}
+
+.tiroir :is(.conteneur-rapport, .conteneur-confirmation) .conteneur-actions {
+  margin-top: 2em;
 }

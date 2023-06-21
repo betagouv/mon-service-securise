@@ -9,7 +9,7 @@ class ActionInvitation extends ActionAbstraite {
   constructor(tableauDesServices) {
     super('#contenu-invitation', tableauDesServices);
     this.appliqueContenu({
-      titre: 'Inviter des contributeurs 1/2',
+      titre: 'Inviter des contributeurs',
       texteSimple:
         'Inviter les personnes de votre choix à contribuer à ce service.',
       texteMultiple:
@@ -18,11 +18,10 @@ class ActionInvitation extends ActionAbstraite {
   }
 
   initialise() {
+    super.initialise();
     $('#email-invitation-collaboration').val('');
     $('#action-invitation').show();
     $('.message-erreur#invitation-deja-envoyee').hide();
-    const $loader = $('.conteneur-loader', this.idConteneur);
-    $loader.removeClass('visible');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -36,8 +35,7 @@ class ActionInvitation extends ActionAbstraite {
 
     if (!$emailInvite.is(':valid')) return Promise.reject();
 
-    const $loader = $('.conteneur-loader', this.idConteneur);
-    $loader.addClass('visible');
+    this.basculeLoader(true);
     $('#action-invitation').hide();
 
     const emailContributeur = $emailInvite.val();
@@ -49,13 +47,18 @@ class ActionInvitation extends ActionAbstraite {
         })
     );
     return Promise.all(invitations)
-      .then(() => this.tableauDesServices.recupereServices())
+      .then(() => {
+        this.tableauDesServices.recupereServices();
+        this.basculeLoader(false);
+        this.basculeFormulaire(false);
+        this.basculeRapport(true);
+      })
       .catch((e) => {
         if (estInvitationDejaEnvoyee(e.response)) {
           $('.message-erreur#invitation-deja-envoyee').show();
         }
         $('#action-invitation').show();
-        $loader.removeClass('visible');
+        this.basculeLoader(false);
         throw e;
       });
   }

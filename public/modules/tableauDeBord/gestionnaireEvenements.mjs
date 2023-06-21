@@ -75,13 +75,9 @@ const gestionnaireEvenements = {
         .then(() => gestionnaireTiroir.basculeOuvert(false));
     });
 
-    $('#action-invitation').on('click', () => {
-      registreDesActions.invitation
-        .execute()
-        .then(() =>
-          gestionnaireTiroir.afficheContenuAction('invitation-confirmation')
-        );
-    });
+    $('#action-invitation').on('click', () =>
+      registreDesActions.invitation.execute()
+    );
 
     $('#action-export-csv').on('click', () =>
       registreDesActions.export.execute()
