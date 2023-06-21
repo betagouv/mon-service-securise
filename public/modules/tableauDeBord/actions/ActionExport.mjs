@@ -2,7 +2,7 @@ import ActionAbstraite from './Action.mjs';
 
 class ActionExport extends ActionAbstraite {
   constructor(tableauDesServices) {
-    super(tableauDesServices);
+    super('#contenu-export', tableauDesServices);
     this.appliqueContenu({
       titre: 'Exporter la sélection',
       texteSimple:

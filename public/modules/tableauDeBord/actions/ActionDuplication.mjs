@@ -5,7 +5,7 @@ const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
 
 class ActionDuplication extends ActionAbstraite {
   constructor(tableauDesServices) {
-    super(tableauDesServices);
+    super('#contenu-duplication', tableauDesServices);
     this.appliqueContenu({
       titre: 'Dupliquer',
       texteSimple:
@@ -13,14 +13,13 @@ class ActionDuplication extends ActionAbstraite {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   initialise() {
-    $('#contenu-duplication form').show();
+    $('form', this.idConteneur).show();
     $('#nombre-copie').val(1);
-    const $loader = $('.conteneur-loader', '#contenu-duplication');
+    const $loader = $('.conteneur-loader', this.idConteneur);
     $loader.removeClass('visible');
     $('#action-duplication').show();
-    $('#contenu-duplication .rapport-execution').hide();
+    $('.rapport-execution', this.idConteneur).hide();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -29,12 +28,12 @@ class ActionDuplication extends ActionAbstraite {
   }
 
   execute() {
-    declencheValidation('#contenu-duplication');
+    declencheValidation(this.idConteneur);
     const $nombreCopie = $('#nombre-copie');
 
     if (!$nombreCopie.is(':valid')) return Promise.resolve();
 
-    const $loader = $('.conteneur-loader', '#contenu-duplication');
+    const $loader = $('.conteneur-loader', this.idConteneur);
     $loader.addClass('visible');
     $('#action-duplication').hide();
 
@@ -53,10 +52,10 @@ class ActionDuplication extends ActionAbstraite {
         const { data, status } = exc.response;
 
         if (status === 424 && data.type === 'DONNEES_OBLIGATOIRES_MANQUANTES') {
-          $('#contenu-duplication form').hide();
+          $('form', this.idConteneur).hide();
           const urlDecrire = `/service/${this.idSelectionne()}/descriptionService`;
           $('#aller-dans-decrire').attr('href', urlDecrire);
-          $('#contenu-duplication .rapport-execution').show();
+          $('.rapport-execution', this.idConteneur).show();
         }
 
         throw exc;
