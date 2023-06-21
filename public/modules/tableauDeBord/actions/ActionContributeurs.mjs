@@ -31,7 +31,7 @@ const metEnFormeLigne = (
     <div class='role ${estProprietaire ? 'proprietaire' : 'contributeur'}'>${
     estProprietaire ? 'Propriétaire' : 'Contributeur'
   }</div>
-    ${`<div class="actions-contributeurs ${
+    ${`<div class="declencheur-menu-flottant ${
       estSupprimable ? '' : 'invisible'
     }">${metEnFormeMenuFlotant({
       peutSupprimer: estSupprimable,
@@ -83,12 +83,12 @@ class ActionContributeurs {
 
   // eslint-disable-next-line class-methods-use-this
   brancheComportementInteractions() {
-    $('.actions-contributeurs', '#contenu-contributeurs').on(
+    $('.declencheur-menu-flottant', '#contenu-contributeurs').on(
       'click',
       (evenement) => {
         const $boutonMenu = $(evenement.target);
         const doitOuvrir = !$boutonMenu.hasClass('actif');
-        $('.actions-contributeurs', '#contenu-contributeurs ').removeClass(
+        $('.declencheur-menu-flottant', '#contenu-contributeurs ').removeClass(
           'actif'
         );
         $('.menu-flotant', '#contenu-contributeurs').addClass('invisible');

@@ -10,14 +10,22 @@ const gestionnaireEvenements = {
       tableauDesServices.modifieRecherche($(e.target).val());
     });
 
-    const fermeTriSiClicEnDehors = (e) => {
+    const fermeMenusContextuelsSiClicEnDehors = (e) => {
+      const $elementClique = $(e.target);
       if (
-        !$(e.target).hasClass('entete-contributeurs') &&
-        !$(e.target).parents('.entete-contributeurs').length > 0
+        !$elementClique.hasClass('entete-contributeurs') &&
+        !$elementClique.parents('.entete-contributeurs').length > 0
       )
         gestionnaireEvenements.triContributeurs.ferme();
+
+      if (
+        !$elementClique.hasClass('declencheur-menu-flottant') &&
+        !$elementClique.parents('.declencheur-menu-flottant').length > 0
+      ) {
+        gestionnaireEvenements.fermeMenuFlottant();
+      }
     };
-    $(document).on('click', (e) => fermeTriSiClicEnDehors(e));
+    $(document).on('click', (e) => fermeMenusContextuelsSiClicEnDehors(e));
 
     $('.tableau-services thead th.triable').on('click', (e) => {
       const colonne = $(e.target).data('colonne');
@@ -159,9 +167,8 @@ const gestionnaireEvenements = {
     gestionnaireTiroir.basculeOuvert(false);
   },
   fermeMenuFlottant: () => {
-    $('.action-lien').removeClass('actif');
-    $('.conteneur-selection-services').removeClass('actif');
     $('.menu-flotant').addClass('invisible');
+    $('.declencheur-menu-flottant').removeClass('actif');
   },
 };
 

@@ -1029,7 +1029,7 @@ label[for='recherche-service'] {
   padding: 0;
 }
 
-#contenu-contributeurs .actions-contributeurs {
+#contenu-contributeurs .declencheur-menu-flottant {
   border-radius: 4px;
   border: 1px solid #cbd5e1;
   padding: 0.1em 0.2em;
@@ -1038,16 +1038,16 @@ label[for='recherche-service'] {
   cursor: pointer;
 }
 
-#contenu-contributeurs .actions-contributeurs.invisible {
+#contenu-contributeurs .declencheur-menu-flottant.invisible {
   display: flex;
   visibility: hidden;
 }
 
-#contenu-contributeurs .actions-contributeurs.actif {
+#contenu-contributeurs .declencheur-menu-flottant.actif {
   border-color: #08416a;
 }
 
-#contenu-contributeurs .actions-contributeurs::before {
+#contenu-contributeurs .declencheur-menu-flottant::before {
   content: '';
   display: flex;
   width: 2em;
@@ -1057,7 +1057,7 @@ label[for='recherche-service'] {
   background-size: contain;
 }
 
-#contenu-contributeurs .actions-contributeurs.actif::before {
+#contenu-contributeurs .declencheur-menu-flottant.actif::before {
   /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) invert(20%) sepia(56%) saturate(1325%)
