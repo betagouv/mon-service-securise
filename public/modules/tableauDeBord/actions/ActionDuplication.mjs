@@ -14,12 +14,9 @@ class ActionDuplication extends ActionAbstraite {
   }
 
   initialise() {
-    $('form', this.idConteneur).show();
+    super.initialise();
     $('#nombre-copie').val(1);
-    const $loader = $('.conteneur-loader', this.idConteneur);
-    $loader.removeClass('visible');
     $('#action-duplication').show();
-    $('.rapport-execution', this.idConteneur).hide();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -33,8 +30,7 @@ class ActionDuplication extends ActionAbstraite {
 
     if (!$nombreCopie.is(':valid')) return Promise.resolve();
 
-    const $loader = $('.conteneur-loader', this.idConteneur);
-    $loader.addClass('visible');
+    this.basculeLoader(true);
     $('#action-duplication').hide();
 
     const nombreCopies = parseInt($nombreCopie.val(), 10) || 1;
@@ -52,10 +48,10 @@ class ActionDuplication extends ActionAbstraite {
         const { data, status } = exc.response;
 
         if (status === 424 && data.type === 'DONNEES_OBLIGATOIRES_MANQUANTES') {
-          $('form', this.idConteneur).hide();
+          this.basculeFormulaire(false);
           const urlDecrire = `/service/${this.idSelectionne()}/descriptionService`;
           $('#aller-dans-decrire').attr('href', urlDecrire);
-          $('.rapport-execution', this.idConteneur).show();
+          this.basculeRapport(true);
         }
 
         throw exc;

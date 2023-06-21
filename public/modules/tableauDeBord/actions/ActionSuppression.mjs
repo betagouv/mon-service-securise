@@ -11,10 +11,11 @@ class ActionSuppression extends ActionAbstraite {
   }
 
   initialise() {
+    super.initialise();
+    $('#action-suppression').show();
+
     const { nomDuService, servicesSelectionnes } = this.tableauDesServices;
-
     const nbServicesSelectionnes = servicesSelectionnes.size;
-
     if (nbServicesSelectionnes === 1) {
       const idSelectionne = servicesSelectionnes.keys().next().value;
       $('#nombre-service-suppression').html(
@@ -33,22 +34,18 @@ class ActionSuppression extends ActionAbstraite {
   }
 
   execute() {
-    const $loader = $('.conteneur-loader', this.idConteneur);
     const $actionSuppression = $('#action-suppression');
 
     $actionSuppression.hide();
-    $loader.addClass('visible');
+    this.basculeLoader(true);
 
     const suppressions = [...this.tableauDesServices.servicesSelectionnes].map(
       (idService) => axios.delete(`/api/service/${idService}`)
     );
 
     return Promise.all(suppressions).then(() => {
-      $actionSuppression.prop('disabled', false);
       this.tableauDesServices.servicesSelectionnes.clear();
       this.tableauDesServices.recupereServices();
-      $actionSuppression.show();
-      $loader.removeClass('visible');
     });
   }
 }

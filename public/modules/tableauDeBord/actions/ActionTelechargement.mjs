@@ -13,6 +13,8 @@ class ActionTelechargement extends ActionAbstraite {
   }
 
   initialise() {
+    super.initialise();
+
     const idSelectionne = this.tableauDesServices.servicesSelectionnes
       .keys()
       .next().value;

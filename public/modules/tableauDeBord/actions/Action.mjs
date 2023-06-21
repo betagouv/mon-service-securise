@@ -15,9 +15,31 @@ class ActionAbstraite {
     this.texteMultiple = texteMultiple;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  basculeConfirmation(visible) {
+    const $confirmation = $('.conteneur-confirmation', this.idConteneur);
+    $confirmation.toggleClass('invisible', !visible);
+  }
+
+  basculeFormulaire(visible) {
+    const $formulaire = $('.conteneur-formulaire', this.idConteneur);
+    $formulaire.toggleClass('invisible', !visible);
+  }
+
+  basculeLoader(visible) {
+    const $loader = $('.conteneur-loader', this.idConteneur);
+    $loader.toggleClass('invisible', !visible);
+  }
+
+  basculeRapport(visible) {
+    const $rapport = $('.conteneur-rapport', this.idConteneur);
+    $rapport.toggleClass('invisible', !visible);
+  }
+
   initialise() {
-    throw new Error('La méthode "initialise" doit être implémentée');
+    this.basculeFormulaire(true);
+    this.basculeLoader(false);
+    this.basculeConfirmation(false);
+    this.basculeRapport(false);
   }
 
   // eslint-disable-next-line class-methods-use-this

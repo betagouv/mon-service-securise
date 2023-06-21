@@ -106,9 +106,10 @@ block main
           h3.titre-tiroir
           p.texte-tiroir
       .contenu-tiroir
-        form.bloc-contenu#contenu-contributeurs
-          ul#liste-contributeurs
-          .confirmation-suppression
+        .bloc-contenu#contenu-contributeurs
+          form.conteneur-formulaire
+            ul#liste-contributeurs
+          .conteneur-confirmation
             p.entete 
               span Souhaitez-vous vraiment retirer les accès de 
               span#nom-contributeur-suppression
@@ -123,40 +124,42 @@ block main
             .conteneur-actions
               button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
               button.bouton#confirmation-suppression-contributeur(type='button') Retirer du service
-        form.bloc-contenu#contenu-export
-          - const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
-          - const maintenant = new Date();
-          - const nomFichierCsv = `MSS_services_${formatDateCourt.format(maintenant).replaceAll('-', '')}.csv`
-          ul.liste-fichiers
-            li.fichier
-              .nom-document
-                p= nomFichierCsv
-              button.bouton#action-export-csv(type='button') Télécharger
-        form.bloc-contenu#contenu-invitation
-          label Ajouter
-            br
-            input(
-              id = 'email-invitation-collaboration',
-              name = 'email-invitation-collaboration',
-              type = 'email',
-              placeholder = 'ex : e.leroy@domaine.fr',
-              required,
-            )
-            .message-erreur Veuillez saisir une adresse e-mail valide.
-            .message-erreur#invitation-deja-envoyee Cette personne est déjà ajoutée pour ce service. Veuillez renseigner un autre e-mail.
-          .conteneur-loader
-            .icone-chargement
-            .titre-loader Envoi en cours...
-            .info-loader Merci de ne pas rafraîchir la page
-          .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
-            button.bouton#action-invitation(type='button') Envoyer une invitation
-        .bloc-contenu#contenu-invitation-confirmation
-          img(src='/statique/assets/images/image_succes_invitation.svg')
-          p Un e-mail d'invitation a bien été envoyé.
-          button.bouton#retour-liste-contributeurs Revenir à la liste des contributeurs
+        .bloc-contenu#contenu-export
+          form.conteneur-formulaire
+            - const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            - const maintenant = new Date();
+            - const nomFichierCsv = `MSS_services_${formatDateCourt.format(maintenant).replaceAll('-', '')}.csv`
+            ul.liste-fichiers
+              li.fichier
+                .nom-document
+                  p= nomFichierCsv
+                button.bouton#action-export-csv(type='button') Télécharger
+        .bloc-contenu#contenu-invitation
+          form.conteneur-formulaire
+            label Ajouter
+              br
+              input(
+                id = 'email-invitation-collaboration',
+                name = 'email-invitation-collaboration',
+                type = 'email',
+                placeholder = 'ex : e.leroy@domaine.fr',
+                required,
+              )
+              .message-erreur Veuillez saisir une adresse e-mail valide.
+              .message-erreur#invitation-deja-envoyee Cette personne est déjà ajoutée pour ce service. Veuillez renseigner un autre e-mail.
+            .conteneur-loader
+              .icone-chargement
+              .titre-loader Envoi en cours...
+              .info-loader Merci de ne pas rafraîchir la page
+            .conteneur-actions
+              button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
+              button.bouton#action-invitation(type='button') Envoyer une invitation
+          .conteneur-rapport
+            img(src='/statique/assets/images/image_succes_invitation.svg')
+            p Un e-mail d'invitation a bien été envoyé.
+            button.bouton#retour-liste-contributeurs(type='button') Revenir à la liste des contributeurs
         .bloc-contenu#contenu-duplication
-          form
+          form.conteneur-formulaire
             label Nombre de copies souhaitées
               br
               input(
@@ -177,34 +180,36 @@ block main
             .conteneur-actions
               button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
               button.bouton#action-duplication(type='button') Valider
-          .rapport-execution
+          .conteneur-rapport
             .
               Le service n'a pas été dupliqué car toutes les informations obligatoires n'ont pas été remplies dans la rubrique « Décrire ».<br>
               Remplissez ces informations avant de pouvoir dupliquer.
             .conteneur-actions
               a.bouton#aller-dans-decrire Aller dans « Décrire »
-        form.bloc-contenu#contenu-suppression
-          p 
-            span Souhaitez-vous vraiment supprimer 
-            span#nombre-service-suppression
-            span ?
-          label.banniere-avertissement
-            img(src='/statique/assets/images/icone_danger.svg')
-            .contenu-texte-avertissement
-              strong Cette action est irréversible
-              p Les données seront définitivement effacées. Les contributeurs n'auront plus accès à ce service.
-          .conteneur-loader
-            .icone-chargement
-            .titre-loader Suppression en cours...
-            .info-loader Merci de ne pas rafraîchir la page
-          .conteneur-actions
-            button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
-            button.bouton#action-suppression(type='button') Confirmer la suppression
-        form.bloc-contenu#contenu-telechargement
-          +documentTelechargeable('Synthèse de la sécurité du service', "Ce PDF résume en 1 page l'état de la sécurité du service.", 'PDF', 'lien-synthese')
-          +documentTelechargeable('Annexes', 'Ce PDF détaille toutes les informations renseignées sur la sécurité du service.', 'PDF', 'lien-annexes')
-          +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est le document de décision pouvant être signé par l'autorité d'homologation.", 'PDF', 'lien-decision', true)
-          +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDFs à télécharger.', 'ZIP', 'lien-archive')
+        .bloc-contenu#contenu-suppression
+          form.conteneur-formulaire
+            p 
+              span Souhaitez-vous vraiment supprimer 
+              span#nombre-service-suppression
+              span ?
+            label.banniere-avertissement
+              img(src='/statique/assets/images/icone_danger.svg')
+              .contenu-texte-avertissement
+                strong Cette action est irréversible
+                p Les données seront définitivement effacées. Les contributeurs n'auront plus accès à ce service.
+            .conteneur-loader
+              .icone-chargement
+              .titre-loader Suppression en cours...
+              .info-loader Merci de ne pas rafraîchir la page
+            .conteneur-actions
+              button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
+              button.bouton#action-suppression(type='button') Confirmer la suppression
+        .bloc-contenu#contenu-telechargement
+          form.conteneur-formulaire
+            +documentTelechargeable('Synthèse de la sécurité du service', "Ce PDF résume en 1 page l'état de la sécurité du service.", 'PDF', 'lien-synthese')
+            +documentTelechargeable('Annexes', 'Ce PDF détaille toutes les informations renseignées sur la sécurité du service.', 'PDF', 'lien-annexes')
+            +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est le document de décision pouvant être signé par l'autorité d'homologation.", 'PDF', 'lien-decision', true)
+            +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDFs à télécharger.', 'ZIP', 'lien-archive')
 
 
   script(type = 'module', src = '/statique/tableauDeBord.js')
