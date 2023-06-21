@@ -244,32 +244,6 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const ajouteDescriptionServiceAHomologation = (
-    idUtilisateur,
-    idHomologation,
-    infos
-  ) => {
-    const donneesAPersister = (h) => h.donneesAPersister().toutes();
-
-    const consigneEvenement = (h) =>
-      adaptateurJournalMSS.consigneEvenement(
-        new EvenementCompletudeServiceModifiee({
-          idService: idHomologation,
-          ...h.completudeMesures(),
-        }).toJSON()
-      );
-
-    const metsAJourHomologation = (h) =>
-      valideDescriptionService(idUtilisateur, infos, h.id)
-        .then(() =>
-          metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos)
-        )
-        .then(() => p.lis.une(idHomologation))
-        .then(consigneEvenement);
-
-    return p.lis.une(idHomologation).then(metsAJourHomologation);
-  };
-
   const ajouteRolesResponsabilitesAHomologation = (...params) =>
     metsAJourProprieteHomologation('rolesResponsabilites', ...params);
 
@@ -278,6 +252,45 @@ const creeDepot = (config = {}) => {
 
   const homologations = (idUtilisateur) =>
     p.lis.cellesDeUtilisateur(idUtilisateur);
+
+  const ajouteDescriptionServiceAHomologation = (
+    idUtilisateur,
+    idHomologation,
+    infos
+  ) => {
+    const donneesAPersister = (h) => h.donneesAPersister().toutes();
+
+    const consigneEvenement = (h) => {
+      adaptateurJournalMSS.consigneEvenement(
+        new EvenementCompletudeServiceModifiee({
+          idService: idHomologation,
+          ...h.completudeMesures(),
+        }).toJSON()
+      );
+      return h;
+    };
+
+    const envoieTrackingCompletude = (h) =>
+      serviceTracking
+        .completudeDesServicesPourUtilisateur({ homologations }, h.createur.id)
+        .then((tauxCompletude) =>
+          adaptateurTracking.envoieTrackingCompletudeService(
+            h.createur.email,
+            tauxCompletude
+          )
+        );
+
+    const metsAJourHomologation = (h) =>
+      valideDescriptionService(idUtilisateur, infos, h.id)
+        .then(() =>
+          metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos)
+        )
+        .then(() => p.lis.une(idHomologation))
+        .then(consigneEvenement)
+        .then(envoieTrackingCompletude);
+
+    return p.lis.une(idHomologation).then(metsAJourHomologation);
+  };
 
   const ajouteMesuresAHomologation = (idHomologation, generales, specifiques) =>
     ajouteMesuresGeneralesAHomologation(idHomologation, generales)

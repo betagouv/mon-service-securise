@@ -2,10 +2,23 @@ class ConstructeurServiceTracking {
   constructor() {
     this.nombreMoyenContributeursPourUtilisateur = 0;
     this.completudeDesServicesPourUtilisateur = {
-      nbServices: 9,
-      nbMoyenContributeurs: this.nombreMoyenContributeursPourUtilisateur,
+      nombreServices: 9,
+      nombreMoyenContributeurs: this.nombreMoyenContributeursPourUtilisateur,
       tauxCompletudeMoyenTousServices: 0,
     };
+  }
+
+  avecCompletudeDesServices(
+    nombreServices,
+    nombreMoyenContributeurs,
+    tauxCompletudeMoyenTousServices
+  ) {
+    this.completudeDesServicesPourUtilisateur = {
+      nombreServices,
+      nombreMoyenContributeurs,
+      tauxCompletudeMoyenTousServices,
+    };
+    return this;
   }
 
   construis() {

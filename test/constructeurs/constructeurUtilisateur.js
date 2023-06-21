@@ -25,6 +25,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  avecEmail(email) {
+    this.donnees.email = email;
+    return this;
+  }
+
   construis() {
     return new Utilisateur(this.donnees);
   }
