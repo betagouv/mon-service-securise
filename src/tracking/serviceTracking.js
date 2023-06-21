@@ -28,8 +28,8 @@ const creeService = () => {
     ]);
 
     return {
-      nbServices: hs.length,
-      nbMoyenContributeurs,
+      nombreServices: hs.length,
+      nombreMoyenContributeurs: nbMoyenContributeurs,
       tauxCompletudeMoyenTousServices: Math.floor(
         (hs.reduce((accumulateur, h) => {
           const completudeMesures = h.completudeMesures();
