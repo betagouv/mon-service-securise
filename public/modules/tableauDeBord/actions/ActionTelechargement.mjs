@@ -1,11 +1,15 @@
-class ActionTelechargement {
+import ActionAbstraite from './Action.mjs';
+
+class ActionTelechargement extends ActionAbstraite {
   constructor(tableauDesServices) {
-    this.tableauDesServices = tableauDesServices;
-    this.titre = 'Télécharger les PDFs';
-    this.texteSimple =
-      "Obtenir les documents utiles à la sécurisation et à l'homologation des services sélectionnés.";
-    this.texteMultiple =
-      "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.";
+    super(tableauDesServices);
+    this.appliqueContenu({
+      titre: 'Télécharger les PDFs',
+      texteSimple:
+        "Obtenir les documents utiles à la sécurisation et à l'homologation des services sélectionnés.",
+      texteMultiple:
+        "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.",
+    });
   }
 
   initialise() {

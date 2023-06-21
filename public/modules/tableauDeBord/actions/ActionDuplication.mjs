@@ -1,13 +1,16 @@
+import ActionAbstraite from './Action.mjs';
 import { declencheValidation } from '../../interactions/validation.mjs';
 
 const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
 
-class ActionDuplication {
+class ActionDuplication extends ActionAbstraite {
   constructor(tableauDesServices) {
-    this.tableauDesServices = tableauDesServices;
-    this.titre = 'Dupliquer';
-    this.texteSimple =
-      "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.";
+    super(tableauDesServices);
+    this.appliqueContenu({
+      titre: 'Dupliquer',
+      texteSimple:
+        "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.",
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this

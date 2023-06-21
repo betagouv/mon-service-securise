@@ -1,10 +1,13 @@
-class ActionSuppression {
+import ActionAbstraite from './Action.mjs';
+
+class ActionSuppression extends ActionAbstraite {
   constructor(tableauDesServices) {
-    this.tableauDesServices = tableauDesServices;
-    this.titre = 'Supprimer';
-    this.texteSimple = 'Effacer toutes les données du service sélectionné.';
-    this.texteMultiple =
-      'Effacer toutes les données des services sélectionnés.';
+    super(tableauDesServices);
+    this.appliqueContenu({
+      titre: 'Supprimer',
+      texteSimple: 'Effacer toutes les données du service sélectionné.',
+      texteMultiple: 'Effacer toutes les données des services sélectionnés.',
+    });
   }
 
   initialise() {
