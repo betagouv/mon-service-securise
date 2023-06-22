@@ -100,18 +100,16 @@ const creeDepot = (config = {}) => {
     return utilisateur(idUtilisateur);
   };
 
-  const metsAJourUtilisateur = (id, donnees) => {
+  const metsAJourUtilisateur = async (id, donnees) => {
     delete donnees.motDePasse;
-    return adaptateurPersistance.metsAJourUtilisateur(id, donnees).then(() =>
-      adaptateurJournalMSS
-        .consigneEvenement(
-          new EvenementProfilUtilisateurModifie({
-            idUtilisateur: id,
-            ...donnees,
-          }).toJSON()
-        )
-        .then(() => utilisateur(id))
+    await adaptateurPersistance.metsAJourUtilisateur(id, donnees);
+    await adaptateurJournalMSS.consigneEvenement(
+      new EvenementProfilUtilisateurModifie({
+        idUtilisateur: id,
+        ...donnees,
+      }).toJSON()
     );
+    return utilisateur(id);
   };
 
   const reinitialiseMotDePasse = (email) =>
