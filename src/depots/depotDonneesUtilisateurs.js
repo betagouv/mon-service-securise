@@ -62,10 +62,10 @@ const creeDepot = (config = {}) => {
     return utilisateur(id);
   };
 
-  const utilisateurAFinaliser = (idReset) =>
-    adaptateurPersistance
-      .utilisateurAvecIdReset(idReset)
-      .then((u) => (u ? new Utilisateur(u, { adaptateurJWT }) : undefined));
+  const utilisateurAFinaliser = async (idReset) => {
+    const u = await adaptateurPersistance.utilisateurAvecIdReset(idReset);
+    return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
+  };
 
   const utilisateurAuthentifie = (login, motDePasse) =>
     adaptateurPersistance.utilisateurAvecEmail(login).then((u) => {
