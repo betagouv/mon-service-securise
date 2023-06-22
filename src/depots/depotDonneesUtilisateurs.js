@@ -112,15 +112,16 @@ const creeDepot = (config = {}) => {
     return utilisateur(id);
   };
 
-  const reinitialiseMotDePasse = (email) =>
-    adaptateurPersistance.utilisateurAvecEmail(email).then((u) => {
-      if (!u) return undefined;
+  const reinitialiseMotDePasse = async (email) => {
+    const u = await adaptateurPersistance.utilisateurAvecEmail(email);
+    if (!u) return undefined;
 
-      const idResetMotDePasse = adaptateurUUID.genereUUID();
-      return adaptateurPersistance
-        .metsAJourUtilisateur(u.id, { idResetMotDePasse })
-        .then(() => utilisateur(u.id));
+    const idResetMotDePasse = adaptateurUUID.genereUUID();
+    await adaptateurPersistance.metsAJourUtilisateur(u.id, {
+      idResetMotDePasse,
     });
+    return utilisateur(u.id);
+  };
 
   const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) =>
     adaptateurPersistance
