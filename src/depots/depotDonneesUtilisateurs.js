@@ -21,10 +21,10 @@ const creeDepot = (config = {}) => {
     adaptateurUUID = adaptateurUUIDParDefaut,
   } = config;
 
-  const utilisateur = (identifiant) =>
-    adaptateurPersistance
-      .utilisateur(identifiant)
-      .then((u) => (u ? new Utilisateur(u, { adaptateurJWT }) : undefined));
+  const utilisateur = async (identifiant) => {
+    const u = await adaptateurPersistance.utilisateur(identifiant);
+    return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
+  };
 
   const nouvelUtilisateur = (donneesUtilisateur) =>
     new Promise((resolve, reject) => {
