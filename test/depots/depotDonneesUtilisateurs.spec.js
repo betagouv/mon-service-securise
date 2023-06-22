@@ -396,103 +396,85 @@ describe('Le dépôt de données des utilisateurs', () => {
         });
       });
 
-      it("lève une exception et n'enregistre pas l'utilisateur si l'email n'est pas renseigné", (done) => {
+      it("lève une exception et n'enregistre pas l'utilisateur si l'email n'est pas renseigné", async () => {
         let utilisateurCree = false;
-        adaptateurPersistance.ajouteUtilisateur = () =>
-          Promise.resolve((utilisateurCree = true));
-
-        depot
-          .nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont' })
-          .then(() =>
-            done(
-              "La création de l'utilisateur aurait dû lever une ErreurEmailManquant"
-            )
-          )
-          .catch((erreur) => {
-            expect(erreur).to.be.a(ErreurEmailManquant);
-            expect(utilisateurCree).to.be(false);
-            done();
-          })
-          .catch(done);
-      });
-
-      it('génère un UUID pour cet utilisateur', (done) => {
-        depot
-          .nouvelUtilisateur({
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-          })
-          .then((utilisateur) => {
-            expect(utilisateur.id).to.equal('1');
-            done();
-          })
-          .catch(done);
-      });
-
-      it('ajoute le nouvel utilisateur au dépôt', (done) => {
-        depot
-          .utilisateur('1')
-          .then((u) => expect(u).to.be(undefined))
-          .then(() =>
-            depot.nouvelUtilisateur({
-              prenom: 'Jean',
-              nom: 'Dupont',
-              email: 'jean.dupont@mail.fr',
-            })
-          )
-          .then(() => depot.utilisateur('1'))
-          .then((utilisateur) => {
-            expect(utilisateur).to.be.an(Utilisateur);
-            expect(utilisateur.idResetMotDePasse).to.equal('2');
-            expect(utilisateur.prenom).to.equal('Jean');
-            expect(utilisateur.nom).to.equal('Dupont');
-            expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
-            expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
-            done();
-          })
-          .catch(done);
-      });
-
-      it('utilise la date actuelle comme date de création du nouvel utilisateur', (done) => {
-        depot
-          .nouvelUtilisateur({
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-          })
-          .then((utilisateur) => {
-            expect(utilisateur).to.be.an(Utilisateur);
-            expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
-            expect(utilisateur.dateCreation).to.eql(
-              adaptateurHorloge.maintenant()
-            );
-            done();
-          })
-          .catch(done);
-      });
-
-      it("consigne des événements traçants l'inscription de l'utilisateur", (done) => {
-        const evenementConsignes = [];
-        adaptateurJournalMSS.consigneEvenement = (evenement) => {
-          evenementConsignes.push(evenement);
-          return Promise.resolve();
+        let erreurLevee;
+        adaptateurPersistance.ajouteUtilisateur = async () => {
+          utilisateurCree = true;
         };
 
-        depot
-          .nouvelUtilisateur({
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-          })
-          .then(() =>
-            expect(evenementConsignes.map((e) => e.type)).to.eql([
-              'NOUVEL_UTILISATEUR_INSCRIT',
-              'PROFIL_UTILISATEUR_MODIFIE',
-            ])
-          )
-          .then(() => done())
-          .catch(done);
+        try {
+          await depot.nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont' });
+          erreurLevee = false;
+        } catch (erreur) {
+          erreurLevee = true;
+          expect(erreur).to.be.a(ErreurEmailManquant);
+          expect(utilisateurCree).to.be(false);
+        } finally {
+          if (!erreurLevee)
+            expect().to.fail(
+              "La création de l'utilisateur aurait dû lever une ErreurEmailManquant"
+            );
+        }
+      });
+
+      it('génère un UUID pour cet utilisateur', async () => {
+        const utilisateur = await depot.nouvelUtilisateur({
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+        });
+
+        expect(utilisateur.id).to.equal('1');
+      });
+
+      it('ajoute le nouvel utilisateur au dépôt', async () => {
+        const u = await depot.utilisateur('1');
+        expect(u).to.be(undefined);
+
+        await depot.nouvelUtilisateur({
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+        });
+
+        const utilisateur = await depot.utilisateur('1');
+        expect(utilisateur).to.be.an(Utilisateur);
+        expect(utilisateur.idResetMotDePasse).to.equal('2');
+        expect(utilisateur.prenom).to.equal('Jean');
+        expect(utilisateur.nom).to.equal('Dupont');
+        expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
+        expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
+      });
+
+      it('utilise la date actuelle comme date de création du nouvel utilisateur', async () => {
+        const utilisateur = await depot.nouvelUtilisateur({
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+        });
+
+        expect(utilisateur).to.be.an(Utilisateur);
+        expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
+        expect(utilisateur.dateCreation).to.eql(adaptateurHorloge.maintenant());
+      });
+
+      it("consigne des événements traçants l'inscription de l'utilisateur", async () => {
+        const evenementConsignes = [];
+        adaptateurJournalMSS.consigneEvenement = async (evenement) => {
+          evenementConsignes.push(evenement);
+        };
+
+        await depot.nouvelUtilisateur({
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+        });
+
+        expect(evenementConsignes.map((e) => e.type)).to.eql([
+          'NOUVEL_UTILISATEUR_INSCRIT',
+          'PROFIL_UTILISATEUR_MODIFIE',
+        ]);
       });
     });
 

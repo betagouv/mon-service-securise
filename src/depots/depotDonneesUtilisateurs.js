@@ -26,51 +26,41 @@ const creeDepot = (config = {}) => {
     return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
   };
 
-  const nouvelUtilisateur = (donneesUtilisateur) =>
-    new Promise((resolve, reject) => {
-      const { email } = donneesUtilisateur;
-      if (!email)
-        throw new ErreurEmailManquant('Le champ email doit être renseigné');
+  const nouvelUtilisateur = async (donneesUtilisateur) => {
+    const { email } = donneesUtilisateur;
+    if (!email)
+      throw new ErreurEmailManquant('Le champ email doit être renseigné');
 
-      adaptateurPersistance.utilisateurAvecEmail(email).then((u) => {
-        if (u) {
-          return reject(
-            new ErreurUtilisateurExistant(
-              'Utilisateur déjà existant pour cette adresse email',
-              u.id
-            )
-          );
-        }
+    const u = await adaptateurPersistance.utilisateurAvecEmail(email);
+    if (u)
+      throw new ErreurUtilisateurExistant(
+        'Utilisateur déjà existant pour cette adresse email',
+        u.id
+      );
 
-        const id = adaptateurUUID.genereUUID();
-        donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
-        return adaptateurChiffrement
-          .hacheBCrypt(adaptateurUUID.genereUUID())
-          .then((hash) => {
-            donneesUtilisateur.motDePasse = hash;
+    const id = adaptateurUUID.genereUUID();
+    donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
+    donneesUtilisateur.motDePasse = await adaptateurChiffrement.hacheBCrypt(
+      adaptateurUUID.genereUUID()
+    );
 
-            adaptateurPersistance
-              .ajouteUtilisateur(id, donneesUtilisateur)
-              .then(() =>
-                adaptateurJournalMSS.consigneEvenement(
-                  new EvenementNouvelUtilisateurInscrit({
-                    idUtilisateur: id,
-                  }).toJSON()
-                )
-              )
-              .then(() =>
-                adaptateurJournalMSS
-                  .consigneEvenement(
-                    new EvenementProfilUtilisateurModifie({
-                      idUtilisateur: id,
-                      ...donneesUtilisateur,
-                    }).toJSON()
-                  )
-                  .then(() => resolve(utilisateur(id)))
-              );
-          });
-      });
-    });
+    await adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur);
+
+    await adaptateurJournalMSS.consigneEvenement(
+      new EvenementNouvelUtilisateurInscrit({
+        idUtilisateur: id,
+      }).toJSON()
+    );
+
+    await adaptateurJournalMSS.consigneEvenement(
+      new EvenementProfilUtilisateurModifie({
+        idUtilisateur: id,
+        ...donneesUtilisateur,
+      }).toJSON()
+    );
+
+    return utilisateur(id);
+  };
 
   const utilisateurAFinaliser = (idReset) =>
     adaptateurPersistance
