@@ -92,15 +92,13 @@ const creeDepot = (config = {}) => {
 
   const { utilisateurAvecEmail } = adaptateurPersistance;
 
-  const metsAJourMotDePasse = (idUtilisateur, motDePasse) =>
-    adaptateurChiffrement
-      .hacheBCrypt(motDePasse)
-      .then((hash) =>
-        adaptateurPersistance.metsAJourUtilisateur(idUtilisateur, {
-          motDePasse: hash,
-        })
-      )
-      .then(() => utilisateur(idUtilisateur));
+  const metsAJourMotDePasse = async (idUtilisateur, motDePasse) => {
+    const hash = await adaptateurChiffrement.hacheBCrypt(motDePasse);
+    await adaptateurPersistance.metsAJourUtilisateur(idUtilisateur, {
+      motDePasse: hash,
+    });
+    return utilisateur(idUtilisateur);
+  };
 
   const metsAJourUtilisateur = (id, donnees) => {
     delete donnees.motDePasse;

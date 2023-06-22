@@ -62,41 +62,37 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
   });
 
-  it("met à jour le mot de passe d'un utilisateur", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          {
-            id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-            motDePasse: 'mdp_origine-chiffré',
-          },
-        ],
-      }
-    );
+  it("met à jour le mot de passe d'un utilisateur", async () => {
     const depot = DepotDonneesUtilisateurs.creeDepot({
       adaptateurChiffrement,
       adaptateurJWT,
-      adaptateurPersistance,
+      adaptateurPersistance: unePersistanceMemoire()
+        .ajouteUnUtilisateur({
+          id: '123',
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_origine-chiffré',
+        })
+        .construis(),
     });
 
-    depot
-      .utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
-      .then((utilisateur) => expect(typeof utilisateur).to.be('undefined'))
-      .then(() => depot.metsAJourMotDePasse('123', 'mdp_12345'))
-      .then((utilisateur) => {
-        expect(utilisateur).to.be.an(Utilisateur);
-        expect(utilisateur.id).to.equal('123');
-        expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
-      })
-      .then(() =>
-        depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
-      )
-      .then((utilisateur) => expect(utilisateur.id).to.equal('123'))
-      .then(() => done())
-      .catch(done);
+    const avant = await depot.utilisateurAuthentifie(
+      'jean.dupont@mail.fr',
+      'mdp_12345'
+    );
+    expect(typeof avant).to.be('undefined');
+
+    const misAJour = await depot.metsAJourMotDePasse('123', 'mdp_12345');
+    expect(misAJour).to.be.an(Utilisateur);
+    expect(misAJour.id).to.equal('123');
+    expect(misAJour.adaptateurJWT).to.equal(adaptateurJWT);
+
+    const apres = await depot.utilisateurAuthentifie(
+      'jean.dupont@mail.fr',
+      'mdp_12345'
+    );
+    expect(apres.id).to.equal('123');
   });
 
   describe('sur demande de mise à jour des informations du profil utilisateur', () => {
