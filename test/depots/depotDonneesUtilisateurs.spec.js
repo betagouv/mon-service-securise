@@ -1,7 +1,9 @@
 const expect = require('expect.js');
 
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-
+const {
+  unePersistanceMemoire,
+} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
 const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
@@ -334,35 +336,26 @@ describe('Le dépôt de données des utilisateurs', () => {
       .catch(done);
   });
 
-  it("retourne l'utilisateur associé à un identifiant reset de mot de passe", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          {
-            id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-            idResetMotDePasse: '999',
-          },
-        ],
-      }
-    );
+  it("retourne l'utilisateur associé à un identifiant reset de mot de passe", async () => {
     const depot = DepotDonneesUtilisateurs.creeDepot({
       adaptateurChiffrement,
       adaptateurJWT,
-      adaptateurPersistance,
+      adaptateurPersistance: unePersistanceMemoire()
+        .ajouteUnUtilisateur({
+          id: '123',
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+          idResetMotDePasse: '999',
+        })
+        .construis(),
     });
 
-    depot
-      .utilisateurAFinaliser('999')
-      .then((utilisateur) => {
-        expect(utilisateur).to.be.an(Utilisateur);
-        expect(utilisateur.id).to.equal('123');
-        expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
-        done();
-      })
-      .catch(done);
+    const utilisateur = await depot.utilisateurAFinaliser('999');
+
+    expect(utilisateur).to.be.an(Utilisateur);
+    expect(utilisateur.id).to.equal('123');
+    expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
   });
 
   describe("sur réception d'une demande d'enregistrement d'un nouvel utilisateur", () => {
