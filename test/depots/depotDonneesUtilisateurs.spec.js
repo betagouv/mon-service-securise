@@ -25,47 +25,41 @@ describe('Le dépôt de données des utilisateurs', () => {
     adaptateurChiffrement = fauxAdaptateurChiffrement();
   });
 
-  it("retourne l'utilisateur authentifié", (done) => {
+  it("retourne l'utilisateur authentifié", async () => {
     adaptateurChiffrement = {
-      hacheBCrypt: (chaine) => {
+      hacheBCrypt: async (chaine) => {
         expect(chaine).to.equal('mdp_12345');
-        return Promise.resolve('12345-chiffré');
+        return '12345-chiffré';
       },
-      compareBCrypt: (chaine1, chaine2) => {
+      compareBCrypt: async (chaine1, chaine2) => {
         expect(chaine1).to.equal('mdp_12345');
         expect(chaine2).to.equal('12345-chiffré');
-        return Promise.resolve(true);
+        return true;
       },
     };
 
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          {
-            id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-            motDePasse: '12345-chiffré',
-          },
-        ],
-      }
-    );
     const depot = DepotDonneesUtilisateurs.creeDepot({
       adaptateurChiffrement,
       adaptateurJWT,
-      adaptateurPersistance,
+      adaptateurPersistance: unePersistanceMemoire()
+        .ajouteUnUtilisateur({
+          id: '123',
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+          motDePasse: '12345-chiffré',
+        })
+        .construis(),
     });
 
-    depot
-      .utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
-      .then((utilisateur) => {
-        expect(utilisateur).to.be.an(Utilisateur);
-        expect(utilisateur.id).to.equal('123');
-        expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
-        done();
-      })
-      .catch(done);
+    const utilisateur = await depot.utilisateurAuthentifie(
+      'jean.dupont@mail.fr',
+      'mdp_12345'
+    );
+
+    expect(utilisateur).to.be.an(Utilisateur);
+    expect(utilisateur.id).to.equal('123');
+    expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
   });
 
   it("met à jour le mot de passe d'un utilisateur", (done) => {

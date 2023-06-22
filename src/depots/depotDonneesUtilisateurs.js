@@ -67,21 +67,23 @@ const creeDepot = (config = {}) => {
     return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
   };
 
-  const utilisateurAuthentifie = (login, motDePasse) =>
-    adaptateurPersistance.utilisateurAvecEmail(login).then((u) => {
-      const motDePasseStocke = u && u.motDePasse;
-      const echecAuthentification = undefined;
+  const utilisateurAuthentifie = async (login, motDePasse) => {
+    const u = await adaptateurPersistance.utilisateurAvecEmail(login);
 
-      if (!motDePasseStocke) return Promise.resolve(echecAuthentification);
+    const motDePasseStocke = u && u.motDePasse;
+    const echecAuthentification = undefined;
 
-      return adaptateurChiffrement
-        .compareBCrypt(motDePasse, motDePasseStocke)
-        .then((authentificationReussie) =>
-          authentificationReussie
-            ? new Utilisateur(u, { adaptateurJWT })
-            : echecAuthentification
-        );
-    });
+    if (!motDePasseStocke) return echecAuthentification;
+
+    const authentificationReussie = await adaptateurChiffrement.compareBCrypt(
+      motDePasse,
+      motDePasseStocke
+    );
+
+    return authentificationReussie
+      ? new Utilisateur(u, { adaptateurJWT })
+      : echecAuthentification;
+  };
 
   const utilisateurExiste = (id) => utilisateur(id).then((u) => !!u);
 
