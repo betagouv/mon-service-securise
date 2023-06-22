@@ -101,69 +101,61 @@ describe('Le dépôt de données des utilisateurs', () => {
 
     beforeEach(() => {
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            {
-              id: '123',
-              prenom: 'Jean',
-              nom: 'Dupont',
-              email: 'jean.dupont@mail.fr',
-            },
-          ],
-        });
-
       depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurChiffrement,
         adaptateurJournalMSS,
-        adaptateurPersistance,
+        adaptateurPersistance: unePersistanceMemoire()
+          .ajouteUnUtilisateur({
+            id: '123',
+            prenom: 'Jean',
+            nom: 'Dupont',
+            email: 'jean.dupont@mail.fr',
+          })
+          .construis(),
       });
     });
 
-    it('met les informations à jour', (done) => {
-      depot
-        .metsAJourUtilisateur('123', { prenom: 'Jérôme', nom: 'Dubois' })
-        .then(() => depot.utilisateur('123'))
-        .then((u) => {
-          expect(u.prenom).to.equal('Jérôme');
-          expect(u.nom).to.equal('Dubois');
-          done();
-        })
-        .catch(done);
+    it('met les informations à jour', async () => {
+      await depot.metsAJourUtilisateur('123', {
+        prenom: 'Jérôme',
+        nom: 'Dubois',
+      });
+      const u = await depot.utilisateur('123');
+      expect(u.prenom).to.equal('Jérôme');
+      expect(u.nom).to.equal('Dubois');
     });
 
-    it('ignore les demandes de changement de mot de passe', (done) => {
-      depot
-        .metsAJourMotDePasse('123', 'mdp_12345')
-        .then(() =>
-          depot.metsAJourUtilisateur('123', {
-            nom: 'Dubois',
-            motDePasse: 'non pris en compte',
-          })
-        )
-        .then(() =>
-          depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
-        )
-        .then((u) => {
-          if (!u)
-            throw new Error(
-              "Le dépôt aurait dû authentifier l'utilisateur avec le mot de passe inchangé"
-            );
+    it('ignore les demandes de changement de mot de passe', async () => {
+      await depot.metsAJourMotDePasse('123', 'mdp_12345');
+      await depot.metsAJourUtilisateur('123', {
+        nom: 'Dubois',
+        motDePasse: 'non pris en compte',
+      });
 
-          expect(u.id).to.equal('123');
-          done();
-        })
-        .catch(done);
+      const u = await depot.utilisateurAuthentifie(
+        'jean.dupont@mail.fr',
+        'mdp_12345'
+      );
+
+      if (!u)
+        throw new Error(
+          "Le dépôt aurait dû authentifier l'utilisateur avec le mot de passe inchangé"
+        );
+      expect(u.id).to.equal('123');
     });
 
-    it('consigne un événement de profil utilisateur modifié', (done) => {
-      adaptateurJournalMSS.consigneEvenement = (evenenement) => {
-        expect(evenenement.type).to.equal('PROFIL_UTILISATEUR_MODIFIE');
-        done();
-        return Promise.resolve();
+    it('consigne un événement de profil utilisateur modifié', async () => {
+      let evenementRecu;
+      adaptateurJournalMSS.consigneEvenement = async (evenenement) => {
+        evenementRecu = evenenement;
       };
 
-      depot.metsAJourUtilisateur('123', { prenom: 'Jérôme', nom: 'Dubois' });
+      await depot.metsAJourUtilisateur('123', {
+        prenom: 'Jérôme',
+        nom: 'Dubois',
+      });
+
+      expect(evenementRecu.type).to.equal('PROFIL_UTILISATEUR_MODIFIE');
     });
   });
 
