@@ -203,33 +203,25 @@ describe('Le dépôt de données des utilisateurs', () => {
       .catch(done);
   });
 
-  it('sait si un utilisateur existe', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          {
-            id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-            motDePasse: 'XXX',
-          },
-        ],
-      }
-    );
+  it('sait si un utilisateur existe', async () => {
     const depot = DepotDonneesUtilisateurs.creeDepot({
       adaptateurChiffrement,
       adaptateurJWT,
-      adaptateurPersistance,
+      adaptateurPersistance: unePersistanceMemoire()
+        .ajouteUnUtilisateur({
+          id: '123',
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+          motDePasse: 'XXX',
+        })
+        .construis(),
     });
 
-    depot
-      .utilisateurExiste('123')
-      .then((utilisateurExiste) => expect(utilisateurExiste).to.be(true))
-      .then(() => depot.utilisateurExiste('999'))
-      .then((utilisateurExiste) => expect(utilisateurExiste).to.be(false))
-      .then(() => done())
-      .catch(done);
+    const connait123 = await depot.utilisateurExiste('123');
+    expect(connait123).to.be(true);
+    const connait999 = await depot.utilisateurExiste('999');
+    expect(connait999).to.be(false);
   });
 
   it("retourne l'utilisateur associé à un identifiant donné", async () => {

@@ -85,7 +85,10 @@ const creeDepot = (config = {}) => {
       : echecAuthentification;
   };
 
-  const utilisateurExiste = (id) => utilisateur(id).then((u) => !!u);
+  const utilisateurExiste = async (id) => {
+    const u = await utilisateur(id);
+    return !!u;
+  };
 
   const { utilisateurAvecEmail } = adaptateurPersistance;
 
