@@ -97,6 +97,7 @@ describe('Une homologation', () => {
         departementEntitePublique: '',
         profilEstComplet: true,
         infolettreAcceptee: false,
+        etatActivation: true,
       },
       contributeurs: [
         {
@@ -113,6 +114,7 @@ describe('Une homologation', () => {
           departementEntitePublique: '',
           profilEstComplet: true,
           infolettreAcceptee: false,
+          etatActivation: true,
         },
       ],
     });

@@ -102,6 +102,25 @@ describe('Un utilisateur', () => {
       expect(toutEnMemeTemps.posteDetaille()).to.eql('RSSI, DPO et Maire');
     });
   });
+
+  describe("sur demande de son etat d'activation", () => {
+    it("retourne 'true' s'il n'a pas d'id de reinitialisation de mot de passe", () => {
+      const utilisateur = new Utilisateur({
+        idResetMotDePasse: '',
+        email: 'jean.dupont@mail.fr',
+      });
+      expect(utilisateur.estActive()).to.be(true);
+    });
+
+    it("retourne 'false' s'il a un id de reinitialisation de mot de passe", () => {
+      const utilisateur = new Utilisateur({
+        idResetMotDePasse: 'Un ID',
+        email: 'jean.dupont@mail.fr',
+      });
+      expect(utilisateur.estActive()).to.be(false);
+    });
+  });
+
   it('sait se convertir en JSON', () => {
     const utilisateur = new Utilisateur({
       id: '123',
@@ -132,6 +151,7 @@ describe('Un utilisateur', () => {
       departementEntitePublique: '75',
       profilEstComplet: true,
       infolettreAcceptee: true,
+      etatActivation: true,
     });
   });
 

@@ -125,6 +125,10 @@ class Utilisateur extends Base {
     return !!this.delegueProtectionDonnees;
   }
 
+  estActive() {
+    return !this.idResetMotDePasse;
+  }
+
   genereToken(callback) {
     return this.adaptateurJWT.genereToken(this.id, this.cguAcceptees, callback);
   }
@@ -171,6 +175,7 @@ class Utilisateur extends Base {
       departementEntitePublique: this.departementEntitePublique || '',
       profilEstComplet: this.profilEstComplet(),
       infolettreAcceptee: this.accepteInfolettre(),
+      etatActivation: this.estActive(),
     };
   }
 }
