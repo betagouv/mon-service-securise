@@ -236,7 +236,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       .catch(done);
   });
 
-  it("retourne l'utilisateur associé à un identifiant donné", (done) => {
+  it("retourne l'utilisateur associé à un identifiant donné", async () => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
         utilisateurs: [
@@ -256,15 +256,11 @@ describe('Le dépôt de données des utilisateurs', () => {
       adaptateurPersistance,
     });
 
-    depot
-      .utilisateur('123')
-      .then((utilisateur) => {
-        expect(utilisateur).to.be.an(Utilisateur);
-        expect(utilisateur.id).to.equal('123');
-        expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
-        done();
-      })
-      .catch(done);
+    const utilisateur = await depot.utilisateur('123');
+
+    expect(utilisateur).to.be.an(Utilisateur);
+    expect(utilisateur.id).to.equal('123');
+    expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
   });
 
   it('retourne tous les utilisateurs enregistrés', (done) => {
