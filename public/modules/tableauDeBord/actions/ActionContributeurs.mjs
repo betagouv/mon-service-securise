@@ -6,7 +6,7 @@ const metEnFormeMenuFlotant = ({ peutSupprimer, service, utilisateur }) => {
         data-id-service="${service.id}" 
         data-id-contributeur="${utilisateur.id}"
         data-nom-service="${service.nomService}"
-        data-nom-contributeur="${utilisateur.nomContributeur}">
+        data-nom-contributeur="${utilisateur.prenomNom}">
           Retirer du service
       </li>`;
   return `<div class="menu-flotant"><ul>${actions}</ul></div>`;

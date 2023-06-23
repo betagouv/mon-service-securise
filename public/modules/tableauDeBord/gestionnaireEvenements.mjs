@@ -12,16 +12,12 @@ const gestionnaireEvenements = {
 
     const fermeMenusContextuelsSiClicEnDehors = (e) => {
       const $elementClique = $(e.target);
-      if (
-        !$elementClique.hasClass('entete-contributeurs') &&
-        !$elementClique.parents('.entete-contributeurs').length > 0
-      )
-        gestionnaireEvenements.triContributeurs.ferme();
-
-      if (
-        !$elementClique.hasClass('declencheur-menu-flottant') &&
-        !$elementClique.parents('.declencheur-menu-flottant').length > 0
-      ) {
+      const pasUnDeclencheur = !$elementClique.hasClass(
+        'declencheur-menu-flottant'
+      );
+      const pasUnElementDuMenu =
+        !$elementClique.parents('.declencheur-menu-flottant').length > 0;
+      if (pasUnDeclencheur && pasUnElementDuMenu) {
         gestionnaireEvenements.fermeMenuFlottant();
       }
     };
@@ -131,7 +127,6 @@ const gestionnaireEvenements = {
     },
     bascule: () =>
       $('.entete-contributeurs .menu-flotant').toggleClass('invisible'),
-    ferme: () => $('.entete-contributeurs .menu-flotant').addClass('invisible'),
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
