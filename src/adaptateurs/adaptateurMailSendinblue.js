@@ -21,7 +21,9 @@ const basculeInfolettre = (destinataire, etat) =>
       enteteJSON
     )
     .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e);
+      fabriqueAdaptateurGestionErreur().logueErreur(e, {
+        'Erreur renvoyée par API Brevo': e.response.data,
+      });
       return Promise.reject(e);
     });
 
@@ -45,7 +47,9 @@ const creeContact = (destinataire, prenom, nom, bloqueEmails) =>
       if (e.response.data.message === 'Contact already exist')
         return Promise.resolve();
 
-      fabriqueAdaptateurGestionErreur().logueErreur(e);
+      fabriqueAdaptateurGestionErreur().logueErreur(e, {
+        'Erreur renvoyée par API Brevo': e.response.data,
+      });
       return Promise.reject(e);
     });
 
@@ -61,7 +65,9 @@ const envoieEmail = (destinataire, idTemplate, params) =>
       enteteJSON
     )
     .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e);
+      fabriqueAdaptateurGestionErreur().logueErreur(e, {
+        'Erreur renvoyée par SMTP Brevo': e.response.data,
+      });
       return Promise.reject(e);
     });
 
