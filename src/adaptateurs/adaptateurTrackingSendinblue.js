@@ -24,7 +24,9 @@ const envoieTracking = (destinataire, typeEvenement, donneesEvenement = {}) =>
       enteteJSON
     )
     .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e);
+      fabriqueAdaptateurGestionErreur().logueErreur(e, {
+        'Erreur renvoyée par API Tracking Brevo': e.response.data,
+      });
       // On veut ici délibérement ignorer l'erreur car l'echec de tracking ne devrait pas entrainer une dégradation de l'expérience utilisateur
       return Promise.resolve();
     });
