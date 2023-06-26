@@ -61,12 +61,17 @@ class ActionContributeurs extends ActionAbstraite {
     super.initialise();
     const [idService] = args;
     const service = this.tableauDesServices.donneesDuService(idService);
-    const $listeContributeurs = $('#liste-contributeurs');
+    const $listeContributeursActifs = $('.contributeurs-actifs');
+    const $listeContributeursEnAttente = $('.contributeurs-attente-activation');
 
-    $listeContributeurs.empty();
-    $listeContributeurs.append(metEnFormeProprietaire(service.createur));
+    $listeContributeursActifs.empty();
+    $listeContributeursEnAttente.empty();
+    $listeContributeursActifs.append(metEnFormeProprietaire(service.createur));
     service.contributeurs.forEach((contributeur) => {
-      $listeContributeurs.append(
+      const $conteneur = contributeur.cguAcceptees
+        ? $listeContributeursActifs
+        : $listeContributeursEnAttente;
+      $conteneur.append(
         metEnFormeContributeur(
           service.permissions.suppressionContributeur,
           contributeur,
