@@ -67,6 +67,11 @@ class ActionContributeurs extends ActionAbstraite {
     $listeContributeursActifs.empty();
     $listeContributeursEnAttente.empty();
     $listeContributeursActifs.append(metEnFormeProprietaire(service.createur));
+
+    $('.titre-contributeurs-attente-activation').toggleClass(
+      'invisible',
+      service.contributeurs.length === 0
+    );
     service.contributeurs.forEach((contributeur) => {
       const $conteneur = contributeur.cguAcceptees
         ? $listeContributeursActifs
