@@ -639,7 +639,7 @@ label[for='recherche-service'] {
 
 .suivi-services .tiroir {
   height: 100%;
-  min-width: 32em;
+  min-width: 33em;
   position: absolute;
   left: 100vw;
   top: 0;
@@ -755,7 +755,7 @@ label[for='recherche-service'] {
 }
 
 #contenu-invitation input {
-  width: 28em;
+  width: 31em;
 }
 
 .contenu-tiroir .conteneur-actions {
@@ -882,12 +882,12 @@ label[for='recherche-service'] {
   height: 2.8em;
 }
 
-#contenu-contributeurs #liste-contributeurs {
+#contenu-contributeurs .liste-contributeurs {
   list-style: none;
   padding-left: 0;
 }
 
-#contenu-contributeurs #liste-contributeurs li {
+#contenu-contributeurs .liste-contributeurs li {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   column-gap: 1em;
@@ -1073,12 +1073,12 @@ label[for='recherche-service'] {
   border-radius: 5px;
 }
 
-#contenu-contributeurs #liste-contributeurs .menu-flotant ul {
+#contenu-contributeurs .liste-contributeurs .menu-flotant ul {
   padding-left: 0;
   padding: 0.2em;
 }
 
-#contenu-contributeurs #liste-contributeurs .menu-flotant li {
+#contenu-contributeurs .liste-contributeurs .menu-flotant li {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -1090,13 +1090,38 @@ label[for='recherche-service'] {
   border-radius: 4px;
 }
 
-#contenu-contributeurs #liste-contributeurs .menu-flotant li:hover {
+#contenu-contributeurs .liste-contributeurs .menu-flotant li:hover {
   background: #f1f5f9;
   color: #0079d0;
 }
 
 #contenu-contributeurs .menu-flotant.invisible {
   display: none;
+}
+
+#contenu-contributeurs .titre-liste {
+  margin: 0;
+  font-size: 1em;
+}
+
+#contenu-contributeurs .titre-liste::before {
+  display: inline-block;
+  content: '';
+  width: 1.4em;
+  height: 1.4em;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-right: 0.3em;
+  transform: translateY(5px);
+}
+
+#contenu-contributeurs .titre-contributeurs-actifs::before {
+  background-image: url('/statique/assets/images/icone_contributeurs_actifs.svg');
+}
+
+#contenu-contributeurs .titre-contributeurs-attente-activation::before {
+  background-image: url('/statique/assets/images/icone_contributeurs_attente_activation.svg');
 }
 
 .invisible {
