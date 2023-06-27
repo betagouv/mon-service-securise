@@ -751,4 +751,29 @@ describe('Une homologation', () => {
       expect(duplicata.dossiers).to.be(undefined);
     });
   });
+
+  describe('sur demande de finalisation du dossier courant', () => {
+    it('délègue aux Dossiers la responsabilité', () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const descriptionService = uneDescriptionValide(referentiel)
+        .construis()
+        .toJSON();
+      let appelDelegue = false;
+
+      const homologation = new Homologation(
+        {
+          id: '123',
+          descriptionService,
+        },
+        referentiel
+      );
+      homologation.dossiers.finaliseDossierCourant = () => {
+        appelDelegue = true;
+      };
+
+      homologation.finaliseDossierCourant();
+
+      expect(appelDelegue).to.be(true);
+    });
+  });
 });

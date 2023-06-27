@@ -161,6 +161,10 @@ class Homologation {
     return this.rolesResponsabilites.expertCybersecurite;
   }
 
+  finaliseDossierCourant() {
+    this.dossiers.finaliseDossierCourant();
+  }
+
   fonctionAutoriteHomologation() {
     return this.rolesResponsabilites.fonctionAutoriteHomologation;
   }
