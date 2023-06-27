@@ -65,24 +65,38 @@ describe('Les dossiers liés à un service', () => {
   );
 
   describe('concernant le dossier actif', () => {
-    ils(
-      "retournent le dossier actif dont la date de début d'homologation est la plus récente",
-      () => {
-        const dossiers = new Dossiers(
-          {
-            dossiers: [
-              unDossierComplet('actif-depuis-10-jours').quiEstActif(10).donnees,
-              unDossierComplet('actif-depuis-hier').quiEstActif(1).donnees,
-            ],
-          },
-          referentiel,
-          adaptateurHorloge
-        );
+    ils('retournent le dossier actif', () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [unDossierComplet('actif').quiEstActif().donnees],
+        },
+        referentiel,
+        adaptateurHorloge
+      );
 
-        const dossierActif = dossiers.dossierActif();
-        expect(dossierActif.id).to.equal('actif-depuis-hier');
-      }
-    );
+      const dossierActif = dossiers.dossierActif();
+      expect(dossierActif.id).to.equal('actif');
+    });
+
+    ils("jettent une erreur s'il y a plusieurs dossiers actifs", () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossierComplet('actif').quiEstActif().donnees,
+            unDossierComplet('actif-second').quiEstActif().donnees,
+          ],
+        },
+        referentiel,
+        adaptateurHorloge
+      );
+
+      expect(() => dossiers.dossierActif()).to.throwError((e) => {
+        expect(e).to.be.an(ErreurDossiersInvalides);
+        expect(e.message).to.equal(
+          "Les dossiers ne peuvent pas avoir plus d'un dossier actif"
+        );
+      });
+    });
 
     ils(
       "retournent une valeur indéfinie si aucun dossier actif n'est trouvé",
