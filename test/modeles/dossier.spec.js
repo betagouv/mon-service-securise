@@ -268,6 +268,15 @@ describe("Un dossier d'homologation", () => {
       expect(dossier.estActif()).to.equal(false);
     });
 
+    it('retourne `false` si le dossier est archivé', () => {
+      const dossier = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstActif()
+        .quiEstArchive()
+        .construit();
+      expect(dossier.estActif()).to.equal(false);
+    });
+
     it("retourne `true` si la date du jour est la date d'homologation", () => {
       const aujourdhui = new Date();
       const adaptateurHorloge = { maintenant: () => aujourdhui };

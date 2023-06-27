@@ -152,7 +152,11 @@ class Dossier extends InformationsHomologation {
   }
 
   estActif() {
-    return this.finalise && this.decision.periodeHomologationEstEnCours();
+    return (
+      this.finalise &&
+      !this.archive &&
+      this.decision.periodeHomologationEstEnCours()
+    );
   }
 
   etapeCourante() {
