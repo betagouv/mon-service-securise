@@ -323,11 +323,11 @@ const creeDepot = (config = {}) => {
 
   const toutesHomologations = () => p.lis.toutes();
 
-  const enregistreDossierCourant = (idHomologation, dossier) =>
+  const enregistreDossier = (idHomologation, dossier) =>
     ajouteAItemsDansHomologation('dossiers', idHomologation, dossier);
 
   const finaliseDossier = (idHomologation, dossier) =>
-    enregistreDossierCourant(idHomologation, dossier).then(() => {
+    enregistreDossier(idHomologation, dossier).then(() => {
       const evenement = new EvenementNouvelleHomologationCreee({
         idService: idHomologation,
         dateHomologation: dossier.decision.dateHomologation,
@@ -479,7 +479,7 @@ const creeDepot = (config = {}) => {
     homologation,
     homologationExiste,
     homologations,
-    enregistreDossierCourant,
+    enregistreDossier,
     nouvelleHomologation,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
