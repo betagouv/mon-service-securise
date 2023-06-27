@@ -28,13 +28,11 @@ class Dossiers extends ElementsConstructibles {
   }
 
   dossierActif() {
-    return this.finalises()
-      .filter((d) => d.estActif())
-      .sort(
-        (a, b) =>
-          new Date(b.decision.dateHomologation) -
-          new Date(a.decision.dateHomologation)
-      )[0];
+    if (this.items.filter((dossier) => dossier.estActif()).length > 1)
+      throw new ErreurDossiersInvalides(
+        "Les dossiers ne peuvent pas avoir plus d'un dossier actif"
+      );
+    return this.items.find((dossier) => dossier.estActif());
   }
 
   finaliseDossierCourant() {
