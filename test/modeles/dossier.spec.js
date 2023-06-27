@@ -7,6 +7,7 @@ const Referentiel = require('../../src/referentiel');
 const {
   ErreurDossierDejaFinalise,
   ErreurDossierNonFinalisable,
+  ErreurDossierNonFinalise,
   ErreurDossierEtapeInconnue,
 } = require('../../src/erreurs');
 
@@ -39,6 +40,7 @@ describe("Un dossier d'homologation", () => {
         avecDocuments: true,
         documents: ['unDocument'],
         finalise: true,
+        archive: true,
       },
       referentiel
     );
@@ -59,6 +61,7 @@ describe("Un dossier d'homologation", () => {
       avecDocuments: true,
       documents: ['unDocument'],
       finalise: true,
+      archive: true,
     });
   });
 
@@ -435,6 +438,29 @@ describe("Un dossier d'homologation", () => {
         .construit();
 
       expect(dossierActif.estExpire()).to.be(false);
+    });
+  });
+
+  describe("sur demande d'archivage", () => {
+    it("archive le dossier s'il est finalisé", () => {
+      const dossierFinalise = unDossier(referentiel)
+        .quiEstComplet()
+        .construit();
+
+      expect(dossierFinalise.archive).to.be(undefined);
+      dossierFinalise.enregistreArchivage();
+      expect(dossierFinalise.archive).to.be(true);
+    });
+
+    it("jette une erreur s'il n'est pas finalisé", () => {
+      const dossierFinalise = unDossier(referentiel)
+        .quiEstNonFinalise()
+        .construit();
+
+      expect(() => dossierFinalise.enregistreArchivage()).to.throwError((e) => {
+        expect(e).to.be.an(ErreurDossierNonFinalise);
+        expect(dossierFinalise.archive).to.be(undefined);
+      });
     });
   });
 });
