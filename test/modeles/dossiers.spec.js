@@ -3,7 +3,10 @@ const expect = require('expect.js');
 const {
   ConstructeurDossierFantaisie,
 } = require('../constructeurs/constructeurDossier');
-const { ErreurDossiersInvalides } = require('../../src/erreurs');
+const {
+  ErreurDossiersInvalides,
+  ErreurDossierNonFinalisable,
+} = require('../../src/erreurs');
 const Dossier = require('../../src/modeles/dossier');
 const Dossiers = require('../../src/modeles/dossiers');
 const Referentiel = require('../../src/referentiel');
@@ -224,5 +227,44 @@ describe('Les dossiers liés à un service', () => {
         );
       }
     );
+  });
+
+  describe('sur demande de finalisation du dossier courant', () => {
+    it('finalise le dossier courant et archive les autres', () => {
+      const deuxDossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossierComplet('dossier à archiver').donnees,
+            unDossierComplet('dossier à finaliser').quiEstNonFinalise().donnees,
+          ],
+        },
+        referentiel
+      );
+
+      deuxDossiers.finaliseDossierCourant();
+
+      const [dossierAArchiver, dossierAFinaliser] = deuxDossiers.items;
+      expect(dossierAArchiver.id).to.equal('dossier à archiver');
+      expect(dossierAArchiver.archive).to.be(true);
+      expect(dossierAFinaliser.id).to.equal('dossier à finaliser');
+      expect(dossierAFinaliser.archive).to.be(undefined);
+      expect(dossierAFinaliser.finalise).to.be(true);
+    });
+
+    it("jette une erreur si aucun dossier courant n'existe", () => {
+      const sansDossierCourant = new Dossiers(
+        {
+          dossiers: [unDossierComplet().donnees],
+        },
+        referentiel
+      );
+
+      expect(() => sansDossierCourant.finaliseDossierCourant()).to.throwError(
+        (e) => {
+          expect(e).to.be.an(ErreurDossierNonFinalisable);
+          expect(e.message).to.equal('Aucun dossier courant à finaliser');
+        }
+      );
+    });
   });
 });

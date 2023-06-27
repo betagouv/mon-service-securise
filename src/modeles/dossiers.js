@@ -1,6 +1,9 @@
 const Dossier = require('./dossier');
 const ElementsConstructibles = require('./elementsConstructibles');
-const { ErreurDossiersInvalides } = require('../erreurs');
+const {
+  ErreurDossiersInvalides,
+  ErreurDossierNonFinalisable,
+} = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 const STATUTS_HOMOLOGATION = {
@@ -30,6 +33,18 @@ class Dossiers extends ElementsConstructibles {
         "Les dossiers ne peuvent pas avoir plus d'un dossier actif"
       );
     return this.items.find((dossier) => dossier.estActif());
+  }
+
+  finaliseDossierCourant() {
+    if (!this.dossierCourant())
+      throw new ErreurDossierNonFinalisable(
+        'Aucun dossier courant à finaliser'
+      );
+
+    this.items.forEach((dossier) => {
+      if (dossier !== this.dossierCourant()) dossier.enregistreArchivage();
+    });
+    this.dossierCourant().enregistreFinalisation();
   }
 
   finalises() {
