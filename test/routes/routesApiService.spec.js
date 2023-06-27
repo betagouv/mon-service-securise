@@ -1205,7 +1205,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur
         .middleware()
         .reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().finaliseDossier = () => Promise.resolve();
+      testeur.depotDonnees().enregistreFinalisationHomologation = () =>
+        Promise.resolve();
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -1218,30 +1219,18 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('recherche le dossier courant correspondant', (done) => {
-      testeur.middleware().verifieRechercheDossierCourant(
-        {
-          url: 'http://localhost:1234/api/service/456/homologation/finalise',
-          method: 'post',
-        },
-        done
-      );
-    });
-
-    it('utilise le dépôt pour finaliser le dossier', (done) => {
-      let depotAppele = false;
-      testeur.depotDonnees().finaliseDossier = (idHomologation, dossier) => {
-        depotAppele = true;
-        expect(idHomologation).to.equal('456');
-        expect(dossier.finalise).to.be(true);
+    it("utilise le dépôt pour finaliser l'homologation", async () => {
+      let servicePasse = {};
+      testeur.depotDonnees().enregistreFinalisationHomologation = (service) => {
+        servicePasse = service;
         return Promise.resolve();
       };
 
-      axios
-        .post('http://localhost:1234/api/service/456/homologation/finalise')
-        .then(() => expect(depotAppele).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      await axios.post(
+        'http://localhost:1234/api/service/456/homologation/finalise'
+      );
+      expect(servicePasse.id).to.equal('456');
+      expect(servicePasse.dossiers.items[0].finalise).to.be(true);
     });
   });
 
