@@ -23,6 +23,11 @@ class ConstructeurService {
     return service;
   }
 
+  avecDossiers(dossiers) {
+    this.donnees.dossiers = dossiers;
+    return this;
+  }
+
   avecId(id) {
     this.donnees.id = id;
     return this;

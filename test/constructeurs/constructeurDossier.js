@@ -38,6 +38,14 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  avecDecision(dateHomologation, dureeValidite) {
+    this.donnees.decision = {
+      dateHomologation,
+      dureeValidite,
+    };
+    return this;
+  }
+
   avecDocuments(documents) {
     this.donnees.documents = documents;
     return this;

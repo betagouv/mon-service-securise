@@ -25,12 +25,12 @@ const nouvelAdaptateur = (
   };
 
   const ajouteHomologation = (id, donneesHomologation) => {
-    donnees.homologations.push(Object.assign(donneesHomologation, { id }));
+    donnees.homologations.push({ id, ...donneesHomologation });
     return Promise.resolve();
   };
 
   const ajouteService = (id, donneesService) => {
-    donnees.services.push(Object.assign(donneesService, { id }));
+    donnees.services.push({ id, ...donneesService });
     return Promise.resolve();
   };
 

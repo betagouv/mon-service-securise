@@ -326,18 +326,24 @@ const creeDepot = (config = {}) => {
   const enregistreDossier = (idHomologation, dossier) =>
     ajouteAItemsDansHomologation('dossiers', idHomologation, dossier);
 
-  const finaliseDossier = (idHomologation, dossier) =>
-    enregistreDossier(idHomologation, dossier).then(() => {
-      const evenement = new EvenementNouvelleHomologationCreee({
-        idService: idHomologation,
-        dateHomologation: dossier.decision.dateHomologation,
-        dureeHomologationMois: referentiel.nbMoisDecalage(
-          dossier.decision.dureeValidite
-        ),
-      });
+  const finaliseDossierCourant = async (service) => {
+    const dossierAvantFinalisation = service.dossierCourant();
 
-      return adaptateurJournalMSS.consigneEvenement(evenement.toJSON());
+    service.finaliseDossierCourant();
+
+    const { id, ...donneesAPersister } = service.donneesAPersister().toutes();
+    await p.sauvegarde(id, donneesAPersister);
+
+    const evenement = new EvenementNouvelleHomologationCreee({
+      idService: id,
+      dateHomologation: dossierAvantFinalisation.decision.dateHomologation,
+      dureeHomologationMois: referentiel.nbMoisDecalage(
+        dossierAvantFinalisation.decision.dureeValidite
+      ),
     });
+
+    adaptateurJournalMSS.consigneEvenement(evenement.toJSON());
+  };
 
   const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
     const idHomologation = adaptateurUUID.genereUUID();
@@ -475,7 +481,7 @@ const creeDepot = (config = {}) => {
     ajouteRisqueGeneralAHomologation,
     ajouteRolesResponsabilitesAHomologation,
     dupliqueHomologation,
-    finaliseDossier,
+    finaliseDossierCourant,
     homologation,
     homologationExiste,
     homologations,
