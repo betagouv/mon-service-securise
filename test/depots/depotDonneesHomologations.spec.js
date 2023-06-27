@@ -48,6 +48,7 @@ const {
 const {
   unServiceTracking,
 } = require('../tracking/constructeurServiceTracking');
+const { unDossier } = require('../constructeurs/constructeurDossier');
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", (done) => {
@@ -1511,7 +1512,7 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  describe("sur demande de finalisation d'un dossier", () => {
+  describe("sur demande de finalisation d'une homologation", () => {
     let adaptateurJournalMSS;
     let adaptateurPersistance;
     let adaptateurUUID;
@@ -1521,7 +1522,6 @@ describe('Le dépôt de données des homologations', () => {
 
     beforeEach(() => {
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-
       const donneesHomologations = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1530,42 +1530,45 @@ describe('Le dépôt de données des homologations', () => {
         homologations: [copie(donneesHomologations)],
         services: [copie(donneesHomologations)],
       });
-
-      adaptateurUUID = { genereUUID: () => 'un UUID' };
     });
 
-    it('enregistre le dossier passé en paramètre', (done) => {
+    it('enregistre le service', async () => {
+      const dossierCourant = unDossier(referentiel).avecDecision(
+        '2022-11-30',
+        'sixMois'
+      );
+
+      let donneesPassees = {};
+      adaptateurPersistance.sauvegardeHomologation = (id, donnees) => {
+        donneesPassees = { id, donnees };
+      };
       const depot = DepotDonneesHomologations.creeDepot({
         adaptateurJournalMSS,
         adaptateurPersistance,
         adaptateurUUID,
         referentiel,
       });
-      const dossier = new Dossier(
-        {
-          id: '999',
-          decision: {
-            dateHomologation: '2022-11-30',
-            dureeValidite: 'sixMois',
-          },
-        },
-        referentiel
-      );
+      const service = unService(referentiel)
+        .avecId('123')
+        .avecNomService('nom')
+        .avecDossiers([dossierCourant.donnees])
+        .construis();
 
-      depot
-        .finaliseDossier('123', dossier)
-        .then(() => depot.homologation('123'))
-        .then((h) => expect(h.nombreDossiers()).to.equal(1))
-        .then(() => done())
-        .catch(done);
+      await depot.enregistreFinalisationHomologation(service);
+      const { id, ...donnees } = service.donneesAPersister().toutes();
+      expect(donneesPassees.id).to.equal('123');
+      expect(donneesPassees.donnees).to.eql(donnees);
     });
 
-    it('consigne un événement « Nouvelle homologation créée » dans le journal MSS', (done) => {
+    it('consigne un événement « Nouvelle homologation créée » dans le journal MSS', async () => {
+      const dossierCourant = unDossier(referentiel).avecDecision(
+        '2022-11-30',
+        'sixMois'
+      );
+
+      let evenementPasse = {};
       adaptateurJournalMSS.consigneEvenement = (evenement) => {
-        expect(evenement.type).to.equal('NOUVELLE_HOMOLOGATION_CREEE');
-        expect(evenement.donnees.dateHomologation).to.equal('2022-11-30');
-        expect(evenement.donnees.dureeHomologationMois).to.equal(6);
-        done();
+        evenementPasse = evenement;
         return Promise.resolve();
       };
       const depot = DepotDonneesHomologations.creeDepot({
@@ -1574,18 +1577,17 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurUUID,
         referentiel,
       });
-      const dossier = new Dossier(
-        {
-          id: '999',
-          decision: {
-            dateHomologation: '2022-11-30',
-            dureeValidite: 'sixMois',
-          },
-        },
-        referentiel
-      );
 
-      depot.finaliseDossier('123', dossier).catch(done);
+      const service = unService(referentiel)
+        .avecId('123')
+        .avecNomService('nom')
+        .avecDossiers([dossierCourant.donnees])
+        .construis();
+
+      await depot.enregistreFinalisationHomologation(service);
+      expect(evenementPasse.type).to.equal('NOUVELLE_HOMOLOGATION_CREEE');
+      expect(evenementPasse.donnees.dateHomologation).to.equal('2022-11-30');
+      expect(evenementPasse.donnees.dureeHomologationMois).to.equal(6);
     });
   });
 
