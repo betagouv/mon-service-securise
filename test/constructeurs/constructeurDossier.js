@@ -92,6 +92,11 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  quiEstArchive() {
+    this.donnees.archive = true;
+    return this;
+  }
+
   quiEstExpire() {
     const tresVieux = new Date();
     tresVieux.setDate(tresVieux.getDate() - 400);
