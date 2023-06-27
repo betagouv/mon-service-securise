@@ -24,6 +24,7 @@ class ErreurDossierNonFinalisable extends ErreurModele {
     this.etapesIncompletes = etapesIncompletes;
   }
 }
+class ErreurDossierNonFinalise extends ErreurModele {}
 class ErreurDossiersInvalides extends ErreurModele {}
 class ErreurDureeValiditeInvalide extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
@@ -67,6 +68,7 @@ module.exports = {
   ErreurDossierDejaFinalise,
   ErreurDossierEtapeInconnue,
   ErreurDossierNonFinalisable,
+  ErreurDossierNonFinalise,
   ErreurDossiersInvalides,
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,

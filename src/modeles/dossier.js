@@ -10,6 +10,7 @@ const {
   ErreurDossierDejaFinalise,
   ErreurDossierNonFinalisable,
   ErreurDossierEtapeInconnue,
+  ErreurDossierNonFinalise,
 } = require('../erreurs');
 
 class Dossier extends InformationsHomologation {
@@ -21,7 +22,7 @@ class Dossier extends InformationsHomologation {
     donneesDossier.finalise = !!donneesDossier.finalise;
 
     super({
-      proprietesAtomiquesFacultatives: ['id', 'finalise'],
+      proprietesAtomiquesFacultatives: ['id', 'finalise', 'archive'],
     });
     this.renseigneProprietes(donneesDossier, referentiel);
     this.referentiel = referentiel;
@@ -104,6 +105,12 @@ class Dossier extends InformationsHomologation {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
     this.documents.declareSansDocument();
+  }
+
+  enregistreArchivage() {
+    if (!this.finalise) throw new ErreurDossierNonFinalise();
+
+    this.archive = true;
   }
 
   enregistreDocuments(documents) {
