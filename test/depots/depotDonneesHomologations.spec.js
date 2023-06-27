@@ -1426,7 +1426,7 @@ describe('Le dépôt de données des homologations', () => {
       );
 
       depot
-        .enregistreDossierCourant('123', dossier)
+        .enregistreDossier('123', dossier)
         .then(() => depot.homologation('123'))
         .then((h) => {
           expect(h.nombreDossiers()).to.equal(1);
@@ -1459,7 +1459,7 @@ describe('Le dépôt de données des homologations', () => {
       const dossier = new Dossier({ id: '999' }, referentiel);
 
       depot
-        .enregistreDossierCourant('123', dossier)
+        .enregistreDossier('123', dossier)
         .then(() => depot.homologation('123'))
         .then((h) => {
           expect(h.nombreDossiers()).to.equal(2);
@@ -1499,7 +1499,7 @@ describe('Le dépôt de données des homologations', () => {
         referentiel
       );
       depot
-        .enregistreDossierCourant('123', seulementAutorite)
+        .enregistreDossier('123', seulementAutorite)
         .then(() => depot.homologation('123'))
         .then((h) => {
           const donneesDossierCourant = h.dossierCourant().toJSON();
