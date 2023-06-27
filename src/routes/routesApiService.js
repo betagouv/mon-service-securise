@@ -390,13 +390,11 @@ const routesApiService = (
   routes.post(
     '/:id/homologation/finalise',
     middleware.trouveService,
-    middleware.trouveDossierCourant,
     (requete, reponse, suite) => {
-      const { homologation, dossierCourant } = requete;
+      const { homologation } = requete;
 
-      dossierCourant.enregistreFinalisation();
       depotDonnees
-        .finaliseDossier(homologation.id, dossierCourant)
+        .finaliseDossierCourant(homologation)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     }
