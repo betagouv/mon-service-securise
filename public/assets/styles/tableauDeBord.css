@@ -322,7 +322,7 @@ label[for='recherche-service'] {
   pointer-events: none;
 }
 
-.tableau-services th.entete-contributeurs .menu-flotant {
+.tableau-services th.entete-contributeurs .menu-flottant {
   top: 100%;
   left: 0;
   right: 0;
@@ -330,11 +330,11 @@ label[for='recherche-service'] {
   gap: 0.8em;
 }
 
-.tableau-services th.entete-contributeurs .menu-flotant p {
+.tableau-services th.entete-contributeurs .menu-flottant p {
   margin: 0;
 }
 
-.tableau-services th.entete-contributeurs .menu-flotant .nom-propriete {
+.tableau-services th.entete-contributeurs .menu-flottant .nom-propriete {
   display: flex;
   flex-direction: column;
   font-weight: bold;
@@ -343,24 +343,24 @@ label[for='recherche-service'] {
   cursor: initial;
 }
 
-.tableau-services th.entete-contributeurs .menu-flotant input {
+.tableau-services th.entete-contributeurs .menu-flottant input {
   margin-right: 0.3em;
 }
 
-.tableau-services th.entete-contributeurs .menu-flotant .nom-propriete label {
+.tableau-services th.entete-contributeurs .menu-flottant .nom-propriete label {
   font-weight: 500;
   color: #2f3a43;
   cursor: pointer;
 }
 
-.tableau-services .menu-flotant .efface-tri-contributeurs {
+.tableau-services .menu-flottant .efface-tri-contributeurs {
   color: #0079d0;
   position: absolute;
   right: 0.85em;
   top: 0.85em;
 }
 
-.tableau-services .menu-flotant .filtre-mes-services::after {
+.tableau-services .menu-flottant .filtre-mes-services::after {
   display: inline-block;
   content: '';
   background-image: url('/statique/assets/images/icone_createur_collaboration.svg');
@@ -512,7 +512,7 @@ label[for='recherche-service'] {
   position: relative;
 }
 
-.tableau-services .menu-flotant {
+.tableau-services .menu-flottant {
   position: absolute;
   background: #fff;
   border: 1px solid #0c5c98;
@@ -525,17 +525,17 @@ label[for='recherche-service'] {
   z-index: 1;
 }
 
-.tableau-services .menu-flotant.invisible {
+.tableau-services .menu-flottant.invisible {
   display: none;
 }
 
-.tableau-services .menu-flotant hr {
+.tableau-services .menu-flottant hr {
   width: 100%;
   border: 1px solid #cbd5e1;
   border-style: solid none none none;
 }
 
-.tableau-services .menu-flotant :is(a, .action) {
+.tableau-services .menu-flottant :is(a, .action) {
   padding: 0.5em;
   border-radius: 4px;
   font-size: 0.9em;
@@ -543,7 +543,7 @@ label[for='recherche-service'] {
   cursor: pointer;
 }
 
-.tableau-services .menu-flotant :is(a, .action):hover {
+.tableau-services .menu-flottant :is(a, .action):hover {
   background: #f1f5f9;
   color: #0c5c98;
 }
@@ -1059,7 +1059,7 @@ label[for='recherche-service'] {
     hue-rotate(173deg) brightness(89%) contrast(97%);
 }
 
-#contenu-contributeurs .menu-flotant {
+#contenu-contributeurs .menu-flottant {
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -1073,12 +1073,12 @@ label[for='recherche-service'] {
   border-radius: 5px;
 }
 
-#contenu-contributeurs .liste-contributeurs .menu-flotant ul {
+#contenu-contributeurs .liste-contributeurs .menu-flottant ul {
   padding-left: 0;
   padding: 0.2em;
 }
 
-#contenu-contributeurs .liste-contributeurs .menu-flotant li {
+#contenu-contributeurs .liste-contributeurs .menu-flottant li {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -1090,12 +1090,12 @@ label[for='recherche-service'] {
   border-radius: 4px;
 }
 
-#contenu-contributeurs .liste-contributeurs .menu-flotant li:hover {
+#contenu-contributeurs .liste-contributeurs .menu-flottant li:hover {
   background: #f1f5f9;
   color: #0079d0;
 }
 
-#contenu-contributeurs .menu-flotant.invisible {
+#contenu-contributeurs .menu-flottant.invisible {
   display: none;
 }
 
