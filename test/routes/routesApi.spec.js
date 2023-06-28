@@ -36,7 +36,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
       testeur.referentiel().recharge({
         statutsHomologation: {
-          aRealiser: { libelle: 'À réaliser', ordre: 1 },
+          nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
         },
       });
 
@@ -114,7 +114,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.adaptateurCsv().genereCsvServices = () => Promise.resolve();
       testeur.referentiel().recharge({
         statutsHomologation: {
-          aRealiser: { libelle: 'À réaliser', ordre: 1 },
+          nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
         },
       });
     });
@@ -226,7 +226,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         expect(service.nombreContributeurs).to.eql(1);
         expect(service.estCreateur).to.be(true);
         expect(service.indiceCyber).not.to.be(undefined);
-        expect(service.statutHomologation.libelle).to.be('À réaliser');
+        expect(service.statutHomologation.libelle).to.be('Non réalisée');
 
         return Promise.resolve('Fichier CSV');
       };

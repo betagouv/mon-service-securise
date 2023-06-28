@@ -7,7 +7,7 @@ const Referentiel = require('../../../src/referentiel');
 describe("L'objet d'API de `GET /services`", () => {
   const referentiel = Referentiel.creeReferentiel({
     statutsHomologation: {
-      aRealiser: { libelle: 'À réaliser', ordre: 1 },
+      nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
     },
   });
 
@@ -70,8 +70,8 @@ describe("L'objet d'API de `GET /services`", () => {
           },
         ],
         statutHomologation: {
-          libelle: 'À réaliser',
-          id: 'aRealiser',
+          libelle: 'Non réalisée',
+          id: 'nonRealisee',
           ordre: 1,
         },
         nombreContributeurs: 1 + 1,

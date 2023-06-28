@@ -7,11 +7,11 @@ const {
 const Referentiel = require('../referentiel');
 
 const STATUTS_HOMOLOGATION = {
-  A_REALISER: 'aRealiser',
-  A_FINALISER: 'aFinaliser',
-  REALISEE: 'realisee',
-  BIENTOT_EXPIREE: 'bientotExpiree',
+  NON_REALISEE: 'nonRealisee',
+  ACTIVEE: 'activee',
+  BIENTOT_ACTIVEE: 'bientotActivee',
   EXPIREE: 'expiree',
+  BIENTOT_EXPIREE: 'bientotExpiree',
 };
 class Dossiers extends ElementsConstructibles {
   constructor(
@@ -52,16 +52,20 @@ class Dossiers extends ElementsConstructibles {
   }
 
   statutHomologation() {
-    if (this.nombre() === 0) return Dossiers.A_REALISER;
-    if (this.dossierCourant()) return Dossiers.A_FINALISER;
+    if (this.nombre() === 0 || this.finalises().length === 0)
+      return Dossiers.NON_REALISEE;
+
     const dossierActif = this.dossierActif();
     if (dossierActif) {
       if (dossierActif.estBientotExpire()) return Dossiers.BIENTOT_EXPIREE;
-      return Dossiers.REALISEE;
+      return Dossiers.ACTIVEE;
     }
-    if (this.items.some((dossier) => dossier.estExpire()))
-      return Dossiers.EXPIREE;
-    return Dossiers.A_REALISER;
+
+    const dossierNonArchive = this.items.find((d) => !d.archive);
+    if (dossierNonArchive.estExpire()) return Dossiers.EXPIREE;
+
+    // TODO: definir le cas bientot-activee explicitement, et renvoyer non-realisée dans les autres cas
+    return Dossiers.BIENTOT_ACTIVEE;
   }
 
   statutSaisie() {
