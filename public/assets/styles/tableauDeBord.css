@@ -488,15 +488,15 @@ label[for='recherche-service'] {
   padding: 0.3em 0.7em;
 }
 
-.tableau-services td .statut-homologation.statut-aRealiser {
-  background: #e9ddff;
-}
-
-.tableau-services td .statut-homologation.statut-aFinaliser {
+.tableau-services td .statut-homologation.statut-nonRealisee {
   background: #dbeeff;
 }
 
-.tableau-services td .statut-homologation.statut-realisee {
+.tableau-services td .statut-homologation.statut-bientotActivee {
+  background: #e7f8d7;
+}
+
+.tableau-services td .statut-homologation.statut-activee {
   background: #d4f4db;
 }
 

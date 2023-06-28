@@ -86,9 +86,9 @@ module.exports = {
   statutsHomologation: {
     expiree: { libelle: 'Expirée', ordre: 0 },
     bientotExpiree: { libelle: 'Bientôt expirée', ordre: 1 },
-    aFinaliser: { libelle: 'À finaliser', ordre: 2 },
-    realisee: { libelle: 'Réalisée', ordre: 3 },
-    aRealiser: { libelle: 'À réaliser', ordre: 4 },
+    nonRealisee: { libelle: 'Non réalisée', ordre: 3 },
+    bientotActivee: { libelle: 'Bientôt activée', ordre: 4 },
+    activee: { libelle: 'Activée', ordre: 5 },
   },
 
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],

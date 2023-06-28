@@ -89,11 +89,14 @@ block cartes-informations
 
     .informations-complementaires-statut
       case idStatutHomologation
-        when 'aRealiser'
+        when 'nonRealisee'
           a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Commencer l'homologation
-        when 'aFinaliser'
-          a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Poursuivre l'homologation
-        when 'realisee'
+        when 'bientotActivee'
+          .dates-statut.
+            Active le #{dossierActif.descriptionProchaineDateHomologation()}
+          .dates-statut.
+            Durée : #{dossierActif.descriptionDureeValidite()}
+        when 'activee'
           .dates-statut.
             Durée : #{dossierActif.descriptionDureeValidite()}
           .dates-statut.

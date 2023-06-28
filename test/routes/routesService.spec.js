@@ -36,7 +36,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     it('recherche le service correspondant', (done) => {
       testeur.referentiel().recharge({
         statutsHomologation: {
-          aRealiser: { libelle: 'À réalisée' },
+          nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
         },
         etapesParcoursHomologation: [{ numero: 1 }],
       });

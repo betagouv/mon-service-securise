@@ -152,19 +152,29 @@ describe('Les dossiers liés à un service', () => {
   });
 
   describe("concernant le statut d'homologation", () => {
-    ils("retournent « À réaliser » si il n'y a aucun dossier", () => {
+    ils("retournent « Non réalisée » si il n'y a aucun dossier", () => {
       const aucunDossiers = new Dossiers({ dossiers: [] });
-      expect(aucunDossiers.statutHomologation()).to.equal(Dossiers.A_REALISER);
-    });
-
-    ils('retournent « À finaliser » si un dossier est en cours', () => {
-      const dossierEnCours = new Dossiers({ dossiers: [{ id: '1' }] });
-      expect(dossierEnCours.statutHomologation()).to.equal(
-        Dossiers.A_FINALISER
+      expect(aucunDossiers.statutHomologation()).to.equal(
+        Dossiers.NON_REALISEE
       );
     });
 
-    ils('retournent « Réalisée » si un dossier est actif', () => {
+    ils(
+      "retournent « Non réalisée » si il n'y a aucun dossier finalisé",
+      () => {
+        const aucunDossiers = new Dossiers(
+          {
+            dossiers: [unDossierComplet().quiEstNonFinalise().donnees],
+          },
+          referentiel
+        );
+        expect(aucunDossiers.statutHomologation()).to.equal(
+          Dossiers.NON_REALISEE
+        );
+      }
+    );
+
+    ils('retournent « Activée » si un dossier est actif', () => {
       const dossierActif = new Dossiers(
         {
           dossiers: [unDossierComplet().quiEstActif(1).donnees],
@@ -173,7 +183,7 @@ describe('Les dossiers liés à un service', () => {
         adaptateurHorloge
       );
 
-      expect(dossierActif.statutHomologation()).to.equal(Dossiers.REALISEE);
+      expect(dossierActif.statutHomologation()).to.equal(Dossiers.ACTIVEE);
     });
 
     ils(
@@ -212,7 +222,7 @@ describe('Les dossiers liés à un service', () => {
     });
 
     ils(
-      'retournent « À réaliser » dans le cas par défaut, par exemple si la seule homologation présente ne sera valide que dans le futur',
+      'retournent « Bientôt activée » si la seule homologation non archivée sera valide dans le futur',
       () => {
         const dossierValideDansLeFutur = new Dossiers(
           {
@@ -223,7 +233,7 @@ describe('Les dossiers liés à un service', () => {
         );
 
         expect(dossierValideDansLeFutur.statutHomologation()).to.equal(
-          Dossiers.A_REALISER
+          Dossiers.BIENTOT_ACTIVEE
         );
       }
     );
