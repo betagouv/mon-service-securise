@@ -1,6 +1,6 @@
 import ActionAbstraite from './Action.mjs';
 
-const metEnFormeMenuFlotant = ({ peutSupprimer, service, utilisateur }) => {
+const metEnFormeMenuflottant = ({ peutSupprimer, service, utilisateur }) => {
   let actions = '';
   if (peutSupprimer)
     actions += `
@@ -11,7 +11,7 @@ const metEnFormeMenuFlotant = ({ peutSupprimer, service, utilisateur }) => {
         data-nom-contributeur="${utilisateur.prenomNom}">
           Retirer du service
       </li>`;
-  return `<div class="menu-flotant"><ul>${actions}</ul></div>`;
+  return `<div class="menu-flottant"><ul>${actions}</ul></div>`;
 };
 
 const metEnFormeLigne = (
@@ -35,7 +35,7 @@ const metEnFormeLigne = (
   }</div>
     ${`<div class="declencheur-menu-flottant ${
       estSupprimable ? '' : 'invisible'
-    }">${metEnFormeMenuFlotant({
+    }">${metEnFormeMenuflottant({
       peutSupprimer: estSupprimable,
       service,
       utilisateur,
@@ -100,10 +100,10 @@ class ActionContributeurs extends ActionAbstraite {
         const $boutonMenu = $(evenement.target);
         const doitOuvrir = !$boutonMenu.hasClass('actif');
         $('.declencheur-menu-flottant', this.idConteneur).removeClass('actif');
-        $('.menu-flotant', this.idConteneur).addClass('invisible');
+        $('.menu-flottant', this.idConteneur).addClass('invisible');
 
         if (doitOuvrir) {
-          const $menu = $('.menu-flotant', $boutonMenu);
+          const $menu = $('.menu-flottant', $boutonMenu);
           $boutonMenu.toggleClass('actif');
           $menu.toggleClass('invisible');
         }

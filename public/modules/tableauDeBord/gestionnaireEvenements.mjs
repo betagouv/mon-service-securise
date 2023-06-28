@@ -122,7 +122,7 @@ const gestionnaireEvenements = {
       tableauDesServices.appliqueTriContributeurs(ordre, filtreEstProprietaire);
     },
     bascule: () =>
-      $('.entete-contributeurs .menu-flotant').toggleClass('invisible'),
+      $('.entete-contributeurs .menu-flottant').toggleClass('invisible'),
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
@@ -158,7 +158,7 @@ const gestionnaireEvenements = {
     gestionnaireTiroir.basculeOuvert(false);
   },
   fermeMenuFlottant: () => {
-    $('.menu-flotant').addClass('invisible');
+    $('.menu-flottant').addClass('invisible');
     $('.declencheur-menu-flottant').removeClass('actif');
   },
 };
