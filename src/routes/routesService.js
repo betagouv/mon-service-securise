@@ -3,6 +3,7 @@ const express = require('express');
 const ActionsSaisie = require('../modeles/actionsSaisie');
 const Homologation = require('../modeles/homologation');
 const InformationsHomologation = require('../modeles/informationsHomologation');
+const VueStatutHomologation = require('../modeles/objetsVues/vueStatutHomologation');
 
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();
@@ -45,6 +46,10 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       actionsSaisie,
       referentiel,
       service: homologation,
+      donneesStatutHomologation: new VueStatutHomologation(
+        homologation,
+        referentiel
+      ).donnees(),
     });
   });
 
