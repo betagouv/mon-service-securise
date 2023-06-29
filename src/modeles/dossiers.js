@@ -13,6 +13,7 @@ const STATUTS_HOMOLOGATION = {
   EXPIREE: 'expiree',
   BIENTOT_EXPIREE: 'bientotExpiree',
 };
+
 class Dossiers extends ElementsConstructibles {
   constructor(
     donnees = { dossiers: [] },
@@ -55,24 +56,12 @@ class Dossiers extends ElementsConstructibles {
     if (this.nombre() === 0 || this.finalises().length === 0)
       return Dossiers.NON_REALISEE;
 
-    const dossierActif = this.dossierActif();
-    if (dossierActif) {
-      if (dossierActif.estBientotExpire()) return Dossiers.BIENTOT_EXPIREE;
-      return Dossiers.ACTIVEE;
-    }
-
-    const dossierNonArchive = this.items.find((d) => !d.archive);
-    if (dossierNonArchive.estExpire()) return Dossiers.EXPIREE;
-
-    // TODO: definir le cas bientot-activee explicitement, et renvoyer non-realisée dans les autres cas
-    return Dossiers.BIENTOT_ACTIVEE;
+    return this.dossierActif().statutHomologation();
   }
 
   statutSaisie() {
-    if (this.nombre() === 0) {
-      return Dossiers.A_SAISIR;
-    }
-    return this.dossierActif() ? Dossiers.COMPLETES : Dossiers.A_COMPLETER;
+    if (this.dossierCourant()) return Dossiers.A_COMPLETER;
+    return Dossiers.A_SAISIR;
   }
 
   static valide({ dossiers }) {

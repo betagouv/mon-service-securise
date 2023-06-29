@@ -247,6 +247,73 @@ describe("Un dossier d'homologation", () => {
     });
   });
 
+  describe("sur demande du statut de l'homologation du dossier", () => {
+    beforeEach(() => {
+      referentiel.recharge({
+        echeancesRenouvellement: {
+          unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 2 },
+        },
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+    });
+
+    it("est « Non réalisée » si le dossier n'est pas finalisé", () => {
+      const nonFinalise = unDossier(referentiel)
+        .quiEstNonFinalise()
+        .construit();
+
+      expect(nonFinalise.statutHomologation()).to.be('nonRealisee');
+    });
+
+    it('est « Bientôt activée » si le dossier est finalisé avec une date de début dans le futur', () => {
+      const maintenantPremierJuin = {
+        maintenant: () => new Date('2023-06-01'),
+      };
+      const actifLeDeuxJuin = unDossier(referentiel, maintenantPremierJuin)
+        .quiEstComplet()
+        .avecDateHomologation(new Date('2023-06-02'))
+        .construit();
+
+      expect(actifLeDeuxJuin.statutHomologation()).to.be('bientotActivee');
+    });
+
+    it('est « Bientôt expirée » si le dossier est finalisé avec une date de fin qui est proche', () => {
+      const maintenantPremierJuin = {
+        maintenant: () => new Date('2023-06-01'),
+      };
+      const expireDansDixJours = unDossier(referentiel, maintenantPremierJuin)
+        .quiEstComplet()
+        .avecDecision('2022-06-11', 'unAn')
+        .construit();
+
+      expect(expireDansDixJours.statutHomologation()).to.be('bientotExpiree');
+    });
+
+    it("est « Activée » si le dossier est finalisé et que sa période d'homologation couvre la date du jour", () => {
+      const maintenantPremierJuin = {
+        maintenant: () => new Date('2023-06-01'),
+      };
+      const actifAnneeComplete = unDossier(referentiel, maintenantPremierJuin)
+        .quiEstComplet()
+        .avecDecision('2023-01-01', 'unAn')
+        .construit();
+
+      expect(actifAnneeComplete.statutHomologation()).to.be('activee');
+    });
+
+    it("est « Expirée » si le dossier est finalisé et que sa date de fin d'homologation est passée", () => {
+      const maintenantPremierJuin = {
+        maintenant: () => new Date('2023-06-01'),
+      };
+      const finiDepuis2022 = unDossier(referentiel, maintenantPremierJuin)
+        .quiEstComplet()
+        .avecDecision('2021-06-15', 'unAn')
+        .construit();
+
+      expect(finiDepuis2022.statutHomologation()).to.be('expiree');
+    });
+  });
+
   describe('sur demande du caractère actif du dossier', () => {
     beforeEach(() => {
       referentiel.recharge({
@@ -256,52 +323,25 @@ describe("Un dossier d'homologation", () => {
     });
 
     it("retourne `false` si le dossier n'est pas finalisé", () => {
-      const dossier = unDossier(referentiel).quiEstActif().construit();
-      expect(dossier.estActif()).to.equal(false);
-    });
-
-    it("retourne `false` si la date du jour n'est pas comprise entre la date d'homologation et la prochaine date d'homologation", () => {
-      const dossier = unDossier(referentiel)
-        .quiEstComplet()
-        .quiEstExpire()
+      const nonFinalise = unDossier(referentiel)
+        .quiEstNonFinalise()
         .construit();
-      expect(dossier.estActif()).to.equal(false);
+
+      expect(nonFinalise.estActif()).to.equal(false);
     });
 
     it('retourne `false` si le dossier est archivé', () => {
-      const dossier = unDossier(referentiel)
-        .quiEstComplet()
-        .quiEstActif()
-        .quiEstArchive()
-        .construit();
-      expect(dossier.estActif()).to.equal(false);
+      const dossierArchive = unDossier(referentiel).quiEstArchive().construit();
+      expect(dossierArchive.estActif()).to.equal(false);
     });
 
-    it("retourne `true` si la date du jour est la date d'homologation", () => {
-      const aujourdhui = new Date();
-      const adaptateurHorloge = { maintenant: () => aujourdhui };
-      const dossierPremierJourActif = unDossier(referentiel, adaptateurHorloge)
+    it('retourne `true` si le dossier est finalisé sans être archivé', () => {
+      const dossierFinaliseNonArchive = unDossier(referentiel)
         .quiEstComplet()
-        .avecDateHomologation(aujourdhui)
+        .nonArchive()
         .construit();
-      expect(dossierPremierJourActif.estActif()).to.equal(true);
-    });
 
-    it("retourne `true` si la date du jour est comprise entre la date d'homologation et la prochaine date d'homologation", () => {
-      const dossierActifDepuis10Jours = unDossier(referentiel)
-        .quiEstComplet()
-        .quiEstActif(10)
-        .construit();
-      expect(dossierActifDepuis10Jours.estActif()).to.equal(true);
-    });
-
-    it("retourne `true` si la date du jour est la date dernière date d'homologation", () => {
-      const adaptateurHorloge = { maintenant: () => new Date('2024-01-01') };
-      const dossierDernierJourActif = unDossier(referentiel, adaptateurHorloge)
-        .quiEstComplet()
-        .avecDateHomologation(new Date('2023-01-01'))
-        .construit();
-      expect(dossierDernierJourActif.estActif()).to.equal(true);
+      expect(dossierFinaliseNonArchive.estActif()).to.equal(true);
     });
   });
 
@@ -392,7 +432,7 @@ describe("Un dossier d'homologation", () => {
   });
 
   describe("sur demande d'une expiration survenant prochainement", () => {
-    it("retourne 'true' si le dossier va bientôt expirer", () => {
+    it("retourne 'true' si la date de fin tombe dans le « bientôt expiré » associé à la durée d'homologation", () => {
       referentiel.recharge({
         echeancesRenouvellement: {
           sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 2 },
@@ -407,7 +447,7 @@ describe("Un dossier d'homologation", () => {
       expect(dossierExpirantDans30Jours.estBientotExpire()).to.be(true);
     });
 
-    it("retourne 'false' si le dossier ne va pas bientôt expirer", () => {
+    it("retourne 'false' si la date de fin est postérieure « bientôt expiré » associé à la durée d'homologation", () => {
       referentiel.recharge({
         echeancesRenouvellement: {
           sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 1 },
@@ -420,6 +460,24 @@ describe("Un dossier d'homologation", () => {
         .construit();
 
       expect(dossierExpirantDans60Jours.estBientotExpire()).to.be(false);
+    });
+
+    it("retourne 'false' si la date de fin est déjà passée", () => {
+      referentiel.recharge({
+        echeancesRenouvellement: {
+          unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 2 },
+        },
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+      const maintenantPremierJuin = {
+        maintenant: () => new Date('2023-06-01'),
+      };
+      const dejaExpire = unDossier(referentiel, maintenantPremierJuin)
+        .quiEstComplet()
+        .avecDecision('2020-01-10', 'unAn')
+        .construit();
+
+      expect(dejaExpire.estBientotExpire()).to.be(false);
     });
   });
 

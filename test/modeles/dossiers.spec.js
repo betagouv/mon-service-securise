@@ -49,6 +49,7 @@ describe('Les dossiers liés à un service', () => {
     });
 
     const dossierCourant = dossiers.dossierCourant();
+
     expect(dossierCourant).to.be.a(Dossier);
     expect(dossierCourant.id).to.equal('2');
   });
@@ -61,6 +62,7 @@ describe('Les dossiers liés à un service', () => {
       });
 
       const dossiersFinalises = dossiers.finalises();
+
       expect(dossiersFinalises.length).to.equal(1);
       expect(dossiersFinalises[0].id).to.equal('1');
     }
@@ -74,6 +76,7 @@ describe('Les dossiers liés à un service', () => {
       );
 
       const dossierActif = dossiers.dossierActif();
+
       expect(dossierActif.id).to.equal('actif');
     });
 
@@ -102,27 +105,28 @@ describe('Les dossiers liés à un service', () => {
         const dossiers = new Dossiers({ dossiers: [{ id: '1' }] });
 
         const dossierActif = dossiers.dossierActif();
+
         expect(dossierActif).to.equal(undefined);
       }
     );
+  });
 
+  describe("concernant le statut de l'action de saisie", () => {
     ils(
-      "considèrent que l'action de saisie est terminée s'il existe un dossier actif",
+      "considèrent que l'action est « à saisir » s'il n'y a pas de dossier",
       () => {
-        const dossiers = new Dossiers(
-          { dossiers: [unDossierComplet().quiEstActif().donnees] },
-          referentiel
-        );
+        const sansDossiers = new Dossiers();
 
-        expect(dossiers.statutSaisie()).to.equal(Dossiers.COMPLETES);
+        expect(sansDossiers.statutSaisie()).to.equal(Dossiers.A_SAISIR);
       }
     );
 
     ils(
-      "considèrent que l'action de saisie est à compléter s'il n'existe pas de dossier actif",
+      "considèrent que l'action est « à compléter » s'il y a un dossier courant",
       () => {
+        const dossierCourant = unDossierComplet().quiEstNonFinalise().donnees;
         const dossiers = new Dossiers(
-          { dossiers: [unDossierComplet().quiEstExpire().donnees] },
+          { dossiers: [dossierCourant] },
           referentiel
         );
 
@@ -131,11 +135,16 @@ describe('Les dossiers liés à un service', () => {
     );
 
     ils(
-      "considèrent que l'action de saisie est à saisir s'il n'existe pas de dossier",
+      "considèrent que l'action est « à compléter » s'il y a à la fois un dossier courant et un dossier actif",
       () => {
-        const dossiers = new Dossiers();
+        const dossierCourant = unDossierComplet().quiEstNonFinalise().donnees;
+        const dossierActif = unDossierComplet().quiEstActif().donnees;
+        const dossiers = new Dossiers(
+          { dossiers: [dossierActif, dossierCourant] },
+          referentiel
+        );
 
-        expect(dossiers.statutSaisie()).to.equal(Dossiers.A_SAISIR);
+        expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
       }
     );
   });
@@ -161,59 +170,19 @@ describe('Les dossiers liés à un service', () => {
       }
     );
 
-    ils('retournent « Activée » si un dossier est actif', () => {
-      const dossierActif = new Dossiers(
-        { dossiers: [unDossierComplet().quiEstActif(1).donnees] },
+    ils('délèguent au dossier actif lorsque celui-ci existe', () => {
+      const avecDossierActifBouchon = new Dossiers(
+        { dossiers: [unDossierComplet().donnees] },
         referentiel
       );
+      avecDossierActifBouchon.dossierActif = () => ({
+        statutHomologation: () => Dossiers.EXPIREE,
+      });
 
-      expect(dossierActif.statutHomologation()).to.equal(Dossiers.ACTIVEE);
+      const statut = avecDossierActifBouchon.statutHomologation();
+
+      expect(statut).to.be(Dossiers.EXPIREE);
     });
-
-    ils(
-      'retournent « Bientôt expirée » si le dossier actif est bientôt expiré',
-      () => {
-        referentiel.recharge({
-          echeancesRenouvellement: {
-            sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 2 },
-          },
-          statutsAvisDossierHomologation: { favorable: {} },
-        });
-        const dossierExpirantDans30Jours = new Dossiers(
-          {
-            dossiers: [unDossierComplet().quiVaExpirer(30, 'sixMois').donnees],
-          },
-          referentiel
-        );
-
-        expect(dossierExpirantDans30Jours.statutHomologation()).to.equal(
-          Dossiers.BIENTOT_EXPIREE
-        );
-      }
-    );
-
-    ils('retournent « Expirée » si un dossier est expiré', () => {
-      const dossierExpire = new Dossiers(
-        { dossiers: [unDossierComplet().quiEstExpire().donnees] },
-        referentiel
-      );
-
-      expect(dossierExpire.statutHomologation()).to.equal(Dossiers.EXPIREE);
-    });
-
-    ils(
-      'retournent « Bientôt activée » si la seule homologation non archivée sera valide dans le futur',
-      () => {
-        const dossierValideDansLeFutur = new Dossiers(
-          { dossiers: [unDossierComplet().quiSeraActif(30).donnees] },
-          referentiel
-        );
-
-        expect(dossierValideDansLeFutur.statutHomologation()).to.equal(
-          Dossiers.BIENTOT_ACTIVEE
-        );
-      }
-    );
   });
 
   describe('sur demande de finalisation du dossier courant', () => {
