@@ -78,6 +78,8 @@ class Dossier extends InformationsHomologation {
   }
 
   estBientotExpire() {
+    if (this.estExpire()) return false;
+
     const moisBientotExpire = this.referentiel.nbMoisBientotExpire(
       this.decision.dureeValidite
     );
@@ -152,11 +154,7 @@ class Dossier extends InformationsHomologation {
   }
 
   estActif() {
-    return (
-      this.finalise &&
-      !this.archive &&
-      this.decision.periodeHomologationEstEnCours()
-    );
+    return this.finalise && !this.archive;
   }
 
   etapeCourante() {
@@ -179,6 +177,25 @@ class Dossier extends InformationsHomologation {
 
   static etapesObligatoires() {
     return ['decision', 'dateTelechargement', 'autorite', 'avis', 'documents'];
+  }
+
+  statutHomologation() {
+    if (!this.finalise) return 'nonRealisee';
+
+    const activeDansLeFutur =
+      new Date(this.decision.dateHomologation) >
+      this.adaptateurHorloge.maintenant();
+    if (activeDansLeFutur) return 'bientotActivee';
+
+    if (this.estBientotExpire()) return 'bientotExpiree';
+
+    if (this.decision.periodeHomologationEstEnCours()) return 'activee';
+
+    if (this.estExpire()) return 'expiree';
+
+    throw new Error(
+      "Impossible de déterminer le statut d'homologation du dossier"
+    );
   }
 
   toJSON() {

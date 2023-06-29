@@ -82,18 +82,13 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
-  quiSeraActif(dans) {
-    const debutActif = new Date();
-    debutActif.setDate(debutActif.getDate() + dans);
-    this.donnees.decision = {
-      dateHomologation: debutActif.toISOString(),
-      dureeValidite: 'unAn',
-    };
+  quiEstArchive() {
+    this.donnees.archive = true;
     return this;
   }
 
-  quiEstArchive() {
-    this.donnees.archive = true;
+  nonArchive() {
+    this.donnees.archive = false;
     return this;
   }
 

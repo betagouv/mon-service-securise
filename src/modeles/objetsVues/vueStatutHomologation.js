@@ -20,10 +20,12 @@ class VueStatutHomologation {
         });
         break;
       }
+
       case Dossiers.BIENTOT_ACTIVEE: {
+        const dossierActif = this.service.dossiers.dossierActif();
         validite = {
-          debut: this.dossierActif().descriptionDateHomologation(),
-          duree: this.dossierActif().descriptionDureeValidite(),
+          debut: dossierActif.descriptionDateHomologation(),
+          duree: dossierActif.descriptionDureeValidite(),
         };
         break;
       }

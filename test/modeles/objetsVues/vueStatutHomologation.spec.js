@@ -29,7 +29,7 @@ describe("Les données de statut d'une homologation", () => {
       },
     });
 
-    it("retourne le lien pour démarrer une homologation pour le statut 'Non réalisée'", () => {
+    it('retourne le lien pour démarrer une homologation pour le statut « Non réalisée »', () => {
       const homologationNonRealisee = unService(referentiel)
         .avecId('123')
         .avecDossiers([])
@@ -55,7 +55,7 @@ describe("Les données de statut d'une homologation", () => {
       });
     });
 
-    it("retourne la date de début d'activation et la durée pour le statut 'Bientôt activée'", () => {
+    it("retourne la date de début d'activation et la durée pour le statut « Bientôt activée »", () => {
       const dateFuture = new Date();
       dateFuture.setDate(dateFuture.getDate() + 10);
 
@@ -78,10 +78,7 @@ describe("Les données de statut d'une homologation", () => {
         libelle: 'Bientôt activée',
         ordre: 4,
         metadonnees: {
-          validite: {
-            debut: dateEnFrancais(dateFuture),
-            duree: '1 an',
-          },
+          validite: { debut: dateEnFrancais(dateFuture), duree: '1 an' },
         },
       });
     });
