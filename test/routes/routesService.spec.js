@@ -3,6 +3,7 @@ const expect = require('expect.js');
 
 const testeurMSS = require('./testeurMSS');
 const Homologation = require('../../src/modeles/homologation');
+const { unService } = require('../constructeurs/constructeurService');
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -36,10 +37,15 @@ describe('Le serveur MSS des routes /service/*', () => {
     it('recherche le service correspondant', (done) => {
       testeur.referentiel().recharge({
         statutsHomologation: {
-          aRealiser: { libelle: 'À réalisée' },
+          unStatut: { libelle: "Un statut d'homologation" },
         },
         etapesParcoursHomologation: [{ numero: 1 }],
       });
+      const service = unService(testeur.referentiel())
+        .avecId('456')
+        .construis();
+      service.dossiers.statutHomologation = () => 'unStatut';
+      testeur.middleware().reinitialise({ homologationARenvoyer: service });
       testeur
         .middleware()
         .verifieRechercheService('http://localhost:1234/service/456', done);

@@ -36,7 +36,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
       testeur.referentiel().recharge({
         statutsHomologation: {
-          aRealiser: { libelle: 'À réaliser', ordre: 1 },
+          unStatut: { libelle: "Un statut d'homologation", ordre: 0 },
         },
       });
 
@@ -114,7 +114,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.adaptateurCsv().genereCsvServices = () => Promise.resolve();
       testeur.referentiel().recharge({
         statutsHomologation: {
-          aRealiser: { libelle: 'À réaliser', ordre: 1 },
+          unStatut: { libelle: "Un statut d'homologation", ordre: 0 },
         },
       });
     });
@@ -204,17 +204,18 @@ describe('Le serveur MSS des routes /api/*', () => {
     it('utilise un adaptateur de CSV pour la génération', (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
-      testeur.depotDonnees().homologations = () =>
-        Promise.resolve([
-          new Service({
-            id: '456',
-            descriptionService: {
-              nomService: 'Un service',
-              organisationsResponsables: ['ANSSI'],
-            },
-            createur: { id: '123', email: 'email.createur@mail.fr' },
-          }),
-        ]);
+      testeur.depotDonnees().homologations = () => {
+        const service = new Service({
+          id: '456',
+          descriptionService: {
+            nomService: 'Un service',
+            organisationsResponsables: ['ANSSI'],
+          },
+          createur: { id: '123', email: 'email.createur@mail.fr' },
+        });
+        service.dossiers.statutHomologation = () => 'unStatut';
+        return Promise.resolve([service]);
+      };
 
       let adaptateurCsvAppele = false;
       testeur.adaptateurCsv().genereCsvServices = (donnees) => {
@@ -226,7 +227,9 @@ describe('Le serveur MSS des routes /api/*', () => {
         expect(service.nombreContributeurs).to.eql(1);
         expect(service.estCreateur).to.be(true);
         expect(service.indiceCyber).not.to.be(undefined);
-        expect(service.statutHomologation.libelle).to.be('À réaliser');
+        expect(service.statutHomologation.libelle).to.be(
+          "Un statut d'homologation"
+        );
 
         return Promise.resolve('Fichier CSV');
       };
