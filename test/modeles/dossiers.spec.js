@@ -15,7 +15,6 @@ const ils = it;
 
 describe('Les dossiers liés à un service', () => {
   const referentiel = Referentiel.creeReferentielVide();
-  const adaptateurHorloge = { maintenant: () => new Date(2023, 2, 1) };
   const unDossierComplet = (id) =>
     new ConstructeurDossierFantaisie(id, referentiel).quiEstComplet();
 
@@ -70,11 +69,8 @@ describe('Les dossiers liés à un service', () => {
   describe('concernant le dossier actif', () => {
     ils('retournent le dossier actif', () => {
       const dossiers = new Dossiers(
-        {
-          dossiers: [unDossierComplet('actif').quiEstActif().donnees],
-        },
-        referentiel,
-        adaptateurHorloge
+        { dossiers: [unDossierComplet('actif').quiEstActif().donnees] },
+        referentiel
       );
 
       const dossierActif = dossiers.dossierActif();
@@ -89,8 +85,7 @@ describe('Les dossiers liés à un service', () => {
             unDossierComplet('actif-second').quiEstActif().donnees,
           ],
         },
-        referentiel,
-        adaptateurHorloge
+        referentiel
       );
 
       expect(() => dossiers.dossierActif()).to.throwError((e) => {
@@ -115,11 +110,8 @@ describe('Les dossiers liés à un service', () => {
       "considèrent que l'action de saisie est terminée s'il existe un dossier actif",
       () => {
         const dossiers = new Dossiers(
-          {
-            dossiers: [unDossierComplet().quiEstActif().donnees],
-          },
-          referentiel,
-          adaptateurHorloge
+          { dossiers: [unDossierComplet().quiEstActif().donnees] },
+          referentiel
         );
 
         expect(dossiers.statutSaisie()).to.equal(Dossiers.COMPLETES);
@@ -130,11 +122,8 @@ describe('Les dossiers liés à un service', () => {
       "considèrent que l'action de saisie est à compléter s'il n'existe pas de dossier actif",
       () => {
         const dossiers = new Dossiers(
-          {
-            dossiers: [unDossierComplet().quiEstExpire().donnees],
-          },
-          referentiel,
-          adaptateurHorloge
+          { dossiers: [unDossierComplet().quiEstExpire().donnees] },
+          referentiel
         );
 
         expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
@@ -153,22 +142,20 @@ describe('Les dossiers liés à un service', () => {
 
   describe("concernant le statut d'homologation", () => {
     ils("retournent « Non réalisée » si il n'y a aucun dossier", () => {
-      const aucunDossiers = new Dossiers({ dossiers: [] });
-      expect(aucunDossiers.statutHomologation()).to.equal(
-        Dossiers.NON_REALISEE
-      );
+      const aucunDossier = new Dossiers({ dossiers: [] });
+
+      expect(aucunDossier.statutHomologation()).to.equal(Dossiers.NON_REALISEE);
     });
 
     ils(
       "retournent « Non réalisée » si il n'y a aucun dossier finalisé",
       () => {
-        const aucunDossiers = new Dossiers(
-          {
-            dossiers: [unDossierComplet().quiEstNonFinalise().donnees],
-          },
+        const aucunDossier = new Dossiers(
+          { dossiers: [unDossierComplet().quiEstNonFinalise().donnees] },
           referentiel
         );
-        expect(aucunDossiers.statutHomologation()).to.equal(
+
+        expect(aucunDossier.statutHomologation()).to.equal(
           Dossiers.NON_REALISEE
         );
       }
@@ -176,11 +163,8 @@ describe('Les dossiers liés à un service', () => {
 
     ils('retournent « Activée » si un dossier est actif', () => {
       const dossierActif = new Dossiers(
-        {
-          dossiers: [unDossierComplet().quiEstActif(1).donnees],
-        },
-        referentiel,
-        adaptateurHorloge
+        { dossiers: [unDossierComplet().quiEstActif(1).donnees] },
+        referentiel
       );
 
       expect(dossierActif.statutHomologation()).to.equal(Dossiers.ACTIVEE);
@@ -199,8 +183,7 @@ describe('Les dossiers liés à un service', () => {
           {
             dossiers: [unDossierComplet().quiVaExpirer(30, 'sixMois').donnees],
           },
-          referentiel,
-          adaptateurHorloge
+          referentiel
         );
 
         expect(dossierExpirantDans30Jours.statutHomologation()).to.equal(
@@ -211,11 +194,8 @@ describe('Les dossiers liés à un service', () => {
 
     ils('retournent « Expirée » si un dossier est expiré', () => {
       const dossierExpire = new Dossiers(
-        {
-          dossiers: [unDossierComplet().quiEstExpire().donnees],
-        },
-        referentiel,
-        adaptateurHorloge
+        { dossiers: [unDossierComplet().quiEstExpire().donnees] },
+        referentiel
       );
 
       expect(dossierExpire.statutHomologation()).to.equal(Dossiers.EXPIREE);
@@ -225,11 +205,8 @@ describe('Les dossiers liés à un service', () => {
       'retournent « Bientôt activée » si la seule homologation non archivée sera valide dans le futur',
       () => {
         const dossierValideDansLeFutur = new Dossiers(
-          {
-            dossiers: [unDossierComplet().quiSeraActif(30).donnees],
-          },
-          referentiel,
-          adaptateurHorloge
+          { dossiers: [unDossierComplet().quiSeraActif(30).donnees] },
+          referentiel
         );
 
         expect(dossierValideDansLeFutur.statutHomologation()).to.equal(
