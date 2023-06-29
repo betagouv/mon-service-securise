@@ -159,12 +159,12 @@
   background-image: url('/statique/assets/images/icone_statut_homologation_nonRealisee.svg');
 }
 
-.carte .statut-homologation.realisee {
+.carte .statut-homologation.activee {
   background: #d4f4db;
 }
 
-.carte .statut-homologation.realisee::before {
-  background-image: url('/statique/assets/images/icone_statut_homologation_realisee.svg');
+.carte .statut-homologation.activee::before {
+  background-image: url('/statique/assets/images/icone_statut_homologation_activee.svg');
 }
 
 .carte .statut-homologation.bientotExpiree {

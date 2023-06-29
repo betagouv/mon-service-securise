@@ -159,7 +159,7 @@ describe('Les dossiers liés à un service', () => {
         adaptateurHorloge
       );
 
-      expect(dossierActif.statutHomologation()).to.equal(Dossiers.REALISEE);
+      expect(dossierActif.statutHomologation()).to.equal(Dossiers.ACTIVEE);
     });
 
     ils(

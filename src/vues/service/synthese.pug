@@ -93,7 +93,7 @@ block cartes-informations
           a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Commencer l'homologation
         when 'nonRealisee'
           a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Poursuivre l'homologation
-        when 'realisee'
+        when 'activee'
           .dates-statut.
             Durée : #{dossierActif.descriptionDureeValidite()}
           .dates-statut.

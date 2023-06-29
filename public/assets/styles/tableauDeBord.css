@@ -496,7 +496,7 @@ label[for='recherche-service'] {
   background: #dbeeff;
 }
 
-.tableau-services td .statut-homologation.statut-realisee {
+.tableau-services td .statut-homologation.statut-activee {
   background: #d4f4db;
 }
 
