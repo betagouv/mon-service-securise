@@ -75,40 +75,28 @@ block zone-principale
       ) Télécharger les annexes
 
 block cartes-informations
-  -
-    const dossiers = service.dossiers
-    const idStatutHomologation = dossiers.statutHomologation()
-    const detailStatutHomologation = referentiel.statutHomologation(idStatutHomologation)
-    const dossierActif = dossiers.dossierActif()
-    const etapeCourante = dossiers.dossierCourant()?.etapeCourante() ?? referentiel.premiereEtapeParcours().id
-    const dateExpiration = dossiers.finalises().find((dossier) => dossier.estExpire())?.descriptionProchaineDateHomologation();
+  - const donneesStatut = donneesStatutHomologation
 
   +carteInformations({titre: "Homologation de sécurité" })
-    .statut.statut-homologation(class=idStatutHomologation, data-id-statut=idStatutHomologation)
-      span= detailStatutHomologation.libelle
+    .statut.statut-homologation(class=donneesStatut.statut)
+      span= donneesStatut.libelle
 
     .informations-complementaires-statut
-      case idStatutHomologation
-        when 'nonRealisee'
-          a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Commencer l'homologation
-        when 'bientotActivee'
+      - const liens = donneesStatut.metadonnees.liens
+      - const validite = donneesStatut.metadonnees.validite
+      if validite
+        if validite.debut
           .dates-statut.
-            Active le #{dossierActif.descriptionProchaineDateHomologation()}
+            Active le #{validite.debut}
+        if validite.duree
           .dates-statut.
-            Durée : #{dossierActif.descriptionDureeValidite()}
-        when 'activee'
+            Durée : #{validite.duree}
+        if validite.fin
           .dates-statut.
-            Durée : #{dossierActif.descriptionDureeValidite()}
-          .dates-statut.
-            Valable jusqu'au #{dossierActif.descriptionProchaineDateHomologation()}
-        when 'bientotExpiree'
-          .dates-statut.
-            Expire le #{dossierActif.descriptionProchaineDateHomologation()}
-          a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Renouveler l'homologation
-        when 'expiree'
-          .dates-statut.
-            Expirée depuis le #{dateExpiration}
-          a.avec-chevron(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`) Renouveler l'homologation
+            #{donneesStatut.statut === 'expiree' ? 'Expirée depuis le ' : "Valable jusqu'au "} #{validite.fin}
+      if liens
+        for lien in liens
+          a.avec-chevron(href=lien.url)!= lien.libelle
 
 
   - const indiceCyber = service.indiceCyber()
