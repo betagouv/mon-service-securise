@@ -492,7 +492,7 @@ label[for='recherche-service'] {
   background: #e9ddff;
 }
 
-.tableau-services td .statut-homologation.statut-aFinaliser {
+.tableau-services td .statut-homologation.statut-nonRealisee {
   background: #dbeeff;
 }
 

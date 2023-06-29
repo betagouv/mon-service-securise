@@ -146,7 +146,7 @@ describe('Les dossiers liés à un service', () => {
     ils('retournent « À finaliser » si un dossier est en cours', () => {
       const dossierEnCours = new Dossiers({ dossiers: [{ id: '1' }] });
       expect(dossierEnCours.statutHomologation()).to.equal(
-        Dossiers.A_FINALISER
+        Dossiers.NON_REALISEE
       );
     });
 

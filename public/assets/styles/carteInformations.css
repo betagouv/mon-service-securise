@@ -151,12 +151,12 @@
   background-image: url('/statique/assets/images/icone_statut_homologation_aRealiser.svg');
 }
 
-.carte .statut-homologation.aFinaliser {
+.carte .statut-homologation.nonRealisee {
   background: #dbeeff;
 }
 
-.carte .statut-homologation.aFinaliser::before {
-  background-image: url('/statique/assets/images/icone_statut_homologation_aFinaliser.svg');
+.carte .statut-homologation.nonRealisee::before {
+  background-image: url('/statique/assets/images/icone_statut_homologation_nonRealisee.svg');
 }
 
 .carte .statut-homologation.realisee {

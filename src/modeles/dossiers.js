@@ -8,7 +8,7 @@ const Referentiel = require('../referentiel');
 
 const STATUTS_HOMOLOGATION = {
   A_REALISER: 'aRealiser',
-  A_FINALISER: 'aFinaliser',
+  NON_REALISEE: 'nonRealisee',
   REALISEE: 'realisee',
   BIENTOT_EXPIREE: 'bientotExpiree',
   EXPIREE: 'expiree',
@@ -55,7 +55,7 @@ class Dossiers extends ElementsConstructibles {
 
   statutHomologation() {
     if (this.nombre() === 0) return Dossiers.A_REALISER;
-    if (this.dossierCourant()) return Dossiers.A_FINALISER;
+    if (this.dossierCourant()) return Dossiers.NON_REALISEE;
     const dossierActif = this.dossierActif();
     if (dossierActif) {
       if (dossierActif.estBientotExpire()) return Dossiers.BIENTOT_EXPIREE;
