@@ -159,6 +159,10 @@
   background-image: url('/statique/assets/images/icone_statut_homologation_nonRealisee.svg');
 }
 
+.carte .statut-homologation.bientotActivee {
+  background: #e7f8d7;
+}
+
 .carte .statut-homologation.activee {
   background: #d4f4db;
 }

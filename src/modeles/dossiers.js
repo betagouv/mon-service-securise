@@ -9,6 +9,7 @@ const Referentiel = require('../referentiel');
 const STATUTS_HOMOLOGATION = {
   A_REALISER: 'aRealiser',
   NON_REALISEE: 'nonRealisee',
+  BIENTOT_ACTIVEE: 'bientotActivee',
   ACTIVEE: 'activee',
   BIENTOT_EXPIREE: 'bientotExpiree',
   EXPIREE: 'expiree',

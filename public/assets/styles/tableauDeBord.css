@@ -496,6 +496,10 @@ label[for='recherche-service'] {
   background: #dbeeff;
 }
 
+.tableau-services td .statut-homologation.statut-bientotActivee {
+  background: #e7f8d7;
+}
+
 .tableau-services td .statut-homologation.statut-activee {
   background: #d4f4db;
 }

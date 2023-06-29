@@ -89,6 +89,7 @@ module.exports = {
     nonRealisee: { libelle: 'Non réalisée', ordre: 2 },
     activee: { libelle: 'Activée', ordre: 3 },
     aRealiser: { libelle: 'À réaliser', ordre: 4 },
+    bientotActivee: { libelle: 'Bientôt activée', ordre: 5 },
   },
 
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
