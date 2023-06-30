@@ -70,6 +70,7 @@ describe("L'objet d'API de `GET /services`", () => {
           },
         ],
         statutHomologation: {
+          enCoursEdition: false,
           libelle: 'Non réalisée',
           id: 'nonRealisee',
           ordre: 1,

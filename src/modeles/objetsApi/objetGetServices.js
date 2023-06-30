@@ -1,9 +1,12 @@
+const Dossiers = require('../dossiers');
+
 const donnees = (services, idUtilisateur, referentiel) => ({
   services: services
     .map((s) => ({
       ...s.toJSON(),
       organisationsResponsables: s.descriptionService.organisationsResponsables,
       statutHomologation: s.dossiers.statutHomologation(),
+      statutSaisie: s.dossiers.statutSaisie(),
       documentsPdfDisponibles: s.documentsPdfDisponibles(),
     }))
     .map((json) => ({
@@ -25,6 +28,7 @@ const donnees = (services, idUtilisateur, referentiel) => ({
       })),
       statutHomologation: {
         id: json.statutHomologation,
+        enCoursEdition: json.statutSaisie === Dossiers.A_COMPLETER,
         ...referentiel.statutHomologation(json.statutHomologation),
       },
       nombreContributeurs: json.contributeurs.length + 1,
