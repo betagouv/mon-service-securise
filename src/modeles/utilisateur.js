@@ -30,13 +30,11 @@ class Utilisateur extends Base {
         'email',
         'telephone',
         'cguAcceptees',
-        'poste',
-        'rssi',
-        'delegueProtectionDonnees',
         'nomEntitePublique',
         'departementEntitePublique',
         'infolettreAcceptee',
       ],
+      proprietesListes: ['postes'],
     });
     valide(donnees);
     this.renseigneProprietes(donnees);
@@ -73,6 +71,14 @@ class Utilisateur extends Base {
       });
     };
 
+    const validePresenceProprietesListes = (proprietes) => {
+      proprietes.forEach((propriete) => {
+        if (!Array.isArray(donnees[propriete])) {
+          envoieErreurProprieteManquante(propriete);
+        }
+      });
+    };
+
     const valideDepartement = (codeDepartement) => {
       if (!referentiel.departement(codeDepartement)) {
         throw new ErreurDepartementInconnu(
@@ -90,11 +96,8 @@ class Utilisateur extends Base {
       'nomEntitePublique',
       'departementEntitePublique',
     ]);
-    validePresenceProprietesBooleenes([
-      'rssi',
-      'delegueProtectionDonnees',
-      'infolettreAcceptee',
-    ]);
+    validePresenceProprietesBooleenes(['infolettreAcceptee']);
+    validePresenceProprietesListes(['postes']);
     valideDepartement(donnees.departementEntitePublique, referentiel);
   }
 
@@ -123,11 +126,11 @@ class Utilisateur extends Base {
   }
 
   estRSSI() {
-    return !!this.rssi;
+    return this.postes.includes(Utilisateur.RSSI);
   }
 
   estDelegueProtectionDonnees() {
-    return !!this.delegueProtectionDonnees;
+    return this.postes.includes(Utilisateur.DPO);
   }
 
   genereToken(callback) {
@@ -146,11 +149,7 @@ class Utilisateur extends Base {
   }
 
   posteDetaille() {
-    const postes = [];
-    if (this.estRSSI()) postes.push(Utilisateur.RSSI);
-    if (this.estDelegueProtectionDonnees()) postes.push(Utilisateur.DPO);
-    postes.push(this.poste);
-    return formatteListeFr(postes.filter((p) => !!p));
+    return formatteListeFr(this.postes);
   }
 
   prenomNom() {
@@ -168,7 +167,10 @@ class Utilisateur extends Base {
       initiales: this.initiales(),
       prenomNom: this.prenomNom(),
       telephone: this.telephone || '',
-      poste: this.poste || '',
+      poste:
+        this.postes.find(
+          (p) => p !== Utilisateur.RSSI && p !== Utilisateur.DPO
+        ) || '',
       posteDetaille: this.posteDetaille(),
       rssi: this.estRSSI(),
       delegueProtectionDonnees: this.estDelegueProtectionDonnees(),

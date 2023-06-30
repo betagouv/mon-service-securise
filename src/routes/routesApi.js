@@ -92,17 +92,27 @@ const routesApi = (
       )
       .then(() => contributeur);
 
-  const obtentionDonneesDeBaseUtilisateur = (corps) => ({
-    prenom: corps.prenom,
-    nom: corps.nom,
-    telephone: corps.telephone,
-    rssi: valeurBooleenne(corps.rssi),
-    delegueProtectionDonnees: valeurBooleenne(corps.delegueProtectionDonnees),
-    poste: corps.poste,
-    nomEntitePublique: corps.nomEntitePublique,
-    departementEntitePublique: corps.departementEntitePublique,
-    infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
-  });
+  const obtentionDonneesDeBaseUtilisateur = (corps) => {
+    const postes = [];
+    if (valeurBooleenne(corps.rssi)) postes.push(Utilisateur.RSSI);
+    if (valeurBooleenne(corps.delegueProtectionDonnees))
+      postes.push(Utilisateur.DPO);
+    if (corps.poste !== '') postes.push(corps.poste);
+    // const items = [
+    //   'foo',
+    //   ... true ? ['bar'] : [],
+    //   ... false ? ['falsy'] : [],
+    // ]
+    return {
+      prenom: corps.prenom,
+      nom: corps.nom,
+      telephone: corps.telephone,
+      postes,
+      nomEntitePublique: corps.nomEntitePublique,
+      departementEntitePublique: corps.departementEntitePublique,
+      infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
+    };
+  };
 
   const messageErreurDonneesUtilisateur = (
     donneesRequete,

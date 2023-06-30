@@ -389,9 +389,9 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
-    it('convertit le RSSI en booléen', (done) => {
-      testeur.depotDonnees().nouvelUtilisateur = ({ rssi }) => {
-        expect(rssi).to.equal(true);
+    it('convertit le RSSI vers le champ "postes"', (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ postes }) => {
+        expect(postes).to.contain('RSSI');
         return Promise.resolve(utilisateur);
       };
 
@@ -403,11 +403,9 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
-    it('convertit le délégué à la protection des données en booléen', (done) => {
-      testeur.depotDonnees().nouvelUtilisateur = ({
-        delegueProtectionDonnees,
-      }) => {
-        expect(delegueProtectionDonnees).to.equal(true);
+    it('convertit le délégué à la protection des données vers le champ "postes"', (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ postes }) => {
+        expect(postes).to.contain('DPO');
         return Promise.resolve(utilisateur);
       };
 
@@ -465,11 +463,15 @@ describe('Le serveur MSS des routes /api/*', () => {
     it("demande au dépôt de créer l'utilisateur", (done) => {
       testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
         const donneesAttendues = {
-          ...donneesRequete,
-          rssi: true,
-          delegueProtectionDonnees: false,
+          prenom: 'Jean',
+          nom: 'Dupont',
+          telephone: '0100000000',
+          postes: ['RSSI', "Chargé des systèmes d'informations"],
+          nomEntitePublique: 'Ville de Paris',
+          departementEntitePublique: '75',
           cguAcceptees: true,
           infolettreAcceptee: true,
+          email: 'jean.dupont@mail.fr',
         };
         expect(donneesUtilisateur).to.eql(donneesAttendues);
         return Promise.resolve(utilisateur);
@@ -1021,13 +1023,13 @@ describe('Le serveur MSS des routes /api/*', () => {
       );
     });
 
-    it('convertit le RSSI en booléen', (done) => {
+    it('convertit le RSSI vers le champ "postes"', (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
 
-      testeur.depotDonnees().metsAJourUtilisateur = (id, { rssi }) => {
+      testeur.depotDonnees().metsAJourUtilisateur = (id, { postes }) => {
         try {
           expect(id).to.equal('123');
-          expect(rssi).to.equal(false);
+          expect(postes).to.not.contain('RSSI');
           return Promise.resolve(utilisateur);
         } catch (e) {
           return Promise.reject(e);
@@ -1074,16 +1076,13 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
-    it('convertit le délégué à la protection des données en booléen', (done) => {
+    it('convertit le délégué à la protection des données vers le champ "postes"', (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
 
-      testeur.depotDonnees().metsAJourUtilisateur = (
-        id,
-        { delegueProtectionDonnees }
-      ) => {
+      testeur.depotDonnees().metsAJourUtilisateur = (id, { postes }) => {
         try {
           expect(id).to.equal('123');
-          expect(delegueProtectionDonnees).to.equal(true);
+          expect(postes).to.contain('DPO');
           return Promise.resolve(utilisateur);
         } catch (e) {
           return Promise.reject(e);
@@ -1113,7 +1112,10 @@ describe('Le serveur MSS des routes /api/*', () => {
           expect(donnees.prenom).to.equal('Jean');
           expect(donnees.nom).to.equal('Dupont');
           expect(donnees.telephone).to.equal('0100000000');
-          expect(donnees.poste).to.equal("Chargé des systèmes d'informations");
+          expect(donnees.postes).to.eql([
+            'RSSI',
+            "Chargé des systèmes d'informations",
+          ]);
           expect(donnees.nomEntitePublique).to.equal('Ville de Paris');
           expect(donnees.departementEntitePublique).to.equal('75');
           infosMisesAJour = true;
