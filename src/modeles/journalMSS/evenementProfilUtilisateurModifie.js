@@ -1,5 +1,6 @@
 const Evenement = require('./evenement');
 const { ErreurIdentifiantUtilisateurManquant } = require('./erreurs');
+const Utilisateur = require('../utilisateur');
 
 class EvenementProfilUtilisateurModifie extends Evenement {
   constructor(donnees, options = {}) {
@@ -13,7 +14,7 @@ class EvenementProfilUtilisateurModifie extends Evenement {
     valide();
 
     const roles = [];
-    if (donnees.rssi) roles.push('RSSI');
+    if (donnees.rssi) roles.push(Utilisateur.RSSI);
     if (donnees.delegueProtectionDonnees) roles.push('DPO');
 
     super(

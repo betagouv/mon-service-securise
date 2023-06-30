@@ -13,6 +13,10 @@ const valide = (donnees) => {
     throw new ErreurEmailManquant();
 };
 
+const POSTE = {
+  RSSI: 'RSSI',
+};
+
 class Utilisateur extends Base {
   constructor(donnees = {}, { adaptateurJWT } = {}) {
     super({
@@ -142,7 +146,7 @@ class Utilisateur extends Base {
 
   posteDetaille() {
     const postes = [];
-    if (this.estRSSI()) postes.push('RSSI');
+    if (this.estRSSI()) postes.push(Utilisateur.RSSI);
     if (this.estDelegueProtectionDonnees()) postes.push('DPO');
     postes.push(this.poste);
     return formatteListeFr(postes.filter((p) => !!p));
@@ -175,4 +179,5 @@ class Utilisateur extends Base {
   }
 }
 
+Object.assign(Utilisateur, POSTE);
 module.exports = Utilisateur;
