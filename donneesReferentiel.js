@@ -88,7 +88,7 @@ module.exports = {
     bientotExpiree: { libelle: 'Bientôt expirée', ordre: 1 },
     nonRealisee: { libelle: 'Non réalisée', ordre: 3 },
     bientotActivee: { libelle: 'Bientôt activée', ordre: 4 },
-    activee: { libelle: 'Activée', ordre: 5 },
+    activee: { libelle: 'Active', ordre: 5 },
   },
 
   seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
