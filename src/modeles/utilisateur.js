@@ -15,6 +15,7 @@ const valide = (donnees) => {
 
 const POSTE = {
   RSSI: 'RSSI',
+  DPO: 'DPO',
 };
 
 class Utilisateur extends Base {
@@ -147,7 +148,7 @@ class Utilisateur extends Base {
   posteDetaille() {
     const postes = [];
     if (this.estRSSI()) postes.push(Utilisateur.RSSI);
-    if (this.estDelegueProtectionDonnees()) postes.push('DPO');
+    if (this.estDelegueProtectionDonnees()) postes.push(Utilisateur.DPO);
     postes.push(this.poste);
     return formatteListeFr(postes.filter((p) => !!p));
   }

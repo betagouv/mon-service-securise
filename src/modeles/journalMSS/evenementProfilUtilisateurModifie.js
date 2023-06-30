@@ -15,7 +15,7 @@ class EvenementProfilUtilisateurModifie extends Evenement {
 
     const roles = [];
     if (donnees.rssi) roles.push(Utilisateur.RSSI);
-    if (donnees.delegueProtectionDonnees) roles.push('DPO');
+    if (donnees.delegueProtectionDonnees) roles.push(Utilisateur.DPO);
 
     super(
       'PROFIL_UTILISATEUR_MODIFIE',
