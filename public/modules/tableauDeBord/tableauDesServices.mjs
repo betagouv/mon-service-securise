@@ -234,7 +234,11 @@ const tableauDesServices = {
       );
       $ligne.append(
         $(
-          `<td><div class='statut-homologation statut-${service.statutHomologation.id}'>${service.statutHomologation.libelle}</div></td>`
+          `<td><div class='statut-homologation statut-${
+            service.statutHomologation.id
+          } ${
+            service.statutHomologation.enCoursEdition ? 'enCoursEdition' : ''
+          }'>${service.statutHomologation.libelle}</div></td>`
         )
       );
 
