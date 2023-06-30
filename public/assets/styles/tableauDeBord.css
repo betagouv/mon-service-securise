@@ -487,18 +487,17 @@ label[for='recherche-service'] {
   border-radius: 40px;
   padding: 0.3em 0.7em;
   display: inline-flex;
-  gap: 0.2em;
+  gap: 0.5em;
   white-space: nowrap;
 }
 
 .tableau-services td .statut-homologation.enCoursEdition::after {
   content: '';
-  width: 1.8em;
-  height: 1.8em;
+  width: 1.6em;
+  height: 1.6em;
   background-image: url('/statique/assets/images/icone_crayon_pastille_blanche.svg');
   background-repeat: no-repeat;
   background-size: contain;
-  transform: translateY(-1px);
 }
 
 .tableau-services td .statut-homologation.statut-nonRealisee {
