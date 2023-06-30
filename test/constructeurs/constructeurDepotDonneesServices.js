@@ -17,6 +17,11 @@ class ConstructeurDepotDonneesServices {
     this.serviceTracking = ServiceTracking.creeService();
   }
 
+  avecAdaptateurChiffrement(adaptateurChiffrement) {
+    this.adaptateurChiffrement = adaptateurChiffrement;
+    return this;
+  }
+
   avecAdaptateurPersistance(constructeurAdaptateurPersistance) {
     this.constructeurAdaptateurPersistance = constructeurAdaptateurPersistance;
     return this;
@@ -44,6 +49,7 @@ class ConstructeurDepotDonneesServices {
 
   construis() {
     return DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement: this.adaptateurChiffrement,
       adaptateurJournalMSS: this.adaptateurJournalMSS,
       adaptateurPersistance: this.constructeurAdaptateurPersistance.construis(),
       adaptateurTracking: this.adaptateurTracking,

@@ -2,6 +2,7 @@ const { createHash } = require('crypto');
 const bcrypt = require('bcrypt');
 
 const chiffre = (chaine) => chaine;
+const dechiffre = (chaine) => chaine;
 
 const NOMBRE_DE_PASSES = 10;
 const hacheBCrypt = (chaineEnClair) =>
@@ -17,6 +18,7 @@ const nonce = () =>
 
 module.exports = {
   chiffre,
+  dechiffre,
   compareBCrypt: compare,
   hacheBCrypt,
   hacheSha256,

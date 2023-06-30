@@ -148,60 +148,111 @@ describe('Le dépôt de données des homologations', () => {
       .catch(done);
   });
 
-  it('peut retrouver une homologation à partir de son identifiant', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        homologations: [
-          { id: '789', descriptionService: { nomService: 'nom' } },
-        ],
-      }
-    );
-    const referentiel = Referentiel.creeReferentielVide();
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurPersistance,
-      referentiel,
+  describe("sur demande de lecture d'un service via son identifiant", () => {
+    it('sait renvoyer le service', (done) => {
+      const adaptateurPersistance =
+        AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          homologations: [
+            { id: '789', descriptionService: { nomService: 'nom' } },
+          ],
+        });
+      const referentiel = Referentiel.creeReferentielVide();
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        referentiel,
+      });
+
+      depot
+        .homologation('789')
+        .then((homologation) => {
+          expect(homologation).to.be.a(Homologation);
+          expect(homologation.id).to.equal('789');
+          expect(homologation.referentiel).to.equal(referentiel);
+          done();
+        })
+        .catch(done);
     });
 
-    depot
-      .homologation('789')
-      .then((homologation) => {
-        expect(homologation).to.be.a(Homologation);
-        expect(homologation.id).to.equal('789');
-        expect(homologation.referentiel).to.equal(referentiel);
-        done();
-      })
-      .catch(done);
-  });
+    it('associe ses contributeurs au service', (done) => {
+      const adaptateurPersistance =
+        AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [
+            { id: '111', email: 'createur@mail.fr' },
+            { id: '999', email: 'contributeur@mail.fr' },
+          ],
+          homologations: [
+            { id: '789', descriptionService: { nomService: 'nom' } },
+          ],
+          autorisations: [
+            { idHomologation: '789', idUtilisateur: '111', type: 'createur' },
+            {
+              idHomologation: '789',
+              idUtilisateur: '999',
+              type: 'contributeur',
+            },
+          ],
+        });
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+      });
 
-  it("associe ses contributeurs à l'homologation", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          { id: '111', email: 'createur@mail.fr' },
-          { id: '999', email: 'contributeur@mail.fr' },
-        ],
-        homologations: [
-          { id: '789', descriptionService: { nomService: 'nom' } },
-        ],
-        autorisations: [
-          { idHomologation: '789', idUtilisateur: '111', type: 'createur' },
-          { idHomologation: '789', idUtilisateur: '999', type: 'contributeur' },
-        ],
-      }
-    );
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurPersistance,
+      depot
+        .homologation('789')
+        .then((homologation) => {
+          const { contributeurs } = homologation;
+          expect(contributeurs.length).to.equal(1);
+          expect(contributeurs[0].id).to.equal('999');
+          done();
+        })
+        .catch(done);
     });
 
-    depot
-      .homologation('789')
-      .then((homologation) => {
-        const { contributeurs } = homologation;
-        expect(contributeurs.length).to.equal(1);
-        expect(contributeurs[0].id).to.equal('999');
-        done();
-      })
-      .catch(done);
+    it('déchiffre les données persistées avant de les renvoyer', (done) => {
+      const adaptateurChiffrement = fauxAdaptateurChiffrement();
+      const referentiel = Referentiel.creeReferentielVide();
+
+      adaptateurChiffrement.dechiffre = (chaine) => `${chaine} - déchiffré`;
+
+      const unServiceExistant = unService(referentiel)
+        .avecId('123')
+        .avecDescriptionService(
+          uneDescriptionValide(referentiel)
+            .avecNomService('Service A')
+            .deLOrganisation('ANSSI')
+            .avecPresentation('Le service fait A & B')
+            .accessiblePar('https://site.fr', 'https://autre.site.fr').donnees
+        ).donnees;
+      const adaptateurPersistance =
+        unePersistanceMemoire().ajouteUnService(unServiceExistant);
+      const depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecAdaptateurChiffrement(adaptateurChiffrement)
+        .avecReferentiel(referentiel)
+        .construis();
+
+      depot
+        .homologation('123')
+        .then((homologation) => {
+          const {
+            nomService,
+            organisationsResponsables,
+            presentation,
+            pointsAcces,
+          } = homologation.descriptionService;
+
+          expect(nomService).to.equal('Service A - déchiffré');
+          expect(organisationsResponsables).to.eql(['ANSSI - déchiffré']);
+          expect(presentation).to.eql('Le service fait A & B - déchiffré');
+          expect(pointsAcces.items[0].description).to.equal(
+            'https://site.fr - déchiffré'
+          );
+          expect(pointsAcces.items[1].description).to.equal(
+            'https://autre.site.fr - déchiffré'
+          );
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe("sur demande d'associations de mesures à un service", () => {

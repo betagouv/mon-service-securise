@@ -17,6 +17,7 @@ const ServiceTracking = require('../tracking/serviceTracking');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
+  const dechiffre = (chaine) => adaptateurChiffrement.dechiffre(chaine);
 
   return {
     chiffre: {
@@ -40,6 +41,27 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
         };
       },
     },
+    dechiffre: {
+      donneesService: (donnees) => {
+        const { descriptionService } = donnees;
+        return {
+          ...donnees,
+          descriptionService: {
+            ...descriptionService,
+            nomService: dechiffre(descriptionService.nomService),
+            presentation: dechiffre(descriptionService.presentation),
+            organisationsResponsables:
+              descriptionService.organisationsResponsables?.map(
+                adaptateurChiffrement.dechiffre
+              ),
+            pointsAcces: descriptionService.pointsAcces?.map((p) => ({
+              ...p,
+              description: dechiffre(p.description),
+            })),
+          },
+        };
+      },
+    },
   };
 };
 
@@ -48,13 +70,15 @@ const fabriquePersistance = (
   adaptateurChiffrement,
   referentiel
 ) => {
-  const { chiffre } = fabriqueChiffrement(adaptateurChiffrement);
+  const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
   const persistance = {
     lis: {
       une: async (idHomologation) => {
         const h = await adaptateurPersistance.homologation(idHomologation);
-        return h ? new Homologation(h, referentiel) : undefined;
+        return h
+          ? new Homologation(dechiffre.donneesService(h), referentiel)
+          : undefined;
       },
       cellesDeUtilisateur: async (idUtilisateur) => {
         const hs = await adaptateurPersistance.homologations(idUtilisateur);
