@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const Service = require('../../../src/modeles/service');
 const objetGetServices = require('../../../src/modeles/objetsApi/objetGetServices');
 const Referentiel = require('../../../src/referentiel');
+const Dossiers = require('../../../src/modeles/dossiers');
 
 describe("L'objet d'API de `GET /services`", () => {
   const referentiel = Referentiel.creeReferentiel({
@@ -86,7 +87,7 @@ describe("L'objet d'API de `GET /services`", () => {
   });
 
   it('fournit les données de résumé des services', () => {
-    unAutreService.dossiers.statutSaisie = () => 'completes';
+    unAutreService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
 
     const services = [unService, unAutreService];
     expect(objetGetServices.donnees(services, 'A', referentiel).resume).to.eql({
