@@ -1,6 +1,6 @@
 const Referentiel = require('../../referentiel');
 
-class VueAnnexePDFDescription {
+class ObjetPDFAnnexeDescription {
   constructor(homologation, referentiel = Referentiel.creeReferentielVide()) {
     this.referentiel = referentiel;
     this.homologation = homologation;
@@ -34,4 +34,4 @@ class VueAnnexePDFDescription {
   }
 }
 
-module.exports = VueAnnexePDFDescription;
+module.exports = ObjetPDFAnnexeDescription;

@@ -10,9 +10,9 @@ const ObjetPersistanceHomologation = require('./objetsPersistance/objetPersistan
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
-const VueAnnexePDFDescription = require('./objetsPDF/vueAnnexePDFDescription');
-const VueAnnexePDFMesures = require('./objetsPDF/vueAnnexePDFMesures');
-const VueAnnexePDFRisques = require('./objetsPDF/vueAnnexePDFRisques');
+const ObjetPDFAnnexeDescription = require('./objetsPDF/objetPDFAnnexeDescription');
+const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
+const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -269,15 +269,15 @@ class Homologation {
   }
 
   vueAnnexePDFDescription() {
-    return new VueAnnexePDFDescription(this, this.referentiel);
+    return new ObjetPDFAnnexeDescription(this, this.referentiel);
   }
 
   vueAnnexePDFMesures() {
-    return new VueAnnexePDFMesures(this, this.referentiel);
+    return new ObjetPDFAnnexeMesures(this, this.referentiel);
   }
 
   vueAnnexePDFRisques() {
-    return new VueAnnexePDFRisques(this, this.referentiel);
+    return new ObjetPDFAnnexeRisques(this, this.referentiel);
   }
 }
 
