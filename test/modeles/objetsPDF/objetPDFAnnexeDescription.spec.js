@@ -2,7 +2,7 @@ const expect = require('expect.js');
 
 const Homologation = require('../../../src/modeles/homologation');
 const Referentiel = require('../../../src/referentiel');
-const VueAnnexePDFDescription = require('../../../src/modeles/objetsPDF/vueAnnexePDFDescription');
+const VueAnnexePDFDescription = require('../../../src/modeles/objetsPDF/objetPDFAnnexeDescription');
 
 describe("L'objet PDF de l'annexe de description", () => {
   const donneesReferentiel = {
