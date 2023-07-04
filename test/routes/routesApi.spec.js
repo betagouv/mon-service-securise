@@ -12,6 +12,7 @@ const {
 } = require('../../src/erreurs');
 
 const testeurMSS = require('./testeurMSS');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const Service = require('../../src/modeles/service');
 const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
 
@@ -1218,7 +1219,7 @@ describe('Le serveur MSS des routes /api/*', () => {
       depotDonnees.utilisateur = (idUtilisateur) => {
         try {
           expect(idUtilisateur).to.equal('123');
-          return Promise.resolve({ toJSON: () => ({ id: '123' }) });
+          return Promise.resolve(unUtilisateur().avecId('123').construis());
         } catch (erreur) {
           return Promise.reject(erreur);
         }

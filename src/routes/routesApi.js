@@ -20,6 +20,9 @@ const ServiceTracking = require('../tracking/serviceTracking');
 const Utilisateur = require('../modeles/utilisateur');
 const objetGetServices = require('../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../modeles/objetsApi/objetGetIndicesCyber');
+const {
+  enUtilisateurApi,
+} = require('../modeles/objetsApi/objetApiUtilisateur');
 
 const routesApi = (
   middleware,
@@ -394,9 +397,12 @@ const routesApi = (
     (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       if (idUtilisateur) {
-        depotDonnees.utilisateur(idUtilisateur).then((utilisateur) => {
-          reponse.json({ utilisateur: utilisateur.toJSON() });
-        });
+        depotDonnees
+          .utilisateur(idUtilisateur)
+          .then(enUtilisateurApi)
+          .then((utilisateur) => {
+            reponse.json({ utilisateur });
+          });
       } else reponse.status(401).send("Pas d'utilisateur courant");
     }
   );
