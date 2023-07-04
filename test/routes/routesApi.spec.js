@@ -447,6 +447,22 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
+    it('aggrège les champs RSSI, DPO et poste dans le champs postes', (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ postes }) => {
+        expect(postes).to.eql(['RSSI', 'DPO', 'Maire']);
+        return Promise.resolve(utilisateur);
+      };
+
+      donneesRequete.rssi = 'true';
+      donneesRequete.delegueProtectionDonnees = 'true';
+      donneesRequete.poste = 'Maire';
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch(done);
+    });
+
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", (done) => {
       donneesRequete.prenom = '';
 
@@ -470,6 +486,7 @@ describe('Le serveur MSS des routes /api/*', () => {
           delegueProtectionDonnees: false,
           cguAcceptees: true,
           infolettreAcceptee: true,
+          postes: ['RSSI', "Chargé des systèmes d'informations"],
         };
         expect(donneesUtilisateur).to.eql(donneesAttendues);
         return Promise.resolve(utilisateur);
@@ -1116,6 +1133,10 @@ describe('Le serveur MSS des routes /api/*', () => {
           expect(donnees.poste).to.equal("Chargé des systèmes d'informations");
           expect(donnees.nomEntitePublique).to.equal('Ville de Paris');
           expect(donnees.departementEntitePublique).to.equal('75');
+          expect(donnees.postes).to.eql([
+            'RSSI',
+            "Chargé des systèmes d'informations",
+          ]);
           infosMisesAJour = true;
           return Promise.resolve(utilisateur);
         } catch (e) {
