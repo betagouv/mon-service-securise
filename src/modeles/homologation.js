@@ -10,6 +10,7 @@ const ObjetPersistanceHomologation = require('./objetsPersistance/objetPersistan
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
+const { enUtilisateurApi } = require('./objetsApi/objetApiUtilisateur');
 const ObjetPDFAnnexeDescription = require('./objetsPDF/objetPDFAnnexeDescription');
 const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
 const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
@@ -256,8 +257,8 @@ class Homologation {
   toJSON() {
     return {
       id: this.id,
-      createur: this.createur.toJSON(),
-      contributeurs: this.contributeurs.map((c) => c.toJSON()),
+      createur: enUtilisateurApi(this.createur),
+      contributeurs: this.contributeurs.map(enUtilisateurApi),
       nomService: this.nomService(),
     };
   }

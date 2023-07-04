@@ -86,6 +86,8 @@ describe('Une homologation', () => {
       createur: {
         id: '456',
         cguAcceptees: false,
+        prenom: 'Bruno',
+        nom: 'Dumans',
         prenomNom: 'Bruno Dumans',
         telephone: '',
         initiales: 'BD',
@@ -102,6 +104,8 @@ describe('Une homologation', () => {
         {
           id: '999',
           cguAcceptees: false,
+          prenom: 'Jean',
+          nom: 'Dupont',
           prenomNom: 'Jean Dupont',
           telephone: '',
           initiales: 'JD',
