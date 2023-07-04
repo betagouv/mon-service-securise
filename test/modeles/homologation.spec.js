@@ -8,9 +8,9 @@ const InformationsHomologation = require('../../src/modeles/informationsHomologa
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const Utilisateur = require('../../src/modeles/utilisateur');
-const VueAnnexePDFDescription = require('../../src/modeles/objetsVues/vueAnnexePDFDescription');
-const VueAnnexePDFMesures = require('../../src/modeles/objetsVues/vueAnnexePDFMesures');
-const VueAnnexePDFRisques = require('../../src/modeles/objetsVues/vueAnnexePDFRisques');
+const VueAnnexePDFDescription = require('../../src/modeles/objetsPDF/vueAnnexePDFDescription');
+const VueAnnexePDFMesures = require('../../src/modeles/objetsPDF/vueAnnexePDFMesures');
+const VueAnnexePDFRisques = require('../../src/modeles/objetsPDF/vueAnnexePDFRisques');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
