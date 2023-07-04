@@ -1,7 +1,7 @@
 const Utilisateur = require('../../src/modeles/utilisateur');
 
 class ConstructeurUtilisateur {
-  constructor() {
+  constructor(adaptateurJWT = {}) {
     this.donnees = {
       dateCreation: '',
       id: '',
@@ -18,6 +18,7 @@ class ConstructeurUtilisateur {
       departementEntitePublique: '',
       infolettreAcceptee: '',
     };
+    this.adaptateurJWT = adaptateurJWT;
   }
 
   avecId(idUtilisateur) {
@@ -30,11 +31,18 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  avecPrenomNom(prenom, nom) {
+    this.donnees.prenom = prenom;
+    this.donnees.nom = nom;
+    return this;
+  }
+
   construis() {
-    return new Utilisateur(this.donnees);
+    return new Utilisateur(this.donnees, { adaptateurJWT: this.adaptateurJWT });
   }
 }
 
-const unUtilisateur = () => new ConstructeurUtilisateur();
+const unUtilisateur = (adaptateurJWT) =>
+  new ConstructeurUtilisateur(adaptateurJWT);
 
 module.exports = { ConstructeurUtilisateur, unUtilisateur };

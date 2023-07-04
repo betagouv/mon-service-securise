@@ -1260,7 +1260,10 @@ describe('Le serveur MSS des routes /api/*', () => {
         return p;
       };
 
-      const utilisateur = { toJSON: () => {}, genereToken: () => {} };
+      const adaptateurJWT = {
+        genereToken: () => 'un token',
+      };
+      const utilisateur = unUtilisateur(adaptateurJWT).construis();
 
       testeur.depotDonnees().utilisateurAuthentifie = (login, motDePasse) => {
         try {
@@ -1283,12 +1286,14 @@ describe('Le serveur MSS des routes /api/*', () => {
 
     describe("avec authentification réussie de l'utilisateur", () => {
       beforeEach(() => {
-        const utilisateur = {
-          email: 'jean.dupont@mail.fr',
-          id: '456',
-          toJSON: () => ({ prenomNom: 'Jean Dupont' }),
+        const adaptateurJWT = {
           genereToken: () => 'un token',
         };
+        const utilisateur = unUtilisateur(adaptateurJWT)
+          .avecEmail('jean.dupont@mail.fr')
+          .avecPrenomNom('Jean', 'Dupont')
+          .avecId('456')
+          .construis();
 
         testeur.depotDonnees().utilisateurAuthentifie = () =>
           Promise.resolve(utilisateur);
@@ -1308,9 +1313,8 @@ describe('Le serveur MSS des routes /api/*', () => {
           })
           .then((reponse) => {
             expect(reponse.status).to.equal(200);
-            expect(reponse.data.utilisateur).to.eql({
-              prenomNom: 'Jean Dupont',
-            });
+            expect(reponse.data.utilisateur.prenomNom).to.eql('Jean Dupont');
+            expect(reponse.data.utilisateur.id).to.eql('456');
             done();
           })
           .catch(done);

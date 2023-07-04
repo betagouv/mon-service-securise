@@ -431,7 +431,7 @@ const routesApi = (
                 .sauvegardeParcoursUtilisateur(parcoursUtilisateur)
                 .then(() =>
                   reponse.json({
-                    utilisateur: utilisateur.toJSON(),
+                    utilisateur: enUtilisateurApi(utilisateur),
                     nouvelleFonctionnalite,
                   })
                 );
