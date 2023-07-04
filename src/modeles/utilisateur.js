@@ -28,6 +28,7 @@ class Utilisateur extends Base {
         'poste',
         'rssi',
         'delegueProtectionDonnees',
+        'postes',
         'nomEntitePublique',
         'departementEntitePublique',
         'infolettreAcceptee',
