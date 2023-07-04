@@ -6,7 +6,7 @@ const DescriptionService = require('./descriptionService');
 const Dossiers = require('./dossiers');
 const Mesure = require('./mesure');
 const Mesures = require('./mesures');
-const DonneesPersistanceHomologation = require('./objetsDonnees/donneesPersistanceHomologation');
+const ObjetPersistanceHomologation = require('./objetsPersistance/objetPersistanceHomologation');
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
@@ -140,7 +140,7 @@ class Homologation {
   }
 
   donneesAPersister() {
-    return new DonneesPersistanceHomologation({
+    return new ObjetPersistanceHomologation({
       id: this.id,
       avisExpertCyber: this.avisExpertCyber.donneesSerialisees(),
       descriptionService: this.descriptionService.donneesSerialisees(),
