@@ -1,6 +1,6 @@
 const Dossiers = require('../dossiers');
 
-class VueStatutHomologation {
+class ObjetApiStatutHomologation {
   constructor(service, referentiel) {
     this.service = service;
     this.referentiel = referentiel;
@@ -89,4 +89,4 @@ class VueStatutHomologation {
   }
 }
 
-module.exports = VueStatutHomologation;
+module.exports = ObjetApiStatutHomologation;
