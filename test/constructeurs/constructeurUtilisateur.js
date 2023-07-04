@@ -21,6 +21,11 @@ class ConstructeurUtilisateur {
     this.adaptateurJWT = adaptateurJWT;
   }
 
+  avecCguAcceptees() {
+    this.donnees.cguAcceptees = true;
+    return this;
+  }
+
   avecId(idUtilisateur) {
     this.donnees.id = idUtilisateur;
     return this;

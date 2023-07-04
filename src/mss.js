@@ -9,6 +9,7 @@ const routesApi = require('./routes/routesApi');
 const { routesBibliotheques } = require('./routes/routesBibliotheques');
 const routesService = require('./routes/routesService');
 const routesStyles = require('./routes/routesStyles');
+const { enUtilisateurApi } = require('./modeles/objetsApi/objetApiUtilisateur');
 
 require('dotenv').config();
 
@@ -86,6 +87,7 @@ const creeServeur = (
       const idUtilisateur = requete.idUtilisateurCourant;
       depotDonnees
         .utilisateur(idUtilisateur)
+        .then(enUtilisateurApi)
         .then((utilisateur) =>
           reponse.render('motDePasse/edition', { utilisateur })
         );
