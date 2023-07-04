@@ -144,7 +144,9 @@ const creeServeur = (
         }
 
         requete.session.token = utilisateur.genereToken();
-        reponse.render('motDePasse/edition', { utilisateur });
+        reponse.render('motDePasse/edition', {
+          utilisateur: enUtilisateurApi(utilisateur),
+        });
       });
     }
   );

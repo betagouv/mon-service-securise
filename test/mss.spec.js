@@ -83,11 +83,12 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/initialisationMotDePasse/:idReset`', () => {
     describe('avec idReset valide', () => {
-      const utilisateur = {
-        id: '123',
+      const adaptateurJWT = {
         genereToken: () => 'un token',
-        accepteCGU: () => false,
       };
+      const utilisateur = unUtilisateur(adaptateurJWT)
+        .avecId('123')
+        .construis();
 
       beforeEach(() => {
         testeur.depotDonnees().utilisateurAFinaliser = () =>
