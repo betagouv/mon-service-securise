@@ -2,9 +2,9 @@ const expect = require('expect.js');
 
 const Homologation = require('../../../src/modeles/homologation');
 const Referentiel = require('../../../src/referentiel');
-const VueAnnexePDFRisques = require('../../../src/modeles/objetsVues/vueAnnexePDFRisques');
+const VueAnnexePDFRisques = require('../../../src/modeles/objetsPDF/vueAnnexePDFRisques');
 
-describe("L'objet de vue des descriptions des risques", () => {
+describe("L'objet PDF des descriptions des risques", () => {
   const donneesReferentiel = {
     niveauxGravite: {
       nonConcerne: {

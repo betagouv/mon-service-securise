@@ -10,9 +10,9 @@ const ObjetPersistanceHomologation = require('./objetsPersistance/objetPersistan
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
 const Utilisateur = require('./utilisateur');
-const VueAnnexePDFDescription = require('./objetsVues/vueAnnexePDFDescription');
-const VueAnnexePDFMesures = require('./objetsVues/vueAnnexePDFMesures');
-const VueAnnexePDFRisques = require('./objetsVues/vueAnnexePDFRisques');
+const VueAnnexePDFDescription = require('./objetsPDF/vueAnnexePDFDescription');
+const VueAnnexePDFMesures = require('./objetsPDF/vueAnnexePDFMesures');
+const VueAnnexePDFRisques = require('./objetsPDF/vueAnnexePDFRisques');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
