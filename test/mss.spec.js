@@ -166,7 +166,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/utilisateur/edition`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      const utilisateur = { accepteCGU: () => true };
+      const utilisateur = unUtilisateur().avecCguAcceptees().construis();
       testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateur);
       testeur
         .middleware()

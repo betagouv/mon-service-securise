@@ -209,6 +209,7 @@ const creeServeur = (
       const idUtilisateur = requete.idUtilisateurCourant;
       depotDonnees
         .utilisateur(idUtilisateur)
+        .then(enUtilisateurApi)
         .then((utilisateur) =>
           reponse.render('utilisateur/edition', { utilisateur, departements })
         );
