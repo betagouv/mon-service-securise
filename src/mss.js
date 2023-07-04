@@ -94,7 +94,7 @@ const creeServeur = (
 
   // Pour que les utilisateurs ayant cette page en favoris ne soient pas perdus.
   app.get('/questionsFrequentes', (_requete, reponse) => {
-    reponse.redirect('https://aide.monservicesecurise.beta.gouv.fr');
+    reponse.redirect('https://aide.monservicesecurise.ssi.gouv.fr');
   });
 
   app.get('/mentionsLegales', (_requete, reponse) => {
