@@ -102,38 +102,6 @@ describe('Un utilisateur', () => {
       expect(toutEnMemeTemps.posteDetaille()).to.eql('RSSI, DPO et Maire');
     });
   });
-  it('sait se convertir en JSON', () => {
-    const utilisateur = new Utilisateur({
-      id: '123',
-      prenom: 'Jean',
-      nom: 'Dupont',
-      email: 'jean.dupont@mail.fr',
-      telephone: '0100000000',
-      motDePasse: 'XXX',
-      poste: 'Maire',
-      rssi: true,
-      delegueProtectionDonnees: false,
-      nomEntitePublique: 'Ville de Paris',
-      departementEntitePublique: '75',
-      infolettreAcceptee: true,
-    });
-
-    expect(utilisateur.toJSON()).to.eql({
-      id: '123',
-      cguAcceptees: false,
-      prenomNom: 'Jean Dupont',
-      telephone: '0100000000',
-      initiales: 'JD',
-      poste: 'Maire',
-      posteDetaille: 'RSSI et Maire',
-      rssi: true,
-      delegueProtectionDonnees: false,
-      nomEntitePublique: 'Ville de Paris',
-      departementEntitePublique: '75',
-      profilEstComplet: true,
-      infolettreAcceptee: true,
-    });
-  });
 
   it('sait générer son JWT', (done) => {
     const adaptateurJWT = {};

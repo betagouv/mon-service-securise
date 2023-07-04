@@ -155,24 +155,6 @@ class Utilisateur extends Base {
   profilEstComplet() {
     return (this.nom?.trim() ?? '') !== '';
   }
-
-  toJSON() {
-    return {
-      id: this.id,
-      cguAcceptees: this.accepteCGU(),
-      initiales: this.initiales(),
-      prenomNom: this.prenomNom(),
-      telephone: this.telephone || '',
-      poste: this.poste || '',
-      posteDetaille: this.posteDetaille(),
-      rssi: this.estRSSI(),
-      delegueProtectionDonnees: this.estDelegueProtectionDonnees(),
-      nomEntitePublique: this.nomEntitePublique || '',
-      departementEntitePublique: this.departementEntitePublique || '',
-      profilEstComplet: this.profilEstComplet(),
-      infolettreAcceptee: this.accepteInfolettre(),
-    };
-  }
 }
 
 module.exports = Utilisateur;
