@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const DonneesPersistanceHomologation = require('../../../src/modeles/objetsDonnees/donneesPersistanceHomologation');
+const ObjetPersistanceHomologation = require('../../../src/modeles/objetsPersistance/objetPersistanceHomologation');
 
 describe("Les données de persistance d'une homologation", () => {
   it('peuvent exclure une propriété', () => {
@@ -9,7 +9,7 @@ describe("Les données de persistance d'une homologation", () => {
     };
 
     expect(
-      new DonneesPersistanceHomologation(donneesHomologation).sauf('dossiers')
+      new ObjetPersistanceHomologation(donneesHomologation).sauf('dossiers')
     ).to.eql({ id: 'id' });
   });
 
@@ -20,7 +20,7 @@ describe("Les données de persistance d'une homologation", () => {
     };
 
     expect(
-      new DonneesPersistanceHomologation(donneesHomologation).sauf(
+      new ObjetPersistanceHomologation(donneesHomologation).sauf(
         'dossiers',
         'id'
       )

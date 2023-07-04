@@ -1,6 +1,6 @@
 const copie = require('../../utilitaires/copie');
 
-class DonneesPersistanceHomologation {
+class ObjetPersistanceHomologation {
   constructor(donneesHomologation) {
     this.donnees = donneesHomologation;
   }
@@ -18,4 +18,4 @@ class DonneesPersistanceHomologation {
   }
 }
 
-module.exports = DonneesPersistanceHomologation;
+module.exports = ObjetPersistanceHomologation;
