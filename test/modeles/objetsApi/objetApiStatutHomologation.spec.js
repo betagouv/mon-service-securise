@@ -1,12 +1,12 @@
 const expect = require('expect.js');
 
-const VueStatutHomologation = require('../../../src/modeles/objetsVues/vueStatutHomologation');
+const ObjetApiStatutHomologation = require('../../../src/modeles/objetsApi/objetApiStatutHomologation');
 const Referentiel = require('../../../src/referentiel');
 const { unService } = require('../../constructeurs/constructeurService');
 const { unDossier } = require('../../constructeurs/constructeurDossier');
 const { dateEnFrancais } = require('../../../src/utilitaires/date');
 
-describe("Les données de statut d'une homologation", () => {
+describe("La représentation API du statut d'une homologation", () => {
   describe("sur demande du statut d'homologation", () => {
     const referentiel = Referentiel.creeReferentiel({
       statutsHomologation: {
@@ -35,7 +35,7 @@ describe("Les données de statut d'une homologation", () => {
         .avecDossiers([])
         .construis();
 
-      const donnees = new VueStatutHomologation(
+      const donnees = new ObjetApiStatutHomologation(
         homologationNonRealisee,
         referentiel
       ).donnees();
@@ -68,7 +68,7 @@ describe("Les données de statut d'une homologation", () => {
         ])
         .construis();
 
-      const donnees = new VueStatutHomologation(
+      const donnees = new ObjetApiStatutHomologation(
         homologationBientotActive,
         referentiel
       ).donnees();
@@ -91,7 +91,7 @@ describe("Les données de statut d'une homologation", () => {
         ])
         .construis();
 
-      const donnees = new VueStatutHomologation(
+      const donnees = new ObjetApiStatutHomologation(
         homologationActive,
         referentiel
       ).donnees();
@@ -119,7 +119,7 @@ describe("Les données de statut d'une homologation", () => {
         ])
         .construis();
 
-      const donnees = new VueStatutHomologation(
+      const donnees = new ObjetApiStatutHomologation(
         homologationBientotExpiree,
         referentiel
       ).donnees();
@@ -152,7 +152,7 @@ describe("Les données de statut d'une homologation", () => {
         ])
         .construis();
 
-      const donnees = new VueStatutHomologation(
+      const donnees = new ObjetApiStatutHomologation(
         homologationExpiree,
         referentiel
       ).donnees();
