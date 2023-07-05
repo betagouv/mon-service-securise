@@ -286,3 +286,7 @@ input[type='checkbox'] + label.label-checkbox {
 .icone-voir-mot-de-passe.cacher {
   background-image: url('/statique/assets/images/icone_cacher_mot_de_passe.svg');
 }
+
+.label-mot-de-passe {
+  margin-bottom: 0.2em !important;
+}
