@@ -109,37 +109,60 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
           .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
           input(type='hidden' name='nomEntitePublique' id='nomEntitePublique' value != donnees.nomEntitePublique)
 
-      .requis(data-nom = 'rssi')
-        +inputOuiNon({
-          nom: 'rssi',
-          titre: "Êtes-vous Responsable de la sécurité des systèmes d'information ?",
-          objetDonnees: donnees,
-          messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
-          requis: true,
-        })
+      .requis
+        label.fonction-poste Fonction/poste
+          - const postes = donnees.postes ?? []
+          - const autrePoste = postes.find((poste) => poste !== 'RSSI' && poste !== 'DPO' && poste !== 'DSI')
+          .conteneur-checkbox
+            input(
+              id = 'posteRSSI'
+              name = 'posteRSSI'
+              checked = postes.includes('RSSI')
+              type = 'checkbox'
+              class = 'input-checkbox'
+            )
+            label.label-checkbox(for = 'posteRSSI') Responsable de la sécurité des systèmes d'information
+          .conteneur-checkbox
+            input(
+              id = 'posteDPO'
+              name = 'posteDPO'
+              checked = postes.includes('DPO')
+              type = 'checkbox'
+              class = 'input-checkbox'
+            )
+            label.label-checkbox(for = 'posteDPO') Délégué/e à la protection des données personnelles
+          .conteneur-checkbox
+            input(
+              id = 'posteDSI'
+              name = 'posteDSI'
+              checked = postes.includes('DSI')
+              type = 'checkbox'
+              class = 'input-checkbox'
+            )
+            label.label-checkbox(for = 'posteDSI') Responsable des systèmes d'information
+          .conteneur-checkbox.conteneur-autre-poste
+            input(
+              id = 'posteAutrePresent'
+              name = 'posteAutrePresent'
+              checked = autrePoste
+              type = 'checkbox'
+              class = 'input-checkbox'
+            )
+            label.label-checkbox(for = 'posteAutrePresent') Autre
+            p(id = 'info-complementaire-poste-autre') Merci de préciser votre fonction/poste
+            input(
+              id = 'posteAutre',
+              name = 'posteAutre',
+              value != autrePoste
+            )
+            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.
 
-      .requis(data-nom = 'delegueProtectionDonnees')
-        +inputOuiNon({
-          nom: 'delegueProtectionDonnees',
-          titre: 'Exercez-vous la fonction de Délégué/e à la protection des données ?',
-          objetDonnees: donnees,
-          messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
-          requis: true,
-        })
-
-      label Poste
-        br
-        input(
-          id = 'poste',
-          name = 'poste',
-          value != donnees.poste,
-          placeholder = "ex : Cheffe/Chef de projet maîtrise d'ouvrage"
-        )
 
       input(
         id = 'infolettreAcceptee',
         name = 'infolettreAcceptee',
         checked = donnees.infolettreAcceptee,
         type = 'checkbox'
+        class = 'input-checkbox'
       )
       label.label-checkbox(for = 'infolettreAcceptee') J'accepte de recevoir la lettre d'information MonServiceSécurisé.
