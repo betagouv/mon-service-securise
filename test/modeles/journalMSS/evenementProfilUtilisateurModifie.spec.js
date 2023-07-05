@@ -33,27 +33,16 @@ describe('Un événement de profil utilisateur modifié', () => {
     });
   });
 
-  describe("utilise les données reçues pour déterminer le(s) rôle(s) de l'utilisateur", () => {
-    it('se base sur le champ `rssi` pour indiquer le rôle « RSSI »', () => {
-      const utilisateurRssi = { idUtilisateur: 'abc', rssi: true };
-      const evenement = new EvenementProfilUtilisateurModifie(utilisateurRssi, {
-        adaptateurChiffrement: hacheEnMajuscules,
-      });
-
-      expect(evenement.toJSON().donnees.roles).to.eql(['RSSI']);
+  it("utilise les données reçues pour déterminer le(s) rôle(s) de l'utilisateur", () => {
+    const utilisateurRssi = {
+      idUtilisateur: 'abc',
+      postes: ['RSSI', 'DPO', 'Maire'],
+    };
+    const evenement = new EvenementProfilUtilisateurModifie(utilisateurRssi, {
+      adaptateurChiffrement: hacheEnMajuscules,
     });
 
-    it('se base sur le champ `delegueProtectionDonnees` pour indiquer le rôle « DPO »', () => {
-      const utilisateurDpo = {
-        idUtilisateur: 'abc',
-        delegueProtectionDonnees: true,
-      };
-      const evenement = new EvenementProfilUtilisateurModifie(utilisateurDpo, {
-        adaptateurChiffrement: hacheEnMajuscules,
-      });
-
-      expect(evenement.toJSON().donnees.roles).to.eql(['DPO']);
-    });
+    expect(evenement.toJSON().donnees.roles).to.eql(['RSSI', 'DPO', 'Maire']);
   });
 
   it("exige que l'identifiant utilisateur soit renseigné", (done) => {
