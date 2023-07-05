@@ -40,7 +40,7 @@ describe('Un utilisateur', () => {
     });
   });
 
-  describe('sur demande du « prénom / nom »', () => {
+  describe('sur demande du « prénom / nom »', () => {
     it('reste robuste si le nom est absent', () => {
       const utilisateur = new Utilisateur({
         prenom: 'Jean',
@@ -63,45 +63,15 @@ describe('Un utilisateur', () => {
     });
   });
 
-  describe('sur demande de son poste détaillé', () => {
-    it("inclut « RSSI » si l'utilisateur est RSSI", () => {
-      const estRssi = new Utilisateur({
-        email: 'jean.dupont@mail.fr',
-        rssi: true,
-      });
-
-      expect(estRssi.posteDetaille()).to.contain('RSSI');
+  it('combine toutes les informations de postes sur demande de son poste détaillé', () => {
+    const toutEnMemeTemps = new Utilisateur({
+      email: 'jean.dupont@mail.fr',
+      postes: ['RSSI', 'DPO', 'Maire'],
     });
 
-    it("inclut « DPO » si l'utilisateur est DPO", () => {
-      const estDpo = new Utilisateur({
-        email: 'jean.dupont@mail.fr',
-        delegueProtectionDonnees: true,
-      });
-
-      expect(estDpo.posteDetaille()).to.contain('DPO');
-    });
-
-    it("inclut le poste déclaré par l'utilisateur", () => {
-      const avecPoste = new Utilisateur({
-        email: 'jean.dupont@mail.fr',
-        poste: 'Maire',
-      });
-
-      expect(avecPoste.posteDetaille()).to.contain('Maire');
-    });
-
-    it('combine toutes les informations disponibles', () => {
-      const toutEnMemeTemps = new Utilisateur({
-        email: 'jean.dupont@mail.fr',
-        rssi: true,
-        delegueProtectionDonnees: true,
-        poste: 'Maire',
-      });
-
-      expect(toutEnMemeTemps.posteDetaille()).to.eql('RSSI, DPO et Maire');
-    });
+    expect(toutEnMemeTemps.posteDetaille()).to.eql('RSSI, DPO et Maire');
   });
+
   it('sait se convertir en JSON', () => {
     const utilisateur = new Utilisateur({
       id: '123',
@@ -110,9 +80,7 @@ describe('Un utilisateur', () => {
       email: 'jean.dupont@mail.fr',
       telephone: '0100000000',
       motDePasse: 'XXX',
-      poste: 'Maire',
-      rssi: true,
-      delegueProtectionDonnees: false,
+      postes: ['RSSI', 'Maire'],
       nomEntitePublique: 'Ville de Paris',
       departementEntitePublique: '75',
       infolettreAcceptee: true,
@@ -124,10 +92,8 @@ describe('Un utilisateur', () => {
       prenomNom: 'Jean Dupont',
       telephone: '0100000000',
       initiales: 'JD',
-      poste: 'Maire',
+      postes: ['RSSI', 'Maire'],
       posteDetaille: 'RSSI et Maire',
-      rssi: true,
-      delegueProtectionDonnees: false,
       nomEntitePublique: 'Ville de Paris',
       departementEntitePublique: '75',
       profilEstComplet: true,
@@ -218,12 +184,10 @@ describe('Un utilisateur', () => {
       'email',
       'telephone',
       'cguAcceptees',
-      'poste',
-      'rssi',
-      'delegueProtectionDonnees',
       'nomEntitePublique',
       'departementEntitePublique',
       'infolettreAcceptee',
+      'postes.*',
     ];
     expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
   });
@@ -256,8 +220,7 @@ describe('Un utilisateur', () => {
         prenom: 'Sandy',
         nom: 'Ferrance',
         email: 'sandy.ferrance@domaine.co',
-        rssi: true,
-        delegueProtectionDonnees: false,
+        postes: ['RSSI'],
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
         infolettreAcceptee: true,
@@ -307,16 +270,8 @@ describe('Un utilisateur', () => {
       );
     });
 
-    it("exige que l'information de RSSI soit renseignée", (done) => {
-      verifiePresencePropriete('rssi', 'RSSI', done);
-    });
-
-    it("exige que l'information de délégué à la protection des données soit renseignée", (done) => {
-      verifiePresencePropriete(
-        'delegueProtectionDonnees',
-        'délégué à la protection des données',
-        done
-      );
+    it('exige que les postes soient renseignés', (done) => {
+      verifiePresencePropriete('postes', 'Postes', done);
     });
 
     it("exige que l'information d'acceptation de l'infolettre soit renseignée", (done) => {

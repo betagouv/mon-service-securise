@@ -22,14 +22,14 @@ describe("L'objet d'API de `GET /services`", () => {
       id: 'A',
       email: 'email.createur@mail.fr',
       prenom: 'Jacques',
-      poste: 'RSSI',
+      postes: ['RSSI'],
     },
     contributeurs: [
       {
         id: 'B',
         email: 'email.contributeur1@mail.fr',
         prenom: 'Jean',
-        poste: 'Maire',
+        postes: ['Maire'],
       },
     ],
   });
