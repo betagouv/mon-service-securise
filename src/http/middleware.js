@@ -187,6 +187,24 @@ const middleware = (configuration = {}) => {
       message: 'Non autorisé',
     });
 
+  const verificationMotDePasse = (requete, reponse, suite) => {
+    if (!requete.idUtilisateurCourant)
+      throw new Error(
+        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+      );
+
+    const { motDePasse } = requete.body;
+    if (!motDePasse) {
+      reponse.status(422).send('Le champ "motDePasse" est obligatoire');
+      return;
+    }
+
+    depotDonnees
+      .verifieMotDePasse(requete.idUtilisateurCourant, motDePasse)
+      .then(() => suite())
+      .catch(() => reponse.status(401).send('Mot de passe incorrect'));
+  };
+
   return {
     aseptise,
     aseptiseListe,
@@ -200,6 +218,7 @@ const middleware = (configuration = {}) => {
     verificationAcceptationCGU,
     verificationAddresseIP,
     verificationJWT,
+    verificationMotDePasse,
   };
 };
 
