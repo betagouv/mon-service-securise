@@ -12,16 +12,12 @@ class EvenementProfilUtilisateurModifie extends Evenement {
 
     valide();
 
-    const roles = [];
-    if (donnees.rssi) roles.push('RSSI');
-    if (donnees.delegueProtectionDonnees) roles.push('DPO');
-
     super(
       'PROFIL_UTILISATEUR_MODIFIE',
       {
         idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur),
         departementOrganisation: donnees.departementEntitePublique,
-        roles,
+        roles: donnees.postes ?? [],
       },
       date
     );
