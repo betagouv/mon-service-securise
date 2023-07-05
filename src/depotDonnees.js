@@ -84,6 +84,7 @@ const creeDepot = (config = {}) => {
     utilisateurExiste,
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
+    verifieMotDePasse,
   } = depotUtilisateurs;
 
   const {
@@ -141,6 +142,7 @@ const creeDepot = (config = {}) => {
     utilisateurExiste,
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
+    verifieMotDePasse,
   };
 };
 
