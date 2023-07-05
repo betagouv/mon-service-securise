@@ -1,3 +1,5 @@
+import brancheChampsMotDePasse from './modules/interactions/brancheChampsMotDePasse.mjs';
+
 $(() => {
   const $inputs = $('input');
   const $erreur = $('.message-erreur');
@@ -32,4 +34,6 @@ $(() => {
         }
       });
   });
+
+  brancheChampsMotDePasse($form);
 });
