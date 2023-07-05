@@ -266,9 +266,41 @@ input[type='checkbox'] + label.label-checkbox {
   margin: 0;
 }
 
-#infolettreAcceptee {
+.input-checkbox {
   vertical-align: top;
   cursor: pointer;
+  transform: translateY(0) !important;
+}
+
+.fonction-poste .conteneur-checkbox:first-of-type {
+  margin-top: 1em;
+}
+
+.conteneur-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 1em;
+  flex-wrap: wrap;
+}
+
+.fonction-poste .conteneur-checkbox.conteneur-autre-poste {
+  margin-bottom: 0;
+}
+
+#info-complementaire-poste-autre {
+  font-weight: normal;
+  font-size: 0.9em;
+  margin: 0 0 0 2.6em;
+}
+
+#posteAutre {
+  background: none;
+  border: none;
+  border-bottom: 1px solid #cbd4e0;
+  border-radius: 0;
+  margin: 0 2.6em;
+  padding: 0.5em 0;
 }
 
 .icone-voir-mot-de-passe {
