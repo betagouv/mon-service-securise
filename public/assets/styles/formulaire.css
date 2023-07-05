@@ -270,3 +270,19 @@ input[type='checkbox'] + label.label-checkbox {
   vertical-align: top;
   cursor: pointer;
 }
+
+.icone-voir-mot-de-passe {
+  position: absolute;
+  right: 1em;
+  top: 2.3em;
+  cursor: pointer;
+  background-image: url('/statique/assets/images/icone_voir_mot_de_passe.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 1.7em;
+  height: 1.7em;
+}
+
+.icone-voir-mot-de-passe.cacher {
+  background-image: url('/statique/assets/images/icone_cacher_mot_de_passe.svg');
+}
