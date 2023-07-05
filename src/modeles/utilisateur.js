@@ -25,9 +25,6 @@ class Utilisateur extends Base {
         'email',
         'telephone',
         'cguAcceptees',
-        'poste',
-        'rssi',
-        'delegueProtectionDonnees',
         'postes',
         'nomEntitePublique',
         'departementEntitePublique',
@@ -69,6 +66,14 @@ class Utilisateur extends Base {
       });
     };
 
+    const validePresenceProprieteListes = (proprietes) => {
+      proprietes.forEach((propriete) => {
+        if (!Array.isArray(donnees[propriete])) {
+          envoieErreurProprieteManquante(propriete);
+        }
+      });
+    };
+
     const valideDepartement = (codeDepartement) => {
       if (!referentiel.departement(codeDepartement)) {
         throw new ErreurDepartementInconnu(
@@ -86,11 +91,8 @@ class Utilisateur extends Base {
       'nomEntitePublique',
       'departementEntitePublique',
     ]);
-    validePresenceProprietesBooleenes([
-      'rssi',
-      'delegueProtectionDonnees',
-      'infolettreAcceptee',
-    ]);
+    validePresenceProprietesBooleenes(['infolettreAcceptee']);
+    validePresenceProprieteListes(['postes']);
     valideDepartement(donnees.departementEntitePublique, referentiel);
   }
 
@@ -101,12 +103,10 @@ class Utilisateur extends Base {
       'email',
       'telephone',
       'cguAcceptees',
-      'poste',
-      'rssi',
-      'delegueProtectionDonnees',
       'nomEntitePublique',
       'departementEntitePublique',
       'infolettreAcceptee',
+      'postes.*',
     ];
   }
 
@@ -116,14 +116,6 @@ class Utilisateur extends Base {
 
   accepteInfolettre() {
     return !!this.infolettreAcceptee;
-  }
-
-  estRSSI() {
-    return !!this.rssi;
-  }
-
-  estDelegueProtectionDonnees() {
-    return !!this.delegueProtectionDonnees;
   }
 
   genereToken(callback) {
@@ -142,11 +134,7 @@ class Utilisateur extends Base {
   }
 
   posteDetaille() {
-    const postes = [];
-    if (this.estRSSI()) postes.push('RSSI');
-    if (this.estDelegueProtectionDonnees()) postes.push('DPO');
-    postes.push(this.poste);
-    return formatteListeFr(postes.filter((p) => !!p));
+    return formatteListeFr(this.postes);
   }
 
   prenomNom() {
@@ -164,10 +152,8 @@ class Utilisateur extends Base {
       initiales: this.initiales(),
       prenomNom: this.prenomNom(),
       telephone: this.telephone || '',
-      poste: this.poste || '',
+      postes: this.postes || [],
       posteDetaille: this.posteDetaille(),
-      rssi: this.estRSSI(),
-      delegueProtectionDonnees: this.estDelegueProtectionDonnees(),
       nomEntitePublique: this.nomEntitePublique || '',
       departementEntitePublique: this.departementEntitePublique || '',
       profilEstComplet: this.profilEstComplet(),

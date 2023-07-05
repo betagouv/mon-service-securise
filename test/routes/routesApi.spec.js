@@ -331,9 +331,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         nom: 'Dupont',
         email: 'jean.dupont@mail.fr',
         telephone: '0100000000',
-        rssi: 'true',
-        delegueProtectionDonnees: 'false',
-        poste: "Chargé des systèmes d'informations",
+        postes: ['RSSI', "Chargé des systèmes d'informations"],
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
         cguAcceptees: 'true',
@@ -359,12 +357,10 @@ describe('Le serveur MSS des routes /api/*', () => {
           'email',
           'telephone',
           'cguAcceptees',
-          'poste',
-          'rssi',
-          'delegueProtectionDonnees',
           'nomEntitePublique',
           'departementEntitePublique',
           'infolettreAcceptee',
+          'postes.*',
         ],
         {
           method: 'post',
@@ -382,36 +378,6 @@ describe('Le serveur MSS des routes /api/*', () => {
       };
 
       donneesRequete.email = 'Jean.DUPONT@mail.fr';
-
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => done())
-        .catch(done);
-    });
-
-    it('convertit le RSSI en booléen', (done) => {
-      testeur.depotDonnees().nouvelUtilisateur = ({ rssi }) => {
-        expect(rssi).to.equal(true);
-        return Promise.resolve(utilisateur);
-      };
-
-      donneesRequete.rssi = 'true';
-
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => done())
-        .catch(done);
-    });
-
-    it('convertit le délégué à la protection des données en booléen', (done) => {
-      testeur.depotDonnees().nouvelUtilisateur = ({
-        delegueProtectionDonnees,
-      }) => {
-        expect(delegueProtectionDonnees).to.equal(true);
-        return Promise.resolve(utilisateur);
-      };
-
-      donneesRequete.delegueProtectionDonnees = 'true';
 
       axios
         .post('http://localhost:1234/api/utilisateur', donneesRequete)
@@ -447,22 +413,6 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch(done);
     });
 
-    it('aggrège les champs RSSI, DPO et poste dans le champs postes', (done) => {
-      testeur.depotDonnees().nouvelUtilisateur = ({ postes }) => {
-        expect(postes).to.eql(['RSSI', 'DPO', 'Maire']);
-        return Promise.resolve(utilisateur);
-      };
-
-      donneesRequete.rssi = 'true';
-      donneesRequete.delegueProtectionDonnees = 'true';
-      donneesRequete.poste = 'Maire';
-
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => done())
-        .catch(done);
-    });
-
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", (done) => {
       donneesRequete.prenom = '';
 
@@ -482,11 +432,8 @@ describe('Le serveur MSS des routes /api/*', () => {
       testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
         const donneesAttendues = {
           ...donneesRequete,
-          rssi: true,
-          delegueProtectionDonnees: false,
           cguAcceptees: true,
           infolettreAcceptee: true,
-          postes: ['RSSI', "Chargé des systèmes d'informations"],
         };
         expect(donneesUtilisateur).to.eql(donneesAttendues);
         return Promise.resolve(utilisateur);
@@ -975,9 +922,7 @@ describe('Le serveur MSS des routes /api/*', () => {
         prenom: 'Jean',
         nom: 'Dupont',
         telephone: '0100000000',
-        rssi: 'true',
-        delegueProtectionDonnees: 'false',
-        poste: "Chargé des systèmes d'informations",
+        postes: ['RSSI', "Chargé des systèmes d'informations"],
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
         infolettreAcceptee: 'true',
@@ -1007,12 +952,10 @@ describe('Le serveur MSS des routes /api/*', () => {
           'nom',
           'telephone',
           'cguAcceptees',
-          'poste',
-          'rssi',
-          'delegueProtectionDonnees',
           'nomEntitePublique',
           'departementEntitePublique',
           'infolettreAcceptee',
+          'postes.*',
         ],
         {
           method: 'put',
@@ -1036,31 +979,6 @@ describe('Le serveur MSS des routes /api/*', () => {
         },
         done
       );
-    });
-
-    it('convertit le RSSI en booléen', (done) => {
-      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
-
-      testeur.depotDonnees().metsAJourUtilisateur = (id, { rssi }) => {
-        try {
-          expect(id).to.equal('123');
-          expect(rssi).to.equal(false);
-          return Promise.resolve(utilisateur);
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      };
-
-      donneesRequete.rssi = 'false';
-
-      axios
-        .put('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idUtilisateur: '123' });
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
     });
 
     it("convertit l'infolettre acceptée en valeur booléenne", (done) => {
@@ -1091,34 +1009,6 @@ describe('Le serveur MSS des routes /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
-    it('convertit le délégué à la protection des données en booléen', (done) => {
-      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
-
-      testeur.depotDonnees().metsAJourUtilisateur = (
-        id,
-        { delegueProtectionDonnees }
-      ) => {
-        try {
-          expect(id).to.equal('123');
-          expect(delegueProtectionDonnees).to.equal(true);
-          return Promise.resolve(utilisateur);
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      };
-
-      donneesRequete.delegueProtectionDonnees = 'true';
-
-      axios
-        .put('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idUtilisateur: '123' });
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
-    });
-
     it("met à jour les autres informations de l'utilisateur", (done) => {
       let infosMisesAJour = false;
 
@@ -1130,7 +1020,6 @@ describe('Le serveur MSS des routes /api/*', () => {
           expect(donnees.prenom).to.equal('Jean');
           expect(donnees.nom).to.equal('Dupont');
           expect(donnees.telephone).to.equal('0100000000');
-          expect(donnees.poste).to.equal("Chargé des systèmes d'informations");
           expect(donnees.nomEntitePublique).to.equal('Ville de Paris');
           expect(donnees.departementEntitePublique).to.equal('75');
           expect(donnees.postes).to.eql([

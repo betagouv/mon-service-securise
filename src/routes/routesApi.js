@@ -92,30 +92,15 @@ const routesApi = (
       )
       .then(() => contributeur);
 
-  const obtentionDonneesDeBaseUtilisateur = (corps) => {
-    const rssi = valeurBooleenne(corps.rssi);
-    const delegueProtectionDonnees = valeurBooleenne(
-      corps.delegueProtectionDonnees
-    );
-    const { poste } = corps;
-
-    return {
-      prenom: corps.prenom,
-      nom: corps.nom,
-      telephone: corps.telephone,
-      rssi,
-      delegueProtectionDonnees,
-      poste,
-      nomEntitePublique: corps.nomEntitePublique,
-      departementEntitePublique: corps.departementEntitePublique,
-      infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
-      postes: [
-        ...(rssi ? ['RSSI'] : []),
-        ...(delegueProtectionDonnees ? ['DPO'] : []),
-        ...(poste !== '' ? [poste] : []),
-      ],
-    };
-  };
+  const obtentionDonneesDeBaseUtilisateur = (corps) => ({
+    prenom: corps.prenom,
+    nom: corps.nom,
+    telephone: corps.telephone,
+    nomEntitePublique: corps.nomEntitePublique,
+    departementEntitePublique: corps.departementEntitePublique,
+    infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
+    postes: corps.postes,
+  });
 
   const messageErreurDonneesUtilisateur = (
     donneesRequete,
