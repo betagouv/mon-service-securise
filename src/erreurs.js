@@ -33,6 +33,7 @@ class ErreurIdentifiantActionSaisieInvalide extends ErreurModele {}
 class ErreurIdentifiantActionSaisieManquant extends ErreurModele {}
 class ErreurLocalisationDonneesInvalide extends ErreurModele {}
 class ErreurMesureInconnue extends ErreurModele {}
+class ErreurMotDePasseIncorrect extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
 class ErreurNomServiceDejaExistant extends ErreurModele {}
 class ErreurProprieteManquante extends ErreurModele {}
@@ -77,6 +78,7 @@ module.exports = {
   ErreurIdentifiantActionSaisieManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
+  ErreurMotDePasseIncorrect,
   ErreurModele,
   ErreurNiveauGraviteInconnu,
   ErreurNomServiceDejaExistant,
