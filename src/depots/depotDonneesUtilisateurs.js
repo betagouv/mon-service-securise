@@ -7,6 +7,7 @@ const {
   ErreurSuppressionImpossible,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
+  ErreurMotDePasseIncorrect,
 } = require('../erreurs');
 const EvenementNouvelUtilisateurInscrit = require('../modeles/journalMSS/evenementNouvelUtilisateurInscrit');
 const EvenementProfilUtilisateurModifie = require('../modeles/journalMSS/evenementProfilUtilisateurModifie');
@@ -167,6 +168,24 @@ const creeDepot = (config = {}) => {
       .metsAJourUtilisateur(utilisateurAModifier.id, { cguAcceptees: true })
       .then(() => utilisateur(utilisateurAModifier.id));
 
+  const verifieMotDePasse = async (idUtilisateur, motDePasse) => {
+    const erreurMotDePasseIncorrect = new ErreurMotDePasseIncorrect(
+      'Le mot de passe est incorrect'
+    );
+    const u = await adaptateurPersistance.utilisateur(idUtilisateur);
+
+    const motDePasseStocke = u && u.motDePasse;
+
+    if (!motDePasseStocke) throw erreurMotDePasseIncorrect;
+
+    const authentificationReussie = await adaptateurChiffrement.compareBCrypt(
+      motDePasse,
+      motDePasseStocke
+    );
+
+    if (!authentificationReussie) throw erreurMotDePasseIncorrect;
+  };
+
   return {
     metsAJourMotDePasse,
     metsAJourUtilisateur,
@@ -181,6 +200,7 @@ const creeDepot = (config = {}) => {
     utilisateurExiste,
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
+    verifieMotDePasse,
   };
 };
 
