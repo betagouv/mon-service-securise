@@ -1,3 +1,4 @@
+import brancheChampsMotDePasse from '../modules/interactions/brancheChampsMotDePasse.mjs';
 import {
   brancheValidation,
   declencheValidation,
@@ -25,4 +26,6 @@ $(() => {
       .put('/api/motDePasse', donnees)
       .then(() => (window.location = '/tableauDeBord'));
   });
+
+  brancheChampsMotDePasse($(selecteurFormulaire));
 });
