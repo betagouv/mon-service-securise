@@ -3,12 +3,168 @@ const expect = require('expect.js');
 
 const testeurMSS = require('./testeurMSS');
 
+const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
+
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
 
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
+
+  describe('quand requête POST sur `/api/token`', () => {
+    it("authentifie l'utilisateur avec le login en minuscules", (done) => {
+      testeur.depotDonnees().lisParcoursUtilisateur = async () => {
+        const p = new ParcoursUtilisateur();
+        p.recupereNouvelleFonctionnalite = () => 'fonctionnalité-bouchon';
+        return p;
+      };
+
+      const utilisateur = { toJSON: () => {}, genereToken: () => {} };
+
+      testeur.depotDonnees().utilisateurAuthentifie = (login, motDePasse) => {
+        try {
+          expect(login).to.equal('jean.dupont@mail.fr');
+          expect(motDePasse).to.equal('mdp_12345');
+          return Promise.resolve(utilisateur);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+
+      axios
+        .post('http://localhost:1234/api/token', {
+          login: 'Jean.DUPONT@mail.fr',
+          motDePasse: 'mdp_12345',
+        })
+        .then(() => done())
+        .catch(done);
+    });
+
+    describe("avec authentification réussie de l'utilisateur", () => {
+      beforeEach(() => {
+        const utilisateur = {
+          email: 'jean.dupont@mail.fr',
+          id: '456',
+          toJSON: () => ({ prenomNom: 'Jean Dupont' }),
+          genereToken: () => 'un token',
+        };
+
+        testeur.depotDonnees().utilisateurAuthentifie = () =>
+          Promise.resolve(utilisateur);
+
+        testeur.depotDonnees().lisParcoursUtilisateur = async () => {
+          const p = new ParcoursUtilisateur();
+          p.recupereNouvelleFonctionnalite = () => 'fonctionnalité-bouchon';
+          return p;
+        };
+      });
+
+      it("retourne les informations de l'utilisateur", (done) => {
+        axios
+          .post('http://localhost:1234/api/token', {
+            login: 'jean.dupont@mail.fr',
+            motDePasse: 'mdp_12345',
+          })
+          .then((reponse) => {
+            expect(reponse.status).to.equal(200);
+            expect(reponse.data.utilisateur).to.eql({
+              prenomNom: 'Jean Dupont',
+            });
+            done();
+          })
+          .catch(done);
+      });
+
+      it('pose un cookie', (done) => {
+        axios
+          .post('http://localhost:1234/api/token', {
+            login: 'jean.dupont@mail.fr',
+            motDePasse: 'mdp_12345',
+          })
+          .then((reponse) => testeur.verifieJetonDepose(reponse, done))
+          .catch(done);
+      });
+
+      it("utilise l'adaptateur de tracking pour envoyer un événement de connexion", (done) => {
+        let donneesPassees = {};
+        testeur.depotDonnees().homologations = () =>
+          Promise.resolve([{ id: '123' }]);
+        testeur.adaptateurTracking().envoieTrackingConnexion = (
+          destinataire,
+          donneesEvenement
+        ) => {
+          donneesPassees = { destinataire, donneesEvenement };
+          return Promise.resolve();
+        };
+
+        axios
+          .post('http://localhost:1234/api/token', {
+            login: 'jean.dupont@mail.fr',
+            motDePasse: 'mdp_12345',
+          })
+          .then(() => {
+            expect(donneesPassees).to.eql({
+              destinataire: 'jean.dupont@mail.fr',
+              donneesEvenement: { nombreServices: 1 },
+            });
+            done();
+          })
+          .catch((e) => done(e.response?.data || e));
+      });
+
+      it('utilise le dépôt pour lire et mettre à jour le parcours utilisateur', async () => {
+        let idPasse;
+        let donneesPassees = {};
+        testeur.depotDonnees().lisParcoursUtilisateur = (id) => {
+          idPasse = id;
+          return Promise.resolve(
+            new ParcoursUtilisateur({ idUtilisateur: id })
+          );
+        };
+        testeur.depotDonnees().sauvegardeParcoursUtilisateur = (parcours) => {
+          donneesPassees = parcours.toJSON();
+          return Promise.resolve();
+        };
+
+        await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+        expect(idPasse).to.eql('456');
+        expect(donneesPassees.idUtilisateur).to.eql('456');
+        expect(donneesPassees.dateDerniereConnexion).not.to.be(undefined);
+      });
+
+      it('retourne la nouvelle fonctionnalité dictée par le parcours utilisateur', async () => {
+        const reponse = await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+        expect(reponse.data.nouvelleFonctionnalite).to.eql(
+          'fonctionnalité-bouchon'
+        );
+      });
+    });
+
+    describe("avec échec de l'authentification de l'utilisateur", () => {
+      it('retourne un HTTP 401', (done) => {
+        testeur.depotDonnees().utilisateurAuthentifie = () =>
+          Promise.resolve(undefined);
+
+        testeur.verifieRequeteGenereErreurHTTP(
+          401,
+          "L'authentification a échoué",
+          {
+            method: 'post',
+            url: 'http://localhost:1234/api/token',
+            data: {},
+          },
+          done
+        );
+      });
+    });
+  });
 
   describe('quand requête GET sur `/api/annuaire/suggestions`', () => {
     beforeEach(() => {

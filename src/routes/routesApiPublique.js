@@ -2,11 +2,48 @@ const express = require('express');
 
 const routesApiPublique = ({
   adaptateurAnnuaire,
+  adaptateurTracking,
   middleware,
   depotDonnees,
   referentiel,
 }) => {
   const routes = express.Router();
+
+  routes.post('/token', (requete, reponse, suite) => {
+    const login = requete.body.login?.toLowerCase();
+    const { motDePasse } = requete.body;
+    depotDonnees
+      .utilisateurAuthentifie(login, motDePasse)
+      .then((utilisateur) => {
+        if (utilisateur) {
+          const token = utilisateur.genereToken();
+          requete.session.token = token;
+          depotDonnees.homologations(utilisateur.id).then((services) =>
+            adaptateurTracking.envoieTrackingConnexion(utilisateur.email, {
+              nombreServices: services.length,
+            })
+          );
+          depotDonnees
+            .lisParcoursUtilisateur(utilisateur.id)
+            .then((parcoursUtilisateur) => {
+              const nouvelleFonctionnalite =
+                parcoursUtilisateur.recupereNouvelleFonctionnalite();
+              parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
+              depotDonnees
+                .sauvegardeParcoursUtilisateur(parcoursUtilisateur)
+                .then(() =>
+                  reponse.json({
+                    utilisateur: utilisateur.toJSON(),
+                    nouvelleFonctionnalite,
+                  })
+                );
+            });
+        } else {
+          reponse.status(401).send("L'authentification a échoué");
+        }
+      })
+      .catch(suite);
+  });
 
   routes.get('/annuaire/suggestions', (requete, reponse) => {
     const { recherche = '', departement = null } = requete.query;

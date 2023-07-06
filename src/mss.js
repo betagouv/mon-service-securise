@@ -192,6 +192,7 @@ const creeServeur = (
     '/api',
     routesApiPublique({
       adaptateurAnnuaire,
+      adaptateurTracking,
       depotDonnees,
       middleware,
       referentiel,
