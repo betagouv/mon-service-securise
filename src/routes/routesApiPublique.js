@@ -2,12 +2,30 @@ const express = require('express');
 
 const routesApiPublique = ({
   adaptateurAnnuaire,
+  adaptateurMail,
   adaptateurTracking,
   middleware,
   depotDonnees,
   referentiel,
 }) => {
   const routes = express.Router();
+
+  routes.post('/reinitialisationMotDePasse', (requete, reponse, suite) => {
+    const email = requete.body.email?.toLowerCase();
+
+    depotDonnees
+      .reinitialiseMotDePasse(email)
+      .then((utilisateur) => {
+        if (utilisateur) {
+          adaptateurMail.envoieMessageReinitialisationMotDePasse(
+            utilisateur.email,
+            utilisateur.idResetMotDePasse
+          );
+        }
+      })
+      .then(() => reponse.send(''))
+      .catch(suite);
+  });
 
   routes.post('/token', (requete, reponse, suite) => {
     const login = requete.body.login?.toLowerCase();
