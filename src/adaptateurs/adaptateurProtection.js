@@ -16,13 +16,13 @@ const adaptateurProtection = {
     return rateLimit({
       windowMs: uneMinute,
       max: maxParFenetreParIp,
-      handler: (requete, reponse, _suite, options) => {
+      handler: (requete, reponse) => {
         const attaque = requete.headers['x-real-ip']?.replaceAll('.', '*');
         fabriqueAdaptateurGestionErreur().logueErreur(
           new Error('Limite de trafic atteinte par une IP.'),
           { 'IP de la requete': attaque }
         );
-        reponse.status(options.statusCode).send(options.message);
+        reponse.render('erreurTropDeTrafic');
       },
       skip: (requete) =>
         routesNonLimitees.some((r) => requete.path.startsWith(r)),
