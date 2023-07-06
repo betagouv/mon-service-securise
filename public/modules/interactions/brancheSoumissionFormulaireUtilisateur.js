@@ -26,6 +26,7 @@ const brancheValidationPoste = (selecteurFormulaire) => {
     });
   };
 
+  verifieEtatCasesACocher();
   $toutesCasesACocher.on('change', () => verifieEtatCasesACocher());
   $champSaisieAutre.on('input', () => verifieEtatCasesACocher());
 };
