@@ -20,6 +20,9 @@ const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   : require('./src/adaptateurs/adaptateurMailMemoire');
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
 const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
+const {
+  adaptateurProtection,
+} = require('./src/adaptateurs/adaptateurProtection');
 
 const adaptateurTracking = fabriqueAdaptateurTracking();
 
@@ -46,7 +49,8 @@ const serveur = MSS.creeServeur(
   adaptateurAnnuaire,
   adaptateurCsv,
   adaptateurZip,
-  adaptateurTracking
+  adaptateurTracking,
+  adaptateurProtection
 );
 
 serveur.ecoute(port, () => {

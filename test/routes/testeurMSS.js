@@ -19,6 +19,7 @@ const testeurMss = () => {
   let adaptateurCsv;
   let adaptateurZip;
   let adaptateurTracking;
+  let adaptateurProtection;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -65,6 +66,9 @@ const testeurMss = () => {
       envoieTrackingInvitationContributeur: () => Promise.resolve(),
       envoieTrackingNouveauServiceCree: () => Promise.resolve(),
     };
+    adaptateurProtection = {
+      protectionCsrf: () => (_requete, _reponse, suite) => suite(),
+    };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     moteurRegles = new MoteurRegles(referentiel);
@@ -84,7 +88,7 @@ const testeurMss = () => {
           adaptateurCsv,
           adaptateurZip,
           adaptateurTracking,
-          false,
+          adaptateurProtection,
           false,
           false
         );
