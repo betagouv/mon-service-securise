@@ -1,7 +1,29 @@
 const express = require('express');
 
-const routesApiPublique = ({ middleware, depotDonnees }) => {
+const routesApiPublique = ({
+  adaptateurAnnuaire,
+  middleware,
+  depotDonnees,
+  referentiel,
+}) => {
   const routes = express.Router();
+
+  routes.get('/annuaire/suggestions', (requete, reponse) => {
+    const { recherche = '', departement = null } = requete.query;
+
+    if (recherche === '') {
+      reponse.status(400).send('Le terme de recherche ne peut pas être vide');
+      return;
+    }
+    if (departement !== null && !referentiel.estCodeDepartement(departement)) {
+      reponse.status(400).send('Le département doit être valide (01 à 989)');
+      return;
+    }
+
+    adaptateurAnnuaire
+      .rechercheOrganisation(recherche, departement)
+      .then((suggestions) => reponse.status(200).json({ suggestions }));
+  });
 
   routes.post(
     '/desinscriptionInfolettre',
