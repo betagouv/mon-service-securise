@@ -68,6 +68,7 @@ const testeurMss = () => {
     };
     adaptateurProtection = {
       protectionCsrf: () => (_requete, _reponse, suite) => suite(),
+      protectionLimiteTrafic: () => (_requete, _reponse, suite) => suite(),
     };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();

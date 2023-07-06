@@ -48,6 +48,7 @@ const creeServeur = (
   );
 
   app.use(adaptateurProtection.protectionCsrf(ENDPOINTS_SANS_CSRF));
+  app.use(adaptateurProtection.protectionLimiteTrafic());
 
   app.use(middleware.positionneHeaders);
   app.use(middleware.repousseExpirationCookie);
