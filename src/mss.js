@@ -148,15 +148,6 @@ const creeServeur = (
   );
 
   app.get(
-    '/admin/inscription',
-    middleware.authentificationBasique,
-    (_requete, reponse) => {
-      const departements = referentiel.departements();
-      reponse.render('admin/inscription', { departements });
-    }
-  );
-
-  app.get(
     '/espacePersonnel',
     middleware.verificationAcceptationCGU,
     (_requete, reponse) => {

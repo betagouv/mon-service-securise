@@ -130,17 +130,6 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/admin/inscription`', () => {
-    it("verrouille l'accès par une authentification basique", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeAuthentificationBasique(
-          'http://localhost:1234/admin/inscription',
-          done
-        );
-    });
-  });
-
   describe('quand requête GET sur `/espacePersonnel`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur
