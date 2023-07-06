@@ -33,7 +33,6 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
     .catch((e) => done(e.response?.data || e));
 };
 
-let authentificationBasiqueMenee = false;
 let cguAcceptees;
 let expirationCookieRepoussee = false;
 let headersAvecNoncePositionnes = false;
@@ -58,7 +57,6 @@ const middlewareFantaisie = {
       descriptionService: { nomService: 'un service' },
     }),
   }) => {
-    authentificationBasiqueMenee = false;
     cguAcceptees = acceptationCGU;
     expirationCookieRepoussee = false;
     headersAvecNoncePositionnes = false;
@@ -86,11 +84,6 @@ const middlewareFantaisie = {
     listes.forEach(({ nom, proprietes }) =>
       listesAseptisees.push({ nom, proprietes })
     );
-    suite();
-  },
-
-  authentificationBasique: (_requete, _reponse, suite) => {
-    authentificationBasiqueMenee = true;
     suite();
   },
 
@@ -194,13 +187,6 @@ const middlewareFantaisie = {
   verifieRequeteExigeAcceptationCGU: (...params) => {
     verifieRequeteChangeEtat(
       { lectureEtat: () => verificationCGUMenee },
-      ...params
-    );
-  },
-
-  verifieRequeteExigeAuthentificationBasique: (...params) => {
-    verifieRequeteChangeEtat(
-      { lectureEtat: () => authentificationBasiqueMenee },
       ...params
     );
   },

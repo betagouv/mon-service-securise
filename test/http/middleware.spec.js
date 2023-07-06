@@ -134,39 +134,6 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  describe('sur authentification basique', () => {
-    it('retourne une erreur HTTP 401 et demande un challenge si échec authentification', (done) => {
-      const middleware = Middleware({ login: 'admin', motDePasse: 'password' });
-
-      requete.headers = {};
-
-      reponse.set = (nomHeader, valeurHeader) => {
-        expect(nomHeader).to.equal('WWW-Authenticate');
-        expect(valeurHeader).to.equal(
-          'Basic realm="Administration MonServiceSécurisé"'
-        );
-      };
-
-      prepareVerificationReponse(reponse, 401, done);
-
-      middleware.authentificationBasique(requete, reponse, () =>
-        done('Exécution suite chaîne inattendue')
-      );
-    });
-
-    it('poursuit normalement si succès authentification', (done) => {
-      const middleware = Middleware({ login: 'admin', motDePasse: 'password' });
-
-      requete.headers = { authorization: 'Basic YWRtaW46cGFzc3dvcmQ=' }; // admin:password
-
-      middleware.authentificationBasique(requete, reponse, () => {
-        expect(requete.auth.user).to.equal('admin');
-        expect(requete.auth.password).to.equal('password');
-        done();
-      });
-    });
-  });
-
   describe('sur recherche homologation existante', () => {
     const adaptateurJWT = {
       decode: () => ({ idUtilisateur: '999', cguAcceptees: true }),
