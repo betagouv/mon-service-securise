@@ -9,6 +9,7 @@ const routesApi = require('./routes/routesApi');
 const { routesBibliotheques } = require('./routes/routesBibliotheques');
 const routesService = require('./routes/routesService');
 const routesStyles = require('./routes/routesStyles');
+const { routesApiPublique } = require('./routes/routesApiPublique');
 
 require('dotenv').config();
 
@@ -187,6 +188,8 @@ const creeServeur = (
       adaptateurTracking
     )
   );
+
+  app.use('/api', routesApiPublique({ middleware, depotDonnees }));
 
   app.use('/bibliotheques', routesBibliotheques());
 
