@@ -1,6 +1,4 @@
 const controlAcces = require('express-ip-access-control');
-const basicAuth = require('express-basic-auth');
-const pug = require('pug');
 const { check } = require('express-validator');
 const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
 const { CSP_BIBLIOTHEQUES } = require('../routes/routesBibliotheques');
@@ -11,16 +9,7 @@ const middleware = (configuration = {}) => {
     adaptateurChiffrement,
     adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
     adaptateurJWT,
-    login,
-    motDePasse,
   } = configuration;
-
-  const authentificationBasique = basicAuth({
-    challenge: true,
-    realm: 'Administration MonServiceSécurisé',
-    users: { [login]: motDePasse },
-    unauthorizedResponse: () => pug.renderFile('src/vues/accesRefuse.pug'),
-  });
 
   const positionneHeaders = (requete, reponse, suite) => {
     const { nonce } = requete;
@@ -200,7 +189,6 @@ const middleware = (configuration = {}) => {
     aseptise,
     aseptiseListe,
     aseptiseListes,
-    authentificationBasique,
     positionneHeaders,
     positionneHeadersAvecNonce,
     repousseExpirationCookie,
