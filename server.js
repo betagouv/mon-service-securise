@@ -32,8 +32,6 @@ const middleware = Middleware({
   adaptateurEnvironnement,
   adaptateurJWT,
   depotDonnees,
-  login: process.env.LOGIN_ADMIN,
-  motDePasse: process.env.MOT_DE_PASSE_ADMIN,
 });
 
 const serveur = MSS.creeServeur(
