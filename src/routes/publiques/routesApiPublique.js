@@ -6,6 +6,10 @@ const {
   EchecEnvoiMessage,
   ErreurModele,
 } = require('../../erreurs');
+const {
+  messageErreurDonneesUtilisateur,
+  obtentionDonneesDeBaseUtilisateur,
+} = require('../mappeur/utilisateur');
 
 const routesApiPublique = ({
   middleware,
@@ -21,32 +25,6 @@ const routesApiPublique = ({
     '/utilisateur',
     middleware.aseptise(...Utilisateur.nomsProprietesBase()),
     (requete, reponse, suite) => {
-      const obtentionDonneesDeBaseUtilisateur = (corps) => ({
-        prenom: corps.prenom,
-        nom: corps.nom,
-        telephone: corps.telephone,
-        nomEntitePublique: corps.nomEntitePublique,
-        departementEntitePublique: corps.departementEntitePublique,
-        infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
-        postes: corps.postes,
-      });
-
-      const messageErreurDonneesUtilisateur = (
-        donneesRequete,
-        utilisateurExistant = false
-      ) => {
-        try {
-          Utilisateur.valideDonnees(
-            donneesRequete,
-            referentiel,
-            utilisateurExistant
-          );
-          return { donneesInvalides: false };
-        } catch (erreur) {
-          return { donneesInvalides: true, messageErreur: erreur.message };
-        }
-      };
-
       const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
         promesseEnvoiMessage
           .then(() => utilisateur)
@@ -80,9 +58,9 @@ const routesApiPublique = ({
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
       donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       donnees.email = requete.body.email?.toLowerCase();
-
       const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(donnees);
+        messageErreurDonneesUtilisateur(donnees, false, referentiel);
+
       if (donneesInvalides) {
         reponse
           .status(422)

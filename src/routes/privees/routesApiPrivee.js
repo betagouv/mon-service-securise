@@ -19,6 +19,10 @@ const Utilisateur = require('../../modeles/utilisateur');
 const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
 const { DUREE_SESSION } = require('../../http/configurationServeur');
+const {
+  messageErreurDonneesUtilisateur,
+  obtentionDonneesDeBaseUtilisateur,
+} = require('../mappeur/utilisateur');
 
 const routesApiPrivee = ({
   middleware,
@@ -68,32 +72,6 @@ const routesApiPrivee = ({
         service.id
       )
       .then(() => contributeur);
-
-  const obtentionDonneesDeBaseUtilisateur = (corps) => ({
-    prenom: corps.prenom,
-    nom: corps.nom,
-    telephone: corps.telephone,
-    nomEntitePublique: corps.nomEntitePublique,
-    departementEntitePublique: corps.departementEntitePublique,
-    infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
-    postes: corps.postes,
-  });
-
-  const messageErreurDonneesUtilisateur = (
-    donneesRequete,
-    utilisateurExistant = false
-  ) => {
-    try {
-      Utilisateur.valideDonnees(
-        donneesRequete,
-        referentiel,
-        utilisateurExistant
-      );
-      return { donneesInvalides: false };
-    } catch (erreur) {
-      return { donneesInvalides: true, messageErreur: erreur.message };
-    }
-  };
 
   const routes = express.Router();
 
@@ -261,9 +239,9 @@ const routesApiPrivee = ({
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
-
       const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(donnees, true);
+        messageErreurDonneesUtilisateur(donnees, true, referentiel);
+
       if (donneesInvalides) {
         reponse
           .status(422)
