@@ -2,6 +2,10 @@ const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const ParcoursUtilisateur = require('../../../src/modeles/parcoursUtilisateur');
+const {
+  ErreurUtilisateurExistant,
+  ErreurEmailManquant,
+} = require('../../../src/erreurs');
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
@@ -9,6 +13,281 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
+
+  describe('quand requête POST sur `/api/utilisateur`', () => {
+    const utilisateur = { id: '123', genereToken: () => 'un token' };
+    let donneesRequete;
+
+    beforeEach(() => {
+      donneesRequete = {
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+        telephone: '0100000000',
+        postes: ['RSSI', "Chargé des systèmes d'informations"],
+        nomEntitePublique: 'Ville de Paris',
+        departementEntitePublique: '75',
+        cguAcceptees: 'true',
+        infolettreAcceptee: 'true',
+      };
+
+      testeur.referentiel().departement = () => 'Paris';
+      testeur.adaptateurMail().creeContact = () => Promise.resolve();
+      testeur.adaptateurMail().envoieMessageFinalisationInscription = () =>
+        Promise.resolve();
+      testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse = () =>
+        Promise.resolve();
+
+      testeur.depotDonnees().nouvelUtilisateur = () =>
+        Promise.resolve(utilisateur);
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        [
+          'prenom',
+          'nom',
+          'email',
+          'telephone',
+          'cguAcceptees',
+          'nomEntitePublique',
+          'departementEntitePublique',
+          'infolettreAcceptee',
+          'postes.*',
+        ],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/utilisateur',
+          data: donneesRequete,
+        },
+        done
+      );
+    });
+
+    it("convertit l'email en minuscules", (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ email }) => {
+        expect(email).to.equal('jean.dupont@mail.fr');
+        return Promise.resolve(utilisateur);
+      };
+
+      donneesRequete.email = 'Jean.DUPONT@mail.fr';
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch(done);
+    });
+
+    it('convertit les cgu acceptées en valeur booléenne', (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ cguAcceptees }) => {
+        expect(cguAcceptees).to.equal(true);
+        return Promise.resolve(utilisateur);
+      };
+
+      donneesRequete.cguAcceptees = 'true';
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("convertit l'infolettre acceptée en valeur booléenne", (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = ({ infolettreAcceptee }) => {
+        expect(infolettreAcceptee).to.equal(true);
+        return Promise.resolve(utilisateur);
+      };
+
+      donneesRequete.infolettreAcceptee = 'true';
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", (done) => {
+      donneesRequete.prenom = '';
+
+      testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        'La création d\'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/utilisateur',
+          data: donneesRequete,
+        },
+        done
+      );
+    });
+
+    it("demande au dépôt de créer l'utilisateur", (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
+        const donneesAttendues = {
+          ...donneesRequete,
+          cguAcceptees: true,
+          infolettreAcceptee: true,
+        };
+        expect(donneesUtilisateur).to.eql(donneesAttendues);
+        return Promise.resolve(utilisateur);
+      };
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({ idUtilisateur: '123' });
+          done();
+        })
+        .catch(done);
+    });
+
+    it("utilise l'adaptateur de tracking pour envoyer un événement d'inscription", (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = () =>
+        Promise.resolve({ email: 'jean.dupont@mail.fr' });
+
+      let donneesPassees = {};
+      testeur.adaptateurTracking().envoieTrackingInscription = (
+        destinataire
+      ) => {
+        donneesPassees = { destinataire };
+        return Promise.resolve();
+      };
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => {
+          expect(donneesPassees).to.eql({
+            destinataire: 'jean.dupont@mail.fr',
+          });
+          done();
+        })
+        .catch(done);
+    });
+
+    it('crée un contact email', (done) => {
+      utilisateur.email = 'jean.dupont@mail.fr';
+      utilisateur.prenom = 'Jean';
+      utilisateur.nom = 'Dupont';
+      utilisateur.infolettreAcceptee = false;
+
+      testeur.adaptateurMail().creeContact = (
+        destinataire,
+        prenom,
+        nom,
+        bloqueEmails
+      ) => {
+        expect(destinataire).to.equal('jean.dupont@mail.fr');
+        expect(prenom).to.equal('Jean');
+        expect(nom).to.equal('Dupont');
+        expect(bloqueEmails).to.equal(true);
+        return Promise.resolve();
+      };
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("envoie un message de notification à l'utilisateur créé", (done) => {
+      utilisateur.email = 'jean.dupont@mail.fr';
+      utilisateur.idResetMotDePasse = '999';
+
+      testeur.adaptateurMail().envoieMessageFinalisationInscription = (
+        destinataire,
+        idResetMotDePasse
+      ) => {
+        expect(destinataire).to.equal('jean.dupont@mail.fr');
+        expect(idResetMotDePasse).to.equal('999');
+        return Promise.resolve();
+      };
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => done())
+        .catch(done);
+    });
+
+    describe("si l'envoi de mail échoue", () => {
+      beforeEach(() => {
+        testeur.adaptateurMail().envoieMessageFinalisationInscription = () =>
+          Promise.reject(new Error('Oups.'));
+        testeur.depotDonnees().supprimeUtilisateur = () => Promise.resolve();
+      });
+
+      it('retourne une erreur HTTP 424', (done) => {
+        testeur.verifieRequeteGenereErreurHTTP(
+          424,
+          "L'envoi de l'email de finalisation d'inscription a échoué",
+          {
+            method: 'post',
+            url: 'http://localhost:1234/api/utilisateur',
+            data: donneesRequete,
+          },
+          done
+        );
+      });
+
+      it("supprime l'utilisateur créé", (done) => {
+        let utilisateurSupprime = false;
+        testeur.depotDonnees().supprimeUtilisateur = (id) => {
+          expect(id).to.equal('123');
+
+          utilisateurSupprime = true;
+          return Promise.resolve();
+        };
+
+        axios
+          .post('http://localhost:1234/api/utilisateur', donneesRequete)
+          .catch(() => {
+            expect(utilisateurSupprime).to.be(true);
+            done();
+          })
+          .catch(done);
+      });
+    });
+
+    it('envoie un email de notification de tentative de réinscription', (done) => {
+      expect(donneesRequete.email).to.equal('jean.dupont@mail.fr');
+      let notificationEnvoyee = false;
+
+      testeur.depotDonnees().nouvelUtilisateur = () =>
+        Promise.reject(new ErreurUtilisateurExistant('oups', '123'));
+
+      testeur.adaptateurMail().envoieNotificationTentativeReinscription = (
+        destinataire
+      ) => {
+        expect(destinataire).to.equal('jean.dupont@mail.fr');
+        notificationEnvoyee = true;
+        return Promise.resolve();
+      };
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', donneesRequete)
+        .then(() => {
+          expect(notificationEnvoyee).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+
+    it("génère une erreur HTTP 422 si l'email n'est pas renseigné", (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = () =>
+        Promise.reject(new ErreurEmailManquant('oups'));
+
+      testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        'oups',
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/utilisateur',
+          data: donneesRequete,
+        },
+        done
+      );
+    });
+  });
 
   describe('quand requête POST sur `/api/reinitialisationMotDePasse`', () => {
     const utilisateur = {

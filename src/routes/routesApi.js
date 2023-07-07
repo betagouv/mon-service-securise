@@ -12,7 +12,6 @@ const {
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
   ErreurModele,
-  ErreurUtilisateurExistant,
 } = require('../erreurs');
 const routesApiService = require('./routesApiService');
 const ServiceTracking = require('../tracking/serviceTracking');
@@ -40,17 +39,6 @@ const routesApi = (
           .then(() => Promise.reject(new EchecEnvoiMessage()))
       );
 
-  const creeContactEmail = (utilisateur) =>
-    verifieSuccesEnvoiMessage(
-      adaptateurMail.creeContact(
-        utilisateur.email,
-        utilisateur.prenom ?? '',
-        utilisateur.nom ?? '',
-        !utilisateur.infolettreAcceptee
-      ),
-      utilisateur
-    );
-
   const envoieMessageInvitationInscription = (
     emetteur,
     contributeur,
@@ -64,16 +52,6 @@ const routesApi = (
         contributeur.idResetMotDePasse
       ),
       contributeur
-    );
-
-  const envoieMessageFinalisationInscription = (utilisateur) =>
-    verifieSuccesEnvoiMessage(
-      adaptateurMail.envoieMessageFinalisationInscription(
-        utilisateur.email,
-        utilisateur.idResetMotDePasse,
-        utilisateur.prenom
-      ),
-      utilisateur
     );
 
   const envoieMessageInvitationContribution = (
@@ -223,55 +201,6 @@ const routesApi = (
         reponse.json({ seuilCriticite });
       } catch {
         reponse.status(422).send('Données invalides');
-      }
-    }
-  );
-
-  routes.post(
-    '/utilisateur',
-    middleware.aseptise(...Utilisateur.nomsProprietesBase()),
-    (requete, reponse, suite) => {
-      const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
-      donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
-      donnees.email = requete.body.email?.toLowerCase();
-
-      const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(donnees);
-      if (donneesInvalides) {
-        reponse
-          .status(422)
-          .send(
-            `La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`
-          );
-      } else {
-        depotDonnees
-          .nouvelUtilisateur(donnees)
-          .then(creeContactEmail)
-          .then(envoieMessageFinalisationInscription)
-          .then((utilisateur) => {
-            adaptateurTracking.envoieTrackingInscription(utilisateur.email);
-            return utilisateur;
-          })
-          .catch((erreur) => {
-            if (erreur instanceof ErreurUtilisateurExistant) {
-              return adaptateurMail
-                .envoieNotificationTentativeReinscription(donnees.email)
-                .then(() => ({ id: erreur.idUtilisateur }));
-            }
-            throw erreur;
-          })
-          .then(({ id }) => reponse.json({ idUtilisateur: id }))
-          .catch((e) => {
-            if (e instanceof EchecEnvoiMessage) {
-              reponse
-                .status(424)
-                .send(
-                  "L'envoi de l'email de finalisation d'inscription a échoué"
-                );
-            } else if (e instanceof ErreurModele) {
-              reponse.status(422).send(e.message);
-            } else suite(e);
-          });
       }
     }
   );
