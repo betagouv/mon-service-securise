@@ -164,7 +164,15 @@ const creeServeur = (
     }
   );
 
-  app.use('/api', routesApiPublique({ middleware, referentiel, depotDonnees }));
+  app.use(
+    '/api',
+    routesApiPublique({
+      middleware,
+      referentiel,
+      depotDonnees,
+      adaptateurAnnuaire,
+    })
+  );
 
   app.use(
     '/api',
@@ -175,7 +183,6 @@ const creeServeur = (
       referentiel,
       adaptateurHorloge,
       adaptateurPdf,
-      adaptateurAnnuaire,
       adaptateurCsv,
       adaptateurZip,
       adaptateurTracking
