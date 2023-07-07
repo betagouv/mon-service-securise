@@ -9,6 +9,64 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
   afterEach(testeur.arrete);
 
+  describe('quand requête GET sur `/api/annuaire/suggestions`', () => {
+    beforeEach(() => {
+      testeur.referentiel().estCodeDepartement = () => true;
+    });
+
+    it('retourne une erreur HTTP 400 si le terme de recherche est vide', (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        'Le terme de recherche ne peut pas être vide',
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/annuaire/suggestions?departement=75',
+        },
+        done
+      );
+    });
+
+    it("retourne une erreur HTTP 400 si le département n'est pas dans le referentiel", (done) => {
+      testeur.referentiel().estCodeDepartement = () => false;
+      testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        'Le département doit être valide (01 à 989)',
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/annuaire/suggestions?recherche=mairie&departement=990',
+        },
+        done
+      );
+    });
+
+    it("recherche les organisations correspondantes grâce à l'adaptateur annuaire", (done) => {
+      let adaptateurAppele = false;
+      testeur.adaptateurAnnuaire().rechercheOrganisation = (
+        terme,
+        departement
+      ) => {
+        adaptateurAppele = true;
+        expect(terme).to.equal('mairie');
+        expect(departement).to.equal('01');
+        return Promise.resolve([{ nom: 'un résultat', departement: '01' }]);
+      };
+
+      axios
+        .get(
+          'http://localhost:1234/api/annuaire/suggestions?recherche=mairie&departement=01'
+        )
+        .then((reponse) => {
+          expect(adaptateurAppele).to.be(true);
+          expect(reponse.status).to.be(200);
+          expect(reponse.data.suggestions).to.eql([
+            { nom: 'un résultat', departement: '01' },
+          ]);
+        })
+        .then(done)
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
+
   describe('quand requête POST sur `/api/desinscriptionInfolettre`', () => {
     const donneesRequete = {
       email: 'jean.dujardin@mail.com',
