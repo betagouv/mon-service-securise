@@ -178,7 +178,7 @@ const creeServeur = (
 
   app.use(
     '/api',
-    routesApiPrivee(
+    routesApiPrivee({
       middleware,
       adaptateurMail,
       depotDonnees,
@@ -187,8 +187,8 @@ const creeServeur = (
       adaptateurPdf,
       adaptateurCsv,
       adaptateurZip,
-      adaptateurTracking
-    )
+      adaptateurTracking,
+    })
   );
 
   app.use('/bibliotheques', routesBibliotheques());
