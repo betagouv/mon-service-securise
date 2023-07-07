@@ -373,16 +373,12 @@ describe('Le dépôt de données des utilisateurs', () => {
 
         try {
           await depot.nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont' });
-          erreurLevee = false;
         } catch (erreur) {
           erreurLevee = true;
           expect(erreur).to.be.a(ErreurEmailManquant);
           expect(utilisateurCree).to.be(false);
         } finally {
-          if (!erreurLevee)
-            expect().to.fail(
-              "La création de l'utilisateur aurait dû lever une ErreurEmailManquant"
-            );
+          expect(erreurLevee).to.be(true);
         }
       });
 
