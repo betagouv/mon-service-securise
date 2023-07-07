@@ -5,6 +5,7 @@ const {
   ENDPOINTS_SANS_CSRF,
 } = require('./http/configurationServeur');
 const routesApi = require('./routes/routesApi');
+const routesApiPublique = require('./routes/publiques/routesApiPublique');
 const { routesBibliotheques } = require('./routes/routesBibliotheques');
 const routesService = require('./routes/routesService');
 const routesStyles = require('./routes/routesStyles');
@@ -162,6 +163,8 @@ const creeServeur = (
       reponse.render('tableauDeBord');
     }
   );
+
+  app.use('/api', routesApiPublique({ middleware, referentiel }));
 
   app.use(
     '/api',
