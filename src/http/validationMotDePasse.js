@@ -3,6 +3,7 @@
 // La mutualisation est prévue lorsque le back supportera la syntaxe « import … from »
 
 const resultatValidation = {
+  ERREUR_MOT_DE_PASSE_NON_CHAINE: 'erreurMotDePasseNonChaine',
   ERREUR_MOT_DE_PASSE_TROP_COURT: 'erreurMotDePasseTropCourt',
   ERREUR_PAS_DE_CARACTERE_SPECIAL: 'erreurPasDeCaractereSpecial',
   ERREUR_PAS_DE_CHIFFRE: 'erreurPasDeChiffre',
@@ -12,8 +13,8 @@ const resultatValidation = {
 };
 
 const valideMotDePasse = (motDePasse) => {
-  if (motDePasse === '') return resultatValidation.MOT_DE_PASSE_VALIDE;
-
+  if (typeof motDePasse !== 'string')
+    return resultatValidation.ERREUR_MOT_DE_PASSE_NON_CHAINE;
   if (motDePasse.length < 12)
     return resultatValidation.ERREUR_MOT_DE_PASSE_TROP_COURT;
   if (!motDePasse.match(/[A-Z]/))

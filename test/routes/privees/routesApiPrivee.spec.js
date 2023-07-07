@@ -383,35 +383,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
-    it("ne fait rien si aucun nouveau mot de passe n'est renseigné (possible tant que le changement de MDP se fait sur la page profil utilisateur)", (done) => {
-      let motDePasseMisAJour = false;
-
-      testeur.depotDonnees().metsAJourMotDePasse = () => {
-        motDePasseMisAJour = true;
-        return Promise.resolve();
-      };
-
-      axios
-        .put('http://localhost:1234/api/motDePasse', { motDePasse: undefined })
-        .then((reponse) => expect(reponse.status).to.equal(204))
-        .then(() => expect(motDePasseMisAJour).to.be(false))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
-    });
-
-    it('retourne une erreur HTTP 422 si le mot de passe est invalide', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'Mot de passe invalide',
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/motDePasse',
-          data: { motDePasse: '' },
-        },
-        done
-      );
-    });
-
     it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", (done) => {
       testeur.verifieRequeteGenereErreurHTTP(
         422,

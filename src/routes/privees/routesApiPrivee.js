@@ -193,20 +193,6 @@ const routesApiPrivee = ({
       const cguEnCoursDAcceptation = valeurBooleenne(requete.body.cguAcceptees);
       const { motDePasse } = requete.body;
 
-      const pasDeMotDePasse = motDePasse === undefined;
-      if (pasDeMotDePasse) {
-        reponse.status(204).send();
-        return;
-      }
-
-      const motDePasseInvalide = !(
-        typeof motDePasse === 'string' && motDePasse
-      );
-      if (motDePasseInvalide) {
-        reponse.status(422).send('Mot de passe invalide');
-        return;
-      }
-
       if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
         reponse.status(422).send('CGU non acceptées');
         return;
