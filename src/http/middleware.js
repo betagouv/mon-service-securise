@@ -1,7 +1,9 @@
 const controlAcces = require('express-ip-access-control');
 const { check } = require('express-validator');
 const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
-const { CSP_BIBLIOTHEQUES } = require('../routes/routesBibliotheques');
+const {
+  CSP_BIBLIOTHEQUES,
+} = require('../routes/publiques/routesBibliotheques');
 
 const middleware = (configuration = {}) => {
   const {

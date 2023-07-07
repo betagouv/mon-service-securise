@@ -1,4 +1,4 @@
-const testeurMSS = require('./testeurMSS');
+const testeurMSS = require('../testeurMSS');
 
 describe('Le serveur MSS des routes /bibliotheques/*', () => {
   const testeur = testeurMSS();
