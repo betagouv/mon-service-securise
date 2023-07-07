@@ -564,14 +564,14 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  describe('sur vérification du mot de passe', () => {
+  describe('sur challenge du mot de passe', () => {
     it("jette une erreur technique si l'ID de l'utilisateur courant n'est pas présent dans la requête", (done) => {
       requete.idUtilisateurCourant = null;
 
       const middleware = Middleware();
 
       expect(() =>
-        middleware.verificationMotDePasse(requete, reponse)
+        middleware.challengeMotDePasse(requete, reponse)
       ).to.throwError((e) => {
         expect(e.message).to.equal(
           'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
@@ -587,19 +587,19 @@ describe('Le middleware MSS', () => {
       prepareVerificationReponse(
         reponse,
         422,
-        'Le champ "motDePasse" est obligatoire',
+        'Le champ `motDePasseChallenge` est obligatoire',
         done
       );
       const suite = () =>
         done("Le middleware suivant n'aurait pas dû être appelé");
 
       const middleware = Middleware();
-      middleware.verificationMotDePasse(requete, reponse, suite);
+      middleware.challengeMotDePasse(requete, reponse, suite);
     });
 
     it('renvoie une erreur HTTP 401 si le mot de passe est incorrect', (done) => {
       requete.idUtilisateurCourant = '123';
-      requete.body = { motDePasse: 'MAUVAIS_MDP' };
+      requete.body = { motDePasseChallenge: 'MAUVAIS_MDP' };
       depotDonnees.verifieMotDePasse = () => Promise.reject();
 
       prepareVerificationReponse(reponse, 401, 'Mot de passe incorrect', done);
@@ -607,39 +607,44 @@ describe('Le middleware MSS', () => {
         done("Le middleware suivant n'aurait pas dû être appelé");
 
       const middleware = Middleware({ depotDonnees });
-      middleware.verificationMotDePasse(requete, reponse, suite);
+      middleware.challengeMotDePasse(requete, reponse, suite);
     });
 
     it('utilise le dépôt de données pour vérifier le mot de passe', async () => {
       let donneesPassees = {};
       requete.idUtilisateurCourant = '123';
-      requete.body = { motDePasse: 'MDP' };
+      requete.body = { motDePasseChallenge: 'MDP' };
 
-      depotDonnees.verifieMotDePasse = async (idUtilisateur, motDePasse) => {
-        donneesPassees = { idUtilisateur, motDePasse };
+      depotDonnees.verifieMotDePasse = async (
+        idUtilisateur,
+        motDePasseChallenge
+      ) => {
+        donneesPassees = { idUtilisateur, motDePasseChallenge };
       };
 
       const middleware = Middleware({ depotDonnees });
-      await middleware.verificationMotDePasse(requete, reponse, () => {});
+      await middleware.challengeMotDePasse(requete, reponse, () => {});
 
       expect(donneesPassees).to.eql({
         idUtilisateur: '123',
-        motDePasse: 'MDP',
+        motDePasseChallenge: 'MDP',
       });
     });
 
     it('appelle le middleware suivant quand le mot de passe est correct', async () => {
       let middlewareSuivantAppele = false;
       requete.idUtilisateurCourant = '123';
-      requete.body = { motDePasse: 'MDP' };
+      requete.body = { motDePasseChallenge: 'MDP' };
 
-      depotDonnees.verifieMotDePasse = async () => {};
+      const verificationOk = () => async () => {};
+      depotDonnees.verifieMotDePasse = verificationOk();
+
       const suite = () => {
         middlewareSuivantAppele = true;
       };
 
       const middleware = Middleware({ depotDonnees });
-      await middleware.verificationMotDePasse(requete, reponse, suite);
+      await middleware.challengeMotDePasse(requete, reponse, suite);
 
       expect(middlewareSuivantAppele).to.be(true);
     });

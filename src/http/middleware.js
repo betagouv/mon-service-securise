@@ -187,20 +187,22 @@ const middleware = (configuration = {}) => {
       message: 'Non autorisé',
     });
 
-  const verificationMotDePasse = (requete, reponse, suite) => {
+  const challengeMotDePasse = (requete, reponse, suite) => {
     if (!requete.idUtilisateurCourant)
       throw new Error(
         'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
       );
 
-    const { motDePasse } = requete.body;
-    if (!motDePasse) {
-      reponse.status(422).send('Le champ "motDePasse" est obligatoire');
+    const { motDePasseChallenge } = requete.body;
+    if (!motDePasseChallenge) {
+      reponse
+        .status(422)
+        .send('Le champ `motDePasseChallenge` est obligatoire');
       return;
     }
 
     depotDonnees
-      .verifieMotDePasse(requete.idUtilisateurCourant, motDePasse)
+      .verifieMotDePasse(requete.idUtilisateurCourant, motDePasseChallenge)
       .then(() => suite())
       .catch(() => reponse.status(401).send('Mot de passe incorrect'));
   };
@@ -218,7 +220,7 @@ const middleware = (configuration = {}) => {
     verificationAcceptationCGU,
     verificationAddresseIP,
     verificationJWT,
-    verificationMotDePasse,
+    challengeMotDePasse,
   };
 };
 
