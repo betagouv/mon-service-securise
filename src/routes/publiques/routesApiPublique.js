@@ -1,4 +1,5 @@
 const express = require('express');
+const { DUREE_SESSION } = require('../../http/configurationServeur');
 
 const routesApiPublique = ({
   middleware,
@@ -7,6 +8,10 @@ const routesApiPublique = ({
   adaptateurAnnuaire,
 }) => {
   const routes = express.Router();
+
+  routes.get('/dureeSession', (_requete, reponse) => {
+    reponse.send({ dureeSession: DUREE_SESSION });
+  });
 
   routes.get('/annuaire/suggestions', (requete, reponse) => {
     const { recherche = '', departement = null } = requete.query;
