@@ -1,5 +1,4 @@
 const express = require('express');
-const { DUREE_SESSION } = require('../../http/configurationServeur');
 const Utilisateur = require('../../modeles/utilisateur');
 const { valeurBooleenne } = require('../../utilitaires/aseptisation');
 const {
@@ -174,10 +173,6 @@ const routesApiPublique = ({
         }
       })
       .catch(suite);
-  });
-
-  routes.get('/dureeSession', (_requete, reponse) => {
-    reponse.send({ dureeSession: DUREE_SESSION });
   });
 
   routes.get('/annuaire/suggestions', (requete, reponse) => {

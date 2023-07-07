@@ -18,6 +18,7 @@ const ServiceTracking = require('../../tracking/serviceTracking');
 const Utilisateur = require('../../modeles/utilisateur');
 const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
+const { DUREE_SESSION } = require('../../http/configurationServeur');
 
 const routesApiPrivee = ({
   middleware,
@@ -301,6 +302,10 @@ const routesApiPrivee = ({
         reponse.json({ utilisateur: utilisateur.toJSON() });
       });
     } else reponse.status(401).send("Pas d'utilisateur courant");
+  });
+
+  routes.get('/dureeSession', (_requete, reponse) => {
+    reponse.send({ dureeSession: DUREE_SESSION });
   });
 
   routes.post(
