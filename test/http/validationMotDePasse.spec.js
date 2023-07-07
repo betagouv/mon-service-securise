@@ -5,6 +5,12 @@ const {
 } = require('../../src/http/validationMotDePasse');
 
 describe('Le validateur de mot de passe', () => {
+  it('vérifie que le mot de passe est une chaîne de caractères', () => {
+    expect(valideMotDePasse([])).to.equal(
+      resultatValidation.ERREUR_MOT_DE_PASSE_NON_CHAINE
+    );
+  });
+
   it("vérifie que la taille du mot de passe est d'au moins douze caractères", () => {
     expect(valideMotDePasse('Ab!45678901')).to.equal(
       resultatValidation.ERREUR_MOT_DE_PASSE_TROP_COURT
@@ -58,12 +64,6 @@ describe('Le validateur de mot de passe', () => {
       expect(valideMotDePasse(mdp)).to.equal(
         resultatValidation.MOT_DE_PASSE_VALIDE
       )
-    );
-  });
-
-  it('accepte un mot de passe vide comme valide', () => {
-    expect(valideMotDePasse('')).to.equal(
-      resultatValidation.MOT_DE_PASSE_VALIDE
     );
   });
 });

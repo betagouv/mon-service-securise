@@ -12,8 +12,6 @@ const resultatValidation = {
 };
 
 const valideMotDePasse = (motDePasse) => {
-  if (motDePasse === '') return resultatValidation.MOT_DE_PASSE_VALIDE;
-
   if (motDePasse.length < 12)
     return resultatValidation.ERREUR_MOT_DE_PASSE_TROP_COURT;
   if (!motDePasse.match(/[A-Z]/))

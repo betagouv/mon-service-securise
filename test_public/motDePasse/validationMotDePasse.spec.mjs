@@ -60,10 +60,4 @@ describe('Le validateur de mot de passe', () => {
       )
     );
   });
-
-  it('accepte un mot de passe vide comme valide', () => {
-    expect(valideMotDePasse('')).to.equal(
-      resultatValidation.MOT_DE_PASSE_VALIDE
-    );
-  });
 });
