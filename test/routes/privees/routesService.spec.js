@@ -1,8 +1,8 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
-const testeurMSS = require('./testeurMSS');
-const Homologation = require('../../src/modeles/homologation');
+const testeurMSS = require('../testeurMSS');
+const Homologation = require('../../../src/modeles/homologation');
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
