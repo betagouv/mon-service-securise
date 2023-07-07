@@ -5,10 +5,12 @@ const {
   ENDPOINTS_SANS_CSRF,
 } = require('./http/configurationServeur');
 const routesApiPrivee = require('./routes/privees/routesApiPrivee');
-const routesApiPublique = require('./routes/publiques/routesApiPublique');
-const { routesBibliotheques } = require('./routes/routesBibliotheques');
 const routesService = require('./routes/privees/routesService');
-const routesStyles = require('./routes/routesStyles');
+const routesApiPublique = require('./routes/publiques/routesApiPublique');
+const {
+  routesBibliotheques,
+} = require('./routes/publiques/routesBibliotheques');
+const routesStyles = require('./routes/publiques/routesStyles');
 
 require('dotenv').config();
 
@@ -175,6 +177,8 @@ const creeServeur = (
       adaptateurMail,
     })
   );
+  app.use('/bibliotheques', routesBibliotheques());
+  app.use('/styles', routesStyles());
 
   app.use(
     '/api',
@@ -197,10 +201,6 @@ const creeServeur = (
     middleware.verificationJWT,
     routesService(middleware, referentiel, depotDonnees, moteurRegles)
   );
-
-  app.use('/bibliotheques', routesBibliotheques());
-
-  app.use('/styles', routesStyles());
 
   app.get(
     '/utilisateur/edition',

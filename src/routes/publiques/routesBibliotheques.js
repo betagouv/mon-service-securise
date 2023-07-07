@@ -1,6 +1,6 @@
 const axios = require('axios');
 const express = require('express');
-const adaptateurEnvironnement = require('../adaptateurs/adaptateurEnvironnement');
+const adaptateurEnvironnement = require('../../adaptateurs/adaptateurEnvironnement');
 
 const CHEMINS_BIBLIOTHEQUES = {
   get: {
