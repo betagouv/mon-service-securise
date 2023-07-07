@@ -134,6 +134,9 @@ const middlewareFantaisie = {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
     verificationCGUMenee = true;
+    // Réplique le comportement du middleware CGU de PROD,
+    // qui appelle le middleware de vérification JWT.
+    verificationJWTMenee = true;
     suite();
   },
 
