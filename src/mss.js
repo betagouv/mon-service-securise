@@ -171,6 +171,7 @@ const creeServeur = (
       referentiel,
       depotDonnees,
       adaptateurAnnuaire,
+      adaptateurTracking,
     })
   );
 
