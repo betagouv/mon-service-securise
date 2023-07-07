@@ -19,7 +19,7 @@ const Utilisateur = require('../../modeles/utilisateur');
 const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
 
-const routesApiPrivee = (
+const routesApiPrivee = ({
   middleware,
   adaptateurMail,
   depotDonnees,
@@ -28,8 +28,8 @@ const routesApiPrivee = (
   adaptateurPdf,
   adaptateurCsv,
   adaptateurZip,
-  adaptateurTracking
-) => {
+  adaptateurTracking,
+}) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
     promesseEnvoiMessage
       .then(() => utilisateur)
