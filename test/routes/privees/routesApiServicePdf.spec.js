@@ -1,15 +1,15 @@
 const expect = require('expect.js');
 const axios = require('axios');
 
-const testeurMSS = require('./testeurMSS');
+const testeurMSS = require('../testeurMSS');
 const {
   verifieNomFichierServi,
   verifieTypeFichierServiEstPDF,
   verifieTypeFichierServiEstZIP,
-} = require('../aides/verifieFichierServi');
-const { unDossier } = require('../constructeurs/constructeurDossier');
-const Homologation = require('../../src/modeles/homologation');
-const Referentiel = require('../../src/referentiel');
+} = require('../../aides/verifieFichierServi');
+const { unDossier } = require('../../constructeurs/constructeurDossier');
+const Homologation = require('../../../src/modeles/homologation');
+const Referentiel = require('../../../src/referentiel');
 
 describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
   const testeur = testeurMSS();
