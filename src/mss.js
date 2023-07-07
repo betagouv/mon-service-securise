@@ -172,6 +172,7 @@ const creeServeur = (
       depotDonnees,
       adaptateurAnnuaire,
       adaptateurTracking,
+      adaptateurMail,
     })
   );
 
