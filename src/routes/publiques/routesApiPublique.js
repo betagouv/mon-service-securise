@@ -1,5 +1,12 @@
 const express = require('express');
 const { DUREE_SESSION } = require('../../http/configurationServeur');
+const Utilisateur = require('../../modeles/utilisateur');
+const { valeurBooleenne } = require('../../utilitaires/aseptisation');
+const {
+  ErreurUtilisateurExistant,
+  EchecEnvoiMessage,
+  ErreurModele,
+} = require('../../erreurs');
 
 const routesApiPublique = ({
   middleware,
@@ -10,6 +17,111 @@ const routesApiPublique = ({
   adaptateurMail,
 }) => {
   const routes = express.Router();
+
+  routes.post(
+    '/utilisateur',
+    middleware.aseptise(...Utilisateur.nomsProprietesBase()),
+    (requete, reponse, suite) => {
+      const obtentionDonneesDeBaseUtilisateur = (corps) => ({
+        prenom: corps.prenom,
+        nom: corps.nom,
+        telephone: corps.telephone,
+        nomEntitePublique: corps.nomEntitePublique,
+        departementEntitePublique: corps.departementEntitePublique,
+        infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
+        postes: corps.postes,
+      });
+
+      const messageErreurDonneesUtilisateur = (
+        donneesRequete,
+        utilisateurExistant = false
+      ) => {
+        try {
+          Utilisateur.valideDonnees(
+            donneesRequete,
+            referentiel,
+            utilisateurExistant
+          );
+          return { donneesInvalides: false };
+        } catch (erreur) {
+          return { donneesInvalides: true, messageErreur: erreur.message };
+        }
+      };
+
+      const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
+        promesseEnvoiMessage
+          .then(() => utilisateur)
+          .catch(() =>
+            depotDonnees
+              .supprimeUtilisateur(utilisateur.id)
+              .then(() => Promise.reject(new EchecEnvoiMessage()))
+          );
+
+      const creeContactEmail = (utilisateur) =>
+        verifieSuccesEnvoiMessage(
+          adaptateurMail.creeContact(
+            utilisateur.email,
+            utilisateur.prenom ?? '',
+            utilisateur.nom ?? '',
+            !utilisateur.infolettreAcceptee
+          ),
+          utilisateur
+        );
+
+      const envoieMessageFinalisationInscription = (utilisateur) =>
+        verifieSuccesEnvoiMessage(
+          adaptateurMail.envoieMessageFinalisationInscription(
+            utilisateur.email,
+            utilisateur.idResetMotDePasse,
+            utilisateur.prenom
+          ),
+          utilisateur
+        );
+
+      const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
+      donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
+      donnees.email = requete.body.email?.toLowerCase();
+
+      const { donneesInvalides, messageErreur } =
+        messageErreurDonneesUtilisateur(donnees);
+      if (donneesInvalides) {
+        reponse
+          .status(422)
+          .send(
+            `La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`
+          );
+      } else {
+        depotDonnees
+          .nouvelUtilisateur(donnees)
+          .then(creeContactEmail)
+          .then(envoieMessageFinalisationInscription)
+          .then((utilisateur) => {
+            adaptateurTracking.envoieTrackingInscription(utilisateur.email);
+            return utilisateur;
+          })
+          .catch((erreur) => {
+            if (erreur instanceof ErreurUtilisateurExistant) {
+              return adaptateurMail
+                .envoieNotificationTentativeReinscription(donnees.email)
+                .then(() => ({ id: erreur.idUtilisateur }));
+            }
+            throw erreur;
+          })
+          .then(({ id }) => reponse.json({ idUtilisateur: id }))
+          .catch((e) => {
+            if (e instanceof EchecEnvoiMessage) {
+              reponse
+                .status(424)
+                .send(
+                  "L'envoi de l'email de finalisation d'inscription a échoué"
+                );
+            } else if (e instanceof ErreurModele) {
+              reponse.status(422).send(e.message);
+            } else suite(e);
+          });
+      }
+    }
+  );
 
   routes.post('/reinitialisationMotDePasse', (requete, reponse, suite) => {
     const email = requete.body.email?.toLowerCase();
