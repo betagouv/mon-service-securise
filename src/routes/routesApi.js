@@ -276,23 +276,6 @@ const routesApi = (
     }
   );
 
-  routes.post('/reinitialisationMotDePasse', (requete, reponse, suite) => {
-    const email = requete.body.email?.toLowerCase();
-
-    depotDonnees
-      .reinitialiseMotDePasse(email)
-      .then((utilisateur) => {
-        if (utilisateur) {
-          adaptateurMail.envoieMessageReinitialisationMotDePasse(
-            utilisateur.email,
-            utilisateur.idResetMotDePasse
-          );
-        }
-      })
-      .then(() => reponse.send(''))
-      .catch(suite);
-  });
-
   routes.put(
     '/motDePasse',
     middleware.verificationJWT,

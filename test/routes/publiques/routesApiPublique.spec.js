@@ -10,6 +10,87 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
   afterEach(testeur.arrete);
 
+  describe('quand requête POST sur `/api/reinitialisationMotDePasse`', () => {
+    const utilisateur = {
+      email: 'jean.dupont@mail.fr',
+      idResetMotDePasse: '999',
+    };
+
+    beforeEach(() => {
+      testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse = () =>
+        Promise.resolve();
+      testeur.depotDonnees().reinitialiseMotDePasse = () =>
+        Promise.resolve(utilisateur);
+    });
+
+    it("convertit l'email en minuscules", (done) => {
+      testeur.depotDonnees().reinitialiseMotDePasse = (email) => {
+        expect(email).to.equal('jean.dupont@mail.fr');
+        return Promise.resolve(utilisateur);
+      };
+
+      axios
+        .post('http://localhost:1234/api/reinitialisationMotDePasse', {
+          email: 'Jean.DUPONT@mail.fr',
+        })
+        .then(() => done())
+        .catch(done);
+    });
+
+    it("échoue silencieusement si l'email n'est pas renseigné", (done) => {
+      testeur.depotDonnees().nouvelUtilisateur = () => Promise.resolve();
+
+      axios
+        .post('http://localhost:1234/api/reinitialisationMotDePasse')
+        .then(() => done())
+        .catch(done);
+    });
+
+    it('demande au dépôt de réinitialiser le mot de passe', (done) => {
+      testeur.depotDonnees().reinitialiseMotDePasse = (email) =>
+        new Promise((resolve) => {
+          expect(email).to.equal('jean.dupont@mail.fr');
+          resolve(utilisateur);
+        });
+
+      axios
+        .post('http://localhost:1234/api/reinitialisationMotDePasse', {
+          email: 'jean.dupont@mail.fr',
+        })
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data).to.eql({});
+          done();
+        })
+        .catch(done);
+    });
+
+    it("envoie un mail à l'utilisateur", (done) => {
+      let messageEnvoye = false;
+
+      expect(utilisateur.idResetMotDePasse).to.equal('999');
+
+      testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse = (
+        email,
+        idReset
+      ) =>
+        new Promise((resolve) => {
+          expect(email).to.equal('jean.dupont@mail.fr');
+          expect(idReset).to.equal('999');
+          messageEnvoye = true;
+          resolve();
+        });
+
+      axios
+        .post('http://localhost:1234/api/reinitialisationMotDePasse', {
+          email: 'jean.dupont@mail.fr',
+        })
+        .then(() => expect(messageEnvoye).to.be(true))
+        .then(() => done())
+        .catch(done);
+    });
+  });
+
   describe('quand requête POST sur `/api/token`', () => {
     it("authentifie l'utilisateur avec le login en minuscules", (done) => {
       testeur.depotDonnees().lisParcoursUtilisateur = async () => {
