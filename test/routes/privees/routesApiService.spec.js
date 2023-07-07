@@ -1,17 +1,17 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
-const testeurMSS = require('./testeurMSS');
+const testeurMSS = require('../testeurMSS');
 
-const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
-const { unDossier } = require('../constructeurs/constructeurDossier');
+const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
+const { unDossier } = require('../../constructeurs/constructeurDossier');
 const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
-} = require('../../src/erreurs');
-const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
-const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
-const Homologation = require('../../src/modeles/homologation');
+} = require('../../../src/erreurs');
+const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
+const AutorisationCreateur = require('../../../src/modeles/autorisations/autorisationCreateur');
+const Homologation = require('../../../src/modeles/homologation');
 
 describe('Le serveur MSS des routes /api/service/*', () => {
   const testeur = testeurMSS();

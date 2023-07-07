@@ -13,7 +13,7 @@ const {
   ErreurAutorisationExisteDeja,
   ErreurModele,
 } = require('../../erreurs');
-const routesApiService = require('../routesApiService');
+const routesApiService = require('./routesApiService');
 const ServiceTracking = require('../../tracking/serviceTracking');
 const Utilisateur = require('../../modeles/utilisateur');
 const objetGetServices = require('../../modeles/objetsApi/objetGetServices');

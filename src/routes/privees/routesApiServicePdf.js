@@ -1,6 +1,6 @@
 const express = require('express');
-const { genereGradientConique } = require('../pdf/graphiques/camembert');
-const { dateYYYYMMDD } = require('../utilitaires/date');
+const { genereGradientConique } = require('../../pdf/graphiques/camembert');
+const { dateYYYYMMDD } = require('../../utilitaires/date');
 
 const routesApiServicePdf = (
   middleware,
