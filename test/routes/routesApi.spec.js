@@ -1898,19 +1898,4 @@ describe('Le serveur MSS des routes /api/*', () => {
         });
     });
   });
-
-  describe('quand requête GET sur `/api/dureeSession`', () => {
-    it('renvoie la durée de session', (done) => {
-      axios
-        .get('http://localhost:1234/api/dureeSession')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-
-          const { dureeSession } = reponse.data;
-          expect(dureeSession).to.equal(3600000);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
-    });
-  });
 });

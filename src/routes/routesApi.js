@@ -3,7 +3,6 @@ const express = require('express');
 const { valeurBooleenne } = require('../utilitaires/aseptisation');
 const { dateYYYYMMDD } = require('../utilitaires/date');
 const { zipTableaux } = require('../utilitaires/tableau');
-const { DUREE_SESSION } = require('../http/configurationServeur');
 const {
   resultatValidation,
   valideMotDePasse,
@@ -581,10 +580,6 @@ const routesApi = (
         });
     }
   );
-
-  routes.get('/dureeSession', (_requete, reponse) => {
-    reponse.send({ dureeSession: DUREE_SESSION });
-  });
 
   return routes;
 };
