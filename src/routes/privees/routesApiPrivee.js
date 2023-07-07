@@ -207,7 +207,6 @@ const routesApiPrivee = ({
 
   routes.put(
     '/motDePasse',
-    middleware.verificationJWT,
     middleware.aseptise('cguAcceptees'),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
@@ -255,7 +254,6 @@ const routesApiPrivee = ({
 
   routes.put(
     '/utilisateur',
-    middleware.verificationJWT,
     middleware.aseptise([
       ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email'),
     ]),
@@ -296,18 +294,14 @@ const routesApiPrivee = ({
     }
   );
 
-  routes.get(
-    '/utilisateurCourant',
-    middleware.verificationJWT,
-    (requete, reponse) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      if (idUtilisateur) {
-        depotDonnees.utilisateur(idUtilisateur).then((utilisateur) => {
-          reponse.json({ utilisateur: utilisateur.toJSON() });
-        });
-      } else reponse.status(401).send("Pas d'utilisateur courant");
-    }
-  );
+  routes.get('/utilisateurCourant', (requete, reponse) => {
+    const idUtilisateur = requete.idUtilisateurCourant;
+    if (idUtilisateur) {
+      depotDonnees.utilisateur(idUtilisateur).then((utilisateur) => {
+        reponse.json({ utilisateur: utilisateur.toJSON() });
+      });
+    } else reponse.status(401).send("Pas d'utilisateur courant");
+  });
 
   routes.post(
     '/autorisation',

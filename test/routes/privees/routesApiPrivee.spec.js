@@ -17,6 +17,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
   afterEach(testeur.arrete);
 
+  it("vérifie que l'utilisateur est authentifié sur toutes les routes", (done) => {
+    // On vérifie une seule route privée.
+    // Par construction, les autres seront protégées aussi puisque la protection est ajoutée comme middleware
+    // devant le routeur dédié aux routes privées.
+    testeur
+      .middleware()
+      .verifieRequeteExigeJWT('http://localhost:1234/api/services', done);
+  });
+
   describe('quand requête GET sur `/api/services`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur
@@ -330,15 +339,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         Promise.resolve(utilisateur);
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeJWT(
-          { method: 'put', url: 'http://localhost:1234/api/motDePasse' },
-          done
-        );
-    });
-
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         ['cguAcceptees'],
@@ -573,17 +573,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       depotDonnees.utilisateur = () => Promise.resolve(utilisateur);
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeJWT(
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/utilisateur',
-          data: donneesRequete,
-        },
-        done
-      );
-    });
-
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         [
@@ -750,16 +739,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/utilisateurCourant`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeJWT(
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/utilisateurCourant',
-        },
-        done
-      );
-    });
-
     it("renvoie l'utilisateur correspondant à l'identifiant", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 

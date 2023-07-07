@@ -178,6 +178,7 @@ const creeServeur = (
 
   app.use(
     '/api',
+    middleware.verificationJWT,
     routesApiPrivee({
       middleware,
       adaptateurMail,
