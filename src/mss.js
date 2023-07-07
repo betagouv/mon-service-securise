@@ -164,7 +164,7 @@ const creeServeur = (
     }
   );
 
-  app.use('/api', routesApiPublique({ middleware, referentiel }));
+  app.use('/api', routesApiPublique({ middleware, referentiel, depotDonnees }));
 
   app.use(
     '/api',
