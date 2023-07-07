@@ -521,6 +521,69 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
   });
 
+  describe('quand requête PATCH sur `/api/motDePasse', () => {
+    let utilisateur;
+    beforeEach(() => {
+      utilisateur = { id: '123', genereToken: () => 'un token' };
+      testeur.depotDonnees().metsAJourMotDePasse = async () => utilisateur;
+    });
+
+    it('utilise le middleware de challenge du mot de passe', (done) => {
+      testeurMSS().middleware().verifieChallengeMotDePasse(
+        {
+          method: 'patch',
+          url: 'http://localhost:1234/api/motDePasse',
+        },
+        done
+      );
+    });
+
+    it('met à jour le mot de passe', async () => {
+      let motDePasseMisAJour = false;
+      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
+      testeur.depotDonnees().metsAJourMotDePasse = async (
+        idUtilisateur,
+        motDePasse
+      ) => {
+        expect(idUtilisateur).to.equal('123');
+        expect(motDePasse).to.equal('mdp_ABC12345');
+        motDePasseMisAJour = true;
+        return utilisateur;
+      };
+
+      const reponse = await axios.patch(
+        'http://localhost:1234/api/motDePasse',
+        { motDePasse: 'mdp_ABC12345' }
+      );
+
+      expect(motDePasseMisAJour).to.be(true);
+      expect(reponse.status).to.equal(200);
+      expect(reponse.data).to.eql({ idUtilisateur: '123' });
+    });
+
+    it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        'Mot de passe trop simple',
+        {
+          method: 'patch',
+          url: 'http://localhost:1234/api/motDePasse',
+          data: { motDePasse: '1234' },
+        },
+        done
+      );
+    });
+
+    it('pose un nouveau cookie', (done) => {
+      axios
+        .patch('http://localhost:1234/api/motDePasse', {
+          motDePasse: 'mdp_ABC12345',
+        })
+        .then((reponse) => testeur.verifieJetonDepose(reponse, done))
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
+
   describe('quand requête PUT sur `/api/utilisateur`', () => {
     let utilisateur;
     let donneesRequete;

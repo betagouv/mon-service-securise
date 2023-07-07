@@ -217,6 +217,29 @@ const routesApiPrivee = ({
     }
   );
 
+  routes.patch(
+    '/motDePasse',
+    middleware.challengeMotDePasse,
+    (requete, reponse) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const { motDePasse } = requete.body;
+
+      const mdpInvalide =
+        valideMotDePasse(motDePasse) !== resultatValidation.MOT_DE_PASSE_VALIDE;
+      if (mdpInvalide) {
+        reponse.status(422).send('Mot de passe trop simple');
+        return;
+      }
+
+      depotDonnees
+        .metsAJourMotDePasse(idUtilisateur, motDePasse)
+        .then((utilisateur) => {
+          requete.session.token = utilisateur.genereToken();
+          reponse.json({ idUtilisateur });
+        });
+    }
+  );
+
   routes.put(
     '/utilisateur',
     middleware.aseptise([

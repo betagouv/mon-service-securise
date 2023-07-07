@@ -34,6 +34,7 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
 };
 
 let cguAcceptees;
+let challengeMotDePasseEffectue = false;
 let expirationCookieRepoussee = false;
 let headersAvecNoncePositionnes = false;
 let headersPositionnes = false;
@@ -84,6 +85,11 @@ const middlewareFantaisie = {
     listes.forEach(({ nom, proprietes }) =>
       listesAseptisees.push({ nom, proprietes })
     );
+    suite();
+  },
+
+  challengeMotDePasse: (_requete, _reponse, suite) => {
+    challengeMotDePasseEffectue = true;
     suite();
   },
 
@@ -225,6 +231,13 @@ const middlewareFantaisie = {
   verifieRequeteRepousseExpirationCookie: (...params) => {
     verifieRequeteChangeEtat(
       { lectureEtat: () => expirationCookieRepoussee },
+      ...params
+    );
+  },
+
+  verifieChallengeMotDePasse: (...params) => {
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => challengeMotDePasseEffectue },
       ...params
     );
   },
