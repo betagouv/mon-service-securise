@@ -4,13 +4,13 @@ const expect = require('expect.js');
 const {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
-} = require('../aides/verifieFichierServi');
-const { ErreurModele } = require('../../src/erreurs');
+} = require('../../aides/verifieFichierServi');
+const { ErreurModele } = require('../../../src/erreurs');
 
-const testeurMSS = require('./testeurMSS');
-const Service = require('../../src/modeles/service');
+const testeurMSS = require('../testeurMSS');
+const Service = require('../../../src/modeles/service');
 
-describe('Le serveur MSS des routes /api/*', () => {
+describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
 
   beforeEach(testeur.initialise);

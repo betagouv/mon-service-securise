@@ -1,25 +1,25 @@
 const express = require('express');
 
-const { valeurBooleenne } = require('../utilitaires/aseptisation');
-const { dateYYYYMMDD } = require('../utilitaires/date');
-const { zipTableaux } = require('../utilitaires/tableau');
+const { valeurBooleenne } = require('../../utilitaires/aseptisation');
+const { dateYYYYMMDD } = require('../../utilitaires/date');
+const { zipTableaux } = require('../../utilitaires/tableau');
 const {
   resultatValidation,
   valideMotDePasse,
-} = require('../http/validationMotDePasse');
+} = require('../../http/validationMotDePasse');
 const {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
   ErreurModele,
-} = require('../erreurs');
-const routesApiService = require('./routesApiService');
-const ServiceTracking = require('../tracking/serviceTracking');
-const Utilisateur = require('../modeles/utilisateur');
-const objetGetServices = require('../modeles/objetsApi/objetGetServices');
-const objetGetIndicesCyber = require('../modeles/objetsApi/objetGetIndicesCyber');
+} = require('../../erreurs');
+const routesApiService = require('../routesApiService');
+const ServiceTracking = require('../../tracking/serviceTracking');
+const Utilisateur = require('../../modeles/utilisateur');
+const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
+const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
 
-const routesApi = (
+const routesApiPrivee = (
   middleware,
   adaptateurMail,
   depotDonnees,
@@ -460,4 +460,4 @@ const routesApi = (
   return routes;
 };
 
-module.exports = routesApi;
+module.exports = routesApiPrivee;

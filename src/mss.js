@@ -4,7 +4,7 @@ const {
   DUREE_SESSION,
   ENDPOINTS_SANS_CSRF,
 } = require('./http/configurationServeur');
-const routesApi = require('./routes/routesApi');
+const routesApiPrivee = require('./routes/privees/routesApiPrivee');
 const routesApiPublique = require('./routes/publiques/routesApiPublique');
 const { routesBibliotheques } = require('./routes/routesBibliotheques');
 const routesService = require('./routes/routesService');
@@ -178,7 +178,7 @@ const creeServeur = (
 
   app.use(
     '/api',
-    routesApi(
+    routesApiPrivee(
       middleware,
       adaptateurMail,
       depotDonnees,
