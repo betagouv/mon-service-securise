@@ -7,7 +7,7 @@ const {
 const routesApiPrivee = require('./routes/privees/routesApiPrivee');
 const routesApiPublique = require('./routes/publiques/routesApiPublique');
 const { routesBibliotheques } = require('./routes/routesBibliotheques');
-const routesService = require('./routes/routesService');
+const routesService = require('./routes/privees/routesService');
 const routesStyles = require('./routes/routesStyles');
 
 require('dotenv').config();
@@ -192,12 +192,13 @@ const creeServeur = (
     })
   );
 
-  app.use('/bibliotheques', routesBibliotheques());
-
   app.use(
     '/service',
+    middleware.verificationJWT,
     routesService(middleware, referentiel, depotDonnees, moteurRegles)
   );
+
+  app.use('/bibliotheques', routesBibliotheques());
 
   app.use('/styles', routesStyles());
 

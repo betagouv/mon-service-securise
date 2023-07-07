@@ -1,9 +1,9 @@
 const express = require('express');
 
-const ActionsSaisie = require('../modeles/actionsSaisie');
-const Homologation = require('../modeles/homologation');
-const InformationsHomologation = require('../modeles/informationsHomologation');
-const ObjetApiStatutHomologation = require('../modeles/objetsApi/objetApiStatutHomologation');
+const ActionsSaisie = require('../../modeles/actionsSaisie');
+const Homologation = require('../../modeles/homologation');
+const InformationsHomologation = require('../../modeles/informationsHomologation');
+const ObjetApiStatutHomologation = require('../../modeles/objetsApi/objetApiStatutHomologation');
 
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();
