@@ -1,11 +1,12 @@
 doctype html
-meta(charset='utf-8')
-meta(name = 'viewport', content = 'width=device-width')
-meta(property = 'og:site_name', content = 'MonServiceSécurisé')
-link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
+html(lang = 'fr', xml:lang = 'fr', xmlns = 'http://www.w3.org/1999/xhtml')
+    meta(charset='utf-8')
+    meta(name = 'viewport', content = 'width=device-width')
+    meta(property = 'og:site_name', content = 'MonServiceSécurisé')
+    link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
 
-block page
+    block page
 
-if process.env.ID_MATOMO
-    script(src='/statique/scripts/matomo.js', id='script-matomo' data-id-matomo=process.env.ID_MATOMO)
-    script(src='/statique/scripts/matomoGestionnaireTag.js')
+    if process.env.ID_MATOMO
+        script(src='/statique/scripts/matomo.js', id='script-matomo' data-id-matomo=process.env.ID_MATOMO)
+        script(src='/statique/scripts/matomoGestionnaireTag.js')
