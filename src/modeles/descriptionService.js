@@ -15,11 +15,11 @@ class DescriptionService extends InformationsHomologation {
         'delaiAvantImpactCritique',
         'localisationDonnees',
         'nomService',
-        'presentation',
         'provenanceService',
         'risqueJuridiqueFinancierReputationnel',
         'statutDeploiement',
       ],
+      proprietesAtomiquesFacultatives: ['presentation'],
       proprietesListes: [
         'donneesCaracterePersonnel',
         'fonctionnalites',
