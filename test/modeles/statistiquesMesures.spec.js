@@ -316,21 +316,24 @@ describe('Les statistiques sur les mesures de sécurité', () => {
         une: {
           misesEnOeuvre: 1,
           retenues: 5,
-          indispensables: { total: 12, enCours: 2, fait: 1 },
+          indispensables: { total: 12, enCours: 2, fait: 1, nonFait: 0 },
         },
         deux: {
           misesEnOeuvre: 2,
           retenues: 5,
-          indispensables: { total: 15, enCours: 3, fait: 2 },
+          indispensables: { total: 15, enCours: 3, fait: 2, nonFait: 0 },
         },
       },
       referentiel
     );
 
-    expect(stats.indispensables().enCours).to.equal(2 + 3);
-    expect(stats.indispensables().fait).to.equal(1 + 2);
-    expect(stats.indispensables().total).to.equal(12 + 15);
-    expect(stats.indispensables().restant).to.equal(12 + 15 - (1 + 2));
+    expect(stats.indispensables()).to.eql({
+      enCours: 2 + 3,
+      fait: 1 + 2,
+      total: 12 + 15,
+      restant: 12 + 15 - (1 + 2),
+      nonFait: 0 + 0,
+    });
   });
 
   elles('peuvent filtrer les totaux par mesures recommandées', () => {
@@ -339,20 +342,25 @@ describe('Les statistiques sur les mesures de sécurité', () => {
         une: {
           misesEnOeuvre: 1,
           retenues: 5,
-          recommandees: { total: 12, enCours: 2, fait: 1 },
+          recommandees: { total: 12, enCours: 2, fait: 1, nonFait: 0 },
         },
         deux: {
           misesEnOeuvre: 2,
           retenues: 5,
-          recommandees: { total: 15, enCours: 3, fait: 2 },
+          recommandees: { total: 15, enCours: 3, fait: 2, nonFait: 0 },
         },
       },
       referentiel
     );
 
-    expect(stats.recommandees().enCours).to.equal(2 + 3);
-    expect(stats.recommandees().fait).to.equal(1 + 2);
-    expect(stats.recommandees().total).to.equal(12 + 15);
+    const recommandees = stats.recommandees();
+    expect(recommandees).to.eql({
+      enCours: 2 + 3,
+      fait: 1 + 2,
+      total: 12 + 15,
+      restant: 12 + 15 - (1 + 2),
+      nonFait: 0 + 0,
+    });
   });
 
   describe('sur demande de la complétude', () => {
