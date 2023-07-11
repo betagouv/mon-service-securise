@@ -316,12 +316,12 @@ describe('Les statistiques sur les mesures de sécurité', () => {
         une: {
           misesEnOeuvre: 1,
           retenues: 5,
-          indispensables: { total: 12, enCours: 2, fait: 1, nonFait: 0 },
+          indispensables: { total: 12, enCours: 2, fait: 1, nonFait: 8 },
         },
         deux: {
           misesEnOeuvre: 2,
           retenues: 5,
-          indispensables: { total: 15, enCours: 3, fait: 2, nonFait: 0 },
+          indispensables: { total: 15, enCours: 3, fait: 2, nonFait: 4 },
         },
       },
       referentiel
@@ -332,7 +332,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       fait: 1 + 2,
       total: 12 + 15,
       restant: 12 + 15 - (1 + 2),
-      nonFait: 0 + 0,
+      nonFait: 8 + 4,
     });
   });
 
@@ -342,12 +342,12 @@ describe('Les statistiques sur les mesures de sécurité', () => {
         une: {
           misesEnOeuvre: 1,
           retenues: 5,
-          recommandees: { total: 12, enCours: 2, fait: 1, nonFait: 0 },
+          recommandees: { total: 12, enCours: 2, fait: 1, nonFait: 8 },
         },
         deux: {
           misesEnOeuvre: 2,
           retenues: 5,
-          recommandees: { total: 15, enCours: 3, fait: 2, nonFait: 0 },
+          recommandees: { total: 15, enCours: 3, fait: 2, nonFait: 4 },
         },
       },
       referentiel
@@ -359,7 +359,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       fait: 1 + 2,
       total: 12 + 15,
       restant: 12 + 15 - (1 + 2),
-      nonFait: 0 + 0,
+      nonFait: 8 + 4,
     });
   });
 
