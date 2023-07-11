@@ -43,3 +43,5 @@ block main
 
   script(type = 'module', src = '/statique/motDePasse/brancheValidationMotDePasse.js')
   script(type = 'module', src = '/statique/motDePasse/edition.js')
+  script(id = 'challenge-mot-de-passe', type = 'application/json').
+    !{JSON.stringify({ afficheChallengeMotDePasse })}
