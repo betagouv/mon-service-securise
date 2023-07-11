@@ -31,7 +31,7 @@ block main
       if afficheChallengeMotDePasse
         label.requis Mot de passe actuel
           input(id='mot-de-passe-challenge', name = 'motDePasseChallenge', type='password', required)
-          .message-erreur Le mot de passe n'est pas assez robuste
+          .message-erreur-specifique Le mot de passe actuel saisi est incorrect
 
       label.requis Nouveau mot de passe
         input(id='mot-de-passe', name = 'motDePasse', type='password', required)

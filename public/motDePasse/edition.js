@@ -14,6 +14,11 @@ $(() => {
   const $boutonValider = $("button[type = 'submit']", $(selecteurFormulaire));
   $boutonValider.on('click', () => declencheValidation(selecteurFormulaire));
 
+  const $msgErreurChallenge = $(
+    '#mot-de-passe-challenge ~ .message-erreur-specifique'
+  );
+  $('#mot-de-passe-challenge').on('change', () => $msgErreurChallenge.hide());
+
   $(selecteurFormulaire).on('submit', (e) => {
     e.preventDefault();
 
@@ -32,7 +37,10 @@ $(() => {
           motDePasse: $('#mot-de-passe').val(),
           motDePasseChallenge: $('#mot-de-passe-challenge').val(),
         })
-        .then(() => (window.location = '/tableauDeBord'));
+        .then(() => (window.location = '/tableauDeBord'))
+        .catch(({ response }) => {
+          if (response.status === 401) $msgErreurChallenge.show();
+        });
     }
   });
 
