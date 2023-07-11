@@ -87,11 +87,12 @@ const creeServeur = (
     middleware.verificationJWT,
     (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees
-        .utilisateur(idUtilisateur)
-        .then((utilisateur) =>
-          reponse.render('motDePasse/edition', { utilisateur })
-        );
+      depotDonnees.utilisateur(idUtilisateur).then((utilisateur) =>
+        reponse.render('motDePasse/edition', {
+          utilisateur,
+          afficheChallengeMotDePasse: true,
+        })
+      );
     }
   );
 
