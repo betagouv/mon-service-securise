@@ -333,6 +333,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       total: 12 + 15,
       restant: 12 + 15 - (1 + 2),
       nonFait: 8 + 4,
+      aRemplir: 12 + 15 - (1 + 2) - (2 + 3) - (8 + 4),
     });
   });
 
@@ -360,6 +361,7 @@ describe('Les statistiques sur les mesures de sécurité', () => {
       total: 12 + 15,
       restant: 12 + 15 - (1 + 2),
       nonFait: 8 + 4,
+      aRemplir: 12 + 15 - (1 + 2) - (2 + 3) - (8 + 4),
     });
   });
 

@@ -781,7 +781,7 @@ p {
   color: white;
 }
 
-.synthese-securite .graphique-camemberts .chiffre:is(.non-fait, .restant) {
+.synthese-securite .graphique-camemberts .chiffre:is(.non-fait, .a-remplir) {
   color: #08416a;
 }
 
