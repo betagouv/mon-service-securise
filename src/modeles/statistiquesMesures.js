@@ -116,6 +116,9 @@ class StatistiquesMesures {
     );
 
     resultat.restant = resultat.total - resultat.fait;
+    resultat.aRemplir =
+      resultat.total - resultat.fait - resultat.enCours - resultat.nonFait;
+
     return resultat;
   }
 
