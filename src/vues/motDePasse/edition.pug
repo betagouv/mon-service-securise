@@ -10,11 +10,17 @@ block append styles
 block retour
   nav.fil-ariane
     a.avec-chevron(href = '/tableauDeBord') Tableau de bord
-    div Changez votre mot de passe
+    if afficheChallengeMotDePasse
+      div Changez votre mot de passe
+    else
+      div Créez votre mot de passe
 
 block main
   form.etroit.mot-de-passe#edition
-    h1 Changez votre mot de passe
+    if afficheChallengeMotDePasse
+      h1 Changez votre mot de passe
+    else
+      h1 Créez votre mot de passe 
     .mention champ obligatoire
     section
       div Le mot de passe doit comporter <b>12 caractères mininum</b> contenant au moins :
