@@ -17,14 +17,23 @@ $(() => {
   $(selecteurFormulaire).on('submit', (e) => {
     e.preventDefault();
 
-    const donnees = {
-      motDePasse: $('#mot-de-passe').val(),
-      cguAcceptees: reponseAcceptee('cguAcceptees'),
-    };
-
-    axios
-      .put('/api/motDePasse', donnees)
-      .then(() => (window.location = '/tableauDeBord'));
+    const challenge = JSON.parse($('#challenge-mot-de-passe').text());
+    const estInitialisation = !challenge.afficheChallengeMotDePasse;
+    if (estInitialisation) {
+      axios
+        .put('/api/motDePasse', {
+          motDePasse: $('#mot-de-passe').val(),
+          cguAcceptees: reponseAcceptee('cguAcceptees'),
+        })
+        .then(() => (window.location = '/tableauDeBord'));
+    } else {
+      axios
+        .patch('/api/motDePasse', {
+          motDePasse: $('#mot-de-passe').val(),
+          motDePasseChallenge: $('#mot-de-passe-challenge').val(),
+        })
+        .then(() => (window.location = '/tableauDeBord'));
+    }
   });
 
   brancheChampsMotDePasse($(selecteurFormulaire));
