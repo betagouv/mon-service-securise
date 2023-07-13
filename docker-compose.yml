@@ -40,6 +40,20 @@ services:
       - '${PORT_MSS}:3000'
     depends_on:
       - mss-db
+      - mss-crypto
+
+  mss-crypto:
+    image: hashicorp/vault:1.14
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=root # Mot de passe de connexion sur l'UI Vault locale
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    networks:
+      - mss-network
+    ports:
+      - '8200:8200'
+    volumes:
+      - ./scripts/init-mss-crypto.sh:/init-mss-crypto.sh
+    entrypoint: sh -c "/init-mss-crypto.sh"
 
 networks:
   mss-network:
