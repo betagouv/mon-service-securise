@@ -1,7 +1,8 @@
+import brancheChampsMotDePasse from './modules/interactions/brancheChampsMotDePasse.mjs';
 import { brancheModale } from './modules/interactions/modale.mjs';
+import { brancheValidation } from './modules/interactions/validation.mjs';
 import gestionnaireEvenements from './modules/tableauDeBord/gestionnaireEvenements.mjs';
 import tableauDesServices from './modules/tableauDeBord/tableauDesServices.mjs';
-import { brancheValidation } from './modules/interactions/validation.mjs';
 
 const afficheBandeauMajProfil = () =>
   axios
@@ -18,4 +19,6 @@ $(() => {
   brancheValidation('.tiroir form');
   tableauDesServices.recupereServices();
   gestionnaireEvenements.brancheComportement();
+
+  brancheChampsMotDePasse($('.conteneur-formulaire'));
 });
