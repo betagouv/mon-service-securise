@@ -72,7 +72,8 @@ const gestionnaireEvenements = {
     $('#action-suppression').on('click', () => {
       registreDesActions.suppression
         .execute()
-        .then(() => gestionnaireTiroir.basculeOuvert(false));
+        .then(() => gestionnaireTiroir.basculeOuvert(false))
+        .catch(() => {});
     });
 
     $('#action-invitation').on('click', () =>

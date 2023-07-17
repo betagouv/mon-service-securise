@@ -13,6 +13,15 @@ class ActionSuppression extends ActionAbstraite {
   initialise() {
     super.initialise();
     $('#action-suppression').show();
+    const $msgErreurChallenge = $(
+      '#mot-de-passe-challenge-suppression ~ .message-erreur-specifique'
+    );
+    const $champChallenge = $('#mot-de-passe-challenge-suppression');
+    $msgErreurChallenge.hide();
+    $champChallenge.val('');
+
+    $champChallenge.off('input');
+    $champChallenge.on('input', () => $msgErreurChallenge.hide());
 
     const { nomDuService, servicesSelectionnes } = this.tableauDesServices;
     const nbServicesSelectionnes = servicesSelectionnes.size;
@@ -35,18 +44,35 @@ class ActionSuppression extends ActionAbstraite {
 
   execute() {
     const $actionSuppression = $('#action-suppression');
+    const motDePasseChallenge = $('#mot-de-passe-challenge-suppression').val();
 
     $actionSuppression.hide();
     this.basculeLoader(true);
 
     const suppressions = [...this.tableauDesServices.servicesSelectionnes].map(
-      (idService) => axios.delete(`/api/service/${idService}`)
+      (idService) =>
+        axios.delete(`/api/service/${idService}`, {
+          data: { motDePasseChallenge },
+        })
     );
 
-    return Promise.all(suppressions).then(() => {
-      this.tableauDesServices.servicesSelectionnes.clear();
-      this.tableauDesServices.recupereServices();
-    });
+    return Promise.all(suppressions)
+      .then(() => {
+        this.tableauDesServices.servicesSelectionnes.clear();
+        this.tableauDesServices.recupereServices();
+      })
+      .catch((exc) => {
+        if (exc.response.status === 401) {
+          const $msgErreurChallenge = $(
+            '#mot-de-passe-challenge-suppression ~ .message-erreur-specifique'
+          );
+          $msgErreurChallenge.show();
+          $actionSuppression.show();
+          this.basculeLoader(false);
+
+          throw exc;
+        }
+      });
   }
 }
 

@@ -780,6 +780,12 @@ label[for='recherche-service'] {
   margin: 0 0 1em 0;
 }
 
+#contenu-suppression
+  :is(.contenu-texte-information, .contenu-texte-avertissement)
+  p {
+  margin: 0;
+}
+
 #contenu-contributeurs .conteneur-confirmation .entete {
   margin: 0 0 1em 0;
 }

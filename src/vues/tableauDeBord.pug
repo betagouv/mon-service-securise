@@ -198,6 +198,14 @@ block main
               .contenu-texte-avertissement
                 strong Cette action est irréversible
                 p Les données seront définitivement effacées. Les contributeurs n'auront plus accès à ce service.
+            label.banniere-information
+              img(src='/statique/assets/images/icone_information_suppression.svg')
+              .contenu-texte-information
+                p Pour permettre la suppression, veuillez saisir votre mot de passe actuel.
+            label.requis Mot de passe actuel
+              input(id='mot-de-passe-challenge-suppression', name = 'motDePasseChallengeSuppression', type='password', required)
+              .message-erreur Ce champs est obligatoire. Veuillez le renseigner.
+              .message-erreur-specifique Le mot de passe actuel saisi est incorrect
             .conteneur-loader
               .icone-chargement
               .titre-loader Suppression en cours...
