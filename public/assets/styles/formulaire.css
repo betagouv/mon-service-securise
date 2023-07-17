@@ -322,3 +322,27 @@ input[type='checkbox'] + label.label-checkbox {
 .label-mot-de-passe {
   margin-bottom: 0.2em !important;
 }
+
+.conteneur-infolettre {
+  position: relative;
+  background: #eff6ff;
+}
+
+.conteneur-infolettre::before {
+  content: '';
+  background: #eff6ff;
+  border-radius: 10px;
+  position: absolute;
+  height: calc(100% + 2em);
+  width: calc(100% + 2em);
+  top: -1em;
+  left: -1em;
+}
+
+.label-checkbox[for='infolettreAcceptee'] {
+  position: relative;
+}
+
+#infolettreAcceptee:not(:checked) {
+  background: #eff6ff;
+}
