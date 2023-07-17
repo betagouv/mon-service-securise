@@ -403,6 +403,7 @@ const routesApiService = (
   routes.delete(
     '/:id',
     middleware.verificationAcceptationCGU,
+    middleware.challengeMotDePasse,
     (requete, reponse, suite) => {
       const verifiePermissionSuppressionService = (idUtilisateur, idService) =>
         depotDonnees
