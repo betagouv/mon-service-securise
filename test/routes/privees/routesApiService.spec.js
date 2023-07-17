@@ -1249,6 +1249,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
+    it('utilise le middleware de challenge du mot de passe', (done) => {
+      testeurMSS().middleware().verifieChallengeMotDePasse(
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/service/123',
+        },
+        done
+      );
+    });
+
     it("demande au dépôt de vérifier l'autorisation d'accès au service pour l'utilisateur courant", (done) => {
       let autorisationVerifiee = false;
 
