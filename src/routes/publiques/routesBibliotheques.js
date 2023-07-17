@@ -4,8 +4,6 @@ const adaptateurEnvironnement = require('../../adaptateurs/adaptateurEnvironneme
 
 const CHEMINS_BIBLIOTHEQUES = {
   get: {
-    'html2canvas.min.js':
-      'https://unpkg.com/html2canvas/dist/html2canvas.min.js',
     'jspdf.umd.min.js': 'https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js',
     'matomo-tag-manager.js': adaptateurEnvironnement.matomo().urlTagManager(),
     'piwik.js': 'https://stats.data.gouv.fr/piwik.js',
