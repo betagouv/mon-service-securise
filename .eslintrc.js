@@ -16,6 +16,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
+  ignorePatterns: ['public/bibliotheques/*.js'],
   plugins: ['mocha'],
   rules: {
     'mocha/no-exclusive-tests': 'error',
