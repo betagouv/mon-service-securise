@@ -251,7 +251,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
             buffer: 'PDF B',
           });
           expect(fichiers[2]).to.eql({
-            nom: 'DossierDecison.pdf',
+            nom: 'DossierDecision.pdf',
             buffer: 'PDF C',
           });
           adaptateurZipAppele = true;
