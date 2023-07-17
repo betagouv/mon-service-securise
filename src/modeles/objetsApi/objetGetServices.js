@@ -41,7 +41,9 @@ const donnees = (services, idUtilisateur, referentiel) => ({
   resume: {
     nombreServices: services.length,
     nombreServicesHomologues: services.filter(
-      (s) => s.dossiers.statutHomologation() === Dossiers.ACTIVEE
+      (s) =>
+        s.dossiers.statutHomologation() === Dossiers.ACTIVEE ||
+        s.dossiers.statutHomologation() === Dossiers.BIENTOT_EXPIREE
     ).length,
   },
 });

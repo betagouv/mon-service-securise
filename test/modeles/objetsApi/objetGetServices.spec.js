@@ -87,12 +87,13 @@ describe("L'objet d'API de `GET /services`", () => {
   });
 
   it('fournit les données de résumé des services', () => {
+    unService.dossiers.statutHomologation = () => Dossiers.BIENTOT_EXPIREE;
     unAutreService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
 
     const services = [unService, unAutreService];
     expect(objetGetServices.donnees(services, 'A', referentiel).resume).to.eql({
       nombreServices: 2,
-      nombreServicesHomologues: 1,
+      nombreServicesHomologues: 2,
     });
   });
 
