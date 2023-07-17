@@ -17,7 +17,7 @@ $(() => {
   const $msgErreurChallenge = $(
     '#mot-de-passe-challenge ~ .message-erreur-specifique'
   );
-  $('#mot-de-passe-challenge').on('change', () => $msgErreurChallenge.hide());
+  $('#mot-de-passe-challenge').on('input', () => $msgErreurChallenge.hide());
 
   $(selecteurFormulaire).on('submit', (e) => {
     e.preventDefault();
