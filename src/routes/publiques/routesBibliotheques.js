@@ -4,7 +4,6 @@ const adaptateurEnvironnement = require('../../adaptateurs/adaptateurEnvironneme
 
 const CHEMINS_BIBLIOTHEQUES = {
   get: {
-    'axios-1.0.0.min.js': 'https://unpkg.com/axios@1.0.0/dist/axios.min.js',
     'html2canvas.min.js':
       'https://unpkg.com/html2canvas/dist/html2canvas.min.js',
     'jquery-3.6.0.min.js': 'https://code.jquery.com/jquery-3.6.0.min.js',
