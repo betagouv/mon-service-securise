@@ -72,6 +72,7 @@ const middlewareFantaisie = {
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
     verificationCGUMenee = false;
+    challengeMotDePasseEffectue = false;
   },
 
   aseptise:
