@@ -110,7 +110,7 @@ const routesApiServicePdf = (
                 homologation,
                 homologation.dossierCourant()
               ),
-            nom: () => 'DossierDecison.pdf',
+            nom: () => 'DossierDecision.pdf',
           },
           syntheseSecurite: {
             pdf: () => generePdfSyntheseSecurite(homologation),
