@@ -10,7 +10,7 @@ block append styles
 block append scripts
   script(id = 'donnees-departements', type = 'application/json').
     !{JSON.stringify(departements || [])}
-  script(src = "/bibliotheques/selectize.min.js")
+  script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
   script(src = "/statique/plugins/selectize.aucun-resultat.js")
   script(src = "/statique/utilisateur/suggestionEntite.js")
 

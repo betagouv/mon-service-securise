@@ -6,8 +6,6 @@ const CHEMINS_BIBLIOTHEQUES = {
   get: {
     'matomo-tag-manager.js': adaptateurEnvironnement.matomo().urlTagManager(),
     'piwik.js': 'https://stats.data.gouv.fr/piwik.js',
-    'selectize.min.js':
-      'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js',
   },
   post: {
     evenementMatomo: 'https://stats.data.gouv.fr/piwik.php',
