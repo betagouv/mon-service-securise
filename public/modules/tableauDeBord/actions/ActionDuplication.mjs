@@ -1,5 +1,4 @@
 import ActionAbstraite from './Action.mjs';
-import { declencheValidation } from '../../interactions/validation.mjs';
 
 const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
 
@@ -25,10 +24,9 @@ class ActionDuplication extends ActionAbstraite {
   }
 
   execute() {
-    declencheValidation(this.idConteneur);
     const $nombreCopie = $('#nombre-copie');
 
-    if (!$nombreCopie.is(':valid')) return Promise.resolve();
+    if (!this.formulaireEstValide) return Promise.reject();
 
     this.basculeLoader(true);
     $('#action-duplication').hide();
