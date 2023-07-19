@@ -70,7 +70,25 @@ const brancheComportementModaleNouvelleFonctionnalite = ($modale) => {
     }
   };
 
+  const brancheComportementBoutonNouveautes = () => {
+    const ajouteIdDansURL = () =>
+      axios.get(`/api/nouvelleFonctionnalite/derniere`).then((reponse) => {
+        const idDerniereFonctionnalite = reponse.data.id;
+        const parametresUrl = new URLSearchParams(window.location.search);
+        parametresUrl.set('nouvelleFonctionnalite', idDerniereFonctionnalite);
+        const nouvelleUrl = `${window.location.origin}${window.location.pathname}?${parametresUrl}`;
+        window.history.replaceState({}, null, nouvelleUrl);
+      });
+
+    $('.bandeau-nouveautes').on('click', () => {
+      ajouteIdDansURL().then(() => {
+        montreNouvelleFonctionnaliteSiNecessaire();
+      });
+    });
+  };
+
   montreNouvelleFonctionnaliteSiNecessaire();
+  brancheComportementBoutonNouveautes();
 };
 
 export default brancheComportementModaleNouvelleFonctionnalite;

@@ -184,9 +184,8 @@ header nav a,
   display: flex;
   height: 2.7em;
   align-items: center;
-}
-
-.bandeau-nouveautes {
+  padding: 0.3em 0.85em;
+  cursor: pointer;
   position: relative;
   color: var(--gris-fonce);
   background-color: var(--fond-gris-pale);
@@ -216,16 +215,4 @@ header nav a,
   font-weight: bold;
   font-size: 0.95em;
   text-align: left;
-}
-
-.bandeau-nouveautes p::after {
-  display: block;
-  content: '';
-  width: 1em;
-  height: 1em;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
-  mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
-  transform: translateX(0.3em) translateY(0.08em) scale(0.95);
 }
