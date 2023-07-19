@@ -118,10 +118,6 @@ const creeServeur = (
     reponse.render('mentionsLegales');
   });
 
-  app.get('/nouvellesFonctionnalites', (_requete, reponse) => {
-    reponse.render('nouvellesFonctionnalites');
-  });
-
   app.get('/statistiques', (_requete, reponse) => {
     reponse.render('statistiques');
   });
@@ -177,6 +173,14 @@ const creeServeur = (
     middleware.verificationAcceptationCGU,
     (_requete, reponse) => {
       reponse.render('tableauDeBord');
+    }
+  );
+
+  app.get(
+    '/historiqueProduit',
+    middleware.verificationAcceptationCGU,
+    (_requete, reponse) => {
+      reponse.render('historiqueProduit');
     }
   );
 
