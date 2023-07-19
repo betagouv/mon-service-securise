@@ -77,7 +77,7 @@ const gestionnaireEvenements = {
     });
 
     $('#action-invitation').on('click', () =>
-      registreDesActions.invitation.execute()
+      registreDesActions.invitation.execute().catch(() => {})
     );
 
     $('#action-export-csv').on('click', () =>
