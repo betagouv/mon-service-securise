@@ -1453,4 +1453,34 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
   });
+
+  describe('quand requête GET sur `/api/nouvelleFonctionnalite/derniere`', () => {
+    it("retourne une erreur HTTP 404 si il n'y a pas de fonctionnalité", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        404,
+        'Aucune dernière fonctionnalité',
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/nouvelleFonctionnalite/derniere',
+        },
+        done
+      );
+    });
+
+    it("retourne l'ID de la dernière fonctionnalité", (done) => {
+      testeur.referentiel().recharge({
+        nouvellesFonctionnalites: [
+          { id: 'tdb', fichierPug: 'tableauDeBord.pug' },
+        ],
+      });
+      axios
+        .get('http://localhost:1234/api/nouvelleFonctionnalite/derniere')
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.data.id).to.equal('tdb');
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
+    });
+  });
 });

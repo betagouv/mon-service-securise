@@ -444,6 +444,17 @@ const routesApiPrivee = ({
     }
   );
 
+  routes.get('/nouvelleFonctionnalite/derniere', (_, reponse) => {
+    const nouvelleFonctionnalite = referentiel.derniereNouvelleFonctionnalite();
+
+    if (!nouvelleFonctionnalite) {
+      reponse.status(404).send('Aucune dernière fonctionnalité');
+      return;
+    }
+
+    reponse.json({ id: nouvelleFonctionnalite.id });
+  });
+
   routes.get(
     '/nouvelleFonctionnalite/:id',
     middleware.aseptise('id'),
