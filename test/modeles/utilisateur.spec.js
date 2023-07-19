@@ -84,6 +84,7 @@ describe('Un utilisateur', () => {
       nomEntitePublique: 'Ville de Paris',
       departementEntitePublique: '75',
       infolettreAcceptee: true,
+      transactionnelAccepte: true,
     });
 
     expect(utilisateur.toJSON()).to.eql({
@@ -98,6 +99,7 @@ describe('Un utilisateur', () => {
       departementEntitePublique: '75',
       profilEstComplet: true,
       infolettreAcceptee: true,
+      transactionnelAccepte: true,
     });
   });
 
@@ -139,6 +141,17 @@ describe('Un utilisateur', () => {
 
     const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
     expect(autreUtilisateur.accepteCGU()).to.be(false);
+  });
+
+  it('sait détecter si le transactionnel a été acceptée', () => {
+    const utilisateur = new Utilisateur({
+      email: 'jean.dupont@mail.fr',
+      transactionnelAccepte: true,
+    });
+    expect(utilisateur.accepteTransactionnel()).to.be(true);
+
+    const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
+    expect(autreUtilisateur.accepteTransactionnel()).to.be(false);
   });
 
   it("sait détecter si l'infolettre a été acceptée", () => {
@@ -224,6 +237,7 @@ describe('Un utilisateur', () => {
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
         infolettreAcceptee: true,
+        transactionnelAccepte: true,
       };
     });
 
