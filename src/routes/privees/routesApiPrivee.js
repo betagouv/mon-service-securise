@@ -248,6 +248,7 @@ const routesApiPrivee = ({
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
+      donnees.transactionnelAccepte = true;
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, true, referentiel);
 

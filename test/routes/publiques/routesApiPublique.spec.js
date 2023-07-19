@@ -127,6 +127,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           ...donneesRequete,
           cguAcceptees: true,
           infolettreAcceptee: true,
+          transactionnelAccepte: true,
         };
         expect(donneesUtilisateur).to.eql(donneesAttendues);
         return Promise.resolve(utilisateur);
