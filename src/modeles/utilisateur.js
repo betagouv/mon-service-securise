@@ -29,6 +29,7 @@ class Utilisateur extends Base {
         'nomEntitePublique',
         'departementEntitePublique',
         'infolettreAcceptee',
+        'transactionnelAccepte',
       ],
     });
     valide(donnees);
@@ -91,7 +92,10 @@ class Utilisateur extends Base {
       'nomEntitePublique',
       'departementEntitePublique',
     ]);
-    validePresenceProprietesBooleenes(['infolettreAcceptee']);
+    validePresenceProprietesBooleenes([
+      'infolettreAcceptee',
+      'transactionnelAccepte',
+    ]);
     validePresenceProprieteListes(['postes']);
     valideDepartement(donnees.departementEntitePublique, referentiel);
   }
@@ -116,6 +120,10 @@ class Utilisateur extends Base {
 
   accepteInfolettre() {
     return !!this.infolettreAcceptee;
+  }
+
+  accepteTransactionnel() {
+    return !!this.transactionnelAccepte;
   }
 
   genereToken(callback) {
@@ -158,6 +166,7 @@ class Utilisateur extends Base {
       departementEntitePublique: this.departementEntitePublique || '',
       profilEstComplet: this.profilEstComplet(),
       infolettreAcceptee: this.accepteInfolettre(),
+      transactionnelAccepte: this.accepteTransactionnel(),
     };
   }
 }
