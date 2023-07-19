@@ -1,5 +1,4 @@
 import ActionAbstraite from './Action.mjs';
-import { declencheValidation } from '../../interactions/validation.mjs';
 
 const estInvitationDejaEnvoyee = (reponseErreur) =>
   reponseErreur.status === 422 &&
@@ -30,10 +29,9 @@ class ActionInvitation extends ActionAbstraite {
   }
 
   execute() {
-    declencheValidation(this.idConteneur);
     const $emailInvite = $('#email-invitation-collaboration');
 
-    if (!$emailInvite.is(':valid')) return Promise.reject();
+    if (!this.formulaireEstValide) return Promise.reject();
 
     this.basculeLoader(true);
     $('#action-invitation').hide();
