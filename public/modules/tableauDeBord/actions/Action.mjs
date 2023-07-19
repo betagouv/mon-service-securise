@@ -1,4 +1,18 @@
+import {
+  brancheValidation,
+  declencheValidation,
+} from '../../interactions/validation.mjs';
+
 class ActionAbstraite {
+  get selecteurFormulaire() {
+    return `${this.idConteneur} .conteneur-formulaire`;
+  }
+
+  get formulaireEstValide() {
+    declencheValidation(this.selecteurFormulaire);
+    return $(this.selecteurFormulaire).is(':valid');
+  }
+
   constructor(idConteneur, tableauDesServices) {
     if (this.constructor === ActionAbstraite) {
       throw new TypeError(
@@ -7,6 +21,7 @@ class ActionAbstraite {
     }
     this.tableauDesServices = tableauDesServices;
     this.idConteneur = idConteneur;
+    brancheValidation(this.selecteurFormulaire);
   }
 
   appliqueContenu({ titre, texteSimple, texteMultiple }) {

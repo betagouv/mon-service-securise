@@ -46,6 +46,8 @@ class ActionSuppression extends ActionAbstraite {
     const $actionSuppression = $('#action-suppression');
     const motDePasseChallenge = $('#mot-de-passe-challenge-suppression').val();
 
+    if (!this.formulaireEstValide) return Promise.reject();
+
     $actionSuppression.hide();
     this.basculeLoader(true);
 
