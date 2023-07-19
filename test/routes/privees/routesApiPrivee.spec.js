@@ -684,6 +684,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           expect(donnees.telephone).to.equal('0100000000');
           expect(donnees.nomEntitePublique).to.equal('Ville de Paris');
           expect(donnees.departementEntitePublique).to.equal('75');
+          expect(donnees.infolettreAcceptee).to.equal(true);
+          expect(donnees.transactionnelAccepte).to.equal(true);
           expect(donnees.postes).to.eql([
             'RSSI',
             "Chargé des systèmes d'informations",
