@@ -23,7 +23,6 @@ const donnees = (services, idUtilisateur, referentiel) => ({
         id: c.id,
         prenomNom: c.prenomNom,
         initiales: c.initiales,
-        cguAcceptees: c.cguAcceptees,
         poste: c.posteDetaille,
       })),
       statutHomologation: {
