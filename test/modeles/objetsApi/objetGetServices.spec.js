@@ -66,7 +66,6 @@ describe("L'objet d'API de `GET /services`", () => {
             id: 'B',
             prenomNom: 'Jean',
             initiales: 'J',
-            cguAcceptees: false,
             poste: 'Maire',
           },
         ],
