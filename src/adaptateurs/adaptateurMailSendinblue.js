@@ -40,6 +40,12 @@ const creeContact = (destinataire, prenom, nom, bloqueEmails) =>
         email: destinataire,
         emailBlacklisted: bloqueEmails,
         attributes: { PRENOM: decode(prenom), NOM: decode(nom) },
+        listIds: [
+          Number(
+            process.env
+              .SENDINBLUE_ID_LISTE_POUR_MAILS_TRANSACTIONNELS_DE_RELANCE
+          ),
+        ],
       },
       enteteJSON
     )
