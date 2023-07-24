@@ -275,56 +275,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/api/seuilCriticite`', () => {
-    it('vérifie que les CGU sont acceptées', (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/seuilCriticite',
-          done
-        );
-    });
-
-    it('détermine le seuil de criticité pour le service', (done) => {
-      testeur.referentiel().criticite = (
-        idsFonctionnalites,
-        idsDonnees,
-        idDelai
-      ) => {
-        expect(idsFonctionnalites).to.eql(['f1', 'f2']);
-        expect(idsDonnees).to.eql(['d1', 'd2']);
-        expect(idDelai).to.equal('unDelai');
-        return 'moyen';
-      };
-
-      axios('http://localhost:1234/api/seuilCriticite', {
-        params: {
-          fonctionnalites: ['f1', 'f2'],
-          donneesCaracterePersonnel: ['d1', 'd2'],
-          delaiAvantImpactCritique: 'unDelai',
-        },
-      })
-        .then((reponse) =>
-          expect(reponse.data).to.eql({ seuilCriticite: 'moyen' })
-        )
-        .then(() => done())
-        .catch(done);
-    });
-
-    it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'Données invalides',
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/seuilCriticite',
-          params: { delaiAvantImpactCritique: 'delaiInvalide' },
-        },
-        done
-      );
-    });
-  });
-
   describe('quand requête PUT sur `/api/motDePasse`', () => {
     let utilisateur;
 

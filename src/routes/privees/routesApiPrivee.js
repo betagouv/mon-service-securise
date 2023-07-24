@@ -162,28 +162,6 @@ const routesApiPrivee = ({
     )
   );
 
-  routes.get(
-    '/seuilCriticite',
-    middleware.verificationAcceptationCGU,
-    (requete, reponse) => {
-      const {
-        fonctionnalites = [],
-        donneesCaracterePersonnel = [],
-        delaiAvantImpactCritique,
-      } = requete.query;
-      try {
-        const seuilCriticite = referentiel.criticite(
-          fonctionnalites,
-          donneesCaracterePersonnel,
-          delaiAvantImpactCritique
-        );
-        reponse.json({ seuilCriticite });
-      } catch {
-        reponse.status(422).send('Données invalides');
-      }
-    }
-  );
-
   routes.put(
     '/motDePasse',
     middleware.aseptise('cguAcceptees'),
