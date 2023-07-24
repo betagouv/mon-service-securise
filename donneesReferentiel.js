@@ -130,56 +130,43 @@ module.exports = {
   fonctionnalites: {
     newsletter: {
       description: 'Inscription à une newsletter',
-      seuilCriticite: 'faible',
     },
     questionnaire: {
       description: 'Questionnaires, sondages',
-      seuilCriticite: 'faible',
     },
     reseauSocial: {
       description: 'Réseau social, forum, commentaires',
-      seuilCriticite: 'moyen',
     },
     visionconference: {
       description: 'Audio, visioconférence',
-      seuilCriticite: 'moyen',
     },
     paiement: {
       description: 'Paiement en ligne',
-      seuilCriticite: 'eleve',
     },
     signatureElectronique: {
       description: 'Dispositif de signature électronique',
-      seuilCriticite: 'critique',
     },
     compte: {
       description: 'Création de compte (utilisateurs avec comptes)',
-      seuilCriticite: 'faible',
     },
     messagerie: {
       description: 'Messagerie instantanée',
-      seuilCriticite: 'moyen',
     },
     emails: {
       description: "Envoi et réception d'emails",
-      seuilCriticite: 'moyen',
     },
     documents: {
       description: 'Stockage de documents',
-      seuilCriticite: 'moyen',
     },
     formulaire: {
       description: 'Formulaire administratif ou démarche en ligne',
-      seuilCriticite: 'faible',
     },
     edition: {
       description:
         'Édition collaborative (documents, murs collaboratifs, etc.)',
-      seuilCriticite: 'moyen',
     },
     reservation: {
       description: 'Outils de réservation (livres, places, salles, etc.)',
-      seuilCriticite: 'faible',
     },
   },
 
@@ -187,56 +174,45 @@ module.exports = {
     contact: {
       description: 'Données de contact',
       exemple: 'mail, numéro de téléphone, adresse postale.',
-      seuilCriticite: 'faible',
     },
     identite: {
       description: "Données d'identité",
       exemple: 'nom/prénom, pseudonyme, date de naissance.',
-      seuilCriticite: 'faible',
     },
     document: {
       description: "Documents d'identité et autres documents officiels",
       exemple: 'photo de passeport, titre de séjour.',
-      seuilCriticite: 'faible',
     },
     situation: {
       description:
         'Données relatives à la situation familiale, économique et financière',
       exemple: 'revenus, état civil.',
-      seuilCriticite: 'moyen',
     },
     localisation: {
       description: 'Données de localisation',
       exemple: 'adresse IP, identifiant de connexion, cookies.',
-      seuilCriticite: 'faible',
     },
     banque: {
       description: 'Données de paiement',
       exemple: 'nº de carte bancaire.',
-      seuilCriticite: 'critique',
     },
     mineurs: {
       description: 'Données concernant des personnes mineures',
-      seuilCriticite: 'eleve',
     },
     sensibiliteParticuliere: {
       description: 'Données de santé',
-      seuilCriticite: 'critique',
     },
   },
 
   delaisAvantImpactCritique: {
     moinsUneHeure: {
       description: "Moins d'une heure",
-      seuilCriticite: 'critique',
     },
     uneJournee: {
       description: 'Une journée',
-      seuilCriticite: 'moyen',
     },
     plusUneJournee: {
       description: "Plus d'une journée",
-      seuilCriticite: 'faible',
     },
   },
 
