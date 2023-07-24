@@ -91,8 +91,6 @@ module.exports = {
     activee: { libelle: 'Active', ordre: 5 },
   },
 
-  seuilsCriticites: ['critique', 'eleve', 'moyen', 'faible'],
-
   typesService: {
     siteInternet: { description: 'Site Internet' },
     applicationMobile: { description: 'Application Mobile' },

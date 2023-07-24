@@ -18,7 +18,6 @@ const donneesReferentielVide = {
   niveauxGravite: {},
   nouvellesFonctionnalites: [],
   provenancesService: {},
-  seuilsCriticites: [],
   statutsDeploiement: {},
   statutsMesures: {},
   tranchesIndicesCybers: [],
@@ -94,7 +93,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const risque = (id) => risques()[id] || {};
   const definitionRisque = (idRisque) => risque(idRisque).definition;
   const descriptionRisque = (idRisque) => risque(idRisque).description;
-  const seuilsCriticites = () => donnees.seuilsCriticites;
   const sousTitreActionSaisie = (id) => actionSaisie(id)?.sousTitre;
   const statutsDeploiement = () => donnees.statutsDeploiement;
   const descriptionStatutDeploiement = (idStatut) =>
@@ -169,50 +167,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
       .join(', ');
   };
 
-  const seuilCriticiteMin = () => {
-    const seuils = seuilsCriticites();
-    return seuils[seuils.length - 1];
-  };
-
-  const criticiteElement = (nomElement, idElement) =>
-    idElement
-      ? donnees[nomElement][idElement].seuilCriticite
-      : seuilCriticiteMin();
-
-  const criticiteDelai = (...params) =>
-    criticiteElement('delaisAvantImpactCritique', ...params);
-  const criticiteDonnees = (...params) =>
-    criticiteElement('donneesCaracterePersonnel', ...params);
-  const criticiteFonctionnalite = (...params) =>
-    criticiteElement('fonctionnalites', ...params);
-
-  const criticiteMax = (...criticites) => {
-    const seuils = seuilsCriticites();
-    const positionMin = Math.min(...criticites.map((c) => seuils.indexOf(c)));
-    return seuils[positionMin];
-  };
-
-  const criticite = (idsFonctionnalites, idsDonnees, idDelai) => {
-    const seuils = seuilsCriticites();
-    const seuilMin = seuilCriticiteMin();
-
-    const criticiteMaxFonctionnalites = idsFonctionnalites.length
-      ? seuils.find((s) =>
-          idsFonctionnalites.find((id) => criticiteFonctionnalite(id) === s)
-        )
-      : seuilMin;
-
-    const criticiteMaxDonnees = idsDonnees.length
-      ? seuils.find((s) => idsDonnees.find((d) => criticiteDonnees(d) === s))
-      : seuilMin;
-
-    return criticiteMax(
-      criticiteMaxFonctionnalites,
-      criticiteMaxDonnees,
-      criticiteDelai(idDelai)
-    );
-  };
-
   const numeroEtape = (idEtape) =>
     etapesParcoursHomologation().find((e) => e.id === idEtape)?.numero;
 
@@ -284,11 +238,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     codeDepartements,
     coefficientIndiceCyberMesuresIndispensables,
     coefficientIndiceCyberMesuresRecommandees,
-    criticite,
-    criticiteDelai,
-    criticiteDonnees,
-    criticiteFonctionnalite,
-    criticiteMax,
     indiceCyberNoteMax,
     definitionRisque,
     delaisAvantImpactCritique,
@@ -345,8 +294,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     recharge,
     reglesPersonnalisation,
     risques,
-    seuilCriticiteMin,
-    seuilsCriticites,
     descriptionStatutDeploiement,
     sousTitreActionSaisie,
     statutsAvisDossierHomologation,
