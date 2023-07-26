@@ -17,7 +17,7 @@ const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
-  : require('./src/adaptateurs/adaptateurMailMemoire');
+  : require('./src/adaptateurs/adaptateurMailMemoire').fabriqueAdaptateurMailMemoire();
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
 const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
 const {
