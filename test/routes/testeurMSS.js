@@ -52,7 +52,7 @@ const testeurMss = () => {
   const initialise = (done) => {
     adaptateurAnnuaire = {};
     adaptateurHorloge = adaptateurHorlogeParDefaut;
-    adaptateurMail = adaptateurMailMemoire;
+    adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
       genereAnnexes: () => Promise.resolve('PDF Annexe'),
       genereDossierDecision: () => Promise.resolve('PDF Dossier decision'),
