@@ -331,11 +331,17 @@ input[type='checkbox'] + label.label-checkbox {
   width: 100%;
   position: relative;
   left: -1em;
-  row-gap: 1em;
+  row-gap: 1.25em;
   background: #eff6ff;
   margin: 1em 0;
   border-radius: 10px;
   padding: 1em;
+}
+
+.preferences-communication .separateur {
+  height: 1px;
+  width: 100%;
+  background: #1992dc30;
 }
 
 .label-checkbox[for='infolettreAcceptee'] {
