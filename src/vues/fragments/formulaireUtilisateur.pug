@@ -173,6 +173,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
           if forceEmailsTransactionnels
             input(type='hidden' id='transactionnelAccepte' value='true')
           else
+            .separateur
             div
               input(
                 id = 'transactionnelAccepte',
