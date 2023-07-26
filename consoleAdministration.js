@@ -174,11 +174,32 @@ class ConsoleAdministration {
     });
 
     const recupereContacts = async () => {
-      const url = `https://api.brevo.com/v3/contacts/lists/${idListe}/contacts`;
       const config = configHttp({
         'api-key': process.env.SENDINBLUE_EMAIL_CLEF_API,
       });
-      return (await axios.get(url, config)).data.contacts;
+      const urlListe = `https://api.brevo.com/v3/contacts/lists/${idListe}`;
+      const detailListe = (await axios.get(urlListe, config)).data;
+      const nbContacts = detailListe.uniqueSubscribers;
+
+      const taillePaquet = 500;
+      const contacts = [];
+      log.jaune(
+        `📦 ${nbContacts} dans la liste, à récupérer par paquet de ${taillePaquet}\n`
+      );
+
+      for (let i = 0; i < nbContacts / taillePaquet; i += 1) {
+        const offset = i * taillePaquet;
+        const url = `${urlListe}/contacts?limit=${taillePaquet}&offset=${offset}`;
+        log.cyan(
+          `🚚 Paquet de ${offset} à ${(i + 1) * taillePaquet}… ${url}\n`
+        );
+
+        // eslint-disable-next-line no-await-in-loop
+        const paquet = (await axios.get(url, config)).data.contacts;
+        contacts.push(...paquet);
+      }
+
+      return contacts;
     };
 
     const envoieUnEvent = async (email) => {
@@ -195,10 +216,9 @@ class ConsoleAdministration {
 
     const contacts = await recupereContacts();
     const nbContacts = contacts.length;
+    log.jaune(`👨‍👩‍👧‍👦 Contacts récupérés : ${nbContacts}\n`);
+
     let i = 0;
-
-    log.jaune(`👨‍👩‍👧‍👦 Contacts à traiter : ${nbContacts}\n`);
-
     const avanceAuSuivant = () => {
       i += 1;
     };
