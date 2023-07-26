@@ -242,7 +242,10 @@ const routesApiPrivee = ({
         .utilisateur(idUtilisateur)
         .then((utilisateur) =>
           utilisateur.changePreferencesCommunication(
-            { infolettreAcceptee: donnees.infolettreAcceptee },
+            {
+              infolettreAcceptee: donnees.infolettreAcceptee,
+              transactionnelAccepte: donnees.transactionnelAccepte,
+            },
             adaptateurMail
           )
         )

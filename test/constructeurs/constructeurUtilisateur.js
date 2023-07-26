@@ -15,6 +15,7 @@ class ConstructeurUtilisateur {
       nomEntitePublique: '',
       departementEntitePublique: '',
       infolettreAcceptee: '',
+      transactionnelAccepte: '',
     };
   }
 
@@ -35,6 +36,16 @@ class ConstructeurUtilisateur {
 
   quiRefuseInfolettre() {
     this.donnees.infolettreAcceptee = false;
+    return this;
+  }
+
+  quiAccepteEmailsTransactionnels() {
+    this.donnees.transactionnelAccepte = true;
+    return this;
+  }
+
+  quiRefuseEmailsTransactionnels() {
+    this.donnees.transactionnelAccepte = false;
     return this;
   }
 

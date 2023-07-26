@@ -22,6 +22,14 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoyer("Inscription à l'infolettre MSS", args);
   };
 
+  const desinscrisEmailsTransactionnels = async (...args) => {
+    envoyer('Désinscription des emails transactionnels', args);
+  };
+
+  const inscrisEmailsTransactionnels = async (...args) => {
+    envoyer('Inscription aux emails transactionnels', args);
+  };
+
   const envoieMessageFinalisationInscription = async (...args) => {
     envoyer("Envoie de l'email de finalisation de l'inscription", args);
   };
@@ -47,7 +55,9 @@ const fabriqueAdaptateurMailMemoire = () => {
 
   return {
     creeContact,
+    desinscrisEmailsTransactionnels,
     desinscrisInfolettre,
+    inscrisEmailsTransactionnels,
     inscrisInfolettre,
     envoieMessageFinalisationInscription,
     envoieMessageInvitationContribution,
