@@ -28,6 +28,16 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  quiAccepteInfolettre() {
+    this.donnees.infolettreAcceptee = true;
+    return this;
+  }
+
+  quiRefuseInfolettre() {
+    this.donnees.infolettreAcceptee = false;
+    return this;
+  }
+
   construis() {
     return new Utilisateur(this.donnees);
   }

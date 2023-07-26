@@ -10,6 +10,7 @@ const Utilisateur = require('../../src/modeles/utilisateur');
 const {
   fabriqueAdaptateurMailMemoire,
 } = require('../../src/adaptateurs/adaptateurMailMemoire');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
 describe('Un utilisateur', () => {
   describe("sur demande d'un profil complet ou non", () => {
@@ -323,6 +324,8 @@ describe('Un utilisateur', () => {
       adaptateurEmail = fabriqueAdaptateurMailMemoire();
     });
 
+    const jeanDupont = () => unUtilisateur().avecEmail('jean.dupont@mail.fr');
+
     it("s'inscrit à l'infolettre s'il passe de « non » à « oui » sur ce canal de communication", async () => {
       let inscriptionEffectuee;
       adaptateurEmail.inscrisInfolettre = async (email) => {
@@ -332,12 +335,8 @@ describe('Un utilisateur', () => {
         throw new Error('Ce test ne devrait pas déclencher de désinscription');
       };
 
-      const utilisateur = new Utilisateur({
-        email: 'jean.dupont@mail.fr',
-        infolettreAcceptee: false,
-      });
-
-      await utilisateur.changePreferencesCommunication(
+      const refusait = jeanDupont().quiRefuseInfolettre().construis();
+      await refusait.changePreferencesCommunication(
         { infolettreAcceptee: true },
         adaptateurEmail
       );
@@ -353,12 +352,9 @@ describe('Un utilisateur', () => {
       adaptateurEmail.inscrisInfolettre = async () => {
         throw new Error("Ce test ne devrait pas déclencher d'inscription");
       };
-      const utilisateur = new Utilisateur({
-        email: 'jean.dupont@mail.fr',
-        infolettreAcceptee: true,
-      });
 
-      await utilisateur.changePreferencesCommunication(
+      const acceptait = jeanDupont().quiAccepteInfolettre().construis();
+      await acceptait.changePreferencesCommunication(
         { infolettreAcceptee: false },
         adaptateurEmail
       );
