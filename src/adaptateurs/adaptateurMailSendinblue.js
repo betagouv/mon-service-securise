@@ -12,6 +12,9 @@ const enteteJSON = {
   },
 };
 const urlBase = 'https://api.brevo.com/v3';
+const idListeEmailsTransactionnels = Number(
+  process.env.SENDINBLUE_ID_LISTE_POUR_MAILS_TRANSACTIONNELS_DE_RELANCE
+);
 
 const basculeInfolettre = (destinataire, etat) =>
   axios
@@ -40,12 +43,7 @@ const creeContact = (destinataire, prenom, nom, bloqueEmails) =>
         email: destinataire,
         emailBlacklisted: bloqueEmails,
         attributes: { PRENOM: decode(prenom), NOM: decode(nom) },
-        listIds: [
-          Number(
-            process.env
-              .SENDINBLUE_ID_LISTE_POUR_MAILS_TRANSACTIONNELS_DE_RELANCE
-          ),
-        ],
+        listIds: [idListeEmailsTransactionnels],
       },
       enteteJSON
     )
@@ -58,6 +56,38 @@ const creeContact = (destinataire, prenom, nom, bloqueEmails) =>
       });
       return Promise.reject(e);
     });
+
+const inscrisEmailsTransactionnels = async (destinataire) => {
+  // https://developers.brevo.com/reference/addcontacttolist-1
+  const url = new URL(
+    `${urlBase}/contacts/lists/${idListeEmailsTransactionnels}/contacts/add`
+  );
+
+  try {
+    await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
+  } catch (e) {
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Brevo': e.response.data,
+    });
+    throw e;
+  }
+};
+
+const desinscrisEmailsTransactionnels = async (destinataire) => {
+  // https://developers.brevo.com/reference/removecontactfromlist
+  const url = new URL(
+    `${urlBase}/contacts/lists/${idListeEmailsTransactionnels}/contacts/remove`
+  );
+
+  try {
+    await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
+  } catch (e) {
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Brevo': e.response.data,
+    });
+    throw e;
+  }
+};
 
 const envoieEmail = (destinataire, idTemplate, params) =>
   axios
@@ -147,7 +177,9 @@ const envoieNotificationTentativeReinscription = (destinataire) =>
 
 module.exports = {
   creeContact,
+  desinscrisEmailsTransactionnels,
   desinscrisInfolettre,
+  inscrisEmailsTransactionnels,
   inscrisInfolettre,
   envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,

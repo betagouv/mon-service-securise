@@ -645,10 +645,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       };
 
       donneesRequete.infolettreAcceptee = 'true';
+      donneesRequete.transactionnelAccepte = 'true';
       await axios.put('http://localhost:1234/api/utilisateur', donneesRequete);
 
       expect(preferencesChangees).to.eql({
         infolettreAcceptee: true,
+        transactionnelAccepte: true,
       });
     });
   });

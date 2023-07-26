@@ -362,5 +362,47 @@ describe('Un utilisateur', () => {
 
       expect(desinscriptionEffectuee).to.be('jean.dupont@mail.fr');
     });
+
+    it("s'inscrit aux emails transactionnels s'il passe de « non » à « oui » sur ce canal de communications", async () => {
+      let inscriptionEffectuee;
+      adaptateurEmail.inscrisEmailsTransactionnels = async (email) => {
+        inscriptionEffectuee = email;
+      };
+      adaptateurEmail.desinscrisEmailsTransactionnels = async () => {
+        throw new Error('Ce test ne devrait pas déclencher de désinscription');
+      };
+
+      const refusait = jeanDupont()
+        .quiRefuseEmailsTransactionnels()
+        .construis();
+
+      await refusait.changePreferencesCommunication(
+        { transactionnelAccepte: true },
+        adaptateurEmail
+      );
+
+      expect(inscriptionEffectuee).to.be('jean.dupont@mail.fr');
+    });
+
+    it("se déinscrit des emails transactionnels s'il passe de « oui » à « non » sur ce canal de communications", async () => {
+      let desinscriptionEffectuee;
+      adaptateurEmail.desinscrisEmailsTransactionnels = async (email) => {
+        desinscriptionEffectuee = email;
+      };
+      adaptateurEmail.inscrisEmailsTransactionnels = async () => {
+        throw new Error("Ce test ne devrait pas déclencher d'inscription");
+      };
+
+      const acceptait = jeanDupont()
+        .quiAccepteEmailsTransactionnels()
+        .construis();
+
+      await acceptait.changePreferencesCommunication(
+        { transactionnelAccepte: false },
+        adaptateurEmail
+      );
+
+      expect(desinscriptionEffectuee).to.be('jean.dupont@mail.fr');
+    });
   });
 });

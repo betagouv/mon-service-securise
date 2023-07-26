@@ -162,6 +162,16 @@ class Utilisateur extends Base {
 
     if (inscrisIL) await adaptateurEmail.inscrisInfolettre(this.email);
     if (desinscrisIL) await adaptateurEmail.desinscrisInfolettre(this.email);
+
+    const transacActuel = this.accepteTransactionnel();
+    const nouveauTransac = nouvellesPreferences.transactionnelAccepte;
+    const inscrisTransac = !transacActuel && nouveauTransac;
+    const desinscrisTransac = transacActuel && !nouveauTransac;
+
+    if (inscrisTransac)
+      await adaptateurEmail.inscrisEmailsTransactionnels(this.email);
+    if (desinscrisTransac)
+      await adaptateurEmail.desinscrisEmailsTransactionnels(this.email);
   }
 
   toJSON() {
