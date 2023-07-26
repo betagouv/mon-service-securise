@@ -1,3 +1,4 @@
+const axios = require('axios');
 const donneesReferentiel = require('./donneesReferentiel');
 const DepotDonnees = require('./src/depotDonnees');
 const Referentiel = require('./src/referentiel');
@@ -153,6 +154,81 @@ class ConsoleAdministration {
       Promise.resolve(evenements),
       journal.consigneEvenement
     );
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async genereEvenenentsBrevo(typeEvenement, idListe) {
+    const log = {
+      jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
+      cyan: (txt) => process.stdout.write(`\x1b[36m${txt}\x1b[0m`),
+      vert: (txt) => process.stdout.write(`\x1b[92m${txt}\x1b[0m`),
+      rouge: (txt) => process.stdout.write(`\x1b[31m${txt}\x1b[0m`),
+    };
+
+    const configHttp = (clefApi) => ({
+      headers: {
+        ...clefApi,
+        accept: 'application/json',
+        'content-type': 'application/json',
+      },
+    });
+
+    const recupereContacts = async () => {
+      const url = `https://api.brevo.com/v3/contacts/lists/${idListe}/contacts`;
+      const config = configHttp({
+        'api-key': process.env.SENDINBLUE_EMAIL_CLEF_API,
+      });
+      return (await axios.get(url, config)).data.contacts;
+    };
+
+    const envoieUnEvent = async (email) => {
+      const url = `https://in-automate.sendinblue.com/api/v2/trackEvent`;
+      const config = configHttp({
+        'ma-key': process.env.SENDINBLUE_TRACKING_CLEF_API,
+      });
+      await axios.post(url, { email, event: typeEvenement }, config);
+    };
+
+    log.jaune(
+      `🪵 Génération d'événements \`${typeEvenement}\` pour les contacts de la liste ${idListe}\n`
+    );
+
+    const contacts = await recupereContacts();
+    const nbContacts = contacts.length;
+    let i = 0;
+
+    log.jaune(`👨‍👩‍👧‍👦 Contacts à traiter : ${nbContacts}\n`);
+
+    const avanceAuSuivant = () => {
+      i += 1;
+    };
+
+    const traiteUnContact = async (contact) => {
+      const avancement = ((i / nbContacts) * 100).toFixed(0);
+      const now = new Date(Date.now()).toISOString();
+      log.cyan(
+        `[${now}] CONTACT ${i}/${nbContacts} (${avancement}%) ${contact.email}`
+      );
+
+      try {
+        await envoieUnEvent(contact.email);
+        log.vert(` OK\n`);
+      } catch (e) {
+        log.rouge(`ERREUR\n${e.toString()}\n`);
+      }
+    };
+
+    let interval;
+    const traiteOuQuitte = async () => {
+      if (i < nbContacts) {
+        avanceAuSuivant();
+        await traiteUnContact(contacts[i - 1]);
+      } else {
+        clearInterval(interval);
+        log.jaune('FIN\n');
+      }
+    };
+    interval = setInterval(() => traiteOuQuitte(), 600);
   }
 }
 
