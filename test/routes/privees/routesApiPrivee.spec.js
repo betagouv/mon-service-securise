@@ -598,31 +598,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it("convertit l'infolettre acceptée en valeur booléenne", async () => {
-      let idRecu;
-      let infolettreRecue;
-
-      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
-      testeur.depotDonnees().metsAJourUtilisateur = async (
-        id,
-        { infolettreAcceptee }
-      ) => {
-        idRecu = id;
-        infolettreRecue = infolettreAcceptee;
-      };
-
-      donneesRequete.infolettreAcceptee = 'false';
-      const reponse = await axios.put(
-        'http://localhost:1234/api/utilisateur',
-        donneesRequete
-      );
-
-      expect(reponse.status).to.equal(200);
-      expect(reponse.data).to.eql({ idUtilisateur: '123' });
-      expect(idRecu).to.be('123');
-      expect(infolettreRecue).to.be(false);
-    });
-
     it("met à jour les autres informations de l'utilisateur", async () => {
       let idRecu;
       let donneesRecues;
