@@ -16,7 +16,8 @@ block main
 
     +formulaireUtilisateur({
       donnees: utilisateur,
-      emailLectureSeule: true
+      emailLectureSeule: true,
+      forceEmailsTransactionnels: false
     })
 
     button(type = 'submit').bouton Enregistrer

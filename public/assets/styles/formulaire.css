@@ -331,6 +331,7 @@ input[type='checkbox'] + label.label-checkbox {
   width: 100%;
   position: relative;
   left: -1em;
+  row-gap: 1em;
   background: #eff6ff;
   margin: 1em 0;
   border-radius: 10px;

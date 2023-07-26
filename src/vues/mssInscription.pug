@@ -12,7 +12,7 @@ block main
       p.
         MonServiceSécurisé est accessible aux professionnels travaillant au sein d'une <b>organisation publique ou privée</b> dans la sécurisation de services publics numériques.
 
-    +formulaireUtilisateur({})
+    +formulaireUtilisateur({ forceEmailsTransactionnels: true })
     button(type = 'submit').bouton Valider
 
   script(type = 'module', src = '/statique/inscription.js')

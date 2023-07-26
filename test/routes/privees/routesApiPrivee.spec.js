@@ -552,6 +552,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
         infolettreAcceptee: 'true',
+        transactionnelAccepte: 'true',
       };
 
       testeur.referentiel().departement = () => 'Paris';
@@ -570,6 +571,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           'nomEntitePublique',
           'departementEntitePublique',
           'infolettreAcceptee',
+          'transactionnelAccepte',
           'postes.*',
         ],
         {

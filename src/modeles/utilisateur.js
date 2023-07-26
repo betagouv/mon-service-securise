@@ -110,6 +110,7 @@ class Utilisateur extends Base {
       'nomEntitePublique',
       'departementEntitePublique',
       'infolettreAcceptee',
+      'transactionnelAccepte',
       'postes.*',
     ];
   }
