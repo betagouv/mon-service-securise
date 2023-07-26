@@ -11,7 +11,7 @@ const enteteJSON = {
     'content-type': 'application/json',
   },
 };
-const urlBase = 'https://api.sendinblue.com/v3';
+const urlBase = 'https://api.brevo.com/v3';
 
 const basculeInfolettre = (destinataire, etat) =>
   axios
