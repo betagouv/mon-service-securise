@@ -593,69 +593,61 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it("convertit l'infolettre acceptée en valeur booléenne", (done) => {
-      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
+    it("convertit l'infolettre acceptée en valeur booléenne", async () => {
+      let idRecu;
+      let infolettreRecue;
 
-      testeur.depotDonnees().metsAJourUtilisateur = (
+      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
+      testeur.depotDonnees().metsAJourUtilisateur = async (
         id,
         { infolettreAcceptee }
       ) => {
-        try {
-          expect(id).to.equal('123');
-          expect(infolettreAcceptee).to.equal(false);
-          return Promise.resolve(utilisateur);
-        } catch (e) {
-          return Promise.reject(e);
-        }
+        idRecu = id;
+        infolettreRecue = infolettreAcceptee;
       };
 
       donneesRequete.infolettreAcceptee = 'false';
+      const reponse = await axios.put(
+        'http://localhost:1234/api/utilisateur',
+        donneesRequete
+      );
 
-      axios
-        .put('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idUtilisateur: '123' });
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      expect(reponse.status).to.equal(200);
+      expect(reponse.data).to.eql({ idUtilisateur: '123' });
+      expect(idRecu).to.be('123');
+      expect(infolettreRecue).to.be(false);
     });
 
-    it("met à jour les autres informations de l'utilisateur", (done) => {
-      let infosMisesAJour = false;
+    it("met à jour les autres informations de l'utilisateur", async () => {
+      let idRecu;
+      let donneesRecues;
 
       testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
-
-      testeur.depotDonnees().metsAJourUtilisateur = (id, donnees) => {
-        try {
-          expect(id).to.equal('123');
-          expect(donnees.prenom).to.equal('Jean');
-          expect(donnees.nom).to.equal('Dupont');
-          expect(donnees.telephone).to.equal('0100000000');
-          expect(donnees.nomEntitePublique).to.equal('Ville de Paris');
-          expect(donnees.departementEntitePublique).to.equal('75');
-          expect(donnees.infolettreAcceptee).to.equal(true);
-          expect(donnees.transactionnelAccepte).to.equal(true);
-          expect(donnees.postes).to.eql([
-            'RSSI',
-            "Chargé des systèmes d'informations",
-          ]);
-          infosMisesAJour = true;
-          return Promise.resolve(utilisateur);
-        } catch (e) {
-          return Promise.reject(e);
-        }
+      testeur.depotDonnees().metsAJourUtilisateur = async (id, donnees) => {
+        idRecu = id;
+        donneesRecues = donnees;
+        return utilisateur;
       };
 
-      axios
-        .put('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then((reponse) => {
-          expect(infosMisesAJour).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idUtilisateur: '123' });
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      const reponse = await axios.put(
+        'http://localhost:1234/api/utilisateur',
+        donneesRequete
+      );
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.data).to.eql({ idUtilisateur: '123' });
+      expect(idRecu).to.equal('123');
+      expect(donneesRecues.prenom).to.equal('Jean');
+      expect(donneesRecues.nom).to.equal('Dupont');
+      expect(donneesRecues.telephone).to.equal('0100000000');
+      expect(donneesRecues.nomEntitePublique).to.equal('Ville de Paris');
+      expect(donneesRecues.departementEntitePublique).to.equal('75');
+      expect(donneesRecues.infolettreAcceptee).to.equal(true);
+      expect(donneesRecues.transactionnelAccepte).to.equal(true);
+      expect(donneesRecues.postes).to.eql([
+        'RSSI',
+        "Chargé des systèmes d'informations",
+      ]);
     });
 
     describe("sur demande de recherche de l'utilisateur", () => {
