@@ -157,13 +157,14 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
             )
             .message-erreur Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.
 
-      label Préférences de communication
-      .conteneur-infolettre
-        input(
-          id = 'infolettreAcceptee',
-          name = 'infolettreAcceptee',
-          checked = donnees.infolettreAcceptee,
-          type = 'checkbox'
-          class = 'input-checkbox'
-        )
-        label.label-checkbox(for = 'infolettreAcceptee') J'accepte de recevoir la lettre d'information MonServiceSécurisé.
+      .preferences-communication
+        label Préférences de communication
+        .conteneur-checkbox
+          input(
+            id = 'infolettreAcceptee',
+            name = 'infolettreAcceptee',
+            checked = donnees.infolettreAcceptee,
+            type = 'checkbox'
+            class = 'input-checkbox'
+          )
+          label.label-checkbox(for = 'infolettreAcceptee') J'accepte de recevoir la lettre d'information MonServiceSécurisé.
