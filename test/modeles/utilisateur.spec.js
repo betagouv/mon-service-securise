@@ -7,6 +7,9 @@ const {
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const Utilisateur = require('../../src/modeles/utilisateur');
+const {
+  fabriqueAdaptateurMailMemoire,
+} = require('../../src/adaptateurs/adaptateurMailMemoire');
 
 describe('Un utilisateur', () => {
   describe("sur demande d'un profil complet ou non", () => {
@@ -310,6 +313,57 @@ describe('Un utilisateur', () => {
         );
         done();
       }
+    });
+  });
+
+  describe('sur demande de changement de ses préférences de communication', () => {
+    let adaptateurEmail;
+
+    beforeEach(() => {
+      adaptateurEmail = fabriqueAdaptateurMailMemoire();
+    });
+
+    it("s'inscrit à l'infolettre s'il passe de « non » à « oui » sur ce canal de communication", async () => {
+      let inscriptionEffectuee;
+      adaptateurEmail.inscrisInfolettre = async (email) => {
+        inscriptionEffectuee = email;
+      };
+      adaptateurEmail.desinscrisInfolettre = async () => {
+        throw new Error('Ce test ne devrait pas déclencher de désinscription');
+      };
+
+      const utilisateur = new Utilisateur({
+        email: 'jean.dupont@mail.fr',
+        infolettreAcceptee: false,
+      });
+
+      await utilisateur.changePreferencesCommunication(
+        { infolettreAcceptee: true },
+        adaptateurEmail
+      );
+
+      expect(inscriptionEffectuee).to.be('jean.dupont@mail.fr');
+    });
+
+    it("se désinscrit de l'infolettre s'il passe de « oui » à « non » sur ce canal de communication ", async () => {
+      let desinscriptionEffectuee;
+      adaptateurEmail.desinscrisInfolettre = async (email) => {
+        desinscriptionEffectuee = email;
+      };
+      adaptateurEmail.inscrisInfolettre = async () => {
+        throw new Error("Ce test ne devrait pas déclencher d'inscription");
+      };
+      const utilisateur = new Utilisateur({
+        email: 'jean.dupont@mail.fr',
+        infolettreAcceptee: true,
+      });
+
+      await utilisateur.changePreferencesCommunication(
+        { infolettreAcceptee: false },
+        adaptateurEmail
+      );
+
+      expect(desinscriptionEffectuee).to.be('jean.dupont@mail.fr');
     });
   });
 });

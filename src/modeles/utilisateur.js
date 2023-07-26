@@ -153,6 +153,16 @@ class Utilisateur extends Base {
     return (this.nom?.trim() ?? '') !== '';
   }
 
+  async changePreferencesCommunication(nouvellesPreferences, adaptateurEmail) {
+    const infolettreActuelle = this.accepteInfolettre();
+    const nouvelleInfolettre = nouvellesPreferences.infolettreAcceptee;
+    const inscrisIL = !infolettreActuelle && nouvelleInfolettre;
+    const desinscrisIL = infolettreActuelle && !nouvelleInfolettre;
+
+    if (inscrisIL) await adaptateurEmail.inscrisInfolettre(this.email);
+    if (desinscrisIL) await adaptateurEmail.desinscrisInfolettre(this.email);
+  }
+
   toJSON() {
     return {
       id: this.id,
