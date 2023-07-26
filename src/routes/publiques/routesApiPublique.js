@@ -58,7 +58,6 @@ const routesApiPublique = ({
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
       donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       donnees.email = requete.body.email?.toLowerCase();
-      donnees.transactionnelAccepte = true;
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, false, referentiel);
 

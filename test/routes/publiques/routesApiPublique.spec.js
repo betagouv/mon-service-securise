@@ -29,6 +29,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         departementEntitePublique: '75',
         cguAcceptees: 'true',
         infolettreAcceptee: 'true',
+        transactionnelAccepte: 'true',
       };
 
       testeur.referentiel().departement = () => 'Paris';
@@ -53,6 +54,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           'nomEntitePublique',
           'departementEntitePublique',
           'infolettreAcceptee',
+          'transactionnelAccepte',
           'postes.*',
         ],
         {

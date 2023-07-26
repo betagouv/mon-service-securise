@@ -14,7 +14,7 @@ block append scripts
   script(src = "/statique/plugins/selectize.aucun-resultat.js")
   script(src = "/statique/utilisateur/suggestionEntite.js")
 
-mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
+mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransactionnels })
   .mention champ obligatoire
 
   section
@@ -160,11 +160,25 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule })
       .preferences-communication
         label Préférences de communication
         .conteneur-checkbox
-          input(
-            id = 'infolettreAcceptee',
-            name = 'infolettreAcceptee',
-            checked = donnees.infolettreAcceptee,
-            type = 'checkbox'
-            class = 'input-checkbox'
-          )
-          label.label-checkbox(for = 'infolettreAcceptee') J'accepte de recevoir la lettre d'information MonServiceSécurisé.
+          div
+            input(
+              id = 'infolettreAcceptee',
+              name = 'infolettreAcceptee',
+              checked = donnees.infolettreAcceptee,
+              type = 'checkbox'
+              class = 'input-checkbox'
+            )
+            label.label-checkbox(for = 'infolettreAcceptee') J'accepte de recevoir la lettre d'information MonServiceSécurisé.
+
+          if forceEmailsTransactionnels
+            input(type='hidden' id='transactionnelAccepte' value='true')
+          else
+            div
+              input(
+                id = 'transactionnelAccepte',
+                name = 'transactionnelAccepte',
+                checked = donnees.transactionnelAccepte,
+                type = 'checkbox'
+                class = 'input-checkbox'
+              )
+              label.label-checkbox(for = 'transactionnelAccepte') J'accepte de recevoir des informations relatives à mon utilisation de MonServiceSécurisé

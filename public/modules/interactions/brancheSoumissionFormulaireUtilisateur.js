@@ -48,6 +48,11 @@ const brancheSoumissionFormulaireUtilisateur = (
     motDePasse: () => $('#mot-de-passe').val(),
     cguAcceptees: () => reponseAcceptee('cguAcceptees'),
     infolettreAcceptee: () => $('#infolettreAcceptee').is(':checked'),
+    transactionnelAccepte: () => {
+      const $t = $('#transactionnelAccepte');
+      const acceptationForcee = $t.attr('type') === 'hidden';
+      return acceptationForcee ? $t.val() : $t.is(':checked');
+    },
     postes: () => {
       const postes = [
         ...($('#posteRSSI').is(':checked') ? ['RSSI'] : []),

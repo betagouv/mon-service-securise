@@ -204,6 +204,7 @@ describe('Un utilisateur', () => {
       'nomEntitePublique',
       'departementEntitePublique',
       'infolettreAcceptee',
+      'transactionnelAccepte',
       'postes.*',
     ];
     expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
