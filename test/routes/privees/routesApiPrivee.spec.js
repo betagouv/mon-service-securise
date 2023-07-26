@@ -9,6 +9,9 @@ const { ErreurModele } = require('../../../src/erreurs');
 
 const testeurMSS = require('../testeurMSS');
 const Service = require('../../../src/modeles/service');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -539,7 +542,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     let donneesRequete;
 
     beforeEach(() => {
-      utilisateur = { id: '123' };
+      utilisateur = unUtilisateur().avecId('123').construis();
 
       donneesRequete = {
         prenom: 'Jean',
@@ -650,68 +653,25 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       ]);
     });
 
-    describe("sur demande de recherche de l'utilisateur", () => {
-      it("demande au dépôt de retrouver l'utilisateur", (done) => {
-        let depotAppele = false;
-        testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
+    it("met à jour les préférences de communication de l'utilisateur", async () => {
+      let preferencesChangees;
+      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
 
-        testeur.depotDonnees().utilisateur = (idUtilisateur) => {
-          expect(idUtilisateur).to.eql(123);
-          depotAppele = true;
-          return Promise.resolve(utilisateur);
+      testeur.depotDonnees().utilisateur = async () => {
+        const u = unUtilisateur().construis();
+
+        u.changePreferencesCommunication = async (nouvellesPreferences) => {
+          preferencesChangees = nouvellesPreferences;
         };
 
-        axios
-          .put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then(() => {
-            expect(depotAppele).to.be(true);
-            done();
-          })
-          .catch(done);
-      });
+        return u;
+      };
 
-      it("inscrit l'utilisateur à l'infolettre si il l'a demandé", (done) => {
-        let inscriptionAppelee = false;
-        donneesRequete.infolettreAcceptee = 'true';
-        utilisateur.email = 'jean.dupont@mail.fr';
-        testeur.depotDonnees().utilisateur = () =>
-          Promise.resolve({ ...utilisateur, infolettreAcceptee: false });
+      donneesRequete.infolettreAcceptee = 'true';
+      await axios.put('http://localhost:1234/api/utilisateur', donneesRequete);
 
-        testeur.adaptateurMail().inscrisInfolettre = (destinataire) => {
-          inscriptionAppelee = true;
-          expect(destinataire).to.equal('jean.dupont@mail.fr');
-          return Promise.resolve();
-        };
-
-        axios
-          .put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then(() => {
-            expect(inscriptionAppelee).to.be(true);
-            done();
-          })
-          .catch(done);
-      });
-
-      it("désinscrit l'utilisateur à l'infolettre si il l'a demandé", (done) => {
-        let desinscriptionAppelee = false;
-        donneesRequete.infolettreAcceptee = 'false';
-        utilisateur.email = 'jean.dupont@mail.fr';
-        testeur.depotDonnees().utilisateur = () =>
-          Promise.resolve({ ...utilisateur, infolettreAcceptee: true });
-
-        testeur.adaptateurMail().desinscrisInfolettre = (destinataire) => {
-          desinscriptionAppelee = true;
-          expect(destinataire).to.equal('jean.dupont@mail.fr');
-          return Promise.resolve();
-        };
-
-        axios
-          .put('http://localhost:1234/api/utilisateur', donneesRequete)
-          .then(() => {
-            expect(desinscriptionAppelee).to.be(true);
-            done();
-          })
-          .catch(done);
+      expect(preferencesChangees).to.eql({
+        infolettreAcceptee: true,
       });
     });
   });

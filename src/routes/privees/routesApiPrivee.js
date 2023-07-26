@@ -241,20 +241,12 @@ const routesApiPrivee = ({
 
       depotDonnees
         .utilisateur(idUtilisateur)
-        .then((utilisateur) => {
-          const acceptationInfolettreActuelle = utilisateur.infolettreAcceptee;
-          const nouvelleAcceptationInfolettre = donnees.infolettreAcceptee;
-          const doitInscrire =
-            !acceptationInfolettreActuelle && nouvelleAcceptationInfolettre;
-          const doitDesinscrire =
-            acceptationInfolettreActuelle && !nouvelleAcceptationInfolettre;
-
-          if (doitInscrire)
-            return adaptateurMail.inscrisInfolettre(utilisateur.email);
-          if (doitDesinscrire)
-            return adaptateurMail.desinscrisInfolettre(utilisateur.email);
-          return Promise.resolve();
-        })
+        .then((utilisateur) =>
+          utilisateur.changePreferencesCommunication(
+            { infolettreAcceptee: donnees.infolettreAcceptee },
+            adaptateurMail
+          )
+        )
         .then(() => depotDonnees.metsAJourUtilisateur(idUtilisateur, donnees))
         .then(() => reponse.json({ idUtilisateur }))
         .catch(suite);
