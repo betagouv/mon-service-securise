@@ -66,6 +66,12 @@ const inscrisEmailsTransactionnels = async (destinataire) => {
   try {
     await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
   } catch (e) {
+    if (
+      e.response.data.message ===
+      'Contact already in list and/or does not exist'
+    )
+      return;
+
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
       'Erreur renvoyée par API Brevo': e.response.data,
     });
@@ -82,6 +88,12 @@ const desinscrisEmailsTransactionnels = async (destinataire) => {
   try {
     await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
   } catch (e) {
+    if (
+      e.response.data.message ===
+      'Contact already removed from list and/or does not exist'
+    )
+      return;
+
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
       'Erreur renvoyée par API Brevo': e.response.data,
     });
