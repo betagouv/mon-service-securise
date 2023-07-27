@@ -89,20 +89,24 @@ describe('Le dépôt de données des homologations', () => {
     expect(homologations[0].createur.id).to.equal('456');
   });
 
-  it("utilise l'adaptateur de persistance sans `idUtilisateur` pour récupérer toutes les homologations du système", (done) => {
-    const adaptateurPersistance =
-      AdaptateurPersistanceMemoire.nouvelAdaptateur();
-    adaptateurPersistance.homologations = (idUtilisateur) => {
-      expect(idUtilisateur).to.be(undefined);
-      done();
-      return Promise.resolve([]);
+  it("utilise l'adaptateur de persistance sans `idUtilisateur` pour récupérer toutes les homologations du système", async () => {
+    let adaptateurAppele;
+    let idRecu;
+    const adaptateurPersistance = unePersistanceMemoire().construis();
+    adaptateurPersistance.homologations = async (idUtilisateur) => {
+      adaptateurAppele = true;
+      idRecu = idUtilisateur;
+      return [];
     };
 
     const depot = DepotDonneesHomologations.creeDepot({
       adaptateurPersistance,
     });
 
-    depot.toutesHomologations();
+    await depot.toutesHomologations();
+
+    expect(adaptateurAppele).to.be(true);
+    expect(idRecu).to.be(undefined);
   });
 
   it('trie les homologations par ordre alphabétique du nom du service', (done) => {
