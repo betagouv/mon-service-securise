@@ -220,21 +220,23 @@ describe('Le dépôt de données des homologations', () => {
         .construis();
     });
 
-    it("associe les mesures générales à l'homologation", (done) => {
+    it("associe les mesures générales à l'homologation", async () => {
       const generale = new MesureGenerale(
         { id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT },
         referentiel
       );
 
-      depot
-        .ajouteMesuresAHomologation('123', [generale], new MesuresSpecifiques())
-        .then(() => depot.homologation('123'))
-        .then(({ mesures: { mesuresGenerales } }) => {
-          expect(mesuresGenerales.nombre()).to.equal(1);
-          expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
-          done();
-        })
-        .catch(done);
+      await depot.ajouteMesuresAHomologation(
+        '123',
+        [generale],
+        new MesuresSpecifiques()
+      );
+
+      const {
+        mesures: { mesuresGenerales },
+      } = await depot.homologation('123');
+      expect(mesuresGenerales.nombre()).to.equal(1);
+      expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
     });
 
     it('associe les mesures générales au service', (done) => {
