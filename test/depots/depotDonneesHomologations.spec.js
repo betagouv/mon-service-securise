@@ -746,6 +746,7 @@ describe('Le dépôt de données des homologations', () => {
     let adaptateurChiffrement;
     let adaptateurJournalMSS;
     let adaptateurPersistance;
+    let adaptateurTracking;
     let adaptateurUUID;
     let depot;
     let referentiel;
@@ -759,6 +760,7 @@ describe('Le dépôt de données des homologations', () => {
         services: [],
         autorisations: [],
       });
+      adaptateurTracking = unAdaptateurTracking().construis();
       adaptateurUUID = { genereUUID: () => 'unUUID' };
       referentiel = Referentiel.creeReferentielVide();
 
@@ -766,6 +768,7 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurChiffrement,
         adaptateurJournalMSS,
         adaptateurPersistance,
+        adaptateurTracking,
         adaptateurUUID,
         referentiel,
       });
@@ -951,7 +954,7 @@ describe('Le dépôt de données des homologations', () => {
 
     it("l'adaptateur de tracking est utilisé pour envoyer un événement de création de service", async () => {
       let donneesPassees = {};
-      const adaptateurTracking = unAdaptateurTracking()
+      adaptateurTracking = unAdaptateurTracking()
         .avecEnvoiTrackingNouveauServiceCree(
           (destinataire, donneesEvenement) => {
             donneesPassees = { destinataire, donneesEvenement };
@@ -990,7 +993,7 @@ describe('Le dépôt de données des homologations', () => {
 
     it("l'adaptateur de tracking est utilisé pour envoyer la completude lors de la création d'un service", async () => {
       let donneesPassees = {};
-      const adaptateurTracking = unAdaptateurTracking()
+      adaptateurTracking = unAdaptateurTracking()
         .avecEnvoiTrackingCompletude((destinataire, donneesEvenement) => {
           donneesPassees = { destinataire, donneesEvenement };
         })
@@ -1700,6 +1703,7 @@ describe('Le dépôt de données des homologations', () => {
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurJournalMSS: AdaptateurJournalMSSMemoire.nouvelAdaptateur(),
         adaptateurPersistance,
+        adaptateurTracking: unAdaptateurTracking().construis(),
         adaptateurUUID: AdaptateurUUID,
         referentiel,
       });
