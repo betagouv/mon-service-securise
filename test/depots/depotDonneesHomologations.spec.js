@@ -144,29 +144,21 @@ describe('Le dépôt de données des homologations', () => {
     expect(hs[2].nomService()).to.equal('C-service');
   });
 
-  it('peut retrouver une homologation à partir de son identifiant', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        homologations: [
-          { id: '789', descriptionService: { nomService: 'nom' } },
-        ],
-      }
-    );
+  it('peut retrouver une homologation à partir de son identifiant', async () => {
+    const adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUnService({ id: '789', descriptionService: { nomService: 'nom' } })
+      .construis();
     const referentiel = Referentiel.creeReferentielVide();
     const depot = DepotDonneesHomologations.creeDepot({
       adaptateurPersistance,
       referentiel,
     });
 
-    depot
-      .homologation('789')
-      .then((homologation) => {
-        expect(homologation).to.be.a(Homologation);
-        expect(homologation.id).to.equal('789');
-        expect(homologation.referentiel).to.equal(referentiel);
-        done();
-      })
-      .catch(done);
+    const homologation = await depot.homologation('789');
+
+    expect(homologation).to.be.a(Homologation);
+    expect(homologation.id).to.equal('789');
+    expect(homologation.referentiel).to.equal(referentiel);
   });
 
   it("associe ses contributeurs à l'homologation", (done) => {
