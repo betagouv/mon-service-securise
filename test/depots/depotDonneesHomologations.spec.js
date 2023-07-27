@@ -275,24 +275,22 @@ describe('Le dépôt de données des homologations', () => {
       );
     });
 
-    it("associe les mesures spécifiques à l'homologation", (done) => {
+    it("associe les mesures spécifiques à l'homologation", async () => {
       const generales = [];
       const specifiques = new MesuresSpecifiques({
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
       });
 
-      depot
-        .ajouteMesuresAHomologation('123', generales, specifiques)
-        .then(() => depot.homologation('123'))
-        .then(({ mesures: { mesuresSpecifiques } }) => {
-          expect(mesuresSpecifiques.nombre()).to.equal(1);
-          expect(mesuresSpecifiques.item(0)).to.be.a(MesureSpecifique);
-          expect(mesuresSpecifiques.item(0).description).to.equal(
-            'Une mesure spécifique'
-          );
-          done();
-        })
-        .catch(done);
+      await depot.ajouteMesuresAHomologation('123', generales, specifiques);
+
+      const {
+        mesures: { mesuresSpecifiques },
+      } = await depot.homologation('123');
+      expect(mesuresSpecifiques.nombre()).to.equal(1);
+      expect(mesuresSpecifiques.item(0)).to.be.a(MesureSpecifique);
+      expect(mesuresSpecifiques.item(0).description).to.equal(
+        'Une mesure spécifique'
+      );
     });
 
     it('associe les mesures spécifiques au service', (done) => {
