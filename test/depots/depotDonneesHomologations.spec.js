@@ -484,21 +484,21 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it("ne détecte pas de doublon sur le nom de service pour l'homologation en cours de mise à jour", (done) => {
+    it("ne détecte pas de doublon sur le nom de service pour l'homologation en cours de mise à jour", async () => {
       const description = uneDescriptionValide(referentiel)
         .avecPresentation('Une autre présentation')
         .construis();
 
-      depot
-        .ajouteDescriptionServiceAHomologation('999', '123', description)
-        .then(() => depot.homologation('123'))
-        .then(({ descriptionService }) => {
-          expect(descriptionService.presentation).to.equal(
-            'Une autre présentation'
-          );
-          done();
-        })
-        .catch(done);
+      await depot.ajouteDescriptionServiceAHomologation(
+        '999',
+        '123',
+        description
+      );
+
+      const { descriptionService } = await depot.homologation('123');
+      expect(descriptionService.presentation).to.equal(
+        'Une autre présentation'
+      );
     });
 
     it('consigne un événement de changement de complétude du service', async () => {
