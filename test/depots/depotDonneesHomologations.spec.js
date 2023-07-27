@@ -161,7 +161,7 @@ describe('Le dépôt de données des homologations', () => {
     expect(homologation.referentiel).to.equal(referentiel);
   });
 
-  it("associe ses contributeurs à l'homologation", (done) => {
+  it("associe ses contributeurs à l'homologation", async () => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
         utilisateurs: [
@@ -181,15 +181,11 @@ describe('Le dépôt de données des homologations', () => {
       adaptateurPersistance,
     });
 
-    depot
-      .homologation('789')
-      .then((homologation) => {
-        const { contributeurs } = homologation;
-        expect(contributeurs.length).to.equal(1);
-        expect(contributeurs[0].id).to.equal('999');
-        done();
-      })
-      .catch(done);
+    const homologation = await depot.homologation('789');
+
+    const { contributeurs } = homologation;
+    expect(contributeurs.length).to.equal(1);
+    expect(contributeurs[0].id).to.equal('999');
   });
 
   describe("sur demande d'associations de mesures à un service", () => {
