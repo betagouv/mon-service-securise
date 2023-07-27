@@ -109,7 +109,7 @@ describe('Le dépôt de données des homologations', () => {
     expect(idRecu).to.be(undefined);
   });
 
-  it('trie les homologations par ordre alphabétique du nom du service', (done) => {
+  it('trie les homologations par ordre alphabétique du nom du service', async () => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
         homologations: [
@@ -136,16 +136,12 @@ describe('Le dépôt de données des homologations', () => {
       adaptateurPersistance,
     });
 
-    depot
-      .homologations('999')
-      .then((hs) => {
-        expect(hs.length).to.equal(3);
-        expect(hs[0].nomService()).to.equal('A-service');
-        expect(hs[1].nomService()).to.equal('B-service');
-        expect(hs[2].nomService()).to.equal('C-service');
-        done();
-      })
-      .catch(done);
+    const hs = await depot.homologations('999');
+
+    expect(hs.length).to.equal(3);
+    expect(hs[0].nomService()).to.equal('A-service');
+    expect(hs[1].nomService()).to.equal('B-service');
+    expect(hs[2].nomService()).to.equal('C-service');
   });
 
   it('peut retrouver une homologation à partir de son identifiant', (done) => {
