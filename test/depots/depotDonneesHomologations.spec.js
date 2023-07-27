@@ -439,7 +439,7 @@ describe('Le dépôt de données des homologations', () => {
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
-    it("met à jour la description de service dans l'objet métier service", (done) => {
+    it("met à jour la description de service dans l'objet métier service", async () => {
       const depotServices = DepotDonneesServices.creeDepot({
         adaptateurPersistance: adaptateurPersistance.construis(),
         referentiel,
@@ -448,14 +448,14 @@ describe('Le dépôt de données des homologations', () => {
         .avecNomService('Nouveau Nom')
         .construis();
 
-      depot
-        .ajouteDescriptionServiceAHomologation('999', '123', description)
-        .then(() => depotServices.service('123'))
-        .then(({ descriptionService }) => {
-          expect(descriptionService.nomService).to.equal('Nouveau Nom');
-          done();
-        })
-        .catch(done);
+      await depot.ajouteDescriptionServiceAHomologation(
+        '999',
+        '123',
+        description
+      );
+
+      const { descriptionService } = await depotServices.service('123');
+      expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
     it('lève une exception si des propriétés obligatoires ne sont pas renseignées', (done) => {
