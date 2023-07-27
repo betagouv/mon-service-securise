@@ -344,10 +344,6 @@ input[type='checkbox'] + label.label-checkbox {
   background: #1992dc30;
 }
 
-.label-checkbox[for='infolettreAcceptee'] {
-  position: relative;
-}
-
-#infolettreAcceptee:not(:checked) {
+.preferences-communication input[type='checkbox']:not(:checked) {
   background: #eff6ff;
 }
