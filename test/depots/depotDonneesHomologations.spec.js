@@ -424,19 +424,19 @@ describe('Le dépôt de données des homologations', () => {
         .construis();
     });
 
-    it("met à jour la description du service d'une homologation", (done) => {
+    it("met à jour la description du service d'une homologation", async () => {
       const description = uneDescriptionValide(referentiel)
         .avecNomService('Nouveau Nom')
         .construis();
 
-      depot
-        .ajouteDescriptionServiceAHomologation('999', '123', description)
-        .then(() => depot.homologation('123'))
-        .then(({ descriptionService }) => {
-          expect(descriptionService.nomService).to.equal('Nouveau Nom');
-          done();
-        })
-        .catch(done);
+      await depot.ajouteDescriptionServiceAHomologation(
+        '999',
+        '123',
+        description
+      );
+
+      const { descriptionService } = await depot.homologation('123');
+      expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
     it("met à jour la description de service dans l'objet métier service", (done) => {
