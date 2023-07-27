@@ -51,7 +51,7 @@ const {
 const { unDossier } = require('../constructeurs/constructeurDossier');
 
 describe('Le dépôt de données des homologations', () => {
-  it("connaît toutes les homologations d'un utilisateur donné", (done) => {
+  it("connaît toutes les homologations d'un utilisateur donné", async () => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
         homologations: [
@@ -72,25 +72,21 @@ describe('Le dépôt de données des homologations', () => {
         ],
       }
     );
-
     const referentiel = Referentiel.creeReferentielVide();
     const depot = DepotDonneesHomologations.creeDepot({
       adaptateurPersistance,
       referentiel,
     });
-    depot
-      .homologations('456')
-      .then((homologations) => {
-        expect(homologations.length).to.equal(1);
-        expect(homologations[0]).to.be.a(Homologation);
-        expect(homologations[0].id).to.equal('123');
-        expect(homologations[0].referentiel).to.equal(referentiel);
 
-        expect(homologations[0].createur).to.be.ok();
-        expect(homologations[0].createur.id).to.equal('456');
-        done();
-      })
-      .catch(done);
+    const homologations = await depot.homologations('456');
+
+    expect(homologations.length).to.equal(1);
+    expect(homologations[0]).to.be.a(Homologation);
+    expect(homologations[0].id).to.equal('123');
+    expect(homologations[0].referentiel).to.equal(referentiel);
+
+    expect(homologations[0].createur).to.be.ok();
+    expect(homologations[0].createur.id).to.equal('456');
   });
 
   it("utilise l'adaptateur de persistance sans `idUtilisateur` pour récupérer toutes les homologations du système", (done) => {
