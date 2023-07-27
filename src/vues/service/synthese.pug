@@ -103,8 +103,3 @@ block cartes-informations
   +indiceCyber({ referentiel, indiceCyber })
 
   +recommandationsANSSI({ referentiel, noteObtenue: indiceCyber.total })
-
-  +carteInformations({ titre: 'Pour les services référencés avant le 12/10/2022' })
-    .liens
-      a.avec-chevron(href = `/service/${service.id}/avisExpertCyber`) Accéder à « Avis sur le dossier »
-      a.avec-chevron(href = `/service/${service.id}/decision`) Télécharger les annexes 1ère version
