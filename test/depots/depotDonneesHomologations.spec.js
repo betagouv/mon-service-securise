@@ -364,7 +364,7 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  it('renseigne les mesures générales associées à une homologation', (done) => {
+  it('renseigne les mesures générales associées à une homologation', async () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { gouvernance: 'Gouvernance' },
       mesures: { identifiantMesure: { categorie: 'gouvernance' } },
@@ -377,24 +377,21 @@ describe('Le dépôt de données des homologations', () => {
       mesuresGenerales: [{ id: 'identifiantMesure', statut: 'fait' }],
     };
 
-    const adaptateurPersistance =
-      unePersistanceMemoire().ajouteUnService(donneesHomologation);
     const depot = unDepotDeDonneesServices()
-      .avecAdaptateurPersistance(adaptateurPersistance)
+      .avecAdaptateurPersistance(
+        unePersistanceMemoire().ajouteUnService(donneesHomologation)
+      )
       .avecReferentiel(referentiel)
       .construis();
 
-    depot
-      .homologation('123')
-      .then(({ mesures: { mesuresGenerales } }) => {
-        expect(mesuresGenerales.nombre()).to.equal(1);
+    const {
+      mesures: { mesuresGenerales },
+    } = await depot.homologation('123');
 
-        const mesure = mesuresGenerales.item(0);
-        expect(mesure).to.be.a(MesureGenerale);
-        expect(mesure.id).to.equal('identifiantMesure');
-        done();
-      })
-      .catch(done);
+    expect(mesuresGenerales.nombre()).to.equal(1);
+    const mesure = mesuresGenerales.item(0);
+    expect(mesure).to.be.a(MesureGenerale);
+    expect(mesure.id).to.equal('identifiantMesure');
   });
 
   describe("sur demande de mise à jour de la description du service d'une homologation", () => {
