@@ -226,11 +226,8 @@ describe('Le dépôt de données des homologations', () => {
         referentiel
       );
 
-      await depot.ajouteMesuresAHomologation(
-        '123',
-        [generale],
-        new MesuresSpecifiques()
-      );
+      const specifiques = new MesuresSpecifiques();
+      await depot.ajouteMesuresAHomologation('123', [generale], specifiques);
 
       const {
         mesures: { mesuresGenerales },
@@ -249,11 +246,8 @@ describe('Le dépôt de données des homologations', () => {
         referentiel
       );
 
-      await depot.ajouteMesuresAHomologation(
-        '123',
-        [generale],
-        new MesuresSpecifiques()
-      );
+      const specifiques = new MesuresSpecifiques();
+      await depot.ajouteMesuresAHomologation('123', [generale], specifiques);
 
       const {
         mesures: { mesuresGenerales },
@@ -263,23 +257,22 @@ describe('Le dépôt de données des homologations', () => {
       expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
     });
 
-    it("met à jour les données de la mesure générale si elle est déjà associée à l'homologation", (done) => {
+    it("met à jour les données de la mesure générale si elle est déjà associée à l'homologation", async () => {
       const generale = new MesureGenerale(
         { id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT },
         referentiel
       );
 
-      depot
-        .ajouteMesuresAHomologation('123', [generale], new MesuresSpecifiques())
-        .then(() => depot.homologation('123'))
-        .then(({ mesures: { mesuresGenerales } }) => {
-          expect(mesuresGenerales.nombre()).to.equal(1);
-          expect(mesuresGenerales.item(0).statut).to.equal(
-            MesureGenerale.STATUT_FAIT
-          );
-          done();
-        })
-        .catch(done);
+      const specifiques = new MesuresSpecifiques();
+      await depot.ajouteMesuresAHomologation('123', [generale], specifiques);
+
+      const {
+        mesures: { mesuresGenerales },
+      } = await depot.homologation('123');
+      expect(mesuresGenerales.nombre()).to.equal(1);
+      expect(mesuresGenerales.item(0).statut).to.equal(
+        MesureGenerale.STATUT_FAIT
+      );
     });
 
     it("associe les mesures spécifiques à l'homologation", (done) => {
