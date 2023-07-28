@@ -657,63 +657,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête POST sur `/api/service/:id/avisExpertCyber`', () => {
-    beforeEach(
-      () =>
-        (testeur.depotDonnees().ajouteAvisExpertCyberAHomologation = () =>
-          Promise.resolve())
-    );
-
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/service/456/avisExpertCyber',
-        },
-        done
-      );
-    });
-
-    it("demande au dépôt d'associer l'avis d'expert au service", (done) => {
-      let avisAjoute = false;
-
-      testeur.depotDonnees().ajouteAvisExpertCyberAHomologation = (
-        idService,
-        avis
-      ) => {
-        expect(idService).to.equal('456');
-        expect(avis.commentaire).to.equal('Un commentaire');
-        avisAjoute = true;
-        return Promise.resolve();
-      };
-
-      axios
-        .post('http://localhost:1234/api/service/456/avisExpertCyber', {
-          commentaire: 'Un commentaire',
-        })
-        .then((reponse) => {
-          expect(avisAjoute).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idService: '456' });
-          done();
-        })
-        .catch(done);
-    });
-
-    it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'Données invalides',
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/service/456/avisExpertCyber',
-          data: { avis: 'avisInvalide' },
-        },
-        done
-      );
-    });
-  });
-
   describe('quand requête PUT sur /api/service/:id/homologation/autorite', () => {
     beforeEach(() => {
       const homologationAvecDossier = new Homologation({

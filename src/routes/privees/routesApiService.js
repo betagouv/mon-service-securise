@@ -10,7 +10,6 @@ const {
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const AutorisationCreateur = require('../../modeles/autorisations/autorisationCreateur');
 const Avis = require('../../modeles/avis');
-const AvisExpertCyber = require('../../modeles/avisExpertCyber');
 const DescriptionService = require('../../modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('../../modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('../../modeles/donneesSensiblesSpecifiques');
@@ -236,24 +235,6 @@ const routesApiService = (
           })
           .then(() => reponse.send({ idService }))
           .catch(suite);
-      } catch {
-        reponse.status(422).send('Données invalides');
-      }
-    }
-  );
-
-  routes.post(
-    '/:id/avisExpertCyber',
-    middleware.trouveService,
-    (requete, reponse) => {
-      try {
-        const avisExpert = new AvisExpertCyber(requete.body, referentiel);
-        depotDonnees
-          .ajouteAvisExpertCyberAHomologation(
-            requete.homologation.id,
-            avisExpert
-          )
-          .then(() => reponse.send({ idService: requete.homologation.id }));
       } catch {
         reponse.status(422).send('Données invalides');
       }
