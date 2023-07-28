@@ -19,7 +19,6 @@ const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologa
 const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
-const AvisExpertCyber = require('../../src/modeles/avisExpertCyber');
 const Dossier = require('../../src/modeles/dossier');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
@@ -685,32 +684,6 @@ describe('Le dépôt de données des homologations', () => {
         expect(risquesSpecifiques.item(0).description).to.equal(
           'Un nouveau risque'
         );
-        done();
-      })
-      .catch(done);
-  });
-
-  it("sait associer un avis d'expert cyber à une homologation", (done) => {
-    const donneesHomologation = {
-      id: '123',
-      descriptionService: { nomService: 'nom' },
-    };
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        homologations: [copie(donneesHomologation)],
-        services: [copie(donneesHomologation)],
-      }
-    );
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurPersistance,
-    });
-
-    const avisExpert = new AvisExpertCyber({ avis: AvisExpertCyber.FAVORABLE });
-    depot
-      .ajouteAvisExpertCyberAHomologation('123', avisExpert)
-      .then(() => depot.homologation('123'))
-      .then(({ avisExpertCyber }) => {
-        expect(avisExpertCyber.favorable()).to.be(true);
         done();
       })
       .catch(done);
