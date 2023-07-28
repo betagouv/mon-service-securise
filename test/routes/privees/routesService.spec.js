@@ -131,17 +131,6 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/service/:id/avisExpertCyber`', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur
-        .middleware()
-        .verifieRechercheService(
-          'http://localhost:1234/service/456/avisExpertCyber',
-          done
-        );
-    });
-  });
-
   describe('quand requête GET sur `/service/:id/dossiers`', () => {
     beforeEach(() => {
       testeur.referentiel().premiereEtapeParcours = () =>
