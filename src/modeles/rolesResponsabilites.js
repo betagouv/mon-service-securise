@@ -36,13 +36,6 @@ class RolesResponsabilites extends InformationsHomologation {
     this.renseigneProprietes(donneesRolesResponsabilites);
   }
 
-  descriptionExpertCybersecurite() {
-    return descriptionRole(
-      this.expertCybersecurite,
-      this.fonctionExpertCybersecurite
-    );
-  }
-
   descriptionDelegueProtectionDonnees() {
     return descriptionRole(
       this.delegueProtectionDonnees,
