@@ -9,8 +9,6 @@ module.exports = {
   extends: ['airbnb-base', 'prettier'],
   globals: {
     axios: 'readonly',
-    html2canvas: 'readonly',
-    jspdf: 'readonly',
     moment: 'readonly',
   },
   parserOptions: {
