@@ -81,40 +81,6 @@ class RolesResponsabilites extends InformationsHomologation {
   descriptionStructureDeveloppement() {
     return this.partiesPrenantes.developpementFourniture()?.nom || '';
   }
-
-  descriptionGouvernance() {
-    const acteurDecrit = (role, description) => ({ role, description });
-    const description = (acteur) =>
-      acteur.nom + (acteur.fonction ? ` (${acteur.fonction})` : '');
-    const acteursSpecifiques = () =>
-      this.acteursHomologation
-        .tous()
-        .map((acteur) => acteurDecrit(acteur.role, description(acteur)));
-
-    const acteurs = [
-      acteurDecrit(
-        "Autorité d'homologation",
-        this.descriptionAutoriteHomologation()
-      ),
-      acteurDecrit(
-        'Spécialiste cybersécurité',
-        this.descriptionExpertCybersecurite()
-      ),
-      acteurDecrit(
-        'Délégué(e) à la protection des données à caractère personnel',
-        this.descriptionDelegueProtectionDonnees()
-      ),
-      acteurDecrit(
-        'Responsable métier du projet',
-        this.descriptionPiloteProjet()
-      ),
-      ...acteursSpecifiques(),
-    ];
-
-    return acteurs.filter(
-      (acteur) => acteur.description !== 'Information non renseignée'
-    );
-  }
 }
 
 module.exports = RolesResponsabilites;
