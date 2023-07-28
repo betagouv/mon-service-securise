@@ -51,7 +51,6 @@ const creeDepot = (config = {}) => {
   });
 
   const {
-    ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteDossierCourantSiNecessaire,
     ajouteMesuresAHomologation,
@@ -103,7 +102,6 @@ const creeDepot = (config = {}) => {
 
   return {
     accesAutorise,
-    ajouteAvisExpertCyberAHomologation,
     ajouteContributeurAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteDossierCourantSiNecessaire,

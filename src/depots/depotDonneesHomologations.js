@@ -247,9 +247,6 @@ const creeDepot = (config = {}) => {
   const ajouteRolesResponsabilitesAHomologation = (...params) =>
     metsAJourProprieteHomologation('rolesResponsabilites', ...params);
 
-  const ajouteAvisExpertCyberAHomologation = (...params) =>
-    metsAJourProprieteHomologation('avisExpertCyber', ...params);
-
   const homologations = (idUtilisateur) =>
     p.lis.cellesDeUtilisateur(idUtilisateur);
 
@@ -474,7 +471,6 @@ const creeDepot = (config = {}) => {
   };
 
   return {
-    ajouteAvisExpertCyberAHomologation,
     ajouteDescriptionServiceAHomologation,
     ajouteDossierCourantSiNecessaire,
     ajouteMesuresAHomologation,
