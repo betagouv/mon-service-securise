@@ -47,13 +47,6 @@ class RolesResponsabilites extends InformationsHomologation {
       : membresEquipe.join(', ');
   }
 
-  descriptionAutoriteHomologation() {
-    return descriptionRole(
-      this.autoriteHomologation,
-      this.fonctionAutoriteHomologation
-    );
-  }
-
   descriptionPiloteProjet() {
     return descriptionRole(this.piloteProjet, this.fonctionPiloteProjet);
   }

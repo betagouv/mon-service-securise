@@ -307,20 +307,6 @@ describe('Une homologation', () => {
     );
   });
 
-  it("sait décrire l'autorité d'homologation", () => {
-    const homologation = new Homologation({
-      id: '123',
-      rolesResponsabilites: {
-        autoriteHomologation: 'Jean Dupont',
-        fonctionAutoriteHomologation: 'Maire',
-      },
-    });
-
-    expect(homologation.descriptionAutoriteHomologation()).to.equal(
-      'Jean Dupont (Maire)'
-    );
-  });
-
   it('délègue aux mesures le calcul des statistiques', () => {
     let calculDelegueAuxMesures = false;
 
