@@ -63,17 +63,6 @@ describe("L'ensemble des rôles et responsabilités", () => {
     });
   });
 
-  it("présente les informations relatives à l'expert cybersécurité", () => {
-    const rolesResponsabilites = new RolesResponsabilites({
-      expertCybersecurite: 'Jean Dupont',
-      fonctionExpertCybersecurite: 'RSSI',
-    });
-
-    expect(rolesResponsabilites.descriptionExpertCybersecurite()).to.equal(
-      'Jean Dupont (RSSI)'
-    );
-  });
-
   it('présente les informations relatives au ou à la déléguée à la protection des données', () => {
     const rolesResponsabilites = new RolesResponsabilites({
       delegueProtectionDonnees: 'Jean Dupont',
