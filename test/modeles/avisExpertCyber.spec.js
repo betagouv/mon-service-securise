@@ -100,19 +100,6 @@ describe("L'avis de l'expert Cyber", () => {
     }
   });
 
-  it("décrit l'échéance de l'homologation", () => {
-    referentiel.descriptionExpiration = (identifiant) => {
-      expect(identifiant).to.equal('unAn');
-      return 'Une description';
-    };
-
-    const avisExpert = new AvisExpertCyber(
-      { dateRenouvellement: 'unAn' },
-      referentiel
-    );
-    expect(avisExpert.descriptionExpiration()).to.equal('Une description');
-  });
-
   it('détermine le statut de saisie', () => {
     const avisExpert = new AvisExpertCyber(
       {

@@ -433,25 +433,6 @@ describe('Le référentiel', () => {
     ).to.be(false);
   });
 
-  it("sait décrire l'échéance de l'homologation", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      echeancesRenouvellement: {
-        uneEcheance: { expiration: 'description expiration' },
-      },
-    });
-
-    expect(referentiel.descriptionExpiration('uneEcheance')).to.equal(
-      'description expiration'
-    );
-  });
-
-  it("donne une valeur par défaut pour l'échéance d'homologation", () => {
-    const referentiel = Referentiel.creeReferentielVide();
-    expect(referentiel.descriptionExpiration()).to.equal(
-      'Information non renseignée'
-    );
-  });
-
   it('connait les niveaux de gravité des risques', () => {
     const referentiel = Referentiel.creeReferentiel({
       niveauxGravite: {

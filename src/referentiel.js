@@ -149,12 +149,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const infosNiveauxGraviteConcernes = (ordreInverse) =>
     infosNiveauxGravite(ordreInverse).filter((niveau) => !niveau.nonConcerne);
 
-  const descriptionExpiration = (identifiant) => {
-    if (!identifiant) return 'Information non renseignée';
-
-    return donnees.echeancesRenouvellement[identifiant].expiration;
-  };
-
   const localisationDonnees = (identifiant) => {
     if (!identifiant) return 'Localisation des données non renseignée';
     return localisationsDonnees()[identifiant].description;
@@ -250,7 +244,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionDelaiAvantImpactCritique,
     descriptionDonneesCaracterePersonnel,
     descriptionEcheanceRenouvellement,
-    descriptionExpiration,
     descriptionFonctionnalite,
     descriptionRisque,
     descriptionStatutMesure,
