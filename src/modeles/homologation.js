@@ -102,10 +102,6 @@ class Homologation {
     return this.rolesResponsabilites.descriptionEquipePreparation();
   }
 
-  descriptionExpiration() {
-    return this.avisExpertCyber.descriptionExpiration();
-  }
-
   descriptionLocalisationDonnees() {
     return this.descriptionService.descriptionLocalisationDonnees();
   }

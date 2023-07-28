@@ -41,10 +41,6 @@ class AvisExpertCyber extends InformationsHomologation {
     this.referentiel = referentiel;
   }
 
-  descriptionExpiration() {
-    return this.referentiel.descriptionExpiration(this.dateRenouvellement);
-  }
-
   favorable() {
     return this.avis === AVIS.FAVORABLE;
   }

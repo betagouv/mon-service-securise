@@ -321,22 +321,6 @@ describe('Une homologation', () => {
     );
   });
 
-  it('décrit son expiration', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      echeancesRenouvellement: { unAn: { expiration: 'Dans un an' } },
-    });
-
-    const homologation = new Homologation(
-      {
-        id: '123',
-        avisExpertCyber: { dateRenouvellement: 'unAn' },
-      },
-      referentiel
-    );
-
-    expect(homologation.descriptionExpiration()).to.equal('Dans un an');
-  });
-
   it('délègue aux mesures le calcul des statistiques', () => {
     let calculDelegueAuxMesures = false;
 
