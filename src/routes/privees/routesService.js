@@ -103,18 +103,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     reponse.render('service/risques', { referentiel, service: homologation });
   });
 
-  routes.get(
-    '/:id/avisExpertCyber',
-    middleware.trouveService,
-    (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.render('service/avisExpertCyber', {
-        referentiel,
-        service: homologation,
-      });
-    }
-  );
-
   routes.get('/:id/dossiers', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/dossiers', {
