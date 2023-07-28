@@ -165,10 +165,6 @@ class Homologation {
     return this.rolesResponsabilites.fonctionAutoriteHomologation;
   }
 
-  gouvernance() {
-    return this.rolesResponsabilites.descriptionGouvernance();
-  }
-
   hebergeur() {
     return this.rolesResponsabilites.descriptionHebergeur();
   }
