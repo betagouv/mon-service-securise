@@ -296,17 +296,6 @@ describe('Une homologation', () => {
     expect(homologation.mesuresSpecifiques().nombre()).to.equal(1);
   });
 
-  it("sait décrire l'équipe de préparation du dossier", () => {
-    const homologation = new Homologation({
-      id: '123',
-      rolesResponsabilites: { piloteProjet: 'Sylvie Martin' },
-    });
-
-    expect(homologation.descriptionEquipePreparation()).to.equal(
-      'Sylvie Martin (fonction non renseignée)'
-    );
-  });
-
   it('délègue aux mesures le calcul des statistiques', () => {
     let calculDelegueAuxMesures = false;
 

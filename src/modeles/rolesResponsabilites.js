@@ -36,21 +36,6 @@ class RolesResponsabilites extends InformationsHomologation {
     this.renseigneProprietes(donneesRolesResponsabilites);
   }
 
-  descriptionEquipePreparation() {
-    const membresEquipe = [];
-    if (this.piloteProjet) membresEquipe.push(this.descriptionPiloteProjet());
-    if (this.expertCybersecurite)
-      membresEquipe.push(this.descriptionExpertCybersecurite());
-
-    return membresEquipe.length === 0
-      ? 'Information non renseignée'
-      : membresEquipe.join(', ');
-  }
-
-  descriptionPiloteProjet() {
-    return descriptionRole(this.piloteProjet, this.fonctionPiloteProjet);
-  }
-
   descriptionExpertCybersecurite() {
     return descriptionRole(
       this.expertCybersecurite,
