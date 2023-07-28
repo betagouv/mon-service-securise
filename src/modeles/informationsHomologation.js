@@ -1,7 +1,5 @@
 const Base = require('./base');
 
-const { pagination } = require('../utilitaires/pagination');
-
 const STATUTS_SAISIE = {
   A_SAISIR: 'aSaisir',
   A_COMPLETER: 'aCompleter',
@@ -19,17 +17,6 @@ class InformationsHomologation extends Base {
     return Object.keys(this.listesAgregats).some(
       (l) => this[l].statutSaisie() === InformationsHomologation.A_COMPLETER
     );
-  }
-
-  pagines(nbElementsParPage) {
-    const tousLesElements = Object.keys(this.listesAgregats).flatMap((l) =>
-      this[l].tous()
-    );
-    return pagination(nbElementsParPage, tousLesElements);
-  }
-
-  paginees(...params) {
-    return this.pagines(...params);
   }
 
   statutSaisie() {
