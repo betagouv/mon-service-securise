@@ -94,10 +94,6 @@ class Homologation {
     return this.rolesResponsabilites.delegueProtectionDonnees;
   }
 
-  descriptionAutoriteHomologation() {
-    return this.rolesResponsabilites.descriptionAutoriteHomologation();
-  }
-
   descriptionEquipePreparation() {
     return this.rolesResponsabilites.descriptionEquipePreparation();
   }

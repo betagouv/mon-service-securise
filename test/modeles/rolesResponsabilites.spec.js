@@ -103,38 +103,6 @@ describe("L'ensemble des rôles et responsabilités", () => {
     });
   });
 
-  describe("sur une interrogation sur l'autorité d'homologation", () => {
-    it("présente les informations relatives à l'autorité d'homologation", () => {
-      const rolesResponsabilites = new RolesResponsabilites({
-        autoriteHomologation: 'Jean Dupont',
-        fonctionAutoriteHomologation: 'Maire',
-      });
-
-      expect(rolesResponsabilites.descriptionAutoriteHomologation()).to.equal(
-        'Jean Dupont (Maire)'
-      );
-    });
-
-    it("ne mentionne pas la fonction de l'autorité d'homologation si info inexistante", () => {
-      const rolesResponsabilites = new RolesResponsabilites({
-        autoriteHomologation: 'Jean Dupont',
-      });
-
-      expect(rolesResponsabilites.descriptionAutoriteHomologation()).to.equal(
-        'Jean Dupont (fonction non renseignée)'
-      );
-    });
-
-    it("ne mentionne pas l'autorité d'homologation si info inexistante", () => {
-      const rolesResponsabilites = new RolesResponsabilites({
-        fonctionAutoriteHomologation: 'Maire',
-      });
-      expect(rolesResponsabilites.descriptionAutoriteHomologation()).to.equal(
-        'Information non renseignée'
-      );
-    });
-  });
-
   it('présente les informations relatives au pilote projet', () => {
     const rolesResponsabilites = new RolesResponsabilites({
       piloteProjet: 'Jean Dupont',
