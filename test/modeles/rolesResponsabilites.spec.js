@@ -63,57 +63,6 @@ describe("L'ensemble des rôles et responsabilités", () => {
     });
   });
 
-  describe("sur interrogation sur l'équipe de préparation du dossier", () => {
-    it("retourne les noms du pilote du projet de l'expert cybersécurité", () => {
-      const rolesResponsabilites = new RolesResponsabilites({
-        piloteProjet: 'Sylvie Martin',
-        expertCybersecurite: 'Anna Dubreuil',
-      });
-
-      expect(rolesResponsabilites.descriptionEquipePreparation()).to.equal(
-        'Sylvie Martin (fonction non renseignée), Anna Dubreuil (fonction non renseignée)'
-      );
-    });
-
-    it("ne parle pas du responsable du projet si l'information est inexistante", () => {
-      const rolesResponsabilites = new RolesResponsabilites({
-        expertCybersecurite: 'Anna Dubreuil',
-      });
-
-      expect(rolesResponsabilites.descriptionEquipePreparation()).to.equal(
-        'Anna Dubreuil (fonction non renseignée)'
-      );
-    });
-
-    it("ne parle pas de l'expert cyber si l'information est inexistante", () => {
-      const rolesResponsabilites = new RolesResponsabilites({
-        piloteProjet: 'Sylvie Martin',
-      });
-
-      expect(rolesResponsabilites.descriptionEquipePreparation()).to.equal(
-        'Sylvie Martin (fonction non renseignée)'
-      );
-    });
-
-    it('retourne une valeur par défaut', () => {
-      const rolesResponsabilites = new RolesResponsabilites();
-      expect(rolesResponsabilites.descriptionEquipePreparation()).to.equal(
-        'Information non renseignée'
-      );
-    });
-  });
-
-  it('présente les informations relatives au pilote projet', () => {
-    const rolesResponsabilites = new RolesResponsabilites({
-      piloteProjet: 'Jean Dupont',
-      fonctionPiloteProjet: 'Expert métier',
-    });
-
-    expect(rolesResponsabilites.descriptionPiloteProjet()).to.equal(
-      'Jean Dupont (Expert métier)'
-    );
-  });
-
   it("présente les informations relatives à l'expert cybersécurité", () => {
     const rolesResponsabilites = new RolesResponsabilites({
       expertCybersecurite: 'Jean Dupont',
