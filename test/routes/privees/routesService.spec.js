@@ -57,26 +57,6 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/service/:id/decision`', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur
-        .middleware()
-        .verifieRechercheService(
-          'http://localhost:1234/service/456/decision',
-          done
-        );
-    });
-
-    it('sert la page avec un nonce', (done) => {
-      testeur
-        .middleware()
-        .verifieRequetePositionneHeadersAvecNonce(
-          'http://localhost:1234/service/456/decision',
-          done
-        );
-    });
-  });
-
   describe('quand requête GET sur `/service/:id/mesures`', () => {
     it('recherche le service correspondant', (done) => {
       testeur
