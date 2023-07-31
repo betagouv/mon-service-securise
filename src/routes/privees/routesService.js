@@ -86,6 +86,10 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       referentiel,
       service: homologation,
       mesures,
+      donneesStatutHomologation: new ObjetApiStatutHomologation(
+        homologation,
+        referentiel
+      ).donnees(),
     });
   });
 

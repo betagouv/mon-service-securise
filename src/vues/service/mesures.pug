@@ -1,6 +1,7 @@
 extends ./formulaire
 include ../fragments/inputChoix
 include ../fragments/cartesInformations
+include ../cartes/statutHomologation
 include ../cartes/indiceCyber
 include ../cartes/recommandationsANSSI
 
@@ -73,6 +74,8 @@ block formulaire
   script(type = 'module', src = '/statique/service/mesures.js')
 
 block cartes-informations
+  +statutHomologation({ donneesStatutHomologation })
+
   - const indiceCyber = service.indiceCyber()
   +indiceCyber({referentiel, indiceCyber})
 

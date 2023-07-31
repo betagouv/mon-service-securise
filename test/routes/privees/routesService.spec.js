@@ -58,6 +58,13 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('quand requête GET sur `/service/:id/mesures`', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        statutsHomologation: {},
+        etapesParcoursHomologation: [{ numero: 1 }],
+      });
+    });
+
     it('recherche le service correspondant', (done) => {
       testeur
         .middleware()
