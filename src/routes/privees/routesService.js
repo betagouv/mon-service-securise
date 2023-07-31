@@ -54,20 +54,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   });
 
   routes.get(
-    '/:id/decision',
-    middleware.trouveService,
-    middleware.positionneHeadersAvecNonce,
-    (requete, reponse) => {
-      const { homologation, nonce } = requete;
-      reponse.render('service/decision', {
-        service: homologation,
-        referentiel,
-        nonce,
-      });
-    }
-  );
-
-  routes.get(
     '/:id/descriptionService',
     middleware.trouveService,
     (requete, reponse) => {
