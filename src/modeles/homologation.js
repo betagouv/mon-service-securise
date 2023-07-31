@@ -1,7 +1,6 @@
 const MoteurRegles = require('../moteurRegles');
 const Referentiel = require('../referentiel');
 
-const AvisExpertCyber = require('./avisExpertCyber');
 const DescriptionService = require('./descriptionService');
 const Dossiers = require('./dossiers');
 const Mesure = require('./mesure');
@@ -37,7 +36,6 @@ class Homologation {
       risquesGeneraux = [],
       risquesSpecifiques = [],
       rolesResponsabilites = {},
-      avisExpertCyber = {},
     } = donnees;
 
     this.id = id;
@@ -69,7 +67,6 @@ class Homologation {
       { risquesGeneraux, risquesSpecifiques },
       referentiel
     );
-    this.avisExpertCyber = new AvisExpertCyber(avisExpertCyber, referentiel);
 
     this.referentiel = referentiel;
   }
@@ -130,7 +127,6 @@ class Homologation {
   donneesAPersister() {
     return new ObjetPersistanceHomologation({
       id: this.id,
-      avisExpertCyber: this.avisExpertCyber.donneesSerialisees(),
       descriptionService: this.descriptionService.donneesSerialisees(),
       dossiers: this.dossiers.donneesSerialisees(),
       mesuresGenerales: this.mesuresGenerales().donneesSerialisees(),
