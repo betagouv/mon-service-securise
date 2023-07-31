@@ -582,7 +582,6 @@ describe('Une homologation', () => {
       const homologation = new Homologation(
         {
           id: 'id-homologation',
-          avisExpertCyber: { avis: 'defavorable' },
           descriptionService: uneDescriptionValide(
             Referentiel.creeReferentielVide()
           )
@@ -611,7 +610,6 @@ describe('Une homologation', () => {
 
       expect(homologation.donneesAPersister().toutes()).to.eql({
         id: 'id-homologation',
-        avisExpertCyber: { avis: 'defavorable' },
         descriptionService: {
           delaiAvantImpactCritique: 'unDelai',
           localisationDonnees: 'uneLocalisation',
