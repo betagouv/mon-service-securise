@@ -1,5 +1,8 @@
 extends ./formulaire
 include ../fragments/inputChoix
+include ../fragments/cartesInformations
+include ../cartes/indiceCyber
+include ../cartes/recommandationsANSSI
 
 mixin inputMesure({ nom, titre, indispensable })
   +inputChoix({
@@ -68,3 +71,9 @@ block formulaire
     !{JSON.stringify(referentiel.statutsMesures())}
 
   script(type = 'module', src = '/statique/service/mesures.js')
+
+block cartes-informations
+  - const indiceCyber = service.indiceCyber()
+  +indiceCyber({referentiel, indiceCyber})
+
+  +recommandationsANSSI({referentiel, noteObtenue: indiceCyber.total})
