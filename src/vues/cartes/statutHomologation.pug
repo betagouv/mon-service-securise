@@ -1,0 +1,24 @@
+include ../fragments/carteInformations
+
+mixin statutHomologation({ donneesStatutHomologation })
+  +carteInformations({titre: "Homologation de sécurité"})
+    .statut.statut-homologation(class=donneesStatutHomologation.statut)
+      span= donneesStatutHomologation.libelle
+
+    .informations-complementaires-statut
+      - const liens = donneesStatutHomologation.metadonnees.liens
+      - const validite = donneesStatutHomologation.metadonnees.validite
+      if validite
+        if validite.debut
+          .dates-statut.
+            Active le #{validite.debut}
+        if validite.duree
+          .dates-statut.
+            Durée : #{validite.duree}
+        if validite.fin
+          .dates-statut.
+            #{donneesStatutHomologation.statut === 'expiree' ? 'Expirée depuis le ' : "Valable jusqu'au "} #{validite.fin}
+      if liens
+        for lien in liens
+          a.avec-chevron(href=lien.url)!= lien.libelle
+
