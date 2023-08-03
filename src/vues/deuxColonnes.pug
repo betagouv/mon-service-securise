@@ -3,6 +3,7 @@ include ./fragments/texteTronque
 
 block append styles
   link(href = '/statique/assets/styles/deuxColonnes.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/menuNavigation.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/filAriane.css', rel = 'stylesheet')
 
 block header
@@ -20,6 +21,18 @@ block retour
       block filArianeNoeudFinal
 
 block main
+  .menu-navigation
+    .accueil
+      a(href="/" title="Naviguer vers la page d'acceuil")
+
+    .nom-service
+      +texteTronque({ texte: service.nomService() || '' })
+
+    .parcours
+
+    a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord") Tableau de bord
+    a.lien-deconnexion(href="/connexion" title="Déconnexion") Se déconnecter
+
   .corps.marges-fixes
     .zone-principale
       block nom-service
