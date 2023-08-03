@@ -5,6 +5,9 @@ block append styles
   link(href = '/statique/assets/styles/deuxColonnes.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/filAriane.css', rel = 'stylesheet')
 
+block header
+  // Pas de header sur les pages 2 colonnes
+
 block retour
   - const s = homologation || service
   if s
