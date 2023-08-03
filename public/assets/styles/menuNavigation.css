@@ -1,0 +1,83 @@
+.menu-navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 19em;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-navigation > * {
+  padding: 20px 30px;
+}
+
+:is(.menu-navigation, .menu-navigation a) {
+  color: #0c5c98;
+}
+
+.menu-navigation .accueil {
+  background: #ebf4f7;
+}
+
+.menu-navigation .accueil a {
+  display: block;
+  width: 7.5rem;
+  height: 2.8rem;
+  background: url(../images/logo_mss.svg) no-repeat center;
+  background-size: contain;
+}
+
+.menu-navigation .nom-service {
+  background: #dbecf1;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.menu-navigation .parcours {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #fff;
+}
+
+:is(
+    .menu-navigation .lien-tableau-de-bord,
+    .menu-navigation .lien-deconnexion
+  ) {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  background-color: #fff;
+  border-top: 1px solid #0c5c98;
+}
+
+.menu-navigation .lien-tableau-de-bord {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.menu-navigation .lien-deconnexion {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+:is(
+    .menu-navigation .lien-tableau-de-bord,
+    .menu-navigation .lien-deconnexion
+  )::before {
+  display: block;
+  width: 30px;
+  height: 30px;
+  content: '';
+}
+
+.menu-navigation .lien-tableau-de-bord::before {
+  background: url(../images/icone_undo.svg) no-repeat;
+}
+
+.menu-navigation .lien-deconnexion::before {
+  background: url(../images/icone_deconnecter.svg) no-repeat;
+}
