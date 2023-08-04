@@ -43,18 +43,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   );
 
   routes.get('/:id', middleware.trouveService, (requete, reponse) => {
-    const { homologation } = requete;
-
-    reponse.render('service/synthese', {
-      InformationsHomologation,
-      actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
-      referentiel,
-      service: homologation,
-      donneesStatutHomologation: new ObjetApiStatutHomologation(
-        homologation,
-        referentiel
-      ).donnees(),
-    });
+    reponse.redirect(`/service/${requete.params.id}/descriptionService`);
   });
 
   routes.get(
