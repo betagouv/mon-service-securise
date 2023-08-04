@@ -29,6 +29,13 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const actionsSaisie = () => donnees.actionsSaisie || {};
   const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
   const actionSaisie = (id) => actionsSaisie()[id] || {};
+  const premiereActionSaisie = () => {
+    const [id, champs] = Object.entries(actionsSaisie()).find(
+      ([_id, { position }]) => position === 0
+    );
+
+    return { id, ...champs };
+  };
   const statutsAvisDossierHomologation = () =>
     donnees.statutsAvisDossierHomologation || {};
   const statutHomologation = (idStatut) =>
@@ -272,6 +279,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nouvelleFonctionnalite,
     numeroEtape,
     positionActionSaisie,
+    premiereActionSaisie,
     premiereEtapeParcours,
     provenancesService,
     recharge,

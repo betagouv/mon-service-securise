@@ -38,6 +38,21 @@ describe('Le référentiel', () => {
     });
   });
 
+  it("connaît la première action de saisie d'un service : celle ayant la position 0", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      actionsSaisie: {
+        actionA: { sousTitre: 'Action A', position: 0 },
+        actionB: { sousTitre: 'Action B', position: 1 },
+      },
+    });
+
+    expect(referentiel.premiereActionSaisie()).to.eql({
+      id: 'actionA',
+      sousTitre: 'Action A',
+      position: 0,
+    });
+  });
+
   it("sait décrire le type de service à partir d'identifiants", () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: { siteInternet: { description: 'Site internet' } },

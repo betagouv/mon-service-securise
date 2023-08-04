@@ -4,6 +4,7 @@ const ActionsSaisie = require('../../modeles/actionsSaisie');
 const Homologation = require('../../modeles/homologation');
 const InformationsHomologation = require('../../modeles/informationsHomologation');
 const ObjetApiStatutHomologation = require('../../modeles/objetsApi/objetApiStatutHomologation');
+const ActionSaisie = require('../../modeles/actionSaisie');
 
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();
@@ -24,10 +25,16 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           }
 
           const service = new Homologation(donneesService);
+          const actionCreation = new ActionSaisie(
+            referentiel.premiereActionSaisie(),
+            referentiel,
+            service
+          );
           reponse.render('service/creation', {
+            InformationsHomologation,
             referentiel,
             service,
-            actionsSaisie: new ActionsSaisie(referentiel, service).toJSON(),
+            actionsSaisie: [actionCreation.toJSON()],
             etapeActive: 'descriptionService',
           });
         })
