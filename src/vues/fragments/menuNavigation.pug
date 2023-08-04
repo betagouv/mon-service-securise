@@ -43,6 +43,22 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
           li
             a.lien-risques(href = `/service/${service.id}/risques`) Risques
 
+      .documents-telechargeables
+        h4 Documents à télécharger
+        ul
+          li
+            a.lien-pdf(
+              href = `/api/service/${service.id}/pdf/syntheseSecurite.pdf`,
+              target = '_blank',
+              rel = 'noopener'
+              title= 'Télécharger le PDF de synthèse de sécurité dans une nouvelle fenêtre') Synthèse de sécurité
+          li
+            a.lien-pdf(
+              href = `/api/service/${service.id}/pdf/annexes.pdf`,
+              target = '_blank',
+              rel = 'noopener'
+              title= 'Télécharger les annexes PDF dans une nouvelle fenêtre') Annexes
+
 
   a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord") Tableau de bord
   a.lien-deconnexion(href="/connexion" title="Déconnexion") Se déconnecter
