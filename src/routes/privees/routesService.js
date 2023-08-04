@@ -28,6 +28,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
             referentiel,
             service,
             actionsSaisie: new ActionsSaisie(referentiel, service).toJSON(),
+            etapeActive: 'descriptionService',
           });
         })
         .catch(suite);
@@ -58,6 +59,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         referentiel,
         service: homologation,
         actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+        etapeActive: 'descriptionService',
       });
     }
   );
@@ -69,6 +71,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       referentiel,
       service: homologation,
       actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+      etapeActive: 'mesures',
       mesures,
       donneesStatutHomologation: new ObjetApiStatutHomologation(
         homologation,
@@ -104,6 +107,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     reponse.render('service/dossiers', {
       service: homologation,
       actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+      etapeActive: 'dossiers',
       premiereEtapeParcours: referentiel.premiereEtapeParcours(),
       referentiel,
     });
@@ -136,6 +140,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
             referentiel,
             service: h,
             actionsSaisie: new ActionsSaisie(referentiel, h).toJSON(),
+            etapeActive: 'dossiers',
             idEtape,
           });
         })

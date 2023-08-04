@@ -1,11 +1,13 @@
-mixin etapeParcours({ position, description, sousTitre })
+mixin etapeParcours({ id, position, url, description, sousTitre })
+  - const estActive = etapeActive === id
   li
-    a(href = url)
+    a(href = url, class = estActive ? 'actif' : '')
       span.position
         !=(position+1)
       !=description
-    span.sous-titre
-      !=sousTitre
+    if estActive
+      span.sous-titre
+        !=sousTitre
 
 .menu-navigation
   .accueil
