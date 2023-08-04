@@ -85,6 +85,23 @@
   text-align: center;
 }
 
+.menu-navigation .parcours .chevron {
+  content: '';
+  display: block;
+  flex-shrink: 0;
+  width: 1em;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
+  mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
+  background: #0c5c98;
+  rotate: 90deg;
+}
+
+.menu-navigation .parcours a.actif .chevron {
+  rotate: -90deg;
+}
+
 .menu-navigation .parcours .sous-titre {
   font-size: 0.9em;
 }
