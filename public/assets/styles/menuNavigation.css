@@ -41,6 +41,34 @@
   flex-direction: column;
   flex: 1;
   background-color: #fff;
+  padding-top: 50px;
+}
+
+.menu-navigation .parcours ul {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.menu-navigation .parcours ul li {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+}
+
+.menu-navigation .parcours a {
+  display: flex;
+  flex-direction: row;
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+.menu-navigation .parcours .sous-titre {
+  font-size: 0.9em;
 }
 
 :is(
