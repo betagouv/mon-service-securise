@@ -85,6 +85,21 @@
   text-align: center;
 }
 
+.menu-navigation .parcours .statut-saisie {
+  margin-left: auto;
+  width: 1.3em;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.menu-navigation .parcours .statut-saisie.faite {
+  background-image: url(../images/icone_ok_pastille_verte.svg);
+}
+
+.menu-navigation .parcours .statut-saisie.en-cours {
+  background-image: url(../images/icone_crayon_pastille_bleue.svg);
+}
+
 .menu-navigation .parcours .chevron {
   content: '';
   display: block;

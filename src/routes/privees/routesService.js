@@ -56,6 +56,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.render('service/descriptionService', {
+        InformationsHomologation,
         referentiel,
         service: homologation,
         actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
@@ -68,6 +69,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     const { homologation } = requete;
     const mesures = moteurRegles.mesures(homologation.descriptionService);
     reponse.render('service/mesures', {
+      InformationsHomologation,
       referentiel,
       service: homologation,
       actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
@@ -86,6 +88,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.render('service/rolesResponsabilites', {
+        InformationsHomologation,
         service: homologation,
         actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
         referentiel,
@@ -96,6 +99,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   routes.get('/:id/risques', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/risques', {
+      InformationsHomologation,
       referentiel,
       service: homologation,
       actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
@@ -105,6 +109,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   routes.get('/:id/dossiers', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/dossiers', {
+      InformationsHomologation,
       service: homologation,
       actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
       etapeActive: 'dossiers',
@@ -137,6 +142,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
             return;
           }
           reponse.render(`service/etapeDossier/${idEtape}`, {
+            InformationsHomologation,
             referentiel,
             service: h,
             actionsSaisie: new ActionsSaisie(referentiel, h).toJSON(),
