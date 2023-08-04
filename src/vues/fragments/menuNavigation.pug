@@ -16,7 +16,7 @@ mixin etapeParcours({ position, description, sousTitre })
 
   .parcours
     ul
-      each actionSaisie in referentiel.actionsSaisie()
+      each actionSaisie in actionsSaisie
         +etapeParcours(actionSaisie)
 
   a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord") Tableau de bord

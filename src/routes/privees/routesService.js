@@ -24,7 +24,11 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           }
 
           const service = new Homologation(donneesService);
-          reponse.render('service/creation', { referentiel, service });
+          reponse.render('service/creation', {
+            referentiel,
+            service,
+            actionsSaisie: new ActionsSaisie(referentiel, service).toJSON(),
+          });
         })
         .catch(suite);
     }
@@ -53,6 +57,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       reponse.render('service/descriptionService', {
         referentiel,
         service: homologation,
+        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
       });
     }
   );
@@ -63,6 +68,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     reponse.render('service/mesures', {
       referentiel,
       service: homologation,
+      actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
       mesures,
       donneesStatutHomologation: new ObjetApiStatutHomologation(
         homologation,
@@ -78,6 +84,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       const { homologation } = requete;
       reponse.render('service/rolesResponsabilites', {
         service: homologation,
+        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
         referentiel,
       });
     }
@@ -85,13 +92,18 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
 
   routes.get('/:id/risques', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
-    reponse.render('service/risques', { referentiel, service: homologation });
+    reponse.render('service/risques', {
+      referentiel,
+      service: homologation,
+      actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+    });
   });
 
   routes.get('/:id/dossiers', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
     reponse.render('service/dossiers', {
       service: homologation,
+      actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
       premiereEtapeParcours: referentiel.premiereEtapeParcours(),
       referentiel,
     });
@@ -123,6 +135,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           reponse.render(`service/etapeDossier/${idEtape}`, {
             referentiel,
             service: h,
+            actionsSaisie: new ActionsSaisie(referentiel, h).toJSON(),
             idEtape,
           });
         })

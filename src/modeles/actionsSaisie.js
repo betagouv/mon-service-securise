@@ -15,9 +15,9 @@ class ActionsSaisie {
     const position = this.referentiel.positionActionSaisie;
 
     return Object.keys(this.referentiel.actionsSaisie())
-      .sort((a1, a2) => position(a1) - position(a2))
-      .map((a) =>
-        new ActionSaisie({ id: a }, this.referentiel, this.service).toJSON()
+      .sort((id1, id2) => position(id1) - position(id2))
+      .map((id) =>
+        new ActionSaisie({ id }, this.referentiel, this.service).toJSON()
       );
   }
 }
