@@ -63,8 +63,21 @@
 .menu-navigation .parcours a {
   display: flex;
   flex-direction: row;
+  column-gap: 10px;
   font-size: 1.2em;
   font-weight: 700;
+}
+
+.menu-navigation .parcours .position {
+  width: 1em;
+  height: 1em;
+  border: 2px solid #0c5c98;
+  padding: 4px;
+  font-size: 0.9em;
+  font-weight: 400;
+  line-height: 0.9em;
+  border-radius: 100%;
+  text-align: center;
 }
 
 .menu-navigation .parcours .sous-titre {
