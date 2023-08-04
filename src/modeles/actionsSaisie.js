@@ -1,14 +1,14 @@
 const ActionSaisie = require('./actionSaisie');
-const Homologation = require('./homologation');
+const Service = require('./service');
 const Referentiel = require('../referentiel');
 
 class ActionsSaisie {
   constructor(
     referentiel = Referentiel.creeReferentielVide,
-    homologation = new Homologation({})
+    service = new Service({})
   ) {
     this.referentiel = referentiel;
-    this.homologation = homologation;
+    this.service = service;
   }
 
   toJSON() {
@@ -17,11 +17,7 @@ class ActionsSaisie {
     return Object.keys(this.referentiel.actionsSaisie())
       .sort((a1, a2) => position(a1) - position(a2))
       .map((a) =>
-        new ActionSaisie(
-          { id: a },
-          this.referentiel,
-          this.homologation
-        ).toJSON()
+        new ActionSaisie({ id: a }, this.referentiel, this.service).toJSON()
       );
   }
 }

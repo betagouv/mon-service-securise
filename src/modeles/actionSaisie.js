@@ -1,5 +1,5 @@
 const Base = require('./base');
-const Homologation = require('./homologation');
+const Service = require('./service');
 
 const {
   ErreurIdentifiantActionSaisieInvalide,
@@ -11,13 +11,13 @@ class ActionSaisie extends Base {
   constructor(
     donnees = {},
     referentiel = Referentiel.creeReferentielVide(),
-    homologation = new Homologation({})
+    service = new Service({})
   ) {
     super({ proprietesAtomiquesRequises: ['id'] });
     ActionSaisie.valide(donnees, referentiel);
     this.renseigneProprietes(donnees);
 
-    this.homologation = homologation;
+    this.service = service;
     this.referentiel = referentiel;
   }
 
@@ -30,7 +30,7 @@ class ActionSaisie extends Base {
   }
 
   statut() {
-    return this.homologation.statutSaisie(this.id);
+    return this.service.statutSaisie(this.id);
   }
 
   suivante() {
