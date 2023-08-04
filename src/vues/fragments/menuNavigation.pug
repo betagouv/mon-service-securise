@@ -5,6 +5,7 @@ mixin etapeParcours({ id, position, url, description, sousTitre })
       span.position
         !=(position+1)
       !=description
+      span.chevron
     if estActive
       span.sous-titre
         !=sousTitre
