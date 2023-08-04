@@ -519,25 +519,6 @@ describe('Le référentiel', () => {
     });
   });
 
-  it("connaît l'action de saisie suivante d'une action de saisie donnée", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: {
-        uneAction: { position: 0 },
-        actionSuivante: { position: 1 },
-      },
-    });
-
-    expect(referentiel.actionSuivante('uneAction')).to.equal('actionSuivante');
-  });
-
-  it("retourne `undefined` s'il n'y a pas d'action de saisie suivante", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { position: 0 } },
-    });
-
-    expect(referentiel.actionSuivante('uneAction')).to.be(undefined);
-  });
-
   it('connaît la liste des départements', () => {
     const referentiel = Referentiel.creeReferentiel({
       departements: [

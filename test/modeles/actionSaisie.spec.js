@@ -20,49 +20,6 @@ describe('Une action de saisie', () => {
     expect(action.id).to.equal('uneAction');
   });
 
-  it('connaît sa description', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { description: 'Une description' } },
-    });
-
-    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
-    expect(action.description()).to.equal('Une description');
-  });
-
-  it("connaît l'identifiant de l'action suivante", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: {
-        uneAction: { position: 0 },
-        actionSuivante: { position: 1 },
-      },
-    });
-
-    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
-    expect(action.suivante()).to.equal('actionSuivante');
-  });
-
-  it('connaît son sous-titre', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: { sousTitre: 'Un sous-titre' } },
-    });
-
-    const action = new ActionSaisie({ id: 'uneAction' }, referentiel);
-    expect(action.sousTitre()).to.equal('Un sous-titre');
-  });
-
-  it('connaît son statut', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      actionsSaisie: { uneAction: {} },
-    });
-
-    const service = unService().construis();
-    service.statutSaisie = () => InformationsHomologation.COMPLETES;
-
-    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, service);
-
-    expect(action.statut()).to.equal(InformationsHomologation.COMPLETES);
-  });
-
   it('sait se décrire comme un objet JSON', () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: {
@@ -81,6 +38,7 @@ describe('Une action de saisie', () => {
 
     expect(action.toJSON()).to.eql({
       id: 'uneAction',
+      position: 0,
       description: 'Une description',
       sousTitre: 'Un sous-titre',
       statut: InformationsHomologation.A_SAISIR,

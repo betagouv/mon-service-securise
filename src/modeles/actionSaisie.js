@@ -21,28 +21,14 @@ class ActionSaisie extends Base {
     this.referentiel = referentiel;
   }
 
-  description() {
-    return this.referentiel.descriptionActionSaisie(this.id);
-  }
-
-  sousTitre() {
-    return this.referentiel.sousTitreActionSaisie(this.id);
-  }
-
-  statut() {
-    return this.service.statutSaisie(this.id);
-  }
-
-  suivante() {
-    return this.referentiel.actionSuivante(this.id);
-  }
-
   toJSON() {
+    const donnees = this.referentiel.actionSaisie(this.id);
     return {
       id: this.id,
-      description: this.description(),
-      statut: this.statut(),
-      sousTitre: this.sousTitre(),
+      description: donnees.description,
+      statut: this.service.statutSaisie(this.id),
+      sousTitre: donnees.sousTitre,
+      position: donnees.position,
       url: `/service/${this.service.id}/${this.id}`,
     };
   }

@@ -38,7 +38,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const descriptionCategorie = (idCategorie) =>
     categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
-  const descriptionActionSaisie = (id) => actionSaisie(id).description;
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement || [];
   const estDocumentHomologation = (idDocument) =>
     donnees.documentsHomologation[idDocument] !== undefined;
@@ -93,7 +92,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const risque = (id) => risques()[id] || {};
   const definitionRisque = (idRisque) => risque(idRisque).definition;
   const descriptionRisque = (idRisque) => risque(idRisque).description;
-  const sousTitreActionSaisie = (id) => actionSaisie(id)?.sousTitre;
   const statutsDeploiement = () => donnees.statutsDeploiement;
   const descriptionStatutDeploiement = (idStatut) =>
     statutsDeploiement()[idStatut]?.description;
@@ -130,13 +128,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
           ? indiceCyber <= tranche.borneSuperieure
           : indiceCyber < tranche.borneSuperieure)
     ) || {};
-
-  const actionSuivante = (id) => {
-    const position = positionActionSaisie(id);
-    return Object.keys(actionsSaisie()).find(
-      (a) => positionActionSaisie(a) === position + 1
-    );
-  };
 
   const infosNiveauxGravite = (ordreInverse = false) => {
     const niveaux = Object.keys(niveauxGravite()).map((clef) => ({
@@ -227,7 +218,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   return {
     actionsSaisie,
-    actionSuivante,
+    actionSaisie,
     categoriesMesures,
     codeDepartements,
     coefficientIndiceCyberMesuresIndispensables,
@@ -239,7 +230,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     departements,
     derniereNouvelleFonctionnalite,
     derniereEtapeParcours,
-    descriptionActionSaisie,
     descriptionCategorie,
     descriptionDelaiAvantImpactCritique,
     descriptionDonneesCaracterePersonnel,
@@ -288,7 +278,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     reglesPersonnalisation,
     risques,
     descriptionStatutDeploiement,
-    sousTitreActionSaisie,
     statutsAvisDossierHomologation,
     statutsDeploiement,
     statutDeploiementValide,

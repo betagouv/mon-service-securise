@@ -30,6 +30,7 @@ describe("Les actions de saisie d'un service", () => {
     expect(actions.toJSON()).to.eql([
       {
         id: 'uneAction',
+        position: 0,
         description: 'Une description',
         sousTitre: undefined,
         statut: InformationsHomologation.A_SAISIR,
@@ -37,6 +38,7 @@ describe("Les actions de saisie d'un service", () => {
       },
       {
         id: 'actionSuivante',
+        position: 1,
         description: "Description de l'action suivante",
         sousTitre: undefined,
         statut: InformationsHomologation.A_SAISIR,
