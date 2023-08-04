@@ -1,11 +1,20 @@
-mixin etapeParcours({ id, position, url, description, sousTitre })
-  - const estActive = etapeActive === id
+mixin etapeParcours({ id, position, url, description, sousTitre, statut })
+  -
+    const estActive = etapeActive === id
+    const statutSaisie = (s) => {
+      switch (s) {
+        case InformationsHomologation.COMPLETES: return 'faite';
+        case InformationsHomologation.A_COMPLETER: return 'en-cours';
+        default: return '';
+      }
+    }
   li
     a(href = url, class = estActive ? 'actif' : '')
       span.position
         !=(position+1)
       !=description
       span.chevron
+      span.statut-saisie(class = statutSaisie(statut))
     if estActive
       span.sous-titre
         !=sousTitre
