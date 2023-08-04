@@ -1,6 +1,8 @@
-mixin etapeParcours({ description, sousTitre })
+mixin etapeParcours({ position, description, sousTitre })
   li
     a(href = url)
+      span.position
+        !=(position+1)
       !=description
     span.sous-titre
       !=sousTitre
