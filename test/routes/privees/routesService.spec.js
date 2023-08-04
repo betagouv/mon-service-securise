@@ -14,6 +14,9 @@ describe('Le serveur MSS des routes /service/*', () => {
   describe('quand requête GET sur `/service/creation `', () => {
     it("Récupère dans le dépôt le nom de l'organisation de l'utilisateur", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur
+        .referentiel()
+        .recharge({ actionsSaisie: { descriptionService: { position: 0 } } });
       let idRecu;
 
       testeur.depotDonnees().utilisateur = async (idUtilisateur) => {

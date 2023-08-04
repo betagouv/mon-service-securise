@@ -1,6 +1,7 @@
 mixin etapeParcours({ id, position, url, description, sousTitre, statut })
   -
     const estActive = etapeActive === id
+    const estCreation = !!service.id === false
     const statutSaisie = (s) => {
       switch (s) {
         case InformationsHomologation.COMPLETES: return 'faite';
@@ -8,8 +9,9 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
         default: return '';
       }
     }
+
   li
-    a(href = url, class = estActive ? 'actif' : '')
+    a(href = estCreation ? '#' : url, class = estActive ? 'actif' : '')
       span.position
         !=(position+1)
       !=description
