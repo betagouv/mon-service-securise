@@ -1,7 +1,8 @@
+- const estSurCreationDeService = !!service.id === false
+
 mixin etapeParcours({ id, position, url, description, sousTitre, statut })
   -
     const estActive = etapeActive === id
-    const estCreation = !!service.id === false
     const statutSaisie = (s) => {
       switch (s) {
         case InformationsHomologation.COMPLETES: return 'faite';
@@ -11,7 +12,7 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
     }
 
   li
-    a(href = estCreation ? '#' : url, class = estActive ? 'actif' : '')
+    a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
       span.position
         !=(position+1)
       !=description
@@ -29,9 +30,19 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
     +texteTronque({texte: service.nomService() || ''})
 
   .parcours
-    ul
+    ul.etapes
       each actionSaisie in actionsSaisie
         +etapeParcours(actionSaisie)
+
+    if !estSurCreationDeService
+      .outils-complementaires
+        h4 Outils complémentaires
+        ul
+          li
+            a.lien-contacts-utiles(href = `/service/${service.id}/rolesResponsabilites`) Contacts utiles
+          li
+            a.lien-risques(href = `/service/${service.id}/risques`) Risques
+
 
   a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord") Tableau de bord
   a.lien-deconnexion(href="/connexion" title="Déconnexion") Se déconnecter
