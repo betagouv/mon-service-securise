@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 
+const { unService } = require('../constructeurs/constructeurService');
 const ActionSaisie = require('../../src/modeles/actionSaisie');
-const Homologation = require('../../src/modeles/homologation');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 
 const {
@@ -55,14 +55,11 @@ describe('Une action de saisie', () => {
       actionsSaisie: { uneAction: {} },
     });
 
-    const homologation = new Homologation({});
-    homologation.statutSaisie = () => InformationsHomologation.COMPLETES;
+    const service = unService().construis();
+    service.statutSaisie = () => InformationsHomologation.COMPLETES;
 
-    const action = new ActionSaisie(
-      { id: 'uneAction' },
-      referentiel,
-      homologation
-    );
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, service);
+
     expect(action.statut()).to.equal(InformationsHomologation.COMPLETES);
   });
 
@@ -77,14 +74,11 @@ describe('Une action de saisie', () => {
       },
     });
 
-    const homologation = new Homologation({});
-    homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
+    const service = unService().construis();
+    service.statutSaisie = () => InformationsHomologation.A_SAISIR;
 
-    const action = new ActionSaisie(
-      { id: 'uneAction' },
-      referentiel,
-      homologation
-    );
+    const action = new ActionSaisie({ id: 'uneAction' }, referentiel, service);
+
     expect(action.toJSON()).to.eql({
       id: 'uneAction',
       description: 'Une description',

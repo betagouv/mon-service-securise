@@ -1,19 +1,19 @@
 const expect = require('expect.js');
 
+const { unService } = require('../constructeurs/constructeurService');
 const Referentiel = require('../../src/referentiel');
 const ActionsSaisie = require('../../src/modeles/actionsSaisie');
-const Homologation = require('../../src/modeles/homologation');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 
 const elles = it;
 
-function uneHomologation() {
-  const homologation = new Homologation({});
-  homologation.statutSaisie = () => InformationsHomologation.A_SAISIR;
-  return homologation;
-}
+const unServiceASaisir = () => {
+  const service = unService().construis();
+  service.statutSaisie = () => InformationsHomologation.A_SAISIR;
+  return service;
+};
 
-describe("Les actions de saisie d'une homologation", () => {
+describe("Les actions de saisie d'un service", () => {
   elles('retournent les infos de chaque action triée par position', () => {
     const referentiel = Referentiel.creeReferentiel({
       actionsSaisie: {
@@ -25,7 +25,7 @@ describe("Les actions de saisie d'une homologation", () => {
       },
     });
 
-    const actions = new ActionsSaisie(referentiel, uneHomologation());
+    const actions = new ActionsSaisie(referentiel, unServiceASaisir());
 
     expect(actions.toJSON()).to.eql([
       {
