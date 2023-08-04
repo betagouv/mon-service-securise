@@ -68,6 +68,11 @@
   font-weight: 700;
 }
 
+.menu-navigation .parcours a.actif .position {
+  color: white;
+  background: #0c5c98;
+}
+
 .menu-navigation .parcours .position {
   width: 1em;
   height: 1em;
