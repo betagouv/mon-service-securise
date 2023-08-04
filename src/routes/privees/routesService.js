@@ -33,17 +33,9 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   routes.get('/:id', middleware.trouveService, (requete, reponse) => {
     const { homologation } = requete;
 
-    const actionsSaisie = new ActionsSaisie(referentiel, homologation)
-      .toJSON()
-      .map(({ id, ...autresDonnees }) => ({
-        url: `/service/${homologation.id}/${id}`,
-        id,
-        ...autresDonnees,
-      }));
-
     reponse.render('service/synthese', {
       InformationsHomologation,
-      actionsSaisie,
+      actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
       referentiel,
       service: homologation,
       donneesStatutHomologation: new ObjetApiStatutHomologation(

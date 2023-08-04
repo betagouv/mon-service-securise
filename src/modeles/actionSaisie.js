@@ -43,6 +43,7 @@ class ActionSaisie extends Base {
       description: this.description(),
       statut: this.statut(),
       sousTitre: this.sousTitre(),
+      url: `/service/${this.service.id}/${this.id}`,
     };
   }
 
