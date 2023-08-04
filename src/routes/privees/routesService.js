@@ -84,7 +84,10 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     middleware.trouveService,
     (requete, reponse) => {
       const { homologation } = requete;
-      reponse.render('service/rolesResponsabilites', { service: homologation });
+      reponse.render('service/rolesResponsabilites', {
+        service: homologation,
+        referentiel,
+      });
     }
   );
 

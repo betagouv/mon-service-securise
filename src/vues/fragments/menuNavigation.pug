@@ -1,5 +1,9 @@
-block append styles
-  link(href = '/statique/assets/styles/menuNavigation.css', rel = 'stylesheet')
+mixin etapeParcours({ description, sousTitre })
+  li
+    a(href = url)
+      !=description
+    span.sous-titre
+      !=sousTitre
 
 .menu-navigation
   .accueil
@@ -9,6 +13,9 @@ block append styles
     +texteTronque({texte: service.nomService() || ''})
 
   .parcours
+    ul
+      each actionSaisie in referentiel.actionsSaisie()
+        +etapeParcours(actionSaisie)
 
   a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord") Tableau de bord
   a.lien-deconnexion(href="/connexion" title="Déconnexion") Se déconnecter
