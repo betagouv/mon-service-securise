@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   z-index: 20;
-  width: 19em;
+  width: 21em;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -125,14 +125,14 @@
   font-size: 0.9em;
 }
 
-.menu-navigation .outils-complementaires {
+.menu-navigation :is(.outils-complementaires, .documents-telechargeables) {
   display: flex;
   flex-direction: column;
   row-gap: 20px;
   font-size: 0.98em;
 }
 
-.menu-navigation .outils-complementaires h4 {
+.menu-navigation :is(.outils-complementaires, .documents-telechargeables) h4 {
   text-align: left;
   color: var(--bleu-survol);
   font-weight: 400;
@@ -140,14 +140,19 @@
   margin: 0;
 }
 
-.menu-navigation .outils-complementaires ul {
+.menu-navigation :is(.outils-complementaires, .documents-telechargeables) ul {
   margin-top: 0;
   row-gap: 20px;
   font-weight: 700;
 }
 
-.menu-navigation .outils-complementaires a {
+.menu-navigation :is(.outils-complementaires, .documents-telechargeables) a {
   align-items: center;
+}
+
+.menu-navigation .documents-telechargeables a {
+  color: var(--bleu-mise-en-avant);
+  font-weight: 500;
 }
 
 :is(
@@ -175,7 +180,8 @@
     .menu-navigation .lien-contacts-utiles,
     .menu-navigation .lien-risques,
     .menu-navigation .lien-tableau-de-bord,
-    .menu-navigation .lien-deconnexion
+    .menu-navigation .lien-deconnexion,
+    .menu-navigation .lien-pdf
   )::before {
   display: block;
   width: 30px;
@@ -197,4 +203,9 @@
 
 .menu-navigation .lien-deconnexion::before {
   background: url(../images/icone_deconnecter.svg) no-repeat;
+}
+
+.menu-navigation .lien-pdf::before {
+  background: url(../images/icone_telechargement_pdf.svg) no-repeat;
+  background-size: contain;
 }
