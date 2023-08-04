@@ -14,7 +14,7 @@
 }
 
 :is(.menu-navigation, .menu-navigation a) {
-  color: #0c5c98;
+  color: var(--bleu-survol);
 }
 
 .menu-navigation .accueil {
@@ -39,6 +39,7 @@
 .menu-navigation .parcours {
   display: flex;
   flex-direction: column;
+  row-gap: 50px;
   flex: 1;
   background-color: #fff;
   padding-top: 50px;
@@ -64,19 +65,22 @@
   display: flex;
   flex-direction: row;
   column-gap: 10px;
+}
+
+.menu-navigation .parcours .etapes a {
   font-size: 1.2em;
   font-weight: 700;
 }
 
 .menu-navigation .parcours a.actif .position {
   color: white;
-  background: #0c5c98;
+  background: var(--bleu-survol);
 }
 
 .menu-navigation .parcours .position {
   width: 1em;
   height: 1em;
-  border: 2px solid #0c5c98;
+  border: 2px solid var(--bleu-survol);
   padding: 4px;
   font-size: 0.9em;
   font-weight: 400;
@@ -109,7 +113,7 @@
   mask-size: contain;
   -webkit-mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
   mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
-  background: #0c5c98;
+  background: var(--bleu-survol);
   rotate: 90deg;
 }
 
@@ -121,6 +125,31 @@
   font-size: 0.9em;
 }
 
+.menu-navigation .outils-complementaires {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  font-size: 0.98em;
+}
+
+.menu-navigation .outils-complementaires h4 {
+  text-align: left;
+  color: var(--bleu-survol);
+  font-weight: 400;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.menu-navigation .outils-complementaires ul {
+  margin-top: 0;
+  row-gap: 20px;
+  font-weight: 700;
+}
+
+.menu-navigation .outils-complementaires a {
+  align-items: center;
+}
+
 :is(
     .menu-navigation .lien-tableau-de-bord,
     .menu-navigation .lien-deconnexion
@@ -129,7 +158,7 @@
   align-items: center;
   column-gap: 10px;
   background-color: #fff;
-  border-top: 1px solid #0c5c98;
+  border-top: 1px solid var(--bleu-survol);
 }
 
 .menu-navigation .lien-tableau-de-bord {
@@ -143,6 +172,8 @@
 }
 
 :is(
+    .menu-navigation .lien-contacts-utiles,
+    .menu-navigation .lien-risques,
     .menu-navigation .lien-tableau-de-bord,
     .menu-navigation .lien-deconnexion
   )::before {
@@ -150,6 +181,14 @@
   width: 30px;
   height: 30px;
   content: '';
+}
+
+.menu-navigation .lien-contacts-utiles::before {
+  background: url(../images/icone_contacts_utiles.svg) no-repeat;
+}
+
+.menu-navigation .lien-risques::before {
+  background: url(../images/icone_risques.svg) no-repeat;
 }
 
 .menu-navigation .lien-tableau-de-bord::before {
