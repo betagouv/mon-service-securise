@@ -4,11 +4,6 @@ block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
 
-block nom-service
-  if (service)
-    .nom-service
-      h1!= service.nomService()
-
 block zone-principale
   .formulaire
     block formulaire
