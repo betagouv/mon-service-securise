@@ -78,13 +78,13 @@
 }
 
 .menu-navigation .parcours .position {
-  width: 1em;
-  height: 1em;
+  width: 1.3em;
+  height: 1.3em;
   border: 2px solid var(--bleu-survol);
   padding: 4px;
   font-size: 0.9em;
   font-weight: 400;
-  line-height: 0.9em;
+  line-height: 1.1em;
   border-radius: 100%;
   text-align: center;
 }
@@ -184,25 +184,29 @@
     .menu-navigation .lien-pdf
   )::before {
   display: block;
-  width: 30px;
-  height: 30px;
+  width: 2rem;
+  height: 2rem;
   content: '';
 }
 
 .menu-navigation .lien-contacts-utiles::before {
   background: url(../images/icone_contacts_utiles.svg) no-repeat;
+  background-size: contain;
 }
 
 .menu-navigation .lien-risques::before {
   background: url(../images/icone_risques.svg) no-repeat;
+  background-size: contain;
 }
 
 .menu-navigation .lien-tableau-de-bord::before {
   background: url(../images/icone_undo.svg) no-repeat;
+  background-size: contain;
 }
 
 .menu-navigation .lien-deconnexion::before {
   background: url(../images/icone_deconnecter.svg) no-repeat;
+  background-size: contain;
 }
 
 .menu-navigation .lien-pdf::before {
