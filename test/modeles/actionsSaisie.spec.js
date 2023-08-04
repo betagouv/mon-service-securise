@@ -8,7 +8,7 @@ const InformationsHomologation = require('../../src/modeles/informationsHomologa
 const elles = it;
 
 const unServiceASaisir = () => {
-  const service = unService().construis();
+  const service = unService().avecId('ABC').construis();
   service.statutSaisie = () => InformationsHomologation.A_SAISIR;
   return service;
 };
@@ -33,12 +33,14 @@ describe("Les actions de saisie d'un service", () => {
         description: 'Une description',
         sousTitre: undefined,
         statut: InformationsHomologation.A_SAISIR,
+        url: '/service/ABC/uneAction',
       },
       {
         id: 'actionSuivante',
         description: "Description de l'action suivante",
         sousTitre: undefined,
         statut: InformationsHomologation.A_SAISIR,
+        url: '/service/ABC/actionSuivante',
       },
     ]);
   });

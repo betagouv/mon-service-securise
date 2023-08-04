@@ -74,7 +74,7 @@ describe('Une action de saisie', () => {
       },
     });
 
-    const service = unService().construis();
+    const service = unService().avecId('ABC').construis();
     service.statutSaisie = () => InformationsHomologation.A_SAISIR;
 
     const action = new ActionSaisie({ id: 'uneAction' }, referentiel, service);
@@ -84,6 +84,7 @@ describe('Une action de saisie', () => {
       description: 'Une description',
       sousTitre: 'Un sous-titre',
       statut: InformationsHomologation.A_SAISIR,
+      url: `/service/ABC/uneAction`,
     });
   });
 
