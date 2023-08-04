@@ -30,17 +30,27 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('quand requête GET sur `/service/:id`', () => {
-    it('recherche le service correspondant', (done) => {
+    beforeEach(() => {
       testeur.referentiel().recharge({
         statutsHomologation: {
           nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
         },
         etapesParcoursHomologation: [{ numero: 1 }],
       });
+    });
 
+    it('recherche le service correspondant', (done) => {
       testeur
         .middleware()
         .verifieRechercheService('http://localhost:1234/service/456', done);
+    });
+
+    it('redirige vers la page de description du service', async () => {
+      const reponse = await axios('http://localhost:1234/service/456');
+
+      expect(reponse.request.res.responseUrl).to.contain(
+        '/service/456/descriptionService'
+      );
     });
   });
 
