@@ -1,3 +1,9 @@
+:root {
+  --menu-couleur-repos: var(--bleu-survol);
+  --menu-couleur-survol: var(--bleu-mise-en-avant);
+  --menu-couleur-actif: var(--bleu-anssi);
+}
+
 .menu-navigation {
   position: fixed;
   top: 0;
@@ -15,19 +21,16 @@
 }
 
 :is(.menu-navigation, .menu-navigation a) {
-  color: var(--bleu-survol);
-}
-
-:root {
-  --menu-couleur-survol: var(--bleu-mise-en-avant);
-  --menu-couleur-actif: var(--bleu-anssi);
+  color: var(--menu-couleur-repos);
 }
 
 .menu-navigation a:hover {
   color: var(--menu-couleur-survol);
 }
-.menu-navigation a:hover .chevron {
-  background: var(--menu-couleur-survol);
+.menu-navigation a:hover .chevron,
+.menu-navigation .lien-contacts-utiles:hover::before,
+.menu-navigation .lien-risques:hover::before {
+  background-color: var(--menu-couleur-survol);
 }
 .menu-navigation a:hover .position {
   border-color: var(--menu-couleur-survol);
@@ -39,8 +42,10 @@
 .menu-navigation a:active {
   color: var(--menu-couleur-actif);
 }
-.menu-navigation a:active .chevron {
-  background: var(--menu-couleur-actif);
+.menu-navigation a:active .chevron,
+.menu-navigation .lien-contacts-utiles:active::before,
+.menu-navigation .lien-risques:active::before {
+  background-color: var(--menu-couleur-actif);
 }
 .menu-navigation a:active .position {
   border-color: var(--menu-couleur-actif);
@@ -110,13 +115,13 @@
 
 .menu-navigation .parcours a.actif .position {
   color: white;
-  background: var(--bleu-survol);
+  background: var(--menu-couleur-repos);
 }
 
 .menu-navigation .parcours .position {
   width: 1.3em;
   height: 1.3em;
-  border: 2px solid var(--bleu-survol);
+  border: 2px solid var(--menu-couleur-repos);
   padding: 4px;
   font-size: 0.9em;
   font-weight: 400;
@@ -155,7 +160,7 @@
   mask-size: contain;
   -webkit-mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
   mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
-  background: var(--bleu-survol);
+  background: var(--menu-couleur-repos);
   rotate: 90deg;
 }
 
@@ -176,7 +181,7 @@
 
 .menu-navigation :is(.outils-complementaires, .documents-telechargeables) h4 {
   text-align: left;
-  color: var(--bleu-survol);
+  color: var(--menu-couleur-repos);
   font-weight: 400;
   text-transform: uppercase;
   margin: 0;
@@ -204,7 +209,7 @@
   display: flex;
   align-items: center;
   column-gap: 10px;
-  border-top: 1px solid var(--bleu-survol);
+  border-top: 1px solid var(--menu-couleur-repos);
 }
 
 .menu-navigation .lien-tableau-de-bord {
@@ -225,19 +230,21 @@
     .menu-navigation .lien-pdf
   )::before {
   display: block;
-  width: 2rem;
-  height: 2rem;
+  width: 1.9rem;
+  height: 1.9rem;
   content: '';
+  background-size: 1.5em;
+  border-radius: 100%;
 }
 
 .menu-navigation .lien-contacts-utiles::before {
-  background: url(../images/icone_contacts_utiles.svg) no-repeat;
-  background-size: contain;
+  background: url(../images/icone_contacts_utiles.svg) no-repeat center
+    var(--menu-couleur-repos);
 }
 
 .menu-navigation .lien-risques::before {
-  background: url(../images/icone_risques.svg) no-repeat;
-  background-size: contain;
+  background: url(../images/icone_risques.svg) no-repeat center
+    var(--menu-couleur-repos);
 }
 
 .menu-navigation .lien-tableau-de-bord::before {
@@ -248,9 +255,11 @@
 .menu-navigation .lien-deconnexion::before {
   background: url(../images/icone_deconnecter.svg) no-repeat;
   background-size: contain;
+  border-radius: 0;
 }
 
 .menu-navigation .lien-pdf::before {
   background: url(../images/icone_telechargement_pdf.svg) no-repeat;
   background-size: contain;
+  border-radius: 0;
 }

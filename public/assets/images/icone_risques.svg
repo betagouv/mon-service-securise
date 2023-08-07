@@ -1,6 +1,7 @@
-<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="15" cy="15" r="15" fill="#0C5C98"/>
-<path d="M15.0009 22.8414H9.95084C7.05917 22.8414 5.85084 20.7747 7.25084 18.2497L9.85085 13.5664L12.3008 9.16641C13.7842 6.49141 16.2175 6.49141 17.7009 9.16641L20.1509 13.5747L22.7509 18.258C24.1509 20.783 22.9342 22.8497 20.0509 22.8497H15.0009V22.8414Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M15 12.5V16.6667" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M14.9961 19.167H15.0036" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="danger">
+<path id="Vector" d="M10.0009 17.8414H4.95084C2.05917 17.8414 0.850839 15.7747 2.25084 13.2497L4.85085 8.56638L7.30085 4.16641C8.78421 1.49141 11.2175 1.49141 12.7009 4.16641L15.1509 8.57471L17.7509 13.258C19.1509 15.783 17.9342 17.8497 15.0509 17.8497H10.0009V17.8414Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M10 7.5V11.6667" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M9.99609 14.167H10.0036" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
 </svg>
