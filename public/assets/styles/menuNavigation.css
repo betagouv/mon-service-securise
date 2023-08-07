@@ -18,6 +18,37 @@
   color: var(--bleu-survol);
 }
 
+:root {
+  --menu-couleur-survol: var(--bleu-mise-en-avant);
+  --menu-couleur-actif: var(--bleu-anssi);
+}
+
+.menu-navigation a:hover {
+  color: var(--menu-couleur-survol);
+}
+.menu-navigation a:hover .chevron {
+  background: var(--menu-couleur-survol);
+}
+.menu-navigation a:hover .position {
+  border-color: var(--menu-couleur-survol);
+}
+.menu-navigation a.actif:hover .position {
+  background-color: var(--menu-couleur-survol) !important;
+}
+
+.menu-navigation a:active {
+  color: var(--menu-couleur-actif);
+}
+.menu-navigation a:active .chevron {
+  background: var(--menu-couleur-actif);
+}
+.menu-navigation a:active .position {
+  border-color: var(--menu-couleur-actif);
+}
+.menu-navigation a.actif:active .position {
+  background-color: var(--menu-couleur-actif) !important;
+}
+
 .menu-navigation .accueil {
   background: #ebf4f7;
 }
