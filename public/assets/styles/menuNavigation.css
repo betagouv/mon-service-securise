@@ -37,12 +37,15 @@
   font-weight: 700;
 }
 
+.menu-navigation :is(.parcours, .lien-tableau-de-bord, .lien-deconnexion) {
+  background: #f8fafc;
+}
+
 .menu-navigation .parcours {
   display: flex;
   flex-direction: column;
   row-gap: 50px;
   flex: 1;
-  background-color: #fff;
   padding-top: 50px;
 }
 
@@ -163,7 +166,6 @@
   display: flex;
   align-items: center;
   column-gap: 10px;
-  background-color: #fff;
   border-top: 1px solid var(--bleu-survol);
 }
 
