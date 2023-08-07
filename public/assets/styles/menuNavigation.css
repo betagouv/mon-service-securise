@@ -19,6 +19,12 @@
 .menu-navigation > * {
   padding: 20px 30px;
 }
+.menu-navigation .accueil {
+  padding-right: 15px;
+}
+.menu-navigation .parcours {
+  padding-right: 45px;
+}
 
 :is(.menu-navigation, .menu-navigation a) {
   color: var(--menu-couleur-repos);
@@ -59,6 +65,10 @@
 }
 
 .menu-navigation .accueil {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   background: #ebf4f7;
 }
 
@@ -68,6 +78,28 @@
   height: 2.8rem;
   background: url(../images/logo_mss.svg) no-repeat center;
   background-size: contain;
+}
+
+.menu-navigation .accueil button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: none;
+  border-radius: 100%;
+  width: 2.1em;
+  height: 2.1em;
+  cursor: pointer;
+}
+
+.menu-navigation .accueil button img {
+  width: 1.2em;
+  height: 1.2em;
+  rotate: 180deg;
+  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) saturate(100%) invert(18%) sepia(93%) saturate(2644%)
+    hue-rotate(191deg) brightness(91%) contrast(91%);
 }
 
 .menu-navigation .nom-service {
@@ -278,4 +310,24 @@
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(16%) sepia(28%) saturate(3895%)
     hue-rotate(184deg) brightness(102%) contrast(94%);
+}
+
+/* MENU FERMÉ */
+.menu-navigation.ferme {
+  width: 5em;
+}
+.menu-navigation.ferme > * {
+  padding-left: 0;
+  padding-right: 0;
+}
+.menu-navigation.ferme .hidden-si-ferme {
+  visibility: hidden !important;
+  white-space: nowrap;
+}
+.menu-navigation.ferme .none-si-ferme {
+  display: none !important;
+}
+.menu-navigation.ferme
+  :is(.parcours a, .lien-tableau-de-bord, .lien-deconnexion) {
+  justify-content: center;
 }

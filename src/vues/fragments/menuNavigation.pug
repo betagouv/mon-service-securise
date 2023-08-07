@@ -15,19 +15,22 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
     a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
       span.position
         !=(position+1)
-      !=description
-      span.chevron
-      span.statut-saisie(class = statutSaisie(statut))
+      span.none-si-ferme!=description
+      span.chevron.none-si-ferme
+      span.statut-saisie.none-si-ferme(class = statutSaisie(statut))
     if estActive
-      span.sous-titre
+      span.sous-titre.none-si-ferme
         !=sousTitre
 
 .menu-navigation
   .accueil
-    a(href="/" title="Naviguer vers la page d'acceuil")
+    a.none-si-ferme(href="/" title="Naviguer vers la page d'acceuil")
+    button
+      img(src = '/statique/assets/images/forme_chevron_blanc.svg' alt='Chevron vers la gauche')
 
   .nom-service
-    +texteTronque({texte: service.nomService() || ''})
+    .hidden-si-ferme
+      +texteTronque({texte: service.nomService() || ''})
 
   .parcours
     ul.etapes
@@ -36,15 +39,17 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
 
     if !estSurCreationDeService
       .outils-complementaires
-        h4 Outils complémentaires
+        h4.hidden-si-ferme Outils complémentaires
         ul
           li
-            a.lien-contacts-utiles(href = `/service/${service.id}/rolesResponsabilites`) Contacts utiles
+            a.lien-contacts-utiles(href = `/service/${service.id}/rolesResponsabilites`)
+              span.none-si-ferme Contacts utiles
           li
-            a.lien-risques(href = `/service/${service.id}/risques`) Risques
+            a.lien-risques(href = `/service/${service.id}/risques`)
+             span.none-si-ferme Risques
 
       .documents-telechargeables
-        h4 Documents à télécharger
+        h4.hidden-si-ferme Documents à télécharger
         ul
           li
             a.lien-pdf(
@@ -53,7 +58,7 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
               rel = 'noopener'
               title= 'Télécharger le PDF de synthèse de sécurité dans une nouvelle fenêtre')
               img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
-              span Synthèse de sécurité
+              span.none-si-ferme Synthèse de sécurité
           li
             a.lien-pdf(
               href = `/api/service/${service.id}/pdf/annexes.pdf`,
@@ -61,8 +66,10 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
               rel = 'noopener'
               title= 'Télécharger les annexes PDF dans une nouvelle fenêtre')
               img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
-              span Annexes
+              span.none-si-ferme Annexes
 
 
-  a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord") Tableau de bord
-  a.lien-deconnexion(href="/connexion" title="Déconnexion") Se déconnecter
+  a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord")
+    span.none-si-ferme Tableau de bord
+  a.lien-deconnexion(href="/connexion" title="Déconnexion")
+    span.none-si-ferme Se déconnecter
