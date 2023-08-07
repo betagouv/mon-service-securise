@@ -51,7 +51,6 @@ section:last-of-type {
 .retour {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   margin-top: 1.5em;
 }
 

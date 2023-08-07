@@ -9,17 +9,6 @@ block append styles
 block header
   // Pas de header sur les pages 2 colonnes
 
-block retour
-  - const s = homologation || service
-  if s
-    nav.fil-ariane
-      a.avec-chevron(href = '/tableauDeBord') Tableau de bord
-      if s.id
-        a.avec-chevron(href = `/service/${s.id}`)
-          +texteTronque({ texte: s.nomService() })
-
-      block filArianeNoeudFinal
-
 block main
   include ./fragments/menuNavigation
 
