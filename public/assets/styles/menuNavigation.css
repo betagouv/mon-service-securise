@@ -29,7 +29,9 @@
 }
 .menu-navigation a:hover .chevron,
 .menu-navigation .lien-contacts-utiles:hover::before,
-.menu-navigation .lien-risques:hover::before {
+.menu-navigation .lien-risques:hover::before,
+.menu-navigation .lien-deconnexion:hover::before,
+.menu-navigation .lien-tableau-de-bord:hover::before {
   background-color: var(--menu-couleur-survol);
 }
 .menu-navigation a:hover .position {
@@ -44,7 +46,9 @@
 }
 .menu-navigation a:active .chevron,
 .menu-navigation .lien-contacts-utiles:active::before,
-.menu-navigation .lien-risques:active::before {
+.menu-navigation .lien-risques:active::before,
+.menu-navigation .lien-deconnexion:active::before,
+.menu-navigation .lien-tableau-de-bord:active::before {
   background-color: var(--menu-couleur-actif);
 }
 .menu-navigation a:active .position {
@@ -254,14 +258,13 @@
 }
 
 .menu-navigation .lien-tableau-de-bord::before {
-  background: url(../images/icone_undo.svg) no-repeat;
-  background-size: contain;
+  background: url(../images/icone_retour.svg) no-repeat center
+    var(--menu-couleur-repos);
 }
 
 .menu-navigation .lien-deconnexion::before {
-  background: url(../images/icone_deconnecter.svg) no-repeat;
-  background-size: contain;
-  border-radius: 0;
+  background: url(../images/icone_deconnecter.svg) no-repeat center
+    var(--menu-couleur-repos);
 }
 
 .menu-navigation .lien-pdf:hover {
