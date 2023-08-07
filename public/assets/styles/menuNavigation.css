@@ -105,6 +105,7 @@
 .menu-navigation .parcours .etapes a {
   font-size: 1.2em;
   font-weight: 700;
+  align-items: baseline;
 }
 
 .menu-navigation .parcours a.actif .position {
@@ -126,17 +127,21 @@
 
 .menu-navigation .parcours .statut-saisie {
   margin-left: auto;
-  width: 1.3em;
+  width: 1em;
+  height: 1em;
+  align-self: center;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .menu-navigation .parcours .statut-saisie.faite {
   background-image: url(../images/icone_ok_pastille_verte.svg);
+  background-size: contain;
 }
 
 .menu-navigation .parcours .statut-saisie.en-cours {
   background-image: url(../images/icone_crayon_pastille_bleue.svg);
+  background-size: contain;
 }
 
 .menu-navigation .parcours .chevron {
@@ -144,6 +149,8 @@
   display: block;
   flex-shrink: 0;
   width: 1em;
+  height: 1em;
+  align-self: center;
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask: url(../images/forme_chevron_blanc.svg) no-repeat center;
