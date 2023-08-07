@@ -201,6 +201,12 @@
   color: var(--bleu-mise-en-avant);
   font-weight: 500;
 }
+.menu-navigation .documents-telechargeables a:hover {
+  color: #0c5c98;
+}
+.menu-navigation .documents-telechargeables a:active {
+  color: #08416a;
+}
 
 :is(
     .menu-navigation .lien-tableau-de-bord,
@@ -259,7 +265,7 @@
 }
 
 .menu-navigation .lien-pdf::before {
-  background: url(../images/icone_telechargement_pdf.svg) no-repeat;
+  background: url(../images/icone_action_telechargement.svg) no-repeat;
   background-size: contain;
   border-radius: 0;
 }
