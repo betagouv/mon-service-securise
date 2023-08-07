@@ -232,9 +232,9 @@
     .menu-navigation .lien-contacts-utiles,
     .menu-navigation .lien-risques,
     .menu-navigation .lien-tableau-de-bord,
-    .menu-navigation .lien-deconnexion,
-    .menu-navigation .lien-pdf
-  )::before {
+    .menu-navigation .lien-deconnexion
+  )::before,
+.menu-navigation .documents-telechargeables img {
   display: block;
   width: 1.9rem;
   height: 1.9rem;
@@ -264,8 +264,15 @@
   border-radius: 0;
 }
 
-.menu-navigation .lien-pdf::before {
-  background: url(../images/icone_action_telechargement.svg) no-repeat;
-  background-size: contain;
-  border-radius: 0;
+.menu-navigation .lien-pdf:hover {
+  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) saturate(100%) invert(22%) sepia(94%) saturate(1432%)
+    hue-rotate(186deg) brightness(95%) contrast(91%);
+}
+.menu-navigation .lien-pdf:active {
+  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) saturate(100%) invert(16%) sepia(28%) saturate(3895%)
+    hue-rotate(184deg) brightness(102%) contrast(94%);
 }

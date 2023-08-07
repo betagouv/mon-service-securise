@@ -51,13 +51,17 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
               href = `/api/service/${service.id}/pdf/syntheseSecurite.pdf`,
               target = '_blank',
               rel = 'noopener'
-              title= 'Télécharger le PDF de synthèse de sécurité dans une nouvelle fenêtre') Synthèse de sécurité
+              title= 'Télécharger le PDF de synthèse de sécurité dans une nouvelle fenêtre')
+              img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
+              span Synthèse de sécurité
           li
             a.lien-pdf(
               href = `/api/service/${service.id}/pdf/annexes.pdf`,
               target = '_blank',
               rel = 'noopener'
-              title= 'Télécharger les annexes PDF dans une nouvelle fenêtre') Annexes
+              title= 'Télécharger les annexes PDF dans une nouvelle fenêtre')
+              img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
+              span Annexes
 
 
   a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord") Tableau de bord
