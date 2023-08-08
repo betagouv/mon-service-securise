@@ -12,11 +12,18 @@ describe('Le serveur MSS des routes /service/*', () => {
   afterEach(testeur.arrete);
 
   describe('quand requête GET sur `/service/creation `', () => {
-    it("Récupère dans le dépôt le nom de l'organisation de l'utilisateur", async () => {
+    beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
       testeur
         .referentiel()
         .recharge({ actionsSaisie: { descriptionService: { position: 0 } } });
+      testeur.depotDonnees().utilisateur = async (idUtilisateur) => ({
+        id: idUtilisateur,
+        nomEntitePublique: 'une entité',
+      });
+    });
+
+    it("Récupère dans le dépôt le nom de l'organisation de l'utilisateur", async () => {
       let idRecu;
 
       testeur.depotDonnees().utilisateur = async (idUtilisateur) => {
@@ -26,6 +33,15 @@ describe('Le serveur MSS des routes /service/*', () => {
 
       await axios('http://localhost:1234/service/creation');
       expect(idRecu).to.equal('123');
+    });
+
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
+          'http://localhost:1234/service/creation',
+          done
+        );
     });
   });
 
@@ -91,6 +107,15 @@ describe('Le serveur MSS des routes /service/*', () => {
         );
     });
 
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
+          'http://localhost:1234/service/456/mesures',
+          done
+        );
+    });
+
     it('interroge le moteur de règles pour obtenir les mesures personnalisées', async () => {
       let descriptionRecue;
       const requete = {};
@@ -120,6 +145,15 @@ describe('Le serveur MSS des routes /service/*', () => {
           done
         );
     });
+
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
+          'http://localhost:1234/service/456/rolesResponsabilites',
+          done
+        );
+    });
   });
 
   describe('quand requête GET sur `/service/:id/risques`', () => {
@@ -127,6 +161,15 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          'http://localhost:1234/service/456/risques',
+          done
+        );
+    });
+
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
           'http://localhost:1234/service/456/risques',
           done
         );
@@ -143,6 +186,15 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          'http://localhost:1234/service/456/dossiers',
+          done
+        );
+    });
+
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
           'http://localhost:1234/service/456/dossiers',
           done
         );
@@ -174,6 +226,15 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
+          done
+        );
+    });
+
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
           'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
           done
         );
