@@ -177,6 +177,11 @@ const middleware = (configuration = {}) => {
   const aseptiseListe = (nomListe, proprietesParametre) =>
     aseptiseListes([{ nom: nomListe, proprietes: proprietesParametre }]);
 
+  const chargePreferencesUtilisateur = (_requete, reponse, suite) => {
+    reponse.locals.preferencesUtilisateur = {};
+    suite();
+  };
+
   const verificationAddresseIP = (listeAddressesIPsAutorisee) =>
     controlAcces({
       mode: 'allow',
@@ -211,6 +216,7 @@ const middleware = (configuration = {}) => {
     aseptise,
     aseptiseListe,
     aseptiseListes,
+    chargePreferencesUtilisateur,
     positionneHeaders,
     positionneHeadersAvecNonce,
     repousseExpirationCookie,

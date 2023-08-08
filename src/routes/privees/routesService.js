@@ -49,6 +49,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   routes.get(
     '/:id/descriptionService',
     middleware.trouveService,
+    middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.render('service/descriptionService', {

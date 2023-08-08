@@ -43,6 +43,7 @@ let idUtilisateurCourant;
 let listesAseptisees = [];
 let listeAdressesIPsAutorisee = [];
 let parametresAseptises = [];
+let preferencesChargees = false;
 let rechercheServiceEffectuee = false;
 let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
@@ -67,6 +68,7 @@ const middlewareFantaisie = {
     listesAseptisees = [];
     listeAdressesIPsAutorisee = [];
     parametresAseptises = [];
+    preferencesChargees = false;
     rechercheServiceEffectuee = false;
     rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
@@ -91,6 +93,12 @@ const middlewareFantaisie = {
 
   challengeMotDePasse: (_requete, _reponse, suite) => {
     challengeMotDePasseEffectue = true;
+    suite();
+  },
+
+  chargePreferencesUtilisateur: (_requete, reponse, suite) => {
+    reponse.locals.preferencesUtilisateur = {};
+    preferencesChargees = true;
     suite();
   },
 
@@ -176,6 +184,13 @@ const middlewareFantaisie = {
         etatInitial: [],
         etatFinal: listeAdressesIp,
       },
+      ...params
+    );
+  },
+
+  verifieChargementDesPreferences: (...params) => {
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => preferencesChargees },
       ...params
     );
   },
