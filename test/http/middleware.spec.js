@@ -53,6 +53,7 @@ describe('Le middleware MSS', () => {
     requete.body = {};
 
     reponse.headers = {};
+    reponse.locals = {};
     reponse.redirect = () => {};
     reponse.set = (clefsValeurs) =>
       Object.assign(reponse.headers, clefsValeurs);
@@ -647,6 +648,17 @@ describe('Le middleware MSS', () => {
       await middleware.challengeMotDePasse(requete, reponse, suite);
 
       expect(middlewareSuivantAppele).to.be(true);
+    });
+  });
+
+  describe('sur demande de chargement des préférences utilisateurs', () => {
+    it('ajoute un objet de préférences à `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+      const middleware = Middleware();
+
+      middleware.chargePreferencesUtilisateur(requete, reponse, () => {
+        expect(reponse.locals.preferencesUtilisateur).not.to.be(undefined);
+        done();
+      });
     });
   });
 });

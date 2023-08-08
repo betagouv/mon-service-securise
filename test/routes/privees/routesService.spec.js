@@ -63,6 +63,15 @@ describe('Le serveur MSS des routes /service/*', () => {
           done
         );
     });
+
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
+          'http://localhost:1234/service/456/descriptionService',
+          done
+        );
+    });
   });
 
   describe('quand requête GET sur `/service/:id/mesures`', () => {
