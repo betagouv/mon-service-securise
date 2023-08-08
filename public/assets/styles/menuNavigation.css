@@ -75,8 +75,8 @@
 
 .menu-navigation .accueil a {
   display: block;
-  width: 7.5rem;
-  height: 2.8rem;
+  width: 120px;
+  height: 45px;
   background: url(../images/logo_mss.svg) no-repeat center;
   background-size: contain;
 }
@@ -328,10 +328,20 @@
 .menu-navigation.ferme .none-si-ferme {
   display: none !important;
 }
-.menu-navigation.ferme .repli-menu {
+.menu-navigation.ferme .accueil {
   position: relative;
+  justify-content: center;
+}
+.menu-navigation.ferme .accueil a {
+  width: 57px;
+  height: 45px;
+  background-size: 100px;
+  background-position: 10px;
+}
+.menu-navigation.ferme .repli-menu {
+  position: absolute;
   left: 4em;
-  top: 4.5em;
+  top: 100px;
 }
 .menu-navigation.ferme .repli-menu img {
   rotate: 0deg;
