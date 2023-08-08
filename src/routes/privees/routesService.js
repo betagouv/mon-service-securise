@@ -12,6 +12,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   routes.get(
     '/creation',
     middleware.verificationAcceptationCGU,
+    middleware.chargePreferencesUtilisateur,
     (requete, reponse, suite) => {
       const { idUtilisateurCourant } = requete;
       depotDonnees
@@ -62,26 +63,32 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     }
   );
 
-  routes.get('/:id/mesures', middleware.trouveService, (requete, reponse) => {
-    const { homologation } = requete;
-    const mesures = moteurRegles.mesures(homologation.descriptionService);
-    reponse.render('service/mesures', {
-      InformationsHomologation,
-      referentiel,
-      service: homologation,
-      actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
-      etapeActive: 'mesures',
-      mesures,
-      donneesStatutHomologation: new ObjetApiStatutHomologation(
-        homologation,
-        referentiel
-      ).donnees(),
-    });
-  });
+  routes.get(
+    '/:id/mesures',
+    middleware.trouveService,
+    middleware.chargePreferencesUtilisateur,
+    (requete, reponse) => {
+      const { homologation } = requete;
+      const mesures = moteurRegles.mesures(homologation.descriptionService);
+      reponse.render('service/mesures', {
+        InformationsHomologation,
+        referentiel,
+        service: homologation,
+        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+        etapeActive: 'mesures',
+        mesures,
+        donneesStatutHomologation: new ObjetApiStatutHomologation(
+          homologation,
+          referentiel
+        ).donnees(),
+      });
+    }
+  );
 
   routes.get(
     '/:id/rolesResponsabilites',
     middleware.trouveService,
+    middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.render('service/rolesResponsabilites', {
@@ -93,31 +100,42 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     }
   );
 
-  routes.get('/:id/risques', middleware.trouveService, (requete, reponse) => {
-    const { homologation } = requete;
-    reponse.render('service/risques', {
-      InformationsHomologation,
-      referentiel,
-      service: homologation,
-      actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
-    });
-  });
+  routes.get(
+    '/:id/risques',
+    middleware.trouveService,
+    middleware.chargePreferencesUtilisateur,
+    (requete, reponse) => {
+      const { homologation } = requete;
+      reponse.render('service/risques', {
+        InformationsHomologation,
+        referentiel,
+        service: homologation,
+        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+      });
+    }
+  );
 
-  routes.get('/:id/dossiers', middleware.trouveService, (requete, reponse) => {
-    const { homologation } = requete;
-    reponse.render('service/dossiers', {
-      InformationsHomologation,
-      service: homologation,
-      actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
-      etapeActive: 'dossiers',
-      premiereEtapeParcours: referentiel.premiereEtapeParcours(),
-      referentiel,
-    });
-  });
+  routes.get(
+    '/:id/dossiers',
+    middleware.trouveService,
+    middleware.chargePreferencesUtilisateur,
+    (requete, reponse) => {
+      const { homologation } = requete;
+      reponse.render('service/dossiers', {
+        InformationsHomologation,
+        service: homologation,
+        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+        etapeActive: 'dossiers',
+        premiereEtapeParcours: referentiel.premiereEtapeParcours(),
+        referentiel,
+      });
+    }
+  );
 
   routes.get(
     '/:id/homologation/edition/etape/:idEtape',
     middleware.trouveService,
+    middleware.chargePreferencesUtilisateur,
     (requete, reponse, suite) => {
       const { homologation } = requete;
       const { idEtape } = requete.params;

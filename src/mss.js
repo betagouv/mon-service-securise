@@ -1,4 +1,5 @@
 const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const {
   DUREE_SESSION,
@@ -50,6 +51,8 @@ const creeServeur = (
       secure: avecCookieSecurise,
     })
   );
+
+  app.use(cookieParser());
 
   app.use(adaptateurProtection.protectionCsrf(ENDPOINTS_SANS_CSRF));
   app.use(adaptateurProtection.protectionLimiteTrafic());

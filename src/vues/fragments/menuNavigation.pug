@@ -22,7 +22,7 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
       span.sous-titre.none-si-ferme
         !=sousTitre
 
-.menu-navigation
+.menu-navigation(class = preferencesUtilisateur.etatMenuNavigation === 'ferme' ? 'ferme' : '')
   .accueil
     a(href="/" title="Naviguer vers la page d'acceuil")
     button.repli-menu

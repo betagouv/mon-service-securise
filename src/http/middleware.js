@@ -177,8 +177,10 @@ const middleware = (configuration = {}) => {
   const aseptiseListe = (nomListe, proprietesParametre) =>
     aseptiseListes([{ nom: nomListe, proprietes: proprietesParametre }]);
 
-  const chargePreferencesUtilisateur = (_requete, reponse, suite) => {
-    reponse.locals.preferencesUtilisateur = {};
+  const chargePreferencesUtilisateur = (requete, reponse, suite) => {
+    reponse.locals.preferencesUtilisateur = {
+      etatMenuNavigation: requete.cookies['etat-menu-navigation'],
+    };
     suite();
   };
 

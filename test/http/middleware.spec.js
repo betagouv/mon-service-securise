@@ -51,6 +51,7 @@ describe('Le middleware MSS', () => {
     requete.session = { token: 'XXX' };
     requete.params = {};
     requete.body = {};
+    requete.cookies = {};
 
     reponse.headers = {};
     reponse.locals = {};
@@ -657,6 +658,17 @@ describe('Le middleware MSS', () => {
 
       middleware.chargePreferencesUtilisateur(requete, reponse, () => {
         expect(reponse.locals.preferencesUtilisateur).not.to.be(undefined);
+        done();
+      });
+    });
+
+    it("lit l'état d'ouverture/fermeture du menu de navigation", (done) => {
+      const middleware = Middleware();
+
+      requete.cookies['etat-menu-navigation'] = 'ferme';
+      middleware.chargePreferencesUtilisateur(requete, reponse, () => {
+        const { preferencesUtilisateur } = reponse.locals;
+        expect(preferencesUtilisateur.etatMenuNavigation).to.be('ferme');
         done();
       });
     });
