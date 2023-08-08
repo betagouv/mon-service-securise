@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: -10px 0 34px 0 #00000026;
+  transition: width 0.1s;
 }
 
 .menu-navigation > * {
@@ -80,7 +81,7 @@
   background-size: contain;
 }
 
-.menu-navigation .accueil button {
+.menu-navigation .accueil .repli-menu {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,7 +93,7 @@
   cursor: pointer;
 }
 
-.menu-navigation .accueil button img {
+.menu-navigation .accueil .repli-menu img {
   width: 1.2em;
   height: 1.2em;
   rotate: 180deg;
@@ -327,7 +328,17 @@
 .menu-navigation.ferme .none-si-ferme {
   display: none !important;
 }
-.menu-navigation.ferme
-  :is(.parcours a, .lien-tableau-de-bord, .lien-deconnexion) {
+.menu-navigation.ferme .repli-menu {
+  position: relative;
+  left: 4em;
+  top: 4.5em;
+}
+.menu-navigation.ferme .repli-menu img {
+  rotate: 0deg;
+  transition: rotate 0.2s;
+}
+.menu-navigation.ferme .parcours a,
+.menu-navigation.ferme .lien-tableau-de-bord,
+.menu-navigation.ferme .lien-deconnexion {
   justify-content: center;
 }
