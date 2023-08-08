@@ -1,16 +1,18 @@
 const {
   unePersistanceMemoire,
 } = require('./constructeurAdaptateurPersistanceMemoire');
-const adaptateurTrackingMemoire = require('../../src/adaptateurs/adaptateurTrackingMemoire');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
 const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const Referentiel = require('../../src/referentiel');
 const ServiceTracking = require('../../src/tracking/serviceTracking');
+const {
+  fabriqueAdaptateurTrackingMemoire,
+} = require('../../src/adaptateurs/adaptateurTrackingMemoire');
 
 class ConstructeurDepotDonneesServices {
   constructor() {
     this.constructeurAdaptateurPersistance = unePersistanceMemoire();
-    this.adaptateurTracking = adaptateurTrackingMemoire;
+    this.adaptateurTracking = fabriqueAdaptateurTrackingMemoire();
     this.adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
     this.adaptateurUUID = { genereUUID: () => 'unUUID' };
     this.referentiel = Referentiel.creeReferentielVide();
