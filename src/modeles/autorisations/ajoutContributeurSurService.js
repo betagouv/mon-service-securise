@@ -23,13 +23,13 @@ const ajoutContributeurSurService = ({
     }
   };
 
+  const verifiePermission = async (idUtilisateur, idService) => {
+    const a = await depotDonnees.autorisationPour(idUtilisateur, idService);
+    if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
+  };
+
   return {
     executer: async (emailContributeur, service, emetteur) => {
-      const verifiePermission = async (...params) => {
-        const a = await depotDonnees.autorisationPour(...params);
-        if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
-      };
-
       const verifieAutorisationInexistante = async (...params) => {
         const existe = await depotDonnees.autorisationExiste(...params);
         if (existe)
