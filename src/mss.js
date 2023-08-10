@@ -28,6 +28,7 @@ const creeServeur = (
   adaptateurZip,
   adaptateurTracking,
   adaptateurProtection,
+  procedures,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
   avecPageErreur = process.env.NODE_ENV === 'production'
 ) => {
@@ -211,6 +212,7 @@ const creeServeur = (
       adaptateurCsv,
       adaptateurZip,
       adaptateurTracking,
+      procedures,
     })
   );
 

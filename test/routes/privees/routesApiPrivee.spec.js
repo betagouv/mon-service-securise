@@ -742,6 +742,19 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         Promise.resolve();
     });
 
+    it('appelle une procédure qui ne fait rien, seulement pour prouver que le mécanisme fonctionne', async () => {
+      let bouchonAppele;
+
+      testeur.procedures().neFaitRien = () => (bouchonAppele = true);
+
+      await axios.post('http://localhost:1234/api/autorisation', {
+        emailContributeur: 'jean.dupont@mail.fr',
+        idHomologation: '123',
+      });
+
+      expect(bouchonAppele).to.be(true);
+    });
+
     it('aseptise les paramètres de la requête', (done) => {
       testeur
         .middleware()

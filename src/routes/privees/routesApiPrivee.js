@@ -34,6 +34,7 @@ const routesApiPrivee = ({
   adaptateurCsv,
   adaptateurZip,
   adaptateurTracking,
+  procedures,
 }) => {
   const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
     promesseEnvoiMessage
@@ -272,7 +273,9 @@ const routesApiPrivee = ({
     '/autorisation',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('idHomologation', 'emailContributeur'),
-    (requete, reponse, suite) => {
+    async (requete, reponse, suite) => {
+      await procedures.neFaitRien();
+
       const idUtilisateur = requete.idUtilisateurCourant;
       const { idHomologation } = requete.body;
       const emailContributeur = requete.body.emailContributeur?.toLowerCase();

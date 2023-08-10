@@ -8,8 +8,8 @@ const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoi
 const MoteurRegles = require('../../src/moteurRegles');
 const MSS = require('../../src/mss');
 const Referentiel = require('../../src/referentiel');
-
 const middleware = require('../mocks/middleware');
+const { fabriqueProcedures } = require('../../src/routes/procedures');
 
 const testeurMss = () => {
   let adaptateurAnnuaire;
@@ -23,6 +23,7 @@ const testeurMss = () => {
   let depotDonnees;
   let moteurRegles;
   let referentiel;
+  let procedures;
   let serveur;
 
   const verifieJetonDepose = (reponse, suite) => {
@@ -72,6 +73,7 @@ const testeurMss = () => {
     };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
+    procedures = fabriqueProcedures();
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()
       .then((depot) => {
@@ -90,6 +92,7 @@ const testeurMss = () => {
           adaptateurZip,
           adaptateurTracking,
           adaptateurProtection,
+          procedures,
           false,
           false
         );
@@ -112,6 +115,7 @@ const testeurMss = () => {
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,
     referentiel: () => referentiel,
+    procedures: () => procedures,
     arrete,
     initialise,
     verifieRequeteGenereErreurHTTP,
