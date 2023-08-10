@@ -17,7 +17,7 @@
 }
 
 .menu-navigation > * {
-  padding: 20px 30px;
+  padding: 15px 30px;
 }
 .menu-navigation .accueil {
   padding-right: 15px;
@@ -105,7 +105,7 @@
 .menu-navigation .nom-service {
   background: #dbecf1;
   text-align: center;
-  font-size: 1.25rem;
+  font-size: 1.15em;
   font-weight: 700;
 }
 
@@ -116,15 +116,16 @@
 .menu-navigation .parcours {
   display: flex;
   flex-direction: column;
-  row-gap: 50px;
+  justify-content: space-evenly;
   flex: 1;
-  padding-top: 50px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .menu-navigation .parcours ul {
   display: flex;
   flex-direction: column;
-  row-gap: 30px;
+  row-gap: 24px;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -134,7 +135,6 @@
 .menu-navigation .parcours ul li {
   display: flex;
   flex-direction: column;
-  row-gap: 7px;
 }
 
 .menu-navigation .parcours a {
@@ -206,12 +206,13 @@
 
 .menu-navigation .parcours .sous-titre {
   font-size: 0.9em;
+  margin-left: 3.3em;
 }
 
 .menu-navigation :is(.outils-complementaires, .documents-telechargeables) {
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
+  row-gap: 15px;
   font-size: 0.98em;
 }
 
@@ -225,7 +226,7 @@
 
 .menu-navigation :is(.outils-complementaires, .documents-telechargeables) ul {
   margin-top: 0;
-  row-gap: 20px;
+  row-gap: 14px;
   font-weight: 700;
 }
 
@@ -257,11 +258,13 @@
 .menu-navigation .lien-tableau-de-bord {
   font-size: 1.125rem;
   font-weight: 500;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .menu-navigation .lien-deconnexion {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 :is(
