@@ -11,8 +11,8 @@ const fabriqueAdaptateurTrackingMemoire = () => {
       .logEvenementsTrackingEnConsole();
 
     if (doitLoguer) {
-      // eslint-disable-next-line no-console
       const donnees = JSON.stringify(donneesEvenement);
+      // eslint-disable-next-line no-console
       console.log(
         `EVENEMENT DE TRACKING: destinataire ${destinataire}, ${typeEvenement}, ${donnees} }`
       );
