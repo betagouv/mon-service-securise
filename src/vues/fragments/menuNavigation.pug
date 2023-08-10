@@ -74,6 +74,8 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
 
 
   a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord")
+    div
+      img(src = '/statique/assets/images/icone_retour.svg' alt="Icône d'une flèche pointant vers la gauche")
     span.none-si-ferme Tableau de bord
   a.lien-deconnexion(href="/connexion" title="Déconnexion")
     span.none-si-ferme Se déconnecter
