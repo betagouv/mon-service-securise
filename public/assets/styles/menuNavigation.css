@@ -36,11 +36,11 @@
 .menu-navigation a:hover .chevron,
 .menu-navigation .lien-contacts-utiles:hover > div,
 .menu-navigation .lien-risques:hover > div,
-.menu-navigation .lien-deconnexion:hover::before,
-.menu-navigation .lien-tableau-de-bord:hover::before {
+.menu-navigation .lien-deconnexion:hover::before {
   background-color: var(--menu-couleur-survol);
 }
-.menu-navigation a:hover .position {
+.menu-navigation a:hover .position,
+.menu-navigation .lien-tableau-de-bord:hover > div {
   border-color: var(--menu-couleur-survol);
 }
 .menu-navigation a.actif:hover .position {
@@ -51,6 +51,11 @@
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(100%);
 }
+.menu-navigation .lien-tableau-de-bord:hover img {
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) saturate(100%) invert(23%) sepia(53%) saturate(2687%)
+    hue-rotate(187deg) brightness(94%) contrast(91%);
+}
 
 .menu-navigation a:active {
   color: var(--menu-couleur-actif);
@@ -58,15 +63,20 @@
 .menu-navigation a:active .chevron,
 .menu-navigation .lien-contacts-utiles:active > div,
 .menu-navigation .lien-risques:active > div,
-.menu-navigation .lien-deconnexion:active::before,
-.menu-navigation .lien-tableau-de-bord:active::before {
+.menu-navigation .lien-deconnexion:active::before {
   background-color: var(--menu-couleur-actif);
 }
-.menu-navigation a:active .position {
+.menu-navigation a:active .position,
+.menu-navigation .lien-tableau-de-bord:active > div {
   border-color: var(--menu-couleur-actif);
 }
 .menu-navigation a.actif:active .position {
   background-color: var(--menu-couleur-actif) !important;
+}
+.menu-navigation .lien-tableau-de-bord:active img {
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) saturate(100%) invert(16%) sepia(31%) saturate(4479%)
+    hue-rotate(186deg) brightness(96%) contrast(94%);
 }
 
 .menu-navigation .accueil {
@@ -161,7 +171,7 @@
 .menu-navigation .parcours .position {
   width: 1.3em;
   height: 1.3em;
-  border: 2px solid var(--menu-couleur-repos);
+  border: 1.5px solid var(--menu-couleur-repos);
   padding: 4px;
   font-size: 0.9em;
   font-weight: 400;
@@ -274,10 +284,8 @@
   padding-bottom: 12px;
 }
 
-:is(
-    .menu-navigation .lien-tableau-de-bord,
-    .menu-navigation .lien-deconnexion
-  )::before,
+.menu-navigation .lien-deconnexion::before,
+.menu-navigation .lien-tableau-de-bord > div,
 .menu-navigation .lien-contacts-utiles > div,
 .menu-navigation .lien-risques > div,
 .menu-navigation .documents-telechargeables img {
@@ -289,22 +297,22 @@
   border-radius: 100%;
 }
 
+.menu-navigation .lien-tableau-de-bord > div {
+  border: 1.5px solid var(--menu-couleur-repos);
+}
 .menu-navigation .lien-contacts-utiles > div,
-.menu-navigation .lien-risques > div {
+.menu-navigation .lien-risques > div,
+.menu-navigation .lien-tableau-de-bord > div {
   display: flex;
   justify-content: center;
 }
 .menu-navigation .lien-contacts-utiles img,
-.menu-navigation .lien-risques img {
+.menu-navigation .lien-risques img,
+.menu-navigation .lien-tableau-de-bord img {
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(15%) sepia(60%) saturate(5222%)
     hue-rotate(193deg) brightness(98%) contrast(91%);
   width: 1.3em;
-}
-
-.menu-navigation .lien-tableau-de-bord::before {
-  background: url(../images/icone_retour.svg) no-repeat center
-    var(--menu-couleur-repos);
 }
 
 .menu-navigation .lien-deconnexion::before {
