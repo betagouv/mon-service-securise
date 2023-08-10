@@ -42,12 +42,12 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
         h4.hidden-si-ferme Outils complémentaires
         ul
           li
-            a.lien-risques(href = `/service/${service.id}/risques`)
+            a.lien-risques(href = `/service/${service.id}/risques`, class = etapeActive === 'risques' ? 'actif' : '')
               div
                 img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »")
               span.none-si-ferme Risques
           li
-            a.lien-contacts-utiles(href = `/service/${service.id}/rolesResponsabilites`)
+            a.lien-contacts-utiles(href = `/service/${service.id}/rolesResponsabilites`, class = etapeActive === 'contactsUtiles' ? 'actif' : '')
               div
                 img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
               span.none-si-ferme Contacts utiles
