@@ -13,8 +13,14 @@ const {
   ErreurAutorisationExisteDeja,
   EchecAutorisation,
 } = require('../../../src/erreurs');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 describe("L'ajout d'un contributeur sur un service", () => {
+  const unEmetteur = (idUtilisateur) =>
+    unUtilisateur().avecId(idUtilisateur).construis();
+
   const autorisation = { id: '111' };
   const utilisateur = {
     id: '999',
@@ -58,7 +64,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
-    }).executer('456', 'jean.dupont@mail.fr', '123');
+    }).executer('jean.dupont@mail.fr', '123', unEmetteur('456'));
 
     expect(autorisationInterrogee.idUtilisateur).to.be('456');
     expect(autorisationInterrogee.idHomologation).to.be('123');
@@ -73,7 +79,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('', 'jean.dupont@mail.fr', '123');
+      }).executer('jean.dupont@mail.fr', '123', unEmetteur());
 
       expect().to.fail("L'ajout aurait dû lever une exception");
     } catch (e) {
@@ -113,10 +119,12 @@ describe("L'ajout d'un contributeur sur un service", () => {
           depotDonnees,
           adaptateurMail,
           adaptateurTracking,
-        }).executer('', 'jean.dupont@mail.fr', '123');
+        }).executer('jean.dupont@mail.fr', '123', unEmetteur());
 
         expect(emailEnvoye.destinataire).to.be('jean.dupont@mail.fr');
-        expect(emailEnvoye.prenomNomEmetteur).to.be('Utilisateur Courant');
+        expect(emailEnvoye.prenomNomEmetteur).to.be(
+          'jean.dujardin@beta.gouv.com'
+        );
         expect(emailEnvoye.nomService).to.be('Nom Service');
         expect(emailEnvoye.idHomologation).to.be('123');
       });
@@ -139,7 +147,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
             depotDonnees,
             adaptateurMail,
             adaptateurTracking,
-          }).executer('', 'jean.dupont@mail.fr', '123');
+          }).executer('jean.dupont@mail.fr', '123', unEmetteur());
 
           expect().to.fail('Le serveur aurait dû lever une exception');
         } catch (e) {
@@ -159,7 +167,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
             depotDonnees,
             adaptateurMail,
             adaptateurTracking,
-          }).executer('', 'jean.dupont@mail.fr', '123');
+          }).executer('jean.dupont@mail.fr', '123', unEmetteur());
 
           expect().to.fail('Le serveur aurait dû lever une exception');
         } catch (e) {
@@ -173,7 +181,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
             depotDonnees,
             adaptateurMail,
             adaptateurTracking,
-          }).executer('', 'jean.dupont@mail.fr', '123');
+          }).executer('jean.dupont@mail.fr', '123', unEmetteur());
 
           expect().to.fail('Le serveur aurait dû lever une exception');
         } catch (e) {
@@ -213,7 +221,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('', 'jean.dupont@mail.fr', '123');
+      }).executer('jean.dupont@mail.fr', '123', unEmetteur());
 
       expect(emailAjoute).to.be('jean.dupont@mail.fr');
     });
@@ -233,7 +241,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('', 'jean.dupont@mail.fr', '123');
+      }).executer('jean.dupont@mail.fr', '123', unEmetteur());
 
       expect(contactCree.destinataire).to.be('jean.dupont@mail.fr');
       expect(contactCree.prenom).to.be('');
@@ -242,14 +250,8 @@ describe("L'ajout d'un contributeur sur un service", () => {
     });
 
     it("envoie un mail d'invitation au contributeur créé", async () => {
-      let idEmetteur;
       let idService;
       let emailEnvoye;
-
-      depotDonnees.utilisateur = async (id) => {
-        idEmetteur = id;
-        return { prenomNom: () => 'Utilisateur Courant' };
-      };
 
       depotDonnees.homologation = async (id) => {
         idService = id;
@@ -274,12 +276,13 @@ describe("L'ajout d'un contributeur sur un service", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('888', 'jean.dupont@mail.fr', '123');
+      }).executer('jean.dupont@mail.fr', '123', unEmetteur('888'));
 
-      expect(idEmetteur).to.be('888');
       expect(idService).to.be('123');
       expect(emailEnvoye.destinataire).to.be('jean.dupont@mail.fr');
-      expect(emailEnvoye.prenomNomEmetteur).to.be('Utilisateur Courant');
+      expect(emailEnvoye.prenomNomEmetteur).to.be(
+        'jean.dujardin@beta.gouv.com'
+      );
       expect(emailEnvoye.nomService).to.be('Nom Service');
       expect(emailEnvoye.idResetMotDePasse).to.be('reset');
     });
@@ -298,7 +301,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
-    }).executer('', 'jean.dupont@mail.fr', '123');
+    }).executer('jean.dupont@mail.fr', '123', unEmetteur());
 
     expect(nouvelleAutorisation.idContributeur).to.be('999');
   });
@@ -324,7 +327,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
-    }).executer('888', 'jean.dupont@mail.fr', '123');
+    }).executer('jean.dupont@mail.fr', '123', unEmetteur('888'));
 
     expect(idEmetteur).to.be('888');
     expect(donneesTracking).to.eql({

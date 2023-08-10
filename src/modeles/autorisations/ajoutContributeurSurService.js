@@ -24,7 +24,7 @@ const ajoutContributeurSurService = ({
   };
 
   return {
-    executer: async (idEmetteur, emailContributeur, idService) => {
+    executer: async (emailContributeur, idService, emetteur) => {
       const verifiePermission = async (...params) => {
         const a = await depotDonnees.autorisationPour(...params);
         if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
@@ -52,10 +52,7 @@ const ajoutContributeurSurService = ({
         contributeurAInformer,
         contributeurEstExistant
       ) => {
-        const [emetteur, service] = await Promise.all([
-          depotDonnees.utilisateur(idEmetteur),
-          depotDonnees.homologation(idService),
-        ]);
+        const service = await depotDonnees.homologation(idService);
 
         if (contributeurEstExistant)
           await adaptateurMail.envoieMessageInvitationContribution(
@@ -88,7 +85,7 @@ const ajoutContributeurSurService = ({
         return c;
       };
 
-      await verifiePermission(idEmetteur, idService);
+      await verifiePermission(emetteur.id, idService);
       const contributeur = await depotDonnees.utilisateurAvecEmail(
         emailContributeur
       );
@@ -98,7 +95,7 @@ const ajoutContributeurSurService = ({
       const nombreMoyenContributeurs =
         await ServiceTracking.creeService().nombreMoyenContributeursPourUtilisateur(
           depotDonnees,
-          idEmetteur
+          emetteur.id
         );
       await adaptateurTracking.envoieTrackingInvitationContributeur(
         emailContributeur,
