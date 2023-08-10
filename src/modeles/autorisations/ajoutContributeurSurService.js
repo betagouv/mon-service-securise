@@ -72,14 +72,20 @@ const ajoutContributeurSurService = ({
     );
   };
 
+  const recupereParEmail = async (emailContributeur) =>
+    depotDonnees.utilisateurAvecEmail(emailContributeur);
+
+  const ajouteContributeur = async (contributeur, service) => {
+    await depotDonnees.ajouteContributeurAHomologation(
+      contributeur.id,
+      service.id
+    );
+  };
+
   return {
     executer: async (emailContributeur, service, emetteur) => {
       await verifiePermission(emetteur.id, service.id);
-
-      const utilisateur = await depotDonnees.utilisateurAvecEmail(
-        emailContributeur
-      );
-
+      const utilisateur = await recupereParEmail(emailContributeur);
       await verifieAutorisationInexistante(utilisateur?.id, service.id);
 
       const dejaInscrit = !!utilisateur;
@@ -87,12 +93,8 @@ const ajoutContributeurSurService = ({
         ? utilisateur
         : await creeUtilisateur(emailContributeur);
 
-      await depotDonnees.ajouteContributeurAHomologation(
-        contributeur.id,
-        service.id
-      );
+      await ajouteContributeur(contributeur, service);
       await informeContributeur(contributeur, dejaInscrit, emetteur, service);
-
       await envoieTracking(emetteur, emailContributeur);
     },
   };
