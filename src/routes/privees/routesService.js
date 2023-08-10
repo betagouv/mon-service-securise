@@ -95,6 +95,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         InformationsHomologation,
         service: homologation,
         actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+        etapeActive: 'contactsUtiles',
         referentiel,
       });
     }
@@ -111,6 +112,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         referentiel,
         service: homologation,
         actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
+        etapeActive: 'risques',
       });
     }
   );
