@@ -35,12 +35,12 @@
 }
 .menu-navigation a:hover .chevron,
 .menu-navigation .lien-contacts-utiles:hover > div,
-.menu-navigation .lien-risques:hover > div,
-.menu-navigation .lien-deconnexion:hover::before {
+.menu-navigation .lien-risques:hover > div {
   background-color: var(--menu-couleur-survol);
 }
 .menu-navigation a:hover .position,
-.menu-navigation .lien-tableau-de-bord:hover > div {
+.menu-navigation .lien-tableau-de-bord:hover > div,
+.menu-navigation .lien-deconnexion:hover > div {
   border-color: var(--menu-couleur-survol);
 }
 .menu-navigation a.actif:hover .position {
@@ -62,12 +62,12 @@
 }
 .menu-navigation a:active .chevron,
 .menu-navigation .lien-contacts-utiles:active > div,
-.menu-navigation .lien-risques:active > div,
-.menu-navigation .lien-deconnexion:active::before {
+.menu-navigation .lien-risques:active > div {
   background-color: var(--menu-couleur-actif);
 }
 .menu-navigation a:active .position,
-.menu-navigation .lien-tableau-de-bord:active > div {
+.menu-navigation .lien-tableau-de-bord:active > div,
+.menu-navigation .lien-deconnexion:active > div {
   border-color: var(--menu-couleur-actif);
 }
 .menu-navigation a.actif:active .position {
@@ -284,7 +284,7 @@
   padding-bottom: 12px;
 }
 
-.menu-navigation .lien-deconnexion::before,
+.menu-navigation .lien-deconnexion > div,
 .menu-navigation .lien-tableau-de-bord > div,
 .menu-navigation .lien-contacts-utiles > div,
 .menu-navigation .lien-risques > div,
@@ -297,27 +297,28 @@
   border-radius: 100%;
 }
 
-.menu-navigation .lien-tableau-de-bord > div {
+.menu-navigation .lien-tableau-de-bord > div,
+.menu-navigation .lien-deconnexion > div {
   border: 1.5px solid var(--menu-couleur-repos);
 }
 .menu-navigation .lien-contacts-utiles > div,
 .menu-navigation .lien-risques > div,
-.menu-navigation .lien-tableau-de-bord > div {
+.menu-navigation .lien-tableau-de-bord > div,
+.menu-navigation .lien-deconnexion > div {
   display: flex;
   justify-content: center;
 }
 .menu-navigation .lien-contacts-utiles img,
 .menu-navigation .lien-risques img,
-.menu-navigation .lien-tableau-de-bord img {
+.menu-navigation .lien-tableau-de-bord img,
+.menu-navigation .lien-deconnexion img {
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(15%) sepia(60%) saturate(5222%)
     hue-rotate(193deg) brightness(98%) contrast(91%);
   width: 1.3em;
 }
-
-.menu-navigation .lien-deconnexion::before {
-  background: url(../images/icone_deconnecter.svg) no-repeat center
-    var(--menu-couleur-repos);
+.menu-navigation .lien-deconnexion img {
+  width: 1.7em;
 }
 
 .menu-navigation .lien-pdf:hover {
