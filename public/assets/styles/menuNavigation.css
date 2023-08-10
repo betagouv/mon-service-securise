@@ -93,8 +93,8 @@
 }
 
 .menu-navigation .accueil .repli-menu img {
-  width: 1.2em;
-  height: 1.2em;
+  width: 1em;
+  height: 1em;
   rotate: 180deg;
   /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
   /* https://codepen.io/sosuke/pen/Pjoqqp */
@@ -317,7 +317,7 @@
 
 /* MENU FERMÉ */
 .menu-navigation.ferme {
-  width: 5em;
+  width: 5.5em;
 }
 .menu-navigation.ferme > * {
   padding-left: 0;
@@ -332,18 +332,16 @@
 }
 .menu-navigation.ferme .accueil {
   position: relative;
-  justify-content: center;
 }
 .menu-navigation.ferme .accueil a {
   width: 57px;
   height: 45px;
   background-size: 100px;
-  background-position: 10px;
+  background-position: 15px;
 }
 .menu-navigation.ferme .repli-menu {
   position: absolute;
-  left: 4em;
-  top: 100px;
+  left: 4.9em;
 }
 .menu-navigation.ferme .repli-menu img {
   rotate: 0deg;
