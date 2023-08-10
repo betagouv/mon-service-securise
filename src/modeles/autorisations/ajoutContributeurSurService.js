@@ -28,14 +28,17 @@ const ajoutContributeurSurService = ({
     if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
   };
 
+  const verifieAutorisationInexistante = async (idUtilisateur, idService) => {
+    const existe = await depotDonnees.autorisationExiste(
+      idUtilisateur,
+      idService
+    );
+    if (existe)
+      throw new ErreurAutorisationExisteDeja("L'autorisation existe déjà");
+  };
+
   return {
     executer: async (emailContributeur, service, emetteur) => {
-      const verifieAutorisationInexistante = async (...params) => {
-        const existe = await depotDonnees.autorisationExiste(...params);
-        if (existe)
-          throw new ErreurAutorisationExisteDeja("L'autorisation existe déjà");
-      };
-
       const creeContributeurSiNecessaire = async (contributeurExistant) => {
         if (contributeurExistant) return contributeurExistant;
 
