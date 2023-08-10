@@ -24,7 +24,7 @@ const ajoutContributeurSurService = ({
   };
 
   return {
-    executer: async (emailContributeur, idService, emetteur) => {
+    executer: async (emailContributeur, service, emetteur) => {
       const verifiePermission = async (...params) => {
         const a = await depotDonnees.autorisationPour(...params);
         if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
@@ -52,8 +52,6 @@ const ajoutContributeurSurService = ({
         contributeurAInformer,
         contributeurEstExistant
       ) => {
-        const service = await depotDonnees.homologation(idService);
-
         if (contributeurEstExistant)
           await adaptateurMail.envoieMessageInvitationContribution(
             contributeurAInformer.email,
@@ -75,22 +73,22 @@ const ajoutContributeurSurService = ({
       const inviteContributeur = async (contributeurExistant) => {
         await verifieAutorisationInexistante(
           contributeurExistant?.id,
-          idService
+          service.id
         );
         const c = await creeContributeurSiNecessaire(
           contributeurExistant,
-          idService
+          service.id
         );
         await informeContributeur(c, contributeurExistant);
         return c;
       };
 
-      await verifiePermission(emetteur.id, idService);
+      await verifiePermission(emetteur.id, service.id);
       const contributeur = await depotDonnees.utilisateurAvecEmail(
         emailContributeur
       );
       const c = await inviteContributeur(contributeur);
-      await depotDonnees.ajouteContributeurAHomologation(c.id, idService);
+      await depotDonnees.ajouteContributeurAHomologation(c.id, service.id);
 
       const nombreMoyenContributeurs =
         await ServiceTracking.creeService().nombreMoyenContributeursPourUtilisateur(
