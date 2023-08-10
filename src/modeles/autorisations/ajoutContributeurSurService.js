@@ -10,19 +10,6 @@ const ajoutContributeurSurService = ({
   adaptateurMail,
   adaptateurTracking,
 }) => {
-  const supprimeUtilisateurSiEchec = async (
-    promesseEnvoiMessage,
-    utilisateur
-  ) => {
-    try {
-      await promesseEnvoiMessage;
-      return utilisateur;
-    } catch (e) {
-      await depotDonnees.supprimeUtilisateur(utilisateur.id);
-      throw new EchecEnvoiMessage();
-    }
-  };
-
   const verifiePermission = async (idUtilisateur, idService) => {
     const a = await depotDonnees.autorisationPour(idUtilisateur, idService);
     if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
@@ -37,71 +24,76 @@ const ajoutContributeurSurService = ({
       throw new ErreurAutorisationExisteDeja("L'autorisation existe déjà");
   };
 
+  const creeUtilisateur = async (email) => {
+    const utilisateur = await depotDonnees.nouvelUtilisateur({
+      email,
+      infolettreAcceptee: false,
+    });
+    await adaptateurMail.creeContact(email, '', '', true);
+    return utilisateur;
+  };
+
+  const informeContributeur = async (
+    contributeur,
+    contributeurEstExistant,
+    emetteur,
+    service
+  ) => {
+    if (contributeurEstExistant)
+      await adaptateurMail.envoieMessageInvitationContribution(
+        contributeur.email,
+        emetteur.prenomNom(),
+        service.nomService(),
+        service.id
+      );
+    else
+      try {
+        await adaptateurMail.envoieMessageInvitationInscription(
+          contributeur.email,
+          emetteur.prenomNom(),
+          service.nomService(),
+          contributeur.idResetMotDePasse
+        );
+      } catch (e) {
+        await depotDonnees.supprimeUtilisateur(contributeur.id);
+        throw new EchecEnvoiMessage();
+      }
+  };
+
+  const envoieTracking = async (emetteur, emailContributeur) => {
+    const nombreMoyenContributeurs =
+      await ServiceTracking.creeService().nombreMoyenContributeursPourUtilisateur(
+        depotDonnees,
+        emetteur.id
+      );
+    await adaptateurTracking.envoieTrackingInvitationContributeur(
+      emailContributeur,
+      { nombreMoyenContributeurs }
+    );
+  };
+
   return {
     executer: async (emailContributeur, service, emetteur) => {
-      const creeContributeurSiNecessaire = async (contributeurExistant) => {
-        if (contributeurExistant) return contributeurExistant;
-
-        const utilisateur = await depotDonnees.nouvelUtilisateur({
-          email: emailContributeur,
-          infolettreAcceptee: false,
-        });
-        await adaptateurMail.creeContact(emailContributeur, '', '', true);
-
-        return utilisateur;
-      };
-
-      const informeContributeur = async (
-        contributeurAInformer,
-        contributeurEstExistant
-      ) => {
-        if (contributeurEstExistant)
-          await adaptateurMail.envoieMessageInvitationContribution(
-            contributeurAInformer.email,
-            emetteur.prenomNom(),
-            service.nomService(),
-            service.id
-          );
-        else
-          await supprimeUtilisateurSiEchec(
-            adaptateurMail.envoieMessageInvitationInscription(
-              contributeurAInformer.email,
-              emetteur.prenomNom(),
-              service.nomService(),
-              contributeurAInformer.idResetMotDePasse
-            )
-          );
-      };
-
-      const inviteContributeur = async (contributeurExistant) => {
-        await verifieAutorisationInexistante(
-          contributeurExistant?.id,
-          service.id
-        );
-        const c = await creeContributeurSiNecessaire(
-          contributeurExistant,
-          service.id
-        );
-        await informeContributeur(c, contributeurExistant);
-        return c;
-      };
-
       await verifiePermission(emetteur.id, service.id);
-      const contributeur = await depotDonnees.utilisateurAvecEmail(
+
+      const utilisateur = await depotDonnees.utilisateurAvecEmail(
         emailContributeur
       );
-      const c = await inviteContributeur(contributeur);
-      await depotDonnees.ajouteContributeurAHomologation(c.id, service.id);
 
-      const nombreMoyenContributeurs =
-        await ServiceTracking.creeService().nombreMoyenContributeursPourUtilisateur(
-          depotDonnees,
-          emetteur.id
-        );
-      await adaptateurTracking.envoieTrackingInvitationContributeur(
-        emailContributeur,
-        { nombreMoyenContributeurs }
+      await verifieAutorisationInexistante(utilisateur?.id, service.id);
+
+      const dejaInscrit = !!utilisateur;
+      const contributeur = dejaInscrit
+        ? utilisateur
+        : await creeUtilisateur(emailContributeur);
+
+      await depotDonnees.ajouteContributeurAHomologation(
+        contributeur.id,
+        service.id
       );
+      await informeContributeur(contributeur, dejaInscrit, emetteur, service);
+
+      await envoieTracking(emetteur, emailContributeur);
     },
   };
 };
