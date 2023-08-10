@@ -148,7 +148,7 @@
 }
 
 .menu-navigation .parcours .etapes a {
-  font-size: 1.2em;
+  font-size: 1.15em;
   font-weight: 700;
   align-items: baseline;
 }
@@ -209,7 +209,7 @@
 }
 
 .menu-navigation .parcours .sous-titre {
-  font-size: 0.9em;
+  font-size: 0.85em;
   margin-left: 3.3em;
 }
 
@@ -229,9 +229,9 @@
 }
 
 .menu-navigation :is(.outils-complementaires, .documents-telechargeables) ul {
-  margin-top: 0;
   row-gap: 14px;
-  font-weight: 700;
+  font-weight: 500;
+  font-size: 1.13em;
 }
 
 .menu-navigation :is(.outils-complementaires, .documents-telechargeables) a {
@@ -260,10 +260,13 @@
 }
 
 .menu-navigation .lien-tableau-de-bord {
-  font-size: 1.125rem;
+  font-size: 1.12em;
   font-weight: 500;
   padding-top: 15px;
   padding-bottom: 15px;
+}
+.menu-navigation .lien-deconnexion {
+  font-weight: 500;
 }
 
 .menu-navigation .lien-deconnexion {
@@ -296,7 +299,7 @@
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(15%) sepia(60%) saturate(5222%)
     hue-rotate(193deg) brightness(98%) contrast(91%);
-  width: 1.4em;
+  width: 1.3em;
 }
 
 .menu-navigation .lien-tableau-de-bord::before {
