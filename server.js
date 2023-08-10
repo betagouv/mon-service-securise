@@ -11,8 +11,6 @@ const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
 const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
-
-const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
@@ -23,7 +21,9 @@ const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
 const {
   adaptateurProtection,
 } = require('./src/adaptateurs/adaptateurProtection');
+const { fabriqueProcedures } = require('./src/routes/procedures');
 
+const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
 
 const port = process.env.PORT || 3000;
@@ -36,6 +36,7 @@ const middleware = Middleware({
   adaptateurJWT,
   depotDonnees,
 });
+const procedures = fabriqueProcedures();
 
 const serveur = MSS.creeServeur(
   depotDonnees,
@@ -50,7 +51,8 @@ const serveur = MSS.creeServeur(
   adaptateurCsv,
   adaptateurZip,
   adaptateurTracking,
-  adaptateurProtection
+  adaptateurProtection,
+  procedures
 );
 
 serveur.ecoute(port, () => {
