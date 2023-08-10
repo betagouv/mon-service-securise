@@ -43,10 +43,14 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
         ul
           li
             a.lien-contacts-utiles(href = `/service/${service.id}/rolesResponsabilites`)
+              div
+                img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
               span.none-si-ferme Contacts utiles
           li
             a.lien-risques(href = `/service/${service.id}/risques`)
-             span.none-si-ferme Risques
+              div
+                img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »")
+              span.none-si-ferme Risques
 
       .documents-telechargeables
         h4.hidden-si-ferme Documents à télécharger

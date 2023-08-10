@@ -34,8 +34,8 @@
   color: var(--menu-couleur-survol);
 }
 .menu-navigation a:hover .chevron,
-.menu-navigation .lien-contacts-utiles:hover::before,
-.menu-navigation .lien-risques:hover::before,
+.menu-navigation .lien-contacts-utiles:hover > div,
+.menu-navigation .lien-risques:hover > div,
 .menu-navigation .lien-deconnexion:hover::before,
 .menu-navigation .lien-tableau-de-bord:hover::before {
   background-color: var(--menu-couleur-survol);
@@ -46,13 +46,18 @@
 .menu-navigation a.actif:hover .position {
   background-color: var(--menu-couleur-survol) !important;
 }
+.menu-navigation .lien-contacts-utiles:hover img,
+.menu-navigation .lien-risques:hover img {
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) saturate(100%) invert(100%);
+}
 
 .menu-navigation a:active {
   color: var(--menu-couleur-actif);
 }
 .menu-navigation a:active .chevron,
-.menu-navigation .lien-contacts-utiles:active::before,
-.menu-navigation .lien-risques:active::before,
+.menu-navigation .lien-contacts-utiles:active > div,
+.menu-navigation .lien-risques:active > div,
 .menu-navigation .lien-deconnexion:active::before,
 .menu-navigation .lien-tableau-de-bord:active::before {
   background-color: var(--menu-couleur-actif);
@@ -96,7 +101,6 @@
   width: 1em;
   height: 1em;
   rotate: 180deg;
-  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(18%) sepia(93%) saturate(2644%)
     hue-rotate(191deg) brightness(91%) contrast(91%);
@@ -268,11 +272,11 @@
 }
 
 :is(
-    .menu-navigation .lien-contacts-utiles,
-    .menu-navigation .lien-risques,
     .menu-navigation .lien-tableau-de-bord,
     .menu-navigation .lien-deconnexion
   )::before,
+.menu-navigation .lien-contacts-utiles > div,
+.menu-navigation .lien-risques > div,
 .menu-navigation .documents-telechargeables img {
   display: block;
   width: 1.9rem;
@@ -282,14 +286,17 @@
   border-radius: 100%;
 }
 
-.menu-navigation .lien-contacts-utiles::before {
-  background: url(../images/icone_contacts_utiles.svg) no-repeat center
-    var(--menu-couleur-repos);
+.menu-navigation .lien-contacts-utiles > div,
+.menu-navigation .lien-risques > div {
+  display: flex;
+  justify-content: center;
 }
-
-.menu-navigation .lien-risques::before {
-  background: url(../images/icone_risques.svg) no-repeat center
-    var(--menu-couleur-repos);
+.menu-navigation .lien-contacts-utiles img,
+.menu-navigation .lien-risques img {
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) saturate(100%) invert(15%) sepia(60%) saturate(5222%)
+    hue-rotate(193deg) brightness(98%) contrast(91%);
+  width: 1.4em;
 }
 
 .menu-navigation .lien-tableau-de-bord::before {
@@ -303,13 +310,11 @@
 }
 
 .menu-navigation .lien-pdf:hover {
-  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(22%) sepia(94%) saturate(1432%)
     hue-rotate(186deg) brightness(95%) contrast(91%);
 }
 .menu-navigation .lien-pdf:active {
-  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(16%) sepia(28%) saturate(3895%)
     hue-rotate(184deg) brightness(102%) contrast(94%);
