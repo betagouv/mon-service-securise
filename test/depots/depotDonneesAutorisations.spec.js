@@ -1,8 +1,5 @@
 const expect = require('expect.js');
-
 const { depotVide } = require('./depotVide');
-
-const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
@@ -16,605 +13,457 @@ const {
 } = require('../../src/erreurs');
 const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
+const {
+  unePersistanceMemoire,
+} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
 
 describe('Le dépôt de données des autorisations', () => {
-  it("vérifie que l'utilisateur a accès à l'homologation", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        autorisations: [
-          { idUtilisateur: '456', idHomologation: '123', type: 'createur' },
-        ],
-      }
-    );
-
-    const depot = DepotDonneesAutorisations.creeDepot({
+  const creeDepot = (adaptateurPersistance, adaptateurUUID) =>
+    DepotDonneesAutorisations.creeDepot({
       adaptateurPersistance,
+      adaptateurUUID,
+      depotHomologations: DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+      }),
+      depotUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+      }),
     });
-    depot
-      .accesAutorise('456', '123')
-      .then((accesAutorise) => expect(accesAutorise).to.be(true))
-      .then(() => depot.accesAutorise('456', '999'))
-      .then((accesAutorise) => expect(accesAutorise).to.be(false))
-      .then(() => done())
-      .catch(done);
+
+  it("vérifie que l'utilisateur a accès à l'homologation", async () => {
+    const adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUneAutorisation({
+        idUtilisateur: '456',
+        idHomologation: '123',
+        type: 'createur',
+      })
+      .construis();
+
+    const depot = creeDepot(adaptateurPersistance);
+
+    const accesAutorise123 = await depot.accesAutorise('456', '123');
+    expect(accesAutorise123).to.be(true);
+
+    const accessAutorise999 = await depot.accesAutorise('456', '999');
+    expect(accessAutorise999).to.be(false);
   });
 
   describe("Sur demande de transfert des autorisations d'un utilisateur à un autre", () => {
-    it("vérifie que l'utilisateur source existe", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({});
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotUtilisateurs,
-      });
+    it("vérifie que l'utilisateur source existe", async () => {
+      const depot = creeDepot(unePersistanceMemoire().construis());
 
-      depot
-        .transfereAutorisations('999', '000')
-        .then(() => done('Le transfert aurait dû lever une erreur'))
-        .catch((erreur) => {
-          expect(erreur).to.be.a(ErreurUtilisateurInexistant);
-          expect(erreur.message).to.equal('L\'utilisateur "999" n\'existe pas');
-          done();
-        })
-        .catch(done);
+      try {
+        await depot.transfereAutorisations('999', '000');
+        expect().to.fail('Le transfert aurait dû lever une erreur');
+      } catch (erreur) {
+        expect(erreur).to.be.a(ErreurUtilisateurInexistant);
+        expect(erreur.message).to.equal('L\'utilisateur "999" n\'existe pas');
+      }
     });
 
-    it("vérifie que l'utilisateur cible existe", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotUtilisateurs,
-      });
+    it("vérifie que l'utilisateur cible existe", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .construis();
 
-      depot
-        .transfereAutorisations('999', '000')
-        .then(() => done('Le transfert aurait dû lever une erreur'))
-        .catch((erreur) => {
-          expect(erreur).to.be.a(ErreurUtilisateurInexistant);
-          expect(erreur.message).to.equal('L\'utilisateur "000" n\'existe pas');
-          done();
-        })
-        .catch(done);
+      const depot = creeDepot(adaptateurPersistance);
+
+      try {
+        await depot.transfereAutorisations('999', '000');
+        expect().to.fail('Le transfert aurait dû lever une erreur');
+      } catch (e) {
+        expect(e).to.be.a(ErreurUtilisateurInexistant);
+        expect(e.message).to.equal('L\'utilisateur "000" n\'existe pas');
+      }
     });
 
-    it("vérifie que l'utilisateur cible est différent de l'utilisateur source", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotUtilisateurs,
-      });
+    it("vérifie que l'utilisateur cible est différent de l'utilisateur source", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .construis();
 
-      depot
-        .transfereAutorisations('999', '999')
-        .then(() => done('Le transfert aurait dû lever une erreur'))
-        .catch((erreur) => {
-          expect(erreur).to.be.a(ErreurTranfertVersUtilisateurSource);
-          expect(erreur.message).to.equal(
-            "Transfert d'un utilisateur vers lui-même interdit"
-          );
-          done();
-        })
-        .catch(done);
+      const depot = creeDepot(adaptateurPersistance);
+
+      try {
+        await depot.transfereAutorisations('999', '999');
+        expect().to.fail('Le transfert aurait dû lever une erreur');
+      } catch (erreur) {
+        expect(erreur).to.be.a(ErreurTranfertVersUtilisateurSource);
+        expect(erreur.message).to.be(
+          "Transfert d'un utilisateur vers lui-même interdit"
+        );
+      }
     });
 
-    it('effectue le transfert', (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            { id: '999', email: 'jean.dupont@mail.fr' },
-            { id: '000', email: 'autre.utilisateur@mail.fr' },
-          ],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            { idUtilisateur: '999', idHomologation: '123', type: 'createur' },
-          ],
-        });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotUtilisateurs,
-      });
-
-      depot
-        .transfereAutorisations('999', '000')
-        .then(() => depot.autorisations('999'))
-        .then((as) => expect(as.length).to.equal(0))
-        .then(() => depot.autorisations('000'))
-        .then((as) => {
-          expect(as.length).to.equal(1);
-          expect(as[0]).to.be.an(AutorisationCreateur);
-          expect(as[0].idHomologation).to.equal('123');
-          done();
+    it('effectue le transfert', async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnUtilisateur({ id: '000', email: 'autre.utilisateur@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
         })
-        .catch(done);
+        .ajouteUneAutorisation({
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      await depot.transfereAutorisations('999', '000');
+      const autorisation999 = await depot.autorisations('999');
+      expect(autorisation999.length).to.equal(0);
+
+      const autorisations000 = await depot.autorisations('000');
+      expect(autorisations000.length).to.equal(1);
+      expect(autorisations000[0]).to.be.an(AutorisationCreateur);
+      expect(autorisations000[0].idHomologation).to.equal('123');
     });
 
-    it("ne duplique pas les droits de contribution si l'utilisateur cible est déjà contributeur", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            { id: '999', email: 'jean.dupont@mail.fr' },
-            { id: '000', email: 'autre.utilisateur@mail.fr' },
-          ],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'contributeur',
-            },
-            {
-              id: '789',
-              idUtilisateur: '000',
-              idHomologation: '123',
-              type: 'contributeur',
-            },
-          ],
-        });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotUtilisateurs,
-      });
-
-      depot
-        .transfereAutorisations('999', '000')
-        .then(() => depot.autorisations('999'))
-        .then((as) => expect(as.length).to.equal(0))
-        .then(() => depot.autorisations('000'))
-        .then((as) => {
-          expect(as.length).to.equal(1);
-          expect(as[0].id).to.equal('789');
+    it("ne duplique pas les droits de contribution si l'utilisateur cible est déjà contributeur", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnUtilisateur({ id: '000', email: 'autre.utilisateur@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
         })
-        .then(() => done())
-        .catch(done);
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'contributeur',
+        })
+        .ajouteUneAutorisation({
+          id: '789',
+          idUtilisateur: '000',
+          idHomologation: '123',
+          type: 'contributeur',
+        })
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      await depot.transfereAutorisations('999', '000');
+
+      const as999 = await depot.autorisations('999');
+      expect(as999.length).to.equal(0);
+
+      const as000 = await depot.autorisations('000');
+      expect(as000.length).to.equal(1);
+      expect(as000[0].id).to.equal('789');
     });
 
-    it("met à jour les droits si l'utilisateur source est créateur et l'utilisateur cible déjà contributeur", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            { id: '999', email: 'jean.dupont@mail.fr' },
-            { id: '000', email: 'autre.utilisateur@mail.fr' },
-          ],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'createur',
-            },
-            {
-              id: '789',
-              idUtilisateur: '000',
-              idHomologation: '123',
-              type: 'contributeur',
-            },
-          ],
-        });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotUtilisateurs,
-      });
-
-      depot
-        .transfereAutorisations('999', '000')
-        .then(() => depot.autorisations('999'))
-        .then((as) => expect(as.length).to.equal(0))
-        .then(() => depot.autorisations('000'))
-        .then((as) => {
-          expect(as.length).to.equal(1);
-          expect(as[0]).to.be.an(AutorisationCreateur);
+    it("met à jour les droits si l'utilisateur source est créateur et l'utilisateur cible déjà contributeur", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnUtilisateur({ id: '000', email: 'autre.utilisateur@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
         })
-        .then(() => done())
-        .catch(done);
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .ajouteUneAutorisation({
+          id: '789',
+          idUtilisateur: '000',
+          idHomologation: '123',
+          type: 'contributeur',
+        })
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      await depot.transfereAutorisations('999', '000');
+
+      const as999 = await depot.autorisations('999');
+      expect(as999.length).to.equal(0);
+
+      const as000 = await depot.autorisations('000');
+      expect(as000.length).to.equal(1);
+      expect(as000[0]).to.be.an(AutorisationCreateur);
     });
   });
 
   describe("sur recherche d'une autorisation", () => {
-    it("retourne l'autorisation persistée", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'createur',
-            },
-          ],
-        });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-      });
-
-      depot
-        .autorisation('456')
-        .then((a) => {
-          expect(a).to.be.an(AutorisationCreateur);
-          expect(a.id).to.equal('456');
-          expect(a.idUtilisateur).to.equal('999');
-          expect(a.idHomologation).to.equal('123');
-          done();
+    it("retourne l'autorisation persistée", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
         })
-        .catch(done);
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      const a = await depot.autorisation('456');
+
+      expect(a).to.be.an(AutorisationCreateur);
+      expect(a.id).to.equal('456');
+      expect(a.idUtilisateur).to.equal('999');
+      expect(a.idHomologation).to.equal('123');
     });
 
-    it("retourne `undefined` si l'autorisation est inexistante", (done) => {
-      depotVide()
-        .then((depot) => depot.autorisation('123'))
-        .then((autorisation) => expect(autorisation).to.be(undefined))
-        .then(() => done())
-        .catch(done);
+    it("retourne `undefined` si l'autorisation est inexistante", async () => {
+      const depot = await depotVide();
+      const autorisation = await depot.autorisation('123');
+      expect(autorisation).to.be(undefined);
     });
   });
 
   describe("sur demande d'ajout d'un contributeur à une homologation", () => {
     const adaptateurUUID = { genereUUID: () => {} };
 
-    it('lève une erreur si le contributeur est inexistant', (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'createur',
-            },
-          ],
-        });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotUtilisateurs,
-      });
-
-      depot
-        .ajouteContributeurAHomologation('000', '123')
-        .then(() => done("L'ajout aurait du lever une erreur"))
-        .catch((erreur) => {
-          expect(erreur).to.be.a(ErreurUtilisateurInexistant);
-          expect(erreur.message).to.equal(
-            'Le contributeur "000" n\'existe pas'
-          );
-          done();
+    it('lève une erreur si le contributeur est inexistant', async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
         })
-        .catch(done);
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      try {
+        await depot.ajouteContributeurAHomologation('000', '123');
+        expect().to.fail("L'ajout aurait du lever une erreur");
+      } catch (erreur) {
+        expect(erreur).to.be.a(ErreurUtilisateurInexistant);
+        expect(erreur.message).to.equal('Le contributeur "000" n\'existe pas');
+      }
     });
 
-    it("lève une erreur si l'homologation est inexistante", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            { id: '999', email: 'jean.dupont@mail.fr' },
-            { id: '000', email: 'contributeur@mail.fr' },
-          ],
-        });
-      const depotHomologations = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-      });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotHomologations,
-        depotUtilisateurs,
-      });
+    it("lève une erreur si l'homologation est inexistante", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnUtilisateur({ id: '000', email: 'contributeur@mail.fr' })
+        .construis();
 
-      depot
-        .ajouteContributeurAHomologation('000', '123')
-        .then(() => done("L'ajout aurait du lever une erreur"))
-        .catch((erreur) => {
-          expect(erreur).to.be.a(ErreurHomologationInexistante);
-          expect(erreur.message).to.equal(
-            'L\'homologation "123" n\'existe pas'
-          );
-          done();
-        })
-        .catch(done);
+      const depot = creeDepot(adaptateurPersistance);
+
+      try {
+        await depot.ajouteContributeurAHomologation('000', '123');
+        expect().to.fail("L'ajout aurait du lever une erreur");
+      } catch (erreur) {
+        expect(erreur).to.be.a(ErreurHomologationInexistante);
+        expect(erreur.message).to.equal('L\'homologation "123" n\'existe pas');
+      }
     });
 
-    it("lève une erreur si l'autorisation existe déjà", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'createur',
-            },
-          ],
-        });
-      const depotHomologations = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-      });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        depotHomologations,
-        depotUtilisateurs,
-      });
-
-      depot
-        .ajouteContributeurAHomologation('999', '123')
-        .then(() => done("L'ajout aurait du lever une erreur"))
-        .catch((erreur) => {
-          expect(erreur).to.be.a(ErreurAutorisationExisteDeja);
-          expect(erreur.message).to.equal("L'autorisation existe déjà");
-          done();
+    it("lève une erreur si l'autorisation existe déjà", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
         })
-        .catch(done);
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      try {
+        await depot.ajouteContributeurAHomologation('999', '123');
+        expect().to.fail("L'ajout aurait du lever une erreur");
+      } catch (erreur) {
+        expect(erreur).to.be.a(ErreurAutorisationExisteDeja);
+        expect(erreur.message).to.equal("L'autorisation existe déjà");
+      }
     });
 
-    it("persiste l'autorisation", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            { id: '999', email: 'jean.dupont@mail.fr' },
-            { id: '000', email: 'contributeur@mail.fr' },
-          ],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'createur',
-            },
-          ],
-        });
+    it("persiste l'autorisation", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnUtilisateur({ id: '000', email: 'contributeur@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
+        })
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .construis();
+
       adaptateurUUID.genereUUID = () => '789';
-      const depotHomologations = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-      });
-      const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-        adaptateurUUID,
-        depotHomologations,
-        depotUtilisateurs,
-      });
+      const depot = creeDepot(adaptateurPersistance, adaptateurUUID);
 
-      depot
-        .ajouteContributeurAHomologation('000', '123')
-        .then(() => depot.autorisation('789'))
-        .then((a) => {
-          expect(a).to.be.a(AutorisationContributeur);
-          expect(a.idHomologation).to.equal('123');
-          expect(a.idService).to.equal('123');
-          expect(a.idUtilisateur).to.equal('000');
-          done();
-        })
-        .catch(done);
+      await depot.ajouteContributeurAHomologation('000', '123');
+
+      const a = await depot.autorisation('789');
+      expect(a).to.be.a(AutorisationContributeur);
+      expect(a.idHomologation).to.equal('123');
+      expect(a.idService).to.equal('123');
+      expect(a.idUtilisateur).to.equal('000');
     });
   });
 
-  it("connaît l'autorisation pour un utilisateur et une homologation donnée", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [
-          { id: '123', descriptionService: { nomService: 'Un service' } },
-        ],
-        autorisations: [
-          {
-            id: '456',
-            idUtilisateur: '999',
-            idHomologation: '123',
-            type: 'createur',
-          },
-        ],
-      }
-    );
-    const depot = DepotDonneesAutorisations.creeDepot({
-      adaptateurPersistance,
-    });
-    depot
-      .autorisationPour('999', '123')
-      .then((a) => {
-        expect(a).to.be.an(AutorisationCreateur);
-        expect(a.id).to.equal('456');
-        done();
+  it("connaît l'autorisation pour un utilisateur et une homologation donnée", async () => {
+    const adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+      .ajouteUnService({
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
       })
-      .catch(done);
+      .ajouteUneAutorisation({
+        id: '456',
+        idUtilisateur: '999',
+        idHomologation: '123',
+        type: 'createur',
+      })
+      .construis();
+
+    const depot = creeDepot(adaptateurPersistance);
+
+    const a = await depot.autorisationPour('999', '123');
+
+    expect(a).to.be.an(AutorisationCreateur);
+    expect(a.id).to.equal('456');
   });
 
-  it('sait si une autorisation existe', (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        homologations: [
-          { id: '123', descriptionService: { nomService: 'Un service' } },
-        ],
-        autorisations: [
-          {
-            id: '456',
-            idUtilisateur: '999',
-            idHomologation: '123',
-            type: 'createur',
-          },
-        ],
-      }
-    );
-    const depot = DepotDonneesAutorisations.creeDepot({
-      adaptateurPersistance,
-    });
+  it('sait si une autorisation existe', async () => {
+    const adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+      .ajouteUnService({
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
+      })
+      .ajouteUneAutorisation({
+        id: '456',
+        idUtilisateur: '999',
+        idHomologation: '123',
+        type: 'createur',
+      })
+      .construis();
 
-    depot
-      .autorisationExiste('999', '123')
-      .then((existe) => expect(existe).to.be(true))
-      .then(() => depot.autorisationExiste('999', '000'))
-      .then((existe) => expect(existe).to.be(false))
-      .then(() => depot.autorisationExiste('000', '123'))
-      .then((existe) => expect(existe).to.be(false))
-      .then(() => done())
-      .catch(done);
+    const depot = creeDepot(adaptateurPersistance);
+
+    const existe123 = await depot.autorisationExiste('999', '123');
+    expect(existe123).to.be(true);
+
+    const existe000 = await depot.autorisationExiste('999', '000');
+    expect(existe000).to.be(false);
+
+    const existeInconnu = await depot.autorisationExiste('000', '123');
+    expect(existeInconnu).to.be(false);
   });
 
   describe("sur demande de suppression d'un contributeur", () => {
-    it("vérifie que l'autorisation de contribution existe", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            { id: '999', email: 'jean.dupont@mail.fr' },
-            { id: '000', email: 'annie.dubois@mail.fr' },
-          ],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'createur',
-            },
-          ],
-        });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-      });
-
-      depot
-        .supprimeContributeur('000', '123')
-        .then(() =>
-          done('La demande de suppression aurait dû lever une erreur')
-        )
-        .catch((e) => {
-          expect(e).to.be.an(ErreurAutorisationInexistante);
-          expect(e.message).to.equal(
-            'L\'utilisateur "000" n\'est pas contributeur de l\'homologation "123"'
-          );
-          done();
+    it("vérifie que l'autorisation de contribution existe", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnUtilisateur({ id: '000', email: 'annie.dubois@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
         })
-        .catch(done);
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      try {
+        await depot.supprimeContributeur('000', '123');
+        expect().to.fail('La demande aurait dû lever une erreur');
+      } catch (e) {
+        expect(e).to.be.an(ErreurAutorisationInexistante);
+        expect(e.message).to.equal(
+          'L\'utilisateur "000" n\'est pas contributeur de l\'homologation "123"'
+        );
+      }
     });
 
-    it("vérifie qu'il s'agit bien d'un contributeur et non du créateur de l'homologation", (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'createur',
-            },
-          ],
-        });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-      });
-
-      depot
-        .supprimeContributeur('999', '123')
-        .then(() =>
-          done('La demande de suppression aurait dû lever une erreur')
-        )
-        .catch((e) => {
-          expect(e).to.be.an(ErreurTentativeSuppressionCreateur);
-          expect(e.message).to.equal(
-            'Suppression impossible : l\'utilisateur "999" est le propriétaire de l\'homologation "123"'
-          );
-          done();
+    it("vérifie qu'il s'agit bien d'un contributeur et non du créateur de l'homologation", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
         })
-        .catch(done);
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      try {
+        await depot.supprimeContributeur('999', '123');
+        expect().to.fail('La demande aurait dû lever une erreur');
+      } catch (e) {
+        expect(e).to.be.an(ErreurTentativeSuppressionCreateur);
+        expect(e.message).to.equal(
+          'Suppression impossible : l\'utilisateur "999" est le propriétaire de l\'homologation "123"'
+        );
+      }
     });
 
-    it('supprime le contributeur', (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            { id: '999', email: 'jean.dupont@mail.fr' },
-            { id: '000', email: 'contributeur@mail.fr' },
-          ],
-          homologations: [
-            { id: '123', descriptionService: { nomService: 'Un service' } },
-          ],
-          autorisations: [
-            {
-              id: '456',
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'createur',
-            },
-            {
-              id: '789',
-              idUtilisateur: '000',
-              idHomologation: '123',
-              type: 'contributeur',
-            },
-          ],
-        });
-      const depot = DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
-      });
+    it('supprime le contributeur', async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnUtilisateur({ id: '000', email: 'contributeur@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
+        })
+        .ajouteUneAutorisation({
+          id: '456',
+          idUtilisateur: '999',
+          idHomologation: '123',
+          type: 'createur',
+        })
+        .ajouteUneAutorisation({
+          id: '789',
+          idUtilisateur: '000',
+          idHomologation: '123',
+          type: 'contributeur',
+        })
+        .construis();
 
-      depot
-        .autorisationPour('000', '123')
-        .then((a) => expect(a).to.be.an(AutorisationContributeur))
-        .then(() => depot.supprimeContributeur('000', '123'))
-        .then(() => depot.autorisationPour('000', '123'))
-        .then((a) => expect(a).to.be(undefined))
-        .then(() => done())
-        .catch(done);
+      const depot = creeDepot(adaptateurPersistance);
+
+      const a = await depot.autorisationPour('000', '123');
+      expect(a).to.be.an(AutorisationContributeur);
+
+      await depot.supprimeContributeur('000', '123');
+
+      const apres = await depot.autorisationPour('000', '123');
+      expect(apres).to.be(undefined);
     });
   });
 });
