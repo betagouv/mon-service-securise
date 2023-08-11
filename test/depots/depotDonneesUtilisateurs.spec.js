@@ -411,6 +411,18 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
       });
 
+      it('marque les emails transactionnels comme « acceptés »', async () => {
+        const u = await depot.utilisateur('1');
+        expect(u).to.be(undefined);
+
+        await depot.nouvelUtilisateur({
+          email: 'jean.dupont@mail.fr',
+        });
+
+        const utilisateur = await depot.utilisateur('1');
+        expect(utilisateur.transactionnelAccepte).to.be(true);
+      });
+
       it('utilise la date actuelle comme date de création du nouvel utilisateur', async () => {
         const utilisateur = await depot.nouvelUtilisateur({
           prenom: 'Jean',

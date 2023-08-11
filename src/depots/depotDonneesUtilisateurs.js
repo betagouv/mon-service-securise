@@ -44,6 +44,7 @@ const creeDepot = (config = {}) => {
     donneesUtilisateur.motDePasse = await adaptateurChiffrement.hacheBCrypt(
       adaptateurUUID.genereUUID()
     );
+    donneesUtilisateur.transactionnelAccepte = true;
 
     await adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur);
 
