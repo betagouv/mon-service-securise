@@ -61,7 +61,8 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
               target = '_blank',
               rel = 'noopener'
               title= 'Télécharger le PDF de synthèse de sécurité dans une nouvelle fenêtre')
-              img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
+              div
+                img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
               span.none-si-ferme Synthèse de sécurité
           li
             a.lien-pdf(
@@ -69,7 +70,8 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
               target = '_blank',
               rel = 'noopener'
               title= 'Télécharger les annexes PDF dans une nouvelle fenêtre')
-              img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
+              div
+                img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
               span.none-si-ferme Annexes
 
 
