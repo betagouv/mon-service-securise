@@ -12,23 +12,17 @@ describe('Le serveur MSS des routes /service/*', () => {
   afterEach(testeur.arrete);
 
   describe('quand requête GET sur `/service/creation `', () => {
-    it("Récupère dans le dépôt le nom de l'organisation de l'utilisateur", (done) => {
+    it("Récupère dans le dépôt le nom de l'organisation de l'utilisateur", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
-      let depotDonneesUtilisateursAppelle = false;
+      let idRecu;
 
-      testeur.depotDonnees().utilisateur = (idUtilisateur) => {
-        expect(idUtilisateur).to.equal('123');
-        depotDonneesUtilisateursAppelle = true;
-        return Promise.resolve({
-          id: idUtilisateur,
-          nomEntitePublique: 'une entité',
-        });
+      testeur.depotDonnees().utilisateur = async (idUtilisateur) => {
+        idRecu = idUtilisateur;
+        return { id: idUtilisateur, nomEntitePublique: 'une entité' };
       };
 
-      axios('http://localhost:1234/service/creation')
-        .then(() => expect(depotDonneesUtilisateursAppelle).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      await axios('http://localhost:1234/service/creation');
+      expect(idRecu).to.equal('123');
     });
   });
 
@@ -40,6 +34,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         },
         etapesParcoursHomologation: [{ numero: 1 }],
       });
+
       testeur
         .middleware()
         .verifieRechercheService('http://localhost:1234/service/456', done);
@@ -74,8 +69,8 @@ describe('Le serveur MSS des routes /service/*', () => {
         );
     });
 
-    it('interroge le moteur de règles pour obtenir les mesures personnalisées', (done) => {
-      let moteurInterroge = false;
+    it('interroge le moteur de règles pour obtenir les mesures personnalisées', async () => {
+      let descriptionRecue;
       const requete = {};
 
       testeur.middleware().trouveService(requete, undefined, () => {
@@ -84,15 +79,13 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
 
       testeur.moteurRegles().mesures = (descriptionService) => {
-        expect(descriptionService.nomService).to.equal('un service');
-        moteurInterroge = true;
+        descriptionRecue = descriptionService;
         return {};
       };
 
-      axios('http://localhost:1234/service/456/mesures')
-        .then(() => expect(moteurInterroge).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      await axios('http://localhost:1234/service/456/mesures');
+
+      expect(descriptionRecue.nomService).to.equal('un service');
     });
   });
 
@@ -151,10 +144,8 @@ describe('Le serveur MSS des routes /service/*', () => {
           { numero: 2, id: 'deuxieme' },
         ],
       });
-      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = () =>
-        Promise.resolve();
-      testeur.depotDonnees().homologation = () =>
-        Promise.resolve(homologationARenvoyer);
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async () => {};
+      testeur.depotDonnees().homologation = async () => homologationARenvoyer;
     });
 
     it('recherche le service correspondant', (done) => {
@@ -178,58 +169,43 @@ describe('Le serveur MSS des routes /service/*', () => {
       );
     });
 
-    it('ajoute un dossier courant au service si nécessaire', (done) => {
-      let dossierAjoute = false;
-      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = (idService) => {
-        try {
-          expect(idService).to.equal('456');
-          dossierAjoute = true;
-          return Promise.resolve();
-        } catch (e) {
-          return Promise.reject(e);
-        }
+    it('ajoute un dossier courant au service si nécessaire', async () => {
+      let idRecu;
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async (
+        idService
+      ) => {
+        idRecu = idService;
       };
 
-      axios(
+      await axios(
         'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement'
-      )
-        .then(() => expect(dossierAjoute).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      );
+
+      expect(idRecu).to.be('456');
     });
 
-    it('recharge le service avant de servir la vue', (done) => {
+    it('recharge le service avant de servir la vue', async () => {
       let chargementsService = 0;
-      testeur.depotDonnees().homologation = () => {
-        try {
-          chargementsService += 1;
-          return Promise.resolve(homologationARenvoyer);
-        } catch (e) {
-          return Promise.reject(e);
-        }
+      testeur.depotDonnees().homologation = async () => {
+        chargementsService += 1;
+        return homologationARenvoyer;
       };
 
-      axios(
+      await axios(
         'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement'
-      )
-        .then(() => expect(chargementsService).to.equal(1))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      );
+
+      expect(chargementsService).to.equal(1);
     });
 
-    it("redirige vers l'étape en cours si l'étape demandée est postérieure", (done) => {
-      axios(
+    it("redirige vers l'étape en cours si l'étape demandée est postérieure", async () => {
+      const reponse = await axios(
         'http://localhost:1234/service/456/homologation/edition/etape/deuxieme'
-      )
-        .then((reponse) => {
-          expect(reponse.request.res.responseUrl).to.contain(
-            'edition/etape/dateTelechargement'
-          );
-        })
-        .then(() => done())
-        .catch((e) => {
-          done(e.response?.data || e);
-        });
+      );
+
+      expect(reponse.request.res.responseUrl).to.contain(
+        'edition/etape/dateTelechargement'
+      );
     });
   });
 });
