@@ -14,7 +14,6 @@ const {
   ErreurModele,
 } = require('../../erreurs');
 const routesApiService = require('./routesApiService');
-const ServiceTracking = require('../../tracking/serviceTracking');
 const Utilisateur = require('../../modeles/utilisateur');
 const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
@@ -33,47 +32,8 @@ const routesApiPrivee = ({
   adaptateurPdf,
   adaptateurCsv,
   adaptateurZip,
-  adaptateurTracking,
   procedures,
 }) => {
-  const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
-    promesseEnvoiMessage
-      .then(() => utilisateur)
-      .catch(() =>
-        depotDonnees
-          .supprimeUtilisateur(utilisateur.id)
-          .then(() => Promise.reject(new EchecEnvoiMessage()))
-      );
-
-  const envoieMessageInvitationInscription = (
-    emetteur,
-    contributeur,
-    service
-  ) =>
-    verifieSuccesEnvoiMessage(
-      adaptateurMail.envoieMessageInvitationInscription(
-        contributeur.email,
-        emetteur.prenomNom(),
-        service.nomService(),
-        contributeur.idResetMotDePasse
-      ),
-      contributeur
-    );
-
-  const envoieMessageInvitationContribution = (
-    emetteur,
-    contributeur,
-    service
-  ) =>
-    adaptateurMail
-      .envoieMessageInvitationContribution(
-        contributeur.email,
-        emetteur.prenomNom(),
-        service.nomService(),
-        service.id
-      )
-      .then(() => contributeur);
-
   const routes = express.Router();
 
   routes.get(
@@ -274,111 +234,34 @@ const routesApiPrivee = ({
     middleware.verificationAcceptationCGU,
     middleware.aseptise('idHomologation', 'emailContributeur'),
     async (requete, reponse, suite) => {
-      await procedures.neFaitRien();
-
-      const idUtilisateur = requete.idUtilisateurCourant;
       const { idHomologation } = requete.body;
+      const idUtilisateur = requete.idUtilisateurCourant;
       const emailContributeur = requete.body.emailContributeur?.toLowerCase();
 
-      const verifiePermission = (...params) =>
-        depotDonnees
-          .autorisationPour(...params)
-          .then((a) =>
-            a.permissionAjoutContributeur
-              ? Promise.resolve()
-              : Promise.reject(new EchecAutorisation())
-          );
+      const service = await depotDonnees.homologation(idHomologation);
+      const emetteur = await depotDonnees.utilisateur(idUtilisateur);
 
-      const verifieAutorisationInexistante = (...params) =>
-        depotDonnees
-          .autorisationExiste(...params)
-          .then((existe) =>
-            existe
-              ? Promise.reject(
-                  new ErreurAutorisationExisteDeja("L'autorisation existe déjà")
-                )
-              : Promise.resolve()
-          );
-
-      const creeContributeurSiNecessaire = (contributeurExistant) =>
-        contributeurExistant
-          ? Promise.resolve(contributeurExistant)
-          : depotDonnees
-              .nouvelUtilisateur({
-                email: emailContributeur,
-                infolettreAcceptee: false,
-              })
-              .then((utilisateur) =>
-                adaptateurMail
-                  .creeContact(emailContributeur, '', '', true)
-                  .then(() => utilisateur)
-              );
-
-      const informeContributeur = (
-        contributeurAInformer,
-        contributeurExistant
-      ) =>
-        Promise.all([
-          depotDonnees.utilisateur(idUtilisateur),
-          depotDonnees.homologation(idHomologation),
-        ]).then(([emetteur, service]) =>
-          contributeurExistant
-            ? envoieMessageInvitationContribution(
-                emetteur,
-                contributeurAInformer,
-                service
-              )
-            : envoieMessageInvitationInscription(
-                emetteur,
-                contributeurAInformer,
-                service
-              )
+      try {
+        await procedures.ajoutContributeurSurService(
+          emailContributeur,
+          service,
+          emetteur
         );
-
-      const inviteContributeur = (contributeurExistant) =>
-        verifieAutorisationInexistante(contributeurExistant?.id, idHomologation)
-          .then(() =>
-            creeContributeurSiNecessaire(contributeurExistant, idHomologation)
-          )
-          .then((c) => informeContributeur(c, contributeurExistant));
-
-      verifiePermission(idUtilisateur, idHomologation)
-        .then(() => depotDonnees.utilisateurAvecEmail(emailContributeur))
-        .then(inviteContributeur)
-        .then((c) =>
-          depotDonnees.ajouteContributeurAHomologation(c.id, idHomologation)
-        )
-        .then(() => {
-          ServiceTracking.creeService()
-            .nombreMoyenContributeursPourUtilisateur(
-              depotDonnees,
-              idUtilisateur
-            )
-            .then((nombreMoyenContributeurs) =>
-              adaptateurTracking.envoieTrackingInvitationContributeur(
-                emailContributeur,
-                { nombreMoyenContributeurs }
-              )
-            );
-        })
-        .then(() => reponse.send(''))
-        .catch((e) => {
-          if (e instanceof EchecAutorisation) {
-            reponse.status(403).send("Ajout non autorisé d'un contributeur");
-          } else if (e instanceof ErreurAutorisationExisteDeja) {
-            reponse
-              .status(422)
-              .json({ erreur: { code: 'INVITATION_DEJA_ENVOYEE' } });
-          } else if (e instanceof EchecEnvoiMessage) {
-            reponse
-              .status(424)
-              .send(
-                "L'envoi de l'email de finalisation d'inscription a échoué"
-              );
-          } else if (e instanceof ErreurModele)
-            reponse.status(422).send(e.message);
-          else suite(e);
-        });
+        reponse.send('');
+      } catch (e) {
+        if (e instanceof EchecAutorisation)
+          reponse.status(403).send("Ajout non autorisé d'un contributeur");
+        else if (e instanceof ErreurAutorisationExisteDeja)
+          reponse
+            .status(422)
+            .json({ erreur: { code: 'INVITATION_DEJA_ENVOYEE' } });
+        else if (e instanceof EchecEnvoiMessage)
+          reponse
+            .status(424)
+            .send("L'envoi de l'email de finalisation d'inscription a échoué");
+        else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+        else suite(e);
+      }
     }
   );
 

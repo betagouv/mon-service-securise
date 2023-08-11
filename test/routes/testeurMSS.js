@@ -73,7 +73,11 @@ const testeurMss = () => {
     };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
-    procedures = fabriqueProcedures();
+    procedures = fabriqueProcedures({
+      depotDonnees,
+      adaptateurMail,
+      adaptateurTracking,
+    });
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()
       .then((depot) => {
