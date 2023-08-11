@@ -11,8 +11,6 @@ const Dossier = require('../../src/modeles/dossier');
 const Dossiers = require('../../src/modeles/dossiers');
 const Referentiel = require('../../src/referentiel');
 
-const ils = it;
-
 describe('Les dossiers liés à un service', () => {
   const referentiel = Referentiel.creeReferentielVide();
   const unDossierComplet = (id) =>
@@ -25,25 +23,20 @@ describe('Les dossiers liés à un service', () => {
     })
   );
 
-  ils(
-    "exigent qu'il n'y ait qu'un seul dossier maximum non finalisé",
-    (done) => {
-      try {
-        new Dossiers({
-          dossiers: [{ id: '1', finalise: true }, { id: '2' }, { id: '3' }],
-        });
-        done('La création des dossiers aurait dû lever une exception');
-      } catch (e) {
-        expect(e).to.be.an(ErreurDossiersInvalides);
-        expect(e.message).to.equal(
-          "Les dossiers ne peuvent pas avoir plus d'un dossier non finalisé"
-        );
-        done();
-      }
-    }
-  );
+  it("exigent qu'il n'y ait qu'un seul dossier maximum non finalisé", async () => {
+    expect(() => {
+      new Dossiers({
+        dossiers: [{ id: '1', finalise: true }, { id: '2' }, { id: '3' }],
+      });
+    }).to.throwError((e) => {
+      expect(e).to.be.an(ErreurDossiersInvalides);
+      expect(e.message).to.equal(
+        "Les dossiers ne peuvent pas avoir plus d'un dossier non finalisé"
+      );
+    });
+  });
 
-  ils('retournent comme dossier courant le dossier non finalisé', () => {
+  it('retournent comme dossier courant le dossier non finalisé', () => {
     const dossiers = new Dossiers({
       dossiers: [{ id: '1', finalise: true }, { id: '2' }],
     });
@@ -54,22 +47,19 @@ describe('Les dossiers liés à un service', () => {
     expect(dossierCourant.id).to.equal('2');
   });
 
-  ils(
-    'retournent comme dossiers finalisés ceux qui ne sont pas le dossier courant',
-    () => {
-      const dossiers = new Dossiers({
-        dossiers: [{ id: '1', finalise: true }, { id: '2' }],
-      });
+  it('retournent comme dossiers finalisés ceux qui ne sont pas le dossier courant', () => {
+    const dossiers = new Dossiers({
+      dossiers: [{ id: '1', finalise: true }, { id: '2' }],
+    });
 
-      const dossiersFinalises = dossiers.finalises();
+    const dossiersFinalises = dossiers.finalises();
 
-      expect(dossiersFinalises.length).to.equal(1);
-      expect(dossiersFinalises[0].id).to.equal('1');
-    }
-  );
+    expect(dossiersFinalises.length).to.equal(1);
+    expect(dossiersFinalises[0].id).to.equal('1');
+  });
 
   describe('concernant le dossier actif', () => {
-    ils('retournent le dossier actif', () => {
+    it('retournent le dossier actif', () => {
       const dossiers = new Dossiers(
         { dossiers: [unDossierComplet('actif').quiEstActif().donnees] },
         referentiel
@@ -80,7 +70,7 @@ describe('Les dossiers liés à un service', () => {
       expect(dossierActif.id).to.equal('actif');
     });
 
-    ils("jettent une erreur s'il y a plusieurs dossiers actifs", () => {
+    it("jettent une erreur s'il y a plusieurs dossiers actifs", () => {
       const dossiers = new Dossiers(
         {
           dossiers: [
@@ -99,78 +89,61 @@ describe('Les dossiers liés à un service', () => {
       });
     });
 
-    ils(
-      "retournent une valeur indéfinie si aucun dossier actif n'est trouvé",
-      () => {
-        const dossiers = new Dossiers({ dossiers: [{ id: '1' }] });
+    it("retournent une valeur indéfinie si aucun dossier actif n'est trouvé", () => {
+      const dossiers = new Dossiers({ dossiers: [{ id: '1' }] });
 
-        const dossierActif = dossiers.dossierActif();
+      const dossierActif = dossiers.dossierActif();
 
-        expect(dossierActif).to.equal(undefined);
-      }
-    );
+      expect(dossierActif).to.equal(undefined);
+    });
   });
 
   describe("concernant le statut de l'action de saisie", () => {
-    ils(
-      "considèrent que l'action est « à saisir » s'il n'y a pas de dossier",
-      () => {
-        const sansDossiers = new Dossiers();
+    it("considèrent que l'action est « à saisir » s'il n'y a pas de dossier", () => {
+      const sansDossiers = new Dossiers();
 
-        expect(sansDossiers.statutSaisie()).to.equal(Dossiers.A_SAISIR);
-      }
-    );
+      expect(sansDossiers.statutSaisie()).to.equal(Dossiers.A_SAISIR);
+    });
 
-    ils(
-      "considèrent que l'action est « à compléter » s'il y a un dossier courant",
-      () => {
-        const dossierCourant = unDossierComplet().quiEstNonFinalise().donnees;
-        const dossiers = new Dossiers(
-          { dossiers: [dossierCourant] },
-          referentiel
-        );
+    it("considèrent que l'action est « à compléter » s'il y a un dossier courant", () => {
+      const dossierCourant = unDossierComplet().quiEstNonFinalise().donnees;
+      const dossiers = new Dossiers(
+        { dossiers: [dossierCourant] },
+        referentiel
+      );
 
-        expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
-      }
-    );
+      expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
+    });
 
-    ils(
-      "considèrent que l'action est « à compléter » s'il y a à la fois un dossier courant et un dossier actif",
-      () => {
-        const dossierCourant = unDossierComplet().quiEstNonFinalise().donnees;
-        const dossierActif = unDossierComplet().quiEstActif().donnees;
-        const dossiers = new Dossiers(
-          { dossiers: [dossierActif, dossierCourant] },
-          referentiel
-        );
+    it("considèrent que l'action est « à compléter » s'il y a à la fois un dossier courant et un dossier actif", () => {
+      const dossierCourant = unDossierComplet().quiEstNonFinalise().donnees;
+      const dossierActif = unDossierComplet().quiEstActif().donnees;
+      const dossiers = new Dossiers(
+        { dossiers: [dossierActif, dossierCourant] },
+        referentiel
+      );
 
-        expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
-      }
-    );
+      expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
+    });
   });
 
   describe("concernant le statut d'homologation", () => {
-    ils("retournent « Non réalisée » si il n'y a aucun dossier", () => {
+    it("retournent « Non réalisée » si il n'y a aucun dossier", () => {
       const aucunDossier = new Dossiers({ dossiers: [] });
 
       expect(aucunDossier.statutHomologation()).to.equal(Dossiers.NON_REALISEE);
     });
 
-    ils(
-      "retournent « Non réalisée » si il n'y a aucun dossier finalisé",
-      () => {
-        const aucunDossier = new Dossiers(
-          { dossiers: [unDossierComplet().quiEstNonFinalise().donnees] },
-          referentiel
-        );
+    it("retournent « Non réalisée » si il n'y a aucun dossier finalisé", () => {
+      const aucunDossier = new Dossiers(
+        { dossiers: [unDossierComplet().quiEstNonFinalise().donnees] },
+        referentiel
+      );
 
-        expect(aucunDossier.statutHomologation()).to.equal(
-          Dossiers.NON_REALISEE
-        );
-      }
-    );
+      expect(aucunDossier.statutHomologation()).to.equal(Dossiers.NON_REALISEE);
+    });
 
-    ils('délèguent au dossier actif lorsque celui-ci existe', () => {
+    it('délèguent au dossier actif lorsque celui-ci existe', () => {
       const avecDossierActifBouchon = new Dossiers(
         { dossiers: [unDossierComplet().donnees] },
         referentiel
@@ -209,9 +182,7 @@ describe('Les dossiers liés à un service', () => {
 
     it("jette une erreur si aucun dossier courant n'existe", () => {
       const sansDossierCourant = new Dossiers(
-        {
-          dossiers: [unDossierComplet().donnees],
-        },
+        { dossiers: [unDossierComplet().donnees] },
         referentiel
       );
 
