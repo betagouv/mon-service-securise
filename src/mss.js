@@ -211,7 +211,6 @@ const creeServeur = (
       adaptateurPdf,
       adaptateurCsv,
       adaptateurZip,
-      adaptateurTracking,
       procedures,
     })
   );

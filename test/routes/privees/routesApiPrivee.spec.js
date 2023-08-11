@@ -5,13 +5,14 @@ const {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
 } = require('../../aides/verifieFichierServi');
-const { ErreurModele } = require('../../../src/erreurs');
+const { ErreurModele, EchecAutorisation } = require('../../../src/erreurs');
 
 const testeurMSS = require('../testeurMSS');
 const Service = require('../../../src/modeles/service');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
+const { unService } = require('../../constructeurs/constructeurService');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -712,47 +713,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête POST sur `/api/autorisation`', () => {
-    const autorisation = { id: '111' };
-    const utilisateur = {
-      id: '999',
-      genereToken: () => 'un token',
-      accepteCGU: () => true,
-    };
-
     beforeEach(() => {
-      testeur.middleware().reinitialise({ idUtilisateur: '456' });
-      autorisation.permissionAjoutContributeur = true;
+      testeur.depotDonnees().utilisateur = async () =>
+        unUtilisateur().construis();
+      testeur.depotDonnees().homologation = async () => unService().construis();
 
-      testeur.depotDonnees().autorisationExiste = () => Promise.resolve(false);
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(autorisation);
-      testeur.depotDonnees().utilisateurAvecEmail = () =>
-        Promise.resolve(utilisateur);
-      testeur.depotDonnees().ajouteContributeurAHomologation = () =>
-        Promise.resolve();
-
-      const utilisateurCourant = { prenomNom: () => '' };
-      testeur.depotDonnees().utilisateur = () =>
-        Promise.resolve(utilisateurCourant);
-
-      const homologation = { nomService: () => '' };
-      testeur.depotDonnees().homologation = () => Promise.resolve(homologation);
-
-      testeur.adaptateurMail().envoieMessageInvitationContribution = () =>
-        Promise.resolve();
-    });
-
-    it('appelle une procédure qui ne fait rien, seulement pour prouver que le mécanisme fonctionne', async () => {
-      let bouchonAppele;
-
-      testeur.procedures().neFaitRien = () => (bouchonAppele = true);
-
-      await axios.post('http://localhost:1234/api/autorisation', {
-        emailContributeur: 'jean.dupont@mail.fr',
-        idHomologation: '123',
-      });
-
-      expect(bouchonAppele).to.be(true);
+      testeur.procedures().ajoutContributeurSurService = async () => {};
     });
 
     it('aseptise les paramètres de la requête', (done) => {
@@ -775,106 +741,72 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit d'ajouter un contributeur", (done) => {
-      autorisation.permissionAjoutContributeur = false;
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(autorisation);
+    it("appelle la procédure d'ajout de contributeur", async () => {
+      let ajout;
 
-      axios
-        .post('http://localhost:1234/api/autorisation', {
+      testeur.depotDonnees().homologation = async (id) =>
+        unService().avecId(id).construis();
+      testeur.depotDonnees().utilisateur = async () =>
+        unUtilisateur().avecId('EMETTEUR').construis();
+
+      testeur.procedures().ajoutContributeurSurService = async (
+        emailContributeur,
+        service,
+        emetteur
+      ) => {
+        ajout = { emailContributeur, service, emetteur };
+      };
+
+      await axios.post('http://localhost:1234/api/autorisation', {
+        emailContributeur: 'jean.dupont@mail.fr',
+        idHomologation: '123',
+      });
+
+      expect(ajout.emailContributeur).to.be('jean.dupont@mail.fr');
+      expect(ajout.service.id).to.be('123');
+      expect(ajout.emetteur.id).to.be('EMETTEUR');
+    });
+
+    it("met l'email du contributeur en minuscules pour éviter de créer des comptes en double", async () => {
+      let ajout;
+
+      testeur.procedures().ajoutContributeurSurService = async (
+        emailContributeur
+      ) => {
+        ajout = { emailContributeur };
+      };
+
+      await axios.post('http://localhost:1234/api/autorisation', {
+        emailContributeur: 'JEAN.DUPONT@MAIL.FR',
+        idHomologation: '123',
+      });
+
+      const enMinucsules = 'jean.dupont@mail.fr';
+      expect(ajout.emailContributeur).to.be(enMinucsules);
+    });
+
+    it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit d'ajouter un contributeur", async () => {
+      testeur.procedures().ajoutContributeurSurService = async () => {
+        throw new EchecAutorisation();
+      };
+
+      try {
+        await axios.post('http://localhost:1234/api/autorisation', {
           emailContributeur: 'jean.dupont@mail.fr',
           idHomologation: '123',
-        })
-        .then(() => {
-          done('La requête aurait dû lever une erreur HTTP 403');
-        })
-        .catch((e) => {
-          expect(e.response.status).to.equal(403);
-          expect(e.response.data).to.equal(
-            "Ajout non autorisé d'un contributeur"
-          );
-          done();
-        })
-        .catch(done);
-    });
-
-    describe('si le contributeur existe déjà', () => {
-      beforeEach(() => {
-        const contributeur = { email: 'jean.dupont@mail.fr' };
-        testeur.depotDonnees().utilisateurAvecEmail = () =>
-          Promise.resolve(contributeur);
-
-        const utilisateurCourant = { prenomNom: () => 'Utilisateur Courant' };
-        testeur.depotDonnees().utilisateur = () =>
-          Promise.resolve(utilisateurCourant);
-
-        const homologation = { id: '123', nomService: () => 'Nom Service' };
-        testeur.depotDonnees().homologation = () =>
-          Promise.resolve(homologation);
-      });
-
-      describe('avec un email en majuscules', () => {
-        it('retrouve le compte et le ne recrée donc pas', (done) => {
-          testeur.depotDonnees().utilisateurAvecEmail = (emailRecherche) => {
-            const enMinuscules = 'jean.dupont@mail.fr';
-            expect(emailRecherche).to.be(enMinuscules);
-            done();
-            return Promise.resolve({ email: enMinuscules });
-          };
-
-          testeur.depotDonnees().nouvelUtilisateur = () => {
-            done("L'utilisateur ne devrait pas être re-créé");
-          };
-
-          axios
-            .post('http://localhost:1234/api/autorisation', {
-              emailContributeur: 'Jean.DUPONT@mail.fr',
-              idHomologation: '123',
-            })
-            .catch((e) => done(e.response?.data || e));
         });
-      });
+
+        expect().to.fail('La requête aurait dû lever une erreur HTTP 403');
+      } catch (e) {
+        expect(e.response.status).to.equal(403);
+        expect(e.response.data).to.equal(
+          "Ajout non autorisé d'un contributeur"
+        );
+      }
     });
 
-    describe("si le contributeur n'existe pas déjà", () => {
-      let contributeurCree;
-
-      beforeEach(() => {
-        let utilisateurInexistant;
-        testeur.depotDonnees().utilisateurAvecEmail = () =>
-          Promise.resolve(utilisateurInexistant);
-        testeur.adaptateurMail().envoieMessageInvitationInscription = () =>
-          Promise.resolve();
-        testeur.adaptateurMail().creeContact = () => Promise.resolve();
-
-        contributeurCree = {
-          id: '789',
-          email: 'jean.dupont@mail.fr',
-          idResetMotDePasse: 'reset',
-        };
-        testeur.depotDonnees().nouvelUtilisateur = () =>
-          Promise.resolve(contributeurCree);
-      });
-
-      it('crée le compte avec un email converti en minuscules', (done) => {
-        testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
-          const enMinuscules = 'jean.dupont@mail.fr';
-          expect(donneesUtilisateur.email).to.be(enMinuscules);
-          done();
-          return Promise.resolve(contributeurCree);
-        };
-
-        axios
-          .post('http://localhost:1234/api/autorisation', {
-            emailContributeur: 'Jean.DUPONT@mail.fr',
-            idHomologation: '123',
-          })
-          .catch((e) => done(e.response?.data || e));
-      });
-    });
-
-    it('retourne une erreur HTTP 422 si le dépôt a levé une `ErreurModele`', (done) => {
-      testeur.depotDonnees().ajouteContributeurAHomologation = () => {
+    it('retourne une erreur HTTP 422 si la procédure a levé une `ErreurModele`', (done) => {
+      testeur.procedures().ajoutContributeurSurService = async () => {
         throw new ErreurModele('oups');
       };
 

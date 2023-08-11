@@ -36,7 +36,11 @@ const middleware = Middleware({
   adaptateurJWT,
   depotDonnees,
 });
-const procedures = fabriqueProcedures();
+const procedures = fabriqueProcedures({
+  depotDonnees,
+  adaptateurMail,
+  adaptateurTracking,
+});
 
 const serveur = MSS.creeServeur(
   depotDonnees,
