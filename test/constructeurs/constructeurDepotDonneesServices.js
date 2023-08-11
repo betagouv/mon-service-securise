@@ -4,10 +4,12 @@ const {
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
 const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const Referentiel = require('../../src/referentiel');
-const ServiceTracking = require('../../src/tracking/serviceTracking');
 const {
   fabriqueAdaptateurTrackingMemoire,
 } = require('../../src/adaptateurs/adaptateurTrackingMemoire');
+const {
+  fabriqueServiceTracking,
+} = require('../../src/tracking/serviceTracking');
 
 class ConstructeurDepotDonneesServices {
   constructor() {
@@ -16,7 +18,7 @@ class ConstructeurDepotDonneesServices {
     this.adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
     this.adaptateurUUID = { genereUUID: () => 'unUUID' };
     this.referentiel = Referentiel.creeReferentielVide();
-    this.serviceTracking = ServiceTracking.creeService();
+    this.serviceTracking = fabriqueServiceTracking();
   }
 
   avecAdaptateurPersistance(constructeurAdaptateurPersistance) {

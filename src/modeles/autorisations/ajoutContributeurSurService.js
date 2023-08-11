@@ -3,7 +3,7 @@ const {
   ErreurAutorisationExisteDeja,
   EchecEnvoiMessage,
 } = require('../../erreurs');
-const ServiceTracking = require('../../tracking/serviceTracking');
+const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
 
 const ajoutContributeurSurService = ({
   depotDonnees,
@@ -62,7 +62,7 @@ const ajoutContributeurSurService = ({
 
   const envoieTracking = async (emetteur, emailContributeur) => {
     const nombreMoyenContributeurs =
-      await ServiceTracking.creeService().nombreMoyenContributeursPourUtilisateur(
+      await fabriqueServiceTracking().nombreMoyenContributeursPourUtilisateur(
         depotDonnees,
         emetteur.id
       );

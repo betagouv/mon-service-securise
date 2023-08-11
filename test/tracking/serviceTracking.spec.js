@@ -1,8 +1,10 @@
 const expect = require('expect.js');
-const ServiceTracking = require('../../src/tracking/serviceTracking');
 const { unService } = require('../constructeurs/constructeurService');
 const { bouchonneMesures } = require('../constructeurs/constructeurMesures');
 const Referentiel = require('../../src/referentiel');
+const {
+  fabriqueServiceTracking,
+} = require('../../src/tracking/serviceTracking');
 
 describe('Le service de tracking des services', () => {
   describe('sur une demande de complétude', () => {
@@ -23,7 +25,7 @@ describe('Le service de tracking des services', () => {
       const depotHomologations = {
         homologations: async () => [premierService, secondService],
       };
-      const serviceTracking = ServiceTracking.creeService();
+      const serviceTracking = fabriqueServiceTracking();
 
       const completude =
         await serviceTracking.completudeDesServicesPourUtilisateur(
@@ -49,7 +51,7 @@ describe('Le service de tracking des services', () => {
         homologations: async () => [premierService, secondService],
         nombreMoyenContributeursPourUtilisateur: async () => 3,
       };
-      const serviceTracking = ServiceTracking.creeService();
+      const serviceTracking = fabriqueServiceTracking();
 
       const completude =
         await serviceTracking.completudeDesServicesPourUtilisateur(
@@ -83,7 +85,7 @@ describe('Le service de tracking des services', () => {
           return [serviceAvec3Contributeurs, serviceSansContributeur];
         },
       };
-      const serviceTracking = ServiceTracking.creeService();
+      const serviceTracking = fabriqueServiceTracking();
 
       const nbMoyenContributeurs =
         await serviceTracking.nombreMoyenContributeursPourUtilisateur(
@@ -97,7 +99,7 @@ describe('Le service de tracking des services', () => {
 
     it("reste robuste si il n'y a pas de service", async () => {
       const depotSansHomologations = { homologations: async () => [] };
-      const serviceTracking = ServiceTracking.creeService();
+      const serviceTracking = fabriqueServiceTracking();
 
       const nbMoyenContributeurs =
         await serviceTracking.nombreMoyenContributeursPourUtilisateur(

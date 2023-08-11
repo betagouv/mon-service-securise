@@ -1,4 +1,4 @@
-const creeService = () => {
+const fabriqueServiceTracking = () => {
   const nombreMoyenContributeursPourUtilisateur = async (
     depotHomologations,
     idUtilisateur
@@ -51,4 +51,4 @@ const creeService = () => {
   };
 };
 
-module.exports = { creeService };
+module.exports = { fabriqueServiceTracking };
