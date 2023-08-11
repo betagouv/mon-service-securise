@@ -287,17 +287,27 @@
   padding-bottom: 12px;
 }
 
-.menu-navigation .lien-deconnexion > div,
-.menu-navigation .lien-tableau-de-bord > div,
 .menu-navigation .lien-contacts-utiles > div,
 .menu-navigation .lien-risques > div,
-.menu-navigation .documents-telechargeables img {
-  display: block;
-  width: 1.9rem;
-  height: 1.9rem;
-  content: '';
-  background-size: 1.5em;
+.menu-navigation .lien-pdf > div {
+  width: 1.9em;
+  height: 1.9em;
   border-radius: 100%;
+}
+.menu-navigation .lien-deconnexion > div,
+.menu-navigation .lien-tableau-de-bord > div {
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 100%;
+}
+
+.menu-navigation .lien-contacts-utiles img,
+.menu-navigation .lien-risques img,
+.menu-navigation .documents-telechargeables img {
+  width: 1.35em;
+}
+.menu-navigation .lien-deconnexion img {
+  width: 1.65em;
 }
 
 .menu-navigation .lien-tableau-de-bord > div,
@@ -307,9 +317,11 @@
 .menu-navigation .lien-contacts-utiles > div,
 .menu-navigation .lien-risques > div,
 .menu-navigation .lien-tableau-de-bord > div,
+.menu-navigation .lien-pdf > div,
 .menu-navigation .lien-deconnexion > div {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .menu-navigation .lien-contacts-utiles img,
 .menu-navigation .lien-risques img,
@@ -318,10 +330,6 @@
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(15%) sepia(60%) saturate(5222%)
     hue-rotate(193deg) brightness(98%) contrast(91%);
-  width: 1.3em;
-}
-.menu-navigation .lien-deconnexion img {
-  width: 1.7em;
 }
 
 .menu-navigation .lien-pdf:hover {
