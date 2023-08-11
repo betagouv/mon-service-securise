@@ -19,12 +19,6 @@
 .menu-navigation > * {
   padding: 15px 30px;
 }
-.menu-navigation .accueil {
-  padding-right: 15px;
-}
-.menu-navigation .parcours {
-  padding-right: 45px;
-}
 
 :is(.menu-navigation, .menu-navigation a) {
   color: var(--menu-couleur-repos);
