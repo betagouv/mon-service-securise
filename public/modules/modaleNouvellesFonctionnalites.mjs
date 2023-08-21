@@ -1,6 +1,7 @@
 const brancheComportementModaleNouvelleFonctionnalite = ($modale) => {
   const populePagination = (nombrePage) => {
     const $conteneur = $('.pagination', $modale);
+    $conteneur.empty();
     for (let i = 1; i <= nombrePage; i += 1) {
       let classe = 'rond';
       if (i === 1) classe += ' actif';
