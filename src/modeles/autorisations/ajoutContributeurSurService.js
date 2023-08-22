@@ -36,15 +36,13 @@ const ajoutContributeurSurService = ({
   const informeContributeur = async (
     contributeur,
     contributeurEstExistant,
-    emetteur,
-    service
+    emetteur
   ) => {
     if (contributeurEstExistant)
       await adaptateurMail.envoieMessageInvitationContribution(
         contributeur.email,
         emetteur.prenomNom(),
-        service.nomService(),
-        service.id
+        1
       );
     else
       try {
@@ -94,7 +92,7 @@ const ajoutContributeurSurService = ({
         : await creeUtilisateur(emailContributeur);
 
       await ajouteContributeur(contributeur, service);
-      await informeContributeur(contributeur, dejaInscrit, emetteur, service);
+      await informeContributeur(contributeur, dejaInscrit, emetteur);
       await envoieTracking(emetteur, emailContributeur);
     },
   };
