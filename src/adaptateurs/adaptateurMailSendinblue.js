@@ -151,16 +151,16 @@ const envoieMessageInvitationContribution = (
 const envoieMessageInvitationInscription = (
   destinataire,
   prenomNomEmetteur,
-  nomService,
-  idResetMotDePasse
+  idResetMotDePasse,
+  nbServices
 ) =>
   envoieEmail(
     destinataire,
     parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION, 10),
     {
-      PRENOM: decode(prenomNomEmetteur),
-      NOM_SERVICE: decode(nomService),
-      URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
+      emetteur: decode(prenomNomEmetteur),
+      nb_services_invitation: Number(nbServices),
+      url: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
     }
   );
 

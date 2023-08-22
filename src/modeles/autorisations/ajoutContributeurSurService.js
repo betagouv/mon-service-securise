@@ -49,8 +49,8 @@ const ajoutContributeurSurService = ({
         await adaptateurMail.envoieMessageInvitationInscription(
           contributeur.email,
           emetteur.prenomNom(),
-          service.nomService(),
-          contributeur.idResetMotDePasse
+          contributeur.idResetMotDePasse,
+          1
         );
       } catch (e) {
         await depotDonnees.supprimeUtilisateur(contributeur.id);
