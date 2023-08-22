@@ -136,16 +136,15 @@ const envoieMessageFinalisationInscription = (
 const envoieMessageInvitationContribution = (
   destinataire,
   prenomNomEmetteur,
-  nomService,
-  idService
+  nbServices
 ) =>
   envoieEmail(
     destinataire,
     parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
     {
-      PRENOM: decode(prenomNomEmetteur),
-      NOM_SERVICE: decode(nomService),
-      URL: `${process.env.URL_BASE_MSS}/service/${idService}`,
+      emetteur: decode(prenomNomEmetteur),
+      nb_services_invitation: Number(nbServices),
+      url: `${process.env.URL_BASE_MSS}/tableauDeBord`,
     }
   );
 

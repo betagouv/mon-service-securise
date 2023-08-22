@@ -107,15 +107,9 @@ describe("L'ajout d'un contributeur sur un service", () => {
         adaptateurMail.envoieMessageInvitationContribution = async (
           destinataire,
           prenomNomEmetteur,
-          nomService,
-          idHomologation
+          nbServices
         ) => {
-          emailEnvoye = {
-            destinataire,
-            prenomNomEmetteur,
-            nomService,
-            idHomologation,
-          };
+          emailEnvoye = { destinataire, prenomNomEmetteur, nbServices };
         };
 
         await ajoutContributeurSurService({
@@ -128,8 +122,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         expect(emailEnvoye.prenomNomEmetteur).to.be(
           'jean.dujardin@beta.gouv.com'
         );
-        expect(emailEnvoye.nomService).to.be('Nom Service');
-        expect(emailEnvoye.idHomologation).to.be('123');
+        expect(emailEnvoye.nbServices).to.be(1);
       });
     });
 
