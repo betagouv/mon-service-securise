@@ -251,14 +251,14 @@ describe("L'ajout d'un contributeur sur un service", () => {
       adaptateurMail.envoieMessageInvitationInscription = async (
         destinataire,
         prenomNomEmetteur,
-        nomService,
-        idResetMotDePasse
+        idResetMotDePasse,
+        nbServices
       ) => {
         emailEnvoye = {
           destinataire,
           prenomNomEmetteur,
-          nomService,
           idResetMotDePasse,
+          nbServices,
         };
       };
 
@@ -272,8 +272,8 @@ describe("L'ajout d'un contributeur sur un service", () => {
       expect(emailEnvoye.prenomNomEmetteur).to.be(
         'jean.dujardin@beta.gouv.com'
       );
-      expect(emailEnvoye.nomService).to.be('Nom Service');
       expect(emailEnvoye.idResetMotDePasse).to.be('reset');
+      expect(emailEnvoye.nbServices).to.be(1);
     });
   });
 
