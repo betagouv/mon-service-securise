@@ -244,7 +244,7 @@ const routesApiPrivee = ({
       try {
         await procedures.ajoutContributeurSurServices(
           emailContributeur,
-          service,
+          [service],
           emetteur
         );
         reponse.send('');
