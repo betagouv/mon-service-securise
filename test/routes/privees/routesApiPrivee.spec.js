@@ -725,7 +725,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur
         .middleware()
         .verifieAseptisationParametres(
-          ['idHomologation', 'emailContributeur'],
+          ['idServices.*', 'emailContributeur'],
           { method: 'post', url: 'http://localhost:1234/api/autorisation' },
           done
         );
@@ -759,12 +759,36 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       await axios.post('http://localhost:1234/api/autorisation', {
         emailContributeur: 'jean.dupont@mail.fr',
-        idHomologation: '123',
+        idServices: ['123'],
       });
 
       expect(ajout.emailContributeur).to.be('jean.dupont@mail.fr');
       expect(ajout.services[0].id).to.be('123');
       expect(ajout.emetteur.id).to.be('EMETTEUR');
+    });
+
+    it('cible tous les services demandés', async () => {
+      let cibles;
+
+      testeur.depotDonnees().homologation = async (id) =>
+        unService().avecId(id).construis();
+
+      testeur.procedures().ajoutContributeurSurServices = async (
+        _,
+        services,
+        __
+      ) => {
+        cibles = services;
+      };
+
+      await axios.post('http://localhost:1234/api/autorisation', {
+        emailContributeur: 'jean.dupont@mail.fr',
+        idServices: ['123', '456'],
+      });
+
+      expect(cibles.length).to.be(2);
+      expect(cibles[0].id).to.be('123');
+      expect(cibles[1].id).to.be('456');
     });
 
     it("met l'email du contributeur en minuscules pour éviter de créer des comptes en double", async () => {
@@ -778,7 +802,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       await axios.post('http://localhost:1234/api/autorisation', {
         emailContributeur: 'JEAN.DUPONT@MAIL.FR',
-        idHomologation: '123',
+        idServices: ['123'],
       });
 
       const enMinucsules = 'jean.dupont@mail.fr';
@@ -793,7 +817,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       try {
         await axios.post('http://localhost:1234/api/autorisation', {
           emailContributeur: 'jean.dupont@mail.fr',
-          idHomologation: '123',
+          idServices: ['123'],
         });
 
         expect().to.fail('La requête aurait dû lever une erreur HTTP 403');
@@ -813,11 +837,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.verifieRequeteGenereErreurHTTP(
         422,
         'oups',
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/autorisation',
-          data: {},
-        },
+        { method: 'post', url: 'http://localhost:1234/api/autorisation' },
         done
       );
     });
