@@ -718,7 +718,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         unUtilisateur().construis();
       testeur.depotDonnees().homologation = async () => unService().construis();
 
-      testeur.procedures().ajoutContributeurSurService = async () => {};
+      testeur.procedures().ajoutContributeurSurServices = async () => {};
     });
 
     it('aseptise les paramètres de la requête', (done) => {
@@ -749,7 +749,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().utilisateur = async () =>
         unUtilisateur().avecId('EMETTEUR').construis();
 
-      testeur.procedures().ajoutContributeurSurService = async (
+      testeur.procedures().ajoutContributeurSurServices = async (
         emailContributeur,
         service,
         emetteur
@@ -770,7 +770,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("met l'email du contributeur en minuscules pour éviter de créer des comptes en double", async () => {
       let ajout;
 
-      testeur.procedures().ajoutContributeurSurService = async (
+      testeur.procedures().ajoutContributeurSurServices = async (
         emailContributeur
       ) => {
         ajout = { emailContributeur };
@@ -786,7 +786,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit d'ajouter un contributeur", async () => {
-      testeur.procedures().ajoutContributeurSurService = async () => {
+      testeur.procedures().ajoutContributeurSurServices = async () => {
         throw new EchecAutorisation();
       };
 
@@ -806,7 +806,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si la procédure a levé une `ErreurModele`', (done) => {
-      testeur.procedures().ajoutContributeurSurService = async () => {
+      testeur.procedures().ajoutContributeurSurServices = async () => {
         throw new ErreurModele('oups');
       };
 

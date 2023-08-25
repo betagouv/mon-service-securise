@@ -1,14 +1,18 @@
 const {
-  ajoutContributeurSurService,
-} = require('../modeles/autorisations/ajoutContributeurSurService');
+  ajoutContributeurSurServices,
+} = require('../modeles/autorisations/ajoutContributeurSurServices');
 
 const fabriqueProcedures = ({
   depotDonnees,
   adaptateurMail,
   adaptateurTracking,
 }) => ({
-  ajoutContributeurSurService: async (emailContributeur, service, emetteur) => {
-    await ajoutContributeurSurService({
+  ajoutContributeurSurServices: async (
+    emailContributeur,
+    service,
+    emetteur
+  ) => {
+    await ajoutContributeurSurServices({
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
