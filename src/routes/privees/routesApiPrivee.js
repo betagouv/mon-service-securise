@@ -242,7 +242,7 @@ const routesApiPrivee = ({
       const emetteur = await depotDonnees.utilisateur(idUtilisateur);
 
       try {
-        await procedures.ajoutContributeurSurService(
+        await procedures.ajoutContributeurSurServices(
           emailContributeur,
           service,
           emetteur

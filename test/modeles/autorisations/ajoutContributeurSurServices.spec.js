@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 const {
-  ajoutContributeurSurService,
-} = require('../../../src/modeles/autorisations/ajoutContributeurSurService');
+  ajoutContributeurSurServices,
+} = require('../../../src/modeles/autorisations/ajoutContributeurSurServices');
 const { depotVide } = require('../../depots/depotVide');
 const {
   fabriqueAdaptateurMailMemoire,
@@ -63,7 +63,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
       return autorisation;
     };
 
-    await ajoutContributeurSurService({
+    await ajoutContributeurSurServices({
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
@@ -78,7 +78,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
     depotDonnees.autorisationPour = async () => autorisation;
 
     try {
-      await ajoutContributeurSurService({
+      await ajoutContributeurSurServices({
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
@@ -112,7 +112,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
           emailEnvoye = { destinataire, prenomNomEmetteur, nbServices };
         };
 
-        await ajoutContributeurSurService({
+        await ajoutContributeurSurServices({
           depotDonnees,
           adaptateurMail,
           adaptateurTracking,
@@ -139,7 +139,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         };
 
         try {
-          await ajoutContributeurSurService({
+          await ajoutContributeurSurServices({
             depotDonnees,
             adaptateurMail,
             adaptateurTracking,
@@ -159,7 +159,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         };
 
         try {
-          await ajoutContributeurSurService({
+          await ajoutContributeurSurServices({
             depotDonnees,
             adaptateurMail,
             adaptateurTracking,
@@ -173,7 +173,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
 
       it("renvoie une erreur explicite à propos de l'invitation déjà envoyée", async () => {
         try {
-          await ajoutContributeurSurService({
+          await ajoutContributeurSurServices({
             depotDonnees,
             adaptateurMail,
             adaptateurTracking,
@@ -213,7 +213,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         };
       };
 
-      await ajoutContributeurSurService({
+      await ajoutContributeurSurServices({
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
@@ -233,7 +233,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         contactCree = { destinataire, prenom, nom, bloqueEmails };
       };
 
-      await ajoutContributeurSurService({
+      await ajoutContributeurSurServices({
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
@@ -262,7 +262,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
         };
       };
 
-      await ajoutContributeurSurService({
+      await ajoutContributeurSurServices({
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
@@ -286,7 +286,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
       nouvelleAutorisation = { idContributeur, idHomologation };
     };
 
-    await ajoutContributeurSurService({
+    await ajoutContributeurSurServices({
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
@@ -312,7 +312,7 @@ describe("L'ajout d'un contributeur sur un service", () => {
       donneesTracking = { destinataire, donneesEvenement };
     };
 
-    await ajoutContributeurSurService({
+    await ajoutContributeurSurServices({
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,

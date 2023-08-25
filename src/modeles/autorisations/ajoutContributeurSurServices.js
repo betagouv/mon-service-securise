@@ -5,7 +5,7 @@ const {
 } = require('../../erreurs');
 const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
 
-const ajoutContributeurSurService = ({
+const ajoutContributeurSurServices = ({
   depotDonnees,
   adaptateurMail,
   adaptateurTracking,
@@ -98,4 +98,4 @@ const ajoutContributeurSurService = ({
   };
 };
 
-module.exports = { ajoutContributeurSurService };
+module.exports = { ajoutContributeurSurServices };
