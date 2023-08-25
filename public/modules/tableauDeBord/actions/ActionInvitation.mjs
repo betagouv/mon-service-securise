@@ -24,8 +24,8 @@ class ActionInvitation extends ActionAbstraite {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  estDisponible({ estSelectionMultiple, seulementCreateur }) {
-    return !estSelectionMultiple && seulementCreateur;
+  estDisponible({ seulementCreateur }) {
+    return seulementCreateur;
   }
 
   execute() {
@@ -37,14 +37,12 @@ class ActionInvitation extends ActionAbstraite {
     $('#action-invitation').hide();
 
     const emailContributeur = $emailInvite.val();
-    const invitations = [...this.tableauDesServices.servicesSelectionnes].map(
-      (idService) =>
-        axios.post('/api/autorisation', {
-          emailContributeur,
-          idHomologation: idService,
-        })
-    );
-    return Promise.all(invitations)
+
+    return axios
+      .post('/api/autorisation', {
+        emailContributeur,
+        idServices: [...this.tableauDesServices.servicesSelectionnes],
+      })
       .then(() => {
         this.tableauDesServices.recupereServices();
         this.basculeLoader(false);

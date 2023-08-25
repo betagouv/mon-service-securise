@@ -232,19 +232,21 @@ const routesApiPrivee = ({
   routes.post(
     '/autorisation',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('idHomologation', 'emailContributeur'),
+    middleware.aseptise('idServices.*', 'emailContributeur'),
     async (requete, reponse, suite) => {
-      const { idHomologation } = requete.body;
+      const { idServices = [] } = requete.body;
       const idUtilisateur = requete.idUtilisateurCourant;
       const emailContributeur = requete.body.emailContributeur?.toLowerCase();
 
-      const service = await depotDonnees.homologation(idHomologation);
+      const services = await Promise.all(
+        idServices.map(depotDonnees.homologation)
+      );
       const emetteur = await depotDonnees.utilisateur(idUtilisateur);
 
       try {
         await procedures.ajoutContributeurSurServices(
           emailContributeur,
-          [service],
+          services,
           emetteur
         );
         reponse.send('');
