@@ -1,8 +1,4 @@
-const {
-  EchecAutorisation,
-  ErreurAutorisationExisteDeja,
-  EchecEnvoiMessage,
-} = require('../../erreurs');
+const { EchecAutorisation, EchecEnvoiMessage } = require('../../erreurs');
 const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
 
 const ajoutContributeurSurServices = ({
@@ -10,18 +6,32 @@ const ajoutContributeurSurServices = ({
   adaptateurMail,
   adaptateurTracking,
 }) => {
-  const verifiePermission = async (idUtilisateur, idService) => {
-    const a = await depotDonnees.autorisationPour(idUtilisateur, idService);
-    if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
+  const verifiePermission = async (idUtilisateur, services) => {
+    const verifieLeService = async (service) => {
+      const a = await depotDonnees.autorisationPour(idUtilisateur, service.id);
+      if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
+    };
+
+    await Promise.all(services.map(verifieLeService));
   };
 
-  const verifieAutorisationInexistante = async (idUtilisateur, idService) => {
-    const existe = await depotDonnees.autorisationExiste(
-      idUtilisateur,
-      idService
+  const lesServicesSansAutorisationExistante = async (
+    idUtilisateur,
+    services
+  ) => {
+    const autorisationExistePourLeService = async (s) =>
+      depotDonnees.autorisationExiste(idUtilisateur, s.id);
+
+    const autorisations = await Promise.all(
+      services.map(async (s) => ({
+        service: s,
+        autorisationExiste: await autorisationExistePourLeService(s),
+      }))
     );
-    if (existe)
-      throw new ErreurAutorisationExisteDeja("L'autorisation existe déjà");
+
+    return autorisations
+      .filter(({ autorisationExiste }) => autorisationExiste === false)
+      .map(({ service }) => service);
   };
 
   const creeUtilisateur = async (email) => {
@@ -36,13 +46,14 @@ const ajoutContributeurSurServices = ({
   const informeContributeur = async (
     contributeur,
     contributeurEstExistant,
-    emetteur
+    emetteur,
+    services
   ) => {
     if (contributeurEstExistant)
       await adaptateurMail.envoieMessageInvitationContribution(
         contributeur.email,
         emetteur.prenomNom(),
-        1
+        services.length
       );
     else
       try {
@@ -50,7 +61,7 @@ const ajoutContributeurSurServices = ({
           contributeur.email,
           emetteur.prenomNom(),
           contributeur.idResetMotDePasse,
-          1
+          services.length
         );
       } catch (e) {
         await depotDonnees.supprimeUtilisateur(contributeur.id);
@@ -73,27 +84,34 @@ const ajoutContributeurSurServices = ({
   const recupereParEmail = async (emailContributeur) =>
     depotDonnees.utilisateurAvecEmail(emailContributeur);
 
-  const ajouteContributeur = async (contributeur, service) => {
-    await depotDonnees.ajouteContributeurAHomologation(
-      contributeur.id,
-      service.id
-    );
+  const ajouteContributeur = async (contributeur, services) => {
+    const ajouteAuService = async (s) => {
+      await depotDonnees.ajouteContributeurAHomologation(contributeur.id, s.id);
+    };
+
+    await Promise.all(services.map(ajouteAuService));
   };
 
   return {
     executer: async (emailContributeur, services, emetteur) => {
-      const [service] = services;
-      await verifiePermission(emetteur.id, service.id);
+      await verifiePermission(emetteur.id, services);
       const utilisateur = await recupereParEmail(emailContributeur);
-      await verifieAutorisationInexistante(utilisateur?.id, service.id);
+
+      const cibles = await lesServicesSansAutorisationExistante(
+        utilisateur?.id,
+        services
+      );
+
+      const rienAFaire = cibles.length === 0;
+      if (rienAFaire) return;
 
       const dejaInscrit = !!utilisateur;
       const contributeur = dejaInscrit
         ? utilisateur
         : await creeUtilisateur(emailContributeur);
 
-      await ajouteContributeur(contributeur, service);
-      await informeContributeur(contributeur, dejaInscrit, emetteur);
+      await ajouteContributeur(contributeur, services);
+      await informeContributeur(contributeur, dejaInscrit, emetteur, cibles);
       await envoieTracking(emetteur, emailContributeur);
     },
   };

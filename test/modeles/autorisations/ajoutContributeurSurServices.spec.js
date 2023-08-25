@@ -9,16 +9,13 @@ const {
 const {
   fabriqueAdaptateurTrackingMemoire,
 } = require('../../../src/adaptateurs/adaptateurTrackingMemoire');
-const {
-  ErreurAutorisationExisteDeja,
-  EchecAutorisation,
-} = require('../../../src/erreurs');
+const { EchecAutorisation } = require('../../../src/erreurs');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
 const { unService } = require('../../constructeurs/constructeurService');
 
-describe("L'ajout d'un contributeur sur un service", () => {
+describe("L'ajout d'un contributeur sur des services", () => {
   const unEmetteur = (idUtilisateur) =>
     unUtilisateur().avecId(idUtilisateur).construis();
   const leService = (id) =>
@@ -56,10 +53,10 @@ describe("L'ajout d'un contributeur sur un service", () => {
     adaptateurTracking = fabriqueAdaptateurTrackingMemoire();
   });
 
-  it("vérifie que l'utilisateur a le droit d'ajouter un contributeur", async () => {
-    let autorisationInterrogee = false;
+  it("vérifie que l'utilisateur a le droit d'ajouter un contributeur à *tous* les services demandés", async () => {
+    const autorisationsInterrogees = [];
     depotDonnees.autorisationPour = async (idUtilisateur, idHomologation) => {
-      autorisationInterrogee = { idUtilisateur, idHomologation };
+      autorisationsInterrogees.push({ idUtilisateur, idHomologation });
       return autorisation;
     };
 
@@ -67,10 +64,16 @@ describe("L'ajout d'un contributeur sur un service", () => {
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
-    }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur('456'));
+    }).executer(
+      'jean.dupont@mail.fr',
+      [leService('123'), leService('888')],
+      unEmetteur('456')
+    );
 
-    expect(autorisationInterrogee.idUtilisateur).to.be('456');
-    expect(autorisationInterrogee.idHomologation).to.be('123');
+    expect(autorisationsInterrogees).to.eql([
+      { idUtilisateur: '456', idHomologation: '123' },
+      { idUtilisateur: '456', idHomologation: '888' },
+    ]);
   });
 
   it("lève une exception si l'utilisateur n'a pas le droit d'ajouter un contributeur", async () => {
@@ -116,74 +119,70 @@ describe("L'ajout d'un contributeur sur un service", () => {
           depotDonnees,
           adaptateurMail,
           adaptateurTracking,
-        }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+        }).executer(
+          'jean.dupont@mail.fr',
+          [leService('123'), [leService('888')]],
+          unEmetteur()
+        );
 
         expect(emailEnvoye.destinataire).to.be('jean.dupont@mail.fr');
         expect(emailEnvoye.prenomNomEmetteur).to.be(
           'jean.dujardin@beta.gouv.com'
         );
-        expect(emailEnvoye.nbServices).to.be(1);
+        expect(emailEnvoye.nbServices).to.be(2);
       });
     });
 
-    describe('si le contributeur a déjà été invité', () => {
+    describe('si le contributeur a déjà été invité sur *tous* les services', () => {
       beforeEach(() => {
         depotDonnees.autorisationExiste = async () => true;
       });
 
-      it("n'envoie pas d'email d'invitation à contribuer", async () => {
-        let emailEnvoye = false;
+      it("n'envoie aucun email au contributeur", async () => {
+        const emailEnvoye = { inscription: false, contribution: false };
 
         adaptateurMail.envoieMessageInvitationContribution = async () => {
-          emailEnvoye = true;
+          emailEnvoye.contribution = true;
         };
-
-        try {
-          await ajoutContributeurSurServices({
-            depotDonnees,
-            adaptateurMail,
-            adaptateurTracking,
-          }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
-
-          expect().to.fail('Le serveur aurait dû lever une exception');
-        } catch (e) {
-          expect(emailEnvoye).to.be(false);
-        }
-      });
-
-      it("n'envoie pas d'email d'invitation à s'inscrire", async () => {
-        let emailEnvoye = false;
-
         adaptateurMail.envoieMessageInvitationInscription = async () => {
-          emailEnvoye = true;
+          emailEnvoye.inscription = true;
         };
 
-        try {
-          await ajoutContributeurSurServices({
-            depotDonnees,
-            adaptateurMail,
-            adaptateurTracking,
-          }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+        await ajoutContributeurSurServices({
+          depotDonnees,
+          adaptateurMail,
+          adaptateurTracking,
+        }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
 
-          expect().to.fail('Le serveur aurait dû lever une exception');
-        } catch (e) {
-          expect(emailEnvoye).to.be(false);
-        }
+        expect(emailEnvoye.inscription).to.be(false);
+        expect(emailEnvoye.contribution).to.be(false);
       });
+    });
+  });
 
-      it("renvoie une erreur explicite à propos de l'invitation déjà envoyée", async () => {
-        try {
-          await ajoutContributeurSurServices({
-            depotDonnees,
-            adaptateurMail,
-            adaptateurTracking,
-          }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+  describe('si le contributeur a déjà été invité sur *certains* services', () => {
+    it('envoie un email ne mentionnant que les nouveaux services ciblés', async () => {
+      const existePour123MaisPas888 = async (_, idService) =>
+        idService === '123';
+      depotDonnees.autorisationExiste = existePour123MaisPas888;
 
-          expect().to.fail('Le serveur aurait dû lever une exception');
-        } catch (e) {
-          expect(e).to.be.an(ErreurAutorisationExisteDeja);
-        }
-      });
+      let nbServicesMentionnes = 0;
+      adaptateurMail.envoieMessageInvitationContribution = async (
+        _,
+        __,
+        nbServices
+      ) => {
+        nbServicesMentionnes = nbServices;
+      };
+
+      const deuxServices = [leService('123'), leService('888')];
+      await ajoutContributeurSurServices({
+        depotDonnees,
+        adaptateurMail,
+        adaptateurTracking,
+      }).executer('jean.dupont@mail.fr', deuxServices, unEmetteur());
+
+      expect(nbServicesMentionnes).to.be(1);
     });
   });
 
@@ -266,33 +265,44 @@ describe("L'ajout d'un contributeur sur un service", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+      }).executer(
+        'jean.dupont@mail.fr',
+        [leService('123'), leService('888')],
+        unEmetteur()
+      );
 
       expect(emailEnvoye.destinataire).to.be('jean.dupont@mail.fr');
       expect(emailEnvoye.prenomNomEmetteur).to.be(
         'jean.dujardin@beta.gouv.com'
       );
       expect(emailEnvoye.idResetMotDePasse).to.be('reset');
-      expect(emailEnvoye.nbServices).to.be(1);
+      expect(emailEnvoye.nbServices).to.be(2);
     });
   });
 
-  it("demande au dépôt de données d'ajouter l'autorisation", async () => {
-    let nouvelleAutorisation;
+  it("demande au dépôt de données d'ajouter les autorisations", async () => {
+    const autorisations = [];
     depotDonnees.ajouteContributeurAHomologation = async (
       idContributeur,
-      idHomologation
+      idService
     ) => {
-      nouvelleAutorisation = { idContributeur, idHomologation };
+      autorisations.push({ idContributeur, idService });
     };
 
     await ajoutContributeurSurServices({
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
-    }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+    }).executer(
+      'jean.dupont@mail.fr',
+      [leService('123'), leService('888')],
+      unEmetteur()
+    );
 
-    expect(nouvelleAutorisation.idContributeur).to.be('999');
+    expect(autorisations).to.eql([
+      { idContributeur: '999', idService: '123' },
+      { idContributeur: '999', idService: '888' },
+    ]);
   });
 
   it("envoie un événement d'invitation contributeur via l'adaptateur de tracking", async () => {
