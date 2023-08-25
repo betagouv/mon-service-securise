@@ -81,7 +81,8 @@ const ajoutContributeurSurServices = ({
   };
 
   return {
-    executer: async (emailContributeur, service, emetteur) => {
+    executer: async (emailContributeur, services, emetteur) => {
+      const [service] = services;
       await verifiePermission(emetteur.id, service.id);
       const utilisateur = await recupereParEmail(emailContributeur);
       await verifieAutorisationInexistante(utilisateur?.id, service.id);

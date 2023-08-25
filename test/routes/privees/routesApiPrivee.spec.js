@@ -751,10 +751,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.procedures().ajoutContributeurSurServices = async (
         emailContributeur,
-        service,
+        services,
         emetteur
       ) => {
-        ajout = { emailContributeur, service, emetteur };
+        ajout = { emailContributeur, services, emetteur };
       };
 
       await axios.post('http://localhost:1234/api/autorisation', {
@@ -763,7 +763,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
 
       expect(ajout.emailContributeur).to.be('jean.dupont@mail.fr');
-      expect(ajout.service.id).to.be('123');
+      expect(ajout.services[0].id).to.be('123');
       expect(ajout.emetteur.id).to.be('EMETTEUR');
     });
 
