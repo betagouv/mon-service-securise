@@ -4,6 +4,12 @@ const estInvitationDejaEnvoyee = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'INVITATION_DEJA_ENVOYEE';
 
+const metEnFormeLigne = (emailContributeur) =>
+  `<li class="contributeur-a-inviter" data-email="${emailContributeur}">
+      <img src='/statique/assets/images/avatar_invitation_contributeur.svg'>
+      <span>${emailContributeur}</span>
+  </li>`;
+
 class ActionInvitation extends ActionAbstraite {
   constructor(tableauDesServices) {
     super('#contenu-invitation', tableauDesServices);
@@ -17,10 +23,30 @@ class ActionInvitation extends ActionAbstraite {
   }
 
   initialise() {
+    const $champEmail = $('#email-invitation-collaboration');
+    const $listeContributeurs = $('#liste-ajout-contributeur');
+
     super.initialise();
-    $('#email-invitation-collaboration').val('');
+    $champEmail.val('');
     $('#action-invitation').show();
     $('.message-erreur#invitation-deja-envoyee').hide();
+    $listeContributeurs.empty();
+
+    $champEmail.off('keydown');
+    $champEmail.on('keydown', (evenement) => {
+      if (evenement.key === 'Enter') {
+        if (!this.formulaireEstValide) return;
+
+        const nouveauContributeur = $champEmail.val();
+        const contributeursExistants = $.makeArray(
+          $('.contributeur-a-inviter', this.idConteneur)
+        ).map((el) => $(el).data('email'));
+        if (!contributeursExistants.includes(nouveauContributeur)) {
+          $listeContributeurs.append(metEnFormeLigne(nouveauContributeur));
+        }
+        $champEmail.val('');
+      }
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -29,20 +55,23 @@ class ActionInvitation extends ActionAbstraite {
   }
 
   execute() {
-    const $emailInvite = $('#email-invitation-collaboration');
+    const emailsContributeurs = $.makeArray(
+      $('.contributeur-a-inviter', this.idConteneur)
+    ).map((el) => $(el).data('email'));
 
-    if (!this.formulaireEstValide) return Promise.reject();
+    if (!emailsContributeurs.length) return Promise.reject();
 
     this.basculeLoader(true);
     $('#action-invitation').hide();
 
-    const emailContributeur = $emailInvite.val();
-
-    return axios
-      .post('/api/autorisation', {
-        emailContributeur,
-        idServices: [...this.tableauDesServices.servicesSelectionnes],
-      })
+    return Promise.all(
+      emailsContributeurs.map((emailContributeur) =>
+        axios.post('/api/autorisation', {
+          emailContributeur,
+          idServices: [...this.tableauDesServices.servicesSelectionnes],
+        })
+      )
+    )
       .then(() => {
         this.tableauDesServices.recupereServices();
         this.basculeLoader(false);
