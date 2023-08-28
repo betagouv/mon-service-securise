@@ -53,6 +53,9 @@
 .menu-navigation .outils-complementaires a.actif > div {
   background-color: var(--menu-couleur-repos);
 }
+.menu-navigation .outils-complementaires a.actif:active > div {
+  background-color: var(--menu-couleur-actif) !important;
+}
 .menu-navigation .outils-complementaires a.actif img {
   filter: brightness(0) saturate(100%) invert(100%);
 }
