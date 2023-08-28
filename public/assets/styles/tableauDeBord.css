@@ -785,8 +785,26 @@ label[for='recherche-service'] {
   gap: 0.5em;
 }
 
-#contenu-invitation #liste-ajout-contributeur .contributeur-a-inviter img {
+#contenu-invitation
+  #liste-ajout-contributeur
+  .contributeur-a-inviter
+  .avatar-contributeur {
   width: 2.5em;
+}
+
+#contenu-invitation
+  #liste-ajout-contributeur
+  .contributeur-a-inviter
+  .bouton-suppression-contributeur {
+  width: 1.5em;
+  cursor: pointer;
+}
+
+#contenu-invitation
+  #liste-ajout-contributeur
+  .contributeur-a-inviter
+  .bouton-suppression-contributeur {
+  margin-left: auto;
 }
 
 .contenu-tiroir .conteneur-actions {

@@ -4,11 +4,19 @@ const estInvitationDejaEnvoyee = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'INVITATION_DEJA_ENVOYEE';
 
-const metEnFormeLigne = (emailContributeur) =>
-  `<li class="contributeur-a-inviter" data-email="${emailContributeur}">
-      <img src='/statique/assets/images/avatar_invitation_contributeur.svg'>
-      <span>${emailContributeur}</span>
-  </li>`;
+const metEnFormeLigne = (emailContributeur) => {
+  const conteneurLigne =
+    $(`<li class="contributeur-a-inviter" data-email="${emailContributeur}">
+        <img class="avatar-contributeur" src='/statique/assets/images/avatar_invitation_contributeur.svg'>
+        <span>${emailContributeur}</span>
+      </li>`);
+  const boutonSuppression = $(
+    '<img class="bouton-suppression-contributeur" src="/statique/assets/images/icone_supprimer_gris.svg">'
+  );
+  boutonSuppression.on('click', () => conteneurLigne.remove());
+  conteneurLigne.append(boutonSuppression);
+  return conteneurLigne;
+};
 
 class ActionInvitation extends ActionAbstraite {
   constructor(tableauDesServices) {
