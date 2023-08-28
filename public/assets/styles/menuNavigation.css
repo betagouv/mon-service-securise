@@ -117,6 +117,7 @@
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) saturate(100%) invert(18%) sepia(93%) saturate(2644%)
     hue-rotate(191deg) brightness(91%) contrast(91%);
+  transform: translateX(1px);
 }
 
 .menu-navigation .nom-service {
