@@ -45,6 +45,7 @@ class ActionInvitation extends ActionAbstraite {
           $listeContributeurs.append(metEnFormeLigne(nouveauContributeur));
         }
         $champEmail.val('');
+        $champEmail.addClass('intouche');
       }
     });
   }
