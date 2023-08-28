@@ -770,6 +770,25 @@ label[for='recherche-service'] {
   width: 31em;
 }
 
+#contenu-invitation #liste-ajout-contributeur {
+  list-style: none;
+  padding-left: 0;
+}
+
+#contenu-invitation #liste-ajout-contributeur .contributeur-a-inviter {
+  padding: 1em;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-top: 0.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+#contenu-invitation #liste-ajout-contributeur .contributeur-a-inviter img {
+  width: 2.5em;
+}
+
 .contenu-tiroir .conteneur-actions {
   display: flex;
   justify-content: end;

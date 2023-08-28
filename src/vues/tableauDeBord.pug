@@ -137,7 +137,7 @@ block main
                 button.bouton#action-export-csv(type='button') Télécharger
         .bloc-contenu#contenu-invitation
           form.conteneur-formulaire
-            label Ajouter
+            label Ajouter un ou plusieurs contributeurs
               br
               input(
                 id = 'email-invitation-collaboration',
@@ -146,6 +146,7 @@ block main
                 placeholder = 'ex : e.leroy@domaine.fr',
                 required,
               )
+              ul#liste-ajout-contributeur
               .message-erreur Veuillez saisir une adresse e-mail valide.
               .message-erreur#invitation-deja-envoyee Cette personne est déjà ajoutée pour ce service. Veuillez renseigner un autre e-mail.
             .conteneur-loader
