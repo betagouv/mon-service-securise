@@ -161,6 +161,31 @@ describe("L'ajout d'un contributeur sur des services", () => {
   });
 
   describe('si le contributeur a déjà été invité sur *certains* services', () => {
+    it('ajoute le contributeur seulement sur les services manquants', async () => {
+      const existePour123MaisPas888 = async (_, idService) =>
+        idService === '123';
+      depotDonnees.autorisationExiste = existePour123MaisPas888;
+
+      const autorisations = [];
+      depotDonnees.ajouteContributeurAHomologation = async (
+        idContributeur,
+        idService
+      ) => {
+        autorisations.push({ idContributeur, idService });
+      };
+
+      const deuxServices = [leService('123'), leService('888')];
+      await ajoutContributeurSurServices({
+        depotDonnees,
+        adaptateurMail,
+        adaptateurTracking,
+      }).executer('jean.dupont@mail.fr', deuxServices, unEmetteur());
+
+      expect(autorisations).to.eql([
+        { idContributeur: '999', idService: '888' },
+      ]);
+    });
+
     it('envoie un email ne mentionnant que les nouveaux services ciblés', async () => {
       const existePour123MaisPas888 = async (_, idService) =>
         idService === '123';

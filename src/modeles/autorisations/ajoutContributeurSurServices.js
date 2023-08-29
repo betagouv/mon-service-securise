@@ -110,7 +110,7 @@ const ajoutContributeurSurServices = ({
         ? utilisateur
         : await creeUtilisateur(emailContributeur);
 
-      await ajouteContributeur(contributeur, services);
+      await ajouteContributeur(contributeur, cibles);
       await informeContributeur(contributeur, dejaInscrit, emetteur, cibles);
       await envoieTracking(emetteur, emailContributeur);
     },
