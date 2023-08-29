@@ -21,6 +21,11 @@ module.exports = {
       fichierPug: 'tableauDeBord.pug',
       dateDeDeploiement: '2023-06-20',
     },
+    {
+      id: 'menuNavigation',
+      fichierPug: 'menuNavigation.pug',
+      dateDeDeploiement: '2023-08-30',
+    },
   ],
 
   tranchesIndicesCybers: [
