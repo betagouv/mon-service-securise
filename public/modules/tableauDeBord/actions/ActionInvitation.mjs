@@ -32,8 +32,11 @@ class ActionInvitation extends ActionAbstraite {
       }
     });
 
+    const REGEX_EMAIL = /[\w]+@[\w]{2,}\.[\w]{2,}/i;
     $('#email-invitation-collaboration', this.idConteneur).selectize({
-      create: true,
+      create: (input) =>
+        REGEX_EMAIL.test(input) ? { value: input.toLowerCase() } : false,
+      createFilter: (input) => REGEX_EMAIL.test(input),
       render: {
         // On affiche la liste des emails en-dessous, on masque donc les items selectize
         item: () => '<span class="invisible"></span>',
