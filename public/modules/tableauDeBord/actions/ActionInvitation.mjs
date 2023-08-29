@@ -47,7 +47,7 @@ class ActionInvitation extends ActionAbstraite {
       if (evenement.key === 'Enter') {
         if (!this.formulaireEstValide) return;
 
-        const nouveauContributeur = $champEmail.val();
+        const nouveauContributeur = $champEmail.val().toLowerCase();
         const contributeursExistants = $.makeArray(
           $('.contributeur-a-inviter', this.idConteneur)
         ).map((el) => $(el).data('email'));
