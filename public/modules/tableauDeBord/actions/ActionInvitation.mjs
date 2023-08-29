@@ -21,6 +21,7 @@ class ActionInvitation extends ActionAbstraite {
       texteMultiple:
         'Inviter les personnes de votre choix à contribuer à ces services.',
     });
+
     $('#liste-ajout-contributeur', this.idConteneur).on('click', (e) => {
       const $elementClique = $(e.target);
       if ($elementClique.hasClass('bouton-suppression-contributeur')) {
@@ -29,6 +30,19 @@ class ActionInvitation extends ActionAbstraite {
         );
         $ligneASupprimer.remove();
       }
+    });
+
+    $('#email-invitation-collaboration', this.idConteneur).selectize({
+      create: true,
+      render: {
+        // On affiche la liste des emails en-dessous, on masque donc les items selectize
+        item: () => '<span class="invisible"></span>',
+        option_create: () =>
+          '<div class="create option-ajout">Ajouter ce contributeur</div>',
+      },
+      onItemAdd: (value) => {
+        $('#liste-ajout-contributeur').append(metEnFormeLigne(value));
+      },
     });
   }
 
@@ -41,23 +55,6 @@ class ActionInvitation extends ActionAbstraite {
     $('#action-invitation').show();
     $('.message-erreur#invitation-deja-envoyee').hide();
     $listeContributeurs.empty();
-
-    $champEmail.off('keydown');
-    $champEmail.on('keydown', (evenement) => {
-      if (evenement.key === 'Enter') {
-        if (!this.formulaireEstValide) return;
-
-        const nouveauContributeur = $champEmail.val().toLowerCase();
-        const contributeursExistants = $.makeArray(
-          $('.contributeur-a-inviter', this.idConteneur)
-        ).map((el) => $(el).data('email'));
-        if (!contributeursExistants.includes(nouveauContributeur)) {
-          $listeContributeurs.append(metEnFormeLigne(nouveauContributeur));
-        }
-        $champEmail.val('');
-        $champEmail.addClass('intouche');
-      }
-    });
   }
 
   // eslint-disable-next-line class-methods-use-this

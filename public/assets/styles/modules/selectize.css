@@ -146,6 +146,7 @@
   justify-content: left;
   align-items: center;
   gap: 0.5em;
+  cursor: pointer;
 }
 
 .selectize-dropdown .option-ajout::before {

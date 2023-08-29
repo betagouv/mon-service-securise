@@ -1186,3 +1186,7 @@ label[for='recherche-service'] {
 .tiroir :is(.conteneur-rapport, .conteneur-confirmation) .conteneur-actions {
   margin-top: 2em;
 }
+
+.selectize-control.multi .selectize-input.has-items {
+  padding: 0.8em;
+}

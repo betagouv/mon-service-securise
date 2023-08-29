@@ -29,7 +29,12 @@ mixin documentTelechargeable(nom, description, type, idLien, peutEtreIndisponibl
       p.lien-indisponible Document non disponible
 
 block append styles
+  link(href = '/styles/selectize.default.min.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/tableauDeBord.css', rel = 'stylesheet')
+
+block append scripts
+  script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
 
 block main
   +modaleNouveauService
@@ -142,12 +147,10 @@ block main
               input(
                 id = 'email-invitation-collaboration',
                 name = 'email-invitation-collaboration',
-                type = 'email',
+                type = 'text',
                 placeholder = 'ex : e.leroy@domaine.fr',
                 required,
               )
-              .message-erreur Veuillez saisir une adresse e-mail valide.
-              .message-erreur#invitation-deja-envoyee Cette personne est déjà ajoutée pour ce service. Veuillez renseigner un autre e-mail.
               ul#liste-ajout-contributeur
             .conteneur-loader
               .icone-chargement
