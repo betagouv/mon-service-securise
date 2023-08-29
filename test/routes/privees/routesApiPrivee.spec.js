@@ -1029,7 +1029,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("retourne l'ID de la dernière fonctionnalité", (done) => {
       testeur.referentiel().recharge({
         nouvellesFonctionnalites: [
-          { id: 'tdb', fichierPug: 'tableauDeBord.pug' },
+          {
+            id: 'tdb',
+            fichierPug: 'tableauDeBord.pug',
+            dateDeDeploiement: '2020-01-01',
+          },
         ],
       });
       axios
