@@ -205,9 +205,13 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     }
   };
 
-  const derniereNouvelleFonctionnalite = () => {
-    const fonctionnalitesDechronologique =
-      donnees.nouvellesFonctionnalites.sort(
+  const derniereNouvelleFonctionnalite = (dateDeReference) => {
+    const fonctionnalitesDechronologique = donnees.nouvellesFonctionnalites
+      .filter(
+        (fonctionnalite) =>
+          new Date(fonctionnalite.dateDeDeploiement) < dateDeReference
+      )
+      .sort(
         (a, b) => new Date(b.dateDeDeploiement) - new Date(a.dateDeDeploiement)
       );
     return fonctionnalitesDechronologique[0];

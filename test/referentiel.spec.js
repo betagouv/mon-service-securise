@@ -706,17 +706,34 @@ describe('Le référentiel', () => {
     });
   });
 
-  it('sait renvoyer la dernière nouvelle fonctionnalité en date', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      nouvellesFonctionnalites: [
-        { id: 'nouveauté30Janvier', dateDeDeploiement: '2023-01-30' },
-        { id: 'nouveauté1Février', dateDeDeploiement: '2023-02-01' },
-      ],
+  describe('sur demande de derniére nouvelle fonctionnalité en date', () => {
+    it('sait renvoyer la dernière nouvelle fonctionnalité', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        nouvellesFonctionnalites: [
+          { id: 'nouveauté30Janvier', dateDeDeploiement: '2023-01-30' },
+          { id: 'nouveauté1Février', dateDeDeploiement: '2023-02-01' },
+        ],
+      });
+      const dateDeReference1Mars = new Date('2023-03-01');
+
+      expect(
+        referentiel.derniereNouvelleFonctionnalite(dateDeReference1Mars).id
+      ).to.equal('nouveauté1Février');
     });
 
-    expect(referentiel.derniereNouvelleFonctionnalite().id).to.equal(
-      'nouveauté1Février'
-    );
+    it('ne renvoie que les fonctionnalités antérieures à la date de référence, pour ne pas renvoyer de fonctionnalité du futur', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        nouvellesFonctionnalites: [
+          { id: 'nouveauté1Janvier', dateDeDeploiement: '2023-01-30' },
+          { id: 'nouveauté1Mars', dateDeDeploiement: '2023-03-01' },
+        ],
+      });
+      const dateDeReference1Fevrier = new Date('2023-02-01');
+
+      expect(
+        referentiel.derniereNouvelleFonctionnalite(dateDeReference1Fevrier).id
+      ).to.equal('nouveauté1Janvier');
+    });
   });
 
   it('sait renvoyer une nouvelle fonctionnalité via son id', () => {

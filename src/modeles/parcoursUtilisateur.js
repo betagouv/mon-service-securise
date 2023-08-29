@@ -24,7 +24,9 @@ class ParcoursUtilisateur extends Base {
 
   recupereNouvelleFonctionnalite() {
     const derniereFonctionnalite =
-      this.referentiel.derniereNouvelleFonctionnalite();
+      this.referentiel.derniereNouvelleFonctionnalite(
+        this.adaptateurHorloge.maintenant()
+      );
     if (!derniereFonctionnalite) return undefined;
     if (!this.dateDerniereConnexion) return derniereFonctionnalite?.id;
     const dateDerniereConnexion = new Date(this.dateDerniereConnexion);

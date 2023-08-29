@@ -305,7 +305,9 @@ const routesApiPrivee = ({
   );
 
   routes.get('/nouvelleFonctionnalite/derniere', (_, reponse) => {
-    const nouvelleFonctionnalite = referentiel.derniereNouvelleFonctionnalite();
+    const nouvelleFonctionnalite = referentiel.derniereNouvelleFonctionnalite(
+      adaptateurHorloge.maintenant()
+    );
 
     if (!nouvelleFonctionnalite) {
       reponse.status(404).send('Aucune dernière fonctionnalité');
