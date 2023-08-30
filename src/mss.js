@@ -215,6 +215,7 @@ const creeServeur = (
       adaptateurCsv,
       adaptateurZip,
       procedures,
+      serviceAnnuaire,
     })
   );
 

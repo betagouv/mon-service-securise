@@ -33,6 +33,7 @@ const routesApiPrivee = ({
   adaptateurCsv,
   adaptateurZip,
   procedures,
+  serviceAnnuaire,
 }) => {
   const routes = express.Router();
 
@@ -334,6 +335,24 @@ const routesApiPrivee = ({
       reponse.render(
         `nouvellesFonctionnalites/${nouvelleFonctionnalite.fichierPug}`
       );
+    }
+  );
+
+  routes.get(
+    '/annuaire/contributeurs',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('recherche'),
+    (requete, reponse) => {
+      const { recherche = '' } = requete.query;
+
+      if (recherche === '') {
+        reponse.status(400).send('Le terme de recherche ne peut pas être vide');
+        return;
+      }
+
+      serviceAnnuaire
+        .rechercheContributeurs(requete.idUtilisateurCourant, recherche)
+        .then((suggestions) => reponse.status(200).json({ suggestions }));
     }
   );
 
