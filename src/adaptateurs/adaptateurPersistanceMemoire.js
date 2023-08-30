@@ -294,6 +294,26 @@ const nouvelAdaptateur = (
     else dejaConnu.donnees = donneesParcoursUtilisateur;
   };
 
+  const rechercheContributeurs = async (idUtilisateur, recherche) => {
+    const idServices = donnees.autorisations
+      .filter((a) => a.idUtilisateur === idUtilisateur && a.type === 'createur')
+      .map((a) => a.idService);
+    const idUniquesContributeurs = donnees.autorisations.filter(
+      (a) => idServices.includes(a.idService) && a.type !== 'createur'
+    );
+    const tousContributeurs = donnees.utilisateurs.filter((u) =>
+      idUniquesContributeurs.includes(u.id)
+    );
+
+    const rechercheMinuscule = recherche.toLowerCase();
+    return tousContributeurs.filter(
+      (c) =>
+        c.email.toLowerCase().includes(rechercheMinuscule) ||
+        c.prenom?.toLowerCase().includes(rechercheMinuscule) ||
+        c.nom?.toLowerCase().includes(rechercheMinuscule)
+    );
+  };
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -307,6 +327,7 @@ const nouvelAdaptateur = (
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
+    rechercheContributeurs,
     sauvegardeParcoursUtilisateur,
     sauvegardeHomologation,
     sauvegardeService,

@@ -29,6 +29,13 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  quiSAppelle(prenomNom) {
+    const [prenom, nom] = prenomNom.split(' ');
+    this.donnees.prenom = prenom;
+    this.donnees.nom = nom;
+    return this;
+  }
+
   quiAccepteInfolettre() {
     this.donnees.infolettreAcceptee = true;
     return this;

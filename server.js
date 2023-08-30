@@ -10,6 +10,7 @@ const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironneme
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const fabriqueAdaptateurPersistance = require('./src/adaptateurs/fabriqueAdaptateurPersistance');
 const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
@@ -18,6 +19,10 @@ const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
   : require('./src/adaptateurs/adaptateurMailMemoire').fabriqueAdaptateurMailMemoire();
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
+
+const adaptateurPersistance = fabriqueAdaptateurPersistance(
+  process.env.NODE_ENV
+);
 const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
 const {
   adaptateurProtection,
@@ -28,6 +33,7 @@ const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
 const serviceAnnuaire = fabriqueAnnuaire({
   adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+  adaptateurPersistance,
 });
 
 const port = process.env.PORT || 3000;

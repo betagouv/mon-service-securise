@@ -342,7 +342,7 @@ const routesApiPrivee = ({
     '/annuaire/contributeurs',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('recherche'),
-    (requete, reponse) => {
+    async (requete, reponse) => {
       const { recherche = '' } = requete.query;
 
       if (recherche === '') {
@@ -350,9 +350,18 @@ const routesApiPrivee = ({
         return;
       }
 
-      serviceAnnuaire
-        .rechercheContributeurs(requete.idUtilisateurCourant, recherche)
-        .then((suggestions) => reponse.status(200).json({ suggestions }));
+      const contributeurs = await serviceAnnuaire.rechercheContributeurs(
+        requete.idUtilisateurCourant,
+        recherche
+      );
+
+      reponse.status(200).json({
+        suggestions: contributeurs.map((c) => ({
+          prenomNom: c.prenomNom(),
+          email: c.email,
+          initiales: c.initiales(),
+        })),
+      });
     }
   );
 

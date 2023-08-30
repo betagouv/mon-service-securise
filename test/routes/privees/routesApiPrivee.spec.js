@@ -1089,8 +1089,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       ) => {
         appelDepot.idUtilisateur = idUtilisateur;
         appelDepot.recherche = recherche;
+
         return [
-          { nomPrenom: 'Jean Dujardin', email: 'jean.dujardin@beta.gouv.fr' },
+          unUtilisateur()
+            .avecEmail('jean.dujardin@beta.gouv.fr')
+            .quiSAppelle('Jean Dujardin')
+            .construis(),
         ];
       };
 
@@ -1101,7 +1105,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(appelDepot).to.eql({ idUtilisateur: '123', recherche: 'jean' });
       expect(reponse.status).to.be(200);
       expect(reponse.data.suggestions).to.eql([
-        { nomPrenom: 'Jean Dujardin', email: 'jean.dujardin@beta.gouv.fr' },
+        {
+          prenomNom: 'Jean Dujardin',
+          email: 'jean.dujardin@beta.gouv.fr',
+          initiales: 'JD',
+        },
       ]);
     });
   });
