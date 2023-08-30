@@ -69,14 +69,14 @@ const ajoutContributeurSurServices = ({
       }
   };
 
-  const envoieTracking = async (emetteur, emailContributeur) => {
+  const envoieTracking = async (emetteur) => {
     const nombreMoyenContributeurs =
       await fabriqueServiceTracking().nombreMoyenContributeursPourUtilisateur(
         depotDonnees,
         emetteur.id
       );
     await adaptateurTracking.envoieTrackingInvitationContributeur(
-      emailContributeur,
+      emetteur.email,
       { nombreMoyenContributeurs }
     );
   };
@@ -112,7 +112,7 @@ const ajoutContributeurSurServices = ({
 
       await ajouteContributeur(contributeur, cibles);
       await informeContributeur(contributeur, dejaInscrit, emetteur, cibles);
-      await envoieTracking(emetteur, emailContributeur);
+      await envoieTracking(emetteur);
     },
   };
 };
