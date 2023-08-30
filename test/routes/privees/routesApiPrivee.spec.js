@@ -1046,4 +1046,63 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
   });
+
+  describe('quand requête GET sur `/api/annuaire/contributeurs`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          'http://localhost:1234/api/annuaire/contributeurs',
+          done
+        );
+    });
+
+    it('aseptise la chaine de recherche', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['recherche'],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/annuaire/contributeurs',
+        },
+        done
+      );
+    });
+
+    it('retourne une erreur HTTP 400 si le terme de recherche est vide', (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        'Le terme de recherche ne peut pas être vide',
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/annuaire/contributeurs',
+        },
+        done
+      );
+    });
+
+    it("utilise le service d'annuaire pour suggérer des contributeurs", async () => {
+      const appelDepot = {};
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.serviceAnnuaire().rechercheContributeurs = async (
+        idUtilisateur,
+        recherche
+      ) => {
+        appelDepot.idUtilisateur = idUtilisateur;
+        appelDepot.recherche = recherche;
+        return [
+          { nomPrenom: 'Jean Dujardin', email: 'jean.dujardin@beta.gouv.fr' },
+        ];
+      };
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/annuaire/contributeurs?recherche=jean'
+      );
+
+      expect(appelDepot).to.eql({ idUtilisateur: '123', recherche: 'jean' });
+      expect(reponse.status).to.be(200);
+      expect(reponse.data.suggestions).to.eql([
+        { nomPrenom: 'Jean Dujardin', email: 'jean.dujardin@beta.gouv.fr' },
+      ]);
+    });
+  });
 });
