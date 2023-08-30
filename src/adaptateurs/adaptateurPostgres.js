@@ -351,6 +351,42 @@ const nouvelAdaptateur = (env) => {
     else await metsAJourTable('parcours_utilisateurs', id, donnees);
   };
 
+  const rechercheContributeurs = async (idUtilisateur, recherche) => {
+    const tousContributeurs = await knex.raw(
+      `
+          WITH mes_services
+            AS (
+              SELECT donnees->>'idService' AS ids_services
+                FROM autorisations
+                WHERE donnees->>'idUtilisateur' = ? AND donnees->>'type' = 'createur'
+            )
+            SELECT DISTINCT ON (u.id) u.id, u.donnees
+              FROM autorisations AS a
+              JOIN utilisateurs AS u ON u.id::TEXT = a.donnees->>'idUtilisateur'
+                WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services) AND a.donnees->>'type' = 'contributeur'
+    `,
+      idUtilisateur
+    );
+
+    const normalise = (texte) =>
+      texte
+        ?.toLowerCase()
+        // Permet de supprimer les accents : https://stackoverflow.com/a/51874002
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '');
+
+    const rechercheNormalisee = normalise(recherche);
+
+    return tousContributeurs.rows
+      .map(convertisLigneEnObjet)
+      .filter(
+        (contributeur) =>
+          normalise(contributeur.email).includes(rechercheNormalisee) ||
+          normalise(contributeur.prenom)?.includes(rechercheNormalisee) ||
+          normalise(contributeur.nom)?.includes(rechercheNormalisee)
+      );
+  };
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -365,6 +401,7 @@ const nouvelAdaptateur = (env) => {
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
+    rechercheContributeurs,
     sauvegardeHomologation,
     sauvegardeService,
     service,
