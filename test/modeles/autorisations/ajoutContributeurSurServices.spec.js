@@ -351,11 +351,11 @@ describe("L'ajout d'un contributeur sur des services", () => {
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
-    }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur('888'));
+    }).executer('contributeur@mail.fr', [leService('123')], unEmetteur('888'));
 
     expect(idEmetteur).to.be('888');
     expect(donneesTracking).to.eql({
-      destinataire: 'jean.dupont@mail.fr',
+      destinataire: 'jean.dujardin@beta.gouv.com',
       donneesEvenement: { nombreMoyenContributeurs: 3 },
     });
   });
