@@ -3,13 +3,14 @@ const DepotDonnees = require('./src/depotDonnees');
 const MoteurRegles = require('./src/moteurRegles');
 const MSS = require('./src/mss');
 const Referentiel = require('./src/referentiel');
-const adaptateurAnnuaire = require('./src/adaptateurs/adaptateurAnnuaire');
+const { fabriqueAnnuaire } = require('./src/annuaire/serviceAnnuaire');
 const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurCsv = require('./src/adaptateurs/adaptateurCsv');
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
@@ -25,6 +26,9 @@ const { fabriqueProcedures } = require('./src/routes/procedures');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
+const serviceAnnuaire = fabriqueAnnuaire({
+  adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+});
 
 const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
@@ -51,7 +55,7 @@ const serveur = MSS.creeServeur(
   adaptateurPdf,
   adaptateurHorloge,
   adaptateurGestionErreur,
-  adaptateurAnnuaire,
+  serviceAnnuaire,
   adaptateurCsv,
   adaptateurZip,
   adaptateurTracking,

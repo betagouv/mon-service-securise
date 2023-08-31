@@ -12,7 +12,7 @@ const middleware = require('../mocks/middleware');
 const { fabriqueProcedures } = require('../../src/routes/procedures');
 
 const testeurMss = () => {
-  let adaptateurAnnuaire;
+  let serviceAnnuaire;
   let adaptateurHorloge;
   let adaptateurMail;
   let adaptateurPdf;
@@ -51,7 +51,7 @@ const testeurMss = () => {
   };
 
   const initialise = (done) => {
-    adaptateurAnnuaire = {};
+    serviceAnnuaire = {};
     adaptateurHorloge = adaptateurHorlogeParDefaut;
     adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
@@ -91,7 +91,7 @@ const testeurMss = () => {
           adaptateurPdf,
           adaptateurHorloge,
           adaptateurGestionErreurVide,
-          adaptateurAnnuaire,
+          serviceAnnuaire,
           adaptateurCsv,
           adaptateurZip,
           adaptateurTracking,
@@ -108,7 +108,7 @@ const testeurMss = () => {
   const arrete = () => serveur.arreteEcoute();
 
   return {
-    adaptateurAnnuaire: () => adaptateurAnnuaire,
+    serviceAnnuaire: () => serviceAnnuaire,
     adaptateurHorloge: () => adaptateurHorloge,
     adaptateurMail: () => adaptateurMail,
     adaptateurPdf: () => adaptateurPdf,
