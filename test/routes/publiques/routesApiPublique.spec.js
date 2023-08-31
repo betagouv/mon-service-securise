@@ -557,9 +557,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       );
     });
 
-    it("recherche les organisations correspondantes grâce à l'adaptateur annuaire", (done) => {
+    it("recherche les organisations correspondantes grâce au service d'annuaire", (done) => {
       let adaptateurAppele = false;
-      testeur.adaptateurAnnuaire().rechercheOrganisation = (
+      testeur.serviceAnnuaire().rechercheOrganisation = (
         terme,
         departement
       ) => {

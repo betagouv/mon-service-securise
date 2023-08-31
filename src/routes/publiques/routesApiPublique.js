@@ -15,7 +15,7 @@ const routesApiPublique = ({
   middleware,
   referentiel,
   depotDonnees,
-  adaptateurAnnuaire,
+  serviceAnnuaire,
   adaptateurTracking,
   adaptateurMail,
 }) => {
@@ -165,7 +165,7 @@ const routesApiPublique = ({
       return;
     }
 
-    adaptateurAnnuaire
+    serviceAnnuaire
       .rechercheOrganisation(recherche, departement)
       .then((suggestions) => reponse.status(200).json({ suggestions }));
   });

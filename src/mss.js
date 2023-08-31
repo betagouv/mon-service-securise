@@ -24,7 +24,7 @@ const creeServeur = (
   adaptateurPdf,
   adaptateurHorloge,
   adaptateurGestionErreur,
-  adaptateurAnnuaire,
+  serviceAnnuaire,
   adaptateurCsv,
   adaptateurZip,
   adaptateurTracking,
@@ -194,7 +194,7 @@ const creeServeur = (
       middleware,
       referentiel,
       depotDonnees,
-      adaptateurAnnuaire,
+      serviceAnnuaire,
       adaptateurTracking,
       adaptateurMail,
     })
