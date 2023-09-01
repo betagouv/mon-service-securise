@@ -164,6 +164,10 @@
   color: #0079d0;
 }
 
+.selectize-dropdown-content {
+  min-height: 36px;
+}
+
 .selectize-control.plugin-clear_button .clear {
   visibility: hidden;
   font-size: 1em;
