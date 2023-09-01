@@ -7,7 +7,7 @@ import ActionSuppression from './actions/ActionSuppression.mjs';
 import ActionTelechargement from './actions/ActionTelechargement.mjs';
 
 const registreDesActions = {
-  contributeurs: new ActionContributeurs(tableauDesServices),
+  contributeurs: new ActionContributeurs(),
   duplication: new ActionDuplication(tableauDesServices),
   export: new ActionExport(),
   invitation: new ActionInvitation(tableauDesServices),

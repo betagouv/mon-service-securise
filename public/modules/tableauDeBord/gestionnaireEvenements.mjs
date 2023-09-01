@@ -43,7 +43,9 @@ const gestionnaireEvenements = {
           const idService = $elementClique
             .parents('.ligne-service')
             .data('id-service');
-          gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
+          gestionnaireEvenements.afficheTiroirAction($elementClique, {
+            donneesService: tableauDesServices.donneesDuService(idService),
+          });
         } else if ($elementClique.data('action') === 'telechargement') {
           const idService = tableauDesServices.servicesSelectionnes
             .keys()
@@ -94,9 +96,10 @@ const gestionnaireEvenements = {
       })
     );
 
-    $('#confirmation-suppression-contributeur').on('click', () =>
-      registreDesActions.contributeurs.execute()
-    );
+    $('#confirmation-suppression-contributeur').on('click', async () => {
+      await registreDesActions.contributeurs.execute();
+      tableauDesServices.recupereServices();
+    });
 
     $('#retour-liste-contributeurs').on('click', () => {
       const idService = [...tableauDesServices.servicesSelectionnes][0];
