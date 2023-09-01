@@ -4,12 +4,29 @@ const estInvitationDejaEnvoyee = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'INVITATION_DEJA_ENVOYEE';
 
-const metEnFormeLigne = (emailContributeur) =>
-  `<li class="contributeur-a-inviter" data-email="${emailContributeur}">
-    <img class="avatar-contributeur" src='/statique/assets/images/avatar_invitation_contributeur.svg'>
-    <span>${emailContributeur}</span>
+const metEnFormeLigne = ({ email, prenomNom, initiales }) =>
+  `<li class="contributeur-a-inviter" data-email="${email}">
+    <div class="initiales contributeur ${
+      !initiales ? 'persona' : ''
+    }">${initiales}</div>
+    <span>${prenomNom}</span>
     <img class="bouton-suppression-contributeur" src="/statique/assets/images/icone_supprimer_gris.svg">
   </li>`;
+
+const rechercheSuggestions = async (recherche, callback) => {
+  if (recherche.length < 2) {
+    callback([]);
+    return;
+  }
+
+  const reponse = await axios.get('/api/annuaire/contributeurs', {
+    params: { recherche },
+  });
+
+  const { suggestions } = reponse.data;
+
+  callback(suggestions);
+};
 
 class ActionInvitation extends ActionAbstraite {
   constructor(tableauDesServices) {
@@ -33,18 +50,50 @@ class ActionInvitation extends ActionAbstraite {
     });
 
     const REGEX_EMAIL = /[\w]+@[\w]{2,}\.[\w]{2,}/i;
-    $('#email-invitation-collaboration', this.idConteneur).selectize({
+    const $champSaisie = $('#email-invitation-collaboration', this.idConteneur);
+    const $champSelectize = $champSaisie.selectize({
       create: (input) =>
-        REGEX_EMAIL.test(input) ? { value: input.toLowerCase() } : false,
+        REGEX_EMAIL.test(input)
+          ? {
+              prenomNom: input.toLowerCase(),
+              email: input.toLowerCase(),
+              initiales: '',
+            }
+          : false,
       createFilter: (input) => REGEX_EMAIL.test(input),
+      valueField: 'prenomNom',
+      searchField: 'prenomNom',
       render: {
         // On affiche la liste des emails en-dessous, on masque donc les items selectize
-        item: () => '<span class="invisible"></span>',
+        item: (contributeur) =>
+          `<span class="invisible"  data-email="${contributeur.email}" data-prenom-nom="${contributeur.prenomNom}" data-initiales="${contributeur.initiales}"></span>`,
+        option: (option, escape) =>
+          `<div class="option suggestion-contributeur"><div class="initiales contributeur ${
+            !option.initiales ? 'persona' : ''
+          }">${option.initiales}</div> <div>${escape(
+            option.prenomNom
+          )}</div></div>`,
         option_create: () =>
           '<div class="create option-ajout">Ajouter ce contributeur</div>',
       },
-      onItemAdd: (value) => {
-        $('#liste-ajout-contributeur').append(metEnFormeLigne(value));
+      onItemAdd: (_, $item) => {
+        $champSelectize[0].selectize.clear();
+        $champSelectize[0].selectize.clearOptions();
+        $('#liste-ajout-contributeur').append(
+          metEnFormeLigne({
+            email: $item.data('email'),
+            prenomNom: $item.data('prenom-nom'),
+            initiales: $item.data('initiales'),
+          })
+        );
+      },
+      load: (recherche, callback) => {
+        $champSelectize[0].selectize.clearOptions();
+        rechercheSuggestions(recherche, callback);
+      },
+      score: () => {
+        const aucunFiltrage = () => 1; // Le filtrage est assuré par le backend.
+        return aucunFiltrage;
       },
     });
   }

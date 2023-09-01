@@ -807,6 +807,35 @@ label[for='recherche-service'] {
   margin-left: auto;
 }
 
+#contenu-invitation
+  #email-invitation-collaboration
+  ~ .intouche
+  .selectize-input {
+  border-color: var(--liseres) !important;
+}
+
+#contenu-invitation .option .initiales {
+  min-width: 1.5em;
+  min-height: 1.5em;
+  font-size: 0.8em;
+  padding: 0.4em;
+  margin-right: 1em;
+}
+
+#contenu-invitation .option.suggestion-contributeur {
+  display: flex;
+  align-items: center;
+}
+
+#contenu-invitation .initiales.persona::before {
+  content: '';
+  width: 1.5em;
+  height: 1.5em;
+  background-image: url('/statique/assets/images/persona_invitation_contributeur.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .contenu-tiroir .conteneur-actions {
   display: flex;
   justify-content: end;
@@ -959,7 +988,7 @@ label[for='recherche-service'] {
   grid-column: 1 / 6;
 }
 
-#contenu-contributeurs .initiale {
+:is(#contenu-contributeurs, #contenu-invitation) .initiales {
   border-radius: 50%;
   min-width: 2.5em;
   min-height: 2.5em;
@@ -970,11 +999,11 @@ label[for='recherche-service'] {
   color: #ffffff;
 }
 
-#contenu-contributeurs .initiale.proprietaire {
+:is(#contenu-contributeurs, #contenu-invitation) .initiales.proprietaire {
   background: #c19616;
 }
 
-#contenu-contributeurs .initiale.contributeur {
+:is(#contenu-contributeurs, #contenu-invitation) .initiales.contributeur {
   background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
 }
 
