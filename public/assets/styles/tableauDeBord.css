@@ -827,7 +827,7 @@ label[for='recherche-service'] {
   align-items: center;
 }
 
-#contenu-invitation .initiales.persona::before {
+:is(#contenu-invitation, #contenu-contributeurs) .initiales.persona::before {
   content: '';
   width: 1.5em;
   height: 1.5em;
