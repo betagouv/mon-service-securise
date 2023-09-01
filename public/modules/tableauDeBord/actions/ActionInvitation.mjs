@@ -29,8 +29,8 @@ const rechercheSuggestions = async (recherche, callback) => {
 };
 
 class ActionInvitation extends ActionAbstraite {
-  constructor(tableauDesServices) {
-    super('#contenu-invitation', tableauDesServices);
+  constructor() {
+    super('#contenu-invitation');
     this.appliqueContenu({
       titre: 'Inviter des contributeurs',
       texteSimple:
@@ -114,7 +114,7 @@ class ActionInvitation extends ActionAbstraite {
     return seulementCreateur;
   }
 
-  execute() {
+  execute({ idServices }) {
     const emailsContributeurs = $.makeArray(
       $('.contributeur-a-inviter', this.idConteneur)
     ).map((el) => $(el).data('email'));
@@ -126,14 +126,10 @@ class ActionInvitation extends ActionAbstraite {
 
     return Promise.all(
       emailsContributeurs.map((emailContributeur) =>
-        axios.post('/api/autorisation', {
-          emailContributeur,
-          idServices: [...this.tableauDesServices.servicesSelectionnes],
-        })
+        axios.post('/api/autorisation', { emailContributeur, idServices })
       )
     )
       .then(() => {
-        this.tableauDesServices.recupereServices();
         this.basculeLoader(false);
         this.basculeFormulaire(false);
         this.basculeRapport(true);

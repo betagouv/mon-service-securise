@@ -93,7 +93,10 @@ const gestionnaireEvenements = {
     });
 
     $('#action-invitation').on('click', () =>
-      registreDesActions.invitation.execute().catch(() => {})
+      registreDesActions.invitation
+        .execute({ idServices: [...tableauDesServices.servicesSelectionnes] })
+        .then(() => tableauDesServices.recupereServices())
+        .catch(() => {})
     );
 
     $('#action-export-csv').on('click', () =>
