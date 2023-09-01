@@ -1,0 +1,498 @@
+.tiroir {
+  height: 100%;
+  min-width: 33em;
+  position: absolute;
+  left: 100vw;
+  top: 0;
+  overflow-y: scroll;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: -10px 0px 34px 0px #00000026;
+  background: #fff;
+  visibility: hidden;
+}
+
+.tiroir.ouvert {
+  transform: translateX(-100%);
+  visibility: visible;
+}
+
+.entete-tiroir {
+  position: relative;
+  background: #dbecf1;
+  text-align: left;
+  padding: 0 2em;
+}
+
+.entete-tiroir .image-entete {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.entete-tiroir .par-dessus {
+  position: relative;
+}
+
+.titre-tiroir {
+  font-size: 1.6em;
+  margin: 0;
+  padding-top: 30px;
+}
+
+.texte-tiroir {
+  margin: 0;
+  padding-top: 0.8em;
+  font-weight: 500;
+  padding-bottom: 30px;
+}
+
+.croix-fermeture {
+  position: absolute;
+  top: 1.8em;
+  right: 0;
+  font-weight: bold;
+  background: #fff;
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.contenu-tiroir {
+  text-align: left;
+  padding: 2em 2em;
+}
+
+.contenu-tiroir .bouton {
+  padding: 0.5em 1em;
+  margin: 0;
+}
+
+#contenu-duplication p {
+  font-weight: 500;
+  margin-bottom: 2em;
+}
+
+:is(#contenu-duplication, #contenu-suppression) label {
+  margin-bottom: 2em;
+}
+
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
+  .conteneur-loader {
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+  padding: 1em 0;
+  margin-bottom: 2em;
+}
+
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
+  .titre-loader {
+  font-weight: bold;
+}
+
+:is(#contenu-duplication, #contenu-suppression, #contenu-invitation)
+  .info-loader {
+  font-weight: 500;
+}
+
+:is(#contenu-duplication, #contenu-invitation) label {
+  font-weight: bold;
+}
+
+:is(#contenu-duplication, #contenu-invitation) input {
+  padding: 0.7em 1em;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  margin-top: 1em;
+  width: 8em;
+}
+
+#contenu-invitation input {
+  width: 31em;
+}
+
+#contenu-invitation #liste-ajout-contributeur {
+  list-style: none;
+  padding-left: 0;
+}
+
+#contenu-invitation #liste-ajout-contributeur .contributeur-a-inviter {
+  padding: 1em;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-top: 0.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+#contenu-invitation
+  #liste-ajout-contributeur
+  .contributeur-a-inviter
+  .avatar-contributeur {
+  width: 2.5em;
+}
+
+#contenu-invitation
+  #liste-ajout-contributeur
+  .contributeur-a-inviter
+  .bouton-suppression-contributeur {
+  width: 1.5em;
+  cursor: pointer;
+}
+
+#contenu-invitation
+  #liste-ajout-contributeur
+  .contributeur-a-inviter
+  .bouton-suppression-contributeur {
+  margin-left: auto;
+}
+
+#contenu-invitation
+  #email-invitation-collaboration
+  ~ .intouche
+  .selectize-input {
+  border-color: var(--liseres) !important;
+}
+
+#contenu-invitation .option .initiales {
+  min-width: 1.5em;
+  min-height: 1.5em;
+  font-size: 0.8em;
+  padding: 0.4em;
+  margin-right: 1em;
+}
+
+#contenu-invitation .option.suggestion-contributeur {
+  display: flex;
+  align-items: center;
+}
+
+:is(#contenu-invitation, #contenu-contributeurs) .initiales.persona::before {
+  content: '';
+  width: 1.5em;
+  height: 1.5em;
+  background-image: url('/statique/assets/images/persona_invitation_contributeur.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.contenu-tiroir .conteneur-actions {
+  display: flex;
+  justify-content: end;
+  gap: 1em;
+}
+
+#contenu-suppression p {
+  margin: 0 0 1em 0;
+}
+
+#contenu-suppression
+  :is(.contenu-texte-information, .contenu-texte-avertissement)
+  p {
+  margin: 0;
+}
+
+#contenu-contributeurs .conteneur-confirmation .entete {
+  margin: 0 0 1em 0;
+}
+
+.banniere-avertissement,
+.banniere-information {
+  display: flex;
+  border: 1px solid #faa72c;
+  border-radius: 4px;
+  background: #fff2de;
+  padding: 0.7em 1em;
+  gap: 1em;
+}
+
+.banniere-information {
+  background: #dbeeff;
+  border-color: #0079d0;
+}
+
+:is(.banniere-avertissement, .banniere-information) p {
+  margin: 0;
+  font-weight: 500;
+}
+
+#contenu-invitation .conteneur-rapport {
+  text-align: center;
+  padding-top: 2em;
+}
+
+#contenu-invitation .conteneur-rapport button {
+  margin-top: 2em;
+}
+
+#contenu-export .liste-fichiers {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#contenu-export .fichier {
+  padding: 1em 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1em;
+  border: 1px solid var(--liseres-fonce);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+#contenu-export .nom-document p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+#contenu-export .nom-document p::before {
+  content: '';
+  width: 2.8em;
+  height: 2.8em;
+  background-image: url('/statique/assets/images/icone_document_csv.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#contenu-telechargement p {
+  font-weight: 500;
+}
+
+#contenu-telechargement .document-telechargeable {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+  border: 1px solid var(--liseres-fonce);
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+#contenu-telechargement .lien-indisponible {
+  display: none;
+  text-align: right;
+  color: #08416a;
+}
+
+#contenu-telechargement .document-telechargeable p {
+  margin: 0;
+}
+
+#contenu-telechargement .document-telechargeable .contenu {
+  display: flex;
+  column-gap: 1em;
+}
+
+#contenu-telechargement .document-telechargeable .titre-document {
+  font-weight: bold;
+  color: var(--bleu-anssi);
+  margin-bottom: 0.5em;
+}
+
+#contenu-telechargement .document-telechargeable .description-document {
+  font-size: 0.9em;
+}
+
+#contenu-telechargement .document-telechargeable .lien-telechargement {
+  align-self: flex-end;
+}
+
+#contenu-telechargement .document-telechargeable .icone-type-document {
+  width: 2.8em;
+  height: 2.8em;
+}
+
+#contenu-contributeurs .liste-contributeurs {
+  list-style: none;
+  padding-left: 0;
+}
+
+#contenu-contributeurs .liste-contributeurs li {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  column-gap: 1em;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 0.5em;
+}
+
+#contenu-contributeurs .contenu-nom-prenom {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  grid-column: 1 / 6;
+}
+
+:is(#contenu-contributeurs, #contenu-invitation) .initiales {
+  border-radius: 50%;
+  min-width: 2.5em;
+  min-height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+:is(#contenu-contributeurs, #contenu-invitation) .initiales.proprietaire {
+  background: #c19616;
+}
+
+:is(#contenu-contributeurs, #contenu-invitation) .initiales.contributeur {
+  background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
+}
+
+#contenu-contributeurs .nom-contributeur {
+  font-weight: 500;
+  word-break: break-word;
+}
+
+#contenu-contributeurs .poste-contributeur {
+  font-weight: 500;
+  color: #667892;
+}
+
+#contenu-contributeurs .role {
+  border-radius: 4px;
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 0.9em;
+  line-height: 0.9em;
+  padding: 0.4em 0.5em;
+  align-self: center;
+  grid-column: 6 / 7;
+}
+
+#contenu-contributeurs .role.proprietaire {
+  background: #c19616;
+}
+
+#contenu-contributeurs .role.contributeur {
+  background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
+}
+
+#contenu-contributeurs .declencheur-menu-flottant {
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  padding: 0.1em 0.2em;
+  position: relative;
+  align-self: center;
+  cursor: pointer;
+}
+
+#contenu-contributeurs .declencheur-menu-flottant.invisible {
+  display: flex;
+  visibility: hidden;
+}
+
+#contenu-contributeurs .declencheur-menu-flottant.actif {
+  border-color: #08416a;
+}
+
+#contenu-contributeurs .declencheur-menu-flottant::before {
+  content: '';
+  display: flex;
+  width: 2em;
+  height: 2em;
+  background-image: url('/statique/assets/images/points_horizontal_bleu.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#contenu-contributeurs .declencheur-menu-flottant.actif::before {
+  /* On utilise ici un site web pour générer la couleur cible en partant d'une icône noire */
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) invert(20%) sepia(56%) saturate(1325%)
+    hue-rotate(173deg) brightness(89%) contrast(97%);
+}
+
+#contenu-contributeurs .menu-flottant {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  position: absolute;
+  left: -2px;
+  top: 0;
+  transform: translateX(-100%);
+  white-space: nowrap;
+  background: #ffffff;
+  border: 1px solid #0c5c98;
+  border-radius: 5px;
+}
+
+#contenu-contributeurs .liste-contributeurs .menu-flottant ul {
+  padding-left: 0;
+  padding: 0.2em;
+}
+
+#contenu-contributeurs .liste-contributeurs .menu-flottant li {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0.6em 0.4em;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-radius: 4px;
+}
+
+#contenu-contributeurs .liste-contributeurs .menu-flottant li:hover {
+  background: #f1f5f9;
+  color: #0079d0;
+}
+
+#contenu-contributeurs .menu-flottant.invisible {
+  display: none;
+}
+
+#contenu-contributeurs .titre-liste {
+  margin: 0;
+  font-size: 1em;
+}
+
+#contenu-contributeurs .titre-liste::before {
+  display: inline-block;
+  content: '';
+  width: 1.4em;
+  height: 1.4em;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-right: 0.3em;
+  transform: translateY(5px);
+}
+
+#contenu-contributeurs .titre-contributeurs-actifs::before {
+  background-image: url('/statique/assets/images/icone_contributeurs_actifs.svg');
+}
+
+#contenu-contributeurs .titre-contributeurs-attente-activation::before {
+  background-image: url('/statique/assets/images/icone_contributeurs_attente_activation.svg');
+}
+
+.invisible {
+  display: none !important;
+}
+
+.tiroir :is(.conteneur-rapport, .conteneur-confirmation) .conteneur-actions {
+  margin-top: 2em;
+}
+
+.selectize-control.multi .selectize-input.has-items {
+  padding: 0.8em;
+}
