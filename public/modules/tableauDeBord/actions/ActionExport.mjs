@@ -1,8 +1,8 @@
 import ActionAbstraite from './Action.mjs';
 
 class ActionExport extends ActionAbstraite {
-  constructor(tableauDesServices) {
-    super('#contenu-export', tableauDesServices);
+  constructor() {
+    super('#contenu-export');
     this.appliqueContenu({
       titre: 'Exporter la sélection',
       texteSimple:
@@ -20,10 +20,11 @@ class ActionExport extends ActionAbstraite {
     return true;
   }
 
-  execute() {
+  // eslint-disable-next-line class-methods-use-this
+  execute({ idServices }) {
     window.open(
       `/api/services/export.csv?idsServices=${encodeURIComponent(
-        JSON.stringify([...this.tableauDesServices.servicesSelectionnes])
+        JSON.stringify(idServices)
       )}`,
       '_blank'
     );
