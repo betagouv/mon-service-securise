@@ -13,13 +13,12 @@ class ActionAbstraite {
     return $(this.selecteurFormulaire).is(':valid');
   }
 
-  constructor(idConteneur, tableauDesServices) {
+  constructor(idConteneur) {
     if (this.constructor === ActionAbstraite) {
       throw new TypeError(
         'La classe abstraite "ActionAbstraite" ne peut pas être instanciée directement'
       );
     }
-    this.tableauDesServices = tableauDesServices;
     this.idConteneur = idConteneur;
     brancheValidation(this.selecteurFormulaire);
   }
