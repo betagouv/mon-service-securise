@@ -92,7 +92,14 @@ const gestionnaireEvenements = {
       const idService = [...tableauDesServices.servicesSelectionnes][0];
 
       $('#barre-outils .action').removeClass('actif');
-      gestionnaireTiroir.afficheContenuAction('contributeurs', idService);
+      gestionnaireTiroir.afficheContenuAction(
+        {
+          identifiantAction: 'contributeurs',
+          estSelectionMulitple:
+            tableauDesServices.servicesSelectionnes.size > 1,
+        },
+        idService
+      );
       gestionnaireEvenements.fermeMenuFlottant();
     });
 
@@ -103,7 +110,13 @@ const gestionnaireEvenements = {
   afficheTiroirAction: ($action, ...args) => {
     $('#barre-outils .action').removeClass('actif');
     $action.addClass('actif');
-    gestionnaireTiroir.afficheContenuAction($action.data('action'), ...args);
+    gestionnaireTiroir.afficheContenuAction(
+      {
+        identifiantAction: $action.data('action'),
+        estSelectionMulitple: tableauDesServices.servicesSelectionnes.size > 1,
+      },
+      ...args
+    );
     gestionnaireEvenements.fermeMenuFlottant();
   },
   triContributeurs: {

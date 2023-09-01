@@ -1,15 +1,15 @@
-import tableauDesServices from './tableauDesServices.mjs';
 import registreDesActions from './registreActions.mjs';
 
 const EVENEMENT_BASCULE_TIROIR = 'basculeTiroir';
 
 const gestionnaireTiroir = {
-  afficheContenuAction: (identifiantAction, ...args) => {
+  afficheContenuAction: (
+    { identifiantAction, estSelectionMulitple },
+    ...args
+  ) => {
     const action = registreDesActions[identifiantAction];
 
     const { titre, texteSimple, texteMultiple, initialise } = action;
-    const estSelectionMulitple =
-      tableauDesServices.servicesSelectionnes.size > 1;
 
     $('.titre-tiroir').text(titre);
     $('.texte-tiroir').text(estSelectionMulitple ? texteMultiple : texteSimple);
