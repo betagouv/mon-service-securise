@@ -14,7 +14,7 @@ const gestionnaireTiroir = {
     $('.titre-tiroir').text(titre);
     $('.texte-tiroir').text(estSelectionMulitple ? texteMultiple : texteSimple);
     $('.bloc-contenu').hide();
-    $(`#contenu-${identifiantAction}`).show();
+    action.affiche();
     initialise.apply(action, args);
     gestionnaireTiroir.basculeOuvert(true);
   },

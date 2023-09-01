@@ -24,6 +24,10 @@ class ActionAbstraite {
     brancheValidation(this.selecteurFormulaire);
   }
 
+  affiche() {
+    $(this.idConteneur).show();
+  }
+
   appliqueContenu({ titre, texteSimple, texteMultiple }) {
     this.titre = titre;
     this.texteSimple = texteSimple;
