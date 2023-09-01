@@ -527,7 +527,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/api/annuaire/suggestions`', () => {
+  describe('quand requête GET sur `/api/annuaire/organisations`', () => {
     beforeEach(() => {
       testeur.referentiel().estCodeDepartement = () => true;
     });
@@ -538,7 +538,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         'Le terme de recherche ne peut pas être vide',
         {
           method: 'get',
-          url: 'http://localhost:1234/api/annuaire/suggestions?departement=75',
+          url: 'http://localhost:1234/api/annuaire/organisations?departement=75',
         },
         done
       );
@@ -551,7 +551,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         'Le département doit être valide (01 à 989)',
         {
           method: 'get',
-          url: 'http://localhost:1234/api/annuaire/suggestions?recherche=mairie&departement=990',
+          url: 'http://localhost:1234/api/annuaire/organisations?recherche=mairie&departement=990',
         },
         done
       );
@@ -571,7 +571,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       axios
         .get(
-          'http://localhost:1234/api/annuaire/suggestions?recherche=mairie&departement=01'
+          'http://localhost:1234/api/annuaire/organisations?recherche=mairie&departement=01'
         )
         .then((reponse) => {
           expect(adaptateurAppele).to.be(true);

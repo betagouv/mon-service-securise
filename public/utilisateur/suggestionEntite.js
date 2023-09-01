@@ -17,13 +17,15 @@ const rechercheSuggestions = (recherche, callback) => {
   if (departementSelectionne !== '')
     parametresRequete.params.departement = departementSelectionne;
 
-  axios.get('/api/annuaire/suggestions', parametresRequete).then((reponse) => {
-    const suggestions = reponse.data.suggestions.map(({ departement, nom }) =>
-      uneSuggestion(departement, nom)
-    );
+  axios
+    .get('/api/annuaire/organisations', parametresRequete)
+    .then((reponse) => {
+      const suggestions = reponse.data.suggestions.map(({ departement, nom }) =>
+        uneSuggestion(departement, nom)
+      );
 
-    callback(suggestions);
-  });
+      callback(suggestions);
+    });
 };
 
 $(() => {
