@@ -44,6 +44,14 @@ const gestionnaireEvenements = {
             .parents('.ligne-service')
             .data('id-service');
           gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
+        } else if ($elementClique.data('action') === 'telechargement') {
+          const idService = tableauDesServices.servicesSelectionnes
+            .keys()
+            .next().value;
+          gestionnaireEvenements.afficheTiroirAction($elementClique, {
+            idService,
+            donneesService: tableauDesServices.donneesDuService(idService),
+          });
         } else gestionnaireEvenements.afficheTiroirAction($elementClique);
       } else if ($elementClique.hasClass('entete-contributeurs')) {
         gestionnaireEvenements.triContributeurs.bascule();
