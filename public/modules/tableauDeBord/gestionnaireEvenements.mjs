@@ -47,9 +47,7 @@ const gestionnaireEvenements = {
             donneesService: tableauDesServices.donneesDuService(idService),
           });
         } else if ($elementClique.data('action') === 'telechargement') {
-          const idService = tableauDesServices.servicesSelectionnes
-            .keys()
-            .next().value;
+          const idService = tableauDesServices.idServiceSelectionne();
           gestionnaireEvenements.afficheTiroirAction($elementClique, {
             idService,
             donneesService: tableauDesServices.donneesDuService(idService),
@@ -58,7 +56,7 @@ const gestionnaireEvenements = {
           const nbServicesSelectionnes =
             tableauDesServices.servicesSelectionnes.size;
           const nomDuService = tableauDesServices.nomDuService(
-            tableauDesServices.servicesSelectionnes.keys().next().value
+            tableauDesServices.idServiceSelectionne()
           );
           gestionnaireEvenements.afficheTiroirAction($elementClique, {
             nbServicesSelectionnes,
@@ -84,10 +82,7 @@ const gestionnaireEvenements = {
 
     $('#action-duplication').on('click', () => {
       registreDesActions.duplication
-        .execute({
-          idService: tableauDesServices.servicesSelectionnes.keys().next()
-            .value,
-        })
+        .execute({ idService: tableauDesServices.idServiceSelectionne() })
         .then(() => {
           tableauDesServices.recupereServices();
           gestionnaireTiroir.basculeOuvert(false);
@@ -125,8 +120,6 @@ const gestionnaireEvenements = {
     });
 
     $('#retour-liste-contributeurs').on('click', () => {
-      const idService = [...tableauDesServices.servicesSelectionnes][0];
-
       $('#barre-outils .action').removeClass('actif');
       gestionnaireTiroir.afficheContenuAction(
         {
@@ -134,7 +127,11 @@ const gestionnaireEvenements = {
           estSelectionMulitple:
             tableauDesServices.servicesSelectionnes.size > 1,
         },
-        idService
+        {
+          donneesService: tableauDesServices.donneesDuService(
+            tableauDesServices.idServiceSelectionne()
+          ),
+        }
       );
       gestionnaireEvenements.fermeMenuFlottant();
     });
