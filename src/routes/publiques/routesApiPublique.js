@@ -153,7 +153,7 @@ const routesApiPublique = ({
       .catch(suite);
   });
 
-  routes.get('/annuaire/suggestions', (requete, reponse) => {
+  routes.get('/annuaire/organisations', (requete, reponse) => {
     const { recherche = '', departement = null } = requete.query;
 
     if (recherche === '') {
