@@ -47,8 +47,8 @@ const metEnFormeContributeur = (estSupprimable, contributeur, service) =>
   metEnFormeLigne(false, estSupprimable, contributeur, service);
 
 class ActionContributeurs extends ActionAbstraite {
-  constructor(tableauDesServices) {
-    super('#contenu-contributeurs', tableauDesServices);
+  constructor() {
+    super('#contenu-contributeurs');
     this.appliqueContenu({
       titre: 'Contributeurs',
       texteSimple:
@@ -56,21 +56,19 @@ class ActionContributeurs extends ActionAbstraite {
     });
   }
 
-  initialise(...args) {
+  initialise({ donneesService }) {
     super.initialise();
-    const [idService] = args;
-    const service = this.tableauDesServices.donneesDuService(idService);
     const $listeContributeurs = $('.contributeurs-actifs');
 
     $listeContributeurs.empty();
-    $listeContributeurs.append(metEnFormeProprietaire(service.createur));
+    $listeContributeurs.append(metEnFormeProprietaire(donneesService.createur));
 
-    service.contributeurs.forEach((contributeur) => {
+    donneesService.contributeurs.forEach((contributeur) => {
       $listeContributeurs.append(
         metEnFormeContributeur(
-          service.permissions.suppressionContributeur,
+          donneesService.permissions.suppressionContributeur,
           contributeur,
-          service
+          donneesService
         )
       );
     });
@@ -126,7 +124,7 @@ class ActionContributeurs extends ActionAbstraite {
     );
   }
 
-  execute() {
+  async execute() {
     const $action = $(
       '#confirmation-suppression-contributeur',
       '#contenu-contributeurs'
@@ -135,17 +133,14 @@ class ActionContributeurs extends ActionAbstraite {
     const idService = $action.attr('data-id-service');
     const idContributeur = $action.attr('data-id-contributeur');
 
-    axios
-      .delete('/api/autorisation', {
-        params: { idHomologation: idService, idContributeur },
-      })
-      .then(() => {
-        this.basculeFormulaire(true);
-        this.basculeConfirmation(false);
+    await axios.delete('/api/autorisation', {
+      params: { idHomologation: idService, idContributeur },
+    });
 
-        $ligneContributeur.fadeOut(200, (element) => $(element).remove());
-        this.tableauDesServices.recupereServices();
-      });
+    this.basculeFormulaire(true);
+    this.basculeConfirmation(false);
+
+    $ligneContributeur.fadeOut(200, (element) => $(element).remove());
   }
 }
 
