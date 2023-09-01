@@ -1,4 +1,3 @@
-import tableauDesServices from './tableauDesServices.mjs';
 import ActionContributeurs from './actions/ActionContributeurs.mjs';
 import ActionDuplication from './actions/ActionDuplication.mjs';
 import ActionExport from './actions/ActionExport.mjs';
@@ -11,7 +10,7 @@ const registreDesActions = {
   duplication: new ActionDuplication(),
   export: new ActionExport(),
   invitation: new ActionInvitation(),
-  suppression: new ActionSuppression(tableauDesServices),
+  suppression: new ActionSuppression(),
   telechargement: new ActionTelechargement(),
 };
 

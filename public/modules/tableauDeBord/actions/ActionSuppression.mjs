@@ -1,8 +1,8 @@
 import ActionAbstraite from './Action.mjs';
 
 class ActionSuppression extends ActionAbstraite {
-  constructor(tableauDesServices) {
-    super('#contenu-suppression', tableauDesServices);
+  constructor() {
+    super('#contenu-suppression');
     this.appliqueContenu({
       titre: 'Supprimer',
       texteSimple: 'Effacer toutes les données du service sélectionné.',
@@ -10,7 +10,7 @@ class ActionSuppression extends ActionAbstraite {
     });
   }
 
-  initialise() {
+  initialise({ nomDuService, nbServicesSelectionnes }) {
     super.initialise();
     $('#action-suppression').show();
     const $msgErreurChallenge = $(
@@ -23,12 +23,9 @@ class ActionSuppression extends ActionAbstraite {
     $champChallenge.off('input');
     $champChallenge.on('input', () => $msgErreurChallenge.hide());
 
-    const { nomDuService, servicesSelectionnes } = this.tableauDesServices;
-    const nbServicesSelectionnes = servicesSelectionnes.size;
     if (nbServicesSelectionnes === 1) {
-      const idSelectionne = servicesSelectionnes.keys().next().value;
       $('#nombre-service-suppression').html(
-        `le service <strong>${nomDuService(idSelectionne)}</strong> `
+        `le service <strong>${nomDuService}</strong> `
       );
     } else {
       $('#nombre-service-suppression').html(
@@ -42,7 +39,7 @@ class ActionSuppression extends ActionAbstraite {
     return seulementCreateur;
   }
 
-  execute() {
+  execute({ idServices }) {
     const $actionSuppression = $('#action-suppression');
     const motDePasseChallenge = $('#mot-de-passe-challenge-suppression').val();
 
@@ -51,30 +48,24 @@ class ActionSuppression extends ActionAbstraite {
     $actionSuppression.hide();
     this.basculeLoader(true);
 
-    const suppressions = [...this.tableauDesServices.servicesSelectionnes].map(
-      (idService) =>
-        axios.delete(`/api/service/${idService}`, {
-          data: { motDePasseChallenge },
-        })
+    const suppressions = idServices.map((idService) =>
+      axios.delete(`/api/service/${idService}`, {
+        data: { motDePasseChallenge },
+      })
     );
 
-    return Promise.all(suppressions)
-      .then(() => {
-        this.tableauDesServices.servicesSelectionnes.clear();
-        this.tableauDesServices.recupereServices();
-      })
-      .catch((exc) => {
-        if (exc.response.status === 401) {
-          const $msgErreurChallenge = $(
-            '#mot-de-passe-challenge-suppression ~ .message-erreur-specifique'
-          );
-          $msgErreurChallenge.show();
-          $actionSuppression.show();
-          this.basculeLoader(false);
+    return Promise.all(suppressions).catch((exc) => {
+      if (exc.response.status === 401) {
+        const $msgErreurChallenge = $(
+          '#mot-de-passe-challenge-suppression ~ .message-erreur-specifique'
+        );
+        $msgErreurChallenge.show();
+        $actionSuppression.show();
+        this.basculeLoader(false);
 
-          throw exc;
-        }
-      });
+        throw exc;
+      }
+    });
   }
 }
 
