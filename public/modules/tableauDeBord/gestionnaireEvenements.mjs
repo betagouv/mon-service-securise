@@ -38,13 +38,13 @@ const gestionnaireEvenements = {
         gestionnaireEvenements.basculeSelectionTousServices($elementClique);
       } else if ($elementClique.hasClass('checkbox-tous-services')) {
         gestionnaireEvenements.basculeSelectionTousServices($elementClique);
-      } else if ($elementClique.hasClass('action')) {
-        gestionnaireEvenements.afficheTiroirAction($elementClique);
-      } else if ($elementClique.hasClass('contributeurs')) {
-        const idService = $elementClique
-          .parents('.ligne-service')
-          .data('id-service');
-        gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
+      } else if ($elementClique.hasClass('ouvre-tiroir')) {
+        if ($elementClique.hasClass('contributeurs')) {
+          const idService = $elementClique
+            .parents('.ligne-service')
+            .data('id-service');
+          gestionnaireEvenements.afficheTiroirAction($elementClique, idService);
+        } else gestionnaireEvenements.afficheTiroirAction($elementClique);
       } else if ($elementClique.hasClass('entete-contributeurs')) {
         gestionnaireEvenements.triContributeurs.bascule();
       } else if ($elementClique.hasClass('tri-contributeur')) {
