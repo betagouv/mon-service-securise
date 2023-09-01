@@ -4,8 +4,8 @@ const fabriqueAnnuaire = ({
   adaptateurRechercheEntreprise,
   adaptateurPersistance,
 }) => ({
-  rechercheOrganisation: async (terme, departement) =>
-    adaptateurRechercheEntreprise.rechercheOrganisation(terme, departement),
+  rechercheOrganisations: async (terme, departement) =>
+    adaptateurRechercheEntreprise.rechercheOrganisations(terme, departement),
   rechercheContributeurs: async (idUtilisateur, recherche) => {
     const contributeurs = await adaptateurPersistance.rechercheContributeurs(
       idUtilisateur,

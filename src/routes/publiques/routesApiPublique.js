@@ -166,7 +166,7 @@ const routesApiPublique = ({
     }
 
     serviceAnnuaire
-      .rechercheOrganisation(recherche, departement)
+      .rechercheOrganisations(recherche, departement)
       .then((suggestions) => reponse.status(200).json({ suggestions }));
   });
 

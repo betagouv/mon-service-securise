@@ -3,7 +3,7 @@ const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
 
-const rechercheOrganisation = (terme, departement) =>
+const rechercheOrganisations = (terme, departement) =>
   axios
     .get('https://recherche-entreprises.api.gouv.fr/search', {
       params: {
@@ -27,4 +27,4 @@ const rechercheOrganisation = (terme, departement) =>
       return Promise.resolve([]);
     });
 
-module.exports = { rechercheOrganisation };
+module.exports = { rechercheOrganisations };
