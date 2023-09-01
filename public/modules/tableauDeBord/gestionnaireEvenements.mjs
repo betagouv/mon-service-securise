@@ -74,8 +74,14 @@ const gestionnaireEvenements = {
 
     $('#action-duplication').on('click', () => {
       registreDesActions.duplication
-        .execute()
-        .then(() => gestionnaireTiroir.basculeOuvert(false))
+        .execute({
+          idService: tableauDesServices.servicesSelectionnes.keys().next()
+            .value,
+        })
+        .then(() => {
+          tableauDesServices.recupereServices();
+          gestionnaireTiroir.basculeOuvert(false);
+        })
         .catch(() => {});
     });
 

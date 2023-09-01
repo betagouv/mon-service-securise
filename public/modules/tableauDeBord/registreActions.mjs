@@ -8,7 +8,7 @@ import ActionTelechargement from './actions/ActionTelechargement.mjs';
 
 const registreDesActions = {
   contributeurs: new ActionContributeurs(),
-  duplication: new ActionDuplication(tableauDesServices),
+  duplication: new ActionDuplication(),
   export: new ActionExport(),
   invitation: new ActionInvitation(tableauDesServices),
   suppression: new ActionSuppression(tableauDesServices),

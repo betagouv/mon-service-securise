@@ -3,8 +3,8 @@ import ActionAbstraite from './Action.mjs';
 const tableauDeLongueur = (longueur) => [...Array(longueur).keys()];
 
 class ActionDuplication extends ActionAbstraite {
-  constructor(tableauDesServices) {
-    super('#contenu-duplication', tableauDesServices);
+  constructor() {
+    super('#contenu-duplication');
     this.appliqueContenu({
       titre: 'Dupliquer',
       texteSimple:
@@ -23,7 +23,7 @@ class ActionDuplication extends ActionAbstraite {
     return !estSelectionMultiple && seulementCreateur;
   }
 
-  execute() {
+  async execute({ idService }) {
     const $nombreCopie = $('#nombre-copie');
 
     if (!this.formulaireEstValide) return Promise.reject();
@@ -33,31 +33,27 @@ class ActionDuplication extends ActionAbstraite {
 
     const nombreCopies = parseInt($nombreCopie.val(), 10) || 1;
     const uneCopie = () =>
-      axios({ method: 'copy', url: `/api/service/${this.idSelectionne()}` });
+      axios({ method: 'copy', url: `/api/service/${idService}` });
 
     const copies = tableauDeLongueur(nombreCopies).reduce(
       (acc) => acc.then(() => uneCopie()),
       Promise.resolve()
     );
 
-    return copies
-      .then(() => this.tableauDesServices.recupereServices())
-      .catch((exc) => {
-        const { data, status } = exc.response;
+    try {
+      return await copies;
+    } catch (exc) {
+      const { data, status } = exc.response;
 
-        if (status === 424 && data.type === 'DONNEES_OBLIGATOIRES_MANQUANTES') {
-          this.basculeFormulaire(false);
-          const urlDecrire = `/service/${this.idSelectionne()}/descriptionService`;
-          $('#aller-dans-decrire').attr('href', urlDecrire);
-          this.basculeRapport(true);
-        }
+      if (status === 424 && data.type === 'DONNEES_OBLIGATOIRES_MANQUANTES') {
+        this.basculeFormulaire(false);
+        const urlDecrire = `/service/${idService}/descriptionService`;
+        $('#aller-dans-decrire').attr('href', urlDecrire);
+        this.basculeRapport(true);
+      }
 
-        throw exc;
-      });
-  }
-
-  idSelectionne() {
-    return this.tableauDesServices.servicesSelectionnes.keys().next().value;
+      throw exc;
+    }
   }
 }
 
