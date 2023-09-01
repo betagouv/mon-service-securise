@@ -1,14 +1,7 @@
-import registreDesActions from './registreActions.mjs';
-
 const EVENEMENT_BASCULE_TIROIR = 'basculeTiroir';
 
 const gestionnaireTiroir = {
-  afficheContenuAction: (
-    { identifiantAction, estSelectionMulitple },
-    ...args
-  ) => {
-    const action = registreDesActions[identifiantAction];
-
+  afficheContenuAction: ({ action, estSelectionMulitple }, ...args) => {
     const { titre, texteSimple, texteMultiple, initialise } = action;
 
     $('.titre-tiroir').text(titre);
