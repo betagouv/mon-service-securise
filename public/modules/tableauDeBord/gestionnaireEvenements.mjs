@@ -5,6 +5,8 @@ import tableauDesServices, { ORDRE_DE_TRI } from './tableauDesServices.mjs';
 
 const gestionnaireEvenements = {
   brancheComportement: () => {
+    gestionnaireTiroir.brancheComportement();
+
     $('#recherche-service').on('input', (e) => {
       tableauDesServices.effaceSelection();
       tableauDesServices.modifieRecherche($(e.target).val());
@@ -74,10 +76,6 @@ const gestionnaireEvenements = {
         $('input[name="tri-contributeur"]').prop('checked', false);
         gestionnaireEvenements.triContributeurs.applique();
       }
-    });
-
-    $('.tiroir .fermeture-tiroir').on('click', () => {
-      gestionnaireTiroir.basculeOuvert(false);
     });
 
     $('#action-duplication').on('click', () => {

@@ -19,6 +19,11 @@ const gestionnaireTiroir = {
     }
     $(document).trigger(EVENEMENT_BASCULE_TIROIR, { ouvert: doitOuvrir });
   },
+  brancheComportement: () => {
+    $('.tiroir .fermeture-tiroir').on('click', () => {
+      gestionnaireTiroir.basculeOuvert(false);
+    });
+  },
 };
 
 export { gestionnaireTiroir, EVENEMENT_BASCULE_TIROIR };
