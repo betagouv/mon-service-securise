@@ -16,18 +16,6 @@ mixin actionAvecIcone(sourceImage, texteAction, action, id)
     img(src=sourceImage)
     p!= texteAction
 
-mixin documentTelechargeable(nom, description, type, idLien, peutEtreIndisponible)
-  - const sourceImage = `/statique/assets/images/icone_telechargement_${type.toLowerCase()}.svg`
-  .document-telechargeable(id= `conteneur-${idLien}`)
-    .contenu
-      img.icone-type-document(src=sourceImage)
-      .contenu-texte
-        p.titre-document= nom
-        p.description-document!= description
-    a.lien-telechargement.bouton(href='', target='_blank', rel='noopener', id=idLien) Télécharger
-    if (peutEtreIndisponible)
-      p.lien-indisponible Document non disponible
-
 block append styles
   link(href = '/styles/selectize.default.min.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
@@ -215,12 +203,7 @@ block main
             .conteneur-actions
               button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
               button.bouton#action-suppression(type='button') Confirmer la suppression
-        .bloc-contenu#contenu-telechargement
-          form.conteneur-formulaire
-            +documentTelechargeable('Synthèse de la sécurité du service', "Ce PDF résume en 1 page l'état de la sécurité du service.", 'PDF', 'lien-synthese')
-            +documentTelechargeable('Annexes', 'Ce PDF détaille toutes les informations renseignées sur la sécurité du service.', 'PDF', 'lien-annexes')
-            +documentTelechargeable("Décision d'homologation de sécurité", "Ce PDF est le document de décision pouvant être signé par l'autorité d'homologation.", 'PDF', 'lien-decision', true)
-            +documentTelechargeable('Tous les documents', 'Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDFs à télécharger.', 'ZIP', 'lien-archive')
+        include ./tiroirs/tiroirTelechargement
 
 
   script(type = 'module', src = '/statique/tableauDeBord.js')
