@@ -118,16 +118,7 @@ block main
             .conteneur-actions
               button.bouton.bouton-secondaire.fermeture-tiroir(type='button') Annuler
               button.bouton#confirmation-suppression-contributeur(type='button') Retirer du service
-        .bloc-contenu#contenu-export
-          form.conteneur-formulaire
-            - const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
-            - const maintenant = new Date();
-            - const nomFichierCsv = `MSS_services_${formatDateCourt.format(maintenant).replaceAll('-', '')}.csv`
-            ul.liste-fichiers
-              li.fichier
-                .nom-document
-                  p= nomFichierCsv
-                button.bouton#action-export-csv(type='button') Télécharger
+        include ./tiroirs/tiroirExport
         .bloc-contenu#contenu-invitation
           form.conteneur-formulaire
             label(for = 'email-invitation-collaboration') Ajouter un ou plusieurs contributeurs
