@@ -215,7 +215,7 @@ const tableauDesServices = {
         }'></div>`
       );
       const $nombreContributeurs = $(
-        `<div class='contributeurs' title='${metEnFormeContributeurs(
+        `<div class='contributeurs ouvre-tiroir' title='${metEnFormeContributeurs(
           service
         )}' data-action='contributeurs'>${service.nombreContributeurs}</div>`
       );
