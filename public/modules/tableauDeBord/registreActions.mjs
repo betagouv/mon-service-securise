@@ -12,7 +12,7 @@ const registreDesActions = {
   export: new ActionExport(),
   invitation: new ActionInvitation(tableauDesServices),
   suppression: new ActionSuppression(tableauDesServices),
-  telechargement: new ActionTelechargement(tableauDesServices),
+  telechargement: new ActionTelechargement(),
 };
 
 export default registreDesActions;

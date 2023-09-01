@@ -1,8 +1,8 @@
 import ActionAbstraite from './Action.mjs';
 
 class ActionTelechargement extends ActionAbstraite {
-  constructor(tableauDesServices) {
-    super('#contenu-telechargement', tableauDesServices);
+  constructor() {
+    super('#contenu-telechargement');
     this.appliqueContenu({
       titre: 'Télécharger les PDFs',
       texteSimple:
@@ -12,21 +12,15 @@ class ActionTelechargement extends ActionAbstraite {
     });
   }
 
-  initialise() {
+  initialise({ idService, donneesService }) {
     super.initialise();
 
-    const idSelectionne = this.tableauDesServices.servicesSelectionnes
-      .keys()
-      .next().value;
-    const urlBase = `/api/service/${idSelectionne}/pdf/`;
+    const urlBase = `/api/service/${idService}/pdf/`;
 
     $('#lien-synthese').attr('href', `${urlBase}syntheseSecurite.pdf`);
     $('#lien-annexes').attr('href', `${urlBase}annexes.pdf`);
     $('#lien-decision').attr('href', `${urlBase}dossierDecision.pdf`);
     $('#lien-archive').attr('href', `${urlBase}documentsHomologation.zip`);
-
-    const donneesService =
-      this.tableauDesServices.donneesDuService(idSelectionne);
 
     const $conteneurDecision = $('#conteneur-lien-decision');
     const dossierDecisionDisponible =
