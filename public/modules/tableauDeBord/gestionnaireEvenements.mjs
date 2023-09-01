@@ -94,7 +94,7 @@ const gestionnaireEvenements = {
       $('#barre-outils .action').removeClass('actif');
       gestionnaireTiroir.afficheContenuAction(
         {
-          identifiantAction: 'contributeurs',
+          action: registreDesActions.contributeurs,
           estSelectionMulitple:
             tableauDesServices.servicesSelectionnes.size > 1,
         },
@@ -112,7 +112,7 @@ const gestionnaireEvenements = {
     $action.addClass('actif');
     gestionnaireTiroir.afficheContenuAction(
       {
-        identifiantAction: $action.data('action'),
+        action: registreDesActions[$action.data('action')],
         estSelectionMulitple: tableauDesServices.servicesSelectionnes.size > 1,
       },
       ...args
