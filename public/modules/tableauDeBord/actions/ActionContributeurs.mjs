@@ -22,7 +22,7 @@ const metEnFormeLigne = (
 ) =>
   `<li class='ligne-contributeur'>
     <div class='contenu-nom-prenom'>
-      <div class='initiale ${
+      <div class='initiales ${
         estProprietaire ? 'proprietaire' : 'contributeur'
       }'>${utilisateur.initiales}</div>
       <div class='nom-prenom-poste'>

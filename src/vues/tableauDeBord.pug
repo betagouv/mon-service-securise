@@ -142,12 +142,10 @@ block main
                 button.bouton#action-export-csv(type='button') Télécharger
         .bloc-contenu#contenu-invitation
           form.conteneur-formulaire
-            label Ajouter un ou plusieurs contributeurs
-              br
-              input(
+            label(for = 'email-invitation-collaboration') Ajouter un ou plusieurs contributeurs
+              select(
                 id = 'email-invitation-collaboration',
                 name = 'email-invitation-collaboration',
-                type = 'text',
                 placeholder = 'ex : e.leroy@domaine.fr',
                 required,
               )
