@@ -54,6 +54,16 @@ const gestionnaireEvenements = {
             idService,
             donneesService: tableauDesServices.donneesDuService(idService),
           });
+        } else if ($elementClique.data('action') === 'suppression') {
+          const nbServicesSelectionnes =
+            tableauDesServices.servicesSelectionnes.size;
+          const nomDuService = tableauDesServices.nomDuService(
+            tableauDesServices.servicesSelectionnes.keys().next().value
+          );
+          gestionnaireEvenements.afficheTiroirAction($elementClique, {
+            nbServicesSelectionnes,
+            nomDuService,
+          });
         } else gestionnaireEvenements.afficheTiroirAction($elementClique);
       } else if ($elementClique.hasClass('entete-contributeurs')) {
         gestionnaireEvenements.triContributeurs.bascule();
@@ -87,8 +97,12 @@ const gestionnaireEvenements = {
 
     $('#action-suppression').on('click', () => {
       registreDesActions.suppression
-        .execute()
-        .then(() => gestionnaireTiroir.basculeOuvert(false))
+        .execute({ idServices: [...tableauDesServices.servicesSelectionnes] })
+        .then(() => {
+          tableauDesServices.servicesSelectionnes.clear();
+          tableauDesServices.recupereServices();
+          gestionnaireTiroir.basculeOuvert(false);
+        })
         .catch(() => {});
     });
 
