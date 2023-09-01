@@ -153,22 +153,29 @@ const routesApiPublique = ({
       .catch(suite);
   });
 
-  routes.get('/annuaire/organisations', (requete, reponse) => {
-    const { recherche = '', departement = null } = requete.query;
+  routes.get(
+    '/annuaire/organisations',
+    middleware.aseptise(['recherche', 'departement']),
+    (requete, reponse) => {
+      const { recherche = '', departement = null } = requete.query;
 
-    if (recherche === '') {
-      reponse.status(400).send('Le terme de recherche ne peut pas être vide');
-      return;
-    }
-    if (departement !== null && !referentiel.estCodeDepartement(departement)) {
-      reponse.status(400).send('Le département doit être valide (01 à 989)');
-      return;
-    }
+      if (recherche === '') {
+        reponse.status(400).send('Le terme de recherche ne peut pas être vide');
+        return;
+      }
+      if (
+        departement !== null &&
+        !referentiel.estCodeDepartement(departement)
+      ) {
+        reponse.status(400).send('Le département doit être valide (01 à 989)');
+        return;
+      }
 
-    serviceAnnuaire
-      .rechercheOrganisations(recherche, departement)
-      .then((suggestions) => reponse.status(200).json({ suggestions }));
-  });
+      serviceAnnuaire
+        .rechercheOrganisations(recherche, departement)
+        .then((suggestions) => reponse.status(200).json({ suggestions }));
+    }
+  );
 
   routes.post(
     '/desinscriptionInfolettre',

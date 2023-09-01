@@ -532,6 +532,17 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       testeur.referentiel().estCodeDepartement = () => true;
     });
 
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['recherche', 'departement'],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/annuaire/organisations',
+        },
+        done
+      );
+    });
+
     it('retourne une erreur HTTP 400 si le terme de recherche est vide', (done) => {
       testeur.verifieRequeteGenereErreurHTTP(
         400,
