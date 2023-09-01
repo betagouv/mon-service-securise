@@ -31,6 +31,8 @@ const tableauDesServices = {
   termeRecherche: '',
   tri: { colonne: null, ordre: ORDRE_DE_TRI.AUCUN },
   filtre: { seulementProprietaire: false },
+  idServiceSelectionne: () =>
+    tableauDesServices.servicesSelectionnes.keys().next().value,
   afficheDonnees: () => {
     tableauDesServices.videTableau();
     tableauDesServices.filtreEtTriDonnees();
