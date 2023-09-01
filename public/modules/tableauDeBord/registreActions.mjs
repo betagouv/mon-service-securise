@@ -10,7 +10,7 @@ const registreDesActions = {
   contributeurs: new ActionContributeurs(),
   duplication: new ActionDuplication(),
   export: new ActionExport(),
-  invitation: new ActionInvitation(tableauDesServices),
+  invitation: new ActionInvitation(),
   suppression: new ActionSuppression(tableauDesServices),
   telechargement: new ActionTelechargement(),
 };
