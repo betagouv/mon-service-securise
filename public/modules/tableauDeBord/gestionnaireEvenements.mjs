@@ -41,30 +41,7 @@ const gestionnaireEvenements = {
       } else if ($elementClique.hasClass('checkbox-tous-services')) {
         gestionnaireEvenements.basculeSelectionTousServices($elementClique);
       } else if ($elementClique.hasClass('ouvre-tiroir')) {
-        if ($elementClique.hasClass('contributeurs')) {
-          const idService = $elementClique
-            .parents('.ligne-service')
-            .data('id-service');
-          gestionnaireEvenements.afficheTiroirAction($elementClique, {
-            donneesService: tableauDesServices.donneesDuService(idService),
-          });
-        } else if ($elementClique.data('action') === 'telechargement') {
-          const idService = tableauDesServices.idServiceSelectionne();
-          gestionnaireEvenements.afficheTiroirAction($elementClique, {
-            idService,
-            donneesService: tableauDesServices.donneesDuService(idService),
-          });
-        } else if ($elementClique.data('action') === 'suppression') {
-          const nbServicesSelectionnes =
-            tableauDesServices.servicesSelectionnes.size;
-          const nomDuService = tableauDesServices.nomDuService(
-            tableauDesServices.idServiceSelectionne()
-          );
-          gestionnaireEvenements.afficheTiroirAction($elementClique, {
-            nbServicesSelectionnes,
-            nomDuService,
-          });
-        } else gestionnaireEvenements.afficheTiroirAction($elementClique);
+        gestionnaireEvenements.brancheTiroirAction($elementClique);
       } else if ($elementClique.hasClass('entete-contributeurs')) {
         gestionnaireEvenements.triContributeurs.bascule();
       } else if ($elementClique.hasClass('tri-contributeur')) {
@@ -137,6 +114,32 @@ const gestionnaireEvenements = {
     $('#email-invitation-collaboration').on('input', () => {
       $('.message-erreur#invitation-deja-envoyee').hide();
     });
+  },
+  brancheTiroirAction: ($elementClique) => {
+    if ($elementClique.hasClass('contributeurs')) {
+      const idService = $elementClique
+        .parents('.ligne-service')
+        .data('id-service');
+      gestionnaireEvenements.afficheTiroirAction($elementClique, {
+        donneesService: tableauDesServices.donneesDuService(idService),
+      });
+    } else if ($elementClique.data('action') === 'telechargement') {
+      const idService = tableauDesServices.idServiceSelectionne();
+      gestionnaireEvenements.afficheTiroirAction($elementClique, {
+        idService,
+        donneesService: tableauDesServices.donneesDuService(idService),
+      });
+    } else if ($elementClique.data('action') === 'suppression') {
+      const nbServicesSelectionnes =
+        tableauDesServices.servicesSelectionnes.size;
+      const nomDuService = tableauDesServices.nomDuService(
+        tableauDesServices.idServiceSelectionne()
+      );
+      gestionnaireEvenements.afficheTiroirAction($elementClique, {
+        nbServicesSelectionnes,
+        nomDuService,
+      });
+    } else gestionnaireEvenements.afficheTiroirAction($elementClique);
   },
   afficheTiroirAction: ($action, ...args) => {
     $('#barre-outils .action').removeClass('actif');
