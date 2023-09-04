@@ -23,7 +23,10 @@ const brancheComportementModaleNouvelleFonctionnalite = ($modale) => {
       $modale[0].close();
     });
 
-    $($modale).on('close', () => supprimeQueryString());
+    $($modale).on('close', () => {
+      supprimeQueryString();
+      $modale.attr('data-page-actuelle', 1);
+    });
 
     $('.bouton.suivant', $modale).on('click', () => {
       const actuelle = parseInt($modale.attr('data-page-actuelle'), 10);
