@@ -55,6 +55,35 @@ const gestionnaireEvenements = {
       }
     });
 
+    gestionnaireEvenements.brancheExecutionActions();
+  },
+  brancheTiroirAction: ($elementClique) => {
+    if ($elementClique.hasClass('contributeurs')) {
+      const idService = $elementClique
+        .parents('.ligne-service')
+        .data('id-service');
+      gestionnaireEvenements.afficheTiroirAction($elementClique, {
+        donneesService: tableauDesServices.donneesDuService(idService),
+      });
+    } else if ($elementClique.data('action') === 'telechargement') {
+      const idService = tableauDesServices.idServiceSelectionne();
+      gestionnaireEvenements.afficheTiroirAction($elementClique, {
+        idService,
+        donneesService: tableauDesServices.donneesDuService(idService),
+      });
+    } else if ($elementClique.data('action') === 'suppression') {
+      const nbServicesSelectionnes =
+        tableauDesServices.servicesSelectionnes.size;
+      const nomDuService = tableauDesServices.nomDuService(
+        tableauDesServices.idServiceSelectionne()
+      );
+      gestionnaireEvenements.afficheTiroirAction($elementClique, {
+        nbServicesSelectionnes,
+        nomDuService,
+      });
+    } else gestionnaireEvenements.afficheTiroirAction($elementClique);
+  },
+  brancheExecutionActions: () => {
     $('#action-duplication').on('click', () => {
       registreDesActions.duplication
         .execute({ idService: tableauDesServices.idServiceSelectionne() })
@@ -114,32 +143,6 @@ const gestionnaireEvenements = {
     $('#email-invitation-collaboration').on('input', () => {
       $('.message-erreur#invitation-deja-envoyee').hide();
     });
-  },
-  brancheTiroirAction: ($elementClique) => {
-    if ($elementClique.hasClass('contributeurs')) {
-      const idService = $elementClique
-        .parents('.ligne-service')
-        .data('id-service');
-      gestionnaireEvenements.afficheTiroirAction($elementClique, {
-        donneesService: tableauDesServices.donneesDuService(idService),
-      });
-    } else if ($elementClique.data('action') === 'telechargement') {
-      const idService = tableauDesServices.idServiceSelectionne();
-      gestionnaireEvenements.afficheTiroirAction($elementClique, {
-        idService,
-        donneesService: tableauDesServices.donneesDuService(idService),
-      });
-    } else if ($elementClique.data('action') === 'suppression') {
-      const nbServicesSelectionnes =
-        tableauDesServices.servicesSelectionnes.size;
-      const nomDuService = tableauDesServices.nomDuService(
-        tableauDesServices.idServiceSelectionne()
-      );
-      gestionnaireEvenements.afficheTiroirAction($elementClique, {
-        nbServicesSelectionnes,
-        nomDuService,
-      });
-    } else gestionnaireEvenements.afficheTiroirAction($elementClique);
   },
   afficheTiroirAction: ($action, ...args) => {
     $('#barre-outils .action').removeClass('actif');
