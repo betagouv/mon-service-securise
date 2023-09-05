@@ -7,7 +7,7 @@
     "npm": "9"
   },
   "scripts": {
-    "build": "knex migrate:latest && npm test && npm run cree-utilisateur-demo",
+    "build": "knex migrate:latest && npm test && npm run cree-utilisateur-demo && npx vite build --config svelte/vite.config.mts",
     "cree-utilisateur-demo": "node creeUtilisateurDemo.js",
     "test": "eslint . && mocha",
     "test:mocha": "mocha",
@@ -56,6 +56,9 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.0.2",
+    "@tsconfig/svelte": "^3.0.0",
+    "concurrently": "^8.2.1",
     "eslint": "^8.31.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.8.0",
@@ -67,6 +70,11 @@
     "lint-staged": "^13.2.2",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
-    "prettier": "2.8.8"
+    "prettier": "2.8.8",
+    "svelte": "^3.55.1",
+    "svelte-check": "^2.10.3",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
   }
 }

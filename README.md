@@ -61,3 +61,16 @@ Il est alors possible de créer un compte utilisateur à l'url `http://localhost
 Les tests peuvent être lancés depuis un conteneur Docker en exécutant le script
 `scripts/tests.sh`. Les tests sont alors rejoués à chaque modification de
 fichier du projet sur la machine hôte.
+
+## Conception
+
+### Composants Svelte
+
+Certaines parties du frontend sont suffisament compliquées pour ne pas être codées en jQuery.
+Pour celles-ci, on utilise `Svelte`. Le code est rangé dans `/svelte`.
+
+En local, les composants sont `build` à la volée grâce à l'option `vite build --watch`.
+
+En production, ils sont `build` via le `build` du `package.json`.
+
+Dans les deux cas, le code généré se retrouve dans `/public/composants-svelte` pour être référencé depuis les `.pug`.
