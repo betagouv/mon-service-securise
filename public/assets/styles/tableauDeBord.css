@@ -656,7 +656,9 @@ label[for='recherche-service'] {
   max-height: 0;
   overflow: hidden;
   box-sizing: border-box;
-  transition: max-height 0.2s, padding 0.2s;
+  transition:
+    max-height 0.2s,
+    padding 0.2s;
 }
 
 .tableau-services #barre-outils th {

@@ -30,8 +30,8 @@ const metEnFormeLigne = (
       </div>
     </div>
     <div class='role ${estProprietaire ? 'proprietaire' : 'contributeur'}'>${
-    estProprietaire ? 'Propriétaire' : 'Contributeur'
-  }</div>
+      estProprietaire ? 'Propriétaire' : 'Contributeur'
+    }</div>
     ${`<div class="declencheur-menu-flottant ${
       estSupprimable ? '' : 'invisible'
     }">${metEnFormeMenuflottant({
