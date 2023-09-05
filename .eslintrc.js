@@ -14,7 +14,11 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
-  ignorePatterns: ['public/bibliotheques/*.js'],
+  ignorePatterns: [
+    'public/bibliotheques/*.js',
+    'public/composants-svelte/*.js',
+    'svelte/svelte.config.js',
+  ],
   plugins: ['mocha'],
   rules: {
     'mocha/no-exclusive-tests': 'error',
