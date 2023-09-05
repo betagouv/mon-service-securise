@@ -4,9 +4,8 @@ const creeDepot = (config = {}) => {
   const { adaptateurPersistance, referentiel } = config;
 
   const lisParcoursUtilisateur = async (idUtilisateur) => {
-    const parcoursConnu = await adaptateurPersistance.lisParcoursUtilisateur(
-      idUtilisateur
-    );
+    const parcoursConnu =
+      await adaptateurPersistance.lisParcoursUtilisateur(idUtilisateur);
     return new ParcoursUtilisateur(
       parcoursConnu ?? { idUtilisateur },
       referentiel
