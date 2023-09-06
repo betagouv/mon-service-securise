@@ -10,11 +10,11 @@ class ActionContributeurs extends ActionAbstraite {
     });
   }
 
-  initialise({ donneesService }) {
+  initialise({ donneesServices }) {
     super.initialise();
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-contributeurs', {
-        detail: { services: [donneesService] },
+        detail: { services: donneesServices },
       })
     );
   }

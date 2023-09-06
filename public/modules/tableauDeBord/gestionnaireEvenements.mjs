@@ -67,7 +67,14 @@ const gestionnaireEvenements = {
         .parents('.ligne-service')
         .data('id-service');
       gestionnaireEvenements.afficheTiroirAction($elementClique, {
-        donneesService: tableauDesServices.donneesDuService(idService),
+        donneesServices: [tableauDesServices.donneesDuService(idService)],
+      });
+    } else if ($elementClique.data('action') === 'contributeurs') {
+      const donneesServices = [...tableauDesServices.servicesSelectionnes].map(
+        (idService) => tableauDesServices.donneesDuService(idService)
+      );
+      gestionnaireEvenements.afficheTiroirAction($elementClique, {
+        donneesServices,
       });
     } else if ($elementClique.data('action') === 'telechargement') {
       const idService = tableauDesServices.idServiceSelectionne();
@@ -109,13 +116,6 @@ const gestionnaireEvenements = {
         .catch(() => {});
     });
 
-    $('#action-invitation').on('click', () =>
-      registreDesActions.invitation
-        .execute({ idServices: [...tableauDesServices.servicesSelectionnes] })
-        .then(() => tableauDesServices.recupereServices())
-        .catch(() => {})
-    );
-
     $('#action-export-csv').on('click', () =>
       registreDesActions.export.execute({
         idServices: [...tableauDesServices.servicesSelectionnes],
@@ -137,10 +137,6 @@ const gestionnaireEvenements = {
         }
       );
       gestionnaireEvenements.fermeMenuFlottant();
-    });
-
-    $('#email-invitation-collaboration').on('input', () => {
-      $('.message-erreur#invitation-deja-envoyee').hide();
     });
   },
   afficheTiroirAction: ($action, ...args) => {
