@@ -392,6 +392,7 @@
   position: relative;
   align-self: center;
   cursor: pointer;
+  background: white;
 }
 
 #contenu-contributeurs .declencheur-menu-flottant.invisible {
@@ -420,7 +421,7 @@
     hue-rotate(173deg) brightness(89%) contrast(97%);
 }
 
-#contenu-contributeurs .menu-flottant {
+#contenu-contributeurs :is(.menu-flottant, .svelte-menu-flottant) {
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -434,12 +435,18 @@
   border-radius: 5px;
 }
 
-#contenu-contributeurs .liste-contributeurs .menu-flottant ul {
+#contenu-contributeurs
+  .liste-contributeurs
+  :is(.menu-flottant, .svelte-menu-flottant)
+  ul {
   padding-left: 0;
   padding: 0.2em;
 }
 
-#contenu-contributeurs .liste-contributeurs .menu-flottant li {
+#contenu-contributeurs
+  .liste-contributeurs
+  :is(.menu-flottant, .svelte-menu-flottant)
+  li {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -451,12 +458,15 @@
   border-radius: 4px;
 }
 
-#contenu-contributeurs .liste-contributeurs .menu-flottant li:hover {
+#contenu-contributeurs
+  .liste-contributeurs
+  :is(.menu-flottant, .svelte-menu-flottant)
+  li:hover {
   background: #f1f5f9;
   color: #0079d0;
 }
 
-#contenu-contributeurs .menu-flottant.invisible {
+#contenu-contributeurs :is(.menu-flottant, .svelte-menu-flottant).invisible {
   display: none;
 }
 

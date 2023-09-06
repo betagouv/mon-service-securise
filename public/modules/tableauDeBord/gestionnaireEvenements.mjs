@@ -7,6 +7,10 @@ const gestionnaireEvenements = {
   brancheComportement: () => {
     gestionnaireTiroir.brancheComportement();
 
+    $(document.body).on('jquery-recharge-services', () => {
+      tableauDesServices.recupereServices();
+    });
+
     $('#recherche-service').on('input', (e) => {
       tableauDesServices.effaceSelection();
       tableauDesServices.modifieRecherche($(e.target).val());
@@ -117,11 +121,6 @@ const gestionnaireEvenements = {
         idServices: [...tableauDesServices.servicesSelectionnes],
       })
     );
-
-    $('#confirmation-suppression-contributeur').on('click', async () => {
-      await registreDesActions.contributeurs.execute();
-      tableauDesServices.recupereServices();
-    });
 
     $('#retour-liste-contributeurs').on('click', () => {
       $('#barre-outils .action').removeClass('actif');
