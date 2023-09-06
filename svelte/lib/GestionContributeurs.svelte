@@ -7,8 +7,8 @@
   import SuppressionContributeur from './SuppressionContributeur.svelte';
 
   export let services: Service[];
-  $: service = services[0];
-  $: contributeurs = service.contributeurs;
+  $: serviceUnique = services[0];
+  $: contributeurs = serviceUnique.contributeurs;
 
   const supprimeContributeur = (evenement: CustomEvent<Utilisateur>) => {
     contributeurs = contributeurs.filter((c) => c.id != evenement.detail.id);
@@ -17,21 +17,21 @@
 </script>
 
 {#if $gestionContributeursStore.etapeCourante === 'SuppressionContributeur'}
-  <SuppressionContributeur {service} on:suppressionEffectuee={supprimeContributeur} />
+  <SuppressionContributeur service={serviceUnique} on:suppressionEffectuee={supprimeContributeur} />
 {:else}
-  <InvitationContributeur {service} />
-  {#if $gestionContributeursStore.etapeCourante !== 'InvitationContributeurs'}
+  <InvitationContributeur {services} />
+  {#if $gestionContributeursStore.etapeCourante !== 'InvitationContributeurs' && services.length === 1}
     <h3 class="titre-liste titre-contributeurs-actifs">Ajouté(s) au service</h3>
     <ul class="liste-contributeurs contributeurs-actifs">
       <LigneContributeur
         estProprietaire={true}
         estSupprimable={false}
-        utilisateur={service.createur}
+        utilisateur={serviceUnique.createur}
       />
       {#each contributeurs as contributeur (contributeur.id)}
         <LigneContributeur
           estProprietaire={false}
-          estSupprimable={service.permissions.suppressionContributeur}
+          estSupprimable={serviceUnique.permissions.suppressionContributeur}
           utilisateur={contributeur}
         />
       {/each}

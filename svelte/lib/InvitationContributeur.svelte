@@ -6,7 +6,7 @@
 
   type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
 
-  export let service: Service;
+  export let services: Service[];
 
   let contributeursAInviter: Utilisateur[] = [];
   let etapeCourante: Etape = 'Ajout';
@@ -40,7 +40,7 @@
       emails.map((emailContributeur) =>
         axios.post('/api/autorisation', {
           emailContributeur,
-          idServices: [service.id],
+          idServices: services.map((s) => s.id),
         })
       )
     );
