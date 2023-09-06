@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Service, Utilisateur } from './gestionContributeurs.d';
 
+  import { gestionContributeursStore } from './gestionContributeurs.store';
   import LigneContributeur from './LigneContributeur.svelte';
   import SuppressionContributeur from './SuppressionContributeur.svelte';
 
@@ -8,16 +9,11 @@
   $: service = services[0];
   $: contributeurs = service.contributeurs;
 
-  let idMenuOuvert: string;
   let utilisateurEnCoursDeSuppression: Utilisateur;
-
-  const ouvrirMenu = (idContributeur: string) => {
-    idMenuOuvert = idContributeur;
-  };
 
   const retirerContributeur = (utilisateur: Utilisateur) => {
     utilisateurEnCoursDeSuppression = utilisateur;
-    idMenuOuvert = null;
+    gestionContributeursStore.ouvrirMenuPour(null);
   };
 
   const supprimeContributeur = (evenement: CustomEvent<Utilisateur>) => {
@@ -47,8 +43,6 @@
         estProprietaire={false}
         estSupprimable={service.permissions.suppressionContributeur}
         utilisateur={contributeur}
-        menuEstOuvert={contributeur.id === idMenuOuvert}
-        onMenuClick={ouvrirMenu}
         onRetirerContributeur={retirerContributeur}
       />
     {/each}

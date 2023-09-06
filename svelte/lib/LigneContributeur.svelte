@@ -1,12 +1,11 @@
 <script lang="ts">
   import type { Utilisateur } from './gestionContributeurs.d';
+  import { gestionContributeursStore } from './gestionContributeurs.store';
 
   export let estProprietaire: boolean;
   export let estSupprimable: boolean;
   export let utilisateur: Utilisateur;
-  export let menuEstOuvert = false;
 
-  export let onMenuClick = (idUtilisateur: string) => {};
   export let onRetirerContributeur = (utilisateur: Utilisateur) => {};
 </script>
 
@@ -29,9 +28,15 @@
   {#if estSupprimable}
     <button
       class="declencheur-menu-flottant"
-      on:click={() => onMenuClick(utilisateur.id)}
+      on:click={() =>
+        gestionContributeursStore.ouvrirMenuPour(utilisateur.id)}
     >
-      <div class="svelte-menu-flottant" class:invisible={!menuEstOuvert}>
+      <div
+        class="svelte-menu-flottant"
+        class:invisible={!(
+          $gestionContributeursStore.idMenuOuvert === utilisateur.id
+        )}
+      >
         <ul>
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <li
