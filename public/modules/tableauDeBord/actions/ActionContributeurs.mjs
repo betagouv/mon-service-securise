@@ -7,6 +7,8 @@ class ActionContributeurs extends ActionAbstraite {
       titre: 'Contributeurs',
       texteSimple:
         'Gérer la liste des personnes invitées à contribuer au service sélectionné.',
+      texteMultiple:
+        'Gérer la liste des personnes invitées à contribuer aux services sélectionnés.',
     });
   }
 
@@ -20,8 +22,8 @@ class ActionContributeurs extends ActionAbstraite {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  estDisponible() {
-    return true;
+  estDisponible({ seulementCreateur }) {
+    return seulementCreateur;
   }
 }
 
