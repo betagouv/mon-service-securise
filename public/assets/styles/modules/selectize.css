@@ -137,7 +137,7 @@
   font-size: 12px;
 }
 
-.selectize-dropdown .option-ajout {
+:is(.selectize-dropdown, .liste-suggestions) .option-ajout {
   padding: 0.6em;
   color: #0079d0;
   font-weight: bold;
@@ -149,7 +149,7 @@
   cursor: pointer;
 }
 
-.selectize-dropdown .option-ajout::before {
+:is(.selectize-dropdown, .liste-suggestions) .option-ajout::before {
   content: '';
   width: 1.3em;
   height: 1.3em;
@@ -160,7 +160,7 @@
   transform: translateY(1px);
 }
 
-.selectize-dropdown .option-ajout.active {
+:is(.selectize-dropdown, .liste-suggestions) .option-ajout.active {
   color: #0079d0;
 }
 
