@@ -4,8 +4,9 @@
   import { createEventDispatcher } from 'svelte';
   import { gestionContributeursStore } from './gestionContributeurs.store';
 
-  export let utilisateur: Utilisateur;
   export let service: Service;
+
+  $: utilisateur = $gestionContributeursStore.utilisateurEnCoursDeSuppression as Utilisateur;
 
   const envoiEvenement = createEventDispatcher();
 

@@ -23,4 +23,5 @@ export type Utilisateur = {
   prenomNom: string;
   initiales: string;
   poste: string;
+  email: string;
 };

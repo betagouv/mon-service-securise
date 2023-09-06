@@ -2,6 +2,7 @@
   import type { Service, Utilisateur } from './gestionContributeurs.d';
 
   import { gestionContributeursStore } from './gestionContributeurs.store';
+  import InvitationContributeur from './InvitationContributeur.svelte';
   import LigneContributeur from './LigneContributeur.svelte';
   import SuppressionContributeur from './SuppressionContributeur.svelte';
 
@@ -16,25 +17,24 @@
 </script>
 
 {#if $gestionContributeursStore.etapeCourante === 'SuppressionContributeur'}
-  <SuppressionContributeur
-    utilisateur={$gestionContributeursStore.utilisateurEnCoursDeSuppression}
-    {service}
-    on:suppressionEffectuee={supprimeContributeur}
-  />
+  <SuppressionContributeur {service} on:suppressionEffectuee={supprimeContributeur} />
 {:else}
-  <h3 class="titre-liste titre-contributeurs-actifs">Ajouté(s) au service</h3>
-  <ul class="liste-contributeurs contributeurs-actifs">
-    <LigneContributeur
-      estProprietaire={true}
-      estSupprimable={false}
-      utilisateur={service.createur}
-    />
-    {#each contributeurs as contributeur (contributeur.id)}
+  <InvitationContributeur {service} />
+  {#if $gestionContributeursStore.etapeCourante !== 'InvitationContributeurs'}
+    <h3 class="titre-liste titre-contributeurs-actifs">Ajouté(s) au service</h3>
+    <ul class="liste-contributeurs contributeurs-actifs">
       <LigneContributeur
-        estProprietaire={false}
-        estSupprimable={service.permissions.suppressionContributeur}
-        utilisateur={contributeur}
+        estProprietaire={true}
+        estSupprimable={false}
+        utilisateur={service.createur}
       />
-    {/each}
-  </ul>
+      {#each contributeurs as contributeur (contributeur.id)}
+        <LigneContributeur
+          estProprietaire={false}
+          estSupprimable={service.permissions.suppressionContributeur}
+          utilisateur={contributeur}
+        />
+      {/each}
+    </ul>
+  {/if}
 {/if}

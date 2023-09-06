@@ -1,7 +1,10 @@
 import { writable } from 'svelte/store';
 import type { Utilisateur } from './gestionContributeurs.d';
 
-type Etape = 'ListeContributeurs' | 'SuppressionContributeur';
+type Etape =
+  | 'ListeContributeurs'
+  | 'SuppressionContributeur'
+  | 'InvitationContributeurs';
 
 type EtatGestionContributeursStore = {
   etapeCourante: Etape;
@@ -30,6 +33,12 @@ export const gestionContributeursStore = {
       ...etat,
       etapeCourante: 'ListeContributeurs',
       utilisateurEnCoursDeSuppression: null,
+    }));
+  },
+  afficheEtapeInvitation: () => {
+    update((valeurActuelle) => ({
+      ...valeurActuelle,
+      etapeCourante: 'InvitationContributeurs',
     }));
   },
   reinitialise: () => set(valeurParDefaut),
