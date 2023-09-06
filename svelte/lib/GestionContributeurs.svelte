@@ -9,25 +9,16 @@
   $: service = services[0];
   $: contributeurs = service.contributeurs;
 
-  let utilisateurEnCoursDeSuppression: Utilisateur;
-
-  const retirerContributeur = (utilisateur: Utilisateur) => {
-    utilisateurEnCoursDeSuppression = utilisateur;
-    gestionContributeursStore.ouvrirMenuPour(null);
-  };
-
   const supprimeContributeur = (evenement: CustomEvent<Utilisateur>) => {
-    utilisateurEnCoursDeSuppression = null;
     contributeurs = contributeurs.filter((c) => c.id != evenement.detail.id);
     document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
   };
 </script>
 
-{#if utilisateurEnCoursDeSuppression}
+{#if $gestionContributeursStore.etapeCourante === 'SuppressionContributeur'}
   <SuppressionContributeur
-    utilisateur={utilisateurEnCoursDeSuppression}
+    utilisateur={$gestionContributeursStore.utilisateurEnCoursDeSuppression}
     {service}
-    on:annuler={() => (utilisateurEnCoursDeSuppression = null)}
     on:suppressionEffectuee={supprimeContributeur}
   />
 {:else}
@@ -43,7 +34,6 @@
         estProprietaire={false}
         estSupprimable={service.permissions.suppressionContributeur}
         utilisateur={contributeur}
-        onRetirerContributeur={retirerContributeur}
       />
     {/each}
   </ul>

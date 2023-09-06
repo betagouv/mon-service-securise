@@ -5,8 +5,6 @@
   export let estProprietaire: boolean;
   export let estSupprimable: boolean;
   export let utilisateur: Utilisateur;
-
-  export let onRetirerContributeur = (utilisateur: Utilisateur) => {};
 </script>
 
 <li class="ligne-contributeur">
@@ -41,7 +39,10 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <li
             class="action-suppression-contributeur"
-            on:click={() => onRetirerContributeur(utilisateur)}
+            on:click={() =>
+              gestionContributeursStore.afficheEtapeSuppression(
+                utilisateur
+              )}
           >
             Retirer du service
           </li>

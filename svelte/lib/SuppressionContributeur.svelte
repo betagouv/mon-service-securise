@@ -2,6 +2,7 @@
   import type { Service, Utilisateur } from './gestionContributeurs.d';
 
   import { createEventDispatcher } from 'svelte';
+  import { gestionContributeursStore } from './gestionContributeurs.store';
 
   export let utilisateur: Utilisateur;
   export let service: Service;
@@ -12,6 +13,7 @@
     await axios.delete('/api/autorisation', {
       params: { idHomologation: service.id, idContributeur: utilisateur.id },
     });
+    gestionContributeursStore.afficheEtapeListe();
     envoiEvenement('suppressionEffectuee', { ...utilisateur });
   };
 </script>
@@ -35,7 +37,8 @@
     <button
       class="bouton bouton-secondaire"
       type="button"
-      on:click={() => envoiEvenement('annuler')}
+      on:click={() =>
+        gestionContributeursStore.afficheEtapeListe()}
     >
       Annuler
     </button>
