@@ -6,11 +6,7 @@ import { glob } from 'glob';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    svelte({
-      preprocess: vitePreprocess(),
-    }),
-  ],
+  plugins: [svelte({ preprocess: vitePreprocess() })],
   root: './lib',
   build: {
     // on build vers le dossier de fichiers statiques /public pour servir les bundles depuis le pug

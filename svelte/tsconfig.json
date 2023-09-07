@@ -8,13 +8,15 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "strict": true
   },
   "include": [
     "vite.config.mts",
     "lib/**/*.d.ts",
     "lib/**/*.ts",
     "lib/**/*.js",
-    "lib/**/*.svelte"
+    "lib/**/*.svelte",
+    ".eslintrc.js"
   ]
 }

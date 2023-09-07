@@ -17,7 +17,7 @@ module.exports = {
   ignorePatterns: [
     'public/bibliotheques/*.js',
     'public/composants-svelte/*.js',
-    'svelte/svelte.config.js',
+    'public/composants-svelte/*.mjs',
   ],
   plugins: ['mocha'],
   rules: {
