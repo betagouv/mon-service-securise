@@ -16,8 +16,8 @@
       {utilisateur.initiales}
     </div>
     <div class="nom-prenom-poste">
-      <div class="nom-contributeur">{utilisateur.prenomNom}</div>
-      <div class="poste-contributeur">{utilisateur.poste}</div>
+      <div class="nom-contributeur">{@html utilisateur.prenomNom}</div>
+      <div class="poste-contributeur">{@html utilisateur.poste}</div>
     </div>
   </div>
   <div class="role {estProprietaire ? 'proprietaire' : 'contributeur'}">
@@ -26,8 +26,7 @@
   {#if estSupprimable}
     <button
       class="declencheur-menu-flottant"
-      on:click={() =>
-        gestionContributeursStore.ouvrirMenuPour(utilisateur.id)}
+      on:click={() => gestionContributeursStore.ouvrirMenuPour(utilisateur.id)}
     >
       <div
         class="svelte-menu-flottant"
@@ -40,9 +39,7 @@
           <li
             class="action-suppression-contributeur"
             on:click={() =>
-              gestionContributeursStore.afficheEtapeSuppression(
-                utilisateur
-              )}
+              gestionContributeursStore.afficheEtapeSuppression(utilisateur)}
           >
             Retirer du service
           </li>

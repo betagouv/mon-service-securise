@@ -14,4 +14,10 @@ module.exports = {
       parserOptions: { parser: '@typescript-eslint/parser' },
     },
   ],
+  settings: {
+    svelte: {
+      // On veut parser de la donnée encodée en HTML depuis le back, on doit pouvoir utiliser l'instruction `@html`
+      ignoreWarnings: ['svelte/no-at-html-tags'],
+    },
+  },
 };
