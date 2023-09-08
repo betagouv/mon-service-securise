@@ -21,25 +21,22 @@ const { subscribe, update, set } =
 export const gestionContributeursStore = {
   subscribe,
   afficheEtapeSuppression: (utilisateur: Utilisateur) => {
-    update((valeurActuelle) => ({
-      ...valeurActuelle,
+    update((etat) => ({
+      ...etat,
       etapeCourante: 'SuppressionContributeur',
       utilisateurEnCoursDeSuppression: utilisateur,
       idMenuOuvert: null,
     }));
   },
   afficheEtapeListe: () => {
-    update((valeurActuelle) => ({
-      ...valeurActuelle,
+    update((etat) => ({
+      ...etat,
       etapeCourante: 'ListeContributeurs',
       utilisateurEnCoursDeSuppression: null,
     }));
   },
   ouvrirMenuPour: (idUtilisateur: string) => {
-    update((valeurActuelle) => ({
-      ...valeurActuelle,
-      idMenuOuvert: idUtilisateur,
-    }));
+    update((etat) => ({ ...etat, idMenuOuvert: idUtilisateur }));
   },
   reinitialise: () => set(valeurParDefaut),
 };
