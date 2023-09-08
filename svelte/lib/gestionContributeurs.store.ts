@@ -9,20 +9,17 @@ type EtatGestionContributeursStore = {
   utilisateurEnCoursDeSuppression: Utilisateur;
 };
 
-let { subscribe, update } = writable<EtatGestionContributeursStore>({
+const valeurParDefaut: EtatGestionContributeursStore = {
   idMenuOuvert: null,
   etapeCourante: 'ListeContributeurs',
   utilisateurEnCoursDeSuppression: null,
-});
+};
+
+const { subscribe, update, set } =
+  writable<EtatGestionContributeursStore>(valeurParDefaut);
 
 export const gestionContributeursStore = {
   subscribe,
-  ouvrirMenuPour: (idUtilisateur: string) => {
-    update((valeurActuelle) => ({
-      ...valeurActuelle,
-      idMenuOuvert: idUtilisateur,
-    }));
-  },
   afficheEtapeSuppression: (utilisateur: Utilisateur) => {
     update((valeurActuelle) => ({
       ...valeurActuelle,
@@ -38,4 +35,11 @@ export const gestionContributeursStore = {
       utilisateurEnCoursDeSuppression: null,
     }));
   },
+  ouvrirMenuPour: (idUtilisateur: string) => {
+    update((valeurActuelle) => ({
+      ...valeurActuelle,
+      idMenuOuvert: idUtilisateur,
+    }));
+  },
+  reinitialise: () => set(valeurParDefaut),
 };
