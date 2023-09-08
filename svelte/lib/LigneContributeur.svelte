@@ -1,13 +1,11 @@
 <script lang="ts">
   import type { Utilisateur } from './gestionContributeurs.d';
   import { gestionContributeursStore } from './gestionContributeurs.store';
+  import MenuFlottant from './ui/MenuFlottant.svelte';
 
   export let estProprietaire: boolean;
   export let estSupprimable: boolean;
   export let utilisateur: Utilisateur;
-
-  let menuOuvert = false;
-  let menuEl;
 </script>
 
 <li class="ligne-contributeur">
@@ -27,30 +25,17 @@
     {estProprietaire ? 'Propriétaire' : 'Contributeur'}
   </div>
   {#if estSupprimable}
-    <button
-      class="declencheur-menu-flottant"
-      on:click={() => (menuOuvert = !menuOuvert)}
-      bind:this={menuEl}
-    >
-      <div class="svelte-menu-flottant" class:invisible={!menuOuvert}>
-        <ul>
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <li
-            class="action-suppression-contributeur"
-            on:click={() =>
-              gestionContributeursStore.afficheEtapeSuppression(utilisateur)}
-          >
-            Retirer du service
-          </li>
-        </ul>
-      </div>
-    </button>
+    <MenuFlottant>
+      <ul>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <li
+          class="action-suppression-contributeur"
+          on:click={() =>
+            gestionContributeursStore.afficheEtapeSuppression(utilisateur)}
+        >
+          Retirer du service
+        </li>
+      </ul>
+    </MenuFlottant>
   {/if}
 </li>
-
-<svelte:body
-  on:click={(e) => {
-    const clicSurMenu = e.target === menuEl || menuEl?.contains(e.target);
-    if (!clicSurMenu) menuOuvert = false;
-  }}
-/>
