@@ -1,20 +1,17 @@
 <script lang="ts">
   import type { Utilisateur } from './gestionContributeurs.d';
+  import { store } from './gestionContributeurs.store';
 
-  import { gestionContributeursStore } from './gestionContributeurs.store';
-
-  $: service = $gestionContributeursStore.services[0];
-
-  $: utilisateur =
-    $gestionContributeursStore.utilisateurEnCoursDeSuppression as Utilisateur;
+  $: service = $store.services[0];
+  $: utilisateur = $store.utilisateurEnCoursDeSuppression as Utilisateur;
 
   const supprimeContributeur = async () => {
     await axios.delete('/api/autorisation', {
       params: { idHomologation: service.id, idContributeur: utilisateur.id },
     });
-    gestionContributeursStore.supprimeContributeur(utilisateur);
+    store.supprimeContributeur(utilisateur);
     document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
-    gestionContributeursStore.afficheEtapeListe();
+    store.afficheEtapeListe();
   };
 </script>
 
@@ -38,7 +35,7 @@
     <button
       class="bouton bouton-secondaire"
       type="button"
-      on:click={() => gestionContributeursStore.afficheEtapeListe()}
+      on:click={() => store.afficheEtapeListe()}
     >
       Annuler
     </button>

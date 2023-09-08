@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { gestionContributeursStore } from './gestionContributeurs.store';
+  import { store } from './gestionContributeurs.store';
   import InvitationContributeur from './InvitationContributeur.svelte';
   import LigneContributeur from './LigneContributeur.svelte';
   import SuppressionContributeur from './SuppressionContributeur.svelte';
 
-  $: surServiceUnique = $gestionContributeursStore.services.length === 1;
-  $: serviceUnique = $gestionContributeursStore.services[0];
+  $: surServiceUnique = $store.services.length === 1;
+  $: serviceUnique = $store.services[0];
   $: contributeurs = serviceUnique.contributeurs;
 </script>
 
-{#if $gestionContributeursStore.etapeCourante === 'SuppressionContributeur'}
+{#if $store.etapeCourante === 'SuppressionContributeur'}
   <SuppressionContributeur />
 {:else}
   <InvitationContributeur />
-  {#if $gestionContributeursStore.etapeCourante !== 'InvitationContributeurs' && surServiceUnique}
+  {#if $store.etapeCourante !== 'InvitationContributeurs' && surServiceUnique}
     <h3 class="titre-liste titre-contributeurs-actifs">Ajouté(s) au service</h3>
     <ul class="liste-contributeurs contributeurs-actifs">
       <LigneContributeur

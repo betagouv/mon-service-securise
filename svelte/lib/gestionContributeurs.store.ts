@@ -21,7 +21,7 @@ const valeurParDefaut: EtatGestionContributeursStore = {
 const { subscribe, update, set } =
   writable<EtatGestionContributeursStore>(valeurParDefaut);
 
-export const gestionContributeursStore = {
+export const store = {
   subscribe,
   afficheEtapeSuppression: (utilisateur: Utilisateur) => {
     update((etat) => ({
