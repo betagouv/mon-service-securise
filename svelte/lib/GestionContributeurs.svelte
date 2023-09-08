@@ -12,7 +12,9 @@
 {#if $store.etapeCourante === 'SuppressionContributeur'}
   <SuppressionContributeur />
 {:else}
-  <InvitationContributeur />
+  {#if $store.services.every((s) => s.estCreateur)}
+    <InvitationContributeur />
+  {/if}
   {#if $store.etapeCourante !== 'InvitationContributeurs' && surServiceUnique}
     <h3 class="titre-liste titre-contributeurs-actifs">Ajouté(s) au service</h3>
     <ul class="liste-contributeurs contributeurs-actifs">
