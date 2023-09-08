@@ -121,23 +121,6 @@ const gestionnaireEvenements = {
         idServices: [...tableauDesServices.servicesSelectionnes],
       })
     );
-
-    $('#retour-liste-contributeurs').on('click', () => {
-      $('#barre-outils .action').removeClass('actif');
-      gestionnaireTiroir.afficheContenuAction(
-        {
-          action: registreDesActions.contributeurs,
-          estSelectionMulitple:
-            tableauDesServices.servicesSelectionnes.size > 1,
-        },
-        {
-          donneesService: tableauDesServices.donneesDuService(
-            tableauDesServices.idServiceSelectionne()
-          ),
-        }
-      );
-      gestionnaireEvenements.fermeMenuFlottant();
-    });
   },
   afficheTiroirAction: ($action, ...args) => {
     $('#barre-outils .action').removeClass('actif');
