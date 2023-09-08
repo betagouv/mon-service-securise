@@ -1,5 +1,8 @@
 import GestionContributeurs from './GestionContributeurs.svelte';
-import type { GestionContributeursProps } from './gestionContributeurs.d';
+import type {
+  GestionContributeursProps,
+  Service,
+} from './gestionContributeurs.d';
 import { gestionContributeursStore } from './gestionContributeurs.store';
 
 document.body.addEventListener(
@@ -9,16 +12,15 @@ document.body.addEventListener(
 
 let app: GestionContributeurs;
 
-const reinitialiseStore = () => {
-  gestionContributeursStore.reinitialise();
+const reinitialiseStore = (services: Service[]) => {
+  gestionContributeursStore.reinitialise(services);
 };
 
 const rechargeApp = (props: GestionContributeursProps) => {
   app?.$destroy();
-  reinitialiseStore();
+  reinitialiseStore(props.services);
   app = new GestionContributeurs({
-    target: document.getElementById('conteneur-gestion-contributeurs'),
-    props,
+    target: document.getElementById('conteneur-gestion-contributeurs')!,
   });
 };
 
