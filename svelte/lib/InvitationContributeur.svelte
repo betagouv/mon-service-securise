@@ -117,16 +117,5 @@
       alt="Icône envoi email"
     />
     <p>Un e-mail d'invitation a bien été envoyé.</p>
-    <button
-      class="bouton"
-      id="retour-liste-contributeurs"
-      type="button"
-      on:click={() => {
-        etapeCourante = 'Ajout';
-        store.afficheEtapeListe();
-      }}
-    >
-      Revenir à la liste des contributeurs
-    </button>
   </div>
 {/if}
