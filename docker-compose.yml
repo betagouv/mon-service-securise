@@ -27,7 +27,7 @@ services:
 
   web:
     <<: *configuration-base
-    command: bash -c "export PUPPETEER_EXECUTABLE_PATH=$$(which chromium) && npx knex migrate:latest && npx concurrently \"npx nodemon server.js\" \"npx vite build --watch --config svelte/vite.config.mts\""
+    command: bash -c "export PUPPETEER_EXECUTABLE_PATH=$$(which chromium) && npx knex migrate:latest && npx concurrently \"npx nodemon server.js\" \"npx vite build --watch --minify false --config svelte/vite.config.mts\""
     environment:
       - NODE_ENV=development
       # Sur Mac M1 le téléchargement de Chromium échoue, car aucune version compatible `arm64`.
