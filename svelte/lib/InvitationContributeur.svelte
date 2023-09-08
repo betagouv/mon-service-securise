@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Service, Utilisateur } from './gestionContributeurs.d';
+  import type { Utilisateur } from './gestionContributeurs.d';
 
-  import { gestionContributeursStore } from './gestionContributeurs.store';
+  import { store } from './gestionContributeurs.store';
   import ChampAvecSuggestions from './ChampAvecSuggestions.svelte';
 
   type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
@@ -9,9 +9,9 @@
   let contributeursAInviter: Utilisateur[] = [];
   let etapeCourante: Etape = 'Ajout';
 
-  $: services = $gestionContributeursStore.services;
+  $: services = $store.services;
   $: afficheLesBoutonsAction =
-    $gestionContributeursStore.etapeCourante === 'InvitationContributeurs';
+    $store.etapeCourante === 'InvitationContributeurs';
 
   const rechercheContributeurs = async (recherche: string) => {
     const reponse = await axios.get('/api/annuaire/contributeurs', {
@@ -22,7 +22,7 @@
   };
 
   const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
-    gestionContributeursStore.afficheEtapeInvitation();
+    store.afficheEtapeInvitation();
     if (!contributeursAInviter.find((c) => c.email === evenement.detail.email))
       contributeursAInviter = [...contributeursAInviter, evenement.detail];
   };
@@ -86,7 +86,7 @@
           type="button"
           on:click={() => {
             contributeursAInviter = [];
-            gestionContributeursStore.afficheEtapeListe();
+            store.afficheEtapeListe();
           }}
         >
           Annuler
@@ -123,7 +123,7 @@
       type="button"
       on:click={() => {
         etapeCourante = 'Ajout';
-        gestionContributeursStore.afficheEtapeListe();
+        store.afficheEtapeListe();
       }}
     >
       Revenir à la liste des contributeurs

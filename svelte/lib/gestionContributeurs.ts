@@ -3,7 +3,7 @@ import type {
   GestionContributeursProps,
   Service,
 } from './gestionContributeurs.d';
-import { gestionContributeursStore } from './gestionContributeurs.store';
+import { store } from './gestionContributeurs.store';
 
 document.body.addEventListener(
   'svelte-recharge-contributeurs',
@@ -13,7 +13,7 @@ document.body.addEventListener(
 let app: GestionContributeurs;
 
 const reinitialiseStore = (services: Service[]) => {
-  gestionContributeursStore.reinitialise(services);
+  store.reinitialise(services);
 };
 
 const rechargeApp = (props: GestionContributeursProps) => {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Utilisateur } from './gestionContributeurs.d';
-  import { gestionContributeursStore } from './gestionContributeurs.store';
+  import { store } from './gestionContributeurs.store';
   import MenuFlottant from './ui/MenuFlottant.svelte';
 
   export let estProprietaire: boolean;
@@ -30,8 +30,7 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li
           class="action-suppression-contributeur"
-          on:click={() =>
-            gestionContributeursStore.afficheEtapeSuppression(utilisateur)}
+          on:click={() => store.afficheEtapeSuppression(utilisateur)}
         >
           Retirer du service
         </li>
