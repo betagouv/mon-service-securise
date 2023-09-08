@@ -5,6 +5,9 @@
   export let estProprietaire: boolean;
   export let estSupprimable: boolean;
   export let utilisateur: Utilisateur;
+
+  let menuOuvert = false;
+  let menuEl;
 </script>
 
 <li class="ligne-contributeur">
@@ -26,14 +29,10 @@
   {#if estSupprimable}
     <button
       class="declencheur-menu-flottant"
-      on:click={() => gestionContributeursStore.ouvrirMenuPour(utilisateur.id)}
+      on:click={() => (menuOuvert = !menuOuvert)}
+      bind:this={menuEl}
     >
-      <div
-        class="svelte-menu-flottant"
-        class:invisible={!(
-          $gestionContributeursStore.idMenuOuvert === utilisateur.id
-        )}
-      >
+      <div class="svelte-menu-flottant" class:invisible={!menuOuvert}>
         <ul>
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <li
@@ -48,3 +47,10 @@
     </button>
   {/if}
 </li>
+
+<svelte:body
+  on:click={(e) => {
+    const clicSurMenu = e.target === menuEl || menuEl?.contains(e.target);
+    if (!clicSurMenu) menuOuvert = false;
+  }}
+/>

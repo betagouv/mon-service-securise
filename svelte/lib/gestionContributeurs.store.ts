@@ -4,13 +4,11 @@ import type { Utilisateur } from './gestionContributeurs.d';
 type Etape = 'ListeContributeurs' | 'SuppressionContributeur';
 
 type EtatGestionContributeursStore = {
-  idMenuOuvert: string;
   etapeCourante: Etape;
-  utilisateurEnCoursDeSuppression: Utilisateur;
+  utilisateurEnCoursDeSuppression: Utilisateur | null;
 };
 
 const valeurParDefaut: EtatGestionContributeursStore = {
-  idMenuOuvert: null,
   etapeCourante: 'ListeContributeurs',
   utilisateurEnCoursDeSuppression: null,
 };
@@ -25,7 +23,6 @@ export const gestionContributeursStore = {
       ...etat,
       etapeCourante: 'SuppressionContributeur',
       utilisateurEnCoursDeSuppression: utilisateur,
-      idMenuOuvert: null,
     }));
   },
   afficheEtapeListe: () => {
@@ -34,9 +31,6 @@ export const gestionContributeursStore = {
       etapeCourante: 'ListeContributeurs',
       utilisateurEnCoursDeSuppression: null,
     }));
-  },
-  ouvrirMenuPour: (idUtilisateur: string) => {
-    update((etat) => ({ ...etat, idMenuOuvert: idUtilisateur }));
   },
   reinitialise: () => set(valeurParDefaut),
 };
