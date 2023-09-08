@@ -6,12 +6,12 @@
 
   type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
 
-  export let services: Service[];
-
   let contributeursAInviter: Utilisateur[] = [];
   let etapeCourante: Etape = 'Ajout';
 
-  $: afficheLesBoutonsAction = $gestionContributeursStore.etapeCourante === 'InvitationContributeurs';
+  $: services = $gestionContributeursStore.services;
+  $: afficheLesBoutonsAction =
+    $gestionContributeursStore.etapeCourante === 'InvitationContributeurs';
 
   const rechercheContributeurs = async (recherche: string) => {
     const reponse = await axios.get('/api/annuaire/contributeurs', {
@@ -81,10 +81,14 @@
     </label>
     {#if afficheLesBoutonsAction}
       <div class="conteneur-actions">
-        <button class="bouton bouton-secondaire fermeture-tiroir" type="button" on:click={() => {
-          contributeursAInviter = [];
-          gestionContributeursStore.afficheEtapeListe()
-        }}>
+        <button
+          class="bouton bouton-secondaire fermeture-tiroir"
+          type="button"
+          on:click={() => {
+            contributeursAInviter = [];
+            gestionContributeursStore.afficheEtapeListe();
+          }}
+        >
           Annuler
         </button>
         {#if contributeursAInviter.length}

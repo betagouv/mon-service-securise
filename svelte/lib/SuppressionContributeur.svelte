@@ -1,21 +1,20 @@
 <script lang="ts">
-  import type { Service, Utilisateur } from './gestionContributeurs.d';
+  import type { Utilisateur } from './gestionContributeurs.d';
 
-  import { createEventDispatcher } from 'svelte';
   import { gestionContributeursStore } from './gestionContributeurs.store';
 
-  export let service: Service;
+  $: service = $gestionContributeursStore.services[0];
 
-  $: utilisateur = $gestionContributeursStore.utilisateurEnCoursDeSuppression as Utilisateur;
-
-  const envoiEvenement = createEventDispatcher();
+  $: utilisateur =
+    $gestionContributeursStore.utilisateurEnCoursDeSuppression as Utilisateur;
 
   const supprimeContributeur = async () => {
     await axios.delete('/api/autorisation', {
       params: { idHomologation: service.id, idContributeur: utilisateur.id },
     });
+    gestionContributeursStore.supprimeContributeur(utilisateur);
+    document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
     gestionContributeursStore.afficheEtapeListe();
-    envoiEvenement('suppressionEffectuee', { ...utilisateur });
   };
 </script>
 
