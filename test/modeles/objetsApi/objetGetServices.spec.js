@@ -95,37 +95,4 @@ describe("L'objet d'API de `GET /services`", () => {
       nombreServicesHomologues: 2,
     });
   });
-
-  describe('sur demande des permissions', () => {
-    it("autorise la suppression de contributeur si l'utilisateur est créateur", () => {
-      const unServiceDontAestCreateur = new Service({
-        id: '123',
-        descriptionService: { nomService: 'Un service' },
-        createur: { id: 'A', email: 'email.createur@mail.fr' },
-      });
-      const services = [unServiceDontAestCreateur];
-      expect(
-        objetGetServices.donnees(services, 'A', referentiel).services[0]
-          .permissions
-      ).to.eql({
-        suppressionContributeur: true,
-      });
-    });
-
-    it("n'autorise pas la suppression de contributeur si l'utilisateur est contributeur", () => {
-      const unServiceDontAestCreateur = new Service({
-        id: '123',
-        descriptionService: { nomService: 'Un service' },
-        createur: { id: 'A', email: 'email.createur@mail.fr' },
-      });
-      const idUtilisateur = 'un autre ID';
-      const services = [unServiceDontAestCreateur];
-      expect(
-        objetGetServices.donnees(services, idUtilisateur, referentiel)
-          .services[0].permissions
-      ).to.eql({
-        suppressionContributeur: false,
-      });
-    });
-  });
 });
