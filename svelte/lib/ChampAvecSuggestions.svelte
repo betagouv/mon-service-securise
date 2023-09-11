@@ -12,7 +12,7 @@
 
   const envoiEvenement = createEventDispatcher();
 
-  const REGEX_EMAIL = /[\w]+@[\w]{2,}\.[\w]{2,}/i;
+  const REGEX_EMAIL = /[\w-.]+@[\w-.]{2,}\.\w{2,}/i;
   $: proposeAjout = REGEX_EMAIL.test(saisie);
   $: suggestionsVisibles = saisie && (suggestions.length > 0 || proposeAjout);
 
@@ -48,7 +48,11 @@
       <div
         class="create option-ajout"
         on:click={() =>
-          choisisContributeur({ email: saisie, initiales: '', prenomNom: saisie })}
+          choisisContributeur({
+            email: saisie,
+            initiales: '',
+            prenomNom: saisie,
+          })}
       >
         Ajouter ce contributeur
       </div>
@@ -59,7 +63,10 @@
         class="option suggestion-contributeur"
         on:click={() => choisisContributeur(suggestion)}
       >
-        <div class="initiales contributeur" class:persona={!suggestion.initiales}>
+        <div
+          class="initiales contributeur"
+          class:persona={!suggestion.initiales}
+        >
           {suggestion.initiales}
         </div>
         <div>{@html suggestion.prenomNom}</div>
