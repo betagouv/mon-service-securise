@@ -23,6 +23,7 @@ const RisquesSpecifiques = require('../../modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../modeles/rolesResponsabilites');
 const { dateInvalide } = require('../../utilitaires/date');
 const { valeurBooleenne } = require('../../utilitaires/aseptisation');
+const objetGetService = require('../../modeles/objetsApi/objetGetService');
 
 const routesApiService = (
   middleware,
@@ -111,6 +112,20 @@ const routesApiService = (
             reponse.status(422).send(e.message);
           } else suite(e);
         });
+    }
+  );
+
+  routes.get(
+    '/:id',
+    middleware.aseptise('id'),
+    middleware.trouveService,
+    async (requete, reponse) => {
+      const donnees = objetGetService.donnees(
+        requete.homologation,
+        requete.idUtilisateurCourant,
+        referentiel
+      );
+      reponse.json(donnees);
     }
   );
 

@@ -5,6 +5,7 @@ const testeurMSS = require('../testeurMSS');
 
 const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
 const { unDossier } = require('../../constructeurs/constructeurDossier');
+const { unService } = require('../../constructeurs/constructeurService');
 const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
@@ -1406,6 +1407,71 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           done();
         })
         .catch((e) => done(e.response?.data || e));
+    });
+  });
+
+  describe('quand requête GET sur `/api/service/:id', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        echeancesRenouvellement: { unAn: {} },
+        etapesParcoursHomologation: [{ numero: 1, id: 'autorite' }],
+        statutsAvisDossierHomologation: { favorable: {} },
+        statutsHomologation: { nonRealisee: {} },
+      });
+
+      const donneesDossier = unDossier(testeur.referentiel())
+        .quiEstComplet()
+        .quiEstNonFinalise().donnees;
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .avecDossiers([donneesDossier])
+        .construis();
+      testeur
+        .middleware()
+        .reinitialise({ homologationARenvoyer: serviceARenvoyer });
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456',
+        },
+        done
+      );
+    });
+
+    it("aseptise l'id du service", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id'],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456',
+        },
+        done
+      );
+    });
+
+    it('retourne la représentation du service grâce à `objetGetService`', async () => {
+      const reponse = await axios('http://localhost:1234/api/service/456');
+
+      expect(reponse.data).to.eql({
+        id: '456',
+        nomService: 'Nom service',
+        organisationsResponsables: ['ANSSI'],
+        createur: {
+          id: 'AAA',
+          prenomNom: 'jean.dujardin@beta.gouv.com',
+          initiales: '',
+          poste: '',
+        },
+        contributeurs: [],
+        statutHomologation: { id: 'nonRealisee', enCoursEdition: true },
+        nombreContributeurs: 1,
+        estCreateur: false,
+        documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
+        permissions: { suppressionContributeur: false },
+      });
     });
   });
 });
