@@ -11,7 +11,7 @@ const enteteJSON = {
     'content-type': 'application/json',
   },
 };
-const urlBase = 'https://api.brevo.com/v3';
+const urlBase = process.env.SENDINBLUE_EMAIL_API_URL_BASE;
 const idListeEmailsTransactionnels = Number(
   process.env.SENDINBLUE_ID_LISTE_POUR_MAILS_TRANSACTIONNELS_DE_RELANCE
 );
