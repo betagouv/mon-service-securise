@@ -34,7 +34,7 @@ $(() => {
   const brancheComportementTiroirContributeurs = () => {
     gestionnaireTiroir.brancheComportement();
 
-    rechargeDonneesDuService();
+    if (idService) rechargeDonneesDuService();
 
     $(document.body).on('jquery-recharge-services', async () => {
       await rechargeDonneesDuService();
