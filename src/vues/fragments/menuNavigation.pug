@@ -28,13 +28,14 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
     button.repli-menu
       img(src = '/statique/assets/images/forme_chevron_blanc.svg' alt='Chevron vers la gauche')
 
-  .nom-service
-    .none-si-ferme
-      +texteTronque({texte: service.nomService() || ''})
-    button#gerer-contributeurs
-      img(src = '/statique/assets/images/bouton_inviter_collaborateur_persona.svg')
-      span.nombre-contributeurs= service.contributeurs.length + 1
-      span.inviter-contributeurs Inviter des contributeurs
+  if !estSurCreationDeService
+    .nom-service
+      .none-si-ferme
+        +texteTronque({texte: service.nomService() || ''})
+      button#gerer-contributeurs
+        img(src = '/statique/assets/images/bouton_inviter_collaborateur_persona.svg')
+        span.nombre-contributeurs= service.contributeurs.length + 1
+        span.inviter-contributeurs Inviter des contributeurs
 
   .parcours
     ul.etapes
