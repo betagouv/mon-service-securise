@@ -8,6 +8,7 @@ class AutorisationBase extends Base {
         'idUtilisateur',
         'idHomologation',
         'idService',
+        'droits',
       ],
     });
     this.renseigneProprietes(donnees);
@@ -15,6 +16,10 @@ class AutorisationBase extends Base {
     this.permissionAjoutContributeur = false;
     this.permissionSuppressionContributeur = false;
     this.permissionSuppressionService = false;
+  }
+
+  aLaPermission(niveau, rubrique) {
+    return this.droits[rubrique] >= niveau;
   }
 }
 
