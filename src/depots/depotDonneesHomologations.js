@@ -14,6 +14,9 @@ const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenem
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
+const {
+  toutDroitsEnEcriture,
+} = require('../modeles/autorisations/gestionDroits');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -357,6 +360,7 @@ const creeDepot = (config = {}) => {
           idHomologation,
           idService: idHomologation,
           type: 'createur',
+          droits: toutDroitsEnEcriture(),
         })
       )
       .then(() => p.lis.une(idHomologation))
