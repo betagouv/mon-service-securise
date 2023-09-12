@@ -12,4 +12,10 @@ const Rubriques = {
   CONTACTS: 'CONTACTS',
 };
 
-module.exports = { Permissions, Rubriques };
+const toutDroitsEnEcriture = () =>
+  Object.values(Rubriques).reduce(
+    (droits, rubrique) => ({ ...droits, [rubrique]: Permissions.ECRITURE }),
+    {}
+  );
+
+module.exports = { Permissions, Rubriques, toutDroitsEnEcriture };

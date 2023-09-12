@@ -10,6 +10,9 @@ const {
 } = require('../erreurs');
 const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
 const FabriqueAutorisation = require('../modeles/autorisations/fabriqueAutorisation');
+const {
+  toutDroitsEnEcriture,
+} = require('../modeles/autorisations/gestionDroits');
 
 const creeDepot = (config = {}) => {
   const {
@@ -78,6 +81,7 @@ const creeDepot = (config = {}) => {
           idHomologation,
           idService: idHomologation,
           type: 'contributeur',
+          droits: toutDroitsEnEcriture(),
         })
       );
   };

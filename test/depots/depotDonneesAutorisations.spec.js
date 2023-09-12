@@ -16,6 +16,13 @@ const AutorisationCreateur = require('../../src/modeles/autorisations/autorisati
 const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
+const {
+  Rubriques,
+  Permissions,
+} = require('../../src/modeles/autorisations/gestionDroits');
+
+const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
+const { ECRITURE } = Permissions;
 
 describe('Le dépôt de données des autorisations', () => {
   const creeDepot = (adaptateurPersistance, adaptateurUUID) =>
@@ -322,6 +329,13 @@ describe('Le dépôt de données des autorisations', () => {
       expect(a.idHomologation).to.equal('123');
       expect(a.idService).to.equal('123');
       expect(a.idUtilisateur).to.equal('000');
+      expect(a.droits).to.eql({
+        [DECRIRE]: ECRITURE,
+        [SECURISER]: ECRITURE,
+        [HOMOLOGUER]: ECRITURE,
+        [RISQUES]: ECRITURE,
+        [CONTACTS]: ECRITURE,
+      });
     });
   });
 
