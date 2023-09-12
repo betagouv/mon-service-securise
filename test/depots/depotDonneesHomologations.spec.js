@@ -49,6 +49,14 @@ const {
 } = require('../tracking/constructeurServiceTracking');
 const { unDossier } = require('../constructeurs/constructeurDossier');
 
+const {
+  Rubriques,
+  Permissions,
+} = require('../../src/modeles/autorisations/gestionDroits');
+
+const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
+const { ECRITURE } = Permissions;
+
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", async () => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
@@ -827,7 +835,7 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it("déclare un accès entre l'utilisateur et l'homologation", (done) => {
+    it("déclare un accès en écriture entre l'utilisateur et l'homologation", (done) => {
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance,
       });
@@ -847,6 +855,13 @@ describe('Le dépôt de données des homologations', () => {
           expect(autorisation.idHomologation).to.equal('unUUID');
           expect(autorisation.idService).to.equal('unUUID');
           expect(autorisation.idUtilisateur).to.equal('123');
+          expect(autorisation.droits).to.eql({
+            [DECRIRE]: ECRITURE,
+            [SECURISER]: ECRITURE,
+            [HOMOLOGUER]: ECRITURE,
+            [RISQUES]: ECRITURE,
+            [CONTACTS]: ECRITURE,
+          });
           done();
         })
         .catch(done);
