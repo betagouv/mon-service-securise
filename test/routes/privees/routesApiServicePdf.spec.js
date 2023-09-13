@@ -10,6 +10,13 @@ const {
 const { unDossier } = require('../../constructeurs/constructeurDossier');
 const Homologation = require('../../../src/modeles/homologation');
 const Referentiel = require('../../../src/referentiel');
+const {
+  Permissions,
+  Rubriques,
+} = require('../../../src/modeles/autorisations/gestionDroits');
+
+const { LECTURE } = Permissions;
+const { SECURISER, RISQUES, DECRIRE, HOMOLOGUER } = Rubriques;
 
 describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
   const testeur = testeurMSS();
@@ -20,12 +27,15 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
   describe('quand requête GET sur `/api/service/:id/pdf/annexes.pdf`', () => {
     it('recherche le service correspondant', (done) => {
-      testeur
-        .middleware()
-        .verifieRechercheService(
-          'http://localhost:1234/api/service/456/pdf/annexes.pdf',
-          done
-        );
+      testeur.middleware().verifieRechercheService(
+        [
+          { niveau: LECTURE, rubrique: DECRIRE },
+          { niveau: LECTURE, rubrique: SECURISER },
+          { niveau: LECTURE, rubrique: RISQUES },
+        ],
+        'http://localhost:1234/api/service/456/pdf/annexes.pdf',
+        done
+      );
     });
 
     it('sert un fichier de type pdf', (done) => {
@@ -87,6 +97,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: HOMOLOGUER }],
           'http://localhost:1234/api/service/456/pdf/dossierDecision.pdf',
           done
         );
@@ -154,12 +165,14 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur
-        .middleware()
-        .verifieRechercheService(
-          'http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf',
-          done
-        );
+      testeur.middleware().verifieRechercheService(
+        [
+          { niveau: LECTURE, rubrique: SECURISER },
+          { niveau: LECTURE, rubrique: DECRIRE },
+        ],
+        'http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf',
+        done
+      );
     });
 
     it('sert un fichier de type pdf', (done) => {
@@ -213,6 +226,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [],
           'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
           done
         );

@@ -36,6 +36,7 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
 
 let cguAcceptees;
 let challengeMotDePasseEffectue = false;
+let droitVerifie = [];
 let expirationCookieRepoussee = false;
 let headersAvecNoncePositionnes = false;
 let headersPositionnes = false;
@@ -45,7 +46,6 @@ let listesAseptisees = [];
 let listeAdressesIPsAutorisee = [];
 let parametresAseptises = [];
 let preferencesChargees = false;
-let rechercheServiceEffectuee = false;
 let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
 let verificationJWTMenee = false;
@@ -61,6 +61,7 @@ const middlewareFantaisie = {
     }),
   }) => {
     cguAcceptees = acceptationCGU;
+    droitVerifie = [];
     expirationCookieRepoussee = false;
     headersAvecNoncePositionnes = false;
     headersPositionnes = false;
@@ -70,7 +71,6 @@ const middlewareFantaisie = {
     listeAdressesIPsAutorisee = [];
     parametresAseptises = [];
     preferencesChargees = false;
-    rechercheServiceEffectuee = false;
     rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
     verificationJWTMenee = false;
@@ -125,11 +125,14 @@ const middlewareFantaisie = {
     suite();
   },
 
-  trouveService: () => (requete, _reponse, suite) => {
+  trouveService: (listeDroits) => (requete, _reponse, suite) => {
+    droitVerifie = Object.entries(listeDroits).map(([rubrique, niveau]) => ({
+      niveau,
+      rubrique,
+    }));
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
     requete.homologation = homologationTrouvee;
-    rechercheServiceEffectuee = true;
     suite();
   },
 
@@ -196,9 +199,13 @@ const middlewareFantaisie = {
     );
   },
 
-  verifieRechercheService: (...params) => {
+  verifieRechercheService: (droitsAttendus, ...params) => {
     verifieRequeteChangeEtat(
-      { lectureEtat: () => rechercheServiceEffectuee },
+      {
+        lectureEtat: () => droitVerifie,
+        etatInitial: [],
+        etatFinal: droitsAttendus,
+      },
       ...params
     );
   },

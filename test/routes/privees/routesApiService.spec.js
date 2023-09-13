@@ -13,6 +13,13 @@ const {
 const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../../../src/modeles/autorisations/autorisationCreateur');
 const Homologation = require('../../../src/modeles/homologation');
+const {
+  Permissions,
+  Rubriques,
+} = require('../../../src/modeles/autorisations/gestionDroits');
+
+const { ECRITURE, LECTURE } = Permissions;
+const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;
 
 describe('Le serveur MSS des routes /api/service/*', () => {
   const testeur = testeurMSS();
@@ -168,6 +175,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: DECRIRE }],
           { method: 'put', url: 'http://localhost:1234/api/service/456' },
           done
         );
@@ -292,6 +300,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
         {
           method: 'post',
           url: 'http://localhost:1234/api/service/456/mesures',
@@ -454,6 +463,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: CONTACTS }],
         {
           method: 'post',
           url: 'http://localhost:1234/api/service/456/rolesResponsabilites',
@@ -529,6 +539,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: RISQUES }],
         {
           method: 'post',
           url: 'http://localhost:1234/api/service/456/risques',
@@ -673,6 +684,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
           url: 'http://localhost:1234/api/service/456/homologation/autorite',
           method: 'put',
@@ -740,6 +752,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
           url: 'http://localhost:1234/api/service/456/homologation/decision',
           method: 'put',
@@ -839,6 +852,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
           url: 'http://localhost:1234/api/service/456/homologation/telechargement',
           method: 'put',
@@ -902,6 +916,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
           url: 'http://localhost:1234/api/service/456/homologation/avis',
           method: 'put',
@@ -1042,6 +1057,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
           url: 'http://localhost:1234/api/service/456/homologation/documents',
           method: 'put',
@@ -1154,6 +1170,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("recherche l'homologation correspondante", (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
           url: 'http://localhost:1234/api/service/456/homologation/finalise',
           method: 'post',
@@ -1433,6 +1450,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
+        [{ niveau: LECTURE, rubrique: DECRIRE }],
         {
           method: 'get',
           url: 'http://localhost:1234/api/service/456',

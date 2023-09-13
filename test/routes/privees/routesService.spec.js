@@ -3,6 +3,13 @@ const expect = require('expect.js');
 
 const testeurMSS = require('../testeurMSS');
 const Homologation = require('../../../src/modeles/homologation');
+const {
+  Permissions,
+  Rubriques,
+} = require('../../../src/modeles/autorisations/gestionDroits');
+
+const { LECTURE } = Permissions;
+const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -58,7 +65,11 @@ describe('Le serveur MSS des routes /service/*', () => {
     it('recherche le service correspondant', (done) => {
       testeur
         .middleware()
-        .verifieRechercheService('http://localhost:1234/service/456', done);
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: DECRIRE }],
+          'http://localhost:1234/service/456',
+          done
+        );
     });
 
     it('redirige vers la page de description du service', async () => {
@@ -75,6 +86,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: DECRIRE }],
           'http://localhost:1234/service/456/descriptionService',
           done
         );
@@ -102,6 +114,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: SECURISER }],
           'http://localhost:1234/service/456/mesures',
           done
         );
@@ -141,6 +154,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: CONTACTS }],
           'http://localhost:1234/service/456/rolesResponsabilites',
           done
         );
@@ -161,6 +175,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: RISQUES }],
           'http://localhost:1234/service/456/risques',
           done
         );
@@ -186,6 +201,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: HOMOLOGUER }],
           'http://localhost:1234/service/456/dossiers',
           done
         );
@@ -226,6 +242,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur
         .middleware()
         .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: HOMOLOGUER }],
           'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
           done
         );
