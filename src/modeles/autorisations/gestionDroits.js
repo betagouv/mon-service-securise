@@ -18,4 +18,16 @@ const toutDroitsEnEcriture = () =>
     {}
   );
 
-module.exports = { Permissions, Rubriques, toutDroitsEnEcriture };
+const verifieCoherenceDesDroits = (droits) =>
+  Object.entries(droits).every(([rubrique, niveau]) => {
+    const rubriqueExiste = Object.values(Rubriques).includes(rubrique);
+    const niveauExiste = Object.values(Permissions).includes(niveau);
+    return rubriqueExiste && niveauExiste;
+  });
+
+module.exports = {
+  Permissions,
+  Rubriques,
+  toutDroitsEnEcriture,
+  verifieCoherenceDesDroits,
+};

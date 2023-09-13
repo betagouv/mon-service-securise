@@ -1,5 +1,6 @@
 const expect = require('expect.js');
 const Middleware = require('../../src/http/middleware');
+const { ErreurDroitsIncoherents } = require('../../src/erreurs');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
@@ -151,7 +152,7 @@ describe('Le middleware MSS', () => {
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       requete.params = { id: '123' };
-      middleware.trouveService(requete, reponse);
+      middleware.trouveService({})(requete, reponse);
     });
 
     it('renvoie une erreur HTTP 404 si service non trouvée', (done) => {
@@ -161,7 +162,24 @@ describe('Le middleware MSS', () => {
 
       const suite = () =>
         done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveService(requete, reponse, suite);
+      middleware.trouveService({})(requete, reponse, suite);
+    });
+
+    it("jette une erreur technique si l'objet de droits est incohérent", (done) => {
+      const middleware = Middleware();
+
+      expect(() =>
+        middleware.trouveService({ mauvaiseCle: 'mauvaiseValeur' })(
+          requete,
+          reponse
+        )
+      ).to.throwError((e) => {
+        expect(e).to.be.an(ErreurDroitsIncoherents);
+        expect(e.message).to.equal(
+          "L'objet de droits doit être de la forme `{ [Rubrique]: niveau }`"
+        );
+        done();
+      });
     });
 
     it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
@@ -173,7 +191,7 @@ describe('Le middleware MSS', () => {
 
       const suite = () =>
         done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveService(requete, reponse, suite);
+      middleware.trouveService({})(requete, reponse, suite);
     });
 
     it("retourne une erreur HTTP 422 si le service n'a pas pu être instanciée", (done) => {
@@ -189,7 +207,7 @@ describe('Le middleware MSS', () => {
 
       const suite = () =>
         done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveService(requete, reponse, suite);
+      middleware.trouveService({})(requete, reponse, suite);
     });
 
     it('retourne le service trouvé et appelle le middleware suivant', (done) => {
@@ -198,7 +216,7 @@ describe('Le middleware MSS', () => {
       depotDonnees.accesAutorise = () => Promise.resolve(true);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-      middleware.trouveService(requete, reponse, () => {
+      middleware.trouveService({})(requete, reponse, () => {
         try {
           expect(requete.homologation).to.equal(homologation);
           done();

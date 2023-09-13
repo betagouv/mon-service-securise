@@ -4,6 +4,10 @@ const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvir
 const {
   CSP_BIBLIOTHEQUES,
 } = require('../routes/publiques/routesBibliotheques');
+const {
+  verifieCoherenceDesDroits,
+} = require('../modeles/autorisations/gestionDroits');
+const { ErreurDroitsIncoherents } = require('../erreurs');
 
 const middleware = (configuration = {}) => {
   const {
@@ -90,8 +94,15 @@ const middleware = (configuration = {}) => {
     });
   };
 
-  const trouveService = (requete, reponse, suite) => {
+  const trouveService = (droitsRequis) => (requete, reponse, suite) => {
     const idService = requete.params.id;
+
+    const droitsCoherents = verifieCoherenceDesDroits(droitsRequis);
+
+    if (!droitsCoherents)
+      throw new ErreurDroitsIncoherents(
+        "L'objet de droits doit être de la forme `{ [Rubrique]: niveau }`"
+      );
 
     verificationAcceptationCGU(requete, reponse, () =>
       depotDonnees
@@ -102,7 +113,7 @@ const middleware = (configuration = {}) => {
           if (!homologation) reponse.status(404).send('Service non trouvé');
           else {
             depotDonnees
-              .accesAutorise(idUtilisateur, idService)
+              .accesAutorise(idUtilisateur, idService, droitsRequis)
               .then((accesAutorise) => {
                 if (!accesAutorise)
                   reponse.status(403).send('Accès au service refusé');
