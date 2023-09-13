@@ -30,7 +30,8 @@ block page
         block navigation
         .bouton-fermer Fermer
 
-  include csrf.pug
+  block session
+    include csrf.pug
 
   main
     .retour.marges-fixes
