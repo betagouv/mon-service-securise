@@ -6,6 +6,14 @@ const InformationsHomologation = require('../../modeles/informationsHomologation
 const ObjetApiStatutHomologation = require('../../modeles/objetsApi/objetApiStatutHomologation');
 const ActionSaisie = require('../../modeles/actionSaisie');
 
+const {
+  Permissions,
+  Rubriques,
+} = require('../../modeles/autorisations/gestionDroits');
+
+const { LECTURE } = Permissions;
+const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
+
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();
 
@@ -42,14 +50,17 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         .catch(suite);
     }
   );
-
-  routes.get('/:id', middleware.trouveService, (requete, reponse) => {
-    reponse.redirect(`/service/${requete.params.id}/descriptionService`);
-  });
+  routes.get(
+    '/:id',
+    middleware.trouveService({ [DECRIRE]: LECTURE }),
+    (requete, reponse) => {
+      reponse.redirect(`/service/${requete.params.id}/descriptionService`);
+    }
+  );
 
   routes.get(
     '/:id/descriptionService',
-    middleware.trouveService,
+    middleware.trouveService({ [DECRIRE]: LECTURE }),
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
@@ -65,7 +76,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
 
   routes.get(
     '/:id/mesures',
-    middleware.trouveService,
+    middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
@@ -87,7 +98,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
 
   routes.get(
     '/:id/rolesResponsabilites',
-    middleware.trouveService,
+    middleware.trouveService({ [CONTACTS]: LECTURE }),
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
@@ -103,7 +114,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
 
   routes.get(
     '/:id/risques',
-    middleware.trouveService,
+    middleware.trouveService({ [RISQUES]: LECTURE }),
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
@@ -119,7 +130,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
 
   routes.get(
     '/:id/dossiers',
-    middleware.trouveService,
+    middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
@@ -136,7 +147,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
 
   routes.get(
     '/:id/homologation/edition/etape/:idEtape',
-    middleware.trouveService,
+    middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
     middleware.chargePreferencesUtilisateur,
     (requete, reponse, suite) => {
       const { homologation } = requete;

@@ -25,6 +25,14 @@ const { dateInvalide } = require('../../utilitaires/date');
 const { valeurBooleenne } = require('../../utilitaires/aseptisation');
 const objetGetService = require('../../modeles/objetsApi/objetGetService');
 
+const {
+  Permissions,
+  Rubriques,
+} = require('../../modeles/autorisations/gestionDroits');
+
+const { ECRITURE, LECTURE } = Permissions;
+const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
+
 const routesApiService = (
   middleware,
   depotDonnees,
@@ -80,10 +88,9 @@ const routesApiService = (
         });
     }
   );
-
   routes.put(
     '/:id',
-    middleware.trouveService,
+    middleware.trouveService({ [DECRIRE]: ECRITURE }),
     middleware.aseptise('nomService', 'organisationsResponsables.*'),
     middleware.aseptiseListes([
       { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
@@ -118,7 +125,7 @@ const routesApiService = (
   routes.get(
     '/:id',
     middleware.aseptise('id'),
-    middleware.trouveService,
+    middleware.trouveService({ [DECRIRE]: LECTURE }),
     async (requete, reponse) => {
       const donnees = objetGetService.donnees(
         requete.homologation,
@@ -131,7 +138,7 @@ const routesApiService = (
 
   routes.post(
     '/:id/mesures',
-    middleware.trouveService,
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
     middleware.aseptise(
       'mesuresGenerales.*.statut',
       'mesuresGenerales.*.modalites',
@@ -173,7 +180,7 @@ const routesApiService = (
 
   routes.post(
     '/:id/rolesResponsabilites',
-    middleware.trouveService,
+    middleware.trouveService({ [CONTACTS]: ECRITURE }),
     middleware.aseptiseListes([
       {
         nom: 'acteursHomologation',
@@ -198,7 +205,7 @@ const routesApiService = (
 
   routes.post(
     '/:id/risques',
-    middleware.trouveService,
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
     middleware.aseptise(
       '*',
       'risquesSpecifiques.*.description',
@@ -258,7 +265,7 @@ const routesApiService = (
 
   routes.put(
     '/:id/homologation/autorite',
-    middleware.trouveService,
+    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
     middleware.aseptise('nom', 'fonction'),
     (requete, reponse, suite) => {
@@ -277,7 +284,7 @@ const routesApiService = (
 
   routes.put(
     '/:id/homologation/decision',
-    middleware.trouveService,
+    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
     middleware.aseptise('dateHomologation', 'dureeValidite'),
     (requete, reponse, suite) => {
@@ -306,7 +313,7 @@ const routesApiService = (
 
   routes.put(
     '/:id/homologation/telechargement',
-    middleware.trouveService,
+    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
     (requete, reponse, suite) => {
       const { homologation, dossierCourant } = requete;
@@ -322,7 +329,7 @@ const routesApiService = (
 
   routes.put(
     '/:id/homologation/avis',
-    middleware.trouveService,
+    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
     middleware.aseptiseListes([
       {
@@ -358,7 +365,7 @@ const routesApiService = (
 
   routes.put(
     '/:id/homologation/documents',
-    middleware.trouveService,
+    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
     middleware.aseptise('documents.*', 'avecDocuments'),
     (requete, reponse, suite) => {
@@ -385,7 +392,7 @@ const routesApiService = (
 
   routes.post(
     '/:id/homologation/finalise',
-    middleware.trouveService,
+    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     (requete, reponse, suite) => {
       const { homologation } = requete;
 
