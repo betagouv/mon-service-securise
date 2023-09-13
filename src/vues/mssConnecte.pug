@@ -11,6 +11,9 @@ block navigation
 
   .utilisateur-courant
 
+  include nouvellesFonctionnalites/modaleNouvellesFonctionnalites.pug
+
+block append session
   .rideau#deconnexion
     .modale.deconnexion
       .fermeture-modale
@@ -18,8 +21,6 @@ block navigation
       h1 Session expirée
       p Veuillez vous reconnecter.
       a.bouton(href = '/connexion') Reconnexion
-
-  include nouvellesFonctionnalites/modaleNouvellesFonctionnalites.pug
 
   script(type = 'module', src = '/statique/mssConnecte.js')
 
