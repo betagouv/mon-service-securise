@@ -1,5 +1,6 @@
 class EchecAutorisation extends Error {}
 class EchecEnvoiMessage extends Error {}
+class ErreurDroitsIncoherents extends Error {}
 class ErreurModele extends Error {}
 class ErreurAutorisationExisteDeja extends ErreurModele {}
 class ErreurAutorisationInexistante extends ErreurModele {}
@@ -71,6 +72,7 @@ module.exports = {
   ErreurDossierNonFinalisable,
   ErreurDossierNonFinalise,
   ErreurDossiersInvalides,
+  ErreurDroitsIncoherents,
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
   ErreurHomologationInexistante,
