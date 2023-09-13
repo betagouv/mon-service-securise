@@ -22,7 +22,7 @@ const {
 } = require('../../src/modeles/autorisations/gestionDroits');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
-const { ECRITURE } = Permissions;
+const { ECRITURE, LECTURE } = Permissions;
 
 describe('Le dépôt de données des autorisations', () => {
   const creeDepot = (adaptateurPersistance, adaptateurUUID) =>
@@ -37,22 +37,51 @@ describe('Le dépôt de données des autorisations', () => {
       }),
     });
 
-  it("vérifie que l'utilisateur a accès à l'homologation", async () => {
-    const adaptateurPersistance = unePersistanceMemoire()
-      .ajouteUneAutorisation({
-        idUtilisateur: '456',
-        idHomologation: '123',
-        type: 'createur',
-      })
-      .construis();
+  describe("sur demande de validation d'autorisation d'accès", () => {
+    it("retourne `false` si aucune n'autorisation n'existe pour cet utilisateur et ce service", async () => {
+      const depot = creeDepot(unePersistanceMemoire().construis());
 
-    const depot = creeDepot(adaptateurPersistance);
+      const accesAutorise123 = await depot.accesAutorise('456', '123');
 
-    const accesAutorise123 = await depot.accesAutorise('456', '123');
-    expect(accesAutorise123).to.be(true);
+      expect(accesAutorise123).to.be(false);
+    });
 
-    const accessAutorise999 = await depot.accesAutorise('456', '999');
-    expect(accessAutorise999).to.be(false);
+    it('retourne `true` si le niveau de permission est suffisant pour cette rubrique', async () => {
+      const avecDroitEcriture = unePersistanceMemoire()
+        .ajouteUneAutorisation({
+          idUtilisateur: '456',
+          idHomologation: '123',
+          type: 'createur',
+          droits: { [DECRIRE]: ECRITURE },
+        })
+        .construis();
+
+      const depot = creeDepot(avecDroitEcriture);
+
+      const accesAutoriseEnLecture = await depot.accesAutorise('456', '123', {
+        [DECRIRE]: LECTURE,
+      });
+
+      expect(accesAutoriseEnLecture).to.be(true);
+    });
+
+    it("retourne `false` si le niveau de permission n'est pas suffisant pour cette rubrique", async () => {
+      const avecDroitLecture = unePersistanceMemoire()
+        .ajouteUneAutorisation({
+          idUtilisateur: '456',
+          idHomologation: '123',
+          type: 'createur',
+          droits: { [DECRIRE]: LECTURE },
+        })
+        .construis();
+      const depot = creeDepot(avecDroitLecture);
+
+      const accesAutoriseEnEcriture = await depot.accesAutorise('456', '123', {
+        [DECRIRE]: ECRITURE,
+      });
+
+      expect(accesAutoriseEnEcriture).to.be(false);
+    });
   });
 
   describe("Sur demande de transfert des autorisations d'un utilisateur à un autre", () => {

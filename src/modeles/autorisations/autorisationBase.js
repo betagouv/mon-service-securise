@@ -21,6 +21,12 @@ class AutorisationBase extends Base {
   aLaPermission(niveau, rubrique) {
     return this.droits[rubrique] >= niveau;
   }
+
+  aLesPermissions(droits) {
+    return Object.entries(droits).every(([rubrique, niveau]) =>
+      this.aLaPermission(niveau, rubrique)
+    );
+  }
 }
 
 module.exports = AutorisationBase;
