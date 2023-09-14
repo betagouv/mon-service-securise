@@ -155,7 +155,7 @@ const routesApiPublique = ({
 
   routes.get(
     '/annuaire/organisations',
-    middleware.aseptise(['recherche', 'departement']),
+    middleware.aseptise('recherche', 'departement'),
     (requete, reponse) => {
       const { recherche = '', departement = null } = requete.query;
 
