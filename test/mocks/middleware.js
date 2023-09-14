@@ -4,10 +4,11 @@ const expect = require('expect.js');
 const Homologation = require('../../src/modeles/homologation');
 
 const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
-  const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) =>
-    expect(`${[valeurConstatee, ...diagnostics].join(' ')}`).to.eql(
-      `${[valeurReference, ...diagnostics].join(' ')}`
-    );
+  const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
+    expect(
+      `${[JSON.stringify(valeurConstatee), ...diagnostics].join(' ')}`
+    ).to.eql(`${[JSON.stringify(valeurReference), ...diagnostics].join(' ')}`);
+  };
 
   const { lectureEtat, etatInitial = false, etatFinal = true } = donneesEtat;
   const suffixeLectureEtat = `(sur appel à ${lectureEtat.toString()})`;
@@ -124,7 +125,7 @@ const middlewareFantaisie = {
     suite();
   },
 
-  trouveService: (requete, _reponse, suite) => {
+  trouveService: () => (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
     requete.homologation = homologationTrouvee;

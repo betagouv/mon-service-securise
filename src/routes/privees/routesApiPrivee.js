@@ -182,9 +182,9 @@ const routesApiPrivee = ({
 
   routes.put(
     '/utilisateur',
-    middleware.aseptise([
-      ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email'),
-    ]),
+    middleware.aseptise(
+      ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email')
+    ),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
