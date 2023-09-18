@@ -13,78 +13,56 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
 
   li
     a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
-      span.position
-        !=(position+1)
-      span.none-si-ferme!=description
-      span.chevron.none-si-ferme
-      span.statut-saisie.none-si-ferme(class = statutSaisie(statut))
-    if estActive
-      span.sous-titre.none-si-ferme
-        !=sousTitre
+      div
+        span.position
+          !=(position+1)
+        span.none-si-ferme!= description
+        span.statut-saisie.none-si-ferme(class = statutSaisie(statut))
+      span.sous-titre.hidden-si-ferme!= sousTitre
 
 .menu-navigation(class = preferencesUtilisateur.etatMenuNavigation === 'ferme' ? 'ferme' : '')
-  .accueil
-    a(href="/" title="Naviguer vers la page d'acceuil")
-    button.repli-menu
-      img(src = '/statique/assets/images/forme_chevron_blanc.svg' alt='Chevron vers la gauche')
-
-  if !estSurCreationDeService
-    .nom-service
-      .none-si-ferme
-        +texteTronque({texte: service.nomService() || ''})
+  .actions
+    if !estSurCreationDeService
       button#gerer-contributeurs
         img(src = '/statique/assets/images/bouton_inviter_collaborateur_persona.svg')
-        span.nombre-contributeurs= service.contributeurs.length + 1
+        span.none-si-ferme.nombre-contributeurs= service.contributeurs.length + 1
         span.inviter-contributeurs Gérer les contributeurs
+    button.repli-menu
+      img(src = '/statique/assets/images/forme_chevron_blanc.svg' alt='Chevron vers la gauche')
 
   .parcours
     ul.etapes
       each actionSaisie in actionsSaisie
         +etapeParcours(actionSaisie)
 
-    if !estSurCreationDeService
-      .outils-complementaires
-        h4.hidden-si-ferme Outils complémentaires
-        ul
-          li
-            a.lien-risques(href = `/service/${service.id}/risques`, class = etapeActive === 'risques' ? 'actif' : '')
-              div
-                img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »")
-              span.none-si-ferme Risques
-          li
-            a.lien-contacts-utiles(href = `/service/${service.id}/rolesResponsabilites`, class = etapeActive === 'contactsUtiles' ? 'actif' : '')
-              div
-                img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
-              span.none-si-ferme Contacts utiles
-
-      .documents-telechargeables
-        h4.hidden-si-ferme Documents à télécharger
-        ul
-          li
-            a.lien-pdf(
-              href = `/api/service/${service.id}/pdf/syntheseSecurite.pdf`,
-              target = '_blank',
-              rel = 'noopener'
-              title= 'Télécharger le PDF de synthèse de sécurité dans une nouvelle fenêtre')
-              div
-                img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
-              span.none-si-ferme Synthèse de sécurité
-          li
-            a.lien-pdf(
-              href = `/api/service/${service.id}/pdf/annexes.pdf`,
-              target = '_blank',
-              rel = 'noopener'
-              title= 'Télécharger les annexes PDF dans une nouvelle fenêtre')
-              div
-                img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
-              span.none-si-ferme Annexes
-
-
-  a.lien-tableau-de-bord(href="/tableauDeBord" title="Retour au tableau de bord")
-    div
-      img(src = '/statique/assets/images/icone_retour.svg' alt="Icône d'une flèche pointant vers la gauche")
-    span.none-si-ferme Tableau de bord
-  a.lien-deconnexion(href="/connexion" title="Déconnexion")
-    div
-      img(src = '/statique/assets/images/icone_deconnecter.svg' alt="Icône d'une croix")
-    span.none-si-ferme Se déconnecter
+  if !estSurCreationDeService
+    .autres-liens
+      ul
+        li
+          a(href = `/service/${service.id}/risques`, class = etapeActive === 'risques' ? 'actif' : '')
+            .pastille
+              img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »")
+            span.none-si-ferme Risques
+        li
+          a(href = `/service/${service.id}/rolesResponsabilites`, class = etapeActive === 'contactsUtiles' ? 'actif' : '')
+            .pastille
+              img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
+            span.none-si-ferme Contacts utiles
+        li
+          a(
+            href = `/api/service/${service.id}/pdf/syntheseSecurite.pdf`,
+            target = '_blank',
+            rel = 'noopener'
+            title= 'Télécharger le PDF de synthèse de sécurité dans une nouvelle fenêtre')
+            .pastille
+              img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
+            span.none-si-ferme Synthèse de sécurité
+        li
+          a(
+            href = `/api/service/${service.id}/pdf/annexes.pdf`,
+            target = '_blank',
+            rel = 'noopener'
+            title= 'Télécharger les annexes PDF dans une nouvelle fenêtre')
+            .pastille
+              img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
+            span.none-si-ferme Annexes

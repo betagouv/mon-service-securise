@@ -66,19 +66,17 @@ module.exports = {
     descriptionService: {
       position: 0,
       description: 'Décrire',
-      sousTitre: 'Présentez les caractéristiques de votre service.',
+      sousTitre: 'Évaluer les besoins de sécurité',
     },
     mesures: {
       position: 1,
       description: 'Sécuriser',
-      sousTitre:
-        'Mettez en œuvre les mesures de sécurité adaptées à votre service.',
+      sousTitre: "Mesurer et renforcer l'indice cyber",
     },
     dossiers: {
       position: 2,
       description: 'Homologuer',
-      sousTitre:
-        'Complétez et téléchargez les documents pour homologuer le service.',
+      sousTitre: "Générer un dossier d'homologation",
     },
   },
 
