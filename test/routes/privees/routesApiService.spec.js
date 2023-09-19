@@ -17,6 +17,9 @@ const {
   Permissions,
   Rubriques,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const {
+  uneAutorisation,
+} = require('../../constructeurs/constructeurAutorisation');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;
@@ -1436,6 +1439,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         statutsHomologation: { nonRealisee: {} },
       });
 
+      testeur.depotDonnees().autorisationPour = async () =>
+        uneAutorisation()
+          .avecDroits({ [HOMOLOGUER]: LECTURE })
+          .construis();
+
       const donneesDossier = unDossier(testeur.referentiel())
         .quiEstComplet()
         .quiEstNonFinalise().donnees;
@@ -1443,14 +1451,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .avecId('456')
         .avecDossiers([donneesDossier])
         .construis();
-      testeur
-        .middleware()
-        .reinitialise({ homologationARenvoyer: serviceARenvoyer });
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: serviceARenvoyer,
+        idUtilisateur: '123',
+      });
     });
 
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
-        [{ niveau: LECTURE, rubrique: DECRIRE }],
+        [],
         {
           method: 'get',
           url: 'http://localhost:1234/api/service/456',
@@ -1468,6 +1477,21 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         },
         done
       );
+    });
+
+    it("interroge le dépôt pour obtenir l'autorisation associée", async () => {
+      let donneesPassees = {};
+      testeur.depotDonnees().autorisationPour = async (
+        idUtilisateur,
+        idService
+      ) => {
+        donneesPassees = { idUtilisateur, idService };
+        return uneAutorisation().avecDroits({}).construis();
+      };
+
+      const reponse = await axios('http://localhost:1234/api/service/456');
+      expect(donneesPassees.idUtilisateur).to.equal('123');
+      expect(donneesPassees.idService).to.equal('456');
     });
 
     it('retourne la représentation du service grâce à `objetGetService`', async () => {

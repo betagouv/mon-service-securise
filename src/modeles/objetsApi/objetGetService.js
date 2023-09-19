@@ -1,6 +1,10 @@
 const Dossiers = require('../dossiers');
+const { Permissions, Rubriques } = require('../autorisations/gestionDroits');
 
-const donnees = (service, idUtilisateur, referentiel) => ({
+const { LECTURE } = Permissions;
+const { HOMOLOGUER } = Rubriques;
+
+const donnees = (service, autorisation, idUtilisateur, referentiel) => ({
   id: service.id,
   nomService: service.nomService(),
   organisationsResponsables:
@@ -17,11 +21,13 @@ const donnees = (service, idUtilisateur, referentiel) => ({
     initiales: c.initiales(),
     poste: c.posteDetaille(),
   })),
-  statutHomologation: {
-    id: service.dossiers.statutHomologation(),
-    enCoursEdition: service.dossiers.statutSaisie() === Dossiers.A_COMPLETER,
-    ...referentiel.statutHomologation(service.dossiers.statutHomologation()),
-  },
+  ...(autorisation.aLaPermission(LECTURE, HOMOLOGUER) && {
+    statutHomologation: {
+      id: service.dossiers.statutHomologation(),
+      enCoursEdition: service.dossiers.statutSaisie() === Dossiers.A_COMPLETER,
+      ...referentiel.statutHomologation(service.dossiers.statutHomologation()),
+    },
+  }),
   nombreContributeurs: service.contributeurs.length + 1,
   estCreateur: service.createur.id === idUtilisateur,
   documentsPdfDisponibles: service.documentsPdfDisponibles(),
