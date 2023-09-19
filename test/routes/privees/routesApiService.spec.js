@@ -1489,7 +1489,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return uneAutorisation().avecDroits({}).construis();
       };
 
-      const reponse = await axios('http://localhost:1234/api/service/456');
+      await axios('http://localhost:1234/api/service/456');
       expect(donneesPassees.idUtilisateur).to.equal('123');
       expect(donneesPassees.idService).to.equal('456');
     });

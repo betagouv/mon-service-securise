@@ -40,17 +40,20 @@ const routesApiPrivee = ({
   routes.get(
     '/services',
     middleware.verificationAcceptationCGU,
-    (requete, reponse) => {
-      depotDonnees
-        .homologations(requete.idUtilisateurCourant)
-        .then((services) =>
-          objetGetServices.donnees(
-            services,
-            requete.idUtilisateurCourant,
-            referentiel
-          )
-        )
-        .then((donnees) => reponse.json(donnees));
+    async (requete, reponse) => {
+      const services = await depotDonnees.homologations(
+        requete.idUtilisateurCourant
+      );
+      const autorisations = await depotDonnees.autorisations(
+        requete.idUtilisateurCourant
+      );
+      const donnees = objetGetServices.donnees(
+        services,
+        autorisations,
+        requete.idUtilisateurCourant,
+        referentiel
+      );
+      reponse.json(donnees);
     }
   );
 
