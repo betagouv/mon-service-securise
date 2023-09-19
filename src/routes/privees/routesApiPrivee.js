@@ -57,11 +57,15 @@ const routesApiPrivee = ({
   routes.get(
     '/services/indices-cyber',
     middleware.verificationAcceptationCGU,
-    (requete, reponse) => {
-      depotDonnees
-        .homologations(requete.idUtilisateurCourant)
-        .then((services) => objetGetIndicesCyber.donnees(services))
-        .then((donnees) => reponse.json(donnees));
+    async (requete, reponse) => {
+      const services = await depotDonnees.homologations(
+        requete.idUtilisateurCourant
+      );
+      const autorisations = await depotDonnees.autorisations(
+        requete.idUtilisateurCourant
+      );
+      const donnees = objetGetIndicesCyber.donnees(services, autorisations);
+      reponse.json(donnees);
     }
   );
 

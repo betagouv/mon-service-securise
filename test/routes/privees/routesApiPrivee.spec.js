@@ -13,6 +13,9 @@ const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
 const { unService } = require('../../constructeurs/constructeurService');
+const {
+  uneAutorisation,
+} = require('../../constructeurs/constructeurAutorisation');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -86,8 +89,35 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         );
     });
 
+    it("interroge le dépôt de données pour récupérer les autorisations de l'utilisateur", async () => {
+      let donneesPassees = {};
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+
+      testeur.depotDonnees().autorisations = async (idUtilisateur) => {
+        donneesPassees = { idUtilisateur };
+        return [
+          uneAutorisation()
+            .deCreateurDeService('123', '456')
+            .avecDroits({})
+            .construis(),
+        ];
+      };
+
+      await axios.get('http://localhost:1234/api/services/indices-cyber');
+      expect(donneesPassees.idUtilisateur).to.equal('123');
+    });
+
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
+
+      testeur.depotDonnees().autorisations = async () => {
+        return [
+          uneAutorisation()
+            .deCreateurDeService('123', '456')
+            .avecDroits({})
+            .construis(),
+        ];
+      };
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');

@@ -8,6 +8,7 @@ class ConstructeurAutorisation {
       idHomologation: '',
       idService: '',
       type: '',
+      droits: {},
     };
   }
 
@@ -24,6 +25,11 @@ class ConstructeurAutorisation {
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
     this.donnees.idHomologation = idService;
+    return this;
+  }
+
+  avecDroits(droits) {
+    this.donnees.droits = droits;
     return this;
   }
 
