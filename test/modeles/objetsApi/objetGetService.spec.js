@@ -3,6 +3,13 @@ const expect = require('expect.js');
 const Service = require('../../../src/modeles/service');
 const objetGetService = require('../../../src/modeles/objetsApi/objetGetService');
 const Referentiel = require('../../../src/referentiel');
+const {
+  uneAutorisation,
+} = require('../../constructeurs/constructeurAutorisation');
+const {
+  Rubriques: { HOMOLOGUER },
+  Permissions: { LECTURE },
+} = require('../../../src/modeles/autorisations/gestionDroits');
 
 describe("L'objet d'API de `GET /service`", () => {
   const referentiel = Referentiel.creeReferentiel({
@@ -10,6 +17,9 @@ describe("L'objet d'API de `GET /service`", () => {
       nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
     },
   });
+  const lectureSurHomologuer = uneAutorisation()
+    .avecDroits({ [HOMOLOGUER]: LECTURE })
+    .construis();
 
   const unService = new Service({
     id: '123',
@@ -34,7 +44,9 @@ describe("L'objet d'API de `GET /service`", () => {
   });
 
   it('fournit les données nécessaires', () => {
-    expect(objetGetService.donnees(unService, 'A', referentiel)).to.eql({
+    expect(
+      objetGetService.donnees(unService, lectureSurHomologuer, 'A', referentiel)
+    ).to.eql({
       id: '123',
       nomService: 'Un service',
       organisationsResponsables: ['Une organisation'],
@@ -67,6 +79,19 @@ describe("L'objet d'API de `GET /service`", () => {
     });
   });
 
+  it("masque le statut d'homologation si l'utilisateur n'a pas la permission", () => {
+    const autorisationSansHomologuer = uneAutorisation()
+      .avecDroits({})
+      .construis();
+    const donnees = objetGetService.donnees(
+      unService,
+      autorisationSansHomologuer,
+      'A',
+      referentiel
+    );
+    expect(donnees.statutHomologation).to.be(undefined);
+  });
+
   describe('sur demande des permissions', () => {
     it("autorise la suppression de contributeur si l'utilisateur est créateur", () => {
       const unServiceDontAestCreateur = new Service({
@@ -75,8 +100,12 @@ describe("L'objet d'API de `GET /service`", () => {
         createur: { id: 'A', email: 'email.createur@mail.fr' },
       });
       expect(
-        objetGetService.donnees(unServiceDontAestCreateur, 'A', referentiel)
-          .permissions
+        objetGetService.donnees(
+          unServiceDontAestCreateur,
+          lectureSurHomologuer,
+          'A',
+          referentiel
+        ).permissions
       ).to.eql({
         suppressionContributeur: true,
       });
@@ -92,6 +121,7 @@ describe("L'objet d'API de `GET /service`", () => {
       expect(
         objetGetService.donnees(
           unServiceDontAestCreateur,
+          lectureSurHomologuer,
           idUtilisateur,
           referentiel
         ).permissions

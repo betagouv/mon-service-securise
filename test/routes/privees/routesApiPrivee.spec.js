@@ -48,6 +48,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
+      let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
       testeur.referentiel().recharge({
         statutsHomologation: {
@@ -56,7 +57,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
-        expect(idUtilisateur).to.equal('123');
+        donneesPassees = { idUtilisateur };
         return Promise.resolve([
           new Service({
             id: '456',
@@ -77,6 +78,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           const { services } = reponse.data;
           expect(services.length).to.equal(1);
           expect(services[0].id).to.equal('456');
+          expect(donneesPassees.idUtilisateur).to.equal('123');
           done();
         })
         .catch(done);
@@ -112,6 +114,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
+      let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
       testeur.depotDonnees().autorisations = async () => [
@@ -122,7 +125,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       ];
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
-        expect(idUtilisateur).to.equal('123');
+        donneesPassees = { idUtilisateur };
         return Promise.resolve([
           new Service({
             id: '456',
@@ -143,6 +146,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           const { services } = reponse.data;
           expect(services.length).to.equal(1);
           expect(services[0].id).to.equal('456');
+          expect(donneesPassees.idUtilisateur).to.equal('123');
           done();
         })
         .catch(done);
@@ -204,12 +208,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
-      let depotAppele = false;
+      let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
-        expect(idUtilisateur).to.equal('123');
-        depotAppele = true;
+        donneesPassees = { idUtilisateur };
         return Promise.resolve([
           new Service({
             id: '456',
@@ -226,7 +229,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .get('http://localhost:1234/api/services/export.csv')
         .then((reponse) => {
           expect(reponse.status).to.equal(200);
-          expect(depotAppele).to.be(true);
+          expect(donneesPassees.idUtilisateur).to.equal('123');
           done();
         })
         .catch(done);

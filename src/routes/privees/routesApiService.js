@@ -30,7 +30,7 @@ const {
   Rubriques,
 } = require('../../modeles/autorisations/gestionDroits');
 
-const { ECRITURE, LECTURE } = Permissions;
+const { ECRITURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
 
 const routesApiService = (
@@ -125,10 +125,15 @@ const routesApiService = (
   routes.get(
     '/:id',
     middleware.aseptise('id'),
-    middleware.trouveService({ [DECRIRE]: LECTURE }),
+    middleware.trouveService({}),
     async (requete, reponse) => {
+      const autorisation = await depotDonnees.autorisationPour(
+        requete.idUtilisateurCourant,
+        requete.homologation.id
+      );
       const donnees = objetGetService.donnees(
         requete.homologation,
+        autorisation,
         requete.idUtilisateurCourant,
         referentiel
       );
