@@ -1,22 +1,31 @@
-const donnees = (services) => {
+const { Permissions, Rubriques } = require('../autorisations/gestionDroits');
+
+const { LECTURE } = Permissions;
+const { SECURISER } = Rubriques;
+
+const donnees = (services, autorisations) => {
   const servicesIndiceCyberCalcules = services.map((s) => ({
     id: s.id,
-    indiceCyber: s.indiceCyber().total,
+    ...(autorisations
+      .find((a) => a.idService === s.id)
+      .aLaPermission(LECTURE, SECURISER) && {
+      indiceCyber: s.indiceCyber().total,
+    }),
   }));
 
   const servicesAvecIndiceCyber = servicesIndiceCyberCalcules.filter(
-    (s) => s.indiceCyber > 0
+    (s) => s.indiceCyber && s.indiceCyber > 0
   );
 
   const indiceCyberMoyen =
-    servicesIndiceCyberCalcules
+    servicesAvecIndiceCyber
       .map((s) => s.indiceCyber)
       .reduce((a, b) => a + b, 0) / servicesAvecIndiceCyber.length;
 
   return {
     services: servicesIndiceCyberCalcules.map((s) => ({
       ...s,
-      indiceCyber: s.indiceCyber.toFixed(1),
+      ...(s.indiceCyber && { indiceCyber: s.indiceCyber.toFixed(1) }),
     })),
     resume: {
       indiceCyberMoyen: Number.isNaN(indiceCyberMoyen)
