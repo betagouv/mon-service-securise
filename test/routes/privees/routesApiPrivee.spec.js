@@ -38,6 +38,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/services`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.referentiel().recharge({
+        statutsHomologation: {
+          nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
+        },
+      });
+    });
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur
         .middleware()
@@ -55,6 +64,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
         },
       });
+
+      testeur.depotDonnees().autorisations = async () => [
+        uneAutorisation()
+          .deCreateurDeService('123', '456')
+          .avecDroits({})
+          .construis(),
+      ];
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         donneesPassees = { idUtilisateur };
@@ -82,6 +98,22 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           done();
         })
         .catch(done);
+    });
+
+    it("interroge le dépôt de données pour récupérer les autorisations de l'utilisateur", async () => {
+      let donneesPassees = {};
+      testeur.depotDonnees().autorisations = async (idUtilisateur) => {
+        donneesPassees = { idUtilisateur };
+        return [
+          uneAutorisation()
+            .deCreateurDeService('123', '456')
+            .avecDroits({})
+            .construis(),
+        ];
+      };
+
+      await axios.get('http://localhost:1234/api/services');
+      expect(donneesPassees.idUtilisateur).to.equal('123');
     });
   });
 
