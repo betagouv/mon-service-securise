@@ -12,6 +12,7 @@ const Utilisateur = require('./utilisateur');
 const ObjetPDFAnnexeDescription = require('./objetsPDF/objetPDFAnnexeDescription');
 const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
 const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
+const AutorisationBase = require('./autorisations/autorisationBase');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -110,18 +111,29 @@ class Homologation {
     }, {});
   }
 
-  documentsPdfDisponibles() {
-    const documents = ['annexes', 'syntheseSecurite'];
+  documentsPdfDisponibles(autorisation) {
+    const droitAuxAnnexes = autorisation.aLesPermissions(
+      AutorisationBase.DROITS_ANNEXES_PDF
+    );
+    const droitALaSyntheseSecurite = autorisation.aLesPermissions(
+      AutorisationBase.DROIT_SYNTHESE_SECURITE_PDF
+    );
+    const droitAuDossierDecision = autorisation.aLesPermissions(
+      AutorisationBase.DROITS_DOSSIER_DECISION_PDF
+    );
     const dossierCourant = this.dossierCourant();
-    if (
-      dossierCourant &&
+
+    return [
+      ...(droitAuxAnnexes ? ['annexes'] : []),
+      ...(droitALaSyntheseSecurite ? ['syntheseSecurite'] : []),
+      ...(dossierCourant &&
       this.referentiel.etapeSuffisantePourDossierDecision(
         dossierCourant.etapeCourante()
-      )
-    ) {
-      documents.push('dossierDecision');
-    }
-    return documents;
+      ) &&
+      droitAuDossierDecision
+        ? ['dossierDecision']
+        : []),
+    ];
   }
 
   donneesAPersister() {
