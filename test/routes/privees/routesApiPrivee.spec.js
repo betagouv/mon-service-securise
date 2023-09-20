@@ -16,6 +16,10 @@ const { unService } = require('../../constructeurs/constructeurService');
 const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
+const {
+  Rubriques: { SECURISER },
+  Permissions: { LECTURE },
+} = require('../../../src/modeles/autorisations/gestionDroits');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -110,14 +114,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
-      testeur.depotDonnees().autorisations = async () => {
-        return [
-          uneAutorisation()
-            .deCreateurDeService('123', '456')
-            .avecDroits({})
-            .construis(),
-        ];
-      };
+      testeur.depotDonnees().autorisations = async () => [
+        uneAutorisation()
+          .deCreateurDeService('123', '456')
+          .avecDroits({})
+          .construis(),
+      ];
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         expect(idUtilisateur).to.equal('123');
@@ -155,6 +157,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
         },
       });
+      testeur.depotDonnees().autorisations = async () => [
+        uneAutorisation()
+          .deCreateurDeService('123', '456')
+          .avecDroits({ [SECURISER]: LECTURE })
+          .construis(),
+      ];
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -175,6 +183,24 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         },
         done
       );
+    });
+
+    it("interroge le dépôt de données pour récupérer les autorisations de l'utilisateur", async () => {
+      let donneesPassees = {};
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+
+      testeur.depotDonnees().autorisations = async (idUtilisateur) => {
+        donneesPassees = { idUtilisateur };
+        return [
+          uneAutorisation()
+            .deCreateurDeService('123', '456')
+            .avecDroits({})
+            .construis(),
+        ];
+      };
+
+      await axios.get('http://localhost:1234/api/services/export.csv');
+      expect(donneesPassees).to.eql({ idUtilisateur: '123' });
     });
 
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {

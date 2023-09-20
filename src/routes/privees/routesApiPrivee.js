@@ -73,16 +73,19 @@ const routesApiPrivee = ({
     '/services/export.csv',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('idsServices.*'),
-    (requete, reponse) => {
+    async (requete, reponse) => {
       const { idsServices = [] } = requete.query;
 
-      const donneesCsvServices = (services) => {
+      const donneesCsvServices = (services, autorisations) => {
         const servicesSansIndice = objetGetServices.donnees(
           services,
           requete.idUtilisateurCourant,
           referentiel
         );
-        const indicesCyber = objetGetIndicesCyber.donnees(services);
+        const indicesCyber = objetGetIndicesCyber.donnees(
+          services,
+          autorisations
+        );
 
         return zipTableaux(
           servicesSansIndice.services,
@@ -91,28 +94,30 @@ const routesApiPrivee = ({
         );
       };
 
-      depotDonnees
-        .homologations(requete.idUtilisateurCourant)
-        .then((services) =>
-          services.filter((service) => idsServices.includes(service.id))
-        )
-        .then((services) => donneesCsvServices(services))
-        .then((donneesServices) =>
-          adaptateurCsv.genereCsvServices(donneesServices)
-        )
-        .then((buffer) => {
-          const maintenantFormate = dateYYYYMMDD(
-            adaptateurHorloge.maintenant()
-          );
-          reponse
-            .contentType('text/csv;charset=utf-8')
-            .set(
-              'Content-Disposition',
-              `attachment; filename="MSS_services_${maintenantFormate}.csv"`
-            )
-            .send(buffer);
-        })
-        .catch(() => reponse.sendStatus(424));
+      const autorisations = await depotDonnees.autorisations(
+        requete.idUtilisateurCourant
+      );
+
+      const services = await depotDonnees.homologations(
+        requete.idUtilisateurCourant
+      );
+      const donneesServices = donneesCsvServices(
+        services.filter((service) => idsServices.includes(service.id)),
+        autorisations
+      );
+      try {
+        const buffer = await adaptateurCsv.genereCsvServices(donneesServices);
+        const maintenantFormate = dateYYYYMMDD(adaptateurHorloge.maintenant());
+        reponse
+          .contentType('text/csv;charset=utf-8')
+          .set(
+            'Content-Disposition',
+            `attachment; filename="MSS_services_${maintenantFormate}.csv"`
+          )
+          .send(buffer);
+      } catch {
+        reponse.sendStatus(424);
+      }
     }
   );
 
