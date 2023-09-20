@@ -1,13 +1,7 @@
 const express = require('express');
+const AutorisationBase = require('../../modeles/autorisations/autorisationBase');
 const { genereGradientConique } = require('../../pdf/graphiques/camembert');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
-const {
-  Permissions,
-  Rubriques,
-} = require('../../modeles/autorisations/gestionDroits');
-
-const { LECTURE } = Permissions;
-const { HOMOLOGUER, RISQUES, SECURISER, DECRIRE } = Rubriques;
 
 const routesApiServicePdf = (
   middleware,
@@ -63,11 +57,7 @@ const routesApiServicePdf = (
   };
   routes.get(
     '/:id/pdf/annexes.pdf',
-    middleware.trouveService({
-      [DECRIRE]: LECTURE,
-      [SECURISER]: LECTURE,
-      [RISQUES]: LECTURE,
-    }),
+    middleware.trouveService(AutorisationBase.DROITS_ANNEXES_PDF),
     (requete, reponse, suite) => {
       const { homologation } = requete;
 
@@ -79,7 +69,7 @@ const routesApiServicePdf = (
 
   routes.get(
     '/:id/pdf/dossierDecision.pdf',
-    middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
+    middleware.trouveService(AutorisationBase.DROITS_DOSSIER_DECISION_PDF),
     middleware.trouveDossierCourant,
     (requete, reponse, suite) => {
       const { homologation, dossierCourant } = requete;
@@ -92,7 +82,7 @@ const routesApiServicePdf = (
 
   routes.get(
     '/:id/pdf/syntheseSecurite.pdf',
-    middleware.trouveService({ [SECURISER]: LECTURE, [DECRIRE]: LECTURE }),
+    middleware.trouveService(AutorisationBase.DROIT_SYNTHESE_SECURITE_PDF),
     (requete, reponse, suite) => {
       const { homologation } = requete;
 
