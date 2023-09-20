@@ -26,6 +26,7 @@ const tableauDesServices = {
   $tableau: $('.contenu-tableau-services'),
   donnees: [],
   donneesAffichees: [],
+  estEnChargement: false,
   nombreServices: 0,
   servicesSelectionnes: new Set(),
   termeRecherche: '',
@@ -148,6 +149,7 @@ const tableauDesServices = {
   nomDuService: (idService) =>
     tableauDesServices.donneesDuService(idService)?.nomService,
   recupereServices: () => {
+    tableauDesServices.estEnChargement = true;
     axios.get('/api/utilisateurCourant').then(() =>
       axios
         .get('/api/services')
@@ -170,6 +172,7 @@ const tableauDesServices = {
             );
             cible.indiceCyber = service.indiceCyber;
           });
+          tableauDesServices.estEnChargement = false;
           tableauDesServices.afficheDonnees();
         })
     );
@@ -226,10 +229,13 @@ const tableauDesServices = {
       $ligne.append($celluleCollaborateur);
 
       let contenuIndiceCyber = `${service.indiceCyber}<span class='note-totale'>/5</span>`;
-      if (parseFloat(service.indiceCyber) === 0) {
-        contenuIndiceCyber = '-';
-      } else if (!service.indiceCyber) {
+      if (tableauDesServices.estEnChargement) {
         contenuIndiceCyber = '<div class="icone-chargement"></div>';
+      } else if (
+        parseFloat(service.indiceCyber) === 0 ||
+        !service.indiceCyber
+      ) {
+        contenuIndiceCyber = '-';
       }
       $ligne.append(
         $(`<td class="cellule-indice-cyber">${contenuIndiceCyber}</td>`)
