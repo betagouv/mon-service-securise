@@ -12,7 +12,7 @@ module.exports = {
     moment: 'readonly',
   },
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 2022,
   },
   ignorePatterns: [
     'public/bibliotheques/*.js',
