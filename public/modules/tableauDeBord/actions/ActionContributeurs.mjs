@@ -6,9 +6,9 @@ class ActionContributeurs extends ActionAbstraite {
     this.appliqueContenu({
       titre: 'Contributeurs',
       texteSimple:
-        'Gérer la liste des personnes invitées à contribuer au service sélectionné.',
+        'Gérer la liste des personnes invitées à contribuer au service.',
       texteMultiple:
-        'Gérer la liste des personnes invitées à contribuer aux services sélectionnés.',
+        'Gérer la liste des personnes invitées à contribuer aux services.',
     });
   }
 
