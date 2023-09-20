@@ -11,6 +11,14 @@ const Utilisateur = require('../../src/modeles/utilisateur');
 const VueAnnexePDFDescription = require('../../src/modeles/objetsPDF/objetPDFAnnexeDescription');
 const VueAnnexePDFMesures = require('../../src/modeles/objetsPDF/objetPDFAnnexeMesures');
 const VueAnnexePDFRisques = require('../../src/modeles/objetsPDF/objetPDFAnnexeRisques');
+const { unService } = require('../constructeurs/constructeurService');
+const {
+  Rubriques: { DECRIRE, SECURISER, RISQUES, HOMOLOGUER },
+  Permissions: { LECTURE },
+} = require('../../src/modeles/autorisations/gestionDroits');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
@@ -214,7 +222,46 @@ describe('Une homologation', () => {
       etapeNecessairePourDossierDecision: 'avis',
     });
 
-    it("inclut tous les documents lorsqu'elle a un dossier d'homologation courant à une étape suffisante", () => {
+    const droitsPourAnnexe = {
+      [DECRIRE]: LECTURE,
+      [SECURISER]: LECTURE,
+      [RISQUES]: LECTURE,
+    };
+    const droitsPourSynthese = {
+      [SECURISER]: LECTURE,
+      [DECRIRE]: LECTURE,
+    };
+
+    const casDeTests = [
+      {
+        droits: droitsPourAnnexe,
+        methodeComparaison: 'contain',
+        valeurAttendue: 'annexes',
+      },
+      {
+        droits: droitsPourSynthese,
+        methodeComparaison: 'contain',
+        valeurAttendue: 'syntheseSecurite',
+      },
+      {
+        droits: {},
+        methodeComparaison: 'eql',
+        valeurAttendue: [],
+      },
+    ];
+
+    casDeTests.forEach(({ droits, methodeComparaison, valeurAttendue }) => {
+      it(`contient la valeur \`${valeurAttendue}\` avec les droits correspondant`, () => {
+        const service = unService().construis();
+        const autorisation = uneAutorisation().avecDroits(droits).construis();
+
+        expect(service.documentsPdfDisponibles(autorisation)).to[
+          methodeComparaison
+        ](valeurAttendue);
+      });
+    });
+
+    it("inclut le dossier de décision lorsqu'elle a un dossier d'homologation courant à une étape suffisante et les droits suffisants", () => {
       const homologationAvecDossier = new Homologation(
         {
           id: '123',
@@ -225,12 +272,17 @@ describe('Une homologation', () => {
         },
         referentiel
       );
+      const autorisationPourDossierDecision = uneAutorisation()
+        .avecDroits({
+          [HOMOLOGUER]: LECTURE,
+        })
+        .construis();
 
-      expect(homologationAvecDossier.documentsPdfDisponibles()).to.eql([
-        'annexes',
-        'syntheseSecurite',
-        'dossierDecision',
-      ]);
+      expect(
+        homologationAvecDossier.documentsPdfDisponibles(
+          autorisationPourDossierDecision
+        )
+      ).to.eql(['dossierDecision']);
     });
 
     it("exclut le dossier de décision en cas d'absence de dossier d'homologation courant", () => {
@@ -238,11 +290,17 @@ describe('Une homologation', () => {
         { id: '123', dossiers: [] },
         referentiel
       );
+      const autorisationPourDossierDecision = uneAutorisation()
+        .avecDroits({
+          [HOMOLOGUER]: LECTURE,
+        })
+        .construis();
 
-      expect(homologationSansDossier.documentsPdfDisponibles()).to.eql([
-        'annexes',
-        'syntheseSecurite',
-      ]);
+      expect(
+        homologationSansDossier.documentsPdfDisponibles(
+          autorisationPourDossierDecision
+        )
+      ).to.eql([]);
     });
 
     it("exclut le dossier de décision si l'étape courante du dossier d'homologation n'est pas suffisante", () => {
@@ -250,11 +308,17 @@ describe('Une homologation', () => {
         { id: '123', dossiers: [unDossier(referentiel).donnees] },
         referentiel
       );
+      const autorisationPourDossierDecision = uneAutorisation()
+        .avecDroits({
+          [HOMOLOGUER]: LECTURE,
+        })
+        .construis();
 
-      expect(homologationSansDossier.documentsPdfDisponibles()).to.eql([
-        'annexes',
-        'syntheseSecurite',
-      ]);
+      expect(
+        homologationSansDossier.documentsPdfDisponibles(
+          autorisationPourDossierDecision
+        )
+      ).to.eql([]);
     });
   });
 
