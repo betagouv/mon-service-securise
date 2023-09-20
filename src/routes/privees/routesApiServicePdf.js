@@ -3,13 +3,14 @@ const AutorisationBase = require('../../modeles/autorisations/autorisationBase')
 const { genereGradientConique } = require('../../pdf/graphiques/camembert');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
 
-const routesApiServicePdf = (
-  middleware,
+const routesApiServicePdf = ({
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
-  referentiel
-) => {
+  depotDonnees,
+  middleware,
+  referentiel,
+}) => {
   const routes = express.Router();
 
   const generePdfAnnexes = (homologation) => {
@@ -95,8 +96,13 @@ const routesApiServicePdf = (
   routes.get(
     '/:id/pdf/documentsHomologation.zip',
     middleware.trouveService({}),
-    (requete, reponse, suite) => {
+    async (requete, reponse, suite) => {
       const { homologation } = requete;
+
+      const autorisation = await depotDonnees.autorisationPour(
+        requete.idUtilisateurCourant,
+        homologation.id
+      );
 
       const genereUnDocument = (idDocument) => {
         const references = {
@@ -124,7 +130,9 @@ const routesApiServicePdf = (
       };
 
       Promise.all(
-        homologation.documentsPdfDisponibles().map((d) => genereUnDocument(d))
+        homologation
+          .documentsPdfDisponibles(autorisation)
+          .map((d) => genereUnDocument(d))
       )
         .then((pdfs) => adaptateurZip.genereArchive(pdfs))
         .then((archive) => {
