@@ -44,13 +44,14 @@ const routesApiService = (
   const routes = express.Router();
 
   routes.use(
-    routesApiServicePdf(
-      middleware,
+    routesApiServicePdf({
       adaptateurHorloge,
       adaptateurPdf,
+      depotDonnees,
       adaptateurZip,
-      referentiel
-    )
+      middleware,
+      referentiel,
+    })
   );
 
   routes.post(

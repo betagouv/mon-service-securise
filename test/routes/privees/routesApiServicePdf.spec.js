@@ -14,6 +14,10 @@ const {
   Permissions,
   Rubriques,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const {
+  uneAutorisation,
+} = require('../../constructeurs/constructeurAutorisation');
+const AutorisationBase = require('../../../src/modeles/autorisations/autorisationBase');
 
 const { LECTURE } = Permissions;
 const { SECURISER, RISQUES, DECRIRE, HOMOLOGUER } = Rubriques;
@@ -249,78 +253,60 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    describe("conditionne les documents présents dans l'archive ZIP à l'état du service", () => {
-      it("en fournissant 3 documents si le service a un dossier d'homologation courant", (done) => {
-        let adaptateurZipAppele = false;
-        testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('PDF A');
-        testeur.adaptateurPdf().genereSyntheseSecurite = () =>
-          Promise.resolve('PDF B');
-        testeur.adaptateurPdf().genereDossierDecision = () =>
-          Promise.resolve('PDF C');
-        testeur.adaptateurZip().genereArchive = (fichiers) => {
-          expect(fichiers.length).to.be(3);
-          expect(fichiers[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
-          expect(fichiers[1]).to.eql({
-            nom: 'SyntheseSecurite.pdf',
-            buffer: 'PDF B',
-          });
-          expect(fichiers[2]).to.eql({
-            nom: 'DossierDecision.pdf',
-            buffer: 'PDF C',
-          });
-          adaptateurZipAppele = true;
-        };
+    it("interroge le dépôt de données pour charger l'autorisation de l'utilisateur", async () => {
+      let donneesPassees = {};
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.depotDonnees().autorisationPour = async (
+        idUtilisateur,
+        idService
+      ) => {
+        donneesPassees = { idUtilisateur, idService };
+        return uneAutorisation()
+          .avecDroits(AutorisationBase.DROITS_DOSSIER_DECISION_PDF)
+          .construis();
+      };
 
-        axios
-          .get(
-            'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
-          )
-          .then(() => {
-            expect(adaptateurZipAppele).to.be(true);
-            done();
-          })
-          .catch((e) => done(e.response?.data || e));
-      });
+      await axios.get(
+        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
+      );
+      expect(donneesPassees).to.eql({ idUtilisateur: '123', idService: '456' });
+    });
 
-      it("en fournissant 2 documents si le service n'a pas de dossier d'homologation courant", (done) => {
-        const homologationSansDossier = new Homologation(
-          {
-            id: '456',
-            descriptionService: { nomService: 'un service' },
-            dossiers: [],
-          },
-          referentiel
-        );
+    it("ajoute dans l'archive zip seulement les documents indiqués par le service", (done) => {
+      const homologationSansDossier = new Homologation(
+        {
+          id: '456',
+          descriptionService: { nomService: 'un service' },
+          dossiers: [],
+        },
+        referentiel
+      );
+      homologationSansDossier.documentsPdfDisponibles = () => ['annexes'];
 
-        testeur
-          .middleware()
-          .reinitialise({ homologationARenvoyer: homologationSansDossier });
+      testeur
+        .middleware()
+        .reinitialise({ homologationARenvoyer: homologationSansDossier });
 
-        let adaptateurZipAppele = false;
-        testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('PDF A');
-        testeur.adaptateurPdf().genereSyntheseSecurite = () =>
-          Promise.resolve('PDF B');
-        testeur.adaptateurPdf().genereDossierDecision = () =>
-          Promise.reject(new Error('Ce document ne devrait pas être généré'));
-        testeur.adaptateurZip().genereArchive = (fichiers) => {
-          expect(fichiers.length).to.be(2);
-          expect(fichiers[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
-          expect(fichiers[1]).to.eql({
-            nom: 'SyntheseSecurite.pdf',
-            buffer: 'PDF B',
-          });
-          adaptateurZipAppele = true;
-        };
-        axios
-          .get(
-            'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
-          )
-          .then(() => {
-            expect(adaptateurZipAppele).to.be(true);
-            done();
-          })
-          .catch((e) => done(e.response?.data || e));
-      });
+      let adaptateurZipAppele = false;
+      testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('PDF A');
+      testeur.adaptateurPdf().genereSyntheseSecurite = () =>
+        Promise.reject(new Error('Ce document ne devrait pas être généré'));
+      testeur.adaptateurPdf().genereDossierDecision = () =>
+        Promise.reject(new Error('Ce document ne devrait pas être généré'));
+      testeur.adaptateurZip().genereArchive = (fichiers) => {
+        expect(fichiers.length).to.be(1);
+        expect(fichiers[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
+        adaptateurZipAppele = true;
+      };
+      axios
+        .get(
+          'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
+        )
+        .then(() => {
+          expect(adaptateurZipAppele).to.be(true);
+          done();
+        })
+        .catch((e) => done(e.response?.data || e));
     });
 
     it("utilise un adaptateur d'horloge pour la génération du nom", (done) => {
