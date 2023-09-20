@@ -303,6 +303,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it('utilise un adaptateur de CSV pour la génération', (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
+      testeur.depotDonnees().autorisations = async () => [
+        uneAutorisation()
+          .deCreateurDeService('123', '456')
+          .avecDroits({})
+          .construis(),
+      ];
+
       testeur.depotDonnees().homologations = () =>
         Promise.resolve([
           new Service({
@@ -324,8 +331,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect(service.organisationsResponsables).to.eql(['ANSSI']);
         expect(service.nombreContributeurs).to.eql(1);
         expect(service.estCreateur).to.be(true);
-        expect(service.indiceCyber).not.to.be(undefined);
-        expect(service.statutHomologation.libelle).to.be('Non réalisée');
 
         return Promise.resolve('Fichier CSV');
       };

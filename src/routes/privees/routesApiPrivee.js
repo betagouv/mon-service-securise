@@ -82,6 +82,7 @@ const routesApiPrivee = ({
       const donneesCsvServices = (services, autorisations) => {
         const servicesSansIndice = objetGetServices.donnees(
           services,
+          autorisations,
           requete.idUtilisateurCourant,
           referentiel
         );

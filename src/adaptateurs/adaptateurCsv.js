@@ -20,7 +20,7 @@ const ligneDuService = (service) =>
     service.nombreContributeurs,
     remplaceBooleen(service.estCreateur),
     Number(service.indiceCyber) ? service.indiceCyber : '-',
-    service.statutHomologation.libelle,
+    service.statutHomologation?.libelle ?? '-',
   ].join(SEPARATEUR);
 
 const genereCsvServices = (tableauServices) => {
