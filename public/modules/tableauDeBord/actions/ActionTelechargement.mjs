@@ -22,19 +22,37 @@ class ActionTelechargement extends ActionAbstraite {
     $('#lien-decision').attr('href', `${urlBase}dossierDecision.pdf`);
     $('#lien-archive').attr('href', `${urlBase}documentsHomologation.zip`);
 
-    const $conteneurDecision = $('#conteneur-lien-decision');
-    const dossierDecisionDisponible =
-      donneesService.documentsPdfDisponibles.includes('dossierDecision');
-    $('.lien-telechargement', $conteneurDecision).toggle(
-      dossierDecisionDisponible
-    );
-    $('.lien-indisponible', $conteneurDecision).toggle(
-      !dossierDecisionDisponible
-    );
+    const listeDocuments = [
+      {
+        cible: 'decision',
+        nomDocument: 'dossierDecision',
+      },
+      {
+        cible: 'annexes',
+        nomDocument: 'annexes',
+      },
+      {
+        cible: 'synthese',
+        nomDocument: 'syntheseSecurite',
+      },
+    ];
 
-    $('#nbPdfDisponibles', '#conteneur-lien-archive').text(
-      donneesService.documentsPdfDisponibles.length
-    );
+    listeDocuments.forEach(({ cible, nomDocument }) => {
+      const $conteneur = $(`#conteneur-lien-${cible}`);
+      const documentDisponible =
+        donneesService.documentsPdfDisponibles.includes(nomDocument);
+      $('.lien-telechargement', $conteneur).toggle(documentDisponible);
+      $('.lien-indisponible', $conteneur).toggle(!documentDisponible);
+    });
+
+    const $conteneurArchive = $('#conteneur-lien-archive');
+    if (donneesService.documentsPdfDisponibles.length === 0) {
+      $conteneurArchive.find('.lien-telechargement').hide();
+      $conteneurArchive.find('.lien-indisponible').show();
+    }
+    $conteneurArchive
+      .find('#nbPdfDisponibles')
+      .text(donneesService.documentsPdfDisponibles.length);
   }
 
   // eslint-disable-next-line class-methods-use-this
