@@ -160,7 +160,7 @@ const tableauDesServices = {
             tableauDesServices.nombreServices = data.resume.nombreServices;
             tableauDesServices.donnees = data.services;
             tableauDesServices.donnees.forEach((s) => {
-              s.ordreStatutHomologation = s.statutHomologation.ordre;
+              s.ordreStatutHomologation = s.statutHomologation?.ordre ?? -1;
             });
             tableauDesServices.afficheDonnees();
             tableauDesServices.afficheEtatSelection();
@@ -247,10 +247,10 @@ const tableauDesServices = {
       $ligne.append(
         $(
           `<td><div class='statut-homologation statut-${
-            service.statutHomologation.id
+            service.statutHomologation?.id ?? 'inconnu'
           } ${
-            service.statutHomologation.enCoursEdition ? 'enCoursEdition' : ''
-          }'>${service.statutHomologation.libelle}</div></td>`
+            service.statutHomologation?.enCoursEdition ? 'enCoursEdition' : ''
+          }'>${service.statutHomologation?.libelle ?? '-'}</div></td>`
         )
       );
 
