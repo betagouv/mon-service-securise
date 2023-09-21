@@ -1,6 +1,9 @@
 const expect = require('expect.js');
 const Middleware = require('../../src/http/middleware');
-const { ErreurDroitsIncoherents } = require('../../src/erreurs');
+const {
+  ErreurDroitsIncoherents,
+  ErreurChainageMiddleware,
+} = require('../../src/erreurs');
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
@@ -261,6 +264,7 @@ describe('Le middleware MSS', () => {
       expect(() =>
         middleware.trouveDossierCourant(requete, reponse)
       ).to.throwError((e) => {
+        expect(e).to.be.an(ErreurChainageMiddleware);
         expect(e.message).to.equal(
           'Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveService` ?'
         );
@@ -600,6 +604,7 @@ describe('Le middleware MSS', () => {
       expect(() =>
         middleware.challengeMotDePasse(requete, reponse)
       ).to.throwError((e) => {
+        expect(e).to.be.an(ErreurChainageMiddleware);
         expect(e.message).to.equal(
           'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
         );
@@ -714,6 +719,7 @@ describe('Le middleware MSS', () => {
       expect(() =>
         middleware.chargeAutorisationsService(requete, reponse, () => {})
       ).to.throwError((e) => {
+        expect(e).to.be.an(ErreurChainageMiddleware);
         expect(e.message).to.equal(
           'Un utilisateur courant et un service doivent être présent dans la requête. Manque-t-il un appel à `verificationJWT` et `trouveService` ?'
         );

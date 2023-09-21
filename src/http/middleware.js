@@ -8,7 +8,10 @@ const {
   verifieCoherenceDesDroits,
   Permissions: { LECTURE, INVISIBLE },
 } = require('../modeles/autorisations/gestionDroits');
-const { ErreurDroitsIncoherents } = require('../erreurs');
+const {
+  ErreurDroitsIncoherents,
+  ErreurChainageMiddleware,
+} = require('../erreurs');
 
 const middleware = (configuration = {}) => {
   const {
@@ -133,7 +136,7 @@ const middleware = (configuration = {}) => {
 
   const trouveDossierCourant = (requete, reponse, suite) => {
     if (!requete.homologation)
-      throw new Error(
+      throw new ErreurChainageMiddleware(
         'Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveService` ?'
       );
 
@@ -198,7 +201,7 @@ const middleware = (configuration = {}) => {
 
   const chargeAutorisationsService = (requete, reponse, suite) => {
     if (!requete.idUtilisateurCourant || !requete.homologation)
-      throw new Error(
+      throw new ErreurChainageMiddleware(
         'Un utilisateur courant et un service doivent être présent dans la requête. Manque-t-il un appel à `verificationJWT` et `trouveService` ?'
       );
     depotDonnees
@@ -229,7 +232,7 @@ const middleware = (configuration = {}) => {
 
   const challengeMotDePasse = (requete, reponse, suite) => {
     if (!requete.idUtilisateurCourant)
-      throw new Error(
+      throw new ErreurChainageMiddleware(
         'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
       );
 
