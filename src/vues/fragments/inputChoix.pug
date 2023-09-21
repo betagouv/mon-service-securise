@@ -1,4 +1,4 @@
-mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service, messageErreur, decoration, requis = false })
+mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service, messageErreur, decoration, requis = false, lectureSeule = false })
   - let valeursSelectionnees = objetDonnees[nom]
   - if (typeof valeursSelectionnees === 'boolean') valeursSelectionnees = (valeursSelectionnees ? 'oui' : 'non')
   - const requisGroupe = requis && type === 'checkbox' && Object.keys(items).length > 1
@@ -25,7 +25,8 @@ mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service,
             : identifiant === valeursSelectionnees
         ),
         required = requisChamp,
-        title = ''
+        title = '',
+        disabled = lectureSeule
       )
       label(for = identifiantInput)= description
       br
@@ -34,7 +35,7 @@ mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service,
         br
     .message-erreur=messageErreur
 
-mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur, exempleOui, exempleNon, requis })
+mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur, exempleOui, exempleNon, requis, lectureSeule = false })
   +inputChoix({
     nom,
     titre,
@@ -43,4 +44,5 @@ mixin inputOuiNon({ nom, titre, objetDonnees, messageErreur, exempleOui, exemple
     requis,
     type: 'radio',
     items: { oui: { description: 'Oui', exemple: exempleOui }, non: { description: 'Non', exemple: exempleNon } },
+    lectureSeule
   })
