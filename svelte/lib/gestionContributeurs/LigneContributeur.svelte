@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Utilisateur } from './gestionContributeurs.d';
   import { store } from './gestionContributeurs.store';
-  import MenuFlottant from './ui/MenuFlottant.svelte';
+  import MenuFlottant from '../ui/MenuFlottant.svelte';
 
   export let estProprietaire: boolean;
   export let estSupprimable: boolean;

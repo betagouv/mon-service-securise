@@ -13,7 +13,7 @@ export default defineConfig({
     outDir: resolve(__dirname, '../public/composants-svelte'),
     lib: {
       entry: glob
-        .sync(resolve(__dirname, './lib/*.ts'))
+        .sync(resolve(__dirname, './lib/**/*.ts'))
         .filter((file) => !file.includes('.d.ts')),
       fileName: (_, entryname) => `${entryname}.js`,
       formats: ['es'],
