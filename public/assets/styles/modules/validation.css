@@ -62,20 +62,12 @@ form.champ-unique .requis::before {
   margin: 2em 0;
 }
 
-:is(input, select, textarea):not(.intouche):valid {
+:is(input, select, textarea):not(.intouche):not([type='radio']):valid {
   border-color: var(--bleu-mise-en-avant);
-}
-
-input[type='radio']:not(.intouche):valid {
-  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %230f7ac7; stroke-width: 0.50em" /></svg>');
 }
 
 :is(input, select, textarea):not(.intouche):invalid {
   border-color: var(--rose-anssi);
-}
-
-input[type='radio']:not(.intouche):invalid {
-  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" style="fill: white; stroke: %23ff6584; stroke-width: 0.50em" /></svg>');
 }
 
 :is(input, select, textarea):not(.intouche):invalid:focus {

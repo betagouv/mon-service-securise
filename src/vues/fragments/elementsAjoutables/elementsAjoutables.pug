@@ -1,4 +1,4 @@
-mixin zoneSaisieElementAjoutable(donneesElement, nom, index)
+mixin zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule)
   each valeur, cle in donneesElement
     - var id = cle + '-' + nom + '-' + index;
     if valeur.label
@@ -8,24 +8,27 @@ mixin zoneSaisieElementAjoutable(donneesElement, nom, index)
       name = id,
       type = 'text',
       value != valeur.valeur,
-      placeholder = valeur.valeurExemple
+      placeholder = valeur.valeurExemple,
+      readonly = lectureSeule
     )
 
-mixin zoneSaisie(nom, donneesElement, index)
+mixin zoneSaisie(nom, donneesElement, index, lectureSeule)
   .item-ajoute
-    .icone-suppression
+    if(!lectureSeule)
+      .icone-suppression
     div(id = 'element-' + nom + '-' + index)
-      +zoneSaisieElementAjoutable(donneesElement, nom, index)
+      +zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule)
 
-mixin elementsAjoutables({ identifiantConteneur, nom, donneesElements = [], texteLienAjouter = 'Ajouter', zoneSaisieVideVisible = false, structureZoneSaisieVide = {} })
+mixin elementsAjoutables({ identifiantConteneur, nom, donneesElements = [], texteLienAjouter = 'Ajouter', zoneSaisieVideVisible = false, structureZoneSaisieVide = {}, lectureSeule = false })
   div(id = identifiantConteneur class = 'elements-ajoutables')
     if zoneSaisieVideVisible && donneesElements.length === 0
-      +zoneSaisie(nom, structureZoneSaisieVide, 0)
+      +zoneSaisie(nom, structureZoneSaisieVide, 0, lectureSeule)
     each donneesElement, index in donneesElements
-      +zoneSaisie(nom, donneesElement, index)
-  a(
-    class = 'nouvel-item',
-    id = 'ajout-element-' + nom
-  )= texteLienAjouter
+      +zoneSaisie(nom, donneesElement, index, lectureSeule)
+  if(!lectureSeule)
+    a(
+      class = 'nouvel-item',
+      id = 'ajout-element-' + nom
+    )= texteLienAjouter
 
   script(type = 'module', src = '/statique/modules/elementsAjoutables.js')
