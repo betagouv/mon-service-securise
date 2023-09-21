@@ -240,6 +240,15 @@ describe('Le serveur MSS des routes /service/*', () => {
         );
     });
 
+    it("charge les autorisations du service pour l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesAutorisations(
+          'http://localhost:1234/service/456/dossiers',
+          done
+        );
+    });
+
     it("charge les préférences de l'utilisateur", (done) => {
       testeur
         .middleware()
