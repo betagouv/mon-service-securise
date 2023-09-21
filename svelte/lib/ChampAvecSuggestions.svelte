@@ -12,7 +12,7 @@
 
   const envoiEvenement = createEventDispatcher();
 
-  const REGEX_EMAIL = /[\w-.]+@[\w-.]{2,}\.\w{2,}/i;
+  const REGEX_EMAIL = /^[\w-.]+@[\w-.]{2,}\.\w{2,}$/i;
   $: proposeAjout = REGEX_EMAIL.test(saisie);
   $: suggestionsVisibles = saisie && (suggestions.length > 0 || proposeAjout);
 
