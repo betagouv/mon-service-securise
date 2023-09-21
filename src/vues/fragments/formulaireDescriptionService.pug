@@ -5,6 +5,8 @@ block append styles
   link(href = '/statique/assets/styles/homologation/descriptionService.css', rel = 'stylesheet')
 
 mixin formulaireDescriptionService(idHomologation)
+  - const estEnCreation = !idHomologation
+  - const estLectureSeule  = estEnCreation ? false : autorisationsService.DECRIRE.estLectureSeule
   form.homologation#homologation
     h1.action Décrire
     p.
@@ -20,6 +22,7 @@ mixin formulaireDescriptionService(idHomologation)
             type = 'text',
             value != service.nomService(),
             required
+            readonly = estLectureSeule
           )
           .message-erreur Le nom est obligatoire. Veuillez le renseigner.
           .message-erreur-specifique#nom-deja-utilise Ce nom est déjà utilisé pour un autre service. Veuillez en saisir un autre.
@@ -34,6 +37,7 @@ mixin formulaireDescriptionService(idHomologation)
             placeholder = 'ex : Agglomération de Mansart',
             value != service.descriptionService.organisationsResponsables.toString(),
             required
+            readonly = estLectureSeule
           )
           .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
 
@@ -46,6 +50,7 @@ mixin formulaireDescriptionService(idHomologation)
           objetDonnees: service.descriptionService,
           messageErreur: 'Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.',
           requis: true,
+          lectureSeule: estLectureSeule
         })
 
       .requis
@@ -57,6 +62,7 @@ mixin formulaireDescriptionService(idHomologation)
           objetDonnees: service.descriptionService,
           messageErreur: 'La provenance est obligatoire. Veuillez cocher une option.',
           requis: true,
+          lectureSeule: estLectureSeule
         })
 
       .requis
@@ -68,6 +74,7 @@ mixin formulaireDescriptionService(idHomologation)
           objetDonnees: service.descriptionService,
           messageErreur: 'Le statut est obligatoire. Veuillez cocher une option.',
           requis: true,
+          lectureSeule: estLectureSeule
         })
 
       label Présentation
@@ -75,6 +82,7 @@ mixin formulaireDescriptionService(idHomologation)
           id = 'presentation',
           name = 'presentation',
           placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
+          readonly = estLectureSeule
         )= service.descriptionService.presentation
 
       label Accès
@@ -86,6 +94,7 @@ mixin formulaireDescriptionService(idHomologation)
           donnees: service.descriptionService.pointsAcces.toJSON(),
           texteLienAjouter: 'Ajouter un accès',
           zoneSaisieVideVisible: true,
+          lectureSeule: estLectureSeule
         })
 
     section
@@ -96,6 +105,7 @@ mixin formulaireDescriptionService(idHomologation)
         description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
         items: referentiel.fonctionnalites(),
         objetDonnees: service.descriptionService,
+        lectureSeule: estLectureSeule
       })
 
       +elementsAjoutablesDescription({
@@ -103,6 +113,7 @@ mixin formulaireDescriptionService(idHomologation)
         nom: 'fonctionnalite',
         donnees: service.descriptionService.fonctionnalitesSpecifiques.toJSON(),
         texteLienAjouter: 'Ajouter une fonctionnalité',
+        lectureSeule: estLectureSeule
       })
 
     section
@@ -113,6 +124,7 @@ mixin formulaireDescriptionService(idHomologation)
         description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
         items: referentiel.donneesCaracterePersonnel(),
         objetDonnees: service.descriptionService,
+        lectureSeule: estLectureSeule
       })
 
       +elementsAjoutablesDescription({
@@ -120,6 +132,7 @@ mixin formulaireDescriptionService(idHomologation)
         nom: 'donnees-sensibles',
         donnees: service.descriptionService.donneesSensiblesSpecifiques.toJSON(),
         texteLienAjouter: 'Ajouter des données',
+        lectureSeule: estLectureSeule
       })
 
     section
@@ -132,6 +145,7 @@ mixin formulaireDescriptionService(idHomologation)
           objetDonnees: service.descriptionService,
           messageErreur: 'La localisation des données est obligatoire. Veuillez cocher une option.',
           requis: true,
+          lectureSeule: estLectureSeule
         })
 
       .requis
@@ -143,6 +157,7 @@ mixin formulaireDescriptionService(idHomologation)
           objetDonnees: service.descriptionService,
           messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
           requis: true,
+          lectureSeule: estLectureSeule
         })
       .requis
         +inputOuiNon({
@@ -152,11 +167,13 @@ mixin formulaireDescriptionService(idHomologation)
           exempleOui: "Les mesures de sécurité à mettre en œuvre, proposées dans l'étape suivante « Sécuriser », seront renforcées (ex : réaliser un audit de sécurité approfondi, une analyse de risque Ebios Risk Manager, …).",
           messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
           requis: true,
+          lectureSeule: estLectureSeule
         })
 
-    if idHomologation
-      button.bouton#diagnostic(idHomologation = idHomologation) Enregistrer
-    else
-      button.bouton#diagnostic Valider
+    if !estLectureSeule
+      if !estEnCreation
+        button.bouton#diagnostic(idHomologation = idHomologation) Enregistrer
+      else
+        button.bouton#diagnostic Valider
 
   script(type = 'module', src = '/statique/service/descriptionService.js')
