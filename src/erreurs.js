@@ -1,6 +1,7 @@
 class EchecAutorisation extends Error {}
 class EchecEnvoiMessage extends Error {}
 class ErreurDroitsIncoherents extends Error {}
+class ErreurChainageMiddleware extends Error {}
 class ErreurModele extends Error {}
 class ErreurAutorisationExisteDeja extends ErreurModele {}
 class ErreurAutorisationInexistante extends ErreurModele {}
@@ -61,6 +62,7 @@ module.exports = {
   ErreurAutorisationInexistante,
   ErreurAvisInvalide,
   ErreurCategorieInconnue,
+  ErreurChainageMiddleware,
   ErreurDateHomologationInvalide,
   ErreurDateRenouvellementInvalide,
   ErreurDepartementInconnu,
