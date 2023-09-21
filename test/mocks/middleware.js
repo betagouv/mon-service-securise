@@ -2,6 +2,9 @@ const axios = require('axios');
 const expect = require('expect.js');
 
 const Homologation = require('../../src/modeles/homologation');
+const {
+  Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS },
+} = require('../../src/modeles/autorisations/gestionDroits');
 
 const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
   const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
@@ -34,6 +37,7 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
     .catch((e) => done(e.response?.data || e));
 };
 
+let autorisationsChargees = false;
 let cguAcceptees;
 let challengeMotDePasseEffectue = false;
 let droitVerifie = [];
@@ -60,6 +64,7 @@ const middlewareFantaisie = {
       descriptionService: { nomService: 'un service' },
     }),
   }) => {
+    autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
     droitVerifie = [];
     expirationCookieRepoussee = false;
@@ -94,6 +99,18 @@ const middlewareFantaisie = {
 
   challengeMotDePasse: (_requete, _reponse, suite) => {
     challengeMotDePasseEffectue = true;
+    suite();
+  },
+
+  chargeAutorisationsService: (_requete, reponse, suite) => {
+    reponse.locals.autorisationsService = {
+      [DECRIRE]: {},
+      [SECURISER]: {},
+      [HOMOLOGUER]: {},
+      [RISQUES]: {},
+      [CONTACTS]: {},
+    };
+    autorisationsChargees = true;
     suite();
   },
 
@@ -188,6 +205,13 @@ const middlewareFantaisie = {
         etatInitial: [],
         etatFinal: listeAdressesIp,
       },
+      ...params
+    );
+  },
+
+  verifieChargementDesAutorisations: (...params) => {
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => autorisationsChargees },
       ...params
     );
   },
