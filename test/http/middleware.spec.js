@@ -1,6 +1,13 @@
 const expect = require('expect.js');
 const Middleware = require('../../src/http/middleware');
 const { ErreurDroitsIncoherents } = require('../../src/erreurs');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
+const {
+  Rubriques: { DECRIRE, SECURISER, HOMOLOGUER },
+  Permissions: { LECTURE, ECRITURE, INVISIBLE },
+} = require('../../src/modeles/autorisations/gestionDroits');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
@@ -688,6 +695,72 @@ describe('Le middleware MSS', () => {
         const { preferencesUtilisateur } = reponse.locals;
         expect(preferencesUtilisateur.etatMenuNavigation).to.be('ferme');
         done();
+      });
+    });
+  });
+
+  describe('sur demande de chargement des autorisations pour un service', () => {
+    beforeEach(() => {
+      requete.idUtilisateurCourant = '999';
+      requete.homologation = { id: '123' };
+      depotDonnees.autorisationPour = async () =>
+        uneAutorisation().avecDroits({}).construis();
+    });
+
+    it("jette une erreur technique si le service ou l'utilisateur ne sont pas présents dans la requête", (done) => {
+      requete.homologation = null;
+      const middleware = Middleware({ depotDonnees });
+
+      expect(() =>
+        middleware.chargeAutorisationsService(requete, reponse, () => {})
+      ).to.throwError((e) => {
+        expect(e.message).to.equal(
+          'Un utilisateur courant et un service doivent être présent dans la requête. Manque-t-il un appel à `verificationJWT` et `trouveService` ?'
+        );
+        done();
+      });
+    });
+
+    it("utilise le dépôt de données pour lire l'autorisation", (done) => {
+      let donneesPassees = {};
+      depotDonnees.autorisationPour = async (idUtilisateur, idService) => {
+        donneesPassees = { idUtilisateur, idService };
+        return uneAutorisation().avecDroits({}).construis();
+      };
+
+      const middleware = Middleware({ depotDonnees });
+
+      middleware.chargeAutorisationsService(requete, reponse, () => {
+        expect(donneesPassees).to.eql({
+          idUtilisateur: '999',
+          idService: '123',
+        });
+        done();
+      });
+    });
+
+    it("remanie l'objet d'autorisation pour qu'il soit utilisable par le `.pug`", (done) => {
+      const middleware = Middleware({ depotDonnees });
+      depotDonnees.autorisationPour = async () =>
+        uneAutorisation()
+          .avecDroits({
+            [DECRIRE]: ECRITURE,
+            [SECURISER]: LECTURE,
+            [HOMOLOGUER]: INVISIBLE,
+          })
+          .construis();
+
+      middleware.chargeAutorisationsService(requete, reponse, () => {
+        try {
+          expect(reponse.locals.autorisationsService).to.eql({
+            DECRIRE: { estLectureSeule: false, estMasque: false },
+            SECURISER: { estLectureSeule: true, estMasque: false },
+            HOMOLOGUER: { estLectureSeule: false, estMasque: true },
+          });
+          done();
+        } catch (e) {
+          done(e);
+        }
       });
     });
   });

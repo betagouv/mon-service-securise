@@ -6,6 +6,7 @@ const {
 } = require('../routes/publiques/routesBibliotheques');
 const {
   verifieCoherenceDesDroits,
+  Permissions: { LECTURE, INVISIBLE },
 } = require('../modeles/autorisations/gestionDroits');
 const { ErreurDroitsIncoherents } = require('../erreurs');
 
@@ -195,6 +196,27 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
+  const chargeAutorisationsService = (requete, reponse, suite) => {
+    if (!requete.idUtilisateurCourant || !requete.homologation)
+      throw new Error(
+        'Un utilisateur courant et un service doivent être présent dans la requête. Manque-t-il un appel à `verificationJWT` et `trouveService` ?'
+      );
+    depotDonnees
+      .autorisationPour(requete.idUtilisateurCourant, requete.homologation.id)
+      .then((autorisation) => {
+        reponse.locals.autorisationsService = Object.fromEntries(
+          Object.entries(autorisation.droits).map(([rubrique, niveau]) => [
+            [rubrique],
+            {
+              estLectureSeule: niveau === LECTURE,
+              estMasque: niveau === INVISIBLE,
+            },
+          ])
+        );
+        suite();
+      });
+  };
+
   const verificationAddresseIP = (listeAddressesIPsAutorisee) =>
     controlAcces({
       mode: 'allow',
@@ -229,6 +251,7 @@ const middleware = (configuration = {}) => {
     aseptise,
     aseptiseListe,
     aseptiseListes,
+    chargeAutorisationsService,
     chargePreferencesUtilisateur,
     positionneHeaders,
     positionneHeadersAvecNonce,

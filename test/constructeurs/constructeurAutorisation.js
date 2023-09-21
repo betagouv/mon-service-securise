@@ -27,6 +27,11 @@ class ConstructeurAutorisation {
     return this;
   }
 
+  avecDroits(droits) {
+    this.donnees.droits = droits;
+    return this;
+  }
+
   construis() {
     return new AutorisationBase(this.donnees);
   }
