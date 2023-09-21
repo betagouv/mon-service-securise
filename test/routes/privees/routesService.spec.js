@@ -4,12 +4,9 @@ const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const Homologation = require('../../../src/modeles/homologation');
 const {
-  Permissions,
-  Rubriques,
+  Permissions: { LECTURE },
+  Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES },
 } = require('../../../src/modeles/autorisations/gestionDroits');
-
-const { LECTURE } = Permissions;
-const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -87,6 +84,15 @@ describe('Le serveur MSS des routes /service/*', () => {
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: DECRIRE }],
+          'http://localhost:1234/service/456/descriptionService',
+          done
+        );
+    });
+
+    it("charge les autorisations du service pour l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesAutorisations(
           'http://localhost:1234/service/456/descriptionService',
           done
         );

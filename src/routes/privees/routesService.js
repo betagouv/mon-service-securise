@@ -61,6 +61,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   routes.get(
     '/:id/descriptionService',
     middleware.trouveService({ [DECRIRE]: LECTURE }),
+    middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
