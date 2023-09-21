@@ -152,6 +152,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   routes.get(
     '/:id/homologation/edition/etape/:idEtape',
     middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
+    middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse, suite) => {
       const { homologation } = requete;
