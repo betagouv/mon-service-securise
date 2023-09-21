@@ -118,6 +118,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   routes.get(
     '/:id/risques',
     middleware.trouveService({ [RISQUES]: LECTURE }),
+    middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { homologation } = requete;
