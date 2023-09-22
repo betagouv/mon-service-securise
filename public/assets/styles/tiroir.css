@@ -290,12 +290,6 @@
   margin-bottom: 1em;
 }
 
-#contenu-telechargement .lien-indisponible {
-  display: none;
-  text-align: right;
-  color: #08416a;
-}
-
 #contenu-telechargement .document-telechargeable p {
   margin: 0;
 }

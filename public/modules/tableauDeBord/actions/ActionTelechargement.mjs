@@ -22,34 +22,23 @@ class ActionTelechargement extends ActionAbstraite {
     $('#lien-decision').attr('href', `${urlBase}dossierDecision.pdf`);
     $('#lien-archive').attr('href', `${urlBase}documentsHomologation.zip`);
 
-    const listeDocuments = [
-      {
-        cible: 'decision',
-        nomDocument: 'dossierDecision',
-      },
-      {
-        cible: 'annexes',
-        nomDocument: 'annexes',
-      },
-      {
-        cible: 'synthese',
-        nomDocument: 'syntheseSecurite',
-      },
-    ];
+    const domDocuments = {
+      dossierDecision: 'decision',
+      annexes: 'annexes',
+      syntheseSecurite: 'synthese',
+    };
 
-    listeDocuments.forEach(({ cible, nomDocument }) => {
+    $('.document-telechargeable').hide();
+    donneesService.documentsPdfDisponibles.forEach((nomDocument) => {
+      const cible = domDocuments[nomDocument];
       const $conteneur = $(`#conteneur-lien-${cible}`);
-      const documentDisponible =
-        donneesService.documentsPdfDisponibles.includes(nomDocument);
-      $('.lien-telechargement', $conteneur).toggle(documentDisponible);
-      $('.lien-indisponible', $conteneur).toggle(!documentDisponible);
+      $conteneur.show();
     });
 
     const $conteneurArchive = $('#conteneur-lien-archive');
-    if (donneesService.documentsPdfDisponibles.length === 0) {
-      $conteneurArchive.find('.lien-telechargement').hide();
-      $conteneurArchive.find('.lien-indisponible').show();
-    }
+    $conteneurArchive.toggle(
+      donneesService.documentsPdfDisponibles.length !== 0
+    );
     $conteneurArchive
       .find('#nbPdfDisponibles')
       .text(donneesService.documentsPdfDisponibles.length);
