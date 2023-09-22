@@ -45,8 +45,9 @@ class ActionTelechargement extends ActionAbstraite {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  estDisponible({ estSelectionMultiple }) {
-    return !estSelectionMultiple;
+  estDisponible({ aDesDocuments, estSelectionMultiple }) {
+    if (estSelectionMultiple) return false;
+    return aDesDocuments;
   }
 }
 

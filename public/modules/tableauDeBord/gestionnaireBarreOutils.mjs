@@ -10,9 +10,16 @@ const gestionnaireBarreOutils = {
         tableauDesServices.donnees.find((service) => service.id === idService)
       )
       .every((service) => service.estCreateur);
+    const aDesDocuments =
+      selection.length !== 1
+        ? false
+        : tableauDesServices.donnees.find(
+            (service) => service.id === selection[0]
+          )?.documentsPdfDisponibles.length;
 
     const appliqueVisibilite = (action) => {
       const doitMasquer = !registreDesActions[action].estDisponible({
+        aDesDocuments,
         estSelectionMultiple,
         seulementCreateur,
       });
