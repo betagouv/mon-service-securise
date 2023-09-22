@@ -7,7 +7,6 @@ mixin documentTelechargeable(nom, description, type, idLien, peutEtreIndisponibl
         p.titre-document= nom
         p.description-document!= description
     a.lien-telechargement.bouton(href='', target='_blank', rel='noopener', id=idLien) Télécharger
-    p.lien-indisponible Document non disponible
 
 .bloc-contenu#contenu-telechargement
   form.conteneur-formulaire
