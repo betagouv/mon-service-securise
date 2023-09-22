@@ -3,24 +3,31 @@ import {
   metsAJourAffichageNiveauGravite,
 } from '../interactions/saisieNiveauGravite.js';
 
-const $inputDescription = (index, description) =>
+const $inputDescription = (index, description, lectureSeule) =>
   $(`
 <input id="description-risque-specifique-${index}"
      name="description-risque-specifique-${index}"
      placeholder="Description du risque"
+     ${lectureSeule ? 'readonly' : ''}
      value="${description}">
   `);
 
 const $disque = (niveau) =>
   $(`<div class="disque" data-niveau="${niveau}"></div>`);
 
-const $curseur = (niveaux) =>
+const $curseur = (niveaux, lectureSeule) =>
   Object.keys(niveaux).reduce(
     ($acc, n) => $acc.append($disque(n)),
-    $('<div class="curseur"></div>')
+    $(`<div class="curseur" ${lectureSeule ? 'readonly' : ''}></div>`)
   );
 
-const $saisieNiveauGravite = (index, niveauGravite, niveaux, couleurs) => {
+const $saisieNiveauGravite = (
+  index,
+  niveauGravite,
+  niveaux,
+  couleurs,
+  lectureSeule
+) => {
   const $conteneurSaisie = $(`
 <div class="niveau-gravite">
 <input id="niveauGravite-risque-specifique-${index}"
@@ -29,8 +36,12 @@ const $saisieNiveauGravite = (index, niveauGravite, niveaux, couleurs) => {
        value="${niveauGravite}">
 </div>
   `);
-  $conteneurSaisie.append($curseur(niveaux), $('<div class="legende"></div>'));
-  brancheComportementSaisieNiveauGravite($conteneurSaisie, niveaux, couleurs);
+  $conteneurSaisie.append(
+    $curseur(niveaux, lectureSeule),
+    $('<div class="legende"></div>')
+  );
+  if (!lectureSeule)
+    brancheComportementSaisieNiveauGravite($conteneurSaisie, niveaux, couleurs);
 
   if (niveauGravite) {
     const { position, description } = niveaux[niveauGravite];
@@ -46,14 +57,21 @@ const $saisieNiveauGravite = (index, niveauGravite, niveaux, couleurs) => {
   return $conteneurSaisie;
 };
 
-const $textareaCommentaire = (index, commentaire) =>
+const $textareaCommentaire = (index, commentaire, lectureSeule) =>
   $(`
 <textarea id="commentaire-risque-specifique-${index}"
         name="commentaire-risque-specifique-${index}"
-        placeholder="Commentaires additionnels (facultatifs)">${commentaire}</textarea>
+        placeholder="Commentaires additionnels (facultatifs)"
+        ${lectureSeule ? 'readonly' : ''}>${commentaire}</textarea>
   `);
 
-const $saisieRisqueSpecifique = (index, niveaux, couleurs, donnees = {}) => {
+const $saisieRisqueSpecifique = (
+  index,
+  niveaux,
+  couleurs,
+  donnees = {},
+  lectureSeule = false
+) => {
   const { description = '', niveauGravite = '', commentaire = '' } = donnees;
 
   const $conteneur = $(
@@ -61,11 +79,11 @@ const $saisieRisqueSpecifique = (index, niveaux, couleurs, donnees = {}) => {
   );
 
   $('.synthese', $conteneur).append(
-    $inputDescription(index, description),
-    $saisieNiveauGravite(index, niveauGravite, niveaux, couleurs)
+    $inputDescription(index, description, lectureSeule),
+    $saisieNiveauGravite(index, niveauGravite, niveaux, couleurs, lectureSeule)
   );
 
-  $conteneur.append($textareaCommentaire(index, commentaire));
+  $conteneur.append($textareaCommentaire(index, commentaire, lectureSeule));
 
   return $conteneur;
 };

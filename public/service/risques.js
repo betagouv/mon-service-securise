@@ -15,6 +15,7 @@ import {
 
 $(() => {
   let indexMaxRisquesSpecifiques = 0;
+  const { estLectureSeule } = JSON.parse($('#autorisations-risques').text());
 
   const NIVEAUX_GRAVITE = JSON.parse(
     $('#donnees-referentiel-niveaux-gravite-risque').text()
@@ -25,7 +26,11 @@ $(() => {
 
   const ajouteZoneSaisieCommentairePourRisque = ($r, nom) => {
     const $lien = $('a.informations-additionnelles', $r);
-    const $zoneSaisie = $(`<textarea id=${nom} name=${nom}></textarea>`);
+    const $zoneSaisie = $(
+      `<textarea id=${nom} name=${nom} ${
+        estLectureSeule ? 'readonly' : ''
+      }></textarea>`
+    );
     $zoneSaisie.hide();
     $lien.click(() => $zoneSaisie.toggle());
 
@@ -54,7 +59,13 @@ $(() => {
   };
 
   const zoneSaisieRisqueSpecifique = (index, donnees) =>
-    $saisieRisqueSpecifique(index, NIVEAUX_GRAVITE, COULEURS, donnees);
+    $saisieRisqueSpecifique(
+      index,
+      NIVEAUX_GRAVITE,
+      COULEURS,
+      donnees,
+      estLectureSeule
+    );
 
   const brancheAjoutRisqueSpecifique = (...params) =>
     brancheAjoutItem(
@@ -64,12 +75,15 @@ $(() => {
     );
 
   const peupleRisquesSpecifiques = (...params) =>
-    peupleListeItems(...params, zoneSaisieRisqueSpecifique);
+    peupleListeItems(...params, zoneSaisieRisqueSpecifique, {
+      lectureSeule: estLectureSeule,
+    });
 
   ajouteModalesInformations();
 
   $('.risque').each((_, $r) => {
-    brancheComportementSaisieNiveauGravite($r, NIVEAUX_GRAVITE, COULEURS);
+    if (!estLectureSeule)
+      brancheComportementSaisieNiveauGravite($r, NIVEAUX_GRAVITE, COULEURS);
     ajouteZoneSaisieCommentairePourRisque($r, `commentaire-${$r.id}`);
   });
 

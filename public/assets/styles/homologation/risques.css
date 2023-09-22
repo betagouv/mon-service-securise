@@ -28,8 +28,19 @@
   gap: 0.4em;
 }
 
-.niveau-gravite .disque:hover {
+.niveau-gravite .disque {
   cursor: pointer;
+}
+
+.niveau-gravite .curseur[readonly='true'] .disque {
+  cursor: not-allowed;
+}
+
+.niveau-gravite .curseur[readonly='true'] .disque:hover {
+  border-color: transparent;
+}
+
+.niveau-gravite .disque:hover {
   border-color: var(--bleu-anssi);
 }
 
