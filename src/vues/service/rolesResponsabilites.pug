@@ -8,6 +8,7 @@ block append styles
   link(href = '/statique/assets/styles/homologation/rolesResponsabilites.css', rel = 'stylesheet')
 
 block formulaire
+  - const estLectureSeule  = autorisationsService.CONTACTS.estLectureSeule
   form.homologation#roles-responsabilites
     h1.action Rôles et responsabilités
     p.
@@ -22,25 +23,30 @@ block formulaire
         +inputIdentite({
           role: "Autorité d'homologation",
           nomParametre: 'autoriteHomologation',
+          lectureSeule: estLectureSeule
         })
 
         +inputIdentite({
           role: 'Spécialiste cybersécurité',
           nomParametre: 'expertCybersecurite',
+          lectureSeule: estLectureSeule
         })
 
         +inputIdentite({
           role: 'Délégué(e) à la protection des données à caractère personnel',
           nomParametre: 'delegueProtectionDonnees',
+          lectureSeule: estLectureSeule
         })
 
         +inputIdentite({
           role: 'Responsable métier du projet',
           nomParametre: 'piloteProjet',
+          lectureSeule: estLectureSeule
         })
 
         +elementsAjoutablesActeurHomologation({
           donnees: service.rolesResponsabilites.acteursHomologation.toJSON(),
+          lectureSeule: estLectureSeule
         })
 
       .onglet#parties-prenantes
@@ -48,30 +54,36 @@ block formulaire
           categorie: 'Hébergement du service',
           nomParametre: 'hebergement',
           donnees: service.rolesResponsabilites.partiesPrenantes.hebergement(),
+          lectureSeule: estLectureSeule
         })
 
         +inputPartiePrenante({
           categorie: 'Développement / fourniture du service',
           nomParametre: 'developpementFourniture',
           donnees: service.rolesResponsabilites.partiesPrenantes.developpementFourniture(),
+          lectureSeule: estLectureSeule
         })
 
         +inputPartiePrenante({
           categorie: 'Maintenance du service',
           nomParametre: 'maintenanceService',
           donnees: service.rolesResponsabilites.partiesPrenantes.maintenanceService(),
+          lectureSeule: estLectureSeule
         })
 
         +inputPartiePrenante({
           categorie: 'Gestion de la sécurité du service',
           nomParametre: 'securiteService',
           donnees: service.rolesResponsabilites.partiesPrenantes.securiteService(),
+          lectureSeule: estLectureSeule
         })
 
         +elementsAjoutablesPartiePrenante({
           donnees: service.rolesResponsabilites.partiesPrenantes.specifiques(),
+          lectureSeule: estLectureSeule
         })
 
-    .bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
+    if(!estLectureSeule)
+      .bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
 
   script(type = 'module', src = '/statique/service/rolesResponsabilites.js')

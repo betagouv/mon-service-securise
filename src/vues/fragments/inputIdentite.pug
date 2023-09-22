@@ -1,15 +1,15 @@
-mixin inputIdentite({ role, nomParametre })
+mixin inputIdentite({ role, nomParametre, lectureSeule = false })
   label(for='aucuneAction')= role
     .saisie-role-responsabilite
       label(for = nomParametre) Prénom / Nom
       input(
         id = nomParametre, name = nomParametre, type = 'text',
-        value != service.rolesResponsabilites[nomParametre]
+        value != service.rolesResponsabilites[nomParametre], readonly=lectureSeule
       )
 
       - const nomParamFonction = `fonction${nomParametre.charAt(0).toUpperCase()}${nomParametre.slice(1)}`
       label(for = nomParamFonction) Fonction
       input(
         id = nomParamFonction, name = nomParamFonction, type = 'text',
-        value = service.rolesResponsabilites[nomParamFonction]
+        value = service.rolesResponsabilites[nomParamFonction], readonly=lectureSeule
       )
