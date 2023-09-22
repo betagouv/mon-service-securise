@@ -18,6 +18,7 @@ const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
 const AutorisationBase = require('../../../src/modeles/autorisations/autorisationBase');
+const { unService } = require('../../constructeurs/constructeurService');
 
 const { LECTURE } = Permissions;
 const { SECURISER, RISQUES, DECRIRE, HOMOLOGUER } = Rubriques;
@@ -49,20 +50,16 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    it('utilise un adaptateur de pdf pour la génération', (done) => {
+    it('utilise un adaptateur de pdf pour la génération', async () => {
       let adaptateurPdfAppele = false;
-      testeur.adaptateurPdf().genereAnnexes = () => {
+      testeur.adaptateurPdf().genereAnnexes = async () => {
         adaptateurPdfAppele = true;
-        return Promise.resolve('Pdf annexes');
+        return 'Pdf annexes';
       };
 
-      axios
-        .get('http://localhost:1234/api/service/456/pdf/annexes.pdf')
-        .then(() => {
-          expect(adaptateurPdfAppele).to.be(true);
-          done();
-        })
-        .catch(done);
+      await axios.get('http://localhost:1234/api/service/456/pdf/annexes.pdf');
+
+      expect(adaptateurPdfAppele).to.be(true);
     });
   });
 
@@ -123,31 +120,30 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    it('utilise un adaptateur de pdf pour la génération', (done) => {
-      let adaptateurPdfAppele = false;
-      testeur.adaptateurPdf().genereDossierDecision = (donnees) => {
-        adaptateurPdfAppele = true;
-        expect(donnees.nomService).to.equal('un service');
-        expect(donnees.nomPrenomAutorite).to.equal('Jean Dupond');
-        expect(donnees.fonctionAutorite).to.equal('RSSI');
-        expect(donnees.avis).to.eql([
-          {
-            collaborateurs: ['Jean Dupond'],
-            dureeValidite: 'unAn',
-            statut: 'favorable',
-          },
-        ]);
-        expect(donnees.documents).to.eql(['unDocument']);
-        return Promise.resolve('Pdf dossier décision');
+    it('utilise un adaptateur de pdf pour la génération', async () => {
+      let donneesDossier;
+
+      testeur.adaptateurPdf().genereDossierDecision = async (donnees) => {
+        donneesDossier = donnees;
+
+        return 'Pdf dossier décision';
       };
 
-      axios
-        .get('http://localhost:1234/api/service/456/pdf/dossierDecision.pdf')
-        .then(() => {
-          expect(adaptateurPdfAppele).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      await axios.get(
+        'http://localhost:1234/api/service/456/pdf/dossierDecision.pdf'
+      );
+
+      expect(donneesDossier.nomService).to.equal('un service');
+      expect(donneesDossier.nomPrenomAutorite).to.equal('Jean Dupond');
+      expect(donneesDossier.fonctionAutorite).to.equal('RSSI');
+      expect(donneesDossier.avis).to.eql([
+        {
+          collaborateurs: ['Jean Dupond'],
+          dureeValidite: 'unAn',
+          statut: 'favorable',
+        },
+      ]);
+      expect(donneesDossier.documents).to.eql(['unDocument']);
     });
   });
 
@@ -186,22 +182,20 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    it('utilise un adaptateur de pdf pour la génération', (done) => {
-      let adaptateurPdfAppele = false;
-      testeur.adaptateurPdf().genereSyntheseSecurite = (donnees) => {
-        adaptateurPdfAppele = true;
-        expect(donnees.service).to.eql(homologationARenvoyer);
-        expect(donnees.referentiel).to.eql(testeur.referentiel());
-        return Promise.resolve('Pdf synthèse sécurité');
+    it('utilise un adaptateur de pdf pour la génération', async () => {
+      let donneesSynthese;
+      testeur.adaptateurPdf().genereSyntheseSecurite = async (donnees) => {
+        donneesSynthese = donnees;
+
+        return 'Pdf synthèse sécurité';
       };
 
-      axios
-        .get('http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf')
-        .then(() => {
-          expect(adaptateurPdfAppele).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      await axios.get(
+        'http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf'
+      );
+
+      expect(donneesSynthese.service).to.eql(homologationARenvoyer);
+      expect(donneesSynthese.referentiel).to.eql(testeur.referentiel());
     });
   });
 
@@ -272,59 +266,45 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       expect(donneesPassees).to.eql({ idUtilisateur: '123', idService: '456' });
     });
 
-    it("ajoute dans l'archive zip seulement les documents indiqués par le service", (done) => {
-      const homologationSansDossier = new Homologation(
-        {
-          id: '456',
-          descriptionService: { nomService: 'un service' },
-          dossiers: [],
-        },
-        referentiel
-      );
-      homologationSansDossier.documentsPdfDisponibles = () => ['annexes'];
+    it("ajoute dans l'archive zip seulement les documents indiqués par le service", async () => {
+      const serviceUnSeulDocument = unService().construis();
+      serviceUnSeulDocument.documentsPdfDisponibles = () => ['annexes'];
 
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: homologationSansDossier });
+        .reinitialise({ homologationARenvoyer: serviceUnSeulDocument });
 
-      let adaptateurZipAppele = false;
-      testeur.adaptateurPdf().genereAnnexes = () => Promise.resolve('PDF A');
-      testeur.adaptateurPdf().genereSyntheseSecurite = () =>
-        Promise.reject(new Error('Ce document ne devrait pas être généré'));
-      testeur.adaptateurPdf().genereDossierDecision = () =>
-        Promise.reject(new Error('Ce document ne devrait pas être généré'));
-      testeur.adaptateurZip().genereArchive = (fichiers) => {
-        expect(fichiers.length).to.be(1);
-        expect(fichiers[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
-        adaptateurZipAppele = true;
+      let fichiersZipes;
+      testeur.adaptateurPdf().genereAnnexes = async () => 'PDF A';
+      testeur.adaptateurPdf().genereSyntheseSecurite = async () => {
+        throw new Error('Ce document ne devrait pas être généré');
       };
-      axios
-        .get(
-          'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
-        )
-        .then(() => {
-          expect(adaptateurZipAppele).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      testeur.adaptateurPdf().genereDossierDecision = async () => {
+        throw new Error('Ce document ne devrait pas être généré');
+      };
+      testeur.adaptateurZip().genereArchive = async (fichiers) => {
+        fichiersZipes = fichiers;
+      };
+
+      await axios.get(
+        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
+      );
+
+      expect(fichiersZipes.length).to.be(1);
+      expect(fichiersZipes[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
     });
 
-    it("utilise un adaptateur d'horloge pour la génération du nom", (done) => {
+    it("utilise un adaptateur d'horloge pour la génération du nom", async () => {
       let adaptateurHorlogeAppele = false;
       testeur.adaptateurHorloge().maintenant = () => {
         adaptateurHorlogeAppele = true;
         return new Date();
       };
 
-      axios
-        .get(
-          'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
-        )
-        .then(() => {
-          expect(adaptateurHorlogeAppele).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      await axios.get(
+        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
+      );
+      expect(adaptateurHorlogeAppele).to.be(true);
     });
   });
 });
