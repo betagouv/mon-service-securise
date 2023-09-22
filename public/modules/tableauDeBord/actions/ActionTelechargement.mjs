@@ -4,7 +4,7 @@ class ActionTelechargement extends ActionAbstraite {
   constructor() {
     super('#contenu-telechargement');
     this.appliqueContenu({
-      titre: 'Télécharger les PDFs',
+      titre: 'Télécharger les PDF',
       texteSimple:
         "Obtenir les documents utiles à la sécurisation et à l'homologation des services sélectionnés.",
       texteMultiple:
