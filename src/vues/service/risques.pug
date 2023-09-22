@@ -6,6 +6,7 @@ block append styles
   link(href = '/statique/assets/styles/homologation/risques.css', rel = 'stylesheet')
 
 block formulaire
+  - const estLectureSeule  = autorisationsService.RISQUES.estLectureSeule
   form.homologation#risques
     h1.action Risques de sécurité
     p.
@@ -31,18 +32,21 @@ block formulaire
                 name = `niveauGravite-${identifiant}`,
                 value = '',
               )
-              .curseur
+              .curseur(readonly=`${estLectureSeule}`)
                 each niveau in referentiel.identifiantsNiveauxGravite()
                   .disque(data-niveau = niveau)
               .legende
-          a.informations-additionnelles Commentaires (facultatif)
+          if(!estLectureSeule)
+            a.informations-additionnelles Commentaires (facultatif)
 
     section
       label Risques spécifiques au service numérique
       #risques-specifiques
-      a.nouvel-item Ajouter un risque spécifique
+      if(!estLectureSeule)
+        a.nouvel-item Ajouter un risque spécifique
 
-    .bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
+    if(!estLectureSeule)
+      .bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donnees-referentiel-niveaux-gravite-risque', type = 'application/json').
     !{JSON.stringify(referentiel.niveauxGravite())}
@@ -50,6 +54,8 @@ block formulaire
     !{JSON.stringify(service.risques.toJSON().risquesGeneraux || [])}
   script(id = 'donnees-risques-specifiques', type = 'application/json').
     !{JSON.stringify(service.risques.toJSON().risquesSpecifiques || [])}
+  script(id = 'autorisations-risques', type = 'application/json').
+    !{JSON.stringify(autorisationsService.RISQUES)}
   script(type = 'module', src = '/statique/service/risques.js')
 
 block cartes-informations
