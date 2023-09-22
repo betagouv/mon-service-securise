@@ -5,13 +5,14 @@ include ../cartes/statutHomologation
 include ../cartes/indiceCyber
 include ../cartes/recommandationsANSSI
 
-mixin inputMesure({ nom, titre, indispensable })
+mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
   +inputChoix({
     type: 'radio',
     nom: nom,
     titre: titre,
     items: service.descriptionStatutsMesures(),
     decoration: indispensable ? '<div class="mention-anssi mesure-indispensable">Indispensable</div>' : '',
+    lectureSeule: lectureSeule
   })
 
 block append styles
@@ -19,6 +20,7 @@ block append styles
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
 block formulaire
+  - const estLectureSeule  = autorisationsService.SECURISER.estLectureSeule
   form.homologation#mesures
     h1.action Sécuriser
     p.
@@ -44,6 +46,7 @@ block formulaire
               nom: identifiant,
               titre: donnees.description,
               indispensable: donnees.indispensable,
+              lectureSeule: estLectureSeule
             })
 
             .puce-information
@@ -52,9 +55,10 @@ block formulaire
                   .fermeture-modale
                   h1= donnees.description
                   p!= donnees.descriptionLongue
-    .enregistrement
-      button.bouton.bouton-secondaire.nouvel-item(type = 'button') Ajouter une mesure spécifique
-      button.bouton(idHomologation = service.id) Enregistrer
+    if (!estLectureSeule)
+      .enregistrement
+        button.bouton.bouton-secondaire.nouvel-item(type = 'button') Ajouter une mesure spécifique
+        button.bouton(idHomologation = service.id) Enregistrer
 
   script(id = 'donnees-mesures-generales', type = 'application/json').
     !{JSON.stringify(service.mesures.toJSON().mesuresGenerales || [])}
@@ -67,6 +71,9 @@ block formulaire
 
   script(id = 'referentiel-statuts-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.statutsMesures())}
+
+  script(id = 'autorisations-securiser', type = 'application/json').
+    !{JSON.stringify(autorisationsService.SECURISER)}
 
   script(type = 'module', src = '/statique/service/mesures.js')
 

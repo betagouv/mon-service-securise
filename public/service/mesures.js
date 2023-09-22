@@ -16,13 +16,18 @@ import ajouteModalesInformations from '../modules/interactions/modalesInformatio
 
 $(() => {
   let indexMaxMesuresSpecifiques = 0;
+  const { estLectureSeule } = JSON.parse($('#autorisations-securiser').text());
 
   const $conteneurModalites = (nom) => {
     const $conteneur = $('<div class="informations-additionnelles"></div>');
     const $lien = $(
       '<a class="informations-additionnelles">Commentaires (facultatif)</a>'
     );
-    const $zoneSaisie = $(`<textarea id=${nom} name=${nom}></textarea>`);
+    const $zoneSaisie = $(
+      `<textarea id=${nom} name=${nom} ${
+        estLectureSeule ? 'readonly' : ''
+      }></textarea>`
+    );
     $zoneSaisie.hide();
 
     $lien.on('click', () => {
@@ -30,7 +35,10 @@ $(() => {
       if ($zoneSaisie.is(':visible')) $zoneSaisie.focus();
     });
 
-    $conteneur.append($lien, $zoneSaisie);
+    if (!estLectureSeule) {
+      $conteneur.append($lien);
+    }
+    $conteneur.append($zoneSaisie);
     return $conteneur;
   };
 
@@ -73,6 +81,7 @@ $(() => {
        value="${champ}"
        ${champ === valeur ? 'checked' : ''}
        type="radio"
+       ${estLectureSeule ? 'disabled' : ''}
        required>
 <label for="${nomChamp}-${champ}-mesure-specifique-${index}">${
             referentielChamp[champ]
@@ -118,6 +127,7 @@ $(() => {
           name="description-mesure-specifique-${index}"
           placeholder="Description de la mesure"
           value="${description}"
+          ${estLectureSeule ? 'readonly' : ''}
           required>
     <div class="message-erreur">L'intitulé est obligatoire. Veuillez le renseigner.</div>
   </label>
@@ -131,7 +141,9 @@ ${statuts}
   Précisions sur la mesure dans le cadre de votre organisation
   <textarea id="modalites-mesure-specifique-${index}"
             name="modalites-mesure-specifique-${index}"
-            placeholder="Modalités de mise en œuvre (facultatif)">${modalites}</textarea>
+            placeholder="Modalités de mise en œuvre (facultatif)" ${
+              estLectureSeule ? 'readonly' : ''
+            }>${modalites}</textarea>
 </label>
       `;
   };
@@ -155,6 +167,7 @@ ${statuts}
   const peupleMesuresSpecifiques = (...params) =>
     peupleListeItems(...params, zoneSaisieMesureSpecifique, {
       ordreInverse: true,
+      lectureSeule: estLectureSeule,
     });
 
   ajouteModalesInformations();

@@ -12,11 +12,12 @@ const afficheZoneSaisieItem = (
   selecteur,
   zoneSaisie,
   ordreInverse,
+  lectureSeule,
   actionSurZoneSaisieApresAjout = () => {}
 ) => {
   const $conteneurSaisieItem = $(`
 <label class="item-ajoute">
-  <div class="icone-suppression"></div>
+  ${lectureSeule ? '' : '<div class="icone-suppression"></div>'}
 </label>
   `);
 
@@ -44,6 +45,7 @@ const brancheAjoutItem = (
       selecteurConteneur,
       cbZoneSaisie(index, {}),
       options.ordreInverse,
+      false,
       actionSurZoneSaisieApresAjout
     );
   });
@@ -53,14 +55,15 @@ const peupleListeItems = (
   selecteurConteneur,
   selecteurDonnees,
   cbZoneSaisie,
-  options = { ordreInverse: false }
+  options = { ordreInverse: false, lectureSeule: false }
 ) => {
   const donneesItems = JSON.parse($(selecteurDonnees).text());
   donneesItems.forEach((donnees, index) => {
     afficheZoneSaisieItem(
       selecteurConteneur,
       cbZoneSaisie(index, donnees),
-      options.ordreInverse
+      options.ordreInverse,
+      options.lectureSeule
     );
   });
 
