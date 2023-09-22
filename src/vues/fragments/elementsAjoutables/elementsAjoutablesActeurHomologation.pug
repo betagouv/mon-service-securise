@@ -1,6 +1,6 @@
 include ./elementsAjoutables
 
-mixin elementsAjoutablesActeurHomologation({ donnees = [] })
+mixin elementsAjoutablesActeurHomologation({ donnees = [], lectureSeule = false})
   -
     var donneesElements = donnees.map(({ role, nom, fonction }) => ({
       role: ({ valeur: role, label: 'Rôle au regard du projet' }),
@@ -12,5 +12,6 @@ mixin elementsAjoutablesActeurHomologation({ donnees = [] })
     identifiantConteneur: 'acteurs-homologation',
     nom: 'acteur-homologation',
     donneesElements,
-    texteLienAjouter: 'Ajouter un acteur'
+    texteLienAjouter: 'Ajouter un acteur',
+    lectureSeule
   })

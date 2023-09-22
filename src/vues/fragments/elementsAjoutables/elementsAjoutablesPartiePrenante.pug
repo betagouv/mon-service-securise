@@ -1,6 +1,6 @@
 include ./elementsAjoutables
 
-mixin elementsAjoutablesPartiePrenante({ donnees = [] })
+mixin elementsAjoutablesPartiePrenante({ donnees = [], lectureSeule = false })
   -
     var donneesElements = donnees.map(({ nom, natureAcces, pointContact }) => ({
       nom: ({ valeur: nom, label: "Nom de l'entité" }),
@@ -12,5 +12,6 @@ mixin elementsAjoutablesPartiePrenante({ donnees = [] })
     identifiantConteneur: 'parties-prenantes-specifiques',
     nom: 'partie-prenante-specifique',
     donneesElements,
-    texteLienAjouter: 'Ajouter une partie prenante'
+    texteLienAjouter: 'Ajouter une partie prenante',
+    lectureSeule
   })
