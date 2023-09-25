@@ -205,7 +205,8 @@ ${statuts}
     axios
       .post(`/api/service/${identifiantService}/mesures`, params)
       .then(
-        (reponse) => (window.location = `/service/${reponse.data.idService}`)
+        (reponse) =>
+          (window.location = `/service/${reponse.data.idService}/mesures`)
       );
   });
 });
