@@ -39,7 +39,8 @@ $(() => {
     axios
       .post(`/api/service/${identifiantService}/rolesResponsabilites`, params)
       .then(
-        (reponse) => (window.location = `/service/${reponse.data.idService}`)
+        (reponse) =>
+          (window.location = `/service/${reponse.data.idService}/rolesResponsabilites`)
       );
   });
 });
