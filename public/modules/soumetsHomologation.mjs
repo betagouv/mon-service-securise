@@ -24,7 +24,7 @@ const initialiseComportementFormulaire = (
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
     const redirigeVersSynthese = ({ data: { idService } }) =>
-      (window.location = `/service/${idService}`);
+      (window.location = `/service/${idService}/descriptionService`);
 
     adaptateurAjax
       .execute(requete)

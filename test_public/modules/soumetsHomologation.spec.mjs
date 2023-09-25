@@ -80,7 +80,7 @@ describe("L'initialisation du comportement du formulaire", () => {
         .catch(done);
     });
 
-    it('renvoie vers la synthèse du service', (done) => {
+    it('renvoie vers la description du service', (done) => {
       const evenementsDifferes = $.Deferred();
       initialiseComportementFormulaire(
         '.formulaire',
@@ -92,7 +92,9 @@ describe("L'initialisation du comportement du formulaire", () => {
 
       evenementsDifferes
         .resolveWith($('.bouton').trigger('click'))
-        .then(() => expect(window.location).to.equal('/service/123'))
+        .then(() =>
+          expect(window.location).to.equal('/service/123/descriptionService')
+        )
         .then(() => done())
         .catch(done);
     });
