@@ -162,7 +162,8 @@ const routesApiPrivee = ({
         .metsAJourMotDePasse(idUtilisateur, motDePasse)
         .then(depotDonnees.valideAcceptationCGUPourUtilisateur)
         .then(depotDonnees.supprimeIdResetMotDePassePourUtilisateur)
-        .then((utilisateur) => {
+        .then(async (utilisateur) => {
+          await adaptateurMail.inscrisEmailsTransactionnels(utilisateur.email);
           requete.session.token = utilisateur.genereToken();
           reponse.json({ idUtilisateur });
         })
