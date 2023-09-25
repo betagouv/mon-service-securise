@@ -455,6 +455,28 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
+    it("ajoute l'utilisateur à la liste marketing Brevo via l'adaptateur", async () => {
+      let inscriptionEffectuee;
+
+      testeur.depotDonnees().supprimeIdResetMotDePassePourUtilisateur =
+        async () => ({
+          id: '123',
+          email: 'jean.dujardin@beta.gouv.fr',
+          genereToken: () => 'un token',
+        });
+      testeur.adaptateurMail().inscrisEmailsTransactionnels = async (
+        emailUtilisateur
+      ) => {
+        inscriptionEffectuee = emailUtilisateur;
+      };
+
+      await axios.put('http://localhost:1234/api/motDePasse', {
+        motDePasse: 'mdp_ABC12345',
+      });
+
+      expect(inscriptionEffectuee).to.equal('jean.dujardin@beta.gouv.fr');
+    });
+
     it("invalide l'identifiant de réinitialisation de mot de passe", (done) => {
       let idResetSupprime = false;
 
