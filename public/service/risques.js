@@ -108,7 +108,8 @@ $(() => {
     axios
       .post(`/api/service/${identifiantService}/risques`, params)
       .then(
-        (reponse) => (window.location = `/service/${reponse.data.idService}`)
+        (reponse) =>
+          (window.location = `/service/${reponse.data.idService}/risques`)
       );
   });
 });
