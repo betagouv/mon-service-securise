@@ -39,7 +39,7 @@ const ajoutContributeurSurServices = ({
       email,
       infolettreAcceptee: false,
     });
-    await adaptateurMail.creeContact(email, '', '', true);
+    await adaptateurMail.creeContact(email, '', '', true, true);
     return utilisateur;
   };
 

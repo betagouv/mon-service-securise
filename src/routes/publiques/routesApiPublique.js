@@ -40,7 +40,8 @@ const routesApiPublique = ({
             utilisateur.email,
             utilisateur.prenom ?? '',
             utilisateur.nom ?? '',
-            !utilisateur.infolettreAcceptee
+            !utilisateur.infolettreAcceptee,
+            false
           ),
           utilisateur
         );

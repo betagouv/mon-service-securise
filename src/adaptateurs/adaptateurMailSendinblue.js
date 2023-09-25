@@ -35,7 +35,13 @@ const desinscrisInfolettre = (destinataire) =>
 const inscrisInfolettre = (destinataire) =>
   basculeInfolettre(destinataire, false);
 
-const creeContact = (destinataire, prenom, nom, bloqueEmails) =>
+const creeContact = (
+  destinataire,
+  prenom,
+  nom,
+  bloqueEmails,
+  bloqueMarketing
+) =>
   axios
     .post(
       `${urlBase}/contacts`,
@@ -43,7 +49,7 @@ const creeContact = (destinataire, prenom, nom, bloqueEmails) =>
         email: destinataire,
         emailBlacklisted: bloqueEmails,
         attributes: { PRENOM: decode(prenom), NOM: decode(nom) },
-        listIds: [idListeEmailsTransactionnels],
+        ...(!bloqueMarketing && { listIds: [idListeEmailsTransactionnels] }),
       },
       enteteJSON
     )
