@@ -246,15 +246,22 @@ describe("L'ajout d'un contributeur sur des services", () => {
       expect(emailAjoute).to.be('jean.dupont@mail.fr');
     });
 
-    it('crée un contact email', async () => {
+    it('crée un contact email (qui refuse les emails marketing pour le moment)', async () => {
       let contactCree;
       adaptateurMail.creeContact = async (
         destinataire,
         prenom,
         nom,
-        bloqueEmails
+        bloqueEmails,
+        bloqueMarketing
       ) => {
-        contactCree = { destinataire, prenom, nom, bloqueEmails };
+        contactCree = {
+          destinataire,
+          prenom,
+          nom,
+          bloqueEmails,
+          bloqueMarketing,
+        };
       };
 
       await ajoutContributeurSurServices({
@@ -267,6 +274,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       expect(contactCree.prenom).to.be('');
       expect(contactCree.nom).to.be('');
       expect(contactCree.bloqueEmails).to.be(true);
+      expect(contactCree.bloqueMarketing).to.be(true);
     });
 
     it("envoie un mail d'invitation au contributeur créé", async () => {
