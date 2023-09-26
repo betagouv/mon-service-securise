@@ -1,6 +1,6 @@
 const Base = require('../base');
 const {
-  Rubriques: { DECRIRE, SECURISER, RISQUES, HOMOLOGUER },
+  Rubriques: { DECRIRE, SECURISER, RISQUES, HOMOLOGUER, CONTACTS },
   Permissions: { LECTURE, ECRITURE },
   Rubriques,
   Permissions,
@@ -40,6 +40,10 @@ class AutorisationBase extends Base {
     );
   }
 
+  peutHomologuer() {
+    return this.aLesPermissions(AutorisationBase.DROITS_HOMOLOGUER);
+  }
+
   resumeNiveauDroit() {
     const tousNiveaux = Object.values(Permissions).reduce(
       (acc, niveau) => ({ ...acc, [niveau]: 0 }),
@@ -65,6 +69,14 @@ class AutorisationBase extends Base {
     ECRITURE: 'ECRITURE',
     LECTURE: 'LECTURE',
     PERSONNALISE: 'PERSONNALISE',
+  };
+
+  static DROITS_HOMOLOGUER = {
+    [DECRIRE]: ECRITURE,
+    [SECURISER]: ECRITURE,
+    [HOMOLOGUER]: ECRITURE,
+    [RISQUES]: ECRITURE,
+    [CONTACTS]: ECRITURE,
   };
 
   static DROITS_ANNEXES_PDF = {
