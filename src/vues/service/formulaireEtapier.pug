@@ -6,7 +6,7 @@ mixin descriptionEtape({ etape })
 
 mixin barre-progression({ numeroEtapeCourante })
   .etapes
-    each etape in referentiel.etapesParcoursHomologation()
+    each etape in referentiel.etapesParcoursHomologation(autorisationsService.peutHomologuer)
       -
         let classeEtape = 'courante';
         if (etape.numero < numeroEtapeCourante) classeEtape = 'passee';
