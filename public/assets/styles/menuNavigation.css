@@ -10,6 +10,7 @@
   top: 0;
   left: 0;
   width: var(--menu-largeur);
+  min-width: var(--menu-largeur);
   height: 100%;
   max-height: 100vh;
   display: flex;
@@ -31,21 +32,19 @@
 .menu-navigation a:hover {
   color: var(--menu-couleur-survol);
 }
-.menu-navigation a:hover .position {
-  border-color: var(--menu-couleur-survol);
-}
-.menu-navigation a.actif:hover .position {
-  background-color: var(--menu-couleur-survol) !important;
-}
 
 .menu-navigation a:active {
   color: var(--menu-couleur-actif);
 }
-.menu-navigation a:active .position {
-  border-color: var(--menu-couleur-actif);
-}
-.menu-navigation a.actif:active .position {
+
+.menu-navigation a:active .action-saisie,
+.menu-navigation a.actif:active .action-saisie {
   background-color: var(--menu-couleur-actif) !important;
+}
+
+.menu-navigation a:hover .action-saisie,
+.menu-navigation a.actif:hover .action-saisie {
+  background-color: var(--menu-couleur-survol) !important;
 }
 
 .menu-navigation .actions {
@@ -118,53 +117,69 @@
   background-color: var(--menu-couleur-survol);
 }
 
-.menu-navigation .etapes a > div {
-  font-size: 1.15em;
-  font-weight: 700;
-  align-items: baseline;
+.menu-navigation .etapes li a {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
-.menu-navigation a.actif .position {
-  color: white;
+.menu-navigation .etapes li div {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-navigation .etapes #descriptionService {
+  -webkit-mask: url(../images/actionsSaisie/descriptionService.svg) no-repeat
+    center;
+  mask: url(../images/actionsSaisie/descriptionService.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.menu-navigation .etapes #mesures {
+  -webkit-mask: url(../images/actionsSaisie/mesures.svg) no-repeat center;
+  mask: url(../images/actionsSaisie/mesures.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.menu-navigation .etapes #dossiers {
+  -webkit-mask: url(../images/actionsSaisie/dossiers.svg) no-repeat center;
+  mask: url(../images/actionsSaisie/dossiers.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.menu-navigation .action-saisie {
   background: var(--menu-couleur-repos);
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
 }
 
-.menu-navigation .position {
-  width: 1.3em;
-  height: 1.3em;
-  border: 1.5px solid var(--menu-couleur-repos);
-  padding: 4px;
-  font-size: 0.9em;
+.menu-navigation .etapes .nom-action {
+  font-weight: 700;
+  font-size: 1.1em;
+}
+.menu-navigation .etapes .sous-titre {
   font-weight: 400;
-  line-height: 1.1em;
-  border-radius: 100%;
-  text-align: center;
+  font-size: 0.85em;
+  padding-right: 10px;
 }
 
 .menu-navigation .statut-saisie {
-  margin-left: auto;
-  width: 1em;
-  height: 1em;
-  align-self: center;
-  background-repeat: no-repeat;
-  background-position: center;
+  width: 16px;
+  height: 16px;
 }
 
 .menu-navigation .statut-saisie.faite {
   background-image: url(../images/icone_ok_pastille_verte.svg);
-  background-size: contain;
+  background-size: cover;
 }
 
 .menu-navigation .statut-saisie.en-cours {
   background-image: url(../images/icone_crayon_pastille_bleue.svg);
-  background-size: contain;
-}
-
-.menu-navigation .sous-titre {
-  display: inline-block;
-  font-size: 0.85em;
-  margin-left: 3.3em;
-  padding-right: 20px;
+  background-size: cover;
 }
 
 .menu-navigation .autres-liens {
@@ -248,7 +263,7 @@
   width: 52px;
   height: 30px;
   padding: 0;
-  background-image: url('/statique/assets/images/bouton_inviter_collaborateur_fond_ouvert.svg');
+  background-image: url(../images/bouton_inviter_collaborateur_fond_ouvert.svg);
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
