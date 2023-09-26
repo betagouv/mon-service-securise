@@ -109,6 +109,7 @@ const middlewareFantaisie = {
       [HOMOLOGUER]: {},
       [RISQUES]: {},
       [CONTACTS]: {},
+      peutHomologuer: true,
     };
     autorisationsChargees = true;
     suite();
