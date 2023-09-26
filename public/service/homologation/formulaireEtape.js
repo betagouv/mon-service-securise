@@ -6,6 +6,7 @@ import {
 let formulaireDejaSoumis = false;
 
 const brancheComportemenFormulaireEtape = (actionSoumission) => {
+  const { estLectureSeule } = JSON.parse($('#autorisations-homologuer').text());
   const $boutonSuivant = $('.bouton#suivant');
 
   const selecteurFormulaire = 'form';
@@ -14,18 +15,22 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
 
   brancheValidation(selecteurFormulaire);
 
+  const versEtapeSuivante = () =>
+    (window.location = idEtapeSuivante
+      ? `/service/${idService}/homologation/edition/etape/${idEtapeSuivante}`
+      : `/service/${idService}/dossiers`);
+
   $(selecteurFormulaire).on('submit', (e) => {
     e.preventDefault();
 
+    if (estLectureSeule) {
+      versEtapeSuivante();
+      return;
+    }
+
     if (!formulaireDejaSoumis) {
       formulaireDejaSoumis = true;
-
-      actionSoumission(idService, selecteurFormulaire).then(
-        () =>
-          (window.location = idEtapeSuivante
-            ? `/service/${idService}/homologation/edition/etape/${idEtapeSuivante}`
-            : `/service/${idService}/dossiers`)
-      );
+      actionSoumission(idService, selecteurFormulaire).then(versEtapeSuivante);
     }
   });
 
