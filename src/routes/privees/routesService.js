@@ -9,6 +9,7 @@ const ActionSaisie = require('../../modeles/actionSaisie');
 const {
   Permissions,
   Rubriques,
+  premiereRouteDisponible,
 } = require('../../modeles/autorisations/gestionDroits');
 
 const { LECTURE } = Permissions;
@@ -50,13 +51,19 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         .catch(suite);
     }
   );
-  routes.get(
-    '/:id',
-    middleware.trouveService({ [DECRIRE]: LECTURE }),
-    (requete, reponse) => {
-      reponse.redirect(`/service/${requete.params.id}/descriptionService`);
+
+  routes.get('/:id', middleware.trouveService({}), async (requete, reponse) => {
+    const autorisation = await depotDonnees.autorisationPour(
+      requete.idUtilisateurCourant,
+      requete.homologation.id
+    );
+    const routeRedirection = premiereRouteDisponible(autorisation);
+    if (!routeRedirection) {
+      reponse.redirect('/tableauDeBord');
+      return;
     }
-  );
+    reponse.redirect(`/service/${requete.params.id}${routeRedirection}`);
+  });
 
   routes.get(
     '/:id/descriptionService',

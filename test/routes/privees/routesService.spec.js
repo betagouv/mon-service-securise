@@ -7,6 +7,9 @@ const {
   Permissions: { LECTURE },
   Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES },
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const {
+  uneAutorisation,
+} = require('../../constructeurs/constructeurAutorisation');
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -51,6 +54,9 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id`', () => {
     beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.depotDonnees().autorisationPour = async () =>
+        uneAutorisation().construis();
       testeur.referentiel().recharge({
         statutsHomologation: {
           nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
@@ -62,19 +68,65 @@ describe('Le serveur MSS des routes /service/*', () => {
     it('recherche le service correspondant', (done) => {
       testeur
         .middleware()
-        .verifieRechercheService(
-          [{ niveau: LECTURE, rubrique: DECRIRE }],
-          'http://localhost:1234/service/456',
-          done
-        );
+        .verifieRechercheService([], 'http://localhost:1234/service/456', done);
     });
 
-    it('redirige vers la page de description du service', async () => {
-      const reponse = await axios('http://localhost:1234/service/456');
+    it("utilise le dépôt de données pour retrouver l'autorisation de l'utilisateur sur ce service", async () => {
+      let donneesPassees = {};
+      testeur.depotDonnees().autorisationPour = async (
+        idUtilisateur,
+        idService
+      ) => {
+        donneesPassees = { idUtilisateur, idService };
+        return uneAutorisation().construis();
+      };
 
-      expect(reponse.request.res.responseUrl).to.contain(
-        '/service/456/descriptionService'
-      );
+      await axios('http://localhost:1234/service/456');
+      expect(donneesPassees).to.eql({ idUtilisateur: '123', idService: '456' });
+    });
+
+    describe('sur redirection vers une rubrique du service', () => {
+      const casDeTests = [
+        {
+          droits: { [DECRIRE]: LECTURE },
+          redirectionAttendue: '/descriptionService',
+        },
+        {
+          droits: { [SECURISER]: LECTURE },
+          redirectionAttendue: '/mesures',
+        },
+        {
+          droits: { [HOMOLOGUER]: LECTURE },
+          redirectionAttendue: '/dossiers',
+        },
+        {
+          droits: { [RISQUES]: LECTURE },
+          redirectionAttendue: '/risques',
+        },
+        {
+          droits: { [CONTACTS]: LECTURE },
+          redirectionAttendue: '/rolesResponsabilites',
+        },
+        {
+          droits: {},
+          redirectionAttendue: '/tableauDeBord',
+        },
+      ];
+
+      casDeTests.forEach(({ droits, redirectionAttendue }) => {
+        it(`redirige vers \`${redirectionAttendue}\` avec le droit de lecture sur \`${
+          Object.keys(droits)[0] ?? 'aucune rubrique'
+        }\``, async () => {
+          testeur.depotDonnees().autorisationPour = async () =>
+            uneAutorisation().avecDroits(droits).construis();
+
+          const reponse = await axios('http://localhost:1234/service/456');
+
+          expect(reponse.request.res.responseUrl).to.contain(
+            redirectionAttendue
+          );
+        });
+      });
     });
   });
 

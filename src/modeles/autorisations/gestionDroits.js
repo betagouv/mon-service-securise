@@ -12,6 +12,21 @@ const Rubriques = {
   CONTACTS: 'CONTACTS',
 };
 
+const premiereRouteDisponible = (autorisation) => {
+  const routeParRubrique = [
+    { rubrique: Rubriques.DECRIRE, route: '/descriptionService' },
+    { rubrique: Rubriques.SECURISER, route: '/mesures' },
+    { rubrique: Rubriques.HOMOLOGUER, route: '/dossiers' },
+    { rubrique: Rubriques.RISQUES, route: '/risques' },
+    { rubrique: Rubriques.CONTACTS, route: '/rolesResponsabilites' },
+  ];
+  const { LECTURE } = Permissions;
+
+  return routeParRubrique.find(({ rubrique }) =>
+    autorisation.aLaPermission(LECTURE, rubrique)
+  )?.route;
+};
+
 const toutDroitsEnEcriture = () =>
   Object.values(Rubriques).reduce(
     (droits, rubrique) => ({ ...droits, [rubrique]: Permissions.ECRITURE }),
@@ -28,6 +43,7 @@ const verifieCoherenceDesDroits = (droits) =>
 module.exports = {
   Permissions,
   Rubriques,
+  premiereRouteDisponible,
   toutDroitsEnEcriture,
   verifieCoherenceDesDroits,
 };
