@@ -60,8 +60,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     ids
       ?.map((id) => descriptionDonneesCaracterePersonnel(id))
       .filter((id) => id !== undefined);
-  const etapesParcoursHomologation = () =>
-    donnees.etapesParcoursHomologation || [];
+  const etapesParcoursHomologation = (peutHomologuer = true) => {
+    const etapes = donnees.etapesParcoursHomologation || [];
+    if (peutHomologuer) return etapes;
+    return etapes.filter((etape) => !etape.reserveePeutHomologuer);
+  };
   const identifiantsEcheancesRenouvellement = () =>
     Object.keys(echeancesRenouvellement());
   const estIdentifiantEcheanceRenouvellementConnu = (idEcheance) =>

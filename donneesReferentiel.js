@@ -818,8 +818,18 @@ module.exports = {
     { numero: 2, libelle: 'Avis', id: 'avis' },
     { numero: 3, libelle: 'Documents', id: 'documents' },
     { numero: 4, libelle: 'Décision', id: 'dateTelechargement' },
-    { numero: 5, libelle: 'Date', id: 'decision' },
-    { numero: 6, libelle: 'Récapitulatif', id: 'recapitulatif' },
+    {
+      numero: 5,
+      libelle: 'Date',
+      id: 'decision',
+      reserveePeutHomologuer: true,
+    },
+    {
+      numero: 6,
+      libelle: 'Récapitulatif',
+      id: 'recapitulatif',
+      reserveePeutHomologuer: true,
+    },
   ],
 
   etapeNecessairePourDossierDecision: 'dateTelechargement',

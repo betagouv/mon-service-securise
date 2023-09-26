@@ -732,6 +732,41 @@ describe('Le référentiel', () => {
     });
   });
 
+  describe("sur demande des etapes du parcours d'homologation", () => {
+    it("inclue toutes les étapes s'il n'y a pas de paramètres", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesParcoursHomologation: [{ numero: 1 }, { numero: 2 }],
+      });
+
+      const etapes = referentiel.etapesParcoursHomologation();
+      expect(etapes.length).to.equal(2);
+    });
+
+    it('inclue toutes les étapes si `peutHomologuer` est vrai', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesParcoursHomologation: [{ numero: 1 }, { numero: 2 }],
+      });
+      const peutHomologuer = true;
+
+      const etapes = referentiel.etapesParcoursHomologation(peutHomologuer);
+      expect(etapes.length).to.equal(2);
+    });
+
+    it("n'inclue pas les étapes réservée à l'homologation si `peutHomologuer` est faux", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesParcoursHomologation: [
+          { numero: 1 },
+          { numero: 2, reserveePeutHomologuer: true },
+        ],
+      });
+      const nePeutPasHomologuer = false;
+
+      const etapes =
+        referentiel.etapesParcoursHomologation(nePeutPasHomologuer);
+      expect(etapes.length).to.equal(1);
+    });
+  });
+
   it('sait renvoyer une nouvelle fonctionnalité via son id', () => {
     const referentiel = Referentiel.creeReferentiel({
       nouvellesFonctionnalites: [{ id: 'nouveauté' }],
