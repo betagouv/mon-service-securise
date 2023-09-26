@@ -1,8 +1,9 @@
 @media screen and (max-width: 1247px) {
-  header.marges-fixes {
+  header {
     width: 100vw;
     max-width: 90%;
     column-gap: unset;
+    justify-content: space-between;
   }
 
   header nav:not(.visible) {
