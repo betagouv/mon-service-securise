@@ -10,11 +10,32 @@ header {
   width: var(--menu-largeur);
 }
 
+.header-gauche .titre-page {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
 .header-gauche .titre-page h3 {
   color: var(--bleu-survol);
   font-size: 1.55em;
   font-weight: 700;
   margin: 0;
+}
+
+.header-gauche .titre-page .retour-tableau-de-bord {
+  cursor: pointer;
+  font-size: 0.75em;
+  font-weight: 500;
+  line-height: 1.35em;
+  background: #f1f5f9;
+  width: fit-content;
+  border-radius: 20px;
+  padding: 1px 8px;
+}
+
+.header-gauche .titre-page .retour-tableau-de-bord a {
+  color: #667892;
 }
 
 .corps {
