@@ -6,6 +6,10 @@ header {
   max-width: unset;
 }
 
+main {
+  background-color: white;
+}
+
 .header-gauche .conteneur-logo {
   width: var(--menu-largeur);
 }
