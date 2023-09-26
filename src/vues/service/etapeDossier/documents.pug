@@ -14,6 +14,7 @@ block formulaire
   -
     const documents = service.dossierCourant().documents
     const avecDocumentsRadio = { avecDocuments: documents.avecDocuments === null ? null : documents.avecDocuments ? 1 : 0 }
+    const estLectureSeule  = autorisationsService.HOMOLOGUER.estLectureSeule
 
   +inputChoix({
     type: 'radio',
@@ -22,13 +23,15 @@ block formulaire
     objetDonnees: avecDocumentsRadio,
     messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
     requis: true,
+    lectureSeule: estLectureSeule
   })
 
   fieldset#documents
     p.requis Titre et informations utiles
-    .ajout-documents
-      input#champ-titre-document(type='text', placeholder='ex : Analyse Ebios juin 2022')
-      button.bouton.bouton-secondaire#ajout-document(type='button') Ajouter
+    if(!estLectureSeule)
+      .ajout-documents
+        input#champ-titre-document(type='text', placeholder='ex : Analyse Ebios juin 2022')
+        button.bouton.bouton-secondaire#ajout-document(type='button') Ajouter
     div
       input(id='au-moins-un-document', class='invisible', type='text', required, value=documents.documents.length > 0 ? 'OK' : '')
       .message-erreur Ce champ est obligatoire. Veuillez le renseigner. 
@@ -36,7 +39,8 @@ block formulaire
       each document in documents.documents
         li.element-document(data-document=document)
           .contenu!= document
-          .bouton-supprimer
+          if(!estLectureSeule)
+            .bouton-supprimer
 
   script(type = 'module', src = '/statique/service/homologation/etapes/documents.js')
 
