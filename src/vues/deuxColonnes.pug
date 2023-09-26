@@ -14,8 +14,8 @@ block append scripts
   script(type = 'module', src = '/statique/scripts/menuNavigation.js')
   script(type = 'module', src = '/statique/composants-svelte/gestionContributeurs.js')
 
-block header
-  // Pas de header sur les pages 2 colonnes
+block header-gauche
+  a.logo-mss(href='/tableauDeBord')
 
 block main
   include ./fragments/menuNavigation
