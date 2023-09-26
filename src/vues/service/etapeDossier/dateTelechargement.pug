@@ -4,37 +4,46 @@ block append styles
   link(href = '/statique/assets/styles/etapesDossier/decision.css', rel = 'stylesheet')
 
 block formulaire
-  - const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
-  - const formatDateLong = Intl.DateTimeFormat('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
-  - const maintenant = new Date();
-  - const nomFichier = `MSS_decision_${formatDateCourt.format(maintenant).replaceAll('-', '')}.zip`
-  - const dateTelechargement = service.dossierCourant()?.dateTelechargement.date;
+  -
+    const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    const formatDateLong = Intl.DateTimeFormat('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+    const maintenant = new Date();
+    const nomFichier = `MSS_decision_${formatDateCourt.format(maintenant).replaceAll('-', '')}.zip`
+    const dateTelechargement = service.dossierCourant()?.dateTelechargement.date;
+    const peutHomologuer  = autorisationsService.peutHomologuer
 
-  span Voici les étapes à suivre pour finaliser l'homologation de sécurité de votre service :
-  .conteneur-telechargement
-    a.document-homologation(
-      href=`/api/service/${service.id}/pdf/documentsHomologation.zip`
-      data-action-enregistrement=`/api/service/${service.id}/homologation/telechargement`
-      target='_blank'
-      rel='noopener'
-    )= nomFichier
-    if(dateTelechargement)
-      span.date-telechargement= `Dernier téléchargement le : ${formatDateLong.format(new Date(dateTelechargement))}`
-  
-  .validation-telechargement
-    input(type='text', required, value=dateTelechargement)
-    .message-erreur Vous devez télécharger ce fichier .ZIP pour pouvoir passer à l'étape suivante.
-  
-  ul.consignes
-    li Télécharger le fichier .ZIP contenant les 3 PDF : synthèse de sécurité, annexes et décision d'homologation de sécurité.
-    li Présenter, pour signature, la décision d'homologation de sécurité à l'autorité d'homologation ainsi que la synthèse de la sécurité.
-    li Se reconnecter ensuite pour renseigner la date de signature et la durée de validité de l'homologation dans les dernières étapes Date et Récapitulatif.
+  if(peutHomologuer)
+    span Voici les étapes à suivre pour finaliser l'homologation de sécurité de votre service :
+    .conteneur-telechargement
+      a.document-homologation(
+        href=`/api/service/${service.id}/pdf/documentsHomologation.zip`
+        data-action-enregistrement=`/api/service/${service.id}/homologation/telechargement`
+        target='_blank'
+        rel='noopener'
+      )= nomFichier
+      if(dateTelechargement)
+        span.date-telechargement= `Dernier téléchargement le : ${formatDateLong.format(new Date(dateTelechargement))}`
 
-  script(type = "module", src = "/statique/service/homologation/etapes/decision.js")
+    .validation-telechargement
+      input(type='text', required, value=dateTelechargement)
+      .message-erreur Vous devez télécharger ce fichier .ZIP pour pouvoir passer à l'étape suivante.
+
+    ul.consignes
+      li Télécharger le fichier .ZIP contenant les 3 PDF : synthèse de sécurité, annexes et décision d'homologation de sécurité.
+      li Présenter, pour signature, la décision d'homologation de sécurité à l'autorité d'homologation ainsi que la synthèse de la sécurité.
+      li Se reconnecter ensuite pour renseigner la date de signature et la durée de validité de l'homologation dans les dernières étapes Date et Récapitulatif.
+
+    script(type = "module", src = "/statique/service/homologation/etapes/decision.js")
+  else
+    p Le PDF de la décision d’homologation de sécurité est disponible pour le(s) propriétaire(s) du service.
+    p Une fois signée par l’autorité d’homologation, le statut et la durée d’homologation pour ce service apparaîtront dans la liste des homologations et sur votre tableau de bord.
 
 block bouton-etape
-  button.bouton#suivant(
-    data-id-homologation = service.id,
-    data-id-etape = idEtape,
-    data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
+  if(peutHomologuer)
+    button.bouton#suivant(
+      data-id-homologation = service.id,
+      data-id-etape = idEtape,
+      data-id-etape-suivante = referentiel.idEtapeSuivante(idEtape)
     ) Suivant
+  else
+    a.bouton(href=`/service/${service.id}/dossiers`) Aller à la liste des homologations
