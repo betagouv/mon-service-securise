@@ -6,6 +6,17 @@ header {
   max-width: unset;
 }
 
+.header-gauche .conteneur-logo {
+  width: var(--menu-largeur);
+}
+
+.header-gauche .titre-page h3 {
+  color: var(--bleu-survol);
+  font-size: 1.55em;
+  font-weight: 700;
+  margin: 0;
+}
+
 .corps {
   display: grid;
   grid-template-columns: 4fr 1fr;

@@ -1,5 +1,4 @@
 extends mssConnecte
-include ./fragments/texteTronque
 include ./tiroirs/tiroir.pug
 
 block append styles
@@ -15,7 +14,10 @@ block append scripts
   script(type = 'module', src = '/statique/composants-svelte/gestionContributeurs.js')
 
 block header-gauche
-  a.logo-mss(href='/tableauDeBord')
+  .conteneur-logo
+    a.logo-mss(href='/tableauDeBord')
+  .titre-page
+    block header-titre-page
 
 block main
   include ./fragments/menuNavigation

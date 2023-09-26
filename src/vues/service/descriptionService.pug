@@ -1,5 +1,10 @@
 extends ./decrire
+include ../fragments/texteTronque
 include ../fragments/formulaireDescriptionService
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
 
 block formulaire
   +formulaireDescriptionService(service.id)

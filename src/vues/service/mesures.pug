@@ -1,6 +1,7 @@
 extends ./formulaire
 include ../fragments/inputChoix
 include ../fragments/cartesInformations
+include ../fragments/texteTronque
 include ../cartes/statutHomologation
 include ../cartes/indiceCyber
 include ../cartes/recommandationsANSSI
@@ -18,6 +19,10 @@ mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
 block append styles
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
 
 block formulaire
   - const estLectureSeule  = autorisationsService.SECURISER.estLectureSeule

@@ -2,13 +2,14 @@
   --menu-couleur-repos: var(--bleu-survol);
   --menu-couleur-survol: var(--bleu-mise-en-avant);
   --menu-couleur-actif: var(--bleu-anssi);
+  --menu-largeur: 19em;
 }
 
 .menu-navigation {
   position: sticky;
   top: 0;
   left: 0;
-  width: 19em;
+  width: var(--menu-largeur);
   height: 100%;
   max-height: 100vh;
   display: flex;
