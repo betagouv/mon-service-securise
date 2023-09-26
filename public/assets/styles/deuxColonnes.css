@@ -31,11 +31,23 @@ header {
   background: #f1f5f9;
   width: fit-content;
   border-radius: 20px;
-  padding: 1px 8px;
+  padding: 1px 8px 1px 3px;
 }
 
 .header-gauche .titre-page .retour-tableau-de-bord a {
   color: #667892;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.header-gauche .titre-page .retour-tableau-de-bord a::before {
+  content: '';
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: white url(../images/fleche_retour.svg) no-repeat center;
 }
 
 .corps {
