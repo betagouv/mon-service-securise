@@ -3,7 +3,8 @@
 }
 
 main {
-  padding-bottom: 0;
+  background-image: url('/statique/assets/images/fond_entete_tableau_de_bord.svg');
+  background-repeat: no-repeat;
 }
 
 .bandeau-maj-profil {
@@ -52,8 +53,6 @@ main {
 }
 
 .entete-suivi-services {
-  background-image: url('/statique/assets/images/fond_entete_tableau_de_bord.svg');
-  background-repeat: no-repeat;
   padding-bottom: 1em;
 }
 

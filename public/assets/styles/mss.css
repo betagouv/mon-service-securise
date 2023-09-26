@@ -21,8 +21,10 @@ body {
 }
 
 main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   flex-grow: 1;
-  padding-bottom: 5em;
   border-top: solid 1px var(--liseres);
   border-bottom: solid 2px var(--systeme-design-etat-bleu);
   background: var(--fond-pale);

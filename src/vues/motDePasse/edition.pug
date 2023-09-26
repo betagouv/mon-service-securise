@@ -7,14 +7,6 @@ block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
-block retour
-  nav.fil-ariane
-    a.avec-chevron(href = '/tableauDeBord') Tableau de bord
-    if afficheChallengeMotDePasse
-      div Changez votre mot de passe
-    else
-      div Créez votre mot de passe
-
 block main
   form.etroit.mot-de-passe#edition
     if afficheChallengeMotDePasse
