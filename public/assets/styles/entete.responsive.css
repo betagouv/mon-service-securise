@@ -26,9 +26,8 @@
     background-color: #fff;
     height: 100vh;
     width: 100vw;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    row-gap: 1em;
+    flex-direction: column;
+    row-gap: 16px;
   }
 
   header nav.visible .bouton-fermer {
@@ -57,8 +56,12 @@
     transform: translateY(0.3em);
   }
 
+  header nav.visible a[href^='mailto:'] {
+    order: 4;
+  }
+
   header nav.visible :is(a, .nom-utilisateur-courant) {
-    padding: 0.3em 0 0.6em;
+    padding: 0.3em 0 8px;
     border-bottom: 1px var(--liseres) solid;
   }
 
@@ -68,7 +71,6 @@
 
   header nav.visible .utilisateur-courant {
     display: flex;
-    flex-direction: column-reverse;
   }
 
   header nav.visible .utilisateur-courant .connexion {
