@@ -65,6 +65,16 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
     });
 
+    it("aseptise l'identifiant reçu", (done) => {
+      testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['id'],
+          'http://localhost:1234/service/456',
+          done
+        );
+    });
+
     it('recherche le service correspondant', (done) => {
       testeur
         .middleware()
