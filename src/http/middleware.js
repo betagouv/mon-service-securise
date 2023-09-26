@@ -207,15 +207,22 @@ const middleware = (configuration = {}) => {
     depotDonnees
       .autorisationPour(requete.idUtilisateurCourant, requete.homologation.id)
       .then((autorisation) => {
-        reponse.locals.autorisationsService = Object.fromEntries(
-          Object.entries(autorisation.droits).map(([rubrique, niveau]) => [
-            [rubrique],
-            {
+        const droitsRubriques = Object.entries(autorisation.droits).reduce(
+          (droits, [rubrique, niveau]) => ({
+            ...droits,
+            [rubrique]: {
               estLectureSeule: niveau === LECTURE,
               estMasque: niveau === INVISIBLE,
             },
-          ])
+          }),
+          {}
         );
+
+        reponse.locals.autorisationsService = {
+          ...droitsRubriques,
+          peutHomologuer: autorisation.peutHomologuer(),
+        };
+
         suite();
       });
   };

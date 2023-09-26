@@ -762,6 +762,7 @@ describe('Le middleware MSS', () => {
             DECRIRE: { estLectureSeule: false, estMasque: false },
             SECURISER: { estLectureSeule: true, estMasque: false },
             HOMOLOGUER: { estLectureSeule: false, estMasque: true },
+            peutHomologuer: false,
           });
           done();
         } catch (e) {
