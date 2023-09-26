@@ -318,8 +318,7 @@
   width: 1.65em;
 }
 
-.menu-navigation .lien-tableau-de-bord > div,
-.menu-navigation .lien-deconnexion > div {
+.menu-navigation .lien-tableau-de-bord > div {
   border: 1.5px solid var(--menu-couleur-repos);
 }
 .menu-navigation .lien-contacts-utiles > div,

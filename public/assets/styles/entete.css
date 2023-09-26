@@ -117,14 +117,15 @@ header nav a,
   border-radius: 0.35em;
 }
 
-.nom-utilisateur-courant {
+.nom-utilisateur-courant,
+.deconnexion {
   display: flex;
   align-items: center;
 
   color: var(--systeme-design-etat-bleu);
 }
 
-:is(.connexion, .nom-utilisateur-courant):before,
+:is(.connexion, .nom-utilisateur-courant, .deconnexion):before,
 .nom-utilisateur-courant::after {
   display: inline-block;
 
@@ -135,7 +136,7 @@ header nav a,
 :is(.connexion, .nom-utilisateur-courant)::before {
   width: 1.3em;
   height: 1.1em;
-  margin-right: 0.3em;
+  margin-right: 8px;
 
   -webkit-mask: url(../images/icone_utilisateur.svg) no-repeat center;
   mask: url(../images/icone_utilisateur.svg) no-repeat center;
@@ -143,10 +144,21 @@ header nav a,
   mask-size: contain;
 }
 
+.deconnexion::before {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+
+  -webkit-mask: url(../images/icone_deconnecter.svg) no-repeat center;
+  mask: url(../images/icone_deconnecter.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
 .nom-utilisateur-courant::after {
   width: 0.7em;
   height: 0.7em;
-  margin-left: 0.3em;
+  margin-left: 8px;
 
   -webkit-mask: url(../images/icone_fleche_bas.svg) no-repeat center;
   mask: url(../images/icone_fleche_bas.svg) no-repeat center;

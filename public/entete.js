@@ -17,23 +17,25 @@ $(() => {
 <div class="menu">
   <a href="/tableauDeBord">Mon tableau de bord</a>
   <a href="/utilisateur/edition">Mettre à jour mon profil</a>
-  <a href="/motDePasse/edition">Changer mon mot de passe</a>
-  <a href="/connexion">Me déconnecter</a>
+  <a href="/motDePasse/edition">Changer mon mot de passe</a>  
 </div>
   `);
 
+  const deconnexion = () =>
+    '<a class="deconnexion" href="/connexion">Se déconnecter</a>';
+
   const ajouteUtilisateurCourantDans = (selecteur, donneesUtilisateur) => {
     const $conteneur = $(selecteur);
-    const $infosUtilisateurCourant =
+
+    const $identiteUtilisateur =
       creeConteneurUtilisateurCourant(donneesUtilisateur);
-    const $deconnexion = creeMenu();
-    $deconnexion.toggle();
+    const $menu = creeMenu();
+    $menu.toggle();
 
-    $conteneur.on('click', () => {
-      $deconnexion.toggle();
-    });
+    $conteneur.on('click', () => $menu.toggle());
 
-    $conteneur.append($infosUtilisateurCourant, $deconnexion);
+    $conteneur.append($identiteUtilisateur, $menu);
+    $(deconnexion()).insertAfter($conteneur);
   };
 
   const ajouteBoutonConnexionDans = (selecteur) => {
