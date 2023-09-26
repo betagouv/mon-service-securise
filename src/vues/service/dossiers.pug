@@ -6,6 +6,7 @@ mixin dossier({ statut, dossier, idService })
     const etapeCourante = dossier.etapeCourante()
     const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante) - 1
     const nombreTotalEtapes = referentiel.derniereEtapeParcours().numero
+    const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
 
   .dossier
     .contenu-dossier
@@ -15,7 +16,8 @@ mixin dossier({ statut, dossier, idService })
           div= `Durée : ${dossier.descriptionDureeValidite()}`
           div= `Prochaine homologation : ${dossier.descriptionProchaineDateHomologation()}`
         else
-          div= `Étapes complétées : ${numeroDerniereEtapeCompletee} / ${nombreTotalEtapes}`
+          if(!estLectureSeule)
+            div= `Étapes complétées : ${numeroDerniereEtapeCompletee} / ${nombreTotalEtapes}`
     if idService
       nav
         a(href = `/service/${idService}/homologation/edition/etape/${etapeCourante}`) Consulter
@@ -46,9 +48,12 @@ block formulaire
     script(type = "module", src = "/statique/service/homologation/dossiers.js")
 
 block bouton-etape
-  - const etapeSuivante = dossierCourant?.etapeCourante() ?? premiereEtapeParcours.id
+  -
+    const etapeSuivante = dossierCourant?.etapeCourante() ?? premiereEtapeParcours.id
+    const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
 
-  button.bouton#suivant(
-    data-id-homologation = service.id,
-    data-id-etape-suivante = etapeSuivante
-    ) Nouvelle homologation
+  if(!estLectureSeule)
+    button.bouton#suivant(
+      data-id-homologation = service.id,
+      data-id-etape-suivante = etapeSuivante
+      ) Nouvelle homologation
