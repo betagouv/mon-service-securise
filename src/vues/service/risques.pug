@@ -1,9 +1,14 @@
 extends ./formulaire
 include ../fragments/carteInformations
 include ../fragments/cartesInformations
+include ../fragments/texteTronque
 
 block append styles
   link(href = '/statique/assets/styles/homologation/risques.css', rel = 'stylesheet')
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
 
 block formulaire
   - const estLectureSeule  = autorisationsService.RISQUES.estLectureSeule

@@ -1,4 +1,5 @@
 extends ./formulaireEtapier
+include ../fragments/texteTronque
 
 mixin dossier({ statut, dossier, idService })
   -
@@ -24,6 +25,10 @@ mixin dossierFinalise({ dossier })
 
 mixin dossierCourant({ ...donnees })
   +dossier({ statut: 'Homologation en cours', ...donnees })
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
 
 block formulaire
   -

@@ -1,11 +1,16 @@
 extends ./formulaire
 include ../fragments/inputIdentite
 include ../fragments/inputPartiePrenante
+include ../fragments/texteTronque
 include ../fragments/elementsAjoutables/elementsAjoutablesActeurHomologation
 include ../fragments/elementsAjoutables/elementsAjoutablesPartiePrenante
 
 block append styles
   link(href = '/statique/assets/styles/homologation/rolesResponsabilites.css', rel = 'stylesheet')
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
 
 block formulaire
   - const estLectureSeule  = autorisationsService.CONTACTS.estLectureSeule
