@@ -3,6 +3,15 @@ header {
   column-gap: 1.4em;
   align-items: center;
   padding: 1em 0;
+  justify-content: space-around;
+  margin: auto;
+  width: 100%;
+  max-width: 1440px;
+}
+
+header :is(.header-gauche, .header-droit) {
+  display: flex;
+  align-items: center;
 }
 
 header a {

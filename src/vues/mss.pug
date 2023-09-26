@@ -18,17 +18,22 @@ block page
   title MonServiceSécurisé
 
   block header
-    header.marges-fixes
-      .bloc-marque
-        .marianne
-        .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
-        .devise
-      a.logo-anssi(href='https://www.ssi.gouv.fr')
-      a.logo-mss(href='/')
-      .sandwich
-      nav
-        .bouton-fermer Fermer
-        block navigation
+    header
+      block header-gauche
+        .header-gauche
+          .bloc-marque
+            .marianne
+            .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
+            .devise
+          a.logo-anssi(href='https://www.ssi.gouv.fr')
+          a.logo-mss(href='/')
+
+      block header-droit
+        .header-droit
+          .sandwich
+          nav
+            .bouton-fermer Fermer
+            block navigation
 
   block session
     include csrf.pug
