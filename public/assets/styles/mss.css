@@ -50,16 +50,6 @@ section:last-of-type {
   border-bottom: solid 1px var(--liseres);
 }
 
-.retour {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1.5em;
-}
-
-.retour:empty {
-  display: none;
-}
-
 .invisible {
   display: none;
 }
