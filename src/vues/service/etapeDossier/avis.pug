@@ -15,6 +15,7 @@ block formulaire
   -
     const avis = service.dossierCourant().avis
     const avecAvisRadio = { avecAvis: avis.avecAvis === null ? null : avis.avecAvis ? 1 : 0 }
+    const estLectureSeule  = autorisationsService.HOMOLOGUER.estLectureSeule
 
   +inputChoix({
     type: 'radio',
@@ -23,9 +24,10 @@ block formulaire
     objetDonnees: avecAvisRadio,
     messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
     requis: true,
+    lectureSeule: estLectureSeule
   })
 
-  +elementsAjoutablesAvis(service.dossierCourant().avis.avis)
+  +elementsAjoutablesAvis(service.dossierCourant().avis.avis, estLectureSeule)
 
   script(type = "module", src = "/statique/service/homologation/etapes/avis.js")
   script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
@@ -34,10 +36,11 @@ block bouton-etape
     -
       const afficheBoutonAjout = service.dossierCourant().avis.avecAvis === true
       const cssAffichage = afficheBoutonAjout ? '' : 'invisible'
-    a(
-      class = `nouvel-item bouton bouton-secondaire ${cssAffichage}`
-      id = 'ajout-element-un-avis'
-    ) Ajouter un avis
+    if(!estLectureSeule)
+      a(
+        class = `nouvel-item bouton bouton-secondaire ${cssAffichage}`
+        id = 'ajout-element-un-avis'
+      ) Ajouter un avis
     button.bouton#suivant(
       data-id-homologation = service.id,
       data-id-etape = idEtape,

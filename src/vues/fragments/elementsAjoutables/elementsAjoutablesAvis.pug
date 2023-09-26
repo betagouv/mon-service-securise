@@ -1,6 +1,6 @@
 include ../inputChoix
 
-mixin zoneSaisieUnAvis(donneesUnAvis = {}, index = 0, indexAvis = index + 1)
+mixin zoneSaisieUnAvis({donneesUnAvis = {}, index = 0, indexAvis = index + 1, lectureSeule = false})
   div(id = `element-un-avis-${index}`)
     .cartouche: h3 Avis n°#{indexAvis}
     .contenu
@@ -11,7 +11,8 @@ mixin zoneSaisieUnAvis(donneesUnAvis = {}, index = 0, indexAvis = index + 1)
             name = `collaborateurs-un-avis-${index}`,
             placeholder = 'ex: Louis Martin',
             required,
-            multiple
+            multiple,
+            disabled = lectureSeule
           )
             each collaborateur in donneesUnAvis.collaborateurs || []
               option(value!= collaborateur, selected) !{collaborateur}
@@ -29,6 +30,7 @@ mixin zoneSaisieUnAvis(donneesUnAvis = {}, index = 0, indexAvis = index + 1)
             requis: true,
             messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
             objetDonnees: donneesUnAvis,
+            lectureSeule: lectureSeule
           })
 
       - donneesUnAvis[`dureeValidite-un-avis-${index}`] = donneesUnAvis.dureeValidite
@@ -41,6 +43,7 @@ mixin zoneSaisieUnAvis(donneesUnAvis = {}, index = 0, indexAvis = index + 1)
             requis: true,
             messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
             objetDonnees: donneesUnAvis,
+            lectureSeule: lectureSeule
           })
 
       label.texte-libre Commentaires et recommandations
@@ -49,19 +52,21 @@ mixin zoneSaisieUnAvis(donneesUnAvis = {}, index = 0, indexAvis = index + 1)
           id = `commentaires-un-avis-${index}`,
           name = `commentaires-un-avis-${index}`,
           placeholder = 'ex : favorable pour la mise en ligne sous réserve que certaines mesures soient réalisées dans 1 mois.',
+          readonly = lectureSeule
         )!= donneesUnAvis.commentaires
 
-mixin unAvis(donneesUnAvis = {}, index = 0)
+mixin unAvis(donneesUnAvis = {}, index = 0, lectureSeule = false)
   .item-ajoute
-    .icone-suppression
-    +zoneSaisieUnAvis(donneesUnAvis, index)
+    if(!lectureSeule)
+        .icone-suppression
+    +zoneSaisieUnAvis({donneesUnAvis, index, lectureSeule})
 
-mixin elementsAjoutablesAvis(donneesAvis = [])
+mixin elementsAjoutablesAvis(donneesAvis = [], lectureSeule = false)
   .elements-ajoutables#avis
     #element-ajoutable-template.invisible
-      +zoneSaisieUnAvis({}, 'INDEX', 'INDEX_AVIS')
+      +zoneSaisieUnAvis({donneesUnAvis:{}, index:'INDEX', indexAvis: 'INDEX_AVIS'})
 
     each donneesUnAvis, index in donneesAvis 
-      +unAvis(donneesUnAvis, index)
+      +unAvis(donneesUnAvis, index, lectureSeule)
 
   script(type = 'module', src = '/statique/modules/elementsAjoutables.js')
