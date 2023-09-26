@@ -190,3 +190,16 @@
   transform: translateY(3px);
   visibility: visible;
 }
+
+.selectize-control .selectize-input.disabled {
+  opacity: 1 !important;
+  background: #dbecf1 !important;
+}
+
+.selectize-control .selectize-input.disabled .item {
+  padding: 0.4em !important;
+}
+
+.selectize-control .selectize-input.disabled .remove {
+  display: none !important;
+}
