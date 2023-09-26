@@ -13,12 +13,12 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
 
   li
     a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
+      span.action-saisie(id = id)
       div
-        span.position
-          !=(position+1)
-        span.none-si-ferme!= description
-        span.statut-saisie.none-si-ferme(class = statutSaisie(statut))
-      span.sous-titre.hidden-si-ferme!= sousTitre
+        span.nom-action.none-si-ferme!= description
+        span.sous-titre.hidden-si-ferme!= sousTitre
+      .statut-saisie.none-si-ferme(class = statutSaisie(statut))
+
 
 .menu-navigation(class = preferencesUtilisateur.etatMenuNavigation === 'ferme' ? 'ferme' : '')
   .actions
