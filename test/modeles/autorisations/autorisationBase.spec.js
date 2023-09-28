@@ -7,7 +7,7 @@ const {
 } = require('../../../src/modeles/autorisations/gestionDroits');
 
 const { ECRITURE, LECTURE, INVISIBLE } = Permissions;
-const { DECRIRE, SECURISER } = Rubriques;
+const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
 
 describe('Une autorisation de base', () => {
   it("ne permet pas d'ajouter un contributeur", () => {
@@ -74,5 +74,55 @@ describe('Une autorisation de base', () => {
 
     expect(peutLire).to.be(false);
     expect(peutEcrire).to.be(false);
+  });
+
+  describe('sur demande de résumé de niveau de droit', () => {
+    it("retourne 'ECRITURE' si tous les droits sont en ECRITURE", () => {
+      const autorisationLecture = new AutorisationBase({
+        droits: {
+          [DECRIRE]: ECRITURE,
+          [SECURISER]: ECRITURE,
+          [HOMOLOGUER]: ECRITURE,
+          [RISQUES]: ECRITURE,
+          [CONTACTS]: ECRITURE,
+        },
+      });
+
+      expect(autorisationLecture.resumeNiveauDroit()).to.equal(
+        AutorisationBase.RESUME_NIVEAU_DROIT.ECRITURE
+      );
+    });
+
+    it("retourne 'LECTURE' si tous les droits sont en LECTURE", () => {
+      const autorisationLecture = new AutorisationBase({
+        droits: {
+          [DECRIRE]: LECTURE,
+          [SECURISER]: LECTURE,
+          [HOMOLOGUER]: LECTURE,
+          [RISQUES]: LECTURE,
+          [CONTACTS]: LECTURE,
+        },
+      });
+
+      expect(autorisationLecture.resumeNiveauDroit()).to.equal(
+        AutorisationBase.RESUME_NIVEAU_DROIT.LECTURE
+      );
+    });
+
+    it("retourne 'PERSONNALISE' si les droits sont mixtes", () => {
+      const autorisationLecture = new AutorisationBase({
+        droits: {
+          [DECRIRE]: LECTURE,
+          [SECURISER]: ECRITURE,
+          [HOMOLOGUER]: LECTURE,
+          [RISQUES]: ECRITURE,
+          [CONTACTS]: ECRITURE,
+        },
+      });
+
+      expect(autorisationLecture.resumeNiveauDroit()).to.equal(
+        AutorisationBase.RESUME_NIVEAU_DROIT.PERSONNALISE
+      );
+    });
   });
 });
