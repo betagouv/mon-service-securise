@@ -4,7 +4,7 @@ class ConstructeurUtilisateur {
   constructor() {
     this.donnees = {
       dateCreation: '',
-      id: '',
+      id: '999',
       idResetMotDePasse: '',
       prenom: '',
       nom: '',

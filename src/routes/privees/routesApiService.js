@@ -478,6 +478,24 @@ const routesApiService = (
     }
   );
 
+  routes.get(
+    '/:id/autorisations',
+    middleware.trouveService({}),
+    middleware.aseptise('id'),
+    async (requete, reponse) => {
+      const { id: idService } = requete.homologation;
+      const autorisations =
+        await depotDonnees.autorisationsDuService(idService);
+
+      reponse.json(
+        autorisations.map((a) => ({
+          idUtilisateur: a.idUtilisateur,
+          resumeNiveauDroit: a.resumeNiveauDroit(),
+        }))
+      );
+    }
+  );
+
   return routes;
 };
 

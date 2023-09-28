@@ -1516,4 +1516,81 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
   });
+
+  describe('quand requête GET sur `/api/service/:id/autorisations', () => {
+    beforeEach(() => {
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .construis();
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: serviceARenvoyer,
+        idUtilisateur: '123',
+      });
+      testeur.depotDonnees().autorisationsDuService = async (idService) => [
+        uneAutorisation().deCreateurDeService('AAA', idService).construis(),
+      ];
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/autorisations',
+        },
+        done
+      );
+    });
+
+    it("aseptise l'id du service", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id'],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/autorisations',
+        },
+        done
+      );
+    });
+
+    it('Utilise le depot pour récupérer toutes les autorisations du service', async () => {
+      let donneesPassees = {};
+      testeur.depotDonnees().autorisationsDuService = async (idService) => {
+        donneesPassees = { idService };
+        return [
+          uneAutorisation().deCreateurDeService('AAA', idService).construis(),
+        ];
+      };
+
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .avecNContributeurs(1)
+        .construis();
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: serviceARenvoyer,
+        idUtilisateur: '123',
+      });
+
+      await axios.get('http://localhost:1234/api/service/456/autorisations');
+
+      expect(donneesPassees).to.eql({ idService: '456' });
+    });
+
+    it('Retourne le résumé du niveau de droit pour chaque utilisateur du service', async () => {
+      testeur.depotDonnees().autorisationsDuService = async () => [
+        {
+          idUtilisateur: 'AAA',
+          resumeNiveauDroit: () => 'ECRITURE',
+        },
+      ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/service/456/autorisations'
+      );
+
+      expect(reponse.data).to.eql([
+        { idUtilisateur: 'AAA', resumeNiveauDroit: 'ECRITURE' },
+      ]);
+    });
+  });
 });
