@@ -5,6 +5,8 @@ const {
   Permissions,
   Rubriques,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
+const AutorisationCreateur = require('../../../src/modeles/autorisations/autorisationCreateur');
 
 const { ECRITURE, LECTURE, INVISIBLE } = Permissions;
 const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
@@ -123,6 +125,20 @@ describe('Une autorisation de base', () => {
       expect(autorisationLecture.resumeNiveauDroit()).to.equal(
         AutorisationBase.RESUME_NIVEAU_DROIT.PERSONNALISE
       );
+    });
+  });
+
+  describe('sur demande de permission de gestion des contributeurs', () => {
+    it("retourne 'false' si l'autorisation ne provient pas d'un créateur", () => {
+      const autorisationContributeur = new AutorisationContributeur();
+
+      expect(autorisationContributeur.peutGererContributeurs()).to.be(false);
+    });
+
+    it("retourne 'true' si l'autorisation provient d'un créateur", () => {
+      const autorisationCreateur = new AutorisationCreateur();
+
+      expect(autorisationCreateur.peutGererContributeurs()).to.be(true);
     });
   });
 });

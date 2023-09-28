@@ -34,6 +34,12 @@ class AutorisationBase extends Base {
     );
   }
 
+  peutGererContributeurs() {
+    return (
+      this.permissionAjoutContributeur && this.permissionSuppressionContributeur
+    );
+  }
+
   resumeNiveauDroit() {
     const tousNiveaux = Object.values(Permissions).reduce(
       (acc, niveau) => ({ ...acc, [niveau]: 0 }),
