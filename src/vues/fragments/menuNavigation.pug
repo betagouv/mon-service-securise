@@ -14,9 +14,9 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
   li
     a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
       span.action-saisie(id = id)
-      div
-        span.nom-action.none-si-ferme!= description
-        span.sous-titre.hidden-si-ferme!= sousTitre
+      .none-si-ferme
+        span.nom-action!= description
+        span.sous-titre!= sousTitre
       .statut-saisie.none-si-ferme(class = statutSaisie(statut))
 
 
