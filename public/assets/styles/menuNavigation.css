@@ -184,6 +184,7 @@
 .menu-navigation .statut-saisie {
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
 }
 
 .menu-navigation .statut-saisie.faite {
