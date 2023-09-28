@@ -9,6 +9,7 @@
   box-shadow: -10px 0px 34px 0px #00000026;
   background: #fff;
   visibility: hidden;
+  z-index: 20;
 }
 
 .tiroir.ouvert {
