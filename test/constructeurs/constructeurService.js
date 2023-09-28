@@ -43,9 +43,13 @@ class ConstructeurService {
     return this;
   }
 
-  avecNContributeurs(combien) {
+  avecNContributeurs(combien, ids = []) {
     for (let i = 0; i < combien; i += 1) {
-      this.donnees.contributeurs.push(unUtilisateur().donnees);
+      let { donnees } = unUtilisateur();
+      if (ids.length) {
+        donnees = unUtilisateur().avecId(ids[i]).donnees;
+      }
+      this.donnees.contributeurs.push(donnees);
     }
     return this;
   }
