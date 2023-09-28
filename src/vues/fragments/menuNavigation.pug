@@ -38,16 +38,18 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
   if !estSurCreationDeService
     .autres-liens
       ul
-        li
-          a(href = `/service/${service.id}/risques`, class = etapeActive === 'risques' ? 'actif' : '')
-            .pastille
-              img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »")
-            span.none-si-ferme Risques
-        li
-          a(href = `/service/${service.id}/rolesResponsabilites`, class = etapeActive === 'contactsUtiles' ? 'actif' : '')
-            .pastille
-              img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
-            span.none-si-ferme Contacts utiles
+        if !autorisationsService.RISQUES.estMasque
+          li
+            a(href = `/service/${service.id}/risques`, class = etapeActive === 'risques' ? 'actif' : '')
+              .pastille
+                img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »")
+              span.none-si-ferme Risques
+        if !autorisationsService.CONTACTS.estMasque
+          li
+            a(href = `/service/${service.id}/rolesResponsabilites`, class = etapeActive === 'contactsUtiles' ? 'actif' : '')
+              .pastille
+                img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
+              span.none-si-ferme Contacts utiles
         li
           a(
             href = `/api/service/${service.id}/pdf/syntheseSecurite.pdf`,
