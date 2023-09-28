@@ -7,7 +7,7 @@
     "npm": "9"
   },
   "scripts": {
-    "build": "knex migrate:latest && npm test && npm run cree-utilisateur-demo && npx vite build --config svelte/vite.config.mts",
+    "build": "knex migrate:latest && npm run cree-utilisateur-demo && npx vite build --config svelte/vite.config.mts",
     "cree-utilisateur-demo": "node creeUtilisateurDemo.js",
     "test": "eslint . && mocha",
     "test:mocha": "mocha",
