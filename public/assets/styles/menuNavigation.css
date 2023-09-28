@@ -33,18 +33,14 @@
   color: var(--menu-couleur-survol);
 }
 
+.menu-navigation a:hover .action-saisie {
+  background-color: var(--menu-couleur-survol);
+}
 .menu-navigation a:active {
   color: var(--menu-couleur-actif);
 }
-
-.menu-navigation a:active .action-saisie,
-.menu-navigation a.actif:active .action-saisie {
-  background-color: var(--menu-couleur-actif) !important;
-}
-
-.menu-navigation a:hover .action-saisie,
-.menu-navigation a.actif:hover .action-saisie {
-  background-color: var(--menu-couleur-survol) !important;
+.menu-navigation a:active .action-saisie {
+  background-color: var(--menu-couleur-actif);
 }
 
 .menu-navigation .actions {
@@ -98,6 +94,22 @@
   column-gap: 8px;
 }
 
+.menu-navigation .autres-liens a:hover > span {
+  color: var(--menu-couleur-repos);
+}
+.menu-navigation .autres-liens a:active > span {
+  color: var(--menu-couleur-actif);
+}
+.menu-navigation .autres-liens a:hover img {
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) invert(17%) sepia(100%) saturate(2297%)
+    hue-rotate(190deg) brightness(98%) contrast(91%);
+}
+.menu-navigation .autres-liens a:active img {
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: brightness(0) invert(15%) sepia(76%) saturate(1769%)
+    hue-rotate(184deg) brightness(96%) contrast(94%);
+}
 .menu-navigation .autres-liens a.actif > div {
   background-color: var(--menu-couleur-repos);
 }
@@ -112,6 +124,9 @@
 }
 .menu-navigation .autres-liens a.actif:active > div {
   background-color: var(--menu-couleur-actif) !important;
+}
+.menu-navigation .autres-liens a.actif:active > span {
+  color: var(--menu-couleur-actif);
 }
 .menu-navigation .autres-liens a.actif:hover > div {
   background-color: var(--menu-couleur-survol);
@@ -210,23 +225,7 @@
   font-weight: 500;
   font-size: 0.95em;
 }
-.menu-navigation .autres-liens a:hover {
-  color: #0c5c98;
-}
-.menu-navigation .autres-liens a:active {
-  color: #08416a;
-}
 
-.menu-navigation .autres-liens a:not(.actif):hover img {
-  /* https://codepen.io/sosuke/pen/Pjoqqp */
-  filter: brightness(0) invert(17%) sepia(100%) saturate(2297%)
-    hue-rotate(190deg) brightness(98%) contrast(91%);
-}
-.menu-navigation .autres-liens a:not(.actif):active img {
-  /* https://codepen.io/sosuke/pen/Pjoqqp */
-  filter: brightness(0) invert(15%) sepia(76%) saturate(1769%)
-    hue-rotate(184deg) brightness(96%) contrast(94%);
-}
 .menu-navigation .autres-liens a img {
   width: 20px;
   height: 20px;
