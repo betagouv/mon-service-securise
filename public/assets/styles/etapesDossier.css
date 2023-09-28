@@ -18,15 +18,18 @@ section {
   border: 0;
 }
 
-.etapes {
-  --taille-bordure-etape: 2px;
-
+.homologation .etapes {
   margin-top: 3em;
   display: flex;
+  justify-content: space-between;
 }
 
-.etape:first-of-type {
-  margin-left: -2em;
+.etape {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
 }
 
 .etape .libelle-etape {
@@ -35,38 +38,8 @@ section {
   color: var(--texte-fonce);
 }
 
-.etape .numero-etape {
-  position: relative;
-  margin: 0 calc(3em + var(--taille-bordure-etape));
-}
-
-.etape .numero-etape::after,
-.etape .numero-etape::before {
-  content: '';
-  display: block;
-  position: absolute;
-  top: 0.93em;
-  width: 3em;
-  border: solid 1.5px var(--bordure-foncee);
-  background: var(--bordure-foncee);
-}
-
-.etape .numero-etape::after {
-  left: calc(2em + var(--taille-bordure-etape));
-}
-
-.etape .numero-etape::before {
-  right: calc(2em + var(--taille-bordure-etape));
-}
-
-.etape:first-of-type .numero-etape::before,
-.etape:last-of-type .numero-etape::after {
-  display: none;
-}
-
 form .numero-etape {
-  margin-right: 0.5em;
-  border: solid var(--taille-bordure-etape);
+  border: 1px solid #667892;
 
   text-align: center;
   line-height: 1.9;
@@ -78,6 +51,7 @@ form .numero-etape {
   height: 2em;
 
   border-radius: 50%;
+  z-index: 5;
 }
 
 .etape.passee .numero-etape {
@@ -106,12 +80,6 @@ form .numero-etape {
   outline-offset: 0.3em;
 }
 
-.etape.passee .numero-etape::after,
-.etape:is(.passee, .courante) .numero-etape::before {
-  border-color: var(--bleu-mise-en-avant);
-  background-color: var(--bleu-mise-en-avant);
-}
-
 .etape.courante .numero-etape {
   border-color: var(--bleu-anssi);
   background: var(--bleu-anssi);
@@ -121,6 +89,42 @@ form .numero-etape {
 .etape.future .numero-etape {
   border-color: var(--texte-moyen-fonce);
   color: var(--texte-moyen-fonce);
+  background: white;
+}
+
+/* STEPPER */
+.etape::before {
+  position: absolute;
+  content: '';
+  border-bottom: 2px solid var(--bordure-foncee);
+  width: 100%;
+  top: 15px;
+  left: -50%;
+  z-index: 2;
+}
+.etape::after {
+  position: absolute;
+  content: '';
+  border-bottom: 2px solid var(--bordure-foncee);
+  width: 100%;
+  top: 15px;
+  left: 50%;
+  z-index: 2;
+}
+.etape.passee::after {
+  position: absolute;
+  content: '';
+  border-bottom: 2px solid var(--bleu-mise-en-avant);
+  width: 100%;
+  top: 15px;
+  left: 50%;
+  z-index: 3;
+}
+.etape:first-child::before {
+  content: none;
+}
+.etape:last-child::after {
+  content: none;
 }
 
 section.autorite {
