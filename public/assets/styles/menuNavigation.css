@@ -185,6 +185,7 @@
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+  transform: translateY(2px);
 }
 
 .menu-navigation .statut-saisie.faite {
