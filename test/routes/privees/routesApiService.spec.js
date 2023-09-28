@@ -1524,7 +1524,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .construis();
       testeur.middleware().reinitialise({
         homologationARenvoyer: serviceARenvoyer,
-        idUtilisateur: '123',
+        idUtilisateur: 'AAA',
       });
       testeur.depotDonnees().autorisationsDuService = async (idService) => [
         uneAutorisation().deCreateurDeService('AAA', idService).construis(),
@@ -1568,7 +1568,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .construis();
       testeur.middleware().reinitialise({
         homologationARenvoyer: serviceARenvoyer,
-        idUtilisateur: '123',
+        idUtilisateur: 'AAA',
       });
 
       await axios.get('http://localhost:1234/api/service/456/autorisations');
@@ -1578,10 +1578,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('Retourne le résumé du niveau de droit pour chaque utilisateur du service', async () => {
       testeur.depotDonnees().autorisationsDuService = async () => [
-        {
-          idUtilisateur: 'AAA',
-          resumeNiveauDroit: () => 'ECRITURE',
-        },
+        uneAutorisation()
+          .deCreateurDeService('AAA', '456')
+          .avecTousDroitsEcriture()
+          .construis(),
       ];
 
       const reponse = await axios.get(
@@ -1591,6 +1591,54 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.data).to.eql([
         { idUtilisateur: 'AAA', resumeNiveauDroit: 'ECRITURE' },
       ]);
+    });
+
+    it("Renvoie toutes les autorisations si l'utilisateur est créateur", async () => {
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .avecNContributeurs(3, ['ABC', 'DEF', 'GHI'])
+        .construis();
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: serviceARenvoyer,
+        idUtilisateur: 'AAA',
+      });
+      testeur.depotDonnees().autorisationsDuService = async () => [
+        uneAutorisation().deCreateurDeService('AAA', '456').construis(),
+        uneAutorisation().deContributeurDeService('ABC', '456').construis(),
+        uneAutorisation().deContributeurDeService('DEF', '456').construis(),
+        uneAutorisation().deContributeurDeService('GHI', '456').construis(),
+      ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/service/456/autorisations'
+      );
+
+      expect(reponse.data.length).to.be(3 + 1);
+    });
+
+    it("Renvoie uniquement le créateur et l'utilisateur s'il n'est pas créateur", async () => {
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .avecNContributeurs(3, ['ABC', 'DEF', 'GHI'])
+        .construis();
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: serviceARenvoyer,
+        idUtilisateur: 'DEF',
+      });
+      testeur.depotDonnees().autorisationsDuService = async () => [
+        uneAutorisation().deCreateurDeService('AAA', '456').construis(),
+        uneAutorisation().deContributeurDeService('ABC', '456').construis(),
+        uneAutorisation().deContributeurDeService('DEF', '456').construis(),
+        uneAutorisation().deContributeurDeService('GHI', '456').construis(),
+      ];
+
+      const { data } = await axios.get(
+        'http://localhost:1234/api/service/456/autorisations'
+      );
+
+      expect(data.length).to.be(2);
+      expect(data[0].idUtilisateur).to.equal('AAA');
+      expect(data[1].idUtilisateur).to.equal('DEF');
     });
   });
 });

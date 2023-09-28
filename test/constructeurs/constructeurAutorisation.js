@@ -1,4 +1,8 @@
-const AutorisationBase = require('../../src/modeles/autorisations/autorisationBase');
+const {
+  toutDroitsEnEcriture,
+} = require('../../src/modeles/autorisations/gestionDroits');
+const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
+const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
 
 class ConstructeurAutorisation {
   constructor() {
@@ -7,7 +11,7 @@ class ConstructeurAutorisation {
       idUtilisateur: '',
       idHomologation: '',
       idService: '',
-      type: '',
+      type: 'contributeur',
       droits: {},
     };
   }
@@ -33,8 +37,15 @@ class ConstructeurAutorisation {
     return this;
   }
 
+  avecTousDroitsEcriture() {
+    this.donnees.droits = toutDroitsEnEcriture();
+    return this;
+  }
+
   construis() {
-    return new AutorisationBase(this.donnees);
+    return this.donnees.type === 'createur'
+      ? new AutorisationCreateur(this.donnees)
+      : new AutorisationContributeur(this.donnees);
   }
 }
 
