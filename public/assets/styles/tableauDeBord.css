@@ -56,15 +56,6 @@ main {
   padding-bottom: 1em;
 }
 
-.entete-suivi-services .titres {
-  padding-top: 3em;
-}
-
-.entete-suivi-services .titres h1 {
-  text-align: left;
-  margin: 0;
-}
-
 label[for='recherche-service'] {
   font-weight: bold;
 }
@@ -72,7 +63,7 @@ label[for='recherche-service'] {
 .bandeau-info-action {
   display: flex;
   align-items: start;
-  margin-top: 2em;
+  margin-top: 4em;
 }
 
 .informations {

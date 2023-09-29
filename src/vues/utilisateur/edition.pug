@@ -5,10 +5,16 @@ include ../fragments/formulaireUtilisateur
 block append styles
   link(href = '/statique/assets/styles/filAriane.css', rel = 'stylesheet')
 
+block header-gauche
+  .conteneur-logo
+    a.logo-mss(href='/tableauDeBord')
+  .titre-page
+    h3 Profil
+    .retour-tableau-de-bord
+      a(href='/tableauDeBord') Retour au tableau de bord
+
 block main
   form.etroit.utilisateur#edition
-    h1 Profil
-
     +formulaireUtilisateur({
       donnees: utilisateur,
       emailLectureSeule: true,

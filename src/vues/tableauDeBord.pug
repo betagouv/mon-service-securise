@@ -28,6 +28,15 @@ block append scripts
   script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
   script(src = "/statique/composants-svelte/gestionContributeurs.js", type = "module")
 
+block bandeau-nouveautes
+  // Pas de « Nouveautés » sur le tableau de bord
+
+block header-gauche
+  .conteneur-logo
+    a.logo-mss(href='/')
+  .titre-page
+    h3 Mon tableau de bord
+
 block main
   +modaleNouveauService
 
@@ -38,8 +47,6 @@ block main
   .suivi-services
     .entete-suivi-services
       .marges-fixes
-        .titres
-          h1 Mon tableau de bord
         .bandeau-info-action
           .informations
             +carteInformation('/statique/assets/images/icone_services_enregistres.svg', '', 'nombre-services', 'Services', 'enregistrés')
