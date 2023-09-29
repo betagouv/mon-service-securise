@@ -4,10 +4,11 @@ block append styles
   link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
 
 block navigation
-  .bandeau-nouveautes
-    img(src='/statique/assets/images/bandeau_nouveautes_decoration.svg', alt='Décoration du bouton des nouveautés')
-    p.
-      Nouveautés
+  block bandeau-nouveautes
+    .bandeau-nouveautes
+      img(src='/statique/assets/images/bandeau_nouveautes_decoration.svg', alt='Décoration du bouton des nouveautés')
+      p.
+        Nouveautés
 
   .utilisateur-courant
 
