@@ -3,7 +3,7 @@ include ../fragments/texteTronque
 
 mixin dossier({ statut, dossier, idService })
   -
-    const etapeCourante = dossier.etapeCourante()
+    const etapeCourante = referentiel.etapeDossierAutorisee(dossier.etapeCourante(), autorisationsService.peutHomologuer)
     const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante) - 1
     const nombreTotalEtapes = referentiel.derniereEtapeParcours().numero
     const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule

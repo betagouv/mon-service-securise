@@ -776,4 +776,44 @@ describe('Le référentiel', () => {
       id: 'nouveauté',
     });
   });
+
+  describe("sur demande de l'étape autorisée du dossier", () => {
+    let referentiel;
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        etapesParcoursHomologation: [
+          { numero: 1, id: 'id-autorisee-pour-tous' },
+          {
+            numero: 2,
+            id: 'id-autorisee-seulement-homologation',
+            reserveePeutHomologuer: true,
+          },
+        ],
+      });
+    });
+
+    it("renvoie l'id de la même étape s'il s'agit d'un homologateur car il peut voir toutes les étapes", () => {
+      expect(
+        referentiel.etapeDossierAutorisee(
+          'id-autorisee-seulement-homologation',
+          true
+        )
+      ).to.be('id-autorisee-seulement-homologation');
+    });
+
+    it("renvoie l'id de l'étape maximale autorisée s'il s'agit d'un non-homologateur car il n'a pas le droit d'accès aux étapes d'homologation", () => {
+      expect(
+        referentiel.etapeDossierAutorisee(
+          'id-autorisee-seulement-homologation',
+          false
+        )
+      ).to.be('id-autorisee-pour-tous');
+    });
+
+    it("renvoie l'id de la même étape si l'étape demandée n'est pas reservée aux homologateurs", () => {
+      expect(
+        referentiel.etapeDossierAutorisee('id-autorisee-pour-tous', false)
+      ).to.be('id-autorisee-pour-tous');
+    });
+  });
 });
