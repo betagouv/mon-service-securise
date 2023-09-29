@@ -1,4 +1,5 @@
 extends ./formulaire
+include ../fragments/texteTronque
 
 mixin descriptionEtape({ etape })
   .numero-etape= etape.numero
@@ -23,6 +24,10 @@ mixin barre-progression({ numeroEtapeCourante })
 block append styles
   link(href='/statique/assets/styles/etapesDossier.css', rel='stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
 
 block zone-principale
   form.homologation
