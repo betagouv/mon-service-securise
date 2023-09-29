@@ -518,7 +518,7 @@ describe('Le référentiel', () => {
       expect(positions).to.eql([2, 1]);
     });
 
-    it('inclue les identifiants dans les informations', () => {
+    it('inclut les identifiants dans les informations', () => {
       const referentiel = Referentiel.creeReferentiel({
         niveauxGravite: {
           niveauUn: { position: 0 },
@@ -733,7 +733,7 @@ describe('Le référentiel', () => {
   });
 
   describe("sur demande des etapes du parcours d'homologation", () => {
-    it("inclue toutes les étapes s'il n'y a pas de paramètres", () => {
+    it("inclut toutes les étapes s'il n'y a pas de paramètres", () => {
       const referentiel = Referentiel.creeReferentiel({
         etapesParcoursHomologation: [{ numero: 1 }, { numero: 2 }],
       });
@@ -742,7 +742,7 @@ describe('Le référentiel', () => {
       expect(etapes.length).to.equal(2);
     });
 
-    it('inclue toutes les étapes si `peutHomologuer` est vrai', () => {
+    it('inclut toutes les étapes si `peutHomologuer` est vrai', () => {
       const referentiel = Referentiel.creeReferentiel({
         etapesParcoursHomologation: [{ numero: 1 }, { numero: 2 }],
       });
@@ -752,7 +752,7 @@ describe('Le référentiel', () => {
       expect(etapes.length).to.equal(2);
     });
 
-    it("n'inclue pas les étapes réservée à l'homologation si `peutHomologuer` est faux", () => {
+    it("n'inclut pas les étapes réservée à l'homologation si `peutHomologuer` est faux", () => {
       const referentiel = Referentiel.creeReferentiel({
         etapesParcoursHomologation: [
           { numero: 1 },
