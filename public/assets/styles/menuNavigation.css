@@ -2,7 +2,6 @@
   --menu-couleur-repos: var(--bleu-survol);
   --menu-couleur-survol: var(--bleu-mise-en-avant);
   --menu-couleur-actif: var(--bleu-anssi);
-  --menu-largeur: 19em;
 }
 
 .menu-navigation {

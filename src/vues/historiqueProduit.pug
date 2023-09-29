@@ -4,11 +4,17 @@ block append styles
   link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/nouvellesFonctionnalites.css', rel = 'stylesheet')
 
+block header-gauche
+  .conteneur-logo
+    a.logo-mss(href='/tableauDeBord')
+  .titre-page
+    h3 Historique du produit
+    .retour-tableau-de-bord
+      a(href='/tableauDeBord') Retour au tableau de bord
+
 block main
-  
   .marges-fixes
     .documentation
-      h1 Historique du produit
       p.description Découvrez les dernières évolutions de MonServiceSécurisé.
       
       ul.evolutions

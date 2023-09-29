@@ -7,12 +7,19 @@ block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
+block header-gauche
+  .conteneur-logo
+    a.logo-mss(href='/tableauDeBord')
+  .titre-page
+    if afficheChallengeMotDePasse
+      h3 Changez votre mot de passe
+    else
+      h3 Créez votre mot de passe
+    .retour-tableau-de-bord
+      a(href='/tableauDeBord') Retour au tableau de bord
+
 block main
   form.etroit.mot-de-passe#edition
-    if afficheChallengeMotDePasse
-      h1 Changez votre mot de passe
-    else
-      h1 Créez votre mot de passe 
     .mention champ obligatoire
     section
       div Le mot de passe doit comporter <b>12 caractères mininum</b> contenant au moins :

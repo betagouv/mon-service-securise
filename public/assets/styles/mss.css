@@ -1,3 +1,7 @@
+:root {
+  --menu-largeur: 19em;
+}
+
 html {
   height: 100%;
 }
