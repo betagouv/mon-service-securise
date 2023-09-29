@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { ResumeNiveauDroit, Utilisateur } from './gestionContributeurs.d';
+  import type {
+    ResumeNiveauDroit,
+    Utilisateur,
+  } from './gestionContributeurs.d';
   import { store } from './gestionContributeurs.store';
   import MenuFlottant from '../ui/MenuFlottant.svelte';
 
@@ -27,23 +30,25 @@
       <div class="poste-contributeur">{@html utilisateur.poste}</div>
     </div>
   </div>
-  {#if resumeNiveauDroit}
-    <div class="role {resumeNiveauDroit}">
-      {STATUS_DROITS[resumeNiveauDroit]}
-    </div>
-  {/if}
-  {#if estSupprimable}
-    <!--    svelte-ignore a11y-click-events-have-key-events-->
-    <div
-      class="conteneur-suppression"
-      on:click={() => store.afficheEtapeSuppression(utilisateur)}
-    >
-      <img
-        src="/statique/assets/images/icone_supprimer_gris.svg"
-        alt="supression d'un contributeur"
-      />
-    </div>
-  {/if}
+  <div class="conteneur-actions">
+    {#if resumeNiveauDroit}
+      <div class="role {resumeNiveauDroit}">
+        {STATUS_DROITS[resumeNiveauDroit]}
+      </div>
+    {/if}
+    {#if estSupprimable}
+      <!--    svelte-ignore a11y-click-events-have-key-events-->
+      <div
+        class="conteneur-suppression"
+        on:click={() => store.afficheEtapeSuppression(utilisateur)}
+      >
+        <img
+          src="/statique/assets/images/icone_supprimer_gris.svg"
+          alt="supression d'un contributeur"
+        />
+      </div>
+    {/if}
+  </div>
 </li>
 
 <style>
@@ -68,5 +73,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    cursor: pointer;
   }
 </style>

@@ -198,7 +198,7 @@
 .contenu-tiroir .conteneur-actions {
   display: flex;
   justify-content: end;
-  gap: 1em;
+  gap: 10px;
 }
 
 #contenu-suppression p {
@@ -325,9 +325,8 @@
 }
 
 #contenu-contributeurs .liste-contributeurs li {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  column-gap: 1em;
+  display: flex;
+  justify-content: space-between;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   padding: 1em;
@@ -338,7 +337,6 @@
   display: flex;
   align-items: center;
   gap: 1em;
-  grid-column: 1 / 6;
 }
 
 #contenu-contributeurs .initiales {
@@ -370,7 +368,6 @@
   line-height: 0.9em;
   padding: 0.4em 0.5em;
   align-self: center;
-  grid-column: 6 / 7;
 }
 
 #contenu-contributeurs .declencheur-menu-flottant {
