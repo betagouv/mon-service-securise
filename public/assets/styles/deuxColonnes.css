@@ -36,6 +36,7 @@ main {
   width: fit-content;
   border-radius: 20px;
   padding: 1px 8px 1px 3px;
+  border: 1.5px solid transparent;
 }
 
 .header-gauche .titre-page .retour-tableau-de-bord a {
@@ -52,6 +53,15 @@ main {
   height: 13px;
   border-radius: 50%;
   background: white url(../images/fleche_retour.svg) no-repeat center;
+}
+
+.header-gauche .retour-tableau-de-bord:hover {
+  background-color: #dbecf1;
+}
+
+.header-gauche .retour-tableau-de-bord:active {
+  background-color: #f1f5f9;
+  border: 1.5px solid #667892;
 }
 
 .corps {
