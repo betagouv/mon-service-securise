@@ -13,7 +13,8 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
 
   li
     a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
-      span.action-saisie(id = id)
+      .pastille
+        span.action-saisie(id = id)
       .none-si-ferme
         span.nom-action!= description
         span.sous-titre!= sousTitre
