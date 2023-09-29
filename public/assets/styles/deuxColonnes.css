@@ -14,6 +14,10 @@ main {
   width: var(--menu-largeur);
 }
 
+.header-gauche .logo-mss {
+  width: 120px;
+}
+
 .header-gauche .titre-page {
   display: flex;
   flex-direction: column;
