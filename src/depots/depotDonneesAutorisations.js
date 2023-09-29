@@ -43,6 +43,11 @@ const creeDepot = (config = {}) => {
       .autorisation(id)
       .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
 
+  const autorisationsDuService = async (id) => {
+    const as = await adaptateurPersistance.autorisationsDuService(id);
+    return as.map((a) => FabriqueAutorisation.fabrique(a));
+  };
+
   const autorisationPour = (...params) =>
     adaptateurPersistance
       .autorisationPour(...params)
@@ -151,6 +156,7 @@ const creeDepot = (config = {}) => {
     autorisationExiste,
     autorisationPour,
     autorisations,
+    autorisationsDuService,
     supprimeContributeur,
     transfereAutorisations,
   };
