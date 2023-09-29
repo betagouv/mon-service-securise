@@ -194,6 +194,19 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return numeroEtapeCourante >= numeroEtapeSuffisante;
   };
 
+  const etapeDossierAutorisee = (idEtape, peutHomologuer) => {
+    if (peutHomologuer) return idEtape;
+    const etapesDisponibles = etapesParcoursHomologation(peutHomologuer);
+    const numeroMaxDisponible = Math.max(
+      ...etapesDisponibles.map((e) => e.numero)
+    );
+    const numeroEtapeAutorisee = Math.min(
+      numeroEtape(idEtape),
+      numeroMaxDisponible
+    );
+    return etapesDisponibles.find((e) => e.numero === numeroEtapeAutorisee)?.id;
+  };
+
   const valideDonnees = () => {
     const sommeCoefficients =
       coefficientIndiceCyberMesuresIndispensables() +
@@ -260,6 +273,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estDocumentHomologation,
     estIdentifiantEcheanceRenouvellementConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
+    etapeDossierAutorisee,
     etapeExiste,
     etapesParcoursHomologation,
     etapeSuffisantePourDossierDecision,
