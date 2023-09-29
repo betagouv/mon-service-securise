@@ -95,12 +95,13 @@ block main
                 +actionAvecIcone('/statique/assets/images/icone_dupliquer_service.svg', 'Dupliquer', 'duplication')
                 +actionAvecIcone('/statique/assets/images/icone_supprimer.svg', 'Supprimer', 'suppression')
         tbody.contenu-tableau-services
-    +tiroir
-      include ./tiroirs/tiroirContributeurs
-      include ./tiroirs/tiroirExport
-      include ./tiroirs/tiroirDuplication
-      include ./tiroirs/tiroirSuppression
-      include ./tiroirs/tiroirTelechargement
+
+  +tiroir
+    include ./tiroirs/tiroirContributeurs
+    include ./tiroirs/tiroirExport
+    include ./tiroirs/tiroirDuplication
+    include ./tiroirs/tiroirSuppression
+    include ./tiroirs/tiroirTelechargement
 
 
   script(type = 'module', src = '/statique/tableauDeBord.js')

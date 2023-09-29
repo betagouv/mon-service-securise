@@ -310,7 +310,3 @@
   white-space: nowrap;
   transform: translateY(-2px);
 }
-
-.corps.marges-fixes + .tiroir {
-  position: fixed;
-}

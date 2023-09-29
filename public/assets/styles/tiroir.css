@@ -1,7 +1,7 @@
 .tiroir {
   height: 100%;
   min-width: 33em;
-  position: absolute;
+  position: fixed;
   left: 100vw;
   top: 0;
   overflow-y: scroll;
