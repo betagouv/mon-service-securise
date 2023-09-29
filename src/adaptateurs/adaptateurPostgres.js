@@ -204,6 +204,14 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
       .then((rows) => rows.map(convertisLigneEnObjet));
 
+  const autorisationsDuService = async (idService) => {
+    const as = await knex('autorisations').whereRaw(
+      "donnees->>'idService'=?",
+      idService
+    );
+    return as.map(convertisLigneEnObjet);
+  };
+
   const idsHomologationsCreeesParUtilisateur = (
     idUtilisateur,
     idsHomologationsAExclure = []
@@ -394,6 +402,7 @@ const nouvelAdaptateur = (env) => {
     autorisation,
     autorisationPour,
     autorisations,
+    autorisationsDuService,
     homologation,
     homologationAvecNomService,
     homologations,

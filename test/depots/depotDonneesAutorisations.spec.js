@@ -20,6 +20,9 @@ const {
   Rubriques,
   Permissions,
 } = require('../../src/modeles/autorisations/gestionDroits');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE, LECTURE } = Permissions;
@@ -508,5 +511,30 @@ describe('Le dépôt de données des autorisations', () => {
       const apres = await depot.autorisationPour('000', '123');
       expect(apres).to.be(undefined);
     });
+  });
+
+  it('connaît toutes les autorisations pour un service donné', async () => {
+    const adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUnUtilisateur({ id: '888' })
+      .ajouteUnUtilisateur({ id: '999' })
+      .ajouteUnService({
+        id: '123',
+        descriptionService: { nomService: 'Un service' },
+      })
+      .ajouteUneAutorisation(
+        uneAutorisation().deCreateurDeService('888', '123').donnees
+      )
+      .ajouteUneAutorisation(
+        uneAutorisation().deContributeurDeService('999', '123').donnees
+      )
+      .construis();
+
+    const depot = creeDepot(adaptateurPersistance);
+
+    const a = await depot.autorisationsDuService('123');
+
+    expect(a.length).to.be(2);
+    expect(a[0]).to.be.an(AutorisationCreateur);
+    expect(a[1]).to.be.an(AutorisationContributeur);
   });
 });

@@ -93,6 +93,7 @@ const creeDepot = (config = {}) => {
     autorisationExiste,
     autorisationPour,
     autorisations,
+    autorisationsDuService,
     supprimeContributeur,
     transfereAutorisations,
   } = depotAutorisations;
@@ -112,6 +113,7 @@ const creeDepot = (config = {}) => {
     autorisationExiste,
     autorisationPour,
     autorisations,
+    autorisationsDuService,
     dupliqueHomologation,
     homologation,
     homologationExiste,

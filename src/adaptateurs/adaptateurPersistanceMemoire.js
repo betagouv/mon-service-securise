@@ -179,6 +179,9 @@ const nouvelAdaptateur = (
         .map((a) => a.idHomologation)
     );
 
+  const autorisationsDuService = async (idService) =>
+    donnees.autorisations.filter((a) => a.idService === idService);
+
   const autorisationPour = (idUtilisateur, idHomologation) =>
     Promise.resolve(
       donnees.autorisations.find(
@@ -320,6 +323,7 @@ const nouvelAdaptateur = (
     autorisation,
     autorisationPour,
     autorisations,
+    autorisationsDuService,
     homologation,
     homologationAvecNomService,
     homologations,
