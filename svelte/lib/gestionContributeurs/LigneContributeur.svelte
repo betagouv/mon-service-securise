@@ -33,17 +33,16 @@
     </div>
   {/if}
   {#if estSupprimable}
-    <MenuFlottant>
-      <ul>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li
-          class="action-suppression-contributeur"
-          on:click={() => store.afficheEtapeSuppression(utilisateur)}
-        >
-          Retirer du service
-        </li>
-      </ul>
-    </MenuFlottant>
+    <!--    svelte-ignore a11y-click-events-have-key-events-->
+    <div
+      class="conteneur-suppression"
+      on:click={() => store.afficheEtapeSuppression(utilisateur)}
+    >
+      <img
+        src="/statique/assets/images/icone_supprimer_gris.svg"
+        alt="supression d'un contributeur"
+      />
+    </div>
   {/if}
 </li>
 
@@ -63,5 +62,11 @@
 
   .PERSONNALISE {
     background: linear-gradient(180deg, #54b8f6 0%, #3479c9 100%);
+  }
+
+  .conteneur-suppression {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 </style>
