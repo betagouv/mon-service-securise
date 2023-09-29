@@ -352,14 +352,6 @@
   color: #ffffff;
 }
 
-#contenu-contributeurs .initiales.proprietaire {
-  background: #c19616;
-}
-
-#contenu-contributeurs .initiales.contributeur {
-  background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
-}
-
 #contenu-contributeurs .nom-contributeur {
   font-weight: 500;
   word-break: break-word;
@@ -379,14 +371,6 @@
   padding: 0.4em 0.5em;
   align-self: center;
   grid-column: 6 / 7;
-}
-
-#contenu-contributeurs .role.proprietaire {
-  background: #c19616;
-}
-
-#contenu-contributeurs .role.contributeur {
-  background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
 }
 
 #contenu-contributeurs .declencheur-menu-flottant {
@@ -479,24 +463,9 @@
   font-size: 1em;
 }
 
-#contenu-contributeurs .titre-liste::before {
-  display: inline-block;
-  content: '';
-  width: 1.4em;
-  height: 1.4em;
-  background-image: none;
-  background-repeat: no-repeat;
-  background-size: contain;
-  margin-right: 0.3em;
-  transform: translateY(5px);
-}
-
-#contenu-contributeurs .titre-contributeurs-actifs::before {
-  background-image: url('/statique/assets/images/icone_contributeurs_actifs.svg');
-}
-
-#contenu-contributeurs .titre-contributeurs-attente-activation::before {
-  background-image: url('/statique/assets/images/icone_contributeurs_attente_activation.svg');
+#contenu-contributeurs .sous-titre-liste {
+  margin-top: 0.3em;
+  font-size: 0.9em;
 }
 
 .invisible {

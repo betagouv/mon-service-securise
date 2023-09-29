@@ -24,3 +24,10 @@ export type Utilisateur = {
   poste: string;
   email: string;
 };
+
+export type ResumeNiveauDroit = 'ECRITURE' | 'LECTURE' | 'PERSONNALISE';
+
+export type Autorisation = {
+  idUtilisateur: string;
+  resumeNiveauDroit: ResumeNiveauDroit;
+};
