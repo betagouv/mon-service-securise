@@ -134,7 +134,7 @@
   margin-top: 0.5em;
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 8px;
 }
 
 #contenu-contributeurs
@@ -166,33 +166,17 @@
   border-color: var(--liseres) !important;
 }
 
-#contenu-contributeurs .option .initiales {
-  min-width: 1.5em;
-  min-height: 1.5em;
-  font-size: 0.8em;
-  padding: 0.4em;
-  margin-right: 1em;
-}
-
 #contenu-contributeurs .option.suggestion-contributeur {
   display: flex;
   align-items: center;
   padding: 0.6em;
   cursor: pointer;
   font-weight: normal;
+  column-gap: 8px;
 }
 
 #contenu-contributeurs .option:hover {
   background-color: var(--fond-gris-pale);
-}
-
-#contenu-contributeurs .initiales.persona::before {
-  content: '';
-  width: 1.5em;
-  height: 1.5em;
-  background-image: url('/statique/assets/images/persona_invitation_contributeur.svg');
-  background-repeat: no-repeat;
-  background-size: contain;
 }
 
 .contenu-tiroir .conteneur-actions {
@@ -336,18 +320,7 @@
 #contenu-contributeurs .contenu-nom-prenom {
   display: flex;
   align-items: center;
-  gap: 1em;
-}
-
-#contenu-contributeurs .initiales {
-  border-radius: 50%;
-  min-width: 2.5em;
-  min-height: 2.5em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #ffffff;
+  gap: 8px;
 }
 
 #contenu-contributeurs .nom-contributeur {

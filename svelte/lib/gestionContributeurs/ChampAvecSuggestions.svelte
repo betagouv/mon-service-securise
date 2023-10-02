@@ -2,6 +2,7 @@
   import type { Utilisateur } from './gestionContributeurs.d';
 
   import { createEventDispatcher } from 'svelte';
+  import Initiales from './Initiales.svelte';
 
   export let callbackDeRecherche: (recherche: string) => Promise<Utilisateur[]>;
   export let dureeDebounceEnMs = 300;
@@ -63,12 +64,7 @@
         class="option suggestion-contributeur"
         on:click={() => choisisContributeur(suggestion)}
       >
-        <div
-          class="initiales contributeur"
-          class:persona={!suggestion.initiales}
-        >
-          {suggestion.initiales}
-        </div>
+        <Initiales valeur={suggestion.initiales} />
         <div>{@html suggestion.prenomNom}</div>
       </div>
     {/each}
