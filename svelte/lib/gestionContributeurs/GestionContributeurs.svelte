@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { Autorisation, ResumeNiveauDroit } from './gestionContributeurs.d';
+  import type {
+    Autorisation,
+    ResumeNiveauDroit,
+  } from './gestionContributeurs.d';
   import { store } from './gestionContributeurs.store';
   import InvitationContributeur from './InvitationContributeur.svelte';
   import LigneContributeur from './LigneContributeur.svelte';
@@ -35,9 +38,6 @@
   {/if}
   {#if $store.etapeCourante !== 'InvitationContributeurs' && surServiceUnique}
     <h3 class="titre-liste">Liste des contributeurs au service</h3>
-    <p class="sous-titre-liste">
-      Sélectionner une personne pour gérer ses droits d'accès
-    </p>
     <ul class="liste-contributeurs contributeurs-actifs">
       <LigneContributeur
         estSupprimable={false}
