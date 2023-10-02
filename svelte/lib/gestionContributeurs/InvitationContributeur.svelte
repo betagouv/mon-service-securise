@@ -3,6 +3,7 @@
 
   import { store } from './gestionContributeurs.store';
   import ChampAvecSuggestions from './ChampAvecSuggestions.svelte';
+  import Initiales from './Initiales.svelte';
 
   type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
 
@@ -61,12 +62,7 @@
       <ul id="liste-ajout-contributeur">
         {#each contributeursAInviter as contributeur (contributeur.email)}
           <li class="contributeur-a-inviter">
-            <div
-              class="initiales contributeur"
-              class:persona={!contributeur.initiales}
-            >
-              {contributeur.initiales}
-            </div>
+            <Initiales valeur={contributeur.initiales} />
             <span>{@html contributeur.prenomNom}</span>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <img

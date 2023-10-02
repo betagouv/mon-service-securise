@@ -4,7 +4,7 @@
     Utilisateur,
   } from './gestionContributeurs.d';
   import { store } from './gestionContributeurs.store';
-  import MenuFlottant from '../ui/MenuFlottant.svelte';
+  import Initiales from './Initiales.svelte';
 
   const STATUS_DROITS: Record<ResumeNiveauDroit, string> = {
     ECRITURE: 'Édition',
@@ -19,12 +19,7 @@
 
 <li class="ligne-contributeur">
   <div class="contenu-nom-prenom">
-    <div
-      class="initiales {resumeNiveauDroit}
-    {!utilisateur.initiales ? 'persona' : ''}"
-    >
-      {utilisateur.initiales}
-    </div>
+    <Initiales valeur={utilisateur.initiales} {resumeNiveauDroit} />
     <div class="nom-prenom-poste">
       <div class="nom-contributeur">{@html utilisateur.prenomNom}</div>
       <div class="poste-contributeur">{@html utilisateur.poste}</div>
