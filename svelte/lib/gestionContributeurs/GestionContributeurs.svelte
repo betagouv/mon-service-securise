@@ -54,3 +54,19 @@
     </ul>
   {/if}
 {/if}
+
+<style>
+  .liste-contributeurs {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .liste-contributeurs :global(li) {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 1em;
+    margin-bottom: 0.5em;
+  }
+</style>

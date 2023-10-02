@@ -303,46 +303,6 @@
   height: 2.8em;
 }
 
-#contenu-contributeurs .liste-contributeurs {
-  list-style: none;
-  padding-left: 0;
-}
-
-#contenu-contributeurs .liste-contributeurs li {
-  display: flex;
-  justify-content: space-between;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 1em;
-  margin-bottom: 0.5em;
-}
-
-#contenu-contributeurs .contenu-nom-prenom {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#contenu-contributeurs .nom-contributeur {
-  font-weight: 500;
-  word-break: break-word;
-}
-
-#contenu-contributeurs .poste-contributeur {
-  font-weight: 500;
-  color: #667892;
-}
-
-#contenu-contributeurs .role {
-  border-radius: 4px;
-  font-weight: bold;
-  color: #ffffff;
-  font-size: 0.9em;
-  line-height: 0.9em;
-  padding: 0.4em 0.5em;
-  align-self: center;
-}
-
 #contenu-contributeurs .declencheur-menu-flottant {
   border-radius: 4px;
   border: 1px solid #cbd5e1;
