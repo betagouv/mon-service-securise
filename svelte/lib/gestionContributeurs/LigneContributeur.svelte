@@ -45,6 +45,7 @@
         <img
           src="/statique/assets/images/icone_supprimer_gris.svg"
           alt="supression d'un contributeur"
+          title="Supprimer ce contributeur"
         />
       </div>
     {/if}
