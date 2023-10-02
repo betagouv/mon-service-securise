@@ -3,6 +3,8 @@
 }
 
 main {
+  flex-direction: column;
+  align-items: center;
   background-image: url('/statique/assets/images/fond_entete_tableau_de_bord.svg');
   background-repeat: no-repeat;
 }
@@ -10,6 +12,7 @@ main {
 .bandeau-maj-profil {
   display: flex;
   height: 2.7em;
+  width: 100%;
   align-items: center;
   color: #fff;
   background-color: var(--bleu-mise-en-avant);
