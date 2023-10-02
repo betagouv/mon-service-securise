@@ -79,6 +79,14 @@ describe('Une autorisation de base', () => {
   });
 
   describe('sur demande de résumé de niveau de droit', () => {
+    it("retour 'PROPRIETAIRE' si l'utilisateur est créateur du service", async () => {
+      const autorisationCreateur = new AutorisationCreateur();
+
+      expect(autorisationCreateur.resumeNiveauDroit()).to.be(
+        AutorisationBase.RESUME_NIVEAU_DROIT.PROPRIETAIRE
+      );
+    });
+
     it("retourne 'ECRITURE' si tous les droits sont en ECRITURE", () => {
       const autorisationLecture = new AutorisationBase({
         droits: {

@@ -25,7 +25,11 @@ export type Utilisateur = {
   email: string;
 };
 
-export type ResumeNiveauDroit = 'ECRITURE' | 'LECTURE' | 'PERSONNALISE';
+export type ResumeNiveauDroit =
+  | 'PROPRIETAIRE'
+  | 'ECRITURE'
+  | 'LECTURE'
+  | 'PERSONNALISE';
 
 export type Autorisation = {
   idUtilisateur: string;

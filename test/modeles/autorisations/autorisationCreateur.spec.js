@@ -17,4 +17,9 @@ describe("Une autorisation d'accès en tant que créateur", () => {
     const autorisation = new AutorisationCreateur();
     expect(autorisation.permissionSuppressionService).to.be(true);
   });
+
+  it("indique que l'utilisateur est propriétaire du service", () => {
+    const autorisation = new AutorisationCreateur();
+    expect(autorisation.estProprietaire).to.be(true);
+  });
 });

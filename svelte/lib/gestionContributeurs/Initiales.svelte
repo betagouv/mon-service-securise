@@ -35,6 +35,10 @@
     background-size: contain;
   }
 
+  .PROPRIETAIRE {
+    background: #c19616;
+  }
+
   .ECRITURE {
     background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
   }
