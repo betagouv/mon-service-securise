@@ -131,6 +131,7 @@
 }
 
 .menu-navigation .etapes li a {
+  height: 56px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -220,6 +221,7 @@
 }
 
 .menu-navigation .autres-liens a {
+  height: 30px;
   align-items: center;
   color: var(--bleu-mise-en-avant);
   font-weight: 500;
