@@ -236,6 +236,10 @@
     hue-rotate(185deg) brightness(95%) contrast(101%);
 }
 
+.menu-navigation #icone-risques {
+  transform: translateY(-1px);
+}
+
 /* MENU FERMÉ */
 .menu-navigation.ferme {
   width: 5.5em;

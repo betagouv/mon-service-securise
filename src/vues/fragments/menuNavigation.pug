@@ -45,7 +45,7 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut, rubriqu
           li
             a(href = `/service/${service.id}/risques`, class = etapeActive === 'risques' ? 'actif' : '')
               .pastille
-                img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »")
+                img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »", id = 'icone-risques')
               span.none-si-ferme Risques
         if !autorisationsService.CONTACTS.estMasque
           li
