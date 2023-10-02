@@ -17,6 +17,13 @@
 
 <style>
   .role {
+    border-radius: 4px;
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 0.9em;
+    line-height: 0.9em;
+    padding: 0.4em 0.5em;
+    align-self: center;
     background: linear-gradient(180deg, #54b8f6 0%, #3479c9 100%);
   }
 

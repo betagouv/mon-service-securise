@@ -130,4 +130,9 @@
     display: flex;
     justify-content: space-between;
   }
+  .contenu-nom-prenom {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 </style>

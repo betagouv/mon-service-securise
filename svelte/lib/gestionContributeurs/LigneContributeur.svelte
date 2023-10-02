@@ -39,6 +39,20 @@
 </li>
 
 <style>
+  .contenu-nom-prenom {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nom-contributeur {
+    font-weight: 500;
+    word-break: break-word;
+  }
+  .poste-contributeur {
+    font-weight: 500;
+    color: #667892;
+  }
+
   .conteneur-suppression {
     display: flex;
     align-items: center;
