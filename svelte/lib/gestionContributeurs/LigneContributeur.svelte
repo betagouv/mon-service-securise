@@ -21,7 +21,10 @@
     </div>
   </div>
   <div class="conteneur-actions">
-    <TagNiveauDroit niveau={resumeNiveauDroit} />
+    {#if resumeNiveauDroit}
+      <TagNiveauDroit niveau={resumeNiveauDroit} />
+    {/if}
+
     {#if estSupprimable}
       <!--    svelte-ignore a11y-click-events-have-key-events-->
       <div
