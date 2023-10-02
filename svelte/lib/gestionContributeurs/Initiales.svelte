@@ -2,7 +2,7 @@
   import type { ResumeNiveauDroit } from './gestionContributeurs.d';
 
   export let valeur: string;
-  export let resumeNiveauDroit: ResumeNiveauDroit;
+  export let resumeNiveauDroit: ResumeNiveauDroit | undefined;
 </script>
 
 <div
