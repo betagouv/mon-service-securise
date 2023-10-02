@@ -5,13 +5,7 @@
   } from './gestionContributeurs.d';
   import { store } from './gestionContributeurs.store';
   import Initiales from './Initiales.svelte';
-
-  const STATUS_DROITS: Record<ResumeNiveauDroit, string> = {
-    PROPRIETAIRE: 'Propriétaire',
-    ECRITURE: 'Édition',
-    LECTURE: 'Lecture',
-    PERSONNALISE: 'Personnalisé',
-  };
+  import TagNiveauDroit from './TagNiveauDroit.svelte';
 
   export let estSupprimable: boolean;
   export let utilisateur: Utilisateur;
@@ -27,11 +21,7 @@
     </div>
   </div>
   <div class="conteneur-actions">
-    {#if resumeNiveauDroit}
-      <div class="role {resumeNiveauDroit}">
-        {STATUS_DROITS[resumeNiveauDroit]}
-      </div>
-    {/if}
+    <TagNiveauDroit niveau={resumeNiveauDroit} />
     {#if estSupprimable}
       <!--    svelte-ignore a11y-click-events-have-key-events-->
       <div
@@ -49,27 +39,6 @@
 </li>
 
 <style>
-  .role,
-  .initiales {
-    background: linear-gradient(180deg, #54b8f6 0%, #3479c9 100%);
-  }
-
-  .PROPRIETAIRE {
-    background: #c19616;
-  }
-
-  .ECRITURE {
-    background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
-  }
-
-  .LECTURE {
-    background: linear-gradient(180deg, #a226b8 0%, #8926c9 100%);
-  }
-
-  .PERSONNALISE {
-    background: linear-gradient(180deg, #54b8f6 0%, #3479c9 100%);
-  }
-
   .conteneur-suppression {
     display: flex;
     align-items: center;
