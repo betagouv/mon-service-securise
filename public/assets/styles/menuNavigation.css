@@ -240,10 +240,6 @@
 .menu-navigation.ferme {
   width: 5.5em;
 }
-.menu-navigation.ferme > * {
-  padding-left: 0;
-  padding-right: 0;
-}
 
 .menu-navigation.ferme .none-si-ferme {
   display: none !important;
@@ -251,9 +247,6 @@
 .menu-navigation.ferme .repli-menu img {
   rotate: 0deg;
   transition: rotate 0.2s;
-}
-.menu-navigation.ferme a {
-  justify-content: center;
 }
 
 /* GÉRER CONTRIBUTEURS */
