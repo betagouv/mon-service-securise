@@ -7,6 +7,7 @@ class AutorisationCreateur extends AutorisationBase {
     this.permissionAjoutContributeur = true;
     this.permissionSuppressionContributeur = true;
     this.permissionSuppressionService = true;
+    this.estProprietaire = true;
   }
 }
 

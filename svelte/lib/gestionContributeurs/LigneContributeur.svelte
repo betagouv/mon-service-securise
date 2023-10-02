@@ -7,6 +7,7 @@
   import Initiales from './Initiales.svelte';
 
   const STATUS_DROITS: Record<ResumeNiveauDroit, string> = {
+    PROPRIETAIRE: 'Propriétaire',
     ECRITURE: 'Édition',
     LECTURE: 'Lecture',
     PERSONNALISE: 'Personnalisé',
@@ -51,6 +52,10 @@
   .role,
   .initiales {
     background: linear-gradient(180deg, #54b8f6 0%, #3479c9 100%);
+  }
+
+  .PROPRIETAIRE {
+    background: #c19616;
   }
 
   .ECRITURE {

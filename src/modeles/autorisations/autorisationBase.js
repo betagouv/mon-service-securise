@@ -45,6 +45,10 @@ class AutorisationBase extends Base {
   }
 
   resumeNiveauDroit() {
+    const { RESUME_NIVEAU_DROIT } = AutorisationBase;
+
+    if (this.estProprietaire) return RESUME_NIVEAU_DROIT.PROPRIETAIRE;
+
     const tousNiveaux = Object.values(Permissions).reduce(
       (acc, niveau) => ({ ...acc, [niveau]: 0 }),
       {}
@@ -58,14 +62,15 @@ class AutorisationBase extends Base {
     });
 
     if (tousNiveaux[ECRITURE] === totalRubriques)
-      return AutorisationBase.RESUME_NIVEAU_DROIT.ECRITURE;
+      return RESUME_NIVEAU_DROIT.ECRITURE;
     if (tousNiveaux[LECTURE] === totalRubriques)
-      return AutorisationBase.RESUME_NIVEAU_DROIT.LECTURE;
+      return RESUME_NIVEAU_DROIT.LECTURE;
 
-    return AutorisationBase.RESUME_NIVEAU_DROIT.PERSONNALISE;
+    return RESUME_NIVEAU_DROIT.PERSONNALISE;
   }
 
   static RESUME_NIVEAU_DROIT = {
+    PROPRIETAIRE: 'PROPRIETAIRE',
     ECRITURE: 'ECRITURE',
     LECTURE: 'LECTURE',
     PERSONNALISE: 'PERSONNALISE',
