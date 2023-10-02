@@ -62,7 +62,10 @@
       <ul id="liste-ajout-contributeur">
         {#each contributeursAInviter as contributeur (contributeur.email)}
           <li class="contributeur-a-inviter">
-            <Initiales valeur={contributeur.initiales} />
+            <Initiales
+              valeur={contributeur.initiales}
+              resumeNiveauDroit="ECRITURE"
+            />
             <span>{@html contributeur.prenomNom}</span>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <img

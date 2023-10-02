@@ -64,7 +64,7 @@
         class="option suggestion-contributeur"
         on:click={() => choisisContributeur(suggestion)}
       >
-        <Initiales valeur={suggestion.initiales} />
+        <Initiales valeur={suggestion.initiales} resumeNiveauDroit="ECRITURE" />
         <div>{@html suggestion.prenomNom}</div>
       </div>
     {/each}
