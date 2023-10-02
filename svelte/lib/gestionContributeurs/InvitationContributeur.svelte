@@ -4,6 +4,7 @@
   import { store } from './gestionContributeurs.store';
   import ChampAvecSuggestions from './ChampAvecSuggestions.svelte';
   import Initiales from './Initiales.svelte';
+  import TagNiveauDroit from './TagNiveauDroit.svelte';
 
   type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
 
@@ -62,18 +63,23 @@
       <ul id="liste-ajout-contributeur">
         {#each contributeursAInviter as contributeur (contributeur.email)}
           <li class="contributeur-a-inviter">
-            <Initiales
-              valeur={contributeur.initiales}
-              resumeNiveauDroit="ECRITURE"
-            />
-            <span>{@html contributeur.prenomNom}</span>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <img
-              class="bouton-suppression-contributeur"
-              src="/statique/assets/images/icone_supprimer_gris.svg"
-              alt="bouton de suppression d'un contributeur"
-              on:click={() => supprimeInvitation(contributeur)}
-            />
+            <div class="contenu-nom-prenom">
+              <Initiales
+                valeur={contributeur.initiales}
+                resumeNiveauDroit="ECRITURE"
+              />
+              <span>{@html contributeur.prenomNom}</span>
+            </div>
+            <div class="conteneur-actions">
+              <TagNiveauDroit niveau="ECRITURE" />
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <img
+                class="bouton-suppression-contributeur"
+                src="/statique/assets/images/icone_supprimer_gris.svg"
+                alt="bouton de suppression d'un contributeur"
+                on:click={() => supprimeInvitation(contributeur)}
+              />
+            </div>
           </li>
         {/each}
       </ul>
@@ -118,3 +124,10 @@
     <p>Un e-mail d'invitation a bien été envoyé.</p>
   </div>
 {/if}
+
+<style>
+  .contributeur-a-inviter {
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
