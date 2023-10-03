@@ -4,7 +4,7 @@ const AutorisationBase = require('../../../src/modeles/autorisations/autorisatio
 const {
   Permissions,
   Rubriques,
-  toutDroitsEnEcriture,
+  tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../../../src/modeles/autorisations/autorisationCreateur');
@@ -156,7 +156,7 @@ describe('Une autorisation de base', () => {
       id: 'uuid',
       idService: '123',
       idUtilisateur: '999',
-      droits: toutDroitsEnEcriture(),
+      droits: tousDroitsEnEcriture(),
     });
 
     expect(autorisationContributeur.donneesAPersister()).to.eql({

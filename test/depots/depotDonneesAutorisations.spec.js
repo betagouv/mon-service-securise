@@ -19,7 +19,7 @@ const {
 const {
   Rubriques,
   Permissions,
-  toutDroitsEnEcriture,
+  tousDroitsEnEcriture,
 } = require('../../src/modeles/autorisations/gestionDroits');
 const {
   uneAutorisation,
@@ -374,7 +374,7 @@ describe('Le dépôt de données des autorisations', () => {
         new AutorisationContributeur({
           idUtilisateur: '000',
           idService: '123',
-          droits: toutDroitsEnEcriture(),
+          droits: tousDroitsEnEcriture(),
         })
       );
 
