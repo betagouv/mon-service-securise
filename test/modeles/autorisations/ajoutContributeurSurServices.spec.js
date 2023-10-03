@@ -15,6 +15,9 @@ const {
 } = require('../../constructeurs/constructeurUtilisateur');
 const { unService } = require('../../constructeurs/constructeurService');
 const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
+const {
+  toutDroitsEnEcriture,
+} = require('../../../src/modeles/autorisations/gestionDroits');
 
 describe("L'ajout d'un contributeur sur des services", () => {
   const unEmetteur = (idUtilisateur) =>
@@ -68,6 +71,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     }).executer(
       'jean.dupont@mail.fr',
       [leService('123'), leService('888')],
+      toutDroitsEnEcriture(),
       unEmetteur('456')
     );
 
@@ -86,7 +90,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+      }).executer(
+        'jean.dupont@mail.fr',
+        [leService('123')],
+        toutDroitsEnEcriture(),
+        unEmetteur()
+      );
 
       expect().to.fail("L'ajout aurait dû lever une exception");
     } catch (e) {
@@ -123,6 +132,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
         }).executer(
           'jean.dupont@mail.fr',
           [leService('123'), [leService('888')]],
+          toutDroitsEnEcriture(),
           unEmetteur()
         );
 
@@ -153,7 +163,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
           depotDonnees,
           adaptateurMail,
           adaptateurTracking,
-        }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+        }).executer(
+          'jean.dupont@mail.fr',
+          [leService('123')],
+          toutDroitsEnEcriture(),
+          unEmetteur()
+        );
 
         expect(emailEnvoye.inscription).to.be(false);
         expect(emailEnvoye.contribution).to.be(false);
@@ -180,7 +195,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('jean.dupont@mail.fr', deuxServices, unEmetteur());
+      }).executer(
+        'jean.dupont@mail.fr',
+        deuxServices,
+        toutDroitsEnEcriture(),
+        unEmetteur()
+      );
 
       expect(autorisations.length).to.be(1);
       const [a] = autorisations;
@@ -207,7 +227,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('jean.dupont@mail.fr', deuxServices, unEmetteur());
+      }).executer(
+        'jean.dupont@mail.fr',
+        deuxServices,
+        toutDroitsEnEcriture(),
+        unEmetteur()
+      );
 
       expect(nbServicesMentionnes).to.be(1);
     });
@@ -243,7 +268,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+      }).executer(
+        'jean.dupont@mail.fr',
+        [leService('123')],
+        toutDroitsEnEcriture(),
+        unEmetteur()
+      );
 
       expect(emailAjoute).to.be('jean.dupont@mail.fr');
     });
@@ -270,7 +300,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
-      }).executer('jean.dupont@mail.fr', [leService('123')], unEmetteur());
+      }).executer(
+        'jean.dupont@mail.fr',
+        [leService('123')],
+        toutDroitsEnEcriture(),
+        unEmetteur()
+      );
 
       expect(contactCree.destinataire).to.be('jean.dupont@mail.fr');
       expect(contactCree.prenom).to.be('');
@@ -303,6 +338,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       }).executer(
         'jean.dupont@mail.fr',
         [leService('123'), leService('888')],
+        toutDroitsEnEcriture(),
         unEmetteur()
       );
 
@@ -328,6 +364,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     }).executer(
       'jean.dupont@mail.fr',
       [leService('123'), leService('888')],
+      toutDroitsEnEcriture(),
       unEmetteur()
     );
 
@@ -362,7 +399,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
-    }).executer('contributeur@mail.fr', [leService('123')], unEmetteur('888'));
+    }).executer(
+      'contributeur@mail.fr',
+      [leService('123')],
+      toutDroitsEnEcriture(),
+      unEmetteur('888')
+    );
 
     expect(idEmetteur).to.be('888');
     expect(donneesTracking).to.eql({

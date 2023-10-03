@@ -22,6 +22,9 @@ const {
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
 } = require('../mappeur/utilisateur');
+const {
+  toutDroitsEnEcriture,
+} = require('../../modeles/autorisations/gestionDroits');
 
 const routesApiPrivee = ({
   middleware,
@@ -262,6 +265,7 @@ const routesApiPrivee = ({
         await procedures.ajoutContributeurSurServices(
           emailContributeur,
           services,
+          toutDroitsEnEcriture(),
           emetteur
         );
         reponse.send('');
