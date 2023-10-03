@@ -1569,9 +1569,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idService
       ) => {
         autorisationRecherchee = { idContributeur, idService };
-        return uneAutorisation()
-          .deCreateurDeService('456', 'uuid-1')
-          .construis();
+        return uneAutorisation().deCreateurDeService('AAA', '456').construis();
       };
 
       await axios.patch(
