@@ -266,6 +266,17 @@ const nouvelAdaptateur = (env) => {
     );
   };
 
+  const sauvegardeAutorisation = async (id, donneesAutorisation) => {
+    const ligne = await knex('autorisations')
+      .where('id', id)
+      .select({ id: 'id' })
+      .first();
+
+    const dejaConnue = ligne !== undefined;
+    if (dejaConnue) metsAJourTable('autorisations', id, donneesAutorisation);
+    else ajouteLigneDansTable('autorisations', id, donneesAutorisation);
+  };
+
   const supprimeAutorisation = (idUtilisateur, idHomologation) =>
     knex('autorisations')
       .whereRaw(
@@ -414,6 +425,7 @@ const nouvelAdaptateur = (env) => {
     sauvegardeHomologation,
     sauvegardeService,
     service,
+    sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,
     supprimeAutorisation,
     supprimeAutorisations,

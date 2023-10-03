@@ -94,6 +94,7 @@ const creeDepot = (config = {}) => {
     autorisationPour,
     autorisations,
     autorisationsDuService,
+    sauvegardeAutorisation,
     supprimeContributeur,
     transfereAutorisations,
   } = depotAutorisations;
@@ -127,6 +128,7 @@ const creeDepot = (config = {}) => {
     nouvelUtilisateur,
     reinitialiseMotDePasse,
     remplaceRisquesSpecifiquesPourHomologation,
+    sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,
     supprimeContributeur,
     supprimeHomologation,
