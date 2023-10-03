@@ -23,7 +23,7 @@ const {
   obtentionDonneesDeBaseUtilisateur,
 } = require('../mappeur/utilisateur');
 const {
-  toutDroitsEnEcriture,
+  tousDroitsEnEcriture,
 } = require('../../modeles/autorisations/gestionDroits');
 
 const routesApiPrivee = ({
@@ -265,7 +265,7 @@ const routesApiPrivee = ({
         await procedures.ajoutContributeurSurServices(
           emailContributeur,
           services,
-          toutDroitsEnEcriture(),
+          tousDroitsEnEcriture(),
           emetteur
         );
         reponse.send('');

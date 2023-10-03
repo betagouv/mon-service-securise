@@ -27,7 +27,7 @@ const premiereRouteDisponible = (autorisation) => {
   )?.route;
 };
 
-const toutDroitsEnEcriture = () =>
+const tousDroitsEnEcriture = () =>
   Object.values(Rubriques).reduce(
     (droits, rubrique) => ({ ...droits, [rubrique]: Permissions.ECRITURE }),
     {}
@@ -44,6 +44,6 @@ module.exports = {
   Permissions,
   Rubriques,
   premiereRouteDisponible,
-  toutDroitsEnEcriture,
+  tousDroitsEnEcriture,
   verifieCoherenceDesDroits,
 };

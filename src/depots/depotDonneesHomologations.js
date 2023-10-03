@@ -15,7 +15,7 @@ const EvenementServiceSupprime = require('../modeles/journalMSS/evenementService
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
 const {
-  toutDroitsEnEcriture,
+  tousDroitsEnEcriture,
 } = require('../modeles/autorisations/gestionDroits');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
@@ -360,7 +360,7 @@ const creeDepot = (config = {}) => {
           idHomologation,
           idService: idHomologation,
           type: 'createur',
-          droits: toutDroitsEnEcriture(),
+          droits: tousDroitsEnEcriture(),
         })
       )
       .then(() => p.lis.une(idHomologation))

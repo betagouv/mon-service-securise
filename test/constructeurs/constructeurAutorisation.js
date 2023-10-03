@@ -1,5 +1,5 @@
 const {
-  toutDroitsEnEcriture,
+  tousDroitsEnEcriture,
 } = require('../../src/modeles/autorisations/gestionDroits');
 const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
@@ -38,7 +38,7 @@ class ConstructeurAutorisation {
   }
 
   avecTousDroitsEcriture() {
-    this.donnees.droits = toutDroitsEnEcriture();
+    this.donnees.droits = tousDroitsEnEcriture();
     return this;
   }
 

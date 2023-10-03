@@ -16,7 +16,7 @@ const {
 const { unService } = require('../../constructeurs/constructeurService');
 const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
 const {
-  toutDroitsEnEcriture,
+  tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
 
 describe("L'ajout d'un contributeur sur des services", () => {
@@ -71,7 +71,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     }).executer(
       'jean.dupont@mail.fr',
       [leService('123'), leService('888')],
-      toutDroitsEnEcriture(),
+      tousDroitsEnEcriture(),
       unEmetteur('456')
     );
 
@@ -93,7 +93,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       }).executer(
         'jean.dupont@mail.fr',
         [leService('123')],
-        toutDroitsEnEcriture(),
+        tousDroitsEnEcriture(),
         unEmetteur()
       );
 
@@ -132,7 +132,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
         }).executer(
           'jean.dupont@mail.fr',
           [leService('123'), [leService('888')]],
-          toutDroitsEnEcriture(),
+          tousDroitsEnEcriture(),
           unEmetteur()
         );
 
@@ -166,7 +166,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
         }).executer(
           'jean.dupont@mail.fr',
           [leService('123')],
-          toutDroitsEnEcriture(),
+          tousDroitsEnEcriture(),
           unEmetteur()
         );
 
@@ -198,7 +198,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       }).executer(
         'jean.dupont@mail.fr',
         deuxServices,
-        toutDroitsEnEcriture(),
+        tousDroitsEnEcriture(),
         unEmetteur()
       );
 
@@ -230,7 +230,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       }).executer(
         'jean.dupont@mail.fr',
         deuxServices,
-        toutDroitsEnEcriture(),
+        tousDroitsEnEcriture(),
         unEmetteur()
       );
 
@@ -271,7 +271,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       }).executer(
         'jean.dupont@mail.fr',
         [leService('123')],
-        toutDroitsEnEcriture(),
+        tousDroitsEnEcriture(),
         unEmetteur()
       );
 
@@ -303,7 +303,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       }).executer(
         'jean.dupont@mail.fr',
         [leService('123')],
-        toutDroitsEnEcriture(),
+        tousDroitsEnEcriture(),
         unEmetteur()
       );
 
@@ -338,7 +338,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       }).executer(
         'jean.dupont@mail.fr',
         [leService('123'), leService('888')],
-        toutDroitsEnEcriture(),
+        tousDroitsEnEcriture(),
         unEmetteur()
       );
 
@@ -364,7 +364,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     }).executer(
       'jean.dupont@mail.fr',
       [leService('123'), leService('888')],
-      toutDroitsEnEcriture(),
+      tousDroitsEnEcriture(),
       unEmetteur()
     );
 
@@ -402,7 +402,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     }).executer(
       'contributeur@mail.fr',
       [leService('123')],
-      toutDroitsEnEcriture(),
+      tousDroitsEnEcriture(),
       unEmetteur('888')
     );
 
