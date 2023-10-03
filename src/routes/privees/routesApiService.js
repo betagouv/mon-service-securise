@@ -28,6 +28,7 @@ const objetGetService = require('../../modeles/objetsApi/objetGetService');
 const {
   Permissions,
   Rubriques,
+  verifieCoherenceDesDroits,
 } = require('../../modeles/autorisations/gestionDroits');
 
 const { ECRITURE } = Permissions;
@@ -504,6 +505,39 @@ const routesApiService = (
           resumeNiveauDroit: a.resumeNiveauDroit(),
         }))
       );
+    }
+  );
+
+  routes.patch(
+    '/:id/autorisations/:idAutorisation',
+    middleware.trouveService({}),
+    middleware.aseptise('id', 'idAutorisation'),
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } = requete;
+      const { id: idService, idAutorisation } = requete.params;
+      const nouveauxDroits = requete.body.droits;
+
+      if (!verifieCoherenceDesDroits(nouveauxDroits)) {
+        reponse.status(422).json({ code: 'DROITS_INCOHERENTS' });
+        return;
+      }
+
+      const autorisationUtilisateur = await depotDonnees.autorisationPour(
+        idUtilisateurCourant,
+        idService
+      );
+
+      if (!autorisationUtilisateur.peutGererContributeurs()) {
+        reponse.status(403).json({ code: 'INTERDIT' });
+        return;
+      }
+
+      const ciblee = await depotDonnees.autorisation(idAutorisation);
+      ciblee.droits = nouveauxDroits;
+
+      await depotDonnees.persisteAutorisation(ciblee);
+
+      reponse.sendStatus(200);
     }
   );
 
