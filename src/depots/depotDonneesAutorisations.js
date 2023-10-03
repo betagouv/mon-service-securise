@@ -56,50 +56,46 @@ const creeDepot = (config = {}) => {
   const autorisationExiste = (...params) =>
     autorisationPour(...params).then((a) => !!a);
 
-  const ajouteContributeurAHomologation = (nouvelleAutorisation) => {
-    const verifieUtilisateurExiste = (id) =>
-      depotUtilisateurs.utilisateurExiste(id).then((existe) => {
-        if (!existe)
-          throw new ErreurUtilisateurInexistant(
-            `Le contributeur "${id}" n'existe pas`
-          );
-      });
+  const ajouteContributeurAHomologation = async (nouvelleAutorisation) => {
+    const verifieUtilisateurExiste = async (id) => {
+      const existe = await depotUtilisateurs.utilisateurExiste(id);
+      if (!existe)
+        throw new ErreurUtilisateurInexistant(
+          `Le contributeur "${id}" n'existe pas`
+        );
+    };
 
-    const verifieHomologationExiste = (id) =>
-      depotHomologations
-        .homologation(nouvelleAutorisation.idService)
-        .then((h) => {
-          if (!h)
-            throw new ErreurHomologationInexistante(
-              `L'homologation "${id}" n'existe pas`
-            );
-        });
+    const verifieServiceExiste = async (id) => {
+      const h = await depotHomologations.homologation(
+        nouvelleAutorisation.idService
+      );
+      if (!h)
+        throw new ErreurHomologationInexistante(
+          `L'homologation "${id}" n'existe pas`
+        );
+    };
 
-    const verifieAutorisationInexistante = (...params) =>
-      autorisationExiste(...params).then((existe) => {
-        if (existe)
-          throw new ErreurAutorisationExisteDeja("L'autorisation existe déjà");
-      });
+    const verifieAutorisationInexistante = async (...params) => {
+      const existe = await autorisationExiste(...params);
+      if (existe)
+        throw new ErreurAutorisationExisteDeja("L'autorisation existe déjà");
+    };
 
     const idAutorisation = adaptateurUUID.genereUUID();
 
-    return verifieUtilisateurExiste(nouvelleAutorisation.idUtilisateur)
-      .then(() => verifieHomologationExiste(nouvelleAutorisation.idService))
-      .then(() =>
-        verifieAutorisationInexistante(
-          nouvelleAutorisation.idUtilisateur,
-          nouvelleAutorisation.idService
-        )
-      )
-      .then(() =>
-        adaptateurPersistance.ajouteAutorisation(idAutorisation, {
-          idUtilisateur: nouvelleAutorisation.idUtilisateur,
-          idHomologation: nouvelleAutorisation.idService,
-          idService: nouvelleAutorisation.idService,
-          type: 'contributeur',
-          droits: toutDroitsEnEcriture(),
-        })
-      );
+    await verifieUtilisateurExiste(nouvelleAutorisation.idUtilisateur);
+    await verifieServiceExiste(nouvelleAutorisation.idService);
+    await verifieAutorisationInexistante(
+      nouvelleAutorisation.idUtilisateur,
+      nouvelleAutorisation.idService
+    );
+    await adaptateurPersistance.ajouteAutorisation(idAutorisation, {
+      idUtilisateur: nouvelleAutorisation.idUtilisateur,
+      idHomologation: nouvelleAutorisation.idService,
+      idService: nouvelleAutorisation.idService,
+      type: 'contributeur',
+      droits: toutDroitsEnEcriture(),
+    });
   };
 
   const supprimeContributeur = (...params) => {
