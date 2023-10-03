@@ -14,7 +14,7 @@
       const reponse = await axios.get(
         `/api/service/${serviceUnique.id}/autorisations`
       );
-      store.chargeAutorisations(reponse.data);
+      store.autorisations.charge(reponse.data);
     }
   });
 </script>

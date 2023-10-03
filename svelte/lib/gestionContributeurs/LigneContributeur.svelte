@@ -33,7 +33,7 @@
       }
     );
 
-    store.remplaceAutorisation(autorisationMAJ);
+    store.autorisations.remplace(autorisationMAJ);
   };
 </script>
 
@@ -61,7 +61,7 @@
       <!--    svelte-ignore a11y-click-events-have-key-events-->
       <div
         class="conteneur-suppression"
-        on:click={() => store.afficheEtapeSuppression(utilisateur)}
+        on:click={() => store.navigation.afficheEtapeSuppression(utilisateur)}
       >
         <img
           src="/statique/assets/images/icone_supprimer_gris.svg"
