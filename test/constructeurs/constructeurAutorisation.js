@@ -16,6 +16,11 @@ class ConstructeurAutorisation {
     };
   }
 
+  avecId(id) {
+    this.donnees.id = id;
+    return this;
+  }
+
   deCreateurDeService(idUtilisateur, idService) {
     this.donnees.type = 'createur';
     this.donnees.idUtilisateur = idUtilisateur;

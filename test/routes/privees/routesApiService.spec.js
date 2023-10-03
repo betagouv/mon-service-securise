@@ -1535,7 +1535,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().autorisation = async () =>
         uneAutorisation().avecTousDroitsEcriture().construis();
 
-      testeur.depotDonnees().persisteAutorisation = async () => {};
+      testeur.depotDonnees().sauvegardeAutorisation = async () => {};
     });
 
     it('recherche le service correspondant', (done) => {
@@ -1612,7 +1612,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       };
 
       let autorisationPersistee;
-      testeur.depotDonnees().persisteAutorisation = async (autorisation) => {
+      testeur.depotDonnees().sauvegardeAutorisation = async (autorisation) => {
         autorisationPersistee = autorisation;
       };
 

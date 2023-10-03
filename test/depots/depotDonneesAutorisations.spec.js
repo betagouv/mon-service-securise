@@ -560,4 +560,26 @@ describe('Le dépôt de données des autorisations', () => {
     expect(a[0]).to.be.an(AutorisationCreateur);
     expect(a[1]).to.be.an(AutorisationContributeur);
   });
+
+  it('sait sauvegarder une autorisation', async () => {
+    const enEcriture = uneAutorisation()
+      .avecId('uuid-a')
+      .deContributeurDeService('123', '999')
+      .avecTousDroitsEcriture();
+    const depot = creeDepot(
+      unePersistanceMemoire()
+        .ajouteUneAutorisation(enEcriture.donnees)
+        .construis()
+    );
+
+    const avant = await depot.autorisation('uuid-a');
+    expect(avant.droits.HOMOLOGUER).to.be(ECRITURE);
+
+    avant.appliqueDroits({ HOMOLOGUER: LECTURE });
+
+    await depot.sauvegardeAutorisation(avant);
+
+    const apres = await depot.autorisation('uuid-a');
+    expect(apres.droits.HOMOLOGUER).to.be(LECTURE);
+  });
 });

@@ -534,7 +534,7 @@ const routesApiService = (
 
       const ciblee = await depotDonnees.autorisation(idAutorisation);
       ciblee.appliqueDroits(nouveauxDroits);
-      await depotDonnees.persisteAutorisation(ciblee);
+      await depotDonnees.sauvegardeAutorisation(ciblee);
 
       reponse.sendStatus(200);
     }

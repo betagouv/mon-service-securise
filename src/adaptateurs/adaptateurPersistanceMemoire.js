@@ -111,6 +111,13 @@ const nouvelAdaptateur = (
   const metsAJourService = (...params) =>
     metsAJourEnregistrement(service, ...params);
 
+  const sauvegardeAutorisation = async (id, donneesAutorisation) => {
+    const dejaConnue = donnees.autorisations.find((a) => a.id === id);
+
+    if (!dejaConnue) donnees.autorisations.push({ id, ...donneesAutorisation });
+    else Object.assign(dejaConnue, { ...donneesAutorisation });
+  };
+
   const sauvegardeHomologation = (id, donneesHomologation) => {
     const dejaConnue =
       donnees.homologations.find((h) => h.id === id) !== undefined;
@@ -332,6 +339,7 @@ const nouvelAdaptateur = (
     metsAJourUtilisateur,
     nbAutorisationsCreateur,
     rechercheContributeurs,
+    sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,
     sauvegardeHomologation,
     sauvegardeService,
