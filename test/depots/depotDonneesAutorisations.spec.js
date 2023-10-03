@@ -23,6 +23,7 @@ const {
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
+const AutorisationBase = require('../../src/modeles/autorisations/autorisationBase');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE, LECTURE } = Permissions;
@@ -284,7 +285,9 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance);
 
       try {
-        await depot.ajouteContributeurAHomologation('000', '123');
+        await depot.ajouteContributeurAHomologation(
+          new AutorisationBase({ idUtilisateur: '000', idService: '123' })
+        );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
         expect(erreur).to.be.a(ErreurUtilisateurInexistant);
@@ -301,7 +304,9 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance);
 
       try {
-        await depot.ajouteContributeurAHomologation('000', '123');
+        await depot.ajouteContributeurAHomologation(
+          new AutorisationBase({ idUtilisateur: '000', idService: '123' })
+        );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
         expect(erreur).to.be.a(ErreurHomologationInexistante);
@@ -327,7 +332,9 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance);
 
       try {
-        await depot.ajouteContributeurAHomologation('999', '123');
+        await depot.ajouteContributeurAHomologation(
+          new AutorisationBase({ idUtilisateur: '999', idService: '123' })
+        );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
         expect(erreur).to.be.a(ErreurAutorisationExisteDeja);
@@ -354,7 +361,9 @@ describe('Le dépôt de données des autorisations', () => {
       adaptateurUUID.genereUUID = () => '789';
       const depot = creeDepot(adaptateurPersistance, adaptateurUUID);
 
-      await depot.ajouteContributeurAHomologation('000', '123');
+      await depot.ajouteContributeurAHomologation(
+        new AutorisationBase({ idUtilisateur: '000', idService: '123' })
+      );
 
       const a = await depot.autorisation('789');
       expect(a).to.be.a(AutorisationContributeur);

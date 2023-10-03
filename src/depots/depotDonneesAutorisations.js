@@ -56,7 +56,7 @@ const creeDepot = (config = {}) => {
   const autorisationExiste = (...params) =>
     autorisationPour(...params).then((a) => !!a);
 
-  const ajouteContributeurAHomologation = (idContributeur, idHomologation) => {
+  const ajouteContributeurAHomologation = (nouvelleAutorisation) => {
     const verifieUtilisateurExiste = (id) =>
       depotUtilisateurs.utilisateurExiste(id).then((existe) => {
         if (!existe)
@@ -66,12 +66,14 @@ const creeDepot = (config = {}) => {
       });
 
     const verifieHomologationExiste = (id) =>
-      depotHomologations.homologation(idHomologation).then((h) => {
-        if (!h)
-          throw new ErreurHomologationInexistante(
-            `L'homologation "${id}" n'existe pas`
-          );
-      });
+      depotHomologations
+        .homologation(nouvelleAutorisation.idService)
+        .then((h) => {
+          if (!h)
+            throw new ErreurHomologationInexistante(
+              `L'homologation "${id}" n'existe pas`
+            );
+        });
 
     const verifieAutorisationInexistante = (...params) =>
       autorisationExiste(...params).then((existe) => {
@@ -81,16 +83,19 @@ const creeDepot = (config = {}) => {
 
     const idAutorisation = adaptateurUUID.genereUUID();
 
-    return verifieUtilisateurExiste(idContributeur)
-      .then(() => verifieHomologationExiste(idHomologation))
+    return verifieUtilisateurExiste(nouvelleAutorisation.idUtilisateur)
+      .then(() => verifieHomologationExiste(nouvelleAutorisation.idService))
       .then(() =>
-        verifieAutorisationInexistante(idContributeur, idHomologation)
+        verifieAutorisationInexistante(
+          nouvelleAutorisation.idUtilisateur,
+          nouvelleAutorisation.idService
+        )
       )
       .then(() =>
         adaptateurPersistance.ajouteAutorisation(idAutorisation, {
-          idUtilisateur: idContributeur,
-          idHomologation,
-          idService: idHomologation,
+          idUtilisateur: nouvelleAutorisation.idUtilisateur,
+          idHomologation: nouvelleAutorisation.idService,
+          idService: nouvelleAutorisation.idService,
           type: 'contributeur',
           droits: toutDroitsEnEcriture(),
         })
