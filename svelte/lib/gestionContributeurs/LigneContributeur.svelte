@@ -1,31 +1,61 @@
 <script lang="ts">
   import type {
+    Autorisation,
     ResumeNiveauDroit,
+    Service,
     Utilisateur,
   } from './gestionContributeurs.d';
   import { store } from './gestionContributeurs.store';
   import Initiales from './Initiales.svelte';
   import TagNiveauDroit from './TagNiveauDroit.svelte';
+  import { enPermission } from './gestionContributeurs.d';
 
-  export let estSupprimable: boolean;
+  export let droitsModifiables: boolean;
   export let utilisateur: Utilisateur;
-  export let resumeNiveauDroit: ResumeNiveauDroit;
+  export let autorisation: Autorisation | undefined;
+
+  let serviceUnique: Service;
+  $: serviceUnique = $store.services[0];
+
+  const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
+    const permission = enPermission(nouveauDroit);
+    const idAutorisation = autorisation!.idAutorisation;
+    await axios.patch(
+      `/api/service/${serviceUnique.id}/autorisations/${idAutorisation}`,
+      {
+        droits: {
+          DECRIRE: permission,
+          SECURISER: permission,
+          HOMOLOGUER: permission,
+          RISQUES: permission,
+          CONTACTS: permission,
+        },
+      }
+    );
+  };
 </script>
 
 <li class="ligne-contributeur">
   <div class="contenu-nom-prenom">
-    <Initiales valeur={utilisateur.initiales} {resumeNiveauDroit} />
+    <Initiales
+      valeur={utilisateur.initiales}
+      resumeNiveauDroit={autorisation?.resumeNiveauDroit}
+    />
     <div class="nom-prenom-poste">
       <div class="nom-contributeur">{@html utilisateur.prenomNom}</div>
       <div class="poste-contributeur">{@html utilisateur.poste}</div>
     </div>
   </div>
   <div class="conteneur-actions">
-    {#if resumeNiveauDroit}
-      <TagNiveauDroit niveau={resumeNiveauDroit} />
+    {#if autorisation?.resumeNiveauDroit}
+      <TagNiveauDroit
+        niveau={autorisation.resumeNiveauDroit}
+        {droitsModifiables}
+        on:droitsChange={(e) => changeDroits(e.detail)}
+      />
     {/if}
 
-    {#if estSupprimable}
+    {#if droitsModifiables}
       <!--    svelte-ignore a11y-click-events-have-key-events-->
       <div
         class="conteneur-suppression"

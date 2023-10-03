@@ -9,7 +9,7 @@
   import SuppressionContributeur from './SuppressionContributeur.svelte';
   import { onMount } from 'svelte';
 
-  let autorisations: Record<string, ResumeNiveauDroit> = {};
+  let autorisations: Record<string, Autorisation> = {};
   $: surServiceUnique = $store.services.length === 1;
   $: serviceUnique = $store.services[0];
   $: contributeurs = serviceUnique.contributeurs;
@@ -20,9 +20,9 @@
         `/api/service/${serviceUnique.id}/autorisations`
       );
       autorisations = reponse.data.reduce(
-        (acc: Record<string, ResumeNiveauDroit>, v: Autorisation) => ({
+        (acc: Record<string, Autorisation>, a: Autorisation) => ({
           ...acc,
-          [v.idUtilisateur]: v.resumeNiveauDroit,
+          [a.idUtilisateur]: a,
         }),
         {}
       );
@@ -40,15 +40,15 @@
     <h3 class="titre-liste">Liste des contributeurs au service</h3>
     <ul class="liste-contributeurs contributeurs-actifs">
       <LigneContributeur
-        estSupprimable={false}
+        droitsModifiables={false}
         utilisateur={serviceUnique.createur}
-        resumeNiveauDroit={autorisations[serviceUnique.createur.id]}
+        autorisation={autorisations[serviceUnique.createur.id]}
       />
       {#each contributeurs as contributeur (contributeur.id)}
         <LigneContributeur
-          estSupprimable={serviceUnique.permissions.gestionContributeurs}
+          droitsModifiables={serviceUnique.permissions.gestionContributeurs}
           utilisateur={contributeur}
-          resumeNiveauDroit={autorisations[contributeur.id]}
+          autorisation={autorisations[contributeur.id]}
         />
       {/each}
     </ul>

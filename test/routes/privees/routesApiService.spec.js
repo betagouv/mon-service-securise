@@ -1707,7 +1707,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('retourne le résumé du niveau de droit pour chaque utilisateur du service', async () => {
       testeur.depotDonnees().autorisationsDuService = async () => [
-        uneAutorisation().deCreateurDeService('AAA', '456').construis(),
+        uneAutorisation()
+          .avecId('uuid-a')
+          .deCreateurDeService('AAA', '456')
+          .construis(),
       ];
 
       const reponse = await axios.get(
@@ -1715,7 +1718,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(reponse.data).to.eql([
-        { idUtilisateur: 'AAA', resumeNiveauDroit: 'PROPRIETAIRE' },
+        {
+          idAutorisation: 'uuid-a',
+          idUtilisateur: 'AAA',
+          resumeNiveauDroit: 'PROPRIETAIRE',
+        },
       ]);
     });
 

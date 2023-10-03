@@ -502,6 +502,7 @@ const routesApiService = (
       reponse.json(
         autorisations.map((a) => ({
           idUtilisateur: a.idUtilisateur,
+          idAutorisation: a.id,
           resumeNiveauDroit: a.resumeNiveauDroit(),
         }))
       );
