@@ -82,6 +82,8 @@
     border: 1px solid #0c5c98;
     background: white;
     padding: 5px;
+    position: relative;
+    top: 6px;
   }
 
   .role-propose {
