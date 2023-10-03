@@ -73,9 +73,7 @@ describe("L'objet d'API de `GET /service`", () => {
       nombreContributeurs: 1 + 1,
       estCreateur: true,
       documentsPdfDisponibles: [],
-      permissions: {
-        suppressionContributeur: true,
-      },
+      permissions: { gestionContributeurs: false },
     });
   });
 
@@ -93,25 +91,24 @@ describe("L'objet d'API de `GET /service`", () => {
   });
 
   describe('sur demande des permissions', () => {
-    it("autorise la suppression de contributeur si l'utilisateur est créateur", () => {
+    it("autorise la gestion de contributeurs si l'utilisateur est créateur", () => {
       const unServiceDontAestCreateur = new Service({
         id: '123',
         descriptionService: { nomService: 'Un service' },
         createur: { id: 'A', email: 'email.createur@mail.fr' },
       });
+
       expect(
         objetGetService.donnees(
           unServiceDontAestCreateur,
-          lectureSurHomologuer,
+          uneAutorisation().deCreateurDeService('A', '123').construis(),
           'A',
           referentiel
         ).permissions
-      ).to.eql({
-        suppressionContributeur: true,
-      });
+      ).to.eql({ gestionContributeurs: true });
     });
 
-    it("n'autorise pas la suppression de contributeur si l'utilisateur est contributeur", () => {
+    it("n'autorise pas la gestion de contributeurs si l'utilisateur est contributeur", () => {
       const unServiceDontAestCreateur = new Service({
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -125,9 +122,7 @@ describe("L'objet d'API de `GET /service`", () => {
           idUtilisateur,
           referentiel
         ).permissions
-      ).to.eql({
-        suppressionContributeur: false,
-      });
+      ).to.eql({ gestionContributeurs: false });
     });
   });
 });
