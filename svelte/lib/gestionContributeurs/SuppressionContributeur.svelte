@@ -9,9 +9,9 @@
     await axios.delete('/api/autorisation', {
       params: { idHomologation: service.id, idContributeur: utilisateur.id },
     });
-    store.supprimeContributeur(utilisateur);
+    store.contributeurs.supprime(utilisateur);
     document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
-    store.afficheEtapeListe();
+    store.navigation.afficheEtapeListe();
   };
 </script>
 
@@ -35,7 +35,7 @@
     <button
       class="bouton bouton-secondaire"
       type="button"
-      on:click={() => store.afficheEtapeListe()}
+      on:click={() => store.navigation.afficheEtapeListe()}
     >
       Annuler
     </button>

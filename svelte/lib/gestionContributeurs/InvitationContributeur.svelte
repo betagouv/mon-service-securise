@@ -24,7 +24,7 @@
   };
 
   const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
-    store.afficheEtapeInvitation();
+    store.navigation.afficheEtapeInvitation();
     if (!contributeursAInviter.find((c) => c.email === evenement.detail.email))
       contributeursAInviter = [...contributeursAInviter, evenement.detail];
   };
@@ -91,7 +91,7 @@
           type="button"
           on:click={() => {
             contributeursAInviter = [];
-            store.afficheEtapeListe();
+            store.navigation.afficheEtapeListe();
           }}
         >
           Annuler
