@@ -108,6 +108,10 @@ class AutorisationBase extends Base {
     [SECURISER]: LECTURE,
     [DECRIRE]: LECTURE,
   };
+
+  appliqueDroits(nouveauxDroits) {
+    this.droits = { ...this.droits, ...nouveauxDroits };
+  }
 }
 
 module.exports = AutorisationBase;

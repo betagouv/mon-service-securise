@@ -79,6 +79,19 @@ describe('Une autorisation de base', () => {
     expect(peutEcrire).to.be(false);
   });
 
+  it('sait appliquer de nouveaux droits', () => {
+    const autorisation = new AutorisationBase({
+      droits: tousDroitsEnEcriture(),
+    });
+    expect(autorisation.aLaPermission(ECRITURE, HOMOLOGUER)).to.be(true);
+
+    const homologuerLecture = { HOMOLOGUER: LECTURE };
+    autorisation.appliqueDroits(homologuerLecture);
+
+    expect(autorisation.aLaPermission(ECRITURE, HOMOLOGUER)).to.be(false);
+    expect(autorisation.aLaPermission(LECTURE, HOMOLOGUER)).to.be(true);
+  });
+
   describe('sur demande de résumé de niveau de droit', () => {
     it("retour 'PROPRIETAIRE' si l'utilisateur est créateur du service", async () => {
       const autorisationCreateur = new AutorisationCreateur();
