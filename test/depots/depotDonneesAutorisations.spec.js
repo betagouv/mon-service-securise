@@ -6,7 +6,7 @@ const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisate
 const {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
-  ErreurHomologationInexistante,
+  ErreurServiceInexistant,
   ErreurTentativeSuppressionCreateur,
   ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
@@ -264,7 +264,7 @@ describe('Le dépôt de données des autorisations', () => {
     });
   });
 
-  describe("sur demande d'ajout d'un contributeur à une homologation", () => {
+  describe("sur demande d'ajout d'un contributeur à un service", () => {
     const adaptateurUUID = { genereUUID: () => {} };
 
     it('lève une erreur si le contributeur est inexistant', async () => {
@@ -285,7 +285,7 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance);
 
       try {
-        await depot.ajouteContributeurAHomologation(
+        await depot.ajouteContributeurAuService(
           new AutorisationBase({ idUtilisateur: '000', idService: '123' })
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
@@ -295,7 +295,7 @@ describe('Le dépôt de données des autorisations', () => {
       }
     });
 
-    it("lève une erreur si l'homologation est inexistante", async () => {
+    it('lève une erreur si le service est inexistant', async () => {
       const adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
         .ajouteUnUtilisateur({ id: '000', email: 'contributeur@mail.fr' })
@@ -304,13 +304,13 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance);
 
       try {
-        await depot.ajouteContributeurAHomologation(
+        await depot.ajouteContributeurAuService(
           new AutorisationBase({ idUtilisateur: '000', idService: '123' })
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
-        expect(erreur).to.be.a(ErreurHomologationInexistante);
-        expect(erreur.message).to.equal('L\'homologation "123" n\'existe pas');
+        expect(erreur).to.be.a(ErreurServiceInexistant);
+        expect(erreur.message).to.equal('Le service "123" n\'existe pas');
       }
     });
 
@@ -332,7 +332,7 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance);
 
       try {
-        await depot.ajouteContributeurAHomologation(
+        await depot.ajouteContributeurAuService(
           new AutorisationBase({ idUtilisateur: '999', idService: '123' })
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
@@ -361,7 +361,7 @@ describe('Le dépôt de données des autorisations', () => {
       adaptateurUUID.genereUUID = () => '789';
       const depot = creeDepot(adaptateurPersistance, adaptateurUUID);
 
-      await depot.ajouteContributeurAHomologation(
+      await depot.ajouteContributeurAuService(
         new AutorisationBase({ idUtilisateur: '000', idService: '123' })
       );
 
@@ -380,7 +380,7 @@ describe('Le dépôt de données des autorisations', () => {
     });
   });
 
-  it("connaît l'autorisation pour un utilisateur et une homologation donnée", async () => {
+  it("connaît l'autorisation pour un utilisateur et un service donnés", async () => {
     const adaptateurPersistance = unePersistanceMemoire()
       .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
       .ajouteUnService({
@@ -455,12 +455,12 @@ describe('Le dépôt de données des autorisations', () => {
       } catch (e) {
         expect(e).to.be.an(ErreurAutorisationInexistante);
         expect(e.message).to.equal(
-          'L\'utilisateur "000" n\'est pas contributeur de l\'homologation "123"'
+          'L\'utilisateur "000" n\'est pas contributeur du service "123"'
         );
       }
     });
 
-    it("vérifie qu'il s'agit bien d'un contributeur et non du créateur de l'homologation", async () => {
+    it("vérifie qu'il s'agit bien d'un contributeur et non du créateur du service", async () => {
       const adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
         .ajouteUnService({
@@ -483,7 +483,7 @@ describe('Le dépôt de données des autorisations', () => {
       } catch (e) {
         expect(e).to.be.an(ErreurTentativeSuppressionCreateur);
         expect(e.message).to.equal(
-          'Suppression impossible : l\'utilisateur "999" est le propriétaire de l\'homologation "123"'
+          'Suppression impossible : l\'utilisateur "999" est le propriétaire du service "123"'
         );
       }
     });

@@ -87,7 +87,7 @@ const ajoutContributeurSurServices = ({
 
   const ajouteContributeur = async (contributeur, services) => {
     const ajouteAuService = async (s) => {
-      await depotDonnees.ajouteContributeurAHomologation(
+      await depotDonnees.ajouteContributeurAuService(
         new AutorisationBase({
           idUtilisateur: contributeur.id,
           idService: s.id,

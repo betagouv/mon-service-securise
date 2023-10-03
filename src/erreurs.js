@@ -30,7 +30,7 @@ class ErreurDossierNonFinalise extends ErreurModele {}
 class ErreurDossiersInvalides extends ErreurModele {}
 class ErreurDureeValiditeInvalide extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
-class ErreurHomologationInexistante extends ErreurModele {}
+class ErreurServiceInexistant extends ErreurModele {}
 class ErreurIdentifiantActionSaisieInvalide extends ErreurModele {}
 class ErreurIdentifiantActionSaisieManquant extends ErreurModele {}
 class ErreurLocalisationDonneesInvalide extends ErreurModele {}
@@ -77,7 +77,6 @@ module.exports = {
   ErreurDroitsIncoherents,
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
-  ErreurHomologationInexistante,
   ErreurIdentifiantActionSaisieInvalide,
   ErreurIdentifiantActionSaisieManquant,
   ErreurLocalisationDonneesInvalide,
@@ -88,6 +87,7 @@ module.exports = {
   ErreurNomServiceDejaExistant,
   ErreurProprieteManquante,
   ErreurRisqueInconnu,
+  ErreurServiceInexistant,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
   ErreurSuppressionImpossible,
