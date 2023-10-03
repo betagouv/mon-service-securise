@@ -99,9 +99,7 @@ describe("L'objet d'API de `GET /services`", () => {
         nombreContributeurs: 1 + 1,
         estCreateur: true,
         documentsPdfDisponibles: [],
-        permissions: {
-          suppressionContributeur: true,
-        },
+        permissions: { gestionContributeurs: true },
       },
     ]);
   });

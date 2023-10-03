@@ -1513,7 +1513,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         nombreContributeurs: 1,
         estCreateur: false,
         documentsPdfDisponibles: [],
-        permissions: { suppressionContributeur: false },
+        permissions: { gestionContributeurs: false },
       });
     });
   });

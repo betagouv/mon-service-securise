@@ -46,7 +46,7 @@
       />
       {#each contributeurs as contributeur (contributeur.id)}
         <LigneContributeur
-          estSupprimable={serviceUnique.permissions.suppressionContributeur}
+          estSupprimable={serviceUnique.permissions.gestionContributeurs}
           utilisateur={contributeur}
           resumeNiveauDroit={autorisations[contributeur.id]}
         />

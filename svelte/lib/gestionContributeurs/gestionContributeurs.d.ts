@@ -13,7 +13,7 @@ export type Service = {
   createur: Utilisateur;
   estCreateur: boolean;
   contributeurs: Utilisateur[];
-  permissions: { suppressionContributeur: boolean };
+  permissions: { gestionContributeurs: boolean };
   nomService: string;
 };
 
