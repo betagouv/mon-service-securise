@@ -87,13 +87,10 @@ const creeDepot = (config = {}) => {
       nouvelleAutorisation.idUtilisateur,
       nouvelleAutorisation.idService
     );
-    await adaptateurPersistance.ajouteAutorisation(idAutorisation, {
-      idUtilisateur: nouvelleAutorisation.idUtilisateur,
-      idHomologation: nouvelleAutorisation.idService,
-      idService: nouvelleAutorisation.idService,
-      type: 'contributeur',
-      droits: toutDroitsEnEcriture(),
-    });
+    await adaptateurPersistance.ajouteAutorisation(
+      idAutorisation,
+      nouvelleAutorisation.donneesAPersister()
+    );
   };
 
   const supprimeContributeur = (...params) => {

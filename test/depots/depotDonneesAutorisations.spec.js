@@ -19,11 +19,11 @@ const {
 const {
   Rubriques,
   Permissions,
+  toutDroitsEnEcriture,
 } = require('../../src/modeles/autorisations/gestionDroits');
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
-const AutorisationBase = require('../../src/modeles/autorisations/autorisationBase');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE, LECTURE } = Permissions;
@@ -286,7 +286,10 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          new AutorisationBase({ idUtilisateur: '000', idService: '123' })
+          new AutorisationContributeur({
+            idUtilisateur: '000',
+            idService: '123',
+          })
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -305,7 +308,10 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          new AutorisationBase({ idUtilisateur: '000', idService: '123' })
+          new AutorisationContributeur({
+            idUtilisateur: '000',
+            idService: '123',
+          })
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -333,7 +339,10 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          new AutorisationBase({ idUtilisateur: '999', idService: '123' })
+          new AutorisationContributeur({
+            idUtilisateur: '999',
+            idService: '123',
+          })
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -362,10 +371,15 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance, adaptateurUUID);
 
       await depot.ajouteContributeurAuService(
-        new AutorisationBase({ idUtilisateur: '000', idService: '123' })
+        new AutorisationContributeur({
+          idUtilisateur: '000',
+          idService: '123',
+          droits: toutDroitsEnEcriture(),
+        })
       );
 
       const a = await depot.autorisation('789');
+
       expect(a).to.be.a(AutorisationContributeur);
       expect(a.idHomologation).to.equal('123');
       expect(a.idService).to.equal('123');

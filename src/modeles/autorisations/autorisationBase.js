@@ -69,6 +69,16 @@ class AutorisationBase extends Base {
     return RESUME_NIVEAU_DROIT.PERSONNALISE;
   }
 
+  donneesAPersister() {
+    return {
+      id: this.id,
+      idService: this.idService,
+      idHomologation: this.idService,
+      idUtilisateur: this.idUtilisateur,
+      droits: this.droits,
+    };
+  }
+
   static RESUME_NIVEAU_DROIT = {
     PROPRIETAIRE: 'PROPRIETAIRE',
     ECRITURE: 'ECRITURE',

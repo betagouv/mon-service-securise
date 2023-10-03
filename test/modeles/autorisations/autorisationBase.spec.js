@@ -4,6 +4,7 @@ const AutorisationBase = require('../../../src/modeles/autorisations/autorisatio
 const {
   Permissions,
   Rubriques,
+  toutDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
 const AutorisationCreateur = require('../../../src/modeles/autorisations/autorisationCreateur');
@@ -147,6 +148,30 @@ describe('Une autorisation de base', () => {
       const autorisationCreateur = new AutorisationCreateur();
 
       expect(autorisationCreateur.peutGererContributeurs()).to.be(true);
+    });
+  });
+
+  it('connaît ses données à persister', () => {
+    const autorisationContributeur = new AutorisationContributeur({
+      id: 'uuid',
+      idService: '123',
+      idUtilisateur: '999',
+      droits: toutDroitsEnEcriture(),
+    });
+
+    expect(autorisationContributeur.donneesAPersister()).to.eql({
+      id: 'uuid',
+      idService: '123',
+      idHomologation: '123',
+      idUtilisateur: '999',
+      type: 'contributeur',
+      droits: {
+        CONTACTS: 2,
+        DECRIRE: 2,
+        HOMOLOGUER: 2,
+        RISQUES: 2,
+        SECURISER: 2,
+      },
     });
   });
 });
