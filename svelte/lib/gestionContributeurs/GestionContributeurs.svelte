@@ -1,15 +1,10 @@
 <script lang="ts">
-  import type {
-    Autorisation,
-    ResumeNiveauDroit,
-  } from './gestionContributeurs.d';
   import { store } from './gestionContributeurs.store';
   import InvitationContributeur from './InvitationContributeur.svelte';
   import LigneContributeur from './LigneContributeur.svelte';
   import SuppressionContributeur from './SuppressionContributeur.svelte';
   import { onMount } from 'svelte';
 
-  let autorisations: Record<string, Autorisation> = {};
   $: surServiceUnique = $store.services.length === 1;
   $: serviceUnique = $store.services[0];
   $: contributeurs = serviceUnique.contributeurs;
@@ -19,13 +14,7 @@
       const reponse = await axios.get(
         `/api/service/${serviceUnique.id}/autorisations`
       );
-      autorisations = reponse.data.reduce(
-        (acc: Record<string, Autorisation>, a: Autorisation) => ({
-          ...acc,
-          [a.idUtilisateur]: a,
-        }),
-        {}
-      );
+      store.chargeAutorisations(reponse.data);
     }
   });
 </script>
@@ -42,13 +31,11 @@
       <LigneContributeur
         droitsModifiables={false}
         utilisateur={serviceUnique.createur}
-        autorisation={autorisations[serviceUnique.createur.id]}
       />
       {#each contributeurs as contributeur (contributeur.id)}
         <LigneContributeur
           droitsModifiables={serviceUnique.permissions.gestionContributeurs}
           utilisateur={contributeur}
-          autorisation={autorisations[contributeur.id]}
         />
       {/each}
     </ul>
