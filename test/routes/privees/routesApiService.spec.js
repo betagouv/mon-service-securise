@@ -16,6 +16,7 @@ const Homologation = require('../../../src/modeles/homologation');
 const {
   Permissions,
   Rubriques,
+  tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const {
   uneAutorisation,
@@ -1514,6 +1515,134 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         documentsPdfDisponibles: [],
         permissions: { suppressionContributeur: false },
       });
+    });
+  });
+
+  describe('quand requête PATCH sur `/api/service/:id/autorisations/:idAutorisation`', () => {
+    beforeEach(() => {
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .construis();
+
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: serviceARenvoyer,
+        idUtilisateur: 'AAA',
+      });
+
+      testeur.depotDonnees().autorisationPour = async () =>
+        uneAutorisation().deCreateurDeService('AAA', '456').construis();
+
+      testeur.depotDonnees().autorisation = async () =>
+        uneAutorisation().avecTousDroitsEcriture().construis();
+
+      testeur.depotDonnees().persisteAutorisation = async () => {};
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [],
+        {
+          method: 'PATCH',
+          url: 'http://localhost:1234/api/service/456/autorisations/uuid-1',
+          data: { droits: tousDroitsEnEcriture() },
+        },
+        done
+      );
+    });
+
+    it("aseptise l'id du service et de l'autorisation", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id', 'idAutorisation'],
+        {
+          method: 'PATCH',
+          url: 'http://localhost:1234/api/service/456/autorisations/uuid-1',
+          data: { droits: tousDroitsEnEcriture() },
+        },
+        done
+      );
+    });
+
+    it("récupère l'autorisation de l'utilisateur courant sur le service", async () => {
+      let autorisationRecherchee;
+      testeur.depotDonnees().autorisationPour = async (
+        idContributeur,
+        idService
+      ) => {
+        autorisationRecherchee = { idContributeur, idService };
+        return uneAutorisation()
+          .deCreateurDeService('456', 'uuid-1')
+          .construis();
+      };
+
+      await axios.patch(
+        'http://localhost:1234/api/service/456/autorisations/uuid-1',
+        { droits: tousDroitsEnEcriture() }
+      );
+
+      expect(autorisationRecherchee).to.eql({
+        idContributeur: 'AAA',
+        idService: '456',
+      });
+    });
+
+    it("renvoie une erreur 403 si l'utilisateur courant n'a pas le droit de gérer les contributeurs sur le service", async () => {
+      testeur.depotDonnees().autorisationPour = async () => ({
+        peutGererContributeurs: () => false,
+      });
+
+      try {
+        await axios.patch(
+          'http://localhost:1234/api/service/456/autorisations/uuid-1',
+          { droits: tousDroitsEnEcriture() }
+        );
+
+        expect().to.fail('La requête aurait dû lever une erreur HTTP 403');
+      } catch (e) {
+        expect(e.response.status).to.equal(403);
+        expect(e.response.data).to.eql({ code: 'INTERDIT' });
+      }
+    });
+
+    it("récupère l'autorisation cible et lui applique les droits demandés puis persiste la modification", async () => {
+      let autorisationCiblee;
+      testeur.depotDonnees().autorisation = async (id) => {
+        autorisationCiblee = id;
+        const enEcriture = uneAutorisation().avecTousDroitsEcriture();
+        return enEcriture.construis();
+      };
+
+      let autorisationPersistee;
+      testeur.depotDonnees().persisteAutorisation = async (autorisation) => {
+        autorisationPersistee = autorisation;
+      };
+
+      const droitsCible = {
+        DECRIRE: 1,
+        SECURISER: 1,
+        HOMOLOGUER: 0,
+        RISQUES: 0,
+        CONTACTS: 2,
+      };
+      await axios.patch(
+        'http://localhost:1234/api/service/456/autorisations/uuid-1',
+        { droits: droitsCible }
+      );
+
+      expect(autorisationCiblee).to.be('uuid-1');
+      expect(autorisationPersistee.droits).to.eql(droitsCible);
+    });
+
+    it('jette une erreur 422 si les droits envoyés sont incohérents', (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        { code: 'DROITS_INCOHERENTS' },
+        {
+          method: 'PATCH',
+          url: 'http://localhost:1234/api/service/456/autorisations/uuid-1',
+          data: { droits: { MAUVAISE_RUBRIQUE: 1 } },
+        },
+        done
+      );
     });
   });
 
