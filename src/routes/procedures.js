@@ -10,14 +10,14 @@ const fabriqueProcedures = ({
   ajoutContributeurSurServices: async (
     emailContributeur,
     service,
+    droits,
     emetteur
-  ) => {
-    await ajoutContributeurSurServices({
+  ) =>
+    ajoutContributeurSurServices({
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
-    }).executer(emailContributeur, service, emetteur);
-  },
+    }).executer(emailContributeur, service, droits, emetteur),
 });
 
 module.exports = { fabriqueProcedures };

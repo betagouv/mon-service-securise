@@ -1,7 +1,6 @@
 const { EchecAutorisation, EchecEnvoiMessage } = require('../../erreurs');
 const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
 const AutorisationContributeur = require('./autorisationContributeur');
-const { toutDroitsEnEcriture } = require('./gestionDroits');
 
 const ajoutContributeurSurServices = ({
   depotDonnees,
@@ -86,13 +85,13 @@ const ajoutContributeurSurServices = ({
   const recupereParEmail = async (emailContributeur) =>
     depotDonnees.utilisateurAvecEmail(emailContributeur);
 
-  const ajouteContributeur = async (contributeur, services) => {
+  const ajouteContributeur = async (contributeur, services, droits) => {
     const ajouteAuService = async (s) => {
       await depotDonnees.ajouteContributeurAuService(
         new AutorisationContributeur({
           idUtilisateur: contributeur.id,
           idService: s.id,
-          droits: toutDroitsEnEcriture(),
+          droits,
         })
       );
     };
@@ -101,7 +100,7 @@ const ajoutContributeurSurServices = ({
   };
 
   return {
-    executer: async (emailContributeur, services, emetteur) => {
+    executer: async (emailContributeur, services, droits, emetteur) => {
       await verifiePermission(emetteur.id, services);
       const utilisateur = await recupereParEmail(emailContributeur);
 
@@ -118,7 +117,7 @@ const ajoutContributeurSurServices = ({
         ? utilisateur
         : await creeUtilisateur(emailContributeur);
 
-      await ajouteContributeur(contributeur, cibles);
+      await ajouteContributeur(contributeur, cibles, droits);
       await informeContributeur(contributeur, dejaInscrit, emetteur, cibles);
       await envoieTracking(emetteur);
     },
