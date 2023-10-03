@@ -164,14 +164,14 @@ describe("L'ajout d'un contributeur sur des services", () => {
     it('ajoute le contributeur seulement sur les services manquants', async () => {
       const existePour123MaisPas888 = async (_, idService) =>
         idService === '123';
+
       depotDonnees.autorisationExiste = existePour123MaisPas888;
 
       const autorisations = [];
       depotDonnees.ajouteContributeurAHomologation = async (
-        idContributeur,
-        idService
+        nouvelleAutorisation
       ) => {
-        autorisations.push({ idContributeur, idService });
+        autorisations.push(nouvelleAutorisation);
       };
 
       const deuxServices = [leService('123'), leService('888')];
@@ -181,9 +181,10 @@ describe("L'ajout d'un contributeur sur des services", () => {
         adaptateurTracking,
       }).executer('jean.dupont@mail.fr', deuxServices, unEmetteur());
 
-      expect(autorisations).to.eql([
-        { idContributeur: '999', idService: '888' },
-      ]);
+      expect(autorisations.length).to.be(1);
+      const [a] = autorisations;
+      expect(a.idUtilisateur).to.be('999');
+      expect(a.idService).to.be('888');
     });
 
     it('envoie un email ne mentionnant que les nouveaux services ciblés', async () => {
@@ -316,10 +317,9 @@ describe("L'ajout d'un contributeur sur des services", () => {
   it("demande au dépôt de données d'ajouter les autorisations", async () => {
     const autorisations = [];
     depotDonnees.ajouteContributeurAHomologation = async (
-      idContributeur,
-      idService
+      nouvelleAutorisation
     ) => {
-      autorisations.push({ idContributeur, idService });
+      autorisations.push(nouvelleAutorisation);
     };
 
     await ajoutContributeurSurServices({
@@ -332,10 +332,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
       unEmetteur()
     );
 
-    expect(autorisations).to.eql([
-      { idContributeur: '999', idService: '123' },
-      { idContributeur: '999', idService: '888' },
-    ]);
+    expect(autorisations.length).to.be(2);
+    const [a1, a2] = autorisations;
+    expect(a1.idUtilisateur).to.be('999');
+    expect(a1.idService).to.be('123');
+    expect(a2.idUtilisateur).to.be('999');
+    expect(a2.idService).to.be('888');
   });
 
   it("envoie un événement d'invitation contributeur via l'adaptateur de tracking", async () => {
