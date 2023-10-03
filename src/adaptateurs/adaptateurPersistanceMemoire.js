@@ -294,7 +294,7 @@ const nouvelAdaptateur = (
 
     if (!dejaConnu)
       donnees.parcoursUtilisateurs.push({ id, ...donneesParcoursUtilisateur });
-    else dejaConnu.donnees = donneesParcoursUtilisateur;
+    else Object.assign(dejaConnu, { ...donneesParcoursUtilisateur });
   };
 
   const rechercheContributeurs = async (idUtilisateur, recherche) => {
