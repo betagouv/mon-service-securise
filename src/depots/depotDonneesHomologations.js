@@ -2,7 +2,7 @@ const adaptateurChiffrementParDefaut = require('../adaptateurs/adaptateurChiffre
 const fabriqueAdaptateurTracking = require('../adaptateurs/fabriqueAdaptateurTracking');
 const {
   ErreurDonneesObligatoiresManquantes,
-  ErreurHomologationInexistante,
+  ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
 } = require('../erreurs');
 const DescriptionService = require('../modeles/descriptionService');
@@ -176,7 +176,7 @@ const creeDepot = (config = {}) => {
     p.lis.une(idHomologation).then((h) => {
       if (typeof h === 'undefined') {
         return Promise.reject(
-          new ErreurHomologationInexistante(
+          new ErreurServiceInexistant(
             `Homologation "${idHomologation}" non trouvée`
           )
         );
@@ -465,8 +465,8 @@ const creeDepot = (config = {}) => {
       .then((h) =>
         typeof h === 'undefined'
           ? Promise.reject(
-              new ErreurHomologationInexistante(
-                `Homologation "${idHomologation}" non trouvée`
+              new ErreurServiceInexistant(
+                `Service "${idHomologation}" non trouvé`
               )
             )
           : h

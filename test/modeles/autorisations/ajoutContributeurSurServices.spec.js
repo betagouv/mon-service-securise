@@ -39,7 +39,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     depotDonnees.autorisationExiste = async () => false;
     depotDonnees.autorisationPour = async () => autorisation;
     depotDonnees.utilisateurAvecEmail = async () => utilisateur;
-    depotDonnees.ajouteContributeurAHomologation = async () => {};
+    depotDonnees.ajouteContributeurAuService = async () => {};
 
     const utilisateurCourant = { prenomNom: () => '' };
     depotDonnees.utilisateur = async () => utilisateurCourant;
@@ -168,7 +168,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       depotDonnees.autorisationExiste = existePour123MaisPas888;
 
       const autorisations = [];
-      depotDonnees.ajouteContributeurAHomologation = async (
+      depotDonnees.ajouteContributeurAuService = async (
         nouvelleAutorisation
       ) => {
         autorisations.push(nouvelleAutorisation);
@@ -316,9 +316,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
 
   it("demande au dépôt de données d'ajouter les autorisations", async () => {
     const autorisations = [];
-    depotDonnees.ajouteContributeurAHomologation = async (
-      nouvelleAutorisation
-    ) => {
+    depotDonnees.ajouteContributeurAuService = async (nouvelleAutorisation) => {
       autorisations.push(nouvelleAutorisation);
     };
 

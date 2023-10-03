@@ -4,7 +4,7 @@ const uneDescriptionValide = require('../constructeurs/constructeurDescriptionSe
 
 const {
   ErreurDonneesObligatoiresManquantes,
-  ErreurHomologationInexistante,
+  ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
@@ -1349,7 +1349,7 @@ describe('Le dépôt de données des homologations', () => {
           done("La tentative d'ajout de dossier aurait dû lever une exception")
         )
         .catch((e) => {
-          expect(e).to.be.an(ErreurHomologationInexistante);
+          expect(e).to.be.an(ErreurServiceInexistant);
           expect(e.message).to.equal('Homologation "999" non trouvée');
           done();
         })
@@ -1678,8 +1678,8 @@ describe('Le dépôt de données des homologations', () => {
           done('La tentative de duplication aurait dû lever une exception')
         )
         .catch((e) => {
-          expect(e).to.be.an(ErreurHomologationInexistante);
-          expect(e.message).to.equal('Homologation "id-invalide" non trouvée');
+          expect(e).to.be.an(ErreurServiceInexistant);
+          expect(e.message).to.equal('Service "id-invalide" non trouvé');
           done();
         })
         .catch(done);
