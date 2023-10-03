@@ -1682,7 +1682,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('Utilise le depot pour récupérer toutes les autorisations du service', async () => {
+    it('utilise le depot pour récupérer toutes les autorisations du service', async () => {
       let donneesPassees = {};
       testeur.depotDonnees().autorisationsDuService = async (idService) => {
         donneesPassees = { idService };
@@ -1705,7 +1705,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesPassees).to.eql({ idService: '456' });
     });
 
-    it('Retourne le résumé du niveau de droit pour chaque utilisateur du service', async () => {
+    it('retourne le résumé du niveau de droit pour chaque utilisateur du service', async () => {
       testeur.depotDonnees().autorisationsDuService = async () => [
         uneAutorisation().deCreateurDeService('AAA', '456').construis(),
       ];
@@ -1719,7 +1719,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       ]);
     });
 
-    it("Renvoie toutes les autorisations si l'utilisateur est créateur", async () => {
+    it("renvoie toutes les autorisations si l'utilisateur est créateur", async () => {
       const serviceARenvoyer = unService(testeur.referentiel())
         .avecId('456')
         .avecNContributeurs(3, ['ABC', 'DEF', 'GHI'])
@@ -1742,7 +1742,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.data.length).to.be(3 + 1);
     });
 
-    it("Renvoie uniquement le créateur et l'utilisateur s'il n'est pas créateur", async () => {
+    it("renvoie uniquement le créateur et l'utilisateur s'il n'est pas créateur", async () => {
       const serviceARenvoyer = unService(testeur.referentiel())
         .avecId('456')
         .avecNContributeurs(3, ['ABC', 'DEF', 'GHI'])
