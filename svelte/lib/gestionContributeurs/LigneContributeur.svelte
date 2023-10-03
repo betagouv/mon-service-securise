@@ -1,6 +1,5 @@
 <script lang="ts">
   import type {
-    Autorisation,
     ResumeNiveauDroit,
     Service,
     Utilisateur,
@@ -12,14 +11,15 @@
 
   export let droitsModifiables: boolean;
   export let utilisateur: Utilisateur;
-  export let autorisation: Autorisation | undefined;
 
   let serviceUnique: Service;
   $: serviceUnique = $store.services[0];
+  $: autorisation = $store.autorisations[utilisateur.id];
 
   const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
     const permission = enPermission(nouveauDroit);
     const idAutorisation = autorisation!.idAutorisation;
+
     const { data: autorisationMAJ } = await axios.patch(
       `/api/service/${serviceUnique.id}/autorisations/${idAutorisation}`,
       {
@@ -33,7 +33,7 @@
       }
     );
 
-    autorisation = autorisationMAJ;
+    store.remplaceAutorisation(autorisationMAJ);
   };
 </script>
 

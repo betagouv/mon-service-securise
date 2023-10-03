@@ -1,5 +1,9 @@
 import { writable } from 'svelte/store';
-import type { Service, Utilisateur } from './gestionContributeurs.d';
+import type {
+  Autorisation,
+  Service,
+  Utilisateur,
+} from './gestionContributeurs.d';
 
 type Etape =
   | 'ListeContributeurs'
@@ -10,12 +14,14 @@ type EtatGestionContributeursStore = {
   etapeCourante: Etape;
   utilisateurEnCoursDeSuppression: Utilisateur | null;
   services: Service[];
+  autorisations: Record<string, Autorisation>;
 };
 
 const valeurParDefaut: EtatGestionContributeursStore = {
   etapeCourante: 'ListeContributeurs',
   utilisateurEnCoursDeSuppression: null,
   services: [],
+  autorisations: {},
 };
 
 const { subscribe, update, set } =
@@ -50,4 +56,23 @@ export const store = {
     });
   },
   reinitialise: (services: Service[]) => set({ ...valeurParDefaut, services }),
+  chargeAutorisations: (autorisations: Autorisation[]) => {
+    const parIdUtilisateur = autorisations.reduce(
+      (acc: Record<string, Autorisation>, a: Autorisation) => ({
+        ...acc,
+        [a.idUtilisateur]: a,
+      }),
+      {}
+    );
+    update((etat) => ({ ...etat, autorisations: parIdUtilisateur }));
+  },
+  remplaceAutorisation: (remplacante: Autorisation) => {
+    update((etat) => ({
+      ...etat,
+      autorisations: {
+        ...etat.autorisations,
+        [remplacante.idUtilisateur]: remplacante,
+      },
+    }));
+  },
 };
