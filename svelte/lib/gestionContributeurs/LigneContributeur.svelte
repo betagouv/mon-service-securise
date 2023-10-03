@@ -20,7 +20,7 @@
   const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
     const permission = enPermission(nouveauDroit);
     const idAutorisation = autorisation!.idAutorisation;
-    await axios.patch(
+    const { data: autorisationMAJ } = await axios.patch(
       `/api/service/${serviceUnique.id}/autorisations/${idAutorisation}`,
       {
         droits: {
@@ -32,6 +32,8 @@
         },
       }
     );
+
+    autorisation = autorisationMAJ;
   };
 </script>
 

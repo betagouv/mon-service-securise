@@ -1630,6 +1630,33 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(autorisationPersistee.droits).to.eql(droitsCible);
     });
 
+    it("renvoie la représentation API de l'autorisation mise à jour", async () => {
+      testeur.depotDonnees().autorisation = async (id) =>
+        uneAutorisation()
+          .avecId(id)
+          .deContributeurDeService('888', '456')
+          .construis();
+
+      const droitsCible = {
+        DECRIRE: 1,
+        SECURISER: 1,
+        HOMOLOGUER: 0,
+        RISQUES: 0,
+        CONTACTS: 2,
+      };
+
+      const reponse = await axios.patch(
+        'http://localhost:1234/api/service/456/autorisations/uuid-1',
+        { droits: droitsCible }
+      );
+
+      expect(reponse.data).to.eql({
+        idAutorisation: 'uuid-1',
+        idUtilisateur: '888',
+        resumeNiveauDroit: 'PERSONNALISE',
+      });
+    });
+
     it('jette une erreur 422 si les droits envoyés sont incohérents', (done) => {
       testeur.verifieRequeteGenereErreurHTTP(
         422,

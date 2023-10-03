@@ -24,6 +24,7 @@ const RolesResponsabilites = require('../../modeles/rolesResponsabilites');
 const { dateInvalide } = require('../../utilitaires/date');
 const { valeurBooleenne } = require('../../utilitaires/aseptisation');
 const objetGetService = require('../../modeles/objetsApi/objetGetService');
+const objetGetAutorisation = require('../../modeles/objetsApi/objetGetAutorisation');
 
 const {
   Permissions,
@@ -499,13 +500,7 @@ const routesApiService = (
         );
       }
 
-      reponse.json(
-        autorisations.map((a) => ({
-          idUtilisateur: a.idUtilisateur,
-          idAutorisation: a.id,
-          resumeNiveauDroit: a.resumeNiveauDroit(),
-        }))
-      );
+      reponse.json(autorisations.map((a) => objetGetAutorisation.donnees(a)));
     }
   );
 
@@ -537,7 +532,7 @@ const routesApiService = (
       ciblee.appliqueDroits(nouveauxDroits);
       await depotDonnees.sauvegardeAutorisation(ciblee);
 
-      reponse.sendStatus(200);
+      reponse.json(objetGetAutorisation.donnees(ciblee));
     }
   );
 
