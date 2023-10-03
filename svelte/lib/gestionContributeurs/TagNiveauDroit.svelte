@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ResumeNiveauDroit } from './gestionContributeurs.d';
+  import { createEventDispatcher } from 'svelte';
 
   const STATUS_DROITS: Record<ResumeNiveauDroit, string> = {
     PROPRIETAIRE: 'Propriétaire',
@@ -9,11 +10,20 @@
   };
 
   export let niveau: ResumeNiveauDroit;
+  export let droitsModifiables: boolean;
+
+  const dispatch = createEventDispatcher<{ droitsChange: ResumeNiveauDroit }>();
 </script>
 
 <div class="role {niveau}">
   {STATUS_DROITS[niveau]}
 </div>
+{#if droitsModifiables}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div on:click={() => dispatch('droitsChange', 'ECRITURE')}>ECRITURE</div>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div on:click={() => dispatch('droitsChange', 'LECTURE')}>LECTURE</div>
+{/if}
 
 <style>
   .role {

@@ -71,7 +71,7 @@
               <span>{@html contributeur.prenomNom}</span>
             </div>
             <div class="conteneur-actions">
-              <TagNiveauDroit niveau="ECRITURE" />
+              <TagNiveauDroit niveau="ECRITURE" droitsModifiables={false} />
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <img
                 class="bouton-suppression-contributeur"

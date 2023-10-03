@@ -31,7 +31,20 @@ export type ResumeNiveauDroit =
   | 'LECTURE'
   | 'PERSONNALISE';
 
+export const enPermission = (resume: ResumeNiveauDroit) => {
+  switch (resume) {
+    case 'LECTURE':
+      return 1;
+    case 'ECRITURE':
+      return 2;
+    case 'PROPRIETAIRE':
+    case 'PERSONNALISE':
+      throw new Error(`${resume} non convertible en permission`);
+  }
+};
+
 export type Autorisation = {
+  idAutorisation: string;
   idUtilisateur: string;
   resumeNiveauDroit: ResumeNiveauDroit;
 };
