@@ -33,9 +33,14 @@
 
   const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
     store.navigation.afficheEtapeInvitation();
-    const dejaInvite = invitations.find(
-      (c) => c.utilisateur.email === evenement.detail.email
+
+    const memeEmails = (email1: string, email2: string) =>
+      email1.localeCompare(email2, 'fr', { sensitivity: 'accent' }) === 0;
+
+    const dejaInvite = invitations.find((c) =>
+      memeEmails(c.utilisateur.email, evenement.detail.email)
     );
+
     if (!dejaInvite)
       invitations = [
         ...invitations,

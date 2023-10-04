@@ -50,9 +50,9 @@
         class="create option-ajout"
         on:click={() =>
           choisisContributeur({
-            email: saisie,
+            email: saisie.toLocaleLowerCase('fr'),
             initiales: '',
-            prenomNom: saisie,
+            prenomNom: saisie.toLocaleLowerCase('fr'),
           })}
       >
         Ajouter ce contributeur
