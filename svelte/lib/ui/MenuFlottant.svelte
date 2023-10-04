@@ -33,6 +33,7 @@
     position: absolute;
     left: -2px;
     transform: translateX(-100%);
+    z-index: 100;
   }
 
   .invisible {
