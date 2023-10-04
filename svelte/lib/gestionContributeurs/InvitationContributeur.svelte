@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { Utilisateur } from './gestionContributeurs.d';
+  import type {
+    ResumeNiveauDroit,
+    Utilisateur,
+  } from './gestionContributeurs.d';
 
   import { store } from './gestionContributeurs.store';
   import ChampAvecSuggestions from './ChampAvecSuggestions.svelte';
@@ -8,7 +11,10 @@
 
   type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
 
-  let contributeursAInviter: Utilisateur[] = [];
+  let invitations: {
+    utilisateur: Utilisateur;
+    droit: ResumeNiveauDroit;
+  }[] = [];
   let etapeCourante: Etape = 'Ajout';
 
   $: services = $store.services;
@@ -25,19 +31,23 @@
 
   const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
     store.navigation.afficheEtapeInvitation();
-    if (!contributeursAInviter.find((c) => c.email === evenement.detail.email))
-      contributeursAInviter = [...contributeursAInviter, evenement.detail];
+    const dejaInvite = invitations.find(
+      (c) => c.utilisateur.email === evenement.detail.email
+    );
+    if (!dejaInvite)
+      invitations = [
+        ...invitations,
+        { utilisateur: evenement.detail, droit: 'ECRITURE' },
+      ];
   };
 
-  const supprimeInvitation = (contributeur: Utilisateur) => {
-    contributeursAInviter = contributeursAInviter.filter(
-      (c) => c.email !== contributeur.email
-    );
+  const supprimeInvitation = ({ email }: Utilisateur) => {
+    invitations = invitations.filter((c) => c.utilisateur.email !== email);
   };
 
   const envoiInvitation = async () => {
     etapeCourante = 'EnvoiEnCours';
-    const emails = contributeursAInviter.map((c) => c.email);
+    const emails = invitations.map((c) => c.utilisateur.email);
     await Promise.all(
       emails.map((emailContributeur) =>
         axios.post('/api/autorisation', {
@@ -46,7 +56,7 @@
         })
       )
     );
-    contributeursAInviter = [];
+    invitations = [];
     etapeCourante = 'Rapport';
     document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
   };
@@ -61,23 +71,27 @@
         on:contributeurChoisi={ajouteInvitation}
       />
       <ul id="liste-ajout-contributeur">
-        {#each contributeursAInviter as contributeur (contributeur.email)}
+        {#each invitations as { utilisateur, droit } (utilisateur.email)}
           <li class="contributeur-a-inviter">
             <div class="contenu-nom-prenom">
               <Initiales
-                valeur={contributeur.initiales}
-                resumeNiveauDroit="ECRITURE"
+                valeur={utilisateur.initiales}
+                resumeNiveauDroit={droit}
               />
-              <span>{@html contributeur.prenomNom}</span>
+              <span>{@html utilisateur.prenomNom}</span>
             </div>
             <div class="conteneur-actions">
-              <TagNiveauDroit niveau="ECRITURE" droitsModifiables={false} />
+              <TagNiveauDroit
+                niveau={droit}
+                droitsModifiables={true}
+                on:droitsChange={(e) => (droit = e.detail)}
+              />
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <img
                 class="bouton-suppression-contributeur"
                 src="/statique/assets/images/icone_supprimer_gris.svg"
                 alt="bouton de suppression d'un contributeur"
-                on:click={() => supprimeInvitation(contributeur)}
+                on:click={() => supprimeInvitation(utilisateur)}
               />
             </div>
           </li>
@@ -90,13 +104,13 @@
           class="bouton bouton-secondaire fermeture-tiroir"
           type="button"
           on:click={() => {
-            contributeursAInviter = [];
+            invitations = [];
             store.navigation.afficheEtapeListe();
           }}
         >
           Annuler
         </button>
-        {#if contributeursAInviter.length}
+        {#if invitations.length}
           <button
             class="bouton"
             id="action-invitation"
