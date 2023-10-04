@@ -3,6 +3,7 @@
     ResumeNiveauDroit,
     Utilisateur,
   } from './gestionContributeurs.d';
+  import { enDroitsSurRubrique } from './gestionContributeurs.d';
 
   import { store } from './gestionContributeurs.store';
   import ChampAvecSuggestions from './ChampAvecSuggestions.svelte';
@@ -10,11 +11,12 @@
   import TagNiveauDroit from './TagNiveauDroit.svelte';
 
   type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
-
-  let invitations: {
+  type Invitation = {
     utilisateur: Utilisateur;
     droit: ResumeNiveauDroit;
-  }[] = [];
+  };
+
+  let invitations: Invitation[] = [];
   let etapeCourante: Etape = 'Ajout';
 
   $: services = $store.services;
@@ -47,11 +49,11 @@
 
   const envoiInvitation = async () => {
     etapeCourante = 'EnvoiEnCours';
-    const emails = invitations.map((c) => c.utilisateur.email);
     await Promise.all(
-      emails.map((emailContributeur) =>
+      invitations.map((i) =>
         axios.post('/api/autorisation', {
-          emailContributeur,
+          emailContributeur: i.utilisateur.email,
+          droits: enDroitsSurRubrique(i.droit),
           idServices: services.map((s) => s.id),
         })
       )
