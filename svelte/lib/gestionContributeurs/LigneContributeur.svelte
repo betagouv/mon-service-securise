@@ -7,7 +7,7 @@
   import { store } from './gestionContributeurs.store';
   import Initiales from './Initiales.svelte';
   import TagNiveauDroit from './TagNiveauDroit.svelte';
-  import { enPermission } from './gestionContributeurs.d';
+  import { enDroitsSurRubrique } from './gestionContributeurs.d';
 
   export let droitsModifiables: boolean;
   export let utilisateur: Utilisateur;
@@ -17,20 +17,11 @@
   $: autorisation = $store.autorisations[utilisateur.id];
 
   const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
-    const permission = enPermission(nouveauDroit);
     const idAutorisation = autorisation!.idAutorisation;
 
     const { data: autorisationMAJ } = await axios.patch(
       `/api/service/${serviceUnique.id}/autorisations/${idAutorisation}`,
-      {
-        droits: {
-          DECRIRE: permission,
-          SECURISER: permission,
-          HOMOLOGUER: permission,
-          RISQUES: permission,
-          CONTACTS: permission,
-        },
-      }
+      { droits: enDroitsSurRubrique(nouveauDroit) }
     );
 
     store.autorisations.remplace(autorisationMAJ);

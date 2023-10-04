@@ -31,12 +31,29 @@ export type ResumeNiveauDroit =
   | 'LECTURE'
   | 'PERSONNALISE';
 
-export const enPermission = (resume: ResumeNiveauDroit) => {
+export type Rubrique =
+  | 'DECRIRE'
+  | 'SECURISER'
+  | 'HOMOLOGUER'
+  | 'RISQUES'
+  | 'CONTACTS';
+
+export const enDroitsSurRubrique = (
+  resume: ResumeNiveauDroit
+): Record<Rubrique, number> => {
+  const rubriquesAvecDroit = (droit: number) => ({
+    DECRIRE: droit,
+    SECURISER: droit,
+    HOMOLOGUER: droit,
+    RISQUES: droit,
+    CONTACTS: droit,
+  });
+
   switch (resume) {
     case 'LECTURE':
-      return 1;
+      return rubriquesAvecDroit(1);
     case 'ECRITURE':
-      return 2;
+      return rubriquesAvecDroit(2);
     case 'PROPRIETAIRE':
     case 'PERSONNALISE':
       throw new Error(`${resume} non convertible en permission`);
