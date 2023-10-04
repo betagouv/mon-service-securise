@@ -19,6 +19,7 @@ const {
 const {
   Rubriques: { SECURISER },
   Permissions: { LECTURE },
+  tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
@@ -840,13 +841,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it('aseptise les paramètres de la requête', (done) => {
-      testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['idServices.*', 'emailContributeur'],
-          { method: 'post', url: 'http://localhost:1234/api/autorisation' },
-          done
-        );
+      testeur.middleware().verifieAseptisationParametres(
+        ['idServices.*', 'emailContributeur'],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/autorisation',
+          data: { droits: tousDroitsEnEcriture() },
+        },
+        done
+      );
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -854,12 +857,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         {
           method: 'post',
           url: 'http://localhost:1234/api/autorisation',
+          data: { droits: tousDroitsEnEcriture() },
         },
         done
       );
     });
 
-    it("appelle la procédure d'ajout de contributeur", async () => {
+    it("appelle la procédure d'ajout de contributeur avec les droits envoyés", async () => {
       let ajout;
 
       testeur.depotDonnees().homologation = async (id) =>
@@ -876,20 +880,23 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ajout = { emailContributeur, services, droits, emetteur };
       };
 
+      const droitsEnvoyes = {
+        DECRIRE: 2,
+        SECURISER: 1,
+        HOMOLOGUER: 2,
+        RISQUES: 1,
+        CONTACTS: 2,
+      };
+
       await axios.post('http://localhost:1234/api/autorisation', {
         emailContributeur: 'jean.dupont@mail.fr',
         idServices: ['123'],
+        droits: droitsEnvoyes,
       });
 
       expect(ajout.emailContributeur).to.be('jean.dupont@mail.fr');
       expect(ajout.services[0].id).to.be('123');
-      expect(ajout.droits).to.eql({
-        DECRIRE: 2,
-        SECURISER: 2,
-        HOMOLOGUER: 2,
-        RISQUES: 2,
-        CONTACTS: 2,
-      });
+      expect(ajout.droits).to.eql(droitsEnvoyes);
       expect(ajout.emetteur.id).to.be('EMETTEUR');
     });
 
@@ -910,6 +917,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       await axios.post('http://localhost:1234/api/autorisation', {
         emailContributeur: 'jean.dupont@mail.fr',
         idServices: ['123', '456'],
+        droits: tousDroitsEnEcriture(),
       });
 
       expect(cibles.length).to.be(2);
@@ -929,6 +937,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       await axios.post('http://localhost:1234/api/autorisation', {
         emailContributeur: 'JEAN.DUPONT@MAIL.FR',
         idServices: ['123'],
+        droits: tousDroitsEnEcriture(),
       });
 
       const enMinucsules = 'jean.dupont@mail.fr';
@@ -944,6 +953,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         await axios.post('http://localhost:1234/api/autorisation', {
           emailContributeur: 'jean.dupont@mail.fr',
           idServices: ['123'],
+          droits: tousDroitsEnEcriture(),
         });
 
         expect().to.fail('La requête aurait dû lever une erreur HTTP 403');
@@ -963,7 +973,24 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.verifieRequeteGenereErreurHTTP(
         422,
         'oups',
-        { method: 'post', url: 'http://localhost:1234/api/autorisation' },
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/autorisation',
+          data: { droits: tousDroitsEnEcriture() },
+        },
+        done
+      );
+    });
+
+    it('retourne une erreur HTTP 422 si les droits sont incohérents', (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        { erreur: { code: 'DROITS_INCOHERENTS' } },
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/autorisation',
+          data: { droits: { RUBRIQUE_INCONNUE: 2 } },
+        },
         done
       );
     });
