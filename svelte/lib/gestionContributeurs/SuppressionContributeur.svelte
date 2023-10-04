@@ -21,16 +21,6 @@
     service
     <strong>{@html service.nomService}</strong> ?
   </p>
-  <div class="banniere-information">
-    <img
-      src="/statique/assets/images/icone_information_suppression.svg"
-      alt="icone d'information"
-    />
-    <div class="contenu-texte-information">
-      <strong>Cette action est réversible</strong>
-      <p>Vous pourrez ajouter à nouveau cette personne.</p>
-    </div>
-  </div>
   <div class="conteneur-actions">
     <button
       class="bouton bouton-secondaire"
