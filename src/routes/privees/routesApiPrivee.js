@@ -23,7 +23,7 @@ const {
   obtentionDonneesDeBaseUtilisateur,
 } = require('../mappeur/utilisateur');
 const {
-  tousDroitsEnEcriture,
+  verifieCoherenceDesDroits,
 } = require('../../modeles/autorisations/gestionDroits');
 
 const routesApiPrivee = ({
@@ -252,9 +252,14 @@ const routesApiPrivee = ({
     middleware.verificationAcceptationCGU,
     middleware.aseptise('idServices.*', 'emailContributeur'),
     async (requete, reponse, suite) => {
-      const { idServices = [] } = requete.body;
+      const { idServices = [], droits } = requete.body;
       const idUtilisateur = requete.idUtilisateurCourant;
       const emailContributeur = requete.body.emailContributeur?.toLowerCase();
+
+      if (!verifieCoherenceDesDroits(droits)) {
+        reponse.status(422).json({ erreur: { code: 'DROITS_INCOHERENTS' } });
+        return;
+      }
 
       const services = await Promise.all(
         idServices.map(depotDonnees.homologation)
@@ -265,7 +270,7 @@ const routesApiPrivee = ({
         await procedures.ajoutContributeurSurServices(
           emailContributeur,
           services,
-          tousDroitsEnEcriture(),
+          droits,
           emetteur
         );
         reponse.send('');
