@@ -51,6 +51,7 @@
   .liste-contributeurs :global(li) {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
     padding: 1em;

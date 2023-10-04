@@ -81,8 +81,6 @@
 
   .conteneur-suppression {
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
     cursor: pointer;
   }
 </style>

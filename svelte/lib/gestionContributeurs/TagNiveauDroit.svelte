@@ -83,7 +83,6 @@
     background: white;
     padding: 5px;
     position: relative;
-    top: 6px;
   }
 
   .role-propose {
