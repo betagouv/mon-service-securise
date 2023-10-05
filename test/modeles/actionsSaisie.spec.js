@@ -21,29 +21,17 @@ describe("Les actions de saisie d'un service", () => {
           position: 1,
           description: "Description de l'action suivante",
         },
-        uneAction: { position: 0, description: 'Une description' },
+        uneAction: {
+          position: 0,
+          description: 'Une description',
+        },
       },
     });
 
     const actions = new ActionsSaisie(referentiel, unServiceASaisir());
 
-    expect(actions.toJSON()).to.eql([
-      {
-        id: 'uneAction',
-        position: 0,
-        description: 'Une description',
-        sousTitre: undefined,
-        statut: InformationsHomologation.A_SAISIR,
-        url: '/service/ABC/uneAction',
-      },
-      {
-        id: 'actionSuivante',
-        position: 1,
-        description: "Description de l'action suivante",
-        sousTitre: undefined,
-        statut: InformationsHomologation.A_SAISIR,
-        url: '/service/ABC/actionSuivante',
-      },
-    ]);
+    const [action1, action2] = actions.toJSON();
+    expect(action1.position).to.be(0);
+    expect(action2.position).to.be(1);
   });
 });

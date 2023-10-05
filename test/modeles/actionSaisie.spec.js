@@ -27,6 +27,7 @@ describe('Une action de saisie', () => {
           position: 0,
           description: 'Une description',
           sousTitre: 'Un sous-titre',
+          rubriqueDroit: 'DECRIRE',
         },
       },
     });
@@ -43,6 +44,7 @@ describe('Une action de saisie', () => {
       sousTitre: 'Un sous-titre',
       statut: InformationsHomologation.A_SAISIR,
       url: `/service/ABC/uneAction`,
+      rubriqueDroit: 'DECRIRE',
     });
   });
 
