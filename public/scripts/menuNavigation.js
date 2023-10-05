@@ -23,7 +23,7 @@ $(() => {
     ouvrir: () => cookie().supprimer(),
   };
 
-  const rechargeDonneesDuService = async () => {
+  const rechargeNbContributeurs = async () => {
     const reponse = await axios.get(`/api/service/${idService}`);
     donneesService = reponse.data;
     $('.nombre-contributeurs', '#gerer-contributeurs').text(
@@ -34,18 +34,15 @@ $(() => {
   const brancheComportementTiroirContributeurs = () => {
     gestionnaireTiroir.brancheComportement();
 
-    if (idService) rechargeDonneesDuService();
+    if (idService) rechargeNbContributeurs();
 
     $(document.body).on('jquery-recharge-services', async () => {
-      await rechargeDonneesDuService();
+      await rechargeNbContributeurs();
     });
 
     $('#gerer-contributeurs').on('click', () => {
       gestionnaireTiroir.afficheContenuAction(
-        {
-          action: contributeurs,
-          estSelectionMulitple: false,
-        },
+        { action: contributeurs, estSelectionMulitple: false },
         { donneesServices: [donneesService] }
       );
     });
