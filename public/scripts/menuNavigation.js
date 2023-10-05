@@ -32,10 +32,9 @@ const tiroirContributeur = (idService) => {
   };
 };
 
-$(() => {
+const repliMenu = () => {
   const $menu = $('.menu-navigation');
   const $repliMenu = $('.repli-menu', $menu);
-  const idService = $('.page-service').data('id-service');
 
   const cookie = () => {
     const cookieAvecAge = (ageEnSecondes) =>
@@ -52,16 +51,25 @@ $(() => {
     ouvrir: () => cookie().supprimer(),
   };
 
-  $repliMenu.on('click', () => {
-    const menuOuvert = !$menu.hasClass('ferme');
-    if (menuOuvert) {
-      $menu.addClass('ferme');
-      persistance.fermer();
-    } else {
-      $menu.removeClass('ferme');
-      persistance.ouvrir();
-    }
-  });
+  return {
+    brancheComportement: () => {
+      $repliMenu.on('click', () => {
+        const menuOuvert = !$menu.hasClass('ferme');
+        if (menuOuvert) {
+          $menu.addClass('ferme');
+          persistance.fermer();
+        } else {
+          $menu.removeClass('ferme');
+          persistance.ouvrir();
+        }
+      });
+    },
+  };
+};
 
+$(() => {
+  const idService = $('.page-service').data('id-service');
+
+  repliMenu().brancheComportement();
   tiroirContributeur(idService).brancheComportement();
 });
