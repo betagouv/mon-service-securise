@@ -1,5 +1,6 @@
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 import ActionContributeurs from '../modules/tableauDeBord/actions/ActionContributeurs.mjs';
+import ActionTelechargement from '../modules/tableauDeBord/actions/ActionTelechargement.mjs';
 
 const tiroirContributeur = (idService) => {
   const contributeurs = new ActionContributeurs();
@@ -14,8 +15,6 @@ const tiroirContributeur = (idService) => {
 
   return {
     brancheComportement: () => {
-      gestionnaireTiroir.brancheComportement();
-
       if (idService) rechargeNbContributeurs();
 
       $(document.body).on('jquery-recharge-services', async () => {
@@ -26,6 +25,24 @@ const tiroirContributeur = (idService) => {
         gestionnaireTiroir.afficheContenuAction(
           { action: contributeurs, estSelectionMulitple: false },
           { donneesServices: [donneesService] }
+        );
+      });
+    },
+  };
+};
+
+const tiroirTelechargement = (idService) => {
+  const telechargement = new ActionTelechargement();
+  const chargeDonneesService = async () =>
+    (await axios.get(`/api/service/${idService}`)).data;
+
+  return {
+    brancheComportement: () => {
+      $('#voir-telechargement').on('click', async () => {
+        const donneesService = await chargeDonneesService();
+        gestionnaireTiroir.afficheContenuAction(
+          { action: telechargement, estSelectionMulitple: false },
+          { idService, donneesService }
         );
       });
     },
@@ -66,10 +83,12 @@ const repliMenu = () => {
     },
   };
 };
-
 $(() => {
   const idService = $('.page-service').data('id-service');
 
   repliMenu().brancheComportement();
+
+  gestionnaireTiroir.brancheComportement();
   tiroirContributeur(idService).brancheComportement();
+  tiroirTelechargement(idService).brancheComportement();
 });
