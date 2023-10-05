@@ -54,20 +54,8 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut, rubriqu
                 img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
               span.none-si-ferme Contacts utiles
         li
-          a(
-            href = `/api/service/${service.id}/pdf/syntheseSecurite.pdf`,
-            target = '_blank',
-            rel = 'noopener'
-            title= 'Télécharger le PDF de synthèse de sécurité dans une nouvelle fenêtre')
+          a#voir-telechargement(href = '#')
             .pastille
-              img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
-            span.none-si-ferme Synthèse de sécurité
-        li
-          a(
-            href = `/api/service/${service.id}/pdf/annexes.pdf`,
-            target = '_blank',
-            rel = 'noopener'
-            title= 'Télécharger les annexes PDF dans une nouvelle fenêtre')
-            .pastille
-              img(src = '/statique/assets/images/icone_action_telechargement.svg' alt='Icône de fichier PDF')
-            span.none-si-ferme Annexes
+              img(src = '/statique/assets/images/icone_telechargement_fichier.svg' alt='Icône de téléchargement de fichier')
+            span.none-si-ferme Télécharger les PDF
+
