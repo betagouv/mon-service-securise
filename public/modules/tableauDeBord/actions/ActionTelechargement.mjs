@@ -6,9 +6,9 @@ class ActionTelechargement extends ActionAbstraite {
     this.appliqueContenu({
       titre: 'Télécharger les PDF',
       texteSimple:
-        "Obtenir les documents utiles à la sécurisation et à l'homologation des services sélectionnés.",
-      texteMultiple:
         "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.",
+      texteMultiple:
+        "Obtenir les documents utiles à la sécurisation et à l'homologation des services sélectionnés.",
     });
   }
 
