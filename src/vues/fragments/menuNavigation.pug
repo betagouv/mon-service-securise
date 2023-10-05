@@ -1,8 +1,9 @@
 - const estSurCreationDeService = !!service.id === false
 
-mixin etapeParcours({ id, position, url, description, sousTitre, statut })
+mixin etapeParcours({ id, position, url, description, sousTitre, statut, rubriqueDroit })
   -
     const estActive = etapeActive === id
+    const estVisible = estSurCreationDeService || !(autorisationsService[rubriqueDroit].estMasque)
     const statutSaisie = (s) => {
       switch (s) {
         case InformationsHomologation.COMPLETES: return 'faite';
@@ -11,14 +12,15 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut })
       }
     }
 
-  li
-    a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
-      .pastille
-        span.action-saisie(id = id)
-      .none-si-ferme
-        span.nom-action!= description
-        span.sous-titre!= sousTitre
-      .statut-saisie.none-si-ferme(class = statutSaisie(statut))
+  if estVisible
+    li
+      a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
+        .pastille
+          span.action-saisie(id = id)
+        .none-si-ferme
+          span.nom-action!= description
+          span.sous-titre!= sousTitre
+        .statut-saisie.none-si-ferme(class = statutSaisie(statut))
 
 
 .menu-navigation(class = preferencesUtilisateur.etatMenuNavigation === 'ferme' ? 'ferme' : '')

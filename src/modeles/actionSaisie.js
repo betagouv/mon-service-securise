@@ -30,6 +30,7 @@ class ActionSaisie extends Base {
       sousTitre: donnees.sousTitre,
       position: donnees.position,
       url: `/service/${this.service.id}/${this.id}`,
+      rubriqueDroit: donnees.rubriqueDroit,
     };
   }
 
