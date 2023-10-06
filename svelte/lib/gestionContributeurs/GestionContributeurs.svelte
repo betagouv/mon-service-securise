@@ -4,6 +4,7 @@
   import LigneContributeur from './LigneContributeur.svelte';
   import SuppressionContributeur from './SuppressionContributeur.svelte';
   import { onMount } from 'svelte';
+  import PersonnalisationContributeur from './PersonnalisationContributeur.svelte';
 
   $: surServiceUnique = $store.services.length === 1;
   $: serviceUnique = $store.services[0];
@@ -21,6 +22,8 @@
 
 {#if $store.etapeCourante === 'SuppressionContributeur'}
   <SuppressionContributeur />
+{:else if $store.etapeCourante === 'PersonnalisationContributeur'}
+  <PersonnalisationContributeur />
 {:else}
   {#if $store.services.every((s) => s.estCreateur)}
     <InvitationContributeur />
