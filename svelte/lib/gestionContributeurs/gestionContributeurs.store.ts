@@ -9,11 +9,13 @@ import type {
 type Etape =
   | 'ListeContributeurs'
   | 'SuppressionContributeur'
-  | 'InvitationContributeurs';
+  | 'InvitationContributeurs'
+  | 'PersonnalisationContributeur';
 
 type EtatGestionContributeursStore = {
   etapeCourante: Etape;
   utilisateurEnCoursDeSuppression: Utilisateur | null;
+  utilisateurEnCoursDePersonnalisation: Utilisateur | null;
   services: Service[];
   autorisations: Record<IdUtilisateur, Autorisation>;
 };
@@ -21,6 +23,7 @@ type EtatGestionContributeursStore = {
 const valeurParDefaut: EtatGestionContributeursStore = {
   etapeCourante: 'ListeContributeurs',
   utilisateurEnCoursDeSuppression: null,
+  utilisateurEnCoursDePersonnalisation: null,
   services: [],
   autorisations: {},
 };
@@ -43,9 +46,16 @@ export const store = {
         ...etat,
         etapeCourante: 'ListeContributeurs',
         utilisateurEnCoursDeSuppression: null,
+        utilisateurEnCoursDePersonnalisation: null,
       })),
     afficheEtapeInvitation: () =>
       update((etat) => ({ ...etat, etapeCourante: 'InvitationContributeurs' })),
+    affichePersonnalisationContributeur: (cible: Utilisateur) =>
+      update((etat) => ({
+        ...etat,
+        etapeCourante: 'PersonnalisationContributeur',
+        utilisateurEnCoursDePersonnalisation: cible,
+      })),
   },
   contributeurs: {
     supprime: (contributeur: Utilisateur) =>

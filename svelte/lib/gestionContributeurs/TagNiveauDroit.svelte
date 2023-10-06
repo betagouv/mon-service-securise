@@ -13,7 +13,10 @@
   export let niveau: ResumeNiveauDroit;
   export let droitsModifiables: boolean;
 
-  const dispatch = createEventDispatcher<{ droitsChange: ResumeNiveauDroit }>();
+  const dispatch = createEventDispatcher<{
+    droitsChange: ResumeNiveauDroit;
+    choixPersonnalisation: null;
+  }>();
 </script>
 
 {#if !droitsModifiables}
@@ -42,6 +45,16 @@
       >
         <div class="nom">Édition</div>
         <div class="description">Modifier et ajouter des informations</div>
+      </div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div
+        class="role-propose"
+        on:click={() => dispatch('choixPersonnalisation')}
+      >
+        <div class="nom">Personnalisé</div>
+        <div class="description">
+          Disposer de droits spécifiques à chaque rubrique
+        </div>
       </div>
     </div>
   </MenuFlottant>

@@ -10,6 +10,7 @@
   import { enDroitsSurRubrique } from './gestionContributeurs.d';
 
   export let droitsModifiables: boolean;
+  export let afficheDroits: boolean = true;
   export let utilisateur: Utilisateur;
 
   let serviceUnique: Service;
@@ -40,11 +41,14 @@
     </div>
   </div>
   <div class="conteneur-actions">
-    {#if autorisation?.resumeNiveauDroit}
+    {#if afficheDroits && autorisation?.resumeNiveauDroit}
       <TagNiveauDroit
         niveau={autorisation.resumeNiveauDroit}
         {droitsModifiables}
-        on:droitsChange={(e) => changeDroits(e.detail)}
+        on:droitsChange={({ detail: nouveauxDroits }) =>
+          changeDroits(nouveauxDroits)}
+        on:choixPersonnalisation={() =>
+          store.navigation.affichePersonnalisationContributeur(utilisateur)}
       />
     {/if}
 
