@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import type {
   Autorisation,
+  IdUtilisateur,
   Service,
   Utilisateur,
 } from './gestionContributeurs.d';
@@ -14,7 +15,7 @@ type EtatGestionContributeursStore = {
   etapeCourante: Etape;
   utilisateurEnCoursDeSuppression: Utilisateur | null;
   services: Service[];
-  autorisations: Record<string, Autorisation>;
+  autorisations: Record<IdUtilisateur, Autorisation>;
 };
 
 const valeurParDefaut: EtatGestionContributeursStore = {
@@ -59,7 +60,7 @@ export const store = {
   autorisations: {
     charge: (autorisations: Autorisation[]) => {
       const parIdUtilisateur = autorisations.reduce(
-        (acc: Record<string, Autorisation>, a: Autorisation) => ({
+        (acc: Record<IdUtilisateur, Autorisation>, a: Autorisation) => ({
           ...acc,
           [a.idUtilisateur]: a,
         }),

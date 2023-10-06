@@ -17,8 +17,10 @@ export type Service = {
   nomService: string;
 };
 
+export type IdUtilisateur = string;
+
 export type Utilisateur = {
-  id: string;
+  id: IdUtilisateur;
   prenomNom: string;
   initiales: string;
   poste: string;
@@ -60,8 +62,10 @@ export const enDroitsSurRubrique = (
   }
 };
 
+export type IdAutorisation = string;
+
 export type Autorisation = {
-  idAutorisation: string;
-  idUtilisateur: string;
+  idAutorisation: IdAutorisation;
+  idUtilisateur: IdUtilisateur;
   resumeNiveauDroit: ResumeNiveauDroit;
 };
