@@ -27,6 +27,11 @@ export type Utilisateur = {
   email: string;
 };
 
+type Invisible = 0;
+type Lecture = 1;
+type Ecriture = 2;
+type Permission = Invisible | Lecture | Ecriture;
+
 export type ResumeNiveauDroit =
   | 'PROPRIETAIRE'
   | 'ECRITURE'
@@ -42,20 +47,20 @@ export type Rubrique =
 
 export const enDroitsSurRubrique = (
   resume: ResumeNiveauDroit
-): Record<Rubrique, number> => {
-  const rubriquesAvecDroit = (droit: number) => ({
-    DECRIRE: droit,
-    SECURISER: droit,
-    HOMOLOGUER: droit,
-    RISQUES: droit,
-    CONTACTS: droit,
+): Record<Rubrique, Permission> => {
+  const rubriquesAvecPermission = (p: Permission) => ({
+    DECRIRE: p,
+    SECURISER: p,
+    HOMOLOGUER: p,
+    RISQUES: p,
+    CONTACTS: p,
   });
 
   switch (resume) {
     case 'LECTURE':
-      return rubriquesAvecDroit(1);
+      return rubriquesAvecPermission(1);
     case 'ECRITURE':
-      return rubriquesAvecDroit(2);
+      return rubriquesAvecPermission(2);
     case 'PROPRIETAIRE':
     case 'PERSONNALISE':
       throw new Error(`${resume} non convertible en permission`);
@@ -68,4 +73,5 @@ export type Autorisation = {
   idAutorisation: IdAutorisation;
   idUtilisateur: IdUtilisateur;
   resumeNiveauDroit: ResumeNiveauDroit;
+  droits: Record<Rubrique, Permission>;
 };

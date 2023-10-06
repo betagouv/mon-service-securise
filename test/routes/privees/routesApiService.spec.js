@@ -1654,6 +1654,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idAutorisation: 'uuid-1',
         idUtilisateur: '888',
         resumeNiveauDroit: 'PERSONNALISE',
+        droits: droitsCible,
       });
     });
 
@@ -1730,11 +1731,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesPassees).to.eql({ idService: '456' });
     });
 
-    it('retourne le résumé du niveau de droit pour chaque utilisateur du service', async () => {
+    it('retourne les autorisations de chaque utilisateur du service', async () => {
       testeur.depotDonnees().autorisationsDuService = async () => [
         uneAutorisation()
           .avecId('uuid-a')
           .deCreateurDeService('AAA', '456')
+          .avecDroits({ DECRIRE: 2 })
           .construis(),
       ];
 
@@ -1747,6 +1749,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           idAutorisation: 'uuid-a',
           idUtilisateur: 'AAA',
           resumeNiveauDroit: 'PROPRIETAIRE',
+          droits: { DECRIRE: 2 },
         },
       ]);
     });
