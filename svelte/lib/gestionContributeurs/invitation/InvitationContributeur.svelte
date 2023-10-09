@@ -12,6 +12,8 @@
   import ListeInvitations from './ListeInvitations.svelte';
   import * as api from './invitation.api';
   import BoutonsActions from './BoutonsActions.svelte';
+  import EnvoiEnCours from './EnvoiEnCours.svelte';
+  import Rapport from './Rapport.svelte';
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
   type Email = string;
@@ -116,17 +118,7 @@
     }}
   />
 {:else if etapeCourante === 'EnvoiEnCours'}
-  <div class="conteneur-loader">
-    <div class="icone-chargement"></div>
-    <div class="titre-loader">Envoi en cours...</div>
-    <div class="info-loader">Merci de ne pas rafraîchir la page</div>
-  </div>
+  <EnvoiEnCours />
 {:else if etapeCourante === 'Rapport'}
-  <div class="conteneur-rapport">
-    <img
-      src="/statique/assets/images/image_succes_invitation.svg"
-      alt="Icône envoi email"
-    />
-    <p>Un e-mail d'invitation a bien été envoyé.</p>
-  </div>
+  <Rapport />
 {/if}
