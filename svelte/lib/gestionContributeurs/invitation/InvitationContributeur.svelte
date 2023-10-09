@@ -53,8 +53,8 @@
       };
   };
 
-  const supprimeInvitation = ({ id }: Utilisateur) => {
-    delete invitations[id];
+  const supprimeInvitation = ({ email }: Utilisateur) => {
+    delete invitations[email];
     invitations = invitations;
   };
 
