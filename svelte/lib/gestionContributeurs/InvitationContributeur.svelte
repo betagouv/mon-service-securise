@@ -30,6 +30,7 @@
     personnalises: Record<Rubrique, Permission>
   ) => {
     invitations[enPersonnalisation!.email].droits = personnalises;
+    invitations = invitations;
   };
 
   $: services = $store.services;
@@ -170,7 +171,6 @@
     }}
     on:valider={({ detail: personnalises }) => {
       personnaliseLesDroitsInvite(personnalises);
-      invitations = invitations;
       etapeCourante = 'Ajout';
     }}
   />
