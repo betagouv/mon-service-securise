@@ -10,7 +10,7 @@
   import ChampAvecSuggestions from '../kit/ChampAvecSuggestions.svelte';
   import Initiales from '../kit/Initiales.svelte';
   import TagNiveauDroit from '../kit/TagNiveauDroit.svelte';
-  import PersonnalisationInvitation from './PersonnalisationInvitation.svelte';
+  import PersonnalisationDroits from '../personnalisation/PersonnalisationDroits.svelte';
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
   type Email = string;
@@ -162,8 +162,8 @@
     {/if}
   </form>
 {:else if etapeCourante === 'Personnalisation'}
-  <PersonnalisationInvitation
-    invite={aPersonnaliser().utilisateur}
+  <PersonnalisationDroits
+    utilisateur={aPersonnaliser().utilisateur}
     droitsOriginaux={aPersonnaliser().droits}
     on:annuler={() => {
       enPersonnalisation = null;
