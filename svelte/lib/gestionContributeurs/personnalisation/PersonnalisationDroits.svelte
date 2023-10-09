@@ -10,7 +10,7 @@
   import { createEventDispatcher } from 'svelte';
 
   export let utilisateur: Utilisateur;
-  export let droitsOriginaux: Record<IdUtilisateur, Permission>;
+  export let droitsOriginaux: Record<Rubrique, Permission>;
   $: redefinis = { ...droitsOriginaux };
 
   let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
@@ -21,6 +21,12 @@
     { id: 'RISQUES', nom: 'Risques de sécurité', droit: redefinis.RISQUES },
     { id: 'CONTACTS', nom: 'Contacts utiles', droit: redefinis.CONTACTS },
   ];
+
+  const changeVisibilite = (event: Event, id: Rubrique) => {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) redefinis[id] = 1;
+    else redefinis[id] = 0;
+  };
 
   const dispatch = createEventDispatcher<{
     valider: Record<IdUtilisateur, Permission>;
@@ -44,7 +50,14 @@
   <div class="personnalisation">
     {#each rubriques as { id, nom, droit }}
       <div class="rubrique">
-        <div class="nom-rubrique">{nom}</div>
+        <div>
+          <input
+            type="checkbox"
+            checked={droit > 0}
+            on:change={(e) => changeVisibilite(e, id)}
+          />
+          <div class="nom-rubrique">{nom}</div>
+        </div>
         <div>
           {#if droit !== 0}
             <TagLectureEcriture
@@ -111,11 +124,19 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    height: 1.7em;
+  }
+  .rubrique input[type='checkbox'] {
+    width: 20px !important;
+    height: 20px;
+    margin: 0;
+    transform: none;
   }
   .rubrique > div {
     display: flex;
     align-items: center;
     flex-direction: row;
+    column-gap: 10px;
   }
   .rubrique .nom-rubrique {
     font-weight: 500;
