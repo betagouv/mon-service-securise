@@ -1,6 +1,8 @@
 <script lang="ts">
   import type {
+    Permission,
     ResumeNiveauDroit,
+    Rubrique,
     Utilisateur,
   } from './gestionContributeurs.d';
   import { enDroitsSurRubrique } from './gestionContributeurs.d';
@@ -13,7 +15,7 @@
   type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
   type Invitation = {
     utilisateur: Utilisateur;
-    droit: ResumeNiveauDroit;
+    droits: Record<Rubrique, Permission>;
   };
 
   let invitations: Invitation[] = [];
@@ -31,20 +33,31 @@
     return reponse.data.suggestions;
   };
 
+  const resumeLesDroits = (
+    droits: Record<Rubrique, Permission>
+  ): ResumeNiveauDroit => {
+    if (Object.values(droits).every((p) => p === 1)) return 'LECTURE';
+    if (Object.values(droits).every((p) => p === 2)) return 'ECRITURE';
+    return 'PERSONNALISE';
+  };
+
   const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
     store.navigation.afficheEtapeInvitation();
 
-    const memeEmails = (email1: string, email2: string) =>
+    const memesEmails = (email1: string, email2: string) =>
       email1.localeCompare(email2, 'fr', { sensitivity: 'accent' }) === 0;
 
     const dejaInvite = invitations.find((c) =>
-      memeEmails(c.utilisateur.email, evenement.detail.email)
+      memesEmails(c.utilisateur.email, evenement.detail.email)
     );
 
     if (!dejaInvite)
       invitations = [
         ...invitations,
-        { utilisateur: evenement.detail, droit: 'ECRITURE' },
+        {
+          utilisateur: evenement.detail,
+          droits: enDroitsSurRubrique('ECRITURE'),
+        },
       ];
   };
 
@@ -58,7 +71,7 @@
       invitations.map((i) =>
         axios.post('/api/autorisation', {
           emailContributeur: i.utilisateur.email,
-          droits: enDroitsSurRubrique(i.droit),
+          droits: i.droits,
           idServices: services.map((s) => s.id),
         })
       )
@@ -78,20 +91,22 @@
         on:contributeurChoisi={ajouteInvitation}
       />
       <ul id="liste-ajout-contributeur">
-        {#each invitations as { utilisateur, droit } (utilisateur.email)}
+        {#each invitations as { utilisateur, droits } (utilisateur.email)}
           <li class="contributeur-a-inviter">
             <div class="contenu-nom-prenom">
               <Initiales
                 valeur={utilisateur.initiales}
-                resumeNiveauDroit={droit}
+                resumeNiveauDroit={resumeLesDroits(droits)}
               />
               <span>{@html utilisateur.prenomNom}</span>
             </div>
             <div class="conteneur-actions">
               <TagNiveauDroit
-                niveau={droit}
+                niveau={resumeLesDroits(droits)}
                 droitsModifiables={true}
-                on:droitsChange={(e) => (droit = e.detail)}
+                on:droitsChange={(e) =>
+                  (droits = enDroitsSurRubrique(e.detail))}
+                on:choixPersonnalisation={() => {}}
               />
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <img
