@@ -5,8 +5,8 @@
   import TagLectureEcriture from './TagLectureEcriture.svelte';
 
   $: contributeur = $store.utilisateurEnCoursDePersonnalisation!;
-  $: autorisation = $store.autorisations[contributeur.id];
-  $: redefinis = { ...autorisation.droits };
+  $: originaux = $store.autorisations[contributeur.id];
+  $: redefinis = { ...originaux.droits };
 
   let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
   $: rubriques = [
@@ -19,7 +19,7 @@
 
   const envoyerDroits = async () => {
     const idService = $store.services[0].id;
-    const idAutorisation = autorisation.idAutorisation;
+    const idAutorisation = originaux.idAutorisation;
     const { data: nouvelleAutorisation } = await axios.patch(
       `/api/service/${idService}/autorisations/${idAutorisation}`,
       { droits: redefinis }
@@ -62,7 +62,10 @@
   <button
     class="bouton bouton-secondaire"
     type="button"
-    on:click={() => store.navigation.afficheEtapeListe()}
+    on:click={() => {
+      store.autorisations.remplace(originaux);
+      store.navigation.afficheEtapeListe();
+    }}
   >
     Annuler
   </button>
