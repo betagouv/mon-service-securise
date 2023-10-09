@@ -1,18 +1,12 @@
 <script lang="ts">
-  import { store } from './gestionContributeurs.store';
-  import type {
-    Rubrique,
-    Permission,
-    Utilisateur,
-  } from './gestionContributeurs.d';
-  import LigneContributeur from './LigneContributeur.svelte';
-  import TagLectureEcriture from './TagLectureEcriture.svelte';
-  import { createEventDispatcher } from 'svelte';
+  import { store } from '../gestionContributeurs.store';
+  import type { Rubrique, Permission } from '../gestionContributeurs.d';
+  import LigneContributeur from '../kit/LigneContributeur.svelte';
+  import TagLectureEcriture from '../personnalisation/TagLectureEcriture.svelte';
 
-  export let invite: Utilisateur;
-  export let droitsOriginaux: Record<Rubrique, Permission>;
-
-  $: redefinis = { ...droitsOriginaux };
+  $: contributeur = $store.utilisateurEnCoursDePersonnalisation!;
+  $: originaux = $store.autorisations[contributeur.id];
+  $: redefinis = { ...originaux.droits };
 
   let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
   $: rubriques = [
@@ -23,17 +17,23 @@
     { id: 'CONTACTS', nom: 'Contacts utiles', droit: redefinis.CONTACTS },
   ];
 
-  const dispatch = createEventDispatcher<{
-    annuler: null;
-    valider: Record<Rubrique, Permission>;
-  }>();
+  const envoyerDroits = async () => {
+    const idService = $store.services[0].id;
+    const idAutorisation = originaux.idAutorisation;
+    const { data: nouvelleAutorisation } = await axios.patch(
+      `/api/service/${idService}/autorisations/${idAutorisation}`,
+      { droits: redefinis }
+    );
+    store.autorisations.remplace(nouvelleAutorisation);
+    store.navigation.afficheEtapeListe();
+  };
 </script>
 
 <div class="identite-contributeur">
   <div class="titre">Contributeur sélectionné</div>
   <ul class="liste-contributeurs">
     <LigneContributeur
-      utilisateur={invite}
+      utilisateur={contributeur}
       droitsModifiables={false}
       afficheDroits={false}
     />
@@ -62,7 +62,10 @@
   <button
     class="bouton bouton-secondaire"
     type="button"
-    on:click={() => dispatch('annuler')}
+    on:click={() => {
+      store.autorisations.remplace(originaux);
+      store.navigation.afficheEtapeListe();
+    }}
   >
     Annuler
   </button>
@@ -70,7 +73,7 @@
     class="bouton"
     id="action-invitation"
     type="button"
-    on:click={() => dispatch('valider', redefinis)}
+    on:click={() => envoyerDroits()}
   >
     Enregistrer
   </button>

@@ -3,11 +3,11 @@
     ResumeNiveauDroit,
     Service,
     Utilisateur,
-  } from './gestionContributeurs.d';
-  import { store } from './gestionContributeurs.store';
+  } from '../gestionContributeurs.d';
+  import { store } from '../gestionContributeurs.store';
   import Initiales from './Initiales.svelte';
   import TagNiveauDroit from './TagNiveauDroit.svelte';
-  import { enDroitsSurRubrique } from './gestionContributeurs.d';
+  import { enDroitsSurRubrique } from '../gestionContributeurs.d';
 
   export let droitsModifiables: boolean;
   export let afficheDroits: boolean = true;

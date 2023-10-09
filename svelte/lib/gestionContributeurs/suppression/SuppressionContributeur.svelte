@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Utilisateur } from './gestionContributeurs.d';
-  import { store } from './gestionContributeurs.store';
+  import type { Utilisateur } from '../gestionContributeurs.d';
+  import { store } from '../gestionContributeurs.store';
 
   $: service = $store.services[0];
   $: utilisateur = $store.utilisateurEnCoursDeSuppression as Utilisateur;

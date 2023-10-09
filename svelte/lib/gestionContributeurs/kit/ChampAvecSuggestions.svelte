@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Utilisateur } from './gestionContributeurs.d';
+  import type { Utilisateur } from '../gestionContributeurs.d';
 
   import { createEventDispatcher } from 'svelte';
   import Initiales from './Initiales.svelte';

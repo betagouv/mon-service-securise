@@ -4,12 +4,12 @@
     ResumeNiveauDroit,
     Rubrique,
     Utilisateur,
-  } from './gestionContributeurs.d';
-  import { enDroitsSurRubrique } from './gestionContributeurs.d';
-  import { store } from './gestionContributeurs.store';
-  import ChampAvecSuggestions from './ChampAvecSuggestions.svelte';
-  import Initiales from './Initiales.svelte';
-  import TagNiveauDroit from './TagNiveauDroit.svelte';
+  } from '../gestionContributeurs.d';
+  import { enDroitsSurRubrique } from '../gestionContributeurs.d';
+  import { store } from '../gestionContributeurs.store';
+  import ChampAvecSuggestions from '../kit/ChampAvecSuggestions.svelte';
+  import Initiales from '../kit/Initiales.svelte';
+  import TagNiveauDroit from '../kit/TagNiveauDroit.svelte';
   import PersonnalisationInvitation from './PersonnalisationInvitation.svelte';
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
