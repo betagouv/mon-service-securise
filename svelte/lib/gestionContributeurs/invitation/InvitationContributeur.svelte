@@ -11,6 +11,7 @@
   import PersonnalisationDroits from '../personnalisation/PersonnalisationDroits.svelte';
   import ListeInvitations from './ListeInvitations.svelte';
   import * as api from './invitation.api';
+  import BoutonsActions from './BoutonsActions.svelte';
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
   type Email = string;
@@ -91,27 +92,14 @@
       />
     </label>
     {#if afficheLesBoutonsAction}
-      <div class="conteneur-actions">
-        <button
-          class="bouton bouton-secondaire fermeture-tiroir"
-          type="button"
-          on:click={() => {
-            invitations = {};
-            store.navigation.afficheEtapeListe();
-          }}
-        >
-          Annuler
-        </button>
-        {#if Object.values(invitations).length}
-          <button
-            class="bouton"
-            type="button"
-            on:click={() => envoiInvitation()}
-          >
-            Envoyer une invitation
-          </button>
-        {/if}
-      </div>
+      <BoutonsActions
+        afficherBoutonEnvoyer={Object.values(invitations).length > 0}
+        on:annuler={() => {
+          invitations = {};
+          store.navigation.afficheEtapeListe();
+        }}
+        on:envoyer={() => envoiInvitation()}
+      />
     {/if}
   </form>
 {:else if etapeCourante === 'Personnalisation'}
