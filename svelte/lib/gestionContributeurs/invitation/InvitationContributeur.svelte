@@ -9,6 +9,7 @@
   import ChampAvecSuggestions from '../kit/ChampAvecSuggestions.svelte';
   import PersonnalisationDroits from '../personnalisation/PersonnalisationDroits.svelte';
   import ListeInvitations from './ListeInvitations.svelte';
+  import * as api from './invitation.api';
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
   type Email = string;
@@ -34,14 +35,6 @@
   $: services = $store.services;
   $: afficheLesBoutonsAction =
     $store.etapeCourante === 'InvitationContributeurs';
-
-  const rechercheContributeurs = async (recherche: string) => {
-    const reponse = await axios.get('/api/annuaire/contributeurs', {
-      params: { recherche },
-    });
-
-    return reponse.data.suggestions;
-  };
 
   const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
     store.navigation.afficheEtapeInvitation();
@@ -70,15 +63,7 @@
 
   const envoiInvitation = async () => {
     etapeCourante = 'EnvoiEnCours';
-    await Promise.all(
-      Object.values(invitations).map((i) =>
-        axios.post('/api/autorisation', {
-          emailContributeur: i.utilisateur.email,
-          droits: i.droits,
-          idServices: services.map((s) => s.id),
-        })
-      )
-    );
+    await api.envoieInvitations(Object.values(invitations), services);
     invitations = {};
     etapeCourante = 'Rapport';
     document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
@@ -90,7 +75,7 @@
     <label for="email-invitation-collaboration">
       Ajouter un ou plusieurs contributeurs
       <ChampAvecSuggestions
-        callbackDeRecherche={rechercheContributeurs}
+        callbackDeRecherche={api.rechercheContributeurs}
         on:contributeurChoisi={ajouteInvitation}
       />
       <ListeInvitations
