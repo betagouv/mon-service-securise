@@ -105,7 +105,6 @@
         {#if Object.values(invitations).length}
           <button
             class="bouton"
-            id="action-invitation"
             type="button"
             on:click={() => envoiInvitation()}
           >
