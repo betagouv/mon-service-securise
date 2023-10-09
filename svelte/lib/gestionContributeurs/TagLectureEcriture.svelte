@@ -1,9 +1,14 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import MenuFlottant from '../ui/MenuFlottant.svelte';
   import type { Ecriture, Lecture } from './gestionContributeurs.d';
 
   const LIBELLE_DROITS = { [1]: 'Lecture', [2]: 'Édition' };
-  const droitsDisponibles = [
+  const droitsDisponibles: {
+    nom: string;
+    description: string;
+    droit: Lecture | Ecriture;
+  }[] = [
     {
       nom: LIBELLE_DROITS[1],
       description: 'Consulter uniquement les informations',
@@ -17,6 +22,9 @@
   ];
 
   export let droit: Lecture | Ecriture;
+  const dispatch = createEventDispatcher<{
+    droitChange: Lecture | Ecriture;
+  }>();
 </script>
 
 <MenuFlottant>
@@ -34,7 +42,7 @@
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="droit-propose"
-        on:click={() => {}}
+        on:click={() => dispatch('droitChange', droit)}
         class:lecture={droit === 1}
         class:ecriture={droit === 2}
       >
