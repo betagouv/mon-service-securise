@@ -6,20 +6,31 @@
     Utilisateur,
   } from './gestionContributeurs.d';
   import { enDroitsSurRubrique } from './gestionContributeurs.d';
-
   import { store } from './gestionContributeurs.store';
   import ChampAvecSuggestions from './ChampAvecSuggestions.svelte';
   import Initiales from './Initiales.svelte';
   import TagNiveauDroit from './TagNiveauDroit.svelte';
+  import PersonnalisationInvitation from './PersonnalisationInvitation.svelte';
 
-  type Etape = 'Ajout' | 'EnvoiEnCours' | 'Rapport';
+  type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
+  type Email = string;
   type Invitation = {
     utilisateur: Utilisateur;
     droits: Record<Rubrique, Permission>;
   };
 
-  let invitations: Invitation[] = [];
+  let invitations: Record<Email, Invitation> = {};
   let etapeCourante: Etape = 'Ajout';
+  let enPersonnalisation: Utilisateur | null;
+  const aPersonnaliser = () => ({
+    utilisateur: enPersonnalisation!,
+    droits: invitations[enPersonnalisation!.email].droits,
+  });
+  const personnaliseLesDroitsInvite = (
+    personnalises: Record<Rubrique, Permission>
+  ) => {
+    invitations[enPersonnalisation!.email].droits = personnalises;
+  };
 
   $: services = $store.services;
   $: afficheLesBoutonsAction =
@@ -47,28 +58,29 @@
     const memesEmails = (email1: string, email2: string) =>
       email1.localeCompare(email2, 'fr', { sensitivity: 'accent' }) === 0;
 
-    const dejaInvite = invitations.find((c) =>
-      memesEmails(c.utilisateur.email, evenement.detail.email)
+    const dejaInvite = Object.values(invitations).find((i) =>
+      memesEmails(i.utilisateur.email, evenement.detail.email)
     );
 
     if (!dejaInvite)
-      invitations = [
+      invitations = {
         ...invitations,
-        {
+        [evenement.detail.email]: {
           utilisateur: evenement.detail,
           droits: enDroitsSurRubrique('ECRITURE'),
         },
-      ];
+      };
   };
 
-  const supprimeInvitation = ({ email }: Utilisateur) => {
-    invitations = invitations.filter((c) => c.utilisateur.email !== email);
+  const supprimeInvitation = ({ id }: Utilisateur) => {
+    delete invitations[id];
+    invitations = invitations;
   };
 
   const envoiInvitation = async () => {
     etapeCourante = 'EnvoiEnCours';
     await Promise.all(
-      invitations.map((i) =>
+      Object.values(invitations).map((i) =>
         axios.post('/api/autorisation', {
           emailContributeur: i.utilisateur.email,
           droits: i.droits,
@@ -76,7 +88,7 @@
         })
       )
     );
-    invitations = [];
+    invitations = {};
     etapeCourante = 'Rapport';
     document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
   };
@@ -91,7 +103,7 @@
         on:contributeurChoisi={ajouteInvitation}
       />
       <ul id="liste-ajout-contributeur">
-        {#each invitations as { utilisateur, droits } (utilisateur.email)}
+        {#each Object.values(invitations) as { utilisateur, droits } (utilisateur.email)}
           <li class="contributeur-a-inviter">
             <div class="contenu-nom-prenom">
               <Initiales
@@ -106,7 +118,10 @@
                 droitsModifiables={true}
                 on:droitsChange={(e) =>
                   (droits = enDroitsSurRubrique(e.detail))}
-                on:choixPersonnalisation={() => {}}
+                on:choixPersonnalisation={() => {
+                  enPersonnalisation = utilisateur;
+                  etapeCourante = 'Personnalisation';
+                }}
               />
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <img
@@ -126,13 +141,13 @@
           class="bouton bouton-secondaire fermeture-tiroir"
           type="button"
           on:click={() => {
-            invitations = [];
+            invitations = {};
             store.navigation.afficheEtapeListe();
           }}
         >
           Annuler
         </button>
-        {#if invitations.length}
+        {#if Object.values(invitations).length}
           <button
             class="bouton"
             id="action-invitation"
@@ -145,6 +160,20 @@
       </div>
     {/if}
   </form>
+{:else if etapeCourante === 'Personnalisation'}
+  <PersonnalisationInvitation
+    invite={aPersonnaliser().utilisateur}
+    droitsOriginaux={aPersonnaliser().droits}
+    on:annuler={() => {
+      enPersonnalisation = null;
+      etapeCourante = 'Ajout';
+    }}
+    on:valider={({ detail: personnalises }) => {
+      personnaliseLesDroitsInvite(personnalises);
+      invitations = invitations;
+      etapeCourante = 'Ajout';
+    }}
+  />
 {:else if etapeCourante === 'EnvoiEnCours'}
   <div class="conteneur-loader">
     <div class="icone-chargement"></div>
