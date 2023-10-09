@@ -5,29 +5,28 @@
   import TagLectureEcriture from './TagLectureEcriture.svelte';
 
   $: contributeur = $store.utilisateurEnCoursDePersonnalisation!;
-  $: autorisations = $store.autorisations[contributeur.id];
-  $: redefinies = { ...autorisations };
+  $: autorisation = $store.autorisations[contributeur.id];
+  $: redefinis = { ...autorisation.droits };
 
   let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
   $: rubriques = [
-    { id: 'DECRIRE', nom: 'Décrire', droit: redefinies.droits.DECRIRE },
-    { id: 'SECURISER', nom: 'Sécuriser', droit: redefinies.droits.SECURISER },
-    {
-      id: 'HOMOLOGUER',
-      nom: 'Homologuer',
-      droit: redefinies.droits.HOMOLOGUER,
-    },
-    {
-      id: 'RISQUES',
-      nom: 'Risques de sécurité',
-      droit: redefinies.droits.RISQUES,
-    },
-    {
-      id: 'CONTACTS',
-      nom: 'Contacts utiles',
-      droit: redefinies.droits.CONTACTS,
-    },
+    { id: 'DECRIRE', nom: 'Décrire', droit: redefinis.DECRIRE },
+    { id: 'SECURISER', nom: 'Sécuriser', droit: redefinis.SECURISER },
+    { id: 'HOMOLOGUER', nom: 'Homologuer', droit: redefinis.HOMOLOGUER },
+    { id: 'RISQUES', nom: 'Risques de sécurité', droit: redefinis.RISQUES },
+    { id: 'CONTACTS', nom: 'Contacts utiles', droit: redefinis.CONTACTS },
   ];
+
+  const envoyerDroits = async () => {
+    const idService = $store.services[0].id;
+    const idAutorisation = autorisation.idAutorisation;
+    const { data: nouvelleAutorisation } = await axios.patch(
+      `/api/service/${idService}/autorisations/${idAutorisation}`,
+      { droits: redefinis }
+    );
+    store.autorisations.remplace(nouvelleAutorisation);
+    store.navigation.afficheEtapeListe();
+  };
 </script>
 
 <div class="identite-contributeur">
@@ -51,7 +50,7 @@
           {#if droit !== 0}
             <TagLectureEcriture
               {droit}
-              on:droitChange={(e) => (redefinies.droits[id] = e.detail)}
+              on:droitChange={(e) => (redefinis[id] = e.detail)}
             />
           {/if}
         </div>
@@ -71,7 +70,7 @@
     class="bouton"
     id="action-invitation"
     type="button"
-    on:click={() => {}}
+    on:click={() => envoyerDroits()}
   >
     Enregistrer
   </button>
