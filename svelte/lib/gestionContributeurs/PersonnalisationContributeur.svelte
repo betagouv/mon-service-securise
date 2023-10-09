@@ -1,17 +1,32 @@
 <script lang="ts">
   import { store } from './gestionContributeurs.store';
+  import type { Rubrique, Permission } from './gestionContributeurs.d';
   import LigneContributeur from './LigneContributeur.svelte';
   import TagLectureEcriture from './TagLectureEcriture.svelte';
 
   $: contributeur = $store.utilisateurEnCoursDePersonnalisation!;
   $: autorisations = $store.autorisations[contributeur.id];
+  $: redefinies = { ...autorisations };
 
+  let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
   $: rubriques = [
-    { nom: 'Décrire', droit: autorisations.droits.DECRIRE },
-    { nom: 'Sécuriser', droit: autorisations.droits.SECURISER },
-    { nom: 'Homologuer', droit: autorisations.droits.HOMOLOGUER },
-    { nom: 'Risques de sécurité', droit: autorisations.droits.RISQUES },
-    { nom: 'Contacts utiles', droit: autorisations.droits.CONTACTS },
+    { id: 'DECRIRE', nom: 'Décrire', droit: redefinies.droits.DECRIRE },
+    { id: 'SECURISER', nom: 'Sécuriser', droit: redefinies.droits.SECURISER },
+    {
+      id: 'HOMOLOGUER',
+      nom: 'Homologuer',
+      droit: redefinies.droits.HOMOLOGUER,
+    },
+    {
+      id: 'RISQUES',
+      nom: 'Risques de sécurité',
+      droit: redefinies.droits.RISQUES,
+    },
+    {
+      id: 'CONTACTS',
+      nom: 'Contacts utiles',
+      droit: redefinies.droits.CONTACTS,
+    },
   ];
 </script>
 
@@ -29,12 +44,15 @@
   <div class="titre">Permissions</div>
   <div>Sélectionner les droits d'accès pour chaque rubrique.</div>
   <div class="personnalisation">
-    {#each rubriques as { nom, droit }}
+    {#each rubriques as { id, nom, droit }}
       <div class="rubrique">
         <div class="nom-rubrique">{nom}</div>
         <div>
           {#if droit !== 0}
-            <TagLectureEcriture {droit} />
+            <TagLectureEcriture
+              {droit}
+              on:droitChange={(e) => (redefinies.droits[id] = e.detail)}
+            />
           {/if}
         </div>
       </div>
