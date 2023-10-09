@@ -1,16 +1,14 @@
 <script lang="ts">
   import type {
     Permission,
-    ResumeNiveauDroit,
     Rubrique,
     Utilisateur,
   } from '../gestionContributeurs.d';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import { store } from '../gestionContributeurs.store';
   import ChampAvecSuggestions from '../kit/ChampAvecSuggestions.svelte';
-  import Initiales from '../kit/Initiales.svelte';
-  import TagNiveauDroit from '../kit/TagNiveauDroit.svelte';
   import PersonnalisationDroits from '../personnalisation/PersonnalisationDroits.svelte';
+  import ListeInvitations from './ListeInvitations.svelte';
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
   type Email = string;
@@ -43,14 +41,6 @@
     });
 
     return reponse.data.suggestions;
-  };
-
-  const resumeLesDroits = (
-    droits: Record<Rubrique, Permission>
-  ): ResumeNiveauDroit => {
-    if (Object.values(droits).every((p) => p === 1)) return 'LECTURE';
-    if (Object.values(droits).every((p) => p === 2)) return 'ECRITURE';
-    return 'PERSONNALISE';
   };
 
   const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
@@ -103,38 +93,20 @@
         callbackDeRecherche={rechercheContributeurs}
         on:contributeurChoisi={ajouteInvitation}
       />
-      <ul id="liste-ajout-contributeur">
-        {#each Object.values(invitations) as { utilisateur, droits } (utilisateur.email)}
-          <li class="contributeur-a-inviter">
-            <div class="contenu-nom-prenom">
-              <Initiales
-                valeur={utilisateur.initiales}
-                resumeNiveauDroit={resumeLesDroits(droits)}
-              />
-              <span>{@html utilisateur.prenomNom}</span>
-            </div>
-            <div class="conteneur-actions">
-              <TagNiveauDroit
-                niveau={resumeLesDroits(droits)}
-                droitsModifiables={true}
-                on:droitsChange={(e) =>
-                  (droits = enDroitsSurRubrique(e.detail))}
-                on:choixPersonnalisation={() => {
-                  enPersonnalisation = utilisateur;
-                  etapeCourante = 'Personnalisation';
-                }}
-              />
-              <!-- svelte-ignore a11y-click-events-have-key-events -->
-              <img
-                class="bouton-suppression-contributeur"
-                src="/statique/assets/images/icone_supprimer_gris.svg"
-                alt="bouton de suppression d'un contributeur"
-                on:click={() => supprimeInvitation(utilisateur)}
-              />
-            </div>
-          </li>
-        {/each}
-      </ul>
+      <ListeInvitations
+        invitations={Object.values(invitations)}
+        on:droitsChange={({ detail: nouveauxDroits }) => {
+          invitations[nouveauxDroits.utilisateur.email].droits =
+            nouveauxDroits.droits;
+          invitations = invitations;
+        }}
+        on:choixPersonnalisation={({ detail: utilisateur }) => {
+          enPersonnalisation = utilisateur;
+          etapeCourante = 'Personnalisation';
+        }}
+        on:supprimerInvitation={({ detail: aSupprimer }) =>
+          supprimeInvitation(aSupprimer)}
+      />
     </label>
     {#if afficheLesBoutonsAction}
       <div class="conteneur-actions">
@@ -189,15 +161,3 @@
     <p>Un e-mail d'invitation a bien été envoyé.</p>
   </div>
 {/if}
-
-<style>
-  .contributeur-a-inviter {
-    display: flex;
-    justify-content: space-between;
-  }
-  .contenu-nom-prenom {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-</style>
