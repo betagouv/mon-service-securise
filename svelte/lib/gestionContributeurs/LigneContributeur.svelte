@@ -37,7 +37,9 @@
     />
     <div class="nom-prenom-poste">
       <div class="nom-contributeur">{@html utilisateur.prenomNom}</div>
-      <div class="poste-contributeur">{@html utilisateur.poste}</div>
+      {#if utilisateur.poste}
+        <div class="poste-contributeur">{@html utilisateur.poste}</div>
+      {/if}
     </div>
   </div>
   <div class="conteneur-actions">
