@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ResumeNiveauDroit } from './gestionContributeurs.d';
+  import type { ResumeNiveauDroit } from '../gestionContributeurs.d';
 
   export let valeur: string;
   export let resumeNiveauDroit: ResumeNiveauDroit | undefined;

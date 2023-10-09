@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import MenuFlottant from '../ui/MenuFlottant.svelte';
-  import type { Ecriture, Lecture } from './gestionContributeurs.d';
+  import MenuFlottant from '../../ui/MenuFlottant.svelte';
+  import type { Ecriture, Lecture } from '../gestionContributeurs.d';
 
   const LIBELLE_DROITS = { [1]: 'Lecture', [2]: 'Édition' };
   const droitsDisponibles: {

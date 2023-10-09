@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { ResumeNiveauDroit } from './gestionContributeurs.d';
+  import type { ResumeNiveauDroit } from '../gestionContributeurs.d';
   import { createEventDispatcher } from 'svelte';
-  import MenuFlottant from '../ui/MenuFlottant.svelte';
+  import MenuFlottant from '../../ui/MenuFlottant.svelte';
 
   const STATUS_DROITS: Record<ResumeNiveauDroit, string> = {
     PROPRIETAIRE: 'Propriétaire',

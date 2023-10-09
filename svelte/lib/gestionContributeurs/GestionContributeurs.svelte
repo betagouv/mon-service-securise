@@ -1,10 +1,10 @@
 <script lang="ts">
   import { store } from './gestionContributeurs.store';
-  import InvitationContributeur from './InvitationContributeur.svelte';
-  import LigneContributeur from './LigneContributeur.svelte';
-  import SuppressionContributeur from './SuppressionContributeur.svelte';
+  import InvitationContributeur from './invitation/InvitationContributeur.svelte';
+  import LigneContributeur from './kit/LigneContributeur.svelte';
+  import SuppressionContributeur from './suppression/SuppressionContributeur.svelte';
   import { onMount } from 'svelte';
-  import PersonnalisationContributeur from './PersonnalisationContributeur.svelte';
+  import PersonnalisationContributeur from './personnalisation/PersonnalisationContributeur.svelte';
 
   $: surServiceUnique = $store.services.length === 1;
   $: serviceUnique = $store.services[0];
