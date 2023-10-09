@@ -1,5 +1,6 @@
 <script lang="ts">
   import type {
+    Invitation,
     Permission,
     Rubrique,
     Utilisateur,
@@ -13,10 +14,6 @@
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
   type Email = string;
-  type Invitation = {
-    utilisateur: Utilisateur;
-    droits: Record<Rubrique, Permission>;
-  };
 
   let invitations: Record<Email, Invitation> = {};
   let etapeCourante: Etape = 'Ajout';

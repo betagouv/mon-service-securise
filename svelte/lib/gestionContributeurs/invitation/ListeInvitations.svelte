@@ -1,5 +1,6 @@
 <script lang="ts">
   import type {
+    Invitation,
     Permission,
     ResumeNiveauDroit,
     Rubrique,
@@ -9,11 +10,6 @@
   import Initiales from '../kit/Initiales.svelte';
   import TagNiveauDroit from '../kit/TagNiveauDroit.svelte';
   import { createEventDispatcher } from 'svelte';
-
-  type Invitation = {
-    utilisateur: Utilisateur;
-    droits: Record<Rubrique, Permission>;
-  };
 
   export let invitations: Invitation[];
   const dispatch = createEventDispatcher<{
