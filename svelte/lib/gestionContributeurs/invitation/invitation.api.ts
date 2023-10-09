@@ -1,9 +1,4 @@
-import type {
-  Permission,
-  Rubrique,
-  Service,
-  Utilisateur,
-} from '../gestionContributeurs.d';
+import type { Invitation, Service } from '../gestionContributeurs.d';
 
 export const rechercheContributeurs = async (recherche: string) => {
   const reponse = await axios.get('/api/annuaire/contributeurs', {
@@ -11,11 +6,6 @@ export const rechercheContributeurs = async (recherche: string) => {
   });
 
   return reponse.data.suggestions;
-};
-
-type Invitation = {
-  utilisateur: Utilisateur;
-  droits: Record<Rubrique, Permission>;
 };
 
 export const envoieInvitations = async (

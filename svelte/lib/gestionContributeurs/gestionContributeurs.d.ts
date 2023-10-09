@@ -67,6 +67,11 @@ export const enDroitsSurRubrique = (
   }
 };
 
+export type Invitation = {
+  utilisateur: Utilisateur;
+  droits: Record<Rubrique, Permission>;
+};
+
 export type IdAutorisation = string;
 
 export type Autorisation = {
