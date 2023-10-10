@@ -1,9 +1,8 @@
 const Dossiers = require('../dossiers');
 const objetGetService = require('./objetGetService');
-const { Permissions, Rubriques } = require('../autorisations/gestionDroits');
+const AutorisationBase = require('../autorisations/autorisationBase');
 
-const { LECTURE } = Permissions;
-const { HOMOLOGUER } = Rubriques;
+const { DROITS_VOIR_STATUT_HOMOLOGATION } = AutorisationBase;
 
 const donnees = (services, autorisations, idUtilisateur, referentiel) => ({
   services: services.map((s) =>
@@ -22,7 +21,7 @@ const donnees = (services, autorisations, idUtilisateur, referentiel) => ({
           s.dossiers.statutHomologation() === Dossiers.BIENTOT_EXPIREE) &&
         autorisations
           .find((a) => a.idService === s.id)
-          .aLaPermission(LECTURE, HOMOLOGUER)
+          .aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION)
     ).length,
   },
 });

@@ -1,8 +1,7 @@
 const Dossiers = require('../dossiers');
-const { Permissions, Rubriques } = require('../autorisations/gestionDroits');
+const AutorisationBase = require('../autorisations/autorisationBase');
 
-const { LECTURE } = Permissions;
-const { HOMOLOGUER } = Rubriques;
+const { DROITS_VOIR_STATUT_HOMOLOGATION } = AutorisationBase;
 
 const donnees = (service, autorisation, idUtilisateur, referentiel) => ({
   id: service.id,
@@ -21,7 +20,7 @@ const donnees = (service, autorisation, idUtilisateur, referentiel) => ({
     initiales: c.initiales(),
     poste: c.posteDetaille(),
   })),
-  ...(autorisation.aLaPermission(LECTURE, HOMOLOGUER) && {
+  ...(autorisation.aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION) && {
     statutHomologation: {
       id: service.dossiers.statutHomologation(),
       enCoursEdition: service.dossiers.statutSaisie() === Dossiers.A_COMPLETER,
