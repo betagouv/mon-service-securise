@@ -176,7 +176,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
-    (requete, reponse, suite) => {
+    async (requete, reponse, suite) => {
       const { homologation } = requete;
       const { idEtape } = requete.params;
 
@@ -185,27 +185,29 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         return;
       }
 
-      depotDonnees
-        .ajouteDossierCourantSiNecessaire(homologation.id)
-        .then(() => depotDonnees.homologation(homologation.id))
-        .then((h) => {
-          const etapeCourante = h.dossierCourant().etapeCourante();
-          const numeroEtapeCourante = referentiel.numeroEtape(etapeCourante);
-          const numeroEtapeDemandee = referentiel.numeroEtape(idEtape);
-          if (numeroEtapeDemandee > numeroEtapeCourante) {
-            reponse.redirect(etapeCourante);
-            return;
-          }
-          reponse.render(`service/etapeDossier/${idEtape}`, {
-            InformationsHomologation,
-            referentiel,
-            service: h,
-            actionsSaisie: new ActionsSaisie(referentiel, h).toJSON(),
-            etapeActive: 'dossiers',
-            idEtape,
-          });
-        })
-        .catch(suite);
+      try {
+        await depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id);
+
+        const h = await depotDonnees.homologation(homologation.id);
+        const etapeCourante = h.dossierCourant().etapeCourante();
+        const numeroEtapeCourante = referentiel.numeroEtape(etapeCourante);
+        const numeroEtapeDemandee = referentiel.numeroEtape(idEtape);
+        if (numeroEtapeDemandee > numeroEtapeCourante) {
+          reponse.redirect(etapeCourante);
+          return;
+        }
+
+        reponse.render(`service/etapeDossier/${idEtape}`, {
+          InformationsHomologation,
+          referentiel,
+          service: h,
+          actionsSaisie: new ActionsSaisie(referentiel, h).toJSON(),
+          etapeActive: 'dossiers',
+          idEtape,
+        });
+      } catch (e) {
+        suite();
+      }
     }
   );
 
