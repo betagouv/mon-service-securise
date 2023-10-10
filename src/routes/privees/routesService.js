@@ -93,11 +93,8 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     async (requete, reponse) => {
-      const { homologation } = requete;
-      const autorisation = await depotDonnees.autorisationPour(
-        requete.idUtilisateurCourant,
-        homologation.id
-      );
+      const { homologation, autorisationService } = requete;
+
       const mesures = moteurRegles.mesures(homologation.descriptionService);
       reponse.render('service/mesures', {
         InformationsHomologation,
@@ -110,7 +107,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           homologation,
           referentiel
         ).donnees(),
-        peutVoirIndiceCyber: autorisation.aLesPermissions(
+        peutVoirIndiceCyber: autorisationService.aLesPermissions(
           DROITS_VOIR_INDICE_CYBER
         ),
       });
