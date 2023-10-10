@@ -15,7 +15,8 @@ const AutorisationBase = require('../../modeles/autorisations/autorisationBase')
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
-const { DROITS_VOIR_INDICE_CYBER } = AutorisationBase;
+const { DROITS_VOIR_INDICE_CYBER, DROITS_VOIR_STATUT_HOMOLOGATION } =
+  AutorisationBase;
 
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();
@@ -109,6 +110,9 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         ).donnees(),
         peutVoirIndiceCyber: autorisationService.aLesPermissions(
           DROITS_VOIR_INDICE_CYBER
+        ),
+        peutVoirStatutHomologation: autorisationService.aLesPermissions(
+          DROITS_VOIR_STATUT_HOMOLOGATION
         ),
       });
     }
