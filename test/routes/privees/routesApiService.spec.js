@@ -1199,16 +1199,18 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête DELETE sur `/api/service/:id`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(new AutorisationCreateur());
+      testeur.middleware().reinitialise({
+        autorisationACharger: new AutorisationCreateur(),
+      });
       testeur.depotDonnees().supprimeHomologation = () => Promise.resolve();
     });
 
-    it('vérifie que les CGU sont acceptées', (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+    it('utilise le middleware de recherche du service', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [],
         {
           method: 'delete',
-          url: 'http://localhost:1234/api/service/123',
+          url: 'http://localhost:1234/api/serdvice/123',
         },
         done
       );
@@ -1224,33 +1226,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("demande au dépôt de vérifier l'autorisation d'accès au service pour l'utilisateur courant", (done) => {
-      let autorisationVerifiee = false;
-
-      testeur.middleware().reinitialise({ idUtilisateur: '999' });
-      testeur.depotDonnees().autorisationPour = (idUtilisateur, idService) => {
-        try {
-          expect(idUtilisateur).to.equal('999');
-          expect(idService).to.equal('123');
-          autorisationVerifiee = true;
-
-          return Promise.resolve(new AutorisationCreateur());
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      };
-
-      axios
-        .delete('http://localhost:1234/api/service/123')
-        .then(() => expect(autorisationVerifiee).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+    it("utilise le middleware de chargement de l'autorisation", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesAutorisations(
+          { method: 'delete', url: 'http://localhost:1234/api/service/456' },
+          done
+        );
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
       const autorisationNonTrouvee = undefined;
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(autorisationNonTrouvee);
+      testeur
+        .middleware()
+        .reinitialise({ autorisationACharger: autorisationNonTrouvee });
 
       testeur.verifieRequeteGenereErreurHTTP(
         403,
@@ -1264,8 +1253,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas les droits de suppression du service", (done) => {
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(new AutorisationContributeur());
+      testeur
+        .middleware()
+        .reinitialise({ autorisationACharger: new AutorisationContributeur() });
 
       testeur.verifieRequeteGenereErreurHTTP(
         403,
