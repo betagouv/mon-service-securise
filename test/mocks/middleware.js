@@ -5,6 +5,9 @@ const Homologation = require('../../src/modeles/homologation');
 const {
   Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS },
 } = require('../../src/modeles/autorisations/gestionDroits');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
 
 const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
   const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
@@ -37,6 +40,7 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
     .catch((e) => done(e.response?.data || e));
 };
 
+let autorisationChargee;
 let autorisationsChargees = false;
 let cguAcceptees;
 let challengeMotDePasseEffectue = false;
@@ -63,6 +67,7 @@ const middlewareFantaisie = {
       id: '456',
       descriptionService: { nomService: 'un service' },
     }),
+    autorisationACharger = uneAutorisation().construis(),
   }) => {
     autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
@@ -72,6 +77,7 @@ const middlewareFantaisie = {
     headersPositionnes = false;
     homologationTrouvee = homologationARenvoyer;
     idUtilisateurCourant = idUtilisateur;
+    autorisationChargee = autorisationACharger;
     listesAseptisees = [];
     listeAdressesIPsAutorisee = [];
     parametresAseptises = [];
@@ -102,7 +108,7 @@ const middlewareFantaisie = {
     suite();
   },
 
-  chargeAutorisationsService: (_requete, reponse, suite) => {
+  chargeAutorisationsService: (requete, reponse, suite) => {
     reponse.locals.autorisationsService = {
       [DECRIRE]: {},
       [SECURISER]: {},
@@ -112,6 +118,7 @@ const middlewareFantaisie = {
       peutHomologuer: true,
     };
     autorisationsChargees = true;
+    requete.autorisationService = autorisationChargee;
     suite();
   },
 

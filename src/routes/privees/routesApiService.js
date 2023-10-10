@@ -129,14 +129,11 @@ const routesApiService = (
     '/:id',
     middleware.aseptise('id'),
     middleware.trouveService({}),
+    middleware.chargeAutorisationsService,
     async (requete, reponse) => {
-      const autorisation = await depotDonnees.autorisationPour(
-        requete.idUtilisateurCourant,
-        requete.homologation.id
-      );
       const donnees = objetGetService.donnees(
         requete.homologation,
-        autorisation,
+        requete.autorisationService,
         requete.idUtilisateurCourant,
         referentiel
       );

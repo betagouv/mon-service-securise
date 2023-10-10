@@ -1440,11 +1440,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         statutsHomologation: { nonRealisee: {} },
       });
 
-      testeur.depotDonnees().autorisationPour = async () =>
-        uneAutorisation()
-          .avecDroits({ [HOMOLOGUER]: LECTURE })
-          .construis();
-
       const donneesDossier = unDossier(testeur.referentiel())
         .quiEstComplet()
         .quiEstNonFinalise().donnees;
@@ -1455,6 +1450,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.middleware().reinitialise({
         homologationARenvoyer: serviceARenvoyer,
         idUtilisateur: '123',
+        autorisationACharger: uneAutorisation()
+          .avecDroits({ [HOMOLOGUER]: LECTURE })
+          .construis(),
       });
     });
 
@@ -1480,19 +1478,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("interroge le dépôt pour obtenir l'autorisation associée", async () => {
-      let donneesPassees = {};
-      testeur.depotDonnees().autorisationPour = async (
-        idUtilisateur,
-        idService
-      ) => {
-        donneesPassees = { idUtilisateur, idService };
-        return uneAutorisation().avecDroits({}).construis();
-      };
-
-      await axios('http://localhost:1234/api/service/456');
-      expect(donneesPassees.idUtilisateur).to.equal('123');
-      expect(donneesPassees.idService).to.equal('456');
+    it("utilise le middleware de chargement de l'autorisation", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesAutorisations(
+          'http://localhost:1234/api/service/456',
+          done
+        );
     });
 
     it('retourne la représentation du service grâce à `objetGetService`', async () => {
