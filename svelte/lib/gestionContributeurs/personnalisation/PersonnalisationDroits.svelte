@@ -8,6 +8,7 @@
   import LigneContributeur from '../kit/LigneContributeur.svelte';
   import TagLectureEcriture from '../personnalisation/TagLectureEcriture.svelte';
   import { createEventDispatcher } from 'svelte';
+  import OnOff from '../kit/OnOff.svelte';
 
   export let utilisateur: Utilisateur;
   export let droitsOriginaux: Record<Rubrique, Permission>;
@@ -21,12 +22,6 @@
     { id: 'RISQUES', nom: 'Risques de sécurité', droit: redefinis.RISQUES },
     { id: 'CONTACTS', nom: 'Contacts utiles', droit: redefinis.CONTACTS },
   ];
-
-  const changeVisibilite = (event: Event, id: Rubrique) => {
-    const checkbox = event.target as HTMLInputElement;
-    if (checkbox.checked) redefinis[id] = 1;
-    else redefinis[id] = 0;
-  };
 
   const dispatch = createEventDispatcher<{
     valider: Record<IdUtilisateur, Permission>;
@@ -51,10 +46,13 @@
     {#each rubriques as { id, nom, droit }}
       <div class="rubrique">
         <div>
-          <input
-            type="checkbox"
+          <OnOff
+            id="visibilite-{id}"
             checked={droit > 0}
-            on:change={(e) => changeVisibilite(e, id)}
+            on:change={({ detail: estCochee }) => {
+              if (estCochee) redefinis[id] = 1;
+              else redefinis[id] = 0;
+            }}
           />
           <div class="nom-rubrique">{nom}</div>
         </div>
@@ -125,12 +123,6 @@
     flex-direction: row;
     justify-content: space-between;
     height: 1.7em;
-  }
-  .rubrique input[type='checkbox'] {
-    width: 20px !important;
-    height: 20px;
-    margin: 0;
-    transform: none;
   }
   .rubrique > div {
     display: flex;
