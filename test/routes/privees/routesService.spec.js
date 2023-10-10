@@ -54,9 +54,9 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id`', () => {
     beforeEach(() => {
-      testeur.middleware().reinitialise({ idUtilisateur: '123' });
-      testeur.depotDonnees().autorisationPour = async () =>
-        uneAutorisation().construis();
+      testeur.middleware().reinitialise({
+        autorisationACharger: uneAutorisation().construis(),
+      });
       testeur.referentiel().recharge({
         statutsHomologation: {
           nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
@@ -81,18 +81,13 @@ describe('Le serveur MSS des routes /service/*', () => {
         .verifieRechercheService([], 'http://localhost:1234/service/456', done);
     });
 
-    it("utilise le dépôt de données pour retrouver l'autorisation de l'utilisateur sur ce service", async () => {
-      let donneesPassees = {};
-      testeur.depotDonnees().autorisationPour = async (
-        idUtilisateur,
-        idService
-      ) => {
-        donneesPassees = { idUtilisateur, idService };
-        return uneAutorisation().construis();
-      };
-
-      await axios('http://localhost:1234/service/456');
-      expect(donneesPassees).to.eql({ idUtilisateur: '123', idService: '456' });
+    it("utilise le middleware de chargement de l'autorisation", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesAutorisations(
+          'http://localhost:1234/service/456',
+          done
+        );
     });
 
     describe('sur redirection vers une rubrique du service', () => {
@@ -127,8 +122,11 @@ describe('Le serveur MSS des routes /service/*', () => {
         it(`redirige vers \`${redirectionAttendue}\` avec le droit de lecture sur \`${
           Object.keys(droits)[0] ?? 'aucune rubrique'
         }\``, async () => {
-          testeur.depotDonnees().autorisationPour = async () =>
-            uneAutorisation().avecDroits(droits).construis();
+          testeur.middleware().reinitialise({
+            autorisationACharger: uneAutorisation()
+              .avecDroits(droits)
+              .construis(),
+          });
 
           const reponse = await axios('http://localhost:1234/service/456');
 

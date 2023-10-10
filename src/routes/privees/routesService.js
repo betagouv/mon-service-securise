@@ -56,12 +56,10 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     '/:id',
     middleware.aseptise('id'),
     middleware.trouveService({}),
+    middleware.chargeAutorisationsService,
     async (requete, reponse) => {
-      const autorisation = await depotDonnees.autorisationPour(
-        requete.idUtilisateurCourant,
-        requete.homologation.id
-      );
-      const routeRedirection = premiereRouteDisponible(autorisation);
+      const { autorisationService } = requete;
+      const routeRedirection = premiereRouteDisponible(autorisationService);
       if (!routeRedirection) {
         reponse.redirect('/tableauDeBord');
         return;
