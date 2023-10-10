@@ -342,6 +342,8 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async () => {};
       testeur.depotDonnees().homologation = async () => homologationARenvoyer;
+      testeur.depotDonnees().autorisationPour = async () =>
+        uneAutorisation().construis();
     });
 
     it('recherche le service correspondant', (done) => {
