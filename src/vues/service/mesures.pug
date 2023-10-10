@@ -85,7 +85,7 @@ block formulaire
 block cartes-informations
   +statutHomologation({ donneesStatutHomologation })
 
-  - const indiceCyber = service.indiceCyber()
-  +indiceCyber({referentiel, indiceCyber})
-
-  +recommandationsANSSI({referentiel, noteObtenue: indiceCyber.total})
+  if peutVoirIndiceCyber
+    - const indiceCyber = service.indiceCyber()
+    +indiceCyber({referentiel, indiceCyber})
+    +recommandationsANSSI({referentiel, noteObtenue: indiceCyber.total})
