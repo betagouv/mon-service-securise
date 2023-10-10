@@ -197,6 +197,11 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           return;
         }
 
+        const autorisation = await depotDonnees.autorisationPour(
+          requete.idUtilisateurCourant,
+          homologation.id
+        );
+
         reponse.render(`service/etapeDossier/${idEtape}`, {
           InformationsHomologation,
           referentiel,
@@ -204,6 +209,9 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           actionsSaisie: new ActionsSaisie(referentiel, h).toJSON(),
           etapeActive: 'dossiers',
           idEtape,
+          peutVoirIndiceCyber: autorisation.aLesPermissions(
+            DROITS_VOIR_INDICE_CYBER
+          ),
         });
       } catch (e) {
         suite();
