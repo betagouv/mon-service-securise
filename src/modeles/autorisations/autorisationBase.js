@@ -94,6 +94,10 @@ class AutorisationBase extends Base {
     [CONTACTS]: ECRITURE,
   };
 
+  static DROITS_VOIR_INDICE_CYBER = {
+    [SECURISER]: LECTURE,
+  };
+
   static DROITS_ANNEXES_PDF = {
     [DECRIRE]: LECTURE,
     [SECURISER]: LECTURE,

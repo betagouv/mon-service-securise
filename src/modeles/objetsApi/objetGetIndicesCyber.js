@@ -1,14 +1,13 @@
-const { Permissions, Rubriques } = require('../autorisations/gestionDroits');
+const AutorisationBase = require('../autorisations/autorisationBase');
 
-const { LECTURE } = Permissions;
-const { SECURISER } = Rubriques;
+const { DROITS_VOIR_INDICE_CYBER } = AutorisationBase;
 
 const donnees = (services, autorisations) => {
   const servicesIndiceCyberCalcules = services.map((s) => ({
     id: s.id,
     ...(autorisations
       .find((a) => a.idService === s.id)
-      .aLaPermission(LECTURE, SECURISER) && {
+      .aLesPermissions(DROITS_VOIR_INDICE_CYBER) && {
       indiceCyber: s.indiceCyber().total,
     }),
   }));
