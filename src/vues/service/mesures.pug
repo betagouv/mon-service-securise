@@ -83,7 +83,8 @@ block formulaire
   script(type = 'module', src = '/statique/service/mesures.js')
 
 block cartes-informations
-  +statutHomologation({ donneesStatutHomologation })
+  if peutVoirStatutHomologation
+    +statutHomologation({ donneesStatutHomologation })
 
   if peutVoirIndiceCyber
     - const indiceCyber = service.indiceCyber()
