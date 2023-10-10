@@ -441,16 +441,13 @@ const routesApiService = (
 
   routes.copy(
     '/:id',
-    middleware.verificationAcceptationCGU,
+    middleware.trouveService({}),
+    middleware.chargeAutorisationsService,
     (requete, reponse, suite) => {
-      const verifiePermissionDuplicationService = (idUtilisateur, idService) =>
-        depotDonnees
-          .autorisationPour(idUtilisateur, idService)
-          .then((autorisation) =>
-            autorisation instanceof AutorisationCreateur
-              ? Promise.resolve()
-              : Promise.reject(new EchecAutorisation())
-          );
+      const verifiePermissionDuplicationService = () =>
+        requete.autorisationService instanceof AutorisationCreateur
+          ? Promise.resolve()
+          : Promise.reject(new EchecAutorisation());
 
       const { idUtilisateurCourant } = requete;
       const idService = requete.params.id;

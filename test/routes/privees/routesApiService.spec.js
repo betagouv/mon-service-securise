@@ -1309,12 +1309,23 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   describe('quand requête COPY sur `/api/service/:id`', () => {
     beforeEach(() => {
       testeur.depotDonnees().dupliqueHomologation = () => Promise.resolve();
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(new AutorisationCreateur());
+      testeur.middleware().reinitialise({
+        autorisationACharger: new AutorisationCreateur(),
+      });
     });
 
-    it('vérifie que les CGU sont acceptées', (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+    it('utilise le middleware de chargement du service', (done) => {
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          [],
+          { method: 'copy', url: 'http://localhost:1234/api/service/123' },
+          done
+        );
+    });
+
+    it("utilise le middleware de chargement de l'autorisation", (done) => {
+      testeur.middleware().verifieChargementDesAutorisations(
         {
           method: 'copy',
           url: 'http://localhost:1234/api/service/123',
@@ -1323,35 +1334,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("demande au dépôt de vérifier que l'utilisateur courant a le droit de dupliquer le service", (done) => {
-      let autorisationVerifiee = false;
-
-      testeur.middleware().reinitialise({ idUtilisateur: '999' });
-      testeur.depotDonnees().autorisationPour = (idUtilisateur, idService) => {
-        try {
-          expect(idUtilisateur).to.equal('999');
-          expect(idService).to.equal('123');
-          autorisationVerifiee = true;
-
-          return Promise.resolve(new AutorisationCreateur());
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      };
-
-      axios({
-        method: 'copy',
-        url: 'http://localhost:1234/api/service/123',
-      })
-        .then(() => expect(autorisationVerifiee).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
-    });
-
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
       const autorisationNonTrouvee = undefined;
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(autorisationNonTrouvee);
+      testeur
+        .middleware()
+        .reinitialise({ autorisationACharger: autorisationNonTrouvee });
 
       testeur.verifieRequeteGenereErreurHTTP(
         403,
@@ -1365,8 +1352,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'est pas le créateur du service", (done) => {
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(new AutorisationContributeur());
+      testeur
+        .middleware()
+        .reinitialise({ autorisationACharger: new AutorisationContributeur() });
 
       testeur.verifieRequeteGenereErreurHTTP(
         403,
@@ -1405,7 +1393,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('demande au dépôt de dupliquer le service', (done) => {
       let serviceDuplique = false;
 
-      testeur.middleware().reinitialise({ idUtilisateur: '999' });
+      testeur.middleware().reinitialise({
+        idUtilisateur: '999',
+        autorisationACharger: new AutorisationCreateur(),
+      });
+
       testeur.depotDonnees().dupliqueHomologation = (idService) => {
         try {
           expect(idService).to.equal('123');
