@@ -1494,17 +1494,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PATCH sur `/api/service/:id/autorisations/:idAutorisation`', () => {
     beforeEach(() => {
-      const serviceARenvoyer = unService(testeur.referentiel())
-        .avecId('456')
-        .construis();
-
       testeur.middleware().reinitialise({
-        homologationARenvoyer: serviceARenvoyer,
-        idUtilisateur: 'AAA',
+        autorisationACharger: uneAutorisation()
+          .deCreateurDeService('AAA', '456')
+          .construis(),
       });
-
-      testeur.depotDonnees().autorisationPour = async () =>
-        uneAutorisation().deCreateurDeService('AAA', '456').construis();
 
       testeur.depotDonnees().autorisation = async () =>
         uneAutorisation().avecTousDroitsEcriture().construis();
@@ -1536,30 +1530,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("récupère l'autorisation de l'utilisateur courant sur le service", async () => {
-      let autorisationRecherchee;
-      testeur.depotDonnees().autorisationPour = async (
-        idContributeur,
-        idService
-      ) => {
-        autorisationRecherchee = { idContributeur, idService };
-        return uneAutorisation().deCreateurDeService('AAA', '456').construis();
-      };
-
-      await axios.patch(
-        'http://localhost:1234/api/service/456/autorisations/uuid-1',
-        { droits: tousDroitsEnEcriture() }
+    it("utilise le middleware de chargement de l'autorisation", (done) => {
+      testeur.middleware().verifieChargementDesAutorisations(
+        {
+          method: 'PATCH',
+          url: 'http://localhost:1234/api/service/456/autorisations/uuid-1',
+          data: { droits: tousDroitsEnEcriture() },
+        },
+        done
       );
-
-      expect(autorisationRecherchee).to.eql({
-        idContributeur: 'AAA',
-        idService: '456',
-      });
     });
 
     it("renvoie une erreur 403 si l'utilisateur courant n'a pas le droit de gérer les contributeurs sur le service", async () => {
-      testeur.depotDonnees().autorisationPour = async () => ({
-        peutGererContributeurs: () => false,
+      testeur.middleware().reinitialise({
+        autorisationACharger: { peutGererContributeurs: () => false },
       });
 
       try {
