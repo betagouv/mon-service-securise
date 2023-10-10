@@ -223,6 +223,8 @@ const middleware = (configuration = {}) => {
           peutHomologuer: autorisation.peutHomologuer(),
         };
 
+        requete.autorisationService = autorisation;
+
         suite();
       });
   };
