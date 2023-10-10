@@ -49,7 +49,6 @@ const routesApiService = (
     routesApiServicePdf({
       adaptateurHorloge,
       adaptateurPdf,
-      depotDonnees,
       adaptateurZip,
       middleware,
       referentiel,
