@@ -98,6 +98,10 @@ class AutorisationBase extends Base {
     [SECURISER]: LECTURE,
   };
 
+  static DROITS_VOIR_STATUT_HOMOLOGATION = {
+    [HOMOLOGUER]: LECTURE,
+  };
+
   static DROITS_ANNEXES_PDF = {
     [DECRIRE]: LECTURE,
     [SECURISER]: LECTURE,
