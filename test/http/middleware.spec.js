@@ -745,7 +745,28 @@ describe('Le middleware MSS', () => {
       });
     });
 
-    it("remanie l'objet d'autorisation pour qu'il soit utilisable par le `.pug`", (done) => {
+    it("ajoute l'autorisation à la *`requete`* pour qu'elle soit accessibles aux routes utilisant le middleware", (done) => {
+      const middleware = Middleware({ depotDonnees });
+      const autorisationChargee = uneAutorisation()
+        .avecDroits({
+          [DECRIRE]: ECRITURE,
+          [SECURISER]: LECTURE,
+          [HOMOLOGUER]: INVISIBLE,
+        })
+        .construis();
+      depotDonnees.autorisationPour = async () => autorisationChargee;
+
+      middleware.chargeAutorisationsService(requete, reponse, () => {
+        try {
+          expect(requete.autorisationService).to.be(autorisationChargee);
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+
+    it("remanie l'objet d'autorisation à la *`reponse`* pour qu'il soit utilisable par le `.pug`", (done) => {
       const middleware = Middleware({ depotDonnees });
       depotDonnees.autorisationPour = async () =>
         uneAutorisation()
