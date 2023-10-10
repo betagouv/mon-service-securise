@@ -54,7 +54,7 @@
     background: white;
     border: 1px solid #cbd5e1;
     border-radius: 15px;
-    transition: 0.3s cubic-bezier(0, 0, 0.2, 1);
+    transition: 0.2s cubic-bezier(0, 0, 0.2, 1);
   }
 
   input:checked + label {
@@ -65,5 +65,9 @@
   input:checked + label:after {
     left: calc(100% + 1px);
     transform: translateX(-100%);
+    background-image: url('/statique/assets/images/icone_check.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    border-color: #0079d0;
   }
 </style>
