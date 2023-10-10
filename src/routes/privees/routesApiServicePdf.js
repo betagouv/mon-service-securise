@@ -7,7 +7,6 @@ const routesApiServicePdf = ({
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
-  depotDonnees,
   middleware,
   referentiel,
 }) => {
@@ -96,13 +95,9 @@ const routesApiServicePdf = ({
   routes.get(
     '/:id/pdf/documentsHomologation.zip',
     middleware.trouveService({}),
+    middleware.chargeAutorisationsService,
     async (requete, reponse, suite) => {
-      const { homologation } = requete;
-
-      const autorisation = await depotDonnees.autorisationPour(
-        requete.idUtilisateurCourant,
-        homologation.id
-      );
+      const { homologation, autorisationService } = requete;
 
       const genereUnDocument = (idDocument) => {
         const references = {
@@ -131,7 +126,7 @@ const routesApiServicePdf = ({
 
       Promise.all(
         homologation
-          .documentsPdfDisponibles(autorisation)
+          .documentsPdfDisponibles(autorisationService)
           .map((d) => genereUnDocument(d))
       )
         .then((pdfs) => adaptateurZip.genereArchive(pdfs))

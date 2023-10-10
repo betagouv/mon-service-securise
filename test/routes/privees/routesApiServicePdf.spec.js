@@ -14,10 +14,6 @@ const {
   Permissions,
   Rubriques,
 } = require('../../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const AutorisationBase = require('../../../src/modeles/autorisations/autorisationBase');
 const { unService } = require('../../constructeurs/constructeurService');
 
 const { LECTURE } = Permissions;
@@ -247,23 +243,13 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    it("interroge le dépôt de données pour charger l'autorisation de l'utilisateur", async () => {
-      let donneesPassees = {};
-      testeur.middleware().reinitialise({ idUtilisateur: '123' });
-      testeur.depotDonnees().autorisationPour = async (
-        idUtilisateur,
-        idService
-      ) => {
-        donneesPassees = { idUtilisateur, idService };
-        return uneAutorisation()
-          .avecDroits(AutorisationBase.DROITS_DOSSIER_DECISION_PDF)
-          .construis();
-      };
-
-      await axios.get(
-        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
-      );
-      expect(donneesPassees).to.eql({ idUtilisateur: '123', idService: '456' });
+    it("utilise le middleware de chargement de l'autorisation", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesAutorisations(
+          'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
+          done
+        );
     });
 
     it("ajoute dans l'archive zip seulement les documents indiqués par le service", async () => {
