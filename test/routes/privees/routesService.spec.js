@@ -173,9 +173,8 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur.referentiel().recharge({
         statutsHomologation: {},
         etapesParcoursHomologation: [{ numero: 1 }],
+        autorisationACharger: uneAutorisation().construis(),
       });
-      testeur.depotDonnees().autorisationPour = async () =>
-        uneAutorisation().construis();
     });
 
     it('recherche le service correspondant', (done) => {
