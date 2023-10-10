@@ -409,17 +409,14 @@ const routesApiService = (
 
   routes.delete(
     '/:id',
-    middleware.verificationAcceptationCGU,
+    middleware.trouveService({}),
     middleware.challengeMotDePasse,
+    middleware.chargeAutorisationsService,
     (requete, reponse, suite) => {
-      const verifiePermissionSuppressionService = (idUtilisateur, idService) =>
-        depotDonnees
-          .autorisationPour(idUtilisateur, idService)
-          .then((autorisation) =>
-            autorisation?.permissionSuppressionService
-              ? Promise.resolve()
-              : Promise.reject(new EchecAutorisation())
-          );
+      const verifiePermissionSuppressionService = () =>
+        requete.autorisationService.permissionSuppressionService
+          ? Promise.resolve()
+          : Promise.reject(new EchecAutorisation());
 
       const { idUtilisateurCourant } = requete;
       const idService = requete.params.id;
