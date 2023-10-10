@@ -497,10 +497,11 @@ const routesApiService = (
   routes.patch(
     '/:id/autorisations/:idAutorisation',
     middleware.trouveService({}),
+    middleware.chargeAutorisationsService,
     middleware.aseptise('id', 'idAutorisation'),
     async (requete, reponse) => {
-      const { idUtilisateurCourant } = requete;
-      const { id: idService, idAutorisation } = requete.params;
+      const { autorisationService } = requete;
+      const { idAutorisation } = requete.params;
       const nouveauxDroits = requete.body.droits;
 
       if (!verifieCoherenceDesDroits(nouveauxDroits)) {
@@ -508,12 +509,7 @@ const routesApiService = (
         return;
       }
 
-      const autorisationUtilisateur = await depotDonnees.autorisationPour(
-        idUtilisateurCourant,
-        idService
-      );
-
-      if (!autorisationUtilisateur.peutGererContributeurs()) {
+      if (!autorisationService.peutGererContributeurs()) {
         reponse.status(403).json({ code: 'INTERDIT' });
         return;
       }
