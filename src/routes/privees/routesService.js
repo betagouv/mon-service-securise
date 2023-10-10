@@ -11,9 +11,11 @@ const {
   Rubriques,
   premiereRouteDisponible,
 } = require('../../modeles/autorisations/gestionDroits');
+const AutorisationBase = require('../../modeles/autorisations/autorisationBase');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
+const { DROITS_VOIR_INDICE_CYBER } = AutorisationBase;
 
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();
@@ -92,8 +94,12 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
-    (requete, reponse) => {
+    async (requete, reponse) => {
       const { homologation } = requete;
+      const autorisation = await depotDonnees.autorisationPour(
+        requete.idUtilisateurCourant,
+        homologation.id
+      );
       const mesures = moteurRegles.mesures(homologation.descriptionService);
       reponse.render('service/mesures', {
         InformationsHomologation,
@@ -106,6 +112,9 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           homologation,
           referentiel
         ).donnees(),
+        peutVoirIndiceCyber: autorisation.aLesPermissions(
+          DROITS_VOIR_INDICE_CYBER
+        ),
       });
     }
   );
