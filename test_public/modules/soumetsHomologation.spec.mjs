@@ -36,7 +36,7 @@ describe("L'initialisation du comportement du formulaire", () => {
       };
     });
 
-    it('envoie au serveur les données du service à créer', (done) => {
+    it('envoie au serveur les données du service à créer', async () => {
       const evenementsDifferes = $.Deferred();
       initialiseComportementFormulaire(
         '.formulaire',
@@ -46,18 +46,13 @@ describe("L'initialisation du comportement du formulaire", () => {
         adaptateurAjax
       );
 
-      evenementsDifferes
-        .resolveWith($('.bouton').trigger('click'))
-        .then(() => {
-          expect(ajaxRequete.method).to.equal('post');
-          expect(ajaxRequete.url).to.equal('/api/service');
-          expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
-        })
-        .then(() => done())
-        .catch(done);
+      await evenementsDifferes.resolveWith($('.bouton').trigger('click'));
+      expect(ajaxRequete.method).to.equal('post');
+      expect(ajaxRequete.url).to.equal('/api/service');
+      expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
     });
 
-    it('envoie au serveur les données du service à modifier', (done) => {
+    it('envoie au serveur les données du service à modifier', async () => {
       const evenementsDifferes = $.Deferred();
       $('.bouton').attr('idHomologation', '12345');
 
@@ -69,18 +64,13 @@ describe("L'initialisation du comportement du formulaire", () => {
         adaptateurAjax
       );
 
-      evenementsDifferes
-        .resolveWith($('.bouton').trigger('click'))
-        .then(() => {
-          expect(ajaxRequete.method).to.equal('put');
-          expect(ajaxRequete.url).to.equal('/api/service/12345');
-          expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
-        })
-        .then(() => done())
-        .catch(done);
+      await evenementsDifferes.resolveWith($('.bouton').trigger('click'));
+      expect(ajaxRequete.method).to.equal('put');
+      expect(ajaxRequete.url).to.equal('/api/service/12345');
+      expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
     });
 
-    it('renvoie vers la description du service', (done) => {
+    it('renvoie vers la description du service', async () => {
       const evenementsDifferes = $.Deferred();
       initialiseComportementFormulaire(
         '.formulaire',
@@ -90,16 +80,11 @@ describe("L'initialisation du comportement du formulaire", () => {
         adaptateurAjax
       );
 
-      evenementsDifferes
-        .resolveWith($('.bouton').trigger('click'))
-        .then(() =>
-          expect(window.location).to.equal('/service/123/descriptionService')
-        )
-        .then(() => done())
-        .catch(done);
+      await evenementsDifferes.resolveWith($('.bouton').trigger('click'));
+      expect(window.location).to.equal('/service/123/descriptionService');
     });
 
-    it("exécute la callback d'erreur en cas d'erreur", (done) => {
+    it("exécute la callback d'erreur en cas d'erreur", async () => {
       const evenementsDifferes = $.Deferred();
       const adaptateurAjaxErreur = {
         execute: () => Promise.reject(),
@@ -116,11 +101,8 @@ describe("L'initialisation du comportement du formulaire", () => {
         adaptateurAjaxErreur
       );
 
-      evenementsDifferes
-        .resolveWith($('.bouton').trigger('click'))
-        .then(() => expect(callbackErreurAppele).to.be(true))
-        .then(() => done())
-        .catch(done);
+      await evenementsDifferes.resolveWith($('.bouton').trigger('click'));
+      expect(callbackErreurAppele).to.be(true);
     });
   });
 });
