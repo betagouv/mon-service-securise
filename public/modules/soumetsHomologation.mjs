@@ -23,13 +23,14 @@ const initialiseComportementFormulaire = (
     evenement.preventDefault();
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
-    const redirigeVersSynthese = ({ data: { idService } }) =>
-      (window.location = `/service/${idService}/descriptionService`);
+    const redirige = ({ data: { idService } }) => {
+      const estCreationDeService = !identifiantService;
+      window.location = estCreationDeService
+        ? `/service/${idService}/mesures`
+        : `/service/${idService}/descriptionService`;
+    };
 
-    adaptateurAjax
-      .execute(requete)
-      .then(redirigeVersSynthese)
-      .catch(callbackErreur);
+    adaptateurAjax.execute(requete).then(redirige).catch(callbackErreur);
   });
 
   $bouton.on('click', () => {
