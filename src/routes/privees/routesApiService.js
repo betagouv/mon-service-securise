@@ -414,7 +414,7 @@ const routesApiService = (
     middleware.chargeAutorisationsService,
     (requete, reponse, suite) => {
       const verifiePermissionSuppressionService = () =>
-        requete.autorisationService.permissionSuppressionService
+        requete.autorisationService.peutSupprimerService()
           ? Promise.resolve()
           : Promise.reject(new EchecAutorisation());
 

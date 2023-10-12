@@ -25,7 +25,7 @@ describe('Une autorisation de base', () => {
 
   it('ne permet pas de supprimer un service', () => {
     const autorisation = new AutorisationBase();
-    expect(autorisation.permissionSuppressionService).to.be(false);
+    expect(autorisation.peutSupprimerService()).to.be(false);
   });
 
   it("permet de savoir s'il y a une permission en lecture sur une rubrique", () => {

@@ -21,7 +21,7 @@ class AutorisationBase extends Base {
 
     this.permissionAjoutContributeur = false;
     this.permissionSuppressionContributeur = false;
-    this.permissionSuppressionService = false;
+    this.estProprietaire = false;
   }
 
   aLaPermission(niveau, rubrique) {
@@ -42,6 +42,10 @@ class AutorisationBase extends Base {
 
   peutHomologuer() {
     return this.aLesPermissions(AutorisationBase.DROITS_HOMOLOGUER);
+  }
+
+  peutSupprimerService() {
+    return this.estProprietaire;
   }
 
   resumeNiveauDroit() {
