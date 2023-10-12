@@ -6,6 +6,7 @@
   --menu-couleur-autres-survol: #0c5c98;
 
   --menu-couleur-tous-clique: #0c5c98;
+  --menu-couleur-tous-pastille-cliquee: #dbecf1;
   --menu-couleur-tous-pastille-active: #dbecf1;
 }
 
@@ -214,16 +215,29 @@
 .menu-navigation a:hover .pastille {
   background-color: transparent;
 }
+.menu-navigation a:active .pastille {
+  background-color: var(--menu-couleur-tous-pastille-active);
+}
 .menu-navigation .etapes a:hover {
   color: var(--menu-couleur-etapes-survol);
+}
+.menu-navigation .etapes a:active {
+  color: var(--menu-couleur-tous-clique);
 }
 
 .menu-navigation .autres-liens a:hover {
   color: var(--menu-couleur-autres-survol);
 }
+.menu-navigation .autres-liens a:active {
+  color: var(--menu-couleur-tous-clique);
+}
 
 .menu-navigation .etapes a:hover .action-saisie {
   background-color: var(--menu-couleur-etapes-survol);
+  filter: unset;
+}
+.menu-navigation .etapes a:active .action-saisie {
+  background-color: var(--menu-couleur-tous-clique);
   filter: unset;
 }
 .menu-navigation a:active {
@@ -264,6 +278,9 @@
 
 .menu-navigation.ferme a:hover .pastille {
   background-color: white;
+}
+.menu-navigation.ferme a:active .pastille {
+  background-color: var(--menu-couleur-tous-pastille-active);
 }
 
 /* GÉRER CONTRIBUTEURS */
