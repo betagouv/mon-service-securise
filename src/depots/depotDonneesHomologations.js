@@ -217,7 +217,7 @@ const creeDepot = (config = {}) => {
   const homologationExiste = (...params) =>
     p.lis.celleAvecNomService(...params).then((h) => !!h);
 
-  const valideDescriptionService = (
+  const valideDescriptionService = async (
     idUtilisateur,
     donnees,
     idHomologationMiseAJour
@@ -225,26 +225,21 @@ const creeDepot = (config = {}) => {
     const { nomService } = donnees;
 
     if (!DescriptionService.proprietesObligatoiresRenseignees(donnees)) {
-      return Promise.reject(
-        new ErreurDonneesObligatoiresManquantes(
-          'Certaines données obligatoires ne sont pas renseignées'
-        )
+      throw new ErreurDonneesObligatoiresManquantes(
+        'Certaines données obligatoires ne sont pas renseignées'
       );
     }
 
-    return homologationExiste(
+    const homologationExistante = await homologationExiste(
       idUtilisateur,
       nomService,
       idHomologationMiseAJour
-    ).then((homologationExistante) =>
-      homologationExistante
-        ? Promise.reject(
-            new ErreurNomServiceDejaExistant(
-              `Le nom du service "${nomService}" existe déjà pour une autre homologation`
-            )
-          )
-        : Promise.resolve()
     );
+
+    if (homologationExistante)
+      throw new ErreurNomServiceDejaExistant(
+        `Le nom du service "${nomService}" existe déjà pour une autre homologation`
+      );
   };
 
   const ajouteRolesResponsabilitesAHomologation = (...params) =>
@@ -345,59 +340,55 @@ const creeDepot = (config = {}) => {
     adaptateurJournalMSS.consigneEvenement(evenement.toJSON());
   };
 
-  const nouvelleHomologation = (idUtilisateur, donneesHomologation) => {
+  const nouvelleHomologation = async (idUtilisateur, donneesHomologation) => {
     const idHomologation = adaptateurUUID.genereUUID();
     const idAutorisation = adaptateurUUID.genereUUID();
 
-    return valideDescriptionService(
+    await valideDescriptionService(
       idUtilisateur,
       donneesHomologation.descriptionService
-    )
-      .then(() => p.sauvegarde(idHomologation, donneesHomologation))
-      .then(() =>
-        adaptateurPersistance.ajouteAutorisation(idAutorisation, {
+    );
+
+    await p.sauvegarde(idHomologation, donneesHomologation);
+
+    await adaptateurPersistance.ajouteAutorisation(idAutorisation, {
+      idUtilisateur,
+      idHomologation,
+      idService: idHomologation,
+      type: 'createur',
+      droits: tousDroitsEnEcriture(),
+    });
+
+    const h = await p.lis.une(idHomologation);
+
+    await Promise.all([
+      adaptateurJournalMSS.consigneEvenement(
+        new EvenementNouveauServiceCree({
+          idService: h.id,
           idUtilisateur,
-          idHomologation,
-          idService: idHomologation,
-          type: 'createur',
-          droits: tousDroitsEnEcriture(),
-        })
-      )
-      .then(() => p.lis.une(idHomologation))
-      .then((h) =>
-        Promise.all([
-          adaptateurJournalMSS.consigneEvenement(
-            new EvenementNouveauServiceCree({
-              idService: h.id,
-              idUtilisateur,
-            }).toJSON()
-          ),
-          adaptateurJournalMSS.consigneEvenement(
-            new EvenementCompletudeServiceModifiee({
-              idService: h.id,
-              ...h.completudeMesures(),
-            }).toJSON()
-          ),
-          homologations(idUtilisateur).then((hs) => {
-            adaptateurTracking.envoieTrackingNouveauServiceCree(
-              h.createur.email,
-              { nombreServices: hs.length }
-            );
-          }),
-          serviceTracking
-            .completudeDesServicesPourUtilisateur(
-              { homologations },
-              idUtilisateur
-            )
-            .then((tauxCompletude) =>
-              adaptateurTracking.envoieTrackingCompletudeService(
-                h.createur.email,
-                tauxCompletude
-              )
-            ),
-        ])
-      )
-      .then(() => idHomologation);
+        }).toJSON()
+      ),
+      adaptateurJournalMSS.consigneEvenement(
+        new EvenementCompletudeServiceModifiee({
+          idService: h.id,
+          ...h.completudeMesures(),
+        }).toJSON()
+      ),
+      homologations(idUtilisateur).then((hs) => {
+        adaptateurTracking.envoieTrackingNouveauServiceCree(h.createur.email, {
+          nombreServices: hs.length,
+        });
+      }),
+      serviceTracking
+        .completudeDesServicesPourUtilisateur({ homologations }, idUtilisateur)
+        .then((tauxCompletude) =>
+          adaptateurTracking.envoieTrackingCompletudeService(
+            h.createur.email,
+            tauxCompletude
+          )
+        ),
+    ]);
+    return idHomologation;
   };
 
   const remplaceRisquesSpecifiquesPourHomologation = (...params) =>
