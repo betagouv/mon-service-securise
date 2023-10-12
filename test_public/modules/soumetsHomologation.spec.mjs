@@ -70,7 +70,7 @@ describe("L'initialisation du comportement du formulaire", () => {
       expect(ajaxRequete.data['champ-1']).to.equal('valeur 1');
     });
 
-    it('renvoie vers la description du service', async () => {
+    it('renvoie vers « Sécuriser » après une création de service', async () => {
       const evenementsDifferes = $.Deferred();
       initialiseComportementFormulaire(
         '.formulaire',
@@ -81,6 +81,24 @@ describe("L'initialisation du comportement du formulaire", () => {
       );
 
       await evenementsDifferes.resolveWith($('.bouton').trigger('click'));
+
+      expect(window.location).to.equal('/service/123/mesures');
+    });
+
+    it('renvoie vers « Décrire » après une édition de service existant', async () => {
+      const evenementsDifferes = $.Deferred();
+      $('.bouton').attr('idHomologation', '12345');
+
+      initialiseComportementFormulaire(
+        '.formulaire',
+        '.bouton',
+        fonctionExtractionParametres,
+        callbackErreurParDefaut,
+        adaptateurAjax
+      );
+
+      await evenementsDifferes.resolveWith($('.bouton').trigger('click'));
+
       expect(window.location).to.equal('/service/123/descriptionService');
     });
 
