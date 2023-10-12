@@ -212,27 +212,24 @@
 }
 
 /* HOVER ET ACTIVE */
-.menu-navigation a:hover .pastille {
-  background-color: transparent;
-}
 .menu-navigation a:active .pastille {
   background-color: var(--menu-couleur-tous-pastille-active);
 }
-.menu-navigation .etapes a:hover {
+.menu-navigation .etapes a:not(.actif):hover {
   color: var(--menu-couleur-etapes-survol);
 }
 .menu-navigation .etapes a:active {
   color: var(--menu-couleur-tous-clique);
 }
 
-.menu-navigation .autres-liens a:hover {
+.menu-navigation .autres-liens a:not(.actif):hover {
   color: var(--menu-couleur-autres-survol);
 }
 .menu-navigation .autres-liens a:active {
   color: var(--menu-couleur-tous-clique);
 }
 
-.menu-navigation .etapes a:hover .action-saisie {
+.menu-navigation .etapes a:not(.actif):hover .action-saisie {
   background-color: var(--menu-couleur-etapes-survol);
   filter: unset;
 }
@@ -246,13 +243,13 @@
 .menu-navigation a:active .action-saisie {
   background-color: var(--menu-couleur-tous-clique);
 }
-.menu-navigation .autres-liens a:hover > span {
+.menu-navigation .autres-liens a:not(.actif):hover > span {
   color: var(--menu-couleur-autres-survol);
 }
 .menu-navigation .autres-liens a:active > span {
   color: var(--menu-couleur-tous-clique);
 }
-.menu-navigation .autres-liens a:hover img {
+.menu-navigation .autres-liens a:not(.actif):hover img {
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: brightness(0) invert(17%) sepia(100%) saturate(2297%)
     hue-rotate(190deg) brightness(98%) contrast(91%);
@@ -276,7 +273,7 @@
   transition: rotate 0.2s;
 }
 
-.menu-navigation.ferme a:hover .pastille {
+.menu-navigation.ferme a:not(.actif):hover .pastille {
   background-color: white;
 }
 .menu-navigation.ferme a:active .pastille {
