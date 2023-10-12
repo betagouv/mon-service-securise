@@ -340,42 +340,42 @@ const creeDepot = (config = {}) => {
     adaptateurJournalMSS.consigneEvenement(evenement.toJSON());
   };
 
-  const nouvelleHomologation = async (idUtilisateur, donneesHomologation) => {
-    const idHomologation = adaptateurUUID.genereUUID();
+  const nouveauService = async (idUtilisateur, donneesService) => {
+    const idService = adaptateurUUID.genereUUID();
     const idAutorisation = adaptateurUUID.genereUUID();
 
     await valideDescriptionService(
       idUtilisateur,
-      donneesHomologation.descriptionService
+      donneesService.descriptionService
     );
 
-    await p.sauvegarde(idHomologation, donneesHomologation);
+    await p.sauvegarde(idService, donneesService);
 
     await adaptateurPersistance.ajouteAutorisation(idAutorisation, {
       idUtilisateur,
-      idHomologation,
-      idService: idHomologation,
+      idService,
+      idHomologation: idService,
       type: 'createur',
       droits: tousDroitsEnEcriture(),
     });
 
-    const h = await p.lis.une(idHomologation);
+    const s = await p.lis.une(idService);
 
     await Promise.all([
       adaptateurJournalMSS.consigneEvenement(
         new EvenementNouveauServiceCree({
-          idService: h.id,
+          idService: s.id,
           idUtilisateur,
         }).toJSON()
       ),
       adaptateurJournalMSS.consigneEvenement(
         new EvenementCompletudeServiceModifiee({
-          idService: h.id,
-          ...h.completudeMesures(),
+          idService: s.id,
+          ...s.completudeMesures(),
         }).toJSON()
       ),
       homologations(idUtilisateur).then((hs) => {
-        adaptateurTracking.envoieTrackingNouveauServiceCree(h.createur.email, {
+        adaptateurTracking.envoieTrackingNouveauServiceCree(s.createur.email, {
           nombreServices: hs.length,
         });
       }),
@@ -383,12 +383,12 @@ const creeDepot = (config = {}) => {
         .completudeDesServicesPourUtilisateur({ homologations }, idUtilisateur)
         .then((tauxCompletude) =>
           adaptateurTracking.envoieTrackingCompletudeService(
-            h.createur.email,
+            s.createur.email,
             tauxCompletude
           )
         ),
     ]);
-    return idHomologation;
+    return idService;
   };
 
   const remplaceRisquesSpecifiquesPourHomologation = (...params) =>
@@ -448,7 +448,7 @@ const creeDepot = (config = {}) => {
 
       return trouveIndexDisponible(idCreateur, nomHomologationADupliquer)
         .then(donneesADupliquer)
-        .then((donnees) => nouvelleHomologation(idCreateur, donnees));
+        .then((donnees) => nouveauService(idCreateur, donnees));
     };
 
     return p.lis
@@ -477,7 +477,7 @@ const creeDepot = (config = {}) => {
     homologationExiste,
     homologations,
     enregistreDossier,
-    nouvelleHomologation,
+    nouveauService,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
     supprimeHomologationsCreeesPar,

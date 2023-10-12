@@ -35,7 +35,7 @@ const creeDonnees = (depotDonnees) =>
       )
     )
     .then((u) =>
-      depotDonnees.nouvelleHomologation(u.id, {
+      depotDonnees.nouveauService(u.id, {
         descriptionService: descriptionService.toJSON(),
       })
     );

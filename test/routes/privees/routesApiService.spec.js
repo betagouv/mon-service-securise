@@ -34,7 +34,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().nouvelleHomologation = () => Promise.resolve();
+      testeur.depotDonnees().nouveauService = () => Promise.resolve();
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -110,7 +110,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si données insuffisantes pour création service', (done) => {
-      testeur.depotDonnees().nouvelleHomologation = () =>
+      testeur.depotDonnees().nouveauService = () =>
         Promise.reject(new ErreurDonneesObligatoiresManquantes('oups'));
 
       testeur.verifieRequeteGenereErreurHTTP(
@@ -126,7 +126,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
-      testeur.depotDonnees().nouvelleHomologation = () =>
+      testeur.depotDonnees().nouveauService = () =>
         Promise.reject(new ErreurNomServiceDejaExistant('oups'));
 
       testeur.verifieRequeteGenereErreurHTTP(
@@ -149,7 +149,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .construis()
         .toJSON();
 
-      testeur.depotDonnees().nouvelleHomologation = (
+      testeur.depotDonnees().nouveauService = (
         idUtilisateur,
         { descriptionService }
       ) => {

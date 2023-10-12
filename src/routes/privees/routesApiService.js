@@ -74,7 +74,7 @@ const routesApiService = (
       Promise.resolve()
         .then(() => new DescriptionService(requete.body, referentiel))
         .then((description) =>
-          depotDonnees.nouvelleHomologation(requete.idUtilisateurCourant, {
+          depotDonnees.nouveauService(requete.idUtilisateurCourant, {
             descriptionService: description.toJSON(),
           })
         )
