@@ -20,7 +20,6 @@ class AutorisationBase extends Base {
     this.renseigneProprietes(donnees);
 
     this.permissionAjoutContributeur = false;
-    this.permissionSuppressionContributeur = false;
     this.estProprietaire = false;
   }
 
@@ -35,9 +34,7 @@ class AutorisationBase extends Base {
   }
 
   peutGererContributeurs() {
-    return (
-      this.permissionAjoutContributeur && this.permissionSuppressionContributeur
-    );
+    return this.estProprietaire;
   }
 
   peutHomologuer() {

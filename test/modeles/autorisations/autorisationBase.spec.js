@@ -13,16 +13,6 @@ const { ECRITURE, LECTURE, INVISIBLE } = Permissions;
 const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
 
 describe('Une autorisation de base', () => {
-  it("ne permet pas d'ajouter un contributeur", () => {
-    const autorisation = new AutorisationBase();
-    expect(autorisation.permissionAjoutContributeur).to.be(false);
-  });
-
-  it('ne permet pas de supprimer un contributeur', () => {
-    const autorisation = new AutorisationBase();
-    expect(autorisation.permissionSuppressionContributeur).to.be(false);
-  });
-
   it('ne permet pas de supprimer un service', () => {
     const autorisation = new AutorisationBase();
     expect(autorisation.peutSupprimerService()).to.be(false);
@@ -151,13 +141,13 @@ describe('Une autorisation de base', () => {
   });
 
   describe('sur demande de permission de gestion des contributeurs', () => {
-    it("retourne 'false' si l'autorisation ne provient pas d'un créateur", () => {
+    it("interdit la gestion si l'autorisation ne provient pas d'un créateur", () => {
       const autorisationContributeur = new AutorisationContributeur();
 
       expect(autorisationContributeur.peutGererContributeurs()).to.be(false);
     });
 
-    it("retourne 'true' si l'autorisation provient d'un créateur", () => {
+    it("autorise la gestion si l'autorisation provient d'un créateur", () => {
       const autorisationCreateur = new AutorisationCreateur();
 
       expect(autorisationCreateur.peutGererContributeurs()).to.be(true);
