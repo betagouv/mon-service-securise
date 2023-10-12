@@ -697,7 +697,7 @@ describe('Le dépôt de données des homologations', () => {
       .catch(done);
   });
 
-  describe("quand il reçoit une demande d'enregistrement d'une nouvelle homologation", () => {
+  describe("quand il reçoit une demande d'enregistrement d'un nouveau service", () => {
     let adaptateurChiffrement;
     let adaptateurJournalMSS;
     let adaptateurPersistance;
@@ -729,7 +729,7 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
 
-    it('ajoute la nouvelle homologation au dépôt', (done) => {
+    it('ajoute le nouveau service au dépôt', (done) => {
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Super Service')
         .construis()
@@ -738,17 +738,17 @@ describe('Le dépôt de données des homologations', () => {
       depot
         .homologations('123')
         .then((homologations) => expect(homologations.length).to.equal(0))
-        .then(() => depot.nouvelleHomologation('123', { descriptionService }))
+        .then(() => depot.nouveauService('123', { descriptionService }))
         .then(() => depot.homologations('123'))
-        .then((homologations) => {
-          expect(homologations.length).to.equal(1);
-          expect(homologations[0].nomService()).to.equal('Super Service');
+        .then((services) => {
+          expect(services.length).to.equal(1);
+          expect(services[0].nomService()).to.equal('Super Service');
           done();
         })
         .catch(done);
     });
 
-    it("génère un UUID pour l'homologation créée", (done) => {
+    it('génère un UUID pour le service créée', (done) => {
       adaptateurUUID.genereUUID = () => '11111111-1111-1111-1111-111111111111';
 
       const descriptionService = uneDescriptionValide(referentiel)
@@ -757,11 +757,9 @@ describe('Le dépôt de données des homologations', () => {
         .toJSON();
 
       depot
-        .nouvelleHomologation('123', { descriptionService })
-        .then((idHomologation) =>
-          expect(idHomologation).to.equal(
-            '11111111-1111-1111-1111-111111111111'
-          )
+        .nouveauService('123', { descriptionService })
+        .then((idService) =>
+          expect(idService).to.equal('11111111-1111-1111-1111-111111111111')
         )
         .then(() => depot.homologations('123'))
         .then((homologations) => {
@@ -793,7 +791,7 @@ describe('Le dépôt de données des homologations', () => {
         .donneesSerialisees();
 
       depot
-        .nouvelleHomologation('123', { descriptionService })
+        .nouveauService('123', { descriptionService })
         .then(() => {
           const {
             nomService,
@@ -826,8 +824,8 @@ describe('Le dépôt de données des homologations', () => {
         .toJSON();
 
       depot
-        .nouvelleHomologation('123', { descriptionService })
-        .then((idHomologation) => depotDonneesServices.service(idHomologation))
+        .nouveauService('123', { descriptionService })
+        .then((idService) => depotDonneesServices.service(idService))
         .then((service) => {
           expect(service.nomService()).to.equal('Super Service');
           done();
@@ -835,7 +833,7 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it("déclare un accès en écriture entre l'utilisateur et l'homologation", (done) => {
+    it("déclare un accès en écriture entre l'utilisateur et le service", (done) => {
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance,
       });
@@ -846,7 +844,7 @@ describe('Le dépôt de données des homologations', () => {
       depotAutorisations
         .autorisations('123')
         .then((as) => expect(as.length).to.equal(0))
-        .then(() => depot.nouvelleHomologation('123', { descriptionService }))
+        .then(() => depot.nouveauService('123', { descriptionService }))
         .then(() => depotAutorisations.autorisations('123'))
         .then((as) => {
           expect(as.length).to.equal(1);
@@ -887,7 +885,7 @@ describe('Le dépôt de données des homologations', () => {
         };
 
         depot
-          .nouvelleHomologation('123', { descriptionService })
+          .nouveauService('123', { descriptionService })
           .then(() =>
             verifieRecuEvenementDeType('NOUVEAU_SERVICE_CREE', evenements)
           )
@@ -902,7 +900,7 @@ describe('Le dépôt de données des homologations', () => {
         };
 
         depot
-          .nouvelleHomologation('123', { descriptionService })
+          .nouveauService('123', { descriptionService })
           .then(() =>
             verifieRecuEvenementDeType(
               'COMPLETUDE_SERVICE_MODIFIEE',
@@ -943,7 +941,7 @@ describe('Le dépôt de données des homologations', () => {
         .avecReferentiel(referentiel)
         .construis();
 
-      await depot.nouvelleHomologation(utilisateur.id, { descriptionService });
+      await depot.nouveauService(utilisateur.id, { descriptionService });
 
       expect(donneesPassees).to.eql({
         destinataire: 'jean.dujardin@beta.gouv.com',
@@ -981,7 +979,7 @@ describe('Le dépôt de données des homologations', () => {
         .avecReferentiel(referentiel)
         .construis();
 
-      await depot.nouvelleHomologation(utilisateur.id, { descriptionService });
+      await depot.nouveauService(utilisateur.id, { descriptionService });
 
       expect(donneesPassees).to.eql({
         destinataire: 'jean.dujardin@beta.gouv.com',
@@ -1002,7 +1000,7 @@ describe('Le dépôt de données des homologations', () => {
         .toJSON();
 
       depot
-        .nouvelleHomologation('123', {
+        .nouveauService('123', {
           descriptionService: donneesDescriptionServiceIncompletes,
         })
         .then(() =>
@@ -1020,10 +1018,10 @@ describe('Le dépôt de données des homologations', () => {
         .toJSON();
 
       depot
-        .nouvelleHomologation('123', { descriptionService })
-        .then(() => depot.nouvelleHomologation('123', { descriptionService }))
+        .nouveauService('123', { descriptionService })
+        .then(() => depot.nouveauService('123', { descriptionService }))
         .then(() =>
-          done("La création de l'homologation aurait dû lever une exception")
+          done('La création du service aurait dû lever une exception')
         )
         .catch((e) => {
           expect(e).to.be.an(ErreurNomServiceDejaExistant);
