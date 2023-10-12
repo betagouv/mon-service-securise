@@ -300,7 +300,7 @@ const routesApiPrivee = ({
         depotDonnees
           .autorisationPour(...params)
           .then((a) =>
-            a.permissionSuppressionContributeur
+            a.peutGererContributeurs()
               ? Promise.resolve()
               : Promise.reject(new EchecAutorisation())
           );

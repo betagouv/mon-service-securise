@@ -997,14 +997,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête DELETE sur `/api/autorisation`', () => {
-    const autorisation = { id: '111' };
+    const autorisation = uneAutorisation().deCreateurDeService().construis();
 
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: '456' });
       autorisation.permissionSuppressionContributeur = true;
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(autorisation);
-      testeur.depotDonnees().supprimeContributeur = () => Promise.resolve();
+      testeur.depotDonnees().autorisationPour = async () => autorisation;
+      testeur.depotDonnees().supprimeContributeur = async () => {};
     });
 
     it('aseptise les paramètres de la requête', (done) => {
@@ -1027,102 +1026,81 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it("vérifie que l'utilisateur a le droit de supprimer un contributeur", (done) => {
-      let autorisationInterrogee = false;
-      testeur.depotDonnees().autorisationPour = (
+    it("vérifie que l'utilisateur a le droit de supprimer un contributeur", async () => {
+      let autorisationCherchee = {};
+      testeur.depotDonnees().autorisationPour = async (
         idUtilisateur,
         idHomologation
       ) => {
-        try {
-          expect(testeur.middleware().idUtilisateurCourant()).to.equal('456');
-
-          expect(idUtilisateur).to.equal('456');
-          expect(idHomologation).to.equal('123');
-          autorisationInterrogee = true;
-          return Promise.resolve(autorisation);
-        } catch (e) {
-          return Promise.reject(e);
-        }
+        autorisationCherchee = { idUtilisateur, idHomologation };
+        return uneAutorisation().deCreateurDeService().construis();
       };
 
-      axios
-        .delete('http://localhost:1234/api/autorisation', {
-          params: { idHomologation: '123' },
-        })
-        .then(() => {
-          expect(autorisationInterrogee).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      await axios.delete('http://localhost:1234/api/autorisation', {
+        params: { idHomologation: '123' },
+      });
+
+      expect(autorisationCherchee.idUtilisateur).to.be('456');
+      expect(autorisationCherchee.idHomologation).to.be('123');
     });
 
-    it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit de supprimer un contributeur", (done) => {
-      autorisation.permissionSuppressionContributeur = false;
-      testeur.depotDonnees().autorisationPour = () =>
-        Promise.resolve(autorisation);
+    it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit de supprimer un contributeur", async () => {
+      const contributeurSimple = uneAutorisation()
+        .deContributeurDeService()
+        .construis();
+      testeur.depotDonnees().autorisationPour = async () => contributeurSimple;
 
-      axios
-        .delete('http://localhost:1234/api/autorisation', {
+      try {
+        await axios.delete('http://localhost:1234/api/autorisation', {
           params: { idHomologation: '123' },
-        })
-        .then(() => {
-          done('La requête aurait dû lever une erreur HTTP 403');
-        })
-        .catch((e) => {
-          expect(e.response.status).to.equal(403);
-          expect(e.response.data).to.equal(
-            'Suppression non autorisé pour un contributeur'
-          );
-          done();
-        })
-        .catch(done);
+        });
+        expect().fail('La requête aurait dû lever une erreur HTTP 403');
+      } catch (e) {
+        expect(e.response.status).to.equal(403);
+        expect(e.response.data).to.equal(
+          'Suppression non autorisé pour un contributeur'
+        );
+      }
     });
 
-    it("utilise le dépôt de données pour supprimer l'autorisation du contributeur", (done) => {
-      let depotInterroge = false;
-      testeur.depotDonnees().supprimeContributeur = (
+    it("utilise le dépôt de données pour supprimer l'autorisation du contributeur", async () => {
+      let contributeurSupprime = {};
+      testeur.depotDonnees().supprimeContributeur = async (
         idContributeur,
         idHomologation
       ) => {
-        depotInterroge = true;
-        expect(idContributeur).to.equal('999');
-        expect(idHomologation).to.equal('123');
-        return Promise.resolve({});
+        contributeurSupprime = { idContributeur, idHomologation };
+        return {};
       };
 
-      axios
-        .delete('http://localhost:1234/api/autorisation', {
-          params: {
-            idHomologation: '123',
-            idContributeur: '999',
-          },
-        })
-        .then(() => {
-          expect(depotInterroge).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      await axios.delete('http://localhost:1234/api/autorisation', {
+        params: {
+          idHomologation: '123',
+          idContributeur: '999',
+        },
+      });
+
+      expect(contributeurSupprime.idContributeur).to.be('999');
+      expect(contributeurSupprime.idHomologation).to.be('123');
     });
 
-    it("retourne une erreur HTTP 424 si le dépôt ne peut pas supprimer l'autorisation", (done) => {
-      testeur.depotDonnees().supprimeContributeur = () =>
-        Promise.reject(new Error("Un message d'erreur"));
+    it("retourne une erreur HTTP 424 si le dépôt ne peut pas supprimer l'autorisation", async () => {
+      testeur.depotDonnees().supprimeContributeur = async () => {
+        throw new Error("Un message d'erreur");
+      };
 
-      axios
-        .delete('http://localhost:1234/api/autorisation', {
+      try {
+        await axios.delete('http://localhost:1234/api/autorisation', {
           params: {
             idHomologation: '123',
             emailContributeur: 'jean.dupont@mail.fr',
           },
-        })
-        .then(() => {
-          done('La requête aurait dû lever une erreur HTTP 424');
-        })
-        .catch((e) => {
-          expect(e.response.status).to.equal(424);
-          expect(e.response.data).to.equal("Un message d'erreur");
-          done();
         });
+        expect().fail('La requête aurait dû lever une erreur HTTP 424');
+      } catch (e) {
+        expect(e.response.status).to.equal(424);
+        expect(e.response.data).to.equal("Un message d'erreur");
+      }
     });
   });
 
