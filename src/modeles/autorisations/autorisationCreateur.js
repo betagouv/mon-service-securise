@@ -9,6 +9,10 @@ class AutorisationCreateur extends AutorisationBase {
     this.permissionSuppressionService = true;
     this.estProprietaire = true;
   }
+
+  donneesAPersister() {
+    return { ...super.donneesAPersister(), type: 'createur' };
+  }
 }
 
 module.exports = AutorisationCreateur;

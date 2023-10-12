@@ -17,6 +17,7 @@ const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
 const {
   tousDroitsEnEcriture,
 } = require('../modeles/autorisations/gestionDroits');
+const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -351,13 +352,15 @@ const creeDepot = (config = {}) => {
 
     await p.sauvegarde(idService, donneesService);
 
-    await adaptateurPersistance.ajouteAutorisation(idAutorisation, {
+    const createur = new AutorisationCreateur({
       idUtilisateur,
       idService,
-      idHomologation: idService,
-      type: 'createur',
       droits: tousDroitsEnEcriture(),
     });
+    await adaptateurPersistance.ajouteAutorisation(
+      idAutorisation,
+      createur.donneesAPersister()
+    );
 
     const s = await p.lis.une(idService);
 
