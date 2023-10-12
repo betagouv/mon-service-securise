@@ -20,25 +20,23 @@ const descriptionService = new DescriptionService(
   referentiel
 );
 
-const creeDonnees = (depotDonnees) =>
-  depotDonnees
-    .nouvelUtilisateur({
-      prenom: process.env.PRENOM_UTILISATEUR_DEMO,
-      nom: process.env.NOM_UTILISATEUR_DEMO,
-      email: process.env.EMAIL_UTILISATEUR_DEMO,
-      cguAcceptees: true,
-    })
-    .then((u) =>
-      depotDonnees.metsAJourMotDePasse(
-        u.id,
-        process.env.MOT_DE_PASSE_UTILISATEUR_DEMO
-      )
-    )
-    .then((u) =>
-      depotDonnees.nouveauService(u.id, {
-        descriptionService: descriptionService.toJSON(),
-      })
-    );
+const creeDonnees = async (depotDonnees) => {
+  const u = await depotDonnees.nouvelUtilisateur({
+    prenom: process.env.PRENOM_UTILISATEUR_DEMO,
+    nom: process.env.NOM_UTILISATEUR_DEMO,
+    email: process.env.EMAIL_UTILISATEUR_DEMO,
+    cguAcceptees: true,
+  });
+
+  await depotDonnees.metsAJourMotDePasse(
+    u.id,
+    process.env.MOT_DE_PASSE_UTILISATEUR_DEMO
+  );
+
+  await depotDonnees.nouveauService(u.id, {
+    descriptionService: descriptionService.toJSON(),
+  });
+};
 
 if (process.env.CREATION_UTILISATEUR_DEMO) {
   const adaptateurPersistance = fabriqueAdaptateurPersistance(
