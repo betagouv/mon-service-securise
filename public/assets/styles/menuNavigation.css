@@ -6,6 +6,7 @@
   --menu-couleur-autres-survol: #0c5c98;
 
   --menu-couleur-tous-clique: #0c5c98;
+  --menu-couleur-tous-pastille-active: #dbecf1;
 }
 
 .menu-navigation {
@@ -86,12 +87,13 @@
 }
 
 .menu-navigation a.actif .pastille {
-  background-color: var(--menu-couleur-tous-clique);
+  background-color: var(--menu-couleur-tous-pastille-active);
 }
 
 .menu-navigation .autres-liens a.actif img,
 .menu-navigation .etapes a.actif .action-saisie {
-  filter: brightness(0) saturate(100%) invert(100%);
+  filter: brightness(0) saturate(100%) invert(17%) sepia(85%) saturate(2876%)
+    hue-rotate(192deg) brightness(94%) contrast(91%);
 }
 
 .menu-navigation .etapes li a {
