@@ -51,6 +51,6 @@ $(() => {
   brancheElementsAjoutablesDescription(
     'points-acces',
     'point-acces',
-    'exemple : https://www.adresse.fr, App Store, Play Store…'
+    'exemple : https://www.adresse.fr, adresse IP'
   );
 });
