@@ -10,7 +10,7 @@ const ajoutContributeurSurServices = ({
   const verifiePermission = async (idUtilisateur, services) => {
     const verifieLeService = async (service) => {
       const a = await depotDonnees.autorisationPour(idUtilisateur, service.id);
-      if (!a.permissionAjoutContributeur) throw new EchecAutorisation();
+      if (!a.peutGererContributeurs()) throw new EchecAutorisation();
     };
 
     await Promise.all(services.map(verifieLeService));

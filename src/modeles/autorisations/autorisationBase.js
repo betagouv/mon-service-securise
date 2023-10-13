@@ -19,7 +19,6 @@ class AutorisationBase extends Base {
     });
     this.renseigneProprietes(donnees);
 
-    this.permissionAjoutContributeur = false;
     this.estProprietaire = false;
   }
 

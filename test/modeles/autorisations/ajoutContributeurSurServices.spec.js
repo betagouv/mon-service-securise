@@ -18,6 +18,9 @@ const AutorisationContributeur = require('../../../src/modeles/autorisations/aut
 const {
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const {
+  uneAutorisation,
+} = require('../../constructeurs/constructeurAutorisation');
 
 describe("L'ajout d'un contributeur sur des services", () => {
   const unEmetteur = (idUtilisateur) =>
@@ -25,7 +28,9 @@ describe("L'ajout d'un contributeur sur des services", () => {
   const leService = (id) =>
     unService().avecId(id).avecNomService('Nom Service').construis();
 
-  const autorisation = { id: '111' };
+  const peutGererContributeurs = uneAutorisation()
+    .deCreateurDeService()
+    .construis();
   const utilisateur = {
     id: '999',
     genereToken: () => 'un token',
@@ -37,11 +42,9 @@ describe("L'ajout d'un contributeur sur des services", () => {
   let adaptateurTracking;
 
   beforeEach(async () => {
-    autorisation.permissionAjoutContributeur = true;
-
     depotDonnees = await depotVide();
     depotDonnees.autorisationExiste = async () => false;
-    depotDonnees.autorisationPour = async () => autorisation;
+    depotDonnees.autorisationPour = async () => peutGererContributeurs;
     depotDonnees.utilisateurAvecEmail = async () => utilisateur;
     depotDonnees.ajouteContributeurAuService = async () => {};
 
@@ -61,7 +64,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     const autorisationsInterrogees = [];
     depotDonnees.autorisationPour = async (idUtilisateur, idHomologation) => {
       autorisationsInterrogees.push({ idUtilisateur, idHomologation });
-      return autorisation;
+      return peutGererContributeurs;
     };
 
     await ajoutContributeurSurServices({
@@ -82,8 +85,10 @@ describe("L'ajout d'un contributeur sur des services", () => {
   });
 
   it("lève une exception si l'utilisateur n'a pas le droit d'ajouter un contributeur", async () => {
-    autorisation.permissionAjoutContributeur = false;
-    depotDonnees.autorisationPour = async () => autorisation;
+    const sansGestionContributeur = uneAutorisation()
+      .deContributeurDeService()
+      .construis();
+    depotDonnees.autorisationPour = async () => sansGestionContributeur;
 
     try {
       await ajoutContributeurSurServices({
