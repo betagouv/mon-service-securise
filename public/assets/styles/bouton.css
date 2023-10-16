@@ -6,6 +6,7 @@ button {
 }
 
 .bouton {
+  position: relative;
   display: inline-block;
 
   margin: 2em 0 2em auto;

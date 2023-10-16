@@ -19,8 +19,14 @@ const initialiseComportementFormulaire = (
   const $form = $(selecteurFormulaire);
 
   brancheValidation(selecteurFormulaire);
-  $form.on('submit', (evenement) => {
+
+  const basculeEnCoursChargement = (etat) => {
+    $bouton.toggleClass('en-cours-chargement', etat).prop('disabled', etat);
+  };
+
+  $form.on('submit', async (evenement) => {
     evenement.preventDefault();
+    basculeEnCoursChargement(true);
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
     const redirige = ({ data: { idService } }) => {
@@ -30,7 +36,13 @@ const initialiseComportementFormulaire = (
         : `/service/${idService}/descriptionService`;
     };
 
-    adaptateurAjax.execute(requete).then(redirige).catch(callbackErreur);
+    try {
+      const donnees = await adaptateurAjax.execute(requete);
+      basculeEnCoursChargement(false);
+      redirige(donnees);
+    } catch (e) {
+      callbackErreur(e);
+    }
   });
 
   $bouton.on('click', () => {
