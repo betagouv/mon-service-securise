@@ -51,7 +51,7 @@ block formulaire
         a.nouvel-item Ajouter un risque spécifique
 
     if(!estLectureSeule)
-      .bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
+      button.bouton(idHomologation = service.id) Enregistrer &nbsp;&nbsp;›
 
   script(id = 'donnees-referentiel-niveaux-gravite-risque', type = 'application/json').
     !{JSON.stringify(referentiel.niveauxGravite())}
