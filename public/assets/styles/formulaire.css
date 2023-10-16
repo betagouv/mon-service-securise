@@ -372,3 +372,22 @@ input[type='checkbox'] + label.label-checkbox {
 .preferences-communication input[type='checkbox']:not(:checked) {
   background: #eff6ff;
 }
+
+button.bouton.en-cours-chargement {
+  color: transparent;
+}
+
+button.bouton.en-cours-chargement::before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border-radius: 50%;
+  border: 2px solid white;
+  border-color: white transparent;
+  animation: rotation 1.2s linear infinite;
+  top: calc(50% - 10px);
+  left: calc(50% - 10px);
+}
