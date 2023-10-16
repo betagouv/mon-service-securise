@@ -12,6 +12,7 @@ import {
   brancheComportementSaisieNiveauGravite,
   metsAJourAffichageNiveauGravite,
 } from '../modules/interactions/saisieNiveauGravite.js';
+import basculeEnCoursChargement from '../modules/enregistreRubrique.mjs';
 
 $(() => {
   let indexMaxRisquesSpecifiques = 0;
@@ -98,18 +99,20 @@ $(() => {
   const $bouton = $('.bouton[idHomologation]');
   const identifiantService = $bouton.attr('idHomologation');
 
-  $bouton.click(() => {
+  $bouton.on('click', async () => {
+    basculeEnCoursChargement($bouton, true);
     const params = parametresAvecItemsExtraits(
       'form#risques',
       'risquesSpecifiques',
       '^(description|niveauGravite|commentaire)-risque-specifique-'
     );
 
-    axios
-      .post(`/api/service/${identifiantService}/risques`, params)
-      .then(
-        (reponse) =>
-          (window.location = `/service/${reponse.data.idService}/risques`)
-      );
+    const reponse = await axios.post(
+      `/api/service/${identifiantService}/risques`,
+      params
+    );
+
+    basculeEnCoursChargement($bouton, false);
+    window.location = `/service/${reponse.data.idService}/risques`;
   });
 });
