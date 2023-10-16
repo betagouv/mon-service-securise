@@ -2,6 +2,7 @@ import {
   brancheValidation,
   declencheValidation,
 } from '../../modules/interactions/validation.mjs';
+import basculeEnCoursChargement from '../../modules/enregistreRubrique.mjs';
 
 let formulaireDejaSoumis = false;
 
@@ -20,7 +21,7 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
       ? `/service/${idService}/homologation/edition/etape/${idEtapeSuivante}`
       : `/service/${idService}/dossiers`);
 
-  $(selecteurFormulaire).on('submit', (e) => {
+  $(selecteurFormulaire).on('submit', async (e) => {
     e.preventDefault();
 
     if (estLectureSeule) {
@@ -30,7 +31,10 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
 
     if (!formulaireDejaSoumis) {
       formulaireDejaSoumis = true;
-      actionSoumission(idService, selecteurFormulaire).then(versEtapeSuivante);
+      basculeEnCoursChargement($boutonSuivant, false);
+      await actionSoumission(idService, selecteurFormulaire);
+      basculeEnCoursChargement($boutonSuivant, true);
+      versEtapeSuivante();
     }
   });
 
