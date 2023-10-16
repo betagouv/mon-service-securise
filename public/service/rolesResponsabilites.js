@@ -2,6 +2,7 @@ import arrangeParametresPartiesPrenantes from '../modules/arrangeParametresParti
 import parametres from '../modules/parametres.mjs';
 import brancheElementsAjoutables from '../modules/brancheElementsAjoutables.js';
 import brancheOnglets from '../modules/interactions/brancheOnglets.mjs';
+import basculeEnCoursChargement from '../modules/enregistreRubrique.mjs';
 
 const tousLesParametres = (selecteurFormulaire) => {
   const params = parametres(selecteurFormulaire);
@@ -33,14 +34,16 @@ $(() => {
   const $bouton = $('.bouton[idHomologation]');
   const identifiantService = $bouton.attr('idHomologation');
 
-  $bouton.on('click', () => {
+  $bouton.on('click', async () => {
+    basculeEnCoursChargement($bouton, true);
     const params = tousLesParametres('form#roles-responsabilites');
 
-    axios
-      .post(`/api/service/${identifiantService}/rolesResponsabilites`, params)
-      .then(
-        (reponse) =>
-          (window.location = `/service/${reponse.data.idService}/rolesResponsabilites`)
-      );
+    const reponse = await axios.post(
+      `/api/service/${identifiantService}/rolesResponsabilites`,
+      params
+    );
+    basculeEnCoursChargement($bouton, false);
+
+    window.location = `/service/${reponse.data.idService}/rolesResponsabilites`;
   });
 });
