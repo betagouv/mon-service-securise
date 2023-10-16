@@ -59,5 +59,6 @@
     border-radius: 8px;
     padding: 1em;
     margin-bottom: 0.5em;
+    column-gap: 16px;
   }
 </style>
