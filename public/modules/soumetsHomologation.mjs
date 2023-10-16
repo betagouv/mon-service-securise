@@ -3,6 +3,7 @@ import {
   brancheValidation,
   declencheValidation,
 } from './interactions/validation.mjs';
+import basculeEnCoursChargement from './enregistreRubrique.mjs';
 
 const initialiseComportementFormulaire = (
   selecteurFormulaire,
@@ -20,13 +21,9 @@ const initialiseComportementFormulaire = (
 
   brancheValidation(selecteurFormulaire);
 
-  const basculeEnCoursChargement = (etat) => {
-    $bouton.toggleClass('en-cours-chargement', etat).prop('disabled', etat);
-  };
-
   $form.on('submit', async (evenement) => {
     evenement.preventDefault();
-    basculeEnCoursChargement(true);
+    basculeEnCoursChargement($bouton, true);
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
     const redirige = ({ data: { idService } }) => {
@@ -38,9 +35,10 @@ const initialiseComportementFormulaire = (
 
     try {
       const donnees = await adaptateurAjax.execute(requete);
-      basculeEnCoursChargement(false);
+      basculeEnCoursChargement($bouton, false);
       redirige(donnees);
     } catch (e) {
+      basculeEnCoursChargement($bouton, false);
       callbackErreur(e);
     }
   });
