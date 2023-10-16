@@ -32,7 +32,7 @@
     <div class="roles-disponibles">
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
-        class="role-propose"
+        class="role-propose lecture"
         on:click={() => dispatch('droitsChange', 'LECTURE')}
       >
         <div class="nom">Lecture</div>
@@ -40,7 +40,7 @@
       </div>
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
-        class="role-propose"
+        class="role-propose ecriture"
         on:click={() => dispatch('droitsChange', 'ECRITURE')}
       >
         <div class="nom">Édition</div>
@@ -48,7 +48,7 @@
       </div>
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
-        class="role-propose"
+        class="role-propose personnalise"
         on:click={() => dispatch('choixPersonnalisation')}
       >
         <div class="nom">Personnalisé</div>
@@ -102,8 +102,16 @@
     border-radius: 5px;
   }
 
-  .role-propose .nom {
+  .role-propose.lecture .nom {
+    color: #7025da;
+  }
+  .role-propose.ecriture .nom {
     color: #0079d0;
+  }
+  .role-propose.personnalise .nom {
+    color: #0079d0;
+  }
+  .role-propose .nom {
     font-style: normal;
     font-weight: 500;
     line-height: 1.2rem;
@@ -114,7 +122,13 @@
     font-weight: 400;
   }
 
-  .role-propose:hover {
+  .role-propose.lecture:hover {
+    background: #e9ddff;
+  }
+  .role-propose.ecriture:hover {
+    background: #dbeeff;
+  }
+  .role-propose.personnalise:hover {
     background: #eff6ff;
   }
 
