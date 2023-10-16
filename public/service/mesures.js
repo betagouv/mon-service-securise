@@ -13,6 +13,7 @@ import {
 import texteHTML from '../modules/texteHTML.js';
 
 import ajouteModalesInformations from '../modules/interactions/modalesInformations.mjs';
+import basculeEnCoursChargement from '../modules/enregistreRubrique.mjs';
 
 $(() => {
   let indexMaxMesuresSpecifiques = 0;
@@ -197,16 +198,17 @@ ${statuts}
     declencheValidation('form#mesures');
   });
 
-  $('form#mesures').on('submit', (evenement) => {
+  $('form#mesures').on('submit', async (evenement) => {
     evenement.preventDefault();
+    basculeEnCoursChargement($bouton, true);
     const params = parametres('form#mesures');
     arrangeParametresMesures(params);
 
-    axios
-      .post(`/api/service/${identifiantService}/mesures`, params)
-      .then(
-        (reponse) =>
-          (window.location = `/service/${reponse.data.idService}/mesures`)
-      );
+    const reponse = await axios.post(
+      `/api/service/${identifiantService}/mesures`,
+      params
+    );
+    basculeEnCoursChargement($bouton, false);
+    window.location = `/service/${reponse.data.idService}/mesures`;
   });
 });
