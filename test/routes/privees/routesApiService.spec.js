@@ -1476,16 +1476,18 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         id: '456',
         nomService: 'Nom service',
         organisationsResponsables: ['ANSSI'],
-        createur: {
-          id: 'AAA',
-          prenomNom: 'jean.dujardin@beta.gouv.com',
-          initiales: '',
-          poste: '',
-        },
-        contributeurs: [],
+        contributeurs: [
+          {
+            id: 'AAA',
+            prenomNom: 'jean.dujardin@beta.gouv.com',
+            initiales: '',
+            poste: '',
+            estProprietaire: true,
+          },
+        ],
         statutHomologation: { id: 'nonRealisee', enCoursEdition: true },
         nombreContributeurs: 1,
-        estCreateur: false,
+        estProprietaire: false,
         documentsPdfDisponibles: [],
         permissions: { gestionContributeurs: false },
       });

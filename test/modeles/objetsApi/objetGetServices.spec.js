@@ -76,18 +76,20 @@ describe("L'objet d'API de `GET /services`", () => {
         id: '123',
         nomService: 'Un service',
         organisationsResponsables: ['Une organisation'],
-        createur: {
-          id: 'A',
-          prenomNom: 'Jacques',
-          initiales: 'J',
-          poste: 'RSSI',
-        },
         contributeurs: [
+          {
+            id: 'A',
+            prenomNom: 'Jacques',
+            initiales: 'J',
+            poste: 'RSSI',
+            estProprietaire: true,
+          },
           {
             id: 'B',
             prenomNom: 'Jean',
             initiales: 'J',
             poste: 'Maire',
+            estProprietaire: false,
           },
         ],
         statutHomologation: {
@@ -97,7 +99,7 @@ describe("L'objet d'API de `GET /services`", () => {
           ordre: 1,
         },
         nombreContributeurs: 1 + 1,
-        estCreateur: true,
+        estProprietaire: true,
         documentsPdfDisponibles: [],
         permissions: { gestionContributeurs: true },
       },
