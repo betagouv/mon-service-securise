@@ -52,12 +52,11 @@ describe('Le dépôt de données des autorisations', () => {
 
     it('retourne `true` si le niveau de permission est suffisant pour cette rubrique', async () => {
       const avecDroitEcriture = unePersistanceMemoire()
-        .ajouteUneAutorisation({
-          idUtilisateur: '456',
-          idHomologation: '123',
-          type: 'createur',
-          droits: { [DECRIRE]: ECRITURE },
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation()
+            .deCreateurDeService('456', '123')
+            .avecDroits({ [DECRIRE]: ECRITURE }).donnees
+        )
         .construis();
 
       const depot = creeDepot(avecDroitEcriture);
@@ -71,12 +70,11 @@ describe('Le dépôt de données des autorisations', () => {
 
     it("retourne `false` si le niveau de permission n'est pas suffisant pour cette rubrique", async () => {
       const avecDroitLecture = unePersistanceMemoire()
-        .ajouteUneAutorisation({
-          idUtilisateur: '456',
-          idHomologation: '123',
-          type: 'createur',
-          droits: { [DECRIRE]: LECTURE },
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation()
+            .deCreateurDeService('456', '123')
+            .avecDroits({ [DECRIRE]: LECTURE }).donnees
+        )
         .construis();
       const depot = creeDepot(avecDroitLecture);
 
@@ -143,11 +141,9 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().deCreateurDeService('999', '123').donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
@@ -170,18 +166,14 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'contributeur',
-        })
-        .ajouteUneAutorisation({
-          id: '789',
-          idUtilisateur: '000',
-          idHomologation: '123',
-          type: 'contributeur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deContributeurDeService('999', '123')
+            .donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('789').deContributeurDeService('000', '123')
+            .donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
@@ -204,18 +196,14 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
-        .ajouteUneAutorisation({
-          id: '789',
-          idUtilisateur: '000',
-          idHomologation: '123',
-          type: 'contributeur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+            .donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('789').deContributeurDeService('000', '123')
+            .donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
@@ -239,12 +227,10 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+            .donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
@@ -274,12 +260,10 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+            .donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
@@ -327,12 +311,10 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+            .donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
@@ -359,12 +341,10 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deContributeurDeService('999', '123')
+            .donnees
+        )
         .construis();
 
       adaptateurUUID.genereUUID = () => '789';
@@ -401,12 +381,10 @@ describe('Le dépôt de données des autorisations', () => {
         id: '123',
         descriptionService: { nomService: 'Un service' },
       })
-      .ajouteUneAutorisation({
-        id: '456',
-        idUtilisateur: '999',
-        idHomologation: '123',
-        type: 'createur',
-      })
+      .ajouteUneAutorisation(
+        uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          .donnees
+      )
       .construis();
 
     const depot = creeDepot(adaptateurPersistance);
@@ -424,12 +402,10 @@ describe('Le dépôt de données des autorisations', () => {
         id: '123',
         descriptionService: { nomService: 'Un service' },
       })
-      .ajouteUneAutorisation({
-        id: '456',
-        idUtilisateur: '999',
-        idHomologation: '123',
-        type: 'createur',
-      })
+      .ajouteUneAutorisation(
+        uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          .donnees
+      )
       .construis();
 
     const depot = creeDepot(adaptateurPersistance);
@@ -453,12 +429,10 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+            .donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
@@ -481,12 +455,10 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+            .donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
@@ -510,18 +482,14 @@ describe('Le dépôt de données des autorisations', () => {
           id: '123',
           descriptionService: { nomService: 'Un service' },
         })
-        .ajouteUneAutorisation({
-          id: '456',
-          idUtilisateur: '999',
-          idHomologation: '123',
-          type: 'createur',
-        })
-        .ajouteUneAutorisation({
-          id: '789',
-          idUtilisateur: '000',
-          idHomologation: '123',
-          type: 'contributeur',
-        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+            .donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('789').deContributeurDeService('000', '123')
+            .donnees
+        )
         .construis();
 
       const depot = creeDepot(adaptateurPersistance);
