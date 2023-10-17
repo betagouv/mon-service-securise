@@ -74,8 +74,8 @@ describe('Le dépôt de données des homologations', () => {
           },
         ],
         autorisations: [
-          { idUtilisateur: '456', idHomologation: '123', type: 'createur' },
-          { idUtilisateur: '999', idHomologation: '789', type: 'createur' },
+          uneAutorisation().deCreateurDeService('456', '123').donnees,
+          uneAutorisation().deCreateurDeService('999', '789').donnees,
         ],
       }
     );
@@ -133,9 +133,9 @@ describe('Le dépôt de données des homologations', () => {
           },
         ],
         autorisations: [
-          { idUtilisateur: '999', idHomologation: '123', type: 'createur' },
-          { idUtilisateur: '999', idHomologation: '456', type: 'createur' },
-          { idUtilisateur: '999', idHomologation: '789', type: 'createur' },
+          uneAutorisation().deCreateurDeService('999', '123').donnees,
+          uneAutorisation().deCreateurDeService('999', '456').donnees,
+          uneAutorisation().deCreateurDeService('999', '789').donnees,
         ],
       }
     );
@@ -179,8 +179,8 @@ describe('Le dépôt de données des homologations', () => {
           { id: '789', descriptionService: { nomService: 'nom' } },
         ],
         autorisations: [
-          { idHomologation: '789', idUtilisateur: '111', type: 'createur' },
-          { idHomologation: '789', idUtilisateur: '999', type: 'contributeur' },
+          uneAutorisation().deCreateurDeService('111', '789').donnees,
+          uneAutorisation().deContributeurDeService('999', '789').donnees,
         ],
       }
     );
@@ -1046,7 +1046,7 @@ describe('Le dépôt de données des homologations', () => {
             },
           ],
           autorisations: [
-            { idUtilisateur: '123', idHomologation: '789', type: 'createur' },
+            uneAutorisation().deCreateurDeService('123', '789').donnees,
           ],
         });
       const depot = DepotDonneesHomologations.creeDepot({
@@ -1103,8 +1103,8 @@ describe('Le dépôt de données des homologations', () => {
             },
           ],
           autorisations: [
-            { idUtilisateur: '123', idHomologation: '888', type: 'createur' },
-            { idUtilisateur: '123', idHomologation: '999', type: 'createur' },
+            uneAutorisation().deCreateurDeService('123', '888').donnees,
+            uneAutorisation().deCreateurDeService('123', '999').donnees,
           ],
         });
       const depot = DepotDonneesHomologations.creeDepot({
@@ -1137,12 +1137,8 @@ describe('Le dépôt de données des homologations', () => {
         homologations: [copie(donneesHomologation)],
         services: [copie(donneesHomologation)],
         autorisations: [
-          {
-            id: '456',
-            idUtilisateur: '999',
-            idHomologation: '123',
-            type: 'createur',
-          },
+          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+            .donnees,
         ],
       });
 
@@ -1196,24 +1192,12 @@ describe('Le dépôt de données des homologations', () => {
           { id: '222', descriptionService: { nomService: 'Un autre service' } },
         ],
         autorisations: [
-          {
-            id: '123',
-            idUtilisateur: '999',
-            idHomologation: '111',
-            type: 'createur',
-          },
-          {
-            id: '456',
-            idUtilisateur: '000',
-            idHomologation: '111',
-            type: 'contributeur',
-          },
-          {
-            id: '789',
-            idUtilisateur: '000',
-            idHomologation: '222',
-            type: 'contributeur',
-          },
+          uneAutorisation().avecId('123').deCreateurDeService('999', '111')
+            .donnees,
+          uneAutorisation().avecId('456').deContributeurDeService('000', '111')
+            .donnees,
+          uneAutorisation().avecId('789').deContributeurDeService('000', '222')
+            .donnees,
         ],
       });
       const depot = DepotDonneesHomologations.creeDepot({
@@ -1569,12 +1553,8 @@ describe('Le dépôt de données des homologations', () => {
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [
-            {
-              id: '456',
-              idUtilisateur: 'ABC',
-              idHomologation: '123',
-              type: 'createur',
-            },
+            uneAutorisation().avecId('456').deCreateurDeService('ABC', '123')
+              .donnees,
           ],
         });
       const adaptateurJournalMSS =
@@ -1605,18 +1585,10 @@ describe('Le dépôt de données des homologations', () => {
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [
-            {
-              id: 'a',
-              idUtilisateur: 'ABC',
-              idHomologation: '123',
-              type: 'createur',
-            },
-            {
-              id: 'b',
-              idUtilisateur: 'DEF',
-              idHomologation: '123',
-              type: 'contributeur',
-            },
+            uneAutorisation().avecId('a').deCreateurDeService('ABC', '123')
+              .donnees,
+            uneAutorisation().avecId('b').deContributeurDeService('DEF', '123')
+              .donnees,
           ],
         });
 
@@ -1651,12 +1623,7 @@ describe('Le dépôt de données des homologations', () => {
           homologations: [{ id: '123-1', descriptionService }],
           services: [{ id: '123-1', descriptionService }],
           autorisations: [
-            {
-              idUtilisateur: '123',
-              idHomologation: '123-1',
-              idService: '123-1',
-              type: 'createur',
-            },
+            uneAutorisation().deCreateurDeService('123', '123-1').donnees,
           ],
         });
 
@@ -1720,12 +1687,7 @@ describe('Le dépôt de données des homologations', () => {
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
           homologations: [{ id: '123', descriptionService }],
           autorisations: [
-            {
-              idUtilisateur: '999',
-              idHomologation: '123',
-              idService: '123',
-              type: 'createur',
-            },
+            uneAutorisation().deCreateurDeService('999', '123').donnees,
           ],
         });
 
@@ -1752,12 +1714,7 @@ describe('Le dépôt de données des homologations', () => {
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
           homologations: [{ id: '123', descriptionService: copie1 }],
           autorisations: [
-            {
-              idUtilisateur: '999',
-              idHomologation: '123',
-              idService: '123',
-              type: 'createur',
-            },
+            uneAutorisation().deCreateurDeService('999', '123').donnees,
           ],
         });
 
@@ -1791,18 +1748,8 @@ describe('Le dépôt de données des homologations', () => {
             { id: '456', descriptionService: duplication },
           ],
           autorisations: [
-            {
-              idUtilisateur: '999',
-              idHomologation: '123',
-              idService: '123',
-              type: 'createur',
-            },
-            {
-              idUtilisateur: '999',
-              idHomologation: '456',
-              idService: '456',
-              type: 'createur',
-            },
+            uneAutorisation().deCreateurDeService('999', '123').donnees,
+            uneAutorisation().deCreateurDeService('999', '456').donnees,
           ],
         });
 
@@ -1829,12 +1776,7 @@ describe('Le dépôt de données des homologations', () => {
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
           homologations: [{ id: '123', descriptionService: original }],
           autorisations: [
-            {
-              idUtilisateur: '999',
-              idHomologation: '123',
-              idService: '123',
-              type: 'createur',
-            },
+            uneAutorisation().deCreateurDeService('999', '123').donnees,
           ],
         });
 
