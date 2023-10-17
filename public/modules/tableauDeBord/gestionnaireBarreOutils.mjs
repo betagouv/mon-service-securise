@@ -5,11 +5,11 @@ const gestionnaireBarreOutils = {
   afficheOutils: () => {
     const selection = [...tableauDesServices.servicesSelectionnes];
     const estSelectionMultiple = selection.length > 1;
-    const seulementCreateur = selection
+    const seulementProprietaire = selection
       .map((idService) =>
         tableauDesServices.donnees.find((service) => service.id === idService)
       )
-      .every((service) => service.estCreateur);
+      .every((service) => service.estProprietaire);
     const aDesDocuments =
       selection.length !== 1
         ? false
@@ -21,7 +21,7 @@ const gestionnaireBarreOutils = {
       const doitMasquer = !registreDesActions[action].estDisponible({
         aDesDocuments,
         estSelectionMultiple,
-        seulementCreateur,
+        seulementProprietaire,
       });
       const $action = $(`.action[data-action="${action}"`);
       $action.toggleClass('inactif', doitMasquer);
