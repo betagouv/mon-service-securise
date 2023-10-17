@@ -3,23 +3,23 @@ const AutorisationBase = require('../autorisations/autorisationBase');
 
 const { DROITS_VOIR_STATUT_HOMOLOGATION } = AutorisationBase;
 
+const representeContributeur = (contributeur, estProprietaire) => ({
+  id: contributeur.id,
+  prenomNom: contributeur.prenomNom(),
+  initiales: contributeur.initiales(),
+  poste: contributeur.posteDetaille(),
+  estProprietaire,
+});
+
 const donnees = (service, autorisation, idUtilisateur, referentiel) => ({
   id: service.id,
   nomService: service.nomService(),
   organisationsResponsables:
     service.descriptionService.organisationsResponsables ?? [],
-  createur: {
-    id: service.createur.id,
-    prenomNom: service.createur.prenomNom(),
-    initiales: service.createur.initiales(),
-    poste: service.createur.posteDetaille(),
-  },
-  contributeurs: service.contributeurs.map((c) => ({
-    id: c.id,
-    prenomNom: c.prenomNom(),
-    initiales: c.initiales(),
-    poste: c.posteDetaille(),
-  })),
+  contributeurs: [
+    representeContributeur(service.createur, true),
+    ...service.contributeurs.map((c) => representeContributeur(c, false)),
+  ],
   ...(autorisation.aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION) && {
     statutHomologation: {
       id: service.dossiers.statutHomologation(),
@@ -28,7 +28,7 @@ const donnees = (service, autorisation, idUtilisateur, referentiel) => ({
     },
   }),
   nombreContributeurs: service.contributeurs.length + 1,
-  estCreateur: service.createur.id === idUtilisateur,
+  estProprietaire: service.createur.id === idUtilisateur,
   documentsPdfDisponibles: service.documentsPdfDisponibles(autorisation),
   permissions: {
     gestionContributeurs: autorisation.peutGererContributeurs(),
