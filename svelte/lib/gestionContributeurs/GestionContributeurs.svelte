@@ -25,19 +25,16 @@
 {:else if $store.etapeCourante === 'PersonnalisationContributeur'}
   <PersonnalisationContributeur />
 {:else}
-  {#if $store.services.every((s) => s.estCreateur)}
+  {#if $store.services.every((s) => s.estProprietaire)}
     <InvitationContributeur />
   {/if}
   {#if $store.etapeCourante !== 'InvitationContributeurs' && surServiceUnique}
     <h3 class="titre-liste">Liste des contributeurs au service</h3>
     <ul class="liste-contributeurs contributeurs-actifs">
-      <LigneContributeur
-        droitsModifiables={false}
-        utilisateur={serviceUnique.createur}
-      />
       {#each contributeurs as contributeur (contributeur.id)}
         <LigneContributeur
-          droitsModifiables={serviceUnique.permissions.gestionContributeurs}
+          droitsModifiables={!contributeur.estProprietaire &&
+            serviceUnique.permissions.gestionContributeurs}
           utilisateur={contributeur}
         />
       {/each}
