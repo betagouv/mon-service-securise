@@ -19,8 +19,8 @@ class ActionDuplication extends ActionAbstraite {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  estDisponible({ estSelectionMultiple, seulementCreateur }) {
-    return !estSelectionMultiple && seulementCreateur;
+  estDisponible({ estSelectionMultiple, seulementProprietaire }) {
+    return !estSelectionMultiple && seulementProprietaire;
   }
 
   async execute({ idService }) {
