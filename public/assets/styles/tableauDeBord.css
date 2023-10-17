@@ -356,7 +356,7 @@ label[for='recherche-service'] {
 .tableau-services .menu-flottant .filtre-mes-services::after {
   display: inline-block;
   content: '';
-  background-image: url('/statique/assets/images/icone_createur_collaboration.svg');
+  background-image: url('/statique/assets/images/icone_proprietaire_collaboration.svg');
   background-repeat: no-repeat;
   background-size: contain;
   width: 1.7em;
@@ -455,7 +455,7 @@ label[for='recherche-service'] {
 .tableau-services td .conteneur-contributeur::before {
   display: inline-block;
   content: '';
-  background-image: url('/statique/assets/images/icone_createur_collaboration.svg');
+  background-image: url('/statique/assets/images/icone_proprietaire_collaboration.svg');
   background-repeat: no-repeat;
   background-size: contain;
   width: 1.4em;
@@ -463,7 +463,7 @@ label[for='recherche-service'] {
   margin-right: 0.3em;
 }
 
-.tableau-services td .conteneur-contributeur:not(.createur)::before {
+.tableau-services td .conteneur-contributeur:not(.proprietaire)::before {
   opacity: 0;
 }
 
