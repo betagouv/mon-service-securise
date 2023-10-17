@@ -16,6 +16,9 @@ const {
   ErreurMotDePasseIncorrect,
 } = require('../../src/erreurs');
 const Utilisateur = require('../../src/modeles/utilisateur');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
@@ -550,7 +553,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [
-            { idUtilisateur: '999', idHomologation: '123', type: 'createur' },
+            uneAutorisation().deCreateurDeService('999', '123').donnees,
           ],
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
@@ -603,16 +606,8 @@ describe('Le dépôt de données des utilisateurs', () => {
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [
-            {
-              idUtilisateur: '999',
-              idHomologation: '123',
-              type: 'contributeur',
-            },
-            {
-              idUtilisateur: '000',
-              idHomologation: '123',
-              type: 'contributeur',
-            },
+            uneAutorisation().deContributeurDeService('999', '123').donnees,
+            uneAutorisation().deContributeurDeService('000', '123').donnees,
           ],
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
