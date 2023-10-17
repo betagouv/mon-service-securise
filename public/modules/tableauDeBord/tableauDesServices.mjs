@@ -10,10 +10,7 @@ const ORDRE_DE_TRI = {
 };
 
 const metEnFormeContributeurs = (service) =>
-  [
-    service.createur.prenomNom,
-    ...service.contributeurs.map((c) => c.prenomNom),
-  ].join('\n');
+  service.contributeurs.map((c) => c.prenomNom).join('\n');
 const remplisCartesInformations = (resume) => {
   $('#nombre-services').text(resume.nombreServices);
   $('#nombre-services-homologues').text(resume.nombreServicesHomologues);
@@ -134,7 +131,7 @@ const tableauDesServices = {
       )
       .filter((service) =>
         tableauDesServices.filtre.seulementProprietaire
-          ? service.estCreateur
+          ? service.estProprietaire
           : true
       )
       .sort((serviceA, serviceB) => {
@@ -218,9 +215,9 @@ const tableauDesServices = {
       const $celluleCollaborateur = $('<td></td>');
       const $conteneurCollaborateur = $(
         `<div class='conteneur-contributeur ${
-          service.estCreateur ? 'createur' : ''
+          service.estProprietaire ? 'proprietaire' : ''
         }' title='${
-          service.estCreateur ? 'Service dont je suis propriétaire' : ''
+          service.estProprietaire ? 'Service dont je suis propriétaire' : ''
         }'></div>`
       );
       const $nombreContributeurs = $(
