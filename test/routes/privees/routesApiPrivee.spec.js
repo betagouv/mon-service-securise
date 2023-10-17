@@ -331,7 +331,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect(service.nomService).to.eql('Un service');
         expect(service.organisationsResponsables).to.eql(['ANSSI']);
         expect(service.nombreContributeurs).to.eql(1);
-        expect(service.estCreateur).to.be(true);
+        expect(service.estProprietaire).to.be(true);
 
         return Promise.resolve('Fichier CSV');
       };

@@ -18,7 +18,7 @@ const ligneDuService = (service) =>
       .map(remplaceSeparateurParEspace)
       .join(' - '),
     service.nombreContributeurs,
-    remplaceBooleen(service.estCreateur),
+    remplaceBooleen(service.estProprietaire),
     Number(service.indiceCyber) ? service.indiceCyber : '-',
     service.statutHomologation?.libelle ?? '-',
   ].join(SEPARATEUR);
