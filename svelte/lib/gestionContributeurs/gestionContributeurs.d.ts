@@ -10,8 +10,7 @@ export type GestionContributeursProps = {
 
 export type Service = {
   id: string;
-  createur: Utilisateur;
-  estCreateur: boolean;
+  estProprietaire: boolean;
   contributeurs: Utilisateur[];
   permissions: { gestionContributeurs: boolean };
   nomService: string;
@@ -25,6 +24,7 @@ export type Utilisateur = {
   initiales: string;
   poste: string;
   email: string;
+  estProprietaire: boolean;
 };
 
 type Invisible = 0;
