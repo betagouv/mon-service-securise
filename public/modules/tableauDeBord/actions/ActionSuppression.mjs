@@ -35,8 +35,8 @@ class ActionSuppression extends ActionAbstraite {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  estDisponible({ seulementCreateur }) {
-    return seulementCreateur;
+  estDisponible({ seulementProprietaire }) {
+    return seulementProprietaire;
   }
 
   execute({ idServices }) {
