@@ -53,7 +53,7 @@
       >
         <div class="nom">Personnalisé</div>
         <div class="description">
-          Disposer de droits spécifiques à chaque rubrique
+          Avoir un droit d'accès adapté par rubrique
         </div>
       </div>
     </div>
