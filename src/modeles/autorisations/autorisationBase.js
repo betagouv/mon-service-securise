@@ -10,17 +10,31 @@ class AutorisationBase extends Base {
   constructor(donnees = {}) {
     super({
       proprietesAtomiquesRequises: [
+        'estProprietaire',
         'id',
         'idUtilisateur',
         'idHomologation',
         'idService',
         'droits',
+        'type',
       ],
     });
     this.renseigneProprietes(donnees);
-
-    this.estProprietaire = false;
   }
+
+  static NouvelleAutorisationContributeur = (donnees = {}) =>
+    new AutorisationBase({
+      ...donnees,
+      estProprietaire: false,
+      type: 'contributeur',
+    });
+
+  static NouvelleAutorisationProprietaire = (donnees = {}) =>
+    new AutorisationBase({
+      ...donnees,
+      estProprietaire: true,
+      type: 'createur',
+    });
 
   aLaPermission(niveau, rubrique) {
     return this.droits[rubrique] >= niveau;
@@ -71,11 +85,13 @@ class AutorisationBase extends Base {
 
   donneesAPersister() {
     return {
+      estProprietaire: this.estProprietaire,
       id: this.id,
       idService: this.idService,
       idHomologation: this.idService,
       idUtilisateur: this.idUtilisateur,
       droits: this.droits,
+      type: this.type,
     };
   }
 
