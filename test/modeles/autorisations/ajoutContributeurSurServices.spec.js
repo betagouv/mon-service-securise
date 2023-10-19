@@ -375,10 +375,10 @@ describe("L'ajout d'un contributeur sur des services", () => {
 
     expect(autorisations.length).to.be(2);
     const [a1, a2] = autorisations;
-    expect(a1).to.be.an(AutorisationContributeur);
+    expect(a1.estProprietaire).to.be(false);
     expect(a1.idUtilisateur).to.be('999');
     expect(a1.idService).to.be('123');
-    expect(a2).to.be.an(AutorisationContributeur);
+    expect(a2.estProprietaire).to.be(false);
     expect(a2.idUtilisateur).to.be('999');
     expect(a2.idService).to.be('888');
   });

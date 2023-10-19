@@ -1254,9 +1254,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas les droits de suppression du service", (done) => {
-      testeur
-        .middleware()
-        .reinitialise({ autorisationACharger: new AutorisationContributeur() });
+      testeur.middleware().reinitialise({
+        autorisationACharger: uneAutorisation()
+          .deContributeurDeService()
+          .construis(),
+      });
 
       testeur.verifieRequeteGenereErreurHTTP(
         403,
@@ -1344,9 +1346,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'est pas le créateur du service", (done) => {
-      testeur
-        .middleware()
-        .reinitialise({ autorisationACharger: new AutorisationContributeur() });
+      testeur.middleware().reinitialise({
+        autorisationACharger: uneAutorisation()
+          .deContributeurDeService()
+          .construis(),
+      });
 
       testeur.verifieRequeteGenereErreurHTTP(
         403,
