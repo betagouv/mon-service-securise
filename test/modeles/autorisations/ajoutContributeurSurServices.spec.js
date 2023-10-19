@@ -14,7 +14,6 @@ const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
 const { unService } = require('../../constructeurs/constructeurService');
-const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
 const {
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');

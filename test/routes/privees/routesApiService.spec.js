@@ -10,7 +10,6 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
 } = require('../../../src/erreurs');
-const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
 const Homologation = require('../../../src/modeles/homologation');
 const {
   Permissions,
