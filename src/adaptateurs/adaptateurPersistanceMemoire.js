@@ -49,7 +49,7 @@ const nouvelAdaptateur = (
 
     const filtre = seulementUnUtilisateur
       ? (a) => a.idUtilisateur === idUtilisateur
-      : (a) => a.type === 'createur';
+      : (a) => a.estProprietaire;
 
     return Promise.resolve(donnees.autorisations.filter(filtre));
   };
@@ -59,9 +59,11 @@ const nouvelAdaptateur = (
       .filter((a) => a.idHomologation === idHomologation)
       .reduce(
         (acc, a) => {
-          acc[`${a.type}s`].push(
-            donnees.utilisateurs.find((u) => u.id === a.idUtilisateur)
+          const utilisateur = donnees.utilisateurs.find(
+            (u) => u.id === a.idUtilisateur
           );
+          if (a.estProprietaire) acc.createurs.push(utilisateur);
+          else acc.contributeurs.push(utilisateur);
           return acc;
         },
         { createurs: [], contributeurs: [] }
@@ -180,7 +182,7 @@ const nouvelAdaptateur = (
         .filter(
           (as) =>
             as.idUtilisateur === idUtilisateur &&
-            as.type === 'createur' &&
+            as.estProprietaire &&
             !idsHomologationsAExclure.includes(as.idHomologation)
         )
         .map((a) => a.idHomologation)
@@ -206,7 +208,7 @@ const nouvelAdaptateur = (
   const nbAutorisationsCreateur = (idUtilisateur) =>
     Promise.resolve(
       donnees.autorisations.filter(
-        (a) => a.idUtilisateur === idUtilisateur && a.type === 'createur'
+        (a) => a.idUtilisateur === idUtilisateur && a.estProprietaire
       ).length
     );
 
@@ -267,9 +269,7 @@ const nouvelAdaptateur = (
 
     const supprimeDoublonsCreationContribution = (idUtilisateur) => {
       const idsHomologationsCreees = donnees.autorisations
-        .filter(
-          (a) => a.idUtilisateur === idUtilisateur && a.type === 'createur'
-        )
+        .filter((a) => a.idUtilisateur === idUtilisateur && a.estProprietaire)
         .map((a) => a.idHomologation);
 
       donnees.autorisations = donnees.autorisations.filter(
@@ -306,10 +306,10 @@ const nouvelAdaptateur = (
 
   const rechercheContributeurs = async (idUtilisateur, recherche) => {
     const idServices = donnees.autorisations
-      .filter((a) => a.idUtilisateur === idUtilisateur && a.type === 'createur')
+      .filter((a) => a.idUtilisateur === idUtilisateur && a.estProprietaire)
       .map((a) => a.idService);
     const idUniquesContributeurs = donnees.autorisations.filter(
-      (a) => idServices.includes(a.idService) && a.type !== 'createur'
+      (a) => idServices.includes(a.idService) && !a.estProprietaire
     );
     const tousContributeurs = donnees.utilisateurs.filter((u) =>
       idUniquesContributeurs.includes(u.id)
