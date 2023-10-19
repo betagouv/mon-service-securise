@@ -19,7 +19,6 @@ const {
 const {
   Rubriques,
   Permissions,
-  tousDroitsEnEcriture,
 } = require('../../src/modeles/autorisations/gestionDroits');
 const {
   uneAutorisation,
@@ -270,10 +269,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          new AutorisationContributeur({
-            idUtilisateur: '000',
-            idService: '123',
-          })
+          uneAutorisation().deContributeurDeService('000', '123').construis()
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -292,10 +288,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          new AutorisationContributeur({
-            idUtilisateur: '000',
-            idService: '123',
-          })
+          uneAutorisation().deContributeurDeService('000', '123').construis()
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -321,10 +314,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          new AutorisationContributeur({
-            idUtilisateur: '999',
-            idService: '123',
-          })
+          uneAutorisation().deContributeurDeService('999', '123').construis()
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -351,11 +341,10 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance, adaptateurUUID);
 
       await depot.ajouteContributeurAuService(
-        new AutorisationContributeur({
-          idUtilisateur: '000',
-          idService: '123',
-          droits: tousDroitsEnEcriture(),
-        })
+        uneAutorisation()
+          .deContributeurDeService('000', '123')
+          .avecTousDroitsEcriture()
+          .construis()
       );
 
       const a = await depot.autorisation('789');
