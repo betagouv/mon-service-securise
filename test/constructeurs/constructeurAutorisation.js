@@ -1,12 +1,12 @@
 const {
   tousDroitsEnEcriture,
 } = require('../../src/modeles/autorisations/gestionDroits');
-const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
-const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
+const AutorisationBase = require('../../src/modeles/autorisations/autorisationBase');
 
 class ConstructeurAutorisation {
   constructor() {
     this.donnees = {
+      estProprietaire: false,
       id: '',
       idUtilisateur: '',
       idHomologation: '',
@@ -22,6 +22,7 @@ class ConstructeurAutorisation {
   }
 
   deCreateurDeService(idUtilisateur, idService) {
+    this.donnees.estProprietaire = true;
     this.donnees.type = 'createur';
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
@@ -30,6 +31,7 @@ class ConstructeurAutorisation {
   }
 
   deContributeurDeService(idUtilisateur, idService) {
+    this.donnees.estProprietaire = false;
     this.donnees.type = 'contributeur';
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
@@ -49,8 +51,8 @@ class ConstructeurAutorisation {
 
   construis() {
     return this.donnees.type === 'createur'
-      ? new AutorisationCreateur(this.donnees)
-      : new AutorisationContributeur(this.donnees);
+      ? AutorisationBase.NouvelleAutorisationProprietaire(this.donnees)
+      : AutorisationBase.NouvelleAutorisationContributeur(this.donnees);
   }
 }
 

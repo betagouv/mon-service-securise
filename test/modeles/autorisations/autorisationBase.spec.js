@@ -6,16 +6,21 @@ const {
   Rubriques,
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
-const AutorisationContributeur = require('../../../src/modeles/autorisations/autorisationContributeur');
-const AutorisationCreateur = require('../../../src/modeles/autorisations/autorisationCreateur');
 
 const { ECRITURE, LECTURE, INVISIBLE } = Permissions;
 const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
 
-describe('Une autorisation de base', () => {
-  it('ne permet pas de supprimer un service', () => {
-    const autorisation = new AutorisationBase();
-    expect(autorisation.peutSupprimerService()).to.be(false);
+describe('Une autorisation', () => {
+  describe('sur demande de permission de suppression de service', () => {
+    it('interdit la suppression pour un contributeur', () => {
+      const autorisation = AutorisationBase.NouvelleAutorisationContributeur();
+      expect(autorisation.peutSupprimerService()).to.be(false);
+    });
+
+    it('autorise la suppression pour un propriétaire', () => {
+      const autorisation = AutorisationBase.NouvelleAutorisationProprietaire();
+      expect(autorisation.peutSupprimerService()).to.be(true);
+    });
   });
 
   it("permet de savoir s'il y a une permission en lecture sur une rubrique", () => {
@@ -83,10 +88,11 @@ describe('Une autorisation de base', () => {
   });
 
   describe('sur demande de résumé de niveau de droit', () => {
-    it("retour 'PROPRIETAIRE' si l'utilisateur est créateur du service", async () => {
-      const autorisationCreateur = new AutorisationCreateur();
+    it("retourne 'PROPRIETAIRE' si l'utilisateur est propriétaire du service", async () => {
+      const autorisationProprietaire =
+        AutorisationBase.NouvelleAutorisationProprietaire();
 
-      expect(autorisationCreateur.resumeNiveauDroit()).to.be(
+      expect(autorisationProprietaire.resumeNiveauDroit()).to.be(
         AutorisationBase.RESUME_NIVEAU_DROIT.PROPRIETAIRE
       );
     });
@@ -141,40 +147,72 @@ describe('Une autorisation de base', () => {
   });
 
   describe('sur demande de permission de gestion des contributeurs', () => {
-    it("interdit la gestion si l'autorisation ne provient pas d'un créateur", () => {
-      const autorisationContributeur = new AutorisationContributeur();
+    it('interdit la gestion pour un contributeur', () => {
+      const autorisationContributeur =
+        AutorisationBase.NouvelleAutorisationContributeur();
 
       expect(autorisationContributeur.peutGererContributeurs()).to.be(false);
     });
 
-    it("autorise la gestion si l'autorisation provient d'un créateur", () => {
-      const autorisationCreateur = new AutorisationCreateur();
+    it('autorise la gestion pour un propriétaire', () => {
+      const autorisationCreateur =
+        AutorisationBase.NouvelleAutorisationProprietaire();
 
       expect(autorisationCreateur.peutGererContributeurs()).to.be(true);
     });
   });
 
-  it('connaît ses données à persister', () => {
-    const autorisationContributeur = new AutorisationContributeur({
-      id: 'uuid',
-      idService: '123',
-      idUtilisateur: '999',
-      droits: tousDroitsEnEcriture(),
+  describe('sur demande des données à persister', () => {
+    it('connaît ses données pour une autorisation de contributeur', () => {
+      const autorisationContributeur =
+        AutorisationBase.NouvelleAutorisationContributeur({
+          id: 'uuid',
+          idService: '123',
+          idUtilisateur: '999',
+          droits: tousDroitsEnEcriture(),
+        });
+
+      expect(autorisationContributeur.donneesAPersister()).to.eql({
+        estProprietaire: false,
+        id: 'uuid',
+        idService: '123',
+        idHomologation: '123',
+        idUtilisateur: '999',
+        type: 'contributeur',
+        droits: {
+          CONTACTS: 2,
+          DECRIRE: 2,
+          HOMOLOGUER: 2,
+          RISQUES: 2,
+          SECURISER: 2,
+        },
+      });
     });
 
-    expect(autorisationContributeur.donneesAPersister()).to.eql({
-      id: 'uuid',
-      idService: '123',
-      idHomologation: '123',
-      idUtilisateur: '999',
-      type: 'contributeur',
-      droits: {
-        CONTACTS: 2,
-        DECRIRE: 2,
-        HOMOLOGUER: 2,
-        RISQUES: 2,
-        SECURISER: 2,
-      },
+    it('connaît ses données pour une autorisation de propriétaire', () => {
+      const autorisationProprietaire =
+        AutorisationBase.NouvelleAutorisationProprietaire({
+          id: 'uuid',
+          idService: '123',
+          idUtilisateur: '999',
+          droits: tousDroitsEnEcriture(),
+        });
+
+      expect(autorisationProprietaire.donneesAPersister()).to.eql({
+        estProprietaire: true,
+        id: 'uuid',
+        idService: '123',
+        idHomologation: '123',
+        idUtilisateur: '999',
+        type: 'createur',
+        droits: {
+          CONTACTS: 2,
+          DECRIRE: 2,
+          HOMOLOGUER: 2,
+          RISQUES: 2,
+          SECURISER: 2,
+        },
+      });
     });
   });
 });
