@@ -11,8 +11,6 @@ const {
   ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
 } = require('../../src/erreurs');
-const AutorisationContributeur = require('../../src/modeles/autorisations/autorisationContributeur');
-const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
@@ -153,7 +151,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       const autorisations000 = await depot.autorisations('000');
       expect(autorisations000.length).to.equal(1);
-      expect(autorisations000[0]).to.be.an(AutorisationCreateur);
+      expect(autorisations000[0].estProprietaire).to.be(true);
       expect(autorisations000[0].idHomologation).to.equal('123');
     });
 
@@ -214,7 +212,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       const as000 = await depot.autorisations('000');
       expect(as000.length).to.equal(1);
-      expect(as000[0]).to.be.an(AutorisationCreateur);
+      expect(as000[0].estProprietaire).to.be(true);
     });
   });
 
@@ -236,7 +234,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       const a = await depot.autorisation('456');
 
-      expect(a).to.be.an(AutorisationCreateur);
+      expect(a.estProprietaire).to.be(true);
       expect(a.id).to.equal('456');
       expect(a.idUtilisateur).to.equal('999');
       expect(a.idHomologation).to.equal('123');
@@ -349,7 +347,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       const a = await depot.autorisation('789');
 
-      expect(a).to.be.a(AutorisationContributeur);
+      expect(a.estProprietaire).to.be(false);
       expect(a.idHomologation).to.equal('123');
       expect(a.idService).to.equal('123');
       expect(a.idUtilisateur).to.equal('000');
@@ -363,7 +361,7 @@ describe('Le dépôt de données des autorisations', () => {
     });
   });
 
-  it("connaît l'autorisation pour un utilisateur et un service donnés", async () => {
+  it("connaît l'autorisation pour un utilisateur et un service donné", async () => {
     const adaptateurPersistance = unePersistanceMemoire()
       .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
       .ajouteUnService({
@@ -380,7 +378,7 @@ describe('Le dépôt de données des autorisations', () => {
 
     const a = await depot.autorisationPour('999', '123');
 
-    expect(a).to.be.an(AutorisationCreateur);
+    expect(a.estProprietaire).to.be(true);
     expect(a.id).to.equal('456');
   });
 
@@ -484,7 +482,7 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(adaptateurPersistance);
 
       const a = await depot.autorisationPour('000', '123');
-      expect(a).to.be.an(AutorisationContributeur);
+      expect(a.estProprietaire).to.be(false);
 
       await depot.supprimeContributeur('000', '123');
 
@@ -514,8 +512,8 @@ describe('Le dépôt de données des autorisations', () => {
     const a = await depot.autorisationsDuService('123');
 
     expect(a.length).to.be(2);
-    expect(a[0]).to.be.an(AutorisationCreateur);
-    expect(a[1]).to.be.an(AutorisationContributeur);
+    expect(a[0].estProprietaire).to.be(true);
+    expect(a[1].estProprietaire).to.be(false);
   });
 
   it('sait sauvegarder une autorisation', async () => {

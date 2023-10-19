@@ -8,7 +8,6 @@ const {
   ErreurNomServiceDejaExistant,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
-const AutorisationCreateur = require('../../modeles/autorisations/autorisationCreateur');
 const Avis = require('../../modeles/avis');
 const DescriptionService = require('../../modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('../../modeles/fonctionnalitesSpecifiques');
