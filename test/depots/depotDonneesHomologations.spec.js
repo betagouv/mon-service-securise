@@ -18,7 +18,6 @@ const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisa
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
 const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 
-const AutorisationCreateur = require('../../src/modeles/autorisations/autorisationCreateur');
 const Dossier = require('../../src/modeles/dossier');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
@@ -849,7 +848,7 @@ describe('Le dépôt de données des homologations', () => {
         .then((as) => {
           expect(as.length).to.equal(1);
           const autorisation = as[0];
-          expect(autorisation).to.be.an(AutorisationCreateur);
+          expect(autorisation.estProprietaire).to.be(true);
           expect(autorisation.idHomologation).to.equal('unUUID');
           expect(autorisation.idService).to.equal('unUUID');
           expect(autorisation.idUtilisateur).to.equal('123');

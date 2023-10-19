@@ -1,12 +1,11 @@
-const AutorisationContributeur = require('./autorisationContributeur');
-const AutorisationCreateur = require('./autorisationCreateur');
+const AutorisationBase = require('./autorisationBase');
 
-const CLASSES_AUTORISATIONS = {
-  contributeur: AutorisationContributeur,
-  createur: AutorisationCreateur,
+const CONSTRUCTEURS_AUTORISATIONS = {
+  contributeur: AutorisationBase.NouvelleAutorisationContributeur,
+  createur: AutorisationBase.NouvelleAutorisationProprietaire,
 };
 
 const fabrique = ({ type, ...autresDonnees }) =>
-  new CLASSES_AUTORISATIONS[type](autresDonnees);
+  CONSTRUCTEURS_AUTORISATIONS[type](autresDonnees);
 
 module.exports = { fabrique };

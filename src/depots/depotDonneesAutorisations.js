@@ -8,7 +8,6 @@ const {
   ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
 } = require('../erreurs');
-const AutorisationCreateur = require('../modeles/autorisations/autorisationCreateur');
 const FabriqueAutorisation = require('../modeles/autorisations/fabriqueAutorisation');
 
 const creeDepot = (config = {}) => {
@@ -107,7 +106,7 @@ const creeDepot = (config = {}) => {
 
     const verifieSuppressionPermise = (idContributeur, idHomologation) =>
       autorisationPour(idContributeur, idHomologation).then((a) => {
-        if (a.constructor.name === AutorisationCreateur.name) {
+        if (a.estProprietaire) {
           throw new ErreurTentativeSuppressionCreateur(
             `Suppression impossible : l'utilisateur "${idContributeur}" est le propriétaire du service "${idHomologation}"`
           );
