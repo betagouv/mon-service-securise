@@ -19,6 +19,7 @@ const {
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
@@ -32,17 +33,15 @@ describe('Une homologation', () => {
   });
 
   it('connaît ses contributrices et contributeurs', () => {
-    const homologation = new Homologation({
-      id: '123',
-      contributeurs: [
-        {
-          id: '456',
-          prenom: 'Jean',
-          nom: 'Dupont',
-          email: 'jean.dupont@mail.fr',
-        },
-      ],
-    });
+    const homologation = unService()
+      .avecId('123')
+      .ajouteUnContributeur(
+        unUtilisateur()
+          .avecId('456')
+          .quiSAppelle('Jean Dupont')
+          .avecEmail('jean.dupont@mail.fr').donnees
+      )
+      .construis();
 
     const { contributeurs } = homologation;
     expect(contributeurs.length).to.equal(1);
@@ -53,15 +52,15 @@ describe('Une homologation', () => {
   });
 
   it('connaît son créateur', () => {
-    const homologation = new Homologation({
-      id: '123',
-      createur: {
-        id: '456',
-        prenom: 'Jean',
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
-      },
-    });
+    const homologation = unService()
+      .avecId('123')
+      .ajouteUnProprietaire(
+        unUtilisateur()
+          .avecId('456')
+          .quiSAppelle('Jean Dupont')
+          .avecEmail('jean.dupont@mail.fr').donnees
+      )
+      .construis();
 
     const { createur } = homologation;
     expect(createur).to.be.an(Utilisateur);
@@ -69,25 +68,22 @@ describe('Une homologation', () => {
   });
 
   it('sait se convertir en JSON', () => {
-    const homologation = new Homologation({
-      id: '123',
-      createur: {
-        id: '456',
-        prenom: 'Bruno',
-        nom: 'Dumans',
-        email: 'bruno.dumans@mail.fr',
-      },
-      descriptionService: { nomService: 'Super Service' },
-      contributeurs: [
-        {
-          id: '999',
-          prenom: 'Jean',
-          nom: 'Dupont',
-          email: 'jean.dupont@mail.fr',
-        },
-      ],
-    });
-
+    const homologation = unService()
+      .avecId('123')
+      .avecNomService('Super Service')
+      .ajouteUnProprietaire(
+        unUtilisateur()
+          .avecId('456')
+          .quiSAppelle('Bruno Dumans')
+          .avecEmail('bruno.dumans@mail.fr').donnees
+      )
+      .ajouteUnContributeur(
+        unUtilisateur()
+          .avecId('999')
+          .quiSAppelle('Jean Dupont')
+          .avecEmail('jean.dupont@mail.fr').donnees
+      )
+      .construis();
     expect(homologation.toJSON()).to.eql({
       id: '123',
       nomService: 'Super Service',
@@ -425,9 +421,7 @@ describe('Une homologation', () => {
   });
 
   it('connaît son indice cyber', () => {
-    const homologation = new Homologation({
-      createur: { email: 'bruno.dumans@mail.fr' },
-    });
+    const homologation = unService().construis();
     homologation.mesures.indiceCyber = () => 3.7;
 
     expect(homologation.indiceCyber()).to.equal(3.7);
