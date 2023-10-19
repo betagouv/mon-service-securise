@@ -46,6 +46,10 @@ class AutorisationBase extends Base {
     );
   }
 
+  peutDupliquer() {
+    return this.estProprietaire;
+  }
+
   peutGererContributeurs() {
     return this.estProprietaire;
   }
