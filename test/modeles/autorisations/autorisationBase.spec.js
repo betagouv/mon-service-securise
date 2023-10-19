@@ -23,6 +23,18 @@ describe('Une autorisation', () => {
     });
   });
 
+  describe('sur demande de permission de duplication de service', () => {
+    it('interdit la duplication pour un contributeur', () => {
+      const autorisation = AutorisationBase.NouvelleAutorisationContributeur();
+      expect(autorisation.peutDupliquer()).to.be(false);
+    });
+
+    it('autorise la duplication pour un propriétaire', () => {
+      const autorisation = AutorisationBase.NouvelleAutorisationProprietaire();
+      expect(autorisation.peutDupliquer()).to.be(true);
+    });
+  });
+
   it("permet de savoir s'il y a une permission en lecture sur une rubrique", () => {
     const autorisation = new AutorisationBase({
       droits: { [DECRIRE]: LECTURE },
