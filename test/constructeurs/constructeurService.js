@@ -53,6 +53,16 @@ class ConstructeurService {
     }
     return this;
   }
+
+  ajouteUnContributeur(contributeur) {
+    this.donnees.contributeurs.push(contributeur);
+    return this;
+  }
+
+  ajouteUnProprietaire(proprietaire) {
+    this.donnees.createur = proprietaire;
+    return this;
+  }
 }
 
 const unService = (referentiel = Referentiel.creeReferentielVide()) =>
