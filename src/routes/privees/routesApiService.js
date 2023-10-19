@@ -442,7 +442,7 @@ const routesApiService = (
     middleware.chargeAutorisationsService,
     (requete, reponse, suite) => {
       const verifiePermissionDuplicationService = () =>
-        requete.autorisationService instanceof AutorisationCreateur
+        requete.autorisationService.peutDupliquer()
           ? Promise.resolve()
           : Promise.reject(new EchecAutorisation());
 
