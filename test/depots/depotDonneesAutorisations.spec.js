@@ -69,7 +69,7 @@ describe('Le dépôt de données des autorisations', () => {
       const avecDroitLecture = unePersistanceMemoire()
         .ajouteUneAutorisation(
           uneAutorisation()
-            .deCreateurDeService('456', '123')
+            .deContributeurDeService('456', '123')
             .avecDroits({ [DECRIRE]: LECTURE }).donnees
         )
         .construis();

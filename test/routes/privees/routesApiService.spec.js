@@ -1702,7 +1702,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         uneAutorisation()
           .avecId('uuid-a')
           .deCreateurDeService('AAA', '456')
-          .avecDroits({ DECRIRE: 2 })
           .construis(),
       ];
 
@@ -1715,7 +1714,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           idAutorisation: 'uuid-a',
           idUtilisateur: 'AAA',
           resumeNiveauDroit: 'PROPRIETAIRE',
-          droits: { DECRIRE: 2 },
+          droits: tousDroitsEnEcriture(),
         },
       ]);
     });
