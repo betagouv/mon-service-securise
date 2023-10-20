@@ -43,6 +43,13 @@ class ConstructeurService {
     return this;
   }
 
+  avecOrganisationResponsable(organisationResponsable) {
+    this.donnees.descriptionService.organisationsResponsables = [
+      organisationResponsable,
+    ];
+    return this;
+  }
+
   avecNContributeurs(combien, ids = []) {
     for (let i = 0; i < combien; i += 1) {
       let { donnees } = unUtilisateur();
