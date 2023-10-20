@@ -4,6 +4,7 @@ const {
   Permissions: { LECTURE, ECRITURE },
   Rubriques,
   Permissions,
+  tousDroitsEnEcriture,
 } = require('./gestionDroits');
 
 class AutorisationBase extends Base {
@@ -32,6 +33,7 @@ class AutorisationBase extends Base {
   static NouvelleAutorisationProprietaire = (donnees = {}) =>
     new AutorisationBase({
       ...donnees,
+      droits: tousDroitsEnEcriture(),
       estProprietaire: true,
       type: 'createur',
     });

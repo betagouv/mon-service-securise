@@ -207,7 +207,6 @@ describe('Une autorisation', () => {
           id: 'uuid',
           idService: '123',
           idUtilisateur: '999',
-          droits: tousDroitsEnEcriture(),
         });
 
       expect(autorisationProprietaire.donneesAPersister()).to.eql({
