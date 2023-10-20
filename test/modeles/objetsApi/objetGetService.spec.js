@@ -107,7 +107,7 @@ describe("L'objet d'API de `GET /service`", () => {
       expect(
         objetGetService.donnees(
           unServiceDontAestCreateur,
-          uneAutorisation().deCreateurDeService('A', '123').construis(),
+          uneAutorisation().deProprietaireDeService('A', '123').construis(),
           'A',
           referentiel
         ).permissions

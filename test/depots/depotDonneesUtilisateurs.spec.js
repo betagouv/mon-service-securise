@@ -553,7 +553,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [
-            uneAutorisation().deCreateurDeService('999', '123').donnees,
+            uneAutorisation().deProprietaireDeService('999', '123').donnees,
           ],
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({

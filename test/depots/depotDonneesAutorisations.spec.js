@@ -51,7 +51,7 @@ describe('Le dépôt de données des autorisations', () => {
       const avecDroitEcriture = unePersistanceMemoire()
         .ajouteUneAutorisation(
           uneAutorisation()
-            .deCreateurDeService('456', '123')
+            .deProprietaireDeService('456', '123')
             .avecDroits({ [DECRIRE]: ECRITURE }).donnees
         )
         .construis();
@@ -139,7 +139,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().deCreateurDeService('999', '123').donnees
+          uneAutorisation().deProprietaireDeService('999', '123').donnees
         )
         .construis();
 
@@ -194,7 +194,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
             .donnees
         )
         .ajouteUneAutorisation(
@@ -225,7 +225,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
             .donnees
         )
         .construis();
@@ -258,7 +258,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
             .donnees
         )
         .construis();
@@ -303,7 +303,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
             .donnees
         )
         .construis();
@@ -369,7 +369,7 @@ describe('Le dépôt de données des autorisations', () => {
         descriptionService: { nomService: 'Un service' },
       })
       .ajouteUneAutorisation(
-        uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+        uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
           .donnees
       )
       .construis();
@@ -390,7 +390,7 @@ describe('Le dépôt de données des autorisations', () => {
         descriptionService: { nomService: 'Un service' },
       })
       .ajouteUneAutorisation(
-        uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+        uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
           .donnees
       )
       .construis();
@@ -417,7 +417,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
             .donnees
         )
         .construis();
@@ -443,7 +443,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
             .donnees
         )
         .construis();
@@ -470,7 +470,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deCreateurDeService('999', '123')
+          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
             .donnees
         )
         .ajouteUneAutorisation(
@@ -500,7 +500,7 @@ describe('Le dépôt de données des autorisations', () => {
         descriptionService: { nomService: 'Un service' },
       })
       .ajouteUneAutorisation(
-        uneAutorisation().deCreateurDeService('888', '123').donnees
+        uneAutorisation().deProprietaireDeService('888', '123').donnees
       )
       .ajouteUneAutorisation(
         uneAutorisation().deContributeurDeService('999', '123').donnees

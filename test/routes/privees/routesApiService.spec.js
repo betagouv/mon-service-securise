@@ -1508,7 +1508,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     beforeEach(() => {
       testeur.middleware().reinitialise({
         autorisationACharger: uneAutorisation()
-          .deCreateurDeService('AAA', '456')
+          .deProprietaireDeService('AAA', '456')
           .construis(),
       });
 
@@ -1652,7 +1652,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idUtilisateur: 'AAA',
       });
       testeur.depotDonnees().autorisationsDuService = async (idService) => [
-        uneAutorisation().deCreateurDeService('AAA', idService).construis(),
+        uneAutorisation().deProprietaireDeService('AAA', idService).construis(),
       ];
     });
 
@@ -1683,7 +1683,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().autorisationsDuService = async (idService) => {
         donneesPassees = { idService };
         return [
-          uneAutorisation().deCreateurDeService('AAA', idService).construis(),
+          uneAutorisation()
+            .deProprietaireDeService('AAA', idService)
+            .construis(),
         ];
       };
 
@@ -1705,7 +1707,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().autorisationsDuService = async () => [
         uneAutorisation()
           .avecId('uuid-a')
-          .deCreateurDeService('AAA', '456')
+          .deProprietaireDeService('AAA', '456')
           .construis(),
       ];
 
@@ -1733,7 +1735,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idUtilisateur: 'AAA',
       });
       testeur.depotDonnees().autorisationsDuService = async () => [
-        uneAutorisation().deCreateurDeService('AAA', '456').construis(),
+        uneAutorisation().deProprietaireDeService('AAA', '456').construis(),
         uneAutorisation().deContributeurDeService('ABC', '456').construis(),
         uneAutorisation().deContributeurDeService('DEF', '456').construis(),
         uneAutorisation().deContributeurDeService('GHI', '456').construis(),
@@ -1756,7 +1758,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idUtilisateur: 'DEF',
       });
       testeur.depotDonnees().autorisationsDuService = async () => [
-        uneAutorisation().deCreateurDeService('AAA', '456').construis(),
+        uneAutorisation().deProprietaireDeService('AAA', '456').construis(),
         uneAutorisation().deContributeurDeService('ABC', '456').construis(),
         uneAutorisation().deContributeurDeService('DEF', '456').construis(),
         uneAutorisation().deContributeurDeService('GHI', '456').construis(),
