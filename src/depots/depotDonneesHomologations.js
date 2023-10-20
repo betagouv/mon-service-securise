@@ -14,9 +14,6 @@ const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenem
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
-const {
-  tousDroitsEnEcriture,
-} = require('../modeles/autorisations/gestionDroits');
 const AutorisationBase = require('../modeles/autorisations/autorisationBase');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
@@ -355,7 +352,6 @@ const creeDepot = (config = {}) => {
     const createur = AutorisationBase.NouvelleAutorisationProprietaire({
       idUtilisateur,
       idService,
-      droits: tousDroitsEnEcriture(),
     });
     await adaptateurPersistance.ajouteAutorisation(
       idAutorisation,
