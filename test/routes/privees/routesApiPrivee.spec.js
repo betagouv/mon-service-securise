@@ -8,7 +8,6 @@ const {
 const { ErreurModele, EchecAutorisation } = require('../../../src/erreurs');
 
 const testeurMSS = require('../testeurMSS');
-const Service = require('../../../src/modeles/service');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
@@ -24,6 +23,13 @@ const {
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
+  const service = unService()
+    .avecId('456')
+    .avecNomService('Un service')
+    .ajouteUnProprietaire(
+      unUtilisateur().avecEmail('email.proprietaire@mail.fr').donnees
+    )
+    .construis();
 
   beforeEach(testeur.initialise);
 
@@ -75,16 +81,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         donneesPassees = { idUtilisateur };
-        return Promise.resolve([
-          new Service({
-            id: '456',
-            descriptionService: {
-              nomService: 'Un service',
-              organisationsResponsables: [],
-            },
-            createur: { email: 'email.createur@mail.fr' },
-          }),
-        ]);
+        return Promise.resolve([service]);
       };
 
       axios
@@ -159,16 +156,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         donneesPassees = { idUtilisateur };
-        return Promise.resolve([
-          new Service({
-            id: '456',
-            descriptionService: {
-              nomService: 'Un service',
-              organisationsResponsables: [],
-            },
-            createur: { email: 'email.createur@mail.fr' },
-          }),
-        ]);
+        return Promise.resolve([service]);
       };
 
       axios
@@ -246,16 +234,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.depotDonnees().homologations = (idUtilisateur) => {
         donneesPassees = { idUtilisateur };
-        return Promise.resolve([
-          new Service({
-            id: '456',
-            descriptionService: {
-              nomService: 'Un service',
-              organisationsResponsables: [],
-            },
-            createur: { email: 'email.createur@mail.fr' },
-          }),
-        ]);
+        return Promise.resolve([service]);
       };
 
       axios
@@ -271,22 +250,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it('filtre les services en fonction de la requête', (done) => {
       testeur.depotDonnees().homologations = () =>
         Promise.resolve([
-          new Service({
-            id: '456',
-            descriptionService: {
-              nomService: 'Un service',
-              organisationsResponsables: [],
-            },
-            createur: { email: 'email.createur@mail.fr' },
-          }),
-          new Service({
-            id: '789',
-            descriptionService: {
-              nomService: 'Un deuxième service',
-              organisationsResponsables: [],
-            },
-            createur: { email: 'email.createur@mail.fr' },
-          }),
+          service,
+          unService()
+            .avecId('789')
+            .avecNomService('Un deuxième service')
+            .ajouteUnProprietaire(
+              unUtilisateur().avecEmail('email.proprietaire@mail.fr').donnees
+            )
+            .construis(),
         ]);
 
       testeur.adaptateurCsv().genereCsvServices = (donneesServices) => {
@@ -313,25 +284,26 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.depotDonnees().homologations = () =>
         Promise.resolve([
-          new Service({
-            id: '456',
-            descriptionService: {
-              nomService: 'Un service',
-              organisationsResponsables: ['ANSSI'],
-            },
-            createur: { id: '123', email: 'email.createur@mail.fr' },
-          }),
+          unService()
+            .avecId('456')
+            .avecNomService('Un service')
+            .avecOrganisationResponsable('ANSSI')
+            .ajouteUnProprietaire(
+              unUtilisateur().avecId('123').avecEmail('email.createur@mail.fr')
+                .donnees
+            )
+            .construis(),
         ]);
 
       let adaptateurCsvAppele = false;
       testeur.adaptateurCsv().genereCsvServices = (donnees) => {
         adaptateurCsvAppele = true;
 
-        const service = donnees[0];
-        expect(service.nomService).to.eql('Un service');
-        expect(service.organisationsResponsables).to.eql(['ANSSI']);
-        expect(service.nombreContributeurs).to.eql(1);
-        expect(service.estProprietaire).to.be(true);
+        const serviceRecu = donnees[0];
+        expect(serviceRecu.nomService).to.eql('Un service');
+        expect(serviceRecu.organisationsResponsables).to.eql(['ANSSI']);
+        expect(serviceRecu.nombreContributeurs).to.eql(1);
+        expect(serviceRecu.estProprietaire).to.be(true);
 
         return Promise.resolve('Fichier CSV');
       };
