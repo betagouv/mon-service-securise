@@ -8,14 +8,14 @@ block append styles
 
 block header-gauche
   .conteneur-logo
-    a.logo-mss(href='/tableauDeBord')
+    a.logo-mss(href='/tableauDeBord' title='Retour au tableau de bord')
   .titre-page
     if afficheChallengeMotDePasse
       h3 Changez votre mot de passe
     else
       h3 Créez votre mot de passe
     .retour-tableau-de-bord
-      a(href='/tableauDeBord') Retour au tableau de bord
+      a(href='/tableauDeBord' title='Retour au tableau de bord') Retour au tableau de bord
 
 block bandeau-nouveautes
   // Pas de « Nouveautés » sur cette page
