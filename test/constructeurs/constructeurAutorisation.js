@@ -50,7 +50,7 @@ class ConstructeurAutorisation {
   }
 
   construis() {
-    return this.donnees.type === 'createur'
+    return this.donnees.estProprietaire
       ? AutorisationBase.NouvelleAutorisationProprietaire(this.donnees)
       : AutorisationBase.NouvelleAutorisationContributeur(this.donnees);
   }
