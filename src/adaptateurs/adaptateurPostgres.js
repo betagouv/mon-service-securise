@@ -151,7 +151,7 @@ const nouvelAdaptateur = (env) => {
 
     const filtre = seulementUnUtilisateur
       ? ["(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur]
-      : ["(donnees->>'type') = 'createur'"];
+      : ["(donnees->>'estProprietaire')::boolean = true"];
 
     const idsHomologations = knex('autorisations')
       .whereRaw(...filtre)
