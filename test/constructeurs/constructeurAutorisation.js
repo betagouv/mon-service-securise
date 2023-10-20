@@ -21,7 +21,7 @@ class ConstructeurAutorisation {
     return this;
   }
 
-  deCreateurDeService(idUtilisateur, idService) {
+  deProprietaireDeService(idUtilisateur, idService) {
     this.donnees.estProprietaire = true;
     this.donnees.type = 'createur';
     this.donnees.idUtilisateur = idUtilisateur;

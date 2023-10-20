@@ -28,7 +28,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     unService().avecId(id).avecNomService('Nom Service').construis();
 
   const peutGererContributeurs = uneAutorisation()
-    .deCreateurDeService()
+    .deProprietaireDeService()
     .construis();
   const utilisateur = {
     id: '999',

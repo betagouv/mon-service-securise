@@ -74,7 +74,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.depotDonnees().autorisations = async () => [
         uneAutorisation()
-          .deCreateurDeService('123', '456')
+          .deProprietaireDeService('123', '456')
           .avecDroits({})
           .construis(),
       ];
@@ -104,7 +104,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         donneesPassees = { idUtilisateur };
         return [
           uneAutorisation()
-            .deCreateurDeService('123', '456')
+            .deProprietaireDeService('123', '456')
             .avecDroits({})
             .construis(),
         ];
@@ -133,7 +133,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         donneesPassees = { idUtilisateur };
         return [
           uneAutorisation()
-            .deCreateurDeService('123', '456')
+            .deProprietaireDeService('123', '456')
             .avecDroits({})
             .construis(),
         ];
@@ -149,7 +149,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.depotDonnees().autorisations = async () => [
         uneAutorisation()
-          .deCreateurDeService('123', '456')
+          .deProprietaireDeService('123', '456')
           .avecDroits({})
           .construis(),
       ];
@@ -184,7 +184,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
       testeur.depotDonnees().autorisations = async () => [
         uneAutorisation()
-          .deCreateurDeService('123', '456')
+          .deProprietaireDeService('123', '456')
           .avecDroits({ [SECURISER]: LECTURE })
           .construis(),
       ];
@@ -218,7 +218,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         donneesPassees = { idUtilisateur };
         return [
           uneAutorisation()
-            .deCreateurDeService('123', '456')
+            .deProprietaireDeService('123', '456')
             .avecDroits({})
             .construis(),
         ];
@@ -277,7 +277,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.depotDonnees().autorisations = async () => [
         uneAutorisation()
-          .deCreateurDeService('123', '456')
+          .deProprietaireDeService('123', '456')
           .avecDroits({})
           .construis(),
       ];
@@ -969,7 +969,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête DELETE sur `/api/autorisation`', () => {
-    const autorisation = uneAutorisation().deCreateurDeService().construis();
+    const autorisation = uneAutorisation()
+      .deProprietaireDeService()
+      .construis();
 
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: '456' });
@@ -1005,7 +1007,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         idHomologation
       ) => {
         autorisationCherchee = { idUtilisateur, idHomologation };
-        return uneAutorisation().deCreateurDeService().construis();
+        return uneAutorisation().deProprietaireDeService().construis();
       };
 
       await axios.delete('http://localhost:1234/api/autorisation', {

@@ -18,11 +18,11 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
   let unAutreService;
   const autorisations = [
     uneAutorisation()
-      .deCreateurDeService('999', '123')
+      .deProprietaireDeService('999', '123')
       .avecDroits({ [SECURISER]: LECTURE })
       .construis(),
     uneAutorisation()
-      .deCreateurDeService('999', '456')
+      .deProprietaireDeService('999', '456')
       .avecDroits({ [SECURISER]: LECTURE })
       .construis(),
   ];
@@ -82,7 +82,9 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
 
     const services = [unService, unAutreService];
     const autorisationsSansPermission = [
-      uneAutorisation().deCreateurDeService('999', unService.id).construis(),
+      uneAutorisation()
+        .deProprietaireDeService('999', unService.id)
+        .construis(),
       uneAutorisation()
         .deContributeurDeService('999', unAutreService.id)
         .construis(),
