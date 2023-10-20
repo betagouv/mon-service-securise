@@ -1394,9 +1394,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           AutorisationBase.NouvelleAutorisationProprietaire(),
       });
 
-      testeur.depotDonnees().dupliqueHomologation = (idService) => {
+      testeur.depotDonnees().dupliqueHomologation = (
+        idService,
+        idUtilisateur
+      ) => {
         try {
           expect(idService).to.equal('123');
+          expect(idUtilisateur).to.equal('999');
           serviceDuplique = true;
 
           return Promise.resolve();
