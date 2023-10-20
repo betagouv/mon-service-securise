@@ -29,6 +29,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  avecPostes(postes) {
+    this.donnees.postes = postes;
+    return this;
+  }
+
   quiSAppelle(prenomNom) {
     const [prenom, nom] = prenomNom.split(' ');
     this.donnees.prenom = prenom;

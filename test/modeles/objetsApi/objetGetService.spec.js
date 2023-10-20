@@ -1,6 +1,5 @@
 const expect = require('expect.js');
 
-const Service = require('../../../src/modeles/service');
 const objetGetService = require('../../../src/modeles/objetsApi/objetGetService');
 const Referentiel = require('../../../src/referentiel');
 const {
@@ -10,6 +9,10 @@ const {
   Rubriques: { HOMOLOGUER },
   Permissions: { LECTURE },
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const { unService } = require('../../constructeurs/constructeurService');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 describe("L'objet d'API de `GET /service`", () => {
   const referentiel = Referentiel.creeReferentiel({
@@ -21,31 +24,29 @@ describe("L'objet d'API de `GET /service`", () => {
     .avecDroits({ [HOMOLOGUER]: LECTURE })
     .construis();
 
-  const unService = new Service({
-    id: '123',
-    descriptionService: {
-      nomService: 'Un service',
-      organisationsResponsables: ['Une organisation'],
-    },
-    createur: {
-      id: 'A',
-      email: 'email.createur@mail.fr',
-      prenom: 'Jacques',
-      postes: ['RSSI'],
-    },
-    contributeurs: [
-      {
-        id: 'B',
-        email: 'email.contributeur1@mail.fr',
-        prenom: 'Jean',
-        postes: ['Maire'],
-      },
-    ],
-  });
+  const service = unService()
+    .avecId('123')
+    .avecNomService('Un service')
+    .avecOrganisationResponsable('Une organisation')
+    .ajouteUnProprietaire(
+      unUtilisateur()
+        .avecId('A')
+        .avecEmail('email.proprietaire@mail.fr')
+        .quiSAppelle('Jean Dupont')
+        .avecPostes(['RSSI']).donnees
+    )
+    .ajouteUnContributeur(
+      unUtilisateur()
+        .avecId('B')
+        .avecEmail('email.contributeur1@mail.fr')
+        .quiSAppelle('Pierre Lecoux')
+        .avecPostes(['Maire']).donnees
+    )
+    .construis();
 
   it('fournit les données nécessaires', () => {
     expect(
-      objetGetService.donnees(unService, lectureSurHomologuer, 'A', referentiel)
+      objetGetService.donnees(service, lectureSurHomologuer, 'A', referentiel)
     ).to.eql({
       id: '123',
       nomService: 'Un service',
@@ -53,15 +54,15 @@ describe("L'objet d'API de `GET /service`", () => {
       contributeurs: [
         {
           id: 'A',
-          prenomNom: 'Jacques',
-          initiales: 'J',
+          prenomNom: 'Jean Dupont',
+          initiales: 'JD',
           poste: 'RSSI',
           estProprietaire: true,
         },
         {
           id: 'B',
-          prenomNom: 'Jean',
-          initiales: 'J',
+          prenomNom: 'Pierre Lecoux',
+          initiales: 'PL',
           poste: 'Maire',
           estProprietaire: false,
         },
@@ -84,7 +85,7 @@ describe("L'objet d'API de `GET /service`", () => {
       .avecDroits({})
       .construis();
     const donnees = objetGetService.donnees(
-      unService,
+      service,
       autorisationSansHomologuer,
       'A',
       referentiel
@@ -93,12 +94,15 @@ describe("L'objet d'API de `GET /service`", () => {
   });
 
   describe('sur demande des permissions', () => {
-    it("autorise la gestion de contributeurs si l'utilisateur est créateur", () => {
-      const unServiceDontAestCreateur = new Service({
-        id: '123',
-        descriptionService: { nomService: 'Un service' },
-        createur: { id: 'A', email: 'email.createur@mail.fr' },
-      });
+    it("autorise la gestion de contributeurs si l'utilisateur est propriétaire", () => {
+      const unServiceDontAestCreateur = unService()
+        .avecId('123')
+        .avecNomService('Un service')
+        .ajouteUnProprietaire(
+          unUtilisateur().avecId('A').avecEmail('email.proprietaire@mail.fr')
+            .donnees
+        )
+        .construis();
 
       expect(
         objetGetService.donnees(
@@ -111,11 +115,14 @@ describe("L'objet d'API de `GET /service`", () => {
     });
 
     it("n'autorise pas la gestion de contributeurs si l'utilisateur est contributeur", () => {
-      const unServiceDontAestCreateur = new Service({
-        id: '123',
-        descriptionService: { nomService: 'Un service' },
-        createur: { id: 'A', email: 'email.createur@mail.fr' },
-      });
+      const unServiceDontAestCreateur = unService()
+        .avecId('123')
+        .avecNomService('Un service')
+        .ajouteUnProprietaire(
+          unUtilisateur().avecId('A').avecEmail('email.proprietaire@mail.fr')
+            .donnees
+        )
+        .construis();
       const idUtilisateur = 'un autre ID';
       expect(
         objetGetService.donnees(
