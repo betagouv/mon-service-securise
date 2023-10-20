@@ -1637,7 +1637,7 @@ describe('Le dépôt de données des homologations', () => {
 
     it("reste robuste quand l'homologation n'est pas trouvée", (done) => {
       depot
-        .dupliqueHomologation('id-invalide')
+        .dupliqueHomologation('id-invalide', '123')
         .then(() =>
           done('La tentative de duplication aurait dû lever une exception')
         )
@@ -1651,7 +1651,7 @@ describe('Le dépôt de données des homologations', () => {
 
     it('peut dupliquer une homologation à partir de son identifiant', (done) => {
       depot
-        .dupliqueHomologation('123-1')
+        .dupliqueHomologation('123-1', '123')
         .then(() => depot.homologations('123'))
         .then((homologations) => {
           expect(homologations.length).to.equal(2);
@@ -1662,8 +1662,8 @@ describe('Le dépôt de données des homologations', () => {
 
     it("utilise un nom disponible pour l'homologation dupliquée", (done) => {
       depot
-        .dupliqueHomologation('123-1')
-        .then(() => depot.dupliqueHomologation('123-1'))
+        .dupliqueHomologation('123-1', '123')
+        .then(() => depot.dupliqueHomologation('123-1', '123'))
         .then(() => depot.homologations('123'))
         .then(([_, h2, h3]) => {
           expect(h2.nomService()).to.equal('Service à dupliquer - Copie 1');
