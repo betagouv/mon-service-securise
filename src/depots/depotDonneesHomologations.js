@@ -415,7 +415,7 @@ const creeDepot = (config = {}) => {
       supprimeHomologation
     );
 
-  const trouveIndexDisponible = (idCreateur, nomHomologationDupliquee) => {
+  const trouveIndexDisponible = (idProprietaire, nomHomologationDupliquee) => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
     const nomCompatibleRegExp = nomHomologationDupliquee.replace(
       /[.*+?^${}()|[\]\\]/g,
@@ -435,7 +435,7 @@ const creeDepot = (config = {}) => {
       return Math.max(0, resultat) + 1;
     };
 
-    return p.lis.cellesDeUtilisateur(idCreateur).then(indexMax);
+    return p.lis.cellesDeUtilisateur(idProprietaire).then(indexMax);
   };
 
   const dupliqueHomologation = (idHomologation, idProprietaire) => {
