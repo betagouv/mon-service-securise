@@ -377,14 +377,14 @@ const nouvelAdaptateur = (env) => {
             AS (
               SELECT donnees->>'idService' AS ids_services
                 FROM autorisations
-                WHERE donnees->>'idUtilisateur' = ? AND donnees->>'type' = 'createur'
+                WHERE donnees->>'idUtilisateur' = ? AND (donnees->>'estProprietaire')::boolean = true
             )
             SELECT DISTINCT ON (u.id) u.id, u.donnees
               FROM autorisations AS a
               JOIN utilisateurs AS u ON u.id::TEXT = a.donnees->>'idUtilisateur'
-                WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services) AND a.donnees->>'type' = 'contributeur'
+                WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services) AND a.donnees->>'idUtilisateur' != ?
     `,
-      idUtilisateur
+      [idUtilisateur, idUtilisateur]
     );
 
     const normalise = (texte) =>
