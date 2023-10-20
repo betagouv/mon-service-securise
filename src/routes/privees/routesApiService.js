@@ -474,7 +474,7 @@ const routesApiService = (
     middleware.trouveService({}),
     middleware.aseptise('id'),
     async (requete, reponse) => {
-      const { id: idService, createur } = requete.homologation;
+      const { id: idService } = requete.homologation;
       let autorisations = await depotDonnees.autorisationsDuService(idService);
 
       const autorisationUtilisateurCourant = autorisations.find(
@@ -484,7 +484,7 @@ const routesApiService = (
       if (!autorisationUtilisateurCourant.peutGererContributeurs()) {
         autorisations = autorisations.filter(
           (a) =>
-            a.idUtilisateur === createur.id ||
+            a.estProprietaire ||
             a.idUtilisateur === requete.idUtilisateurCourant
         );
       }
