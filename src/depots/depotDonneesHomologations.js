@@ -442,16 +442,15 @@ const creeDepot = (config = {}) => {
     return p.lis.cellesDeUtilisateur(idCreateur).then(indexMax);
   };
 
-  const dupliqueHomologation = (idHomologation) => {
+  const dupliqueHomologation = (idHomologation, idProprietaire) => {
     const duplique = (h) => {
       const nomHomologationADupliquer = `${h.nomService()} - Copie`;
-      const idCreateur = h.createur.id;
       const donneesADupliquer = (index) =>
         h.donneesADupliquer(`${nomHomologationADupliquer} ${index}`);
 
-      return trouveIndexDisponible(idCreateur, nomHomologationADupliquer)
+      return trouveIndexDisponible(idProprietaire, nomHomologationADupliquer)
         .then(donneesADupliquer)
-        .then((donnees) => nouveauService(idCreateur, donnees));
+        .then((donnees) => nouveauService(idProprietaire, donnees));
     };
 
     return p.lis
