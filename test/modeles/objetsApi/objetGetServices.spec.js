@@ -1,6 +1,5 @@
 const expect = require('expect.js');
 
-const Service = require('../../../src/modeles/service');
 const objetGetServices = require('../../../src/modeles/objetsApi/objetGetServices');
 const Referentiel = require('../../../src/referentiel');
 const Dossiers = require('../../../src/modeles/dossiers');
@@ -11,6 +10,10 @@ const {
   Rubriques,
   Permissions,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const { unService } = require('../../constructeurs/constructeurService');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 const { HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -22,42 +25,33 @@ describe("L'objet d'API de `GET /services`", () => {
     },
   });
 
-  const unService = new Service({
-    id: '123',
-    descriptionService: {
-      nomService: 'Un service',
-      organisationsResponsables: ['Une organisation'],
-    },
-    createur: {
-      id: 'A',
-      email: 'email.createur@mail.fr',
-      prenom: 'Jacques',
-      postes: ['RSSI'],
-    },
-    contributeurs: [
-      {
-        id: 'B',
-        email: 'email.contributeur1@mail.fr',
-        prenom: 'Jean',
-        postes: ['Maire'],
-      },
-    ],
-  });
+  const service = unService()
+    .avecId('123')
+    .avecNomService('Un service')
+    .avecOrganisationResponsable('Une organisation')
+    .ajouteUnProprietaire(
+      unUtilisateur()
+        .avecId('A')
+        .avecEmail('email.proprietaire@mail.fr')
+        .quiSAppelle('Jean Dupont')
+        .avecPostes(['RSSI']).donnees
+    )
+    .ajouteUnContributeur(
+      unUtilisateur()
+        .avecId('B')
+        .avecEmail('email.contributeur1@mail.fr')
+        .quiSAppelle('Pierre Lecoux')
+        .avecPostes(['Maire']).donnees
+    )
+    .construis();
 
-  const unAutreService = new Service({
-    id: '456',
-    descriptionService: {
-      nomService: 'Un autre service',
-      organisationsResponsables: ['Une organisation'],
-    },
-    createur: { id: 'A', email: 'email.createur@mail.fr', prenom: 'Jacques' },
-    contributeurs: [
-      { id: 'B', email: 'email.contributeur1@mail.fr', prenom: 'Jean' },
-    ],
-  });
+  const unAutreService = unService()
+    .avecId('456')
+    .avecNomService('Un autre service')
+    .construis();
 
   it('fournit les données nécessaires', () => {
-    const services = [unService];
+    const services = [service];
     const autorisationComplete = uneAutorisation()
       .deCreateurDeService('456', '123')
       .construis();
@@ -76,15 +70,15 @@ describe("L'objet d'API de `GET /services`", () => {
         contributeurs: [
           {
             id: 'A',
-            prenomNom: 'Jacques',
-            initiales: 'J',
+            prenomNom: 'Jean Dupont',
+            initiales: 'JD',
             poste: 'RSSI',
             estProprietaire: true,
           },
           {
             id: 'B',
-            prenomNom: 'Jean',
-            initiales: 'J',
+            prenomNom: 'Pierre Lecoux',
+            initiales: 'PL',
             poste: 'Maire',
             estProprietaire: false,
           },
@@ -104,11 +98,11 @@ describe("L'objet d'API de `GET /services`", () => {
   });
 
   it('fournit les données de résumé des services', () => {
-    unService.dossiers.statutHomologation = () => Dossiers.BIENTOT_EXPIREE;
+    service.dossiers.statutHomologation = () => Dossiers.BIENTOT_EXPIREE;
     unAutreService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
 
     const autorisationPourUnService = uneAutorisation()
-      .deCreateurDeService('999', unService.id)
+      .deCreateurDeService('999', service.id)
       .avecDroits({
         [HOMOLOGUER]: LECTURE,
       })
@@ -121,7 +115,7 @@ describe("L'objet d'API de `GET /services`", () => {
       })
       .construis();
 
-    const services = [unService, unAutreService];
+    const services = [service, unAutreService];
     expect(
       objetGetServices.donnees(
         services,
@@ -136,7 +130,7 @@ describe("L'objet d'API de `GET /services`", () => {
   });
 
   it("ne considère pas les services dont le statut d'homologation est masqué pour le calcul du nombre de services homologués", () => {
-    unService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
+    service.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
     unAutreService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
 
     const autorisationPourUnService = uneAutorisation()
@@ -151,7 +145,7 @@ describe("L'objet d'API de `GET /services`", () => {
       .avecDroits({})
       .construis();
 
-    const services = [unService, unAutreService];
+    const services = [service, unAutreService];
     const donnees = objetGetServices.donnees(
       services,
       [autorisationPourUnService, autorisationSansHomologuerPourUnAutreService],
