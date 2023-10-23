@@ -355,16 +355,18 @@ const creeDepot = (config = {}) => {
 
     await p.sauvegarde(idService, donneesService);
 
-    const createur = AutorisationBase.NouvelleAutorisationProprietaire({
+    const proprietaire = AutorisationBase.NouvelleAutorisationProprietaire({
       idUtilisateur,
       idService,
     });
     await adaptateurPersistance.ajouteAutorisation(
       idAutorisation,
-      createur.donneesAPersister()
+      proprietaire.donneesAPersister()
     );
 
     const s = await p.lis.une(idService);
+
+    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
 
     await Promise.all([
       adaptateurJournalMSS.consigneEvenement(
@@ -380,7 +382,7 @@ const creeDepot = (config = {}) => {
         }).toJSON()
       ),
       homologations(idUtilisateur).then((hs) => {
-        adaptateurTracking.envoieTrackingNouveauServiceCree(s.createur.email, {
+        adaptateurTracking.envoieTrackingNouveauServiceCree(utilisateur.email, {
           nombreServices: hs.length,
         });
       }),
@@ -388,7 +390,7 @@ const creeDepot = (config = {}) => {
         .completudeDesServicesPourUtilisateur({ homologations }, idUtilisateur)
         .then((tauxCompletude) =>
           adaptateurTracking.envoieTrackingCompletudeService(
-            s.createur.email,
+            utilisateur.email,
             tauxCompletude
           )
         ),
