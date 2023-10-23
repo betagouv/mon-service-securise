@@ -1544,8 +1544,8 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  describe('sur demande de suppression des homologations créées par un utilisateur', () => {
-    it("supprime les homologations dont l'utilisateur est le créateur", (done) => {
+  describe("sur demande de suppression des homologations dont l'utilisateur est propriétaire", () => {
+    it("supprime les homologations dont l'utilisateur est propriétaire", (done) => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [{ id: 'ABC', email: 'jean.dupont@mail.fr' }],
@@ -1575,7 +1575,7 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it("ne supprime pas les homologations où l'utilisateur est contributeur", (done) => {
+    it("ne supprime pas les homologations où l'utilisateur n'est pas propriétaire", (done) => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [

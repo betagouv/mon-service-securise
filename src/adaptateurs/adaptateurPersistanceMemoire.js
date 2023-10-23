@@ -176,17 +176,25 @@ const nouvelAdaptateur = (
   const idsHomologationsCreeesParUtilisateurAvecProprietaireUnique = (
     idUtilisateur,
     idsHomologationsAExclure = []
-  ) =>
-    Promise.resolve(
-      donnees.autorisations
-        .filter(
-          (as) =>
-            as.idUtilisateur === idUtilisateur &&
-            as.estProprietaire &&
-            !idsHomologationsAExclure.includes(as.idHomologation)
-        )
-        .map((a) => a.idHomologation)
+  ) => {
+    const mesServices = donnees.autorisations
+      .filter((as) => as.idUtilisateur === idUtilisateur && as.estProprietaire)
+      .map((a) => a.idHomologation);
+
+    const nbProprietaireParService = donnees.autorisations
+      .filter((as) => mesServices.includes(as.idService) && as.estProprietaire)
+      .reduce((acc, a) => {
+        acc[a.idService] = acc[a.idService] ? acc[a.idService] + 1 : 1;
+        return acc;
+      }, {});
+
+    return Promise.resolve(
+      Object.entries(nbProprietaireParService)
+        .filter(([_, nbProprietaires]) => nbProprietaires === 1)
+        .map(([idService]) => idService)
+        .filter((idService) => !idsHomologationsAExclure.includes(idService))
     );
+  };
 
   const autorisationsDuService = async (idService) =>
     donnees.autorisations.filter((a) => a.idService === idService);
