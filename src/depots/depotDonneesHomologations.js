@@ -263,15 +263,21 @@ const creeDepot = (config = {}) => {
       return h;
     };
 
-    const envoieTrackingCompletude = (h) =>
-      serviceTracking
-        .completudeDesServicesPourUtilisateur({ homologations }, h.createur.id)
-        .then((tauxCompletude) =>
-          adaptateurTracking.envoieTrackingCompletudeService(
-            h.createur.email,
-            tauxCompletude
-          )
+    const envoieTrackingCompletude = async () => {
+      const tauxCompletude =
+        await serviceTracking.completudeDesServicesPourUtilisateur(
+          { homologations },
+          idUtilisateur
         );
+
+      const utilisateur =
+        await adaptateurPersistance.utilisateur(idUtilisateur);
+
+      await adaptateurTracking.envoieTrackingCompletudeService(
+        utilisateur.email,
+        tauxCompletude
+      );
+    };
 
     const metsAJourHomologation = (h) =>
       valideDescriptionService(idUtilisateur, infos, h.id)
