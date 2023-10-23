@@ -153,6 +153,7 @@ const routesApiService = (
     (requete, reponse, suite) => {
       const { mesuresSpecifiques = [], mesuresGenerales = {} } = requete.body;
       const idService = requete.homologation.id;
+      const idUtilisateur = requete.idUtilisateurCourant;
 
       try {
         const generales = Object.keys(mesuresGenerales).map((idMesure) => {
@@ -172,7 +173,12 @@ const routesApiService = (
         );
 
         depotDonnees
-          .ajouteMesuresAHomologation(idService, generales, specifiques)
+          .ajouteMesuresAHomologation(
+            idService,
+            idUtilisateur,
+            generales,
+            specifiques
+          )
           .then(() => reponse.send({ idService }))
           .catch(suite);
       } catch {
