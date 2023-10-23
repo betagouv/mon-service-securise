@@ -299,6 +299,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         mesures: { identifiantMesure: {} },
         statutsMesures: { fait: 'Fait' },
       });
+      testeur.middleware().reinitialise({
+        idUtilisateur: '999',
+      });
     });
 
     it('recherche le service correspondant', (done) => {
@@ -335,10 +338,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
       testeur.depotDonnees().ajouteMesuresAHomologation = (
         idService,
+        idUtilisateur,
         [generale],
         specifiques
       ) => {
         expect(idService).to.equal('456');
+        expect(idUtilisateur).to.equal('999');
         expect(generale.id).to.equal('identifiantMesure');
         expect(generale.statut).to.equal('fait');
         expect(generale.modalites).to.equal("Des modalités d'application");
@@ -381,6 +386,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       let mesuresRemplacees = false;
       testeur.depotDonnees().ajouteMesuresAHomologation = (
         _id,
+        _idUtilisateur,
         _generales,
         specifiques
       ) => {
@@ -409,6 +415,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       let mesuresRemplacees = false;
       testeur.depotDonnees().ajouteMesuresAHomologation = (
         _id,
+        _idUtilisateur,
         _generales,
         specifiques
       ) => {

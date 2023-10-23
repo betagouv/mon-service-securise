@@ -292,6 +292,7 @@ const creeDepot = (config = {}) => {
 
   const ajouteMesuresAHomologation = async (
     idHomologation,
+    idUtilisateur,
     generales,
     specifiques
   ) => {
@@ -310,10 +311,11 @@ const creeDepot = (config = {}) => {
     const tauxCompletude =
       await serviceTracking.completudeDesServicesPourUtilisateur(
         { homologations },
-        h.createur.id
+        idUtilisateur
       );
+    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await adaptateurTracking.envoieTrackingCompletudeService(
-      h.createur.email,
+      utilisateur.email,
       tauxCompletude
     );
   };
