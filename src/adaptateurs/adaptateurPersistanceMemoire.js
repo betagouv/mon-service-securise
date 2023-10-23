@@ -205,7 +205,7 @@ const nouvelAdaptateur = (
     return Promise.resolve();
   };
 
-  const nbAutorisationsCreateur = (idUtilisateur) =>
+  const nbAutorisationsProprietaire = (idUtilisateur) =>
     Promise.resolve(
       donnees.autorisations.filter(
         (a) => a.idUtilisateur === idUtilisateur && a.estProprietaire
@@ -337,7 +337,7 @@ const nouvelAdaptateur = (
     idsHomologationsCreeesParUtilisateur,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
-    nbAutorisationsCreateur,
+    nbAutorisationsProprietaire,
     rechercheContributeurs,
     sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,
