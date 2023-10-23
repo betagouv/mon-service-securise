@@ -142,7 +142,7 @@ const creeDepot = (config = {}) => {
         }
       });
 
-    const verifieUtilisateurPasCreateur = (id) =>
+    const verifieUtilisateurPasProprietaire = (id) =>
       adaptateurPersistance.nbAutorisationsProprietaire(id).then((nb) => {
         if (nb > 0) {
           throw new ErreurSuppressionImpossible(
@@ -152,7 +152,7 @@ const creeDepot = (config = {}) => {
       });
 
     return verifieUtilisateurExistant(...params)
-      .then(() => verifieUtilisateurPasCreateur(...params))
+      .then(() => verifieUtilisateurPasProprietaire(...params))
       .then(() =>
         adaptateurPersistance.supprimeAutorisationsContribution(...params)
       )
