@@ -173,21 +173,6 @@ const nouvelAdaptateur = (
   const autorisation = (id) =>
     Promise.resolve(donnees.autorisations.find((a) => a.id === id));
 
-  const idsHomologationsCreeesParUtilisateur = (
-    idUtilisateur,
-    idsHomologationsAExclure = []
-  ) =>
-    Promise.resolve(
-      donnees.autorisations
-        .filter(
-          (as) =>
-            as.idUtilisateur === idUtilisateur &&
-            as.estProprietaire &&
-            !idsHomologationsAExclure.includes(as.idHomologation)
-        )
-        .map((a) => a.idHomologation)
-    );
-
   const autorisationsDuService = async (idService) =>
     donnees.autorisations.filter((a) => a.idService === idService);
 
@@ -281,7 +266,6 @@ const nouvelAdaptateur = (
     homologation,
     homologationAvecNomService,
     homologations,
-    idsHomologationsCreeesParUtilisateur,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,

@@ -5,7 +5,6 @@ const {
   ErreurAutorisationInexistante,
   ErreurServiceInexistant,
   ErreurTentativeSuppressionCreateur,
-  ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
 } = require('../erreurs');
 const FabriqueAutorisation = require('../modeles/autorisations/fabriqueAutorisation');

@@ -212,22 +212,6 @@ const nouvelAdaptateur = (env) => {
     return as.map(convertisLigneEnObjet);
   };
 
-  const idsHomologationsCreeesParUtilisateur = (
-    idUtilisateur,
-    idsHomologationsAExclure = []
-  ) =>
-    knex('autorisations')
-      .whereRaw(
-        "donnees->>'idUtilisateur'=? AND donnees->>'type'='createur'",
-        idUtilisateur
-      )
-      .whereNotIn(
-        knex.raw("donnees->>'idHomologation'"),
-        idsHomologationsAExclure
-      )
-      .select({ idHomologation: knex.raw("donnees->>'idHomologation'") })
-      .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
-
   const ajouteAutorisation = (...params) =>
     ajouteLigneDansTable('autorisations', ...params);
 
@@ -360,7 +344,6 @@ const nouvelAdaptateur = (env) => {
     homologation,
     homologationAvecNomService,
     homologations,
-    idsHomologationsCreeesParUtilisateur,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,

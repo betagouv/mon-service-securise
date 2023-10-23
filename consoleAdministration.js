@@ -45,24 +45,8 @@ class ConsoleAdministration {
     return this.depotDonnees.supprimeHomologation(idHomologation);
   }
 
-  supprimeHomologationsDeUtilisateur(
-    idUtilisateur,
-    idsHomologationsAConserver
-  ) {
-    return this.depotDonnees.supprimeHomologationsCreeesPar(
-      idUtilisateur,
-      idsHomologationsAConserver
-    );
-  }
-
   supprimeUtilisateur(id) {
     return this.depotDonnees.supprimeUtilisateur(id);
-  }
-
-  supprimeCompteUtilisateur(idUtilisateur) {
-    return this.depotDonnees
-      .supprimeHomologationsCreeesPar(idUtilisateur)
-      .then(() => this.depotDonnees.supprimeUtilisateur(idUtilisateur));
   }
 
   genereTousEvenementsCompletude(persisteEvenements = false) {

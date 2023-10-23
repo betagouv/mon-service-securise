@@ -8,7 +8,6 @@ const {
   ErreurAutorisationInexistante,
   ErreurServiceInexistant,
   ErreurTentativeSuppressionCreateur,
-  ErreurTranfertVersUtilisateurSource,
   ErreurUtilisateurInexistant,
 } = require('../../src/erreurs');
 const {
