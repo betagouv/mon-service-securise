@@ -290,34 +290,33 @@ const creeDepot = (config = {}) => {
     return p.lis.une(idHomologation).then(metsAJourHomologation);
   };
 
-  const ajouteMesuresAHomologation = (idHomologation, generales, specifiques) =>
-    ajouteMesuresGeneralesAHomologation(idHomologation, generales)
-      .then(() =>
-        remplaceMesuresSpecifiquesPourHomologation(idHomologation, specifiques)
-      )
-      .then(() => p.lis.une(idHomologation))
-      .then((h) =>
-        adaptateurJournalMSS
-          .consigneEvenement(
-            new EvenementCompletudeServiceModifiee({
-              idService: h.id,
-              ...h.completudeMesures(),
-            }).toJSON()
-          )
-          .then(() =>
-            serviceTracking
-              .completudeDesServicesPourUtilisateur(
-                { homologations },
-                h.createur.id
-              )
-              .then((tauxCompletude) =>
-                adaptateurTracking.envoieTrackingCompletudeService(
-                  h.createur.email,
-                  tauxCompletude
-                )
-              )
-          )
+  const ajouteMesuresAHomologation = async (
+    idHomologation,
+    generales,
+    specifiques
+  ) => {
+    await ajouteMesuresGeneralesAHomologation(idHomologation, generales);
+    await remplaceMesuresSpecifiquesPourHomologation(
+      idHomologation,
+      specifiques
+    );
+    const h = await p.lis.une(idHomologation);
+    await adaptateurJournalMSS.consigneEvenement(
+      new EvenementCompletudeServiceModifiee({
+        idService: h.id,
+        ...h.completudeMesures(),
+      }).toJSON()
+    );
+    const tauxCompletude =
+      await serviceTracking.completudeDesServicesPourUtilisateur(
+        { homologations },
+        h.createur.id
       );
+    await adaptateurTracking.envoieTrackingCompletudeService(
+      h.createur.email,
+      tauxCompletude
+    );
+  };
 
   const toutesHomologations = () => p.lis.toutes();
 
