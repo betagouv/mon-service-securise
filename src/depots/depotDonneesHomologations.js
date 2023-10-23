@@ -12,7 +12,6 @@ const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenem
 const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
 const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
-const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
 const AutorisationBase = require('../modeles/autorisations/autorisationBase');
 
@@ -403,18 +402,6 @@ const creeDepot = (config = {}) => {
         )
       );
 
-  const supprimeHomologationsCreeesPar = (
-    idUtilisateur,
-    idsHomologationsAConserver = []
-  ) =>
-    avecPMapPourChaqueElement(
-      adaptateurPersistance.idsHomologationsCreeesParUtilisateur(
-        idUtilisateur,
-        idsHomologationsAConserver
-      ),
-      supprimeHomologation
-    );
-
   const trouveIndexDisponible = (idProprietaire, nomHomologationDupliquee) => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
     const nomCompatibleRegExp = nomHomologationDupliquee.replace(
@@ -478,7 +465,6 @@ const creeDepot = (config = {}) => {
     nouveauService,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
-    supprimeHomologationsCreeesPar,
     toutesHomologations,
     trouveIndexDisponible,
   };
