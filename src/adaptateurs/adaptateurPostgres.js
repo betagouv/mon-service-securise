@@ -298,63 +298,6 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("donnees->>'idHomologation'=?", idHomologation)
       .del();
 
-  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) =>
-    knex.transaction(
-      (trx) => {
-        const supprimeAutorisationsContributionDejaPresentes = () =>
-          knex('autorisations as a1')
-            .join(
-              'autorisations as a2',
-              knex.raw("a1.donnees->>'idHomologation'"),
-              knex.raw("a2.donnees->>'idHomologation'")
-            )
-            .whereRaw("a1.donnees->>'idUtilisateur'=?", idUtilisateurSource)
-            .whereRaw("a2.donnees->>'idUtilisateur'=?", idUtilisateurCible)
-            .whereRaw("a1.donnees->>'type'='contributeur'")
-            .whereRaw("a2.donnees->>'type'='contributeur'")
-            .del()
-            .transacting(trx);
-
-        const operationTransfert = () =>
-          knex('autorisations')
-            .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateurSource)
-            .update({
-              donnees: knex.raw(
-                "(jsonb_set(donnees::jsonb, '{ idUtilisateur }', '??'))::json",
-                idUtilisateurCible
-              ),
-            })
-            .transacting(trx);
-
-        const supprimeDoublonsCreationContribution = (idUtilisateur) =>
-          knex('autorisations as a1')
-            .join('autorisations as a2', function jointure() {
-              this.on(
-                knex.raw("a1.donnees->>'idHomologation'"),
-                knex.raw("a2.donnees->>'idHomologation'")
-              ).andOn(
-                knex.raw("a1.donnees->>'idUtilisateur'"),
-                knex.raw("a2.donnees->>'idUtilisateur'")
-              );
-            })
-            .whereRaw("a1.donnees->>'idUtilisateur'=?", idUtilisateur)
-            .whereRaw("a1.donnees->>'type'='contributeur'")
-            .whereRaw("a2.donnees->>'type'='createur'")
-            .del()
-            .transacting(trx);
-
-        return supprimeAutorisationsContributionDejaPresentes(
-          idUtilisateurSource,
-          idUtilisateurCible
-        )
-          .then(operationTransfert)
-          .then(() => supprimeDoublonsCreationContribution(idUtilisateurCible))
-          .then(trx.commit)
-          .catch(trx.rollback);
-      },
-      { doNotRejectOnRollback: false }
-    );
-
   const lisParcoursUtilisateur = async (id) =>
     elementDeTable('parcours_utilisateurs', id);
 
@@ -437,7 +380,6 @@ const nouvelAdaptateur = (env) => {
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tousUtilisateurs,
-    transfereAutorisations,
     utilisateur,
     utilisateurAvecEmail,
     utilisateurAvecIdReset,
