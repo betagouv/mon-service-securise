@@ -143,7 +143,7 @@ const creeDepot = (config = {}) => {
       });
 
     const verifieUtilisateurPasCreateur = (id) =>
-      adaptateurPersistance.nbAutorisationsCreateur(id).then((nb) => {
+      adaptateurPersistance.nbAutorisationsProprietaire(id).then((nb) => {
         if (nb > 0) {
           throw new ErreurSuppressionImpossible(
             `Suppression impossible : l'utilisateur "${id}" a créé des services`

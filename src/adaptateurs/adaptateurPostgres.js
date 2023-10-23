@@ -231,11 +231,11 @@ const nouvelAdaptateur = (env) => {
   const ajouteAutorisation = (...params) =>
     ajouteLigneDansTable('autorisations', ...params);
 
-  const nbAutorisationsCreateur = (idUtilisateur) =>
+  const nbAutorisationsProprietaire = (idUtilisateur) =>
     knex('autorisations')
       .count('id')
       .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
-      .whereRaw("donnees->>'type'='createur'")
+      .whereRaw("(donnees->>'estProprietaire')::boolean=true")
       .then(([{ count }]) => parseInt(count, 10));
 
   const sauvegardeHomologation = (id, donneesHomologations) => {
@@ -420,7 +420,7 @@ const nouvelAdaptateur = (env) => {
     idsHomologationsCreeesParUtilisateur,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
-    nbAutorisationsCreateur,
+    nbAutorisationsProprietaire,
     rechercheContributeurs,
     sauvegardeHomologation,
     sauvegardeService,
