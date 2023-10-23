@@ -212,21 +212,29 @@ const nouvelAdaptateur = (env) => {
     return as.map(convertisLigneEnObjet);
   };
 
-  const idsHomologationsCreeesParUtilisateurAvecProprietaireUnique = (
+  const idsHomologationsCreeesParUtilisateurAvecProprietaireUnique = async (
     idUtilisateur,
     idsHomologationsAExclure = []
-  ) =>
-    knex('autorisations')
-      .whereRaw(
-        "donnees->>'idUtilisateur'=? AND donnees->>'type'='createur'",
-        idUtilisateur
-      )
-      .whereNotIn(
-        knex.raw("donnees->>'idHomologation'"),
-        idsHomologationsAExclure
-      )
-      .select({ idHomologation: knex.raw("donnees->>'idHomologation'") })
-      .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
+  ) => {
+    const resultat = await knex.raw(
+      `
+              WITH mes_ids_services AS (SELECT donnees ->> 'idService' as id_service
+                                        FROM autorisations
+                                        WHERE donnees ->> 'idUtilisateur' = ?
+                                          AND (donnees ->> 'estProprietaire')::boolean = true)
+              SELECT donnees ->> 'idService' as idService
+              from autorisations as a
+                     JOIN mes_ids_services ON id_service = a.donnees ->> 'idService'
+                AND (a.donnees ->> 'estProprietaire')::boolean = true
+              GROUP BY donnees ->> 'idService'
+              HAVING COUNT(*) = 1;
+            `,
+      [idUtilisateur]
+    );
+    return resultat.rows
+      .map(({ idService }) => idService)
+      .filter((idService) => !idsHomologationsAExclure.includes(idService));
+  };
 
   const ajouteAutorisation = (...params) =>
     ajouteLigneDansTable('autorisations', ...params);
