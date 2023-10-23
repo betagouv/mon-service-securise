@@ -212,7 +212,7 @@ const nouvelAdaptateur = (env) => {
     return as.map(convertisLigneEnObjet);
   };
 
-  const idsHomologationsCreeesParUtilisateur = (
+  const idsHomologationsCreeesParUtilisateurAvecProprietaireUnique = (
     idUtilisateur,
     idsHomologationsAExclure = []
   ) =>
@@ -417,7 +417,7 @@ const nouvelAdaptateur = (env) => {
     homologation,
     homologationAvecNomService,
     homologations,
-    idsHomologationsCreeesParUtilisateur,
+    idsHomologationsCreeesParUtilisateurAvecProprietaireUnique,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,

@@ -173,7 +173,7 @@ const nouvelAdaptateur = (
   const autorisation = (id) =>
     Promise.resolve(donnees.autorisations.find((a) => a.id === id));
 
-  const idsHomologationsCreeesParUtilisateur = (
+  const idsHomologationsCreeesParUtilisateurAvecProprietaireUnique = (
     idUtilisateur,
     idsHomologationsAExclure = []
   ) =>
@@ -334,7 +334,7 @@ const nouvelAdaptateur = (
     homologation,
     homologationAvecNomService,
     homologations,
-    idsHomologationsCreeesParUtilisateur,
+    idsHomologationsCreeesParUtilisateurAvecProprietaireUnique,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsCreateur,

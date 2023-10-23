@@ -408,7 +408,7 @@ const creeDepot = (config = {}) => {
     idsHomologationsAConserver = []
   ) =>
     avecPMapPourChaqueElement(
-      adaptateurPersistance.idsHomologationsCreeesParUtilisateur(
+      adaptateurPersistance.idsHomologationsCreeesParUtilisateurAvecProprietaireUnique(
         idUtilisateur,
         idsHomologationsAConserver
       ),
