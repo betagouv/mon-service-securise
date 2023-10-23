@@ -118,34 +118,6 @@ const creeDepot = (config = {}) => {
       .then(() => adaptateurPersistance.supprimeAutorisation(...params));
   };
 
-  const transfereAutorisations = (idUtilisateurSource, idUtilisateurCible) => {
-    const verifieUtilisateurExiste = (id) =>
-      depotUtilisateurs.utilisateurExiste(id).then((existe) => {
-        if (!existe)
-          throw new ErreurUtilisateurInexistant(
-            `L'utilisateur "${id}" n'existe pas`
-          );
-      });
-
-    const verifieUtilisateursSourceDestinationDifferents = () => {
-      if (idUtilisateurSource === idUtilisateurCible) {
-        throw new ErreurTranfertVersUtilisateurSource(
-          "Transfert d'un utilisateur vers lui-même interdit"
-        );
-      }
-    };
-
-    return verifieUtilisateurExiste(idUtilisateurSource)
-      .then(() => verifieUtilisateurExiste(idUtilisateurCible))
-      .then(() => verifieUtilisateursSourceDestinationDifferents())
-      .then(() =>
-        adaptateurPersistance.transfereAutorisations(
-          idUtilisateurSource,
-          idUtilisateurCible
-        )
-      );
-  };
-
   return {
     accesAutorise,
     ajouteContributeurAuService,
@@ -156,7 +128,6 @@ const creeDepot = (config = {}) => {
     autorisationsDuService,
     sauvegardeAutorisation,
     supprimeContributeur,
-    transfereAutorisations,
   };
 };
 
