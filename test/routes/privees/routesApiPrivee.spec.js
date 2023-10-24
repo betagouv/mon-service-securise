@@ -1034,24 +1034,30 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("utilise le dépôt de données pour supprimer l'autorisation du contributeur", async () => {
-      let contributeurSupprime = {};
+      let suppressionDemandee = {};
       testeur.depotDonnees().supprimeContributeur = async (
         idContributeur,
-        idHomologation
+        idHomologation,
+        idUtilisateurCourant
       ) => {
-        contributeurSupprime = { idContributeur, idHomologation };
+        suppressionDemandee = {
+          idContributeur,
+          idHomologation,
+          idUtilisateurCourant,
+        };
         return {};
       };
 
       await axios.delete('http://localhost:1234/api/autorisation', {
         params: {
-          idHomologation: '123',
+          idHomologation: 'ABC',
           idContributeur: '999',
         },
       });
 
-      expect(contributeurSupprime.idContributeur).to.be('999');
-      expect(contributeurSupprime.idHomologation).to.be('123');
+      expect(suppressionDemandee.idContributeur).to.be('999');
+      expect(suppressionDemandee.idHomologation).to.be('ABC');
+      expect(suppressionDemandee.idUtilisateurCourant).to.be('456');
     });
 
     it("retourne une erreur HTTP 424 si le dépôt ne peut pas supprimer l'autorisation", async () => {
