@@ -93,28 +93,28 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const supprimeContributeur = (...params) => {
-    const verifieAutorisationExiste = (idContributeur, idHomologation) =>
-      autorisationExiste(idContributeur, idHomologation).then((existe) => {
-        if (!existe) {
-          throw new ErreurAutorisationInexistante(
-            `L'utilisateur "${idContributeur}" n'est pas contributeur du service "${idHomologation}"`
-          );
-        }
-      });
+  const supprimeContributeur = async (idContributeur, idService) => {
+    const verifieAutorisationExiste = async () => {
+      const existe = await autorisationExiste(idContributeur, idService);
+      if (!existe) {
+        throw new ErreurAutorisationInexistante(
+          `L'utilisateur "${idContributeur}" n'est pas contributeur du service "${idService}"`
+        );
+      }
+    };
 
-    const verifieSuppressionPermise = (idContributeur, idHomologation) =>
-      autorisationPour(idContributeur, idHomologation).then((a) => {
-        if (a.estProprietaire) {
-          throw new ErreurTentativeSuppressionCreateur(
-            `Suppression impossible : l'utilisateur "${idContributeur}" est le propriétaire du service "${idHomologation}"`
-          );
-        }
-      });
+    const verifieSuppressionPermise = async () => {
+      const a = await autorisationPour(idContributeur, idService);
+      if (a.estProprietaire) {
+        throw new ErreurTentativeSuppressionCreateur(
+          `Suppression impossible : l'utilisateur "${idContributeur}" est le propriétaire du service "${idService}"`
+        );
+      }
+    };
 
-    return verifieAutorisationExiste(...params)
-      .then(() => verifieSuppressionPermise(...params))
-      .then(() => adaptateurPersistance.supprimeAutorisation(...params));
+    await verifieAutorisationExiste();
+    await verifieSuppressionPermise();
+    await adaptateurPersistance.supprimeAutorisation(idContributeur, idService);
   };
 
   return {
