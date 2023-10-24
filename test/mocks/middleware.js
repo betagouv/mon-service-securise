@@ -44,7 +44,7 @@ let autorisationChargee;
 let autorisationsChargees = false;
 let cguAcceptees;
 let challengeMotDePasseEffectue = false;
-let droitVerifie = [];
+let droitVerifie = null;
 let expirationCookieRepoussee = false;
 let headersAvecNoncePositionnes = false;
 let headersPositionnes = false;
@@ -71,7 +71,7 @@ const middlewareFantaisie = {
   }) => {
     autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
-    droitVerifie = [];
+    droitVerifie = null;
     expirationCookieRepoussee = false;
     headersAvecNoncePositionnes = false;
     headersPositionnes = false;
@@ -235,7 +235,7 @@ const middlewareFantaisie = {
     verifieRequeteChangeEtat(
       {
         lectureEtat: () => droitVerifie,
-        etatInitial: [],
+        etatInitial: null,
         etatFinal: droitsAttendus,
       },
       ...params
