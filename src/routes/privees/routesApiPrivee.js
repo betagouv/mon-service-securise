@@ -295,36 +295,28 @@ const routesApiPrivee = ({
     '/autorisation',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('idHomologation', 'idContributeur'),
-    (requete, reponse, suite) => {
-      const verifiePermissionSuppression = (...params) =>
-        depotDonnees
-          .autorisationPour(...params)
-          .then((a) =>
-            a.peutGererContributeurs()
-              ? Promise.resolve()
-              : Promise.reject(new EchecAutorisation())
-          );
+    async (requete, reponse, suite) => {
+      const verifiePermissionSuppression = async (...params) => {
+        const a = await depotDonnees.autorisationPour(...params);
+        if (!a.peutGererContributeurs()) throw new EchecAutorisation();
+      };
 
       const idUtilisateur = requete.idUtilisateurCourant;
       const { idHomologation, idContributeur } = requete.query;
 
-      verifiePermissionSuppression(idUtilisateur, idHomologation)
-        .then(() => {
-          depotDonnees
-            .supprimeContributeur(idContributeur, idHomologation)
-            .then(() => reponse.sendStatus(200))
-            .catch((e) => {
-              reponse.status(424).send(e.message);
-            });
-        })
-        .catch((e) => {
-          if (e instanceof EchecAutorisation) {
-            reponse
-              .status(403)
-              .send('Suppression non autorisé pour un contributeur');
-          }
-          suite(e);
-        });
+      try {
+        await verifiePermissionSuppression(idUtilisateur, idHomologation);
+        await depotDonnees.supprimeContributeur(idContributeur, idHomologation);
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof EchecAutorisation)
+          reponse
+            .status(403)
+            .send('Suppression non autorisé pour un contributeur');
+        else reponse.status(424).send(e.message);
+
+        suite(e);
+      }
     }
   );
 
