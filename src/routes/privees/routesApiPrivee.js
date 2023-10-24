@@ -296,17 +296,21 @@ const routesApiPrivee = ({
     middleware.verificationAcceptationCGU,
     middleware.aseptise('idHomologation', 'idContributeur'),
     async (requete, reponse, suite) => {
-      const verifiePermissionSuppression = async (...params) => {
-        const a = await depotDonnees.autorisationPour(...params);
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const { idHomologation: idService, idContributeur } = requete.query;
+
+      const verifiePermissionSuppression = async () => {
+        const a = await depotDonnees.autorisationPour(idUtilisateur, idService);
         if (!a.peutGererContributeurs()) throw new EchecAutorisation();
       };
 
-      const idUtilisateur = requete.idUtilisateurCourant;
-      const { idHomologation, idContributeur } = requete.query;
-
       try {
-        await verifiePermissionSuppression(idUtilisateur, idHomologation);
-        await depotDonnees.supprimeContributeur(idContributeur, idHomologation);
+        await verifiePermissionSuppression();
+        await depotDonnees.supprimeContributeur(
+          idContributeur,
+          idService,
+          idUtilisateur
+        );
         reponse.sendStatus(200);
       } catch (e) {
         if (e instanceof EchecAutorisation)
