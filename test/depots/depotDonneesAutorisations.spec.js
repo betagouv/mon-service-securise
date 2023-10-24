@@ -310,31 +310,20 @@ describe('Le dépôt de données des autorisations', () => {
     });
 
     it('supprime le contributeur', async () => {
-      const adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
-        .ajouteUnUtilisateur({ id: '000', email: 'contributeur@mail.fr' })
-        .ajouteUnService({
-          id: '123',
-          descriptionService: { nomService: 'Un service' },
-        })
+      const avecUneAutorisation = unePersistanceMemoire()
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-            .donnees
-        )
-        .ajouteUneAutorisation(
-          uneAutorisation().avecId('789').deContributeurDeService('000', '123')
-            .donnees
+          uneAutorisation().deContributeurDeService('000', 'ABC').donnees
         )
         .construis();
 
-      const depot = creeDepot(adaptateurPersistance);
+      const depot = creeDepot(avecUneAutorisation);
 
-      const a = await depot.autorisationPour('000', '123');
-      expect(a.estProprietaire).to.be(false);
+      const avant = await depot.autorisationPour('000', 'ABC');
+      expect(avant).not.to.be(undefined);
 
-      await depot.supprimeContributeur('000', '123');
+      await depot.supprimeContributeur('000', 'ABC', '123');
 
-      const apres = await depot.autorisationPour('000', '123');
+      const apres = await depot.autorisationPour('000', 'ABC');
       expect(apres).to.be(undefined);
     });
   });
