@@ -1579,6 +1579,30 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
+    it("renvoie une erreur 422 si l'utilisateur courant tente de modifier ses propres droits", async () => {
+      const monAutorisation = uneAutorisation()
+        .deProprietaireDeService('123', 'ABC')
+        .construis();
+
+      testeur.middleware().reinitialise({
+        idUtilisateur: '123',
+        autorisationACharger: monAutorisation,
+      });
+      testeur.depotDonnees().autorisation = async () => monAutorisation;
+
+      try {
+        await axios.patch(
+          'http://localhost:1234/api/service/456/autorisations/uuid-1',
+          { droits: tousDroitsEnEcriture() }
+        );
+
+        expect().to.fail('La requête aurait dû lever une erreur HTTP 422');
+      } catch (e) {
+        expect(e.response.status).to.equal(422);
+        expect(e.response.data).to.eql({ code: 'AUTO-MODIFICATION_INTERDITE' });
+      }
+    });
+
     it("renvoie une erreur 403 si l'utilisateur courant n'a pas le droit de gérer les contributeurs sur le service", async () => {
       testeur.middleware().reinitialise({
         autorisationACharger: { peutGererContributeurs: () => false },

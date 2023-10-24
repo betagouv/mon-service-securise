@@ -509,7 +509,7 @@ const routesApiService = ({
     middleware.chargeAutorisationsService,
     middleware.aseptise('id', 'idAutorisation'),
     async (requete, reponse) => {
-      const { autorisationService } = requete;
+      const { autorisationService, idUtilisateurCourant } = requete;
       const { idAutorisation } = requete.params;
       const nouveauxDroits = requete.body.droits;
 
@@ -524,6 +524,11 @@ const routesApiService = ({
       }
 
       const ciblee = await depotDonnees.autorisation(idAutorisation);
+      if (ciblee.idUtilisateur === idUtilisateurCourant) {
+        reponse.status(422).json({ code: 'AUTO-MODIFICATION_INTERDITE' });
+        return;
+      }
+
       ciblee.appliqueDroits(nouveauxDroits);
       await depotDonnees.sauvegardeAutorisation(ciblee);
 
