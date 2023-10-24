@@ -4,8 +4,8 @@ const {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurServiceInexistant,
-  ErreurTentativeSuppressionCreateur,
   ErreurUtilisateurInexistant,
+  ErreurSuppressionImpossible,
 } = require('../erreurs');
 const FabriqueAutorisation = require('../modeles/autorisations/fabriqueAutorisation');
 
@@ -93,7 +93,11 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const supprimeContributeur = async (idContributeur, idService) => {
+  const supprimeContributeur = async (
+    idContributeur,
+    idService,
+    idUtilisateurCourant
+  ) => {
     const verifieAutorisationExiste = async () => {
       const existe = await autorisationExiste(idContributeur, idService);
       if (!existe) {
@@ -104,12 +108,11 @@ const creeDepot = (config = {}) => {
     };
 
     const verifieSuppressionPermise = async () => {
-      const a = await autorisationPour(idContributeur, idService);
-      if (a.estProprietaire) {
-        throw new ErreurTentativeSuppressionCreateur(
-          `Suppression impossible : l'utilisateur "${idContributeur}" est le propriétaire du service "${idService}"`
+      const impossible = idContributeur === idUtilisateurCourant;
+      if (impossible)
+        throw new ErreurSuppressionImpossible(
+          `L'utilisateur "${idUtilisateurCourant}" ne peut pas supprimer sa propre autorisation`
         );
-      }
     };
 
     await verifieAutorisationExiste();

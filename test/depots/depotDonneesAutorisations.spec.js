@@ -7,8 +7,8 @@ const {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurServiceInexistant,
-  ErreurTentativeSuppressionCreateur,
   ErreurUtilisateurInexistant,
+  ErreurSuppressionImpossible,
 } = require('../../src/erreurs');
 const {
   unePersistanceMemoire,
@@ -280,38 +280,31 @@ describe('Le dépôt de données des autorisations', () => {
       const depot = creeDepot(sansAutorisations);
 
       try {
-        await depot.supprimeContributeur('000', '123');
+        await depot.supprimeContributeur('000', 'ABC', '123');
         expect().to.fail('La demande aurait dû lever une erreur');
       } catch (e) {
         expect(e).to.be.an(ErreurAutorisationInexistante);
         expect(e.message).to.equal(
-          'L\'utilisateur "000" n\'est pas contributeur du service "123"'
+          'L\'utilisateur "000" n\'est pas contributeur du service "ABC"'
         );
       }
     });
 
-    it("vérifie qu'il s'agit bien d'un contributeur et non du créateur du service", async () => {
-      const adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
-        .ajouteUnService({
-          id: '123',
-          descriptionService: { nomService: 'Un service' },
-        })
+    it("empêche l'utilisateur de supprimer sa propre autorisation", async () => {
+      const autorisationPour123 = unePersistanceMemoire()
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-            .donnees
+          uneAutorisation().deProprietaireDeService('123', 'ABC').donnees
         )
         .construis();
-
-      const depot = creeDepot(adaptateurPersistance);
+      const depot = creeDepot(autorisationPour123);
 
       try {
-        await depot.supprimeContributeur('999', '123');
+        await depot.supprimeContributeur('123', 'ABC', '123');
         expect().to.fail('La demande aurait dû lever une erreur');
       } catch (e) {
-        expect(e).to.be.an(ErreurTentativeSuppressionCreateur);
+        expect(e).to.be.an(ErreurSuppressionImpossible);
         expect(e.message).to.equal(
-          'Suppression impossible : l\'utilisateur "999" est le propriétaire du service "123"'
+          'L\'utilisateur "123" ne peut pas supprimer sa propre autorisation'
         );
       }
     });
