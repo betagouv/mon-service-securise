@@ -969,14 +969,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête DELETE sur `/api/autorisation`', () => {
-    const autorisation = uneAutorisation()
-      .deProprietaireDeService()
-      .construis();
-
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: '456' });
-      autorisation.permissionSuppressionContributeur = true;
-      testeur.depotDonnees().autorisationPour = async () => autorisation;
+      testeur.depotDonnees().autorisationPour = async () =>
+        uneAutorisation().deProprietaireDeService().construis();
       testeur.depotDonnees().supprimeContributeur = async () => {};
     });
 
