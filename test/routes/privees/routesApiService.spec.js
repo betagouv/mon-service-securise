@@ -1217,7 +1217,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         [],
         {
           method: 'delete',
-          url: 'http://localhost:1234/api/serdvice/123',
+          url: 'http://localhost:1234/api/service/123',
         },
         done
       );
