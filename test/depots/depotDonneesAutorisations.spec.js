@@ -275,20 +275,9 @@ describe('Le dépôt de données des autorisations', () => {
 
   describe("sur demande de suppression d'un contributeur", () => {
     it("vérifie que l'autorisation de contribution existe", async () => {
-      const adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
-        .ajouteUnUtilisateur({ id: '000', email: 'annie.dubois@mail.fr' })
-        .ajouteUnService({
-          id: '123',
-          descriptionService: { nomService: 'Un service' },
-        })
-        .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-            .donnees
-        )
-        .construis();
+      const sansAutorisations = unePersistanceMemoire().construis();
 
-      const depot = creeDepot(adaptateurPersistance);
+      const depot = creeDepot(sansAutorisations);
 
       try {
         await depot.supprimeContributeur('000', '123');
