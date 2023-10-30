@@ -99,7 +99,8 @@ $(() => {
   const $bouton = $('.bouton[idHomologation]');
   const identifiantService = $bouton.attr('idHomologation');
 
-  $bouton.on('click', async () => {
+  $bouton.on('click', async (e) => {
+    e.preventDefault();
     basculeEnCoursChargement($bouton, true);
     const params = parametresAvecItemsExtraits(
       'form#risques',
