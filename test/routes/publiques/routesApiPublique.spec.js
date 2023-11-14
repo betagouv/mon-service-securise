@@ -307,6 +307,16 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         Promise.resolve(utilisateur);
     });
 
+    it('applique une protection de trafic', (done) => {
+      testeur.middleware().verifieProtectionTrafic(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/reinitialisationMotDePasse',
+        },
+        done
+      );
+    });
+
     it("convertit l'email en minuscules", (done) => {
       testeur.depotDonnees().reinitialiseMotDePasse = (email) => {
         expect(email).to.equal('jean.dupont@mail.fr');
