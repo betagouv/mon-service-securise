@@ -43,6 +43,16 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         Promise.resolve(utilisateur);
     });
 
+    it('applique une protection de trafic', (done) => {
+      testeur.middleware().verifieProtectionTrafic(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/utilisateur',
+        },
+        done
+      );
+    });
+
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         [
