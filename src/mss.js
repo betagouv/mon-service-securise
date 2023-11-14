@@ -239,7 +239,13 @@ const creeServeur = (
     }
   );
 
-  app.use('/statique', express.static('public'));
+  app.use(
+    '/statique',
+    express.static('public', {
+      setHeaders: (reponse) =>
+        reponse.setHeader('cache-control', 'max-age=3600, must-revalidate'),
+    })
+  );
 
   app.use(adaptateurGestionErreur.controleurErreurs());
 
