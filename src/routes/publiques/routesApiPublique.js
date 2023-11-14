@@ -23,6 +23,7 @@ const routesApiPublique = ({
 
   routes.post(
     '/utilisateur',
+    middleware.protegeTrafic(),
     middleware.aseptise(...Utilisateur.nomsProprietesBase()),
     (requete, reponse, suite) => {
       const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
