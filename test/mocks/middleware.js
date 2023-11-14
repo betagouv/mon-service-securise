@@ -56,6 +56,7 @@ let parametresAseptises = [];
 let preferencesChargees = false;
 let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
+let traficProtege = false;
 let verificationJWTMenee = false;
 let verificationCGUMenee = false;
 
@@ -84,6 +85,7 @@ const middlewareFantaisie = {
     preferencesChargees = false;
     rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
+    traficProtege = false;
     verificationJWTMenee = false;
     verificationCGUMenee = false;
     challengeMotDePasseEffectue = false;
@@ -137,6 +139,11 @@ const middlewareFantaisie = {
 
   positionneHeadersAvecNonce: (_requete, _reponse, suite) => {
     headersAvecNoncePositionnes = true;
+    suite();
+  },
+
+  protegeTrafic: () => (_requete, _reponse, suite) => {
+    traficProtege = true;
     suite();
   },
 
@@ -229,6 +236,10 @@ const middlewareFantaisie = {
       { lectureEtat: () => preferencesChargees },
       ...params
     );
+  },
+
+  verifieProtectionTrafic: (...params) => {
+    verifieRequeteChangeEtat({ lectureEtat: () => traficProtege }, ...params);
   },
 
   verifieRechercheService: (droitsAttendus, ...params) => {

@@ -376,6 +376,16 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
   });
 
   describe('quand requête POST sur `/api/token`', () => {
+    it('applique une protection de trafic', (done) => {
+      testeur.middleware().verifieProtectionTrafic(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/token',
+        },
+        done
+      );
+    });
+
     it("authentifie l'utilisateur avec le login en minuscules", (done) => {
       testeur.depotDonnees().lisParcoursUtilisateur = async () => {
         const p = new ParcoursUtilisateur();

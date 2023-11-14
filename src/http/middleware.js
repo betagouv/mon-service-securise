@@ -19,6 +19,7 @@ const middleware = (configuration = {}) => {
     adaptateurChiffrement,
     adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
     adaptateurJWT,
+    adaptateurProtection,
   } = configuration;
 
   const positionneHeaders = (requete, reponse, suite) => {
@@ -259,6 +260,9 @@ const middleware = (configuration = {}) => {
       .catch(() => reponse.status(401).send('Mot de passe incorrect'));
   };
 
+  const protegeTrafic = () =>
+    adaptateurProtection.protectionLimiteTraficEndpointSensible();
+
   return {
     aseptise,
     aseptiseListe,
@@ -267,6 +271,7 @@ const middleware = (configuration = {}) => {
     chargePreferencesUtilisateur,
     positionneHeaders,
     positionneHeadersAvecNonce,
+    protegeTrafic,
     repousseExpirationCookie,
     suppressionCookie,
     trouveService,
