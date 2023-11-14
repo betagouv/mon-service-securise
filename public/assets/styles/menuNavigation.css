@@ -307,10 +307,6 @@
   width: auto;
   min-width: unset;
 }
-.menu-navigation.ferme .actions,
-.menu-navigation.ferme .etapes div {
-  justify-content: center;
-}
 
 .menu-navigation:not(.ferme) #gerer-contributeurs:hover {
   min-width: 204px;
