@@ -36,6 +36,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().nouveauService = () => Promise.resolve();
     });
 
+    it('applique une protection de trafic', (done) => {
+      testeur.middleware().verifieProtectionTrafic(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service',
+        },
+        done
+      );
+    });
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur
         .middleware()
