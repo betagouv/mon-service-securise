@@ -9,7 +9,7 @@ const tiroirContributeur = (idService) => {
     const reponse = await axios.get(`/api/service/${idService}`);
     donneesService = reponse.data;
     $('.nombre-contributeurs', '#gerer-contributeurs').text(
-      donneesService.contributeurs.length + 1
+      donneesService.contributeurs.length
     );
   };
 
