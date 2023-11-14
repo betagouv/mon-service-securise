@@ -44,6 +44,7 @@ const middleware = Middleware({
   adaptateurChiffrement,
   adaptateurEnvironnement,
   adaptateurJWT,
+  adaptateurProtection,
   depotDonnees,
 });
 const procedures = fabriqueProcedures({
