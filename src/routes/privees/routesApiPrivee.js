@@ -130,14 +130,14 @@ const routesApiPrivee = ({
 
   routes.use(
     '/service',
-    routesApiService(
+    routesApiService({
       middleware,
       depotDonnees,
       referentiel,
       adaptateurHorloge,
       adaptateurPdf,
-      adaptateurZip
-    )
+      adaptateurZip,
+    })
   );
 
   routes.put(

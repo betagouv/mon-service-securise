@@ -34,14 +34,14 @@ const {
 const { ECRITURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
 
-const routesApiService = (
+const routesApiService = ({
   middleware,
   depotDonnees,
   referentiel,
   adaptateurHorloge,
   adaptateurPdf,
-  adaptateurZip
-) => {
+  adaptateurZip,
+}) => {
   const routes = express.Router();
 
   routes.use(
@@ -56,6 +56,7 @@ const routesApiService = (
 
   routes.post(
     '/',
+    middleware.protegeTrafic(),
     middleware.verificationAcceptationCGU,
     middleware.aseptise('nomService', 'organisationsResponsables.*'),
     middleware.aseptiseListes([
