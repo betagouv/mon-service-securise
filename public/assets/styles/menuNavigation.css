@@ -282,7 +282,8 @@
 
 /* GÉRER CONTRIBUTEURS */
 .menu-navigation #gerer-contributeurs {
-  width: 52px;
+  width: fit-content;
+  min-width: 52px;
   height: 30px;
   padding: 0;
   background-image: url(../images/bouton_inviter_collaborateur_fond_ouvert.svg);
@@ -292,7 +293,7 @@
   align-items: center;
   gap: 3px;
   cursor: pointer;
-  transition: width 0.3s cubic-bezier(0.47, 1.64, 0.41, 0.8);
+  transition: min-width 0.3s cubic-bezier(0.47, 1.64, 0.41, 0.8);
   border-radius: 25px;
   overflow: hidden;
   border: none;
@@ -304,6 +305,7 @@
 
 .menu-navigation.ferme #gerer-contributeurs {
   width: auto;
+  min-width: unset;
 }
 .menu-navigation.ferme .actions,
 .menu-navigation.ferme .etapes div {
@@ -311,7 +313,7 @@
 }
 
 .menu-navigation:not(.ferme) #gerer-contributeurs:hover {
-  width: 217px;
+  min-width: 204px;
   height: 30px;
 }
 
@@ -326,6 +328,7 @@
 .menu-navigation #gerer-contributeurs .nombre-contributeurs {
   color: #fff;
   transform: translateY(-2px);
+  padding-right: 8px;
 }
 
 .menu-navigation #gerer-contributeurs .inviter-contributeurs {
