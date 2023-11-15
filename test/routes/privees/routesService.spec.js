@@ -225,6 +225,36 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
   });
 
+  describe('quand requête GET sur `/service/:id/indiceCyber`', () => {
+    it('recherche le service correspondant', (done) => {
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: SECURISER }],
+          'http://localhost:1234/service/456/indiceCyber',
+          done
+        );
+    });
+
+    it("charge les autorisations du service pour l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesAutorisations(
+          'http://localhost:1234/service/456/indiceCyber',
+          done
+        );
+    });
+
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
+          'http://localhost:1234/service/456/indiceCyber',
+          done
+        );
+    });
+  });
+
   describe('quand requete GET sur `/service/:id/rolesResponsabilites`', () => {
     it('recherche le service correspondant', (done) => {
       testeur
