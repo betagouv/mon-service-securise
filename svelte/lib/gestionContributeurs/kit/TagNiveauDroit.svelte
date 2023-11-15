@@ -102,13 +102,7 @@
     border-radius: 5px;
   }
 
-  .role-propose.lecture .nom {
-    color: #7025da;
-  }
-  .role-propose.ecriture .nom {
-    color: #0079d0;
-  }
-  .role-propose.personnalise .nom {
+  .role-propose .nom {
     color: #0079d0;
   }
   .role-propose .nom {
@@ -122,13 +116,7 @@
     font-weight: 400;
   }
 
-  .role-propose.lecture:hover {
-    background: #e9ddff;
-  }
-  .role-propose.ecriture:hover {
-    background: #dbeeff;
-  }
-  .role-propose.personnalise:hover {
+  .role-propose:hover {
     background: #eff6ff;
   }
 
