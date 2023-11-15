@@ -2,6 +2,7 @@ const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const {
+  CACHE_CONTROL_FICHIERS_STATIQUES,
   DUREE_SESSION,
   ENDPOINTS_SANS_CSRF,
 } = require('./http/configurationServeur');
@@ -243,7 +244,7 @@ const creeServeur = (
     '/statique',
     express.static('public', {
       setHeaders: (reponse) =>
-        reponse.setHeader('cache-control', 'max-age=3600, must-revalidate'),
+        reponse.setHeader('cache-control', CACHE_CONTROL_FICHIERS_STATIQUES),
     })
   );
 

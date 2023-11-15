@@ -13,4 +13,10 @@ const ENDPOINTS_SANS_CSRF = [
   { path: '/bibliotheques/evenementMatomo', type: 'exact' },
 ];
 
-module.exports = { DUREE_SESSION, ENDPOINTS_SANS_CSRF };
+const { CACHE_CONTROL_FICHIERS_STATIQUES } = process.env;
+
+module.exports = {
+  CACHE_CONTROL_FICHIERS_STATIQUES,
+  DUREE_SESSION,
+  ENDPOINTS_SANS_CSRF,
+};
