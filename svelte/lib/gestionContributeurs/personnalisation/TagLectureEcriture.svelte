@@ -104,28 +104,20 @@
     font-style: normal;
     font-weight: 500;
     line-height: 1.2rem;
-  }
-
-  .droit-propose.lecture .nom {
-    color: #7025da;
-  }
-  .droit-propose.ecriture .nom {
     color: #0079d0;
   }
+
   .droit-propose .description {
     color: #2f3a43;
     font-weight: 400;
+  }
+  .droit-propose:hover {
+    background: #eff6ff;
   }
   .droit-propose:hover .nom {
     font-weight: 700;
   }
   .droit-propose:hover .description {
     font-weight: 500;
-  }
-  .droit-propose.lecture:hover {
-    background: #e9ddff;
-  }
-  .droit-propose.ecriture:hover {
-    background: #dbeeff;
   }
 </style>
