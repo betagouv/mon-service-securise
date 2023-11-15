@@ -19,6 +19,7 @@ const prepareVerificationReponse = (reponse, status, ...params) => {
   if (params.length === 1) [suite] = params;
   if (params.length === 2) [message, suite] = params;
 
+  reponse.render = () => suite();
   reponse.status = (s) => {
     try {
       expect(s).to.equal(status);

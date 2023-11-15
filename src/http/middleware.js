@@ -121,7 +121,7 @@ const middleware = (configuration = {}) => {
               .accesAutorise(idUtilisateur, idService, droitsRequis)
               .then((accesAutorise) => {
                 if (!accesAutorise)
-                  reponse.status(403).send('Accès au service refusé');
+                  reponse.status(403).render('erreurAccesRefuse');
                 else {
                   requete.homologation = homologation;
                   suite();
