@@ -119,6 +119,23 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   );
 
   routes.get(
+    '/:id/indiceCyber',
+    middleware.trouveService(Autorisation.DROITS_VOIR_INDICE_CYBER),
+    middleware.chargeAutorisationsService,
+    middleware.chargePreferencesUtilisateur,
+    async (requete, reponse) => {
+      const { homologation: service } = requete;
+      reponse.render('service/indiceCyber', {
+        InformationsHomologation,
+        service,
+        actionsSaisie: new ActionsSaisie(referentiel, service).toJSON(),
+        etapeActive: 'mesures',
+        referentiel,
+      });
+    }
+  );
+
+  routes.get(
     '/:id/rolesResponsabilites',
     middleware.trouveService({ [CONTACTS]: LECTURE }),
     middleware.chargeAutorisationsService,
