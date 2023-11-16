@@ -1,0 +1,14 @@
+svg {
+  width: 100%;
+  height: 260px;
+}
+
+svg text {
+  fill: #667892;
+  font-size: 0.5em;
+}
+
+svg text.echelle {
+  font-size: 0.4em;
+  fill: black;
+}
