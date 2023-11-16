@@ -56,6 +56,8 @@ dans le fichier `.env`).
 
 Il est alors possible de créer un compte utilisateur à l'url `http://localhost:[PORT_MSS]/inscription`.
 
+Il est également possible d'attacher un debugger `nodejs` car MSS est démarré avec `--inspect=0.0.0.0`.
+
 ## Exécution de la suite de tests automatisés
 
 Les tests peuvent être lancés depuis un conteneur Docker en exécutant le script
