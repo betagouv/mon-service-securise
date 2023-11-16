@@ -1,0 +1,55 @@
+block append styles
+  link(href = '/statique/assets/styles/radarIndiceCyber.css', rel = 'stylesheet')
+
+mixin radarIndiceCyber(indicesCyber, indiceMax)
+  - const labels = ['Gouvernance', 'Résilience', 'Défense', 'Protection']
+
+  -
+    const taille = 100
+    const centre = [taille / 2, taille / 2]
+    const rayonMax = 0.95 * taille / 2
+    const zoomX = -40
+    const zoomY = -10
+    const decallageTexte = 5
+    const nbPoints = indicesCyber.length;
+    const nbEchelle = parseInt(noteMax)
+    const angleOrigine = -Math.PI / 2
+    const incrementEchelle = rayonMax / nbEchelle;
+
+  svg(
+    width=taille,
+    height=taille,
+    viewBox=`${zoomX} ${zoomY} ${taille + Math.abs(zoomX * 2)} ${taille + Math.abs(zoomY * 2)}`,
+    fill="none",
+    xmlns="http://www.w3.org/2000/svg"
+  )
+    - const polaireVersCartesien = (r, theta, i) => [r * Math.cos(i * theta + angleOrigine) + centre[0], r * Math.sin(i * theta + angleOrigine) + centre[1]];
+    - const generePoints = (centre, radius, nbPoints) => {const theta = (2 * Math.PI) / nbPoints;return new Array(nbPoints).fill(0).map((_, i) => polaireVersCartesien(radius, theta, i))}
+    - const generePointsValeur = (indices, indiceMax, centre) => {const nbPoints = indices.length;const theta = (2 * Math.PI) / nbPoints; return indices.map((indice, idx) => polaireVersCartesien(indice / indiceMax * rayonMax , theta, idx))}
+    - const tableauVersPointsPolygone = (array) => { return array.map((c) => c.join(' ')).join(' ')}
+    - const angleVersPointAncrage = (angle) => {if (angle > 320 || angle < 40 || (angle > 140 && angle < 220)) return "middle"; if (angle > 140) return "end"; return "start";}
+    each point in generePoints(centre, rayonMax, nbPoints)
+      line(x1=centre[0] y1=centre[1] x2=point[0] y2=point[1] stroke="#D9D9D9" stroke-width="0.5")
+    each point, index in generePoints(centre, rayonMax + decallageTexte, nbPoints)
+      -
+        const angle = index * (360 / nbPoints)
+        const pointAncrage = angleVersPointAncrage(angle)
+        const decallageY = (angle > 90 && angle < 270) ? 6 : 0;
+      text(x=point[0] y=point[1] dy=decallageY text-anchor=pointAncrage)= labels[index]
+    each radius, index in new Array(nbEchelle + 1).fill().map((_, i) => i * incrementEchelle)
+      polygon(
+        stroke="#D9D9D9",
+        points=tableauVersPointsPolygone(generePoints(centre, radius, nbPoints)),
+        stroke-width="0.5"
+      )
+      if(index != 0)
+        text.echelle(x=centre[0] y=(centre[1] - radius) dx=2 dy=2)= index
+    polygon(
+      stroke="url(#gradient-lineaire-anssi)"
+      stroke-width="1.5"
+      stroke-linejoin="round"
+      points=tableauVersPointsPolygone(generePointsValeur(indicesCyber, indiceMax, centre))
+    )
+    linearGradient(id="gradient-lineaire-anssi" x1=taille/2 y1="0" x2=taille/2 y2=taille gradientUnits="userSpaceOnUse")
+      stop(stop-color="#54B8F6")
+      stop(offset="1" stop-color="#3479C9")

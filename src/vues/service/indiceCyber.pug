@@ -1,0 +1,55 @@
+extends ./formulaire
+include ../fragments/texteTronque
+include ../fragments/radarIndiceCyber
+include ../fragments/scoreIndiceCyber
+
+block append styles
+  link(href = '/statique/assets/styles/homologation/indiceCyber.css', rel = 'stylesheet')
+
+block header-titre-page
+  h3
+    +texteTronque({ texte: service.nomService() || '' })
+
+block zone-principale
+  - const indiceCyber = service.indiceCyber()
+  - const noteMax = referentiel.indiceCyberNoteMax()
+  - const trancheIndiceCyber = referentiel.trancheIndiceCyber(indiceCyber.total)
+  - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
+  .conteneur-indice-cyber
+    .conteneur-titre
+      h1 Sécuriser
+      h2 •
+      h2 L'indice cyber
+    .conteneur-descriptif
+      .disque-indice
+        +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, noteMax)
+      .contenu-descriptif
+        p L'indice cyber est une évaluation indicative du niveau de sécurisation du service, calculé à partir des mesures faites et partielles proposées par l'ANSSI dans MonServiceSécurisé.
+    .conteneur-plus-details
+      details
+        summary(role='button')
+        .contenu-plus-details
+          .conteneur-graphique
+            h4 Répartition par catégorie
+            +radarIndiceCyber([
+              indiceCyber.gouvernance,
+              indiceCyber.resilience,
+              indiceCyber.defense,
+              indiceCyber.protection,
+            ], noteMax)
+          .conteneur-explication-valeur
+            .titre
+              img.icone(src="/statique/assets/images/icone_explication_tranche.svg")
+              h4 Quelle est la valeur de l'indice cyber ?
+            p= referentiel.descriptionTrancheIndiceCyber(indiceCyber.total)
+    .conteneur-recommandation-anssi
+      img.fond(src="/statique/assets/images/fond_recommandation_anssi.svg")
+      .titre
+        img.icone(src="/statique/assets/images/icone_recommandation_anssi.svg")
+        h3 Recommandation indicative de l'ANSSI en cas de décision d'homologation
+      .conteneur-duree-recommandee
+        if(trancheIndiceCyber.conseilHomologation)
+          p= trancheIndiceCyber.conseilHomologation
+          .separateur
+        p Durée recommandée de l'homologation
+        p#duree-recommandee= trancheIndiceCyber.dureeHomologationConseillee

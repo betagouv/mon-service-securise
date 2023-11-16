@@ -1,0 +1,225 @@
+.corps {
+  margin-top: 1.7em;
+}
+
+.zone-principale {
+  padding: 0 4em;
+  width: 100%;
+  margin-bottom: 8em;
+}
+
+.cartes-informations {
+  display: none;
+}
+
+.conteneur-indice-cyber {
+  text-align: left;
+}
+
+.conteneur-indice-cyber .conteneur-titre {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 0.6em;
+}
+
+.conteneur-indice-cyber h1 {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.7em;
+}
+
+.conteneur-indice-cyber h2 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.4em;
+}
+
+.conteneur-indice-cyber .conteneur-descriptif {
+  background: #eff6ff;
+  border-radius: 8px 8px 0px 0px;
+  padding: 24px;
+  margin-top: 120px;
+  color: #0c5c98;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  position: relative;
+}
+
+.conteneur-descriptif p {
+  margin: 0;
+}
+
+.conteneur-descriptif .disque-indice {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 8em;
+  height: 8em;
+  font-size: 1.3em;
+  position: absolute;
+  top: -5em;
+}
+
+.disque-indice .note {
+  font-size: 1.73em;
+}
+
+.disque-indice .note-max {
+  font-size: 1.06em;
+}
+
+.conteneur-descriptif .contenu-descriptif {
+  padding-left: 12em;
+}
+
+.conteneur-indice-cyber .conteneur-plus-details {
+  border-radius: 0px 0px 8px 8px;
+  border: 1.5px solid #dbecf1;
+  padding: 8px 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.conteneur-plus-details details {
+  width: 100%;
+}
+
+.conteneur-indice-cyber .conteneur-plus-details summary {
+  margin: 0;
+  font-weight: 500;
+  color: #0079d0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.conteneur-indice-cyber .conteneur-plus-details summary:before {
+  content: 'Plus de détails';
+}
+
+.conteneur-indice-cyber .conteneur-plus-details details[open] > summary:before {
+  content: 'Moins de détails';
+}
+
+.conteneur-indice-cyber .conteneur-plus-details summary:after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: url('/statique/assets/images/forme_chevron_bleu.svg');
+  transform: translateY(1px) rotate(90deg);
+  transition: transform 0.1s ease-in-out;
+}
+
+.conteneur-indice-cyber .conteneur-plus-details details[open] > summary:after {
+  transform: translateY(1px) rotate(270deg);
+}
+
+.contenu-plus-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 17px 0 8px 0;
+  gap: 2em;
+}
+
+.contenu-plus-details h4 {
+  font-size: 1.15em;
+  margin: 0;
+}
+
+.conteneur-graphique svg {
+  margin-top: 1em;
+}
+
+.contenu-plus-details :is(.conteneur-graphique, .conteneur-explication-valeur) {
+  flex: 1;
+}
+
+.contenu-plus-details .conteneur-explication-valeur {
+  color: #0c5c98;
+}
+
+.contenu-plus-details .conteneur-explication-valeur p {
+  font-weight: 500;
+  margin: 0;
+}
+
+.contenu-plus-details .conteneur-explication-valeur {
+  border-radius: 8px;
+  background: #eff6ff;
+  padding: 16px 24px 24px 24px;
+}
+
+.contenu-plus-details .conteneur-explication-valeur .titre {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.conteneur-recommandation-anssi {
+  border-radius: 8px;
+  margin-top: 32px;
+  padding: 16px 32px 25px 32px;
+  background: #eff6ff;
+  position: relative;
+  color: #0c5c98;
+  overflow: hidden;
+}
+
+.conteneur-recommandation-anssi img.fond {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+
+.conteneur-recommandation-anssi .titre {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.conteneur-recommandation-anssi h3,
+.conteneur-recommandation-anssi p {
+  margin: 0;
+}
+
+.conteneur-duree-recommandee {
+  margin-top: 24px;
+  margin-left: 40px;
+  display: flex;
+  flex-direction: row;
+  background: #ffffff;
+  position: relative;
+  z-index: 1;
+  padding: 8px 16px;
+  gap: 18px;
+  font-weight: bold;
+  border-radius: 8px;
+  align-items: center;
+  width: fit-content;
+}
+
+.conteneur-duree-recommandee .separateur {
+  width: 0;
+  height: 22px;
+  border: 1px solid #0c5c98;
+}
+
+#duree-recommandee {
+  border-radius: 8px;
+  background: #0c5c98;
+  padding: 8px 16px;
+  color: #ffffff;
+  margin-left: -10px;
+  font-weight: 500;
+}
