@@ -56,7 +56,10 @@ dans le fichier `.env`).
 
 Il est alors possible de créer un compte utilisateur à l'url `http://localhost:[PORT_MSS]/inscription`.
 
-Il est également possible d'attacher un debugger `nodejs` car MSS est démarré avec `--inspect=0.0.0.0`.
+### Outils en local
+
+- Il est possible d'attacher un debugger `nodejs` car MSS est démarré avec `--inspect=0.0.0.0`.
+- `Postgres` est relayé sur le port `5432` de l'hôte. Donc le requêtage via un outil graphique est possible.
 
 ## Exécution de la suite de tests automatisés
 
