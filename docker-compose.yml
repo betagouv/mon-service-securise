@@ -16,6 +16,8 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     networks:
       - mss-network
+    ports:
+      - '5432:5432'
     volumes:
       - /var/lib/postgresql/data
 
