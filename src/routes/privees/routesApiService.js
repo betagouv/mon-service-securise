@@ -444,6 +444,7 @@ const routesApiService = ({
 
   routes.copy(
     '/:id',
+    middleware.protegeTrafic(),
     middleware.trouveService({}),
     middleware.chargeAutorisationsService,
     (requete, reponse, suite) => {

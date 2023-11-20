@@ -1324,6 +1324,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
+    it('applique une protection de trafic', (done) => {
+      testeur
+        .middleware()
+        .verifieProtectionTrafic(
+          { method: 'copy', url: 'http://localhost:1234/api/service/123' },
+          done
+        );
+    });
+
     it('utilise le middleware de chargement du service', (done) => {
       testeur
         .middleware()
