@@ -177,7 +177,7 @@ const routesApiPrivee = ({
   routes.patch(
     '/motDePasse',
     middleware.challengeMotDePasse,
-    (requete, reponse) => {
+    async (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const { motDePasse } = requete.body;
 
@@ -188,12 +188,12 @@ const routesApiPrivee = ({
         return;
       }
 
-      depotDonnees
-        .metsAJourMotDePasse(idUtilisateur, motDePasse)
-        .then((utilisateur) => {
-          requete.session.token = utilisateur.genereToken();
-          reponse.json({ idUtilisateur });
-        });
+      const utilisateur = await depotDonnees.metsAJourMotDePasse(
+        idUtilisateur,
+        motDePasse
+      );
+      requete.session.token = utilisateur.genereToken();
+      reponse.json({ idUtilisateur });
     }
   );
 
