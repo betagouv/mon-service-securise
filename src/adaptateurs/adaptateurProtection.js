@@ -11,10 +11,7 @@ const parametresCommuns = (typeRequete, doitFermerConnexion = false) => ({
     const attaque = requete.headers['x-real-ip']?.replaceAll('.', '*');
     fabriqueAdaptateurGestionErreur().logueErreur(
       new Error('Limite de trafic atteinte par une IP.'),
-      {
-        typeRequete,
-        'IP de la requete': attaque,
-      }
+      { typeRequete, 'IP de la requete': attaque }
     );
     if (doitFermerConnexion) reponse.end();
     else reponse.render('erreurTropDeTrafic');
