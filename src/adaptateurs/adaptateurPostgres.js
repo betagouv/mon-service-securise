@@ -63,7 +63,7 @@ const nouvelAdaptateur = (env) => {
 
   const arreteTout = () => knex.destroy();
 
-  const homologation = (id) => {
+  const homologation = async (id) => {
     const requeteHomologation = knex('homologations')
       .where('id', id)
       .select({ id: 'id', donnees: 'donnees' })
@@ -102,11 +102,13 @@ const nouvelAdaptateur = (env) => {
         donnees: 'u.donnees',
       });
 
-    return Promise.all([
+    const [h, createur, contributeurs] = await Promise.all([
       requeteHomologation,
       requeteCreateur,
       requeteContributeurs,
-    ]).then(([h, createur, contributeurs]) => ({
+    ]);
+
+    return {
       id: h.id,
       ...h.donnees,
       createur: {
@@ -119,7 +121,7 @@ const nouvelAdaptateur = (env) => {
         dateCreation: createur.dateCreation,
         ...c.donnees,
       })),
-    }));
+    };
   };
 
   const service = (id) => elementDeTable('services', id);
