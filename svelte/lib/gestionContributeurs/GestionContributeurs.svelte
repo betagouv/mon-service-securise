@@ -33,7 +33,7 @@
     <ul class="liste-contributeurs contributeurs-actifs">
       {#each contributeurs as contributeur (contributeur.id)}
         <LigneContributeur
-          droitsModifiables={!contributeur.estProprietaire &&
+          droitsModifiables={!contributeur.estUtilisateurCourant &&
             serviceUnique.permissions.gestionContributeurs}
           utilisateur={contributeur}
         />

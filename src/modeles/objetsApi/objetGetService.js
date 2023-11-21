@@ -13,7 +13,7 @@ const donnees = (service, autorisation, referentiel) => ({
     prenomNom: c.prenomNom(),
     initiales: c.initiales(),
     poste: c.posteDetaille(),
-    estProprietaire: autorisation.designeUtilisateur(c.id),
+    estUtilisateurCourant: autorisation.designeUtilisateur(c.id),
   })),
   ...(autorisation.aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION) && {
     statutHomologation: {
