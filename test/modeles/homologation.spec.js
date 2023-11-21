@@ -67,59 +67,6 @@ describe('Une homologation', () => {
     expect(createur.id).to.equal('456');
   });
 
-  it('sait se convertir en JSON', () => {
-    const homologation = unService()
-      .avecId('123')
-      .avecNomService('Super Service')
-      .ajouteUnProprietaire(
-        unUtilisateur()
-          .avecId('456')
-          .quiSAppelle('Bruno Dumans')
-          .avecEmail('bruno.dumans@mail.fr').donnees
-      )
-      .ajouteUnContributeur(
-        unUtilisateur()
-          .avecId('999')
-          .quiSAppelle('Jean Dupont')
-          .avecEmail('jean.dupont@mail.fr').donnees
-      )
-      .construis();
-    expect(homologation.toJSON()).to.eql({
-      id: '123',
-      nomService: 'Super Service',
-      createur: {
-        id: '456',
-        cguAcceptees: false,
-        prenomNom: 'Bruno Dumans',
-        telephone: '',
-        initiales: 'BD',
-        postes: [],
-        posteDetaille: '',
-        nomEntitePublique: '',
-        departementEntitePublique: '',
-        profilEstComplet: true,
-        infolettreAcceptee: false,
-        transactionnelAccepte: false,
-      },
-      contributeurs: [
-        {
-          id: '999',
-          cguAcceptees: false,
-          prenomNom: 'Jean Dupont',
-          telephone: '',
-          initiales: 'JD',
-          postes: [],
-          posteDetaille: '',
-          nomEntitePublique: '',
-          departementEntitePublique: '',
-          profilEstComplet: true,
-          infolettreAcceptee: false,
-          transactionnelAccepte: false,
-        },
-      ],
-    });
-  });
-
   it('sait décrire le type service', () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: {

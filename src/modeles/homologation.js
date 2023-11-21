@@ -245,15 +245,6 @@ class Homologation {
     return this.rolesResponsabilites.descriptionStructureDeveloppement();
   }
 
-  toJSON() {
-    return {
-      id: this.id,
-      createur: this.createur.toJSON(),
-      contributeurs: this.contributeurs.map((c) => c.toJSON()),
-      nomService: this.nomService(),
-    };
-  }
-
   donneesADupliquer(nomService) {
     const donnees = this.donneesAPersister().sauf('dossiers', 'id');
     donnees.descriptionService.nomService = nomService;
