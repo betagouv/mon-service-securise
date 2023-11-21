@@ -9,7 +9,6 @@ class ConstructeurService {
       id: '',
       descriptionService: uneDescriptionValide(referentiel).donnees,
       contributeurs: [],
-      createur: { id: 'AAA', email: 'jean.dujardin@beta.gouv.com' },
     };
     this.mesures = undefined;
     this.referentiel = referentiel;
@@ -63,11 +62,6 @@ class ConstructeurService {
 
   ajouteUnContributeur(contributeur) {
     this.donnees.contributeurs.push(contributeur);
-    return this;
-  }
-
-  ajouteUnProprietaire(proprietaire) {
-    this.donnees.createur = proprietaire;
     return this;
   }
 }

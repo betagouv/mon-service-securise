@@ -51,22 +51,6 @@ describe('Une homologation', () => {
     expect(contributeur.id).to.equal('456');
   });
 
-  it('connaît son créateur', () => {
-    const homologation = unService()
-      .avecId('123')
-      .ajouteUnProprietaire(
-        unUtilisateur()
-          .avecId('456')
-          .quiSAppelle('Jean Dupont')
-          .avecEmail('jean.dupont@mail.fr').donnees
-      )
-      .construis();
-
-    const { createur } = homologation;
-    expect(createur).to.be.an(Utilisateur);
-    expect(createur.id).to.equal('456');
-  });
-
   it('sait décrire le type service', () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: {

@@ -30,7 +30,6 @@ class Homologation {
     const {
       id = '',
       contributeurs = [],
-      createur = {},
       descriptionService = {},
       dossiers = [],
       mesuresSpecifiques = [],
@@ -40,7 +39,6 @@ class Homologation {
     } = donnees;
 
     this.id = id;
-    if (createur.email) this.createur = new Utilisateur(createur);
     this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
     this.descriptionService = new DescriptionService(
       descriptionService,
