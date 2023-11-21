@@ -97,7 +97,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const unServiceDontAestCreateur = unService()
         .avecId('123')
         .avecNomService('Un service')
-        .ajouteUnProprietaire(
+        .ajouteUnContributeur(
           unUtilisateur().avecId('A').avecEmail('email.proprietaire@mail.fr')
             .donnees
         )
@@ -116,7 +116,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const unServiceDontAestCreateur = unService()
         .avecId('123')
         .avecNomService('Un service')
-        .ajouteUnProprietaire(
+        .ajouteUnContributeur(
           unUtilisateur().avecId('A').avecEmail('email.proprietaire@mail.fr')
             .donnees
         )
