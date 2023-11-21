@@ -16,7 +16,7 @@ mixin zoneSaisieUnAvis({donneesUnAvis = {}, index = 0, indexAvis = index + 1, le
           )
             each collaborateur in donneesUnAvis.collaborateurs || []
               option(value!= collaborateur, selected) !{collaborateur}
-            each contributeur in [service.createur, ...service.contributeurs]
+            each contributeur in service.contributeurs
               option(value!= contributeur.prenomNom()) !{contributeur.prenomNom()}
           .message-erreur Au moins un prénom nom de collaborateur est obligatoire. Veuillez renseigner des lettres. Les chiffres ne sont pas autorisés.
 
