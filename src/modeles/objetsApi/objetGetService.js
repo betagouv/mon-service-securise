@@ -11,7 +11,7 @@ const representeContributeur = (contributeur, estProprietaire) => ({
   estProprietaire,
 });
 
-const donnees = (service, autorisation, idUtilisateur, referentiel) => ({
+const donnees = (service, autorisation, referentiel) => ({
   id: service.id,
   nomService: service.nomService(),
   organisationsResponsables:

@@ -56,12 +56,8 @@ describe("L'objet d'API de `GET /services`", () => {
       .deProprietaireDeService('456', '123')
       .construis();
     expect(
-      objetGetServices.donnees(
-        services,
-        [autorisationComplete],
-        'A',
-        referentiel
-      ).services
+      objetGetServices.donnees(services, [autorisationComplete], referentiel)
+        .services
     ).to.eql([
       {
         id: '123',
@@ -120,7 +116,6 @@ describe("L'objet d'API de `GET /services`", () => {
       objetGetServices.donnees(
         services,
         [autorisationPourUnService, autorisationPourUnAutreService],
-        'A',
         referentiel
       ).resume
     ).to.eql({
@@ -149,7 +144,6 @@ describe("L'objet d'API de `GET /services`", () => {
     const donnees = objetGetServices.donnees(
       services,
       [autorisationPourUnService, autorisationSansHomologuerPourUnAutreService],
-      'A',
       referentiel
     );
     expect(donnees.resume.nombreServices).to.equal(2);

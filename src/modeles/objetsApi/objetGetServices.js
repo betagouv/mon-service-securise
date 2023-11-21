@@ -4,12 +4,11 @@ const AutorisationBase = require('../autorisations/autorisationBase');
 
 const { DROITS_VOIR_STATUT_HOMOLOGATION } = AutorisationBase;
 
-const donnees = (services, autorisations, idUtilisateur, referentiel) => ({
+const donnees = (services, autorisations, referentiel) => ({
   services: services.map((s) =>
     objetGetService.donnees(
       s,
       autorisations.find((a) => a.idService === s.id),
-      idUtilisateur,
       referentiel
     )
   ),

@@ -53,7 +53,6 @@ const routesApiPrivee = ({
       const donnees = objetGetServices.donnees(
         services,
         autorisations,
-        requete.idUtilisateurCourant,
         referentiel
       );
       reponse.json(donnees);
@@ -86,7 +85,6 @@ const routesApiPrivee = ({
         const servicesSansIndice = objetGetServices.donnees(
           services,
           autorisations,
-          requete.idUtilisateurCourant,
           referentiel
         );
         const indicesCyber = objetGetIndicesCyber.donnees(
