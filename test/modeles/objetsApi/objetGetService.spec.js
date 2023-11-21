@@ -74,7 +74,7 @@ describe("L'objet d'API de `GET /service`", () => {
         ordre: 1,
       },
       nombreContributeurs: 1 + 1,
-      estProprietaire: true,
+      estProprietaire: false,
       documentsPdfDisponibles: [],
       permissions: { gestionContributeurs: false },
     });
