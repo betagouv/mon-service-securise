@@ -28,7 +28,7 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut, rubriqu
     if !estSurCreationDeService
       button#gerer-contributeurs
         img(src = '/statique/assets/images/bouton_inviter_collaborateur_persona.svg')
-        span.none-si-ferme.nombre-contributeurs= service.contributeurs.length + 1
+        span.none-si-ferme.nombre-contributeurs= service.contributeurs.length
         span.inviter-contributeurs Gérer les contributeurs
     button.repli-menu
       img(src = '/statique/assets/images/forme_chevron_blanc.svg' alt='Chevron vers la gauche')

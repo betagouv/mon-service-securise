@@ -92,10 +92,7 @@ const nouvelAdaptateur = (env) => {
         knex.raw("(a.donnees->>'idUtilisateur')::uuid"),
         'u.id'
       )
-      .whereRaw(
-        "(a.donnees->>'idHomologation')::uuid = ? AND a.donnees->>'type' = 'contributeur'",
-        id
-      )
+      .whereRaw("(a.donnees->>'idHomologation')::uuid = ?", id)
       .select({
         id: 'u.id',
         dateCreation: 'u.date_creation',
@@ -118,7 +115,7 @@ const nouvelAdaptateur = (env) => {
       },
       contributeurs: contributeurs.map((c) => ({
         id: c.id,
-        dateCreation: createur.dateCreation,
+        dateCreation: c.dateCreation,
         ...c.donnees,
       })),
     };

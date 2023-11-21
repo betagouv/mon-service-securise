@@ -54,38 +54,23 @@ const nouvelAdaptateur = (
     return Promise.resolve(donnees.autorisations.filter(filtre));
   };
 
-  const intervenantsHomologation = (idHomologation) =>
+  const contributeursService = (idService) =>
     donnees.autorisations
-      .filter((a) => a.idHomologation === idHomologation)
-      .reduce(
-        (acc, a) => {
-          const utilisateur = donnees.utilisateurs.find(
-            (u) => u.id === a.idUtilisateur
-          );
-          if (a.estProprietaire) acc.createurs.push(utilisateur);
-          else acc.contributeurs.push(utilisateur);
-          return acc;
-        },
-        { createurs: [], contributeurs: [] }
-      );
+      .filter((a) => a.idHomologation === idService)
+      .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
 
   const homologation = (id) => {
     const homologationTrouvee = donnees.homologations.find((h) => h.id === id);
-    if (homologationTrouvee) {
-      const intervenants = intervenantsHomologation(id);
-      [homologationTrouvee.createur] = intervenants.createurs;
-      homologationTrouvee.contributeurs = intervenants.contributeurs;
-    }
+    if (homologationTrouvee)
+      homologationTrouvee.contributeurs = contributeursService(id);
+
     return Promise.resolve(homologationTrouvee);
   };
 
   const service = (id) => {
     const serviceTrouve = donnees.services.find((s) => s.id === id);
-    if (serviceTrouve) {
-      const intervenants = intervenantsHomologation(id);
-      [serviceTrouve.createur] = intervenants.createurs;
-      serviceTrouve.contributeurs = intervenants.contributeurs;
-    }
+    if (serviceTrouve) serviceTrouve.contributeurs = contributeursService(id);
+
     return Promise.resolve(serviceTrouve);
   };
 
