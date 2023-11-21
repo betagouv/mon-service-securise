@@ -529,6 +529,13 @@ const routesApiService = ({
         return;
       }
 
+      const { homologation } = requete;
+      const cibleUnServiceDifferent = ciblee.idService !== homologation.id;
+      if (cibleUnServiceDifferent) {
+        reponse.status(422).json({ code: 'LIEN_INCOHERENT' });
+        return;
+      }
+
       ciblee.appliqueDroits(nouveauxDroits);
       await depotDonnees.sauvegardeAutorisation(ciblee);
 

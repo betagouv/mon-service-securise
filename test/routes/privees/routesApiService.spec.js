@@ -1603,6 +1603,40 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       }
     });
 
+    it("renvoie une erreur 422 si l'utilisateur tente de modifier une autorisation qui n'appartient pas au service ciblé", async () => {
+      const serviceABC = unService().avecId('ABC').construis();
+      const leroyProprietaireDeABC = uneAutorisation()
+        .deProprietaireDeService('LEROY', 'ABC')
+        .construis();
+
+      testeur.middleware().reinitialise({
+        idUtilisateur: 'LEROY',
+        homologationARenvoyer: serviceABC,
+        autorisationACharger: leroyProprietaireDeABC,
+      });
+
+      const autorisationSurDEF = uneAutorisation()
+        .deContributeurDeService('DUPONT', 'DEF')
+        .construis();
+      testeur.depotDonnees().autorisation = async () => autorisationSurDEF;
+
+      try {
+        const leroyVeutModifierDEF =
+          'http://localhost:1234/api/service/456/autorisations/uuid-appartenant-a-DEF';
+        await axios.patch(leroyVeutModifierDEF, {
+          droits: tousDroitsEnEcriture(),
+        });
+
+        expect().to.fail(
+          "La requête aurait dû lever une erreur HTTP 422 car Leroy tente d'utiliser le service ABC pour modifier chez DEF"
+        );
+      } catch (e) {
+        if (!e.response) throw e;
+        expect(e.response.status).to.equal(422);
+        expect(e.response.data).to.eql({ code: 'LIEN_INCOHERENT' });
+      }
+    });
+
     it("renvoie une erreur 403 si l'utilisateur courant n'a pas le droit de gérer les contributeurs sur le service", async () => {
       testeur.middleware().reinitialise({
         autorisationACharger: { peutGererContributeurs: () => false },
@@ -1625,8 +1659,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       let autorisationCiblee;
       testeur.depotDonnees().autorisation = async (id) => {
         autorisationCiblee = id;
-        const enEcriture = uneAutorisation().avecTousDroitsEcriture();
-        return enEcriture.construis();
+        return uneAutorisation()
+          .deContributeurDeService('DUPONT', '456')
+          .construis();
       };
 
       let autorisationPersistee;
