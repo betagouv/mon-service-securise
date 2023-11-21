@@ -20,6 +20,9 @@ const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
 const AutorisationBase = require('../../../src/modeles/autorisations/autorisationBase');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;
@@ -1463,6 +1466,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .quiEstNonFinalise().donnees;
       const serviceARenvoyer = unService(testeur.referentiel())
         .avecId('456')
+        .ajouteUnContributeur(
+          unUtilisateur().avecId('AAA').avecEmail('aaa@mail.fr').donnees
+        )
+        .ajouteUnContributeur(
+          unUtilisateur().avecId('BBB').avecEmail('bbb@mail.fr').donnees
+        )
         .avecDossiers([donneesDossier])
         .construis();
       testeur.middleware().reinitialise({
@@ -1475,25 +1484,23 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        [],
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/service/456',
-        },
-        done
-      );
+      testeur
+        .middleware()
+        .verifieRechercheService(
+          [],
+          { method: 'get', url: 'http://localhost:1234/api/service/456' },
+          done
+        );
     });
 
     it("aseptise l'id du service", (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['id'],
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/service/456',
-        },
-        done
-      );
+      testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['id'],
+          { method: 'get', url: 'http://localhost:1234/api/service/456' },
+          done
+        );
     });
 
     it("utilise le middleware de chargement de l'autorisation", (done) => {
@@ -1515,14 +1522,21 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         contributeurs: [
           {
             id: 'AAA',
-            prenomNom: 'jean.dujardin@beta.gouv.com',
+            prenomNom: 'aaa@mail.fr',
             initiales: '',
             poste: '',
-            estProprietaire: true,
+            estProprietaire: false,
+          },
+          {
+            id: 'BBB',
+            prenomNom: 'bbb@mail.fr',
+            initiales: '',
+            poste: '',
+            estProprietaire: false,
           },
         ],
         statutHomologation: { id: 'nonRealisee', enCoursEdition: true },
-        nombreContributeurs: 1,
+        nombreContributeurs: 2,
         estProprietaire: false,
         documentsPdfDisponibles: [],
         permissions: { gestionContributeurs: false },

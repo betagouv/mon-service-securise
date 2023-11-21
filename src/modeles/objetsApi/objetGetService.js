@@ -3,23 +3,18 @@ const AutorisationBase = require('../autorisations/autorisationBase');
 
 const { DROITS_VOIR_STATUT_HOMOLOGATION } = AutorisationBase;
 
-const representeContributeur = (contributeur, estProprietaire) => ({
-  id: contributeur.id,
-  prenomNom: contributeur.prenomNom(),
-  initiales: contributeur.initiales(),
-  poste: contributeur.posteDetaille(),
-  estProprietaire,
-});
-
 const donnees = (service, autorisation, referentiel) => ({
   id: service.id,
   nomService: service.nomService(),
   organisationsResponsables:
     service.descriptionService.organisationsResponsables ?? [],
-  contributeurs: [
-    representeContributeur(service.createur, true),
-    ...service.contributeurs.map((c) => representeContributeur(c, false)),
-  ],
+  contributeurs: service.contributeurs.map((c) => ({
+    id: c.id,
+    prenomNom: c.prenomNom(),
+    initiales: c.initiales(),
+    poste: c.posteDetaille(),
+    estProprietaire: autorisation.designeUtilisateur(c.id),
+  })),
   ...(autorisation.aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION) && {
     statutHomologation: {
       id: service.dossiers.statutHomologation(),
@@ -27,7 +22,7 @@ const donnees = (service, autorisation, referentiel) => ({
       ...referentiel.statutHomologation(service.dossiers.statutHomologation()),
     },
   }),
-  nombreContributeurs: service.contributeurs.length + 1,
+  nombreContributeurs: service.contributeurs.length,
   estProprietaire: autorisation.estProprietaire,
   documentsPdfDisponibles: service.documentsPdfDisponibles(autorisation),
   permissions: {
