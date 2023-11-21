@@ -57,14 +57,14 @@ describe("L'objet d'API de `GET /service`", () => {
           prenomNom: 'Jean Dupont',
           initiales: 'JD',
           poste: 'RSSI',
-          estProprietaire: false,
+          estUtilisateurCourant: false,
         },
         {
           id: 'B',
           prenomNom: 'Pierre Lecoux',
           initiales: 'PL',
           poste: 'Maire',
-          estProprietaire: false,
+          estUtilisateurCourant: false,
         },
       ],
       statutHomologation: {

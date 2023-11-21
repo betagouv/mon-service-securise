@@ -24,7 +24,7 @@ export type Utilisateur = {
   initiales: string;
   poste: string;
   email: string;
-  estProprietaire: boolean;
+  estUtilisateurCourant: boolean;
 };
 
 type Invisible = 0;
