@@ -133,7 +133,6 @@ const routesApiService = ({
       const donnees = objetGetService.donnees(
         requete.homologation,
         requete.autorisationService,
-        requete.idUtilisateurCourant,
         referentiel
       );
       reponse.json(donnees);

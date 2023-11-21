@@ -46,7 +46,7 @@ describe("L'objet d'API de `GET /service`", () => {
 
   it('fournit les données nécessaires', () => {
     expect(
-      objetGetService.donnees(service, lectureSurHomologuer, 'A', referentiel)
+      objetGetService.donnees(service, lectureSurHomologuer, referentiel)
     ).to.eql({
       id: '123',
       nomService: 'Un service',
@@ -87,7 +87,6 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansHomologuer,
-      'A',
       referentiel
     );
     expect(donnees.statutHomologation).to.be(undefined);
@@ -108,13 +107,12 @@ describe("L'objet d'API de `GET /service`", () => {
         objetGetService.donnees(
           unServiceDontAestCreateur,
           uneAutorisation().deProprietaireDeService('A', '123').construis(),
-          'A',
           referentiel
         ).permissions
       ).to.eql({ gestionContributeurs: true });
     });
 
-    it("n'autorise pas la gestion de contributeurs si l'utilisateur est contributeur", () => {
+    it("n'autorise pas la gestion de contributeurs si l'utilisateur n'a pas les droits requis", () => {
       const unServiceDontAestCreateur = unService()
         .avecId('123')
         .avecNomService('Un service')
@@ -123,12 +121,10 @@ describe("L'objet d'API de `GET /service`", () => {
             .donnees
         )
         .construis();
-      const idUtilisateur = 'un autre ID';
       expect(
         objetGetService.donnees(
           unServiceDontAestCreateur,
           lectureSurHomologuer,
-          idUtilisateur,
           referentiel
         ).permissions
       ).to.eql({ gestionContributeurs: false });
