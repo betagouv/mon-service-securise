@@ -90,9 +90,6 @@ describe('Le dépôt de données des homologations', () => {
     expect(homologations[0]).to.be.a(Homologation);
     expect(homologations[0].id).to.equal('123');
     expect(homologations[0].referentiel).to.equal(referentiel);
-
-    expect(homologations[0].createur).to.be.ok();
-    expect(homologations[0].createur.id).to.equal('456');
   });
 
   it("utilise l'adaptateur de persistance sans `idUtilisateur` pour récupérer toutes les homologations du système", async () => {
@@ -190,8 +187,9 @@ describe('Le dépôt de données des homologations', () => {
     const homologation = await depot.homologation('789');
 
     const { contributeurs } = homologation;
-    expect(contributeurs.length).to.equal(1);
-    expect(contributeurs[0].id).to.equal('999');
+    expect(contributeurs.length).to.equal(2);
+    expect(contributeurs[0].id).to.equal('111');
+    expect(contributeurs[1].id).to.equal('999');
   });
 
   describe("sur demande d'associations de mesures à un service", () => {
