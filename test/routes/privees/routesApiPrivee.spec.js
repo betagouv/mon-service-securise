@@ -26,7 +26,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   const service = unService()
     .avecId('456')
     .avecNomService('Un service')
-    .ajouteUnProprietaire(
+    .ajouteUnContributeur(
       unUtilisateur().avecEmail('email.proprietaire@mail.fr').donnees
     )
     .construis();
@@ -254,7 +254,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           unService()
             .avecId('789')
             .avecNomService('Un deuxième service')
-            .ajouteUnProprietaire(
+            .ajouteUnContributeur(
               unUtilisateur().avecEmail('email.proprietaire@mail.fr').donnees
             )
             .construis(),
