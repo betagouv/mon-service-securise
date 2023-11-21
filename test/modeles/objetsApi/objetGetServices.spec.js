@@ -29,7 +29,7 @@ describe("L'objet d'API de `GET /services`", () => {
     .avecId('123')
     .avecNomService('Un service')
     .avecOrganisationResponsable('Une organisation')
-    .ajouteUnProprietaire(
+    .ajouteUnContributeur(
       unUtilisateur()
         .avecId('A')
         .avecEmail('email.proprietaire@mail.fr')
@@ -53,8 +53,9 @@ describe("L'objet d'API de `GET /services`", () => {
   it('fournit les données nécessaires', () => {
     const services = [service];
     const autorisationComplete = uneAutorisation()
-      .deProprietaireDeService('456', '123')
+      .deProprietaireDeService('A', '123')
       .construis();
+
     expect(
       objetGetServices.donnees(services, [autorisationComplete], referentiel)
         .services

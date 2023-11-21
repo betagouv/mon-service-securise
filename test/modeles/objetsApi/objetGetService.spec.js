@@ -28,7 +28,7 @@ describe("L'objet d'API de `GET /service`", () => {
     .avecId('123')
     .avecNomService('Un service')
     .avecOrganisationResponsable('Une organisation')
-    .ajouteUnProprietaire(
+    .ajouteUnContributeur(
       unUtilisateur()
         .avecId('A')
         .avecEmail('email.proprietaire@mail.fr')
@@ -57,7 +57,7 @@ describe("L'objet d'API de `GET /service`", () => {
           prenomNom: 'Jean Dupont',
           initiales: 'JD',
           poste: 'RSSI',
-          estProprietaire: true,
+          estProprietaire: false,
         },
         {
           id: 'B',

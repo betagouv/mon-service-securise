@@ -89,6 +89,10 @@ class AutorisationBase extends Base {
     return RESUME_NIVEAU_DROIT.PERSONNALISE;
   }
 
+  designeUtilisateur(idUtilisateur) {
+    return this.idUtilisateur === idUtilisateur;
+  }
+
   donneesAPersister() {
     return {
       estProprietaire: this.estProprietaire,
