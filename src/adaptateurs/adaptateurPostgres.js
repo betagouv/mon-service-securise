@@ -69,23 +69,6 @@ const nouvelAdaptateur = (env) => {
       .select({ id: 'id', donnees: 'donnees' })
       .first();
 
-    const requeteCreateur = knex('autorisations as a')
-      .join(
-        'utilisateurs as u',
-        knex.raw("(a.donnees->>'idUtilisateur')::uuid"),
-        'u.id'
-      )
-      .whereRaw(
-        "(a.donnees->>'idHomologation')::uuid = ? AND a.donnees->>'type' = 'createur'",
-        id
-      )
-      .select({
-        id: 'u.id',
-        dateCreation: 'u.date_creation',
-        donnees: 'u.donnees',
-      })
-      .first();
-
     const requeteContributeurs = knex('autorisations as a')
       .join(
         'utilisateurs as u',
@@ -99,20 +82,14 @@ const nouvelAdaptateur = (env) => {
         donnees: 'u.donnees',
       });
 
-    const [h, createur, contributeurs] = await Promise.all([
+    const [h, contributeurs] = await Promise.all([
       requeteHomologation,
-      requeteCreateur,
       requeteContributeurs,
     ]);
 
     return {
       id: h.id,
       ...h.donnees,
-      createur: {
-        id: createur.id,
-        dateCreation: createur.dateCreation,
-        ...createur.donnees,
-      },
       contributeurs: contributeurs.map((c) => ({
         id: c.id,
         dateCreation: c.dateCreation,
