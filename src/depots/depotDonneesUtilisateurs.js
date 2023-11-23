@@ -132,31 +132,27 @@ const creeDepot = (config = {}) => {
       })
       .then(() => utilisateur(utilisateurAModifier.id));
 
-  const supprimeUtilisateur = (...params) => {
-    const verifieUtilisateurExistant = (id) =>
-      adaptateurPersistance.utilisateur(id).then((u) => {
-        if (typeof u === 'undefined') {
-          throw new ErreurUtilisateurInexistant(
-            `L'utilisateur "${id}" n'existe pas`
-          );
-        }
-      });
+  const supprimeUtilisateur = async (id) => {
+    const verifieUtilisateurExistant = async () => {
+      const u = await adaptateurPersistance.utilisateur(id);
+      if (typeof u === 'undefined')
+        throw new ErreurUtilisateurInexistant(
+          `L'utilisateur "${id}" n'existe pas`
+        );
+    };
 
-    const verifieUtilisateurPasProprietaire = (id) =>
-      adaptateurPersistance.nbAutorisationsProprietaire(id).then((nb) => {
-        if (nb > 0) {
-          throw new ErreurSuppressionImpossible(
-            `Suppression impossible : l'utilisateur "${id}" a créé des services`
-          );
-        }
-      });
+    const verifieUtilisateurPasProprietaire = async () => {
+      const nb = await adaptateurPersistance.nbAutorisationsProprietaire(id);
+      if (nb > 0)
+        throw new ErreurSuppressionImpossible(
+          `Suppression impossible : l'utilisateur "${id}" a créé des services`
+        );
+    };
 
-    return verifieUtilisateurExistant(...params)
-      .then(() => verifieUtilisateurPasProprietaire(...params))
-      .then(() =>
-        adaptateurPersistance.supprimeAutorisationsContribution(...params)
-      )
-      .then(() => adaptateurPersistance.supprimeUtilisateur(...params));
+    await verifieUtilisateurExistant();
+    await verifieUtilisateurPasProprietaire();
+    await adaptateurPersistance.supprimeAutorisationsContribution(id);
+    await adaptateurPersistance.supprimeUtilisateur(id);
   };
 
   const tousUtilisateurs = () =>
