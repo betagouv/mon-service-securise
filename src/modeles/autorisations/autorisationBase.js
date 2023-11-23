@@ -138,6 +138,12 @@ class AutorisationBase extends Base {
   };
 
   appliqueDroits(nouveauxDroits) {
+    if (nouveauxDroits.estProprietaire) {
+      this.estProprietaire = true;
+      this.droits = tousDroitsEnEcriture();
+      return;
+    }
+
     this.droits = { ...this.droits, ...nouveauxDroits };
   }
 }
