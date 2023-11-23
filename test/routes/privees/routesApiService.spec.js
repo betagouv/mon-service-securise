@@ -1739,6 +1739,23 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         done
       );
     });
+
+    it('permet de nommer un nouveau propriétaire', async () => {
+      testeur.depotDonnees().autorisation = async () =>
+        uneAutorisation().deContributeurDeService('BBB', '456').construis();
+
+      let autorisationPersistee;
+      testeur.depotDonnees().sauvegardeAutorisation = async (autorisation) => {
+        autorisationPersistee = autorisation;
+      };
+
+      await axios.patch(
+        'http://localhost:1234/api/service/456/autorisations/uuid-1',
+        { droits: { estProprietaire: true } }
+      );
+
+      expect(autorisationPersistee.estProprietaire).to.be(true);
+    });
   });
 
   describe('quand requête GET sur `/api/service/:id/autorisations', () => {
