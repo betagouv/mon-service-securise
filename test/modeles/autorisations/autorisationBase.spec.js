@@ -116,6 +116,22 @@ describe('Une autorisation', () => {
     });
   });
 
+  it("supprime le droit de propriétaire lors de l'application d'un droit d'écriture", () => {
+    const autorisation = AutorisationBase.NouvelleAutorisationProprietaire();
+
+    autorisation.appliqueDroits({ HOMOLOGUER: ECRITURE });
+
+    expect(autorisation.estProprietaire).to.be(false);
+  });
+
+  it("supprime le droit de propriétaire lors de l'application d'un droit de lecture", () => {
+    const autorisation = AutorisationBase.NouvelleAutorisationProprietaire();
+
+    autorisation.appliqueDroits({ HOMOLOGUER: LECTURE });
+
+    expect(autorisation.estProprietaire).to.be(false);
+  });
+
   describe('sur demande de résumé de niveau de droit', () => {
     it("retourne 'PROPRIETAIRE' si l'utilisateur est propriétaire du service", async () => {
       const autorisationProprietaire =
