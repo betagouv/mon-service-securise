@@ -1,11 +1,8 @@
 const AutorisationBase = require('./autorisationBase');
 
-const CONSTRUCTEURS_AUTORISATIONS = {
-  contributeur: AutorisationBase.NouvelleAutorisationContributeur,
-  createur: AutorisationBase.NouvelleAutorisationProprietaire,
-};
-
-const fabrique = ({ type, ...autresDonnees }) =>
-  CONSTRUCTEURS_AUTORISATIONS[type](autresDonnees);
+const fabrique = (donnees) =>
+  donnees.estProprietaire
+    ? AutorisationBase.NouvelleAutorisationProprietaire(donnees)
+    : AutorisationBase.NouvelleAutorisationContributeur(donnees);
 
 module.exports = { fabrique };
