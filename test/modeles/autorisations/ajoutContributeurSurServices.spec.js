@@ -382,6 +382,30 @@ describe("L'ajout d'un contributeur sur des services", () => {
     expect(a2.idService).to.be('888');
   });
 
+  it('sait ajouter un contributeur en tant que « Propriétaire »', async () => {
+    const autorisations = [];
+    depotDonnees.ajouteContributeurAuService = async (nouvelleAutorisation) => {
+      autorisations.push(nouvelleAutorisation);
+    };
+
+    await ajoutContributeurSurServices({
+      depotDonnees,
+      adaptateurMail,
+      adaptateurTracking,
+    }).executer(
+      'jean.dupont@mail.fr',
+      [leService('123')],
+      { estProprietaire: true },
+      unEmetteur()
+    );
+
+    expect(autorisations.length).to.be(1);
+    const [a1] = autorisations;
+    expect(a1.estProprietaire).to.be(true);
+    expect(a1.idUtilisateur).to.be('999');
+    expect(a1.idService).to.be('123');
+  });
+
   it("envoie un événement d'invitation contributeur via l'adaptateur de tracking", async () => {
     let idEmetteur;
     let donneesTracking;

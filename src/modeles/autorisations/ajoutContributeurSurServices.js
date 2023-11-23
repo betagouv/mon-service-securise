@@ -88,11 +88,16 @@ const ajoutContributeurSurServices = ({
   const ajouteContributeur = async (contributeur, services, droits) => {
     const ajouteAuService = async (s) => {
       await depotDonnees.ajouteContributeurAuService(
-        AutorisationBase.NouvelleAutorisationContributeur({
-          idUtilisateur: contributeur.id,
-          idService: s.id,
-          droits,
-        })
+        droits.estProprietaire
+          ? AutorisationBase.NouvelleAutorisationProprietaire({
+              idUtilisateur: contributeur.id,
+              idService: s.id,
+            })
+          : AutorisationBase.NouvelleAutorisationContributeur({
+              idUtilisateur: contributeur.id,
+              idService: s.id,
+              droits,
+            })
       );
     };
 
