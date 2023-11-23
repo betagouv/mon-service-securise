@@ -144,6 +144,7 @@ class AutorisationBase extends Base {
       return;
     }
 
+    this.estProprietaire = false;
     this.droits = { ...this.droits, ...nouveauxDroits };
   }
 }
