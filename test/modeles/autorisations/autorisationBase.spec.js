@@ -190,7 +190,6 @@ describe('Une autorisation', () => {
         idService: '123',
         idHomologation: '123',
         idUtilisateur: '999',
-        type: 'contributeur',
         droits: {
           CONTACTS: 2,
           DECRIRE: 2,
@@ -215,7 +214,6 @@ describe('Une autorisation', () => {
         idService: '123',
         idHomologation: '123',
         idUtilisateur: '999',
-        type: 'createur',
         droits: {
           CONTACTS: 2,
           DECRIRE: 2,

@@ -24,18 +24,13 @@ class AutorisationBase extends Base {
   }
 
   static NouvelleAutorisationContributeur = (donnees = {}) =>
-    new AutorisationBase({
-      ...donnees,
-      estProprietaire: false,
-      type: 'contributeur',
-    });
+    new AutorisationBase({ ...donnees, estProprietaire: false });
 
   static NouvelleAutorisationProprietaire = (donnees = {}) =>
     new AutorisationBase({
       ...donnees,
       droits: tousDroitsEnEcriture(),
       estProprietaire: true,
-      type: 'createur',
     });
 
   aLaPermission(niveau, rubrique) {
@@ -101,7 +96,6 @@ class AutorisationBase extends Base {
       idHomologation: this.idService,
       idUtilisateur: this.idUtilisateur,
       droits: this.droits,
-      type: this.type,
     };
   }
 
