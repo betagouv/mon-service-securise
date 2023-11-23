@@ -244,7 +244,7 @@ const nouvelAdaptateur = (env) => {
   const supprimeAutorisationsContribution = (idUtilisateur) =>
     knex('autorisations')
       .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
-      .whereRaw("donnees->>'type'='contributeur'")
+      .whereRaw("(donnees->>'estProprietaire')::boolean=false")
       .del();
 
   const supprimeAutorisationsHomologation = (idHomologation) =>
