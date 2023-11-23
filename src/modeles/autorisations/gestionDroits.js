@@ -33,12 +33,15 @@ const tousDroitsEnEcriture = () =>
     {}
   );
 
-const verifieCoherenceDesDroits = (droits) =>
-  Object.entries(droits).every(([rubrique, niveau]) => {
+const verifieCoherenceDesDroits = (droits) => {
+  if (droits.estProprietaire) return true;
+
+  return Object.entries(droits).every(([rubrique, niveau]) => {
     const rubriqueExiste = Object.values(Rubriques).includes(rubrique);
     const niveauExiste = Object.values(Permissions).includes(niveau);
     return rubriqueExiste && niveauExiste;
   });
+};
 
 module.exports = {
   Permissions,
