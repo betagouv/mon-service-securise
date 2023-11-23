@@ -11,7 +11,6 @@ class ConstructeurAutorisation {
       idUtilisateur: '',
       idHomologation: '',
       idService: '',
-      type: 'contributeur',
       droits: {},
     };
   }
@@ -23,7 +22,6 @@ class ConstructeurAutorisation {
 
   deProprietaireDeService(idUtilisateur, idService) {
     this.donnees.estProprietaire = true;
-    this.donnees.type = 'createur';
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
     this.donnees.idHomologation = idService;
@@ -32,7 +30,6 @@ class ConstructeurAutorisation {
 
   deContributeurDeService(idUtilisateur, idService) {
     this.donnees.estProprietaire = false;
-    this.donnees.type = 'contributeur';
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
     this.donnees.idHomologation = idService;
