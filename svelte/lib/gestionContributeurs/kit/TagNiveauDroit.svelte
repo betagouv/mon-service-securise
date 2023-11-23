@@ -124,6 +124,16 @@
     font-weight: 400;
   }
 
+  .role-propose.personnalise {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .role-propose.proprietaire {
+    border-top: 1px solid #cbd5e1;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
   .role-propose:hover {
     background: #eff6ff;
   }
