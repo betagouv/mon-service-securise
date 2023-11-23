@@ -99,6 +99,23 @@ describe('Une autorisation', () => {
     expect(autorisation.aLaPermission(LECTURE, HOMOLOGUER)).to.be(true);
   });
 
+  it('passe tous les droits en écriture si on devient propriétaire', () => {
+    const autorisation = new AutorisationBase({
+      droits: { [DECRIRE]: LECTURE },
+    });
+
+    autorisation.appliqueDroits({ estProprietaire: true });
+
+    expect(autorisation.estProprietaire).to.be(true);
+    expect(autorisation.droits).to.eql({
+      [DECRIRE]: ECRITURE,
+      [SECURISER]: ECRITURE,
+      [HOMOLOGUER]: ECRITURE,
+      [RISQUES]: ECRITURE,
+      [CONTACTS]: ECRITURE,
+    });
+  });
+
   describe('sur demande de résumé de niveau de droit', () => {
     it("retourne 'PROPRIETAIRE' si l'utilisateur est propriétaire du service", async () => {
       const autorisationProprietaire =
