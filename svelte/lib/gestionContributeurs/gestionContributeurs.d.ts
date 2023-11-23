@@ -62,6 +62,7 @@ export const enDroitsSurRubrique = (
     case 'ECRITURE':
       return rubriquesAvecPermission(2);
     case 'PROPRIETAIRE':
+      return { estProprietaire: true };
     case 'PERSONNALISE':
       throw new Error(`${resume} non convertible en permission`);
   }

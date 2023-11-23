@@ -56,6 +56,14 @@
           Avoir un droit d'accès adapté par rubrique
         </div>
       </div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div
+        class="role-propose proprietaire"
+        on:click={() => dispatch('droitsChange', 'PROPRIETAIRE')}
+      >
+        <div class="nom">Propriétaire</div>
+        <div class="description">Gérer le service et les contributeurs</div>
+      </div>
     </div>
   </MenuFlottant>
 {/if}
