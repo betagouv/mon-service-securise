@@ -47,7 +47,7 @@ export type Rubrique =
 
 export const enDroitsSurRubrique = (
   resume: ResumeNiveauDroit
-): Record<Rubrique, Permission> => {
+): Record<Rubrique, Permission> & { estProprietaire: boolean } => {
   const rubriquesAvecPermission = (p: Permission) => ({
     DECRIRE: p,
     SECURISER: p,
@@ -70,7 +70,7 @@ export const enDroitsSurRubrique = (
 
 export type Invitation = {
   utilisateur: Utilisateur;
-  droits: Record<Rubrique, Permission>;
+  droits: Record<Rubrique, Permission> & { estProprietaire: boolean };
 };
 
 export type IdAutorisation = string;

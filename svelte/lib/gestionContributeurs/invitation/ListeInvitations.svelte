@@ -19,8 +19,9 @@
   }>();
 
   const resumeLesDroits = (
-    droits: Record<Rubrique, Permission>
+    droits: Record<Rubrique, Permission> & { estProprietaire: boolean }
   ): ResumeNiveauDroit => {
+    if (droits.estProprietaire) return 'PROPRIETAIRE';
     if (Object.values(droits).every((p) => p === 1)) return 'LECTURE';
     if (Object.values(droits).every((p) => p === 2)) return 'ECRITURE';
     return 'PERSONNALISE';
