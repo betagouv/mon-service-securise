@@ -12,7 +12,7 @@ const Utilisateur = require('./utilisateur');
 const ObjetPDFAnnexeDescription = require('./objetsPDF/objetPDFAnnexeDescription');
 const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
 const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
-const AutorisationBase = require('./autorisations/autorisationBase');
+const Autorisation = require('./autorisations/autorisation');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -111,13 +111,13 @@ class Homologation {
 
   documentsPdfDisponibles(autorisation) {
     const droitAuxAnnexes = autorisation.aLesPermissions(
-      AutorisationBase.DROITS_ANNEXES_PDF
+      Autorisation.DROITS_ANNEXES_PDF
     );
     const droitALaSyntheseSecurite = autorisation.aLesPermissions(
-      AutorisationBase.DROIT_SYNTHESE_SECURITE_PDF
+      Autorisation.DROIT_SYNTHESE_SECURITE_PDF
     );
     const droitAuDossierDecision = autorisation.aLesPermissions(
-      AutorisationBase.DROITS_DOSSIER_DECISION_PDF
+      Autorisation.DROITS_DOSSIER_DECISION_PDF
     );
     const dossierCourant = this.dossierCourant();
 

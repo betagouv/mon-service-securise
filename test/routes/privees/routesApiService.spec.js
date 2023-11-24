@@ -19,7 +19,7 @@ const {
 const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
-const AutorisationBase = require('../../../src/modeles/autorisations/autorisationBase');
+const Autorisation = require('../../../src/modeles/autorisations/autorisation');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
@@ -1219,8 +1219,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   describe('quand requête DELETE sur `/api/service/:id`', () => {
     beforeEach(() => {
       testeur.middleware().reinitialise({
-        autorisationACharger:
-          AutorisationBase.NouvelleAutorisationProprietaire(),
+        autorisationACharger: Autorisation.NouvelleAutorisationProprietaire(),
       });
       testeur.depotDonnees().supprimeHomologation = () => Promise.resolve();
     });
@@ -1322,8 +1321,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     beforeEach(() => {
       testeur.depotDonnees().dupliqueHomologation = () => Promise.resolve();
       testeur.middleware().reinitialise({
-        autorisationACharger:
-          AutorisationBase.NouvelleAutorisationProprietaire(),
+        autorisationACharger: Autorisation.NouvelleAutorisationProprietaire(),
       });
     });
 
@@ -1419,8 +1417,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
       testeur.middleware().reinitialise({
         idUtilisateur: '999',
-        autorisationACharger:
-          AutorisationBase.NouvelleAutorisationProprietaire(),
+        autorisationACharger: Autorisation.NouvelleAutorisationProprietaire(),
       });
 
       testeur.depotDonnees().dupliqueHomologation = (

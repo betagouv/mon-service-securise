@@ -1,7 +1,7 @@
 const Dossiers = require('../dossiers');
-const AutorisationBase = require('../autorisations/autorisationBase');
+const Autorisation = require('../autorisations/autorisation');
 
-const { DROITS_VOIR_STATUT_HOMOLOGATION } = AutorisationBase;
+const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 
 const donnees = (service, autorisation, referentiel) => ({
   id: service.id,

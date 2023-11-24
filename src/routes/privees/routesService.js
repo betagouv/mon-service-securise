@@ -11,12 +11,12 @@ const {
   Rubriques,
   premiereRouteDisponible,
 } = require('../../modeles/autorisations/gestionDroits');
-const AutorisationBase = require('../../modeles/autorisations/autorisationBase');
+const Autorisation = require('../../modeles/autorisations/autorisation');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
 const { DROITS_VOIR_INDICE_CYBER, DROITS_VOIR_STATUT_HOMOLOGATION } =
-  AutorisationBase;
+  Autorisation;
 
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();

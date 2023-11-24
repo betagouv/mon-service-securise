@@ -13,7 +13,7 @@ const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouv
 const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
-const AutorisationBase = require('../modeles/autorisations/autorisationBase');
+const Autorisation = require('../modeles/autorisations/autorisation');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -355,7 +355,7 @@ const creeDepot = (config = {}) => {
 
     await p.sauvegarde(idService, donneesService);
 
-    const proprietaire = AutorisationBase.NouvelleAutorisationProprietaire({
+    const proprietaire = Autorisation.NouvelleAutorisationProprietaire({
       idUtilisateur,
       idService,
     });

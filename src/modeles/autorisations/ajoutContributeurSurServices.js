@@ -1,6 +1,6 @@
 const { EchecAutorisation, EchecEnvoiMessage } = require('../../erreurs');
 const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
-const AutorisationBase = require('./autorisationBase');
+const Autorisation = require('./autorisation');
 
 const ajoutContributeurSurServices = ({
   depotDonnees,
@@ -89,11 +89,11 @@ const ajoutContributeurSurServices = ({
     const ajouteAuService = async (s) => {
       await depotDonnees.ajouteContributeurAuService(
         droits.estProprietaire
-          ? AutorisationBase.NouvelleAutorisationProprietaire({
+          ? Autorisation.NouvelleAutorisationProprietaire({
               idUtilisateur: contributeur.id,
               idService: s.id,
             })
-          : AutorisationBase.NouvelleAutorisationContributeur({
+          : Autorisation.NouvelleAutorisationContributeur({
               idUtilisateur: contributeur.id,
               idService: s.id,
               droits,

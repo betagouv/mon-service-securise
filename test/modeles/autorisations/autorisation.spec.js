@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 
-const AutorisationBase = require('../../../src/modeles/autorisations/autorisationBase');
+const Autorisation = require('../../../src/modeles/autorisations/autorisation');
 const {
   Permissions,
   Rubriques,
@@ -13,30 +13,30 @@ const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
 describe('Une autorisation', () => {
   describe('sur demande de permission de suppression de service', () => {
     it('interdit la suppression pour un contributeur', () => {
-      const autorisation = AutorisationBase.NouvelleAutorisationContributeur();
+      const autorisation = Autorisation.NouvelleAutorisationContributeur();
       expect(autorisation.peutSupprimerService()).to.be(false);
     });
 
     it('autorise la suppression pour un propriétaire', () => {
-      const autorisation = AutorisationBase.NouvelleAutorisationProprietaire();
+      const autorisation = Autorisation.NouvelleAutorisationProprietaire();
       expect(autorisation.peutSupprimerService()).to.be(true);
     });
   });
 
   describe('sur demande de permission de duplication de service', () => {
     it('interdit la duplication pour un contributeur', () => {
-      const autorisation = AutorisationBase.NouvelleAutorisationContributeur();
+      const autorisation = Autorisation.NouvelleAutorisationContributeur();
       expect(autorisation.peutDupliquer()).to.be(false);
     });
 
     it('autorise la duplication pour un propriétaire', () => {
-      const autorisation = AutorisationBase.NouvelleAutorisationProprietaire();
+      const autorisation = Autorisation.NouvelleAutorisationProprietaire();
       expect(autorisation.peutDupliquer()).to.be(true);
     });
   });
 
   it("permet de savoir s'il y a une permission en lecture sur une rubrique", () => {
-    const autorisation = new AutorisationBase({
+    const autorisation = new Autorisation({
       droits: { [DECRIRE]: LECTURE },
     });
 
@@ -44,7 +44,7 @@ describe('Une autorisation', () => {
   });
 
   it("permet de savoir s'il y a une permission en écriture sur une rubrique", () => {
-    const autorisation = new AutorisationBase({
+    const autorisation = new Autorisation({
       droits: { [DECRIRE]: ECRITURE },
     });
 
@@ -52,7 +52,7 @@ describe('Une autorisation', () => {
   });
 
   it("autorise la lecture sur une rubrique avec droits d'écriture", () => {
-    const autorisationEcriture = new AutorisationBase({
+    const autorisationEcriture = new Autorisation({
       droits: { [DECRIRE]: ECRITURE },
     });
 
@@ -62,7 +62,7 @@ describe('Une autorisation', () => {
   });
 
   it("n'autorise pas l'accès à une rubrique non référencée", () => {
-    const autorisationSecuriser = new AutorisationBase({
+    const autorisationSecuriser = new Autorisation({
       droits: { [SECURISER]: ECRITURE },
     });
 
@@ -75,7 +75,7 @@ describe('Une autorisation', () => {
   });
 
   it("n'autorise aucun accès pour un niveau invisible", () => {
-    const niveauInvisible = new AutorisationBase({
+    const niveauInvisible = new Autorisation({
       droits: { [DECRIRE]: INVISIBLE },
     });
 
@@ -87,7 +87,7 @@ describe('Une autorisation', () => {
   });
 
   it('sait appliquer de nouveaux droits', () => {
-    const autorisation = new AutorisationBase({
+    const autorisation = new Autorisation({
       droits: tousDroitsEnEcriture(),
     });
     expect(autorisation.aLaPermission(ECRITURE, HOMOLOGUER)).to.be(true);
@@ -100,7 +100,7 @@ describe('Une autorisation', () => {
   });
 
   it('passe tous les droits en écriture si on devient propriétaire', () => {
-    const autorisation = new AutorisationBase({
+    const autorisation = new Autorisation({
       droits: { [DECRIRE]: LECTURE },
     });
 
@@ -117,7 +117,7 @@ describe('Une autorisation', () => {
   });
 
   it("supprime le droit de propriétaire lors de l'application d'un droit d'écriture", () => {
-    const autorisation = AutorisationBase.NouvelleAutorisationProprietaire();
+    const autorisation = Autorisation.NouvelleAutorisationProprietaire();
 
     autorisation.appliqueDroits({ HOMOLOGUER: ECRITURE });
 
@@ -125,7 +125,7 @@ describe('Une autorisation', () => {
   });
 
   it("supprime le droit de propriétaire lors de l'application d'un droit de lecture", () => {
-    const autorisation = AutorisationBase.NouvelleAutorisationProprietaire();
+    const autorisation = Autorisation.NouvelleAutorisationProprietaire();
 
     autorisation.appliqueDroits({ HOMOLOGUER: LECTURE });
 
@@ -135,15 +135,15 @@ describe('Une autorisation', () => {
   describe('sur demande de résumé de niveau de droit', () => {
     it("retourne 'PROPRIETAIRE' si l'utilisateur est propriétaire du service", async () => {
       const autorisationProprietaire =
-        AutorisationBase.NouvelleAutorisationProprietaire();
+        Autorisation.NouvelleAutorisationProprietaire();
 
       expect(autorisationProprietaire.resumeNiveauDroit()).to.be(
-        AutorisationBase.RESUME_NIVEAU_DROIT.PROPRIETAIRE
+        Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE
       );
     });
 
     it("retourne 'ECRITURE' si tous les droits sont en ECRITURE", () => {
-      const autorisationLecture = new AutorisationBase({
+      const autorisationLecture = new Autorisation({
         droits: {
           [DECRIRE]: ECRITURE,
           [SECURISER]: ECRITURE,
@@ -154,12 +154,12 @@ describe('Une autorisation', () => {
       });
 
       expect(autorisationLecture.resumeNiveauDroit()).to.equal(
-        AutorisationBase.RESUME_NIVEAU_DROIT.ECRITURE
+        Autorisation.RESUME_NIVEAU_DROIT.ECRITURE
       );
     });
 
     it("retourne 'LECTURE' si tous les droits sont en LECTURE", () => {
-      const autorisationLecture = new AutorisationBase({
+      const autorisationLecture = new Autorisation({
         droits: {
           [DECRIRE]: LECTURE,
           [SECURISER]: LECTURE,
@@ -170,12 +170,12 @@ describe('Une autorisation', () => {
       });
 
       expect(autorisationLecture.resumeNiveauDroit()).to.equal(
-        AutorisationBase.RESUME_NIVEAU_DROIT.LECTURE
+        Autorisation.RESUME_NIVEAU_DROIT.LECTURE
       );
     });
 
     it("retourne 'PERSONNALISE' si les droits sont mixtes", () => {
-      const autorisationLecture = new AutorisationBase({
+      const autorisationLecture = new Autorisation({
         droits: {
           [DECRIRE]: LECTURE,
           [SECURISER]: ECRITURE,
@@ -186,7 +186,7 @@ describe('Une autorisation', () => {
       });
 
       expect(autorisationLecture.resumeNiveauDroit()).to.equal(
-        AutorisationBase.RESUME_NIVEAU_DROIT.PERSONNALISE
+        Autorisation.RESUME_NIVEAU_DROIT.PERSONNALISE
       );
     });
   });
@@ -194,14 +194,14 @@ describe('Une autorisation', () => {
   describe('sur demande de permission de gestion des contributeurs', () => {
     it('interdit la gestion pour un contributeur', () => {
       const autorisationContributeur =
-        AutorisationBase.NouvelleAutorisationContributeur();
+        Autorisation.NouvelleAutorisationContributeur();
 
       expect(autorisationContributeur.peutGererContributeurs()).to.be(false);
     });
 
     it('autorise la gestion pour un propriétaire', () => {
       const autorisationCreateur =
-        AutorisationBase.NouvelleAutorisationProprietaire();
+        Autorisation.NouvelleAutorisationProprietaire();
 
       expect(autorisationCreateur.peutGererContributeurs()).to.be(true);
     });
@@ -209,13 +209,13 @@ describe('Une autorisation', () => {
 
   describe("sur demande de permission d'homologuer un service", () => {
     it("autorise l'homologation pour un propriétaire", () => {
-      const proprietaire = AutorisationBase.NouvelleAutorisationProprietaire();
+      const proprietaire = Autorisation.NouvelleAutorisationProprietaire();
 
       expect(proprietaire.peutHomologuer()).to.be(true);
     });
 
     it("interdit l'homologation pour un contributeur", () => {
-      const contributeur = AutorisationBase.NouvelleAutorisationContributeur({
+      const contributeur = Autorisation.NouvelleAutorisationContributeur({
         droits: tousDroitsEnEcriture(),
       });
 
@@ -226,7 +226,7 @@ describe('Une autorisation', () => {
   describe('sur demande des données à persister', () => {
     it('connaît ses données pour une autorisation de contributeur', () => {
       const autorisationContributeur =
-        AutorisationBase.NouvelleAutorisationContributeur({
+        Autorisation.NouvelleAutorisationContributeur({
           id: 'uuid',
           idService: '123',
           idUtilisateur: '999',
@@ -251,7 +251,7 @@ describe('Une autorisation', () => {
 
     it('connaît ses données pour une autorisation de propriétaire', () => {
       const autorisationProprietaire =
-        AutorisationBase.NouvelleAutorisationProprietaire({
+        Autorisation.NouvelleAutorisationProprietaire({
           id: 'uuid',
           idService: '123',
           idUtilisateur: '999',

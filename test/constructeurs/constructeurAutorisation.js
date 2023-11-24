@@ -1,7 +1,7 @@
 const {
   tousDroitsEnEcriture,
 } = require('../../src/modeles/autorisations/gestionDroits');
-const AutorisationBase = require('../../src/modeles/autorisations/autorisationBase');
+const Autorisation = require('../../src/modeles/autorisations/autorisation');
 
 class ConstructeurAutorisation {
   constructor() {
@@ -48,8 +48,8 @@ class ConstructeurAutorisation {
 
   construis() {
     return this.donnees.estProprietaire
-      ? AutorisationBase.NouvelleAutorisationProprietaire(this.donnees)
-      : AutorisationBase.NouvelleAutorisationContributeur(this.donnees);
+      ? Autorisation.NouvelleAutorisationProprietaire(this.donnees)
+      : Autorisation.NouvelleAutorisationContributeur(this.donnees);
   }
 }
 
