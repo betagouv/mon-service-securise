@@ -1,8 +1,8 @@
-const AutorisationBase = require('./autorisationBase');
+const Autorisation = require('./autorisation');
 
 const fabrique = (donnees) =>
   donnees.estProprietaire
-    ? AutorisationBase.NouvelleAutorisationProprietaire(donnees)
-    : AutorisationBase.NouvelleAutorisationContributeur(donnees);
+    ? Autorisation.NouvelleAutorisationProprietaire(donnees)
+    : Autorisation.NouvelleAutorisationContributeur(donnees);
 
 module.exports = { fabrique };

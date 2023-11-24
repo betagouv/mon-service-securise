@@ -1,6 +1,6 @@
-const AutorisationBase = require('../autorisations/autorisationBase');
+const Autorisation = require('../autorisations/autorisation');
 
-const { DROITS_VOIR_INDICE_CYBER } = AutorisationBase;
+const { DROITS_VOIR_INDICE_CYBER } = Autorisation;
 
 const donnees = (services, autorisations) => {
   const servicesIndiceCyberCalcules = services.map((s) => ({

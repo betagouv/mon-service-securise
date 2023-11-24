@@ -7,7 +7,7 @@ const {
   tousDroitsEnEcriture,
 } = require('./gestionDroits');
 
-class AutorisationBase extends Base {
+class Autorisation extends Base {
   constructor(donnees = {}) {
     super({
       proprietesAtomiquesRequises: [
@@ -24,10 +24,10 @@ class AutorisationBase extends Base {
   }
 
   static NouvelleAutorisationContributeur = (donnees = {}) =>
-    new AutorisationBase({ ...donnees, estProprietaire: false });
+    new Autorisation({ ...donnees, estProprietaire: false });
 
   static NouvelleAutorisationProprietaire = (donnees = {}) =>
-    new AutorisationBase({
+    new Autorisation({
       ...donnees,
       droits: tousDroitsEnEcriture(),
       estProprietaire: true,
@@ -60,7 +60,7 @@ class AutorisationBase extends Base {
   }
 
   resumeNiveauDroit() {
-    const { RESUME_NIVEAU_DROIT } = AutorisationBase;
+    const { RESUME_NIVEAU_DROIT } = Autorisation;
 
     if (this.estProprietaire) return RESUME_NIVEAU_DROIT.PROPRIETAIRE;
 
@@ -141,4 +141,4 @@ class AutorisationBase extends Base {
   }
 }
 
-module.exports = AutorisationBase;
+module.exports = Autorisation;
