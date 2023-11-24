@@ -207,6 +207,22 @@ describe('Une autorisation', () => {
     });
   });
 
+  describe("sur demande de permission d'homologuer un service", () => {
+    it("autorise l'homologation pour un propriétaire", () => {
+      const proprietaire = AutorisationBase.NouvelleAutorisationProprietaire();
+
+      expect(proprietaire.peutHomologuer()).to.be(true);
+    });
+
+    it("interdit l'homologation pour un contributeur", () => {
+      const contributeur = AutorisationBase.NouvelleAutorisationContributeur({
+        droits: tousDroitsEnEcriture(),
+      });
+
+      expect(contributeur.peutHomologuer()).to.be(false);
+    });
+  });
+
   describe('sur demande des données à persister', () => {
     it('connaît ses données pour une autorisation de contributeur', () => {
       const autorisationContributeur =
