@@ -38,6 +38,7 @@ module.exports = {
         "L'ANSSI recommande de renforcer la sécurité du service numérique avant de procéder à son homologation.",
       deconseillee: true,
       dureeHomologationConseillee: '6 mois',
+      conseilHomologation: 'Homologation déconseillée',
     },
     {
       borneInferieure: 1,
@@ -48,6 +49,7 @@ module.exports = {
         "L'ANSSI recommande de renforcer la sécurité du service numérique avant de procéder à son homologation.",
       deconseillee: true,
       dureeHomologationConseillee: '6 mois',
+      conseilHomologation: 'Homologation déconseillée',
     },
     {
       borneInferieure: 2,
@@ -56,6 +58,7 @@ module.exports = {
         "La durée d'homologation du service devrait être limitée à <b>1 an</b>.",
       recommandationANSSIComplement: recommandationPoursuiteRenforcement,
       dureeHomologationConseillee: '1 an',
+      conseilHomologation: 'Continuer à renforcer la sécurité du service',
     },
     {
       borneInferieure: 3,
@@ -64,6 +67,7 @@ module.exports = {
         "La durée d'homologation du service peut aller jusqu'à <b>2 ans</b>.",
       recommandationANSSIComplement: recommandationPoursuiteRenforcement,
       dureeHomologationConseillee: '2 ans',
+      conseilHomologation: 'Continuer à renforcer la sécurité du service',
     },
     {
       borneInferieure: 4,
