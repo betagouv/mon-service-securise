@@ -1,6 +1,6 @@
 const Base = require('../base');
 const {
-  Rubriques: { DECRIRE, SECURISER, RISQUES, HOMOLOGUER, CONTACTS },
+  Rubriques: { DECRIRE, SECURISER, RISQUES, HOMOLOGUER },
   Permissions: { LECTURE, ECRITURE },
   Rubriques,
   Permissions,
@@ -104,14 +104,6 @@ class AutorisationBase extends Base {
     ECRITURE: 'ECRITURE',
     LECTURE: 'LECTURE',
     PERSONNALISE: 'PERSONNALISE',
-  };
-
-  static DROITS_HOMOLOGUER = {
-    [DECRIRE]: ECRITURE,
-    [SECURISER]: ECRITURE,
-    [HOMOLOGUER]: ECRITURE,
-    [RISQUES]: ECRITURE,
-    [CONTACTS]: ECRITURE,
   };
 
   static DROITS_VOIR_INDICE_CYBER = {
