@@ -31,6 +31,15 @@ module.exports = {
   tranchesIndicesCybers: [
     {
       borneInferieure: 0,
+      borneSuperieure: 1,
+      recommandationANSSI:
+        "L'homologation du service est déconseillée ou devrait être limitée à <b>6 mois</b>.",
+      recommandationANSSIComplement:
+        "L'ANSSI recommande de renforcer la sécurité du service numérique avant de procéder à son homologation.",
+      deconseillee: true,
+    },
+    {
+      borneInferieure: 1,
       borneSuperieure: 2,
       recommandationANSSI:
         "L'homologation du service est déconseillée ou devrait être limitée à <b>6 mois</b>.",
