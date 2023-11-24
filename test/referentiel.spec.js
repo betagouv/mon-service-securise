@@ -702,6 +702,32 @@ describe('Le référentiel', () => {
     });
   });
 
+  describe("sur une demande de description de tranche de l'indice cyber", () => {
+    it("renvoie la description de la tranche, mise en forme avec la valeur de l'indice cyber", () => {
+      const tranche = {
+        borneInferieure: 0,
+        borneSuperieure: 2,
+        description: 'La valeur est $INDICE_CYBER',
+      };
+      const referentiel = Referentiel.creeReferentiel({
+        tranchesIndicesCybers: [tranche],
+      });
+
+      expect(referentiel.descriptionTrancheIndiceCyber(1.51)).to.eql(
+        'La valeur est 1,5'
+      );
+    });
+
+    it("reste robuste quand l'indice n'est pas dans une tranche", () => {
+      const tranche = { borneInferieure: 0, borneSuperieure: 2 };
+      const referentiel = Referentiel.creeReferentiel({
+        tranchesIndicesCybers: [tranche],
+      });
+
+      expect(referentiel.descriptionTrancheIndiceCyber(6)).to.eql('');
+    });
+  });
+
   describe('sur demande de derniére nouvelle fonctionnalité en date', () => {
     it('sait renvoyer la dernière nouvelle fonctionnalité', () => {
       const referentiel = Referentiel.creeReferentiel({

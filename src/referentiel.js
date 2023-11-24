@@ -139,6 +139,19 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
           : indiceCyber < tranche.borneSuperieure)
     ) || {};
 
+  const descriptionTrancheIndiceCyber = (indiceCyber) => {
+    const formatIndiceCyber = Intl.NumberFormat('fr', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format;
+    return (
+      trancheIndiceCyber(indiceCyber)?.description?.replaceAll(
+        '$INDICE_CYBER',
+        formatIndiceCyber(indiceCyber)
+      ) ?? ''
+    );
+  };
+
   const infosNiveauxGravite = (ordreInverse = false) => {
     const niveaux = Object.keys(niveauxGravite()).map((clef) => ({
       identifiant: clef,
@@ -264,6 +277,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionFonctionnalite,
     descriptionRisque,
     descriptionStatutMesure,
+    descriptionTrancheIndiceCyber,
     descriptionsDonneesCaracterePersonnel,
     descriptionsFonctionnalites,
     donneesCaracterePersonnel,

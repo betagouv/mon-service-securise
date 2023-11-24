@@ -39,6 +39,8 @@ module.exports = {
       deconseillee: true,
       dureeHomologationConseillee: '6 mois',
       conseilHomologation: 'Homologation déconseillée',
+      description:
+        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un niveau de sécurisation très insuffisant face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
     },
     {
       borneInferieure: 1,
@@ -50,6 +52,8 @@ module.exports = {
       deconseillee: true,
       dureeHomologationConseillee: '6 mois',
       conseilHomologation: 'Homologation déconseillée',
+      description:
+        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un niveau de sécurisation insuffisant face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
     },
     {
       borneInferieure: 2,
@@ -59,6 +63,8 @@ module.exports = {
       recommandationANSSIComplement: recommandationPoursuiteRenforcement,
       dureeHomologationConseillee: '1 an',
       conseilHomologation: 'Continuer à renforcer la sécurité du service',
+      description:
+        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un niveau de sécurisation modéré face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
     },
     {
       borneInferieure: 3,
@@ -68,6 +74,8 @@ module.exports = {
       recommandationANSSIComplement: recommandationPoursuiteRenforcement,
       dureeHomologationConseillee: '2 ans',
       conseilHomologation: 'Continuer à renforcer la sécurité du service',
+      description:
+        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un bon niveau de sécurisation face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
     },
     {
       borneInferieure: 4,
@@ -77,6 +85,8 @@ module.exports = {
         "La durée d'homologation du service peut aller jusqu'à <b>3 ans</b>.",
       recommandationANSSIComplement: recommandationPoursuiteRenforcement,
       dureeHomologationConseillee: '3 ans',
+      description:
+        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un très bon niveau de sécurisation face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
     },
   ],
 
