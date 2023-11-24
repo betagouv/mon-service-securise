@@ -52,7 +52,7 @@ class AutorisationBase extends Base {
   }
 
   peutHomologuer() {
-    return this.aLesPermissions(AutorisationBase.DROITS_HOMOLOGUER);
+    return this.estProprietaire;
   }
 
   peutSupprimerService() {
