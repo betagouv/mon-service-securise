@@ -308,16 +308,21 @@
   min-width: unset;
 }
 
-.menu-navigation:not(.ferme) #gerer-contributeurs:hover {
+.menu-navigation:not(.ferme)
+  :is(#gerer-contributeurs:hover, #gerer-contributeurs.ouvert) {
   min-width: 204px;
   height: 30px;
 }
 
-.menu-navigation:not(.ferme) #gerer-contributeurs:hover .nombre-contributeurs {
+.menu-navigation:not(.ferme)
+  :is(#gerer-contributeurs:hover, #gerer-contributeurs.ouvert)
+  .nombre-contributeurs {
   display: none;
 }
 
-.menu-navigation:not(.ferme) #gerer-contributeurs:hover .inviter-contributeurs {
+.menu-navigation:not(.ferme)
+  :is(#gerer-contributeurs:hover, #gerer-contributeurs.ouvert)
+  .inviter-contributeurs {
   display: block;
 }
 

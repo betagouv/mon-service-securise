@@ -26,7 +26,7 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut, rubriqu
 .menu-navigation(class = preferencesUtilisateur.etatMenuNavigation === 'ferme' ? 'ferme' : '')
   .actions
     if !estSurCreationDeService
-      button#gerer-contributeurs
+      button#gerer-contributeurs(class = preferencesUtilisateur.etatMenuNavigation === 'ferme' ? '' : 'ouvert')
         img(src = '/statique/assets/images/bouton_inviter_collaborateur_persona.svg')
         span.none-si-ferme.nombre-contributeurs= service.contributeurs.length
         span.inviter-contributeurs Gérer les contributeurs

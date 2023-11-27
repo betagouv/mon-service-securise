@@ -52,6 +52,7 @@ const tiroirTelechargement = (idService) => {
 const repliMenu = () => {
   const $menu = $('.menu-navigation');
   const $repliMenu = $('.repli-menu', $menu);
+  const $gererContributeurs = $('#gerer-contributeurs', $menu);
 
   const cookie = () => {
     const cookieAvecAge = (ageEnSecondes) =>
@@ -68,16 +69,27 @@ const repliMenu = () => {
     ouvrir: () => cookie().supprimer(),
   };
 
+  const fermeApresDelai = () => {
+    setTimeout(() => {
+      $gererContributeurs.removeClass('ouvert');
+    }, 3000);
+  };
+
   return {
     brancheComportement: () => {
+      fermeApresDelai();
+
       $repliMenu.on('click', () => {
         const menuOuvert = !$menu.hasClass('ferme');
         if (menuOuvert) {
           $menu.addClass('ferme');
           persistance.fermer();
+          $gererContributeurs.removeClass('ouvert');
         } else {
           $menu.removeClass('ferme');
           persistance.ouvrir();
+          $gererContributeurs.addClass('ouvert');
+          fermeApresDelai();
         }
       });
     },
