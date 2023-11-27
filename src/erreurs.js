@@ -31,8 +31,6 @@ class ErreurDossiersInvalides extends ErreurModele {}
 class ErreurDureeValiditeInvalide extends ErreurModele {}
 class ErreurEmailManquant extends ErreurModele {}
 class ErreurServiceInexistant extends ErreurModele {}
-class ErreurIdentifiantActionSaisieInvalide extends ErreurModele {}
-class ErreurIdentifiantActionSaisieManquant extends ErreurModele {}
 class ErreurLocalisationDonneesInvalide extends ErreurModele {}
 class ErreurMesureInconnue extends ErreurModele {}
 class ErreurMotDePasseIncorrect extends ErreurModele {}
@@ -75,8 +73,6 @@ module.exports = {
   ErreurDroitsIncoherents,
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
-  ErreurIdentifiantActionSaisieInvalide,
-  ErreurIdentifiantActionSaisieManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
   ErreurMotDePasseIncorrect,

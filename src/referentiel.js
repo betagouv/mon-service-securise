@@ -2,7 +2,6 @@ const { ErreurDonneesReferentielIncorrectes } = require('./erreurs');
 const donneesParDefaut = require('../donneesReferentiel');
 
 const donneesReferentielVide = {
-  actionsSaisie: {},
   categoriesMesures: {},
   indiceCyber: {},
   delaisAvantImpactCritique: {},
@@ -26,21 +25,10 @@ const donneesReferentielVide = {
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   let donnees = donneesReferentiel;
 
-  const actionsSaisie = () => donnees.actionsSaisie || {};
-  const identifiantsActionsSaisie = () => Object.keys(actionsSaisie());
-  const actionSaisie = (id) => actionsSaisie()[id] || {};
-  const premiereActionSaisie = () => {
-    const [id, champs] = Object.entries(actionsSaisie()).find(
-      ([_id, { position }]) => position === 0
-    );
-
-    return { id, ...champs };
-  };
   const statutsAvisDossierHomologation = () =>
     donnees.statutsAvisDossierHomologation || {};
   const statutHomologation = (idStatut) =>
     donnees.statutsHomologation[idStatut];
-  const positionActionSaisie = (id) => actionSaisie(id).position;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie) =>
     categoriesMesures()[idCategorie];
@@ -257,8 +245,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   valideDonnees();
 
   return {
-    actionsSaisie,
-    actionSaisie,
     categoriesMesures,
     codeDepartements,
     coefficientIndiceCyberMesuresIndispensables,
@@ -292,7 +278,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     etapesParcoursHomologation,
     etapeSuffisantePourDossierDecision,
     fonctionnalites,
-    identifiantsActionsSaisie,
     identifiantsCategoriesMesures,
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
@@ -313,8 +298,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauxGravite,
     nouvelleFonctionnalite,
     numeroEtape,
-    positionActionSaisie,
-    premiereActionSaisie,
     premiereEtapeParcours,
     provenancesService,
     recharge,
