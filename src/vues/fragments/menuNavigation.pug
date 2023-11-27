@@ -1,9 +1,9 @@
 - const estSurCreationDeService = !!service.id === false
+- const urlDeService = (suffixe) => `/service/${service.id}/${suffixe}`
 
-mixin etapeParcours({ id, position, url, description, sousTitre, statut, rubriqueDroit })
+mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
   -
     const estActive = etapeActive === id
-    const estVisible = estSurCreationDeService || !(autorisationsService[rubriqueDroit].estMasque)
     const statutSaisie = (s) => {
       switch (s) {
         case InformationsHomologation.COMPLETES: return 'faite';
@@ -14,14 +14,13 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut, rubriqu
 
   if estVisible
     li
-      a(href = estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
+      a(href= estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
         .pastille
           span.action-saisie(id = id)
         .none-si-ferme
-          span.nom-action!= description
+          span.nom-action!= nom
           span.sous-titre!= sousTitre
         .statut-saisie.none-si-ferme(class = statutSaisie(statut))
-
 
 .menu-navigation(class = preferencesUtilisateur.etatMenuNavigation === 'ferme' ? 'ferme' : '')
   .actions
@@ -35,21 +34,53 @@ mixin etapeParcours({ id, position, url, description, sousTitre, statut, rubriqu
 
   .parcours
     ul.etapes
-      each actionSaisie in actionsSaisie
-        +etapeParcours(actionSaisie)
+      if estSurCreationDeService
+        +etapeParcours({
+          id: 'descriptionService',
+          nom: 'Décrire',
+          sousTitre: 'Évaluer les besoins de sécurité',
+          statut: service.descriptionService.statutSaisie(),
+          estVisible: true
+        })
+      else
+        +etapeParcours({
+          id: 'descriptionService',
+          url: urlDeService('descriptionService'),
+          nom: 'Décrire',
+          sousTitre: 'Évaluer les besoins de sécurité',
+          statut: service.descriptionService.statutSaisie(),
+          estVisible: !(autorisationsService.DECRIRE.estMasque)
+        })
+        +etapeParcours({
+          id: 'mesures',
+          url: urlDeService('mesures'),
+          nom: 'Sécuriser',
+          sousTitre: "Mesurer et renforcer l'indice cyber",
+          visibileSurCreationService: false,
+          statut: service.mesures.statutSaisie(),
+          estVisible: !(autorisationsService.SECURISER.estMasque)
+        })
+        +etapeParcours({
+          id: 'dossiers',
+          url: urlDeService('dossiers'),
+          nom: 'Homologuer',
+          sousTitre: "Générer un dossier d'homologation",
+          statut: service.dossiers.statutSaisie(),
+          estVisible: !(autorisationsService.HOMOLOGUER.estMasque)
+        })
 
   if !estSurCreationDeService
     .autres-liens
       ul
         if !autorisationsService.RISQUES.estMasque
           li
-            a(href = `/service/${service.id}/risques`, class = etapeActive === 'risques' ? 'actif' : '')
+            a(href = urlDeService('risques'), class = etapeActive === 'risques' ? 'actif' : '')
               .pastille
                 img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »", id = 'icone-risques')
               span.none-si-ferme Risques
         if !autorisationsService.CONTACTS.estMasque
           li
-            a(href = `/service/${service.id}/rolesResponsabilites`, class = etapeActive === 'contactsUtiles' ? 'actif' : '')
+            a(href = urlDeService('rolesResponsabilites'), class = etapeActive === 'contactsUtiles' ? 'actif' : '')
               .pastille
                 img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
               span.none-si-ferme Contacts utiles
