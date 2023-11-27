@@ -1,10 +1,8 @@
 const express = require('express');
 
-const ActionsSaisie = require('../../modeles/actionsSaisie');
 const Homologation = require('../../modeles/homologation');
 const InformationsHomologation = require('../../modeles/informationsHomologation');
 const ObjetApiStatutHomologation = require('../../modeles/objetsApi/objetApiStatutHomologation');
-const ActionSaisie = require('../../modeles/actionSaisie');
 
 const {
   Permissions,
@@ -37,17 +35,10 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
             };
           }
 
-          const service = new Homologation(donneesService);
-          const actionCreation = new ActionSaisie(
-            referentiel.premiereActionSaisie(),
-            referentiel,
-            service
-          );
           reponse.render('service/creation', {
             InformationsHomologation,
             referentiel,
-            service,
-            actionsSaisie: [actionCreation.toJSON()],
+            service: new Homologation(donneesService),
             etapeActive: 'descriptionService',
           });
         })
@@ -82,7 +73,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         InformationsHomologation,
         referentiel,
         service: homologation,
-        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
         etapeActive: 'descriptionService',
       });
     }
@@ -101,7 +91,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         InformationsHomologation,
         referentiel,
         service: homologation,
-        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
         etapeActive: 'mesures',
         mesures,
         donneesStatutHomologation: new ObjetApiStatutHomologation(
@@ -128,7 +117,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       reponse.render('service/indiceCyber', {
         InformationsHomologation,
         service,
-        actionsSaisie: new ActionsSaisie(referentiel, service).toJSON(),
         etapeActive: 'mesures',
         referentiel,
       });
@@ -145,7 +133,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       reponse.render('service/rolesResponsabilites', {
         InformationsHomologation,
         service: homologation,
-        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
         etapeActive: 'contactsUtiles',
         referentiel,
       });
@@ -163,7 +150,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         InformationsHomologation,
         referentiel,
         service: homologation,
-        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
         etapeActive: 'risques',
       });
     }
@@ -179,7 +165,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       reponse.render('service/dossiers', {
         InformationsHomologation,
         service: homologation,
-        actionsSaisie: new ActionsSaisie(referentiel, homologation).toJSON(),
         etapeActive: 'dossiers',
         premiereEtapeParcours: referentiel.premiereEtapeParcours(),
         referentiel,
@@ -222,7 +207,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           InformationsHomologation,
           referentiel,
           service: h,
-          actionsSaisie: new ActionsSaisie(referentiel, h).toJSON(),
           etapeActive: 'dossiers',
           idEtape,
           peutVoirIndiceCyber: autorisation.aLesPermissions(
