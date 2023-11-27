@@ -90,27 +90,6 @@ module.exports = {
     },
   ],
 
-  actionsSaisie: {
-    descriptionService: {
-      position: 0,
-      description: 'Décrire',
-      sousTitre: 'Évaluer les besoins de sécurité',
-      rubriqueDroit: 'DECRIRE',
-    },
-    mesures: {
-      position: 1,
-      description: 'Sécuriser',
-      sousTitre: "Mesurer et renforcer l'indice cyber",
-      rubriqueDroit: 'SECURISER',
-    },
-    dossiers: {
-      position: 2,
-      description: 'Homologuer',
-      sousTitre: "Générer un dossier d'homologation",
-      rubriqueDroit: 'HOMOLOGUER',
-    },
-  },
-
   statutsAvisDossierHomologation: {
     favorable: { description: 'Favorable' },
     favorableAvecReserve: { description: 'Favorable avec réserve' },
