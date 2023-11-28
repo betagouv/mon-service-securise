@@ -20,7 +20,7 @@ const routesBibliotheques = () => {
   const routes = express.Router();
 
   const ajouteRoutes = (methode) =>
-    routes[methode]('/:nomBibliotheque', async (requete, reponse, suite) => {
+    routes[methode]('/:nomBibliotheque', async (requete, reponse) => {
       const { nomBibliotheque } = requete.params;
       const chemin = CHEMINS_BIBLIOTHEQUES[methode][nomBibliotheque];
 
@@ -35,12 +35,18 @@ const routesBibliotheques = () => {
           {},
           { params: requete.query }
         );
+
         reponse
           .status(reponseServeur.status)
           .type('text/javascript')
           .send(reponseServeur.data);
       } catch (e) {
-        suite();
+        const details = JSON.stringify(e.toJSON());
+        // eslint-disable-next-line no-console
+        console.error(
+          `[ERREUR] Bibliothèque [${methode}] ${chemin}\n${details}`
+        );
+        reponse.sendStatus(400);
       }
     });
 
