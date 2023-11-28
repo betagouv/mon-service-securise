@@ -10,6 +10,7 @@ const {
 const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
+const { unService } = require('../../constructeurs/constructeurService');
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -122,10 +123,13 @@ describe('Le serveur MSS des routes /service/*', () => {
         it(`redirige vers \`${redirectionAttendue}\` avec le droit de lecture sur \`${
           Object.keys(droits)[0] ?? 'aucune rubrique'
         }\``, async () => {
+          const service = unService().construis();
+          service.indiceCyber = () => ({ total: 2 });
           testeur.middleware().reinitialise({
             autorisationACharger: uneAutorisation()
               .avecDroits(droits)
               .construis(),
+            homologationARenvoyer: service,
           });
 
           const reponse = await axios('http://localhost:1234/service/456');
@@ -226,6 +230,12 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('quand requête GET sur `/service/:id/indiceCyber`', () => {
+    beforeEach(() => {
+      const service = unService().construis();
+      service.indiceCyber = () => ({ total: 2 });
+      testeur.middleware().reinitialise({ homologationARenvoyer: service });
+    });
+
     it('recherche le service correspondant', (done) => {
       testeur
         .middleware()
