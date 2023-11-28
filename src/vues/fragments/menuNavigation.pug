@@ -21,6 +21,8 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
           span.nom-action!= nom
           span.sous-titre!= sousTitre
         .statut-saisie.none-si-ferme(class = statutSaisie(statut))
+      if(block)
+        block
 
 .menu-navigation(class = preferencesUtilisateur.etatMenuNavigation === 'ferme' ? 'ferme' : '')
   .actions
@@ -60,6 +62,9 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
           statut: service.mesures.statutSaisie(),
           estVisible: !(autorisationsService.SECURISER.estMasque)
         })
+          a.none-si-ferme#lien-indice-cyber(href=urlDeService('indiceCyber'))
+            | Indice cyber
+            img(src='/statique/assets/images/forme_chevron_bleu_fonce.svg')
         +etapeParcours({
           id: 'dossiers',
           url: urlDeService('dossiers'),
