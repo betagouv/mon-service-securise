@@ -16,7 +16,7 @@ mixin radarIndiceCyber(indicesCyber, indiceMax)
     const angleOrigine = -Math.PI / 2
     const incrementEchelle = rayonMax / nbEchelle;
 
-  svg(
+  svg.radarIndiceCyber(
     width=taille,
     height=taille,
     viewBox=`${zoomX} ${zoomY} ${taille + Math.abs(zoomX * 2)} ${taille + Math.abs(zoomY * 2)}`,
