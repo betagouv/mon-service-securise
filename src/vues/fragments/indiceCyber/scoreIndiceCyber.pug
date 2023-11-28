@@ -1,6 +1,3 @@
-block append styles
-  link(href = '/statique/assets/styles/cartes/indiceCyber/scoreIndiceCyber.css', rel = 'stylesheet')
-
 mixin scoreIndiceCyber(indiceCyber, noteMax)
   - const tranchesIndiceCyber = [{min: 0, max: 1, gradientDebut: '#A226B8', gradientFin: '#8926C9'}, {min: 1, max: 2, gradientDebut: '#513AC8', gradientFin: '#8C26C7'}, {min: 2, max: 3, gradientDebut: '#326FC0', gradientFin: '#4D3DC5'}, {min: 3, max: 4, gradientDebut: '#54B8F6', gradientFin: '#3479C9'}, {min: 4, max: 5, gradientDebut: '#D2DFE6', gradientFin: '#9CACB5'}, {min: 5, max: 6, gradientDebut: '#F2CA5A', gradientFin: '#DBAF2C'}]
   - const cheminCirculaire = (cx, cy, r) => `M ${cx - r}, ${cy} a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0`
@@ -13,18 +10,18 @@ mixin scoreIndiceCyber(indiceCyber, noteMax)
   - const indiceCyberFormatte = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(indiceCyber)
   - const rotationFleche = (indiceCyber / noteMax) * (rotationFlecheMax - rotationFlecheMin) + rotationFlecheMin;
   - const progressionJauge = (indiceCyber / noteMax) * (progressionJaugeMax - progressionJaugeMin) + progressionJaugeMin;
-  svg#score-indice-cyber(viewbox='0 0 160 160' fill='none' xmlns='http://www.w3.org/2000/svg')
+  svg#score-indice-cyber(viewbox='0 0 160 160' fill='none' xmlns='http://www.w3.org/2000/svg' filter='drop-shadow(0px 4.6857147216796875px 23.428573608398438px rgba(26, 68, 139, 0.2))')
     g
       circle(cx='80' cy='80' r='79' fill='white' stroke='#CECECE' stroke-width='2')
       circle(cx='80' cy='80' r='52.5' fill='url(#gradient_fond)')
-      text.note-max(x=105 y=98)= noteMax
+      text.note-max(x=105 y=98 fill='white' font-size='1.5em' opacity='0.8')= noteMax
       line(opacity='0.8' x1='97' y1='100' x2='105' y2='70' stroke='white')
-      text.indice-cyber(x=40 y=90)= indiceCyberFormatte
+      text.indice-cyber(x=40 y=90 fill='white' font-size='2.2em' font-weight='bold')= indiceCyberFormatte
       path(id='courbe-texte-indice-cyber' d=cheminCirculaire(80, 80, 72))
-      text(class='texte-courbe-indice-cyber')
-        textPath(href="#courbe-texte-indice-cyber" startOffset='40') Indice cyber
+      text(fill='#2f3a43' font-size='1em' letter-spacing='3px' font-weight='bold')
+        textPath(href="#courbe-texte-indice-cyber" startOffset='28') INDICE CYBER
       include masqueJauge.scoreIndiceCyber.svg.pug
-      mask#masque_progression(style='mask-type:alpha' maskunits='userSpaceOnUse')
+      mask#masque_progression(maskunits='userSpaceOnUse')
         include masqueJauge.scoreIndiceCyber.svg.pug
       g(mask='url(#masque_progression)')
         path(d=cheminDemiCercle(80, 80, 67) stroke='url(#gradient_progression)' stroke-width='18' transform=`rotate(${progressionJauge})` transform-origin="80 80")
