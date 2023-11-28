@@ -19,6 +19,11 @@ const extraisParametresDescriptionService = (selecteurFormulaire) => {
     params.organisationsResponsables = [params.organisationsResponsables];
   }
 
+  params.nombreOrganisationsUtilisatrices = {
+    borneBasse: 0,
+    borneHaute: 0,
+  };
+
   return params;
 };
 
