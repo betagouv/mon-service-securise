@@ -105,6 +105,10 @@
   column-gap: 16px;
 }
 
+.menu-navigation .etapes li:nth-child(2) {
+  height: 85px;
+}
+
 .menu-navigation .etapes li div {
   display: flex;
   flex-direction: column;
@@ -338,4 +342,24 @@
   font-size: 14px;
   white-space: nowrap;
   transform: translateY(-2px);
+}
+
+.menu-navigation #lien-indice-cyber {
+  margin-top: 8px;
+  margin-left: 44px;
+  padding: 2px 4px;
+  height: auto;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  background: #ffffff;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+}
+
+.menu-navigation #lien-indice-cyber img {
+  transform: translateY(1px);
 }
