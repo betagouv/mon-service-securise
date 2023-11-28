@@ -20,7 +20,7 @@ const routesBibliotheques = () => {
   const routes = express.Router();
 
   const ajouteRoutes = (methode) =>
-    routes[methode]('/:nomBibliotheque', (requete, reponse, suite) => {
+    routes[methode]('/:nomBibliotheque', async (requete, reponse, suite) => {
       const { nomBibliotheque } = requete.params;
       const chemin = CHEMINS_BIBLIOTHEQUES[methode][nomBibliotheque];
 
@@ -29,14 +29,19 @@ const routesBibliotheques = () => {
         return;
       }
 
-      axios[methode](chemin, {}, { params: requete.query })
-        .then((reponseServeur) =>
-          reponse
-            .status(reponseServeur.status)
-            .type('text/javascript')
-            .send(reponseServeur.data)
-        )
-        .catch(suite);
+      try {
+        const reponseServeur = await axios[methode](
+          chemin,
+          {},
+          { params: requete.query }
+        );
+        reponse
+          .status(reponseServeur.status)
+          .type('text/javascript')
+          .send(reponseServeur.data);
+      } catch (e) {
+        suite();
+      }
     });
 
   Object.keys(CHEMINS_BIBLIOTHEQUES).forEach(ajouteRoutes);
