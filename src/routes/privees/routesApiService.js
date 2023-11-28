@@ -58,7 +58,11 @@ const routesApiService = ({
     '/',
     middleware.protegeTrafic(),
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('nomService', 'organisationsResponsables.*'),
+    middleware.aseptise(
+      'nomService',
+      'organisationsResponsables.*',
+      'nombreOrganisationsUtilisatrices.*'
+    ),
     middleware.aseptiseListes([
       { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
       {
@@ -94,7 +98,11 @@ const routesApiService = ({
   routes.put(
     '/:id',
     middleware.trouveService({ [DECRIRE]: ECRITURE }),
-    middleware.aseptise('nomService', 'organisationsResponsables.*'),
+    middleware.aseptise(
+      'nomService',
+      'organisationsResponsables.*',
+      'nombreOrganisationsUtilisatrices.*'
+    ),
     middleware.aseptiseListes([
       { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
       {
