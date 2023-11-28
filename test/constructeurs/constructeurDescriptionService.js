@@ -18,6 +18,7 @@ class ConstructeurDescriptionService {
       risqueJuridiqueFinancierReputationnel: false,
       statutDeploiement: 'unStatutDeploiement',
       typeService: 'unType',
+      nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
     };
   }
 

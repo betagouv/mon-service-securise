@@ -18,6 +18,7 @@ class DescriptionService extends InformationsHomologation {
         'provenanceService',
         'risqueJuridiqueFinancierReputationnel',
         'statutDeploiement',
+        'nombreOrganisationsUtilisatrices',
       ],
       proprietesAtomiquesFacultatives: ['presentation'],
       proprietesListes: [
@@ -73,6 +74,7 @@ class DescriptionService extends InformationsHomologation {
       'risqueJuridiqueFinancierReputationnel',
       'statutDeploiement',
       'typeService',
+      'nombreOrganisationsUtilisatrices',
     ];
   }
 
