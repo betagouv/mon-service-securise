@@ -72,10 +72,6 @@ const routesApiService = ({
     ]),
     async (requete, reponse, suite) => {
       try {
-        requete.body.nombreOrganisationsUtilisatrices ??= {
-          borneBasse: 0,
-          borneHaute: 0,
-        };
         const description = new DescriptionService(requete.body, referentiel);
 
         const idService = await depotDonnees.nouveauService(
