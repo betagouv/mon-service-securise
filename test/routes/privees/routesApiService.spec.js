@@ -62,7 +62,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur
         .middleware()
         .verifieAseptisationParametres(
-          ['nomService', 'organisationsResponsables.*'],
+          [
+            'nomService',
+            'organisationsResponsables.*',
+            'nombreOrganisationsUtilisatrices.*',
+          ],
           { method: 'post', url: 'http://localhost:1234/api/service' },
           done
         );
@@ -200,7 +204,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur
         .middleware()
         .verifieAseptisationParametres(
-          ['nomService', 'organisationsResponsables.*'],
+          [
+            'nomService',
+            'organisationsResponsables.*',
+            'nombreOrganisationsUtilisatrices.*',
+          ],
           { method: 'put', url: 'http://localhost:1234/api/service/456' },
           done
         );
