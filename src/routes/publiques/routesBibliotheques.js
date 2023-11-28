@@ -24,18 +24,19 @@ const routesBibliotheques = () => {
       const { nomBibliotheque } = requete.params;
       const chemin = CHEMINS_BIBLIOTHEQUES[methode][nomBibliotheque];
 
-      if (chemin) {
-        axios[methode](chemin, {}, { params: requete.query })
-          .then((reponseServeur) =>
-            reponse
-              .status(reponseServeur.status)
-              .type('text/javascript')
-              .send(reponseServeur.data)
-          )
-          .catch(suite);
-      } else {
+      if (!chemin) {
         reponse.status(404).send(`Bibliothèque inconnue : ${nomBibliotheque}`);
+        return;
       }
+
+      axios[methode](chemin, {}, { params: requete.query })
+        .then((reponseServeur) =>
+          reponse
+            .status(reponseServeur.status)
+            .type('text/javascript')
+            .send(reponseServeur.data)
+        )
+        .catch(suite);
     });
 
   Object.keys(CHEMINS_BIBLIOTHEQUES).forEach(ajouteRoutes);
