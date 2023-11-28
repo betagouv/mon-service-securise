@@ -110,22 +110,24 @@ const routesApiService = ({
         proprietes: DonneesSensiblesSpecifiques.proprietesItem(),
       },
     ]),
-    (requete, reponse, suite) => {
-      Promise.resolve()
-        .then(() => new DescriptionService(requete.body, referentiel))
-        .then((descriptionService) =>
-          depotDonnees.ajouteDescriptionServiceAHomologation(
-            requete.idUtilisateurCourant,
-            requete.params.id,
-            descriptionService
-          )
-        )
-        .then(() => reponse.send({ idService: requete.homologation.id }))
-        .catch((e) => {
-          if (e instanceof ErreurModele) {
-            reponse.status(422).send(e.message);
-          } else suite(e);
-        });
+    async (requete, reponse, suite) => {
+      try {
+        const descriptionService = new DescriptionService(
+          requete.body,
+          referentiel
+        );
+
+        await depotDonnees.ajouteDescriptionServiceAHomologation(
+          requete.idUtilisateurCourant,
+          requete.params.id,
+          descriptionService
+        );
+
+        reponse.send({ idService: requete.homologation.id });
+      } catch (e) {
+        if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+        else suite(e);
+      }
     }
   );
 
