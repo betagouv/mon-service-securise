@@ -14,7 +14,6 @@ block zone-principale
   - const indiceCyber = service.indiceCyber()
   - const noteMax = referentiel.indiceCyberNoteMax()
   - const trancheIndiceCyber = referentiel.trancheIndiceCyber(indiceCyber.total)
-  - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format
   .conteneur-indice-cyber
     .conteneur-titre
       h1 Sécuriser
@@ -22,7 +21,7 @@ block zone-principale
       h2 L'indice cyber
     .conteneur-descriptif
       .disque-indice
-        +scoreIndiceCyber(formatIndiceCyber, indiceCyber.total, noteMax)
+        +scoreIndiceCyber(indiceCyber.total, noteMax)
       .contenu-descriptif
         p L'indice cyber est une évaluation indicative du niveau de sécurisation du service, calculé à partir des mesures faites et partielles proposées par l'ANSSI dans MonServiceSécurisé.
     .conteneur-plus-details

@@ -1,0 +1,28 @@
+#score-indice-cyber {
+  filter: drop-shadow(
+    0px 4.6857147216796875px 23.428573608398438px rgba(26, 68, 139, 0.2)
+  );
+}
+
+.indice-cyber,
+.note-max {
+  fill: white;
+}
+
+.note-max {
+  font-size: 1.5em;
+  opacity: 0.8;
+}
+
+.indice-cyber {
+  font-size: 2.2em;
+  font-weight: bold;
+}
+
+.texte-courbe-indice-cyber {
+  fill: #2f3a43;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
