@@ -153,31 +153,30 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("demande au dépôt de données d'enregistrer les nouveaux service", (done) => {
+    it("demande au dépôt de données d'enregistrer les nouveaux service", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
+
       const donneesDescriptionService = uneDescriptionValide(
         testeur.referentiel()
       )
         .construis()
         .toJSON();
 
-      testeur.depotDonnees().nouveauService = (
+      testeur.depotDonnees().nouveauService = async (
         idUtilisateur,
         { descriptionService }
       ) => {
         expect(idUtilisateur).to.equal('123');
         expect(descriptionService).to.eql(donneesDescriptionService);
-        return Promise.resolve('456');
+        return '456';
       };
 
-      axios
-        .post('http://localhost:1234/api/service', donneesDescriptionService)
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idService: '456' });
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      const reponse = await axios.post(
+        'http://localhost:1234/api/service',
+        donneesDescriptionService
+      );
+      expect(reponse.status).to.equal(200);
+      expect(reponse.data).to.eql({ idService: '456' });
     });
   });
 
