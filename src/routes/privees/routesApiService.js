@@ -70,26 +70,25 @@ const routesApiService = ({
         proprietes: DonneesSensiblesSpecifiques.proprietesItem(),
       },
     ]),
-    (requete, reponse, suite) => {
-      Promise.resolve()
-        .then(() => new DescriptionService(requete.body, referentiel))
-        .then((description) =>
-          depotDonnees.nouveauService(requete.idUtilisateurCourant, {
-            descriptionService: description.toJSON(),
-          })
-        )
-        .then((idService) => reponse.json({ idService }))
-        .catch((e) => {
-          if (e instanceof ErreurNomServiceDejaExistant)
-            reponse
-              .status(422)
-              .json({ erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } });
-          else if (e instanceof ErreurModele)
-            reponse.status(422).send(e.message);
-          else suite(e);
-        });
+    async (requete, reponse, suite) => {
+      try {
+        const description = new DescriptionService(requete.body, referentiel);
+        const idService = await depotDonnees.nouveauService(
+          requete.idUtilisateurCourant,
+          { descriptionService: description.toJSON() }
+        );
+        reponse.json({ idService });
+      } catch (e) {
+        if (e instanceof ErreurNomServiceDejaExistant)
+          reponse
+            .status(422)
+            .json({ erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } });
+        else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+        else suite(e);
+      }
     }
   );
+
   routes.put(
     '/:id',
     middleware.trouveService({ [DECRIRE]: ECRITURE }),
