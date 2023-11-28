@@ -1,5 +1,7 @@
 extends base
 
+include ../../vues/fragments/indiceCyber/scoreIndiceCyber
+
 mixin chiffre(texte, angle, classe, estUnique)
   - const rayon = estUnique ? '0' : '3em';
   if(texte !== 0)
@@ -76,13 +78,7 @@ block page
         - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
         .contenu
           .score-indice-cyber
-              .logo-indice-cyber
-                img.logo
-                div(class = `disque couleur-indice-cyber-${Math.floor(indiceCyber.total)}`)
-                div(class = `curseur position-${Math.floor(indiceCyber.total)}`)
-                .conteneur-note
-                  span.note= formatIndiceCyber(indiceCyber.total)
-                  span.note-max= `/${noteMax}`
+              +scoreIndiceCyber(indiceCyber.total, noteMax, false)
           .indices-par-categories
             .titre
               p Par catégorie :
