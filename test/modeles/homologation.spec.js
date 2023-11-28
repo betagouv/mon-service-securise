@@ -614,6 +614,7 @@ describe('Une homologation', () => {
           fonctionnalitesSpecifiques: [],
           pointsAcces: [],
           organisationsResponsables: ['ANSSI'],
+          nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         },
         dossiers: [
           {

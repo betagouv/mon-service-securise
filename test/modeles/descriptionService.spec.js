@@ -34,6 +34,7 @@ describe('La description du service', () => {
         provenanceService: 'uneProvenance',
         risqueJuridiqueFinancierReputationnel: true,
         statutDeploiement: 'unStatut',
+        nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
       },
       referentielAvecStatutValide('unStatut')
     );
@@ -55,6 +56,10 @@ describe('La description du service', () => {
       true
     );
     expect(descriptionService.statutDeploiement).to.equal('unStatut');
+    expect(descriptionService.nombreOrganisationsUtilisatrices).to.eql({
+      borneBasse: 1,
+      borneHaute: 5,
+    });
 
     expect(descriptionService.nombreDonneesSensiblesSpecifiques()).to.equal(1);
     expect(descriptionService.nombreFonctionnalitesSpecifiques()).to.equal(1);
@@ -70,6 +75,7 @@ describe('La description du service', () => {
       'risqueJuridiqueFinancierReputationnel',
       'statutDeploiement',
       'typeService',
+      'nombreOrganisationsUtilisatrices',
     ]);
   });
 
@@ -208,6 +214,7 @@ describe('La description du service', () => {
         provenanceService: 'uneProvenance',
         risqueJuridiqueFinancierReputationnel: true,
         statutDeploiement: 'accessible',
+        nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
       },
       referentielAvecStatutValide('accessible')
     );
