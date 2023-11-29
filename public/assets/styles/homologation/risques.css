@@ -94,6 +94,7 @@ ul.niveaux-gravite {
   padding: 0;
 
   line-height: 1.8em;
+  margin-bottom: 0;
 }
 
 .niveaux-gravite .disque {
@@ -117,4 +118,42 @@ ul.niveaux-gravite {
   display: block;
   position: absolute;
   left: 3em;
+}
+
+#risques .description-risques {
+  margin-bottom: 1em;
+  padding-bottom: 2em;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+#risques .carte {
+  margin-top: 1em;
+  padding-top: 1em;
+  background: #fafbfc;
+  border-radius: 4px;
+}
+
+#risques .carte h1 {
+  font-size: 1rem;
+}
+
+#risques .carte h2 {
+  font-size: 0.9rem;
+}
+
+#risques .carte h3 {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+#risques .carte h3 + p {
+  font-size: 0.9rem;
+  font-weight: normal;
+  margin-bottom: 0;
+  color: #08416a;
+}
+
+#risques section {
+  border-top: none;
 }
