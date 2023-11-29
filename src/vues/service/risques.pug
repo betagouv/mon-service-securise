@@ -3,6 +3,12 @@ include ../fragments/carteInformations
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
 
+mixin detailsRisques
+  each niveau in referentiel.infosNiveauxGravite(ordreInverse = true)
+    - const { description, descriptionLongue } = niveau
+    h3= description
+    p= descriptionLongue
+
 block append styles
   link(href = '/statique/assets/styles/homologation/risques.css', rel = 'stylesheet')
 
@@ -14,10 +20,22 @@ block formulaire
   - const estLectureSeule  = autorisationsService.RISQUES.estLectureSeule
   form.homologation#risques
     h1.action Risques de sécurité
-    p.
-      Cliquez sur le curseur pour évaluer l'impact potentiel des risques
-      de sécurité les plus courants sur votre service. Apportez des précisions
-      et ajoutez des risques complémentaires, si nécessaire.
+    p.description-risques
+      | Cliquez sur le curseur pour évaluer l'impact potentiel des risques
+      | de sécurité les plus courants sur votre service. Apportez des précisions
+      | et ajoutez des risques complémentaires, si nécessaire.
+
+    +carteInformations({
+      titre: 'Niveaux de gravité',
+      sousTitre: "Découvrez les 5 niveaux définis par l'ANSSI.",
+      details: 'detailsRisques',
+    })
+      ul.niveaux-gravite
+        each niveau in referentiel.infosNiveauxGravite(ordreInverse = true)
+          - const { couleur, description } = niveau
+          li
+            .disque(class = `${couleur === 'blanc' ? 'cercle blanc' : couleur}`)
+            = description
 
     section
       each donnees, identifiant in referentiel.risques()
@@ -62,22 +80,3 @@ block formulaire
   script(id = 'autorisations-risques', type = 'application/json').
     !{JSON.stringify(autorisationsService.RISQUES)}
   script(type = 'module', src = '/statique/service/risques.js')
-
-block cartes-informations
-  mixin detailsRisques
-    each niveau in referentiel.infosNiveauxGravite(ordreInverse = true)
-      - const { description, descriptionLongue } = niveau
-      h3= description
-      p= descriptionLongue
-
-  +carteInformations({
-    titre: 'Niveaux de gravité',
-    sousTitre: "Découvrez les 5 niveaux définis par l'ANSSI.",
-    details: 'detailsRisques',
-  })
-    ul.niveaux-gravite
-      each niveau in referentiel.infosNiveauxGravite(ordreInverse = true)
-        - const { couleur, description } = niveau
-        li
-          .disque(class = `${ couleur === 'blanc' ? 'cercle blanc' : couleur }`)
-          = description
