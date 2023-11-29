@@ -15,8 +15,17 @@
 
 .zone-hover-point-radar {
   opacity: 0;
+  cursor: pointer;
 }
 
 .zone-hover-point-radar:hover {
   opacity: 1;
+}
+
+.zone-hover-point-radar text {
+  font-size: 0.45em;
+}
+
+.zone-hover-point-radar .fond-zone-hover {
+  filter: drop-shadow(0 0 2px rgba(26, 68, 139, 0.2));
 }
