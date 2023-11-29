@@ -50,5 +50,5 @@ block zone-principale
         if(trancheIndiceCyber.conseilHomologation)
           p= trancheIndiceCyber.conseilHomologation
           .separateur
-        p Durée recommandée de l'homologation
+        p= `Durée d'homologation conseillée ${trancheIndiceCyber.deconseillee ? "en cas de décision d'homologation" : ""}`
         p#duree-recommandee= trancheIndiceCyber.dureeHomologationConseillee
