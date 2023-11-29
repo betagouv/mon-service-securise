@@ -12,3 +12,11 @@
   font-size: 0.4em;
   fill: black;
 }
+
+.zone-hover-point-radar {
+  opacity: 0;
+}
+
+.zone-hover-point-radar:hover {
+  opacity: 1;
+}

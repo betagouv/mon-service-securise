@@ -44,12 +44,21 @@ mixin radarIndiceCyber(indicesCyber, indiceMax)
       )
       if(index != 0)
         text.echelle(x=centre[0] y=(centre[1] - radius) dx=2 dy=2)= index
+    - const pointsIndiceCyber = generePointsValeur(indicesCyber, indiceMax, centre)
     polygon(
       stroke="url(#gradient-lineaire-anssi)"
       stroke-width="1.5"
       stroke-linejoin="round"
-      points=tableauVersPointsPolygone(generePointsValeur(indicesCyber, indiceMax, centre))
+      points=tableauVersPointsPolygone(pointsIndiceCyber)
     )
+    each point in pointsIndiceCyber
+      g.zone-hover-point-radar
+        circle(cx=point[0] cy=point[1] r=4 fill='transparent')
+        circle(cx=point[0] cy=point[1] r=2 fill='url(#gradient-lineaire-point)')
+
     linearGradient(id="gradient-lineaire-anssi" x1=taille/2 y1="0" x2=taille/2 y2=taille gradientUnits="userSpaceOnUse")
       stop(stop-color="#54B8F6")
       stop(offset="1" stop-color="#3479C9")
+    linearGradient(id="gradient-lineaire-point" gradientTransform="rotate(90)")
+      stop(offset="0%" stop-color="#54B8F6")
+      stop(offset="100%" stop-color="#3479C9")
