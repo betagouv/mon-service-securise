@@ -12,7 +12,6 @@ const Autorisation = require('../../modeles/autorisations/autorisation');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
-const { DROITS_VOIR_INDICE_CYBER } = Autorisation;
 
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();
@@ -82,7 +81,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     async (requete, reponse) => {
-      const { homologation, autorisationService } = requete;
+      const { homologation } = requete;
 
       const mesures = moteurRegles.mesures(homologation.descriptionService);
       reponse.render('service/mesures', {
@@ -91,9 +90,6 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         service: homologation,
         etapeActive: 'mesures',
         mesures,
-        peutVoirIndiceCyber: autorisationService.aLesPermissions(
-          DROITS_VOIR_INDICE_CYBER
-        ),
       });
     }
   );
