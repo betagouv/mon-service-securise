@@ -3,7 +3,6 @@ include ../fragments/inputChoix
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
 include ../cartes/indiceCyber
-include ../cartes/recommandationsANSSI
 
 mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
   +inputChoix({
@@ -86,4 +85,3 @@ block cartes-informations
   if peutVoirIndiceCyber
     - const indiceCyber = service.indiceCyber()
     +indiceCyber({referentiel, indiceCyber})
-    +recommandationsANSSI({referentiel, noteObtenue: indiceCyber.total})
