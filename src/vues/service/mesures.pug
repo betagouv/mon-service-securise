@@ -2,7 +2,6 @@ extends ./formulaire
 include ../fragments/inputChoix
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
-include ../cartes/indiceCyber
 
 mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
   +inputChoix({
@@ -79,9 +78,3 @@ block formulaire
     !{JSON.stringify(autorisationsService.SECURISER)}
 
   script(type = 'module', src = '/statique/service/mesures.js')
-
-block cartes-informations
-
-  if peutVoirIndiceCyber
-    - const indiceCyber = service.indiceCyber()
-    +indiceCyber({referentiel, indiceCyber})
