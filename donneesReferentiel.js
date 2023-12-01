@@ -1,8 +1,5 @@
 const { departements } = require('./donneesReferentielDepartements');
 
-const recommandationPoursuiteRenforcement =
-  "L'ANSSI recommande la poursuite du renforcement de la sécurité du service numérique.";
-
 const expiration = (duree) =>
   `${duree.charAt(0).toUpperCase()}${duree.slice(
     1
@@ -32,10 +29,6 @@ module.exports = {
     {
       borneInferieure: 0,
       borneSuperieure: 1,
-      recommandationANSSI:
-        "L'homologation du service est déconseillée ou devrait être limitée à <b>6 mois</b>.",
-      recommandationANSSIComplement:
-        "L'ANSSI recommande de renforcer la sécurité du service numérique avant de procéder à son homologation.",
       deconseillee: true,
       dureeHomologationConseillee: '6 mois',
       conseilHomologation: 'Homologation déconseillée',
@@ -45,10 +38,6 @@ module.exports = {
     {
       borneInferieure: 1,
       borneSuperieure: 2,
-      recommandationANSSI:
-        "L'homologation du service est déconseillée ou devrait être limitée à <b>6 mois</b>.",
-      recommandationANSSIComplement:
-        "L'ANSSI recommande de renforcer la sécurité du service numérique avant de procéder à son homologation.",
       deconseillee: true,
       dureeHomologationConseillee: '6 mois',
       conseilHomologation: 'Homologation déconseillée',
@@ -58,9 +47,6 @@ module.exports = {
     {
       borneInferieure: 2,
       borneSuperieure: 3,
-      recommandationANSSI:
-        "La durée d'homologation du service devrait être limitée à <b>1 an</b>.",
-      recommandationANSSIComplement: recommandationPoursuiteRenforcement,
       dureeHomologationConseillee: '1 an',
       conseilHomologation: 'Continuer à renforcer la sécurité du service',
       description:
@@ -69,9 +55,6 @@ module.exports = {
     {
       borneInferieure: 3,
       borneSuperieure: 4,
-      recommandationANSSI:
-        "La durée d'homologation du service peut aller jusqu'à <b>2 ans</b>.",
-      recommandationANSSIComplement: recommandationPoursuiteRenforcement,
       dureeHomologationConseillee: '2 ans',
       conseilHomologation: 'Continuer à renforcer la sécurité du service',
       description:
@@ -81,9 +64,6 @@ module.exports = {
       borneInferieure: 4,
       borneSuperieure: 5,
       borneSuperieureIncluse: true,
-      recommandationANSSI:
-        "La durée d'homologation du service peut aller jusqu'à <b>3 ans</b>.",
-      recommandationANSSIComplement: recommandationPoursuiteRenforcement,
       dureeHomologationConseillee: '3 ans',
       description:
         "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un très bon niveau de sécurisation face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
