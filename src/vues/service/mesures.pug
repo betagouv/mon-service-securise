@@ -2,7 +2,6 @@ extends ./formulaire
 include ../fragments/inputChoix
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
-include ../cartes/statutHomologation
 include ../cartes/indiceCyber
 include ../cartes/recommandationsANSSI
 
@@ -83,8 +82,6 @@ block formulaire
   script(type = 'module', src = '/statique/service/mesures.js')
 
 block cartes-informations
-  if peutVoirStatutHomologation
-    +statutHomologation({ donneesStatutHomologation })
 
   if peutVoirIndiceCyber
     - const indiceCyber = service.indiceCyber()
