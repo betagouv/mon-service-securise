@@ -2,7 +2,6 @@ const express = require('express');
 
 const Homologation = require('../../modeles/homologation');
 const InformationsHomologation = require('../../modeles/informationsHomologation');
-const ObjetApiStatutHomologation = require('../../modeles/objetsApi/objetApiStatutHomologation');
 
 const {
   Permissions,
@@ -13,8 +12,7 @@ const Autorisation = require('../../modeles/autorisations/autorisation');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
-const { DROITS_VOIR_INDICE_CYBER, DROITS_VOIR_STATUT_HOMOLOGATION } =
-  Autorisation;
+const { DROITS_VOIR_INDICE_CYBER } = Autorisation;
 
 const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
   const routes = express.Router();
@@ -93,15 +91,8 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
         service: homologation,
         etapeActive: 'mesures',
         mesures,
-        donneesStatutHomologation: new ObjetApiStatutHomologation(
-          homologation,
-          referentiel
-        ).donnees(),
         peutVoirIndiceCyber: autorisationService.aLesPermissions(
           DROITS_VOIR_INDICE_CYBER
-        ),
-        peutVoirStatutHomologation: autorisationService.aLesPermissions(
-          DROITS_VOIR_STATUT_HOMOLOGATION
         ),
       });
     }
