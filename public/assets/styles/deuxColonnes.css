@@ -8,9 +8,3 @@ main {
   grid-gap: 2em;
   margin-top: 3em;
 }
-
-.cartes-informations {
-  display: flex;
-  flex-direction: column;
-  row-gap: 2em;
-}
