@@ -7,7 +7,7 @@ header {
 }
 
 .header-gauche .conteneur-logo {
-  width: var(--menu-largeur);
+  margin-right: 52px;
 }
 
 .header-gauche .logo-mss {
