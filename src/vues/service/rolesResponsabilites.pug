@@ -12,11 +12,15 @@ block header-titre-page
   h3
     +texteTronque({texte: service.nomService() || ''})
 
+block titre
+  h1 Contacts utiles
+block sous-titre
+  h2 Enregistrer les coordonnées des personnes importantes pour le service
+
 block formulaire
   - const estLectureSeule  = autorisationsService.CONTACTS.estLectureSeule
   form.homologation#roles-responsabilites
-    h1.action Rôles et responsabilités
-    p.
+    p.informations-complementaires.
       Listez toutes les personnes assurant le bon fonctionnement du service pour les contacter rapidement en cas de besoin.
 
     section
