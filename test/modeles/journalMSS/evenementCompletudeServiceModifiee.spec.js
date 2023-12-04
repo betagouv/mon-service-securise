@@ -7,6 +7,7 @@ const {
   ErreurNombreTotalMesuresManquant,
   ErreurNombreMesuresCompletesManquant,
   ErreurIndiceCyberManquant,
+  ErreurNombreOrganisationsUtilisatricesManquant,
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de complétude modifiée', () => {
@@ -33,6 +34,10 @@ describe('Un événement de complétude modifiée', () => {
         nombreMesuresCompletes: 38,
         detailMesures: [{ idMesure: 'analyseRisques', statut: 'fait' }],
         indiceCyber: { total: 4.1 },
+        nombreOrganisationsUtilisatrices: {
+          borneBasse: 1,
+          borneHaute: 5,
+        },
       },
       { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
     );
@@ -45,6 +50,10 @@ describe('Un événement de complétude modifiée', () => {
         nombreMesuresCompletes: 38,
         detailMesures: [{ idMesure: 'analyseRisques', statut: 'fait' }],
         detailIndiceCyber: [{ categorie: 'total', indice: 4.1 }],
+        nombreOrganisationsUtilisatrices: {
+          borneBasse: 1,
+          borneHaute: 5,
+        },
       },
       date: '17/11/2022',
     });
@@ -60,6 +69,18 @@ describe('Un événement de complétude modifiée', () => {
       { categorie: 'total', indice: 4.1 },
       { categorie: 'gouvernance', indice: 3.8 },
     ]);
+  });
+
+  it("utilise des bornes à « 1 » pour les services dont le nombre d'organisations utilisatrices est à « 0 »", () => {
+    const evenement = unEvenement()
+      .avecNombreOrganisationsUtilisatricesInconnu()
+      .construis()
+      .toJSON();
+
+    expect(evenement.donnees.nombreOrganisationsUtilisatrices).to.eql({
+      borneBasse: 1,
+      borneHaute: 1,
+    });
   });
 
   it("exige que l'identifiant du service soit renseigné", (done) => {
@@ -123,6 +144,19 @@ describe('Un événement de complétude modifiée', () => {
       );
     } catch (e) {
       expect(e).to.be.an(ErreurIndiceCyberManquant);
+      done();
+    }
+  });
+
+  it("exige que le nombre d'organisations utilisatrices soit renseigné", (done) => {
+    try {
+      unEvenement().sans('nombreOrganisationsUtilisatrices').construis();
+
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
+    } catch (e) {
+      expect(e).to.be.an(ErreurNombreOrganisationsUtilisatricesManquant);
       done();
     }
   });

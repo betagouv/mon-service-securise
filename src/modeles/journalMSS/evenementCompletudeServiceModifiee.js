@@ -3,6 +3,7 @@ const {
   ErreurDetailMesuresManquant,
   ErreurIdentifiantServiceManquant,
   ErreurNombreMesuresCompletesManquant,
+  ErreurNombreOrganisationsUtilisatricesManquant,
   ErreurNombreTotalMesuresManquant,
   ErreurIndiceCyberManquant,
 } = require('./erreurs');
@@ -23,6 +24,8 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       if (manque(donnees.detailMesures))
         throw new ErreurDetailMesuresManquant();
       if (manque(donnees.indiceCyber)) throw new ErreurIndiceCyberManquant();
+      if (manque(donnees.nombreOrganisationsUtilisatrices))
+        throw new ErreurNombreOrganisationsUtilisatricesManquant();
     };
 
     const enTableau = (donneesIndiceCyber) =>
@@ -41,6 +44,12 @@ class EvenementCompletudeServiceModifiee extends Evenement {
         idService: adaptateurChiffrement.hacheSha256(idService),
         detailIndiceCyber: enTableau(indiceCyber),
         ...donneesBrutes,
+        nombreOrganisationsUtilisatrices: {
+          borneBasse:
+            Number(donnees.nombreOrganisationsUtilisatrices.borneBasse) || 1,
+          borneHaute:
+            Number(donnees.nombreOrganisationsUtilisatrices.borneHaute) || 1,
+        },
       },
       date
     );
