@@ -21,15 +21,20 @@ block header-titre-page
   h3
     +texteTronque({texte: service.nomService() || ''})
 
+block titre
+  h1 Sécuriser
+
+block sous-titre
+  h2 Mettre en oeuvre des mesures de sécurité adaptées
+
 block formulaire
   - const estLectureSeule  = autorisationsService.SECURISER.estLectureSeule
   form.homologation#mesures
-    h1.action Sécuriser
-    p.
+    p.informations-complementaires.
       Sélectionnez le statut de mise en œuvre de chaque mesure de sécurité
-      et apportez des précisions, si nécessaire.<br>
+      et apportez des précisions, si nécessaire.
       Ces informations permettent de suivre la mise en œuvre des mesures de
-      sécurité adaptées au service et d'évaluer son niveau de sécurité.
+      sécurité adaptées au service et d'évaluer son niveau de sécurité (Indice cyber).
 
     section
       nav
