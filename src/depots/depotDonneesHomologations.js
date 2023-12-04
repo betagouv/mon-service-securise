@@ -257,6 +257,8 @@ const creeDepot = (config = {}) => {
         new EvenementCompletudeServiceModifiee({
           idService: idHomologation,
           ...h.completudeMesures(),
+          nombreOrganisationsUtilisatrices:
+            h.descriptionService.nombreOrganisationsUtilisatrices,
         }).toJSON()
       );
       return h;
@@ -306,6 +308,8 @@ const creeDepot = (config = {}) => {
       new EvenementCompletudeServiceModifiee({
         idService: h.id,
         ...h.completudeMesures(),
+        nombreOrganisationsUtilisatrices:
+          h.descriptionService.nombreOrganisationsUtilisatrices,
       }).toJSON()
     );
     const tauxCompletude =
@@ -379,6 +383,8 @@ const creeDepot = (config = {}) => {
         new EvenementCompletudeServiceModifiee({
           idService: s.id,
           ...s.completudeMesures(),
+          nombreOrganisationsUtilisatrices:
+            s.descriptionService.nombreOrganisationsUtilisatrices,
         }).toJSON()
       ),
       homologations(idUtilisateur).then((hs) => {
