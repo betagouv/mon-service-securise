@@ -6,5 +6,19 @@ main {
   display: grid;
   grid-template-columns: 4fr 1fr;
   grid-gap: 2em;
-  margin-top: 3em;
+}
+
+.titre h1 {
+  font-size: 1.625rem;
+  font-weight: bold;
+  text-align: left;
+  margin: 0;
+}
+
+.sous-titre h2 {
+  font-size: 0.875rem;
+  font-weight: normal;
+  text-align: left;
+  margin: 0 0 32px 0;
+  color: #667892;
 }

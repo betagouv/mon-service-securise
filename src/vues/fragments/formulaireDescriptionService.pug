@@ -8,9 +8,7 @@ mixin formulaireDescriptionService(idHomologation)
   - const estEnCreation = !idHomologation
   - const estLectureSeule  = estEnCreation ? false : autorisationsService.DECRIRE.estLectureSeule
   form.homologation#homologation
-    h1.action Décrire
-    p.
-      Précisez les caractéristiques de votre service pour obtenir des recommandations personnalisées de l'ANSSI.
+    p.informations-complementaires Présentez les caractéristiques de votre service numérique pour obtenir des recommandations personnalisées de l'ANSSI.
     section
       .mention champ obligatoire
       .requis
