@@ -118,27 +118,24 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const indiceCyberNoteMax = () => donnees.indiceCyber?.noteMax || 10;
 
+  const verifieIndiceEstDansTranche = (indiceCyber, tranche) =>
+    indiceCyber >= tranche.borneInferieure &&
+    (tranche.borneSuperieureIncluse
+      ? indiceCyber <= tranche.borneSuperieure
+      : indiceCyber < tranche.borneSuperieure);
+
   const trancheIndiceCyber = (indiceCyber) =>
-    donnees.tranchesIndicesCybers.find(
-      (tranche) =>
-        indiceCyber >= tranche.borneInferieure &&
-        (tranche.borneSuperieureIncluse
-          ? indiceCyber <= tranche.borneSuperieure
-          : indiceCyber < tranche.borneSuperieure)
+    donnees.tranchesIndicesCybers.find((tranche) =>
+      verifieIndiceEstDansTranche(indiceCyber, tranche)
     ) || {};
 
-  const descriptionTrancheIndiceCyber = (indiceCyber) => {
-    const formatIndiceCyber = Intl.NumberFormat('fr', {
-      minimumFractionDigits: 1,
-      maximumFractionDigits: 1,
-    }).format;
-    return (
-      trancheIndiceCyber(indiceCyber)?.description?.replaceAll(
-        '$INDICE_CYBER',
-        formatIndiceCyber(indiceCyber)
-      ) ?? ''
-    );
-  };
+  const descriptionsTranchesIndiceCyber = (indiceCyber) =>
+    donnees.tranchesIndicesCybers
+      .sort((a, b) => a.borneInferieure - b.borneInferieure)
+      .map((tranche) => ({
+        description: tranche.description,
+        trancheCourante: verifieIndiceEstDansTranche(indiceCyber, tranche),
+      }));
 
   const infosNiveauxGravite = (ordreInverse = false) => {
     const niveaux = Object.keys(niveauxGravite()).map((clef) => ({
@@ -263,7 +260,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionFonctionnalite,
     descriptionRisque,
     descriptionStatutMesure,
-    descriptionTrancheIndiceCyber,
+    descriptionsTranchesIndiceCyber,
     descriptionsDonneesCaracterePersonnel,
     descriptionsFonctionnalites,
     donneesCaracterePersonnel,

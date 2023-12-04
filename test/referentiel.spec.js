@@ -687,29 +687,41 @@ describe('Le référentiel', () => {
     });
   });
 
-  describe("sur une demande de description de tranche de l'indice cyber", () => {
-    it("renvoie la description de la tranche, mise en forme avec la valeur de l'indice cyber", () => {
-      const tranche = {
-        borneInferieure: 0,
-        borneSuperieure: 2,
-        description: 'La valeur est $INDICE_CYBER',
-      };
-      const referentiel = Referentiel.creeReferentiel({
-        tranchesIndicesCybers: [tranche],
-      });
+  describe("sur une demande des descriptions des tranches de l'indice cyber", () => {
+    let referentiel;
 
-      expect(referentiel.descriptionTrancheIndiceCyber(1.51)).to.eql(
-        'La valeur est 1,5'
-      );
+    beforeEach(() => {
+      const tranche1 = {
+        borneInferieure: 0,
+        borneSuperieure: 1,
+        description: 'Indice cyber 0-1',
+      };
+      const tranche2 = {
+        borneInferieure: 1,
+        borneSuperieure: 2,
+        description: 'Indice cyber 1-2',
+      };
+      referentiel = Referentiel.creeReferentiel({
+        tranchesIndicesCybers: [tranche2, tranche1],
+      });
     });
 
-    it("reste robuste quand l'indice n'est pas dans une tranche", () => {
-      const tranche = { borneInferieure: 0, borneSuperieure: 2 };
-      const referentiel = Referentiel.creeReferentiel({
-        tranchesIndicesCybers: [tranche],
-      });
+    it("renvoie les descriptions dans l'ordre croissant", () => {
+      const resultat = referentiel.descriptionsTranchesIndiceCyber(1);
+      expect(resultat[0].description).to.eql('Indice cyber 0-1');
+      expect(resultat[1].description).to.eql('Indice cyber 1-2');
+    });
 
-      expect(referentiel.descriptionTrancheIndiceCyber(6)).to.eql('');
+    it("indique dans quel tranche se situe l'indice cyber passé en paramètre", () => {
+      const resultat = referentiel.descriptionsTranchesIndiceCyber(0.5);
+      expect(resultat[0]).to.eql({
+        description: 'Indice cyber 0-1',
+        trancheCourante: true,
+      });
+      expect(resultat[1]).to.eql({
+        description: 'Indice cyber 1-2',
+        trancheCourante: false,
+      });
     });
   });
 
