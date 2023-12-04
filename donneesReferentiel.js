@@ -32,8 +32,7 @@ module.exports = {
       deconseillee: true,
       dureeHomologationConseillee: '6 mois',
       conseilHomologation: 'Homologation déconseillée',
-      description:
-        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un niveau de sécurisation très insuffisant face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
+      description: "Très insuffisant lorsqu'il est < 1",
     },
     {
       borneInferieure: 1,
@@ -41,32 +40,28 @@ module.exports = {
       deconseillee: true,
       dureeHomologationConseillee: '6 mois',
       conseilHomologation: 'Homologation déconseillée',
-      description:
-        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un niveau de sécurisation insuffisant face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
+      description: "Insuffisant lorsqu'il est < 2",
     },
     {
       borneInferieure: 2,
       borneSuperieure: 3,
       dureeHomologationConseillee: '1 an',
       conseilHomologation: 'Continuer à renforcer la sécurité du service',
-      description:
-        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un niveau de sécurisation modéré face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
+      description: "Modéré lorsqu'il est < 3",
     },
     {
       borneInferieure: 3,
       borneSuperieure: 4,
       dureeHomologationConseillee: '2 ans',
       conseilHomologation: 'Continuer à renforcer la sécurité du service',
-      description:
-        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un bon niveau de sécurisation face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
+      description: "Bon lorsqu'il est < 4",
     },
     {
       borneInferieure: 4,
       borneSuperieure: 5,
       borneSuperieureIncluse: true,
       dureeHomologationConseillee: '3 ans',
-      description:
-        "Un indice cyber de $INDICE_CYBER peut être considéré comme reflétant un très bon niveau de sécurisation face aux risques les plus courants. Cette évaluation est indicative et n'est pas une preuve du niveau de sécurité effectif du service.",
+      description: 'Très bon entre 4 et 5',
     },
   ],
 
