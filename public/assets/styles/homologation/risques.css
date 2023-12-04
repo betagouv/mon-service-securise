@@ -121,6 +121,7 @@ ul.niveaux-gravite {
 }
 
 #risques .description-risques {
+  font-size: 1rem;
   margin-bottom: 1em;
   padding-bottom: 2em;
   border-bottom: 1px solid #cbd5e1;
