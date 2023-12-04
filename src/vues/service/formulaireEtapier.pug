@@ -30,13 +30,16 @@ block header-titre-page
     +texteTronque({texte: service.nomService() || ''})
 
 block zone-principale
-  form.homologation
-    h1.action Homologuer
+  .titre
+    h1 Homologuer
 
+
+  form.homologation
     if idEtape
       +barre-progression({ numeroEtapeCourante: referentiel.numeroEtape(idEtape) })
     else
-      h2 Réalisez et suivez les homologations de sécurité pour votre service
+      .sous-titre
+        h2 Gérer un dossier et un projet de décision d'homologation pour se mettre en conformité avec la réglementation
 
     hr
 
