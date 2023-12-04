@@ -40,7 +40,10 @@ block zone-principale
             .titre
               img.icone(src="/statique/assets/images/icone_explication_tranche.svg")
               h4 Quelle est la valeur de l'indice cyber ?
-            p= referentiel.descriptionTrancheIndiceCyber(indiceCyber.total)
+            p Face aux risques les plus courants, un indice cyber peut être considéré comme
+            ul.liste-tranches
+              each tranche in referentiel.descriptionsTranchesIndiceCyber(indiceCyber.total)
+                li(class=`${tranche.trancheCourante ? 'tranche-courante' : ''}`)= tranche.description
     .conteneur-recommandation-anssi
       img.fond(src="/statique/assets/images/fond_recommandation_anssi.svg")
       .titre
