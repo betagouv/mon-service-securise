@@ -16,10 +16,14 @@ block header-titre-page
   h3
     +texteTronque({texte: service.nomService() || ''})
 
+block titre
+  h1 Risques de sécurité
+block sous-titre
+  h2 Évaluer le niveau de gravité des risques cyber les plus courants pour le service
+
 block formulaire
   - const estLectureSeule  = autorisationsService.RISQUES.estLectureSeule
   form.homologation#risques
-    h1.action Risques de sécurité
     p.description-risques
       | Cliquez sur le curseur pour évaluer l'impact potentiel des risques
       | de sécurité les plus courants sur votre service. Apportez des précisions
