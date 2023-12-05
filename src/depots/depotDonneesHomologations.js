@@ -245,7 +245,7 @@ const creeDepot = (config = {}) => {
   const homologations = (idUtilisateur) =>
     p.lis.cellesDeUtilisateur(idUtilisateur);
 
-  const ajouteDescriptionServiceAHomologation = (
+  const ajouteDescriptionServiceAHomologation = async (
     idUtilisateur,
     idHomologation,
     infos
@@ -280,16 +280,20 @@ const creeDepot = (config = {}) => {
       );
     };
 
-    const metsAJourHomologation = (h) =>
-      valideDescriptionService(idUtilisateur, infos, h.id)
-        .then(() =>
-          metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos)
-        )
-        .then(() => p.lis.une(idHomologation))
-        .then(consigneEvenement)
-        .then(envoieTrackingCompletude);
+    const metsAJourHomologation = async (h) => {
+      await valideDescriptionService(idUtilisateur, infos, h.id);
+      await metsAJourDescriptionServiceHomologation(
+        donneesAPersister(h),
+        infos
+      );
 
-    return p.lis.une(idHomologation).then(metsAJourHomologation);
+      const homologationFraiche = await p.lis.une(idHomologation);
+      await consigneEvenement(homologationFraiche);
+      await envoieTrackingCompletude();
+    };
+
+    const h = await p.lis.une(idHomologation);
+    await metsAJourHomologation(h);
   };
 
   const ajouteMesuresAHomologation = async (
