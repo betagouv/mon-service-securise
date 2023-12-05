@@ -174,6 +174,9 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/mesures`', () => {
     beforeEach(() => {
+      const service = unService().avecNomService('un service').construis();
+      service.indiceCyber = () => ({ total: 2 });
+      testeur.middleware().reinitialise({ homologationARenvoyer: service });
       testeur.referentiel().recharge({
         autorisationACharger: uneAutorisation().construis(),
       });

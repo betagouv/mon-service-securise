@@ -169,3 +169,36 @@ main {
   font-weight: normal;
   font-size: 1rem;
 }
+
+.formulaire {
+  position: relative;
+}
+
+.conteneur-indice-cyber {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  align-items: center;
+  cursor: pointer;
+}
+
+.conteneur-indice-cyber svg {
+  width: 4.2em;
+  height: 4.2em;
+}
+
+.conteneur-indice-cyber svg .indice-cyber {
+  font-size: 2.9em;
+}
+
+.conteneur-indice-cyber .cartouche-indice-cyber {
+  border-radius: 8px;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  color: #08416a;
+  font-weight: bold;
+  transform: translateX(12px);
+}

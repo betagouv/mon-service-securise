@@ -2,6 +2,7 @@ extends ../parcoursService
 include ../fragments/inputChoix
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
+include ../fragments/indiceCyber/scoreIndiceCyber
 
 mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
   +inputChoix({
@@ -23,6 +24,9 @@ block header-titre-page
 
 block titre
   h1 Sécuriser
+  a.conteneur-indice-cyber(href="indiceCyber")
+    .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
+    +scoreIndiceCyber(service.indiceCyber().total, referentiel.indiceCyberNoteMax())
 
 block sous-titre
   h2 Mettre en oeuvre des mesures de sécurité adaptées
@@ -35,6 +39,7 @@ block formulaire
       et apportez des précisions, si nécessaire.
       Ces informations permettent de suivre la mise en œuvre des mesures de
       sécurité adaptées au service et d'évaluer son niveau de sécurité (Indice cyber).
+
 
     section
       nav
