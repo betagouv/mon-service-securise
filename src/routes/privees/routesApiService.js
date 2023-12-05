@@ -121,7 +121,7 @@ const routesApiService = ({
           referentiel
         );
 
-        await depotDonnees.ajouteDescriptionServiceAHomologation(
+        await depotDonnees.ajouteDescriptionService(
           requete.idUtilisateurCourant,
           requete.params.id,
           descriptionService

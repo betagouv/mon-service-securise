@@ -51,7 +51,7 @@ const creeDepot = (config = {}) => {
   });
 
   const {
-    ajouteDescriptionServiceAHomologation,
+    ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
     ajouteMesuresAHomologation,
     ajouteRisqueGeneralAHomologation,
@@ -103,7 +103,7 @@ const creeDepot = (config = {}) => {
   return {
     accesAutorise,
     ajouteContributeurAuService,
-    ajouteDescriptionServiceAHomologation,
+    ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
     ajouteMesuresAHomologation,
     ajouteRisqueGeneralAHomologation,

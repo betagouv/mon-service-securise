@@ -186,8 +186,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur `/api/service/:id`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation =
-        async () => {};
+      testeur.depotDonnees().ajouteDescriptionService = async () => {};
     });
 
     it('recherche le service correspondant', (done) => {
@@ -245,7 +244,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('demande au dépôt de données de mettre à jour le service', async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation = async (
+      testeur.depotDonnees().ajouteDescriptionService = async (
         idUtilisateur,
         idService,
         infosGenerales
@@ -277,7 +276,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si la validation des propriétés obligatoires échoue', (done) => {
-      testeur.depotDonnees().ajouteDescriptionServiceAHomologation = () =>
+      testeur.depotDonnees().ajouteDescriptionService = () =>
         Promise.reject(new ErreurNomServiceDejaExistant('oups'));
 
       testeur.verifieRequeteGenereErreurHTTP(

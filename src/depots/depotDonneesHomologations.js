@@ -122,11 +122,7 @@ const creeDepot = (config = {}) => {
       return p.sauvegarde(id, donnees);
     });
 
-  const metsAJourProprieteHomologation = (
-    nomPropriete,
-    idOuHomologation,
-    propriete
-  ) => {
+  const metsAJourProprieteService = (nomPropriete, idOuService, propriete) => {
     const metsAJour = (h) => {
       h[nomPropriete] ||= {};
 
@@ -137,23 +133,16 @@ const creeDepot = (config = {}) => {
       return p.sauvegarde(id, donnees);
     };
 
-    const trouveDonneesHomologation = (param) =>
+    const trouveDonneesService = (param) =>
       typeof param === 'object'
         ? Promise.resolve(param)
         : p.lis.une(param).then((h) => h.donneesAPersister().toutes());
 
-    return trouveDonneesHomologation(idOuHomologation).then(metsAJour);
+    return trouveDonneesService(idOuService).then(metsAJour);
   };
 
-  const metsAJourDescriptionServiceHomologation = (
-    homologationCible,
-    informations
-  ) =>
-    metsAJourProprieteHomologation(
-      'descriptionService',
-      homologationCible,
-      informations
-    );
+  const metsAJourDescriptionService = (serviceCible, informations) =>
+    metsAJourProprieteService('descriptionService', serviceCible, informations);
 
   const remplaceProprieteHomologation = (
     nomPropriete,
@@ -240,23 +229,19 @@ const creeDepot = (config = {}) => {
   };
 
   const ajouteRolesResponsabilitesAHomologation = (...params) =>
-    metsAJourProprieteHomologation('rolesResponsabilites', ...params);
+    metsAJourProprieteService('rolesResponsabilites', ...params);
 
   const homologations = (idUtilisateur) =>
     p.lis.cellesDeUtilisateur(idUtilisateur);
 
-  const ajouteDescriptionServiceAHomologation = async (
-    idUtilisateur,
-    idHomologation,
-    infos
-  ) => {
-    const consigneEvenement = async (h) =>
+  const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
+    const consigneEvenement = async (s) =>
       adaptateurJournalMSS.consigneEvenement(
         new EvenementCompletudeServiceModifiee({
-          idService: idHomologation,
-          ...h.completudeMesures(),
+          idService,
+          ...s.completudeMesures(),
           nombreOrganisationsUtilisatrices:
-            h.descriptionService.nombreOrganisationsUtilisatrices,
+            s.descriptionService.nombreOrganisationsUtilisatrices,
         }).toJSON()
       );
 
@@ -276,15 +261,15 @@ const creeDepot = (config = {}) => {
       );
     };
 
-    const h = await p.lis.une(idHomologation);
-    await valideDescriptionService(idUtilisateur, infos, h.id);
-    await metsAJourDescriptionServiceHomologation(
-      h.donneesAPersister().toutes(),
+    const service = await p.lis.une(idService);
+    await valideDescriptionService(idUtilisateur, infos, service.id);
+    await metsAJourDescriptionService(
+      service.donneesAPersister().toutes(),
       infos
     );
 
-    const homologationFraiche = await p.lis.une(idHomologation);
-    await consigneEvenement(homologationFraiche);
+    const serviceFrais = await p.lis.une(idService);
+    await consigneEvenement(serviceFrais);
     await envoieTrackingCompletude();
   };
 
@@ -462,7 +447,7 @@ const creeDepot = (config = {}) => {
   };
 
   return {
-    ajouteDescriptionServiceAHomologation,
+    ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
     ajouteMesuresAHomologation,
     ajouteRisqueGeneralAHomologation,

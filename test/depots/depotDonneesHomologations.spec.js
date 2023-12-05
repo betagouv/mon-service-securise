@@ -458,11 +458,7 @@ describe('Le dépôt de données des homologations', () => {
         .avecNomService('Nouveau Nom')
         .construis();
 
-      await depot.ajouteDescriptionServiceAHomologation(
-        '999',
-        '123',
-        description
-      );
+      await depot.ajouteDescriptionService('999', '123', description);
 
       const { descriptionService } = await depot.homologation('123');
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
@@ -477,11 +473,7 @@ describe('Le dépôt de données des homologations', () => {
         .avecNomService('Nouveau Nom')
         .construis();
 
-      await depot.ajouteDescriptionServiceAHomologation(
-        '999',
-        '123',
-        description
-      );
+      await depot.ajouteDescriptionService('999', '123', description);
 
       const { descriptionService } = await depotServices.service('123');
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
@@ -493,11 +485,7 @@ describe('Le dépôt de données des homologations', () => {
         .construis();
 
       depot
-        .ajouteDescriptionServiceAHomologation(
-          '999',
-          '123',
-          descriptionIncomplete
-        )
+        .ajouteDescriptionService('999', '123', descriptionIncomplete)
         .then(() =>
           done(
             'La mise à jour de la description du service aurait dû lever une exception'
@@ -518,11 +506,7 @@ describe('Le dépôt de données des homologations', () => {
         .avecPresentation('Une autre présentation')
         .construis();
 
-      await depot.ajouteDescriptionServiceAHomologation(
-        '999',
-        '123',
-        description
-      );
+      await depot.ajouteDescriptionService('999', '123', description);
 
       const { descriptionService } = await depot.homologation('123');
       expect(descriptionService.presentation).to.equal(
@@ -538,11 +522,7 @@ describe('Le dépôt de données des homologations', () => {
       };
       const description = uneDescriptionValide(referentiel).construis();
 
-      await depot.ajouteDescriptionServiceAHomologation(
-        '999',
-        '123',
-        description
-      );
+      await depot.ajouteDescriptionService('999', '123', description);
 
       expect(evenementRecu.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
     });
@@ -566,11 +546,7 @@ describe('Le dépôt de données des homologations', () => {
         )
         .construis();
 
-      await depot.ajouteDescriptionServiceAHomologation(
-        '999',
-        '123',
-        description
-      );
+      await depot.ajouteDescriptionService('999', '123', description);
 
       expect(donneesPassees).to.eql({
         destinataire: 'jean.dupont@mail.fr',
