@@ -250,7 +250,7 @@ const creeDepot = (config = {}) => {
     idHomologation,
     infos
   ) => {
-    const consigneEvenement = (h) => {
+    const consigneEvenement = async (h) =>
       adaptateurJournalMSS.consigneEvenement(
         new EvenementCompletudeServiceModifiee({
           idService: idHomologation,
@@ -259,8 +259,6 @@ const creeDepot = (config = {}) => {
             h.descriptionService.nombreOrganisationsUtilisatrices,
         }).toJSON()
       );
-      return h;
-    };
 
     const envoieTrackingCompletude = async () => {
       const tauxCompletude =
