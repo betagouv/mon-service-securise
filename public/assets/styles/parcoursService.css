@@ -2,12 +2,6 @@ main {
   background-color: white;
 }
 
-.corps {
-  display: grid;
-  grid-template-columns: 4fr 1fr;
-  grid-gap: 2em;
-}
-
 .titre h1 {
   font-size: 1.625rem;
   font-weight: bold;
