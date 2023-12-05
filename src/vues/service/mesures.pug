@@ -18,6 +18,10 @@ mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
 block append styles
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
+  link(href = '/statique/composants-svelte/mesure.css', rel = 'stylesheet')
+
+block append scripts
+  script(type = 'module', src = '/statique/composants-svelte/mesure.js')
 
 block header-titre-page
   h3
@@ -74,7 +78,7 @@ block formulaire
                   p!= donnees.descriptionLongue
     if (!estLectureSeule)
       .enregistrement
-        button.bouton.bouton-secondaire.nouvel-item(type = 'button') Ajouter une mesure spécifique
+        button#ajout-mesure-specifique.bouton.bouton-secondaire.nouvel-item(type = 'button') Ajouter une mesure spécifique
         button.bouton(idHomologation = service.id) Enregistrer
 
   script(id = 'donnees-mesures-generales', type = 'application/json').

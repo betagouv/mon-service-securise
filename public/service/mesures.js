@@ -1,23 +1,26 @@
 import arrangeParametresMesures from '../modules/arrangeParametresMesures.mjs';
 import brancheFiltresMesures from '../modules/interactions/brancheFiltresMesures.mjs';
 import {
-  brancheConteneur,
   brancheValidation,
   declencheValidation,
 } from '../modules/interactions/validation.mjs';
 import parametres from '../modules/parametres.mjs';
-import {
-  brancheAjoutItem,
-  peupleListeItems,
-} from '../modules/saisieListeItems.js';
+import { peupleListeItems } from '../modules/saisieListeItems.js';
 import texteHTML from '../modules/texteHTML.js';
 
 import ajouteModalesInformations from '../modules/interactions/modalesInformations.mjs';
 import basculeEnCoursChargement from '../modules/enregistreRubrique.mjs';
+import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
+import ActionMesure from '../modules/tableauDeBord/actions/ActionMesure.mjs';
 
 $(() => {
-  let indexMaxMesuresSpecifiques = 0;
   const { estLectureSeule } = JSON.parse($('#autorisations-securiser').text());
+  const referentielCategoriesMesures = JSON.parse(
+    $('#referentiel-categories-mesures').text()
+  );
+  const referentielStatutsMesures = JSON.parse(
+    $('#referentiel-statuts-mesures').text()
+  );
 
   const $conteneurModalites = (nom) => {
     const $conteneur = $('<div class="informations-additionnelles"></div>');
@@ -100,9 +103,6 @@ $(() => {
       `;
       return boutonsRadios;
     };
-    const referentielCategoriesMesures = JSON.parse(
-      $('#referentiel-categories-mesures').text()
-    );
     const categories = choixParBoutonsRadios(
       referentielCategoriesMesures,
       'categorie',
@@ -110,9 +110,6 @@ $(() => {
       categorie
     );
 
-    const referentielStatutsMesures = JSON.parse(
-      $('#referentiel-statuts-mesures').text()
-    );
     const statuts = choixParBoutonsRadios(
       referentielStatutsMesures,
       'statut',
@@ -149,22 +146,6 @@ ${statuts}
       `;
   };
 
-  const actionSurZoneSaisieApresAjout = ($conteneurSaisieItem) => {
-    brancheConteneur($conteneurSaisieItem);
-    $("input[name^='description-mesure-specifique-']", $conteneurSaisieItem)
-      .get(0)
-      .scrollIntoView({ behavior: 'smooth', block: 'center' });
-  };
-
-  const brancheAjoutMesureSpecifique = (...params) =>
-    brancheAjoutItem(
-      ...params,
-      zoneSaisieMesureSpecifique,
-      () => (indexMaxMesuresSpecifiques += 1),
-      actionSurZoneSaisieApresAjout,
-      { ordreInverse: true }
-    );
-
   const peupleMesuresSpecifiques = (...params) =>
     peupleListeItems(...params, zoneSaisieMesureSpecifique, {
       ordreInverse: true,
@@ -183,11 +164,10 @@ ${statuts}
   ajouteConteneursModalites();
   peupleFormulaire();
 
-  indexMaxMesuresSpecifiques = peupleMesuresSpecifiques(
+  peupleMesuresSpecifiques(
     '#mesures-specifiques',
     '#donnees-mesures-specifiques'
   );
-  brancheAjoutMesureSpecifique('.nouvel-item', '#mesures-specifiques');
 
   brancheValidation('form#mesures');
 
@@ -210,5 +190,23 @@ ${statuts}
     );
     basculeEnCoursChargement($bouton, false);
     window.location = `/service/${reponse.data.idService}/mesures`;
+  });
+
+  const actionMesure = new ActionMesure();
+  $('#ajout-mesure-specifique').on('click', () => {
+    const mesuresExistantes = parametres('form#mesures');
+    arrangeParametresMesures(mesuresExistantes);
+    gestionnaireTiroir.afficheContenuAction(
+      {
+        action: actionMesure,
+        estSelectionMulitple: false,
+      },
+      {
+        idService: identifiantService,
+        categories: referentielCategoriesMesures,
+        statuts: referentielStatutsMesures,
+        mesuresExistantes,
+      }
+    );
   });
 });
