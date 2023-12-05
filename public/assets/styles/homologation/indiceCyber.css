@@ -154,19 +154,16 @@
   background: #0079d0;
   font-weight: bold;
   color: white;
-  padding: 4px 10px 4px 6px;
+  padding: 4px 10px 4px 8px;
   list-style-type: none;
-  margin-left: -16px;
+  margin-left: -20px;
   display: flex;
   gap: 6px;
   flex-direction: row;
 }
 
 .conteneur-explication-valeur .liste-tranches .tranche-courante:before {
-  content: '';
-  width: 24px;
-  height: 24px;
-  background-image: url('/statique/assets/images/coche_blanche.svg');
+  content: '•';
 }
 
 .contenu-plus-details .conteneur-explication-valeur {
