@@ -280,20 +280,13 @@ const creeDepot = (config = {}) => {
       );
     };
 
-    const metsAJourHomologation = async (h) => {
-      await valideDescriptionService(idUtilisateur, infos, h.id);
-      await metsAJourDescriptionServiceHomologation(
-        donneesAPersister(h),
-        infos
-      );
-
-      const homologationFraiche = await p.lis.une(idHomologation);
-      await consigneEvenement(homologationFraiche);
-      await envoieTrackingCompletude();
-    };
-
     const h = await p.lis.une(idHomologation);
-    await metsAJourHomologation(h);
+    await valideDescriptionService(idUtilisateur, infos, h.id);
+    await metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos);
+
+    const homologationFraiche = await p.lis.une(idHomologation);
+    await consigneEvenement(homologationFraiche);
+    await envoieTrackingCompletude();
   };
 
   const ajouteMesuresAHomologation = async (
