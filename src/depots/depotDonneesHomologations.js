@@ -250,8 +250,6 @@ const creeDepot = (config = {}) => {
     idHomologation,
     infos
   ) => {
-    const donneesAPersister = (h) => h.donneesAPersister().toutes();
-
     const consigneEvenement = (h) => {
       adaptateurJournalMSS.consigneEvenement(
         new EvenementCompletudeServiceModifiee({
@@ -282,7 +280,10 @@ const creeDepot = (config = {}) => {
 
     const h = await p.lis.une(idHomologation);
     await valideDescriptionService(idUtilisateur, infos, h.id);
-    await metsAJourDescriptionServiceHomologation(donneesAPersister(h), infos);
+    await metsAJourDescriptionServiceHomologation(
+      h.donneesAPersister().toutes(),
+      infos
+    );
 
     const homologationFraiche = await p.lis.une(idHomologation);
     await consigneEvenement(homologationFraiche);
