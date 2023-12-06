@@ -116,7 +116,7 @@ $(() => {
     const statuts = choixParBoutonsRadios(
       referentielStatutsMesures,
       'statut',
-      'Niveau de mise en œuvre',
+      'Statut de mise en œuvre',
       statut
     );
 
