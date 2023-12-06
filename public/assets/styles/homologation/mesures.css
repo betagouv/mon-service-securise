@@ -202,3 +202,12 @@ main {
   font-weight: bold;
   transform: translateX(12px);
 }
+
+.conteneur-indice-cyber:hover .cartouche-indice-cyber {
+  background: #dbecf1;
+}
+
+.conteneur-indice-cyber:active .cartouche-indice-cyber {
+  background: #08416a;
+  color: white;
+}
