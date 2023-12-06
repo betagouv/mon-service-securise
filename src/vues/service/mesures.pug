@@ -3,6 +3,7 @@ include ../fragments/inputChoix
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
 include ../fragments/indiceCyber/scoreIndiceCyber
+include ../fragments/jaugeProgressionMesures
 
 mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
   +inputChoix({
@@ -24,9 +25,13 @@ block header-titre-page
 
 block titre
   h1 Sécuriser
-  a.conteneur-indice-cyber(href="indiceCyber")
-    .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
-    +scoreIndiceCyber(service.indiceCyber().total, referentiel.indiceCyberNoteMax())
+  .conteneur-indicateurs
+    .conteneur-jauge-progression
+      .cartouche-progression-mesures des mesures renseignées
+      +jaugeProgressionMesures(pourcentageProgression)
+    a.conteneur-indice-cyber(href="indiceCyber")
+      .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
+      +scoreIndiceCyber(service.indiceCyber().total, referentiel.indiceCyberNoteMax())
 
 block sous-titre
   h2 Mettre en oeuvre des mesures de sécurité adaptées

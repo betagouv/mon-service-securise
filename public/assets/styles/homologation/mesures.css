@@ -178,7 +178,39 @@ main {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
+}
+
+.conteneur-indicateurs {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.jauge-progression-mesures {
+  width: 4.2em;
+  height: 4.2em;
+}
+
+.conteneur-jauge-progression {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
   align-items: center;
+  user-select: none;
+}
+
+.conteneur-jauge-progression .cartouche-progression-mesures {
+  border-radius: 8px;
+  background: #f1f5f9;
+  padding: 8px 12px 8px 60px;
+  color: #08416a;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.conteneur-jauge-progression .jauge-progression-mesures {
+  position: absolute;
 }
 
 .conteneur-indice-cyber {
@@ -205,6 +237,7 @@ main {
   color: #08416a;
   font-weight: bold;
   transform: translateX(12px);
+  white-space: nowrap;
 }
 
 .conteneur-indice-cyber:hover .cartouche-indice-cyber {
