@@ -366,9 +366,9 @@ module.exports = {
   },
 
   statutsMesures: {
-    fait: 'Fait',
-    enCours: 'En cours',
-    nonFait: 'Non fait',
+    fait: 'Faite',
+    enCours: 'Partielle',
+    nonFait: 'Non prise en compte',
   },
 
   mesures: {
