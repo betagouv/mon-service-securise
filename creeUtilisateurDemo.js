@@ -16,6 +16,7 @@ const descriptionService = new DescriptionService(
     statutDeploiement: 'enLigne',
     typeService: ['siteInternet'],
     organisationsResponsables: ['Agglomération de Mansart'],
+    nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
   },
   referentiel
 );
