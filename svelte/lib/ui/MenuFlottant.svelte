@@ -1,4 +1,6 @@
 <script lang="ts">
+  import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
+
   let menuOuvert = false;
   let menuEl: any;
 </script>
@@ -15,12 +17,7 @@
   </div>
 </div>
 
-<svelte:body
-  on:click={(e) => {
-    const clicSurMenu = e.target === menuEl || menuEl?.contains(e.target);
-    if (!clicSurMenu) menuOuvert = false;
-  }}
-/>
+<FermetureSurClicEnDehors bind:doitEtreOuvert={menuOuvert} element={menuEl} />
 
 <style>
   .conteneur {
