@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { MesuresExistantes, MesureSpecifique } from './mesure.d';
+  import Formulaire from '../ui/Formulaire.svelte';
+  import { validation } from '../directives/validation';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -26,55 +28,71 @@
 
 <span>Ajoutée</span>
 
-<label for="intitule" class="requis">
-  Intitulé
-  <textarea
-    bind:value={intitule}
-    name="intitule"
-    placeholder="ex: lorem ipsum"
-    class="intouche"
-    required
-  />
-</label>
+<Formulaire on:validation={enregistreMesure}>
+  <label for="intitule" class="requis">
+    Intitulé
+    <textarea
+      bind:value={intitule}
+      name="intitule"
+      placeholder="ex: lorem ipsum"
+      class="intouche"
+      required
+      use:validation={"L'intitulé est obligatoire. Veuillez le renseigner."}
+    />
+  </label>
 
-<label for="details">
-  Détails sur la mise en œuvre
-  <textarea
-    bind:value={details}
-    name="details"
-    placeholder="ex: lorem ipsum"
-    class="intouche"
-  />
-</label>
+  <label for="details">
+    Détails sur la mise en œuvre
+    <textarea
+      bind:value={details}
+      name="details"
+      placeholder="ex: lorem ipsum"
+      class="intouche"
+    />
+  </label>
 
-<label for="categorie" class="requis">
-  Catégorie
-  <select bind:value={categorie} name="categorie" class="intouche" required>
-    <option value="" disabled selected>Non renseigné</option>
-    {#each Object.entries(categories) as [valeur, label]}
-      <option value={valeur}>{label}</option>
-    {/each}
-  </select>
-</label>
+  <label for="categorie" class="requis">
+    Catégorie
+    <select
+      bind:value={categorie}
+      name="categorie"
+      class="intouche"
+      required
+      use:validation={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
+    >
+      <option value="" disabled selected>Non renseigné</option>
+      {#each Object.entries(categories) as [valeur, label]}
+        <option value={valeur}>{label}</option>
+      {/each}
+    </select>
+  </label>
 
-<label for="statut" class="requis">
-  Statut de mise en œuvre
-  <select bind:value={statut} name="statut" class="intouche" required>
-    <option value="" disabled selected>Non renseigné</option>
-    {#each Object.entries(statuts) as [valeur, label]}
-      <option value={valeur}>{label}</option>
-    {/each}
-  </select>
-</label>
+  <label for="statut" class="requis">
+    Statut de mise en œuvre
+    <select
+      bind:value={statut}
+      name="statut"
+      class="intouche"
+      required
+      use:validation={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
+    >
+      <option value="" disabled selected>Non renseigné</option>
+      {#each Object.entries(statuts) as [valeur, label]}
+        <option value={valeur}>{label}</option>
+      {/each}
+    </select>
+  </label>
 
-<div class="conteneur-bouton">
-  <button
-    on:click={enregistreMesure}
-    class="bouton"
-    class:en-cours-chargement={enCoursEnvoi}
-    disabled={enCoursEnvoi}>Enregistrer</button
-  >
-</div>
+  <div class="conteneur-bouton">
+    <button
+      type="submit"
+      class="bouton"
+      class:en-cours-chargement={enCoursEnvoi}
+      disabled={enCoursEnvoi}
+      >Enregistrer
+    </button>
+  </div>
+</Formulaire>
 
 <style>
   span {
@@ -91,16 +109,21 @@
 
   label {
     font-weight: bold;
+    margin-bottom: 16px;
   }
 
   select {
     appearance: auto;
   }
 
+  textarea {
+    resize: none;
+  }
+
   textarea,
   select {
     margin-top: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 0;
   }
 
   label.requis:before {
@@ -113,5 +136,27 @@
     margin-top: 24px;
     display: flex;
     justify-content: end;
+  }
+
+  :global(.erreur-champ-saisie) {
+    margin: 4px 0 0 0;
+    color: var(--rose-anssi);
+    font-weight: normal;
+    flex-direction: row;
+  }
+
+  :global(.erreur-champ-saisie:before) {
+    content: '';
+    display: flex;
+    background-image: url('/statique/assets/images/icone_attention_rose_2.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+
+  :global(textarea.invalide, select.invalide) {
+    border-color: var(--rose-anssi);
   }
 </style>
