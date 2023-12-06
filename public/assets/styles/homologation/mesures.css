@@ -174,10 +174,14 @@ main {
   position: relative;
 }
 
+.titre {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .conteneur-indice-cyber {
-  position: absolute;
-  top: 0;
-  right: 0;
   display: flex;
   flex-direction: row;
   gap: 0;
