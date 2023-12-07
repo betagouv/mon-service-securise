@@ -305,7 +305,7 @@ const creeDepot = (config = {}) => {
       utilisateur.email,
       tauxCompletude
     );
-    busEvenements.publie(new EvenementMesuresServiceModifiees());
+    await busEvenements.publie(new EvenementMesuresServiceModifiees());
   };
 
   const toutesHomologations = () => p.lis.toutes();

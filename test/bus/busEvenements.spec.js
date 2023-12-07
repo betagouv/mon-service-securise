@@ -44,7 +44,7 @@ describe("Le bus d'événements", () => {
     expect(compteur).to.be(1);
   });
 
-  it("appelle tous les abonnés du type d'événement publié", () => {
+  it("appelle tous les abonnés du type d'événement publié", async () => {
     let compteur = 0;
 
     const bus = creeBusEvenements();
@@ -55,7 +55,7 @@ describe("Le bus d'événements", () => {
       compteur += 10;
     });
 
-    bus.publie(new EvenementTestA());
+    await bus.publie(new EvenementTestA());
 
     expect(compteur).to.be(11);
   });
@@ -104,5 +104,19 @@ describe("Le bus d'événements", () => {
     bus.publie(new EvenementTestA());
 
     expect(erreurEnregistree).to.eql(new Error('BOUM'));
+  });
+
+  it('éxecute des handlers asynchrones', (done) => {
+    let compteur = 0;
+
+    const bus = creeBusEvenements();
+    bus.abonne(EvenementTestA, () =>
+      Promise.resolve().then(() => (compteur += 1))
+    );
+
+    bus.publie(new EvenementTestA()).then(() => {
+      expect(compteur).to.be(1);
+      done();
+    });
   });
 });
