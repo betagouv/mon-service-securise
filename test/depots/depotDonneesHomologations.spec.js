@@ -52,6 +52,7 @@ const {
   Rubriques,
   Permissions,
 } = require('../../src/modeles/autorisations/gestionDroits');
+const EvenementMesuresServiceModifiees = require('../../src/bus/evenementMesuresServiceModifiees');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -196,6 +197,7 @@ describe('Le dépôt de données des homologations', () => {
     let adaptateurPersistance;
     let adaptateurJournalMSS;
     let depot;
+    let busEvenements;
 
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { gouvernance: 'Gouvernance' },
@@ -204,6 +206,12 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     beforeEach(() => {
+      busEvenements = {
+        dernierEvenementRecu: null,
+        publie: (e) => {
+          busEvenements.dernierEvenementRecu = e;
+        },
+      };
       const utilisateur = unUtilisateur().avecId('789').donnees;
       const autorisation = uneAutorisation().deProprietaireDeService(
         '789',
@@ -221,6 +229,7 @@ describe('Le dépôt de données des homologations', () => {
         .avecReferentiel(referentiel)
         .avecAdaptateurPersistance(adaptateurPersistance)
         .avecJournalMSS(adaptateurJournalMSS)
+        .avecBusEvenements(busEvenements)
         .construis();
     });
 
@@ -390,6 +399,24 @@ describe('Le dépôt de données des homologations', () => {
           tauxCompletudeMoyenTousServices: 18,
         },
       });
+    });
+
+    it("publie un événement de 'Mesures service modifiées'", async () => {
+      await depot.ajouteMesuresAHomologation(
+        '123',
+        '789',
+        [
+          new MesureGenerale(
+            { id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT },
+            referentiel
+          ),
+        ],
+        new MesuresSpecifiques()
+      );
+
+      expect(busEvenements.dernierEvenementRecu).to.be.an(
+        EvenementMesuresServiceModifiees
+      );
     });
   });
 

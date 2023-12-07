@@ -14,6 +14,7 @@ const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenem
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
 const Autorisation = require('../modeles/autorisations/autorisation');
+const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresServiceModifiees');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -90,6 +91,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     adaptateurTracking = fabriqueAdaptateurTracking(),
     adaptateurUUID,
+    busEvenements,
     referentiel,
     serviceTracking = fabriqueServiceTracking(),
   } = config;
@@ -303,6 +305,7 @@ const creeDepot = (config = {}) => {
       utilisateur.email,
       tauxCompletude
     );
+    busEvenements.publie(new EvenementMesuresServiceModifiees());
   };
 
   const toutesHomologations = () => p.lis.toutes();

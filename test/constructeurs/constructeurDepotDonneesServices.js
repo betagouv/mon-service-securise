@@ -17,6 +17,7 @@ class ConstructeurDepotDonneesServices {
     this.adaptateurTracking = fabriqueAdaptateurTrackingMemoire();
     this.adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
     this.adaptateurUUID = { genereUUID: () => 'unUUID' };
+    this.busEvenements = { publie: () => {}, abonne: () => {} };
     this.referentiel = Referentiel.creeReferentielVide();
     this.serviceTracking = fabriqueServiceTracking();
   }
@@ -46,12 +47,18 @@ class ConstructeurDepotDonneesServices {
     return this;
   }
 
+  avecBusEvenements(busEvenements) {
+    this.busEvenements = busEvenements;
+    return this;
+  }
+
   construis() {
     return DepotDonneesHomologations.creeDepot({
       adaptateurJournalMSS: this.adaptateurJournalMSS,
       adaptateurPersistance: this.constructeurAdaptateurPersistance.construis(),
       adaptateurTracking: this.adaptateurTracking,
       adaptateurUUID: this.adaptateurUUID,
+      busEvenements: this.busEvenements,
       referentiel: this.referentiel,
       serviceTracking: this.serviceTracking,
     });
