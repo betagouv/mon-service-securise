@@ -9,14 +9,16 @@ class BusEvenements {
     this.handlers[classeEvenement.name].push(handler);
   }
 
-  publie(evenement) {
-    this.handlers[evenement.constructor.name].forEach((handler) => {
+  async publie(evenement) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const handler of this.handlers[evenement.constructor.name]) {
       try {
-        handler(evenement);
+        // eslint-disable-next-line no-await-in-loop
+        await handler(evenement);
       } catch (e) {
         this.adaptateurGestionErreur.logueErreur(e);
       }
-    });
+    }
   }
 }
 
