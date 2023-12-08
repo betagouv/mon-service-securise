@@ -31,7 +31,7 @@ const {
   verifieCoherenceDesDroits,
 } = require('../../modeles/autorisations/gestionDroits');
 
-const { ECRITURE } = Permissions;
+const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
 
 const routesApiService = ({
@@ -41,6 +41,7 @@ const routesApiService = ({
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
+  moteurRegles,
 }) => {
   const routes = express.Router();
 
@@ -147,6 +148,32 @@ const routesApiService = ({
         referentiel
       );
       reponse.json(donnees);
+    }
+  );
+
+  routes.get(
+    '/:id/mesures',
+    middleware.trouveService({ [SECURISER]: LECTURE }),
+    (requete, reponse) => {
+      const { homologation: service } = requete;
+      const { mesuresGenerales, mesuresSpecifiques } = service.mesures.toJSON();
+
+      const mesuresPersonnalisees = Object.entries(
+        moteurRegles.mesures(service.descriptionService)
+      ).reduce((acc, [idMesure, donneesMesure]) => {
+        const mesure = mesuresGenerales.find((m) => m.id === idMesure);
+        return {
+          ...acc,
+          [idMesure]: {
+            ...donneesMesure,
+            ...(mesure && { ...mesure, id: undefined }),
+          },
+        };
+      }, {});
+      reponse.json({
+        mesuresGenerales: mesuresPersonnalisees,
+        mesuresSpecifiques,
+      });
     }
   );
 
