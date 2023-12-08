@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { MesuresExistantes, MesureSpecifique } from './mesure.d';
   import Formulaire from '../ui/Formulaire.svelte';
-  import { validation } from '../directives/validation';
+  import { validationChamp } from '../directives/validationChamp';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -37,7 +37,7 @@
       placeholder="Description de la mesure"
       class="intouche"
       required
-      use:validation={"L'intitulé est obligatoire. Veuillez le renseigner."}
+      use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
     />
   </label>
 
@@ -58,7 +58,7 @@
       id="categorie"
       class="intouche"
       required
-      use:validation={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
+      use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
     >
       <option value="" disabled selected>Non renseigné</option>
       {#each Object.entries(categories) as [valeur, label]}
@@ -74,7 +74,7 @@
       id="statut"
       class="intouche"
       required
-      use:validation={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
+      use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
     >
       <option value="" disabled selected>Non renseigné</option>
       {#each Object.entries(statuts) as [valeur, label]}
