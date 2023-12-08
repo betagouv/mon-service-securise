@@ -34,7 +34,7 @@
     <textarea
       bind:value={intitule}
       name="intitule"
-      placeholder="ex: lorem ipsum"
+      placeholder="Description de la mesure"
       class="intouche"
       required
       use:validation={"L'intitulé est obligatoire. Veuillez le renseigner."}
@@ -46,7 +46,7 @@
     <textarea
       bind:value={details}
       name="details"
-      placeholder="ex: lorem ipsum"
+      placeholder="Modalités de mise en œuvre (facultatif)"
       class="intouche"
     />
   </label>
