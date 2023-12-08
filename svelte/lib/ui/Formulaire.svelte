@@ -3,13 +3,14 @@
 
   let formulaire: HTMLFormElement;
 
-  const dispatch = createEventDispatcher();
-  const surValidation = () => {
+  const dispatch = createEventDispatcher<{ formulaireValide: null }>();
+
+  const verifieValidite = () => {
     formulaire.reportValidity();
-    if (formulaire.checkValidity()) dispatch('validation');
+    if (formulaire.checkValidity()) dispatch('formulaireValide');
   };
 </script>
 
-<form bind:this={formulaire} on:submit|preventDefault={surValidation}>
+<form bind:this={formulaire} on:submit|preventDefault={verifieValidite}>
   <slot />
 </form>
