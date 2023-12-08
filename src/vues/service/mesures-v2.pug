@@ -1,0 +1,41 @@
+extends ../parcoursService
+include ../fragments/texteTronque
+include ../fragments/indiceCyber/scoreIndiceCyber
+include ../fragments/jaugeProgressionMesures
+
+block append styles
+  link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
+  link(href = '/statique/composants-svelte/mesure.css', rel = 'stylesheet')
+  link(href = '/statique/composants-svelte/tableauDesMesures.css', rel = 'stylesheet')
+
+block append scripts
+  script(type = 'module', src = '/statique/composants-svelte/mesure.js')
+  script(type = 'module', src = '/statique/composants-svelte/tableauDesMesures.js')
+  script(type = 'module', src = '/statique/service/mesures-v2.js')
+  script(id = 'donnees-referentiel-mesures-generales', type = 'application/json').
+    !{JSON.stringify(mesures || {})}
+  script(id = 'referentiel-categories-mesures', type = 'application/json').
+    !{JSON.stringify(referentiel.categoriesMesures())}
+  script(id = 'referentiel-statuts-mesures', type = 'application/json').
+    !{JSON.stringify(referentiel.statutsMesures())}
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
+
+block titre
+  h1 Sécuriser
+  .conteneur-indicateurs
+    .conteneur-jauge-progression
+      .cartouche-progression-mesures des mesures renseignées
+      +jaugeProgressionMesures(pourcentageProgression)
+    a.conteneur-indice-cyber(href="indiceCyber")
+      .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
+      +scoreIndiceCyber(service.indiceCyber().total, referentiel.indiceCyberNoteMax())
+
+block sous-titre
+  h2 Mettre en oeuvre des mesures de sécurité adaptées
+
+block formulaire
+  - const estLectureSeule  = autorisationsService.SECURISER.estLectureSeule
+  #tableau-des-mesures

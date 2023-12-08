@@ -83,12 +83,26 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     async (requete, reponse) => {
       const { homologation } = requete;
 
+      const { v } = requete.query;
+
       const mesures = moteurRegles.mesures(homologation.descriptionService);
       const completude = homologation.completudeMesures();
       const pourcentageProgression = Math.round(
         (completude.nombreMesuresCompletes / completude.nombreTotalMesures) *
           100
       );
+      if (v === '2') {
+        reponse.render('service/mesures-v2', {
+          InformationsHomologation,
+          referentiel,
+          service: homologation,
+          etapeActive: 'mesures',
+          pourcentageProgression,
+          mesures,
+        });
+        return;
+      }
+
       reponse.render('service/mesures', {
         InformationsHomologation,
         referentiel,
