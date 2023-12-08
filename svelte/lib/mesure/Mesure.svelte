@@ -31,7 +31,8 @@
 <Formulaire on:formulaireValide={enregistreMesure}>
   <label for="intitule" class="requis">
     Intitulé
-    <textarea
+    <input
+      type="text"
       bind:value={intitule}
       id="intitule"
       placeholder="Description de la mesure"
@@ -120,6 +121,7 @@
     resize: none;
   }
 
+  input[type='text'],
   textarea,
   select {
     margin-top: 8px;
