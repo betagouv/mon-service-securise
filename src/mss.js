@@ -217,6 +217,7 @@ const creeServeur = (
       adaptateurZip,
       procedures,
       serviceAnnuaire,
+      moteurRegles,
     })
   );
 

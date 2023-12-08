@@ -37,6 +37,7 @@ const routesApiPrivee = ({
   adaptateurZip,
   procedures,
   serviceAnnuaire,
+  moteurRegles,
 }) => {
   const routes = express.Router();
 
@@ -135,6 +136,7 @@ const routesApiPrivee = ({
       adaptateurHorloge,
       adaptateurPdf,
       adaptateurZip,
+      moteurRegles,
     })
   );
 
