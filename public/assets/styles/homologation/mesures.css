@@ -174,7 +174,7 @@ main {
   position: relative;
 }
 
-.titre {
+.titre-page {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
