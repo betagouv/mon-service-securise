@@ -28,7 +28,7 @@
 
 <span>Ajoutée</span>
 
-<Formulaire on:validation={enregistreMesure}>
+<Formulaire on:formulaireValide={enregistreMesure}>
   <label for="intitule" class="requis">
     Intitulé
     <textarea
