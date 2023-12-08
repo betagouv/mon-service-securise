@@ -33,7 +33,7 @@
     Intitulé
     <textarea
       bind:value={intitule}
-      name="intitule"
+      id="intitule"
       placeholder="Description de la mesure"
       class="intouche"
       required
@@ -45,7 +45,7 @@
     Détails sur la mise en œuvre
     <textarea
       bind:value={details}
-      name="details"
+      id="details"
       placeholder="Modalités de mise en œuvre (facultatif)"
       class="intouche"
     />
@@ -55,7 +55,7 @@
     Catégorie
     <select
       bind:value={categorie}
-      name="categorie"
+      id="categorie"
       class="intouche"
       required
       use:validation={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
@@ -71,7 +71,7 @@
     Statut de mise en œuvre
     <select
       bind:value={statut}
-      name="statut"
+      id="statut"
       class="intouche"
       required
       use:validation={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
