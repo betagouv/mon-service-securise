@@ -19,6 +19,7 @@ const creeDepot = (config = {}) => {
     adaptateurTracking = fabriqueAdaptateurTracking(),
     adaptateurUUID = adaptateurUUIDParDefaut,
     referentiel = Referentiel.creeReferentiel(),
+    busEvenements,
   } = config;
 
   const depotHomologations = depotDonneesHomologations.creeDepot({
@@ -27,6 +28,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     adaptateurTracking,
     adaptateurUUID,
+    busEvenements,
     referentiel,
   });
 

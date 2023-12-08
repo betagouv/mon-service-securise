@@ -195,7 +195,6 @@ describe('Le dépôt de données des homologations', () => {
 
   describe("sur demande d'associations de mesures à un service", () => {
     let adaptateurPersistance;
-    let adaptateurJournalMSS;
     let depot;
     let busEvenements;
 
@@ -224,11 +223,9 @@ describe('Le dépôt de données des homologations', () => {
         .ajouteUnService(service)
         .ajouteUneAutorisation(autorisation)
         .ajouteUnUtilisateur(utilisateur);
-      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
         .avecAdaptateurPersistance(adaptateurPersistance)
-        .avecJournalMSS(adaptateurJournalMSS)
         .avecBusEvenements(busEvenements)
         .construis();
     });
@@ -346,27 +343,6 @@ describe('Le dépôt de données des homologations', () => {
       expect(mesuresSpecifiques.item(0).description).to.equal(
         'Une mesure spécifique'
       );
-    });
-
-    it('consigne un événement de changement de complétude du service', async () => {
-      let evenementRecu = {};
-      adaptateurJournalMSS.consigneEvenement = (evenement) => {
-        evenementRecu = evenement;
-        return Promise.resolve();
-      };
-      const generales = [];
-      const specifiques = new MesuresSpecifiques({
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
-      });
-
-      await depot.ajouteMesuresAHomologation(
-        '123',
-        '789',
-        generales,
-        specifiques
-      );
-
-      expect(evenementRecu.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
     });
 
     it("l'adaptateur de tracking est utilisé pour envoyé la complétude lors de modification de mesures", async () => {

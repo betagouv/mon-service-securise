@@ -28,18 +28,30 @@ const {
   adaptateurProtection,
 } = require('./src/adaptateurs/adaptateurProtection');
 const { fabriqueProcedures } = require('./src/routes/procedures');
+const BusEvenements = require('./src/bus/busEvenements');
+const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
+const { cableTousLesAbonnes } = require('./src/bus/cablage');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
+const adaptateurJournal = fabriqueAdaptateurJournalMSS();
 const serviceAnnuaire = fabriqueAnnuaire({
   adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
   adaptateurPersistance,
 });
+const busEvenements = new BusEvenements({ adaptateurGestionErreur });
 
 const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
-const depotDonnees = DepotDonnees.creeDepot();
+
+cableTousLesAbonnes(busEvenements, { adaptateurJournal });
+
+const depotDonnees = DepotDonnees.creeDepot({
+  adaptateurJournalMSS: adaptateurJournal,
+  busEvenements,
+});
+
 const middleware = Middleware({
   adaptateurChiffrement,
   adaptateurEnvironnement,
@@ -47,6 +59,7 @@ const middleware = Middleware({
   adaptateurProtection,
   depotDonnees,
 });
+
 const procedures = fabriqueProcedures({
   depotDonnees,
   adaptateurMail,
