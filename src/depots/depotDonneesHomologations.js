@@ -286,15 +286,8 @@ const creeDepot = (config = {}) => {
       idHomologation,
       specifiques
     );
-    const h = await p.lis.une(idHomologation);
-    await adaptateurJournalMSS.consigneEvenement(
-      new EvenementCompletudeServiceModifiee({
-        idService: h.id,
-        ...h.completudeMesures(),
-        nombreOrganisationsUtilisatrices:
-          h.descriptionService.nombreOrganisationsUtilisatrices,
-      }).toJSON()
-    );
+    const service = await p.lis.une(idHomologation);
+
     const tauxCompletude =
       await serviceTracking.completudeDesServicesPourUtilisateur(
         { homologations },
@@ -305,7 +298,9 @@ const creeDepot = (config = {}) => {
       utilisateur.email,
       tauxCompletude
     );
-    await busEvenements.publie(new EvenementMesuresServiceModifiees());
+    await busEvenements.publie(
+      new EvenementMesuresServiceModifiees({ service })
+    );
   };
 
   const toutesHomologations = () => p.lis.toutes();
