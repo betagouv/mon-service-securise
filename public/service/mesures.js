@@ -197,10 +197,7 @@ ${statuts}
     const mesuresExistantes = parametres('form#mesures');
     arrangeParametresMesures(mesuresExistantes);
     gestionnaireTiroir.afficheContenuAction(
-      {
-        action: actionMesure,
-        estSelectionMulitple: false,
-      },
+      { action: actionMesure },
       {
         idService: identifiantService,
         categories: referentielCategoriesMesures,
