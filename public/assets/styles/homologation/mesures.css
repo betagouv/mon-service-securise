@@ -185,6 +185,8 @@ main {
   display: flex;
   flex-direction: row;
   gap: 1em;
+  position: absolute;
+  right: 0;
 }
 
 .jauge-progression-mesures {
