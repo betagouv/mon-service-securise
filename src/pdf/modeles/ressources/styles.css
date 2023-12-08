@@ -696,8 +696,8 @@ p {
   font-size: 10px;
 }
 
-.synthese-securite .total :is(.contenu, .legende) {
-  flex: 1;
+.synthese-securite .total.conteneur {
+  justify-content: space-between;
 }
 
 .synthese-securite .total .contenu {
