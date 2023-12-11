@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Mesures, MesuresDTO } from './tableauDesMesures.d';
+  import type { Mesures } from './tableauDesMesures.d';
   import LigneMesure from './ligne/LigneMesure.svelte';
   import { recupereMesures, enregistreMesures } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
@@ -13,11 +13,27 @@
     mesures = await recupereMesures(idService);
   });
 
+  let etatEnregistrement = {
+    enCours: false,
+    premierEnregistrementFait: false,
+  };
   const metAJourMesures = async () => {
+    etatEnregistrement.enCours = true;
     await enregistreMesures(idService, mesures);
+    etatEnregistrement.enCours = false;
+    if (!etatEnregistrement.premierEnregistrementFait)
+      etatEnregistrement.premierEnregistrementFait = true;
   };
 </script>
 
+<div class="barre-actions">
+  {#if etatEnregistrement.enCours}
+    <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
+  {/if}
+  {#if !etatEnregistrement.enCours && etatEnregistrement.premierEnregistrementFait}
+    <p class="enregistrement-termine">Enregistré</p>
+  {/if}
+</div>
 <div class="tableau-des-mesures">
   {#if mesures}
     {#each Object.entries(mesures.mesuresGenerales) as [id, mesure] (id)}
@@ -45,3 +61,57 @@
     {/each}
   {/if}
 </div>
+
+<style>
+  .barre-actions {
+    display: flex;
+    align-items: flex-start;
+    padding: 1em 0;
+  }
+
+  .barre-actions p {
+    margin: 0;
+  }
+
+  .enregistrement-en-cours,
+  .enregistrement-termine {
+    font-size: 1.1em;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .enregistrement-en-cours:before,
+  .enregistrement-termine:before {
+    content: '';
+    display: flex;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .enregistrement-en-cours {
+    color: #0c5c98;
+  }
+
+  .enregistrement-termine {
+    color: #0e972b;
+  }
+
+  .enregistrement-en-cours:before {
+    background-image: url('/statique/assets/images/icone_enregistrement_en_cours.svg');
+    animation: rotation 1s linear infinite;
+  }
+
+  @keyframes rotation {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .enregistrement-termine:before {
+    background-image: url('/statique/assets/images/icone_enregistrement_termine.svg');
+  }
+</style>
