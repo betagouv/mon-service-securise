@@ -12,8 +12,6 @@ block append scripts
   script(type = 'module', src = '/statique/composants-svelte/mesure.js')
   script(type = 'module', src = '/statique/composants-svelte/tableauDesMesures.js')
   script(type = 'module', src = '/statique/service/mesures-v2.js')
-  script(id = 'donnees-referentiel-mesures-generales', type = 'application/json').
-    !{JSON.stringify(mesures || {})}
   script(id = 'referentiel-categories-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.categoriesMesures())}
   script(id = 'referentiel-statuts-mesures', type = 'application/json').
