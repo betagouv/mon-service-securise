@@ -307,23 +307,17 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne la représenation des mesures en utilisant `objetGetMesures`', async () => {
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [
+            { id: 'mesureA', statut: 'fait', modalites: 'un commentaire' },
+          ],
+        },
+        referentiel.creeReferentiel({ mesures: { mesureA: {} } })
+      );
+
       testeur.middleware().reinitialise({
-        homologationARenvoyer: unService()
-          .avecMesures(
-            new Mesures(
-              {
-                mesuresGenerales: [
-                  {
-                    id: 'mesureA',
-                    statut: 'fait',
-                    modalites: 'un commentaire',
-                  },
-                ],
-              },
-              referentiel.creeReferentiel({ mesures: { mesureA: {} } })
-            )
-          )
-          .construis(),
+        homologationARenvoyer: unService().avecMesures(mesures).construis(),
       });
 
       testeur.moteurRegles().mesures = () => ({

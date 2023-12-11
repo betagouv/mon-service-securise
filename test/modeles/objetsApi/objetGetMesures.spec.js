@@ -29,11 +29,7 @@ describe("L'objet d'API de `GET /mesures`", () => {
         new Mesures(
           {
             mesuresGenerales: [
-              {
-                id: 'mesureA',
-                statut: 'fait',
-                modalites: 'un commentaire',
-              },
+              { id: 'mesureA', statut: 'fait', modalites: 'un commentaire' },
             ],
           },
           referentiel.creeReferentiel({ mesures: { mesureA: {} } })
@@ -42,9 +38,7 @@ describe("L'objet d'API de `GET /mesures`", () => {
       .construis();
 
     const moteurRegles = {
-      mesures: () => ({
-        mesureA: { description: 'Mesure A' },
-      }),
+      mesures: () => ({ mesureA: { description: 'Mesure A' } }),
     };
 
     const resultat = objetGetMesures.donnees(service, moteurRegles);
@@ -58,17 +52,11 @@ describe("L'objet d'API de `GET /mesures`", () => {
 
   it('ne pollue pas les mesures personnalisée avec des mesures inexistantes sur le service (undefined)', async () => {
     const service = unService()
-      .avecMesures(
-        new Mesures({
-          mesuresGenerales: [],
-        })
-      )
+      .avecMesures(new Mesures({ mesuresGenerales: [] }))
       .construis();
 
     const moteurRegles = {
-      mesures: () => ({
-        mesureA: { description: 'Mesure A' },
-      }),
+      mesures: () => ({ mesureA: { description: 'Mesure A' } }),
     };
 
     const resultat = objetGetMesures.donnees(service, moteurRegles);
