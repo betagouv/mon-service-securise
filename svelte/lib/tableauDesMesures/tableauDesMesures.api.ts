@@ -5,10 +5,7 @@ export const recupereMesures = async (idService: string) => {
   return reponse.data as Mesures;
 };
 
-export const enregistreMesures = async (
-  idService: string,
-  mesures: Mesures
-) => {
+export const metEnFormeMesures = (mesures: Mesures) => {
   const mesuresGenerales: Record<string, MesureGeneraleDTO> = Object.entries(
     mesures.mesuresGenerales
   )
@@ -23,9 +20,18 @@ export const enregistreMesures = async (
       }),
       {}
     );
-
-  await axios.post(`/api/service/${idService}/mesures`, {
+  return {
     mesuresGenerales,
     mesuresSpecifiques: mesures.mesuresSpecifiques,
-  });
+  };
+};
+
+export const enregistreMesures = async (
+  idService: string,
+  mesures: Mesures
+) => {
+  await axios.post(
+    `/api/service/${idService}/mesures`,
+    metEnFormeMesures(mesures)
+  );
 };
