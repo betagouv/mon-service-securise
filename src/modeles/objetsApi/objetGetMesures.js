@@ -1,19 +1,31 @@
+const fusionneGeneraleEtPersonnalisee = (
+  mesureGenerale,
+  mesurePersonnalisee
+) => {
+  const [id, donnees] = mesurePersonnalisee;
+
+  if (mesureGenerale) delete mesureGenerale.id;
+
+  return {
+    [id]: { ...donnees, ...(mesureGenerale && { ...mesureGenerale }) },
+  };
+};
+
 const donnees = (service, moteurRegles) => {
   const { mesuresGenerales, mesuresSpecifiques } = service.mesures.toJSON();
 
   const mesuresPersonnalisees = Object.entries(
     moteurRegles.mesures(service.descriptionService)
-  ).reduce((acc, [idMesure, donneesMesure]) => {
-    const mesure = mesuresGenerales.find((m) => m.id === idMesure);
-    if (mesure) delete mesure.id;
-    return {
+  ).reduce(
+    (acc, mesurePersonnalisee) => ({
       ...acc,
-      [idMesure]: {
-        ...donneesMesure,
-        ...(mesure && { ...mesure }),
-      },
-    };
-  }, {});
+      ...fusionneGeneraleEtPersonnalisee(
+        mesuresGenerales.find((m) => m.id === mesurePersonnalisee[0]),
+        mesurePersonnalisee
+      ),
+    }),
+    {}
+  );
 
   return {
     mesuresGenerales: mesuresPersonnalisees,
