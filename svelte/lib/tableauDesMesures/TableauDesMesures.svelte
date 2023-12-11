@@ -6,7 +6,11 @@
     Mesures,
   } from './tableauDesMesures.d';
   import LigneMesure from './ligne/LigneMesure.svelte';
-  import { enregistreMesures, recupereMesures } from './tableauDesMesures.api';
+  import {
+    recupereMesures,
+    enregistreMesures,
+    metEnFormeMesures,
+  } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
 
   enum EtatEnregistrement {
@@ -31,9 +35,20 @@
     await enregistreMesures(idService, mesures);
     etatEnregistrement = Fait;
   };
+
+  const afficheTiroirAjoutDeMesureSpecifique = () => {
+    document.body.dispatchEvent(
+      new CustomEvent('svelte-affiche-tiroir-ajout-mesure-specifique', {
+        detail: { mesuresExistantes: metEnFormeMesures(mesures) },
+      })
+    );
+  };
 </script>
 
 <div class="barre-actions">
+  <button class="bouton" on:click={afficheTiroirAjoutDeMesureSpecifique}
+    >Ajouter</button
+  >
   {#if etatEnregistrement === EnCours}
     <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
   {/if}
@@ -78,7 +93,8 @@
 <style>
   .barre-actions {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    gap: 1em;
     padding: 1em 0;
   }
 
@@ -126,5 +142,10 @@
 
   .enregistrement-termine:before {
     background-image: url('/statique/assets/images/icone_enregistrement_termine.svg');
+  }
+
+  .bouton {
+    margin: 0;
+    padding: 0.5em 2em;
   }
 </style>
