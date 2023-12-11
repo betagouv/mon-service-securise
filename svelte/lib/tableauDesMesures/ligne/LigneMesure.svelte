@@ -1,9 +1,17 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+  import type {
+    MesureGenerale,
+    MesureSpecifique,
+  } from '../tableauDesMesures.d';
+
   export let referentiel: { label: string; classe?: string };
+  export let mesure: MesureSpecifique | MesureGenerale;
   export let nom: string;
   export let categorie: string;
-  export let idStatut: string;
   export let referentielStatuts: Record<string, string>;
+
+  const dispatch = createEventDispatcher<{ modificationStatut: null }>();
 </script>
 
 <div class="ligne-de-mesure">
@@ -13,7 +21,13 @@
     <span class="categorie">{categorie}</span>
   </div>
   <label for="statut">
-    <select bind:value={idStatut} id="statut" class="intouche" required>
+    <select
+      bind:value={mesure.statut}
+      id="statut"
+      class="intouche"
+      required
+      on:change={() => dispatch('modificationStatut')}
+    >
       <option value="" disabled selected>--</option>
       {#each Object.entries(referentielStatuts) as [valeur, label]}
         <option value={valeur}>{label}</option>

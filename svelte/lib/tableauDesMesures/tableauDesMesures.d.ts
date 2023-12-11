@@ -5,33 +5,33 @@ declare global {
 }
 
 export type TableauDesMesuresProps = {
-  referentielMesuresGenerales: ReferentielMesuresGenerales;
   idService: string;
   categories: Record<string, string>;
   statuts: Record<string, string>;
 };
 
-export type ReferentielMesuresGenerales = Record<
-  string,
-  {
-    description: string;
-    categorie: string;
-    indispensable: boolean;
-    descriptionLongue: string;
-  }
->;
-
 export type MesureGenerale = {
-  statut: string;
+  description: string;
+  categorie: string;
+  indispensable: boolean;
+  descriptionLongue: string;
+  statut?: string;
   modalites?: string;
 };
 
-export type MesureSpecifique = MesureGenerale & {
+export type MesureSpecifique = {
   categorie: string;
   description: string;
+  statut: string;
+  modalites: string;
 };
 
 export type Mesures = {
   mesuresGenerales: Record<string, MesureGenerale>;
   mesuresSpecifiques: MesureSpecifique[];
+};
+
+export type MesureGeneraleDTO = {
+  statut: string;
+  modalites?: string;
 };
