@@ -22,6 +22,7 @@
   background: #dbecf1;
   text-align: left;
   padding: 0 2em;
+  overflow: hidden;
 }
 
 .entete-tiroir .image-entete {
