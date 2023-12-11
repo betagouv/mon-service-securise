@@ -30,6 +30,7 @@ const {
   Rubriques,
   verifieCoherenceDesDroits,
 } = require('../../modeles/autorisations/gestionDroits');
+const objetGetMesures = require('../../modeles/objetsApi/objetGetMesures');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -156,24 +157,8 @@ const routesApiService = ({
     middleware.trouveService({ [SECURISER]: LECTURE }),
     (requete, reponse) => {
       const { homologation: service } = requete;
-      const { mesuresGenerales, mesuresSpecifiques } = service.mesures.toJSON();
 
-      const mesuresPersonnalisees = Object.entries(
-        moteurRegles.mesures(service.descriptionService)
-      ).reduce((acc, [idMesure, donneesMesure]) => {
-        const mesure = mesuresGenerales.find((m) => m.id === idMesure);
-        return {
-          ...acc,
-          [idMesure]: {
-            ...donneesMesure,
-            ...(mesure && { ...mesure, id: undefined }),
-          },
-        };
-      }, {});
-      reponse.json({
-        mesuresGenerales: mesuresPersonnalisees,
-        mesuresSpecifiques,
-      });
+      reponse.json(objetGetMesures.donnees(service, moteurRegles));
     }
   );
 

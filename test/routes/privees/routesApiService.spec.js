@@ -306,20 +306,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('interroge le moteur de règles pour obtenir les mesures personnalisées', async () => {
-      let descriptionRecue;
-
-      testeur.moteurRegles().mesures = (descriptionService) => {
-        descriptionRecue = descriptionService;
-        return {};
-      };
-
-      await axios('http://localhost:1234/api/service/456/mesures');
-
-      expect(descriptionRecue.nomService).to.equal('un service');
-    });
-
-    it('associe les statuts et commentaires des mesures générales du service aux mesures personnalisées', async () => {
+    it('retourne la représenation des mesures en utilisant `objetGetMesures`', async () => {
       testeur.middleware().reinitialise({
         homologationARenvoyer: unService()
           .avecMesures(
@@ -347,56 +334,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         'http://localhost:1234/api/service/456/mesures'
       );
 
-      expect(reponse.data.mesuresGenerales.mesureA).to.eql({
-        description: 'Mesure A',
-        statut: 'fait',
-        modalites: 'un commentaire',
+      expect(reponse.data).to.eql({
+        mesuresGenerales: {
+          mesureA: {
+            description: 'Mesure A',
+            statut: 'fait',
+            modalites: 'un commentaire',
+          },
+        },
+        mesuresSpecifiques: [],
       });
-    });
-
-    it('ne pollue pas les mesures personnalisée avec des mesures inexistantes sur le service (undefined)', async () => {
-      testeur.middleware().reinitialise({
-        homologationARenvoyer: unService()
-          .avecMesures(
-            new Mesures({
-              mesuresGenerales: [],
-            })
-          )
-          .construis(),
-      });
-
-      testeur.moteurRegles().mesures = () => ({
-        mesureA: { description: 'Mesure A' },
-      });
-
-      const reponse = await axios(
-        'http://localhost:1234/api/service/456/mesures'
-      );
-
-      expect(reponse.data.mesuresGenerales.mesureA).to.eql({
-        description: 'Mesure A',
-      });
-    });
-
-    it('fait passe plat sur les mesures spécifiques du service', async () => {
-      testeur.middleware().reinitialise({
-        homologationARenvoyer: unService()
-          .avecMesures(
-            new Mesures({
-              mesuresGenerales: [],
-              mesuresSpecifiques: [{ description: 'une mesure' }],
-            })
-          )
-          .construis(),
-      });
-
-      const reponse = await axios(
-        'http://localhost:1234/api/service/456/mesures'
-      );
-
-      expect(reponse.data.mesuresSpecifiques).to.eql([
-        { description: 'une mesure' },
-      ]);
     });
   });
 
