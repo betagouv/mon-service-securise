@@ -3,9 +3,7 @@ const fusionneGeneraleEtPersonnalisee = (
   mesurePersonnalisee
 ) => {
   const [id, donnees] = mesurePersonnalisee;
-
-  if (mesureGenerale) delete mesureGenerale.id;
-
+  delete mesureGenerale?.id;
   return {
     [id]: { ...donnees, ...(mesureGenerale && { ...mesureGenerale }) },
   };
