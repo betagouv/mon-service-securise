@@ -205,7 +205,7 @@ main {
 .conteneur-jauge-progression .cartouche-progression-mesures {
   border-radius: 8px;
   background: #f1f5f9;
-  padding: 8px 12px 8px 60px;
+  padding: 8px 12px 8px 68px;
   color: #08416a;
   font-weight: 500;
   white-space: nowrap;
@@ -213,6 +213,7 @@ main {
 
 .conteneur-jauge-progression .jauge-progression-mesures {
   position: absolute;
+  left: 5px;
 }
 
 .conteneur-indice-cyber {
