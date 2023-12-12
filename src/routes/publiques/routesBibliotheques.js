@@ -5,15 +5,15 @@ const adaptateurEnvironnement = require('../../adaptateurs/adaptateurEnvironneme
 const CHEMINS_BIBLIOTHEQUES = {
   get: {
     'matomo-tag-manager.js': adaptateurEnvironnement.matomo().urlTagManager(),
-    'piwik.js': 'https://stats.data.gouv.fr/piwik.js',
+    'matomo.js': 'https://stats.beta.gouv.fr/matomo.js',
   },
   post: {
-    evenementMatomo: 'https://stats.data.gouv.fr/piwik.php',
+    evenementMatomo: 'https://stats.beta.gouv.fr/matomo.php',
   },
 };
 
 const CSP_BIBLIOTHEQUES = {
-  matomo: { connect: 'https://stats.data.gouv.fr/piwik.php' },
+  matomo: { connect: 'https://stats.beta.gouv.fr/matomo.php' },
 };
 
 const routesBibliotheques = () => {

@@ -9,7 +9,7 @@
 
   const g = document.createElement('script');
   g.async = true;
-  g.src = '/bibliotheques/piwik.js';
+  g.src = '/bibliotheques/matomo.js';
 
   const premierScript = document.getElementsByTagName('script')[0];
   premierScript.parentNode.insertBefore(g, premierScript);

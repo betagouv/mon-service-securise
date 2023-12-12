@@ -432,10 +432,10 @@ describe('Le middleware MSS', () => {
       );
     });
 
-    it('autorise la connexion vers MSS et stats.data.gouv (pour Matomo)', (done) => {
+    it('autorise la connexion vers MSS et stats.beta.gouv (pour Matomo)', (done) => {
       verifiePositionnementHeader(
         'content-security-policy',
-        "connect-src 'self' https://stats.data.gouv.fr/piwik.php",
+        "connect-src 'self' https://stats.beta.gouv.fr/matomo.php",
         done
       );
     });
