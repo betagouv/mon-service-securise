@@ -1,9 +1,9 @@
 mixin jaugeProgressionMesures(progression)
   - const taille = 100;
   svg.jauge-progression-mesures(viewbox=`0 0 ${taille} ${taille}`)
-    - const tailleCercle = taille * 0.7
+    - const tailleCercle = taille * 0.85
     - const perimetreCercle = (2 * Math.PI * (tailleCercle / 2))
     circle(cx=taille/2 cy=taille/2 r=tailleCercle/2 fill='white' stroke='#DBEEFF' stroke-width=4)
     circle(cx=taille/2 cy=taille/2 r=tailleCercle/2 fill='none' stroke='#0079D0' stroke-width=6 stroke-linecap='round' transform=`rotate(90 ${taille/2} ${taille/2})` stroke-dasharray=`${progression * perimetreCercle / 100} ${perimetreCercle}`)
 
-    text(x=taille/2 y=taille/2+6 text-anchor='middle' fill='#0C5C98' font-weight='bold' font-size='1.3em')= `${progression} %`
+    text(x=taille/2 y=taille/2+8 text-anchor='middle' fill='#0C5C98' font-weight='bold' font-size=`${taille*0.22}px`)= `${progression} %`
