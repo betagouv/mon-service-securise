@@ -1,4 +1,4 @@
-type TypeNoeud = HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement;
+type TypeNoeud = HTMLTextAreaElement | HTMLSelectElement;
 
 export const validationChamp = (
   noeud: TypeNoeud,
