@@ -1,8 +1,15 @@
 <script lang="ts">
   import type { Mesures } from './tableauDesMesures.d';
   import LigneMesure from './ligne/LigneMesure.svelte';
-  import { recupereMesures, enregistreMesures } from './tableauDesMesures.api';
+  import { enregistreMesures, recupereMesures } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
+
+  enum EtatEnregistrement {
+    Jamais,
+    EnCours,
+    Fait,
+  }
+  const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -13,24 +20,19 @@
     mesures = await recupereMesures(idService);
   });
 
-  let etatEnregistrement = {
-    enCours: false,
-    premierEnregistrementFait: false,
-  };
+  let etatEnregistrement: EtatEnregistrement = Jamais;
   const metAJourMesures = async () => {
-    etatEnregistrement.enCours = true;
+    etatEnregistrement = EnCours;
     await enregistreMesures(idService, mesures);
-    etatEnregistrement.enCours = false;
-    if (!etatEnregistrement.premierEnregistrementFait)
-      etatEnregistrement.premierEnregistrementFait = true;
+    etatEnregistrement = Fait;
   };
 </script>
 
 <div class="barre-actions">
-  {#if etatEnregistrement.enCours}
+  {#if etatEnregistrement === EnCours}
     <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
   {/if}
-  {#if !etatEnregistrement.enCours && etatEnregistrement.premierEnregistrementFait}
+  {#if etatEnregistrement === Fait}
     <p class="enregistrement-termine">Enregistré</p>
   {/if}
 </div>
