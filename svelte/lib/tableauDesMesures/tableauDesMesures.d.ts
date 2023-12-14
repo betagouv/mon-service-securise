@@ -4,8 +4,10 @@ declare global {
   }
 }
 
+export type IdService = string;
+
 export type TableauDesMesuresProps = {
-  idService: string;
+  idService: IdService;
   categories: Record<string, string>;
   statuts: Record<string, string>;
 };

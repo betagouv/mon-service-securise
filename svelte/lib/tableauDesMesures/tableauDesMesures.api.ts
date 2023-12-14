@@ -1,12 +1,12 @@
-import type { Mesures } from './tableauDesMesures.d';
+import type { IdService, Mesures } from './tableauDesMesures.d';
 
-export const recupereMesures = async (idService: string) => {
+export const recupereMesures = async (idService: IdService) => {
   const reponse = await axios.get(`/api/service/${idService}/mesures`);
   return reponse.data as Mesures;
 };
 
 export const enregistreMesures = async (
-  idService: string,
+  idService: IdService,
   mesures: Mesures
 ) => {
   type MesureGeneraleApi = {
