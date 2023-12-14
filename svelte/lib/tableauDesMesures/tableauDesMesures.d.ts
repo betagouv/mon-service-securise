@@ -28,7 +28,8 @@ export type MesureSpecifique = {
   modalites: string;
 };
 
+export type IdMesureGenerale = string;
 export type Mesures = {
-  mesuresGenerales: Record<string, MesureGenerale>;
+  mesuresGenerales: Record<IdMesureGenerale, MesureGenerale>;
   mesuresSpecifiques: MesureSpecifique[];
 };
