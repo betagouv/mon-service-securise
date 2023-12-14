@@ -48,6 +48,7 @@
         ? 'Indispensable'
         : 'Recommandé'}
       <LigneMesure
+        {id}
         referentiel={{ label: labelReferentiel, classe: 'mss' }}
         nom={mesure.description}
         categorie={categories[mesure.categorie]}
@@ -58,6 +59,7 @@
     {/each}
     {#each mesures.mesuresSpecifiques as mesure, index (index)}
       <LigneMesure
+        id={`specifique-${index}`}
         referentiel={{ label: 'Nouvelle' }}
         nom={mesure.description}
         categorie={categories[mesure.categorie]}

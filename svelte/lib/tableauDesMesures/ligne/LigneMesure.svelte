@@ -5,6 +5,9 @@
     MesureSpecifique,
   } from '../tableauDesMesures.d';
 
+  type IdDom = string;
+
+  export let id: IdDom;
   export let referentiel: { label: string; classe?: string };
   export let mesure: MesureSpecifique | MesureGenerale;
   export let nom: string;
@@ -20,10 +23,10 @@
     <p class="titre">{@html nom}</p>
     <span class="categorie">{categorie}</span>
   </div>
-  <label for="statut">
+  <label for={`statut-${id}`}>
     <select
       bind:value={mesure.statut}
-      id="statut"
+      id={`statut-${id}`}
       class="intouche"
       required
       on:change={() => dispatch('modificationStatut')}
