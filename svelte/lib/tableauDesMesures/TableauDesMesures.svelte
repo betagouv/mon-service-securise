@@ -1,5 +1,10 @@
 <script lang="ts">
-  import type { IdService, Mesures } from './tableauDesMesures.d';
+  import type {
+    IdCategorie,
+    IdService,
+    IdStatut,
+    Mesures,
+  } from './tableauDesMesures.d';
   import LigneMesure from './ligne/LigneMesure.svelte';
   import { enregistreMesures, recupereMesures } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
@@ -12,8 +17,8 @@
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
   export let idService: IdService;
-  export let categories: Record<string, string>;
-  export let statuts: Record<string, string>;
+  export let categories: Record<IdCategorie, string>;
+  export let statuts: Record<IdStatut, string>;
 
   let mesures: Mesures;
   onMount(async () => {
