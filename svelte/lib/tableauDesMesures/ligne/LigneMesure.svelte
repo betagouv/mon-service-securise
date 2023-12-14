@@ -17,7 +17,7 @@
 <div class="ligne-de-mesure">
   <span class={referentiel.classe}>{referentiel.label}</span>
   <div class="titre-mesure">
-    <p class="titre">{nom}</p>
+    <p class="titre">{@html nom}</p>
     <span class="categorie">{categorie}</span>
   </div>
   <label for="statut">
