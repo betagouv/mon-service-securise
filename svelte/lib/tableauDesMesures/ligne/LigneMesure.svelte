@@ -8,7 +8,11 @@
   type IdDom = string;
 
   export let id: IdDom;
-  export let referentiel: { label: string; classe?: string };
+  export let referentiel: {
+    label: string;
+    classe: string;
+    indispensable?: boolean;
+  };
   export let mesure: MesureSpecifique | MesureGenerale;
   export let nom: string;
   export let categorie: string;
@@ -18,7 +22,10 @@
 </script>
 
 <div class="ligne-de-mesure">
-  <span class={referentiel.classe}>{referentiel.label}</span>
+  <span
+    class={`referentiel ${referentiel.classe}`}
+    class:indispensable={referentiel.indispensable}>{referentiel.label}</span
+  >
   <div class="titre-mesure">
     <p class="titre">{@html nom}</p>
     <span class="categorie">{categorie}</span>
@@ -52,9 +59,7 @@
     justify-content: space-between;
   }
 
-  span {
-    color: #08416a;
-    background: #f1f5f9;
+  .referentiel {
     border-radius: 40px;
     padding: 4px 10px;
     font-weight: 500;
@@ -64,7 +69,21 @@
     width: fit-content;
   }
 
-  span.mss:before {
+  .referentiel.specifique {
+    color: #08416a;
+    background: #f1f5f9;
+  }
+
+  .referentiel.mss:not(.indispensable) {
+    color: #0079d0;
+    background: #dbeeff;
+  }
+  .referentiel.mss.indispensable {
+    color: #7025da;
+    background: #e9ddff;
+  }
+
+  .referentiel.mss:before {
     content: '';
     display: flex;
     background-image: url('/statique/assets/images/logo_mss_petit.svg');
