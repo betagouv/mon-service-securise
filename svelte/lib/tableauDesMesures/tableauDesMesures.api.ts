@@ -1,4 +1,4 @@
-import type { MesureGeneraleDTO, Mesures } from './tableauDesMesures.d';
+import type { Mesures } from './tableauDesMesures.d';
 
 export const recupereMesures = async (idService: string) => {
   const reponse = await axios.get(`/api/service/${idService}/mesures`);
@@ -9,7 +9,12 @@ export const enregistreMesures = async (
   idService: string,
   mesures: Mesures
 ) => {
-  const mesuresGenerales: Record<string, MesureGeneraleDTO> = Object.entries(
+  type MesureGeneraleApi = {
+    statut: string;
+    modalites?: string;
+  };
+
+  const mesuresGenerales: Record<string, MesureGeneraleApi> = Object.entries(
     mesures.mesuresGenerales
   )
     .filter(([_, mesure]) => mesure.statut)

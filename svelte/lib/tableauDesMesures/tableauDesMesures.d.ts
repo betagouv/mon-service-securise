@@ -30,8 +30,3 @@ export type Mesures = {
   mesuresGenerales: Record<string, MesureGenerale>;
   mesuresSpecifiques: MesureSpecifique[];
 };
-
-export type MesureGeneraleDTO = {
-  statut: string;
-  modalites?: string;
-};
