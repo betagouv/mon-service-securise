@@ -19,6 +19,7 @@ $(() => {
       categories,
       statuts,
       mesuresExistantes: e.detail.mesuresExistantes,
+      mesureAEditer: e.detail.mesureAEditer,
     };
 
     gestionnaireTiroir.afficheContenuAction(

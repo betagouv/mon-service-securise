@@ -18,7 +18,10 @@
   export let categorie: string;
   export let referentielStatuts: Record<string, string>;
 
-  const dispatch = createEventDispatcher<{ modificationStatut: null }>();
+  const dispatch = createEventDispatcher<{
+    modificationStatut: null;
+    click: null;
+  }>();
 </script>
 
 <div class="ligne-de-mesure">
@@ -27,7 +30,7 @@
     class:indispensable={referentiel.indispensable}>{referentiel.label}</span
   >
   <div class="titre-mesure">
-    <p class="titre">
+    <p class="titre" on:click={() => dispatch('click')}>
       {nom}
       <img src="/statique/assets/images/chevron_noir.svg" />
     </p>
@@ -111,6 +114,7 @@
   .titre {
     font-weight: 500;
     text-align: left;
+    cursor: pointer;
   }
 
   .titre img {

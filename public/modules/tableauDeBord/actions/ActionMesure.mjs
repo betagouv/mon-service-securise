@@ -6,11 +6,23 @@ class ActionMesure extends ActionAbstraite {
     this.appliqueContenu({ titre: '', texteSimple: '', texteMultiple: '' });
   }
 
-  initialise({ idService, categories, statuts, mesuresExistantes }) {
+  initialise({
+    idService,
+    categories,
+    statuts,
+    mesuresExistantes,
+    mesureAEditer,
+  }) {
     super.initialise();
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-mesure', {
-        detail: { idService, categories, statuts, mesuresExistantes },
+        detail: {
+          idService,
+          categories,
+          statuts,
+          mesuresExistantes,
+          mesureAEditer,
+        },
       })
     );
   }
