@@ -1,9 +1,9 @@
 import ActionAbstraite from './Action.mjs';
 
 class ActionMesure extends ActionAbstraite {
-  constructor() {
+  constructor(titre = '') {
     super('#contenu-mesure');
-    this.appliqueContenu({ titre: '', texteSimple: '', texteMultiple: '' });
+    this.appliqueContenu({ titre, texteSimple: '', texteMultiple: '' });
   }
 
   initialise({

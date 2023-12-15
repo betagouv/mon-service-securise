@@ -48,6 +48,10 @@
       new CustomEvent('svelte-affiche-tiroir-ajout-mesure-specifique', {
         detail: {
           mesuresExistantes: metEnFormeMesures(mesures),
+          titreTiroir:
+            mesureAEditer && mesureAEditer.typeMesure === 'GENERALE'
+              ? mesureAEditer.description
+              : '',
           ...(mesureAEditer && { mesureAEditer }),
         },
       })
