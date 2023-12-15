@@ -27,7 +27,7 @@
     class:indispensable={referentiel.indispensable}>{referentiel.label}</span
   >
   <div class="titre-mesure">
-    <p class="titre">{@html nom}</p>
+    <p class="titre">{nom}</p>
     <span class="categorie">{categorie}</span>
   </div>
   <label for={`statut-${id}`}>
