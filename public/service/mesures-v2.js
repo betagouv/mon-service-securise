@@ -12,7 +12,7 @@ $(() => {
     })
   );
 
-  const actionMesure = new ActionMesure();
+  let actionMesure;
   $(document.body).on('svelte-affiche-tiroir-ajout-mesure-specifique', (e) => {
     const propsDuBundle = {
       idService,
@@ -21,6 +21,7 @@ $(() => {
       mesuresExistantes: e.detail.mesuresExistantes,
       mesureAEditer: e.detail.mesureAEditer,
     };
+    actionMesure = new ActionMesure(e.detail.titreTiroir);
 
     gestionnaireTiroir.afficheContenuAction(
       { action: actionMesure },
