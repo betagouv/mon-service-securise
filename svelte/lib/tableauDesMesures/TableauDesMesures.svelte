@@ -3,7 +3,9 @@
     IdCategorie,
     IdService,
     IdStatut,
+    MesureGenerale,
     Mesures,
+    MesureSpecifique,
   } from './tableauDesMesures.d';
   import LigneMesure from './ligne/LigneMesure.svelte';
   import {
@@ -18,6 +20,7 @@
     EnCours,
     Fait,
   }
+
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
   export let idService: IdService;
@@ -36,19 +39,26 @@
     etatEnregistrement = Fait;
   };
 
-  const afficheTiroirAjoutDeMesureSpecifique = () => {
+  type MesureAEditer = (MesureSpecifique | MesureGenerale) & {
+    typeMesure: 'GENERALE' | 'SPECIFIQUE';
+    idMesure: string | number;
+  };
+  const afficheTiroirDeMesure = (mesureAEditer?: MesureAEditer) => {
     document.body.dispatchEvent(
       new CustomEvent('svelte-affiche-tiroir-ajout-mesure-specifique', {
-        detail: { mesuresExistantes: metEnFormeMesures(mesures) },
+        detail: {
+          mesuresExistantes: metEnFormeMesures(mesures),
+          ...(mesureAEditer && { mesureAEditer }),
+        },
       })
     );
   };
 </script>
 
 <div class="barre-actions">
-  <button class="bouton" on:click={afficheTiroirAjoutDeMesureSpecifique}
-    >Ajouter</button
-  >
+  <button class="bouton" on:click={() => afficheTiroirDeMesure()}
+    >Ajouter
+  </button>
   {#if etatEnregistrement === EnCours}
     <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
   {/if}
@@ -74,6 +84,12 @@
         referentielStatuts={statuts}
         bind:mesure
         on:modificationStatut={metAJourMesures}
+        on:click={() =>
+          afficheTiroirDeMesure({
+            ...mesure,
+            typeMesure: 'GENERALE',
+            idMesure: id,
+          })}
       />
     {/each}
     {#each mesures.mesuresSpecifiques as mesure, index (index)}
@@ -85,6 +101,12 @@
         referentielStatuts={statuts}
         bind:mesure
         on:modificationStatut={metAJourMesures}
+        on:click={() =>
+          afficheTiroirDeMesure({
+            ...mesure,
+            typeMesure: 'SPECIFIQUE',
+            idMesure: index,
+          })}
       />
     {/each}
   {/if}
