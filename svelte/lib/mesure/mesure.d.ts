@@ -31,6 +31,7 @@ export type MesureAEditer = (MesureSpecifique | MesureGenerale) & {
   description: string;
   descriptionLongue: string;
   categorie: string;
+  indispensable?: boolean;
   typeMesure: 'GENERALE' | 'SPECIFIQUE';
   idMesure: string | number;
 };
