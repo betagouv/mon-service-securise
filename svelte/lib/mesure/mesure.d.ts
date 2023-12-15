@@ -9,6 +9,7 @@ export type MesureProps = {
   categories: Record<string, string>;
   statuts: Record<string, string>;
   mesuresExistantes: MesuresExistantes;
+  mesureAEditer?: MesureGenerale | MesureSpecifique;
 };
 
 export type MesuresExistantes = {
@@ -24,4 +25,11 @@ export type MesureGenerale = {
 export type MesureSpecifique = MesureGenerale & {
   categorie: string;
   description: string;
+};
+
+export type MesureAEditer = (MesureSpecifique | MesureGenerale) & {
+  description: string;
+  categorie: string;
+  typeMesure: 'GENERALE' | 'SPECIFIQUE';
+  idMesure: string | number;
 };

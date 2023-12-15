@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { MesuresExistantes, MesureSpecifique } from './mesure.d';
+  import type {
+    MesureAEditer,
+    MesuresExistantes,
+    MesureSpecifique,
+  } from './mesure.d';
   import Formulaire from '../ui/Formulaire.svelte';
   import { validationChamp } from '../directives/validationChamp';
 
@@ -7,8 +11,18 @@
   export let categories: Record<string, string>;
   export let statuts: Record<string, string>;
   export let mesuresExistantes: MesuresExistantes;
+  export let mesureAEditer: MesureAEditer | null = null;
 
   let intitule: string, details: string, categorie: string, statut: string;
+  if (mesureAEditer) {
+    intitule = mesureAEditer.description;
+    details = mesureAEditer.modalites ?? '';
+    categorie = mesureAEditer.categorie;
+    statut = mesureAEditer.statut;
+  }
+  $: doitAfficherIntitule =
+    !mesureAEditer ||
+    (mesureAEditer && mesureAEditer.typeMesure === 'SPECIFIQUE');
 
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
@@ -29,18 +43,20 @@
 <span>Ajoutée</span>
 
 <Formulaire on:formulaireValide={enregistreMesure}>
-  <label for="intitule" class="requis">
-    Intitulé
-    <textarea
-      rows="2"
-      bind:value={intitule}
-      id="intitule"
-      placeholder="Description de la mesure"
-      class="intouche"
-      required
-      use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
-    />
-  </label>
+  {#if doitAfficherIntitule}
+    <label for="intitule" class="requis">
+      Intitulé
+      <textarea
+        rows="2"
+        bind:value={intitule}
+        id="intitule"
+        placeholder="Description de la mesure"
+        class="intouche"
+        required
+        use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
+      />
+    </label>
+  {/if}
 
   <label for="details">
     Détails sur la mise en œuvre
