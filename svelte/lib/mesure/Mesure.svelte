@@ -62,8 +62,6 @@
   };
 </script>
 
-<span>Ajoutée</span>
-
 <Formulaire on:formulaireValide={enregistreMesure}>
   {#if doitAfficherIntitule}
     <label for="intitule" class="requis">
