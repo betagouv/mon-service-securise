@@ -29,6 +29,7 @@ export type MesureSpecifique = MesureGenerale & {
 
 export type MesureAEditer = (MesureSpecifique | MesureGenerale) & {
   description: string;
+  descriptionLongue: string;
   categorie: string;
   typeMesure: 'GENERALE' | 'SPECIFIQUE';
   idMesure: string | number;

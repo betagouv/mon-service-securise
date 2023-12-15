@@ -23,6 +23,8 @@
   $: doitAfficherIntitule =
     !mesureAEditer ||
     (mesureAEditer && mesureAEditer.typeMesure === 'SPECIFIQUE');
+  $: doitAfficherDescriptionLongue =
+    mesureAEditer && mesureAEditer.typeMesure === 'GENERALE';
 
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
@@ -56,6 +58,12 @@
         use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
       />
     </label>
+  {/if}
+  {#if doitAfficherDescriptionLongue}
+    <details>
+      <summary />
+      <p>{@html mesureAEditer.descriptionLongue}</p>
+    </details>
   {/if}
 
   <label for="details">
@@ -176,5 +184,39 @@
 
   :global(textarea.invalide, select.invalide) {
     border-color: var(--rose-anssi);
+  }
+
+  summary {
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  summary:before {
+    content: 'Description';
+  }
+
+  summary:after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    background: url('/statique/assets/images/chevron_noir.svg');
+    transform: translateY(1px) rotate(90deg);
+    transition: transform 0.1s ease-in-out;
+  }
+
+  details[open] > summary:after {
+    transform: translateY(1px) rotate(270deg);
+  }
+
+  details p {
+    margin: 8px 0 0;
+    font-weight: 500;
+  }
+
+  details {
+    margin-bottom: 16px;
   }
 </style>
