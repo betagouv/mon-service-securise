@@ -29,13 +29,32 @@
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
     enCoursEnvoi = true;
-    const mesureSpecifique: MesureSpecifique = {
-      categorie,
-      description: intitule,
-      modalites: details,
-      statut,
-    };
-    mesuresExistantes.mesuresSpecifiques.push(mesureSpecifique);
+    if (!mesureAEditer) {
+      const mesureSpecifique: MesureSpecifique = {
+        categorie,
+        description: intitule,
+        modalites: details,
+        statut,
+      };
+      mesuresExistantes.mesuresSpecifiques.push(mesureSpecifique);
+    } else {
+      let mesure = {
+        modalites: details,
+        statut,
+      };
+      if (mesureAEditer.typeMesure === 'SPECIFIQUE') {
+        mesure = {
+          ...mesure,
+          categorie: categorie,
+          description: intitule,
+        };
+      }
+      if (mesureAEditer.typeMesure === 'GENERALE') {
+        mesuresExistantes.mesuresGenerales[mesureAEditer.idMesure] = mesure;
+      } else {
+        mesuresExistantes.mesuresSpecifiques[mesureAEditer.idMesure] = mesure;
+      }
+    }
     await axios.post(`/api/service/${idService}/mesures`, mesuresExistantes);
     enCoursEnvoi = false;
     window.location.reload();
