@@ -23,6 +23,7 @@
   $: doitAfficherIntitule =
     !mesureAEditer ||
     (mesureAEditer && mesureAEditer.typeMesure === 'SPECIFIQUE');
+  $: doitAfficherChoixCategorie = doitAfficherIntitule;
   $: doitAfficherDescriptionLongue =
     mesureAEditer && mesureAEditer.typeMesure === 'GENERALE';
 
@@ -96,21 +97,23 @@
     />
   </label>
 
-  <label for="categorie" class="requis">
-    Catégorie
-    <select
-      bind:value={categorie}
-      id="categorie"
-      class="intouche"
-      required
-      use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
-    >
-      <option value="" disabled selected>Non renseigné</option>
-      {#each Object.entries(categories) as [valeur, label]}
-        <option value={valeur}>{label}</option>
-      {/each}
-    </select>
-  </label>
+  {#if doitAfficherChoixCategorie}
+    <label for="categorie" class="requis">
+      Catégorie
+      <select
+        bind:value={categorie}
+        id="categorie"
+        class="intouche"
+        required
+        use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
+      >
+        <option value="" disabled selected>Non renseigné</option>
+        {#each Object.entries(categories) as [valeur, label]}
+          <option value={valeur}>{label}</option>
+        {/each}
+      </select>
+    </label>
+  {/if}
 
   <label for="statut" class="requis">
     Statut de mise en œuvre
