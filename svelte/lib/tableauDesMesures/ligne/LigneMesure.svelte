@@ -27,7 +27,10 @@
     class:indispensable={referentiel.indispensable}>{referentiel.label}</span
   >
   <div class="titre-mesure">
-    <p class="titre">{nom}</p>
+    <p class="titre">
+      {nom}
+      <img src="/statique/assets/images/chevron_noir.svg" />
+    </p>
     <span class="categorie">{categorie}</span>
   </div>
   <label for={`statut-${id}`}>
@@ -108,6 +111,12 @@
   .titre {
     font-weight: 500;
     text-align: left;
+  }
+
+  .titre img {
+    width: 24px;
+    height: 24px;
+    position: absolute;
   }
 
   .categorie {
