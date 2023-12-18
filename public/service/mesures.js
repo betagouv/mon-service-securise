@@ -194,10 +194,13 @@ ${statuts}
 
   brancheValidation('form#mesures');
 
-  const brancheAutoSave = () =>
-    $('input[type="radio"]', 'form#mesures .mesure').on('change', async () =>
+  const brancheAutoSave = () => {
+    const mesure = 'form#mesures .mesure';
+    $('input[type="radio"]', mesure).on('change', async () =>
       sauvegardeLesMesures()
     );
+    $('textarea', mesure).on('blur', async () => sauvegardeLesMesures());
+  };
 
   brancheAutoSave();
 
