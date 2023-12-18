@@ -95,6 +95,8 @@ describe('Le serveur MSS', () => {
   });
 
   describe('quand requête GET sur `/initialisationMotDePasse/:idReset`', () => {
+    const uuid = '109156be-c4fb-41ea-b1b4-efe1671c5836';
+
     describe('avec idReset valide', () => {
       const utilisateur = {
         id: '123',
@@ -115,10 +117,10 @@ describe('Le serveur MSS', () => {
         };
 
         const reponse = await axios.get(
-          'http://localhost:1234/initialisationMotDePasse/999'
+          `http://localhost:1234/initialisationMotDePasse/${uuid}`
         );
 
-        expect(idRecu).to.be('999');
+        expect(idRecu).to.be(uuid);
         await testeur.verifieJetonDepose(reponse, () => {});
       });
     });
@@ -128,9 +130,18 @@ describe('Le serveur MSS', () => {
         .middleware()
         .verifieAseptisationParametres(
           ['idReset'],
-          'http://localhost:1234/initialisationMotDePasse/999',
+          `http://localhost:1234/initialisationMotDePasse/${uuid}`,
           done
         );
+    });
+
+    it("retourne une erreur HTTP 400 sur idReset n'est pas un UUID valide", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        'UUID requis',
+        'http://localhost:1234/initialisationMotDePasse/999',
+        done
+      );
     });
 
     it('retourne une erreur HTTP 404 si idReset inconnu', (done) => {
@@ -138,8 +149,8 @@ describe('Le serveur MSS', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(
         404,
-        'Identifiant d\'initialisation de mot de passe "999" inconnu',
-        'http://localhost:1234/initialisationMotDePasse/999',
+        `Identifiant d'initialisation de mot de passe "${uuid}" inconnu`,
+        `http://localhost:1234/initialisationMotDePasse/${uuid}`,
         done
       );
     });
