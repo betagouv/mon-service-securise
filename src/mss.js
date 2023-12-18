@@ -1,3 +1,4 @@
+const uuid = require('uuid');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const express = require('express');
@@ -149,6 +150,13 @@ const creeServeur = (
     middleware.aseptise('idReset'),
     async (requete, reponse) => {
       const { idReset } = requete.params;
+
+      const pasUnUUID = !uuid.validate(idReset);
+      if (pasUnUUID) {
+        reponse.status(400).send(`UUID requis`);
+        return;
+      }
+
       const utilisateur = await depotDonnees.utilisateurAFinaliser(idReset);
       if (!utilisateur) {
         reponse
