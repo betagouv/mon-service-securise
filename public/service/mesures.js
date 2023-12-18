@@ -195,11 +195,11 @@ ${statuts}
   brancheValidation('form#mesures');
 
   const brancheAutoSave = () => {
-    const mesure = 'form#mesures .mesure';
-    $('input[type="radio"]', mesure).on('change', async () =>
+    const formulaire = 'form#mesures';
+    $('input[type="radio"]', formulaire).on('change', async () =>
       sauvegardeLesMesures()
     );
-    $('textarea', mesure).on('blur', async () => sauvegardeLesMesures());
+    $('textarea', formulaire).on('blur', async () => sauvegardeLesMesures());
   };
 
   brancheAutoSave();
