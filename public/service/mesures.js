@@ -71,12 +71,8 @@ $(() => {
     indiqueSauvegardeEnCours(true);
     const params = parametres('form#mesures');
     arrangeParametresMesures(params);
-    const reponse = await axios.post(
-      `/api/service/${identifiantService}/mesures`,
-      params
-    );
+    await axios.post(`/api/service/${identifiantService}/mesures`, params);
     indiqueSauvegardeEnCours(false);
-    window.location = `/service/${reponse.data.idService}/mesures`;
   };
 
   const peupleFormulaire = () => {
