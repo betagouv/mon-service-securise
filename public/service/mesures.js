@@ -207,6 +207,9 @@ ${statuts}
       sauvegardeLesMesures()
     );
     $('textarea', formulaire).on('blur', async () => sauvegardeLesMesures());
+    $('.icone-suppression', formulaire).on('click', async () =>
+      sauvegardeLesMesures()
+    );
   };
 
   brancheAutoSave();
