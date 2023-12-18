@@ -22,6 +22,9 @@ $(() => {
     $('#referentiel-statuts-mesures').text()
   );
 
+  const $boutonSave = $('.bouton[idHomologation]');
+  const identifiantService = $boutonSave.attr('idHomologation');
+
   const $conteneurModalites = (nom) => {
     const $conteneur = $('<div class="informations-additionnelles"></div>');
     const $lien = $(
@@ -52,6 +55,26 @@ $(() => {
       const $modalites = $conteneurModalites(nom);
       $modalites.appendTo($f);
     });
+
+  const sauvegardeLesMesures = async () => {
+    const indiqueSauvegardeEnCours = (estEnCours) => {
+      basculeEnCoursChargement($boutonSave, estEnCours);
+      const $statut = $('#statut-enregistrement');
+      $statut.toggleClass('enregistrement-en-cours', estEnCours);
+      $statut.toggleClass('enregistrement-termine', !estEnCours);
+      $statut.text(estEnCours ? 'Enregistrement en cours…' : 'Terminé');
+    };
+
+    indiqueSauvegardeEnCours(true);
+    const params = parametres('form#mesures');
+    arrangeParametresMesures(params);
+    const reponse = await axios.post(
+      `/api/service/${identifiantService}/mesures`,
+      params
+    );
+    indiqueSauvegardeEnCours(false);
+    window.location = `/service/${reponse.data.idService}/mesures`;
+  };
 
   const peupleFormulaire = () => {
     const donneesMesuresGenerales = JSON.parse(
@@ -160,8 +183,8 @@ ${statuts}
     '.mesure',
     '.item-ajoute'
   );
-
   ajouteConteneursModalites();
+
   peupleFormulaire();
 
   peupleMesuresSpecifiques(
@@ -171,32 +194,14 @@ ${statuts}
 
   brancheValidation('form#mesures');
 
-  const $bouton = $('.bouton[idHomologation]');
-  const identifiantService = $bouton.attr('idHomologation');
-
-  const sauvegardeLesMesures = async () => {
-    const indiqueSauvegardeEnCours = (estEnCours) => {
-      basculeEnCoursChargement($bouton, estEnCours);
-      const $statut = $('#statut-enregistrement');
-      $statut.toggleClass('enregistrement-en-cours', estEnCours);
-      $statut.toggleClass('enregistrement-termine', !estEnCours);
-      $statut.text(estEnCours ? 'Enregistrement en cours…' : 'Terminé');
-    };
-
-    indiqueSauvegardeEnCours(true);
-    const params = parametres('form#mesures');
-    arrangeParametresMesures(params);
-    const reponse = await axios.post(
-      `/api/service/${identifiantService}/mesures`,
-      params
+  const brancheAutoSave = () =>
+    $('input[type="radio"]', 'form#mesures .mesure').on('change', async () =>
+      sauvegardeLesMesures()
     );
-    indiqueSauvegardeEnCours(false);
-    window.location = `/service/${reponse.data.idService}/mesures`;
-  };
 
-  $bouton.on('click', () => {
-    declencheValidation('form#mesures');
-  });
+  brancheAutoSave();
+
+  $boutonSave.on('click', () => declencheValidation('form#mesures'));
 
   $('form#mesures').on('submit', async (evenement) => {
     evenement.preventDefault();
