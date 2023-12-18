@@ -62,7 +62,7 @@ $(() => {
       const $statut = $('#statut-enregistrement');
       $statut.toggleClass('enregistrement-en-cours', estEnCours);
       $statut.toggleClass('enregistrement-termine', !estEnCours);
-      $statut.text(estEnCours ? 'Enregistrement en cours…' : 'Terminé');
+      $statut.text(estEnCours ? 'Enregistrement en cours…' : 'Enregistré');
     };
 
     const formulaireEstValide = $('form')[0].reportValidity();
