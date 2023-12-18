@@ -161,9 +161,7 @@ const creeServeur = (
       if (!utilisateur) {
         reponse
           .status(404)
-          .send(
-            `Identifiant d'initialisation de mot de passe "${idReset}" inconnu`
-          );
+          .send(`Identifiant d'initialisation de mot de passe inconnu`);
         return;
       }
 

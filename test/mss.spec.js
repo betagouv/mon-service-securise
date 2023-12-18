@@ -149,7 +149,7 @@ describe('Le serveur MSS', () => {
 
       testeur.verifieRequeteGenereErreurHTTP(
         404,
-        `Identifiant d'initialisation de mot de passe "${uuid}" inconnu`,
+        `Identifiant d'initialisation de mot de passe inconnu`,
         `http://localhost:1234/initialisationMotDePasse/${uuid}`,
         done
       );
