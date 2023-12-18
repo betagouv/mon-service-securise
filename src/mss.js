@@ -147,21 +147,20 @@ const creeServeur = (
   app.get(
     '/initialisationMotDePasse/:idReset',
     middleware.aseptise('idReset'),
-    (requete, reponse) => {
+    async (requete, reponse) => {
       const { idReset } = requete.params;
-      depotDonnees.utilisateurAFinaliser(idReset).then((utilisateur) => {
-        if (!utilisateur) {
-          reponse
-            .status(404)
-            .send(
-              `Identifiant d'initialisation de mot de passe "${idReset}" inconnu`
-            );
-          return;
-        }
+      const utilisateur = await depotDonnees.utilisateurAFinaliser(idReset);
+      if (!utilisateur) {
+        reponse
+          .status(404)
+          .send(
+            `Identifiant d'initialisation de mot de passe "${idReset}" inconnu`
+          );
+        return;
+      }
 
-        requete.session.token = utilisateur.genereToken();
-        reponse.render('motDePasse/edition', { utilisateur });
-      });
+      requete.session.token = utilisateur.genereToken();
+      reponse.render('motDePasse/edition', { utilisateur });
     }
   );
 
