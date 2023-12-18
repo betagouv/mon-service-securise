@@ -174,13 +174,7 @@ ${statuts}
   const $bouton = $('.bouton[idHomologation]');
   const identifiantService = $bouton.attr('idHomologation');
 
-  $bouton.on('click', () => {
-    declencheValidation('form#mesures');
-  });
-
-  $('form#mesures').on('submit', async (evenement) => {
-    evenement.preventDefault();
-
+  const sauvegardeLesMesures = async () => {
     const indiqueSauvegardeEnCours = (estEnCours) => {
       basculeEnCoursChargement($bouton, estEnCours);
       const $statut = $('#statut-enregistrement');
@@ -198,6 +192,15 @@ ${statuts}
     );
     indiqueSauvegardeEnCours(false);
     window.location = `/service/${reponse.data.idService}/mesures`;
+  };
+
+  $bouton.on('click', () => {
+    declencheValidation('form#mesures');
+  });
+
+  $('form#mesures').on('submit', async (evenement) => {
+    evenement.preventDefault();
+    await sauvegardeLesMesures();
   });
 
   const actionMesure = new ActionMesure();
