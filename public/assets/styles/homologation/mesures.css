@@ -117,8 +117,8 @@ form#mesures .specifiques input[type='radio'] {
   background-color: #fff;
   bottom: 0;
   display: flex;
-  justify-content: flex-end;
-  column-gap: 1.7em;
+  justify-content: space-between;
+  align-items: center;
   width: calc(100% + 7em);
   margin-left: -7em;
   padding: 1.4em 7em 1.4em 0;
@@ -133,6 +133,51 @@ form#mesures .specifiques input[type='radio'] {
       #a826b333
     )
     1;
+}
+
+.enregistrement #statut-enregistrement {
+  margin-left: 7em;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.enregistrement #statut-enregistrement.enregistrement-en-cours {
+  color: #0c5c98;
+}
+
+.enregistrement #statut-enregistrement.enregistrement-termine {
+  color: #0e972b;
+}
+
+.enregistrement #statut-enregistrement:before {
+  content: '';
+  display: flex;
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.enregistrement #statut-enregistrement.enregistrement-en-cours:before {
+  background-image: url('/statique/assets/images/icone_enregistrement_en_cours.svg');
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.enregistrement #statut-enregistrement.enregistrement-termine:before {
+  background-image: url('/statique/assets/images/icone_enregistrement_termine.svg');
+}
+
+.enregistrement .boutons {
+  display: flex;
+  gap: 25px;
 }
 
 .enregistrement .bouton {

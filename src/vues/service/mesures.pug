@@ -78,8 +78,10 @@ block formulaire
                   p!= donnees.descriptionLongue
     if (!estLectureSeule)
       .enregistrement
-        button#ajout-mesure-specifique.bouton.bouton-secondaire.nouvel-item(type = 'button') Ajouter une mesure spécifique
-        button.bouton(idHomologation = service.id) Enregistrer
+        #statut-enregistrement
+        .boutons
+          button#ajout-mesure-specifique.bouton.bouton-secondaire.nouvel-item(type = 'button') Ajouter une mesure spécifique
+          button.bouton(idHomologation = service.id) Enregistrer
 
   script(id = 'donnees-mesures-generales', type = 'application/json').
     !{JSON.stringify(service.mesures.toJSON().mesuresGenerales || [])}

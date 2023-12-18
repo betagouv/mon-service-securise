@@ -180,15 +180,23 @@ ${statuts}
 
   $('form#mesures').on('submit', async (evenement) => {
     evenement.preventDefault();
-    basculeEnCoursChargement($bouton, true);
+
+    const indiqueSauvegardeEnCours = (estEnCours) => {
+      basculeEnCoursChargement($bouton, estEnCours);
+      const $statut = $('#statut-enregistrement');
+      $statut.toggleClass('enregistrement-en-cours', estEnCours);
+      $statut.toggleClass('enregistrement-termine', !estEnCours);
+      $statut.text(estEnCours ? 'Enregistrement en cours…' : 'Terminé');
+    };
+
+    indiqueSauvegardeEnCours(true);
     const params = parametres('form#mesures');
     arrangeParametresMesures(params);
-
     const reponse = await axios.post(
       `/api/service/${identifiantService}/mesures`,
       params
     );
-    basculeEnCoursChargement($bouton, false);
+    indiqueSauvegardeEnCours(false);
     window.location = `/service/${reponse.data.idService}/mesures`;
   });
 
