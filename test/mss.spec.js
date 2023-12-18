@@ -103,21 +103,23 @@ describe('Le serveur MSS', () => {
       };
 
       beforeEach(() => {
-        testeur.depotDonnees().utilisateurAFinaliser = () =>
-          Promise.resolve(utilisateur);
-        testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateur);
+        testeur.depotDonnees().utilisateurAFinaliser = async () => utilisateur;
+        testeur.depotDonnees().utilisateur = async () => utilisateur;
       });
 
-      it('dépose le jeton dans un cookie', (done) => {
-        testeur.depotDonnees().utilisateurAFinaliser = (idReset) => {
-          expect(idReset).to.equal('999');
-          return Promise.resolve(utilisateur);
+      it('dépose le jeton dans un cookie', async () => {
+        let idRecu;
+        testeur.depotDonnees().utilisateurAFinaliser = async (idReset) => {
+          idRecu = idReset;
+          return utilisateur;
         };
 
-        axios
-          .get('http://localhost:1234/initialisationMotDePasse/999')
-          .then((reponse) => testeur.verifieJetonDepose(reponse, done))
-          .catch(done);
+        const reponse = await axios.get(
+          'http://localhost:1234/initialisationMotDePasse/999'
+        );
+
+        expect(idRecu).to.be('999');
+        await testeur.verifieJetonDepose(reponse, () => {});
       });
     });
 
@@ -132,8 +134,7 @@ describe('Le serveur MSS', () => {
     });
 
     it('retourne une erreur HTTP 404 si idReset inconnu', (done) => {
-      testeur.depotDonnees().utilisateurAFinaliser = () =>
-        Promise.resolve(undefined);
+      testeur.depotDonnees().utilisateurAFinaliser = async () => {};
 
       testeur.verifieRequeteGenereErreurHTTP(
         404,
