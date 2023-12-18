@@ -65,6 +65,9 @@ $(() => {
       $statut.text(estEnCours ? 'Enregistrement en cours…' : 'Terminé');
     };
 
+    const formulaireEstValide = $('form')[0].reportValidity();
+    if (!formulaireEstValide) return;
+
     indiqueSauvegardeEnCours(true);
     const params = parametres('form#mesures');
     arrangeParametresMesures(params);
@@ -145,6 +148,7 @@ $(() => {
   <label for="description-mesure-specifique-${index}" class="nom-champ">
     Intitulé
     <input id="description-mesure-specifique-${index}"
+          type="text"
           name="description-mesure-specifique-${index}"
           placeholder="Description de la mesure"
           value="${description}"
@@ -197,6 +201,9 @@ ${statuts}
   const brancheAutoSave = () => {
     const formulaire = 'form#mesures';
     $('input[type="radio"]', formulaire).on('change', async () =>
+      sauvegardeLesMesures()
+    );
+    $('input[type="text"]', formulaire).on('blur', async () =>
       sauvegardeLesMesures()
     );
     $('textarea', formulaire).on('blur', async () => sauvegardeLesMesures());
