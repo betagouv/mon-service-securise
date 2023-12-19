@@ -43,6 +43,7 @@ form input {
 }
 
 form :is(input, textarea)[readonly] {
+  color: #667892;
   background: #dbecf1;
   user-select: none;
   cursor: not-allowed;
@@ -77,6 +78,7 @@ select[disabled] {
   color: #667892;
   background: #dbecf1;
   appearance: none !important;
+  cursor: not-allowed;
 }
 
 fieldset {
