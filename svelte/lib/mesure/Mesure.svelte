@@ -9,6 +9,8 @@
   export let categories: Record<string, string>;
   export let statuts: Record<string, string>;
   export let mesuresExistantes: MesuresExistantes;
+  export let estLectureSeule: boolean;
+
 
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
@@ -29,6 +31,7 @@
         id="intitule"
         placeholder="Description de la mesure"
         class="intouche"
+        readonly={estLectureSeule}
         required
         use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
       />
@@ -49,6 +52,7 @@
       id="details"
       placeholder="Modalités de mise en œuvre (facultatif)"
       class="intouche"
+      readonly={estLectureSeule}
     />
   </label>
 
@@ -60,6 +64,7 @@
         id="categorie"
         class="intouche"
         required
+        disabled={estLectureSeule}
         use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
       >
         <option value="" disabled selected>Non renseigné</option>
@@ -77,6 +82,7 @@
       id="statut"
       class="intouche"
       required
+      disabled={estLectureSeule}
       use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
     >
       <option value="" disabled selected>Non renseigné</option>
@@ -86,15 +92,17 @@
     </select>
   </label>
 
-  <div class="conteneur-bouton">
-    <button
-      type="submit"
-      class="bouton"
-      class:en-cours-chargement={enCoursEnvoi}
-      disabled={enCoursEnvoi}
-      >Enregistrer
-    </button>
-  </div>
+  {#if !estLectureSeule}
+    <div class="conteneur-bouton">
+      <button
+        type="submit"
+        class="bouton"
+        class:en-cours-chargement={enCoursEnvoi}
+        disabled={enCoursEnvoi}
+        >Enregistrer
+      </button>
+    </div>
+  {/if}
 </Formulaire>
 
 <style>
