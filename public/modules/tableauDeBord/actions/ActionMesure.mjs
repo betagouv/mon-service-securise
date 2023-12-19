@@ -10,6 +10,7 @@ class ActionMesure extends ActionAbstraite {
     idService,
     categories,
     statuts,
+    estLectureSeule,
     mesuresExistantes,
     mesureAEditer,
   }) {
@@ -20,6 +21,7 @@ class ActionMesure extends ActionAbstraite {
           idService,
           categories,
           statuts,
+          estLectureSeule,
           mesuresExistantes,
           mesureAEditer,
         },

@@ -16,6 +16,8 @@ block append scripts
     !{JSON.stringify(referentiel.categoriesMesures())}
   script(id = 'referentiel-statuts-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.statutsMesures())}
+  script(id = 'securiser-lecture-seule', type = 'application/json').
+    !{JSON.stringify(autorisationsService.SECURISER.estLectureSeule)}
 
 block header-titre-page
   h3
@@ -35,5 +37,4 @@ block sous-titre
   h2 Mettre en oeuvre des mesures de sécurité adaptées
 
 block formulaire
-  - const estLectureSeule  = autorisationsService.SECURISER.estLectureSeule
   #tableau-des-mesures
