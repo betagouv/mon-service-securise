@@ -30,8 +30,10 @@
     class:indispensable={referentiel.indispensable}>{referentiel.label}</span
   >
   <div class="titre-mesure">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <p class="titre" on:click={() => dispatch('click')}>
       {nom}
+      <!-- svelte-ignore a11y-missing-attribute -->
       <img src="/statique/assets/images/chevron_noir.svg" />
     </p>
     <span class="categorie">{categorie}</span>
