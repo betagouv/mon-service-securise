@@ -45,11 +45,15 @@ const port = process.env.PORT || 3000;
 const referentiel = Referentiel.creeReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
 
-cableTousLesAbonnes(busEvenements, { adaptateurJournal });
-
 const depotDonnees = DepotDonnees.creeDepot({
   adaptateurJournalMSS: adaptateurJournal,
   busEvenements,
+});
+
+cableTousLesAbonnes(busEvenements, {
+  adaptateurTracking,
+  adaptateurJournal,
+  depotDonnees,
 });
 
 const middleware = Middleware({

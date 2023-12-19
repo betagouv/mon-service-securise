@@ -1,6 +1,7 @@
 class EvenementMesuresServiceModifiees {
-  constructor({ service }) {
+  constructor({ service, utilisateur }) {
     this.service = service;
+    this.utilisateur = utilisateur;
   }
 }
 

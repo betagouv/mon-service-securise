@@ -345,38 +345,6 @@ describe('Le dépôt de données des homologations', () => {
       );
     });
 
-    it("l'adaptateur de tracking est utilisé pour envoyé la complétude lors de modification de mesures", async () => {
-      let donneesPassees = {};
-      const adaptateurTracking = unAdaptateurTracking()
-        .avecEnvoiTrackingCompletude((destinataire, donneesEvenement) => {
-          donneesPassees = { destinataire, donneesEvenement };
-        })
-        .construis();
-      const serviceTracking = unServiceTracking()
-        .avecCompletudeDesServices(1, 5, 18)
-        .construis();
-      depot = unDepotDeDonneesServices()
-        .avecAdaptateurPersistance(adaptateurPersistance)
-        .avecAdaptateurTracking(adaptateurTracking)
-        .avecServiceTracking(serviceTracking)
-        .avecReferentiel(referentiel)
-        .construis();
-      const mesures = new MesuresSpecifiques({
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
-      });
-
-      await depot.ajouteMesuresAHomologation('123', '789', [], mesures);
-
-      expect(donneesPassees).to.eql({
-        destinataire: 'jean.dujardin@beta.gouv.com',
-        donneesEvenement: {
-          nombreServices: 1,
-          nombreMoyenContributeurs: 5,
-          tauxCompletudeMoyenTousServices: 18,
-        },
-      });
-    });
-
     it("publie un événement de 'Mesures service modifiées'", async () => {
       await depot.ajouteMesuresAHomologation(
         '123',

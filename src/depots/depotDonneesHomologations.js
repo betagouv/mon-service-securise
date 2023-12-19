@@ -286,20 +286,12 @@ const creeDepot = (config = {}) => {
       idHomologation,
       specifiques
     );
-    const service = await p.lis.une(idHomologation);
 
-    const tauxCompletude =
-      await serviceTracking.completudeDesServicesPourUtilisateur(
-        { homologations },
-        idUtilisateur
-      );
+    const service = await p.lis.une(idHomologation);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
-    await adaptateurTracking.envoieTrackingCompletudeService(
-      utilisateur.email,
-      tauxCompletude
-    );
+
     await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service })
+      new EvenementMesuresServiceModifiees({ service, utilisateur })
     );
   };
 
