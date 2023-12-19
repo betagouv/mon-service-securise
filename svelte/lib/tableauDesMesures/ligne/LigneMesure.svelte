@@ -17,6 +17,7 @@
   export let nom: string;
   export let categorie: string;
   export let referentielStatuts: Record<string, string>;
+  export let estLectureSeule: boolean;
 
   const dispatch = createEventDispatcher<{
     modificationStatut: null;
@@ -43,7 +44,7 @@
       bind:value={mesure.statut}
       id={`statut-${id}`}
       class="intouche"
-      required
+      disabled={estLectureSeule}
       on:change={() => dispatch('modificationStatut')}
     >
       <option value="" disabled selected>--</option>

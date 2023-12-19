@@ -26,6 +26,7 @@
   export let idService: IdService;
   export let categories: Record<IdCategorie, string>;
   export let statuts: Record<IdStatut, string>;
+  export let estLectureSeule: boolean;
 
   let mesures: Mesures;
   onMount(async () => {
@@ -62,17 +63,19 @@
   };
 </script>
 
-<div class="barre-actions">
-  <button class="bouton" on:click={() => afficheTiroirDeMesure()}
-    >Ajouter
-  </button>
-  {#if etatEnregistrement === EnCours}
-    <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
-  {/if}
-  {#if etatEnregistrement === Fait}
-    <p class="enregistrement-termine">Enregistré</p>
-  {/if}
-</div>
+{#if !estLectureSeule}
+  <div class="barre-actions">
+    <button class="bouton" on:click={() => afficheTiroirDeMesure()}
+      >Ajouter
+    </button>
+    {#if etatEnregistrement === EnCours}
+      <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
+    {/if}
+    {#if etatEnregistrement === Fait}
+      <p class="enregistrement-termine">Enregistré</p>
+    {/if}
+  </div>
+{/if}
 <div class="tableau-des-mesures">
   {#if mesures}
     {#each Object.entries(mesures.mesuresGenerales) as [id, mesure] (id)}
@@ -99,6 +102,7 @@
               idMesure: id,
             },
           })}
+        {estLectureSeule}
       />
     {/each}
     {#each mesures.mesuresSpecifiques as mesure, index (index)}
@@ -118,6 +122,7 @@
               idMesure: index,
             },
           })}
+        {estLectureSeule}
       />
     {/each}
   {/if}

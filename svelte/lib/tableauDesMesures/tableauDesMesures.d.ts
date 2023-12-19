@@ -12,6 +12,7 @@ export type TableauDesMesuresProps = {
   idService: IdService;
   categories: Record<IdCategorie, string>;
   statuts: Record<IdStatut, string>;
+  estLectureSeule: boolean;
 };
 
 export type MesureGenerale = {

@@ -73,6 +73,12 @@ form input[type='checkbox'][disabled]:before {
   border-color: black;
 }
 
+select[disabled] {
+  color: #667892;
+  background: #dbecf1;
+  appearance: none !important;
+}
+
 fieldset {
   margin: 0 0 1em 0;
   padding: 0 0 2em;
