@@ -2,11 +2,22 @@ const EvenementMesuresServiceModifiees = require('./evenementMesuresServiceModif
 const {
   consigneDansJournal,
 } = require('./abonnements/mesuresServiceModifiees/consigneDansJournal');
+const {
+  envoieTrackingCompletude,
+} = require('./abonnements/mesuresServiceModifiees/envoieTrackingDeCompletude');
 
-const cableTousLesAbonnes = (busEvenements, { adaptateurJournal }) => {
+const cableTousLesAbonnes = (
+  busEvenements,
+  { adaptateurTracking, adaptateurJournal, depotDonnees }
+) => {
   busEvenements.abonne(
     EvenementMesuresServiceModifiees,
     consigneDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementMesuresServiceModifiees,
+    envoieTrackingCompletude({ adaptateurTracking, depotDonnees })
   );
 };
 
