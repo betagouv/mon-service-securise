@@ -19,6 +19,7 @@
 
 <style>
   p {
+    padding: 4px 10px;
     font-size: 0.6em;
     font-weight: 500;
     color: #08416a;

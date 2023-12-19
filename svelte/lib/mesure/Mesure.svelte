@@ -141,18 +141,6 @@
 </Formulaire>
 
 <style>
-  span {
-    position: absolute;
-    top: 24px;
-    left: 32px;
-    font-size: 0.95em;
-    font-weight: 500;
-    color: #08416a;
-    border-radius: 40px;
-    background: #ffffff;
-    padding: 4px 10px;
-  }
-
   label {
     font-weight: bold;
     margin-bottom: 16px;
