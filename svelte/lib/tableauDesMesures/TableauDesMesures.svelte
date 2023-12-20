@@ -61,7 +61,42 @@
       })
     );
   };
+
+  let recherche = '';
+  $: contientEnMinuscule = (champ?: string) =>
+    champ ? champ.toLowerCase().includes(recherche.toLowerCase()) : false;
+  $: mesureFiltrees = {
+    mesuresGenerales: Object.entries(mesures?.mesuresGenerales ?? {}).reduce(
+      (acc, [cle, m]) => {
+        const doitEtreConservee =
+          contientEnMinuscule(m.descriptionLongue) ||
+          contientEnMinuscule(m.modalites) ||
+          contientEnMinuscule(m.description);
+        return {
+          ...acc,
+          ...(doitEtreConservee && { [cle]: m }),
+        };
+      },
+      {}
+    ),
+    mesuresSpecifiques: mesures?.mesuresSpecifiques.filter(
+      (m) =>
+        contientEnMinuscule(m.description) || contientEnMinuscule(m.modalites)
+    ),
+  } as Mesures;
 </script>
+
+<div class="barre-filtres">
+  <label for="recherche">
+    Rechercher
+    <input
+      type="search"
+      id="recherche"
+      bind:value={recherche}
+      placeholder="ex : chiffrer, sauvegarde, données..."
+    />
+  </label>
+</div>
 
 {#if !estLectureSeule}
   <div class="barre-actions">
@@ -78,7 +113,7 @@
 {/if}
 <div class="tableau-des-mesures">
   {#if mesures}
-    {#each Object.entries(mesures.mesuresGenerales) as [id, mesure] (id)}
+    {#each Object.entries(mesureFiltrees.mesuresGenerales) as [id, mesure] (id)}
       {@const labelReferentiel = mesure.indispensable
         ? 'Indispensable'
         : 'Recommandé'}
@@ -105,7 +140,8 @@
         {estLectureSeule}
       />
     {/each}
-    {#each mesures.mesuresSpecifiques as mesure, index (index)}
+    {#each mesureFiltrees.mesuresSpecifiques as mesure, index (index)}
+      {@const indexReel = mesures.mesuresSpecifiques.indexOf(mesure)}
       <LigneMesure
         id={`specifique-${index}`}
         referentiel={{ label: 'Nouvelle', classe: 'specifique' }}
@@ -119,7 +155,7 @@
             mesure,
             metadonnees: {
               typeMesure: 'SPECIFIQUE',
-              idMesure: index,
+              idMesure: indexReel,
             },
           })}
         {estLectureSeule}
@@ -129,6 +165,25 @@
 </div>
 
 <style>
+  .barre-filtres {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+  }
+
+  label[for='recherche'] {
+    font-weight: bold;
+  }
+
+  #recherche {
+    margin-left: 16px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    color: #667892;
+    padding: 8px 16px;
+    min-width: 300px;
+  }
+
   .barre-actions {
     display: flex;
     align-items: center;
