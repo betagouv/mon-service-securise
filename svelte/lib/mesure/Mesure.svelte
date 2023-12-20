@@ -93,7 +93,13 @@
   </label>
 
   {#if !estLectureSeule}
-    <div class="conteneur-bouton">
+    <div
+      class="conteneur-actions"
+      class:boutonADroite={!$configurationAffichage.doitAfficherSuppression}
+    >
+      {#if $configurationAffichage.doitAfficherSuppression}
+        <p>Supprimer la mesure</p>
+      {/if}
       <button
         type="submit"
         class="bouton"
@@ -131,10 +137,21 @@
     transform: translate(6px, -3px);
   }
 
-  .conteneur-bouton {
+  .conteneur-actions {
     margin-top: 24px;
     display: flex;
+    justify-content: space-between;
+  }
+
+  .conteneur-actions.boutonADroite {
     justify-content: end;
+  }
+
+  .conteneur-actions p {
+    font-weight: 500;
+    color: #0079d0;
+    cursor: pointer;
+    margin: 0;
   }
 
   :global(.erreur-champ-saisie) {
