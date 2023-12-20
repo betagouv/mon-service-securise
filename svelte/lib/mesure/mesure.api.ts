@@ -22,3 +22,17 @@ export const enregistreMesures = async (
   }
   await axios.post(`/api/service/${idService}/mesures`, mesuresExistantes);
 };
+
+export const supprimeMesureSpecifique = async (
+  idService: string,
+  mesuresExistantes: MesuresExistantes,
+  idMesureSpecifique: number
+) => {
+  const copieMesuresSpecifiques = [...mesuresExistantes.mesuresSpecifiques];
+  copieMesuresSpecifiques.splice(idMesureSpecifique, 1);
+  const donnees = {
+    mesuresGenerales: mesuresExistantes.mesuresGenerales,
+    mesuresSpecifiques: copieMesuresSpecifiques,
+  };
+  await axios.post(`/api/service/${idService}/mesures`, donnees);
+};
