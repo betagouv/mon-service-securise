@@ -1,13 +1,17 @@
 import { derived, writable } from 'svelte/store';
 import type { MesureEditee, MesureGeneraleEnrichie } from './mesure.d';
 
-type Etape = 'Creation' | 'EditionGenerale' | 'EditionSpecifique';
+type Etape =
+  | 'Creation'
+  | 'EditionGenerale'
+  | 'EditionSpecifique'
+  | 'SuppressionSpecifique';
 export type MesureStore = {
   etape: Etape;
   mesureEditee: MesureEditee;
 };
 
-const { subscribe, set } = writable<MesureStore>();
+const { subscribe, set, update } = writable<MesureStore>();
 
 const mesureEditeeParDefaut: MesureEditee = {
   mesure: {
@@ -35,6 +39,16 @@ export const store = {
       mesureEditee: mesureEditee ?? mesureEditeeParDefaut,
     });
   },
+  afficheEtapeSuppression: () =>
+    update((etat) => ({
+      ...etat,
+      etape: 'SuppressionSpecifique',
+    })),
+  afficheEtapeEditionSpecifique: () =>
+    update((etat) => ({
+      ...etat,
+      etape: 'EditionSpecifique',
+    })),
 };
 
 export const configurationAffichage = derived(store, ($store) => {
@@ -53,5 +67,6 @@ export const configurationAffichage = derived(store, ($store) => {
     doitAfficherChoixCategorie:
       $store.etape === 'Creation' || $store.etape === 'EditionSpecifique',
     doitAfficherDescriptionLongue: $store.etape === 'EditionGenerale',
+    doitAfficherSuppression: $store.etape === 'EditionSpecifique',
   };
 });
