@@ -2,7 +2,7 @@ import { derived, writable } from 'svelte/store';
 import type { MesureEditee, MesureGeneraleEnrichie } from './mesure.d';
 
 type Etape = 'Creation' | 'EditionGenerale' | 'EditionSpecifique';
-type MesureStore = {
+export type MesureStore = {
   etape: Etape;
   mesureEditee: MesureEditee;
 };

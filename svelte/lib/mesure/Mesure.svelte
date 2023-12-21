@@ -1,12 +1,9 @@
 <script lang="ts">
-  import type {
-    MesureEditee,
-    MesuresExistantes,
-    MesureSpecifique,
-  } from './mesure.d';
+  import type { MesuresExistantes } from './mesure.d';
   import Formulaire from '../ui/Formulaire.svelte';
   import { validationChamp } from '../directives/validationChamp';
   import { configurationAffichage, store } from './mesure.store';
+  import { enregistreMesures } from './mesure.api';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -16,20 +13,7 @@
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
     enCoursEnvoi = true;
-    if ($store.etape === 'Creation') {
-      mesuresExistantes.mesuresSpecifiques.push($store.mesureEditee.mesure);
-    } else {
-      if ($store.etape === 'EditionGenerale') {
-        mesuresExistantes.mesuresGenerales[
-          $store.mesureEditee.metadonnees.idMesure
-        ] = $store.mesureEditee.mesure;
-      } else {
-        mesuresExistantes.mesuresSpecifiques[
-          $store.mesureEditee.metadonnees.idMesure as number
-        ] = $store.mesureEditee.mesure;
-      }
-    }
-    await axios.post(`/api/service/${idService}/mesures`, mesuresExistantes);
+    await enregistreMesures(idService, mesuresExistantes, $store);
     enCoursEnvoi = false;
     window.location.reload();
   };
