@@ -1,18 +1,8 @@
 <script lang="ts">
-  import type { MesureAEditer } from '../mesure.d';
+  import { configurationAffichage } from '../mesure.store';
 
-  export let mesureAEditer: MesureAEditer | null = null;
-
-  let contenuTexte: string;
-  if (!mesureAEditer) {
-    contenuTexte = 'Ajoutée';
-  } else {
-    if (mesureAEditer.typeMesure === 'SPECIFIQUE') contenuTexte = 'Nouvelle';
-    else {
-      if (mesureAEditer.indispensable) contenuTexte = 'Indispensable';
-      else contenuTexte = 'Recommandée';
-    }
-  }
+  const contenuTexte =
+    $configurationAffichage.contenuTexteCartoucheDuReferentiel;
 </script>
 
 <p

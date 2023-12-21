@@ -1,6 +1,7 @@
 import Mesure from './Mesure.svelte';
 import EnteteTiroir from './entete/EnteteTiroir.svelte';
-import type { MesureGenerale, MesureProps, MesureSpecifique } from './mesure.d';
+import type { MesureEditee, MesureProps } from './mesure.d';
+import { store } from './mesure.store';
 
 document.body.addEventListener(
   'svelte-recharge-mesure',
@@ -8,27 +9,29 @@ document.body.addEventListener(
 );
 
 let enteteTiroir: EnteteTiroir;
-const changeCartoucheDuReferentiel = (
-  mesureAEditer?: MesureGenerale | MesureSpecifique
-) => {
+const changeCartoucheDuReferentiel = () => {
   enteteTiroir?.$destroy();
   const cible = document.querySelector('.titre-tiroir');
   const insererAvant = cible?.lastChild;
   enteteTiroir = new EnteteTiroir({
     target: cible,
     anchor: insererAvant,
-    props: { mesureAEditer },
   });
 };
 
+const reinitialiseStore = (mesureAEditer?: MesureEditee) => {
+  store.reinitialise(mesureAEditer);
+};
+
 let app: Mesure;
-const rechargeApp = (props: MesureProps) => {
+const rechargeApp = ({ mesureAEditer, ...autreProps }: MesureProps) => {
   app?.$destroy();
+  reinitialiseStore(mesureAEditer);
+  changeCartoucheDuReferentiel();
   app = new Mesure({
     target: document.getElementById('conteneur-mesure')!,
-    props,
+    props: autreProps,
   });
-  changeCartoucheDuReferentiel(props.mesureAEditer);
 };
 
 export default app;
