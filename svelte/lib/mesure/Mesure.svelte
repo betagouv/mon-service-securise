@@ -1,59 +1,32 @@
 <script lang="ts">
   import type {
-    MesureAEditer,
+    MesureEditee,
     MesuresExistantes,
     MesureSpecifique,
   } from './mesure.d';
   import Formulaire from '../ui/Formulaire.svelte';
   import { validationChamp } from '../directives/validationChamp';
+  import { configurationAffichage, store } from './mesure.store';
 
   export let idService: string;
   export let categories: Record<string, string>;
   export let statuts: Record<string, string>;
   export let mesuresExistantes: MesuresExistantes;
-  export let mesureAEditer: MesureAEditer | null = null;
-
-  let intitule: string, details: string, categorie: string, statut: string;
-  if (mesureAEditer) {
-    intitule = mesureAEditer.description;
-    details = mesureAEditer.modalites ?? '';
-    categorie = mesureAEditer.categorie;
-    statut = mesureAEditer.statut;
-  }
-  $: doitAfficherIntitule =
-    !mesureAEditer ||
-    (mesureAEditer && mesureAEditer.typeMesure === 'SPECIFIQUE');
-  $: doitAfficherChoixCategorie = doitAfficherIntitule;
-  $: doitAfficherDescriptionLongue =
-    mesureAEditer && mesureAEditer.typeMesure === 'GENERALE';
 
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
     enCoursEnvoi = true;
-    if (!mesureAEditer) {
-      const mesureSpecifique: MesureSpecifique = {
-        categorie,
-        description: intitule,
-        modalites: details,
-        statut,
-      };
-      mesuresExistantes.mesuresSpecifiques.push(mesureSpecifique);
+    if ($store.etape === 'Creation') {
+      mesuresExistantes.mesuresSpecifiques.push($store.mesureEditee.mesure);
     } else {
-      let mesure = {
-        modalites: details,
-        statut,
-      };
-      if (mesureAEditer.typeMesure === 'SPECIFIQUE') {
-        mesure = {
-          ...mesure,
-          categorie: categorie,
-          description: intitule,
-        };
-      }
-      if (mesureAEditer.typeMesure === 'GENERALE') {
-        mesuresExistantes.mesuresGenerales[mesureAEditer.idMesure] = mesure;
+      if ($store.etape === 'EditionGenerale') {
+        mesuresExistantes.mesuresGenerales[
+          $store.mesureEditee.metadonnees.idMesure
+        ] = $store.mesureEditee.mesure;
       } else {
-        mesuresExistantes.mesuresSpecifiques[mesureAEditer.idMesure] = mesure;
+        mesuresExistantes.mesuresSpecifiques[
+          $store.mesureEditee.metadonnees.idMesure as number
+        ] = $store.mesureEditee.mesure;
       }
     }
     await axios.post(`/api/service/${idService}/mesures`, mesuresExistantes);
@@ -63,12 +36,12 @@
 </script>
 
 <Formulaire on:formulaireValide={enregistreMesure}>
-  {#if doitAfficherIntitule}
+  {#if $configurationAffichage.doitAfficherIntitule}
     <label for="intitule" class="requis">
       Intitulé
       <textarea
         rows="2"
-        bind:value={intitule}
+        bind:value={$store.mesureEditee.mesure.description}
         id="intitule"
         placeholder="Description de la mesure"
         class="intouche"
@@ -77,10 +50,10 @@
       />
     </label>
   {/if}
-  {#if doitAfficherDescriptionLongue}
+  {#if $configurationAffichage.doitAfficherDescriptionLongue}
     <details>
       <summary />
-      <p>{@html mesureAEditer.descriptionLongue}</p>
+      <p>{@html $store.mesureEditee.mesure.descriptionLongue}</p>
     </details>
   {/if}
 
@@ -88,18 +61,18 @@
     Détails sur la mise en œuvre
     <textarea
       rows="10"
-      bind:value={details}
+      bind:value={$store.mesureEditee.mesure.modalites}
       id="details"
       placeholder="Modalités de mise en œuvre (facultatif)"
       class="intouche"
     />
   </label>
 
-  {#if doitAfficherChoixCategorie}
+  {#if $configurationAffichage.doitAfficherChoixCategorie}
     <label for="categorie" class="requis">
       Catégorie
       <select
-        bind:value={categorie}
+        bind:value={$store.mesureEditee.mesure.categorie}
         id="categorie"
         class="intouche"
         required
@@ -116,7 +89,7 @@
   <label for="statut" class="requis">
     Statut de mise en œuvre
     <select
-      bind:value={statut}
+      bind:value={$store.mesureEditee.mesure.statut}
       id="statut"
       class="intouche"
       required

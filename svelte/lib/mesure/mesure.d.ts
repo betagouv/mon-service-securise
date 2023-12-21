@@ -9,7 +9,7 @@ export type MesureProps = {
   categories: Record<string, string>;
   statuts: Record<string, string>;
   mesuresExistantes: MesuresExistantes;
-  mesureAEditer?: MesureGenerale | MesureSpecifique;
+  mesureAEditer?: MesureEditee;
 };
 
 export type MesuresExistantes = {
@@ -22,16 +22,22 @@ export type MesureGenerale = {
   modalites?: string;
 };
 
+export type MesureGeneraleEnrichie = MesureGenerale & {
+  description: string;
+  descriptionLongue: string;
+  categorie: string;
+  indispensable?: boolean;
+};
+
 export type MesureSpecifique = MesureGenerale & {
   categorie: string;
   description: string;
 };
 
-export type MesureAEditer = (MesureSpecifique | MesureGenerale) & {
-  description: string;
-  descriptionLongue: string;
-  categorie: string;
-  indispensable?: boolean;
-  typeMesure: 'GENERALE' | 'SPECIFIQUE';
-  idMesure: string | number;
+export type MesureEditee = {
+  mesure: MesureSpecifique | MesureGeneraleEnrichie;
+  metadonnees: {
+    typeMesure: 'GENERALE' | 'SPECIFIQUE';
+    idMesure: string | number;
+  };
 };

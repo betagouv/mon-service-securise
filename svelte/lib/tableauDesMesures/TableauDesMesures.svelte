@@ -39,9 +39,12 @@
     etatEnregistrement = Fait;
   };
 
-  type MesureAEditer = (MesureSpecifique | MesureGenerale) & {
-    typeMesure: 'GENERALE' | 'SPECIFIQUE';
-    idMesure: string | number;
+  type MesureAEditer = {
+    mesure: MesureSpecifique | MesureGenerale;
+    metadonnees: {
+      typeMesure: 'GENERALE' | 'SPECIFIQUE';
+      idMesure: string | number;
+    };
   };
   const afficheTiroirDeMesure = (mesureAEditer?: MesureAEditer) => {
     document.body.dispatchEvent(
@@ -49,8 +52,8 @@
         detail: {
           mesuresExistantes: metEnFormeMesures(mesures),
           titreTiroir:
-            mesureAEditer && mesureAEditer.typeMesure === 'GENERALE'
-              ? mesureAEditer.description
+            mesureAEditer && mesureAEditer.metadonnees.typeMesure === 'GENERALE'
+              ? mesureAEditer.mesure.description
               : '',
           ...(mesureAEditer && { mesureAEditer }),
         },
@@ -90,9 +93,11 @@
         on:modificationStatut={metAJourMesures}
         on:click={() =>
           afficheTiroirDeMesure({
-            ...mesure,
-            typeMesure: 'GENERALE',
-            idMesure: id,
+            mesure,
+            metadonnees: {
+              typeMesure: 'GENERALE',
+              idMesure: id,
+            },
           })}
       />
     {/each}
@@ -107,9 +112,11 @@
         on:modificationStatut={metAJourMesures}
         on:click={() =>
           afficheTiroirDeMesure({
-            ...mesure,
-            typeMesure: 'SPECIFIQUE',
-            idMesure: index,
+            mesure,
+            metadonnees: {
+              typeMesure: 'SPECIFIQUE',
+              idMesure: index,
+            },
           })}
       />
     {/each}
