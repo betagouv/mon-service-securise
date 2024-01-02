@@ -6,6 +6,7 @@
   import { validationChamp } from '../directives/validationChamp';
   import { configurationAffichage, store } from './mesure.store';
   import { enregistreMesures } from './mesure.api';
+  import SelectionStatut from '../ui/SelectionStatut.svelte';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -79,22 +80,14 @@
       </label>
     {/if}
 
-    <label for="statut" class="requis">
-      Statut de mise en œuvre
-      <select
-        bind:value={$store.mesureEditee.mesure.statut}
-        id="statut"
-        class="intouche"
-        required
-        disabled={estLectureSeule}
-        use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
-      >
-        <option value="" disabled selected>Non renseigné</option>
-        {#each Object.entries(statuts) as [valeur, label]}
-          <option value={valeur}>{label}</option>
-        {/each}
-      </select>
-    </label>
+    <SelectionStatut
+      bind:statut={$store.mesureEditee.mesure.statut}
+      id="statut"
+      {estLectureSeule}
+      referentielStatuts={statuts}
+      label="Statut de mise en œuvre"
+      requis
+    />
 
     {#if !estLectureSeule}
       <div class="conteneur-actions">

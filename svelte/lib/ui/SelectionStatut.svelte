@@ -1,22 +1,31 @@
 <script lang="ts">
   import type { ReferentielStatut } from './types.d';
+  import { validationChamp } from '../directives/validationChamp';
 
   export let id: string;
   export let statut: string | undefined;
   export let referentielStatuts: ReferentielStatut;
 
+  export let label = '';
   export let estLectureSeule = false;
+  export let requis = false;
 </script>
 
-<label for={`statut-${id}`}>
+<label for={`statut-${id}`} class:requis>
+  {label}
   <select
     bind:value={statut}
     id={`statut-${id}`}
-    class="intouche"
+    class="intouche {statut}"
+    class:vide={!statut}
     disabled={estLectureSeule}
+    required={requis}
+    use:validationChamp={requis
+      ? 'Ce champ est obligatoire. Veuillez sélectionner une option.'
+      : ''}
     on:change
   >
-    <option value="" disabled selected>--</option>
+    <option value="" disabled selected>-</option>
     {#each Object.entries(referentielStatuts) as [valeur, label]}
       <option value={valeur}>{label}</option>
     {/each}
@@ -26,5 +35,36 @@
 <style>
   select {
     appearance: auto;
+    margin-top: 8px;
+    --couleur: transparent;
+    border: 1px solid var(--couleur);
+    border-right: 8px solid var(--couleur);
+    background: var(--couleur);
+  }
+
+  select.fait {
+    --couleur: #d4f4db;
+  }
+
+  select.enCours {
+    --couleur: #dbeeff;
+  }
+
+  select.nonFait {
+    --couleur: #fff2de;
+  }
+
+  select.vide {
+    --couleur: #f1f5f9;
+  }
+
+  option {
+    background: white;
+  }
+
+  label.requis:before {
+    content: '*';
+    color: var(--rose-anssi);
+    transform: translate(6px, -3px);
   }
 </style>
