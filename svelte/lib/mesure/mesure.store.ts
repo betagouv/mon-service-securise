@@ -53,10 +53,8 @@ export const store = {
 
 export const configurationAffichage = derived(store, ($store) => {
   const contenuTexteCartoucheDuReferentiel: string =
-    $store.etape === 'Creation'
-      ? 'Ajoutée'
-      : $store.etape === 'EditionSpecifique'
-      ? 'Nouvelle'
+    $store.etape === 'Creation' || $store.etape === 'EditionSpecifique'
+      ? 'Spécifique'
       : ($store.mesureEditee.mesure as MesureGeneraleEnrichie).indispensable
       ? 'Indispensable'
       : 'Recommandée';
