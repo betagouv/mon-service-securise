@@ -18,7 +18,7 @@ export default defineConfig({
       fileName: (_, entryname) => `${entryname}.js`,
       formats: ['es'],
     },
-    cssCodeSplit: true,
+    cssCodeSplit: false,
     emptyOutDir: true,
   },
 });
