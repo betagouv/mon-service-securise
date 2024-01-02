@@ -565,6 +565,16 @@ const routesApiService = ({
     }
   );
 
+  routes.get(
+    '/:id/indiceCyber',
+    middleware.trouveService({ [SECURISER]: LECTURE }),
+    middleware.aseptise('id'),
+    (requete, reponse) => {
+      const { homologation } = requete;
+      reponse.json(homologation.indiceCyber());
+    }
+  );
+
   return routes;
 };
 
