@@ -4,15 +4,14 @@
     MesureGenerale,
     MesureSpecifique,
   } from '../tableauDesMesures.d';
+  import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
+  import type { Referentiel } from '../../ui/types.d';
 
   type IdDom = string;
 
   export let id: IdDom;
-  export let referentiel: {
-    label: string;
-    classe: string;
-    indispensable?: boolean;
-  };
+  export let referentiel: Referentiel;
+  export let indispensable = false;
   export let mesure: MesureSpecifique | MesureGenerale;
   export let nom: string;
   export let categorie: string;
@@ -26,10 +25,7 @@
 </script>
 
 <div class="ligne-de-mesure">
-  <span
-    class={`referentiel ${referentiel.classe}`}
-    class:indispensable={referentiel.indispensable}>{referentiel.label}</span
-  >
+  <CartoucheReferentiel {referentiel} {indispensable} />
   <div class="titre-mesure">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <p class="titre" on:click={() => dispatch('click')}>
@@ -66,41 +62,6 @@
     grid-template-columns: 2fr 6fr 3fr;
     align-items: center;
     justify-content: space-between;
-  }
-
-  .referentiel {
-    border-radius: 40px;
-    padding: 4px 10px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-  }
-
-  .referentiel.specifique {
-    color: #08416a;
-    background: #f1f5f9;
-  }
-
-  .referentiel.mss:not(.indispensable) {
-    color: #0079d0;
-    background: #dbeeff;
-  }
-  .referentiel.mss.indispensable {
-    color: #7025da;
-    background: #e9ddff;
-  }
-
-  .referentiel.mss:before {
-    content: '';
-    display: flex;
-    background-image: url('/statique/assets/images/logo_mss_petit.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 19px;
-    height: 16px;
-    margin-right: 6px;
   }
 
   .titre-mesure {

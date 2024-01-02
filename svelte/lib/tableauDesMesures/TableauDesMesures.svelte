@@ -14,6 +14,7 @@
     metEnFormeMesures,
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
+  import { Referentiel } from '../ui/types.d';
 
   enum EtatEnregistrement {
     Jamais,
@@ -79,16 +80,10 @@
 <div class="tableau-des-mesures">
   {#if mesures}
     {#each Object.entries(mesures.mesuresGenerales) as [id, mesure] (id)}
-      {@const labelReferentiel = mesure.indispensable
-        ? 'Indispensable'
-        : 'Recommandé'}
       <LigneMesure
         {id}
-        referentiel={{
-          label: labelReferentiel,
-          classe: 'mss',
-          indispensable: mesure.indispensable,
-        }}
+        referentiel={Referentiel.ANSSI}
+        indispensable={mesure.indispensable}
         nom={mesure.description}
         categorie={categories[mesure.categorie]}
         referentielStatuts={statuts}
@@ -108,7 +103,7 @@
     {#each mesures.mesuresSpecifiques as mesure, index (index)}
       <LigneMesure
         id={`specifique-${index}`}
-        referentiel={{ label: 'Spécifique', classe: 'specifique' }}
+        referentiel={Referentiel.SPECIFIQUE}
         nom={mesure.description}
         categorie={categories[mesure.categorie]}
         referentielStatuts={statuts}
