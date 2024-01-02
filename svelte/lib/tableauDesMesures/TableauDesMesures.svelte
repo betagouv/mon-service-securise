@@ -65,8 +65,8 @@
 
 {#if !estLectureSeule}
   <div class="barre-actions">
-    <button class="bouton" on:click={() => afficheTiroirDeMesure()}
-      >Ajouter
+    <button class="bouton" on:click={() => afficheTiroirDeMesure()}>
+      Ajouter une mesure
     </button>
     {#if etatEnregistrement === EnCours}
       <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
