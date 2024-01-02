@@ -1924,4 +1924,42 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(data[1].idUtilisateur).to.equal('DEF');
     });
   });
+
+  describe('quand requête GET sur `/api/service/:id/indiceCyber', () => {
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: LECTURE, rubrique: SECURISER }],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/indiceCyber',
+        },
+        done
+      );
+    });
+
+    it("aseptise l'id du service", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id'],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/indiceCyber',
+        },
+        done
+      );
+    });
+
+    it("renvoie l'indice cyber du service", async () => {
+      const serviceARenvoyer = unService().construis();
+      serviceARenvoyer.indiceCyber = () => ({ total: 1.5 });
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: serviceARenvoyer,
+      });
+
+      const { data } = await axios.get(
+        'http://localhost:1234/api/service/456/indiceCyber'
+      );
+
+      expect(data.total).to.be(1.5);
+    });
+  });
 });
