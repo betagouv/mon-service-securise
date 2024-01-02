@@ -1,5 +1,6 @@
 import { derived, writable } from 'svelte/store';
 import type { MesureEditee, MesureGeneraleEnrichie } from './mesure.d';
+import { Referentiel } from '../ui/types.d';
 
 type Etape =
   | 'Creation'
@@ -52,14 +53,16 @@ export const store = {
 };
 
 export const configurationAffichage = derived(store, ($store) => {
-  const contenuTexteCartoucheDuReferentiel: string =
-    $store.etape === 'Creation' || $store.etape === 'EditionSpecifique'
-      ? 'Spécifique'
-      : ($store.mesureEditee.mesure as MesureGeneraleEnrichie).indispensable
-      ? 'Indispensable'
-      : 'Recommandée';
+  const referentiel: Referentiel =
+    $store.etape === 'EditionGenerale'
+      ? Referentiel.ANSSI
+      : Referentiel.SPECIFIQUE;
   return {
-    contenuTexteCartoucheDuReferentiel,
+    referentiel,
+    indispensable:
+      referentiel === Referentiel.SPECIFIQUE
+        ? false
+        : ($store.mesureEditee.mesure as MesureGeneraleEnrichie).indispensable,
     doitAfficherIntitule:
       $store.etape === 'Creation' || $store.etape === 'EditionSpecifique',
     doitAfficherChoixCategorie:
