@@ -5,7 +5,8 @@
     MesureSpecifique,
   } from '../tableauDesMesures.d';
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
-  import type { Referentiel } from '../../ui/types.d';
+  import type { Referentiel, ReferentielStatut } from '../../ui/types.d';
+  import SelectionStatut from '../../ui/SelectionStatut.svelte';
 
   type IdDom = string;
 
@@ -15,7 +16,7 @@
   export let mesure: MesureSpecifique | MesureGenerale;
   export let nom: string;
   export let categorie: string;
-  export let referentielStatuts: Record<string, string>;
+  export let referentielStatuts: ReferentielStatut;
   export let estLectureSeule: boolean;
 
   const dispatch = createEventDispatcher<{
@@ -35,20 +36,13 @@
     </p>
     <span class="categorie">{categorie}</span>
   </div>
-  <label for={`statut-${id}`}>
-    <select
-      bind:value={mesure.statut}
-      id={`statut-${id}`}
-      class="intouche"
-      disabled={estLectureSeule}
-      on:change={() => dispatch('modificationStatut')}
-    >
-      <option value="" disabled selected>--</option>
-      {#each Object.entries(referentielStatuts) as [valeur, label]}
-        <option value={valeur}>{label}</option>
-      {/each}
-    </select>
-  </label>
+  <SelectionStatut
+    bind:statut={mesure.statut}
+    {id}
+    {estLectureSeule}
+    {referentielStatuts}
+    on:change={() => dispatch('modificationStatut')}
+  />
 </div>
 
 <style>
@@ -91,9 +85,5 @@
     color: #667892;
     font-size: 0.9em;
     font-weight: 500;
-  }
-
-  select {
-    appearance: auto;
   }
 </style>
