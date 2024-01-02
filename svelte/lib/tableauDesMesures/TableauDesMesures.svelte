@@ -108,7 +108,7 @@
     {#each mesures.mesuresSpecifiques as mesure, index (index)}
       <LigneMesure
         id={`specifique-${index}`}
-        referentiel={{ label: 'Nouvelle', classe: 'specifique' }}
+        referentiel={{ label: 'Spécifique', classe: 'specifique' }}
         nom={mesure.description}
         categorie={categories[mesure.categorie]}
         referentielStatuts={statuts}
