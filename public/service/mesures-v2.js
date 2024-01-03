@@ -6,10 +6,17 @@ $(() => {
   const statuts = JSON.parse($('#referentiel-statuts-mesures').text());
   const estLectureSeule = JSON.parse($('#securiser-lecture-seule').text());
   const idService = $('.page-service').data('id-service');
+  const { indiceCyber, noteMax } = JSON.parse($('#indice-cyber').text());
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-mesures', {
       detail: { categories, statuts, idService, estLectureSeule },
+    })
+  );
+
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-indice-cyber', {
+      detail: { indiceCyber, noteMax },
     })
   );
 
