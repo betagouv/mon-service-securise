@@ -1,6 +1,5 @@
 extends ../parcoursService
 include ../fragments/texteTronque
-include ../fragments/indiceCyber/scoreIndiceCyber
 include ../fragments/jaugeProgressionMesures
 
 block append styles
@@ -10,6 +9,7 @@ block append styles
 block append scripts
   script(type = 'module', src = '/statique/composants-svelte/mesure.js')
   script(type = 'module', src = '/statique/composants-svelte/tableauDesMesures.js')
+  script(type = 'module', src = '/statique/composants-svelte/indiceCyber.js')
   script(type = 'module', src = '/statique/service/mesures-v2.js')
   script(id = 'referentiel-categories-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.categoriesMesures())}
@@ -17,6 +17,8 @@ block append scripts
     !{JSON.stringify(referentiel.statutsMesures())}
   script(id = 'securiser-lecture-seule', type = 'application/json').
     !{JSON.stringify(autorisationsService.SECURISER.estLectureSeule)}
+  script(id = 'indice-cyber', type = 'application/json').
+    !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})}
 
 block header-titre-page
   h3
@@ -30,7 +32,7 @@ block titre
       +jaugeProgressionMesures(pourcentageProgression)
     a.conteneur-indice-cyber(href="indiceCyber")
       .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
-      +scoreIndiceCyber(service.indiceCyber().total, referentiel.indiceCyberNoteMax())
+      #conteneur-indice-cyber
 
 block sous-titre
   h2 Mettre en oeuvre des mesures de sécurité adaptées
