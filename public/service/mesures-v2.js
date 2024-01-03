@@ -7,6 +7,7 @@ $(() => {
   const estLectureSeule = JSON.parse($('#securiser-lecture-seule').text());
   const idService = $('.page-service').data('id-service');
   const { indiceCyber, noteMax } = JSON.parse($('#indice-cyber').text());
+  const pourcentageCompletude = JSON.parse($('#completude-mesure').text());
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-mesures', {
@@ -17,6 +18,12 @@ $(() => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-indice-cyber', {
       detail: { indiceCyber, noteMax, idService },
+    })
+  );
+
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-completude-mesure', {
+      detail: { progression: pourcentageCompletude },
     })
   );
 

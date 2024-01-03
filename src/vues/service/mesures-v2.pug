@@ -1,6 +1,5 @@
 extends ../parcoursService
 include ../fragments/texteTronque
-include ../fragments/jaugeProgressionMesures
 
 block append styles
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
@@ -9,6 +8,7 @@ block append styles
 block append scripts
   script(type = 'module', src = '/statique/composants-svelte/mesure.js')
   script(type = 'module', src = '/statique/composants-svelte/tableauDesMesures.js')
+  script(type = 'module', src = '/statique/composants-svelte/completudeMesure.js')
   script(type = 'module', src = '/statique/composants-svelte/indiceCyber.js')
   script(type = 'module', src = '/statique/service/mesures-v2.js')
   script(id = 'referentiel-categories-mesures', type = 'application/json').
@@ -19,6 +19,8 @@ block append scripts
     !{JSON.stringify(autorisationsService.SECURISER.estLectureSeule)}
   script(id = 'indice-cyber', type = 'application/json').
     !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})}
+  script(id = 'completude-mesure', type = 'application/json').
+    !{JSON.stringify(pourcentageProgression)}
 
 block header-titre-page
   h3
@@ -27,9 +29,7 @@ block header-titre-page
 block titre
   h1 Sécuriser
   .conteneur-indicateurs
-    .conteneur-jauge-progression
-      .cartouche-progression-mesures des mesures renseignées
-      +jaugeProgressionMesures(pourcentageProgression)
+    #conteneur-completude-mesure
     a.conteneur-indice-cyber(href="indiceCyber")
       .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
       #conteneur-indice-cyber

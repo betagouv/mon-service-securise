@@ -229,36 +229,10 @@ main {
 .conteneur-indicateurs {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 1em;
   position: absolute;
   right: 0;
-}
-
-.jauge-progression-mesures {
-  width: 4.2em;
-  height: 4.2em;
-}
-
-.conteneur-jauge-progression {
-  display: flex;
-  flex-direction: row;
-  gap: 0;
-  align-items: center;
-  user-select: none;
-}
-
-.conteneur-jauge-progression .cartouche-progression-mesures {
-  border-radius: 8px;
-  background: #f1f5f9;
-  padding: 8px 12px 8px 68px;
-  color: #08416a;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.conteneur-jauge-progression .jauge-progression-mesures {
-  position: absolute;
-  left: 5px;
 }
 
 .conteneur-indice-cyber {
