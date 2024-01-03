@@ -566,6 +566,21 @@ const routesApiService = ({
   );
 
   routes.get(
+    '/:id/completude',
+    middleware.trouveService({ [SECURISER]: LECTURE }),
+    middleware.aseptise('id'),
+    (requete, reponse) => {
+      const { homologation: service } = requete;
+      const completude = service.completudeMesures();
+      const pourcentageProgression = Math.round(
+        (completude.nombreMesuresCompletes / completude.nombreTotalMesures) *
+          100
+      );
+      reponse.json({ completude: pourcentageProgression });
+    }
+  );
+
+  routes.get(
     '/:id/indiceCyber',
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.aseptise('id'),
