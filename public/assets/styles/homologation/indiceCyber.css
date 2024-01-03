@@ -53,6 +53,10 @@
   top: -5em;
 }
 
+#conteneur-indice-cyber {
+  width: 100%;
+}
+
 .conteneur-descriptif .contenu-descriptif {
   padding-left: 12em;
 }
