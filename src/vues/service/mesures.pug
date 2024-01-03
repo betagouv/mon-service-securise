@@ -2,7 +2,6 @@ extends ../parcoursService
 include ../fragments/inputChoix
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
-include ../fragments/jaugeProgressionMesures
 
 mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
   +inputChoix({
@@ -21,7 +20,10 @@ block append styles
 
 block append scripts
   script(type = 'module', src = '/statique/composants-svelte/mesure.js')
+  script(type = 'module', src = '/statique/composants-svelte/completudeMesure.js')
   script(type = 'module', src = '/statique/composants-svelte/indiceCyber.js')
+  script(id = 'completude-mesure', type = 'application/json').
+    !{JSON.stringify(pourcentageProgression)}
   script(id = 'indice-cyber', type = 'application/json').
     !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})}
 
@@ -32,9 +34,7 @@ block header-titre-page
 block titre
   h1 Sécuriser
   .conteneur-indicateurs
-    .conteneur-jauge-progression
-      .cartouche-progression-mesures des mesures renseignées
-      +jaugeProgressionMesures(pourcentageProgression)
+    #conteneur-completude-mesure
     a.conteneur-indice-cyber(href="indiceCyber")
       .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
       #conteneur-indice-cyber

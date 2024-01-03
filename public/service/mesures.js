@@ -21,6 +21,12 @@ $(() => {
   const referentielStatutsMesures = JSON.parse(
     $('#referentiel-statuts-mesures').text()
   );
+  const pourcentageCompletude = JSON.parse($('#completude-mesure').text());
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-completude-mesure', {
+      detail: { progression: pourcentageCompletude },
+    })
+  );
 
   const $boutonSave = $('.bouton[idHomologation]');
   const identifiantService = $boutonSave.attr('idHomologation');
