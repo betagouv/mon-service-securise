@@ -1962,4 +1962,45 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(data.total).to.be(1.5);
     });
   });
+
+  describe('quand requête GET sur `/api/service/:id/completude', () => {
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: LECTURE, rubrique: SECURISER }],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/completude',
+        },
+        done
+      );
+    });
+
+    it("aseptise l'id du service", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id'],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/completude',
+        },
+        done
+      );
+    });
+
+    it('renvoie la complétude des mesures du service', async () => {
+      const serviceARenvoyer = unService().construis();
+      serviceARenvoyer.completudeMesures = () => ({
+        nombreMesuresCompletes: 2,
+        nombreTotalMesures: 10,
+      });
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: serviceARenvoyer,
+      });
+
+      const { data } = await axios.get(
+        'http://localhost:1234/api/service/456/completude'
+      );
+
+      expect(data.completude).to.be(20);
+    });
+  });
 });
