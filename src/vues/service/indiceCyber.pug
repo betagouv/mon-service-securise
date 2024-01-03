@@ -1,10 +1,15 @@
 extends ../parcoursService
 include ../fragments/texteTronque
 include ../fragments/indiceCyber/radarIndiceCyber
-include ../fragments/indiceCyber/scoreIndiceCyber
 
 block append styles
   link(href = '/statique/assets/styles/homologation/indiceCyber.css', rel = 'stylesheet')
+
+block append scripts
+  script(type = 'module', src = '/statique/composants-svelte/indiceCyber.js')
+  script(type = 'module', src = '/statique/service/indiceCyber.js')
+  script(id = 'indice-cyber', type = 'application/json').
+    !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax() })}
 
 block header-titre-page
   h3
@@ -21,7 +26,7 @@ block zone-principale
       h2 L'indice cyber
     .conteneur-descriptif
       .disque-indice
-        +scoreIndiceCyber(indiceCyber.total, noteMax)
+        #conteneur-indice-cyber
       .contenu-descriptif
         p L'indice cyber est une évaluation indicative du niveau de sécurisation du service, calculé à partir des mesures faites et partielles proposées par l'ANSSI dans MonServiceSécurisé.
     .conteneur-plus-details
