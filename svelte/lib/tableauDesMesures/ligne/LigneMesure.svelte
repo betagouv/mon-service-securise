@@ -82,8 +82,11 @@
   }
 
   .categorie {
+    background: #f1f5f9;
     color: #667892;
+    padding: 1px 8px 3px 8px;
     font-size: 0.9em;
     font-weight: 500;
+    border-radius: 20px;
   }
 </style>
