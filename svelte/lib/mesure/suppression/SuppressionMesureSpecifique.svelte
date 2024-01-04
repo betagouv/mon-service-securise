@@ -1,7 +1,7 @@
 <script lang="ts">
   import { store } from '../mesure.store';
-  import {supprimeMesureSpecifique} from "../mesure.api";
-  import type {MesuresExistantes} from "../mesure.d";
+  import { supprimeMesureSpecifique } from '../mesure.api';
+  import type { MesuresExistantes } from '../mesure.d';
 
   export let idService: string;
   export let mesuresExistantes: MesuresExistantes;
@@ -9,9 +9,19 @@
   let enCoursEnvoi = false;
   const supprimeMesure = async () => {
     enCoursEnvoi = true;
-    await supprimeMesureSpecifique(idService, mesuresExistantes, $store.mesureEditee.metadonnees.idMesure as number);
+    await supprimeMesureSpecifique(
+      idService,
+      mesuresExistantes,
+      $store.mesureEditee.metadonnees.idMesure as number
+    );
     enCoursEnvoi = false;
-    window.location.reload();
+    document.body.dispatchEvent(
+      new CustomEvent('mesure-modifiee', {
+        detail: {
+          doitFermerTiroir: true,
+        },
+      })
+    );
   };
 </script>
 
