@@ -2,7 +2,6 @@ extends ../parcoursService
 include ../fragments/inputChoix
 include ../fragments/cartesInformations
 include ../fragments/texteTronque
-include ../fragments/indiceCyber/scoreIndiceCyber
 include ../fragments/jaugeProgressionMesures
 
 mixin inputMesure({ nom, titre, indispensable, lectureSeule = false })
@@ -22,6 +21,9 @@ block append styles
 
 block append scripts
   script(type = 'module', src = '/statique/composants-svelte/mesure.js')
+  script(type = 'module', src = '/statique/composants-svelte/indiceCyber.js')
+  script(id = 'indice-cyber', type = 'application/json').
+    !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})}
 
 block header-titre-page
   h3
@@ -35,7 +37,7 @@ block titre
       +jaugeProgressionMesures(pourcentageProgression)
     a.conteneur-indice-cyber(href="indiceCyber")
       .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
-      +scoreIndiceCyber(service.indiceCyber().total, referentiel.indiceCyberNoteMax())
+      #conteneur-indice-cyber
 
 block sous-titre
   h2 Mettre en œuvre des mesures de sécurité adaptées
