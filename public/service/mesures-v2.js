@@ -16,7 +16,7 @@ $(() => {
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-indice-cyber', {
-      detail: { indiceCyber, noteMax },
+      detail: { indiceCyber, noteMax, idService },
     })
   );
 
