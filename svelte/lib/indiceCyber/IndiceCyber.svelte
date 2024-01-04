@@ -1,12 +1,14 @@
 <script lang="ts">
   import MasqueJauge from './svg/MasqueJauge.svelte';
   import Fleche from './svg/Fleche.svelte';
+  import { recupereIndiceCyber } from './indiceCyber.api';
 
   export let indiceCyber: number;
   export let noteMax: number;
+  export let idService: string;
   export let avecAnimation = true;
 
-  const indiceCyberFormatte = Intl.NumberFormat('fr', {
+  $: indiceCyberFormatte = Intl.NumberFormat('fr', {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   }).format(indiceCyber);
@@ -19,10 +21,11 @@
     { min: 4, max: 5, gradientDebut: '#D2DFE6', gradientFin: '#9CACB5' },
     { min: 5, max: 6, gradientDebut: '#F2CA5A', gradientFin: '#DBAF2C' },
   ];
-  const idxInterval = tranchesIndiceCyber.findIndex(
+  $: idxInterval = tranchesIndiceCyber.findIndex(
     ({ min, max }) => indiceCyber >= min && indiceCyber < max
   );
-  const { gradientDebut, gradientFin } = tranchesIndiceCyber[idxInterval];
+  $: gradientDebut = tranchesIndiceCyber[idxInterval].gradientDebut;
+  $: gradientFin = tranchesIndiceCyber[idxInterval].gradientFin;
 
   const [rotationFlecheMin, rotationFlecheMax] = [-13, 164];
   const [progressionJaugeMin, progressionJaugeMax] = [0, 176];
@@ -34,14 +37,18 @@
     },0`;
   const cheminDemiCercle = (cx: number, cy: number, r: number) =>
     `M ${cx - r}, ${cy} a ${r},${r} 0 1,0 ${r * 2},0`;
-  const rotationFleche =
+  $: rotationFleche =
     (indiceCyber / noteMax) * (rotationFlecheMax - rotationFlecheMin) +
     rotationFlecheMin;
-  const progressionJauge =
+  $: progressionJauge =
     (indiceCyber / noteMax) * (progressionJaugeMax - progressionJaugeMin) +
     progressionJaugeMin;
+  const metAJourIndiceCyber = async () => {
+    indiceCyber = await recupereIndiceCyber(idService);
+  };
 </script>
 
+<svelte:body on:mesure-modifiee={metAJourIndiceCyber} />
 <svg
   id="score-indice-cyber"
   viewBox="0 0 160 160"
