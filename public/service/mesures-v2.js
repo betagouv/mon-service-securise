@@ -30,4 +30,9 @@ $(() => {
       propsDuBundle
     );
   });
+
+  $(document.body).on('mesure-modifiee', (e) => {
+    const { doitFermerTiroir } = e.detail;
+    if (doitFermerTiroir) gestionnaireTiroir.basculeOuvert(false);
+  });
 });
