@@ -22,14 +22,16 @@ $(() => {
     $('#referentiel-statuts-mesures').text()
   );
   const pourcentageCompletude = JSON.parse($('#completude-mesure').text());
-  document.body.dispatchEvent(
-    new CustomEvent('svelte-recharge-completude-mesure', {
-      detail: { progression: pourcentageCompletude },
-    })
-  );
-
   const $boutonSave = $('.bouton[idHomologation]');
   const identifiantService = $boutonSave.attr('idHomologation');
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-completude-mesure', {
+      detail: {
+        progression: pourcentageCompletude,
+        idService: identifiantService,
+      },
+    })
+  );
 
   const { indiceCyber, noteMax } = JSON.parse($('#indice-cyber').text());
   document.body.dispatchEvent(
