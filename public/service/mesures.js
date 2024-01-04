@@ -25,6 +25,13 @@ $(() => {
   const $boutonSave = $('.bouton[idHomologation]');
   const identifiantService = $boutonSave.attr('idHomologation');
 
+  const { indiceCyber, noteMax } = JSON.parse($('#indice-cyber').text());
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-indice-cyber', {
+      detail: { indiceCyber, noteMax },
+    })
+  );
+
   const $conteneurModalites = (nom) => {
     const $conteneur = $('<div class="informations-additionnelles"></div>');
     const $lien = $(
