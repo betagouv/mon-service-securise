@@ -231,4 +231,6 @@ ${statuts}
       }
     );
   });
+
+  $(document.body).on('mesure-modifiee', () => window.location.reload());
 });

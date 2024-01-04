@@ -19,7 +19,13 @@
     enCoursEnvoi = true;
     await enregistreMesures(idService, mesuresExistantes, $store);
     enCoursEnvoi = false;
-    window.location.reload();
+    document.body.dispatchEvent(
+      new CustomEvent('mesure-modifiee', {
+        detail: {
+          doitFermerTiroir: true,
+        },
+      })
+    );
   };
 </script>
 
