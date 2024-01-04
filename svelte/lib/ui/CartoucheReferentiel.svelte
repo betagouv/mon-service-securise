@@ -6,7 +6,7 @@
 
   const label =
     referentiel === Referentiel.SPECIFIQUE
-      ? 'Spécifique'
+      ? 'Mesures ajoutées'
       : referentiel === Referentiel.ANSSI && indispensable
       ? 'Indispensable'
       : 'Recommandé';
