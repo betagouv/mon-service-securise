@@ -40,6 +40,7 @@
     etatEnregistrement = EnCours;
     await enregistreMesures(idService, mesures);
     etatEnregistrement = Fait;
+    document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
   };
 
   type MesureAEditer = {
