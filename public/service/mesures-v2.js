@@ -23,7 +23,7 @@ $(() => {
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-completude-mesure', {
-      detail: { progression: pourcentageCompletude },
+      detail: { progression: pourcentageCompletude, idService },
     })
   );
 

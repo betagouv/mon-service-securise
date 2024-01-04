@@ -1,11 +1,19 @@
 <script lang="ts">
+  import { recupereCompletudeMesure } from './completudeMesure.api';
+
   export let progression: number;
+  export let idService: string;
 
   const taille = 100;
   const tailleCercle = taille * 0.85;
   const perimetreCercle = 2 * Math.PI * (tailleCercle / 2);
+
+  const metAJourCompletude = async () => {
+    progression = await recupereCompletudeMesure(idService);
+  };
 </script>
 
+<svelte:body on:mesure-modifiee={metAJourCompletude} />
 <div class="conteneur-jauge-progression">
   <div class="cartouche-progression-mesures">des mesures renseignées</div>
   <svg class="jauge-progression-mesures" viewBox="0 0 {taille} {taille}">
