@@ -4,6 +4,7 @@
   import { recupereIndiceCyber } from './indiceCyber.api';
 
   export let indiceCyber: number;
+
   export let noteMax: number;
   export let idService: string;
   export let avecAnimation = true;
@@ -43,8 +44,14 @@
   $: progressionJauge =
     (indiceCyber / noteMax) * (progressionJaugeMax - progressionJaugeMin) +
     progressionJaugeMin;
+
+  let animationJauge: SVGAnimateTransformElement;
+  let animationFleche: SVGAnimateTransformElement;
+
   const metAJourIndiceCyber = async () => {
     indiceCyber = await recupereIndiceCyber(idService);
+    animationJauge?.beginElement();
+    animationFleche?.beginElement();
   };
 </script>
 
@@ -112,6 +119,7 @@
       >
         {#if avecAnimation}
           <animateTransform
+            bind:this={animationJauge}
             attributeName="transform"
             type="rotate"
             from={progressionJaugeMin}
@@ -125,6 +133,7 @@
     <g transform="rotate({rotationFleche})" transform-origin="80 80">
       {#if avecAnimation}
         <animateTransform
+          bind:this={animationFleche}
           attributeName="transform"
           type="rotate"
           from={rotationFlecheMin}
