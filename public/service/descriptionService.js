@@ -23,6 +23,15 @@ const brancheComportementMessageErreur = () => {
   });
 };
 
+const brancheComportementNombreOrganisationsUtilisatrices = () => {
+  const $selection = $('#nombre-organisations-utilisatrices');
+  const $conteneur = $('.conteneur-nombre-organisations-utilisatrices');
+  $selection.on('change', () => {
+    const nouvelleValeur = $selection.val();
+    $conteneur.toggleClass('vide', nouvelleValeur === '0-0');
+  });
+};
+
 const estNomServiceDejaUtilise = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
@@ -53,4 +62,5 @@ $(() => {
     'point-acces',
     'exemple : https://www.adresse.fr, adresse IP'
   );
+  brancheComportementNombreOrganisationsUtilisatrices();
 });
