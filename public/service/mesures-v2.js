@@ -32,7 +32,7 @@ $(() => {
   });
 
   $(document.body).on('mesure-modifiee', (e) => {
-    const { doitFermerTiroir } = e.detail;
+    const doitFermerTiroir = e.detail?.sourceDeModification === 'tiroir';
     if (doitFermerTiroir) gestionnaireTiroir.basculeOuvert(false);
   });
 });

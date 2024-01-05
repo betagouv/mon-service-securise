@@ -21,9 +21,7 @@
     enCoursEnvoi = false;
     document.body.dispatchEvent(
       new CustomEvent('mesure-modifiee', {
-        detail: {
-          doitFermerTiroir: true,
-        },
+        detail: { sourceDeModification: 'tiroir' },
       })
     );
   };
