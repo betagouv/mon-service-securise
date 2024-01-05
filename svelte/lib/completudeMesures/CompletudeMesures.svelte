@@ -9,24 +9,28 @@
   const tailleCercle = taille * 0.85;
   const perimetreCercle = 2 * Math.PI * (tailleCercle / 2);
 
-  let passage50Pourcent = false;
-  let nbConfettis = 0;
+  let lanceAnimation = false;
+
   const metAJourCompletude = async () => {
-    const ancienneProgression = progression;
+    let avant = progression;
     progression = await recupereCompletudeMesure(idService);
-    if (progression >= 50 && ancienneProgression < 50) {
-      passage50Pourcent = true;
-      nbConfettis = 30;
-    }
+    lanceAnimation = progression > avant;
   };
 </script>
 
 <svelte:body on:mesure-modifiee={metAJourCompletude} />
 
-<div class="conteneur-jauge-progression" class:passage50Pourcent>
-  {#each new Array(nbConfettis).fill(0) as _}
-    <Confetti />
-  {/each}
+<div
+  class="conteneur-jauge-progression"
+  class:animationCompletude={lanceAnimation}
+>
+  {#if lanceAnimation}
+    {#key progression}
+      {#each new Array(30).fill(0) as _}
+        <Confetti />
+      {/each}
+    {/key}
+  {/if}
   <div class="cartouche-progression-mesures">des mesures renseignées</div>
   <svg class="jauge-progression-mesures" viewBox="0 0 {taille} {taille}">
     <circle
@@ -93,21 +97,21 @@
     left: 5px;
   }
 
-  .passage50Pourcent {
+  .animationCompletude {
     --duree-animation: 1000ms;
     --type-animation: ease-in-out;
   }
 
-  .passage50Pourcent .cartouche-progression-mesures {
+  .animationCompletude .cartouche-progression-mesures {
     animation: fond-vert-pale var(--duree-animation) var(--type-animation);
   }
 
-  .passage50Pourcent #cercle-progression {
+  .animationCompletude #cercle-progression {
     animation: couleur-svg-vert-fonce var(--duree-animation)
       var(--type-animation);
   }
 
-  .passage50Pourcent text {
+  .animationCompletude text {
     animation: fond-svg-vert-fonce var(--duree-animation) var(--type-animation);
   }
 
