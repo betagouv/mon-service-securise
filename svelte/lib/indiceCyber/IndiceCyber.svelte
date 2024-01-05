@@ -7,7 +7,6 @@
 
   export let noteMax: number;
   export let idService: string;
-  export let avecAnimation = true;
 
   $: indiceCyberFormatte = Intl.NumberFormat('fr', {
     minimumFractionDigits: 1,
@@ -114,34 +113,29 @@
         d={cheminDemiCercle(80, 80, 67)}
         stroke="url(#gradient_progression)"
         stroke-width="18"
-        transform="rotate({progressionJauge})"
         transform-origin="80 80"
       >
-        {#if avecAnimation}
-          <animateTransform
-            bind:this={animationJauge}
-            attributeName="transform"
-            type="rotate"
-            from={progressionJaugeMin}
-            to={progressionJauge}
-            dur={DUREE_ANIMATION}
-            fill="freeze"
-          />
-        {/if}
-      </path>
-    </g>
-    <g transform="rotate({rotationFleche})" transform-origin="80 80">
-      {#if avecAnimation}
         <animateTransform
-          bind:this={animationFleche}
+          bind:this={animationJauge}
           attributeName="transform"
           type="rotate"
-          from={rotationFlecheMin}
-          to={rotationFleche}
+          from={progressionJaugeMin}
+          to={progressionJauge}
           dur={DUREE_ANIMATION}
           fill="freeze"
         />
-      {/if}
+      </path>
+    </g>
+    <g transform-origin="80 80">
+      <animateTransform
+        bind:this={animationFleche}
+        attributeName="transform"
+        type="rotate"
+        from={rotationFlecheMin}
+        to={rotationFleche}
+        dur={DUREE_ANIMATION}
+        fill="freeze"
+      />
       <Fleche />
     </g>
   </g>
