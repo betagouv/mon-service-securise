@@ -28,6 +28,20 @@ module.exports = {
     },
   ],
 
+  nombreOrganisationsUtilisatrices: [
+    { label: 'Mon organisation uniquement', borneBasse: 1, borneHaute: 1 },
+    { label: '2', borneBasse: 2, borneHaute: 2 },
+    { label: '3', borneBasse: 3, borneHaute: 3 },
+    { label: '4', borneBasse: 4, borneHaute: 4 },
+    { label: 'entre 5 et 10', borneBasse: 5, borneHaute: 10 },
+    { label: 'entre 11 et 50', borneBasse: 11, borneHaute: 50 },
+    { label: 'entre 51 et 100', borneBasse: 51, borneHaute: 100 },
+    { label: 'entre 101 et 500', borneBasse: 101, borneHaute: 500 },
+    { label: 'entre 501 et 1 000', borneBasse: 501, borneHaute: 1000 },
+    { label: 'entre 1 001 et 5 000', borneBasse: 1001, borneHaute: 5000 },
+    { label: 'plus de 5 000', borneBasse: 5001, borneHaute: 5001 },
+  ],
+
   tranchesIndicesCybers: [
     {
       borneInferieure: 0,
