@@ -30,10 +30,10 @@
   export let estLectureSeule: boolean;
 
   let mesures: Mesures;
-  const rafraichitMesures = async () => {
+  const rafraichisMesures = async () => {
     mesures = await recupereMesures(idService);
   };
-  onMount(rafraichitMesures);
+  onMount(rafraichisMesures);
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
   const metAJourMesures = async () => {
@@ -66,7 +66,7 @@
   };
 </script>
 
-<svelte:body on:mesure-modifiee={rafraichitMesures} />
+<svelte:body on:mesure-modifiee={rafraichisMesures} />
 {#if !estLectureSeule}
   <div class="barre-actions">
     <button class="bouton" on:click={() => afficheTiroirDeMesure()}>
@@ -115,10 +115,7 @@
         on:click={() =>
           afficheTiroirDeMesure({
             mesure,
-            metadonnees: {
-              typeMesure: 'SPECIFIQUE',
-              idMesure: index,
-            },
+            metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: index },
           })}
         {estLectureSeule}
       />
