@@ -76,7 +76,7 @@
           disabled={estLectureSeule}
           use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
         >
-          <option value="" disabled selected>Non renseigné</option>
+          <option value="" disabled selected>-</option>
           {#each Object.entries(categories) as [valeur, label]}
             <option value={valeur}>{label}</option>
           {/each}
@@ -129,6 +129,10 @@
   select {
     margin-top: 8px;
     margin-bottom: 0;
+  }
+
+  #categorie {
+    border-right: 8px solid transparent;
   }
 
   label.requis:before {
