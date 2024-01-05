@@ -1,6 +1,6 @@
 export enum Referentiel {
-  ANSSI,
-  SPECIFIQUE,
+  ANSSI = 'ANSSI',
+  SPECIFIQUE = 'Mesures ajoutées',
 }
 
 export type IdStatut = string;

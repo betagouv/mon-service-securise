@@ -5,8 +5,9 @@
     MesureSpecifique,
   } from '../tableauDesMesures.d';
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
-  import type { Referentiel, ReferentielStatut } from '../../ui/types.d';
+  import { Referentiel, type ReferentielStatut } from '../../ui/types.d';
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
+  import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
 
   type IdDom = string;
 
@@ -26,7 +27,7 @@
 </script>
 
 <div class="ligne-de-mesure">
-  <CartoucheReferentiel {referentiel} {indispensable} />
+  <CartoucheReferentiel {referentiel} />
   <div class="titre-mesure">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <p class="titre" on:click={() => dispatch('click')}>
@@ -34,7 +35,12 @@
       <!-- svelte-ignore a11y-missing-attribute -->
       <img src="/statique/assets/images/chevron_noir.svg" />
     </p>
-    <span class="categorie">{categorie}</span>
+    <div class="conteneur-cartouches">
+      <span class="categorie">{categorie}</span>
+      {#if referentiel === Referentiel.ANSSI}
+        <CartoucheIndispensable {indispensable} />
+      {/if}
+    </div>
   </div>
   <SelectionStatut
     bind:statut={mesure.statut}
@@ -88,5 +94,11 @@
     font-size: 0.9em;
     font-weight: 500;
     border-radius: 20px;
+  }
+
+  .conteneur-cartouches {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
   }
 </style>
