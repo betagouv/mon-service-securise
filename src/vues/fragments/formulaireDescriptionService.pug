@@ -39,6 +39,25 @@ mixin formulaireDescriptionService(idHomologation)
           )
           .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
 
+      - const { borneBasse, borneHaute } = service.descriptionService.nombreOrganisationsUtilisatrices
+      - const valeurService = `${borneBasse}-${borneHaute}`
+      - const valeurVide = '0-0'
+      .conteneur-nombre-organisations-utilisatrices(class = `${valeurService === valeurVide && !estLectureSeule ? 'vide' : ''}`)
+        .requis
+          label À combien d'organisations publiques est destiné le service ?
+            br
+            select(
+              id = 'nombre-organisations-utilisatrices'
+              name = 'nombreOrganisationsUtilisatrices'
+              required
+              disabled = estLectureSeule
+            )
+              option(value='' disabled label='-' selected=(valeurService===valeurVide))
+              each tranche in referentiel.nombreOrganisationsUtilisatrices()
+                - const valeurOption = `${tranche.borneBasse}-${tranche.borneHaute}`
+                option(value=valeurOption label=tranche.label selected=(valeurService===valeurOption))
+            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une option.
+
       .requis
         +inputChoix({
           type: 'checkbox',

@@ -1,13 +1,13 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
-const Homologation = require('../../src/modeles/homologation');
 const {
   Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS },
 } = require('../../src/modeles/autorisations/gestionDroits');
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
+const { unService } = require('../constructeurs/constructeurService');
 
 const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
   const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
@@ -64,10 +64,10 @@ const middlewareFantaisie = {
   reinitialise: ({
     idUtilisateur,
     acceptationCGU = true,
-    homologationARenvoyer = new Homologation({
-      id: '456',
-      descriptionService: { nomService: 'un service' },
-    }),
+    homologationARenvoyer = unService()
+      .avecId('456')
+      .avecNomService('un service')
+      .construis(),
     autorisationACharger = uneAutorisation().construis(),
   }) => {
     autorisationsChargees = false;
