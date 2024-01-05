@@ -20,6 +20,7 @@ const donneesReferentielVide = {
   statutsDeploiement: {},
   statutsMesures: {},
   tranchesIndicesCybers: [],
+  nombreOrganisationsUtilisatrices: [],
 };
 
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
@@ -109,6 +110,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donnees.nouvellesFonctionnalites.find(
       (fonctionnalite) => fonctionnalite.id === id
     );
+  const nombreOrganisationsUtilisatrices = () =>
+    donnees.nombreOrganisationsUtilisatrices || [];
 
   const coefficientIndiceCyberMesuresIndispensables = () =>
     donnees.indiceCyber?.coefficientIndispensables || 0.5;
@@ -293,6 +296,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbMoisBientotExpire,
     niveauGravite,
     niveauxGravite,
+    nombreOrganisationsUtilisatrices,
     nouvelleFonctionnalite,
     numeroEtape,
     premiereEtapeParcours,
