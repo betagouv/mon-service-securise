@@ -721,4 +721,26 @@ describe('Une homologation', () => {
       expect(appelDelegue).to.be(true);
     });
   });
+
+  describe("sur demande d'instanciation d'un service pour un utilisateur", () => {
+    it('retourne un service qui utilise des valeurs par défaut', () => {
+      const utilisateur = unUtilisateur().construis();
+      const service = Homologation.creePourUnUtilisateur(utilisateur);
+
+      expect(
+        service.descriptionService.nombreOrganisationsUtilisatrices
+      ).to.eql({ borneBasse: 0, borneHaute: 0 });
+    });
+
+    it("ajoute le nom de l'entité publique si l'utilisateur en a une", () => {
+      const utilisateur = unUtilisateur()
+        .avecNomEntitePublique('ANSSI')
+        .construis();
+      const service = Homologation.creePourUnUtilisateur(utilisateur);
+
+      expect(service.descriptionService.organisationsResponsables).to.eql([
+        'ANSSI',
+      ]);
+    });
+  });
 });

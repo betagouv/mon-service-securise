@@ -260,6 +260,24 @@ class Homologation {
   vueAnnexePDFRisques() {
     return new ObjetPDFAnnexeRisques(this, this.referentiel);
   }
+
+  static creePourUnUtilisateur(utilisateur) {
+    const donneesService = {
+      descriptionService: {
+        nombreOrganisationsUtilisatrices: {
+          borneBasse: 0,
+          borneHaute: 0,
+        },
+      },
+    };
+    if (utilisateur.nomEntitePublique) {
+      donneesService.descriptionService.organisationsResponsables = [
+        utilisateur.nomEntitePublique,
+      ];
+    }
+
+    return new Homologation(donneesService);
+  }
 }
 
 Object.assign(Homologation, NIVEAUX);
