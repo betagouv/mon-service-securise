@@ -29,6 +29,10 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           if (utilisateur.nomEntitePublique) {
             donneesService.descriptionService = {
               organisationsResponsables: [utilisateur.nomEntitePublique],
+              nombreOrganisationsUtilisatrices: {
+                borneBasse: 0,
+                borneHaute: 0,
+              },
             };
           }
 
