@@ -9,10 +9,18 @@ const parametresCommuns = (typeRequete, doitFermerConnexion = false) => ({
   windowMs: uneMinute,
   handler: (requete, reponse) => {
     const attaque = requete.headers['x-real-ip']?.replaceAll('.', '*');
-    fabriqueAdaptateurGestionErreur().logueErreur(
-      new Error(`[${typeRequete}] Limite de trafic atteinte par une IP.`),
-      { typeRequete, 'IP de la requete': attaque }
-    );
+
+    if (typeRequete === 'Navigation')
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[${typeRequete}] Limite de trafic atteinte par l'IP ${attaque}.`
+      );
+    else
+      fabriqueAdaptateurGestionErreur().logueErreur(
+        new Error(`[${typeRequete}] Limite de trafic atteinte par une IP.`),
+        { typeRequete, 'IP de la requete': attaque }
+      );
+
     if (doitFermerConnexion) reponse.end();
     else reponse.render('erreurTropDeTrafic');
   },
