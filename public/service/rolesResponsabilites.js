@@ -17,7 +17,7 @@ $(() => {
 
   brancheElementsAjoutables('acteurs-homologation', 'acteur-homologation', {
     role: { label: 'Rôle au regard du projet' },
-    nom: { label: 'Nom / Prénom' },
+    nom: { label: 'Prénom / Nom' },
     fonction: { label: 'Fonction' },
   });
 
