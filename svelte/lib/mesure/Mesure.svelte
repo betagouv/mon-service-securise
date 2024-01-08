@@ -139,6 +139,8 @@
     content: '*';
     color: var(--rose-anssi);
     transform: translate(6px, -3px);
+    margin-left: -10px;
+    margin-right: 4px;
   }
 
   .conteneur-actions {
