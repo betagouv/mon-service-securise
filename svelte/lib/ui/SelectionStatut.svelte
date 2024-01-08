@@ -33,6 +33,10 @@
 </label>
 
 <style>
+  label {
+    margin-bottom: 16px;
+  }
+
   select {
     appearance: auto;
     margin-top: 8px;
