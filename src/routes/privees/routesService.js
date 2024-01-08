@@ -1,6 +1,5 @@
 const express = require('express');
 
-const Homologation = require('../../modeles/homologation');
 const InformationsHomologation = require('../../modeles/informationsHomologation');
 
 const {
@@ -9,6 +8,7 @@ const {
   premiereRouteDisponible,
 } = require('../../modeles/autorisations/gestionDroits');
 const Autorisation = require('../../modeles/autorisations/autorisation');
+const Service = require('../../modeles/service');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -25,21 +25,10 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
       depotDonnees
         .utilisateur(idUtilisateurCourant)
         .then((utilisateur) => {
-          const donneesService = {};
-          if (utilisateur.nomEntitePublique) {
-            donneesService.descriptionService = {
-              organisationsResponsables: [utilisateur.nomEntitePublique],
-              nombreOrganisationsUtilisatrices: {
-                borneBasse: 0,
-                borneHaute: 0,
-              },
-            };
-          }
-
           reponse.render('service/creation', {
             InformationsHomologation,
             referentiel,
-            service: new Homologation(donneesService),
+            service: Service.creePourUnUtilisateur(utilisateur),
             etapeActive: 'descriptionService',
           });
         })

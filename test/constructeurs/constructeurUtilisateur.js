@@ -34,6 +34,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  avecNomEntitePublique(nomEntite) {
+    this.donnees.nomEntitePublique = nomEntite;
+    return this;
+  }
+
   quiSAppelle(prenomNom) {
     const [prenom, nom] = prenomNom.split(' ');
     this.donnees.prenom = prenom;
