@@ -1,5 +1,6 @@
 import { writable, derived } from 'svelte/store';
 import type {
+  IdCategorie,
   MesureGenerale,
   Mesures,
   MesureSpecifique,
@@ -19,29 +20,40 @@ export const mesures = {
 };
 
 export const rechercheTextuelle = writable<string>('');
+export const rechercheCategorie = writable<IdCategorie[]>([]);
 
 const contientEnMinuscule = (champ: string | undefined, recherche: string) =>
   champ ? champ.toLowerCase().includes(recherche.toLowerCase()) : false;
 
 enum IdFiltre {
   rechercheTextuelle,
+  rechercheCategorie,
 }
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type FiltresPredicats = Record<IdFiltre, Filtre>;
 
 type Predicats = { actifs: IdFiltre[]; filtres: FiltresPredicats };
-export const predicats = derived<[typeof rechercheTextuelle], Predicats>(
-  [rechercheTextuelle],
-  ([$rechercheTextuelle]) => {
+export const predicats = derived<
+  [typeof rechercheTextuelle, typeof rechercheCategorie],
+  Predicats
+>(
+  [rechercheTextuelle, rechercheCategorie],
+  ([$rechercheTextuelle, $rechercheCategorie]) => {
     const actifs = [];
     if ($rechercheTextuelle) actifs.push(IdFiltre.rechercheTextuelle);
+    if ($rechercheCategorie.length > 0)
+      actifs.push(IdFiltre.rechercheCategorie);
 
     return {
       actifs,
       filtres: {
         [IdFiltre.rechercheTextuelle]: (
           mesure: MesureSpecifique | MesureGenerale
-        ) => contientEnMinuscule(mesure.description, $rechercheTextuelle),
+        ) =>
+          contientEnMinuscule(mesure.description, $rechercheTextuelle) ,
+        [IdFiltre.rechercheCategorie]: (
+          mesure: MesureSpecifique | MesureGenerale
+        ) => $rechercheCategorie.includes(mesure.categorie),
       },
     };
   }
