@@ -19,7 +19,9 @@
     rechercheTextuelle,
     mesuresFiltrees,
     nombreResultats,
+    rechercheCategorie,
   } from './tableauDesMesures.store';
+  import MenuFlottant from '../ui/MenuFlottant.svelte';
 
   enum EtatEnregistrement {
     Jamais,
@@ -80,6 +82,36 @@
       placeholder="ex : chiffrer, sauvegarde, données..."
     />
   </label>
+  <MenuFlottant>
+    <div slot="declencheur">
+      <button class="bouton bouton-secondaire bouton-filtre">
+        <img src="/statique/assets/images/icone_filtre.svg" />
+        Filtres
+      </button>
+    </div>
+
+    <div class="filtres-disponibles">
+      <div class="titre-filtres">
+        <img src="/statique/assets/images/icone_filtre.svg" />
+        Filtres
+      </div>
+      <fieldset>
+        <legend>Catégories de cybersécurité</legend>
+        {#each Object.entries(categories) as [id, categorie]}
+          <div>
+            <input
+              type="checkbox"
+              {id}
+              name={id}
+              bind:group={$rechercheCategorie}
+              value={id}
+            />
+            <label for={id}>{categorie}</label>
+          </div>
+        {/each}
+      </fieldset>
+    </div>
+  </MenuFlottant>
 </div>
 {#if !estLectureSeule}
   <div class="barre-actions">
@@ -147,6 +179,7 @@
     display: flex;
     flex-direction: row;
     margin-bottom: 1em;
+    gap: 16px;
   }
 
   label[for='recherche'] {
@@ -218,11 +251,51 @@
   .bouton {
     margin: 0;
     padding: 0.5em 1em;
+    font-weight: 500;
   }
 
   .aucun-resultat {
     border-radius: 8px;
     border: 1px solid #cbd5e1;
     padding: 9px 0;
+  }
+
+  .bouton-filtre {
+    display: flex;
+    gap: 8px;
+  }
+
+  .titre-filtres {
+    display: flex;
+    gap: 8px;
+    padding: calc(0.5em + 1px) calc(1em - 16px + 1px);
+    font-weight: 500;
+    color: #08416a;
+    margin-bottom: 8px;
+  }
+
+  .titre-filtres img {
+    filter: brightness(0) invert(16%) sepia(87%) saturate(1447%)
+      hue-rotate(183deg) brightness(91%) contrast(94%);
+  }
+
+  .filtres-disponibles {
+    width: 260px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    padding: 0 16px 24px 16px;
+  }
+
+  .filtres-disponibles fieldset {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+  }
+
+  :global(.svelte-menu-flottant) {
+    transform: translate(0, -1px) !important;
   }
 </style>
