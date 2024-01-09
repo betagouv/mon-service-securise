@@ -2,7 +2,7 @@
   export let indispensable: boolean;
 </script>
 
-<span class:indispensable>{indispensable ? 'Indispensable' : 'Recommandé'}</span
+<span class:indispensable>{indispensable ? 'Indispensable' : 'Recommandée'}</span
 >
 
 <style>
