@@ -1,6 +1,7 @@
 import { writable, derived } from 'svelte/store';
 import type {
   IdCategorie,
+  IdStatut,
   MesureGenerale,
   Mesures,
   MesureSpecifique,
@@ -21,6 +22,7 @@ export const mesures = {
 
 export const rechercheTextuelle = writable<string>('');
 export const rechercheCategorie = writable<IdCategorie[]>([]);
+export const rechercheStatut = writable<IdStatut[]>([]);
 
 const contientEnMinuscule = (champ: string | undefined, recherche: string) =>
   champ ? champ.toLowerCase().includes(recherche.toLowerCase()) : false;
@@ -28,21 +30,27 @@ const contientEnMinuscule = (champ: string | undefined, recherche: string) =>
 enum IdFiltre {
   rechercheTextuelle,
   rechercheCategorie,
+  rechercheStatut,
 }
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type FiltresPredicats = Record<IdFiltre, Filtre>;
 
 type Predicats = { actifs: IdFiltre[]; filtres: FiltresPredicats };
 export const predicats = derived<
-  [typeof rechercheTextuelle, typeof rechercheCategorie],
+  [
+    typeof rechercheTextuelle,
+    typeof rechercheCategorie,
+    typeof rechercheStatut,
+  ],
   Predicats
 >(
-  [rechercheTextuelle, rechercheCategorie],
-  ([$rechercheTextuelle, $rechercheCategorie]) => {
+  [rechercheTextuelle, rechercheCategorie, rechercheStatut],
+  ([$rechercheTextuelle, $rechercheCategorie, $rechercheStatut]) => {
     const actifs = [];
     if ($rechercheTextuelle) actifs.push(IdFiltre.rechercheTextuelle);
     if ($rechercheCategorie.length > 0)
       actifs.push(IdFiltre.rechercheCategorie);
+    if ($rechercheStatut.length > 0) actifs.push(IdFiltre.rechercheStatut);
 
     return {
       actifs,
@@ -54,6 +62,11 @@ export const predicats = derived<
         [IdFiltre.rechercheCategorie]: (
           mesure: MesureSpecifique | MesureGenerale
         ) => $rechercheCategorie.includes(mesure.categorie),
+        [IdFiltre.rechercheStatut]: (
+          mesure: MesureSpecifique | MesureGenerale
+        ) =>
+          $rechercheStatut.includes(mesure.statut ?? '') ||
+          ($rechercheStatut.includes('nonRenseignee') && !mesure.statut),
       },
     };
   }

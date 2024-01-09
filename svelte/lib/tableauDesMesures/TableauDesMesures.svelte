@@ -20,6 +20,7 @@
     mesuresFiltrees,
     nombreResultats,
     rechercheCategorie,
+    rechercheStatut,
   } from './tableauDesMesures.store';
   import MenuFlottant from '../ui/MenuFlottant.svelte';
 
@@ -72,6 +73,7 @@
 
   const effaceFiltres = () => {
     rechercheCategorie.set([]);
+    rechercheStatut.set([]);
   };
 </script>
 
@@ -111,6 +113,21 @@
               value={id}
             />
             <label for={id}>{categorie}</label>
+          </div>
+        {/each}
+      </fieldset>
+      <fieldset>
+        <legend>Statut</legend>
+        {#each Object.entries( { ...statuts, nonRenseignee: 'Non renseignée' } ) as [id, statut]}
+          <div>
+            <input
+              type="checkbox"
+              {id}
+              name={id}
+              bind:group={$rechercheStatut}
+              value={id}
+            />
+            <label for={id}>{statut}</label>
           </div>
         {/each}
       </fieldset>
@@ -301,8 +318,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 0;
     padding: 0;
+    margin: 0 0 24px;
   }
 
   :global(.svelte-menu-flottant) {
@@ -310,6 +327,6 @@
   }
 
   .bouton-effacer-filtre {
-    margin-top: 32px;
+    margin-top: 8px;
   }
 </style>
