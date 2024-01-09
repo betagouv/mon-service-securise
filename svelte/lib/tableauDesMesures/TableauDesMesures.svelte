@@ -4,7 +4,6 @@
     IdService,
     IdStatut,
     MesureGenerale,
-    Mesures,
     MesureSpecifique,
   } from './tableauDesMesures.d';
   import LigneMesure from './ligne/LigneMesure.svelte';
@@ -15,6 +14,7 @@
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
   import { Referentiel } from '../ui/types.d';
+  import { store } from './tableauDesMesures.store';
 
   enum EtatEnregistrement {
     Jamais,
@@ -29,16 +29,14 @@
   export let statuts: Record<IdStatut, string>;
   export let estLectureSeule: boolean;
 
-  let mesures: Mesures;
-  const rafraichisMesures = async () => {
-    mesures = await recupereMesures(idService);
-  };
+  const rafraichisMesures = async () =>
+    store.reinitialise(await recupereMesures(idService));
   onMount(rafraichisMesures);
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
   const metAJourMesures = async () => {
     etatEnregistrement = EnCours;
-    await enregistreMesures(idService, mesures);
+    await enregistreMesures(idService, $store);
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
   };
@@ -54,7 +52,7 @@
     document.body.dispatchEvent(
       new CustomEvent('svelte-affiche-tiroir-ajout-mesure-specifique', {
         detail: {
-          mesuresExistantes: metEnFormeMesures(mesures),
+          mesuresExistantes: metEnFormeMesures($store),
           titreTiroir:
             mesureAEditer && mesureAEditer.metadonnees.typeMesure === 'GENERALE'
               ? mesureAEditer.mesure.description
@@ -81,46 +79,44 @@
   </div>
 {/if}
 <div class="tableau-des-mesures">
-  {#if mesures}
-    {#each Object.entries(mesures.mesuresGenerales) as [id, mesure] (id)}
-      <LigneMesure
-        {id}
-        referentiel={Referentiel.ANSSI}
-        indispensable={mesure.indispensable}
-        nom={mesure.description}
-        categorie={categories[mesure.categorie]}
-        referentielStatuts={statuts}
-        bind:mesure
-        on:modificationStatut={metAJourMesures}
-        on:click={() =>
-          afficheTiroirDeMesure({
-            mesure,
-            metadonnees: {
-              typeMesure: 'GENERALE',
-              idMesure: id,
-            },
-          })}
-        {estLectureSeule}
-      />
-    {/each}
-    {#each mesures.mesuresSpecifiques as mesure, index (index)}
-      <LigneMesure
-        id={`specifique-${index}`}
-        referentiel={Referentiel.SPECIFIQUE}
-        nom={mesure.description}
-        categorie={categories[mesure.categorie]}
-        referentielStatuts={statuts}
-        bind:mesure
-        on:modificationStatut={metAJourMesures}
-        on:click={() =>
-          afficheTiroirDeMesure({
-            mesure,
-            metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: index },
-          })}
-        {estLectureSeule}
-      />
-    {/each}
-  {/if}
+  {#each Object.entries($store.mesuresGenerales) as [id, mesure] (id)}
+    <LigneMesure
+      {id}
+      referentiel={Referentiel.ANSSI}
+      indispensable={mesure.indispensable}
+      nom={mesure.description}
+      categorie={categories[mesure.categorie]}
+      referentielStatuts={statuts}
+      bind:mesure
+      on:modificationStatut={metAJourMesures}
+      on:click={() =>
+        afficheTiroirDeMesure({
+          mesure,
+          metadonnees: {
+            typeMesure: 'GENERALE',
+            idMesure: id,
+          },
+        })}
+      {estLectureSeule}
+    />
+  {/each}
+  {#each $store.mesuresSpecifiques as mesure, index (index)}
+    <LigneMesure
+      id={`specifique-${index}`}
+      referentiel={Referentiel.SPECIFIQUE}
+      nom={mesure.description}
+      categorie={categories[mesure.categorie]}
+      referentielStatuts={statuts}
+      bind:mesure
+      on:modificationStatut={metAJourMesures}
+      on:click={() =>
+        afficheTiroirDeMesure({
+          mesure,
+          metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: index },
+        })}
+      {estLectureSeule}
+    />
+  {/each}
 </div>
 
 <style>
