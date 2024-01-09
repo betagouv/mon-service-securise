@@ -69,6 +69,10 @@
       })
     );
   };
+
+  const effaceFiltres = () => {
+    rechercheCategorie.set([]);
+  };
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
@@ -110,6 +114,12 @@
           </div>
         {/each}
       </fieldset>
+      <button
+        class="bouton bouton-secondaire bouton-effacer-filtre"
+        on:click={effaceFiltres}
+      >
+        Effacer les filtres
+      </button>
     </div>
   </MenuFlottant>
 </div>
@@ -297,5 +307,9 @@
 
   :global(.svelte-menu-flottant) {
     transform: translate(0, -1px) !important;
+  }
+
+  .bouton-effacer-filtre {
+    margin-top: 32px;
   }
 </style>
