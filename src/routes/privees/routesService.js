@@ -83,10 +83,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           100
       );
 
-      const { v } = requete.query;
-      const vue = v === '2' ? 'service/mesures-v2' : 'service/mesures';
-
-      reponse.render(vue, {
+      reponse.render('service/mesures-v2', {
         InformationsHomologation,
         referentiel,
         service: homologation,
