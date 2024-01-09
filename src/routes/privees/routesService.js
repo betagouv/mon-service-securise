@@ -83,7 +83,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
           100
       );
 
-      reponse.render('service/mesures-v2', {
+      reponse.render('service/mesures', {
         InformationsHomologation,
         referentiel,
         service: homologation,

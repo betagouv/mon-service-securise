@@ -10,7 +10,7 @@ block append scripts
   script(type = 'module', src = '/statique/composants-svelte/tableauDesMesures.js')
   script(type = 'module', src = '/statique/composants-svelte/completudeMesure.js')
   script(type = 'module', src = '/statique/composants-svelte/indiceCyber.js')
-  script(type = 'module', src = '/statique/service/mesures-v2.js')
+  script(type = 'module', src = '/statique/service/mesures.js')
   script(id = 'referentiel-categories-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.categoriesMesures())}
   script(id = 'referentiel-statuts-mesures', type = 'application/json').
