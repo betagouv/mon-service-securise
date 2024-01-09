@@ -12,9 +12,7 @@ export type MesureStore = {
   mesureEditee: MesureEditee;
 };
 
-const { subscribe, set, update } = writable<MesureStore>();
-
-const mesureEditeeParDefaut: MesureEditee = {
+const mesureEditeeParDefaut = (): MesureEditee => ({
   mesure: {
     categorie: '',
     description: '',
@@ -25,7 +23,9 @@ const mesureEditeeParDefaut: MesureEditee = {
     typeMesure: 'SPECIFIQUE',
     idMesure: 0,
   },
-};
+});
+const { subscribe, set, update } = writable<MesureStore>();
+
 export const store = {
   set,
   subscribe,
@@ -37,7 +37,7 @@ export const store = {
       : 'EditionSpecifique';
     set({
       etape,
-      mesureEditee: mesureEditee ?? mesureEditeeParDefaut,
+      mesureEditee: mesureEditee ?? mesureEditeeParDefaut(),
     });
   },
   afficheEtapeSuppression: () =>
