@@ -14,7 +14,12 @@
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
   import { Referentiel } from '../ui/types.d';
-  import { store } from './tableauDesMesures.store';
+  import {
+    mesures,
+    rechercheTextuelle,
+    mesuresFiltrees,
+    nombreResultats,
+  } from './tableauDesMesures.store';
 
   enum EtatEnregistrement {
     Jamais,
@@ -30,13 +35,13 @@
   export let estLectureSeule: boolean;
 
   const rafraichisMesures = async () =>
-    store.reinitialise(await recupereMesures(idService));
+    mesures.reinitialise(await recupereMesures(idService));
   onMount(rafraichisMesures);
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
   const metAJourMesures = async () => {
     etatEnregistrement = EnCours;
-    await enregistreMesures(idService, $store);
+    await enregistreMesures(idService, $mesures);
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
   };
@@ -52,7 +57,7 @@
     document.body.dispatchEvent(
       new CustomEvent('svelte-affiche-tiroir-ajout-mesure-specifique', {
         detail: {
-          mesuresExistantes: metEnFormeMesures($store),
+          mesuresExistantes: metEnFormeMesures($mesures),
           titreTiroir:
             mesureAEditer && mesureAEditer.metadonnees.typeMesure === 'GENERALE'
               ? mesureAEditer.mesure.description
@@ -65,6 +70,17 @@
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
+<div class="barre-filtres">
+  <label for="recherche">
+    Rechercher
+    <input
+      type="search"
+      id="recherche"
+      bind:value={$rechercheTextuelle}
+      placeholder="ex : chiffrer, sauvegarde, données..."
+    />
+  </label>
+</div>
 {#if !estLectureSeule}
   <div class="barre-actions">
     <button class="bouton" on:click={() => afficheTiroirDeMesure()}>
@@ -79,47 +95,73 @@
   </div>
 {/if}
 <div class="tableau-des-mesures">
-  {#each Object.entries($store.mesuresGenerales) as [id, mesure] (id)}
-    <LigneMesure
-      {id}
-      referentiel={Referentiel.ANSSI}
-      indispensable={mesure.indispensable}
-      nom={mesure.description}
-      categorie={categories[mesure.categorie]}
-      referentielStatuts={statuts}
-      bind:mesure
-      on:modificationStatut={metAJourMesures}
-      on:click={() =>
-        afficheTiroirDeMesure({
-          mesure,
-          metadonnees: {
-            typeMesure: 'GENERALE',
-            idMesure: id,
-          },
-        })}
-      {estLectureSeule}
-    />
-  {/each}
-  {#each $store.mesuresSpecifiques as mesure, index (index)}
-    <LigneMesure
-      id={`specifique-${index}`}
-      referentiel={Referentiel.SPECIFIQUE}
-      nom={mesure.description}
-      categorie={categories[mesure.categorie]}
-      referentielStatuts={statuts}
-      bind:mesure
-      on:modificationStatut={metAJourMesures}
-      on:click={() =>
-        afficheTiroirDeMesure({
-          mesure,
-          metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: index },
-        })}
-      {estLectureSeule}
-    />
-  {/each}
+  {#if $nombreResultats.aucunResultat}
+    <div class="aucun-resultat">
+      Aucune mesure ne correspond à la recherche.
+    </div>
+  {:else}
+    {#each Object.entries($mesuresFiltrees.mesuresGenerales) as [id, mesure] (id)}
+      <LigneMesure
+        {id}
+        referentiel={Referentiel.ANSSI}
+        indispensable={mesure.indispensable}
+        nom={mesure.description}
+        categorie={categories[mesure.categorie]}
+        referentielStatuts={statuts}
+        bind:mesure={$mesures.mesuresGenerales[id]}
+        on:modificationStatut={metAJourMesures}
+        on:click={() =>
+          afficheTiroirDeMesure({
+            mesure,
+            metadonnees: {
+              typeMesure: 'GENERALE',
+              idMesure: id,
+            },
+          })}
+        {estLectureSeule}
+      />
+    {/each}
+    {#each $mesuresFiltrees.mesuresSpecifiques as mesure, index (index)}
+      {@const indexReel = $mesures.mesuresSpecifiques.indexOf(mesure)}
+      <LigneMesure
+        id={`specifique-${index}`}
+        referentiel={Referentiel.SPECIFIQUE}
+        nom={mesure.description}
+        categorie={categories[mesure.categorie]}
+        referentielStatuts={statuts}
+        bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
+        on:modificationStatut={metAJourMesures}
+        on:click={() =>
+          afficheTiroirDeMesure({
+            mesure,
+            metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },
+          })}
+        {estLectureSeule}
+      />
+    {/each}
+  {/if}
 </div>
 
 <style>
+  .barre-filtres {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+  }
+
+  label[for='recherche'] {
+    font-weight: bold;
+  }
+
+  #recherche {
+    margin-left: 16px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    color: #667892;
+    padding: 8px 16px;
+    min-width: 300px;
+  }
+
   .barre-actions {
     display: flex;
     align-items: center;
@@ -176,5 +218,11 @@
   .bouton {
     margin: 0;
     padding: 0.5em 1em;
+  }
+
+  .aucun-resultat {
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    padding: 9px 0;
   }
 </style>
