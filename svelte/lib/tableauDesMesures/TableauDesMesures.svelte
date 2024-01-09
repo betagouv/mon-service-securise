@@ -139,6 +139,13 @@
       </button>
     </div>
   </MenuFlottant>
+  <p
+    class="nombre-resultat"
+    class:visible={$nombreResultats.aDesFiltresAppliques}
+  >
+    <strong>{$nombreResultats.filtrees}&nbsp;</strong
+    >/&nbsp;{$nombreResultats.total} mesures affichées
+  </p>
 </div>
 {#if !estLectureSeule}
   <div class="barre-actions">
@@ -207,6 +214,7 @@
     flex-direction: row;
     margin-bottom: 1em;
     gap: 16px;
+    align-items: center;
   }
 
   label[for='recherche'] {
@@ -328,5 +336,14 @@
 
   .bouton-effacer-filtre {
     margin-top: 8px;
+  }
+
+  .nombre-resultat {
+    color: #0079d0;
+    opacity: 0;
+  }
+
+  .nombre-resultat.visible {
+    opacity: 1;
   }
 </style>
