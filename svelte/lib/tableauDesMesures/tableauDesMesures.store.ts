@@ -94,19 +94,26 @@ type NombreResultats = {
   total: number;
   filtrees: number;
   aucunResultat: boolean;
+  aDesFiltresAppliques: boolean;
 };
 export const nombreResultats = derived<
   [typeof mesures, typeof mesuresFiltrees],
   NombreResultats
->([mesures, mesuresFiltrees], ([$mesures, $mesuresFiltrees]) => ({
-  total:
-    Object.keys($mesures.mesuresGenerales).length +
-    $mesures.mesuresSpecifiques.length,
-  filtrees:
-    Object.keys($mesuresFiltrees.mesuresGenerales).length +
-    $mesuresFiltrees.mesuresSpecifiques.length,
-  aucunResultat:
-    Object.keys($mesuresFiltrees.mesuresGenerales).length +
-      $mesuresFiltrees.mesuresSpecifiques.length ===
-    0,
-}));
+>([mesures, mesuresFiltrees], ([$mesures, $mesuresFiltrees]) => {
+  const nbMesuresGenerales = Object.keys($mesures.mesuresGenerales).length;
+  const nbMesuresSpecifiques = $mesures.mesuresSpecifiques.length;
+  const nbMesuresTotal = nbMesuresGenerales + nbMesuresSpecifiques;
+  const nbMesuresGeneralesFiltrees = Object.keys(
+    $mesuresFiltrees.mesuresGenerales
+  ).length;
+  const nbMesuresSpecifiquesFiltrees =
+    $mesuresFiltrees.mesuresSpecifiques.length;
+  const nbMesuresFiltreesTotal =
+    nbMesuresGeneralesFiltrees + nbMesuresSpecifiquesFiltrees;
+  return {
+    total: nbMesuresGenerales + nbMesuresSpecifiques,
+    filtrees: nbMesuresFiltreesTotal,
+    aucunResultat: nbMesuresFiltreesTotal === 0,
+    aDesFiltresAppliques: nbMesuresTotal !== nbMesuresFiltreesTotal,
+  };
+});
