@@ -42,7 +42,7 @@
     on:input={() => avecTemporisation(rechercheSuggestions)}
     bind:value={saisie}
     autocomplete="off"
-    placeholder="ex : Émilie Leroy, e.leroy@domaine.fr"
+    placeholder="ex : emilie.leroy@domaine.fr"
   />
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
     {#if proposeAjout}
