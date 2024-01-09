@@ -2,15 +2,11 @@
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
 
   let menuOuvert = false;
-  let menuEl: any;
+  let menuEl: HTMLDivElement;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-  class="conteneur"
-  on:click={() => (menuOuvert = !menuOuvert)}
-  bind:this={menuEl}
->
+<div class="conteneur" on:click={() => (menuOuvert = true)} bind:this={menuEl}>
   <slot name="declencheur" />
   <div class="svelte-menu-flottant" class:invisible={!menuOuvert}>
     <slot />
