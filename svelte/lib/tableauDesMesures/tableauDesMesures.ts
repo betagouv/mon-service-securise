@@ -1,6 +1,6 @@
 import TableauDesMesures from './TableauDesMesures.svelte';
 import type { TableauDesMesuresProps } from './tableauDesMesures.d';
-import { store } from './tableauDesMesures.store';
+import { mesures } from './tableauDesMesures.store';
 
 document.body.addEventListener(
   'svelte-recharge-tableau-mesures',
@@ -8,7 +8,7 @@ document.body.addEventListener(
 );
 
 const reinitialiseStore = () => {
-  store.reinitialise();
+  mesures.reinitialise();
 };
 
 let app: TableauDesMesures;
