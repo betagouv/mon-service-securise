@@ -76,6 +76,10 @@ const creeServeur = (
     reponse.render('aPropos');
   });
 
+  app.get('/accessibilite', (_requete, reponse) => {
+    reponse.render('accessibilite');
+  });
+
   app.get('/cgu', (_requete, reponse) => {
     reponse.render('cgu');
   });
