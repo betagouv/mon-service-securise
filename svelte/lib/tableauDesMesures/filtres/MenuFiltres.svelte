@@ -95,23 +95,25 @@
         />
         <label for="anssi">ANSSI</label>
       </div>
-      <div>
+      <div class:invisible={!referentielANSSI && !selectionPartielleANSSI}>
         <input
           type="checkbox"
           id="anssi-indispensable"
           name="anssi-indispensable"
           bind:group={$rechercheReferentiel}
           value={IdReferentiel.ANSSIIndispensable}
+          class="decalage-checkbox"
         />
         <label for="anssi-indispensable">Indispensable</label>
       </div>
-      <div>
+      <div class:invisible={!referentielANSSI && !selectionPartielleANSSI}>
         <input
           type="checkbox"
           id="anssi-recommandee"
           name="anssi-recommandee"
           bind:group={$rechercheReferentiel}
           value={IdReferentiel.ANSSIRecommandee}
+          class="decalage-checkbox"
         />
         <label for="anssi-recommandee">Recommandée</label>
       </div>
@@ -212,5 +214,13 @@
     width: 0.6em;
     height: 0.7em;
     border-bottom: 0.15em #fff solid;
+  }
+
+  .decalage-checkbox {
+    margin-left: 12px;
+  }
+
+  .invisible {
+    display: none;
   }
 </style>
