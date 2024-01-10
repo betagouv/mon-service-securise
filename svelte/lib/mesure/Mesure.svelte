@@ -7,6 +7,8 @@
   import { configurationAffichage, store } from './mesure.store';
   import { enregistreMesures } from './mesure.api';
   import SelectionStatut from '../ui/SelectionStatut.svelte';
+  import { rechercheTextuelle } from '../tableauDesMesures/tableauDesMesures.store';
+  import { surligneTexte } from '../directives/surligneTexte';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -47,9 +49,11 @@
       </label>
     {/if}
     {#if $configurationAffichage.doitAfficherDescriptionLongue}
-      <details>
+      <details open={!!$rechercheTextuelle}>
         <summary />
-        <p>{@html $store.mesureEditee.mesure.descriptionLongue}</p>
+        <p use:surligneTexte={$rechercheTextuelle}>
+          {$store.mesureEditee.mesure.descriptionLongue}
+        </p>
       </details>
     {/if}
 
