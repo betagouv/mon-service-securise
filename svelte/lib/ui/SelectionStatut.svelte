@@ -24,6 +24,7 @@
       ? 'Ce champ est obligatoire. Veuillez sélectionner une option.'
       : ''}
     on:change
+    on:click|stopPropagation
   >
     <option value="" disabled selected>-</option>
     {#each Object.entries(referentielStatuts) as [valeur, label]}
