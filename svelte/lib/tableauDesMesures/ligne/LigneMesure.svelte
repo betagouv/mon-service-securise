@@ -9,7 +9,6 @@
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import { rechercheTextuelle } from '../tableauDesMesures.store';
-  import { surligneTexte } from '../../directives/surligneTexte';
 
   type IdDom = string;
 
@@ -23,14 +22,19 @@
   export let estLectureSeule: boolean;
 
   const dispatch = createEventDispatcher<{ modificationStatut: null }>();
+
+  $: texteSurligne = nom.replace(
+    new RegExp($rechercheTextuelle, 'ig'),
+    (texte: string) => `<mark>${texte}</mark>`
+  );
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="ligne-de-mesure" on:click>
   <CartoucheReferentiel {referentiel} />
   <div class="titre-mesure">
-    <p class="titre" use:surligneTexte={$rechercheTextuelle}>
-      {nom}
+    <p class="titre">
+      {@html texteSurligne}
     </p>
     <div class="conteneur-cartouches">
       <span class="categorie">{categorie}</span>
