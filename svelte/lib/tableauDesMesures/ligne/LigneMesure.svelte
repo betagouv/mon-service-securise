@@ -9,7 +9,7 @@
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import { rechercheTextuelle } from '../tableauDesMesures.store';
-  import { surlgineTexte } from '../../directives/surligneTexte';
+  import { surligneTexte } from '../../directives/surligneTexte';
 
   type IdDom = string;
 
@@ -29,7 +29,7 @@
 <div class="ligne-de-mesure" on:click>
   <CartoucheReferentiel {referentiel} />
   <div class="titre-mesure">
-    <p class="titre" use:surlgineTexte={$rechercheTextuelle}>
+    <p class="titre" use:surligneTexte={$rechercheTextuelle}>
       {nom}
     </p>
     <div class="conteneur-cartouches">
