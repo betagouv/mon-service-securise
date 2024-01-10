@@ -8,7 +8,6 @@
   import { enregistreMesures } from './mesure.api';
   import SelectionStatut from '../ui/SelectionStatut.svelte';
   import { rechercheTextuelle } from '../tableauDesMesures/tableauDesMesures.store';
-  import { surligneTexte } from '../directives/surligneTexte';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -27,6 +26,11 @@
       })
     );
   };
+
+  $: texteSurligne = $store.mesureEditee.mesure.descriptionLongue?.replace(
+    new RegExp($rechercheTextuelle, 'ig'),
+    (texte: string) => `<mark>${texte}</mark>`
+  );
 </script>
 
 {#if $store.etape === 'SuppressionSpecifique'}
@@ -51,8 +55,8 @@
     {#if $configurationAffichage.doitAfficherDescriptionLongue}
       <details open={!!$rechercheTextuelle}>
         <summary />
-        <p use:surligneTexte={$rechercheTextuelle}>
-          {$store.mesureEditee.mesure.descriptionLongue}
+        <p>
+          {@html texteSurligne}
         </p>
       </details>
     {/if}
