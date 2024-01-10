@@ -52,7 +52,7 @@
   .ligne-de-mesure {
     border-radius: 8px;
     border: 1px solid #cbd5e1;
-    padding: 20px 16px;
+    padding: 20px 56px 20px 16px;
     gap: 56px;
     margin-bottom: 8px;
     display: grid;
@@ -60,6 +60,23 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    position: relative;
+  }
+
+  .ligne-de-mesure:after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    display: flex;
+    background: url('/statique/assets/images/forme_chevron_bleu.svg') no-repeat;
+    background-size: contain;
+    position: absolute;
+    right: 16px;
+    top: calc(50% - 12px);
+  }
+
+  :global(.ligne-de-mesure label) {
+    margin-bottom: 0 !important;
   }
 
   .titre-mesure {
