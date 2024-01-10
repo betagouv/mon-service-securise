@@ -2,8 +2,10 @@
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { IdCategorie, IdStatut } from '../tableauDesMesures.d';
   import {
+    IdReferentiel,
     nombreResultats,
     rechercheCategorie,
+    rechercheReferentiel,
     rechercheStatut,
   } from '../tableauDesMesures.store';
 
@@ -13,6 +15,27 @@
   const effaceFiltres = () => {
     rechercheCategorie.set([]);
     rechercheStatut.set([]);
+    rechercheReferentiel.set([]);
+  };
+
+  $: referentielANSSI =
+    $rechercheReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
+    $rechercheReferentiel.includes(IdReferentiel.ANSSIIndispensable);
+  let selectionPartielleANSSI: boolean;
+  $: {
+    const estRecommandee = $rechercheReferentiel.includes(
+      IdReferentiel.ANSSIRecommandee
+    );
+    const estIndispensable = $rechercheReferentiel.includes(
+      IdReferentiel.ANSSIIndispensable
+    );
+    selectionPartielleANSSI = estRecommandee
+      ? !estIndispensable
+      : estIndispensable;
+  }
+  const gereCocheANSSI = () => {
+    if (referentielANSSI) rechercheReferentiel.ajouteReferentielANSSI();
+    else rechercheReferentiel.supprimeReferentielANSSI();
   };
 </script>
 
@@ -58,6 +81,50 @@
           <label for={id}>{statut}</label>
         </div>
       {/each}
+    </fieldset>
+    <fieldset>
+      <legend>Mesures par référentiel</legend>
+      <div>
+        <input
+          type="checkbox"
+          id="anssi"
+          name="anssi"
+          bind:checked={referentielANSSI}
+          on:click={gereCocheANSSI}
+          class:selection-partielle={selectionPartielleANSSI}
+        />
+        <label for="anssi">ANSSI</label>
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          id="anssi-indispensable"
+          name="anssi-indispensable"
+          bind:group={$rechercheReferentiel}
+          value={IdReferentiel.ANSSIIndispensable}
+        />
+        <label for="anssi-indispensable">Indispensable</label>
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          id="anssi-recommandee"
+          name="anssi-recommandee"
+          bind:group={$rechercheReferentiel}
+          value={IdReferentiel.ANSSIRecommandee}
+        />
+        <label for="anssi-recommandee">Recommandée</label>
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          id="mesure-ajoutee"
+          name="mesure-ajoutee"
+          bind:group={$rechercheReferentiel}
+          value={IdReferentiel.MesureAjoutee}
+        />
+        <label for="mesure-ajoutee">Mesures ajoutées</label>
+      </div>
     </fieldset>
     <button
       class="bouton bouton-secondaire bouton-effacer-filtre"
@@ -132,5 +199,18 @@
     margin: 0;
     padding: 0.5em 1em;
     font-weight: 500;
+  }
+
+  #anssi.selection-partielle {
+    background-color: var(--bleu-mise-en-avant);
+  }
+
+  #anssi.selection-partielle::before {
+    content: '';
+    display: block;
+    margin: auto;
+    width: 0.6em;
+    height: 0.7em;
+    border-bottom: 0.15em #fff solid;
   }
 </style>

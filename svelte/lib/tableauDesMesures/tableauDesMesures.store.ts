@@ -23,14 +23,47 @@ export const mesures = {
 export const rechercheTextuelle = writable<string>('');
 export const rechercheCategorie = writable<IdCategorie[]>([]);
 export const rechercheStatut = writable<IdStatut[]>([]);
+export enum IdReferentiel {
+  ANSSIRecommandee,
+  ANSSIIndispensable,
+  MesureAjoutee,
+}
+const {
+  subscribe: subscribeReferentiel,
+  set: setReferentiel,
+  update: updateReferentiel,
+} = writable<IdReferentiel[]>([]);
+export const rechercheReferentiel = {
+  subscribe: subscribeReferentiel,
+  set: setReferentiel,
+  ajouteReferentielANSSI: () => {
+    updateReferentiel((etat) => {
+      etat.splice(etat.indexOf(IdReferentiel.ANSSIRecommandee), 1);
+      etat.splice(etat.indexOf(IdReferentiel.ANSSIIndispensable), 1);
+      return etat;
+    });
+  },
+  supprimeReferentielANSSI: () =>
+    updateReferentiel((etat) => [
+      ...etat,
+      IdReferentiel.ANSSIRecommandee,
+      IdReferentiel.ANSSIIndispensable,
+    ]),
+};
 
 const contientEnMinuscule = (champ: string | undefined, recherche: string) =>
   champ ? champ.toLowerCase().includes(recherche.toLowerCase()) : false;
+const estMesureGenerale = (
+  mesure: MesureSpecifique | MesureGenerale
+): mesure is MesureGenerale =>
+  //   On utilise ici un typeguard, et on se base sur une propriété qui est uniquement présente dans les mesures générales
+  'descriptionLongue' in mesure && mesure.descriptionLongue !== undefined;
 
 enum IdFiltre {
   rechercheTextuelle,
   rechercheCategorie,
   rechercheStatut,
+  rechercheReferentiel,
 }
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type FiltresPredicats = Record<IdFiltre, Filtre>;
@@ -41,16 +74,29 @@ export const predicats = derived<
     typeof rechercheTextuelle,
     typeof rechercheCategorie,
     typeof rechercheStatut,
+    typeof rechercheReferentiel,
   ],
   Predicats
 >(
-  [rechercheTextuelle, rechercheCategorie, rechercheStatut],
-  ([$rechercheTextuelle, $rechercheCategorie, $rechercheStatut]) => {
+  [
+    rechercheTextuelle,
+    rechercheCategorie,
+    rechercheStatut,
+    rechercheReferentiel,
+  ],
+  ([
+    $rechercheTextuelle,
+    $rechercheCategorie,
+    $rechercheStatut,
+    $rechercheReferentiel,
+  ]) => {
     const actifs = [];
     if ($rechercheTextuelle) actifs.push(IdFiltre.rechercheTextuelle);
     if ($rechercheCategorie.length > 0)
       actifs.push(IdFiltre.rechercheCategorie);
     if ($rechercheStatut.length > 0) actifs.push(IdFiltre.rechercheStatut);
+    if ($rechercheReferentiel.length > 0)
+      actifs.push(IdFiltre.rechercheReferentiel);
 
     return {
       actifs,
@@ -67,6 +113,17 @@ export const predicats = derived<
         ) =>
           $rechercheStatut.includes(mesure.statut ?? '') ||
           ($rechercheStatut.includes('nonRenseignee') && !mesure.statut),
+        [IdFiltre.rechercheReferentiel]: (
+          mesure: MesureSpecifique | MesureGenerale
+        ) =>
+          ($rechercheReferentiel.includes(IdReferentiel.MesureAjoutee) &&
+            !estMesureGenerale(mesure)) ||
+          ($rechercheReferentiel.includes(IdReferentiel.ANSSIIndispensable) &&
+            estMesureGenerale(mesure) &&
+            mesure.indispensable) ||
+          ($rechercheReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
+            estMesureGenerale(mesure) &&
+            !mesure.indispensable),
       },
     };
   }
