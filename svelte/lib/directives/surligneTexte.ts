@@ -1,6 +1,6 @@
 type TypeNoeud = HTMLParagraphElement;
 
-export const surlgineTexte = (noeud: TypeNoeud, terme: string) => {
+export const surligneTexte = (noeud: TypeNoeud, terme: string) => {
   const surligne = (terme: string) => {
     const texte = noeud.innerText;
     noeud.innerHTML = texte.replace(
