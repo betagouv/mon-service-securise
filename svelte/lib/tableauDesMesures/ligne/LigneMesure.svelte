@@ -8,6 +8,8 @@
   import { Referentiel, type ReferentielStatut } from '../../ui/types.d';
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
+  import { rechercheTextuelle } from '../tableauDesMesures.store';
+  import { surlgineTexte } from '../../directives/surligneTexte';
 
   type IdDom = string;
 
@@ -20,20 +22,15 @@
   export let referentielStatuts: ReferentielStatut;
   export let estLectureSeule: boolean;
 
-  const dispatch = createEventDispatcher<{
-    modificationStatut: null;
-    click: null;
-  }>();
+  const dispatch = createEventDispatcher<{ modificationStatut: null }>();
 </script>
 
-<div class="ligne-de-mesure">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="ligne-de-mesure" on:click>
   <CartoucheReferentiel {referentiel} />
   <div class="titre-mesure">
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <p class="titre" on:click={() => dispatch('click')}>
+    <p class="titre" use:surlgineTexte={$rechercheTextuelle}>
       {nom}
-      <!-- svelte-ignore a11y-missing-attribute -->
-      <img src="/statique/assets/images/chevron_noir.svg" />
     </p>
     <div class="conteneur-cartouches">
       <span class="categorie">{categorie}</span>
@@ -62,6 +59,7 @@
     grid-template-columns: 2fr 6fr 3fr;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
   }
 
   .titre-mesure {
@@ -78,14 +76,7 @@
   .titre {
     font-weight: 500;
     text-align: left;
-    cursor: pointer;
     word-break: break-word;
-  }
-
-  .titre img {
-    width: 24px;
-    height: 24px;
-    position: absolute;
   }
 
   .categorie {
@@ -101,5 +92,9 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
+  }
+
+  :global(mark) {
+    background: #d4f4db;
   }
 </style>
