@@ -29,7 +29,7 @@
 
   $: texteSurligne = $store.mesureEditee.mesure.descriptionLongue?.replace(
     new RegExp($rechercheTextuelle, 'ig'),
-    (texte: string) => `<mark>${texte}</mark>`
+    (texte: string) => ($rechercheTextuelle ? `<mark>${texte}</mark>` : texte)
   );
 </script>
 
