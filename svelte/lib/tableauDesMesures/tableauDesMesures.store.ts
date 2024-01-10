@@ -103,8 +103,7 @@ export const predicats = derived<
       filtres: {
         [IdFiltre.rechercheTextuelle]: (
           mesure: MesureSpecifique | MesureGenerale
-        ) =>
-          contientEnMinuscule(mesure.description, $rechercheTextuelle) ,
+        ) => contientEnMinuscule(mesure.description, $rechercheTextuelle),
         [IdFiltre.rechercheCategorie]: (
           mesure: MesureSpecifique | MesureGenerale
         ) => $rechercheCategorie.includes(mesure.categorie),
@@ -134,7 +133,7 @@ export const mesuresFiltrees = derived<
   Mesures
 >([mesures, predicats], ([$mesures, $predicats]) => ({
   mesuresGenerales: Object.entries($mesures.mesuresGenerales)
-    .filter(([cle, m]) =>
+    .filter(([_, m]) =>
       $predicats.actifs
         .map((idPredicat: IdFiltre) => $predicats.filtres[idPredicat])
         .every((p: Filtre) => p(m))
