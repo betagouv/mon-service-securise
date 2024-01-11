@@ -78,7 +78,7 @@
   margin-bottom: 2em;
 }
 
-:is(#contenu-duplication, #contenu-suppression) label {
+:is(#contenu-duplication, #contenu-suppression) .banniere {
   margin-bottom: 2em;
 }
 
