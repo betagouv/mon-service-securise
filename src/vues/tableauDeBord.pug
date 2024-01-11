@@ -17,6 +17,9 @@ mixin actionAvecIcone(sourceImage, texteAction, action, id)
     img(src=sourceImage)
     p!= texteAction
 
+block title
+  title Tableau de bord | MonServiceSécurisé
+
 block append styles
   link(href = '/styles/selectize.default.min.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')

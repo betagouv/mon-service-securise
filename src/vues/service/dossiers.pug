@@ -27,6 +27,9 @@ mixin dossierFinalise({ dossier })
 mixin dossierCourant({ ...donnees })
   +dossier({ statut: 'Homologation en cours', ...donnees })
 
+block title
+  title Homologuer | MonServiceSécurisé
+
 block formulaire
   -
     const { dossiers } = service
