@@ -5,7 +5,7 @@ include ./tiroirs/tiroir.pug
 mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLigne, texteDeuxiemeLigne)
   .carte
     .conteneur-image(class=classeFondImage)
-      img(src=sourceImage)
+      img(src=sourceImage alt='')
     .conteneur-texte
       dl
         dt.nombre(id=idNombre) -
@@ -14,7 +14,7 @@ mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLign
 
 mixin actionAvecIcone(sourceImage, texteAction, action, id)
   .action.ouvre-tiroir(data-action=action, id=id, tabindex=0)
-    img(src=sourceImage)
+    img(src=sourceImage alt='')
     p!= texteAction
 
 block title
