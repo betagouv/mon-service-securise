@@ -252,7 +252,7 @@ const tableauDesServices = {
       );
 
       const $boutonLienSynthese = $(
-        `<a class='action-lien action-lien-synthese' href='/service/${service.id}'><img src='/statique/assets/images/forme_chevron_bleu.svg'></a>`
+        `<a class='action-lien action-lien-synthese' href='/service/${service.id}'><img src='/statique/assets/images/forme_chevron_bleu.svg' alt='Service | MonServiceSécurisé'></a>`
       );
       const $celluleActions = $("<td class='cellule-actions'></td>");
       $celluleActions.append($boutonLienSynthese);
