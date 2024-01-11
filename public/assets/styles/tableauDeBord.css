@@ -682,6 +682,8 @@ label[for='recherche-service'] {
   cursor: pointer;
   font-weight: 500;
   padding: 0.5em 0.7em;
+  border: none;
+  background: transparent;
 }
 
 .tableau-services .conteneur-barre-outils .action.inactif {
