@@ -55,8 +55,7 @@
     {/if}
 
     {#if droitsModifiables}
-      <!--    svelte-ignore a11y-click-events-have-key-events-->
-      <div
+      <button
         class="conteneur-suppression"
         on:click={() => store.navigation.afficheEtapeSuppression(utilisateur)}
       >
@@ -65,7 +64,7 @@
           alt="supression d'un contributeur"
           title="Supprimer ce contributeur"
         />
-      </div>
+      </button>
     {/if}
   </div>
 </li>
@@ -88,5 +87,7 @@
   .conteneur-suppression {
     display: flex;
     cursor: pointer;
+    border: none;
+    background: transparent;
   }
 </style>
