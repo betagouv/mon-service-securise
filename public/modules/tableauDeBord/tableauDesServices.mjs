@@ -102,7 +102,7 @@ const tableauDesServices = {
     tableauDesServices.afficheDonnees();
 
     $('input[name="tri-contributeur"]').prop('checked', false);
-    $('.tableau-services thead th.entete-contributeurs').attr('data-ordre', 0);
+    $('.tableau-services thead .bouton-contributeurs').attr('data-ordre', 0);
 
     $('.tableau-services thead .triable').attr('data-ordre', 0);
     $(`.tableau-services thead [data-colonne="${colonne}"]`).attr(
