@@ -235,7 +235,8 @@ label[for='recherche-service'] {
   background: none;
 }
 
-.tableau-services thead tr:not(:last-of-type) th:last-of-type {
+.tableau-services thead tr:not(:last-of-type) td:last-of-type {
+  background: #dbecf1;
   border-top-right-radius: 8px;
 }
 
