@@ -358,6 +358,8 @@ label[for='recherche-service'] {
   position: absolute;
   right: 0.85em;
   top: 0.85em;
+  border: none;
+  background: transparent;
 }
 
 .tableau-services .menu-flottant .filtre-mes-services::after {
