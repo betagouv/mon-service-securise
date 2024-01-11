@@ -72,8 +72,8 @@ block main
                 label
                   input.checkbox-tous-services(type='checkbox')
                   .texte-tous-service Tous
-            th.entete-contributeurs.declencheur-menu-flottant(data-colonne='nombreContributeurs', data-ordre='0', data-filtre-proprietaire='false', tabindex=0)
-              p Contributeur(s)
+            th.entete-contributeurs
+              button.bouton-contributeurs.declencheur-menu-flottant(data-colonne='nombreContributeurs', data-ordre='0', data-filtre-proprietaire='false') Contributeur(s)
               .menu-flottant.invisible
                 button.efface-tri-contributeurs effacer le tri
                 fieldset.nom-propriete

@@ -46,7 +46,7 @@ const gestionnaireEvenements = {
         gestionnaireEvenements.basculeSelectionTousServices($elementClique);
       } else if ($elementClique.hasClass('ouvre-tiroir')) {
         gestionnaireEvenements.brancheTiroirAction($elementClique);
-      } else if ($elementClique.hasClass('entete-contributeurs')) {
+      } else if ($elementClique.hasClass('bouton-contributeurs')) {
         gestionnaireEvenements.triContributeurs.bascule();
       } else if ($elementClique.hasClass('tri-contributeur')) {
         gestionnaireEvenements.triContributeurs.applique();
@@ -144,14 +144,14 @@ const gestionnaireEvenements = {
         'input.filtre-proprietaire-contributeurs'
       ).is(':checked');
 
-      $('.entete-contributeurs')
+      $('.bouton-contributeurs')
         .attr('data-ordre', ordre)
         .attr('data-filtre-proprietaire', filtreEstProprietaire);
 
       tableauDesServices.appliqueTriContributeurs(ordre, filtreEstProprietaire);
     },
     bascule: () =>
-      $('.entete-contributeurs .menu-flottant').toggleClass('invisible'),
+      $('.bouton-contributeurs .menu-flottant').toggleClass('invisible'),
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
