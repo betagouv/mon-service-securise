@@ -41,8 +41,8 @@ block page
   main
     block main
     .bom
-      .bom-vignette(tabindex=0)
-      .bom-titre(tabindex=0) Aide
+      button.bom-vignette(aria-label='Menu assitance')
+      button.bom-titre Aide
       .bom-modale
         .bandeau-titre Bienvenue sur
           .nom-produit MonServiceSécurisé
@@ -53,7 +53,7 @@ block page
               a(href = 'https://aide.monservicesecurise.ssi.gouv.fr/'): li Nous contacter
               a(href = 'https://calendly.com/monservicesecurise-henri/presentation-de-monservicesecurise-anssi'): li Bénéficier d'une présentation de MonServiceSécurisé
               a(href = 'https://aide.monservicesecurise.ssi.gouv.fr/'): li Consulter la F.A.Q.
-        .fermeture
+        button.fermeture
           p Fermer
 
   footer
