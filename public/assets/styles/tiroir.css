@@ -160,13 +160,6 @@
   margin-left: auto;
 }
 
-#contenu-contributeurs
-  #email-invitation-collaboration
-  ~ .intouche
-  .selectize-input {
-  border-color: var(--liseres) !important;
-}
-
 #contenu-contributeurs .option.suggestion-contributeur {
   display: flex;
   align-items: center;
