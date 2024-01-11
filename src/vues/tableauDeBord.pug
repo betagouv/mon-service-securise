@@ -53,7 +53,7 @@ block main
             +carteInformation('/statique/assets/images/icone_services_enregistres.svg', '', 'nombre-services', 'Services', 'enregistrés')
             +carteInformation('/statique/assets/images/icone_services_homologues.svg', 'vert', 'nombre-services-homologues', 'Services', 'homologués')
             +carteInformation('/statique/assets/images/icone_indice_cyber_moyen.svg', 'bleu', 'indice-cyber-moyen', 'Indice cyber', 'moyen')
-          .nouveau-service.bouton#nouveau-service Nouveau service
+          .nouveau-service.bouton#nouveau-service(tabindex=0) Nouveau service
         .recherche
           label(for='recherche-service') Rechercher
             input#recherche-service(type='text', placeHolder='ex : Service Z, Agglomération de Mansart,...')
@@ -72,7 +72,7 @@ block main
                 label
                   input.checkbox-tous-services(type='checkbox')
                   .texte-tous-service Tous
-            th.entete-contributeurs.declencheur-menu-flottant(data-colonne='nombreContributeurs', data-ordre='0', data-filtre-proprietaire='false')
+            th.entete-contributeurs.declencheur-menu-flottant(data-colonne='nombreContributeurs', data-ordre='0', data-filtre-proprietaire='false', tabindex=0)
               p Contributeur(s)
               .menu-flottant.invisible
                 p.efface-tri-contributeurs effacer le tri
@@ -90,8 +90,8 @@ block main
                     input.filtre-contributeur.filtre-proprietaire-contributeurs(type='checkbox')
                     p.filtre-mes-services Mes services
 
-            th.triable(data-colonne='indiceCyber', data-ordre='0') Indice Cyber
-            th.triable(data-colonne='ordreStatutHomologation', data-ordre='0') Homologation
+            th.triable(data-colonne='indiceCyber', data-ordre='0', tabindex=0) Indice Cyber
+            th.triable(data-colonne='ordreStatutHomologation', data-ordre='0', tabindex=0) Homologation
             td
           tr#barre-outils
             th(colspan=5)

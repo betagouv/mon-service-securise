@@ -6,12 +6,12 @@ block append styles
 
 block navigation
   block bandeau-nouveautes
-    .bandeau-nouveautes
+    .bandeau-nouveautes(tabindex=0)
       img(src='/statique/assets/images/bandeau_nouveautes_decoration.svg', alt='Décoration du bouton des nouveautés')
       p.
         Nouveautés
 
-  .utilisateur-courant
+  .utilisateur-courant(tabindex=0)
 
   include nouvellesFonctionnalites/modaleNouvellesFonctionnalites.pug
 
