@@ -4,6 +4,7 @@
   import { createEventDispatcher } from 'svelte';
   import Initiales from './Initiales.svelte';
 
+  export let id: string;
   export let callbackDeRecherche: (recherche: string) => Promise<Utilisateur[]>;
   export let dureeDebounceEnMs = 300;
 
@@ -38,6 +39,7 @@
 
 <div class="conteneur-suggestions">
   <input
+    {id}
     type="text"
     on:input={() => avecTemporisation(rechercheSuggestions)}
     bind:value={saisie}

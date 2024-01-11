@@ -75,6 +75,7 @@
     <label for="email-invitation-collaboration">
       Ajouter un ou plusieurs contributeurs
       <ChampAvecSuggestions
+        id="email-invitation-collaboration"
         callbackDeRecherche={api.rechercheContributeurs}
         on:contributeurChoisi={ajouteInvitation}
       />
