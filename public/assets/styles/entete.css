@@ -116,6 +116,8 @@ header nav a,
   position: relative;
 
   cursor: pointer;
+  border: none;
+  background: transparent;
 }
 
 .connexion {
@@ -184,8 +186,9 @@ header nav a,
 
   top: 2em;
   left: 0;
-  width: 13.5em;
+  width: calc(100% - 2.6em);
 
+  margin: 0 0.3em;
   padding: 1em;
 
   border: solid 1px var(--liseres);
