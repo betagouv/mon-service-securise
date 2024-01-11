@@ -90,8 +90,10 @@ block main
                     input.filtre-contributeur.filtre-proprietaire-contributeurs(type='checkbox')
                     p.filtre-mes-services Mes services
 
-            th.triable(data-colonne='indiceCyber', data-ordre='0', tabindex=0) Indice Cyber
-            th.triable(data-colonne='ordreStatutHomologation', data-ordre='0', tabindex=0) Homologation
+            th
+              button.triable(data-colonne='indiceCyber', data-ordre='0') Indice Cyber
+            th
+              button.triable(data-colonne='ordreStatutHomologation', data-ordre='0') Homologation
             td
           tr#barre-outils
             th(colspan=5)

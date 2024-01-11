@@ -72,7 +72,7 @@ const tableauDesServices = {
     tableauDesServices.tri = { colonne: 'nombreContributeurs', ordre };
     tableauDesServices.filtre.seulementProprietaire = filtreEstProprietaire;
     tableauDesServices.afficheDonnees();
-    $('.tableau-services thead th.triable').attr('data-ordre', 0);
+    $('.tableau-services thead .triable').attr('data-ordre', 0);
   },
   basculeSelectionService: (idService, statut) => {
     if (statut) {
@@ -104,8 +104,8 @@ const tableauDesServices = {
     $('input[name="tri-contributeur"]').prop('checked', false);
     $('.tableau-services thead th.entete-contributeurs').attr('data-ordre', 0);
 
-    $('.tableau-services thead th.triable').attr('data-ordre', 0);
-    $(`.tableau-services thead th[data-colonne="${colonne}"]`).attr(
+    $('.tableau-services thead .triable').attr('data-ordre', 0);
+    $(`.tableau-services thead [data-colonne="${colonne}"]`).attr(
       'data-ordre',
       ordre
     );

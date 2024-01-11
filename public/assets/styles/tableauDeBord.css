@@ -194,7 +194,14 @@ label[for='recherche-service'] {
   justify-content: left;
 }
 
-.tableau-services thead th.triable::after {
+.tableau-services thead .triable {
+  border: none;
+  background: transparent;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tableau-services thead .triable::after {
   content: '';
   display: inline-block;
   background-image: none;
@@ -206,24 +213,24 @@ label[for='recherche-service'] {
   margin-top: -8px;
 }
 
-.tableau-services thead th.triable:not([data-ordre='0']) {
+.tableau-services thead .triable:not([data-ordre='0']) {
   color: #08416a;
 }
 
-.tableau-services thead th.triable:hover,
+.tableau-services thead .triable:hover,
 .tableau-services thead th.entete-contributeurs:hover {
   color: #0c5c98;
 }
 
-.tableau-services thead th.triable[data-ordre='0']::after {
+.tableau-services thead .triable[data-ordre='0']::after {
   background-image: url('/statique/assets/images/icone_tri_aucun.svg');
 }
 
-.tableau-services thead th.triable[data-ordre='1']::after {
+.tableau-services thead .triable[data-ordre='1']::after {
   background-image: url('/statique/assets/images/icone_tri_croissant.svg');
 }
 
-.tableau-services thead th.triable[data-ordre='2']::after {
+.tableau-services thead .triable[data-ordre='2']::after {
   background-image: url('/statique/assets/images/icone_tri_decroissant.svg');
 }
 
