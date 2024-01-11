@@ -180,6 +180,10 @@
     margin: 0 0 24px;
   }
 
+  .filtres-disponibles legend {
+    text-align: left;
+  }
+
   :global(.svelte-menu-flottant) {
     transform: translate(0, -1px) !important;
   }
