@@ -13,7 +13,7 @@ mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLign
         dd!= texteDeuxiemeLigne
 
 mixin actionAvecIcone(sourceImage, texteAction, action, id)
-  .action.ouvre-tiroir(data-action=action, id=id, tabindex=0)
+  button.action.ouvre-tiroir(data-action=action, id=id)
     img(src=sourceImage alt='')
     p!= texteAction
 
