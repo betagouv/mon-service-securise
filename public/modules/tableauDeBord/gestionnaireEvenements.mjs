@@ -29,7 +29,7 @@ const gestionnaireEvenements = {
     };
     $(document).on('click', (e) => fermeMenusContextuelsSiClicEnDehors(e));
 
-    $('.tableau-services thead th.triable').on('click', (e) => {
+    $('.tableau-services thead .triable').on('click', (e) => {
       const colonne = $(e.target).data('colonne');
       tableauDesServices.modifieTri(colonne);
     });
