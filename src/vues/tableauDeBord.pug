@@ -76,14 +76,16 @@ block main
               p Contributeur(s)
               .menu-flottant.invisible
                 p.efface-tri-contributeurs effacer le tri
-                .nom-propriete Trier
+                fieldset.nom-propriete
+                  legend Trier
                   label 
                     input.tri-contributeur(type='radio', name='tri-contributeur', value=1)
                     p Croissant
                   label
                     input.tri-contributeur(type='radio', name='tri-contributeur', value=2)
                     p Décroissant
-                .nom-propriete Filtrer
+                fieldset.nom-propriete
+                  legend Filtrer
                   label
                     input.filtre-contributeur.filtre-proprietaire-contributeurs(type='checkbox')
                     p.filtre-mes-services Mes services
