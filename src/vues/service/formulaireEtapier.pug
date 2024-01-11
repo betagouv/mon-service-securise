@@ -21,6 +21,9 @@ mixin barre-progression({ numeroEtapeCourante })
         else
           +descriptionEtape({ etape })
 
+block title
+  title Homologuer | MonServiceSécurisé
+
 block append styles
   link(href='/statique/assets/styles/etapesDossier.css', rel='stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')

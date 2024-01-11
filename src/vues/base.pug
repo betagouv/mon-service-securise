@@ -5,6 +5,8 @@ html(lang = 'fr', xml:lang = 'fr', xmlns = 'http://www.w3.org/1999/xhtml')
     meta(property = 'og:site_name', content = 'MonServiceSécurisé')
     link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
 
+    block title
+        title MonServiceSécurisé
     block page
 
     if process.env.ID_MATOMO
