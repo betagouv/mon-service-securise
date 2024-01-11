@@ -32,7 +32,8 @@ header nav {
   font-size: 0.9em;
 }
 
-header nav :is(.sandwich, .bouton-fermer) {
+header .sandwich,
+header nav .bouton-fermer {
   display: none;
 }
 

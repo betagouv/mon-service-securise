@@ -11,12 +11,15 @@
   }
 
   header .sandwich {
+    background-color: transparent;
     background-image: url('../images/icone_sandwich.svg');
     background-repeat: no-repeat;
     background-size: contain;
     width: 1.5em;
     height: 1.5em;
     cursor: pointer;
+    border: none;
+    display: flex;
   }
 
   header nav.visible {
