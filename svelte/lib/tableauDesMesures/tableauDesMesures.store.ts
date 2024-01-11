@@ -6,18 +6,27 @@ import type {
   Mesures,
   MesureSpecifique,
 } from './tableauDesMesures.d';
-
 const mesuresParDefaut = (): Mesures => ({
   mesuresGenerales: {},
   mesuresSpecifiques: [],
 });
 
-const { subscribe, set } = writable<Mesures>(mesuresParDefaut());
+const { subscribe, set, update } = writable<Mesures>(mesuresParDefaut());
 
 export const mesures = {
   set,
   subscribe,
   reinitialise: (mesures?: Mesures) => set(mesures ?? mesuresParDefaut()),
+  metAJourStatutMesureGenerale: (idMesure: string, statut: string) =>
+    update((valeur) => {
+      valeur.mesuresGenerales[idMesure].statut = statut;
+      return valeur;
+    }),
+  metAJourStatutMesureSpecifique: (idMesure: number, statut: string) =>
+    update((valeur) => {
+      valeur.mesuresSpecifiques[idMesure].statut = statut;
+      return valeur;
+    }),
 };
 
 export const rechercheTextuelle = writable<string>('');

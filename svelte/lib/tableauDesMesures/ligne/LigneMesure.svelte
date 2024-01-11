@@ -21,7 +21,9 @@
   export let referentielStatuts: ReferentielStatut;
   export let estLectureSeule: boolean;
 
-  const dispatch = createEventDispatcher<{ modificationStatut: null }>();
+  const dispatch = createEventDispatcher<{
+    modificationStatut: { statut: string };
+  }>();
 
   $: texteSurligne = nom.replace(
     new RegExp($rechercheTextuelle, 'ig'),
@@ -48,7 +50,8 @@
     {id}
     {estLectureSeule}
     {referentielStatuts}
-    on:change={() => dispatch('modificationStatut')}
+    on:input={(e) =>
+      dispatch('modificationStatut', { statut: e.detail.statut })}
   />
 </div>
 
