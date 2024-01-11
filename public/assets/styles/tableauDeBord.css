@@ -335,6 +335,12 @@ label[for='recherche-service'] {
   color: #667892;
   gap: 0.4em;
   cursor: initial;
+  margin: 0;
+  padding: 0;
+}
+
+.tableau-services th.entete-contributeurs .menu-flottant legend {
+  margin-bottom: 0.4em;
 }
 
 .tableau-services th.entete-contributeurs .menu-flottant input {
