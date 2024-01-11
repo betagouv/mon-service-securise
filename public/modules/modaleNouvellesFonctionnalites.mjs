@@ -5,7 +5,9 @@ const brancheComportementModaleNouvelleFonctionnalite = ($modale) => {
     for (let i = 1; i <= nombrePage; i += 1) {
       let classe = 'rond';
       if (i === 1) classe += ' actif';
-      const rond = $(`<div class="${classe}" data-numero-page="${i}"></div>`);
+      const rond = $(
+        `<div class="${classe}" data-numero-page="${i}" tabindex="0"></div>`
+      );
       rond.on('click', () => {
         $modale.attr('data-page-actuelle', i);
       });
