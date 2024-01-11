@@ -705,6 +705,12 @@ label[for='recherche-service'] {
   padding-left: 1.5em;
 }
 
+.tableau-services
+  :is(.conteneur-tous-selection, .conteneur-selection-multiple)
+  label {
+  display: flex;
+}
+
 .tableau-services .conteneur-barre-outils hr {
   margin: 0;
   border: 1px solid #cbd5e1;
