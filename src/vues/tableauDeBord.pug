@@ -69,8 +69,9 @@ block main
           tr
             th.entete-selection
               .conteneur-tous-selection
-                input.checkbox-tous-services(type='checkbox')
-                .texte-tous-service Tous
+                label
+                  input.checkbox-tous-services(type='checkbox')
+                  .texte-tous-service Tous
             th.entete-contributeurs.declencheur-menu-flottant(data-colonne='nombreContributeurs', data-ordre='0', data-filtre-proprietaire='false')
               p Contributeur(s)
               .menu-flottant.invisible
@@ -94,8 +95,9 @@ block main
             th(colspan=5)
               .conteneur-barre-outils
                 .conteneur-selection-multiple
-                  input.checkbox-selection-tous-services(type='checkbox')
-                  .texte-nombre-service 0 sélectionné
+                  label
+                    input.checkbox-selection-tous-services(type='checkbox')
+                    .texte-nombre-service 0 sélectionné
                 hr
                 +actionAvecIcone('/statique/assets/images/icone_ajout_contributeur.svg', 'Gérer les contributeurs', 'contributeurs')
                 +actionAvecIcone('/statique/assets/images/icone_action_telechargement.svg', 'Télécharger PDF', 'telechargement', 'action-flottante-telechargement')

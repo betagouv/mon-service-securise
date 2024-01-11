@@ -201,7 +201,7 @@ const tableauDesServices = {
       );
       const $celluleNoms = $("<td class='cellule-noms'></td>");
       const $inputSelection = $(
-        "<input class='selection-service' type='checkbox' >"
+        `<label><input class='selection-service' type='checkbox' title='Sélection du service ${service.nomService}'></label>`
       );
       $inputSelection.prop('checked', estSelectionne);
       const $nomService =
