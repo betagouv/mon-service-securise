@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ReferentielStatut } from './types.d';
   import { validationChamp } from '../directives/validationChamp';
+  import { createEventDispatcher } from 'svelte';
 
   export let id: string;
   export let statut: string | undefined;
@@ -9,6 +10,8 @@
   export let label = '';
   export let estLectureSeule = false;
   export let requis = false;
+
+  const dispatch = createEventDispatcher<{ input: { statut: string } }>();
 </script>
 
 <label for={`statut-${id}`} class:requis>
@@ -23,7 +26,9 @@
     use:validationChamp={requis
       ? 'Ce champ est obligatoire. Veuillez sélectionner une option.'
       : ''}
-    on:change
+    on:input={(e) => {
+      dispatch('input', { statut: e.target?.value });
+    }}
     on:click|stopPropagation
   >
     <option value="" disabled selected>-</option>

@@ -111,7 +111,10 @@
         categorie={categories[mesure.categorie]}
         referentielStatuts={statuts}
         bind:mesure={$mesures.mesuresGenerales[id]}
-        on:modificationStatut={metAJourMesures}
+        on:modificationStatut={(e) => {
+          mesures.metAJourStatutMesureGenerale(id, e.detail.statut);
+          metAJourMesures();
+        }}
         on:click={() =>
           afficheTiroirDeMesure({
             mesure,
@@ -132,7 +135,10 @@
         categorie={categories[mesure.categorie]}
         referentielStatuts={statuts}
         bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
-        on:modificationStatut={metAJourMesures}
+        on:modificationStatut={(e) => {
+          mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);
+          metAJourMesures();
+        }}
         on:click={() =>
           afficheTiroirDeMesure({
             mesure,
