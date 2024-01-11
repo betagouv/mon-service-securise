@@ -203,16 +203,16 @@ header nav a,
 
 .bandeau-nouveautes {
   display: flex;
-  height: 2.7em;
   align-items: center;
   padding: 0.3em 0.85em;
   cursor: pointer;
   position: relative;
   color: var(--gris-fonce);
   background-color: var(--fond-gris-pale);
-  height: 2em;
+  height: 2.7em;
   border-radius: 8px;
   margin-right: 2em;
+  border: none;
 }
 
 .bandeau-nouveautes p::after {
