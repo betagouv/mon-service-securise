@@ -4,6 +4,8 @@
   right: 2em;
   z-index: 10;
   transition: opacity 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
 .bom :is(.bom-vignette, .bom-titre) {
@@ -17,6 +19,8 @@
   background-image: url(../images/vignette_bom.svg);
   background-repeat: no-repeat;
   background-size: contain;
+  border: none;
+  background-color: transparent;
 }
 
 .bom:hover .bom-vignette {
@@ -32,6 +36,7 @@
   color: #fff;
   font-size: 1.1em;
   font-weight: bold;
+  border: none;
 }
 
 .bom:hover .bom-titre {
@@ -151,6 +156,9 @@
   justify-content: end;
   padding-right: 1.3em;
   gap: 0.3em;
+  border: none;
+  background: transparent;
+  margin-left: auto;
 }
 
 .bom .bom-modale .fermeture::after {
