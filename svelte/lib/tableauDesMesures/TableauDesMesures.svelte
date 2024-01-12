@@ -78,7 +78,7 @@
       type="search"
       id="recherche"
       bind:value={$rechercheTextuelle}
-      placeholder="ex : chiffrer, sauvegarde, données..."
+      placeholder="Intitulé, description"
     />
   </label>
   <MenuFiltres {categories} {statuts} />
