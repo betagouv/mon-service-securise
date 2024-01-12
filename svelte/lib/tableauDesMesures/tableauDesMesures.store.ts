@@ -6,6 +6,7 @@ import type {
   Mesures,
   MesureSpecifique,
 } from './tableauDesMesures.d';
+
 const mesuresParDefaut = (): Mesures => ({
   mesuresGenerales: {},
   mesuresSpecifiques: [],
@@ -45,19 +46,22 @@ const {
 export const rechercheReferentiel = {
   subscribe: subscribeReferentiel,
   set: setReferentiel,
-  ajouteReferentielANSSI: () => {
-    updateReferentiel((etat) => {
-      etat.splice(etat.indexOf(IdReferentiel.ANSSIRecommandee), 1);
-      etat.splice(etat.indexOf(IdReferentiel.ANSSIIndispensable), 1);
-      return etat;
-    });
-  },
-  supprimeReferentielANSSI: () =>
-    updateReferentiel((etat) => [
-      ...etat,
-      IdReferentiel.ANSSIRecommandee,
-      IdReferentiel.ANSSIIndispensable,
+  ajouteLesReferentielsANSSI: () =>
+    updateReferentiel((etatActuel) => [
+      ...new Set([
+        ...etatActuel,
+        IdReferentiel.ANSSIRecommandee,
+        IdReferentiel.ANSSIIndispensable,
+      ]),
     ]),
+  supprimeLesReferentielsANSSI: () =>
+    updateReferentiel((etatActuel) =>
+      etatActuel.filter(
+        (f) =>
+          f !== IdReferentiel.ANSSIIndispensable &&
+          f !== IdReferentiel.ANSSIRecommandee
+      )
+    ),
 };
 
 const contientEnMinuscule = (champ: string | undefined, recherche: string) =>
