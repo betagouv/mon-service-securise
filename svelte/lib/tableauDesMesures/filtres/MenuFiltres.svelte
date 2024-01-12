@@ -18,7 +18,7 @@
     rechercheReferentiel.set([]);
   };
 
-  $: referentielANSSI =
+  $: cocheGlobaleANSSI =
     $rechercheReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
     $rechercheReferentiel.includes(IdReferentiel.ANSSIIndispensable);
   let selectionPartielleANSSI: boolean;
@@ -34,8 +34,9 @@
       : estIndispensable;
   }
   const gereCocheANSSI = () => {
-    if (referentielANSSI) rechercheReferentiel.ajouteReferentielANSSI();
-    else rechercheReferentiel.supprimeReferentielANSSI();
+    const devientCochee = !cocheGlobaleANSSI;
+    if (devientCochee) rechercheReferentiel.ajouteLesReferentielsANSSI();
+    else rechercheReferentiel.supprimeLesReferentielsANSSI();
   };
 </script>
 
@@ -89,13 +90,13 @@
           type="checkbox"
           id="anssi"
           name="anssi"
-          bind:checked={referentielANSSI}
+          bind:checked={cocheGlobaleANSSI}
           on:click={gereCocheANSSI}
           class:selection-partielle={selectionPartielleANSSI}
         />
         <label for="anssi">ANSSI</label>
       </div>
-      <div class:invisible={!referentielANSSI && !selectionPartielleANSSI}>
+      <div class:invisible={!cocheGlobaleANSSI && !selectionPartielleANSSI}>
         <input
           type="checkbox"
           id="anssi-indispensable"
@@ -106,7 +107,7 @@
         />
         <label for="anssi-indispensable">Indispensable</label>
       </div>
-      <div class:invisible={!referentielANSSI && !selectionPartielleANSSI}>
+      <div class:invisible={!cocheGlobaleANSSI && !selectionPartielleANSSI}>
         <input
           type="checkbox"
           id="anssi-recommandee"
