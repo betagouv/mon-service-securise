@@ -21,9 +21,11 @@ const gestionnaireEvenements = {
       const pasUnDeclencheur = !$elementClique.hasClass(
         'declencheur-menu-flottant'
       );
+      const pasUnMenu = !$elementClique.hasClass('.menu-flottant');
       const pasUnElementDuMenu =
-        !$elementClique.parents('.declencheur-menu-flottant').length > 0;
-      if (pasUnDeclencheur && pasUnElementDuMenu) {
+        !$elementClique.parents('.menu-flottant').length > 0;
+
+      if (pasUnDeclencheur && pasUnMenu && pasUnElementDuMenu) {
         gestionnaireEvenements.fermeMenuFlottant();
       }
     };
@@ -151,7 +153,7 @@ const gestionnaireEvenements = {
       tableauDesServices.appliqueTriContributeurs(ordre, filtreEstProprietaire);
     },
     bascule: () =>
-      $('.bouton-contributeurs .menu-flottant').toggleClass('invisible'),
+      $('.bouton-contributeurs + .menu-flottant').toggleClass('invisible'),
   },
   selectionneService: ($checkbox) => {
     const selectionne = $checkbox.is(':checked');
