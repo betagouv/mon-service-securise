@@ -85,7 +85,11 @@
 </div>
 {#if !estLectureSeule}
   <div class="barre-actions">
-    <button class="bouton" on:click={() => afficheTiroirDeMesure()}>
+    <button
+      class="bouton"
+      on:click={() => afficheTiroirDeMesure()}
+      disabled={etatEnregistrement === EnCours}
+    >
       Ajouter une mesure
     </button>
     {#if etatEnregistrement === EnCours}
@@ -123,7 +127,7 @@
               idMesure: id,
             },
           })}
-        {estLectureSeule}
+        estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
       />
     {/each}
     {#each $mesuresFiltrees.mesuresSpecifiques as mesure, index (index)}
@@ -144,7 +148,7 @@
             mesure,
             metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },
           })}
-        {estLectureSeule}
+        estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
       />
     {/each}
   {/if}
