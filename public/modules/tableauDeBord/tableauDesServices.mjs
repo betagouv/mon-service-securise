@@ -201,11 +201,11 @@ const tableauDesServices = {
       );
       const $celluleNoms = $("<td class='cellule-noms'></td>");
       const $inputSelection = $(
-        `<input class='selection-service' type='checkbox' title='Sélection du service ${service.nomService}'>`
+        `<input class='selection-service' type='checkbox' aria-labelledby='nom-${service.id}'>`
       );
       $inputSelection.prop('checked', estSelectionne);
       const $nomService =
-        $(`<a class='conteneur-noms' href='/service/${service.id}'>
+        $(`<a class='conteneur-noms' href='/service/${service.id}' id='nom-${service.id}'>
                               <div class='nom-service'>${service.nomService}</div>
                               <div class='nom-organisation'>${service.organisationsResponsables[0]}</div>
                             </a>`);
