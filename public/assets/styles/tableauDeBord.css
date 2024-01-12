@@ -199,6 +199,7 @@ label[for='recherche-service'] {
   background: transparent;
   font-weight: 500;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .tableau-services thead .triable::after {
@@ -261,6 +262,10 @@ label[for='recherche-service'] {
   left: 0;
   right: 0;
   background: #dbecf1;
+}
+
+.tableau-services .bouton-contributeurs {
+  cursor: pointer;
 }
 
 .tableau-services .bouton-contributeurs::after {
@@ -357,6 +362,8 @@ label[for='recherche-service'] {
   font-weight: 500;
   color: #2f3a43;
   cursor: pointer;
+  display: flex;
+  align-items: baseline;
 }
 
 .tableau-services .menu-flottant .efface-tri-contributeurs {
@@ -366,6 +373,7 @@ label[for='recherche-service'] {
   top: 0.85em;
   border: none;
   background: transparent;
+  cursor: pointer;
 }
 
 .tableau-services .menu-flottant .filtre-mes-services::after {
