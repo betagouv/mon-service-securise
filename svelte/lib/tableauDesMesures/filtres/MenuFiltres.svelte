@@ -39,7 +39,7 @@
   };
 </script>
 
-<MenuFlottant>
+<MenuFlottant parDessusDeclencheur={true}>
   <div slot="declencheur">
     <button class="bouton bouton-secondaire bouton-filtre">
       <img src="/statique/assets/images/icone_filtre.svg" alt="" />
@@ -182,10 +182,6 @@
 
   .filtres-disponibles legend {
     text-align: left;
-  }
-
-  :global(.svelte-menu-flottant) {
-    transform: translate(0, -1px) !important;
   }
 
   .bouton-effacer-filtre {
