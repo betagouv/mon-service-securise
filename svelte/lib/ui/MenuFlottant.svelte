@@ -2,17 +2,24 @@
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
 
   export let parDessusDeclencheur = false;
+  export let fermeMenuSiClicInterne = false;
 
   let menuOuvert = false;
-  let menuEl: HTMLDivElement;
+  let declencheurEl: HTMLButtonElement;
+  let contenuEl: HTMLDivElement;
 </script>
 
-<div class="conteneur" bind:this={menuEl}>
-  <button class="declencheur" on:click={() => (menuOuvert = true)}>
+<div class="conteneur">
+  <button
+    class="declencheur"
+    on:click={() => (menuOuvert = true)}
+    bind:this={declencheurEl}
+  >
     <slot name="declencheur" />
   </button>
   <div
     class="svelte-menu-flottant"
+    bind:this={contenuEl}
     class:invisible={!menuOuvert}
     class:parDessusDeclencheur
   >
@@ -20,7 +27,10 @@
   </div>
 </div>
 
-<FermetureSurClicEnDehors bind:doitEtreOuvert={menuOuvert} element={menuEl} />
+<FermetureSurClicEnDehors
+  bind:doitEtreOuvert={menuOuvert}
+  elements={[declencheurEl, ...(fermeMenuSiClicInterne ? [] : [contenuEl])]}
+/>
 
 <style>
   .conteneur {

@@ -1,10 +1,11 @@
 <script lang="ts">
-  export let element: HTMLElement;
+  export let elements: HTMLElement[];
   export let doitEtreOuvert: boolean;
 
   const gereClic = (e: MouseEvent) => {
     const clicInterieur =
-      e.target === element || element?.contains(e.target as Node);
+      elements.includes(e.target as HTMLElement) ||
+      elements.some((el) => el.contains(e.target as Node));
     if (!clicInterieur) doitEtreOuvert = false;
   };
 </script>

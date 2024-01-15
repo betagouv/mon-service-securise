@@ -24,7 +24,7 @@
     {STATUS_DROITS[niveau]}
   </div>
 {:else}
-  <MenuFlottant>
+  <MenuFlottant fermeMenuSiClicInterne={true}>
     <span slot="declencheur" class="role role-modifiable {niveau}">
       {STATUS_DROITS[niveau]}
     </span>
