@@ -118,6 +118,7 @@ header nav a,
   cursor: pointer;
   border: none;
   background: transparent;
+  min-width: 240px;
 }
 
 .connexion {
