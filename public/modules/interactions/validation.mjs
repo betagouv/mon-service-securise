@@ -33,8 +33,24 @@ const brancheValidation = (selecteurFormulaire) => {
   brancheValidationCasesACocher();
 };
 
+const declencheScrollSurErreur = (selecteurFormulaire) => {
+  const champAvecErreur = $(
+    'input:invalid, select:invalid',
+    selecteurFormulaire
+  );
+  if (champAvecErreur.length) {
+    let element = $(champAvecErreur[0]);
+    if (element.parents('label').length)
+      element = $(element.parents('label')[0]);
+    else if (element.parents('fieldset').length)
+      element = $(element.parents('fieldset')[0]);
+    element[0].scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
 const declencheValidation = (selecteurFormulaire) => {
   $(selecteurFormulaire).trigger(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE);
+  declencheScrollSurErreur(selecteurFormulaire);
 };
 
 export { brancheConteneur, brancheValidation, declencheValidation };
