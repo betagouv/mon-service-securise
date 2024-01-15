@@ -7,9 +7,10 @@
   let menuEl: HTMLDivElement;
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="conteneur" on:click={() => (menuOuvert = true)} bind:this={menuEl}>
-  <slot name="declencheur" />
+<div class="conteneur" bind:this={menuEl}>
+  <button class="declencheur" on:click={() => (menuOuvert = true)}>
+    <slot name="declencheur" />
+  </button>
   <div
     class="svelte-menu-flottant"
     class:invisible={!menuOuvert}
@@ -41,5 +42,11 @@
 
   .invisible {
     display: none;
+  }
+
+  button {
+    border: none;
+    background: transparent;
+    padding: 0;
   }
 </style>

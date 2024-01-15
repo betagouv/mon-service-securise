@@ -25,50 +25,57 @@
   </div>
 {:else}
   <MenuFlottant>
-    <div slot="declencheur" class="role role-modifiable {niveau}">
+    <span slot="declencheur" class="role role-modifiable {niveau}">
       {STATUS_DROITS[niveau]}
-    </div>
+    </span>
 
     <div class="roles-disponibles">
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div
+      <button
         class="role-propose lecture"
         on:click={() => dispatch('droitsChange', 'LECTURE')}
       >
-        <div class="nom">Lecture</div>
-        <div class="description">Consulter uniquement les informations</div>
-      </div>
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div
+        <span class="nom">Lecture</span>
+        <br />
+        <span class="description">Consulter uniquement les informations</span>
+      </button>
+      <button
         class="role-propose ecriture"
         on:click={() => dispatch('droitsChange', 'ECRITURE')}
       >
-        <div class="nom">Édition</div>
-        <div class="description">Modifier et ajouter des informations</div>
-      </div>
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div
+        <span class="nom">Édition</span>
+        <br />
+        <span class="description">Modifier et ajouter des informations</span>
+      </button>
+      <button
         class="role-propose personnalise"
         on:click={() => dispatch('choixPersonnalisation')}
       >
-        <div class="nom">Personnalisé</div>
-        <div class="description">
+        <span class="nom">Personnalisé</span>
+        <br />
+        <span class="description">
           Avoir un droit d'accès adapté par rubrique
-        </div>
-      </div>
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div
+        </span>
+      </button>
+      <button
         class="role-propose proprietaire"
         on:click={() => dispatch('droitsChange', 'PROPRIETAIRE')}
       >
-        <div class="nom">Propriétaire</div>
-        <div class="description">Gérer le service et les contributeurs</div>
-      </div>
+        <span class="nom">Propriétaire</span>
+        <br />
+        <span class="description">Gérer le service et les contributeurs</span>
+      </button>
     </div>
   </MenuFlottant>
 {/if}
 
 <style>
+  button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    text-align: left;
+  }
+
   .role {
     border-radius: 4px;
     font-weight: bold;
