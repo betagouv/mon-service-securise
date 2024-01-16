@@ -121,6 +121,16 @@
       <div>
         <input
           type="checkbox"
+          id="mesure-cnil"
+          name="mesure-cnil"
+          bind:group={$rechercheReferentiel}
+          value={IdReferentiel.CNIL}
+        />
+        <label for="mesure-cnil">CNIL</label>
+      </div>
+      <div>
+        <input
+          type="checkbox"
           id="mesure-ajoutee"
           name="mesure-ajoutee"
           bind:group={$rechercheReferentiel}
