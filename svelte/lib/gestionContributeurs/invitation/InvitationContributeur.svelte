@@ -79,21 +79,21 @@
         callbackDeRecherche={api.rechercheContributeurs}
         on:contributeurChoisi={ajouteInvitation}
       />
-      <ListeInvitations
-        invitations={Object.values(invitations)}
-        on:droitsChange={({ detail: nouveauxDroits }) => {
-          invitations[nouveauxDroits.utilisateur.email].droits =
-            nouveauxDroits.droits;
-          invitations = invitations;
-        }}
-        on:choixPersonnalisation={({ detail: utilisateur }) => {
-          enPersonnalisation = utilisateur;
-          etapeCourante = 'Personnalisation';
-        }}
-        on:supprimerInvitation={({ detail: aSupprimer }) =>
-          supprimeInvitation(aSupprimer)}
-      />
     </label>
+    <ListeInvitations
+      invitations={Object.values(invitations)}
+      on:droitsChange={({ detail: nouveauxDroits }) => {
+        invitations[nouveauxDroits.utilisateur.email].droits =
+          nouveauxDroits.droits;
+        invitations = invitations;
+      }}
+      on:choixPersonnalisation={({ detail: utilisateur }) => {
+        enPersonnalisation = utilisateur;
+        etapeCourante = 'Personnalisation';
+      }}
+      on:supprimerInvitation={({ detail: aSupprimer }) =>
+        supprimeInvitation(aSupprimer)}
+    />
     {#if afficheLesBoutonsAction}
       <BoutonsActions
         afficherBoutonEnvoyer={Object.values(invitations).length > 0}
