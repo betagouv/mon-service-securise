@@ -58,5 +58,6 @@
     border: none;
     background: transparent;
     padding: 0;
+    cursor: pointer;
   }
 </style>
