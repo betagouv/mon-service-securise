@@ -40,7 +40,7 @@
     </p>
     <div class="conteneur-cartouches">
       <span class="categorie">{categorie}</span>
-      {#if referentiel === Referentiel.ANSSI}
+      {#if referentiel !== Referentiel.SPECIFIQUE}
         <CartoucheIndispensable {indispensable} />
       {/if}
     </div>

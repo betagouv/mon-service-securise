@@ -1,3 +1,5 @@
+import { Referentiel } from '../ui/types.d';
+
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-tableau-mesures': CustomEvent;
@@ -22,6 +24,7 @@ export type MesureGenerale = {
   descriptionLongue: string;
   statut?: string;
   modalites?: string;
+  referentiel: Referentiel;
 };
 
 export type MesureSpecifique = {
