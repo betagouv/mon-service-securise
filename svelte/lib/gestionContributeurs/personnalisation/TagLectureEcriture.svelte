@@ -27,7 +27,7 @@
   }>();
 </script>
 
-<MenuFlottant>
+<MenuFlottant fermeMenuSiClicInterne={true}>
   <div
     slot="declencheur"
     class="droit"
@@ -39,21 +39,29 @@
 
   <div class="droits-disponibles">
     {#each droitsDisponibles as { nom, description, droit }}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div
+      <button
         class="droit-propose"
         on:click={() => dispatch('droitChange', droit)}
         class:lecture={droit === 1}
         class:ecriture={droit === 2}
       >
-        <div class="nom">{nom}</div>
-        <div class="description">{description}</div>
-      </div>
+        <span class="nom">{nom}</span>
+        <br />
+        <span class="description">{description}</span>
+      </button>
     {/each}
   </div>
 </MenuFlottant>
 
 <style>
+  button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+  }
+
   .droit {
     border-radius: 4px;
     font-weight: bold;
