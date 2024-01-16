@@ -503,7 +503,84 @@ module.exports = {
         "Lors du développement du service et, autant que possible, dans le cas de l'achat d'un service sur étagère, procéder à des tests techniques automatiques de la sécurité du service.<br>Cette mesure permet de vérifier rapidement l'existence de vulnérabilités non corrigées parmi les vulnérabilités les plus connues.",
       referentiel: 'ANSSI',
     },
-
+    registreTraitements: {
+      description: 'Remplir le registre des traitements et le tenir à jour',
+      categorie: 'gouvernance',
+      indispensable: true,
+      descriptionLongue:
+        'Rapprochez-vous de votre DPD ou de l’équipe juridique pour compléter le registre avec les 6 informations suivantes :' +
+        '<ul>' +
+        '<li>les parties prenantes (responsable de traitement, sous-traitants, catégories de destinataires) qui interviennent dans le traitement des données,</li>' +
+        '<li>les catégories de données traitées et de personnes concernées,</li>' +
+        '<li>le but poursuivi (ce que vous faites des données),</li>' +
+        '<li>qui a accès aux données et à qui elles sont communiquées,</li>' +
+        '<li>combien de temps vous les conservez,</li>' +
+        '<li>comment elles sont sécurisées.</li>' +
+        '</ul>' +
+        'Plus d’information <a href="https://www.cnil.fr/fr/RGPD-le-registre-des-activites-de-traitement" target="_blank">ici</a>.' +
+        '<br>' +
+        'Le registre est prévu par l’article 30 du RGPD, c’est un outil global avec votre organisme il participe à la documentation de la conformité. Document de recensement et d’analyse, il doit refléter la réalité de vos traitements de données personnelles.',
+      referentiel: 'CNIL',
+    },
+    minimisationCollecteDonnees: {
+      description:
+        'Minimiser la collecte des données à caractère personnel au strict nécessaire',
+      categorie: 'gouvernance',
+      indispensable: true,
+      descriptionLongue:
+        'Evaluer le but de chaque collecte de données. Ne collecter que les données strictement nécessaires pour atteindre votre objectif. Il ne faut pas collecter des données inutiles pour votre traitement en se disant qu’elles pourraient servir plus tard. Lorsque trop de données sont collectées, il faut immédiatement supprimer les données non-nécessaires.' +
+        '<br>' +
+        'Cette mesure limite la collecte des données personnelles uniquement aux informations essentielles pour réaliser un objectif spécifique. Cela réduit les risques liés à la gestion des données et renforce la protection de la vie privée des personnes.',
+      referentiel: 'CNIL',
+    },
+    dureeLimiteeConservationDonnees: {
+      description:
+        'Déterminer une durée limitée de traitement et de conservation des données à caractère personnel au strict nécessaire',
+      categorie: 'gouvernance',
+      indispensable: true,
+      descriptionLongue:
+        'Ne conserver les données en « base active » (ou environnement de production) que le temps strictement nécessaire à la réalisation de l’objectif poursuivi. Il faut ensuite détruire ou anonymiser les données ou les archiver dans le respect des obligations légales applicables en matière de conservation des archives publiques. Vous pouvez consulter le <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/guide_durees_de_conservation.pdf" target="_blank">guide pratique prévu à cet effet</a>.' +
+        '<br>' +
+        "Cette mesure vise à limiter le temps pendant lequel les données personnelles sont conservées et traitées, réduisant ainsi les risques de mauvaise utilisation, d'accès non autorisé, de fuite de données ou de réutilisation non-anticipée.",
+      referentiel: 'CNIL',
+    },
+    utilisationDonneesCaracterePersonnel: {
+      description:
+        'Fournir des informations aux personnes concernées sur l’utilisation de leurs données à caractère personnel',
+      categorie: 'gouvernance',
+      indispensable: true,
+      descriptionLongue:
+        'Informer clairement les personnes lors de la collecte de leurs données de manière à ce qu’elles puissent :' +
+        '<ul>' +
+        '<li>connaître la raison de la collecte des différentes données les concernant ;</li>' +
+        '<li>comprendre le traitement qui sera fait de leurs données ;</li>' +
+        '<li>être assurer de la maîtrise de leurs données, notamment via l’exercice de leurs droits. La liste complète des informations à fournir <a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3#Article13" target="_blank">est disponible ici</a> .</li>' +
+        '<br>' +
+        'Les personnes doivent conserver la maîtrise des données qui les concernent. Cela suppose qu’elles soient clairement informées de l’utilisation qui sera faite de leurs données. Les personnes doivent également être informées de leurs droits et des modalités d’exercice de ces droits. Plus d’information <a href="https://www.cnil.fr/fr/conformite-rgpd-information-des-personnes-et-transparence" target="_blank">ici</a>.',
+      referentiel: 'CNIL',
+    },
+    modalitesExerciceDroits: {
+      description:
+        'Fournir des informations aux personnes concernées sur les modalités d’exercice des droits',
+      categorie: 'gouvernance',
+      indispensable: true,
+      descriptionLongue:
+        "Permettre aux personnes d’exercer leurs droits d’accès aux données qui les concernent, de rectification ou de suppression, voire d’opposition (sauf si le traitement répond à une obligation légale). Une réponse à une demande de droit d’accès doit contenir une copie des données ainsi que : l’objectif du traitement des données, si possible sa durée, l'identité des destinataires, dans le cas d’un traitement automatisé sa logique et ses conséquences. Ces droits doivent pouvoir s’exercer par voie électronique à partir d’une adresse dédiée. Plus d’informations sont disponibles <a href='https://www.cnil.fr/fr/les-droits-des-personnes-sur-leurs-donnees' target='_blank'>ici</a>." +
+        '<br>' +
+        "Les personnes ont le droit d'accéder aux données à caractère personnel qui ont été collectées à leur sujet. Elles doivent pouvoir exercer ce droit facilement et à des intervalles raisonnables, afin de prendre connaissance du traitement et d'en vérifier la licéité.",
+      referentiel: 'CNIL',
+    },
+    analyseProtectionDonnees: {
+      description:
+        'Vérifier si une Analyse sur la protection des données à caractère personnel doit être réalisée',
+      categorie: 'gouvernance',
+      indispensable: true,
+      descriptionLongue:
+        'Consulter <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">la liste des exemptions</a>. Si votre traitement n’y figure pas, regarder s’il fait partie des traitements pour lesquels <a href="https://www.cnil.fr/fr/analyse-dimpact-relative-la-protection-des-donnees-publication-dune-liste-des-traitements-pour" target="_blank">une AIPD est obligatoire</a>. Si une AIPD est nécessaire, vous pouvez la réaliser à l’aide du <a href="https://www.cnil.fr/fr/outil-pia-telechargez-et-installez-le-logiciel-de-la-cnil" target="_blank">logiciel PIA</a>.' +
+        '<br>' +
+        "Cette analyse, aussi appelée Analyse d'Impact sur la Protection des Données (AIPD), vise à évaluer et à atténuer les risques liés au traitement des données personnelles, surtout dans le cas de traitements susceptibles de présenter des risques élevés pour les droits et libertés des individus.",
+      referentiel: 'CNIL',
+    },
     anonymisationDonnees: {
       description:
         "Anonymiser autant que possible les données conservées concernant l'activité des utilisateurs",
@@ -1031,6 +1108,26 @@ module.exports = {
       impactIndisponibiliteRapidementCritique: {
         regles: [{ presence: ['moinsUneHeure'] }],
         mesuresARendreIndispensables: ['garantieHauteDisponibilite'],
+      },
+      avecDonneesCaracterePersonnel: {
+        regles: [
+          { presence: ['contact'] },
+          { presence: ['identite'] },
+          { presence: ['document'] },
+          { presence: ['situation'] },
+          { presence: ['localisation'] },
+          { presence: ['banque'] },
+          { presence: ['mineurs'] },
+          { presence: ['sensibiliteParticuliere'] },
+        ],
+        mesuresAAjouter: [
+          'registreTraitements',
+          'minimisationCollecteDonnees',
+          'dureeLimiteeConservationDonnees',
+          'utilisationDonneesCaracterePersonnel',
+          'modalitesExerciceDroits',
+          'analyseProtectionDonnees',
+        ],
       },
     },
     mesuresBase: [
