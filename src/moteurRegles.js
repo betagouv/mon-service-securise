@@ -1,10 +1,15 @@
 const Referentiel = require('./referentiel');
 const Profil = require('./modeles/profils/profil');
+const adaptateurEnvironnement = require('./adaptateurs/adaptateurEnvironnement');
 
 class MoteurRegles {
-  constructor(referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    referentiel = Referentiel.creeReferentielVide(),
+    adaptateurEnv = adaptateurEnvironnement
+  ) {
     this.reglesPersonnalisation = referentiel.reglesPersonnalisation();
     this.referentiel = referentiel;
+    this.adaptateurEnvironnement = adaptateurEnv;
   }
 
   mesuresAModifier(descriptionService, mesuresACibler) {
@@ -80,11 +85,19 @@ class MoteurRegles {
         [idMesure]: mesureAvecImportanceAjustee(idsMesuresReference, idMesure),
       });
 
-    return idsMesures.reduce(
+    let mesuresAjustees = idsMesures.reduce(
       (...parametres) =>
         ajouteEtRendsIndispensable(mesuresARendreIndispensables, ...parametres),
       {}
     );
+
+    if (!this.adaptateurEnvironnement.referentiel().avecMesuresCNIL())
+      mesuresAjustees = Object.fromEntries(
+        Object.entries(mesuresAjustees).filter(
+          ([, mesure]) => mesure.referentiel !== 'CNIL'
+        )
+      );
+    return mesuresAjustees;
   }
 }
 
