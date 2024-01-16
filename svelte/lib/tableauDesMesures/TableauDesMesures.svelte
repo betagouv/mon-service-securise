@@ -109,7 +109,7 @@
     {#each Object.entries($mesuresFiltrees.mesuresGenerales) as [id, mesure] (id)}
       <LigneMesure
         {id}
-        referentiel={Referentiel.ANSSI}
+        referentiel={mesure.referentiel}
         indispensable={mesure.indispensable}
         nom={mesure.description}
         categorie={categories[mesure.categorie]}
