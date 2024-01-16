@@ -1,4 +1,4 @@
-import { writable, derived } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 import type {
   IdCategorie,
   IdStatut,
@@ -6,6 +6,7 @@ import type {
   Mesures,
   MesureSpecifique,
 } from './tableauDesMesures.d';
+import { Referentiel } from '../ui/types.d';
 
 const mesuresParDefaut = (): Mesures => ({
   mesuresGenerales: {},
@@ -36,6 +37,7 @@ export const rechercheStatut = writable<IdStatut[]>([]);
 export enum IdReferentiel {
   ANSSIRecommandee,
   ANSSIIndispensable,
+  CNIL,
   MesureAjoutee,
 }
 const {
@@ -138,6 +140,9 @@ export const predicats = derived<
           ($rechercheReferentiel.includes(IdReferentiel.ANSSIIndispensable) &&
             estMesureGenerale(mesure) &&
             mesure.indispensable) ||
+          ($rechercheReferentiel.includes(IdReferentiel.CNIL) &&
+            estMesureGenerale(mesure) &&
+            mesure.referentiel === Referentiel.CNIL) ||
           ($rechercheReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
             estMesureGenerale(mesure) &&
             !mesure.indispensable),
