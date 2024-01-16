@@ -74,6 +74,7 @@
     background: transparent;
     padding: 0;
     text-align: left;
+    cursor: pointer;
   }
 
   .role {
