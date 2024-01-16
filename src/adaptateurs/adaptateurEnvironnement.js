@@ -31,10 +31,15 @@ const statistiques = () => ({
       : '',
 });
 
+const referentiel = () => ({
+  avecMesuresCNIL: () => process.env.AVEC_MESURES_CNIL === 'true',
+});
+
 module.exports = {
   emailMemoire,
   journalMSS,
   matomo,
+  referentiel,
   sendinblue,
   sentry,
   statistiques,
