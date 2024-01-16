@@ -55,7 +55,7 @@ export const store = {
 export const configurationAffichage = derived(store, ($store) => {
   const referentiel: Referentiel =
     $store.etape === 'EditionGenerale'
-      ? Referentiel.ANSSI
+      ? ($store.mesureEditee.mesure as MesureGeneraleEnrichie).referentiel
       : Referentiel.SPECIFIQUE;
   return {
     referentiel,

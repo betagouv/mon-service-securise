@@ -9,7 +9,7 @@
 
 <div class="conteneur">
   <CartoucheReferentiel {referentiel} />
-  {#if referentiel === Referentiel.ANSSI}
+  {#if referentiel !== Referentiel.SPECIFIQUE}
     <CartoucheIndispensable indispensable={indispensable ?? false} />
   {/if}
 </div>
