@@ -1,3 +1,5 @@
+import type { Referentiel } from '../ui/types.d';
+
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-mesure': CustomEvent;
@@ -28,6 +30,7 @@ export type MesureGeneraleEnrichie = MesureGenerale & {
   descriptionLongue: string;
   categorie: string;
   indispensable?: boolean;
+  referentiel: Referentiel;
 };
 
 export type MesureSpecifique = MesureGenerale & {
