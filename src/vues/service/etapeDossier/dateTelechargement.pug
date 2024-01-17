@@ -3,6 +3,9 @@ extends ../formulaireEtapier
 block append styles
   link(href = '/statique/assets/styles/etapesDossier/decision.css', rel = 'stylesheet')
 
+block title
+  title Homologuer - Décision | MonServiceSécurisé
+
 block formulaire
   -
     const formatDateCourt = Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
