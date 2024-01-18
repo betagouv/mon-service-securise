@@ -4,6 +4,7 @@
   import { recupereIndiceCyber } from './indiceCyber.api';
 
   export let indiceCyber: number;
+  export let completudeSuffisante: boolean;
 
   export let noteMax: number;
   export let idService: string;
@@ -48,9 +49,32 @@
   let animationFleche: SVGAnimateTransformElement;
 
   const metAJourIndiceCyber = async () => {
-    indiceCyber = await recupereIndiceCyber(idService);
+    const donnees = await recupereIndiceCyber(idService);
+    indiceCyber = donnees.indiceCyber;
+    const nouvelleCompletudeSuffisante =
+      donnees.completudeSuffisantePourAfficherIndiceCyber;
+    if (nouvelleCompletudeSuffisante && !completudeSuffisante) {
+      enleveFlou();
+    }
+    completudeSuffisante = nouvelleCompletudeSuffisante;
     animationJauge?.beginElement();
     animationFleche?.beginElement();
+  };
+
+  const enleveFlou = () => {
+    const conteneurs = document.getElementsByClassName(
+      'conteneur-indice-cyber'
+    );
+    if (conteneurs && conteneurs.length === 1) {
+      conteneurs.item(0)!.classList.remove('flou');
+    }
+
+    const cartouches = document.getElementsByClassName(
+      'cartouche-indice-cyber'
+    );
+    if (cartouches && cartouches.length === 1) {
+      cartouches.item(0)!.classList.add('passage-visible');
+    }
   };
 </script>
 

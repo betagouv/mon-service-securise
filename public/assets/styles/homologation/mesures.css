@@ -75,3 +75,22 @@
 .conteneur-indice-cyber:hover .cartouche-indice-cyber-insuffisant {
   display: flex;
 }
+
+.conteneur-indice-cyber .cartouche-indice-cyber.passage-visible {
+  animation: fond-vert-pale 1s ease-in-out;
+}
+
+@keyframes fond-vert-pale {
+  0% {
+    background: #f1f5f9;
+    box-shadow: 0 0 50px 10px rgba(212, 244, 219, 0);
+  }
+  50% {
+    background: #d4f4db;
+    box-shadow: 0 0 50px 10px rgba(212, 244, 219, 1);
+  }
+  100% {
+    background: #f1f5f9;
+    box-shadow: 0 0 50px 10px rgba(212, 244, 219, 0);
+  }
+}

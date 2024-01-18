@@ -21,7 +21,7 @@ block append scripts
   script(id = 'securiser-lecture-seule', type = 'application/json').
     !{JSON.stringify(autorisationsService.SECURISER.estLectureSeule)}
   script(id = 'indice-cyber', type = 'application/json').
-    !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax() })}
+    !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax(), completudeSuffisante: referentiel.completudeSuffisantePourAfficherIndiceCyber(pourcentageProgression) })}
   script(id = 'completude-mesure', type = 'application/json').
     !{JSON.stringify(pourcentageProgression)}
 

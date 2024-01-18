@@ -1,4 +1,8 @@
 export const recupereIndiceCyber = async (idService: string) => {
-  const reponse = await axios.get(`/api/service/${idService}/indiceCyber`);
-  return reponse.data.total as number;
+  const { data } = await axios.get(`/api/service/${idService}/indiceCyber`);
+  return {
+    indiceCyber: data.indiceCyber.total,
+    completudeSuffisantePourAfficherIndiceCyber:
+      data.completudeSuffisantePourAfficherIndiceCyber,
+  };
 };
