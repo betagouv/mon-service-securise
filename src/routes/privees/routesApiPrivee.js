@@ -70,7 +70,11 @@ const routesApiPrivee = ({
       const autorisations = await depotDonnees.autorisations(
         requete.idUtilisateurCourant
       );
-      const donnees = objetGetIndicesCyber.donnees(services, autorisations);
+      const donnees = objetGetIndicesCyber.donnees(
+        services,
+        autorisations,
+        referentiel
+      );
       reponse.json(donnees);
     }
   );

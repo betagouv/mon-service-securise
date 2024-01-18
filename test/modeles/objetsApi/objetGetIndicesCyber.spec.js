@@ -9,6 +9,7 @@ const {
   Rubriques,
   Permissions,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const Referentiel = require('../../../src/referentiel');
 
 const { SECURISER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -26,18 +27,30 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
       .avecDroits({ [SECURISER]: LECTURE })
       .construis(),
   ];
+  const referentiel = Referentiel.creeReferentiel({
+    completudeRequisePourAfficherIndiceCyber: 50,
+  });
 
   beforeEach(() => {
     unService = new Service({ id: '123' });
     unService.indiceCyber = () => ({ total: 3.51 });
+    unService.completudeMesures = () => ({
+      nombreMesuresCompletes: 5,
+      nombreTotalMesures: 10,
+    });
 
     unAutreService = new Service({ id: '456' });
     unAutreService.indiceCyber = () => ({ total: 5 });
+    unAutreService.completudeMesures = () => ({
+      nombreMesuresCompletes: 5,
+      nombreTotalMesures: 10,
+    });
   });
 
   it('fournit les données nécessaires', () => {
     expect(
-      objetGetIndicesCyber.donnees([unService], autorisations).services
+      objetGetIndicesCyber.donnees([unService], autorisations, referentiel)
+        .services
     ).to.eql([{ id: '123', indiceCyber: 3.5 }]);
   });
 
@@ -48,7 +61,22 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
 
     const { services } = objetGetIndicesCyber.donnees(
       [unService],
-      [autorisationSansSecuriser]
+      [autorisationSansSecuriser],
+      referentiel
+    );
+    expect(services[0].indiceCyber).to.be(undefined);
+  });
+
+  it("ne fournit pas l'indice cyber si le taux de complétude est insuffisant", () => {
+    const unServiceAvecFaibleCompletude = new Service({ id: '123' });
+    unServiceAvecFaibleCompletude.completudeMesures = () => ({
+      nombreMesuresCompletes: 0,
+      nombreTotalMesures: 10,
+    });
+    const { services } = objetGetIndicesCyber.donnees(
+      [unServiceAvecFaibleCompletude],
+      autorisations,
+      referentiel
     );
     expect(services[0].indiceCyber).to.be(undefined);
   });
@@ -58,11 +86,11 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
     unAutreService.indiceCyber = () => ({ total: 5 });
 
     const services = [unService, unAutreService];
-    expect(objetGetIndicesCyber.donnees(services, autorisations).resume).to.eql(
-      {
-        indiceCyberMoyen: '4.5',
-      }
-    );
+    expect(
+      objetGetIndicesCyber.donnees(services, autorisations, referentiel).resume
+    ).to.eql({
+      indiceCyberMoyen: '4.5',
+    });
   });
 
   it('ne compte pas les indices cyber nuls dans le calcul de la moyenne', () => {
@@ -71,12 +99,12 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
 
     const services = [unService, unAutreService];
     expect(
-      objetGetIndicesCyber.donnees(services, autorisations).resume
+      objetGetIndicesCyber.donnees(services, autorisations, referentiel).resume
         .indiceCyberMoyen
     ).to.be('4.0');
   });
 
-  it('ne compte pas les indices cyber lorsque la permission est insuffisante', () => {
+  it('ne compte pas les indices cyber `undefined` dans le calcul de la moyenne', () => {
     unService.indiceCyber = () => ({ total: 4 });
     unAutreService.indiceCyber = () => ({ total: 2 });
 
@@ -90,8 +118,11 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
         .construis(),
     ];
     expect(
-      objetGetIndicesCyber.donnees(services, autorisationsSansPermission).resume
-        .indiceCyberMoyen
+      objetGetIndicesCyber.donnees(
+        services,
+        autorisationsSansPermission,
+        referentiel
+      ).resume.indiceCyberMoyen
     ).to.be('4.0');
   });
 
@@ -101,7 +132,7 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
 
     const services = [unService, unAutreService];
     expect(
-      objetGetIndicesCyber.donnees(services, autorisations).resume
+      objetGetIndicesCyber.donnees(services, autorisations, referentiel).resume
         .indiceCyberMoyen
     ).to.be('-');
   });
