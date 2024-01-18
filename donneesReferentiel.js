@@ -15,6 +15,8 @@ module.exports = {
     noteMax: 5,
   },
 
+  completudeRequisePourAfficherIndiceCyber: 50,
+
   nouvellesFonctionnalites: [
     {
       id: 'tableauDeBord',

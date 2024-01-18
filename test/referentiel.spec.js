@@ -839,4 +839,29 @@ describe('Le référentiel', () => {
       ).to.be('id-autorisee-pour-tous');
     });
   });
+
+  describe("sur demande de complétude suffisante pour afficher l'indice cyber", () => {
+    it('retourne `false` si la complétude est inférieure à la complétude requise', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        completudeRequisePourAfficherIndiceCyber: 50,
+      });
+
+      expect(referentiel.completudeSuffisantePourAfficherIndiceCyber(10)).to.be(
+        false
+      );
+    });
+
+    it('retourne `true` si la complétude est supérieure ou égale à la complétude requise', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        completudeRequisePourAfficherIndiceCyber: 50,
+      });
+
+      expect(referentiel.completudeSuffisantePourAfficherIndiceCyber(50)).to.be(
+        true
+      );
+      expect(
+        referentiel.completudeSuffisantePourAfficherIndiceCyber(100)
+      ).to.be(true);
+    });
+  });
 });
