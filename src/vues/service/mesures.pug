@@ -34,7 +34,7 @@ block titre
   h1 Sécuriser
   .conteneur-indicateurs
     #conteneur-completude-mesure
-    a.conteneur-indice-cyber(href="indiceCyber", class=`${tauxCompletudeSuffisant ? '' : 'flou'}`)
+    a.conteneur-indice-cyber(href=`${tauxCompletudeSuffisant ? 'indiceCyber' : '#'}`, class=`${tauxCompletudeSuffisant ? '' : 'flou'}`)
       .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
       #conteneur-indice-cyber
 
