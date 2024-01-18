@@ -1948,9 +1948,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("renvoie l'indice cyber du service", async () => {
+    it("renvoie l'indice cyber du service et indique si le taux de complétude est suffisant", async () => {
       const serviceARenvoyer = unService().construis();
       serviceARenvoyer.indiceCyber = () => ({ total: 1.5 });
+      serviceARenvoyer.completudeMesures = () => ({
+        nombreMesuresCompletes: 5,
+        nombreTotalMesures: 10,
+      });
+      testeur
+        .referentiel()
+        .recharge({ completudeRequisePourAfficherIndiceCyber: 50 });
       testeur.middleware().reinitialise({
         homologationARenvoyer: serviceARenvoyer,
       });
@@ -1959,7 +1966,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         'http://localhost:1234/api/service/456/indiceCyber'
       );
 
-      expect(data.total).to.be(1.5);
+      expect(data.indiceCyber.total).to.be(1.5);
+      expect(data.completudeSuffisantePourAfficherIndiceCyber).to.be(true);
     });
   });
 
