@@ -94,7 +94,8 @@ const routesApiPrivee = ({
         );
         const indicesCyber = objetGetIndicesCyber.donnees(
           services,
-          autorisations
+          autorisations,
+          referentiel
         );
 
         return zipTableaux(
