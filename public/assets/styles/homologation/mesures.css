@@ -20,6 +20,10 @@
   flex-direction: row;
   gap: 0;
   align-items: center;
+  cursor: default;
+}
+
+.conteneur-indice-cyber:not(.flou) {
   cursor: pointer;
 }
 
@@ -46,11 +50,11 @@
   white-space: nowrap;
 }
 
-.conteneur-indice-cyber:hover .cartouche-indice-cyber {
+.conteneur-indice-cyber:not(.flou):hover .cartouche-indice-cyber {
   background: #dbecf1;
 }
 
-.conteneur-indice-cyber:active .cartouche-indice-cyber {
+.conteneur-indice-cyber:not(.flou):active .cartouche-indice-cyber {
   background: #08416a;
   color: white;
 }
