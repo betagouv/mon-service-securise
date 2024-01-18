@@ -119,6 +119,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const coefficientIndiceCyberMesuresRecommandees = () =>
     donnees.indiceCyber?.coefficientRecommandees || 0.5;
 
+  const completudeNecessairePourAfficherIndiceCyber = () =>
+    donnees.completudeRequisePourAfficherIndiceCyber;
   const completudeSuffisantePourAfficherIndiceCyber = (completude) =>
     completude >= donnees.completudeRequisePourAfficherIndiceCyber;
 
@@ -252,6 +254,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     codeDepartements,
     coefficientIndiceCyberMesuresIndispensables,
     coefficientIndiceCyberMesuresRecommandees,
+    completudeNecessairePourAfficherIndiceCyber,
     completudeSuffisantePourAfficherIndiceCyber,
     indiceCyberNoteMax,
     definitionRisque,

@@ -35,6 +35,8 @@ block titre
   .conteneur-indicateurs
     #conteneur-completude-mesure
     a.conteneur-indice-cyber(href=`${tauxCompletudeSuffisant ? 'indiceCyber' : '#'}`, class=`${tauxCompletudeSuffisant ? '' : 'flou'}`)
+      if !tauxCompletudeSuffisant
+        .cartouche-indice-cyber-insuffisant= `Indice cyber disponible dès ${referentiel.completudeNecessairePourAfficherIndiceCyber()}% des mesures complétées`
       .cartouche-indice-cyber Indice cyber&nbsp;&nbsp;
       #conteneur-indice-cyber
 
