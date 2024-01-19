@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const Homologation = require('../../../src/modeles/homologation');
 const Referentiel = require('../../../src/referentiel');
 const VueAnnexePDFMesures = require('../../../src/modeles/objetsPDF/objetPDFAnnexeMesures');
+const { unService } = require('../../constructeurs/constructeurService');
 
 describe("L'objet PDF de l'annexe des mesures", () => {
   const donneesReferentiel = {
@@ -10,6 +11,10 @@ describe("L'objet PDF de l'annexe des mesures", () => {
     mesures: { mesure1: {} },
     niveauxGravite: { grave: {} },
     statutsMesures: { fait: 'Fait', enCours: 'En cours' },
+    articlesDefinisReferentielsMesure: {
+      ANSSI: "l'",
+      CNIL: 'la ',
+    },
   };
   const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
   const homologation = new Homologation(
@@ -88,5 +93,23 @@ describe("L'objet PDF de l'annexe des mesures", () => {
 
     expect(donnees).to.have.key('nbMesuresARemplirToutesCategories');
     expect(donnees.nbMesuresARemplirToutesCategories).to.equal(6);
+  });
+
+  it('fournit une chaine de caractères indiquant les référentiels concernés par les mesures non renseignées', () => {
+    const service = unService().construis();
+    service.mesures.enrichiesAvecDonneesPersonnalisees = () => ({
+      mesuresGenerales: {
+        mesureA: { referentiel: 'ANSSI' },
+        mesureB: { referentiel: 'CNIL' },
+        mesureC: { referentiel: 'CNIL' },
+      },
+    });
+    const vueAnnexePDFMesures = new VueAnnexePDFMesures(service, referentiel);
+
+    const donnees = vueAnnexePDFMesures.donnees();
+
+    expect(donnees.referentielsConcernesMesuresNonRenseignees).to.equal(
+      "l'ANSSI et la CNIL"
+    );
   });
 });
