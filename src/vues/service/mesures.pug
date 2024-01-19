@@ -24,6 +24,8 @@ block append scripts
     !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})}
   script(id = 'completude-mesure', type = 'application/json').
     !{JSON.stringify(pourcentageProgression)}
+  script(id = 'feature-flags', type = 'application/json').
+    !{JSON.stringify(featureFlags)}
 
 block header-titre-page
   h3
