@@ -306,22 +306,24 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('retourne la représenation des mesures en utilisant `objetGetMesures`', async () => {
+    it('retourne la représentation enrichie des mesures', async () => {
+      const avecMesureA = referentiel.creeReferentiel({
+        mesures: { mesureA: {} },
+      });
       const mesures = new Mesures(
         {
           mesuresGenerales: [
             { id: 'mesureA', statut: 'fait', modalites: 'un commentaire' },
           ],
         },
-        referentiel.creeReferentiel({ mesures: { mesureA: {} } })
+        avecMesureA,
+        { mesureA: { description: 'Mesure A', referentiel: 'ANSSI' } }
       );
 
       testeur.middleware().reinitialise({
-        homologationARenvoyer: unService().avecMesures(mesures).construis(),
-      });
-
-      testeur.moteurRegles().mesures = () => ({
-        mesureA: { description: 'Mesure A' },
+        homologationARenvoyer: unService(avecMesureA)
+          .avecMesures(mesures)
+          .construis(),
       });
 
       const reponse = await axios(
@@ -334,6 +336,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
             description: 'Mesure A',
             statut: 'fait',
             modalites: 'un commentaire',
+            referentiel: 'ANSSI',
           },
         },
         mesuresSpecifiques: [],
