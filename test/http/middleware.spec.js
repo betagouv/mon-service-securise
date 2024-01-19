@@ -705,6 +705,32 @@ describe('Le middleware MSS', () => {
     });
   });
 
+  describe('sur demande de chargement des `feature flags`', () => {
+    it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+      const middleware = Middleware();
+
+      middleware.chargeFeatureFlags(requete, reponse, () => {
+        expect(reponse.locals.featureFlags).not.to.be(undefined);
+        done();
+      });
+    });
+
+    it("lit l'état d'activation des mesures CNIL via l'adaptateur environnement", (done) => {
+      const adaptateurEnvironnement = {
+        referentiel: () => ({
+          avecMesuresCNIL: () => true,
+        }),
+      };
+      const middleware = Middleware({ adaptateurEnvironnement });
+
+      middleware.chargeFeatureFlags(requete, reponse, () => {
+        const { featureFlags } = reponse.locals;
+        expect(featureFlags.avecMesuresCNIL).to.be(true);
+        done();
+      });
+    });
+  });
+
   describe('sur demande de chargement des autorisations pour un service', () => {
     beforeEach(() => {
       requete.idUtilisateurCourant = '999';
