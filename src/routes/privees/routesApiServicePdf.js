@@ -41,15 +41,21 @@ const routesApiServicePdf = ({
     return adaptateurPdf.genereDossierDecision(donnees);
   };
 
-  const generePdfSyntheseSecurite = (homologation) => {
+  const generePdfSyntheseSecurite = (service) => {
+    const referentiels = Object.entries(
+      service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
+    ).map(([_, mesure]) => mesure.referentiel);
+    const referentielConcernes =
+      referentiel.formatteListeDeReferentiels(referentiels);
     const donnees = {
-      service: homologation,
+      service,
       camembertIndispensables: genereGradientConique(
-        homologation.statistiquesMesuresIndispensables()
+        service.statistiquesMesuresIndispensables()
       ),
       camembertRecommandees: genereGradientConique(
-        homologation.statistiquesMesuresRecommandees()
+        service.statistiquesMesuresRecommandees()
       ),
+      referentielConcernes,
       referentiel,
     };
 
