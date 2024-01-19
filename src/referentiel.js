@@ -63,6 +63,17 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const estIdentifiantStatutAvisDossierHomologationConnu = (idStatut) =>
     identifiantsStatutAvisDossierHomologation().includes(idStatut);
   const fonctionnalites = () => donnees.fonctionnalites;
+  const formatteListeDeReferentiels = (referentiels) => {
+    const formatte = new Intl.ListFormat('fr', {
+      type: 'conjunction',
+    });
+    const referentielsSansDoublon = new Set(
+      referentiels.map(
+        (r) => `${donnees.articlesDefinisReferentielsMesure[r] ?? ''}${r}`
+      )
+    );
+    return formatte.format(referentielsSansDoublon);
+  };
   const descriptionFonctionnalite = (id) => fonctionnalites()[id]?.description;
   const descriptionsFonctionnalites = (ids) =>
     ids
@@ -278,6 +289,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     etapesParcoursHomologation,
     etapeSuffisantePourDossierDecision,
     fonctionnalites,
+    formatteListeDeReferentiels,
     identifiantsCategoriesMesures,
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,

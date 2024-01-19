@@ -839,4 +839,41 @@ describe('Le référentiel', () => {
       ).to.be('id-autorisee-pour-tous');
     });
   });
+
+  describe("sur demande de formattage d'une liste de référentiels", () => {
+    it('utilise les articles définis devant les référentiels', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        articlesDefinisReferentielsMesure: {
+          ANSSI: "l'",
+          CNIL: 'la ',
+        },
+      });
+
+      expect(
+        referentiel.formatteListeDeReferentiels(['ANSSI', 'CNIL'])
+      ).to.equal("l'ANSSI et la CNIL");
+    });
+
+    it('supprime les doublons', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        articlesDefinisReferentielsMesure: {
+          ANSSI: "l'",
+        },
+      });
+
+      expect(
+        referentiel.formatteListeDeReferentiels(['ANSSI', 'ANSSI'])
+      ).to.equal("l'ANSSI");
+    });
+
+    it("reste robuste si le référentiel n'existe pas", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        articlesDefinisReferentielsMesure: {},
+      });
+
+      expect(referentiel.formatteListeDeReferentiels(['ANSSI'])).to.equal(
+        'ANSSI'
+      );
+    });
+  });
 });
