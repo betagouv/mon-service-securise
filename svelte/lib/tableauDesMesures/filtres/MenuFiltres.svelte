@@ -179,7 +179,7 @@
   }
 
   .filtres-disponibles {
-    width: 260px;
+    width: 280px;
     border-radius: 8px;
     border: 1px solid #cbd5e1;
     background: white;
@@ -205,6 +205,8 @@
   .nombre-resultat {
     color: #0079d0;
     opacity: 0;
+    position: relative;
+    z-index: 101;
   }
 
   .nombre-resultat.visible {
