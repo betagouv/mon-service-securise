@@ -705,10 +705,15 @@ p {
   white-space: nowrap;
 }
 
+.synthese-securite .total-mesures {
+  white-space: break-spaces;
+}
+
 .synthese-securite .total .legende {
   display: flex;
   justify-content: flex-end;
   column-gap: 1em;
+  white-space: nowrap;
 }
 
 .synthese-securite .total .legende > *::before {

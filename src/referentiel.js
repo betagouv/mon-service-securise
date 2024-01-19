@@ -2,6 +2,7 @@ const { ErreurDonneesReferentielIncorrectes } = require('./erreurs');
 const donneesParDefaut = require('../donneesReferentiel');
 
 const donneesReferentielVide = {
+  articlesDefinisReferentielsMesure: {},
   categoriesMesures: {},
   indiceCyber: {},
   delaisAvantImpactCritique: {},
