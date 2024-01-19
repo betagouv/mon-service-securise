@@ -73,6 +73,7 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
+    middleware.chargeFeatureFlags,
     async (requete, reponse) => {
       const { homologation } = requete;
 
