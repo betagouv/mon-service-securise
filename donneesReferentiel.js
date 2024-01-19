@@ -385,6 +385,11 @@ module.exports = {
     nonFait: 'Non prise en compte',
   },
 
+  articlesDefinisReferentielsMesure: {
+    ANSSI: "l'",
+    CNIL: 'la ',
+  },
+
   mesures: {
     analyseRisques: {
       description:
