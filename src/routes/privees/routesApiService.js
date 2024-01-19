@@ -42,7 +42,6 @@ const routesApiService = ({
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
-  moteurRegles,
 }) => {
   const routes = express.Router();
 
@@ -158,7 +157,7 @@ const routesApiService = ({
     (requete, reponse) => {
       const { homologation: service } = requete;
 
-      reponse.json(objetGetMesures.donnees(service, moteurRegles));
+      reponse.json(objetGetMesures.donnees(service));
     }
   );
 
