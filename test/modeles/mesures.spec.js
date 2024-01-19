@@ -276,4 +276,80 @@ describe('Les mesures liées à une homologation', () => {
       expect(mesures.statutsMesuresPersonnalisees()).to.be.empty();
     });
   });
+
+  describe('sur demande des mesures enrichies', () => {
+    let referentiel;
+
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        mesures: { mesure1: {} },
+        categoriesMesures: { categorie1: 'Catégorie 1' },
+      });
+    });
+
+    elles(
+      'savent fournir les mesures générales enrichies avec les données des mesures personnalisées (catégorie, description, …)',
+      () => {
+        const mesure1Personnalisee = {
+          description: 'Mesure une',
+          categorie: 'categorie1',
+          indispensable: true,
+        };
+
+        const mesures = new Mesures(
+          {
+            mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
+            mesuresSpecifiques: [],
+          },
+          referentiel,
+          { mesure1: mesure1Personnalisee }
+        );
+
+        expect(mesures.enrichiesAvecDonneesPersonnalisees()).to.eql({
+          mesuresGenerales: {
+            mesure1: {
+              statut: 'fait',
+              description: 'Mesure une',
+              categorie: 'categorie1',
+              indispensable: true,
+            },
+          },
+          mesuresSpecifiques: [],
+        });
+      }
+    );
+
+    elles(
+      "ne suppriment pas l'ID des mesures générales dans les objets `MesureGenerale`",
+      () => {
+        const mesures = new Mesures(
+          {
+            mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
+            mesuresSpecifiques: [],
+          },
+          referentiel,
+          { mesure1: { description: 'Mesure une' } }
+        );
+
+        mesures.enrichiesAvecDonneesPersonnalisees(); // Appel pour déclencher le code
+        expect(mesures.mesuresGenerales.toutes()[0].id).to.be('mesure1'); // Vérifie l'absence d'effet de bord
+      }
+    );
+
+    elles('incluent les mesures spécifiques', () => {
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [],
+          mesuresSpecifiques: [{ statut: 'fait', categorie: 'categorie1' }],
+        },
+        referentiel,
+        {}
+      );
+
+      expect(mesures.enrichiesAvecDonneesPersonnalisees()).to.eql({
+        mesuresGenerales: {},
+        mesuresSpecifiques: [{ statut: 'fait', categorie: 'categorie1' }],
+      });
+    });
+  });
 });

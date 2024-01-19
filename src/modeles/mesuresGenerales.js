@@ -93,6 +93,10 @@ class MesuresGenerales extends ElementsConstructibles {
     }
     return MesuresGenerales.A_COMPLETER;
   }
+
+  avecId(idMesure) {
+    return this.toutes().find((m) => m.id === idMesure);
+  }
 }
 
 module.exports = MesuresGenerales;

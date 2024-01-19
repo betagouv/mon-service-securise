@@ -73,6 +73,30 @@ class Mesures extends InformationsHomologation {
       .filter((m) => m.statut !== '')
       .map((m) => ({ idMesure: m.id, statut: m.statut }));
   }
+
+  enrichiesAvecDonneesPersonnalisees() {
+    const mesuresEnrichies = Object.entries(this.mesuresPersonnalisees).reduce(
+      (acc, mesurePersonnalisee) => {
+        const [id, donnees] = mesurePersonnalisee;
+        let generale = this.mesuresGenerales.avecId(id);
+        if (generale) {
+          generale = generale.toJSON();
+          delete generale.id;
+        }
+
+        return {
+          ...acc,
+          [id]: { ...donnees, ...(generale && { ...generale }) },
+        };
+      },
+      {}
+    );
+
+    return {
+      mesuresGenerales: mesuresEnrichies,
+      mesuresSpecifiques: this.mesuresSpecifiques.toJSON(),
+    };
+  }
 }
 
 module.exports = Mesures;
