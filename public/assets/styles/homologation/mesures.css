@@ -1,9 +1,13 @@
+.zone-principale {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .titre-page {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  position: relative;
 }
 
 .conteneur-indicateurs {
@@ -11,8 +15,13 @@
   flex-direction: row;
   align-items: center;
   gap: 1em;
-  position: absolute;
+  position: sticky;
+  top: 16px;
   right: 0;
+  z-index: 2;
+  margin-top: -6em;
+  width: fit-content;
+  margin-left: auto;
 }
 
 .conteneur-indice-cyber {

@@ -72,35 +72,37 @@
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
-<div class="barre-filtres">
-  <label for="recherche">
-    Rechercher
-    <input
-      type="search"
-      id="recherche"
-      bind:value={$rechercheTextuelle}
-      placeholder="Intitulé, description"
-    />
-  </label>
+<div class="barre-outils-sticky">
+  <div class="barre-filtres">
+    <label for="recherche">
+      Rechercher
+      <input
+        type="search"
+        id="recherche"
+        bind:value={$rechercheTextuelle}
+        placeholder="Intitulé, description"
+      />
+    </label>
   <MenuFiltres {categories} {statuts} {avecMesuresCNIL} />
-</div>
-{#if !estLectureSeule}
-  <div class="barre-actions">
-    <button
-      class="bouton"
-      on:click={() => afficheTiroirDeMesure()}
-      disabled={etatEnregistrement === EnCours}
-    >
-      Ajouter une mesure
-    </button>
-    {#if etatEnregistrement === EnCours}
-      <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
-    {/if}
-    {#if etatEnregistrement === Fait}
-      <p class="enregistrement-termine">Enregistré</p>
-    {/if}
   </div>
-{/if}
+  {#if !estLectureSeule}
+    <div class="barre-actions">
+      <button
+        class="bouton"
+        on:click={() => afficheTiroirDeMesure()}
+        disabled={etatEnregistrement === EnCours}
+      >
+        Ajouter une mesure
+      </button>
+      {#if etatEnregistrement === EnCours}
+        <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
+      {/if}
+      {#if etatEnregistrement === Fait}
+        <p class="enregistrement-termine">Enregistré</p>
+      {/if}
+    </div>
+  {/if}
+</div>
 <div class="tableau-des-mesures">
   {#if $nombreResultats.aucunResultat}
     <div class="aucun-resultat">
@@ -156,10 +158,18 @@
 </div>
 
 <style>
+  .barre-outils-sticky {
+    position: sticky;
+    padding: 24px 0;
+    top: 0;
+    background: white;
+    z-index: 1;
+  }
+
   .barre-filtres {
     display: flex;
     flex-direction: row;
-    margin-bottom: 1em;
+    margin-bottom: 24px;
     gap: 16px;
     align-items: center;
   }
@@ -181,7 +191,6 @@
     display: flex;
     align-items: center;
     gap: 1em;
-    padding: 1em 0;
   }
 
   .barre-actions p {
