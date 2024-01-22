@@ -139,13 +139,15 @@ export const predicats = derived<
             !estMesureGenerale(mesure)) ||
           ($rechercheReferentiel.includes(IdReferentiel.ANSSIIndispensable) &&
             estMesureGenerale(mesure) &&
-            mesure.indispensable) ||
+            mesure.indispensable &&
+            mesure.referentiel === Referentiel.ANSSI) ||
           ($rechercheReferentiel.includes(IdReferentiel.CNIL) &&
             estMesureGenerale(mesure) &&
             mesure.referentiel === Referentiel.CNIL) ||
           ($rechercheReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
             estMesureGenerale(mesure) &&
-            !mesure.indispensable),
+            !mesure.indispensable &&
+            mesure.referentiel === Referentiel.ANSSI),
       },
     };
   }
