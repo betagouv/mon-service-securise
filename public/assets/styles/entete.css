@@ -138,6 +138,10 @@ header nav a,
   color: var(--systeme-design-etat-bleu);
 }
 
+.nom-utilisateur-courant {
+  width: 100%;
+}
+
 :is(.connexion, .nom-utilisateur-courant, .deconnexion):before,
 .nom-utilisateur-courant::after {
   display: inline-block;
@@ -171,7 +175,7 @@ header nav a,
 .nom-utilisateur-courant::after {
   width: 0.7em;
   height: 0.7em;
-  margin-left: 8px;
+  margin-left: auto;
 
   -webkit-mask: url(../images/icone_fleche_bas.svg) no-repeat center;
   mask: url(../images/icone_fleche_bas.svg) no-repeat center;
