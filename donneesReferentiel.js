@@ -577,7 +577,7 @@ module.exports = {
     },
     analyseProtectionDonnees: {
       description:
-        'Vérifier si une Analyse sur la protection des données à caractère personnel doit être réalisée',
+        'Vérifier si une analyse sur la protection des données à caractère personnel doit être réalisée',
       categorie: 'gouvernance',
       indispensable: true,
       descriptionLongue:
