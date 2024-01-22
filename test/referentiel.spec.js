@@ -876,4 +876,50 @@ describe('Le référentiel', () => {
       );
     });
   });
+
+  describe('sur demande de tous les retours utilisateur sur une mesure', () => {
+    it('retourne toutes les valeurs possibles', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        retoursUtilisateurMesure: {
+          unAvis: { description: 'un avis' },
+          unAutreAvis: { description: 'un autre avis' },
+        },
+      });
+
+      expect(referentiel.retoursUtilisateurMesure()).to.eql({
+        unAvis: { description: 'un avis' },
+        unAutreAvis: { description: 'un autre avis' },
+      });
+    });
+
+    it('reste robuste si aucune valeurs', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        retoursUtilisateurMesure: undefined,
+      });
+
+      expect(referentiel.retoursUtilisateurMesure()).to.eql({});
+    });
+  });
+
+  describe("sur demande d'un retour utilisateur sur une mesure par id", () => {
+    it('retourne la valeur', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        retoursUtilisateurMesure: {
+          unAvis: { description: 'un avis' },
+        },
+      });
+
+      expect(referentiel.retourUtilisateurMesure('unAvis')).to.eql({
+        description: 'un avis',
+      });
+    });
+
+    it("retourne `null` si l'id est introuvable", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        retoursUtilisateurMesure: {},
+      });
+
+      expect(referentiel.retourUtilisateurMesure('unAvis')).to.equal(null);
+    });
+  });
 });

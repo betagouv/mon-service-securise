@@ -1184,5 +1184,14 @@ module.exports = {
       'testsSauvegardes',
     ],
   },
+  retoursUtilisateurMesure: {
+    mesureUtile: 'Cette mesure est utile',
+    mesurePasClaire: "Cette mesure n'est pas claire",
+    mesurePasPertinente:
+      "Cette mesure n'est pas pertinente compte tenu des caractéristiques du service",
+    mesureTropExigeante: 'Cette mesure est trop exigeante',
+    mesurePasAssezExigeante: "Cette mesure n'est pas assez exigeante",
+    autre: 'Autre',
+  },
   departements,
 };
