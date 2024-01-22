@@ -244,6 +244,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return fonctionnalitesDechronologique[0];
   };
 
+  const retoursUtilisateurMesure = () => donnees.retoursUtilisateurMesure || {};
+  const retourUtilisateurMesure = (idRetour) =>
+    retoursUtilisateurMesure()[idRetour] ?? null;
+
   const recharge = (nouvellesDonnees) => {
     donnees = { ...donneesReferentielVide, ...nouvellesDonnees };
     valideDonnees();
@@ -316,6 +320,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     provenancesService,
     recharge,
     reglesPersonnalisation,
+    retoursUtilisateurMesure,
+    retourUtilisateurMesure,
     risques,
     descriptionStatutDeploiement,
     statutsAvisDossierHomologation,
