@@ -1,6 +1,9 @@
 .zone-principale {
+  margin-left: 34px;
+  margin-right: 56px;
   padding-left: 0;
   padding-right: 0;
+  max-width: 1200px;
 }
 
 .titre-page {
