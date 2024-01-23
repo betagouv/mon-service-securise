@@ -126,40 +126,43 @@ const routesApiPublique = ({
   routes.post(
     '/token',
     middleware.protegeTrafic(),
-    (requete, reponse, suite) => {
+    async (requete, reponse, suite) => {
       const login = requete.body.login?.toLowerCase();
       const { motDePasse } = requete.body;
-      depotDonnees
-        .utilisateurAuthentifie(login, motDePasse)
-        .then((utilisateur) => {
-          if (utilisateur) {
-            const token = utilisateur.genereToken();
-            requete.session.token = token;
-            depotDonnees.homologations(utilisateur.id).then((services) =>
-              adaptateurTracking.envoieTrackingConnexion(utilisateur.email, {
-                nombreServices: services.length,
-              })
-            );
-            depotDonnees
-              .lisParcoursUtilisateur(utilisateur.id)
-              .then((parcoursUtilisateur) => {
-                const nouvelleFonctionnalite =
-                  parcoursUtilisateur.recupereNouvelleFonctionnalite();
-                parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
-                depotDonnees
-                  .sauvegardeParcoursUtilisateur(parcoursUtilisateur)
-                  .then(() =>
-                    reponse.json({
-                      utilisateur: utilisateur.toJSON(),
-                      nouvelleFonctionnalite,
-                    })
-                  );
-              });
-          } else {
-            reponse.status(401).send("L'authentification a échoué");
-          }
-        })
-        .catch(suite);
+
+      try {
+        const utilisateur = await depotDonnees.utilisateurAuthentifie(
+          login,
+          motDePasse
+        );
+
+        if (utilisateur) {
+          const token = utilisateur.genereToken();
+          requete.session.token = token;
+
+          const services = await depotDonnees.homologations(utilisateur.id);
+          await adaptateurTracking.envoieTrackingConnexion(utilisateur.email, {
+            nombreServices: services.length,
+          });
+
+          const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
+            utilisateur.id
+          );
+          const nouvelleFonctionnalite =
+            parcoursUtilisateur.recupereNouvelleFonctionnalite();
+          parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
+          await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
+
+          reponse.json({
+            utilisateur: utilisateur.toJSON(),
+            nouvelleFonctionnalite,
+          });
+        } else {
+          reponse.status(401).send("L'authentification a échoué");
+        }
+      } catch (e) {
+        suite(e);
+      }
     }
   );
 
