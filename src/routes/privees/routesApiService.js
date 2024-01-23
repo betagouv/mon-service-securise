@@ -31,6 +31,7 @@ const {
   verifieCoherenceDesDroits,
 } = require('../../modeles/autorisations/gestionDroits');
 const objetGetMesures = require('../../modeles/objetsApi/objetGetMesures');
+const EvenementRetourUtilisateurMesure = require('../../modeles/journalMSS/evenementRetourUtilisateurMesure');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -42,6 +43,7 @@ const routesApiService = ({
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
+  adaptateurJournalMSS,
 }) => {
   const routes = express.Router();
 
@@ -586,6 +588,45 @@ const routesApiService = ({
     (requete, reponse) => {
       const { homologation } = requete;
       reponse.json(homologation.indiceCyber());
+    }
+  );
+
+  routes.post(
+    '/:id/retourUtilisateurMesure',
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
+    middleware.aseptise('id', 'idMesure', 'idRetour', 'commentaire'),
+    async (requete, reponse) => {
+      const { homologation: service, idUtilisateurCourant } = requete;
+      const { idRetour, idMesure, commentaire } = requete.body;
+      const retourUtilisateur = referentiel.retourUtilisateurMesure(idRetour);
+
+      if (!retourUtilisateur) {
+        reponse.status(424).send({
+          type: 'DONNEES_INCORRECTES',
+          message: "L'identifiant de retour utilisateur est incorrect.",
+        });
+        return;
+      }
+
+      if (!referentiel.identifiantsMesures().includes(idMesure)) {
+        reponse.status(424).send({
+          type: 'DONNEES_INCORRECTES',
+          message: "L'identifiant de mesure est incorrect.",
+        });
+        return;
+      }
+
+      await adaptateurJournalMSS.consigneEvenement(
+        new EvenementRetourUtilisateurMesure({
+          idService: service.id,
+          idUtilisateur: idUtilisateurCourant,
+          idMesure,
+          idRetour,
+          commentaire,
+        }).toJSON()
+      );
+
+      reponse.sendStatus(200);
     }
   );
 
