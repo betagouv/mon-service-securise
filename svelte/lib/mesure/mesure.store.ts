@@ -69,5 +69,6 @@ export const configurationAffichage = derived(store, ($store) => {
       $store.etape === 'Creation' || $store.etape === 'EditionSpecifique',
     doitAfficherDescriptionLongue: $store.etape === 'EditionGenerale',
     doitAfficherSuppression: $store.etape === 'EditionSpecifique',
+    doitAfficherRetourUtilisateur: $store.etape === 'EditionGenerale',
   };
 });
