@@ -36,3 +36,16 @@ export const supprimeMesureSpecifique = async (
   };
   await axios.post(`/api/service/${idService}/mesures`, donnees);
 };
+
+export const enregistreRetourUtilisateur = async (
+  idService: string,
+  idMesure: string,
+  idRetour: string,
+  commentaire: string
+) => {
+  await axios.post(`/api/service/${idService}/retourUtilisateurMesure`, {
+    idMesure,
+    idRetour,
+    commentaire,
+  });
+};

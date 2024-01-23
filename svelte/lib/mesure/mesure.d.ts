@@ -10,6 +10,7 @@ export type MesureProps = {
   idService: string;
   categories: Record<string, string>;
   statuts: Record<string, string>;
+  retoursUtilisateur: Record<string, string>;
   estLectureSeule: boolean;
   mesuresExistantes: MesuresExistantes;
   mesureAEditer?: MesureEditee;

@@ -5,20 +5,35 @@
 
   import { validationChamp } from '../directives/validationChamp';
   import { configurationAffichage, store } from './mesure.store';
-  import { enregistreMesures } from './mesure.api';
+  import { enregistreMesures, enregistreRetourUtilisateur } from './mesure.api';
   import SelectionStatut from '../ui/SelectionStatut.svelte';
   import { rechercheTextuelle } from '../tableauDesMesures/tableauDesMesures.store';
 
   export let idService: string;
   export let categories: Record<string, string>;
   export let statuts: Record<string, string>;
+  export let retoursUtilisateur: Record<string, string>;
   export let mesuresExistantes: MesuresExistantes;
   export let estLectureSeule: boolean;
 
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
     enCoursEnvoi = true;
-    await enregistreMesures(idService, mesuresExistantes, $store);
+    const promesses = [enregistreMesures(idService, mesuresExistantes, $store)];
+    if (
+      $configurationAffichage.doitAfficherRetourUtilisateur &&
+      retourUtilisateur
+    ) {
+      promesses.push(
+        enregistreRetourUtilisateur(
+          idService,
+          $store.mesureEditee.metadonnees.idMesure as string,
+          retourUtilisateur,
+          commentaireRetourUtilisateur
+        )
+      );
+    }
+    await Promise.all(promesses);
     enCoursEnvoi = false;
     document.body.dispatchEvent(
       new CustomEvent('mesure-modifiee', {
@@ -31,6 +46,9 @@
     new RegExp($rechercheTextuelle, 'ig'),
     (texte: string) => ($rechercheTextuelle ? `<mark>${texte}</mark>` : texte)
   );
+
+  let retourUtilisateur: string;
+  let commentaireRetourUtilisateur: string;
 </script>
 
 {#if $store.etape === 'SuppressionSpecifique'}
@@ -102,6 +120,30 @@
     />
 
     {#if !estLectureSeule}
+      {#if $configurationAffichage.doitAfficherRetourUtilisateur}
+        <div class="conteneur-retour-utilisateur">
+          <label for="retour-utilisateur">
+            Donnez votre avis sur cette mesure
+            <select
+              id="retour-utilisateur"
+              name="retour-utilisateur"
+              bind:value={retourUtilisateur}
+            >
+              <option value="" disabled selected>-</option>
+              {#each Object.entries(retoursUtilisateur) as [valeur, label]}
+                <option value={valeur}>{label}</option>
+              {/each}
+            </select>
+          </label>
+          {#if retourUtilisateur}
+            <textarea
+              bind:value={commentaireRetourUtilisateur}
+              placeholder="Apportez des précisions ou formulez une suggestion."
+            ></textarea>
+          {/if}
+        </div>
+      {/if}
+
       <div class="conteneur-actions">
         {#if $configurationAffichage.doitAfficherSuppression}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -223,5 +265,15 @@
 
   details {
     margin-bottom: 16px;
+  }
+
+  .conteneur-retour-utilisateur {
+    padding: 16px;
+    border-radius: 6px;
+    background: #eff6ff;
+  }
+
+  .conteneur-retour-utilisateur label {
+    margin-bottom: 0;
   }
 </style>
