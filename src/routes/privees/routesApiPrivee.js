@@ -35,6 +35,7 @@ const routesApiPrivee = ({
   adaptateurPdf,
   adaptateurCsv,
   adaptateurZip,
+  adaptateurJournalMSS,
   procedures,
   serviceAnnuaire,
 }) => {
@@ -135,6 +136,7 @@ const routesApiPrivee = ({
       adaptateurHorloge,
       adaptateurPdf,
       adaptateurZip,
+      adaptateurJournalMSS,
     })
   );
 

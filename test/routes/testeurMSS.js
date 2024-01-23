@@ -20,6 +20,7 @@ const testeurMss = () => {
   let adaptateurZip;
   let adaptateurTracking;
   let adaptateurProtection;
+  let adaptateurJournalMSS;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -74,6 +75,7 @@ const testeurMss = () => {
         () => (_requete, _reponse, suite) =>
           suite(),
     };
+    adaptateurJournalMSS = { consigneEvenement: async () => {} };
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     procedures = fabriqueProcedures({
@@ -99,6 +101,7 @@ const testeurMss = () => {
           adaptateurZip,
           adaptateurTracking,
           adaptateurProtection,
+          adaptateurJournalMSS,
           procedures,
           false,
           false
@@ -118,6 +121,7 @@ const testeurMss = () => {
     adaptateurCsv: () => adaptateurCsv,
     adaptateurZip: () => adaptateurZip,
     adaptateurTracking: () => adaptateurTracking,
+    adaptateurJournalMSS: () => adaptateurJournalMSS,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,

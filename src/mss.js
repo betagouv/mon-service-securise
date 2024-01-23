@@ -31,6 +31,7 @@ const creeServeur = (
   adaptateurZip,
   adaptateurTracking,
   adaptateurProtection,
+  adaptateurJournalMSS,
   procedures,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
   avecPageErreur = process.env.NODE_ENV === 'production'
@@ -224,6 +225,7 @@ const creeServeur = (
       adaptateurPdf,
       adaptateurCsv,
       adaptateurZip,
+      adaptateurJournalMSS,
       procedures,
       serviceAnnuaire,
     })
