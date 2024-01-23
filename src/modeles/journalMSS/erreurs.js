@@ -4,6 +4,8 @@ class ErreurDetailMesuresManquant extends ErreurJournal {}
 class ErreurDureeHomologationManquante extends ErreurJournal {}
 class ErreurIdentifiantServiceManquant extends ErreurJournal {}
 class ErreurIdentifiantUtilisateurManquant extends ErreurJournal {}
+class ErreurIdentifiantMesureManquant extends ErreurJournal {}
+class ErreurIdentifiantRetourUtilisateurManquant extends ErreurJournal {}
 class ErreurIndiceCyberManquant extends ErreurJournal {}
 class ErreurNombreOrganisationsUtilisatricesManquant extends ErreurJournal {}
 class ErreurNombreMesuresCompletesManquant extends ErreurJournal {}
@@ -15,6 +17,8 @@ module.exports = {
   ErreurDureeHomologationManquante,
   ErreurIdentifiantServiceManquant,
   ErreurIdentifiantUtilisateurManquant,
+  ErreurIdentifiantMesureManquant,
+  ErreurIdentifiantRetourUtilisateurManquant,
   ErreurIndiceCyberManquant,
   ErreurNombreOrganisationsUtilisatricesManquant,
   ErreurNombreMesuresCompletesManquant,
