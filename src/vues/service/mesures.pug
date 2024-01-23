@@ -18,6 +18,8 @@ block append scripts
     !{JSON.stringify(referentiel.categoriesMesures())}
   script(id = 'referentiel-statuts-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.statutsMesures())}
+  script(id = 'referentiel-retours-utilisateur', type = 'application/json').
+    !{JSON.stringify(referentiel.retoursUtilisateurMesure())}
   script(id = 'securiser-lecture-seule', type = 'application/json').
     !{JSON.stringify(autorisationsService.SECURISER.estLectureSeule)}
   script(id = 'indice-cyber', type = 'application/json').
