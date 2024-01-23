@@ -136,30 +136,31 @@ const routesApiPublique = ({
           motDePasse
         );
 
-        if (utilisateur) {
-          const token = utilisateur.genereToken();
-          requete.session.token = token;
-
-          const services = await depotDonnees.homologations(utilisateur.id);
-          await adaptateurTracking.envoieTrackingConnexion(utilisateur.email, {
-            nombreServices: services.length,
-          });
-
-          const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
-            utilisateur.id
-          );
-          const nouvelleFonctionnalite =
-            parcoursUtilisateur.recupereNouvelleFonctionnalite();
-          parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
-          await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
-
-          reponse.json({
-            utilisateur: utilisateur.toJSON(),
-            nouvelleFonctionnalite,
-          });
-        } else {
+        if (!utilisateur) {
           reponse.status(401).send("L'authentification a échoué");
+          return;
         }
+
+        const token = utilisateur.genereToken();
+        requete.session.token = token;
+
+        const services = await depotDonnees.homologations(utilisateur.id);
+        await adaptateurTracking.envoieTrackingConnexion(utilisateur.email, {
+          nombreServices: services.length,
+        });
+
+        const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
+          utilisateur.id
+        );
+        const nouvelleFonctionnalite =
+          parcoursUtilisateur.recupereNouvelleFonctionnalite();
+        parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
+        await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
+
+        reponse.json({
+          utilisateur: utilisateur.toJSON(),
+          nouvelleFonctionnalite,
+        });
       } catch (e) {
         suite(e);
       }
