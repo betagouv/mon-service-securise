@@ -2006,4 +2006,86 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(data.completude).to.be(20);
     });
   });
+
+  describe('quand requête POST sur `/api/service/:id/retourUtilisateurMesure', () => {
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/retourUtilisateurMesure',
+        },
+        done
+      );
+    });
+
+    it('aseptise les données de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id', 'idMesure', 'idRetour', 'commentaire'],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/retourUtilisateurMesure',
+        },
+        done
+      );
+    });
+
+    it("retourne une erreur HTTP 424 si l'id du retour utilisateur est inconnu", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        424,
+        {
+          type: 'DONNEES_INCORRECTES',
+          message: "L'identifiant de retour utilisateur est incorrect.",
+        },
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/retourUtilisateurMesure',
+          data: { idRetour: 'idRetourInconnu' },
+        },
+        done
+      );
+    });
+
+    it("retourne une erreur HTTP 424 si l'id de mesure est inconnu", (done) => {
+      testeur.referentiel().recharge({
+        retoursUtilisateurMesure: { idRetour: 'un retour utilisateur' },
+      });
+      testeur.verifieRequeteGenereErreurHTTP(
+        424,
+        {
+          type: 'DONNEES_INCORRECTES',
+          message: "L'identifiant de mesure est incorrect.",
+        },
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/retourUtilisateurMesure',
+          data: { idMesure: 'idMesureInconnu', idRetour: 'idRetour' },
+        },
+        done
+      );
+    });
+
+    it('consigne un événement de retour utilisateur sur une mesure', async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.referentiel().recharge({
+        retoursUtilisateurMesure: { bonneMesure: 'mesure satisfaisante' },
+        mesures: { implementerMfa: {} },
+      });
+      let evenementRecu = {};
+      testeur.adaptateurJournalMSS().consigneEvenement = async (donnees) => {
+        evenementRecu = donnees;
+      };
+
+      await axios.post(
+        'http://localhost:1234/api/service/456/retourUtilisateurMesure',
+        {
+          idMesure: 'implementerMfa',
+          idRetour: 'bonneMesure',
+          commentaire: 'un commentaire',
+        }
+      );
+
+      expect(evenementRecu.type).to.equal('RETOUR_UTILISATEUR_MESURE_RECU');
+    });
+  });
 });
