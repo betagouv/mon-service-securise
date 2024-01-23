@@ -84,6 +84,7 @@ const serveur = MSS.creeServeur(
   adaptateurZip,
   adaptateurTracking,
   adaptateurProtection,
+  adaptateurJournal,
   procedures
 );
 
