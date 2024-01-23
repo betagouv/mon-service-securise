@@ -4,6 +4,9 @@ import ActionMesure from '../modules/tableauDeBord/actions/ActionMesure.mjs';
 $(() => {
   const categories = JSON.parse($('#referentiel-categories-mesures').text());
   const statuts = JSON.parse($('#referentiel-statuts-mesures').text());
+  const retoursUtilisateur = JSON.parse(
+    $('#referentiel-retours-utilisateur').text()
+  );
   const estLectureSeule = JSON.parse($('#securiser-lecture-seule').text());
   const idService = $('.page-service').data('id-service');
   const { indiceCyber, noteMax } = JSON.parse($('#indice-cyber').text());
@@ -40,6 +43,7 @@ $(() => {
       idService,
       categories,
       statuts,
+      retoursUtilisateur,
       estLectureSeule,
       mesuresExistantes: e.detail.mesuresExistantes,
       mesureAEditer: e.detail.mesureAEditer,
