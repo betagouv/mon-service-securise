@@ -97,7 +97,7 @@
         />
         <label for="anssi">ANSSI</label>
       </div>
-      <div class:invisible={!cocheGlobaleANSSI && !selectionPartielleANSSI}>
+      <div>
         <input
           type="checkbox"
           id="anssi-indispensable"
@@ -108,7 +108,7 @@
         />
         <label for="anssi-indispensable">Indispensable</label>
       </div>
-      <div class:invisible={!cocheGlobaleANSSI && !selectionPartielleANSSI}>
+      <div>
         <input
           type="checkbox"
           id="anssi-recommandee"
@@ -234,9 +234,5 @@
 
   .decalage-checkbox {
     margin-left: 12px;
-  }
-
-  .invisible {
-    display: none;
   }
 </style>
