@@ -259,7 +259,7 @@ const creeServeur = (
     })
   );
 
-  app.use(adaptateurGestionErreur.controleurErreurs());
+  app.use(adaptateurGestionErreur.controleurErreurs);
 
   if (avecPageErreur) {
     app.use((_erreur, _requete, reponse, _suite) => {
