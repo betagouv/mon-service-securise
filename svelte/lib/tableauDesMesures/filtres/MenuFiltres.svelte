@@ -8,6 +8,7 @@
     rechercheReferentiel,
     rechercheStatut,
   } from '../tableauDesMesures.store';
+  import { menuNavigationOuvert } from '../../ui/menuNavigation.store';
 
   export let categories: Record<IdCategorie, string>;
   export let statuts: Record<IdStatut, string>;
@@ -155,7 +156,10 @@
   class:visible={$nombreResultats.aDesFiltresAppliques}
 >
   <strong>{$nombreResultats.filtrees}&nbsp;</strong
-  >/&nbsp;{$nombreResultats.total} mesures affichées
+  >/&nbsp;{$nombreResultats.total}
+  {#if !$menuNavigationOuvert}
+    <span>mesures affichées</span>
+  {/if}
 </p>
 
 <style>
