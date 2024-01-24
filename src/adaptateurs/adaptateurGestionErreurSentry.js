@@ -10,7 +10,15 @@ const initialise = () => {
 
 const controleurRequetes = () => Sentry.Handlers.requestHandler();
 
-const controleurErreurs = () => Sentry.Handlers.errorHandler();
+const controleurErreurs = (erreur, requete, reponse, suite) => {
+  if (requete && requete.body) {
+    Object.keys(requete.body).forEach((cle) => {
+      if (cle.includes('motDePasse')) requete.body[cle] = '********';
+    });
+  }
+
+  return Sentry.Handlers.errorHandler()(erreur, requete, reponse, suite);
+};
 
 const logueErreur = (erreur, infosDeContexte = {}) => {
   Sentry.withScope(() => {
