@@ -44,7 +44,10 @@
 
 <MenuFlottant parDessusDeclencheur={true}>
   <div slot="declencheur">
-    <button class="bouton bouton-secondaire bouton-filtre">
+    <button
+      class="bouton bouton-secondaire bouton-filtre"
+      class:actif={$nombreResultats.aDesFiltresAppliques}
+    >
       <img src="/statique/assets/images/icone_filtre.svg" alt="" />
       Filtres
     </button>
@@ -166,6 +169,16 @@
   .bouton-filtre {
     display: flex;
     gap: 8px;
+  }
+
+  .bouton-filtre.actif {
+    color: #08416a;
+    border-color: #08416a;
+  }
+
+  .bouton-filtre.actif img {
+    filter: brightness(0) invert(15%) sepia(24%) saturate(4604%)
+      hue-rotate(184deg) brightness(107%) contrast(94%);
   }
 
   .titre-filtres {
