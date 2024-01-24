@@ -56,6 +56,14 @@
   margin-bottom: 2em;
 }
 
+.modale-nouvelles-fonctionnalites h2.sans-marge-basse {
+  margin-bottom: 8px;
+}
+
+.modale-nouvelles-fonctionnalites h2.plus-petit {
+  font-size: 1em;
+}
+
 .modale-nouvelles-fonctionnalites .illustration {
   max-height: 290px;
 }
