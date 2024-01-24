@@ -26,6 +26,11 @@ module.exports = {
       fichierPug: 'menuNavigation.pug',
       dateDeDeploiement: '2023-08-30',
     },
+    {
+      id: 'referentielCNIL',
+      fichierPug: 'referentielCNIL.pug',
+      dateDeDeploiement: '2024-02-08 14:00:00Z',
+    },
   ],
 
   nombreOrganisationsUtilisatrices: [
