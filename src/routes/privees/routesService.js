@@ -102,11 +102,17 @@ const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
     middleware.chargePreferencesUtilisateur,
     async (requete, reponse) => {
       const { homologation: service } = requete;
+      const referentiels = Object.entries(
+        service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
+      ).map(([_, mesure]) => mesure.referentiel);
+      const referentielConcernes =
+        referentiel.formatteListeDeReferentiels(referentiels);
       reponse.render('service/indiceCyber', {
         InformationsHomologation,
         service,
         etapeActive: 'mesures',
         referentiel,
+        referentielConcernes,
       });
     }
   );
