@@ -56,7 +56,7 @@ const repliMenu = () => {
 
   const cookie = () => {
     const cookieAvecAge = (ageEnSecondes) =>
-      `etat-menu-navigation=ferme; path=/; max-age=${ageEnSecondes}`;
+      `etat-menu-navigation=ferme; SameSite=Strict; path=/; max-age=${ageEnSecondes}`;
     const unAn = 3600 * 24 * 365;
     return {
       poserPourUnAn: () => (document.cookie = cookieAvecAge(unAn)),
