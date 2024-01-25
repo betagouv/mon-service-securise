@@ -87,6 +87,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     !!donnees.mesures[idMesure].indispensable;
   const mesures = () => JSON.parse(JSON.stringify(donnees.mesures));
   const identifiantsMesures = () => Object.keys(mesures());
+  const estIdentifiantMesureConnu = (id) => identifiantsMesures().includes(id);
   const mesure = (id) => mesures()[id];
   const typesService = () => donnees.typesService;
   const nbMoisDecalage = (idEcheance) =>
@@ -288,6 +289,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estCodeDepartement,
     estDocumentHomologation,
     estIdentifiantEcheanceRenouvellementConnu,
+    estIdentifiantMesureConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
     etapeDossierAutorisee,
     etapeExiste,

@@ -337,6 +337,15 @@ describe('Le référentiel', () => {
     ]);
   });
 
+  it('sait dire si un identifiant de mesure fait partie du référentiel', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { uneMesure: {} },
+    });
+
+    expect(referentiel.estIdentifiantMesureConnu('xyzMesure')).to.be(false);
+    expect(referentiel.estIdentifiantMesureConnu('uneMesure')).to.be(true);
+  });
+
   it('connaît la liste des localisations de données', () => {
     const referentiel = Referentiel.creeReferentiel({
       localisationsDonnees: { uneClef: 'une valeur' },
