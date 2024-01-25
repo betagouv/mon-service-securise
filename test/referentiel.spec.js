@@ -904,12 +904,10 @@ describe('Le référentiel', () => {
   describe("sur demande d'un retour utilisateur sur une mesure par id", () => {
     it('retourne la valeur', () => {
       const referentiel = Referentiel.creeReferentiel({
-        retoursUtilisateurMesure: {
-          unAvis: { description: 'un avis' },
-        },
+        retoursUtilisateurMesure: { unAvis: { description: 'un avis' } },
       });
 
-      expect(referentiel.retourUtilisateurMesure('unAvis')).to.eql({
+      expect(referentiel.retourUtilisateurMesureAvecId('unAvis')).to.eql({
         description: 'un avis',
       });
     });
@@ -919,7 +917,9 @@ describe('Le référentiel', () => {
         retoursUtilisateurMesure: {},
       });
 
-      expect(referentiel.retourUtilisateurMesure('unAvis')).to.equal(null);
+      expect(referentiel.retourUtilisateurMesureAvecId('unAvis')).to.equal(
+        null
+      );
     });
   });
 });

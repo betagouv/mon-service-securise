@@ -245,7 +245,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   };
 
   const retoursUtilisateurMesure = () => donnees.retoursUtilisateurMesure || {};
-  const retourUtilisateurMesure = (idRetour) =>
+  const retourUtilisateurMesureAvecId = (idRetour) =>
     retoursUtilisateurMesure()[idRetour] ?? null;
 
   const recharge = (nouvellesDonnees) => {
@@ -321,7 +321,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     recharge,
     reglesPersonnalisation,
     retoursUtilisateurMesure,
-    retourUtilisateurMesure,
+    retourUtilisateurMesureAvecId,
     risques,
     descriptionStatutDeploiement,
     statutsAvisDossierHomologation,
