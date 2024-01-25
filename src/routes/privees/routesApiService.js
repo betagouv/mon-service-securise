@@ -598,7 +598,8 @@ const routesApiService = ({
     async (requete, reponse) => {
       const { homologation: service, idUtilisateurCourant } = requete;
       const { idRetour, idMesure, commentaire } = requete.body;
-      const retourUtilisateur = referentiel.retourUtilisateurMesure(idRetour);
+      const retourUtilisateur =
+        referentiel.retourUtilisateurMesureAvecId(idRetour);
 
       if (!retourUtilisateur) {
         reponse.status(424).send({
