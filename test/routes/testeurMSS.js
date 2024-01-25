@@ -44,8 +44,8 @@ const testeurMss = () => {
     axios(requete)
       .then(() => suite('Réponse OK inattendue'))
       .catch((erreur) => {
-        expect(erreur.response.status).to.equal(status);
-        expect(erreur.response.data).to.eql(messageErreur);
+        expect(erreur.response?.status).to.equal(status);
+        expect(erreur.response?.data).to.eql(messageErreur);
         suite();
       })
       .catch(suite);
