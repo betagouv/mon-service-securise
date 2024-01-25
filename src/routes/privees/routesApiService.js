@@ -609,7 +609,7 @@ const routesApiService = ({
         return;
       }
 
-      if (!referentiel.identifiantsMesures().includes(idMesure)) {
+      if (!referentiel.estIdentifiantMesureConnu(idMesure)) {
         reponse.status(424).send({
           type: 'DONNEES_INCORRECTES',
           message: "L'identifiant de mesure est incorrect.",
