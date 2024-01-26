@@ -560,7 +560,7 @@ module.exports = {
       categorie: 'gouvernance',
       indispensable: true,
       descriptionLongue:
-        "<p>Ne conserver les données en « base active » (ou environnement de production) que le temps strictement nécessaire à la réalisation de l’objectif poursuivi. <br>Il faut ensuite détruire ou anonymiser les données ou les archiver dans le respect des obligations légales applicables en matière de conservation des archives publiques. Vous pouvez consulter le <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/guide_durees_de_conservation.pdf" target="_blank">guide pratique prévu à cet effet</a>.</p>"+
+        '<p>Ne conserver les données en « base active » (ou environnement de production) que le temps strictement nécessaire à la réalisation de l’objectif poursuivi. <br>Il faut ensuite détruire ou anonymiser les données ou les archiver dans le respect des obligations légales applicables en matière de conservation des archives publiques. Vous pouvez consulter le <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/guide_durees_de_conservation.pdf" target="_blank">guide pratique prévu à cet effet</a>.</p>'+
         "<p>Cette mesure vise à limiter le temps pendant lequel les données personnelles sont conservées et traitées, réduisant ainsi les risques de mauvaise utilisation, d'accès non autorisé, de fuite de données ou de réutilisation non-anticipée.</p>",
       referentiel: 'CNIL',
     },
@@ -596,7 +596,7 @@ module.exports = {
       categorie: 'gouvernance',
       indispensable: true,
       descriptionLongue:
-        "<p>Consulter <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">la liste des exemptions</a>. Si votre traitement n’y figure pas, regarder s’il fait partie des traitements pour lesquels <a href="https://www.cnil.fr/fr/analyse-dimpact-relative-la-protection-des-donnees-publication-dune-liste-des-traitements-pour" target="_blank">une AIPD est obligatoire</a>. Si une AIPD est nécessaire, vous pouvez la réaliser à l’aide du <a href="https://www.cnil.fr/fr/outil-pia-telechargez-et-installez-le-logiciel-de-la-cnil" target="_blank">logiciel PIA</a>.</p>" +
+        '<p>Consulter <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">la liste des exemptions</a>. Si votre traitement n’y figure pas, regarder s’il fait partie des traitements pour lesquels <a href="https://www.cnil.fr/fr/analyse-dimpact-relative-la-protection-des-donnees-publication-dune-liste-des-traitements-pour" target="_blank">une AIPD est obligatoire</a>. Si une AIPD est nécessaire, vous pouvez la réaliser à l’aide du <a href="https://www.cnil.fr/fr/outil-pia-telechargez-et-installez-le-logiciel-de-la-cnil" target="_blank">logiciel PIA</a>.</p>' +
         "<p>Cette analyse, aussi appelée Analyse d'Impact sur la Protection des Données (AIPD), vise à évaluer et à atténuer les risques liés au traitement des données personnelles, surtout dans le cas de traitements susceptibles de présenter des risques élevés pour les droits et libertés des individus.</p>",
       referentiel: 'CNIL',
     },
