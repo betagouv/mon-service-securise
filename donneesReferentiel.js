@@ -559,7 +559,7 @@ module.exports = {
         '<ul>' +
         '<li>connaître la raison de la collecte des différentes données les concernant ;</li>' +
         '<li>comprendre le traitement qui sera fait de leurs données ;</li>' +
-        '<li>être assurer de la maîtrise de leurs données, notamment via l’exercice de leurs droits. La liste complète des informations à fournir <a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3#Article13" target="_blank">est disponible ici</a> .</li>' +
+        '<li>être assurées de la maîtrise de leurs données, notamment via l’exercice de leurs droits. La liste complète des informations à fournir <a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3#Article13" target="_blank">est disponible ici</a> .</li>' +
         '</ul><br>' +
         'Les personnes doivent conserver la maîtrise des données qui les concernent. Cela suppose qu’elles soient clairement informées de l’utilisation qui sera faite de leurs données. Les personnes doivent également être informées de leurs droits et des modalités d’exercice de ces droits. Plus d’information <a href="https://www.cnil.fr/fr/conformite-rgpd-information-des-personnes-et-transparence" target="_blank">ici</a>.',
       referentiel: 'CNIL',
