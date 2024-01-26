@@ -56,12 +56,24 @@ const genereCsvMesures = async (donneesMesures) => {
     ],
   });
 
-  const { mesuresGenerales } = donneesMesures;
-  const donneesCsv = Object.values(mesuresGenerales).map((m) => ({
-    ...m,
-    type: m.indispensable ? 'Indispensable' : 'Recommandée',
-    descriptionLongue: stripHtml(m.descriptionLongue).result,
-  }));
+  const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
+  const donneesCsv = Object.values(mesuresGenerales)
+    .map((m) => ({
+      description: m.description,
+      referentiel: m.referentiel,
+      type: m.indispensable ? 'Indispensable' : 'Recommandée',
+      categorie: m.categorie,
+      descriptionLongue: stripHtml(m.descriptionLongue).result,
+    }))
+    .concat(
+      mesuresSpecifiques.map((m) => ({
+        description: decode(m.description),
+        referentiel: 'Mesures ajoutées',
+        type: '',
+        categorie: m.categorie,
+        descriptionLongue: '',
+      }))
+    );
 
   const titre = writer.getHeaderString();
   const lignes = writer.stringifyRecords(donneesCsv);
