@@ -13,7 +13,12 @@ const Service = require('../../modeles/service');
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
 
-const routesService = (middleware, referentiel, depotDonnees, moteurRegles) => {
+const routesService = ({
+  middleware,
+  referentiel,
+  depotDonnees,
+  moteurRegles,
+}) => {
   const routes = express.Router();
 
   routes.get(
