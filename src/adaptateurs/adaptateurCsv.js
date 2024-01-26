@@ -7,6 +7,7 @@ const {
 
 const remplaceBooleen = (booleen) => (booleen ? 'Oui' : 'Non');
 const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
+const sansRetoursChariots = (texte) => texte.replaceAll('\n', ' ');
 
 const genereCsvServices = (tableauServices) => {
   try {
@@ -44,17 +45,20 @@ const genereCsvServices = (tableauServices) => {
   }
 };
 
-const genereCsvMesures = async (donneesMesures) => {
-  const writer = createObjectCsvStringifier({
-    // Les `id` correspondent aux noms des propriétés dans notre modèle Mesure
-    header: [
-      { id: 'description', title: 'Nom de la mesure' },
-      { id: 'referentiel', title: 'Référentiel' },
-      { id: 'type', title: 'Type' },
-      { id: 'categorie', title: 'Catégorie' },
-      { id: 'descriptionLongue', title: 'Description' },
-    ],
-  });
+const genereCsvMesures = async (donneesMesures, avecDonneesAdditionnnelles) => {
+  // Les `id` correspondent aux noms des propriétés dans notre modèle Mesure
+  const colonnes = [
+    { id: 'description', title: 'Nom de la mesure' },
+    { id: 'referentiel', title: 'Référentiel' },
+    { id: 'type', title: 'Type' },
+    { id: 'categorie', title: 'Catégorie' },
+    { id: 'descriptionLongue', title: 'Description' },
+  ];
+
+  if (avecDonneesAdditionnnelles) {
+    colonnes.push({ id: 'statut', title: 'Statut' });
+    colonnes.push({ id: 'commentaires', title: 'Commentaires' });
+  }
 
   const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
   const donneesCsv = Object.values(mesuresGenerales)
@@ -64,6 +68,8 @@ const genereCsvMesures = async (donneesMesures) => {
       type: m.indispensable ? 'Indispensable' : 'Recommandée',
       categorie: m.categorie,
       descriptionLongue: stripHtml(m.descriptionLongue).result,
+      statut: m.statut,
+      commentaires: sansRetoursChariots(decode(m.modalites)),
     }))
     .concat(
       mesuresSpecifiques.map((m) => ({
@@ -72,9 +78,12 @@ const genereCsvMesures = async (donneesMesures) => {
         type: '',
         categorie: m.categorie,
         descriptionLongue: '',
+        statut: m.statut,
+        commentaires: sansRetoursChariots(decode(m.modalites)),
       }))
     );
 
+  const writer = createObjectCsvStringifier({ header: colonnes });
   const titre = writer.getHeaderString();
   const lignes = writer.stringifyRecords(donneesCsv);
   const csv = avecBOM(titre, lignes);
