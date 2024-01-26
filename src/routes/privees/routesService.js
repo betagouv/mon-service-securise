@@ -9,6 +9,7 @@ const {
 } = require('../../modeles/autorisations/gestionDroits');
 const Autorisation = require('../../modeles/autorisations/autorisation');
 const Service = require('../../modeles/service');
+const { dateYYYYMMDD } = require('../../utilitaires/date');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -20,6 +21,7 @@ const routesService = ({
   moteurRegles,
   adaptateurCsv,
   adaptateurGestionErreur,
+  adaptateurHorloge,
 }) => {
   const routes = express.Router();
 
@@ -108,16 +110,22 @@ const routesService = ({
     middleware.trouveService({ [SECURISER]: LECTURE }),
     async (requete, reponse) => {
       const { homologation: service } = requete;
+      const { avecDonneesAdditionnelles } = requete.query;
 
       try {
         const bufferCsv = await adaptateurCsv.genereCsvMesures(
           service.mesures.enrichiesAvecDonneesPersonnalisees(),
-          requete.query.avecDonneesAdditionnelles
+          avecDonneesAdditionnelles
         );
+
+        const s = service.nomService();
+        const date = dateYYYYMMDD(adaptateurHorloge.maintenant());
+        const perimetre = avecDonneesAdditionnelles ? 'avec' : 'sans';
+        const fichier = `${s} Liste mesures ${perimetre} données additionnelles ${date}.csv`;
 
         reponse
           .contentType('text/csv;charset=utf-8')
-          .set('Content-Disposition', `attachment; filename="mesures.csv"`)
+          .set('Content-Disposition', `attachment; filename="${fichier}"`)
           .send(bufferCsv);
       } catch (e) {
         adaptateurGestionErreur.logueErreur(e);

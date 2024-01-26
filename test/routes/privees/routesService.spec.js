@@ -13,6 +13,7 @@ const {
 const { unService } = require('../../constructeurs/constructeurService');
 const {
   verifieTypeFichierServiEstCSV,
+  verifieNomFichierServi,
 } = require('../../aides/verifieFichierServi');
 
 describe('Le serveur MSS des routes /service/*', () => {
@@ -286,6 +287,18 @@ describe('Le serveur MSS des routes /service/*', () => {
     it('sert un fichier de type CSV', (done) => {
       verifieTypeFichierServiEstCSV(
         'http://localhost:1234/service/456/mesures/export.csv',
+        done
+      );
+    });
+
+    it('nomme le fichier CSV avec le nom du service et un horodatage', (done) => {
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: unService().avecNomService('Mairie').construis(),
+      });
+      testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
+      verifieNomFichierServi(
+        'http://localhost:1234/service/456/mesures/export.csv',
+        'Mairie Liste mesures sans données additionnelles 20240123.csv',
         done
       );
     });
