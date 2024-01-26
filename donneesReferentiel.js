@@ -540,8 +540,8 @@ module.exports = {
         '<li>comment elles sont sécurisées.</li>' +
         '</ul>' +
         'Plus d’information <a href="https://www.cnil.fr/fr/RGPD-le-registre-des-activites-de-traitement" target="_blank">ici</a>.' +
-        '<br>' +
-        'Le registre est prévu par l’article 30 du RGPD, c’est un outil global avec votre organisme il participe à la documentation de la conformité. Document de recensement et d’analyse, il doit refléter la réalité de vos traitements de données personnelles.',
+        '<p>' +
+        'Le registre est prévu par l’article 30 du RGPD, c’est un outil global avec votre organisme il participe à la documentation de la conformité. Document de recensement et d’analyse, il doit refléter la réalité de vos traitements de données personnelles.</p>',
       referentiel: 'CNIL',
     },
     minimisationCollecteDonnees: {
@@ -813,7 +813,8 @@ module.exports = {
         'Acheter un ou plusieurs noms de domaine proches du nom de domaine du service',
       categorie: 'protection',
       descriptionLongue:
-        "Lors du choix du nom de domaine du service numérique, procédez à l'achat d'un ou plusieurs noms de domaines proches du nom de domaine du service numérique, par exemple en changeant des lettres ou en achetant des noms de domaine avec d'autres extensions (ex. .com ou .net).<br>Cette mesure permet de limiter le risque de typosquatting (ex. utilisation de noms de domaines proches contenant des modifications typographiques discrètes), permettant de rediriger les utilisateurs vers un site malveillant.",
+        "<p>Lors du choix du nom de domaine du service numérique, procédez à l'achat d'un ou plusieurs noms de domaines proches du nom de domaine du service numérique, par exemple en changeant des lettres ou en achetant des noms de domaine avec d'autres extensions (ex. .com ou .net).</p>" +
+        "<p>Cette mesure permet de limiter le risque de typosquatting (ex. utilisation de noms de domaines proches contenant des modifications typographiques discrètes), permettant de rediriger les utilisateurs vers un site malveillant.</p>",
       referentiel: 'ANSSI',
     },
     portsOuverts: {
@@ -888,7 +889,8 @@ module.exports = {
       categorie: 'defense',
       descriptionLongue:
         "<p>Formaliser une procédure à suivre en cas d'incident de sécurité sur le service, pouvant inclure des éléments relatifs à la gestion technique de l'incident, la coordination des personnes concernées au sein de l'organisation, la communication aux utilisateurs et aux autres entités potentiellement impactées. </p>" +
-        "<p>Sauvegarder ce document dans un environnement sécurisé, déconnecté du service.<br>Cette mesure permet de préparer l'organisation à réagir de manière rapide et efficace en cas d'incident de sécurité affectant le service et à remédier à la situation.</p>",
+        "<p>Sauvegarder ce document dans un environnement sécurisé, déconnecté du service.</p>" +
+        "<p>Cette mesure permet de préparer l'organisation à réagir de manière rapide et efficace en cas d'incident de sécurité affectant le service et à remédier à la situation.</p>",
       referentiel: 'ANSSI',
     },
     journalAcces: {
@@ -978,7 +980,7 @@ module.exports = {
       indispensable: true,
       descriptionLongue:
         "<p>Sauvegarder en continu la machine virtuelle sur laquelle est déployée le service.</p>" +
-        "<p>>Cette mesure permet la restauration rapide du service, à partir de la dernière sauvegarde de la machine virtuelle effectuée, en cas d'incident de sécurité qui conduirait à leur suppression et ou les rendrait inaccessible.</p>",
+        "<p>Cette mesure permet la restauration rapide du service, à partir de la dernière sauvegarde de la machine virtuelle effectuée, en cas d'incident de sécurité qui conduirait à leur suppression et ou les rendrait inaccessible.</p>",
       referentiel: 'ANSSI',
     },
     testsSauvegardes: {
