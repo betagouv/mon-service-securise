@@ -241,6 +241,7 @@ const creeServeur = (
       moteurRegles,
       adaptateurCsv,
       adaptateurGestionErreur,
+      adaptateurHorloge,
     })
   );
 
