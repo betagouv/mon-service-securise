@@ -398,7 +398,7 @@ module.exports = {
       descriptionLongue:
       "<p>Conduire ou se faire accompagner dans la réalisation d'une analyse des risques pour la sécurité du service. L'ANSSI recommande de s'appuyer pour cela sur la méthode EBIOS Risk manager.</p>" + 
       "<p>Pour évaluer l'impact des risques les plus courants, utilisez l'outil proposé par MonServiceSécurisé.</p>" +
-      <p>Cette mesure permet de mettre en place de mesures de sécurité adaptées permettant de diminuer la probabilité de survenue des risques que l'organisation choisira d'adresser."</p>,
+      "<p>Cette mesure permet de mettre en place de mesures de sécurité adaptées permettant de diminuer la probabilité de survenue des risques que l'organisation choisira d'adresser.</p>",
       referentiel: 'ANSSI',
     },
     audit: {
