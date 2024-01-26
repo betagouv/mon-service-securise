@@ -1,5 +1,6 @@
 const { decode } = require('html-entities');
 const { createObjectCsvStringifier } = require('csv-writer');
+const { stripHtml } = require('string-strip-html');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
@@ -59,6 +60,7 @@ const genereCsvMesures = async (donneesMesures) => {
   const donneesCsv = Object.values(mesuresGenerales).map((m) => ({
     ...m,
     type: m.indispensable ? 'Indispensable' : 'Recommandée',
+    descriptionLongue: stripHtml(m.descriptionLongue).result,
   }));
 
   const titre = writer.getHeaderString();
