@@ -11,6 +11,9 @@ const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
 const { unService } = require('../../constructeurs/constructeurService');
+const {
+  verifieTypeFichierServiEstCSV,
+} = require('../../aides/verifieFichierServi');
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -236,6 +239,88 @@ describe('Le serveur MSS des routes /service/*', () => {
       await axios('http://localhost:1234/service/456/mesures');
 
       expect(descriptionRecue.nomService).to.equal('un service');
+    });
+  });
+
+  describe('quand requête GET sur `/service/:id/mesures/export.csv', () => {
+    beforeEach(() => {
+      testeur.adaptateurCsv().genereCsvMesures = async () => Buffer.from('');
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: LECTURE, rubrique: SECURISER }],
+        {
+          method: 'GET',
+          url: 'http://localhost:1234/service/456/mesures/export.csv',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id', 'avecDonneesAdditionnelles'],
+        {
+          method: 'GET',
+          url: 'http://localhost:1234/service/456/mesures/export.csv',
+        },
+        done
+      );
+    });
+
+    it('utilise un adaptateur CSV pour la génération', async () => {
+      let mesuresExportees;
+      testeur.adaptateurCsv().genereCsvMesures = async (mesures) => {
+        mesuresExportees = mesures;
+      };
+
+      await axios.get('http://localhost:1234/service/456/mesures/export.csv');
+
+      expect(mesuresExportees).to.eql({
+        mesuresGenerales: [],
+        mesuresSpecifiques: [],
+      });
+    });
+
+    it('sert un fichier de type CSV', (done) => {
+      verifieTypeFichierServiEstCSV(
+        'http://localhost:1234/service/456/mesures/export.csv',
+        done
+      );
+    });
+
+    it("reste robuste en cas d'erreur de génération CSV", async () => {
+      testeur.adaptateurCsv().genereCsvMesures = async () => {
+        throw Error('BOOM');
+      };
+
+      let executionOK;
+      try {
+        await axios.get('http://localhost:1234/service/456/mesures/export.csv');
+        executionOK = true;
+      } catch (e) {
+        expect(e.response.status).to.be(424);
+      } finally {
+        if (executionOK) expect().fail('Une exception aurait dû être levée');
+      }
+    });
+
+    it("logue l'erreur survenue le cas échéant", async () => {
+      let erreurLoguee;
+
+      testeur.adaptateurCsv().genereCsvMesures = async () => {
+        throw Error('BOOM');
+      };
+      testeur.adaptateurGestionErreur().logueErreur = (erreur) => {
+        erreurLoguee = erreur;
+      };
+
+      try {
+        await axios.get('http://localhost:1234/service/456/mesures/export.csv');
+      } catch (e) {
+        expect(erreurLoguee).to.be.an(Error);
+      }
     });
   });
 

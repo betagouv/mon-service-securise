@@ -44,4 +44,10 @@ const genereCsvServices = (tableauServices) => {
   }
 };
 
-module.exports = { genereCsvServices };
+const genereCsvMesures = async () => {
+  const avecBOM = '\uFEFF';
+  const contenuBouchon = ['a', 'b', 'c'].join(SEPARATEUR);
+  return Buffer.from(`${avecBOM}${contenuBouchon}`);
+};
+
+module.exports = { genereCsvMesures, genereCsvServices };
