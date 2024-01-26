@@ -15,6 +15,7 @@ const testeurMss = () => {
   let serviceAnnuaire;
   let adaptateurHorloge;
   let adaptateurMail;
+  let adaptateurGestionErreur;
   let adaptateurPdf;
   let adaptateurCsv;
   let adaptateurZip;
@@ -62,6 +63,7 @@ const testeurMss = () => {
     };
     adaptateurCsv = {};
     adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };
+    adaptateurGestionErreur = adaptateurGestionErreurVide;
     adaptateurTracking = {
       envoieTrackingConnexion: () => Promise.resolve(),
       envoieTrackingInscription: () => Promise.resolve(),
@@ -95,7 +97,7 @@ const testeurMss = () => {
           adaptateurMail,
           adaptateurPdf,
           adaptateurHorloge,
-          adaptateurGestionErreurVide,
+          adaptateurGestionErreur,
           serviceAnnuaire,
           adaptateurCsv,
           adaptateurZip,
@@ -115,6 +117,7 @@ const testeurMss = () => {
 
   return {
     serviceAnnuaire: () => serviceAnnuaire,
+    adaptateurGestionErreur: () => adaptateurGestionErreur,
     adaptateurHorloge: () => adaptateurHorloge,
     adaptateurMail: () => adaptateurMail,
     adaptateurPdf: () => adaptateurPdf,

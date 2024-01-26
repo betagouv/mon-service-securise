@@ -18,6 +18,8 @@ const routesService = ({
   referentiel,
   depotDonnees,
   moteurRegles,
+  adaptateurCsv,
+  adaptateurGestionErreur,
 }) => {
   const routes = express.Router();
 
@@ -97,6 +99,29 @@ const routesService = ({
         pourcentageProgression,
         mesures,
       });
+    }
+  );
+
+  routes.get(
+    '/:id/mesures/export.csv',
+    middleware.aseptise('id', 'avecDonneesAdditionnelles'),
+    middleware.trouveService({ [SECURISER]: LECTURE }),
+    async (requete, reponse) => {
+      const { homologation: service } = requete;
+
+      try {
+        const bufferCsv = await adaptateurCsv.genereCsvMesures(
+          service.mesures.enrichiesAvecDonneesPersonnalisees()
+        );
+
+        reponse
+          .contentType('text/csv;charset=utf-8')
+          .set('Content-Disposition', `attachment; filename="mesures.csv"`)
+          .send(bufferCsv);
+      } catch (e) {
+        adaptateurGestionErreur.logueErreur(e);
+        reponse.sendStatus(424);
+      }
     }
   );
 

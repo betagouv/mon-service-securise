@@ -234,7 +234,14 @@ const creeServeur = (
   app.use(
     '/service',
     middleware.verificationJWT,
-    routesService({ middleware, referentiel, depotDonnees, moteurRegles })
+    routesService({
+      middleware,
+      referentiel,
+      depotDonnees,
+      moteurRegles,
+      adaptateurCsv,
+      adaptateurGestionErreur,
+    })
   );
 
   app.get(
