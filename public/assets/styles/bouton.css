@@ -22,6 +22,28 @@ button {
   user-select: none;
 }
 
+.bouton.bouton-avec-icone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bouton.bouton-avec-icone::before {
+  content: '';
+  display: flex;
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.bouton.bouton-avec-icone:hover::before {
+  filter: brightness(0) saturate(100%) invert(23%) sepia(19%) saturate(6268%)
+    hue-rotate(186deg) brightness(103%) contrast(91%);
+}
+.bouton.bouton-avec-icone:active::before {
+  filter: brightness(0) saturate(100%) invert(16%) sepia(20%) saturate(6277%)
+    hue-rotate(185deg) brightness(96%) contrast(94%);
+}
+
 .bouton:not(:disabled):hover {
   cursor: pointer;
   opacity: 0.87;
@@ -40,5 +62,19 @@ button {
 .bouton.bouton-secondaire {
   color: var(--bleu-mise-en-avant);
   border-color: var(--bleu-mise-en-avant);
+  background-color: #fff;
+}
+
+.bouton.bouton-tertiaire {
+  color: var(--bleu-mise-en-avant);
+  border: none;
+  background-color: #fff;
+}
+.bouton.bouton-tertiaire:hover {
+  color: var(--bleu-survol);
+  background-color: var(--fond-gris-pale);
+}
+.bouton.bouton-tertiaire:active {
+  color: var(--bleu-anssi);
   background-color: #fff;
 }

@@ -83,7 +83,7 @@
         placeholder="Intitulé, description"
       />
     </label>
-  <MenuFiltres {categories} {statuts} {avecMesuresCNIL} />
+    <MenuFiltres {categories} {statuts} {avecMesuresCNIL} />
   </div>
   {#if !estLectureSeule}
     <div class="barre-actions">
@@ -93,6 +93,11 @@
         disabled={etatEnregistrement === EnCours}
       >
         Ajouter une mesure
+      </button>
+      <button
+        class="bouton bouton-avec-icone bouton-tertiaire bouton-export-mesures"
+      >
+        Exporter la liste des mesures
       </button>
       {#if etatEnregistrement === EnCours}
         <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
@@ -190,7 +195,7 @@
   .barre-actions {
     display: flex;
     align-items: center;
-    gap: 1em;
+    gap: 8px;
   }
 
   .barre-actions p {
@@ -243,6 +248,10 @@
     margin: 0;
     padding: 0.5em 1em;
     font-weight: 500;
+  }
+
+  .bouton-export-mesures:before {
+    background-image: url('/statique/assets/images/icone_telechargement_fichier.svg');
   }
 
   .aucun-resultat {
