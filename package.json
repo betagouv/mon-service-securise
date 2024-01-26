@@ -54,6 +54,7 @@
     "pg": "^8.8.0",
     "pug": "^3.0.2",
     "puppeteer": "^19.7.3",
+    "string-strip-html": "^8.4.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
