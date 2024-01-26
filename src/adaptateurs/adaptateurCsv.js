@@ -1,5 +1,6 @@
 const { EOL } = require('os');
 const { decode } = require('html-entities');
+const { createObjectCsvStringifier } = require('csv-writer');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
@@ -44,10 +45,31 @@ const genereCsvServices = (tableauServices) => {
   }
 };
 
-const genereCsvMesures = async () => {
-  const avecBOM = '\uFEFF';
-  const contenuBouchon = ['a', 'b', 'c'].join(SEPARATEUR);
-  return Buffer.from(`${avecBOM}${contenuBouchon}`);
+const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
+
+const genereCsvMesures = async (donneesMesures) => {
+  const writer = createObjectCsvStringifier({
+    // Les `id` correspondent aux noms des propriétés dans notre modèle Mesure
+    header: [
+      { id: 'description', title: 'Nom de la mesure' },
+      { id: 'referentiel', title: 'Référentiel' },
+      { id: 'type', title: 'Type' },
+      { id: 'categorie', title: 'Catégorie' },
+      { id: 'descriptionLongue', title: 'Description' },
+    ],
+  });
+
+  const { mesuresGenerales } = donneesMesures;
+  const donneesCsv = Object.values(mesuresGenerales).map((m) => ({
+    ...m,
+    type: m.indispensable ? 'Indispensable' : 'Recommandée',
+  }));
+
+  const titre = writer.getHeaderString();
+  const lignes = writer.stringifyRecords(donneesCsv);
+  const csv = avecBOM(titre, lignes);
+
+  return Buffer.from(csv, 'utf-8');
 };
 
 module.exports = { genereCsvMesures, genereCsvServices };
