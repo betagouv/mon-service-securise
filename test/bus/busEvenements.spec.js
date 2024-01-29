@@ -28,6 +28,20 @@ describe("Le bus d'événements", () => {
     expect(compteur).to.be(1);
   });
 
+  it("permet d'ajouter plusieurs abonnés en un seul appel", async () => {
+    let compteur = 0;
+
+    const bus = creeBusEvenements();
+    bus.abonnePlusieurs(EvenementTestA, [
+      () => (compteur += 1),
+      () => (compteur += 10),
+    ]);
+
+    await bus.publie(new EvenementTestA());
+
+    expect(compteur).to.be(11);
+  });
+
   it('fait la différence entre les événements', () => {
     let compteur = 0;
 
