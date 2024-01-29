@@ -17,16 +17,27 @@ const cableTousLesAbonnes = (
   busEvenements,
   { adaptateurTracking, adaptateurJournal, depotDonnees }
 ) => {
+  // =========================
+  // CRÉATION DE SERVICE
   busEvenements.abonne(
     EvenementNouveauServiceCree,
     consigneNouveauServiceDansJournal({ adaptateurJournal })
   );
-
   busEvenements.abonne(
     EvenementNouveauServiceCree,
     envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees })
   );
+  busEvenements.abonne(
+    EvenementNouveauServiceCree,
+    consigneCompletudeDansJournal({ adaptateurJournal })
+  );
+  busEvenements.abonne(
+    EvenementNouveauServiceCree,
+    envoieTrackingCompletude({ adaptateurTracking, depotDonnees })
+  );
 
+  // =========================
+  // MODIFICATION DES MESURES
   busEvenements.abonne(
     EvenementMesuresServiceModifiees,
     consigneCompletudeDansJournal({ adaptateurJournal })

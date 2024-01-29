@@ -340,17 +340,10 @@ const creeDepot = (config = {}) => {
     );
 
     const service = await p.lis.une(idService);
-
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
-
-    await Promise.all([
-      busEvenements.publie(
-        new EvenementNouveauServiceCree({ service, utilisateur })
-      ),
-      busEvenements.publie(
-        new EvenementMesuresServiceModifiees({ service, utilisateur })
-      ),
-    ]);
+    await busEvenements.publie(
+      new EvenementNouveauServiceCree({ service, utilisateur })
+    );
 
     return idService;
   };
