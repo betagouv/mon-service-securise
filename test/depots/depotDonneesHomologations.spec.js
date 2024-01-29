@@ -54,6 +54,7 @@ const {
 } = require('../../src/modeles/autorisations/gestionDroits');
 const EvenementMesuresServiceModifiees = require('../../src/bus/evenementMesuresServiceModifiees');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
+const EvenementNouveauServiceCree = require('../../src/bus/evenementNouveauServiceCree');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -354,9 +355,9 @@ describe('Le dépôt de données des homologations', () => {
         new MesuresSpecifiques()
       );
 
-      expect(busEvenements.dernierEvenementRecu).to.be.an(
-        EvenementMesuresServiceModifiees
-      );
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesuresServiceModifiees)
+      ).to.be(true);
     });
   });
 
@@ -833,6 +834,19 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
+    it('publie un événement de "Nouveau service créé"', async () => {
+      const descriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Super Service')
+        .construis()
+        .toJSON();
+
+      await depot.nouveauService('123', { descriptionService });
+
+      expect(busEvenements.aRecuUnEvenement(EvenementNouveauServiceCree)).to.be(
+        true
+      );
+    });
+
     it("publie un événement de 'Mesures service modifiées'", async () => {
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Super Service')
@@ -841,38 +855,9 @@ describe('Le dépôt de données des homologations', () => {
 
       await depot.nouveauService('123', { descriptionService });
 
-      expect(busEvenements.dernierEvenementRecu).to.be.an(
-        EvenementMesuresServiceModifiees
-      );
-    });
-
-    describe("le journal MSS est utilisé pour consigner l'enregistrement", () => {
-      let descriptionService;
-
-      const verifieRecuEvenementDeType = (typeAttendu, evenements) =>
-        expect(evenements.map((e) => e.type)).to.contain(typeAttendu);
-
-      beforeEach(
-        () =>
-          (descriptionService = uneDescriptionValide(referentiel)
-            .construis()
-            .toJSON())
-      );
-
-      it('avec un événement typé signalant le nouveau service créé', (done) => {
-        const evenements = [];
-        adaptateurJournalMSS.consigneEvenement = (evenement) => {
-          evenements.push(evenement);
-        };
-
-        depot
-          .nouveauService('123', { descriptionService })
-          .then(() =>
-            verifieRecuEvenementDeType('NOUVEAU_SERVICE_CREE', evenements)
-          )
-          .then(() => done())
-          .catch(done);
-      });
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesuresServiceModifiees)
+      ).to.be(true);
     });
 
     it("l'adaptateur de tracking est utilisé pour envoyer un événement de création de service", async () => {
