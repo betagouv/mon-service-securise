@@ -183,18 +183,27 @@ const creeDepot = (config = {}) => {
       return Promise.resolve(h.dossierCourant());
     });
 
-  const ajouteMesuresGeneralesAHomologation = (idHomologation, mesures) =>
-    mesures.reduce(
-      (acc, mesure) =>
-        acc.then(() =>
-          ajouteAItemsDansHomologation(
-            'mesuresGenerales',
-            idHomologation,
-            mesure
-          )
-        ),
-      Promise.resolve()
-    );
+  const ajouteMesuresGeneralesAHomologation = async (
+    idHomologation,
+    mesures
+  ) => {
+    const h = await p.lis.une(idHomologation);
+    const donneesAPersister = h.donneesAPersister().toutes();
+    donneesAPersister.mesuresGenerales ||= [];
+
+    mesures.forEach((mesure) => {
+      const donneesMesure = mesure.toJSON();
+      const mesurePresente = donneesAPersister.mesuresGenerales.find(
+        (i) => i.id === donneesMesure.id
+      );
+
+      if (mesurePresente) Object.assign(mesurePresente, donneesMesure);
+      else donneesAPersister.mesuresGenerales.push(donneesMesure);
+    });
+
+    const { id, ...donnees } = donneesAPersister;
+    await p.sauvegarde(id, donnees);
+  };
 
   const remplaceMesuresSpecifiquesPourHomologation = (...params) =>
     remplaceProprieteHomologation('mesuresSpecifiques', ...params);
