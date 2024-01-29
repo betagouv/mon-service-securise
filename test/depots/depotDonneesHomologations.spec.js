@@ -206,12 +206,7 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     beforeEach(() => {
-      busEvenements = {
-        dernierEvenementRecu: null,
-        publie: (e) => {
-          busEvenements.dernierEvenementRecu = e;
-        },
-      };
+      busEvenements = fabriqueBusPourLesTests();
       const utilisateur = unUtilisateur().avecId('789').donnees;
       const autorisation = uneAutorisation().deProprietaireDeService(
         '789',
