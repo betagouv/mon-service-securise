@@ -350,11 +350,6 @@ const creeDepot = (config = {}) => {
       busEvenements.publie(
         new EvenementMesuresServiceModifiees({ service, utilisateur })
       ),
-      homologations(idUtilisateur).then((hs) => {
-        adaptateurTracking.envoieTrackingNouveauServiceCree(utilisateur.email, {
-          nombreServices: hs.length,
-        });
-      }),
     ]);
 
     return idService;

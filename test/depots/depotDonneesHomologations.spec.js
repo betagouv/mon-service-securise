@@ -860,46 +860,6 @@ describe('Le dépôt de données des homologations', () => {
       ).to.be(true);
     });
 
-    it("l'adaptateur de tracking est utilisé pour envoyer un événement de création de service", async () => {
-      let donneesPassees = {};
-      adaptateurTracking = unAdaptateurTracking()
-        .avecEnvoiTrackingNouveauServiceCree(
-          (destinataire, donneesEvenement) => {
-            donneesPassees = { destinataire, donneesEvenement };
-          }
-        )
-        .construis();
-      const descriptionService = uneDescriptionValide(referentiel)
-        .avecNomService('Un autre service')
-        .construis()
-        .toJSON();
-      const utilisateur = unUtilisateur().avecId('456').donnees;
-      const unServiceExistant = unService(referentiel).avecId('123').donnees;
-      const uneAutorisationExistante =
-        uneAutorisation().deProprietaireDeService(
-          utilisateur.id,
-          unServiceExistant.id
-        ).donnees;
-      adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUneAutorisation(uneAutorisationExistante)
-        .ajouteUnService(unServiceExistant)
-        .ajouteUnUtilisateur(utilisateur);
-      depot = unDepotDeDonneesServices()
-        .avecAdaptateurPersistance(adaptateurPersistance)
-        .avecAdaptateurTracking(adaptateurTracking)
-        .avecReferentiel(referentiel)
-        .construis();
-
-      await depot.nouveauService(utilisateur.id, { descriptionService });
-
-      expect(donneesPassees).to.eql({
-        destinataire: 'jean.dujardin@beta.gouv.com',
-        donneesEvenement: {
-          nombreServices: 2,
-        },
-      });
-    });
-
     it('lève une exception si une propriété obligatoire de la description du service est manquante', (done) => {
       const donneesDescriptionServiceIncompletes = uneDescriptionValide(
         referentiel
