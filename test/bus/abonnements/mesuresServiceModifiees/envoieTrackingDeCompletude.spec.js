@@ -60,6 +60,7 @@ describe("L'abonnement à `EvenementMesuresServiceModifiees` qui envoie au track
         utilisateur: unUtilisateur()
           .avecEmail('jean.dupont@mail.fr')
           .construis(),
+        service: unService().construis(),
       })
     );
 

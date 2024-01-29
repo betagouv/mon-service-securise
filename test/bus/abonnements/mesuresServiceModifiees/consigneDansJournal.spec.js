@@ -6,6 +6,9 @@ const { unService } = require('../../../constructeurs/constructeurService');
 const {
   consigneDansJournal,
 } = require('../../../../src/bus/abonnements/mesuresServiceModifiees/consigneDansJournal');
+const {
+  unUtilisateur,
+} = require('../../../constructeurs/constructeurUtilisateur');
 
 describe("L'abonnement à `EvenementMesuresServiceModifiees` qui consigne dans le journal MSS", () => {
   let bus;
@@ -34,7 +37,10 @@ describe("L'abonnement à `EvenementMesuresServiceModifiees` qui consigne dans l
     );
 
     await bus.publie(
-      new EvenementMesuresServiceModifiees({ service: unService().construis() })
+      new EvenementMesuresServiceModifiees({
+        service: unService().construis(),
+        utilisateur: unUtilisateur().construis(),
+      })
     );
 
     expect(evenementRecu.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
