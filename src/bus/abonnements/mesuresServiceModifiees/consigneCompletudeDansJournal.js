@@ -1,6 +1,6 @@
 const EvenementCompletudeServiceModifiee = require('../../../modeles/journalMSS/evenementCompletudeServiceModifiee');
 
-function consigneDansJournal({ adaptateurJournal }) {
+function consigneCompletudeDansJournal({ adaptateurJournal }) {
   return async (evenement) => {
     const { service } = evenement;
 
@@ -15,4 +15,4 @@ function consigneDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneDansJournal };
+module.exports = { consigneCompletudeDansJournal };

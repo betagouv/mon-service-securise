@@ -1,7 +1,7 @@
 const EvenementMesuresServiceModifiees = require('./evenementMesuresServiceModifiees');
 const {
-  consigneDansJournal,
-} = require('./abonnements/mesuresServiceModifiees/consigneDansJournal');
+  consigneCompletudeDansJournal,
+} = require('./abonnements/mesuresServiceModifiees/consigneCompletudeDansJournal');
 const {
   envoieTrackingCompletude,
 } = require('./abonnements/mesuresServiceModifiees/envoieTrackingDeCompletude');
@@ -12,7 +12,7 @@ const cableTousLesAbonnes = (
 ) => {
   busEvenements.abonne(
     EvenementMesuresServiceModifiees,
-    consigneDansJournal({ adaptateurJournal })
+    consigneCompletudeDansJournal({ adaptateurJournal })
   );
 
   busEvenements.abonne(
