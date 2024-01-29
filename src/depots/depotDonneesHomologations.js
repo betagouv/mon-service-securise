@@ -183,12 +183,9 @@ const creeDepot = (config = {}) => {
       return Promise.resolve(h.dossierCourant());
     });
 
-  const ajouteMesuresGeneralesAHomologation = async (
-    idHomologation,
-    mesures
-  ) => {
-    const h = await p.lis.une(idHomologation);
-    const donneesAPersister = h.donneesAPersister().toutes();
+  const ajouteMesuresGeneralesAService = async (idService, mesures) => {
+    const s = await p.lis.une(idService);
+    const donneesAPersister = s.donneesAPersister().toutes();
     donneesAPersister.mesuresGenerales ||= [];
 
     mesures.forEach((mesure) => {
@@ -290,7 +287,7 @@ const creeDepot = (config = {}) => {
     generales,
     specifiques
   ) => {
-    await ajouteMesuresGeneralesAHomologation(idHomologation, generales);
+    await ajouteMesuresGeneralesAService(idHomologation, generales);
     await remplaceMesuresSpecifiquesPourHomologation(
       idHomologation,
       specifiques
