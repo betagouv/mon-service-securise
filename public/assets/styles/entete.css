@@ -114,11 +114,9 @@ header nav a,
 
 .utilisateur-courant {
   position: relative;
-
   cursor: pointer;
   border: none;
   background: transparent;
-  min-width: 240px;
 }
 
 .connexion {
@@ -175,7 +173,7 @@ header nav a,
 .nom-utilisateur-courant::after {
   width: 0.7em;
   height: 0.7em;
-  margin-left: auto;
+  margin-left: 8px;
 
   -webkit-mask: url(../images/icone_fleche_bas.svg) no-repeat center;
   mask: url(../images/icone_fleche_bas.svg) no-repeat center;
@@ -201,6 +199,7 @@ header nav a,
   background: var(--fond-pale);
 
   text-decoration: none;
+  min-width: 200px;
 }
 
 .menu a {
