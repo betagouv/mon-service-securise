@@ -4,8 +4,8 @@ const BusEvenements = require('../../../../src/bus/busEvenements');
 const EvenementMesuresServiceModifiees = require('../../../../src/bus/evenementMesuresServiceModifiees');
 const { unService } = require('../../../constructeurs/constructeurService');
 const {
-  consigneDansJournal,
-} = require('../../../../src/bus/abonnements/mesuresServiceModifiees/consigneDansJournal');
+  consigneCompletudeDansJournal,
+} = require('../../../../src/bus/abonnements/mesuresServiceModifiees/consigneCompletudeDansJournal');
 const {
   unUtilisateur,
 } = require('../../../constructeurs/constructeurUtilisateur');
@@ -33,7 +33,7 @@ describe("L'abonnement à `EvenementMesuresServiceModifiees` qui consigne dans l
 
     bus.abonne(
       EvenementMesuresServiceModifiees,
-      consigneDansJournal({ adaptateurJournal })
+      consigneCompletudeDansJournal({ adaptateurJournal })
     );
 
     await bus.publie(
