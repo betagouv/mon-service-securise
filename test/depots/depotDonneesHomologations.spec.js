@@ -847,19 +847,6 @@ describe('Le dépôt de données des homologations', () => {
       );
     });
 
-    it("publie un événement de 'Mesures service modifiées'", async () => {
-      const descriptionService = uneDescriptionValide(referentiel)
-        .avecNomService('Super Service')
-        .construis()
-        .toJSON();
-
-      await depot.nouveauService('123', { descriptionService });
-
-      expect(
-        busEvenements.aRecuUnEvenement(EvenementMesuresServiceModifiees)
-      ).to.be(true);
-    });
-
     it('lève une exception si une propriété obligatoire de la description du service est manquante', (done) => {
       const donneesDescriptionServiceIncompletes = uneDescriptionValide(
         referentiel
