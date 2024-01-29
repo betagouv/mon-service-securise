@@ -1,16 +1,16 @@
 const expect = require('expect.js');
-const AdaptateurJournalMSSMemoire = require('../../../../src/adaptateurs/adaptateurJournalMSSMemoire');
-const BusEvenements = require('../../../../src/bus/busEvenements');
-const EvenementMesuresServiceModifiees = require('../../../../src/bus/evenementMesuresServiceModifiees');
-const { unService } = require('../../../constructeurs/constructeurService');
-const {
-  consigneCompletudeDansJournal,
-} = require('../../../../src/bus/abonnements/mesuresServiceModifiees/consigneCompletudeDansJournal');
+const AdaptateurJournalMSSMemoire = require('../../../src/adaptateurs/adaptateurJournalMSSMemoire');
+const BusEvenements = require('../../../src/bus/busEvenements');
+const EvenementMesuresServiceModifiees = require('../../../src/bus/evenementMesuresServiceModifiees');
+const { unService } = require('../../constructeurs/constructeurService');
 const {
   unUtilisateur,
-} = require('../../../constructeurs/constructeurUtilisateur');
+} = require('../../constructeurs/constructeurUtilisateur');
+const {
+  consigneCompletudeDansJournal,
+} = require('../../../src/bus/abonnements/consigneCompletudeDansJournal');
 
-describe("L'abonnement à `EvenementMesuresServiceModifiees` qui consigne dans le journal MSS", () => {
+describe("L'abonnement à qui consigne la complétude dans le journal MSS", () => {
   let bus;
   let adaptateurJournal;
 
