@@ -9,6 +9,9 @@ const EvenementNouveauServiceCree = require('./evenementNouveauServiceCree');
 const {
   consigneNouveauServiceDansJournal,
 } = require('./abonnements/consigneNouveauServiceDansJournal');
+const {
+  envoieTrackingDeNouveauService,
+} = require('./abonnements/envoieTrackingDeNouveauService');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -17,6 +20,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementNouveauServiceCree,
     consigneNouveauServiceDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementNouveauServiceCree,
+    envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees })
   );
 
   busEvenements.abonne(
