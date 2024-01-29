@@ -339,39 +339,27 @@ const creeDepot = (config = {}) => {
       proprietaire.donneesAPersister()
     );
 
-    const s = await p.lis.une(idService);
+    const service = await p.lis.une(idService);
 
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
 
     await Promise.all([
       adaptateurJournalMSS.consigneEvenement(
         new EvenementNouveauServiceCree({
-          idService: s.id,
+          idService: service.id,
           idUtilisateur,
         }).toJSON()
       ),
-      adaptateurJournalMSS.consigneEvenement(
-        new EvenementCompletudeServiceModifiee({
-          idService: s.id,
-          ...s.completudeMesures(),
-          nombreOrganisationsUtilisatrices:
-            s.descriptionService.nombreOrganisationsUtilisatrices,
-        }).toJSON()
+      busEvenements.publie(
+        new EvenementMesuresServiceModifiees({ service, utilisateur })
       ),
       homologations(idUtilisateur).then((hs) => {
         adaptateurTracking.envoieTrackingNouveauServiceCree(utilisateur.email, {
           nombreServices: hs.length,
         });
       }),
-      serviceTracking
-        .completudeDesServicesPourUtilisateur({ homologations }, idUtilisateur)
-        .then((tauxCompletude) =>
-          adaptateurTracking.envoieTrackingCompletudeService(
-            utilisateur.email,
-            tauxCompletude
-          )
-        ),
     ]);
+
     return idService;
   };
 

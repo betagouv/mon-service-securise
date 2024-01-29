@@ -53,6 +53,7 @@ const {
   Permissions,
 } = require('../../src/modeles/autorisations/gestionDroits');
 const EvenementMesuresServiceModifiees = require('../../src/bus/evenementMesuresServiceModifiees');
+const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -672,6 +673,7 @@ describe('Le dépôt de données des homologations', () => {
     let adaptateurPersistance;
     let adaptateurTracking;
     let adaptateurUUID;
+    let busEvenements;
     let depot;
     let referentiel;
 
@@ -686,6 +688,7 @@ describe('Le dépôt de données des homologations', () => {
       });
       adaptateurTracking = unAdaptateurTracking().construis();
       adaptateurUUID = { genereUUID: () => 'unUUID' };
+      busEvenements = fabriqueBusPourLesTests();
       referentiel = Referentiel.creeReferentielVide();
 
       depot = DepotDonneesHomologations.creeDepot({
@@ -694,6 +697,7 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurPersistance,
         adaptateurTracking,
         adaptateurUUID,
+        busEvenements,
         referentiel,
       });
     });
@@ -834,6 +838,19 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
+    it("publie un événement de 'Mesures service modifiées'", async () => {
+      const descriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Super Service')
+        .construis()
+        .toJSON();
+
+      await depot.nouveauService('123', { descriptionService });
+
+      expect(busEvenements.dernierEvenementRecu).to.be.an(
+        EvenementMesuresServiceModifiees
+      );
+    });
+
     describe("le journal MSS est utilisé pour consigner l'enregistrement", () => {
       let descriptionService;
 
@@ -857,24 +874,6 @@ describe('Le dépôt de données des homologations', () => {
           .nouveauService('123', { descriptionService })
           .then(() =>
             verifieRecuEvenementDeType('NOUVEAU_SERVICE_CREE', evenements)
-          )
-          .then(() => done())
-          .catch(done);
-      });
-
-      it('avec un événement typé signalant une modification de complétude', (done) => {
-        const evenements = [];
-        adaptateurJournalMSS.consigneEvenement = (evenement) => {
-          evenements.push(evenement);
-        };
-
-        depot
-          .nouveauService('123', { descriptionService })
-          .then(() =>
-            verifieRecuEvenementDeType(
-              'COMPLETUDE_SERVICE_MODIFIEE',
-              evenements
-            )
           )
           .then(() => done())
           .catch(done);
@@ -917,46 +916,6 @@ describe('Le dépôt de données des homologations', () => {
         destinataire: 'jean.dujardin@beta.gouv.com',
         donneesEvenement: {
           nombreServices: 2,
-        },
-      });
-    });
-
-    it("l'adaptateur de tracking est utilisé pour envoyer la completude lors de la création d'un service", async () => {
-      let donneesPassees = {};
-      adaptateurTracking = unAdaptateurTracking()
-        .avecEnvoiTrackingCompletude((destinataire, donneesEvenement) => {
-          donneesPassees = { destinataire, donneesEvenement };
-        })
-        .construis();
-      const serviceTracking = {
-        completudeDesServicesPourUtilisateur: async () => ({
-          nombreServices: 2,
-          nombreMoyenContributeurs: 3,
-          tauxCompletudeMoyenTousServices: 12,
-        }),
-      };
-      const descriptionService = uneDescriptionValide(referentiel)
-        .avecNomService('Un autre service')
-        .construis()
-        .toJSON();
-      const utilisateur = unUtilisateur().avecId('456').donnees;
-      adaptateurPersistance =
-        unePersistanceMemoire().ajouteUnUtilisateur(utilisateur);
-      depot = unDepotDeDonneesServices()
-        .avecAdaptateurPersistance(adaptateurPersistance)
-        .avecAdaptateurTracking(adaptateurTracking)
-        .avecServiceTracking(serviceTracking)
-        .avecReferentiel(referentiel)
-        .construis();
-
-      await depot.nouveauService(utilisateur.id, { descriptionService });
-
-      expect(donneesPassees).to.eql({
-        destinataire: 'jean.dujardin@beta.gouv.com',
-        donneesEvenement: {
-          nombreServices: 2,
-          nombreMoyenContributeurs: 3,
-          tauxCompletudeMoyenTousServices: 12,
         },
       });
     });
@@ -1539,6 +1498,7 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurPersistance,
         adaptateurTracking: unAdaptateurTracking().construis(),
         adaptateurUUID: AdaptateurUUID,
+        busEvenements: fabriqueBusPourLesTests(),
         referentiel,
       });
     });
