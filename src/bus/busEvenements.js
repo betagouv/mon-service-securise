@@ -9,6 +9,10 @@ class BusEvenements {
     this.handlers[classeEvenement.name].push(handler);
   }
 
+  abonnePlusieurs(classeEvenement, handlers) {
+    handlers.forEach((h) => this.abonne(classeEvenement, h));
+  }
+
   async publie(evenement) {
     // eslint-disable-next-line no-restricted-syntax
     for (const handler of this.handlers[evenement.constructor.name]) {
