@@ -9,12 +9,12 @@ const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
 const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
-const EvenementNouveauServiceCree = require('../modeles/journalMSS/evenementNouveauServiceCree');
 const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
 const Autorisation = require('../modeles/autorisations/autorisation');
 const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresServiceModifiees');
+const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -344,11 +344,8 @@ const creeDepot = (config = {}) => {
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
 
     await Promise.all([
-      adaptateurJournalMSS.consigneEvenement(
-        new EvenementNouveauServiceCree({
-          idService: service.id,
-          idUtilisateur,
-        }).toJSON()
+      busEvenements.publie(
+        new EvenementNouveauServiceCree({ service, utilisateur })
       ),
       busEvenements.publie(
         new EvenementMesuresServiceModifiees({ service, utilisateur })
