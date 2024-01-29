@@ -1,28 +1,15 @@
 const expect = require('expect.js');
 const AdaptateurJournalMSSMemoire = require('../../../src/adaptateurs/adaptateurJournalMSSMemoire');
-const BusEvenements = require('../../../src/bus/busEvenements');
-const EvenementMesuresServiceModifiees = require('../../../src/bus/evenementMesuresServiceModifiees');
 const { unService } = require('../../constructeurs/constructeurService');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
 const {
   consigneCompletudeDansJournal,
 } = require('../../../src/bus/abonnements/consigneCompletudeDansJournal');
 
-describe("L'abonnement à qui consigne la complétude dans le journal MSS", () => {
-  let bus;
+describe("L'abonnement qui consigne la complétude dans le journal MSS", () => {
   let adaptateurJournal;
 
   beforeEach(() => {
     adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-    bus = new BusEvenements({
-      adaptateurGestionErreur: {
-        logueErreur: (e) => {
-          throw e;
-        },
-      },
-    });
   });
 
   it('consigne un événement de changement de complétude du service', async () => {
@@ -31,17 +18,9 @@ describe("L'abonnement à qui consigne la complétude dans le journal MSS", () =
       evenementRecu = evenement;
     };
 
-    bus.abonne(
-      EvenementMesuresServiceModifiees,
-      consigneCompletudeDansJournal({ adaptateurJournal })
-    );
-
-    await bus.publie(
-      new EvenementMesuresServiceModifiees({
-        service: unService().construis(),
-        utilisateur: unUtilisateur().construis(),
-      })
-    );
+    await consigneCompletudeDansJournal({ adaptateurJournal })({
+      service: unService().construis(),
+    });
 
     expect(evenementRecu.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
   });
