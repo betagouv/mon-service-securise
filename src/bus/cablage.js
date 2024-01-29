@@ -17,36 +17,17 @@ const cableTousLesAbonnes = (
   busEvenements,
   { adaptateurTracking, adaptateurJournal, depotDonnees }
 ) => {
-  // =========================
-  // CRÉATION DE SERVICE
-  busEvenements.abonne(
-    EvenementNouveauServiceCree,
-    consigneNouveauServiceDansJournal({ adaptateurJournal })
-  );
-  busEvenements.abonne(
-    EvenementNouveauServiceCree,
-    envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees })
-  );
-  busEvenements.abonne(
-    EvenementNouveauServiceCree,
-    consigneCompletudeDansJournal({ adaptateurJournal })
-  );
-  busEvenements.abonne(
-    EvenementNouveauServiceCree,
-    envoieTrackingCompletude({ adaptateurTracking, depotDonnees })
-  );
+  busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
+    consigneNouveauServiceDansJournal({ adaptateurJournal }),
+    envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees }),
+    consigneCompletudeDansJournal({ adaptateurJournal }),
+    envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
+  ]);
 
-  // =========================
-  // MODIFICATION DES MESURES
-  busEvenements.abonne(
-    EvenementMesuresServiceModifiees,
-    consigneCompletudeDansJournal({ adaptateurJournal })
-  );
-
-  busEvenements.abonne(
-    EvenementMesuresServiceModifiees,
-    envoieTrackingCompletude({ adaptateurTracking, depotDonnees })
-  );
+  busEvenements.abonnePlusieurs(EvenementMesuresServiceModifiees, [
+    consigneCompletudeDansJournal({ adaptateurJournal }),
+    envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
+  ]);
 };
 
 module.exports = { cableTousLesAbonnes };
