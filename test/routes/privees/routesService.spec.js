@@ -303,6 +303,22 @@ describe('Le serveur MSS des routes /service/*', () => {
       );
     });
 
+    it('tronque le nom du service à 30 caractères', async () => {
+      const tropLong = new Array(150).fill('A').join('');
+      testeur.middleware().reinitialise({
+        homologationARenvoyer: unService().avecNomService(tropLong).construis(),
+      });
+      testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
+
+      const reponse = await axios(
+        'http://localhost:1234/service/456/mesures/export.csv'
+      );
+
+      expect(reponse.headers['content-disposition']).to.contain(
+        'filename="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Liste'
+      );
+    });
+
     it("reste robuste en cas d'erreur de génération CSV", async () => {
       testeur.adaptateurCsv().genereCsvMesures = async () => {
         throw Error('BOOM');
