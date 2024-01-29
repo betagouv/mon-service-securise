@@ -139,6 +139,7 @@
             <textarea
               bind:value={commentaireRetourUtilisateur}
               placeholder="Apportez des précisions ou formulez une suggestion."
+              rows="3"
             ></textarea>
           {/if}
         </div>
@@ -275,5 +276,15 @@
 
   .conteneur-retour-utilisateur label {
     margin-bottom: 0;
+  }
+
+  .conteneur-retour-utilisateur select {
+    background: white;
+    border: transparent;
+    border-right: 8px solid transparent;
+  }
+
+  .conteneur-retour-utilisateur textarea {
+    background: white;
   }
 </style>
