@@ -1,4 +1,4 @@
-const EvenementCompletudeServiceModifiee = require('../../../modeles/journalMSS/evenementCompletudeServiceModifiee');
+const EvenementCompletudeServiceModifiee = require('../../modeles/journalMSS/evenementCompletudeServiceModifiee');
 
 function consigneCompletudeDansJournal({ adaptateurJournal }) {
   return async (evenement) => {

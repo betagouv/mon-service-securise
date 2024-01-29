@@ -1,10 +1,10 @@
 const EvenementMesuresServiceModifiees = require('./evenementMesuresServiceModifiees');
 const {
   consigneCompletudeDansJournal,
-} = require('./abonnements/mesuresServiceModifiees/consigneCompletudeDansJournal');
+} = require('./abonnements/consigneCompletudeDansJournal');
 const {
   envoieTrackingCompletude,
-} = require('./abonnements/mesuresServiceModifiees/envoieTrackingDeCompletude');
+} = require('./abonnements/envoieTrackingDeCompletude');
 
 const cableTousLesAbonnes = (
   busEvenements,

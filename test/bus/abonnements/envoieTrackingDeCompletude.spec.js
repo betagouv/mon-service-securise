@@ -1,24 +1,22 @@
 const expect = require('expect.js');
-const BusEvenements = require('../../../../src/bus/busEvenements');
-const EvenementMesuresServiceModifiees = require('../../../../src/bus/evenementMesuresServiceModifiees');
-const { unService } = require('../../../constructeurs/constructeurService');
+const BusEvenements = require('../../../src/bus/busEvenements');
+const EvenementMesuresServiceModifiees = require('../../../src/bus/evenementMesuresServiceModifiees');
+const { unService } = require('../../constructeurs/constructeurService');
 const {
   unAdaptateurTracking,
-} = require('../../../constructeurs/constructeurAdaptateurTracking');
+} = require('../../constructeurs/constructeurAdaptateurTracking');
 const {
   unUtilisateur,
-} = require('../../../constructeurs/constructeurUtilisateur');
+} = require('../../constructeurs/constructeurUtilisateur');
 const {
   unDepotDeDonneesServices,
-} = require('../../../constructeurs/constructeurDepotDonneesServices');
-const {
-  bouchonneMesures,
-} = require('../../../constructeurs/constructeurMesures');
+} = require('../../constructeurs/constructeurDepotDonneesServices');
+const { bouchonneMesures } = require('../../constructeurs/constructeurMesures');
 const {
   envoieTrackingCompletude,
-} = require('../../../../src/bus/abonnements/mesuresServiceModifiees/envoieTrackingDeCompletude');
+} = require('../../../src/bus/abonnements/envoieTrackingDeCompletude');
 
-describe("L'abonnement à `EvenementMesuresServiceModifiees` qui envoie au tracking les informations de complétude", () => {
+describe("L'abonnement qui envoie au tracking les informations de complétude", () => {
   let bus;
   let adaptateurTracking;
   let depotDonnees;

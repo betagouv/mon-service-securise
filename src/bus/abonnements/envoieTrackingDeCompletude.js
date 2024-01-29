@@ -1,6 +1,4 @@
-const {
-  fabriqueServiceTracking,
-} = require('../../../tracking/serviceTracking');
+const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
 
 function envoieTrackingCompletude({ adaptateurTracking, depotDonnees }) {
   return async (evenement) => {
