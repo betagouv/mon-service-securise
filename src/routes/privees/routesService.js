@@ -116,7 +116,8 @@ const routesService = ({
       try {
         const bufferCsv = await adaptateurCsv.genereCsvMesures(
           service.mesures.enrichiesAvecDonneesPersonnalisees(),
-          avecDonneesAdditionnelles
+          avecDonneesAdditionnelles,
+          referentiel
         );
 
         const s = decode(service.nomService().substring(0, 30));
