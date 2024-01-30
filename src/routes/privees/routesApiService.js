@@ -267,7 +267,7 @@ const routesApiService = ({
         const ajouts = Object.values(donneesRisques).reduce((acc, donnees) => {
           const risque = new RisqueGeneral(donnees, referentiel);
           return acc.then(() =>
-            depotDonnees.ajouteRisqueGeneralAHomologation(idService, risque)
+            depotDonnees.ajouteRisqueGeneralAService(idService, risque)
           );
         }, Promise.resolve());
 

@@ -202,10 +202,10 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(id, donnees);
   };
 
-  const remplaceMesuresSpecifiquesPourHomologation = (...params) =>
+  const remplaceMesuresSpecifiquesPourService = (...params) =>
     remplaceProprieteService('mesuresSpecifiques', ...params);
 
-  const ajouteRisqueGeneralAHomologation = (...params) =>
+  const ajouteRisqueGeneralAService = (...params) =>
     ajouteAItemsDansHomologation('risquesGeneraux', ...params);
 
   const homologationExiste = (...params) =>
@@ -282,18 +282,15 @@ const creeDepot = (config = {}) => {
   };
 
   const ajouteMesuresAHomologation = async (
-    idHomologation,
+    idService,
     idUtilisateur,
     generales,
     specifiques
   ) => {
-    await ajouteMesuresGeneralesAService(idHomologation, generales);
-    await remplaceMesuresSpecifiquesPourHomologation(
-      idHomologation,
-      specifiques
-    );
+    await ajouteMesuresGeneralesAService(idService, generales);
+    await remplaceMesuresSpecifiquesPourService(idService, specifiques);
 
-    const service = await p.lis.une(idHomologation);
+    const service = await p.lis.une(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
 
     await busEvenements.publie(
@@ -419,7 +416,7 @@ const creeDepot = (config = {}) => {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
     ajouteMesuresAHomologation,
-    ajouteRisqueGeneralAHomologation,
+    ajouteRisqueGeneralAService,
     ajouteRolesResponsabilitesAHomologation,
     dupliqueHomologation,
     finaliseDossierCourant,

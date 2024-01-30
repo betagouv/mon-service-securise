@@ -588,7 +588,7 @@ describe('Le dépôt de données des homologations', () => {
         commentaire: 'Un commentaire',
       });
       depot
-        .ajouteRisqueGeneralAHomologation('123', risque)
+        .ajouteRisqueGeneralAService('123', risque)
         .then(() => depot.homologation('123'))
         .then(({ risques }) => {
           expect(risques.risquesGeneraux.nombre()).to.equal(1);
