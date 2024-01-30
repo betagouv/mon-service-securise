@@ -1325,7 +1325,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête COPY sur `/api/service/:id`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().dupliqueHomologation = () => Promise.resolve();
+      testeur.depotDonnees().dupliqueService = () => Promise.resolve();
       testeur.middleware().reinitialise({
         autorisationACharger: Autorisation.NouvelleAutorisationProprietaire(),
       });
@@ -1396,7 +1396,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 424 si des données obligatoires ne sont pas renseignées', (done) => {
-      testeur.depotDonnees().dupliqueHomologation = () =>
+      testeur.depotDonnees().dupliqueService = () =>
         Promise.reject(
           new ErreurDonneesObligatoiresManquantes(
             'Certaines données obligatoires ne sont pas renseignées'
@@ -1426,10 +1426,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         autorisationACharger: Autorisation.NouvelleAutorisationProprietaire(),
       });
 
-      testeur.depotDonnees().dupliqueHomologation = (
-        idService,
-        idUtilisateur
-      ) => {
+      testeur.depotDonnees().dupliqueService = (idService, idUtilisateur) => {
         try {
           expect(idService).to.equal('123');
           expect(idUtilisateur).to.equal('999');

@@ -478,7 +478,7 @@ const routesApiService = ({
 
       verifiePermissionDuplicationService(idUtilisateurCourant, idService)
         .then(() =>
-          depotDonnees.dupliqueHomologation(idService, idUtilisateurCourant)
+          depotDonnees.dupliqueService(idService, idUtilisateurCourant)
         )
         .then(() => reponse.send('Service dupliqué'))
         .catch((e) => {

@@ -387,7 +387,7 @@ const creeDepot = (config = {}) => {
     return p.lis.cellesDeUtilisateur(idProprietaire).then(indexMax);
   };
 
-  const dupliqueHomologation = (idHomologation, idProprietaire) => {
+  const dupliqueService = (idHomologation, idProprietaire) => {
     const duplique = (h) => {
       const nomHomologationADupliquer = `${h.nomService()} - Copie`;
       const donneesADupliquer = (index) =>
@@ -418,7 +418,7 @@ const creeDepot = (config = {}) => {
     ajouteMesuresAuService,
     ajouteRisqueGeneralAService,
     ajouteRolesResponsabilitesAService,
-    dupliqueHomologation,
+    dupliqueService,
     finaliseDossierCourant,
     homologation,
     homologationExiste,
