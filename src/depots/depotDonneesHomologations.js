@@ -236,7 +236,7 @@ const creeDepot = (config = {}) => {
       );
   };
 
-  const ajouteRolesResponsabilitesAHomologation = (...params) =>
+  const ajouteRolesResponsabilitesAService = (...params) =>
     metsAJourProprieteService('rolesResponsabilites', ...params);
 
   const homologations = (idUtilisateur) =>
@@ -417,7 +417,7 @@ const creeDepot = (config = {}) => {
     ajouteDossierCourantSiNecessaire,
     ajouteMesuresAHomologation,
     ajouteRisqueGeneralAService,
-    ajouteRolesResponsabilitesAHomologation,
+    ajouteRolesResponsabilitesAService,
     dupliqueHomologation,
     finaliseDossierCourant,
     homologation,
