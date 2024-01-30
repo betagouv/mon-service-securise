@@ -109,7 +109,7 @@ describe('Le dépôt de données des homologations', () => {
       adaptateurPersistance,
     });
 
-    await depot.toutesHomologations();
+    await depot.tousLesServices();
 
     expect(adaptateurAppele).to.be(true);
     expect(idRecu).to.be(undefined);

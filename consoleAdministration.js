@@ -55,7 +55,7 @@ class ConsoleAdministration {
       : this.journalConsole;
 
     const evenements = this.depotDonnees
-      .toutesHomologations()
+      .tousLesServices()
       .then((hs) =>
         hs.map((h) => ({ idService: h.id, ...h.completudeMesures() }))
       )
@@ -96,8 +96,8 @@ class ConsoleAdministration {
       ? this.adaptateurJournalMSS
       : this.journalConsole;
 
-    const toutes = await this.depotDonnees.toutesHomologations();
-    const dossiersParService = toutes.map((h) => ({
+    const tous = await this.depotDonnees.tousLesServices();
+    const dossiersParService = tous.map((h) => ({
       idService: h.id,
       finalises: h.dossiers.finalises(),
     }));

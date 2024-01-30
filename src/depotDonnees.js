@@ -67,7 +67,7 @@ const creeDepot = (config = {}) => {
     nouveauService,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
-    toutesHomologations,
+    tousLesServices,
   } = depotHomologations;
 
   const {
@@ -135,7 +135,7 @@ const creeDepot = (config = {}) => {
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeUtilisateur,
     tousUtilisateurs,
-    toutesHomologations,
+    tousLesServices,
     utilisateur,
     utilisateurAFinaliser,
     utilisateurAuthentifie,
