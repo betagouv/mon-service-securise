@@ -574,8 +574,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/:id/risques`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation =
-        async () => {};
+      testeur.depotDonnees().remplaceRisquesSpecifiquesDuService = async () => {}
     });
 
     it('recherche le service correspondant', (done) => {
@@ -638,6 +637,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("demande au dépôt d'associer les risques spécifiques au service", async () => {
       let risquesRemplaces = false;
+<<<<<<< HEAD
       testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation =
         async (idService, risques) => {
           expect(idService).to.equal('456');
@@ -646,6 +646,19 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           expect(risques.item(0).commentaire).to.equal('Un commentaire');
           risquesRemplaces = true;
         };
+=======
+      testeur.depotDonnees().remplaceRisquesSpecifiquesDuService = (
+        idService,
+        risques
+      ) => {
+        expect(idService).to.equal('456');
+        expect(risques.nombre()).to.equal(1);
+        expect(risques.item(0).description).to.equal('Un risque spécifique');
+        expect(risques.item(0).commentaire).to.equal('Un commentaire');
+        risquesRemplaces = true;
+        return Promise.resolve();
+      };
+>>>>>>> e80fbda3 ([SOIN] Parle de `service` plutôt que d'`homologation`)
 
       await axios.post('http://localhost:1234/api/service/456/risques', {
         risquesSpecifiques: [
@@ -663,11 +676,22 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.referentiel().recharge({ niveauxGravite: { unNiveau: {} } });
 
       let risquesRemplaces = false;
+<<<<<<< HEAD
       testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation =
         async (_, risques) => {
           expect(risques.nombre()).to.equal(2);
           risquesRemplaces = true;
         };
+=======
+      testeur.depotDonnees().remplaceRisquesSpecifiquesDuService = (
+        _,
+        risques
+      ) => {
+        expect(risques.nombre()).to.equal(2);
+        risquesRemplaces = true;
+        return Promise.resolve();
+      };
+>>>>>>> e80fbda3 ([SOIN] Parle de `service` plutôt que d'`homologation`)
 
       const risquesSpecifiques = [];
       risquesSpecifiques[2] = { description: 'Un risque spécifique' };

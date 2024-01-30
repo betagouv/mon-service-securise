@@ -351,7 +351,7 @@ const creeDepot = (config = {}) => {
     return idService;
   };
 
-  const remplaceRisquesSpecifiquesPourHomologation = (...params) =>
+  const remplaceRisquesSpecifiquesDuService = (...params) =>
     remplaceProprieteService('risquesSpecifiques', ...params);
 
   const supprimeHomologation = (idHomologation) =>
@@ -425,7 +425,7 @@ const creeDepot = (config = {}) => {
     homologations,
     enregistreDossier,
     nouveauService,
-    remplaceRisquesSpecifiquesPourHomologation,
+    remplaceRisquesSpecifiquesDuService,
     supprimeHomologation,
     tousLesServices,
     trouveIndexDisponible,
