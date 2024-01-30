@@ -38,7 +38,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().nouveauService = () => Promise.resolve();
+      testeur.depotDonnees().nouveauService = async () => {};
     });
 
     it('applique une protection de trafic', (done) => {
@@ -74,44 +74,32 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         );
     });
 
-    it("aseptise la liste des points d'accès ainsi que son contenu", (done) => {
-      axios
-        .post('http://localhost:1234/api/service', {})
-        .then(() => {
-          testeur
-            .middleware()
-            .verifieAseptisationListe('pointsAcces', ['description']);
-          done();
-        })
-        .catch(done);
+    it("aseptise la liste des points d'accès ainsi que son contenu", async () => {
+      await axios.post('http://localhost:1234/api/service', {});
+
+      testeur
+        .middleware()
+        .verifieAseptisationListe('pointsAcces', ['description']);
     });
 
-    it('aseptise la liste des fonctionnalités spécifiques ainsi que son contenu', (done) => {
-      axios
-        .post('http://localhost:1234/api/service', {})
-        .then(() => {
-          testeur
-            .middleware()
-            .verifieAseptisationListe('fonctionnalitesSpecifiques', [
-              'description',
-            ]);
-          done();
-        })
-        .catch(done);
+    it('aseptise la liste des fonctionnalités spécifiques ainsi que son contenu', async () => {
+      await axios.post('http://localhost:1234/api/service', {});
+
+      testeur
+        .middleware()
+        .verifieAseptisationListe('fonctionnalitesSpecifiques', [
+          'description',
+        ]);
     });
 
-    it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', (done) => {
-      axios
-        .post('http://localhost:1234/api/service', {})
-        .then(() => {
-          testeur
-            .middleware()
-            .verifieAseptisationListe('donneesSensiblesSpecifiques', [
-              'description',
-            ]);
-          done();
-        })
-        .catch(done);
+    it('aseptise la liste des données sensibles spécifiques ainsi que son contenu', async () => {
+      await axios.post('http://localhost:1234/api/service', {});
+
+      testeur
+        .middleware()
+        .verifieAseptisationListe('donneesSensiblesSpecifiques', [
+          'description',
+        ]);
     });
 
     it('retourne une erreur HTTP 422 si les données de description de service sont invalides', (done) => {
@@ -128,8 +116,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si données insuffisantes pour création service', (done) => {
-      testeur.depotDonnees().nouveauService = () =>
-        Promise.reject(new ErreurDonneesObligatoiresManquantes('oups'));
+      testeur.depotDonnees().nouveauService = async () => {
+        throw new ErreurDonneesObligatoiresManquantes('oups');
+      };
 
       testeur.verifieRequeteGenereErreurHTTP(
         422,
@@ -144,8 +133,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
-      testeur.depotDonnees().nouveauService = () =>
-        Promise.reject(new ErreurNomServiceDejaExistant('oups'));
+      testeur.depotDonnees().nouveauService = async () => {
+        throw new ErreurNomServiceDejaExistant('oups');
+      };
 
       testeur.verifieRequeteGenereErreurHTTP(
         422,
@@ -181,6 +171,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         'http://localhost:1234/api/service',
         donneesDescriptionService
       );
+
       expect(reponse.status).to.equal(200);
       expect(reponse.data).to.eql({ idService: '456' });
     });
