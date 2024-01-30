@@ -104,11 +104,7 @@ const creeDepot = (config = {}) => {
 
   const homologation = (idHomologation) => p.lis.une(idHomologation);
 
-  const ajouteAItemsDansHomologation = async (
-    nomListeItems,
-    idService,
-    item
-  ) => {
+  const ajouteAItemsDuService = async (nomListeItems, idService, item) => {
     const service = await p.lis.une(idService);
     const donneesAPersister = service.donneesAPersister().toutes();
     donneesAPersister[nomListeItems] ||= [];
@@ -173,11 +169,9 @@ const creeDepot = (config = {}) => {
       if (!h.dossierCourant()) {
         const idDossier = adaptateurUUID.genereUUID();
         const dossier = new Dossier({ id: idDossier });
-        return ajouteAItemsDansHomologation(
-          'dossiers',
-          idHomologation,
-          dossier
-        ).then(() => dossier);
+        return ajouteAItemsDuService('dossiers', idHomologation, dossier).then(
+          () => dossier
+        );
       }
 
       return Promise.resolve(h.dossierCourant());
@@ -206,7 +200,7 @@ const creeDepot = (config = {}) => {
     remplaceProprieteService('mesuresSpecifiques', ...params);
 
   const ajouteRisqueGeneralAService = (...params) =>
-    ajouteAItemsDansHomologation('risquesGeneraux', ...params);
+    ajouteAItemsDuService('risquesGeneraux', ...params);
 
   const homologationExiste = (...params) =>
     p.lis.celleAvecNomService(...params).then((h) => !!h);
@@ -301,7 +295,7 @@ const creeDepot = (config = {}) => {
   const tousLesServices = () => p.lis.toutes();
 
   const enregistreDossier = (idHomologation, dossier) =>
-    ajouteAItemsDansHomologation('dossiers', idHomologation, dossier);
+    ajouteAItemsDuService('dossiers', idHomologation, dossier);
 
   const finaliseDossierCourant = async (service) => {
     const dossierAvantFinalisation = service.dossierCourant();
