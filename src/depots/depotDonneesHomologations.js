@@ -106,11 +106,11 @@ const creeDepot = (config = {}) => {
 
   const ajouteAItemsDansHomologation = async (
     nomListeItems,
-    idHomologation,
+    idService,
     item
   ) => {
-    const h = await p.lis.une(idHomologation);
-    const donneesAPersister = h.donneesAPersister().toutes();
+    const service = await p.lis.une(idService);
+    const donneesAPersister = service.donneesAPersister().toutes();
     donneesAPersister[nomListeItems] ||= [];
 
     const donneesItem = item.toJSON();
@@ -118,11 +118,8 @@ const creeDepot = (config = {}) => {
       (i) => i.id === donneesItem.id
     );
 
-    if (itemDejaDansDepot) {
-      Object.assign(itemDejaDansDepot, donneesItem);
-    } else {
-      donneesAPersister[nomListeItems].push(donneesItem);
-    }
+    if (itemDejaDansDepot) Object.assign(itemDejaDansDepot, donneesItem);
+    else donneesAPersister[nomListeItems].push(donneesItem);
 
     const { id, ...donnees } = donneesAPersister;
     await p.sauvegarde(id, donnees);
