@@ -156,25 +156,23 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(id, donnees);
   };
 
-  const ajouteDossierCourantSiNecessaire = (idHomologation) =>
-    p.lis.une(idHomologation).then((h) => {
-      if (typeof h === 'undefined') {
+  const ajouteDossierCourantSiNecessaire = (idService) =>
+    p.lis.une(idService).then((s) => {
+      if (typeof s === 'undefined') {
         return Promise.reject(
-          new ErreurServiceInexistant(
-            `Homologation "${idHomologation}" non trouvée`
-          )
+          new ErreurServiceInexistant(`Service "${idService}" non trouvée`)
         );
       }
 
-      if (!h.dossierCourant()) {
+      if (!s.dossierCourant()) {
         const idDossier = adaptateurUUID.genereUUID();
         const dossier = new Dossier({ id: idDossier });
-        return ajouteAItemsDuService('dossiers', idHomologation, dossier).then(
+        return ajouteAItemsDuService('dossiers', idService, dossier).then(
           () => dossier
         );
       }
 
-      return Promise.resolve(h.dossierCourant());
+      return Promise.resolve(s.dossierCourant());
     });
 
   const ajouteMesuresGeneralesAService = async (idService, mesures) => {
