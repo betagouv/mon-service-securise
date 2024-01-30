@@ -387,25 +387,23 @@ const creeDepot = (config = {}) => {
     return p.lis.cellesDeUtilisateur(idProprietaire).then(indexMax);
   };
 
-  const dupliqueService = (idHomologation, idProprietaire) => {
-    const duplique = (h) => {
-      const nomHomologationADupliquer = `${h.nomService()} - Copie`;
+  const dupliqueService = (idService, idProprietaire) => {
+    const duplique = (s) => {
+      const nomServiceADupliquer = `${s.nomService()} - Copie`;
       const donneesADupliquer = (index) =>
-        h.donneesADupliquer(`${nomHomologationADupliquer} ${index}`);
+        s.donneesADupliquer(`${nomServiceADupliquer} ${index}`);
 
-      return trouveIndexDisponible(idProprietaire, nomHomologationADupliquer)
+      return trouveIndexDisponible(idProprietaire, nomServiceADupliquer)
         .then(donneesADupliquer)
         .then((donnees) => nouveauService(idProprietaire, donnees));
     };
 
     return p.lis
-      .une(idHomologation)
+      .une(idService)
       .then((h) =>
         typeof h === 'undefined'
           ? Promise.reject(
-              new ErreurServiceInexistant(
-                `Service "${idHomologation}" non trouvé`
-              )
+              new ErreurServiceInexistant(`Service "${idService}" non trouvé`)
             )
           : h
       )
