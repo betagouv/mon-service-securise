@@ -612,7 +612,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
       let risqueAjoute = false;
 
-      testeur.depotDonnees().ajouteRisqueGeneralAHomologation = async (
+      testeur.depotDonnees().ajouteRisqueGeneralAService = async (
         idService,
         risque
       ) => {
