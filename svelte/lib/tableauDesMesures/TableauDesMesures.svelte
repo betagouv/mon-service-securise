@@ -69,6 +69,12 @@
       })
     );
   };
+
+  const afficheTiroirExportDesMesures = () => {
+    document.body.dispatchEvent(
+      new CustomEvent('svelte-affiche-tiroir-export-mesures')
+    );
+  };
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
@@ -96,6 +102,7 @@
       </button>
       <button
         class="bouton bouton-avec-icone bouton-tertiaire bouton-export-mesures"
+        on:click={afficheTiroirExportDesMesures}
       >
         Exporter la liste des mesures
       </button>

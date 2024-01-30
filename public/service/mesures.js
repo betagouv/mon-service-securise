@@ -1,5 +1,6 @@
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 import ActionMesure from '../modules/tableauDeBord/actions/ActionMesure.mjs';
+import ActionExportMesures from '../modules/tableauDeBord/actions/ActionExportMesures.mjs';
 
 $(() => {
   const categories = JSON.parse($('#referentiel-categories-mesures').text());
@@ -53,6 +54,14 @@ $(() => {
     gestionnaireTiroir.afficheContenuAction(
       { action: actionMesure },
       propsDuBundle
+    );
+  });
+
+  const actionExportMesures = new ActionExportMesures();
+  $(document.body).on('svelte-affiche-tiroir-export-mesures', () => {
+    gestionnaireTiroir.afficheContenuAction(
+      { action: actionExportMesures },
+      { idService }
     );
   });
 
