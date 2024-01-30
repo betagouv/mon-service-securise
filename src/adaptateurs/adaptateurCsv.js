@@ -45,7 +45,11 @@ const genereCsvServices = (tableauServices) => {
   }
 };
 
-const genereCsvMesures = async (donneesMesures, avecDonneesAdditionnnelles) => {
+const genereCsvMesures = async (
+  donneesMesures,
+  avecDonneesAdditionnnelles,
+  referentiel
+) => {
   // Les `id` correspondent aux noms des propriétés dans notre modèle Mesure
   const colonnes = [
     { id: 'description', title: 'Nom de la mesure' },
@@ -66,9 +70,9 @@ const genereCsvMesures = async (donneesMesures, avecDonneesAdditionnnelles) => {
       description: m.description,
       referentiel: m.referentiel,
       type: m.indispensable ? 'Indispensable' : 'Recommandée',
-      categorie: m.categorie,
+      categorie: referentiel.descriptionCategorie(m.categorie),
       descriptionLongue: stripHtml(m.descriptionLongue).result,
-      statut: m.statut,
+      statut: referentiel.descriptionStatutMesure(m.statut),
       commentaires: sansRetoursChariots(decode(m.modalites)),
     }))
     .concat(
@@ -76,9 +80,9 @@ const genereCsvMesures = async (donneesMesures, avecDonneesAdditionnnelles) => {
         description: decode(m.description),
         referentiel: 'Mesures ajoutées',
         type: '',
-        categorie: m.categorie,
+        categorie: referentiel.descriptionCategorie(m.categorie),
         descriptionLongue: '',
-        statut: m.statut,
+        statut: referentiel.descriptionStatutMesure(m.statut),
         commentaires: sansRetoursChariots(decode(m.modalites)),
       }))
     );
