@@ -1,12 +1,4 @@
-mixin documentTelechargeable(nom, description, type, idLien, peutEtreIndisponible)
-  - const sourceImage = `/statique/assets/images/icone_telechargement_${type.toLowerCase()}.svg`
-  .document-telechargeable(id= `conteneur-${idLien}`)
-    .contenu
-      img.icone-type-document(src=sourceImage alt='')
-      .contenu-texte
-        p.titre-document= nom
-        p.description-document!= description
-    a.lien-telechargement.bouton(href='', target='_blank', rel='noopener', id=idLien) Télécharger
+include ./documentTelechargeable
 
 .bloc-contenu#contenu-telechargement
   form.conteneur-formulaire
