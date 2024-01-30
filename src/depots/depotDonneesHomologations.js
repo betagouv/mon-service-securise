@@ -104,25 +104,29 @@ const creeDepot = (config = {}) => {
 
   const homologation = (idHomologation) => p.lis.une(idHomologation);
 
-  const ajouteAItemsDansHomologation = (nomListeItems, idHomologation, item) =>
-    p.lis.une(idHomologation).then((h) => {
-      const donneesAPersister = h.donneesAPersister().toutes();
-      donneesAPersister[nomListeItems] ||= [];
+  const ajouteAItemsDansHomologation = async (
+    nomListeItems,
+    idHomologation,
+    item
+  ) => {
+    const h = await p.lis.une(idHomologation);
+    const donneesAPersister = h.donneesAPersister().toutes();
+    donneesAPersister[nomListeItems] ||= [];
 
-      const donneesItem = item.toJSON();
-      const itemDejaDansDepot = donneesAPersister[nomListeItems].find(
-        (i) => i.id === donneesItem.id
-      );
+    const donneesItem = item.toJSON();
+    const itemDejaDansDepot = donneesAPersister[nomListeItems].find(
+      (i) => i.id === donneesItem.id
+    );
 
-      if (itemDejaDansDepot) {
-        Object.assign(itemDejaDansDepot, donneesItem);
-      } else {
-        donneesAPersister[nomListeItems].push(donneesItem);
-      }
+    if (itemDejaDansDepot) {
+      Object.assign(itemDejaDansDepot, donneesItem);
+    } else {
+      donneesAPersister[nomListeItems].push(donneesItem);
+    }
 
-      const { id, ...donnees } = donneesAPersister;
-      return p.sauvegarde(id, donnees);
-    });
+    const { id, ...donnees } = donneesAPersister;
+    await p.sauvegarde(id, donnees);
+  };
 
   const metsAJourProprieteService = (nomPropriete, idOuService, propriete) => {
     const metsAJour = (h) => {
