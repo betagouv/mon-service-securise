@@ -123,10 +123,13 @@ const routesService = ({
         const date = dateYYYYMMDD(adaptateurHorloge.maintenant());
         const perimetre = avecDonneesAdditionnelles ? 'avec' : 'sans';
         const fichier = `${s} Liste mesures ${perimetre} données additionnelles ${date}.csv`;
-
+        const uriFichier = encodeURIComponent(fichier);
         reponse
           .contentType('text/csv;charset=utf-8')
-          .set('Content-Disposition', `attachment; filename="${fichier}"`)
+          .set(
+            'Content-Disposition',
+            `attachment; filename="${fichier}"; filename*=UTF-8''${uriFichier}`
+          )
           .send(bufferCsv);
       } catch (e) {
         adaptateurGestionErreur.logueErreur(e);
