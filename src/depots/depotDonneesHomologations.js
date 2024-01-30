@@ -156,24 +156,21 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(id, donnees);
   };
 
-  const ajouteDossierCourantSiNecessaire = (idService) =>
-    p.lis.une(idService).then((s) => {
-      if (typeof s === 'undefined') {
-        return Promise.reject(
-          new ErreurServiceInexistant(`Service "${idService}" non trouvée`)
-        );
-      }
+  const ajouteDossierCourantSiNecessaire = async (idService) => {
+    const s = await p.lis.une(idService);
 
-      if (!s.dossierCourant()) {
-        const idDossier = adaptateurUUID.genereUUID();
-        const dossier = new Dossier({ id: idDossier });
-        return ajouteAItemsDuService('dossiers', idService, dossier).then(
-          () => dossier
-        );
-      }
+    if (typeof s === 'undefined')
+      throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
 
-      return Promise.resolve(s.dossierCourant());
-    });
+    if (!s.dossierCourant()) {
+      const idDossier = adaptateurUUID.genereUUID();
+      const dossier = new Dossier({ id: idDossier });
+      await ajouteAItemsDuService('dossiers', idService, dossier);
+      return dossier;
+    }
+
+    return s.dossierCourant();
+  };
 
   const ajouteMesuresGeneralesAService = async (idService, mesures) => {
     const s = await p.lis.une(idService);

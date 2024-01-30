@@ -1168,7 +1168,7 @@ describe('Le dépôt de données des homologations', () => {
         )
         .catch((e) => {
           expect(e).to.be.an(ErreurServiceInexistant);
-          expect(e.message).to.equal('Homologation "999" non trouvée');
+          expect(e.message).to.equal('Service "999" non trouvé');
           done();
         })
         .catch(done);
