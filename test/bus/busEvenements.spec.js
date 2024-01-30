@@ -15,15 +15,15 @@ describe("Le bus d'événements", () => {
     adaptateurGestionErreur = { logueErreur: () => {} }
   ) => new BusEvenements({ adaptateurGestionErreur });
 
-  it("permet de s'abonner à un type d'événement", () => {
+  it("permet de s'abonner à un type d'événement", async () => {
     let compteur = 0;
 
     const bus = creeBusEvenements();
-    bus.abonne(EvenementTestA, () => {
+    bus.abonne(EvenementTestA, async () => {
       compteur += 1;
     });
 
-    bus.publie(new EvenementTestA());
+    await bus.publie(new EvenementTestA());
 
     expect(compteur).to.be(1);
   });
@@ -33,8 +33,8 @@ describe("Le bus d'événements", () => {
 
     const bus = creeBusEvenements();
     bus.abonnePlusieurs(EvenementTestA, [
-      () => (compteur += 1),
-      () => (compteur += 10),
+      async () => (compteur += 1),
+      async () => (compteur += 10),
     ]);
 
     await bus.publie(new EvenementTestA());
@@ -42,18 +42,18 @@ describe("Le bus d'événements", () => {
     expect(compteur).to.be(11);
   });
 
-  it('fait la différence entre les événements', () => {
+  it('fait la différence entre les événements', async () => {
     let compteur = 0;
 
     const bus = creeBusEvenements();
-    bus.abonne(EvenementTestA, () => {
+    bus.abonne(EvenementTestA, async () => {
       compteur += 1;
     });
-    bus.abonne(EvenementTestB, () => {
+    bus.abonne(EvenementTestB, async () => {
       compteur += 100;
     });
 
-    bus.publie(new EvenementTestA());
+    await bus.publie(new EvenementTestA());
 
     expect(compteur).to.be(1);
   });
@@ -62,10 +62,10 @@ describe("Le bus d'événements", () => {
     let compteur = 0;
 
     const bus = creeBusEvenements();
-    bus.abonne(EvenementTestA, () => {
+    bus.abonne(EvenementTestA, async () => {
       compteur += 1;
     });
-    bus.abonne(EvenementTestA, () => {
+    bus.abonne(EvenementTestA, async () => {
       compteur += 10;
     });
 
@@ -74,36 +74,36 @@ describe("Le bus d'événements", () => {
     expect(compteur).to.be(11);
   });
 
-  it("passe l'événement reçu en paramètre aux abonnés", () => {
+  it("passe l'événement reçu en paramètre aux abonnés", async () => {
     let compteur = 0;
 
     const bus = creeBusEvenements();
-    bus.abonne(EvenementTestA, (e) => {
+    bus.abonne(EvenementTestA, async (e) => {
       compteur += e.increment;
     });
 
-    bus.publie(new EvenementTestA(30));
+    await bus.publie(new EvenementTestA(30));
 
     expect(compteur).to.be(30);
   });
 
-  it("éxecute tous les handlers même en cas d'exception", () => {
+  it("éxecute tous les handlers même en cas d'exception", async () => {
     let compteur = 0;
 
     const bus = creeBusEvenements({ logueErreur: () => {} });
-    bus.abonne(EvenementTestA, () => {
+    bus.abonne(EvenementTestA, async () => {
       throw new Error('BOUM');
     });
-    bus.abonne(EvenementTestA, () => {
+    bus.abonne(EvenementTestA, async () => {
       compteur += 1;
     });
 
-    bus.publie(new EvenementTestA());
+    await bus.publie(new EvenementTestA());
 
     expect(compteur).to.be(1);
   });
 
-  it("envoie les erreurs des handlers à l'adaptateur de gestion d'erreur", () => {
+  it("envoie les erreurs des handlers à l'adaptateur de gestion d'erreur", async () => {
     let erreurEnregistree;
 
     const bus = creeBusEvenements({
@@ -111,26 +111,12 @@ describe("Le bus d'événements", () => {
         erreurEnregistree = e;
       },
     });
-    bus.abonne(EvenementTestA, () => {
+    bus.abonne(EvenementTestA, async () => {
       throw new Error('BOUM');
     });
 
-    bus.publie(new EvenementTestA());
+    await bus.publie(new EvenementTestA());
 
     expect(erreurEnregistree).to.eql(new Error('BOUM'));
-  });
-
-  it('éxecute des handlers asynchrones', (done) => {
-    let compteur = 0;
-
-    const bus = creeBusEvenements();
-    bus.abonne(EvenementTestA, () =>
-      Promise.resolve().then(() => (compteur += 1))
-    );
-
-    bus.publie(new EvenementTestA()).then(() => {
-      expect(compteur).to.be(1);
-      done();
-    });
   });
 });
