@@ -387,27 +387,22 @@ const creeDepot = (config = {}) => {
     return p.lis.cellesDeUtilisateur(idProprietaire).then(indexMax);
   };
 
-  const dupliqueService = (idService, idProprietaire) => {
-    const duplique = (s) => {
-      const nomServiceADupliquer = `${s.nomService()} - Copie`;
+  const dupliqueService = async (idService, idProprietaire) => {
+    const duplique = async (s) => {
+      const nomDuplication = `${s.nomService()} - Copie`;
       const donneesADupliquer = (index) =>
-        s.donneesADupliquer(`${nomServiceADupliquer} ${index}`);
+        s.donneesADupliquer(`${nomDuplication} ${index}`);
 
-      return trouveIndexDisponible(idProprietaire, nomServiceADupliquer)
-        .then(donneesADupliquer)
-        .then((donnees) => nouveauService(idProprietaire, donnees));
+      const index = await trouveIndexDisponible(idProprietaire, nomDuplication);
+      const donnees = donneesADupliquer(index);
+      await nouveauService(idProprietaire, donnees);
     };
 
-    return p.lis
-      .une(idService)
-      .then((h) =>
-        typeof h === 'undefined'
-          ? Promise.reject(
-              new ErreurServiceInexistant(`Service "${idService}" non trouvé`)
-            )
-          : h
-      )
-      .then(duplique);
+    const s = await p.lis.une(idService);
+    if (typeof s === 'undefined')
+      throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
+
+    await duplique(s);
   };
 
   return {
