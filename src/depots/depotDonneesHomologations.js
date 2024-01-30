@@ -298,7 +298,7 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const toutesHomologations = () => p.lis.toutes();
+  const tousLesServices = () => p.lis.toutes();
 
   const enregistreDossier = (idHomologation, dossier) =>
     ajouteAItemsDansHomologation('dossiers', idHomologation, dossier);
@@ -427,7 +427,7 @@ const creeDepot = (config = {}) => {
     nouveauService,
     remplaceRisquesSpecifiquesPourHomologation,
     supprimeHomologation,
-    toutesHomologations,
+    tousLesServices,
     trouveIndexDisponible,
   };
 };
