@@ -13,21 +13,18 @@ class ActionExport extends ActionAbstraite {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  initialise() {}
+  initialise({ idServices }) {
+    $('#action-export-csv').attr(
+      'href',
+      `/api/services/export.csv?idsServices=${encodeURIComponent(
+        JSON.stringify(idServices)
+      )}`
+    );
+  }
 
   // eslint-disable-next-line class-methods-use-this
   estDisponible() {
     return true;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  execute({ idServices }) {
-    window.open(
-      `/api/services/export.csv?idsServices=${encodeURIComponent(
-        JSON.stringify(idServices)
-      )}`,
-      '_blank'
-    );
   }
 }
 
