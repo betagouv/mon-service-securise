@@ -162,14 +162,12 @@ const creeDepot = (config = {}) => {
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
 
-    if (!s.dossierCourant()) {
-      const idDossier = adaptateurUUID.genereUUID();
-      const dossier = new Dossier({ id: idDossier });
-      await ajouteAItemsDuService('dossiers', idService, dossier);
-      return dossier;
-    }
+    if (s.dossierCourant()) return s.dossierCourant();
 
-    return s.dossierCourant();
+    const idDossier = adaptateurUUID.genereUUID();
+    const dossier = new Dossier({ id: idDossier });
+    await ajouteAItemsDuService('dossiers', idService, dossier);
+    return dossier;
   };
 
   const ajouteMesuresGeneralesAService = async (idService, mesures) => {
