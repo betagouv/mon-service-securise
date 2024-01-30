@@ -94,7 +94,10 @@ const gestionnaireEvenements = {
         nbServicesSelectionnes,
         nomDuService,
       });
-    } else gestionnaireEvenements.afficheTiroirAction($elementClique);
+    } else
+      gestionnaireEvenements.afficheTiroirAction($elementClique, {
+        idServices: [...tableauDesServices.servicesSelectionnes],
+      });
   },
   brancheExecutionActions: () => {
     $('#action-duplication').on('click', () => {
@@ -117,12 +120,6 @@ const gestionnaireEvenements = {
         })
         .catch(() => {});
     });
-
-    $('#action-export-csv').on('click', () =>
-      registreDesActions.export.execute({
-        idServices: [...tableauDesServices.servicesSelectionnes],
-      })
-    );
   },
   afficheTiroirAction: ($action, ...args) => {
     $('#barre-outils .action').removeClass('actif');
