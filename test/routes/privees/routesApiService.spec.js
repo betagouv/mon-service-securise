@@ -338,7 +338,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/:id/mesures', () => {
     beforeEach(() => {
-      testeur.depotDonnees().ajouteMesuresAHomologation = async () => {};
+      testeur.depotDonnees().ajouteMesuresAuService = async () => {};
       testeur.referentiel().recharge({
         categoriesMesures: { uneCategorie: 'Une catégorie' },
         mesures: { identifiantMesure: {} },
@@ -381,7 +381,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("demande au dépôt d'associer les mesures au service", async () => {
       let mesuresAjoutees = false;
 
-      testeur.depotDonnees().ajouteMesuresAHomologation = async (
+      testeur.depotDonnees().ajouteMesuresAuService = async (
         idService,
         idUtilisateur,
         [generale],
@@ -427,7 +427,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('filtre les mesures spécifiques vides', async () => {
       let mesuresRemplacees = false;
-      testeur.depotDonnees().ajouteMesuresAHomologation = async (
+      testeur.depotDonnees().ajouteMesuresAuService = async (
         _id,
         _idUtilisateur,
         _generales,
@@ -453,7 +453,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("filtre les mesures spécifiques qui n'ont pas les propriétés requises", async () => {
       let mesuresRemplacees = false;
-      testeur.depotDonnees().ajouteMesuresAHomologation = async (
+      testeur.depotDonnees().ajouteMesuresAuService = async (
         _id,
         _idUtilisateur,
         _generales,

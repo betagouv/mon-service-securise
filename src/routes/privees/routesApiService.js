@@ -197,7 +197,7 @@ const routesApiService = ({
         );
 
         depotDonnees
-          .ajouteMesuresAHomologation(
+          .ajouteMesuresAuService(
             idService,
             idUtilisateur,
             generales,
