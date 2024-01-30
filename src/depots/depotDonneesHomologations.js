@@ -147,19 +147,18 @@ const creeDepot = (config = {}) => {
   const metsAJourDescriptionService = (serviceCible, informations) =>
     metsAJourProprieteService('descriptionService', serviceCible, informations);
 
-  const remplaceProprieteHomologation = (
+  const remplaceProprieteHomologation = async (
     nomPropriete,
     idHomologation,
     propriete
-  ) =>
-    p.lis.une(idHomologation).then((h) => {
-      const donneesAPersister = h.donneesAPersister().toutes();
-      const donneesPropriete = propriete.toJSON();
-      donneesAPersister[nomPropriete] = donneesPropriete;
+  ) => {
+    const h = await p.lis.une(idHomologation);
+    const donneesAPersister = h.donneesAPersister().toutes();
+    donneesAPersister[nomPropriete] = propriete.toJSON();
 
-      const { id, ...donnees } = donneesAPersister;
-      return p.sauvegarde(id, donnees);
-    });
+    const { id, ...donnees } = donneesAPersister;
+    await p.sauvegarde(id, donnees);
+  };
 
   const ajouteDossierCourantSiNecessaire = (idHomologation) =>
     p.lis.une(idHomologation).then((h) => {
