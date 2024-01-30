@@ -147,13 +147,13 @@ const creeDepot = (config = {}) => {
   const metsAJourDescriptionService = (serviceCible, informations) =>
     metsAJourProprieteService('descriptionService', serviceCible, informations);
 
-  const remplaceProprieteHomologation = async (
+  const remplaceProprieteService = async (
     nomPropriete,
-    idHomologation,
+    idService,
     propriete
   ) => {
-    const h = await p.lis.une(idHomologation);
-    const donneesAPersister = h.donneesAPersister().toutes();
+    const s = await p.lis.une(idService);
+    const donneesAPersister = s.donneesAPersister().toutes();
     donneesAPersister[nomPropriete] = propriete.toJSON();
 
     const { id, ...donnees } = donneesAPersister;
@@ -203,7 +203,7 @@ const creeDepot = (config = {}) => {
   };
 
   const remplaceMesuresSpecifiquesPourHomologation = (...params) =>
-    remplaceProprieteHomologation('mesuresSpecifiques', ...params);
+    remplaceProprieteService('mesuresSpecifiques', ...params);
 
   const ajouteRisqueGeneralAHomologation = (...params) =>
     ajouteAItemsDansHomologation('risquesGeneraux', ...params);
@@ -355,7 +355,7 @@ const creeDepot = (config = {}) => {
   };
 
   const remplaceRisquesSpecifiquesPourHomologation = (...params) =>
-    remplaceProprieteHomologation('risquesSpecifiques', ...params);
+    remplaceProprieteService('risquesSpecifiques', ...params);
 
   const supprimeHomologation = (idHomologation) =>
     adaptateurPersistance
