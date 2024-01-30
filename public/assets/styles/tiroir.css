@@ -251,7 +251,7 @@
   content: '';
   width: 2.8em;
   height: 2.8em;
-  background-image: url('/statique/assets/images/icone_document_csv.svg');
+  background-image: url('/statique/assets/images/icone_telechargement_csv.svg');
   background-repeat: no-repeat;
   background-size: contain;
 }
