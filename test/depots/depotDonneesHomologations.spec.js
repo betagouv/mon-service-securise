@@ -862,7 +862,7 @@ describe('Le dépôt de données des homologations', () => {
         .catch((e) => {
           expect(e).to.be.an(ErreurNomServiceDejaExistant);
           expect(e.message).to.equal(
-            'Le nom du service "Nom service" existe déjà pour une autre homologation'
+            'Le nom du service "Nom service" existe déjà pour un autre service'
           );
           done();
         })
@@ -890,9 +890,9 @@ describe('Le dépôt de données des homologations', () => {
       });
 
       depot
-        .homologationExiste('123', 'Un nom de service')
+        .serviceExiste('123', 'Un nom de service')
         .then((homologationExiste) => expect(homologationExiste).to.be(false))
-        .then(() => depot.homologationExiste('123', 'Un service existant'))
+        .then(() => depot.serviceExiste('123', 'Un service existant'))
         .then((homologationExiste) => expect(homologationExiste).to.be(true))
         .then(() => done())
         .catch(done);
@@ -918,7 +918,7 @@ describe('Le dépôt de données des homologations', () => {
       });
 
       depot
-        .homologationExiste('456', 'Un service existant')
+        .serviceExiste('456', 'Un service existant')
         .then((homologationExiste) => expect(homologationExiste).to.be(false))
         .then(() => done())
         .catch(done);
@@ -948,11 +948,9 @@ describe('Le dépôt de données des homologations', () => {
       });
 
       depot
-        .homologationExiste('123', 'Un service existant', '888')
+        .serviceExiste('123', 'Un service existant', '888')
         .then((homologationExiste) => expect(homologationExiste).to.be(false))
-        .then(() =>
-          depot.homologationExiste('123', 'Un service existant', '999')
-        )
+        .then(() => depot.serviceExiste('123', 'Un service existant', '999'))
         .then((homologationExiste) => expect(homologationExiste).to.be(true))
         .then(() => done())
         .catch(done);
