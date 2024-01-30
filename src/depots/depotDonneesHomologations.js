@@ -364,27 +364,28 @@ const creeDepot = (config = {}) => {
         )
       );
 
-  const trouveIndexDisponible = (idProprietaire, nomHomologationDupliquee) => {
+  const trouveIndexDisponible = async (idProprietaire, nomService) => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
-    const nomCompatibleRegExp = nomHomologationDupliquee.replace(
+    const nomCompatibleRegExp = nomService.replace(
       /[.*+?^${}()|[\]\\]/g,
       '\\$&'
     );
     const filtreNomDuplique = new RegExp(`^${nomCompatibleRegExp} (\\d+)$`);
 
-    const maxMatch = (maxCourant, nomService) => {
-      const index = parseInt(nomService.match(filtreNomDuplique)?.[1], 10);
+    const maxMatch = (maxCourant, nomCandidat) => {
+      const index = parseInt(nomCandidat.match(filtreNomDuplique)?.[1], 10);
       return index > maxCourant ? index : maxCourant;
     };
 
-    const indexMax = (hs) => {
-      const resultat = hs
-        .map((h) => h.nomService())
+    const indexMax = (services) => {
+      const resultat = services
+        .map((s) => s.nomService())
         .reduce(maxMatch, -Infinity);
       return Math.max(0, resultat) + 1;
     };
 
-    return p.lis.cellesDeUtilisateur(idProprietaire).then(indexMax);
+    const services = await p.lis.cellesDeUtilisateur(idProprietaire);
+    return indexMax(services);
   };
 
   const dupliqueService = async (idService, idProprietaire) => {
