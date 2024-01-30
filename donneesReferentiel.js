@@ -766,7 +766,7 @@ module.exports = {
       categorie: 'protection',
       indispensable: true,
       descriptionLongue:
-        '<p>Demander un nom et un prénom pour toute création de compte administrateur et utilisateur et informer chaque personne ne peut pas être partagé</p>' +
+        '<p>Demander un nom et un prénom pour toute création de compte administrateur et utilisateur et informer chaque personne que le compte ne peut pas être partagé</p>' +
         "<p>Cette mesure permet de réduire le risque de diffusion d'identifiants et de mots de passe à des personnes qui n'auraient pas le droit d'accéder au service ou à certaines de ses fonctions. <br>Cette mesure également à la bonne gestion des comptes d'accès au service.</p>",
       referentiel: 'ANSSI',
     },
