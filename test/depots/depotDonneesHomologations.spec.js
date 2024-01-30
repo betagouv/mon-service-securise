@@ -619,7 +619,7 @@ describe('Le dépôt de données des homologations', () => {
       risquesSpecifiques: [{ description: 'Un risque' }],
     });
     depot
-      .remplaceRisquesSpecifiquesPourHomologation('123', risque)
+      .remplaceRisquesSpecifiquesDuService('123', risque)
       .then(() => depot.homologation('123'))
       .then(({ risques: { risquesSpecifiques } }) => {
         expect(risquesSpecifiques.nombre()).to.equal(1);
@@ -650,7 +650,7 @@ describe('Le dépôt de données des homologations', () => {
       risquesSpecifiques: [{ description: 'Un nouveau risque' }],
     });
     depot
-      .remplaceRisquesSpecifiquesPourHomologation('123', risques)
+      .remplaceRisquesSpecifiquesDuService('123', risques)
       .then(() => depot.homologation('123'))
       .then(({ risques: { risquesSpecifiques } }) => {
         expect(risquesSpecifiques.nombre()).to.equal(1);

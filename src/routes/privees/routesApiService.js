@@ -283,7 +283,7 @@ const routesApiService = ({
               referentiel
             );
 
-            return depotDonnees.remplaceRisquesSpecifiquesPourHomologation(
+            return depotDonnees.remplaceRisquesSpecifiquesDuService(
               idService,
               listeRisquesSpecifiques
             );
