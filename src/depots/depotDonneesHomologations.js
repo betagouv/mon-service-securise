@@ -195,7 +195,7 @@ const creeDepot = (config = {}) => {
   const ajouteRisqueGeneralAService = (...params) =>
     ajouteAItemsDuService('risquesGeneraux', ...params);
 
-  const homologationExiste = (...params) =>
+  const serviceExiste = (...params) =>
     p.lis.celleAvecNomService(...params).then((h) => !!h);
 
   const valideDescriptionService = async (
@@ -211,15 +211,15 @@ const creeDepot = (config = {}) => {
       );
     }
 
-    const homologationExistante = await homologationExiste(
+    const serviceExistant = await serviceExiste(
       idUtilisateur,
       nomService,
       idHomologationMiseAJour
     );
 
-    if (homologationExistante)
+    if (serviceExistant)
       throw new ErreurNomServiceDejaExistant(
-        `Le nom du service "${nomService}" existe déjà pour une autre homologation`
+        `Le nom du service "${nomService}" existe déjà pour un autre service`
       );
   };
 
@@ -402,7 +402,7 @@ const creeDepot = (config = {}) => {
     dupliqueService,
     finaliseDossierCourant,
     homologation,
-    homologationExiste,
+    serviceExiste,
     homologations,
     enregistreDossier,
     nouveauService,
