@@ -951,7 +951,7 @@ module.exports = {
       description: 'Organiser un exercice de gestion de crise',
       categorie: 'resilience',
       descriptionLongue:
-        "<p>Organiser un exercice simulant une crise consécutive à un ou plusieurs incidents de sécurité aux conséquences particulièrement graves pour l'organisation..</p>" +
+        "<p>Organiser un exercice simulant une crise consécutive à un ou plusieurs incidents de sécurité aux conséquences particulièrement graves pour l'organisation.</p>" +
         "<p>Cette mesure permet d'entraîner les équipes, d'identifier freins à la gestion efficace d'une crise et de les corriger en vue de se préparer à la survenue d'une crise réelle.</p>",
       referentiel: 'ANSSI',
     },
