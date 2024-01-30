@@ -14,15 +14,13 @@ class BusEvenements {
   }
 
   async publie(evenement) {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const handler of this.handlers[evenement.constructor.name]) {
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        await handler(evenement);
-      } catch (e) {
+    // On fonctionne exprès en `fire & forget` pour les handlers.
+    // Dans un souci de performance : on ne veut pas attendre les exécutions.
+    this.handlers[evenement.constructor.name].forEach((handler) => {
+      handler(evenement).catch((e) => {
         this.adaptateurGestionErreur.logueErreur(e);
-      }
-    }
+      });
+    });
   }
 }
 
