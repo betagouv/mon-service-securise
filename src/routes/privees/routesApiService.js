@@ -228,10 +228,7 @@ const routesApiService = ({
       const rolesResponsabilites = new RolesResponsabilites(requete.body);
       const idService = requete.homologation.id;
       depotDonnees
-        .ajouteRolesResponsabilitesAHomologation(
-          idService,
-          rolesResponsabilites
-        )
+        .ajouteRolesResponsabilitesAService(idService, rolesResponsabilites)
         .then(() => reponse.send({ idService }));
     }
   );

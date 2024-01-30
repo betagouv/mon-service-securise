@@ -546,7 +546,7 @@ describe('Le dépôt de données des homologations', () => {
       autoriteHomologation: 'Jean Dupont',
     });
     depot
-      .ajouteRolesResponsabilitesAHomologation('123', roles)
+      .ajouteRolesResponsabilitesAService('123', roles)
       .then(() => depot.homologation('123'))
       .then(({ rolesResponsabilites }) => {
         expect(rolesResponsabilites.autoriteHomologation).to.equal(
