@@ -105,8 +105,8 @@ const creeDepot = (config = {}) => {
   const homologation = (idHomologation) => p.lis.une(idHomologation);
 
   const ajouteAItemsDuService = async (nomListeItems, idService, item) => {
-    const service = await p.lis.une(idService);
-    const donneesAPersister = service.donneesAPersister().toutes();
+    const s = await p.lis.une(idService);
+    const donneesAPersister = s.donneesAPersister().toutes();
     donneesAPersister[nomListeItems] ||= [];
 
     const donneesItem = item.toJSON();
