@@ -48,8 +48,10 @@ const main = async () => {
     const adaptateurPersistance = fabriqueAdaptateurPersistance(
       process.env.NODE_ENV
     );
-
-    const depotDonnees = DepotDonnees.creeDepot();
+    const busEvenements = new BusEvenements({
+      adaptateurGestionErreur: fabriqueAdaptateurGestionErreur(),
+    });
+    const depotDonnees = DepotDonnees.creeDepot({ busEvenements });
 
     /* eslint-disable no-console */
     const u = await adaptateurPersistance.utilisateurAvecEmail(
