@@ -269,8 +269,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si la validation des propriétés obligatoires échoue', (done) => {
-      testeur.depotDonnees().ajouteDescriptionService = () =>
-        Promise.reject(new ErreurNomServiceDejaExistant('oups'));
+      testeur.depotDonnees().ajouteDescriptionService = async () => {
+        throw new ErreurNomServiceDejaExistant('oups');
+      };
 
       testeur.verifieRequeteGenereErreurHTTP(
         422,
@@ -337,8 +338,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/:id/mesures', () => {
     beforeEach(() => {
-      testeur.depotDonnees().ajouteMesuresAHomologation = () =>
-        Promise.resolve();
+      testeur.depotDonnees().ajouteMesuresAHomologation = async () => {};
       testeur.referentiel().recharge({
         categoriesMesures: { uneCategorie: 'Une catégorie' },
         mesures: { identifiantMesure: {} },
@@ -378,10 +378,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("demande au dépôt d'associer les mesures au service", (done) => {
+    it("demande au dépôt d'associer les mesures au service", async () => {
       let mesuresAjoutees = false;
 
-      testeur.depotDonnees().ajouteMesuresAHomologation = (
+      testeur.depotDonnees().ajouteMesuresAHomologation = async (
         idService,
         idUtilisateur,
         [generale],
@@ -399,11 +399,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         );
 
         mesuresAjoutees = true;
-        return Promise.resolve();
       };
 
-      axios
-        .post('http://localhost:1234/api/service/456/mesures', {
+      const reponse = await axios.post(
+        'http://localhost:1234/api/service/456/mesures',
+        {
           mesuresGenerales: {
             identifiantMesure: {
               statut: 'fait',
@@ -417,19 +417,17 @@ describe('Le serveur MSS des routes /api/service/*', () => {
               statut: 'fait',
             },
           ],
-        })
-        .then((reponse) => {
-          expect(mesuresAjoutees).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idService: '456' });
-          done();
-        })
-        .catch(done);
+        }
+      );
+
+      expect(mesuresAjoutees).to.be(true);
+      expect(reponse.status).to.equal(200);
+      expect(reponse.data).to.eql({ idService: '456' });
     });
 
-    it('filtre les mesures spécifiques vides', (done) => {
+    it('filtre les mesures spécifiques vides', async () => {
       let mesuresRemplacees = false;
-      testeur.depotDonnees().ajouteMesuresAHomologation = (
+      testeur.depotDonnees().ajouteMesuresAHomologation = async (
         _id,
         _idUtilisateur,
         _generales,
@@ -437,7 +435,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       ) => {
         expect(specifiques.nombre()).to.equal(1);
         mesuresRemplacees = true;
-        return Promise.resolve();
       };
 
       const mesuresSpecifiques = [];
@@ -447,18 +444,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         statut: 'fait',
       };
 
-      axios
-        .post('http://localhost:1234/api/service/456/mesures', {
-          mesuresSpecifiques,
-        })
-        .then(() => expect(mesuresRemplacees).to.be(true))
-        .then(() => done())
-        .catch(done);
+      await axios.post('http://localhost:1234/api/service/456/mesures', {
+        mesuresSpecifiques,
+      });
+
+      expect(mesuresRemplacees).to.be(true);
     });
 
-    it("filtre les mesures spécifiques qui n'ont pas les propriétés requises", (done) => {
+    it("filtre les mesures spécifiques qui n'ont pas les propriétés requises", async () => {
       let mesuresRemplacees = false;
-      testeur.depotDonnees().ajouteMesuresAHomologation = (
+      testeur.depotDonnees().ajouteMesuresAHomologation = async (
         _id,
         _idUtilisateur,
         _generales,
@@ -466,7 +461,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       ) => {
         expect(specifiques.nombre()).to.equal(1);
         mesuresRemplacees = true;
-        return Promise.resolve();
       };
 
       const mesuresSpecifiques = [
@@ -481,13 +475,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         { modalites: 'Modalités' },
       ];
 
-      axios
-        .post('http://localhost:1234/api/service/456/mesures', {
-          mesuresSpecifiques,
-        })
-        .then(() => expect(mesuresRemplacees).to.be(true))
-        .then(() => done())
-        .catch(done);
+      await axios.post('http://localhost:1234/api/service/456/mesures', {
+        mesuresSpecifiques,
+      });
+
+      expect(mesuresRemplacees).to.be(true);
     });
 
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
@@ -527,69 +519,63 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("demande au dépôt d'associer les rôles et responsabilités au service", (done) => {
+    it("demande au dépôt d'associer les rôles et responsabilités au service", async () => {
       let rolesResponsabilitesAjoutees = false;
 
-      testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = (
+      testeur.depotDonnees().ajouteRolesResponsabilitesAHomologation = async (
         idService,
         role
       ) => {
         expect(idService).to.equal('456');
         expect(role.autoriteHomologation).to.equal('Jean Dupont');
         rolesResponsabilitesAjoutees = true;
-        return Promise.resolve();
       };
 
-      axios
-        .post('http://localhost:1234/api/service/456/rolesResponsabilites', {
-          autoriteHomologation: 'Jean Dupont',
-        })
-        .then((reponse) => {
-          expect(rolesResponsabilitesAjoutees).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idService: '456' });
-          done();
-        })
-        .catch(done);
+      const reponse = await axios.post(
+        'http://localhost:1234/api/service/456/rolesResponsabilites',
+        { autoriteHomologation: 'Jean Dupont' }
+      );
+
+      expect(rolesResponsabilitesAjoutees).to.be(true);
+      expect(reponse.status).to.equal(200);
+      expect(reponse.data).to.eql({ idService: '456' });
     });
 
-    it("aseptise la liste des acteurs de l'homologation ainsi que son contenu", (done) => {
-      axios
-        .post('http://localhost:1234/api/service/456/rolesResponsabilites', {})
-        .then(() => {
-          testeur
-            .middleware()
-            .verifieAseptisationListe('acteursHomologation', [
-              'role',
-              'nom',
-              'fonction',
-            ]);
-          done();
-        })
-        .catch(done);
+    it("aseptise la liste des acteurs de l'homologation ainsi que son contenu", async () => {
+      await axios.post(
+        'http://localhost:1234/api/service/456/rolesResponsabilites',
+        {}
+      );
+
+      testeur
+        .middleware()
+        .verifieAseptisationListe('acteursHomologation', [
+          'role',
+          'nom',
+          'fonction',
+        ]);
     });
 
-    it('aseptise la liste des parties prenantes ainsi que son contenu', (done) => {
-      axios
-        .post('http://localhost:1234/api/service/456/rolesResponsabilites', {})
-        .then(() => {
-          testeur
-            .middleware()
-            .verifieAseptisationListe('partiesPrenantes', [
-              'nom',
-              'natureAcces',
-              'pointContact',
-            ]);
-          done();
-        })
-        .catch(done);
+    it('aseptise la liste des parties prenantes ainsi que son contenu', async () => {
+      await axios.post(
+        'http://localhost:1234/api/service/456/rolesResponsabilites',
+        {}
+      );
+
+      testeur
+        .middleware()
+        .verifieAseptisationListe('partiesPrenantes', [
+          'nom',
+          'natureAcces',
+          'pointContact',
+        ]);
     });
   });
 
   describe('quand requête POST sur `/api/service/:id/risques`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = () =>
-        Promise.resolve();
+      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation =
+        async () => {};
     });
 
     it('recherche le service correspondant', (done) => {
@@ -619,95 +605,79 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("demande au dépôt d'associer les risques généraux au service", (done) => {
+    it("demande au dépôt d'associer les risques généraux au service", async () => {
       testeur.referentiel().recharge({
         risques: { unRisque: {} },
         niveauxGravite: { unNiveau: {} },
       });
       let risqueAjoute = false;
 
-      testeur.depotDonnees().ajouteRisqueGeneralAHomologation = (
+      testeur.depotDonnees().ajouteRisqueGeneralAHomologation = async (
         idService,
         risque
       ) => {
-        try {
-          expect(idService).to.equal('456');
-          expect(risque.id).to.equal('unRisque');
-          expect(risque.commentaire).to.equal('Un commentaire');
-          expect(risque.niveauGravite).to.equal('unNiveau');
-          risqueAjoute = true;
-          return Promise.resolve();
-        } catch (e) {
-          return done(e);
-        }
+        expect(idService).to.equal('456');
+        expect(risque.id).to.equal('unRisque');
+        expect(risque.commentaire).to.equal('Un commentaire');
+        expect(risque.niveauGravite).to.equal('unNiveau');
+        risqueAjoute = true;
       };
 
-      axios
-        .post('http://localhost:1234/api/service/456/risques', {
+      const reponse = await axios.post(
+        'http://localhost:1234/api/service/456/risques',
+        {
           'commentaire-unRisque': 'Un commentaire',
           'niveauGravite-unRisque': 'unNiveau',
-        })
-        .then((reponse) => {
-          expect(risqueAjoute).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idService: '456' });
-          done();
-        })
-        .catch(done);
+        }
+      );
+
+      expect(risqueAjoute).to.be(true);
+      expect(reponse.status).to.equal(200);
+      expect(reponse.data).to.eql({ idService: '456' });
     });
 
-    it("demande au dépôt d'associer les risques spécifiques au service", (done) => {
+    it("demande au dépôt d'associer les risques spécifiques au service", async () => {
       let risquesRemplaces = false;
-      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = (
-        idService,
-        risques
-      ) => {
-        expect(idService).to.equal('456');
-        expect(risques.nombre()).to.equal(1);
-        expect(risques.item(0).description).to.equal('Un risque spécifique');
-        expect(risques.item(0).commentaire).to.equal('Un commentaire');
-        risquesRemplaces = true;
-        return Promise.resolve();
-      };
+      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation =
+        async (idService, risques) => {
+          expect(idService).to.equal('456');
+          expect(risques.nombre()).to.equal(1);
+          expect(risques.item(0).description).to.equal('Un risque spécifique');
+          expect(risques.item(0).commentaire).to.equal('Un commentaire');
+          risquesRemplaces = true;
+        };
 
-      axios
-        .post('http://localhost:1234/api/service/456/risques', {
-          risquesSpecifiques: [
-            {
-              description: 'Un risque spécifique',
-              commentaire: 'Un commentaire',
-            },
-          ],
-        })
-        .then(() => expect(risquesRemplaces).to.be(true))
-        .then(() => done())
-        .catch(done);
+      await axios.post('http://localhost:1234/api/service/456/risques', {
+        risquesSpecifiques: [
+          {
+            description: 'Un risque spécifique',
+            commentaire: 'Un commentaire',
+          },
+        ],
+      });
+
+      expect(risquesRemplaces).to.be(true);
     });
 
-    it('filtre les risques spécifiques vides', (done) => {
+    it('filtre les risques spécifiques vides', async () => {
       testeur.referentiel().recharge({ niveauxGravite: { unNiveau: {} } });
 
       let risquesRemplaces = false;
-      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation = (
-        _,
-        risques
-      ) => {
-        expect(risques.nombre()).to.equal(2);
-        risquesRemplaces = true;
-        return Promise.resolve();
-      };
+      testeur.depotDonnees().remplaceRisquesSpecifiquesPourHomologation =
+        async (_, risques) => {
+          expect(risques.nombre()).to.equal(2);
+          risquesRemplaces = true;
+        };
 
       const risquesSpecifiques = [];
       risquesSpecifiques[2] = { description: 'Un risque spécifique' };
       risquesSpecifiques[5] = { niveauGravite: 'unNiveau' };
 
-      axios
-        .post('http://localhost:1234/api/service/456/risques', {
-          risquesSpecifiques,
-        })
-        .then(() => expect(risquesRemplaces).to.be(true))
-        .then(() => done())
-        .catch(done);
+      await axios.post('http://localhost:1234/api/service/456/risques', {
+        risquesSpecifiques,
+      });
+
+      expect(risquesRemplaces).to.be(true);
     });
 
     it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
@@ -734,7 +704,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur
         .middleware()
         .reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
+      testeur.depotDonnees().enregistreDossier = async () => {};
     });
 
     it("recherche l'homologation correspondante", (done) => {
@@ -769,25 +739,25 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("utilise le dépôt pour enregistrer l'autorité d'homologation", (done) => {
+    it("utilise le dépôt pour enregistrer l'autorité d'homologation", async () => {
       let depotAppele = false;
 
-      testeur.depotDonnees().enregistreDossier = (idHomologation, dossier) => {
+      testeur.depotDonnees().enregistreDossier = async (
+        idHomologation,
+        dossier
+      ) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.autorite.nom).to.equal('Jean Dupond');
         expect(dossier.autorite.fonction).to.equal('RSSI');
-        return Promise.resolve();
       };
 
-      axios
-        .put('http://localhost:1234/api/service/456/homologation/autorite', {
-          nom: 'Jean Dupond',
-          fonction: 'RSSI',
-        })
-        .then(() => expect(depotAppele).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      await axios.put(
+        'http://localhost:1234/api/service/456/homologation/autorite',
+        { nom: 'Jean Dupond', fonction: 'RSSI' }
+      );
+
+      expect(depotAppele).to.be(true);
     });
   });
 
@@ -801,7 +771,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur
         .middleware()
         .reinitialise({ homologationARenvoyer: homologationAvecDossier });
-      testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
+      testeur.depotDonnees().enregistreDossier = async () => {};
       testeur.referentiel().recharge({ echeancesRenouvellement: { unAn: {} } });
     });
 
