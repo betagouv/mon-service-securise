@@ -2,6 +2,10 @@ const fabriqueAdaptateurPersistance = require('./src/adaptateurs/fabriqueAdaptat
 const DepotDonnees = require('./src/depotDonnees');
 const DescriptionService = require('./src/modeles/descriptionService');
 const Referentiel = require('./src/referentiel');
+const BusEvenements = require('./src/bus/busEvenements');
+const {
+  fabriqueAdaptateurGestionErreur,
+} = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
 
 const referentiel = Referentiel.creeReferentiel();
 const descriptionService = new DescriptionService(
@@ -39,25 +43,29 @@ const creeDonnees = async (depotDonnees) => {
   });
 };
 
-if (process.env.CREATION_UTILISATEUR_DEMO) {
-  const adaptateurPersistance = fabriqueAdaptateurPersistance(
-    process.env.NODE_ENV
-  );
-  const depotDonnees = DepotDonnees.creeDepot();
+const main = async () => {
+  if (process.env.CREATION_UTILISATEUR_DEMO) {
+    const adaptateurPersistance = fabriqueAdaptateurPersistance(
+      process.env.NODE_ENV
+    );
 
-  /* eslint-disable no-console */
-  adaptateurPersistance
-    .utilisateurAvecEmail(process.env.EMAIL_UTILISATEUR_DEMO)
-    .then((u) => {
-      if (u) {
-        console.log('Utilisateur déjà existant !…');
-        process.exit(0);
-      }
+    const depotDonnees = DepotDonnees.creeDepot();
 
-      creeDonnees(depotDonnees).then(() => {
-        console.log('Utilisateur de démonstration créé !');
-        process.exit(0);
-      });
-    });
-  /* eslint-enable no-console */
-}
+    /* eslint-disable no-console */
+    const u = await adaptateurPersistance.utilisateurAvecEmail(
+      process.env.EMAIL_UTILISATEUR_DEMO
+    );
+
+    if (u) {
+      console.log('Utilisateur déjà existant !…');
+      process.exit(0);
+    }
+
+    await creeDonnees(depotDonnees);
+    console.log('Utilisateur de démonstration créé !');
+    process.exit(0);
+    /* eslint-enable no-console */
+  }
+};
+
+main().then(() => {});
