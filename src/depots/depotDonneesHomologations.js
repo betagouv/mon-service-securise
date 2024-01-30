@@ -281,7 +281,7 @@ const creeDepot = (config = {}) => {
     await envoieTrackingCompletude();
   };
 
-  const ajouteMesuresAHomologation = async (
+  const ajouteMesuresAuService = async (
     idService,
     idUtilisateur,
     generales,
@@ -415,7 +415,7 @@ const creeDepot = (config = {}) => {
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
-    ajouteMesuresAHomologation,
+    ajouteMesuresAuService,
     ajouteRisqueGeneralAService,
     ajouteRolesResponsabilitesAService,
     dupliqueHomologation,

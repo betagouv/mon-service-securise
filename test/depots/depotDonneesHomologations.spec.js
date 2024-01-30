@@ -234,12 +234,7 @@ describe('Le dépôt de données des homologations', () => {
       );
 
       const specifiques = new MesuresSpecifiques();
-      await depot.ajouteMesuresAHomologation(
-        '123',
-        '789',
-        [generale],
-        specifiques
-      );
+      await depot.ajouteMesuresAuService('123', '789', [generale], specifiques);
 
       const {
         mesures: { mesuresGenerales },
@@ -259,12 +254,7 @@ describe('Le dépôt de données des homologations', () => {
       );
 
       const specifiques = new MesuresSpecifiques();
-      await depot.ajouteMesuresAHomologation(
-        '123',
-        '789',
-        [generale],
-        specifiques
-      );
+      await depot.ajouteMesuresAuService('123', '789', [generale], specifiques);
 
       const {
         mesures: { mesuresGenerales },
@@ -281,12 +271,7 @@ describe('Le dépôt de données des homologations', () => {
       );
 
       const specifiques = new MesuresSpecifiques();
-      await depot.ajouteMesuresAHomologation(
-        '123',
-        '789',
-        [generale],
-        specifiques
-      );
+      await depot.ajouteMesuresAuService('123', '789', [generale], specifiques);
 
       const {
         mesures: { mesuresGenerales },
@@ -303,12 +288,7 @@ describe('Le dépôt de données des homologations', () => {
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
       });
 
-      await depot.ajouteMesuresAHomologation(
-        '123',
-        '789',
-        generales,
-        specifiques
-      );
+      await depot.ajouteMesuresAuService('123', '789', generales, specifiques);
 
       const {
         mesures: { mesuresSpecifiques },
@@ -330,7 +310,7 @@ describe('Le dépôt de données des homologations', () => {
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
       });
 
-      await depot.ajouteMesuresAHomologation('123', '789', generales, mesures);
+      await depot.ajouteMesuresAuService('123', '789', generales, mesures);
 
       const {
         mesures: { mesuresSpecifiques },
@@ -343,7 +323,7 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("publie un événement de 'Mesures service modifiées'", async () => {
-      await depot.ajouteMesuresAHomologation(
+      await depot.ajouteMesuresAuService(
         '123',
         '789',
         [
