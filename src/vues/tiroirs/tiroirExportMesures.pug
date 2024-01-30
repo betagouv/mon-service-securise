@@ -1,0 +1,6 @@
+include ./documentTelechargeable
+
+.bloc-contenu#contenu-export-mesures
+  form.conteneur-formulaire
+    +documentTelechargeable('Liste sans données additionnelles renseignées', "Cette liste ne contient ni statut ni commentaire ajoutés aux mesures.", 'CSV', 'lien-sans-donnees-additionnelles')
+    +documentTelechargeable('Liste avec données additionnelles renseignées', "Cette liste contient les statuts et les commentaires ajoutés aux mesures.", 'CSV', 'lien-avec-donnees-additionnelles')
