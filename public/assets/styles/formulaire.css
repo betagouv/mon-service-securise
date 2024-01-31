@@ -399,3 +399,7 @@ button.bouton.en-cours-chargement::before {
   top: calc(50% - 10px);
   left: calc(50% - 10px);
 }
+
+#ajout-element-point-acces {
+  margin-top: 24px;
+}
