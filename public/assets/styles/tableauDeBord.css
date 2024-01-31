@@ -164,15 +164,19 @@ label[for='recherche-service'] {
 }
 
 .tableau-services colgroup .nom-service {
-  width: 40%;
+  width: 45%;
 }
 
 .tableau-services colgroup .nombre-contributeurs {
   width: 20%;
 }
 
-.tableau-services colgroup :is(.indice-cyber, .statut-homologation) {
+.tableau-services colgroup .indice-cyber {
   width: 15%;
+}
+
+.tableau-services colgroup .statut-homologation {
+  width: 20%;
 }
 
 .tableau-services thead th {
@@ -243,7 +247,7 @@ label[for='recherche-service'] {
   background: none;
 }
 
-.tableau-services thead tr:not(:last-of-type) td:last-of-type {
+.tableau-services thead tr:not(:last-of-type) th:last-of-type {
   background: #dbecf1;
   border-top-right-radius: 8px;
 }
