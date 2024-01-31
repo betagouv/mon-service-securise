@@ -466,6 +466,7 @@ label[for='recherche-service'] {
   width: fit-content;
   padding: 0.2em 0.5em;
   cursor: pointer;
+  border: none;
 }
 
 .tableau-services td .contributeurs::before {
