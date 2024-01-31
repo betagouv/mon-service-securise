@@ -4,6 +4,7 @@ block page
   block scripts
     script(src='/statique/bibliotheques/axios-1.0.0.min.js')
     script(src='/statique/bibliotheques/jquery-3.6.0.min.js')
+    script(type = 'module', src = '/statique/composants-svelte/decouverteFonctionnalite.js')
 
   block styles
     link(href='/statique/assets/styles/palette.css', rel='stylesheet')
@@ -14,6 +15,7 @@ block page
     link(href='/statique/assets/styles/entete.css', rel='stylesheet')
     link(href='/statique/assets/styles/piedPage.css', rel='stylesheet')
     link(href='/statique/assets/styles/bom.css', rel='stylesheet')
+    link(href = '/statique/composants-svelte/style.css', rel = 'stylesheet')
 
   title MonServiceSécurisé
 
@@ -38,6 +40,7 @@ block page
   block session
     include csrf.pug
 
+  #conteneur-decouverte-fonctionnalite
   main
     block main
     .bom

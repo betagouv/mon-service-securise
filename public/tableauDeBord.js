@@ -21,4 +21,38 @@ $(() => {
   gestionnaireEvenements.brancheComportement();
 
   brancheChampsMotDePasse($('.conteneur-formulaire'));
+
+  // document.body.dispatchEvent(
+  //   new CustomEvent('svelte-recharge-decouverte-fonctionnalite', {
+  //     detail: {
+  //       cible: $('.bom')[0],
+  //       etapes: [
+  //         { texte: "C'est par ici pour découvrir notre petit robot" },
+  //         {
+  //           texte:
+  //             'Vous pouvez cliquer dessus pour faire apparaître des choses',
+  //           action: 'click',
+  //           cibleAction: $('.bom-vignette')[0],
+  //         },
+  //       ],
+  //     },
+  //   })
+  // );
+
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-decouverte-fonctionnalite', {
+      detail: {
+        cible: $('label[for="recherche-service"]')[0],
+        etapes: [
+          { texte: 'On peut aussi montrer un autre élément de MSS' },
+          {
+            texte: 'Et intéragir avec',
+            action: 'input',
+            cibleAction: $('#recherche-service')[0],
+            donneesAction: ['M', 'o', 'n'],
+          },
+        ],
+      },
+    })
+  );
 });
