@@ -746,3 +746,11 @@ label[for='recherche-service'] {
 .tableau-services .conteneur-barre-outils hr.action {
   padding: 0;
 }
+
+.tableau-services .conteneur-indice-cyber {
+  padding: 0 6px 2px 6px;
+  border-radius: 4px;
+  background: #dbeeff;
+  color: #2f3a43;
+  font-weight: 500;
+}
