@@ -783,3 +783,21 @@ label[for='recherche-service'] {
 .tableau-services .conteneur-noms:hover:after {
   filter: none;
 }
+
+.tableau-services td :is(.contributeurs, .conteneur-indice-cyber):hover {
+  background: #0c5c98;
+  color: white;
+}
+
+.tableau-services td .contributeurs:hover::before {
+  filter: brightness(0) invert(100%);
+}
+
+.tableau-services td :is(.contributeurs, .conteneur-indice-cyber):active {
+  background: #08416a;
+  color: white;
+}
+
+.tableau-services td .contributeurs:active::before {
+  filter: brightness(0) invert(100%);
+}
