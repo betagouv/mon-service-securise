@@ -229,7 +229,7 @@ const tableauDesServices = {
       $celluleCollaborateur.append($conteneurCollaborateur);
       $ligne.append($celluleCollaborateur);
 
-      let contenuIndiceCyber = `${service.indiceCyber}<span class='note-totale'>/5</span>`;
+      let contenuIndiceCyber = `<a href='/service/${service.id}/indiceCyber' title='Accéder à la page Indice Cyber' class='conteneur-indice-cyber'><span class='note'>${service.indiceCyber}</span><span class='note-totale'>/5</span></a>`;
       if (tableauDesServices.estEnChargement) {
         contenuIndiceCyber = '<div class="icone-chargement"></div>';
       } else if (
