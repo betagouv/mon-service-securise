@@ -407,3 +407,7 @@ button.bouton.en-cours-chargement::before {
 #ajout-element-point-acces {
   margin-top: 24px;
 }
+
+.nouvel-item {
+  font-weight: bold;
+}
