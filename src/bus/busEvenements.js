@@ -16,7 +16,7 @@ class BusEvenements {
   async publie(evenement) {
     // On fonctionne exprès en `fire & forget` pour les handlers.
     // Dans un souci de performance : on ne veut pas attendre les exécutions.
-    this.handlers[evenement.constructor.name].forEach((handler) => {
+    this.handlers[evenement.constructor.name]?.forEach((handler) => {
       handler(evenement).catch((e) => {
         this.adaptateurGestionErreur.logueErreur(e);
       });
