@@ -442,6 +442,13 @@ label[for='recherche-service'] {
   max-width: 100%;
 }
 
+.tableau-services td .conteneur-noms::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
 .tableau-services td .nom-service {
   color: #2f3a43;
   font-weight: 500;
@@ -800,4 +807,11 @@ label[for='recherche-service'] {
 
 .tableau-services td .contributeurs:active::before {
   filter: brightness(0) invert(100%);
+}
+
+.tableau-services
+  td
+  :is(.contributeurs, .conteneur-indice-cyber, .selection-service) {
+  position: relative;
+  z-index: 2;
 }
