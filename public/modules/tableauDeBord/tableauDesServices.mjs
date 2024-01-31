@@ -221,9 +221,9 @@ const tableauDesServices = {
         }'></div>`
       );
       const $nombreContributeurs = $(
-        `<div class='contributeurs ouvre-tiroir' title='${metEnFormeContributeurs(
+        `<button class='contributeurs ouvre-tiroir' title='${metEnFormeContributeurs(
           service
-        )}' data-action='contributeurs'>${service.nombreContributeurs}</div>`
+        )}' data-action='contributeurs'>${service.nombreContributeurs}</button>`
       );
       $conteneurCollaborateur.append($nombreContributeurs);
       $celluleCollaborateur.append($conteneurCollaborateur);
