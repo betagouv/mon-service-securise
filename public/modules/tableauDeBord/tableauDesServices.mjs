@@ -250,7 +250,6 @@ const tableauDesServices = {
           }'>${service.statutHomologation?.libelle ?? '-'}</div></td>`
         )
       );
-
       tableauDesServices.$tableau.append($ligne);
     });
   },

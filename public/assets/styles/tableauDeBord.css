@@ -758,3 +758,27 @@ label[for='recherche-service'] {
   color: #2f3a43;
   font-weight: 500;
 }
+
+.tableau-services .ligne-service {
+  position: relative;
+}
+
+.tableau-services .ligne-service:after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  display: flex;
+  background: url('/statique/assets/images/forme_chevron_bleu.svg') no-repeat;
+  background-size: contain;
+  position: absolute;
+  right: 16px;
+  top: calc(50% - 12px);
+}
+
+.tableau-services .conteneur-noms:hover .nom-service {
+  color: #0079d0;
+}
+
+.tableau-services .conteneur-noms:hover:after {
+  filter: none;
+}
