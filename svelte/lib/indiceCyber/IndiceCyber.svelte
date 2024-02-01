@@ -18,7 +18,7 @@
     { min: 1, max: 2, gradientDebut: '#513AC8', gradientFin: '#8C26C7' },
     { min: 2, max: 3, gradientDebut: '#326FC0', gradientFin: '#4D3DC5' },
     { min: 3, max: 4, gradientDebut: '#54B8F6', gradientFin: '#3479C9' },
-    { min: 4, max: 5, gradientDebut: '#D2DFE6', gradientFin: '#9CACB5' },
+    { min: 4, max: 5, gradientDebut: '#18EAC4', gradientFin: '#445CDE' },
     { min: 5, max: 6, gradientDebut: '#F2CA5A', gradientFin: '#DBAF2C' },
   ];
   $: idxInterval = tranchesIndiceCyber.findIndex(
