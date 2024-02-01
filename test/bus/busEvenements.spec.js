@@ -119,4 +119,11 @@ describe("Le bus d'événements", () => {
 
     expect(erreurEnregistree).to.eql(new Error('BOUM'));
   });
+
+  it("reste robuste si aucun handler n'existe pour l'événement", async () => {
+    const bus = creeBusEvenements();
+
+    // On veut juste vérifier que cette ligne ne jette aucune exception
+    await bus.publie(new EvenementTestA());
+  });
 });
