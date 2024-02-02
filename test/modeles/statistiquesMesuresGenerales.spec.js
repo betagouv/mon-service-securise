@@ -1,11 +1,10 @@
 const expect = require('expect.js');
 
-const MesuresGenerales = require('../../src/modeles/mesuresGenerales');
 const Referentiel = require('../../src/referentiel');
 const { ErreurCategorieInconnue } = require('../../src/erreurs');
 const {
-  StatistiquesMesuresGenerales,
-} = require('../../src/modeles/statistiquesMesuresGenerales');
+  desStatistiques,
+} = require('../constructeurs/constructeurStatistiquesMesuresGenerales');
 
 describe('Les statistiques des mesures générales', () => {
   it('vérifient que les catégories sont présentes dans le référentiel', () => {
@@ -14,19 +13,15 @@ describe('Les statistiques des mesures générales', () => {
     });
 
     expect(() => {
-      const mesureResilience = { categorie: 'resilience' };
+      const mesureProtection = { categorie: 'protection' };
 
-      new StatistiquesMesuresGenerales(
-        {
-          mesuresGenerales: new MesuresGenerales({ mesuresGenerales: [] }),
-          mesuresPersonnalisees: { mesureA: mesureResilience },
-        },
-        seulementGouvernance
-      );
+      desStatistiques(seulementGouvernance)
+        .avecMesuresPersonnalisees({ P1: mesureProtection })
+        .construis();
     }).to.throwException((e) => {
       expect(e).to.be.a(ErreurCategorieInconnue);
       expect(e.message).to.equal(
-        'La catégorie "resilience" n\'est pas répertoriée'
+        'La catégorie "protection" n\'est pas répertoriée'
       );
     });
   });
@@ -42,26 +37,18 @@ describe('Les statistiques des mesures générales', () => {
       statutsMesures: { fait: '' },
     });
 
-    const stats = new StatistiquesMesuresGenerales(
-      {
-        mesuresGenerales: new MesuresGenerales(
-          {
-            mesuresGenerales: [
-              { id: 'G1', statut: 'fait' },
-              { id: 'G2', statut: 'fait' },
-              { id: 'R1', statut: 'fait' },
-            ],
-          },
-          referentiel
-        ),
-        mesuresPersonnalisees: {
-          G1: { categorie: 'gouvernance' },
-          G2: { categorie: 'gouvernance' },
-          R1: { categorie: 'resilience' },
-        },
-      },
-      referentiel
-    );
+    const stats = desStatistiques(referentiel)
+      .surLesMesuresGenerales([
+        { id: 'G1', statut: 'fait' },
+        { id: 'G2', statut: 'fait' },
+        { id: 'R1', statut: 'fait' },
+      ])
+      .avecMesuresPersonnalisees({
+        G1: { categorie: 'gouvernance' },
+        G2: { categorie: 'gouvernance' },
+        R1: { categorie: 'resilience' },
+      })
+      .construis();
 
     expect(stats.faites('gouvernance')).to.eql(2);
     expect(stats.faites('resilience')).to.eql(1);
@@ -79,26 +66,18 @@ describe('Les statistiques des mesures générales', () => {
       statutsMesures: { enCours: '' },
     });
 
-    const stats = new StatistiquesMesuresGenerales(
-      {
-        mesuresGenerales: new MesuresGenerales(
-          {
-            mesuresGenerales: [
-              { id: 'G1', statut: 'enCours' },
-              { id: 'G2', statut: 'enCours' },
-              { id: 'R1', statut: 'enCours' },
-            ],
-          },
-          referentiel
-        ),
-        mesuresPersonnalisees: {
-          G1: { categorie: 'gouvernance' },
-          G2: { categorie: 'gouvernance' },
-          R1: { categorie: 'resilience' },
-        },
-      },
-      referentiel
-    );
+    const stats = desStatistiques(referentiel)
+      .surLesMesuresGenerales([
+        { id: 'G1', statut: 'enCours' },
+        { id: 'G2', statut: 'enCours' },
+        { id: 'R1', statut: 'enCours' },
+      ])
+      .avecMesuresPersonnalisees({
+        G1: { categorie: 'gouvernance' },
+        G2: { categorie: 'gouvernance' },
+        R1: { categorie: 'resilience' },
+      })
+      .construis();
 
     expect(stats.enCours('gouvernance')).to.eql(2);
     expect(stats.enCours('resilience')).to.eql(1);
