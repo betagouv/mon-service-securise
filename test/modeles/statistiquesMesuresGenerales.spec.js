@@ -67,4 +67,41 @@ describe('Les statistiques des mesures générales', () => {
     expect(stats.faites('resilience')).to.eql(1);
     expect(stats.faites('protection')).to.eql(0);
   });
+
+  it('calcule le nombre de mesures "En cours" par catégorie', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        resilience: 'Résilience',
+        protection: 'Protection',
+      },
+      mesures: { G1: {}, G2: {}, R1: {} },
+      statutsMesures: { enCours: '' },
+    });
+
+    const stats = new StatistiquesMesuresGenerales(
+      {
+        mesuresGenerales: new MesuresGenerales(
+          {
+            mesuresGenerales: [
+              { id: 'G1', statut: 'enCours' },
+              { id: 'G2', statut: 'enCours' },
+              { id: 'R1', statut: 'enCours' },
+            ],
+          },
+          referentiel
+        ),
+        mesuresPersonnalisees: {
+          G1: { categorie: 'gouvernance' },
+          G2: { categorie: 'gouvernance' },
+          R1: { categorie: 'resilience' },
+        },
+      },
+      referentiel
+    );
+
+    expect(stats.enCours('gouvernance')).to.eql(2);
+    expect(stats.enCours('resilience')).to.eql(1);
+    expect(stats.enCours('protection')).to.eql(0);
+  });
 });

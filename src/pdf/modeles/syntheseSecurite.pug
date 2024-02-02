@@ -114,7 +114,7 @@ block page
             .mesures-par-categorie
               .graphiques.conteneur
                 - const faites = (idCategorie) => service.statistiquesMesuresGenerales().faites(idCategorie)
-                - const enCours = (idCategorie) => service.statistiquesMesures().enCours(idCategorie)
+                - const enCours = (idCategorie) => service.statistiquesMesuresGenerales().enCours(idCategorie)
                 - const nonFaites = (idCategorie) => service.statistiquesMesures().nonFaites(idCategorie)
                 - const aRemplir = (idCategorie) => service.statistiquesMesures().aRemplir(idCategorie)
 
