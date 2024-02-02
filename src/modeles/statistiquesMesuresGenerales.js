@@ -36,6 +36,10 @@ class StatistiquesMesuresGenerales {
   enCours(idCategorie) {
     return this.parCategorie[idCategorie].enCours;
   }
+
+  nonFaites(idCategorie) {
+    return this.parCategorie[idCategorie].nonFait;
+  }
 }
 
 module.exports = { StatistiquesMesuresGenerales };
