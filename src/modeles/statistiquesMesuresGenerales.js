@@ -29,7 +29,7 @@ class StatistiquesMesuresGenerales {
     });
   }
 
-  misesEnOeuvre(idCategorie) {
+  faites(idCategorie) {
     return this.parCategorie[idCategorie].fait;
   }
 }

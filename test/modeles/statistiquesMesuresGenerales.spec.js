@@ -31,7 +31,7 @@ describe('Les statistiques des mesures générales', () => {
     });
   });
 
-  it('calcule le nombre de mesures mises en œuvre (Faites) par catégorie', () => {
+  it('calcule le nombre de mesures "Faites" par catégorie', () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: {
         gouvernance: 'Gouvernance',
@@ -63,8 +63,8 @@ describe('Les statistiques des mesures générales', () => {
       referentiel
     );
 
-    expect(stats.misesEnOeuvre('gouvernance')).to.eql(2);
-    expect(stats.misesEnOeuvre('resilience')).to.eql(1);
-    expect(stats.misesEnOeuvre('protection')).to.eql(0);
+    expect(stats.faites('gouvernance')).to.eql(2);
+    expect(stats.faites('resilience')).to.eql(1);
+    expect(stats.faites('protection')).to.eql(0);
   });
 });
