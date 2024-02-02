@@ -2,6 +2,9 @@ const InformationsHomologation = require('./informationsHomologation');
 const MesuresGenerales = require('./mesuresGenerales');
 const MesuresSpecifiques = require('./mesuresSpecifiques');
 const Referentiel = require('../referentiel');
+const {
+  StatistiquesMesuresGenerales,
+} = require('./statistiquesMesuresGenerales');
 
 class Mesures extends InformationsHomologation {
   constructor(
@@ -96,6 +99,16 @@ class Mesures extends InformationsHomologation {
       mesuresGenerales: mesuresEnrichies,
       mesuresSpecifiques: this.mesuresSpecifiques.toJSON(),
     };
+  }
+
+  statistiquesMesuresGenerales() {
+    return new StatistiquesMesuresGenerales(
+      {
+        mesuresGenerales: this.mesuresGenerales,
+        mesuresPersonnalisees: this.mesuresPersonnalisees,
+      },
+      this.referentiel
+    );
   }
 }
 
