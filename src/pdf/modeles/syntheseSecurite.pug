@@ -116,7 +116,7 @@ block page
                 - const faites = (idCategorie) => service.statistiquesMesuresGenerales().faites(idCategorie)
                 - const enCours = (idCategorie) => service.statistiquesMesuresGenerales().enCours(idCategorie)
                 - const nonFaites = (idCategorie) => service.statistiquesMesuresGenerales().nonFaites(idCategorie)
-                - const aRemplir = (idCategorie) => service.statistiquesMesures().aRemplir(idCategorie)
+                - const aRemplir = (idCategorie) => service.statistiquesMesuresGenerales().sansStatut(idCategorie)
 
                 each idCategorie in service.statistiquesMesures().categories()
                   .categorie

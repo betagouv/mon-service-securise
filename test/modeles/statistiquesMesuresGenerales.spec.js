@@ -112,4 +112,29 @@ describe('Les statistiques des mesures générales', () => {
     expect(stats.nonFaites('resilience')).to.eql(1);
     expect(stats.nonFaites('protection')).to.eql(0);
   });
+
+  it("calcule le nombre de mesures sans statut par catégorie : les mesures personnalisées qui sont absentes des mesures générales ou les générales sans statut (même si ce n'est pas censé arriver)", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        resilience: 'Résilience',
+        protection: 'Protection',
+      },
+      mesures: { G1: {}, G2: {}, R1: {} },
+      statutsMesures: { fait: '' },
+    });
+
+    const g2SansStatut = { id: 'G2' };
+    const stats = desStatistiques(referentiel)
+      .surLesMesuresGenerales([g2SansStatut])
+      .avecMesuresPersonnalisees({
+        G1: { categorie: 'gouvernance' },
+        G2: { categorie: 'gouvernance' },
+        R1: { categorie: 'resilience' },
+      })
+      .construis();
+
+    expect(stats.sansStatut('gouvernance')).to.be(2); // G2 sans statut, et G1 absente des générales
+    expect(stats.sansStatut('resilience')).to.be(1); // R1 absente des générales
+  });
 });
