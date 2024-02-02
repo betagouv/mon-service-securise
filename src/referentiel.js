@@ -1,4 +1,7 @@
-const { ErreurDonneesReferentielIncorrectes } = require('./erreurs');
+const {
+  ErreurDonneesReferentielIncorrectes,
+  ErreurCategorieInconnue,
+} = require('./erreurs');
 const donneesParDefaut = require('../donneesReferentiel');
 
 const donneesReferentielVide = {
@@ -249,6 +252,17 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const retourUtilisateurMesureAvecId = (idRetour) =>
     retoursUtilisateurMesure()[idRetour] ?? null;
 
+  const verifieCategoriesMesuresSontRepertoriees = (categories) => {
+    const distinctes = [...new Set(categories)];
+    const repertoriees = identifiantsCategoriesMesures();
+    const categorieInconnue = distinctes.find((c) => !repertoriees.includes(c));
+
+    if (categorieInconnue)
+      throw new ErreurCategorieInconnue(
+        `La catégorie "${categorieInconnue}" n'est pas répertoriée`
+      );
+  };
+
   const recharge = (nouvellesDonnees) => {
     donnees = { ...donneesReferentielVide, ...nouvellesDonnees };
     valideDonnees();
@@ -334,6 +348,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     trancheIndiceCyber,
     typeService,
     typesService,
+    verifieCategoriesMesuresSontRepertoriees,
   };
 };
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);

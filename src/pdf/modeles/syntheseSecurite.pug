@@ -113,7 +113,7 @@ block page
           p.type Par catégorie
             .mesures-par-categorie
               .graphiques.conteneur
-                - const faites = (idCategorie) => service.statistiquesMesures().misesEnOeuvre(idCategorie)
+                - const faites = (idCategorie) => service.statistiquesMesuresGenerales().misesEnOeuvre(idCategorie)
                 - const enCours = (idCategorie) => service.statistiquesMesures().enCours(idCategorie)
                 - const nonFaites = (idCategorie) => service.statistiquesMesures().nonFaites(idCategorie)
                 - const aRemplir = (idCategorie) => service.statistiquesMesures().aRemplir(idCategorie)

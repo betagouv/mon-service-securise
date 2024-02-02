@@ -227,6 +227,10 @@ class Homologation {
     return this.mesures.statistiques();
   }
 
+  statistiquesMesuresGenerales() {
+    return this.mesures.statistiquesMesuresGenerales();
+  }
+
   statistiquesMesuresIndispensables() {
     return this.statistiquesMesures().indispensables();
   }
