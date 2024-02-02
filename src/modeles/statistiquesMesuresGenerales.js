@@ -32,6 +32,10 @@ class StatistiquesMesuresGenerales {
   faites(idCategorie) {
     return this.parCategorie[idCategorie].fait;
   }
+
+  enCours(idCategorie) {
+    return this.parCategorie[idCategorie].enCours;
+  }
 }
 
 module.exports = { StatistiquesMesuresGenerales };
