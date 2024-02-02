@@ -83,4 +83,33 @@ describe('Les statistiques des mesures générales', () => {
     expect(stats.enCours('resilience')).to.eql(1);
     expect(stats.enCours('protection')).to.eql(0);
   });
+
+  it('calcule le nombre de mesures "Non faites" par catégorie', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        resilience: 'Résilience',
+        protection: 'Protection',
+      },
+      mesures: { G1: {}, G2: {}, R1: {} },
+      statutsMesures: { nonFait: '' },
+    });
+
+    const stats = desStatistiques(referentiel)
+      .surLesMesuresGenerales([
+        { id: 'G1', statut: 'nonFait' },
+        { id: 'G2', statut: 'nonFait' },
+        { id: 'R1', statut: 'nonFait' },
+      ])
+      .avecMesuresPersonnalisees({
+        G1: { categorie: 'gouvernance' },
+        G2: { categorie: 'gouvernance' },
+        R1: { categorie: 'resilience' },
+      })
+      .construis();
+
+    expect(stats.nonFaites('gouvernance')).to.eql(2);
+    expect(stats.nonFaites('resilience')).to.eql(1);
+    expect(stats.nonFaites('protection')).to.eql(0);
+  });
 });
