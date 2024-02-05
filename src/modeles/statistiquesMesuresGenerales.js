@@ -1,4 +1,4 @@
-const { STATUT_FAIT } = require('./mesure');
+const { STATUT_FAIT, statutRenseigne } = require('./mesure');
 
 const statutsMesuresAZero = (referentiel, statutsComplementaires) =>
   Object.keys(referentiel.statutsMesures()).reduce(
@@ -35,7 +35,7 @@ class StatistiquesMesuresGenerales {
       const generale = mesuresGenerales.avecId(id);
 
       const { categorie } = mesurePerso;
-      const avecStatut = generale?.statut;
+      const avecStatut = statutRenseigne(generale?.statut);
       if (avecStatut) this.parCategorie[categorie][generale.statut] += 1;
       else this.parCategorie[categorie].sansStatut += 1;
 
