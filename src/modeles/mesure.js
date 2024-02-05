@@ -39,9 +39,7 @@ class Mesure extends InformationsHomologation {
   }
 
   static statutRenseigne(statut) {
-    return Object.keys(STATUTS)
-      .map((clef) => STATUTS[clef])
-      .includes(statut);
+    return Object.values(STATUTS).includes(statut);
   }
 
   static valide({ statut }) {
