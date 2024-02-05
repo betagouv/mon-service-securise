@@ -151,6 +151,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         unStatutDeploiement: { description: 'Statut de déploiement' },
       },
       typesService: { unType: { description: 'Type de service' } },
+      statutsMesures: { fait: 'Fait' },
       mesures: { uneMesure: { categorie: 'uneCategorie' } },
       reglesPersonnalisation: { mesuresBase: ['uneMesure'] },
     });

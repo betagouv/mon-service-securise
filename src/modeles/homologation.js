@@ -232,7 +232,7 @@ class Homologation {
   }
 
   statistiquesMesuresIndispensables() {
-    return this.statistiquesMesures().indispensables();
+    return this.mesures.statistiquesMesuresGenerales().indispensables();
   }
 
   statistiquesMesuresRecommandees() {
