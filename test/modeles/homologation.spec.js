@@ -365,17 +365,6 @@ describe('Une homologation', () => {
     expect(homologation.nombreTotalMesuresGenerales()).to.equal(42);
   });
 
-  it('délègue aux statistiques le calcul du nombre de mesures à remplir toutes catégories confondues', () => {
-    const homologation = new Homologation({ mesuresGenerales: [] });
-    homologation.statistiquesMesures = () => ({
-      aRemplirToutesCategories: () => 42,
-    });
-
-    const nombre = homologation.nombreTotalMesuresARemplirToutesCategories();
-
-    expect(nombre).to.equal(42);
-  });
-
   it('délègue aux mesures le calcul de la complétude des mesures', () => {
     const homologation = new Homologation({});
 
