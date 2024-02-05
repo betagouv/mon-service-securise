@@ -26,7 +26,7 @@ describe('Les statistiques des mesures générales', () => {
     });
   });
 
-  it('calcule le nombre de mesures "Faites" par catégorie', () => {
+  it('calculent le nombre de mesures "Faites" par catégorie', () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: {
         gouvernance: 'Gouvernance',
@@ -55,7 +55,7 @@ describe('Les statistiques des mesures générales', () => {
     expect(stats.faites('protection')).to.eql(0);
   });
 
-  it('calcule le nombre de mesures "En cours" par catégorie', () => {
+  it('calculent le nombre de mesures "En cours" par catégorie', () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: {
         gouvernance: 'Gouvernance',
@@ -84,7 +84,7 @@ describe('Les statistiques des mesures générales', () => {
     expect(stats.enCours('protection')).to.eql(0);
   });
 
-  it('calcule le nombre de mesures "Non faites" par catégorie', () => {
+  it('calculent le nombre de mesures "Non faites" par catégorie', () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: {
         gouvernance: 'Gouvernance',
@@ -113,7 +113,7 @@ describe('Les statistiques des mesures générales', () => {
     expect(stats.nonFaites('protection')).to.eql(0);
   });
 
-  it("calcule le nombre de mesures sans statut par catégorie : les mesures personnalisées qui sont absentes des mesures générales ou les générales sans statut (même si ce n'est pas censé arriver)", () => {
+  it("calculent le nombre de mesures sans statut par catégorie : les mesures personnalisées qui sont absentes des mesures générales ou les générales sans statut (même si ce n'est pas censé arriver)", () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: {
         gouvernance: 'Gouvernance',
