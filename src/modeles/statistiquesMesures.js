@@ -168,10 +168,6 @@ class StatistiquesMesures {
     return this.filtreesParType('recommandees');
   }
 
-  retenues(idCategorie) {
-    return this.donnees[idCategorie].retenues;
-  }
-
   score(idCategorie) {
     const { indispensables, recommandees } = this.donnees[idCategorie];
 

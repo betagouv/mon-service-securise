@@ -74,16 +74,6 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     }
   });
 
-  elles('connaissent les mesures retenues pour une catégorie', () => {
-    const stats = new StatistiquesMesures(
-      {
-        une: { retenues: 5, misesEnOeuvre: 2 },
-      },
-      referentiel
-    );
-    expect(stats.retenues('une')).to.equal(5);
-  });
-
   elles('connaissent les mesures mises en œuvre pour une catégorie', () => {
     const stats = new StatistiquesMesures(
       {
@@ -118,26 +108,6 @@ describe('Les statistiques sur les mesures de sécurité', () => {
     );
 
     expect(stats.nonFaites('une')).to.equal(2 + 1);
-  });
-
-  elles('connaissent les mesures à remplir pour une catégorie', () => {
-    const stats = new StatistiquesMesures(
-      {
-        une: {
-          misesEnOeuvre: 3,
-          retenues: 9,
-          indispensables: { total: 8, fait: 2, enCours: 3, nonFait: 1 },
-          recommandees: { total: 10, fait: 1, enCours: 3, nonFait: 1 },
-        },
-      },
-      referentiel
-    );
-
-    const mesuresIndispensableARemplir = 8 - 2 - 3 - 1;
-    const mesuresRecommandeesARemplir = 10 - 1 - 3 - 1;
-    expect(stats.aRemplir('une')).to.equal(
-      mesuresIndispensableARemplir + mesuresRecommandeesARemplir
-    );
   });
 
   elles('connaissent les mesures à remplir pour toutes les catégories', () => {
