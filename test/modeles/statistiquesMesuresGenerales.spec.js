@@ -138,177 +138,183 @@ describe('Les statistiques des mesures générales', () => {
     expect(stats.sansStatut('resilience')).to.be(1); // R1 absente des générales
   });
 
-  describe('quand elles calculent le nombre de mesures indispensables', () => {
-    it('donnent le nombre de mesures au statut "En cours" qui sont indispensables', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {}, C: {} },
-        statutsMesures: { fait: '', enCours: '' },
+  const casDeTests = [
+    { nom: 'indispensables', methode: 'indispensables', indispensable: true },
+    { nom: 'recommandées', methode: 'recommandees', indispensable: false },
+  ];
+  casDeTests.forEach(({ nom, methode, indispensable }) => {
+    describe(`quand elles calculent le nombre de mesures ${nom}`, () => {
+      it(`donnent le nombre de mesures au statut "En cours" qui sont ${nom}`, () => {
+        const referentiel = Referentiel.creeReferentiel({
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {} },
+          statutsMesures: { fait: '', enCours: '' },
+        });
+
+        const enCoursEtTypeCorrect = { id: 'A', statut: 'enCours' };
+        const typeCorrectMaisPasEnCours = { id: 'B', statut: 'fait' };
+        const enCoursMaisPasTypeCorrect = { id: 'C', statut: 'enCours' };
+
+        const stats = desStatistiques(referentiel)
+          .surLesMesuresGenerales([
+            enCoursEtTypeCorrect,
+            typeCorrectMaisPasEnCours,
+            enCoursMaisPasTypeCorrect,
+          ])
+          .avecMesuresPersonnalisees({
+            A: { indispensable, categorie: 'gouvernance' },
+            B: { indispensable, categorie: 'gouvernance' },
+            C: { indispensable: !indispensable, categorie: 'gouvernance' },
+          })
+          .construis();
+
+        expect(stats[methode]().enCours).to.be(1);
       });
 
-      const enCoursEtIndispensable = { id: 'A', statut: 'enCours' };
-      const indispensableMaisPasEnCours = { id: 'B', statut: 'fait' };
-      const enCoursMaisPasIndispensable = { id: 'C', statut: 'enCours' };
+      it(`donnent le nombre de mesures au statut "Non fait" qui sont ${nom}`, () => {
+        const referentiel = Referentiel.creeReferentiel({
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {} },
+          statutsMesures: { fait: '', nonFait: '' },
+        });
 
-      const stats = desStatistiques(referentiel)
-        .surLesMesuresGenerales([
-          enCoursEtIndispensable,
-          indispensableMaisPasEnCours,
-          enCoursMaisPasIndispensable,
-        ])
-        .avecMesuresPersonnalisees({
-          A: { indispensable: true, categorie: 'gouvernance' },
-          B: { indispensable: true, categorie: 'gouvernance' },
-          C: { categorie: 'gouvernance' },
-        })
-        .construis();
+        const nonFaitEtTypeCorrect = { id: 'A', statut: 'nonFait' };
+        const typeCorrectMaisPasNonFait = { id: 'B', statut: 'fait' };
+        const nonFaitMaisPasTypeCorrect = { id: 'C', statut: 'nonFait' };
 
-      expect(stats.indispensables().enCours).to.be(1);
-    });
+        const stats = desStatistiques(referentiel)
+          .surLesMesuresGenerales([
+            nonFaitEtTypeCorrect,
+            typeCorrectMaisPasNonFait,
+            nonFaitMaisPasTypeCorrect,
+          ])
+          .avecMesuresPersonnalisees({
+            A: { indispensable, categorie: 'gouvernance' },
+            B: { indispensable, categorie: 'gouvernance' },
+            C: { indispensable: !indispensable, categorie: 'gouvernance' },
+          })
+          .construis();
 
-    it('donnent le nombre de mesures au statut "Non fait" qui sont indispensables', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {}, C: {} },
-        statutsMesures: { fait: '', nonFait: '' },
+        expect(stats[methode]().nonFait).to.be(1);
       });
 
-      const nonFaitEtIndispensable = { id: 'A', statut: 'nonFait' };
-      const indispensableMaisPasNonFait = { id: 'B', statut: 'fait' };
-      const nonFaitMaisPasIndispensable = { id: 'C', statut: 'nonFait' };
+      it(`donnent le nombre de mesures au statut "Fait" qui sont ${nom}`, () => {
+        const referentiel = Referentiel.creeReferentiel({
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {} },
+          statutsMesures: { fait: '', nonFait: '' },
+        });
 
-      const stats = desStatistiques(referentiel)
-        .surLesMesuresGenerales([
-          nonFaitEtIndispensable,
-          indispensableMaisPasNonFait,
-          nonFaitMaisPasIndispensable,
-        ])
-        .avecMesuresPersonnalisees({
-          A: { indispensable: true, categorie: 'gouvernance' },
-          B: { indispensable: true, categorie: 'gouvernance' },
-          C: { categorie: 'gouvernance' },
-        })
-        .construis();
+        const faitEtTypeCorrect = { id: 'A', statut: 'fait' };
+        const typeCorrectMaisPasFait = { id: 'B', statut: 'nonFait' };
+        const faitMaisPasTypeCorrect = { id: 'C', statut: 'fait' };
 
-      expect(stats.indispensables().nonFait).to.be(1);
-    });
+        const stats = desStatistiques(referentiel)
+          .surLesMesuresGenerales([
+            faitEtTypeCorrect,
+            typeCorrectMaisPasFait,
+            faitMaisPasTypeCorrect,
+          ])
+          .avecMesuresPersonnalisees({
+            A: { indispensable, categorie: 'gouvernance' },
+            B: { indispensable, categorie: 'gouvernance' },
+            C: { indispensable: !indispensable, categorie: 'gouvernance' },
+          })
+          .construis();
 
-    it('donnent le nombre de mesures au statut "Fait" qui sont indispensables', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {}, C: {} },
-        statutsMesures: { fait: '', nonFait: '' },
+        expect(stats[methode]().fait).to.be(1);
       });
 
-      const faitEtIndispensable = { id: 'A', statut: 'fait' };
-      const indispensableMaisPasFait = { id: 'B', statut: 'nonFait' };
-      const faitMaisPasIndispensable = { id: 'C', statut: 'fait' };
+      it('donnent le nombre de mesures "restantes" : ce sont celles qui ne sont pas au statut "Fait"', () => {
+        const referentiel = Referentiel.creeReferentiel({
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {} },
+          statutsMesures: { fait: '', enCours: '', nonFait: '' },
+        });
 
-      const stats = desStatistiques(referentiel)
-        .surLesMesuresGenerales([
-          faitEtIndispensable,
-          indispensableMaisPasFait,
-          faitMaisPasIndispensable,
-        ])
-        .avecMesuresPersonnalisees({
-          A: { indispensable: true, categorie: 'gouvernance' },
-          B: { indispensable: true, categorie: 'gouvernance' },
-          C: { categorie: 'gouvernance' },
-        })
-        .construis();
+        const enCours = { id: 'A', statut: 'enCours' };
+        const nonFaite = { id: 'B', statut: 'nonFait' };
+        const faite = { id: 'C', statut: 'fait' };
+        const sansStatutCarSeulementDansPerso = {
+          indispensable,
+          categorie: 'gouvernance',
+        };
 
-      expect(stats.indispensables().fait).to.be(1);
-    });
+        const stats = desStatistiques(referentiel)
+          .surLesMesuresGenerales([enCours, nonFaite, faite])
+          .avecMesuresPersonnalisees({
+            A: { indispensable, categorie: 'gouvernance' },
+            B: { indispensable, categorie: 'gouvernance' },
+            C: { indispensable, categorie: 'gouvernance' },
+            D: sansStatutCarSeulementDansPerso,
+          })
+          .construis();
 
-    it('donnent le nombre de mesures "restantes" : ce sont celles qui ne sont pas au statut "Fait"', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {}, C: {} },
-        statutsMesures: { fait: '', enCours: '', nonFait: '' },
+        // Une seule mesure faite sur 4 : il y en a 3 "restantes".
+        expect(stats[methode]().restant).to.be(3);
       });
 
-      const enCours = { id: 'A', statut: 'enCours' };
-      const nonFaite = { id: 'B', statut: 'nonFait' };
-      const faite = { id: 'C', statut: 'fait' };
-      const sansStatutCarSeulementDansPerso = {
-        indispensable: true,
-        categorie: 'gouvernance',
-      };
+      it('donnent le nombre de mesures "à remplir" : celles qui n\'ont pas de statut', () => {
+        const referentiel = Referentiel.creeReferentiel({
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {} },
+          statutsMesures: { nonFait: '' },
+        });
 
-      const stats = desStatistiques(referentiel)
-        .surLesMesuresGenerales([enCours, nonFaite, faite])
-        .avecMesuresPersonnalisees({
-          A: { indispensable: true, categorie: 'gouvernance' },
-          B: { indispensable: true, categorie: 'gouvernance' },
-          C: { indispensable: true, categorie: 'gouvernance' },
-          D: sansStatutCarSeulementDansPerso,
-        })
-        .construis();
+        // Une mesure générale sans statut est impossible à obtenir via l'IHM… mais on se protège quand même
+        const sansStatut = { id: 'A' };
+        const avecStatutDoncNeComptePas = { id: 'B', statut: 'nonFait' };
+        const sansStatutCarSeulementDansPerso = {
+          indispensable,
+          categorie: 'gouvernance',
+        };
 
-      // Une seule mesure faite sur 4 : il y en a 3 "restantes".
-      expect(stats.indispensables().restant).to.be(3);
-    });
+        const stats = desStatistiques(referentiel)
+          .surLesMesuresGenerales([sansStatut, avecStatutDoncNeComptePas])
+          .avecMesuresPersonnalisees({
+            A: { indispensable, categorie: 'gouvernance' },
+            B: { indispensable, categorie: 'gouvernance' },
+            C: sansStatutCarSeulementDansPerso,
+          })
+          .construis();
 
-    it('donnent le nombre de mesures "à remplir" : celles qui n\'ont pas de statut', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {} },
-        statutsMesures: { nonFait: '' },
+        expect(stats[methode]().aRemplir).to.be(2); // On compte A et C
       });
 
-      // Une mesure générale sans statut est impossible à obtenir via l'IHM… mais on se protège quand même
-      const sansStatut = { id: 'A' };
-      const avecStatutDoncNeComptePas = { id: 'B', statut: 'nonFait' };
-      const sansStatutCarSeulementDansPerso = {
-        indispensable: true,
-        categorie: 'gouvernance',
-      };
+      it(`donnent le nombre total de mesures qui sont ${nom}`, () => {
+        const referentiel = Referentiel.creeReferentiel({
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {}, D: {}, E: {} },
+          statutsMesures: { fait: '', nonFait: '' },
+        });
 
-      const stats = desStatistiques(referentiel)
-        .surLesMesuresGenerales([sansStatut, avecStatutDoncNeComptePas])
-        .avecMesuresPersonnalisees({
-          A: { indispensable: true, categorie: 'gouvernance' },
-          B: { indispensable: true, categorie: 'gouvernance' },
-          C: sansStatutCarSeulementDansPerso,
-        })
-        .construis();
+        const typeCorrectFaite = { id: 'A', statut: 'fait' };
+        const typeCorrectNonFaite = { id: 'B', statut: 'nonFait' };
+        const typeCorrectSansStatut = { id: 'C' };
+        const typeIncorrect = { id: 'D', statut: 'fait' };
+        const typeCorrectSeulementPersonnalisee = {
+          indispensable,
+          categorie: 'gouvernance',
+        };
 
-      expect(stats.indispensables().aRemplir).to.be(2); // On compte A et C
-    });
+        const stats = desStatistiques(referentiel)
+          .surLesMesuresGenerales([
+            typeCorrectFaite,
+            typeCorrectNonFaite,
+            typeCorrectSansStatut,
+            typeIncorrect,
+          ])
+          .avecMesuresPersonnalisees({
+            A: { indispensable, categorie: 'gouvernance' },
+            B: { indispensable, categorie: 'gouvernance' },
+            C: { indispensable, categorie: 'gouvernance' },
+            D: { indispensable: !indispensable, categorie: 'gouvernance' },
+            E: typeCorrectSeulementPersonnalisee,
+          })
+          .construis();
 
-    it('donnent le nombre total de mesures qui sont indispensables', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {}, C: {}, D: {}, E: {} },
-        statutsMesures: { fait: '', nonFait: '' },
+        expect(stats[methode]().total).to.be(4);
       });
-
-      const indispensableFaite = { id: 'A', statut: 'fait' };
-      const indispensableNonFaite = { id: 'B', statut: 'nonFait' };
-      const indispensableSansStatut = { id: 'C' };
-      const nonIndispensable = { id: 'D', statut: 'fait' };
-      const indispensableSeulementPersonnalisee = {
-        indispensable: true,
-        categorie: 'gouvernance',
-      };
-
-      const stats = desStatistiques(referentiel)
-        .surLesMesuresGenerales([
-          indispensableFaite,
-          indispensableNonFaite,
-          indispensableSansStatut,
-          nonIndispensable,
-        ])
-        .avecMesuresPersonnalisees({
-          A: { indispensable: true, categorie: 'gouvernance' },
-          B: { indispensable: true, categorie: 'gouvernance' },
-          C: { indispensable: true, categorie: 'gouvernance' },
-          D: { categorie: 'gouvernance' },
-          E: indispensableSeulementPersonnalisee,
-        })
-        .construis();
-
-      expect(stats.indispensables().total).to.be(4);
     });
   });
 });

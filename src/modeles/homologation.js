@@ -236,7 +236,7 @@ class Homologation {
   }
 
   statistiquesMesuresRecommandees() {
-    return this.statistiquesMesures().recommandees();
+    return this.mesures.statistiquesMesuresGenerales().recommandees();
   }
 
   statutSaisie(nomInformationsHomologation) {
