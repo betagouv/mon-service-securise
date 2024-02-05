@@ -29,6 +29,7 @@ class StatistiquesMesuresGenerales {
     const complementaires = () => ({ total: 0, restant: 0, aRemplir: 0 });
     this.parType = {
       indispensables: statutsMesuresAZero(referentiel, complementaires()),
+      recommandees: statutsMesuresAZero(referentiel, complementaires()),
     };
 
     Object.entries(mesuresPersonnalisees).forEach(([id, mesurePerso]) => {
@@ -40,21 +41,21 @@ class StatistiquesMesuresGenerales {
       else this.parCategorie[categorie].sansStatut += 1;
 
       const { indispensable } = mesurePerso;
-      if (indispensable) {
-        this.parType.indispensables.total += 1;
+      const type = indispensable ? 'indispensables' : 'recommandees';
 
-        if (avecStatut) this.parType.indispensables[generale.statut] += 1;
+      this.parType[type].total += 1;
 
-        const seulementMesurePerso = !generale; // Seulement une mesure perso : signifie "sans statut"
+      if (avecStatut) this.parType[type][generale.statut] += 1;
 
-        const nonFaite = generale?.statut !== STATUT_FAIT;
-        const compteCommeRestante = nonFaite || seulementMesurePerso;
-        if (compteCommeRestante) this.parType.indispensables.restant += 1;
+      const seulementMesurePerso = !generale; // Seulement une mesure perso : signifie "sans statut"
 
-        const generaleSansStatut = generale && !generale.statut;
-        const aRemplir = generaleSansStatut || seulementMesurePerso;
-        if (aRemplir) this.parType.indispensables.aRemplir += 1;
-      }
+      const nonFaite = generale?.statut !== STATUT_FAIT;
+      const compteCommeRestante = nonFaite || seulementMesurePerso;
+      if (compteCommeRestante) this.parType[type].restant += 1;
+
+      const generaleSansStatut = generale && !generale.statut;
+      const aRemplir = generaleSansStatut || seulementMesurePerso;
+      if (aRemplir) this.parType[type].aRemplir += 1;
     });
   }
 
@@ -76,6 +77,10 @@ class StatistiquesMesuresGenerales {
 
   indispensables() {
     return this.parType.indispensables;
+  }
+
+  recommandees() {
+    return this.parType.recommandees;
   }
 }
 
