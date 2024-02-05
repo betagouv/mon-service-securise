@@ -196,7 +196,7 @@ class Homologation {
   }
 
   nombreTotalMesuresARemplirToutesCategories() {
-    return this.statistiquesMesures().aRemplirToutesCategories();
+    return this.statistiquesMesuresGenerales().toutesCategories.sansStatut;
   }
 
   nomService() {
@@ -232,11 +232,11 @@ class Homologation {
   }
 
   statistiquesMesuresIndispensables() {
-    return this.mesures.statistiquesMesuresGenerales().indispensables();
+    return this.statistiquesMesuresGenerales().indispensables();
   }
 
   statistiquesMesuresRecommandees() {
-    return this.mesures.statistiquesMesuresGenerales().recommandees();
+    return this.statistiquesMesuresGenerales().recommandees();
   }
 
   statutSaisie(nomInformationsHomologation) {

@@ -31,14 +31,20 @@ class StatistiquesMesuresGenerales {
       indispensables: statutsMesuresAZero(referentiel, complementaires()),
       recommandees: statutsMesuresAZero(referentiel, complementaires()),
     };
+    this.toutesCategories = statutsMesuresAZero(referentiel, { sansStatut: 0 });
 
     Object.entries(mesuresPersonnalisees).forEach(([id, mesurePerso]) => {
       const generale = mesuresGenerales.avecId(id);
 
       const { categorie } = mesurePerso;
       const avecStatut = statutRenseigne(generale?.statut);
-      if (avecStatut) this.parCategorie[categorie][generale.statut] += 1;
-      else this.parCategorie[categorie].sansStatut += 1;
+      if (avecStatut) {
+        this.parCategorie[categorie][generale.statut] += 1;
+        this.toutesCategories[generale.statut] += 1;
+      } else {
+        this.parCategorie[categorie].sansStatut += 1;
+        this.toutesCategories.sansStatut += 1;
+      }
 
       const { indispensable } = mesurePerso;
       const type = indispensable ? 'indispensables' : 'recommandees';
@@ -73,6 +79,10 @@ class StatistiquesMesuresGenerales {
 
   sansStatut(idCategorie) {
     return this.parCategorie[idCategorie].sansStatut;
+  }
+
+  sansStatutToutesCategories() {
+    return this.toutesCategories.sansStatut;
   }
 
   indispensables() {

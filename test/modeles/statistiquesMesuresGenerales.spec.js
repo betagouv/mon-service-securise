@@ -317,4 +317,29 @@ describe('Les statistiques des mesures générales', () => {
       });
     });
   });
+
+  it("calculent le nombre de mesures 'Sans statut' pour toutes les catégories", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        resilience: 'Résilience',
+        protection: 'Protection',
+      },
+      mesures: { G1: {}, G2: {}, R1: {}, P1: {} },
+      statutsMesures: { fait: 'Fait' },
+    });
+
+    const g2AvecStatut = { id: 'G2', statut: 'fait' };
+    const stats = desStatistiques(referentiel)
+      .surLesMesuresGenerales([g2AvecStatut])
+      .avecMesuresPersonnalisees({
+        G1: { categorie: 'gouvernance' },
+        G2: { categorie: 'gouvernance' },
+        R1: { categorie: 'resilience' },
+        P1: { categorie: 'protection' },
+      })
+      .construis();
+
+    expect(stats.sansStatutToutesCategories()).to.be(3);
+  });
 });
