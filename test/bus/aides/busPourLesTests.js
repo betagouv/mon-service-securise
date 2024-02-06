@@ -2,8 +2,8 @@ const fabriqueBusPourLesTests = () => {
   const evenementsRecus = [];
   return {
     publie: async (e) => evenementsRecus.push(e),
-    aRecuUnEvenement: (attendu) => {
-      if (evenementsRecus.find((e) => e instanceof attendu)) return true;
+    aRecuUnEvenement: (typeAttendu) => {
+      if (evenementsRecus.find((e) => e instanceof typeAttendu)) return true;
 
       throw new Error(
         `Événement attendu non reçu. Reçu : ${evenementsRecus
@@ -11,6 +11,8 @@ const fabriqueBusPourLesTests = () => {
           .join(' ')}`
       );
     },
+    recupereEvenement: (typeAttendu) =>
+      evenementsRecus.find((e) => e instanceof typeAttendu),
   };
 };
 
