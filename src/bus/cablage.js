@@ -12,6 +12,9 @@ const {
 const {
   envoieTrackingDeNouveauService,
 } = require('./abonnements/envoieTrackingDeNouveauService');
+const {
+  consigneProprietaireCreeUnServiceDansJournal,
+} = require('./abonnements/consigneProprietaireCreeUnServiceDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -19,6 +22,7 @@ const cableTousLesAbonnes = (
 ) => {
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
     consigneNouveauServiceDansJournal({ adaptateurJournal }),
+    consigneProprietaireCreeUnServiceDansJournal({ adaptateurJournal }),
     envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees }),
     consigneCompletudeDansJournal({ adaptateurJournal }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
