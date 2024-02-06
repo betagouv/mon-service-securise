@@ -80,21 +80,6 @@ describe('Les mesures liées à une homologation', () => {
     expect(stats).to.equal('résultat');
   });
 
-  elles("délèguent le calcul de l'indice cyber aux mesures générales", () => {
-    const mesures = new Mesures({}, Referentiel.creeReferentielVide(), {
-      id1: {},
-    });
-
-    mesures.mesuresGenerales.statistiques = (
-      identifiantsMesuresPersonnalisees
-    ) => {
-      expect(identifiantsMesuresPersonnalisees).to.eql({ id1: {} });
-      return { indiceCyber: () => 3.7 };
-    };
-
-    expect(mesures.indiceCyber()).to.equal(3.7);
-  });
-
   elles('connaissent le nombre total de mesures générales', () => {
     const referentiel = Referentiel.creeReferentielVide();
 

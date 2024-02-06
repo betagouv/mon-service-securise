@@ -122,35 +122,6 @@ class StatistiquesMesures {
     return resultat;
   }
 
-  indiceCyber() {
-    const nbMesures = (categorie) => {
-      const { indispensables, recommandees } = this.donnees[categorie];
-      return indispensables.total + recommandees.total;
-    };
-
-    const totalPondere = this.categories().reduce(
-      (acc, categorie) => acc + nbMesures(categorie) * this.score(categorie),
-      0
-    );
-
-    const nbTotalMesures = this.categories().reduce(
-      (acc, categorie) => acc + nbMesures(categorie),
-      0
-    );
-
-    const indiceTotal =
-      this.referentiel.indiceCyberNoteMax() * (totalPondere / nbTotalMesures);
-
-    return this.categories().reduce(
-      (acc, categorie) =>
-        Object.assign(acc, {
-          [categorie]:
-            this.referentiel.indiceCyberNoteMax() * this.score(categorie),
-        }),
-      { total: indiceTotal }
-    );
-  }
-
   indispensables() {
     return this.filtreesParType('indispensables');
   }
@@ -166,31 +137,6 @@ class StatistiquesMesures {
 
   recommandees() {
     return this.filtreesParType('recommandees');
-  }
-
-  score(idCategorie) {
-    const { indispensables, recommandees } = this.donnees[idCategorie];
-
-    const indispensablesFaites = indispensables.fait;
-    const totalIndispensables = indispensables.total;
-    const recommandeesFaites = recommandees.fait;
-    const totalRecommandees = recommandees.total;
-
-    if (totalRecommandees === 0)
-      return indispensablesFaites / totalIndispensables;
-    if (totalIndispensables === 0)
-      return recommandeesFaites / totalRecommandees;
-
-    const coeffIndispensables =
-      this.referentiel.coefficientIndiceCyberMesuresIndispensables();
-    const coeffRecommandees =
-      this.referentiel.coefficientIndiceCyberMesuresRecommandees();
-
-    return (
-      (coeffIndispensables +
-        coeffRecommandees * (recommandeesFaites / totalRecommandees)) *
-      (indispensablesFaites / totalIndispensables)
-    );
   }
 
   toJSON() {

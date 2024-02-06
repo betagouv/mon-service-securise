@@ -5,6 +5,7 @@ const Referentiel = require('../referentiel');
 const {
   StatistiquesMesuresGenerales,
 } = require('./statistiquesMesuresGenerales');
+const { IndiceCyber } = require('./indiceCyber');
 
 class Mesures extends InformationsHomologation {
   constructor(
@@ -24,7 +25,10 @@ class Mesures extends InformationsHomologation {
   }
 
   indiceCyber() {
-    return this.statistiques().indiceCyber();
+    return new IndiceCyber(
+      this.statistiquesMesuresGenerales().totauxParTypeEtParCategorie(),
+      this.referentiel
+    ).indiceCyber();
   }
 
   nombreMesuresPersonnalisees() {
