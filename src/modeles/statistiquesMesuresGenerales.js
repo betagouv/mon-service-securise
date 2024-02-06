@@ -6,11 +6,14 @@ const statutsMesuresAZero = (referentiel, statutsComplementaires) =>
     statutsComplementaires
   );
 
-const initialiseStatsParCategorie = (referentiel) =>
+const initialiseStatsParCategorie = (referentiel, complementaire) =>
   referentiel.identifiantsCategoriesMesures().reduce(
     (acc, categorie) => ({
       ...acc,
-      [categorie]: statutsMesuresAZero(referentiel, { sansStatut: 0 }),
+      [categorie]: statutsMesuresAZero(referentiel, {
+        sansStatut: 0,
+        ...complementaire,
+      }),
     }),
     {}
   );
@@ -32,6 +35,10 @@ class StatistiquesMesuresGenerales {
       recommandees: statutsMesuresAZero(referentiel, complementaires()),
     };
     this.toutesCategories = statutsMesuresAZero(referentiel, { sansStatut: 0 });
+    this.parTypeEtParCategorie = {
+      indispensables: initialiseStatsParCategorie(referentiel, { total: 0 }),
+      recommandees: initialiseStatsParCategorie(referentiel, { total: 0 }),
+    };
 
     Object.entries(mesuresPersonnalisees).forEach(([id, mesurePerso]) => {
       const generale = mesuresGenerales.avecId(id);
@@ -50,8 +57,12 @@ class StatistiquesMesuresGenerales {
       const type = indispensable ? 'indispensables' : 'recommandees';
 
       this.parType[type].total += 1;
+      this.parTypeEtParCategorie[type][categorie].total += 1;
 
-      if (avecStatut) this.parType[type][generale.statut] += 1;
+      if (avecStatut) {
+        this.parType[type][generale.statut] += 1;
+        this.parTypeEtParCategorie[type][categorie][generale.statut] += 1;
+      }
 
       const seulementMesurePerso = !generale; // Seulement une mesure perso : signifie "sans statut"
 
@@ -61,7 +72,10 @@ class StatistiquesMesuresGenerales {
 
       const generaleSansStatut = generale && !generale.statut;
       const aRemplir = generaleSansStatut || seulementMesurePerso;
-      if (aRemplir) this.parType[type].aRemplir += 1;
+      if (aRemplir) {
+        this.parType[type].aRemplir += 1;
+        this.parTypeEtParCategorie[type][categorie].sansStatut += 1;
+      }
     });
   }
 
@@ -91,6 +105,10 @@ class StatistiquesMesuresGenerales {
 
   recommandees() {
     return this.parType.recommandees;
+  }
+
+  totauxParTypeEtParCategorie() {
+    return this.parTypeEtParCategorie;
   }
 }
 

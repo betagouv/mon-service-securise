@@ -342,4 +342,43 @@ describe('Les statistiques des mesures générales', () => {
 
     expect(stats.sansStatutToutesCategories()).to.be(3);
   });
+
+  it('calculent les totaux et le nombre de mesure faites par type et par catégories', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        protection: 'Protection',
+      },
+      mesures: { G1: {}, G2: {}, G3: {}, P1: {}, P2: {} },
+      statutsMesures: { fait: 'Fait', enCours: 'En cours' },
+    });
+
+    const stats = desStatistiques(referentiel)
+      .surLesMesuresGenerales([
+        { id: 'G1', statut: 'fait' },
+        { id: 'G2', statut: 'fait' },
+        { id: 'G3', statut: 'enCours' },
+        { id: 'P1', statut: 'fait' },
+        { id: 'P2', statut: 'enCours' },
+      ])
+      .avecMesuresPersonnalisees({
+        G1: { categorie: 'gouvernance', indispensable: true },
+        G2: { categorie: 'gouvernance', indispensable: true },
+        G3: { categorie: 'gouvernance', indispensable: true },
+        P1: { categorie: 'protection' },
+        P2: { categorie: 'protection' },
+      })
+      .construis();
+
+    expect(stats.totauxParTypeEtParCategorie()).to.eql({
+      indispensables: {
+        gouvernance: { sansStatut: 0, enCours: 1, fait: 2, total: 3 },
+        protection: { sansStatut: 0, enCours: 0, fait: 0, total: 0 },
+      },
+      recommandees: {
+        protection: { sansStatut: 0, enCours: 1, fait: 1, total: 2 },
+        gouvernance: { sansStatut: 0, enCours: 0, fait: 0, total: 0 },
+      },
+    });
+  });
 });
