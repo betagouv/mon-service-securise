@@ -8,6 +8,9 @@ const {
   ErreurSuppressionImpossible,
 } = require('../erreurs');
 const FabriqueAutorisation = require('../modeles/autorisations/fabriqueAutorisation');
+const {
+  EvenementAutorisationsServiceModifiees,
+} = require('../bus/evenementAutorisationsServiceModifiees');
 
 const creeDepot = (config = {}) => {
   const {
@@ -15,6 +18,7 @@ const creeDepot = (config = {}) => {
     adaptateurUUID = adaptateurUUIDParDefaut,
     depotHomologations,
     depotUtilisateurs,
+    busEvenements,
   } = config;
 
   const autorisations = (idUtilisateur) =>
@@ -91,6 +95,8 @@ const creeDepot = (config = {}) => {
       idAutorisation,
       nouvelleAutorisation.donneesAPersister()
     );
+
+    await busEvenements.publie(new EvenementAutorisationsServiceModifiees());
   };
 
   const supprimeContributeur = async (

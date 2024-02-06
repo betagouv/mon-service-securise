@@ -20,12 +20,16 @@ const {
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
+const {
+  EvenementAutorisationsServiceModifiees,
+} = require('../../src/bus/evenementAutorisationsServiceModifiees');
+const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE, LECTURE } = Permissions;
 
 describe('Le dépôt de données des autorisations', () => {
-  const creeDepot = (adaptateurPersistance, adaptateurUUID) =>
+  const creeDepot = (adaptateurPersistance, adaptateurUUID, busEvenements) =>
     DepotDonneesAutorisations.creeDepot({
       adaptateurPersistance,
       adaptateurUUID,
@@ -35,6 +39,7 @@ describe('Le dépôt de données des autorisations', () => {
       depotUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
       }),
+      busEvenements: busEvenements ?? fabriqueBusPourLesTests(),
     });
 
   describe("sur demande de validation d'autorisation d'accès", () => {
@@ -224,6 +229,32 @@ describe('Le dépôt de données des autorisations', () => {
         [RISQUES]: ECRITURE,
         [CONTACTS]: ECRITURE,
       });
+    });
+
+    it("publie sur le bus d'événements les autorisations complètes après mise à jour", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnService({ id: '123', descriptionService: { nomService: 'X' } })
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
+            .donnees
+        )
+        .ajouteUnUtilisateur({ id: '000', email: 'contributeur@mail.fr' })
+        .construis();
+
+      const bus = fabriqueBusPourLesTests();
+      const depot = creeDepot(adaptateurPersistance, undefined, bus);
+
+      await depot.ajouteContributeurAuService(
+        uneAutorisation()
+          .deContributeurDeService('000', '123')
+          .avecTousDroitsEcriture()
+          .construis()
+      );
+
+      expect(
+        bus.aRecuUnEvenement(EvenementAutorisationsServiceModifiees)
+      ).to.be(true);
     });
   });
 
