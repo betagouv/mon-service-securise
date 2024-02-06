@@ -255,6 +255,15 @@ describe('Le dépôt de données des autorisations', () => {
       expect(
         bus.aRecuUnEvenement(EvenementAutorisationsServiceModifiees)
       ).to.be(true);
+
+      const recu = bus.recupereEvenement(
+        EvenementAutorisationsServiceModifiees
+      );
+      expect(recu.idService).to.be('123');
+      expect(recu.autorisations).to.eql([
+        { idUtilisateur: '999', droit: 'PROPRIETAIRE' },
+        { idUtilisateur: '000', droit: 'ECRITURE' },
+      ]);
     });
   });
 

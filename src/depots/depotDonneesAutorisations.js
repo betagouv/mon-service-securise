@@ -60,6 +60,23 @@ const creeDepot = (config = {}) => {
   const autorisationExiste = (...params) =>
     autorisationPour(...params).then((a) => !!a);
 
+  const publieAutorisationsDuService = async (idService) => {
+    const donneesFraiches =
+      await adaptateurPersistance.autorisationsDuService(idService);
+
+    const evenement = new EvenementAutorisationsServiceModifiees({
+      idService,
+      autorisations: donneesFraiches
+        .map(FabriqueAutorisation.fabrique)
+        .map((a) => ({
+          idUtilisateur: a.idUtilisateur,
+          droit: a.resumeNiveauDroit(),
+        })),
+    });
+
+    await busEvenements.publie(evenement);
+  };
+
   const ajouteContributeurAuService = async (nouvelleAutorisation) => {
     const verifieUtilisateurExiste = async (id) => {
       const existe = await depotUtilisateurs.utilisateurExiste(id);
@@ -96,7 +113,7 @@ const creeDepot = (config = {}) => {
       nouvelleAutorisation.donneesAPersister()
     );
 
-    await busEvenements.publie(new EvenementAutorisationsServiceModifiees());
+    await publieAutorisationsDuService(nouvelleAutorisation.idService);
   };
 
   const supprimeContributeur = async (
