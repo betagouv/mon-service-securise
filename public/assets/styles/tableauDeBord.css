@@ -562,7 +562,7 @@ label[for='recherche-service'] {
   white-space: nowrap;
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  z-index: 3;
 }
 
 .tableau-services .menu-flottant.invisible {
