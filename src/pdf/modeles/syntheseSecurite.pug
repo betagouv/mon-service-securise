@@ -118,7 +118,7 @@ block page
                 - const nonFaites = (idCategorie) => service.statistiquesMesuresGenerales().nonFaites(idCategorie)
                 - const aRemplir = (idCategorie) => service.statistiquesMesuresGenerales().sansStatut(idCategorie)
 
-                each idCategorie in service.statistiquesMesures().categories()
+                each idCategorie in referentiel.identifiantsCategoriesMesures()
                   .categorie
                     p.titre= referentiel.descriptionCategorie(idCategorie)
                     .graphique
