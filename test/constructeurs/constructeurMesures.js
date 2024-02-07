@@ -14,11 +14,9 @@ class ConstructeurMesures {
 
   construis() {
     return {
-      statistiques: () => ({
-        completude: () => ({
-          nombreTotalMesures: this.nombreTotalMesures,
-          nombreMesuresCompletes: this.nombreMesuresCompletes,
-        }),
+      completude: () => ({
+        nombreTotalMesures: this.nombreTotalMesures,
+        nombreMesuresCompletes: this.nombreMesuresCompletes,
       }),
       statutsMesuresPersonnalisees: () => this.statutsMesuresPersonnalisees,
       indiceCyber: () => ({ total: this.indiceCyber }),

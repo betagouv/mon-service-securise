@@ -365,30 +365,6 @@ describe('Une homologation', () => {
     expect(homologation.nombreTotalMesuresGenerales()).to.equal(42);
   });
 
-  it('délègue aux mesures le calcul de la complétude des mesures', () => {
-    const homologation = new Homologation({});
-
-    homologation.mesures = {
-      statistiques: () => ({
-        completude: () => ({
-          nombreTotalMesures: 10,
-          nombreMesuresCompletes: 8,
-        }),
-      }),
-      statutsMesuresPersonnalisees: () => [],
-      indiceCyber: () => ({ total: 4.2 }),
-    };
-
-    const completude = homologation.completudeMesures();
-
-    expect(completude).to.eql({
-      nombreTotalMesures: 10,
-      nombreMesuresCompletes: 8,
-      detailMesures: [],
-      indiceCyber: { total: 4.2 },
-    });
-  });
-
   it('délègue aux mesures le calcul du nombre de mesures spécifiques', () => {
     const homologation = new Homologation({ mesuresGenerales: [] });
     homologation.mesures.nombreMesuresSpecifiques = () => 42;
