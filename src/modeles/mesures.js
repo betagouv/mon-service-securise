@@ -6,6 +6,7 @@ const {
   StatistiquesMesuresGenerales,
 } = require('./statistiquesMesuresGenerales');
 const { IndiceCyber } = require('./indiceCyber');
+const { CompletudeMesures } = require('./completudeMesures');
 
 class Mesures extends InformationsHomologation {
   constructor(
@@ -22,6 +23,13 @@ class Mesures extends InformationsHomologation {
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
     this.mesuresPersonnalisees = mesuresPersonnalisees;
+  }
+
+  completude() {
+    return new CompletudeMesures({
+      statistiquesMesuresGenerales: this.statistiquesMesuresGenerales(),
+      mesuresSpecifiques: this.mesuresSpecifiques,
+    });
   }
 
   indiceCyber() {
