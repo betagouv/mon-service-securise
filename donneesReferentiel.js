@@ -388,6 +388,7 @@ module.exports = {
     fait: 'Faite',
     enCours: 'Partielle',
     nonFait: 'Non prise en compte',
+    aLancer: 'À lancer',
   },
 
   articlesDefinisReferentielsMesure: {

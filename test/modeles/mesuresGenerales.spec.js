@@ -134,6 +134,7 @@ describe('La liste des mesures générales', () => {
       expect(Object.keys(mesures.parStatutEtCategorie())).to.eql([
         'enCours',
         'nonFait',
+        'aLancer',
         'fait',
       ]);
     });

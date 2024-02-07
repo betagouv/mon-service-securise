@@ -64,6 +64,10 @@
     --couleur: #fff2de;
   }
 
+  select.aLancer {
+    --couleur: #e9ddff;
+  }
+
   select.vide {
     --couleur: #f1f5f9;
   }
