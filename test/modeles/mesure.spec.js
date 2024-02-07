@@ -7,7 +7,12 @@ const elle = it;
 describe('Une mesure', () => {
   describe('sur demande des statuts possibles', () => {
     elle('retourne les statuts avec `fait` en premier par défaut', () => {
-      expect(Mesure.statutsPossibles()).to.eql(['fait', 'enCours', 'nonFait']);
+      expect(Mesure.statutsPossibles()).to.eql([
+        'fait',
+        'enCours',
+        'nonFait',
+        'aLancer',
+      ]);
     });
 
     elle(
@@ -17,6 +22,7 @@ describe('Une mesure', () => {
         expect(Mesure.statutsPossibles(statutFaitALaFin)).to.eql([
           'enCours',
           'nonFait',
+          'aLancer',
           'fait',
         ]);
       }

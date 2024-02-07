@@ -10,6 +10,7 @@ const STATUTS = {
   STATUT_FAIT: 'fait',
   STATUT_EN_COURS: 'enCours',
   STATUT_NON_FAIT: 'nonFait',
+  STATUT_A_LANCER: 'aLancer',
 };
 
 class Mesure extends InformationsHomologation {

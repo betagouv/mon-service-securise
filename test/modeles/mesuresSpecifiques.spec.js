@@ -103,6 +103,7 @@ describe('La liste des mesures spécifiques', () => {
     expect(Object.keys(mesures.parStatutEtCategorie())).to.eql([
       'enCours',
       'nonFait',
+      'aLancer',
       'fait',
     ]);
   });
