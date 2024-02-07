@@ -1,4 +1,5 @@
 const Referentiel = require('../../referentiel');
+const Mesure = require('../mesure');
 
 class ObjetPDFAnnexeMesures {
   constructor(service, referentiel = Referentiel.creeReferentielVide()) {
@@ -21,6 +22,7 @@ class ObjetPDFAnnexeMesures {
 
     return {
       statuts: this.referentiel.statutsMesures(),
+      statutsAvecFaitALaFin: Mesure.statutsPossibles(true),
       categories: this.referentiel.categoriesMesures(),
       nomService: this.service.nomService(),
       mesuresParStatut: this.service.mesuresParStatutEtCategorie(),

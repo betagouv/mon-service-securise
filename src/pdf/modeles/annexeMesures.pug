@@ -16,9 +16,8 @@ mixin bloc-mesure(mesuresParCategorie, legende)
     .saut-page
 
 block page
-  +bloc-mesure(donneesMesures.mesuresParStatut.enCours, donneesMesures.statuts.enCours)
-  +bloc-mesure(donneesMesures.mesuresParStatut.nonFait, donneesMesures.statuts.nonFait)
-  +bloc-mesure(donneesMesures.mesuresParStatut.fait, donneesMesures.statuts.fait)
+  each statut in donneesMesures.statutsAvecFaitALaFin
+    +bloc-mesure(donneesMesures.mesuresParStatut[statut], donneesMesures.statuts[statut])
   if donneesMesures.nbMesuresARemplirToutesCategories > 0
     +boite-grise('Non renseignées', 'non-renseignees')
       p.
