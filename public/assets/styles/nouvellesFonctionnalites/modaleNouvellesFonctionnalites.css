@@ -46,6 +46,7 @@
   color: #0079d0;
   font-size: 2em;
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 .modale-nouvelles-fonctionnalites h2 {
@@ -54,6 +55,8 @@
   font-weight: normal;
   margin-top: 0.5em;
   margin-bottom: 2em;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 .modale-nouvelles-fonctionnalites h2.sans-marge-basse {
