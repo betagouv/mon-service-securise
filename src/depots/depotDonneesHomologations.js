@@ -306,7 +306,7 @@ const creeDepot = (config = {}) => {
       ),
     });
 
-    adaptateurJournalMSS.consigneEvenement(evenement.toJSON());
+    await adaptateurJournalMSS.consigneEvenement(evenement.toJSON());
   };
 
   const nouveauService = async (idUtilisateur, donneesService) => {
