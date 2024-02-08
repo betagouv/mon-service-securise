@@ -79,6 +79,10 @@ class StatistiquesMesuresGenerales {
     });
   }
 
+  aLancer(idCategorie) {
+    return this.parCategorie[idCategorie].aLancer;
+  }
+
   faites(idCategorie) {
     return this.parCategorie[idCategorie].fait;
   }
