@@ -16,6 +16,11 @@
   justify-content: end;
 }
 
+.modale-nouvelles-fonctionnalites .conteneur-fermeture .bouton-fermeture {
+  background: transparent;
+  border: none;
+}
+
 .modale-nouvelles-fonctionnalites .bouton-fermeture {
   cursor: pointer;
 }
