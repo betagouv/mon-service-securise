@@ -1,4 +1,4 @@
-const ANGLE_MINIMUM = 20;
+const ANGLE_MINIMUM = 30;
 
 const detailAngle = (debut, fin) => ({
   debut,
@@ -7,7 +7,7 @@ const detailAngle = (debut, fin) => ({
 });
 
 const recalculPourFin360 = (angles) => {
-  const { fait, enCours, nonFait, aRemplir } = angles;
+  const { fait, enCours, nonFait, aLancer, aRemplir } = angles;
 
   const depassement = fait.fin - 360;
   const nbAnglesAModifier = Object.values(angles)
@@ -23,6 +23,7 @@ const recalculPourFin360 = (angles) => {
   const valeurRevisees = {
     enCours: valeurRevisee(enCours),
     nonFait: valeurRevisee(nonFait),
+    aLancer: valeurRevisee(aLancer),
     aRemplir: valeurRevisee(aRemplir),
     fait: valeurRevisee(fait),
   };
@@ -32,9 +33,13 @@ const recalculPourFin360 = (angles) => {
     enCoursRevise.fin,
     enCoursRevise.fin + valeurRevisees.nonFait
   );
-  const aRemplirRevise = detailAngle(
+  const aLancerRevise = detailAngle(
     nonFaitRevise.fin,
-    nonFaitRevise.fin + valeurRevisees.aRemplir
+    nonFaitRevise.fin + valeurRevisees.aLancer
+  );
+  const aRemplirRevise = detailAngle(
+    aLancerRevise.fin,
+    aLancerRevise.fin + valeurRevisees.aRemplir
   );
   const faitRevise = detailAngle(
     aRemplirRevise.fin,
@@ -44,6 +49,7 @@ const recalculPourFin360 = (angles) => {
   return {
     enCours: enCoursRevise,
     nonFait: nonFaitRevise,
+    aLancer: aLancerRevise,
     aRemplir: aRemplirRevise,
     fait: faitRevise,
   };
@@ -54,6 +60,7 @@ const genereGradientConique = (statistiques) => {
     const total =
       statistiques.enCours +
       statistiques.nonFait +
+      statistiques.aLancer +
       statistiques.aRemplir +
       statistiques.fait;
 
@@ -63,16 +70,21 @@ const genereGradientConique = (statistiques) => {
 
   const enCours = avecAngleMinimum(statistiques.enCours);
   const nonFait = avecAngleMinimum(statistiques.nonFait);
+  const aLancer = avecAngleMinimum(statistiques.aLancer);
   const aRemplir = avecAngleMinimum(statistiques.aRemplir);
   const fait = avecAngleMinimum(statistiques.fait);
 
   const anglesInitiaux = {
     enCours: detailAngle(0, enCours),
     nonFait: detailAngle(enCours, enCours + nonFait),
-    aRemplir: detailAngle(enCours + nonFait, enCours + nonFait + aRemplir),
+    aLancer: detailAngle(enCours + nonFait, enCours + nonFait + aLancer),
+    aRemplir: detailAngle(
+      enCours + nonFait + aLancer,
+      enCours + nonFait + aLancer + aRemplir
+    ),
     fait: detailAngle(
-      enCours + nonFait + aRemplir,
-      enCours + nonFait + aRemplir + fait
+      enCours + nonFait + aLancer + aRemplir,
+      enCours + nonFait + aLancer + aRemplir + fait
     ),
   };
 
@@ -84,6 +96,7 @@ const genereGradientConique = (statistiques) => {
   const seulementStatistiquesConcernes = {
     enCours: statistiques.enCours,
     nonFait: statistiques.nonFait,
+    aLancer: statistiques.aLancer,
     aRemplir: statistiques.aRemplir,
     fait: statistiques.fait,
   };

@@ -3,15 +3,15 @@ extends base
 include ./indiceCyber/scoreIndiceCyber
 
 mixin chiffre(texte, angle, classe, estUnique)
-  - const rayon = estUnique ? '0' : '3em';
+  - const rayon = estUnique ? '0' : '2.5em';
   if(texte !== 0)
     .chiffre(class=classe, style=`top: calc(${rayon} * cos(180deg - ${angle}deg)); left: calc(${rayon} * sin(180deg - ${angle}deg));`)!= texte
 
 mixin statistiquesMesures({ id, statistiques = {},  camembert = {}, unique = null})
-  - const { total = 0, enCours = 0, nonFait = 0, fait = 0, restant = 0, aRemplir = 0 } = statistiques
-  - const chaineGradientConique = `background: conic-gradient(#75A1E8 ${camembert.enCours.debut}deg ${camembert.enCours.fin}deg, #D0E0F6 ${camembert.nonFait.debut}deg ${camembert.nonFait.fin}deg, #FFFFFF ${camembert.aRemplir.debut}deg ${camembert.aRemplir.fin}deg, transparent ${camembert.aRemplir.fin}deg 360deg);`;
-  - const chaineGradientConiqueFait = `background: conic-gradient(transparent 0deg ${camembert.fait.debut}deg, #0A4C8C ${camembert.fait.debut}deg ${camembert.fait.fin}deg);`;
-  - const decalageCamemberFait = '4px'
+  - const { total = 0, enCours = 0, nonFait = 0, aLancer = 0, fait = 0, restant = 0, aRemplir = 0 } = statistiques
+  - const chaineGradientConique = `background: conic-gradient(#0A498C ${camembert.enCours.debut}deg ${camembert.enCours.fin}deg, #75A1E8 ${camembert.nonFait.debut}deg ${camembert.nonFait.fin}deg, #D0E0F6 ${camembert.aLancer.debut}deg ${camembert.aLancer.fin}deg, #FFFFFF ${camembert.aRemplir.debut}deg ${camembert.aRemplir.fin}deg, transparent ${camembert.aRemplir.fin}deg 360deg);`;
+  - const chaineGradientConiqueFait = `background: conic-gradient(transparent 0deg ${camembert.fait.debut}deg, #173B62 ${camembert.fait.debut}deg ${camembert.fait.fin}deg);`;
+  - const decalageCamemberFait = '8px'
   - const styleDecalageCamemberFait = `top: calc(${decalageCamemberFait} * cos(180deg - ${camembert.fait.milieu}deg)); left: calc(${decalageCamemberFait} * sin(180deg - ${camembert.fait.milieu}deg));`
   .statistiques-mesures
     .details
@@ -21,6 +21,7 @@ mixin statistiquesMesures({ id, statistiques = {},  camembert = {}, unique = nul
         .camembert(style=chaineGradientConique)
         +chiffre(enCours, camembert.enCours.milieu, 'en-cours', unique === 'enCours')
         +chiffre(nonFait, camembert.nonFait.milieu, 'non-fait', unique === 'nonFait')
+        +chiffre(aLancer, camembert.aLancer.milieu, 'a-lancer', unique === 'aLancer')
         +chiffre(aRemplir, camembert.aRemplir.milieu, 'a-remplir', unique === 'aRemplir')
         .camembert.fait(style=`${chaineGradientConiqueFait}; ${styleDecalageCamemberFait}`)
         +chiffre(fait, camembert.fait.milieu, 'fait', unique == 'fait')
@@ -44,6 +45,7 @@ mixin totalMesures(totalMesuresGenerales, totalMesuresSpecifiques)
       .legende-faites Faites
       .legende-en-cours Partielles
       .legende-non-faites Non prises en compte
+      .legende-a-lancer À lancer
       .legende-a-remplir À remplir
 
 block page
@@ -116,6 +118,7 @@ block page
                 - const faites = (idCategorie) => service.statistiquesMesuresGenerales().faites(idCategorie)
                 - const enCours = (idCategorie) => service.statistiquesMesuresGenerales().enCours(idCategorie)
                 - const nonFaites = (idCategorie) => service.statistiquesMesuresGenerales().nonFaites(idCategorie)
+                - const aLancer = (idCategorie) => service.statistiquesMesuresGenerales().aLancer(idCategorie)
                 - const aRemplir = (idCategorie) => service.statistiquesMesuresGenerales().sansStatut(idCategorie)
 
                 each idCategorie in referentiel.identifiantsCategoriesMesures()
@@ -131,6 +134,9 @@ block page
                       if nonFaites(idCategorie)
                         - const nbNonFaites = nonFaites(idCategorie);
                         .statut.non-faites(style=`flex: ${nbNonFaites};`)= nbNonFaites
+                      if aLancer(idCategorie)
+                        - const nbALancer = aLancer(idCategorie);
+                        .statut.a-lancer(style=`flex: ${nbALancer};`)= nbALancer
                       if aRemplir(idCategorie)
                         - const nbARemplir = aRemplir(idCategorie);
                         .statut.a-remplir(style=`flex: ${nbARemplir};`)= nbARemplir
