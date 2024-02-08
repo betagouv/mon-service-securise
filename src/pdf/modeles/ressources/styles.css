@@ -627,8 +627,8 @@ p {
 }
 
 .synthese-securite .statistiques-mesures .graphique-camemberts {
-  width: 10em;
-  height: 10em;
+  width: 8em;
+  height: 8em;
   position: relative;
 }
 
@@ -645,25 +645,27 @@ p {
 }
 
 .synthese-securite .statistiques-mesures .camembert.bordure-reste-a-faire {
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
 .synthese-securite .graphique-camemberts .chiffre {
   position: absolute;
-  transform: translate(calc(5em - 50%), calc(5em - 50%));
+  transform: translate(calc(4em - 50%), calc(4em - 50%)) scale(1.1);
   font-weight: bold;
+  text-align: center;
 }
 
 .synthese-securite .graphique-camemberts .chiffre.en-cours {
   color: white;
 }
 
-.synthese-securite .graphique-camemberts .chiffre:is(.non-fait, .a-remplir) {
+.synthese-securite
+  .graphique-camemberts
+  .chiffre:is(.non-fait, .a-remplir, .a-lancer) {
   color: #08416a;
 }
 
 .synthese-securite .graphique-camemberts .chiffre.fait {
-  font-weight: normal;
   color: white;
 }
 
@@ -727,16 +729,21 @@ p {
 }
 
 .synthese-securite .legende-faites::before {
-  background: #0a4c8c;
-  border: solid 1px #0a4c8c;
+  background: #173b62;
+  border: solid 1px #173b62;
 }
 
 .synthese-securite .legende-en-cours::before {
+  background: #0a498c;
+  border: solid 1px #0a498c;
+}
+
+.synthese-securite .legende-non-faites::before {
   background: #75a1e8;
   border: solid 1px #75a1e8;
 }
 
-.synthese-securite .legende-non-faites::before {
+.synthese-securite .legende-a-lancer::before {
   background: #d0e0f6;
   border: solid 1px #d0e0f6;
 }
@@ -758,6 +765,7 @@ p {
   padding: 0.8em;
   margin-top: 1em;
   text-align: center;
+  font-weight: bold;
 }
 
 .synthese-securite .mesures-par-categorie .graphique .statut:first-of-type {
@@ -771,16 +779,21 @@ p {
 }
 
 .synthese-securite .mesures-par-categorie .graphique .faites {
-  background-color: #0a4c8c;
+  background-color: #172738;
   color: #fff;
 }
 
 .synthese-securite .mesures-par-categorie .graphique .en-cours {
-  background-color: #75a1e8;
+  background-color: #0a498c;
   color: #fff;
 }
 
 .synthese-securite .mesures-par-categorie .graphique .non-faites {
+  background-color: #75a1e8;
+  color: #0a4c8c;
+}
+
+.synthese-securite .mesures-par-categorie .graphique .a-lancer {
   background-color: #d0e0f6;
   color: #0a4c8c;
 }
