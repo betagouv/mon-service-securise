@@ -1,5 +1,7 @@
 .marges-fixes {
   width: 1290px;
+  container-type: inline-size;
+  container-name: conteneur-mesures;
 }
 
 .zone-principale {
@@ -65,4 +67,16 @@
 .conteneur-indice-cyber:active .cartouche-indice-cyber {
   background: #08416a;
   color: white;
+}
+
+@container conteneur-mesures (max-width: 1060px) {
+  .cartouche-progression-mesures,
+  .cartouche-indice-cyber {
+    display: none;
+  }
+
+  .jauge-progression-mesures {
+    left: unset !important;
+    right: -5px;
+  }
 }
