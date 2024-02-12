@@ -70,7 +70,7 @@ block page
             dt Statut :
             dd= service.descriptionStatutDeploiement()
           dl
-          - const presentation = service.presentation();
+          - const presentation = service.presentation() ?? "";
           - const tailleMaximale = 500;
             dt Présentation :
             dd= presentation.length > tailleMaximale ? presentation.substring(0, tailleMaximale) + '…' : presentation
