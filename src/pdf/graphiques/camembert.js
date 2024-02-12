@@ -10,15 +10,26 @@ const recalculPourFin360 = (angles) => {
   const { fait, enCours, nonFait, aLancer, aRemplir } = angles;
 
   const depassement = fait.fin - 360;
-  const nbAnglesAModifier = Object.values(angles)
-    .map(({ debut, fin }) => fin - debut === ANGLE_MINIMUM)
+  let nbAnglesAModifier = Object.values(angles)
+    .map(({ debut, fin }) => fin - debut === ANGLE_MINIMUM || fin === debut)
     .filter((estAngleMinimum) => estAngleMinimum === false).length;
-  const angleASoustraire = depassement / nbAnglesAModifier;
+  let angleASoustraire = depassement / nbAnglesAModifier;
+  Object.values(angles).forEach((detail) => {
+    const angle = detail.fin - detail.debut;
+    if (angle > ANGLE_MINIMUM && angle - angleASoustraire < ANGLE_MINIMUM) {
+      detail.nePeutEtreModifie = true;
+      nbAnglesAModifier -= 1;
+      angleASoustraire = depassement / nbAnglesAModifier;
+    }
+  });
 
-  const valeurRevisee = (angle) =>
-    angle.fin - angle.debut === ANGLE_MINIMUM
+  const valeurRevisee = (angle) => {
+    if (angle.nePeutEtreModifie) return angle.fin - angle.debut;
+    if (angle.fin - angle.debut === 0) return 0;
+    return angle.fin - angle.debut === ANGLE_MINIMUM
       ? ANGLE_MINIMUM
       : angle.fin - angle.debut - angleASoustraire;
+  };
 
   const valeurRevisees = {
     enCours: valeurRevisee(enCours),
