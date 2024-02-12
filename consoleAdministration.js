@@ -49,21 +49,20 @@ class ConsoleAdministration {
     return this.depotDonnees.supprimeUtilisateur(id);
   }
 
-  genereTousEvenementsCompletude(persisteEvenements = false) {
+  async genereTousEvenementsCompletude(persisteEvenements = false) {
     const journal = persisteEvenements
       ? this.adaptateurJournalMSS
       : this.journalConsole;
 
-    const evenements = this.depotDonnees
-      .tousLesServices()
-      .then((hs) =>
-        hs.map((h) => ({ idService: h.id, ...h.completudeMesures() }))
-      )
-      .then((stats) =>
-        stats.map((s) => new EvenementCompletudeServiceModifiee(s).toJSON())
-      );
+    const services = await this.depotDonnees.tousLesServices();
+    const evenements = services.map((s) =>
+      new EvenementCompletudeServiceModifiee({
+        idService: s.id,
+        ...s.completudeMesures(),
+      }).toJSON()
+    );
 
-    return avecPMapPourChaqueElement(evenements, journal.consigneEvenement);
+    await avecPMapPourChaqueElement(evenements, journal.consigneEvenement);
   }
 
   genereTousEvenementsNouvelUtilisateurInscrit(persisteEvenements = false) {
