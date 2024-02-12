@@ -64,7 +64,10 @@ class ConsoleAdministration {
             s.descriptionService.nombreOrganisationsUtilisatrices,
         }).toJSON()
       )
-      .map((e) => ({ ...e, genereParAdministrateur: true }));
+      .map(({ donnees, ...reste }) => ({
+        donnees: { ...donnees, genereParAdministrateur: true },
+        ...reste,
+      }));
 
     await avecPMapPourChaqueElement(
       Promise.resolve(evenements),
