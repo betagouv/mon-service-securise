@@ -55,14 +55,21 @@ class ConsoleAdministration {
       : this.journalConsole;
 
     const services = await this.depotDonnees.tousLesServices();
-    const evenements = services.map((s) =>
-      new EvenementCompletudeServiceModifiee({
-        idService: s.id,
-        ...s.completudeMesures(),
-      }).toJSON()
-    );
+    const evenements = services
+      .map((s) =>
+        new EvenementCompletudeServiceModifiee({
+          idService: s.id,
+          ...s.completudeMesures(),
+          nombreOrganisationsUtilisatrices:
+            s.descriptionService.nombreOrganisationsUtilisatrices,
+        }).toJSON()
+      )
+      .map((e) => ({ ...e, genereParAdministrateur: true }));
 
-    await avecPMapPourChaqueElement(evenements, journal.consigneEvenement);
+    await avecPMapPourChaqueElement(
+      Promise.resolve(evenements),
+      journal.consigneEvenement
+    );
   }
 
   genereTousEvenementsNouvelUtilisateurInscrit(persisteEvenements = false) {

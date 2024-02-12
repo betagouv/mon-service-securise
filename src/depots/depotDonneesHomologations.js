@@ -63,7 +63,10 @@ const fabriquePersistance = (
           .map((h) => new Homologation(h, referentiel))
           .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService()));
       },
-      toutes: async () => persistance.lis.cellesDeUtilisateur(),
+      toutes: async () => {
+        const donneesServices = await adaptateurPersistance.tousLesServices();
+        return donneesServices.map((s) => new Homologation(s, referentiel));
+      },
       celleAvecNomService: async (...params) =>
         adaptateurPersistance.homologationAvecNomService(...params),
     },

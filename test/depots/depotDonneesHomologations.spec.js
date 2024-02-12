@@ -95,13 +95,11 @@ describe('Le dépôt de données des homologations', () => {
     expect(homologations[0].referentiel).to.equal(referentiel);
   });
 
-  it("utilise l'adaptateur de persistance sans `idUtilisateur` pour récupérer toutes les homologations du système", async () => {
+  it("utilise l'adaptateur de persistance pour récupérer tous les services du système", async () => {
     let adaptateurAppele;
-    let idRecu;
     const adaptateurPersistance = unePersistanceMemoire().construis();
-    adaptateurPersistance.homologations = async (idUtilisateur) => {
+    adaptateurPersistance.tousLesServices = async () => {
       adaptateurAppele = true;
-      idRecu = idUtilisateur;
       return [];
     };
 
@@ -112,7 +110,6 @@ describe('Le dépôt de données des homologations', () => {
     await depot.tousLesServices();
 
     expect(adaptateurAppele).to.be(true);
-    expect(idRecu).to.be(undefined);
   });
 
   it('trie les homologations par ordre alphabétique du nom du service', async () => {
