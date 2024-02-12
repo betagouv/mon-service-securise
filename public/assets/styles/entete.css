@@ -159,7 +159,7 @@ header nav a,
   mask-size: contain;
 }
 
-.deconnexion::before {
+header nav .deconnexion::before {
   width: 24px;
   height: 24px;
   margin-right: 8px;
