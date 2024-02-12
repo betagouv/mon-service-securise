@@ -79,6 +79,11 @@ const nouvelAdaptateur = (
       Promise.all(as.map(({ idHomologation }) => homologation(idHomologation)))
     );
 
+  const tousLesServices = async () => {
+    const lesIds = donnees.services.map((s) => s.id);
+    return lesIds.map(homologation);
+  };
+
   const homologationAvecNomService = (
     idUtilisateur,
     nomService,
@@ -268,6 +273,7 @@ const nouvelAdaptateur = (
     supprimeService,
     supprimeUtilisateur,
     supprimeUtilisateurs,
+    tousLesServices,
     tousUtilisateurs,
     utilisateur,
     utilisateurAvecEmail,

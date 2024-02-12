@@ -131,6 +131,13 @@ const nouvelAdaptateur = (env) => {
     return avecPMapPourChaqueElement(idsHomologations, homologation);
   };
 
+  const tousLesServices = async () => {
+    const lignes = await knex('services').select({ id: 'id' });
+    const ids = lignes.map(({ id }) => id);
+
+    return avecPMapPourChaqueElement(Promise.resolve(ids), homologation);
+  };
+
   const metsAJourHomologation = (...params) =>
     metsAJourTable('homologations', ...params);
   const metsAJourService = (...params) => metsAJourTable('services', ...params);
@@ -332,6 +339,7 @@ const nouvelAdaptateur = (env) => {
     supprimeHomologations,
     supprimeUtilisateur,
     supprimeUtilisateurs,
+    tousLesServices,
     tousUtilisateurs,
     utilisateur,
     utilisateurAvecEmail,
