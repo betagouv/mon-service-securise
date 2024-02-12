@@ -47,6 +47,23 @@ describe('Les graphiques camembert', () => {
       });
     });
 
+    it("ne modifie pas les angles inférieur à l'angle minimum, ou les angles nuls", () => {
+      const statistiques = {
+        enCours: 4,
+        nonFait: 2,
+        fait: 37,
+        aRemplir: 0,
+        aLancer: 2,
+      };
+
+      const resultat = genereGradientConique(statistiques).angles;
+      expect(resultat.enCours).to.eql({ debut: 0, milieu: 16, fin: 32 });
+      expect(resultat.nonFait).to.eql({ debut: 32, milieu: 47, fin: 62 });
+      expect(resultat.aLancer).to.eql({ debut: 62, milieu: 77, fin: 92 });
+      expect(resultat.aRemplir).to.eql({ debut: 92, milieu: 92, fin: 92 });
+      expect(resultat.fait).to.eql({ debut: 92, milieu: 226, fin: 360 });
+    });
+
     it("s'assurent qu'une portion avec valeur fasse au moins 30 degrés pour rester visible", () => {
       const verifieAngleMinimum = (statistiques, identifiantStatut) => {
         const { angles } = genereGradientConique(statistiques);
