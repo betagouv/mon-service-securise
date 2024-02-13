@@ -36,7 +36,14 @@ const statistiques = () => ({
       : '',
 });
 
+const chiffrement = () => ({
+  urlBaseDuService: () => process.env.CHIFFREMENT_URL_BASE_DU_SERVICE,
+  cleDuMoteurTransit: () => process.env.CHIFFREMENT_CLE_DU_MOTEUR_TRANSIT,
+  tokenVault: () => process.env.CHIFFREMENT_TOKEN_VAULT,
+});
+
 module.exports = {
+  chiffrement,
   emailMemoire,
   filtrageIp,
   journalMSS,
