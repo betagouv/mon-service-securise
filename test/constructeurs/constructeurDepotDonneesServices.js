@@ -10,6 +10,7 @@ const {
 const {
   fabriqueServiceTracking,
 } = require('../../src/tracking/serviceTracking');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 class ConstructeurDepotDonneesServices {
   constructor() {
@@ -54,6 +55,7 @@ class ConstructeurDepotDonneesServices {
 
   construis() {
     return DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
       adaptateurJournalMSS: this.adaptateurJournalMSS,
       adaptateurPersistance: this.constructeurAdaptateurPersistance.construis(),
       adaptateurTracking: this.adaptateurTracking,
