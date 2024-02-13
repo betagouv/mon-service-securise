@@ -1,7 +1,26 @@
+const axios = require('axios');
 const { createHash } = require('crypto');
 const bcrypt = require('bcrypt');
+const { chiffrement } = require('./adaptateurEnvironnement');
 
-const chiffre = async (chaine) => chaine;
+const chiffre = async (chaine) => {
+  const env = chiffrement();
+  const base = env.urlBaseDuService();
+  const cleTransit = env.cleDuMoteurTransit();
+
+  const reponse = await axios.put(
+    `${base}/v1/transit/encrypt/${cleTransit}`,
+    { plaintext: chaine },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Vault-Token': env.tokenVault(),
+      },
+    }
+  );
+
+  return reponse.data.data.ciphertext;
+};
 
 const NOMBRE_DE_PASSES = 10;
 const hacheBCrypt = (chaineEnClair) =>
