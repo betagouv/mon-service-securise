@@ -1,7 +1,7 @@
 const { createHash } = require('crypto');
 const bcrypt = require('bcrypt');
 
-const chiffre = (chaine) => chaine;
+const chiffre = async (chaine) => chaine;
 
 const NOMBRE_DE_PASSES = 10;
 const hacheBCrypt = (chaineEnClair) =>

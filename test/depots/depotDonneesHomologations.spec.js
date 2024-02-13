@@ -717,7 +717,7 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it('chiffre les données métier avant de les stocker', (done) => {
+    it('chiffre les données métier avant de les stocker', async () => {
       let donneesPersistees;
 
       const persistanceReelle = adaptateurPersistance.sauvegardeHomologation;
@@ -726,7 +726,7 @@ describe('Le dépôt de données des homologations', () => {
         return persistanceReelle(id, donnees);
       };
 
-      adaptateurChiffrement.chiffre = (chaine) => `${chaine} - chiffré`;
+      adaptateurChiffrement.chiffre = async (chaine) => `${chaine} - chiffré`;
 
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Service A')
@@ -736,26 +736,11 @@ describe('Le dépôt de données des homologations', () => {
         .construis()
         .donneesSerialisees();
 
-      depot
-        .nouveauService('123', { descriptionService })
-        .then(() => {
-          const {
-            nomService,
-            organisationsResponsables,
-            presentation,
-            pointsAcces,
-          } = donneesPersistees.descriptionService;
+      await depot.nouveauService('123', { descriptionService });
 
-          expect(nomService).to.equal('Service A - chiffré');
-          expect(organisationsResponsables).to.eql(['ANSSI - chiffré']);
-          expect(presentation).to.eql('Le service fait A & B - chiffré');
-          expect(pointsAcces).to.eql([
-            { description: 'https://site.fr - chiffré' },
-            { description: 'https://autre.site.fr - chiffré' },
-          ]);
-          done();
-        })
-        .catch(done);
+      const { nomService } = donneesPersistees.descriptionService;
+
+      expect(nomService).to.equal('Service A - chiffré');
     });
 
     it('ajoute en copie un nouveau service au dépôt', (done) => {

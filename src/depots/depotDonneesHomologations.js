@@ -21,22 +21,13 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
 
   return {
     chiffre: {
-      donneesService: (donnees) => {
+      donneesService: async (donnees) => {
         const { descriptionService } = donnees;
         return {
           ...donnees,
           descriptionService: {
             ...descriptionService,
-            nomService: chiffre(descriptionService.nomService),
-            presentation: chiffre(descriptionService.presentation),
-            organisationsResponsables:
-              descriptionService.organisationsResponsables.map(
-                adaptateurChiffrement.chiffre
-              ),
-            pointsAcces: descriptionService.pointsAcces.map((p) => ({
-              ...p,
-              description: chiffre(p.description),
-            })),
+            nomService: await chiffre(descriptionService.nomService),
           },
         };
       },
@@ -71,7 +62,7 @@ const fabriquePersistance = (
         adaptateurPersistance.homologationAvecNomService(...params),
     },
     sauvegarde: async (id, donneesService) => {
-      const donneesChiffrees = chiffre.donneesService(donneesService);
+      const donneesChiffrees = await chiffre.donneesService(donneesService);
       return Promise.all([
         adaptateurPersistance.sauvegardeService(id, donneesChiffrees),
         adaptateurPersistance.sauvegardeHomologation(id, donneesChiffrees),
