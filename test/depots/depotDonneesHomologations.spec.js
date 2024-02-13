@@ -516,6 +516,7 @@ describe('Le dépôt de données des homologations', () => {
       }
     );
     const depot = DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
       adaptateurPersistance,
     });
 
@@ -557,6 +558,7 @@ describe('Le dépôt de données des homologations', () => {
           services: [copie(donneesHomologation)],
         });
       const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
       });
 
@@ -589,6 +591,7 @@ describe('Le dépôt de données des homologations', () => {
       }
     );
     const depot = DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
       adaptateurPersistance,
     });
 
@@ -620,6 +623,7 @@ describe('Le dépôt de données des homologations', () => {
       }
     );
     const depot = DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
       adaptateurPersistance,
     });
 
@@ -1091,6 +1095,7 @@ describe('Le dépôt de données des homologations', () => {
           services: [copie(donneesHomologations)],
         });
       const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
       });
@@ -1115,6 +1120,7 @@ describe('Le dépôt de données des homologations', () => {
         });
       adaptateurUUID.genereUUID = () => '999';
       const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
       });
@@ -1174,6 +1180,7 @@ describe('Le dépôt de données des homologations', () => {
           services: [copie(donneesHomologations)],
         });
       const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
         referentiel,
@@ -1216,6 +1223,7 @@ describe('Le dépôt de données des homologations', () => {
           services: [copie(donneesHomologations)],
         });
       const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
         referentiel,
@@ -1252,6 +1260,7 @@ describe('Le dépôt de données des homologations', () => {
           services: [copie(donneesService)],
         });
       const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
         referentiel,
@@ -1288,6 +1297,7 @@ describe('Le dépôt de données des homologations', () => {
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       adaptateurPersistance = unePersistanceMemoire().construis();
       depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurJournalMSS,
         adaptateurPersistance,
         referentiel,
@@ -1381,6 +1391,7 @@ describe('Le dépôt de données des homologations', () => {
         });
 
       depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurJournalMSS: AdaptateurJournalMSSMemoire.nouvelAdaptateur(),
         adaptateurPersistance,
         adaptateurTracking: unAdaptateurTracking().construis(),

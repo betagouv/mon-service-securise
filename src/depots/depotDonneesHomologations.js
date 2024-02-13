@@ -1,4 +1,3 @@
-const adaptateurChiffrementParDefaut = require('../adaptateurs/adaptateurChiffrement');
 const fabriqueAdaptateurTracking = require('../adaptateurs/fabriqueAdaptateurTracking');
 const {
   ErreurDonneesObligatoiresManquantes,
@@ -80,7 +79,7 @@ const fabriquePersistance = (
 
 const creeDepot = (config = {}) => {
   const {
-    adaptateurChiffrement = adaptateurChiffrementParDefaut,
+    adaptateurChiffrement,
     adaptateurJournalMSS,
     adaptateurPersistance,
     adaptateurTracking = fabriqueAdaptateurTracking(),
