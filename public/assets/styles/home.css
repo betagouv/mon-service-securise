@@ -8,42 +8,42 @@ main {
   display: block;
 }
 
-.bloc-contenu {
+#home .bloc-contenu {
   padding: 24px 16px;
 }
 
-.fond-couleur-principale {
+#home .fond-couleur-principale {
   background: var(--couleur-principale);
   color: white;
 }
 
-.fond-couleur-principale-attenuee {
+#home .fond-couleur-principale-attenuee {
   background: var(--couleur-principale-attenuee);
   color: #282828;
 }
 
-.fond-couleur-principale-attenuee h3 {
+#home .fond-couleur-principale-attenuee h3 {
   color: #08416a;
 }
 
-h1 {
+#home h1 {
   margin: 16px 0 0;
 }
 
-h2 {
+#home h2 {
   margin: 24px 0 0;
   font-weight: normal;
 }
 
-h3 {
+#home h3 {
   font-size: 1.8em;
 }
 
-.alignement-gauche {
+#home .alignement-gauche {
   text-align: left;
 }
 
-a {
+#home a {
   background: white;
   padding: 10px 32px;
   display: flex;
@@ -55,80 +55,140 @@ a {
   margin: 24px 0;
 }
 
-a.secondaire {
+#home a.secondaire {
   background: transparent;
   border: 1px solid white;
   color: white;
 }
 
-a.principal {
+#home a.principal {
   background: var(--couleur-principale);
   color: white;
 }
 
-.grande-marge-basse {
+#home .grande-marge-basse {
   margin-bottom: 40px;
 }
 
-.moyenne-marge-basse {
+#home .moyenne-marge-basse {
   margin-bottom: 32px;
 }
 
-.petite-marge-basse {
+#home .petite-marge-basse {
   margin-bottom: 24px;
 }
 
-.moyenne-police {
+#home .tres-petite-marge-basse {
+  margin-bottom: 16px;
+}
+
+#home .sans-padding-bas {
+  padding-bottom: 0;
+}
+
+#home .moyenne-police {
   font-size: 1.4em;
 }
 
-.couleur-principale-foncee {
+#home .couleur-principale-foncee {
   color: #0c5c98;
 }
 
-p {
+#home p {
   margin: 0;
 }
 
-.conteneur-logo-partenaire {
+#home .conteneur-logo-partenaire {
   display: flex;
   flex-direction: row;
   gap: 24px;
 }
 
-.conteneur-avantages {
+#home .conteneur-avantages {
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
 
-.contenu-avantage {
+#home .contenu-avantage {
   border-left: 4px solid var(--couleur-principale);
   padding-left: 16px;
   padding-right: 8px;
 }
 
-.contenu-avantage h4 {
+#home .contenu-avantage h4 {
   font-size: 1.8em;
   text-align: left;
   margin: 0 0 8px;
 }
 
-.contenu-avantage p {
+#home .contenu-avantage p {
   font-size: 1em;
   text-align: left;
 }
 
-.conteneur-photos-equipe {
+#home .conteneur-photos-equipe {
   display: flex;
   flex-direction: row;
 }
 
-.conteneur-photos-equipe .decalage-gauche {
+#home .conteneur-photos-equipe .decalage-gauche {
   transform: translateX(-40px);
 }
 
-hr {
+#home hr {
   border: none;
   border-top: 1px solid white;
+}
+
+#home .etapes {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+#home .numero-etape {
+  width: 48px;
+  height: 48px;
+  background: var(--couleur-principale);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#home .numero-etape span {
+  transform: translateY(-2px);
+}
+
+#home .etape h4 {
+  font-size: 1.8em;
+  margin: 0 0 16px;
+}
+
+#home .etape p {
+  font-size: 1.2em;
+}
+
+#home .decalage-bas {
+  transform: translateY(6px);
+}
+
+#home .chiffres-cle {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+#home .chiffre-cle h4 {
+  font-size: 4em;
+  margin: 0 0 16px;
+}
+
+#home .chiffre-cle p {
+  font-weight: bold;
+  font-size: 1.4em;
 }
