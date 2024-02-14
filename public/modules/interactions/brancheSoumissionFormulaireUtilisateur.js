@@ -45,6 +45,7 @@ const brancheSoumissionFormulaireUtilisateur = (
     telephone: () => $('#telephone').val(),
     nomEntitePublique: () => $('#nomEntitePublique').val(),
     departementEntitePublique: () => $('#departementEntitePublique').val(),
+    siretEntitePublique: () => $('#siretEntitePublique').val(),
     motDePasse: () => $('#mot-de-passe').val(),
     cguAcceptees: () => reponseAcceptee('cguAcceptees'),
     infolettreAcceptee: () => $('#infolettreAcceptee').is(':checked'),

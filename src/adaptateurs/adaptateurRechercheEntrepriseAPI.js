@@ -18,9 +18,14 @@ const rechercheOrganisations = async (terme, departement) => {
         },
       }
     );
+
     return reponse.data.results
       .filter((r) => r.siege.departement !== null)
-      .map((r) => ({ nom: r.nom_complet, departement: r.siege.departement }));
+      .map((r) => ({
+        nom: r.nom_complet,
+        departement: r.siege.departement,
+        siret: r.siege.siret,
+      }));
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
       'Erreur renvoyée par API recherche-entreprise': e.response?.data,
