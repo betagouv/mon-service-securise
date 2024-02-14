@@ -250,16 +250,40 @@ describe('Un utilisateur', () => {
       };
     });
 
-    it('exige que le prénom soit renseigné', (done) => {
-      verifiePresencePropriete('prenom', 'prénom', done);
-    });
-
-    it('exige que le nom soit renseigné', (done) => {
-      verifiePresencePropriete('nom', 'nom', done);
-    });
-
-    it("exige que l'e-mail soit renseigné quand l'utilisateur est inexistant", (done) => {
-      verifiePresencePropriete('email', 'e-mail', done);
+    const casDeTests = [
+      {
+        propriete: 'prenom',
+        labelPropriete: 'prénom',
+      },
+      {
+        propriete: 'nom',
+        labelPropriete: 'nom',
+      },
+      {
+        propriete: 'email',
+        labelPropriete: 'e-mail',
+      },
+      {
+        propriete: 'nomEntitePublique',
+        labelPropriete: "nom de l'entité publique",
+      },
+      {
+        propriete: 'departementEntitePublique',
+        labelPropriete: "département de l'entité publique",
+      },
+      {
+        propriete: 'postes',
+        labelPropriete: 'Postes',
+      },
+      {
+        propriete: 'infolettreAcceptee',
+        labelPropriete: 'infolettre acceptée',
+      },
+    ];
+    casDeTests.forEach(({ propriete, labelPropriete }) => {
+      it(`exige que la propriété ${labelPropriete} soit renseignée`, (done) => {
+        verifiePresencePropriete(propriete, labelPropriete, done);
+      });
     });
 
     it("n'exige pas que l'e-mail soit renseigné quand l'utilisateur existe déjà", (done) => {
@@ -275,34 +299,6 @@ describe('Un utilisateur', () => {
         }
         done(messageEchec);
       }
-    });
-
-    it("exige que le nom de l'entité publique soit renseigné", (done) => {
-      verifiePresencePropriete(
-        'nomEntitePublique',
-        "nom de l'entité publique",
-        done
-      );
-    });
-
-    it('exige que le département soit renseigné', (done) => {
-      verifiePresencePropriete(
-        'departementEntitePublique',
-        "département de l'entité publique",
-        done
-      );
-    });
-
-    it('exige que les postes soient renseignés', (done) => {
-      verifiePresencePropriete('postes', 'Postes', done);
-    });
-
-    it("exige que l'information d'acceptation de l'infolettre soit renseignée", (done) => {
-      verifiePresencePropriete(
-        'infolettreAcceptee',
-        'infolettre acceptée',
-        done
-      );
     });
 
     it('exige un département présent dans le référentiel', (done) => {
