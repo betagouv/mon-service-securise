@@ -200,13 +200,6 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const chargeFeatureFlags = (_requete, reponse, suite) => {
-    reponse.locals.featureFlags = {
-      avecMesuresCNIL: adaptateurEnvironnement.referentiel().avecMesuresCNIL(),
-    };
-    suite();
-  };
-
   const chargeAutorisationsService = (requete, reponse, suite) => {
     if (!requete.idUtilisateurCourant || !requete.homologation)
       throw new ErreurChainageMiddleware(
@@ -275,7 +268,6 @@ const middleware = (configuration = {}) => {
     aseptiseListe,
     aseptiseListes,
     chargeAutorisationsService,
-    chargeFeatureFlags,
     chargePreferencesUtilisateur,
     positionneHeaders,
     positionneHeadersAvecNonce,

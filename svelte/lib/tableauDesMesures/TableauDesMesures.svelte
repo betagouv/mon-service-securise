@@ -34,7 +34,6 @@
   export let categories: Record<IdCategorie, string>;
   export let statuts: Record<IdStatut, string>;
   export let estLectureSeule: boolean;
-  export let avecMesuresCNIL: boolean;
 
   const rafraichisMesures = async () =>
     mesures.reinitialise(await recupereMesures(idService));
@@ -89,7 +88,7 @@
         placeholder="Intitulé, description"
       />
     </label>
-    <MenuFiltres {categories} {statuts} {avecMesuresCNIL} />
+    <MenuFiltres {categories} {statuts} />
   </div>
   {#if !estLectureSeule}
     <div class="barre-actions">

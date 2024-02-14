@@ -15,7 +15,6 @@ export type TableauDesMesuresProps = {
   categories: Record<IdCategorie, string>;
   statuts: Record<IdStatut, string>;
   estLectureSeule: boolean;
-  avecMesuresCNIL: boolean;
 };
 
 export type MesureGenerale = {

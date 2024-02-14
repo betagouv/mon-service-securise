@@ -54,7 +54,6 @@ let listesAseptisees = [];
 let listeAdressesIPsAutorisee = [];
 let parametresAseptises = [];
 let preferencesChargees = false;
-let featureFlagsCharges = false;
 let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
 let traficProtege = false;
@@ -84,7 +83,6 @@ const middlewareFantaisie = {
     listeAdressesIPsAutorisee = [];
     parametresAseptises = [];
     preferencesChargees = false;
-    featureFlagsCharges = false;
     rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
     traficProtege = false;
@@ -129,12 +127,6 @@ const middlewareFantaisie = {
   chargePreferencesUtilisateur: (_requete, reponse, suite) => {
     reponse.locals.preferencesUtilisateur = {};
     preferencesChargees = true;
-    suite();
-  },
-
-  chargeFeatureFlags: (_requete, reponse, suite) => {
-    reponse.locals.featureFlags = {};
-    featureFlagsCharges = true;
     suite();
   },
 
@@ -242,13 +234,6 @@ const middlewareFantaisie = {
   verifieChargementDesPreferences: (...params) => {
     verifieRequeteChangeEtat(
       { lectureEtat: () => preferencesChargees },
-      ...params
-    );
-  },
-
-  verifieChargementDesFeatureFlags: (...params) => {
-    verifieRequeteChangeEtat(
-      { lectureEtat: () => featureFlagsCharges },
       ...params
     );
   },
