@@ -643,6 +643,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
+        siretEntitePublique: 'SIRET',
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
       };
@@ -662,6 +663,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           'cguAcceptees',
           'nomEntitePublique',
           'departementEntitePublique',
+          'siretEntitePublique',
           'infolettreAcceptee',
           'transactionnelAccepte',
           'postes.*',

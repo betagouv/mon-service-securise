@@ -28,6 +28,7 @@ class Utilisateur extends Base {
         'postes',
         'nomEntitePublique',
         'departementEntitePublique',
+        'siretEntitePublique',
         'infolettreAcceptee',
         'transactionnelAccepte',
       ],
@@ -91,6 +92,7 @@ class Utilisateur extends Base {
       'nom',
       'nomEntitePublique',
       'departementEntitePublique',
+      'siretEntitePublique',
     ]);
     validePresenceProprietesBooleenes([
       'infolettreAcceptee',
@@ -109,6 +111,7 @@ class Utilisateur extends Base {
       'cguAcceptees',
       'nomEntitePublique',
       'departementEntitePublique',
+      'siretEntitePublique',
       'infolettreAcceptee',
       'transactionnelAccepte',
       'postes.*',
@@ -185,6 +188,7 @@ class Utilisateur extends Base {
       posteDetaille: this.posteDetaille(),
       nomEntitePublique: this.nomEntitePublique || '',
       departementEntitePublique: this.departementEntitePublique || '',
+      siretEntitePublique: this.siretEntitePublique,
       profilEstComplet: this.profilEstComplet(),
       infolettreAcceptee: this.accepteInfolettre(),
       transactionnelAccepte: this.accepteTransactionnel(),

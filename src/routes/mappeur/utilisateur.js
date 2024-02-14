@@ -7,6 +7,7 @@ const obtentionDonneesDeBaseUtilisateur = (corps) => ({
   telephone: corps.telephone,
   nomEntitePublique: corps.nomEntitePublique,
   departementEntitePublique: corps.departementEntitePublique,
+  siretEntitePublique: corps.siretEntitePublique || null,
   infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
   transactionnelAccepte: valeurBooleenne(corps.transactionnelAccepte),
   postes: corps.postes,

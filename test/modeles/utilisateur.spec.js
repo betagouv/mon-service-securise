@@ -87,6 +87,7 @@ describe('Un utilisateur', () => {
       postes: ['RSSI', 'Maire'],
       nomEntitePublique: 'Ville de Paris',
       departementEntitePublique: '75',
+      siretEntitePublique: 'SIRET',
       infolettreAcceptee: true,
       transactionnelAccepte: true,
     });
@@ -101,6 +102,7 @@ describe('Un utilisateur', () => {
       posteDetaille: 'RSSI et Maire',
       nomEntitePublique: 'Ville de Paris',
       departementEntitePublique: '75',
+      siretEntitePublique: 'SIRET',
       profilEstComplet: true,
       infolettreAcceptee: true,
       transactionnelAccepte: true,
@@ -203,6 +205,7 @@ describe('Un utilisateur', () => {
       'cguAcceptees',
       'nomEntitePublique',
       'departementEntitePublique',
+      'siretEntitePublique',
       'infolettreAcceptee',
       'transactionnelAccepte',
       'postes.*',
@@ -241,6 +244,7 @@ describe('Un utilisateur', () => {
         postes: ['RSSI'],
         nomEntitePublique: 'Ville de Paris',
         departementEntitePublique: '75',
+        siretEntitePublique: 'SIRET',
         infolettreAcceptee: true,
         transactionnelAccepte: true,
       };
