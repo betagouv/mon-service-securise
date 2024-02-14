@@ -75,6 +75,10 @@ const creeServeur = (
     reponse.render('index');
   });
 
+  app.get('/home', (_requete, reponse) => {
+    reponse.render('home');
+  });
+
   app.get('/aPropos', (_requete, reponse) => {
     reponse.render('aPropos');
   });

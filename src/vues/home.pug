@@ -1,0 +1,48 @@
+extends mssDeconnecte
+
+mixin contenuAvantage(titre, description)
+  .contenu-avantage
+    h4!= titre
+    p!= description
+
+block append styles
+  link(href='/statique/assets/styles/index.css', rel='stylesheet')
+  link(href='/statique/assets/styles/index.responsive.css', rel='stylesheet')
+  link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
+  link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
+  link(href='/statique/assets/styles/home.css', rel='stylesheet')
+
+block main
+  .bloc-contenu.fond-couleur-principale
+    img(src='/statique/assets/images/home/illustration_1.svg' alt='')
+    h1 MonServiceSécurisé
+    h2.alignement-gauche L'outil pour piloter en équipe la sécurité de tous vos services numériques et pour les homologuer rapidement
+    a#commencer-a-securiser(href='https://www.monservicesecurise.ssi.gouv.fr/inscription') Commencer à sécuriser
+    a.secondaire.grande-marge-basse#etre-accompagne(href='https://calendly.com/monservicesecurise-henri/presentation-de-monservicesecurise-anssi-clone' target='_blank' rel='noopener') Être accompagné
+    p.alignement-gauche.moyenne-marge-basse Une innovation ANSSI conçue pour durer en collaboration avec :
+    .conteneur-logo-partenaire
+      img(src='/statique/assets/images/home/cnil.svg' alt='Logo de la CNIL')
+      img(src='/statique/assets/images/home/declic.svg' alt='Logo de Déclic')
+  .bloc-contenu.fond-couleur-principale-attenuee
+    h3 TODO LE CARROUSEL
+  .bloc-contenu.fond-couleur-principale-attenuee
+    h3.alignement-gauche.moyenne-marge-basse Les avantages de MonServiceSécurisé
+    img.grande-marge-basse(src='/statique/assets/images/home/illustration_2.svg' alt='')
+    .conteneur-avantages.grande-marge-basse
+      +contenuAvantage('Laissez-vous guider !', "Utilisez MonServiceSécurisé, même si la cybersécurité n'a QUE des secrets pour vous")
+      +contenuAvantage('Renforcez la sécurité de tous vos services', 'Placez votre effort au bon niveau et obtenez des résultats concrets.')
+      +contenuAvantage('Mettez-vous en conformité', "L'homologation de sécurité devient un jeu d'enfant avec MonServiceSécurisé.")
+    a.principal.petite-marge-basse#commencer-a-securiser-avantages(href='https://www.monservicesecurise.ssi.gouv.fr/inscription') Commencer à sécuriser
+  .bloc-contenu.fond-couleur-principale
+    .conteneur-photos-equipe.petite-marge-basse
+      img(src='/statique/assets/images/home/antoine.svg' alt="Photo d'Antoine Dupuy")
+      img.decalage-gauche(src='/statique/assets/images/home/henri.svg' alt="Photo d'Henri Casalis")
+    hr.petite-marge-basse
+    h3.alignement-gauche.petite-marge-basse Notre équipe est à votre écoute
+    p.moyenne-police.alignement-gauche
+      span Antoine et Henri vous guideront dans la découverte et la prise en main de MonServiceSécurisé au sein de votre organisation.&nbsp;
+      span
+        b Notre priorité : vous accompagner.
+    a.petite-marge-basse#beneficier-accompagnement(href='https://calendly.com/monservicesecurise-henri/presentation-de-monservicesecurise-anssi-clone' target='_blank' rel='noopener') Bénéficier d'un accompagnement
+  .bloc-contenu
+    h3.alignement-gauche.moyenne-marge-basse.couleur-principale-foncee Comment fonctionne MonServiceSécurisé ?
