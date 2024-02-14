@@ -37,6 +37,7 @@ main {
 
 #home h3 {
   font-size: 1.8em;
+  margin: 24px 0 0;
 }
 
 #home .alignement-gauche {
@@ -88,6 +89,10 @@ main {
 
 #home .moyenne-police {
   font-size: 1.4em;
+}
+
+#home .couleur-principale {
+  color: var(--couleur-principale);
 }
 
 #home .couleur-principale-foncee {
@@ -191,4 +196,48 @@ main {
 #home .chiffre-cle p {
   font-weight: bold;
   font-size: 1.4em;
+}
+
+#home .conteneur-entites img {
+  margin-bottom: 24px;
+}
+
+#home .conteneur-entites img:last-of-type {
+  margin-bottom: 0;
+}
+
+#home .conteneur-temoignages {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#home .temoignage h4 {
+  margin: 8px 0 0;
+  font-size: 1.4em;
+}
+
+#home .temoignage h5 {
+  margin: 16px 0 0;
+  font-size: 1em;
+}
+
+#home .temoignage h6 {
+  margin: 4px 0 0;
+  color: #666666;
+  font-style: italic;
+  font-weight: normal;
+}
+
+#home .titre-etroit {
+  padding: 0 16px;
+}
+
+#home .icone-lien-externe::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-image: url('/statique/assets/images/home/icone_lien_externe.svg');
+  background-repeat: no-repeat;
+  margin-right: 8px;
 }

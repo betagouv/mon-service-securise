@@ -18,6 +18,13 @@ mixin chiffreCle(chiffre, description)
     h4.alignement-gauche.couleur-principale-foncee!= chiffre
     p.alignement-gauche!=description
 
+mixin temoignage(citation, auteur, source)
+  .temoignage.alignement-gauche
+    img(src='/statique/assets/images/home/icone_temoignage.svg' alt='')
+    h4!= `« ${citation} »`
+    h5.couleur-principale!= auteur
+    h6.alignement-gauche!= source
+
 block append styles
   link(href='/statique/assets/styles/index.css', rel='stylesheet')
   link(href='/statique/assets/styles/index.responsive.css', rel='stylesheet')
@@ -75,3 +82,22 @@ block main
         +chiffreCle('+55%', "L'augmentation moyenne de l'indice cyber d'un service en seulement 1 mois")
         +chiffreCle('5 min', "Le temps nécessaire pour démarrer un projet d'homologation et obtenir une 1ère version de son dossier.")
         +chiffreCle('+3500', "Plus de 3500 personnes utilisent déjà MonServiceSécurisé.")
+    .bloc-contenu.fond-couleur-principale-attenuee
+      h3.alignement-gauche.couleur-principale-foncee.moyenne-marge-basse Ces entités qui nous font confiance
+      .conteneur-entites.grande-marge-basse
+        img(src='/statique/assets/images/home/metropole_aix_marseille_provence.svg' alt='La métropole Aix-Marseille-Provence')
+        img(src='/statique/assets/images/home/anct.svg' alt='ANCT Incubateur des territoires')
+        img(src='/statique/assets/images/home/essonne.svg' alt='Essonne')
+        img(src='/statique/assets/images/home/inclusion_connect.svg' alt='Inclusion Connect')
+      .conteneur-temoignages.tres-petite-marge-basse
+        +temoignage("Lorem ipsum dolor sit amet, consectetur adipiscing. Dignissim cursus at ullamcorper mauris non. Integer aliquam, scelerisque.", "Auteur", "Ouvrage · Détail 1.2 · Détail 1.3 · Détail 1.4 ")
+        +temoignage("Lorem ipsum dolor sit amet, consectetur adipiscing. Dignissim cursus at ullamcorper mauris non. Integer aliquam, scelerisque.", "Auteur", "Ouvrage · Détail 1.2 · Détail 1.3 · Détail 1.4 ")
+    .bloc-contenu
+      h3.titre-etroit.couleur-principale-foncee.moyenne-marge-basse Qu’est-ce que l’ANSSI ?
+      img.moyenne-marge-basse(src='/statique/assets/images/home/anssi.svg' alt='ANSSI')
+      p.moyenne-police.moyenne-marge-basse
+        span Créée en 2009, l’Agence nationale de la sécurité des systèmes d’information (ANSSI) est l’autorité nationale en matière de cybersécurité et de cyberdéfense.
+        br
+        span
+          b Son action pour la protection de la Nation face aux cyberattaques se traduit en quatre grandes missions : défendre, connaître, partager, accompagner.
+      a.principal.icone-lien-externe#en-savoir-plus(href='https://cyber.gouv.fr/' target='_blank' rel='noopener') En savoir plus
