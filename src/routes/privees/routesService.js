@@ -83,7 +83,6 @@ const routesService = ({
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
-    middleware.chargeFeatureFlags,
     async (requete, reponse) => {
       const { homologation } = requete;
 

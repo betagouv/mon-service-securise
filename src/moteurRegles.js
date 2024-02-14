@@ -85,19 +85,11 @@ class MoteurRegles {
         [idMesure]: mesureAvecImportanceAjustee(idsMesuresReference, idMesure),
       });
 
-    let mesuresAjustees = idsMesures.reduce(
+    return idsMesures.reduce(
       (...parametres) =>
         ajouteEtRendsIndispensable(mesuresARendreIndispensables, ...parametres),
       {}
     );
-
-    if (!this.adaptateurEnvironnement.referentiel().avecMesuresCNIL())
-      mesuresAjustees = Object.fromEntries(
-        Object.entries(mesuresAjustees).filter(
-          ([, mesure]) => mesure.referentiel !== 'CNIL'
-        )
-      );
-    return mesuresAjustees;
   }
 }
 

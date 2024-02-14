@@ -214,15 +214,6 @@ describe('Le serveur MSS des routes /service/*', () => {
         );
     });
 
-    it('charge les feature flags', (done) => {
-      testeur
-        .middleware()
-        .verifieChargementDesFeatureFlags(
-          'http://localhost:1234/service/456/mesures',
-          done
-        );
-    });
-
     it('interroge le moteur de règles pour obtenir les mesures personnalisées', async () => {
       let descriptionRecue;
       const requete = {};

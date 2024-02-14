@@ -12,7 +12,6 @@
 
   export let categories: Record<IdCategorie, string>;
   export let statuts: Record<IdStatut, string>;
-  export let avecMesuresCNIL: boolean;
 
   const effaceFiltres = () => {
     rechercheCategorie.set([]);
@@ -123,18 +122,16 @@
         />
         <label for="anssi-recommandee">Recommandée</label>
       </div>
-      {#if avecMesuresCNIL}
-        <div>
-          <input
-            type="checkbox"
-            id="mesure-cnil"
-            name="mesure-cnil"
-            bind:group={$rechercheReferentiel}
-            value={IdReferentiel.CNIL}
-          />
-          <label for="mesure-cnil">CNIL</label>
-        </div>
-      {/if}
+      <div>
+        <input
+          type="checkbox"
+          id="mesure-cnil"
+          name="mesure-cnil"
+          bind:group={$rechercheReferentiel}
+          value={IdReferentiel.CNIL}
+        />
+        <label for="mesure-cnil">CNIL</label>
+      </div>
       <div>
         <input
           type="checkbox"
