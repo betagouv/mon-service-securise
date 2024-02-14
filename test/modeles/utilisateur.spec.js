@@ -272,6 +272,10 @@ describe('Un utilisateur', () => {
         labelPropriete: "département de l'entité publique",
       },
       {
+        propriete: 'siretEntitePublique',
+        labelPropriete: "SIRET de l'entité publique",
+      },
+      {
         propriete: 'postes',
         labelPropriete: 'Postes',
       },
