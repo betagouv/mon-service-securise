@@ -25,12 +25,21 @@ mixin temoignage(citation, auteur, source)
     h5.couleur-principale!= auteur
     h6.alignement-gauche!= source
 
+mixin carteCarrousel(numero, description)
+  .carte-carrousel(id=`slide-${numero}`)
+    img.petite-marge-basse(src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
+    h4!= description
+
+
 block append styles
   link(href='/statique/assets/styles/index.css', rel='stylesheet')
   link(href='/statique/assets/styles/index.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/home.css', rel='stylesheet')
+
+block append scripts
+  script(type = 'module', src = '/statique/home.js')
 
 block main
   #home
@@ -41,11 +50,21 @@ block main
       a#commencer-a-securiser(href='https://www.monservicesecurise.ssi.gouv.fr/inscription') Commencer à sécuriser
       a.secondaire.grande-marge-basse#etre-accompagne(href='https://calendly.com/monservicesecurise-henri/presentation-de-monservicesecurise-anssi-clone' target='_blank' rel='noopener') Être accompagné
       p.alignement-gauche.moyenne-marge-basse Une innovation ANSSI conçue pour durer en collaboration avec :
-      .conteneur-logo-partenaire
+      .conteneur-logo-partenaire.petite-marge-basse
         img(src='/statique/assets/images/home/cnil.svg' alt='Logo de la CNIL')
         img(src='/statique/assets/images/home/declic.svg' alt='Logo de Déclic')
-    .bloc-contenu.fond-couleur-principale-attenuee
-      h3 TODO LE CARROUSEL
+    .conteneur-carrousel#carrousel
+      +carteCarrousel(1, "Gratuit, 100% en ligne et collaboratif")
+      +carteCarrousel(2, "Accessible à toutes les entités publiques")
+      +carteCarrousel(3, "Conçu par les spécialistes de l'ANSSI")
+    .conteneur-liens-carrousel
+      button.precedent
+        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
+      button.actif.lien-carte(data-cible=0) 1
+      button.lien-carte(data-cible=1) 2
+      button.lien-carte(data-cible=2) 3
+      button.suivant
+        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
     .bloc-contenu.fond-couleur-principale-attenuee
       h3.alignement-gauche.moyenne-marge-basse Les avantages de MonServiceSécurisé
       img.grande-marge-basse(src='/statique/assets/images/home/illustration_2.svg' alt='')

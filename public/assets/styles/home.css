@@ -241,3 +241,83 @@ main {
   background-repeat: no-repeat;
   margin-right: 8px;
 }
+
+#home .conteneur-carrousel {
+  background: linear-gradient(
+    to bottom,
+    var(--couleur-principale) 20%,
+    var(--couleur-principale-attenuee) 20%
+  );
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 24px;
+}
+
+#home .conteneur-carrousel::-webkit-scrollbar {
+  display: none;
+}
+
+#home .carte-carrousel {
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 12px 12px 0 #0000001a;
+  padding: 0 32px 32px 32px;
+  width: calc(288px - 64px);
+  flex-shrink: 0;
+  scroll-snap-align: center;
+}
+
+#home .carte-carrousel:first-of-type {
+  margin-left: 16px;
+}
+
+#home .carte-carrousel:last-of-type {
+  margin-right: 16px;
+}
+
+#home .carte-carrousel img {
+  margin: 0;
+}
+
+#home .carte-carrousel h4 {
+  margin: 8px 0 0;
+  font-size: 1.8em;
+  font-weight: 800;
+}
+
+#home .conteneur-liens-carrousel {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  background: var(--couleur-principale-attenuee);
+  padding-bottom: 24px;
+}
+
+#home .conteneur-liens-carrousel button {
+  background: transparent;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.8em;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#home .conteneur-liens-carrousel button.actif {
+  background: var(--couleur-principale);
+  color: white;
+}
+
+#home .conteneur-liens-carrousel button.suivant {
+  transform: rotate(180deg);
+}
