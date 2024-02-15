@@ -1,0 +1,116 @@
+@media screen and (min-width: 768px) {
+  #home img.taille-maximale {
+    width: 100%;
+  }
+
+  #home .bloc-contenu {
+    padding: 56px 112px;
+    overflow-x: hidden;
+  }
+
+  #home .bloc-contenu.bloc-etroit {
+    padding: 56px;
+  }
+
+  #home h1 {
+    font-size: 3.9em;
+  }
+
+  #home h3 {
+    font-size: 2.8em;
+  }
+
+  #home a {
+    width: fit-content;
+    height: fit-content;
+    font-size: 1.3em;
+  }
+
+  #home .conteneur-liens {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+  }
+
+  #home .carte-carrousel {
+    width: calc(384px - 108px);
+    padding: 24px 54px 54px 54px;
+  }
+
+  #home .carte-carrousel h4 {
+    font-size: 2.2em;
+  }
+
+  #home .carte-carrousel:first-of-type {
+    margin-left: 56px;
+  }
+
+  #home .carte-carrousel:last-of-type {
+    margin-right: 56px;
+  }
+
+  #home .conteneur-liens-carrousel {
+    padding-bottom: 0;
+    margin-bottom: -40px;
+  }
+
+  #home img.plus-grand {
+    width: 140%;
+    transform: translateX(-60px);
+  }
+
+  #home .contenu-avantage h4 {
+    font-size: 2.2em;
+  }
+
+  #home .conteneur-centre {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #home .conteneur-photos-equipe {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #home .moyenne-police-tablette {
+    font-size: 2.2em;
+  }
+
+  #home .moyenne-marge-haute-tablette {
+    margin-top: 48px;
+  }
+
+  #home .numero-etape {
+    width: 120px;
+    height: 120px;
+    font-size: 3.3em;
+  }
+
+  #home .conteneur-etroit {
+    padding: 0 136px;
+  }
+
+  #home .decalage-bas {
+    transform: translateY(62px);
+    margin-top: -40px;
+  }
+
+  #home .centre-tablette {
+    text-align: center;
+  }
+
+  #home .chiffre-cle h4 {
+    font-size: 5.6em;
+  }
+
+  #home .conteneur-entites {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+}
