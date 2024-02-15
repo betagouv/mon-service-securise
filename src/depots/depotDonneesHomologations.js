@@ -16,7 +16,8 @@ const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresService
 const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
-  const chiffre = (chaine) => adaptateurChiffrement.chiffre(chaine);
+  const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
+  const dechiffre = async (chaine) => adaptateurChiffrement.dechiffre(chaine);
 
   return {
     chiffre: {
@@ -31,6 +32,18 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
         };
       },
     },
+    dechiffre: {
+      donneesService: async (donnees) => {
+        const { descriptionService } = donnees;
+        return {
+          ...donnees,
+          descriptionService: {
+            ...descriptionService,
+            nomService: await dechiffre(descriptionService.nomService),
+          },
+        };
+      },
+    },
   };
 };
 
@@ -39,13 +52,17 @@ const fabriquePersistance = (
   adaptateurChiffrement,
   referentiel
 ) => {
-  const { chiffre } = fabriqueChiffrement(adaptateurChiffrement);
+  const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
   const persistance = {
     lis: {
       une: async (idHomologation) => {
         const h = await adaptateurPersistance.homologation(idHomologation);
-        return h ? new Homologation(h, referentiel) : undefined;
+
+        if (!h) return undefined;
+
+        const donneesEnClair = await dechiffre.donneesService(h);
+        return new Homologation(donneesEnClair, referentiel);
       },
       cellesDeUtilisateur: async (idUtilisateur) => {
         const hs = await adaptateurPersistance.homologations(idUtilisateur);

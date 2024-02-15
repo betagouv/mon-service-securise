@@ -22,6 +22,25 @@ const chiffre = async (chaine) => {
   return reponse.data.data.ciphertext;
 };
 
+const dechiffre = async (chaine) => {
+  const env = chiffrement();
+  const base = env.urlBaseDuService();
+  const cleTransit = env.cleDuMoteurTransit();
+
+  const reponse = await axios.put(
+    `${base}/v1/transit/decrypt/${cleTransit}`,
+    { ciphertext: chaine },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Vault-Token': env.tokenVault(),
+      },
+    }
+  );
+
+  return reponse.data.data.plaintext;
+};
+
 const NOMBRE_DE_PASSES = 10;
 const hacheBCrypt = (chaineEnClair) =>
   bcrypt.hash(chaineEnClair, NOMBRE_DE_PASSES);
@@ -36,6 +55,7 @@ const nonce = () =>
 
 module.exports = {
   chiffre,
+  dechiffre,
   compareBCrypt: compare,
   hacheBCrypt,
   hacheSha256,

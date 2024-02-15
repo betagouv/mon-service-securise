@@ -24,6 +24,7 @@ const {
   EvenementAutorisationsServiceModifiees,
 } = require('../../src/bus/evenementAutorisationsServiceModifiees');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE, LECTURE } = Permissions;
@@ -34,6 +35,7 @@ describe('Le dépôt de données des autorisations', () => {
       adaptateurPersistance,
       adaptateurUUID,
       depotHomologations: DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
       }),
       depotUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
