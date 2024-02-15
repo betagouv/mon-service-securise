@@ -3,14 +3,17 @@ const { createHash } = require('crypto');
 const bcrypt = require('bcrypt');
 const { chiffrement } = require('./adaptateurEnvironnement');
 
-const chiffre = async (chaine) => {
+const chiffre = async (chaineOuObjet) => {
   const env = chiffrement();
   const base = env.urlBaseDuService();
   const cleTransit = env.cleDuMoteurTransit();
 
+  const brut = JSON.stringify(chaineOuObjet);
+  const base64 = Buffer.from(brut).toString('base64');
+
   const reponse = await axios.put(
     `${base}/v1/transit/encrypt/${cleTransit}`,
-    { plaintext: chaine },
+    { plaintext: base64 },
     {
       headers: {
         'Content-Type': 'application/json',
@@ -22,14 +25,14 @@ const chiffre = async (chaine) => {
   return reponse.data.data.ciphertext;
 };
 
-const dechiffre = async (chaine) => {
+const dechiffre = async (chaineChiffree) => {
   const env = chiffrement();
   const base = env.urlBaseDuService();
   const cleTransit = env.cleDuMoteurTransit();
 
   const reponse = await axios.put(
     `${base}/v1/transit/decrypt/${cleTransit}`,
-    { ciphertext: chaine },
+    { ciphertext: chaineChiffree },
     {
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +41,9 @@ const dechiffre = async (chaine) => {
     }
   );
 
-  return reponse.data.data.plaintext;
+  const base64 = Buffer.from(reponse.data.data.plaintext, 'base64');
+  const brut = base64.toString('utf-8');
+  return JSON.parse(brut);
 };
 
 const NOMBRE_DE_PASSES = 10;
