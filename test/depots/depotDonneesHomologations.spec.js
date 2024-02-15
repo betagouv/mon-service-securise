@@ -148,11 +148,19 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   it('peut retrouver une homologation à partir de son identifiant', async () => {
+    const adaptateurChiffrement = {
+      dechiffre: async (chaine) => chaine.replace(' - chiffré', ''),
+    };
+
     const adaptateurPersistance = unePersistanceMemoire()
-      .ajouteUnService({ id: '789', descriptionService: { nomService: 'nom' } })
+      .ajouteUnService({
+        id: '789',
+        descriptionService: { nomService: 'nom - chiffré' },
+      })
       .construis();
     const referentiel = Referentiel.creeReferentielVide();
     const depot = DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement,
       adaptateurPersistance,
       referentiel,
     });
@@ -162,6 +170,7 @@ describe('Le dépôt de données des homologations', () => {
     expect(homologation).to.be.a(Homologation);
     expect(homologation.id).to.equal('789');
     expect(homologation.referentiel).to.equal(referentiel);
+    expect(homologation.nomService()).to.be('nom');
   });
 
   it("associe ses contributeurs à l'homologation", async () => {
@@ -181,6 +190,7 @@ describe('Le dépôt de données des homologations', () => {
       }
     );
     const depot = DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
       adaptateurPersistance,
     });
 
@@ -1072,6 +1082,7 @@ describe('Le dépôt de données des homologations', () => {
           services: [copie(donneesHomologations)],
         });
       const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
       });
