@@ -113,10 +113,10 @@ const middleware = (configuration = {}) => {
     verificationAcceptationCGU(requete, reponse, () =>
       depotDonnees
         .homologation(idService)
-        .then((homologation) => {
+        .then((service) => {
           const idUtilisateur = requete.idUtilisateurCourant;
 
-          if (!homologation) reponse.status(404).send('Service non trouvé');
+          if (!service) reponse.status(404).send('Service non trouvé');
           else {
             depotDonnees
               .accesAutorise(idUtilisateur, idService, droitsRequis)
@@ -124,7 +124,7 @@ const middleware = (configuration = {}) => {
                 if (!accesAutorise)
                   reponse.status(403).render('erreurAccesRefuse');
                 else {
-                  requete.homologation = homologation;
+                  requete.homologation = service;
                   suite();
                 }
               });
