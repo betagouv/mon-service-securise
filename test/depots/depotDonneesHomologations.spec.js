@@ -148,14 +148,19 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   it('peut retrouver une homologation à partir de son identifiant', async () => {
+    let donneeDechiffree;
     const adaptateurChiffrement = {
-      dechiffre: async (chaine) => chaine.replace(' - chiffré', ''),
+      dechiffre: async (objetDonnee) => {
+        donneeDechiffree = objetDonnee;
+        const { chiffre, ...reste } = objetDonnee;
+        return reste;
+      },
     };
 
     const adaptateurPersistance = unePersistanceMemoire()
       .ajouteUnService({
         id: '789',
-        descriptionService: { nomService: 'nom - chiffré' },
+        descriptionService: { nomService: 'nom', chiffre: true },
       })
       .construis();
     const referentiel = Referentiel.creeReferentielVide();
@@ -171,6 +176,7 @@ describe('Le dépôt de données des homologations', () => {
     expect(homologation.id).to.equal('789');
     expect(homologation.referentiel).to.equal(referentiel);
     expect(homologation.nomService()).to.be('nom');
+    expect(donneeDechiffree).to.eql({ nomService: 'nom', chiffre: true });
   });
 
   it("associe ses contributeurs à l'homologation", async () => {
@@ -740,21 +746,22 @@ describe('Le dépôt de données des homologations', () => {
         return persistanceReelle(id, donnees);
       };
 
-      adaptateurChiffrement.chiffre = async (chaine) => `${chaine} - chiffré`;
+      adaptateurChiffrement.chiffre = async (objet) => ({
+        ...objet,
+        chiffre: true,
+      });
 
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Service A')
-        .deLOrganisation('ANSSI')
-        .avecPresentation('Le service fait A & B')
-        .accessiblePar('https://site.fr', 'https://autre.site.fr')
         .construis()
         .donneesSerialisees();
 
       await depot.nouveauService('123', { descriptionService });
 
-      const { nomService } = donneesPersistees.descriptionService;
-
-      expect(nomService).to.equal('Service A - chiffré');
+      expect(donneesPersistees.descriptionService.nomService).to.equal(
+        'Service A'
+      );
+      expect(donneesPersistees.descriptionService.chiffre).to.equal(true);
     });
 
     it('ajoute en copie un nouveau service au dépôt', (done) => {

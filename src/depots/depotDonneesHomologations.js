@@ -25,10 +25,7 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
         const { descriptionService } = donnees;
         return {
           ...donnees,
-          descriptionService: {
-            ...descriptionService,
-            nomService: await chiffre(descriptionService.nomService),
-          },
+          descriptionService: await chiffre(descriptionService),
         };
       },
     },
@@ -37,10 +34,7 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
         const { descriptionService } = donnees;
         return {
           ...donnees,
-          descriptionService: {
-            ...descriptionService,
-            nomService: await dechiffre(descriptionService.nomService),
-          },
+          descriptionService: await dechiffre(descriptionService),
         };
       },
     },
