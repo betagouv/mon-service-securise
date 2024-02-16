@@ -105,33 +105,30 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   it('trie les homologations par ordre alphabétique du nom du service', async () => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        homologations: [
-          { id: '123', descriptionService: { nomService: 'B-service' } },
-          { id: '456', descriptionService: { nomService: 'C-service' } },
-          { id: '789', descriptionService: { nomService: 'A-service' } },
-        ],
-        utilisateurs: [
-          {
-            id: '999',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-          },
-        ],
-        autorisations: [
-          uneAutorisation().deProprietaire('999', '123').donnees,
-          uneAutorisation().deProprietaire('999', '456').donnees,
-          uneAutorisation().deProprietaire('999', '789').donnees,
-        ],
-      }
-    );
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurPersistance,
-    });
+    const r = Referentiel.creeReferentielVide();
+    const persistance = unePersistanceMemoire()
+      .ajouteUnUtilisateur(unUtilisateur().avecId('U').donnees)
+      .ajouteUnService(
+        unService(r).avecId('1').avecNomService('B-service').donnees
+      )
+      .ajouteUnService(
+        unService(r).avecId('2').avecNomService('C-service').donnees
+      )
+      .ajouteUnService(
+        unService(r).avecId('3').avecNomService('A-service').donnees
+      )
+      .ajouteUneAutorisation(uneAutorisation().deProprietaire('U', '1').donnees)
+      .ajouteUneAutorisation(uneAutorisation().deProprietaire('U', '2').donnees)
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U', '3').donnees
+      );
 
-    const hs = await depot.homologations('999');
+    const depot = unDepotDeDonneesServices()
+      .avecReferentiel(r)
+      .avecAdaptateurPersistance(persistance)
+      .construis();
+
+    const hs = await depot.homologations('U');
 
     expect(hs.length).to.equal(3);
     expect(hs[0].nomService()).to.equal('A-service');
