@@ -103,6 +103,11 @@ main {
   margin: 0;
 }
 
+#home .conteneur-titre {
+  display: flex;
+  flex-direction: column;
+}
+
 #home .conteneur-logo-partenaire {
   display: flex;
   flex-direction: row;
@@ -113,6 +118,11 @@ main {
   display: flex;
   flex-direction: column;
   gap: 32px;
+}
+
+#home .conteneur-avantage {
+  display: flex;
+  flex-direction: column;
 }
 
 #home .contenu-avantage {

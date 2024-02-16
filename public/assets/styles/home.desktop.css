@@ -1,0 +1,157 @@
+@media screen and (min-width: 1440px) {
+  #home .alignement-gauche-desktop {
+    text-align: left;
+  }
+
+  #home .bloc-contenu {
+    padding: 80px 0;
+  }
+
+  #home .bloc-contenu > * {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  #home .invisible-desktop {
+    display: none;
+  }
+
+  #home .visible-uniquement-desktop {
+    display: flex;
+  }
+
+  #home .conteneur-titre {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 24px;
+  }
+
+  #home .conteneur-carrousel {
+    justify-content: center;
+  }
+
+  #home .conteneur-avantage {
+    flex-direction: row-reverse;
+    padding-top: 72px;
+  }
+
+  #home .conteneur-avantage img {
+    transform: translate(100px, -20px) scale(1.1);
+    flex: 1;
+  }
+
+  #home .conteneur-avantage .conteneur-avantages {
+    flex: 1;
+  }
+
+  #home .conteneur-flex-photos-equipe {
+    display: flex;
+    flex-direction: row;
+    padding: 0 15vw;
+    gap: 32px;
+  }
+
+  #home .conteneur-photos-equipe {
+    border-right: 1px solid white;
+  }
+
+  #home .conteneur-gauche-desktop {
+    justify-content: left;
+  }
+
+  #home .etape {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 54px;
+    position: relative;
+  }
+
+  #home .etape.pair {
+    flex-direction: row-reverse;
+  }
+
+  #home .numero-etape {
+    min-width: 120px;
+    min-height: 120px;
+    z-index: 1;
+  }
+
+  #home .contenu-texte-etape {
+    padding-right: 122px;
+  }
+
+  #home .etape.pair .contenu-texte-etape {
+    padding-right: 0;
+    padding-left: 122px;
+  }
+
+  #home .etape .chemin {
+    position: absolute;
+    left: 41%;
+    top: 190px;
+    transform: rotate(-22deg);
+  }
+
+  #home .etape .chemin.pair {
+    position: absolute;
+    left: 56%;
+    top: 243px;
+    transform: rotate(180deg);
+  }
+
+  #home .bloc-contenu.bloc-etroit {
+    padding: 80px 0;
+  }
+
+  #home .conteneur-collaboration {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  #home .contenu-texte-collaboration {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  #home .conteneur-collaboration .conteneur-etroit {
+    flex: 0.8;
+    transform: translateY(24px);
+  }
+
+  #home .chiffre-cle {
+    padding: 0 122px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 72px;
+  }
+
+  #home .chiffre-cle h4 {
+    white-space: nowrap;
+    flex: 1;
+    text-align: left;
+  }
+
+  #home .chiffre-cle p {
+    text-align: left;
+    flex: 2;
+  }
+
+  #home .conteneur-temoignages {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #home #presentation-anssi {
+    padding: 80px 22vw;
+  }
+}
+
+@media screen and (max-width: 1439px) {
+  #home .visible-uniquement-desktop {
+    display: none;
+  }
+}
