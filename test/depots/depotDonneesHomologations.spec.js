@@ -169,32 +169,28 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   it("associe ses contributeurs à l'homologation", async () => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          { id: '111', email: 'createur@mail.fr' },
-          { id: '999', email: 'contributeur@mail.fr' },
-        ],
-        homologations: [
-          { id: '789', descriptionService: { nomService: 'nom' } },
-        ],
-        autorisations: [
-          uneAutorisation().deProprietaire('111', '789').donnees,
-          uneAutorisation().deContributeur('999', '789').donnees,
-        ],
-      }
-    );
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurChiffrement: fauxAdaptateurChiffrement(),
-      adaptateurPersistance,
-    });
+    const r = Referentiel.creeReferentielVide();
+    const persistance = unePersistanceMemoire()
+      .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+      .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+      .ajouteUnService(unService(r).avecId('S1').donnees)
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U1', 'S1').donnees
+      )
+      .ajouteUneAutorisation(
+        uneAutorisation().deContributeur('U2', 'S1').donnees
+      );
+    const depot = unDepotDeDonneesServices()
+      .avecReferentiel(r)
+      .avecAdaptateurPersistance(persistance)
+      .construis();
 
-    const homologation = await depot.homologation('789');
+    const homologation = await depot.homologation('S1');
 
     const { contributeurs } = homologation;
     expect(contributeurs.length).to.equal(2);
-    expect(contributeurs[0].id).to.equal('111');
-    expect(contributeurs[1].id).to.equal('999');
+    expect(contributeurs[0].id).to.equal('U1');
+    expect(contributeurs[1].id).to.equal('U2');
   });
 
   describe("sur demande d'associations de mesures à un service", () => {
