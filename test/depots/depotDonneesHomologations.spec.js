@@ -791,32 +791,28 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  describe('sur vérification existence homologation avec un nom de service donné', () => {
-    it('détecte existence homologation', (done) => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
-          homologations: [
-            {
-              id: '789',
-              descriptionService: { nomService: 'Un service existant' },
-            },
-          ],
-          autorisations: [
-            uneAutorisation().deProprietaire('123', '789').donnees,
-          ],
-        });
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-      });
+  describe("sur la vérification d'existence d'un service avec un nom de service donné", () => {
+    it("détecte l'existence d'un service grâce à son nom et un utilisateur", async () => {
+      const r = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(
+          unService(r).avecId('S1').avecNomService('Le service').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        );
 
-      depot
-        .serviceExiste('123', 'Un nom de service')
-        .then((homologationExiste) => expect(homologationExiste).to.be(false))
-        .then(() => depot.serviceExiste('123', 'Un service existant'))
-        .then((homologationExiste) => expect(homologationExiste).to.be(true))
-        .then(() => done())
-        .catch(done);
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(r)
+        .avecAdaptateurPersistance(persistance)
+        .construis();
+
+      const existeMauvaisNom = await depot.serviceExiste('U1', 'Mauvais nom');
+      expect(existeMauvaisNom).to.be(false);
+
+      const existeNomCorrect = await depot.serviceExiste('U1', 'Le service');
+      expect(existeNomCorrect).to.be(true);
     });
 
     it("ne considère que les homologations de l'utilisateur donné", (done) => {
