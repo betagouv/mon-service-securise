@@ -549,29 +549,25 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   it('sait associer un risque spécifique à une homologation', async () => {
-    const donneesHomologation = {
-      id: '123',
-      descriptionService: { nomService: 'nom' },
-    };
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        homologations: [copie(donneesHomologation)],
-        services: [copie(donneesHomologation)],
-      }
-    );
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurChiffrement: fauxAdaptateurChiffrement(),
-      adaptateurPersistance,
-    });
+    const r = Referentiel.creeReferentielVide();
+
+    const depot = unDepotDeDonneesServices()
+      .avecReferentiel(r)
+      .avecAdaptateurPersistance(
+        unePersistanceMemoire().ajouteUnService(
+          unService(r).avecId('S1').donnees
+        )
+      )
+      .construis();
 
     const risque = new RisquesSpecifiques({
       risquesSpecifiques: [{ description: 'Un risque' }],
     });
-    await depot.remplaceRisquesSpecifiquesDuService('123', risque);
+    await depot.remplaceRisquesSpecifiquesDuService('S1', risque);
 
     const {
       risques: { risquesSpecifiques },
-    } = await depot.homologation('123');
+    } = await depot.homologation('S1');
     expect(risquesSpecifiques.nombre()).to.equal(1);
     expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
     expect(risquesSpecifiques.item(0).description).to.equal('Un risque');
