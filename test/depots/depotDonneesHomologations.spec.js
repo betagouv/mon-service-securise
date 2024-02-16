@@ -373,20 +373,16 @@ describe('Le dépôt de données des homologations', () => {
 
     beforeEach(() => {
       referentiel = Referentiel.creeReferentielVide();
-      const utilisateur = unUtilisateur()
-        .avecId('999')
-        .avecEmail('jean.dupont@mail.fr').donnees;
-      const autorisation = uneAutorisation().deProprietaire(
-        '999',
-        '123'
-      ).donnees;
-      const service = unService(referentiel)
-        .avecId('123')
-        .avecNomService('Super Service').donnees;
       adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnService(service)
-        .ajouteUneAutorisation(autorisation)
-        .ajouteUnUtilisateur(utilisateur);
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId('U1').avecEmail('jean.dupont@mail.fr').donnees
+        )
+        .ajouteUnService(
+          unService(referentiel).avecId('S1').avecNomService('Service').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        );
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
@@ -400,9 +396,9 @@ describe('Le dépôt de données des homologations', () => {
         .avecNomService('Nouveau Nom')
         .construis();
 
-      await depot.ajouteDescriptionService('999', '123', description);
+      await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depot.homologation('123');
+      const { descriptionService } = await depot.homologation('S1');
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
@@ -415,9 +411,9 @@ describe('Le dépôt de données des homologations', () => {
         .avecNomService('Nouveau Nom')
         .construis();
 
-      await depot.ajouteDescriptionService('999', '123', description);
+      await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depotServices.service('123');
+      const { descriptionService } = await depotServices.service('S1');
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
@@ -427,7 +423,7 @@ describe('Le dépôt de données des homologations', () => {
         .construis();
 
       depot
-        .ajouteDescriptionService('999', '123', descriptionIncomplete)
+        .ajouteDescriptionService('U1', 'S1', descriptionIncomplete)
         .then(() =>
           done(
             'La mise à jour de la description du service aurait dû lever une exception'
@@ -443,14 +439,14 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it("ne détecte pas de doublon sur le nom de service pour l'homologation en cours de mise à jour", async () => {
+    it('ne détecte pas de doublon sur le nom de service pour le service en cours de mise à jour', async () => {
       const description = uneDescriptionValide(referentiel)
         .avecPresentation('Une autre présentation')
         .construis();
 
-      await depot.ajouteDescriptionService('999', '123', description);
+      await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depot.homologation('123');
+      const { descriptionService } = await depot.homologation('S1');
       expect(descriptionService.presentation).to.equal(
         'Une autre présentation'
       );
@@ -464,7 +460,7 @@ describe('Le dépôt de données des homologations', () => {
       };
       const description = uneDescriptionValide(referentiel).construis();
 
-      await depot.ajouteDescriptionService('999', '123', description);
+      await depot.ajouteDescriptionService('U1', 'S1', description);
 
       expect(evenementRecu.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
     });
@@ -488,7 +484,7 @@ describe('Le dépôt de données des homologations', () => {
         )
         .construis();
 
-      await depot.ajouteDescriptionService('999', '123', description);
+      await depot.ajouteDescriptionService('U1', 'S1', description);
 
       expect(donneesPassees).to.eql({
         destinataire: 'jean.dupont@mail.fr',
