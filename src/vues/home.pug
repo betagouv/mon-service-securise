@@ -26,7 +26,7 @@ mixin temoignage(citation, auteur, source)
   .temoignage.alignement-gauche
     img(src='/statique/assets/images/home/icone_temoignage.svg' alt='')
     h4!= `« ${citation} »`
-    h5.couleur-principale!= auteur
+    h5!= auteur
     h6.alignement-gauche!= source
 
 mixin carteCarrousel(numero, description)
