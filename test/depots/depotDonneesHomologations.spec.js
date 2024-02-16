@@ -653,27 +653,16 @@ describe('Le dépôt de données des homologations', () => {
       expect(apres[0].nomService()).to.equal('Super Service');
     });
 
-    it('génère un UUID pour le service créée', (done) => {
+    it('génère un UUID pour le service créée', async () => {
       adaptateurUUID.genereUUID = () => '11111111-1111-1111-1111-111111111111';
 
-      const descriptionService = uneDescriptionValide(referentiel)
-        .avecNomService('Super Service')
-        .construis()
-        .toJSON();
+      const idService = await depot.nouveauService('123', {
+        descriptionService: uneDescriptionValide(referentiel).donnees,
+      });
 
-      depot
-        .nouveauService('123', { descriptionService })
-        .then((idService) =>
-          expect(idService).to.equal('11111111-1111-1111-1111-111111111111')
-        )
-        .then(() => depot.homologations('123'))
-        .then((homologations) => {
-          expect(homologations[0].id).to.equal(
-            '11111111-1111-1111-1111-111111111111'
-          );
-          done();
-        })
-        .catch(done);
+      expect(idService).to.be('11111111-1111-1111-1111-111111111111');
+      const services = await depot.homologations('123');
+      expect(services[0].id).to.be('11111111-1111-1111-1111-111111111111');
     });
 
     it('chiffre les données métier avant de les stocker', async () => {
