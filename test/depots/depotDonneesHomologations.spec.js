@@ -548,7 +548,7 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  it('sait associer un risque spécifique à une homologation', (done) => {
+  it('sait associer un risque spécifique à une homologation', async () => {
     const donneesHomologation = {
       id: '123',
       descriptionService: { nomService: 'nom' },
@@ -567,16 +567,14 @@ describe('Le dépôt de données des homologations', () => {
     const risque = new RisquesSpecifiques({
       risquesSpecifiques: [{ description: 'Un risque' }],
     });
-    depot
-      .remplaceRisquesSpecifiquesDuService('123', risque)
-      .then(() => depot.homologation('123'))
-      .then(({ risques: { risquesSpecifiques } }) => {
-        expect(risquesSpecifiques.nombre()).to.equal(1);
-        expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
-        expect(risquesSpecifiques.item(0).description).to.equal('Un risque');
-        done();
-      })
-      .catch(done);
+    await depot.remplaceRisquesSpecifiquesDuService('123', risque);
+
+    const {
+      risques: { risquesSpecifiques },
+    } = await depot.homologation('123');
+    expect(risquesSpecifiques.nombre()).to.equal(1);
+    expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
+    expect(risquesSpecifiques.item(0).description).to.equal('Un risque');
   });
 
   it('supprime les risques spécifiques précédemment associés', (done) => {
