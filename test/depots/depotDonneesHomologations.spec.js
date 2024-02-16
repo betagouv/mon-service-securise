@@ -838,7 +838,7 @@ describe('Le dépôt de données des homologations', () => {
       expect(existeChezU1).to.be(true);
     });
 
-    it("ne considère pas l'homologation en cours de mise à jour", (done) => {
+    it('ne considère pas le service en cours de mise à jour', async () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
@@ -861,13 +861,18 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurPersistance,
       });
 
-      depot
-        .serviceExiste('123', 'Un service existant', '888')
-        .then((homologationExiste) => expect(homologationExiste).to.be(false))
-        .then(() => depot.serviceExiste('123', 'Un service existant', '999'))
-        .then((homologationExiste) => expect(homologationExiste).to.be(true))
-        .then(() => done())
-        .catch(done);
+      const considereEnCours = await depot.serviceExiste(
+        '123',
+        'Un service existant',
+        '888'
+      );
+      expect(considereEnCours).to.be(false);
+      const considereAutre = await depot.serviceExiste(
+        '123',
+        'Un service existant',
+        '999'
+      );
+      expect(considereAutre).to.be(true);
     });
   });
 
