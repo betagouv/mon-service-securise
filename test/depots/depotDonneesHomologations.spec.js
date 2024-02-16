@@ -815,7 +815,7 @@ describe('Le dépôt de données des homologations', () => {
       expect(existeNomCorrect).to.be(true);
     });
 
-    it("ne considère que les homologations de l'utilisateur donné", (done) => {
+    it("ne considère que les services de l'utilisateur donné", async () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [
@@ -834,11 +834,11 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurPersistance,
       });
 
-      depot
-        .serviceExiste('456', 'Un service existant')
-        .then((homologationExiste) => expect(homologationExiste).to.be(false))
-        .then(() => done())
-        .catch(done);
+      const serviceExiste = await depot.serviceExiste(
+        '456',
+        'Un service existant'
+      );
+      expect(serviceExiste).to.be(false);
     });
 
     it("ne considère pas l'homologation en cours de mise à jour", (done) => {
