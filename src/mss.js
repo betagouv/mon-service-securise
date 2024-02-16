@@ -43,6 +43,8 @@ const creeServeur = (
   adaptateurGestionErreur.initialise();
   app.use(adaptateurGestionErreur.controleurRequetes());
 
+  app.use(middleware.filtreIpAutorisees());
+
   app.use(express.json());
 
   app.use(

@@ -20,6 +20,10 @@ describe('Le serveur MSS', () => {
       .catch(done);
   });
 
+  it('utilise un filtrage IP pour ne servir que les IP autorisées', (done) => {
+    testeur.middleware().verifieFiltrageIp('http://localhost:1234', done);
+  });
+
   describe('quand une page est servie', () => {
     it('positionne les headers', (done) => {
       testeur
