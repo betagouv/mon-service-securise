@@ -11,14 +11,14 @@ class ConstructeurService {
       contributeurs: [],
     };
     this.mesures = undefined;
+    this.risques = undefined;
     this.referentiel = referentiel;
   }
 
   construis() {
     const service = new Service(this.donnees, this.referentiel);
-    if (this.mesures !== undefined) {
-      service.mesures = this.mesures;
-    }
+    if (this.mesures !== undefined) service.mesures = this.mesures;
+    if (this.risques !== undefined) service.risques = this.risques;
     return service;
   }
 
@@ -34,6 +34,11 @@ class ConstructeurService {
 
   avecMesures(mesures) {
     this.mesures = mesures;
+    return this;
+  }
+
+  avecRisques(risques) {
+    this.risques = risques;
     return this;
   }
 
