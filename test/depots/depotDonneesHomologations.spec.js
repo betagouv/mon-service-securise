@@ -617,12 +617,11 @@ describe('Le dépôt de données des homologations', () => {
     beforeEach(() => {
       adaptateurChiffrement = fauxAdaptateurChiffrement();
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
-        homologations: [],
-        services: [],
-        autorisations: [],
-      });
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId('123').avecEmail('jean.dupont@mail.fr').donnees
+        )
+        .construis();
       adaptateurTracking = unAdaptateurTracking().construis();
       adaptateurUUID = { genereUUID: () => 'unUUID' };
       busEvenements = fabriqueBusPourLesTests();
