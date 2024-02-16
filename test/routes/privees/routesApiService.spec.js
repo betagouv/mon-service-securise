@@ -1279,9 +1279,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas les droits de suppression du service", (done) => {
       testeur.middleware().reinitialise({
-        autorisationACharger: uneAutorisation()
-          .deContributeurDeService()
-          .construis(),
+        autorisationACharger: uneAutorisation().deContributeur().construis(),
       });
 
       testeur.verifieRequeteGenereErreurHTTP(
@@ -1379,9 +1377,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'est pas le créateur du service", (done) => {
       testeur.middleware().reinitialise({
-        autorisationACharger: uneAutorisation()
-          .deContributeurDeService()
-          .construis(),
+        autorisationACharger: uneAutorisation().deContributeur().construis(),
       });
 
       testeur.verifieRequeteGenereErreurHTTP(
@@ -1548,7 +1544,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     beforeEach(() => {
       testeur.middleware().reinitialise({
         autorisationACharger: uneAutorisation()
-          .deProprietaireDeService('AAA', '456')
+          .deProprietaire('AAA', '456')
           .construis(),
       });
 
@@ -1595,7 +1591,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("renvoie une erreur 422 si l'utilisateur courant tente de modifier ses propres droits", async () => {
       const monAutorisation = uneAutorisation()
-        .deProprietaireDeService('123', 'ABC')
+        .deProprietaire('123', 'ABC')
         .construis();
 
       testeur.middleware().reinitialise({
@@ -1620,7 +1616,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("renvoie une erreur 422 si l'utilisateur tente de modifier une autorisation qui n'appartient pas au service ciblé", async () => {
       const serviceABC = unService().avecId('ABC').construis();
       const leroyProprietaireDeABC = uneAutorisation()
-        .deProprietaireDeService('LEROY', 'ABC')
+        .deProprietaire('LEROY', 'ABC')
         .construis();
 
       testeur.middleware().reinitialise({
@@ -1630,7 +1626,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
 
       const autorisationSurDEF = uneAutorisation()
-        .deContributeurDeService('DUPONT', 'DEF')
+        .deContributeur('DUPONT', 'DEF')
         .construis();
       testeur.depotDonnees().autorisation = async () => autorisationSurDEF;
 
@@ -1673,9 +1669,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       let autorisationCiblee;
       testeur.depotDonnees().autorisation = async (id) => {
         autorisationCiblee = id;
-        return uneAutorisation()
-          .deContributeurDeService('DUPONT', '456')
-          .construis();
+        return uneAutorisation().deContributeur('DUPONT', '456').construis();
       };
 
       let autorisationPersistee;
@@ -1701,10 +1695,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("renvoie la représentation API de l'autorisation mise à jour", async () => {
       testeur.depotDonnees().autorisation = async (id) =>
-        uneAutorisation()
-          .avecId(id)
-          .deContributeurDeService('888', '456')
-          .construis();
+        uneAutorisation().avecId(id).deContributeur('888', '456').construis();
 
       const droitsCible = {
         DECRIRE: 1,
@@ -1742,7 +1733,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('permet de nommer un nouveau propriétaire', async () => {
       testeur.depotDonnees().autorisation = async () =>
-        uneAutorisation().deContributeurDeService('BBB', '456').construis();
+        uneAutorisation().deContributeur('BBB', '456').construis();
 
       let autorisationPersistee;
       testeur.depotDonnees().sauvegardeAutorisation = async (autorisation) => {
@@ -1768,7 +1759,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idUtilisateur: 'AAA',
       });
       testeur.depotDonnees().autorisationsDuService = async (idService) => [
-        uneAutorisation().deProprietaireDeService('AAA', idService).construis(),
+        uneAutorisation().deProprietaire('AAA', idService).construis(),
       ];
     });
 
@@ -1798,11 +1789,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       let donneesPassees = {};
       testeur.depotDonnees().autorisationsDuService = async (idService) => {
         donneesPassees = { idService };
-        return [
-          uneAutorisation()
-            .deProprietaireDeService('AAA', idService)
-            .construis(),
-        ];
+        return [uneAutorisation().deProprietaire('AAA', idService).construis()];
       };
 
       const serviceARenvoyer = unService(testeur.referentiel())
@@ -1823,7 +1810,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().autorisationsDuService = async () => [
         uneAutorisation()
           .avecId('uuid-a')
-          .deProprietaireDeService('AAA', '456')
+          .deProprietaire('AAA', '456')
           .construis(),
       ];
 
@@ -1851,10 +1838,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idUtilisateur: 'AAA',
       });
       testeur.depotDonnees().autorisationsDuService = async () => [
-        uneAutorisation().deProprietaireDeService('AAA', '456').construis(),
-        uneAutorisation().deContributeurDeService('ABC', '456').construis(),
-        uneAutorisation().deContributeurDeService('DEF', '456').construis(),
-        uneAutorisation().deContributeurDeService('GHI', '456').construis(),
+        uneAutorisation().deProprietaire('AAA', '456').construis(),
+        uneAutorisation().deContributeur('ABC', '456').construis(),
+        uneAutorisation().deContributeur('DEF', '456').construis(),
+        uneAutorisation().deContributeur('GHI', '456').construis(),
       ];
 
       const reponse = await axios.get(
@@ -1874,10 +1861,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idUtilisateur: 'DEF',
       });
       testeur.depotDonnees().autorisationsDuService = async () => [
-        uneAutorisation().deProprietaireDeService('AAA', '456').construis(),
-        uneAutorisation().deContributeurDeService('ABC', '456').construis(),
-        uneAutorisation().deContributeurDeService('DEF', '456').construis(),
-        uneAutorisation().deContributeurDeService('GHI', '456').construis(),
+        uneAutorisation().deProprietaire('AAA', '456').construis(),
+        uneAutorisation().deContributeur('ABC', '456').construis(),
+        uneAutorisation().deContributeur('DEF', '456').construis(),
+        uneAutorisation().deContributeur('GHI', '456').construis(),
       ];
 
       const { data } = await axios.get(

@@ -68,10 +68,10 @@ describe('Le dépôt de données des homologations', () => {
       .ajouteUnService(unService(referentiel).avecId('789').donnees)
       .ajouteUnUtilisateur(unUtilisateur().avecId('456').donnees)
       .ajouteUneAutorisation(
-        uneAutorisation().deProprietaireDeService('456', '123').donnees
+        uneAutorisation().deProprietaire('456', '123').donnees
       )
       .ajouteUneAutorisation(
-        uneAutorisation().deProprietaireDeService('999', '789').donnees
+        uneAutorisation().deProprietaire('999', '789').donnees
       );
 
     const depot = unDepotDeDonneesServices()
@@ -121,9 +121,9 @@ describe('Le dépôt de données des homologations', () => {
           },
         ],
         autorisations: [
-          uneAutorisation().deProprietaireDeService('999', '123').donnees,
-          uneAutorisation().deProprietaireDeService('999', '456').donnees,
-          uneAutorisation().deProprietaireDeService('999', '789').donnees,
+          uneAutorisation().deProprietaire('999', '123').donnees,
+          uneAutorisation().deProprietaire('999', '456').donnees,
+          uneAutorisation().deProprietaire('999', '789').donnees,
         ],
       }
     );
@@ -182,8 +182,8 @@ describe('Le dépôt de données des homologations', () => {
           { id: '789', descriptionService: { nomService: 'nom' } },
         ],
         autorisations: [
-          uneAutorisation().deProprietaireDeService('111', '789').donnees,
-          uneAutorisation().deContributeurDeService('999', '789').donnees,
+          uneAutorisation().deProprietaire('111', '789').donnees,
+          uneAutorisation().deContributeur('999', '789').donnees,
         ],
       }
     );
@@ -214,7 +214,7 @@ describe('Le dépôt de données des homologations', () => {
     beforeEach(() => {
       busEvenements = fabriqueBusPourLesTests();
       const utilisateur = unUtilisateur().avecId('789').donnees;
-      const autorisation = uneAutorisation().deProprietaireDeService(
+      const autorisation = uneAutorisation().deProprietaire(
         '789',
         '123'
       ).donnees;
@@ -387,7 +387,7 @@ describe('Le dépôt de données des homologations', () => {
       const utilisateur = unUtilisateur()
         .avecId('999')
         .avecEmail('jean.dupont@mail.fr').donnees;
-      const autorisation = uneAutorisation().deProprietaireDeService(
+      const autorisation = uneAutorisation().deProprietaire(
         '999',
         '123'
       ).donnees;
@@ -877,7 +877,7 @@ describe('Le dépôt de données des homologations', () => {
             },
           ],
           autorisations: [
-            uneAutorisation().deProprietaireDeService('123', '789').donnees,
+            uneAutorisation().deProprietaire('123', '789').donnees,
           ],
         });
       const depot = DepotDonneesHomologations.creeDepot({
@@ -934,8 +934,8 @@ describe('Le dépôt de données des homologations', () => {
             },
           ],
           autorisations: [
-            uneAutorisation().deProprietaireDeService('123', '888').donnees,
-            uneAutorisation().deProprietaireDeService('123', '999').donnees,
+            uneAutorisation().deProprietaire('123', '888').donnees,
+            uneAutorisation().deProprietaire('123', '999').donnees,
           ],
         });
       const depot = DepotDonneesHomologations.creeDepot({
@@ -966,8 +966,7 @@ describe('Le dépôt de données des homologations', () => {
         homologations: [copie(donneesHomologation)],
         services: [copie(donneesHomologation)],
         autorisations: [
-          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-            .donnees,
+          uneAutorisation().avecId('456').deProprietaire('999', '123').donnees,
         ],
       });
 
@@ -1021,12 +1020,9 @@ describe('Le dépôt de données des homologations', () => {
           { id: '222', descriptionService: { nomService: 'Un autre service' } },
         ],
         autorisations: [
-          uneAutorisation().avecId('123').deProprietaireDeService('999', '111')
-            .donnees,
-          uneAutorisation().avecId('456').deContributeurDeService('000', '111')
-            .donnees,
-          uneAutorisation().avecId('789').deContributeurDeService('000', '222')
-            .donnees,
+          uneAutorisation().avecId('123').deProprietaire('999', '111').donnees,
+          uneAutorisation().avecId('456').deContributeur('000', '111').donnees,
+          uneAutorisation().avecId('789').deContributeur('000', '222').donnees,
         ],
       });
       const depot = DepotDonneesHomologations.creeDepot({
@@ -1396,7 +1392,7 @@ describe('Le dépôt de données des homologations', () => {
           homologations: [{ id: '123-1', descriptionService }],
           services: [{ id: '123-1', descriptionService }],
           autorisations: [
-            uneAutorisation().deProprietaireDeService('123', '123-1').donnees,
+            uneAutorisation().deProprietaire('123', '123-1').donnees,
           ],
         });
 
@@ -1462,7 +1458,7 @@ describe('Le dépôt de données des homologations', () => {
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
           homologations: [{ id: '123', descriptionService }],
           autorisations: [
-            uneAutorisation().deProprietaireDeService('999', '123').donnees,
+            uneAutorisation().deProprietaire('999', '123').donnees,
           ],
         });
 
@@ -1489,7 +1485,7 @@ describe('Le dépôt de données des homologations', () => {
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
           homologations: [{ id: '123', descriptionService: copie1 }],
           autorisations: [
-            uneAutorisation().deProprietaireDeService('999', '123').donnees,
+            uneAutorisation().deProprietaire('999', '123').donnees,
           ],
         });
 
@@ -1523,8 +1519,8 @@ describe('Le dépôt de données des homologations', () => {
             { id: '456', descriptionService: duplication },
           ],
           autorisations: [
-            uneAutorisation().deProprietaireDeService('999', '123').donnees,
-            uneAutorisation().deProprietaireDeService('999', '456').donnees,
+            uneAutorisation().deProprietaire('999', '123').donnees,
+            uneAutorisation().deProprietaire('999', '456').donnees,
           ],
         });
 
@@ -1551,7 +1547,7 @@ describe('Le dépôt de données des homologations', () => {
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
           homologations: [{ id: '123', descriptionService: original }],
           autorisations: [
-            uneAutorisation().deProprietaireDeService('999', '123').donnees,
+            uneAutorisation().deProprietaire('999', '123').donnees,
           ],
         });
 

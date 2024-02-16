@@ -18,11 +18,11 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
   let unAutreService;
   const autorisations = [
     uneAutorisation()
-      .deProprietaireDeService('999', '123')
+      .deProprietaire('999', '123')
       .avecDroits({ [SECURISER]: LECTURE })
       .construis(),
     uneAutorisation()
-      .deProprietaireDeService('999', '456')
+      .deProprietaire('999', '456')
       .avecDroits({ [SECURISER]: LECTURE })
       .construis(),
   ];
@@ -43,7 +43,7 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
 
   it("ne fournit pas l'indice cyber si les permissions ne sont pas suffisantes", () => {
     const autorisationSansSecuriser = uneAutorisation()
-      .deContributeurDeService('999', '123')
+      .deContributeur('999', '123')
       .construis();
 
     const { services } = objetGetIndicesCyber.donnees(
@@ -82,12 +82,8 @@ describe("L'objet d'API de `GET /services/indices-cyber`", () => {
 
     const services = [unService, unAutreService];
     const autorisationsSansPermission = [
-      uneAutorisation()
-        .deProprietaireDeService('999', unService.id)
-        .construis(),
-      uneAutorisation()
-        .deContributeurDeService('999', unAutreService.id)
-        .construis(),
+      uneAutorisation().deProprietaire('999', unService.id).construis(),
+      uneAutorisation().deContributeur('999', unAutreService.id).construis(),
     ];
     expect(
       objetGetIndicesCyber.donnees(services, autorisationsSansPermission).resume

@@ -57,7 +57,7 @@ describe('Le dépôt de données des autorisations', () => {
       const avecDroitEcriture = unePersistanceMemoire()
         .ajouteUneAutorisation(
           uneAutorisation()
-            .deProprietaireDeService('456', '123')
+            .deProprietaire('456', '123')
             .avecDroits({ [DECRIRE]: ECRITURE }).donnees
         )
         .construis();
@@ -75,7 +75,7 @@ describe('Le dépôt de données des autorisations', () => {
       const avecDroitLecture = unePersistanceMemoire()
         .ajouteUneAutorisation(
           uneAutorisation()
-            .deContributeurDeService('456', '123')
+            .deContributeur('456', '123')
             .avecDroits({ [DECRIRE]: LECTURE }).donnees
         )
         .construis();
@@ -98,8 +98,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-            .donnees
+          uneAutorisation().avecId('456').deProprietaire('999', '123').donnees
         )
         .construis();
 
@@ -131,8 +130,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-            .donnees
+          uneAutorisation().avecId('456').deProprietaire('999', '123').donnees
         )
         .construis();
 
@@ -140,7 +138,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          uneAutorisation().deContributeurDeService('000', '123').construis()
+          uneAutorisation().deContributeur('000', '123').construis()
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -159,7 +157,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          uneAutorisation().deContributeurDeService('000', '123').construis()
+          uneAutorisation().deContributeur('000', '123').construis()
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -176,8 +174,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-            .donnees
+          uneAutorisation().avecId('456').deProprietaire('999', '123').donnees
         )
         .construis();
 
@@ -185,7 +182,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       try {
         await depot.ajouteContributeurAuService(
-          uneAutorisation().deContributeurDeService('999', '123').construis()
+          uneAutorisation().deContributeur('999', '123').construis()
         );
         expect().to.fail("L'ajout aurait du lever une erreur");
       } catch (erreur) {
@@ -203,8 +200,7 @@ describe('Le dépôt de données des autorisations', () => {
           descriptionService: { nomService: 'Un service' },
         })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deContributeurDeService('999', '123')
-            .donnees
+          uneAutorisation().avecId('456').deContributeur('999', '123').donnees
         )
         .construis();
 
@@ -213,7 +209,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       await depot.ajouteContributeurAuService(
         uneAutorisation()
-          .deContributeurDeService('000', '123')
+          .deContributeur('000', '123')
           .avecTousDroitsEcriture()
           .construis()
       );
@@ -238,8 +234,7 @@ describe('Le dépôt de données des autorisations', () => {
         .ajouteUnService({ id: '123', descriptionService: { nomService: 'X' } })
         .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
         .ajouteUneAutorisation(
-          uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-            .donnees
+          uneAutorisation().avecId('456').deProprietaire('999', '123').donnees
         )
         .ajouteUnUtilisateur({ id: '000', email: 'contributeur@mail.fr' })
         .construis();
@@ -249,7 +244,7 @@ describe('Le dépôt de données des autorisations', () => {
 
       await depot.ajouteContributeurAuService(
         uneAutorisation()
-          .deContributeurDeService('000', '123')
+          .deContributeur('000', '123')
           .avecTousDroitsEcriture()
           .construis()
       );
@@ -277,8 +272,7 @@ describe('Le dépôt de données des autorisations', () => {
         descriptionService: { nomService: 'Un service' },
       })
       .ajouteUneAutorisation(
-        uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-          .donnees
+        uneAutorisation().avecId('456').deProprietaire('999', '123').donnees
       )
       .construis();
 
@@ -298,8 +292,7 @@ describe('Le dépôt de données des autorisations', () => {
         descriptionService: { nomService: 'Un service' },
       })
       .ajouteUneAutorisation(
-        uneAutorisation().avecId('456').deProprietaireDeService('999', '123')
-          .donnees
+        uneAutorisation().avecId('456').deProprietaire('999', '123').donnees
       )
       .construis();
 
@@ -335,7 +328,7 @@ describe('Le dépôt de données des autorisations', () => {
     it("empêche l'utilisateur de supprimer sa propre autorisation", async () => {
       const autorisationPour123 = unePersistanceMemoire()
         .ajouteUneAutorisation(
-          uneAutorisation().deProprietaireDeService('123', 'ABC').donnees
+          uneAutorisation().deProprietaire('123', 'ABC').donnees
         )
         .construis();
       const depot = creeDepot(autorisationPour123);
@@ -354,7 +347,7 @@ describe('Le dépôt de données des autorisations', () => {
     it('supprime le contributeur', async () => {
       const avecUneAutorisation = unePersistanceMemoire()
         .ajouteUneAutorisation(
-          uneAutorisation().deContributeurDeService('000', 'ABC').donnees
+          uneAutorisation().deContributeur('000', 'ABC').donnees
         )
         .construis();
 
@@ -379,10 +372,10 @@ describe('Le dépôt de données des autorisations', () => {
         descriptionService: { nomService: 'Un service' },
       })
       .ajouteUneAutorisation(
-        uneAutorisation().deProprietaireDeService('888', '123').donnees
+        uneAutorisation().deProprietaire('888', '123').donnees
       )
       .ajouteUneAutorisation(
-        uneAutorisation().deContributeurDeService('999', '123').donnees
+        uneAutorisation().deContributeur('999', '123').donnees
       )
       .construis();
 
@@ -398,7 +391,7 @@ describe('Le dépôt de données des autorisations', () => {
   it('sait sauvegarder une autorisation', async () => {
     const enEcriture = uneAutorisation()
       .avecId('uuid-a')
-      .deContributeurDeService('123', '999')
+      .deContributeur('123', '999')
       .avecTousDroitsEcriture();
     const depot = creeDepot(
       unePersistanceMemoire()
