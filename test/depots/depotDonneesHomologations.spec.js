@@ -692,25 +692,20 @@ describe('Le dépôt de données des homologations', () => {
       expect(donneesPersistees.descriptionService.chiffre).to.equal(true);
     });
 
-    it('ajoute en copie un nouveau service au dépôt', (done) => {
+    it('ajoute en copie un nouveau service au dépôt', async () => {
       const depotDonneesServices = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
         referentiel,
       });
 
-      const descriptionService = uneDescriptionValide(referentiel)
-        .avecNomService('Super Service')
-        .construis()
-        .toJSON();
+      const descriptionService =
+        uneDescriptionValide(referentiel).avecNomService('Service').donnees;
+      const idService = await depot.nouveauService('123', {
+        descriptionService,
+      });
 
-      depot
-        .nouveauService('123', { descriptionService })
-        .then((idService) => depotDonneesServices.service(idService))
-        .then((service) => {
-          expect(service.nomService()).to.equal('Super Service');
-          done();
-        })
-        .catch(done);
+      const service = await depotDonneesServices.service(idService);
+      expect(service.nomService()).to.equal('Service');
     });
 
     it("déclare un accès en écriture entre l'utilisateur et le service", (done) => {
