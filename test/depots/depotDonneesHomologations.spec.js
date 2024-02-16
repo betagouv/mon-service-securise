@@ -839,39 +839,29 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('ne considère pas le service en cours de mise à jour', async () => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
-          homologations: [
-            {
-              id: '888',
-              descriptionService: { nomService: 'Un service existant' },
-            },
-            {
-              id: '999',
-              descriptionService: { nomService: 'Un nom de service' },
-            },
-          ],
-          autorisations: [
-            uneAutorisation().deProprietaire('123', '888').donnees,
-            uneAutorisation().deProprietaire('123', '999').donnees,
-          ],
-        });
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-      });
+      const r = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(
+          unService(r).avecId('S1').avecNomService('Le S1').donnees
+        )
+        .ajouteUnService(
+          unService(r).avecId('S2').avecNomService('Autre service').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        );
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(r)
+        .avecAdaptateurPersistance(persistance)
+        .construis();
 
-      const considereEnCours = await depot.serviceExiste(
-        '123',
-        'Un service existant',
-        '888'
-      );
+      const considereEnCours = await depot.serviceExiste('U1', 'Le S1', 'S1');
       expect(considereEnCours).to.be(false);
-      const considereAutre = await depot.serviceExiste(
-        '123',
-        'Un service existant',
-        '999'
-      );
+      const considereAutre = await depot.serviceExiste('U1', 'Le S1', 'S2');
       expect(considereAutre).to.be(true);
     });
   });
