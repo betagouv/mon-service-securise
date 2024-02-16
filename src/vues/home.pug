@@ -34,6 +34,18 @@ mixin carteCarrousel(numero, description)
     img.petite-marge-basse(src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
     h4!= description
 
+mixin carrousel(id, nbItems)
+  div(id=id)
+    .conteneur-carrousel
+      block
+    .conteneur-liens-carrousel.invisible-desktop
+      button.precedent
+        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
+      for numeroItem in new Array(nbItems).fill(0).map((_, i) => i)
+        - const estPremier = numeroItem === 0
+        button.lien-carte(class=`${estPremier ? 'actif': ''}` data-cible=numeroItem)!= numeroItem + 1
+      button.suivant
+        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
 
 block append styles
   link(href='/statique/assets/styles/index.css', rel='stylesheet')
@@ -62,18 +74,10 @@ block main
           .conteneur-logo-partenaire.petite-marge-basse
             img(src='/statique/assets/images/home/cnil.svg' alt='Logo de la CNIL')
             img(src='/statique/assets/images/home/declic.svg' alt='Logo de Déclic')
-    .conteneur-carrousel#carrousel
+    +carrousel('carrousel-presentation', 3)
       +carteCarrousel(1, "Gratuit, 100% en ligne et collaboratif")
       +carteCarrousel(2, "Accessible à toutes les entités publiques")
       +carteCarrousel(3, "Conçu par les spécialistes de l'ANSSI")
-    .conteneur-liens-carrousel.invisible-desktop
-      button.precedent
-        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
-      button.actif.lien-carte(data-cible=0) 1
-      button.lien-carte(data-cible=1) 2
-      button.lien-carte(data-cible=2) 3
-      button.suivant
-        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
     .bloc-contenu.fond-couleur-principale-attenuee
       h3.alignement-gauche.moyenne-marge-basse Les avantages de MonServiceSécurisé
       .conteneur-avantage

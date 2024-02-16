@@ -1,6 +1,7 @@
-$(() => {
-  const $carrousel = $('#carrousel');
-  const $conteneurLiens = $('.conteneur-liens-carrousel');
+const brancheComportementCarrousel = (selecteurCarrousel) => {
+  const $conteneur = $(selecteurCarrousel);
+  const $carrousel = $('.conteneur-carrousel', $conteneur);
+  const $conteneurLiens = $('.conteneur-liens-carrousel', $conteneur);
   const $boutonsLienDirect = $('.lien-carte', $conteneurLiens);
 
   const margeColonne = parseFloat($carrousel.css('gap').replace('px', ''));
@@ -56,4 +57,8 @@ $(() => {
   });
 
   $carrousel.scrollLeft(0);
+};
+
+$(() => {
+  brancheComportementCarrousel('#carrousel-presentation');
 });
