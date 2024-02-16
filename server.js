@@ -4,7 +4,6 @@ const MoteurRegles = require('./src/moteurRegles');
 const MSS = require('./src/mss');
 const Referentiel = require('./src/referentiel');
 const { fabriqueAnnuaire } = require('./src/annuaire/serviceAnnuaire');
-const adaptateurChiffrement = require('./src/adaptateurs/adaptateurChiffrement');
 const adaptateurCsv = require('./src/adaptateurs/adaptateurCsv');
 const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
 const {
@@ -31,10 +30,14 @@ const { fabriqueProcedures } = require('./src/routes/procedures');
 const BusEvenements = require('./src/bus/busEvenements');
 const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
 const { cableTousLesAbonnes } = require('./src/bus/cablage');
+const {
+  fabriqueAdaptateurChiffrement,
+} = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
 const adaptateurJournal = fabriqueAdaptateurJournalMSS();
+const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
 const serviceAnnuaire = fabriqueAnnuaire({
   adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
   adaptateurPersistance,
@@ -46,6 +49,7 @@ const referentiel = Referentiel.creeReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
 
 const depotDonnees = DepotDonnees.creeDepot({
+  adaptateurChiffrement,
   adaptateurJournalMSS: adaptateurJournal,
   busEvenements,
 });
