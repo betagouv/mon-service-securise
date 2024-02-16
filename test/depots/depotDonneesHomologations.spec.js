@@ -816,29 +816,26 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("ne considère que les services de l'utilisateur donné", async () => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            { id: '123', email: 'jean.dupont@mail.fr' },
-            { id: '456', email: 'sylvie.martin@mail.fr' },
-          ],
-          homologations: [
-            {
-              id: '789',
-              idUtilisateur: '123',
-              descriptionService: { nomService: 'Un service existant' },
-            },
-          ],
-        });
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-      });
+      const r = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .ajouteUnService(
+          unService(r).avecId('S1').avecNomService('Service de U1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        );
 
-      const serviceExiste = await depot.serviceExiste(
-        '456',
-        'Un service existant'
-      );
-      expect(serviceExiste).to.be(false);
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(r)
+        .avecAdaptateurPersistance(persistance)
+        .construis();
+
+      const existeChezU2 = await depot.serviceExiste('U2', 'Service de U1');
+      expect(existeChezU2).to.be(false);
+      const existeChezU1 = await depot.serviceExiste('U1', 'Service de U1');
+      expect(existeChezU1).to.be(true);
     });
 
     it("ne considère pas l'homologation en cours de mise à jour", (done) => {
