@@ -528,30 +528,23 @@ describe('Le dépôt de données des homologations', () => {
     it('sait associer un risque général à une homologation', async () => {
       RisqueGeneral.valide = () => {};
 
-      const donneesHomologation = {
-        id: '123',
-        descriptionService: { nomService: 'nom' },
-      };
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          homologations: [copie(donneesHomologation)],
-          services: [copie(donneesHomologation)],
-        });
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurChiffrement: fauxAdaptateurChiffrement(),
-        adaptateurPersistance,
-      });
+      const r = Referentiel.creeReferentielVide();
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(r)
+        .avecAdaptateurPersistance(
+          unePersistanceMemoire().ajouteUnService(
+            unService(r).avecId('S1').donnees
+          )
+        )
+        .construis();
 
-      const risque = new RisqueGeneral({
-        id: 'unRisque',
-        commentaire: 'Un commentaire',
-      });
-      await depot.ajouteRisqueGeneralAService('123', risque);
+      const risque = new RisqueGeneral({ id: 'R1' });
+      await depot.ajouteRisqueGeneralAService('S1', risque);
 
-      const { risques } = await depot.homologation('123');
+      const { risques } = await depot.homologation('S1');
       expect(risques.risquesGeneraux.nombre()).to.equal(1);
       expect(risques.risquesGeneraux.item(0)).to.be.a(RisqueGeneral);
-      expect(risques.risquesGeneraux.item(0).id).to.equal('unRisque');
+      expect(risques.risquesGeneraux.item(0).id).to.equal('R1');
     });
   });
 
