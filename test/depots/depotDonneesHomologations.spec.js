@@ -206,18 +206,14 @@ describe('Le dépôt de données des homologations', () => {
 
     beforeEach(() => {
       busEvenements = fabriqueBusPourLesTests();
-      const utilisateur = unUtilisateur().avecId('789').donnees;
-      const autorisation = uneAutorisation().deProprietaire(
-        '789',
-        '123'
-      ).donnees;
-      const service = unService(referentiel)
-        .avecId('123')
-        .avecNomService('nom').donnees;
       adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnService(service)
-        .ajouteUneAutorisation(autorisation)
-        .ajouteUnUtilisateur(utilisateur);
+        .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
+        .ajouteUnService(
+          unService(referentiel).avecId('123').avecNomService('nom').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('789', '123').donnees
+        );
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
         .avecAdaptateurPersistance(adaptateurPersistance)
