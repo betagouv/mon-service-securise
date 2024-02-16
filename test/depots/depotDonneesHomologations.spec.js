@@ -708,36 +708,31 @@ describe('Le dépôt de données des homologations', () => {
       expect(service.nomService()).to.equal('Service');
     });
 
-    it("déclare un accès en écriture entre l'utilisateur et le service", (done) => {
+    it("déclare un accès en écriture entre l'utilisateur et le service", async () => {
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance,
       });
-      const descriptionService = uneDescriptionValide(referentiel)
-        .construis()
-        .toJSON();
 
-      depotAutorisations
-        .autorisations('123')
-        .then((as) => expect(as.length).to.equal(0))
-        .then(() => depot.nouveauService('123', { descriptionService }))
-        .then(() => depotAutorisations.autorisations('123'))
-        .then((as) => {
-          expect(as.length).to.equal(1);
-          const autorisation = as[0];
-          expect(autorisation.estProprietaire).to.be(true);
-          expect(autorisation.idHomologation).to.equal('unUUID');
-          expect(autorisation.idService).to.equal('unUUID');
-          expect(autorisation.idUtilisateur).to.equal('123');
-          expect(autorisation.droits).to.eql({
-            [DECRIRE]: ECRITURE,
-            [SECURISER]: ECRITURE,
-            [HOMOLOGUER]: ECRITURE,
-            [RISQUES]: ECRITURE,
-            [CONTACTS]: ECRITURE,
-          });
-          done();
-        })
-        .catch(done);
+      const avant = await depotAutorisations.autorisations('123');
+      expect(avant.length).to.equal(0);
+
+      const descriptionService = uneDescriptionValide(referentiel).donnees;
+      await depot.nouveauService('123', { descriptionService });
+
+      const apres = await depotAutorisations.autorisations('123');
+      expect(apres.length).to.equal(1);
+      const autorisation = apres[0];
+      expect(autorisation.estProprietaire).to.be(true);
+      expect(autorisation.idHomologation).to.equal('unUUID');
+      expect(autorisation.idService).to.equal('unUUID');
+      expect(autorisation.idUtilisateur).to.equal('123');
+      expect(autorisation.droits).to.eql({
+        [DECRIRE]: ECRITURE,
+        [SECURISER]: ECRITURE,
+        [HOMOLOGUER]: ECRITURE,
+        [RISQUES]: ECRITURE,
+        [CONTACTS]: ECRITURE,
+      });
     });
 
     it('publie un événement de "Nouveau service créé"', async () => {
