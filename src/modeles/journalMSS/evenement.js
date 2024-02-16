@@ -1,11 +1,13 @@
-const AdaptateurChiffrement = require('../../adaptateurs/adaptateurChiffrement');
+const {
+  fabriqueAdaptateurChiffrement,
+} = require('../../adaptateurs/fabriqueAdaptateurChiffrement');
 
 class Evenement {
   static optionsParDefaut(options) {
     return {
       date: options.date ?? Date.now(),
       adaptateurChiffrement:
-        options.adaptateurChiffrement ?? AdaptateurChiffrement,
+        options.adaptateurChiffrement ?? fabriqueAdaptateurChiffrement(),
     };
   }
 

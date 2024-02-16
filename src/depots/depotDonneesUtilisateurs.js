@@ -1,4 +1,3 @@
-const adaptateurChiffrementParDefaut = require('../adaptateurs/adaptateurChiffrement');
 const adaptateurJWTParDefaut = require('../adaptateurs/adaptateurJWT');
 const adaptateurUUIDParDefaut = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
@@ -15,7 +14,7 @@ const Utilisateur = require('../modeles/utilisateur');
 
 const creeDepot = (config = {}) => {
   const {
-    adaptateurChiffrement = adaptateurChiffrementParDefaut,
+    adaptateurChiffrement,
     adaptateurJournalMSS,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
