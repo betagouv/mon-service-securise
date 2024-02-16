@@ -525,7 +525,7 @@ describe('Le dépôt de données des homologations', () => {
 
     after(() => (RisqueGeneral.valide = valideRisque));
 
-    it('sait associer un risque général à une homologation', (done) => {
+    it('sait associer un risque général à une homologation', async () => {
       RisqueGeneral.valide = () => {};
 
       const donneesHomologation = {
@@ -546,16 +546,12 @@ describe('Le dépôt de données des homologations', () => {
         id: 'unRisque',
         commentaire: 'Un commentaire',
       });
-      depot
-        .ajouteRisqueGeneralAService('123', risque)
-        .then(() => depot.homologation('123'))
-        .then(({ risques }) => {
-          expect(risques.risquesGeneraux.nombre()).to.equal(1);
-          expect(risques.risquesGeneraux.item(0)).to.be.a(RisqueGeneral);
-          expect(risques.risquesGeneraux.item(0).id).to.equal('unRisque');
-          done();
-        })
-        .catch(done);
+      await depot.ajouteRisqueGeneralAService('123', risque);
+
+      const { risques } = await depot.homologation('123');
+      expect(risques.risquesGeneraux.nombre()).to.equal(1);
+      expect(risques.risquesGeneraux.item(0)).to.be.a(RisqueGeneral);
+      expect(risques.risquesGeneraux.item(0).id).to.equal('unRisque');
     });
   });
 
