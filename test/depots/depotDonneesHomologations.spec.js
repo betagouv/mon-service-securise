@@ -638,23 +638,19 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
 
-    it('ajoute le nouveau service au dépôt', (done) => {
+    it('ajoute le nouveau service au dépôt', async () => {
+      const avant = await depot.homologations('123');
+      expect(avant.length).to.equal(0);
+
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Super Service')
         .construis()
         .toJSON();
+      await depot.nouveauService('123', { descriptionService });
 
-      depot
-        .homologations('123')
-        .then((homologations) => expect(homologations.length).to.equal(0))
-        .then(() => depot.nouveauService('123', { descriptionService }))
-        .then(() => depot.homologations('123'))
-        .then((services) => {
-          expect(services.length).to.equal(1);
-          expect(services[0].nomService()).to.equal('Super Service');
-          done();
-        })
-        .catch(done);
+      const apres = await depot.homologations('123');
+      expect(apres.length).to.equal(1);
+      expect(apres[0].nomService()).to.equal('Super Service');
     });
 
     it('génère un UUID pour le service créée', (done) => {
