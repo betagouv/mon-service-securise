@@ -497,7 +497,7 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  it('sait associer des rôles et responsabilités à une homologation', (done) => {
+  it('sait associer des rôles et responsabilités à une homologation', async () => {
     const donneesHomologation = {
       id: '123',
       descriptionService: { nomService: 'nom' },
@@ -516,16 +516,10 @@ describe('Le dépôt de données des homologations', () => {
     const roles = new RolesResponsabilites({
       autoriteHomologation: 'Jean Dupont',
     });
-    depot
-      .ajouteRolesResponsabilitesAService('123', roles)
-      .then(() => depot.homologation('123'))
-      .then(({ rolesResponsabilites }) => {
-        expect(rolesResponsabilites.autoriteHomologation).to.equal(
-          'Jean Dupont'
-        );
-        done();
-      })
-      .catch(done);
+    await depot.ajouteRolesResponsabilitesAService('123', roles);
+
+    const { rolesResponsabilites } = await depot.homologation('123');
+    expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
   });
 
   describe('concernant les risques généraux', () => {
