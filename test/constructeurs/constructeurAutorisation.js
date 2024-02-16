@@ -20,7 +20,7 @@ class ConstructeurAutorisation {
     return this;
   }
 
-  deProprietaireDeService(idUtilisateur, idService) {
+  deProprietaire(idUtilisateur, idService) {
     this.donnees.estProprietaire = true;
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
@@ -28,7 +28,7 @@ class ConstructeurAutorisation {
     return this;
   }
 
-  deContributeurDeService(idUtilisateur, idService) {
+  deContributeur(idUtilisateur, idService) {
     this.donnees.estProprietaire = false;
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;

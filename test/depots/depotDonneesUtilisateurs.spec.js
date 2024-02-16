@@ -553,7 +553,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [
-            uneAutorisation().deProprietaireDeService('999', '123').donnees,
+            uneAutorisation().deProprietaire('999', '123').donnees,
           ],
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
@@ -606,8 +606,8 @@ describe('Le dépôt de données des utilisateurs', () => {
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [
-            uneAutorisation().deContributeurDeService('999', '123').donnees,
-            uneAutorisation().deContributeurDeService('000', '123').donnees,
+            uneAutorisation().deContributeur('999', '123').donnees,
+            uneAutorisation().deContributeur('000', '123').donnees,
           ],
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({

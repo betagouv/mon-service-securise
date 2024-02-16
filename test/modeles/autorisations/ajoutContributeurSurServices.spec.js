@@ -27,9 +27,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
   const leService = (id) =>
     unService().avecId(id).avecNomService('Nom Service').construis();
 
-  const peutGererContributeurs = uneAutorisation()
-    .deProprietaireDeService()
-    .construis();
+  const peutGererContributeurs = uneAutorisation().deProprietaire().construis();
   const utilisateur = {
     id: '999',
     genereToken: () => 'un token',
@@ -85,7 +83,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
 
   it("lève une exception si l'utilisateur n'a pas le droit d'ajouter un contributeur", async () => {
     const sansGestionContributeur = uneAutorisation()
-      .deContributeurDeService()
+      .deContributeur()
       .construis();
     depotDonnees.autorisationPour = async () => sansGestionContributeur;
 

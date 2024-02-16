@@ -53,7 +53,7 @@ describe("L'objet d'API de `GET /services`", () => {
   it('fournit les données nécessaires', () => {
     const services = [service];
     const autorisationComplete = uneAutorisation()
-      .deProprietaireDeService('A', '123')
+      .deProprietaire('A', '123')
       .construis();
 
     expect(
@@ -99,14 +99,14 @@ describe("L'objet d'API de `GET /services`", () => {
     unAutreService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
 
     const autorisationPourUnService = uneAutorisation()
-      .deProprietaireDeService('999', service.id)
+      .deProprietaire('999', service.id)
       .avecDroits({
         [HOMOLOGUER]: LECTURE,
       })
       .construis();
 
     const autorisationPourUnAutreService = uneAutorisation()
-      .deProprietaireDeService('999', unAutreService.id)
+      .deProprietaire('999', unAutreService.id)
       .avecDroits({
         [HOMOLOGUER]: LECTURE,
       })
@@ -130,14 +130,14 @@ describe("L'objet d'API de `GET /services`", () => {
     unAutreService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
 
     const autorisationPourUnService = uneAutorisation()
-      .deContributeurDeService('999', '123')
+      .deContributeur('999', '123')
       .avecDroits({
         [HOMOLOGUER]: LECTURE,
       })
       .construis();
 
     const autorisationSansHomologuerPourUnAutreService = uneAutorisation()
-      .deContributeurDeService('999', '456')
+      .deContributeur('999', '456')
       .avecDroits({})
       .construis();
 
