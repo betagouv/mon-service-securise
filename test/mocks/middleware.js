@@ -54,6 +54,7 @@ let listesAseptisees = [];
 let listeAdressesIPsAutorisee = [];
 let parametresAseptises = [];
 let preferencesChargees = false;
+let filtrageIpEstActif = false;
 let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
 let traficProtege = false;
@@ -83,6 +84,7 @@ const middlewareFantaisie = {
     listeAdressesIPsAutorisee = [];
     parametresAseptises = [];
     preferencesChargees = false;
+    filtrageIpEstActif = false;
     rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
     traficProtege = false;
@@ -127,6 +129,11 @@ const middlewareFantaisie = {
   chargePreferencesUtilisateur: (_requete, reponse, suite) => {
     reponse.locals.preferencesUtilisateur = {};
     preferencesChargees = true;
+    suite();
+  },
+
+  filtreIpAutorisees: () => (_requete, _reponse, suite) => {
+    filtrageIpEstActif = true;
     suite();
   },
 
@@ -234,6 +241,13 @@ const middlewareFantaisie = {
   verifieChargementDesPreferences: (...params) => {
     verifieRequeteChangeEtat(
       { lectureEtat: () => preferencesChargees },
+      ...params
+    );
+  },
+
+  verifieFiltrageIp: (...params) => {
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => filtrageIpEstActif },
       ...params
     );
   },

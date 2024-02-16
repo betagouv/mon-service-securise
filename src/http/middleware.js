@@ -1,5 +1,6 @@
 const controlAcces = require('express-ip-access-control');
 const { check } = require('express-validator');
+const ipfilter = require('express-ipfilter').IpFilter;
 const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
 const {
   CSP_BIBLIOTHEQUES,
@@ -263,6 +264,22 @@ const middleware = (configuration = {}) => {
   const protegeTrafic = () =>
     adaptateurProtection.protectionLimiteTraficEndpointSensible();
 
+  const filtreIpAutorisees = () => {
+    const config = adaptateurEnvironnement.filtrageIp();
+
+    if (!config.activerFiltrageIp()) {
+      const aucunFiltrage = (_req, _rep, suite) => suite();
+      return aucunFiltrage;
+    }
+
+    return ipfilter(config.ipAutorisees(), {
+      // Utilise l'IP d'origine : https://doc.scalingo.com/platform/internals/routing
+      detectIp: (requete) => requete.headers['x-real-ip'],
+      mode: 'allow',
+      log: false,
+    });
+  };
+
   return {
     aseptise,
     aseptiseListe,
@@ -272,6 +289,7 @@ const middleware = (configuration = {}) => {
     positionneHeaders,
     positionneHeadersAvecNonce,
     protegeTrafic,
+    filtreIpAutorisees,
     repousseExpirationCookie,
     suppressionCookie,
     trouveService,

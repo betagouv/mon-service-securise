@@ -8,6 +8,11 @@ const journalMSS = () => ({
     process.env.AVEC_JOURNAL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
 });
 
+const filtrageIp = () => ({
+  ipAutorisees: () => process.env.ADRESSES_IP_AUTORISEES?.split(',') ?? [],
+  activerFiltrageIp: () => filtrageIp().ipAutorisees().length > 0,
+});
+
 const matomo = () => ({
   urlTagManager: () => process.env.MATOMO_URL_TAG_MANAGER,
 });
@@ -33,6 +38,7 @@ const statistiques = () => ({
 
 module.exports = {
   emailMemoire,
+  filtrageIp,
   journalMSS,
   matomo,
   sendinblue,
