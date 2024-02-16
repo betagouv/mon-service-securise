@@ -61,31 +61,23 @@ const { ECRITURE } = Permissions;
 
 describe('Le dépôt de données des homologations', () => {
   it("connaît toutes les homologations d'un utilisateur donné", async () => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        homologations: [
-          { id: '123', descriptionService: { nomService: 'Super Service' } },
-          { id: '789', descriptionService: { nomService: 'Autre service' } },
-        ],
-        utilisateurs: [
-          {
-            id: '456',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-          },
-        ],
-        autorisations: [
-          uneAutorisation().deProprietaireDeService('456', '123').donnees,
-          uneAutorisation().deProprietaireDeService('999', '789').donnees,
-        ],
-      }
-    );
     const referentiel = Referentiel.creeReferentielVide();
-    const depot = DepotDonneesHomologations.creeDepot({
-      adaptateurPersistance,
-      referentiel,
-    });
+
+    const adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUnService(unService(referentiel).avecId('123').donnees)
+      .ajouteUnService(unService(referentiel).avecId('789').donnees)
+      .ajouteUnUtilisateur(unUtilisateur().avecId('456').donnees)
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaireDeService('456', '123').donnees
+      )
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaireDeService('999', '789').donnees
+      );
+
+    const depot = unDepotDeDonneesServices()
+      .avecAdaptateurPersistance(adaptateurPersistance)
+      .avecReferentiel(referentiel)
+      .construis();
 
     const homologations = await depot.homologations('456');
 
