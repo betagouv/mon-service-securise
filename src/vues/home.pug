@@ -22,29 +22,20 @@ mixin chiffreCle(chiffre, description)
     h4.alignement-gauche.centre-tablette.couleur-principale-foncee!= chiffre
     p.alignement-gauche.centre-tablette!=description
 
-mixin temoignage(citation, auteur, source)
-  .temoignage.alignement-gauche
-    img(src='/statique/assets/images/home/icone_temoignage.svg' alt='')
-    h4!= `« ${citation} »`
-    h5!= auteur
-    h6.alignement-gauche!= source
-
 mixin carteCarrousel(numero, description)
   .carte-carrousel(id=`slide-${numero}`)
     img.petite-marge-basse(src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
     h4!= description
 
-mixin carrousel(id, nbItems)
+mixin carrousel(id, texteBoutonSuivant)
   div(id=id)
     .conteneur-carrousel
       block
-    .conteneur-liens-carrousel.invisible-desktop
+    .conteneur-liens-carrousel
       button.precedent
         img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
-      for numeroItem in new Array(nbItems).fill(0).map((_, i) => i)
-        - const estPremier = numeroItem === 0
-        button.lien-carte(class=`${estPremier ? 'actif': ''}` data-cible=numeroItem)!= numeroItem + 1
       button.suivant
+        span!= texteBoutonSuivant
         img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
 
 block append styles
@@ -74,7 +65,7 @@ block main
           .conteneur-logo-partenaire.petite-marge-basse
             img(src='/statique/assets/images/home/cnil.svg' alt='Logo de la CNIL')
             img(src='/statique/assets/images/home/declic.svg' alt='Logo de Déclic')
-    +carrousel('carrousel-presentation', 3)
+    +carrousel('carrousel-presentation', 'Suivant')
       +carteCarrousel(1, "Gratuit, 100% en ligne et collaboratif")
       +carteCarrousel(2, "Accessible à toutes les entités publiques")
       +carteCarrousel(3, "Conçu par les spécialistes de l'ANSSI")
@@ -131,9 +122,8 @@ block main
         img(src='/statique/assets/images/home/anct.svg' alt='ANCT Incubateur des territoires')
         img(src='/statique/assets/images/home/essonne.svg' alt='Essonne')
         img(src='/statique/assets/images/home/inclusion_connect.svg' alt='Inclusion Connect')
-      .conteneur-temoignages.tres-petite-marge-basse
-        +temoignage("Lorem ipsum dolor sit amet, consectetur adipiscing. Dignissim cursus at ullamcorper mauris non. Integer aliquam, scelerisque.", "Auteur", "Ouvrage · Détail 1.2 · Détail 1.3 · Détail 1.4 ")
-        +temoignage("Lorem ipsum dolor sit amet, consectetur adipiscing. Dignissim cursus at ullamcorper mauris non. Integer aliquam, scelerisque.", "Auteur", "Ouvrage · Détail 1.2 · Détail 1.3 · Détail 1.4 ")
+      +carrousel('carrousel-temoignages', 'Témoignages suivants')
+        include home/temoignages
     .bloc-contenu.bloc-etroit#presentation-anssi
       h3.titre-etroit.couleur-principale-foncee.moyenne-marge-basse Qu’est-ce que l’ANSSI ?
       img.moyenne-marge-basse(src='/statique/assets/images/home/anssi.svg' alt='ANSSI')
