@@ -234,8 +234,9 @@ const nouvelAdaptateur = (env) => {
       .first();
 
     const dejaConnue = ligne !== undefined;
-    if (dejaConnue) metsAJourTable('autorisations', id, donneesAutorisation);
-    else ajouteLigneDansTable('autorisations', id, donneesAutorisation);
+    if (dejaConnue)
+      await metsAJourTable('autorisations', id, donneesAutorisation);
+    else await ajouteLigneDansTable('autorisations', id, donneesAutorisation);
   };
 
   const supprimeAutorisation = (idUtilisateur, idHomologation) =>
