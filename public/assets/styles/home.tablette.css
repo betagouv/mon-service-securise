@@ -33,7 +33,7 @@
   }
 
   #home .carte-carrousel {
-    width: calc(384px - 108px);
+    width: calc(50vw - (56px + 56px + 16px * 2 + 12px));
     padding: 24px 54px 54px 54px;
   }
 
@@ -112,5 +112,12 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: 32px;
+  }
+
+  #home .temoignage {
+    min-width: calc(100vw - 112px * 2);
+    width: calc(100vw - 112px * 2);
+    flex-shrink: 0;
+    scroll-snap-align: center;
   }
 }

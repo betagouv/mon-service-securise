@@ -253,12 +253,15 @@ main {
   margin-right: 8px;
 }
 
-#home .conteneur-carrousel {
+#home #carrousel-presentation .conteneur-carrousel {
   background: linear-gradient(
     to bottom,
     var(--couleur-principale) 20%,
     var(--couleur-principale-attenuee) 20%
   );
+}
+
+#home .conteneur-carrousel {
   display: flex;
   gap: 24px;
   overflow-x: auto;
@@ -279,7 +282,7 @@ main {
   border-radius: 4px;
   box-shadow: 0 12px 12px 0 #0000001a;
   padding: 0 32px 32px 32px;
-  width: calc(288px - 64px);
+  width: calc(100vw - (32px + 32px + 16px * 2));
   flex-shrink: 0;
   scroll-snap-align: center;
 }
@@ -307,28 +310,34 @@ main {
   flex-direction: row;
   gap: 16px;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background: var(--couleur-principale-attenuee);
-  padding-bottom: 24px;
+  padding: 0 16px 24px 16px;
+}
+
+#home #carrousel-temoignages .conteneur-liens-carrousel {
+  padding: 0 0 24px 0;
 }
 
 #home .conteneur-liens-carrousel button {
   background: transparent;
-  border-radius: 4px;
-  padding: 4px 10px;
-  font-size: 0.8em;
   border: none;
+  border-bottom: 1px solid #0c5c98;
+  color: #0c5c98;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#home .conteneur-liens-carrousel button.actif {
-  background: var(--couleur-principale);
-  color: white;
+#home .conteneur-liens-carrousel button.suivant img {
+  transform: rotate(180deg);
+  padding-right: 8px;
 }
 
-#home .conteneur-liens-carrousel button.suivant {
-  transform: rotate(180deg);
+#home .temoignage {
+  min-width: calc(100vw - 32px);
+  width: calc(100vw - 32px);
+  flex-shrink: 0;
+  scroll-snap-align: center;
 }

@@ -30,6 +30,14 @@
     justify-content: center;
   }
 
+  #home .carte-carrousel {
+    width: calc(384px - 54px * 2);
+  }
+
+  #home #carrousel-presentation .conteneur-liens-carrousel {
+    display: none;
+  }
+
   #home .conteneur-avantage {
     flex-direction: row-reverse;
     padding-top: 72px;
@@ -143,6 +151,12 @@
   #home .conteneur-temoignages {
     display: flex;
     flex-direction: row;
+  }
+
+  #home .temoignage {
+    min-width: calc(1200px / 2 - 12px);
+    width: calc(1200px / 2 - 12px);
+    scroll-snap-align: start;
   }
 
   #home #presentation-anssi {
