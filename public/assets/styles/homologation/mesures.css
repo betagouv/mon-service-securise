@@ -2,6 +2,7 @@
   width: 1290px;
   container-type: inline-size;
   container-name: conteneur-mesures;
+  z-index: 1;
 }
 
 .zone-principale {
