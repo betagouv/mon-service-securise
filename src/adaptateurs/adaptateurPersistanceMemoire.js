@@ -190,7 +190,7 @@ const nouvelAdaptateur = (
   const supprimeAutorisation = (idUtilisateur, idHomologation) => {
     donnees.autorisations = donnees.autorisations.filter(
       (a) =>
-        a.idUtilisateur !== idUtilisateur && a.idHomologation !== idHomologation
+        a.idUtilisateur !== idUtilisateur || a.idHomologation !== idHomologation
     );
     return Promise.resolve();
   };
