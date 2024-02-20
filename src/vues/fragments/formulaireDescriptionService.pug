@@ -44,7 +44,7 @@ mixin formulaireDescriptionService(idHomologation)
       .conteneur-nombre-organisations-utilisatrices(class = `${valeurService === valeurVide && !estLectureSeule && !estEnCreation ? 'vide' : ''}`)
         .requis
           label À combien d'organisations publiques est destiné le service ?
-            p.description Si le service est mutualisé au profit de plusieurs organisations publiques merci de préciser combien en bénéficieront.
+            p.description Si le service est mutualisé au profit de plusieurs organisations publiques, merci de préciser combien en bénéficieront.
             p.description Si le service n’est pas mutualisé, merci de choisir « Mon organisation uniquement ».
             select(
               id = 'nombre-organisations-utilisatrices'
