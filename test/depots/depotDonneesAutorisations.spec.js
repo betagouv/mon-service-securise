@@ -364,6 +364,28 @@ describe('Le dépôt de données des autorisations', () => {
       const apres = await depot.autorisationPour('U1', 'S1');
       expect(apres).to.be(undefined);
     });
+
+    it("publie les autorisations à jour sur le bus d'événements", async () => {
+      const bus = fabriqueBusPourLesTests();
+      const avecDeuxExistantes = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('A1').deProprietaire('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('A2').deProprietaire('U2', 'S1').donnees
+        )
+        .construis();
+      const depot = creeDepot(avecDeuxExistantes, null, bus);
+
+      await depot.supprimeContributeur('U1', 'S1', 'U2');
+
+      expect(
+        bus.recupereEvenement(EvenementAutorisationsServiceModifiees)
+      ).to.eql({
+        idService: 'S1',
+        autorisations: [{ droit: 'PROPRIETAIRE', idUtilisateur: 'U2' }],
+      });
+    });
   });
 
   it('connaît toutes les autorisations pour un service donné', async () => {
