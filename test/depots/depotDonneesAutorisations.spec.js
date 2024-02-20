@@ -388,25 +388,53 @@ describe('Le dépôt de données des autorisations', () => {
     expect(a[1].estProprietaire).to.be(false);
   });
 
-  it('sait sauvegarder une autorisation', async () => {
-    const enEcriture = uneAutorisation()
-      .avecId('uuid-a')
-      .deContributeur('123', '999')
-      .avecTousDroitsEcriture();
-    const depot = creeDepot(
-      unePersistanceMemoire()
-        .ajouteUneAutorisation(enEcriture.donnees)
-        .construis()
-    );
+  describe("sur demande de sauvegarde d'une autorisation", () => {
+    it('persiste les données', async () => {
+      const enEcriture = uneAutorisation()
+        .avecId('uuid-a')
+        .deContributeur('123', '999')
+        .avecTousDroitsEcriture();
+      const depot = creeDepot(
+        unePersistanceMemoire()
+          .ajouteUneAutorisation(enEcriture.donnees)
+          .construis()
+      );
 
-    const avant = await depot.autorisation('uuid-a');
-    expect(avant.droits.HOMOLOGUER).to.be(ECRITURE);
+      const avant = await depot.autorisation('uuid-a');
+      expect(avant.droits.HOMOLOGUER).to.be(ECRITURE);
 
-    avant.appliqueDroits({ HOMOLOGUER: LECTURE });
+      avant.appliqueDroits({ HOMOLOGUER: LECTURE });
 
-    await depot.sauvegardeAutorisation(avant);
+      await depot.sauvegardeAutorisation(avant);
 
-    const apres = await depot.autorisation('uuid-a');
-    expect(apres.droits.HOMOLOGUER).to.be(LECTURE);
+      const apres = await depot.autorisation('uuid-a');
+      expect(apres.droits.HOMOLOGUER).to.be(LECTURE);
+    });
+
+    it("publie les autorisations à jour sur le bus d'événements", async () => {
+      const bus = fabriqueBusPourLesTests();
+      const avecUneExistante = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('A1').deProprietaire('U1', 'S1').donnees
+        )
+        .construis();
+      const depot = creeDepot(avecUneExistante, null, bus);
+
+      const ecriturePourU2 = uneAutorisation()
+        .deContributeur('U2', 'S1')
+        .avecTousDroitsEcriture()
+        .construis();
+      await depot.sauvegardeAutorisation(ecriturePourU2);
+
+      expect(
+        bus.recupereEvenement(EvenementAutorisationsServiceModifiees)
+      ).to.eql({
+        idService: 'S1',
+        autorisations: [
+          { droit: 'PROPRIETAIRE', idUtilisateur: 'U1' },
+          { droit: 'ECRITURE', idUtilisateur: 'U2' },
+        ],
+      });
+    });
   });
 });
