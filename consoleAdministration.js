@@ -10,15 +10,19 @@ const EvenementCompletudeServiceModifiee = require('./src/modeles/journalMSS/eve
 const EvenementNouvelleHomologationCreee = require('./src/modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementNouvelUtilisateurInscrit = require('./src/modeles/journalMSS/evenementNouvelUtilisateurInscrit');
 const { avecPMapPourChaqueElement } = require('./src/utilitaires/pMap');
+const FabriqueAutorisation = require('./src/modeles/autorisations/fabriqueAutorisation');
+const {
+  EvenementCollaboratifServiceModifie,
+} = require('./src/modeles/journalMSS/evenementCollaboratifServiceModifie');
 
 class ConsoleAdministration {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
-    const adaptateurPersistance =
+    this.adaptateurPersistance =
       AdaptateurPostgres.nouvelAdaptateur(environnementNode);
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
     this.depotDonnees = DepotDonnees.creeDepot({
       adaptateurJWT,
-      adaptateurPersistance,
+      adaptateurPersistance: this.adaptateurPersistance,
       adaptateurUUID,
       referentiel: this.referentiel,
     });
@@ -134,6 +138,44 @@ class ConsoleAdministration {
 
     return avecPMapPourChaqueElement(
       Promise.resolve(evenements),
+      journal.consigneEvenement
+    );
+  }
+
+  async genereTousEvenementsCollaboratif(persisteEvenements = false) {
+    const journal = persisteEvenements
+      ? this.adaptateurJournalMSS
+      : this.journalConsole;
+
+    const tousServices = await this.depotDonnees.tousLesServices();
+
+    const genereAutorisationsDuService = async (idService) => {
+      const donneesFraiches =
+        await this.adaptateurPersistance.autorisationsDuService(idService);
+
+      return new EvenementCollaboratifServiceModifie({
+        idService,
+        autorisations: donneesFraiches
+          .map(FabriqueAutorisation.fabrique)
+          .map((a) => ({
+            idUtilisateur: a.idUtilisateur,
+            droit: a.resumeNiveauDroit(),
+          })),
+      }).toJSON();
+    };
+
+    const tousEvenements = await Promise.all(
+      tousServices.map(async (service) =>
+        genereAutorisationsDuService(service.id)
+      )
+    );
+    const evenementsAdmin = tousEvenements.map(({ donnees, ...reste }) => ({
+      donnees: { ...donnees, genereParAdministrateur: true },
+      ...reste,
+    }));
+
+    return avecPMapPourChaqueElement(
+      Promise.resolve(evenementsAdmin),
       journal.consigneEvenement
     );
   }
