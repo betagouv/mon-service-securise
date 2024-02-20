@@ -42,24 +42,6 @@ const creeDepot = (config = {}) => {
       .autorisation(id)
       .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
 
-  const sauvegardeAutorisation = async (uneAutorisation) => {
-    const { id, ...donnees } = uneAutorisation.donneesAPersister();
-    adaptateurPersistance.sauvegardeAutorisation(id, donnees);
-  };
-
-  const autorisationsDuService = async (id) => {
-    const as = await adaptateurPersistance.autorisationsDuService(id);
-    return as.map((a) => FabriqueAutorisation.fabrique(a));
-  };
-
-  const autorisationPour = (...params) =>
-    adaptateurPersistance
-      .autorisationPour(...params)
-      .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
-
-  const autorisationExiste = (...params) =>
-    autorisationPour(...params).then((a) => !!a);
-
   const publieAutorisationsDuService = async (idService) => {
     const donneesFraiches =
       await adaptateurPersistance.autorisationsDuService(idService);
@@ -76,6 +58,26 @@ const creeDepot = (config = {}) => {
 
     await busEvenements.publie(evenement);
   };
+
+  const sauvegardeAutorisation = async (uneAutorisation) => {
+    const { id, ...donnees } = uneAutorisation.donneesAPersister();
+    await adaptateurPersistance.sauvegardeAutorisation(id, donnees);
+
+    await publieAutorisationsDuService(uneAutorisation.idService);
+  };
+
+  const autorisationsDuService = async (id) => {
+    const as = await adaptateurPersistance.autorisationsDuService(id);
+    return as.map((a) => FabriqueAutorisation.fabrique(a));
+  };
+
+  const autorisationPour = (...params) =>
+    adaptateurPersistance
+      .autorisationPour(...params)
+      .then((a) => (a ? FabriqueAutorisation.fabrique(a) : undefined));
+
+  const autorisationExiste = (...params) =>
+    autorisationPour(...params).then((a) => !!a);
 
   const ajouteContributeurAuService = async (nouvelleAutorisation) => {
     const verifieUtilisateurExiste = async (id) => {
