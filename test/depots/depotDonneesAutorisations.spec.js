@@ -347,18 +347,21 @@ describe('Le dépôt de données des autorisations', () => {
     it('supprime le contributeur', async () => {
       const avecUneAutorisation = unePersistanceMemoire()
         .ajouteUneAutorisation(
-          uneAutorisation().deContributeur('000', 'ABC').donnees
+          uneAutorisation().deContributeur('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U2', 'S1').donnees
         )
         .construis();
 
       const depot = creeDepot(avecUneAutorisation);
 
-      const avant = await depot.autorisationPour('000', 'ABC');
+      const avant = await depot.autorisationPour('U1', 'S1');
       expect(avant).not.to.be(undefined);
 
-      await depot.supprimeContributeur('000', 'ABC', '123');
+      await depot.supprimeContributeur('U1', 'S1', 'U2');
 
-      const apres = await depot.autorisationPour('000', 'ABC');
+      const apres = await depot.autorisationPour('U1', 'S1');
       expect(apres).to.be(undefined);
     });
   });
