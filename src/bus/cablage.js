@@ -1,5 +1,8 @@
 const EvenementMesuresServiceModifiees = require('./evenementMesuresServiceModifiees');
 const {
+  EvenementAutorisationsServiceModifiees,
+} = require('./evenementAutorisationsServiceModifiees');
+const {
   consigneCompletudeDansJournal,
 } = require('./abonnements/consigneCompletudeDansJournal');
 const {
@@ -15,6 +18,9 @@ const {
 const {
   consigneProprietaireCreeUnServiceDansJournal,
 } = require('./abonnements/consigneProprietaireCreeUnServiceDansJournal');
+const {
+  consigneAutorisationsModifieesDansJournal,
+} = require('./abonnements/consigneAutorisationsModifieesDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -32,6 +38,11 @@ const cableTousLesAbonnes = (
     consigneCompletudeDansJournal({ adaptateurJournal }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
+
+  busEvenements.abonne(
+    EvenementAutorisationsServiceModifiees,
+    consigneAutorisationsModifieesDansJournal({ adaptateurJournal })
+  );
 };
 
 module.exports = { cableTousLesAbonnes };
