@@ -811,3 +811,275 @@ p {
   bottom: 0;
   left: 12px;
 }
+
+.tampon-homologation {
+  width: calc(288px - 32px);
+  margin: -8px;
+  padding: 16px;
+  border-radius: 24px;
+  background-image: var(--fond-tampon-homologation);
+  background-repeat: no-repeat;
+  background-size: auto 545px;
+  background-color: white;
+  font-size: 14px;
+}
+
+.tampon-homologation .entete {
+  height: 529px;
+}
+
+.tampon-homologation h1 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0c5c98;
+  margin: 0 0 16px 0;
+}
+
+.tampon-homologation .cartouche {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.tampon-homologation .cartouche:last-of-type {
+  margin-bottom: 32px;
+}
+
+.tampon-homologation .cartouche .titre {
+  border-radius: 16px 16px 0 0;
+  padding: 4px 16px 6px 16px;
+  background: white;
+  color: #0c5c98;
+}
+
+.tampon-homologation .separateur {
+  height: 24px;
+  width: 1px;
+  background: white;
+  min-width: 1px;
+  margin: 0 8px;
+}
+
+.tampon-homologation .cartouche .conteneur-description {
+  border-radius: 0 0 16px 16px;
+  padding: 4px 8px 6px 8px;
+  background: #0c5c98;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.tampon-homologation .cartouche:nth-of-type(2) .conteneur-description {
+  flex-direction: column;
+}
+
+.tampon-homologation .cartouche:nth-of-type(2) .separateur {
+  display: none;
+}
+
+.tampon-homologation .cartouche:nth-of-type(2) .conteneur-description span {
+  padding: 4px 8px 6px 8px;
+}
+
+.tampon-homologation
+  .cartouche:nth-of-type(2)
+  .conteneur-description
+  span:first-of-type {
+  border-bottom: 1px solid white;
+}
+
+.tampon-homologation .pied-page {
+  padding-top: 16px;
+}
+
+.tampon-homologation .conteneur-images {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.tampon-homologation .conteneur-images #logo-mss {
+  width: 140px;
+  height: fit-content;
+  content: var(--logo-mss);
+}
+
+.tampon-homologation .conteneur-images #logo-tampon {
+  width: 100px;
+  height: 100px;
+  top: -30px;
+  right: -12px;
+  content: var(--logo-tampon-homologation);
+  position: absolute;
+}
+
+.tampon-homologation .footer {
+  padding-top: 8px;
+  color: #08416a;
+  margin-bottom: 24px;
+}
+
+.tampon-homologation .extra {
+  color: #08416a;
+}
+
+.tampon-homologation .separateur-extra {
+  display: none;
+}
+
+.tampon-homologation.tablette {
+  width: calc(656px - 48px);
+  padding: 24px;
+  background-size: auto 358px;
+  font-size: 16px;
+}
+
+.tampon-homologation:is(.tablette, .desktop) h1 {
+  font-size: 25px;
+  line-height: 31px;
+}
+
+.tampon-homologation.tablette .entete {
+  height: 342px;
+}
+
+.tampon-homologation:is(.tablette, .desktop) .cartouche {
+  flex-direction: row;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.tampon-homologation:is(.tablette, .desktop) .cartouche:last-of-type {
+  margin-bottom: 24px;
+}
+
+.tampon-homologation:is(.tablette, .desktop) .cartouche .titre {
+  border-radius: 16px 0 0 16px;
+  padding: 4px 8px 6px 8px;
+  min-width: 264px;
+  display: flex;
+  align-items: center;
+}
+
+.tampon-homologation:is(.tablette, .desktop) .cartouche .conteneur-description {
+  border-radius: 0 16px 16px 0;
+  padding: 4px 16px 6px 8px;
+}
+
+.tampon-homologation:is(.tablette, .desktop)
+  .cartouche
+  .conteneur-description
+  span {
+  padding: 0;
+}
+
+.tampon-homologation:is(.tablette, .desktop)
+  .cartouche:nth-of-type(2)
+  .conteneur-description {
+  flex-direction: row;
+}
+
+.tampon-homologation:is(.tablette, .desktop)
+  .cartouche:nth-of-type(2)
+  .separateur {
+  display: flex;
+  height: 100%;
+}
+
+.tampon-homologation:is(.tablette, .desktop)
+  .cartouche:nth-of-type(2)
+  .conteneur-description
+  span:first-of-type {
+  border-bottom: none;
+}
+
+.tampon-homologation:is(.tablette, .desktop) .conteneur-images {
+  position: relative;
+}
+
+.tampon-homologation:is(.tablette, .desktop) #logo-mss {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.tampon-homologation:is(.tablette, .desktop) #logo-tampon {
+  width: 214px;
+  height: 214px;
+  position: absolute;
+  right: 0;
+  top: -64px;
+}
+
+.tampon-homologation.tablette .footer {
+  width: 390px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  padding-top: 0;
+}
+
+.tampon-homologation:is(.tablette, .desktop) .conteneur-extras {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.tampon-homologation:is(.tablette, .desktop) .separateur-extra {
+  display: flex;
+  width: 1px;
+  height: 24px;
+  background: #0c5c98;
+}
+
+.tampon-homologation.desktop {
+  width: calc(996px - 80px);
+  padding: 16px 40px;
+  background-size: auto 336px;
+}
+
+.tampon-homologation.desktop h1 {
+  margin-bottom: 16px;
+}
+
+.tampon-homologation.desktop .entete {
+  height: 320px;
+}
+
+.tampon-homologation.desktop .cartouche {
+  font-size: 16px;
+}
+
+.tampon-homologation.desktop .cartouche .titre {
+  min-width: 300px;
+}
+
+.tampon-homologation.desktop .cartouche .conteneur-description {
+  max-width: 354px;
+}
+
+.tampon-homologation.desktop #logo-mss {
+  margin-top: 0;
+}
+
+.tampon-homologation.desktop #logo-tampon {
+  right: -16px;
+  top: -260px;
+  transform: rotate(15deg);
+}
+
+.tampon-homologation.desktop .pied-page {
+  position: relative;
+  padding-top: 24px;
+}
+
+.tampon-homologation.desktop .footer {
+  width: 752px;
+  position: absolute;
+  top: 14px;
+  left: 164px;
+}
+
+.tampon-homologation.desktop .conteneur-extras {
+  margin-left: 164px;
+}
