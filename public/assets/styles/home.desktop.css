@@ -12,6 +12,10 @@
     margin: 0 auto;
   }
 
+  #home .conteneur-centre {
+    width: 100%;
+  }
+
   #home .invisible-desktop {
     display: none;
   }
@@ -26,7 +30,7 @@
     gap: 24px;
   }
 
-  #home .conteneur-carrousel {
+  #home #carrousel-presentation .conteneur-carrousel {
     justify-content: center;
   }
 
@@ -76,7 +80,7 @@
     position: relative;
   }
 
-  #home .etape.pair {
+  #home .etape:nth-child(even) {
     flex-direction: row-reverse;
   }
 
@@ -90,7 +94,7 @@
     padding-right: 122px;
   }
 
-  #home .etape.pair .contenu-texte-etape {
+  #home .etape:nth-child(even) .contenu-texte-etape {
     padding-right: 0;
     padding-left: 122px;
   }
@@ -102,7 +106,7 @@
     transform: rotate(-22deg);
   }
 
-  #home .etape .chemin.pair {
+  #home .etape:nth-child(even) .chemin {
     position: absolute;
     left: 56%;
     top: 243px;
@@ -161,6 +165,14 @@
 
   #home #presentation-anssi {
     padding: 80px 22vw;
+  }
+
+  #home .grande-marge-basse-desktop {
+    margin-bottom: 48px;
+  }
+
+  #home .moyenne-marge-basse-desktop {
+    margin-bottom: 32px;
   }
 }
 

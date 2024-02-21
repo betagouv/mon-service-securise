@@ -145,6 +145,7 @@ main {
 #home .conteneur-photos-equipe {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 #home .conteneur-photos-equipe .decalage-gauche {
@@ -208,12 +209,17 @@ main {
   font-size: 1.4em;
 }
 
-#home .conteneur-entites img {
-  margin-bottom: 24px;
+#home .conteneur-entites {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
 }
 
-#home .conteneur-entites img:last-of-type {
-  margin-bottom: 0;
+#home .conteneur-entites img {
+  margin-bottom: 24px;
+  align-self: center;
 }
 
 #home .conteneur-temoignages {
@@ -340,4 +346,17 @@ main {
   width: calc(100vw - 32px);
   flex-shrink: 0;
   scroll-snap-align: center;
+}
+
+#home .taille-borne-242 {
+  max-width: 242px;
+}
+
+#home #illustration-collaboratif {
+  max-width: 384px;
+  width: 100%;
+}
+
+#home #conteneur-sport-collectif {
+  overflow-y: hidden;
 }
