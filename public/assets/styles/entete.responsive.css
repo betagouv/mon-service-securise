@@ -75,6 +75,7 @@
 
   header nav.visible .utilisateur-courant {
     display: flex;
+    flex-direction: column-reverse;
   }
 
   header nav.visible .utilisateur-courant .connexion {
