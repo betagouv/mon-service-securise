@@ -1,0 +1,26 @@
+@media screen and (max-width: 428px) {
+  :root {
+    --bom-decalage-lateral: 16px;
+    --bom-decalage-vertical: 10px;
+  }
+  .bom {
+    bottom: var(--bom-decalage-vertical);
+    right: var(--bom-decalage-lateral);
+  }
+
+  .bom .bom-modale {
+    width: 100vw;
+    left: var(--bom-decalage-lateral);
+    bottom: calc(-1 * var(--bom-decalage-vertical));
+    transform: scale(101%);
+  }
+
+  .bom .bom-modale:before {
+    background: none;
+  }
+
+  .bom .bom-modale .bandeau-titre {
+    padding-left: 28vw;
+    background-size: 100%;
+  }
+}
