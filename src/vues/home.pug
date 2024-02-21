@@ -6,8 +6,7 @@ mixin contenuAvantage(titre, description)
     p!= description
 
 mixin etape(numero, titre, description, afficheChemin = true)
-  - const estPair = numero % 2 === 0
-  .etape(class=`${estPair ? 'pair' : ''}`)
+  .etape
     img.taille-maximale.tres-petite-marge-basse(src=`/statique/assets/images/home/illustration_etape_${numero}.svg` alt='')
     .numero-etape.tres-petite-marge-basse(class=`numero-${numero}`)
       span!= numero
@@ -15,7 +14,7 @@ mixin etape(numero, titre, description, afficheChemin = true)
       h4.alignement-gauche!= titre
       p.alignement-gauche!= description
     if afficheChemin
-      img.visible-uniquement-desktop.chemin(class=`${estPair ? 'pair' : ''}` src='/statique/assets/images/home/chemin_etape_gauche.svg' alt='')
+      img.visible-uniquement-desktop.chemin(src='/statique/assets/images/home/chemin_etape_gauche.svg' alt='')
 
 mixin chiffreCle(chiffre, description)
   .chiffre-cle
@@ -54,17 +53,17 @@ block main
   #home
     .bloc-contenu.fond-couleur-principale
       .conteneur-titre
-        img.taille-maximale(src='/statique/assets/images/home/illustration_1.svg' alt='')
+        .conteneur-centre
+          img.taille-maximale.taille-borne(src='/statique/assets/images/home/illustration_1.svg' alt='')
         .contenu-titre
           h1.alignement-gauche-desktop MonServiceSécurisé
-          h2.alignement-gauche L'outil pour piloter en équipe la sécurité de tous vos services numériques et pour les homologuer rapidement
+          h2.alignement-gauche L'outil pour piloter en équipe la sécurité de tous vos services numériques et les homologuer rapidement
           .conteneur-liens
-            a#commencer-a-securiser(href='https://www.monservicesecurise.ssi.gouv.fr/inscription') Commencer à sécuriser
+            a#commencer-a-securiser(href='/inscription') Commencer à sécuriser
             a.secondaire.grande-marge-basse#etre-accompagne(href='https://calendly.com/monservicesecurise-henri/presentation-de-monservicesecurise-anssi-clone' target='_blank' rel='noopener') Être accompagné
           p.alignement-gauche.moyenne-marge-basse Une innovation ANSSI conçue pour durer en collaboration avec :
           .conteneur-logo-partenaire.petite-marge-basse
             img(src='/statique/assets/images/home/cnil.svg' alt='Logo de la CNIL')
-            img(src='/statique/assets/images/home/declic.svg' alt='Logo de Déclic')
     +carrousel('carrousel-presentation', 'Suivant')
       +carteCarrousel(1, "Gratuit, 100% en ligne et collaboratif")
       +carteCarrousel(2, "Accessible à toutes les entités publiques")
@@ -72,18 +71,18 @@ block main
     .bloc-contenu.fond-couleur-principale-attenuee
       h3.alignement-gauche.moyenne-marge-basse Les avantages de MonServiceSécurisé
       .conteneur-avantage
-        img.grande-marge-basse.taille-maximale.plus-grand(src='/statique/assets/images/home/illustration_2.svg' alt='')
+        img.grande-marge-basse.taille-maximale.plus-grand#illustration-laptop(src='/statique/assets/images/home/illustration_2.png' alt='')
         .conteneur-avantages.grande-marge-basse
-          +contenuAvantage('Laissez-vous guider !', "Utilisez MonServiceSécurisé, même si la cybersécurité n'a QUE des secrets pour vous")
+          +contenuAvantage('Laissez-vous guider !', "Utilisez MonServiceSécurisé, même si la cybersécurité n'a QUE des secrets pour vous.")
           +contenuAvantage('Renforcez la sécurité de tous vos services', 'Placez votre effort au bon niveau et obtenez des résultats concrets.')
           +contenuAvantage('Mettez-vous en conformité', "L'homologation de sécurité devient un jeu d'enfant avec MonServiceSécurisé.")
       .conteneur-centre
-        a.principal.petite-marge-basse#commencer-a-securiser-avantages(href='https://www.monservicesecurise.ssi.gouv.fr/inscription') Commencer à sécuriser
+        a.principal.petite-marge-basse#commencer-a-securiser-avantages(href='/inscription') Commencer à sécuriser
     .bloc-contenu.bloc-etroit.fond-couleur-principale
       .conteneur-flex-photos-equipe
         .conteneur-photos-equipe.petite-marge-basse
-          img(src='/statique/assets/images/home/antoine.svg' alt="Photo d'Antoine Dupuy")
-          img.decalage-gauche(src='/statique/assets/images/home/henri.svg' alt="Photo d'Henri Casalis")
+          img(src='/statique/assets/images/home/antoine.png' alt="Photo d'Antoine Dupuy" width=160)
+          img.decalage-gauche(src='/statique/assets/images/home/henri.png' alt="Photo d'Henri Casalis" width=160)
         hr.petite-marge-basse.invisible-desktop
         .contenu-texte-photos-equipe
           h3.alignement-gauche.petite-marge-basse.moyenne-police-tablette Notre équipe est à votre écoute
@@ -96,37 +95,38 @@ block main
     .bloc-contenu
       h3.alignement-gauche.moyenne-marge-basse.couleur-principale-foncee Comment fonctionne MonServiceSécurisé ?
       .etapes.grande-marge-basse
-        +etape(1, 'Décrivez votre service', "Présentez en 3mn les caractéristiques de votre service afin de permettre à l'ANSSI de créer votre liste personnalisée de mesures de sécurité et de mesures proposées par la CNIL.")
-        +etape(2, 'Sécurisez, grâce à des mesures adaptées', "Mettez en oeuvre les mesures proposées et obtenez une évaluation indicative du niveau de sécurisation du service : l'indice cyber.")
+        +etape(1, 'Décrivez votre service', "Présentez en 3 min les caractéristiques de votre service afin de permettre à l'ANSSI de créer votre liste personnalisée de mesures de sécurité et de mesures proposées par la CNIL.")
+        +etape(2, 'Sécurisez, grâce à des mesures adaptées', "Mettez en œuvre les mesures proposées et obtenez une évaluation indicative du niveau de sécurisation du service : l'indice cyber.")
         +etape(3, 'Homologuez en toute simplicité', "Téléchargez en 1 clic, le dossier et le projet de décision d’homologation pour le faire signer.", false)
       .conteneur-centre
-        a.principal.gra#commencer-a-securiser-etapes(href='https://www.monservicesecurise.ssi.gouv.fr/inscription') Commencer à sécuriser
-    .bloc-contenu.bloc-etroit.fond-couleur-principale.sans-padding-bas
+        a.principal.gra#commencer-a-securiser-etapes(href='/inscription') Commencer à sécuriser
+    .bloc-contenu.bloc-etroit.fond-couleur-principale.sans-padding-bas#conteneur-sport-collectif
       .conteneur-collaboration
         .contenu-texte-collaboration
           .contenu-centre-vertical
             h3.alignement-gauche.moyenne-marge-basse La cybersécurité est un sport collectif !
-            p.alignement-gauche.moyenne-police.grande-marge-basse Sécurisez à 2, à 10 ou à 100 pensé par et pour les DSI, RSSI, DPD, et chef/fes de projets. Invitez les personnes de votre choix y compris vos prestataires. Et gérez en finesse leurs droits d’accès.
+            p.alignement-gauche.moyenne-police.grande-marge-basse Sécurisez à 2, à 10 ou à 100. Pensé par et pour les DSI, RSSI, DPD, et chef/fes de projets. Invitez les personnes de votre choix y compris vos prestataires. Et gérez en finesse leurs droits d’accès.
         .conteneur-etroit
-          img.taille-maximale.decalage-bas(src='/statique/assets/images/home/illustration_3.svg' alt="Menu de gestion des contributeurs")
+          img.taille-maximale.decalage-bas#illustration-collaboratif(src='/statique/assets/images/home/illustration_3.png' alt="Menu de gestion des contributeurs" width=384)
     .bloc-contenu
       h3.alignement-gauche.centre-tablette.alignement-gauche-desktop.couleur-principale-foncee.moyenne-marge-basse Ça fonctionne !
       .chiffres-cle.petite-marge-basse
         +chiffreCle('+55%', "L'augmentation moyenne de l'indice cyber d'un service en seulement 1 mois")
         +chiffreCle('5 min', "Le temps nécessaire pour démarrer un projet d'homologation et obtenir une 1ère version de son dossier.")
-        +chiffreCle('+3500', "Plus de 3500 personnes utilisent déjà MonServiceSécurisé.")
+        +chiffreCle('+3&nbsp;500', "Plus de 3&nbsp;500 personnes utilisent déjà MonServiceSécurisé.")
     .bloc-contenu.fond-couleur-principale-attenuee
-      h3.alignement-gauche.couleur-principale-foncee.moyenne-marge-basse Ces entités qui nous font confiance
+      h3.alignement-gauche.couleur-principale-foncee.moyenne-marge-basse.moyenne-marge-basse-desktop Ces entités qui nous font confiance
       .conteneur-entites.grande-marge-basse
-        img(src='/statique/assets/images/home/metropole_aix_marseille_provence.svg' alt='La métropole Aix-Marseille-Provence')
         img(src='/statique/assets/images/home/anct.svg' alt='ANCT Incubateur des territoires')
-        img(src='/statique/assets/images/home/essonne.svg' alt='Essonne')
-        img(src='/statique/assets/images/home/inclusion_connect.svg' alt='Inclusion Connect')
+        img(src='/statique/assets/images/home/declic.png' alt='Logo de Déclic' width=200)
+        img(src='/statique/assets/images/home/essonne.png' alt='Essonne' width=200)
+        img(src='/statique/assets/images/home/inclusion_connect.png' alt='Inclusion Connect' width=250)
+        img(src='/statique/assets/images/home/metropole_aix_marseille_provence.svg' alt='La métropole Aix-Marseille-Provence')
       +carrousel('carrousel-temoignages', 'Témoignages suivants')
         include home/temoignages
     .bloc-contenu.bloc-etroit#presentation-anssi
-      h3.titre-etroit.couleur-principale-foncee.moyenne-marge-basse Qu’est-ce que l’ANSSI ?
-      img.moyenne-marge-basse(src='/statique/assets/images/home/anssi.svg' alt='ANSSI')
+      h3.titre-etroit.couleur-principale-foncee.moyenne-marge-basse.grande-marge-basse-desktop Qu’est-ce que l’ANSSI ?
+      img.moyenne-marge-basse.moyenne-marge-basse-desktop(src='/statique/assets/images/home/anssi.png' alt="Logo de l'ANSSI" width=180)
       p.moyenne-police.moyenne-marge-basse
         span Créée en 2009, l’Agence nationale de la sécurité des systèmes d’information (ANSSI) est l’autorité nationale en matière de cybersécurité et de cyberdéfense.
         br
