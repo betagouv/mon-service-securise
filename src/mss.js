@@ -72,10 +72,6 @@ const creeServeur = (
   app.set('views', './src/vues');
 
   app.get('/', (_requete, reponse) => {
-    reponse.render('index');
-  });
-
-  app.get('/home', (_requete, reponse) => {
     reponse.render('home');
   });
 
