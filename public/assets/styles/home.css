@@ -3,6 +3,10 @@
   --couleur-principale-attenuee: #eaf5ff;
 }
 
+body {
+  min-width: unset;
+}
+
 main {
   border-top: none;
   display: block;
