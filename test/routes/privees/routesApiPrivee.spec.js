@@ -352,14 +352,18 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     let utilisateur;
 
     beforeEach(() => {
-      utilisateur = { id: '123', genereToken: () => 'un token' };
+      utilisateur = {
+        id: '123',
+        email: 'jean.dujardin@beta.gouv.fr',
+        genereToken: () => 'un token',
+      };
 
       const depotDonnees = testeur.depotDonnees();
-      depotDonnees.metsAJourMotDePasse = () => Promise.resolve(utilisateur);
-      depotDonnees.supprimeIdResetMotDePassePourUtilisateur = () =>
-        Promise.resolve(utilisateur);
-      depotDonnees.valideAcceptationCGUPourUtilisateur = () =>
-        Promise.resolve(utilisateur);
+      depotDonnees.utilisateur = async () => utilisateur;
+      depotDonnees.metsAJourMotDePasse = async () => {};
+      depotDonnees.supprimeIdResetMotDePassePourUtilisateur = async () => {};
+      depotDonnees.valideAcceptationCGUPourUtilisateur = async () =>
+        utilisateur;
     });
 
     it('aseptise les paramètres de la requête', (done) => {
@@ -374,36 +378,29 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it('met à jour le mot de passe', (done) => {
-      let motDePasseMisAJour = false;
+    it('met à jour le mot de passe', async () => {
+      let majMotDePasse;
 
       expect(utilisateur.id).to.equal('123');
+
       testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
-      testeur.depotDonnees().metsAJourMotDePasse = (
+      testeur.depotDonnees().metsAJourMotDePasse = async (
         idUtilisateur,
         motDePasse
       ) => {
-        try {
-          expect(idUtilisateur).to.equal('123');
-          expect(motDePasse).to.equal('mdp_ABC12345');
-          motDePasseMisAJour = true;
-          return Promise.resolve(utilisateur);
-        } catch (e) {
-          return Promise.reject(e);
-        }
+        majMotDePasse = { idUtilisateur, motDePasse };
       };
 
-      axios
-        .put('http://localhost:1234/api/motDePasse', {
-          motDePasse: 'mdp_ABC12345',
-        })
-        .then((reponse) => {
-          expect(motDePasseMisAJour).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idUtilisateur: '123' });
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      const reponse = await axios.put('http://localhost:1234/api/motDePasse', {
+        motDePasse: 'mdp_ABC12345',
+      });
+
+      expect(majMotDePasse).to.eql({
+        idUtilisateur: '123',
+        motDePasse: 'mdp_ABC12345',
+      });
+      expect(reponse.status).to.equal(200);
+      expect(reponse.data).to.eql({ idUtilisateur: '123' });
     });
 
     it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", (done) => {
@@ -428,15 +425,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
-    it("ajoute l'utilisateur à la liste marketing Brevo via l'adaptateur", async () => {
+    it("inscrit l'utilisateur aux emails transactionnels Brevo", async () => {
       let inscriptionEffectuee;
 
-      testeur.depotDonnees().supprimeIdResetMotDePassePourUtilisateur =
-        async () => ({
-          id: '123',
-          email: 'jean.dujardin@beta.gouv.fr',
-          genereToken: () => 'un token',
-        });
       testeur.adaptateurMail().inscrisEmailsTransactionnels = async (
         emailUtilisateur
       ) => {
@@ -450,27 +441,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(inscriptionEffectuee).to.equal('jean.dujardin@beta.gouv.fr');
     });
 
-    it("invalide l'identifiant de réinitialisation de mot de passe", (done) => {
-      let idResetSupprime = false;
-
+    it("invalide l'identifiant de réinitialisation de mot de passe", async () => {
       expect(utilisateur.id).to.equal('123');
-      testeur.depotDonnees().supprimeIdResetMotDePassePourUtilisateur = (u) => {
-        try {
-          expect(u.id).to.equal('123');
-          idResetSupprime = true;
-          return Promise.resolve(u);
-        } catch (e) {
-          return Promise.reject(e);
-        }
+
+      let utilisateurQuiEstReset;
+      testeur.depotDonnees().supprimeIdResetMotDePassePourUtilisateur = async (
+        u
+      ) => {
+        utilisateurQuiEstReset = u;
       };
 
-      axios
-        .put('http://localhost:1234/api/motDePasse', {
-          motDePasse: 'mdp_ABC12345',
-        })
-        .then(() => expect(idResetSupprime).to.be(true))
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      await axios.put('http://localhost:1234/api/motDePasse', {
+        motDePasse: 'mdp_ABC12345',
+      });
+
+      expect(utilisateurQuiEstReset.id).to.be('123');
     });
 
     describe("si les CGU n'ont pas déjà été acceptées", () => {
@@ -496,71 +481,55 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           );
         });
 
-        it('ne met pas le mot de passe à jour', (done) => {
+        it('ne met pas le mot de passe à jour', async () => {
           let motDePasseMisAJour = false;
-          testeur.depotDonnees().metsAJourMotDePasse = () => {
+          testeur.depotDonnees().metsAJourMotDePasse = async () => {
             motDePasseMisAJour = true;
-            return Promise.resolve(utilisateur);
           };
 
-          axios
-            .put('http://localhost:1234/api/motDePasse', {
+          try {
+            await axios.put('http://localhost:1234/api/motDePasse', {
               motDePasse: 'mdp_12345',
-            })
-            .then(() => expect(motDePasseMisAJour).to.be(false))
-            .then(() =>
-              done(
-                'La tentative de mise à jour aurait dû retourner une erreur HTTP'
-              )
-            )
-            .catch(() => {
-              expect(motDePasseMisAJour).to.be(false);
-              done();
-            })
-            .catch((e) => done(e.response?.data || e));
+            });
+          } catch (e) {
+            expect(e.response.status).to.be(422);
+            expect(motDePasseMisAJour).to.be(false);
+          }
         });
       });
 
       describe("et que l'utilisateur est en train de les accepter", () => {
-        it("demande au dépôt d'enregistrer que les CGU sont acceptées", (done) => {
-          let acceptationCGUEnregistree = false;
-
+        it("demande au dépôt d'enregistrer que les CGU sont acceptées", async () => {
           expect(utilisateur.id).to.equal('123');
-          testeur.depotDonnees().valideAcceptationCGUPourUtilisateur = (u) => {
-            try {
-              expect(u.id).to.equal('123');
-              acceptationCGUEnregistree = true;
-              return Promise.resolve(u);
-            } catch (e) {
-              return Promise.reject(e);
-            }
+
+          let utilisateurQuiAccepte;
+          testeur.depotDonnees().valideAcceptationCGUPourUtilisateur = async (
+            u
+          ) => {
+            utilisateurQuiAccepte = u;
+            return u;
           };
 
-          axios
-            .put('http://localhost:1234/api/motDePasse', {
-              motDePasse: 'mdp_ABC12345',
-              cguAcceptees: 'true',
-            })
-            .then(() => expect(acceptationCGUEnregistree).to.be(true))
-            .then(() => done())
-            .catch((e) => done(e.response?.data || e));
+          await axios.put('http://localhost:1234/api/motDePasse', {
+            motDePasse: 'mdp_ABC12345',
+            cguAcceptees: 'true',
+          });
+
+          expect(utilisateurQuiAccepte.id).to.be('123');
         });
 
-        it('met à jour le mot de passe', (done) => {
+        it('met à jour le mot de passe', async () => {
           let motDePasseMisAJour = false;
-          testeur.depotDonnees().metsAJourMotDePasse = () => {
+          testeur.depotDonnees().metsAJourMotDePasse = async () => {
             motDePasseMisAJour = true;
-            return Promise.resolve(utilisateur);
           };
 
-          axios
-            .put('http://localhost:1234/api/motDePasse', {
-              motDePasse: 'mdp_ABC12345',
-              cguAcceptees: 'true',
-            })
-            .then(() => expect(motDePasseMisAJour).to.be(true))
-            .then(() => done())
-            .catch((e) => done(e.response?.data || e));
+          await axios.put('http://localhost:1234/api/motDePasse', {
+            motDePasse: 'mdp_ABC12345',
+            cguAcceptees: 'true',
+          });
+
+          expect(motDePasseMisAJour).to.be(true);
         });
       });
     });
