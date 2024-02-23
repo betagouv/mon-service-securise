@@ -142,11 +142,14 @@ const routesApiPrivee = ({
 
   routes.put(
     '/motDePasse',
-    middleware.aseptise('cguAcceptees'),
+    middleware.aseptise('cguAcceptees', 'infolettreAcceptee'),
     async (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const cguDejaAcceptees = requete.cguAcceptees;
       const cguEnCoursDAcceptation = valeurBooleenne(requete.body.cguAcceptees);
+      const infolettreAcceptee = valeurBooleenne(
+        requete.body.infolettreAcceptee
+      );
       const { motDePasse } = requete.body;
 
       if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
@@ -167,6 +170,12 @@ const routesApiPrivee = ({
         u = await depotDonnees.valideAcceptationCGUPourUtilisateur(u);
         await depotDonnees.supprimeIdResetMotDePassePourUtilisateur(u);
         await adaptateurMail.inscrisEmailsTransactionnels(u.email);
+        if (infolettreAcceptee) {
+          await adaptateurMail.inscrisInfolettre(u.email);
+          await depotDonnees.metsAJourUtilisateur(u.id, {
+            infolettreAcceptee: true,
+          });
+        }
         requete.session.token = u.genereToken();
         reponse.json({ idUtilisateur });
       } catch (e) {

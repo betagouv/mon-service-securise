@@ -368,7 +368,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['cguAcceptees'],
+        ['cguAcceptees', 'infolettreAcceptee'],
         {
           method: 'put',
           url: 'http://localhost:1234/api/motDePasse',
@@ -439,6 +439,33 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
 
       expect(inscriptionEffectuee).to.equal('jean.dujardin@beta.gouv.fr');
+    });
+
+    it("ajoute l'utilisateur à la newsletter Brevo si l'utilisateur le souhaite et persiste ce choix", async () => {
+      let inscriptionEffectuee;
+      let utilisateurPersiste;
+
+      testeur.adaptateurMail().inscrisInfolettre = async (emailUtilisateur) => {
+        inscriptionEffectuee = emailUtilisateur;
+      };
+
+      testeur.depotDonnees().metsAJourUtilisateur = async (
+        idUtilisateur,
+        donnees
+      ) => {
+        utilisateurPersiste = { idUtilisateur, donnees };
+      };
+
+      await axios.put('http://localhost:1234/api/motDePasse', {
+        motDePasse: 'mdp_ABC12345',
+        infolettreAcceptee: 'true',
+      });
+
+      expect(inscriptionEffectuee).to.equal('jean.dujardin@beta.gouv.fr');
+      expect(utilisateurPersiste).to.eql({
+        idUtilisateur: '123',
+        donnees: { infolettreAcceptee: true },
+      });
     });
 
     it("invalide l'identifiant de réinitialisation de mot de passe", async () => {
