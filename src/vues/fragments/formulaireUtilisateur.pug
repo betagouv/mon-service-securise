@@ -67,6 +67,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
               id = 'email',
               name = 'email',
               type = 'email',
+              pattern = '^[\\w\\-+.]+@[\\w\\-.]{2,}\\.\\w{2,}$',
               placeholder = 'ex : jean.dupont@domaine.fr',
               required,
               title = ''
