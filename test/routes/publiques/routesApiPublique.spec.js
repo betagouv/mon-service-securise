@@ -6,6 +6,9 @@ const {
   ErreurUtilisateurExistant,
   ErreurEmailManquant,
 } = require('../../../src/erreurs');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
@@ -688,15 +691,17 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("désabonne l'utilisateur de l'infolettre", (done) => {
-      const utilisateur = { id: '123', infolettreAcceptee: true };
+      const utilisateur = unUtilisateur()
+        .avecId('123')
+        .quiAccepteInfolettre()
+        .construis();
       testeur.depotDonnees().utilisateurAvecEmail = (email) => {
         expect(email).to.equal('jean.dujardin@mail.com');
         return Promise.resolve(utilisateur);
       };
       testeur.depotDonnees().metsAJourUtilisateur = (id, donnees) => {
         expect(id).to.equal('123');
-        expect(donnees.id).to.equal('123');
-        expect(donnees.infolettreAcceptee).to.be(false);
+        expect(donnees).to.eql({ infolettreAcceptee: false });
         return Promise.resolve();
       };
 
