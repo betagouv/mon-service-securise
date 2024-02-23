@@ -23,12 +23,16 @@ $(() => {
     e.preventDefault();
 
     const challenge = JSON.parse($('#challenge-mot-de-passe').text());
+    const { estInvitation } = JSON.parse($('#invitation-contributeur').text());
     const estInitialisation = !challenge.afficheChallengeMotDePasse;
     if (estInitialisation) {
       axios
         .put('/api/motDePasse', {
           motDePasse: $('#mot-de-passe').val(),
           cguAcceptees: reponseAcceptee('cguAcceptees'),
+          ...(estInvitation && {
+            infolettreAcceptee: reponseAcceptee('infolettreAcceptee'),
+          }),
         })
         .then(() => (window.location = '/tableauDeBord'));
     } else {

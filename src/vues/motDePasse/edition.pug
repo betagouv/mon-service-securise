@@ -1,5 +1,6 @@
 extends ../mssConnecte
 
+include ../fragments/utilisateur/preferencesCommunication
 include ../fragments/utilisateur/questionCgu
 
 block title
@@ -52,6 +53,7 @@ block main
         .message-erreur Les deux mots de passe sont différents
 
       if !utilisateur.accepteCGU()
+        +preferencesCommunication({ infolettreAcceptee: false }, true)
         +questionCgu
 
     button(type = 'submit').bouton Valider
@@ -60,3 +62,5 @@ block main
   script(type = 'module', src = '/statique/motDePasse/edition.js')
   script(id = 'challenge-mot-de-passe', type = 'application/json').
     !{JSON.stringify({ afficheChallengeMotDePasse })}
+  script(id = 'invitation-contributeur', type = 'application/json').
+    !{JSON.stringify({ estInvitation: !utilisateur.accepteCGU() })}
