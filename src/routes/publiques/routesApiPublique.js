@@ -220,7 +220,6 @@ const routesApiPublique = ({
         }
         depotDonnees
           .metsAJourUtilisateur(utilisateur.id, {
-            ...utilisateur,
             infolettreAcceptee: false,
           })
           .then(() => reponse.sendStatus(200))
