@@ -1,4 +1,5 @@
 include ./inputChoix
+include ./utilisateur/preferencesCommunication
 
 block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
@@ -158,29 +159,4 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
             )
             .message-erreur Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.
 
-      .preferences-communication
-        label Préférences de communication
-        .conteneur-checkbox
-          div
-            input(
-              id = 'infolettreAcceptee',
-              name = 'infolettreAcceptee',
-              checked = donnees.infolettreAcceptee,
-              type = 'checkbox'
-              class = 'input-checkbox'
-            )
-            label.label-checkbox(for = 'infolettreAcceptee') J'accepte de recevoir la lettre d'information MonServiceSécurisé.
-
-          if forceEmailsTransactionnels
-            input(type='hidden' id='transactionnelAccepte' value='true')
-          else
-            .separateur
-            div
-              input(
-                id = 'transactionnelAccepte',
-                name = 'transactionnelAccepte',
-                checked = donnees.transactionnelAccepte,
-                type = 'checkbox'
-                class = 'input-checkbox'
-              )
-              label.label-checkbox(for = 'transactionnelAccepte') J'accepte de recevoir des informations relatives à l'utilisation de MonServiceSécurisé
+      +preferencesCommunication(donnees, forceEmailsTransactionnels)
