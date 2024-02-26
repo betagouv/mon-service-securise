@@ -27,6 +27,8 @@ const sendinblue = () => ({
 const sentry = () => ({
   dsn: () => process.env.SENTRY_DSN,
   environnement: () => process.env.SENTRY_ENVIRONNEMENT,
+  sampleRateDuTracing: () =>
+    Number(process.env.SENTRY_SAMPLE_RATE_DU_TRACING) || 0,
 });
 
 const statistiques = () => ({
