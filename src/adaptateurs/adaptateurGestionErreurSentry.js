@@ -21,7 +21,7 @@ const initialise = (applicationExpress) => {
       ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
     ],
     ignoreTransactions: ['/statique/'],
-    tracesSampleRate: 1.0,
+    tracesSampleRate: adaptateurEnvironnement.sentry().sampleRateDuTracing(),
   });
 
   applicationExpress.use(Sentry.Handlers.requestHandler());
