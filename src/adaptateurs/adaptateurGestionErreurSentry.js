@@ -12,16 +12,18 @@ const logueErreur = (erreur, infosDeContexte = {}) => {
 };
 
 const initialise = (applicationExpress) => {
+  const config = adaptateurEnvironnement.sentry();
+
   Sentry.init({
-    dsn: adaptateurEnvironnement.sentry().dsn(),
-    environment: adaptateurEnvironnement.sentry().environnement(),
+    dsn: config.dsn(),
+    environment: config.environnement(),
     integrations: [
       new Sentry.Integrations.Express({ app: applicationExpress }),
       new Sentry.Integrations.Postgres(),
       ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
     ],
-    ignoreTransactions: ['/statique/'],
-    tracesSampleRate: adaptateurEnvironnement.sentry().sampleRateDuTracing(),
+    ignoreTransactions: config.cheminsIgnoresParTracing(),
+    tracesSampleRate: config.sampleRateDuTracing(),
   });
 
   applicationExpress.use(Sentry.Handlers.requestHandler());

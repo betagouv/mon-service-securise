@@ -29,6 +29,8 @@ const sentry = () => ({
   environnement: () => process.env.SENTRY_ENVIRONNEMENT,
   sampleRateDuTracing: () =>
     Number(process.env.SENTRY_SAMPLE_RATE_DU_TRACING) || 0,
+  cheminsIgnoresParTracing: () =>
+    process.env.SENTRY_CHEMINS_IGNORES_PAR_TRACING?.split(',') ?? [],
 });
 
 const statistiques = () => ({
