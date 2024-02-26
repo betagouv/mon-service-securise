@@ -11,14 +11,14 @@ const logueErreur = (erreur, infosDeContexte = {}) => {
   });
 };
 
-const initialise = () => {
+const initialise = (applicationExpress) => {
   Sentry.init({
     dsn: adaptateurEnvironnement.sentry().dsn(),
     environment: adaptateurEnvironnement.sentry().environnement(),
   });
-};
 
-const controleurRequetes = () => Sentry.Handlers.requestHandler();
+  applicationExpress.use(Sentry.Handlers.requestHandler());
+};
 
 const controleurErreurs = (erreur, requete, reponse, suite) => {
   const estErreurDeFiltrageIp = erreur instanceof IpDeniedError;
@@ -44,7 +44,6 @@ const controleurErreurs = (erreur, requete, reponse, suite) => {
 
 module.exports = {
   initialise,
-  controleurRequetes,
   controleurErreurs,
   logueErreur,
 };
