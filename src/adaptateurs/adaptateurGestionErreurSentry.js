@@ -15,9 +15,17 @@ const initialise = (applicationExpress) => {
   Sentry.init({
     dsn: adaptateurEnvironnement.sentry().dsn(),
     environment: adaptateurEnvironnement.sentry().environnement(),
+    integrations: [
+      new Sentry.Integrations.Express({ app: applicationExpress }),
+      new Sentry.Integrations.Postgres(),
+      ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
+    ],
+    ignoreTransactions: ['/statique/'],
+    tracesSampleRate: 1.0,
   });
 
   applicationExpress.use(Sentry.Handlers.requestHandler());
+  applicationExpress.use(Sentry.Handlers.tracingHandler());
 };
 
 const controleurErreurs = (erreur, requete, reponse, suite) => {
