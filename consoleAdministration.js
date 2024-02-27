@@ -14,6 +14,9 @@ const FabriqueAutorisation = require('./src/modeles/autorisations/fabriqueAutori
 const {
   EvenementCollaboratifServiceModifie,
 } = require('./src/modeles/journalMSS/evenementCollaboratifServiceModifie');
+const {
+  fabriqueAdaptateurChiffrement,
+} = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
 
 class ConsoleAdministration {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
@@ -21,6 +24,7 @@ class ConsoleAdministration {
       AdaptateurPostgres.nouvelAdaptateur(environnementNode);
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
     this.depotDonnees = DepotDonnees.creeDepot({
+      adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
       adaptateurJWT,
       adaptateurPersistance: this.adaptateurPersistance,
       adaptateurUUID,

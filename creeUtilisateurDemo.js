@@ -6,6 +6,9 @@ const BusEvenements = require('./src/bus/busEvenements');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const {
+  fabriqueAdaptateurChiffrement,
+} = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
 
 const referentiel = Referentiel.creeReferentiel();
 const descriptionService = new DescriptionService(
@@ -51,7 +54,11 @@ const main = async () => {
     const busEvenements = new BusEvenements({
       adaptateurGestionErreur: fabriqueAdaptateurGestionErreur(),
     });
-    const depotDonnees = DepotDonnees.creeDepot({ busEvenements });
+    const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
+    const depotDonnees = DepotDonnees.creeDepot({
+      adaptateurChiffrement,
+      busEvenements,
+    });
 
     /* eslint-disable no-console */
     const u = await adaptateurPersistance.utilisateurAvecEmail(
