@@ -14,6 +14,9 @@ const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
 const Autorisation = require('../modeles/autorisations/autorisation');
 const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresServiceModifiees');
 const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree');
+const {
+  EvenementDescriptionServiceModifiee,
+} = require('../bus/evenementDescriptionServiceModifiee');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -244,15 +247,14 @@ const creeDepot = (config = {}) => {
         }).toJSON()
       );
 
+    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
+
     const envoieTrackingCompletude = async () => {
       const tauxCompletude =
         await serviceTracking.completudeDesServicesPourUtilisateur(
           { homologations },
           idUtilisateur
         );
-
-      const utilisateur =
-        await adaptateurPersistance.utilisateur(idUtilisateur);
 
       await adaptateurTracking.envoieTrackingCompletudeService(
         utilisateur.email,
@@ -268,6 +270,12 @@ const creeDepot = (config = {}) => {
     );
 
     const serviceFrais = await p.lis.une(idService);
+    await busEvenements.publie(
+      new EvenementDescriptionServiceModifiee({
+        service: serviceFrais,
+        utilisateur,
+      })
+    );
     await consigneEvenement(serviceFrais);
     await envoieTrackingCompletude();
   };

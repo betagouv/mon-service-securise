@@ -55,6 +55,9 @@ const {
 const EvenementMesuresServiceModifiees = require('../../src/bus/evenementMesuresServiceModifiees');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 const EvenementNouveauServiceCree = require('../../src/bus/evenementNouveauServiceCree');
+const {
+  EvenementDescriptionServiceModifiee,
+} = require('../../src/bus/evenementDescriptionServiceModifiee');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -368,6 +371,7 @@ describe('Le dépôt de données des homologations', () => {
   describe("sur demande de mise à jour de la description d'un service", () => {
     let adaptateurPersistance;
     let adaptateurJournalMSS;
+    let bus;
     let depot;
     let referentiel;
 
@@ -384,10 +388,12 @@ describe('Le dépôt de données des homologations', () => {
           uneAutorisation().deProprietaire('U1', 'S1').donnees
         );
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+      bus = fabriqueBusPourLesTests();
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
         .avecAdaptateurPersistance(adaptateurPersistance)
         .avecJournalMSS(adaptateurJournalMSS)
+        .avecBusEvenements(bus)
         .construis();
     });
 
@@ -446,6 +452,20 @@ describe('Le dépôt de données des homologations', () => {
       expect(descriptionService.presentation).to.equal(
         'Une autre présentation'
       );
+    });
+
+    it('publie un événement de « description service modifiée »', async () => {
+      const description = uneDescriptionValide(referentiel).construis();
+
+      await depot.ajouteDescriptionService('U1', 'S1', description);
+
+      expect(bus.aRecuUnEvenement(EvenementDescriptionServiceModifiee)).to.be(
+        true
+      );
+      const evenement = bus.recupereEvenement(
+        EvenementDescriptionServiceModifiee
+      );
+      expect(evenement.service.id).to.be('S1');
     });
 
     it('consigne un événement de changement de complétude du service', async () => {
