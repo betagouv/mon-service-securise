@@ -57,9 +57,10 @@ const testeurMss = () => {
     adaptateurHorloge = adaptateurHorlogeParDefaut;
     adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
-      genereAnnexes: () => Promise.resolve('PDF Annexe'),
-      genereDossierDecision: () => Promise.resolve('PDF Dossier decision'),
-      genereSyntheseSecurite: () => Promise.resolve('PDF Synthese securite'),
+      genereAnnexes: async () => 'PDF Annexe',
+      genereDossierDecision: async () => 'PDF Dossier decision',
+      genereSyntheseSecurite: async () => 'PDF Synthese securite',
+      genereTamponHomologation: async () => 'PNG Tampon homologation',
     };
     adaptateurCsv = {};
     adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };

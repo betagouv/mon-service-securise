@@ -1,4 +1,5 @@
 const express = require('express');
+const { decode } = require('html-entities');
 const Autorisation = require('../../modeles/autorisations/autorisation');
 const { genereGradientConique } = require('../../pdf/graphiques/camembert');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
@@ -149,6 +150,42 @@ const routesApiServicePdf = ({
             .send(archive);
         })
         .catch(suite);
+    }
+  );
+
+  routes.get(
+    '/:id/archive/tamponHomologation.zip',
+    middleware.trouveService(Autorisation.DROIT_TAMPON_HOMOLOGATION_ZIP),
+    async (requete, reponse, suite) => {
+      try {
+        const { homologation: service } = requete;
+        if (!service.dossiers.dossierActif()) {
+          reponse.status(422).send("Le service n'a pas d'homologation active");
+          return;
+        }
+
+        const fichiers = await adaptateurPdf.genereTamponHomologation({
+          service,
+          dossier: service.dossiers.dossierActif(),
+          referentiel,
+        });
+        const archive = await adaptateurZip.genereArchive(fichiers);
+
+        const nomService = decode(
+          service.nomService().substring(0, 30).replace(' ', '_')
+        );
+        const nomFichier = `MSS_tampon_homologation_${nomService}.zip`;
+        const uriFichier = encodeURIComponent(nomFichier);
+        reponse
+          .contentType('application/zip')
+          .set(
+            'Content-Disposition',
+            `attachment; filename="${nomFichier}"; filename*=UTF-8''${uriFichier}`
+          )
+          .send(archive);
+      } catch (e) {
+        suite(e);
+      }
     }
   );
 

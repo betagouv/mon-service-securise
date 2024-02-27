@@ -294,4 +294,99 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       expect(adaptateurHorlogeAppele).to.be(true);
     });
   });
+
+  describe('quand requête GET sur `/api/service/:id/archive/tamponHomologation.zip`', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { unAn: {} },
+      statutsAvisDossierHomologation: { favorable: {} },
+    });
+    const serviceARenvoyer = unService(referentiel)
+      .avecId('456')
+      .avecNomService('un service')
+      .avecDossiers([
+        unDossier(referentiel).quiEstComplet().quiEstActif(60).donnees,
+      ])
+      .construis();
+
+    beforeEach(() => {
+      testeur
+        .middleware()
+        .reinitialise({ homologationARenvoyer: serviceARenvoyer });
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [
+          { niveau: LECTURE, rubrique: HOMOLOGUER },
+          { niveau: LECTURE, rubrique: DECRIRE },
+        ],
+        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
+        done
+      );
+    });
+
+    it('sert un fichier de type zip', (done) => {
+      verifieTypeFichierServiEstZIP(
+        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
+        done
+      );
+    });
+
+    it('sert un fichier qui contient le nom du service', (done) => {
+      testeur.adaptateurHorloge().maintenant = () => new Date(2023, 0, 28);
+
+      verifieNomFichierServi(
+        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
+        'MSS_tampon_homologation_un_service.zip',
+        done
+      );
+    });
+
+    it("retourne une erreur HTTP 422 si le service n'a pas d'homologation active", (done) => {
+      const serviceSansDossierActif = unService(referentiel)
+        .avecId('456')
+        .avecNomService('un service')
+        .avecDossiers([])
+        .construis();
+      testeur
+        .middleware()
+        .reinitialise({ homologationARenvoyer: serviceSansDossierActif });
+
+      testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        "Le service n'a pas d'homologation active",
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
+        },
+        done
+      );
+    });
+
+    it('utilise un adaptateur Pdf pour la génération des fichiers', async () => {
+      let adaptateurPdfAppele = false;
+      testeur.adaptateurPdf().genereTamponHomologation = () => {
+        adaptateurPdfAppele = true;
+        return [];
+      };
+
+      await axios.get(
+        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip'
+      );
+      expect(adaptateurPdfAppele).to.be(true);
+    });
+
+    it("utilise un adaptateur Zip pour l'archivage des fichiers", async () => {
+      let adaptateurZipAppele = false;
+      testeur.adaptateurZip().genereArchive = () => {
+        adaptateurZipAppele = true;
+        return [];
+      };
+
+      await axios.get(
+        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip'
+      );
+      expect(adaptateurZipAppele).to.be(true);
+    });
+  });
 });
