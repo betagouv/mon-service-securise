@@ -55,4 +55,17 @@ describe("L'abonnement qui envoie au tracking les informations de complétude", 
       },
     });
   });
+
+  it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
+    try {
+      await envoieTrackingCompletude({ adaptateurTracking, depotDonnees })({
+        utilisateur: null,
+      });
+      expect().fail("L'instanciation aurait dû lever une exception.");
+    } catch (e) {
+      expect(e.message).to.be(
+        "Impossible d'envoyer les données de complétude à Brevo sans avoir l'utilisateur en paramètre."
+      );
+    }
+  });
 });
