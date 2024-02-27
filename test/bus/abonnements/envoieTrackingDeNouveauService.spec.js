@@ -45,4 +45,20 @@ describe("L'abonnement qui envoie au tracking les informations d'un nouveau serv
       donneesEvenement: { nombreServices: 3 },
     });
   });
+
+  it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
+    try {
+      await envoieTrackingDeNouveauService({
+        adaptateurTracking,
+        depotDonnees,
+      })({
+        utilisateur: null,
+      });
+      expect().fail("L'instanciation aurait dû lever une exception.");
+    } catch (e) {
+      expect(e.message).to.be(
+        "Impossible d'envoyer le nombre de services d'un utilisateur à Brevo sans avoir l'utilisateur en paramètre."
+      );
+    }
+  });
 });
