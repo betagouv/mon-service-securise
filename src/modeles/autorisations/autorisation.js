@@ -129,6 +129,11 @@ class Autorisation extends Base {
     [DECRIRE]: LECTURE,
   };
 
+  static DROIT_TAMPON_HOMOLOGATION_ZIP = {
+    [HOMOLOGUER]: LECTURE,
+    [DECRIRE]: LECTURE,
+  };
+
   appliqueDroits(nouveauxDroits) {
     if (nouveauxDroits.estProprietaire) {
       this.estProprietaire = true;
