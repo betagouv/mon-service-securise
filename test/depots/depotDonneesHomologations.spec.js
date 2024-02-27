@@ -417,26 +417,22 @@ describe('Le dépôt de données des homologations', () => {
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
-    it('lève une exception si des propriétés obligatoires ne sont pas renseignées', (done) => {
+    it('lève une exception si des propriétés obligatoires ne sont pas renseignées', async () => {
       const descriptionIncomplete = uneDescriptionValide(referentiel)
         .avecNomService('')
         .construis();
 
-      depot
-        .ajouteDescriptionService('U1', 'S1', descriptionIncomplete)
-        .then(() =>
-          done(
-            'La mise à jour de la description du service aurait dû lever une exception'
-          )
-        )
-        .catch((e) => {
-          expect(e).to.be.an(ErreurDonneesObligatoiresManquantes);
-          expect(e.message).to.equal(
-            'Certaines données obligatoires ne sont pas renseignées'
-          );
-          done();
-        })
-        .catch(done);
+      try {
+        await depot.ajouteDescriptionService('U1', 'S1', descriptionIncomplete);
+        expect().fail(
+          'La mise à jour de la description du service aurait dû lever une exception'
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurDonneesObligatoiresManquantes);
+        expect(e.message).to.equal(
+          'Certaines données obligatoires ne sont pas renseignées'
+        );
+      }
     });
 
     it('ne détecte pas de doublon sur le nom de service pour le service en cours de mise à jour', async () => {
