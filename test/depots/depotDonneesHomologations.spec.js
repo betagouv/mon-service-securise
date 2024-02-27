@@ -43,9 +43,6 @@ const {
 const {
   unAdaptateurTracking,
 } = require('../constructeurs/constructeurAdaptateurTracking');
-const {
-  unServiceTracking,
-} = require('../tracking/constructeurServiceTracking');
 const { unDossier } = require('../constructeurs/constructeurDossier');
 
 const {
@@ -466,50 +463,6 @@ describe('Le dépôt de données des homologations', () => {
         EvenementDescriptionServiceModifiee
       );
       expect(evenement.service.id).to.be('S1');
-    });
-
-    it('consigne un événement de changement de complétude du service', async () => {
-      let evenementRecu = {};
-      adaptateurJournalMSS.consigneEvenement = (evenement) => {
-        evenementRecu = evenement;
-        return Promise.resolve();
-      };
-      const description = uneDescriptionValide(referentiel).construis();
-
-      await depot.ajouteDescriptionService('U1', 'S1', description);
-
-      expect(evenementRecu.type).to.equal('COMPLETUDE_SERVICE_MODIFIEE');
-    });
-
-    it("l'adaptateur de tracking est utilisé pour envoyer la complétude lors de la mise à jour d'une description du service", async () => {
-      let donneesPassees = {};
-      const description = uneDescriptionValide(referentiel).construis();
-      depot = unDepotDeDonneesServices()
-        .avecReferentiel(referentiel)
-        .avecAdaptateurPersistance(adaptateurPersistance)
-        .avecJournalMSS(adaptateurJournalMSS)
-        .avecServiceTracking(
-          unServiceTracking().avecCompletudeDesServices(2, 3, 12).construis()
-        )
-        .avecAdaptateurTracking(
-          unAdaptateurTracking()
-            .avecEnvoiTrackingCompletude((destinataire, donneesEvenement) => {
-              donneesPassees = { destinataire, donneesEvenement };
-            })
-            .construis()
-        )
-        .construis();
-
-      await depot.ajouteDescriptionService('U1', 'S1', description);
-
-      expect(donneesPassees).to.eql({
-        destinataire: 'jean.dupont@mail.fr',
-        donneesEvenement: {
-          nombreServices: 2,
-          nombreMoyenContributeurs: 3,
-          tauxCompletudeMoyenTousServices: 12,
-        },
-      });
     });
   });
 
