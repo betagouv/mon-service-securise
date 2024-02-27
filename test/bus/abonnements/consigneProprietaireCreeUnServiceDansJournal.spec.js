@@ -32,4 +32,36 @@ describe("L'abonnement qui consigne (dans le journal MSS) le lien entre un propr
     expect(autorisations[0].idUtilisateur).not.to.be(undefined);
     expect(autorisations[0].droit).to.be('PROPRIETAIRE');
   });
+
+  it("lève une exception s'il ne reçoit pas de service", async () => {
+    try {
+      await consigneProprietaireCreeUnServiceDansJournal({ adaptateurJournal })(
+        {
+          service: null,
+          utilisateur: unUtilisateur().avecId('ABC').construis(),
+        }
+      );
+      expect().fail("L'instanciation aurait dû lever une exception.");
+    } catch (e) {
+      expect(e.message).to.be(
+        'Impossible de consigner le lien entre un créateur et son service dans le journal MSS sans avoir le service en paramètre.'
+      );
+    }
+  });
+
+  it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
+    try {
+      await consigneProprietaireCreeUnServiceDansJournal({ adaptateurJournal })(
+        {
+          service: unService().avecId('123').construis(),
+          utilisateur: null,
+        }
+      );
+      expect().fail("L'instanciation aurait dû lever une exception.");
+    } catch (e) {
+      expect(e.message).to.be(
+        'Impossible de consigner le lien entre un créateur et son service dans le journal MSS sans avoir le créateur en paramètre.'
+      );
+    }
+  });
 });
