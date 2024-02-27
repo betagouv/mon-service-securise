@@ -21,6 +21,9 @@ const {
 const {
   consigneAutorisationsModifieesDansJournal,
 } = require('./abonnements/consigneAutorisationsModifieesDansJournal');
+const {
+  EvenementDescriptionServiceModifiee,
+} = require('./evenementDescriptionServiceModifiee');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -35,6 +38,11 @@ const cableTousLesAbonnes = (
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesuresServiceModifiees, [
+    consigneCompletudeDansJournal({ adaptateurJournal }),
+    envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
+  ]);
+
+  busEvenements.abonnePlusieurs(EvenementDescriptionServiceModifiee, [
     consigneCompletudeDansJournal({ adaptateurJournal }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);

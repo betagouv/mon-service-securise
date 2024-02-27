@@ -1,4 +1,3 @@
-const fabriqueAdaptateurTracking = require('../adaptateurs/fabriqueAdaptateurTracking');
 const {
   ErreurDonneesObligatoiresManquantes,
   ErreurServiceInexistant,
@@ -7,10 +6,8 @@ const {
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
-const EvenementCompletudeServiceModifiee = require('../modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
-const { fabriqueServiceTracking } = require('../tracking/serviceTracking');
 const Autorisation = require('../modeles/autorisations/autorisation');
 const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresServiceModifiees');
 const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree');
@@ -96,11 +93,9 @@ const creeDepot = (config = {}) => {
     adaptateurChiffrement,
     adaptateurJournalMSS,
     adaptateurPersistance,
-    adaptateurTracking = fabriqueAdaptateurTracking(),
     adaptateurUUID,
     busEvenements,
     referentiel,
-    serviceTracking = fabriqueServiceTracking(),
   } = config;
 
   const p = fabriquePersistance(
@@ -237,47 +232,18 @@ const creeDepot = (config = {}) => {
     p.lis.cellesDeUtilisateur(idUtilisateur);
 
   const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
-    const consigneEvenement = async (s) =>
-      adaptateurJournalMSS.consigneEvenement(
-        new EvenementCompletudeServiceModifiee({
-          idService,
-          ...s.completudeMesures(),
-          nombreOrganisationsUtilisatrices:
-            s.descriptionService.nombreOrganisationsUtilisatrices,
-        }).toJSON()
-      );
-
-    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
-
-    const envoieTrackingCompletude = async () => {
-      const tauxCompletude =
-        await serviceTracking.completudeDesServicesPourUtilisateur(
-          { homologations },
-          idUtilisateur
-        );
-
-      await adaptateurTracking.envoieTrackingCompletudeService(
-        utilisateur.email,
-        tauxCompletude
-      );
-    };
-
-    const service = await p.lis.une(idService);
-    await valideDescriptionService(idUtilisateur, infos, service.id);
+    const existant = await p.lis.une(idService);
+    await valideDescriptionService(idUtilisateur, infos, existant.id);
     await metsAJourDescriptionService(
-      service.donneesAPersister().toutes(),
+      existant.donneesAPersister().toutes(),
       infos
     );
 
-    const serviceFrais = await p.lis.une(idService);
+    const service = await p.lis.une(idService);
+    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementDescriptionServiceModifiee({
-        service: serviceFrais,
-        utilisateur,
-      })
+      new EvenementDescriptionServiceModifiee({ service, utilisateur })
     );
-    await consigneEvenement(serviceFrais);
-    await envoieTrackingCompletude();
   };
 
   const ajouteMesuresAuService = async (
