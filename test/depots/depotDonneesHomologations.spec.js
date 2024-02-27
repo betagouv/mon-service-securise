@@ -365,7 +365,7 @@ describe('Le dépôt de données des homologations', () => {
     expect(mesure.id).to.equal('identifiantMesure');
   });
 
-  describe("sur demande de mise à jour de la description du service d'une homologation", () => {
+  describe("sur demande de mise à jour de la description d'un service", () => {
     let adaptateurPersistance;
     let adaptateurJournalMSS;
     let depot;
@@ -391,7 +391,7 @@ describe('Le dépôt de données des homologations', () => {
         .construis();
     });
 
-    it("met à jour la description du service d'une homologation", async () => {
+    it('met à jour la description du service', async () => {
       const description = uneDescriptionValide(referentiel)
         .avecNomService('Nouveau Nom')
         .construis();
