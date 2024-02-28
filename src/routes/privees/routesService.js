@@ -11,7 +11,6 @@ const {
 const Autorisation = require('../../modeles/autorisations/autorisation');
 const Service = require('../../modeles/service');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
-const Dossiers = require('../../modeles/dossiers');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -201,13 +200,10 @@ const routesService = ({
     (requete, reponse) => {
       const { homologation: service, autorisationService } = requete;
 
-      const dossierActif = service.dossiers.dossierActif();
       const peutVoirTamponHomologation =
         autorisationService.aLesPermissions(
           Autorisation.DROIT_TAMPON_HOMOLOGATION_ZIP
-        ) &&
-        dossierActif &&
-        dossierActif.statutHomologation() === Dossiers.ACTIVEE;
+        ) && service.dossiers.aUnDossierEnCoursDeValidite();
 
       reponse.render('service/dossiers', {
         InformationsHomologation,
