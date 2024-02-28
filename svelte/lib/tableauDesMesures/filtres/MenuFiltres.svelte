@@ -9,6 +9,7 @@
     rechercheStatut,
   } from '../tableauDesMesures.store';
   import { menuNavigationOuvert } from '../../ui/menuNavigation.store';
+  import NombreResultatsFiltres from './NombreResultatsFiltres.svelte';
 
   export let categories: Record<IdCategorie, string>;
   export let statuts: Record<IdStatut, string>;
@@ -151,16 +152,7 @@
     </button>
   </div>
 </MenuFlottant>
-<p
-  class="nombre-resultat"
-  class:visible={$nombreResultats.aDesFiltresAppliques}
->
-  <strong>{$nombreResultats.filtrees}&nbsp;</strong
-  >/&nbsp;{$nombreResultats.total}
-  {#if !$menuNavigationOuvert}
-    <span>mesures affichées</span>
-  {/if}
-</p>
+<NombreResultatsFiltres />
 
 <style>
   .bouton-filtre {
@@ -216,17 +208,6 @@
 
   .bouton-effacer-filtre {
     margin-top: 8px;
-  }
-
-  .nombre-resultat {
-    color: #0079d0;
-    opacity: 0;
-    position: relative;
-    z-index: 101;
-  }
-
-  .nombre-resultat.visible {
-    opacity: 1;
   }
 
   .bouton {
