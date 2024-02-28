@@ -26,7 +26,7 @@
   align-items: center;
   gap: 1em;
   position: sticky;
-  top: 16px;
+  top: 10px;
   right: 0;
   z-index: 2;
   margin-top: -6em;
@@ -70,7 +70,7 @@
   color: white;
 }
 
-@container conteneur-mesures (max-width: 1060px) {
+@container conteneur-mesures (max-width: 1160px) {
   .cartouche-progression-mesures,
   .cartouche-indice-cyber {
     display: none;
