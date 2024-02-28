@@ -24,6 +24,13 @@ class Dossiers extends ElementsConstructibles {
     super(Dossier, { items: dossiers }, referentiel);
   }
 
+  aUnDossierEnCoursDeValidite() {
+    const dossierActif = this.dossierActif();
+
+    if (!dossierActif) return false;
+    return dossierActif.statutHomologation() === Dossiers.ACTIVEE;
+  }
+
   dossierCourant() {
     return this.items.find((i) => !i.finalise);
   }

@@ -2,6 +2,7 @@ const expect = require('expect.js');
 
 const {
   ConstructeurDossierFantaisie,
+  unDossier,
 } = require('../constructeurs/constructeurDossier');
 const {
   ErreurDossiersInvalides,
@@ -192,6 +193,46 @@ describe('Les dossiers liés à un service', () => {
           expect(e.message).to.equal('Aucun dossier courant à finaliser');
         }
       );
+    });
+  });
+
+  describe("sur demande de présence d'un dossier actif et en cours de validité", () => {
+    it("retourne `false` s'il n'y a pas de dossier actif", () => {
+      const dossiersSansDossierActif = new Dossiers(
+        { dossiers: [unDossier(referentiel).quiEstNonFinalise().donnees] },
+        referentiel
+      );
+      expect(dossiersSansDossierActif.aUnDossierEnCoursDeValidite()).to.be(
+        false
+      );
+    });
+
+    it("retourne `false` si le dossier actif n'est pas en cours de validité", () => {
+      const dossiersAvecDossierActifExpire = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel).quiEstComplet().quiEstExpire().donnees,
+          ],
+        },
+        referentiel
+      );
+      expect(
+        dossiersAvecDossierActifExpire.aUnDossierEnCoursDeValidite()
+      ).to.be(false);
+    });
+
+    it('retourne `true` si le dossier actif est en corus de validité', () => {
+      const dossiersAvecDossierActifExpire = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel).quiEstComplet().quiEstActif().donnees,
+          ],
+        },
+        referentiel
+      );
+      expect(
+        dossiersAvecDossierActifExpire.aUnDossierEnCoursDeValidite()
+      ).to.be(true);
     });
   });
 });
