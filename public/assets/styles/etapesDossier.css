@@ -2,7 +2,7 @@
   padding-bottom: 0;
 }
 
-h2 {
+.homologation h2 {
   font-size: 1em;
   font-weight: normal;
 }
@@ -196,4 +196,11 @@ section.autorite {
   background: #fff;
 
   color: var(--bleu-mise-en-avant);
+}
+
+#bouton-tampon-homologation:before {
+  content: url('/statique/assets/images/icone_telecharger_tampon.svg');
+  width: 30px;
+  height: 30px;
+  margin-right: -4px;
 }
