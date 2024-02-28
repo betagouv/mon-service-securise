@@ -355,3 +355,28 @@
 .selectize-control.multi .selectize-input.has-items {
   padding: 0.8em;
 }
+
+#contenu-telechargement-tampon-homologation code {
+  font-size: 14px;
+  background: var(--fond-bleu-pale);
+  padding: 2px;
+  border-radius: 4px;
+}
+
+#contenu-telechargement-tampon-homologation :is(ul, li) {
+  margin-top: 8px;
+}
+
+#contenu-telechargement-tampon-homologation .conteneur-actions {
+  justify-content: center;
+  margin-top: 32px;
+}
+
+#contenu-telechargement-tampon-homologation
+  #lien-archive-tampon-homologation:before {
+  content: url('/statique/assets/images/icone_telecharger_tampon.svg');
+  filter: brightness(0) invert();
+  width: 30px;
+  height: 30px;
+  margin-right: -4px;
+}
