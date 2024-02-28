@@ -12,6 +12,10 @@
     margin: 0 auto;
   }
 
+  #home .moyenne-marge-basse {
+    margin-bottom: 32px;
+  }
+
   #home .conteneur-centre {
     width: 100%;
   }
@@ -165,14 +169,6 @@
 
   #home #presentation-anssi {
     padding: 80px 22vw;
-  }
-
-  #home .grande-marge-basse-desktop {
-    margin-bottom: 48px;
-  }
-
-  #home .moyenne-marge-basse-desktop {
-    margin-bottom: 32px;
   }
 }
 
