@@ -198,6 +198,8 @@
     border: 1px solid #cbd5e1;
     background: white;
     padding: 0 16px 24px 16px;
+    max-height: min(100vh - 320px, 100vh);
+    overflow-y: scroll;
   }
 
   .filtres-disponibles fieldset {
