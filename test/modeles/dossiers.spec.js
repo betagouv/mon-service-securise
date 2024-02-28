@@ -232,7 +232,7 @@ describe('Les dossiers liés à un service', () => {
       ).to.be(false);
     });
 
-    it('retourne `true` si le dossier actif est en corus de validité', () => {
+    it('retourne `true` si le dossier actif est en cours de validité', () => {
       const dossiersAvecDossierActifExpire = new Dossiers(
         {
           dossiers: [
