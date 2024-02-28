@@ -54,9 +54,12 @@
   </div>
 
   <div class="filtres-disponibles">
-    <div class="titre-filtres">
-      <img src="/statique/assets/images/icone_filtre.svg" alt="" />
-      Filtres
+    <div class="entete">
+      <div class="titre-filtres">
+        <img src="/statique/assets/images/icone_filtre.svg" alt="" />
+        Filtres
+      </div>
+      <NombreResultatsFiltres />
     </div>
     <fieldset>
       <legend>Catégories de cybersécurité</legend>
@@ -168,6 +171,17 @@
   .bouton-filtre.actif img {
     filter: brightness(0) invert(15%) sepia(24%) saturate(4604%)
       hue-rotate(184deg) brightness(107%) contrast(94%);
+  }
+
+  .entete {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 31.5px;
+  }
+
+  .entete :global(.nombre-resultat) {
+    margin-top: -8px;
   }
 
   .titre-filtres {

@@ -18,6 +18,7 @@
   .nombre-resultat {
     color: #0079d0;
     opacity: 0;
+    margin: 0;
   }
 
   .nombre-resultat.visible {
