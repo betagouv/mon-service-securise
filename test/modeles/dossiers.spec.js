@@ -126,6 +126,17 @@ describe('Les dossiers liés à un service', () => {
 
       expect(dossiers.statutSaisie()).to.equal(Dossiers.A_COMPLETER);
     });
+
+    it("considèrent que l'action est « complète » s'il y a un dossier actif et en cours de validité", () => {
+      const dossierActifEnCoursDeValidite =
+        unDossierComplet().quiEstActif().donnees;
+      const dossiers = new Dossiers(
+        { dossiers: [dossierActifEnCoursDeValidite] },
+        referentiel
+      );
+
+      expect(dossiers.statutSaisie()).to.equal(Dossiers.COMPLETES);
+    });
   });
 
   describe("concernant le statut d'homologation", () => {

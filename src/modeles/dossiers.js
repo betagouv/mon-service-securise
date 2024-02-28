@@ -68,6 +68,7 @@ class Dossiers extends ElementsConstructibles {
 
   statutSaisie() {
     if (this.dossierCourant()) return Dossiers.A_COMPLETER;
+    if (this.aUnDossierEnCoursDeValidite()) return Dossiers.COMPLETES;
     return Dossiers.A_SAISIR;
   }
 
