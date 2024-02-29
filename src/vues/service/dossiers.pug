@@ -50,8 +50,6 @@ block bouton-etape
     const etapeSuivante = dossierCourant?.etapeCourante() ?? premiereEtapeParcours.id
     const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
 
-  if(peutVoirTamponHomologation)
-    button.bouton.bouton-tertiaire.bouton-avec-icone#bouton-tampon-homologation(type='button') Télécharger le tampon d’homologation
   if(!estLectureSeule)
     button.bouton#suivant(
       data-id-homologation = service.id,
