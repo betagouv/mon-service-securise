@@ -27,11 +27,6 @@ block sous-titre
 block formulaire
   - const estLectureSeule  = autorisationsService.RISQUES.estLectureSeule
   form.homologation#risques
-    p.description-risques
-      | Cliquez sur le curseur pour évaluer l'impact potentiel des risques
-      | de sécurité les plus courants sur votre service. Apportez des précisions
-      | et ajoutez des risques complémentaires, si nécessaire.
-
     +carteInformations({
       titre: 'Niveaux de gravité',
       sousTitre: "Découvrez les 5 niveaux définis par l'ANSSI.",
