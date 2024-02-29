@@ -1531,7 +1531,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
             estUtilisateurCourant: false,
           },
         ],
-        statutHomologation: { id: 'nonRealisee', enCoursEdition: true },
+        statutHomologation: {
+          id: 'nonRealisee',
+          enCoursEdition: true,
+          etapeCourante: 'autorite',
+        },
         nombreContributeurs: 2,
         estProprietaire: false,
         documentsPdfDisponibles: [],

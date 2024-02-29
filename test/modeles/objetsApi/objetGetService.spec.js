@@ -13,18 +13,28 @@ const { unService } = require('../../constructeurs/constructeurService');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
+const { unDossier } = require('../../constructeurs/constructeurDossier');
 
 describe("L'objet d'API de `GET /service`", () => {
   const referentiel = Referentiel.creeReferentiel({
     statutsHomologation: {
       nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
     },
+    echeancesRenouvellement: { unAn: {} },
+    statutsAvisDossierHomologation: { favorable: {} },
+    etapesParcoursHomologation: [
+      {
+        numero: 1,
+        libelle: 'Autorité',
+        id: 'autorite',
+      },
+    ],
   });
   const lectureSurHomologuer = uneAutorisation()
     .avecDroits({ [HOMOLOGUER]: LECTURE })
     .construis();
 
-  const service = unService()
+  const service = unService(referentiel)
     .avecId('123')
     .avecNomService('Un service')
     .avecOrganisationResponsable('Une organisation')
@@ -42,6 +52,9 @@ describe("L'objet d'API de `GET /service`", () => {
         .quiSAppelle('Pierre Lecoux')
         .avecPostes(['Maire']).donnees
     )
+    .avecDossiers([
+      unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
+    ])
     .construis();
 
   it('fournit les données nécessaires', () => {
@@ -68,7 +81,8 @@ describe("L'objet d'API de `GET /service`", () => {
         },
       ],
       statutHomologation: {
-        enCoursEdition: false,
+        enCoursEdition: true,
+        etapeCourante: 'autorite',
         libelle: 'Non réalisée',
         id: 'nonRealisee',
         ordre: 1,
