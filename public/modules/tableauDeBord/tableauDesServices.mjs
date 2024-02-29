@@ -180,10 +180,15 @@ const tableauDesServices = {
   },
   remplisTableau: () => {
     if (tableauDesServices.donneesAffichees.length === 0) {
+      const aUneRechercheTextuelle =
+        tableauDesServices.termeRecherche.length !== 0;
+      const texteAAfficher = `Aucun service${
+        aUneRechercheTextuelle ? ' ne correspond à la recherche' : ''
+      }.`;
       tableauDesServices.$tableau.append(`
       <tr>
         <td colspan='5'>
-          Aucun service ne correspond à la recherche.
+          ${texteAAfficher}
         </td>
       </tr>
       `);
