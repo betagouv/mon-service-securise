@@ -246,13 +246,19 @@ const tableauDesServices = {
       $ligne.append(
         $(`<td class="cellule-indice-cyber">${contenuIndiceCyber}</td>`)
       );
+      const typeElementHtml = service.statutHomologation ? 'a' : 'div';
+      const lienHomologation = service.statutHomologation?.enCoursEdition
+        ? `/service/${service.id}/homologation/edition/etape/${service.statutHomologation.etapeCourante}`
+        : `/service/${service.id}/dossiers`;
       $ligne.append(
         $(
-          `<td><div class='statut-homologation statut-${
+          `<td><${typeElementHtml} class='statut-homologation statut-${
             service.statutHomologation?.id ?? 'inconnu'
           } ${
             service.statutHomologation?.enCoursEdition ? 'enCoursEdition' : ''
-          }'>${service.statutHomologation?.libelle ?? '-'}</div></td>`
+          }' href='${lienHomologation}'>${
+            service.statutHomologation?.libelle ?? '-'
+          }</${typeElementHtml}></td>`
         )
       );
       tableauDesServices.$tableau.append($ligne);

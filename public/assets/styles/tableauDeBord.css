@@ -517,6 +517,9 @@ label[for='recherche-service'] {
   display: inline-flex;
   gap: 0.5em;
   white-space: nowrap;
+  color: var(--texte-fonce);
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .tableau-services td .statut-homologation.enCoursEdition::after {
@@ -791,7 +794,9 @@ label[for='recherche-service'] {
   filter: none;
 }
 
-.tableau-services td :is(.contributeurs, .conteneur-indice-cyber):hover {
+.tableau-services
+  td
+  :is(.contributeurs, .conteneur-indice-cyber, a.statut-homologation):hover {
   background: #0c5c98;
   color: white;
 }
@@ -800,7 +805,9 @@ label[for='recherche-service'] {
   filter: brightness(0) invert(100%);
 }
 
-.tableau-services td :is(.contributeurs, .conteneur-indice-cyber):active {
+.tableau-services
+  td
+  :is(.contributeurs, .conteneur-indice-cyber, a.statut-homologation):active {
   background: #08416a;
   color: white;
 }
@@ -811,7 +818,12 @@ label[for='recherche-service'] {
 
 .tableau-services
   td
-  :is(.contributeurs, .conteneur-indice-cyber, .selection-service) {
+  :is(
+    .contributeurs,
+    .conteneur-indice-cyber,
+    .selection-service,
+    a.statut-homologation
+  ) {
   position: relative;
   z-index: 2;
 }
