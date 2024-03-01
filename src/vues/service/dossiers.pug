@@ -6,6 +6,13 @@ mixin dossier({ statut, dossier, service, avecIndiceCyber, avecActions })
     const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante)
     const nombreTotalEtapes = referentiel.derniereEtapeParcours().numero
     const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
+    const texteTronque = (texte, tailleLimite) => {
+      const texteDecode = decode(texte);
+      const longueurInitiale = texteDecode.length;
+      let resultat = texteDecode.substring(0, tailleLimite);
+      if (resultat.length < longueurInitiale) resultat += '…';
+      return resultat
+    }
 
   .dossier
     .contenu-dossier
@@ -21,8 +28,8 @@ mixin dossier({ statut, dossier, service, avecIndiceCyber, avecActions })
         .contenu-details
           .details
             if dossier.finalise
-              div= `Durée : ${dossier.descriptionDureeValidite()}`
-              div= `Prochaine homologation : ${dossier.descriptionProchaineDateHomologation()}`
+              div!= `Autorité d'homologation : ${texteTronque(dossier.autorite.nom, 37)} | ${texteTronque(dossier.autorite.fonction, 37)}`
+              div= `Date d'échéance : ${dossier.descriptionProchaineDateHomologation()}`
             else
               if(!estLectureSeule)
                 - const titreEtape = referentiel.etapesParcoursHomologation().find((e) => e.id === etapeCourante)
@@ -36,7 +43,8 @@ mixin dossier({ statut, dossier, service, avecIndiceCyber, avecActions })
           img.fleche(src='/statique/assets/images/forme_chevron_bleu.svg' alt='')
 
 mixin dossierFinalise({ dossier })
-  +dossier({ statut: 'Homologation finalisée', dossier })
+  - const dateDecision = new Intl.DateTimeFormat('fr-FR').format(new Date(dossier.decision.dateHomologation))
+  +dossier({ statut: `Décision d'homologation du ${dateDecision}`, dossier })
 
 mixin dossierCourant({ dossier, idService, service })
   +dossier({ statut: "Projet d'homologation", dossier, service, avecIndiceCyber: true, avecActions: true })

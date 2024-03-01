@@ -207,6 +207,7 @@ const routesService = ({
 
       reponse.render('service/dossiers', {
         InformationsHomologation,
+        decode,
         service,
         etapeActive: 'dossiers',
         premiereEtapeParcours: referentiel.premiereEtapeParcours(),
