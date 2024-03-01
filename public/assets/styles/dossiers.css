@@ -98,3 +98,27 @@
 .homologation .details {
   color: #667892;
 }
+
+.homologation .dossier .statut-homologation {
+  padding: 5px 12px;
+  border-radius: 40px;
+  font-weight: bold;
+  color: #2f3a43;
+  width: fit-content;
+}
+
+.homologation .dossier .statut-homologation.bientotActivee {
+  background: #e7f8d7;
+}
+
+.homologation .dossier .statut-homologation.activee {
+  background: #d4f4db;
+}
+
+.homologation .dossier .statut-homologation.bientotExpiree {
+  background: #fff2de;
+}
+
+.homologation .dossier .statut-homologation.expiree {
+  background: #ffdfdf;
+}
