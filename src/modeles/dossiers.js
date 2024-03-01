@@ -24,6 +24,10 @@ class Dossiers extends ElementsConstructibles {
     super(Dossier, { items: dossiers }, referentiel);
   }
 
+  archives() {
+    return this.items.filter((i) => i.archive);
+  }
+
   aUnDossierEnCoursDeValidite() {
     const dossierActif = this.dossierActif();
 

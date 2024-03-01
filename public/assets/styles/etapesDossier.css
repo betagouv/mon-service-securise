@@ -1,5 +1,13 @@
+.marges-fixes {
+  width: 1290px;
+}
+
 .zone-principale {
-  padding-bottom: 0;
+  margin-left: 34px;
+  margin-right: 56px;
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 1200px;
 }
 
 .homologation h2 {
@@ -149,18 +157,14 @@ section.autorite {
   margin-bottom: 0;
 }
 
-.dossiers {
-  min-height: 20em;
-}
-
 .dossier {
   display: flex;
   justify-content: space-between;
 
   margin: 1em 0;
   padding: 1.5em 2em;
-  border: solid 1px var(--bordure-foncee);
-  border-radius: 3px;
+  border: solid 1px #cbd5e1;
+  border-radius: 4px;
 }
 
 .dossier .statut {

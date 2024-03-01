@@ -208,7 +208,7 @@ describe('Les dossiers liés à un service', () => {
   });
 
   describe("sur demande de présence d'un dossier actif et en cours de validité", () => {
-    it("retourne `false` s'il n'y a pas de dossier actif", () => {
+    it("retournent `false` s'il n'y a pas de dossier actif", () => {
       const dossiersSansDossierActif = new Dossiers(
         { dossiers: [unDossier(referentiel).quiEstNonFinalise().donnees] },
         referentiel
@@ -218,7 +218,7 @@ describe('Les dossiers liés à un service', () => {
       );
     });
 
-    it("retourne `false` si le dossier actif n'est pas en cours de validité", () => {
+    it("retournent `false` si le dossier actif n'est pas en cours de validité", () => {
       const dossiersAvecDossierActifExpire = new Dossiers(
         {
           dossiers: [
@@ -232,7 +232,7 @@ describe('Les dossiers liés à un service', () => {
       ).to.be(false);
     });
 
-    it('retourne `true` si le dossier actif est en cours de validité', () => {
+    it('retournent `true` si le dossier actif est en cours de validité', () => {
       const dossiersAvecDossierActifExpire = new Dossiers(
         {
           dossiers: [
@@ -244,6 +244,31 @@ describe('Les dossiers liés à un service', () => {
       expect(
         dossiersAvecDossierActifExpire.aUnDossierEnCoursDeValidite()
       ).to.be(true);
+    });
+  });
+
+  describe('sur demande des dossiers archivés', () => {
+    it('retournent seulement les dossiers avec la propriété `archive` valant `true`', () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel)
+              .avecId('archive')
+              .quiEstComplet()
+              .quiEstArchive().donnees,
+            unDossier(referentiel).avecId('complet').quiEstComplet().donnees,
+            unDossier(referentiel)
+              .avecId('finalise')
+              .quiEstComplet()
+              .quiEstNonFinalise().donnees,
+          ],
+        },
+        referentiel
+      );
+
+      const archives = dossiers.archives();
+      expect(archives.length).to.be(1);
+      expect(archives[0].id).to.be('archive');
     });
   });
 });
