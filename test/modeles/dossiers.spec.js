@@ -7,6 +7,7 @@ const {
 const {
   ErreurDossiersInvalides,
   ErreurDossierNonFinalisable,
+  ErreurDossierCourantInexistant,
 } = require('../../src/erreurs');
 const Dossier = require('../../src/modeles/dossier');
 const Dossiers = require('../../src/modeles/dossiers');
@@ -269,6 +270,38 @@ describe('Les dossiers liés à un service', () => {
       const archives = dossiers.archives();
       expect(archives.length).to.be(1);
       expect(archives[0].id).to.be('archive');
+    });
+  });
+
+  describe('sur demande de suppression du dossier courant', () => {
+    it('suppriment le dossier courant', () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossierComplet('D1').donnees,
+            unDossierComplet('D2').quiEstNonFinalise().donnees,
+          ],
+        },
+        referentiel
+      );
+
+      dossiers.supprimeDossierCourant();
+
+      expect(dossiers.nombre()).to.be(1);
+      expect(dossiers.items[0].id).to.be('D1');
+    });
+
+    it("jettent une erreur s'il n'y a pas de dossier courant", () => {
+      const sansDossierCourant = new Dossiers({ dossiers: [] }, referentiel);
+
+      expect(() =>
+        sansDossierCourant.supprimeDossierCourant()
+      ).to.throwException((e) => {
+        expect(e).to.be.an(ErreurDossierCourantInexistant);
+        expect(e.message).to.be(
+          'Les dossiers ne comportent pas de dossier courant'
+        );
+      });
     });
   });
 });

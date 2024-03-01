@@ -13,6 +13,7 @@ class ErreurDepartementInconnu extends ErreurModele {}
 class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDonneesStatistiques extends ErreurModele {}
+class ErreurDossierCourantInexistant extends ErreurModele {}
 class ErreurDossierDejaFinalise extends ErreurModele {}
 class ErreurDossierEtapeInconnue extends ErreurModele {
   constructor(etapeInconnue) {
@@ -65,6 +66,7 @@ module.exports = {
   ErreurDonneesObligatoiresManquantes,
   ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
+  ErreurDossierCourantInexistant,
   ErreurDossierDejaFinalise,
   ErreurDossierEtapeInconnue,
   ErreurDossierNonFinalisable,
