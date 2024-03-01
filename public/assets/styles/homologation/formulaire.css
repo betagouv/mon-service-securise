@@ -138,8 +138,8 @@ label.exemple {
   display: flex;
   justify-content: flex-end;
   column-gap: 1.7em;
-  width: calc(100% + 7em);
-  margin-left: -7em;
+  margin-left: 0;
+  margin-top: 32px;
   padding: 1.4em 7em 1.4em 0;
   border-top-width: 2px;
   border-top-style: solid;

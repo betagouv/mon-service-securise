@@ -1,0 +1,95 @@
+.sous-titre h2 {
+  margin-bottom: 16px;
+}
+
+.homologation hr {
+  display: none;
+}
+
+.homologation .titre-section {
+  margin: 24px 0 16px;
+  font-weight: bold;
+  font-size: 1.4em;
+  color: #0c5c98;
+}
+
+.homologation .dossier {
+  padding: 16px;
+  position: relative;
+  pointer-events: none;
+}
+
+.homologation .statut {
+  font-size: 1.11em;
+}
+
+.homologation .indice-cyber {
+  padding: 3px 8px 5px 8px;
+  border-radius: 4px;
+  background: #dbeeff;
+  width: fit-content;
+}
+
+.homologation .conteneur-indice-cyber {
+  font-weight: 500;
+}
+
+.homologation .contenu-gauche-dossier {
+  display: flex;
+  flex-direction: row;
+}
+
+.homologation .contenu-gauche {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  align-items: baseline;
+}
+
+.homologation .contenu-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.homologation .numero-etape {
+  border: none;
+  color: #667892;
+  text-align: left;
+}
+
+.homologation .titre-etape {
+  color: #2f3a43;
+}
+
+.homologation .lien-etape-courante {
+  pointer-events: auto;
+  width: fit-content;
+}
+
+.homologation .lien-etape-courante:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.homologation .dossier:hover .statut {
+  color: #0079d0;
+}
+
+.homologation #affiche-documents {
+  pointer-events: auto;
+  z-index: 2;
+  position: relative;
+  margin-right: 48px;
+}
+
+.homologation #affiche-documents:before {
+  content: url('/statique/assets/images/icone_telechargement_fichier.svg');
+}
+
+.homologation .conteneur-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}

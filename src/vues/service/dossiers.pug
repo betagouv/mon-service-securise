@@ -1,31 +1,48 @@
 extends ./formulaireEtapier
 
-mixin dossier({ statut, dossier, idService })
+mixin dossier({ statut, dossier, service, avecIndiceCyber, avecActions })
   -
     const etapeCourante = referentiel.etapeDossierAutorisee(dossier.etapeCourante(), autorisationsService.peutHomologuer)
-    const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante) - 1
+    const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante)
     const nombreTotalEtapes = referentiel.derniereEtapeParcours().numero
     const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
 
   .dossier
     .contenu-dossier
-      .statut= statut
-      .details
-        if dossier.finalise
-          div= `Durée : ${dossier.descriptionDureeValidite()}`
-          div= `Prochaine homologation : ${dossier.descriptionProchaineDateHomologation()}`
-        else
-          if(!estLectureSeule)
-            div= `Étapes complétées : ${numeroDerniereEtapeCompletee} / ${nombreTotalEtapes}`
-    if idService
-      nav
-        a(href = `/service/${idService}/homologation/edition/etape/${etapeCourante}`) Consulter
+      .contenu-gauche
+        .contenu-statut
+          .statut= statut
+          if avecIndiceCyber
+            - const indiceCyber = service.indiceCyber().total.toFixed(1)
+            .indice-cyber
+              b Indice cyber&nbsp;
+              span.conteneur-indice-cyber
+                span.note-indice-cyber!= `${indiceCyber}/${referentiel.indiceCyberNoteMax()}`
+        .contenu-details
+          .details
+            if dossier.finalise
+              div= `Durée : ${dossier.descriptionDureeValidite()}`
+              div= `Prochaine homologation : ${dossier.descriptionProchaineDateHomologation()}`
+            else
+              if(!estLectureSeule)
+                - const titreEtape = referentiel.etapesParcoursHomologation().find((e) => e.id === etapeCourante)
+                .contenu-etape-courante
+                  .numero-etape!= `Étape ${numeroDerniereEtapeCompletee} sur ${nombreTotalEtapes}`
+                  .titre-etape!= titreEtape.libelle
+    if avecActions
+      .conteneur-actions
+        button.bouton.bouton-avec-icone.bouton-tertiaire#affiche-documents(type='button') Accéder aux documents
+        a.lien-etape-courante(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`)
+          img.fleche(src='/statique/assets/images/forme_chevron_bleu.svg' alt='')
 
 mixin dossierFinalise({ dossier })
   +dossier({ statut: 'Homologation finalisée', dossier })
 
-mixin dossierCourant({ ...donnees })
-  +dossier({ statut: 'Homologation en cours', ...donnees })
+mixin dossierCourant({ dossier, idService, service })
+  +dossier({ statut: "Projet d'homologation", dossier, service, avecIndiceCyber: true, avecActions: true })
+
+block append styles
+  link(href='/statique/assets/styles/dossiers.css', rel='stylesheet')
 
 block title
   title Homologuer - Accueil | MonServiceSécurisé
@@ -33,15 +50,23 @@ block title
 block formulaire
   -
     const { dossiers } = service
-    const dossiersFinalises = dossiers.finalises();
     const dossierCourant = dossiers.dossierCourant()
+    const dossierActif = dossiers.dossierActif()
+    const dossiersPasses = dossiers.archives();
 
   .dossiers
     if dossierCourant
-      +dossierCourant({ dossier: dossierCourant, idService: service.id })
+      h3.titre-section Projet d'homologation en cours
+      +dossierCourant({ dossier: dossierCourant, service })
 
-    each dossier in dossiersFinalises
-      +dossierFinalise({ dossier })
+    if dossierActif
+      h3.titre-section Dernière homologation validée
+      +dossierFinalise({ dossier: dossierActif })
+
+    if dossiersPasses.length
+      h3.titre-section Homologations passées
+      each dossier in dossiersPasses
+        +dossierFinalise({ dossier })
 
     script(type = "module", src = "/statique/service/homologation/dossiers.js")
 

@@ -18,6 +18,11 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  avecId(id) {
+    this.donnees.id = id;
+    return this;
+  }
+
   avecDateHomologation(date) {
     this.donnees.decision.dateHomologation = date.toISOString();
     return this;
