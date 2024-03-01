@@ -3,6 +3,7 @@ const ElementsConstructibles = require('./elementsConstructibles');
 const {
   ErreurDossiersInvalides,
   ErreurDossierNonFinalisable,
+  ErreurDossierCourantInexistant,
 } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
@@ -74,6 +75,15 @@ class Dossiers extends ElementsConstructibles {
     if (this.dossierCourant()) return Dossiers.A_COMPLETER;
     if (this.aUnDossierEnCoursDeValidite()) return Dossiers.COMPLETES;
     return Dossiers.A_SAISIR;
+  }
+
+  supprimeDossierCourant() {
+    const dossierCourant = this.dossierCourant();
+    if (!dossierCourant)
+      throw new ErreurDossierCourantInexistant(
+        'Les dossiers ne comportent pas de dossier courant'
+      );
+    this.items = this.items.filter((d) => d !== dossierCourant);
   }
 
   static valide({ dossiers }) {
