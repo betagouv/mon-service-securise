@@ -1,6 +1,6 @@
 extends ./formulaireEtapier
 
-mixin dossier({ statut, dossier, service, avecIndiceCyber, avecActions })
+mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomologation, afficheActions })
   -
     const etapeCourante = referentiel.etapeDossierAutorisee(dossier.etapeCourante(), autorisationsService.peutHomologuer)
     const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante)
@@ -19,12 +19,16 @@ mixin dossier({ statut, dossier, service, avecIndiceCyber, avecActions })
       .contenu-gauche
         .contenu-statut
           .statut= statut
-          if avecIndiceCyber
+          if afficheIndiceCyber
             - const indiceCyber = service.indiceCyber().total.toFixed(1)
             .indice-cyber
               b Indice cyber&nbsp;
               span.conteneur-indice-cyber
                 span.note-indice-cyber!= `${indiceCyber}/${referentiel.indiceCyberNoteMax()}`
+          if afficheStatutHomologation
+            - const statutHomologation = dossier.statutHomologation()
+            .statut-homologation(class=statutHomologation)
+              span!= referentiel.statutHomologation(statutHomologation).libelle
         .contenu-details
           .details
             if dossier.finalise
@@ -36,18 +40,18 @@ mixin dossier({ statut, dossier, service, avecIndiceCyber, avecActions })
                 .contenu-etape-courante
                   .numero-etape!= `Étape ${numeroDerniereEtapeCompletee} sur ${nombreTotalEtapes}`
                   .titre-etape!= titreEtape.libelle
-    if avecActions
+    if afficheActions
       .conteneur-actions
         button.bouton.bouton-avec-icone.bouton-tertiaire#affiche-documents(type='button') Accéder aux documents
         a.lien-etape-courante(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`)
           img.fleche(src='/statique/assets/images/forme_chevron_bleu.svg' alt='')
 
-mixin dossierFinalise({ dossier })
+mixin dossierFinalise({ dossier, service })
   - const dateDecision = new Intl.DateTimeFormat('fr-FR').format(new Date(dossier.decision.dateHomologation))
-  +dossier({ statut: `Décision d'homologation du ${dateDecision}`, dossier })
+  +dossier({ statut: `Décision d'homologation du ${dateDecision}`, dossier, afficheStatutHomologation: true })
 
 mixin dossierCourant({ dossier, idService, service })
-  +dossier({ statut: "Projet d'homologation", dossier, service, avecIndiceCyber: true, avecActions: true })
+  +dossier({ statut: "Projet d'homologation", dossier, service, afficheIndiceCyber: true, afficheActions: true })
 
 block append styles
   link(href='/statique/assets/styles/dossiers.css', rel='stylesheet')
@@ -69,7 +73,7 @@ block formulaire
 
     if dossierActif
       h3.titre-section Dernière homologation validée
-      +dossierFinalise({ dossier: dossierActif })
+      +dossierFinalise({ dossier: dossierActif, service })
 
     if dossiersPasses.length
       h3.titre-section Homologations passées
