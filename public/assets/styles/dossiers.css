@@ -21,6 +21,7 @@
 
 .homologation .statut {
   font-size: 1.11em;
+  white-space: nowrap;
 }
 
 .homologation .indice-cyber {
@@ -92,4 +93,8 @@
   display: flex;
   flex-direction: column;
   align-items: end;
+}
+
+.homologation .details {
+  color: #667892;
 }
