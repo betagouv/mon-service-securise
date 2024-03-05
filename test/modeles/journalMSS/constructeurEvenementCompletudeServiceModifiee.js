@@ -1,8 +1,11 @@
 const EvenementCompletudeServiceModifiee = require('../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee');
+const { unService } = require('../../constructeurs/constructeurService');
 
 class ConstructeurEvenementCompletudeServiceModifiee {
   constructor() {
+    const service = unService().avecId('abc').donnees;
     this.donnees = {
+      service,
       idService: 'abc',
       nombreTotalMesures: 54,
       nombreMesuresCompletes: 38,

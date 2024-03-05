@@ -8,7 +8,9 @@ const {
   ErreurNombreMesuresCompletesManquant,
   ErreurIndiceCyberManquant,
   ErreurNombreOrganisationsUtilisatricesManquant,
+  ErreurServiceManquant,
 } = require('../../../src/modeles/journalMSS/erreurs');
+const { unService } = require('../../constructeurs/constructeurService');
 
 describe('Un événement de complétude modifiée', () => {
   const unEvenement = () =>
@@ -29,6 +31,7 @@ describe('Un événement de complétude modifiée', () => {
   it('sait se convertir en JSON', () => {
     const evenement = new EvenementCompletudeServiceModifiee(
       {
+        service: unService().avecId('abc').construis(),
         idService: 'abc',
         nombreTotalMesures: 54,
         nombreMesuresCompletes: 38,
@@ -81,6 +84,19 @@ describe('Un événement de complétude modifiée', () => {
       borneBasse: 1,
       borneHaute: 1,
     });
+  });
+
+  it('exige que le service soit renseigné', (done) => {
+    try {
+      unEvenement().sans('service').construis();
+
+      done(
+        Error("L'instanciation de l'événement aurait dû lever une exception")
+      );
+    } catch (e) {
+      expect(e).to.be.an(ErreurServiceManquant);
+      done();
+    }
   });
 
   it("exige que l'identifiant du service soit renseigné", (done) => {

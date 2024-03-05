@@ -6,6 +6,7 @@ const {
   ErreurNombreOrganisationsUtilisatricesManquant,
   ErreurNombreTotalMesuresManquant,
   ErreurIndiceCyberManquant,
+  ErreurServiceManquant,
 } = require('./erreurs');
 
 class EvenementCompletudeServiceModifiee extends Evenement {
@@ -15,6 +16,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
     const valide = () => {
       const manque = (donnee) => typeof donnee === 'undefined';
 
+      if (manque(donnees.service)) throw new ErreurServiceManquant();
       if (manque(donnees.idService))
         throw new ErreurIdentifiantServiceManquant();
       if (manque(donnees.nombreTotalMesures))
@@ -36,7 +38,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
 
     valide();
 
-    const { idService, indiceCyber, ...donneesBrutes } = donnees;
+    const { idService, indiceCyber, service, ...donneesBrutes } = donnees;
 
     super(
       'COMPLETUDE_SERVICE_MODIFIEE',
