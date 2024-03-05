@@ -11,6 +11,7 @@ class ErreurIndiceCyberManquant extends ErreurJournal {}
 class ErreurNombreOrganisationsUtilisatricesManquant extends ErreurJournal {}
 class ErreurNombreMesuresCompletesManquant extends ErreurJournal {}
 class ErreurNombreTotalMesuresManquant extends ErreurJournal {}
+class ErreurServiceManquant extends ErreurJournal {}
 
 module.exports = {
   ErreurAutorisationsServiceManquantes,
@@ -25,4 +26,5 @@ module.exports = {
   ErreurNombreOrganisationsUtilisatricesManquant,
   ErreurNombreMesuresCompletesManquant,
   ErreurNombreTotalMesuresManquant,
+  ErreurServiceManquant,
 };

@@ -13,6 +13,7 @@ function consigneCompletudeDansJournal({ adaptateurJournal }) {
     if (!service) leveException('service');
 
     const completude = new EvenementCompletudeServiceModifiee({
+      service,
       idService: service.id,
       ...service.completudeMesures(),
       nombreOrganisationsUtilisatrices:

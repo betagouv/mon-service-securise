@@ -66,6 +66,7 @@ class ConsoleAdministration {
     const evenements = services
       .map((s) =>
         new EvenementCompletudeServiceModifiee({
+          service: s,
           idService: s.id,
           ...s.completudeMesures(),
           nombreOrganisationsUtilisatrices:
