@@ -67,9 +67,18 @@ block formulaire
     const dossiersPasses = dossiers.archives();
 
   .dossiers
+    -
+      const etapeSuivante = dossierCourant?.etapeCourante() ?? premiereEtapeParcours.id
+      const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
     if dossierCourant
       h3.titre-section Projet d'homologation en cours
       +dossierCourant({ dossier: dossierCourant, service })
+    else
+      if(!estLectureSeule)
+        button.bouton#suivant(
+          data-id-homologation = service.id,
+          data-id-etape-suivante = etapeSuivante
+        ) Nouvelle homologation
 
     if dossierActif
       h3.titre-section Dernière homologation validée
@@ -80,15 +89,8 @@ block formulaire
       each dossier in dossiersPasses
         +dossierFinalise({ dossier })
 
+    if !dossierCourant && !dossierActif && !dossiersPasses.length
+      .aucun-projets
+        span Aucun projet d'homologation n'est en cours ni aucune homologation n'a été validée
+
     script(type = "module", src = "/statique/service/homologation/dossiers.js")
-
-block bouton-etape
-  -
-    const etapeSuivante = dossierCourant?.etapeCourante() ?? premiereEtapeParcours.id
-    const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
-
-  if(!estLectureSeule)
-    button.bouton#suivant(
-      data-id-homologation = service.id,
-      data-id-etape-suivante = etapeSuivante
-      ) Nouvelle homologation
