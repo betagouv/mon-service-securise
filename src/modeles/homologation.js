@@ -247,6 +247,10 @@ class Homologation {
     return this.rolesResponsabilites.descriptionStructureDeveloppement();
   }
 
+  supprimeDossierCourant() {
+    this.dossiers.supprimeDossierCourant();
+  }
+
   donneesADupliquer(nomService) {
     const donnees = this.donneesAPersister().sauf('dossiers', 'id');
     donnees.descriptionService.nomService = nomService;

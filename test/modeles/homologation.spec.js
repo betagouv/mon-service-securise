@@ -672,4 +672,16 @@ describe('Une homologation', () => {
       ]);
     });
   });
+
+  it('délègue la suppression du dossier courant aux dossiers', () => {
+    let appelDelegue = false;
+
+    const service = unService().construis();
+    service.dossiers.supprimeDossierCourant = () => {
+      appelDelegue = true;
+    };
+
+    service.supprimeDossierCourant();
+    expect(appelDelegue).to.be(true);
+  });
 });
