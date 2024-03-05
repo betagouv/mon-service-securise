@@ -1446,4 +1446,46 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
   });
+
+  describe('sur demande de mise à jour du service', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+
+    it("jette une erreur si le service n'existe pas", async () => {
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance: unePersistanceMemoire().construis(),
+        referentiel,
+      });
+
+      try {
+        await depot.metsAJourService(unService().avecId('123').construis());
+        expect().fail("L'instanciation aurait dû lever une exception.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurServiceInexistant);
+        expect(e.message).to.equal('Service "123" non trouvé');
+      }
+    });
+
+    it("délègue à l'adaptateur persistance la sauvegarde du service", async () => {
+      const service = unService(referentiel).avecId('S1').construis();
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnService({ id: 'S1' })
+        .construis();
+
+      let donneesPersistees;
+      adaptateurPersistance.sauvegardeService = async (id, donnees) => {
+        donneesPersistees = { id, donnees };
+      };
+
+      const depot = DepotDonneesHomologations.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        referentiel,
+      });
+
+      await depot.metsAJourService(service);
+
+      expect(donneesPersistees.id).to.eql('S1');
+      expect(donneesPersistees.donnees).not.to.be(undefined);
+    });
+  });
 });
