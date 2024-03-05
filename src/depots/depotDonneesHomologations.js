@@ -371,6 +371,14 @@ const creeDepot = (config = {}) => {
     await duplique(s);
   };
 
+  const metsAJourService = async (service) => {
+    const s = await p.lis.une(service.id);
+    if (typeof s === 'undefined')
+      throw new ErreurServiceInexistant(`Service "${service.id}" non trouvé`);
+
+    await p.sauvegarde(service.id, service.donneesAPersister().toutes());
+  };
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
@@ -383,6 +391,7 @@ const creeDepot = (config = {}) => {
     serviceExiste,
     homologations,
     enregistreDossier,
+    metsAJourService,
     nouveauService,
     remplaceRisquesSpecifiquesDuService,
     supprimeHomologation,
