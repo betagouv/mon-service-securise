@@ -6,6 +6,7 @@ const {
   ErreurModele,
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
+  ErreurDossierCourantInexistant,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -430,6 +431,24 @@ const routesApiService = ({
         .finaliseDossierCourant(homologation)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
+    }
+  );
+
+  routes.delete(
+    '/:id/homologation/dossierCourant',
+    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
+    middleware.challengeMotDePasse,
+    async (requete, reponse, suite) => {
+      const { homologation: service } = requete;
+      try {
+        service.supprimeDossierCourant();
+        await depotDonnees.metsAJourService(service);
+        reponse.sendStatus(204);
+      } catch (e) {
+        if (e instanceof ErreurDossierCourantInexistant)
+          reponse.status(422).send(e.message);
+        else suite(e);
+      }
     }
   );
 

@@ -24,7 +24,7 @@ const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
 const Mesures = require('../../../src/modeles/mesures');
-const referentiel = require('../../../src/referentiel');
+const Referentiel = require('../../../src/referentiel');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;
@@ -299,7 +299,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne la représentation enrichie des mesures', async () => {
-      const avecMesureA = referentiel.creeReferentiel({
+      const avecMesureA = Referentiel.creeReferentiel({
         mesures: { mesureA: {} },
       });
       const mesures = new Mesures(
@@ -2039,6 +2039,75 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(evenementRecu.type).to.equal('RETOUR_UTILISATEUR_MESURE_RECU');
+    });
+  });
+
+  describe('quand requête DELETE sur `/api/service/:id/homologation/dossierCourant`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({
+        autorisationACharger: Autorisation.NouvelleAutorisationProprietaire(),
+      });
+    });
+
+    it('utilise le middleware de recherche du service', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/service/123/homologation/dossierCourant',
+        },
+        done
+      );
+    });
+
+    it('utilise le middleware de challenge du mot de passe', (done) => {
+      testeurMSS().middleware().verifieChallengeMotDePasse(
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/service/123/homologation/dossierCourant',
+        },
+        done
+      );
+    });
+
+    it("retourne une erreur HTTP 422 si le service n'a pas de dossier courant", (done) => {
+      const service = unService().construis();
+      testeur.middleware().reinitialise({ homologationARenvoyer: service });
+
+      testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        'Les dossiers ne comportent pas de dossier courant',
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/service/123/homologation/dossierCourant',
+        },
+        done
+      );
+    });
+
+    it('demande au dépôt de mettre à jour le service', async () => {
+      const referentiel = Referentiel.creeReferentiel({
+        echeancesRenouvellement: { unAn: {} },
+        statutsAvisDossierHomologation: { favorable: {} },
+      });
+      const service = unService(referentiel)
+        .avecId('123')
+        .avecDossiers([
+          unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
+        ])
+        .construis();
+      let serviceMisAJour;
+
+      testeur.middleware().reinitialise({ homologationARenvoyer: service });
+      testeur.depotDonnees().metsAJourService = async (s) => {
+        serviceMisAJour = s;
+      };
+
+      await axios.delete(
+        'http://localhost:1234/api/service/123/homologation/dossierCourant'
+      );
+
+      expect(serviceMisAJour.id).to.be('123');
     });
   });
 });
