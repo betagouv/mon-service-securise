@@ -1,6 +1,6 @@
 import ActionAbstraite from './Action.mjs';
 
-class ActionSuppression extends ActionAbstraite {
+class ActionSuppressionService extends ActionAbstraite {
   constructor() {
     super('#contenu-suppression');
     this.appliqueContenu({
@@ -69,4 +69,4 @@ class ActionSuppression extends ActionAbstraite {
   }
 }
 
-export default ActionSuppression;
+export default ActionSuppressionService;
