@@ -65,13 +65,7 @@ class ConsoleAdministration {
     const services = await this.depotDonnees.tousLesServices();
     const evenements = services
       .map((s) =>
-        new EvenementCompletudeServiceModifiee({
-          service: s,
-          idService: s.id,
-          ...s.completudeMesures(),
-          nombreOrganisationsUtilisatrices:
-            s.descriptionService.nombreOrganisationsUtilisatrices,
-        }).toJSON()
+        new EvenementCompletudeServiceModifiee({ service: s }).toJSON()
       )
       .map(({ donnees, ...reste }) => ({
         donnees: { ...donnees, genereParAdministrateur: true },
