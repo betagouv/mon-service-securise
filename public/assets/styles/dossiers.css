@@ -19,6 +19,11 @@
   pointer-events: none;
 }
 
+.homologation .dossier:not(.dossier-courant) {
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
 .homologation .statut {
   font-size: 1.11em;
   white-space: nowrap;
@@ -82,11 +87,16 @@
   pointer-events: auto;
   z-index: 2;
   position: relative;
-  margin-right: 48px;
+  margin-right: 88px;
 }
 
 .homologation #affiche-documents:before {
   content: url('/statique/assets/images/icone_telechargement_fichier.svg');
+}
+
+.homologation .contenu-dossier {
+  display: flex;
+  align-items: center;
 }
 
 .homologation .conteneur-actions {
@@ -140,4 +150,18 @@
   font-weight: 500;
   text-align: center;
   margin-top: 68px;
+}
+
+.homologation #supprime-dossier-courant {
+  background: none;
+  border: none;
+  pointer-events: auto;
+  padding: 0;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.homologation #supprime-dossier-courant:hover img {
+  filter: brightness(0) invert(28%) sepia(65%) saturate(2283%)
+    hue-rotate(186deg) brightness(101%) contrast(103%);
 }
