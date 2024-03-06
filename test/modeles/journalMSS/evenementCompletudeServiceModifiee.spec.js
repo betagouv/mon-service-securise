@@ -42,6 +42,20 @@ describe('Un événement de complétude modifiée', () => {
     const service = unService(referentiel)
       .avecId('ABC')
       .avecMesures(mesures)
+      .avecDescription({
+        delaiAvantImpactCritique: 'uneHeure',
+        localisationDonnees: 'uneLocalisation',
+        donneesCaracterePersonnel: ['donnee A', 'donnee B'],
+        donneesSensiblesSpecifiques: ['donneeSensible A'],
+        fonctionnalites: ['reseauSocial'],
+        fonctionnalitesSpecifiques: ['feature A', 'feature B'],
+        provenanceService: 'developpement',
+        risqueJuridiqueFinancierReputationnel: true,
+        statutDeploiement: 'unStatutDeploiement',
+        typeService: ['applicationMobile'],
+        nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+        pointsAcces: ['point A', 'point B'],
+      })
       .construis();
 
     const evenement = new EvenementCompletudeServiceModifiee(
@@ -61,6 +75,17 @@ describe('Un événement de complétude modifiée', () => {
           { categorie: 'gouvernance', indice: 5 },
         ],
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+        typeService: ['applicationMobile'],
+        provenanceService: 'developpement',
+        statutDeploiement: 'unStatutDeploiement',
+        pointsAcces: 2,
+        fonctionnalites: ['reseauSocial'],
+        fonctionnalitesSpecifiques: 2,
+        donneesCaracterePersonnel: ['donnee A', 'donnee B'],
+        donneesSensiblesSpecifiques: 1,
+        localisationDonnees: 'uneLocalisation',
+        delaiAvantImpactCritique: 'uneHeure',
+        risqueJuridiqueFinancierReputationnel: true,
       },
       date: '08/03/2024',
     });
