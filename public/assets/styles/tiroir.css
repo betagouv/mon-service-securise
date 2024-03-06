@@ -79,11 +79,21 @@
   margin-bottom: 2em;
 }
 
-:is(#contenu-duplication, #contenu-suppression) .banniere {
+:is(
+    #contenu-duplication,
+    #contenu-suppression,
+    #contenu-suppression-dossier-courant
+  )
+  .banniere {
   margin-bottom: 2em;
 }
 
-:is(#contenu-duplication, #contenu-suppression, #contenu-contributeurs)
+:is(
+    #contenu-duplication,
+    #contenu-suppression,
+    #contenu-suppression-dossier-courant,
+    #contenu-contributeurs
+  )
   .conteneur-loader {
   border: 1px solid #cbd5e1;
   border-radius: 4px;
@@ -96,11 +106,21 @@
   margin-bottom: 2em;
 }
 
-:is(#contenu-duplication, #contenu-suppression) .titre-loader {
+:is(
+    #contenu-duplication,
+    #contenu-suppression,
+    #contenu-suppression-dossier-courant
+  )
+  .titre-loader {
   font-weight: bold;
 }
 
-:is(#contenu-duplication, #contenu-suppression) .info-loader {
+:is(
+    #contenu-duplication,
+    #contenu-suppression,
+    #contenu-suppression-dossier-courant
+  )
+  .info-loader {
   font-weight: 500;
 }
 
@@ -180,11 +200,11 @@
   gap: 10px;
 }
 
-#contenu-suppression p {
+:is(#contenu-suppression, #contenu-suppression-dossier-courant) p {
   margin: 0 0 1em 0;
 }
 
-#contenu-suppression
+:is(#contenu-suppression, #contenu-suppression-dossier-courant)
   :is(.contenu-texte-information, .contenu-texte-avertissement)
   p {
   margin: 0;
