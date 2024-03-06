@@ -1,6 +1,6 @@
 extends ./formulaireEtapier
 
-mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomologation, afficheActions })
+mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomologation, afficheActions, classeCss })
   -
     const etapeCourante = referentiel.etapeDossierAutorisee(dossier.etapeCourante(), autorisationsService.peutHomologuer)
     const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante)
@@ -14,7 +14,7 @@ mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomol
       return resultat
     }
 
-  .dossier
+  .dossier(class=classeCss)
     .contenu-dossier
       .contenu-gauche
         .contenu-statut
@@ -42,16 +42,20 @@ mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomol
                   .titre-etape!= titreEtape.libelle
     if afficheActions
       .conteneur-actions
+        if !estLectureSeule
+          button(type='button' title="Supprimer le projet d'homologation")#supprime-dossier-courant
+            img(src='/statique/assets/images/icone_croix_noire.svg' alt='')
         button.bouton.bouton-avec-icone.bouton-tertiaire#affiche-documents(type='button') Accéder aux documents
         a.lien-etape-courante(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`)
           img.fleche(src='/statique/assets/images/forme_chevron_bleu.svg' alt='')
+
 
 mixin dossierFinalise({ dossier, service })
   - const dateDecision = new Intl.DateTimeFormat('fr-FR').format(new Date(dossier.decision.dateHomologation))
   +dossier({ statut: `Décision d'homologation du ${dateDecision}`, dossier, afficheStatutHomologation: true })
 
 mixin dossierCourant({ dossier, idService, service })
-  +dossier({ statut: "Projet d'homologation", dossier, service, afficheIndiceCyber: true, afficheActions: true })
+  +dossier({ statut: "Projet d'homologation", dossier, service, afficheIndiceCyber: true, afficheActions: true, classeCss: "dossier-courant"})
 
 block append styles
   link(href='/statique/assets/styles/dossiers.css', rel='stylesheet')
