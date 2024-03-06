@@ -27,6 +27,11 @@ class ConstructeurService {
     return this;
   }
 
+  avecDescription(description) {
+    this.donnees.descriptionService = description;
+    return this;
+  }
+
   avecId(id) {
     this.donnees.id = id;
     return this;

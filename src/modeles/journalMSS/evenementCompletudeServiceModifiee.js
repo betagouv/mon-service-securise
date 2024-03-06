@@ -22,8 +22,21 @@ class EvenementCompletudeServiceModifiee extends Evenement {
     const { service } = donnees;
     const { indiceCyber, ...autreDonneesCompletude } =
       service.completudeMesures();
-    const { borneBasse, borneHaute } =
-      service.descriptionService.nombreOrganisationsUtilisatrices;
+    const {
+      typeService,
+      nombreOrganisationsUtilisatrices,
+      provenanceService,
+      statutDeploiement,
+      pointsAcces,
+      fonctionnalites,
+      fonctionnalitesSpecifiques,
+      donneesCaracterePersonnel,
+      donneesSensiblesSpecifiques,
+      localisationDonnees,
+      delaiAvantImpactCritique,
+      risqueJuridiqueFinancierReputationnel,
+    } = service.descriptionService;
+    const { borneBasse, borneHaute } = nombreOrganisationsUtilisatrices;
 
     const nombreOuUn = (nombre) => Number(nombre) || 1;
 
@@ -37,6 +50,17 @@ class EvenementCompletudeServiceModifiee extends Evenement {
           borneBasse: nombreOuUn(borneBasse),
           borneHaute: nombreOuUn(borneHaute),
         },
+        typeService,
+        provenanceService,
+        statutDeploiement,
+        pointsAcces: pointsAcces.nombre(),
+        fonctionnalites,
+        fonctionnalitesSpecifiques: fonctionnalitesSpecifiques.nombre(),
+        donneesCaracterePersonnel,
+        donneesSensiblesSpecifiques: donneesSensiblesSpecifiques.nombre(),
+        localisationDonnees,
+        delaiAvantImpactCritique,
+        risqueJuridiqueFinancierReputationnel,
       },
       date
     );
