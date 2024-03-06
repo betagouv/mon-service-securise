@@ -3,27 +3,19 @@ const { unService } = require('../../constructeurs/constructeurService');
 
 class ConstructeurEvenementCompletudeServiceModifiee {
   constructor() {
-    const service = unService().avecId('abc').donnees;
-    this.donnees = {
-      service,
-      idService: 'abc',
-      nombreTotalMesures: 54,
-      nombreMesuresCompletes: 38,
-      detailMesures: [{ idMesure: 'analyseRisques', statut: 'fait' }],
-      indiceCyber: { total: 4.1 },
-      nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
-    };
+    const service = unService().avecId('abc').construis();
+    this.donnees = { service };
     this.date = '14/02/2023';
     this.adaptateurChiffrement = { hacheSha256: (valeur) => valeur };
   }
 
-  avecIdService(idService) {
-    this.donnees.idService = idService;
+  avecService(service) {
+    this.donnees.service = service;
     return this;
   }
 
-  avecIndiceCyber(indiceCyber) {
-    this.donnees.indiceCyber = indiceCyber;
+  avecIdService(idService) {
+    this.donnees.service.id = idService;
     return this;
   }
 
@@ -38,8 +30,10 @@ class ConstructeurEvenementCompletudeServiceModifiee {
   }
 
   avecNombreOrganisationsUtilisatricesInconnu() {
-    this.donnees.nombreOrganisationsUtilisatrices.borneBasse = '0';
-    this.donnees.nombreOrganisationsUtilisatrices.borneHaute = '0';
+    this.donnees.service.descriptionService.nombreOrganisationsUtilisatrices.borneBasse =
+      '0';
+    this.donnees.service.descriptionService.nombreOrganisationsUtilisatrices.borneHaute =
+      '0';
     return this;
   }
 

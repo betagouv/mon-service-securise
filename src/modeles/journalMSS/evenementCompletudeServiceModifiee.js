@@ -1,13 +1,5 @@
 const Evenement = require('./evenement');
-const {
-  ErreurDetailMesuresManquant,
-  ErreurIdentifiantServiceManquant,
-  ErreurNombreMesuresCompletesManquant,
-  ErreurNombreOrganisationsUtilisatricesManquant,
-  ErreurNombreTotalMesuresManquant,
-  ErreurIndiceCyberManquant,
-  ErreurServiceManquant,
-} = require('./erreurs');
+const { ErreurServiceManquant } = require('./erreurs');
 
 class EvenementCompletudeServiceModifiee extends Evenement {
   constructor(donnees, options = {}) {
@@ -17,17 +9,6 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       const manque = (donnee) => typeof donnee === 'undefined';
 
       if (manque(donnees.service)) throw new ErreurServiceManquant();
-      if (manque(donnees.idService))
-        throw new ErreurIdentifiantServiceManquant();
-      if (manque(donnees.nombreTotalMesures))
-        throw new ErreurNombreTotalMesuresManquant();
-      if (manque(donnees.nombreMesuresCompletes))
-        throw new ErreurNombreMesuresCompletesManquant();
-      if (manque(donnees.detailMesures))
-        throw new ErreurDetailMesuresManquant();
-      if (manque(donnees.indiceCyber)) throw new ErreurIndiceCyberManquant();
-      if (manque(donnees.nombreOrganisationsUtilisatrices))
-        throw new ErreurNombreOrganisationsUtilisatricesManquant();
     };
 
     const enTableau = (donneesIndiceCyber) =>
@@ -38,19 +19,23 @@ class EvenementCompletudeServiceModifiee extends Evenement {
 
     valide();
 
-    const { idService, indiceCyber, service, ...donneesBrutes } = donnees;
+    const { service } = donnees;
+    const { indiceCyber, ...autreDonneesCompletude } =
+      service.completudeMesures();
+    const { borneBasse, borneHaute } =
+      service.descriptionService.nombreOrganisationsUtilisatrices;
+
+    const nombreOuUn = (nombre) => Number(nombre) || 1;
 
     super(
       'COMPLETUDE_SERVICE_MODIFIEE',
       {
-        idService: adaptateurChiffrement.hacheSha256(idService),
+        idService: adaptateurChiffrement.hacheSha256(service.id),
         detailIndiceCyber: enTableau(indiceCyber),
-        ...donneesBrutes,
+        ...autreDonneesCompletude,
         nombreOrganisationsUtilisatrices: {
-          borneBasse:
-            Number(donnees.nombreOrganisationsUtilisatrices.borneBasse) || 1,
-          borneHaute:
-            Number(donnees.nombreOrganisationsUtilisatrices.borneHaute) || 1,
+          borneBasse: nombreOuUn(borneBasse),
+          borneHaute: nombreOuUn(borneHaute),
         },
       },
       date

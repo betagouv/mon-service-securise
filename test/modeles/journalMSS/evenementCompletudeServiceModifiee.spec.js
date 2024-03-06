@@ -2,15 +2,11 @@ const expect = require('expect.js');
 const ConstructeurEvenementCompletudeServiceModifiee = require('./constructeurEvenementCompletudeServiceModifiee');
 const EvenementCompletudeServiceModifiee = require('../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee');
 const {
-  ErreurDetailMesuresManquant,
-  ErreurIdentifiantServiceManquant,
-  ErreurNombreTotalMesuresManquant,
-  ErreurNombreMesuresCompletesManquant,
-  ErreurIndiceCyberManquant,
-  ErreurNombreOrganisationsUtilisatricesManquant,
   ErreurServiceManquant,
 } = require('../../../src/modeles/journalMSS/erreurs');
 const { unService } = require('../../constructeurs/constructeurService');
+const Mesures = require('../../../src/modeles/mesures');
+const Referentiel = require('../../../src/referentiel');
 
 describe('Un événement de complétude modifiée', () => {
   const unEvenement = () =>
@@ -29,19 +25,35 @@ describe('Un événement de complétude modifiée', () => {
   });
 
   it('sait se convertir en JSON', () => {
-    const evenement = new EvenementCompletudeServiceModifiee(
-      {
-        service: unService().avecId('abc').construis(),
-        idService: 'abc',
-        nombreTotalMesures: 54,
-        nombreMesuresCompletes: 38,
-        detailMesures: [{ idMesure: 'analyseRisques', statut: 'fait' }],
-        indiceCyber: { total: 4.1 },
-        nombreOrganisationsUtilisatrices: {
-          borneBasse: 1,
-          borneHaute: 5,
-        },
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { mesureA: {} },
+      categoriesMesures: { gouvernance: 'Gouvernance' },
+      statutsMesures: { fait: 'Faite' },
+      indiceCyber: { noteMax: 5 },
+    });
+    const mesuresPersonnalises = {
+      mesureA: {
+        description: 'Mesure A',
+        referentiel: 'ANSSI',
+        categorie: 'gouvernance',
       },
+    };
+    const mesures = new Mesures(
+      {
+        mesuresGenerales: [
+          { id: 'mesureA', statut: 'fait', modalites: 'un commentaire' },
+        ],
+      },
+      referentiel,
+      mesuresPersonnalises
+    );
+    const service = unService(referentiel)
+      .avecId('ABC')
+      .avecMesures(mesures)
+      .construis();
+
+    const evenement = new EvenementCompletudeServiceModifiee(
+      { service },
       { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
     );
 
@@ -49,10 +61,13 @@ describe('Un événement de complétude modifiée', () => {
       type: 'COMPLETUDE_SERVICE_MODIFIEE',
       donnees: {
         idService: 'ABC',
-        nombreTotalMesures: 54,
-        nombreMesuresCompletes: 38,
-        detailMesures: [{ idMesure: 'analyseRisques', statut: 'fait' }],
-        detailIndiceCyber: [{ categorie: 'total', indice: 4.1 }],
+        nombreTotalMesures: 1,
+        nombreMesuresCompletes: 1,
+        detailMesures: [{ idMesure: 'mesureA', statut: 'fait' }],
+        detailIndiceCyber: [
+          { categorie: 'total', indice: 5 },
+          { categorie: 'gouvernance', indice: 5 },
+        ],
         nombreOrganisationsUtilisatrices: {
           borneBasse: 1,
           borneHaute: 5,
@@ -63,14 +78,34 @@ describe('Un événement de complétude modifiée', () => {
   });
 
   it("range les données de l'indice cyber par catégorie", () => {
-    const evenement = unEvenement()
-      .avecIndiceCyber({ total: 4.1, gouvernance: 3.8 })
-      .construis()
-      .toJSON();
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { mesureA: {} },
+      categoriesMesures: { gouvernance: 'Gouvernance' },
+      statutsMesures: { fait: 'Faite' },
+      indiceCyber: { noteMax: 5 },
+    });
+    const mesuresPersonnalises = {
+      mesureA: {
+        description: 'Mesure A',
+        referentiel: 'ANSSI',
+        categorie: 'gouvernance',
+      },
+    };
+    const mesures = new Mesures(
+      {
+        mesuresGenerales: [
+          { id: 'mesureA', statut: 'fait', modalites: 'un commentaire' },
+        ],
+      },
+      referentiel,
+      mesuresPersonnalises
+    );
+    const service = unService(referentiel).avecMesures(mesures).construis();
+    const evenement = unEvenement().avecService(service).construis().toJSON();
 
     expect(evenement.donnees.detailIndiceCyber).to.eql([
-      { categorie: 'total', indice: 4.1 },
-      { categorie: 'gouvernance', indice: 3.8 },
+      { categorie: 'total', indice: 5 },
+      { categorie: 'gouvernance', indice: 5 },
     ]);
   });
 
@@ -95,84 +130,6 @@ describe('Un événement de complétude modifiée', () => {
       );
     } catch (e) {
       expect(e).to.be.an(ErreurServiceManquant);
-      done();
-    }
-  });
-
-  it("exige que l'identifiant du service soit renseigné", (done) => {
-    try {
-      unEvenement().sans('idService').construis();
-
-      done(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurIdentifiantServiceManquant);
-      done();
-    }
-  });
-
-  it('exige que le nombre total de mesures soit renseigné', (done) => {
-    try {
-      unEvenement().sans('nombreTotalMesures').construis();
-
-      done(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurNombreTotalMesuresManquant);
-      done();
-    }
-  });
-
-  it('exige que le nombre de mesures complètes soit renseigné', (done) => {
-    try {
-      unEvenement().sans('nombreMesuresCompletes').construis();
-
-      done(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurNombreMesuresCompletesManquant);
-      done();
-    }
-  });
-
-  it('exige que le detail des mesures soit renseigné', (done) => {
-    try {
-      unEvenement().sans('detailMesures').construis();
-
-      done(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurDetailMesuresManquant);
-      done();
-    }
-  });
-
-  it("exige que l'indice cyber soit renseigné", (done) => {
-    try {
-      unEvenement().sans('indiceCyber').construis();
-
-      done(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurIndiceCyberManquant);
-      done();
-    }
-  });
-
-  it("exige que le nombre d'organisations utilisatrices soit renseigné", (done) => {
-    try {
-      unEvenement().sans('nombreOrganisationsUtilisatrices').construis();
-
-      done(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurNombreOrganisationsUtilisatricesManquant);
       done();
     }
   });
