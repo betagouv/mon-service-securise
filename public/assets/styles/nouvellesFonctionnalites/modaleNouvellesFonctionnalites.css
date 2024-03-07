@@ -102,6 +102,7 @@
 
 .modale-nouvelles-fonctionnalites .pagination .rond.actif {
   background: linear-gradient(180deg, #54b8f6 0%, #3479c9 100%);
+  background-origin: border-box;
   border: 1px solid transparent;
 }
 
