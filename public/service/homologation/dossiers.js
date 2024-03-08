@@ -35,7 +35,8 @@ $(() => {
     });
   });
 
-  $('#action-suppression-dossier-courant').on('click', async () => {
+  $('#formulaire-suppression-dossier-courant').on('submit', async (e) => {
+    e.preventDefault();
     await suppressionDossierCourant.execute({ idService });
     window.location.reload();
   });
