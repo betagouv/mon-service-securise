@@ -32,18 +32,10 @@ describe('Un événement de complétude modifiée', () => {
       indiceCyber: { noteMax: 5 },
     });
     const mesuresPersonnalises = {
-      mesureA: {
-        description: 'Mesure A',
-        referentiel: 'ANSSI',
-        categorie: 'gouvernance',
-      },
+      mesureA: { categorie: 'gouvernance' },
     };
     const mesures = new Mesures(
-      {
-        mesuresGenerales: [
-          { id: 'mesureA', statut: 'fait', modalites: 'un commentaire' },
-        ],
-      },
+      { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
       referentiel,
       mesuresPersonnalises
     );
@@ -54,7 +46,7 @@ describe('Un événement de complétude modifiée', () => {
 
     const evenement = new EvenementCompletudeServiceModifiee(
       { service },
-      { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
+      { date: '08/03/2024', adaptateurChiffrement: hacheEnMajuscules }
     );
 
     expect(evenement.toJSON()).to.eql({
@@ -68,12 +60,9 @@ describe('Un événement de complétude modifiée', () => {
           { categorie: 'total', indice: 5 },
           { categorie: 'gouvernance', indice: 5 },
         ],
-        nombreOrganisationsUtilisatrices: {
-          borneBasse: 1,
-          borneHaute: 5,
-        },
+        nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
       },
-      date: '17/11/2022',
+      date: '08/03/2024',
     });
   });
 
@@ -84,19 +73,9 @@ describe('Un événement de complétude modifiée', () => {
       statutsMesures: { fait: 'Faite' },
       indiceCyber: { noteMax: 5 },
     });
-    const mesuresPersonnalises = {
-      mesureA: {
-        description: 'Mesure A',
-        referentiel: 'ANSSI',
-        categorie: 'gouvernance',
-      },
-    };
+    const mesuresPersonnalises = { mesureA: { categorie: 'gouvernance' } };
     const mesures = new Mesures(
-      {
-        mesuresGenerales: [
-          { id: 'mesureA', statut: 'fait', modalites: 'un commentaire' },
-        ],
-      },
+      { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
       referentiel,
       mesuresPersonnalises
     );
