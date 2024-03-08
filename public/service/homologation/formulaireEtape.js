@@ -10,7 +10,7 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
   const { estLectureSeule } = JSON.parse($('#autorisations-homologuer').text());
   const $boutonSuivant = $('.bouton#suivant');
 
-  const selecteurFormulaire = 'form';
+  const selecteurFormulaire = 'form.homologation';
   const idService = $boutonSuivant.data('id-homologation');
   const idEtapeSuivante = $boutonSuivant.data('id-etape-suivante');
 
