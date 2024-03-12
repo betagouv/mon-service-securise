@@ -50,9 +50,9 @@ mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomol
           img.fleche(src='/statique/assets/images/forme_chevron_bleu.svg' alt='')
 
 
-mixin dossierFinalise({ dossier, service })
+mixin dossierFinalise({ dossier, service, afficheStatutHomologation })
   - const dateDecision = new Intl.DateTimeFormat('fr-FR').format(new Date(dossier.decision.dateHomologation))
-  +dossier({ statut: `Décision d'homologation du ${dateDecision}`, dossier, afficheStatutHomologation: true })
+  +dossier({ statut: `Décision d'homologation du ${dateDecision}`, dossier, afficheStatutHomologation })
 
 mixin dossierCourant({ dossier, idService, service })
   +dossier({ statut: "Projet d'homologation", dossier, service, afficheIndiceCyber: true, afficheActions: true, classeCss: "dossier-courant"})
@@ -86,12 +86,12 @@ block formulaire
 
     if dossierActif
       h3.titre-section Dernière homologation validée
-      +dossierFinalise({ dossier: dossierActif, service })
+      +dossierFinalise({ dossier: dossierActif, service, afficheStatutHomologation: true })
 
     if dossiersPasses.length
       h3.titre-section Homologations passées
       each dossier in dossiersPasses
-        +dossierFinalise({ dossier })
+        +dossierFinalise({ dossier, afficheStatutHomologation: false })
 
     if !dossierCourant && !dossierActif && !dossiersPasses.length
       .aucun-projets
