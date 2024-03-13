@@ -55,6 +55,7 @@ const EvenementNouveauServiceCree = require('../../src/bus/evenementNouveauServi
 const {
   EvenementDescriptionServiceModifiee,
 } = require('../../src/bus/evenementDescriptionServiceModifiee');
+const Mesures = require('../../src/modeles/mesures');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -1180,6 +1181,10 @@ describe('Le dépôt de données des homologations', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { sixMois: { nbMoisDecalage: 6 }, unAn: {} },
       statutsAvisDossierHomologation: { favorable: {} },
+      categoriesMesures: { gouvernance: {} },
+      statutsMesures: { fait: {} },
+      mesures: { mesureA: {} },
+      indiceCyber: { noteMax: 5 },
     });
 
     beforeEach(() => {
@@ -1216,6 +1221,14 @@ describe('Le dépôt de données des homologations', () => {
       adaptateurPersistance.sauvegardeHomologation = async (id, donnees) => {
         donneesPassees = { id, donnees };
       };
+      const mesuresPersonnalises = {
+        mesureA: { categorie: 'gouvernance' },
+      };
+      const mesures = new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+        referentiel,
+        mesuresPersonnalises
+      );
       const service = unService(referentiel)
         .avecId('123')
         .avecNomService('nom')
@@ -1225,6 +1238,7 @@ describe('Le dépôt de données des homologations', () => {
             .quiEstNonFinalise()
             .avecDecision('2022-11-30', 'sixMois').donnees,
         ])
+        .avecMesures(mesures)
         .construis();
 
       await depot.finaliseDossierCourant(service);

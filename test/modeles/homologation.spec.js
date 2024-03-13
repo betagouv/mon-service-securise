@@ -632,22 +632,22 @@ describe('Une homologation', () => {
       const descriptionService = uneDescriptionValide(referentiel)
         .construis()
         .toJSON();
-      let appelDelegue = false;
+      let indiceCyberPasse;
 
-      const homologation = new Homologation(
-        {
-          id: '123',
-          descriptionService,
-        },
+      const service = new Homologation(
+        { id: '123', descriptionService },
         referentiel
       );
-      homologation.dossiers.finaliseDossierCourant = () => {
-        appelDelegue = true;
+      service.indiceCyber = () => ({
+        total: 3.5,
+      });
+      service.dossiers.finaliseDossierCourant = (indiceCyber) => {
+        indiceCyberPasse = indiceCyber;
       };
 
-      homologation.finaliseDossierCourant();
+      service.finaliseDossierCourant();
 
-      expect(appelDelegue).to.be(true);
+      expect(indiceCyberPasse).to.be(3.5);
     });
   });
 
