@@ -352,7 +352,7 @@ describe("Un dossier d'homologation", () => {
       referentiel.recharge({ documentsHomologation: { unDocument: {} } });
       const dossier = new Dossier({}, referentiel);
 
-      expect(() => dossier.enregistreFinalisation()).to.throwError((e) => {
+      expect(() => dossier.enregistreFinalisation(0)).to.throwError((e) => {
         expect(e).to.be.an(ErreurDossierNonFinalisable);
         expect(e.message).to.equal(
           'Ce dossier comporte des étapes incomplètes.'
@@ -378,8 +378,9 @@ describe("Un dossier d'homologation", () => {
         .quiEstNonFinalise()
         .construit();
 
-      dossierComplet.enregistreFinalisation();
+      dossierComplet.enregistreFinalisation(3.5);
       expect(dossierComplet.finalise).to.be(true);
+      expect(dossierComplet.indiceCyber).to.be(3.5);
     });
   });
 

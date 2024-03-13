@@ -138,7 +138,7 @@ class Dossier extends InformationsHomologation {
     this.decision.enregistre(dateHomologation, dureeHomologation);
   }
 
-  enregistreFinalisation() {
+  enregistreFinalisation(indiceCyber) {
     if (!this.estComplet()) {
       const etapesIncompletes = Dossier.etapesObligatoires().filter(
         (etape) => !this[etape].estComplete()
@@ -150,6 +150,7 @@ class Dossier extends InformationsHomologation {
     }
 
     this.finalise = true;
+    this.indiceCyber = indiceCyber;
   }
 
   estComplet() {
