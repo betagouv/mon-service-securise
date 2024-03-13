@@ -31,7 +31,7 @@ mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service,
       label(for = identifiantInput)= description
       br
       if exemple
-        label.exemple(for = identifiantInput)= exemple
+        .exemple= exemple
         br
     .message-erreur=messageErreur
 
