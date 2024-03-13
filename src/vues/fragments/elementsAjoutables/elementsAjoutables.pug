@@ -1,4 +1,4 @@
-mixin zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule)
+mixin zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule, identifiantChampTitre)
   each valeur, cle in donneesElement
     - var id = cle + '-' + nom + '-' + index;
     if valeur.label
@@ -10,21 +10,22 @@ mixin zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule)
       value != valeur.valeur,
       placeholder = valeur.valeurExemple,
       readonly = lectureSeule
+      aria-labelledby = identifiantChampTitre || ''
     )
 
-mixin zoneSaisie(nom, donneesElement, index, lectureSeule)
+mixin zoneSaisie(nom, donneesElement, index, lectureSeule, identifiantChampTitre)
   .item-ajoute
     if(!lectureSeule)
       button.icone-suppression(title="Suppression de l'élément")
     div(id = 'element-' + nom + '-' + index)
-      +zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule)
+      +zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule, identifiantChampTitre)
 
-mixin elementsAjoutables({ identifiantConteneur, nom, donneesElements = [], texteLienAjouter = 'Ajouter', zoneSaisieVideVisible = false, structureZoneSaisieVide = {}, lectureSeule = false })
+mixin elementsAjoutables({ identifiantConteneur, nom, donneesElements = [], texteLienAjouter = 'Ajouter', zoneSaisieVideVisible = false, structureZoneSaisieVide = {}, lectureSeule = false, identifiantChampTitre })
   div(id = identifiantConteneur class = 'elements-ajoutables')
     if zoneSaisieVideVisible && donneesElements.length === 0
-      +zoneSaisie(nom, structureZoneSaisieVide, 0, lectureSeule)
+      +zoneSaisie(nom, structureZoneSaisieVide, 0, lectureSeule, identifiantChampTitre)
     each donneesElement, index in donneesElements
-      +zoneSaisie(nom, donneesElement, index, lectureSeule)
+      +zoneSaisie(nom, donneesElement, index, lectureSeule, identifiantChampTitre)
   if(!lectureSeule)
     a(
       class = 'nouvel-item',
