@@ -156,7 +156,7 @@ class Homologation {
   }
 
   finaliseDossierCourant() {
-    this.dossiers.finaliseDossierCourant();
+    this.dossiers.finaliseDossierCourant(this.indiceCyber().total);
   }
 
   fonctionAutoriteHomologation() {
