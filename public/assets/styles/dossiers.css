@@ -165,3 +165,9 @@
   filter: brightness(0) invert(28%) sepia(65%) saturate(2283%)
     hue-rotate(186deg) brightness(101%) contrast(103%);
 }
+
+.homologation .conteneur-statut-indice-cyber {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
