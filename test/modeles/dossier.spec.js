@@ -41,6 +41,7 @@ describe("Un dossier d'homologation", () => {
         documents: ['unDocument'],
         finalise: true,
         archive: true,
+        indiceCyber: 3.5,
       },
       referentiel
     );
@@ -62,6 +63,7 @@ describe("Un dossier d'homologation", () => {
       documents: ['unDocument'],
       finalise: true,
       archive: true,
+      indiceCyber: 3.5,
     });
   });
 
