@@ -22,7 +22,12 @@ class Dossier extends InformationsHomologation {
     donneesDossier.finalise = !!donneesDossier.finalise;
 
     super({
-      proprietesAtomiquesFacultatives: ['id', 'finalise', 'archive'],
+      proprietesAtomiquesFacultatives: [
+        'id',
+        'finalise',
+        'archive',
+        'indiceCyber',
+      ],
     });
     this.renseigneProprietes(donneesDossier, referentiel);
     this.referentiel = referentiel;
