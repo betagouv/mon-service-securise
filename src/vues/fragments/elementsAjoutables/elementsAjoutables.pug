@@ -15,7 +15,7 @@ mixin zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule)
 mixin zoneSaisie(nom, donneesElement, index, lectureSeule)
   .item-ajoute
     if(!lectureSeule)
-      .icone-suppression
+      button.icone-suppression(title="Suppression de l'élément")
     div(id = 'element-' + nom + '-' + index)
       +zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule)
 
