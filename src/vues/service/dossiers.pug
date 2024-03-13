@@ -1,6 +1,6 @@
 extends ./formulaireEtapier
 
-mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomologation, afficheActions, classeCss })
+mixin dossier({ statut, dossier, service, indiceCyber, afficheStatutHomologation, afficheActions, classeCss })
   -
     const etapeCourante = referentiel.etapeDossierAutorisee(dossier.etapeCourante(), autorisationsService.peutHomologuer)
     const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante)
@@ -19,16 +19,16 @@ mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomol
       .contenu-gauche
         .contenu-statut
           .statut= statut
-          if afficheIndiceCyber
-            - const indiceCyber = service.indiceCyber().total.toFixed(1)
-            .indice-cyber
-              b Indice cyber&nbsp;
-              span.conteneur-indice-cyber
-                span.note-indice-cyber!= `${indiceCyber}/${referentiel.indiceCyberNoteMax()}`
-          if afficheStatutHomologation
-            - const statutHomologation = dossier.statutHomologation()
-            .statut-homologation(class=statutHomologation)
-              span!= referentiel.statutHomologation(statutHomologation).libelle
+          .conteneur-statut-indice-cyber
+            if afficheStatutHomologation
+              - const statutHomologation = dossier.statutHomologation()
+              .statut-homologation(class=statutHomologation)
+                span!= referentiel.statutHomologation(statutHomologation).libelle
+            if indiceCyber !== undefined
+              .indice-cyber
+                b Indice cyber&nbsp;
+                span.conteneur-indice-cyber
+                  span.note-indice-cyber!= `${indiceCyber.toFixed(1)}/${referentiel.indiceCyberNoteMax()}`
         .contenu-details
           .details
             if dossier.finalise
@@ -52,10 +52,10 @@ mixin dossier({ statut, dossier, service, afficheIndiceCyber, afficheStatutHomol
 
 mixin dossierFinalise({ dossier, service, afficheStatutHomologation })
   - const dateDecision = new Intl.DateTimeFormat('fr-FR').format(new Date(dossier.decision.dateHomologation))
-  +dossier({ statut: `Décision d'homologation du ${dateDecision}`, dossier, afficheStatutHomologation })
+  +dossier({ statut: `Décision d'homologation du ${dateDecision}`, dossier, afficheStatutHomologation, indiceCyber: dossier.indiceCyber })
 
 mixin dossierCourant({ dossier, idService, service })
-  +dossier({ statut: "Projet d'homologation", dossier, service, afficheIndiceCyber: true, afficheActions: true, classeCss: "dossier-courant"})
+  +dossier({ statut: "Projet d'homologation", dossier, service, indiceCyber: service.indiceCyber().total, afficheActions: true, classeCss: "dossier-courant"})
 
 block append styles
   link(href='/statique/assets/styles/dossiers.css', rel='stylesheet')
