@@ -53,11 +53,11 @@ form .decoration {
   color: var(--texte-clair);
 }
 
-label.exemple::before {
+.exemple::before {
   content: 'ex : ';
 }
 
-label.exemple {
+.exemple {
   display: inline-block;
 
   margin: 0 0 0 2.5em;
