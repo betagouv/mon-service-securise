@@ -27,7 +27,7 @@ mixin elementsAjoutables({ identifiantConteneur, nom, donneesElements = [], text
     each donneesElement, index in donneesElements
       +zoneSaisie(nom, donneesElement, index, lectureSeule, identifiantChampTitre)
   if(!lectureSeule)
-    a(
+    button(
       class = 'nouvel-item',
       id = 'ajout-element-' + nom
     )= texteLienAjouter

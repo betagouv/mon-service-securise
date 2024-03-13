@@ -410,6 +410,10 @@ button.bouton.en-cours-chargement::before {
 
 .nouvel-item {
   font-weight: bold;
+  border: none;
+  background: transparent;
+  color: var(--bleu-mise-en-avant);
+  cursor: pointer;
 }
 
 form.homologation label p.description:first-of-type {
