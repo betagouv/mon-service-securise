@@ -102,7 +102,7 @@ mixin formulaireDescriptionService(idHomologation)
           readonly = estLectureSeule
         )= service.descriptionService.presentation
 
-      label Accès
+      label(id='label-acces') Accès
         br
         +elementsAjoutablesDescription({
           identifiantConteneur: 'points-acces',
@@ -111,7 +111,8 @@ mixin formulaireDescriptionService(idHomologation)
           donnees: service.descriptionService.pointsAcces.toJSON(),
           texteLienAjouter: 'Ajouter un accès',
           zoneSaisieVideVisible: true,
-          lectureSeule: estLectureSeule
+          lectureSeule: estLectureSeule,
+          identifiantChampTitre: 'label-acces'
         })
 
     section
@@ -130,7 +131,8 @@ mixin formulaireDescriptionService(idHomologation)
         nom: 'fonctionnalite',
         donnees: service.descriptionService.fonctionnalitesSpecifiques.toJSON(),
         texteLienAjouter: 'Ajouter une fonctionnalité',
-        lectureSeule: estLectureSeule
+        lectureSeule: estLectureSeule,
+        identifiantChampTitre: 'fonctionnalites-label'
       })
 
     section
@@ -149,7 +151,8 @@ mixin formulaireDescriptionService(idHomologation)
         nom: 'donnees-sensibles',
         donnees: service.descriptionService.donneesSensiblesSpecifiques.toJSON(),
         texteLienAjouter: 'Ajouter des données',
-        lectureSeule: estLectureSeule
+        lectureSeule: estLectureSeule,
+        identifiantChampTitre: 'donneesCaracterePersonnel-label'
       })
 
     section

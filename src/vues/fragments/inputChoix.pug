@@ -6,7 +6,7 @@ mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service,
   - const classeGroupe = type === 'checkbox' ? 'casesACocher' : ''
 
   fieldset(id = nom, class = classeGroupe, required = requisGroupe)
-    legend.titre= titre
+    legend.titre(id = `${nom}-label`)= titre
       if decoration
         .decoration !{decoration}
     if description
