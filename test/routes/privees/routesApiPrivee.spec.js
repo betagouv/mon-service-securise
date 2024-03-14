@@ -744,29 +744,24 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/utilisateurCourant`', () => {
-    it("renvoie l'utilisateur correspondant à l'identifiant", (done) => {
+    it("renvoie des infos de l'utilisateur correspondant à l'identifiant", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
-
+      let idUtilisateurRecu = null;
       const depotDonnees = testeur.depotDonnees();
-      depotDonnees.utilisateur = (idUtilisateur) => {
-        try {
-          expect(idUtilisateur).to.equal('123');
-          return Promise.resolve({ toJSON: () => ({ id: '123' }) });
-        } catch (erreur) {
-          return Promise.reject(erreur);
-        }
+      depotDonnees.utilisateur = async (idUtilisateur) => {
+        idUtilisateurRecu = idUtilisateur;
+        return unUtilisateur().quiSAppelle('Marie Jeanne').construis();
       };
 
-      axios
-        .get('http://localhost:1234/api/utilisateurCourant')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
+      const response = await axios.get(
+        'http://localhost:1234/api/utilisateurCourant'
+      );
 
-          const { utilisateur } = reponse.data;
-          expect(utilisateur.id).to.equal('123');
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      expect(response.status).to.equal(200);
+      expect(idUtilisateurRecu).to.equal('123');
+      const { utilisateur } = response.data;
+      expect(utilisateur.prenomNom).to.equal('Marie Jeanne');
+      expect(utilisateur.profilEstComplet).to.be(true);
     });
 
     it("répond avec un code 401 quand il n'y a pas d'identifiant", (done) => {

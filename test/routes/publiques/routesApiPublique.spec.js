@@ -456,22 +456,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         };
       });
 
-      it("retourne les informations de l'utilisateur", (done) => {
-        axios
-          .post('http://localhost:1234/api/token', {
-            login: 'jean.dupont@mail.fr',
-            motDePasse: 'mdp_12345',
-          })
-          .then((reponse) => {
-            expect(reponse.status).to.equal(200);
-            expect(reponse.data.utilisateur).to.eql({
-              prenomNom: 'Jean Dupont',
-            });
-            done();
-          })
-          .catch(done);
-      });
-
       it('pose un cookie', (done) => {
         axios
           .post('http://localhost:1234/api/token', {
