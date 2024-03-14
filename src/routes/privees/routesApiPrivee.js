@@ -248,7 +248,12 @@ const routesApiPrivee = ({
     const idUtilisateur = requete.idUtilisateurCourant;
     if (idUtilisateur) {
       depotDonnees.utilisateur(idUtilisateur).then((utilisateur) => {
-        reponse.json({ utilisateur: utilisateur.toJSON() });
+        reponse.json({
+          utilisateur: {
+            prenomNom: utilisateur.prenomNom(),
+            profilEstComplet: utilisateur.profilEstComplet(),
+          },
+        });
       });
     } else reponse.status(401).send("Pas d'utilisateur courant");
   });

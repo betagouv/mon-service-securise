@@ -173,23 +173,6 @@ class Utilisateur extends Base {
     if (desinscrisTransac)
       await adaptateurEmail.desinscrisEmailsTransactionnels(this.email);
   }
-
-  toJSON() {
-    return {
-      id: this.id,
-      cguAcceptees: this.accepteCGU(),
-      initiales: this.initiales(),
-      prenomNom: this.prenomNom(),
-      telephone: this.telephone || '',
-      postes: this.postes || [],
-      posteDetaille: this.posteDetaille(),
-      nomEntitePublique: this.nomEntitePublique || '',
-      departementEntitePublique: this.departementEntitePublique || '',
-      profilEstComplet: this.profilEstComplet(),
-      infolettreAcceptee: this.accepteInfolettre(),
-      transactionnelAccepte: this.accepteTransactionnel(),
-    };
-  }
 }
 
 module.exports = Utilisateur;

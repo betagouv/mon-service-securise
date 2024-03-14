@@ -158,7 +158,6 @@ const routesApiPublique = ({
         await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
 
         reponse.json({
-          utilisateur: utilisateur.toJSON(),
           nouvelleFonctionnalite,
         });
       } catch (e) {

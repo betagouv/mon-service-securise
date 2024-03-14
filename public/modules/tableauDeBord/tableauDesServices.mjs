@@ -148,31 +148,27 @@ const tableauDesServices = {
   recupereServices: () => {
     tableauDesServices.estEnChargement = true;
     axios
-      .get('/api/utilisateurCourant')
-      .then(() =>
-        axios
-          .get('/api/services')
-          .then(({ data }) => {
-            remplisCartesInformations(data.resume);
-            tableauDesServices.nombreServices = data.resume.nombreServices;
-            tableauDesServices.donnees = data.services;
-            tableauDesServices.donnees.forEach((s) => {
-              s.ordreStatutHomologation = s.statutHomologation?.ordre ?? -1;
-            });
-            tableauDesServices.afficheDonnees();
-            tableauDesServices.afficheEtatSelection();
-          })
-          .then(() => axios.get('/api/services/indices-cyber'))
-          .then(({ data }) => {
-            remplisCarteInformationIndiceCyber(data.resume.indiceCyberMoyen);
-            data.services.forEach((service) => {
-              const cible = tableauDesServices.donnees.find(
-                (donneesService) => donneesService.id === service.id
-              );
-              cible.indiceCyber = service.indiceCyber;
-            });
-          })
-      )
+      .get('/api/services')
+      .then(({ data }) => {
+        remplisCartesInformations(data.resume);
+        tableauDesServices.nombreServices = data.resume.nombreServices;
+        tableauDesServices.donnees = data.services;
+        tableauDesServices.donnees.forEach((s) => {
+          s.ordreStatutHomologation = s.statutHomologation?.ordre ?? -1;
+        });
+        tableauDesServices.afficheDonnees();
+        tableauDesServices.afficheEtatSelection();
+      })
+      .then(() => axios.get('/api/services/indices-cyber'))
+      .then(({ data }) => {
+        remplisCarteInformationIndiceCyber(data.resume.indiceCyberMoyen);
+        data.services.forEach((service) => {
+          const cible = tableauDesServices.donnees.find(
+            (donneesService) => donneesService.id === service.id
+          );
+          cible.indiceCyber = service.indiceCyber;
+        });
+      })
       .finally(() => {
         tableauDesServices.estEnChargement = false;
         tableauDesServices.afficheDonnees();
