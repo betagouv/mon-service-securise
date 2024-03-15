@@ -626,31 +626,6 @@ describe('Une homologation', () => {
     });
   });
 
-  describe('sur demande de finalisation du dossier courant', () => {
-    it('délègue aux Dossiers la responsabilité', () => {
-      const referentiel = Referentiel.creeReferentielVide();
-      const descriptionService = uneDescriptionValide(referentiel)
-        .construis()
-        .toJSON();
-      let indiceCyberPasse;
-
-      const service = new Homologation(
-        { id: '123', descriptionService },
-        referentiel
-      );
-      service.indiceCyber = () => ({
-        total: 3.5,
-      });
-      service.dossiers.finaliseDossierCourant = (indiceCyber) => {
-        indiceCyberPasse = indiceCyber;
-      };
-
-      service.finaliseDossierCourant();
-
-      expect(indiceCyberPasse).to.be(3.5);
-    });
-  });
-
   describe("sur demande d'instanciation d'un service pour un utilisateur", () => {
     it('retourne un service qui utilise des valeurs par défaut', () => {
       const utilisateur = unUtilisateur().construis();

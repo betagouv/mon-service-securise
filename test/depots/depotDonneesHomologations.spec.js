@@ -1199,6 +1199,14 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('finalise le dossier courant', async () => {
+      const uneMesureFaiteSurDeux = new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+        referentiel,
+        {
+          mesureA: { categorie: 'gouvernance' },
+          mesureB: { categorie: 'gouvernance' },
+        }
+      );
       const service = unService(referentiel)
         .avecId('123')
         .avecNomService('nom')
@@ -1208,12 +1216,14 @@ describe('Le dépôt de données des homologations', () => {
             .quiEstNonFinalise()
             .avecDecision('2022-11-30', 'sixMois').donnees,
         ])
+        .avecMesures(uneMesureFaiteSurDeux)
         .construis();
       expect(service.dossiers.items[0].finalise).to.be(false);
 
       await depot.finaliseDossierCourant(service);
 
       expect(service.dossiers.items[0].finalise).to.be(true);
+      expect(service.dossiers.items[0].indiceCyber).to.be(2.5);
     });
 
     it('enregistre le service', async () => {
