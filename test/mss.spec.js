@@ -2,6 +2,7 @@ const axios = require('axios');
 const expect = require('expect.js');
 
 const testeurMSS = require('./routes/testeurMSS');
+const { unUtilisateur } = require('./constructeurs/constructeurUtilisateur');
 
 describe('Le serveur MSS', () => {
   const testeur = testeurMSS();
@@ -183,7 +184,7 @@ describe('Le serveur MSS', () => {
 
   describe('quand requête GET sur `/utilisateur/edition`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
-      const utilisateur = { accepteCGU: () => true };
+      const utilisateur = unUtilisateur().quiAccepteCGU().construis();
       testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateur);
       testeur
         .middleware()

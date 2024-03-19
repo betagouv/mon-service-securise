@@ -28,8 +28,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         email: 'jean.dupont@mail.fr',
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
-        nomEntitePublique: 'Ville de Paris',
-        departementEntitePublique: '75',
+        nomEntite: 'Ville de Paris',
+        departementEntite: '75',
         cguAcceptees: 'true',
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
@@ -64,11 +64,11 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           'email',
           'telephone',
           'cguAcceptees',
-          'nomEntitePublique',
-          'departementEntitePublique',
           'infolettreAcceptee',
           'transactionnelAccepte',
           'postes.*',
+          'nomEntite',
+          'departementEntite',
         ],
         {
           method: 'post',
@@ -139,10 +139,18 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     it("demande au dépôt de créer l'utilisateur", (done) => {
       testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
         const donneesAttendues = {
-          ...donneesRequete,
-          cguAcceptees: true,
+          prenom: 'Jean',
+          nom: 'Dupont',
+          telephone: '0100000000',
+          entite: {
+            nom: 'Ville de Paris',
+            departement: '75',
+          },
           infolettreAcceptee: true,
           transactionnelAccepte: true,
+          postes: ['RSSI', "Chargé des systèmes d'informations"],
+          cguAcceptees: true,
+          email: 'jean.dupont@mail.fr',
         };
         expect(donneesUtilisateur).to.eql(donneesAttendues);
         return Promise.resolve(utilisateur);

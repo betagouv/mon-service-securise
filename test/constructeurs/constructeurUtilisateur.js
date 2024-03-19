@@ -12,8 +12,10 @@ class ConstructeurUtilisateur {
       telephone: '',
       cguAcceptees: '',
       postes: [],
-      nomEntitePublique: '',
-      departementEntitePublique: '',
+      entite: {
+        nom: '',
+        departement: '',
+      },
       infolettreAcceptee: '',
       transactionnelAccepte: '',
     };
@@ -34,8 +36,8 @@ class ConstructeurUtilisateur {
     return this;
   }
 
-  avecNomEntitePublique(nomEntite) {
-    this.donnees.nomEntitePublique = nomEntite;
+  avecNomEntite(nomEntite) {
+    this.donnees.entite.nom = nomEntite;
     return this;
   }
 
@@ -66,8 +68,13 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  quiAccepteCGU() {
+    this.donnees.cguAcceptees = true;
+    return this;
+  }
+
   quiDependDu(departement) {
-    this.donnees.departementEntitePublique = departement;
+    this.donnees.entite.departement = departement;
     return this;
   }
 

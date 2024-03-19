@@ -11,9 +11,7 @@ const rechercheSuggestions = (recherche, callback) => {
   }
 
   const parametresRequete = { params: { recherche } };
-  const departementSelectionne = $(
-    '#departementEntitePublique-selectize'
-  ).val();
+  const departementSelectionne = $('#departementEntite-selectize').val();
   if (departementSelectionne !== '')
     parametresRequete.params.departement = departementSelectionne;
 
@@ -29,11 +27,11 @@ const rechercheSuggestions = (recherche, callback) => {
 };
 
 $(() => {
-  const nom = $('#nomEntitePublique').val();
-  const departement = $('#departementEntitePublique').val();
+  const nom = $('#nomEntite').val();
+  const departement = $('#departementEntite').val();
   const enModeEdition = !!nom && !!departement;
 
-  const $champSelectize = $('#nomEntitePublique-selectize').selectize({
+  const $champSelectize = $('#nomEntite-selectize').selectize({
     plugins: ['clear_button'],
     options: enModeEdition ? [uneSuggestion(departement, nom)] : [],
     items: enModeEdition ? [`${nom} (${departement})`] : [],
@@ -60,10 +58,10 @@ $(() => {
       rechercheSuggestions(recherche, callback);
     },
     onItemAdd: (_value, $item) => {
-      $('#nomEntitePublique').val($item.data('nom'));
+      $('#nomEntite').val($item.data('nom'));
     },
     onItemRemove: () => {
-      $('#nomEntitePublique').val('');
+      $('#nomEntite').val('');
     },
     score: () => {
       const aucunFiltrage = () => 1;
@@ -72,7 +70,7 @@ $(() => {
   });
 
   const departements = JSON.parse($('#donnees-departements').text());
-  $('#departementEntitePublique-selectize').selectize({
+  $('#departementEntite-selectize').selectize({
     plugins: ['aucun_resultat', 'clear_button'],
     options: departements.map((d) => ({ ...d, label: `${d.nom} (${d.code})` })),
     items: enModeEdition ? [departement] : [],
@@ -89,7 +87,7 @@ $(() => {
         `<div class="option">${escape(option.label)}</div>`,
     },
     onItemAdd: (_value, $item) => {
-      $('#departementEntitePublique').val($item.data('departement').toString());
+      $('#departementEntite').val($item.data('departement').toString());
     },
   });
 });

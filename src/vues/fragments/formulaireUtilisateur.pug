@@ -22,6 +22,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
     block champs-formulaire
       -
         const patternNomPrenom = '^\\D+$';
+        const entite = donnees.entite || {};
         const messageErreurNomPrenom = (label) => `
           Le ${label} est obligatoire. Veuillez renseigner des lettres avec ou sans signes diacritiques.
           Les chiffres ne sont pas autorisés.
@@ -89,27 +90,27 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
         .message-erreur Le numéro de téléphone doit respecter le format 0000000000.
 
       .requis
-        label(for = 'departementEntitePublique-selectize') Département de votre organisation
+        label(for = 'departementEntite-selectize') Département de votre organisation
           select(
-            id = 'departementEntitePublique-selectize',
-            name = 'departementEntitePublique-selectize',
+            id = 'departementEntite-selectize',
+            name = 'departementEntite-selectize',
             placeHolder = 'ex : 33, Morbihan',
             required,
           )
           .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
-          input(type='hidden' name='departementEntitePublique' id='departementEntitePublique' value != donnees.departementEntitePublique)
+          input(type='hidden' name='departementEntite' id='departementEntite' value != entite.departement)
 
       .requis
-        label(for = 'nomEntitePublique-selectize') Nom de votre organisation
+        label(for = 'nomEntite-selectize') Nom de votre organisation
           select(
-            id = 'nomEntitePublique-selectize',
-            name = 'nomEntitePublique-selectize',
+            id = 'nomEntite-selectize',
+            name = 'nomEntite-selectize',
             placeHolder = 'ex : Agglomération de Mansart, Société Y',
             required,
           )
           .icone-chargement
           .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
-          input(type='hidden' name='nomEntitePublique' id='nomEntitePublique' value != donnees.nomEntitePublique)
+          input(type='hidden' name='nomEntite' id='nomEntite' value != entite.nom)
 
       .requis
         label.fonction-poste Fonction/poste

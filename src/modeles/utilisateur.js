@@ -1,11 +1,8 @@
 const Base = require('./base');
-const {
-  ErreurDepartementInconnu,
-  ErreurEmailManquant,
-  ErreurProprieteManquante,
-} = require('../erreurs');
+const { ErreurEmailManquant, ErreurProprieteManquante } = require('../erreurs');
 const Referentiel = require('../referentiel');
 const { formatteListeFr } = require('../utilitaires/liste');
+const Entite = require('./entite');
 
 const valide = (donnees) => {
   const { email } = donnees;
@@ -26,13 +23,12 @@ class Utilisateur extends Base {
         'telephone',
         'cguAcceptees',
         'postes',
-        'nomEntitePublique',
-        'departementEntitePublique',
         'infolettreAcceptee',
         'transactionnelAccepte',
       ],
     });
     valide(donnees);
+    this.entite = new Entite(donnees.entite);
     this.renseigneProprietes(donnees);
     this.adaptateurJWT = adaptateurJWT;
   }
@@ -59,6 +55,14 @@ class Utilisateur extends Base {
       });
     };
 
+    const validePresenceProprietesObjet = (proprietes) => {
+      proprietes.forEach((propriete) => {
+        if (typeof donnees[propriete] !== 'object') {
+          envoieErreurProprieteManquante(propriete);
+        }
+      });
+    };
+
     const validePresenceProprietesBooleenes = (proprietes) => {
       proprietes.forEach((propriete) => {
         if (typeof donnees[propriete] !== 'boolean') {
@@ -75,29 +79,17 @@ class Utilisateur extends Base {
       });
     };
 
-    const valideDepartement = (codeDepartement) => {
-      if (!referentiel.departement(codeDepartement)) {
-        throw new ErreurDepartementInconnu(
-          `Le département identifié par "${codeDepartement}" n'est pas répertorié`
-        );
-      }
-    };
-
     if (!utilisateurExistant) {
       validePresenceProprietes(['email']);
     }
-    validePresenceProprietes([
-      'prenom',
-      'nom',
-      'nomEntitePublique',
-      'departementEntitePublique',
-    ]);
+    validePresenceProprietes(['prenom', 'nom']);
+    validePresenceProprietesObjet(['entite']);
+    Entite.valideDonnees(donnees.entite, referentiel);
     validePresenceProprietesBooleenes([
       'infolettreAcceptee',
       'transactionnelAccepte',
     ]);
     validePresenceProprieteListes(['postes']);
-    valideDepartement(donnees.departementEntitePublique, referentiel);
   }
 
   static nomsProprietesBase() {
@@ -107,8 +99,6 @@ class Utilisateur extends Base {
       'email',
       'telephone',
       'cguAcceptees',
-      'nomEntitePublique',
-      'departementEntitePublique',
       'infolettreAcceptee',
       'transactionnelAccepte',
       'postes.*',
