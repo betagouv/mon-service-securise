@@ -17,7 +17,7 @@ class EvenementProfilUtilisateurModifie extends Evenement {
       'PROFIL_UTILISATEUR_MODIFIE',
       {
         idUtilisateur: adaptateurChiffrement.hacheSha256(utilisateur.id),
-        departementOrganisation: utilisateur.departementEntitePublique,
+        departementOrganisation: utilisateur.entite?.departement,
         roles: utilisateur.postes ?? [],
       },
       date

@@ -31,7 +31,9 @@ describe('Le serveur MSS des routes /service/*', () => {
         .recharge({ actionsSaisie: { descriptionService: { position: 0 } } });
       testeur.depotDonnees().utilisateur = async (idUtilisateur) => ({
         id: idUtilisateur,
-        nomEntitePublique: 'une entité',
+        entite: {
+          nom: 'une entité',
+        },
       });
     });
 
@@ -40,7 +42,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
       testeur.depotDonnees().utilisateur = async (idUtilisateur) => {
         idRecu = idUtilisateur;
-        return { id: idUtilisateur, nomEntitePublique: 'une entité' };
+        return { id: idUtilisateur, entite: { nom: 'une entité' } };
       };
 
       await axios('http://localhost:1234/service/creation');

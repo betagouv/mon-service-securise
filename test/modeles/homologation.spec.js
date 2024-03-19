@@ -636,10 +636,8 @@ describe('Une homologation', () => {
       ).to.eql({ borneBasse: 0, borneHaute: 0 });
     });
 
-    it("ajoute le nom de l'entité publique si l'utilisateur en a une", () => {
-      const utilisateur = unUtilisateur()
-        .avecNomEntitePublique('ANSSI')
-        .construis();
+    it("ajoute le nom de l'entité si l'utilisateur en a une", () => {
+      const utilisateur = unUtilisateur().avecNomEntite('ANSSI').construis();
       const service = Homologation.creePourUnUtilisateur(utilisateur);
 
       expect(service.descriptionService.organisationsResponsables).to.eql([

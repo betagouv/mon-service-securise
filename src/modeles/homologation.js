@@ -278,9 +278,9 @@ class Homologation {
         },
       },
     };
-    if (utilisateur.nomEntitePublique) {
+    if (utilisateur.entite.nom) {
       donneesService.descriptionService.organisationsResponsables = [
-        utilisateur.nomEntitePublique,
+        utilisateur.entite.nom,
       ];
     }
 

@@ -170,8 +170,6 @@ describe('Un utilisateur', () => {
       'email',
       'telephone',
       'cguAcceptees',
-      'nomEntitePublique',
-      'departementEntitePublique',
       'infolettreAcceptee',
       'transactionnelAccepte',
       'postes.*',
@@ -189,7 +187,12 @@ describe('Un utilisateur', () => {
     });
 
     const verifiePresencePropriete = (clef, nom, done) => {
-      delete donnees[clef];
+      if (clef.includes('.')) {
+        const clefs = clef.split('.');
+        delete donnees[clefs[0]][clefs[1]];
+      } else {
+        delete donnees[clef];
+      }
       try {
         Utilisateur.valideDonnees(donnees, referentiel);
         done(
@@ -208,8 +211,10 @@ describe('Un utilisateur', () => {
         nom: 'Ferrance',
         email: 'sandy.ferrance@domaine.co',
         postes: ['RSSI'],
-        nomEntitePublique: 'Ville de Paris',
-        departementEntitePublique: '75',
+        entite: {
+          nom: 'Ville de Paris',
+          departement: '75',
+        },
         infolettreAcceptee: true,
         transactionnelAccepte: true,
       };
@@ -242,18 +247,14 @@ describe('Un utilisateur', () => {
       }
     });
 
-    it("exige que le nom de l'entité publique soit renseigné", (done) => {
-      verifiePresencePropriete(
-        'nomEntitePublique',
-        "nom de l'entité publique",
-        done
-      );
+    it("exige que le nom de l'entité soit renseigné", (done) => {
+      verifiePresencePropriete('entite.nom', "nom de l'entité", done);
     });
 
     it('exige que le département soit renseigné', (done) => {
       verifiePresencePropriete(
-        'departementEntitePublique',
-        "département de l'entité publique",
+        'entite.departement',
+        "département de l'entité",
         done
       );
     });
@@ -271,7 +272,7 @@ describe('Un utilisateur', () => {
     });
 
     it('exige un département présent dans le référentiel', (done) => {
-      donnees.departementEntitePublique = 'codeDepartementInconnu';
+      donnees.entite.departement = 'codeDepartementInconnu';
       try {
         Utilisateur.valideDonnees(donnees, referentiel);
         done(
