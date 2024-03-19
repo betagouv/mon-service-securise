@@ -66,6 +66,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  quiDependDu(departement) {
+    this.donnees.departementEntitePublique = departement;
+    return this;
+  }
+
   construis() {
     return new Utilisateur(this.donnees);
   }

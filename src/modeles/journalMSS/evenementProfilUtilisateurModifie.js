@@ -1,13 +1,14 @@
 const Evenement = require('./evenement');
-const { ErreurIdentifiantUtilisateurManquant } = require('./erreurs');
+const { ErreurUtilisateurManquant } = require('./erreurs');
+const Utilisateur = require('../utilisateur');
 
 class EvenementProfilUtilisateurModifie extends Evenement {
-  constructor(donnees, options = {}) {
+  constructor(utilisateur, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
     const valide = () => {
-      if (!donnees.idUtilisateur)
-        throw new ErreurIdentifiantUtilisateurManquant();
+      if (!utilisateur || !(utilisateur instanceof Utilisateur))
+        throw new ErreurUtilisateurManquant();
     };
 
     valide();
@@ -15,9 +16,9 @@ class EvenementProfilUtilisateurModifie extends Evenement {
     super(
       'PROFIL_UTILISATEUR_MODIFIE',
       {
-        idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur),
-        departementOrganisation: donnees.departementEntitePublique,
-        roles: donnees.postes ?? [],
+        idUtilisateur: adaptateurChiffrement.hacheSha256(utilisateur.id),
+        departementOrganisation: utilisateur.departementEntitePublique,
+        roles: utilisateur.postes ?? [],
       },
       date
     );

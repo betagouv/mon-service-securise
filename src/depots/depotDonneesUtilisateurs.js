@@ -31,7 +31,7 @@ const creeDepot = (config = {}) => {
     if (!email)
       throw new ErreurEmailManquant('Le champ email doit être renseigné');
 
-    const u = await adaptateurPersistance.utilisateurAvecEmail(email);
+    let u = await adaptateurPersistance.utilisateurAvecEmail(email);
     if (u)
       throw new ErreurUtilisateurExistant(
         'Utilisateur déjà existant pour cette adresse email',
@@ -46,6 +46,7 @@ const creeDepot = (config = {}) => {
     donneesUtilisateur.transactionnelAccepte = true;
 
     await adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur);
+    u = await utilisateur(id);
 
     await adaptateurJournalMSS.consigneEvenement(
       new EvenementNouvelUtilisateurInscrit({
@@ -54,13 +55,10 @@ const creeDepot = (config = {}) => {
     );
 
     await adaptateurJournalMSS.consigneEvenement(
-      new EvenementProfilUtilisateurModifie({
-        idUtilisateur: id,
-        ...donneesUtilisateur,
-      }).toJSON()
+      new EvenementProfilUtilisateurModifie(u).toJSON()
     );
 
-    return utilisateur(id);
+    return u;
   };
 
   const utilisateurAFinaliser = async (idReset) => {
@@ -104,13 +102,11 @@ const creeDepot = (config = {}) => {
   const metsAJourUtilisateur = async (id, donnees) => {
     delete donnees.motDePasse;
     await adaptateurPersistance.metsAJourUtilisateur(id, donnees);
+    const u = await utilisateur(id);
     await adaptateurJournalMSS.consigneEvenement(
-      new EvenementProfilUtilisateurModifie({
-        idUtilisateur: id,
-        ...donnees,
-      }).toJSON()
+      new EvenementProfilUtilisateurModifie(u).toJSON()
     );
-    return utilisateur(id);
+    return u;
   };
 
   const reinitialiseMotDePasse = async (email) => {

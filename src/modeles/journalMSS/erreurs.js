@@ -7,6 +7,7 @@ class ErreurIdentifiantUtilisateurManquant extends ErreurJournal {}
 class ErreurIdentifiantMesureManquant extends ErreurJournal {}
 class ErreurIdentifiantRetourUtilisateurManquant extends ErreurJournal {}
 class ErreurServiceManquant extends ErreurJournal {}
+class ErreurUtilisateurManquant extends ErreurJournal {}
 
 module.exports = {
   ErreurAutorisationsServiceManquantes,
@@ -17,4 +18,5 @@ module.exports = {
   ErreurIdentifiantMesureManquant,
   ErreurIdentifiantRetourUtilisateurManquant,
   ErreurServiceManquant,
+  ErreurUtilisateurManquant,
 };
