@@ -78,6 +78,10 @@ const creeServeur = (
     reponse.render('aPropos');
   });
 
+  app.get('/securite', (_requete, reponse) => {
+    reponse.render('securite');
+  });
+
   app.get('/accessibilite', (_requete, reponse) => {
     reponse.render('accessibilite');
   });
