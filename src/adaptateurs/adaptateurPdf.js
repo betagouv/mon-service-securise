@@ -153,11 +153,14 @@ const genereTamponHomologation = async (donnees) => {
   try {
     navigateur = await lanceNavigateur();
     const compileImageEnHTMLBase64 = (buffer, largeur, hauteur) =>
-      pug.compileFile('src/pdf/modeles/tamponHomologation.base64.pug')({
-        base64: buffer.toString('base64'),
-        largeur,
-        hauteur,
-      });
+      Buffer.from(
+        pug.compileFile('src/pdf/modeles/tamponHomologation.base64.pug')({
+          base64: buffer.toString('base64'),
+          largeur,
+          hauteur,
+        }),
+        'utf-8'
+      );
 
     const fichiers = [];
     /* eslint-disable no-await-in-loop */

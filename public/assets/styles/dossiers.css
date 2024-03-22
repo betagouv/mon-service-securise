@@ -171,3 +171,10 @@
   flex-direction: row;
   gap: 16px;
 }
+
+.homologation #bouton-tampon-homologation {
+  pointer-events: auto;
+  z-index: 2;
+  position: relative;
+  height: fit-content;
+}
