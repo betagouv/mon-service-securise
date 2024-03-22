@@ -8,7 +8,7 @@ const uneMinute = 60 * 1000;
 const parametresCommuns = (typeRequete, doitFermerConnexion = false) => ({
   windowMs: uneMinute,
   handler: (requete, reponse) => {
-    const attaque = requete.headers['x-real-ip']?.replaceAll('.', '*');
+    const attaque = requete.ip.replaceAll('.', '*');
 
     if (typeRequete === 'Navigation')
       // eslint-disable-next-line no-console
@@ -24,9 +24,6 @@ const parametresCommuns = (typeRequete, doitFermerConnexion = false) => ({
     if (doitFermerConnexion) reponse.end();
     else reponse.render('erreurTropDeTrafic');
   },
-  keyGenerator: (requete) =>
-    // Utilise l'IP de l'utilisateur : https://doc.scalingo.com/platform/internals/routing
-    requete.headers['x-real-ip'],
 });
 
 const adaptateurProtection = {
