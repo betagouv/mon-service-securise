@@ -332,12 +332,12 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    it('sert un fichier qui contient le nom du service', (done) => {
+    it("sert un fichier qui porte le nom de l'archive", (done) => {
       testeur.adaptateurHorloge().maintenant = () => new Date(2023, 0, 28);
 
       verifieNomFichierServi(
         'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
-        'MSS_tampon_homologation_un_service.zip',
+        'MSS_tampon_homologation.zip',
         done
       );
     });

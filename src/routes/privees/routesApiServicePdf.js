@@ -1,5 +1,4 @@
 const express = require('express');
-const { decode } = require('html-entities');
 const Autorisation = require('../../modeles/autorisations/autorisation');
 const { genereGradientConique } = require('../../pdf/graphiques/camembert');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
@@ -171,17 +170,12 @@ const routesApiServicePdf = ({
         });
         const archive = await adaptateurZip.genereArchive(fichiers);
 
-        const nomService = decode(
-          service.nomService().substring(0, 30).replaceAll(' ', '_')
-        );
-        const nomFichier = `MSS_tampon_homologation_${nomService}.zip`;
-        const uriFichier = encodeURIComponent(nomFichier);
+        // On omet volontairement le nom du service car on rencontre de nombreux soucis de formattage
+        // (accents, emoji, troncature, etc..)
+        const nomFichier = 'MSS_tampon_homologation.zip';
         reponse
           .contentType('application/zip')
-          .set(
-            'Content-Disposition',
-            `attachment; filename="${nomFichier}"; filename*=UTF-8''${uriFichier}`
-          )
+          .attachment(nomFichier)
           .send(archive);
       } catch (e) {
         suite(e);
