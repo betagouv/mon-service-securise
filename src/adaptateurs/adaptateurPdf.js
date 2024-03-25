@@ -3,6 +3,7 @@ const pug = require('pug');
 const { readFile } = require('fs/promises');
 const { decode } = require('html-entities');
 const { resolve } = require('path');
+const puppeteer = require('puppeteer');
 const { lanceNavigateur } = require('./adaptateurPdf.puppeteer');
 const {
   fabriqueAdaptateurGestionErreur,
@@ -21,12 +22,18 @@ const formatPdfA4 = (enteteHtml, piedPageHtml) => ({
   margin: { bottom: '2cm', left: '1cm', right: '1cm', top: '23mm' },
 });
 
+const connexionNavigateur = async () =>
+  puppeteer.connect({
+    browserWSEndpoint: `${process.env.GENERATION_PDF_URL}?token=${process.env.GENERATION_PDF_TOKEN}`,
+  });
+
 const generePdfs = async (pagesHtml) => {
   /* eslint-disable no-await-in-loop */
   /* eslint-disable no-restricted-syntax */
   let navigateur = null;
+
   try {
-    navigateur = await lanceNavigateur();
+    navigateur = await connexionNavigateur();
 
     const pagesPdf = [];
     for (const { corps, entete, piedPage } of pagesHtml) {
@@ -37,8 +44,11 @@ const generePdfs = async (pagesHtml) => {
     }
 
     return pagesPdf;
+  } catch (e) {
+    console.warn(e);
+    console.warn('hello');
   } finally {
-    if (navigateur !== null) await navigateur.close();
+    if (navigateur !== null) navigateur.close();
   }
   /* eslint-enable no-await-in-loop */
   /* eslint-enable no-restricted-syntax */
