@@ -172,7 +172,7 @@ const routesApiServicePdf = ({
         const archive = await adaptateurZip.genereArchive(fichiers);
 
         const nomService = decode(
-          service.nomService().substring(0, 30).replace(' ', '_')
+          service.nomService().substring(0, 30).replaceAll(' ', '_')
         );
         const nomFichier = `MSS_tampon_homologation_${nomService}.zip`;
         const uriFichier = encodeURIComponent(nomFichier);
