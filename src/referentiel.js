@@ -185,11 +185,15 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const premiereEtapeParcours = () =>
     etapesParcoursHomologation().find((e) => e.numero === 1);
 
-  const derniereEtapeParcours = () =>
-    etapesParcoursHomologation().find(
+  const derniereEtapeParcours = (peutHomologuer = true) =>
+    etapesParcoursHomologation(peutHomologuer).find(
       (e) =>
         e.numero ===
-        Math.max(...etapesParcoursHomologation().map(({ numero }) => numero))
+        Math.max(
+          ...etapesParcoursHomologation(peutHomologuer).map(
+            ({ numero }) => numero
+          )
+        )
     );
 
   const etapeExiste = (idEtape) =>

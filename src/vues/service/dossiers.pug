@@ -4,7 +4,7 @@ mixin dossier({ statut, dossier, service, indiceCyber, afficheStatutHomologation
   -
     const etapeCourante = referentiel.etapeDossierAutorisee(dossier.etapeCourante(), autorisationsService.peutHomologuer)
     const numeroDerniereEtapeCompletee = referentiel.numeroEtape(etapeCourante)
-    const nombreTotalEtapes = referentiel.derniereEtapeParcours().numero
+    const nombreTotalEtapes = referentiel.derniereEtapeParcours(autorisationsService.peutHomologuer).numero
     const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
     const texteTronque = (texte, tailleLimite) => {
       const texteDecode = decode(texte);
@@ -35,11 +35,10 @@ mixin dossier({ statut, dossier, service, indiceCyber, afficheStatutHomologation
               div!= `Autorité d'homologation : ${texteTronque(dossier.autorite.nom, 37)} | ${texteTronque(dossier.autorite.fonction, 37)}`
               div= `Date d'échéance : ${dossier.descriptionProchaineDateHomologation()}`
             else
-              if(!estLectureSeule)
-                - const titreEtape = referentiel.etapesParcoursHomologation().find((e) => e.id === etapeCourante)
-                .contenu-etape-courante
-                  .numero-etape!= `Étape ${numeroDerniereEtapeCompletee} sur ${nombreTotalEtapes}`
-                  .titre-etape!= titreEtape.libelle
+              - const titreEtape = referentiel.etapesParcoursHomologation().find((e) => e.id === etapeCourante)
+              .contenu-etape-courante
+                .numero-etape!= `Étape ${numeroDerniereEtapeCompletee} sur ${nombreTotalEtapes}`
+                .titre-etape!= titreEtape.libelle
     if afficheActions
       .conteneur-actions
         if !estLectureSeule
