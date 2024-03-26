@@ -26,7 +26,13 @@ class Dossiers extends ElementsConstructibles {
   }
 
   archives() {
-    return this.items.filter((i) => i.archive);
+    return this.items
+      .filter((i) => i.archive)
+      .sort(
+        (a, b) =>
+          new Date(b.dateProchaineHomologation()) -
+          new Date(a.dateProchaineHomologation())
+      );
   }
 
   aUnDossierEnCoursDeValidite() {
