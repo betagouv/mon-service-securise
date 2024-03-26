@@ -28,6 +28,10 @@ const EvenementUtilisateurModifie = require('./evenementUtilisateurModifie');
 const {
   consigneProfilUtilisateurModifieDansJournal,
 } = require('./abonnements/consigneProfilUtilisateurModifieDansJournal');
+const {
+  consigneNouvelUtilisateurInscritDansJournal,
+} = require('./abonnements/consigneNouvelUtilisateurInscritDansJournal');
+const EvenementUtilisateurInscrit = require('./evenementUtilisateurInscrit');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -59,6 +63,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementUtilisateurModifie,
     consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementUtilisateurInscrit,
+    consigneNouvelUtilisateurInscritDansJournal({ adaptateurJournal })
   );
 };
 
