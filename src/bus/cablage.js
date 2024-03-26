@@ -65,10 +65,10 @@ const cableTousLesAbonnes = (
     consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal })
   );
 
-  busEvenements.abonne(
-    EvenementUtilisateurInscrit,
-    consigneNouvelUtilisateurInscritDansJournal({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementUtilisateurInscrit, [
+    consigneNouvelUtilisateurInscritDansJournal({ adaptateurJournal }),
+    consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal }),
+  ]);
 };
 
 module.exports = { cableTousLesAbonnes };
