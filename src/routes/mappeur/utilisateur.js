@@ -6,21 +6,16 @@ const obtentionDonneesDeBaseUtilisateur = (corps) => ({
   nom: corps.nom,
   telephone: corps.telephone,
   entite: {
-    nom: corps.nomEntite,
-    departement: corps.departementEntite,
+    siret: corps.siretEntite,
   },
   infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
   transactionnelAccepte: valeurBooleenne(corps.transactionnelAccepte),
   postes: corps.postes,
 });
 
-const messageErreurDonneesUtilisateur = (
-  donneesRequete,
-  utilisateurExiste,
-  referentiel
-) => {
+const messageErreurDonneesUtilisateur = (donneesRequete, utilisateurExiste) => {
   try {
-    Utilisateur.valideDonnees(donneesRequete, referentiel, utilisateurExiste);
+    Utilisateur.valideDonnees(donneesRequete, utilisateurExiste);
     return { donneesInvalides: false };
   } catch (erreur) {
     return { donneesInvalides: true, messageErreur: erreur.message };

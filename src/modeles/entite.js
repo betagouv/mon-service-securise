@@ -1,43 +1,42 @@
 const Base = require('./base');
+const { ErreurProprieteManquante } = require('../erreurs');
 const {
-  ErreurDepartementInconnu,
-  ErreurProprieteManquante,
-} = require('../erreurs');
-const Referentiel = require('../referentiel');
+  fabriqueAdaptateurGestionErreur,
+} = require('../adaptateurs/fabriqueAdaptateurGestionErreur');
 
 class Entite extends Base {
   constructor(donnees = {}) {
     super({
-      proprietesAtomiquesRequises: ['nom', 'departement'],
+      proprietesAtomiquesRequises: ['siret'],
+      proprietesAtomiquesFacultatives: ['nom', 'departement'],
     });
     this.renseigneProprietes(donnees);
   }
 
-  static valideDonnees(
-    donnees = {},
-    referentiel = Referentiel.creeReferentielVide()
-  ) {
-    const envoieErreurProprieteManquante = (propriete) => {
+  static valideDonnees(donnees = {}) {
+    if (typeof donnees.siret !== 'string' || donnees.siret === '') {
       throw new ErreurProprieteManquante(
-        `La propriété "${propriete}" est requise`
+        'La propriété "entite.siret" est requise'
       );
-    };
-
-    const valideDepartement = (codeDepartement) => {
-      if (!referentiel.departement(codeDepartement)) {
-        throw new ErreurDepartementInconnu(
-          `Le département identifié par "${codeDepartement}" n'est pas répertorié`
-        );
-      }
-    };
-
-    if (typeof donnees.nom !== 'string' || donnees.nom === '') {
-      envoieErreurProprieteManquante('entite.nom');
     }
-    if (typeof donnees.departement !== 'string' || donnees.departement === '') {
-      envoieErreurProprieteManquante('entite.departement');
+  }
+
+  static async completeDonnees(donnees, adaptateurServiceAnnuaire) {
+    const organisations =
+      await adaptateurServiceAnnuaire.rechercheOrganisations(donnees.siret);
+    if (organisations.length !== 1) {
+      fabriqueAdaptateurGestionErreur().logueErreur(
+        new Error(
+          `Une seule organisation était attendue dans la recherche par SIRET`
+        ),
+        {
+          siret: donnees.siret,
+          reponseApiEntreprise: organisations,
+        }
+      );
+      return donnees;
     }
-    valideDepartement(donnees.departement);
+    return organisations[0];
   }
 }
 

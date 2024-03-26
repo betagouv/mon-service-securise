@@ -18,7 +18,11 @@ const rechercheOrganisations = (terme, departement) =>
     .then((reponse) =>
       reponse.data.results
         .filter((r) => r.siege.departement !== null)
-        .map((r) => ({ nom: r.nom_complet, departement: r.siege.departement }))
+        .map((r) => ({
+          nom: r.nom_complet,
+          departement: r.siege.departement,
+          siret: r.siege.siret,
+        }))
     )
     .catch((e) => {
       fabriqueAdaptateurGestionErreur().logueErreur(e, {

@@ -45,6 +45,7 @@
   color: var(--texte-fonce);
   text-shadow: none;
   font-weight: normal;
+  margin-right: 24px;
 }
 
 .selectize-control.multi .selectize-input .item a.remove {

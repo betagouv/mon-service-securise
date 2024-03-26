@@ -10,7 +10,6 @@ const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
 const fabriqueAdaptateurPersistance = require('./src/adaptateurs/fabriqueAdaptateurPersistance');
-const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
@@ -33,6 +32,7 @@ const { cableTousLesAbonnes } = require('./src/bus/cablage');
 const {
   fabriqueAdaptateurChiffrement,
 } = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
+const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
@@ -50,6 +50,7 @@ const moteurRegles = new MoteurRegles(referentiel);
 
 const depotDonnees = DepotDonnees.creeDepot({
   adaptateurChiffrement,
+  adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
   busEvenements,
 });
 
