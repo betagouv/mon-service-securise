@@ -8,14 +8,13 @@ const {
   ErreurUtilisateurInexistant,
   ErreurMotDePasseIncorrect,
 } = require('../erreurs');
-const EvenementNouvelUtilisateurInscrit = require('../modeles/journalMSS/evenementNouvelUtilisateurInscrit');
 const Utilisateur = require('../modeles/utilisateur');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
+const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
 
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement,
-    adaptateurJournalMSS,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = adaptateurUUIDParDefaut,
@@ -49,10 +48,8 @@ const creeDepot = (config = {}) => {
     await adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur);
     u = await utilisateur(id);
 
-    await adaptateurJournalMSS.consigneEvenement(
-      new EvenementNouvelUtilisateurInscrit({
-        idUtilisateur: id,
-      }).toJSON()
+    await busEvenements.publie(
+      new EvenementUtilisateurInscrit({ utilisateur: u })
     );
 
     await busEvenements.publie(
