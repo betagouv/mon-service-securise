@@ -4,7 +4,6 @@ const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
@@ -21,6 +20,7 @@ const {
 } = require('../constructeurs/constructeurAutorisation');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 const EvenementUtilisateurModifie = require('../../src/bus/evenementUtilisateurModifie');
+const EvenementUtilisateurInscrit = require('../../src/bus/evenementUtilisateurInscrit');
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
@@ -105,13 +105,10 @@ describe('Le dépôt de données des utilisateurs', () => {
 
   describe('sur demande de mise à jour des informations du profil utilisateur', () => {
     let depot;
-    let adaptateurJournalMSS;
 
     beforeEach(() => {
-      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurChiffrement,
-        adaptateurJournalMSS,
         adaptateurPersistance: unePersistanceMemoire()
           .ajouteUnUtilisateur({
             id: '123',
@@ -345,7 +342,6 @@ describe('Le dépôt de données des utilisateurs', () => {
 
     describe("quand l'utilisateur n'existe pas déjà", () => {
       const adaptateurHorloge = {};
-      let adaptateurJournalMSS;
       let adaptateurPersistance;
 
       beforeEach(() => {
@@ -357,14 +353,12 @@ describe('Le dépôt de données des utilisateurs', () => {
           },
         };
         adaptateurHorloge.maintenant = () => new Date(2000, 1, 1, 12, 0);
-        adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
         adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
           { utilisateurs: [] },
           adaptateurHorloge
         );
         depot = DepotDonneesUtilisateurs.creeDepot({
           adaptateurChiffrement,
-          adaptateurJournalMSS,
           adaptateurJWT,
           adaptateurPersistance,
           adaptateurUUID,
@@ -443,21 +437,16 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(utilisateur.dateCreation).to.eql(adaptateurHorloge.maintenant());
       });
 
-      it("consigne un événement traçant l'inscription de l'utilisateur", async () => {
-        const evenementConsignes = [];
-        adaptateurJournalMSS.consigneEvenement = async (evenement) => {
-          evenementConsignes.push(evenement);
-        };
-
+      it("publie sur le bus d'événements l'inscription de l'utilisateur", async () => {
         await depot.nouvelUtilisateur({
           prenom: 'Jean',
           nom: 'Dupont',
           email: 'jean.dupont@mail.fr',
         });
 
-        expect(evenementConsignes.map((e) => e.type)).to.eql([
-          'NOUVEL_UTILISATEUR_INSCRIT',
-        ]);
+        expect(bus.aRecuUnEvenement(EvenementUtilisateurInscrit)).to.be(true);
+        const recu = bus.recupereEvenement(EvenementUtilisateurInscrit);
+        expect(recu.utilisateur.id).not.to.be(undefined);
       });
 
       it("publie sur le bus d'événements l'utilisateur modifié", async () => {

@@ -30,7 +30,6 @@ const creeDepot = (config = {}) => {
 
   const depotUtilisateurs = depotDonneesUtilisateurs.creeDepot({
     adaptateurChiffrement,
-    adaptateurJournalMSS,
     adaptateurJWT,
     adaptateurPersistance,
     adaptateurUUID,
