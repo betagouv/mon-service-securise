@@ -506,7 +506,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur.referentiel().recharge({
         etapesParcoursHomologation: [
           { numero: 1, id: 'dateTelechargement' },
-          { numero: 2, id: 'deuxieme' },
+          { numero: 2, id: 'deuxieme', reserveePeutHomologuer: true },
         ],
       });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async () => {};
@@ -583,6 +583,26 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
 
     it("redirige vers l'étape en cours si l'étape demandée est postérieure", async () => {
+      const reponse = await axios(
+        'http://localhost:1234/service/456/homologation/edition/etape/deuxieme'
+      );
+
+      expect(reponse.request.res.responseUrl).to.contain(
+        'edition/etape/dateTelechargement'
+      );
+    });
+
+    it("redirige vers la dernière étape disponible si l'étape demandée n'est pas accessible pour l'utilisateur", async () => {
+      const serviceARenvoyer = unService().construis();
+      serviceARenvoyer.dossierCourant = () => ({
+        etapeCourante: () => 'deuxieme',
+        dateTelechargement: { date: new Date() },
+      });
+      testeur.depotDonnees().homologation = async () => serviceARenvoyer;
+      testeur.depotDonnees().autorisationACharger = uneAutorisation()
+        .deContributeur()
+        .construis();
+
       const reponse = await axios(
         'http://localhost:1234/service/456/homologation/edition/etape/deuxieme'
       );

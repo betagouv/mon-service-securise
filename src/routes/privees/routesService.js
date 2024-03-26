@@ -223,7 +223,7 @@ const routesService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     async (requete, reponse, suite) => {
-      const { homologation } = requete;
+      const { homologation, autorisationService } = requete;
       const { idEtape } = requete.params;
 
       if (!referentiel.etapeExiste(idEtape)) {
@@ -235,7 +235,10 @@ const routesService = ({
         await depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id);
 
         const h = await depotDonnees.homologation(homologation.id);
-        const etapeCourante = h.dossierCourant().etapeCourante();
+        const etapeCourante = referentiel.etapeDossierAutorisee(
+          h.dossierCourant().etapeCourante(),
+          autorisationService.peutHomologuer()
+        );
         const numeroEtapeCourante = referentiel.numeroEtape(etapeCourante);
         const numeroEtapeDemandee = referentiel.numeroEtape(idEtape);
         if (numeroEtapeDemandee > numeroEtapeCourante) {
