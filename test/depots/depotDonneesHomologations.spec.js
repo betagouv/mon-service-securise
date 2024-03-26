@@ -56,11 +56,18 @@ const {
   EvenementDescriptionServiceModifiee,
 } = require('../../src/bus/evenementDescriptionServiceModifiee');
 const Mesures = require('../../src/modeles/mesures');
+const EvenementDossierHomologationFinalise = require('../../src/bus/evenementDossierHomologationFinalise');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
 
 describe('Le dépôt de données des homologations', () => {
+  let busEvenements;
+
+  beforeEach(() => {
+    busEvenements = fabriqueBusPourLesTests();
+  });
+
   it("connaît toutes les homologations d'un utilisateur donné", async () => {
     const referentiel = Referentiel.creeReferentielVide();
 
@@ -197,7 +204,6 @@ describe('Le dépôt de données des homologations', () => {
   describe("sur demande d'associations de mesures à un service", () => {
     let adaptateurPersistance;
     let depot;
-    let busEvenements;
 
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { gouvernance: 'Gouvernance' },
@@ -206,7 +212,6 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     beforeEach(() => {
-      busEvenements = fabriqueBusPourLesTests();
       adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
         .ajouteUnService(
@@ -580,7 +585,6 @@ describe('Le dépôt de données des homologations', () => {
     let adaptateurPersistance;
     let adaptateurTracking;
     let adaptateurUUID;
-    let busEvenements;
     let depot;
     let referentiel;
 
@@ -594,7 +598,6 @@ describe('Le dépôt de données des homologations', () => {
         .construis();
       adaptateurTracking = unAdaptateurTracking().construis();
       adaptateurUUID = { genereUUID: () => 'unUUID' };
-      busEvenements = fabriqueBusPourLesTests();
       referentiel = Referentiel.creeReferentielVide();
 
       depot = DepotDonneesHomologations.creeDepot({
@@ -1195,6 +1198,7 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurJournalMSS,
         adaptateurPersistance,
         referentiel,
+        busEvenements,
       });
     });
 
@@ -1259,11 +1263,7 @@ describe('Le dépôt de données des homologations', () => {
       expect(donneesPassees.donnees).to.eql(donnees);
     });
 
-    it('consigne un événement « Nouvelle homologation créée » dans le journal MSS', async () => {
-      let evenementPasse = {};
-      adaptateurJournalMSS.consigneEvenement = async (evenement) => {
-        evenementPasse = evenement;
-      };
+    it("publie sur le bus d'événements le dossier finalisé", async () => {
       const service = unService(referentiel)
         .avecId('123')
         .avecNomService('nom')
@@ -1277,9 +1277,15 @@ describe('Le dépôt de données des homologations', () => {
 
       await depot.finaliseDossierCourant(service);
 
-      expect(evenementPasse.type).to.equal('NOUVELLE_HOMOLOGATION_CREEE');
-      expect(evenementPasse.donnees.dateHomologation).to.equal('2022-11-30');
-      expect(evenementPasse.donnees.dureeHomologationMois).to.equal(6);
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementDossierHomologationFinalise)
+      ).to.be(true);
+      const recu = busEvenements.recupereEvenement(
+        EvenementDossierHomologationFinalise
+      );
+      expect(recu.idService).to.be('123');
+      expect(recu.dossier.decision.dateHomologation).to.be('2022-11-30');
+      expect(recu.dossier.decision.dureeValidite).to.be('sixMois');
     });
   });
 
