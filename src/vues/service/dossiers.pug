@@ -49,7 +49,7 @@ mixin dossier({ statut, dossier, service, indiceCyber, afficheStatutHomologation
         a.lien-etape-courante(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`)
           img.fleche(src='/statique/assets/images/forme_chevron_bleu.svg' alt='')
     if afficheTamponHomologation
-      button.bouton.bouton-tertiaire.bouton-avec-icone#bouton-tampon-homologation(type='button') Télécharger le tampon
+      button.bouton.bouton-tertiaire.bouton-avec-icone#bouton-tampon-homologation(type='button') Télécharger l'encart d'homologation
 
 
 mixin dossierFinalise({ dossier, service, afficheStatutHomologation, afficheTamponHomologation })
