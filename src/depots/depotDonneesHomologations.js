@@ -6,7 +6,6 @@ const {
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
-const EvenementNouvelleHomologationCreee = require('../modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const Autorisation = require('../modeles/autorisations/autorisation');
 const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresServiceModifiees');
@@ -14,6 +13,7 @@ const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree'
 const {
   EvenementDescriptionServiceModifiee,
 } = require('../bus/evenementDescriptionServiceModifiee');
+const EvenementDossierHomologationFinalise = require('../bus/evenementDossierHomologationFinalise');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -276,15 +276,12 @@ const creeDepot = (config = {}) => {
     const { id, ...donneesAPersister } = service.donneesAPersister().toutes();
     await p.sauvegarde(id, donneesAPersister);
 
-    const evenement = new EvenementNouvelleHomologationCreee({
-      idService: id,
-      dateHomologation: dossierAvantFinalisation.decision.dateHomologation,
-      dureeHomologationMois: referentiel.nbMoisDecalage(
-        dossierAvantFinalisation.decision.dureeValidite
-      ),
-    });
-
-    await adaptateurJournalMSS.consigneEvenement(evenement.toJSON());
+    await busEvenements.publie(
+      new EvenementDossierHomologationFinalise({
+        idService: id,
+        dossier: dossierAvantFinalisation,
+      })
+    );
   };
 
   const nouveauService = async (idUtilisateur, donneesService) => {
