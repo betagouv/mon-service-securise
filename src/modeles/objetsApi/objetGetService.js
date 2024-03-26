@@ -6,6 +6,10 @@ const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 const donnees = (service, autorisation, referentiel) => {
   const enCoursEdition =
     service.dossiers.statutSaisie() === Dossiers.A_COMPLETER;
+  const etapeCouranteAutorisee = referentiel.etapeDossierAutorisee(
+    service.dossiers.dossierCourant()?.etapeCourante(),
+    autorisation.peutHomologuer()
+  );
   return {
     id: service.id,
     nomService: service.nomService(),
@@ -22,9 +26,7 @@ const donnees = (service, autorisation, referentiel) => {
       statutHomologation: {
         id: service.dossiers.statutHomologation(),
         enCoursEdition,
-        ...(enCoursEdition && {
-          etapeCourante: service.dossiers.dossierCourant()?.etapeCourante(),
-        }),
+        ...(enCoursEdition && { etapeCourante: etapeCouranteAutorisee }),
         ...referentiel.statutHomologation(
           service.dossiers.statutHomologation()
         ),
