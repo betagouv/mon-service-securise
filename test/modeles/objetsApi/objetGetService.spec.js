@@ -106,6 +106,39 @@ describe("L'objet d'API de `GET /service`", () => {
     expect(donnees.statutHomologation).to.be(undefined);
   });
 
+  it("montre la dernière étape disponible si l'utilisateur n'a pas le droit d'homologuer", () => {
+    const referentielDeuxEtapes = Referentiel.creeReferentiel({
+      echeancesRenouvellement: { unAn: {} },
+      statutsAvisDossierHomologation: { favorable: {} },
+      statutsHomologation: {
+        nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
+      },
+      etapesParcoursHomologation: [
+        { numero: 1, libelle: 'Autorité', id: 'autorite' },
+        {
+          numero: 2,
+          libelle: 'Avis',
+          id: 'avis',
+          reserveePeutHomologuer: true,
+        },
+      ],
+    });
+
+    const serviceAvecDossierFinalise = unService(referentielDeuxEtapes)
+      .avecId('123')
+      .avecDossiers([
+        unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
+      ])
+      .construis();
+
+    const donnees = objetGetService.donnees(
+      serviceAvecDossierFinalise,
+      lectureSurHomologuer,
+      referentielDeuxEtapes
+    );
+    expect(donnees.statutHomologation.etapeCourante).to.be('autorite');
+  });
+
   describe('sur demande des permissions', () => {
     it("autorise la gestion de contributeurs si l'utilisateur est propriétaire", () => {
       const unServiceDontAestCreateur = unService()
