@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
+const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
 const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
@@ -18,6 +19,7 @@ const Utilisateur = require('../../src/modeles/utilisateur');
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 const EvenementUtilisateurModifie = require('../../src/bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../../src/bus/evenementUtilisateurInscrit');
@@ -25,11 +27,13 @@ const EvenementUtilisateurInscrit = require('../../src/bus/evenementUtilisateurI
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
   let adaptateurChiffrement;
+  let adaptateurRechercheEntite;
   let bus;
 
   beforeEach(() => {
     adaptateurJWT = 'Un adaptateur';
     adaptateurChiffrement = fauxAdaptateurChiffrement();
+    adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
     bus = fabriqueBusPourLesTests();
   });
 
@@ -110,31 +114,54 @@ describe('Le dépôt de données des utilisateurs', () => {
       depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurChiffrement,
         adaptateurPersistance: unePersistanceMemoire()
-          .ajouteUnUtilisateur({
-            id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-          })
+          .ajouteUnUtilisateur(
+            unUtilisateur()
+              .avecId('123')
+              .quiSAppelle('Jean Dupont')
+              .avecEmail('jean.dupont@mail.fr').donnees
+          )
           .construis(),
+        adaptateurRechercheEntite,
         busEvenements: bus,
       });
     });
 
     it('met les informations à jour', async () => {
-      await depot.metsAJourUtilisateur('123', {
-        prenom: 'Jérôme',
-        nom: 'Dubois',
-      });
+      await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur().avecId('123').quiSAppelle('Jérôme Dubois').donnees
+      );
       const u = await depot.utilisateur('123');
       expect(u.prenom).to.equal('Jérôme');
       expect(u.nom).to.equal('Dubois');
     });
 
+    it("complète les informations de l'entité et les enregistre", async () => {
+      adaptateurRechercheEntite.rechercheOrganisations = async () => [
+        {
+          nom: 'MonEntite',
+          departement: '75',
+          siret: '12345',
+        },
+      ];
+
+      const utilisateur = await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur()
+          .avecId('123')
+          .quiTravaillePourUneEntiteAvecSiret('12345').donnees
+      );
+
+      expect(utilisateur.entite.departement).to.equal('75');
+      expect(utilisateur.entite.siret).to.equal('12345');
+      expect(utilisateur.entite.nom).to.equal('MonEntite');
+    });
+
     it('ignore les demandes de changement de mot de passe', async () => {
       await depot.metsAJourMotDePasse('123', 'mdp_12345');
       await depot.metsAJourUtilisateur('123', {
-        nom: 'Dubois',
+        ...unUtilisateur().avecId('123').avecEmail('jean.dupont@mail.fr')
+          .donnees,
         motDePasse: 'non pris en compte',
       });
 
@@ -151,10 +178,10 @@ describe('Le dépôt de données des utilisateurs', () => {
     });
 
     it("publie sur le bus d'événements l'utilisateur modifié", async () => {
-      await depot.metsAJourUtilisateur('123', {
-        prenom: 'Jérôme',
-        nom: 'Dubois',
-      });
+      await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur().avecId('123').quiSAppelle('Jérôme Dubois').donnees
+      );
 
       expect(bus.aRecuUnEvenement(EvenementUtilisateurModifie)).to.be(true);
       const recu = bus.recupereEvenement(EvenementUtilisateurModifie);
@@ -362,6 +389,7 @@ describe('Le dépôt de données des utilisateurs', () => {
           adaptateurJWT,
           adaptateurPersistance,
           adaptateurUUID,
+          adaptateurRechercheEntite,
           busEvenements: bus,
         });
       });
@@ -374,7 +402,9 @@ describe('Le dépôt de données des utilisateurs', () => {
         };
 
         try {
-          await depot.nouvelUtilisateur({ prenom: 'Jean', nom: 'Dupont' });
+          await depot.nouvelUtilisateur(
+            unUtilisateur().quiSAppelle('Jean Dupont').sansEmail().donnees
+          );
         } catch (erreur) {
           erreurLevee = true;
           expect(erreur).to.be.a(ErreurEmailManquant);
@@ -384,25 +414,51 @@ describe('Le dépôt de données des utilisateurs', () => {
         }
       });
 
-      it('génère un UUID pour cet utilisateur', async () => {
+      it("peut créer un utilisateur avec uniquement un email (comme lorsqu'on invite un collaborateur)", async () => {
         const utilisateur = await depot.nouvelUtilisateur({
-          prenom: 'Jean',
-          nom: 'Dupont',
           email: 'jean.dupont@mail.fr',
         });
 
+        expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
+      });
+
+      it('génère un UUID pour cet utilisateur', async () => {
+        const utilisateur = await depot.nouvelUtilisateur(
+          unUtilisateur()
+            .quiSAppelle('Jean Dupont')
+            .avecEmail('jean.dupont@mail.fr').donnees
+        );
+
         expect(utilisateur.id).to.equal('1');
+      });
+
+      it("complète les informations de l'entité et les enregistre", async () => {
+        adaptateurRechercheEntite.rechercheOrganisations = async () => [
+          {
+            nom: 'MonEntite',
+            departement: '75',
+            siret: '12345',
+          },
+        ];
+
+        const utilisateur = await depot.nouvelUtilisateur(
+          unUtilisateur().quiTravaillePourUneEntiteAvecSiret('12345').donnees
+        );
+
+        expect(utilisateur.entite.departement).to.equal('75');
+        expect(utilisateur.entite.siret).to.equal('12345');
+        expect(utilisateur.entite.nom).to.equal('MonEntite');
       });
 
       it('ajoute le nouvel utilisateur au dépôt', async () => {
         const u = await depot.utilisateur('1');
         expect(u).to.be(undefined);
 
-        await depot.nouvelUtilisateur({
-          prenom: 'Jean',
-          nom: 'Dupont',
-          email: 'jean.dupont@mail.fr',
-        });
+        await depot.nouvelUtilisateur(
+          unUtilisateur()
+            .quiSAppelle('Jean Dupont')
+            .avecEmail('jean.dupont@mail.fr').donnees
+        );
 
         const utilisateur = await depot.utilisateur('1');
         expect(utilisateur).to.be.an(Utilisateur);
@@ -417,20 +473,20 @@ describe('Le dépôt de données des utilisateurs', () => {
         const u = await depot.utilisateur('1');
         expect(u).to.be(undefined);
 
-        await depot.nouvelUtilisateur({
-          email: 'jean.dupont@mail.fr',
-        });
+        await depot.nouvelUtilisateur(
+          unUtilisateur().avecEmail('jean.dupont@mail.fr').donnees
+        );
 
         const utilisateur = await depot.utilisateur('1');
         expect(utilisateur.transactionnelAccepte).to.be(true);
       });
 
       it('utilise la date actuelle comme date de création du nouvel utilisateur', async () => {
-        const utilisateur = await depot.nouvelUtilisateur({
-          prenom: 'Jean',
-          nom: 'Dupont',
-          email: 'jean.dupont@mail.fr',
-        });
+        const utilisateur = await depot.nouvelUtilisateur(
+          unUtilisateur()
+            .quiSAppelle('Jean Dupont')
+            .avecEmail('jean.dupont@mail.fr').donnees
+        );
 
         expect(utilisateur).to.be.an(Utilisateur);
         expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
@@ -438,11 +494,11 @@ describe('Le dépôt de données des utilisateurs', () => {
       });
 
       it("publie sur le bus d'événements l'inscription de l'utilisateur", async () => {
-        await depot.nouvelUtilisateur({
-          prenom: 'Jean',
-          nom: 'Dupont',
-          email: 'jean.dupont@mail.fr',
-        });
+        await depot.nouvelUtilisateur(
+          unUtilisateur()
+            .quiSAppelle('Jean Dupont')
+            .avecEmail('jean.dupont@mail.fr').donnees
+        );
 
         expect(bus.aRecuUnEvenement(EvenementUtilisateurInscrit)).to.be(true);
         const recu = bus.recupereEvenement(EvenementUtilisateurInscrit);
@@ -462,7 +518,9 @@ describe('Le dépôt de données des utilisateurs', () => {
         });
 
         depot
-          .nouvelUtilisateur({ email: 'jean.dupont@mail.fr' })
+          .nouvelUtilisateur(
+            unUtilisateur().avecEmail('jean.dupont@mail.fr').donnees
+          )
           .then(() => done('Une exception aurait dû être levée.'))
           .catch((e) => {
             expect(e).to.be.a(ErreurUtilisateurExistant);

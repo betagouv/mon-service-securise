@@ -211,14 +211,13 @@ const routesApiPrivee = ({
     '/utilisateur',
     middleware.aseptise(
       ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email'),
-      'nomEntite',
-      'departementEntite'
+      'siretEntite'
     ),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
       const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(donnees, true, referentiel);
+        messageErreurDonneesUtilisateur(donnees, true);
 
       if (donneesInvalides) {
         reponse

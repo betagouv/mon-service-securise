@@ -9,6 +9,7 @@ const {
   ErreurMotDePasseIncorrect,
 } = require('../erreurs');
 const Utilisateur = require('../modeles/utilisateur');
+const Entite = require('../modeles/entite');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
 
@@ -18,6 +19,7 @@ const creeDepot = (config = {}) => {
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = adaptateurUUIDParDefaut,
+    adaptateurRechercheEntite,
     busEvenements,
   } = config;
 
@@ -44,6 +46,12 @@ const creeDepot = (config = {}) => {
       adaptateurUUID.genereUUID()
     );
     donneesUtilisateur.transactionnelAccepte = true;
+    if (donneesUtilisateur.entite) {
+      donneesUtilisateur.entite = await Entite.completeDonnees(
+        donneesUtilisateur.entite,
+        adaptateurRechercheEntite
+      );
+    }
 
     await adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur);
     u = await utilisateur(id);
@@ -95,7 +103,13 @@ const creeDepot = (config = {}) => {
 
   const metsAJourUtilisateur = async (id, donnees) => {
     delete donnees.motDePasse;
+    donnees.entite = await Entite.completeDonnees(
+      donnees.entite,
+      adaptateurRechercheEntite
+    );
+
     await adaptateurPersistance.metsAJourUtilisateur(id, donnees);
+
     const u = await utilisateur(id);
     await busEvenements.publie(
       new EvenementUtilisateurModifie({ utilisateur: u })

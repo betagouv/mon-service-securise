@@ -1,6 +1,5 @@
 const Base = require('./base');
 const { ErreurEmailManquant, ErreurProprieteManquante } = require('../erreurs');
-const Referentiel = require('../referentiel');
 const { formatteListeFr } = require('../utilitaires/liste');
 const Entite = require('./entite');
 
@@ -33,11 +32,7 @@ class Utilisateur extends Base {
     this.adaptateurJWT = adaptateurJWT;
   }
 
-  static valideDonnees(
-    donnees = {},
-    referentiel = Referentiel.creeReferentielVide(),
-    utilisateurExistant = false
-  ) {
+  static valideDonnees(donnees = {}, utilisateurExistant = false) {
     const envoieErreurProprieteManquante = (propriete) => {
       throw new ErreurProprieteManquante(
         `La propriété "${propriete}" est requise`
@@ -84,7 +79,7 @@ class Utilisateur extends Base {
     }
     validePresenceProprietes(['prenom', 'nom']);
     validePresenceProprietesObjet(['entite']);
-    Entite.valideDonnees(donnees.entite, referentiel);
+    Entite.valideDonnees(donnees.entite);
     validePresenceProprietesBooleenes([
       'infolettreAcceptee',
       'transactionnelAccepte',

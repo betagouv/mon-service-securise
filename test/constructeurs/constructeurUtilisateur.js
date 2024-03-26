@@ -15,6 +15,7 @@ class ConstructeurUtilisateur {
       entite: {
         nom: '',
         departement: '',
+        siret: '',
       },
       infolettreAcceptee: '',
       transactionnelAccepte: '',
@@ -31,6 +32,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  sansEmail() {
+    this.donnees.email = null;
+    return this;
+  }
+
   avecPostes(postes) {
     this.donnees.postes = postes;
     return this;
@@ -38,6 +44,11 @@ class ConstructeurUtilisateur {
 
   avecNomEntite(nomEntite) {
     this.donnees.entite.nom = nomEntite;
+    return this;
+  }
+
+  quiTravaillePourUneEntiteAvecSiret(siret) {
+    this.donnees.entite.siret = siret;
     return this;
   }
 

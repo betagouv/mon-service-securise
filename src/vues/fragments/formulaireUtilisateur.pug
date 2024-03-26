@@ -101,16 +101,17 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
           input(type='hidden' name='departementEntite' id='departementEntite' value != entite.departement)
 
       .requis
-        label(for = 'nomEntite-selectize') Nom de votre organisation
+        label(for = 'siretEntite-selectize') Nom ou SIRET de votre organisation
           select(
-            id = 'nomEntite-selectize',
-            name = 'nomEntite-selectize',
-            placeHolder = 'ex : Agglomération de Mansart, Société Y',
+            id = 'siretEntite-selectize',
+            name = 'siretEntite-selectize',
+            placeHolder = 'ex : 13261762000010, Agglomération de Mansart, Société Y',
             required,
           )
           .icone-chargement
           .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
           input(type='hidden' name='nomEntite' id='nomEntite' value != entite.nom)
+          input(type='hidden' name='siretEntite' id='siretEntite' value != entite.siret)
 
       .requis
         label.fonction-poste Fonction/poste
