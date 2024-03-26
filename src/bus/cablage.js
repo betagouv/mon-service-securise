@@ -24,6 +24,10 @@ const {
 const {
   EvenementDescriptionServiceModifiee,
 } = require('./evenementDescriptionServiceModifiee');
+const EvenementUtilisateurModifie = require('./evenementUtilisateurModifie');
+const {
+  consigneProfilUtilisateurModifieDansJournal,
+} = require('./abonnements/consigneProfilUtilisateurModifieDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -50,6 +54,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementAutorisationsServiceModifiees,
     consigneAutorisationsModifieesDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementUtilisateurModifie,
+    consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal })
   );
 };
 
