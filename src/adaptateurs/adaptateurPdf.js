@@ -171,7 +171,7 @@ const genereTamponHomologation = async (donnees) => {
       largeur,
       hauteur,
     } of configurationsDispositifs) {
-      const corps = pug.compileFile('src/pdf/modeles/tamponHomologation.pug')({
+      const corps = pug.compileFile('src/pdf/modeles/encartHomologation.pug')({
         ...donnees,
         taillesTexte,
         tailleDispositif,
