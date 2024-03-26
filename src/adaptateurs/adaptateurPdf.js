@@ -189,12 +189,12 @@ const genereTamponHomologation = async (donnees) => {
 
       const bufferImage = Buffer.from(screenshotBase64, 'base64');
       fichiers.push({
-        nom: `cartoucheHomologation.${tailleDispositif}.png`,
+        nom: `encartHomologation.${tailleDispositif}.png`,
         buffer: bufferImage,
       });
 
       fichiers.push({
-        nom: `cartoucheHomologation.${tailleDispositif}.html`,
+        nom: `encartHomologation.${tailleDispositif}.html`,
         buffer: compileImageEnHTMLBase64(bufferImage, largeur, hauteur),
       });
     }
