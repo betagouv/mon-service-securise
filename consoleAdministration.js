@@ -17,6 +17,7 @@ const {
 const {
   fabriqueAdaptateurChiffrement,
 } = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
+const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 
 class ConsoleAdministration {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
@@ -29,6 +30,7 @@ class ConsoleAdministration {
       adaptateurPersistance: this.adaptateurPersistance,
       adaptateurUUID,
       referentiel: this.referentiel,
+      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
     });
     this.adaptateurJournalMSS = fabriqueAdaptateurJournalMSS();
 

@@ -1,11 +1,9 @@
 const expect = require('expect.js');
 
 const {
-  ErreurDepartementInconnu,
   ErreurEmailManquant,
   ErreurProprieteManquante,
 } = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
 const Utilisateur = require('../../src/modeles/utilisateur');
 const {
   fabriqueAdaptateurMailMemoire,
@@ -179,12 +177,6 @@ describe('Un utilisateur', () => {
 
   describe("sur une demande de validation des données d'un utilisateur", () => {
     let donnees;
-    const referentiel = Referentiel.creeReferentiel({
-      departements: [
-        { nom: 'Ain', code: '01' },
-        { nom: 'Paris', code: '75' },
-      ],
-    });
 
     const verifiePresencePropriete = (clef, nom, done) => {
       if (clef.includes('.')) {
@@ -194,7 +186,7 @@ describe('Un utilisateur', () => {
         delete donnees[clef];
       }
       try {
-        Utilisateur.valideDonnees(donnees, referentiel);
+        Utilisateur.valideDonnees(donnees);
         done(
           `La validation des données d'un utilisateur sans ${nom} aurait du lever une erreur de propriété manquante`
         );
@@ -212,8 +204,7 @@ describe('Un utilisateur', () => {
         email: 'sandy.ferrance@domaine.co',
         postes: ['RSSI'],
         entite: {
-          nom: 'Ville de Paris',
-          departement: '75',
+          siret: '7524242424',
         },
         infolettreAcceptee: true,
         transactionnelAccepte: true,
@@ -235,7 +226,7 @@ describe('Un utilisateur', () => {
     it("n'exige pas que l'e-mail soit renseigné quand l'utilisateur existe déjà", (done) => {
       delete donnees.email;
       try {
-        Utilisateur.valideDonnees(donnees, referentiel, true);
+        Utilisateur.valideDonnees(donnees, true);
         done();
       } catch (erreur) {
         let messageEchec = `La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur : ${erreur.message}`;
@@ -247,16 +238,8 @@ describe('Un utilisateur', () => {
       }
     });
 
-    it("exige que le nom de l'entité soit renseigné", (done) => {
-      verifiePresencePropriete('entite.nom', "nom de l'entité", done);
-    });
-
-    it('exige que le département soit renseigné', (done) => {
-      verifiePresencePropriete(
-        'entite.departement',
-        "département de l'entité",
-        done
-      );
+    it("exige que le SIRET de l'entité soit renseigné", (done) => {
+      verifiePresencePropriete('entite.siret', "SIRET de l'entité", done);
     });
 
     it('exige que les postes soient renseignés', (done) => {
@@ -269,22 +252,6 @@ describe('Un utilisateur', () => {
         'infolettre acceptée',
         done
       );
-    });
-
-    it('exige un département présent dans le référentiel', (done) => {
-      donnees.entite.departement = 'codeDepartementInconnu';
-      try {
-        Utilisateur.valideDonnees(donnees, referentiel);
-        done(
-          "La validation des données d'un utilisateur avec un département hors référentiel aurait du lever une erreur"
-        );
-      } catch (error) {
-        expect(error).to.be.a(ErreurDepartementInconnu);
-        expect(error.message).to.equal(
-          'Le département identifié par "codeDepartementInconnu" n\'est pas répertorié'
-        );
-        done();
-      }
     });
   });
 
