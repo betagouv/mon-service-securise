@@ -272,6 +272,30 @@ describe('Les dossiers liés à un service', () => {
       expect(archives.length).to.be(1);
       expect(archives[0].id).to.be('archive');
     });
+
+    it("retournent les dossiers archives dans l'ordre décroissant des dates d'échéances", () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel)
+              .avecId('archive-deuxieme')
+              .quiEstComplet()
+              .avecDecision('01/01/2023', 'unAn')
+              .quiEstArchive().donnees,
+            unDossier(referentiel)
+              .avecId('archive-premier')
+              .quiEstComplet()
+              .avecDecision('01/01/2024', 'unAn')
+              .quiEstArchive().donnees,
+          ],
+        },
+        referentiel
+      );
+
+      const archives = dossiers.archives();
+      expect(archives[0].id).to.be('archive-premier');
+      expect(archives[1].id).to.be('archive-deuxieme');
+    });
   });
 
   describe('sur demande de suppression du dossier courant', () => {
