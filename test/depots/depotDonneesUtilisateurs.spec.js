@@ -19,14 +19,18 @@ const Utilisateur = require('../../src/modeles/utilisateur');
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
+const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
+const EvenementUtilisateurModifie = require('../../src/bus/evenementUtilisateurModifie');
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
   let adaptateurChiffrement;
+  let bus;
 
   beforeEach(() => {
     adaptateurJWT = 'Un adaptateur';
     adaptateurChiffrement = fauxAdaptateurChiffrement();
+    bus = fabriqueBusPourLesTests();
   });
 
   it("retourne l'utilisateur authentifié", async () => {
@@ -116,6 +120,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             email: 'jean.dupont@mail.fr',
           })
           .construis(),
+        busEvenements: bus,
       });
     });
 
@@ -148,18 +153,17 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(u.id).to.equal('123');
     });
 
-    it('consigne un événement de profil utilisateur modifié', async () => {
-      let evenementRecu;
-      adaptateurJournalMSS.consigneEvenement = async (evenenement) => {
-        evenementRecu = evenenement;
-      };
-
+    it("publie sur le bus d'événements l'utilisateur modifié", async () => {
       await depot.metsAJourUtilisateur('123', {
         prenom: 'Jérôme',
         nom: 'Dubois',
       });
 
-      expect(evenementRecu.type).to.equal('PROFIL_UTILISATEUR_MODIFIE');
+      expect(bus.aRecuUnEvenement(EvenementUtilisateurModifie)).to.be(true);
+      const recu = bus.recupereEvenement(EvenementUtilisateurModifie);
+      expect(recu.utilisateur.id).to.be('123');
+      expect(recu.utilisateur.prenom).to.be('Jérôme');
+      expect(recu.utilisateur.nom).to.be('Dubois');
     });
   });
 
@@ -364,6 +368,7 @@ describe('Le dépôt de données des utilisateurs', () => {
           adaptateurJWT,
           adaptateurPersistance,
           adaptateurUUID,
+          busEvenements: bus,
         });
       });
 
@@ -438,7 +443,7 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(utilisateur.dateCreation).to.eql(adaptateurHorloge.maintenant());
       });
 
-      it("consigne des événements traçants l'inscription de l'utilisateur", async () => {
+      it("consigne un événement traçant l'inscription de l'utilisateur", async () => {
         const evenementConsignes = [];
         adaptateurJournalMSS.consigneEvenement = async (evenement) => {
           evenementConsignes.push(evenement);
@@ -452,8 +457,22 @@ describe('Le dépôt de données des utilisateurs', () => {
 
         expect(evenementConsignes.map((e) => e.type)).to.eql([
           'NOUVEL_UTILISATEUR_INSCRIT',
-          'PROFIL_UTILISATEUR_MODIFIE',
         ]);
+      });
+
+      it("publie sur le bus d'événements l'utilisateur modifié", async () => {
+        await depot.nouvelUtilisateur({
+          prenom: 'Jean',
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+        });
+
+        expect(bus.aRecuUnEvenement(EvenementUtilisateurModifie)).to.be(true);
+        const recu = bus.recupereEvenement(EvenementUtilisateurModifie);
+        expect(recu.utilisateur.id).not.to.be(undefined);
+        expect(recu.utilisateur.prenom).to.be('Jean');
+        expect(recu.utilisateur.nom).to.be('Dupont');
+        expect(recu.utilisateur.email).to.be('jean.dupont@mail.fr');
       });
     });
 

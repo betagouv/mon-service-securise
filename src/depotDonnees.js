@@ -35,6 +35,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     adaptateurUUID,
     depotHomologations,
+    busEvenements,
   });
 
   const depotAutorisations = depotDonneesAutorisations.creeDepot({

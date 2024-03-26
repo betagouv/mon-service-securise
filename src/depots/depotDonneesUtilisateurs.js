@@ -9,8 +9,8 @@ const {
   ErreurMotDePasseIncorrect,
 } = require('../erreurs');
 const EvenementNouvelUtilisateurInscrit = require('../modeles/journalMSS/evenementNouvelUtilisateurInscrit');
-const EvenementProfilUtilisateurModifie = require('../modeles/journalMSS/evenementProfilUtilisateurModifie');
 const Utilisateur = require('../modeles/utilisateur');
+const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 
 const creeDepot = (config = {}) => {
   const {
@@ -19,6 +19,7 @@ const creeDepot = (config = {}) => {
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = adaptateurUUIDParDefaut,
+    busEvenements,
   } = config;
 
   const utilisateur = async (identifiant) => {
@@ -54,8 +55,8 @@ const creeDepot = (config = {}) => {
       }).toJSON()
     );
 
-    await adaptateurJournalMSS.consigneEvenement(
-      new EvenementProfilUtilisateurModifie(u).toJSON()
+    await busEvenements.publie(
+      new EvenementUtilisateurModifie({ utilisateur: u })
     );
 
     return u;
@@ -103,8 +104,8 @@ const creeDepot = (config = {}) => {
     delete donnees.motDePasse;
     await adaptateurPersistance.metsAJourUtilisateur(id, donnees);
     const u = await utilisateur(id);
-    await adaptateurJournalMSS.consigneEvenement(
-      new EvenementProfilUtilisateurModifie(u).toJSON()
+    await busEvenements.publie(
+      new EvenementUtilisateurModifie({ utilisateur: u })
     );
     return u;
   };
