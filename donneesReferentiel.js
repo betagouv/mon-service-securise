@@ -31,6 +31,11 @@ module.exports = {
       fichierPug: 'referentielCNIL.pug',
       dateDeDeploiement: '2024-02-08 14:00:00Z',
     },
+    {
+      id: 'encartHomologation',
+      fichierPug: 'encartHomologation.pug',
+      dateDeDeploiement: '2024-04-03 14:30:00Z',
+    },
   ],
 
   nombreOrganisationsUtilisatrices: [
