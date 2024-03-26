@@ -448,21 +448,6 @@ describe('Le dépôt de données des utilisateurs', () => {
         const recu = bus.recupereEvenement(EvenementUtilisateurInscrit);
         expect(recu.utilisateur.id).not.to.be(undefined);
       });
-
-      it("publie sur le bus d'événements l'utilisateur modifié", async () => {
-        await depot.nouvelUtilisateur({
-          prenom: 'Jean',
-          nom: 'Dupont',
-          email: 'jean.dupont@mail.fr',
-        });
-
-        expect(bus.aRecuUnEvenement(EvenementUtilisateurModifie)).to.be(true);
-        const recu = bus.recupereEvenement(EvenementUtilisateurModifie);
-        expect(recu.utilisateur.id).not.to.be(undefined);
-        expect(recu.utilisateur.prenom).to.be('Jean');
-        expect(recu.utilisateur.nom).to.be('Dupont');
-        expect(recu.utilisateur.email).to.be('jean.dupont@mail.fr');
-      });
     });
 
     describe("quand l'utilisateur existe déjà", () => {

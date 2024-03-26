@@ -52,10 +52,6 @@ const creeDepot = (config = {}) => {
       new EvenementUtilisateurInscrit({ utilisateur: u })
     );
 
-    await busEvenements.publie(
-      new EvenementUtilisateurModifie({ utilisateur: u })
-    );
-
     return u;
   };
 
