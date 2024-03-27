@@ -36,6 +36,10 @@ const EvenementDossierHomologationFinalise = require('./evenementDossierHomologa
 const {
   consigneNouvelleHomologationCreeeDansJournal,
 } = require('./abonnements/consigneNouvelleHomologationCreeeDansJournal');
+const EvenementServiceSupprime = require('./evenementServiceSupprime');
+const {
+  consigneServiceSupprimeDansJournal,
+} = require('./abonnements/consigneServiceSupprimeDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -80,6 +84,11 @@ const cableTousLesAbonnes = (
       adaptateurJournal,
       referentiel,
     })
+  );
+
+  busEvenements.abonne(
+    EvenementServiceSupprime,
+    consigneServiceSupprimeDansJournal({ adaptateurJournal })
   );
 };
 
