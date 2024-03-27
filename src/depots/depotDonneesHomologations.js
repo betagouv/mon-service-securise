@@ -316,15 +316,13 @@ const creeDepot = (config = {}) => {
   const remplaceRisquesSpecifiquesDuService = (...params) =>
     remplaceProprieteService('risquesSpecifiques', ...params);
 
-  const supprimeHomologation = (idHomologation) =>
-    adaptateurPersistance
-      .supprimeAutorisationsHomologation(idHomologation)
-      .then(() => p.supprime(idHomologation))
-      .then(() =>
-        adaptateurJournalMSS.consigneEvenement(
-          new EvenementServiceSupprime({ idService: idHomologation }).toJSON()
-        )
-      );
+  const supprimeHomologation = async (idService) => {
+    await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
+    await p.supprime(idService);
+    await adaptateurJournalMSS.consigneEvenement(
+      new EvenementServiceSupprime({ idService }).toJSON()
+    );
+  };
 
   const trouveIndexDisponible = async (idProprietaire, nomService) => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
