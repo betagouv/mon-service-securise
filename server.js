@@ -50,7 +50,6 @@ const moteurRegles = new MoteurRegles(referentiel);
 
 const depotDonnees = DepotDonnees.creeDepot({
   adaptateurChiffrement,
-  adaptateurJournalMSS: adaptateurJournal,
   busEvenements,
 });
 
