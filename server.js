@@ -58,6 +58,7 @@ cableTousLesAbonnes(busEvenements, {
   adaptateurTracking,
   adaptateurJournal,
   depotDonnees,
+  referentiel,
 });
 
 const middleware = Middleware({

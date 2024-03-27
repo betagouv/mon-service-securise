@@ -32,10 +32,14 @@ const {
   consigneNouvelUtilisateurInscritDansJournal,
 } = require('./abonnements/consigneNouvelUtilisateurInscritDansJournal');
 const EvenementUtilisateurInscrit = require('./evenementUtilisateurInscrit');
+const EvenementDossierHomologationFinalise = require('./evenementDossierHomologationFinalise');
+const {
+  consigneNouvelleHomologationCreeeDansJournal,
+} = require('./abonnements/consigneNouvelleHomologationCreeeDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
-  { adaptateurTracking, adaptateurJournal, depotDonnees }
+  { adaptateurTracking, adaptateurJournal, depotDonnees, referentiel }
 ) => {
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
     consigneNouveauServiceDansJournal({ adaptateurJournal }),
@@ -69,6 +73,14 @@ const cableTousLesAbonnes = (
     consigneNouvelUtilisateurInscritDansJournal({ adaptateurJournal }),
     consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal }),
   ]);
+
+  busEvenements.abonne(
+    EvenementDossierHomologationFinalise,
+    consigneNouvelleHomologationCreeeDansJournal({
+      adaptateurJournal,
+      referentiel,
+    })
+  );
 };
 
 module.exports = { cableTousLesAbonnes };
