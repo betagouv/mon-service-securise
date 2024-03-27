@@ -9,7 +9,6 @@ const {
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
-const AdaptateurJournalMSSMemoire = require('../../src/adaptateurs/adaptateurJournalMSSMemoire');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const AdaptateurUUID = require('../../src/adaptateurs/adaptateurUUID');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
@@ -374,7 +373,6 @@ describe('Le dépôt de données des homologations', () => {
 
   describe("sur demande de mise à jour de la description d'un service", () => {
     let adaptateurPersistance;
-    let adaptateurJournalMSS;
     let bus;
     let depot;
     let referentiel;
@@ -391,12 +389,10 @@ describe('Le dépôt de données des homologations', () => {
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire('U1', 'S1').donnees
         );
-      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       bus = fabriqueBusPourLesTests();
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
         .avecAdaptateurPersistance(adaptateurPersistance)
-        .avecJournalMSS(adaptateurJournalMSS)
         .avecBusEvenements(bus)
         .construis();
     });
@@ -582,7 +578,6 @@ describe('Le dépôt de données des homologations', () => {
 
   describe("quand il reçoit une demande d'enregistrement d'un nouveau service", () => {
     let adaptateurChiffrement;
-    let adaptateurJournalMSS;
     let adaptateurPersistance;
     let adaptateurTracking;
     let adaptateurUUID;
@@ -591,7 +586,6 @@ describe('Le dépôt de données des homologations', () => {
 
     beforeEach(() => {
       adaptateurChiffrement = fauxAdaptateurChiffrement();
-      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(
           unUtilisateur().avecId('123').avecEmail('jean.dupont@mail.fr').donnees
@@ -603,7 +597,6 @@ describe('Le dépôt de données des homologations', () => {
 
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurChiffrement,
-        adaptateurJournalMSS,
         adaptateurPersistance,
         adaptateurTracking,
         adaptateurUUID,
@@ -842,7 +835,6 @@ describe('Le dépôt de données des homologations', () => {
 
   describe("sur demande de suppression d'une homologation", () => {
     let adaptateurPersistance;
-    let adaptateurJournalMSS;
     let depot;
 
     beforeEach(() => {
@@ -859,10 +851,8 @@ describe('Le dépôt de données des homologations', () => {
         ],
       });
 
-      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurPersistance,
-        adaptateurJournalMSS,
         busEvenements,
       });
     });
@@ -911,7 +901,6 @@ describe('Le dépôt de données des homologations', () => {
       });
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurPersistance,
-        adaptateurJournalMSS,
         busEvenements,
       });
 
@@ -1173,7 +1162,6 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   describe('sur demande de finalisation du dossier courant', () => {
-    let adaptateurJournalMSS;
     let adaptateurPersistance;
     let depot;
     const referentiel = Referentiel.creeReferentiel({
@@ -1186,11 +1174,9 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     beforeEach(() => {
-      adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
       adaptateurPersistance = unePersistanceMemoire().construis();
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
-        adaptateurJournalMSS,
         adaptateurPersistance,
         referentiel,
         busEvenements,
@@ -1306,7 +1292,6 @@ describe('Le dépôt de données des homologations', () => {
 
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
-        adaptateurJournalMSS: AdaptateurJournalMSSMemoire.nouvelAdaptateur(),
         adaptateurPersistance,
         adaptateurTracking: unAdaptateurTracking().construis(),
         adaptateurUUID: AdaptateurUUID,
