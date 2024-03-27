@@ -57,6 +57,7 @@ const {
 } = require('../../src/bus/evenementDescriptionServiceModifiee');
 const Mesures = require('../../src/modeles/mesures');
 const EvenementDossierHomologationFinalise = require('../../src/bus/evenementDossierHomologationFinalise');
+const EvenementServiceSupprime = require('../../src/bus/evenementServiceSupprime');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -862,6 +863,7 @@ describe('Le dépôt de données des homologations', () => {
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurPersistance,
         adaptateurJournalMSS,
+        busEvenements,
       });
     });
 
@@ -910,6 +912,7 @@ describe('Le dépôt de données des homologations', () => {
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurPersistance,
         adaptateurJournalMSS,
+        busEvenements,
       });
 
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
@@ -928,18 +931,14 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it('consigne un événement de service supprimé', (done) => {
-      adaptateurJournalMSS.consigneEvenement = (evenement) => {
-        expect(evenement.type).to.be('SERVICE_SUPPRIME');
-        done();
-      };
+    it("publie sur le bus d'événements le service supprimé", async () => {
+      await depot.supprimeHomologation('111');
 
-      depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        adaptateurJournalMSS,
-      });
-
-      depot.supprimeHomologation('111').catch(done);
+      expect(busEvenements.aRecuUnEvenement(EvenementServiceSupprime)).to.be(
+        true
+      );
+      const recu = busEvenements.recupereEvenement(EvenementServiceSupprime);
+      expect(recu.idService).to.be('111');
     });
   });
 
