@@ -35,6 +35,7 @@ footer nav a {
   text-decoration: none;
   color: var(--texte-fonce);
   white-space: nowrap;
+  font-size: 12px;
 }
 
 footer nav a:hover {
