@@ -842,6 +842,7 @@ describe('Le dépôt de données des homologations', () => {
   describe("sur demande de suppression d'une homologation", () => {
     let adaptateurPersistance;
     let adaptateurJournalMSS;
+    let depot;
 
     beforeEach(() => {
       const donneesHomologation = {
@@ -858,14 +859,13 @@ describe('Le dépôt de données des homologations', () => {
       });
 
       adaptateurJournalMSS = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-    });
-
-    it("supprime l'homologation", (done) => {
-      const depot = DepotDonneesHomologations.creeDepot({
+      depot = DepotDonneesHomologations.creeDepot({
         adaptateurPersistance,
         adaptateurJournalMSS,
       });
+    });
 
+    it("supprime l'homologation", (done) => {
       adaptateurPersistance
         .homologation('123')
         .then((h) => expect(h).to.be.an(Object))
@@ -879,11 +879,6 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('supprime le service', (done) => {
-      const depot = DepotDonneesHomologations.creeDepot({
-        adaptateurPersistance,
-        adaptateurJournalMSS,
-      });
-
       adaptateurPersistance
         .service('123')
         .then((s) => expect(s).to.be.an(Object))
@@ -912,10 +907,11 @@ describe('Le dépôt de données des homologations', () => {
           uneAutorisation().avecId('789').deContributeur('000', '222').donnees,
         ],
       });
-      const depot = DepotDonneesHomologations.creeDepot({
+      depot = DepotDonneesHomologations.creeDepot({
         adaptateurPersistance,
         adaptateurJournalMSS,
       });
+
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance,
       });
@@ -938,7 +934,7 @@ describe('Le dépôt de données des homologations', () => {
         done();
       };
 
-      const depot = DepotDonneesHomologations.creeDepot({
+      depot = DepotDonneesHomologations.creeDepot({
         adaptateurPersistance,
         adaptateurJournalMSS,
       });
