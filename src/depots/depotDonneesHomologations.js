@@ -6,7 +6,6 @@ const {
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
 const Homologation = require('../modeles/homologation');
-const EvenementServiceSupprime = require('../modeles/journalMSS/evenementServiceSupprime');
 const Autorisation = require('../modeles/autorisations/autorisation');
 const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresServiceModifiees');
 const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree');
@@ -14,6 +13,7 @@ const {
   EvenementDescriptionServiceModifiee,
 } = require('../bus/evenementDescriptionServiceModifiee');
 const EvenementDossierHomologationFinalise = require('../bus/evenementDossierHomologationFinalise');
+const EvenementServiceSupprime = require('../bus/evenementServiceSupprime');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -91,7 +91,6 @@ const fabriquePersistance = (
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement,
-    adaptateurJournalMSS,
     adaptateurPersistance,
     adaptateurUUID,
     busEvenements,
@@ -319,9 +318,7 @@ const creeDepot = (config = {}) => {
   const supprimeHomologation = async (idService) => {
     await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
     await p.supprime(idService);
-    await adaptateurJournalMSS.consigneEvenement(
-      new EvenementServiceSupprime({ idService }).toJSON()
-    );
+    await busEvenements.publie(new EvenementServiceSupprime({ idService }));
   };
 
   const trouveIndexDisponible = async (idProprietaire, nomService) => {
