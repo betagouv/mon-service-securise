@@ -40,10 +40,19 @@ const EvenementServiceSupprime = require('./evenementServiceSupprime');
 const {
   consigneServiceSupprimeDansJournal,
 } = require('./abonnements/consigneServiceSupprimeDansJournal');
+const {
+  sauvegardeNotificationsExpirationHomologation,
+} = require('./abonnements/sauvegardeNotificationsExpirationHomologation');
 
 const cableTousLesAbonnes = (
   busEvenements,
-  { adaptateurTracking, adaptateurJournal, depotDonnees, referentiel }
+  {
+    adaptateurHorloge,
+    adaptateurTracking,
+    adaptateurJournal,
+    depotDonnees,
+    referentiel,
+  }
 ) => {
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
     consigneNouveauServiceDansJournal({ adaptateurJournal }),
@@ -78,13 +87,17 @@ const cableTousLesAbonnes = (
     consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal }),
   ]);
 
-  busEvenements.abonne(
-    EvenementDossierHomologationFinalise,
+  busEvenements.abonnePlusieurs(EvenementDossierHomologationFinalise, [
     consigneNouvelleHomologationCreeeDansJournal({
       adaptateurJournal,
       referentiel,
-    })
-  );
+    }),
+    sauvegardeNotificationsExpirationHomologation({
+      adaptateurHorloge,
+      depotDonnees,
+      referentiel,
+    }),
+  ]);
 
   busEvenements.abonne(
     EvenementServiceSupprime,
