@@ -43,6 +43,9 @@ const {
 const {
   sauvegardeNotificationsExpirationHomologation,
 } = require('./abonnements/sauvegardeNotificationsExpirationHomologation');
+const {
+  supprimeNotificationsExpirationHomologation,
+} = require('./abonnements/supprimeNotificationsExpirationHomologation');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -99,10 +102,10 @@ const cableTousLesAbonnes = (
     }),
   ]);
 
-  busEvenements.abonne(
-    EvenementServiceSupprime,
-    consigneServiceSupprimeDansJournal({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementServiceSupprime, [
+    consigneServiceSupprimeDansJournal({ adaptateurJournal }),
+    supprimeNotificationsExpirationHomologation({ depotDonnees }),
+  ]);
 };
 
 module.exports = { cableTousLesAbonnes };
