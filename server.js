@@ -54,6 +54,7 @@ const depotDonnees = DepotDonnees.creeDepot({
 });
 
 cableTousLesAbonnes(busEvenements, {
+  adaptateurHorloge,
   adaptateurTracking,
   adaptateurJournal,
   depotDonnees,

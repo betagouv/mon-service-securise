@@ -98,6 +98,26 @@ const creeDepot = (config = {}) => {
   const { lisParcoursUtilisateur, sauvegardeParcoursUtilisateur } =
     depotParcoursUtilisateurs;
 
+  const supprimeNotificationsExpirationHomologationPourService = async (
+    idService
+  ) => {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Notifications d'expiration d'homologation supprimées pour le service ${idService}`
+    );
+  };
+
+  const sauvegardeNotificationsExpirationHomologation = async (
+    notifications
+  ) => {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Notifications d'expiration d'homologation sauvegardées: ${JSON.stringify(
+        notifications
+      )}`
+    );
+  };
+
   return {
     accesAutorise,
     ajouteContributeurAuService,
@@ -127,9 +147,11 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesDuService,
     sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,
+    sauvegardeNotificationsExpirationHomologation,
     supprimeContributeur,
     supprimeHomologation,
     supprimeIdResetMotDePassePourUtilisateur,
+    supprimeNotificationsExpirationHomologationPourService,
     supprimeUtilisateur,
     tousUtilisateurs,
     tousLesServices,
