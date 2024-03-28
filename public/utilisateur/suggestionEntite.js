@@ -39,11 +39,12 @@ const rechercheSuggestions = (recherche, callback) => {
 
 $(() => {
   const nom = $('#nomEntite').val();
-  const siret = $('#siretEntite').val();
-  const departement = $('#departementEntite').val();
+  let siret = $('#siretEntite').val();
+  let departement = $('#departementEntite').val();
   const enModeEdition = !!siret && !!nom && !!departement;
   const suggestion = enModeEdition && uneSuggestion(departement, nom, siret);
 
+  let $champSelectizeDepartement;
   const $champSelectize = $('#siretEntite-selectize').selectize({
     plugins: ['clear_button'],
     options: enModeEdition ? [suggestion] : [],
@@ -57,9 +58,9 @@ $(() => {
     create: false,
     render: {
       item: (item, escape) =>
-        `<div class="item" data-siret="${item.siret}">${escape(
-          item.label
-        )}</div>`,
+        `<div class="item" data-departement="${item.departement}" data-siret="${
+          item.siret
+        }">${escape(item.label)}</div>`,
       option: (option, escape) =>
         `<div class="option">${escape(option.label)}</div>`,
     },
@@ -68,7 +69,11 @@ $(() => {
       rechercheSuggestions(recherche, callback);
     },
     onItemAdd: (_value, $item) => {
-      $('#siretEntite').val($item.data('siret'));
+      siret = $item.data('siret');
+      departement = $item.data('departement');
+      $('#siretEntite').val(siret);
+      $('#departementEntite').val(departement.toString());
+      $champSelectizeDepartement[0].selectize.setValue(departement);
     },
     onItemRemove: () => {
       $('#siretEntite').val('');
@@ -80,10 +85,10 @@ $(() => {
   });
 
   const departements = JSON.parse($('#donnees-departements').text());
-  $('#departementEntite-selectize').selectize({
-    plugins: ['aucun_resultat', 'clear_button'],
+  $champSelectizeDepartement = $('#departementEntite-selectize').selectize({
+    plugins: ['clear_button'],
     options: departements.map((d) => ({ ...d, label: `${d.nom} (${d.code})` })),
-    items: enModeEdition ? [departement] : [],
+    items: departement ? [departement] : [],
     valueField: 'code',
     labelField: 'label',
     searchField: 'label',
@@ -97,7 +102,13 @@ $(() => {
         `<div class="option">${escape(option.label)}</div>`,
     },
     onItemAdd: (_value, $item) => {
-      $('#departementEntite').val($item.data('departement').toString());
+      const nouveauDepartement = $item.data('departement');
+      $('#departementEntite').val(nouveauDepartement.toString());
+
+      if (nouveauDepartement.toString() !== departement.toString()) {
+        $champSelectize[0].selectize.clear();
+        $champSelectize[0].selectize.clearOptions();
+      }
     },
   });
 });
