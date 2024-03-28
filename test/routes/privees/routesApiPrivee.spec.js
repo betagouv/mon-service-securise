@@ -637,8 +637,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         nom: 'Dupont',
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
-        nomEntite: 'Ville de Paris',
-        departementEntite: '75',
+        siretEntite: '13000766900018',
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
       };
@@ -659,8 +658,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           'infolettreAcceptee',
           'transactionnelAccepte',
           'postes.*',
-          'nomEntite',
-          'departementEntite',
+          'siretEntite',
         ],
         {
           method: 'put',
@@ -708,8 +706,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(donneesRecues.prenom).to.equal('Jean');
       expect(donneesRecues.nom).to.equal('Dupont');
       expect(donneesRecues.telephone).to.equal('0100000000');
-      expect(donneesRecues.entite.nom).to.equal('Ville de Paris');
-      expect(donneesRecues.entite.departement).to.equal('75');
+      expect(donneesRecues.entite.siret).to.equal('13000766900018');
       expect(donneesRecues.infolettreAcceptee).to.equal(true);
       expect(donneesRecues.transactionnelAccepte).to.equal(true);
       expect(donneesRecues.postes).to.eql([

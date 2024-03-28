@@ -24,11 +24,7 @@ const routesApiPublique = ({
   routes.post(
     '/utilisateur',
     middleware.protegeTrafic(),
-    middleware.aseptise(
-      ...Utilisateur.nomsProprietesBase(),
-      'nomEntite',
-      'departementEntite'
-    ),
+    middleware.aseptise(...Utilisateur.nomsProprietesBase(), 'siretEntite'),
     (requete, reponse, suite) => {
       const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
         promesseEnvoiMessage
@@ -65,7 +61,7 @@ const routesApiPublique = ({
       donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       donnees.email = requete.body.email?.toLowerCase();
       const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(donnees, false, referentiel);
+        messageErreurDonneesUtilisateur(donnees, false);
 
       if (donneesInvalides) {
         reponse
