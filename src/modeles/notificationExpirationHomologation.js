@@ -7,6 +7,14 @@ class NotificationExpirationHomologation {
     this.delaiAvantExpirationMois = delaiAvantExpirationMois;
   }
 
+  donneesAPersister() {
+    return {
+      idService: this.idService,
+      dateProchainEnvoi: this.dateProchainEnvoi,
+      delaiAvantExpirationMois: this.delaiAvantExpirationMois,
+    };
+  }
+
   static pourUnDossier({ idService, dossier, referentiel }) {
     const idEcheance = dossier.decision.dureeValidite;
     const nbMoisExpiration = referentiel.nbMoisDecalage(idEcheance);
