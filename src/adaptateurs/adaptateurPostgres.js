@@ -311,6 +311,24 @@ const nouvelAdaptateur = (env) => {
       );
   };
 
+  const sauvegardeNotificationsExpirationHomologation = async (notifications) =>
+    knex.batchInsert(
+      'notifications_expiration_homologation',
+      notifications.map((n) => ({
+        id: n.id,
+        id_service: n.idService,
+        date_prochain_envoi: n.dateProchainEnvoi,
+        delai_avant_expiration_mois: n.delaiAvantExpirationMois,
+      }))
+    );
+
+  const supprimeNotificationsExpirationHomologationPourService = async (
+    idService
+  ) =>
+    knex('notifications_expiration_homologation')
+      .where({ id_service: idService })
+      .del();
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -330,12 +348,14 @@ const nouvelAdaptateur = (env) => {
     sauvegardeService,
     service,
     sauvegardeAutorisation,
+    sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
     supprimeHomologation,
+    supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeHomologations,
     supprimeUtilisateur,
