@@ -4,6 +4,7 @@ const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurP
 const Referentiel = require('./referentiel');
 const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
 const depotDonneesHomologations = require('./depots/depotDonneesHomologations');
+const depotDonneesNotificationsExpirationHomologation = require('./depots/depotDonneesNotificationsExpirationHomologation');
 const depotDonneesParcoursUtilisateurs = require('./depots/depotDonneesParcoursUtilisateur');
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 
@@ -46,6 +47,12 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     referentiel,
   });
+
+  const depotNotificationsExpirationHomologation =
+    depotDonneesNotificationsExpirationHomologation.creeDepot({
+      adaptateurPersistance,
+      adaptateurUUID,
+    });
 
   const {
     ajouteDescriptionService,
@@ -98,25 +105,10 @@ const creeDepot = (config = {}) => {
   const { lisParcoursUtilisateur, sauvegardeParcoursUtilisateur } =
     depotParcoursUtilisateurs;
 
-  const supprimeNotificationsExpirationHomologationPourService = async (
-    idService
-  ) => {
-    // eslint-disable-next-line no-console
-    console.log(
-      `Notifications d'expiration d'homologation supprimées pour le service ${idService}`
-    );
-  };
-
-  const sauvegardeNotificationsExpirationHomologation = async (
-    notifications
-  ) => {
-    // eslint-disable-next-line no-console
-    console.log(
-      `Notifications d'expiration d'homologation sauvegardées: ${JSON.stringify(
-        notifications
-      )}`
-    );
-  };
+  const {
+    sauvegardeNotificationsExpirationHomologation,
+    supprimeNotificationsExpirationHomologationPourService,
+  } = depotNotificationsExpirationHomologation;
 
   return {
     accesAutorise,
