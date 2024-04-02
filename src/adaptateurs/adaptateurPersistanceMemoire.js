@@ -9,6 +9,7 @@ const nouvelAdaptateur = (
   donnees.services ||= [];
   donnees.autorisations ||= [];
   donnees.parcoursUtilisateurs ||= [];
+  donnees.notificationsExpirationHomologation ||= [];
 
   const metsAJourEnregistrement = (
     fonctionRecherche,
@@ -245,6 +246,24 @@ const nouvelAdaptateur = (
     );
   };
 
+  const sauvegardeNotificationsExpirationHomologation = async (
+    notifications
+  ) => {
+    donnees.notificationsExpirationHomologation = [
+      ...donnees.notificationsExpirationHomologation,
+      ...notifications,
+    ];
+  };
+
+  const supprimeNotificationsExpirationHomologationPourService = async (
+    idService
+  ) => {
+    donnees.notificationsExpirationHomologation =
+      donnees.notificationsExpirationHomologation.filter(
+        (n) => n.idService !== idService
+      );
+  };
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -260,6 +279,7 @@ const nouvelAdaptateur = (
     nbAutorisationsProprietaire,
     rechercheContributeurs,
     sauvegardeAutorisation,
+    sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
     sauvegardeHomologation,
     sauvegardeService,
@@ -270,6 +290,7 @@ const nouvelAdaptateur = (
     supprimeAutorisationsHomologation,
     supprimeHomologation,
     supprimeHomologations,
+    supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeUtilisateur,
     supprimeUtilisateurs,
