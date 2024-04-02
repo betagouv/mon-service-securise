@@ -51,4 +51,18 @@ describe("Une notification d'expiration d'homologation", () => {
       });
     });
   });
+
+  it('connait les données à persister', () => {
+    const uneNotification = new NotificationExpirationHomologation({
+      idService: '123',
+      dateProchainEnvoi: new Date('2024-01-01'),
+      delaiAvantExpirationMois: 6,
+    });
+
+    expect(uneNotification.donneesAPersister()).to.eql({
+      idService: '123',
+      dateProchainEnvoi: new Date('2024-01-01'),
+      delaiAvantExpirationMois: 6,
+    });
+  });
 });
