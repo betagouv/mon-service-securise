@@ -29,3 +29,5 @@ block main
     button.bouton Valider
 
   script(type = 'module', src='/statique/connexion.js')
+  script(id = 'url-redirection', type = 'application/json').
+    !{JSON.stringify({urlRedirection: urlRedirection})}
