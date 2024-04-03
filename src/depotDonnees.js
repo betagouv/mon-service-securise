@@ -110,6 +110,7 @@ const creeDepot = (config = {}) => {
   const {
     lisNotificationsExpirationHomologationEnDate,
     sauvegardeNotificationsExpirationHomologation,
+    supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
   } = depotNotificationsExpirationHomologation;
 
@@ -147,6 +148,7 @@ const creeDepot = (config = {}) => {
     supprimeContributeur,
     supprimeHomologation,
     supprimeIdResetMotDePassePourUtilisateur,
+    supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeUtilisateur,
     tousUtilisateurs,

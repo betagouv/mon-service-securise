@@ -337,6 +337,9 @@ const nouvelAdaptateur = (env) => {
       }))
     );
 
+  const supprimeNotificationsExpirationHomologation = async (ids) =>
+    knex('notifications_expiration_homologation').whereIn('id', ids).del();
+
   const supprimeNotificationsExpirationHomologationPourService = async (
     idService
   ) =>
@@ -371,6 +374,7 @@ const nouvelAdaptateur = (env) => {
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
     supprimeHomologation,
+    supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeHomologations,
