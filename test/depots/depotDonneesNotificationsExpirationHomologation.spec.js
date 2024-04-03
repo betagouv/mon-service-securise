@@ -31,6 +31,19 @@ describe("Le dépôt de données des notifications d'expiration d'homologation",
     expect(idServiceAppele).to.be('123');
   });
 
+  it("délègue à l'adaptateur de persistance la suppression des notifications par identifiants", async () => {
+    let idsPasses;
+    adaptateurPersistance.supprimeNotificationsExpirationHomologation = async (
+      ids
+    ) => {
+      idsPasses = ids;
+    };
+
+    await depot.supprimeNotificationsExpirationHomologation([1, 2]);
+
+    expect(idsPasses).to.eql([1, 2]);
+  });
+
   describe('sur demande de sauvegarde de notifications', () => {
     it('utilise un adaptateur de chiffrement pour générer des UUID', async () => {
       let donneesPassees;

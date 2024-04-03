@@ -22,13 +22,15 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const supprimeNotificationsExpirationHomologation = async (ids) =>
+    adaptateurPersistance.supprimeNotificationsExpirationHomologation(ids);
+
   const supprimeNotificationsExpirationHomologationPourService = async (
     idService
-  ) => {
-    await adaptateurPersistance.supprimeNotificationsExpirationHomologationPourService(
+  ) =>
+    adaptateurPersistance.supprimeNotificationsExpirationHomologationPourService(
       idService
     );
-  };
 
   const sauvegardeNotificationsExpirationHomologation = async (
     notifications
@@ -46,6 +48,7 @@ const creeDepot = (config = {}) => {
   return {
     lisNotificationsExpirationHomologationEnDate,
     sauvegardeNotificationsExpirationHomologation,
+    supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
   };
 };

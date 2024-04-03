@@ -266,6 +266,13 @@ const nouvelAdaptateur = (
     ];
   };
 
+  const supprimeNotificationsExpirationHomologation = async (ids) => {
+    donnees.notificationsExpirationHomologation =
+      donnees.notificationsExpirationHomologation.filter(
+        (n) => !ids.includes(n.id)
+      );
+  };
+
   const supprimeNotificationsExpirationHomologationPourService = async (
     idService
   ) => {
@@ -302,6 +309,7 @@ const nouvelAdaptateur = (
     supprimeAutorisationsHomologation,
     supprimeHomologation,
     supprimeHomologations,
+    supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeUtilisateur,
