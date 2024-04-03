@@ -78,4 +78,43 @@ describe("Le dépôt de données des notifications d'expiration d'homologation",
       expect(adaptateurAppele).to.be(false);
     });
   });
+
+  describe('sur demande de lecture des notifications en date', () => {
+    it("passe à l'adaptateur de persistance les dates du jour et du lendemain en tant que bornes", async () => {
+      let donneesRecues;
+      adaptateurPersistance.lisNotificationsExpirationHomologationDansIntervalle =
+        async (debut, fin) => {
+          donneesRecues = { debut, fin };
+          return [];
+        };
+
+      await depot.lisNotificationsExpirationHomologationEnDate(
+        new Date('2024-01-25T00:00:00Z')
+      );
+
+      expect(donneesRecues).to.eql({
+        debut: '2024-01-25T00:00:00.000Z',
+        fin: '2024-01-26T00:00:00.000Z',
+      });
+    });
+
+    it('retourne les notifications', async () => {
+      adaptateurPersistance.lisNotificationsExpirationHomologationDansIntervalle =
+        async () => [
+          {
+            id: 'un ID',
+            idService: 'un ID de service',
+          },
+        ];
+
+      const notifications =
+        await depot.lisNotificationsExpirationHomologationEnDate(
+          new Date('2024-01-01T00:00:00Z')
+        );
+
+      expect(notifications[0]).to.be.an(NotificationExpirationHomologation);
+      expect(notifications[0].id).to.be('un ID');
+      expect(notifications[0].idService).to.be('un ID de service');
+    });
+  });
 });

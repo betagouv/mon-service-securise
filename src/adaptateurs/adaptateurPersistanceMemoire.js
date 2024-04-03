@@ -246,6 +246,17 @@ const nouvelAdaptateur = (
     );
   };
 
+  const lisNotificationsExpirationHomologationDansIntervalle = async (
+    debut,
+    fin
+  ) => {
+    const dateDebut = new Date(debut);
+    const dateFin = new Date(fin);
+    return donnees.notificationsExpirationHomologation.filter(
+      (n) => dateDebut <= n.dateProchainEnvoi && n.dateProchainEnvoi < dateFin
+    );
+  };
+
   const sauvegardeNotificationsExpirationHomologation = async (
     notifications
   ) => {
@@ -274,6 +285,7 @@ const nouvelAdaptateur = (
     homologation,
     homologationAvecNomService,
     homologations,
+    lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
