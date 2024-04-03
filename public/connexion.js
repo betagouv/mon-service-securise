@@ -4,6 +4,7 @@ $(() => {
   const $inputs = $('input');
   const $erreur = $('.message-erreur');
   const $form = $('#connexion');
+  const { urlRedirection } = JSON.parse($('#url-redirection').text());
 
   const rendsAffichageNeutre = () => {
     $erreur.hide();
@@ -23,7 +24,7 @@ $(() => {
       .post('/api/token', { login, motDePasse })
       .then((reponse) => {
         const { nouvelleFonctionnalite } = reponse.data;
-        let url = '/tableauDeBord';
+        let url = urlRedirection ?? '/tableauDeBord';
         if (nouvelleFonctionnalite)
           url += `?nouvelleFonctionnalite=${nouvelleFonctionnalite}`;
         window.location = url;
