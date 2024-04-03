@@ -13,6 +13,7 @@ const {
   ErreurDroitsIncoherents,
   ErreurChainageMiddleware,
 } = require('../erreurs');
+const { ajouteLaRedirectionPostConnexion } = require('./redirection');
 
 const middleware = (configuration = {}) => {
   const {
@@ -78,8 +79,11 @@ const middleware = (configuration = {}) => {
 
   const verificationJWT = (requete, reponse, suite) => {
     const token = adaptateurJWT.decode(requete.session.token);
-    if (!token) reponse.redirect('/connexion');
-    else {
+    if (!token) {
+      const urlDemandee = requete.originalUrl;
+      const urlAvecRedirection = ajouteLaRedirectionPostConnexion(urlDemandee);
+      reponse.redirect(urlAvecRedirection);
+    } else {
       depotDonnees
         .utilisateurExiste(token.idUtilisateur)
         .then((utilisateurExiste) => {
