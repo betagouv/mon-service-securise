@@ -91,6 +91,28 @@ describe('Le middleware MSS', () => {
     middleware.verificationJWT(requete, reponse);
   });
 
+  it("ajoute l'URL originale à la redirection si elle commence par un '/'", (done) => {
+    const adaptateurJWT = { decode: () => null };
+    requete.originalUrl = '/tableauDeBord';
+    prepareVerificationRedirection(
+      reponse,
+      '/connexion?urlRedirection=%2FtableauDeBord',
+      done
+    );
+
+    const middleware = Middleware({ adaptateurJWT });
+    middleware.verificationJWT(requete, reponse);
+  });
+
+  it("n'ajoute pas l'URL originale à la redirection si elle commence par '/api'", (done) => {
+    const adaptateurJWT = { decode: () => null };
+    requete.originalUrl = '/api/service';
+    prepareVerificationRedirection(reponse, '/connexion', done);
+
+    const middleware = Middleware({ adaptateurJWT });
+    middleware.verificationJWT(requete, reponse);
+  });
+
   it('redirige vers mire login si identifiant dans token ne correspond à aucun utilisateur', (done) => {
     const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
 
