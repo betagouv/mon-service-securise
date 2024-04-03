@@ -1,7 +1,8 @@
 const { ajouteMoisADate } = require('../utilitaires/date');
 
 class NotificationExpirationHomologation {
-  constructor({ idService, dateProchainEnvoi, delaiAvantExpirationMois }) {
+  constructor({ id, idService, dateProchainEnvoi, delaiAvantExpirationMois }) {
+    if (id) this.id = id;
     this.idService = idService;
     this.dateProchainEnvoi = dateProchainEnvoi;
     this.delaiAvantExpirationMois = delaiAvantExpirationMois;
