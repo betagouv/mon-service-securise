@@ -192,6 +192,21 @@ const envoieNotificationTentativeReinscription = (destinataire) =>
     }
   );
 
+const envoieNotificationExpirationHomologation = (
+  destinataire,
+  idService,
+  delaiAvantExpirationMois
+) => {
+  const idTemplate =
+    delaiAvantExpirationMois === 0
+      ? process.env.SENDINBLUE_TEMPLATE_NOTIFICATION_HOMOLOGATION_EXPIREE
+      : process.env.SENDINBLUE_TEMPLATE_NOTIFICATION_EXPIRATION_HOMOLOGATION;
+  return envoieEmail(destinataire, parseInt(idTemplate, 10), {
+    id_service: idService,
+    delai_expiration: delaiAvantExpirationMois,
+  });
+};
+
 module.exports = {
   creeContact,
   desinscrisEmailsTransactionnels,
@@ -202,5 +217,6 @@ module.exports = {
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieMessageReinitialisationMotDePasse,
+  envoieNotificationExpirationHomologation,
   envoieNotificationTentativeReinscription,
 };

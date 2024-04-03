@@ -53,6 +53,13 @@ const fabriqueAdaptateurMailMemoire = () => {
     );
   };
 
+  const envoieNotificationExpirationHomologation = async (...args) => {
+    envoyer(
+      "Envoie de l'email de notification d'expiration d'homologation",
+      args
+    );
+  };
+
   return {
     creeContact,
     desinscrisEmailsTransactionnels,
@@ -63,6 +70,7 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoieMessageInvitationContribution,
     envoieMessageInvitationInscription,
     envoieMessageReinitialisationMotDePasse,
+    envoieNotificationExpirationHomologation,
     envoieNotificationTentativeReinscription,
   };
 };
