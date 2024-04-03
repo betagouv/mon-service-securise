@@ -1,12 +1,18 @@
-const ajouteLaRedirectionPostConnexion = (urlDemandee) => {
-  const urlLegalePourRedirection =
-    urlDemandee &&
-    urlDemandee.startsWith('/') &&
-    !urlDemandee.startsWith('/api');
+const estUrlLegalePourRedirection = (urlDemandee) =>
+  urlDemandee && urlDemandee.startsWith('/') && !urlDemandee.startsWith('/api');
 
-  if (!urlLegalePourRedirection) return '/connexion';
+const ajouteLaRedirectionPostConnexion = (urlDemandee) => {
+  const redirectionValide = estUrlLegalePourRedirection(urlDemandee);
+
+  if (!redirectionValide) return '/connexion';
 
   return `/connexion?urlRedirection=${encodeURIComponent(urlDemandee)}`;
 };
 
-module.exports = { ajouteLaRedirectionPostConnexion };
+const construisUrlAbsolueVersPage = (page) => process.env.URL_BASE_MSS + page;
+
+module.exports = {
+  ajouteLaRedirectionPostConnexion,
+  construisUrlAbsolueVersPage,
+  estUrlLegalePourRedirection,
+};

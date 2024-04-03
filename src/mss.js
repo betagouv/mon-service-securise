@@ -14,6 +14,10 @@ const {
   routesBibliotheques,
 } = require('./routes/publiques/routesBibliotheques');
 const routesStyles = require('./routes/publiques/routesStyles');
+const {
+  estUrlLegalePourRedirection,
+  construisUrlAbsolueVersPage,
+} = require('./http/redirection');
 
 require('dotenv').config();
 
@@ -94,8 +98,16 @@ const creeServeur = (
     reponse.render('confidentialite');
   });
 
-  app.get('/connexion', middleware.suppressionCookie, (_requete, reponse) => {
-    reponse.render('connexion');
+  app.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
+    const { urlRedirection } = requete.query;
+    if (!estUrlLegalePourRedirection(urlRedirection)) {
+      reponse.render('connexion');
+      return;
+    }
+
+    reponse.render('connexion', {
+      urlRedirection: construisUrlAbsolueVersPage(urlRedirection),
+    });
   });
 
   app.get(
