@@ -100,8 +100,15 @@ const creeServeur = (
 
   app.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
     const { urlRedirection } = requete.query;
-    if (!estUrlLegalePourRedirection(urlRedirection)) {
+
+    if (!urlRedirection) {
       reponse.render('connexion');
+      return;
+    }
+
+    if (!estUrlLegalePourRedirection(urlRedirection)) {
+      // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
+      reponse.redirect('connexion');
       return;
     }
 
