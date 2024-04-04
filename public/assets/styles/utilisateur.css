@@ -32,3 +32,12 @@ label .information {
   font-size: 0.9em;
   font-weight: normal;
 }
+
+.banniere {
+  margin-top: -1em;
+  margin-bottom: 2em;
+}
+
+.banniere.invisible {
+  display: none;
+}

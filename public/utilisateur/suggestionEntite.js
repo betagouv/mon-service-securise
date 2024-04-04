@@ -72,6 +72,9 @@ $(() => {
       siret = $item.data('siret');
       departement = $item.data('departement');
       $('#siretEntite').val(siret);
+      if (siret) {
+        $('.banniere-avertissement').addClass('invisible');
+      }
       $('#departementEntite').val(departement.toString());
       $champSelectizeDepartement[0].selectize.setValue(departement);
     },

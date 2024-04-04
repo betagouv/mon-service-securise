@@ -27,4 +27,8 @@ block main
 
     button(type = 'submit').bouton Enregistrer
 
+
+  script(id = 'infos-completude-profil', type = 'application/json').
+    !{JSON.stringify({completudeProfil: utilisateur.completudeProfil()})}
+
   script(type = 'module', src = '/statique/utilisateur/edition.js')

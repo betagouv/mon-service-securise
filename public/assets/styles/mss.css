@@ -121,3 +121,23 @@ section:last-of-type {
   border-color: var(--gris-fonce) transparent var(--gris-fonce) transparent;
   animation: rotation 1.2s linear infinite;
 }
+
+.banniere-avertissement,
+.banniere-information {
+  display: flex;
+  border: 1px solid #faa72c;
+  border-radius: 4px;
+  background: #fff2de;
+  padding: 0.7em 1em;
+  gap: 1em;
+}
+
+.banniere-information {
+  background: #dbeeff;
+  border-color: #0079d0;
+}
+
+:is(.banniere-avertissement, .banniere-information) p {
+  margin: 0;
+  font-weight: 500;
+}
