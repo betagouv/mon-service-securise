@@ -3,7 +3,7 @@ const { ErreurUtilisateurManquant } = require('./erreurs');
 const Utilisateur = require('../utilisateur');
 
 class EvenementProfilUtilisateurModifie extends Evenement {
-  constructor(utilisateur, options = {}) {
+  constructor(utilisateur, entite, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
     const valide = () => {
@@ -19,6 +19,7 @@ class EvenementProfilUtilisateurModifie extends Evenement {
         idUtilisateur: adaptateurChiffrement.hacheSha256(utilisateur.id),
         departementOrganisation: utilisateur.entite?.departement,
         roles: utilisateur.postes ?? [],
+        entite: entite || {},
       },
       date
     );

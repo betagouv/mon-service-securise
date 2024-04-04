@@ -13,26 +13,89 @@ describe('Un événement de profil utilisateur modifié', () => {
   it("chiffre l'identifiant de l'utilisateur qui lui est donné", () => {
     const evenement = new EvenementProfilUtilisateurModifie(
       unUtilisateur().avecId('abc').construis(),
+      null,
       { adaptateurChiffrement: hacheEnMajuscules }
     );
 
     expect(evenement.toJSON().donnees.idUtilisateur).to.be('ABC');
   });
 
-  it('sait se convertir en JSON', () => {
-    const evenement = new EvenementProfilUtilisateurModifie(
-      unUtilisateur().avecId('abc').quiDependDu('33').construis(),
-      { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
-    );
+  describe("lorsque les détails de l'entité lui sont passés", () => {
+    const entite = {
+      estServicePublic: false,
+      estFiness: false,
+      estEss: true,
+      estEntrepreneurIndividuel: false,
+      collectiviteTerritoriale: null,
+      estAssociation: false,
+      categorieEntreprise: null,
+      activitePrincipale: '68.20B',
+      trancheEffectifSalarie: null,
+      natureJuridique: '6540',
+      sectionActivitePrincipale: 'L',
+      anneeTrancheEffectifSalarie: null,
+      commune: '33376',
+      departement: '33',
+    };
 
-    expect(evenement.toJSON()).to.eql({
-      type: 'PROFIL_UTILISATEUR_MODIFIE',
-      donnees: {
-        idUtilisateur: 'ABC',
-        departementOrganisation: '33',
-        roles: [],
-      },
-      date: '17/11/2022',
+    it("consigne les détails dans l'évènement", () => {
+      const evenement = new EvenementProfilUtilisateurModifie(
+        unUtilisateur().avecId('abc').quiDependDu('33').construis(),
+        entite,
+        { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
+      );
+
+      expect(evenement.donnees.entite).to.eql(entite);
+    });
+
+    it('sait se convertir en JSON', () => {
+      const evenement = new EvenementProfilUtilisateurModifie(
+        unUtilisateur().avecId('abc').quiDependDu('33').construis(),
+        entite,
+        { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
+      );
+
+      expect(evenement.toJSON()).to.eql({
+        type: 'PROFIL_UTILISATEUR_MODIFIE',
+        donnees: {
+          idUtilisateur: 'ABC',
+          roles: [],
+          departementOrganisation: '33',
+          entite,
+        },
+        date: '17/11/2022',
+      });
+    });
+  });
+
+  describe("lorsque les détails de l'entité ne lui sont pas passés", () => {
+    it("consigne le département de l'entité de l'utilisateur", () => {
+      const evenement = new EvenementProfilUtilisateurModifie(
+        unUtilisateur().avecId('abc').quiDependDu('33').construis(),
+        null,
+        { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
+      );
+
+      expect(evenement.donnees.departementOrganisation).to.equal('33');
+    });
+
+    it('sait se convertir en JSON', () => {
+      const evenement = new EvenementProfilUtilisateurModifie(
+        unUtilisateur().avecId('abc').quiDependDu('33').construis(),
+        null,
+        { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
+      );
+
+      expect(evenement.toJSON()).to.eql({
+        type: 'PROFIL_UTILISATEUR_MODIFIE',
+        donnees: {
+          idUtilisateur: 'ABC',
+          roles: [],
+          departementOrganisation: '33',
+          entite: {},
+        },
+        date: '17/11/2022',
+      });
     });
   });
 
@@ -40,16 +103,20 @@ describe('Un événement de profil utilisateur modifié', () => {
     const utilisateurRssi = unUtilisateur()
       .avecPostes(['RSSI', 'DPO', 'Maire'])
       .construis();
-    const evenement = new EvenementProfilUtilisateurModifie(utilisateurRssi, {
-      adaptateurChiffrement: hacheEnMajuscules,
-    });
+    const evenement = new EvenementProfilUtilisateurModifie(
+      utilisateurRssi,
+      null,
+      {
+        adaptateurChiffrement: hacheEnMajuscules,
+      }
+    );
 
     expect(evenement.toJSON().donnees.roles).to.eql(['RSSI', 'DPO', 'Maire']);
   });
 
   it("exige que l'utilisateur soit renseigné", (done) => {
     try {
-      new EvenementProfilUtilisateurModifie(null, {
+      new EvenementProfilUtilisateurModifie(null, null, {
         adaptateurChiffrement: hacheEnMajuscules,
       });
 
