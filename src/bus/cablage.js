@@ -53,6 +53,7 @@ const cableTousLesAbonnes = (
     adaptateurHorloge,
     adaptateurTracking,
     adaptateurJournal,
+    adaptateurRechercheEntreprise,
     depotDonnees,
     referentiel,
   }
@@ -82,12 +83,18 @@ const cableTousLesAbonnes = (
 
   busEvenements.abonne(
     EvenementUtilisateurModifie,
-    consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal })
+    consigneProfilUtilisateurModifieDansJournal({
+      adaptateurJournal,
+      adaptateurRechercheEntreprise,
+    })
   );
 
   busEvenements.abonnePlusieurs(EvenementUtilisateurInscrit, [
     consigneNouvelUtilisateurInscritDansJournal({ adaptateurJournal }),
-    consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal }),
+    consigneProfilUtilisateurModifieDansJournal({
+      adaptateurJournal,
+      adaptateurRechercheEntreprise,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementDossierHomologationFinalise, [
