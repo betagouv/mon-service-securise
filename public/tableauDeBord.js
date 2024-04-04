@@ -7,10 +7,16 @@ import tableauDesServices from './modules/tableauDeBord/tableauDesServices.mjs';
 const afficheBandeauMajProfil = () =>
   axios
     .get('/api/utilisateurCourant')
-    .then(({ data }) => data.utilisateur)
-    .then((utilisateur) => {
-      if (!utilisateur.profilEstComplet)
-        $('.bandeau-maj-profil').removeClass('invisible');
+    .then(({ data }) => data.utilisateur.completudeProfil)
+    .then((completudeProfil) => {
+      if (completudeProfil.estComplet) {
+        return;
+      }
+      if (completudeProfil.champsNonRenseignes.includes('nom')) {
+        $('#bandeau-profil').removeClass('invisible');
+      } else if (completudeProfil.champsNonRenseignes.includes('siret')) {
+        $('#bandeau-siret').removeClass('invisible');
+      }
     });
 
 $(() => {

@@ -99,7 +99,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
           .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
           input(type='hidden' name='departementEntite' id='departementEntite' value != entite.departement)
 
-      .requis
+      a#siret.requis
         label(for = 'siretEntite-selectize') Nom ou SIRET de votre organisation
           select(
             id = 'siretEntite-selectize',

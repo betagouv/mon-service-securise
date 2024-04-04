@@ -747,7 +747,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const depotDonnees = testeur.depotDonnees();
       depotDonnees.utilisateur = async (idUtilisateur) => {
         idUtilisateurRecu = idUtilisateur;
-        return unUtilisateur().quiSAppelle('Marie Jeanne').construis();
+        return unUtilisateur()
+          .quiSAppelle('Marie Jeanne')
+          .quiTravaillePourUneEntiteAvecSiret('12345')
+          .construis();
       };
 
       const response = await axios.get(
@@ -758,7 +761,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(idUtilisateurRecu).to.equal('123');
       const { utilisateur } = response.data;
       expect(utilisateur.prenomNom).to.equal('Marie Jeanne');
-      expect(utilisateur.profilEstComplet).to.be(true);
+      expect(utilisateur.completudeProfil.estComplet).to.be(true);
     });
 
     it("répond avec un code 401 quand il n'y a pas d'identifiant", (done) => {

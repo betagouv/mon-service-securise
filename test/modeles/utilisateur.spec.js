@@ -12,17 +12,34 @@ const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
 describe('Un utilisateur', () => {
   describe("sur demande d'un profil complet ou non", () => {
-    it('considère le profil « complet » dès lors que le nom est renseigné', () => {
+    it("considère le profil « complet » et sans champ manquant dès lors que le nom et le siret de l'entite sont renseignés", () => {
+      const utilisateur = new Utilisateur({
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+        entite: { siret: '12345' },
+      });
+      expect(utilisateur.completudeProfil().estComplet).to.be(true);
+      expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([]);
+    });
+
+    it('considère le profil « incomplet » à cause du nom et du SIRET manquants si le nom et le SIRET ne sont pas renseignés', () => {
+      const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
+      expect(utilisateur.completudeProfil().estComplet).to.be(false);
+      expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([
+        'nom',
+        'siret',
+      ]);
+    });
+
+    it("considère le profil « incomplet » à cause du SIRET manquant si le SIRET de l'entité n'est pas renseigné", () => {
       const utilisateur = new Utilisateur({
         nom: 'Dupont',
         email: 'jean.dupont@mail.fr',
       });
-      expect(utilisateur.profilEstComplet()).to.be(true);
-    });
-
-    it("considère le profil « incomplet » si le nom n'est pas renseigné", () => {
-      const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-      expect(utilisateur.profilEstComplet()).to.be(false);
+      expect(utilisateur.completudeProfil().estComplet).to.be(false);
+      expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([
+        'siret',
+      ]);
     });
   });
 

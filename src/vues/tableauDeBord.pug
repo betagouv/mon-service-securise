@@ -41,9 +41,20 @@ block header-gauche
 block main
   +modaleNouveauService
 
-  a(href = './utilisateur/edition').bandeau-maj-profil.invisible
-    p.marges-fixes.
-      Mettez à jour vos informations
+  a#bandeau-profil(href = './utilisateur/edition').bandeau-maj-profil.invisible
+    p.marges-fixes
+      strong Bienvenue sur MonServiceSécurisé.
+    p.marges-fixes
+      | N'hésitez pas à mettre à jour vos informations depuis&nbsp;
+      span.souligne votre profil.
+
+  a#bandeau-siret(href = './utilisateur/edition#siret').bandeau-maj-profil.invisible
+    p.marges-fixes
+      strong Nous vous invitons à mettre à jour le nom ou le numéro de SIRET de votre organisation.
+    p.marges-fixes
+      | Afin de fiabiliser les données concernant votre organisation nous affichons désormais le SIRET associé.<br>
+      | Nous vous invitons à compléter ces informations pour éviter toute erreur depuis&nbsp;
+      span.souligne votre profil.
 
   .suivi-services
     .entete-suivi-services

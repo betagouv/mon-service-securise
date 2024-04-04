@@ -252,7 +252,7 @@ const routesApiPrivee = ({
         reponse.json({
           utilisateur: {
             prenomNom: utilisateur.prenomNom(),
-            profilEstComplet: utilisateur.profilEstComplet(),
+            completudeProfil: utilisateur.completudeProfil(),
           },
         });
       });
