@@ -135,8 +135,18 @@ class Utilisateur extends Base {
     return [this.prenom, this.nom].join(' ').trim() || this.email;
   }
 
-  profilEstComplet() {
-    return (this.nom?.trim() ?? '') !== '';
+  completudeProfil() {
+    const nomEstRenseigne = (this.nom?.trim() ?? '') !== '';
+    const siretEstRenseigne = (this.entite?.siret ?? '') !== '';
+    const estComplet = nomEstRenseigne && siretEstRenseigne;
+    const champsNonRenseignes = [];
+    if (!nomEstRenseigne) {
+      champsNonRenseignes.push('nom');
+    }
+    if (!siretEstRenseigne) {
+      champsNonRenseignes.push('siret');
+    }
+    return { estComplet, champsNonRenseignes };
   }
 
   async changePreferencesCommunication(nouvellesPreferences, adaptateurEmail) {

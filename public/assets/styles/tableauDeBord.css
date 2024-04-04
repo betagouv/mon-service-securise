@@ -10,16 +10,17 @@ main {
 }
 
 .bandeau-maj-profil {
-  display: flex;
-  height: 2.7em;
+  padding: 12px 0 4px 0;
+  flex-direction: column;
+  gap: 9px;
   width: 100%;
   align-items: center;
   color: #fff;
   background-color: var(--bleu-mise-en-avant);
 }
 
-.bandeau-maj-profil p::after {
-  background-color: #fff;
+.bandeau-maj-profil .souligne {
+  text-decoration: underline;
 }
 
 .bandeau-maj-profil:hover {
@@ -31,9 +32,7 @@ main {
 }
 
 .bandeau-maj-profil p {
-  display: flex;
   align-items: center;
-  font-weight: bold;
   font-size: 0.95em;
   text-align: left;
 }
