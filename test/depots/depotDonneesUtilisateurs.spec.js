@@ -177,6 +177,20 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(u.id).to.equal('123');
     });
 
+    it("permet la mise à jour d'informations partielles du profil (ne plante pas si l'entité n'est pas fournie)", async () => {
+      const sansEntite = unUtilisateur()
+        .avecId('123')
+        .quiSAppelle('Jérôme Dubois').donnees;
+      delete sansEntite.entite;
+
+      await depot.metsAJourUtilisateur('123', sansEntite);
+
+      const u = await depot.utilisateur('123');
+      expect(u.prenom).to.equal('Jérôme');
+      expect(u.nom).to.equal('Dubois');
+      // Le test passe si aucune exception n'est levée
+    });
+
     it("publie sur le bus d'événements l'utilisateur modifié", async () => {
       await depot.metsAJourUtilisateur(
         '123',
