@@ -103,10 +103,11 @@ const creeDepot = (config = {}) => {
 
   const metsAJourUtilisateur = async (id, donnees) => {
     delete donnees.motDePasse;
-    donnees.entite = await Entite.completeDonnees(
-      donnees.entite,
-      adaptateurRechercheEntite
-    );
+    if (donnees.entite)
+      donnees.entite = await Entite.completeDonnees(
+        donnees.entite,
+        adaptateurRechercheEntite
+      );
 
     await adaptateurPersistance.metsAJourUtilisateur(id, donnees);
 
