@@ -28,7 +28,8 @@ const rechercheOrganisations = async (terme, departement) => {
       }));
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API recherche-entreprise': e.response.data,
+      'Erreur renvoyée par API recherche-entreprise': e.response?.data,
+      'Statut HTTP': e.response?.status,
     });
 
     return [];
@@ -80,7 +81,8 @@ const recupereDetailsOrganisation = async (siret) => {
     };
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API recherche-entreprise': e.response.data,
+      'Erreur renvoyée par API recherche-entreprise': e.response?.data,
+      'Statut HTTP': e.response?.status,
     });
     return undefined;
   }
