@@ -59,22 +59,25 @@ const recupereDetailsOrganisation = async (siret) => {
       return undefined;
     }
 
-    return reponse.data.results.map((r) => ({
-      estServicePublic: r.complements.est_service_public,
-      estFiness: r.complements.est_finess,
-      estEss: r.complements.est_ess,
-      estEntrepreneurIndividuel: r.complements.est_entrepreneur_individuel,
-      collectiviteTerritoriale: r.complements.collectivite_territoriale,
-      estAssociation: r.complements.est_association,
-      categorieEntreprise: r.categorie_entreprise,
-      activitePrincipale: r.activite_principale,
-      trancheEffectifSalarie: r.tranche_effectif_salarie,
-      natureJuridique: r.nature_juridique,
-      sectionActivitePrincipale: r.section_activite_principale,
-      anneeTrancheEffectifSalarie: r.annee_tranche_effectif_salarie,
-      commune: r.siege.commune,
-      departement: r.siege.departement,
-    }))[0];
+    const [entiteApi] = reponse.data.results;
+
+    return {
+      estServicePublic: entiteApi.complements.est_service_public,
+      estFiness: entiteApi.complements.est_finess,
+      estEss: entiteApi.complements.est_ess,
+      estEntrepreneurIndividuel:
+        entiteApi.complements.est_entrepreneur_individuel,
+      collectiviteTerritoriale: entiteApi.complements.collectivite_territoriale,
+      estAssociation: entiteApi.complements.est_association,
+      categorieEntreprise: entiteApi.categorie_entreprise,
+      activitePrincipale: entiteApi.activite_principale,
+      trancheEffectifSalarie: entiteApi.tranche_effectif_salarie,
+      natureJuridique: entiteApi.nature_juridique,
+      sectionActivitePrincipale: entiteApi.section_activite_principale,
+      anneeTrancheEffectifSalarie: entiteApi.annee_tranche_effectif_salarie,
+      commune: entiteApi.siege.commune,
+      departement: entiteApi.siege.departement,
+    };
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
       'Erreur renvoyée par API recherche-entreprise': e.response.data,
