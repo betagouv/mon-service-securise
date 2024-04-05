@@ -52,8 +52,9 @@ const recupereDetailsOrganisation = async (siret) => {
     if (reponse.data.results.length !== 1) {
       fabriqueAdaptateurGestionErreur().logueErreur(
         new Error(
-          `Recherche entreprise: pas de résultat pour le siret ${siret}`
-        )
+          `Recherche entreprise: résultat inattendu pour le SIRET ${siret}`
+        ),
+        { "Reponse de l'API recherche-entreprises": reponse.data }
       );
       return undefined;
     }
