@@ -52,6 +52,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  quiTravaillePour(entite) {
+    this.donnees.entite = entite;
+    return this;
+  }
+
   quiSAppelle(prenomNom) {
     const [prenom, nom] = prenomNom.split(' ');
     this.donnees.prenom = prenom;

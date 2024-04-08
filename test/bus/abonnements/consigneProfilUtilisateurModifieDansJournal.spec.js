@@ -65,6 +65,7 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
       utilisateur: unUtilisateur()
         .avecId('123')
         .avecPostes(['AB', 'CD'])
+        .quiTravaillePourUneEntiteAvecSiret('12345')
         .construis(),
     });
 
@@ -87,5 +88,22 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
         "Impossible de consigner les mises à jour de profil utilisateur sans avoir l'utilisateur en paramètre."
       );
     }
+  });
+
+  it("ne complète pas les détails de l'entité si l'utilisateur n'a pas d'entité, comme dans le cas d'une invitation", async () => {
+    const utilisateurInvite = unUtilisateur()
+      .avecEmail('invite@mail.com')
+      .quiTravaillePour({})
+      .construis();
+
+    adaptateurRechercheEntreprise.recupereDetailsOrganisation = async () =>
+      expect().fail("L'adaptateur ne devrait pas être appelé pour un invité");
+
+    await consigneProfilUtilisateurModifieDansJournal({
+      adaptateurJournal,
+      adaptateurRechercheEntreprise,
+    })({
+      utilisateur: utilisateurInvite,
+    });
   });
 });
