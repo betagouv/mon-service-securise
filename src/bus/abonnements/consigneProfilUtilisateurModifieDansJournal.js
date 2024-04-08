@@ -10,10 +10,13 @@ function consigneProfilUtilisateurModifieDansJournal({
         `Impossible de consigner les mises à jour de profil utilisateur sans avoir l'utilisateur en paramètre.`
       );
 
-    const entite =
-      await adaptateurRechercheEntreprise.recupereDetailsOrganisation(
+    let entite = {};
+    const estUnInvite = !utilisateur.entite.siret;
+    if (!estUnInvite) {
+      entite = await adaptateurRechercheEntreprise.recupereDetailsOrganisation(
         utilisateur.entite.siret
       );
+    }
 
     const profilUtilisateurModifie = new EvenementProfilUtilisateurModifie(
       utilisateur,
