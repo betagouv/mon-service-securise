@@ -23,7 +23,10 @@ Sentry.init({
 });
 
 main().then((rapport) => {
-  Sentry.captureMessage(
-    `[TACHE][ENVOI NOTIFICATIONS HOMOLOGATION] ${rapport.nbNotificationsEnvoyees} envoyées / ${rapport.nbEchecs} erreurs`
-  );
+  Sentry.captureMessage(`[TACHE][ENVOI NOTIFICATIONS HOMOLOGATION]`, {
+    extra: {
+      'Notifications envoyees': rapport.nbNotificationsEnvoyees,
+      'Notifications en echec': rapport.nbEchecs,
+    },
+  });
 });
