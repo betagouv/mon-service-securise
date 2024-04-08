@@ -1,3 +1,12 @@
+const rapportExecution = (resultats) => {
+  const succes = resultats.filter((r) => r.status === 'fulfilled');
+  const echecs = resultats.filter((r) => r.status === 'rejected');
+  return {
+    nbNotificationsEnvoyees: succes.length,
+    nbEchecs: echecs.length,
+  };
+};
+
 const envoieMailsNotificationExpirationHomologation = async (config = {}) => {
   const { depotDonnees, adaptateurHorloge, adaptateurMail } = config;
 
@@ -6,30 +15,35 @@ const envoieMailsNotificationExpirationHomologation = async (config = {}) => {
       adaptateurHorloge.maintenant()
     );
 
+  const premierProprietaireDe = async (idService) => {
+    const autorisationProprietaire = (
+      await depotDonnees.autorisationsDuService(idService)
+    ).find((a) => a.estProprietaire);
+
+    const utilisateur = await depotDonnees.utilisateur(
+      autorisationProprietaire.idUtilisateur
+    );
+
+    return utilisateur.email;
+  };
+
   const resultats = await Promise.allSettled(
     notifications.map(async (notification) => {
-      const autorisationProprietaire = (
-        await depotDonnees.autorisationsDuService(notification.idService)
-      ).find((a) => a.estProprietaire);
-      const destinataire = (
-        await depotDonnees.utilisateur(autorisationProprietaire.idUtilisateur)
-      ).email;
+      const destinataire = await premierProprietaireDe(notification.idService);
+
       await adaptateurMail.envoieNotificationExpirationHomologation(
         destinataire,
         notification.idService,
         notification.delaiAvantExpirationMois
       );
+
       await depotDonnees.supprimeNotificationsExpirationHomologation([
         notification.id,
       ]);
     })
   );
 
-  return {
-    nbNotificationsEnvoyees: resultats.filter((r) => r.status === 'fulfilled')
-      .length,
-    nbEchecs: resultats.filter((r) => r.status === 'rejected').length,
-  };
+  return rapportExecution(resultats);
 };
 
 module.exports = { envoieMailsNotificationExpirationHomologation };
