@@ -1,3 +1,7 @@
+const {
+  fabriqueAdaptateurGestionErreur,
+} = require('../adaptateurs/fabriqueAdaptateurGestionErreur');
+
 const rapportExecution = (resultats) => {
   const succes = resultats.filter((r) => r.status === 'fulfilled');
   const echecs = resultats.filter((r) => r.status === 'rejected');
@@ -29,17 +33,25 @@ const envoieMailsNotificationExpirationHomologation = async (config = {}) => {
 
   const resultats = await Promise.allSettled(
     notifications.map(async (notification) => {
-      const destinataire = await premierProprietaireDe(notification.idService);
+      try {
+        const destinataire = await premierProprietaireDe(
+          notification.idService
+        );
 
-      await adaptateurMail.envoieNotificationExpirationHomologation(
-        destinataire,
-        notification.idService,
-        notification.delaiAvantExpirationMois
-      );
+        await adaptateurMail.envoieNotificationExpirationHomologation(
+          destinataire,
+          notification.idService,
+          notification.delaiAvantExpirationMois
+        );
 
-      await depotDonnees.supprimeNotificationsExpirationHomologation([
-        notification.id,
-      ]);
+        await depotDonnees.supprimeNotificationsExpirationHomologation([
+          notification.id,
+        ]);
+      } catch (e) {
+        fabriqueAdaptateurGestionErreur().logueErreur(e);
+        // Throw pour compter un échec dans le rapport d'exécution
+        throw e;
+      }
     })
   );
 
