@@ -207,12 +207,22 @@ const envoieNotificationExpirationHomologation = (
   });
 };
 
+const envoieMessageFelicitationHomologation = (destinataire, idService) =>
+  envoieEmail(
+    destinataire,
+    parseInt(process.env.SENDINBLUE_TEMPLATE_FELICITATION_HOMOLOGATION, 10),
+    {
+      id_service: idService,
+    }
+  );
+
 module.exports = {
   creeContact,
   desinscrisEmailsTransactionnels,
   desinscrisInfolettre,
   inscrisEmailsTransactionnels,
   inscrisInfolettre,
+  envoieMessageFelicitationHomologation,
   envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,

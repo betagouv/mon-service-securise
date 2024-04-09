@@ -60,12 +60,17 @@ const fabriqueAdaptateurMailMemoire = () => {
     );
   };
 
+  const envoieMessageFelicitationHomologation = async (...args) => {
+    envoyer("Envoie de l'email de félicitation d'homologation", args);
+  };
+
   return {
     creeContact,
     desinscrisEmailsTransactionnels,
     desinscrisInfolettre,
     inscrisEmailsTransactionnels,
     inscrisInfolettre,
+    envoieMessageFelicitationHomologation,
     envoieMessageFinalisationInscription,
     envoieMessageInvitationContribution,
     envoieMessageInvitationInscription,
