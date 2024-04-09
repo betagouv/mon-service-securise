@@ -53,9 +53,9 @@ class ConstructeurService {
   }
 
   avecOrganisationResponsable(organisationResponsable) {
-    this.donnees.descriptionService.organisationsResponsables = [
-      organisationResponsable,
-    ];
+    this.donnees.descriptionService.organisationResponsable = {
+      nom: organisationResponsable,
+    };
     return this;
   }
 

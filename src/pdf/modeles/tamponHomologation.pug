@@ -22,7 +22,7 @@ block page
           return resultat
         }
       h1!= texteTronque(service.nomService(), taillesTexte.nomService)
-      +cartouche('Organisation responsable', texteTronque(service.descriptionService.organisationsResponsables[0], taillesTexte.organisationResponsable))
+      +cartouche('Organisation responsable', texteTronque(service.descriptionService.organisationResponsable.nom, taillesTexte.organisationResponsable))
       +cartouche("Autorité d'homologation", texteTronque(dossier.autorite.nom, taillesTexte.autoriteHomologation), texteTronque(dossier.autorite.fonction, taillesTexte.autoriteHomologation))
       +cartouche("Date d’homologation", formatteDateFrancaise(new Date(dossier.decision.dateHomologation)))
       +cartouche("Durée et échéance de l’homologation", referentiel.descriptionEcheanceRenouvellement(dossier.decision.dureeValidite), formatteDateFrancaise(dossier.dateProchaineHomologation()))

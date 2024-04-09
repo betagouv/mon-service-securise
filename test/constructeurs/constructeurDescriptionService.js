@@ -12,7 +12,9 @@ class ConstructeurDescriptionService {
       delaiAvantImpactCritique: 'unDelai',
       localisationDonnees: 'uneLocalisation',
       nomService: 'Nom service',
-      organisationsResponsables: ['ANSSI'],
+      organisationResponsable: {
+        nom: 'ANSSI',
+      },
       presentation: 'Une présentation',
       provenanceService: 'uneProvenance',
       risqueJuridiqueFinancierReputationnel: false,
@@ -33,7 +35,7 @@ class ConstructeurDescriptionService {
   }
 
   deLOrganisation(organisationResponsable) {
-    this.donnees.organisationsResponsables = [organisationResponsable];
+    this.donnees.organisationResponsable = { nom: organisationResponsable };
     return this;
   }
 

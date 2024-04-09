@@ -125,7 +125,7 @@ const tableauDesServices = {
           service.nomService
             .toLowerCase()
             .includes(tableauDesServices.termeRecherche.toLowerCase()) ||
-          service.organisationsResponsables[0]
+          service.organisationResponsable
             ?.toLowerCase()
             .includes(tableauDesServices.termeRecherche.toLowerCase())
       )
@@ -208,7 +208,7 @@ const tableauDesServices = {
       const $nomService =
         $(`<a class='conteneur-noms' href='/service/${service.id}' id='nom-${service.id}'>
                               <div class='nom-service'>${service.nomService}</div>
-                              <div class='nom-organisation'>${service.organisationsResponsables[0]}</div>
+                              <div class='nom-organisation'>${service.organisationResponsable}</div>
                             </a>`);
       $celluleNoms.append($inputSelection);
       $celluleNoms.append($nomService);

@@ -167,10 +167,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return '456';
       };
 
-      const reponse = await axios.post(
-        'http://localhost:1234/api/service',
-        donneesDescriptionService
-      );
+      const { organisationResponsable, ...autresDonneesDescription } =
+        donneesDescriptionService;
+      const reponse = await axios.post('http://localhost:1234/api/service', {
+        ...autresDonneesDescription,
+        organisationsResponsables: organisationResponsable.nom,
+      });
 
       expect(reponse.status).to.equal(200);
       expect(reponse.data).to.eql({ idService: '456' });
@@ -1514,7 +1516,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.data).to.eql({
         id: '456',
         nomService: 'Nom service',
-        organisationsResponsables: ['ANSSI'],
+        organisationResponsable: 'ANSSI',
         contributeurs: [
           {
             id: 'AAA',

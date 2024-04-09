@@ -15,8 +15,8 @@ const extraisParametresDescriptionService = (selecteurFormulaire) => {
     modifieParametresAvecItemsExtraits(params, cle, sourceRegExpParamsItem)
   );
 
-  if (params.organisationsResponsables) {
-    params.organisationsResponsables = [params.organisationsResponsables];
+  if (params.organisationResponsable) {
+    params.organisationResponsable = [params.organisationResponsable];
   }
 
   const [borneBasse, borneHaute] =
