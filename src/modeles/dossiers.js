@@ -39,7 +39,8 @@ class Dossiers extends ElementsConstructibles {
     const dossierActif = this.dossierActif();
 
     if (!dossierActif) return false;
-    return dossierActif.statutHomologation() === Dossiers.ACTIVEE;
+    const statut = dossierActif.statutHomologation();
+    return statut === Dossiers.ACTIVEE || statut === Dossiers.BIENTOT_EXPIREE;
   }
 
   dossierCourant() {
