@@ -20,7 +20,9 @@ describe('Les dossiers liés à un service', () => {
 
   beforeEach(() =>
     referentiel.recharge({
-      echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
+      echeancesRenouvellement: {
+        unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 1 },
+      },
       statutsAvisDossierHomologation: { favorable: {} },
     })
   );
@@ -239,6 +241,23 @@ describe('Les dossiers liés à un service', () => {
         {
           dossiers: [
             unDossier(referentiel).quiEstComplet().quiEstActif().donnees,
+          ],
+        },
+        referentiel
+      );
+      expect(
+        dossiersAvecDossierActifExpire.aUnDossierEnCoursDeValidite()
+      ).to.be(true);
+    });
+
+    it('retournent `true` si le dossier actif est bientôt expiré', () => {
+      const dossiersAvecDossierActifExpire = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel)
+              .quiEstComplet()
+              .quiEstActif()
+              .quiVaExpirer(1, 'unAn').donnees,
           ],
         },
         referentiel
