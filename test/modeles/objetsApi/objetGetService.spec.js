@@ -63,7 +63,7 @@ describe("L'objet d'API de `GET /service`", () => {
     ).to.eql({
       id: '123',
       nomService: 'Un service',
-      organisationsResponsables: ['Une organisation'],
+      organisationResponsable: 'Une organisation',
       contributeurs: [
         {
           id: 'A',

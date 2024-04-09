@@ -13,8 +13,8 @@ const donnees = (service, autorisation, referentiel) => {
   return {
     id: service.id,
     nomService: service.nomService(),
-    organisationsResponsables:
-      service.descriptionService.organisationsResponsables ?? [],
+    organisationResponsable:
+      service.descriptionService.organisationResponsable.nom ?? '',
     contributeurs: service.contributeurs.map((c) => ({
       id: c.id,
       prenomNom: c.prenomNom(),

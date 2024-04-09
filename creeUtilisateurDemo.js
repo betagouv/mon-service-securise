@@ -22,7 +22,11 @@ const descriptionService = new DescriptionService(
     risqueJuridiqueFinancierReputationnel: false,
     statutDeploiement: 'enLigne',
     typeService: ['siteInternet'],
-    organisationsResponsables: ['Agglomération de Mansart'],
+    organisationResponsable: {
+      nom: 'Agglomération de Mansart',
+      siret: '12345',
+      departement: '75',
+    },
     nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
   },
   referentiel

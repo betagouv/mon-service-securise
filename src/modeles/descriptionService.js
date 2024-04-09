@@ -7,6 +7,7 @@ const FonctionnalitesSpecifiques = require('./fonctionnalitesSpecifiques');
 const InformationsHomologation = require('./informationsHomologation');
 const PointsAcces = require('./pointsAcces');
 const Referentiel = require('../referentiel');
+const Entite = require('./entite');
 
 class DescriptionService extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
@@ -24,7 +25,6 @@ class DescriptionService extends InformationsHomologation {
       proprietesListes: [
         'donneesCaracterePersonnel',
         'fonctionnalites',
-        'organisationsResponsables',
         'typeService',
       ],
       listesAgregats: {
@@ -33,6 +33,7 @@ class DescriptionService extends InformationsHomologation {
         pointsAcces: PointsAcces,
       },
     });
+    this.organisationResponsable = new Entite(donnees.organisationResponsable);
     DescriptionService.valide(donnees, referentiel);
     this.renseigneProprietes(donnees);
 
@@ -63,6 +64,17 @@ class DescriptionService extends InformationsHomologation {
 
   nombrePointsAcces() {
     return this.pointsAcces.nombre();
+  }
+
+  donneesSerialisees() {
+    return this.toJSON();
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      organisationResponsable: this.organisationResponsable.toJSON(),
+    };
   }
 
   static proprietesObligatoires() {

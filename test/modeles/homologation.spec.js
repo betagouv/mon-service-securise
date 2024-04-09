@@ -542,7 +542,9 @@ describe('Une homologation', () => {
           donneesSensiblesSpecifiques: [],
           fonctionnalitesSpecifiques: [],
           pointsAcces: [],
-          organisationsResponsables: ['ANSSI'],
+          organisationResponsable: {
+            nom: 'ANSSI',
+          },
           nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         },
         dossiers: [
@@ -640,9 +642,9 @@ describe('Une homologation', () => {
       const utilisateur = unUtilisateur().avecNomEntite('ANSSI').construis();
       const service = Homologation.creePourUnUtilisateur(utilisateur);
 
-      expect(service.descriptionService.organisationsResponsables).to.eql([
-        'ANSSI',
-      ]);
+      expect(service.descriptionService.organisationResponsable.nom).to.eql(
+        'ANSSI'
+      );
     });
   });
 

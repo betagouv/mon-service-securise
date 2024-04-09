@@ -301,7 +301,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
         const serviceRecu = donnees[0];
         expect(serviceRecu.nomService).to.eql('Un service');
-        expect(serviceRecu.organisationsResponsables).to.eql(['ANSSI']);
+        expect(serviceRecu.organisationResponsable).to.eql('ANSSI');
         expect(serviceRecu.nombreContributeurs).to.eql(1);
         expect(serviceRecu.estProprietaire).to.be(true);
 

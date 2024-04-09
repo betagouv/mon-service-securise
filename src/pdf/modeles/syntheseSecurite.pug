@@ -53,7 +53,7 @@ block page
   .synthese-securite
     h1 Synthèse de la sécurité du service
     .separateur
-    h2!=(service.descriptionService.organisationsResponsables[0])
+    h2!=(service.descriptionService.organisationResponsable.nom)
     h3!=(service.nomService())
     .conteneur
       fieldset(class='resume')

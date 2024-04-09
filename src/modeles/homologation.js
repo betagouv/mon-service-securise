@@ -276,13 +276,9 @@ class Homologation {
           borneBasse: 0,
           borneHaute: 0,
         },
+        organisationResponsable: utilisateur.entite,
       },
     };
-    if (utilisateur.entite.nom) {
-      donneesService.descriptionService.organisationsResponsables = [
-        utilisateur.entite.nom,
-      ];
-    }
 
     return new Homologation(donneesService);
   }

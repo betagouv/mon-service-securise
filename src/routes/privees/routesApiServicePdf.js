@@ -32,7 +32,7 @@ const routesApiServicePdf = ({
       fonctionAutorite: dossierCourant.autorite.fonction,
       indiceCyberTotal: homologation.indiceCyber().total,
       organisationResponsable:
-        homologation.descriptionService.organisationsResponsables[0],
+        homologation.descriptionService.organisationResponsable.nom,
       referentiel,
       ...dossierCourant.avis.toJSON(),
       ...dossierCourant.documents.toJSON(),

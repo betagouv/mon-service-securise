@@ -25,9 +25,7 @@ const genereCsvServices = (tableauServices) => {
 
     const donnnesCsv = tableauServices.map((s) => ({
       service: decode(s.nomService),
-      organisations: s.organisationsResponsables
-        .map((o) => decode(o))
-        .join(' - '),
+      organisations: decode(s.organisationResponsable?.nom),
       nombreContributeurs: s.nombreContributeurs,
       estProprietaire: remplaceBooleen(s.estProprietaire),
       indiceCyber: Number(s.indiceCyber) ? s.indiceCyber : '-',
