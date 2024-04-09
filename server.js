@@ -59,6 +59,7 @@ cableTousLesAbonnes(busEvenements, {
   adaptateurTracking,
   adaptateurJournal,
   adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+  adaptateurMail,
   depotDonnees,
   referentiel,
 });

@@ -46,6 +46,9 @@ const {
 const {
   supprimeNotificationsExpirationHomologation,
 } = require('./abonnements/supprimeNotificationsExpirationHomologation');
+const {
+  envoieMailFelicitationHomologation,
+} = require('./abonnements/envoieMailFelicitationHomologation');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -54,6 +57,7 @@ const cableTousLesAbonnes = (
     adaptateurTracking,
     adaptateurJournal,
     adaptateurRechercheEntreprise,
+    adaptateurMail,
     depotDonnees,
     referentiel,
   }
@@ -107,6 +111,7 @@ const cableTousLesAbonnes = (
       depotDonnees,
       referentiel,
     }),
+    envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementServiceSupprime, [
