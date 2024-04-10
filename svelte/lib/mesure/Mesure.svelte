@@ -71,7 +71,7 @@
       </label>
     {/if}
     {#if $configurationAffichage.doitAfficherDescriptionLongue}
-      <details open={!!$rechercheTextuelle}>
+      <details open={true}>
         <summary />
         <p>
           {@html texteSurligne}
@@ -82,7 +82,7 @@
     <label for="details">
       Détails sur la mise en œuvre
       <textarea
-        rows="10"
+        rows="6"
         bind:value={$store.mesureEditee.mesure.modalites}
         id="details"
         placeholder="Modalités de mise en œuvre (facultatif)"
@@ -195,21 +195,28 @@
   }
 
   .conteneur-actions {
-    margin-top: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    bottom: 0;
+    width: calc(100% + 4em);
+    margin: 24px 0 -2em -2em;
+    border-top: 1px solid #cbd5e1;
+    padding: 1em 0;
+    background: white;
   }
 
   .conteneur-actions button[type='submit'] {
     margin-left: auto;
+    margin-right: 2em;
   }
 
   .conteneur-actions p {
     font-weight: 500;
     color: #0079d0;
     cursor: pointer;
-    margin: 0;
+    margin: 0 0 0 2em;
   }
 
   :global(.erreur-champ-saisie) {
