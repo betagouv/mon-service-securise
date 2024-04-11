@@ -315,7 +315,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       testeur.middleware().reinitialise({
-        homologationARenvoyer: unService(avecMesureA)
+        serviceARenvoyer: unService(avecMesureA)
           .avecMesures(mesures)
           .construis(),
       });
@@ -709,7 +709,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
       testeur.depotDonnees().enregistreDossier = async () => {};
     });
 
@@ -776,7 +776,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
       testeur.depotDonnees().enregistreDossier = async () => {};
       testeur.referentiel().recharge({ echeancesRenouvellement: { unAn: {} } });
     });
@@ -874,7 +874,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
       testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
       testeur
         .referentiel()
@@ -937,7 +937,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
       testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
       testeur.referentiel().recharge({
         echeancesRenouvellement: { unAn: {} },
@@ -1082,7 +1082,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
       testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
     });
 
@@ -1195,7 +1195,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
       testeur.depotDonnees().finaliseDossierCourant = () => Promise.resolve();
     });
 
@@ -1473,7 +1473,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .avecDossiers([donneesDossier])
         .construis();
       testeur.middleware().reinitialise({
-        homologationARenvoyer: serviceARenvoyer,
+        serviceARenvoyer,
         idUtilisateur: '123',
         autorisationACharger: uneAutorisation()
           .avecDroits({ [HOMOLOGUER]: LECTURE })
@@ -1627,7 +1627,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
       testeur.middleware().reinitialise({
         idUtilisateur: 'LEROY',
-        homologationARenvoyer: serviceABC,
+        serviceARenvoyer: serviceABC,
         autorisationACharger: leroyProprietaireDeABC,
       });
 
@@ -1761,7 +1761,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .avecId('456')
         .construis();
       testeur.middleware().reinitialise({
-        homologationARenvoyer: serviceARenvoyer,
+        serviceARenvoyer,
         idUtilisateur: 'AAA',
       });
       testeur.depotDonnees().autorisationsDuService = async (idService) => [
@@ -1803,7 +1803,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .avecNContributeurs(1)
         .construis();
       testeur.middleware().reinitialise({
-        homologationARenvoyer: serviceARenvoyer,
+        serviceARenvoyer,
         idUtilisateur: 'AAA',
       });
 
@@ -1840,7 +1840,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .avecNContributeurs(3, ['ABC', 'DEF', 'GHI'])
         .construis();
       testeur.middleware().reinitialise({
-        homologationARenvoyer: serviceARenvoyer,
+        serviceARenvoyer,
         idUtilisateur: 'AAA',
       });
       testeur.depotDonnees().autorisationsDuService = async () => [
@@ -1863,7 +1863,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .avecNContributeurs(3, ['ABC', 'DEF', 'GHI'])
         .construis();
       testeur.middleware().reinitialise({
-        homologationARenvoyer: serviceARenvoyer,
+        serviceARenvoyer,
         idUtilisateur: 'DEF',
       });
       testeur.depotDonnees().autorisationsDuService = async () => [
@@ -1910,7 +1910,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       const serviceARenvoyer = unService().construis();
       serviceARenvoyer.indiceCyber = () => ({ total: 1.5 });
       testeur.middleware().reinitialise({
-        homologationARenvoyer: serviceARenvoyer,
+        serviceARenvoyer,
       });
 
       const { data } = await axios.get(
@@ -1951,7 +1951,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         nombreTotalMesures: 10,
       });
       testeur.middleware().reinitialise({
-        homologationARenvoyer: serviceARenvoyer,
+        serviceARenvoyer,
       });
 
       const { data } = await axios.get(
@@ -2074,7 +2074,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("retourne une erreur HTTP 422 si le service n'a pas de dossier courant", (done) => {
       const service = unService().construis();
-      testeur.middleware().reinitialise({ homologationARenvoyer: service });
+      testeur.middleware().reinitialise({ serviceARenvoyer: service });
 
       testeur.verifieRequeteGenereErreurHTTP(
         422,
@@ -2100,7 +2100,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .construis();
       let serviceMisAJour;
 
-      testeur.middleware().reinitialise({ homologationARenvoyer: service });
+      testeur.middleware().reinitialise({ serviceARenvoyer: service });
       testeur.depotDonnees().metsAJourService = async (s) => {
         serviceMisAJour = s;
       };
