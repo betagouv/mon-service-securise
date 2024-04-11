@@ -15,9 +15,15 @@ const extraisParametresDescriptionService = (selecteurFormulaire) => {
     modifieParametresAvecItemsExtraits(params, cle, sourceRegExpParamsItem)
   );
 
-  if (params.organisationResponsable) {
-    params.organisationResponsable = [params.organisationResponsable];
-  }
+  params.organisationResponsable = {
+    siret: params.siretEntite,
+  };
+
+  delete params.siretEntite;
+  delete params.nomEntite;
+  delete params.departementEntite;
+  delete params['siretEntite-selectize'];
+  delete params['departementEntite-selectize'];
 
   const [borneBasse, borneHaute] =
     params.nombreOrganisationsUtilisatrices.split('-');

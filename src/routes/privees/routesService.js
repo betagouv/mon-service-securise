@@ -25,6 +25,7 @@ const routesService = ({
   adaptateurHorloge,
 }) => {
   const routes = express.Router();
+  const departements = referentiel.departements();
 
   routes.get(
     '/creation',
@@ -40,6 +41,7 @@ const routesService = ({
             referentiel,
             service: Service.creePourUnUtilisateur(utilisateur),
             etapeActive: 'descriptionService',
+            departements,
           });
         })
         .catch(suite);
@@ -74,6 +76,7 @@ const routesService = ({
         referentiel,
         service: homologation,
         etapeActive: 'descriptionService',
+        departements,
       });
     }
   );
