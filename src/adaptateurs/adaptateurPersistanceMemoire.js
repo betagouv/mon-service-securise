@@ -77,7 +77,7 @@ const nouvelAdaptateur = (
 
   const homologations = (idUtilisateur) =>
     autorisations(idUtilisateur).then((as) =>
-      Promise.all(as.map(({ idHomologation }) => homologation(idHomologation)))
+      Promise.all(as.map(({ idService }) => service(idService)))
     );
 
   const tousLesServices = async () => {

@@ -13,7 +13,7 @@ describe('Le dépôt de données vide', () => {
 
   it('ne retourne rien si on cherche une homologation à partir de son identifiant', (done) => {
     depotVide()
-      .then((depot) => depot.homologation('123'))
+      .then((depot) => depot.service('123'))
       .then((h) => expect(h).to.be(undefined))
       .then(() => done())
       .catch(done);

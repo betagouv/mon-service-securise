@@ -89,7 +89,7 @@ const creeDepot = (config = {}) => {
     };
 
     const verifieServiceExiste = async (id) => {
-      const h = await depotHomologations.homologation(
+      const h = await depotHomologations.service(
         nouvelleAutorisation.idService
       );
       if (!h)
