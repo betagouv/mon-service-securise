@@ -48,13 +48,6 @@ const routesApiService = ({
 }) => {
   const routes = express.Router();
 
-  const formatteOrganisationResponsable = (body) => {
-    body.organisationResponsable = {
-      nom: body.organisationsResponsables,
-    };
-    delete body.organisationsResponsables;
-  };
-
   routes.use(
     routesApiServicePdf({
       adaptateurHorloge,
@@ -87,7 +80,6 @@ const routesApiService = ({
     ]),
     async (requete, reponse, suite) => {
       try {
-        formatteOrganisationResponsable(requete.body);
         const description = new DescriptionService(requete.body, referentiel);
 
         const idService = await depotDonnees.nouveauService(
@@ -128,7 +120,6 @@ const routesApiService = ({
     ]),
     async (requete, reponse, suite) => {
       try {
-        formatteOrganisationResponsable(requete.body);
         const descriptionService = new DescriptionService(
           requete.body,
           referentiel

@@ -3,10 +3,19 @@ include ./elementsAjoutables/elementsAjoutablesDescription
 
 block append styles
   link(href = '/statique/assets/styles/homologation/descriptionService.css', rel = 'stylesheet')
+  link(href = '/styles/selectize.default.min.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
+
+block append scripts
+  script(id = 'donnees-departements', type = 'application/json').
+    !{JSON.stringify(departements || [])}
+  script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
+  script(src = "/statique/utilisateur/suggestionEntite.js")
 
 mixin formulaireDescriptionService(idHomologation)
-  - const estEnCreation = !idHomologation
-  - const estLectureSeule  = estEnCreation ? false : autorisationsService.DECRIRE.estLectureSeule
+  - const estEnCreation = !idHomologation;
+  - const estLectureSeule  = estEnCreation ? false : autorisationsService.DECRIRE.estLectureSeule;
+  - const entite = service?.descriptionService?.organisationResponsable || {};
   form.homologation#homologation
     section
       .mention champ obligatoire
@@ -24,19 +33,45 @@ mixin formulaireDescriptionService(idHomologation)
           .message-erreur Le nom est obligatoire. Veuillez le renseigner.
           .message-erreur-specifique#nom-deja-utilise Ce nom est déjà utilisé pour un autre service. Veuillez en saisir un autre.
 
-      .requis
-        label Organisation responsable du service numérique
-          br
-          input(
-            id = 'organisations-responsables',
-            name = 'organisationsResponsables',
-            type = 'text',
-            placeholder = 'ex : Agglomération de Mansart',
-            value != service.descriptionService.organisationResponsable.nom,
-            required
-            readonly = estLectureSeule
-          )
-          .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
+      if estLectureSeule
+        .requis
+          label Organisation responsable du service numérique
+            br
+            input(
+              id = 'entite-readonly',
+              name = 'entite-readonly',
+              type = 'text',
+              value != entite.nom,
+              required
+              readonly = true
+            )
+
+      unless estLectureSeule
+        .requis
+          label(for = 'departementEntite-selectize') Département de l'organisation responsable du service numérique
+            select(
+              id = 'departementEntite-selectize',
+              name = 'departementEntite-selectize',
+              placeHolder = 'ex : 33, Morbihan',
+              required,
+              readonly = estLectureSeule
+            )
+            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
+            input(type='hidden' name='departementEntite' id='departementEntite' value != entite.departement)
+
+        .requis
+          label(for = 'siretEntite-selectize') Nom ou SIRET de l'organisation responsable du service numérique
+            select(
+              id = 'siretEntite-selectize',
+              name = 'siretEntite-selectize',
+              placeHolder = 'ex : 13261762000010, Agglomération de Mansart, Société Y',
+              required,
+              readonly = estLectureSeule
+            )
+            .icone-chargement
+            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
+            input(type='hidden' name='nomEntite' id='nomEntite' value != entite.nom)
+            input(type='hidden' name='siretEntite' id='siretEntite' value != entite.siret)
 
       - const { borneBasse, borneHaute } = service.descriptionService.nombreOrganisationsUtilisatrices
       - const valeurService = `${borneBasse}-${borneHaute}`

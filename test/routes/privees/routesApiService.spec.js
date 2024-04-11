@@ -155,7 +155,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       const donneesDescriptionService = uneDescriptionValide(
         testeur.referentiel()
       )
-        .deLOrganisation({ nom: 'ABCD' })
+        .deLOrganisation({ siret: '12345' })
         .construis()
         .toJSON();
 
@@ -168,12 +168,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return '456';
       };
 
-      const { organisationResponsable, ...autresDonneesDescription } =
-        donneesDescriptionService;
-      const reponse = await axios.post('http://localhost:1234/api/service', {
-        ...autresDonneesDescription,
-        organisationsResponsables: organisationResponsable.nom,
-      });
+      const reponse = await axios.post(
+        'http://localhost:1234/api/service',
+        donneesDescriptionService
+      );
 
       expect(reponse.status).to.equal(200);
       expect(reponse.data).to.eql({ idService: '456' });
