@@ -50,12 +50,12 @@ const fabriquePersistance = (
 
   const persistance = {
     lis: {
-      une: async (idHomologation) => {
-        const h = await adaptateurPersistance.service(idHomologation);
+      un: async (idService) => {
+        const s = await adaptateurPersistance.service(idService);
 
-        if (!h) return undefined;
+        if (!s) return undefined;
 
-        const donneesEnClair = await dechiffre.donneesService(h);
+        const donneesEnClair = await dechiffre.donneesService(s);
         return new Homologation(donneesEnClair, referentiel);
       },
       cellesDeUtilisateur: async (idUtilisateur) => {
@@ -103,10 +103,10 @@ const creeDepot = (config = {}) => {
     referentiel
   );
 
-  const homologation = (idHomologation) => p.lis.une(idHomologation);
+  const service = (idService) => p.lis.un(idService);
 
   const ajouteAItemsDuService = async (nomListeItems, idService, item) => {
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     const donneesAPersister = s.donneesAPersister().toutes();
     donneesAPersister[nomListeItems] ||= [];
 
@@ -136,7 +136,7 @@ const creeDepot = (config = {}) => {
     const trouveDonneesService = (param) =>
       typeof param === 'object'
         ? Promise.resolve(param)
-        : p.lis.une(param).then((h) => h.donneesAPersister().toutes());
+        : p.lis.un(param).then((h) => h.donneesAPersister().toutes());
 
     return trouveDonneesService(idOuService).then(metsAJour);
   };
@@ -149,7 +149,7 @@ const creeDepot = (config = {}) => {
     idService,
     propriete
   ) => {
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     const donneesAPersister = s.donneesAPersister().toutes();
     donneesAPersister[nomPropriete] = propriete.toJSON();
 
@@ -158,7 +158,7 @@ const creeDepot = (config = {}) => {
   };
 
   const ajouteDossierCourantSiNecessaire = async (idService) => {
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
 
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
@@ -172,7 +172,7 @@ const creeDepot = (config = {}) => {
   };
 
   const ajouteMesuresGeneralesAService = async (idService, mesures) => {
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     const donneesAPersister = s.donneesAPersister().toutes();
     donneesAPersister.mesuresGenerales ||= [];
 
@@ -231,17 +231,17 @@ const creeDepot = (config = {}) => {
     p.lis.cellesDeUtilisateur(idUtilisateur);
 
   const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
-    const existant = await p.lis.une(idService);
+    const existant = await p.lis.un(idService);
     await valideDescriptionService(idUtilisateur, infos, existant.id);
     await metsAJourDescriptionService(
       existant.donneesAPersister().toutes(),
       infos
     );
 
-    const service = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementDescriptionServiceModifiee({ service, utilisateur })
+      new EvenementDescriptionServiceModifiee({ service: s, utilisateur })
     );
   };
 
@@ -254,11 +254,11 @@ const creeDepot = (config = {}) => {
     await ajouteMesuresGeneralesAService(idService, generales);
     await remplaceMesuresSpecifiquesPourService(idService, specifiques);
 
-    const service = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
 
     await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service, utilisateur })
+      new EvenementMesuresServiceModifiees({ service: s, utilisateur })
     );
   };
 
@@ -267,12 +267,12 @@ const creeDepot = (config = {}) => {
   const enregistreDossier = (idHomologation, dossier) =>
     ajouteAItemsDuService('dossiers', idHomologation, dossier);
 
-  const finaliseDossierCourant = async (service) => {
-    const dossierAvantFinalisation = service.dossierCourant();
+  const finaliseDossierCourant = async (s) => {
+    const dossierAvantFinalisation = s.dossierCourant();
 
-    service.finaliseDossierCourant();
+    s.finaliseDossierCourant();
 
-    const { id, ...donneesAPersister } = service.donneesAPersister().toutes();
+    const { id, ...donneesAPersister } = s.donneesAPersister().toutes();
     await p.sauvegarde(id, donneesAPersister);
 
     await busEvenements.publie(
@@ -303,10 +303,10 @@ const creeDepot = (config = {}) => {
       proprietaire.donneesAPersister()
     );
 
-    const service = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementNouveauServiceCree({ service, utilisateur })
+      new EvenementNouveauServiceCree({ service: s, utilisateur })
     );
 
     return idService;
@@ -356,19 +356,19 @@ const creeDepot = (config = {}) => {
       await nouveauService(idProprietaire, donnees);
     };
 
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
 
     await duplique(s);
   };
 
-  const metsAJourService = async (service) => {
-    const s = await p.lis.une(service.id);
-    if (typeof s === 'undefined')
-      throw new ErreurServiceInexistant(`Service "${service.id}" non trouvé`);
+  const metsAJourService = async (s) => {
+    const serviceLu = await p.lis.un(service.id);
+    if (typeof serviceLu === 'undefined')
+      throw new ErreurServiceInexistant(`Service "${s.id}" non trouvé`);
 
-    await p.sauvegarde(service.id, service.donneesAPersister().toutes());
+    await p.sauvegarde(s.id, s.donneesAPersister().toutes());
   };
 
   return {
@@ -379,7 +379,7 @@ const creeDepot = (config = {}) => {
     ajouteRolesResponsabilitesAService,
     dupliqueService,
     finaliseDossierCourant,
-    homologation,
+    service,
     serviceExiste,
     homologations,
     enregistreDossier,
