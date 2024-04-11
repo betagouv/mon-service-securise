@@ -65,7 +65,7 @@ const middlewareFantaisie = {
   reinitialise: ({
     idUtilisateur,
     acceptationCGU = true,
-    homologationARenvoyer = unService()
+    serviceARenvoyer = unService()
       .avecId('456')
       .avecNomService('un service')
       .construis(),
@@ -77,7 +77,7 @@ const middlewareFantaisie = {
     expirationCookieRepoussee = false;
     headersAvecNoncePositionnes = false;
     headersPositionnes = false;
-    serviceTrouve = homologationARenvoyer;
+    serviceTrouve = serviceARenvoyer;
     idUtilisateurCourant = idUtilisateur;
     autorisationChargee = autorisationACharger;
     listesAseptisees = [];

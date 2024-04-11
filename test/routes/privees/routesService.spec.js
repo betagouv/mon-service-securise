@@ -134,7 +134,7 @@ describe('Le serveur MSS des routes /service/*', () => {
             autorisationACharger: uneAutorisation()
               .avecDroits(droits)
               .construis(),
-            homologationARenvoyer: service,
+            serviceARenvoyer: service,
           });
 
           const reponse = await axios('http://localhost:1234/service/456');
@@ -181,7 +181,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     beforeEach(() => {
       const service = unService().avecNomService('un service').construis();
       service.indiceCyber = () => ({ total: 2 });
-      testeur.middleware().reinitialise({ homologationARenvoyer: service });
+      testeur.middleware().reinitialise({ serviceARenvoyer: service });
       testeur.referentiel().recharge({
         autorisationACharger: uneAutorisation().construis(),
       });
@@ -285,7 +285,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
     it('nomme le fichier CSV avec le nom du service et un horodatage', (done) => {
       testeur.middleware().reinitialise({
-        homologationARenvoyer: unService().avecNomService('Mairie').construis(),
+        serviceARenvoyer: unService().avecNomService('Mairie').construis(),
       });
       testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
       verifieNomFichierServi(
@@ -298,7 +298,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     it('tronque le nom du service à 30 caractères', async () => {
       const tropLong = new Array(150).fill('A').join('');
       testeur.middleware().reinitialise({
-        homologationARenvoyer: unService().avecNomService(tropLong).construis(),
+        serviceARenvoyer: unService().avecNomService(tropLong).construis(),
       });
       testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
 
@@ -313,7 +313,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
     it('décode correctement les caractères spéciaux dans le nom du service', (done) => {
       testeur.middleware().reinitialise({
-        homologationARenvoyer: unService()
+        serviceARenvoyer: unService()
           .avecNomService('Service d&#x27;apostrophe')
           .construis(),
       });
@@ -364,7 +364,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     beforeEach(() => {
       const service = unService().construis();
       service.indiceCyber = () => ({ total: 2 });
-      testeur.middleware().reinitialise({ homologationARenvoyer: service });
+      testeur.middleware().reinitialise({ serviceARenvoyer: service });
     });
 
     it('recherche le service correspondant', (done) => {
@@ -492,16 +492,17 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('quand requête GET sur `/service/:id/homologation/edition/etape/:idEtape`', () => {
-    const homologationARenvoyer = new Homologation({
-      id: '456',
-      descriptionService: { nomService: 'un service' },
-    });
-    homologationARenvoyer.dossierCourant = () => ({
-      etapeCourante: () => 'dateTelechargement',
-      dateTelechargement: { date: new Date() },
-    });
+    let serviceARenvoyer;
 
     beforeEach(() => {
+      serviceARenvoyer = unService()
+        .avecId('456')
+        .avecNomService('un service')
+        .construis();
+      serviceARenvoyer.dossierCourant = () => ({
+        etapeCourante: () => 'dateTelechargement',
+        dateTelechargement: { date: new Date() },
+      });
       testeur.referentiel().recharge({
         etapesParcoursHomologation: [
           { numero: 1, id: 'dateTelechargement' },
@@ -509,7 +510,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         ],
       });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async () => {};
-      testeur.depotDonnees().homologation = async () => homologationARenvoyer;
+      testeur.depotDonnees().homologation = async () => serviceARenvoyer;
     });
 
     it('recherche le service correspondant', (done) => {
@@ -571,7 +572,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       let chargementsService = 0;
       testeur.depotDonnees().homologation = async () => {
         chargementsService += 1;
-        return homologationARenvoyer;
+        return serviceARenvoyer;
       };
 
       await axios(
@@ -592,7 +593,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
 
     it("redirige vers la dernière étape disponible si l'étape demandée n'est pas accessible pour l'utilisateur", async () => {
-      const serviceARenvoyer = unService().construis();
+      serviceARenvoyer = unService().construis();
       serviceARenvoyer.dossierCourant = () => ({
         etapeCourante: () => 'deuxieme',
         dateTelechargement: { date: new Date() },

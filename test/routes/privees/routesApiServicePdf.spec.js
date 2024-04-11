@@ -66,7 +66,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     });
 
     beforeEach(() => {
-      const homologationARenvoyer = new Homologation(
+      const serviceARenvoyer = new Homologation(
         {
           id: '456',
           descriptionService: { nomService: 'un service' },
@@ -86,8 +86,8 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         },
         referentiel
       );
-      homologationARenvoyer.mesures.indiceCyber = () => 3.5;
-      testeur.middleware().reinitialise({ homologationARenvoyer });
+      serviceARenvoyer.mesures.indiceCyber = () => 3.5;
+      testeur.middleware().reinitialise({ serviceARenvoyer });
     });
 
     it('recherche le service correspondant', (done) => {
@@ -155,10 +155,10 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       mesures: { uneMesure: { categorie: 'uneCategorie' } },
       reglesPersonnalisation: { mesuresBase: ['uneMesure'] },
     });
-    const homologationARenvoyer = new Homologation({ id: '456' }, referentiel);
+    const serviceARenvoyer = unService(referentiel).avecId('456').construis();
 
     beforeEach(() => {
-      testeur.middleware().reinitialise({ homologationARenvoyer });
+      testeur.middleware().reinitialise({ serviceARenvoyer });
     });
 
     it('recherche le service correspondant', (done) => {
@@ -191,14 +191,14 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         'http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf'
       );
 
-      expect(donneesSynthese.service).to.eql(homologationARenvoyer);
+      expect(donneesSynthese.service).to.eql(serviceARenvoyer);
       expect(donneesSynthese.referentiel).to.eql(testeur.referentiel());
     });
   });
 
   describe('quand requête GET sur `/api/service/:id/pdf/documentsHomologation.zip`', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    const homologationARenvoyer = new Homologation(
+    const serviceARenvoyer = new Homologation(
       {
         id: '456',
         descriptionService: { nomService: 'un service' },
@@ -206,15 +206,15 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       },
       referentiel
     );
-    homologationARenvoyer.mesures.indiceCyber = () => 3.5;
-    homologationARenvoyer.documentsPdfDisponibles = () => [
+    serviceARenvoyer.mesures.indiceCyber = () => 3.5;
+    serviceARenvoyer.documentsPdfDisponibles = () => [
       'annexes',
       'syntheseSecurite',
       'dossierDecision',
     ];
 
     beforeEach(() => {
-      testeur.middleware().reinitialise({ homologationARenvoyer });
+      testeur.middleware().reinitialise({ serviceARenvoyer });
     });
 
     it('recherche le service correspondant', (done) => {
@@ -259,7 +259,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: serviceUnSeulDocument });
+        .reinitialise({ serviceARenvoyer: serviceUnSeulDocument });
 
       let fichiersZipes;
       testeur.adaptateurPdf().genereAnnexes = async () => 'PDF A';
@@ -309,9 +309,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       .construis();
 
     beforeEach(() => {
-      testeur
-        .middleware()
-        .reinitialise({ homologationARenvoyer: serviceARenvoyer });
+      testeur.middleware().reinitialise({ serviceARenvoyer });
     });
 
     it('recherche le service correspondant', (done) => {
@@ -350,7 +348,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         .construis();
       testeur
         .middleware()
-        .reinitialise({ homologationARenvoyer: serviceSansDossierActif });
+        .reinitialise({ serviceARenvoyer: serviceSansDossierActif });
 
       testeur.verifieRequeteGenereErreurHTTP(
         422,
