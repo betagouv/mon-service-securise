@@ -98,7 +98,40 @@ const nouvelAdaptateur = (env) => {
     };
   };
 
-  const service = (id) => elementDeTable('services', id);
+  const service = async (id) => {
+    const requeteService = knex('services')
+      .where('id', id)
+      .select({ id: 'id', donnees: 'donnees' })
+      .first();
+
+    const requeteContributeurs = knex('autorisations as a')
+      .join(
+        'utilisateurs as u',
+        knex.raw("(a.donnees->>'idUtilisateur')::uuid"),
+        'u.id'
+      )
+      .whereRaw("(a.donnees->>'idService')::uuid = ?", id)
+      .select({
+        id: 'u.id',
+        dateCreation: 'u.date_creation',
+        donnees: 'u.donnees',
+      });
+
+    const [s, contributeurs] = await Promise.all([
+      requeteService,
+      requeteContributeurs,
+    ]);
+
+    return {
+      id: s.id,
+      ...s.donnees,
+      contributeurs: contributeurs.map((c) => ({
+        id: c.id,
+        dateCreation: c.dateCreation,
+        ...c.donnees,
+      })),
+    };
+  };
 
   const homologationAvecNomService = (
     idUtilisateur,
