@@ -244,14 +244,14 @@ describe('Le middleware MSS', () => {
     });
 
     it('retourne le service trouvé et appelle le middleware suivant', (done) => {
-      const homologation = {};
-      depotDonnees.homologation = () => Promise.resolve(homologation);
+      const service = {};
+      depotDonnees.homologation = () => Promise.resolve(service);
       depotDonnees.accesAutorise = () => Promise.resolve(true);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       middleware.trouveService({})(requete, reponse, () => {
         try {
-          expect(requete.homologation).to.equal(homologation);
+          expect(requete.service).to.equal(service);
           done();
         } catch (e) {
           done(e);
@@ -261,17 +261,17 @@ describe('Le middleware MSS', () => {
   });
 
   describe("sur recherche du dossier courant d'une homologation existante", () => {
-    it("renvoie une erreur HTTP 404 si l'homologation n'a pas de dossier courant'", (done) => {
-      const homologation = {
+    it("renvoie une erreur HTTP 404 si le service n'a pas de dossier courant'", (done) => {
+      const service = {
         dossierCourant: () => null,
       };
-      requete.homologation = homologation;
+      requete.service = service;
       const middleware = Middleware();
 
       prepareVerificationReponse(
         reponse,
         404,
-        'Homologation sans dossier courant',
+        'Service sans dossier courant',
         done
       );
 
@@ -280,8 +280,8 @@ describe('Le middleware MSS', () => {
       middleware.trouveDossierCourant(requete, reponse, suite);
     });
 
-    it("jette une erreur technique si l'homologation n'est pas présente dans la requête", (done) => {
-      requete.homologation = null;
+    it("jette une erreur technique si le service n'est pas présent dans la requête", (done) => {
+      requete.service = null;
       const middleware = Middleware();
 
       expect(() =>
@@ -289,7 +289,7 @@ describe('Le middleware MSS', () => {
       ).to.throwError((e) => {
         expect(e).to.be.an(ErreurChainageMiddleware);
         expect(e.message).to.equal(
-          'Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveService` ?'
+          'Un service doit être présent dans la requête. Manque-t-il un appel à `trouveService` ?'
         );
         done();
       });
@@ -297,11 +297,11 @@ describe('Le middleware MSS', () => {
 
     it('retourne le dossier courant trouvé et appelle le middleware suivant', (done) => {
       const dossierCourant = {};
-      const homologation = {
+      const service = {
         dossierCourant: () => dossierCourant,
       };
 
-      requete.homologation = homologation;
+      requete.service = service;
       const middleware = Middleware();
 
       middleware.trouveDossierCourant(requete, reponse, () => {
@@ -730,13 +730,13 @@ describe('Le middleware MSS', () => {
   describe('sur demande de chargement des autorisations pour un service', () => {
     beforeEach(() => {
       requete.idUtilisateurCourant = '999';
-      requete.homologation = { id: '123' };
+      requete.service = { id: '123' };
       depotDonnees.autorisationPour = async () =>
         uneAutorisation().avecDroits({}).construis();
     });
 
     it("jette une erreur technique si le service ou l'utilisateur ne sont pas présents dans la requête", (done) => {
-      requete.homologation = null;
+      requete.service = null;
       const middleware = Middleware({ depotDonnees });
 
       expect(() =>

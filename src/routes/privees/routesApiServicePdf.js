@@ -65,9 +65,9 @@ const routesApiServicePdf = ({
     '/:id/pdf/annexes.pdf',
     middleware.trouveService(Autorisation.DROITS_ANNEXES_PDF),
     (requete, reponse, suite) => {
-      const { homologation } = requete;
+      const { service } = requete;
 
-      generePdfAnnexes(homologation)
+      generePdfAnnexes(service)
         .then((pdf) => reponse.contentType('application/pdf').send(pdf))
         .catch(suite);
     }
@@ -78,9 +78,9 @@ const routesApiServicePdf = ({
     middleware.trouveService(Autorisation.DROITS_DOSSIER_DECISION_PDF),
     middleware.trouveDossierCourant,
     (requete, reponse, suite) => {
-      const { homologation, dossierCourant } = requete;
+      const { service, dossierCourant } = requete;
 
-      generePdfDossierDecision(homologation, dossierCourant)
+      generePdfDossierDecision(service, dossierCourant)
         .then((pdf) => reponse.contentType('application/pdf').send(pdf))
         .catch(suite);
     }
@@ -90,9 +90,9 @@ const routesApiServicePdf = ({
     '/:id/pdf/syntheseSecurite.pdf',
     middleware.trouveService(Autorisation.DROIT_SYNTHESE_SECURITE_PDF),
     (requete, reponse, suite) => {
-      const { homologation } = requete;
+      const { service } = requete;
 
-      generePdfSyntheseSecurite(homologation)
+      generePdfSyntheseSecurite(service)
         .then((pdf) => reponse.contentType('application/pdf').send(pdf))
         .catch(suite);
     }
@@ -103,24 +103,21 @@ const routesApiServicePdf = ({
     middleware.trouveService({}),
     middleware.chargeAutorisationsService,
     async (requete, reponse, suite) => {
-      const { homologation, autorisationService } = requete;
+      const { service, autorisationService } = requete;
 
       const genereUnDocument = (idDocument) => {
         const references = {
           annexes: {
-            pdf: () => generePdfAnnexes(homologation),
+            pdf: () => generePdfAnnexes(service),
             nom: () => 'Annexes.pdf',
           },
           dossierDecision: {
             pdf: () =>
-              generePdfDossierDecision(
-                homologation,
-                homologation.dossierCourant()
-              ),
+              generePdfDossierDecision(service, service.dossierCourant()),
             nom: () => 'DossierDecision.pdf',
           },
           syntheseSecurite: {
-            pdf: () => generePdfSyntheseSecurite(homologation),
+            pdf: () => generePdfSyntheseSecurite(service),
             nom: () => 'SyntheseSecurite.pdf',
           },
         };
@@ -131,7 +128,7 @@ const routesApiServicePdf = ({
       };
 
       Promise.all(
-        homologation
+        service
           .documentsPdfDisponibles(autorisationService)
           .map((d) => genereUnDocument(d))
       )
@@ -157,7 +154,7 @@ const routesApiServicePdf = ({
     middleware.trouveService(Autorisation.DROIT_TAMPON_HOMOLOGATION_ZIP),
     async (requete, reponse, suite) => {
       try {
-        const { homologation: service } = requete;
+        const { service } = requete;
         if (!service.dossiers.dossierActif()) {
           reponse.status(422).send("Le service n'a pas d'homologation active");
           return;

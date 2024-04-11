@@ -68,11 +68,11 @@ const routesService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
-      const { homologation } = requete;
+      const { service } = requete;
       reponse.render('service/descriptionService', {
         InformationsHomologation,
         referentiel,
-        service: homologation,
+        service,
         etapeActive: 'descriptionService',
       });
     }
@@ -84,10 +84,10 @@ const routesService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     async (requete, reponse) => {
-      const { homologation } = requete;
+      const { service } = requete;
 
-      const mesures = moteurRegles.mesures(homologation.descriptionService);
-      const completude = homologation.completudeMesures();
+      const mesures = moteurRegles.mesures(service.descriptionService);
+      const completude = service.completudeMesures();
       const pourcentageProgression = Math.round(
         (completude.nombreMesuresCompletes / completude.nombreTotalMesures) *
           100
@@ -96,7 +96,7 @@ const routesService = ({
       reponse.render('service/mesures', {
         InformationsHomologation,
         referentiel,
-        service: homologation,
+        service,
         etapeActive: 'mesures',
         pourcentageProgression,
         mesures,
@@ -109,7 +109,7 @@ const routesService = ({
     middleware.aseptise('id', 'avecDonneesAdditionnelles'),
     middleware.trouveService({ [SECURISER]: LECTURE }),
     async (requete, reponse) => {
-      const { homologation: service } = requete;
+      const { service } = requete;
       const { avecDonneesAdditionnelles } = requete.query;
 
       try {
@@ -144,7 +144,7 @@ const routesService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     async (requete, reponse) => {
-      const { homologation: service } = requete;
+      const { service } = requete;
       const referentiels = Object.entries(
         service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
       ).map(([_, mesure]) => mesure.referentiel);
@@ -166,10 +166,10 @@ const routesService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
-      const { homologation } = requete;
+      const { service } = requete;
       reponse.render('service/rolesResponsabilites', {
         InformationsHomologation,
-        service: homologation,
+        service,
         etapeActive: 'contactsUtiles',
         referentiel,
       });
@@ -182,11 +182,11 @@ const routesService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
-      const { homologation } = requete;
+      const { service } = requete;
       reponse.render('service/risques', {
         InformationsHomologation,
         referentiel,
-        service: homologation,
+        service,
         etapeActive: 'risques',
       });
     }
@@ -198,7 +198,7 @@ const routesService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
-      const { homologation: service, autorisationService } = requete;
+      const { service, autorisationService } = requete;
 
       const peutVoirTamponHomologation =
         autorisationService.aLesPermissions(
@@ -223,7 +223,7 @@ const routesService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     async (requete, reponse, suite) => {
-      const { homologation, autorisationService } = requete;
+      const { service, autorisationService } = requete;
       const { idEtape } = requete.params;
 
       if (!referentiel.etapeExiste(idEtape)) {
@@ -232,11 +232,11 @@ const routesService = ({
       }
 
       try {
-        await depotDonnees.ajouteDossierCourantSiNecessaire(homologation.id);
+        await depotDonnees.ajouteDossierCourantSiNecessaire(service.id);
 
-        const h = await depotDonnees.homologation(homologation.id);
+        const s = await depotDonnees.homologation(service.id);
         const etapeCourante = referentiel.etapeDossierAutorisee(
-          h.dossierCourant().etapeCourante(),
+          s.dossierCourant().etapeCourante(),
           autorisationService.peutHomologuer()
         );
         const numeroEtapeCourante = referentiel.numeroEtape(etapeCourante);
@@ -249,7 +249,7 @@ const routesService = ({
         reponse.render(`service/etapeDossier/${idEtape}`, {
           InformationsHomologation,
           referentiel,
-          service: h,
+          service: s,
           etapeActive: 'dossiers',
           idEtape,
         });

@@ -2,7 +2,6 @@ const axios = require('axios');
 const expect = require('expect.js');
 
 const testeurMSS = require('../testeurMSS');
-const Homologation = require('../../../src/modeles/homologation');
 const {
   Permissions: { LECTURE },
   Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES },
@@ -221,7 +220,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       const requete = {};
 
       testeur.middleware().trouveService(requete, undefined, () => {
-        const { nomService } = requete.homologation.descriptionService;
+        const { nomService } = requete.service.descriptionService;
         expect(nomService).to.equal('un service'); // sanity check
       });
 

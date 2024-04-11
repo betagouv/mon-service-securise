@@ -48,7 +48,7 @@ let droitVerifie = null;
 let expirationCookieRepoussee = false;
 let headersAvecNoncePositionnes = false;
 let headersPositionnes = false;
-let homologationTrouvee;
+let serviceTrouve;
 let idUtilisateurCourant;
 let listesAseptisees = [];
 let listeAdressesIPsAutorisee = [];
@@ -77,7 +77,7 @@ const middlewareFantaisie = {
     expirationCookieRepoussee = false;
     headersAvecNoncePositionnes = false;
     headersPositionnes = false;
-    homologationTrouvee = homologationARenvoyer;
+    serviceTrouve = homologationARenvoyer;
     idUtilisateurCourant = idUtilisateur;
     autorisationChargee = autorisationACharger;
     listesAseptisees = [];
@@ -171,12 +171,12 @@ const middlewareFantaisie = {
     }));
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
-    requete.homologation = homologationTrouvee;
+    requete.service = serviceTrouve;
     suite();
   },
 
   trouveDossierCourant: (requete, _reponse, suite) => {
-    requete.dossierCourant = requete.homologation.dossierCourant();
+    requete.dossierCourant = requete.service.dossierCourant();
     rechercheDossierCourantEffectuee = true;
     suite();
   },

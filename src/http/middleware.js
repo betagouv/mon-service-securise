@@ -128,7 +128,7 @@ const middleware = (configuration = {}) => {
                 if (!accesAutorise)
                   reponse.status(403).render('erreurAccesRefuse');
                 else {
-                  requete.homologation = service;
+                  requete.service = service;
                   suite();
                 }
               });
@@ -141,14 +141,14 @@ const middleware = (configuration = {}) => {
   };
 
   const trouveDossierCourant = (requete, reponse, suite) => {
-    if (!requete.homologation)
+    if (!requete.service)
       throw new ErreurChainageMiddleware(
-        'Une homologation doit être présente dans la requête. Manque-t-il un appel à `trouveService` ?'
+        'Un service doit être présent dans la requête. Manque-t-il un appel à `trouveService` ?'
       );
 
-    const dossierCourant = requete.homologation.dossierCourant();
+    const dossierCourant = requete.service.dossierCourant();
     if (!dossierCourant) {
-      reponse.status(404).send('Homologation sans dossier courant');
+      reponse.status(404).send('Service sans dossier courant');
     } else {
       requete.dossierCourant = dossierCourant;
       suite();
@@ -206,12 +206,12 @@ const middleware = (configuration = {}) => {
   };
 
   const chargeAutorisationsService = (requete, reponse, suite) => {
-    if (!requete.idUtilisateurCourant || !requete.homologation)
+    if (!requete.idUtilisateurCourant || !requete.service)
       throw new ErreurChainageMiddleware(
         'Un utilisateur courant et un service doivent être présent dans la requête. Manque-t-il un appel à `verificationJWT` et `trouveService` ?'
       );
     depotDonnees
-      .autorisationPour(requete.idUtilisateurCourant, requete.homologation.id)
+      .autorisationPour(requete.idUtilisateurCourant, requete.service.id)
       .then((autorisation) => {
         const droitsRubriques = Object.entries(autorisation.droits).reduce(
           (droits, [rubrique, niveau]) => ({
