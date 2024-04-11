@@ -6,6 +6,7 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
+  ErreurProprieteManquante,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
@@ -57,6 +58,8 @@ const {
 const Mesures = require('../../src/modeles/mesures');
 const EvenementDossierHomologationFinalise = require('../../src/bus/evenementDossierHomologationFinalise');
 const EvenementServiceSupprime = require('../../src/bus/evenementServiceSupprime');
+const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
+const Entite = require('../../src/modeles/entite');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -376,9 +379,11 @@ describe('Le dépôt de données des homologations', () => {
     let bus;
     let depot;
     let referentiel;
+    let adaptateurRechercheEntite;
 
     beforeEach(() => {
       referentiel = Referentiel.creeReferentielVide();
+      adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
       adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(
           unUtilisateur().avecId('U1').avecEmail('jean.dupont@mail.fr').donnees
@@ -394,6 +399,7 @@ describe('Le dépôt de données des homologations', () => {
         .avecReferentiel(referentiel)
         .avecAdaptateurPersistance(adaptateurPersistance)
         .avecBusEvenements(bus)
+        .avecAdaptateurRechercheEntite(adaptateurRechercheEntite)
         .construis();
     });
 
@@ -439,6 +445,58 @@ describe('Le dépôt de données des homologations', () => {
           'Certaines données obligatoires ne sont pas renseignées'
         );
       }
+    });
+
+    it("lève une exception si le siret de l'organisation responsable n'est pas renseigné", async () => {
+      const descriptionSansOrganisationResponsable = uneDescriptionValide(
+        referentiel
+      )
+        .deLOrganisation({})
+        .construis();
+
+      try {
+        await depot.ajouteDescriptionService(
+          'U1',
+          'S1',
+          descriptionSansOrganisationResponsable
+        );
+        expect().fail(
+          'La mise à jour de la description du service aurait dû lever une exception'
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurProprieteManquante);
+        expect(e.message).to.equal('La propriété "entite.siret" est requise');
+      }
+    });
+
+    it("complète les informations de l'organisation responsable et les enregistre", async () => {
+      adaptateurRechercheEntite.rechercheOrganisations = async () => [
+        {
+          nom: 'MonEntite',
+          departement: '75',
+          siret: '12345',
+        },
+      ];
+      const depotServices = DepotDonneesServices.creeDepot({
+        adaptateurPersistance: adaptateurPersistance.construis(),
+        referentiel,
+      });
+      const description = uneDescriptionValide(referentiel)
+        .deLOrganisation(new Entite({ siret: '12345' }))
+        .construis();
+
+      await depot.ajouteDescriptionService('U1', 'S1', description);
+
+      const { descriptionService } = await depotServices.service('S1');
+      expect(descriptionService.organisationResponsable.siret).to.equal(
+        '12345'
+      );
+      expect(descriptionService.organisationResponsable.departement).to.equal(
+        '75'
+      );
+      expect(descriptionService.organisationResponsable.nom).to.equal(
+        'MonEntite'
+      );
     });
 
     it('ne détecte pas de doublon sur le nom de service pour le service en cours de mise à jour', async () => {
@@ -581,6 +639,7 @@ describe('Le dépôt de données des homologations', () => {
     let adaptateurPersistance;
     let adaptateurTracking;
     let adaptateurUUID;
+    let adaptateurRechercheEntite;
     let depot;
     let referentiel;
 
@@ -594,12 +653,14 @@ describe('Le dépôt de données des homologations', () => {
       adaptateurTracking = unAdaptateurTracking().construis();
       adaptateurUUID = { genereUUID: () => 'unUUID' };
       referentiel = Referentiel.creeReferentielVide();
+      adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
 
       depot = DepotDonneesHomologations.creeDepot({
         adaptateurChiffrement,
         adaptateurPersistance,
         adaptateurTracking,
         adaptateurUUID,
+        adaptateurRechercheEntite,
         busEvenements,
         referentiel,
       });
@@ -630,6 +691,34 @@ describe('Le dépôt de données des homologations', () => {
       expect(idService).to.be('11111111-1111-1111-1111-111111111111');
       const services = await depot.homologations('123');
       expect(services[0].id).to.be('11111111-1111-1111-1111-111111111111');
+    });
+
+    it("complète les informations de l'organisation responsable avant de les stocker", async () => {
+      adaptateurRechercheEntite.rechercheOrganisations = async () => [
+        {
+          nom: 'MonEntite',
+          departement: '75',
+          siret: '12345',
+        },
+      ];
+      const descriptionService = uneDescriptionValide(referentiel)
+        .deLOrganisation(new Entite({ siret: '12345' }))
+        .construis()
+        .toJSON();
+      await depot.nouveauService('123', { descriptionService });
+
+      const serviceSauvegarde = await depot.homologations('123');
+      const descriptionServiceSauvegarde =
+        serviceSauvegarde[0].descriptionService;
+      expect(
+        descriptionServiceSauvegarde.organisationResponsable.siret
+      ).to.equal('12345');
+      expect(
+        descriptionServiceSauvegarde.organisationResponsable.departement
+      ).to.equal('75');
+      expect(descriptionServiceSauvegarde.organisationResponsable.nom).to.equal(
+        'MonEntite'
+      );
     });
 
     it('chiffre les données métier avant de les stocker', async () => {
@@ -733,6 +822,26 @@ describe('Le dépôt de données des homologations', () => {
         .catch((e) => expect(e).to.be.an(ErreurDonneesObligatoiresManquantes))
         .then(() => done())
         .catch(done);
+    });
+
+    it("lève une exception si le siret de l'organisation responsable n'est pas renseigné", async () => {
+      const descriptionSansOrganisationResponsable = uneDescriptionValide(
+        referentiel
+      )
+        .deLOrganisation({})
+        .construis();
+
+      try {
+        await depot.nouveauService('123', {
+          descriptionService: descriptionSansOrganisationResponsable,
+        });
+        expect().fail(
+          'La mise à jour de la description du service aurait dû lever une exception'
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurProprieteManquante);
+        expect(e.message).to.equal('La propriété "entite.siret" est requise');
+      }
     });
 
     it('lève une exception si le nom du service existe déjà pour une autre homologation', (done) => {
@@ -1296,6 +1405,7 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurTracking: unAdaptateurTracking().construis(),
         adaptateurUUID: AdaptateurUUID,
         busEvenements: fabriqueBusPourLesTests(),
+        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
         referentiel,
       });
     });

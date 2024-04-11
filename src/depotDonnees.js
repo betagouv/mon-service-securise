@@ -23,6 +23,7 @@ const creeDepot = (config = {}) => {
     adaptateurChiffrement,
     adaptateurPersistance,
     adaptateurUUID,
+    adaptateurRechercheEntite,
     busEvenements,
     referentiel,
   });

@@ -14,6 +14,7 @@ const {
 } = require('../bus/evenementDescriptionServiceModifiee');
 const EvenementDossierHomologationFinalise = require('../bus/evenementDossierHomologationFinalise');
 const EvenementServiceSupprime = require('../bus/evenementServiceSupprime');
+const Entite = require('../modeles/entite');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -93,6 +94,7 @@ const creeDepot = (config = {}) => {
     adaptateurChiffrement,
     adaptateurPersistance,
     adaptateurUUID,
+    adaptateurRechercheEntite,
     busEvenements,
     referentiel,
   } = config;
@@ -211,6 +213,7 @@ const creeDepot = (config = {}) => {
         'Certaines données obligatoires ne sont pas renseignées'
       );
     }
+    Entite.valideDonnees(donnees.organisationResponsable);
 
     const serviceExistant = await serviceExiste(
       idUtilisateur,
@@ -224,6 +227,16 @@ const creeDepot = (config = {}) => {
       );
   };
 
+  const completeDescriptionService = async (donneesDescriptionService) => {
+    const donneesEntite = await Entite.completeDonnees(
+      donneesDescriptionService.organisationResponsable,
+      adaptateurRechercheEntite
+    );
+    donneesDescriptionService.organisationResponsable = new Entite(
+      donneesEntite
+    );
+  };
+
   const ajouteRolesResponsabilitesAService = (...params) =>
     metsAJourProprieteService('rolesResponsabilites', ...params);
 
@@ -233,6 +246,7 @@ const creeDepot = (config = {}) => {
   const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
     const existant = await p.lis.une(idService);
     await valideDescriptionService(idUtilisateur, infos, existant.id);
+    await completeDescriptionService(infos);
     await metsAJourDescriptionService(
       existant.donneesAPersister().toutes(),
       infos
@@ -291,6 +305,8 @@ const creeDepot = (config = {}) => {
       idUtilisateur,
       donneesService.descriptionService
     );
+
+    await completeDescriptionService(donneesService.descriptionService);
 
     await p.sauvegarde(idService, donneesService);
 

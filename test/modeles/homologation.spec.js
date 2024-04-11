@@ -544,6 +544,8 @@ describe('Une homologation', () => {
           pointsAcces: [],
           organisationResponsable: {
             nom: 'ANSSI',
+            siret: '12345',
+            departement: '75',
           },
           nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         },
