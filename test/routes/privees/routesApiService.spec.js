@@ -155,6 +155,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       const donneesDescriptionService = uneDescriptionValide(
         testeur.referentiel()
       )
+        .deLOrganisation({ nom: 'ABCD' })
         .construis()
         .toJSON();
 

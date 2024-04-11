@@ -14,6 +14,8 @@ class ConstructeurDescriptionService {
       nomService: 'Nom service',
       organisationResponsable: {
         nom: 'ANSSI',
+        siret: '12345',
+        departement: '75',
       },
       presentation: 'Une présentation',
       provenanceService: 'uneProvenance',
@@ -35,7 +37,7 @@ class ConstructeurDescriptionService {
   }
 
   deLOrganisation(organisationResponsable) {
-    this.donnees.organisationResponsable = { nom: organisationResponsable };
+    this.donnees.organisationResponsable = organisationResponsable;
     return this;
   }
 
