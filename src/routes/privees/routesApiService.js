@@ -140,7 +140,7 @@ const routesApiService = ({
           descriptionService
         );
 
-        reponse.send({ idService: requete.homologation.id });
+        reponse.send({ idService: requete.service.id });
       } catch (e) {
         if (e instanceof ErreurModele) reponse.status(422).send(e.message);
         else suite(e);
@@ -155,7 +155,7 @@ const routesApiService = ({
     middleware.chargeAutorisationsService,
     async (requete, reponse) => {
       const donnees = objetGetService.donnees(
-        requete.homologation,
+        requete.service,
         requete.autorisationService,
         referentiel
       );
@@ -167,7 +167,7 @@ const routesApiService = ({
     '/:id/mesures',
     middleware.trouveService({ [SECURISER]: LECTURE }),
     (requete, reponse) => {
-      const { homologation: service } = requete;
+      const { service } = requete;
 
       reponse.json(objetGetMesures.donnees(service));
     }
@@ -186,7 +186,7 @@ const routesApiService = ({
     ),
     (requete, reponse, suite) => {
       const { mesuresSpecifiques = [], mesuresGenerales = {} } = requete.body;
-      const idService = requete.homologation.id;
+      const idService = requete.service.id;
       const idUtilisateur = requete.idUtilisateurCourant;
 
       try {
@@ -236,7 +236,7 @@ const routesApiService = ({
     ]),
     (requete, reponse) => {
       const rolesResponsabilites = new RolesResponsabilites(requete.body);
-      const idService = requete.homologation.id;
+      const idService = requete.service.id;
       depotDonnees
         .ajouteRolesResponsabilitesAService(idService, rolesResponsabilites)
         .then(() => reponse.send({ idService }));
@@ -255,7 +255,7 @@ const routesApiService = ({
     (requete, reponse, suite) => {
       const { risquesSpecifiques = [], ...params } = requete.body;
       const prefixeAttributRisque = /^(commentaire|niveauGravite)-/;
-      const idService = requete.homologation.id;
+      const idService = requete.service.id;
 
       try {
         const donneesRisques = Object.keys(params)
@@ -309,14 +309,14 @@ const routesApiService = ({
     middleware.trouveDossierCourant,
     middleware.aseptise('nom', 'fonction'),
     (requete, reponse, suite) => {
-      const { homologation, dossierCourant } = requete;
+      const { service, dossierCourant } = requete;
 
       const {
         body: { nom, fonction },
       } = requete;
       dossierCourant.enregistreAutoriteHomologation(nom, fonction);
       depotDonnees
-        .enregistreDossier(homologation.id, dossierCourant)
+        .enregistreDossier(service.id, dossierCourant)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     }
@@ -341,11 +341,11 @@ const routesApiService = ({
         return;
       }
 
-      const { homologation, dossierCourant } = requete;
+      const { service, dossierCourant } = requete;
 
       dossierCourant.enregistreDecision(dateHomologation, dureeValidite);
       depotDonnees
-        .enregistreDossier(homologation.id, dossierCourant)
+        .enregistreDossier(service.id, dossierCourant)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     }
@@ -356,12 +356,12 @@ const routesApiService = ({
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
     (requete, reponse, suite) => {
-      const { homologation, dossierCourant } = requete;
+      const { service, dossierCourant } = requete;
 
       const dateTelechargement = adaptateurHorloge.maintenant();
       dossierCourant.enregistreDateTelechargement(dateTelechargement);
       depotDonnees
-        .enregistreDossier(homologation.id, dossierCourant)
+        .enregistreDossier(service.id, dossierCourant)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     }
@@ -390,14 +390,14 @@ const routesApiService = ({
         return;
       }
 
-      const { homologation, dossierCourant } = requete;
+      const { service, dossierCourant } = requete;
       const avecAvis = valeurBooleenne(requete.body.avecAvis);
 
       if (avecAvis) dossierCourant.enregistreAvis(avis);
       else dossierCourant.declareSansAvis();
 
       depotDonnees
-        .enregistreDossier(homologation.id, dossierCourant)
+        .enregistreDossier(service.id, dossierCourant)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     }
@@ -417,14 +417,14 @@ const routesApiService = ({
         return;
       }
 
-      const { homologation, dossierCourant } = requete;
+      const { service, dossierCourant } = requete;
       const avecDocuments = valeurBooleenne(requete.body.avecDocuments);
 
       if (avecDocuments) dossierCourant.enregistreDocuments(documents);
       else dossierCourant.declareSansDocument();
 
       depotDonnees
-        .enregistreDossier(homologation.id, dossierCourant)
+        .enregistreDossier(service.id, dossierCourant)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     }
@@ -434,10 +434,10 @@ const routesApiService = ({
     '/:id/homologation/finalise',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     (requete, reponse, suite) => {
-      const { homologation } = requete;
+      const { service } = requete;
 
       depotDonnees
-        .finaliseDossierCourant(homologation)
+        .finaliseDossierCourant(service)
         .then(() => reponse.sendStatus(204))
         .catch(suite);
     }
@@ -448,7 +448,7 @@ const routesApiService = ({
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.challengeMotDePasse,
     async (requete, reponse, suite) => {
-      const { homologation: service } = requete;
+      const { service } = requete;
       try {
         service.supprimeDossierCourant();
         await depotDonnees.metsAJourService(service);
@@ -532,7 +532,7 @@ const routesApiService = ({
     middleware.trouveService({}),
     middleware.aseptise('id'),
     async (requete, reponse) => {
-      const { id: idService } = requete.homologation;
+      const { id: idService } = requete.service;
       let autorisations = await depotDonnees.autorisationsDuService(idService);
 
       const autorisationUtilisateurCourant = autorisations.find(
@@ -577,8 +577,8 @@ const routesApiService = ({
         return;
       }
 
-      const { homologation } = requete;
-      const cibleUnServiceDifferent = ciblee.idService !== homologation.id;
+      const { service } = requete;
+      const cibleUnServiceDifferent = ciblee.idService !== service.id;
       if (cibleUnServiceDifferent) {
         reponse.status(422).json({ code: 'LIEN_INCOHERENT' });
         return;
@@ -596,7 +596,7 @@ const routesApiService = ({
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.aseptise('id'),
     (requete, reponse) => {
-      const { homologation: service } = requete;
+      const { service } = requete;
       const completude = service.completudeMesures();
       const pourcentageProgression = Math.round(
         (completude.nombreMesuresCompletes / completude.nombreTotalMesures) *
@@ -611,8 +611,8 @@ const routesApiService = ({
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.aseptise('id'),
     (requete, reponse) => {
-      const { homologation } = requete;
-      reponse.json(homologation.indiceCyber());
+      const { service } = requete;
+      reponse.json(service.indiceCyber());
     }
   );
 
@@ -621,7 +621,7 @@ const routesApiService = ({
     middleware.trouveService({ [SECURISER]: ECRITURE }),
     middleware.aseptise('id', 'idMesure', 'idRetour', 'commentaire'),
     async (requete, reponse) => {
-      const { homologation: service, idUtilisateurCourant } = requete;
+      const { service, idUtilisateurCourant } = requete;
       const { idRetour, idMesure, commentaire } = requete.body;
       const retourUtilisateur =
         referentiel.retourUtilisateurMesureAvecId(idRetour);
