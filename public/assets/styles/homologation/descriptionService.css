@@ -53,3 +53,22 @@
   background: #ffdfdf;
   border-radius: 8px;
 }
+
+.banniere {
+  margin-top: -2em;
+  margin-bottom: 2em;
+}
+
+form.homologation .banniere p {
+  margin-bottom: 0;
+}
+
+.banniere.invisible {
+  display: none;
+}
+
+.banniere .contenu-texte-avertissement {
+  display: flex;
+  flex-direction: column;
+  padding: 0.4em;
+}

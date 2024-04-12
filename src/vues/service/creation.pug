@@ -8,4 +8,7 @@ block sous-titre
   h2 Fournir les informations permettant d'évaluer les besoins de sécurité du service et de proposer des mesures de sécurité adaptées
 
 block formulaire
+  script(id = 'infos-siret-manquant', type = 'application/json').
+    !{JSON.stringify({estEnCreation: true})}
+
   +formulaireDescriptionService
