@@ -287,7 +287,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           unService()
             .avecId('456')
             .avecNomService('Un service')
-            .avecOrganisationResponsable('ANSSI')
+            .avecOrganisationResponsable({ nom: 'ANSSI' })
             .ajouteUnContributeur(
               unUtilisateur().avecId('123').avecEmail('email.createur@mail.fr')
                 .donnees
