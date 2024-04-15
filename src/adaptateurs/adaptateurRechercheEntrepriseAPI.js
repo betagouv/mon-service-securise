@@ -68,7 +68,6 @@ const recupereDetailsOrganisation = async (siret) => {
       estEss: entiteApi.complements.est_ess,
       estEntrepreneurIndividuel:
         entiteApi.complements.est_entrepreneur_individuel,
-      collectiviteTerritoriale: entiteApi.complements.collectivite_territoriale,
       estAssociation: entiteApi.complements.est_association,
       categorieEntreprise: entiteApi.categorie_entreprise,
       activitePrincipale: entiteApi.activite_principale,

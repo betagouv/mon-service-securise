@@ -39,7 +39,6 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
       estFiness: false,
       estEss: true,
       estEntrepreneurIndividuel: false,
-      collectiviteTerritoriale: null,
       estAssociation: false,
       categorieEntreprise: null,
       activitePrincipale: '68.20B',

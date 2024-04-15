@@ -26,7 +26,6 @@ describe('Un événement de profil utilisateur modifié', () => {
       estFiness: false,
       estEss: true,
       estEntrepreneurIndividuel: false,
-      collectiviteTerritoriale: null,
       estAssociation: false,
       categorieEntreprise: null,
       activitePrincipale: '68.20B',
