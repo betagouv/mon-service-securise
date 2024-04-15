@@ -6,7 +6,6 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
-  ErreurProprieteManquante,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
@@ -464,7 +463,7 @@ describe('Le dépôt de données des homologations', () => {
           'La mise à jour de la description du service aurait dû lever une exception'
         );
       } catch (e) {
-        expect(e).to.be.an(ErreurProprieteManquante);
+        expect(e).to.be.an(ErreurDonneesObligatoiresManquantes);
         expect(e.message).to.equal('La propriété "entite.siret" est requise');
       }
     });
@@ -839,7 +838,7 @@ describe('Le dépôt de données des homologations', () => {
           'La mise à jour de la description du service aurait dû lever une exception'
         );
       } catch (e) {
-        expect(e).to.be.an(ErreurProprieteManquante);
+        expect(e).to.be.an(ErreurDonneesObligatoiresManquantes);
         expect(e.message).to.equal('La propriété "entite.siret" est requise');
       }
     });
