@@ -1,6 +1,5 @@
 const expect = require('expect.js');
 const ConstructeurEvenementCompletudeServiceModifiee = require('./constructeurEvenementCompletudeServiceModifiee');
-const EvenementCompletudeServiceModifiee = require('../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee');
 const {
   ErreurServiceManquant,
 } = require('../../../src/modeles/journalMSS/erreurs');
@@ -24,7 +23,7 @@ describe('Un événement de complétude modifiée', () => {
     expect(evenement.donnees.idService).to.be('ABC');
   });
 
-  it('sait se convertir en JSON', () => {
+  it("sait se convertir en JSON sans dévoiler le SIRET de l'organisation responsable", () => {
     const referentiel = Referentiel.creeReferentiel({
       mesures: { mesureA: {} },
       categoriesMesures: { gouvernance: 'Gouvernance' },
@@ -55,13 +54,34 @@ describe('Un événement de complétude modifiée', () => {
         typeService: ['applicationMobile'],
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         pointsAcces: ['point A', 'point B'],
+        organisationResponsable: {
+          siret: '12345',
+        },
       })
       .construis();
+    const detailsOrganisationResponsable = {
+      estServicePublic: false,
+      estFiness: false,
+      estEss: true,
+      estEntrepreneurIndividuel: false,
+      collectiviteTerritoriale: null,
+      estAssociation: false,
+      categorieEntreprise: null,
+      activitePrincipale: '68.20B',
+      trancheEffectifSalarie: null,
+      natureJuridique: '6540',
+      sectionActivitePrincipale: 'L',
+      anneeTrancheEffectifSalarie: null,
+      commune: '33376',
+      departement: '33',
+    };
 
-    const evenement = new EvenementCompletudeServiceModifiee(
-      { service },
-      { date: '08/03/2024', adaptateurChiffrement: hacheEnMajuscules }
-    );
+    const evenement = unEvenement()
+      .avecService(service)
+      .deLOrganisation(detailsOrganisationResponsable)
+      .quiChiffreAvec(hacheEnMajuscules)
+      .quiAEuLieuLe('08/03/2024')
+      .construis();
 
     expect(evenement.toJSON()).to.eql({
       type: 'COMPLETUDE_SERVICE_MODIFIEE',
@@ -86,6 +106,22 @@ describe('Un événement de complétude modifiée', () => {
         localisationDonnees: 'uneLocalisation',
         delaiAvantImpactCritique: 'uneHeure',
         risqueJuridiqueFinancierReputationnel: true,
+        organisationResponsable: {
+          estServicePublic: false,
+          estFiness: false,
+          estEss: true,
+          estEntrepreneurIndividuel: false,
+          collectiviteTerritoriale: null,
+          estAssociation: false,
+          categorieEntreprise: null,
+          activitePrincipale: '68.20B',
+          trancheEffectifSalarie: null,
+          natureJuridique: '6540',
+          sectionActivitePrincipale: 'L',
+          anneeTrancheEffectifSalarie: null,
+          commune: '33376',
+          departement: '33',
+        },
       },
       date: '08/03/2024',
     });

@@ -6,13 +6,26 @@ const leveException = (raison) => {
   );
 };
 
-function consigneCompletudeDansJournal({ adaptateurJournal }) {
+function consigneCompletudeDansJournal({
+  adaptateurJournal,
+  adaptateurRechercheEntreprise,
+}) {
   return async (evenement) => {
     const { service } = evenement;
 
     if (!service) leveException('service');
 
-    const completude = new EvenementCompletudeServiceModifiee({ service });
+    let organisationResponsable = {};
+    const { siret } = service.descriptionService.organisationResponsable;
+    if (siret) {
+      organisationResponsable =
+        await adaptateurRechercheEntreprise.recupereDetailsOrganisation(siret);
+    }
+
+    const completude = new EvenementCompletudeServiceModifiee({
+      service,
+      organisationResponsable,
+    });
 
     await adaptateurJournal.consigneEvenement(completude.toJSON());
   };

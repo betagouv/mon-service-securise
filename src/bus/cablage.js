@@ -66,17 +66,26 @@ const cableTousLesAbonnes = (
     consigneNouveauServiceDansJournal({ adaptateurJournal }),
     consigneProprietaireCreeUnServiceDansJournal({ adaptateurJournal }),
     envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees }),
-    consigneCompletudeDansJournal({ adaptateurJournal }),
+    consigneCompletudeDansJournal({
+      adaptateurJournal,
+      adaptateurRechercheEntreprise,
+    }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesuresServiceModifiees, [
-    consigneCompletudeDansJournal({ adaptateurJournal }),
+    consigneCompletudeDansJournal({
+      adaptateurJournal,
+      adaptateurRechercheEntreprise,
+    }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementDescriptionServiceModifiee, [
-    consigneCompletudeDansJournal({ adaptateurJournal }),
+    consigneCompletudeDansJournal({
+      adaptateurJournal,
+      adaptateurRechercheEntreprise,
+    }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
 
