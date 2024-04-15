@@ -7,7 +7,6 @@ const fauxAdaptateurRechercheEntreprise = () => ({
     estFiness: false,
     estEss: true,
     estEntrepreneurIndividuel: false,
-    collectiviteTerritoriale: null,
     estAssociation: false,
     categorieEntreprise: null,
     activitePrincipale: '68.20B',
