@@ -4,9 +4,19 @@ const { unService } = require('../../constructeurs/constructeurService');
 class ConstructeurEvenementCompletudeServiceModifiee {
   constructor() {
     const service = unService().avecId('abc').construis();
-    this.donnees = { service };
+    this.donnees = { service, organisationResponsable: {} };
     this.date = '14/02/2023';
     this.adaptateurChiffrement = { hacheSha256: (valeur) => valeur };
+  }
+
+  quiAEuLieuLe(date) {
+    this.date = date;
+    return this;
+  }
+
+  deLOrganisation(organisationResponsable) {
+    this.donnees.organisationResponsable = organisationResponsable;
+    return this;
   }
 
   avecService(service) {

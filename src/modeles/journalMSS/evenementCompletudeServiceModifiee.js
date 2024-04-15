@@ -19,7 +19,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
 
     valide();
 
-    const { service } = donnees;
+    const { service, organisationResponsable } = donnees;
     const { indiceCyber, ...autreDonneesCompletude } =
       service.completudeMesures();
     const {
@@ -61,6 +61,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
         localisationDonnees,
         delaiAvantImpactCritique,
         risqueJuridiqueFinancierReputationnel,
+        organisationResponsable,
       },
       date
     );
