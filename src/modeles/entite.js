@@ -1,5 +1,5 @@
 const Base = require('./base');
-const { ErreurProprieteManquante } = require('../erreurs');
+const { ErreurDonneesObligatoiresManquantes } = require('../erreurs');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('../adaptateurs/fabriqueAdaptateurGestionErreur');
@@ -15,7 +15,7 @@ class Entite extends Base {
 
   static valideDonnees(donnees = {}) {
     if (typeof donnees.siret !== 'string' || donnees.siret === '') {
-      throw new ErreurProprieteManquante(
+      throw new ErreurDonneesObligatoiresManquantes(
         'La propriété "entite.siret" est requise'
       );
     }

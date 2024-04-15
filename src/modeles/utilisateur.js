@@ -1,5 +1,8 @@
 const Base = require('./base');
-const { ErreurEmailManquant, ErreurProprieteManquante } = require('../erreurs');
+const {
+  ErreurEmailManquant,
+  ErreurDonneesObligatoiresManquantes,
+} = require('../erreurs');
 const { formatteListeFr } = require('../utilitaires/liste');
 const Entite = require('./entite');
 
@@ -33,8 +36,8 @@ class Utilisateur extends Base {
   }
 
   static valideDonnees(donnees = {}, utilisateurExistant = false) {
-    const envoieErreurProprieteManquante = (propriete) => {
-      throw new ErreurProprieteManquante(
+    const envoieErreurDonneeManquante = (propriete) => {
+      throw new ErreurDonneesObligatoiresManquantes(
         `La propriété "${propriete}" est requise`
       );
     };
@@ -45,7 +48,7 @@ class Utilisateur extends Base {
           typeof donnees[propriete] !== 'string' ||
           donnees[propriete] === ''
         ) {
-          envoieErreurProprieteManquante(propriete);
+          envoieErreurDonneeManquante(propriete);
         }
       });
     };
@@ -53,7 +56,7 @@ class Utilisateur extends Base {
     const validePresenceProprietesObjet = (proprietes) => {
       proprietes.forEach((propriete) => {
         if (typeof donnees[propriete] !== 'object') {
-          envoieErreurProprieteManquante(propriete);
+          envoieErreurDonneeManquante(propriete);
         }
       });
     };
@@ -61,7 +64,7 @@ class Utilisateur extends Base {
     const validePresenceProprietesBooleenes = (proprietes) => {
       proprietes.forEach((propriete) => {
         if (typeof donnees[propriete] !== 'boolean') {
-          envoieErreurProprieteManquante(propriete);
+          envoieErreurDonneeManquante(propriete);
         }
       });
     };
@@ -69,7 +72,7 @@ class Utilisateur extends Base {
     const validePresenceProprieteListes = (proprietes) => {
       proprietes.forEach((propriete) => {
         if (!Array.isArray(donnees[propriete])) {
-          envoieErreurProprieteManquante(propriete);
+          envoieErreurDonneeManquante(propriete);
         }
       });
     };

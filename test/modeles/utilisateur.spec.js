@@ -2,7 +2,7 @@ const expect = require('expect.js');
 
 const {
   ErreurEmailManquant,
-  ErreurProprieteManquante,
+  ErreurDonneesObligatoiresManquantes,
 } = require('../../src/erreurs');
 const Utilisateur = require('../../src/modeles/utilisateur');
 const {
@@ -205,10 +205,10 @@ describe('Un utilisateur', () => {
       try {
         Utilisateur.valideDonnees(donnees);
         done(
-          `La validation des données d'un utilisateur sans ${nom} aurait du lever une erreur de propriété manquante`
+          `La validation des données d'un utilisateur sans ${nom} aurait du lever une erreur de donnée manquante`
         );
       } catch (error) {
-        expect(error).to.be.a(ErreurProprieteManquante);
+        expect(error).to.be.a(ErreurDonneesObligatoiresManquantes);
         expect(error.message).to.equal(`La propriété "${clef}" est requise`);
         done();
       }
@@ -247,7 +247,7 @@ describe('Un utilisateur', () => {
         done();
       } catch (erreur) {
         let messageEchec = `La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur : ${erreur.message}`;
-        if (erreur instanceof ErreurProprieteManquante) {
+        if (erreur instanceof ErreurDonneesObligatoiresManquantes) {
           messageEchec =
             "La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur de propriété manquante";
         }
