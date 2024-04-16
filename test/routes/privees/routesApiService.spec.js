@@ -1537,6 +1537,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           enCoursEdition: true,
           etapeCourante: 'autorite',
         },
+        statutSaisieDescription: 'completes',
         nombreContributeurs: 2,
         estProprietaire: false,
         documentsPdfDisponibles: [],

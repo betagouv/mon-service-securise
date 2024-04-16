@@ -15,6 +15,7 @@ const donnees = (service, autorisation, referentiel) => {
     nomService: service.nomService(),
     organisationResponsable:
       service.descriptionService.organisationResponsable.nom ?? '',
+    statutSaisieDescription: service.descriptionService.statutSaisie(),
     contributeurs: service.contributeurs.map((c) => ({
       id: c.id,
       prenomNom: c.prenomNom(),
