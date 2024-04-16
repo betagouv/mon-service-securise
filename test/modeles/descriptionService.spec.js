@@ -204,6 +204,29 @@ describe('La description du service', () => {
     );
   });
 
+  elle(
+    "détecte qu'elle est partiellement saisie si tout est rempli sauf le siret",
+    () => {
+      const descriptionService = new DescriptionService(
+        {
+          nomService: 'Super Service',
+          delaiAvantImpactCritique: 'uneJournee',
+          localisationDonnees: 'france',
+          presentation: 'Une présentation',
+          provenanceService: 'uneProvenance',
+          risqueJuridiqueFinancierReputationnel: true,
+          statutDeploiement: 'accessible',
+          nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+          organisationResponsable: { nom: 'MonOrga' },
+        },
+        referentielAvecStatutValide('accessible')
+      );
+      expect(descriptionService.statutSaisie()).to.equal(
+        InformationsHomologation.A_COMPLETER
+      );
+    }
+  );
+
   elle("détecte qu'elle est complètement saisie", () => {
     const descriptionService = new DescriptionService(
       {
@@ -215,6 +238,7 @@ describe('La description du service', () => {
         risqueJuridiqueFinancierReputationnel: true,
         statutDeploiement: 'accessible',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+        organisationResponsable: { siret: '12345' },
       },
       referentielAvecStatutValide('accessible')
     );

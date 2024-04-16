@@ -66,6 +66,16 @@ class DescriptionService extends InformationsHomologation {
     return this.pointsAcces.nombre();
   }
 
+  statutSaisie() {
+    const statutSaisieDeBase = super.statutSaisie();
+    if (statutSaisieDeBase !== DescriptionService.COMPLETES) {
+      return statutSaisieDeBase;
+    }
+    return this.organisationResponsable?.statutSaisie() === Entite.COMPLETES
+      ? DescriptionService.COMPLETES
+      : DescriptionService.A_COMPLETER;
+  }
+
   donneesSerialisees() {
     return this.toJSON();
   }
