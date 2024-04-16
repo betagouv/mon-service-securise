@@ -86,6 +86,7 @@ describe("L'objet d'API de `GET /services`", () => {
           id: 'nonRealisee',
           ordre: 1,
         },
+        statutSaisieDescription: 'aCompleter',
         nombreContributeurs: 1 + 1,
         estProprietaire: true,
         documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],

@@ -826,3 +826,17 @@ label[for='recherche-service'] {
   position: relative;
   z-index: 2;
 }
+
+.avertissement-completion {
+  font-size: 0.9em;
+  color: var(--texte-fonce);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.avertissement-completion img {
+  height: 1.1em;
+  width: 1.1em;
+  margin-right: 4px;
+}

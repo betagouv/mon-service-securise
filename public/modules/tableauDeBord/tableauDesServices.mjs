@@ -205,10 +205,23 @@ const tableauDesServices = {
         `<input class='selection-service' type='checkbox' aria-labelledby='nom-${service.id}'>`
       );
       $inputSelection.prop('checked', estSelectionne);
-      const $nomService =
-        $(`<a class='conteneur-noms' href='/service/${service.id}' id='nom-${service.id}'>
-                              <div class='nom-service'>${service.nomService}</div>
-                              <div class='nom-organisation'>${service.organisationResponsable}</div>
+      const $nomService = $(`<a class='conteneur-noms'
+                                href='/service/${service.id}' 
+                                id='nom-${service.id}'>
+                              <div class='nom-service'>
+                                ${service.nomService}
+                              </div>
+                              <div class='nom-organisation'>
+                                ${service.organisationResponsable}
+                              </div>
+                              ${
+                                service.statutSaisieDescription === 'aCompleter'
+                                  ? `<div class="avertissement-completion">
+                                   <img src="/statique/assets/images/icone_danger_bleu.svg" alt="" />
+                                     Informations à mettre à jour
+                                 </div>`
+                                  : ''
+                              }
                             </a>`);
       $celluleNoms.append($inputSelection);
       $celluleNoms.append($nomService);
