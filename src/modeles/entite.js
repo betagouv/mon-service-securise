@@ -1,10 +1,10 @@
-const Base = require('./base');
 const { ErreurDonneesObligatoiresManquantes } = require('../erreurs');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('../adaptateurs/fabriqueAdaptateurGestionErreur');
+const InformationsHomologation = require('./informationsHomologation');
 
-class Entite extends Base {
+class Entite extends InformationsHomologation {
   constructor(donnees = {}) {
     super({
       proprietesAtomiquesRequises: ['siret'],
