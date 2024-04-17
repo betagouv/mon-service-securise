@@ -1,3 +1,5 @@
+block variables
+    - const meta_description = ''
 doctype html
 html(lang = 'fr', xml:lang = 'fr', xmlns = 'http://www.w3.org/1999/xhtml')
     head
@@ -6,6 +8,7 @@ html(lang = 'fr', xml:lang = 'fr', xmlns = 'http://www.w3.org/1999/xhtml')
         if (process.env.GOOGLE_SEARCH_CONSOLE_VERIFICATION)
             meta(name = 'google-site-verification', content = process.env.GOOGLE_SEARCH_CONSOLE_VERIFICATION)
         meta(property = 'og:site_name', content = 'MonServiceSécurisé')
+        meta(name = 'description' content=meta_description)
         link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
 
     block title
