@@ -1,0 +1,4 @@
+mixin badge({ contenu, niveau = 'defaut', taille = 'M' })
+  span.badge(class=`${niveau} ${taille} ${contenu ? '' : 'vide'}` role='alert')
+    if contenu
+      span!= contenu

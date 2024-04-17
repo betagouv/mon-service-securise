@@ -1,0 +1,76 @@
+:root {
+  --radius-full: 9999px;
+  --couleur-informations-erreur-100: #ca3535;
+  --couleur-informations-succes-100: #0e972b;
+  --couleur-informations-vigilance-100: #faa72c;
+  --couleur-principales-bleu-clair-mss: #0079d0;
+  --couleur-principales-gris-contour: #cbd5e1;
+  --couleur-principales-gris-typo: #667892;
+}
+
+.badge {
+  --couleur-texte: white;
+  color: var(--couleur-texte);
+  background: var(--couleur-fond);
+  display: inline-flex;
+  width: fit-content;
+  padding: 0 var(--padding-lateral);
+  border: 1px solid #ffffff;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  font-size: var(--texte-taille);
+  line-height: var(--texte-interligne);
+  text-align: center;
+}
+
+.badge.danger {
+  --couleur-fond: var(--couleur-informations-erreur-100);
+}
+
+.badge.defaut {
+  --couleur-fond: var(--couleur-principales-bleu-clair-mss);
+}
+
+.badge.desactive {
+  --couleur-fond: var(--couleur-principales-gris-contour);
+  --couleur-texte: var(--couleur-principales-gris-typo);
+}
+
+.badge.succes {
+  --couleur-fond: var(--couleur-informations-succes-100);
+}
+
+.badge.alerte {
+  --couleur-fond: var(--couleur-informations-vigilance-100);
+}
+
+.badge.S {
+  --texte-taille: 12px;
+  --texte-interligne: 16px;
+  --hauteur-minimale: 8px;
+  --largeur-minimale: 8px;
+  --padding-lateral: 4px;
+  padding-top: 2px;
+}
+
+.badge.M {
+  --texte-taille: 14px;
+  --texte-interligne: 18px;
+  --hauteur-minimale: 12px;
+  --largeur-minimale: 12px;
+  --padding-lateral: 6px;
+}
+
+.badge.L {
+  --texte-taille: 16px;
+  --texte-interligne: 20px;
+  --hauteur-minimale: 16px;
+  --largeur-minimale: 16px;
+  --padding-lateral: 8px;
+}
+
+.badge.vide {
+  width: var(--largeur-minimale);
+  height: var(--hauteur-minimale);
+  padding: 0;
+}
