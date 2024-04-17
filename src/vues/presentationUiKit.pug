@@ -1,0 +1,35 @@
+include ./kit/badge
+
+mixin presentationComposant(nomComposant)
+  h3(id=nomComposant)!= nomComposant
+  .conteneur-presentation-composant
+    block
+
+doctype html
+html(lang = 'fr', xml:lang = 'fr', xmlns = 'http://www.w3.org/1999/xhtml')
+  meta(charset='utf-8')
+  meta(name = 'viewport', content = 'width=device-width')
+  link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
+  link(href='/statique/assets/styles/fonts.css', rel='stylesheet')
+  link(href='/statique/assets/styles/presentationUiKit.css', rel='stylesheet')
+  link(href='/statique/assets/styles/uiKit.css', rel='stylesheet')
+
+  block title
+    title MonServiceSécurisé | UI Kit
+
+  body
+    main
+      h1 MonServiceSécurisé - UI Kit
+      h2 Composants
+      +presentationComposant('Badge')
+        -
+          const variantes = [{titre: 'Avec contenu', contenu: '99+'}, {titre: 'Sans contenu', contenu: ''}]
+          const niveaux = ['danger', 'defaut', 'desactive', 'succes', 'alerte']
+          const tailles = ['S', 'M', 'L']
+        for variante in variantes
+          h4!= variante.titre
+          for taille in tailles
+            .conteneur-taille-badge
+              span.taille-badge!= taille
+              for niveau in niveaux
+                +badge({contenu: variante.contenu, niveau, taille })

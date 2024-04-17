@@ -94,6 +94,10 @@ const creeServeur = (
     reponse.render('cgu');
   });
 
+  app.get('/uiKit', (_requete, reponse) => {
+    reponse.render('presentationUiKit');
+  });
+
   app.get('/confidentialite', (_requete, reponse) => {
     reponse.render('confidentialite');
   });

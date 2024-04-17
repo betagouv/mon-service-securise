@@ -1,0 +1,15 @@
+body {
+  font-family: Marianne;
+  padding: 16px 32px;
+}
+
+.conteneur-taille-badge {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin-bottom: 32px;
+}
+
+.taille-badge {
+  color: var(--couleur-principales-bleu-clair-mss);
+  font-size: 16px;
+}
