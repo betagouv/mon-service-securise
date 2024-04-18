@@ -2,7 +2,7 @@ const instructionsTamponHomologation = Buffer.from(
   `Instructions d'utilisation
 ------------------------
 
-Vous avez téléchargé une archive .zip sur le site https://www.monservicesecurise.ssi.gouv.fr/.
+Vous avez téléchargé une archive .zip sur le site https://www.monservicesecurise.cyber.gouv.fr/.
 Cette archive contient des encarts d'homologation personnalisés pour votre service.
 
 Nous vous proposons ces encarts en divers formats, afin de faciliter leur utilisation
