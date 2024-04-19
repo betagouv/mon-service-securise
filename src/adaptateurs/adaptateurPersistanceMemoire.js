@@ -54,14 +54,6 @@ const nouvelAdaptateur = (
       .filter((a) => a.idHomologation === idService)
       .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
 
-  const homologation = (id) => {
-    const homologationTrouvee = donnees.services.find((h) => h.id === id);
-    if (homologationTrouvee)
-      homologationTrouvee.contributeurs = contributeursService(id);
-
-    return Promise.resolve(homologationTrouvee);
-  };
-
   const service = (id) => {
     const serviceTrouve = donnees.services.find((s) => s.id === id);
     if (serviceTrouve) serviceTrouve.contributeurs = contributeursService(id);
@@ -69,22 +61,18 @@ const nouvelAdaptateur = (
     return Promise.resolve(serviceTrouve);
   };
 
-  const homologations = (idUtilisateur) =>
+  const services = (idUtilisateur) =>
     autorisations(idUtilisateur).then((as) =>
-      Promise.all(as.map(({ idHomologation }) => homologation(idHomologation)))
+      Promise.all(as.map(({ idHomologation }) => service(idHomologation)))
     );
 
   const tousLesServices = async () => {
     const lesIds = donnees.services.map((s) => s.id);
-    return lesIds.map(homologation);
+    return lesIds.map(service);
   };
 
-  const homologationAvecNomService = (
-    idUtilisateur,
-    nomService,
-    idHomologationMiseAJour
-  ) =>
-    homologations(idUtilisateur).then((hs) =>
+  const serviceAvecNom = (idUtilisateur, nomService, idHomologationMiseAJour) =>
+    services(idUtilisateur).then((hs) =>
       hs.find(
         (h) =>
           h.id !== idHomologationMiseAJour &&
@@ -269,9 +257,9 @@ const nouvelAdaptateur = (
     autorisationPour,
     autorisations,
     autorisationsDuService,
-    homologation,
-    homologationAvecNomService,
-    homologations,
+    service,
+    services,
+    serviceAvecNom,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
@@ -281,7 +269,6 @@ const nouvelAdaptateur = (
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
     sauvegardeService,
-    service,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,

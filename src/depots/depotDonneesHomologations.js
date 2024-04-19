@@ -52,7 +52,7 @@ const fabriquePersistance = (
   const persistance = {
     lis: {
       une: async (idHomologation) => {
-        const h = await adaptateurPersistance.homologation(idHomologation);
+        const h = await adaptateurPersistance.service(idHomologation);
 
         if (!h) return undefined;
 
@@ -60,7 +60,7 @@ const fabriquePersistance = (
         return new Homologation(donneesEnClair, referentiel);
       },
       cellesDeUtilisateur: async (idUtilisateur) => {
-        const hs = await adaptateurPersistance.homologations(idUtilisateur);
+        const hs = await adaptateurPersistance.services(idUtilisateur);
         return hs
           .map((h) => new Homologation(h, referentiel))
           .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService()));
@@ -70,7 +70,7 @@ const fabriquePersistance = (
         return donneesServices.map((s) => new Homologation(s, referentiel));
       },
       celleAvecNomService: async (...params) =>
-        adaptateurPersistance.homologationAvecNomService(...params),
+        adaptateurPersistance.serviceAvecNom(...params),
     },
     sauvegarde: async (id, donneesService) => {
       const donneesChiffrees = await chiffre.donneesService(donneesService);

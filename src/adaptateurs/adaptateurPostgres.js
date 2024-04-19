@@ -61,7 +61,7 @@ const nouvelAdaptateur = (env) => {
 
   const arreteTout = () => knex.destroy();
 
-  const homologation = async (id) => {
+  const service = async (id) => {
     const requeteHomologation = knex('services')
       .where('id', id)
       .select({ id: 'id', donnees: 'donnees' })
@@ -96,13 +96,7 @@ const nouvelAdaptateur = (env) => {
     };
   };
 
-  const service = (id) => elementDeTable('services', id);
-
-  const homologationAvecNomService = (
-    idUtilisateur,
-    nomService,
-    idServiceMiseAJour = ''
-  ) =>
+  const serviceAvecNom = (idUtilisateur, nomService, idServiceMiseAJour = '') =>
     knex('services')
       .join(
         'autorisations',
@@ -120,20 +114,20 @@ const nouvelAdaptateur = (env) => {
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
 
-  const homologations = (idUtilisateur) => {
+  const services = (idUtilisateur) => {
     const idsHomologations = knex('autorisations')
       .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
       .select({ idService: knex.raw("(donnees->>'idService')") })
       .then((lignes) => lignes.map(({ idService }) => idService));
 
-    return avecPMapPourChaqueElement(idsHomologations, homologation);
+    return avecPMapPourChaqueElement(idsHomologations, service);
   };
 
   const tousLesServices = async () => {
     const lignes = await knex('services').select({ id: 'id' });
     const ids = lignes.map(({ id }) => id);
 
-    return avecPMapPourChaqueElement(Promise.resolve(ids), homologation);
+    return avecPMapPourChaqueElement(Promise.resolve(ids), service);
   };
 
   const metsAJourService = (...params) => metsAJourTable('services', ...params);
@@ -333,16 +327,15 @@ const nouvelAdaptateur = (env) => {
     autorisationPour,
     autorisations,
     autorisationsDuService,
-    homologation,
-    homologationAvecNomService,
-    homologations,
+    service,
+    serviceAvecNom,
+    services,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     rechercheContributeurs,
     sauvegardeService,
-    service,
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
