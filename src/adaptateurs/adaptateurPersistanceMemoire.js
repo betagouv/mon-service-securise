@@ -173,9 +173,9 @@ const nouvelAdaptateur = (
     );
   };
 
-  const supprimeAutorisationsHomologation = (idHomologation) => {
+  const supprimeAutorisationsService = (idService) => {
     donnees.autorisations = donnees.autorisations.filter(
-      (a) => a.idHomologation !== idHomologation
+      (a) => a.idService !== idService
     );
     return Promise.resolve();
   };
@@ -272,7 +272,7 @@ const nouvelAdaptateur = (
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
-    supprimeAutorisationsHomologation,
+    supprimeAutorisationsService,
     supprimeServices,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,

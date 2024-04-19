@@ -331,7 +331,7 @@ const creeDepot = (config = {}) => {
     remplaceProprieteService('risquesSpecifiques', ...params);
 
   const supprimeService = async (idService) => {
-    await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
+    await adaptateurPersistance.supprimeAutorisationsService(idService);
     await p.supprime(idService);
     await busEvenements.publie(new EvenementServiceSupprime({ idService }));
   };

@@ -229,7 +229,7 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("(donnees->>'estProprietaire')::boolean=false")
       .del();
 
-  const supprimeAutorisationsHomologation = (idService) =>
+  const supprimeAutorisationsService = (idService) =>
     knex('autorisations').whereRaw("donnees->>'idService'=?", idService).del();
 
   const lisParcoursUtilisateur = async (id) =>
@@ -342,7 +342,7 @@ const nouvelAdaptateur = (env) => {
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
-    supprimeAutorisationsHomologation,
+    supprimeAutorisationsService,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
