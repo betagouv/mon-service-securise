@@ -5,7 +5,6 @@ const nouvelAdaptateur = (
   adaptateurHorloge = adaptateurHorlogeParDefaut
 ) => {
   donnees.utilisateurs ||= [];
-  donnees.homologations ||= [];
   donnees.services ||= [];
   donnees.autorisations ||= [];
   donnees.parcoursUtilisateurs ||= [];
@@ -22,11 +21,6 @@ const nouvelAdaptateur = (
 
   const supprimeEnregistrement = (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
-    return Promise.resolve();
-  };
-
-  const ajouteHomologation = (id, donneesHomologation) => {
-    donnees.homologations.push({ id, ...donneesHomologation });
     return Promise.resolve();
   };
 
@@ -61,7 +55,7 @@ const nouvelAdaptateur = (
       .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
 
   const homologation = (id) => {
-    const homologationTrouvee = donnees.homologations.find((h) => h.id === id);
+    const homologationTrouvee = donnees.services.find((h) => h.id === id);
     if (homologationTrouvee)
       homologationTrouvee.contributeurs = contributeursService(id);
 
@@ -98,9 +92,6 @@ const nouvelAdaptateur = (
       )
     );
 
-  const metsAJourHomologation = (...params) =>
-    metsAJourEnregistrement(homologation, ...params);
-
   const metsAJourService = (...params) =>
     metsAJourEnregistrement(service, ...params);
 
@@ -111,14 +102,6 @@ const nouvelAdaptateur = (
     else Object.assign(dejaConnue, { ...donneesAutorisation });
   };
 
-  const sauvegardeHomologation = (id, donneesHomologation) => {
-    const dejaConnue =
-      donnees.homologations.find((h) => h.id === id) !== undefined;
-    return dejaConnue
-      ? metsAJourHomologation(id, donneesHomologation)
-      : ajouteHomologation(id, donneesHomologation);
-  };
-
   const sauvegardeService = (id, donneesService) => {
     const dejaConnu = donnees.services.find((s) => s.id === id) !== undefined;
     return dejaConnu
@@ -126,11 +109,8 @@ const nouvelAdaptateur = (
       : ajouteService(id, donneesService);
   };
 
-  const supprimeHomologation = (...params) =>
-    supprimeEnregistrement('homologations', ...params);
-
   const supprimeHomologations = () => {
-    donnees.homologations = [];
+    donnees.services = [];
     return Promise.resolve();
   };
 
@@ -300,14 +280,12 @@ const nouvelAdaptateur = (
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
-    sauvegardeHomologation,
     sauvegardeService,
     service,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
-    supprimeHomologation,
     supprimeHomologations,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,

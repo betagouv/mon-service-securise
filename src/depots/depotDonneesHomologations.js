@@ -74,16 +74,10 @@ const fabriquePersistance = (
     },
     sauvegarde: async (id, donneesService) => {
       const donneesChiffrees = await chiffre.donneesService(donneesService);
-      return Promise.all([
-        adaptateurPersistance.sauvegardeService(id, donneesChiffrees),
-        adaptateurPersistance.sauvegardeHomologation(id, donneesChiffrees),
-      ]);
+      return adaptateurPersistance.sauvegardeService(id, donneesChiffrees);
     },
     supprime: async (idHomologation) =>
-      Promise.all([
-        adaptateurPersistance.supprimeHomologation(idHomologation),
-        adaptateurPersistance.supprimeService(idHomologation),
-      ]),
+      adaptateurPersistance.supprimeService(idHomologation),
   };
 
   return persistance;

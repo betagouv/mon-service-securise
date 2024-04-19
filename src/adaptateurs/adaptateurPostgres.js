@@ -54,8 +54,6 @@ const nouvelAdaptateur = (env) => {
   const supprimeEnregistrement = (nomTable, id) =>
     knex(nomTable).where({ id }).del();
 
-  const ajouteHomologation = (...params) =>
-    ajouteLigneDansTable('homologations', ...params);
   const ajouteService = (...params) =>
     ajouteLigneDansTable('services', ...params);
   const ajouteUtilisateur = (...params) =>
@@ -64,7 +62,7 @@ const nouvelAdaptateur = (env) => {
   const arreteTout = () => knex.destroy();
 
   const homologation = async (id) => {
-    const requeteHomologation = knex('homologations')
+    const requeteHomologation = knex('services')
       .where('id', id)
       .select({ id: 'id', donnees: 'donnees' })
       .first();
@@ -75,7 +73,7 @@ const nouvelAdaptateur = (env) => {
         knex.raw("(a.donnees->>'idUtilisateur')::uuid"),
         'u.id'
       )
-      .whereRaw("(a.donnees->>'idHomologation')::uuid = ?", id)
+      .whereRaw("(a.donnees->>'idService')::uuid = ?", id)
       .select({
         id: 'u.id',
         dateCreation: 'u.date_creation',
@@ -103,21 +101,21 @@ const nouvelAdaptateur = (env) => {
   const homologationAvecNomService = (
     idUtilisateur,
     nomService,
-    idHomologationMiseAJour = ''
+    idServiceMiseAJour = ''
   ) =>
-    knex('homologations')
+    knex('services')
       .join(
         'autorisations',
-        knex.raw("(autorisations.donnees->>'idHomologation')::uuid"),
-        'homologations.id'
+        knex.raw("(autorisations.donnees->>'idService')::uuid"),
+        'services.id'
       )
       .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
-      .whereRaw('not homologations.id::text=?', idHomologationMiseAJour)
+      .whereRaw('not services.id::text=?', idServiceMiseAJour)
       .whereRaw(
-        "homologations.donnees#>>'{descriptionService,nomService}'=?",
+        "services.donnees#>>'{descriptionService,nomService}'=?",
         nomService
       )
-      .select('homologations.*')
+      .select('services.*')
       .first()
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
@@ -125,8 +123,8 @@ const nouvelAdaptateur = (env) => {
   const homologations = (idUtilisateur) => {
     const idsHomologations = knex('autorisations')
       .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
-      .select({ idHomologation: knex.raw("(donnees->>'idHomologation')") })
-      .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
+      .select({ idService: knex.raw("(donnees->>'idService')") })
+      .then((lignes) => lignes.map(({ idService }) => idService));
 
     return avecPMapPourChaqueElement(idsHomologations, homologation);
   };
@@ -138,20 +136,16 @@ const nouvelAdaptateur = (env) => {
     return avecPMapPourChaqueElement(Promise.resolve(ids), homologation);
   };
 
-  const metsAJourHomologation = (...params) =>
-    metsAJourTable('homologations', ...params);
   const metsAJourService = (...params) => metsAJourTable('services', ...params);
   const metsAJourUtilisateur = (...params) =>
     metsAJourTable('utilisateurs', ...params);
 
-  const supprimeHomologation = (...params) =>
-    supprimeEnregistrement('homologations', ...params);
   const supprimeService = (...params) =>
     supprimeEnregistrement('services', ...params);
   const supprimeUtilisateur = (...params) =>
     supprimeEnregistrement('utilisateurs', ...params);
 
-  const supprimeHomologations = () => knex('homologations').del();
+  const supprimeHomologations = () => knex('services').del();
 
   const supprimeUtilisateurs = () => knex('utilisateurs').del();
 
@@ -166,12 +160,12 @@ const nouvelAdaptateur = (env) => {
 
   const autorisation = (id) => elementDeTable('autorisations', id);
 
-  const autorisationPour = (idUtilisateur, idHomologation) =>
+  const autorisationPour = (idUtilisateur, idService) =>
     knex('autorisations')
-      .whereRaw(
-        "donnees->>'idUtilisateur'=? and donnees->>'idHomologation'=?",
-        [idUtilisateur, idHomologation]
-      )
+      .whereRaw("donnees->>'idUtilisateur'=? and donnees->>'idService'=?", [
+        idUtilisateur,
+        idService,
+      ])
       .first()
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
@@ -199,20 +193,6 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("(donnees->>'estProprietaire')::boolean=true")
       .then(([{ count }]) => parseInt(count, 10));
 
-  const sauvegardeHomologation = (id, donneesHomologations) => {
-    const testExistence = knex('homologations')
-      .where('id', id)
-      .select({ id: 'id' })
-      .first()
-      .then((ligne) => ligne !== undefined);
-
-    return testExistence.then((dejaConnue) =>
-      dejaConnue
-        ? metsAJourHomologation(id, donneesHomologations)
-        : ajouteHomologation(id, donneesHomologations)
-    );
-  };
-
   const sauvegardeService = (id, donneesService) => {
     const testExistence = knex('services')
       .where('id', id)
@@ -239,12 +219,12 @@ const nouvelAdaptateur = (env) => {
     else await ajouteLigneDansTable('autorisations', id, donneesAutorisation);
   };
 
-  const supprimeAutorisation = (idUtilisateur, idHomologation) =>
+  const supprimeAutorisation = (idUtilisateur, idService) =>
     knex('autorisations')
-      .whereRaw(
-        "donnees->>'idUtilisateur'=? and donnees->>'idHomologation'=?",
-        [idUtilisateur, idHomologation]
-      )
+      .whereRaw("donnees->>'idUtilisateur'=? and donnees->>'idService'=?", [
+        idUtilisateur,
+        idService,
+      ])
       .del();
 
   const supprimeAutorisations = () => knex('autorisations').del();
@@ -255,10 +235,8 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("(donnees->>'estProprietaire')::boolean=false")
       .del();
 
-  const supprimeAutorisationsHomologation = (idHomologation) =>
-    knex('autorisations')
-      .whereRaw("donnees->>'idHomologation'=?", idHomologation)
-      .del();
+  const supprimeAutorisationsHomologation = (idService) =>
+    knex('autorisations').whereRaw("donnees->>'idService'=?", idService).del();
 
   const lisParcoursUtilisateur = async (id) =>
     elementDeTable('parcours_utilisateurs', id);
@@ -363,7 +341,6 @@ const nouvelAdaptateur = (env) => {
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     rechercheContributeurs,
-    sauvegardeHomologation,
     sauvegardeService,
     service,
     sauvegardeAutorisation,
@@ -373,7 +350,6 @@ const nouvelAdaptateur = (env) => {
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
-    supprimeHomologation,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
