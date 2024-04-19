@@ -1,5 +1,5 @@
 const adaptateurJWTParDefaut = require('./adaptateurs/adaptateurJWT');
-const adaptateurUUIDParDefaut = require('./adaptateurs/adaptateurUUID');
+const { fabriqueAdaptateurUUID } = require('./adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const Referentiel = require('./referentiel');
 const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
@@ -13,7 +13,7 @@ const creeDepot = (config = {}) => {
     adaptateurChiffrement,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
-    adaptateurUUID = adaptateurUUIDParDefaut,
+    adaptateurUUID = fabriqueAdaptateurUUID(),
     referentiel = Referentiel.creeReferentiel(),
     adaptateurRechercheEntite,
     busEvenements,

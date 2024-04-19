@@ -4,7 +4,7 @@ const DepotDonnees = require('./src/depotDonnees');
 const Referentiel = require('./src/referentiel');
 const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
-const adaptateurUUID = require('./src/adaptateurs/adaptateurUUID');
+const { fabriqueAdaptateurUUID } = require('./src/adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
 const EvenementCompletudeServiceModifiee = require('./src/modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouvelleHomologationCreee = require('./src/modeles/journalMSS/evenementNouvelleHomologationCreee');
@@ -28,7 +28,7 @@ class ConsoleAdministration {
       adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
       adaptateurJWT,
       adaptateurPersistance: this.adaptateurPersistance,
-      adaptateurUUID,
+      adaptateurUUID: fabriqueAdaptateurUUID(),
       referentiel: this.referentiel,
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
     });

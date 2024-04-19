@@ -1,4 +1,4 @@
-const adaptateurUUIDParDefaut = require('../adaptateurs/adaptateurUUID');
+const { fabriqueAdaptateurUUID } = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
 const {
   ErreurAutorisationExisteDeja,
@@ -15,7 +15,7 @@ const {
 const creeDepot = (config = {}) => {
   const {
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
-    adaptateurUUID = adaptateurUUIDParDefaut,
+    adaptateurUUID = fabriqueAdaptateurUUID(),
     depotHomologations,
     depotUtilisateurs,
     busEvenements,

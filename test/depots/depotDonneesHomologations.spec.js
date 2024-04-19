@@ -10,7 +10,9 @@ const {
 const Referentiel = require('../../src/referentiel');
 
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const AdaptateurUUID = require('../../src/adaptateurs/adaptateurUUID');
+const {
+  fabriqueAdaptateurUUID,
+} = require('../../src/adaptateurs/adaptateurUUID');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
@@ -1402,7 +1404,7 @@ describe('Le dépôt de données des homologations', () => {
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurTracking: unAdaptateurTracking().construis(),
-        adaptateurUUID: AdaptateurUUID,
+        adaptateurUUID: fabriqueAdaptateurUUID(),
         busEvenements: fabriqueBusPourLesTests(),
         adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
         referentiel,

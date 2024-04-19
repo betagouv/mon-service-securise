@@ -6,7 +6,9 @@ const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
 const NotificationExpirationHomologation = require('../../src/modeles/notificationExpirationHomologation');
-const adaptateurUUIDParDefaut = require('../../src/adaptateurs/adaptateurUUID');
+const {
+  fabriqueAdaptateurUUID,
+} = require('../../src/adaptateurs/adaptateurUUID');
 
 describe("Le dépôt de données des notifications d'expiration d'homologation", () => {
   let adaptateurPersistance;
@@ -15,7 +17,7 @@ describe("Le dépôt de données des notifications d'expiration d'homologation",
 
   beforeEach(() => {
     adaptateurPersistance = unePersistanceMemoire().construis();
-    adaptateurUUID = adaptateurUUIDParDefaut;
+    adaptateurUUID = fabriqueAdaptateurUUID();
     depot = creeDepot({ adaptateurPersistance, adaptateurUUID });
   });
 
