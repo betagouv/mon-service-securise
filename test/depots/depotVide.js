@@ -12,7 +12,7 @@ const depotVide = (
   const { adaptateurPersistance } = config;
   return adaptateurPersistance
     .supprimeUtilisateurs()
-    .then(() => adaptateurPersistance.supprimeHomologations())
+    .then(() => adaptateurPersistance.supprimeServices())
     .then(() => adaptateurPersistance.supprimeAutorisations())
     .then(() => DepotDonnees.creeDepot(config));
 };

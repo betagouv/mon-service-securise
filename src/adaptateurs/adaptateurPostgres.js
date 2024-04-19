@@ -139,7 +139,7 @@ const nouvelAdaptateur = (env) => {
   const supprimeUtilisateur = (...params) =>
     supprimeEnregistrement('utilisateurs', ...params);
 
-  const supprimeHomologations = () => knex('services').del();
+  const supprimeServices = () => knex('services').del();
 
   const supprimeUtilisateurs = () => knex('utilisateurs').del();
 
@@ -346,7 +346,7 @@ const nouvelAdaptateur = (env) => {
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
-    supprimeHomologations,
+    supprimeServices,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tousLesServices,

@@ -97,7 +97,7 @@ const nouvelAdaptateur = (
       : ajouteService(id, donneesService);
   };
 
-  const supprimeHomologations = () => {
+  const supprimeServices = () => {
     donnees.services = [];
     return Promise.resolve();
   };
@@ -273,7 +273,7 @@ const nouvelAdaptateur = (
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
-    supprimeHomologations,
+    supprimeServices,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
