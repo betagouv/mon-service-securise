@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 const { depotVide } = require('./depotVide');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const {
   ErreurAutorisationExisteDeja,
@@ -34,7 +34,7 @@ describe('Le dépôt de données des autorisations', () => {
     DepotDonneesAutorisations.creeDepot({
       adaptateurPersistance,
       adaptateurUUID,
-      depotHomologations: DepotDonneesHomologations.creeDepot({
+      depotHomologations: DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
       }),

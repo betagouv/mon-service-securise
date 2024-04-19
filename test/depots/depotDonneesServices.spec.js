@@ -16,7 +16,7 @@ const {
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 
 const Dossier = require('../../src/modeles/dossier');
 const Homologation = require('../../src/modeles/homologation');
@@ -106,7 +106,7 @@ describe('Le dépôt de données des homologations', () => {
       return [];
     };
 
-    const depot = DepotDonneesHomologations.creeDepot({
+    const depot = DepotDonneesServices.creeDepot({
       adaptateurPersistance,
     });
 
@@ -164,7 +164,7 @@ describe('Le dépôt de données des homologations', () => {
       })
       .construis();
     const referentiel = Referentiel.creeReferentielVide();
-    const depot = DepotDonneesHomologations.creeDepot({
+    const depot = DepotDonneesServices.creeDepot({
       adaptateurChiffrement,
       adaptateurPersistance,
       referentiel,
@@ -639,7 +639,7 @@ describe('Le dépôt de données des homologations', () => {
       referentiel = Referentiel.creeReferentielVide();
       adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
 
-      depot = DepotDonneesHomologations.creeDepot({
+      depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement,
         adaptateurPersistance,
         adaptateurTracking,
@@ -938,7 +938,7 @@ describe('Le dépôt de données des homologations', () => {
         ],
       });
 
-      depot = DepotDonneesHomologations.creeDepot({
+      depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
         busEvenements,
       });
@@ -986,7 +986,7 @@ describe('Le dépôt de données des homologations', () => {
           uneAutorisation().avecId('789').deContributeur('000', '222').donnees,
         ],
       });
-      depot = DepotDonneesHomologations.creeDepot({
+      depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
         busEvenements,
       });
@@ -1033,7 +1033,7 @@ describe('Le dépôt de données des homologations', () => {
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           services: [copie(donneesHomologations)],
         });
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
@@ -1056,7 +1056,7 @@ describe('Le dépôt de données des homologations', () => {
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           services: [copie(donneesHomologations)],
         });
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
@@ -1080,7 +1080,7 @@ describe('Le dépôt de données des homologations', () => {
           services: [copie(donneesHomologations)],
         });
       adaptateurUUID.genereUUID = () => '999';
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
@@ -1103,7 +1103,7 @@ describe('Le dépôt de données des homologations', () => {
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           services: [copie(donneesHomologations)],
         });
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
       });
 
@@ -1138,7 +1138,7 @@ describe('Le dépôt de données des homologations', () => {
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           services: [copie(donneesHomologations)],
         });
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
@@ -1180,7 +1180,7 @@ describe('Le dépôt de données des homologations', () => {
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           services: [copie(donneesHomologations)],
         });
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
@@ -1216,7 +1216,7 @@ describe('Le dépôt de données des homologations', () => {
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           services: [copie(donneesService)],
         });
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurUUID,
@@ -1255,7 +1255,7 @@ describe('Le dépôt de données des homologations', () => {
 
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire().construis();
-      depot = DepotDonneesHomologations.creeDepot({
+      depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         referentiel,
@@ -1369,7 +1369,7 @@ describe('Le dépôt de données des homologations', () => {
           ],
         });
 
-      depot = DepotDonneesHomologations.creeDepot({
+      depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         adaptateurTracking: unAdaptateurTracking().construis(),
@@ -1435,7 +1435,7 @@ describe('Le dépôt de données des homologations', () => {
           ],
         });
 
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
         referentiel,
       });
@@ -1462,7 +1462,7 @@ describe('Le dépôt de données des homologations', () => {
           ],
         });
 
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
         referentiel,
       });
@@ -1497,7 +1497,7 @@ describe('Le dépôt de données des homologations', () => {
           ],
         });
 
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
         referentiel,
       });
@@ -1524,7 +1524,7 @@ describe('Le dépôt de données des homologations', () => {
           ],
         });
 
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
         referentiel,
       });
@@ -1541,7 +1541,7 @@ describe('Le dépôt de données des homologations', () => {
     const referentiel = Referentiel.creeReferentielVide();
 
     it("jette une erreur si le service n'existe pas", async () => {
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance: unePersistanceMemoire().construis(),
         referentiel,
       });
@@ -1566,7 +1566,7 @@ describe('Le dépôt de données des homologations', () => {
         donneesPersistees = { id, donnees };
       };
 
-      const depot = DepotDonneesHomologations.creeDepot({
+      const depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         referentiel,

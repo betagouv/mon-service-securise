@@ -1,7 +1,7 @@
 const {
   unePersistanceMemoire,
 } = require('./constructeurAdaptateurPersistanceMemoire');
-const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 const Referentiel = require('../../src/referentiel');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
@@ -36,7 +36,7 @@ class ConstructeurDepotDonneesServices {
   }
 
   construis() {
-    return DepotDonneesHomologations.creeDepot({
+    return DepotDonneesServices.creeDepot({
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
       adaptateurPersistance: this.constructeurAdaptateurPersistance.construis(),
       adaptateurUUID: this.adaptateurUUID,
