@@ -62,7 +62,7 @@ const nouvelAdaptateur = (env) => {
   const arreteTout = () => knex.destroy();
 
   const service = async (id) => {
-    const requeteHomologation = knex('services')
+    const requeteService = knex('services')
       .where('id', id)
       .select({ id: 'id', donnees: 'donnees' })
       .first();
@@ -80,14 +80,14 @@ const nouvelAdaptateur = (env) => {
         donnees: 'u.donnees',
       });
 
-    const [h, contributeurs] = await Promise.all([
-      requeteHomologation,
+    const [s, contributeurs] = await Promise.all([
+      requeteService,
       requeteContributeurs,
     ]);
 
     return {
-      id: h.id,
-      ...h.donnees,
+      id: s.id,
+      ...s.donnees,
       contributeurs: contributeurs.map((c) => ({
         id: c.id,
         dateCreation: c.dateCreation,
@@ -96,7 +96,7 @@ const nouvelAdaptateur = (env) => {
     };
   };
 
-  const serviceAvecNom = (idUtilisateur, nomService, idServiceMiseAJour = '') =>
+  const serviceAvecNom = (idUtilisateur, nomService, idServiceMisAJour = '') =>
     knex('services')
       .join(
         'autorisations',
@@ -104,7 +104,7 @@ const nouvelAdaptateur = (env) => {
         'services.id'
       )
       .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
-      .whereRaw('not services.id::text=?', idServiceMiseAJour)
+      .whereRaw('not services.id::text=?', idServiceMisAJour)
       .whereRaw(
         "services.donnees#>>'{descriptionService,nomService}'=?",
         nomService
@@ -115,12 +115,12 @@ const nouvelAdaptateur = (env) => {
       .catch(() => undefined);
 
   const services = (idUtilisateur) => {
-    const idsHomologations = knex('autorisations')
+    const idsServices = knex('autorisations')
       .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
       .select({ idService: knex.raw("(donnees->>'idService')") })
       .then((lignes) => lignes.map(({ idService }) => idService));
 
-    return avecPMapPourChaqueElement(idsHomologations, service);
+    return avecPMapPourChaqueElement(idsServices, service);
   };
 
   const tousLesServices = async () => {
