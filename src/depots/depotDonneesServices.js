@@ -5,7 +5,7 @@ const {
 } = require('../erreurs');
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
-const Homologation = require('../modeles/homologation');
+const Service = require('../modeles/service');
 const Autorisation = require('../modeles/autorisations/autorisation');
 const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresServiceModifiees');
 const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree');
@@ -57,17 +57,17 @@ const fabriquePersistance = (
         if (!service) return undefined;
 
         const donneesEnClair = await dechiffre.donneesService(service);
-        return new Homologation(donneesEnClair, referentiel);
+        return new Service(donneesEnClair, referentiel);
       },
       ceuxDeUtilisateur: async (idUtilisateur) => {
         const services = await adaptateurPersistance.services(idUtilisateur);
         return services
-          .map((s) => new Homologation(s, referentiel))
+          .map((s) => new Service(s, referentiel))
           .sort((s1, s2) => s1.nomService().localeCompare(s2.nomService()));
       },
       tous: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
-        return donneesServices.map((s) => new Homologation(s, referentiel));
+        return donneesServices.map((s) => new Service(s, referentiel));
       },
       ceuxAvecNom: async (...params) =>
         adaptateurPersistance.serviceAvecNom(...params),
