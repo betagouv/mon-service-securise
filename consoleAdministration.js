@@ -52,7 +52,7 @@ class ConsoleAdministration {
   }
 
   supprimeHomologation(idHomologation) {
-    return this.depotDonnees.supprimeHomologation(idHomologation);
+    return this.depotDonnees.supprimeService(idHomologation);
   }
 
   supprimeUtilisateur(id) {

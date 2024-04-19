@@ -948,7 +948,7 @@ describe('Le dépôt de données des homologations', () => {
       adaptateurPersistance
         .service('123')
         .then((h) => expect(h).to.be.an(Object))
-        .then(() => depot.supprimeHomologation('123'))
+        .then(() => depot.supprimeService('123'))
         .then(() => adaptateurPersistance.service('123'))
         .then((h) => {
           expect(h).to.be(undefined);
@@ -961,7 +961,7 @@ describe('Le dépôt de données des homologations', () => {
       adaptateurPersistance
         .service('123')
         .then((s) => expect(s).to.be.an(Object))
-        .then(() => depot.supprimeHomologation('123'))
+        .then(() => depot.supprimeService('123'))
         .then(() => adaptateurPersistance.service('123'))
         .then((s) => {
           expect(s).to.be(undefined);
@@ -996,7 +996,7 @@ describe('Le dépôt de données des homologations', () => {
       });
 
       depot
-        .supprimeHomologation('111')
+        .supprimeService('111')
         .then(() => depotAutorisations.autorisations('999'))
         .then((as) => expect(as.length).to.equal(0))
         .then(() => depotAutorisations.autorisations('000'))
@@ -1008,7 +1008,7 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("publie sur le bus d'événements le service supprimé", async () => {
-      await depot.supprimeHomologation('111');
+      await depot.supprimeService('111');
 
       expect(busEvenements.aRecuUnEvenement(EvenementServiceSupprime)).to.be(
         true

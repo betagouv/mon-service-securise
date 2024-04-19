@@ -330,7 +330,7 @@ const creeDepot = (config = {}) => {
   const remplaceRisquesSpecifiquesDuService = (...params) =>
     remplaceProprieteService('risquesSpecifiques', ...params);
 
-  const supprimeHomologation = async (idService) => {
+  const supprimeService = async (idService) => {
     await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
     await p.supprime(idService);
     await busEvenements.publie(new EvenementServiceSupprime({ idService }));
@@ -401,7 +401,7 @@ const creeDepot = (config = {}) => {
     metsAJourService,
     nouveauService,
     remplaceRisquesSpecifiquesDuService,
-    supprimeHomologation,
+    supprimeService,
     tousLesServices,
     trouveIndexDisponible,
   };

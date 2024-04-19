@@ -467,7 +467,7 @@ const routesApiService = ({
       const idService = requete.params.id;
 
       verifiePermissionSuppressionService(idUtilisateurCourant, idService)
-        .then(() => depotDonnees.supprimeHomologation(idService))
+        .then(() => depotDonnees.supprimeService(idService))
         .then(() => reponse.send('Service supprimé'))
         .catch((e) => {
           if (e instanceof EchecAutorisation) {
