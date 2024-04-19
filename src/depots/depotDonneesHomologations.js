@@ -99,7 +99,7 @@ const creeDepot = (config = {}) => {
     referentiel
   );
 
-  const homologation = (idHomologation) => p.lis.une(idHomologation);
+  const service = (idService) => p.lis.une(idService);
 
   const ajouteAItemsDuService = async (nomListeItems, idService, item) => {
     const s = await p.lis.une(idService);
@@ -246,10 +246,13 @@ const creeDepot = (config = {}) => {
       infos
     );
 
-    const service = await p.lis.une(idService);
+    const serviceAJour = await p.lis.une(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementDescriptionServiceModifiee({ service, utilisateur })
+      new EvenementDescriptionServiceModifiee({
+        service: serviceAJour,
+        utilisateur,
+      })
     );
   };
 
@@ -262,11 +265,14 @@ const creeDepot = (config = {}) => {
     await ajouteMesuresGeneralesAService(idService, generales);
     await remplaceMesuresSpecifiquesPourService(idService, specifiques);
 
-    const service = await p.lis.une(idService);
+    const serviceAJour = await p.lis.une(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
 
     await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service, utilisateur })
+      new EvenementMesuresServiceModifiees({
+        service: serviceAJour,
+        utilisateur,
+      })
     );
   };
 
@@ -275,12 +281,12 @@ const creeDepot = (config = {}) => {
   const enregistreDossier = (idHomologation, dossier) =>
     ajouteAItemsDuService('dossiers', idHomologation, dossier);
 
-  const finaliseDossierCourant = async (service) => {
-    const dossierAvantFinalisation = service.dossierCourant();
+  const finaliseDossierCourant = async (leService) => {
+    const dossierAvantFinalisation = leService.dossierCourant();
 
-    service.finaliseDossierCourant();
+    leService.finaliseDossierCourant();
 
-    const { id, ...donneesAPersister } = service.donneesAPersister().toutes();
+    const { id, ...donneesAPersister } = leService.donneesAPersister().toutes();
     await p.sauvegarde(id, donneesAPersister);
 
     await busEvenements.publie(
@@ -313,10 +319,10 @@ const creeDepot = (config = {}) => {
       proprietaire.donneesAPersister()
     );
 
-    const service = await p.lis.une(idService);
+    const serviceAJour = await p.lis.une(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementNouveauServiceCree({ service, utilisateur })
+      new EvenementNouveauServiceCree({ service: serviceAJour, utilisateur })
     );
 
     return idService;
@@ -373,12 +379,12 @@ const creeDepot = (config = {}) => {
     await duplique(s);
   };
 
-  const metsAJourService = async (service) => {
-    const s = await p.lis.une(service.id);
+  const metsAJourService = async (leService) => {
+    const s = await p.lis.une(leService.id);
     if (typeof s === 'undefined')
-      throw new ErreurServiceInexistant(`Service "${service.id}" non trouvé`);
+      throw new ErreurServiceInexistant(`Service "${leService.id}" non trouvé`);
 
-    await p.sauvegarde(service.id, service.donneesAPersister().toutes());
+    await p.sauvegarde(leService.id, leService.donneesAPersister().toutes());
   };
 
   return {
@@ -389,7 +395,7 @@ const creeDepot = (config = {}) => {
     ajouteRolesResponsabilitesAService,
     dupliqueService,
     finaliseDossierCourant,
-    homologation,
+    service,
     serviceExiste,
     homologations,
     enregistreDossier,

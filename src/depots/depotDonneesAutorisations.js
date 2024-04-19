@@ -89,10 +89,10 @@ const creeDepot = (config = {}) => {
     };
 
     const verifieServiceExiste = async (id) => {
-      const h = await depotHomologations.homologation(
+      const s = await depotHomologations.service(
         nouvelleAutorisation.idService
       );
-      if (!h)
+      if (!s)
         throw new ErreurServiceInexistant(`Le service "${id}" n'existe pas`);
     };
 

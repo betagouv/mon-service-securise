@@ -798,7 +798,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     beforeEach(() => {
       testeur.depotDonnees().utilisateur = async () =>
         unUtilisateur().construis();
-      testeur.depotDonnees().homologation = async () => unService().construis();
+      testeur.depotDonnees().service = async () => unService().construis();
 
       testeur.procedures().ajoutContributeurSurServices = async () => {};
     });
@@ -829,7 +829,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("appelle la procédure d'ajout de contributeur avec les droits envoyés", async () => {
       let ajout;
 
-      testeur.depotDonnees().homologation = async (id) =>
+      testeur.depotDonnees().service = async (id) =>
         unService().avecId(id).construis();
       testeur.depotDonnees().utilisateur = async () =>
         unUtilisateur().avecId('EMETTEUR').construis();
@@ -866,7 +866,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it('cible tous les services demandés', async () => {
       let cibles;
 
-      testeur.depotDonnees().homologation = async (id) =>
+      testeur.depotDonnees().service = async (id) =>
         unService().avecId(id).construis();
 
       testeur.procedures().ajoutContributeurSurServices = async (

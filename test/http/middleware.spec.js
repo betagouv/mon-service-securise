@@ -73,7 +73,7 @@ describe('Le middleware MSS', () => {
     reponse.status = () => reponse;
     reponse.send = () => {};
 
-    depotDonnees.homologation = () => Promise.resolve();
+    depotDonnees.service = () => Promise.resolve();
     depotDonnees.utilisateurExiste = () => Promise.resolve(true);
   });
 
@@ -174,10 +174,10 @@ describe('Le middleware MSS', () => {
     const adaptateurJWT = {
       decode: () => ({ idUtilisateur: '999', cguAcceptees: true }),
     };
-    beforeEach(() => (depotDonnees.homologation = () => Promise.resolve()));
+    beforeEach(() => (depotDonnees.service = () => Promise.resolve()));
 
     it('requête le dépôt de données', (done) => {
-      depotDonnees.homologation = (id) => {
+      depotDonnees.service = (id) => {
         expect(id).to.equal('123');
         done();
         return Promise.resolve();
@@ -216,7 +216,7 @@ describe('Le middleware MSS', () => {
     });
 
     it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
-      depotDonnees.homologation = () => Promise.resolve({});
+      depotDonnees.service = () => Promise.resolve({});
       depotDonnees.accesAutorise = () => Promise.resolve(false);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
@@ -228,7 +228,7 @@ describe('Le middleware MSS', () => {
     });
 
     it("retourne une erreur HTTP 422 si le service n'a pas pu être instanciée", (done) => {
-      depotDonnees.homologation = () => Promise.reject(new Error('oups'));
+      depotDonnees.service = () => Promise.reject(new Error('oups'));
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
       prepareVerificationReponse(
@@ -245,7 +245,7 @@ describe('Le middleware MSS', () => {
 
     it('retourne le service trouvé et appelle le middleware suivant', (done) => {
       const service = {};
-      depotDonnees.homologation = () => Promise.resolve(service);
+      depotDonnees.service = () => Promise.resolve(service);
       depotDonnees.accesAutorise = () => Promise.resolve(true);
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 

@@ -277,9 +277,7 @@ const routesApiPrivee = ({
         return;
       }
 
-      const services = await Promise.all(
-        idServices.map(depotDonnees.homologation)
-      );
+      const services = await Promise.all(idServices.map(depotDonnees.service));
       const emetteur = await depotDonnees.utilisateur(idUtilisateur);
 
       try {

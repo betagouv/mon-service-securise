@@ -510,7 +510,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         ],
       });
       testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async () => {};
-      testeur.depotDonnees().homologation = async () => serviceARenvoyer;
+      testeur.depotDonnees().service = async () => serviceARenvoyer;
     });
 
     it('recherche le service correspondant', (done) => {
@@ -570,7 +570,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
     it('recharge le service avant de servir la vue', async () => {
       let chargementsService = 0;
-      testeur.depotDonnees().homologation = async () => {
+      testeur.depotDonnees().service = async () => {
         chargementsService += 1;
         return serviceARenvoyer;
       };
@@ -598,7 +598,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         etapeCourante: () => 'deuxieme',
         dateTelechargement: { date: new Date() },
       });
-      testeur.depotDonnees().homologation = async () => serviceARenvoyer;
+      testeur.depotDonnees().service = async () => serviceARenvoyer;
       testeur.depotDonnees().autorisationACharger = uneAutorisation()
         .deContributeur()
         .construis();

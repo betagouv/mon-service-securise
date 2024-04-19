@@ -237,7 +237,7 @@ const routesService = ({
       try {
         await depotDonnees.ajouteDossierCourantSiNecessaire(service.id);
 
-        const s = await depotDonnees.homologation(service.id);
+        const s = await depotDonnees.service(service.id);
         const etapeCourante = referentiel.etapeDossierAutorisee(
           s.dossierCourant().etapeCourante(),
           autorisationService.peutHomologuer()
