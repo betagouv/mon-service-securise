@@ -2,4 +2,6 @@ const uuid = require('uuid');
 
 const genereUUID = () => uuid.v4();
 
-module.exports = { genereUUID };
+const fabriqueAdaptateurUUID = () => ({ genereUUID });
+
+module.exports = { genereUUID, fabriqueAdaptateurUUID };
