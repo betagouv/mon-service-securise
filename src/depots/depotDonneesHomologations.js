@@ -234,8 +234,7 @@ const creeDepot = (config = {}) => {
   const ajouteRolesResponsabilitesAService = (...params) =>
     metsAJourProprieteService('rolesResponsabilites', ...params);
 
-  const homologations = (idUtilisateur) =>
-    p.lis.cellesDeUtilisateur(idUtilisateur);
+  const services = (idUtilisateur) => p.lis.cellesDeUtilisateur(idUtilisateur);
 
   const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
     const existant = await p.lis.une(idService);
@@ -350,15 +349,15 @@ const creeDepot = (config = {}) => {
       return index > maxCourant ? index : maxCourant;
     };
 
-    const indexMax = (services) => {
-      const resultat = services
+    const indexMax = (lesServices) => {
+      const resultat = lesServices
         .map((s) => s.nomService())
         .reduce(maxMatch, -Infinity);
       return Math.max(0, resultat) + 1;
     };
 
-    const services = await p.lis.cellesDeUtilisateur(idProprietaire);
-    return indexMax(services);
+    const servicesDeLutilisateur = await p.lis.cellesDeUtilisateur(idProprietaire);
+    return indexMax(servicesDeLutilisateur);
   };
 
   const dupliqueService = async (idService, idProprietaire) => {
@@ -397,7 +396,7 @@ const creeDepot = (config = {}) => {
     finaliseDossierCourant,
     service,
     serviceExiste,
-    homologations,
+    services,
     enregistreDossier,
     metsAJourService,
     nouveauService,

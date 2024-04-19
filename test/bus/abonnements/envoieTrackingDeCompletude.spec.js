@@ -31,7 +31,7 @@ describe("L'abonnement qui envoie au tracking les informations de complétude", 
     ) => {
       donneesDeTracking = { destinataire, donneesEvenement };
     };
-    depotDonnees.homologations = async () => [
+    depotDonnees.services = async () => [
       unService()
         .avecNContributeurs(3)
         .avecMesures(bouchonneMesures().avecUneCompletude(100, 18).construis())

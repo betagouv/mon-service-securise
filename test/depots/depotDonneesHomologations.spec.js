@@ -90,7 +90,7 @@ describe('Le dépôt de données des homologations', () => {
       .avecReferentiel(referentiel)
       .construis();
 
-    const homologations = await depot.homologations('456');
+    const homologations = await depot.services('456');
 
     expect(homologations.length).to.equal(1);
     expect(homologations[0]).to.be.a(Homologation);
@@ -139,7 +139,7 @@ describe('Le dépôt de données des homologations', () => {
       .avecAdaptateurPersistance(persistance)
       .construis();
 
-    const hs = await depot.homologations('U');
+    const hs = await depot.services('U');
 
     expect(hs.length).to.equal(3);
     expect(hs[0].nomService()).to.equal('A-service');
@@ -651,7 +651,7 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('ajoute le nouveau service au dépôt', async () => {
-      const avant = await depot.homologations('123');
+      const avant = await depot.services('123');
       expect(avant.length).to.equal(0);
 
       const descriptionService = uneDescriptionValide(referentiel)
@@ -660,7 +660,7 @@ describe('Le dépôt de données des homologations', () => {
         .toJSON();
       await depot.nouveauService('123', { descriptionService });
 
-      const apres = await depot.homologations('123');
+      const apres = await depot.services('123');
       expect(apres.length).to.equal(1);
       expect(apres[0].nomService()).to.equal('Super Service');
     });
@@ -673,7 +673,7 @@ describe('Le dépôt de données des homologations', () => {
       });
 
       expect(idService).to.be('11111111-1111-1111-1111-111111111111');
-      const services = await depot.homologations('123');
+      const services = await depot.services('123');
       expect(services[0].id).to.be('11111111-1111-1111-1111-111111111111');
     });
 
@@ -691,7 +691,7 @@ describe('Le dépôt de données des homologations', () => {
         .toJSON();
       await depot.nouveauService('123', { descriptionService });
 
-      const serviceSauvegarde = await depot.homologations('123');
+      const serviceSauvegarde = await depot.services('123');
       const descriptionServiceSauvegarde =
         serviceSauvegarde[0].descriptionService;
       expect(
@@ -1397,7 +1397,7 @@ describe('Le dépôt de données des homologations', () => {
     it('peut dupliquer une homologation à partir de son identifiant', (done) => {
       depot
         .dupliqueService('123-1', '123')
-        .then(() => depot.homologations('123'))
+        .then(() => depot.services('123'))
         .then((homologations) => {
           expect(homologations.length).to.equal(2);
           done();
@@ -1409,7 +1409,7 @@ describe('Le dépôt de données des homologations', () => {
       depot
         .dupliqueService('123-1', '123')
         .then(() => depot.dupliqueService('123-1', '123'))
-        .then(() => depot.homologations('123'))
+        .then(() => depot.services('123'))
         .then(([_, h2, h3]) => {
           expect(h2.nomService()).to.equal('Service à dupliquer - Copie 1');
           expect(h3.nomService()).to.equal('Service à dupliquer - Copie 2');

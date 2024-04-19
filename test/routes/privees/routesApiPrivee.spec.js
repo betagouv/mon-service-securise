@@ -79,7 +79,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      testeur.depotDonnees().homologations = (idUtilisateur) => {
+      testeur.depotDonnees().services = (idUtilisateur) => {
         donneesPassees = { idUtilisateur };
         return Promise.resolve([service]);
       };
@@ -154,7 +154,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      testeur.depotDonnees().homologations = (idUtilisateur) => {
+      testeur.depotDonnees().services = (idUtilisateur) => {
         donneesPassees = { idUtilisateur };
         return Promise.resolve([service]);
       };
@@ -232,7 +232,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
-      testeur.depotDonnees().homologations = (idUtilisateur) => {
+      testeur.depotDonnees().services = (idUtilisateur) => {
         donneesPassees = { idUtilisateur };
         return Promise.resolve([service]);
       };
@@ -248,7 +248,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it('filtre les services en fonction de la requête', (done) => {
-      testeur.depotDonnees().homologations = () =>
+      testeur.depotDonnees().services = () =>
         Promise.resolve([
           service,
           unService()
@@ -282,7 +282,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      testeur.depotDonnees().homologations = () =>
+      testeur.depotDonnees().services = () =>
         Promise.resolve([
           unService()
             .avecId('456')

@@ -473,7 +473,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       it("utilise l'adaptateur de tracking pour envoyer un événement de connexion", (done) => {
         let donneesPassees = {};
-        testeur.depotDonnees().homologations = () =>
+        testeur.depotDonnees().services = () =>
           Promise.resolve([{ id: '123' }]);
         testeur.adaptateurTracking().envoieTrackingConnexion = (
           destinataire,
