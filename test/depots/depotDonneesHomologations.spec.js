@@ -17,7 +17,6 @@ const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
-const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 
 const Dossier = require('../../src/modeles/dossier');
 const Homologation = require('../../src/modeles/homologation');
@@ -248,10 +247,6 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('associe les mesures générales au service', async () => {
-      const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance: adaptateurPersistance.construis(),
-        referentiel,
-      });
       const generale = new MesureGenerale(
         { id: 'identifiantMesure', statut: MesureGenerale.STATUT_FAIT },
         referentiel
@@ -262,7 +257,7 @@ describe('Le dépôt de données des homologations', () => {
 
       const {
         mesures: { mesuresGenerales },
-      } = await depotServices.service('123');
+      } = await depot.homologation('123');
 
       expect(mesuresGenerales.nombre()).to.equal(1);
       expect(mesuresGenerales.item(0).id).to.equal('identifiantMesure');
@@ -305,10 +300,6 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('associe les mesures spécifiques au service', async () => {
-      const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance: adaptateurPersistance.construis(),
-        referentiel,
-      });
       const generales = [];
       const mesures = new MesuresSpecifiques({
         mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
@@ -318,7 +309,7 @@ describe('Le dépôt de données des homologations', () => {
 
       const {
         mesures: { mesuresSpecifiques },
-      } = await depotServices.service('123');
+      } = await depot.homologation('123');
       expect(mesuresSpecifiques.nombre()).to.equal(1);
       expect(mesuresSpecifiques.item(0)).to.be.a(MesureSpecifique);
       expect(mesuresSpecifiques.item(0).description).to.equal(
@@ -416,17 +407,13 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("met à jour la description de service dans l'objet métier service", async () => {
-      const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance: adaptateurPersistance.construis(),
-        referentiel,
-      });
       const description = uneDescriptionValide(referentiel)
         .avecNomService('Nouveau Nom')
         .construis();
 
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depotServices.service('S1');
+      const { descriptionService } = await depot.homologation('S1');
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
@@ -478,17 +465,13 @@ describe('Le dépôt de données des homologations', () => {
           siret: '12345',
         },
       ];
-      const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance: adaptateurPersistance.construis(),
-        referentiel,
-      });
       const description = uneDescriptionValide(referentiel)
         .deLOrganisation(new Entite({ siret: '12345' }))
         .construis();
 
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depotServices.service('S1');
+      const { descriptionService } = await depot.homologation('S1');
       expect(descriptionService.organisationResponsable.siret).to.equal(
         '12345'
       );
@@ -750,18 +733,13 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('ajoute en copie un nouveau service au dépôt', async () => {
-      const depotDonneesServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance,
-        referentiel,
-      });
-
       const descriptionService =
         uneDescriptionValide(referentiel).avecNomService('Service').donnees;
       const idService = await depot.nouveauService('123', {
         descriptionService,
       });
 
-      const service = await depotDonneesServices.service(idService);
+      const service = await depot.homologation(idService);
       expect(service.nomService()).to.equal('Service');
     });
 
