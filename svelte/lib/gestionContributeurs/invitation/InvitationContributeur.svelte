@@ -14,6 +14,9 @@
   import BoutonsActions from './BoutonsActions.svelte';
   import EnvoiEnCours from './EnvoiEnCours.svelte';
   import Rapport from './Rapport.svelte';
+  import { contributeursRechercheVisiteGuidee } from '../modeVisiteGuidee/donneesVisiteGuidee';
+
+  export let modeVisiteGuidee: boolean;
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
   type Email = string;
@@ -74,11 +77,20 @@
   <form class="conteneur-formulaire" on:submit|preventDefault>
     <label for="email-invitation-collaboration">
       Ajouter un ou plusieurs contributeurs
-      <ChampAvecSuggestions
-        id="email-invitation-collaboration"
-        callbackDeRecherche={api.rechercheContributeurs}
-        on:contributeurChoisi={ajouteInvitation}
-      />
+      {#if modeVisiteGuidee}
+        <ChampAvecSuggestions
+          id="email-invitation-collaboration"
+          callbackDeRecherche={async () => contributeursRechercheVisiteGuidee}
+          valeurInitiale="Fréd"
+          modeVisiteGuidee={true}
+        />
+      {:else}
+        <ChampAvecSuggestions
+          id="email-invitation-collaboration"
+          callbackDeRecherche={api.rechercheContributeurs}
+          on:contributeurChoisi={ajouteInvitation}
+        />
+      {/if}
     </label>
     <ListeInvitations
       invitations={Object.values(invitations)}
