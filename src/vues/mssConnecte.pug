@@ -25,6 +25,7 @@ block append session
       a.bouton(href = '/connexion') Reconnexion
 
   script(type = 'module', src = '/statique/mssConnecte.js')
+  script(type = 'module', src = '/statique/composants-svelte/visiteGuidee.js')
 
 block bom-contenu
   p Vous souhaitez :
@@ -40,5 +41,8 @@ block lien-footer-mss
     a(href = '/historiqueProduit') Historique du produit
 
 block visite-guidee
-  if !etatVisiteGuidee.dejaTerminee
+  script(id = 'etat-visite-guidee', type = 'application/json').
+    !{JSON.stringify(etatVisiteGuidee || {})}
+
+  if etatVisiteGuidee && !etatVisiteGuidee.dejaTerminee
     #visite-guidee
