@@ -182,6 +182,15 @@ describe('Le serveur MSS', () => {
     });
   });
 
+  it("vérifie que l'état de la visite guidée est chargé sur le tableau de bord", (done) => {
+    testeur
+      .middleware()
+      .verifieRequeteChargeEtatVisiteGuidee(
+        'http://localhost:1234/tableauDeBord',
+        done
+      );
+  });
+
   describe('quand requête GET sur `/utilisateur/edition`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       const utilisateur = unUtilisateur().quiAccepteCGU().construis();
