@@ -21,6 +21,15 @@ const tiroirContributeur = (idService) => {
         await rechargeNbContributeurs();
       });
 
+      $(document.body).on(
+        'jquery-affiche-tiroir-contributeurs-visite-guidee',
+        () =>
+          gestionnaireTiroir.afficheContenuAction(
+            { action: contributeurs, estSelectionMulitple: false },
+            { modeVisiteGuidee: true }
+          )
+      );
+
       $('#gerer-contributeurs').on('click', () => {
         gestionnaireTiroir.afficheContenuAction(
           { action: contributeurs, estSelectionMulitple: false },
