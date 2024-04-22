@@ -38,3 +38,7 @@ block footer-bandeau-mss
 block lien-footer-mss
   li
     a(href = '/historiqueProduit') Historique du produit
+
+block visite-guidee
+  if !etatVisiteGuidee.dejaTerminee
+    #visite-guidee
