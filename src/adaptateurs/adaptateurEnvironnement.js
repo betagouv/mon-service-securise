@@ -48,9 +48,15 @@ const chiffrement = () => ({
   tokenVault: () => process.env.CHIFFREMENT_TOKEN_VAULT,
 });
 
+const featureFlag = () => ({
+  etatVisiteGuidee: () =>
+    JSON.parse(process.env.FEATURE_FLAG_ETAT_VISITE_GUIDEE) ?? null,
+});
+
 module.exports = {
   chiffrement,
   emailMemoire,
+  featureFlag,
   filtrageIp,
   journalMSS,
   matomo,
