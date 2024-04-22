@@ -54,6 +54,7 @@ let listesAseptisees = [];
 let listeAdressesIPsAutorisee = [];
 let parametresAseptises = [];
 let preferencesChargees = false;
+let etatVisiteGuideeCharge = false;
 let filtrageIpEstActif = false;
 let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
@@ -84,6 +85,7 @@ const middlewareFantaisie = {
     listeAdressesIPsAutorisee = [];
     parametresAseptises = [];
     preferencesChargees = false;
+    etatVisiteGuideeCharge = false;
     filtrageIpEstActif = false;
     rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
@@ -123,6 +125,12 @@ const middlewareFantaisie = {
     };
     autorisationsChargees = true;
     requete.autorisationService = autorisationChargee;
+    suite();
+  },
+
+  chargeEtatVisiteGuidee: (_requete, reponse, suite) => {
+    reponse.locals.etatVisiteGuidee = {};
+    etatVisiteGuideeCharge = true;
     suite();
   },
 
@@ -284,6 +292,13 @@ const middlewareFantaisie = {
   verifieRequeteExigeJWT: (...params) => {
     verifieRequeteChangeEtat(
       { lectureEtat: () => verificationJWTMenee },
+      ...params
+    );
+  },
+
+  verifieRequeteChargeEtatVisiteGuidee: (...params) => {
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => etatVisiteGuideeCharge },
       ...params
     );
   },

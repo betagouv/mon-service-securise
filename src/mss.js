@@ -210,6 +210,7 @@ const creeServeur = (
   app.get(
     '/tableauDeBord',
     middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
     (_requete, reponse) => {
       reponse.render('tableauDeBord');
     }
