@@ -12,11 +12,11 @@ class ActionContributeurs extends ActionAbstraite {
     });
   }
 
-  initialise({ donneesServices }) {
+  initialise({ donneesServices, modeVisiteGuidee }) {
     super.initialise();
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-contributeurs', {
-        detail: { services: donneesServices },
+        detail: { services: donneesServices, modeVisiteGuidee },
       })
     );
   }
