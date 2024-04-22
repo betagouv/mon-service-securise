@@ -198,6 +198,14 @@ const middleware = (configuration = {}) => {
   const aseptiseListe = (nomListe, proprietesParametre) =>
     aseptiseListes([{ nom: nomListe, proprietes: proprietesParametre }]);
 
+  const chargeEtatVisiteGuidee = (_requete, reponse, suite) => {
+    const etatVisiteGuidee = adaptateurEnvironnement
+      .featureFlag()
+      .etatVisiteGuidee();
+    if (etatVisiteGuidee) reponse.locals.etatVisiteGuidee = etatVisiteGuidee;
+    suite();
+  };
+
   const chargePreferencesUtilisateur = (requete, reponse, suite) => {
     reponse.locals.preferencesUtilisateur = {
       etatMenuNavigation: requete.cookies['etat-menu-navigation'],
@@ -289,6 +297,7 @@ const middleware = (configuration = {}) => {
     aseptiseListe,
     aseptiseListes,
     chargeAutorisationsService,
+    chargeEtatVisiteGuidee,
     chargePreferencesUtilisateur,
     positionneHeaders,
     positionneHeadersAvecNonce,

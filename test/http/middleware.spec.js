@@ -815,4 +815,38 @@ describe('Le middleware MSS', () => {
       });
     });
   });
+
+  describe("sur demande de chargement de l'état de la visite guidée", () => {
+    it("ajoute un objet d'état de visite guidée à `reponse.locals` si la variable d'environnement est définie", (done) => {
+      const adaptateurEnvironnement = {
+        featureFlag: () => ({
+          etatVisiteGuidee: () => ({ dejaTerminee: false }),
+        }),
+      };
+      const middleware = Middleware({
+        adaptateurEnvironnement,
+      });
+
+      middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
+        expect(reponse.locals.etatVisiteGuidee).to.eql({
+          dejaTerminee: false,
+        });
+        done();
+      });
+    });
+
+    it("n'ajoute pas un objet d'état de visite guidée à `reponse.locals` si la variable d'environnement n'est pas définie", (done) => {
+      const adaptateurEnvironnement = {
+        featureFlag: () => ({ etatVisiteGuidee: () => null }),
+      };
+      const middleware = Middleware({
+        adaptateurEnvironnement,
+      });
+
+      middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
+        expect(reponse.locals.etatVisiteGuidee).to.be(undefined);
+        done();
+      });
+    });
+  });
 });
