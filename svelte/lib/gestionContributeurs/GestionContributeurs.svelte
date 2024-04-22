@@ -5,13 +5,17 @@
   import SuppressionContributeur from './suppression/SuppressionContributeur.svelte';
   import { onMount } from 'svelte';
   import PersonnalisationContributeur from './personnalisation/PersonnalisationContributeur.svelte';
+  import { autorisationsVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
+
+  export let modeVisiteGuidee: boolean;
 
   $: surServiceUnique = $store.services.length === 1;
   $: serviceUnique = $store.services[0];
   $: contributeurs = serviceUnique.contributeurs;
 
   onMount(async () => {
-    if (surServiceUnique) {
+    if (modeVisiteGuidee) store.autorisations.charge(autorisationsVisiteGuidee);
+    else if (surServiceUnique) {
       const reponse = await axios.get(
         `/api/service/${serviceUnique.id}/autorisations`
       );
@@ -26,7 +30,7 @@
   <PersonnalisationContributeur />
 {:else}
   {#if $store.services.every((s) => s.estProprietaire)}
-    <InvitationContributeur />
+    <InvitationContributeur {modeVisiteGuidee} />
   {/if}
   {#if $store.etapeCourante !== 'InvitationContributeurs' && surServiceUnique}
     <h3 class="titre-liste">Liste des contributeurs au service</h3>

@@ -7,8 +7,10 @@
   export let id: string;
   export let callbackDeRecherche: (recherche: string) => Promise<Utilisateur[]>;
   export let dureeDebounceEnMs = 300;
+  export let valeurInitiale: string = '';
+  export let modeVisiteGuidee: boolean = false;
 
-  let saisie = '';
+  let saisie = valeurInitiale;
   let minuteur: NodeJS.Timeout;
   let suggestions: Utilisateur[] = [];
 
@@ -35,6 +37,10 @@
     saisie = '';
     envoiEvenement('contributeurChoisi', donnees);
   };
+
+  if (modeVisiteGuidee) {
+    rechercheSuggestions();
+  }
 </script>
 
 <div class="conteneur-suggestions">
@@ -65,7 +71,10 @@
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="option suggestion-contributeur"
-        on:click={() => choisisContributeur(suggestion)}
+        on:click={() => {
+          if (modeVisiteGuidee) return;
+          choisisContributeur(suggestion);
+        }}
       >
         <Initiales valeur={suggestion.initiales} resumeNiveauDroit="ECRITURE" />
         <div>{@html suggestion.prenomNom}</div>

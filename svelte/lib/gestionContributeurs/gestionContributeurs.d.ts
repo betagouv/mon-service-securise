@@ -2,10 +2,14 @@
 // On veut utiliser Axios ici car il est configuré pour utiliser le token CSRF
 declare global {
   const axios: any;
+  interface HTMLElementEventMap {
+    'svelte-recharge-contributeurs': CustomEvent;
+  }
 }
 
 export type GestionContributeursProps = {
   services: Service[];
+  modeVisiteGuidee: boolean;
 };
 
 export type Service = {
