@@ -142,10 +142,15 @@ section:last-of-type {
   font-weight: 500;
 }
 
-#visite-guidee {
+#visite-guidee-rideau {
   position: fixed;
   width: 100vw;
   height: 100vh;
   background: #2f3a43b2;
   z-index: 10000;
+}
+
+#visite-guidee {
+  z-index: 10001;
+  position: fixed;
 }

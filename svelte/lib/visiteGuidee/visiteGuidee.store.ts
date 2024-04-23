@@ -8,6 +8,7 @@ const { subscribe, update, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
 
 const cacheRideau = () => {
   document.body.style.overflow = 'auto';
+  document.getElementById('visite-guidee-rideau')!.style.display = 'none';
   document.getElementById('visite-guidee')!.style.display = 'none';
 };
 
