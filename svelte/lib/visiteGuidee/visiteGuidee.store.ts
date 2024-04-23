@@ -6,8 +6,10 @@ type EtapeVisiteGuidee = 'BIENVENUE' | 'PRESENTATION_MENU_NAV';
 
 const { subscribe, update } = writable<EtapeVisiteGuidee>('BIENVENUE');
 
-const cacheRideau = () =>
-  (document.getElementById('visite-guidee')!.style.display = 'none');
+const cacheRideau = () => {
+  document.body.style.overflow = 'auto';
+  document.getElementById('visite-guidee')!.style.display = 'none';
+};
 
 export const visiteGuidee = {
   subscribe,
