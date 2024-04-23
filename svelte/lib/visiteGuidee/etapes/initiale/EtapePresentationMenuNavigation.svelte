@@ -16,12 +16,12 @@
       <button class="bouton">C'est parti !</button>
       <button
         class="bouton bouton-tertiaire"
-        on:click={visiteGuidee.cacheRideau}
+        on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
         >Non merci, je n’ai pas besoin d’aide</button
       >
     </div>
   </div>
-  <button class="fermeture-menu" on:click={visiteGuidee.cacheRideau}>
+  <button class="fermeture-menu" on:click={visiteGuidee.masqueEtapeCourant}>
     <img
       src="/statique/assets/images/icone_fermeture_modale.svg"
       alt="Fermeture du menu de navigation"
