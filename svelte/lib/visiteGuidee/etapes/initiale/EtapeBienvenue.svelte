@@ -14,7 +14,7 @@
 
 <dialog bind:this={elementModale}>
   <form class="entete" method="dialog">
-    <button class="bouton-fermeture" on:click={visiteGuidee.cacheRideau}
+    <button class="bouton-fermeture" on:click={visiteGuidee.masqueEtapeCourant}
       >Fermer</button
     >
   </form>
@@ -42,7 +42,8 @@
     <form method="dialog">
       <button
         class="bouton bouton-tertiaire"
-        on:click={visiteGuidee.cacheRideau}>Ignorer la visite guidée</button
+        on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
+        >Ignorer la visite guidée</button
       >
     </form>
     <button class="bouton" on:click={() => visiteGuidee.etapeSuivante()}

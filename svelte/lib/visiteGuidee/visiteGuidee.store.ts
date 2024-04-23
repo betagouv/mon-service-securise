@@ -4,12 +4,15 @@ import EtapePresentationMenuNavigation from './etapes/initiale/EtapePresentation
 
 type EtapeVisiteGuidee = 'BIENVENUE' | 'PRESENTATION_MENU_NAV';
 
-const { subscribe, set, update } = writable<EtapeVisiteGuidee>('BIENVENUE');
+const { subscribe, update } = writable<EtapeVisiteGuidee>('BIENVENUE');
+
+const cacheRideau = () =>
+  (document.getElementById('visite-guidee')!.style.display = 'none');
 
 export const visiteGuidee = {
   subscribe,
-  cacheRideau: () =>
-    (document.getElementById('visite-guidee')!.style.display = 'none'),
+  masqueEtapeCourant: () => cacheRideau(),
+  fermeDefinitivementVisiteGuidee: () => cacheRideau(),
   etapeSuivante() {
     update((etapeCourante) => {
       switch (etapeCourante) {
