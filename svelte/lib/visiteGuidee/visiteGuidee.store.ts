@@ -8,6 +8,8 @@ const { subscribe, set, update } = writable<EtapeVisiteGuidee>('BIENVENUE');
 
 export const visiteGuidee = {
   subscribe,
+  cacheRideau: () =>
+    (document.getElementById('visite-guidee')!.style.display = 'none'),
   etapeSuivante() {
     update((etapeCourante) => {
       switch (etapeCourante) {

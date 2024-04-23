@@ -10,14 +10,13 @@
     elementModale.showModal();
     elementModale.inert = false;
   });
-
-  const cacheRideau = () =>
-    (document.getElementById('visite-guidee')!.style.display = 'none');
 </script>
 
 <dialog bind:this={elementModale}>
   <form class="entete" method="dialog">
-    <button class="bouton-fermeture" on:click={cacheRideau}>Fermer</button>
+    <button class="bouton-fermeture" on:click={visiteGuidee.cacheRideau}
+      >Fermer</button
+    >
   </form>
   <h2>Bonjour,<br />bienvenue sur MonServiceSécurisé !</h2>
   <p>
@@ -41,8 +40,9 @@
   </p>
   <div class="conteneur-actions">
     <form method="dialog">
-      <button class="bouton bouton-tertiaire" on:click={cacheRideau}
-        >Ignorer la visite guidée</button
+      <button
+        class="bouton bouton-tertiaire"
+        on:click={visiteGuidee.cacheRideau}>Ignorer la visite guidée</button
       >
     </form>
     <button class="bouton" on:click={() => visiteGuidee.etapeSuivante()}
