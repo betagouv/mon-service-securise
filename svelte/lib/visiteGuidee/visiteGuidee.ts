@@ -1,13 +1,16 @@
 import VisiteGuidee from './VisiteGuidee.svelte';
+import type { VisiteGuideeProps } from './visiteGuidee.d';
+import { visiteGuidee } from './visiteGuidee.store';
 
 document.body.addEventListener(
   'svelte-recharge-visite-guidee',
-  (_: CustomEvent) => rechargeApp()
+  (e: CustomEvent<VisiteGuideeProps>) => rechargeApp(e.detail)
 );
 
 let app: VisiteGuidee;
-const rechargeApp = () => {
+const rechargeApp = (props: VisiteGuideeProps) => {
   app?.$destroy();
+  visiteGuidee.initialise(props.etapeCourante);
   app = new VisiteGuidee({
     target: document.getElementById('visite-guidee')!,
   });

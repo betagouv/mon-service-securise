@@ -2,10 +2,9 @@ import { writable, derived } from 'svelte/store';
 import EtapeBienvenue from './etapes/initiale/EtapeBienvenue.svelte';
 import EtapePresentationMenuNavigation from './etapes/initiale/EtapePresentationMenuNavigation.svelte';
 import EtapeDecrire from './etapes/decrire/EtapeDecrire.svelte';
+import type { EtapeVisiteGuidee } from './visiteGuidee.d';
 
-type EtapeVisiteGuidee = 'BIENVENUE' | 'PRESENTATION_MENU_NAV' | 'DECRIRE';
-
-const { subscribe, update } = writable<EtapeVisiteGuidee>('BIENVENUE');
+const { subscribe, update, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
 
 const cacheRideau = () => {
   document.body.style.overflow = 'auto';
@@ -13,6 +12,8 @@ const cacheRideau = () => {
 };
 
 export const visiteGuidee = {
+  initialise: (etapeCourante: EtapeVisiteGuidee) =>
+    set(etapeCourante || 'BIENVENUE'),
   subscribe,
   masqueEtapeCourant: () => cacheRideau(),
   fermeDefinitivementVisiteGuidee: () => cacheRideau(),

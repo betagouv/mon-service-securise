@@ -11,7 +11,9 @@ $(() => {
   const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
   if (etatVisiteGuidee.dejaTerminee === false) {
     document.body.dispatchEvent(
-      new CustomEvent('svelte-recharge-visite-guidee')
+      new CustomEvent('svelte-recharge-visite-guidee', {
+        detail: etatVisiteGuidee,
+      })
     );
   }
 
