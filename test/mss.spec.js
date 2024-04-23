@@ -203,4 +203,35 @@ describe('Le serveur MSS', () => {
         );
     });
   });
+
+  describe('quand requête GET sur `/visiteGuidee/:idEtape`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      const utilisateur = unUtilisateur().quiAccepteCGU().construis();
+      testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateur);
+      testeur
+        .middleware()
+        .verifieRequeteExigeJWT(
+          'http://localhost:1234/visiteGuidee/decrire',
+          done
+        );
+    });
+
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
+          'http://localhost:1234/visiteGuidee/decrire',
+          done
+        );
+    });
+
+    it("charge l'état de la visite guidée", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteChargeEtatVisiteGuidee(
+          'http://localhost:1234/visiteGuidee/decrire',
+          done
+        );
+    });
+  });
 });

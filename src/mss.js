@@ -18,6 +18,9 @@ const {
   estUrlLegalePourRedirection,
   construisUrlAbsolueVersPage,
 } = require('./http/redirection');
+const InformationsHomologation = require('./modeles/informationsHomologation');
+const Service = require('./modeles/service');
+const Utilisateur = require('./modeles/utilisateur');
 
 require('dotenv').config();
 
@@ -281,6 +284,26 @@ const creeServeur = (
         .then((utilisateur) =>
           reponse.render('utilisateur/edition', { utilisateur, departements })
         );
+    }
+  );
+
+  app.get(
+    '/visiteGuidee/:idEtape',
+    middleware.verificationJWT,
+    middleware.chargePreferencesUtilisateur,
+    middleware.chargeEtatVisiteGuidee,
+    (_requete, reponse) => {
+      const utilisateurVisiteGuidee = new Utilisateur({
+        email: 'visite-guidee@cyber.gouv.fr',
+      });
+      const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
+      reponse.render('service/creation', {
+        InformationsHomologation,
+        referentiel,
+        service,
+        etapeActive: 'descriptionService',
+        departements: referentiel.departements(),
+      });
     }
   );
 
