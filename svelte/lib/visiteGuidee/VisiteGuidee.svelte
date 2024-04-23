@@ -1,5 +1,5 @@
 <script lang="ts">
-  import EtapeBienvenue from './etapes/initiale/EtapeBienvenue.svelte';
+  import { composantVisiteGuidee } from './visiteGuidee.store';
 </script>
 
-<EtapeBienvenue />
+<svelte:component this={$composantVisiteGuidee} />

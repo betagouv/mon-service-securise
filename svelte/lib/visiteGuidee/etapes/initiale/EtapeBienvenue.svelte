@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { visiteGuidee } from '../../visiteGuidee.store';
 
   let elementModale: HTMLDialogElement;
 
@@ -44,7 +45,9 @@
         >Ignorer la visite guidée</button
       >
     </form>
-    <button class="bouton">Démarrer la visite guidée</button>
+    <button class="bouton" on:click={() => visiteGuidee.etapeSuivante()}
+      >Démarrer la visite guidée</button
+    >
   </div>
 </dialog>
 
