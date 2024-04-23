@@ -13,7 +13,9 @@
       <li class="desactive piloter">Pilotez vos services</li>
     </ul>
     <div class="conteneur-actions">
-      <button class="bouton">C'est parti !</button>
+      <button class="bouton" on:click={visiteGuidee.etapeSuivante}
+        >C'est parti !</button
+      >
       <button
         class="bouton bouton-tertiaire"
         on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
