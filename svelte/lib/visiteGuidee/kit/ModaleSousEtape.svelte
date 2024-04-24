@@ -4,6 +4,7 @@
   export let positionCible: DOMRect;
   export let titre: string;
   export let description: string;
+  export let animation: string;
 </script>
 
 <div
@@ -23,6 +24,9 @@
   </button>
   <h2>{titre}</h2>
   <p>{description}</p>
+  <div class="conteneur-animation">
+    <img src={animation} alt="" />
+  </div>
   <div class="conteneur-actions">
     <button class="bouton suivant" on:click={visiteGuidee.etapeSuivante}
       >Suivant</button
@@ -145,5 +149,15 @@
       hue-rotate(184deg) brightness(107%) contrast(101%);
     background-size: 16px;
     transform: translateY(3px);
+  }
+
+  .conteneur-animation {
+    padding: 16px;
+    background: var(--fond-bleu-pale);
+    margin-bottom: 28px;
+  }
+
+  .conteneur-animation img {
+    width: 100%;
   }
 </style>
