@@ -49,7 +49,8 @@
     }
   }
 
-  $: estDernierSousEtape = indexEtapeCourante === sousEtapes.length - 1;
+  $: estDerniereSousEtape = indexEtapeCourante === sousEtapes.length - 1;
+  $: estPremiereSousEtape = indexEtapeCourante === 0;
 
   const calculePolygone = () => {
     let { left, top, right, bottom } = positionCible;
@@ -105,15 +106,25 @@
         {/each}
       </div>
       <div class="conteneur-actions">
-        <button
-          class="bouton suivant"
-          on:click={() =>
-            estDernierSousEtape
-              ? visiteGuidee.etapeSuivante()
-              : indexEtapeCourante++}
-        >
-          Suivant
-        </button>
+        <div class="conteneur-navigation">
+          {#if !estPremiereSousEtape}
+            <button
+              class="bouton bouton-tertiaire"
+              on:click={() => indexEtapeCourante--}
+            >
+              Précédent
+            </button>
+          {/if}
+          <button
+            class="bouton suivant"
+            on:click={() =>
+              estDerniereSousEtape
+                ? visiteGuidee.etapeSuivante()
+                : indexEtapeCourante++}
+          >
+            Suivant
+          </button>
+        </div>
         <button
           class="bouton-tertiaire bouton"
           on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
@@ -272,5 +283,10 @@
 
   .pagination-etape.etape-courante {
     background: var(--bleu-mise-en-avant);
+  }
+
+  .conteneur-navigation {
+    display: flex;
+    gap: 16px;
   }
 </style>
