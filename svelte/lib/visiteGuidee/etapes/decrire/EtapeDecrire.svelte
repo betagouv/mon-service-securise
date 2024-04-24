@@ -12,6 +12,7 @@
     {
       cible: cibleNomService,
       callbackInitialeCible: (cible) => (cible.style.width = '50%'),
+      callbackFinaleCible: (cible) => (cible.style.width = '100%'),
       positionnementModale: 'MilieuDroite',
       titre: 'Décrivez votre service',
       description:
@@ -33,6 +34,10 @@
         );
         document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
       },
+      callbackFinaleCible: () =>
+        document
+          .getElementsByClassName('fermeture-tiroir')[0]
+          .dispatchEvent(new Event('click')),
       positionnementModale: 'HautDroite',
       titre: 'Collaborez avec votre équipe',
       description:
