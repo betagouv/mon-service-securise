@@ -2,21 +2,30 @@
   import { visiteGuidee } from '../visiteGuidee.store';
   import { onMount } from 'svelte';
 
-  export let cible: HTMLElement;
-  export let callbackInitialeCible: (cible: HTMLElement) => void;
-
-  export let titre: string;
-  export let description: string;
-  export let animation: string;
-  export let nbEtapes: number;
-  export let numeroEtapeCourante: number;
+  type SousEtape = {
+    cible: HTMLElement;
+    callbackInitialeCible: (cible: HTMLElement) => void;
+    titre: string;
+    description: string;
+    animation: string;
+  };
+  export let sousEtapes: SousEtape[];
 
   const rideau = document.getElementById('visite-guidee-rideau')!;
-  callbackInitialeCible(cible);
+  let indexEtapeCourante = 0;
 
   let positionCible: DOMRect;
+  let sousEtape: SousEtape;
+  $: {
+    sousEtape = sousEtapes[indexEtapeCourante];
+    sousEtape.callbackInitialeCible(sousEtape.cible);
+    positionCible = sousEtape.cible.getBoundingClientRect();
+    calculePolygone();
+  }
+
+  $: estDernierSousEtape = indexEtapeCourante === sousEtapes.length - 1;
+
   const calculePolygone = () => {
-    positionCible = cible.getBoundingClientRect();
     let { left, top, right, bottom } = positionCible;
     left -= 20;
     right += 20;
@@ -35,48 +44,59 @@
             100% 0%
         )`;
   };
+
   onMount(() => calculePolygone());
 </script>
 
 <svelte:window on:resize={calculePolygone} on:load={calculePolygone} />
-<div
-  class="rond"
-  style="top: {positionCible?.top +
-    positionCible?.height / 2 -
-    9}px ; left: {positionCible?.right - 9}px"
-/>
-<div
-  class="conteneur-modale"
-  style="top: {positionCible?.top +
-    positionCible?.height / 2}px ; left: {positionCible?.right + 7}px"
->
-  <button class="bouton-fermeture" on:click={visiteGuidee.masqueEtapeCourant}>
-    Fermer
-  </button>
-  <h2>{titre}</h2>
-  <p>{description}</p>
-  <div class="conteneur-animation">
-    <img src={animation} alt="" />
-  </div>
-  <div class="conteneur-pied-page">
-    <div class="conteneur-pagination">
-      {#each new Array(numeroEtapeCourante) as _}
-        <span class="pagination-etape etape-complete"></span>
-      {/each}
-      {#each new Array(nbEtapes - numeroEtapeCourante) as _}
-        <span class="pagination-etape etape-suivante"></span>
-      {/each}
+{#if sousEtape}
+  <div
+    class="rond"
+    style="top: {positionCible?.top +
+      positionCible?.height / 2 -
+      9}px ; left: {positionCible?.right - 9}px"
+  />
+  <div
+    class="conteneur-modale"
+    style="top: {positionCible?.top +
+      positionCible?.height / 2}px ; left: {positionCible?.right + 7}px"
+  >
+    <button class="bouton-fermeture" on:click={visiteGuidee.masqueEtapeCourant}>
+      Fermer
+    </button>
+    <h2>{sousEtape.titre}</h2>
+    <p>{sousEtape.description}</p>
+    <div class="conteneur-animation">
+      <img src={sousEtape.animation} alt="" />
     </div>
-    <div class="conteneur-actions">
-      <button class="bouton suivant">Suivant</button>
-      <button
-        class="bouton-tertiaire bouton"
-        on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
-        >Ne plus voir ces astuces</button
-      >
+    <div class="conteneur-pied-page">
+      <div class="conteneur-pagination">
+        {#each new Array(indexEtapeCourante + 1) as _}
+          <span class="pagination-etape etape-complete"></span>
+        {/each}
+        {#each new Array(sousEtapes.length - (indexEtapeCourante + 1)) as _}
+          <span class="pagination-etape etape-suivante"></span>
+        {/each}
+      </div>
+      <div class="conteneur-actions">
+        <button
+          class="bouton suivant"
+          on:click={() =>
+            estDernierSousEtape
+              ? visiteGuidee.etapeSuivante()
+              : indexEtapeCourante++}
+        >
+          Suivant
+        </button>
+        <button
+          class="bouton-tertiaire bouton"
+          on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
+          >Ne plus voir ces astuces</button
+        >
+      </div>
     </div>
   </div>
-</div>
+{/if}
 
 <style>
   .rond {
