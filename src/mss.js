@@ -297,7 +297,18 @@ const creeServeur = (
         email: 'visite-guidee@cyber.gouv.fr',
       });
       const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
+      service.id = 'ID-SERVICE-VISITE-GUIDEE';
+
       reponse.locals.etatVisiteGuidee.etapeCourante = 'DECRIRE';
+      reponse.locals.autorisationsService = {
+        DECRIRE: { estMasque: false },
+        SECURISER: { estMasque: false },
+        HOMOLOGUER: { estMasque: false },
+        RISQUES: { estMasque: false },
+        CONTACTS: { estMasque: false },
+        peutHomologuer: false,
+      };
+
       reponse.render('service/creation', {
         InformationsHomologation,
         referentiel,
