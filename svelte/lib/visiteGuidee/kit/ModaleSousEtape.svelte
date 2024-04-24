@@ -2,9 +2,12 @@
   import { visiteGuidee } from '../visiteGuidee.store';
 
   export let positionCible: DOMRect;
+
   export let titre: string;
   export let description: string;
   export let animation: string;
+  export let nbEtapes: number;
+  export let numeroEtapeCourante: number;
 </script>
 
 <div
@@ -27,15 +30,23 @@
   <div class="conteneur-animation">
     <img src={animation} alt="" />
   </div>
-  <div class="conteneur-actions">
-    <button class="bouton suivant" on:click={visiteGuidee.etapeSuivante}
-      >Suivant</button
-    >
-    <button
-      class="bouton-tertiaire bouton"
-      on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
-      >Ne plus voir ces astuces</button
-    >
+  <div class="conteneur-pied-page">
+    <div class="conteneur-pagination">
+      {#each new Array(numeroEtapeCourante) as _}
+        <span class="pagination-etape etape-complete"></span>
+      {/each}
+      {#each new Array(nbEtapes - numeroEtapeCourante) as _}
+        <span class="pagination-etape etape-suivante"></span>
+      {/each}
+    </div>
+    <div class="conteneur-actions">
+      <button class="bouton suivant">Suivant</button>
+      <button
+        class="bouton-tertiaire bouton"
+        on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
+        >Ne plus voir ces astuces</button
+      >
+    </div>
   </div>
 </div>
 
@@ -56,7 +67,7 @@
     color: var(--gris-fonce);
     border-radius: 4px;
     background: white;
-    padding: 12px 40px;
+    padding: 12px 40px 32px 40px;
     position: fixed;
     width: 462px;
     transform: translateY(-50%);
@@ -155,9 +166,36 @@
     padding: 16px;
     background: var(--fond-bleu-pale);
     margin-bottom: 28px;
+    margin-top: 24px;
   }
 
   .conteneur-animation img {
     width: 100%;
+  }
+
+  .conteneur-pied-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .conteneur-pagination {
+    display: flex;
+    gap: 8px;
+  }
+
+  .pagination-etape {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: flex;
+  }
+
+  .pagination-etape.etape-complete {
+    background: var(--bleu-mise-en-avant);
+  }
+
+  .pagination-etape.etape-suivante {
+    background: var(--liseres-fonce);
   }
 </style>
