@@ -6,6 +6,7 @@
   type SousEtape = {
     cible: HTMLElement;
     callbackInitialeCible: (cible: HTMLElement) => void;
+    callbackFinaleCible: (cible: HTMLElement) => void;
     positionnementModale: PositionModale;
     titre: string;
     description: string;
@@ -20,6 +21,7 @@
   let positionModale: { top: string; left: string; transform: string };
   let sousEtape: SousEtape;
   $: {
+    sousEtape?.callbackFinaleCible(sousEtape.cible);
     sousEtape = sousEtapes[indexEtapeCourante];
     sousEtape.callbackInitialeCible(sousEtape.cible);
     positionCible = sousEtape.cible.getBoundingClientRect();
