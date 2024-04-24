@@ -13,3 +13,12 @@ export type EtapeVisiteGuidee =
   | 'BIENVENUE'
   | 'PRESENTATION_MENU_NAV'
   | 'DECRIRE';
+
+type EtapeIndicateurEtape = {
+  titre: string;
+  icone: string;
+  id: string;
+};
+export type ConfigurationIndicateurEtape = {
+  etapes: EtapeIndicateurEtape[];
+};
