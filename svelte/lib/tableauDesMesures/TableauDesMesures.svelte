@@ -21,6 +21,7 @@
     nombreResultats,
   } from './tableauDesMesures.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
+  import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
 
   enum EtatEnregistrement {
     Jamais,
@@ -34,9 +35,12 @@
   export let categories: Record<IdCategorie, string>;
   export let statuts: Record<IdStatut, string>;
   export let estLectureSeule: boolean;
+  export let modeVisiteGuidee: boolean;
 
   const rafraichisMesures = async () =>
-    mesures.reinitialise(await recupereMesures(idService));
+    mesures.reinitialise(
+      modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
+    );
   onMount(rafraichisMesures);
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
