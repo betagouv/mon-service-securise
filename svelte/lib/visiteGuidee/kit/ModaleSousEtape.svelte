@@ -94,11 +94,12 @@
     </div>
     <div class="conteneur-pied-page">
       <div class="conteneur-pagination">
-        {#each new Array(indexEtapeCourante + 1) as _}
-          <span class="pagination-etape etape-complete"></span>
-        {/each}
-        {#each new Array(sousEtapes.length - (indexEtapeCourante + 1)) as _}
-          <span class="pagination-etape etape-suivante"></span>
+        {#each new Array(sousEtapes.length) as _, idx (idx)}
+          <button
+            class="pagination-etape"
+            class:etape-courante={idx === indexEtapeCourante}
+            on:click={() => (indexEtapeCourante = idx)}
+          ></button>
         {/each}
       </div>
       <div class="conteneur-actions">
@@ -262,13 +263,12 @@
     height: 10px;
     border-radius: 50%;
     display: flex;
-  }
-
-  .pagination-etape.etape-complete {
-    background: var(--bleu-mise-en-avant);
-  }
-
-  .pagination-etape.etape-suivante {
     background: var(--liseres-fonce);
+    padding: 0;
+    border: none;
+  }
+
+  .pagination-etape.etape-courante {
+    background: var(--bleu-mise-en-avant);
   }
 </style>
