@@ -1,22 +1,50 @@
 <script lang="ts">
   import { visiteGuidee } from '../visiteGuidee.store';
+  import { onMount } from 'svelte';
 
-  export let positionCible: DOMRect;
+  export let cible: HTMLElement;
+  export let callbackInitialeCible: (cible: HTMLElement) => void;
 
   export let titre: string;
   export let description: string;
   export let animation: string;
   export let nbEtapes: number;
   export let numeroEtapeCourante: number;
+
+  const rideau = document.getElementById('visite-guidee-rideau')!;
+  callbackInitialeCible(cible);
+
+  let positionCible: DOMRect;
+  const calculePolygone = () => {
+    positionCible = cible.getBoundingClientRect();
+    let { left, top, right, bottom } = positionCible;
+    left -= 20;
+    right += 20;
+    bottom += 20;
+    top -= 30;
+    rideau.style.clipPath = `polygon(
+            0% 0%,
+            0% 100%,
+            ${left}px 100%,
+            ${left}px ${top}px,
+            ${right}px ${top}px,
+            ${right}px ${bottom}px,
+            ${left}px ${bottom}px,
+            ${left}px 100%,
+            100% 100%,
+            100% 0%
+        )`;
+  };
+  onMount(() => calculePolygone());
 </script>
 
+<svelte:window on:resize={calculePolygone} on:load={calculePolygone} />
 <div
   class="rond"
   style="top: {positionCible?.top +
     positionCible?.height / 2 -
     9}px ; left: {positionCible?.right - 9}px"
 />
-
 <div
   class="conteneur-modale"
   style="top: {positionCible?.top +
