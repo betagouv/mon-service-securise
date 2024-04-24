@@ -2,9 +2,11 @@
   import { visiteGuidee } from '../visiteGuidee.store';
   import { onMount } from 'svelte';
 
+  type PositionModale = 'MilieuDroite' | 'HautDroite';
   type SousEtape = {
     cible: HTMLElement;
     callbackInitialeCible: (cible: HTMLElement) => void;
+    positionnementModale: PositionModale;
     titre: string;
     description: string;
     animation: string;
@@ -15,12 +17,34 @@
   let indexEtapeCourante = 0;
 
   let positionCible: DOMRect;
+  let positionModale: { top: string; left: string; transform: string };
   let sousEtape: SousEtape;
   $: {
     sousEtape = sousEtapes[indexEtapeCourante];
     sousEtape.callbackInitialeCible(sousEtape.cible);
     positionCible = sousEtape.cible.getBoundingClientRect();
     calculePolygone();
+  }
+
+  $: {
+    if (sousEtape) {
+      switch (sousEtape.positionnementModale) {
+        case 'MilieuDroite':
+          positionModale = {
+            top: `${positionCible.top + positionCible.height / 2}px`,
+            left: `${positionCible.right + 7}px`,
+            transform: '50%',
+          };
+          break;
+        case 'HautDroite':
+          positionModale = {
+            top: `${positionCible.top + positionCible.height / 2}px`,
+            left: `${positionCible.right + 7}px`,
+            transform: '10%',
+          };
+          break;
+      }
+    }
   }
 
   $: estDernierSousEtape = indexEtapeCourante === sousEtapes.length - 1;
@@ -58,8 +82,7 @@
   />
   <div
     class="conteneur-modale"
-    style="top: {positionCible?.top +
-      positionCible?.height / 2}px ; left: {positionCible?.right + 7}px"
+    style="--top: {positionModale.top}; --left: {positionModale.left}; --transform: {positionModale.transform}"
   >
     <button class="bouton-fermeture" on:click={visiteGuidee.masqueEtapeCourant}>
       Fermer
@@ -118,8 +141,10 @@
     padding: 12px 40px 32px 40px;
     position: fixed;
     width: 462px;
-    transform: translateY(-50%);
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.12);
+    top: var(--top);
+    left: var(--left);
+    transform: translateY(calc(0% - var(--transform)));
   }
 
   .conteneur-modale:before {
@@ -130,7 +155,7 @@
     transform: rotate(45deg);
     position: absolute;
     left: -5px;
-    top: calc(50% - 7px);
+    top: calc(var(--transform) - 7px);
   }
 
   .conteneur-modale h2 {
