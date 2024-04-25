@@ -3,6 +3,7 @@ import EtapeBienvenue from './etapes/initiale/EtapeBienvenue.svelte';
 import EtapePresentationMenuNavigation from './etapes/initiale/EtapePresentationMenuNavigation.svelte';
 import EtapeDecrire from './etapes/decrire/EtapeDecrire.svelte';
 import type { EtapeVisiteGuidee } from './visiteGuidee.d';
+import EtapeSecuriser from './etapes/securiser/EtapeSecuriser.svelte';
 
 const { subscribe, update, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
 
@@ -26,6 +27,9 @@ export const visiteGuidee = {
         case 'PRESENTATION_MENU_NAV':
           window.location.href = '/visiteGuidee/decrire';
           return 'DECRIRE';
+        case 'DECRIRE':
+          window.location.href = '/visiteGuidee/securiser';
+          return 'DECRIRE';
         default:
           return 'BIENVENUE';
       }
@@ -41,5 +45,7 @@ export const composantVisiteGuidee = derived(visiteGuidee, ($visiteGuidee) => {
       return EtapePresentationMenuNavigation;
     case 'DECRIRE':
       return EtapeDecrire;
+    case 'SECURISER':
+      return EtapeSecuriser;
   }
 });

@@ -12,7 +12,8 @@ export type VisiteGuideeProps = {
 export type EtapeVisiteGuidee =
   | 'BIENVENUE'
   | 'PRESENTATION_MENU_NAV'
-  | 'DECRIRE';
+  | 'DECRIRE'
+  | 'SECURISER';
 
 type EtapeIndicateurEtape = {
   titre: string;
