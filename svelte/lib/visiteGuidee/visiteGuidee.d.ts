@@ -14,7 +14,8 @@ export type EtapeVisiteGuidee =
   | 'PRESENTATION_MENU_NAV'
   | 'DECRIRE'
   | 'SECURISER'
-  | 'HOMOLOGUER';
+  | 'HOMOLOGUER'
+  | 'PILOTER';
 
 type EtapeIndicateurEtape = {
   titre: string;
