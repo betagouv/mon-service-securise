@@ -233,5 +233,17 @@ describe('Le serveur MSS', () => {
           done
         );
     });
+
+    ['decrire', 'securiser', 'homologuer'].forEach((idEtape) => {
+      it(`rend une vue '.pug' correspondant à l'étape '${idEtape}'`, async () => {
+        testeur.referentiel().recharge({
+          etapesParcoursHomologation: [{ numero: 1 }],
+        });
+        const reponse = await axios.get(
+          `http://localhost:1234/visiteGuidee/${idEtape}`
+        );
+        expect(reponse.status).to.be(200);
+      });
+    });
   });
 });
