@@ -9,7 +9,7 @@
     | 'HautGauche';
   type SousEtape = {
     cible: HTMLElement;
-    callbackInitialeCible: (cible: HTMLElement) => void;
+    callbackInitialeCible?: (cible: HTMLElement) => void;
     callbackFinaleCible?: (cible: HTMLElement) => void;
     delaiAvantAffichage?: number;
     avecTrouRideauColle?: boolean;
@@ -36,7 +36,7 @@
   $: {
     sousEtape?.callbackFinaleCible?.(sousEtape.cible);
     sousEtape = sousEtapes[indexEtapeCourante];
-    sousEtape.callbackInitialeCible(sousEtape.cible);
+    sousEtape.callbackInitialeCible?.(sousEtape.cible);
     setTimeout(() => {
       positionCible = sousEtape.cible.getBoundingClientRect();
       calculePolygone();
