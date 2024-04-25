@@ -2,6 +2,7 @@ const uuid = require('uuid');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const { decode } = require('html-entities');
 const {
   CACHE_CONTROL_FICHIERS_STATIQUES,
   DUREE_SESSION,
@@ -330,6 +331,16 @@ const creeServeur = (
           etapeActive: 'mesures',
           pourcentageProgression,
           mesures,
+        });
+      } else if (idEtape === 'homologuer') {
+        reponse.render('service/dossiers', {
+          InformationsHomologation,
+          decode,
+          service,
+          etapeActive: 'dossiers',
+          premiereEtapeParcours: referentiel.premiereEtapeParcours(),
+          peutVoirTamponHomologation: true,
+          referentiel,
         });
       }
     }
