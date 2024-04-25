@@ -322,6 +322,7 @@ const creeServeur = (
         const mesures = moteurRegles.mesures(service.descriptionService);
         const pourcentageProgression = 80;
 
+        service.indiceCyber = () => ({ total: 4.3 });
         reponse.render('service/mesures', {
           InformationsHomologation,
           referentiel,
