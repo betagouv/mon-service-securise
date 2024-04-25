@@ -292,30 +292,49 @@ const creeServeur = (
     middleware.verificationJWT,
     middleware.chargePreferencesUtilisateur,
     middleware.chargeEtatVisiteGuidee,
-    (_requete, reponse) => {
+    (requete, reponse) => {
       const utilisateurVisiteGuidee = new Utilisateur({
         email: 'visite-guidee@cyber.gouv.fr',
       });
       const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
 
-      reponse.locals.etatVisiteGuidee.etapeCourante = 'DECRIRE';
+      const { idEtape } = requete.params;
+      reponse.locals.etatVisiteGuidee.etapeCourante = idEtape.toUpperCase();
       reponse.locals.autorisationsService = {
         DECRIRE: { estMasque: false },
-        SECURISER: { estMasque: false },
+        SECURISER: { estMasque: false, estLectureSeule: false },
         HOMOLOGUER: { estMasque: false },
         RISQUES: { estMasque: false },
         CONTACTS: { estMasque: false },
         peutHomologuer: false,
       };
 
-      reponse.render('service/creation', {
-        InformationsHomologation,
-        referentiel,
-        service,
-        etapeActive: 'descriptionService',
-        departements: referentiel.departements(),
-      });
+      if (idEtape === 'decrire') {
+        reponse.render('service/creation', {
+          InformationsHomologation,
+          referentiel,
+          service,
+          etapeActive: 'descriptionService',
+          departements: referentiel.departements(),
+        });
+      } else if (idEtape === 'securiser') {
+        const mesures = moteurRegles.mesures(service.descriptionService);
+        const completude = service.completudeMesures();
+        const pourcentageProgression = Math.round(
+          (completude.nombreMesuresCompletes / completude.nombreTotalMesures) *
+            100
+        );
+
+        reponse.render('service/mesures', {
+          InformationsHomologation,
+          referentiel,
+          service,
+          etapeActive: 'mesures',
+          pourcentageProgression,
+          mesures,
+        });
+      }
     }
   );
 
