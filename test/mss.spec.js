@@ -234,7 +234,7 @@ describe('Le serveur MSS', () => {
         );
     });
 
-    ['decrire', 'securiser', 'homologuer'].forEach((idEtape) => {
+    ['decrire', 'securiser', 'homologuer', 'piloter'].forEach((idEtape) => {
       it(`rend une vue '.pug' correspondant à l'étape '${idEtape}'`, async () => {
         testeur.referentiel().recharge({
           etapesParcoursHomologation: [{ numero: 1 }],

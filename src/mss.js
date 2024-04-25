@@ -342,6 +342,8 @@ const creeServeur = (
           peutVoirTamponHomologation: true,
           referentiel,
         });
+      } else if (idEtape === 'piloter') {
+        reponse.render('tableauDeBord');
       }
     }
   );
