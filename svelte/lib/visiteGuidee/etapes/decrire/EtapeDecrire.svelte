@@ -15,7 +15,10 @@
     sousEtapes={[
       {
         cible: cibleNomService,
-        callbackInitialeCible: (cible) => (cible.style.width = '50%'),
+        callbackInitialeCible: (cible) => {
+          cible.style.width = '50%';
+          window.scrollTo(0, 0); // Ici on force le scroll pour ne pas être dérangé par "Erreur de saisie"
+        },
         callbackFinaleCible: (cible) => (cible.style.width = '100%'),
         positionnementModale: 'MilieuDroite',
         titre: 'Décrivez votre service',
