@@ -1,6 +1,6 @@
 <script lang="ts">
   import { recupereCompletudeMesure } from './completudeMesure.api';
-  import Confetti from './confetti/Confetti.svelte';
+  import Confetti from '../ui/Confetti.svelte';
 
   export let progression: number;
   export let idService: string;
