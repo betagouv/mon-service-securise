@@ -94,7 +94,8 @@
   $: estPremiereSousEtape = indexEtapeCourante === 0;
 
   const calculePolygone = () => {
-    if (!positionCible) return;
+    if (!positionCible || !sousEtape) return;
+    positionCible = sousEtape.cible.getBoundingClientRect();
     let { left, top, right, bottom } = positionCible;
     if (!sousEtape.avecTrouRideauColle) {
       left -= 20;
