@@ -12,8 +12,18 @@ class ActionTelechargement extends ActionAbstraite {
     });
   }
 
-  initialise({ idService, donneesService }) {
+  initialise({ idService, donneesService, modeVisiteGuidee }) {
     super.initialise();
+
+    if (modeVisiteGuidee) {
+      [
+        $('#lien-synthese'),
+        $('#lien-annexes'),
+        $('#lien-decision'),
+        $('#lien-archive'),
+      ].forEach((lien) => lien.removeAttr('href'));
+      return;
+    }
 
     const urlBase = `/api/service/${idService}/pdf/`;
 

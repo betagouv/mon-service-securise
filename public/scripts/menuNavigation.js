@@ -53,6 +53,15 @@ const tiroirTelechargement = (idService) => {
 
   return {
     brancheComportement: () => {
+      $(document.body).on(
+        'jquery-affiche-tiroir-telechargement-visite-guidee',
+        () =>
+          gestionnaireTiroir.afficheContenuAction(
+            { action: telechargement, estSelectionMulitple: false },
+            { modeVisiteGuidee: true }
+          )
+      );
+
       $('#voir-telechargement').on('click', async () => {
         const donneesService = await chargeDonneesService();
         gestionnaireTiroir.afficheContenuAction(
