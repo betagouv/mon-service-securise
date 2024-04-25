@@ -13,7 +13,8 @@ export type EtapeVisiteGuidee =
   | 'BIENVENUE'
   | 'PRESENTATION_MENU_NAV'
   | 'DECRIRE'
-  | 'SECURISER';
+  | 'SECURISER'
+  | 'HOMOLOGUER';
 
 type EtapeIndicateurEtape = {
   titre: string;
