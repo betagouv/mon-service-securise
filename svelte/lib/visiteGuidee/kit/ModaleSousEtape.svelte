@@ -1,6 +1,7 @@
 <script lang="ts">
   import { visiteGuidee } from '../visiteGuidee.store';
   import { onMount } from 'svelte';
+  import Confetti from '../../ui/Confetti.svelte';
 
   type PositionModale =
     | 'MilieuDroite'
@@ -225,6 +226,11 @@
                 : indexEtapeCourante++}
           >
             {sousEtape?.derniereEtape ? "C'est parti !" : 'Suivant'}
+            {#if sousEtape?.derniereEtape}
+              {#each new Array(50).fill(0) as _}
+                <Confetti />
+              {/each}
+            {/if}
           </button>
         </div>
         <button
