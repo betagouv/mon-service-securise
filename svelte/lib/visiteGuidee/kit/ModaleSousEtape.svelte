@@ -7,6 +7,7 @@
     | 'HautDroite'
     | 'MilieuGauche'
     | 'HautGauche'
+    | 'BasGauche'
     | 'BasMilieu';
   type SousEtape = {
     cible: HTMLElement;
@@ -86,6 +87,16 @@
             top: `${positionCible.top + positionCible.height / 2}px`,
             left: `${positionCible.right - positionCible.width - 7}px`,
             transformY: '10%',
+            transformX: '-100%',
+            positionRond: 'Gauche',
+            leftPointe: '100%',
+          };
+          break;
+        case 'BasGauche':
+          positionModale = {
+            top: `${positionCible.top + positionCible.height / 2}px`,
+            left: `${positionCible.right - positionCible.width - 7}px`,
+            transformY: '90%',
             transformX: '-100%',
             positionRond: 'Gauche',
             leftPointe: '100%',
