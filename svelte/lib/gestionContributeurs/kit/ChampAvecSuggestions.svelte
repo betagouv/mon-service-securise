@@ -53,7 +53,7 @@
     placeholder="Si nouveau contributeur email, sinon nom ou prénom"
   />
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
-    {#if proposeAjout}
+    {#if proposeAjout && !modeVisiteGuidee}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="create option-ajout"
