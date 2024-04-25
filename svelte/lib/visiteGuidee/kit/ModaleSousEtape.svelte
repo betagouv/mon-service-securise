@@ -18,7 +18,7 @@
     positionnementModale: PositionModale;
     titre: string;
     description: string;
-    animation: string;
+    animation?: string;
   };
   export let sousEtapes: SousEtape[];
 
@@ -188,9 +188,11 @@
     </button>
     <h2>{sousEtape.titre}</h2>
     <p>{sousEtape.description}</p>
-    <div class="conteneur-animation">
-      <img src={sousEtape.animation} alt="" />
-    </div>
+    {#if sousEtape.animation}
+      <div class="conteneur-animation">
+        <img src={sousEtape.animation} alt="" />
+      </div>
+    {/if}
     <div class="conteneur-pied-page">
       <div class="conteneur-pagination">
         {#each new Array(sousEtapes.length) as _, idx (idx)}
