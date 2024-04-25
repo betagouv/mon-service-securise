@@ -16,12 +16,7 @@ class ActionTelechargement extends ActionAbstraite {
     super.initialise();
 
     if (modeVisiteGuidee) {
-      [
-        $('#lien-synthese'),
-        $('#lien-annexes'),
-        $('#lien-decision'),
-        $('#lien-archive'),
-      ].forEach((lien) => lien.removeAttr('href'));
+      $('a', this.selecteurFormulaire).removeAttr('href');
       return;
     }
 
