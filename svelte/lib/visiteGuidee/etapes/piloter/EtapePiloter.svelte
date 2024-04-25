@@ -4,6 +4,7 @@
 
   let cibleNomService: HTMLElement;
   let cibleBandeauNouveaute: HTMLElement;
+  let cibleBOM: HTMLElement;
   onMount(() => {
     const intervalle = setInterval(() => {
       cibleNomService = document.getElementsByClassName(
@@ -15,10 +16,11 @@
     cibleBandeauNouveaute = document.getElementsByClassName(
       'bandeau-nouveautes'
     )[0]! as HTMLElement;
+    cibleBOM = document.getElementsByClassName('bom-modale')[0]! as HTMLElement;
   });
 </script>
 
-{#if cibleNomService && cibleBandeauNouveaute}
+{#if cibleNomService && cibleBandeauNouveaute && cibleBOM}
   <ModaleSousEtape
     sousEtapes={[
       {
@@ -48,6 +50,29 @@
         titre: 'Les nouveautés',
         description:
           'Ne ratez aucune évolution de MonServiceSécurisé. Nous vous partageons les nouveautés en matière de cybersécurité, et les mesures additionnelles qui peuvent impliquer des changement et/ou amélioration pour vos services.',
+        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+      },
+      {
+        cible: cibleBOM,
+        positionnementModale: 'BasGauche',
+        avecTrouRideauColle: true,
+        callbackInitialeCible: () => {
+          document
+            .getElementsByClassName('bom-titre')[0]
+            .dispatchEvent(new Event('click'));
+          document.querySelector('.bom-modale .fermeture').disabled = true;
+          document
+            .querySelectorAll('.bom-modale .contenu a')
+            .forEach((lien) => lien.removeAttribute('href'));
+        },
+        callbackFinaleCible: () => {
+          document
+            .querySelector('.bom-modale .fermeture')
+            .dispatchEvent(new Event('click'));
+        },
+        titre: 'MonServiceSécurisé vous accompagne',
+        description:
+          'Pour toute question, MonServiceSécurisé se fera un plaisir de vous aider par chat ou par webinaire. N’hésitez pas à nous faire vos retours sur le produit, nous les lirons avec attention.',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
     ]}
