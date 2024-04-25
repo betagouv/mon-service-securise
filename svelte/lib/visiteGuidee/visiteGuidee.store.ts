@@ -21,6 +21,7 @@ export const visiteGuidee = {
   subscribe,
   masqueEtapeCourant: () => cacheRideau(),
   fermeDefinitivementVisiteGuidee: () => cacheRideau(),
+  finalise: () => (window.location.href = '/service/creation'),
   etapeSuivante() {
     update((etapeCourante) => {
       switch (etapeCourante) {

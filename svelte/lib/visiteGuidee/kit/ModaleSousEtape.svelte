@@ -19,6 +19,7 @@
     titre: string;
     description: string;
     animation?: string;
+    derniereEtape?: boolean;
   };
   export let sousEtapes: SousEtape[];
 
@@ -215,12 +216,15 @@
           {/if}
           <button
             class="bouton suivant"
+            class:derniereEtape={sousEtape?.derniereEtape}
             on:click={() =>
-              estDerniereSousEtape
+              sousEtape?.derniereEtape
+                ? visiteGuidee.finalise()
+                : estDerniereSousEtape
                 ? visiteGuidee.etapeSuivante()
                 : indexEtapeCourante++}
           >
-            Suivant
+            {sousEtape?.derniereEtape ? "C'est parti !" : 'Suivant'}
           </button>
         </div>
         <button
@@ -314,7 +318,7 @@
     justify-content: center;
   }
 
-  .suivant:after {
+  .suivant:not(.derniereEtape):after {
     --taille: 16px;
     content: '';
     width: var(--taille);
