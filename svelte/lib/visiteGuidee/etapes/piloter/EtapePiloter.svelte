@@ -1,10 +1,12 @@
 <script lang="ts">
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount } from 'svelte';
+  import { visiteGuidee } from '../../visiteGuidee.store';
 
   let cibleNomService: HTMLElement;
   let cibleBandeauNouveaute: HTMLElement;
   let cibleBOM: HTMLElement;
+  let cibleNouveauService: HTMLElement;
   onMount(() => {
     const intervalle = setInterval(() => {
       cibleNomService = document.getElementsByClassName(
@@ -17,10 +19,13 @@
       'bandeau-nouveautes'
     )[0]! as HTMLElement;
     cibleBOM = document.getElementsByClassName('bom-modale')[0]! as HTMLElement;
+    cibleNouveauService = document.getElementsByClassName(
+      'nouveau-service'
+    )[0]! as HTMLElement;
   });
 </script>
 
-{#if cibleNomService && cibleBandeauNouveaute && cibleBOM}
+{#if cibleNomService && cibleBandeauNouveaute && cibleBOM && cibleNouveauService}
   <ModaleSousEtape
     sousEtapes={[
       {
@@ -74,6 +79,18 @@
         description:
           'Pour toute question, MonServiceSécurisé se fera un plaisir de vous aider par chat ou par webinaire. N’hésitez pas à nous faire vos retours sur le produit, nous les lirons avec attention.',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+      },
+      {
+        cible: cibleNouveauService,
+        positionnementModale: 'HautGauche',
+        avecTrouRideauColle: true,
+        callbackInitialeCible: (cible) => {
+          cible.addEventListener('click', () => visiteGuidee.finalise());
+        },
+        titre: 'Créez votre premier service !',
+        description:
+          'N’attendez plus et commencez à sécuriser vos services numériques en créant votre premier service !',
+        derniereEtape: true,
       },
     ]}
   />
