@@ -35,13 +35,16 @@
     leftPointe: string;
   };
   let sousEtape: SousEtape;
+  let afficheModale = true;
   $: {
+    afficheModale = false;
     sousEtape?.callbackFinaleCible?.(sousEtape.cible);
     sousEtape = sousEtapes[indexEtapeCourante];
     sousEtape.callbackInitialeCible?.(sousEtape.cible);
     setTimeout(() => {
       positionCible = sousEtape.cible.getBoundingClientRect();
       calculePolygone();
+      afficheModale = true;
     }, sousEtape.delaiAvantAffichage ?? 0);
   }
 
@@ -105,6 +108,7 @@
   $: estDerniereSousEtape = indexEtapeCourante === sousEtapes.length - 1;
   $: estPremiereSousEtape = indexEtapeCourante === 0;
 
+  $: if (!afficheModale) rideau.style.clipPath = 'none';
   const calculePolygone = () => {
     if (!positionCible || !sousEtape) return;
     positionCible = sousEtape.cible.getBoundingClientRect();
@@ -159,7 +163,7 @@
 </script>
 
 <svelte:window on:resize={calculePolygone} on:load={calculePolygone} />
-{#if sousEtape && positionCible}
+{#if sousEtape && positionCible && afficheModale}
   <div
     class="rond"
     style="top: {decallageRond.top}px ; left: {decallageRond.left}px"
