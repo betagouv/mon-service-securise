@@ -5,6 +5,7 @@ import EtapeDecrire from './etapes/decrire/EtapeDecrire.svelte';
 import type { EtapeVisiteGuidee } from './visiteGuidee.d';
 import EtapeSecuriser from './etapes/securiser/EtapeSecuriser.svelte';
 import EtapeHomologuer from './etapes/homologuer/EtapeHomologuer.svelte';
+import EtapePiloter from './etapes/piloter/EtapePiloter.svelte';
 
 const { subscribe, update, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
 
@@ -35,7 +36,8 @@ export const visiteGuidee = {
           window.location.href = '/visiteGuidee/homologuer';
           return 'HOMOLOGUER';
         case 'HOMOLOGUER':
-          return 'HOMOLOGUER';
+          window.location.href = '/visiteGuidee/piloter';
+          return 'PILOTER';
         default:
           return 'BIENVENUE';
       }
@@ -55,5 +57,7 @@ export const composantVisiteGuidee = derived(visiteGuidee, ($visiteGuidee) => {
       return EtapeSecuriser;
     case 'HOMOLOGUER':
       return EtapeHomologuer;
+    case 'PILOTER':
+      return EtapePiloter;
   }
 });
