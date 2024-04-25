@@ -2,11 +2,15 @@
   import { visiteGuidee } from '../visiteGuidee.store';
   import { onMount } from 'svelte';
 
-  type PositionModale = 'MilieuDroite' | 'HautDroite' | 'HautGauche';
+  type PositionModale =
+    | 'MilieuDroite'
+    | 'HautDroite'
+    | 'MilieuGauche'
+    | 'HautGauche';
   type SousEtape = {
     cible: HTMLElement;
     callbackInitialeCible: (cible: HTMLElement) => void;
-    callbackFinaleCible: (cible: HTMLElement) => void;
+    callbackFinaleCible?: (cible: HTMLElement) => void;
     delaiAvantAffichage?: number;
     avecTrouRideauColle?: boolean;
     positionnementModale: PositionModale;
@@ -30,7 +34,7 @@
   };
   let sousEtape: SousEtape;
   $: {
-    sousEtape?.callbackFinaleCible(sousEtape.cible);
+    sousEtape?.callbackFinaleCible?.(sousEtape.cible);
     sousEtape = sousEtapes[indexEtapeCourante];
     sousEtape.callbackInitialeCible(sousEtape.cible);
     setTimeout(() => {
@@ -62,11 +66,21 @@
             leftPointe: '0%',
           };
           break;
-        case 'HautGauche':
+        case 'MilieuGauche':
           positionModale = {
             top: `${positionCible.top + positionCible.height / 2}px`,
             left: `${positionCible.right - positionCible.width - 7}px`,
             transformY: '50%',
+            transformX: '-100%',
+            positionRond: 'Gauche',
+            leftPointe: '100%',
+          };
+          break;
+        case 'HautGauche':
+          positionModale = {
+            top: `${positionCible.top + positionCible.height / 2}px`,
+            left: `${positionCible.right - positionCible.width - 7}px`,
+            transformY: '10%',
             transformX: '-100%',
             positionRond: 'Gauche',
             leftPointe: '100%',
