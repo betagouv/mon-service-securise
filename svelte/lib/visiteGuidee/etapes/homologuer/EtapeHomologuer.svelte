@@ -15,7 +15,6 @@
     sousEtapes={[
       {
         cible: cibleNouvelleHomologation,
-        callbackInitialeCible: () => {},
         positionnementModale: 'HautDroite',
         titre: 'Mettez-vous en conformité',
         description:
