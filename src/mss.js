@@ -320,11 +320,7 @@ const creeServeur = (
         });
       } else if (idEtape === 'securiser') {
         const mesures = moteurRegles.mesures(service.descriptionService);
-        const completude = service.completudeMesures();
-        const pourcentageProgression = Math.round(
-          (completude.nombreMesuresCompletes / completude.nombreTotalMesures) *
-            100
-        );
+        const pourcentageProgression = 80;
 
         reponse.render('service/mesures', {
           InformationsHomologation,
