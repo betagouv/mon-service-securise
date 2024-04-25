@@ -19,6 +19,37 @@ const remplisCarteInformationIndiceCyber = (indiceCyberMoyen) => {
   $('#indice-cyber-moyen').text(indiceCyberMoyen);
 };
 
+const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+const modeVisiteGuidee = etatVisiteGuidee.dejaTerminee === false;
+const donneesVisiteGuidee = {
+  resume: {
+    nombreServices: 1,
+    nombreServicesHomologues: 0,
+  },
+  indiceCyber: 4.3,
+  services: [
+    {
+      id: 'ID-SERVICE-VISITE-GUIDEE',
+      nomService: 'MonServiceSécurisé',
+      organisationResponsable: 'ANSSI',
+      statutSaisieDescription: 'completes',
+      contributeurs: [],
+      statutHomologation: {
+        id: 'activee',
+        enCoursEdition: false,
+        libelle: 'Active',
+        ordre: 5,
+      },
+      nombreContributeurs: 3,
+      estProprietaire: true,
+      documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
+      permissions: {
+        gestionContributeurs: true,
+      },
+    },
+  ],
+};
+
 const tableauDesServices = {
   $tableau: $('.contenu-tableau-services'),
   donnees: [],
@@ -146,6 +177,15 @@ const tableauDesServices = {
   nomDuService: (idService) =>
     tableauDesServices.donneesDuService(idService)?.nomService,
   recupereServices: () => {
+    if (modeVisiteGuidee) {
+      remplisCartesInformations(donneesVisiteGuidee.resume);
+      tableauDesServices.donnees = donneesVisiteGuidee.services;
+      remplisCarteInformationIndiceCyber(donneesVisiteGuidee.indiceCyber);
+      tableauDesServices.donnees[0].indiceCyber =
+        donneesVisiteGuidee.indiceCyber;
+      tableauDesServices.afficheDonnees();
+      return;
+    }
     tableauDesServices.estEnChargement = true;
     axios
       .get('/api/services')
