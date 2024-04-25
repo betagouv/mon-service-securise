@@ -23,6 +23,9 @@
           document.querySelector(
             '#conteneur-mesure .conteneur-actions button'
           ).disabled = true;
+          document.getElementsByClassName(
+            'fermeture-tiroir'
+          )[0].disabled = true;
         },
         delaiAvantAffichage: 200,
         avecTrouRideauColle: true,
