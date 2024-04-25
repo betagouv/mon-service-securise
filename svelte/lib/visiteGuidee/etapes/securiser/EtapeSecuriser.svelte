@@ -14,7 +14,7 @@
   });
 </script>
 
-{#if cibleTiroirMesure}
+{#if cibleTiroirMesure && cibleIndiceCyber}
   <ModaleSousEtape
     sousEtapes={[
       {
