@@ -6,7 +6,8 @@
     | 'MilieuDroite'
     | 'HautDroite'
     | 'MilieuGauche'
-    | 'HautGauche';
+    | 'HautGauche'
+    | 'BasMilieu';
   type SousEtape = {
     cible: HTMLElement;
     callbackInitialeCible?: (cible: HTMLElement) => void;
@@ -24,12 +25,13 @@
   let indexEtapeCourante = 0;
 
   let positionCible: DOMRect;
+  type PositionRond = 'Droite' | 'Gauche' | 'Bas';
   let positionModale: {
     top: string;
     left: string;
     transformY: string;
     transformX: string;
-    positionRond: 'Droite' | 'Gauche';
+    positionRond: PositionRond;
     leftPointe: string;
   };
   let sousEtape: SousEtape;
@@ -86,6 +88,16 @@
             leftPointe: '100%',
           };
           break;
+        case 'BasMilieu':
+          positionModale = {
+            top: `${positionCible.bottom + 7}px`,
+            left: `${positionCible.right - positionCible.width / 2}px`,
+            transformY: '0%',
+            transformX: '-50%',
+            positionRond: 'Bas',
+            leftPointe: '50%',
+          };
+          break;
       }
     }
   }
@@ -117,6 +129,32 @@
         )`;
   };
 
+  let decallageRond: { top: number; left: number };
+  $: {
+    if (positionModale) {
+      switch (positionModale.positionRond) {
+        case 'Gauche':
+          decallageRond = {
+            top: positionCible.top + positionCible.height / 2 - 9,
+            left: positionCible.left - 9,
+          };
+          break;
+        case 'Droite':
+          decallageRond = {
+            top: positionCible.top + positionCible.height / 2 - 9,
+            left: positionCible.right - 9,
+          };
+          break;
+        case 'Bas':
+          decallageRond = {
+            top: positionCible.bottom - 9,
+            left: positionCible.left + positionCible.width / 2 - 9,
+          };
+          break;
+      }
+    }
+  }
+
   onMount(() => calculePolygone());
 </script>
 
@@ -124,11 +162,7 @@
 {#if sousEtape && positionCible}
   <div
     class="rond"
-    style="top: {positionCible.top +
-      positionCible.height / 2 -
-      9}px ; left: {(positionModale.positionRond === 'Droite'
-      ? positionCible.right
-      : positionCible.left) - 9}px"
+    style="top: {decallageRond.top}px ; left: {decallageRond.left}px"
   />
   <div
     class="conteneur-modale"
