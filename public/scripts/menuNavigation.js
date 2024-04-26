@@ -14,9 +14,6 @@ const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
       const reponse = await axios.get(`/api/service/${idService}`);
       donneesService = reponse.data;
     }
-    $('.nombre-contributeurs', '#gerer-contributeurs').text(
-      donneesService.nombreContributeurs
-    );
   };
 
   return {
