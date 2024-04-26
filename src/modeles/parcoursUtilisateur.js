@@ -44,6 +44,16 @@ class ParcoursUtilisateur extends Base {
     return undefined;
   }
 
+  static pourUtilisateur(idUtilisateur, referentiel) {
+    return new ParcoursUtilisateur(
+      {
+        idUtilisateur,
+        etatVisiteGuidee: { dejaTerminee: false },
+      },
+      referentiel
+    );
+  }
+
   toJSON() {
     return {
       ...super.toJSON(),

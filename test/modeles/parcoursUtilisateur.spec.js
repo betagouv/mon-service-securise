@@ -2,6 +2,7 @@ const expect = require('expect.js');
 
 const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
 const Referentiel = require('../../src/referentiel');
+const EtatVisiteGuidee = require('../../src/modeles/etatVisiteGuidee');
 
 describe('Un parcours utilisateur', () => {
   it('sait se convertir en JSON', () => {
@@ -16,6 +17,16 @@ describe('Un parcours utilisateur', () => {
       dateDerniereConnexion: '2023-01-01',
       etatVisiteGuidee: { dejaTerminee: false, etapeCourante: 'DECRIRE' },
     });
+  });
+
+  it('sait se créer pour un utilisateur avec des valeurs par défaut', () => {
+    const etatInitial = ParcoursUtilisateur.pourUtilisateur('456');
+
+    expect(etatInitial.dateDerniereConnexion).to.be(undefined);
+    expect(etatInitial.idUtilisateur).to.equal('456');
+    expect(etatInitial.etatVisiteGuidee).to.eql(
+      new EtatVisiteGuidee({ dejaTerminee: false })
+    );
   });
 
   it("sait enregistrer une date de dernière connexion en utilisant l'adaptateur horloge", () => {

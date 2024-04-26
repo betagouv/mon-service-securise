@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const DepotDonneesParcoursUtilisateur = require('../../src/depots/depotDonneesParcoursUtilisateur');
 const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
+const EtatVisiteGuidee = require('../../src/modeles/etatVisiteGuidee');
 
 describe('Le dépôt de données Parcours utilisateur', () => {
   let adaptateurPersistance;
@@ -49,5 +50,10 @@ describe('Le dépôt de données Parcours utilisateur', () => {
 
     expect(parcours).to.be.a(ParcoursUtilisateur);
     expect(parcours.idUtilisateur).to.equal('nouvel utilisateur');
+    expect(parcours.etatVisiteGuidee).to.eql(
+      new EtatVisiteGuidee({
+        dejaTerminee: false,
+      })
+    );
   });
 });
