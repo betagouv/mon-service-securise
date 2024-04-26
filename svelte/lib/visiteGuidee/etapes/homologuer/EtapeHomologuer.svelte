@@ -15,6 +15,9 @@
     sousEtapes={[
       {
         cible: cibleNouvelleHomologation,
+        callbackInitialeCible: () => {
+          document.getElementById('suivant').inert = true;
+        },
         positionnementModale: 'HautDroite',
         titre: 'Mettez-vous en conformité',
         description:
