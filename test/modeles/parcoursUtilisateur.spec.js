@@ -8,11 +8,13 @@ describe('Un parcours utilisateur', () => {
     const unParcours = new ParcoursUtilisateur({
       idUtilisateur: '456',
       dateDerniereConnexion: '2023-01-01',
+      etatVisiteGuidee: { dejaTerminee: false, etapeCourante: 'DECRIRE' },
     });
 
     expect(unParcours.toJSON()).to.eql({
       idUtilisateur: '456',
       dateDerniereConnexion: '2023-01-01',
+      etatVisiteGuidee: { dejaTerminee: false, etapeCourante: 'DECRIRE' },
     });
   });
 
