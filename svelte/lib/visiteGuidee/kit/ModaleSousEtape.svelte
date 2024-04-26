@@ -6,6 +6,7 @@
   type PositionModale =
     | 'MilieuDroite'
     | 'HautDroite'
+    | 'BasDroite'
     | 'MilieuGauche'
     | 'HautGauche'
     | 'BasGauche'
@@ -69,6 +70,16 @@
             top: `${positionCible.top + positionCible.height / 2}px`,
             left: `${positionCible.right + 7}px`,
             transformY: '10%',
+            transformX: '0',
+            positionRond: 'Droite',
+            leftPointe: '0%',
+          };
+          break;
+        case 'BasDroite':
+          positionModale = {
+            top: `${positionCible.top + positionCible.height / 2}px`,
+            left: `${positionCible.right + 7}px`,
+            transformY: '90%',
             transformX: '0',
             positionRond: 'Droite',
             leftPointe: '0%',

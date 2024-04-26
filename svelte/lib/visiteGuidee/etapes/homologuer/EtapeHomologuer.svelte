@@ -43,7 +43,7 @@
             .dispatchEvent(new Event('click'));
         },
         avecTrouRideauColle: true,
-        positionnementModale: 'MilieuDroite',
+        positionnementModale: 'BasDroite',
         titre: 'Homologuez en toute simplicité',
         description:
           'Téléchargez en 1 clic, le dossier et le projet de décision d’homologation pour le faire signer.',
