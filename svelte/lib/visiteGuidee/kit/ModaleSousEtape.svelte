@@ -69,7 +69,7 @@
           positionModale = {
             top: `${positionCible.top + positionCible.height / 2}px`,
             left: `${positionCible.right + 7}px`,
-            transformY: '10%',
+            transformY: '20%',
             transformX: '0',
             positionRond: 'Droite',
             leftPointe: '0%',
@@ -79,7 +79,7 @@
           positionModale = {
             top: `${positionCible.top + positionCible.height / 2}px`,
             left: `${positionCible.right + 7}px`,
-            transformY: '90%',
+            transformY: '80%',
             transformX: '0',
             positionRond: 'Droite',
             leftPointe: '0%',
@@ -99,7 +99,7 @@
           positionModale = {
             top: `${positionCible.top + positionCible.height / 2}px`,
             left: `${positionCible.right - positionCible.width - 7}px`,
-            transformY: '10%',
+            transformY: '20%',
             transformX: '-100%',
             positionRond: 'Gauche',
             leftPointe: '100%',
@@ -109,7 +109,7 @@
           positionModale = {
             top: `${positionCible.top + positionCible.height / 2}px`,
             left: `${positionCible.right - positionCible.width - 7}px`,
-            transformY: '90%',
+            transformY: '80%',
             transformX: '-100%',
             positionRond: 'Gauche',
             leftPointe: '100%',
