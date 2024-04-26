@@ -20,8 +20,8 @@ const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
   };
 
   return {
-    brancheComportement: () => {
-      if (idService) rechargeNbContributeurs();
+    brancheComportement: async () => {
+      if (idService) await rechargeNbContributeurs();
 
       $(document.body).on('jquery-recharge-services', async () => {
         await rechargeNbContributeurs();
@@ -111,7 +111,7 @@ const repliMenu = () => {
   };
 };
 
-$(() => {
+$(async () => {
   const idService = $('.page-service').data('id-service');
   const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
   const modeVisiteGuidee = etatVisiteGuidee.dejaTerminee === false;
@@ -119,6 +119,6 @@ $(() => {
   repliMenu().brancheComportement();
 
   gestionnaireTiroir.brancheComportement();
-  tiroirContributeur(idService, modeVisiteGuidee).brancheComportement();
+  await tiroirContributeur(idService, modeVisiteGuidee).brancheComportement();
   tiroirTelechargement(idService).brancheComportement();
 });
