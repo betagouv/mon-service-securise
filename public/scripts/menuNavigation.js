@@ -99,6 +99,14 @@ const repliMenu = () => {
           $gererContributeurs.addClass('ouvert');
         }
       });
+
+      $(document.body).on('jquery-deplie-menu-navigation-visite-guidee', () => {
+        const menuFerme = $menu.hasClass('ferme');
+        if (menuFerme) {
+          $menu.removeClass('ferme');
+          $gererContributeurs.addClass('ouvert');
+        }
+      });
     },
   };
 };

@@ -34,6 +34,9 @@
             'inviter-contributeurs'
           )[0].style.display = 'flex';
           document.body.dispatchEvent(
+            new CustomEvent('jquery-deplie-menu-navigation-visite-guidee')
+          );
+          document.body.dispatchEvent(
             new CustomEvent('jquery-affiche-tiroir-contributeurs-visite-guidee')
           );
           document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
