@@ -93,16 +93,8 @@ const repliMenu = () => {
     ouvrir: () => cookie().supprimer(),
   };
 
-  const fermeApresDelai = () => {
-    setTimeout(() => {
-      $gererContributeurs.removeClass('ouvert');
-    }, 3000);
-  };
-
   return {
     brancheComportement: () => {
-      fermeApresDelai();
-
       $repliMenu.on('click', () => {
         const menuOuvert = !$menu.hasClass('ferme');
         if (menuOuvert) {
@@ -113,7 +105,6 @@ const repliMenu = () => {
           $menu.removeClass('ferme');
           persistance.ouvrir();
           $gererContributeurs.addClass('ouvert');
-          fermeApresDelai();
         }
       });
     },
