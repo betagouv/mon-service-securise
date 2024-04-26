@@ -33,9 +33,6 @@
           document.getElementsByClassName(
             'inviter-contributeurs'
           )[0].style.display = 'flex';
-          document.getElementsByClassName(
-            'nombre-contributeurs'
-          )[0].style.display = 'none';
           document.body.dispatchEvent(
             new CustomEvent('jquery-affiche-tiroir-contributeurs-visite-guidee')
           );
