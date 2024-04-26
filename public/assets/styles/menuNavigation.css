@@ -302,7 +302,9 @@
   overflow: hidden;
   border: none;
 }
-
+.menu-navigation #gerer-contributeurs:hover {
+  filter: contrast(1.15) brightness(1.05);
+}
 .menu-navigation #gerer-contributeurs:active {
   background: #08416a;
 }
