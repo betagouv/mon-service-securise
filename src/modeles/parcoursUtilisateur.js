@@ -1,6 +1,7 @@
 const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
 const Base = require('./base');
 const Referentiel = require('../referentiel');
+const EtatVisiteGuidee = require('./etatVisiteGuidee');
 
 class ParcoursUtilisateur extends Base {
   constructor(
@@ -12,6 +13,7 @@ class ParcoursUtilisateur extends Base {
       proprietesAtomiquesRequises: ['idUtilisateur', 'dateDerniereConnexion'],
     });
     this.renseigneProprietes(donnees);
+    this.etatVisiteGuidee = new EtatVisiteGuidee(donnees.etatVisiteGuidee);
     this.adaptateurHorloge = adaptateurHorloge;
     this.referentiel = referentiel;
   }
@@ -40,6 +42,13 @@ class ParcoursUtilisateur extends Base {
     )
       return derniereFonctionnalite.id;
     return undefined;
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      etatVisiteGuidee: this.etatVisiteGuidee.toJSON(),
+    };
   }
 }
 
