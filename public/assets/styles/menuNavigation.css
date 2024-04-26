@@ -322,20 +322,8 @@
 
 .menu-navigation:not(.ferme)
   :is(#gerer-contributeurs:hover, #gerer-contributeurs.ouvert)
-  .nombre-contributeurs {
-  display: none;
-}
-
-.menu-navigation:not(.ferme)
-  :is(#gerer-contributeurs:hover, #gerer-contributeurs.ouvert)
   .inviter-contributeurs {
   display: block;
-}
-
-.menu-navigation #gerer-contributeurs .nombre-contributeurs {
-  color: #fff;
-  transform: translateY(-2px);
-  padding-right: 8px;
 }
 
 .menu-navigation #gerer-contributeurs .inviter-contributeurs {
