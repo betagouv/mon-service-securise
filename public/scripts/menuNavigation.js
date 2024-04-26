@@ -5,11 +5,9 @@ import ActionTelechargement from '../modules/tableauDeBord/actions/ActionTelecha
 const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
   const contributeurs = new ActionContributeurs();
   let donneesService;
-  const rechargeNbContributeurs = async () => {
+  const chargeDonneesDuService = async () => {
     if (modeVisiteGuidee) {
-      donneesService = {
-        nombreContributeurs: 3,
-      };
+      donneesService = { nombreContributeurs: 3 };
     } else {
       const reponse = await axios.get(`/api/service/${idService}`);
       donneesService = reponse.data;
@@ -18,10 +16,10 @@ const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
 
   return {
     brancheComportement: async () => {
-      if (idService) await rechargeNbContributeurs();
+      if (idService) await chargeDonneesDuService();
 
       $(document.body).on('jquery-recharge-services', async () => {
-        await rechargeNbContributeurs();
+        await chargeDonneesDuService();
       });
 
       $(document.body).on(
