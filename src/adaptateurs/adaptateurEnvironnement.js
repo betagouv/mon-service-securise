@@ -49,8 +49,7 @@ const chiffrement = () => ({
 });
 
 const featureFlag = () => ({
-  etatVisiteGuidee: () =>
-    JSON.parse(process.env.FEATURE_FLAG_ETAT_VISITE_GUIDEE ?? 'null'),
+  visiteGuideeActive: () => process.env.FEATURE_FLAG_VISITE_GUIDEE === 'true',
 });
 
 module.exports = {

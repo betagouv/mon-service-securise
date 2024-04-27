@@ -11,6 +11,7 @@ const {
   Rubriques: { DECRIRE, SECURISER, HOMOLOGUER },
   Permissions: { LECTURE, ECRITURE, INVISIBLE },
 } = require('../../src/modeles/autorisations/gestionDroits');
+const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
@@ -817,27 +818,57 @@ describe('Le middleware MSS', () => {
   });
 
   describe("sur demande de chargement de l'état de la visite guidée", () => {
-    it("ajoute un objet d'état de visite guidée à `reponse.locals` si la variable d'environnement est définie", (done) => {
-      const adaptateurEnvironnement = {
-        featureFlag: () => ({
-          etatVisiteGuidee: () => ({ dejaTerminee: false }),
-        }),
-      };
-      const middleware = Middleware({
-        adaptateurEnvironnement,
+    describe('quand la fonctionnalité visite guidée est active', () => {
+      let middleware;
+
+      beforeEach(() => {
+        const adaptateurEnvironnement = {
+          featureFlag: () => ({ visiteGuideeActive: () => true }),
+        };
+        middleware = Middleware({
+          depotDonnees,
+          adaptateurEnvironnement,
+        });
       });
 
-      middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
-        expect(reponse.locals.etatVisiteGuidee).to.eql({
-          dejaTerminee: false,
+      it("jette une une erreur technique si l'utilisateur n'est pas présent dans la requête", (done) => {
+        requete.idUtilisateurCourant = undefined;
+
+        middleware
+          .chargeEtatVisiteGuidee(requete, reponse, () => {})
+          .then(() =>
+            done(
+              "Le chargement de l'état de la visite guidée aurait dû lever une exception"
+            )
+          )
+          .catch((e) => {
+            expect(e).to.be.an(ErreurChainageMiddleware);
+            expect(e.message).to.equal(
+              'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+            );
+          })
+          .then(() => done())
+          .catch(done);
+      });
+
+      it("ajoute l'état de la visite guidée de l'utilisateur à `reponse.locals`", (done) => {
+        requete.idUtilisateurCourant = '1234';
+        depotDonnees.lisParcoursUtilisateur = async () =>
+          new ParcoursUtilisateur({
+            idUtilisateur: '1234',
+            etatVisiteGuidee: { dejaTerminee: true },
+          });
+
+        middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
+          expect(reponse.locals.etatVisiteGuidee.dejaTerminee).to.equal(true);
+          done();
         });
-        done();
       });
     });
 
-    it("n'ajoute pas un objet d'état de visite guidée à `reponse.locals` si la variable d'environnement n'est pas définie", (done) => {
+    it("n'ajoute pas un objet d'état de visite guidée à `reponse.locals` quand la fonctionnalité visite guidée n'est pas active", (done) => {
       const adaptateurEnvironnement = {
-        featureFlag: () => ({ etatVisiteGuidee: () => null }),
+        featureFlag: () => ({ visiteGuideeActive: () => false }),
       };
       const middleware = Middleware({
         adaptateurEnvironnement,
