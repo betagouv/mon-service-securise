@@ -198,11 +198,21 @@ const middleware = (configuration = {}) => {
   const aseptiseListe = (nomListe, proprietesParametre) =>
     aseptiseListes([{ nom: nomListe, proprietes: proprietesParametre }]);
 
-  const chargeEtatVisiteGuidee = (_requete, reponse, suite) => {
-    const etatVisiteGuidee = adaptateurEnvironnement
+  const chargeEtatVisiteGuidee = async (requete, reponse, suite) => {
+    const visiteGuideeActive = adaptateurEnvironnement
       .featureFlag()
-      .etatVisiteGuidee();
-    if (etatVisiteGuidee) reponse.locals.etatVisiteGuidee = etatVisiteGuidee;
+      .visiteGuideeActive();
+    if (!visiteGuideeActive) {
+      suite();
+    }
+    if (!requete.idUtilisateurCourant)
+      throw new ErreurChainageMiddleware(
+        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+      );
+    const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
+      requete.idUtilisateurCourant
+    );
+    reponse.locals.etatVisiteGuidee = parcoursUtilisateur.etatVisiteGuidee;
     suite();
   };
 
