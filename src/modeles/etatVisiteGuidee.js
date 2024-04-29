@@ -26,6 +26,11 @@ class EtatVisiteGuidee extends Base {
     this.etapeCourante = undefined;
     this.etapesVues = undefined;
   }
+
+  nombreEtapesRestantes() {
+    const nombreEtapesVues = this.etapesVues?.length ?? 0;
+    return this.referentiel.nbEtapesVisiteGuidee() - nombreEtapesVues;
+  }
 }
 
 module.exports = EtatVisiteGuidee;

@@ -111,4 +111,35 @@ describe('Le modèle état visite guidée', () => {
       });
     });
   });
+
+  describe("sur demande du nombre d'étapes vues", () => {
+    it("sait dire combien d'étapes sont restantes", () => {
+      const referentiel = creeReferentiel({
+        etapesVisiteGuidee: {
+          DECRIRE: {},
+          SECURISER: {},
+          HOMOLOGUER: {},
+        },
+      });
+      const etatVisiteGuidee = new EtatVisiteGuidee(
+        { etapesVues: ['DECRIRE', 'SECURISER'] },
+        referentiel
+      );
+
+      const resultat = etatVisiteGuidee.nombreEtapesRestantes();
+
+      expect(resultat).to.eql(1);
+    });
+
+    it("reste robuste s'il n'y a pas d'étapes vues", () => {
+      const referentiel = creeReferentiel({
+        etapesVisiteGuidee: { DECRIRE: {} },
+      });
+      const etatVisiteGuidee = new EtatVisiteGuidee({}, referentiel);
+
+      const resultat = etatVisiteGuidee.nombreEtapesRestantes();
+
+      expect(resultat).to.eql(1);
+    });
+  });
 });
