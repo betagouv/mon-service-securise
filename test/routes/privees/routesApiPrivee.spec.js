@@ -1294,4 +1294,46 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.data.urlEtapeSuivante).to.be(null);
     });
   });
+
+  describe('quand requête POST sur /visiteGuidee/termine', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        etapesVisiteGuidee: {
+          DECRIRE: { idEtapeSuivante: 'SECURISER' },
+        },
+      });
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/visiteGuidee/termine',
+        },
+        done
+      );
+    });
+
+    it("sauvegarde l'état 'finalisé' de la visite guidée", async () => {
+      testeur.depotDonnees().lisParcoursUtilisateur = () =>
+        new ParcoursUtilisateur(
+          {
+            etatVisiteGuidee: { dejaTerminee: false, etapeCourante: 'DECRIRE' },
+          },
+          testeur.referentiel()
+        );
+      let parcoursUtilisateurPasse;
+      testeur.depotDonnees().sauvegardeParcoursUtilisateur = (
+        parcoursUtilisateur
+      ) => {
+        parcoursUtilisateurPasse = parcoursUtilisateur;
+      };
+
+      await axios.post('http://localhost:1234/api/visiteGuidee/termine');
+
+      expect(parcoursUtilisateurPasse.etatVisiteGuidee.toJSON()).to.eql({
+        dejaTerminee: true,
+      });
+    });
+  });
 });
