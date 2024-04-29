@@ -1285,5 +1285,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       expect(reponse.data.urlEtapeSuivante).to.be('/visiteGuidee/securiser');
     });
+
+    it("renvoi une URL `null` s'il n'y a pas d'étape suivante", async () => {
+      const reponse = await axios.post(
+        'http://localhost:1234/api/visiteGuidee/SECURISER/termine'
+      );
+
+      expect(reponse.data.urlEtapeSuivante).to.be(null);
+    });
   });
 });

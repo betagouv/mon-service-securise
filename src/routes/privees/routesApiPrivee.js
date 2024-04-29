@@ -420,9 +420,10 @@ const routesApiPrivee = ({
       await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
 
       reponse.send({
-        urlEtapeSuivante: referentiel.etapeVisiteGuidee(
-          parcoursUtilisateur.etatVisiteGuidee.etapeCourante
-        ).urlEtape,
+        urlEtapeSuivante:
+          referentiel.etapeVisiteGuidee(
+            parcoursUtilisateur.etatVisiteGuidee.etapeCourante
+          )?.urlEtape ?? null,
       });
     }
   );
