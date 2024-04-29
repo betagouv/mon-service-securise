@@ -284,6 +284,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     Object.keys(donnees.etapesVisiteGuidee).includes(idEtape);
   const etapeSuivanteVisiteGuidee = (idEtapeCourante) =>
     donnees.etapesVisiteGuidee[idEtapeCourante]?.idEtapeSuivante ?? null;
+  const nbEtapesVisiteGuidee = () =>
+    Object.keys(donnees.etapesVisiteGuidee).length;
 
   valideDonnees();
 
@@ -365,6 +367,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     etapeSuivanteVisiteGuidee,
     etapeVisiteGuidee,
     etapeVisiteGuideeExiste,
+    nbEtapesVisiteGuidee,
   };
 };
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);
