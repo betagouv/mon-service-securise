@@ -400,6 +400,33 @@ const routesApiPrivee = ({
     }
   );
 
+  routes.post(
+    '/visiteGuidee/:idEtape/termine',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('idEtape'),
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } = requete;
+      const { idEtape } = requete.params;
+
+      if (!referentiel.etapeVisiteGuideeExiste(idEtape)) {
+        reponse.status(400).send("Identifiant d'étape inconnu");
+        return;
+      }
+
+      const parcoursUtilisateur =
+        await depotDonnees.lisParcoursUtilisateur(idUtilisateurCourant);
+
+      parcoursUtilisateur.etatVisiteGuidee.termineEtape(idEtape);
+      await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
+
+      reponse.send({
+        urlEtapeSuivante: referentiel.etapeVisiteGuidee(
+          parcoursUtilisateur.etatVisiteGuidee.etapeCourante
+        ).urlEtape,
+      });
+    }
+  );
+
   return routes;
 };
 

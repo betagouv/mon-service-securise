@@ -20,6 +20,7 @@ const {
   Permissions: { LECTURE },
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const ParcoursUtilisateur = require('../../../src/modeles/parcoursUtilisateur');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -1207,6 +1208,82 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           initiales: 'JD',
         },
       ]);
+    });
+  });
+
+  describe('quand requête POST sur /visiteGuidee/:idEtape/termine', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        etapesVisiteGuidee: {
+          DECRIRE: { idEtapeSuivante: 'SECURISER' },
+          SECURISER: { urlEtape: '/visiteGuidee/securiser' },
+        },
+      });
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/visiteGuidee/DECRIRE/termine',
+        },
+        done
+      );
+    });
+
+    it("aseptise l'identifiant d'étape", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['idEtape'],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/visiteGuidee/DECRIRE/termine',
+        },
+        done
+      );
+    });
+
+    it("retourne une erreur HTTP 400 si l'ID d'étape n'existe pas", (done) => {
+      testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        "Identifiant d'étape inconnu",
+        {
+          method: 'POST',
+          url: 'http://localhost:1234/api/visiteGuidee/MAUVAIS_ID/termine',
+        },
+        done
+      );
+    });
+
+    it('sauvegarde la nouvelle étape courante de la visite guidée', async () => {
+      testeur.depotDonnees().lisParcoursUtilisateur = () =>
+        new ParcoursUtilisateur(
+          {
+            etatVisiteGuidee: { dejaTerminee: false, etapeCourante: 'DECRIRE' },
+          },
+          testeur.referentiel()
+        );
+      let parcoursUtilisateurPasse;
+      testeur.depotDonnees().sauvegardeParcoursUtilisateur = (
+        parcoursUtilisateur
+      ) => {
+        parcoursUtilisateurPasse = parcoursUtilisateur;
+      };
+
+      await axios.post(
+        'http://localhost:1234/api/visiteGuidee/DECRIRE/termine'
+      );
+
+      expect(parcoursUtilisateurPasse.etatVisiteGuidee.etapeCourante).to.be(
+        'SECURISER'
+      );
+    });
+
+    it("renvoi l'URL de l'étape suivante", async () => {
+      const reponse = await axios.post(
+        'http://localhost:1234/api/visiteGuidee/DECRIRE/termine'
+      );
+
+      expect(reponse.data.urlEtapeSuivante).to.be('/visiteGuidee/securiser');
     });
   });
 });
