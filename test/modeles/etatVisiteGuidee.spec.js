@@ -37,6 +37,55 @@ describe('Le modèle état visite guidée', () => {
       expect(etatVisiteGuidee.etapeCourante).to.be(undefined);
       expect(etatVisiteGuidee.dejaTerminee).to.be(true);
     });
+
+    describe("au moment de l'ajout de l'étape aux étapes vues", () => {
+      it("ajoute l'étape aux `etapesVues`", () => {
+        const referentiel = creeReferentiel({
+          etapesVisiteGuidee: {
+            DECRIRE: { idEtapeSuivante: 'SECURISER' },
+            SECURISER: { idEtapeSuivante: 'HOMOLOGUER' },
+            HOMOLOGUER: { idEtapeSuivante: 'PILOTER' },
+          },
+        });
+        const etatVisiteGuidee = new EtatVisiteGuidee(
+          { etapesVues: ['DECRIRE'] },
+          referentiel
+        );
+
+        etatVisiteGuidee.termineEtape('SECURISER');
+
+        expect(etatVisiteGuidee.etapesVues).to.eql(['DECRIRE', 'SECURISER']);
+      });
+
+      it("n'ajoute pas l'étape aux `etapesVues` si elle y figure déjà", () => {
+        const referentiel = creeReferentiel({
+          etapesVisiteGuidee: {
+            DECRIRE: { idEtapeSuivante: 'SECURISER' },
+          },
+        });
+        const etatVisiteGuidee = new EtatVisiteGuidee(
+          { etapesVues: ['DECRIRE'] },
+          referentiel
+        );
+
+        etatVisiteGuidee.termineEtape('DECRIRE');
+
+        expect(etatVisiteGuidee.etapesVues).to.eql(['DECRIRE']);
+      });
+
+      it("reste robuste s'il n'y a pas d'`etapesVues`", () => {
+        const referentiel = creeReferentiel({
+          etapesVisiteGuidee: {
+            DECRIRE: { idEtapeSuivante: 'SECURISER' },
+          },
+        });
+        const etatVisiteGuidee = new EtatVisiteGuidee({}, referentiel);
+
+        etatVisiteGuidee.termineEtape('DECRIRE');
+
+        expect(etatVisiteGuidee.etapesVues).to.eql(['DECRIRE']);
+      });
+    });
   });
 
   describe('sur demande de finalisation de la visite guidée', () => {
@@ -47,14 +96,19 @@ describe('Le modèle état visite guidée', () => {
         },
       });
       const etatVisiteGuidee = new EtatVisiteGuidee(
-        { etapeCourante: 'DECRIRE', dejaTerminee: false },
+        {
+          dejaTerminee: false,
+          etapeCourante: 'SECURISER',
+          etapesVues: ['DECRIRE'],
+        },
         referentiel
       );
 
       etatVisiteGuidee.finalise();
 
-      expect(etatVisiteGuidee.etapeCourante).to.be(undefined);
-      expect(etatVisiteGuidee.dejaTerminee).to.be(true);
+      expect(etatVisiteGuidee.toJSON()).to.eql({
+        dejaTerminee: true,
+      });
     });
   });
 });
