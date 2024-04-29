@@ -4,7 +4,8 @@ const Referentiel = require('../referentiel');
 class EtatVisiteGuidee extends Base {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
-      proprietesAtomiquesRequises: ['dejaTerminee', 'etapeCourante'],
+      proprietesAtomiquesRequises: ['dejaTerminee'],
+      proprietesAtomiquesFacultatives: ['etapeCourante'],
     });
     this.renseigneProprietes(donnees);
     this.referentiel = referentiel;
