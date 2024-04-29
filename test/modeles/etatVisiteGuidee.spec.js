@@ -38,4 +38,23 @@ describe('Le modèle état visite guidée', () => {
       expect(etatVisiteGuidee.dejaTerminee).to.be(true);
     });
   });
+
+  describe('sur demande de finalisation de la visite guidée', () => {
+    it('finalise la visite guidée', () => {
+      const referentiel = creeReferentiel({
+        etapesVisiteGuidee: {
+          DECRIRE: {},
+        },
+      });
+      const etatVisiteGuidee = new EtatVisiteGuidee(
+        { etapeCourante: 'DECRIRE', dejaTerminee: false },
+        referentiel
+      );
+
+      etatVisiteGuidee.finalise();
+
+      expect(etatVisiteGuidee.etapeCourante).to.be(undefined);
+      expect(etatVisiteGuidee.dejaTerminee).to.be(true);
+    });
+  });
 });

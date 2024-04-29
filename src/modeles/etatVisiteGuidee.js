@@ -15,9 +15,13 @@ class EtatVisiteGuidee extends Base {
     if (etapeSuivante) {
       this.etapeCourante = etapeSuivante;
     } else {
-      this.dejaTerminee = true;
-      this.etapeCourante = undefined;
+      this.finalise();
     }
+  }
+
+  finalise() {
+    this.dejaTerminee = true;
+    this.etapeCourante = undefined;
   }
 }
 
