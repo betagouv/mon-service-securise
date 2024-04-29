@@ -5,7 +5,7 @@ class EtatVisiteGuidee extends Base {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
       proprietesAtomiquesRequises: ['dejaTerminee'],
-      proprietesAtomiquesFacultatives: ['etapeCourante'],
+      proprietesAtomiquesFacultatives: ['etapeCourante', 'etapesVues'],
     });
     this.renseigneProprietes(donnees);
     this.referentiel = referentiel;
@@ -15,6 +15,7 @@ class EtatVisiteGuidee extends Base {
     const etapeSuivante = this.referentiel.etapeSuivanteVisiteGuidee(idEtape);
     if (etapeSuivante) {
       this.etapeCourante = etapeSuivante;
+      this.etapesVues = [...new Set([...(this.etapesVues || []), idEtape])];
     } else {
       this.finalise();
     }
@@ -23,6 +24,7 @@ class EtatVisiteGuidee extends Base {
   finalise() {
     this.dejaTerminee = true;
     this.etapeCourante = undefined;
+    this.etapesVues = undefined;
   }
 }
 
