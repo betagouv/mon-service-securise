@@ -24,9 +24,8 @@ describe('Un parcours utilisateur', () => {
 
     expect(etatInitial.dateDerniereConnexion).to.be(undefined);
     expect(etatInitial.idUtilisateur).to.equal('456');
-    expect(etatInitial.etatVisiteGuidee).to.eql(
-      new EtatVisiteGuidee({ dejaTerminee: false })
-    );
+    expect(etatInitial.etatVisiteGuidee).to.be.an(EtatVisiteGuidee);
+    expect(etatInitial.etatVisiteGuidee.dejaTerminee).to.be(false);
   });
 
   it("sait enregistrer une date de dernière connexion en utilisant l'adaptateur horloge", () => {

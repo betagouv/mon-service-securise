@@ -13,7 +13,10 @@ class ParcoursUtilisateur extends Base {
       proprietesAtomiquesRequises: ['idUtilisateur', 'dateDerniereConnexion'],
     });
     this.renseigneProprietes(donnees);
-    this.etatVisiteGuidee = new EtatVisiteGuidee(donnees.etatVisiteGuidee);
+    this.etatVisiteGuidee = new EtatVisiteGuidee(
+      donnees.etatVisiteGuidee,
+      referentiel
+    );
     this.adaptateurHorloge = adaptateurHorloge;
     this.referentiel = referentiel;
   }

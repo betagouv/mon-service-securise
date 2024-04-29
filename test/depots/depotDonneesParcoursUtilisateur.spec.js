@@ -50,10 +50,7 @@ describe('Le dépôt de données Parcours utilisateur', () => {
 
     expect(parcours).to.be.a(ParcoursUtilisateur);
     expect(parcours.idUtilisateur).to.equal('nouvel utilisateur');
-    expect(parcours.etatVisiteGuidee).to.eql(
-      new EtatVisiteGuidee({
-        dejaTerminee: false,
-      })
-    );
+    expect(parcours.etatVisiteGuidee).to.be.an(EtatVisiteGuidee);
+    expect(parcours.etatVisiteGuidee.dejaTerminee).to.be(false);
   });
 });
