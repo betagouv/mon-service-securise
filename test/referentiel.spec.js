@@ -957,4 +957,55 @@ describe('Le référentiel', () => {
       );
     });
   });
+
+  describe("sur demande de l'étape suivante de la visite guidée", () => {
+    it("retourne l'ID de l'étape suivante", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesVisiteGuidee: {
+          DECRIRE: { idEtapeSuivante: 'SECURISER' },
+        },
+      });
+
+      expect(referentiel.etapeSuivanteVisiteGuidee('DECRIRE')).to.be(
+        'SECURISER'
+      );
+    });
+
+    it("retourne `null` si l'ID est introuvable", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesVisiteGuidee: {},
+      });
+
+      expect(referentiel.etapeSuivanteVisiteGuidee('ID_INTROUVABLE')).to.be(
+        null
+      );
+    });
+
+    it("retourne `null` si l'étape n'a pas d'étape suivante", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesVisiteGuidee: { DECRIRE: {} },
+      });
+
+      expect(referentiel.etapeSuivanteVisiteGuidee('DECRIRE')).to.be(null);
+    });
+  });
+
+  it("sait renvoyer le contenu d'un étape de visite guidée", () => {
+    const referentiel = Referentiel.creeReferentiel({
+      etapesVisiteGuidee: { DECRIRE: { urlEtape: '/visiteGuidee/decrire' } },
+    });
+
+    expect(referentiel.etapeVisiteGuidee('DECRIRE')).to.eql({
+      urlEtape: '/visiteGuidee/decrire',
+    });
+  });
+
+  it('sait dire si une étape de visite guidée existe', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      etapesVisiteGuidee: { DECRIRE: {} },
+    });
+
+    expect(referentiel.etapeVisiteGuideeExiste('DECRIRE')).to.be(true);
+    expect(referentiel.etapeVisiteGuideeExiste('MAUVAIS_ID')).to.be(false);
+  });
 });

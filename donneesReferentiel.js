@@ -1266,4 +1266,19 @@ module.exports = {
     autre: 'Autre',
   },
   departements,
+  etapesVisiteGuidee: {
+    DECRIRE: {
+      idEtapeSuivante: 'SECURISER',
+      urlEtape: '/visiteGuidee/decrire',
+    },
+    SECURISER: {
+      idEtapeSuivante: 'HOMOLOGUER',
+      urlEtape: '/visiteGuidee/securiser',
+    },
+    HOMOLOGUER: {
+      idEtapeSuivante: 'PILOTER',
+      urlEtape: '/visiteGuidee/homologuer',
+    },
+    PILOTER: { urlEtape: '/visiteGuidee/piloter' },
+  },
 };
