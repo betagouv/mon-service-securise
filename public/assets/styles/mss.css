@@ -154,3 +154,10 @@ section:last-of-type {
   z-index: 10001;
   position: fixed;
 }
+
+#visite-guidee-menu-navigation {
+  position: fixed;
+  z-index: 10001;
+  bottom: 64px;
+  left: 50px;
+}
