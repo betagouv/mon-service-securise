@@ -51,7 +51,7 @@ class ParcoursUtilisateur extends Base {
     return new ParcoursUtilisateur(
       {
         idUtilisateur,
-        etatVisiteGuidee: { dejaTerminee: false },
+        etatVisiteGuidee: { dejaTerminee: false, enPause: false },
       },
       referentiel
     );
