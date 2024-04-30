@@ -285,7 +285,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const etapeSuivanteVisiteGuidee = (idEtapeCourante) =>
     donnees.etapesVisiteGuidee[idEtapeCourante]?.idEtapeSuivante ?? null;
   const nbEtapesVisiteGuidee = () =>
-    Object.keys(donnees.etapesVisiteGuidee).length;
+    Object.keys(donnees.etapesVisiteGuidee || {}).length;
 
   valideDonnees();
 
