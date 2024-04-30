@@ -115,4 +115,20 @@ describe('Le modèle état visite guidée', () => {
       expect(resultat).to.eql(1);
     });
   });
+
+  it('sait mettre en pause la visite guidée', () => {
+    const etatVisiteGuidee = new EtatVisiteGuidee({ enPause: false });
+
+    etatVisiteGuidee.metEnPause();
+
+    expect(etatVisiteGuidee.enPause).to.be(true);
+  });
+
+  it('sait reprendre la visite guidée', () => {
+    const etatVisiteGuidee = new EtatVisiteGuidee({ enPause: true });
+
+    etatVisiteGuidee.reprends();
+
+    expect(etatVisiteGuidee.enPause).to.be(false);
+  });
 });

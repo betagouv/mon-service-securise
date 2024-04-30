@@ -9,13 +9,13 @@ describe('Un parcours utilisateur', () => {
     const unParcours = new ParcoursUtilisateur({
       idUtilisateur: '456',
       dateDerniereConnexion: '2023-01-01',
-      etatVisiteGuidee: { dejaTerminee: false },
+      etatVisiteGuidee: { dejaTerminee: false, enPause: true },
     });
 
     expect(unParcours.toJSON()).to.eql({
       idUtilisateur: '456',
       dateDerniereConnexion: '2023-01-01',
-      etatVisiteGuidee: { dejaTerminee: false },
+      etatVisiteGuidee: { dejaTerminee: false, enPause: true },
     });
   });
 
@@ -26,6 +26,7 @@ describe('Un parcours utilisateur', () => {
     expect(etatInitial.idUtilisateur).to.equal('456');
     expect(etatInitial.etatVisiteGuidee).to.be.an(EtatVisiteGuidee);
     expect(etatInitial.etatVisiteGuidee.dejaTerminee).to.be(false);
+    expect(etatInitial.etatVisiteGuidee.enPause).to.be(false);
   });
 
   it("sait enregistrer une date de dernière connexion en utilisant l'adaptateur horloge", () => {

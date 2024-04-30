@@ -4,7 +4,7 @@ const Referentiel = require('../referentiel');
 class EtatVisiteGuidee extends Base {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
-      proprietesAtomiquesRequises: ['dejaTerminee'],
+      proprietesAtomiquesRequises: ['dejaTerminee', 'enPause'],
       proprietesAtomiquesFacultatives: ['etapesVues'],
     });
     this.renseigneProprietes(donnees);
@@ -28,6 +28,14 @@ class EtatVisiteGuidee extends Base {
   nombreEtapesRestantes() {
     const nombreEtapesVues = this.etapesVues?.length ?? 0;
     return this.referentiel.nbEtapesVisiteGuidee() - nombreEtapesVues;
+  }
+
+  metEnPause() {
+    this.enPause = true;
+  }
+
+  reprends() {
+    this.enPause = false;
   }
 }
 
