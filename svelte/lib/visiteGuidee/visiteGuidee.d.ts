@@ -23,6 +23,7 @@ type EtapeIndicateurEtape = {
   titre: string;
   icone: string;
   id: EtapeVisiteGuidee;
+  lien?: string;
 };
 export type ConfigurationIndicateurEtape = {
   etapes: EtapeIndicateurEtape[];
