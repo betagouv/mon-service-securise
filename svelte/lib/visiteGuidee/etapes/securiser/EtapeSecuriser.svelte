@@ -30,7 +30,7 @@
             'fermeture-tiroir'
           )[0].disabled = true;
         },
-        delaiAvantAffichage: 200,
+        delaiAvantAffichage: 300,
         avecTrouRideauColle: true,
         callbackFinaleCible: () => {
           document
