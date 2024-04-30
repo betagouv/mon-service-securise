@@ -29,7 +29,7 @@
       {
         cible: cibleGererContributeurs,
         callbackInitialeCible: (cible) => {
-          cible.style.minWidth = '204px';
+          cible.inert = true;
           document.getElementsByClassName(
             'inviter-contributeurs'
           )[0].style.display = 'flex';
