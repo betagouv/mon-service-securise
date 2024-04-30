@@ -1368,4 +1368,36 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(parcoursUtilisateurPasse.etatVisiteGuidee.enPause).to.be(true);
     });
   });
+
+  describe('quand requête POST sur /visiteGuidee/reprends', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/visiteGuidee/reprends',
+        },
+        done
+      );
+    });
+
+    it('sauvegarde la reprise de la visite guidée', async () => {
+      testeur.depotDonnees().lisParcoursUtilisateur = () =>
+        new ParcoursUtilisateur(
+          {
+            etatVisiteGuidee: { dejaTerminee: false, enPause: true },
+          },
+          testeur.referentiel()
+        );
+      let parcoursUtilisateurPasse;
+      testeur.depotDonnees().sauvegardeParcoursUtilisateur = (
+        parcoursUtilisateur
+      ) => {
+        parcoursUtilisateurPasse = parcoursUtilisateur;
+      };
+
+      await axios.post('http://localhost:1234/api/visiteGuidee/reprends');
+
+      expect(parcoursUtilisateurPasse.etatVisiteGuidee.enPause).to.be(false);
+    });
+  });
 });
