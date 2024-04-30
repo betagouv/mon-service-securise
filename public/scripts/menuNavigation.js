@@ -2,13 +2,15 @@ import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.
 import ActionContributeurs from '../modules/tableauDeBord/actions/ActionContributeurs.mjs';
 import ActionTelechargement from '../modules/tableauDeBord/actions/ActionTelechargement.mjs';
 
-const tiroirContributeur = (idService) => {
+const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
   const contributeurs = new ActionContributeurs();
   let donneesService;
 
   const chargeDonneesDuService = async () => {
-    const reponse = await axios.get(`/api/service/${idService}`);
-    donneesService = reponse.data;
+    if (!modeVisiteGuidee) {
+      const reponse = await axios.get(`/api/service/${idService}`);
+      donneesService = reponse.data;
+    }
   };
 
   return {
@@ -113,10 +115,12 @@ const repliMenu = () => {
 
 $(async () => {
   const idService = $('.page-service').data('id-service');
+  const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+  const modeVisiteGuidee = etatVisiteGuidee.dejaTerminee === false;
 
   repliMenu().brancheComportement();
 
   gestionnaireTiroir.brancheComportement();
-  await tiroirContributeur(idService).brancheComportement();
+  await tiroirContributeur(idService, modeVisiteGuidee).brancheComportement();
   tiroirTelechargement(idService).brancheComportement();
 });
