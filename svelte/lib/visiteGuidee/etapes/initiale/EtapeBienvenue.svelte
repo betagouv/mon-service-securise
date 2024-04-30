@@ -9,6 +9,8 @@
     elementModale.inert = true;
     elementModale.showModal();
     elementModale.inert = false;
+    document.getElementById('visite-guidee-menu-navigation').style.display =
+      'none';
   });
 </script>
 
