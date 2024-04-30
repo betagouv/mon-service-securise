@@ -442,6 +442,21 @@ const routesApiPrivee = ({
     }
   );
 
+  routes.post(
+    '/visiteGuidee/metEnPause',
+    middleware.verificationAcceptationCGU,
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } = requete;
+
+      const parcoursUtilisateur =
+        await depotDonnees.lisParcoursUtilisateur(idUtilisateurCourant);
+      parcoursUtilisateur.etatVisiteGuidee.metEnPause();
+      await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
+
+      reponse.sendStatus(200);
+    }
+  );
+
   return routes;
 };
 
