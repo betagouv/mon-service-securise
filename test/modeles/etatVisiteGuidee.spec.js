@@ -119,7 +119,7 @@ describe('Le modèle état visite guidée', () => {
   it('sait mettre en pause la visite guidée', () => {
     const etatVisiteGuidee = new EtatVisiteGuidee({ enPause: false });
 
-    etatVisiteGuidee.metEnPause();
+    etatVisiteGuidee.metsEnPause();
 
     expect(etatVisiteGuidee.enPause).to.be(true);
   });

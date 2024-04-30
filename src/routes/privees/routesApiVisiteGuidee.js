@@ -40,12 +40,12 @@ const routesApiVisiteGuidee = ({ middleware, depotDonnees, referentiel }) => {
     reponse.sendStatus(200);
   });
 
-  routes.post('/metEnPause', async (requete, reponse) => {
+  routes.post('/metsEnPause', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete;
 
     const parcoursUtilisateur =
       await depotDonnees.lisParcoursUtilisateur(idUtilisateurCourant);
-    parcoursUtilisateur.etatVisiteGuidee.metEnPause();
+    parcoursUtilisateur.etatVisiteGuidee.metsEnPause();
     await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
 
     reponse.sendStatus(200);
