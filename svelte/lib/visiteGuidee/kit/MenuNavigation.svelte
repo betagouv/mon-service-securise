@@ -10,6 +10,15 @@
   let menuOuvert: boolean = false;
 
   $: doitMontrerNombre = !menuOuvert;
+
+  const ouvreMenu = () => {
+    menuOuvert = true;
+    visiteGuidee.masqueModale();
+  };
+
+  const fermeMenu = () => {
+    window.location.href = '/tableauDeBord';
+  };
 </script>
 
 <div class="conteneur-menu-navigation">
@@ -68,7 +77,7 @@
   <div class="conteneur-bouton-declencheur">
     <button
       class="declencheur-menu-navigation"
-      on:click={() => (menuOuvert = !menuOuvert)}
+      on:click={() => (menuOuvert ? fermeMenu() : ouvreMenu())}
     >
       <img
         src={menuOuvert

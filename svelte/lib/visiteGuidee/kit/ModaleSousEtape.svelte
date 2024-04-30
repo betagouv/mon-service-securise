@@ -1,6 +1,6 @@
 <script lang="ts">
   import { visiteGuidee } from '../visiteGuidee.store';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import Confetti from '../../ui/Confetti.svelte';
 
   type PositionModale =
@@ -184,6 +184,11 @@
   }
 
   onMount(() => calculePolygone());
+
+  onDestroy(() => {
+    sousEtape?.callbackFinaleCible?.(sousEtape.cible);
+    rideau.style.clipPath = 'none';
+  });
 </script>
 
 <svelte:window on:resize={calculePolygone} on:load={calculePolygone} />

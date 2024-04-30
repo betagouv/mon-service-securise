@@ -21,6 +21,9 @@ export const visiteGuidee = {
     set(etapeCourante || 'BIENVENUE'),
   subscribe,
   masqueEtapeCourant: () => cacheRideau(),
+  masqueModale() {
+    set('MASQUE');
+  },
   async fermeDefinitivementVisiteGuidee() {
     await finaliseVisiteGuidee();
     window.location.href = '/tableauDeBord';
@@ -62,5 +65,7 @@ export const composantVisiteGuidee = derived(visiteGuidee, ($visiteGuidee) => {
       return EtapeHomologuer;
     case 'PILOTER':
       return EtapePiloter;
+    case 'MASQUE':
+      return null;
   }
 });
