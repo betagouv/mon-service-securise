@@ -231,7 +231,7 @@
             class:derniereEtape={sousEtape?.derniereEtape}
             on:click={async () =>
               sousEtape?.derniereEtape
-                ? visiteGuidee.finalise()
+                ? await visiteGuidee.finalise()
                 : estDerniereSousEtape
                 ? await visiteGuidee.etapeSuivante()
                 : indexEtapeCourante++}
