@@ -27,21 +27,25 @@
               id: 'DECRIRE',
               icone:
                 '/statique/assets/images/actionsSaisie/descriptionService.svg',
+              lien: '/visiteGuidee/decrire',
             },
             {
               titre: 'Sécurisez',
               id: 'SECURISER',
               icone: '/statique/assets/images/actionsSaisie/mesures.svg',
+              lien: '/visiteGuidee/securiser',
             },
             {
               titre: 'Homologuez',
               id: 'HOMOLOGUER',
               icone: '/statique/assets/images/actionsSaisie/dossiers.svg',
+              lien: '/visiteGuidee/homologuer',
             },
             {
               titre: 'Pilotez vos services',
               id: 'PILOTER',
               icone: '/statique/assets/images/actionsSaisie/piloter.svg',
+              lien: '/visiteGuidee/piloter',
             },
           ],
         }}
