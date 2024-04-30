@@ -85,7 +85,10 @@
         positionnementModale: 'HautGauche',
         avecTrouRideauColle: true,
         callbackInitialeCible: (cible) => {
-          cible.addEventListener('click', () => visiteGuidee.finalise());
+          cible.addEventListener(
+            'click',
+            async () => await visiteGuidee.finalise()
+          );
         },
         titre: 'Créez votre premier service !',
         description:

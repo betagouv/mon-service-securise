@@ -6,9 +6,9 @@ import type { EtapeVisiteGuidee } from './visiteGuidee.d';
 import EtapeSecuriser from './etapes/securiser/EtapeSecuriser.svelte';
 import EtapeHomologuer from './etapes/homologuer/EtapeHomologuer.svelte';
 import EtapePiloter from './etapes/piloter/EtapePiloter.svelte';
-import { termineEtape } from './visiteGuidee.api';
+import { finaliseVisiteGuidee, termineEtape } from './visiteGuidee.api';
 
-const { subscribe, update, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
+const { subscribe, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
 
 const cacheRideau = () => {
   document.body.style.overflow = 'auto';
@@ -22,7 +22,10 @@ export const visiteGuidee = {
   subscribe,
   masqueEtapeCourant: () => cacheRideau(),
   fermeDefinitivementVisiteGuidee: () => cacheRideau(),
-  finalise: () => (window.location.href = '/service/creation'),
+  async finalise() {
+    await finaliseVisiteGuidee();
+    window.location.href = '/service/creation';
+  },
   async etapeSuivante() {
     const etapeCourante = get(visiteGuidee);
     switch (etapeCourante) {
