@@ -17,7 +17,8 @@ export type EtapeVisiteGuidee =
   | 'DECRIRE'
   | 'SECURISER'
   | 'HOMOLOGUER'
-  | 'PILOTER';
+  | 'PILOTER'
+  | 'MASQUE';
 
 type EtapeIndicateurEtape = {
   titre: string;
