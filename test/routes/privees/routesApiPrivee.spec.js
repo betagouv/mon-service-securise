@@ -1254,11 +1254,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it('sauvegarde la nouvelle étape courante de la visite guidée', async () => {
+    it("sauvegarde l'étape vue de la visite guidée", async () => {
       testeur.depotDonnees().lisParcoursUtilisateur = () =>
         new ParcoursUtilisateur(
           {
-            etatVisiteGuidee: { dejaTerminee: false, etapeCourante: 'DECRIRE' },
+            etatVisiteGuidee: { dejaTerminee: false },
           },
           testeur.referentiel()
         );
@@ -1273,9 +1273,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         'http://localhost:1234/api/visiteGuidee/DECRIRE/termine'
       );
 
-      expect(parcoursUtilisateurPasse.etatVisiteGuidee.etapeCourante).to.be(
-        'SECURISER'
-      );
+      expect(parcoursUtilisateurPasse.etatVisiteGuidee.etapesVues).to.eql([
+        'DECRIRE',
+      ]);
     });
 
     it("renvoi l'URL de l'étape suivante", async () => {
