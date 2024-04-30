@@ -14,6 +14,11 @@ const rechargeApp = (props: VisiteGuideeProps) => {
   appMenuNavigation?.$destroy();
   appMenuNavigation = new MenuNavigation({
     target: document.getElementById('visite-guidee-menu-navigation')!,
+    props: {
+      nombreEtapesRestantes: props.nombreEtapesRestantes,
+      etapeCourante: props.etapeCourante,
+      etapesVues: props.etapesVues,
+    },
   });
 
   app?.$destroy();

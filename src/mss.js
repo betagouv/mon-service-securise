@@ -302,8 +302,10 @@ const creeServeur = (
 
       const { idEtape } = requete.params;
       reponse.locals.etatVisiteGuidee = {
-        ...reponse.locals.etatVisiteGuidee,
+        ...reponse.locals.etatVisiteGuidee.toJSON(),
         etapeCourante: idEtape.toUpperCase(),
+        nombreEtapesRestantes:
+          reponse.locals.etatVisiteGuidee.nombreEtapesRestantes(),
       };
       reponse.locals.autorisationsService = {
         DECRIRE: { estMasque: false },

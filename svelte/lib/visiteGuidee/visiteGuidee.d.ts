@@ -7,6 +7,8 @@ declare global {
 export type VisiteGuideeProps = {
   dejaTermine: boolean;
   etapeCourante: EtapeVisiteGuidee;
+  nombreEtapesRestantes: number;
+  etapesVues: EtapeVisiteGuidee[];
 };
 
 export type EtapeVisiteGuidee =
@@ -20,7 +22,7 @@ export type EtapeVisiteGuidee =
 type EtapeIndicateurEtape = {
   titre: string;
   icone: string;
-  id: string;
+  id: EtapeVisiteGuidee;
 };
 export type ConfigurationIndicateurEtape = {
   etapes: EtapeIndicateurEtape[];

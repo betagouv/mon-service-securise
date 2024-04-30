@@ -1,14 +1,27 @@
 <script lang="ts">
-  import type { ConfigurationIndicateurEtape } from '../visiteGuidee.d';
+  import type {
+    ConfigurationIndicateurEtape,
+    EtapeIndicateurEtape,
+  } from '../visiteGuidee.d';
 
   export let configuration: ConfigurationIndicateurEtape;
-  export let etapeCourante: string;
+  export let etapeCourante: EtapeIndicateurEtape;
+  export let etapesVues: EtapeIndicateurEtape[] = [];
 </script>
 
 <ul>
   {#each configuration.etapes as etape}
-    <li id="etape-{etape.id}" class:active={etape.id === etapeCourante}>
-      <img src={etape.icone} alt="" width="20" height="20" />
+    {@const active = etape.id === etapeCourante}
+    {@const vue = etapesVues.includes(etape.id)}
+    <li id="etape-{etape.id}" class:active class:vue>
+      <img
+        src={vue && !active
+          ? '/statique/assets/images/icone_fait.svg'
+          : etape.icone}
+        alt=""
+        width="20"
+        height="20"
+      />
       <span>{etape.titre}</span>
     </li>
   {/each}
@@ -30,17 +43,21 @@
     color: var(--liseres-fonce);
   }
 
-  ul li img {
+  ul li:not(.vue) img {
     filter: brightness(0) invert(83%) sepia(4%) saturate(776%)
       hue-rotate(178deg) brightness(111%) contrast(76%);
   }
 
   .active {
-    color: var(--texte-fonce);
+    color: var(--texte-fonce) !important;
   }
 
   ul li.active img {
     filter: brightness(0) invert(45%) sepia(53%) saturate(7500%)
       hue-rotate(187deg) brightness(91%) contrast(101%);
+  }
+
+  .vue {
+    color: #0e972b;
   }
 </style>

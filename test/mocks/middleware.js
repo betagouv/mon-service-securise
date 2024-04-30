@@ -129,7 +129,10 @@ const middlewareFantaisie = {
   },
 
   chargeEtatVisiteGuidee: (_requete, reponse, suite) => {
-    reponse.locals.etatVisiteGuidee = {};
+    reponse.locals.etatVisiteGuidee = {
+      toJSON: () => ({}),
+      nombreEtapesRestantes: () => 2,
+    };
     etatVisiteGuideeCharge = true;
     suite();
   },
