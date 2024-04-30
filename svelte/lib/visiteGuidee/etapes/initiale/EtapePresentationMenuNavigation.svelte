@@ -43,7 +43,8 @@
       >
       <button
         class="bouton bouton-tertiaire"
-        on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
+        on:click={async () =>
+          await visiteGuidee.fermeDefinitivementVisiteGuidee()}
         >Non merci, je n’ai pas besoin d’aide</button
       >
     </div>

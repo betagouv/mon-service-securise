@@ -21,7 +21,10 @@ export const visiteGuidee = {
     set(etapeCourante || 'BIENVENUE'),
   subscribe,
   masqueEtapeCourant: () => cacheRideau(),
-  fermeDefinitivementVisiteGuidee: () => cacheRideau(),
+  async fermeDefinitivementVisiteGuidee() {
+    await finaliseVisiteGuidee();
+    window.location.href = '/tableauDeBord';
+  },
   async finalise() {
     await finaliseVisiteGuidee();
     window.location.href = '/service/creation';

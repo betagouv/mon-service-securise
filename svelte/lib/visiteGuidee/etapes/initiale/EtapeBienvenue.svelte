@@ -42,7 +42,8 @@
     <form method="dialog">
       <button
         class="bouton bouton-tertiaire"
-        on:click={visiteGuidee.fermeDefinitivementVisiteGuidee}
+        on:click={async () =>
+          await visiteGuidee.fermeDefinitivementVisiteGuidee()}
         >Ignorer la visite guidée</button
       >
     </form>
