@@ -1,11 +1,14 @@
 <script lang="ts">
   import IndicateurEtape from './IndicateurEtape.svelte';
-  import type { EtapeIndicateurEtape } from '../visiteGuidee.d';
+  import type {
+    EtapeVisiteGuidee,
+    ConfigurationIndicateurEtape,
+  } from '../visiteGuidee.d';
   import { visiteGuidee } from '../visiteGuidee.store';
 
   export let nombreEtapesRestantes: number;
-  export let etapeCourante: EtapeIndicateurEtape;
-  export let etapesVues: EtapeIndicateurEtape[] = [];
+  export let etapeCourante: EtapeVisiteGuidee;
+  export let etapesVues: EtapeVisiteGuidee[] = [];
 
   let menuOuvert: boolean = false;
 
@@ -19,6 +22,44 @@
   const fermeMenu = () => {
     window.location.href = '/tableauDeBord';
   };
+
+  const configuration: ConfigurationIndicateurEtape = {
+    etapes: [
+      {
+        titre: 'Décrivez',
+        id: 'DECRIRE',
+        icone: '/statique/assets/images/actionsSaisie/descriptionService.svg',
+        lien: '/visiteGuidee/decrire',
+      },
+      {
+        titre: 'Sécurisez',
+        id: 'SECURISER',
+        icone: '/statique/assets/images/actionsSaisie/mesures.svg',
+        lien: '/visiteGuidee/securiser',
+      },
+      {
+        titre: 'Homologuez',
+        id: 'HOMOLOGUER',
+        icone: '/statique/assets/images/actionsSaisie/dossiers.svg',
+        lien: '/visiteGuidee/homologuer',
+      },
+      {
+        titre: 'Pilotez vos services',
+        id: 'PILOTER',
+        icone: '/statique/assets/images/actionsSaisie/piloter.svg',
+        lien: '/visiteGuidee/piloter',
+      },
+    ],
+  };
+
+  const etapeSuivante = configuration.etapes.filter(
+    (etape) => !etapesVues.includes(etape.id)
+  )[0];
+  const continuerVisite = () => {
+    if (etapeSuivante) {
+      window.location.href = etapeSuivante.lien || '';
+    }
+  };
 </script>
 
 <div class="conteneur-menu-navigation">
@@ -26,43 +67,9 @@
     <div class="conteneur-indicateurs-etape">
       <h2>Bienvenue dans <br />MonServiceSécurisé</h2>
       <p class="decouvrir-outil">Découvrons l’outil ensemble.</p>
-      <IndicateurEtape
-        {etapeCourante}
-        {etapesVues}
-        configuration={{
-          etapes: [
-            {
-              titre: 'Décrivez',
-              id: 'DECRIRE',
-              icone:
-                '/statique/assets/images/actionsSaisie/descriptionService.svg',
-              lien: '/visiteGuidee/decrire',
-            },
-            {
-              titre: 'Sécurisez',
-              id: 'SECURISER',
-              icone: '/statique/assets/images/actionsSaisie/mesures.svg',
-              lien: '/visiteGuidee/securiser',
-            },
-            {
-              titre: 'Homologuez',
-              id: 'HOMOLOGUER',
-              icone: '/statique/assets/images/actionsSaisie/dossiers.svg',
-              lien: '/visiteGuidee/homologuer',
-            },
-            {
-              titre: 'Pilotez vos services',
-              id: 'PILOTER',
-              icone: '/statique/assets/images/actionsSaisie/piloter.svg',
-              lien: '/visiteGuidee/piloter',
-            },
-          ],
-        }}
-      />
+      <IndicateurEtape {etapeCourante} {etapesVues} {configuration} />
       <div class="conteneur-actions">
-        <button
-          class="bouton"
-          on:click={async () => await visiteGuidee.etapeSuivante()}
+        <button class="bouton" on:click={continuerVisite}
           >Continuer la visite</button
         >
         <button
