@@ -1,4 +1,4 @@
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 import EtapeBienvenue from './etapes/initiale/EtapeBienvenue.svelte';
 import EtapePresentationMenuNavigation from './etapes/initiale/EtapePresentationMenuNavigation.svelte';
 import EtapeDecrire from './etapes/decrire/EtapeDecrire.svelte';
@@ -6,6 +6,7 @@ import type { EtapeVisiteGuidee } from './visiteGuidee.d';
 import EtapeSecuriser from './etapes/securiser/EtapeSecuriser.svelte';
 import EtapeHomologuer from './etapes/homologuer/EtapeHomologuer.svelte';
 import EtapePiloter from './etapes/piloter/EtapePiloter.svelte';
+import { termineEtape } from './visiteGuidee.api';
 
 const { subscribe, update, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
 
@@ -22,27 +23,22 @@ export const visiteGuidee = {
   masqueEtapeCourant: () => cacheRideau(),
   fermeDefinitivementVisiteGuidee: () => cacheRideau(),
   finalise: () => (window.location.href = '/service/creation'),
-  etapeSuivante() {
-    update((etapeCourante) => {
-      switch (etapeCourante) {
-        case 'BIENVENUE':
-          return 'PRESENTATION_MENU_NAV';
-        case 'PRESENTATION_MENU_NAV':
-          window.location.href = '/visiteGuidee/decrire';
-          return 'DECRIRE';
-        case 'DECRIRE':
-          window.location.href = '/visiteGuidee/securiser';
-          return 'SECURISER';
-        case 'SECURISER':
-          window.location.href = '/visiteGuidee/homologuer';
-          return 'HOMOLOGUER';
-        case 'HOMOLOGUER':
-          window.location.href = '/visiteGuidee/piloter';
-          return 'PILOTER';
-        default:
-          return 'BIENVENUE';
-      }
-    });
+  async etapeSuivante() {
+    const etapeCourante = get(visiteGuidee);
+    switch (etapeCourante) {
+      case 'BIENVENUE':
+        set('PRESENTATION_MENU_NAV');
+        break;
+      case 'PRESENTATION_MENU_NAV':
+        window.location.href = '/visiteGuidee/decrire';
+        break;
+      default:
+        const urlEtapeSuivante = await termineEtape(etapeCourante);
+        if (urlEtapeSuivante) {
+          window.location.href = urlEtapeSuivante;
+        }
+        break;
+    }
   },
 };
 

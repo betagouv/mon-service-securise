@@ -229,11 +229,11 @@
           <button
             class="bouton suivant"
             class:derniereEtape={sousEtape?.derniereEtape}
-            on:click={() =>
+            on:click={async () =>
               sousEtape?.derniereEtape
                 ? visiteGuidee.finalise()
                 : estDerniereSousEtape
-                ? visiteGuidee.etapeSuivante()
+                ? await visiteGuidee.etapeSuivante()
                 : indexEtapeCourante++}
           >
             {sousEtape?.derniereEtape ? "C'est parti !" : 'Suivant'}
