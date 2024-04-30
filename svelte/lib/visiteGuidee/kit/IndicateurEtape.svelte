@@ -1,12 +1,12 @@
 <script lang="ts">
   import type {
     ConfigurationIndicateurEtape,
-    EtapeIndicateurEtape,
+    EtapeVisiteGuidee,
   } from '../visiteGuidee.d';
 
   export let configuration: ConfigurationIndicateurEtape;
-  export let etapeCourante: EtapeIndicateurEtape;
-  export let etapesVues: EtapeIndicateurEtape[] = [];
+  export let etapeCourante: EtapeVisiteGuidee;
+  export let etapesVues: EtapeVisiteGuidee[] = [];
 </script>
 
 <ul>
