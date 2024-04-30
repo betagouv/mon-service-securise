@@ -130,7 +130,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
     });
   });
 
-  describe('quand requête POST sur /visiteGuidee/metEnPause', () => {
+  describe('quand requête POST sur /visiteGuidee/metsEnPause', () => {
     it('sauvegarde la pause de la visite guidée', async () => {
       testeur.depotDonnees().lisParcoursUtilisateur = () =>
         new ParcoursUtilisateur(
@@ -146,7 +146,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
         parcoursUtilisateurPasse = parcoursUtilisateur;
       };
 
-      await axios.post('http://localhost:1234/api/visiteGuidee/metEnPause');
+      await axios.post('http://localhost:1234/api/visiteGuidee/metsEnPause');
 
       expect(parcoursUtilisateurPasse.etatVisiteGuidee.enPause).to.be(true);
     });

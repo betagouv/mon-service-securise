@@ -30,7 +30,7 @@ class EtatVisiteGuidee extends Base {
     return this.referentiel.nbEtapesVisiteGuidee() - nombreEtapesVues;
   }
 
-  metEnPause() {
+  metsEnPause() {
     this.enPause = true;
   }
 
