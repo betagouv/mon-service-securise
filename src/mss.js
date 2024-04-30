@@ -301,7 +301,10 @@ const creeServeur = (
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
 
       const { idEtape } = requete.params;
-      reponse.locals.etatVisiteGuidee.etapeCourante = idEtape.toUpperCase();
+      reponse.locals.etatVisiteGuidee = {
+        ...reponse.locals.etatVisiteGuidee,
+        etapeCourante: idEtape.toUpperCase(),
+      };
       reponse.locals.autorisationsService = {
         DECRIRE: { estMasque: false },
         SECURISER: { estMasque: false, estLectureSeule: false },
