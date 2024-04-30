@@ -26,7 +26,7 @@
       },
       {
         cible: cibleTelechargement,
-        callbackInitialeCible: () => {
+        callbackInitialeCible: (cible) => {
           document.body.dispatchEvent(
             new CustomEvent(
               'jquery-affiche-tiroir-telechargement-visite-guidee'
@@ -36,6 +36,7 @@
           document.getElementsByClassName(
             'fermeture-tiroir'
           )[0].disabled = true;
+          cible.inert = true;
         },
         callbackFinaleCible: () => {
           document
