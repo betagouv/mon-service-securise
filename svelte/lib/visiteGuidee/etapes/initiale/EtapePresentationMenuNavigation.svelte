@@ -36,7 +36,9 @@
       etapeCourante="DECRIRE"
     />
     <div class="conteneur-actions">
-      <button class="bouton" on:click={visiteGuidee.etapeSuivante}
+      <button
+        class="bouton"
+        on:click={async () => await visiteGuidee.etapeSuivante()}
         >C'est parti !</button
       >
       <button

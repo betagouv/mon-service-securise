@@ -46,7 +46,9 @@
         >Ignorer la visite guidée</button
       >
     </form>
-    <button class="bouton" on:click={() => visiteGuidee.etapeSuivante()}
+    <button
+      class="bouton"
+      on:click={async () => await visiteGuidee.etapeSuivante()}
       >Démarrer la visite guidée</button
     >
   </div>
