@@ -419,12 +419,11 @@ const routesApiPrivee = ({
       parcoursUtilisateur.etatVisiteGuidee.termineEtape(idEtape);
       await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
 
-      reponse.send({
-        urlEtapeSuivante:
-          referentiel.etapeVisiteGuidee(
-            parcoursUtilisateur.etatVisiteGuidee.etapeCourante
-          )?.urlEtape ?? null,
-      });
+      const idEtapeSuivante = referentiel.etapeSuivanteVisiteGuidee(idEtape);
+      const urlEtapeSuivante =
+        referentiel.etapeVisiteGuidee(idEtapeSuivante)?.urlEtape ?? null;
+
+      reponse.send({ urlEtapeSuivante });
     }
   );
 
