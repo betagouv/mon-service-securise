@@ -212,7 +212,12 @@ const middleware = (configuration = {}) => {
     const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
       requete.idUtilisateurCourant
     );
-    reponse.locals.etatVisiteGuidee = parcoursUtilisateur.etatVisiteGuidee;
+    reponse.locals.etatVisiteGuidee = {
+      ...parcoursUtilisateur.etatVisiteGuidee.toJSON(),
+      nombreEtapesRestantes:
+        parcoursUtilisateur.etatVisiteGuidee.nombreEtapesRestantes(),
+    };
+
     suite();
   };
 
