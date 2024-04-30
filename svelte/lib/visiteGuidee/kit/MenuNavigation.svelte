@@ -5,6 +5,7 @@
     ConfigurationIndicateurEtape,
   } from '../visiteGuidee.d';
   import { visiteGuidee } from '../visiteGuidee.store';
+  import { metsEnPause, reprends } from '../visiteGuidee.api';
 
   export let nombreEtapesRestantes: number;
   export let etapeCourante: EtapeVisiteGuidee;
@@ -19,7 +20,8 @@
     visiteGuidee.masqueModale();
   };
 
-  const fermeMenu = () => {
+  const fermeMenu = async () => {
+    await metsEnPause();
     window.location.href = '/tableauDeBord';
   };
 
@@ -55,8 +57,9 @@
   const etapeSuivante = configuration.etapes.filter(
     (etape) => !etapesVues.includes(etape.id)
   )[0];
-  const continuerVisite = () => {
+  const continuerVisite = async () => {
     if (etapeSuivante) {
+      await reprends();
       window.location.href = etapeSuivante.lien || '';
     }
   };
@@ -69,7 +72,7 @@
       <p class="decouvrir-outil">Découvrons l’outil ensemble.</p>
       <IndicateurEtape {etapeCourante} {etapesVues} {configuration} />
       <div class="conteneur-actions">
-        <button class="bouton" on:click={continuerVisite}
+        <button class="bouton" on:click={async () => await continuerVisite()}
           >Continuer la visite</button
         >
         <button
@@ -84,7 +87,7 @@
   <div class="conteneur-bouton-declencheur">
     <button
       class="declencheur-menu-navigation"
-      on:click={() => (menuOuvert ? fermeMenu() : ouvreMenu())}
+      on:click={async () => (menuOuvert ? await fermeMenu() : ouvreMenu())}
     >
       <img
         src={menuOuvert

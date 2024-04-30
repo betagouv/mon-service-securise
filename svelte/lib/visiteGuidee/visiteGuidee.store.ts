@@ -6,21 +6,22 @@ import type { EtapeVisiteGuidee } from './visiteGuidee.d';
 import EtapeSecuriser from './etapes/securiser/EtapeSecuriser.svelte';
 import EtapeHomologuer from './etapes/homologuer/EtapeHomologuer.svelte';
 import EtapePiloter from './etapes/piloter/EtapePiloter.svelte';
-import { finaliseVisiteGuidee, termineEtape } from './visiteGuidee.api';
+import {
+  finaliseVisiteGuidee,
+  metsEnPause,
+  termineEtape,
+} from './visiteGuidee.api';
 
 const { subscribe, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
-
-const cacheRideau = () => {
-  document.body.style.overflow = 'auto';
-  document.getElementById('visite-guidee-rideau')!.style.display = 'none';
-  document.getElementById('visite-guidee')!.style.display = 'none';
-};
 
 export const visiteGuidee = {
   initialise: (etapeCourante: EtapeVisiteGuidee) =>
     set(etapeCourante || 'BIENVENUE'),
   subscribe,
-  masqueEtapeCourant: () => cacheRideau(),
+  async masqueEtapeCourante() {
+    await metsEnPause();
+    window.location.href = '/tableauDeBord';
+  },
   masqueModale() {
     set('MASQUE');
   },

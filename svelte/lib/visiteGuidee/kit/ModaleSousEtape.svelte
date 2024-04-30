@@ -201,7 +201,10 @@
     class="conteneur-modale"
     style="--top: {positionModale.top}; --left: {positionModale.left}; --transformY: {positionModale.transformY}; --transformX: {positionModale.transformX}; --left-pointe: {positionModale.leftPointe}"
   >
-    <button class="bouton-fermeture" on:click={visiteGuidee.masqueEtapeCourant}>
+    <button
+      class="bouton-fermeture"
+      on:click={async () => await visiteGuidee.masqueEtapeCourante()}
+    >
       Fermer
     </button>
     <h2>{sousEtape.titre}</h2>

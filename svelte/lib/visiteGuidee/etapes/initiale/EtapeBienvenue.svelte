@@ -16,7 +16,9 @@
 
 <dialog bind:this={elementModale}>
   <form class="entete" method="dialog">
-    <button class="bouton-fermeture" on:click={visiteGuidee.masqueEtapeCourant}
+    <button
+      class="bouton-fermeture"
+      on:click={async () => await visiteGuidee.masqueEtapeCourante()}
       >Fermer</button
     >
   </form>

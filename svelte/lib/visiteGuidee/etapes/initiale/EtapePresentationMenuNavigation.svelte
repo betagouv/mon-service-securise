@@ -49,7 +49,10 @@
       >
     </div>
   </div>
-  <button class="fermeture-menu" on:click={visiteGuidee.masqueEtapeCourant}>
+  <button
+    class="fermeture-menu"
+    on:click={async () => await visiteGuidee.masqueEtapeCourante()}
+  >
     <img
       src="/statique/assets/images/icone_fermeture_modale.svg"
       alt="Fermeture du menu de navigation"
