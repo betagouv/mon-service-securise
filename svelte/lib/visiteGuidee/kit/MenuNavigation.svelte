@@ -6,62 +6,75 @@
   export let nombreEtapesRestantes: number;
   export let etapeCourante: EtapeIndicateurEtape;
   export let etapesVues: EtapeIndicateurEtape[] = [];
+
+  let menuOuvert: boolean = false;
+
+  $: doitMontrerNombre = !menuOuvert;
 </script>
 
 <div class="conteneur-menu-navigation">
-  <div class="conteneur-indicateurs-etape">
-    <h2>Bienvenue dans <br />MonServiceSécurisé</h2>
-    <p class="decouvrir-outil">Découvrons l’outil ensemble.</p>
-    <IndicateurEtape
-      {etapeCourante}
-      {etapesVues}
-      configuration={{
-        etapes: [
-          {
-            titre: 'Décrivez',
-            id: 'DECRIRE',
-            icone:
-              '/statique/assets/images/actionsSaisie/descriptionService.svg',
-          },
-          {
-            titre: 'Sécurisez',
-            id: 'SECURISER',
-            icone: '/statique/assets/images/actionsSaisie/mesures.svg',
-          },
-          {
-            titre: 'Homologuez',
-            id: 'HOMOLOGUER',
-            icone: '/statique/assets/images/actionsSaisie/dossiers.svg',
-          },
-          {
-            titre: 'Pilotez vos services',
-            id: 'PILOTER',
-            icone: '/statique/assets/images/actionsSaisie/piloter.svg',
-          },
-        ],
-      }}
-    />
-    <div class="conteneur-actions">
-      <button
-        class="bouton"
-        on:click={async () => await visiteGuidee.etapeSuivante()}
-        >Continuer la visite</button
-      >
-      <button
-        class="bouton bouton-tertiaire bouton-fermeture"
-        on:click={async () =>
-          await visiteGuidee.fermeDefinitivementVisiteGuidee()}
-        >Non merci, je le ferai moi même</button
-      >
+  {#if menuOuvert}
+    <div class="conteneur-indicateurs-etape">
+      <h2>Bienvenue dans <br />MonServiceSécurisé</h2>
+      <p class="decouvrir-outil">Découvrons l’outil ensemble.</p>
+      <IndicateurEtape
+        {etapeCourante}
+        {etapesVues}
+        configuration={{
+          etapes: [
+            {
+              titre: 'Décrivez',
+              id: 'DECRIRE',
+              icone:
+                '/statique/assets/images/actionsSaisie/descriptionService.svg',
+            },
+            {
+              titre: 'Sécurisez',
+              id: 'SECURISER',
+              icone: '/statique/assets/images/actionsSaisie/mesures.svg',
+            },
+            {
+              titre: 'Homologuez',
+              id: 'HOMOLOGUER',
+              icone: '/statique/assets/images/actionsSaisie/dossiers.svg',
+            },
+            {
+              titre: 'Pilotez vos services',
+              id: 'PILOTER',
+              icone: '/statique/assets/images/actionsSaisie/piloter.svg',
+            },
+          ],
+        }}
+      />
+      <div class="conteneur-actions">
+        <button
+          class="bouton"
+          on:click={async () => await visiteGuidee.etapeSuivante()}
+          >Continuer la visite</button
+        >
+        <button
+          class="bouton bouton-tertiaire bouton-fermeture"
+          on:click={async () =>
+            await visiteGuidee.fermeDefinitivementVisiteGuidee()}
+          >Non merci, je le ferai moi même</button
+        >
+      </div>
     </div>
-  </div>
+  {/if}
   <div class="conteneur-bouton-declencheur">
-    <button class="declencheur-menu-navigation">
+    <button
+      class="declencheur-menu-navigation"
+      on:click={() => (menuOuvert = !menuOuvert)}
+    >
       <img
-        src="/statique/assets/images/icone_liste_a_cocher.svg"
+        src={menuOuvert
+          ? '/statique/assets/images/icone_fermeture_modale.svg'
+          : '/statique/assets/images/icone_liste_a_cocher.svg'}
         alt="Ouverture du menu de navigation de la visite guidée"
       />
-      <span class="nombre-etapes-restantes">{nombreEtapesRestantes}</span>
+      {#if doitMontrerNombre}
+        <span class="nombre-etapes-restantes">{nombreEtapesRestantes}</span>
+      {/if}
     </button>
   </div>
 </div>
