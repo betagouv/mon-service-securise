@@ -5,10 +5,10 @@ declare global {
 }
 
 export type VisiteGuideeProps = {
-  dejaTermine: boolean;
   etapeCourante: EtapeVisiteGuidee;
   nombreEtapesRestantes: number;
   etapesVues: EtapeVisiteGuidee[];
+  enPause: boolean;
 };
 
 export type EtapeVisiteGuidee =

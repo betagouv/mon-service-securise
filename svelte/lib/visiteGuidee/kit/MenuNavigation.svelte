@@ -10,6 +10,7 @@
   export let nombreEtapesRestantes: number;
   export let etapeCourante: EtapeVisiteGuidee;
   export let etapesVues: EtapeVisiteGuidee[] = [];
+  export let enPause: boolean;
 
   let menuOuvert: boolean = false;
 
@@ -63,6 +64,19 @@
       window.location.href = etapeSuivante.lien || '';
     }
   };
+
+  const gereRepriseVisiteGuidee = async (e: MouseEvent) => {
+    if (!enPause) return;
+
+    e.preventDefault();
+    if (!e.target) return;
+
+    const cible = (e.target as HTMLElement).closest('a')?.href;
+    if (!cible) return;
+
+    await reprends();
+    window.location.href = cible;
+  };
 </script>
 
 <div class="conteneur-menu-navigation">
@@ -70,7 +84,12 @@
     <div class="conteneur-indicateurs-etape">
       <h2>Bienvenue dans <br />MonServiceSécurisé</h2>
       <p class="decouvrir-outil">Découvrons l’outil ensemble.</p>
-      <IndicateurEtape {etapeCourante} {etapesVues} {configuration} />
+      <IndicateurEtape
+        {etapeCourante}
+        {etapesVues}
+        {configuration}
+        on:click={gereRepriseVisiteGuidee}
+      />
       <div class="conteneur-actions">
         <button class="bouton" on:click={async () => await continuerVisite()}
           >Continuer la visite</button

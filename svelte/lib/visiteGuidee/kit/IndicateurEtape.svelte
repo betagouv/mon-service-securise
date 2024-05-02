@@ -14,7 +14,7 @@
     {@const active = etape.id === etapeCourante}
     {@const vue = etapesVues.includes(etape.id)}
     <li id="etape-{etape.id}" class:active class:vue>
-      <a href={vue || active ? etape.lien : null}>
+      <a href={vue || active ? etape.lien : null} on:click>
         <img
           src={vue && !active
             ? '/statique/assets/images/icone_fait.svg'

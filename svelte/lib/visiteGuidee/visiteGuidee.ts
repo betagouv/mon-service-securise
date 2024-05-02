@@ -18,6 +18,7 @@ const rechargeApp = (props: VisiteGuideeProps) => {
       nombreEtapesRestantes: props.nombreEtapesRestantes,
       etapeCourante: props.etapeCourante,
       etapesVues: props.etapesVues,
+      enPause: props.enPause,
     },
   });
 
