@@ -210,11 +210,20 @@ const middleware = (configuration = {}) => {
       throw new ErreurChainageMiddleware(
         'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
       );
+
     const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
       requete.idUtilisateurCourant
     );
+    const utilisateur = await depotDonnees.utilisateur(
+      requete.idUtilisateurCourant
+    );
+
     reponse.locals.etatVisiteGuidee = {
       ...parcoursUtilisateur.etatVisiteGuidee.toJSON(),
+      utilisateurCourant: {
+        prenom: utilisateur.prenom,
+        profilComplet: utilisateur.completudeProfil().estComplet,
+      },
       nombreEtapesRestantes:
         parcoursUtilisateur.etatVisiteGuidee.nombreEtapesRestantes(),
     };
