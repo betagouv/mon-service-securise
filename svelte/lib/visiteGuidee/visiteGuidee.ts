@@ -22,11 +22,13 @@ const rechargeApp = (props: VisiteGuideeProps) => {
     },
   });
 
-  app?.$destroy();
-  visiteGuidee.initialise(props.etapeCourante);
-  app = new VisiteGuidee({
-    target: document.getElementById('visite-guidee')!,
-  });
+  if (!props.enPause) {
+    app?.$destroy();
+    visiteGuidee.initialise(props.etapeCourante);
+    app = new VisiteGuidee({
+      target: document.getElementById('visite-guidee')!,
+    });
+  }
 };
 
 export default app!;
