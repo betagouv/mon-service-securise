@@ -68,6 +68,7 @@
     position: fixed;
     bottom: 64px;
     left: 50px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
   }
 
   .menu-navigation {
@@ -110,6 +111,7 @@
     height: 44px;
     margin-top: 8px;
     cursor: pointer;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
   }
 
   .fermeture-menu img {

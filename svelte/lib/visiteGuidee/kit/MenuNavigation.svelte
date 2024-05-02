@@ -109,6 +109,7 @@
     padding: 24px;
     width: fit-content;
     margin-bottom: 16px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
   }
 
   h2 {
@@ -146,6 +147,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    background: white;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
   }
 
   .conteneur-actions {
