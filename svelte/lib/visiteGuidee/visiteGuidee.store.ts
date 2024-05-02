@@ -2,7 +2,7 @@ import { writable, derived, get } from 'svelte/store';
 import EtapeBienvenue from './etapes/initiale/EtapeBienvenue.svelte';
 import EtapePresentationMenuNavigation from './etapes/initiale/EtapePresentationMenuNavigation.svelte';
 import EtapeDecrire from './etapes/decrire/EtapeDecrire.svelte';
-import type { EtapeVisiteGuidee } from './visiteGuidee.d';
+import type { EtapeVisiteGuidee, Utilisateur } from './visiteGuidee.d';
 import EtapeSecuriser from './etapes/securiser/EtapeSecuriser.svelte';
 import EtapeHomologuer from './etapes/homologuer/EtapeHomologuer.svelte';
 import EtapePiloter from './etapes/piloter/EtapePiloter.svelte';
@@ -13,6 +13,8 @@ import {
 } from './visiteGuidee.api';
 
 const { subscribe, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
+const { subscribe: subscribeUtilisateur, set: setUtilisateur } =
+  writable<Utilisateur>();
 
 export const visiteGuidee = {
   initialise: (etapeCourante: EtapeVisiteGuidee) =>
@@ -50,6 +52,11 @@ export const visiteGuidee = {
         break;
     }
   },
+};
+
+export const utilisateurCourant = {
+  subscribe: subscribeUtilisateur,
+  initialise: (utilisateur: Utilisateur) => setUtilisateur(utilisateur),
 };
 
 export const composantVisiteGuidee = derived(visiteGuidee, ($visiteGuidee) => {
