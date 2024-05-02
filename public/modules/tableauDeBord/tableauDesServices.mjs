@@ -20,8 +20,10 @@ const remplisCarteInformationIndiceCyber = (indiceCyberMoyen) => {
 };
 
 const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
-const modeVisiteGuidee =
+const visiteGuideeActive =
   etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
+const modeVisiteGuidee =
+  visiteGuideeActive && etatVisiteGuidee.utilisateurCourant.profilComplet;
 const donneesVisiteGuidee = {
   resume: {
     nombreServices: 1,
