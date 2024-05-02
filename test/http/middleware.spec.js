@@ -13,6 +13,7 @@ const {
 } = require('../../src/modeles/autorisations/gestionDroits');
 const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
 const { creeReferentiel } = require('../../src/referentiel');
+const Utilisateur = require('../../src/modeles/utilisateur');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
@@ -826,15 +827,28 @@ describe('Le middleware MSS', () => {
         const adaptateurEnvironnement = {
           featureFlag: () => ({ visiteGuideeActive: () => true }),
         };
+        const referentiel = creeReferentiel({
+          etapesVisiteGuidee: {
+            DECRIRE: {},
+          },
+        });
+        depotDonnees.lisParcoursUtilisateur = async () =>
+          new ParcoursUtilisateur(
+            {
+              idUtilisateur: '1234',
+              etatVisiteGuidee: { dejaTerminee: true },
+            },
+            referentiel
+          );
+        depotDonnees.utilisateur = async () =>
+          new Utilisateur({
+            email: 'jeanne.delajardiniere@gouv.fr',
+            prenom: 'Jeanne',
+          });
         middleware = Middleware({
           depotDonnees,
           adaptateurEnvironnement,
         });
-        depotDonnees.lisParcoursUtilisateur = async () =>
-          new ParcoursUtilisateur({
-            idUtilisateur: '1234',
-            etatVisiteGuidee: { dejaTerminee: true },
-          });
       });
 
       it("jette une une erreur technique si l'utilisateur n'est pas présent dans la requête", (done) => {
@@ -868,25 +882,16 @@ describe('Le middleware MSS', () => {
 
       it("ajoute l'état de la visite guidée de l'utilisateur à `reponse.locals`", (done) => {
         requete.idUtilisateurCourant = '1234';
-        const referentiel = creeReferentiel({
-          etapesVisiteGuidee: {
-            DECRIRE: {},
-          },
-        });
-        depotDonnees.lisParcoursUtilisateur = async () =>
-          new ParcoursUtilisateur(
-            {
-              idUtilisateur: '1234',
-              etatVisiteGuidee: { dejaTerminee: true },
-            },
-            referentiel
-          );
 
         middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
           expect(reponse.locals.etatVisiteGuidee.dejaTerminee).to.equal(true);
           expect(
             reponse.locals.etatVisiteGuidee.nombreEtapesRestantes
           ).to.equal(1);
+          expect(reponse.locals.etatVisiteGuidee.utilisateurCourant).to.eql({
+            prenom: 'Jeanne',
+            profilComplet: false,
+          });
           done();
         });
       });
