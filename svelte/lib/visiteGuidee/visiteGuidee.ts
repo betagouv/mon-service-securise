@@ -1,6 +1,6 @@
 import VisiteGuidee from './VisiteGuidee.svelte';
 import type { VisiteGuideeProps } from './visiteGuidee.d';
-import { visiteGuidee } from './visiteGuidee.store';
+import { utilisateurCourant, visiteGuidee } from './visiteGuidee.store';
 import MenuNavigation from './kit/MenuNavigation.svelte';
 
 document.body.addEventListener(
@@ -25,6 +25,7 @@ const rechargeApp = (props: VisiteGuideeProps) => {
   if (!props.enPause) {
     app?.$destroy();
     visiteGuidee.initialise(props.etapeCourante);
+    utilisateurCourant.initialise(props.utilisateurCourant);
     app = new VisiteGuidee({
       target: document.getElementById('visite-guidee')!,
     });

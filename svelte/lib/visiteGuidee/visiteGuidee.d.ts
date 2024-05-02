@@ -9,6 +9,12 @@ export type VisiteGuideeProps = {
   nombreEtapesRestantes: number;
   etapesVues: EtapeVisiteGuidee[];
   enPause: boolean;
+  utilisateurCourant: Utilisateur;
+};
+
+export type Utilisateur = {
+  prenom?: string;
+  profilComplet: boolean;
 };
 
 export type EtapeVisiteGuidee =
