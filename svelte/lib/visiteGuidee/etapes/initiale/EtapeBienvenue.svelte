@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { visiteGuidee } from '../../visiteGuidee.store';
+  import { visiteGuidee, utilisateurCourant } from '../../visiteGuidee.store';
 
   let elementModale: HTMLDialogElement;
 
@@ -22,7 +22,14 @@
       >Fermer</button
     >
   </form>
-  <h2>Bonjour,<br />bienvenue sur MonServiceSécurisé !</h2>
+  {#if $utilisateurCourant.profilComplet}
+    <h2>
+      Bonjour {$utilisateurCourant.prenom},<br /> bienvenue sur MonServiceSécurisé
+      !
+    </h2>
+  {:else}
+    <h2>Bonjour, bienvenue sur MonServiceSécurisé !</h2>
+  {/if}
   <p>
     Pilotez la sécurité de vos services numériques et homologuez les rapidement.
     Il est gratuit, 100% en ligne, collaboratif et destiné aux entités publiques
