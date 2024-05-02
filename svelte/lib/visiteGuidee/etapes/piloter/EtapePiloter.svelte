@@ -1,31 +1,77 @@
 <script lang="ts">
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount } from 'svelte';
-  import { visiteGuidee } from '../../visiteGuidee.store';
+  import { utilisateurCourant, visiteGuidee } from '../../visiteGuidee.store';
 
   let cibleNomService: HTMLElement;
   let cibleBandeauNouveaute: HTMLElement;
   let cibleBOM: HTMLElement;
   let cibleNouveauService: HTMLElement;
-  onMount(() => {
-    const intervalle = setInterval(() => {
-      cibleNomService = document.getElementsByClassName(
-        'cellule-noms'
-      )[0]! as HTMLElement;
-      if (cibleNomService) clearInterval(intervalle);
-    }, 10);
+  let cibleLignePremierService: HTMLElement;
 
-    cibleBandeauNouveaute = document.getElementsByClassName(
-      'bandeau-nouveautes'
-    )[0]! as HTMLElement;
-    cibleBOM = document.getElementsByClassName('bom-modale')[0]! as HTMLElement;
-    cibleNouveauService = document.getElementsByClassName(
-      'nouveau-service'
-    )[0]! as HTMLElement;
+  const elementDeClasse = (classe: string) =>
+    document.getElementsByClassName(classe)[0]! as HTMLElement;
+
+  onMount(() => {
+    // On utilise ici un mutation observer pour attendre que l'appel API
+    // du tableau des services ait ajouté au DOM les éléments de ligne service
+    const observateur = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((noeud) => {
+          if (noeud.classList.contains('ligne-service')) {
+            cibleNomService = elementDeClasse('cellule-noms');
+            cibleLignePremierService = elementDeClasse('ligne-service');
+          }
+        });
+      });
+    });
+    observateur.observe(elementDeClasse('contenu-tableau-services'), {
+      childList: true,
+      subtree: false,
+    });
+
+    cibleBandeauNouveaute = elementDeClasse('bandeau-nouveautes');
+    cibleBOM = elementDeClasse('bom-modale');
+    cibleNouveauService = elementDeClasse('nouveau-service');
   });
+
+  const derniereSousEtape = () => {
+    if (!cibleNouveauService || !cibleLignePremierService) {
+      return null;
+    }
+    if ($utilisateurCourant.profilComplet) {
+      return {
+        cible: cibleNouveauService,
+        positionnementModale: 'HautGauche',
+        avecTrouRideauColle: true,
+        callbackInitialeCible: (cible) => {
+          cible.addEventListener(
+            'click',
+            async () => await visiteGuidee.finalise()
+          );
+        },
+        titre: 'Créez votre premier service !',
+        description:
+          'N’attendez plus et commencez à sécuriser vos services numériques en créant votre premier service !',
+        texteBoutonDerniereEtape: "C'est parti !",
+      };
+    }
+    return {
+      cible: cibleLignePremierService,
+      positionnementModale: 'BasMilieu',
+      avecTrouRideauColle: true,
+      callbackInitialeCible: (cible) => {
+        cible.inert = true;
+      },
+      titre: 'Collaborez avec votre équipe !',
+      description:
+        'N’attendez plus et contribuez au service numérique sur lequel vous avez été invité !',
+      texteBoutonDerniereEtape: 'Je découvre le service',
+    };
+  };
 </script>
 
-{#if cibleNomService && cibleBandeauNouveaute && cibleBOM && cibleNouveauService}
+{#if cibleNomService && cibleBandeauNouveaute && cibleBOM && cibleNouveauService && cibleLignePremierService}
   <ModaleSousEtape
     sousEtapes={[
       {
@@ -80,21 +126,7 @@
           'Pour toute question, MonServiceSécurisé se fera un plaisir de vous aider par chat ou par webinaire. N’hésitez pas à nous faire vos retours sur le produit, nous les lirons avec attention.',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
-      {
-        cible: cibleNouveauService,
-        positionnementModale: 'HautGauche',
-        avecTrouRideauColle: true,
-        callbackInitialeCible: (cible) => {
-          cible.addEventListener(
-            'click',
-            async () => await visiteGuidee.finalise()
-          );
-        },
-        titre: 'Créez votre premier service !',
-        description:
-          'N’attendez plus et commencez à sécuriser vos services numériques en créant votre premier service !',
-        derniereEtape: true,
-      },
+      derniereSousEtape(),
     ]}
   />
 {/if}
