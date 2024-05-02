@@ -12,6 +12,7 @@ const {
   Permissions: { LECTURE, ECRITURE, INVISIBLE },
 } = require('../../src/modeles/autorisations/gestionDroits');
 const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
+const { creeReferentiel } = require('../../src/referentiel');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
@@ -867,9 +868,25 @@ describe('Le middleware MSS', () => {
 
       it("ajoute l'état de la visite guidée de l'utilisateur à `reponse.locals`", (done) => {
         requete.idUtilisateurCourant = '1234';
+        const referentiel = creeReferentiel({
+          etapesVisiteGuidee: {
+            DECRIRE: {},
+          },
+        });
+        depotDonnees.lisParcoursUtilisateur = async () =>
+          new ParcoursUtilisateur(
+            {
+              idUtilisateur: '1234',
+              etatVisiteGuidee: { dejaTerminee: true },
+            },
+            referentiel
+          );
 
         middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
           expect(reponse.locals.etatVisiteGuidee.dejaTerminee).to.equal(true);
+          expect(
+            reponse.locals.etatVisiteGuidee.nombreEtapesRestantes
+          ).to.equal(1);
           done();
         });
       });
