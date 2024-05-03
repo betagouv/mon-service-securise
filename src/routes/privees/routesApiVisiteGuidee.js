@@ -62,6 +62,17 @@ const routesApiVisiteGuidee = ({ middleware, depotDonnees, referentiel }) => {
     reponse.sendStatus(200);
   });
 
+  routes.post('/reinitialise', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete;
+
+    const parcoursUtilisateur =
+      await depotDonnees.lisParcoursUtilisateur(idUtilisateurCourant);
+    parcoursUtilisateur.etatVisiteGuidee.reinitialise();
+    await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
+
+    reponse.sendStatus(200);
+  });
+
   return routes;
 };
 
