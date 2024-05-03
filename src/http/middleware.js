@@ -202,6 +202,7 @@ const middleware = (configuration = {}) => {
     const visiteGuideeActive = adaptateurEnvironnement
       .featureFlag()
       .visiteGuideeActive();
+    reponse.locals.visiteGuideeActive = visiteGuideeActive;
     if (!visiteGuideeActive) {
       suite();
     }
