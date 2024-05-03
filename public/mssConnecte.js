@@ -17,6 +17,18 @@ $(() => {
     );
   }
 
+  $('#lien-reinitialise-visite-guidee').on('click', () => {
+    axios
+      .post('/api/visiteGuidee/reinitialise')
+      .then(() => {
+        window.location.href = '/tableauDeBord';
+      })
+      /* eslint-disable no-console */
+      .catch(() =>
+        console.warn('Impossible de réinitialiser la visite guidée')
+      );
+  });
+
   axios
     .get('/api/dureeSession')
     .then((reponse) => {
