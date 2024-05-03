@@ -1,4 +1,4 @@
-import { writable, derived, get } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 import EtapeBienvenue from './etapes/initiale/EtapeBienvenue.svelte';
 import EtapePresentationMenuNavigation from './etapes/initiale/EtapePresentationMenuNavigation.svelte';
 import EtapeDecrire from './etapes/decrire/EtapeDecrire.svelte';
@@ -15,6 +15,16 @@ import {
 const { subscribe, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
 const { subscribe: subscribeUtilisateur, set: setUtilisateur } =
   writable<Utilisateur>();
+
+const redirigeApresFinalisationVisite = () => {
+  const ligneService = document.getElementsByClassName(
+    'ligne-service'
+  )[0] as HTMLElement;
+  const { idService } = ligneService.dataset;
+  window.location.href = get(utilisateurCourant).profilComplet
+    ? '/service/creation'
+    : `/service/${idService}`;
+};
 
 export const visiteGuidee = {
   initialise: (etapeCourante: EtapeVisiteGuidee) =>
@@ -33,7 +43,7 @@ export const visiteGuidee = {
   },
   async finalise() {
     await finaliseVisiteGuidee();
-    window.location.href = '/service/creation';
+    redirigeApresFinalisationVisite();
   },
   async etapeSuivante() {
     const etapeCourante = get(visiteGuidee);

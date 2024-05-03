@@ -21,7 +21,7 @@
     titre: string;
     description: string;
     animation?: string;
-    derniereEtape?: boolean;
+    texteBoutonDerniereEtape?: string;
   };
   export let sousEtapes: SousEtape[];
 
@@ -236,16 +236,18 @@
           {/if}
           <button
             class="bouton suivant"
-            class:derniereEtape={sousEtape?.derniereEtape}
+            class:derniereEtape={sousEtape?.texteBoutonDerniereEtape}
             on:click={async () =>
-              sousEtape?.derniereEtape
+              sousEtape?.texteBoutonDerniereEtape
                 ? await visiteGuidee.finalise()
                 : estDerniereSousEtape
                 ? await visiteGuidee.etapeSuivante()
                 : indexEtapeCourante++}
           >
-            {sousEtape?.derniereEtape ? "C'est parti !" : 'Suivant'}
-            {#if sousEtape?.derniereEtape}
+            {sousEtape?.texteBoutonDerniereEtape
+              ? sousEtape.texteBoutonDerniereEtape
+              : 'Suivant'}
+            {#if sousEtape?.texteBoutonDerniereEtape}
               {#each new Array(50).fill(0) as _}
                 <Confetti />
               {/each}
