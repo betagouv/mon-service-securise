@@ -131,4 +131,18 @@ describe('Le modèle état visite guidée', () => {
 
     expect(etatVisiteGuidee.enPause).to.be(false);
   });
+
+  it('sait réinitialiser la visite guidée', () => {
+    const etatVisiteGuidee = new EtatVisiteGuidee({
+      enPause: true,
+      dejaTerminee: false,
+      etapesVues: ['DECRIRE', 'SECURISER'],
+    });
+
+    etatVisiteGuidee.reinitialise();
+
+    expect(etatVisiteGuidee.enPause).to.be(false);
+    expect(etatVisiteGuidee.dejaTerminee).to.be(false);
+    expect(etatVisiteGuidee.etapesVues).to.be(undefined);
+  });
 });
