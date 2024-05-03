@@ -116,7 +116,9 @@ const repliMenu = () => {
 $(async () => {
   const idService = $('.page-service').data('id-service');
   const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
-  const modeVisiteGuidee = etatVisiteGuidee.dejaTerminee === false;
+  const modeVisiteGuidee =
+    etatVisiteGuidee.dejaTerminee === false &&
+    etatVisiteGuidee.enPause === false;
 
   repliMenu().brancheComportement();
 
