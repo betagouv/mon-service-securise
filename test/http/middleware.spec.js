@@ -829,6 +829,11 @@ describe('Le middleware MSS', () => {
           depotDonnees,
           adaptateurEnvironnement,
         });
+        depotDonnees.lisParcoursUtilisateur = async () =>
+          new ParcoursUtilisateur({
+            idUtilisateur: '1234',
+            etatVisiteGuidee: { dejaTerminee: true },
+          });
       });
 
       it("jette une une erreur technique si l'utilisateur n'est pas présent dans la requête", (done) => {
@@ -851,13 +856,17 @@ describe('Le middleware MSS', () => {
           .catch(done);
       });
 
+      it("ajoute le statut d'activation de la fonctionnalité visite guidée à `reponse.locals`", (done) => {
+        requete.idUtilisateurCourant = '1234';
+
+        middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
+          expect(reponse.locals.visiteGuideeActive).to.equal(true);
+          done();
+        });
+      });
+
       it("ajoute l'état de la visite guidée de l'utilisateur à `reponse.locals`", (done) => {
         requete.idUtilisateurCourant = '1234';
-        depotDonnees.lisParcoursUtilisateur = async () =>
-          new ParcoursUtilisateur({
-            idUtilisateur: '1234',
-            etatVisiteGuidee: { dejaTerminee: true },
-          });
 
         middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
           expect(reponse.locals.etatVisiteGuidee.dejaTerminee).to.equal(true);
@@ -866,17 +875,32 @@ describe('Le middleware MSS', () => {
       });
     });
 
-    it("n'ajoute pas un objet d'état de visite guidée à `reponse.locals` quand la fonctionnalité visite guidée n'est pas active", (done) => {
-      const adaptateurEnvironnement = {
-        featureFlag: () => ({ visiteGuideeActive: () => false }),
-      };
-      const middleware = Middleware({
-        adaptateurEnvironnement,
+    describe("quand la fonctionnalité visite guidée n'est pas active", () => {
+      let middleware;
+
+      beforeEach(() => {
+        const adaptateurEnvironnement = {
+          featureFlag: () => ({ visiteGuideeActive: () => false }),
+        };
+        middleware = Middleware({
+          adaptateurEnvironnement,
+        });
       });
 
-      middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
-        expect(reponse.locals.etatVisiteGuidee).to.be(undefined);
-        done();
+      it("ajoute le statut d'activation de la fonctionnalité visite guidée à `reponse.locals`", (done) => {
+        requete.idUtilisateurCourant = '1234';
+
+        middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
+          expect(reponse.locals.visiteGuideeActive).to.equal(false);
+          done();
+        });
+      });
+
+      it("n'ajoute pas un objet d'état de visite guidée à `reponse.locals` quand la fonctionnalité visite guidée n'est pas active", (done) => {
+        middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
+          expect(reponse.locals.etatVisiteGuidee).to.be(undefined);
+          done();
+        });
       });
     });
   });
