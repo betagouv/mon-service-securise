@@ -37,6 +37,12 @@ class EtatVisiteGuidee extends Base {
   reprends() {
     this.enPause = false;
   }
+
+  reinitialise() {
+    this.enPause = false;
+    this.dejaTerminee = false;
+    this.etapesVues = undefined;
+  }
 }
 
 module.exports = EtatVisiteGuidee;
