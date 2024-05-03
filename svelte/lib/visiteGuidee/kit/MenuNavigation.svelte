@@ -22,8 +22,12 @@
   };
 
   const fermeMenu = async () => {
-    await metsEnPause();
-    window.location.href = '/tableauDeBord';
+    if (enPause) {
+      menuOuvert = false;
+    } else {
+      await metsEnPause();
+      window.location.href = '/tableauDeBord';
+    }
   };
 
   const configuration: ConfigurationIndicateurEtape = {
