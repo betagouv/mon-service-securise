@@ -10,7 +10,7 @@ const {
 } = require('./http/configurationServeur');
 const routesConnecteApi = require('./routes/connecte/routesConnecteApi');
 const routesConnectePageService = require('./routes/connecte/routesConnectePageService');
-const routesApiPublique = require('./routes/nonConnecte/routesApiPublique');
+const routesNonConnecteApi = require('./routes/nonConnecte/routesNonConnecteApi');
 const {
   routesBibliotheques,
 } = require('./routes/nonConnecte/routesBibliotheques');
@@ -230,7 +230,7 @@ const creeServeur = (
 
   app.use(
     '/api',
-    routesApiPublique({
+    routesNonConnecteApi({
       middleware,
       referentiel,
       depotDonnees,

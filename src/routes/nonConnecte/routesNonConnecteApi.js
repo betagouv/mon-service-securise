@@ -11,7 +11,7 @@ const {
   obtentionDonneesDeBaseUtilisateur,
 } = require('../mappeur/utilisateur');
 
-const routesApiPublique = ({
+const routesNonConnecteApi = ({
   middleware,
   referentiel,
   depotDonnees,
@@ -230,4 +230,4 @@ const routesApiPublique = ({
   return routes;
 };
 
-module.exports = routesApiPublique;
+module.exports = routesNonConnecteApi;
