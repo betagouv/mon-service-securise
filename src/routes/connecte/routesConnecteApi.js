@@ -27,7 +27,7 @@ const {
 } = require('../../modeles/autorisations/gestionDroits');
 const routesApiVisiteGuidee = require('./routesApiVisiteGuidee');
 
-const routesApiPrivee = ({
+const routesConnecteApi = ({
   middleware,
   adaptateurMail,
   depotDonnees,
@@ -414,4 +414,4 @@ const routesApiPrivee = ({
   return routes;
 };
 
-module.exports = routesApiPrivee;
+module.exports = routesConnecteApi;

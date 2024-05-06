@@ -8,7 +8,7 @@ const {
   DUREE_SESSION,
   ENDPOINTS_SANS_CSRF,
 } = require('./http/configurationServeur');
-const routesApiPrivee = require('./routes/connecte/routesApiPrivee');
+const routesConnecteApi = require('./routes/connecte/routesConnecteApi');
 const routesService = require('./routes/connecte/routesService');
 const routesApiPublique = require('./routes/nonConnecte/routesApiPublique');
 const {
@@ -245,7 +245,7 @@ const creeServeur = (
   app.use(
     '/api',
     middleware.verificationJWT,
-    routesApiPrivee({
+    routesConnecteApi({
       middleware,
       adaptateurMail,
       depotDonnees,
