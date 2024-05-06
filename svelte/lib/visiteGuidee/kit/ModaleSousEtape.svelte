@@ -2,34 +2,14 @@
   import { visiteGuidee } from '../visiteGuidee.store';
   import { onDestroy, onMount } from 'svelte';
   import Confetti from '../../ui/Confetti.svelte';
+  import type { PositionRond, SousEtape } from './ModaleSousEtape.d';
 
-  type PositionModale =
-    | 'MilieuDroite'
-    | 'HautDroite'
-    | 'BasDroite'
-    | 'MilieuGauche'
-    | 'HautGauche'
-    | 'BasGauche'
-    | 'BasMilieu';
-  type SousEtape = {
-    cible: HTMLElement;
-    callbackInitialeCible?: (cible: HTMLElement) => void;
-    callbackFinaleCible?: (cible: HTMLElement) => void;
-    delaiAvantAffichage?: number;
-    avecTrouRideauColle?: boolean;
-    positionnementModale: PositionModale;
-    titre: string;
-    description: string;
-    animation?: string;
-    texteBoutonDerniereEtape?: string;
-  };
   export let sousEtapes: SousEtape[];
 
   const rideau = document.getElementById('visite-guidee-rideau')!;
   let indexEtapeCourante = 0;
 
   let positionCible: DOMRect;
-  type PositionRond = 'Droite' | 'Gauche' | 'Bas';
   let positionModale: {
     top: string;
     left: string;
