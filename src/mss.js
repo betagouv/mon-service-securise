@@ -8,8 +8,8 @@ const {
   DUREE_SESSION,
   ENDPOINTS_SANS_CSRF,
 } = require('./http/configurationServeur');
-const routesApiPrivee = require('./routes/privees/routesApiPrivee');
-const routesService = require('./routes/privees/routesService');
+const routesApiPrivee = require('./routes/connecte/routesApiPrivee');
+const routesService = require('./routes/connecte/routesService');
 const routesApiPublique = require('./routes/nonConnecte/routesApiPublique');
 const {
   routesBibliotheques,
