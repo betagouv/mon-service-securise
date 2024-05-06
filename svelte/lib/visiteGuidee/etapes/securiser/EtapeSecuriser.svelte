@@ -38,7 +38,7 @@
             .dispatchEvent(new Event('click'));
         },
         positionnementModale: 'MilieuGauche',
-        titre: 'Sécurisez, grâce à des mesures adaptées',
+        titre: 'Sécurisez grâce à des mesures adaptées',
         description:
           'Chaque mesure est associée à son référentiel (ANSSI, CNIL) et son niveau d’importance (recommandée ou indispensable pour les mesures ANSSI).',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
@@ -48,9 +48,9 @@
         callbackInitialeCible: (cible) => cible.removeAttribute('href'),
         avecTrouRideauColle: true,
         positionnementModale: 'HautGauche',
-        titre: 'Indice cyber',
+        titre: "Améliorez l'indice cyber de votre service",
         description:
-          "Mettez en œuvre les mesures proposées et obtenez une évaluation indicative du niveau de sécurisation du service : l'indice cyber.",
+          'Mettez en œuvre les mesures proposées et obtenez une évaluation indicative du niveau de sécurisation de votre service.',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
     ]}
