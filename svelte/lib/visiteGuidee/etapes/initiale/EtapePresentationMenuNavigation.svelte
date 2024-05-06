@@ -6,7 +6,7 @@
 <div class="conteneur-menu-navigation">
   <div class="menu-navigation">
     <h2>Bienvenue dans <br />MonServiceSécurisé</h2>
-    <p class="decouvrir-outil">Découvrons l’outil ensemble.</p>
+    <p class="decouvrir-outil">Parcourons ensemble la visite guidée.</p>
     <IndicateurEtape
       configuration={{
         etapes: [
@@ -42,7 +42,7 @@
         >C'est parti !</button
       >
       <button
-        class="bouton bouton-tertiaire"
+        class="lien"
         on:click={async () =>
           await visiteGuidee.fermeDefinitivementVisiteGuidee()}
         >Non merci, je n’ai pas besoin d’aide</button
@@ -117,5 +117,17 @@
   .fermeture-menu img {
     filter: brightness(0) invert(28%) sepia(70%) saturate(1723%)
       hue-rotate(184deg) brightness(107%) contrast(101%);
+  }
+
+  .lien {
+    color: var(--bleu-mise-en-avant);
+    padding: 8px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .lien:hover {
+    text-decoration: underline;
   }
 </style>
