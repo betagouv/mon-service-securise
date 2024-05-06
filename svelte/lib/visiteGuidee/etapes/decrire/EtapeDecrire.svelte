@@ -23,7 +23,7 @@
         positionnementModale: 'MilieuDroite',
         titre: 'Décrivez votre service',
         description:
-          'Dans un premier temps, répondez à quelques questions afin d’obtenir une liste de mesures de sécurité personnalisée',
+          'Dans un premier temps, renseignez quelques informations afin d’obtenir une liste personnalisée de mesures de sécurité.',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
       {
