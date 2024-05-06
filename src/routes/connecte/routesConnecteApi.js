@@ -13,7 +13,7 @@ const {
   ErreurAutorisationExisteDeja,
   ErreurModele,
 } = require('../../erreurs');
-const routesApiService = require('./routesApiService');
+const routesConnecteApiService = require('./routesConnecteApiService');
 const Utilisateur = require('../../modeles/utilisateur');
 const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
@@ -130,7 +130,7 @@ const routesConnecteApi = ({
 
   routes.use(
     '/service',
-    routesApiService({
+    routesConnecteApiService({
       middleware,
       depotDonnees,
       referentiel,
