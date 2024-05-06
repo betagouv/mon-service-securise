@@ -24,16 +24,16 @@
   </form>
   {#if $utilisateurCourant.profilComplet}
     <h2>
-      Bonjour {$utilisateurCourant.prenom},<br /> bienvenue sur MonServiceSécurisé
+      Bonjour {$utilisateurCourant.prenom},<br /> Bienvenue sur MonServiceSécurisé
       !
     </h2>
   {:else}
-    <h2>Bonjour, bienvenue sur MonServiceSécurisé !</h2>
+    <h2>Bonjour,<br /> Bienvenue sur MonServiceSécurisé !</h2>
   {/if}
   <p>
-    Pilotez la sécurité de vos services numériques et homologuez les rapidement.
-    Il est gratuit, 100% en ligne, collaboratif et destiné aux entités publiques
-    et à leurs prestataires.
+    Pilotez la sécurité de vos services numériques et homologuez-les rapidement.
+    MonServiceSécurisé est gratuit, 100% en ligne, collaboratif et destiné aux
+    entités publiques et à leurs prestataires.
   </p>
   <p>
     Les services relevant d'une réglementation encadrant spécifiquement la
@@ -45,9 +45,7 @@
     target="_blank">Obtenir plus d’informations</a
   >
   <p>
-    <b>
-      Maintenant, découvrons ensemble l’outil, cela prendra quelques minutes...
-    </b>
+    <b> Découvrons ensemble la plateforme, cela prendra quelques minutes... </b>
   </p>
   <div class="conteneur-actions">
     <form method="dialog">
@@ -55,7 +53,7 @@
         class="bouton bouton-tertiaire"
         on:click={async () =>
           await visiteGuidee.fermeDefinitivementVisiteGuidee()}
-        >Ignorer la visite guidée</button
+        >Je n’ai pas besoin d’aide</button
       >
     </form>
     <button
@@ -73,7 +71,7 @@
 
   dialog {
     max-width: 600px;
-    padding: 8px 40px;
+    padding: 20px 40px;
     border: none;
     border-radius: 8px;
   }
@@ -85,6 +83,7 @@
 
   button {
     cursor: pointer;
+    margin: 0;
   }
 
   .bouton-fermeture {
@@ -113,12 +112,21 @@
     justify-content: end;
   }
 
+  .conteneur-actions {
+    justify-content: space-between;
+    margin-top: 40px;
+  }
+
   dialog a {
     color: var(--bleu-mise-en-avant);
     text-decoration: none;
     font-weight: 500;
     display: flex;
     flex-direction: row;
+  }
+
+  dialog a:hover {
+    text-decoration: underline;
   }
 
   dialog a:after {
@@ -144,6 +152,6 @@
     color: var(--bleu-mise-en-avant);
     background: transparent;
     border: none;
-    padding: 4px 12px;
+    padding: 4px 0 4px 12px;
   }
 </style>
