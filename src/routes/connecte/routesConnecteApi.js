@@ -25,7 +25,7 @@ const {
 const {
   verifieCoherenceDesDroits,
 } = require('../../modeles/autorisations/gestionDroits');
-const routesApiVisiteGuidee = require('./routesApiVisiteGuidee');
+const routesConnecteApiVisiteGuidee = require('./routesConnecteApiVisiteGuidee');
 
 const routesConnecteApi = ({
   middleware,
@@ -144,7 +144,7 @@ const routesConnecteApi = ({
   routes.use(
     '/visiteGuidee',
     middleware.verificationAcceptationCGU,
-    routesApiVisiteGuidee({
+    routesConnecteApiVisiteGuidee({
       middleware,
       depotDonnees,
       referentiel,

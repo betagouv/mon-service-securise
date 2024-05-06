@@ -1,6 +1,10 @@
 const express = require('express');
 
-const routesApiVisiteGuidee = ({ middleware, depotDonnees, referentiel }) => {
+const routesConnecteApiVisiteGuidee = ({
+  middleware,
+  depotDonnees,
+  referentiel,
+}) => {
   const routes = express.Router();
 
   routes.post(
@@ -76,4 +80,4 @@ const routesApiVisiteGuidee = ({ middleware, depotDonnees, referentiel }) => {
   return routes;
 };
 
-module.exports = routesApiVisiteGuidee;
+module.exports = routesConnecteApiVisiteGuidee;
