@@ -2,6 +2,7 @@
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount } from 'svelte';
   import { utilisateurCourant, visiteGuidee } from '../../visiteGuidee.store';
+  import type { SousEtape } from '../../kit/ModaleSousEtape';
 
   let cibleNomService: HTMLElement;
   let cibleBandeauNouveaute: HTMLElement;
@@ -35,7 +36,7 @@
     cibleNouveauService = elementDeClasse('nouveau-service');
   });
 
-  const derniereSousEtape = () => {
+  const derniereSousEtape = (): SousEtape | null => {
     if (!cibleNouveauService || !cibleLignePremierService) {
       return null;
     }
