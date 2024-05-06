@@ -4,7 +4,7 @@ const ipfilter = require('express-ipfilter').IpFilter;
 const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
 const {
   CSP_BIBLIOTHEQUES,
-} = require('../routes/publiques/routesBibliotheques');
+} = require('../routes/nonConnecte/routesBibliotheques');
 const {
   verifieCoherenceDesDroits,
   Permissions: { LECTURE, INVISIBLE },

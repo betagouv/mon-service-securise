@@ -10,11 +10,11 @@ const {
 } = require('./http/configurationServeur');
 const routesApiPrivee = require('./routes/privees/routesApiPrivee');
 const routesService = require('./routes/privees/routesService');
-const routesApiPublique = require('./routes/publiques/routesApiPublique');
+const routesApiPublique = require('./routes/nonConnecte/routesApiPublique');
 const {
   routesBibliotheques,
-} = require('./routes/publiques/routesBibliotheques');
-const routesStyles = require('./routes/publiques/routesStyles');
+} = require('./routes/nonConnecte/routesBibliotheques');
+const routesStyles = require('./routes/nonConnecte/routesStyles');
 const {
   estUrlLegalePourRedirection,
   construisUrlAbsolueVersPage,
