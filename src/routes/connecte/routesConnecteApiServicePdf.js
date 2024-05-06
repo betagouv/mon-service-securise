@@ -3,7 +3,7 @@ const Autorisation = require('../../modeles/autorisations/autorisation');
 const { genereGradientConique } = require('../../pdf/graphiques/camembert');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
 
-const routesApiServicePdf = ({
+const routesConnecteApiServicePdf = ({
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
@@ -183,4 +183,4 @@ const routesApiServicePdf = ({
   return routes;
 };
 
-module.exports = routesApiServicePdf;
+module.exports = routesConnecteApiServicePdf;
