@@ -19,9 +19,9 @@
           document.getElementById('suivant').inert = true;
         },
         positionnementModale: 'HautDroite',
-        titre: 'Mettez-vous en conformité',
+        titre: 'Homologuez votre service',
         description:
-          "Générez un dossier et un projet de décision d'homologation pour vous mettre en conformité avec la réglementation",
+          "Générez un dossier et un projet de décision d'homologation pour vous mettre en conformité avec la réglementation.",
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
       {
@@ -45,9 +45,9 @@
         },
         avecTrouRideauColle: true,
         positionnementModale: 'BasDroite',
-        titre: 'Homologuez en toute simplicité',
+        titre: 'Téléchargez vos documents utiles',
         description:
-          'Téléchargez en 1 clic, le dossier et le projet de décision d’homologation pour le faire signer.',
+          "Obtenez en 1 clic le dossier et le projet de décision pour signature par votre autorité d'homologation.",
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
     ]}
