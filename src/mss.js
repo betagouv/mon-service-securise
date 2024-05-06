@@ -12,8 +12,8 @@ const routesConnecteApi = require('./routes/connecte/routesConnecteApi');
 const routesConnectePageService = require('./routes/connecte/routesConnectePageService');
 const routesNonConnecteApi = require('./routes/nonConnecte/routesNonConnecteApi');
 const {
-  routesBibliotheques,
-} = require('./routes/nonConnecte/routesBibliotheques');
+  routesNonConnecteApiBibliotheques,
+} = require('./routes/nonConnecte/routesNonConnecteApiBibliotheques');
 const routesStyles = require('./routes/nonConnecte/routesStyles');
 const {
   estUrlLegalePourRedirection,
@@ -239,7 +239,7 @@ const creeServeur = (
       adaptateurMail,
     })
   );
-  app.use('/bibliotheques', routesBibliotheques());
+  app.use('/bibliotheques', routesNonConnecteApiBibliotheques());
   app.use('/styles', routesStyles());
 
   app.use(
