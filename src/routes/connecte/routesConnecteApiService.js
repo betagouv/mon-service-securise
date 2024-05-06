@@ -1,6 +1,6 @@
 const express = require('express');
 
-const routesApiServicePdf = require('./routesApiServicePdf');
+const routesConnecteApiServicePdf = require('./routesConnecteApiServicePdf');
 const {
   EchecAutorisation,
   ErreurModele,
@@ -49,7 +49,7 @@ const routesConnecteApiService = ({
   const routes = express.Router();
 
   routes.use(
-    routesApiServicePdf({
+    routesConnecteApiServicePdf({
       adaptateurHorloge,
       adaptateurPdf,
       adaptateurZip,
