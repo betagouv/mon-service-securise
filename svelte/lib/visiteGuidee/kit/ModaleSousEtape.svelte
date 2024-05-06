@@ -234,12 +234,14 @@
             {/if}
           </button>
         </div>
-        <button
-          class="bouton-tertiaire bouton"
-          on:click={async () =>
-            await visiteGuidee.fermeDefinitivementVisiteGuidee()}
-          >Ne plus voir ces astuces</button
-        >
+        {#if !sousEtape?.texteBoutonDerniereEtape}
+          <button
+            class="lien"
+            on:click={async () =>
+              await visiteGuidee.fermeDefinitivementVisiteGuidee()}
+            >Je n’ai plus besoin d’aide</button
+          >
+        {/if}
       </div>
     </div>
   </div>
@@ -262,7 +264,7 @@
     color: var(--gris-fonce);
     border-radius: 4px;
     background: white;
-    padding: 12px 40px 32px 40px;
+    padding: 20px 40px;
     position: fixed;
     width: 462px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.12);
@@ -341,11 +343,15 @@
     color: var(--bleu-mise-en-avant);
     background: transparent;
     border: none;
-    padding: 4px 12px;
+    padding: 4px 0 4px 12px;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
+  }
+
+  .bouton-fermeture:hover {
+    text-decoration: underline;
   }
 
   .bouton-fermeture:after {
@@ -380,6 +386,7 @@
   .conteneur-pagination {
     display: flex;
     gap: 8px;
+    padding-top: 14px;
   }
 
   .pagination-etape {
@@ -399,5 +406,17 @@
   .conteneur-navigation {
     display: flex;
     gap: 16px;
+  }
+
+  .lien {
+    color: var(--bleu-mise-en-avant);
+    padding: 8px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .lien:hover {
+    text-decoration: underline;
   }
 </style>
