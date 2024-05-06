@@ -14,7 +14,7 @@ const routesNonConnecteApi = require('./routes/nonConnecte/routesNonConnecteApi'
 const {
   routesNonConnecteApiBibliotheques,
 } = require('./routes/nonConnecte/routesNonConnecteApiBibliotheques');
-const routesStyles = require('./routes/nonConnecte/routesStyles');
+const routesNonConnecteApiStyles = require('./routes/nonConnecte/routesNonConnecteApiStyles');
 const {
   estUrlLegalePourRedirection,
   construisUrlAbsolueVersPage,
@@ -240,7 +240,7 @@ const creeServeur = (
     })
   );
   app.use('/bibliotheques', routesNonConnecteApiBibliotheques());
-  app.use('/styles', routesStyles());
+  app.use('/styles', routesNonConnecteApiStyles());
 
   app.use(
     '/api',
