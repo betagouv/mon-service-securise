@@ -15,7 +15,7 @@ const { dateYYYYMMDD } = require('../../utilitaires/date');
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
 
-const routesService = ({
+const routesConnectePageService = ({
   middleware,
   referentiel,
   depotDonnees,
@@ -265,4 +265,4 @@ const routesService = ({
   return routes;
 };
 
-module.exports = routesService;
+module.exports = routesConnectePageService;
