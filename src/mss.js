@@ -9,7 +9,7 @@ const {
   ENDPOINTS_SANS_CSRF,
 } = require('./http/configurationServeur');
 const routesConnecteApi = require('./routes/connecte/routesConnecteApi');
-const routesService = require('./routes/connecte/routesService');
+const routesConnectePageService = require('./routes/connecte/routesConnectePageService');
 const routesApiPublique = require('./routes/nonConnecte/routesApiPublique');
 const {
   routesBibliotheques,
@@ -263,7 +263,7 @@ const creeServeur = (
   app.use(
     '/service',
     middleware.verificationJWT,
-    routesService({
+    routesConnectePageService({
       middleware,
       referentiel,
       depotDonnees,
