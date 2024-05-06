@@ -37,7 +37,7 @@ const EvenementRetourUtilisateurMesure = require('../../modeles/journalMSS/evene
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
 
-const routesApiService = ({
+const routesConnecteApiService = ({
   middleware,
   depotDonnees,
   referentiel,
@@ -650,4 +650,4 @@ const routesApiService = ({
   return routes;
 };
 
-module.exports = routesApiService;
+module.exports = routesConnecteApiService;
