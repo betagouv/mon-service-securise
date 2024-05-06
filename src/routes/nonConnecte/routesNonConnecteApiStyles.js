@@ -6,7 +6,7 @@ const CHEMINS_FEUILLES_DE_STYLE = {
     'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css',
 };
 
-const routesStyles = () => {
+const routesNonConnecteApiStyles = () => {
   const routes = express.Router();
 
   const ajouteRoutes = () =>
@@ -34,4 +34,4 @@ const routesStyles = () => {
   return routes;
 };
 
-module.exports = routesStyles;
+module.exports = routesNonConnecteApiStyles;
