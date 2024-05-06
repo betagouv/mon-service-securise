@@ -16,7 +16,7 @@ const CSP_BIBLIOTHEQUES = {
   matomo: { connect: 'https://stats.beta.gouv.fr/matomo.php' },
 };
 
-const routesBibliotheques = () => {
+const routesNonConnecteApiBibliotheques = () => {
   const routes = express.Router();
 
   const ajouteRoutes = (methode) =>
@@ -55,4 +55,4 @@ const routesBibliotheques = () => {
   return routes;
 };
 
-module.exports = { routesBibliotheques, CSP_BIBLIOTHEQUES };
+module.exports = { routesNonConnecteApiBibliotheques, CSP_BIBLIOTHEQUES };
