@@ -53,7 +53,7 @@
         },
         titre: 'Créez votre premier service !',
         description:
-          'N’attendez plus et commencez à sécuriser vos services numériques en créant votre premier service !',
+          'N’attendez plus et commencez à sécuriser en créant votre premier service numérique !',
         texteBoutonDerniereEtape: "C'est parti !",
       };
     }
@@ -87,9 +87,9 @@
             'selection-service'
           )[0].disabled = true;
         },
-        titre: 'Votre tableau de bord',
+        titre: 'Pilotez vos services grâce au tableau de bord',
         description:
-          'Vous pourrez piloter en équipe la sécurité de tous vos services numériques et les homologuer rapidement, grâce à un tableau complet présentant vos données de progressions.',
+          "Gérez de manière centralisée vos services, avec des outils de productivité intégrés comme la duplication et l'invitation de contributeurs.",
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
       {
@@ -99,9 +99,9 @@
         callbackInitialeCible: (cible) => {
           cible.disabled = true;
         },
-        titre: 'Les nouveautés',
+        titre: 'Découvrez les nouveautés',
         description:
-          'Ne ratez aucune évolution de MonServiceSécurisé. Nous vous partageons les nouveautés en matière de cybersécurité, et les mesures additionnelles qui peuvent impliquer des changement et/ou amélioration pour vos services.',
+          'Ne ratez aucune évolution de MonServiceSécurisé. Nous vous partageons les nouvelles fonctionnalités disponibles sur la plateforme.',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
       {
@@ -122,9 +122,9 @@
             .querySelector('.bom-modale .fermeture')
             .dispatchEvent(new Event('click'));
         },
-        titre: 'MonServiceSécurisé vous accompagne',
+        titre: 'Trouvez des réponses à vos questions',
         description:
-          'Pour toute question, MonServiceSécurisé se fera un plaisir de vous aider par chat ou par webinaire. N’hésitez pas à nous faire vos retours sur le produit, nous les lirons avec attention.',
+          'Notre équipe est à votre disposition pour vous accompagner, par chat, webinaire ou FAQ. N’hésitez pas à nous faire vos retours sur le produit, nous les lirons avec attention.',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
       },
       derniereSousEtape(),
