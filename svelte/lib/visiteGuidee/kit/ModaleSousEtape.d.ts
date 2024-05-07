@@ -12,7 +12,7 @@ export type SousEtape = {
   callbackInitialeCible?: (cible: HTMLElement) => void;
   callbackFinaleCible?: (cible: HTMLElement) => void;
   delaiAvantAffichage?: number;
-  avecTrouRideauColle?: boolean;
+  margeElementMisEnAvant?: number;
   positionnementModale: PositionModale;
   titre: string;
   description: string;

@@ -117,11 +117,11 @@
     if (!positionCible || !sousEtape) return;
     positionCible = sousEtape.cible.getBoundingClientRect();
     let { left, top, right, bottom } = positionCible;
-    if (!sousEtape.avecTrouRideauColle) {
-      left -= 20;
-      right += 20;
-      bottom += 20;
-      top -= 30;
+    if (sousEtape.margeElementMisEnAvant) {
+      left -= sousEtape.margeElementMisEnAvant;
+      right += sousEtape.margeElementMisEnAvant;
+      bottom += sousEtape.margeElementMisEnAvant;
+      top -= sousEtape.margeElementMisEnAvant;
     }
     rideau.style.clipPath = `polygon(
             0% 0%,

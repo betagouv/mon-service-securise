@@ -31,7 +31,6 @@
           )[0].disabled = true;
         },
         delaiAvantAffichage: 300,
-        avecTrouRideauColle: true,
         callbackFinaleCible: () => {
           document
             .getElementsByClassName('fermeture-tiroir')[0]
@@ -46,7 +45,7 @@
       {
         cible: cibleIndiceCyber,
         callbackInitialeCible: (cible) => cible.removeAttribute('href'),
-        avecTrouRideauColle: true,
+        margeElementMisEnAvant: 3,
         positionnementModale: 'HautGauche',
         titre: "Améliorez l'indice cyber de votre service",
         description:
