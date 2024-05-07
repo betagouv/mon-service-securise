@@ -56,6 +56,15 @@ describe('Le serveur MSS des routes /service/*', () => {
           );
       });
 
+      it("vérifie que l'état de la visite guidée est chargé sur la route", (done) => {
+        testeur
+          .middleware()
+          .verifieRequeteChargeEtatVisiteGuidee(
+            `http://localhost:1234/service${route}`,
+            done
+          );
+      });
+
       it('sert le contenu HTML de la page', (done) => {
         axios
           .get(`http://localhost:1234/service${route}`)
