@@ -79,10 +79,6 @@ const creeServeur = (
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
 
-  app.get('/aPropos', (_requete, reponse) => {
-    reponse.render('aPropos');
-  });
-
   app.get('/securite', (_requete, reponse) => {
     reponse.render('securite');
   });
