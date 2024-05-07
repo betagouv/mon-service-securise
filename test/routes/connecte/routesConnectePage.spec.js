@@ -40,9 +40,22 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
   });
 
-  ['/tableauDeBord', '/historiqueProduit'].forEach((route) => {
+  [
+    '/tableauDeBord',
+    '/historiqueProduit',
+    '/visiteGuidee/decrire',
+    '/visiteGuidee/securiser',
+    '/visiteGuidee/homologuer',
+    '/visiteGuidee/piloter',
+  ].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
-      it("vérifie que l'utilisateur est authentifié", (done) => {
+      beforeEach(() => {
+        testeur.referentiel().recharge({
+          etapesParcoursHomologation: [{ numero: 1 }],
+        });
+      });
+
+      it("vérifie que l'utilisateur a accepté les CGU", (done) => {
         testeur
           .middleware()
           .verifieRequeteExigeAcceptationCGU(
@@ -70,6 +83,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           })
           .catch(done);
       });
+    });
+  });
+
+  describe('quand requête GET sur `/visiteGuidee/:idEtape`', () => {
+    it("charge les préférences de l'utilisateur", (done) => {
+      testeur
+        .middleware()
+        .verifieChargementDesPreferences(
+          'http://localhost:1234/visiteGuidee/decrire',
+          done
+        );
     });
   });
 });
