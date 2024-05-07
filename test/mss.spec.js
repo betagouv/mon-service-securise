@@ -39,27 +39,6 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/espacePersonnel`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/espacePersonnel',
-          done
-        );
-    });
-
-    it('redirige vers le tableau de bord', (done) => {
-      axios
-        .get('http://localhost:1234/espacePersonnel')
-        .then((reponse) => {
-          expect(reponse.request.res.responseUrl).to.contain('tableauDeBord');
-          done();
-        })
-        .catch(done);
-    });
-  });
-
   it("vérifie que l'état de la visite guidée est chargé sur le tableau de bord", (done) => {
     testeur
       .middleware()

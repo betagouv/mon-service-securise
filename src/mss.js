@@ -76,14 +76,6 @@ const creeServeur = (
   app.set('views', './src/vues');
 
   app.get(
-    '/espacePersonnel',
-    middleware.verificationAcceptationCGU,
-    (_requete, reponse) => {
-      reponse.redirect('tableauDeBord');
-    }
-  );
-
-  app.get(
     '/tableauDeBord',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
