@@ -23,6 +23,7 @@
         description:
           "Générez un dossier et un projet de décision d'homologation pour vous mettre en conformité avec la réglementation.",
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        margeElementMisEnAvant: 3,
       },
       {
         cible: cibleTelechargement,
@@ -43,7 +44,7 @@
             .getElementsByClassName('fermeture-tiroir')[0]
             .dispatchEvent(new Event('click'));
         },
-        avecTrouRideauColle: true,
+        margeElementMisEnAvant: 3,
         positionnementModale: 'BasDroite',
         titre: 'Téléchargez vos documents utiles',
         description:

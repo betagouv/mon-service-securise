@@ -44,7 +44,7 @@
       return {
         cible: cibleNouveauService,
         positionnementModale: 'HautGauche',
-        avecTrouRideauColle: true,
+        margeElementMisEnAvant: 3,
         callbackInitialeCible: (cible) => {
           cible.addEventListener(
             'click',
@@ -60,7 +60,6 @@
     return {
       cible: cibleLignePremierService,
       positionnementModale: 'BasMilieu',
-      avecTrouRideauColle: true,
       callbackInitialeCible: (cible) => {
         cible.inert = true;
       },
@@ -78,7 +77,6 @@
       {
         cible: cibleNomService,
         positionnementModale: 'MilieuDroite',
-        avecTrouRideauColle: true,
         callbackInitialeCible: () => {
           document
             .getElementsByClassName('conteneur-noms')[0]
@@ -95,7 +93,7 @@
       {
         cible: cibleBandeauNouveaute,
         positionnementModale: 'BasMilieu',
-        avecTrouRideauColle: true,
+        margeElementMisEnAvant: 3,
         callbackInitialeCible: (cible) => {
           cible.disabled = true;
         },
@@ -107,7 +105,7 @@
       {
         cible: cibleBOM,
         positionnementModale: 'BasGauche',
-        avecTrouRideauColle: true,
+        margeElementMisEnAvant: 3,
         callbackInitialeCible: () => {
           document
             .getElementsByClassName('bom-titre')[0]

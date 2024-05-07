@@ -25,6 +25,7 @@
         description:
           'Dans un premier temps, renseignez quelques informations afin d’obtenir une liste personnalisée de mesures de sécurité.',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        margeElementMisEnAvant: 28,
       },
       {
         cible: cibleGererContributeurs,
@@ -50,6 +51,7 @@
         description:
           'Vous pouvez travailler en équipe, inviter vos collègues mais également vos prestataires. Différents niveaux de droits sont disponibles (lecture, édition…).',
         animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        margeElementMisEnAvant: 3,
       },
     ]}
   />
