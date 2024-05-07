@@ -18,6 +18,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/statistiques',
     '/inscription',
     '/activation',
+    '/connexion',
   ].forEach((route) => {
     it(`sert le contenu HTML de la page ${route}`, (done) => {
       axios
@@ -28,6 +29,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
           done();
         })
         .catch(done);
+    });
+  });
+
+  describe('quand requête GET sur `/connexion`', () => {
+    it("déconnecte l'utilisateur courant", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeSuppressionCookie(
+          'http://localhost:1234/connexion',
+          done
+        );
     });
   });
 });

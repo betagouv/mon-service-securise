@@ -39,17 +39,6 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/connexion`', () => {
-    it("déconnecte l'utilisateur courant", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/connexion',
-          done
-        );
-    });
-  });
-
   describe('quand GET sur /motDePasse/edition', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       const utilisateur = { accepteCGU: () => true };
