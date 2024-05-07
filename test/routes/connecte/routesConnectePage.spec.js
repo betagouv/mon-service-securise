@@ -10,11 +10,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   beforeEach(testeur.initialise);
   afterEach(testeur.arrete);
 
-  [
-    '/motDePasse/edition',
-    '/motDePasse/initialisation',
-    '/utilisateur/edition',
-  ].forEach((route) => {
+  ['/motDePasse/initialisation', '/utilisateur/edition'].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
       beforeEach(() => {
         const utilisateur = unUtilisateur().construis();
@@ -41,6 +37,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   [
+    '/motDePasse/edition',
     '/tableauDeBord',
     '/historiqueProduit',
     '/visiteGuidee/decrire',
@@ -50,6 +47,8 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   ].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
       beforeEach(() => {
+        const utilisateur = unUtilisateur().construis();
+        testeur.depotDonnees().utilisateur = async () => utilisateur;
         testeur.referentiel().recharge({
           etapesParcoursHomologation: [{ numero: 1 }],
         });
