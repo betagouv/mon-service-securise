@@ -1,4 +1,7 @@
-import brancheValidationCasesACocher from './brancheValidationCasesACocher.mjs';
+import {
+  brancheValidationCasesACocher,
+  declencheValidationCasesACocher,
+} from './brancheValidationCasesACocher.mjs';
 
 const EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE = 'afficheErreursSiNecessaire';
 
@@ -49,6 +52,7 @@ const declencheScrollSurErreur = (selecteurFormulaire) => {
 };
 
 const declencheValidation = (selecteurFormulaire) => {
+  declencheValidationCasesACocher();
   $(selecteurFormulaire).trigger(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE);
   declencheScrollSurErreur(selecteurFormulaire);
 };
