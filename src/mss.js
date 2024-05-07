@@ -76,19 +76,6 @@ const creeServeur = (
   app.set('views', './src/vues');
 
   app.get(
-    '/motDePasse/initialisation',
-    middleware.verificationJWT,
-    (requete, reponse) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees
-        .utilisateur(idUtilisateur)
-        .then((utilisateur) =>
-          reponse.render('motDePasse/edition', { utilisateur })
-        );
-    }
-  );
-
-  app.get(
     '/espacePersonnel',
     middleware.verificationAcceptationCGU,
     (_requete, reponse) => {

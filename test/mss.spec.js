@@ -39,20 +39,6 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand GET sur /motDePasse/initialisation', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      const utilisateur = { accepteCGU: () => true };
-      testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateur);
-
-      testeur
-        .middleware()
-        .verifieRequeteExigeJWT(
-          'http://localhost:1234/motDePasse/initialisation',
-          done
-        );
-    });
-  });
-
   describe('quand requête GET sur `/espacePersonnel`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur

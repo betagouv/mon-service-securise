@@ -13,6 +13,15 @@ const routesConnectePage = ({ depotDonnees }) => {
     );
   });
 
+  routes.get('/motDePasse/initialisation', (requete, reponse) => {
+    const idUtilisateur = requete.idUtilisateurCourant;
+    depotDonnees
+      .utilisateur(idUtilisateur)
+      .then((utilisateur) =>
+        reponse.render('motDePasse/edition', { utilisateur })
+      );
+  });
+
   return routes;
 };
 

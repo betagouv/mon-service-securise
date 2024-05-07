@@ -7,7 +7,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   beforeEach(testeur.initialise);
   afterEach(testeur.arrete);
 
-  ['/motDePasse/edition'].forEach((route) => {
+  ['/motDePasse/edition', '/motDePasse/initialisation'].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
       beforeEach(() => {
         const utilisateur = { accepteCGU: () => true };
