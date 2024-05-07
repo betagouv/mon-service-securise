@@ -67,17 +67,6 @@ describe('Le serveur MSS', () => {
     });
   });
 
-  describe('quand requête GET sur `/reinitialisationMotDePasse`', () => {
-    it("déconnecte l'utilisateur courant", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/reinitialisationMotDePasse',
-          done
-        );
-    });
-  });
-
   describe('quand requête GET sur `/initialisationMotDePasse/:idReset`', () => {
     const uuid = '109156be-c4fb-41ea-b1b4-efe1671c5836';
 
