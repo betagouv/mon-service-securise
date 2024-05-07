@@ -12,10 +12,11 @@ block main
   .marges-fixes
     h1 Statistiques
 
-    iframe(
-      src=`${new URL(
-              `/public/dashboard/${process.env.STATISTIQUES_ID_DASHBOARD_METABASE}#titled=false&bordered=false&theme=transparent`,
-              process.env.STATISTIQUES_DOMAINE_METABASE_MSS
-            ).toString()}`
-      sandbox="allow-scripts allow-same-origin"
-    )
+    if process.env.STATISTIQUES_ID_DASHBOARD_METABASE
+      iframe(
+        src=`${new URL(
+                `/public/dashboard/${process.env.STATISTIQUES_ID_DASHBOARD_METABASE}#titled=false&bordered=false&theme=transparent`,
+                process.env.STATISTIQUES_DOMAINE_METABASE_MSS
+              ).toString()}`
+        sandbox="allow-scripts allow-same-origin"
+      )
