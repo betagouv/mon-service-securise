@@ -10,34 +10,36 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   beforeEach(testeur.initialise);
   afterEach(testeur.arrete);
 
-  ['/motDePasse/initialisation', '/utilisateur/edition'].forEach((route) => {
-    describe(`quand GET sur ${route}`, () => {
-      beforeEach(() => {
-        const utilisateur = unUtilisateur().construis();
-        testeur.depotDonnees().utilisateur = async () => utilisateur;
-      });
+  describe(`quand GET sur /motDePasse/initialisation`, () => {
+    beforeEach(() => {
+      const utilisateur = unUtilisateur().construis();
+      testeur.depotDonnees().utilisateur = async () => utilisateur;
+    });
 
-      it("vérifie que l'utilisateur est authentifié", (done) => {
-        testeur
-          .middleware()
-          .verifieRequeteExigeJWT(`http://localhost:1234${route}`, done);
-      });
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeJWT(
+          'http://localhost:1234/motDePasse/initialisation',
+          done
+        );
+    });
 
-      it('sert le contenu HTML de la page', (done) => {
-        axios
-          .get(`http://localhost:1234${route}`)
-          .then((reponse) => {
-            expect(reponse.status).to.equal(200);
-            expect(reponse.headers['content-type']).to.contain('text/html');
-            done();
-          })
-          .catch(done);
-      });
+    it('sert le contenu HTML de la page ', (done) => {
+      axios
+        .get('http://localhost:1234/motDePasse/initialisation')
+        .then((reponse) => {
+          expect(reponse.status).to.equal(200);
+          expect(reponse.headers['content-type']).to.contain('text/html');
+          done();
+        })
+        .catch(done);
     });
   });
 
   [
     '/motDePasse/edition',
+    '/utilisateur/edition',
     '/tableauDeBord',
     '/historiqueProduit',
     '/visiteGuidee/decrire',
