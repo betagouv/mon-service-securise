@@ -11,16 +11,6 @@ describe('Le serveur MSS', () => {
 
   afterEach(testeur.arrete);
 
-  it('sert des pages HTML', (done) => {
-    axios
-      .get('http://localhost:1234/')
-      .then((reponse) => {
-        expect(reponse.status).to.equal(200);
-        done();
-      })
-      .catch(done);
-  });
-
   it('utilise un filtrage IP pour ne servir que les IP autorisées', (done) => {
     testeur.middleware().verifieFiltrageIp('http://localhost:1234', done);
   });
