@@ -76,15 +76,6 @@ const creeServeur = (
   app.set('views', './src/vues');
 
   app.get(
-    '/tableauDeBord',
-    middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
-    (_requete, reponse) => {
-      reponse.render('tableauDeBord');
-    }
-  );
-
-  app.get(
     '/historiqueProduit',
     middleware.verificationAcceptationCGU,
     (_requete, reponse) => {
