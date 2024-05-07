@@ -18,6 +18,7 @@ const InformationsHomologation = require('./modeles/informationsHomologation');
 const Service = require('./modeles/service');
 const Utilisateur = require('./modeles/utilisateur');
 const routesNonConnectePage = require('./routes/nonConnecte/routesNonConnectePage');
+const routesConnectePage = require('./routes/connecte/routesConnectePage');
 
 require('dotenv').config();
 
@@ -75,20 +76,6 @@ const creeServeur = (
   app.set('views', './src/vues');
 
   app.get(
-    '/motDePasse/edition',
-    middleware.verificationJWT,
-    (requete, reponse) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees.utilisateur(idUtilisateur).then((utilisateur) =>
-        reponse.render('motDePasse/edition', {
-          utilisateur,
-          afficheChallengeMotDePasse: true,
-        })
-      );
-    }
-  );
-
-  app.get(
     '/motDePasse/initialisation',
     middleware.verificationJWT,
     (requete, reponse) => {
@@ -127,6 +114,7 @@ const creeServeur = (
   );
 
   app.use('', routesNonConnectePage({ depotDonnees, middleware, referentiel }));
+  app.use('', middleware.verificationJWT, routesConnectePage({ depotDonnees }));
 
   app.use(
     '/api',
