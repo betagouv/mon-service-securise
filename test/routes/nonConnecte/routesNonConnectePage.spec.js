@@ -7,7 +7,18 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   beforeEach(testeur.initialise);
   afterEach(testeur.arrete);
 
-  ['/', '/aPropos'].forEach((route) => {
+  [
+    '/',
+    '/aPropos',
+    '/securite',
+    '/accessibilite',
+    '/cgu',
+    '/confidentialite',
+    '/mentionsLegales',
+    '/statistiques',
+    '/inscription',
+    '/activation',
+  ].forEach((route) => {
     it(`sert le contenu HTML de la page ${route}`, (done) => {
       axios
         .get(`http://localhost:1234${route}`)

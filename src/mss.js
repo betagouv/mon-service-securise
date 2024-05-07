@@ -79,22 +79,6 @@ const creeServeur = (
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
 
-  app.get('/securite', (_requete, reponse) => {
-    reponse.render('securite');
-  });
-
-  app.get('/accessibilite', (_requete, reponse) => {
-    reponse.render('accessibilite');
-  });
-
-  app.get('/cgu', (_requete, reponse) => {
-    reponse.render('cgu');
-  });
-
-  app.get('/confidentialite', (_requete, reponse) => {
-    reponse.render('confidentialite');
-  });
-
   app.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
     const { urlRedirection } = requete.query;
 
@@ -146,14 +130,6 @@ const creeServeur = (
     reponse.redirect('https://aide.monservicesecurise.ssi.gouv.fr');
   });
 
-  app.get('/mentionsLegales', (_requete, reponse) => {
-    reponse.render('mentionsLegales');
-  });
-
-  app.get('/statistiques', (_requete, reponse) => {
-    reponse.render('statistiques');
-  });
-
   app.get(
     '/reinitialisationMotDePasse',
     middleware.suppressionCookie,
@@ -161,15 +137,6 @@ const creeServeur = (
       reponse.render('reinitialisationMotDePasse');
     }
   );
-
-  app.get('/inscription', (_requete, reponse) => {
-    const departements = referentiel.departements();
-    reponse.render('inscription', { departements });
-  });
-
-  app.get('/activation', (_requete, reponse) => {
-    reponse.render('activation');
-  });
 
   app.get(
     '/initialisationMotDePasse/:idReset',
@@ -221,7 +188,7 @@ const creeServeur = (
     }
   );
 
-  app.use('', routesNonConnectePage());
+  app.use('', routesNonConnectePage({ referentiel }));
 
   app.use(
     '/api',
