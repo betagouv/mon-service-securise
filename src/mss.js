@@ -93,7 +93,7 @@ const creeServeur = (
   );
 
   app.use('', routesNonConnectePage({ depotDonnees, middleware, referentiel }));
-  app.use('', middleware.verificationJWT, routesConnectePage({ depotDonnees }));
+  app.use('', routesConnectePage({ depotDonnees, middleware, referentiel }));
 
   app.use(
     '/api',
@@ -139,20 +139,6 @@ const creeServeur = (
       adaptateurGestionErreur,
       adaptateurHorloge,
     })
-  );
-
-  app.get(
-    '/utilisateur/edition',
-    middleware.verificationJWT,
-    (requete, reponse) => {
-      const departements = referentiel.departements();
-      const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees
-        .utilisateur(idUtilisateur)
-        .then((utilisateur) =>
-          reponse.render('utilisateur/edition', { utilisateur, departements })
-        );
-    }
   );
 
   app.get(
