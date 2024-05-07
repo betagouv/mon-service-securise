@@ -1,19 +1,20 @@
-const brancheValidationGroupeCasesACocher = ($groupeCasesACocher) => {
-  const $toutesCasesACocher = $('input:checkbox', $groupeCasesACocher);
-
-  const verifieEtatCasesACocher = () => {
+const declencheValidationCasesACocher = () => {
+  $('fieldset.casesACocher[required]').each((_, $groupeCasesACocher) => {
+    const $toutesCasesACocher = $('input:checkbox', $groupeCasesACocher);
     const messageErreur =
       $toutesCasesACocher.filter(':checked').length === 0
         ? 'Erreur de saisie'
         : '';
-    $toutesCasesACocher.each((_, caseACocher) => {
+    $toutesCasesACocher.each((__, caseACocher) => {
       caseACocher.setCustomValidity(messageErreur);
       caseACocher.reportValidity();
     });
-  };
+  });
+};
 
-  verifieEtatCasesACocher();
-  $toutesCasesACocher.on('change', () => verifieEtatCasesACocher());
+const brancheValidationGroupeCasesACocher = ($groupeCasesACocher) => {
+  const $toutesCasesACocher = $('input:checkbox', $groupeCasesACocher);
+  $toutesCasesACocher.on('change', () => declencheValidationCasesACocher());
 };
 
 const brancheValidationCasesACocher = () => {
@@ -22,4 +23,4 @@ const brancheValidationCasesACocher = () => {
   });
 };
 
-export default brancheValidationCasesACocher;
+export { brancheValidationCasesACocher, declencheValidationCasesACocher };

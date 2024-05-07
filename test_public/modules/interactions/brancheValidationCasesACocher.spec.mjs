@@ -2,7 +2,10 @@ import expect from 'expect.js';
 import jquery from 'jquery';
 import { JSDOM } from 'jsdom';
 
-import brancheValidationCasesACocher from '../../../public/modules/interactions/brancheValidationCasesACocher.mjs';
+import {
+  brancheValidationCasesACocher,
+  declencheValidationCasesACocher,
+} from '../../../public/modules/interactions/brancheValidationCasesACocher.mjs';
 
 describe('Le branchement de la validation des cases à cocher', () => {
   const validiteToutesCases = (selecteurGroupe) =>
@@ -45,7 +48,7 @@ describe('Le branchement de la validation des cases à cocher', () => {
   describe('quand le groupe est indiqué comme requis', () => {
     it('rend les cases à cocher invalides quand les cases sont non cochées', () => {
       brancheValidationCasesACocher();
-
+      declencheValidationCasesACocher();
       verifieToutesInvalides('#casesACocher');
     });
 
@@ -80,6 +83,7 @@ describe('Le branchement de la validation des cases à cocher', () => {
   describe('quand il y a plusieurs groupe de cases à cocher', () => {
     it('permet de valider séparément les groupes', () => {
       brancheValidationCasesACocher();
+      declencheValidationCasesACocher();
 
       verifieToutesInvalides('#casesACocher');
       verifieToutesValides('#casesACocher2');
