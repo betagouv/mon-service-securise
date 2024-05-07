@@ -19,6 +19,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/inscription',
     '/activation',
     '/connexion',
+    '/reinitialisationMotDePasse',
   ].forEach((route) => {
     it(`sert le contenu HTML de la page ${route}`, (done) => {
       axios
@@ -38,6 +39,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         .middleware()
         .verifieRequeteExigeSuppressionCookie(
           'http://localhost:1234/connexion',
+          done
+        );
+    });
+  });
+
+  describe('quand requête GET sur `/reinitialisationMotDePasse`', () => {
+    it("déconnecte l'utilisateur courant", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeSuppressionCookie(
+          'http://localhost:1234/reinitialisationMotDePasse',
           done
         );
     });

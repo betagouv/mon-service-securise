@@ -67,6 +67,14 @@ const routesNonConnectePage = ({ middleware, referentiel }) => {
     });
   });
 
+  routes.get(
+    '/reinitialisationMotDePasse',
+    middleware.suppressionCookie,
+    (_requete, reponse) => {
+      reponse.render('reinitialisationMotDePasse');
+    }
+  );
+
   return routes;
 };
 

@@ -108,14 +108,6 @@ const creeServeur = (
   });
 
   app.get(
-    '/reinitialisationMotDePasse',
-    middleware.suppressionCookie,
-    (_requete, reponse) => {
-      reponse.render('reinitialisationMotDePasse');
-    }
-  );
-
-  app.get(
     '/initialisationMotDePasse/:idReset',
     middleware.aseptise('idReset'),
     async (requete, reponse) => {
