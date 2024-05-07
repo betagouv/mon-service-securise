@@ -39,4 +39,37 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       });
     });
   });
+
+  ['/tableauDeBord'].forEach((route) => {
+    describe(`quand GET sur ${route}`, () => {
+      it("vérifie que l'utilisateur est authentifié", (done) => {
+        testeur
+          .middleware()
+          .verifieRequeteExigeAcceptationCGU(
+            `http://localhost:1234${route}`,
+            done
+          );
+      });
+
+      it("vérifie que l'état de la visite guidée est chargé sur la route", (done) => {
+        testeur
+          .middleware()
+          .verifieRequeteChargeEtatVisiteGuidee(
+            `http://localhost:1234${route}`,
+            done
+          );
+      });
+
+      it('sert le contenu HTML de la page', (done) => {
+        axios
+          .get(`http://localhost:1234${route}`)
+          .then((reponse) => {
+            expect(reponse.status).to.equal(200);
+            expect(reponse.headers['content-type']).to.contain('text/html');
+            done();
+          })
+          .catch(done);
+      });
+    });
+  });
 });

@@ -44,6 +44,15 @@ const routesConnectePage = ({ middleware, depotDonnees, referentiel }) => {
     }
   );
 
+  routes.get(
+    '/tableauDeBord',
+    middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
+    (_requete, reponse) => {
+      reponse.render('tableauDeBord');
+    }
+  );
+
   return routes;
 };
 
