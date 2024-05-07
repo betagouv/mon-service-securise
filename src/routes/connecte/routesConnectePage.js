@@ -143,6 +143,7 @@ const routesConnectePage = ({
   routes.use(
     '/service',
     middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
     routesConnectePageService({
       middleware,
       referentiel,
