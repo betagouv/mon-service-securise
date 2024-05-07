@@ -14,6 +14,9 @@ const {
   verifieTypeFichierServiEstCSV,
   verifieNomFichierServi,
 } = require('../../aides/verifieFichierServi');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -21,6 +24,50 @@ describe('Le serveur MSS des routes /service/*', () => {
   beforeEach(testeur.initialise);
 
   afterEach(testeur.arrete);
+
+  [
+    '/creation',
+    '/ID-SERVICE',
+    '/ID-SERVICE/descriptionService',
+    '/ID-SERVICE/mesures',
+    '/ID-SERVICE/indiceCyber',
+    '/ID-SERVICE/rolesResponsabilites',
+    '/ID-SERVICE/risques',
+    '/ID-SERVICE/dossiers',
+  ].forEach((route) => {
+    describe(`quand GET sur /service${route}`, () => {
+      beforeEach(() => {
+        const utilisateur = unUtilisateur().construis();
+        testeur.depotDonnees().utilisateur = async () => utilisateur;
+        testeur.referentiel().recharge({
+          etapesParcoursHomologation: [
+            { numero: 1, id: 'dateTelechargement' },
+            { numero: 2, id: 'deuxieme', reserveePeutHomologuer: true },
+          ],
+        });
+      });
+
+      it("vérifie que l'utilisateur a accepté les CGU", (done) => {
+        testeur
+          .middleware()
+          .verifieRequeteExigeAcceptationCGU(
+            `http://localhost:1234/service${route}`,
+            done
+          );
+      });
+
+      it('sert le contenu HTML de la page', (done) => {
+        axios
+          .get(`http://localhost:1234/service${route}`)
+          .then((reponse) => {
+            expect(reponse.status).to.equal(200);
+            expect(reponse.headers['content-type']).to.contain('text/html');
+            done();
+          })
+          .catch(done);
+      });
+    });
+  });
 
   describe('quand requête GET sur `/service/creation `', () => {
     beforeEach(() => {
