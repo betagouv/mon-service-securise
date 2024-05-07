@@ -3,12 +3,16 @@ const { decode } = require('html-entities');
 const Utilisateur = require('../../modeles/utilisateur');
 const Service = require('../../modeles/service');
 const InformationsHomologation = require('../../modeles/informationsHomologation');
+const routesConnectePageService = require('./routesConnectePageService');
 
 const routesConnectePage = ({
   middleware,
   moteurRegles,
   depotDonnees,
   referentiel,
+  adaptateurCsv,
+  adaptateurGestionErreur,
+  adaptateurHorloge,
 }) => {
   const routes = express.Router();
 
@@ -134,6 +138,20 @@ const routesConnectePage = ({
         reponse.render('tableauDeBord');
       }
     }
+  );
+
+  routes.use(
+    '/service',
+    middleware.verificationAcceptationCGU,
+    routesConnectePageService({
+      middleware,
+      referentiel,
+      depotDonnees,
+      moteurRegles,
+      adaptateurCsv,
+      adaptateurGestionErreur,
+      adaptateurHorloge,
+    })
   );
 
   return routes;

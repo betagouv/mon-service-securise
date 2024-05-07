@@ -29,7 +29,6 @@ const routesConnectePageService = ({
 
   routes.get(
     '/creation',
-    middleware.verificationAcceptationCGU,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse, suite) => {
       const { idUtilisateurCourant } = requete;

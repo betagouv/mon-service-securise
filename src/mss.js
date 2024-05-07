@@ -7,7 +7,6 @@ const {
   ENDPOINTS_SANS_CSRF,
 } = require('./http/configurationServeur');
 const routesConnecteApi = require('./routes/connecte/routesConnecteApi');
-const routesConnectePageService = require('./routes/connecte/routesConnectePageService');
 const routesNonConnecteApi = require('./routes/nonConnecte/routesNonConnecteApi');
 const {
   routesNonConnecteApiBibliotheques,
@@ -79,9 +78,11 @@ const creeServeur = (
       middleware,
       moteurRegles,
       referentiel,
+      adaptateurCsv,
+      adaptateurGestionErreur,
+      adaptateurHorloge,
     })
   );
-
   app.use(
     '/api',
     routesNonConnecteApi({
@@ -93,9 +94,6 @@ const creeServeur = (
       adaptateurMail,
     })
   );
-  app.use('/bibliotheques', routesNonConnecteApiBibliotheques());
-  app.use('/styles', routesNonConnecteApiStyles());
-
   app.use(
     '/api',
     middleware.verificationJWT,
@@ -113,20 +111,8 @@ const creeServeur = (
       serviceAnnuaire,
     })
   );
-
-  app.use(
-    '/service',
-    middleware.verificationJWT,
-    routesConnectePageService({
-      middleware,
-      referentiel,
-      depotDonnees,
-      moteurRegles,
-      adaptateurCsv,
-      adaptateurGestionErreur,
-      adaptateurHorloge,
-    })
-  );
+  app.use('/bibliotheques', routesNonConnecteApiBibliotheques());
+  app.use('/styles', routesNonConnecteApiStyles());
 
   app.use(
     '/statique',
