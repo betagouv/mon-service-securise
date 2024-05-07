@@ -53,6 +53,15 @@ const routesConnectePage = ({ middleware, depotDonnees, referentiel }) => {
     }
   );
 
+  routes.get(
+    '/historiqueProduit',
+    middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
+    (_requete, reponse) => {
+      reponse.render('historiqueProduit');
+    }
+  );
+
   return routes;
 };
 
