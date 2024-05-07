@@ -15,10 +15,6 @@ const {
   routesNonConnecteApiBibliotheques,
 } = require('./routes/nonConnecte/routesNonConnecteApiBibliotheques');
 const routesNonConnecteApiStyles = require('./routes/nonConnecte/routesNonConnecteApiStyles');
-const {
-  estUrlLegalePourRedirection,
-  construisUrlAbsolueVersPage,
-} = require('./http/redirection');
 const InformationsHomologation = require('./modeles/informationsHomologation');
 const Service = require('./modeles/service');
 const Utilisateur = require('./modeles/utilisateur');
@@ -78,25 +74,6 @@ const creeServeur = (
   app.set('trust proxy', 1);
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
-
-  app.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
-    const { urlRedirection } = requete.query;
-
-    if (!urlRedirection) {
-      reponse.render('connexion');
-      return;
-    }
-
-    if (!estUrlLegalePourRedirection(urlRedirection)) {
-      // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
-      reponse.redirect('connexion');
-      return;
-    }
-
-    reponse.render('connexion', {
-      urlRedirection: construisUrlAbsolueVersPage(urlRedirection),
-    });
-  });
 
   app.get(
     '/motDePasse/edition',
@@ -188,7 +165,7 @@ const creeServeur = (
     }
   );
 
-  app.use('', routesNonConnectePage({ referentiel }));
+  app.use('', routesNonConnectePage({ middleware, referentiel }));
 
   app.use(
     '/api',

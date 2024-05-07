@@ -1,6 +1,10 @@
 const express = require('express');
+const {
+  estUrlLegalePourRedirection,
+  construisUrlAbsolueVersPage,
+} = require('../../http/redirection');
 
-const routesNonConnectePage = ({ referentiel }) => {
+const routesNonConnectePage = ({ middleware, referentiel }) => {
   const routes = express.Router();
 
   routes.get('/', (_requete, reponse) => {
@@ -42,6 +46,25 @@ const routesNonConnectePage = ({ referentiel }) => {
 
   routes.get('/activation', (_requete, reponse) => {
     reponse.render('activation');
+  });
+
+  routes.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
+    const { urlRedirection } = requete.query;
+
+    if (!urlRedirection) {
+      reponse.render('connexion');
+      return;
+    }
+
+    if (!estUrlLegalePourRedirection(urlRedirection)) {
+      // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
+      reponse.redirect('connexion');
+      return;
+    }
+
+    reponse.render('connexion', {
+      urlRedirection: construisUrlAbsolueVersPage(urlRedirection),
+    });
   });
 
   return routes;
