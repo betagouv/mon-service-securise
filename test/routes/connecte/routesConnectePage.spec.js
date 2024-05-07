@@ -1,17 +1,24 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
   beforeEach(testeur.initialise);
   afterEach(testeur.arrete);
 
-  ['/motDePasse/edition', '/motDePasse/initialisation'].forEach((route) => {
+  [
+    '/motDePasse/edition',
+    '/motDePasse/initialisation',
+    '/utilisateur/edition',
+  ].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
       beforeEach(() => {
-        const utilisateur = { accepteCGU: () => true };
-        testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateur);
+        const utilisateur = unUtilisateur().construis();
+        testeur.depotDonnees().utilisateur = async () => utilisateur;
       });
 
       it("vérifie que l'utilisateur est authentifié", (done) => {

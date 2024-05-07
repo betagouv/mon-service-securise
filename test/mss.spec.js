@@ -48,19 +48,6 @@ describe('Le serveur MSS', () => {
       );
   });
 
-  describe('quand requête GET sur `/utilisateur/edition`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      const utilisateur = unUtilisateur().quiAccepteCGU().construis();
-      testeur.depotDonnees().utilisateur = () => Promise.resolve(utilisateur);
-      testeur
-        .middleware()
-        .verifieRequeteExigeJWT(
-          'http://localhost:1234/utilisateur/edition',
-          done
-        );
-    });
-  });
-
   describe('quand requête GET sur `/visiteGuidee/:idEtape`', () => {
     it("vérifie que l'utilisateur est authentifié", (done) => {
       const utilisateur = unUtilisateur().quiAccepteCGU().construis();
