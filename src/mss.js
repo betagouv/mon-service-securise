@@ -22,6 +22,7 @@ const {
 const InformationsHomologation = require('./modeles/informationsHomologation');
 const Service = require('./modeles/service');
 const Utilisateur = require('./modeles/utilisateur');
+const routesNonConnectePage = require('./routes/nonConnecte/routesNonConnectePage');
 
 require('dotenv').config();
 
@@ -77,10 +78,6 @@ const creeServeur = (
   app.set('trust proxy', 1);
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
-
-  app.get('/', (_requete, reponse) => {
-    reponse.render('home');
-  });
 
   app.get('/aPropos', (_requete, reponse) => {
     reponse.render('aPropos');
@@ -227,6 +224,8 @@ const creeServeur = (
       reponse.render('historiqueProduit');
     }
   );
+
+  app.use('', routesNonConnectePage());
 
   app.use(
     '/api',
