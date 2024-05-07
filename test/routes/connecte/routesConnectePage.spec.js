@@ -40,7 +40,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
   });
 
-  ['/tableauDeBord'].forEach((route) => {
+  ['/tableauDeBord', '/historiqueProduit'].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
       it("vérifie que l'utilisateur est authentifié", (done) => {
         testeur

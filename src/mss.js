@@ -75,14 +75,6 @@ const creeServeur = (
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
 
-  app.get(
-    '/historiqueProduit',
-    middleware.verificationAcceptationCGU,
-    (_requete, reponse) => {
-      reponse.render('historiqueProduit');
-    }
-  );
-
   app.use('', routesNonConnectePage({ depotDonnees, middleware, referentiel }));
   app.use('', routesConnectePage({ depotDonnees, middleware, referentiel }));
 
