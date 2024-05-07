@@ -14,7 +14,8 @@ const routesConnectePage = ({
 
   routes.get(
     '/motDePasse/edition',
-    middleware.verificationJWT,
+    middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
     (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       depotDonnees.utilisateur(idUtilisateur).then((utilisateur) =>
