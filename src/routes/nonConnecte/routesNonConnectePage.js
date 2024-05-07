@@ -7,6 +7,10 @@ const routesNonConnectePage = () => {
     reponse.render('home');
   });
 
+  routes.get('/aPropos', (_requete, reponse) => {
+    reponse.render('aPropos');
+  });
+
   return routes;
 };
 
