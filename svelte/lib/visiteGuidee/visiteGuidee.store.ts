@@ -2,7 +2,7 @@ import { derived, get, writable } from 'svelte/store';
 import EtapeBienvenue from './etapes/initiale/EtapeBienvenue.svelte';
 import EtapePresentationMenuNavigation from './etapes/initiale/EtapePresentationMenuNavigation.svelte';
 import EtapeDecrire from './etapes/decrire/EtapeDecrire.svelte';
-import type { EtapeVisiteGuidee, Utilisateur } from './visiteGuidee.d';
+import type { EtatVisiteGuidee, Utilisateur } from './visiteGuidee.d';
 import EtapeSecuriser from './etapes/securiser/EtapeSecuriser.svelte';
 import EtapeHomologuer from './etapes/homologuer/EtapeHomologuer.svelte';
 import EtapePiloter from './etapes/piloter/EtapePiloter.svelte';
@@ -12,7 +12,11 @@ import {
   termineEtape,
 } from './visiteGuidee.api';
 
-const { subscribe, set } = writable<EtapeVisiteGuidee>('BIENVENUE');
+const etatParDefaut: EtatVisiteGuidee = {
+  etapeCourante: 'BIENVENUE',
+};
+
+const { subscribe, set } = writable<EtatVisiteGuidee>(etatParDefaut);
 const { subscribe: subscribeUtilisateur, set: setUtilisateur } =
   writable<Utilisateur>();
 
@@ -27,15 +31,16 @@ const redirigeApresFinalisationVisite = () => {
 };
 
 export const visiteGuidee = {
-  initialise: (etapeCourante: EtapeVisiteGuidee) =>
-    set(etapeCourante || 'BIENVENUE'),
+  initialise: (etatVisiteGuidee: EtatVisiteGuidee) => {
+    set(etatVisiteGuidee.etapeCourante ? etatVisiteGuidee : etatParDefaut);
+  },
   subscribe,
   async masqueEtapeCourante() {
     await metsEnPause();
     window.location.href = '/tableauDeBord';
   },
   masqueModale() {
-    set('MASQUE');
+    set({ etapeCourante: 'MASQUE' });
   },
   async fermeDefinitivementVisiteGuidee() {
     await finaliseVisiteGuidee();
@@ -46,16 +51,16 @@ export const visiteGuidee = {
     redirigeApresFinalisationVisite();
   },
   async etapeSuivante() {
-    const etapeCourante = get(visiteGuidee);
-    switch (etapeCourante) {
+    const etat = get(visiteGuidee);
+    switch (etat.etapeCourante) {
       case 'BIENVENUE':
-        set('PRESENTATION_MENU_NAV');
+        set({ etapeCourante: 'PRESENTATION_MENU_NAV' });
         break;
       case 'PRESENTATION_MENU_NAV':
         window.location.href = '/visiteGuidee/decrire';
         break;
       default:
-        const urlEtapeSuivante = await termineEtape(etapeCourante);
+        const urlEtapeSuivante = await termineEtape(etat.etapeCourante);
         if (urlEtapeSuivante) {
           window.location.href = urlEtapeSuivante;
         }
@@ -70,7 +75,7 @@ export const utilisateurCourant = {
 };
 
 export const composantVisiteGuidee = derived(visiteGuidee, ($visiteGuidee) => {
-  switch ($visiteGuidee) {
+  switch ($visiteGuidee.etapeCourante) {
     case 'BIENVENUE':
       return EtapeBienvenue;
     case 'PRESENTATION_MENU_NAV':
