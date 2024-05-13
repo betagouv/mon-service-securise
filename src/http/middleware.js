@@ -205,6 +205,7 @@ const middleware = (configuration = {}) => {
     reponse.locals.visiteGuideeActive = visiteGuideeActive;
     if (!visiteGuideeActive) {
       suite();
+      return;
     }
     if (!requete.idUtilisateurCourant)
       throw new ErreurChainageMiddleware(
