@@ -90,9 +90,14 @@ const routesConnectePage = ({
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
 
       const { idEtape } = requete.params;
+      const idEtapeCourante = idEtape.toUpperCase();
+      const idEtapePrecedente =
+        referentiel.etapePrecedenteVisiteGuidee(idEtapeCourante);
+      const etapePrecedente = referentiel.etapeVisiteGuidee(idEtapePrecedente);
       reponse.locals.etatVisiteGuidee = {
         ...reponse.locals.etatVisiteGuidee,
-        etapeCourante: idEtape.toUpperCase(),
+        etapeCourante: idEtapeCourante,
+        urlEtapePrecedente: etapePrecedente?.urlEtape,
       };
       reponse.locals.autorisationsService = {
         DECRIRE: { estMasque: false },

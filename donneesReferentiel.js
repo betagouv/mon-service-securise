@@ -1272,13 +1272,18 @@ module.exports = {
       urlEtape: '/visiteGuidee/decrire',
     },
     SECURISER: {
+      idEtapePrecedente: 'DECRIRE',
       idEtapeSuivante: 'HOMOLOGUER',
       urlEtape: '/visiteGuidee/securiser',
     },
     HOMOLOGUER: {
+      idEtapePrecedente: 'SECURISER',
       idEtapeSuivante: 'PILOTER',
       urlEtape: '/visiteGuidee/homologuer',
     },
-    PILOTER: { urlEtape: '/visiteGuidee/piloter' },
+    PILOTER: {
+      idEtapePrecedente: 'HOMOLOGUER',
+      urlEtape: '/visiteGuidee/piloter',
+    },
   },
 };
