@@ -10,6 +10,7 @@ export type VisiteGuideeProps = {
   etapesVues: EtapeVisiteGuidee[];
   enPause: boolean;
   utilisateurCourant: Utilisateur;
+  urlEtapePrecedente?: string;
 };
 
 export type Utilisateur = {
@@ -25,6 +26,11 @@ export type EtapeVisiteGuidee =
   | 'HOMOLOGUER'
   | 'PILOTER'
   | 'MASQUE';
+
+export type EtatVisiteGuidee = {
+  etapeCourante: EtapeVisiteGuidee;
+  urlEtapePrecedente?: string;
+};
 
 type EtapeIndicateurEtape = {
   titre: string;
