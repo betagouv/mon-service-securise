@@ -15,25 +15,27 @@
             id: 'DECRIRE',
             icone:
               '/statique/assets/images/actionsSaisie/descriptionService.svg',
+            lien: '/visiteGuidee/decrire',
           },
           {
             titre: 'Sécurisez',
-            id: 'securiser',
+            id: 'SECURISER',
             icone: '/statique/assets/images/actionsSaisie/mesures.svg',
           },
           {
             titre: 'Homologuez',
-            id: 'homologuer',
+            id: 'HOMOLOGUER',
             icone: '/statique/assets/images/actionsSaisie/dossiers.svg',
           },
           {
             titre: 'Pilotez vos services',
-            id: 'piloter',
+            id: 'PILOTER',
             icone: '/statique/assets/images/actionsSaisie/piloter.svg',
           },
         ],
       }}
-      etapeCourante="DECRIRE"
+      etapeCourante="PRESENTATION_MENU_NAV"
+      etapesVues={[]}
     />
     <div class="conteneur-actions">
       <button
