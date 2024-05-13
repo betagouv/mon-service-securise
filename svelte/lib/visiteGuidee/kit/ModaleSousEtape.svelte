@@ -7,7 +7,10 @@
   export let sousEtapes: SousEtape[];
 
   const rideau = document.getElementById('visite-guidee-rideau')!;
-  let indexEtapeCourante = 0;
+  const parametresDeRecherche = new URLSearchParams(window.location.search);
+  const afficheDerniereSousEtape =
+    parametresDeRecherche.has('derniereSousEtape');
+  let indexEtapeCourante = afficheDerniereSousEtape ? sousEtapes.length - 1 : 0;
 
   let positionCible: DOMRect;
   let positionModale: {
