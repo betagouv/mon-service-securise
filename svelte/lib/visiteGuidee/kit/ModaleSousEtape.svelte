@@ -213,6 +213,13 @@
             >
               Précédent
             </button>
+          {:else if $visiteGuidee.urlEtapePrecedente}
+            <a
+              class="bouton bouton-tertiaire"
+              href={`${$visiteGuidee.urlEtapePrecedente}?derniereSousEtape`}
+            >
+              Précédent
+            </a>
           {/if}
           <button
             class="bouton suivant"
@@ -313,7 +320,8 @@
     }
   }
 
-  button {
+  button,
+  a {
     cursor: pointer;
     width: fit-content;
     margin: 0;
