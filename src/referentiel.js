@@ -25,6 +25,7 @@ const donneesReferentielVide = {
   statutsMesures: {},
   tranchesIndicesCybers: [],
   nombreOrganisationsUtilisatrices: [],
+  etapesVisiteGuidee: [],
 };
 
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
@@ -284,6 +285,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     Object.keys(donnees.etapesVisiteGuidee).includes(idEtape);
   const etapeSuivanteVisiteGuidee = (idEtapeCourante) =>
     donnees.etapesVisiteGuidee[idEtapeCourante]?.idEtapeSuivante ?? null;
+  const etapePrecedenteVisiteGuidee = (idEtapeCourante) =>
+    donnees.etapesVisiteGuidee[idEtapeCourante]?.idEtapePrecedente ?? null;
   const nbEtapesVisiteGuidee = () =>
     Object.keys(donnees.etapesVisiteGuidee || {}).length;
 
@@ -364,6 +367,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     typeService,
     typesService,
     verifieCategoriesMesuresSontRepertoriees,
+    etapePrecedenteVisiteGuidee,
     etapeSuivanteVisiteGuidee,
     etapeVisiteGuidee,
     etapeVisiteGuideeExiste,

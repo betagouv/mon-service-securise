@@ -990,6 +990,38 @@ describe('Le référentiel', () => {
     });
   });
 
+  describe("sur demande de l'étape précédente de la visite guidée", () => {
+    it("retourne l'ID de l'étape précédente", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesVisiteGuidee: {
+          SECURISER: { idEtapePrecedente: 'DECRIRE' },
+        },
+      });
+
+      expect(referentiel.etapePrecedenteVisiteGuidee('SECURISER')).to.be(
+        'DECRIRE'
+      );
+    });
+
+    it("retourne `null` si l'ID est introuvable", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesVisiteGuidee: {},
+      });
+
+      expect(referentiel.etapePrecedenteVisiteGuidee('ID_INTROUVABLE')).to.be(
+        null
+      );
+    });
+
+    it("retourne `null` si l'étape n'a pas d'étape précédente", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        etapesVisiteGuidee: { DECRIRE: {} },
+      });
+
+      expect(referentiel.etapePrecedenteVisiteGuidee('DECRIRE')).to.be(null);
+    });
+  });
+
   it("sait renvoyer le contenu d'un étape de visite guidée", () => {
     const referentiel = Referentiel.creeReferentiel({
       etapesVisiteGuidee: { DECRIRE: { urlEtape: '/visiteGuidee/decrire' } },
