@@ -40,7 +40,7 @@
         titre: 'Sécurisez grâce à des mesures adaptées',
         description:
           'Chaque mesure est associée à son référentiel (ANSSI, CNIL) et son niveau d’importance (recommandée ou indispensable pour les mesures ANSSI).',
-        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        animation: '/statique/assets/images/visiteGuidee/securiser.gif',
       },
       {
         cible: cibleIndiceCyber,
@@ -50,7 +50,7 @@
         titre: "Améliorez l'indice cyber de votre service",
         description:
           'Mettez en œuvre les mesures proposées et obtenez une évaluation indicative du niveau de sécurisation de votre service.',
-        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        animation: '/statique/assets/images/visiteGuidee/indice_cyber.gif',
       },
     ]}
   />

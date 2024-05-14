@@ -88,7 +88,7 @@
         titre: 'Pilotez vos services grâce au tableau de bord',
         description:
           "Gérez de manière centralisée vos services, avec des outils de productivité intégrés comme la duplication et l'invitation de contributeurs.",
-        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        animation: '/statique/assets/images/visiteGuidee/tableau_de_bord.gif',
       },
       {
         cible: cibleBandeauNouveaute,
@@ -100,7 +100,7 @@
         titre: 'Découvrez les nouveautés',
         description:
           'Ne ratez aucune évolution de MonServiceSécurisé. Nous vous partageons les nouvelles fonctionnalités disponibles sur la plateforme.',
-        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        animation: '/statique/assets/images/visiteGuidee/nouveautes.gif',
       },
       {
         cible: cibleBOM,
@@ -123,7 +123,7 @@
         titre: 'Trouvez des réponses à vos questions',
         description:
           'Notre équipe est à votre disposition pour vous accompagner, par chat, webinaire ou FAQ. N’hésitez pas à nous faire vos retours sur le produit, nous les lirons avec attention.',
-        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        animation: '/statique/assets/images/visiteGuidee/bom.gif',
       },
       derniereSousEtape(),
     ]}

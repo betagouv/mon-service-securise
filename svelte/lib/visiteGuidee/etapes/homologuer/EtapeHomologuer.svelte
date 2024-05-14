@@ -22,7 +22,7 @@
         titre: 'Homologuez votre service',
         description:
           "Générez un dossier et un projet de décision d'homologation pour vous mettre en conformité avec la réglementation.",
-        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        animation: '/statique/assets/images/visiteGuidee/homologuer.gif',
         margeElementMisEnAvant: 3,
       },
       {
@@ -49,7 +49,7 @@
         titre: 'Téléchargez vos documents utiles',
         description:
           "Obtenez en 1 clic le dossier et le projet de décision pour signature par votre autorité d'homologation.",
-        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        animation: '/statique/assets/images/visiteGuidee/pdf.gif',
       },
     ]}
   />
