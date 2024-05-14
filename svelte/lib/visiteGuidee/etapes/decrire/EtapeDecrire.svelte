@@ -50,7 +50,7 @@
         titre: 'Collaborez avec votre équipe',
         description:
           'Vous pouvez travailler en équipe, inviter vos collègues mais également vos prestataires. Différents niveaux de droits sont disponibles (lecture, édition…).',
-        animation: '/statique/assets/images/visiteGuidee/decrire.gif',
+        animation: '/statique/assets/images/visiteGuidee/contributeurs.gif',
         margeElementMisEnAvant: 3,
       },
     ]}

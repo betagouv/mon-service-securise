@@ -367,8 +367,6 @@
   }
 
   .conteneur-animation {
-    padding: 16px;
-    background: var(--fond-bleu-pale);
     margin-bottom: 28px;
     margin-top: 24px;
   }
