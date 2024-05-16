@@ -121,7 +121,7 @@ const routesConnectePageService = ({
           referentiel
         );
 
-        const s = decode(service.nomService().substring(0, 30));
+        const s = decode(service.nomService()).substring(0, 30);
         const date = dateYYYYMMDD(adaptateurHorloge.maintenant());
         const perimetre = avecDonneesAdditionnelles ? 'avec' : 'sans';
         const fichier = `${s} Liste mesures ${perimetre} données additionnelles ${date}.csv`;
