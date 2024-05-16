@@ -36,11 +36,11 @@ const ajoutContributeurSurServices = ({
   };
 
   const creeUtilisateur = async (email) => {
+    await adaptateurMail.creeContact(email, '', '', true, true);
     const utilisateur = await depotDonnees.nouvelUtilisateur({
       email,
       infolettreAcceptee: false,
     });
-    await adaptateurMail.creeContact(email, '', '', true, true);
     return utilisateur;
   };
 
