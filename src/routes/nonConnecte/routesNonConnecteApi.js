@@ -25,18 +25,21 @@ const routesNonConnecteApi = ({
     '/utilisateur',
     middleware.protegeTrafic(),
     middleware.aseptise(...Utilisateur.nomsProprietesBase(), 'siretEntite'),
-    (requete, reponse, suite) => {
-      const verifieSuccesEnvoiMessage = (promesseEnvoiMessage, utilisateur) =>
-        promesseEnvoiMessage
-          .then(() => utilisateur)
-          .catch(() =>
-            depotDonnees
-              .supprimeUtilisateur(utilisateur.id)
-              .then(() => Promise.reject(new EchecEnvoiMessage()))
-          );
+    async (requete, reponse, suite) => {
+      const verifieSuccesEnvoiMessage = async (
+        promesseEnvoiMessage,
+        utilisateur
+      ) => {
+        try {
+          await promesseEnvoiMessage;
+        } catch {
+          await depotDonnees.supprimeUtilisateur(utilisateur.id);
+          throw new EchecEnvoiMessage();
+        }
+      };
 
-      const creeContactEmail = (utilisateur) =>
-        verifieSuccesEnvoiMessage(
+      const creeContactEmail = async (utilisateur) => {
+        await verifieSuccesEnvoiMessage(
           adaptateurMail.creeContact(
             utilisateur.email,
             utilisateur.prenom ?? '',
@@ -46,9 +49,10 @@ const routesNonConnecteApi = ({
           ),
           utilisateur
         );
+      };
 
-      const envoieMessageFinalisationInscription = (utilisateur) =>
-        verifieSuccesEnvoiMessage(
+      const envoieMessageFinalisationInscription = async (utilisateur) => {
+        await verifieSuccesEnvoiMessage(
           adaptateurMail.envoieMessageFinalisationInscription(
             utilisateur.email,
             utilisateur.idResetMotDePasse,
@@ -56,6 +60,7 @@ const routesNonConnecteApi = ({
           ),
           utilisateur
         );
+      };
 
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
       donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
@@ -70,34 +75,30 @@ const routesNonConnecteApi = ({
             `La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`
           );
       } else {
-        depotDonnees
-          .nouvelUtilisateur(donnees)
-          .then(creeContactEmail)
-          .then(envoieMessageFinalisationInscription)
-          .then((utilisateur) => {
-            adaptateurTracking.envoieTrackingInscription(utilisateur.email);
-            return utilisateur;
-          })
-          .catch((erreur) => {
-            if (erreur instanceof ErreurUtilisateurExistant) {
-              return adaptateurMail
-                .envoieNotificationTentativeReinscription(donnees.email)
-                .then(() => ({ id: erreur.idUtilisateur }));
-            }
-            throw erreur;
-          })
-          .then(({ id }) => reponse.json({ idUtilisateur: id }))
-          .catch((e) => {
-            if (e instanceof EchecEnvoiMessage) {
-              reponse
-                .status(424)
-                .send(
-                  "L'envoi de l'email de finalisation d'inscription a échoué"
-                );
-            } else if (e instanceof ErreurModele) {
-              reponse.status(422).send(e.message);
-            } else suite(e);
-          });
+        try {
+          const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
+          await creeContactEmail(utilisateur);
+          await envoieMessageFinalisationInscription(utilisateur);
+
+          await adaptateurTracking.envoieTrackingInscription(utilisateur.email);
+
+          reponse.json({ idUtilisateur: utilisateur.id });
+        } catch (e) {
+          if (e instanceof ErreurUtilisateurExistant) {
+            await adaptateurMail.envoieNotificationTentativeReinscription(
+              donnees.email
+            );
+            reponse.json({ idUtilisateur: e.idUtilisateur });
+          } else if (e instanceof EchecEnvoiMessage) {
+            reponse
+              .status(424)
+              .send(
+                "L'envoi de l'email de finalisation d'inscription a échoué"
+              );
+          } else if (e instanceof ErreurModele) {
+            reponse.status(422).send(e.message);
+          } else suite(e);
+        }
       }
     }
   );
