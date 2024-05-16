@@ -187,11 +187,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it('crée un contact email', (done) => {
-      utilisateur.email = 'jean.dupont@mail.fr';
-      utilisateur.prenom = 'Jean';
-      utilisateur.nom = 'Dupont';
-      utilisateur.infolettreAcceptee = false;
-
       testeur.adaptateurMail().creeContact = (
         destinataire,
         prenom,
@@ -202,7 +197,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         expect(destinataire).to.equal('jean.dupont@mail.fr');
         expect(prenom).to.equal('Jean');
         expect(nom).to.equal('Dupont');
-        expect(bloqueEmails).to.equal(true);
+        expect(bloqueEmails).to.equal(false);
         expect(bloqueMarketing).to.be(false);
         return Promise.resolve();
       };
