@@ -26,14 +26,10 @@ const routesNonConnecteApi = ({
     middleware.protegeTrafic(),
     middleware.aseptise(...Utilisateur.nomsProprietesBase(), 'siretEntite'),
     async (requete, reponse, suite) => {
-      const verifieSuccesEnvoiMessage = async (
-        promesseEnvoiMessage,
-        utilisateur
-      ) => {
+      const verifieSuccesEnvoiMessage = async (promesseEnvoiMessage) => {
         try {
           await promesseEnvoiMessage;
         } catch {
-          await depotDonnees.supprimeUtilisateur(utilisateur.id);
           throw new EchecEnvoiMessage();
         }
       };
@@ -46,8 +42,7 @@ const routesNonConnecteApi = ({
             utilisateur.nom ?? '',
             !utilisateur.infolettreAcceptee,
             false
-          ),
-          utilisateur
+          )
         );
       };
 
@@ -57,8 +52,7 @@ const routesNonConnecteApi = ({
             utilisateur.email,
             utilisateur.idResetMotDePasse,
             utilisateur.prenom
-          ),
-          utilisateur
+          )
         );
       };
 

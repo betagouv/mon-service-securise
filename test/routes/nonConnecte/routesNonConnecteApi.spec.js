@@ -251,24 +251,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           done
         );
       });
-
-      it("supprime l'utilisateur créé", (done) => {
-        let utilisateurSupprime = false;
-        testeur.depotDonnees().supprimeUtilisateur = (id) => {
-          expect(id).to.equal('123');
-
-          utilisateurSupprime = true;
-          return Promise.resolve();
-        };
-
-        axios
-          .post('http://localhost:1234/api/utilisateur', donneesRequete)
-          .catch(() => {
-            expect(utilisateurSupprime).to.be(true);
-            done();
-          })
-          .catch(done);
-      });
     });
 
     it('envoie un email de notification de tentative de réinscription', (done) => {
