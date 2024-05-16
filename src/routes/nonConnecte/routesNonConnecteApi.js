@@ -70,8 +70,8 @@ const routesNonConnecteApi = ({
           );
       } else {
         try {
+          await creeContactEmail(donnees);
           const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
-          await creeContactEmail(utilisateur);
           await envoieMessageFinalisationInscription(utilisateur);
 
           await adaptateurTracking.envoieTrackingInscription(utilisateur.email);
