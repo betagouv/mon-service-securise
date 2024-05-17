@@ -49,6 +49,9 @@ const {
 const {
   envoieMailFelicitationHomologation,
 } = require('./abonnements/envoieMailFelicitationHomologation');
+const {
+  relieEntrepriseEtContactBrevo,
+} = require('./abonnements/relieEntrepriseEtContactBrevo');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -106,6 +109,10 @@ const cableTousLesAbonnes = (
     consigneNouvelUtilisateurInscritDansJournal({ adaptateurJournal }),
     consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
+      adaptateurRechercheEntreprise,
+    }),
+    relieEntrepriseEtContactBrevo({
+      adaptateurMail,
       adaptateurRechercheEntreprise,
     }),
   ]);
