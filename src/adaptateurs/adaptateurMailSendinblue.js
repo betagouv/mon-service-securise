@@ -3,6 +3,7 @@ const { decode } = require('html-entities');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
+const { ErreurApiBrevo } = require('../erreurs');
 
 const enteteJSON = {
   headers: {
@@ -216,8 +217,63 @@ const envoieMessageFelicitationHomologation = (destinataire, idService) =>
     }
   );
 
+const recupereIdentifiantContact = async (email) => {
+  const reponse = await axios.get(`${urlBase}/contacts/${email}`, enteteJSON);
+  const idContact = reponse?.data?.id;
+  if (!idContact) throw new ErreurApiBrevo(`Contact introuvable: ${email}`);
+  return idContact;
+};
+
+const recupereEntreprise = async (siret) => {
+  const reponse = await axios.get(
+    `${urlBase}/companies?filters=${encodeURIComponent(
+      JSON.stringify({
+        'attributes.sync_mss_siret': siret,
+      })
+    )}`,
+    enteteJSON
+  );
+  if (reponse?.data?.items.length > 1)
+    throw new ErreurApiBrevo(`Plusieurs entreprise pour le SIRET: ${siret}`);
+  const idEntreprise = reponse?.data?.items[0]?.id;
+  return idEntreprise ?? null;
+};
+
+const relieContactAEntreprise = async (idContact, idEntreprise) => {
+  await axios.patch(
+    `${urlBase}/companies/link-unlink/${idEntreprise}`,
+    { linkContactIds: [idContact] },
+    enteteJSON
+  );
+};
+
+const creeEntreprise = async (siret, nom, natureJuridique) => {
+  const reponse = await axios.post(
+    `${urlBase}/companies`,
+    {
+      name: nom,
+      attributes: {
+        sync_mss_siret: siret,
+        sync_mss_nature_juridique: natureJuridique,
+      },
+    },
+    enteteJSON
+  );
+  const idEntreprise = reponse?.data?.id;
+  if (!idEntreprise)
+    throw new ErreurApiBrevo(
+      `Impossible de créer l'entreprise : ${JSON.stringify({
+        siret,
+        nom,
+        natureJuridique,
+      })}`
+    );
+  return idEntreprise;
+};
+
 module.exports = {
   creeContact,
+  creeEntreprise,
   desinscrisEmailsTransactionnels,
   desinscrisInfolettre,
   inscrisEmailsTransactionnels,
@@ -229,4 +285,7 @@ module.exports = {
   envoieMessageReinitialisationMotDePasse,
   envoieNotificationExpirationHomologation,
   envoieNotificationTentativeReinscription,
+  recupereEntreprise,
+  recupereIdentifiantContact,
+  relieContactAEntreprise,
 };
