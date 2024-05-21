@@ -21,7 +21,8 @@ $(() => {
         statuts,
         idService,
         estLectureSeule,
-        modeVisiteGuidee: etatVisiteGuidee.dejaTerminee === false,
+        modeVisiteGuidee:
+          etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause,
       },
     })
   );
