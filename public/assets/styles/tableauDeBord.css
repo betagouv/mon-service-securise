@@ -150,8 +150,23 @@ label[for='recherche-service'] {
 }
 
 #nouveau-service {
-  padding: 0.5em 1em;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px 8px 16px;
   margin: 0;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+#nouveau-service::before {
+  content: '';
+  background: url('/statique/assets/images/icone_ajout_cercle.svg');
+  width: 24px;
+  height: 24px;
+  display: flex;
 }
 
 .tableau-services {
