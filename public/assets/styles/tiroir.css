@@ -1,6 +1,7 @@
 .tiroir {
   height: 100%;
   min-width: 33em;
+  max-width: 33em;
   position: fixed;
   left: 100vw;
   top: 0;
