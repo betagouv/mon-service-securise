@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { AxiosError } = require('axios');
 const donneesReferentiel = require('./donneesReferentiel');
 const DepotDonnees = require('./src/depotDonnees');
 const Referentiel = require('./src/referentiel');
@@ -18,6 +19,8 @@ const {
   fabriqueAdaptateurChiffrement,
 } = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
 const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
+const adaptateurMail = require('./src/adaptateurs/adaptateurMailSendinblue');
+const CrmBrevo = require('./src/crm/crmBrevo');
 
 class ConsoleAdministration {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
@@ -277,6 +280,38 @@ class ConsoleAdministration {
       }
     };
     interval = setInterval(() => traiteOuQuitte(), 600);
+  }
+
+  async rattrapageLienEntrepriseEtContactBrevo() {
+    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
+    const utilisateursAvecSiret = tousUtilisateurs.filter(
+      (u) => u.entite.siret
+    );
+    const crmBrevo = new CrmBrevo({
+      adaptateurMail,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+    });
+
+    let rapportExecution = '';
+    let iteration = 1;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const utilisateur of utilisateursAvecSiret) {
+      process.stdout.write(`\r${iteration}/${utilisateursAvecSiret.length}`);
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        await crmBrevo.creerLienEntrepriseContact(utilisateur);
+      } catch (e) {
+        rapportExecution += `Erreur pour ${utilisateur.email} avec siret ${utilisateur.entite.siret}`;
+        if (e instanceof AxiosError) {
+          rapportExecution += `\n[${e?.response?.status}]: ${e?.response?.data?.message}`;
+        } else {
+          rapportExecution += e.toString();
+        }
+      }
+      iteration += 1;
+    }
+    // eslint-disable-next-line no-console
+    console.log(`\n${rapportExecution}`);
   }
 }
 
