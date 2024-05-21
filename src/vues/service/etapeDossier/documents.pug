@@ -34,7 +34,7 @@ block formulaire
     p.requis Titre et informations utiles
     if(!estLectureSeule)
       .ajout-documents
-        input#champ-titre-document(type='text', placeholder='ex : Analyse Ebios juin 2022')
+        input#champ-titre-document(type='text', placeholder='ex : Analyse Ebios juin 2023')
         button.bouton.bouton-secondaire#ajout-document(type='button') Ajouter
     div
       input(id='au-moins-un-document', class='invisible', type='text', required, value=documents.documents.length > 0 ? 'OK' : '')
