@@ -50,6 +50,7 @@
             'click',
             async () => await visiteGuidee.finalise()
           );
+          cible.removeAttribute('href');
         },
         titre: 'Créez votre premier service !',
         description:
