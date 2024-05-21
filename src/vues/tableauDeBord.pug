@@ -1,5 +1,4 @@
 extends mssConnecte
-include fragments/modaleNouveauService
 include ./tiroirs/tiroir.pug
 
 mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLigne, texteDeuxiemeLigne)
@@ -38,8 +37,6 @@ block header-gauche
     h3 Mon tableau de bord
 
 block main
-  +modaleNouveauService
-
   a#bandeau-profil(href = './utilisateur/edition').bandeau-maj-profil.invisible
     p.marges-fixes
       strong Bienvenue sur MonServiceSécurisé.
