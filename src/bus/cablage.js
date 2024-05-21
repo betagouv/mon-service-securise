@@ -53,6 +53,9 @@ const {
   relieEntrepriseEtContactBrevo,
 } = require('./abonnements/relieEntrepriseEtContactBrevo');
 const CrmBrevo = require('../crm/crmBrevo');
+const {
+  modifieLienEntrepriseEtContactBrevo,
+} = require('./abonnements/modifieLienEntrepriseEtContactBrevo');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -103,13 +106,13 @@ const cableTousLesAbonnes = (
     consigneAutorisationsModifieesDansJournal({ adaptateurJournal })
   );
 
-  busEvenements.abonne(
-    EvenementUtilisateurModifie,
+  busEvenements.abonnePlusieurs(EvenementUtilisateurModifie, [
     consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
       adaptateurRechercheEntreprise,
-    })
-  );
+    }),
+    modifieLienEntrepriseEtContactBrevo({ crmBrevo }),
+  ]);
 
   busEvenements.abonnePlusieurs(EvenementUtilisateurInscrit, [
     consigneNouvelUtilisateurInscritDansJournal({ adaptateurJournal }),
