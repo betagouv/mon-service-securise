@@ -7,6 +7,25 @@ class CrmBrevo {
     this.adaptateurMail = adaptateurMail;
   }
 
+  async supprimerLienEntrepriseContact(utilisateur) {
+    if (!utilisateur)
+      throw new Error(
+        "Impossible de relier une entreprise et un contact sans avoir l'utilisateur en paramètre."
+      );
+    const idUtilisateurBrevo =
+      await this.adaptateurMail.recupereIdentifiantContact(utilisateur.email);
+
+    const idEntreprise =
+      await this.adaptateurMail.recupereEntrepriseDuContact(idUtilisateurBrevo);
+
+    if (idEntreprise) {
+      await this.adaptateurMail.supprimeLienEntreContactEtEntreprise(
+        idUtilisateurBrevo,
+        idEntreprise
+      );
+    }
+  }
+
   async creerLienEntrepriseContact(utilisateur) {
     if (!utilisateur)
       throw new Error(
