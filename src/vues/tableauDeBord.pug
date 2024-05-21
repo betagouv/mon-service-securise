@@ -63,7 +63,7 @@ block main
             +carteInformation('/statique/assets/images/icone_services_enregistres.svg', '', 'nombre-services', 'Services', 'enregistrés')
             +carteInformation('/statique/assets/images/icone_services_homologues.svg', 'vert', 'nombre-services-homologues', 'Services', 'homologués')
             +carteInformation('/statique/assets/images/icone_indice_cyber_moyen.svg', 'bleu', 'indice-cyber-moyen', 'Indice cyber', 'moyen')
-          button.nouveau-service.bouton#nouveau-service Nouveau service
+          a.nouveau-service.bouton#nouveau-service(href='/service/creation') Créer un nouveau service
         .recherche
           label(for='recherche-service') Rechercher
             input#recherche-service(type='text', placeHolder='Nom du service, organisation responsable')
