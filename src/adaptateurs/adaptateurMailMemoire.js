@@ -79,11 +79,30 @@ const fabriqueAdaptateurMailMemoire = () => {
       console.log(`Récupération de l'entreprise Brevo pour le SIRET ${siret}`);
   };
 
+  const recupereEntrepriseDuContact = async (idContact) => {
+    if (doitLoguer)
+      // eslint-disable-next-line no-console
+      console.log(
+        `Récupération de l'entreprise Brevo pour le contact ${idContact}`
+      );
+  };
+
   const relieContactAEntreprise = async (idContact, idEntreprise) => {
     if (doitLoguer)
       // eslint-disable-next-line no-console
       console.log(
         `Relie l'utilisateur ${idContact} à l'entreprise Brevo ${idEntreprise}`
+      );
+  };
+
+  const supprimeLienEntreContactEtEntreprise = async (
+    idContact,
+    idEntreprise
+  ) => {
+    if (doitLoguer)
+      // eslint-disable-next-line no-console
+      console.log(
+        `Supprime le lien entre l'utilisateur ${idContact} à l'entreprise Brevo ${idEntreprise}`
       );
   };
 
@@ -112,8 +131,10 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoieNotificationExpirationHomologation,
     envoieNotificationTentativeReinscription,
     recupereEntreprise,
+    recupereEntrepriseDuContact,
     recupereIdentifiantContact,
     relieContactAEntreprise,
+    supprimeLienEntreContactEtEntreprise,
   };
 };
 

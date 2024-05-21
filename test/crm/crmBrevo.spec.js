@@ -7,6 +7,19 @@ const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheE
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
 describe('Le CRM Brevo', () => {
+  let adaptateurMail;
+  let adaptateurRechercheEntreprise;
+  let crmBrevo;
+
+  beforeEach(() => {
+    adaptateurMail = fabriqueAdaptateurMailMemoire();
+    adaptateurRechercheEntreprise = fauxAdaptateurRechercheEntreprise();
+    crmBrevo = new CrmBrevo({
+      adaptateurRechercheEntreprise,
+      adaptateurMail,
+    });
+  });
+
   it("jette une erreur s'il n'est pas instancié avec les bons adaptateurs", () => {
     expect(() => new CrmBrevo({})).to.throwError((e) => {
       expect(e.message).to.be(
@@ -15,19 +28,6 @@ describe('Le CRM Brevo', () => {
     });
   });
   describe('sur demande de création du lien entre un utilisateur et son entreprise', () => {
-    let adaptateurMail;
-    let adaptateurRechercheEntreprise;
-    let crmBrevo;
-
-    beforeEach(() => {
-      adaptateurMail = fabriqueAdaptateurMailMemoire();
-      adaptateurRechercheEntreprise = fauxAdaptateurRechercheEntreprise();
-      crmBrevo = new CrmBrevo({
-        adaptateurRechercheEntreprise,
-        adaptateurMail,
-      });
-    });
-
     it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
       try {
         await crmBrevo.creerLienEntrepriseContact(null);
@@ -136,6 +136,77 @@ describe('Le CRM Brevo', () => {
         expect(donneesRecues.idContact).to.be('C1');
         expect(donneesRecues.idEntreprise).to.be('E1');
       });
+    });
+  });
+  describe('sur demande de suppression de lien entre un utilisateur et son entreprise', () => {
+    let utilisateur;
+
+    beforeEach(() => {
+      utilisateur = unUtilisateur()
+        .avecEmail('jean.dujardin@beta.gouv.com')
+        .construis();
+    });
+    it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
+      try {
+        await crmBrevo.supprimerLienEntrepriseContact(null);
+
+        expect().fail("L'instanciation aurait dû lever une exception.");
+      } catch (e) {
+        expect(e.message).to.be(
+          "Impossible de relier une entreprise et un contact sans avoir l'utilisateur en paramètre."
+        );
+      }
+    });
+    it("recupère l'identifiant Brevo de l'utilisateur via son email", async () => {
+      let emailRecu;
+      adaptateurMail.recupereIdentifiantContact = async (email) => {
+        emailRecu = email;
+      };
+
+      await crmBrevo.supprimerLienEntrepriseContact(utilisateur);
+
+      expect(emailRecu).to.be('jean.dujardin@beta.gouv.com');
+    });
+    it("recupère l'entreprise liée à l'utilisateur", async () => {
+      let idRecu;
+      adaptateurMail.recupereIdentifiantContact = async () => 'C1';
+      adaptateurMail.recupereEntrepriseDuContact = async (id) => {
+        idRecu = id;
+      };
+
+      await crmBrevo.supprimerLienEntrepriseContact(utilisateur);
+
+      expect(idRecu).to.be('C1');
+    });
+    it("supprime le lien s'il existe", async () => {
+      let idEntrepriseRecu;
+      let idContactRecu;
+      adaptateurMail.recupereIdentifiantContact = async () => 'C1';
+      adaptateurMail.recupereEntrepriseDuContact = async () => 'E1';
+      adaptateurMail.supprimeLienEntreContactEtEntreprise = async (
+        idContact,
+        idEntreprise
+      ) => {
+        idContactRecu = idContact;
+        idEntrepriseRecu = idEntreprise;
+      };
+
+      await crmBrevo.supprimerLienEntrepriseContact(utilisateur);
+
+      expect(idContactRecu).to.be('C1');
+      expect(idEntrepriseRecu).to.be('E1');
+    });
+    it('ne supprime pas de lien inexistant', async () => {
+      let suppressionAppelee = false;
+      adaptateurMail.recupereIdentifiantContact = async () => 'C1';
+      adaptateurMail.recupereEntrepriseDuContact = async () => undefined;
+      adaptateurMail.supprimeLienEntreContactEtEntreprise = async () => {
+        suppressionAppelee = true;
+      };
+
+      await crmBrevo.supprimerLienEntrepriseContact(utilisateur);
+
+      expect(suppressionAppelee).to.be(false);
     });
   });
 });
