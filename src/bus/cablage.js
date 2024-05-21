@@ -52,6 +52,7 @@ const {
 const {
   relieEntrepriseEtContactBrevo,
 } = require('./abonnements/relieEntrepriseEtContactBrevo');
+const CrmBrevo = require('../crm/crmBrevo');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -65,6 +66,11 @@ const cableTousLesAbonnes = (
     referentiel,
   }
 ) => {
+  const crmBrevo = new CrmBrevo({
+    adaptateurRechercheEntreprise,
+    adaptateurMail,
+  });
+
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
     consigneNouveauServiceDansJournal({ adaptateurJournal }),
     consigneProprietaireCreeUnServiceDansJournal({ adaptateurJournal }),
@@ -111,10 +117,7 @@ const cableTousLesAbonnes = (
       adaptateurJournal,
       adaptateurRechercheEntreprise,
     }),
-    relieEntrepriseEtContactBrevo({
-      adaptateurMail,
-      adaptateurRechercheEntreprise,
-    }),
+    relieEntrepriseEtContactBrevo({ crmBrevo }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementDossierHomologationFinalise, [
