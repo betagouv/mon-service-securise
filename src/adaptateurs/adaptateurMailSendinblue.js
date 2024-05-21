@@ -239,10 +239,34 @@ const recupereEntreprise = async (siret) => {
   return idEntreprise ?? null;
 };
 
+const recupereEntrepriseDuContact = async (idContact) => {
+  const reponse = await axios.get(
+    `${urlBase}/companies?linkedContactsIds=${idContact}`,
+    enteteJSON
+  );
+  if (reponse?.data?.items.length > 1)
+    throw new ErreurApiBrevo(
+      `Plusieurs entreprise pour le contact: ${idContact}`
+    );
+  const idEntreprise = reponse?.data?.items[0]?.id;
+  return idEntreprise ?? null;
+};
+
 const relieContactAEntreprise = async (idContact, idEntreprise) => {
   await axios.patch(
     `${urlBase}/companies/link-unlink/${idEntreprise}`,
     { linkContactIds: [idContact] },
+    enteteJSON
+  );
+};
+
+const supprimeLienEntreContactEtEntreprise = async (
+  idContact,
+  idEntreprise
+) => {
+  await axios.patch(
+    `${urlBase}/companies/link-unlink/${idEntreprise}`,
+    { unlinkContactIds: [idContact] },
     enteteJSON
   );
 };
@@ -286,6 +310,8 @@ module.exports = {
   envoieNotificationExpirationHomologation,
   envoieNotificationTentativeReinscription,
   recupereEntreprise,
+  recupereEntrepriseDuContact,
   recupereIdentifiantContact,
   relieContactAEntreprise,
+  supprimeLienEntreContactEtEntreprise,
 };
