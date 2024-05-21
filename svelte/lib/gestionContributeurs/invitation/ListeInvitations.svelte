@@ -36,7 +36,7 @@
           valeur={utilisateur.initiales}
           resumeNiveauDroit={resumeLesDroits(droits)}
         />
-        <span>{@html utilisateur.prenomNom}</span>
+        <span class="prenom-nom">{@html utilisateur.prenomNom}</span>
       </div>
       <div class="conteneur-actions">
         <TagNiveauDroit
@@ -73,5 +73,11 @@
     align-items: center;
     gap: 8px;
     font-weight: 500;
+    overflow: hidden;
+  }
+
+  .prenom-nom {
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 </style>
