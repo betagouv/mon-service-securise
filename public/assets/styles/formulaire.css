@@ -432,3 +432,8 @@ input {
   border-radius: 5px;
   background: var(--fond-pale);
 }
+
+:is(input, select, textarea):not([type='radio']):focus {
+  border-color: var(--bleu-mise-en-avant);
+  outline: none;
+}
