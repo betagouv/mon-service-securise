@@ -35,9 +35,10 @@ form.champ-unique .requis::before {
 .message-erreur-specifique {
   position: relative;
   display: none;
+  align-items: center;
 
   margin: 1em 0;
-  padding-left: 1.5em;
+  padding-left: 32px;
 
   color: var(--rose-anssi);
   font-weight: normal;
@@ -53,27 +54,27 @@ form.champ-unique .requis::before {
   background-image: url(../../images/icone_attention_rose.svg);
   background-repeat: no-repeat;
   background-size: contain;
-  width: 1em;
-  height: 1em;
-  transform: translateY(0.35em);
+  width: 24px;
+  height: 24px;
 }
 
 .requis[data-nom='cguAcceptees'] {
   margin: 2em 0;
 }
 
-:is(input, select, textarea):not(.intouche):not([type='radio']):valid {
+:is(input, select, textarea):not([type='radio']):focus {
   border-color: var(--bleu-mise-en-avant);
+  outline: none;
 }
 
-:is(input, select, textarea):not(.intouche):invalid {
+:is(input, select, textarea):user-invalid {
   border-color: var(--rose-anssi);
 }
 
-:is(input, select, textarea):not(.intouche):invalid:focus {
-  outline-color: var(--rose-anssi);
+:is(input, select, textarea):user-invalid:focus {
+  border-color: var(--rose-anssi);
 }
 
-:is(input, select, textarea):not(.intouche):invalid ~ .message-erreur {
-  display: block;
+:is(input, select, textarea):user-invalid ~ .message-erreur {
+  display: flex;
 }
