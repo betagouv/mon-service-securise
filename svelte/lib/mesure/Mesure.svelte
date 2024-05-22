@@ -63,7 +63,6 @@
           bind:value={$store.mesureEditee.mesure.description}
           id="intitule"
           placeholder="Description de la mesure"
-          class="intouche"
           readonly={estLectureSeule}
           required
           use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
@@ -86,7 +85,6 @@
         bind:value={$store.mesureEditee.mesure.modalites}
         id="details"
         placeholder="Modalités de mise en œuvre (facultatif)"
-        class="intouche"
         readonly={estLectureSeule}
       />
     </label>
@@ -97,7 +95,6 @@
         <select
           bind:value={$store.mesureEditee.mesure.categorie}
           id="categorie"
-          class="intouche"
           required
           disabled={estLectureSeule}
           use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}

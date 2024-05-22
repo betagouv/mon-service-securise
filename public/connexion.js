@@ -13,7 +13,6 @@ $(() => {
     $erreur.show();
   };
   rendsAffichageNeutre();
-  $inputs.addClass('intouche');
   $inputs.on('input', rendsAffichageNeutre);
 
   $form.on('submit', (e) => {

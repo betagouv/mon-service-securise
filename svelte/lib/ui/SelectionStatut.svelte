@@ -19,7 +19,7 @@
   <select
     bind:value={statut}
     id={`statut-${id}`}
-    class="intouche {statut}"
+    class={statut}
     class:vide={!statut}
     disabled={estLectureSeule}
     required={requis}
