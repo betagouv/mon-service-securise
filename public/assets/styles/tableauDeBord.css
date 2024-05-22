@@ -144,7 +144,6 @@ label[for='recherche-service'] {
   margin-left: 1em;
   padding: 0.7em 1em;
   border-radius: 6px;
-  border: 1px solid #cbd5e1;
   min-width: 300px;
   background: var(--fond-pale);
 }

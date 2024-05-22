@@ -426,3 +426,9 @@ form.homologation label p.description {
   margin: 0;
   color: var(--texte-fonce);
 }
+
+input {
+  border: solid 1px var(--liseres);
+  border-radius: 5px;
+  background: var(--fond-pale);
+}
