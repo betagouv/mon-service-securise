@@ -19,6 +19,7 @@
 
 .selectize-control:is(.multi, .single) .selectize-input.focus {
   box-shadow: none;
+  border-color: var(--bleu-mise-en-avant);
 }
 
 .selectized
@@ -106,25 +107,19 @@
   background-color: var(--fond-gris-pale);
 }
 
-.selectized:not(.intouche, [required]) ~ .message-erreur {
+.selectized:not([required]) ~ .message-erreur {
   display: block;
 }
 
-.selectized:not(.intouche, [required])
+.selectized:not([required])
   + .selectize-control:is(.multi, .single)
   .selectize-input {
   border-color: var(--rose-anssi);
 }
 
-.selectized:not(.intouche, [required])
+.selectized:not([required])
   + .selectize-control:is(.multi, .single)
   .selectize-input.has-items {
-  border-color: var(--bleu-mise-en-avant);
-}
-
-.selectized[required]:not(.intouche)
-  + .selectize-control:is(.multi, .single)
-  .selectize-input {
   border-color: var(--bleu-mise-en-avant);
 }
 

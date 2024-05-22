@@ -51,7 +51,7 @@ form.champ-unique .requis::before {
   position: absolute;
   left: 0;
 
-  background-image: url(../../images/icone_attention_rose.svg);
+  background-image: url('/statique/assets/images/icone_attention_rose_2.svg');
   background-repeat: no-repeat;
   background-size: contain;
   width: 24px;
