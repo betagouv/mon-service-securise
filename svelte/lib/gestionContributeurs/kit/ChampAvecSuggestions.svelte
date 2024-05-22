@@ -77,7 +77,7 @@
         }}
       >
         <Initiales valeur={suggestion.initiales} resumeNiveauDroit="ECRITURE" />
-        <div>{@html suggestion.prenomNom}</div>
+        <div class="suggestion">{@html suggestion.prenomNom}</div>
       </div>
     {/each}
   </div>
@@ -97,6 +97,12 @@
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
     transform: translateY(-5px);
+  }
+
+  .suggestion {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .visible {
