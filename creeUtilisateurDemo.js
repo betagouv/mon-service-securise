@@ -9,6 +9,7 @@ const {
 const {
   fabriqueAdaptateurChiffrement,
 } = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
+const adaptateurRechercheEntite = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 
 const referentiel = Referentiel.creeReferentiel();
 const descriptionService = new DescriptionService(
@@ -60,6 +61,7 @@ const main = async () => {
     });
     const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
     const depotDonnees = DepotDonnees.creeDepot({
+      adaptateurRechercheEntite,
       adaptateurChiffrement,
       busEvenements,
     });
