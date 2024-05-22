@@ -48,7 +48,6 @@
     margin-top: 8px;
     --couleur: transparent;
     border: 1px solid var(--couleur);
-    border-right: 8px solid var(--couleur);
     background: var(--couleur);
   }
 

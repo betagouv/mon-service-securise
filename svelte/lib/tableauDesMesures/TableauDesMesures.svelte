@@ -196,8 +196,6 @@
   #recherche {
     margin-left: 16px;
     border-radius: 6px;
-    border: 1px solid #cbd5e1;
-    color: #667892;
     padding: 8px 16px;
     min-width: 300px;
   }
