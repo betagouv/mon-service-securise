@@ -381,3 +381,7 @@
   height: 30px;
   margin-right: -4px;
 }
+
+.label-mot-de-passe {
+  position: relative;
+}
