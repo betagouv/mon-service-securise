@@ -62,16 +62,8 @@ form.champ-unique .requis::before {
   margin: 2em 0;
 }
 
-:is(input, select, textarea):not(.intouche):not([type='radio']):valid {
-  border-color: var(--bleu-mise-en-avant);
-}
-
 :is(input, select, textarea).touche:invalid {
   border-color: var(--rose-anssi);
-}
-
-:is(input, select, textarea):not(.intouche):invalid:focus {
-  outline-color: var(--rose-anssi);
 }
 
 :is(input, select, textarea).touche:invalid ~ .message-erreur {
