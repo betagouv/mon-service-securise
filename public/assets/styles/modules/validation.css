@@ -66,7 +66,7 @@ form.champ-unique .requis::before {
   border-color: var(--bleu-mise-en-avant);
 }
 
-:is(input, select, textarea):not(.intouche):invalid {
+:is(input, select, textarea).touche:invalid {
   border-color: var(--rose-anssi);
 }
 
@@ -74,6 +74,6 @@ form.champ-unique .requis::before {
   outline-color: var(--rose-anssi);
 }
 
-:is(input, select, textarea):not(.intouche):invalid ~ .message-erreur {
+:is(input, select, textarea).touche:invalid ~ .message-erreur {
   display: block;
 }
