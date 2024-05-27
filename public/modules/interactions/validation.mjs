@@ -3,22 +3,20 @@ import {
   declencheValidationCasesACocher,
 } from './brancheValidationCasesACocher.mjs';
 
+// Tous les champs de formulaires reçoivent la classe "touche" au moment d'un changement (input, change)
+// Cette classe permet d'afficher les messages d'erreurs sur tous les `input.touche:invalid`
+// Au moment de la validation du formulaire, on ajoute la classe `.touche` sur tous les champs,
+// afin de forcer l'affichage des champs en erreur.
+
 const EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE = 'afficheErreursSiNecessaire';
 
 const brancheConteneur = (selecteurConteneur) => {
   $('input, select, textarea', selecteurConteneur).each((_index, champ) => {
-    $(champ).addClass('intouche');
-    $(champ).on('input', () => {
-      $(champ).removeClass('intouche');
-    });
+    $(champ).on('input', () => $(champ).addClass('touche'));
     if (champ.type === 'radio' || champ.type === 'checkbox') {
-      $(champ).on('change', (evenement) =>
-        $(evenement.target).siblings().removeClass('intouche')
-      );
+      $(champ).on('change', (e) => $(e.target).siblings().addClass('touche'));
     }
-    $(champ).on('invalid', (evenement) => {
-      evenement.preventDefault();
-    });
+    $(champ).on('invalid', (e) => e.preventDefault());
   });
 };
 
@@ -51,7 +49,14 @@ const declencheScrollSurErreur = (selecteurFormulaire) => {
   }
 };
 
+const marqueTousChampsCommeTouches = (selecteurFormulaire) => {
+  $('input, select, textarea', selecteurFormulaire).each((_index, champ) => {
+    $(champ).addClass('touche');
+  });
+};
+
 const declencheValidation = (selecteurFormulaire) => {
+  marqueTousChampsCommeTouches();
   declencheValidationCasesACocher();
   $(selecteurFormulaire).trigger(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE);
   declencheScrollSurErreur(selecteurFormulaire);
