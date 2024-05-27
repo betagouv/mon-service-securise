@@ -106,26 +106,18 @@
   background-color: var(--fond-gris-pale);
 }
 
-.selectized:not(.intouche, [required]) ~ .message-erreur {
-  display: block;
+.selectize-control > .selectize-input.focus {
+  border-color: var(--bleu-mise-en-avant);
 }
 
-.selectized:not(.intouche, [required])
+.selectized.touche:not([required]) ~ .message-erreur {
+  display: flex;
+}
+
+.selectized.touche:not([required])
   + .selectize-control:is(.multi, .single)
   .selectize-input {
   border-color: var(--rose-anssi);
-}
-
-.selectized:not(.intouche, [required])
-  + .selectize-control:is(.multi, .single)
-  .selectize-input.has-items {
-  border-color: var(--bleu-mise-en-avant);
-}
-
-.selectized[required]:not(.intouche)
-  + .selectize-control:is(.multi, .single)
-  .selectize-input {
-  border-color: var(--bleu-mise-en-avant);
 }
 
 .selectize-control.single .selectize-input:after {
