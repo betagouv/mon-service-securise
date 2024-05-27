@@ -32,6 +32,7 @@ const declencheScrollSurErreur = (selecteurFormulaire) => {
 };
 
 const declencheValidation = (selecteurFormulaire) => {
+  $(selecteurFormulaire)[0].reportValidity();
   declencheValidationCasesACocher();
   declencheScrollSurErreur(selecteurFormulaire);
 };
