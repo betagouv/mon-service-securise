@@ -226,7 +226,7 @@
   :global(.erreur-champ-saisie:before) {
     content: '';
     display: flex;
-    background-image: url('/statique/assets/images/icone_attention_rose_2.svg');
+    background-image: url('/statique/assets/images/icone_attention_rose.svg');
     background-repeat: no-repeat;
     background-size: contain;
     width: 20px;

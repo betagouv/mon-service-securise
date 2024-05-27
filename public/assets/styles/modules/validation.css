@@ -37,25 +37,24 @@ form.champ-unique .requis::before {
   display: none;
 
   margin: 1em 0;
-  padding-left: 1.5em;
 
   color: var(--rose-anssi);
   font-weight: normal;
+
+  align-items: center;
+  flex-direction: row;
+  gap: 8px;
 }
 
 .message-erreur::before,
 .message-erreur-specifique::before {
   content: '';
 
-  position: absolute;
-  left: 0;
-
   background-image: url(../../images/icone_attention_rose.svg);
   background-repeat: no-repeat;
   background-size: contain;
-  width: 1em;
-  height: 1em;
-  transform: translateY(0.35em);
+  width: 24px;
+  height: 24px;
 }
 
 .requis[data-nom='cguAcceptees'] {
@@ -71,5 +70,5 @@ form.champ-unique .requis::before {
 }
 
 :is(input, select, textarea).touche:invalid ~ .message-erreur {
-  display: block;
+  display: flex;
 }
