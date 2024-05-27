@@ -59,7 +59,7 @@ class ActionSuppressionService extends ActionAbstraite {
         const $msgErreurChallenge = $(
           '#mot-de-passe-challenge-suppression ~ .message-erreur-specifique'
         );
-        $msgErreurChallenge.show();
+        $msgErreurChallenge.css('display', 'flex');
         $actionSuppression.show();
         this.basculeLoader(false);
 

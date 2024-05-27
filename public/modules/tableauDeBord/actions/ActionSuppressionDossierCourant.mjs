@@ -50,7 +50,7 @@ class ActionSuppressionDossierCourant extends ActionAbstraite {
         const $msgErreurChallenge = $(
           '#mot-de-passe-challenge-suppression-dossier-courant ~ .message-erreur-specifique'
         );
-        $msgErreurChallenge.show();
+        $msgErreurChallenge.css('display', 'flex');
         $actionSuppression.show();
         this.basculeLoader(false);
 
