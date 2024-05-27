@@ -87,6 +87,11 @@ fieldset {
   border: none;
 }
 
+input:focus {
+  border-color: var(--bleu-mise-en-avant);
+  outline: none;
+}
+
 input[type='text'] {
   margin-bottom: 1em;
 }

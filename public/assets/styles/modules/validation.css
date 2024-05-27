@@ -66,6 +66,10 @@ form.champ-unique .requis::before {
   border-color: var(--rose-anssi);
 }
 
+:is(input, select, textarea):invalid:focus {
+  border-color: var(--bleu-mise-en-avant);
+}
+
 :is(input, select, textarea).touche:invalid ~ .message-erreur {
   display: block;
 }
