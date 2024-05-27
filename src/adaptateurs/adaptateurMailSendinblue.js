@@ -31,6 +31,25 @@ const basculeInfolettre = (destinataire, etat) =>
       return Promise.reject(e);
     });
 
+const metAJourDonneesContact = (destinataire, donnees) =>
+  axios
+    .put(
+      `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
+      {
+        attributes: {
+          sync_mss_nb_services_proprietaire: donnees.nombreServicesProprietaire,
+          sync_mss_nb_services_contributeur: donnees.nombreServicesContributeur,
+        },
+      },
+      enteteJSON
+    )
+    .catch((e) => {
+      fabriqueAdaptateurGestionErreur().logueErreur(e, {
+        'Erreur renvoyée par API Brevo': e.response.data,
+      });
+      return Promise.reject(e);
+    });
+
 const desinscrisInfolettre = (destinataire) =>
   basculeInfolettre(destinataire, true);
 const inscrisInfolettre = (destinataire) =>
@@ -297,6 +316,7 @@ const creeEntreprise = async (siret, nom, natureJuridique) => {
 
 module.exports = {
   creeContact,
+  metAJourDonneesContact,
   creeEntreprise,
   desinscrisEmailsTransactionnels,
   desinscrisInfolettre,
