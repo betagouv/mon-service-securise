@@ -56,6 +56,9 @@ const CrmBrevo = require('../crm/crmBrevo');
 const {
   modifieLienEntrepriseEtContactBrevo,
 } = require('./abonnements/modifieLienEntrepriseEtContactBrevo');
+const {
+  envoieNombreDeServicesDeLUtilisateurABrevo,
+} = require('./abonnements/envoieNombreDeServicesDeLUtilisateurABrevo');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -83,6 +86,10 @@ const cableTousLesAbonnes = (
       adaptateurRechercheEntreprise,
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
+    envoieNombreDeServicesDeLUtilisateurABrevo({
+      adaptateurMail,
+      depotDonnees,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesuresServiceModifiees, [
