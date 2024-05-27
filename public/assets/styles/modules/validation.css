@@ -50,6 +50,9 @@ form.champ-unique .requis::before {
 .message-erreur-specifique::before {
   content: '';
 
+  display: flex;
+  flex-shrink: 0;
+
   background-image: url(../../images/icone_attention_rose.svg);
   background-repeat: no-repeat;
   background-size: contain;
