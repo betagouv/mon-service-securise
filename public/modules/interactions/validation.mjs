@@ -8,8 +8,6 @@ import {
 // Au moment de la validation du formulaire, on ajoute la classe `.touche` sur tous les champs,
 // afin de forcer l'affichage des champs en erreur.
 
-const EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE = 'afficheErreursSiNecessaire';
-
 const brancheConteneur = (selecteurConteneur) => {
   $('input, select, textarea', selecteurConteneur).each((_index, champ) => {
     $(champ).on('input', () => $(champ).addClass('touche'));
@@ -21,15 +19,6 @@ const brancheConteneur = (selecteurConteneur) => {
 };
 
 const brancheValidation = (selecteurFormulaire) => {
-  $(selecteurFormulaire).on(
-    EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE,
-    (evenement) => {
-      if (!evenement.target.reportValidity()) {
-        $('.intouche', selecteurFormulaire).removeClass('intouche');
-      }
-    }
-  );
-
   brancheConteneur(selecteurFormulaire);
   brancheValidationCasesACocher();
 };
@@ -58,7 +47,6 @@ const marqueTousChampsCommeTouches = (selecteurFormulaire) => {
 const declencheValidation = (selecteurFormulaire) => {
   marqueTousChampsCommeTouches();
   declencheValidationCasesACocher();
-  $(selecteurFormulaire).trigger(EVENEMENT_AFFICHE_ERREURS_SI_NECESSAIRE);
   declencheScrollSurErreur(selecteurFormulaire);
 };
 
