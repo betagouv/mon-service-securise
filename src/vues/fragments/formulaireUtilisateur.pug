@@ -166,4 +166,21 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
             )
             .message-erreur Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.
 
+      .requis
+        - const { borneBasse, borneHaute } = donnees.estimationNombreServices ?? {borneBasse: 0, borneHaute: 0}
+        - const valeurUtilisateur = `${borneBasse}_${borneHaute}`
+        - const valeurVide = '0_0'
+        label Combien de services publics numériques avez-vous à sécuriser ?
+          p.description (ex : Systèmes d’information, site web, application mobile, API, téléservices)
+          select(
+            id = 'estimation-nombre-services'
+            name = 'estimationNombreServices'
+            required
+          )
+            option(value='' disabled label='-' selected=(valeurUtilisateur === valeurVide))
+            each tranche in referentiel.estimationNombreServices()
+              - const valeurOption = `${tranche.borneBasse}_${tranche.borneHaute}`
+              option(value=valeurOption label=tranche.label selected=(valeurUtilisateur === valeurOption))
+          .message-erreur Ce champ est obligatoire. Veuillez sélectionner une option.
+
       +preferencesCommunication(donnees, forceEmailsTransactionnels)
