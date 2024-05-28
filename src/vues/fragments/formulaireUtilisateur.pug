@@ -170,7 +170,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
         - const { borneBasse, borneHaute } = donnees.estimationNombreServices ?? {borneBasse: 0, borneHaute: 0}
         - const valeurUtilisateur = `${borneBasse}_${borneHaute}`
         - const valeurVide = '0_0'
-        label Combien de services publics numériques avez-vous à sécuriser ?
+        label Combien de services numériques avez-vous à sécuriser ?
           p.description (ex : Systèmes d’information, site web, application mobile, API, téléservices)
           select(
             id = 'estimation-nombre-services'
