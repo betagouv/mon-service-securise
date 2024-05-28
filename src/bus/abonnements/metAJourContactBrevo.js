@@ -10,7 +10,10 @@ function metAJourContactBrevo({ crmBrevo, depotDonnees }) {
       utilisateur.id
     );
 
-    await crmBrevo.metAJourContact(utilisateur, autorisationsUtilisateur);
+    await crmBrevo.metAJourNombresContributionsContact(
+      utilisateur,
+      autorisationsUtilisateur
+    );
   };
 }
 

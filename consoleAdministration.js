@@ -299,7 +299,10 @@ class ConsoleAdministration {
         const autorisationsUtilisateur = await this.depotDonnees.autorisations(
           utilisateur.id
         );
-        await crmBrevo.metAJourContact(utilisateur, autorisationsUtilisateur);
+        await crmBrevo.metAJourNombresContributionsContact(
+          utilisateur,
+          autorisationsUtilisateur
+        );
         /* eslint-enable no-await-in-loop */
       } catch (e) {
         rapportExecution += `Erreur pour ${utilisateur.email}`;

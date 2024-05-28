@@ -16,7 +16,10 @@ function metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }) {
         const autorisationsUtilisateur = await depotDonnees.autorisations(
           utilisateur.id
         );
-        await crmBrevo.metAJourContact(utilisateur, autorisationsUtilisateur);
+        await crmBrevo.metAJourNombresContributionsContact(
+          utilisateur,
+          autorisationsUtilisateur
+        );
       })
     );
     rapportExecution

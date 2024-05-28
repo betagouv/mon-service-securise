@@ -52,7 +52,7 @@ describe("L'abonnement qui met à jour le contact Brevo", () => {
     depotDonnees.autorisations = async () => autorisations;
     let utilisateurRecu;
     let autorisationsRecues;
-    crmBrevo.metAJourContact = async (u, a) => {
+    crmBrevo.metAJourNombresContributionsContact = async (u, a) => {
       utilisateurRecu = u;
       autorisationsRecues = a;
     };

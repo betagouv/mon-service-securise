@@ -60,7 +60,7 @@ class CrmBrevo {
     );
   }
 
-  metAJourContact(utilisateur, autorisations) {
+  metAJourNombresContributionsContact(utilisateur, autorisations) {
     if (!utilisateur) {
       throw new Error(
         "Impossible d'envoyer à Brevo le nombre de services de l'utilisateur sans avoir l'utilisateur en paramètre."
