@@ -57,6 +57,9 @@ const {
   modifieLienEntrepriseEtContactBrevo,
 } = require('./abonnements/modifieLienEntrepriseEtContactBrevo');
 const { metAJourContactBrevo } = require('./abonnements/metAJourContactBrevo');
+const {
+  metAJourContactsBrevoDesContributeurs,
+} = require('./abonnements/metAJourContactsBrevoDesContributeurs');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -106,10 +109,10 @@ const cableTousLesAbonnes = (
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
 
-  busEvenements.abonne(
-    EvenementAutorisationsServiceModifiees,
-    consigneAutorisationsModifieesDansJournal({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementAutorisationsServiceModifiees, [
+    consigneAutorisationsModifieesDansJournal({ adaptateurJournal }),
+    metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }),
+  ]);
 
   busEvenements.abonnePlusieurs(EvenementUtilisateurModifie, [
     consigneProfilUtilisateurModifieDansJournal({
