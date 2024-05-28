@@ -42,7 +42,7 @@ const routesNonConnectePage = ({ depotDonnees, middleware, referentiel }) => {
 
   routes.get('/inscription', (_requete, reponse) => {
     const departements = referentiel.departements();
-    reponse.render('inscription', { departements });
+    reponse.render('inscription', { departements, referentiel });
   });
 
   routes.get('/activation', (_requete, reponse) => {

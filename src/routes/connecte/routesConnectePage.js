@@ -51,11 +51,13 @@ const routesConnectePage = ({
     (requete, reponse) => {
       const departements = referentiel.departements();
       const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees
-        .utilisateur(idUtilisateur)
-        .then((utilisateur) =>
-          reponse.render('utilisateur/edition', { utilisateur, departements })
-        );
+      depotDonnees.utilisateur(idUtilisateur).then((utilisateur) =>
+        reponse.render('utilisateur/edition', {
+          utilisateur,
+          departements,
+          referentiel,
+        })
+      );
     }
   );
 
