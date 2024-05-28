@@ -70,6 +70,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           'infolettreAcceptee',
           'transactionnelAccepte',
           'postes.*',
+          'estimationNombreServices.*',
           'siretEntite',
         ],
         {

@@ -662,6 +662,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           'infolettreAcceptee',
           'transactionnelAccepte',
           'postes.*',
+          'estimationNombreServices.*',
           'siretEntite',
         ],
         {
