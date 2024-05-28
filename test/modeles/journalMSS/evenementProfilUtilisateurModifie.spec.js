@@ -60,6 +60,10 @@ describe('Un événement de profil utilisateur modifié', () => {
           idUtilisateur: 'ABC',
           roles: [],
           departementOrganisation: '33',
+          estimationNombreServices: {
+            borneBasse: 1,
+            borneHaute: 10,
+          },
           entite,
         },
         date: '17/11/2022',
@@ -91,6 +95,10 @@ describe('Un événement de profil utilisateur modifié', () => {
           idUtilisateur: 'ABC',
           roles: [],
           departementOrganisation: '33',
+          estimationNombreServices: {
+            borneBasse: 1,
+            borneHaute: 10,
+          },
           entite: {},
         },
         date: '17/11/2022',
