@@ -56,9 +56,7 @@ const CrmBrevo = require('../crm/crmBrevo');
 const {
   modifieLienEntrepriseEtContactBrevo,
 } = require('./abonnements/modifieLienEntrepriseEtContactBrevo');
-const {
-  envoieNombreDeServicesDeLUtilisateurABrevo,
-} = require('./abonnements/envoieNombreDeServicesDeLUtilisateurABrevo');
+const { metAJourContactBrevo } = require('./abonnements/metAJourContactBrevo');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -86,8 +84,8 @@ const cableTousLesAbonnes = (
       adaptateurRechercheEntreprise,
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
-    envoieNombreDeServicesDeLUtilisateurABrevo({
-      adaptateurMail,
+    metAJourContactBrevo({
+      crmBrevo,
       depotDonnees,
     }),
   ]);
