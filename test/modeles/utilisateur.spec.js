@@ -223,6 +223,10 @@ describe('Un utilisateur', () => {
         entite: {
           siret: '7524242424',
         },
+        estimationNombreServices: {
+          borneBasse: 1,
+          borneHaute: 10,
+        },
         infolettreAcceptee: true,
         transactionnelAccepte: true,
       };
@@ -257,6 +261,14 @@ describe('Un utilisateur', () => {
 
     it("exige que le SIRET de l'entité soit renseigné", (done) => {
       verifiePresencePropriete('entite.siret', "SIRET de l'entité", done);
+    });
+
+    it("exige que l'estimation du nombre de services soit renseignée", (done) => {
+      verifiePresencePropriete(
+        'estimationNombreServices',
+        'Estimation du nombre de services',
+        done
+      );
     });
 
     it('exige que les postes soient renseignés', (done) => {

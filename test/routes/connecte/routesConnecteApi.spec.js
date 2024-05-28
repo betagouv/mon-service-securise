@@ -638,6 +638,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
+        estimationNombreServices: {
+          borneBasse: 1,
+          borneHaute: 10,
+        },
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
       };
