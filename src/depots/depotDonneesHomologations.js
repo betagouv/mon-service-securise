@@ -332,9 +332,15 @@ const creeDepot = (config = {}) => {
     remplaceProprieteService('risquesSpecifiques', ...params);
 
   const supprimeHomologation = async (idService) => {
+    const { contributeurs } = await p.lis.une(idService);
     await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
     await p.supprime(idService);
-    await busEvenements.publie(new EvenementServiceSupprime({ idService }));
+    await busEvenements.publie(
+      new EvenementServiceSupprime({
+        idService,
+        autorisations: contributeurs.map((u) => ({ idUtilisateur: u.id })),
+      })
+    );
   };
 
   const trouveIndexDisponible = async (idProprietaire, nomService) => {
