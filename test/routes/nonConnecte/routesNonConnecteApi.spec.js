@@ -29,6 +29,10 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
+        estimationNombreServices: {
+          borneBasse: 1,
+          borneHaute: 10,
+        },
         cguAcceptees: 'true',
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
@@ -142,6 +146,10 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           telephone: '0100000000',
           entite: {
             siret: '13000766900018',
+          },
+          estimationNombreServices: {
+            borneBasse: 1,
+            borneHaute: 10,
           },
           infolettreAcceptee: true,
           transactionnelAccepte: true,

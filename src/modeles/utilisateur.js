@@ -27,6 +27,7 @@ class Utilisateur extends Base {
         'postes',
         'infolettreAcceptee',
         'transactionnelAccepte',
+        'estimationNombreServices',
       ],
     });
     valide(donnees);
@@ -81,7 +82,7 @@ class Utilisateur extends Base {
       validePresenceProprietes(['email']);
     }
     validePresenceProprietes(['prenom', 'nom']);
-    validePresenceProprietesObjet(['entite']);
+    validePresenceProprietesObjet(['entite', 'estimationNombreServices']);
     Entite.valideDonnees(donnees.entite);
     validePresenceProprietesBooleenes([
       'infolettreAcceptee',
