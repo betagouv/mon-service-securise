@@ -41,7 +41,7 @@
     peuvent pas être référencés sur MonServiceSécurisé.
   </p>
   <a
-    href="https://aide.monservicesecurise.ssi.gouv.fr/fr/article/quels-services-ne-peuvent-pas-etre-references-sur-monservicesecurise-ey6mt1/"
+    href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/quels-services-ne-peuvent-pas-etre-references-sur-monservicesecurise-ey6mt1/"
     target="_blank">Obtenir plus d’informations</a
   >
   <p>
