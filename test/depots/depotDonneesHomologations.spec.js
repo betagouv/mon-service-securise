@@ -962,6 +962,7 @@ describe('Le dépôt de données des homologations', () => {
       });
 
       depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         busEvenements,
       });
@@ -1010,6 +1011,7 @@ describe('Le dépôt de données des homologations', () => {
         ],
       });
       depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         busEvenements,
       });
@@ -1031,6 +1033,25 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it("publie sur le bus d'événements le service supprimé", async () => {
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          { id: '999', email: 'jean.dupont@mail.fr' },
+          { id: '000', email: 'contributeur@mail.fr' },
+        ],
+        homologations: [
+          { id: '111', descriptionService: { nomService: 'Un service' } },
+        ],
+        autorisations: [
+          uneAutorisation().avecId('123').deProprietaire('999', '111').donnees,
+          uneAutorisation().avecId('456').deContributeur('000', '111').donnees,
+        ],
+      });
+      depot = DepotDonneesHomologations.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance,
+        busEvenements,
+      });
+
       await depot.supprimeHomologation('111');
 
       expect(busEvenements.aRecuUnEvenement(EvenementServiceSupprime)).to.be(
@@ -1038,6 +1059,9 @@ describe('Le dépôt de données des homologations', () => {
       );
       const recu = busEvenements.recupereEvenement(EvenementServiceSupprime);
       expect(recu.idService).to.be('111');
+      expect(recu.autorisations.length).to.be(2);
+      expect(recu.autorisations[0].idUtilisateur).to.eql('999');
+      expect(recu.autorisations[1].idUtilisateur).to.eql('000');
     });
   });
 
