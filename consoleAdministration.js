@@ -282,6 +282,39 @@ class ConsoleAdministration {
     interval = setInterval(() => traiteOuQuitte(), 600);
   }
 
+  async rattrapageNombreServicesContactBrevo() {
+    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
+    const crmBrevo = new CrmBrevo({
+      adaptateurMail,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+    });
+
+    let rapportExecution = '';
+    let iteration = 1;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const utilisateur of tousUtilisateurs) {
+      process.stdout.write(`\r${iteration}/${tousUtilisateurs.length}`);
+      try {
+        /* eslint-disable no-await-in-loop */
+        const autorisationsUtilisateur = await this.depotDonnees.autorisations(
+          utilisateur.id
+        );
+        await crmBrevo.metAJourContact(utilisateur, autorisationsUtilisateur);
+        /* eslint-enable no-await-in-loop */
+      } catch (e) {
+        rapportExecution += `Erreur pour ${utilisateur.email}`;
+        if (e instanceof AxiosError) {
+          rapportExecution += `\n[${e?.response?.status}]: ${e?.response?.data?.message}`;
+        } else {
+          rapportExecution += e.toString();
+        }
+      }
+      iteration += 1;
+    }
+    // eslint-disable-next-line no-console
+    console.log(`\n${rapportExecution}`);
+  }
+
   async rattrapageLienEntrepriseEtContactBrevo() {
     const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
     const utilisateursAvecSiret = tousUtilisateurs.filter(
