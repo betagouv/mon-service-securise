@@ -59,6 +59,31 @@ class CrmBrevo {
       idEntrepriseBrevo
     );
   }
+
+  metAJourContact(utilisateur, autorisations) {
+    if (!utilisateur) {
+      throw new Error(
+        "Impossible d'envoyer à Brevo le nombre de services de l'utilisateur sans avoir l'utilisateur en paramètre."
+      );
+    }
+    if (!autorisations) {
+      throw new Error(
+        "Impossible d'envoyer à Brevo le nombre de services de l'utilisateur sans avoir les autorisations en paramètre."
+      );
+    }
+
+    const nombreServicesProprietaire = autorisations.filter(
+      (a) => a.estProprietaire
+    ).length;
+    const nombreServicesContributeur = autorisations.filter(
+      (a) => !a.estProprietaire
+    ).length;
+
+    return this.adaptateurMail.metAJourDonneesContact(utilisateur.email, {
+      nombreServicesProprietaire,
+      nombreServicesContributeur,
+    });
+  }
 }
 
 module.exports = CrmBrevo;
