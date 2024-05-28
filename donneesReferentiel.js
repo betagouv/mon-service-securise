@@ -52,6 +52,14 @@ module.exports = {
     { label: 'plus de 5 000', borneBasse: 5001, borneHaute: 5001 },
   ],
 
+  estimationNombreServices: [
+    { label: '1 à 10', borneBasse: 1, borneHaute: 10 },
+    { label: '10 à 49', borneBasse: 10, borneHaute: 49 },
+    { label: '50 à 99', borneBasse: 50, borneHaute: 99 },
+    { label: '+ de 100', borneBasse: 100, borneHaute: 100 },
+    { label: 'Je ne sais pas', borneBasse: -1, borneHaute: -1 },
+  ],
+
   tranchesIndicesCybers: [
     {
       borneInferieure: 0,
