@@ -17,6 +17,10 @@ class ConstructeurUtilisateur {
         departement: '',
         siret: '',
       },
+      estimationNombreServices: {
+        borneBasse: '1',
+        borneHaute: '10',
+      },
       infolettreAcceptee: '',
       transactionnelAccepte: '',
     };

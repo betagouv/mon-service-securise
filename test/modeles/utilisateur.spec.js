@@ -17,17 +17,19 @@ describe('Un utilisateur', () => {
         nom: 'Dupont',
         email: 'jean.dupont@mail.fr',
         entite: { siret: '12345' },
+        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
       });
       expect(utilisateur.completudeProfil().estComplet).to.be(true);
       expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([]);
     });
 
-    it('considère le profil « incomplet » à cause du nom et du SIRET manquants si le nom et le SIRET ne sont pas renseignés', () => {
+    it("considère le profil « incomplet » à cause du nom, du SIRET et de l'estimation du nombre de services manquants s'ils ne sont pas renseignés", () => {
       const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
       expect(utilisateur.completudeProfil().estComplet).to.be(false);
       expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([
         'nom',
         'siret',
+        'estimationNombreServices',
       ]);
     });
 
@@ -35,10 +37,24 @@ describe('Un utilisateur', () => {
       const utilisateur = new Utilisateur({
         nom: 'Dupont',
         email: 'jean.dupont@mail.fr',
+        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
       });
       expect(utilisateur.completudeProfil().estComplet).to.be(false);
       expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([
         'siret',
+      ]);
+    });
+
+    it("considère le profil « incomplet » à cause de l'estimation du nombre de services manquante si les bornes sont égales à zéro", () => {
+      const utilisateur = new Utilisateur({
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+        entite: { siret: '12345' },
+        estimationNombreServices: { borneBasse: '0', borneHaute: '0' },
+      });
+      expect(utilisateur.completudeProfil().estComplet).to.be(false);
+      expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([
+        'estimationNombreServices',
       ]);
     });
   });
