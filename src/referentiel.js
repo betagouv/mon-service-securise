@@ -25,6 +25,7 @@ const donneesReferentielVide = {
   statutsMesures: {},
   tranchesIndicesCybers: [],
   nombreOrganisationsUtilisatrices: [],
+  estimationNombreServices: [],
   etapesVisiteGuidee: [],
 };
 
@@ -131,6 +132,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     );
   const nombreOrganisationsUtilisatrices = () =>
     donnees.nombreOrganisationsUtilisatrices || [];
+  const estimationNombreServices = () => donnees.estimationNombreServices || [];
 
   const coefficientIndiceCyberMesuresIndispensables = () =>
     donnees.indiceCyber?.coefficientIndispensables || 0.5;
@@ -322,6 +324,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estIdentifiantEcheanceRenouvellementConnu,
     estIdentifiantMesureConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
+    estimationNombreServices,
     etapeDossierAutorisee,
     etapeExiste,
     etapesParcoursHomologation,
