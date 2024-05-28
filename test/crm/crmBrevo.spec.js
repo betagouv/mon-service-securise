@@ -258,8 +258,8 @@ describe('Le CRM Brevo', () => {
       await crmBrevo.metAJourContact(utilisateur, autorisations);
 
       expect(destinataireRecu).to.eql('jean.valjean@beta.gouv.fr');
-      expect(donneesRecues.nombreServicesProprietaire).to.eql(2);
-      expect(donneesRecues.nombreServicesContributeur).to.eql(1);
+      expect(donneesRecues.sync_mss_nb_services_proprietaire).to.eql(2);
+      expect(donneesRecues.sync_mss_nb_services_contributeur).to.eql(1);
     });
   });
 });
