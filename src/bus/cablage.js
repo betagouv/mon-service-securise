@@ -147,6 +147,7 @@ const cableTousLesAbonnes = (
   busEvenements.abonnePlusieurs(EvenementServiceSupprime, [
     consigneServiceSupprimeDansJournal({ adaptateurJournal }),
     supprimeNotificationsExpirationHomologation({ depotDonnees }),
+    metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }),
   ]);
 };
 
