@@ -220,7 +220,7 @@ describe('Le CRM Brevo', () => {
 
     it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
       try {
-        await crmBrevo.metAJourContact(null, []);
+        await crmBrevo.metAJourNombresContributionsContact(null, []);
 
         expect().fail("L'instanciation aurait dû lever une exception.");
       } catch (e) {
@@ -232,7 +232,7 @@ describe('Le CRM Brevo', () => {
 
     it("lève une exception s'il ne reçoit pas d'autorisations", async () => {
       try {
-        await crmBrevo.metAJourContact(utilisateur, null);
+        await crmBrevo.metAJourNombresContributionsContact(utilisateur, null);
 
         expect().fail("L'instanciation aurait dû lever une exception.");
       } catch (e) {
@@ -255,7 +255,10 @@ describe('Le CRM Brevo', () => {
         donneesRecues = donnees;
       };
 
-      await crmBrevo.metAJourContact(utilisateur, autorisations);
+      await crmBrevo.metAJourNombresContributionsContact(
+        utilisateur,
+        autorisations
+      );
 
       expect(destinataireRecu).to.eql('jean.valjean@beta.gouv.fr');
       expect(donneesRecues.sync_mss_nb_services_proprietaire).to.eql(2);

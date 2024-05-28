@@ -66,7 +66,7 @@ describe("L'abonnement qui met à jour les contacts Brevo des contributeurs", ()
       idUtilisateur === '1' ? utilisateur : utilisateur2;
     const utilisateurRecu = [];
     const autorisationsRecues = [];
-    crmBrevo.metAJourContact = async (u, a) => {
+    crmBrevo.metAJourNombresContributionsContact = async (u, a) => {
       utilisateurRecu.push(u);
       autorisationsRecues.push(a);
     };
@@ -92,7 +92,7 @@ describe("L'abonnement qui met à jour les contacts Brevo des contributeurs", ()
       throw new Error('oups');
     };
     const utilisateurRecu = [];
-    crmBrevo.metAJourContact = async (u) => {
+    crmBrevo.metAJourNombresContributionsContact = async (u) => {
       utilisateurRecu.push(u);
     };
 
