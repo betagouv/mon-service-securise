@@ -36,10 +36,7 @@ const metAJourDonneesContact = (destinataire, donnees) =>
     .put(
       `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
       {
-        attributes: {
-          sync_mss_nb_services_proprietaire: donnees.nombreServicesProprietaire,
-          sync_mss_nb_services_contributeur: donnees.nombreServicesContributeur,
-        },
+        attributes: donnees,
       },
       enteteJSON
     )

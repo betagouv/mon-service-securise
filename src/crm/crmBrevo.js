@@ -80,8 +80,8 @@ class CrmBrevo {
     ).length;
 
     return this.adaptateurMail.metAJourDonneesContact(utilisateur.email, {
-      nombreServicesProprietaire,
-      nombreServicesContributeur,
+      sync_mss_nb_services_proprietaire: nombreServicesProprietaire,
+      sync_mss_nb_services_contributeur: nombreServicesContributeur,
     });
   }
 }
