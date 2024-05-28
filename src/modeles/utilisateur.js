@@ -101,6 +101,7 @@ class Utilisateur extends Base {
       'infolettreAcceptee',
       'transactionnelAccepte',
       'postes.*',
+      'estimationNombreServices.*',
     ];
   }
 

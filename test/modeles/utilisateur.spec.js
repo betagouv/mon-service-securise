@@ -188,6 +188,7 @@ describe('Un utilisateur', () => {
       'infolettreAcceptee',
       'transactionnelAccepte',
       'postes.*',
+      'estimationNombreServices.*',
     ];
     expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
   });
