@@ -44,6 +44,12 @@ const brancheSoumissionFormulaireUtilisateur = (
     email: () => $('#email').val(),
     telephone: () => $('#telephone').val(),
     siretEntite: () => $('#siretEntite').val(),
+    estimationNombreServices: () => {
+      const [borneBasse, borneHaute] = $('#estimation-nombre-services')
+        .val()
+        .split('_');
+      return { borneBasse, borneHaute };
+    },
     motDePasse: () => $('#mot-de-passe').val(),
     cguAcceptees: () => reponseAcceptee('cguAcceptees'),
     infolettreAcceptee: () => $('#infolettreAcceptee').is(':checked'),

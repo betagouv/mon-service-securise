@@ -416,13 +416,21 @@ button.bouton.en-cours-chargement::before {
   cursor: pointer;
 }
 
-form.homologation label p.description:first-of-type {
+.requis label p.description:first-of-type {
   margin-top: 8px;
 }
 
-form.homologation label p.description {
+.requis label p.description:last-of-type {
+  margin-bottom: 16px;
+}
+
+.requis label p.description {
   font-weight: normal;
   font-size: 0.9em;
   margin: 0;
   color: var(--texte-fonce);
+}
+
+select#estimation-nombre-services {
+  appearance: auto;
 }
