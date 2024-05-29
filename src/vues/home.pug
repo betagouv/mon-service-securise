@@ -9,7 +9,7 @@ mixin contenuAvantage(titre, description)
 
 mixin etape(numero, titre, description, afficheChemin = true)
   .etape
-    img.taille-maximale.tres-petite-marge-basse(src=`/statique/assets/images/home/illustration_etape_${numero}.svg` alt='')
+    img.taille-maximale.tres-petite-marge-basse(loading="lazy" src=`/statique/assets/images/home/illustration_etape_${numero}.svg` alt='')
     .numero-etape.tres-petite-marge-basse(class=`numero-${numero}`)
       span!= numero
     .contenu-texte-etape
@@ -25,7 +25,7 @@ mixin chiffreCle(chiffre, description)
 
 mixin carteCarrousel(numero, description)
   .carte-carrousel(id=`slide-${numero}`)
-    img.petite-marge-basse(src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
+    img.petite-marge-basse(loading="lazy" src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
     h4!= description
 
 mixin carrousel(id, texteBoutonSuivant)
@@ -107,7 +107,7 @@ block main
             h3.alignement-gauche.moyenne-marge-basse La cybersécurité est un sport collectif !
             p.alignement-gauche.moyenne-police.grande-marge-basse Sécurisez à 2, à 10 ou à 100. Pensé par et pour les DSI, RSSI, DPD, et chef/fes de projets. Invitez les personnes de votre choix y compris vos prestataires. Et gérez en finesse leurs droits d’accès.
         .conteneur-etroit
-          img.taille-maximale.decalage-bas#illustration-collaboratif(src='/statique/assets/images/home/illustration_3.webp' alt="Menu de gestion des contributeurs" width=384)
+          img.taille-maximale.decalage-bas#illustration-collaboratif(loading="lazy" src='/statique/assets/images/home/illustration_3.webp' alt="Menu de gestion des contributeurs" width=384)
     .bloc-contenu
       h3.alignement-gauche.centre-tablette.alignement-gauche-desktop.couleur-principale-foncee.moyenne-marge-basse Ça fonctionne !
       .chiffres-cle.petite-marge-basse
@@ -117,17 +117,17 @@ block main
     .bloc-contenu.fond-couleur-principale-attenuee
       h3.alignement-gauche.couleur-principale-foncee.moyenne-marge-basse Ces entités qui nous font confiance
       .conteneur-entites.grande-marge-basse
-        img(src='/statique/assets/images/home/anct.svg' alt='ANCT Incubateur des territoires')
-        img(src='/statique/assets/images/home/declic.webp' alt='Logo de Déclic' width=200)
-        img(src='/statique/assets/images/home/essonne.webp' alt='Essonne' width=200)
-        img(src='/statique/assets/images/home/inclusion_connect.webp' alt='Inclusion Connect' width=250)
-        img(src='/statique/assets/images/home/metropole_aix_marseille_provence.svg' alt='La métropole Aix-Marseille-Provence')
-        img(src='/statique/assets/images/home/haute_garonne.webp' alt='Conseil départemental de Haute-Garonne' width=250)
+        img(loading="lazy" src='/statique/assets/images/home/anct.svg' alt='ANCT Incubateur des territoires')
+        img(loading="lazy" src='/statique/assets/images/home/declic.webp' alt='Logo de Déclic' width=200)
+        img(loading="lazy" src='/statique/assets/images/home/essonne.webp' alt='Essonne' width=200)
+        img(loading="lazy" src='/statique/assets/images/home/inclusion_connect.webp' alt='Inclusion Connect' width=250)
+        img(loading="lazy" src='/statique/assets/images/home/metropole_aix_marseille_provence.svg' alt='La métropole Aix-Marseille-Provence')
+        img(loading="lazy" src='/statique/assets/images/home/haute_garonne.webp' alt='Conseil départemental de Haute-Garonne' width=250)
       +carrousel('carrousel-temoignages', 'Témoignages suivants')
         include home/temoignages
     .bloc-contenu.bloc-etroit#presentation-anssi
       h3.titre-etroit.couleur-principale-foncee.moyenne-marge-basse Qu’est-ce que l’ANSSI ?
-      img.moyenne-marge-basse(src='/statique/assets/images/home/anssi.webp' alt="Logo de l'ANSSI" width=180)
+      img.moyenne-marge-basse(loading="lazy" src='/statique/assets/images/home/anssi.webp' alt="Logo de l'ANSSI" width=180)
       p.moyenne-police.moyenne-marge-basse
         span Créée en 2009, l’Agence nationale de la sécurité des systèmes d’information (ANSSI) est l’autorité nationale en matière de cybersécurité et de cyberdéfense.
         br
