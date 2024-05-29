@@ -33,9 +33,9 @@ mixin carrousel(id, texteBoutonSuivant)
     .conteneur-carrousel
       block
     .conteneur-liens-carrousel
-      button.precedent
+      button.precedent(title="Précédent")
         img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
-      button.suivant
+      button.suivant(title="Suivant")
         span!= texteBoutonSuivant
         img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
 
