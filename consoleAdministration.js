@@ -358,10 +358,6 @@ class ConsoleAdministration {
         (u.estimationNombreServices?.borneHaute ?? '0') !== '0'
     );
 
-    console.log(
-      utilisateursAvecEstimation.map((u) => u.estimationNombreServices)
-    );
-    return;
     const crmBrevo = new CrmBrevo({
       adaptateurMail,
       adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
