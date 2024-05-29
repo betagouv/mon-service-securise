@@ -60,6 +60,9 @@ const { metAJourContactBrevo } = require('./abonnements/metAJourContactBrevo');
 const {
   metAJourContactsBrevoDesContributeurs,
 } = require('./abonnements/metAJourContactsBrevoDesContributeurs');
+const {
+  metAJourEstimationNombreServicesContactBrevo,
+} = require('./abonnements/metAJourEstimationNombreServicesContactBrevo');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -120,6 +123,7 @@ const cableTousLesAbonnes = (
       adaptateurRechercheEntreprise,
     }),
     modifieLienEntrepriseEtContactBrevo({ crmBrevo }),
+    metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementUtilisateurInscrit, [
@@ -129,6 +133,7 @@ const cableTousLesAbonnes = (
       adaptateurRechercheEntreprise,
     }),
     relieEntrepriseEtContactBrevo({ crmBrevo }),
+    metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementDossierHomologationFinalise, [
