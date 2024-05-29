@@ -354,9 +354,14 @@ class ConsoleAdministration {
     const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
     const utilisateursAvecEstimation = tousUtilisateurs.filter(
       (u) =>
-        (u.estimationNombreServices?.borneBasse ?? 0) !== 0 &&
-        (u.estimationNombreServices?.borneHaute ?? 0) !== 0
+        (u.estimationNombreServices?.borneBasse ?? '0') !== '0' &&
+        (u.estimationNombreServices?.borneHaute ?? '0') !== '0'
     );
+
+    console.log(
+      utilisateursAvecEstimation.map((u) => u.estimationNombreServices)
+    );
+    return;
     const crmBrevo = new CrmBrevo({
       adaptateurMail,
       adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
