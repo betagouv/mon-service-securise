@@ -213,7 +213,7 @@ describe('Le CRM Brevo', () => {
     });
   });
 
-  describe('sur demande de mise à jour du contact', () => {
+  describe('sur demande de mise à jour du nombre de contributions du contact', () => {
     const utilisateur = unUtilisateur()
       .avecEmail('jean.valjean@beta.gouv.fr')
       .construis();
@@ -263,6 +263,62 @@ describe('Le CRM Brevo', () => {
       expect(destinataireRecu).to.eql('jean.valjean@beta.gouv.fr');
       expect(donneesRecues.sync_mss_nb_services_proprietaire).to.eql(2);
       expect(donneesRecues.sync_mss_nb_services_contributeur).to.eql(1);
+    });
+  });
+
+  describe("sur demande de mise à jour de l'estimation du nombre de services du contact", () => {
+    const utilisateur = unUtilisateur()
+      .avecEmail('jean.valjean@beta.gouv.fr')
+      .avecEstimationNombreServices(1, 10)
+      .construis();
+
+    it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
+      try {
+        await crmBrevo.metAJourEstimationNombreServicesContact(null);
+
+        expect().fail("L'instanciation aurait dû lever une exception.");
+      } catch (e) {
+        expect(e.message).to.be(
+          "Impossible d'envoyer à Brevo l'estimation du nombre de services de l'utilisateur sans avoir l'utilisateur en paramètre."
+        );
+      }
+    });
+
+    it("ne fait rien si l'utilisateur n'a pas d'estimation de nombre de services, en cas d'invitation", async () => {
+      const utilisateurSansEstimation = unUtilisateur()
+        .avecEmail('jean.valjean@beta.gouv.fr')
+        .construis();
+      utilisateurSansEstimation.estimationNombreServices = undefined;
+
+      let adaptateurAppele = false;
+      adaptateurMail.metAJourDonneesContact = async () => {
+        adaptateurAppele = true;
+      };
+
+      await crmBrevo.metAJourEstimationNombreServicesContact(
+        utilisateurSansEstimation
+      );
+
+      expect(adaptateurAppele).to.be(false);
+    });
+
+    it('met à jour le contact Brevo avec son estimation du nombre de services', async () => {
+      let destinataireRecu;
+      let donneesRecues;
+      adaptateurMail.metAJourDonneesContact = async (destinataire, donnees) => {
+        destinataireRecu = destinataire;
+        donneesRecues = donnees;
+      };
+
+      await crmBrevo.metAJourEstimationNombreServicesContact(utilisateur);
+
+      expect(destinataireRecu).to.eql('jean.valjean@beta.gouv.fr');
+      expect(donneesRecues.sync_mss_estimation_nb_services_borne_basse).to.eql(
+        1
+      );
+      expect(donneesRecues.sync_mss_estimation_nb_services_borne_haute).to.eql(
+        10
+      );
     });
   });
 });

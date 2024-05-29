@@ -84,6 +84,23 @@ class CrmBrevo {
       sync_mss_nb_services_contributeur: nombreServicesContributeur,
     });
   }
+
+  async metAJourEstimationNombreServicesContact(utilisateur) {
+    if (!utilisateur) {
+      throw new Error(
+        "Impossible d'envoyer à Brevo l'estimation du nombre de services de l'utilisateur sans avoir l'utilisateur en paramètre."
+      );
+    }
+
+    if (!utilisateur.estimationNombreServices) return;
+
+    await this.adaptateurMail.metAJourDonneesContact(utilisateur.email, {
+      sync_mss_estimation_nb_services_borne_basse:
+        utilisateur.estimationNombreServices.borneBasse,
+      sync_mss_estimation_nb_services_borne_haute:
+        utilisateur.estimationNombreServices.borneHaute,
+    });
+  }
 }
 
 module.exports = CrmBrevo;

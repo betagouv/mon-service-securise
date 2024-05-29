@@ -51,6 +51,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  avecEstimationNombreServices(borneBasse, borneHaute) {
+    this.estimationNombreServices = { borneBasse, borneHaute };
+    return this;
+  }
+
   quiTravaillePourUneEntiteAvecSiret(siret) {
     this.donnees.entite.siret = siret;
     return this;
