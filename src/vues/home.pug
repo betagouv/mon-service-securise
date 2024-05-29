@@ -26,7 +26,7 @@ mixin chiffreCle(chiffre, description)
 mixin carteCarrousel(numero, description)
   .carte-carrousel(id=`slide-${numero}`)
     img.petite-marge-basse(loading="lazy" src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
-    h4!= description
+    h3!= description
 
 mixin carrousel(id, texteBoutonSuivant)
   div(id=id)
