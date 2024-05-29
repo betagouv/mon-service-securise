@@ -349,6 +349,42 @@ class ConsoleAdministration {
     // eslint-disable-next-line no-console
     console.log(`\n${rapportExecution}`);
   }
+
+  async rattrapageEstimationNombreServicesContactBrevo() {
+    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
+    const utilisateursAvecEstimation = tousUtilisateurs.filter(
+      (u) =>
+        (u.estimationNombreServices?.borneBasse ?? 0) !== 0 &&
+        (u.estimationNombreServices?.borneHaute ?? 0) !== 0
+    );
+    const crmBrevo = new CrmBrevo({
+      adaptateurMail,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+    });
+
+    let rapportExecution = '';
+    let iteration = 1;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const utilisateur of utilisateursAvecEstimation) {
+      process.stdout.write(
+        `\r${iteration}/${utilisateursAvecEstimation.length}`
+      );
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        await crmBrevo.metAJourEstimationNombreServicesContact(utilisateur);
+      } catch (e) {
+        rapportExecution += `Erreur pour ${utilisateur.email}`;
+        if (e instanceof AxiosError) {
+          rapportExecution += `\n[${e?.response?.status}]: ${e?.response?.data?.message}`;
+        } else {
+          rapportExecution += e.toString();
+        }
+      }
+      iteration += 1;
+    }
+    // eslint-disable-next-line no-console
+    console.log(`\n${rapportExecution}`);
+  }
 }
 
 module.exports = ConsoleAdministration;
