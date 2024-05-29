@@ -245,11 +245,13 @@ main {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
   gap: 32px;
 }
 
 #home .conteneur-entites img {
+  max-width: 170px;
+  max-height: 70px;
   margin-bottom: 24px;
   align-self: center;
 }
