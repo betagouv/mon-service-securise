@@ -15,6 +15,7 @@ const rechercheOrganisations = async (terme, departement) => {
           page: 1,
           limite_matching_etablissements: 1,
           est_entrepreneur_individuel: false,
+          mtm_campaign: 'mon-service-securise',
         },
       }
     );
@@ -46,6 +47,7 @@ const recupereDetailsOrganisation = async (siret) => {
           per_page: 1,
           page: 1,
           limite_matching_etablissements: 1,
+          mtm_campaign: 'mon-service-securise',
         },
       }
     );
