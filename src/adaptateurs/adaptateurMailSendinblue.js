@@ -52,10 +52,14 @@ const desinscrisInfolettre = (destinataire) =>
 const inscrisInfolettre = (destinataire) =>
   basculeInfolettre(destinataire, false);
 
+const numeroTelephoneAvecIndicatif = (numero) =>
+  numero ? `+33${numero.substring(1)}` : '';
+
 const creeContact = (
   destinataire,
   prenom,
   nom,
+  telephone,
   bloqueNewsletter,
   bloqueMarketing
 ) =>
@@ -65,7 +69,11 @@ const creeContact = (
       {
         email: destinataire,
         emailBlacklisted: bloqueNewsletter,
-        attributes: { PRENOM: decode(prenom), NOM: decode(nom) },
+        attributes: {
+          PRENOM: decode(prenom),
+          NOM: decode(nom),
+          sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
+        },
         ...(!bloqueMarketing && { listIds: [idListeEmailsMarketing] }),
       },
       enteteJSON

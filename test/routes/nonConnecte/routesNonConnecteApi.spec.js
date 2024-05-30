@@ -200,12 +200,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         destinataire,
         prenom,
         nom,
+        telephone,
         bloqueEmails,
         bloqueMarketing
       ) => {
         expect(destinataire).to.equal('jean.dupont@mail.fr');
         expect(prenom).to.equal('Jean');
         expect(nom).to.equal('Dupont');
+        expect(telephone).to.equal('0100000000');
         expect(bloqueEmails).to.equal(false);
         expect(bloqueMarketing).to.be(false);
         return Promise.resolve();

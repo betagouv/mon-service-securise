@@ -40,6 +40,7 @@ const routesNonConnecteApi = ({
             utilisateur.email,
             utilisateur.prenom ?? '',
             utilisateur.nom ?? '',
+            utilisateur.telephone ?? '',
             !utilisateur.infolettreAcceptee,
             false
           )
