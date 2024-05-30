@@ -65,6 +65,9 @@ const {
 const {
   metAJourEstimationNombreServicesContactBrevo,
 } = require('./abonnements/metAJourEstimationNombreServicesContactBrevo');
+const {
+  metAJourContactBrevoDeLUtilisateur,
+} = require('./abonnements/metAJourContactBrevoDeLUtilisateur');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -126,6 +129,7 @@ const cableTousLesAbonnes = (
     }),
     modifieLienEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
+    metAJourContactBrevoDeLUtilisateur({ crmBrevo }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementUtilisateurInscrit, [
