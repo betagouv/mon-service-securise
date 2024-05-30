@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 const {
-  metAJourContactBrevo,
-} = require('../../../src/bus/abonnements/metAJourContactBrevo');
+  metAJourContactBrevoDuContributeur,
+} = require('../../../src/bus/abonnements/metAJourContactBrevoDuContributeur');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
@@ -9,7 +9,7 @@ const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
 
-describe("L'abonnement qui met à jour le contact Brevo", () => {
+describe("L'abonnement qui met à jour le contact Brevo du contributeur", () => {
   let crmBrevo;
   let utilisateur;
   let depotDonnees;
@@ -28,7 +28,7 @@ describe("L'abonnement qui met à jour le contact Brevo", () => {
 
   it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
     try {
-      await metAJourContactBrevo({
+      await metAJourContactBrevoDuContributeur({
         crmBrevo,
         depotDonnees,
       })({
@@ -57,7 +57,7 @@ describe("L'abonnement qui met à jour le contact Brevo", () => {
       autorisationsRecues = a;
     };
 
-    await metAJourContactBrevo({
+    await metAJourContactBrevoDuContributeur({
       crmBrevo,
       depotDonnees,
     })({

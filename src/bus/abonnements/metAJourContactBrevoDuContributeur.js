@@ -1,4 +1,4 @@
-function metAJourContactBrevo({ crmBrevo, depotDonnees }) {
+function metAJourContactBrevoDuContributeur({ crmBrevo, depotDonnees }) {
   return async ({ utilisateur }) => {
     if (!utilisateur) {
       throw new Error(
@@ -17,4 +17,4 @@ function metAJourContactBrevo({ crmBrevo, depotDonnees }) {
   };
 }
 
-module.exports = { metAJourContactBrevo };
+module.exports = { metAJourContactBrevoDuContributeur };
