@@ -69,6 +69,7 @@
 
   #home .conteneur-photos-equipe {
     border-right: 1px solid white;
+    min-width: 600px;
   }
 
   #home .conteneur-gauche-desktop {
