@@ -5,7 +5,17 @@ import parametres, {
 import convertisReponseOuiNon from './convertisReponseOuiNon.mjs';
 
 const extraisParametresDescriptionService = (selecteurFormulaire) => {
-  const params = parametres(selecteurFormulaire);
+  const idFormulaires = $.map(
+    $('form', selecteurFormulaire),
+    (formulaire) => formulaire.id
+  );
+  const params = idFormulaires.reduce(
+    (acc, idFormulaire) => ({
+      ...acc,
+      ...parametres(`#${idFormulaire}`),
+    }),
+    {}
+  );
 
   params.risqueJuridiqueFinancierReputationnel = convertisReponseOuiNon(
     params.risqueJuridiqueFinancierReputationnel

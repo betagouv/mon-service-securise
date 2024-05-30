@@ -3,6 +3,9 @@ import {
   declencheValidationCasesACocher,
 } from './brancheValidationCasesACocher.mjs';
 
+const EVENEMENT_FORMULAIRE_MULTIPLE_VALIDE =
+  'EVENEMENT_FORMULAIRE_MULTIPLE_VALIDE';
+
 // Tous les champs de formulaires reçoivent la classe "touche" au moment d'un changement (input, change)
 // Cette classe permet d'afficher les messages d'erreurs sur tous les `input.touche:invalid`
 // Au moment de la validation du formulaire, on ajoute la classe `.touche` sur tous les champs,
@@ -50,4 +53,22 @@ const declencheValidation = (selecteurFormulaire) => {
   declencheScrollSurErreur(selecteurFormulaire);
 };
 
-export { brancheConteneur, brancheValidation, declencheValidation };
+const declencheValidationFormulairesMultiple = (
+  selecteurConteneurFormulaires
+) => {
+  let tousFormulaireValides = true;
+  $('form', selecteurConteneurFormulaires).each((_i, element) => {
+    if (!element.checkValidity()) tousFormulaireValides = false;
+  });
+
+  if (tousFormulaireValides)
+    selecteurConteneurFormulaires.trigger(EVENEMENT_FORMULAIRE_MULTIPLE_VALIDE);
+};
+
+export {
+  brancheConteneur,
+  brancheValidation,
+  declencheValidation,
+  declencheValidationFormulairesMultiple,
+  EVENEMENT_FORMULAIRE_MULTIPLE_VALIDE,
+};
