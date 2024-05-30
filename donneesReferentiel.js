@@ -450,7 +450,7 @@ module.exports = {
     },
     contactSecurite: {
       description:
-        'Rendre public une procédure permettant de signaler un problème de sécurité',
+        'Rendre publique une procédure permettant de signaler un problème de sécurité',
       categorie: 'gouvernance',
       descriptionLongue:
         "<p>Fournir publiquement une procédure permettant à une personne ou à une entité de signaler un problème de sécurité concernant le service numérique. <br>Cette procédure doit préciser les conditions dans lesquelles un problème de sécurité peut être identifié et signalé et fournir un moyen non nominatif de contacter l'équipe en charge du service ou de sa sécurité (ex. email, formulaire de contact).</p>" +
