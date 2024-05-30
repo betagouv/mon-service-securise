@@ -178,10 +178,21 @@ main {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  overflow: hidden;
 }
 
-#home .conteneur-photos-equipe .decalage-gauche {
-  transform: translateX(-40px);
+#home .conteneur-photos-equipe img {
+  width: 33%;
+  --marge: -24px;
+  max-width: 200px;
+}
+
+#home .conteneur-photos-equipe img:first-of-type {
+  margin-right: var(--marge);
+}
+
+#home .conteneur-photos-equipe img:last-of-type {
+  margin-left: var(--marge);
 }
 
 #home hr {
