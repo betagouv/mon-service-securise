@@ -45,8 +45,8 @@ const marqueTousChampsCommeTouches = (selecteurFormulaire) => {
 };
 
 const declencheValidation = (selecteurFormulaire) => {
-  marqueTousChampsCommeTouches();
-  declencheValidationCasesACocher();
+  marqueTousChampsCommeTouches(selecteurFormulaire);
+  declencheValidationCasesACocher(selecteurFormulaire);
   declencheScrollSurErreur(selecteurFormulaire);
 };
 
