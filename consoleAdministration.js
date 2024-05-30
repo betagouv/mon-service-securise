@@ -21,12 +21,26 @@ const {
 const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 const adaptateurMail = require('./src/adaptateurs/adaptateurMailSendinblue');
 const CrmBrevo = require('./src/crm/crmBrevo');
+const {
+  verifieCoherenceDesDroits,
+} = require('./src/modeles/autorisations/gestionDroits');
+const BusEvenements = require('./src/bus/busEvenements');
+const {
+  fabriqueAdaptateurGestionErreur,
+} = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const { cableTousLesAbonnes } = require('./src/bus/cablage');
+const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
+const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
 
 class ConsoleAdministration {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
     this.adaptateurPersistance =
       AdaptateurPostgres.nouvelAdaptateur(environnementNode);
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
+
+    const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
+    const busEvenements = new BusEvenements({ adaptateurGestionErreur });
+
     this.depotDonnees = DepotDonnees.creeDepot({
       adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
       adaptateurJWT,
@@ -34,12 +48,26 @@ class ConsoleAdministration {
       adaptateurUUID: fabriqueAdaptateurUUID(),
       referentiel: this.referentiel,
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
+      busEvenements,
     });
+
     this.adaptateurJournalMSS = fabriqueAdaptateurJournalMSS();
     this.crmBrevo = new CrmBrevo({
       adaptateurMail,
       adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
     });
+
+    const adaptateurTracking = fabriqueAdaptateurTracking();
+    cableTousLesAbonnes(busEvenements, {
+      adaptateurHorloge,
+      adaptateurTracking,
+      adaptateurJournal: this.adaptateurJournalMSS,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+      adaptateurMail,
+      depotDonnees: this.depotDonnees,
+      referentiel: this.referentiel,
+    });
+
     this.journalConsole = {
       consigneEvenement: (evenement) => {
         /* eslint-disable no-console */
@@ -379,6 +407,23 @@ class ConsoleAdministration {
       afficheErreur,
       rattrapeUtilisateur
     );
+  }
+
+  async transformeAutorisationEnProprietaire(idAutorisation) {
+    const devientProprietaire = { estProprietaire: true };
+
+    if (!verifieCoherenceDesDroits(devientProprietaire))
+      throw Error("L'autorisation de propriétaire n'est pas valide");
+
+    const ciblee = await this.depotDonnees.autorisation(idAutorisation);
+    if (!ciblee)
+      throw Error(`L'autorisation "${idAutorisation}" est introuvable`);
+
+    ciblee.appliqueDroits(devientProprietaire);
+    await this.depotDonnees.sauvegardeAutorisation(ciblee);
+
+    // eslint-disable-next-line no-console
+    console.log('DONE');
   }
 }
 
