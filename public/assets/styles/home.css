@@ -250,8 +250,8 @@ main {
 }
 
 #home .conteneur-entites img {
-  max-width: 170px;
-  max-height: 70px;
+  max-width: 150px;
+  max-height: 63px;
   margin-bottom: 24px;
   align-self: center;
 }
