@@ -94,6 +94,30 @@ form#decrire-etape-2 {
   margin: 0;
 }
 
+.conteneur-actions-etapes :is(#etape-precedente, #etape-suivante) {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.conteneur-actions-etapes #etape-precedente:before {
+  content: '';
+  background: url('/statique/assets/images/fleche_gauche_bleue.svg');
+  display: flex;
+  width: 24px;
+  height: 24px;
+}
+
+.conteneur-actions-etapes #etape-suivante:after {
+  content: '';
+  background: url('/statique/assets/images/fleche_gauche_bleue.svg');
+  transform: rotate(180deg);
+  filter: brightness(0) invert(100%);
+  display: flex;
+  width: 24px;
+  height: 24px;
+}
+
 .conteneur-actions-etapes #etape-precedente {
   display: none;
 }
