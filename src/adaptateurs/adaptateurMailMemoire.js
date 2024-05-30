@@ -14,6 +14,10 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoyer("Création d'un contact email", args);
   };
 
+  const metAJourContact = async (...args) => {
+    envoyer('Mise à jour du contact email', args);
+  };
+
   const metAJourDonneesContact = async (...args) => {
     envoyer("Mise à jour des données d'un contact email", args);
   };
@@ -122,6 +126,7 @@ const fabriqueAdaptateurMailMemoire = () => {
 
   return {
     creeContact,
+    metAJourContact,
     metAJourDonneesContact,
     creeEntreprise,
     desinscrisEmailsTransactionnels,
