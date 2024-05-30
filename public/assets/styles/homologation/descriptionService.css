@@ -76,3 +76,28 @@ form.homologation .banniere p {
 section:first-of-type {
   border-top: none;
 }
+
+form#decrire-etape-2 {
+  display: none;
+}
+
+.conteneur-actions-etapes {
+  display: flex;
+  gap: 16px;
+  padding: 24px 0;
+  justify-content: end;
+  border-top: 1px solid var(--liseres-fonce);
+}
+
+.conteneur-actions-etapes button {
+  padding: 8px 16px;
+  margin: 0;
+}
+
+.conteneur-actions-etapes #etape-precedente {
+  display: none;
+}
+
+.conteneur-actions-etapes .conteneur-bouton-finaliser {
+  display: none;
+}

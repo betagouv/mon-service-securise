@@ -16,226 +16,232 @@ mixin formulaireDescriptionService(idHomologation)
   - const estEnCreation = !idHomologation;
   - const estLectureSeule  = estEnCreation ? false : autorisationsService.DECRIRE.estLectureSeule;
   - const entite = service?.descriptionService?.organisationResponsable || {};
-  form.homologation#homologation
-    section
-      .mention champ obligatoire
-      .requis
-        label Nom du service numérique à homologuer
-          br
-          input(
-            id = 'nom-service',
-            name = 'nomService',
-            type = 'text',
-            data-form-type="other",
-            value != service.nomService(),
-            required
-            readonly = estLectureSeule
-          )
-          .message-erreur Le nom est obligatoire. Veuillez le renseigner.
-          .message-erreur-specifique#nom-deja-utilise Ce nom est déjà utilisé pour un autre service. Veuillez en saisir un autre.
-
-      if estLectureSeule
+  .homologation#homologation
+    form.etape-decrire#decrire-etape-1
+      section
+        .mention champ obligatoire
         .requis
-          label Organisation responsable du service numérique
+          label Nom du service numérique à homologuer
             br
             input(
-              id = 'entite-readonly',
-              name = 'entite-readonly',
+              id = 'nom-service',
+              name = 'nomService',
               type = 'text',
-              value != entite.nom,
+              data-form-type="other",
+              value != service.nomService(),
               required
-              readonly = true
-            )
-
-      unless estLectureSeule
-        .requis
-          label(for = 'departementEntite-selectize') Département de l'organisation responsable du service numérique
-            select(
-              id = 'departementEntite-selectize',
-              name = 'departementEntite-selectize',
-              placeHolder = 'ex : 33, Morbihan',
-              required,
               readonly = estLectureSeule
             )
-            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
-            input(type='hidden' name='departementEntite' id='departementEntite' value != entite.departement)
+            .message-erreur Le nom est obligatoire. Veuillez le renseigner.
+            .message-erreur-specifique#nom-deja-utilise Ce nom est déjà utilisé pour un autre service. Veuillez en saisir un autre.
+
+        if estLectureSeule
+          .requis
+            label Organisation responsable du service numérique
+              br
+              input(
+                id = 'entite-readonly',
+                name = 'entite-readonly',
+                type = 'text',
+                value != entite.nom,
+                required
+                readonly = true
+              )
+
+        unless estLectureSeule
+          .requis
+            label(for = 'departementEntite-selectize') Département de l'organisation responsable du service numérique
+              select(
+                id = 'departementEntite-selectize',
+                name = 'departementEntite-selectize',
+                placeHolder = 'ex : 33, Morbihan',
+                required,
+                readonly = estLectureSeule
+              )
+              .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
+              input(type='hidden' name='departementEntite' id='departementEntite' value != entite.departement)
+
+          .requis
+            label(for = 'siretEntite-selectize') Nom ou SIRET de l'organisation responsable du service numérique
+              select(
+                id = 'siretEntite-selectize',
+                name = 'siretEntite-selectize',
+                placeHolder = 'ex : 13261762000010, Agglomération de Mansart, Société Y',
+                required,
+                readonly = estLectureSeule
+              )
+              .icone-chargement
+              .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
+              input(type='hidden' name='nomEntite' id='nomEntite' value != entite.nom)
+              input(type='hidden' name='siretEntite' id='siretEntite' value != entite.siret)
+
+            .banniere.banniere-avertissement.invisible
+              img(src='/statique/assets/images/icone_danger.svg' alt='')
+              .contenu-texte-avertissement
+                strong Information à mettre à jour
+                p Vous pouvez directement rechercher le nom ou le numéro de SIRET de votre organisation.
+
+        - const { borneBasse, borneHaute } = service.descriptionService.nombreOrganisationsUtilisatrices
+        - const valeurService = `${borneBasse}-${borneHaute}`
+        - const valeurVide = '0-0'
+        .conteneur-nombre-organisations-utilisatrices(class = `${valeurService === valeurVide && !estLectureSeule && !estEnCreation ? 'vide' : ''}`)
+          .requis
+            label À combien d'organisations publiques est destiné le service ?
+              p.description Si le service est mutualisé au profit de plusieurs organisations publiques, merci de préciser combien en bénéficieront.
+              p.description Si le service n’est pas mutualisé, merci de choisir « Mon organisation uniquement ».
+              select(
+                id = 'nombre-organisations-utilisatrices'
+                name = 'nombreOrganisationsUtilisatrices'
+                required
+                disabled = estLectureSeule
+              )
+                option(value='' disabled label='-' selected=(valeurService===valeurVide))
+                each tranche in referentiel.nombreOrganisationsUtilisatrices()
+                  - const valeurOption = `${tranche.borneBasse}-${tranche.borneHaute}`
+                  option(value=valeurOption label=tranche.label selected=(valeurService===valeurOption))
+              .message-erreur Ce champ est obligatoire. Veuillez sélectionner une option.
 
         .requis
-          label(for = 'siretEntite-selectize') Nom ou SIRET de l'organisation responsable du service numérique
-            select(
-              id = 'siretEntite-selectize',
-              name = 'siretEntite-selectize',
-              placeHolder = 'ex : 13261762000010, Agglomération de Mansart, Société Y',
-              required,
-              readonly = estLectureSeule
-            )
-            .icone-chargement
-            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
-            input(type='hidden' name='nomEntite' id='nomEntite' value != entite.nom)
-            input(type='hidden' name='siretEntite' id='siretEntite' value != entite.siret)
+          +inputChoix({
+            type: 'checkbox',
+            nom: 'typeService',
+            titre: 'Type(s)',
+            items: referentiel.typesService(),
+            objetDonnees: service.descriptionService,
+            messageErreur: 'Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.',
+            requis: true,
+            lectureSeule: estLectureSeule
+          })
 
-          .banniere.banniere-avertissement.invisible
-            img(src='/statique/assets/images/icone_danger.svg' alt='')
-            .contenu-texte-avertissement
-              strong Information à mettre à jour
-              p Vous pouvez directement rechercher le nom ou le numéro de SIRET de votre organisation.
-
-      - const { borneBasse, borneHaute } = service.descriptionService.nombreOrganisationsUtilisatrices
-      - const valeurService = `${borneBasse}-${borneHaute}`
-      - const valeurVide = '0-0'
-      .conteneur-nombre-organisations-utilisatrices(class = `${valeurService === valeurVide && !estLectureSeule && !estEnCreation ? 'vide' : ''}`)
         .requis
-          label À combien d'organisations publiques est destiné le service ?
-            p.description Si le service est mutualisé au profit de plusieurs organisations publiques, merci de préciser combien en bénéficieront.
-            p.description Si le service n’est pas mutualisé, merci de choisir « Mon organisation uniquement ».
-            select(
-              id = 'nombre-organisations-utilisatrices'
-              name = 'nombreOrganisationsUtilisatrices'
-              required
-              disabled = estLectureSeule
-            )
-              option(value='' disabled label='-' selected=(valeurService===valeurVide))
-              each tranche in referentiel.nombreOrganisationsUtilisatrices()
-                - const valeurOption = `${tranche.borneBasse}-${tranche.borneHaute}`
-                option(value=valeurOption label=tranche.label selected=(valeurService===valeurOption))
-            .message-erreur Ce champ est obligatoire. Veuillez sélectionner une option.
+          +inputChoix({
+            type: 'radio',
+            nom: 'provenanceService',
+            titre: 'Provenance',
+            items: referentiel.provenancesService(),
+            objetDonnees: service.descriptionService,
+            messageErreur: 'La provenance est obligatoire. Veuillez cocher une option.',
+            requis: true,
+            lectureSeule: estLectureSeule
+          })
 
-      .requis
+        .requis
+          +inputChoix({
+            type: 'radio',
+            nom: 'statutDeploiement',
+            titre: 'Statut',
+            items: referentiel.statutsDeploiement(),
+            objetDonnees: service.descriptionService,
+            messageErreur: 'Le statut est obligatoire. Veuillez cocher une option.',
+            requis: true,
+            lectureSeule: estLectureSeule
+          })
+
+        label Présentation
+          textarea(
+            id = 'presentation',
+            name = 'presentation',
+            placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
+            readonly = estLectureSeule
+          )= service.descriptionService.presentation
+
+        label(id='label-acces') Accès
+          br
+          +elementsAjoutablesDescription({
+            identifiantConteneur: 'points-acces',
+            nom: 'point-acces',
+            valeurExemple: 'exemple : https://www.adresse.fr, adresse IP',
+            donnees: service.descriptionService.pointsAcces.toJSON(),
+            texteLienAjouter: 'Ajouter un accès',
+            zoneSaisieVideVisible: true,
+            lectureSeule: estLectureSeule,
+            identifiantChampTitre: 'label-acces'
+          })
+
+    form.etape-decrire#decrire-etape-2
+      section
         +inputChoix({
           type: 'checkbox',
-          nom: 'typeService',
-          titre: 'Type(s)',
-          items: referentiel.typesService(),
+          nom: 'fonctionnalites',
+          titre: 'Fonctionnalité(s) offerte(s)',
+          description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
+          items: referentiel.fonctionnalites(),
           objetDonnees: service.descriptionService,
-          messageErreur: 'Ce champ est obligatoire. Veuillez sélectionner une ou plusieurs options.',
-          requis: true,
           lectureSeule: estLectureSeule
         })
 
-      .requis
-        +inputChoix({
-          type: 'radio',
-          nom: 'provenanceService',
-          titre: 'Provenance',
-          items: referentiel.provenancesService(),
-          objetDonnees: service.descriptionService,
-          messageErreur: 'La provenance est obligatoire. Veuillez cocher une option.',
-          requis: true,
-          lectureSeule: estLectureSeule
-        })
-
-      .requis
-        +inputChoix({
-          type: 'radio',
-          nom: 'statutDeploiement',
-          titre: 'Statut',
-          items: referentiel.statutsDeploiement(),
-          objetDonnees: service.descriptionService,
-          messageErreur: 'Le statut est obligatoire. Veuillez cocher une option.',
-          requis: true,
-          lectureSeule: estLectureSeule
-        })
-
-      label Présentation
-        textarea(
-          id = 'presentation',
-          name = 'presentation',
-          placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
-          readonly = estLectureSeule
-        )= service.descriptionService.presentation
-
-      label(id='label-acces') Accès
-        br
         +elementsAjoutablesDescription({
-          identifiantConteneur: 'points-acces',
-          nom: 'point-acces',
-          valeurExemple: 'exemple : https://www.adresse.fr, adresse IP',
-          donnees: service.descriptionService.pointsAcces.toJSON(),
-          texteLienAjouter: 'Ajouter un accès',
-          zoneSaisieVideVisible: true,
+          identifiantConteneur: 'fonctionnalites-specifiques',
+          nom: 'fonctionnalite',
+          donnees: service.descriptionService.fonctionnalitesSpecifiques.toJSON(),
+          texteLienAjouter: 'Ajouter une fonctionnalité',
           lectureSeule: estLectureSeule,
-          identifiantChampTitre: 'label-acces'
+          identifiantChampTitre: 'fonctionnalites-label'
         })
 
-    section
-      +inputChoix({
-        type: 'checkbox',
-        nom: 'fonctionnalites',
-        titre: 'Fonctionnalité(s) offerte(s)',
-        description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
-        items: referentiel.fonctionnalites(),
-        objetDonnees: service.descriptionService,
-        lectureSeule: estLectureSeule
-      })
-
-      +elementsAjoutablesDescription({
-        identifiantConteneur: 'fonctionnalites-specifiques',
-        nom: 'fonctionnalite',
-        donnees: service.descriptionService.fonctionnalitesSpecifiques.toJSON(),
-        texteLienAjouter: 'Ajouter une fonctionnalité',
-        lectureSeule: estLectureSeule,
-        identifiantChampTitre: 'fonctionnalites-label'
-      })
-
-    section
-      +inputChoix({
-        type: 'checkbox',
-        nom: 'donneesCaracterePersonnel',
-        titre: 'Données à caractère personnel et autres données sensibles stockées par le service',
-        description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
-        items: referentiel.donneesCaracterePersonnel(),
-        objetDonnees: service.descriptionService,
-        lectureSeule: estLectureSeule
-      })
-
-      +elementsAjoutablesDescription({
-        identifiantConteneur: 'donnees-sensibles-specifiques',
-        nom: 'donnees-sensibles',
-        donnees: service.descriptionService.donneesSensiblesSpecifiques.toJSON(),
-        texteLienAjouter: 'Ajouter des données',
-        lectureSeule: estLectureSeule,
-        identifiantChampTitre: 'donneesCaracterePersonnel-label'
-      })
-
-    section
-      .requis
+      section
         +inputChoix({
-          type: 'radio',
-          nom: 'localisationDonnees',
-          titre: 'Localisation des données',
-          items: referentiel.localisationsDonnees(),
+          type: 'checkbox',
+          nom: 'donneesCaracterePersonnel',
+          titre: 'Données à caractère personnel et autres données sensibles stockées par le service',
+          description: "Cette question permet d'obtenir la liste personnalisée des mesures de sécurité à appliquer.",
+          items: referentiel.donneesCaracterePersonnel(),
           objetDonnees: service.descriptionService,
-          messageErreur: 'La localisation des données est obligatoire. Veuillez cocher une option.',
-          requis: true,
           lectureSeule: estLectureSeule
         })
 
-      .requis
-        +inputChoix({
-          type: 'radio',
-          nom: 'delaiAvantImpactCritique',
-          titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
-          items: referentiel.delaisAvantImpactCritique(),
-          objetDonnees: service.descriptionService,
-          messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
-          requis: true,
-          lectureSeule: estLectureSeule
-        })
-      .requis
-        +inputOuiNon({
-          nom: 'risqueJuridiqueFinancierReputationnel',
-          titre: 'Une atteinte à la sécurité ou au bon fonctionnement du service pourrait entraîner un impact critique sur les plans juridique, financier ou réputationnel',
-          objetDonnees: service.descriptionService,
-          exempleOui: "Les mesures de sécurité à mettre en œuvre, proposées dans l'étape suivante « Sécuriser », seront renforcées (ex : réaliser un audit de sécurité approfondi, une analyse de risque Ebios Risk Manager, …).",
-          messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
-          requis: true,
-          lectureSeule: estLectureSeule
+        +elementsAjoutablesDescription({
+          identifiantConteneur: 'donnees-sensibles-specifiques',
+          nom: 'donnees-sensibles',
+          donnees: service.descriptionService.donneesSensiblesSpecifiques.toJSON(),
+          texteLienAjouter: 'Ajouter des données',
+          lectureSeule: estLectureSeule,
+          identifiantChampTitre: 'donneesCaracterePersonnel-label'
         })
 
-    if !estLectureSeule
-      if !estEnCreation
-        button.bouton#diagnostic(idHomologation = idHomologation) Enregistrer
-      else
-        button.bouton#diagnostic Valider
+      section
+        .requis
+          +inputChoix({
+            type: 'radio',
+            nom: 'localisationDonnees',
+            titre: 'Localisation des données',
+            items: referentiel.localisationsDonnees(),
+            objetDonnees: service.descriptionService,
+            messageErreur: 'La localisation des données est obligatoire. Veuillez cocher une option.',
+            requis: true,
+            lectureSeule: estLectureSeule
+          })
+
+        .requis
+          +inputChoix({
+            type: 'radio',
+            nom: 'delaiAvantImpactCritique',
+            titre: 'Estimation de la durée maximale acceptable de dysfonctionnement grave du service',
+            items: referentiel.delaisAvantImpactCritique(),
+            objetDonnees: service.descriptionService,
+            messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+            requis: true,
+            lectureSeule: estLectureSeule
+          })
+        .requis
+          +inputOuiNon({
+            nom: 'risqueJuridiqueFinancierReputationnel',
+            titre: 'Une atteinte à la sécurité ou au bon fonctionnement du service pourrait entraîner un impact critique sur les plans juridique, financier ou réputationnel',
+            objetDonnees: service.descriptionService,
+            exempleOui: "Les mesures de sécurité à mettre en œuvre, proposées dans l'étape suivante « Sécuriser », seront renforcées (ex : réaliser un audit de sécurité approfondi, une analyse de risque Ebios Risk Manager, …).",
+            messageErreur: 'Ce champ est obligatoire. Veuillez cocher une option.',
+            requis: true,
+            lectureSeule: estLectureSeule
+          })
+
+    .conteneur-actions-etapes
+      button.bouton.bouton-secondaire#etape-precedente Précédent
+      button.bouton#etape-suivante Suivant
+      .conteneur-bouton-finaliser
+        if !estLectureSeule
+          if !estEnCreation
+            button.bouton#diagnostic(idHomologation = idHomologation) Enregistrer les modifications
+          else
+            button.bouton#diagnostic Commencer à sécuriser le service
 
   script(type = 'module', src = '/statique/service/descriptionService.js')

@@ -1,7 +1,8 @@
 import adaptateurAjaxAxios from './adaptateurAjaxAxios.mjs';
 import {
-  brancheValidation,
   declencheValidation,
+  declencheValidationFormulairesMultiple,
+  EVENEMENT_FORMULAIRE_MULTIPLE_VALIDE,
 } from './interactions/validation.mjs';
 import basculeEnCoursChargement from './enregistreRubrique.mjs';
 
@@ -19,10 +20,7 @@ const initialiseComportementFormulaire = (
     : { method: 'post', url: '/api/service' };
   const $form = $(selecteurFormulaire);
 
-  brancheValidation(selecteurFormulaire);
-
-  $form.on('submit', async (evenement) => {
-    evenement.preventDefault();
+  $form.on(EVENEMENT_FORMULAIRE_MULTIPLE_VALIDE, async () => {
     basculeEnCoursChargement($bouton, true);
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
@@ -45,6 +43,7 @@ const initialiseComportementFormulaire = (
 
   $bouton.on('click', () => {
     declencheValidation(selecteurFormulaire);
+    declencheValidationFormulairesMultiple($form);
   });
 };
 

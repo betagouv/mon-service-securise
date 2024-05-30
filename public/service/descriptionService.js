@@ -1,6 +1,10 @@
 import { brancheElementsAjoutablesDescription } from '../modules/brancheElementsAjoutables.js';
 import extraisParametresDescriptionService from '../modules/parametresDescriptionService.mjs';
 import initialiseComportementFormulaire from '../modules/soumetsHomologation.mjs';
+import {
+  brancheValidation,
+  declencheValidation,
+} from '../modules/interactions/validation.mjs';
 
 const messageErreurNomDejaUtilise = {
   affiche: () => {
@@ -45,10 +49,63 @@ const estNomServiceDejaUtilise = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
+const brancheComportementNavigationEtapes = () => {
+  const etapeMin = 1;
+  const etapeMax = 2;
+  const $boutonPrecedent = $('#etape-precedente');
+  const $boutonSuivant = $('#etape-suivante');
+  const $conteneurBoutonFinaliser = $('.conteneur-bouton-finaliser');
+  let etapeCourante = 1;
+
+  brancheValidation($('#decrire-etape-1'));
+  brancheValidation($('#decrire-etape-2'));
+
+  const cacheBouton = ($bouton) => $bouton.css('display', 'none');
+  const afficheBouton = ($bouton) => $bouton.css('display', 'flex');
+
+  const afficheEtape = () => {
+    $('.etape-decrire').hide();
+    $(`#decrire-etape-${etapeCourante}`).show();
+
+    const $entete = $('.marges-fixes');
+
+    if (etapeCourante === etapeMin) cacheBouton($boutonPrecedent);
+    else afficheBouton($boutonPrecedent);
+
+    if (etapeCourante === etapeMax) {
+      cacheBouton($boutonSuivant);
+      afficheBouton($conteneurBoutonFinaliser);
+    } else {
+      afficheBouton($boutonSuivant);
+      cacheBouton($conteneurBoutonFinaliser);
+    }
+
+    $entete[0].scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  };
+
+  $boutonPrecedent.on('click', () => {
+    etapeCourante = Math.max(etapeCourante - 1, 1);
+    afficheEtape();
+  });
+
+  $boutonSuivant.on('click', () => {
+    const $formulaireEtape = $(`#decrire-etape-${etapeCourante}`);
+    declencheValidation($formulaireEtape);
+    if ($formulaireEtape[0].checkValidity()) {
+      etapeCourante = Math.min(etapeCourante + 1, etapeMax);
+      afficheEtape();
+    }
+  });
+};
+
 $(() => {
   afficheBanniereMiseAJourSiret();
+  brancheComportementNavigationEtapes();
   initialiseComportementFormulaire(
-    'form#homologation',
+    '#homologation',
     '.bouton#diagnostic',
     extraisParametresDescriptionService,
     (e) => {
