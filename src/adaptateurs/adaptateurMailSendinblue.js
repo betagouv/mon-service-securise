@@ -16,7 +16,6 @@ const urlBase = process.env.SENDINBLUE_EMAIL_API_URL_BASE;
 const idListeEmailsMarketing = Number(
   process.env.SENDINBLUE_ID_LISTE_POUR_MAILS_TRANSACTIONNELS_DE_RELANCE
 );
-
 const basculeInfolettre = (destinataire, etat) =>
   axios
     .put(
@@ -31,24 +30,9 @@ const basculeInfolettre = (destinataire, etat) =>
       return Promise.reject(e);
     });
 
-const metAJourDonneesContact = (destinataire, donnees) =>
-  axios
-    .put(
-      `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
-      {
-        attributes: donnees,
-      },
-      enteteJSON
-    )
-    .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e, {
-        'Erreur renvoyée par API Brevo': e.response.data,
-      });
-      return Promise.reject(e);
-    });
-
 const desinscrisInfolettre = (destinataire) =>
   basculeInfolettre(destinataire, true);
+
 const inscrisInfolettre = (destinataire) =>
   basculeInfolettre(destinataire, false);
 
@@ -87,6 +71,29 @@ const creeContact = (
       });
       return Promise.reject(e);
     });
+
+const metAJourDonneesContact = (destinataire, donnees) =>
+  axios
+    .put(
+      `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
+      {
+        attributes: donnees,
+      },
+      enteteJSON
+    )
+    .catch((e) => {
+      fabriqueAdaptateurGestionErreur().logueErreur(e, {
+        'Erreur renvoyée par API Brevo': e.response.data,
+      });
+      return Promise.reject(e);
+    });
+
+const metAJourContact = (destinataire, prenom, nom, telephone) =>
+  metAJourDonneesContact(destinataire, {
+    PRENOM: decode(prenom),
+    NOM: decode(nom),
+    sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
+  });
 
 const inscrisEmailsTransactionnels = async (destinataire) => {
   // https://developers.brevo.com/reference/addcontacttolist-1
@@ -321,6 +328,7 @@ const creeEntreprise = async (siret, nom, natureJuridique) => {
 
 module.exports = {
   creeContact,
+  metAJourContact,
   metAJourDonneesContact,
   creeEntreprise,
   desinscrisEmailsTransactionnels,

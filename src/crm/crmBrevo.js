@@ -60,6 +60,20 @@ class CrmBrevo {
     );
   }
 
+  metAJourProfilContact(utilisateur) {
+    if (!utilisateur)
+      throw new Error(
+        "Impossible de mettre à jour le contact sans l'utilisateur en paramètre."
+      );
+
+    return this.adaptateurMail.metAJourContact(
+      utilisateur.email,
+      utilisateur.prenom,
+      utilisateur.nom,
+      utilisateur.telephone
+    );
+  }
+
   metAJourNombresContributionsContact(utilisateur, autorisations) {
     if (!utilisateur) {
       throw new Error(

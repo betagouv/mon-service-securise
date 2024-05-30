@@ -36,6 +36,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  avecTelephone(telephone) {
+    this.donnees.telephone = telephone;
+    return this;
+  }
+
   sansEmail() {
     this.donnees.email = null;
     return this;

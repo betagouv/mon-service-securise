@@ -321,4 +321,49 @@ describe('Le CRM Brevo', () => {
       );
     });
   });
+
+  describe('sur demande de mise à jour du contact', () => {
+    const utilisateur = unUtilisateur()
+      .quiSAppelle('Jean Valjean')
+      .avecEmail('jean.valjean@beta.gouv.fr')
+      .avecTelephone('0100000000')
+      .construis();
+
+    it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
+      try {
+        await crmBrevo.metAJourProfilContact(null);
+
+        expect().fail("L'instanciation aurait dû lever une exception.");
+      } catch (e) {
+        expect(e.message).to.be(
+          "Impossible de mettre à jour le contact sans l'utilisateur en paramètre."
+        );
+      }
+    });
+
+    it('met à jour les nom, prenom et téléphone du contact Brevo', async () => {
+      let destinataireRecu;
+      let prenomRecu;
+      let nomRecu;
+      let telephoneRecu;
+      adaptateurMail.metAJourContact = async (
+        destinataire,
+        prenom,
+        nom,
+        telephone
+      ) => {
+        destinataireRecu = destinataire;
+        prenomRecu = prenom;
+        nomRecu = nom;
+        telephoneRecu = telephone;
+      };
+
+      await crmBrevo.metAJourProfilContact(utilisateur);
+
+      expect(destinataireRecu).to.eql('jean.valjean@beta.gouv.fr');
+      expect(prenomRecu).to.eql('Jean');
+      expect(nomRecu).to.eql('Valjean');
+      expect(telephoneRecu).to.eql('0100000000');
+    });
+  });
 });
