@@ -36,7 +36,10 @@ class ConsoleAdministration {
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
     });
     this.adaptateurJournalMSS = fabriqueAdaptateurJournalMSS();
-
+    this.crmBrevo = new CrmBrevo({
+      adaptateurMail,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+    });
     this.journalConsole = {
       consigneEvenement: (evenement) => {
         /* eslint-disable no-console */
@@ -282,35 +285,27 @@ class ConsoleAdministration {
     interval = setInterval(() => traiteOuQuitte(), 600);
   }
 
-  async rattrapageNombreServicesContactBrevo() {
-    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
-    const crmBrevo = new CrmBrevo({
-      adaptateurMail,
-      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
-    });
-
+  static async rattrapage(
+    collectionARattraper,
+    fonctionMessageErreur,
+    fonctionRattrapage
+  ) {
     let rapportExecution = '';
     let iteration = 1;
     // eslint-disable-next-line no-restricted-syntax
-    for (const utilisateur of tousUtilisateurs) {
-      process.stdout.write(`\r${iteration}/${tousUtilisateurs.length}`);
+    for (const item of collectionARattraper) {
+      process.stdout.write(`\r${iteration}/${collectionARattraper.length}`);
       try {
-        /* eslint-disable no-await-in-loop */
-        const autorisationsUtilisateur = await this.depotDonnees.autorisations(
-          utilisateur.id
-        );
-        await crmBrevo.metAJourNombresContributionsContact(
-          utilisateur,
-          autorisationsUtilisateur
-        );
-        /* eslint-enable no-await-in-loop */
+        // eslint-disable-next-line no-await-in-loop
+        await fonctionRattrapage(item);
       } catch (e) {
-        rapportExecution += `Erreur pour ${utilisateur.email}`;
+        let raisonErreur;
         if (e instanceof AxiosError) {
-          rapportExecution += `\n[${e?.response?.status}]: ${e?.response?.data?.message}`;
+          raisonErreur = `[${e?.response?.status}]: ${e?.response?.data?.message}`;
         } else {
-          rapportExecution += e.toString();
+          raisonErreur = e.toString();
         }
+        rapportExecution += `${fonctionMessageErreur(item)}: ${raisonErreur}\n`;
       }
       iteration += 1;
     }
@@ -318,36 +313,40 @@ class ConsoleAdministration {
     console.log(`\n${rapportExecution}`);
   }
 
+  async rattrapageNombreServicesContactBrevo() {
+    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
+    const afficheErreur = (utilisateur) => `Erreur pour ${utilisateur.email}`;
+    const rattrapeUtilisateur = async (utilisateur) => {
+      const autorisationsUtilisateur = await this.depotDonnees.autorisations(
+        utilisateur.id
+      );
+      await this.crmBrevo.metAJourNombresContributionsContact(
+        utilisateur,
+        autorisationsUtilisateur
+      );
+    };
+    return ConsoleAdministration.rattrapage(
+      tousUtilisateurs,
+      afficheErreur,
+      rattrapeUtilisateur
+    );
+  }
+
   async rattrapageLienEntrepriseEtContactBrevo() {
     const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
     const utilisateursAvecSiret = tousUtilisateurs.filter(
       (u) => u.entite.siret
     );
-    const crmBrevo = new CrmBrevo({
-      adaptateurMail,
-      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
-    });
+    const afficheErreur = (utilisateur) =>
+      `Erreur pour ${utilisateur.email} avec siret ${utilisateur.entite.siret}`;
+    const rattrapeUtilisateur = async (utilisateur) =>
+      this.crmBrevo.creerLienEntrepriseContact(utilisateur);
 
-    let rapportExecution = '';
-    let iteration = 1;
-    // eslint-disable-next-line no-restricted-syntax
-    for (const utilisateur of utilisateursAvecSiret) {
-      process.stdout.write(`\r${iteration}/${utilisateursAvecSiret.length}`);
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        await crmBrevo.creerLienEntrepriseContact(utilisateur);
-      } catch (e) {
-        rapportExecution += `Erreur pour ${utilisateur.email} avec siret ${utilisateur.entite.siret}`;
-        if (e instanceof AxiosError) {
-          rapportExecution += `\n[${e?.response?.status}]: ${e?.response?.data?.message}`;
-        } else {
-          rapportExecution += e.toString();
-        }
-      }
-      iteration += 1;
-    }
-    // eslint-disable-next-line no-console
-    console.log(`\n${rapportExecution}`);
+    return ConsoleAdministration.rattrapage(
+      utilisateursAvecSiret,
+      afficheErreur,
+      rattrapeUtilisateur
+    );
   }
 
   async rattrapageEstimationNombreServicesContactBrevo() {
@@ -358,33 +357,15 @@ class ConsoleAdministration {
         (u.estimationNombreServices?.borneHaute ?? '0') !== '0'
     );
 
-    const crmBrevo = new CrmBrevo({
-      adaptateurMail,
-      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
-    });
+    const afficheErreur = (utilisateur) => `Erreur pour ${utilisateur.email}`;
+    const rattrapeUtilisateur = async (utilisateur) =>
+      this.crmBrevo.metAJourEstimationNombreServicesContact(utilisateur);
 
-    let rapportExecution = '';
-    let iteration = 1;
-    // eslint-disable-next-line no-restricted-syntax
-    for (const utilisateur of utilisateursAvecEstimation) {
-      process.stdout.write(
-        `\r${iteration}/${utilisateursAvecEstimation.length}`
-      );
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        await crmBrevo.metAJourEstimationNombreServicesContact(utilisateur);
-      } catch (e) {
-        rapportExecution += `Erreur pour ${utilisateur.email}`;
-        if (e instanceof AxiosError) {
-          rapportExecution += `\n[${e?.response?.status}]: ${e?.response?.data?.message}`;
-        } else {
-          rapportExecution += e.toString();
-        }
-      }
-      iteration += 1;
-    }
-    // eslint-disable-next-line no-console
-    console.log(`\n${rapportExecution}`);
+    return ConsoleAdministration.rattrapage(
+      utilisateursAvecEstimation,
+      afficheErreur,
+      rattrapeUtilisateur
+    );
   }
 }
 
