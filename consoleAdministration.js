@@ -313,6 +313,19 @@ class ConsoleAdministration {
     console.log(`\n${rapportExecution}`);
   }
 
+  async rattrapageProfilsContactBrevo() {
+    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
+    const afficheErreur = (utilisateur) => `Erreur pour ${utilisateur.email}`;
+    const rattrapeUtilisateur = async (utilisateur) =>
+      this.crmBrevo.metAJourProfilContact(utilisateur);
+
+    return ConsoleAdministration.rattrapage(
+      tousUtilisateurs,
+      afficheErreur,
+      rattrapeUtilisateur
+    );
+  }
+
   async rattrapageNombreServicesContactBrevo() {
     const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
     const afficheErreur = (utilisateur) => `Erreur pour ${utilisateur.email}`;
