@@ -286,6 +286,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
         destinataire,
         prenom,
         nom,
+        numero,
         bloqueEmails,
         bloqueMarketing
       ) => {
@@ -293,6 +294,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
           destinataire,
           prenom,
           nom,
+          numero,
           bloqueEmails,
           bloqueMarketing,
         };
@@ -312,6 +314,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       expect(contactCree.destinataire).to.be('jean.dupont@mail.fr');
       expect(contactCree.prenom).to.be('');
       expect(contactCree.nom).to.be('');
+      expect(contactCree.numero).to.be('');
       expect(contactCree.bloqueEmails).to.be(true);
       expect(contactCree.bloqueMarketing).to.be(true);
     });
