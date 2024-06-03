@@ -127,4 +127,13 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       );
     });
   });
+
+  describe('quand requête GET sur `/sitemap.xml`', () => {
+    it('sert le contenu XML du fichier', async () => {
+      const reponse = await axios.get('http://localhost:1234/sitemap.xml');
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['content-type']).to.contain('application/xml');
+    });
+  });
 });
