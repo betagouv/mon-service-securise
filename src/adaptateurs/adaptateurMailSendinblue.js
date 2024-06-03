@@ -326,6 +326,9 @@ const creeEntreprise = async (siret, nom, natureJuridique) => {
   return idEntreprise;
 };
 
+const supprimeContact = async (email) =>
+  axios.delete(`${urlBase}/contacts/${email}`, enteteJSON);
+
 module.exports = {
   creeContact,
   metAJourContact,
@@ -346,5 +349,6 @@ module.exports = {
   recupereEntrepriseDuContact,
   recupereIdentifiantContact,
   relieContactAEntreprise,
+  supprimeContact,
   supprimeLienEntreContactEtEntreprise,
 };
