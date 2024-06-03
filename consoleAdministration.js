@@ -89,8 +89,12 @@ class ConsoleAdministration {
     return this.depotDonnees.supprimeHomologation(idHomologation);
   }
 
-  supprimeUtilisateur(id) {
-    return this.depotDonnees.supprimeUtilisateur(id);
+  async supprimeUtilisateur(id) {
+    const utilisateur = await this.depotDonnees.utilisateur(id);
+    if (utilisateur) {
+      await this.depotDonnees.supprimeUtilisateur(id);
+      await adaptateurMail.supprimeContact(id);
+    }
   }
 
   async genereTousEvenementsCompletude(persisteEvenements = false) {
