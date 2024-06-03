@@ -23,8 +23,7 @@ mixin formulaireUtilisateur({ donnees = {}, emailLectureSeule, forceEmailsTransa
         const patternNomPrenom = '^\\D+$';
         const entite = donnees.entite || {};
         const messageErreurNomPrenom = (label) => `
-          Le ${label} est obligatoire. Veuillez renseigner des lettres avec ou sans signes diacritiques.
-          Les chiffres ne sont pas autorisés.
+          Le ${label} est obligatoire. Les chiffres ne sont pas autorisés.
         `;
 
       if emailLectureSeule
