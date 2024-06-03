@@ -101,6 +101,10 @@ const routesNonConnectePage = ({ depotDonnees, middleware, referentiel }) => {
     }
   );
 
+  routes.get('/sitemap.xml', async (_requete, reponse) => {
+    reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });
+  });
+
   return routes;
 };
 
