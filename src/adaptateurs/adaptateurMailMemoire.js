@@ -124,6 +124,12 @@ const fabriqueAdaptateurMailMemoire = () => {
       );
   };
 
+  const supprimeContact = async (email) => {
+    if (doitLoguer)
+      // eslint-disable-next-line no-console
+      console.log(`Suppression du contact ${email}`);
+  };
+
   return {
     creeContact,
     metAJourContact,
@@ -144,6 +150,7 @@ const fabriqueAdaptateurMailMemoire = () => {
     recupereEntrepriseDuContact,
     recupereIdentifiantContact,
     relieContactAEntreprise,
+    supprimeContact,
     supprimeLienEntreContactEtEntreprise,
   };
 };

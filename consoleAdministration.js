@@ -93,7 +93,7 @@ class ConsoleAdministration {
     const utilisateur = await this.depotDonnees.utilisateur(id);
     if (utilisateur) {
       await this.depotDonnees.supprimeUtilisateur(id);
-      await adaptateurMail.supprimeContact(id);
+      await adaptateurMail.supprimeContact(utilisateur.email);
     }
   }
 
