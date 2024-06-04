@@ -43,6 +43,7 @@ class ErreurStatutMesureInvalide extends ErreurModele {}
 class ErreurSuppressionImpossible extends Error {}
 class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
+class ErreurIdentifiantNouveauteInconnu extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(message, idUtilisateur) {
@@ -74,6 +75,7 @@ module.exports = {
   ErreurDroitsIncoherents,
   ErreurDureeValiditeInvalide,
   ErreurEmailManquant,
+  ErreurIdentifiantNouveauteInconnu,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
   ErreurMotDePasseIncorrect,

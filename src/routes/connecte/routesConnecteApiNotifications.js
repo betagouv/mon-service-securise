@@ -1,11 +1,14 @@
 const express = require('express');
 const CentreNotifications = require('../../notifications/centreNotifications');
 
-const routesConnecteApiNotifications = ({ referentiel }) => {
+const routesConnecteApiNotifications = ({ depotDonnees, referentiel }) => {
   const routes = express.Router();
 
   routes.get('/', async (_requete, reponse) => {
-    const centreNotifications = new CentreNotifications({ referentiel });
+    const centreNotifications = new CentreNotifications({
+      depotDonnees,
+      referentiel,
+    });
     reponse.json({ notifications: centreNotifications.toutesNotifications() });
   });
 
