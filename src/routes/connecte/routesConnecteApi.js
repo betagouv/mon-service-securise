@@ -152,7 +152,11 @@ const routesConnecteApi = ({
     })
   );
 
-  routes.use('/notifications', routesConnecteApiNotifications({ referentiel }));
+  routes.use(
+    '/notifications',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiNotifications({ referentiel })
+  );
 
   routes.put(
     '/motDePasse',

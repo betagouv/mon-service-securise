@@ -18,6 +18,15 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
       });
     });
 
+    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          { method: 'post', url: 'http://localhost:1234/api/notifications' },
+          done
+        );
+    });
+
     it('retourne les notifications', async () => {
       const reponse = await axios.get(
         'http://localhost:1234/api/notifications'
