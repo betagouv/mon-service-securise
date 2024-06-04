@@ -10,6 +10,7 @@ const nouvelAdaptateur = (
   donnees.autorisations ||= [];
   donnees.parcoursUtilisateurs ||= [];
   donnees.notificationsExpirationHomologation ||= [];
+  donnees.notifications ||= [];
 
   const metsAJourEnregistrement = (
     fonctionRecherche,
@@ -282,6 +283,13 @@ const nouvelAdaptateur = (
       );
   };
 
+  const marqueNouveauteLue = async (idUtilisateur, idNouveaute) => {
+    donnees.notifications[`${idUtilisateur}-${idNouveaute}`] = {
+      idUtilisateur,
+      idNouveaute,
+    };
+  };
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -294,6 +302,7 @@ const nouvelAdaptateur = (
     homologations,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
+    marqueNouveauteLue,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     rechercheContributeurs,

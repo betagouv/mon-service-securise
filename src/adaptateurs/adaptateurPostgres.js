@@ -347,6 +347,21 @@ const nouvelAdaptateur = (env) => {
       .where({ id_service: idService })
       .del();
 
+  const marqueNouveauteLue = async (idUtilisateur, idNouveaute) => {
+    const nouveauteDejaLue =
+      (await knex('notifications_nouveaute')
+        .where('id_utilisateur', idUtilisateur)
+        .where('id_nouveaute', idNouveaute)
+        .select()
+        .first()) !== undefined;
+
+    if (!nouveauteDejaLue)
+      await knex('notifications_nouveaute').insert({
+        id_utilisateur: idUtilisateur,
+        id_nouveaute: idNouveaute,
+      });
+  };
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -360,6 +375,7 @@ const nouvelAdaptateur = (env) => {
     homologations,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
+    marqueNouveauteLue,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     rechercheContributeurs,
