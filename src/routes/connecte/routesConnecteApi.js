@@ -26,6 +26,7 @@ const {
   verifieCoherenceDesDroits,
 } = require('../../modeles/autorisations/gestionDroits');
 const routesConnecteApiVisiteGuidee = require('./routesConnecteApiVisiteGuidee');
+const routesConnecteApiNotifications = require('./routesConnecteApiNotifications');
 
 const routesConnecteApi = ({
   middleware,
@@ -150,6 +151,8 @@ const routesConnecteApi = ({
       referentiel,
     })
   );
+
+  routes.use('/notifications', routesConnecteApiNotifications({ referentiel }));
 
   routes.put(
     '/motDePasse',
