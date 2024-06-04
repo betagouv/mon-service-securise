@@ -245,6 +245,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     }
   };
 
+  const nouvellesFonctionnalites = () => donnees.nouvellesFonctionnalites || [];
+
   const derniereNouvelleFonctionnalite = (dateDeReference) => {
     const fonctionnalitesDechronologique = donnees.nouvellesFonctionnalites
       .filter(
@@ -352,6 +354,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauxGravite,
     nombreOrganisationsUtilisatrices,
     nouvelleFonctionnalite,
+    nouvellesFonctionnalites,
     numeroEtape,
     premiereEtapeParcours,
     provenancesService,
