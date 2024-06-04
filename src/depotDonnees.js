@@ -7,6 +7,7 @@ const depotDonneesHomologations = require('./depots/depotDonneesHomologations');
 const depotDonneesNotificationsExpirationHomologation = require('./depots/depotDonneesNotificationsExpirationHomologation');
 const depotDonneesParcoursUtilisateurs = require('./depots/depotDonneesParcoursUtilisateur');
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
+const depotDonneesNotifications = require('./depots/depotDonneesNotifications');
 
 const creeDepot = (config = {}) => {
   const {
@@ -56,6 +57,10 @@ const creeDepot = (config = {}) => {
       adaptateurPersistance,
       adaptateurUUID,
     });
+
+  const depotNotifications = depotDonneesNotifications.creeDepot({
+    adaptateurPersistance,
+  });
 
   const {
     ajouteDescriptionService,
@@ -108,6 +113,8 @@ const creeDepot = (config = {}) => {
   const { lisParcoursUtilisateur, sauvegardeParcoursUtilisateur } =
     depotParcoursUtilisateurs;
 
+  const { marqueNouveauteLue } = depotNotifications;
+
   const {
     lisNotificationsExpirationHomologationEnDate,
     sauvegardeNotificationsExpirationHomologation,
@@ -136,6 +143,7 @@ const creeDepot = (config = {}) => {
     finaliseDossierCourant,
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
+    marqueNouveauteLue,
     metsAJourMotDePasse,
     metsAJourUtilisateur,
     metsAJourService,
