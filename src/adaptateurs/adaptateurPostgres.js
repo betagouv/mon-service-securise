@@ -362,6 +362,15 @@ const nouvelAdaptateur = (env) => {
       });
   };
 
+  const nouveautesPourUtilisateur = async (idUtilisateur) =>
+    (
+      await knex('notifications_nouveaute')
+        .where('id_utilisateur', idUtilisateur)
+        .select('id_nouveaute')
+    )
+      // eslint-disable-next-line camelcase
+      .map(({ id_nouveaute }) => id_nouveaute);
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -378,6 +387,7 @@ const nouvelAdaptateur = (env) => {
     marqueNouveauteLue,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
+    nouveautesPourUtilisateur,
     rechercheContributeurs,
     sauvegardeHomologation,
     sauvegardeService,

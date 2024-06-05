@@ -290,6 +290,11 @@ const nouvelAdaptateur = (
     };
   };
 
+  const nouveautesPourUtilisateur = async (idUtilisateur) =>
+    Object.entries(donnees.notifications)
+      .filter(([_cle, valeur]) => valeur.idUtilisateur === idUtilisateur)
+      .map((_cle, valeur) => valeur.idNouveaute);
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -305,6 +310,7 @@ const nouvelAdaptateur = (
     marqueNouveauteLue,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
+    nouveautesPourUtilisateur,
     rechercheContributeurs,
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
