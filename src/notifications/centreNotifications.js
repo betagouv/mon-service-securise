@@ -11,12 +11,22 @@ class CentreNotifications {
     this.depotDonnees = depotDonnees;
   }
 
-  toutesNotifications() {
-    return this.referentiel
+  async toutesNotifications(idUtilisateur) {
+    const toutesNouveautes = this.referentiel
       .nouvellesFonctionnalites()
       .sort(
         (a, b) => new Date(b.dateDeDeploiement) - new Date(a.dateDeDeploiement)
       );
+
+    const etatLectureNouveautes =
+      await this.depotDonnees.nouveautesPourUtilisateur(idUtilisateur);
+
+    return toutesNouveautes.map((n) => ({
+      ...n,
+      statutLecture: etatLectureNouveautes.includes(n.id)
+        ? CentreNotifications.NOTIFICATION_LUE
+        : CentreNotifications.NOTIFICATION_NON_LUE,
+    }));
   }
 
   async marqueNouveauteLue(idUtilisateur, idNouveaute) {
@@ -28,6 +38,10 @@ class CentreNotifications {
     }
     await this.depotDonnees.marqueNouveauteLue(idUtilisateur, idNouveaute);
   }
+
+  static NOTIFICATION_LUE = 'lue';
+
+  static NOTIFICATION_NON_LUE = 'nonLue';
 }
 
 module.exports = CentreNotifications;
