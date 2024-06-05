@@ -27,16 +27,37 @@ describe('Le centre de notifications', () => {
   });
 
   describe('sur demande des notifications', () => {
-    it("retourne les nouveautés, dans l'ordre antéchronologique", () => {
+    it("retourne les nouveautés, dans l'ordre antéchronologique", async () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
       });
 
-      const notifications = centreNotifications.toutesNotifications();
+      const notifications = await centreNotifications.toutesNotifications('U1');
 
       expect(notifications.length).to.be(2);
       expect(notifications[0].id).to.be('N2');
+    });
+
+    it("ajoute le statut 'lu' à la notification si elle l'est", async () => {
+      let donneesRecues;
+      depotDonnees.nouveautesPourUtilisateur = async (idUtilisateur) => {
+        donneesRecues = { idUtilisateur };
+        return ['N2'];
+      };
+      const centreNotifications = new CentreNotifications({
+        referentiel,
+        depotDonnees,
+      });
+
+      const notifications = await centreNotifications.toutesNotifications('U1');
+
+      expect(donneesRecues.idUtilisateur).to.be('U1');
+
+      expect(notifications[0].id).to.be('N2');
+      expect(notifications[0].statutLecture).to.be('lue');
+      expect(notifications[1].id).to.be('N1');
+      expect(notifications[1].statutLecture).to.be('nonLue');
     });
   });
 

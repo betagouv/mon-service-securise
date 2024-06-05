@@ -5,12 +5,16 @@ const { ErreurIdentifiantNouveauteInconnu } = require('../../erreurs');
 const routesConnecteApiNotifications = ({ depotDonnees, referentiel }) => {
   const routes = express.Router();
 
-  routes.get('/', async (_requete, reponse) => {
+  routes.get('/', async (requete, reponse) => {
     const centreNotifications = new CentreNotifications({
       depotDonnees,
       referentiel,
     });
-    reponse.json({ notifications: centreNotifications.toutesNotifications() });
+    reponse.json({
+      notifications: await centreNotifications.toutesNotifications(
+        requete.idUtilisateurCourant
+      ),
+    });
   });
 
   routes.post('/nouveautes/:id', async (requete, reponse) => {
