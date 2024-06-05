@@ -113,7 +113,7 @@ const creeDepot = (config = {}) => {
   const { lisParcoursUtilisateur, sauvegardeParcoursUtilisateur } =
     depotParcoursUtilisateurs;
 
-  const { marqueNouveauteLue } = depotNotifications;
+  const { marqueNouveauteLue, nouveautesPourUtilisateur } = depotNotifications;
 
   const {
     lisNotificationsExpirationHomologationEnDate,
@@ -148,6 +148,7 @@ const creeDepot = (config = {}) => {
     metsAJourUtilisateur,
     metsAJourService,
     nouveauService,
+    nouveautesPourUtilisateur,
     nouvelUtilisateur,
     reinitialiseMotDePasse,
     remplaceRisquesSpecifiquesDuService,
