@@ -8,6 +8,10 @@ $(() => {
     $('.modale-nouvelles-fonctionnalites')
   );
 
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-centre-notifications')
+  );
+
   const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
   if (etatVisiteGuidee.dejaTerminee === false) {
     document.body.dispatchEvent(

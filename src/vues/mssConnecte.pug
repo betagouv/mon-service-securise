@@ -5,6 +5,9 @@ block append styles
   link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
   link(href = '/statique/composants-svelte/style.css', rel = 'stylesheet')
 
+block append scripts
+  script(src = "/statique/composants-svelte/centreNotifications.js", type = "module")
+
 block navigation
   block bandeau-nouveautes
     button.bandeau-nouveautes
@@ -12,6 +15,7 @@ block navigation
       p.
         Nouveautés
 
+  #centre-notifications
   button.utilisateur-courant
 
   include nouvellesFonctionnalites/modaleNouvellesFonctionnalites.pug
