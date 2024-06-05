@@ -17,24 +17,14 @@ module.exports = {
 
   nouvellesFonctionnalites: [
     {
-      id: 'tableauDeBord',
-      fichierPug: 'tableauDeBord.pug',
-      dateDeDeploiement: '2023-06-20',
-    },
-    {
-      id: 'menuNavigation',
-      fichierPug: 'menuNavigation.pug',
-      dateDeDeploiement: '2023-08-30',
-    },
-    {
-      id: 'referentielCNIL',
-      fichierPug: 'referentielCNIL.pug',
-      dateDeDeploiement: '2024-02-08 14:00:00Z',
-    },
-    {
       id: 'encartHomologation',
       fichierPug: 'encartHomologation.pug',
       dateDeDeploiement: '2024-04-03 14:30:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-telecharger-lencart-dhomologation-1tr1w3w/',
+      titre: "Téléchargez dès à présent votre encart d'homologation",
+      sousTitre:
+        "Valorisez l'effort de sécurisation mis en œuvre et renforcer la confiance de vos usagers dans vos services",
+      image: 'encart_homologation.png',
     },
   ],
 
