@@ -31,22 +31,26 @@ module.exports = {
     {
       id: 'profil',
       lien: '/utilisateur/edition',
-      titre: 'Nous vous invitons à compléter votre profil.',
-      titreCta: 'Aller sur mon profil',
+      entete: 'Complétez votre profil',
+      titre:
+        'Nous vous invitons à mettre à jour les informations de votre profil.',
+      titreCta: 'Compléter mon profil',
     },
     {
       id: 'siret',
       lien: '/utilisateur/edition#siret',
+      entete: 'Mettez à jour votre SIRET',
       titre:
         'Nous vous invitons à renseigner le numéro de SIRET de votre organisation.',
-      titreCta: 'Aller sur mon profil',
+      titreCta: 'Mettre à jour le SIRET',
     },
     {
       id: 'estimationNombreServices',
       lien: '/utilisateur/edition#estimation-nombre-services',
+      entete: 'Estimez les services publics à sécuriser',
       titre:
         'Nous vous invitons à estimer le nombre de services publics à sécuriser.',
-      titreCta: 'Aller sur mon profil',
+      titreCta: 'Estimer le nombre de service',
     },
   ],
 
