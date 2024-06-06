@@ -10,10 +10,25 @@
   const enteteNotification =
     notification.type === 'nouveaute'
       ? 'Nouveautés'
-      : 'Mettre à jour les informations';
+      : 'Informations à mettre à jour';
+  const cibleCta = notification.type === 'nouveaute' ? '_blank' : '';
+  const relationCta = notification.type === 'nouveaute' ? 'noopener' : '';
+  const actionClick =
+    notification.type === 'nouveaute'
+      ? async () => {
+          await marqueNotificationCommeLue(notification.id);
+          dispatch('notificationMiseAJour');
+        }
+      : () => {};
 </script>
 
-<div class="notification">
+<a
+  class="notification"
+  href={notification.lien}
+  rel={relationCta}
+  target={cibleCta}
+  on:click={actionClick}
+>
   <div class="conteneur-pictogramme {notification.type}">
     {#if notification.statutLecture === 'nonLue'}
       <div class="pastille-non-lue" />
@@ -34,22 +49,13 @@
         />
         <div>
           <p class="sous-titre">{notification.sousTitre}</p>
-          <a
-            href={notification.lien}
-            class="cta"
-            rel="noopener"
-            target="_blank"
-            on:click={async () => {
-              await marqueNotificationCommeLue(notification.id);
-              dispatch('notificationMiseAJour');
-            }}>Découvrir</a
-          >
+          <div class="cta">Découvrir</div>
         </div>
       </div>
     {:else}
-      <a href={notification.lien} class="cta cta-tache"
-        >{notification.titreCta}
-      </a>
+      <div class="cta cta-tache">
+        {notification.titreCta}
+      </div>
     {/if}
 
     {#if notification.type === 'nouveaute'}
@@ -62,7 +68,7 @@
       </div>
     {/if}
   </div>
-</div>
+</a>
 
 <style>
   .type-notification {
@@ -79,6 +85,11 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
+    cursor: pointer;
+  }
+
+  .notification:hover {
+    background: var(--systeme-design-etat-gris-survol);
   }
 
   .conteneur-pictogramme {
@@ -116,22 +127,18 @@
     max-width: 86px;
   }
 
-  a.cta {
+  .cta {
     color: var(--bleu-mise-en-avant);
     padding: 4px 8px;
     border: 1px solid var(--bleu-mise-en-avant);
     border-radius: 4px;
-    cursor: pointer;
     font-size: 12px;
+    background: none;
+    width: fit-content;
   }
 
-  a.cta-tache {
-    margin-top: 8px;
-  }
-
-  a.cta:hover {
-    background: var(--bleu-mise-en-avant) !important;
-    color: white;
+  .cta-tache {
+    margin-top: 16px;
   }
 
   p.sous-titre {
