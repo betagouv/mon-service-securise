@@ -43,6 +43,22 @@ class CentreNotifications {
     await this.depotDonnees.marqueNouveauteLue(idUtilisateur, idNouveaute);
   }
 
+  async toutesTachesEnAttente(idUtilisateur) {
+    const utilisateur = await this.depotDonnees.utilisateur(idUtilisateur);
+    if (!utilisateur) {
+      return [];
+    }
+
+    const completudeProfil = utilisateur.completudeProfil();
+    if (completudeProfil.estComplet) {
+      return [];
+    }
+
+    return completudeProfil.champsNonRenseignes
+      .map((champ) => this.referentiel.tacheCompletudeProfil(champ))
+      .filter((t) => t !== undefined);
+  }
+
   static NOTIFICATION_LUE = 'lue';
 
   static NOTIFICATION_NON_LUE = 'nonLue';
