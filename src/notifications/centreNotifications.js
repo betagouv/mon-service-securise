@@ -12,7 +12,14 @@ class CentreNotifications {
   }
 
   async toutesNotifications(idUtilisateur) {
-    return this.toutesNouveautes(idUtilisateur);
+    const [taches, nouveautes] = await Promise.all([
+      this.toutesTachesEnAttente(idUtilisateur),
+      this.toutesNouveautes(idUtilisateur),
+    ]);
+    return [
+      ...taches.map((t) => ({ ...t, type: 'tache' })),
+      ...nouveautes.map((t) => ({ ...t, type: 'nouveaute' })),
+    ];
   }
 
   async toutesNouveautes(idUtilisateur) {

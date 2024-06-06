@@ -96,6 +96,7 @@ describe('Le centre de notifications', () => {
       expect(donneesRecues.idNouveaute).to.be('N1');
     });
   });
+
   describe('sur demande des tâches en attente', () => {
     it("utilise le dépôt de données pour récupérer l'utilisateur", async () => {
       let idRecu;
@@ -176,6 +177,40 @@ describe('Le centre de notifications', () => {
 
         expect(taches.length).to.be(0);
       });
+    });
+  });
+
+  describe('sur demande de toutes les notifications', () => {
+    let centreNotifications;
+
+    beforeEach(() => {
+      depotDonnees.utilisateur = async () =>
+        unUtilisateur().quiTravaillePourUneEntiteAvecSiret('12345').construis();
+      referentiel = Referentiel.creeReferentiel({
+        tachesCompletudeProfil: [{ id: 'nom', titre: 'Titre tâche' }],
+        nouvellesFonctionnalites: [
+          { id: 'N1', dateDeDeploiement: '2024-01-01' },
+        ],
+      });
+      centreNotifications = new CentreNotifications({
+        referentiel,
+        depotDonnees,
+      });
+    });
+
+    it('renvoie les tâches en attente en premier, puis les nouveautés', async () => {
+      const notifications = await centreNotifications.toutesNotifications('U1');
+
+      expect(notifications.length).to.be(2);
+      expect(notifications[0].id).to.be('nom');
+      expect(notifications[1].id).to.be('N1');
+    });
+
+    it('ajoute le "type" de notifications', async () => {
+      const notifications = await centreNotifications.toutesNotifications('U1');
+
+      expect(notifications[0].type).to.be('tache');
+      expect(notifications[1].type).to.be('nouveaute');
     });
   });
 });
