@@ -18,6 +18,7 @@ export type NotificationNouveaute = NotificationBase & {
 export type NotificationTache = NotificationBase & {
   type: 'tache';
   titreCta: string;
+  entete: string;
 };
 
 export type Notification = NotificationNouveaute | NotificationTache;
