@@ -8,9 +8,7 @@
 
   const dispatch = createEventDispatcher();
   const enteteNotification =
-    notification.type === 'nouveaute'
-      ? 'Nouveautés'
-      : 'Informations à mettre à jour';
+    notification.type === 'nouveaute' ? 'Nouveautés' : notification.entete;
   const cibleCta = notification.type === 'nouveaute' ? '_blank' : '';
   const relationCta = notification.type === 'nouveaute' ? 'noopener' : '';
   const actionClick =
