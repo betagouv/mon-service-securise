@@ -1,12 +1,8 @@
 import { initialiseComportementModale } from './modules/interactions/modale.mjs';
-import brancheComportementModaleNouvelleFonctionnalite from './modules/modaleNouvellesFonctionnalites.mjs';
 import lanceDecompteDeconnexion from './modules/deconnexion.js';
 
 $(() => {
   initialiseComportementModale($('.rideau#deconnexion'));
-  brancheComportementModaleNouvelleFonctionnalite(
-    $('.modale-nouvelles-fonctionnalites')
-  );
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-centre-notifications')
