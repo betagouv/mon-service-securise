@@ -71,15 +71,6 @@ const routesConnectePage = ({
   );
 
   routes.get(
-    '/historiqueProduit',
-    middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
-    (_requete, reponse) => {
-      reponse.render('historiqueProduit');
-    }
-  );
-
-  routes.get(
     '/visiteGuidee/:idEtape',
     middleware.verificationAcceptationCGU,
     middleware.chargePreferencesUtilisateur,
