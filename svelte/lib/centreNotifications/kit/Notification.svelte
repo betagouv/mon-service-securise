@@ -2,25 +2,11 @@
   import { createEventDispatcher } from 'svelte';
   import { marqueNotificationCommeLue } from '../centreNotifications.api';
   import type { Notification } from '../centreNotifications.d';
+  import { formatteDifferenceDateRelative } from '../../formatDate/formatDate';
 
   export let notification: Notification;
 
   const dispatch = createEventDispatcher();
-
-  const formatteDate = (chaineDate: string) => {
-    const dateDeploiement = new Date(chaineDate);
-    const maintenant = new Date();
-    const differenceEnJours = Math.round(
-      (dateDeploiement.getTime() - maintenant.getTime()) / (1000 * 3600 * 24)
-    );
-    const formatter = new Intl.RelativeTimeFormat('fr-FR', {
-      localeMatcher: 'best fit',
-      numeric: 'auto',
-      style: 'long',
-    });
-    const dateFormattee = formatter.format(differenceEnJours, 'day');
-    return dateFormattee.charAt(0).toUpperCase() + dateFormattee.slice(1);
-  };
 </script>
 
 <div class="notification">
@@ -56,7 +42,9 @@
       </div>
     </div>
     <div class="horodatage">
-      <span>{formatteDate(notification.dateDeDeploiement)}</span>
+      <span
+        >{formatteDifferenceDateRelative(notification.dateDeDeploiement)}</span
+      >
     </div>
   </div>
 </div>
