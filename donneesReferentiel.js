@@ -18,7 +18,6 @@ module.exports = {
   nouvellesFonctionnalites: [
     {
       id: 'encartHomologation',
-      fichierPug: 'encartHomologation.pug',
       dateDeDeploiement: '2024-04-03 14:30:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-telecharger-lencart-dhomologation-1tr1w3w/',
       titre: "Téléchargez dès à présent votre encart d'homologation",
