@@ -1,5 +1,10 @@
 const { ErreurIdentifiantNouveauteInconnu } = require('../erreurs');
 
+const avecStatutLecture = (notification, statutLecture) => ({
+  ...notification,
+  statutLecture,
+});
+
 class CentreNotifications {
   constructor({ referentiel, depotDonnees }) {
     if (!referentiel || !depotDonnees) {
@@ -32,12 +37,12 @@ class CentreNotifications {
     const etatLectureNouveautes =
       await this.depotDonnees.nouveautesPourUtilisateur(idUtilisateur);
 
-    return toutesNouveautes.map((n) => ({
-      ...n,
-      statutLecture: etatLectureNouveautes.includes(n.id)
+    return toutesNouveautes.map((n) => {
+      const statutLecture = etatLectureNouveautes.includes(n.id)
         ? CentreNotifications.NOTIFICATION_LUE
-        : CentreNotifications.NOTIFICATION_NON_LUE,
-    }));
+        : CentreNotifications.NOTIFICATION_NON_LUE;
+      return avecStatutLecture(n, statutLecture);
+    });
   }
 
   async marqueNouveauteLue(idUtilisateur, idNouveaute) {
@@ -61,13 +66,19 @@ class CentreNotifications {
       return [];
     }
 
+    if (completudeProfil.champsNonRenseignes.includes('nom')) {
+      const tache = this.referentiel.tacheCompletudeProfil('profil');
+      return [
+        avecStatutLecture(tache, CentreNotifications.NOTIFICATION_NON_LUE),
+      ];
+    }
+
     return completudeProfil.champsNonRenseignes
       .map((champ) => this.referentiel.tacheCompletudeProfil(champ))
       .filter((t) => t !== undefined)
-      .map((t) => ({
-        ...t,
-        statutLecture: CentreNotifications.NOTIFICATION_NON_LUE,
-      }));
+      .map((t) =>
+        avecStatutLecture(t, CentreNotifications.NOTIFICATION_NON_LUE)
+      );
   }
 
   static NOTIFICATION_LUE = 'lue';
