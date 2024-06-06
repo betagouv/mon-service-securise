@@ -26,14 +26,14 @@ describe('Le centre de notifications', () => {
     });
   });
 
-  describe('sur demande des notifications', () => {
+  describe('sur demande des nouveautés', () => {
     it("retourne les nouveautés, dans l'ordre antéchronologique", async () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
       });
 
-      const notifications = await centreNotifications.toutesNotifications('U1');
+      const notifications = await centreNotifications.toutesNouveautes('U1');
 
       expect(notifications.length).to.be(2);
       expect(notifications[0].id).to.be('N2');
@@ -50,7 +50,7 @@ describe('Le centre de notifications', () => {
         depotDonnees,
       });
 
-      const notifications = await centreNotifications.toutesNotifications('U1');
+      const notifications = await centreNotifications.toutesNouveautes('U1');
 
       expect(donneesRecues.idUtilisateur).to.be('U1');
 

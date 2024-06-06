@@ -12,6 +12,10 @@ class CentreNotifications {
   }
 
   async toutesNotifications(idUtilisateur) {
+    return this.toutesNouveautes(idUtilisateur);
+  }
+
+  async toutesNouveautes(idUtilisateur) {
     const toutesNouveautes = this.referentiel
       .nouvellesFonctionnalites()
       .sort(
