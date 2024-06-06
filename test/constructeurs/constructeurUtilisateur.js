@@ -26,6 +26,14 @@ class ConstructeurUtilisateur {
     };
   }
 
+  quiEstInvite() {
+    this.donnees.prenom = '';
+    this.donnees.nom = '';
+    this.donnees.siret = '';
+    this.donnees.estimationNombreServices = {};
+    return this;
+  }
+
   avecId(idUtilisateur) {
     this.donnees.id = idUtilisateur;
     return this;

@@ -141,17 +141,18 @@ describe('Le centre de notifications', () => {
       expect(taches.length).to.be(0);
     });
 
-    describe("lorsque le nom de l'utilisateur est manquant", () => {
+    describe("lorsque le siret de l'utilisateur est manquant", () => {
       beforeEach(() => {
         depotDonnees.utilisateur = async () =>
           unUtilisateur()
-            .quiTravaillePourUneEntiteAvecSiret('12345')
+            .quiSAppelle('Jeanine Valjean')
+            .quiTravaillePourUneEntiteAvecSiret(null)
             .construis();
       });
 
       it('renvoie la notification correspondant au champ non renseigné du profil', async () => {
         referentiel = Referentiel.creeReferentiel({
-          tachesCompletudeProfil: [{ id: 'nom', titre: 'Titre tâche' }],
+          tachesCompletudeProfil: [{ id: 'siret', titre: 'Titre tâche' }],
         });
         const centreNotifications = new CentreNotifications({
           referentiel,
@@ -179,6 +180,27 @@ describe('Le centre de notifications', () => {
         expect(taches.length).to.be(0);
       });
     });
+    describe("lorsque l'utilisateur est invité'", () => {
+      it('renvoie uniquement la notification de profil', async () => {
+        depotDonnees.utilisateur = async () =>
+          unUtilisateur().quiEstInvite().construis();
+        referentiel = Referentiel.creeReferentiel({
+          tachesCompletudeProfil: [
+            { id: 'profil', titre: 'Titre tâche' },
+            { id: 'siret', titre: 'Titre tâche' },
+          ],
+        });
+        const centreNotifications = new CentreNotifications({
+          referentiel,
+          depotDonnees,
+        });
+
+        const taches = await centreNotifications.toutesTachesEnAttente('U1');
+
+        expect(taches.length).to.be(1);
+        expect(taches[0].id).to.be('profil');
+      });
+    });
   });
 
   describe('sur demande de toutes les notifications', () => {
@@ -186,9 +208,9 @@ describe('Le centre de notifications', () => {
 
     beforeEach(() => {
       depotDonnees.utilisateur = async () =>
-        unUtilisateur().quiTravaillePourUneEntiteAvecSiret('12345').construis();
+        unUtilisateur().quiSAppelle('Jean Valjean').construis();
       referentiel = Referentiel.creeReferentiel({
-        tachesCompletudeProfil: [{ id: 'nom', titre: 'Titre tâche' }],
+        tachesCompletudeProfil: [{ id: 'siret', titre: 'Titre tâche' }],
         nouvellesFonctionnalites: [
           { id: 'N1', dateDeDeploiement: '2024-01-01' },
         ],
@@ -203,7 +225,7 @@ describe('Le centre de notifications', () => {
       const notifications = await centreNotifications.toutesNotifications('U1');
 
       expect(notifications.length).to.be(2);
-      expect(notifications[0].id).to.be('nom');
+      expect(notifications[0].id).to.be('siret');
       expect(notifications[1].id).to.be('N1');
     });
 
