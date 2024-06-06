@@ -403,11 +403,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("authentifie l'utilisateur avec le login en minuscules", (done) => {
-      testeur.depotDonnees().lisParcoursUtilisateur = async () => {
-        const p = new ParcoursUtilisateur();
-        p.recupereNouvelleFonctionnalite = () => 'fonctionnalité-bouchon';
-        return p;
-      };
+      testeur.depotDonnees().lisParcoursUtilisateur = async () =>
+        new ParcoursUtilisateur();
 
       const utilisateur = { toJSON: () => {}, genereToken: () => {} };
 
@@ -442,11 +439,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         testeur.depotDonnees().utilisateurAuthentifie = () =>
           Promise.resolve(utilisateur);
 
-        testeur.depotDonnees().lisParcoursUtilisateur = async () => {
-          const p = new ParcoursUtilisateur();
-          p.recupereNouvelleFonctionnalite = () => 'fonctionnalité-bouchon';
-          return p;
-        };
+        testeur.depotDonnees().lisParcoursUtilisateur = async () =>
+          new ParcoursUtilisateur();
       });
 
       it('pose un cookie', (done) => {
@@ -507,16 +501,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         expect(idPasse).to.eql('456');
         expect(donneesPassees.idUtilisateur).to.eql('456');
         expect(donneesPassees.dateDerniereConnexion).not.to.be(undefined);
-      });
-
-      it('retourne la nouvelle fonctionnalité dictée par le parcours utilisateur', async () => {
-        const reponse = await axios.post('http://localhost:1234/api/token', {
-          login: 'jean.dupont@mail.fr',
-          motDePasse: 'mdp_12345',
-        });
-        expect(reponse.data.nouvelleFonctionnalite).to.eql(
-          'fonctionnalité-bouchon'
-        );
       });
     });
 

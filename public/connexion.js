@@ -21,13 +21,7 @@ $(() => {
     const motDePasse = $('#mot-de-passe').val();
     axios
       .post('/api/token', { login, motDePasse })
-      .then((reponse) => {
-        const { nouvelleFonctionnalite } = reponse.data;
-        let url = urlRedirection ?? '/tableauDeBord';
-        if (nouvelleFonctionnalite)
-          url += `?nouvelleFonctionnalite=${nouvelleFonctionnalite}`;
-        window.location = url;
-      })
+      .then(() => (window.location = urlRedirection ?? '/tableauDeBord'))
       .catch((error) => {
         if (error.response.status === 401) {
           afficheAlerte();

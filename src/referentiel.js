@@ -126,10 +126,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donneesReferentiel.departements?.find(
       (unDepartement) => unDepartement.code === code
     )?.nom;
-  const nouvelleFonctionnalite = (id) =>
-    donnees.nouvellesFonctionnalites.find(
-      (fonctionnalite) => fonctionnalite.id === id
-    );
   const nombreOrganisationsUtilisatrices = () =>
     donnees.nombreOrganisationsUtilisatrices || [];
   const estimationNombreServices = () => donnees.estimationNombreServices || [];
@@ -247,18 +243,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const nouvellesFonctionnalites = () => donnees.nouvellesFonctionnalites || [];
 
-  const derniereNouvelleFonctionnalite = (dateDeReference) => {
-    const fonctionnalitesDechronologique = donnees.nouvellesFonctionnalites
-      .filter(
-        (fonctionnalite) =>
-          new Date(fonctionnalite.dateDeDeploiement) < dateDeReference
-      )
-      .sort(
-        (a, b) => new Date(b.dateDeDeploiement) - new Date(a.dateDeDeploiement)
-      );
-    return fonctionnalitesDechronologique[0];
-  };
-
   const retoursUtilisateurMesure = () => donnees.retoursUtilisateurMesure || {};
   const retourUtilisateurMesureAvecId = (idRetour) =>
     retoursUtilisateurMesure()[idRetour] ?? null;
@@ -306,7 +290,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     delaisAvantImpactCritique,
     departement,
     departements,
-    derniereNouvelleFonctionnalite,
     derniereEtapeParcours,
     descriptionCategorie,
     descriptionDelaiAvantImpactCritique,
@@ -353,7 +336,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauGravite,
     niveauxGravite,
     nombreOrganisationsUtilisatrices,
-    nouvelleFonctionnalite,
     nouvellesFonctionnalites,
     numeroEtape,
     premiereEtapeParcours,

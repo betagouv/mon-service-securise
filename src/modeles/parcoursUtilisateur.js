@@ -27,26 +27,6 @@ class ParcoursUtilisateur extends Base {
       .toISOString();
   }
 
-  recupereNouvelleFonctionnalite() {
-    const derniereFonctionnalite =
-      this.referentiel.derniereNouvelleFonctionnalite(
-        this.adaptateurHorloge.maintenant()
-      );
-    if (!derniereFonctionnalite) return undefined;
-    if (!this.dateDerniereConnexion) return derniereFonctionnalite?.id;
-    const dateDerniereConnexion = new Date(this.dateDerniereConnexion);
-    const dateDeploiementDerniereFonctionnalite = new Date(
-      derniereFonctionnalite.dateDeDeploiement
-    );
-    const dateAujourdhui = this.adaptateurHorloge.maintenant();
-    if (
-      dateDerniereConnexion < dateDeploiementDerniereFonctionnalite &&
-      dateAujourdhui > dateDeploiementDerniereFonctionnalite
-    )
-      return derniereFonctionnalite.id;
-    return undefined;
-  }
-
   static pourUtilisateur(idUtilisateur, referentiel) {
     return new ParcoursUtilisateur(
       {
