@@ -243,6 +243,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const nouvellesFonctionnalites = () => donnees.nouvellesFonctionnalites || [];
 
+  const tacheCompletudeProfil = (id) =>
+    donnees.tachesCompletudeProfil.find((t) => t.id === id);
+
   const retoursUtilisateurMesure = () => donnees.retoursUtilisateurMesure || {};
   const retourUtilisateurMesureAvecId = (idRetour) =>
     retoursUtilisateurMesure()[idRetour] ?? null;
@@ -351,6 +354,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     statutDeploiementValide,
     statutHomologation,
     statutsMesures,
+    tacheCompletudeProfil,
     trancheIndiceCyber,
     typeService,
     typesService,
