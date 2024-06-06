@@ -7,45 +7,60 @@
   export let notification: Notification;
 
   const dispatch = createEventDispatcher();
+  const enteteNotification =
+    notification.type === 'nouveaute'
+      ? 'Nouveautés'
+      : 'Mettre à jour les informations';
 </script>
 
 <div class="notification">
-  <div class="conteneur-pictogramme">
+  <div class="conteneur-pictogramme {notification.type}">
     {#if notification.statutLecture === 'nonLue'}
       <div class="pastille-non-lue" />
     {/if}
     <img
-      src="/statique/assets/images/notifications/nouveaute.svg"
-      alt="Icône de nouveauté"
+      src="/statique/assets/images/notifications/{notification.type}.svg"
+      alt="Icône de {notification.type}"
     />
   </div>
   <div class="conteneur-notification">
-    <p class="type-notification">Nouveautés</p>
+    <p class="type-notification">{enteteNotification}</p>
     <p class="titre">{notification.titre}</p>
-    <div class="cartouche-cta">
-      <img
-        src="/statique/assets/images/notifications/illustrations/{notification.image}"
-        alt="Illustration de la nouveauté {notification.titre}"
-      />
-      <div>
-        <p class="sous-titre">{notification.sousTitre}</p>
-        <a
-          href={notification.lien}
-          class="cta"
-          rel="noopener"
-          target="_blank"
-          on:click={async () => {
-            await marqueNotificationCommeLue(notification.id);
-            dispatch('notificationMiseAJour');
-          }}>Découvrir</a
+    {#if notification.type === 'nouveaute'}
+      <div class="cartouche-cta">
+        <img
+          src="/statique/assets/images/notifications/illustrations/{notification.image}"
+          alt="Illustration de la nouveauté {notification.titre}"
+        />
+        <div>
+          <p class="sous-titre">{notification.sousTitre}</p>
+          <a
+            href={notification.lien}
+            class="cta"
+            rel="noopener"
+            target="_blank"
+            on:click={async () => {
+              await marqueNotificationCommeLue(notification.id);
+              dispatch('notificationMiseAJour');
+            }}>Découvrir</a
+          >
+        </div>
+      </div>
+    {:else}
+      <a href={notification.lien} class="cta cta-tache"
+        >{notification.titreCta}
+      </a>
+    {/if}
+
+    {#if notification.type === 'nouveaute'}
+      <div class="horodatage">
+        <span
+          >{formatteDifferenceDateRelative(
+            notification.dateDeDeploiement
+          )}</span
         >
       </div>
-    </div>
-    <div class="horodatage">
-      <span
-        >{formatteDifferenceDateRelative(notification.dateDeDeploiement)}</span
-      >
-    </div>
+    {/if}
   </div>
 </div>
 
@@ -73,11 +88,18 @@
     max-width: var(--taille);
     max-height: var(--taille);
     border-radius: 50%;
-    background: var(--fond-bleu-pale);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+  }
+
+  .conteneur-pictogramme.tache {
+    background: var(--fond-ocre-pale);
+  }
+
+  .conteneur-pictogramme.nouveaute {
+    background: var(--fond-bleu-pale);
   }
 
   .cartouche-cta {
@@ -101,6 +123,10 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
+  }
+
+  a.cta-tache {
+    margin-top: 8px;
   }
 
   a.cta:hover {
