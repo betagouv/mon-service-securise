@@ -148,14 +148,10 @@ const routesNonConnecteApi = ({
         const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
           utilisateur.id
         );
-        const nouvelleFonctionnalite =
-          parcoursUtilisateur.recupereNouvelleFonctionnalite();
         parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
         await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
 
-        reponse.json({
-          nouvelleFonctionnalite,
-        });
+        reponse.sendStatus(200);
       } catch (e) {
         suite(e);
       }
