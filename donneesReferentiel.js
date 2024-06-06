@@ -27,7 +27,28 @@ module.exports = {
     },
   ],
 
-  tachesCompletudeProfil: [],
+  tachesCompletudeProfil: [
+    {
+      id: 'profil',
+      lien: '/utilisateur/edition',
+      titre: 'Nous vous invitons à compléter votre profil.',
+      titreCta: 'Aller sur mon profil',
+    },
+    {
+      id: 'siret',
+      lien: '/utilisateur/edition#siret',
+      titre:
+        'Nous vous invitons à renseigner le numéro de SIRET de votre organisation.',
+      titreCta: 'Aller sur mon profil',
+    },
+    {
+      id: 'estimationNombreServices',
+      lien: '/utilisateur/edition#estimation-nombre-services',
+      titre:
+        'Nous vous invitons à estimer le nombre de services publics à sécuriser.',
+      titreCta: 'Aller sur mon profil',
+    },
+  ],
 
   nombreOrganisationsUtilisatrices: [
     { label: 'Mon organisation uniquement', borneBasse: 1, borneHaute: 1 },
