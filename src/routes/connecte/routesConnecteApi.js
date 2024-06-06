@@ -358,39 +358,6 @@ const routesConnecteApi = ({
     }
   );
 
-  routes.get('/nouvelleFonctionnalite/derniere', (_, reponse) => {
-    const nouvelleFonctionnalite = referentiel.derniereNouvelleFonctionnalite(
-      adaptateurHorloge.maintenant()
-    );
-
-    if (!nouvelleFonctionnalite) {
-      reponse.status(404).send('Aucune dernière fonctionnalité');
-      return;
-    }
-
-    reponse.json({ id: nouvelleFonctionnalite.id });
-  });
-
-  routes.get(
-    '/nouvelleFonctionnalite/:id',
-    middleware.aseptise('id'),
-    (requete, reponse) => {
-      const idNouvelleFonctionnalite = requete.params.id;
-      const nouvelleFonctionnalite = referentiel.nouvelleFonctionnalite(
-        idNouvelleFonctionnalite
-      );
-
-      if (!nouvelleFonctionnalite) {
-        reponse.status(404).send('Nouvelle fonctionnalité inconnue');
-        return;
-      }
-
-      reponse.render(
-        `nouvellesFonctionnalites/${nouvelleFonctionnalite.fichierPug}`
-      );
-    }
-  );
-
   routes.get(
     '/annuaire/contributeurs',
     middleware.verificationAcceptationCGU,
