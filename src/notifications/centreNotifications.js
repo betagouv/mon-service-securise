@@ -63,7 +63,11 @@ class CentreNotifications {
 
     return completudeProfil.champsNonRenseignes
       .map((champ) => this.referentiel.tacheCompletudeProfil(champ))
-      .filter((t) => t !== undefined);
+      .filter((t) => t !== undefined)
+      .map((t) => ({
+        ...t,
+        statutLecture: CentreNotifications.NOTIFICATION_NON_LUE,
+      }));
   }
 
   static NOTIFICATION_LUE = 'lue';

@@ -162,6 +162,7 @@ describe('Le centre de notifications', () => {
 
         expect(taches.length).to.be(1);
         expect(taches[0].titre).to.be('Titre tâche');
+        expect(taches[0].statutLecture).to.be('nonLue');
       });
 
       it("reste robuste si les données d'une tâche sont absentes du référentiel", async () => {
