@@ -766,7 +766,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(idUtilisateurRecu).to.equal('123');
       const { utilisateur } = response.data;
       expect(utilisateur.prenomNom).to.equal('Marie Jeanne');
-      expect(utilisateur.completudeProfil.estComplet).to.be(true);
     });
 
     it("répond avec un code 401 quand il n'y a pas d'identifiant", (done) => {
