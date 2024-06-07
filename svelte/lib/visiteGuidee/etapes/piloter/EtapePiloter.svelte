@@ -5,7 +5,7 @@
   import type { SousEtape } from '../../kit/ModaleSousEtape';
 
   let cibleNomService: HTMLElement;
-  let cibleBandeauNouveaute: HTMLElement;
+  let cibleCentreNotifications: HTMLElement;
   let cibleBOM: HTMLElement;
   let cibleNouveauService: HTMLElement;
   let cibleLignePremierService: HTMLElement;
@@ -31,7 +31,7 @@
       subtree: false,
     });
 
-    cibleBandeauNouveaute = elementDeClasse('bandeau-nouveautes');
+    cibleCentreNotifications = elementDeClasse('centre-notifications');
     cibleBOM = elementDeClasse('bom-modale');
     cibleNouveauService = elementDeClasse('nouveau-service');
   });
@@ -72,7 +72,7 @@
   };
 </script>
 
-{#if cibleNomService && cibleBandeauNouveaute && cibleBOM && cibleNouveauService && cibleLignePremierService}
+{#if cibleNomService && cibleCentreNotifications && cibleBOM && cibleNouveauService && cibleLignePremierService}
   <ModaleSousEtape
     sousEtapes={[
       {
@@ -92,7 +92,7 @@
         animation: '/statique/assets/images/visiteGuidee/tableau_de_bord.gif',
       },
       {
-        cible: cibleBandeauNouveaute,
+        cible: cibleCentreNotifications,
         positionnementModale: 'BasMilieu',
         margeElementMisEnAvant: 3,
         callbackInitialeCible: (cible) => {
