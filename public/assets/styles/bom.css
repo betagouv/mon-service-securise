@@ -1,7 +1,7 @@
 .bom {
   position: fixed;
-  bottom: 2em;
-  right: 2em;
+  bottom: 2.6em;
+  right: 2.5em;
   z-index: 10;
   transition: opacity 0.2s;
   display: flex;
@@ -9,25 +9,8 @@
   align-items: center;
 }
 
-.bom :is(.bom-vignette, .bom-titre) {
+.bom :is(.bom-titre) {
   cursor: pointer;
-}
-
-.bom .bom-vignette {
-  width: 50px;
-  height: 50px;
-  background-image: url(../images/vignette_bom_survol.svg); /* Pré-chargement*/
-  background-image: url(../images/vignette_bom.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: none;
-  background-color: transparent;
-  margin-right: -26px;
-  z-index: 1;
-}
-
-.bom:hover .bom-vignette {
-  background-image: url(../images/vignette_bom_survol.svg);
 }
 
 .bom .bom-titre {
@@ -35,18 +18,21 @@
   border-radius: 20px;
   color: #fff;
   font-size: 1.1em;
-  font-weight: bold;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: fit-content;
-  padding: 2px 16px 2px 32px;
+  height: 40px;
+  padding: 6px 19px;
 }
 
-.bom .bom-titre img {
-  transform: rotate(-90deg) translateX(-1px);
+.bom-titre::before {
+  content: '';
+  background: url('/statique/assets/images/icone_aide_point_interrogation.svg');
+  width: 24px;
+  height: 24px;
+  display: flex;
 }
 
 .bom:hover .bom-titre {
@@ -80,21 +66,17 @@
 .bom .bom-modale .bandeau-titre {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  height: 100px;
-  padding-left: 6em;
+  justify-content: center;
+  height: 80px;
+  padding-left: 1.3em;
   border-radius: 0.8em 0.8em 0 0;
   color: #fff;
   text-align: left;
-  background-image: url(../images/entete_fenetre_bom.svg);
-  background-repeat: no-repeat;
-  background-position-y: -2px;
-  background-size: auto calc(100% + 2px);
+  background-color: var(--bleu-mise-en-avant);
 }
 
-.bom .bandeau-titre .nom-produit {
-  padding-bottom: 0.5em;
-  font-size: 1.3em;
+.bom .bandeau-titre .bandeau-sous-titre {
+  font-size: 1.5em;
   font-weight: bold;
 }
 
@@ -168,7 +150,7 @@
   justify-content: end;
   align-items: center;
   padding-right: 1.3em;
-  gap: 0.3em;
+  gap: 8px;
   border: none;
   background: transparent;
   margin-left: auto;
