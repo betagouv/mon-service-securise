@@ -98,9 +98,9 @@
         callbackInitialeCible: (cible) => {
           cible.disabled = true;
         },
-        titre: 'Découvrez les nouveautés',
+        titre: 'Découvrez le centre de notifications',
         description:
-          'Ne ratez aucune évolution de MonServiceSécurisé. Nous vous partageons les nouvelles fonctionnalités disponibles sur la plateforme.',
+          'Ne ratez aucune information ou nouveauté importante de MonServiceSécurisé !',
         animation: '/statique/assets/images/visiteGuidee/nouveautes.gif',
       },
       {
