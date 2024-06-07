@@ -270,7 +270,6 @@ const routesConnecteApi = ({
         reponse.json({
           utilisateur: {
             prenomNom: utilisateur.prenomNom(),
-            completudeProfil: utilisateur.completudeProfil(),
           },
         });
       });
