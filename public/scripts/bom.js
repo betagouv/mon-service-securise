@@ -1,7 +1,7 @@
 import { EVENEMENT_BASCULE_TIROIR } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 
 $(() => {
-  const $bomReplie = $('.bom .bom-titre, .bom .bom-vignette');
+  const $bomReplie = $('.bom .bom-titre');
   const $bomModale = $('.bom .bom-modale');
 
   $bomReplie.on('click', () => {
