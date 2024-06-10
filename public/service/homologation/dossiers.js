@@ -34,6 +34,10 @@ $(() => {
     elementModale.inert = false;
   }
 
+  $('#bouton-tampon-homologation-modale').on('click', () => {
+    $('.modale-encart-homologation')[0].close();
+  });
+
   $('#affiche-documents').on('click', async () => {
     const donneesService = await chargeDonneesService();
     gestionnaireTiroir.afficheContenuAction(
