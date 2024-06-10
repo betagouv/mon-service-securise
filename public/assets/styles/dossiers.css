@@ -178,3 +178,88 @@
   position: relative;
   height: fit-content;
 }
+
+.modale-encart-homologation::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.modale-encart-homologation {
+  width: 663px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  outline: none;
+}
+
+.modale-encart-homologation .conteneur-fermeture {
+  display: flex;
+  justify-content: end;
+}
+
+.modale-encart-homologation .conteneur-fermeture .bouton-fermeture {
+  background: none;
+  border: none;
+  color: var(--bleu-anssi);
+  display: flex;
+  gap: 8px;
+  margin-right: 26px;
+  cursor: pointer;
+}
+
+.modale-encart-homologation .conteneur-fermeture .bouton-fermeture:hover {
+  background: var(--systeme-design-etat-gris-survol);
+}
+
+.modale-encart-homologation .page {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modale-encart-homologation .page ul {
+  padding-inline-start: 25px;
+}
+
+.modale-encart-homologation .page > ul > li {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.modale-encart-homologation .page li {
+  list-style: disc;
+  font-weight: normal;
+}
+
+.modale-encart-homologation .bouton {
+  padding: 0.5em 1em;
+  margin: 0;
+}
+
+.modale-encart-homologation .conteneur-actions {
+  margin-left: auto;
+}
+
+.conteneur-encart-homologation {
+  padding: 8px 26px 32px;
+}
+
+dialog.modale-encart-homologation h1 {
+  color: var(--bleu-mise-en-avant);
+  font-size: 24px;
+  margin-bottom: 24px;
+  margin-top: 16px;
+}
+
+dialog.modale-encart-homologation .page img {
+  margin-bottom: 24px;
+}
+
+#bouton-tampon-homologation-modale:before {
+  content: url('/statique/assets/images/icone_telecharger_tampon.svg');
+  width: 30px;
+  height: 30px;
+  margin-right: -4px;
+  filter: brightness(0) invert();
+}

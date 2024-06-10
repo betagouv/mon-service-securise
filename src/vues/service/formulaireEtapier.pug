@@ -33,6 +33,8 @@ block zone-principale
   .titre
     h1 Homologuer
 
+  block modale
+
   form.homologation
     if idEtape
       +barre-progression({ numeroEtapeCourante: referentiel.numeroEtape(idEtape) })
