@@ -28,11 +28,13 @@ block main
       .zone-principale
         block zone-principale
           .formulaire
-            .titre.titre-page
-              block titre
-            .sous-titre
-              block sous-titre
-            block formulaire
+            .conteneur-entete
+              .titre.titre-page
+                block titre
+              .sous-titre
+                block sous-titre
+            .conteneur-page-formulaire
+              block formulaire
 
   +tiroir
     include ./tiroirs/tiroirContributeurs
