@@ -83,15 +83,12 @@
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
 <div class="barre-outils-sticky">
   <div class="barre-filtres">
-    <label for="recherche">
-      Rechercher
-      <input
-        type="search"
-        id="recherche"
-        bind:value={$rechercheTextuelle}
-        placeholder="Intitulé, description"
-      />
-    </label>
+    <input
+      type="search"
+      id="recherche"
+      bind:value={$rechercheTextuelle}
+      placeholder="Intitulé, description"
+    />
     <MenuFiltres {categories} {statuts} />
   </div>
   {#if !estLectureSeule}
@@ -189,12 +186,7 @@
     align-items: center;
   }
 
-  label[for='recherche'] {
-    font-weight: bold;
-  }
-
   #recherche {
-    margin-left: 16px;
     border-radius: 6px;
     border: 1px solid #cbd5e1;
     color: #667892;

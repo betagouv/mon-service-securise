@@ -1,14 +1,37 @@
+#tableau-des-mesures {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#tableau-des-mesures > .conteneur-indicateurs {
+  order: 20;
+  background-color: white;
+  margin: 0;
+  width: 50%;
+}
+
+#tableau-des-mesures > .barre-outils-sticky {
+  order: 10;
+  width: 50%;
+}
+
+#tableau-des-mesures > .tableau-des-mesures {
+  order: 30;
+}
+
 .conteneur-indicateurs {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: 1em;
   position: sticky;
-  top: 10px;
+  top: 0px;
   right: 0;
   z-index: 2;
   width: fit-content;
   margin-left: auto;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 
 .conteneur-indice-cyber {
@@ -17,6 +40,7 @@
   gap: 0;
   align-items: center;
   cursor: pointer;
+  margin-top: -14px;
 }
 
 .conteneur-indice-cyber svg {
