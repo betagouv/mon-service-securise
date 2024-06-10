@@ -19,7 +19,7 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
   const versEtapeSuivante = () =>
     (window.location = idEtapeSuivante
       ? `/service/${idService}/homologation/edition/etape/${idEtapeSuivante}`
-      : `/service/${idService}/dossiers`);
+      : `/service/${idService}/dossiers?succesHomologation`);
 
   $(selecteurFormulaire).on('submit', async (e) => {
     e.preventDefault();
