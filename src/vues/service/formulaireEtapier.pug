@@ -30,19 +30,18 @@ block header-titre-page
     +texteTronque({texte: service.nomService() || ''})
 
 block zone-principale
-  .titre
-    h1 Homologuer
-
-  block modale
-
-  form.homologation
-    if idEtape
-      +barre-progression({ numeroEtapeCourante: referentiel.numeroEtape(idEtape) })
-    else
+  .formulaire
+    .conteneur-entete
+      .titre.titre-page
+        h1 Homologuer
       .sous-titre
         h2 Générer un dossier et un projet de décision d'homologation pour se mettre en conformité avec la réglementation
 
-    hr
+  block modale
+
+  form.homologation.conteneur-page-formulaire
+    if idEtape
+      +barre-progression({ numeroEtapeCourante: referentiel.numeroEtape(idEtape) })
 
     block formulaire
 
