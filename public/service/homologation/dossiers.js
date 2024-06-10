@@ -21,6 +21,19 @@ $(() => {
     );
   });
 
+  $('#bouton-fermeture-modale-encart-homologation').on('click', (e) => {
+    e.preventDefault();
+    $('.modale-encart-homologation')[0].close();
+  });
+
+  const parametresDeRecherche = new URLSearchParams(window.location.search);
+  if (parametresDeRecherche.has('succesHomologation')) {
+    const elementModale = $('.modale-encart-homologation')[0];
+    elementModale.inert = true;
+    elementModale.showModal();
+    elementModale.inert = false;
+  }
+
   $('#affiche-documents').on('click', async () => {
     const donneesService = await chargeDonneesService();
     gestionnaireTiroir.afficheContenuAction(

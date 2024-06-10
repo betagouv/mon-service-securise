@@ -61,6 +61,9 @@ mixin dossierCourant({ dossier, idService, service })
 block append styles
   link(href='/statique/assets/styles/dossiers.css', rel='stylesheet')
 
+block modale
+  include modaleEncartHomologation
+
 block title
   title Homologuer - Accueil | MonServiceSécurisé
 
