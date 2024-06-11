@@ -10,13 +10,14 @@ block contenu-etape
     const dureeValidite = dossierCourant.descriptionDureeValidite();
     const dateHomologation = dossierCourant.descriptionDateHomologation();
 
-  p.
-    La décision d'homologation de sécurité a été prise le
-    #[b= dateHomologation] pour une durée de #[b= dureeValidite]. #[br]
-    #[br]
-    En cliquant sur « #{LABEL_BOUTON} », vous confirmez avoir renseigné
-    l'exactitude des informations fournies dans le document de Décision
-    d'homologation de sécurité.
+  section
+    p.
+      La décision d'homologation de sécurité a été prise le
+      #[b= dateHomologation] pour une durée de #[b= dureeValidite]. #[br]
+      #[br]
+      En cliquant sur « #{LABEL_BOUTON} », vous confirmez avoir renseigné
+      l'exactitude des informations fournies dans le document de Décision
+      d'homologation de sécurité.
   script(type = "module", src = "/statique/service/homologation/etapes/recapitulatif.js")
 
 block bouton-etape

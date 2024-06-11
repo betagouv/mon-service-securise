@@ -11,6 +11,7 @@ main {
 }
 
 .sous-titre h2 {
+  line-height: 24px;
   font-size: 16px;
   font-weight: normal;
   text-align: left;
@@ -55,4 +56,23 @@ main {
 .avancement-etape p {
   margin: 0;
   line-height: 24px;
+}
+
+.conteneur-etapier {
+  width: 588px;
+  display: flex;
+  gap: 6px;
+  margin: 12px 62px 16px 100px;
+}
+
+.conteneur-etapier a.etape {
+  opacity: 1;
+}
+
+.conteneur-etapier .etape {
+  height: 8px;
+  background-color: white;
+  opacity: 0.5;
+  text-decoration: none;
+  flex: 1;
 }
