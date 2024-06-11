@@ -3,7 +3,7 @@ extends ../formulaireEtapier
 block title
   title Homologuer - Autorité | MonServiceSécurisé
 
-block formulaire
+block contenu-etape
   -
     const dossierCourant = service.dossierCourant()
     const estLectureSeule  = autorisationsService.HOMOLOGUER.estLectureSeule
