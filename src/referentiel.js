@@ -183,6 +183,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const numeroEtape = (idEtape) =>
     etapesParcoursHomologation().find((e) => e.id === idEtape)?.numero;
 
+  const libelleEtape = (idEtape) =>
+    etapesParcoursHomologation().find((e) => e.id === idEtape)?.libelle;
+
   const premiereEtapeParcours = () =>
     etapesParcoursHomologation().find((e) => e.numero === 1);
 
@@ -328,6 +331,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     idEtapeSuivante,
     infosNiveauxGravite,
     infosNiveauxGraviteConcernes,
+    libelleEtape,
     localisationDonnees,
     localisationsDonnees,
     mesure,
