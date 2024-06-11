@@ -1,6 +1,8 @@
 #tableau-des-mesures {
   display: flex;
   flex-wrap: wrap;
+  container-type: inline-size;
+  container-name: conteneur-mesures;
 }
 
 #tableau-des-mesures > .conteneur-indicateurs {
@@ -8,30 +10,41 @@
   background-color: white;
   margin: 0;
   width: 50%;
+  z-index: 1;
+  justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1em;
+  position: sticky;
+  top: 0;
+  right: 0;
+  padding-top: 25px;
+  padding-bottom: 25px;
 }
 
-#tableau-des-mesures > .barre-outils-sticky {
+#tableau-des-mesures > .barre-filtres {
   order: 10;
   width: 50%;
+  padding-top: 24px;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 #tableau-des-mesures > .tableau-des-mesures {
   order: 30;
 }
 
-.conteneur-indicateurs {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 1em;
-  position: sticky;
-  top: 0px;
-  right: 0;
-  z-index: 2;
-  width: fit-content;
-  margin-left: auto;
-  padding-top: 24px;
+#tableau-des-mesures > .barre-actions {
+  order: 25;
+  background: white;
   padding-bottom: 24px;
+  position: sticky;
+  top: 100px;
+  z-index: 1;
+  width: 100%;
 }
 
 .conteneur-indice-cyber {
@@ -71,7 +84,7 @@
   color: white;
 }
 
-@container conteneur-mesures (max-width: 1160px) {
+@container conteneur-mesures (max-width: 1000px) {
   .cartouche-progression-mesures,
   .cartouche-indice-cyber {
     display: none;
@@ -80,5 +93,6 @@
   .jauge-progression-mesures {
     left: unset !important;
     right: -5px;
+    top: -15px;
   }
 }

@@ -81,40 +81,38 @@
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
-<div class="barre-outils-sticky">
-  <div class="barre-filtres">
-    <input
-      type="search"
-      id="recherche"
-      bind:value={$rechercheTextuelle}
-      placeholder="Intitulé, description"
-    />
-    <MenuFiltres {categories} {statuts} />
-  </div>
-  {#if !estLectureSeule}
-    <div class="barre-actions">
-      <button
-        class="bouton"
-        on:click={() => afficheTiroirDeMesure()}
-        disabled={etatEnregistrement === EnCours}
-      >
-        Ajouter une mesure
-      </button>
-      <button
-        class="bouton bouton-avec-icone bouton-tertiaire bouton-export-mesures"
-        on:click={afficheTiroirExportDesMesures}
-      >
-        Exporter la liste des mesures
-      </button>
-      {#if etatEnregistrement === EnCours}
-        <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
-      {/if}
-      {#if etatEnregistrement === Fait}
-        <p class="enregistrement-termine">Enregistré</p>
-      {/if}
-    </div>
-  {/if}
+<div class="barre-filtres">
+  <input
+    type="search"
+    id="recherche"
+    bind:value={$rechercheTextuelle}
+    placeholder="Intitulé, description"
+  />
+  <MenuFiltres {categories} {statuts} />
 </div>
+{#if !estLectureSeule}
+  <div class="barre-actions">
+    <button
+      class="bouton"
+      on:click={() => afficheTiroirDeMesure()}
+      disabled={etatEnregistrement === EnCours}
+    >
+      Ajouter une mesure
+    </button>
+    <button
+      class="bouton bouton-avec-icone bouton-tertiaire bouton-export-mesures"
+      on:click={afficheTiroirExportDesMesures}
+    >
+      Exporter la liste des mesures
+    </button>
+    {#if etatEnregistrement === EnCours}
+      <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
+    {/if}
+    {#if etatEnregistrement === Fait}
+      <p class="enregistrement-termine">Enregistré</p>
+    {/if}
+  </div>
+{/if}
 <div class="tableau-des-mesures">
   {#if $nombreResultats.aucunResultat}
     <div class="aucun-resultat">
@@ -170,20 +168,11 @@
 </div>
 
 <style>
-  .barre-outils-sticky {
-    position: sticky;
-    padding: 24px 0;
-    top: 0;
-    background: white;
-    z-index: 1;
-  }
-
   .barre-filtres {
     display: flex;
     flex-direction: row;
-    margin-bottom: 24px;
     gap: 16px;
-    align-items: center;
+    align-items: flex-start;
   }
 
   #recherche {
