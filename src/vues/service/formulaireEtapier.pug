@@ -1,26 +1,6 @@
 extends ../parcoursService
 include ../fragments/texteTronque
 
-mixin descriptionEtape({ etape })
-  .numero-etape= etape.numero
-  .libelle-etape= etape.libelle
-
-mixin barre-progression({ numeroEtapeCourante })
-  .etapes
-    each etape in referentiel.etapesParcoursHomologation(autorisationsService.peutHomologuer)
-      -
-        let classeEtape = 'courante';
-        if (etape.numero < numeroEtapeCourante) classeEtape = 'passee';
-        if (etape.numero > numeroEtapeCourante) classeEtape = 'future';
-
-      .etape(class = classeEtape)
-        if classeEtape === 'passee'
-          .numero-etape
-            a(href = `/service/${service.id}/homologation/edition/etape/${etape.id}`).coche
-          .libelle-etape= etape.libelle
-        else
-          +descriptionEtape({ etape })
-
 block append styles
   link(href='/statique/assets/styles/etapesDossier.css', rel='stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
@@ -43,13 +23,23 @@ block avancement-etape
   if idEtape
     p!= `Étape ${referentiel.numeroEtape(idEtape)} sur ${referentiel.derniereEtapeParcours(autorisationsService.peutHomologuer).numero}`
 
+
+block etapier
+  if idEtape
+    - const numeroEtapeCourante = referentiel.numeroEtape(idEtape);
+    .conteneur-etapier
+      each etape in referentiel.etapesParcoursHomologation(autorisationsService.peutHomologuer)
+        - const etapeAccessible = etape.numero <= numeroEtapeCourante;
+        if etapeAccessible
+          a.etape(href=`/service/${service.id}/homologation/edition/etape/${etape.id}`)
+        else
+          .etape
+
 block sous-titre
   h2 Générer un dossier et un projet de décision d'homologation pour se mettre en conformité avec la réglementation
 
 block formulaire
   form.homologation.conteneur-page-formulaire
-    if idEtape
-      +barre-progression({ numeroEtapeCourante: referentiel.numeroEtape(idEtape) })
 
     block contenu-etape
 
