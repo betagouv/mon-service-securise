@@ -14,7 +14,6 @@ main {
   font-size: 16px;
   font-weight: normal;
   text-align: left;
-  margin: 0 0 32px 0;
 }
 
 .marges-fixes {
@@ -23,7 +22,6 @@ main {
 }
 
 .conteneur-entete {
-  height: 60px;
   background-color: var(--bleu-mise-en-avant);
   padding: 32px 0;
   color: white;
