@@ -14,19 +14,21 @@ block append scripts
   script(id = 'indice-cyber', type = 'application/json').
     !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax() })}
 
+block titre
+  h1 Sécuriser
+
+block sous-titre
+  h2 Suivez l’indice cyber de votre service
+
 block header-titre-page
   h3
     +texteTronque({ texte: service.nomService() || '' })
 
-block zone-principale
+block formulaire
   - const indiceCyber = service.indiceCyber()
   - const noteMax = referentiel.indiceCyberNoteMax()
   - const trancheIndiceCyber = referentiel.trancheIndiceCyber(indiceCyber.total)
   .conteneur-indice-cyber
-    .conteneur-titre
-      h1 Sécuriser
-      h2 •
-      h2 L'indice cyber
     .conteneur-descriptif
       .disque-indice
         #conteneur-indice-cyber
