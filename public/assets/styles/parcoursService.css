@@ -43,3 +43,16 @@ main {
 .zone-principale {
   padding: 0;
 }
+
+.avancement-etape {
+  text-align: left;
+  margin-left: 100px;
+  margin-right: 62px;
+  font-size: 14px;
+  padding-bottom: 4px;
+}
+
+.avancement-etape p {
+  margin: 0;
+  line-height: 24px;
+}
