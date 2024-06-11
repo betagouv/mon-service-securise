@@ -34,7 +34,10 @@ block header-titre-page
     +texteTronque({texte: service.nomService() || ''})
 
 block titre
-  h1 Homologuer
+  if idEtape
+    h1!= referentiel.libelleEtape(idEtape)
+  else
+    h1 Homologuer
 
 block sous-titre
   h2 Générer un dossier et un projet de décision d'homologation pour se mettre en conformité avec la réglementation
