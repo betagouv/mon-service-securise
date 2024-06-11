@@ -25,30 +25,29 @@ block append styles
   link(href='/statique/assets/styles/etapesDossier.css', rel='stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
+block append scripts
+  script(id = 'autorisations-homologuer', type = 'application/json').
+    !{JSON.stringify(autorisationsService.HOMOLOGUER)}
+
 block header-titre-page
   h3
     +texteTronque({texte: service.nomService() || ''})
 
-block zone-principale
-  .formulaire
-    .conteneur-entete
-      .titre.titre-page
-        h1 Homologuer
-      .sous-titre
-        h2 Générer un dossier et un projet de décision d'homologation pour se mettre en conformité avec la réglementation
+block titre
+  h1 Homologuer
 
-  block modale
+block sous-titre
+  h2 Générer un dossier et un projet de décision d'homologation pour se mettre en conformité avec la réglementation
 
+block formulaire
   form.homologation.conteneur-page-formulaire
     if idEtape
       +barre-progression({ numeroEtapeCourante: referentiel.numeroEtape(idEtape) })
 
-    block formulaire
+    block contenu-etape
 
     .enregistrement
       .boutons
         .boutons-etape
           block bouton-etape
 
-  script(id = 'autorisations-homologuer', type = 'application/json').
-    !{JSON.stringify(autorisationsService.HOMOLOGUER)}
