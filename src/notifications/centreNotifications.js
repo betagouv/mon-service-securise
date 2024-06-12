@@ -6,14 +6,15 @@ const avecStatutLecture = (notification, statutLecture) => ({
 });
 
 class CentreNotifications {
-  constructor({ referentiel, depotDonnees }) {
-    if (!referentiel || !depotDonnees) {
+  constructor({ referentiel, depotDonnees, adaptateurHorloge }) {
+    if (!referentiel || !depotDonnees || !adaptateurHorloge) {
       throw new Error(
         "Impossible d'instancier le centre de notifications sans ses dépendances"
       );
     }
     this.referentiel = referentiel;
     this.depotDonnees = depotDonnees;
+    this.adaptateurHorloge = adaptateurHorloge;
   }
 
   async toutesNotifications(idUtilisateur) {
@@ -30,6 +31,10 @@ class CentreNotifications {
   async toutesNouveautes(idUtilisateur) {
     const toutesNouveautes = this.referentiel
       .nouvellesFonctionnalites()
+      .filter(
+        (n) =>
+          new Date(n.dateDeDeploiement) <= this.adaptateurHorloge.maintenant()
+      )
       .sort(
         (a, b) => new Date(b.dateDeDeploiement) - new Date(a.dateDeDeploiement)
       );

@@ -2,13 +2,18 @@ const express = require('express');
 const CentreNotifications = require('../../notifications/centreNotifications');
 const { ErreurIdentifiantNouveauteInconnu } = require('../../erreurs');
 
-const routesConnecteApiNotifications = ({ depotDonnees, referentiel }) => {
+const routesConnecteApiNotifications = ({
+  adaptateurHorloge,
+  depotDonnees,
+  referentiel,
+}) => {
   const routes = express.Router();
 
   routes.get('/', async (requete, reponse) => {
     const centreNotifications = new CentreNotifications({
       depotDonnees,
       referentiel,
+      adaptateurHorloge,
     });
     reponse.json({
       notifications: await centreNotifications.toutesNotifications(
@@ -21,6 +26,7 @@ const routesConnecteApiNotifications = ({ depotDonnees, referentiel }) => {
     const centreNotifications = new CentreNotifications({
       depotDonnees,
       referentiel,
+      adaptateurHorloge,
     });
     try {
       await centreNotifications.marqueNouveauteLue(

@@ -4,6 +4,7 @@ const Referentiel = require('../../src/referentiel');
 const { creeDepot } = require('../../src/depotDonnees');
 const { ErreurIdentifiantNouveauteInconnu } = require('../../src/erreurs');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
 
 describe('Le centre de notifications', () => {
   let referentiel;
@@ -32,6 +33,7 @@ describe('Le centre de notifications', () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
+        adaptateurHorloge,
       });
 
       const notifications = await centreNotifications.toutesNouveautes('U1');
@@ -49,6 +51,7 @@ describe('Le centre de notifications', () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
+        adaptateurHorloge,
       });
 
       const notifications = await centreNotifications.toutesNouveautes('U1');
@@ -60,6 +63,24 @@ describe('Le centre de notifications', () => {
       expect(notifications[1].id).to.be('N1');
       expect(notifications[1].statutLecture).to.be('nonLue');
     });
+
+    it('ne retourne pas les nouveautés du futur', async () => {
+      referentiel = Referentiel.creeReferentiel({
+        nouvellesFonctionnalites: [
+          { id: 'N1', dateDeDeploiement: '2024-01-01' },
+        ],
+      });
+      const decembre2023 = { maintenant: () => new Date(2023, 11, 1) };
+      const centreNotifications = new CentreNotifications({
+        referentiel,
+        depotDonnees,
+        adaptateurHorloge: decembre2023,
+      });
+
+      const notifications = await centreNotifications.toutesNouveautes('U1');
+
+      expect(notifications.length).to.be(0);
+    });
   });
 
   describe('sur marquage de nouveauté lue', () => {
@@ -67,6 +88,7 @@ describe('Le centre de notifications', () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
+        adaptateurHorloge,
       });
 
       try {
@@ -88,6 +110,7 @@ describe('Le centre de notifications', () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
+        adaptateurHorloge,
       });
 
       await centreNotifications.marqueNouveauteLue('U1', 'N1');
@@ -106,6 +129,7 @@ describe('Le centre de notifications', () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
+        adaptateurHorloge,
       });
 
       await centreNotifications.toutesTachesEnAttente('U1');
@@ -118,6 +142,7 @@ describe('Le centre de notifications', () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
+        adaptateurHorloge,
       });
 
       const taches = await centreNotifications.toutesTachesEnAttente('U1');
@@ -134,6 +159,7 @@ describe('Le centre de notifications', () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
+        adaptateurHorloge,
       });
 
       const taches = await centreNotifications.toutesTachesEnAttente('U1');
@@ -157,6 +183,7 @@ describe('Le centre de notifications', () => {
         const centreNotifications = new CentreNotifications({
           referentiel,
           depotDonnees,
+          adaptateurHorloge,
         });
 
         const taches = await centreNotifications.toutesTachesEnAttente('U1');
@@ -173,6 +200,7 @@ describe('Le centre de notifications', () => {
         const centreNotifications = new CentreNotifications({
           referentiel,
           depotDonnees,
+          adaptateurHorloge,
         });
 
         const taches = await centreNotifications.toutesTachesEnAttente('U1');
@@ -193,6 +221,7 @@ describe('Le centre de notifications', () => {
         const centreNotifications = new CentreNotifications({
           referentiel,
           depotDonnees,
+          adaptateurHorloge,
         });
 
         const taches = await centreNotifications.toutesTachesEnAttente('U1');
@@ -218,6 +247,7 @@ describe('Le centre de notifications', () => {
       centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
+        adaptateurHorloge,
       });
     });
 

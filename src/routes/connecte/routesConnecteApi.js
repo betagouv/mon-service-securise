@@ -155,7 +155,11 @@ const routesConnecteApi = ({
   routes.use(
     '/notifications',
     middleware.verificationAcceptationCGU,
-    routesConnecteApiNotifications({ depotDonnees, referentiel })
+    routesConnecteApiNotifications({
+      adaptateurHorloge,
+      depotDonnees,
+      referentiel,
+    })
   );
 
   routes.put(
