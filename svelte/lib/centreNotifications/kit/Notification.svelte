@@ -114,7 +114,7 @@
   .cartouche-cta {
     padding: 8px;
     display: flex;
-    align-items: start;
+    align-items: center;
     justify-content: start;
     gap: 10px;
     border: 1px solid var(--liseres-fonce);
