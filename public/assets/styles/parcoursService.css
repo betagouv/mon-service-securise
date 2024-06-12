@@ -80,3 +80,9 @@ main {
   text-decoration: none;
   flex: 1;
 }
+
+nav.marges-fixes {
+  width: 1200px;
+  margin: 0 auto;
+  height: unset;
+}
