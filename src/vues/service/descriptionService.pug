@@ -1,6 +1,7 @@
 extends ./decrire
 include ../fragments/texteTronque
 include ../fragments/formulaireDescriptionService
+include ../fragments/avancementEtape
 
 block header-titre-page
   h3
@@ -11,6 +12,9 @@ block titre
 
 block sous-titre
   h2 Fournir les informations permettant d'évaluer les besoins de sécurité du service et de proposer des mesures de sécurité adaptées
+
+block avancement-etape
+  +avancementEtape(1, 2)
 
 block formulaire
   script(id = 'infos-siret-manquant', type = 'application/json').

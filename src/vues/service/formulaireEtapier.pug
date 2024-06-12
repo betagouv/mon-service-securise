@@ -1,5 +1,6 @@
 extends ../parcoursService
 include ../fragments/texteTronque
+include ../fragments/avancementEtape
 
 block append styles
   link(href='/statique/assets/styles/etapesDossier.css', rel='stylesheet')
@@ -21,8 +22,7 @@ block titre
 
 block avancement-etape
   if idEtape
-    p!= `Étape ${referentiel.numeroEtape(idEtape)} sur ${referentiel.derniereEtapeParcours(autorisationsService.peutHomologuer).numero}`
-
+    +avancementEtape(referentiel.numeroEtape(idEtape), referentiel.derniereEtapeParcours(autorisationsService.peutHomologuer).numero)
 
 block etapier
   if idEtape
