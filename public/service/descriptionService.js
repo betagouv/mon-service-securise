@@ -69,6 +69,9 @@ const brancheComportementNavigationEtapes = () => {
 
     const $entete = $('.marges-fixes');
 
+    $('.avancement-etape p', $entete).text(
+      `Étape ${etapeCourante} sur ${etapeMax}`
+    );
     if (etapeCourante === etapeMin) cacheBouton($boutonPrecedent);
     else afficheBouton($boutonPrecedent);
 
