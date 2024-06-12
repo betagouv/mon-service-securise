@@ -25,6 +25,15 @@ module.exports = {
         "Valorisez l'effort de sécurisation mis en œuvre et renforcez la confiance de vos usagers dans vos services",
       image: 'encart_homologation.png',
     },
+    {
+      id: 'communauteMSS',
+      dateDeDeploiement: '2024-06-13 12:30:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-rejoindre-la-communaute-xtwbkz/',
+      titre: 'Rejoignez la communauté MonServiceSécurisé !',
+      sousTitre:
+        'Devenez membre de la communauté MonServiceSécurisé et échangez avec vos pairs',
+      image: 'communauteMSS.png',
+    },
   ],
 
   tachesCompletudeProfil: [
