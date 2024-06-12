@@ -86,7 +86,7 @@
     type="search"
     id="recherche"
     bind:value={$rechercheTextuelle}
-    placeholder="Intitulé, description"
+    placeholder="Rechercher par intitulé, description"
   />
   <MenuFiltres {categories} {statuts} />
 </div>
