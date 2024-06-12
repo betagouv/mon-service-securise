@@ -73,6 +73,7 @@ block contenu-etape
     const dossierCourant = dossiers.dossierCourant()
     const dossierActif = dossiers.dossierActif()
     const dossiersPasses = dossiers.archives();
+    const aucunDossier = !dossierCourant && !dossierActif && !dossiersPasses.length
 
   .dossiers
     -
@@ -82,7 +83,7 @@ block contenu-etape
       h3.titre-section Projet d'homologation en cours
       +dossierCourant({ dossier: dossierCourant, service })
     else
-      if(!estLectureSeule)
+      if(!estLectureSeule && !aucunDossier)
         button.bouton#suivant(
           data-id-homologation = service.id,
           data-id-etape-suivante = etapeSuivante
@@ -97,8 +98,10 @@ block contenu-etape
       each dossier in dossiersPasses
         +dossierFinalise({ dossier, afficheStatutHomologation: false })
 
-    if !dossierCourant && !dossierActif && !dossiersPasses.length
+    if aucunDossier
       .aucun-projets
-        span Aucun projet d'homologation n'est en cours ni aucune homologation n'a été validée
+        img(src="/statique/assets/images/dossiers.png" alt="Illustration du dossier d'homologation vide")
+        p Aucun projet d’homologation n’est en cours, ni aucune homologation n’a été validée.
+        button.bouton#suivant(data-id-homologation = service.id, data-id-etape-suivante = etapeSuivante) Commencer une nouvelle homologation
 
     script(type = "module", src = "/statique/service/homologation/dossiers.js")
