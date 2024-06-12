@@ -5,8 +5,6 @@
 #tableau-des-mesures {
   display: flex;
   flex-wrap: wrap;
-  container-type: inline-size;
-  container-name: conteneur-mesures;
 }
 
 #tableau-des-mesures > .conteneur-indicateurs {
@@ -86,17 +84,4 @@
 .conteneur-indice-cyber:active .cartouche-indice-cyber {
   background: #08416a;
   color: white;
-}
-
-@container conteneur-mesures (max-width: 1000px) {
-  .cartouche-progression-mesures,
-  .cartouche-indice-cyber {
-    display: none;
-  }
-
-  .jauge-progression-mesures {
-    left: unset !important;
-    right: -5px;
-    top: -15px;
-  }
 }
