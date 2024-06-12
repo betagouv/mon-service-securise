@@ -38,9 +38,9 @@ main {
 
 .conteneur-page-formulaire {
   max-width: 1000px;
-  margin: 0 auto;
   padding: 0 54px;
   background: white;
+  margin: 24px auto;
 }
 
 .zone-principale {

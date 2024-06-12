@@ -72,3 +72,7 @@ form.homologation .banniere p {
   flex-direction: column;
   padding: 0.4em;
 }
+
+section:first-of-type {
+  border-top: none;
+}
