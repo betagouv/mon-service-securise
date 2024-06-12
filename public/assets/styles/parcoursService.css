@@ -20,6 +20,7 @@ main {
 .marges-fixes {
   width: 100%;
   margin: 0;
+  height: 100%;
 }
 
 .conteneur-entete {
@@ -39,10 +40,13 @@ main {
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 54px;
+  background: white;
 }
 
 .zone-principale {
   padding: 0;
+  background: var(--fond-pale);
+  height: 100%;
 }
 
 .avancement-etape {

@@ -1,3 +1,7 @@
+.zone-principale {
+  background: white;
+}
+
 #tableau-des-mesures {
   display: flex;
   flex-wrap: wrap;
