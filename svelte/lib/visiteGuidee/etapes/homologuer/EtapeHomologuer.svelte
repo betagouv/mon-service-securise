@@ -18,7 +18,7 @@
         callbackInitialeCible: () => {
           document.getElementById('suivant').inert = true;
         },
-        positionnementModale: 'HautDroite',
+        positionnementModale: 'BasGauche',
         titre: 'Homologuez votre service',
         description:
           "Générez un dossier et un projet de décision d'homologation pour vous mettre en conformité avec la réglementation.",
