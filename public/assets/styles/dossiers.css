@@ -2,6 +2,10 @@
   background: white;
 }
 
+.conteneur-page-formulaire {
+  max-width: 1200px;
+}
+
 .homologation hr {
   display: none;
 }
