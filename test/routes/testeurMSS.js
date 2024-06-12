@@ -3,7 +3,6 @@ const expect = require('expect.js');
 
 const { depotVide } = require('../depots/depotVide');
 const adaptateurGestionErreurVide = require('../../src/adaptateurs/adaptateurGestionErreurVide');
-const adaptateurHorlogeParDefaut = require('../../src/adaptateurs/adaptateurHorloge');
 const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoire');
 const MoteurRegles = require('../../src/moteurRegles');
 const MSS = require('../../src/mss');
@@ -54,7 +53,9 @@ const testeurMss = () => {
 
   const initialise = (done) => {
     serviceAnnuaire = {};
-    adaptateurHorloge = adaptateurHorlogeParDefaut;
+    adaptateurHorloge = {
+      maintenant: () => new Date(),
+    };
     adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
       genereAnnexes: async () => 'PDF Annexe',
