@@ -91,3 +91,21 @@ section.autorite {
 .conteneur-page-formulaire section {
   border-bottom: none;
 }
+
+.boutons-etape #suivant {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px 16px;
+  margin: 0;
+}
+
+.boutons-etape #suivant:after {
+  content: '';
+  background: url(/statique/assets/images/fleche_gauche_bleue.svg);
+  transform: rotate(180deg);
+  filter: brightness(0) invert(100%);
+  display: flex;
+  width: 24px;
+  height: 24px;
+}
