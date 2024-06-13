@@ -8,7 +8,7 @@ import {
 
 const messageErreurNomDejaUtilise = {
   affiche: () => {
-    $('#nom-deja-utilise').show();
+    $('#nom-deja-utilise').css('display', 'flex');
     const $champNomService = $('#nom-service');
     $champNomService
       .get(0)
@@ -132,11 +132,17 @@ const brancheComportementNavigationEtapes = () => {
       afficheEtape();
     }
   });
+  return {
+    afficheEtape1: () => {
+      etapeCourante = 1;
+      afficheEtape();
+    },
+  };
 };
 
 $(() => {
   afficheBanniereMiseAJourSiret();
-  brancheComportementNavigationEtapes();
+  const navigationEtapes = brancheComportementNavigationEtapes();
   initialiseComportementFormulaire(
     '#homologation',
     '.bouton#diagnostic',
@@ -144,6 +150,7 @@ $(() => {
     (e) => {
       if (estNomServiceDejaUtilise(e.response)) {
         messageErreurNomDejaUtilise.affiche();
+        navigationEtapes.afficheEtape1();
       }
     }
   );
