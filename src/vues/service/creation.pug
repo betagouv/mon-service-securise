@@ -23,4 +23,15 @@ block formulaire
   script(id = 'infos-siret-manquant', type = 'application/json').
     !{JSON.stringify({estEnCreation: true})}
 
+  dialog#modale-creation-service
+    .contenu-modale
+      span.icone
+        .barres
+          span.barre.barre-1
+          span.barre.barre-2
+          span.barre.barre-3
+        span.pulse
+        span.barre-chargement
+      p Nous préparons les mesures de sécurité adaptées à votre service
+
   +formulaireDescriptionService
