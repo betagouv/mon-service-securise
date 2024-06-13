@@ -26,9 +26,14 @@ const initialiseComportementFormulaire = (
 
     const redirige = ({ data: { idService } }) => {
       const estCreationDeService = !identifiantService;
-      window.location = estCreationDeService
-        ? `/service/${idService}/mesures`
-        : `/service/${idService}/descriptionService`;
+      if (estCreationDeService) {
+        $('#modale-creation-service')[0].showModal();
+        setTimeout(() => {
+          window.location = `/service/${idService}/mesures`;
+        }, 3000);
+      } else {
+        window.location = `/service/${idService}/descriptionService`;
+      }
     };
 
     try {
