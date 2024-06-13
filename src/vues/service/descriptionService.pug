@@ -8,13 +8,21 @@ block header-titre-page
     +texteTronque({texte: service.nomService() || ''})
 
 block titre
-  h1 Décrire
+  h1 Présentation du service
 
 block sous-titre
-  h2 Fournir les informations permettant d'évaluer les besoins de sécurité du service et de proposer des mesures de sécurité adaptées
+  h2
+    | Complétez les informations permettant d'évaluer les besoins de sécurité du service et de proposer&nbsp;
+    b des mesures de sécurité adaptées
+    | .
 
 block avancement-etape
   +avancementEtape(1, 2)
+
+block etapier
+  .conteneur-etapier
+    .etape.active(data-numero-etape="1")
+    .etape(data-numero-etape="2")
 
 block formulaire
   script(id = 'infos-siret-manquant', type = 'application/json').
