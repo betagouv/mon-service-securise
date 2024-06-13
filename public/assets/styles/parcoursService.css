@@ -69,7 +69,8 @@ main {
   margin: 12px 62px 16px 100px;
 }
 
-.conteneur-etapier a.etape {
+.conteneur-etapier a.etape,
+.conteneur-etapier .etape.active {
   opacity: 1;
 }
 
@@ -79,6 +80,10 @@ main {
   opacity: 0.5;
   text-decoration: none;
   flex: 1;
+}
+
+.conteneur-etapier .etape.active {
+  cursor: pointer;
 }
 
 nav.marges-fixes {

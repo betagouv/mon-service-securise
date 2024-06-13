@@ -50,11 +50,25 @@ const estNomServiceDejaUtilise = (reponseErreur) =>
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
 const brancheComportementNavigationEtapes = () => {
+  const donneesEtapes = {
+    1: {
+      titre: 'Présentation du service',
+      description:
+        "Complétez les informations permettant d'évaluer les besoins de sécurité du service et de proposer <b>des mesures de sécurité adaptées</b>.",
+    },
+    2: {
+      titre: 'Données et fonctionnalités',
+      description:
+        'Pour mieux comprendre votre service et ses enjeux de protection des données, veuillez répondre aux questions suivantes sur ses <b>fonctionnalités et les données collectées.</b>',
+    },
+  };
+
   const etapeMin = 1;
   const etapeMax = 2;
   const $boutonPrecedent = $('#etape-precedente');
   const $boutonSuivant = $('#etape-suivante');
   const $conteneurBoutonFinaliser = $('.conteneur-bouton-finaliser');
+  const $entete = $('.conteneur-entete');
   let etapeCourante = 1;
 
   brancheValidation($('#decrire-etape-1'));
@@ -67,11 +81,19 @@ const brancheComportementNavigationEtapes = () => {
     $('.etape-decrire').hide();
     $(`#decrire-etape-${etapeCourante}`).show();
 
-    const $entete = $('.marges-fixes');
+    const $hautDePage = $('.marges-fixes');
+    const { titre, description } = donneesEtapes[etapeCourante];
 
     $('.avancement-etape p', $entete).text(
       `Étape ${etapeCourante} sur ${etapeMax}`
     );
+    $('.titre.titre-page h1', $entete).text(titre);
+    $('.sous-titre h2', $entete).html(description);
+    $('.etape', $entete).removeClass('active');
+    for (let i = 1; i <= etapeCourante; i += 1) {
+      $(`.etape:nth-child(${i})`, $entete).addClass('active');
+    }
+
     if (etapeCourante === etapeMin) cacheBouton($boutonPrecedent);
     else afficheBouton($boutonPrecedent);
 
@@ -83,7 +105,7 @@ const brancheComportementNavigationEtapes = () => {
       cacheBouton($conteneurBoutonFinaliser);
     }
 
-    $entete[0].scrollIntoView({
+    $hautDePage[0].scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     });
@@ -99,6 +121,14 @@ const brancheComportementNavigationEtapes = () => {
     declencheValidation($formulaireEtape);
     if ($formulaireEtape[0].checkValidity()) {
       etapeCourante = Math.min(etapeCourante + 1, etapeMax);
+      afficheEtape();
+    }
+  });
+
+  $('.etape', $entete).on('click', (e) => {
+    const $etape = $(e.target);
+    if ($etape.hasClass('active')) {
+      etapeCourante = $etape.data('numero-etape');
       afficheEtape();
     }
   });
