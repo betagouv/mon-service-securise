@@ -123,6 +123,32 @@ class DescriptionService extends InformationsHomologation {
       );
     }
   }
+
+  estimeNiveauDeSecurite() {
+    const estDeNiveau3 =
+      this.fonctionnalites.includes('signatureElectronique') ||
+      this.donneesCaracterePersonnel.includes('sensibiliteParticuliere') ||
+      this.delaiAvantImpactCritique === 'moinsUneHeure' ||
+      this.risqueJuridiqueFinancierReputationnel;
+    if (estDeNiveau3) return 'niveau3';
+
+    const fonctionnalitesNiveau2 = [
+      'reseauSocial',
+      'visionconference',
+      'messagerie',
+      'edition',
+      'paiement',
+    ];
+    const donneesPersonnelNiveau2 = ['identite', 'situation', 'mineurs'];
+    const estDeNiveau2 =
+      this.fonctionnalites.some((f) => fonctionnalitesNiveau2.includes(f)) ||
+      this.donneesCaracterePersonnel.some((f) =>
+        donneesPersonnelNiveau2.includes(f)
+      );
+    if (estDeNiveau2) return 'niveau2';
+
+    return 'niveau1';
+  }
 }
 
 module.exports = DescriptionService;

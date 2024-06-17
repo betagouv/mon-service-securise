@@ -247,4 +247,60 @@ describe('La description du service', () => {
       InformationsHomologation.COMPLETES
     );
   });
+
+  describe("sur demande d'estimation du niveau de sécurité", () => {
+    [
+      ['fonctionnalites', ['signatureElectronique']],
+      ['delaiAvantImpactCritique', 'moinsUneHeure'],
+      ['donneesCaracterePersonnel', ['sensibiliteParticuliere']],
+      ['risqueJuridiqueFinancierReputationnel', true],
+    ].forEach(([cle, propriete]) => {
+      it(`retourne 'niveau3' si la propriété '${propriete}' est présente dans '${cle}'`, () => {
+        const descriptionDeNiveau3 = new DescriptionService({
+          nomService: 'Super Service',
+          [cle]: propriete,
+        });
+
+        const estimation = descriptionDeNiveau3.estimeNiveauDeSecurite();
+
+        expect(estimation).to.be('niveau3');
+      });
+    });
+
+    [
+      ['fonctionnalites', ['reseauSocial']],
+      ['fonctionnalites', ['visionconference']],
+      ['fonctionnalites', ['messagerie']],
+      ['fonctionnalites', ['edition']],
+      ['fonctionnalites', ['paiement']],
+      ['donneesCaracterePersonnel', ['identite']],
+      ['donneesCaracterePersonnel', ['situation']],
+      ['donneesCaracterePersonnel', ['mineurs']],
+    ].forEach(([cle, propriete]) => {
+      it(`retourne 'niveau2' si la propriété '${propriete}' est présente dans '${cle}'`, () => {
+        const descriptionDeNiveau2 = new DescriptionService({
+          nomService: 'Super Service',
+          [cle]: propriete,
+        });
+
+        const estimation = descriptionDeNiveau2.estimeNiveauDeSecurite();
+
+        expect(estimation).to.be('niveau2');
+      });
+    });
+
+    it('retourne "niveau1" par défaut', () => {
+      const descriptionDeNiveau1 = new DescriptionService({
+        nomService: 'Super Service',
+        fonctionnalites: ['uneAutreFonctionnalite'],
+        donneesCaracterePersonnel: ['uneAutreDonnees'],
+        risqueJuridiqueFinancierReputationnel: false,
+        delaiAvantImpactCritique: 'autreDelai',
+      });
+
+      const estimation = descriptionDeNiveau1.estimeNiveauDeSecurite();
+
+      expect(estimation).to.be('niveau1');
+    });
+  });
 });
