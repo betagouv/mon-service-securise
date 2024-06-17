@@ -38,6 +38,15 @@ const creeDonnees = async (depotDonnees) => {
     prenom: process.env.PRENOM_UTILISATEUR_DEMO,
     nom: process.env.NOM_UTILISATEUR_DEMO,
     email: process.env.EMAIL_UTILISATEUR_DEMO,
+    entite: {
+      siret: process.env.SIRET_ENTITE_UTILISATEUR_DEMO,
+      nom: process.env.NOM_ENTITE_UTILISATEUR_DEMO,
+      departement: process.env.DEPARTEMENT_ENTITE_UTILISATEUR_DEMO,
+    },
+    estimationNombreServices: {
+      borneBasse: '1',
+      borneHaute: '10',
+    },
     cguAcceptees: true,
   });
 
