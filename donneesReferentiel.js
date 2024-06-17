@@ -1096,6 +1096,25 @@ module.exports = {
 
   etapeNecessairePourDossierDecision: 'dateTelechargement',
 
+  besoinsDeSecurite: {
+    niveau2: {
+      fonctionnalites: [
+        'reseauSocial',
+        'visionconference',
+        'messagerie',
+        'edition',
+        'paiement',
+      ],
+      donneesCaracterePersonnel: ['identite', 'situation', 'mineurs'],
+    },
+    niveau3: {
+      fonctionnalites: ['signatureElectronique'],
+      delaisAvantImpactCritique: ['moinsUneHeure'],
+      donneesCaracterePersonnel: ['sensibiliteParticuliere'],
+      risqueJuridiqueFinancierReputationnel: true,
+    },
+  },
+
   reglesPersonnalisation: {
     clefsDescriptionServiceAConsiderer: [
       'typeService',
