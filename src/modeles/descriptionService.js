@@ -20,6 +20,8 @@ class DescriptionService extends InformationsHomologation {
         'risqueJuridiqueFinancierReputationnel',
         'statutDeploiement',
         'nombreOrganisationsUtilisatrices',
+        'niveauSecuriteConseille',
+        'niveauSecuriteChoisi',
       ],
       proprietesAtomiquesFacultatives: ['presentation'],
       proprietesListes: [
