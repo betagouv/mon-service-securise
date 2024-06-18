@@ -126,12 +126,12 @@ class DescriptionService extends InformationsHomologation {
     }
   }
 
-  estimeNiveauDeSecurite() {
+  static estimeNiveauDeSecurite(donnees) {
     const estDeNiveau3 =
-      this.fonctionnalites.includes('signatureElectronique') ||
-      this.donneesCaracterePersonnel.includes('sensibiliteParticuliere') ||
-      this.delaiAvantImpactCritique === 'moinsUneHeure' ||
-      this.risqueJuridiqueFinancierReputationnel;
+      donnees.fonctionnalites.includes('signatureElectronique') ||
+      donnees.donneesCaracterePersonnel.includes('sensibiliteParticuliere') ||
+      donnees.delaiAvantImpactCritique === 'moinsUneHeure' ||
+      donnees.risqueJuridiqueFinancierReputationnel;
     if (estDeNiveau3) return 'niveau3';
 
     const fonctionnalitesNiveau2 = [
@@ -143,8 +143,8 @@ class DescriptionService extends InformationsHomologation {
     ];
     const donneesPersonnelNiveau2 = ['identite', 'situation', 'mineurs'];
     const estDeNiveau2 =
-      this.fonctionnalites.some((f) => fonctionnalitesNiveau2.includes(f)) ||
-      this.donneesCaracterePersonnel.some((f) =>
+      donnees.fonctionnalites.some((f) => fonctionnalitesNiveau2.includes(f)) ||
+      donnees.donneesCaracterePersonnel.some((f) =>
         donneesPersonnelNiveau2.includes(f)
       );
     if (estDeNiveau2) return 'niveau2';
