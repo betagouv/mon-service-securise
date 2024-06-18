@@ -98,6 +98,7 @@ class DescriptionService extends InformationsHomologation {
       'statutDeploiement',
       'typeService',
       'nombreOrganisationsUtilisatrices',
+      'niveauSecurite',
     ];
   }
 
