@@ -35,6 +35,7 @@ describe('La description du service', () => {
         risqueJuridiqueFinancierReputationnel: true,
         statutDeploiement: 'unStatut',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+        niveauSecurite: 'niveau1',
       },
       referentielAvecStatutValide('unStatut')
     );
@@ -64,6 +65,7 @@ describe('La description du service', () => {
     expect(descriptionService.nombreDonneesSensiblesSpecifiques()).to.equal(1);
     expect(descriptionService.nombreFonctionnalitesSpecifiques()).to.equal(1);
     expect(descriptionService.nombrePointsAcces()).to.equal(1);
+    expect(descriptionService.niveauSecurite).to.equal('niveau1');
   });
 
   elle('connaît ses propriétés obligatoires', () => {
@@ -239,6 +241,7 @@ describe('La description du service', () => {
         statutDeploiement: 'accessible',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         organisationResponsable: { siret: '12345' },
+        niveauSecurite: 'niveau1',
       },
       referentielAvecStatutValide('accessible')
     );

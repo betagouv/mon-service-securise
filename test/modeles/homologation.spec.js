@@ -548,6 +548,7 @@ describe('Une homologation', () => {
             departement: '75',
           },
           nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+          niveauSecurite: 'niveau1',
         },
         dossiers: [
           {
