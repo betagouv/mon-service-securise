@@ -377,7 +377,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
       verifieNomFichierServi(
         'http://localhost:1234/service/456/mesures/export.csv',
-        "Service d'apostrophe Liste mesures sans données additionnelles 20240123.csv",
+        'Service dapostrophe Liste mesures sans données additionnelles 20240123.csv',
         done
       );
     });
