@@ -78,6 +78,7 @@ describe('La description du service', () => {
       'statutDeploiement',
       'typeService',
       'nombreOrganisationsUtilisatrices',
+      'niveauSecurite',
     ]);
   });
 
