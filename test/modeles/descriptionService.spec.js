@@ -265,7 +265,8 @@ describe('La description du service', () => {
           [cle]: propriete,
         });
 
-        const estimation = descriptionDeNiveau3.estimeNiveauDeSecurite();
+        const estimation =
+          DescriptionService.estimeNiveauDeSecurite(descriptionDeNiveau3);
 
         expect(estimation).to.be('niveau3');
       });
@@ -287,7 +288,8 @@ describe('La description du service', () => {
           [cle]: propriete,
         });
 
-        const estimation = descriptionDeNiveau2.estimeNiveauDeSecurite();
+        const estimation =
+          DescriptionService.estimeNiveauDeSecurite(descriptionDeNiveau2);
 
         expect(estimation).to.be('niveau2');
       });
@@ -302,7 +304,8 @@ describe('La description du service', () => {
         delaiAvantImpactCritique: 'autreDelai',
       });
 
-      const estimation = descriptionDeNiveau1.estimeNiveauDeSecurite();
+      const estimation =
+        DescriptionService.estimeNiveauDeSecurite(descriptionDeNiveau1);
 
       expect(estimation).to.be('niveau1');
     });

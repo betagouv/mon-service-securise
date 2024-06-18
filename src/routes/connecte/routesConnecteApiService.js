@@ -158,7 +158,7 @@ const routesConnecteApiService = ({
         proprietes: DonneesSensiblesSpecifiques.proprietesItem(),
       },
     ]),
-    async (requete, reponse) => {
+    async (requete, reponse, suite) => {
       try {
         const descriptionService = new DescriptionService(
           requete.body,
@@ -166,7 +166,8 @@ const routesConnecteApiService = ({
         );
 
         reponse.json({
-          niveauDeSecuriteMinimal: descriptionService.estimeNiveauDeSecurite(),
+          niveauDeSecuriteMinimal:
+            DescriptionService.estimeNiveauDeSecurite(descriptionService),
         });
       } catch (e) {
         if (e instanceof ErreurModele)
