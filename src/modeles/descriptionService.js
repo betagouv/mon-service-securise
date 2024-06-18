@@ -128,8 +128,8 @@ class DescriptionService extends InformationsHomologation {
 
   static estimeNiveauDeSecurite(donnees) {
     const estDeNiveau3 =
-      donnees.fonctionnalites.includes('signatureElectronique') ||
-      donnees.donneesCaracterePersonnel.includes('sensibiliteParticuliere') ||
+      donnees.fonctionnalites?.includes('signatureElectronique') ||
+      donnees.donneesCaracterePersonnel?.includes('sensibiliteParticuliere') ||
       donnees.delaiAvantImpactCritique === 'moinsUneHeure' ||
       donnees.risqueJuridiqueFinancierReputationnel;
     if (estDeNiveau3) return 'niveau3';
@@ -143,8 +143,10 @@ class DescriptionService extends InformationsHomologation {
     ];
     const donneesPersonnelNiveau2 = ['identite', 'situation', 'mineurs'];
     const estDeNiveau2 =
-      donnees.fonctionnalites.some((f) => fonctionnalitesNiveau2.includes(f)) ||
-      donnees.donneesCaracterePersonnel.some((f) =>
+      donnees.fonctionnalites?.some((f) =>
+        fonctionnalitesNiveau2.includes(f)
+      ) ||
+      donnees.donneesCaracterePersonnel?.some((f) =>
         donneesPersonnelNiveau2.includes(f)
       );
     if (estDeNiveau2) return 'niveau2';
