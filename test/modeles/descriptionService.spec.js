@@ -309,5 +309,24 @@ describe('La description du service', () => {
 
       expect(estimation).to.be('niveau1');
     });
+
+    ['fonctionnalites', 'donneesCaracterePersonnel'].forEach((cle) => {
+      it(`reste robuste lorsque la description de service n’a pas de ${cle}`, () => {
+        const descriptionDeNiveauIncomplete = new DescriptionService({
+          nomService: 'Super Service',
+          fonctionnalites: ['uneAutreFonctionnalite'],
+          donneesCaracterePersonnel: ['uneAutreDonnees'],
+          risqueJuridiqueFinancierReputationnel: false,
+          delaiAvantImpactCritique: 'autreDelai',
+        });
+        descriptionDeNiveauIncomplete[cle] = null;
+
+        const estimation = DescriptionService.estimeNiveauDeSecurite(
+          descriptionDeNiveauIncomplete
+        );
+
+        expect(estimation).to.be('niveau1');
+      });
+    });
   });
 });
