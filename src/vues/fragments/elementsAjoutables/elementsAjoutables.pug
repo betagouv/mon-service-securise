@@ -15,10 +15,10 @@ mixin zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule, ident
 
 mixin zoneSaisie(nom, donneesElement, index, lectureSeule, identifiantChampTitre)
   .item-ajoute
-    if(!lectureSeule)
-      button.icone-suppression(title="Suppression de l'élément")
     div(id = 'element-' + nom + '-' + index)
       +zoneSaisieElementAjoutable(donneesElement, nom, index, lectureSeule, identifiantChampTitre)
+    if(!lectureSeule)
+      button.icone-suppression(title="Suppression de l'élément" type="button")
 
 mixin elementsAjoutables({ identifiantConteneur, nom, donneesElements = [], texteLienAjouter = 'Ajouter', zoneSaisieVideVisible = false, structureZoneSaisieVide = {}, lectureSeule = false, identifiantChampTitre })
   div(id = identifiantConteneur class = 'elements-ajoutables')
