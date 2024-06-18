@@ -2112,4 +2112,76 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(serviceMisAJour.id).to.be('123');
     });
   });
+
+  describe('quand requête POST sur `/api/service/estimationNiveauSecurite`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/estimationNiveauSecurite',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        [
+          'nomService',
+          'organisationsResponsables.*',
+          'nombreOrganisationsUtilisatrices.*',
+        ],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/estimationNiveauSecurite',
+        },
+        done
+      );
+    });
+
+    it('aseptise les listes de paramètres ainsi que leur contenu', async () => {
+      await axios.post(
+        'http://localhost:1234/api/service/estimationNiveauSecurite'
+      );
+
+      testeur
+        .middleware()
+        .verifieAseptisationListe('pointsAcces', ['description']);
+      testeur
+        .middleware()
+        .verifieAseptisationListe('fonctionnalitesSpecifiques', [
+          'description',
+        ]);
+      testeur
+        .middleware()
+        .verifieAseptisationListe('donneesSensiblesSpecifiques', [
+          'description',
+        ]);
+    });
+
+    it("retourne l'estimation du niveau de sécurité pour la description donnée", async () => {
+      const donneesDescriptionNiveau1 = { nomService: 'Mon service' };
+      const resultat = await axios.post(
+        'http://localhost:1234/api/service/estimationNiveauSecurite',
+        donneesDescriptionNiveau1
+      );
+
+      expect(resultat.status).to.be(200);
+      expect(resultat.data.niveauDeSecuriteMinimal).to.be('niveau1');
+    });
+
+    it('retourne une erreur HTTP 400 si les données de description de service sont invalides', (done) => {
+      const donneesInvalides = { statutDeploiement: 'statutInvalide' };
+      testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        'La description du service est invalide',
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/estimationNiveauSecurite',
+          data: donneesInvalides,
+        },
+        done
+      );
+    });
+  });
 });

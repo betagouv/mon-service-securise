@@ -139,6 +139,43 @@ const routesConnecteApiService = ({
     }
   );
 
+  routes.post(
+    '/estimationNiveauSecurite',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise(
+      'nomService',
+      'organisationsResponsables.*',
+      'nombreOrganisationsUtilisatrices.*'
+    ),
+    middleware.aseptiseListes([
+      { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
+      {
+        nom: 'fonctionnalitesSpecifiques',
+        proprietes: FonctionnalitesSpecifiques.proprietesItem(),
+      },
+      {
+        nom: 'donneesSensiblesSpecifiques',
+        proprietes: DonneesSensiblesSpecifiques.proprietesItem(),
+      },
+    ]),
+    async (requete, reponse) => {
+      try {
+        const descriptionService = new DescriptionService(
+          requete.body,
+          referentiel
+        );
+
+        reponse.json({
+          niveauDeSecuriteMinimal: descriptionService.estimeNiveauDeSecurite(),
+        });
+      } catch (e) {
+        if (e instanceof ErreurModele)
+          reponse.status(400).send('La description du service est invalide');
+        else suite(e);
+      }
+    }
+  );
+
   routes.get(
     '/:id',
     middleware.aseptise('id'),
