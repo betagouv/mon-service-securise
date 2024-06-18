@@ -153,6 +153,14 @@ class DescriptionService extends InformationsHomologation {
 
     return 'niveau1';
   }
+
+  static niveauSecuriteChoisiSuffisant(donnees) {
+    const niveaux = ['niveau1', 'niveau2', 'niveau3'];
+    const niveauMinimal = DescriptionService.estimeNiveauDeSecurite(donnees);
+    return (
+      niveaux.indexOf(donnees.niveauSecurite) >= niveaux.indexOf(niveauMinimal)
+    );
+  }
 }
 
 module.exports = DescriptionService;
