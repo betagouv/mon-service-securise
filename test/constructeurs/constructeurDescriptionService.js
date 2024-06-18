@@ -47,6 +47,11 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  deNiveau3() {
+    this.donnees.delaiAvantImpactCritique = 'moinsUneHeure';
+    return this;
+  }
+
   construis() {
     return new DescriptionService(this.donnees, this.referentiel);
   }

@@ -2,6 +2,7 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
+  ErreurDonneesNiveauSecuriteInsuffisant,
 } = require('../erreurs');
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
@@ -214,6 +215,10 @@ const creeDepot = (config = {}) => {
       );
     }
     Entite.valideDonnees(donnees.organisationResponsable);
+
+    if (!DescriptionService.niveauSecuriteChoisiSuffisant(donnees)) {
+      throw new ErreurDonneesNiveauSecuriteInsuffisant();
+    }
 
     const serviceExistant = await serviceExiste(
       idUtilisateur,

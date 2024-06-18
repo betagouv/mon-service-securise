@@ -6,6 +6,7 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
+  ErreurDonneesNiveauSecuriteInsuffisant,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
@@ -803,6 +804,24 @@ describe('Le dépôt de données des homologations', () => {
       expect(busEvenements.aRecuUnEvenement(EvenementNouveauServiceCree)).to.be(
         true
       );
+    });
+
+    it('lève une exception si le niveau de sécurité choisi est inférieur au niveau minimal', async () => {
+      const donneesDescriptionServiceNiveau3 =
+        uneDescriptionValide(referentiel).deNiveau3().donnees;
+      try {
+        await depot.nouveauService('123', {
+          descriptionService: {
+            ...donneesDescriptionServiceNiveau3,
+            niveauSecurite: 'niveau1',
+          },
+        });
+        expect().fail(
+          "La création de l'homologation aurait dû lever une exception"
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurDonneesNiveauSecuriteInsuffisant);
+      }
     });
 
     it('lève une exception si une propriété obligatoire de la description du service est manquante', (done) => {
