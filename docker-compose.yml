@@ -19,7 +19,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - /var/lib/postgresql/data
+      - dbvol:/var/lib/postgresql/data
 
   test:
     <<: *configuration-base
@@ -64,3 +64,5 @@ networks:
 
 volumes:
   node_modules:
+  dbvol:
+    driver: local
