@@ -52,6 +52,11 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  deNiveau2() {
+    this.donnees.fonctionnalites = ['reseauSocial'];
+    return this;
+  }
+
   construis() {
     return new DescriptionService(this.donnees, this.referentiel);
   }
