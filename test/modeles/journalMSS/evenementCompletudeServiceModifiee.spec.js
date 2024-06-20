@@ -57,6 +57,7 @@ describe('Un événement de complétude modifiée', () => {
         organisationResponsable: {
           siret: '12345',
         },
+        niveauSecurite: 'niveau3',
       })
       .construis();
     const detailsOrganisationResponsable = {
@@ -105,6 +106,7 @@ describe('Un événement de complétude modifiée', () => {
         localisationDonnees: 'uneLocalisation',
         delaiAvantImpactCritique: 'uneHeure',
         risqueJuridiqueFinancierReputationnel: true,
+        niveauSecurite: 'niveau3',
         organisationResponsable: {
           estServicePublic: false,
           estFiness: false,

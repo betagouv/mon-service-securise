@@ -35,6 +35,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       localisationDonnees,
       delaiAvantImpactCritique,
       risqueJuridiqueFinancierReputationnel,
+      niveauSecurite,
     } = service.descriptionService;
     const { borneBasse, borneHaute } = nombreOrganisationsUtilisatrices;
 
@@ -62,6 +63,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
         delaiAvantImpactCritique,
         risqueJuridiqueFinancierReputationnel,
         organisationResponsable,
+        niveauSecurite,
       },
       date
     );
