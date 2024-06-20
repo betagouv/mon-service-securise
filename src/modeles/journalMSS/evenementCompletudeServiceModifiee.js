@@ -1,5 +1,6 @@
 const Evenement = require('./evenement');
 const { ErreurServiceManquant } = require('./erreurs');
+const { estimeNiveauDeSecurite } = require('../descriptionService');
 
 class EvenementCompletudeServiceModifiee extends Evenement {
   constructor(donnees, options = {}) {
@@ -20,6 +21,9 @@ class EvenementCompletudeServiceModifiee extends Evenement {
     valide();
 
     const { service, organisationResponsable } = donnees;
+    const niveauSecuriteMinimal = estimeNiveauDeSecurite(
+      service.descriptionService
+    );
     const { indiceCyber, ...autreDonneesCompletude } =
       service.completudeMesures();
     const {
@@ -64,6 +68,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
         risqueJuridiqueFinancierReputationnel,
         organisationResponsable,
         niveauSecurite,
+        niveauSecuriteMinimal,
       },
       date
     );

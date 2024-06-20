@@ -6,6 +6,7 @@ const {
 const { unService } = require('../../constructeurs/constructeurService');
 const Mesures = require('../../../src/modeles/mesures');
 const Referentiel = require('../../../src/referentiel');
+const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
 
 describe('Un événement de complétude modifiée', () => {
   const unEvenement = () =>
@@ -21,6 +22,16 @@ describe('Un événement de complétude modifiée', () => {
       .toJSON();
 
     expect(evenement.donnees.idService).to.be('ABC');
+  });
+
+  it('complète avec le niveau de sécurité minimal', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    const service = unService()
+      .avecDescription(uneDescriptionValide(referentiel).deNiveau2().donnees)
+      .construis();
+    const evenement = unEvenement().avecService(service).construis().toJSON();
+
+    expect(evenement.donnees.niveauSecuriteMinimal).to.eql('niveau2');
   });
 
   it("sait se convertir en JSON sans dévoiler le SIRET de l'organisation responsable", () => {
@@ -107,6 +118,7 @@ describe('Un événement de complétude modifiée', () => {
         delaiAvantImpactCritique: 'uneHeure',
         risqueJuridiqueFinancierReputationnel: true,
         niveauSecurite: 'niveau3',
+        niveauSecuriteMinimal: 'niveau3',
         organisationResponsable: {
           estServicePublic: false,
           estFiness: false,
