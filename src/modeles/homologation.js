@@ -183,6 +183,10 @@ class Homologation {
     return this.mesures.mesuresSpecifiques;
   }
 
+  metAJourMesure(donneesMesure) {
+    this.mesures.mesuresGenerales.metAJourMesure(donneesMesure);
+  }
+
   nombreDossiers() {
     return this.dossiers.nombre();
   }

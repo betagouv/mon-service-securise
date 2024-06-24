@@ -501,6 +501,114 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        mesures: { audit: {} },
+      });
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unService(testeur.referentiel())
+          .avecId('456')
+          .construis(),
+      });
+      testeur.depotDonnees().metsAJourService = () => Promise.resolve();
+    });
+
+    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures/audit',
+        },
+        done
+      );
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures/audit',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['statut', 'modalites'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures/audit',
+        },
+        done
+      );
+    });
+
+    it("délègue au service l'ajout de la mesure", async () => {
+      let donneesRecues;
+      const service = {
+        metAJourMesure: (donnees) => {
+          donneesRecues = donnees;
+        },
+      };
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: service,
+      });
+      const mesureGenerale = {
+        statut: 'fait',
+        modalites: "Des modalités d'application",
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/456/mesures/audit',
+        mesureGenerale
+      );
+
+      expect(donneesRecues).to.eql({
+        statut: 'fait',
+        modalites: "Des modalités d'application",
+        id: 'audit',
+      });
+    });
+
+    it('délègue au dépôt de données la sauvegarde', async () => {
+      let donneesRecues;
+      testeur.depotDonnees().metsAJourService = (donnees) => {
+        donneesRecues = donnees;
+      };
+
+      const mesureGenerale = {
+        statut: 'fait',
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/456/mesures/audit',
+        mesureGenerale
+      );
+
+      expect(donneesRecues.id).to.equal('456');
+    });
+
+    it('renvoie une erreur 400 si la mesure est invalide', async () => {
+      const mesureGenerale = {
+        statut: 'invalide',
+      };
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures/audit',
+          mesureGenerale
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La mesure est invalide.');
+      }
+    });
+  });
+
   describe('quand requête POST sur `/api/service/:id/rolesResponsabilites`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteRolesResponsabilitesAService = () =>
