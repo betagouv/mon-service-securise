@@ -5,10 +5,21 @@ class MesuresGenerales extends ElementsConstructibles {
   constructor(donnees, referentiel) {
     const { mesuresGenerales } = donnees;
     super(MesureGenerale, { items: mesuresGenerales }, referentiel);
+    this.referentiel = referentiel;
   }
 
   nonSaisies() {
     return this.nombre() === 0;
+  }
+
+  metAJourMesure(donneesMesure) {
+    const index = this.items.findIndex((m) => m.id === donneesMesure.id);
+    const mesure = new MesureGenerale(donneesMesure, this.referentiel);
+    if (index !== -1) {
+      this.items[index] = mesure;
+    } else {
+      this.items.push(mesure);
+    }
   }
 
   parStatutEtCategorie() {

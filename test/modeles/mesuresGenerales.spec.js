@@ -2,6 +2,8 @@ const expect = require('expect.js');
 
 const MesuresGenerales = require('../../src/modeles/mesuresGenerales');
 const Referentiel = require('../../src/referentiel');
+const { ErreurMesureInconnue } = require('../../src/erreurs');
+const { creeReferentiel } = require('../../src/referentiel');
 
 const { A_SAISIR, COMPLETES, A_COMPLETER } = MesuresGenerales;
 
@@ -17,6 +19,66 @@ describe('La liste des mesures générales', () => {
         mesure: () => ({}),
       })
   );
+
+  describe("sur demande de mise à jour d'une mesure", () => {
+    beforeEach(() => {
+      referentiel = creeReferentiel({
+        mesures: { m1: {} },
+      });
+    });
+
+    it("insère la mesure si elle n'existe pas", () => {
+      const donnees = { mesuresGenerales: [] };
+      const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
+
+      mesuresGenerales.metAJourMesure({
+        id: 'm1',
+        statut: 'fait',
+      });
+
+      expect(mesuresGenerales.toutes().length).to.equal(1);
+      expect(mesuresGenerales.toutes()[0].id).to.equal('m1');
+      expect(mesuresGenerales.toutes()[0].statut).to.equal('fait');
+    });
+
+    it("jette une erreur si la mesure n'est pas valide", () => {
+      const donnees = { mesuresGenerales: [] };
+      const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
+
+      try {
+        mesuresGenerales.metAJourMesure({
+          id: 'invalide',
+          statut: 'fait',
+        });
+        expect().fail('La méthode aurait du jeter une erreur');
+      } catch (e) {
+        expect(e).to.be.an(ErreurMesureInconnue);
+      }
+
+      expect(mesuresGenerales.toutes().length).to.equal(0);
+    });
+
+    it('met à jour la mesure si elle existe déjà', () => {
+      const donnees = {
+        mesuresGenerales: [
+          {
+            id: 'm1',
+            statut: 'fait',
+          },
+        ],
+      };
+      const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
+
+      mesuresGenerales.metAJourMesure({
+        id: 'm1',
+        statut: 'aLancer',
+      });
+
+      expect(mesuresGenerales.toutes().length).to.equal(1);
+      expect(mesuresGenerales.toutes()[0].id).to.equal('m1');
+      expect(mesuresGenerales.toutes()[0].statut).to.equal('aLancer');
+    });
+  });
 
   it("est à saisir quand rien n'est saisi", () => {
     const donnees = { mesuresGenerales: [] };
