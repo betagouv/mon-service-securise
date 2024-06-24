@@ -2,6 +2,8 @@ const expect = require('expect.js');
 
 const MesuresGenerales = require('../../src/modeles/mesuresGenerales');
 const Referentiel = require('../../src/referentiel');
+const { creeReferentiel } = require('../../src/referentiel');
+const MesureGenerale = require('../../src/modeles/mesureGenerale');
 
 const { A_SAISIR, COMPLETES, A_COMPLETER } = MesuresGenerales;
 
@@ -17,6 +19,42 @@ describe('La liste des mesures générales', () => {
         mesure: () => ({}),
       })
   );
+
+  describe("sur demande de mise à jour d'une mesure", () => {
+    beforeEach(() => {
+      referentiel = creeReferentiel({
+        mesures: { m1: {} },
+      });
+    });
+
+    it("insère la mesure si elle n'existe pas", () => {
+      const donnees = { mesuresGenerales: [] };
+      const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
+
+      mesuresGenerales.metsAJourMesure(
+        new MesureGenerale({ id: 'm1', statut: 'fait' }, referentiel)
+      );
+
+      expect(mesuresGenerales.toutes().length).to.equal(1);
+      expect(mesuresGenerales.toutes()[0].id).to.equal('m1');
+      expect(mesuresGenerales.toutes()[0].statut).to.equal('fait');
+    });
+
+    it('met à jour la mesure si elle existe déjà', () => {
+      const donnees = {
+        mesuresGenerales: [{ id: 'm1', statut: 'fait' }],
+      };
+      const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
+
+      mesuresGenerales.metsAJourMesure(
+        new MesureGenerale({ id: 'm1', statut: 'aLancer' }, referentiel)
+      );
+
+      expect(mesuresGenerales.toutes().length).to.equal(1);
+      expect(mesuresGenerales.toutes()[0].id).to.equal('m1');
+      expect(mesuresGenerales.toutes()[0].statut).to.equal('aLancer');
+    });
+  });
 
   it("est à saisir quand rien n'est saisi", () => {
     const donnees = { mesuresGenerales: [] };
