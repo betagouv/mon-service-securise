@@ -1103,7 +1103,7 @@ module.exports = {
       'provenanceService',
       'donneesCaracterePersonnel',
       'delaiAvantImpactCritique',
-      'risqueJuridiqueFinancierReputationnel',
+      'niveauSecurite',
     ],
     profils: {
       applicationMobile: {
@@ -1155,16 +1155,7 @@ module.exports = {
         mesuresARendreIndispensables: ['testIntrusion'],
       },
       mssPlus: {
-        regles: [
-          { presence: ['reseauSocial'] },
-          { presence: ['visionconference'] },
-          { presence: ['messagerie'] },
-          { presence: ['edition'] },
-          { presence: ['paiement'] },
-          { presence: ['identite'] },
-          { presence: ['situation'] },
-          { presence: ['mineurs'] },
-        ],
+        regles: [{ presence: ['niveau2'] }],
         mesuresAAjouter: [
           'analyseRisques',
           'audit',
@@ -1182,12 +1173,7 @@ module.exports = {
         ],
       },
       mssPlusPlus: {
-        regles: [
-          { presence: ['signatureElectronique'] },
-          { presence: ['moinsUneHeure'] },
-          { presence: ['sensibiliteParticuliere'] },
-          { presence: ['risqueJuridiqueFinancierReputationnel'] },
-        ],
+        regles: [{ presence: ['niveau3'] }],
         mesuresAAjouter: [
           'secNumCloud',
           'analyseRisques',
