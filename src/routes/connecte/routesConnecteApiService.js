@@ -7,6 +7,8 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
   ErreurDossierCourantInexistant,
+  ErreurMesureInconnue,
+  ErreurStatutMesureInvalide,
   ErreurCategorieInconnue,
   ErreurStatutMesureInvalide,
   ErreurMesureInconnue,
@@ -207,6 +209,33 @@ const routesConnecteApiService = ({
       const { service } = requete;
 
       reponse.json(objetGetMesures.donnees(service));
+    }
+  );
+
+  routes.put(
+    '/:id/mesures/:idMesure',
+    middleware.verificationAcceptationCGU,
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
+    middleware.aseptise('statut', 'modalites'),
+    async (requete, reponse, suite) => {
+      const { service, body, params } = requete;
+      try {
+        service.metAJourMesure({
+          ...body,
+          id: params.idMesure,
+        });
+        await depotDonnees.metsAJourService(service);
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (
+          e instanceof ErreurMesureInconnue ||
+          e instanceof ErreurStatutMesureInvalide
+        ) {
+          reponse.status(400).send('La mesure est invalide.');
+          return;
+        }
+        suite(e);
+      }
     }
   );
 
