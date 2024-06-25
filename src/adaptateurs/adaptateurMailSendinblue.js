@@ -16,25 +16,50 @@ const urlBase = process.env.SENDINBLUE_EMAIL_API_URL_BASE;
 const idListeInfolettre = Number(
   process.env.SENDINBLUE_ID_LISTE_POUR_INFOLETTRE
 );
-const basculeInfolettre = (destinataire, etat) =>
-  axios
-    .put(
-      `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
-      { emailBlacklisted: etat },
-      enteteJSON
+
+const desinscrisInfolettre = async (destinataire) => {
+  // https://developers.brevo.com/reference/removecontactfromlist
+  const url = new URL(
+    `${urlBase}/contacts/lists/${idListeInfolettre}/contacts/remove`
+  );
+
+  try {
+    await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
+  } catch (e) {
+    if (
+      e.response.data.message ===
+      'Contact already removed from list and/or does not exist'
     )
-    .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e, {
-        'Erreur renvoyée par API Brevo': e.response.data,
-      });
-      return Promise.reject(e);
+      return;
+
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Brevo': e.response.data,
     });
+    throw e;
+  }
+};
 
-const desinscrisInfolettre = (destinataire) =>
-  basculeInfolettre(destinataire, true);
+const inscrisInfolettre = async (destinataire) => {
+  // https://developers.brevo.com/reference/addcontacttolist-1
+  const url = new URL(
+    `${urlBase}/contacts/lists/${idListeInfolettre}/contacts/add`
+  );
 
-const inscrisInfolettre = (destinataire) =>
-  basculeInfolettre(destinataire, false);
+  try {
+    await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
+  } catch (e) {
+    if (
+      e.response.data.message ===
+      'Contact already in list and/or does not exist'
+    )
+      return;
+
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Brevo': e.response.data,
+    });
+    throw e;
+  }
+};
 
 const numeroTelephoneAvecIndicatif = (numero) =>
   numero ? `+33${numero.substring(1)}` : '';
@@ -52,13 +77,13 @@ const creeContact = (
       `${urlBase}/contacts`,
       {
         email: destinataire,
-        emailBlacklisted: bloqueNewsletter,
+        emailBlacklisted: bloqueMarketing,
         attributes: {
           PRENOM: decode(prenom),
           NOM: decode(nom),
           sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
         },
-        ...(!bloqueMarketing && { listIds: [idListeInfolettre] }),
+        ...(!bloqueNewsletter && { listIds: [idListeInfolettre] }),
       },
       enteteJSON
     )
@@ -95,49 +120,25 @@ const metAJourContact = (destinataire, prenom, nom, telephone) =>
     sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
   });
 
-const inscrisEmailsTransactionnels = async (destinataire) => {
-  // https://developers.brevo.com/reference/addcontacttolist-1
-  const url = new URL(
-    `${urlBase}/contacts/lists/${idListeInfolettre}/contacts/add`
-  );
-
-  try {
-    await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
-  } catch (e) {
-    if (
-      e.response.data.message ===
-      'Contact already in list and/or does not exist'
+const basculeEmailsTransactionnels = (destinataire, etat) =>
+  axios
+    .put(
+      `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
+      { emailBlacklisted: etat },
+      enteteJSON
     )
-      return;
-
-    fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API Brevo': e.response.data,
+    .catch((e) => {
+      fabriqueAdaptateurGestionErreur().logueErreur(e, {
+        'Erreur renvoyée par API Brevo': e.response.data,
+      });
+      return Promise.reject(e);
     });
-    throw e;
-  }
-};
 
-const desinscrisEmailsTransactionnels = async (destinataire) => {
-  // https://developers.brevo.com/reference/removecontactfromlist
-  const url = new URL(
-    `${urlBase}/contacts/lists/${idListeInfolettre}/contacts/remove`
-  );
+const inscrisEmailsTransactionnels = async (destinataire) =>
+  basculeEmailsTransactionnels(destinataire, false);
 
-  try {
-    await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
-  } catch (e) {
-    if (
-      e.response.data.message ===
-      'Contact already removed from list and/or does not exist'
-    )
-      return;
-
-    fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API Brevo': e.response.data,
-    });
-    throw e;
-  }
-};
+const desinscrisEmailsTransactionnels = async (destinataire) =>
+  basculeEmailsTransactionnels(destinataire, true);
 
 const envoieEmail = (destinataire, idTemplate, params) =>
   axios
