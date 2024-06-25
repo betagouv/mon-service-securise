@@ -429,6 +429,22 @@ class ConsoleAdministration {
     // eslint-disable-next-line no-console
     console.log('DONE');
   }
+
+  async basculeBlocklistBrevo() {
+    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
+    const utilisateursTransactionnels = tousUtilisateurs.filter(
+      (u) => u.transactionnelAccepte
+    );
+    const afficheErreur = (utilisateur) => `Erreur pour ${utilisateur.email}`;
+    const rattrapeUtilisateur = async (utilisateur) =>
+      adaptateurMail.inscrisEmailsTransactionnels(utilisateur.email);
+
+    return ConsoleAdministration.rattrapage(
+      utilisateursTransactionnels,
+      afficheErreur,
+      rattrapeUtilisateur
+    );
+  }
 }
 
 module.exports = ConsoleAdministration;
