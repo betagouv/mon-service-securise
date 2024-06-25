@@ -13,8 +13,8 @@ const enteteJSON = {
   },
 };
 const urlBase = process.env.SENDINBLUE_EMAIL_API_URL_BASE;
-const idListeEmailsMarketing = Number(
-  process.env.SENDINBLUE_ID_LISTE_POUR_MAILS_TRANSACTIONNELS_DE_RELANCE
+const idListeInfolettre = Number(
+  process.env.SENDINBLUE_ID_LISTE_POUR_INFOLETTRE
 );
 const basculeInfolettre = (destinataire, etat) =>
   axios
@@ -58,7 +58,7 @@ const creeContact = (
           NOM: decode(nom),
           sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
         },
-        ...(!bloqueMarketing && { listIds: [idListeEmailsMarketing] }),
+        ...(!bloqueMarketing && { listIds: [idListeInfolettre] }),
       },
       enteteJSON
     )
@@ -98,7 +98,7 @@ const metAJourContact = (destinataire, prenom, nom, telephone) =>
 const inscrisEmailsTransactionnels = async (destinataire) => {
   // https://developers.brevo.com/reference/addcontacttolist-1
   const url = new URL(
-    `${urlBase}/contacts/lists/${idListeEmailsMarketing}/contacts/add`
+    `${urlBase}/contacts/lists/${idListeInfolettre}/contacts/add`
   );
 
   try {
@@ -120,7 +120,7 @@ const inscrisEmailsTransactionnels = async (destinataire) => {
 const desinscrisEmailsTransactionnels = async (destinataire) => {
   // https://developers.brevo.com/reference/removecontactfromlist
   const url = new URL(
-    `${urlBase}/contacts/lists/${idListeEmailsMarketing}/contacts/remove`
+    `${urlBase}/contacts/lists/${idListeInfolettre}/contacts/remove`
   );
 
   try {
