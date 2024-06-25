@@ -398,6 +398,8 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(service.id, service.donneesAPersister().toutes());
   };
 
+  const metsAJourMesuresSpecifiquesDuService = () => {};
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
@@ -410,6 +412,7 @@ const creeDepot = (config = {}) => {
     serviceExiste,
     homologations,
     enregistreDossier,
+    metsAJourMesuresSpecifiquesDuService,
     metsAJourService,
     nouveauService,
     remplaceRisquesSpecifiquesDuService,
