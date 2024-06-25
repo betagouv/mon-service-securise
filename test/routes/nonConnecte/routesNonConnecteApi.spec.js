@@ -651,10 +651,10 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       );
     });
 
-    it("désabonne l'utilisateur de l'infolettre", (done) => {
+    it("désabonne l'utilisateur des mails marketing", (done) => {
       const utilisateur = unUtilisateur()
         .avecId('123')
-        .quiAccepteInfolettre()
+        .quiAccepteEmailsTransactionnels()
         .construis();
       testeur.depotDonnees().utilisateurAvecEmail = (email) => {
         expect(email).to.equal('jean.dujardin@mail.com');
@@ -662,7 +662,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       };
       testeur.depotDonnees().metsAJourUtilisateur = (id, donnees) => {
         expect(id).to.equal('123');
-        expect(donnees).to.eql({ infolettreAcceptee: false });
+        expect(donnees).to.eql({ transactionnelAccepte: false });
         return Promise.resolve();
       };
 
