@@ -176,7 +176,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
   describe('quand requête GET sur `/api/services/export.csv`', () => {
     beforeEach(() => {
-      testeur.adaptateurCsv().genereCsvServices = () => Promise.resolve();
+      testeur.adaptateurCsv().genereCsvServices = async () => {};
       testeur.referentiel().recharge({
         statutsHomologation: {
           nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
