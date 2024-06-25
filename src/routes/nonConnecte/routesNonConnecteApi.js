@@ -211,7 +211,7 @@ const routesNonConnecteApi = ({
         }
         depotDonnees
           .metsAJourUtilisateur(utilisateur.id, {
-            infolettreAcceptee: false,
+            transactionnelAccepte: false,
           })
           .then(() => reponse.sendStatus(200))
           .catch(suite);
