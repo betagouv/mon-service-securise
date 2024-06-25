@@ -14,11 +14,12 @@ class ActionExport extends ActionAbstraite {
 
   // eslint-disable-next-line class-methods-use-this
   initialise({ idServices }) {
+    const queryString = new URLSearchParams();
+    idServices.forEach((id) => queryString.append('idsServices', id));
+
     $('#action-export-csv').attr(
       'href',
-      `/api/services/export.csv?idsServices=${encodeURIComponent(
-        JSON.stringify(idServices)
-      )}`
+      `/api/services/export.csv?${queryString}`
     );
   }
 
