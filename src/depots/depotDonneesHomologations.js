@@ -398,7 +398,18 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(service.id, service.donneesAPersister().toutes());
   };
 
-  const metsAJourMesuresSpecifiquesDuService = () => {};
+  const metsAJourMesuresSpecifiquesDuService = async (
+    idService,
+    idUtilisateur,
+    mesures
+  ) => {
+    await remplaceMesuresSpecifiquesPourService(idService, mesures);
+    const service = await p.lis.une(idService);
+    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
+    await busEvenements.publie(
+      new EvenementMesuresServiceModifiees({ service, utilisateur })
+    );
+  };
 
   return {
     ajouteDescriptionService,
