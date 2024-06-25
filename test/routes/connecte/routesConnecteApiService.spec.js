@@ -337,6 +337,148 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur `api/service/:id/mesures-specifiques`', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        categoriesMesures: { uneCategorie: 'Une catégorie' },
+      });
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
+        async () => {};
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures-specifiques',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures-specifiques',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('aseptise tous les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['*.description', '*.categorie', '*.statut', '*.modalites'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures-specifiques',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('délègue au dépôt de données la sauvegarde des mesures spécifiques', async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: '999' });
+      let donneesRecues;
+      let idServiceRecu;
+      let idUtilisateurRecu;
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService = async (
+        idService,
+        idUtilisateur,
+        mesuresSpecifiques
+      ) => {
+        idServiceRecu = idService;
+        idUtilisateurRecu = idUtilisateur;
+        donneesRecues = mesuresSpecifiques;
+      };
+
+      const reponse = await axios.put(
+        'http://localhost:1234/api/service/456/mesures-specifiques',
+        [
+          {
+            description: 'd1',
+            categorie: 'uneCategorie',
+            statut: 'fait',
+            modalites: 'm1',
+          },
+          {
+            description: 'd2',
+            categorie: 'uneCategorie',
+            statut: 'nonFait',
+            modalites: 'm2',
+          },
+        ]
+      );
+
+      expect(donneesRecues.nombre()).to.eql(2);
+      expect(donneesRecues.item(0).toJSON()).to.eql({
+        description: 'd1',
+        categorie: 'uneCategorie',
+        statut: 'fait',
+        modalites: 'm1',
+      });
+      expect(donneesRecues.item(1).toJSON()).to.eql({
+        description: 'd2',
+        categorie: 'uneCategorie',
+        statut: 'nonFait',
+        modalites: 'm2',
+      });
+      expect(idServiceRecu).to.eql(456);
+      expect(idUtilisateurRecu).to.eql(999);
+      expect(reponse.status).to.equal(200);
+    });
+
+    it('retourne une erreur HTTP 400 si la catégorie est inconnue', async () => {
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
+        async () => {};
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures-specifiques',
+          [
+            {
+              description: 'd1',
+              categorie: 'inconnue',
+              statut: 'fait',
+            },
+          ]
+        );
+        expect().fail('L’appel aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'La catégorie "inconnue" n\'est pas répertoriée'
+        );
+      }
+    });
+
+    it('retourne une erreur HTTP 400 si le statut est inconnu', async () => {
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
+        async () => {};
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures-specifiques',
+          [
+            {
+              description: 'd1',
+              categorie: 'uneCategorie',
+              statut: 'plop',
+            },
+          ]
+        );
+        expect().fail('L’appel aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('Le statut "plop" est invalide');
+      }
+    });
+  });
+
   describe('quand requête POST sur `/api/service/:id/mesures', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteMesuresAuService = async () => {};
