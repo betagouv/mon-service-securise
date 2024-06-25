@@ -7,6 +7,8 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
   ErreurDossierCourantInexistant,
+  ErreurCategorieInconnue,
+  ErreurStatutMesureInvalide,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -203,6 +205,47 @@ const routesConnecteApiService = ({
       const { service } = requete;
 
       reponse.json(objetGetMesures.donnees(service));
+    }
+  );
+
+  routes.put(
+    '/:id/mesures-specifiques',
+    middleware.verificationAcceptationCGU,
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
+    middleware.aseptise(
+      '*.description',
+      '*.categorie',
+      '*.statut',
+      '*.modalites'
+    ),
+    async (requete, reponse, suite) => {
+      // il ne faut pas utiliser params.id qui est modifié par le middleware aseptise
+      const {
+        service,
+        idUtilisateurCourant,
+        body: mesuresSpecifiques,
+      } = requete;
+      try {
+        const mesures = new MesuresSpecifiques(
+          { mesuresSpecifiques },
+          referentiel
+        );
+        await depotDonnees.metsAJourMesuresSpecifiquesDuService(
+          service.id,
+          idUtilisateurCourant,
+          mesures
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (
+          e instanceof ErreurCategorieInconnue ||
+          e instanceof ErreurStatutMesureInvalide
+        ) {
+          reponse.status(400).send(e.message);
+          return;
+        }
+        suite(e);
+      }
     }
   );
 
