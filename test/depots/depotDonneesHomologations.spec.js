@@ -1652,4 +1652,55 @@ describe('Le dépôt de données des homologations', () => {
       expect(donneesPersistees.donnees).not.to.be(undefined);
     });
   });
+
+  describe('sur demande de mise à jour des mesures spécifiques d’un service', () => {
+    let adaptateurPersistance;
+    let depot;
+    const referentiel = Referentiel.creeReferentielVide();
+
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
+        .ajouteUnService(
+          unService(referentiel).avecId('123').avecNomService('nom').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('789', '123').donnees
+        );
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+    });
+
+    it('associe les mesures spécifiques au service', async () => {
+      const mesures = new MesuresSpecifiques({
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+      });
+
+      await depot.metsAJourMesuresSpecifiquesDuService('123', '789', mesures);
+
+      const {
+        mesures: { mesuresSpecifiques },
+      } = await depot.homologation('123');
+      expect(mesuresSpecifiques.nombre()).to.equal(1);
+      expect(mesuresSpecifiques.item(0)).to.be.a(MesureSpecifique);
+      expect(mesuresSpecifiques.item(0).description).to.equal(
+        'Une mesure spécifique'
+      );
+    });
+
+    it("publie un événement de 'Mesures service modifiées'", async () => {
+      await depot.metsAJourMesuresSpecifiquesDuService(
+        '123',
+        '789',
+        new MesuresSpecifiques()
+      );
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesuresServiceModifiees)
+      ).to.be(true);
+    });
+  });
 });
