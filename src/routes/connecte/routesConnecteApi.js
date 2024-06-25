@@ -84,6 +84,13 @@ const routesConnecteApi = ({
     async (requete, reponse) => {
       const { idsServices = [] } = requete.query;
 
+      const mauvaisType =
+        !Array.isArray(idsServices) && typeof idsServices !== 'string';
+      if (mauvaisType) {
+        reponse.sendStatus(400);
+        return;
+      }
+
       const donneesCsvServices = (services, autorisations) => {
         const servicesSansIndice = objetGetServices.donnees(
           services,

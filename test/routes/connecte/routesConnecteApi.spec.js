@@ -210,6 +210,32 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
+    describe('concernant le paramètre en query string `idsServices`', () => {
+      it("retourne une erreur 400 si le paramètre n'est pas un tableau", async () => {
+        try {
+          await axios.get(
+            'http://localhost:1234/api/services/export.csv?idsServices[a]=1' // Sera interprété par express comme {a: 1}
+          );
+          expect().fail("L'appel aurait dû jeter une erreur");
+        } catch (e) {
+          expect(e.response.status).to.be(400);
+        }
+      });
+
+      it("fonctionne dans le cas où le tableau ne comporte qu'un seul élément", async () => {
+        // Dans le cas d'un seul ID envoyé, express va interpréter cet ID en `string`, pas en `array`.
+        // Ce cas de test vérifie qu'on sait bien gérer ce cas d'une `string` qui arrive à l'API
+        const queryString = new URLSearchParams();
+        queryString.append('idsServices', '123');
+
+        const reponse = await axios.get(
+          `http://localhost:1234/api/services/export.csv?${queryString}`
+        );
+
+        expect(reponse.status).to.be(200);
+      });
+    });
+
     it("interroge le dépôt de données pour récupérer les autorisations de l'utilisateur", async () => {
       let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
