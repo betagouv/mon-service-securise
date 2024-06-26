@@ -1321,7 +1321,7 @@ describe('Le dépôt de données des homologations', () => {
       echeancesRenouvellement: { sixMois: { nbMoisDecalage: 6 }, unAn: {} },
       statutsAvisDossierHomologation: { favorable: {} },
       categoriesMesures: { gouvernance: {} },
-      statutsMesures: { fait: {} },
+      statutsMesures: { fait: {}, enCours: {} },
       mesures: { mesureA: {} },
       indiceCyber: { noteMax: 5 },
     });
