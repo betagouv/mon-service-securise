@@ -269,14 +269,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('retourne une erreur HTTP 422 si la validation des propriétés obligatoires échoue', (done) => {
+    it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
       testeur.depotDonnees().ajouteDescriptionService = async () => {
         throw new ErreurNomServiceDejaExistant('oups');
       };
 
       testeur.verifieRequeteGenereErreurHTTP(
         422,
-        'oups',
+        { erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } },
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456',
