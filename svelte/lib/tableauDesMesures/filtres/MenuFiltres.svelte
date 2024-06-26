@@ -169,7 +169,7 @@
   }
 
   .entete :global(.nombre-resultat) {
-    margin-top: -8px;
+    margin-top: -12px;
   }
 
   .titre-filtres {
