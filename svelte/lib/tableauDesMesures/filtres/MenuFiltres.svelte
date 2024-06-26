@@ -8,7 +8,6 @@
     rechercheReferentiel,
     rechercheStatut,
   } from '../tableauDesMesures.store';
-  import { menuNavigationOuvert } from '../../ui/menuNavigation.store';
   import NombreResultatsFiltres from './NombreResultatsFiltres.svelte';
 
   export let categories: Record<IdCategorie, string>;

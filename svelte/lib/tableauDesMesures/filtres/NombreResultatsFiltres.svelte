@@ -1,6 +1,5 @@
 <script>
   import { nombreResultats } from '../tableauDesMesures.store';
-  import { menuNavigationOuvert } from '../../ui/menuNavigation.store';
 </script>
 
 <p
@@ -9,9 +8,7 @@
 >
   <strong>{$nombreResultats.filtrees}&nbsp;</strong
   >/&nbsp;{$nombreResultats.total}
-  {#if !$menuNavigationOuvert}
-    <span>mesures affichées</span>
-  {/if}
+  <span>mesures affichées</span>
 </p>
 
 <style>
