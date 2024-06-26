@@ -44,10 +44,7 @@
 
 <MenuFlottant parDessusDeclencheur={true}>
   <div slot="declencheur">
-    <button
-      class="bouton bouton-secondaire bouton-filtre"
-      class:actif={$nombreResultats.aDesFiltresAppliques}
-    >
+    <button class="bouton bouton-secondaire bouton-filtre">
       <img src="/statique/assets/images/icone_filtre.svg" alt="" />
       Filtres
     </button>
@@ -155,22 +152,11 @@
     </button>
   </div>
 </MenuFlottant>
-<NombreResultatsFiltres />
 
 <style>
   .bouton-filtre {
     display: flex;
     gap: 8px;
-  }
-
-  .bouton-filtre.actif {
-    color: #08416a;
-    border-color: #08416a;
-  }
-
-  .bouton-filtre.actif img {
-    filter: brightness(0) invert(15%) sepia(24%) saturate(4604%)
-      hue-rotate(184deg) brightness(107%) contrast(94%);
   }
 
   .entete {
@@ -189,13 +175,8 @@
     gap: 8px;
     padding: calc(0.5em + 1px) calc(1em - 16px + 1px);
     font-weight: 500;
-    color: #08416a;
+    color: var(--bleu-mise-en-avant);
     margin-bottom: 8px;
-  }
-
-  .titre-filtres img {
-    filter: brightness(0) invert(16%) sepia(87%) saturate(1447%)
-      hue-rotate(183deg) brightness(91%) contrast(94%);
   }
 
   .filtres-disponibles {
