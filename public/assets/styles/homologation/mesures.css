@@ -37,6 +37,7 @@
 
 #tableau-des-mesures > .tableau-des-mesures {
   order: 30;
+  width: 100%;
 }
 
 #tableau-des-mesures > .barre-actions {
