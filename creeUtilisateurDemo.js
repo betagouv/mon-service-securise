@@ -29,6 +29,7 @@ const descriptionService = new DescriptionService(
       departement: '75',
     },
     nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+    niveauSecurite: 'niveau1',
   },
   referentiel
 );
