@@ -19,6 +19,7 @@
     color: #0079d0;
     opacity: 0;
     margin: 0;
+    white-space: nowrap;
   }
 
   .nombre-resultat.visible {
