@@ -12,6 +12,7 @@ module.exports = {
   indiceCyber: {
     coefficientIndispensables: 0.6,
     coefficientRecommandees: 0.4,
+    coefficientStatutPartiel: 0.5,
     noteMax: 5,
   },
 
