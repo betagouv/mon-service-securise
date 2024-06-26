@@ -35,6 +35,14 @@ module.exports = {
         'Devenez membre de la communauté MonServiceSécurisé et échangez avec vos pairs',
       image: 'communauteMSS.png',
     },
+    {
+      id: 'mesuresPartielles',
+      dateDeDeploiement: '2024-06-27 12:30:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/que-signifie-et-comment-est-calcule-lindice-cyber-1l94rzd/',
+      titre: "Le calcul de l'Indice Cyber évolue !",
+      sousTitre: 'Il prend désormais en compte les mesures "partielles"',
+      image: 'indiceCyber.png',
+    },
   ],
 
   tachesCompletudeProfil: [
