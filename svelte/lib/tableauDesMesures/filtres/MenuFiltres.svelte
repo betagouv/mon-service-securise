@@ -46,6 +46,9 @@
   <div slot="declencheur">
     <button class="bouton bouton-secondaire bouton-filtre">
       <img src="/statique/assets/images/icone_filtre.svg" alt="" />
+      {#if $nombreResultats.aDesFiltresAppliques}
+        <div class="rond-actif" />
+      {/if}
       Filtres
     </button>
   </div>
@@ -226,5 +229,17 @@
 
   .decalage-checkbox {
     margin-left: 12px;
+  }
+
+  .rond-actif {
+    border-radius: 50%;
+    border: 1px solid white;
+    background: var(--bleu-mise-en-avant);
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    top: 8px;
+    left: 32px;
+    z-index: 1000;
   }
 </style>
