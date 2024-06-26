@@ -38,7 +38,7 @@ describe('Un événement de complétude modifiée', () => {
     const referentiel = Referentiel.creeReferentiel({
       mesures: { mesureA: {} },
       categoriesMesures: { gouvernance: 'Gouvernance' },
-      statutsMesures: { fait: 'Faite' },
+      statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
       indiceCyber: { noteMax: 5 },
     });
     const mesuresPersonnalises = {
@@ -143,7 +143,7 @@ describe('Un événement de complétude modifiée', () => {
     const referentiel = Referentiel.creeReferentiel({
       mesures: { mesureA: {} },
       categoriesMesures: { gouvernance: 'Gouvernance' },
-      statutsMesures: { fait: 'Faite' },
+      statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
       indiceCyber: { noteMax: 5 },
     });
     const mesuresPersonnalises = { mesureA: { categorie: 'gouvernance' } };
