@@ -6,20 +6,25 @@ const tauxDeCategorie = (
   const coeff = {
     indispensables: referentiel.coefficientIndiceCyberMesuresIndispensables(),
     recommandees: referentiel.coefficientIndiceCyberMesuresRecommandees(),
+    statutPartiel: referentiel.coefficientIndiceCyberStatutPartiel(),
   };
   const indispensables = statsIndispensables;
   const recommandees = statsRecommandees;
 
+  const fractionIndispensables =
+    indispensables.fait + indispensables.enCours * coeff.statutPartiel;
+  const fractionRecommandees =
+    recommandees.fait + recommandees.enCours * coeff.statutPartiel;
   let score;
   if (recommandees.total === 0)
-    score = indispensables.fait / indispensables.total;
+    score = fractionIndispensables / indispensables.total;
   else if (indispensables.total === 0)
-    score = recommandees.fait / recommandees.total;
+    score = fractionRecommandees / recommandees.total;
   else
     score =
       (coeff.indispensables +
-        coeff.recommandees * (recommandees.fait / recommandees.total)) *
-      (indispensables.fait / indispensables.total);
+        coeff.recommandees * (fractionRecommandees / recommandees.total)) *
+      (fractionIndispensables / indispensables.total);
 
   return score;
 };
