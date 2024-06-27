@@ -52,8 +52,17 @@ class Mesures extends InformationsHomologation {
   }
 
   parStatutEtCategorie() {
+    const idMesuresPersonnalisees = Object.keys(this.mesuresPersonnalisees);
+    const donneesMesuresGeneralesApplicables = this.mesuresGenerales
+      .toutes()
+      .filter((mesure) => idMesuresPersonnalisees.includes(mesure.id));
+    const mesuresGeneralesApplicables = new MesuresGenerales(
+      { mesuresGenerales: donneesMesuresGeneralesApplicables },
+      this.referentiel
+    );
+
     const mesuresGeneralesParStatut =
-      this.mesuresGenerales.parStatutEtCategorie();
+      mesuresGeneralesApplicables.parStatutEtCategorie();
     return this.mesuresSpecifiques.parStatutEtCategorie(
       mesuresGeneralesParStatut
     );
