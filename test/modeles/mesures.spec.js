@@ -107,6 +107,7 @@ describe('Les mesures liées à une homologation', () => {
 
   describe('sur une demande des mesures par statut', () => {
     let referentiel;
+    let statutVide;
 
     beforeEach(() => {
       referentiel = Referentiel.creeReferentiel({
@@ -119,22 +120,49 @@ describe('Les mesures liées à une homologation', () => {
         },
       });
       referentiel.identifiantsCategoriesMesures = () => ['categorie1'];
+      statutVide = {
+        enCours: {},
+        nonFait: {},
+        aLancer: {},
+      };
     });
 
-    elles('récupère les mesures générales triées', () => {
+    elles('récupère les mesures générales groupées', () => {
       const mesures = new Mesures(
         { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
         referentiel,
         { mesure1: {} }
       );
-      mesures.mesuresGenerales.parStatutEtCategorie = () => ({
-        fait: { categorie1: [{ description: 'mesure1', indispensable: true }] },
-      });
 
       expect(mesures.parStatutEtCategorie()).to.eql({
-        fait: { categorie1: [{ description: 'mesure1', indispensable: true }] },
+        ...statutVide,
+        fait: {
+          categorie1: [
+            {
+              description: 'Mesure une',
+              modalites: undefined,
+              indispensable: true,
+            },
+          ],
+        },
       });
     });
+
+    elles(
+      'filtrent les mesures générales en fonction du moteur de règle',
+      () => {
+        const mesures = new Mesures(
+          { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
+          referentiel,
+          {}
+        );
+
+        expect(mesures.parStatutEtCategorie()).to.eql({
+          ...statutVide,
+          fait: {},
+        });
+      }
+    );
 
     elles('ajoutent les mesures spécifiques', () => {
       const mesures = new Mesures(
@@ -174,13 +202,18 @@ describe('Les mesures liées à une homologation', () => {
         referentiel,
         { mesure1: {} }
       );
-      mesures.mesuresGenerales.parStatutEtCategorie = () => ({
-        fait: { categorie1: [{ description: 'mesure1', indispensable: true }] },
-      });
+
       mesures.mesuresSpecifiques.parStatutEtCategorie = (mesuresParStatut) => {
         expect(mesuresParStatut).to.eql({
+          ...statutVide,
           fait: {
-            categorie1: [{ description: 'mesure1', indispensable: true }],
+            categorie1: [
+              {
+                description: 'Mesure une',
+                modalites: undefined,
+                indispensable: true,
+              },
+            ],
           },
         });
         return {
