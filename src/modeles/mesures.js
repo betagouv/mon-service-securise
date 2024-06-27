@@ -68,13 +68,6 @@ class Mesures extends InformationsHomologation {
     );
   }
 
-  statistiques() {
-    return this.mesuresGenerales.statistiques(
-      this.mesuresPersonnalisees,
-      this.mesuresSpecifiques
-    );
-  }
-
   statutSaisie() {
     const statutSaisieMesures = super.statutSaisie();
     if (

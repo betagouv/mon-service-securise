@@ -287,16 +287,6 @@ describe('Une homologation', () => {
     expect(homologation.mesuresSpecifiques().nombre()).to.equal(1);
   });
 
-  it('délègue aux mesures le calcul des statistiques', () => {
-    let calculDelegueAuxMesures = false;
-
-    const homologation = new Homologation({ id: '123', mesuresGenerales: [] });
-    homologation.mesures.statistiques = () => (calculDelegueAuxMesures = true);
-
-    homologation.statistiquesMesures();
-    expect(calculDelegueAuxMesures).to.be(true);
-  });
-
   describe('sur évaluation du statut de saisie des mesures', () => {
     const referentiel = Referentiel.creeReferentiel({
       mesures: { m1: {}, m2: {} },
