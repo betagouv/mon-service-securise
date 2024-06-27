@@ -50,6 +50,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       {
         idService: adaptateurChiffrement.hacheSha256(service.id),
         detailIndiceCyber: enTableau(indiceCyber),
+        versionIndiceCyber: 'v2',
         ...autreDonneesCompletude,
         nombreOrganisationsUtilisatrices: {
           borneBasse: nombreOuUn(borneBasse),
