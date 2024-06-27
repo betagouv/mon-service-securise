@@ -3,10 +3,12 @@ const { exec } = require('child_process');
 
 describe("Le script de création d'un utilisateur de Démo", () => {
   it('se lance correctement', () => {
-    const variablesEnvironnement =
-      'CREATION_UTILISATEUR_DEMO=true ' +
-      'EMAIL_UTILISATEUR_DEMO=jean.dujardin@beta.gouv.fr ' +
-      'MOT_DE_PASSE_UTILISATEUR_DEMO=UnMotDePasse';
+    const variablesEnvironnement = [
+      'CREATION_UTILISATEUR_DEMO=true',
+      'EMAIL_UTILISATEUR_DEMO=jean.dujardin@beta.gouv.fr',
+      'MOT_DE_PASSE_UTILISATEUR_DEMO=UnMotDePasse',
+      'NODE_ENV=TEST',
+    ].join(' ');
 
     exec(
       `${variablesEnvironnement} node creeUtilisateurDemo.js`,
