@@ -105,6 +105,7 @@ describe('Un événement de complétude modifiée', () => {
           { categorie: 'total', indice: 5 },
           { categorie: 'gouvernance', indice: 5 },
         ],
+        versionIndiceCyber: 'v2',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         typeService: ['applicationMobile'],
         provenanceService: 'developpement',
