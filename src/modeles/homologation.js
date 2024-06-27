@@ -223,10 +223,6 @@ class Homologation {
     return this.risques.risquesSpecifiques;
   }
 
-  statistiquesMesures() {
-    return this.mesures.statistiques();
-  }
-
   statistiquesMesuresGenerales() {
     return this.mesures.statistiquesMesuresGenerales();
   }

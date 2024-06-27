@@ -57,29 +57,6 @@ describe('Les mesures liées à une homologation', () => {
     }
   );
 
-  elles('délèguent le calcul statistique aux mesures générales', () => {
-    let calculStatistiqueAppele = false;
-
-    const mesuresRecommandees = {};
-    const mesures = new Mesures(
-      {},
-      Referentiel.creeReferentielVide(),
-      mesuresRecommandees
-    );
-    mesures.mesuresGenerales.statistiques = (
-      identifiantsMesuresPersonnalisees
-    ) => {
-      expect(identifiantsMesuresPersonnalisees).to.equal(mesuresRecommandees);
-      calculStatistiqueAppele = true;
-      return 'résultat';
-    };
-
-    const stats = mesures.statistiques();
-
-    expect(calculStatistiqueAppele).to.be(true);
-    expect(stats).to.equal('résultat');
-  });
-
   elles('connaissent le nombre total de mesures générales', () => {
     const referentiel = Referentiel.creeReferentielVide();
 
