@@ -77,6 +77,18 @@ describe("L'indice cyber", () => {
       expect(indiceCyber.tauxDeLaCategorie('gouvernance')).to.eql(
         poidsMesuresRecommandeesAjuste + poidsMesuresIndispensables
       );
+
+      // 0,5625
+      // Les indispensables : 2 faites, 1 partielle, 1 non faite
+      // … donc 2 points + 0,5 point + 0 point divisé par 4 mesures indispensables : 2,5 / 4 = 0,625
+      // Les recommandées : 1 faite, 1 partielle, 1 non faite
+      // … donc 1 point + 0,5 point + 0 point divisé par 3 mesures recommandées : 1,5 / 3 = 0,5
+      // Le poids des indispensables est le score des indispensables * coeff des indispensables : 0,625 * 0,8 = 0,5
+      // Le poids des recommandées est le score des recommandées * coeff des recommandées : 0,5 * 0,2 = 0,1
+      // … mais il faut ajuster ce poids des recommandées par une pondération par rapport aux indispensables
+      // … donc on multiplie ce poids des recommandées par le score des indispensables : 0,1 * 0,625 = 0,0625
+      // Donc le total vaut le poids des indispensables + le poids ajusté des recommandées : 0,5 + 0,0625 = 0,5625
+      expect(indiceCyber.tauxDeLaCategorie('gouvernance')).to.be(0.5625);
     });
 
     it("ne tient compte que des mesures indispensables s'il n'y a pas de mesures recommandées", () => {
@@ -123,6 +135,10 @@ describe("L'indice cyber", () => {
           nbIndispensablesPartielles * coefficientStatutPartiel) /
           nbTotalIndispensables
       );
+
+      // 0,5 car on a 1 mesure faite, 1 mesure partielle, 1 mesure non faite
+      // … donc 1 point + 0,5 point + 0 point, divisé par 3 mesures au total : 1,5 / 3 = 0,5
+      expect(taux).to.be(0.5);
     });
 
     it("ne tient compte que des mesures recommandées s'il n'y a pas de mesures indispensables", () => {
@@ -169,6 +185,10 @@ describe("L'indice cyber", () => {
           nbRecommandeePartielle * coefficientStatutPartiel) /
           nbTotalRecommandees
       );
+
+      // 0,5 car on a 1 mesure faite, 1 mesure partielle, 1 mesure non faite
+      // … donc 1 point + 0,5 point + 0 point, divisé par 3 mesures au total : 1,5 / 3 = 0,5
+      expect(taux).to.be(0.5);
     });
   });
 
