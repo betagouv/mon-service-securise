@@ -285,22 +285,40 @@ const recupereEntrepriseDuContact = async (idContact) => {
 };
 
 const relieContactAEntreprise = async (idContact, idEntreprise) => {
-  await axios.patch(
-    `${urlBase}/companies/link-unlink/${idEntreprise}`,
-    { linkContactIds: [idContact] },
-    enteteJSON
-  );
+  try {
+    await axios.patch(
+      `${urlBase}/companies/link-unlink/${idEntreprise}`,
+      { linkContactIds: [idContact] },
+      enteteJSON
+    );
+  } catch (e) {
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Brevo': e.response.data,
+      'identifiant entreprise': idEntreprise,
+      'identifiant contact à lier': idContact,
+    });
+    throw e;
+  }
 };
 
 const supprimeLienEntreContactEtEntreprise = async (
   idContact,
   idEntreprise
 ) => {
-  await axios.patch(
-    `${urlBase}/companies/link-unlink/${idEntreprise}`,
-    { unlinkContactIds: [idContact] },
-    enteteJSON
-  );
+  try {
+    await axios.patch(
+      `${urlBase}/companies/link-unlink/${idEntreprise}`,
+      { unlinkContactIds: [idContact] },
+      enteteJSON
+    );
+  } catch (e) {
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Brevo': e.response.data,
+      'identifiant entreprise': idEntreprise,
+      'identifiant contact à délier': idContact,
+    });
+    throw e;
+  }
 };
 
 const creeEntreprise = async (siret, nom, natureJuridique) => {
@@ -327,8 +345,16 @@ const creeEntreprise = async (siret, nom, natureJuridique) => {
   return idEntreprise;
 };
 
-const supprimeContact = async (email) =>
-  axios.delete(`${urlBase}/contacts/${email}`, enteteJSON);
+const supprimeContact = async (email) => {
+  try {
+    await axios.delete(`${urlBase}/contacts/${email}`, enteteJSON);
+  } catch (e) {
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Brevo': e.response.data,
+    });
+    throw e;
+  }
+};
 
 module.exports = {
   creeContact,
