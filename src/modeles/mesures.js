@@ -69,15 +69,27 @@ class Mesures extends InformationsHomologation {
   }
 
   statutSaisie() {
-    const statutSaisieMesures = super.statutSaisie();
-    if (
-      statutSaisieMesures === Mesures.COMPLETES &&
-      this.nombreMesuresPersonnalisees() !== this.mesuresGenerales.nombre()
-    ) {
-      return Mesures.A_COMPLETER;
-    }
+    const idMesuresPersonnalisees = Object.keys(this.mesuresPersonnalisees);
+    const donneesMesuresGeneralesApplicables = idMesuresPersonnalisees.map(
+      (id) => ({
+        id,
+        ...this.mesuresGenerales.avecId(id),
+      })
+    );
+    const mesuresGeneralesApplicables = new MesuresGenerales(
+      { mesuresGenerales: donneesMesuresGeneralesApplicables },
+      this.referentiel
+    );
 
-    return statutSaisieMesures;
+    const generalesSontCompletes =
+      mesuresGeneralesApplicables.statutSaisie() === Mesures.COMPLETES;
+    const specifiquesCompletes =
+      this.mesuresSpecifiques.statutSaisie() === Mesures.COMPLETES ||
+      this.mesuresSpecifiques.nombre() === 0;
+
+    return generalesSontCompletes && specifiquesCompletes
+      ? Mesures.COMPLETES
+      : Mesures.A_COMPLETER;
   }
 
   statutsMesuresPersonnalisees() {
