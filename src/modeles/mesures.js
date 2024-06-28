@@ -8,6 +8,21 @@ const {
 const { IndiceCyber } = require('./indiceCyber');
 const { CompletudeMesures } = require('./completudeMesures');
 
+function mesuresGeneralesApplicables(
+  mesuresPersonnalisees,
+  mesuresGenerales,
+  referentiel
+) {
+  const idMesuresPersonnalisees = Object.keys(mesuresPersonnalisees);
+  const donneesMesuresGeneralesApplicables = idMesuresPersonnalisees.map(
+    (id) => ({ id, ...mesuresGenerales.avecId(id) })
+  );
+  return new MesuresGenerales(
+    { mesuresGenerales: donneesMesuresGeneralesApplicables },
+    referentiel
+  );
+}
+
 class Mesures extends InformationsHomologation {
   constructor(
     donnees = {},
@@ -52,37 +67,27 @@ class Mesures extends InformationsHomologation {
   }
 
   parStatutEtCategorie() {
-    const idMesuresPersonnalisees = Object.keys(this.mesuresPersonnalisees);
-    const donneesMesuresGeneralesApplicables = this.mesuresGenerales
-      .toutes()
-      .filter((mesure) => idMesuresPersonnalisees.includes(mesure.id));
-    const mesuresGeneralesApplicables = new MesuresGenerales(
-      { mesuresGenerales: donneesMesuresGeneralesApplicables },
+    const applicables = mesuresGeneralesApplicables(
+      this.mesuresPersonnalisees,
+      this.mesuresGenerales,
       this.referentiel
     );
 
-    const mesuresGeneralesParStatut =
-      mesuresGeneralesApplicables.parStatutEtCategorie();
+    const mesuresGeneralesParStatut = applicables.parStatutEtCategorie();
     return this.mesuresSpecifiques.parStatutEtCategorie(
       mesuresGeneralesParStatut
     );
   }
 
   statutSaisie() {
-    const idMesuresPersonnalisees = Object.keys(this.mesuresPersonnalisees);
-    const donneesMesuresGeneralesApplicables = idMesuresPersonnalisees.map(
-      (id) => ({
-        id,
-        ...this.mesuresGenerales.avecId(id),
-      })
-    );
-    const mesuresGeneralesApplicables = new MesuresGenerales(
-      { mesuresGenerales: donneesMesuresGeneralesApplicables },
+    const applicables = mesuresGeneralesApplicables(
+      this.mesuresPersonnalisees,
+      this.mesuresGenerales,
       this.referentiel
     );
 
     const generalesSontCompletes =
-      mesuresGeneralesApplicables.statutSaisie() === Mesures.COMPLETES;
+      applicables.statutSaisie() === Mesures.COMPLETES;
     const specifiquesCompletes =
       this.mesuresSpecifiques.statutSaisie() === Mesures.COMPLETES ||
       this.mesuresSpecifiques.nombre() === 0;
