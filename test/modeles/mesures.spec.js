@@ -1,6 +1,9 @@
 const expect = require('expect.js');
 
-const { A_COMPLETER } = require('../../src/modeles/informationsHomologation');
+const {
+  A_COMPLETER,
+  COMPLETES,
+} = require('../../src/modeles/informationsHomologation');
 const Mesures = require('../../src/modeles/mesures');
 const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 const Referentiel = require('../../src/referentiel');
@@ -40,20 +43,84 @@ describe('Les mesures liées à une homologation', () => {
   );
 
   elles(
-    'sont à completer si toutes les mesures nécessaires ne sont pas complétées',
+    'ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et sans mesures spécifiques ',
     () => {
       const referentiel = Referentiel.creeReferentielVide();
-      referentiel.identifiantsMesures = () => ['mesure 1', 'mesure 2'];
-
+      referentiel.identifiantsMesures = () => ['mesure1'];
       const mesures = new Mesures(
         {
-          mesuresGenerales: [{ id: 'mesure 1', statut: 'fait' }],
+          mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
           mesuresSpecifiques: [],
         },
-        referentiel
+        referentiel,
+        { mesure1: {} }
       );
 
-      expect(mesures.statutSaisie()).to.equal(A_COMPLETER);
+      expect(mesures.statutSaisie()).to.equal(COMPLETES);
+    }
+  );
+
+  elles(
+    'ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et avec mesures spécifiques ',
+    () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      referentiel.identifiantsMesures = () => ['mesure1'];
+      referentiel.identifiantsCategoriesMesures = () => ['gouvernance'];
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
+          mesuresSpecifiques: [
+            {
+              description: 'Faire une étude',
+              categorie: 'gouvernance',
+              statut: 'fait',
+            },
+          ],
+        },
+        referentiel,
+        { mesure1: {} }
+      );
+
+      expect(mesures.statutSaisie()).to.equal(COMPLETES);
+    }
+  );
+
+  elles(
+    'ont comme statut `A_COMPLETER` lorsque certaines mesures sont renseignées, mais pas toutes',
+    () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      referentiel.identifiantsMesures = () => ['mesure1', 'mesure2'];
+      const sansMesure2 = new Mesures(
+        {
+          mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
+          mesuresSpecifiques: [],
+        },
+        referentiel,
+        { mesure1: {}, mesure2: {} }
+      );
+
+      expect(sansMesure2.statutSaisie()).to.equal(A_COMPLETER);
+    }
+  );
+
+  elles(
+    'ont comme statut `COMPLETES` même s’il y a des mesures qui ne sont plus d’actualité',
+    () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      referentiel.identifiantsMesures = () => ['mesure1', 'mesure2'];
+      const avecMesure2EnTrop = new Mesures(
+        {
+          mesuresGenerales: [
+            { id: 'mesure1', statut: 'fait' },
+            { id: 'mesure2', statut: 'fait' },
+          ],
+          mesuresSpecifiques: [],
+        },
+        referentiel,
+        { mesure1: {} }
+      );
+
+      expect(avecMesure2EnTrop.statutSaisie()).to.equal(COMPLETES);
     }
   );
 

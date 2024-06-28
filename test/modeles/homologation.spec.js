@@ -293,13 +293,6 @@ describe('Une homologation', () => {
     });
     const moteur = { mesures: () => ({ m1: {}, m2: {} }) };
 
-    it('détecte que la liste des mesures reste à saisir', () => {
-      const homologation = new Homologation({ id: '123' });
-      expect(homologation.statutSaisie('mesures')).to.equal(
-        InformationsHomologation.A_SAISIR
-      );
-    });
-
     it('détecte que la liste des mesures est à compléter', () => {
       const homologation = new Homologation(
         {
