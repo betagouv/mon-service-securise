@@ -34,6 +34,13 @@ const {
   consigneCompletudeDansJournal,
 } = require('./src/bus/abonnements/consigneCompletudeDansJournal');
 
+const log = {
+  jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
+  cyan: (txt) => process.stdout.write(`\x1b[36m${txt}\x1b[0m`),
+  vert: (txt) => process.stdout.write(`\x1b[92m${txt}\x1b[0m`),
+  rouge: (txt) => process.stdout.write(`\x1b[31m${txt}\x1b[0m`),
+};
+
 class ConsoleAdministration {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
     this.adaptateurPersistance =
@@ -109,10 +116,25 @@ class ConsoleAdministration {
       adaptateurJournal: journal,
       adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
     });
+    const nbServices = services.length;
+    log.jaune(`${nbServices} services à traiter\n`);
 
-    await avecPMapPourChaqueElement(Promise.resolve(services), (service) =>
-      consigneCompletude({ service })
-    );
+    let i = 0;
+    const avanceAuSuivant = () => {
+      i += 1;
+    };
+    let interval;
+    const traiteOuQuitte = async () => {
+      if (i < nbServices) {
+        log.cyan(`Traitement du service ${i + 1}/${nbServices}\n`);
+        await consigneCompletude({ service: services[i] });
+        avanceAuSuivant();
+      } else {
+        clearInterval(interval);
+        log.jaune('FIN\n');
+      }
+    };
+    interval = setInterval(() => traiteOuQuitte(), 200);
   }
 
   genereTousEvenementsNouvelUtilisateurInscrit(persisteEvenements = false) {
@@ -218,13 +240,6 @@ class ConsoleAdministration {
 
   // eslint-disable-next-line class-methods-use-this
   async genereEvenenentsBrevo(typeEvenement, idListe) {
-    const log = {
-      jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
-      cyan: (txt) => process.stdout.write(`\x1b[36m${txt}\x1b[0m`),
-      vert: (txt) => process.stdout.write(`\x1b[92m${txt}\x1b[0m`),
-      rouge: (txt) => process.stdout.write(`\x1b[31m${txt}\x1b[0m`),
-    };
-
     const configHttp = (clefApi) => ({
       headers: {
         ...clefApi,
