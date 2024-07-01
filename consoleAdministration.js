@@ -7,7 +7,6 @@ const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
 const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
 const { fabriqueAdaptateurUUID } = require('./src/adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
-const EvenementCompletudeServiceModifiee = require('./src/modeles/journalMSS/evenementCompletudeServiceModifiee');
 const EvenementNouvelleHomologationCreee = require('./src/modeles/journalMSS/evenementNouvelleHomologationCreee');
 const EvenementNouvelUtilisateurInscrit = require('./src/modeles/journalMSS/evenementNouvelUtilisateurInscrit');
 const { avecPMapPourChaqueElement } = require('./src/utilitaires/pMap');
@@ -31,6 +30,9 @@ const {
 const { cableTousLesAbonnes } = require('./src/bus/cablage');
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
 const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
+const {
+  consigneCompletudeDansJournal,
+} = require('./src/bus/abonnements/consigneCompletudeDansJournal');
 
 class ConsoleAdministration {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
@@ -103,21 +105,13 @@ class ConsoleAdministration {
       : this.journalConsole;
 
     const services = await this.depotDonnees.tousLesServices();
-    const evenements = services
-      .map((s) =>
-        new EvenementCompletudeServiceModifiee({
-          service: s,
-          organisationResponsable: {},
-        }).toJSON()
-      )
-      .map(({ donnees, ...reste }) => ({
-        donnees: { ...donnees, genereParAdministrateur: true },
-        ...reste,
-      }));
+    const consigneCompletude = consigneCompletudeDansJournal({
+      adaptateurJournal: journal,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+    });
 
-    await avecPMapPourChaqueElement(
-      Promise.resolve(evenements),
-      journal.consigneEvenement
+    await avecPMapPourChaqueElement(Promise.resolve(services), (service) =>
+      consigneCompletude({ service })
     );
   }
 
