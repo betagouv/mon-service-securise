@@ -4,6 +4,7 @@ import type {
   IdService,
   Mesures,
   MesureSpecifique,
+  MesureGenerale,
 } from './tableauDesMesures.d';
 
 const decodeEntitesHtml = (mesures: Mesures) => {
@@ -56,12 +57,20 @@ export const metEnFormeMesures = (mesures: Mesures) => {
   };
 };
 
-export const enregistreMesures = async (
+export const enregistreMesuresSpecifiques = async (
   idService: IdService,
-  mesures: Mesures
+  mesures: MesureSpecifique[]
 ) => {
-  await axios.post(
-    `/api/service/${idService}/mesures`,
-    metEnFormeMesures(mesures)
-  );
+  await axios.put(`/api/service/${idService}/mesures-specifiques`, mesures);
+};
+
+export const enregistreMesureGenerale = async (
+  idService: IdService,
+  idMesure: IdMesureGenerale,
+  donneesMesure: MesureGenerale
+) => {
+  await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
+    statut: donneesMesure.statut,
+    ...(donneesMesure.modalites && { modalites: donneesMesure.modalites }),
+  });
 };
