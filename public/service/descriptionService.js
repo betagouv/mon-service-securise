@@ -57,7 +57,7 @@ const brancheComportementNavigationEtapes = () => {
         "Complétez les informations permettant d'évaluer les besoins de sécurité du service et de proposer <b>des mesures de sécurité adaptées</b>.",
     },
     2: {
-      titre: 'Données et fonctionnalités',
+      titre: 'Fonctionnalités et données',
       description:
         'Pour mieux comprendre votre service et ses enjeux de protection des données, veuillez répondre aux questions suivantes sur ses <b>fonctionnalités et les données collectées.</b>',
     },
