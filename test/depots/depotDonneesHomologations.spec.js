@@ -1703,4 +1703,60 @@ describe('Le dépôt de données des homologations', () => {
       ).to.be(true);
     });
   });
+
+  describe("sur demande de mise à jour d'une mesure générale d’un service", () => {
+    let adaptateurPersistance;
+    let depot;
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { gouvernance: 'Gouvernance' },
+      mesures: { audit: { categorie: 'gouvernance' } },
+      reglesPersonnalisation: { mesuresBase: ['audit'] },
+    });
+
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
+        .ajouteUnService(
+          unService(referentiel).avecId('123').avecNomService('nom').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('789', '123').donnees
+        );
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+    });
+
+    it('associe la mesure générale au service', async () => {
+      const mesure = new MesureGenerale(
+        { id: 'audit', statut: 'fait' },
+        referentiel
+      );
+
+      await depot.metsAJourMesureGeneraleDuService('123', '789', mesure);
+
+      const {
+        mesures: { mesuresGenerales },
+      } = await depot.homologation('123');
+      expect(mesuresGenerales.nombre()).to.equal(1);
+      expect(mesuresGenerales.item(0)).to.be.a(MesureGenerale);
+      expect(mesuresGenerales.item(0).id).to.equal('audit');
+      expect(mesuresGenerales.item(0).statut).to.equal('fait');
+    });
+
+    it("publie un événement de 'Mesures service modifiées'", async () => {
+      const mesure = new MesureGenerale(
+        { id: 'audit', statut: 'fait' },
+        referentiel
+      );
+
+      await depot.metsAJourMesureGeneraleDuService('123', '789', mesure);
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesuresServiceModifiees)
+      ).to.be(true);
+    });
+  });
 });
