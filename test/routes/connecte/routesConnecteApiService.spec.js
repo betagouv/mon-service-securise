@@ -643,6 +643,100 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        mesures: { audit: {} },
+      });
+      testeur.middleware().reinitialise({
+        idUtilisateur: '123',
+        serviceARenvoyer: unService(testeur.referentiel())
+          .avecId('456')
+          .construis(),
+      });
+      testeur.depotDonnees().metsAJourMesureGeneraleDuService = () =>
+        Promise.resolve();
+    });
+
+    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures/audit',
+        },
+        done
+      );
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures/audit',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['statut', 'modalites'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesures/audit',
+        },
+        done
+      );
+    });
+
+    it('délègue au dépôt de données la mise à jour des mesures générales', async () => {
+      let donneesRecues;
+      let idServiceRecu;
+      let idUtilisateurRecu;
+      testeur.depotDonnees().metsAJourMesureGeneraleDuService = (
+        idService,
+        idUtilisateur,
+        donnees
+      ) => {
+        donneesRecues = donnees;
+        idServiceRecu = idService;
+        idUtilisateurRecu = idUtilisateur;
+      };
+
+      const mesureGenerale = {
+        statut: 'fait',
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/456/mesures/audit',
+        mesureGenerale
+      );
+
+      expect(idServiceRecu).to.equal('456');
+      expect(idUtilisateurRecu).to.equal('123');
+      expect(donneesRecues.id).to.equal('audit');
+      expect(donneesRecues.statut).to.equal('fait');
+    });
+
+    it('renvoie une erreur 400 si la mesure est invalide', async () => {
+      const mesureGenerale = {
+        statut: 'invalide',
+      };
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures/audit',
+          mesureGenerale
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La mesure est invalide.');
+      }
+    });
+  });
+
   describe('quand requête POST sur `/api/service/:id/rolesResponsabilites`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteRolesResponsabilitesAService = () =>

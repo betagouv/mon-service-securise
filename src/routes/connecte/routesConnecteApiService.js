@@ -9,6 +9,7 @@ const {
   ErreurDossierCourantInexistant,
   ErreurCategorieInconnue,
   ErreurStatutMesureInvalide,
+  ErreurMesureInconnue,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -242,6 +243,38 @@ const routesConnecteApiService = ({
           e instanceof ErreurStatutMesureInvalide
         ) {
           reponse.status(400).send(e.message);
+          return;
+        }
+        suite(e);
+      }
+    }
+  );
+
+  routes.put(
+    '/:id/mesures/:idMesure',
+    middleware.verificationAcceptationCGU,
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
+    middleware.aseptise('statut', 'modalites'),
+    async (requete, reponse, suite) => {
+      const { service, idUtilisateurCourant, body, params } = requete;
+      const mesureGenerale = {
+        ...body,
+        id: params.idMesure,
+      };
+      try {
+        const mesure = new MesureGenerale(mesureGenerale, referentiel);
+        await depotDonnees.metsAJourMesureGeneraleDuService(
+          service.id,
+          idUtilisateurCourant,
+          mesure
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (
+          e instanceof ErreurMesureInconnue ||
+          e instanceof ErreurStatutMesureInvalide
+        ) {
+          reponse.status(400).send('La mesure est invalide.');
           return;
         }
         suite(e);
