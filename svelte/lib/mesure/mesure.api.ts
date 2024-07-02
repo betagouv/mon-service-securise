@@ -6,21 +6,35 @@ export const enregistreMesures = async (
   mesuresExistantes: MesuresExistantes,
   $store: MesureStore
 ) => {
-  if ($store.etape === 'Creation') {
-    mesuresExistantes.mesuresSpecifiques.push($store.mesureEditee.mesure);
-  } else {
-    if ($store.etape === 'EditionGenerale') {
-      const { modalites, statut } = $store.mesureEditee.mesure;
-      mesuresExistantes.mesuresGenerales[
-        $store.mesureEditee.metadonnees.idMesure
-      ] = { modalites, statut };
+  async function enregistreMesureGenerale() {
+    const idMesure = $store.mesureEditee.metadonnees.idMesure;
+    const { modalites, statut } = $store.mesureEditee.mesure;
+    mesuresExistantes.mesuresGenerales[idMesure] = { modalites, statut };
+    await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
+      modalites,
+      statut,
+    });
+  }
+
+  async function enregistreMesuresSpecifiques() {
+    if ($store.etape === 'Creation') {
+      mesuresExistantes.mesuresSpecifiques.push($store.mesureEditee.mesure);
     } else {
       mesuresExistantes.mesuresSpecifiques[
         $store.mesureEditee.metadonnees.idMesure as number
       ] = $store.mesureEditee.mesure;
     }
+    await axios.put(
+      `/api/service/${idService}/mesures-specifiques`,
+      mesuresExistantes.mesuresSpecifiques
+    );
   }
-  await axios.post(`/api/service/${idService}/mesures`, mesuresExistantes);
+
+  if ($store.etape === 'EditionGenerale') {
+    await enregistreMesureGenerale();
+  } else {
+    await enregistreMesuresSpecifiques();
+  }
 };
 
 export const supprimeMesureSpecifique = async (
@@ -30,11 +44,10 @@ export const supprimeMesureSpecifique = async (
 ) => {
   const copieMesuresSpecifiques = [...mesuresExistantes.mesuresSpecifiques];
   copieMesuresSpecifiques.splice(idMesureSpecifique, 1);
-  const donnees = {
-    mesuresGenerales: mesuresExistantes.mesuresGenerales,
-    mesuresSpecifiques: copieMesuresSpecifiques,
-  };
-  await axios.post(`/api/service/${idService}/mesures`, donnees);
+  await axios.put(
+    `/api/service/${idService}/mesures-specifiques`,
+    copieMesuresSpecifiques
+  );
 };
 
 export const enregistreRetourUtilisateur = async (
