@@ -44,10 +44,9 @@
 <MenuFlottant parDessusDeclencheur={true}>
   <div slot="declencheur">
     <button class="bouton bouton-secondaire bouton-filtre">
-      <img src="/statique/assets/images/icone_filtre.svg" alt="" />
-      {#if $nombreResultats.aDesFiltresAppliques}
-        <div class="rond-actif" />
-      {/if}
+      <picture class:filtres-actifs={$nombreResultats.aDesFiltresAppliques}
+        ><img src="/statique/assets/images/icone_filtre.svg" alt="" />
+      </picture>
       Filtres
     </button>
   </div>
@@ -55,7 +54,9 @@
   <div class="filtres-disponibles">
     <div class="entete">
       <div class="titre-filtres">
-        <img src="/statique/assets/images/icone_filtre.svg" alt="" />
+        <picture class:filtres-actifs={$nombreResultats.aDesFiltresAppliques}>
+          <img src="/statique/assets/images/icone_filtre.svg" alt="" />
+        </picture>
         Filtres
       </div>
       <NombreResultatsFiltres />
@@ -230,15 +231,21 @@
     margin-left: 12px;
   }
 
-  .rond-actif {
+  picture {
+    height: 24px;
+    width: 24px;
+  }
+
+  .filtres-actifs::after {
+    display: block;
+    content: '';
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     border: 1px solid white;
     background: var(--bleu-mise-en-avant);
-    width: 8px;
-    height: 8px;
-    position: absolute;
-    top: 8px;
-    left: 32px;
-    z-index: 1000;
+    position: relative;
+    top: -28px;
+    left: 18px;
   }
 </style>
