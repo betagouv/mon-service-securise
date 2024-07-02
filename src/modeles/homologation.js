@@ -48,13 +48,10 @@ class Homologation {
 
     let { mesuresGenerales = [] } = donnees;
     const mesuresPersonnalisees = moteurRegles.mesures(this.descriptionService);
-    const idMesuresPersonnalisees = Object.keys(mesuresPersonnalisees);
-    mesuresGenerales = mesuresGenerales
-      .filter((mesure) => idMesuresPersonnalisees.includes(mesure.id))
-      .map((mesure) => ({
-        ...mesure,
-        rendueIndispensable: !!mesuresPersonnalisees[mesure.id]?.indispensable,
-      }));
+    mesuresGenerales = mesuresGenerales.map((mesure) => ({
+      ...mesure,
+      rendueIndispensable: !!mesuresPersonnalisees[mesure.id]?.indispensable,
+    }));
     this.mesures = new Mesures(
       { mesuresGenerales, mesuresSpecifiques },
       referentiel,

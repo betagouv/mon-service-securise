@@ -356,12 +356,18 @@ describe('Une homologation', () => {
   });
 
   it('délègue aux mesures la récupération des mesures par statut et par catégorie', () => {
-    const homologation = new Homologation({
-      mesuresGenerales: [{ id: 'mesure1', statut: 'enCours' }],
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { m1: {} },
     });
+    const homologation = new Homologation(
+      { mesuresGenerales: [{ id: 'm1', statut: 'enCours' }] },
+      referentiel
+    );
     homologation.mesures.parStatutEtCategorie = () => ({ unStatut: {} });
 
-    expect(homologation.mesuresParStatutEtCategorie()).to.eql({ unStatut: {} });
+    const parStatutEtCategorie = homologation.mesuresParStatutEtCategorie();
+
+    expect(parStatutEtCategorie).to.eql({ unStatut: {} });
   });
 
   it('sait décrire le statut de déploiement', () => {
