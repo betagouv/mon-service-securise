@@ -174,25 +174,6 @@ const creeDepot = (config = {}) => {
     return dossier;
   };
 
-  const ajouteMesuresGeneralesAService = async (idService, mesures) => {
-    const s = await p.lis.une(idService);
-    const donneesAPersister = s.donneesAPersister().toutes();
-    donneesAPersister.mesuresGenerales ||= [];
-
-    mesures.forEach((mesure) => {
-      const donneesMesure = mesure.toJSON();
-      const mesurePresente = donneesAPersister.mesuresGenerales.find(
-        (i) => i.id === donneesMesure.id
-      );
-
-      if (mesurePresente) Object.assign(mesurePresente, donneesMesure);
-      else donneesAPersister.mesuresGenerales.push(donneesMesure);
-    });
-
-    const { id, ...donnees } = donneesAPersister;
-    await p.sauvegarde(id, donnees);
-  };
-
   const remplaceMesuresSpecifiquesPourService = (...params) =>
     remplaceProprieteService('mesuresSpecifiques', ...params);
 
@@ -261,23 +242,6 @@ const creeDepot = (config = {}) => {
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
       new EvenementDescriptionServiceModifiee({ service, utilisateur })
-    );
-  };
-
-  const ajouteMesuresAuService = async (
-    idService,
-    idUtilisateur,
-    generales,
-    specifiques
-  ) => {
-    await ajouteMesuresGeneralesAService(idService, generales);
-    await remplaceMesuresSpecifiquesPourService(idService, specifiques);
-
-    const service = await p.lis.une(idService);
-    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
-
-    await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service, utilisateur })
     );
   };
 
@@ -428,7 +392,6 @@ const creeDepot = (config = {}) => {
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
-    ajouteMesuresAuService,
     ajouteRisqueGeneralAService,
     ajouteRolesResponsabilitesAService,
     dupliqueService,

@@ -17,7 +17,6 @@ const DescriptionService = require('../../modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('../../modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('../../modeles/donneesSensiblesSpecifiques');
 const MesureGenerale = require('../../modeles/mesureGenerale');
-const MesureSpecifique = require('../../modeles/mesureSpecifique');
 const MesuresSpecifiques = require('../../modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('../../modeles/partiesPrenantes/partiesPrenantes');
 const PointsAcces = require('../../modeles/pointsAcces');
@@ -278,54 +277,6 @@ const routesConnecteApiService = ({
           return;
         }
         suite(e);
-      }
-    }
-  );
-
-  routes.post(
-    '/:id/mesures',
-    middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise(
-      'mesuresGenerales.*.statut',
-      'mesuresGenerales.*.modalites',
-      'mesuresSpecifiques.*.description',
-      'mesuresSpecifiques.*.categorie',
-      'mesuresSpecifiques.*.statut',
-      'mesuresSpecifiques.*.modalites'
-    ),
-    (requete, reponse, suite) => {
-      const { mesuresSpecifiques = [], mesuresGenerales = {} } = requete.body;
-      const idService = requete.service.id;
-      const idUtilisateur = requete.idUtilisateurCourant;
-
-      try {
-        const generales = Object.keys(mesuresGenerales).map((idMesure) => {
-          const { modalites, statut } = mesuresGenerales[idMesure];
-          return new MesureGenerale(
-            { id: idMesure, statut, modalites },
-            referentiel
-          );
-        });
-
-        const aPersister = mesuresSpecifiques.filter((mesure) =>
-          MesureSpecifique.proprietesObligatoiresRenseignees(mesure)
-        );
-        const specifiques = new MesuresSpecifiques(
-          { mesuresSpecifiques: aPersister },
-          referentiel
-        );
-
-        depotDonnees
-          .ajouteMesuresAuService(
-            idService,
-            idUtilisateur,
-            generales,
-            specifiques
-          )
-          .then(() => reponse.send({ idService }))
-          .catch(suite);
-      } catch {
-        reponse.status(422).send('Données invalides');
       }
     }
   );
