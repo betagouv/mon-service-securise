@@ -176,4 +176,10 @@ $(() => {
     'exemple : https://www.adresse.fr, adresse IP'
   );
   brancheComportementNombreOrganisationsUtilisatrices();
+
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-niveaux-de-securite', {
+      detail: {},
+    })
+  );
 });
