@@ -55,7 +55,7 @@ const brancheComportementNavigationEtapes = () => {
   };
 
   const etapeMin = 1;
-  const etapeMax = 2;
+  const etapeMax = Object.keys(donneesEtapes).length;
   const $boutonPrecedent = $('#etape-precedente');
   const $boutonSuivant = $('#etape-suivante');
   const $conteneurBoutonFinaliser = $('.conteneur-bouton-finaliser');
@@ -96,10 +96,7 @@ const brancheComportementNavigationEtapes = () => {
       cacheBouton($conteneurBoutonFinaliser);
     }
 
-    $hautDePage[0].scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    $hautDePage[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   $boutonPrecedent.on('click', () => {
