@@ -6,6 +6,7 @@
     resume: string;
   };
   let niveauChoisi: IdNiveauDeSecurite;
+  let niveauSurbrillance: IdNiveauDeSecurite;
 
   const niveaux: NiveauDeSecurite[] = [
     {
@@ -29,10 +30,14 @@
   ];
 </script>
 
-<div>
+<div class="racine">
   <div class="niveaux">
     {#each niveaux as niveau}
-      <div class="boite-niveau">
+      <button
+        type="button"
+        class="boite-niveau"
+        on:click={() => (niveauSurbrillance = niveau.id)}
+      >
         <h4>{niveau.nom}</h4>
         <p>{niveau.resume}</p>
         <input
@@ -42,12 +47,15 @@
           value={niveau.id}
         />
         <label for={niveau.id}> Sélectionner ce niveau </label>
-      </div>
+      </button>
     {/each}
   </div>
 </div>
 
 <style>
+  .racine {
+    padding-top: 48px;
+  }
   .niveaux {
     display: flex;
     flex-direction: row;
@@ -67,12 +75,13 @@
     cursor: pointer;
     border: 1px dashed var(--liseres-fonce);
     border-radius: 5px;
+    background: transparent;
   }
 
   .boite-niveau h4 {
     font-weight: 700;
     font-size: 1.56rem;
-    margin: 0 0 12px 0;
+    margin: 0 auto 12px auto;
   }
 
   label {
