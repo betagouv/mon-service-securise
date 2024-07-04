@@ -56,7 +56,8 @@ section:first-of-type {
   border-top: none;
 }
 
-form#decrire-etape-2 {
+form#decrire-etape-2,
+form#decrire-etape-3 {
   display: none;
 }
 
