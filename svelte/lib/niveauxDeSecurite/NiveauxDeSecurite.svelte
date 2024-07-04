@@ -1,5 +1,5 @@
 <script lang="ts">
-  type IdNiveauDeSecurite = string;
+  type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
   type NiveauDeSecurite = {
     id: IdNiveauDeSecurite;
     nom: string;
@@ -36,6 +36,7 @@
       <button
         type="button"
         class="boite-niveau"
+        class:boite-en-surbrillance={niveau.id === niveauSurbrillance}
         on:click={() => (niveauSurbrillance = niveau.id)}
       >
         <h4>{niveau.nom}</h4>
@@ -50,12 +51,26 @@
       </button>
     {/each}
   </div>
+  {#if niveauSurbrillance}
+    <div class="details-niveau">
+      {#if niveauSurbrillance === 'niveau1'}
+        <h4>Démarche adaptée au niveau élémentaire : initiale</h4>
+      {/if}
+      {#if niveauSurbrillance === 'niveau2'}
+        <h4>Démarche adaptée au niveau modéré : intermédiaire</h4>
+      {/if}
+      {#if niveauSurbrillance === 'niveau3'}
+        <h4>Démarche adaptée au niveau élevé : importante</h4>
+      {/if}
+    </div>
+  {/if}
 </div>
 
 <style>
   .racine {
     padding-top: 48px;
   }
+
   .niveaux {
     display: flex;
     flex-direction: row;
@@ -73,15 +88,20 @@
     flex: 1;
     padding: 32px 11px;
     cursor: pointer;
-    border: 1px dashed var(--liseres-fonce);
+    border: 2px dashed var(--liseres-fonce);
     border-radius: 5px;
     background: transparent;
+    margin-bottom: 24px;
   }
 
   .boite-niveau h4 {
     font-weight: 700;
     font-size: 1.56rem;
     margin: 0 auto 12px auto;
+  }
+
+  .boite-en-surbrillance {
+    border: 2px solid var(--bleu-mise-en-avant);
   }
 
   label {
@@ -92,5 +112,10 @@
     border-radius: 4px;
     width: fit-content;
     margin: auto auto 0;
+  }
+
+  .details-niveau {
+    border: 2px solid var(--bleu-mise-en-avant);
+    border-radius: 8px;
   }
 </style>
