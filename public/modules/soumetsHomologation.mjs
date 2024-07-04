@@ -38,15 +38,7 @@ const initialiseComportementFormulaire = (
     };
 
     try {
-      const reponseNiveauSecurite = await adaptateurAjax.execute({
-        method: 'post',
-        url: `/api/service/estimationNiveauSecurite`,
-        data: fonctionExtractionParametres(selecteurFormulaire),
-      });
-      requete.data = {
-        ...donneesDescription,
-        niveauSecurite: reponseNiveauSecurite.data.niveauDeSecuriteMinimal,
-      };
+      requete.data = donneesDescription;
       const donnees = await adaptateurAjax.execute(requete);
       basculeEnCoursChargement($bouton, false);
       redirige(donnees);

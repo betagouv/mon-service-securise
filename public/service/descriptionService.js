@@ -61,10 +61,15 @@ const brancheComportementNavigationEtapes = () => {
       description:
         'Pour mieux comprendre votre service et ses enjeux de protection des données, veuillez répondre aux questions suivantes sur ses <b>fonctionnalités et les données collectées.</b>',
     },
+    3: {
+      titre: 'Besoins de sécurité',
+      description:
+        "Sur la base des informations renseignées, l'ANSSI a évalué les besoins de sécurité de votre service. Sélectionnez le niveau identifié par l'ANSSI ou un niveau plus élevé puis passez à l'étape suivante pour découvrir la liste de mesures de sécurité adaptée à votre service.",
+    },
   };
 
   const etapeMin = 1;
-  const etapeMax = 2;
+  const etapeMax = 3;
   const $boutonPrecedent = $('#etape-precedente');
   const $boutonSuivant = $('#etape-suivante');
   const $conteneurBoutonFinaliser = $('.conteneur-bouton-finaliser');

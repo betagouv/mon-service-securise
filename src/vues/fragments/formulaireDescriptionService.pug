@@ -234,6 +234,35 @@ mixin formulaireDescriptionService(idHomologation)
             lectureSeule: estLectureSeule
           })
 
+    form.etape-decrire#decrire-etape-3
+      .requis
+        +inputChoix({
+          type: 'radio',
+          nom: 'niveauSecurite',
+          titre: 'Niveau de sécurité',
+          items: {
+            niveau1:
+              {
+                titre: "Élémentaires",
+                description: "Les besoins de sécurité sont élémentaires en l'absence de données ou de fonctionnalités sensibles."
+              },
+            niveau2:
+              {
+                titre: "Modérés",
+                description: "Les besoins de sécurité sont modérés compte tenu de données ou de fonctionnalités plus sensibles traitées par le service."
+              },
+            niveau3:
+              {
+                titre: "Importants",
+                description: "Les besoins de sécurité sont importants compte tenu de la sensibilité des données traitées ou des fonctionnalités proposées."
+              },
+          },
+          objetDonnees: service.descriptionService,
+          messageErreur: 'Le niveau de sécurité est obligatoire. Veuillez cocher une option.',
+          requis: true,
+          lectureSeule: estLectureSeule
+        })
+
     .conteneur-actions-etapes
       button.bouton.bouton-secondaire#etape-precedente Précédent
       button.bouton#etape-suivante Suivant
