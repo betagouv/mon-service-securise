@@ -5,3 +5,14 @@ block title
 
 block append styles
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
+
+block titre
+  h1 Présentation du service
+
+block avancement-etape
+  +avancementEtape(1, 2)
+
+block etapier
+  .conteneur-etapier
+    .etape.active(data-numero-etape="1")
+    .etape(data-numero-etape="2")
