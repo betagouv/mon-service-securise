@@ -3,7 +3,11 @@ extends ../parcoursService
 block title
   title Décrire | MonServiceSécurisé
 
+block append scripts
+  script(type = 'module', src = '/statique/composants-svelte/niveauxDeSecurite.js')
+
 block append styles
+  link(href = '/statique/composants-svelte/style.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
 block titre
