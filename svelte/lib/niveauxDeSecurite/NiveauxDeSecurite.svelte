@@ -1,10 +1,11 @@
 <script lang="ts">
-  type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
-  type NiveauDeSecurite = {
-    id: IdNiveauDeSecurite;
-    nom: string;
-    resume: string;
-  };
+  import type {
+    IdNiveauDeSecurite,
+    NiveauDeSecurite,
+  } from './niveauxDeSecurite.d';
+
+  export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+
   let niveauChoisi: IdNiveauDeSecurite;
   let niveauSurbrillance: IdNiveauDeSecurite;
 

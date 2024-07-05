@@ -4,4 +4,14 @@ declare global {
   }
 }
 
-export type NiveauxDeSecuriteProps = {};
+export type NiveauxDeSecuriteProps = {
+  niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+};
+
+export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
+
+export type NiveauDeSecurite = {
+  id: IdNiveauDeSecurite;
+  nom: string;
+  resume: string;
+};

@@ -6,6 +6,13 @@ import {
   declencheValidation,
 } from '../modules/interactions/validation.mjs';
 
+const $boutonPrecedent = () => $('#etape-precedente');
+const $boutonSuivant = () => $('#etape-suivante');
+const $conteneurBoutonFinaliser = () => $('.conteneur-bouton-finaliser');
+
+const cacheBouton = ($bouton) => $bouton.css('display', 'none');
+const afficheBouton = ($bouton) => $bouton.css('display', 'flex');
+
 const messageErreurNomDejaUtilise = {
   affiche: () => {
     $('#nom-deja-utilise').css('display', 'flex');
@@ -40,6 +47,28 @@ const estNomServiceDejaUtilise = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
+async function chargeEtapeSelectionNiveau() {
+  cacheBouton($boutonSuivant());
+  cacheBouton($boutonPrecedent());
+  cacheBouton($conteneurBoutonFinaliser());
+
+  const reponse = await axios({
+    method: 'post',
+    url: `/api/service/estimationNiveauSecurite`,
+    data: extraisParametresDescriptionService('#homologation'),
+  });
+
+  $('.icone-chargement', '#decrire-etape-3').hide();
+
+  const { niveauDeSecuriteMinimal } = reponse.data;
+
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-niveaux-de-securite', {
+      detail: { niveauDeSecuriteMinimal },
+    })
+  );
+}
+
 const brancheComportementNavigationEtapes = () => {
   const donneesEtapes = {
     1: {
@@ -63,21 +92,17 @@ const brancheComportementNavigationEtapes = () => {
 
   const etapeMin = 1;
   const etapeMax = Object.keys(donneesEtapes).length;
-  const $boutonPrecedent = $('#etape-precedente');
-  const $boutonSuivant = $('#etape-suivante');
-  const $conteneurBoutonFinaliser = $('.conteneur-bouton-finaliser');
   const $entete = $('.conteneur-entete');
   let etapeCourante = 1;
 
   brancheValidation($('#decrire-etape-1'));
   brancheValidation($('#decrire-etape-2'));
 
-  const cacheBouton = ($bouton) => $bouton.css('display', 'none');
-  const afficheBouton = ($bouton) => $bouton.css('display', 'flex');
-
-  const afficheEtape = () => {
+  const afficheEtape = async () => {
     $('.etape-decrire').hide();
     $(`#decrire-etape-${etapeCourante}`).show();
+
+    if (etapeCourante === 3) await chargeEtapeSelectionNiveau();
 
     const $hautDePage = $('.marges-fixes');
     const { titre, description } = donneesEtapes[etapeCourante];
@@ -92,26 +117,26 @@ const brancheComportementNavigationEtapes = () => {
       $(`.etape:nth-child(${i})`, $entete).addClass('active');
     }
 
-    if (etapeCourante === etapeMin) cacheBouton($boutonPrecedent);
-    else afficheBouton($boutonPrecedent);
+    if (etapeCourante === etapeMin) cacheBouton($boutonPrecedent());
+    else afficheBouton($boutonPrecedent());
 
     if (etapeCourante === etapeMax) {
-      cacheBouton($boutonSuivant);
-      afficheBouton($conteneurBoutonFinaliser);
+      cacheBouton($boutonSuivant());
+      afficheBouton($conteneurBoutonFinaliser());
     } else {
-      afficheBouton($boutonSuivant);
-      cacheBouton($conteneurBoutonFinaliser);
+      afficheBouton($boutonSuivant());
+      cacheBouton($conteneurBoutonFinaliser());
     }
 
     $hautDePage[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  $boutonPrecedent.on('click', () => {
+  $boutonPrecedent().on('click', () => {
     etapeCourante = Math.max(etapeCourante - 1, 1);
     afficheEtape();
   });
 
-  $boutonSuivant.on('click', () => {
+  $boutonSuivant().on('click', () => {
     const $formulaireEtape = $(`#decrire-etape-${etapeCourante}`);
     declencheValidation($formulaireEtape);
     if ($formulaireEtape[0].checkValidity()) {
@@ -176,10 +201,4 @@ $(() => {
     'exemple : https://www.adresse.fr, adresse IP'
   );
   brancheComportementNombreOrganisationsUtilisatrices();
-
-  document.body.dispatchEvent(
-    new CustomEvent('svelte-recharge-niveaux-de-securite', {
-      detail: {},
-    })
-  );
 });
