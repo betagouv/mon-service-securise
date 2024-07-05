@@ -146,6 +146,7 @@
     border-radius: 4px;
     width: fit-content;
     margin: auto auto 0;
+    cursor: pointer;
   }
 
   .details-niveau {
