@@ -42,6 +42,7 @@
         type="button"
         class="boite-niveau"
         disabled={estNiveauTropBas(niveau.id)}
+        class:est-niveau-recommande={niveau.id === niveauDeSecuriteMinimal}
         class:niveau-choisi={niveau.id === niveauChoisi}
         class:boite-en-surbrillance={niveau.id === niveauSurbrillance}
         on:click={() => (niveauSurbrillance = niveau.id)}
@@ -120,10 +121,25 @@
     margin-bottom: 24px;
   }
 
+  .est-niveau-recommande::before {
+    content: "Besoins identifiés par l'ANSSI";
+    color: white;
+    background: var(--bleu-mise-en-avant);
+    padding: 4px 10px;
+    border-radius: 40px;
+    align-self: center;
+    position: relative;
+    top: -16px;
+  }
+
   .boite-niveau h4 {
     font-weight: 700;
     font-size: 1.56rem;
     margin: 0 auto 12px auto;
+  }
+
+  .boite-niveau.est-niveau-recommande {
+    padding-top: 0;
   }
 
   .boite-niveau.niveau-choisi,
