@@ -15,3 +15,9 @@ export type NiveauDeSecurite = {
   nom: string;
   resume: string;
 };
+
+export const ordreDesNiveaux: Record<IdNiveauDeSecurite, number> = {
+  niveau1: 1,
+  niveau2: 2,
+  niveau3: 3,
+};
