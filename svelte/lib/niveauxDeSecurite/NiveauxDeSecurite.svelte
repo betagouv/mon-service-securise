@@ -52,6 +52,7 @@
           type="radio"
           id={niveau.id}
           bind:group={niveauChoisi}
+          name="niveauSecurite"
           value={niveau.id}
           disabled={estNiveauTropBas(niveau.id)}
         />
