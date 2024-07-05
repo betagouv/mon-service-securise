@@ -36,6 +36,7 @@
       <button
         type="button"
         class="boite-niveau"
+        class:niveau-choisi={niveau.id === niveauChoisi}
         class:boite-en-surbrillance={niveau.id === niveauSurbrillance}
         on:click={() => (niveauSurbrillance = niveau.id)}
       >
@@ -47,12 +48,19 @@
           bind:group={niveauChoisi}
           value={niveau.id}
         />
-        <label for={niveau.id}> Sélectionner ce niveau </label>
+        <label class:niveau-choisi={niveau.id === niveauChoisi} for={niveau.id}>
+          {niveau.id === niveauChoisi
+            ? 'Niveau sélectionné'
+            : 'Sélectionner ce niveau'}
+        </label>
       </button>
     {/each}
   </div>
   {#if niveauSurbrillance}
-    <div class="details-niveau">
+    <div
+      class="details-niveau"
+      class:details-niveau-choisi={niveauChoisi === niveauSurbrillance}
+    >
       {#if niveauSurbrillance === 'niveau1'}
         <h4>Démarche adaptée au niveau élémentaire : initiale</h4>
       {/if}
@@ -98,6 +106,32 @@
     font-weight: 700;
     font-size: 1.56rem;
     margin: 0 auto 12px auto;
+  }
+
+  .boite-niveau.niveau-choisi,
+  label.niveau-choisi,
+  div.details-niveau-choisi {
+    border-color: #0c8626;
+    border-style: solid;
+  }
+
+  label.niveau-choisi {
+    color: #0c8626;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  label.niveau-choisi::after {
+    display: block;
+    width: 20px;
+    height: 20px;
+    content: '';
+    background: url(/statique/assets/images/icone_ok_cercle_vert.svg) no-repeat
+      center;
+    margin-left: 6px;
+    background-position-y: -7px;
+    background-size: cover;
   }
 
   .boite-en-surbrillance {
