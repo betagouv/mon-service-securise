@@ -170,6 +170,25 @@
 
   .boite-en-surbrillance {
     border: 2px solid var(--bleu-mise-en-avant);
+    position: relative;
+  }
+
+  .boite-en-surbrillance::after {
+    display: block;
+    content: '';
+    width: 14px;
+    height: 14px;
+    border-left: 2px solid var(--bleu-mise-en-avant);
+    border-bottom: 2px solid var(--bleu-mise-en-avant);
+    transform: rotate(-45deg);
+    position: absolute;
+    bottom: -10px;
+    background: white;
+    left: calc(50% - 7px);
+  }
+
+  .niveau-choisi::after {
+    border-color: #0c8626;
   }
 
   label {
