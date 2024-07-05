@@ -1,13 +1,17 @@
 <script lang="ts">
-  import type {
-    IdNiveauDeSecurite,
-    NiveauDeSecurite,
+  import {
+    type IdNiveauDeSecurite,
+    type NiveauDeSecurite,
+    ordreDesNiveaux,
   } from './niveauxDeSecurite.d';
 
   export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
 
   let niveauChoisi: IdNiveauDeSecurite;
   let niveauSurbrillance: IdNiveauDeSecurite;
+
+  const estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
+    ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
 
   const niveaux: NiveauDeSecurite[] = [
     {
@@ -37,6 +41,7 @@
       <button
         type="button"
         class="boite-niveau"
+        disabled={estNiveauTropBas(niveau.id)}
         class:niveau-choisi={niveau.id === niveauChoisi}
         class:boite-en-surbrillance={niveau.id === niveauSurbrillance}
         on:click={() => (niveauSurbrillance = niveau.id)}
@@ -48,12 +53,23 @@
           id={niveau.id}
           bind:group={niveauChoisi}
           value={niveau.id}
+          disabled={estNiveauTropBas(niveau.id)}
         />
-        <label class:niveau-choisi={niveau.id === niveauChoisi} for={niveau.id}>
-          {niveau.id === niveauChoisi
-            ? 'Niveau sélectionné'
-            : 'Sélectionner ce niveau'}
-        </label>
+        {#if estNiveauTropBas(niveau.id)}
+          <div class="niveau-trop-bas">
+            Il est impossible de sélectionner des besoins de sécurité moins
+            élevés que ceux identifiés par l'ANSSI
+          </div>
+        {:else}
+          <label
+            class:niveau-choisi={niveau.id === niveauChoisi}
+            for={niveau.id}
+          >
+            {niveau.id === niveauChoisi
+              ? 'Niveau sélectionné'
+              : 'Sélectionner ce niveau'}
+          </label>
+        {/if}
       </button>
     {/each}
   </div>
@@ -148,6 +164,14 @@
     width: fit-content;
     margin: auto auto 0;
     cursor: pointer;
+  }
+
+  button[disabled] {
+    color: inherit;
+  }
+
+  .niveau-trop-bas {
+    color: var(--texte-clair);
   }
 
   .details-niveau {
