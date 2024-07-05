@@ -47,39 +47,19 @@ const estNomServiceDejaUtilise = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
-async function chargeEtapeSelectionNiveau() {
-  cacheBouton($boutonSuivant());
-  cacheBouton($boutonPrecedent());
-  cacheBouton($conteneurBoutonFinaliser());
-
-  const reponse = await axios({
-    method: 'post',
-    url: `/api/service/estimationNiveauSecurite`,
-    data: extraisParametresDescriptionService('#homologation'),
-  });
-
-  $('.icone-chargement', '#decrire-etape-3').hide();
-
-  const { niveauDeSecuriteMinimal } = reponse.data;
-
-  document.body.dispatchEvent(
-    new CustomEvent('svelte-recharge-niveaux-de-securite', {
-      detail: { niveauDeSecuriteMinimal },
-    })
-  );
-}
-
 const brancheComportementNavigationEtapes = () => {
   const donneesEtapes = {
     1: {
       titre: 'Présentation du service',
       description:
         "Complétez les informations permettant d'évaluer les besoins de sécurité du service et de proposer <b>des mesures de sécurité adaptées</b>.",
+      initialisation: async () => {},
     },
     2: {
       titre: 'Fonctionnalités et données',
       description:
         'Pour mieux comprendre votre service et ses enjeux de protection des données, veuillez répondre aux questions suivantes sur ses <b>fonctionnalités et les données collectées.</b>',
+      initialisation: async () => {},
     },
     3: {
       titre: 'Besoins de sécurité',
@@ -87,6 +67,26 @@ const brancheComportementNavigationEtapes = () => {
         "Sur la base des informations renseignées, l'ANSSI a évalué les <b>besoins de sécurité</b> de votre service. " +
         "Sélectionnez le niveau identifié par l'ANSSI ou un niveau plus élevé puis passez à l'étape suivante pour découvrir la liste de " +
         'mesures de sécurité adaptée à votre service.',
+      initialisation: async () => {
+        cacheBouton($boutonSuivant());
+        cacheBouton($boutonPrecedent());
+        cacheBouton($conteneurBoutonFinaliser());
+
+        const reponse = await axios({
+          method: 'post',
+          url: `/api/service/estimationNiveauSecurite`,
+          data: extraisParametresDescriptionService('#homologation'),
+        });
+
+        $('.icone-chargement', '#decrire-etape-3').hide();
+
+        const { niveauDeSecuriteMinimal } = reponse.data;
+        document.body.dispatchEvent(
+          new CustomEvent('svelte-recharge-niveaux-de-securite', {
+            detail: { niveauDeSecuriteMinimal },
+          })
+        );
+      },
     },
   };
 
@@ -102,8 +102,6 @@ const brancheComportementNavigationEtapes = () => {
     $('.etape-decrire').hide();
     $(`#decrire-etape-${etapeCourante}`).show();
 
-    if (etapeCourante === 3) await chargeEtapeSelectionNiveau();
-
     const $hautDePage = $('.marges-fixes');
     const { titre, description } = donneesEtapes[etapeCourante];
 
@@ -116,6 +114,8 @@ const brancheComportementNavigationEtapes = () => {
     for (let i = 1; i <= etapeCourante; i += 1) {
       $(`.etape:nth-child(${i})`, $entete).addClass('active');
     }
+
+    await donneesEtapes[etapeCourante].initialisation();
 
     if (etapeCourante === etapeMin) cacheBouton($boutonPrecedent());
     else afficheBouton($boutonPrecedent());
