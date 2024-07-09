@@ -7,6 +7,7 @@
 
   export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
   export let niveauSecuriteExistant: IdNiveauDeSecurite | null = null;
+  export let lectureSeule: boolean;
 
   let niveauChoisi: IdNiveauDeSecurite;
   let niveauSurbrillance: IdNiveauDeSecurite;
@@ -84,13 +85,16 @@
           disabled={estNiveauTropBas(niveau.id)}
         />
         {#if estNiveauTropBas(niveau.id)}
-          <div class="niveau-trop-bas">
-            Il est impossible de sélectionner des besoins de sécurité moins
-            élevés que ceux identifiés par l'ANSSI
-          </div>
-        {:else}
+          {#if !lectureSeule}
+            <div class="niveau-trop-bas">
+              Il est impossible de sélectionner des besoins de sécurité moins
+              élevés que ceux identifiés par l'ANSSI
+            </div>
+          {/if}
+        {:else if !lectureSeule || niveau.id === niveauChoisi}
           <label
             class:niveau-choisi={niveau.id === niveauChoisi}
+            class:lectureSeule
             for={niveau.id}
           >
             {niveau.id === niveauChoisi ? 'Sélectionné' : 'Sélectionner'}
@@ -309,6 +313,17 @@
     background-position-y: -7px;
     background-size: cover;
     filter: brightness(0) invert(1);
+  }
+
+  label.lectureSeule {
+    background: none;
+    color: var(--bleu-mise-en-avant);
+    border: none;
+  }
+
+  label.lectureSeule.niveau-choisi::after {
+    filter: brightness(0) invert(26%) sepia(89%) saturate(1419%)
+      hue-rotate(183deg) brightness(112%) contrast(104%);
   }
 
   .boite-en-surbrillance {

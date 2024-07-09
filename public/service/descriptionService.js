@@ -72,23 +72,36 @@ const brancheComportementNavigationEtapes = () => {
         cacheBouton($boutonPrecedent());
         cacheBouton($conteneurBoutonFinaliser());
 
-        const reponse = await axios({
-          method: 'post',
-          url: `/api/service/estimationNiveauSecurite`,
-          data: extraisParametresDescriptionService('#homologation'),
-        });
+        const niveauRecommandeLectureSeule = JSON.parse(
+          $('#niveau-securite-recommande-lecture-seule').text()
+        );
 
+        let niveauDeSecuriteMinimal;
+        if (niveauRecommandeLectureSeule) {
+          niveauDeSecuriteMinimal = niveauRecommandeLectureSeule;
+        } else {
+          const reponse = await axios({
+            method: 'post',
+            url: `/api/service/estimationNiveauSecurite`,
+            data: extraisParametresDescriptionService('#homologation'),
+          });
+          niveauDeSecuriteMinimal = reponse.data.niveauDeSecuriteMinimal;
+        }
         $('.icone-chargement', '#decrire-etape-3').hide();
-
-        const { niveauDeSecuriteMinimal } = reponse.data;
 
         const niveauSecuriteExistant = JSON.parse(
           $('#niveau-securite-existant').text()
         );
 
+        const lectureSeule = JSON.parse($('#decrire-lecture-seule').text());
+
         document.body.dispatchEvent(
           new CustomEvent('svelte-recharge-niveaux-de-securite', {
-            detail: { niveauDeSecuriteMinimal, niveauSecuriteExistant },
+            detail: {
+              niveauDeSecuriteMinimal,
+              niveauSecuriteExistant,
+              lectureSeule,
+            },
           })
         );
       },

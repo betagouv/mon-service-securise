@@ -259,3 +259,7 @@ mixin formulaireDescriptionService(idHomologation)
   script(type = 'module', src = '/statique/service/descriptionService.js')
   script(id = 'niveau-securite-existant', type = 'application/json').
     !{JSON.stringify(estEnCreation ? null : service.descriptionService.niveauSecurite)}
+  script(id = 'niveau-securite-recommande-lecture-seule', type = 'application/json').
+    !{JSON.stringify(niveauRecommandeLectureSeule ? niveauRecommandeLectureSeule : null)}
+  script(id = 'decrire-lecture-seule', type = 'application/json').
+    !{JSON.stringify(estLectureSeule)}

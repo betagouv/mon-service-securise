@@ -11,6 +11,7 @@ const {
 const Autorisation = require('../../modeles/autorisations/autorisation');
 const Service = require('../../modeles/service');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
+const DescriptionService = require('../../modeles/descriptionService');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -79,12 +80,22 @@ const routesConnectePageService = ({
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { service } = requete;
+
+      const estLectureSeule =
+        reponse.locals.autorisationsService?.DECRIRE?.estLectureSeule;
+
       reponse.render('service/descriptionService', {
         InformationsHomologation,
         referentiel,
         service,
         etapeActive: 'descriptionService',
         departements,
+        ...(estLectureSeule && {
+          niveauRecommandeLectureSeule:
+            DescriptionService.estimeNiveauDeSecurite(
+              service.descriptionService
+            ),
+        }),
       });
     }
   );
