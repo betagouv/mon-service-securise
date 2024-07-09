@@ -6,9 +6,15 @@
   import donneesNiveauxDeSecurite from './donneesNiveauxDeSecurite';
 
   export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+  export let niveauSecuriteExistant: IdNiveauDeSecurite | null = null;
 
   let niveauChoisi: IdNiveauDeSecurite;
   let niveauSurbrillance: IdNiveauDeSecurite;
+
+  if (niveauSecuriteExistant) {
+    niveauChoisi = niveauSecuriteExistant;
+    niveauSurbrillance = niveauSecuriteExistant;
+  }
 
   const estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];

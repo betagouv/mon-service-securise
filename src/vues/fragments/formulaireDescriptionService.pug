@@ -257,3 +257,5 @@ mixin formulaireDescriptionService(idHomologation)
             button.bouton#diagnostic(disabled) Commencer à sécuriser le service
 
   script(type = 'module', src = '/statique/service/descriptionService.js')
+  script(id = 'niveau-securite-existant', type = 'application/json').
+    !{JSON.stringify(estEnCreation ? null : service.descriptionService.niveauSecurite)}
