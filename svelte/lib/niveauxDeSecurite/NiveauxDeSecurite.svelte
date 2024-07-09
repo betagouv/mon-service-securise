@@ -37,7 +37,7 @@
 
 <div class="racine">
   <div class="niveaux">
-    {#each niveaux as niveau}
+    {#each niveaux as niveau, index (index)}
       <button
         type="button"
         class="boite-niveau"
@@ -49,6 +49,12 @@
       >
         <h4>{niveau.nom}</h4>
         <p>{niveau.resume}</p>
+        <div class="conteneur-illustration">
+          <img
+            src="/statique/assets/images/niveauxSecurite/{niveau.id}.svg"
+            alt="Illustration du niveau {index + 1} de sécurité"
+          />
+        </div>
         <input
           type="radio"
           id={niveau.id}
@@ -222,5 +228,11 @@
     outline: 3px solid var(--liseres-fonce);
     border-radius: 8px;
     padding: 32px;
+  }
+
+  .conteneur-illustration {
+    text-align: center;
+    width: 100%;
+    margin: 32px 0;
   }
 </style>
