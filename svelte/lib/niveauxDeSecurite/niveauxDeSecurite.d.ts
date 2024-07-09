@@ -6,6 +6,7 @@ declare global {
 
 export type NiveauxDeSecuriteProps = {
   niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+  niveauSecuriteExistant?: IdNiveauDeSecurite;
 };
 
 export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';

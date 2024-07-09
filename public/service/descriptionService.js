@@ -81,9 +81,14 @@ const brancheComportementNavigationEtapes = () => {
         $('.icone-chargement', '#decrire-etape-3').hide();
 
         const { niveauDeSecuriteMinimal } = reponse.data;
+
+        const niveauSecuriteExistant = JSON.parse(
+          $('#niveau-securite-existant').text()
+        );
+
         document.body.dispatchEvent(
           new CustomEvent('svelte-recharge-niveaux-de-securite', {
-            detail: { niveauDeSecuriteMinimal },
+            detail: { niveauDeSecuriteMinimal, niveauSecuriteExistant },
           })
         );
       },
