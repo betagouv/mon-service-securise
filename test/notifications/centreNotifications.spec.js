@@ -28,6 +28,29 @@ describe('Le centre de notifications', () => {
     });
   });
 
+  it('trie toutes les notifications retournées', async () => {
+    const enJanvier = '2024-01-01';
+    referentiel = Referentiel.creeReferentiel({
+      nouvellesFonctionnalites: [{ id: 'N1', dateDeDeploiement: enJanvier }],
+    });
+
+    const enFevrier = '2024-02-02';
+    depotDonnees.tachesDesServices = async () => [
+      { id: 'T1', dateCreation: new Date(enFevrier) },
+    ];
+
+    const centre = new CentreNotifications({
+      referentiel,
+      depotDonnees,
+      adaptateurHorloge,
+    });
+
+    const notifications = await centre.toutesNotifications('U1');
+
+    expect(notifications[0].id).to.be('T1');
+    expect(notifications[1].id).to.be('N1');
+  });
+
   describe('sur demande des nouveautés', () => {
     it("retourne les nouveautés, dans l'ordre antéchronologique", async () => {
       const centreNotifications = new CentreNotifications({
@@ -139,7 +162,9 @@ describe('Le centre de notifications', () => {
 
       const notifs = await centre.toutesNotifications('U1');
 
-      expect(notifs).to.eql([{ id: 'T1', type: 'tache' }]);
+      expect(notifs.length).to.be(1);
+      expect(notifs[0].id).to.be('T1');
+      expect(notifs[0].type).to.be('tache');
     });
   });
 
