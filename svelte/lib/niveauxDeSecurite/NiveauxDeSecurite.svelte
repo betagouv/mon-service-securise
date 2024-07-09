@@ -120,6 +120,17 @@
             {/each}
           </ul>
         </details>
+        <div class="navigation-description">
+          <div class="pagination">
+            {#each donneesNiveauxDeSecurite as niveau}
+              <button
+                type="button"
+                class:actif={niveauSurbrillance === niveau.id}
+                on:click={() => (niveauSurbrillance = niveau.id)}
+              />
+            {/each}
+          </div>
+        </div>
       </div>
     {/if}
   {/if}
@@ -341,5 +352,30 @@
 
   .details-niveau details:last-of-type {
     border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
+  }
+
+  .navigation-description {
+    padding-top: 48px;
+  }
+
+  .navigation-description .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .navigation-description .pagination button {
+    width: 10px;
+    height: 10px;
+    background: var(--liseres-fonce);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .navigation-description .pagination button.actif {
+    background: var(--bleu-mise-en-avant);
   }
 </style>
