@@ -13,6 +13,7 @@ export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
 export type NiveauDeSecurite = {
   id: IdNiveauDeSecurite;
   nom: string;
+  titreNiveau: string;
   resume: string;
   description: {
     exemplesServicesNumeriques: string[];

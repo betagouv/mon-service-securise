@@ -4,6 +4,7 @@ const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
   {
     id: 'niveau1',
     nom: 'Élémentaires',
+    titreNiveau: 'élémentaire',
     resume:
       "Les besoins de sécurité sont élémentaires en l'absence de données ou de fonctionnalités sensibles.",
     description: {
@@ -24,6 +25,7 @@ const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
   {
     id: 'niveau2',
     nom: 'Modérés',
+    titreNiveau: 'modéré',
     resume:
       'Les besoins de sécurité sont modérés compte tenu de données ou de fonctionnalités plus sensibles traitées par le service.',
     description: {
@@ -49,6 +51,7 @@ const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
   {
     id: 'niveau3',
     nom: 'Importants',
+    titreNiveau: 'important',
     resume:
       'Les besoins de sécurité sont importants compte tenu de la sensibilité des données traitées ou des fonctionnalités proposées.',
     description: {
@@ -60,7 +63,7 @@ const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
       evalutationBesoins:
         "Il est nécessaire de réaliser une <b>analyse de risques approfondie</b> prenant appui sur la méthode Ebios Risk Manager afin d'affiner la compréhension des risques pour le service et identifier des mesures de sécurité spécifiques additionnelles adaptés aux risques identifiés.",
       securisation: [
-        'Mettez en œuvre le <b>socle de mesures de sécurité</b> proposé par MonServiceSécurisé afin de protéger contre les risques les plus courants.',
+        'Mettez en œuvre le <b>socle de mesures de sécurité</b> proposé par MonServiceSécurisé afin de protéger vos services contre les risques les plus courants.',
         "<b>Afin de vérifier l'état de la sécurité du service, réalisez un audit de sécurité approfondi, par exemple, par un prestataire qualifié par l'ANSSI (PASSI).</b>",
         "Complétez avec <b>des mesures de sécurité spécifiques</b> adaptées, identifiées dans le cadre l'analyse de risques et de l'audit de sécurité ou découlant de la politique de sécurité de votre organisation.",
       ],

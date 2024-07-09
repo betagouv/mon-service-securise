@@ -59,9 +59,13 @@
     {/each}
   </div>
   {#if niveauSurbrillance}
-    {@const descriptionNiveau = donneesNiveauxDeSecurite.find(
+    {@const indexNiveau = donneesNiveauxDeSecurite.findIndex(
       (n) => n.id === niveauSurbrillance
-    )?.description}
+    )}
+    {@const descriptionNiveau =
+      donneesNiveauxDeSecurite[indexNiveau]?.description}
+    {@const niveauPrecedent = donneesNiveauxDeSecurite[indexNiveau - 1] ?? null}
+    {@const niveauSuivant = donneesNiveauxDeSecurite[indexNiveau + 1] ?? null}
     {#if descriptionNiveau}
       <div
         class="details-niveau"
@@ -121,6 +125,18 @@
           </ul>
         </details>
         <div class="navigation-description">
+          <div class="precedent">
+            <button
+              type="button"
+              class="fleche-navigation"
+              class:masque={!niveauPrecedent}
+              on:click={() => {
+                if (niveauPrecedent) niveauSurbrillance = niveauPrecedent.id;
+              }}
+            >
+              Voir le niveau {niveauPrecedent?.titreNiveau}
+            </button>
+          </div>
           <div class="pagination">
             {#each donneesNiveauxDeSecurite as niveau}
               <button
@@ -129,6 +145,18 @@
                 on:click={() => (niveauSurbrillance = niveau.id)}
               />
             {/each}
+          </div>
+          <div class="suivant">
+            <button
+              type="button"
+              class="fleche-navigation"
+              class:masque={!niveauSuivant}
+              on:click={() => {
+                if (niveauSuivant) niveauSurbrillance = niveauSuivant.id;
+              }}
+            >
+              Découvrir le niveau {niveauSuivant?.titreNiveau}
+            </button>
           </div>
         </div>
       </div>
@@ -356,12 +384,14 @@
 
   .navigation-description {
     padding-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .navigation-description .pagination {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-self: center;
     gap: 8px;
   }
 
@@ -377,5 +407,56 @@
 
   .navigation-description .pagination button.actif {
     background: var(--bleu-mise-en-avant);
+  }
+
+  .masque {
+    opacity: 0;
+  }
+
+  .fleche-navigation {
+    border: none;
+    background: none;
+    color: var(--bleu-mise-en-avant);
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+
+  .fleche-navigation:hover {
+    background: var(--fond-gris-pale);
+    color: var(--bleu-survol);
+  }
+
+  .fleche-navigation.masque {
+    cursor: default;
+  }
+
+  .precedent .fleche-navigation:before {
+    content: '';
+    background: url(/statique/assets/images/fleche_gauche_bleue.svg);
+    display: flex;
+    width: 24px;
+    height: 24px;
+  }
+
+  .suivant {
+    justify-self: end;
+  }
+
+  .suivant .fleche-navigation:after {
+    content: '';
+    background: url(/statique/assets/images/fleche_gauche_bleue.svg);
+    display: flex;
+    width: 24px;
+    height: 24px;
+    transform: rotate(180deg);
+  }
+
+  .fleche-navigation:hover:before,
+  .fleche-navigation:hover:after {
+    filter: brightness(0) invert(22%) sepia(49%) saturate(3021%)
+      hue-rotate(188deg) brightness(95%) contrast(91%);
   }
 </style>
