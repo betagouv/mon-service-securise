@@ -252,8 +252,8 @@ mixin formulaireDescriptionService(idHomologation)
       .conteneur-bouton-finaliser
         if !estLectureSeule
           if !estEnCreation
-            button.bouton#diagnostic(idHomologation = idHomologation) Enregistrer les modifications
+            button.bouton#diagnostic(idHomologation = idHomologation, disabled) Enregistrer les modifications
           else
-            button.bouton#diagnostic Commencer à sécuriser le service
+            button.bouton#diagnostic(disabled) Commencer à sécuriser le service
 
   script(type = 'module', src = '/statique/service/descriptionService.js')

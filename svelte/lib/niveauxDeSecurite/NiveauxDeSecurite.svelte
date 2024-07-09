@@ -15,6 +15,12 @@
 
   const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
+
+  $: {
+    if (niveauChoisi) {
+      document.getElementById('diagnostic')?.removeAttribute('disabled');
+    }
+  }
 </script>
 
 <div class="racine">
