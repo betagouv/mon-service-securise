@@ -11,7 +11,12 @@
   let niveauChoisi: IdNiveauDeSecurite;
   let niveauSurbrillance: IdNiveauDeSecurite;
 
-  if (niveauSecuriteExistant) {
+  const niveauEstRehausse = !niveauSecuriteExistant
+    ? false
+    : ordreDesNiveaux[niveauDeSecuriteMinimal] >
+      ordreDesNiveaux[niveauSecuriteExistant];
+
+  if (niveauSecuriteExistant && !niveauEstRehausse) {
     niveauChoisi = niveauSecuriteExistant;
     niveauSurbrillance = niveauSecuriteExistant;
   }
@@ -21,11 +26,6 @@
 
   const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
-
-  const niveauEstRehausse = !niveauSecuriteExistant
-    ? false
-    : ordreDesNiveaux[niveauDeSecuriteMinimal] >
-      ordreDesNiveaux[niveauSecuriteExistant];
 
   $: {
     if (niveauChoisi) {
