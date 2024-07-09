@@ -120,6 +120,29 @@ describe('Le centre de notifications', () => {
     });
   });
 
+  describe('sur demande des tâches liées aux services', () => {
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        nouvellesFonctionnalites: [],
+      });
+    });
+
+    it('retourne les tâches', async () => {
+      depotDonnees.tachesDesServices = async (idUtilisateur) =>
+        idUtilisateur === 'U1' ? [{ id: 'T1' }] : [];
+
+      const centre = new CentreNotifications({
+        referentiel,
+        depotDonnees,
+        adaptateurHorloge,
+      });
+
+      const notifs = await centre.toutesNotifications('U1');
+
+      expect(notifs).to.eql([{ id: 'T1', type: 'tache' }]);
+    });
+  });
+
   describe('sur demande des tâches en attente', () => {
     it("utilise le dépôt de données pour récupérer l'utilisateur", async () => {
       let idRecu;
