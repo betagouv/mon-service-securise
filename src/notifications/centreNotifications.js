@@ -23,16 +23,30 @@ class CentreNotifications {
       this.toutesNouveautes(idUtilisateur),
       this.depotDonnees.tachesDesServices(idUtilisateur),
     ]);
+
     return [
-      ...taches.map((t) => ({ ...t, type: 'tache' })),
-      ...nouveautes.map((t) => ({ ...t, type: 'nouveaute' })),
-      ...tachesDesServices.map((t) => ({ ...t, type: 'tache' })),
-    ];
+      ...taches.map((t) => ({
+        ...t,
+        type: 'tache',
+        date: () => this.adaptateurHorloge.maintenant(),
+      })),
+      ...nouveautes.map((t) => ({
+        ...t,
+        type: 'nouveaute',
+        date: () => new Date(t.dateDeDeploiement),
+      })),
+      ...tachesDesServices.map((t) => ({
+        ...t,
+        type: 'tache',
+        date: () => t.dateCreation,
+      })),
+    ].sort((a, b) => b.date() - a.date());
   }
 
   async toutesNouveautes(idUtilisateur) {
-    const toutesNouveautes = this.referentiel
-      .nouvellesFonctionnalites()
+    const avant = this.referentiel.nouvellesFonctionnalites();
+
+    const toutesNouveautes = avant
       .filter(
         (n) =>
           new Date(n.dateDeDeploiement) <= this.adaptateurHorloge.maintenant()
