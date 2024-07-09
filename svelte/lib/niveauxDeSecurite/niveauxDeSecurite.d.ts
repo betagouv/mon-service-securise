@@ -14,6 +14,13 @@ export type NiveauDeSecurite = {
   id: IdNiveauDeSecurite;
   nom: string;
   resume: string;
+  description: {
+    exemplesServicesNumeriques: string[];
+    demarcheIndicative: string;
+    evalutationBesoins?: string;
+    securisation: string[];
+    homologation: string[];
+  };
 };
 
 export const ordreDesNiveaux: Record<IdNiveauDeSecurite, number> = {

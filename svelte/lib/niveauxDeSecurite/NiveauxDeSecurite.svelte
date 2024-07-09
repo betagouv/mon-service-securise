@@ -1,9 +1,9 @@
 <script lang="ts">
   import {
     type IdNiveauDeSecurite,
-    type NiveauDeSecurite,
     ordreDesNiveaux,
   } from './niveauxDeSecurite.d';
+  import donneesNiveauxDeSecurite from './donneesNiveauxDeSecurite';
 
   export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
 
@@ -12,32 +12,11 @@
 
   const estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
-
-  const niveaux: NiveauDeSecurite[] = [
-    {
-      id: 'niveau1',
-      nom: 'Élémentaires',
-      resume:
-        "Les besoins de sécurité sont élémentaires en l'absence de données ou de fonctionnalités sensibles.",
-    },
-    {
-      id: 'niveau2',
-      nom: 'Modérés',
-      resume:
-        'Les besoins de sécurité sont modérés compte tenu de données ou de fonctionnalités plus sensibles traitées par le service.',
-    },
-    {
-      id: 'niveau3',
-      nom: 'Importants',
-      resume:
-        'Les besoins de sécurité sont importants compte tenu de la sensibilité des données traitées ou des fonctionnalités proposées.',
-    },
-  ];
 </script>
 
 <div class="racine">
   <div class="niveaux">
-    {#each niveaux as niveau, index (index)}
+    {#each donneesNiveauxDeSecurite as niveau, index (index)}
       <button
         type="button"
         class="boite-niveau"
@@ -80,20 +59,69 @@
     {/each}
   </div>
   {#if niveauSurbrillance}
-    <div
-      class="details-niveau"
-      class:details-niveau-choisi={niveauChoisi === niveauSurbrillance}
-    >
-      {#if niveauSurbrillance === 'niveau1'}
-        <h4>Démarche adaptée au niveau élémentaire : initiale</h4>
-      {/if}
-      {#if niveauSurbrillance === 'niveau2'}
-        <h4>Démarche adaptée au niveau modéré : intermédiaire</h4>
-      {/if}
-      {#if niveauSurbrillance === 'niveau3'}
-        <h4>Démarche adaptée au niveau élevé : importante</h4>
-      {/if}
-    </div>
+    {@const descriptionNiveau = donneesNiveauxDeSecurite.find(
+      (n) => n.id === niveauSurbrillance
+    )?.description}
+    {#if descriptionNiveau}
+      <div
+        class="details-niveau"
+        class:details-niveau-choisi={niveauChoisi === niveauSurbrillance}
+      >
+        <span class="chip">Exemples de services numériques</span>
+        <ul class="liste-exemples-services">
+          {#each descriptionNiveau.exemplesServicesNumeriques as exemple}
+            <li>{exemple}</li>
+          {/each}
+        </ul>
+        <h5>
+          Démarche indicative adaptée : {descriptionNiveau.demarcheIndicative}
+        </h5>
+        {#if descriptionNiveau.evalutationBesoins}
+          <details open>
+            <summary>
+              <img
+                src="/statique/assets/images/niveauxSecurite/icone_bouclier_cle.svg"
+                alt="Icône de l'évaluation des besoins de sécurité"
+              />
+              Evaluation des besoins de sécurité
+            </summary>
+            <p>{@html descriptionNiveau.evalutationBesoins}</p>
+          </details>
+        {/if}
+        <details open>
+          <summary>
+            <img
+              src="/statique/assets/images/niveauxSecurite/icone_taches.svg"
+              alt="Icône de la sécurisation et évaluation de la sécurité"
+            />
+            Sécurisation et évaluation de la sécurité
+          </summary>
+          {#if descriptionNiveau.securisation.length === 1}
+            <p>{@html descriptionNiveau.securisation[0]}</p>
+          {:else}
+            <ul>
+              {#each descriptionNiveau.securisation as securisation}
+                <li>{@html securisation}</li>
+              {/each}
+            </ul>
+          {/if}
+        </details>
+        <details open>
+          <summary>
+            <img
+              src="/statique/assets/images/niveauxSecurite/icone_medaille.svg"
+              alt="Icône de l'homologation"
+            />
+            Homologation
+          </summary>
+          <ul>
+            {#each descriptionNiveau.homologation as homologation}
+              <li>{@html homologation}</li>
+            {/each}
+          </ul>
+        </details>
+      </div>
+    {/if}
   {/if}
 </div>
 
@@ -228,11 +256,90 @@
     outline: 3px solid var(--liseres-fonce);
     border-radius: 8px;
     padding: 32px;
+    text-align: left;
   }
 
   .conteneur-illustration {
     text-align: center;
     width: 100%;
     margin: 32px 0;
+  }
+
+  .details-niveau .chip {
+    padding: 0 10px;
+    border-radius: 40px;
+    background: var(--fond-bleu-pale);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gris-fonce);
+  }
+
+  .details-niveau .liste-exemples-services {
+    color: var(--texte-clair);
+    padding-left: 16px;
+  }
+
+  .details-niveau h5 {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 36px;
+    margin-bottom: 32px;
+  }
+
+  .details-niveau details {
+    cursor: pointer;
+  }
+
+  .details-niveau details p {
+    color: var(--texte-clair);
+    padding: 0 16px 8px 16px;
+  }
+
+  .details-niveau details summary:after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    transform: translateY(1px) rotate(90deg);
+    transition: transform 0.1s ease-in-out;
+    margin-left: auto;
+    background: url(/statique/assets/images/forme_chevron_bleu_fonce.svg)
+      no-repeat;
+    background-size: 16px 16px;
+  }
+
+  .details-niveau details[open] summary:after {
+    transform: translateY(1px) rotate(-90deg);
+  }
+
+  .details-niveau details[open] summary {
+    background: var(--fond-bleu-pale);
+    color: var(--bleu-survol);
+  }
+
+  .details-niveau summary {
+    padding: 12px 16px;
+    border-top: 1px solid var(--systeme-design-etat-contour-champs);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--bleu-anssi);
+  }
+
+  .details-niveau summary:hover {
+    background: #0000000a;
+  }
+
+  .details-niveau details ul {
+    color: var(--texte-clair);
+  }
+
+  .details-niveau details ul li {
+    margin-bottom: 16px;
+  }
+
+  .details-niveau details:last-of-type {
+    border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
   }
 </style>
