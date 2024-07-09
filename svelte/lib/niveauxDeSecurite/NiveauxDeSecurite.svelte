@@ -80,7 +80,7 @@
           Démarche indicative adaptée : {descriptionNiveau.demarcheIndicative}
         </h5>
         {#if descriptionNiveau.evalutationBesoins}
-          <details open>
+          <details>
             <summary>
               <img
                 src="/statique/assets/images/niveauxSecurite/icone_bouclier_cle.svg"
@@ -91,7 +91,7 @@
             <p>{@html descriptionNiveau.evalutationBesoins}</p>
           </details>
         {/if}
-        <details open>
+        <details>
           <summary>
             <img
               src="/statique/assets/images/niveauxSecurite/icone_taches.svg"
@@ -109,7 +109,7 @@
             </ul>
           {/if}
         </details>
-        <details open>
+        <details>
           <summary>
             <img
               src="/statique/assets/images/niveauxSecurite/icone_medaille.svg"
