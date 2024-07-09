@@ -22,6 +22,11 @@
   const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
 
+  const niveauEstRehausse = !niveauSecuriteExistant
+    ? false
+    : ordreDesNiveaux[niveauDeSecuriteMinimal] >
+      ordreDesNiveaux[niveauSecuriteExistant];
+
   $: {
     if (niveauChoisi) {
       document.getElementById('diagnostic')?.removeAttribute('disabled');
@@ -30,6 +35,28 @@
 </script>
 
 <div class="racine">
+  {#if niveauEstRehausse}
+    <div class="avertissement bleu">
+      <img
+        src="/statique/assets/images/icone_information_suppression.svg"
+        alt="Icône de danger"
+      />
+      <div>
+        <span>
+          <b>
+            Les modifications que vous venez d'effectuer impliquent un
+            changement de niveau de sécurité pour votre service.
+          </b>
+        </span>
+        <br />
+        <span>
+          Suite à une analyse par l'ANSSI, il a été déterminé que ce nouveau
+          niveau de service correspond à un <b>niveau supérieur</b> à celui précédemment
+          identifié.
+        </span>
+      </div>
+    </div>
+  {/if}
   <div class="niveaux">
     {#each donneesNiveauxDeSecurite as niveau, index (index)}
       <button
@@ -92,17 +119,17 @@
               alt="Icône de danger"
             />
             <div>
-              <span
-                ><b
-                  >Ces besoins de sécurité sont supérieurs à ceux identifiés à
-                  titre indicatif par l'ANSSI</b
-                ></span
-              >
+              <span>
+                <b>
+                  Ces besoins de sécurité sont supérieurs à ceux identifiés à
+                  titre indicatif par l'ANSSI
+                </b>
+              </span>
               <br />
-              <span
-                >Cela signifie que la liste des mesures de sécurité sera plus
-                complète et la démarche d'homologation plus exigeante</span
-              >
+              <span>
+                Cela signifie que la liste des mesures de sécurité sera plus
+                complète et la démarche d'homologation plus exigeante
+              </span>
             </div>
           </div>
         {/if}
@@ -494,6 +521,12 @@
     border: 1px solid #faa72c;
     background: var(--fond-ocre-pale);
     margin-bottom: 52px;
+    text-align: left;
+  }
+
+  .avertissement.bleu {
+    border: 1px solid var(--bleu-mise-en-avant);
+    background: var(--fond-bleu-pale);
   }
 
   .fleche-navigation:hover:before,
