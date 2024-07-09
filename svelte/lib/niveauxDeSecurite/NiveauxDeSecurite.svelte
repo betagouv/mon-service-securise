@@ -12,6 +12,9 @@
 
   const estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
+
+  const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
+    ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
 </script>
 
 <div class="racine">
@@ -70,6 +73,27 @@
         class="details-niveau"
         class:details-niveau-choisi={niveauChoisi === niveauSurbrillance}
       >
+        {#if estNiveauSuperieur(niveauSurbrillance)}
+          <div class="avertissement">
+            <img
+              src="/statique/assets/images/icone_danger.svg"
+              alt="Icône de danger"
+            />
+            <div>
+              <span
+                ><b
+                  >Ces besoins de sécurité sont supérieurs à ceux identifiés à
+                  titre indicatif par l'ANSSI</b
+                ></span
+              >
+              <br />
+              <span
+                >Cela signifie que la liste des mesures de sécurité sera plus
+                complète et la démarche d'homologation plus exigeante</span
+              >
+            </div>
+          </div>
+        {/if}
         <span class="chip">Exemples de services numériques</span>
         <ul class="liste-exemples-services">
           {#each descriptionNiveau.exemplesServicesNumeriques as exemple}
@@ -447,6 +471,17 @@
     width: 24px;
     height: 24px;
     transform: rotate(180deg);
+  }
+
+  .avertissement {
+    padding: 10px 16px;
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    border-radius: 4px;
+    border: 1px solid #faa72c;
+    background: var(--fond-ocre-pale);
+    margin-bottom: 52px;
   }
 
   .fleche-navigation:hover:before,
