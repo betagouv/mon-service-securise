@@ -119,6 +119,14 @@
     border-radius: 5px;
     background: transparent;
     margin-bottom: 24px;
+    transition:
+      transform 0.2s ease-out,
+      box-shadow 0.2s ease-out;
+  }
+
+  .boite-niveau:hover {
+    box-shadow: 0 16px 24px 0 rgba(0, 121, 208, 0.12);
+    transform: scale(1.02);
   }
 
   .est-niveau-recommande::before {
