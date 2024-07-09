@@ -67,9 +67,7 @@
             class:niveau-choisi={niveau.id === niveauChoisi}
             for={niveau.id}
           >
-            {niveau.id === niveauChoisi
-              ? 'Niveau sélectionné'
-              : 'Sélectionner ce niveau'}
+            {niveau.id === niveauChoisi ? 'Sélectionné' : 'Sélectionner'}
           </label>
         {/if}
       </button>
@@ -115,7 +113,8 @@
     flex: 1;
     padding: 32px 11px;
     cursor: pointer;
-    border: 2px dashed var(--liseres-fonce);
+    outline: 1px dashed var(--liseres-fonce);
+    border: none;
     border-radius: 5px;
     background: transparent;
     margin-bottom: 24px;
@@ -152,13 +151,13 @@
 
   .boite-niveau.niveau-choisi,
   label.niveau-choisi,
-  div.details-niveau-choisi {
-    border-color: #0c8626;
-    border-style: solid;
+  .details-niveau.details-niveau-choisi {
+    outline-color: var(--bleu-mise-en-avant);
   }
 
   label.niveau-choisi {
-    color: #0c8626;
+    color: white;
+    background: var(--bleu-mise-en-avant);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -174,10 +173,11 @@
     margin-left: 6px;
     background-position-y: -7px;
     background-size: cover;
+    filter: brightness(0) invert(1);
   }
 
   .boite-en-surbrillance {
-    border: 2px solid var(--bleu-mise-en-avant);
+    outline: 3px solid var(--liseres-fonce);
     position: relative;
   }
 
@@ -186,17 +186,17 @@
     content: '';
     width: 14px;
     height: 14px;
-    border-left: 2px solid var(--bleu-mise-en-avant);
-    border-bottom: 2px solid var(--bleu-mise-en-avant);
+    border-left: 3px solid var(--liseres-fonce);
+    border-bottom: 3px solid var(--liseres-fonce);
     transform: rotate(-45deg);
     position: absolute;
-    bottom: -10px;
+    bottom: -11px;
     background: white;
     left: calc(50% - 7px);
   }
 
   .niveau-choisi::after {
-    border-color: #0c8626;
+    border-color: var(--bleu-mise-en-avant);
   }
 
   label {
@@ -219,7 +219,8 @@
   }
 
   .details-niveau {
-    border: 2px solid var(--bleu-mise-en-avant);
+    outline: 3px solid var(--liseres-fonce);
     border-radius: 8px;
+    padding: 32px;
   }
 </style>
