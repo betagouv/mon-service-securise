@@ -20,7 +20,6 @@
       <button
         type="button"
         class="boite-niveau"
-        disabled={estNiveauTropBas(niveau.id)}
         class:est-niveau-recommande={niveau.id === niveauDeSecuriteMinimal}
         class:niveau-choisi={niveau.id === niveauChoisi}
         class:boite-en-surbrillance={niveau.id === niveauSurbrillance}
@@ -281,10 +280,6 @@
     width: fit-content;
     margin: auto auto 0;
     cursor: pointer;
-  }
-
-  button[disabled] {
-    color: inherit;
   }
 
   .niveau-trop-bas {
