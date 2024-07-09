@@ -46,14 +46,10 @@ class CentreNotifications {
   async toutesNouveautes(idUtilisateur) {
     const avant = this.referentiel.nouvellesFonctionnalites();
 
-    const toutesNouveautes = avant
-      .filter(
-        (n) =>
-          new Date(n.dateDeDeploiement) <= this.adaptateurHorloge.maintenant()
-      )
-      .sort(
-        (a, b) => new Date(b.dateDeDeploiement) - new Date(a.dateDeDeploiement)
-      );
+    const toutesNouveautes = avant.filter(
+      (n) =>
+        new Date(n.dateDeDeploiement) <= this.adaptateurHorloge.maintenant()
+    );
 
     const etatLectureNouveautes =
       await this.depotDonnees.nouveautesPourUtilisateur(idUtilisateur);

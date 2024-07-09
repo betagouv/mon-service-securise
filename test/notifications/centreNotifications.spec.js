@@ -51,7 +51,7 @@ describe('Le centre de notifications', () => {
     expect(notifications[1].id).to.be('N1');
   });
 
-  describe('sur demande des nouveautés', () => {
+  describe('concernant les nouveautés', () => {
     it("retourne les nouveautés, dans l'ordre antéchronologique", async () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
@@ -59,7 +59,7 @@ describe('Le centre de notifications', () => {
         adaptateurHorloge,
       });
 
-      const notifications = await centreNotifications.toutesNouveautes('U1');
+      const notifications = await centreNotifications.toutesNotifications('U1');
 
       expect(notifications.length).to.be(2);
       expect(notifications[0].id).to.be('N2');
@@ -77,7 +77,7 @@ describe('Le centre de notifications', () => {
         adaptateurHorloge,
       });
 
-      const notifications = await centreNotifications.toutesNouveautes('U1');
+      const notifications = await centreNotifications.toutesNotifications('U1');
 
       expect(donneesRecues.idUtilisateur).to.be('U1');
 
@@ -100,7 +100,7 @@ describe('Le centre de notifications', () => {
         adaptateurHorloge: decembre2023,
       });
 
-      const notifications = await centreNotifications.toutesNouveautes('U1');
+      const notifications = await centreNotifications.toutesNotifications('U1');
 
       expect(notifications.length).to.be(0);
     });
@@ -143,7 +143,7 @@ describe('Le centre de notifications', () => {
     });
   });
 
-  describe('sur demande des tâches liées aux services', () => {
+  describe('concernant les tâches liées aux services', () => {
     beforeEach(() => {
       referentiel = Referentiel.creeReferentiel({
         nouvellesFonctionnalites: [],
@@ -168,7 +168,7 @@ describe('Le centre de notifications', () => {
     });
   });
 
-  describe('sur demande des tâches en attente', () => {
+  describe("concernant les tâches liées à l'utilisateur", () => {
     it("utilise le dépôt de données pour récupérer l'utilisateur", async () => {
       let idRecu;
       depotDonnees.utilisateur = async (idUtilisateur) => {
@@ -180,7 +180,7 @@ describe('Le centre de notifications', () => {
         adaptateurHorloge,
       });
 
-      await centreNotifications.toutesTachesEnAttente('U1');
+      await centreNotifications.toutesNotifications('U1');
 
       expect(idRecu).to.be('U1');
     });
@@ -193,12 +193,16 @@ describe('Le centre de notifications', () => {
         adaptateurHorloge,
       });
 
-      const taches = await centreNotifications.toutesTachesEnAttente('U1');
+      const taches = await centreNotifications.toutesNotifications('U1');
 
       expect(taches).to.be.an(Array);
     });
 
     it("renvoie un tableau vide si le profil de l'utilisateur est complet", async () => {
+      referentiel = Referentiel.creeReferentiel({
+        nouvellesFonctionnalites: [],
+      });
+
       depotDonnees.utilisateur = async () =>
         unUtilisateur()
           .quiSAppelle('Jean Valjean')
@@ -210,12 +214,12 @@ describe('Le centre de notifications', () => {
         adaptateurHorloge,
       });
 
-      const taches = await centreNotifications.toutesTachesEnAttente('U1');
+      const taches = await centreNotifications.toutesNotifications('U1');
 
       expect(taches.length).to.be(0);
     });
 
-    describe("lorsque le siret de l'utilisateur est manquant", () => {
+    describe("lorsque le SIRET de l'utilisateur est manquant", () => {
       beforeEach(() => {
         depotDonnees.utilisateur = async () =>
           unUtilisateur()
@@ -234,7 +238,7 @@ describe('Le centre de notifications', () => {
           adaptateurHorloge,
         });
 
-        const taches = await centreNotifications.toutesTachesEnAttente('U1');
+        const taches = await centreNotifications.toutesNotifications('U1');
 
         expect(taches.length).to.be(1);
         expect(taches[0].titre).to.be('Titre tâche');
@@ -251,11 +255,12 @@ describe('Le centre de notifications', () => {
           adaptateurHorloge,
         });
 
-        const taches = await centreNotifications.toutesTachesEnAttente('U1');
+        const taches = await centreNotifications.toutesNotifications('U1');
 
         expect(taches.length).to.be(0);
       });
     });
+
     describe("lorsque l'utilisateur est invité'", () => {
       it('renvoie uniquement la notification de profil', async () => {
         depotDonnees.utilisateur = async () =>
@@ -272,7 +277,7 @@ describe('Le centre de notifications', () => {
           adaptateurHorloge,
         });
 
-        const taches = await centreNotifications.toutesTachesEnAttente('U1');
+        const taches = await centreNotifications.toutesNotifications('U1');
 
         expect(taches.length).to.be(1);
         expect(taches[0].id).to.be('profil');
