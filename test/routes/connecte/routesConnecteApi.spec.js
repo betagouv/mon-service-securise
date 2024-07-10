@@ -975,16 +975,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it('retourne une erreur HTTP 422 si les droits sont incohérents', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it('retourne une erreur HTTP 422 si les droits sont incohérents', async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         { erreur: { code: 'DROITS_INCOHERENTS' } },
         {
           method: 'post',
           url: 'http://localhost:1234/api/autorisation',
           data: { droits: { RUBRIQUE_INCONNUE: 2 } },
-        },
-        done
+        }
       );
     });
   });
