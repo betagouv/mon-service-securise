@@ -139,7 +139,7 @@ const routesConnecteApiService = ({
           reponse
             .status(422)
             .json({ erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } });
-        if (e instanceof ErreurModele) reponse.status(422).send(e.message);
+        else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
         else suite(e);
       }
     }
