@@ -143,23 +143,27 @@ block main
       +carrousel('carrousel-temoignages', 'Témoignages suivants')
         include home/temoignages
     .bloc-contenu.bloc-etroit.fond-couleur-principale.alignement-gauche#rejoignez-communaute
-      h3.titre-etroit.moyenne-marge-basse Rejoignez la communauté MonServiceSécurisé !
-      p En tant que&nbsp;
-        b membre de la communauté&nbsp;
-        | vous pourrez :
-      br
-      ul
-        li
-          b Echanger&nbsp;
-          | directement avec vos pairs pour une collaboration facilitée.
-        li
-          b Découvrir&nbsp;
-          | en avant-première les nouvelles fonctionnalités à venir.
-        li
-          b Participer&nbsp;
-          | activement au développement de MonServiceSécurisé en nous partageant vos besoins et suggestions d’amélioration.
-      .conteneur-image
-        img(loading="lazy" src='/statique/assets/images/home/illustration_communaute.svg' alt='')
+      .conteneur-communaute
+        div
+          h3.moyenne-marge-basse Rejoignez la communauté MonServiceSécurisé !
+          p En tant que&nbsp;
+            b membre de la communauté&nbsp;
+            | vous pourrez :
+          br
+          ul
+            li
+              b Echanger&nbsp;
+              | directement avec vos pairs pour une collaboration facilitée.
+            li
+              b Découvrir&nbsp;
+              | en avant-première les nouvelles fonctionnalités à venir.
+            li
+              b Participer&nbsp;
+              | activement au développement de MonServiceSécurisé en nous partageant vos besoins et suggestions d’amélioration.
+        div
+          .conteneur-centre
+            img(loading="lazy" src='/statique/assets/images/home/illustration_communaute.svg' alt='')
+      .conteneur-centre
         a#lien-rejoindre-communaute(href="https://tally.so/r/wa6o22") Rejoindre la communauté
 
     .bloc-contenu.bloc-etroit#presentation-anssi

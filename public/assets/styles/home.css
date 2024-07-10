@@ -421,6 +421,11 @@ main {
   overflow-y: hidden;
 }
 
+#home #rejoignez-communaute .conteneur-communaute {
+  display: flex;
+  flex-direction: column;
+}
+
 #home #rejoignez-communaute ul {
   padding-left: 20px;
   line-height: 24px;
@@ -430,7 +435,7 @@ main {
   max-width: 355px;
 }
 
-#home #rejoignez-communaute .conteneur-image {
+#home #rejoignez-communaute .conteneur-centre {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -439,4 +444,5 @@ main {
 
 #home #rejoignez-communaute a {
   margin-top: 0;
+  width: fit-content;
 }
