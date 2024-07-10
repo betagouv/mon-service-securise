@@ -598,7 +598,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
 
     it("répond avec une erreur HTTP 404 si l'identifiant d'étape n'est pas connu du référentiel", async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(404, 'Étape inconnue', {
+      await testeur.verifieRequeteGenereErreurHTTP(404, 'Étape inconnue', {
         method: 'get',
         url: 'http://localhost:1234/service/456/homologation/edition/etape/inconnue',
       });

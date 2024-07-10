@@ -103,7 +103,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si les données de description de service sont invalides', async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         'Le statut de déploiement "statutInvalide" est invalide',
         {
@@ -119,7 +119,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         throw new ErreurDonneesObligatoiresManquantes('oups');
       };
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(422, 'oups', {
+      await testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
         url: 'http://localhost:1234/api/service',
         data: {},
@@ -131,7 +131,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         throw new ErreurNomServiceDejaExistant('oups');
       };
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         { erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } },
         {
@@ -250,7 +250,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si le validateur du modèle échoue', async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         'Le statut de déploiement "statutInvalide" est invalide',
         {
@@ -266,7 +266,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         throw new ErreurNomServiceDejaExistant('oups');
       };
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         { erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } },
         {
@@ -749,15 +749,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si les données sont invalides', async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
-        422,
-        'Données invalides',
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/service/456/risques',
-          data: { 'commentaire-unRisqueInvalide': 'Un commentaire' },
-        }
-      );
+      await testeur.verifieRequeteGenereErreurHTTP(422, 'Données invalides', {
+        method: 'post',
+        url: 'http://localhost:1234/api/service/456/risques',
+        data: { 'commentaire-unRisqueInvalide': 'Un commentaire' },
+      });
     });
   });
 
@@ -1329,7 +1325,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .middleware()
         .reinitialise({ autorisationACharger: autorisationNonTrouvee });
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         403,
         'Droits insuffisants pour supprimer le service',
         { method: 'delete', url: 'http://localhost:1234/api/service/123' }
@@ -1341,7 +1337,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         autorisationACharger: uneAutorisation().deContributeur().construis(),
       });
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         403,
         'Droits insuffisants pour supprimer le service',
         { method: 'delete', url: 'http://localhost:1234/api/service/123' }
@@ -1419,7 +1415,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .middleware()
         .reinitialise({ autorisationACharger: autorisationNonTrouvee });
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         403,
         'Droits insuffisants pour dupliquer le service',
         { method: 'copy', url: 'http://localhost:1234/api/service/123' }
@@ -1431,7 +1427,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         autorisationACharger: uneAutorisation().deContributeur().construis(),
       });
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         403,
         'Droits insuffisants pour dupliquer le service',
         { method: 'copy', url: 'http://localhost:1234/api/service/123' }
@@ -1445,7 +1441,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         );
       };
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         424,
         {
           type: 'DONNEES_OBLIGATOIRES_MANQUANTES',
@@ -1766,7 +1762,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('jette une erreur 422 si les droits envoyés sont incohérents', async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         { code: 'DROITS_INCOHERENTS' },
         {
@@ -2026,7 +2022,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("retourne une erreur HTTP 424 si l'id du retour utilisateur est inconnu", async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         424,
         {
           type: 'DONNEES_INCORRECTES',
@@ -2044,7 +2040,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.referentiel().recharge({
         retoursUtilisateurMesure: { idRetour: 'un retour utilisateur' },
       });
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         424,
         {
           type: 'DONNEES_INCORRECTES',
@@ -2114,7 +2110,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       const service = unService().construis();
       testeur.middleware().reinitialise({ serviceARenvoyer: service });
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         'Les dossiers ne comportent pas de dossier courant',
         {
@@ -2209,7 +2205,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('retourne une erreur HTTP 400 si les données de description de service sont invalides', async () => {
       const donneesInvalides = { statutDeploiement: 'statutInvalide' };
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         400,
         'La description du service est invalide',
         {

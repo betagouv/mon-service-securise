@@ -35,23 +35,7 @@ const testeurMss = () => {
     suite();
   };
 
-  const verifieRequeteGenereErreurHTTP = (
-    status,
-    messageErreur,
-    requete,
-    suite
-  ) => {
-    axios(requete)
-      .then(() => suite('Réponse OK inattendue'))
-      .catch((erreur) => {
-        expect(erreur.response?.status).to.equal(status);
-        expect(erreur.response?.data).to.eql(messageErreur);
-        suite();
-      })
-      .catch(suite);
-  };
-
-  const verifieRequeteGenereErreurHTTPAsync = async (
+  const verifieRequeteGenereErreurHTTP = async (
     status,
     messageErreur,
     requete
@@ -149,7 +133,6 @@ const testeurMss = () => {
     arrete,
     initialise,
     verifieRequeteGenereErreurHTTP,
-    verifieRequeteGenereErreurHTTPAsync,
     verifieJetonDepose,
   };
 };
