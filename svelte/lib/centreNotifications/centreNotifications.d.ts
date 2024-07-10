@@ -22,3 +22,5 @@ export type NotificationTache = NotificationBase & {
 };
 
 export type Notification = NotificationNouveaute | NotificationTache;
+
+export type TypeOnglet = 'aFaire' | 'Nouveautes' | 'Toutes';
