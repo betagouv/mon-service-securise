@@ -11,7 +11,8 @@ const creeDepot = (config = {}) => {
   const nouveautesPourUtilisateur = async (idUtilisateur) =>
     adaptateurPersistance.nouveautesPourUtilisateur(idUtilisateur);
 
-  const tachesDesServices = async () => [];
+  const tachesDesServices = async (idUtilisateur) =>
+    adaptateurPersistance.tachesDeServicePour(idUtilisateur);
 
   return {
     marqueNouveauteLue,

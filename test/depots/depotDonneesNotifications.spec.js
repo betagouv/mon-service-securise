@@ -28,4 +28,21 @@ describe('Le dépôt de données des notifications', () => {
       expect(donneesRecues.idNouveaute).to.be('N1');
     });
   });
+
+  describe('sur demande de la liste des tâches de service', () => {
+    it('utiliser l’adaptateur de persistance pour récupérer toutes les tâches', async () => {
+      let adaptateurAppele;
+      let idUtilisateurUtilise;
+      adaptateurPersistance.tachesDeServicePour = async (idUtilisateur) => {
+        adaptateurAppele = true;
+        idUtilisateurUtilise = idUtilisateur;
+        return [];
+      };
+
+      await depot.tachesDesServices('U1');
+
+      expect(adaptateurAppele).to.be(true);
+      expect(idUtilisateurUtilise).to.be('U1');
+    });
+  });
 });

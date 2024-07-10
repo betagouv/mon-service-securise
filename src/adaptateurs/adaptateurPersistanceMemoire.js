@@ -295,6 +295,8 @@ const nouvelAdaptateur = (
       .filter(([_cle, valeur]) => valeur.idUtilisateur === idUtilisateur)
       .map((_cle, valeur) => valeur.idNouveaute);
 
+  const tachesDeServicePour = async () => [];
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -329,6 +331,7 @@ const nouvelAdaptateur = (
     supprimeService,
     supprimeUtilisateur,
     supprimeUtilisateurs,
+    tachesDeServicePour,
     tousLesServices,
     tousUtilisateurs,
     utilisateur,
