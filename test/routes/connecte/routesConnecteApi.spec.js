@@ -958,21 +958,16 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       }
     });
 
-    it('retourne une erreur HTTP 422 si la procédure a levé une `ErreurModele`', (done) => {
+    it('retourne une erreur HTTP 422 si la procédure a levé une `ErreurModele`', async () => {
       testeur.procedures().ajoutContributeurSurServices = async () => {
         throw new ErreurModele('oups');
       };
 
-      testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'oups',
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/autorisation',
-          data: { droits: tousDroitsEnEcriture() },
-        },
-        done
-      );
+      await testeur.verifieRequeteGenereErreurHTTPAsync(422, 'oups', {
+        method: 'post',
+        url: 'http://localhost:1234/api/autorisation',
+        data: { droits: tousDroitsEnEcriture() },
+      });
     });
 
     it('retourne une erreur HTTP 422 si les droits sont incohérents', async () => {
