@@ -499,19 +499,13 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     describe("avec échec de l'authentification de l'utilisateur", () => {
-      it('retourne un HTTP 401', (done) => {
-        testeur.depotDonnees().utilisateurAuthentifie = () =>
-          Promise.resolve(undefined);
+      it('retourne un HTTP 401', async () => {
+        testeur.depotDonnees().utilisateurAuthentifie = async () => {};
 
-        testeur.verifieRequeteGenereErreurHTTP(
+        await testeur.verifieRequeteGenereErreurHTTPAsync(
           401,
           "L'authentification a échoué",
-          {
-            method: 'post',
-            url: 'http://localhost:1234/api/token',
-            data: {},
-          },
-          done
+          { method: 'post', url: 'http://localhost:1234/api/token', data: {} }
         );
       });
     });
@@ -533,15 +527,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       );
     });
 
-    it('retourne une erreur HTTP 400 si le terme de recherche est vide', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it('retourne une erreur HTTP 400 si le terme de recherche est vide', async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         400,
         'Le terme de recherche ne peut pas être vide',
         {
           method: 'get',
           url: 'http://localhost:1234/api/annuaire/organisations?departement=75',
-        },
-        done
+        }
       );
     });
 
@@ -591,15 +584,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       event: 'unsubscribe',
     };
 
-    it("retourne une erreur HTTP 400 si l'événement n'est pas une désinscription", (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it("retourne une erreur HTTP 400 si l'événement n'est pas une désinscription", async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         400,
         { erreur: "L'événement doit être de type 'unsubscribe'" },
         {
           method: 'post',
           url: 'http://localhost:1234/api/desinscriptionInfolettre',
-        },
-        done
+        }
       );
     });
 
