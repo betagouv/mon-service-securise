@@ -72,6 +72,8 @@ module.exports = {
     },
   ],
 
+  naturesTachesService: {},
+
   nombreOrganisationsUtilisatrices: [
     { label: 'Mon organisation uniquement', borneBasse: 1, borneHaute: 1 },
     { label: '2', borneBasse: 2, borneHaute: 2 },

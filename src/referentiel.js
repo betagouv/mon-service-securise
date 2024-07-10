@@ -286,6 +286,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donnees.etapesVisiteGuidee[idEtapeCourante]?.idEtapePrecedente ?? null;
   const nbEtapesVisiteGuidee = () =>
     Object.keys(donnees.etapesVisiteGuidee || {}).length;
+  const natureTachesService = (nature) =>
+    (donnees.naturesTachesService || {})[nature];
 
   valideDonnees();
 
@@ -372,6 +374,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     etapeVisiteGuidee,
     etapeVisiteGuideeExiste,
     nbEtapesVisiteGuidee,
+    natureTachesService,
   };
 };
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);
