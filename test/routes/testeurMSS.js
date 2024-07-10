@@ -51,6 +51,20 @@ const testeurMss = () => {
       .catch(suite);
   };
 
+  const verifieRequeteGenereErreurHTTPAsync = async (
+    status,
+    messageErreur,
+    requete
+  ) => {
+    try {
+      await axios(requete);
+      expect().fail('Réponse OK inattendue');
+    } catch (erreur) {
+      expect(erreur.response?.status).to.equal(status);
+      expect(erreur.response?.data).to.eql(messageErreur);
+    }
+  };
+
   const initialise = (done) => {
     serviceAnnuaire = {};
     adaptateurHorloge = {
@@ -135,6 +149,7 @@ const testeurMss = () => {
     arrete,
     initialise,
     verifieRequeteGenereErreurHTTP,
+    verifieRequeteGenereErreurHTTPAsync,
     verifieJetonDepose,
   };
 };
