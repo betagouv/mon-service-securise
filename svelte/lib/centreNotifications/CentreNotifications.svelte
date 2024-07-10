@@ -4,6 +4,7 @@
   import type { Notification, TypeOnglet } from './centreNotifications.d';
   import { recupereNotifications } from './centreNotifications.api';
   import ListeNotifications from './kit/ListeNotifications.svelte';
+  import Onglet from './kit/Onglet.svelte';
 
   let ouvert = false;
   let elementCentreNotifications: HTMLDivElement;
@@ -29,12 +30,12 @@
           (n) => n.type === 'tache'
         );
         break;
-      case 'Nouveautes':
+      case 'nouveautes':
         notificationsOngletCourant = notifications.filter(
           (n) => n.type === 'nouveaute'
         );
         break;
-      case 'Toutes':
+      case 'toutes':
         notificationsOngletCourant = notifications;
         break;
     }
@@ -67,21 +68,13 @@
       </button>
     </div>
     <div class="conteneur-onglets">
-      <button
-        type="button"
-        class="onglet"
-        on:click={() => (ongletCourant = 'aFaire')}>À faire</button
-      >
-      <button
-        type="button"
-        class="onglet"
-        on:click={() => (ongletCourant = 'Nouveautes')}>Nouveautés</button
-      >
-      <button
-        type="button"
-        class="onglet"
-        on:click={() => (ongletCourant = 'Toutes')}>Toutes</button
-      >
+      <Onglet bind:ongletCourant cibleOnglet="aFaire" labelOnglet="À faire" />
+      <Onglet
+        bind:ongletCourant
+        cibleOnglet="nouveautes"
+        labelOnglet="Nouveautés"
+      />
+      <Onglet bind:ongletCourant cibleOnglet="toutes" labelOnglet="Toutes" />
     </div>
     <ListeNotifications
       notifications={notificationsOngletCourant}
@@ -184,9 +177,6 @@
   .conteneur-onglets {
     display: flex;
     justify-content: space-evenly;
-  }
-
-  .conteneur-onglets .onglet {
-    min-width: 140px;
+    transform: translateY(1px);
   }
 </style>
