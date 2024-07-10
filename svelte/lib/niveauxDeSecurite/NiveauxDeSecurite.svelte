@@ -377,6 +377,10 @@
     margin: 32px 0;
   }
 
+  .conteneur-illustration img {
+    max-height: 180px;
+  }
+
   .details-niveau .chip {
     padding: 0 10px;
     border-radius: 40px;
