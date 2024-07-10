@@ -420,3 +420,8 @@ main {
 #home #conteneur-sport-collectif {
   overflow-y: hidden;
 }
+
+#home #rejoignez-communaute ul {
+  padding-left: 20px;
+  line-height: 24px;
+}
