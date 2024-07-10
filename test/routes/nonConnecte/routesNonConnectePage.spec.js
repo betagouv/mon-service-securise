@@ -108,7 +108,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
 
     it("retourne une erreur HTTP 400 sur idReset n'est pas un UUID valide", async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         400,
         'UUID requis',
         'http://localhost:1234/initialisationMotDePasse/999'
@@ -118,7 +118,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     it('retourne une erreur HTTP 404 si idReset inconnu', async () => {
       testeur.depotDonnees().utilisateurAFinaliser = async () => {};
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         404,
         `Identifiant d'initialisation de mot de passe inconnu`,
         `http://localhost:1234/initialisationMotDePasse/${uuid}`

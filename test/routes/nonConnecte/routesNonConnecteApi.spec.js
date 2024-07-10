@@ -127,7 +127,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
       donneesRequete.prenom = '';
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         'La création d\'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
         {
@@ -245,7 +245,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       });
 
       it('retourne une erreur HTTP 424', async () => {
-        await testeur.verifieRequeteGenereErreurHTTPAsync(
+        await testeur.verifieRequeteGenereErreurHTTP(
           424,
           "L'envoi de l'email de finalisation d'inscription a échoué",
           {
@@ -286,7 +286,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         throw new ErreurEmailManquant('oups');
       };
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(422, 'oups', {
+      await testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
         url: 'http://localhost:1234/api/utilisateur',
         data: donneesRequete,
@@ -502,7 +502,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       it('retourne un HTTP 401', async () => {
         testeur.depotDonnees().utilisateurAuthentifie = async () => {};
 
-        await testeur.verifieRequeteGenereErreurHTTPAsync(
+        await testeur.verifieRequeteGenereErreurHTTP(
           401,
           "L'authentification a échoué",
           { method: 'post', url: 'http://localhost:1234/api/token', data: {} }
@@ -528,7 +528,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it('retourne une erreur HTTP 400 si le terme de recherche est vide', async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         400,
         'Le terme de recherche ne peut pas être vide',
         {
@@ -540,7 +540,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
     it("retourne une erreur HTTP 400 si le département n'est pas dans le referentiel", async () => {
       testeur.referentiel().estCodeDepartement = () => false;
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         400,
         'Le département doit être valide (01 à 989)',
         {
@@ -585,7 +585,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     };
 
     it("retourne une erreur HTTP 400 si l'événement n'est pas une désinscription", async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         400,
         { erreur: "L'événement doit être de type 'unsubscribe'" },
         {
@@ -596,7 +596,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("retourne une erreur HTTP 400 si le champ email n'est pas présent", async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         400,
         { erreur: "Le champ 'email' doit être présent" },
         {
@@ -611,7 +611,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       testeur.depotDonnees().utilisateurAvecEmail = () =>
         Promise.resolve(undefined);
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         424,
         { erreur: "L'email 'jean.dujardin@mail.com' est introuvable" },
         {

@@ -350,7 +350,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         .middleware()
         .reinitialise({ serviceARenvoyer: serviceSansDossierActif });
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         "Le service n'a pas d'homologation active",
         {

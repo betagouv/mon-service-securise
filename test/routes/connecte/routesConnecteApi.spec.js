@@ -430,7 +430,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         'Mot de passe trop simple',
         {
@@ -521,7 +521,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       describe("et que l'utilisateur n'est pas en train de les accepter", () => {
         it('renvoie une erreur HTTP 422', async () => {
-          await testeur.verifieRequeteGenereErreurHTTPAsync(
+          await testeur.verifieRequeteGenereErreurHTTP(
             422,
             'CGU non acceptées',
             {
@@ -627,7 +627,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         'Mot de passe trop simple',
         {
@@ -700,7 +700,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
       donneesRequete.prenom = '';
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         'La mise à jour de l\'utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
         {
@@ -959,7 +959,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         throw new ErreurModele('oups');
       };
 
-      await testeur.verifieRequeteGenereErreurHTTPAsync(422, 'oups', {
+      await testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
         url: 'http://localhost:1234/api/autorisation',
         data: { droits: tousDroitsEnEcriture() },
@@ -967,7 +967,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it('retourne une erreur HTTP 422 si les droits sont incohérents', async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         422,
         { erreur: { code: 'DROITS_INCOHERENTS' } },
         {
@@ -1111,7 +1111,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it('retourne une erreur HTTP 400 si le terme de recherche est vide', async () => {
-      await testeur.verifieRequeteGenereErreurHTTPAsync(
+      await testeur.verifieRequeteGenereErreurHTTP(
         400,
         'Le terme de recherche ne peut pas être vide',
         {

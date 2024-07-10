@@ -8,7 +8,7 @@ describe('Le serveur MSS des routes /bibliotheques/*', () => {
   afterEach(testeur.arrete);
 
   it('retourne une erreur HTTP 404 si la bibliothèque est inconnue', async () => {
-    await testeur.verifieRequeteGenereErreurHTTPAsync(
+    await testeur.verifieRequeteGenereErreurHTTP(
       404,
       'Bibliothèque inconnue : bibliothequeInconnue.js',
       {
