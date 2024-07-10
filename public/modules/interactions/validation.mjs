@@ -57,12 +57,18 @@ const declencheValidationFormulairesMultiple = (
   selecteurConteneurFormulaires
 ) => {
   let tousFormulaireValides = true;
-  $('form', selecteurConteneurFormulaires).each((_i, element) => {
-    if (!element.checkValidity()) tousFormulaireValides = false;
+  let indicePremierFormulaireInvalide = null;
+  $('form', selecteurConteneurFormulaires).each((index, element) => {
+    if (!element.checkValidity()) {
+      tousFormulaireValides = false;
+      indicePremierFormulaireInvalide = index + 1;
+    }
   });
 
   if (tousFormulaireValides)
     selecteurConteneurFormulaires.trigger(EVENEMENT_FORMULAIRE_MULTIPLE_VALIDE);
+
+  return indicePremierFormulaireInvalide;
 };
 
 export {
