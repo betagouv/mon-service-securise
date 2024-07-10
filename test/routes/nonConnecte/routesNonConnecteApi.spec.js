@@ -124,18 +124,17 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         .catch(done);
     });
 
-    it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", (done) => {
+    it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
       donneesRequete.prenom = '';
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         'La création d\'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
         {
           method: 'post',
           url: 'http://localhost:1234/api/utilisateur',
           data: donneesRequete,
-        },
-        done
+        }
       );
     });
 
@@ -245,16 +244,15 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         testeur.depotDonnees().supprimeUtilisateur = () => Promise.resolve();
       });
 
-      it('retourne une erreur HTTP 424', (done) => {
-        testeur.verifieRequeteGenereErreurHTTP(
+      it('retourne une erreur HTTP 424', async () => {
+        await testeur.verifieRequeteGenereErreurHTTPAsync(
           424,
           "L'envoi de l'email de finalisation d'inscription a échoué",
           {
             method: 'post',
             url: 'http://localhost:1234/api/utilisateur',
             data: donneesRequete,
-          },
-          done
+          }
         );
       });
     });
@@ -283,20 +281,16 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
 
-    it("génère une erreur HTTP 422 si l'email n'est pas renseigné", (done) => {
-      testeur.depotDonnees().nouvelUtilisateur = () =>
-        Promise.reject(new ErreurEmailManquant('oups'));
+    it("génère une erreur HTTP 422 si l'email n'est pas renseigné", async () => {
+      testeur.depotDonnees().nouvelUtilisateur = async () => {
+        throw new ErreurEmailManquant('oups');
+      };
 
-      testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'oups',
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/utilisateur',
-          data: donneesRequete,
-        },
-        done
-      );
+      await testeur.verifieRequeteGenereErreurHTTPAsync(422, 'oups', {
+        method: 'post',
+        url: 'http://localhost:1234/api/utilisateur',
+        data: donneesRequete,
+      });
     });
   });
 
@@ -551,16 +545,15 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 400 si le département n'est pas dans le referentiel", (done) => {
+    it("retourne une erreur HTTP 400 si le département n'est pas dans le referentiel", async () => {
       testeur.referentiel().estCodeDepartement = () => false;
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         400,
         'Le département doit être valide (01 à 989)',
         {
           method: 'get',
           url: 'http://localhost:1234/api/annuaire/organisations?recherche=mairie&departement=990',
-        },
-        done
+        }
       );
     });
 
@@ -610,32 +603,30 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 400 si le champ email n'est pas présent", (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it("retourne une erreur HTTP 400 si le champ email n'est pas présent", async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         400,
         { erreur: "Le champ 'email' doit être présent" },
         {
           method: 'post',
           url: 'http://localhost:1234/api/desinscriptionInfolettre',
           data: { event: 'unsubscribe' },
-        },
-        done
+        }
       );
     });
 
-    it("retourne une erreur HTTP 424 si l'adresse email est introuvable", (done) => {
+    it("retourne une erreur HTTP 424 si l'adresse email est introuvable", async () => {
       testeur.depotDonnees().utilisateurAvecEmail = () =>
         Promise.resolve(undefined);
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         424,
         { erreur: "L'email 'jean.dujardin@mail.com' est introuvable" },
         {
           method: 'post',
           url: 'http://localhost:1234/api/desinscriptionInfolettre',
           data: donneesRequete,
-        },
-        done
+        }
       );
     });
 
