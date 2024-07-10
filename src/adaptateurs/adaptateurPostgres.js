@@ -371,6 +371,8 @@ const nouvelAdaptateur = (env) => {
       // eslint-disable-next-line camelcase
       .map(({ id_nouveaute }) => id_nouveaute);
 
+  const tachesDeServicePour = async (idUtilisateur) => [];
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -406,6 +408,7 @@ const nouvelAdaptateur = (env) => {
     supprimeHomologations,
     supprimeUtilisateur,
     supprimeUtilisateurs,
+    tachesDeServicePour,
     tousLesServices,
     tousUtilisateurs,
     utilisateur,
