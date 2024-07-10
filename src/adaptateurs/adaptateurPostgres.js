@@ -371,7 +371,25 @@ const nouvelAdaptateur = (env) => {
       // eslint-disable-next-line camelcase
       .map(({ id_nouveaute }) => id_nouveaute);
 
-  const tachesDeServicePour = async (idUtilisateur) => [];
+  const tachesDeServicePour = async (idUtilisateur) => {
+    const requete = await knex('taches_service')
+      .innerJoin('autorisations as a', function () {
+        this.on(
+          knex.raw("(a.donnees->>'idService')::uuid"),
+          '=',
+          'taches_service.id_service'
+        ).andOn(knex.raw("(a.donnees->>'estProprietaire')::bool"));
+      })
+      .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
+      .select('taches_service.*');
+    return requete.map((n) => ({
+      id: n.id,
+      idService: n.id_service,
+      dateCreation: new Date(n.date_creation),
+      nature: n.nature,
+      dateFaite: n.date_faite ? new Date(n.date_faite) : null,
+    }));
+  };
 
   return {
     ajouteAutorisation,
