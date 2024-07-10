@@ -45,15 +45,14 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 400 si l'ID d'étape n'existe pas", (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it("retourne une erreur HTTP 400 si l'ID d'étape n'existe pas", async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         400,
         "Identifiant d'étape inconnu",
         {
           method: 'POST',
           url: 'http://localhost:1234/api/visiteGuidee/MAUVAIS_ID/termine',
-        },
-        done
+        }
       );
     });
 
