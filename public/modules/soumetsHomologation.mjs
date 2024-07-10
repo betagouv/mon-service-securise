@@ -10,6 +10,7 @@ const initialiseComportementFormulaire = (
   selecteurFormulaire,
   selecteurBouton,
   fonctionExtractionParametres,
+  navigationEtapes,
   callbackErreur = () => {},
   adaptateurAjax = adaptateurAjaxAxios
 ) => {
@@ -58,7 +59,10 @@ const initialiseComportementFormulaire = (
 
   $bouton.on('click', () => {
     declencheValidation(selecteurFormulaire);
-    declencheValidationFormulairesMultiple($form);
+    const indicePremierFormulaireInvalide =
+      declencheValidationFormulairesMultiple($form);
+    if (indicePremierFormulaireInvalide)
+      navigationEtapes.afficheEtapeN(indicePremierFormulaireInvalide);
   });
 };
 

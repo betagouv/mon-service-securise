@@ -132,9 +132,20 @@ const brancheComportementNavigationEtapes = () => {
       afficheEtape();
     }
   });
+
+  const search = new URLSearchParams(window.location.search);
+  if (search.has('etape')) {
+    etapeCourante = parseInt(search.get('etape'), 10);
+    afficheEtape();
+  }
+
   return {
     afficheEtape1: () => {
       etapeCourante = 1;
+      afficheEtape();
+    },
+    afficheEtapeN: (n) => {
+      etapeCourante = n;
       afficheEtape();
     },
   };
@@ -147,6 +158,7 @@ $(() => {
     '#homologation',
     '.bouton#diagnostic',
     extraisParametresDescriptionService,
+    navigationEtapes,
     (e) => {
       if (estNomServiceDejaUtilise(e.response)) {
         messageErreurNomDejaUtilise.affiche();
