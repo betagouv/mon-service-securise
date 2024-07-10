@@ -11,35 +11,29 @@
   let ongletCourant: TypeOnglet = 'aFaire';
 
   let notifications: Notification[] = [];
-  let notificationsOngletCourant: Notification[] = [];
-  $: nbNonLue = notifications.filter(
-    (n) => n.statutLecture === 'nonLue'
-  ).length;
+  let notificationsParOnglet: Record<TypeOnglet, Notification[]> = {
+    aFaire: [],
+    nouveautes: [],
+    toutes: [],
+  };
+
+  const calculNbNonLue = (notifications: Notification[]) =>
+    notifications.filter((n) => n.statutLecture === 'nonLue').length;
+
+  $: nbNonLue = calculNbNonLue(notifications);
+
   const rafraichisNotifications = async () => {
     notifications = await recupereNotifications();
+    notificationsParOnglet = {
+      aFaire: notifications.filter((n) => n.type === 'tache'),
+      nouveautes: notifications.filter((n) => n.type === 'nouveaute'),
+      toutes: notifications,
+    };
   };
 
   onMount(async () => {
     await rafraichisNotifications();
   });
-
-  $: {
-    switch (ongletCourant) {
-      case 'aFaire':
-        notificationsOngletCourant = notifications.filter(
-          (n) => n.type === 'tache'
-        );
-        break;
-      case 'nouveautes':
-        notificationsOngletCourant = notifications.filter(
-          (n) => n.type === 'nouveaute'
-        );
-        break;
-      case 'toutes':
-        notificationsOngletCourant = notifications;
-        break;
-    }
-  }
 </script>
 
 <FermetureSurClicEnDehors
@@ -68,16 +62,27 @@
       </button>
     </div>
     <div class="conteneur-onglets">
-      <Onglet bind:ongletCourant cibleOnglet="aFaire" labelOnglet="À faire" />
+      <Onglet
+        bind:ongletCourant
+        cibleOnglet="aFaire"
+        labelOnglet="À faire"
+        nbNonLue={calculNbNonLue(notificationsParOnglet.aFaire)}
+      />
       <Onglet
         bind:ongletCourant
         cibleOnglet="nouveautes"
         labelOnglet="Nouveautés"
+        nbNonLue={calculNbNonLue(notificationsParOnglet.nouveautes)}
       />
-      <Onglet bind:ongletCourant cibleOnglet="toutes" labelOnglet="Toutes" />
+      <Onglet
+        bind:ongletCourant
+        cibleOnglet="toutes"
+        labelOnglet="Toutes"
+        nbNonLue={calculNbNonLue(notificationsParOnglet.toutes)}
+      />
     </div>
     <ListeNotifications
-      notifications={notificationsOngletCourant}
+      notifications={notificationsParOnglet[ongletCourant]}
       on:notificationMiseAJour={async () => rafraichisNotifications()}
     />
   </div>
