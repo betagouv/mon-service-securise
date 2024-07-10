@@ -171,6 +171,16 @@
   #home #presentation-anssi {
     padding: 80px 22vw;
   }
+
+  #home #rejoignez-communaute .conteneur-communaute {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: 36px;
+  }
+
+  #home #rejoignez-communaute .conteneur-communaute > div {
+    flex: 1;
+  }
 }
 
 @media screen and (max-width: 1439px) {
