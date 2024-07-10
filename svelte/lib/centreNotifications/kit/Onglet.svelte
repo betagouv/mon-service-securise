@@ -4,6 +4,7 @@
   export let ongletActif: TypeOnglet;
   export let cetOnglet: TypeOnglet;
   export let labelOnglet: string;
+  export let nbNonLue: number;
 </script>
 
 <button
@@ -12,7 +13,10 @@
   class:active={ongletActif === cetOnglet}
   on:click={() => (ongletActif = cetOnglet)}
 >
-  {labelOnglet}
+  <span class="label">{labelOnglet}</span>
+  {#if nbNonLue}
+    <span class="non-lue">{nbNonLue}</span>
+  {/if}
 </button>
 
 <style>
@@ -26,6 +30,10 @@
     border-left: 1px solid transparent;
     border-right: 1px solid transparent;
     border-bottom: 1px solid var(--liseres-fonce);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
 
   .onglet:hover {
@@ -40,5 +48,25 @@
     border-bottom: 1px solid white;
     color: var(--bleu-mise-en-avant);
     font-weight: bold;
+  }
+
+  .non-lue {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid white;
+    background: var(--fond-gris-pale);
+    color: var(--texte-clair);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 12px;
+  }
+
+  .onglet.active .non-lue {
+    background: var(--bleu-mise-en-avant);
+    border: 1px solid transparent;
+    color: white;
   }
 </style>
