@@ -340,7 +340,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 422 si le service n'a pas d'homologation active", (done) => {
+    it("retourne une erreur HTTP 422 si le service n'a pas d'homologation active", async () => {
       const serviceSansDossierActif = unService(referentiel)
         .avecId('456')
         .avecNomService('un service')
@@ -350,14 +350,13 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         .middleware()
         .reinitialise({ serviceARenvoyer: serviceSansDossierActif });
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         "Le service n'a pas d'homologation active",
         {
           method: 'get',
           url: 'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
-        },
-        done
+        }
       );
     });
 

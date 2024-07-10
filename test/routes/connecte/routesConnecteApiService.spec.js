@@ -126,20 +126,19 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
+    it('retourne une erreur HTTP 422 si le nom du service existe déjà', async () => {
       testeur.depotDonnees().nouveauService = async () => {
         throw new ErreurNomServiceDejaExistant('oups');
       };
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         { erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } },
         {
           method: 'post',
           url: 'http://localhost:1234/api/service',
           data: { nomService: 'Un nom déjà existant' },
-        },
-        done
+        }
       );
     });
 
@@ -1337,19 +1336,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas les droits de suppression du service", (done) => {
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas les droits de suppression du service", async () => {
       testeur.middleware().reinitialise({
         autorisationACharger: uneAutorisation().deContributeur().construis(),
       });
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         403,
         'Droits insuffisants pour supprimer le service',
-        {
-          method: 'delete',
-          url: 'http://localhost:1234/api/service/123',
-        },
-        done
+        { method: 'delete', url: 'http://localhost:1234/api/service/123' }
       );
     });
 
@@ -1770,16 +1765,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it('jette une erreur 422 si les droits envoyés sont incohérents', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it('jette une erreur 422 si les droits envoyés sont incohérents', async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         { code: 'DROITS_INCOHERENTS' },
         {
           method: 'PATCH',
           url: 'http://localhost:1234/api/service/456/autorisations/uuid-1',
           data: { droits: { MAUVAISE_RUBRIQUE: 1 } },
-        },
-        done
+        }
       );
     });
 
@@ -2046,11 +2040,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 424 si l'id de mesure est inconnu", (done) => {
+    it("retourne une erreur HTTP 424 si l'id de mesure est inconnu", async () => {
       testeur.referentiel().recharge({
         retoursUtilisateurMesure: { idRetour: 'un retour utilisateur' },
       });
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         424,
         {
           type: 'DONNEES_INCORRECTES',
@@ -2060,8 +2054,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           method: 'post',
           url: 'http://localhost:1234/api/service/456/retourUtilisateurMesure',
           data: { idMesure: 'idMesureInconnu', idRetour: 'idRetour' },
-        },
-        done
+        }
       );
     });
 
