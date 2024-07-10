@@ -425,3 +425,18 @@ main {
   padding-left: 20px;
   line-height: 24px;
 }
+
+#home #rejoignez-communaute img {
+  max-width: 355px;
+}
+
+#home #rejoignez-communaute .conteneur-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#home #rejoignez-communaute a {
+  margin-top: 0;
+}
