@@ -72,7 +72,14 @@ module.exports = {
     },
   ],
 
-  naturesTachesService: {},
+  naturesTachesService: {
+    niveauSecuriteRetrograde: {
+      entete: 'Le besoin de sécurité a été modifié',
+      titreCta: 'Voir le changement',
+      titre:
+        'Votre service [%NOM_SERVICE%] a désormais des besoins de sécurité %NOUVEAU_NIVEAU%.',
+    },
+  },
 
   nombreOrganisationsUtilisatrices: [
     { label: 'Mon organisation uniquement', borneBasse: 1, borneHaute: 1 },
