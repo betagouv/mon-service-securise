@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import FermetureSurClicEnDehors from '../ui/FermetureSurClicEnDehors.svelte';
-  import ComposantNotification from './kit/Notification.svelte';
   import type { Notification } from './centreNotifications.d';
   import { recupereNotifications } from './centreNotifications.api';
+  import ListeNotifications from './kit/ListeNotifications.svelte';
 
   let ouvert = false;
   let elementCentreNotifications: HTMLDivElement;
@@ -42,18 +42,14 @@
   <div class="conteneur-notifications">
     <div class="entete-centre-notifications">
       <p class="titre-centre-notifications">Notifications</p>
-      <button id="masque-notifications" on:click={() => (ouvert = false)}
-        >Fermer</button
-      >
+      <button id="masque-notifications" on:click={() => (ouvert = false)}>
+        Fermer
+      </button>
     </div>
-    <div class="contenu-notifications">
-      {#each notifications as notification (notification.id)}
-        <ComposantNotification
-          {notification}
-          on:notificationMiseAJour={async () => await rafraichisNotifications()}
-        />
-      {/each}
-    </div>
+    <ListeNotifications
+      {notifications}
+      on:notificationMiseAJour={async () => rafraichisNotifications()}
+    />
   </div>
 </div>
 
@@ -146,10 +142,5 @@
 
   .centre-notifications.ouvert .conteneur-notifications {
     display: flex;
-  }
-
-  .contenu-notifications {
-    max-height: 626px;
-    overflow-y: auto;
   }
 </style>
