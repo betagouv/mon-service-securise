@@ -362,7 +362,6 @@ main {
   gap: 16px;
   align-items: center;
   justify-content: space-between;
-  background: var(--couleur-principale-attenuee);
   padding: 0 16px 24px 16px;
 }
 
