@@ -102,34 +102,28 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         ]);
     });
 
-    it('retourne une erreur HTTP 422 si les données de description de service sont invalides', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it('retourne une erreur HTTP 422 si les données de description de service sont invalides', async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         'Le statut de déploiement "statutInvalide" est invalide',
         {
           method: 'post',
           url: 'http://localhost:1234/api/service',
           data: { statutDeploiement: 'statutInvalide' },
-        },
-        done
+        }
       );
     });
 
-    it('retourne une erreur HTTP 422 si données insuffisantes pour création service', (done) => {
+    it('retourne une erreur HTTP 422 si données insuffisantes pour création service', async () => {
       testeur.depotDonnees().nouveauService = async () => {
         throw new ErreurDonneesObligatoiresManquantes('oups');
       };
 
-      testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'oups',
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/service',
-          data: {},
-        },
-        done
-      );
+      await testeur.verifieRequeteGenereErreurHTTPAsync(422, 'oups', {
+        method: 'post',
+        url: 'http://localhost:1234/api/service',
+        data: {},
+      });
     });
 
     it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
@@ -256,33 +250,31 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.data).to.eql({ idService: '456' });
     });
 
-    it('retourne une erreur HTTP 422 si le validateur du modèle échoue', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it('retourne une erreur HTTP 422 si le validateur du modèle échoue', async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         'Le statut de déploiement "statutInvalide" est invalide',
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456',
           data: { statutDeploiement: 'statutInvalide' },
-        },
-        done
+        }
       );
     });
 
-    it('retourne une erreur HTTP 422 si le nom du service existe déjà', (done) => {
+    it('retourne une erreur HTTP 422 si le nom du service existe déjà', async () => {
       testeur.depotDonnees().ajouteDescriptionService = async () => {
         throw new ErreurNomServiceDejaExistant('oups');
       };
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         { erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } },
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456',
           data: { nomService: 'service déjà existant' },
-        },
-        done
+        }
       );
     });
   });
@@ -757,16 +749,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(risquesRemplaces).to.be(true);
     });
 
-    it('retourne une erreur HTTP 422 si les données sont invalides', (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it('retourne une erreur HTTP 422 si les données sont invalides', async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         'Données invalides',
         {
           method: 'post',
           url: 'http://localhost:1234/api/service/456/risques',
           data: { 'commentaire-unRisqueInvalide': 'Un commentaire' },
-        },
-        done
+        }
       );
     });
   });
@@ -1333,20 +1324,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         );
     });
 
-    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", async () => {
       const autorisationNonTrouvee = undefined;
       testeur
         .middleware()
         .reinitialise({ autorisationACharger: autorisationNonTrouvee });
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         403,
         'Droits insuffisants pour supprimer le service',
-        {
-          method: 'delete',
-          url: 'http://localhost:1234/api/service/123',
-        },
-        done
+        { method: 'delete', url: 'http://localhost:1234/api/service/123' }
       );
     });
 
@@ -1431,59 +1418,46 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", async () => {
       const autorisationNonTrouvee = undefined;
       testeur
         .middleware()
         .reinitialise({ autorisationACharger: autorisationNonTrouvee });
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         403,
         'Droits insuffisants pour dupliquer le service',
-        {
-          method: 'copy',
-          url: 'http://localhost:1234/api/service/123',
-        },
-        done
+        { method: 'copy', url: 'http://localhost:1234/api/service/123' }
       );
     });
 
-    it("retourne une erreur HTTP 403 si l'utilisateur courant n'est pas le créateur du service", (done) => {
+    it("retourne une erreur HTTP 403 si l'utilisateur courant n'est pas le créateur du service", async () => {
       testeur.middleware().reinitialise({
         autorisationACharger: uneAutorisation().deContributeur().construis(),
       });
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         403,
         'Droits insuffisants pour dupliquer le service',
-        {
-          method: 'copy',
-          url: 'http://localhost:1234/api/service/123',
-        },
-        done
+        { method: 'copy', url: 'http://localhost:1234/api/service/123' }
       );
     });
 
-    it('retourne une erreur HTTP 424 si des données obligatoires ne sont pas renseignées', (done) => {
-      testeur.depotDonnees().dupliqueService = () =>
-        Promise.reject(
-          new ErreurDonneesObligatoiresManquantes(
-            'Certaines données obligatoires ne sont pas renseignées'
-          )
+    it('retourne une erreur HTTP 424 si des données obligatoires ne sont pas renseignées', async () => {
+      testeur.depotDonnees().dupliqueService = async () => {
+        throw new ErreurDonneesObligatoiresManquantes(
+          'Certaines données obligatoires ne sont pas renseignées'
         );
+      };
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         424,
         {
           type: 'DONNEES_OBLIGATOIRES_MANQUANTES',
           message:
             'La duplication a échoué car certaines données obligatoires ne sont pas renseignées',
         },
-        {
-          method: 'copy',
-          url: 'http://localhost:1234/api/service/123',
-        },
-        done
+        { method: 'copy', url: 'http://localhost:1234/api/service/123' }
       );
     });
 
@@ -2057,8 +2031,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 424 si l'id du retour utilisateur est inconnu", (done) => {
-      testeur.verifieRequeteGenereErreurHTTP(
+    it("retourne une erreur HTTP 424 si l'id du retour utilisateur est inconnu", async () => {
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         424,
         {
           type: 'DONNEES_INCORRECTES',
@@ -2068,8 +2042,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           method: 'post',
           url: 'http://localhost:1234/api/service/456/retourUtilisateurMesure',
           data: { idRetour: 'idRetourInconnu' },
-        },
-        done
+        }
       );
     });
 
@@ -2144,18 +2117,17 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it("retourne une erreur HTTP 422 si le service n'a pas de dossier courant", (done) => {
+    it("retourne une erreur HTTP 422 si le service n'a pas de dossier courant", async () => {
       const service = unService().construis();
       testeur.middleware().reinitialise({ serviceARenvoyer: service });
 
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         422,
         'Les dossiers ne comportent pas de dossier courant',
         {
           method: 'delete',
           url: 'http://localhost:1234/api/service/123/homologation/dossierCourant',
-        },
-        done
+        }
       );
     });
 
@@ -2242,17 +2214,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(resultat.data.niveauDeSecuriteMinimal).to.be('niveau1');
     });
 
-    it('retourne une erreur HTTP 400 si les données de description de service sont invalides', (done) => {
+    it('retourne une erreur HTTP 400 si les données de description de service sont invalides', async () => {
       const donneesInvalides = { statutDeploiement: 'statutInvalide' };
-      testeur.verifieRequeteGenereErreurHTTP(
+      await testeur.verifieRequeteGenereErreurHTTPAsync(
         400,
         'La description du service est invalide',
         {
           method: 'post',
           url: 'http://localhost:1234/api/service/estimationNiveauSecurite',
           data: donneesInvalides,
-        },
-        done
+        }
       );
     });
   });
