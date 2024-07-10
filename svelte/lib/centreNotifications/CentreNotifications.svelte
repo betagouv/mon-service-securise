@@ -1,14 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import FermetureSurClicEnDehors from '../ui/FermetureSurClicEnDehors.svelte';
-  import type { Notification } from './centreNotifications.d';
+  import type { Notification, TypeOnglet } from './centreNotifications.d';
   import { recupereNotifications } from './centreNotifications.api';
   import ListeNotifications from './kit/ListeNotifications.svelte';
 
   let ouvert = false;
   let elementCentreNotifications: HTMLDivElement;
+  let ongletCourant: TypeOnglet = 'aFaire';
 
   let notifications: Notification[] = [];
+  let notificationsOngletCourant: Notification[] = [];
   $: nbNonLue = notifications.filter(
     (n) => n.statutLecture === 'nonLue'
   ).length;
@@ -19,6 +21,24 @@
   onMount(async () => {
     await rafraichisNotifications();
   });
+
+  $: {
+    switch (ongletCourant) {
+      case 'aFaire':
+        notificationsOngletCourant = notifications.filter(
+          (n) => n.type === 'tache'
+        );
+        break;
+      case 'Nouveautes':
+        notificationsOngletCourant = notifications.filter(
+          (n) => n.type === 'nouveaute'
+        );
+        break;
+      case 'Toutes':
+        notificationsOngletCourant = notifications;
+        break;
+    }
+  }
 </script>
 
 <FermetureSurClicEnDehors
@@ -46,8 +66,25 @@
         Fermer
       </button>
     </div>
+    <div class="conteneur-onglets">
+      <button
+        type="button"
+        class="onglet"
+        on:click={() => (ongletCourant = 'aFaire')}>À faire</button
+      >
+      <button
+        type="button"
+        class="onglet"
+        on:click={() => (ongletCourant = 'Nouveautes')}>Nouveautés</button
+      >
+      <button
+        type="button"
+        class="onglet"
+        on:click={() => (ongletCourant = 'Toutes')}>Toutes</button
+      >
+    </div>
     <ListeNotifications
-      {notifications}
+      notifications={notificationsOngletCourant}
       on:notificationMiseAJour={async () => rafraichisNotifications()}
     />
   </div>
@@ -142,5 +179,14 @@
 
   .centre-notifications.ouvert .conteneur-notifications {
     display: flex;
+  }
+
+  .conteneur-onglets {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .conteneur-onglets .onglet {
+    min-width: 140px;
   }
 </style>
