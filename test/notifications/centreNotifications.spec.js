@@ -147,13 +147,13 @@ describe('Le centre de notifications', () => {
     beforeEach(() => {
       referentiel = Referentiel.creeReferentiel({
         nouvellesFonctionnalites: [],
+        naturesTachesService: { n1: {} },
       });
     });
 
     it('retourne les tâches', async () => {
       depotDonnees.tachesDesServices = async (idUtilisateur) =>
-        idUtilisateur === 'U1' ? [{ id: 'T1' }] : [];
-
+        idUtilisateur === 'U1' ? [{ id: 'T1', nature: 'n1' }] : [];
       const centre = new CentreNotifications({
         referentiel,
         depotDonnees,
@@ -165,6 +165,37 @@ describe('Le centre de notifications', () => {
       expect(notifs.length).to.be(1);
       expect(notifs[0].id).to.be('T1');
       expect(notifs[0].type).to.be('tache');
+    });
+
+    it('complète les informations depuis le référentiel', async () => {
+      depotDonnees.tachesDesServices = async (_) => [
+        { nature: 'niveauRetrograde' },
+      ];
+      referentiel = Referentiel.creeReferentiel({
+        nouvellesFonctionnalites: [],
+        naturesTachesService: {
+          niveauRetrograde: {
+            entete: 'Le besoin de sécurité a été modifié',
+            titreCta: 'Voir le changement',
+            titre:
+              'Votre service [XXX] a désormais des besoins de sécurité modérés.',
+          },
+        },
+      });
+
+      const centre = new CentreNotifications({
+        referentiel,
+        depotDonnees,
+        adaptateurHorloge,
+      });
+
+      const notifs = await centre.toutesNotifications('U1');
+
+      expect(notifs[0].entete).to.be('Le besoin de sécurité a été modifié');
+      expect(notifs[0].titreCta).to.be('Voir le changement');
+      expect(notifs[0].titre).to.be(
+        'Votre service [XXX] a désormais des besoins de sécurité modérés.'
+      );
     });
   });
 
