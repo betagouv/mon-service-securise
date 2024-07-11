@@ -33,6 +33,7 @@ const {
   fabriqueAdaptateurChiffrement,
 } = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
 const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
+const adaptateurCmsCrisp = require('./src/adaptateurs/adaptateurCmsCrisp');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
@@ -83,6 +84,7 @@ const serveur = MSS.creeServeur(
   middleware,
   referentiel,
   moteurRegles,
+  adaptateurCmsCrisp,
   adaptateurMail,
   adaptateurPdf,
   adaptateurHorloge,

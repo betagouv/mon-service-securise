@@ -22,6 +22,7 @@ const creeServeur = (
   middleware,
   referentiel,
   moteurRegles,
+  adaptateurCmsCrisp,
   adaptateurMail,
   adaptateurPdf,
   adaptateurHorloge,
@@ -70,7 +71,15 @@ const creeServeur = (
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
 
-  app.use('', routesNonConnectePage({ depotDonnees, middleware, referentiel }));
+  app.use(
+    '',
+    routesNonConnectePage({
+      adaptateurCmsCrisp,
+      depotDonnees,
+      middleware,
+      referentiel,
+    })
+  );
   app.use(
     '',
     routesConnectePage({

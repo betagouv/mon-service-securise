@@ -13,6 +13,7 @@ const { fabriqueProcedures } = require('../../src/routes/procedures');
 const testeurMss = () => {
   let serviceAnnuaire;
   let adaptateurHorloge;
+  let adaptateurCmsCrisp;
   let adaptateurMail;
   let adaptateurGestionErreur;
   let adaptateurPdf;
@@ -54,6 +55,12 @@ const testeurMss = () => {
     adaptateurHorloge = {
       maintenant: () => new Date(),
     };
+    const contenuCrisp = { contenuMarkdown: 'Un contenu', titre: 'Un titre' };
+    adaptateurCmsCrisp = {
+      recupereNouveautes: async () => contenuCrisp,
+      recupereDevenirAmbassadeur: async () => contenuCrisp,
+      recupereFaireConnaitreMSS: async () => contenuCrisp,
+    };
     adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
       genereAnnexes: async () => 'PDF Annexe',
@@ -94,6 +101,7 @@ const testeurMss = () => {
           middleware,
           referentiel,
           moteurRegles,
+          adaptateurCmsCrisp,
           adaptateurMail,
           adaptateurPdf,
           adaptateurHorloge,
