@@ -8,7 +8,7 @@
 
   let ouvert = false;
   let elementCentreNotifications: HTMLDivElement;
-  let ongletCourant: TypeOnglet = 'aFaire';
+  let ongletActif: TypeOnglet = 'aFaire';
 
   let notifications: Notification[] = [];
   let notificationsParOnglet: Record<TypeOnglet, Notification[]> = {
@@ -63,26 +63,26 @@
     </div>
     <div class="conteneur-onglets">
       <Onglet
-        bind:ongletCourant
-        cibleOnglet="aFaire"
+        bind:ongletActif
+        cetOnglet="aFaire"
         labelOnglet="À faire"
         nbNonLue={calculNbNonLue(notificationsParOnglet.aFaire)}
       />
       <Onglet
-        bind:ongletCourant
-        cibleOnglet="nouveautes"
+        bind:ongletActif
+        cetOnglet="nouveautes"
         labelOnglet="Nouveautés"
         nbNonLue={calculNbNonLue(notificationsParOnglet.nouveautes)}
       />
       <Onglet
-        bind:ongletCourant
-        cibleOnglet="toutes"
+        bind:ongletActif
+        cetOnglet="toutes"
         labelOnglet="Toutes"
         nbNonLue={calculNbNonLue(notificationsParOnglet.toutes)}
       />
     </div>
     <ListeNotifications
-      notifications={notificationsParOnglet[ongletCourant]}
+      notifications={notificationsParOnglet[ongletActif]}
       on:notificationMiseAJour={async () => rafraichisNotifications()}
     />
   </div>
