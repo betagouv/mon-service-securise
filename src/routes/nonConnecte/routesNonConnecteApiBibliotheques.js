@@ -14,6 +14,11 @@ const CHEMINS_BIBLIOTHEQUES = {
 
 const CSP_BIBLIOTHEQUES = {
   matomo: { connect: 'https://stats.beta.gouv.fr/matomo.php' },
+  crisp: { image: 'https://storage.crisp.chat' },
+  monservicesecurise: {
+    media:
+      'https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com',
+  },
 };
 
 const routesNonConnecteApiBibliotheques = () => {
