@@ -3,14 +3,34 @@ const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
 const { creeDepot } = require('../../src/depots/depotDonneesNotifications');
+const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
+const { unService } = require('../constructeurs/constructeurService');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
+const { creeReferentielVide } = require('../../src/referentiel');
+const Homologation = require('../../src/modeles/homologation');
 
 describe('Le dépôt de données des notifications', () => {
+  let depotNotifications;
   let adaptateurPersistance;
-  let depot;
+  let referentiel;
 
   beforeEach(() => {
+    referentiel = creeReferentielVide();
+
     adaptateurPersistance = unePersistanceMemoire().construis();
-    depot = creeDepot({ adaptateurPersistance });
+    const depotServices = DepotDonneesHomologations.creeDepot({
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      adaptateurPersistance,
+      referentiel,
+    });
+    depotNotifications = creeDepot({
+      adaptateurPersistance,
+      depotServices,
+    });
   });
 
   describe("sur demande de marquage d'une nouveauté comme lue", () => {
@@ -22,7 +42,7 @@ describe('Le dépôt de données des notifications', () => {
       ) => {
         donneesRecues = { idUtilisateur, idNouveaute };
       };
-      await depot.marqueNouveauteLue('U1', 'N1');
+      await depotNotifications.marqueNouveauteLue('U1', 'N1');
 
       expect(donneesRecues.idUtilisateur).to.be('U1');
       expect(donneesRecues.idNouveaute).to.be('N1');
@@ -39,10 +59,35 @@ describe('Le dépôt de données des notifications', () => {
         return [];
       };
 
-      await depot.tachesDesServices('U1');
+      await depotNotifications.tachesDesServices('U1');
 
       expect(adaptateurAppele).to.be(true);
       expect(idUtilisateurUtilise).to.be('U1');
+    });
+
+    it('complète chaque tâche avec son service', async () => {
+      await adaptateurPersistance.ajouteUtilisateur(
+        'U1',
+        unUtilisateur().avecId('U1').donnees
+      );
+      await adaptateurPersistance.sauvegardeService(
+        'S1',
+        unService(referentiel).avecNomService('Nom du service').avecId('S1')
+          .donnees
+      );
+      await adaptateurPersistance.ajouteAutorisation(
+        'A1',
+        uneAutorisation().deProprietaire('U1', 'S1').donnees
+      );
+
+      adaptateurPersistance.tachesDeServicePour = async (_) => [
+        { idService: 'S1' },
+      ];
+
+      const taches = await depotNotifications.tachesDesServices('U1');
+
+      expect(taches[0].service).to.be.an(Homologation);
+      expect(taches[0].service.nomService()).to.be('Nom du service');
     });
   });
 });

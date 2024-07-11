@@ -60,6 +60,7 @@ const creeDepot = (config = {}) => {
 
   const depotNotifications = depotDonneesNotifications.creeDepot({
     adaptateurPersistance,
+    depotServices: depotHomologations,
   });
 
   const {
