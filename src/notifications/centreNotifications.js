@@ -52,11 +52,21 @@ class CentreNotifications {
 
     return notifications.map((notification) => ({
       ...notification,
-      titre: notification.titre?.replace(
-        '%NOM_SERVICE%',
-        notification.service.nomService()
-      ),
+      titre: CentreNotifications.titreFusionne(notification),
     }));
+  }
+
+  static titreFusionne(notification) {
+    const champsDonnees = Object.keys(notification.donnees || {});
+    const valeurReelle = (champ) => {
+      if (champ === 'NOM_SERVICE') return notification.service?.nomService();
+      return notification.donnees?.[champ];
+    };
+
+    return ['NOM_SERVICE', ...champsDonnees].reduce(
+      (acc, cle) => acc.replace(`%${cle}%`, valeurReelle(cle)),
+      notification.titre || ''
+    );
   }
 
   async toutesNouveautes(idUtilisateur) {
