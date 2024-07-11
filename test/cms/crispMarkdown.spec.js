@@ -38,7 +38,7 @@ describe('Le convertisseur de Markdown Crisp', () => {
 
     expect(resultat).to.be(
       "<div class='conteneur-video'>" +
-        "<video src='http://url.video' controls />" +
+        "<video src='http://url.video' controls></video>" +
         "<p class='legende'>LEGENDE</p>" +
         '</div>'
     );
