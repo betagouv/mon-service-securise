@@ -152,16 +152,18 @@ describe('Le centre de notifications', () => {
       });
     });
 
-    it('retourne les tâches', async () => {
-      depotDonnees.tachesDesServices = async (idUtilisateur) =>
-        idUtilisateur === 'U1' ? [{ id: 'T1', nature: 'n1' }] : [];
-      const centre = new CentreNotifications({
+    const centreDeNotification = () =>
+      new CentreNotifications({
         referentiel,
         depotDonnees,
         adaptateurHorloge,
       });
 
-      const notifs = await centre.toutesNotifications('U1');
+    it('retourne les tâches', async () => {
+      depotDonnees.tachesDesServices = async (idUtilisateur) =>
+        idUtilisateur === 'U1' ? [{ id: 'T1', nature: 'n1' }] : [];
+
+      const notifs = await centreDeNotification().toutesNotifications('U1');
 
       expect(notifs.length).to.be(1);
       expect(notifs[0].id).to.be('T1');
@@ -184,13 +186,7 @@ describe('Le centre de notifications', () => {
         },
       });
 
-      const centre = new CentreNotifications({
-        referentiel,
-        depotDonnees,
-        adaptateurHorloge,
-      });
-
-      const notifs = await centre.toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications('U1');
 
       expect(notifs[0].entete).to.be('Le besoin de sécurité a été modifié');
       expect(notifs[0].titreCta).to.be('Voir le changement');
@@ -208,15 +204,40 @@ describe('Le centre de notifications', () => {
             .construis(),
         },
       ];
-      const centre = new CentreNotifications({
-        referentiel,
-        depotDonnees,
-        adaptateurHorloge,
-      });
 
-      const notifs = await centre.toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications('U1');
 
       expect(notifs[0].titre).to.be('--toto--');
+    });
+
+    it('complète le titre avec les informations des données de la tâche', async () => {
+      depotDonnees.tachesDesServices = async (_) => [
+        {
+          titre: '--%nouveauxBesoins%--',
+          service: { nomService: () => '' },
+          donnees: {
+            nouveauxBesoins: 'petits',
+          },
+        },
+      ];
+      const notifs = await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifs[0].titre).to.be('--petits--');
+    });
+
+    it("peut utiliser n'importe quelle donnée de la tâche pour complèter le titre", async () => {
+      depotDonnees.tachesDesServices = async (_) => [
+        {
+          titre: '--%nimportequoi%--',
+          service: { nomService: () => '' },
+          donnees: {
+            nimportequoi: 'nimportequi',
+          },
+        },
+      ];
+      const notifs = await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifs[0].titre).to.be('--nimportequi--');
     });
   });
 
