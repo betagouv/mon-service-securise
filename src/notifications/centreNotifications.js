@@ -98,6 +98,10 @@ class CentreNotifications {
     await this.depotDonnees.marqueNouveauteLue(idUtilisateur, idNouveaute);
   }
 
+  async marqueTacheLue(idUtilisateur, idTache) {
+    await this.depotDonnees.marqueTacheLue(idUtilisateur, idTache);
+  }
+
   async toutesTachesEnAttente(idUtilisateur) {
     const utilisateur = await this.depotDonnees.utilisateur(idUtilisateur);
     if (!utilisateur) {

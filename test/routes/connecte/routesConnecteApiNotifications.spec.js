@@ -1,6 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
+const { ErreurIdentifiantTacheInconnu } = require('../../../src/erreurs');
 
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
@@ -65,6 +66,42 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
       } catch (e) {
         expect(e.response.status).to.be(400);
         expect(e.response.data).to.be('Identifiant de nouveauté inconnu');
+      }
+    });
+  });
+
+  describe('quand requête PUT sur `/api/notifications/taches/:id`', () => {
+    it('délègue au centre de notification le marquage à "lue"', async () => {
+      let donneesRecues;
+      testeur.depotDonnees().marqueTacheLue = async (
+        idUtilisateur,
+        idTache
+      ) => {
+        donneesRecues = { idUtilisateur, idTache };
+      };
+
+      const reponse = await axios.put(
+        'http://localhost:1234/api/notifications/taches/T1'
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(donneesRecues).to.be.an('object');
+      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(donneesRecues.idTache).to.be('T1');
+    });
+
+    it("reste robuste en cas d'erreur", async () => {
+      testeur.depotDonnees().marqueTacheLue = async () => {
+        throw new ErreurIdentifiantTacheInconnu();
+      };
+      try {
+        await axios.put(
+          'http://localhost:1234/api/notifications/taches/ID_INCONNU'
+        );
+        expect().fail("L'appel aurait dû lever une exception");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('Identifiant de tâche inconnu');
       }
     });
   });

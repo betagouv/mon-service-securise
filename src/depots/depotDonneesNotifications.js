@@ -25,8 +25,11 @@ const creeDepot = (config = {}) => {
     });
   };
 
+  const marqueTacheLue = async (idUtilisateur, idTache) => {};
+
   return {
     marqueNouveauteLue,
+    marqueTacheLue,
     nouveautesPourUtilisateur,
     tachesDesServices,
   };
