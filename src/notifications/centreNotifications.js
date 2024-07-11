@@ -44,12 +44,19 @@ class CentreNotifications {
   }
 
   async toutesTachesDeService(idUtilisateur) {
-    return (await this.depotDonnees.tachesDesServices(idUtilisateur)).map(
-      (tache) => ({
-        ...tache,
-        ...this.referentiel.natureTachesService(tache.nature),
-      })
-    );
+    const taches = await this.depotDonnees.tachesDesServices(idUtilisateur);
+    const notifications = taches.map((tache) => ({
+      ...tache,
+      ...this.referentiel.natureTachesService(tache.nature),
+    }));
+
+    return notifications.map((notification) => ({
+      ...notification,
+      titre: notification.titre?.replace(
+        '%NOM_SERVICE%',
+        notification.service.nomService()
+      ),
+    }));
   }
 
   async toutesNouveautes(idUtilisateur) {

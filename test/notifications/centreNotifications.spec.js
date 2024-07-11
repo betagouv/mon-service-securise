@@ -5,6 +5,7 @@ const { creeDepot } = require('../../src/depotDonnees');
 const { ErreurIdentifiantNouveauteInconnu } = require('../../src/erreurs');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
+const { unService } = require('../constructeurs/constructeurService');
 
 describe('Le centre de notifications', () => {
   let referentiel;
@@ -169,7 +170,7 @@ describe('Le centre de notifications', () => {
 
     it('complète les informations depuis le référentiel', async () => {
       depotDonnees.tachesDesServices = async (_) => [
-        { nature: 'niveauRetrograde' },
+        { nature: 'niveauRetrograde', service: { nomService: () => '' } },
       ];
       referentiel = Referentiel.creeReferentiel({
         nouvellesFonctionnalites: [],
@@ -196,6 +197,26 @@ describe('Le centre de notifications', () => {
       expect(notifs[0].titre).to.be(
         'Votre service [XXX] a désormais des besoins de sécurité modérés.'
       );
+    });
+
+    it('complète le titre avec les informations liées au service', async () => {
+      depotDonnees.tachesDesServices = async (_) => [
+        {
+          titre: '--%NOM_SERVICE%--',
+          service: unService(Referentiel.creeReferentielVide())
+            .avecNomService('toto')
+            .construis(),
+        },
+      ];
+      const centre = new CentreNotifications({
+        referentiel,
+        depotDonnees,
+        adaptateurHorloge,
+      });
+
+      const notifs = await centre.toutesNotifications('U1');
+
+      expect(notifs[0].titre).to.be('--toto--');
     });
   });
 
