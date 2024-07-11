@@ -377,18 +377,17 @@ const nouvelAdaptateur = (env) => {
   const tachesDeServicePour = async (idUtilisateur) => {
     const requete = await knex.raw(
       `
-        select t.*
-        from taches_service t
-               inner join autorisations a
-                          on ((donnees ->> 'idService')::uuid = t.id_service and (donnees ->> 'estProprietaire')::bool = true)
-        where (a.donnees ->> 'idUtilisateur')::uuid = ?`,
+                    select t.*
+                    from taches_service t
+                             inner join autorisations a
+                                        on ((a.donnees ->> 'idService')::uuid = t.id_service and (a.donnees ->> 'estProprietaire')::bool = true)
+                    where (a.donnees ->> 'idUtilisateur')::uuid = ?`,
       [idUtilisateur]
     );
     return requete.rows.map((n) => ({
-      id: n.id,
+      ...n,
       idService: n.id_service,
       dateCreation: new Date(n.date_creation),
-      nature: n.nature,
       dateFaite: n.date_faite ? new Date(n.date_faite) : null,
     }));
   };
