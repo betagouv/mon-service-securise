@@ -1,0 +1,13 @@
+extends mssDeconnecte
+
+block title
+  title!= `${titre} | MonServiceSécurisé`
+
+block append styles
+  link(href = '/statique/assets/styles/article.css', rel = 'stylesheet')
+
+block main
+  .marges-fixes
+    .article
+      h1!= titre
+      .contenu!= contenu
