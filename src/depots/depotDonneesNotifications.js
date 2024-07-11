@@ -3,6 +3,7 @@ const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateur
 const creeDepot = (config = {}) => {
   const {
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
+    depotServices,
   } = config;
 
   const marqueNouveauteLue = async (idUtilisateur, idNouveaute) =>
@@ -11,8 +12,18 @@ const creeDepot = (config = {}) => {
   const nouveautesPourUtilisateur = async (idUtilisateur) =>
     adaptateurPersistance.nouveautesPourUtilisateur(idUtilisateur);
 
-  const tachesDesServices = async (idUtilisateur) =>
-    adaptateurPersistance.tachesDeServicePour(idUtilisateur);
+  const tachesDesServices = async (idUtilisateur) => {
+    const servicesUtilisateur =
+      await depotServices.homologations(idUtilisateur);
+
+    const taches =
+      await adaptateurPersistance.tachesDeServicePour(idUtilisateur);
+
+    return taches.map((t) => {
+      const service = servicesUtilisateur.find((s) => s.id === t.idService);
+      return { ...t, service };
+    });
+  };
 
   return {
     marqueNouveauteLue,
