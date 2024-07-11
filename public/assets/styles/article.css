@@ -1,0 +1,138 @@
+.article {
+  text-align: left;
+  max-width: 700px;
+  margin: 56px auto;
+
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.article h1 {
+  color: var(--bleu-survol);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 52px;
+  margin: 24px 0;
+}
+
+.article h2 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 42px;
+  margin: 32px 0 16px 0;
+}
+
+.article h3 {
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px;
+  margin: 8px 0;
+}
+
+.article h4 {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 42px;
+  margin: 4px 0;
+}
+
+.article p {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: normal;
+  margin: 16px 0;
+}
+
+.article ul li {
+  margin-bottom: 8px;
+}
+
+.article hr {
+  border-bottom: 1px solid var(--liseres-fonce);
+  border-top: none;
+  margin: 32px 0;
+}
+
+.article video {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.article .conteneur-video {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px 0 24px 0;
+}
+
+.article .conteneur-video p {
+  font-style: italic;
+  margin: 0;
+}
+
+.article img {
+  width: 100%;
+  margin: 16px 0 24px 0;
+  border-radius: 10px;
+}
+
+.article .information,
+.article .alerte,
+.article .aide {
+  padding: 16px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4px;
+  align-self: stretch;
+  color: var(--bleu-survol);
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.article .information {
+  border-left: 3px solid var(--bleu-mise-en-avant);
+  background: var(--fond-bleu-pale);
+}
+
+.article .alerte {
+  border-left: 3px solid #faa72c;
+  background: var(--fond-ocre-pale);
+}
+
+.article .aide {
+  background: #eff6ff;
+  position: relative;
+  padding-left: 80px;
+}
+
+.article .information:before,
+.article .alerte:before {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.article .information:before {
+  content: 'Information';
+}
+
+.article .alerte:before {
+  content: 'Alerte';
+}
+
+.article .aide:before {
+  content: '';
+  display: inline;
+  background-image: url('/statique/assets/images/icone_explication_tranche.svg');
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 16px;
+  left: 24px;
+}

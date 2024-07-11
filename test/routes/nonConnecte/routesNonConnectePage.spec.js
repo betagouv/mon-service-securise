@@ -20,6 +20,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/activation',
     '/connexion',
     '/reinitialisationMotDePasse',
+    '/devenir-ambassadeurrice-monservicesecurise',
   ].forEach((route) => {
     it(`sert le contenu HTML de la page ${route}`, (done) => {
       axios

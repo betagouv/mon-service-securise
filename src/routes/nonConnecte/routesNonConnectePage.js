@@ -4,8 +4,14 @@ const {
   estUrlLegalePourRedirection,
   construisUrlAbsolueVersPage,
 } = require('../../http/redirection');
+const CmsCrisp = require('../../cms/cmsCrisp');
 
-const routesNonConnectePage = ({ depotDonnees, middleware, referentiel }) => {
+const routesNonConnectePage = ({
+  adaptateurCmsCrisp,
+  depotDonnees,
+  middleware,
+  referentiel,
+}) => {
   const routes = express.Router();
 
   routes.get('/', (_requete, reponse) => {
@@ -98,6 +104,16 @@ const routesNonConnectePage = ({ depotDonnees, middleware, referentiel }) => {
 
       requete.session.token = utilisateur.genereToken();
       reponse.render('motDePasse/edition', { utilisateur });
+    }
+  );
+
+  routes.get(
+    '/devenir-ambassadeurrice-monservicesecurise',
+    async (_requete, reponse) => {
+      const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+      const { titre, contenu } = await cmsCrisp.recupereDevenirAmbassadeur();
+
+      reponse.render('article', { titre, contenu });
     }
   );
 
