@@ -64,7 +64,7 @@ class CrispMarkdown {
         return false;
       },
       renderer(token) {
-        return `<div class='conteneur-video'><video src='${token.text}' controls /><p class='legende'>${token.legende}</p></div>`;
+        return `<div class='conteneur-video'><video src='${token.text}' controls></video><p class='legende'>${token.legende}</p></div>`;
       },
     };
 
