@@ -1,6 +1,9 @@
 const express = require('express');
 const CentreNotifications = require('../../notifications/centreNotifications');
-const { ErreurIdentifiantNouveauteInconnu } = require('../../erreurs');
+const {
+  ErreurIdentifiantNouveauteInconnu,
+  ErreurIdentifiantTacheInconnu,
+} = require('../../erreurs');
 
 const routesConnecteApiNotifications = ({
   adaptateurHorloge,
@@ -37,6 +40,27 @@ const routesConnecteApiNotifications = ({
     } catch (e) {
       if (e instanceof ErreurIdentifiantNouveauteInconnu) {
         reponse.status(400).send('Identifiant de nouveauté inconnu');
+        return;
+      }
+      suite(e);
+    }
+  });
+
+  routes.put('/taches/:id', async (requete, reponse, suite) => {
+    const centreNotifications = new CentreNotifications({
+      depotDonnees,
+      referentiel,
+      adaptateurHorloge,
+    });
+    try {
+      await centreNotifications.marqueTacheLue(
+        requete.idUtilisateurCourant,
+        requete.params.id
+      );
+      reponse.sendStatus(200);
+    } catch (e) {
+      if (e instanceof ErreurIdentifiantTacheInconnu) {
+        reponse.status(400).send('Identifiant de tâche inconnu');
         return;
       }
       suite(e);

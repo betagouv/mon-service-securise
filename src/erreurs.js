@@ -45,6 +45,7 @@ class ErreurSuppressionImpossible extends Error {}
 class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
 class ErreurIdentifiantNouveauteInconnu extends ErreurModele {}
+class ErreurIdentifiantTacheInconnu extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(message, idUtilisateur) {
@@ -92,4 +93,5 @@ module.exports = {
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
   ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurIdentifiantTacheInconnu,
 };
