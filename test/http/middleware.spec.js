@@ -441,10 +441,18 @@ describe('Le middleware MSS', () => {
       );
     });
 
-    it("autorise le chargement des images dont l'URL commence par `data:`", (done) => {
+    it("autorise le chargement des images dont l'URL commence par `data:` ainsi que les images venant de CRISP", (done) => {
       verifiePositionnementHeader(
         'content-security-policy',
-        "img-src 'self' data:;",
+        "img-src 'self' https://storage.crisp.chat data:;",
+        done
+      );
+    });
+
+    it("autorise le chargement des vidéos provenant du 'CellarStorage' de MSS", (done) => {
+      verifiePositionnementHeader(
+        'content-security-policy',
+        "media-src 'self' https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com;",
         done
       );
     });
