@@ -278,17 +278,20 @@ const nouvelAdaptateur = (env) => {
   const rechercheContributeurs = async (idUtilisateur, recherche) => {
     const tousContributeurs = await knex.raw(
       `
-          WITH mes_services
-            AS (
-              SELECT donnees->>'idService' AS ids_services
-                FROM autorisations
-                WHERE donnees->>'idUtilisateur' = ? AND (donnees->>'estProprietaire')::boolean = true
-            )
-            SELECT DISTINCT ON (u.id) u.id, u.donnees
-              FROM autorisations AS a
-              JOIN utilisateurs AS u ON u.id::TEXT = a.donnees->>'idUtilisateur'
-                WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services) AND a.donnees->>'idUtilisateur' != ?
-    `,
+                    WITH mes_services
+                             AS (SELECT donnees ->>'idService' AS ids_services
+                    FROM autorisations
+                    WHERE donnees->>'idUtilisateur' = ?
+                      AND (donnees->>'estProprietaire')::boolean = true
+                        )
+                    SELECT DISTINCT
+                    ON (u.id) u.id, u.donnees
+                    FROM autorisations AS a
+                        JOIN utilisateurs AS u
+                    ON u.id::TEXT = a.donnees->>'idUtilisateur'
+                    WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services)
+                      AND a.donnees->>'idUtilisateur' != ?
+                `,
       [idUtilisateur, idUtilisateur]
     );
 
@@ -372,17 +375,16 @@ const nouvelAdaptateur = (env) => {
       .map(({ id_nouveaute }) => id_nouveaute);
 
   const tachesDeServicePour = async (idUtilisateur) => {
-    const requete = await knex('taches_service')
-      .innerJoin('autorisations as a', function () {
-        this.on(
-          knex.raw("(a.donnees->>'idService')::uuid"),
-          '=',
-          'taches_service.id_service'
-        ).andOn(knex.raw("(a.donnees->>'estProprietaire')::bool"));
-      })
-      .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
-      .select('taches_service.*');
-    return requete.map((n) => ({
+    const requete = await knex.raw(
+      `
+        select t.*
+        from taches_service t
+               inner join autorisations a
+                          on ((donnees ->> 'idService')::uuid = t.id_service and (donnees ->> 'estProprietaire')::bool = true)
+        where (a.donnees ->> 'idUtilisateur')::uuid = ?`,
+      [idUtilisateur]
+    );
+    return requete.rows.map((n) => ({
       id: n.id,
       idService: n.id_service,
       dateCreation: new Date(n.date_creation),
