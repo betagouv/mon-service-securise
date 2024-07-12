@@ -71,14 +71,11 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
   });
 
   describe('quand requête PUT sur `/api/notifications/taches/:id`', () => {
-    it('délègue au centre de notification le marquage à "lue"', async () => {
+    it('délègue au dépôt via le centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
       testeur.depotDonnees().tachesDesServices = async (_) => [{ id: 'T1' }];
-      testeur.depotDonnees().marqueTacheLue = async (
-        idUtilisateur,
-        idTache
-      ) => {
-        donneesRecues = { idUtilisateur, idTache };
+      testeur.depotDonnees().marqueTacheLue = async (idTache) => {
+        donneesRecues = { idTache };
       };
 
       const reponse = await axios.put(
@@ -87,7 +84,6 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
 
       expect(reponse.status).to.be(200);
       expect(donneesRecues).to.be.an('object');
-      expect(donneesRecues.idUtilisateur).to.be('U1');
       expect(donneesRecues.idTache).to.be('T1');
     });
 
