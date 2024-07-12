@@ -82,9 +82,14 @@ const nouvelAdaptateur = (env) => {
         donnees: 'u.donnees',
       });
 
-    const [h, contributeurs] = await Promise.all([
+    const requeteSuggestionsActions = knex('suggestions_actions')
+      .where({ id_service: id })
+      .select({ nature: 'nature' });
+
+    const [h, contributeurs, suggestions] = await Promise.all([
       requeteHomologation,
       requeteContributeurs,
+      requeteSuggestionsActions,
     ]);
 
     return {
@@ -95,6 +100,7 @@ const nouvelAdaptateur = (env) => {
         dateCreation: c.dateCreation,
         ...c.donnees,
       })),
+      suggestionsActions: suggestions,
     };
   };
 
