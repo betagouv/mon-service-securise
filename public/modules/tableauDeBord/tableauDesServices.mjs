@@ -258,7 +258,9 @@ const tableauDesServices = {
                                 ${service.organisationResponsable}
                               </div>
                               ${
-                                service.statutSaisieDescription === 'aCompleter'
+                                service.statutSaisieDescription ===
+                                  'aCompleter' ||
+                                service.suggestionActionPrioritaire
                                   ? `<div class="avertissement-completion">
                                    <img src="/statique/assets/images/icone_danger_bleu.svg" alt="" />
                                      Informations à mettre à jour
