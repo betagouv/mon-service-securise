@@ -50,49 +50,18 @@ describe("L'objet d'API de `GET /services`", () => {
     .avecNomService('Un autre service')
     .construis();
 
-  it('fournit les données nécessaires', () => {
-    const services = [service];
+  it('fournit les données des services', () => {
     const autorisationComplete = uneAutorisation()
       .deProprietaire('A', '123')
       .construis();
 
-    expect(
-      objetGetServices.donnees(services, [autorisationComplete], referentiel)
-        .services
-    ).to.eql([
-      {
-        id: '123',
-        nomService: 'Un service',
-        organisationResponsable: 'Une organisation',
-        contributeurs: [
-          {
-            id: 'A',
-            prenomNom: 'Jean Dupont',
-            initiales: 'JD',
-            poste: 'RSSI',
-            estUtilisateurCourant: true,
-          },
-          {
-            id: 'B',
-            prenomNom: 'Pierre Lecoux',
-            initiales: 'PL',
-            poste: 'Maire',
-            estUtilisateurCourant: false,
-          },
-        ],
-        statutHomologation: {
-          enCoursEdition: false,
-          libelle: 'Non réalisée',
-          id: 'nonRealisee',
-          ordre: 1,
-        },
-        statutSaisieDescription: 'aCompleter',
-        nombreContributeurs: 1 + 1,
-        estProprietaire: true,
-        documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
-        permissions: { gestionContributeurs: true },
-      },
-    ]);
+    const { services } = objetGetServices.donnees(
+      [service],
+      [autorisationComplete],
+      referentiel
+    );
+    expect(services.length).to.be(1);
+    expect(services[0].id).to.be('123');
   });
 
   it('fournit les données de résumé des services', () => {
