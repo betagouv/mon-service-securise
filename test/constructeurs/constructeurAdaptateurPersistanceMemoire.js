@@ -6,6 +6,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
     this.services = [];
     this.utilisateurs = [];
     this.notificationsExpirationHomologation = [];
+    this.suggestionsActions = [];
   }
 
   ajouteUneAutorisation(autorisation) {
@@ -28,6 +29,11 @@ class ConstructeurAdaptateurPersistanceMemoire {
     return this;
   }
 
+  avecUneSuggestionAction(suggestion) {
+    this.suggestionsActions.push(suggestion);
+    return this;
+  }
+
   construis() {
     return AdaptateurPersistanceMemoire.nouvelAdaptateur({
       autorisations: this.autorisations,
@@ -36,6 +42,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
       utilisateurs: this.utilisateurs,
       notificationsExpirationHomologation:
         this.notificationsExpirationHomologation,
+      suggestionsActions: this.suggestionsActions,
     });
   }
 }

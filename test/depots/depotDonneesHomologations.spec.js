@@ -206,6 +206,21 @@ describe('Le dépôt de données des homologations', () => {
     expect(contributeurs[1].id).to.equal('U2');
   });
 
+  it('associe ses suggestions d’actions au service', async () => {
+    const r = Referentiel.creeReferentielVide();
+    const persistance = unePersistanceMemoire()
+      .ajouteUnService(unService(r).avecId('S1').donnees)
+      .avecUneSuggestionAction({ idService: 'S1', nature: 'siret' });
+    const depot = unDepotDeDonneesServices()
+      .avecReferentiel(r)
+      .avecAdaptateurPersistance(persistance)
+      .construis();
+
+    const service = await depot.homologation('S1');
+
+    expect(service.suggestionActionPrioritaire().nature).to.be('siret');
+  });
+
   it('renseigne les mesures générales associées à une homologation', async () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { gouvernance: 'Gouvernance' },

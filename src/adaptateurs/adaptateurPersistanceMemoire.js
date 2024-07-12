@@ -11,6 +11,7 @@ const nouvelAdaptateur = (
   donnees.parcoursUtilisateurs ||= [];
   donnees.notificationsExpirationHomologation ||= [];
   donnees.notifications ||= [];
+  donnees.suggestionsActions ||= [];
 
   const metsAJourEnregistrement = (
     fonctionRecherche,
@@ -61,10 +62,15 @@ const nouvelAdaptateur = (
       .filter((a) => a.idHomologation === idService)
       .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
 
+  const suggestionsActionsService = (idService) =>
+    donnees.suggestionsActions.filter((s) => s.idService === idService);
+
   const homologation = (id) => {
     const homologationTrouvee = donnees.homologations.find((h) => h.id === id);
-    if (homologationTrouvee)
+    if (homologationTrouvee) {
       homologationTrouvee.contributeurs = contributeursService(id);
+      homologationTrouvee.suggestionsActions = suggestionsActionsService(id);
+    }
 
     return Promise.resolve(homologationTrouvee);
   };
