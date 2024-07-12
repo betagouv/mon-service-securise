@@ -58,7 +58,7 @@ class CentreNotifications {
     return notifications.map((notification) => ({
       ...notification,
       titre: CentreNotifications.titreFusionne(notification),
-      lien: notification.lien?.replace('%ID_SERVICE%', notification.service.id),
+      lien: notification.lien.replace('%ID_SERVICE%', notification.service.id),
       statutLecture: notification.dateFaite
         ? CentreNotifications.NOTIFICATION_LUE
         : CentreNotifications.NOTIFICATION_NON_LUE,
@@ -74,7 +74,7 @@ class CentreNotifications {
 
     return ['NOM_SERVICE', ...champsDonnees].reduce(
       (acc, cle) => acc.replace(`%${cle}%`, valeurReelle(cle)),
-      notification.titre || ''
+      notification.titre
     );
   }
 
