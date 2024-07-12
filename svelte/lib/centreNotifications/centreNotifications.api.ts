@@ -3,6 +3,6 @@ export const recupereNotifications = async () => {
   return reponse.data.notifications;
 };
 
-export const marqueNotificationCommeLue = async (id: string) => {
-  await axios.put(`/api/notifications/nouveautes/${id}`);
+export const marqueNotificationCommeLue = async (type: string, id: string) => {
+  await axios.put(`/api/notifications/${type}/${id}`);
 };

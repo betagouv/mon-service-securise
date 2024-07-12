@@ -39,6 +39,7 @@ class CentreNotifications {
       ...tachesDesServices.map((t) => ({
         ...t,
         type: 'tache',
+        doitNotifierLecture: true,
         date: () => t.dateCreation,
       })),
     ].sort((a, b) => b.date() - a.date());
