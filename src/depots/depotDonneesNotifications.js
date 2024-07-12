@@ -25,7 +25,9 @@ const creeDepot = (config = {}) => {
     });
   };
 
-  const marqueTacheLue = async (idTache) => {};
+  const marqueTacheLue = async (idTache) => {
+    await adaptateurPersistance.marqueTacheDeServiceLue(idTache);
+  };
 
   return {
     marqueNouveauteLue,

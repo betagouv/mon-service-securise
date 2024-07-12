@@ -49,6 +49,19 @@ describe('Le dépôt de données des notifications', () => {
     });
   });
 
+  describe("sur demande de marquage d'une tâche de service comme 'lue'", () => {
+    it("délègue à l'adaptateur persistance le marquage", async () => {
+      let donneesRecues;
+      adaptateurPersistance.marqueTacheDeServiceLue = async (idTache) => {
+        donneesRecues = { idTache };
+      };
+
+      await depotNotifications.marqueTacheLue('T1');
+
+      expect(donneesRecues.idTache).to.be('T1');
+    });
+  });
+
   describe('sur demande de la liste des tâches de service', () => {
     it('utiliser l’adaptateur de persistance pour récupérer toutes les tâches', async () => {
       let adaptateurAppele;
