@@ -297,6 +297,8 @@ const nouvelAdaptateur = (
 
   const tachesDeServicePour = async () => [];
 
+  const marqueTacheDeServiceLue = async () => {};
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -310,6 +312,7 @@ const nouvelAdaptateur = (
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     marqueNouveauteLue,
+    marqueTacheDeServiceLue,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,

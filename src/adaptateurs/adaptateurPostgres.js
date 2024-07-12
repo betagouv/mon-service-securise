@@ -392,6 +392,12 @@ const nouvelAdaptateur = (env) => {
     }));
   };
 
+  const marqueTacheDeServiceLue = async (idTache) => {
+    await knex('taches_service')
+      .where({ id: idTache })
+      .update({ date_faite: knex.fn.now() });
+  };
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -406,6 +412,7 @@ const nouvelAdaptateur = (env) => {
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     marqueNouveauteLue,
+    marqueTacheDeServiceLue,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,
