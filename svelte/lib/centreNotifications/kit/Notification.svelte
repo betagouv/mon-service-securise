@@ -13,10 +13,7 @@
   const relationCta = notification.type === 'nouveaute' ? 'noopener' : '';
   const actionClick = notification.doitNotifierLecture
     ? async () => {
-        await marqueNotificationCommeLue(
-          notification.type + 's',
-          notification.id
-        );
+        await marqueNotificationCommeLue(notification.type, notification.id);
         dispatch('notificationMiseAJour');
       }
     : () => {};
