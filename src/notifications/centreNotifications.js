@@ -21,14 +21,14 @@ class CentreNotifications {
   }
 
   async toutesNotifications(idUtilisateur) {
-    const [taches, nouveautes, tachesDesServices] = await Promise.all([
-      this.toutesTachesEnAttente(idUtilisateur),
+    const [tachesProfil, nouveautes, tachesDesServices] = await Promise.all([
+      this.toutesTachesProfilUtilisateur(idUtilisateur),
       this.toutesNouveautes(idUtilisateur),
       this.toutesTachesDeService(idUtilisateur),
     ]);
 
     return [
-      ...taches.map((t) => ({
+      ...tachesProfil.map((t) => ({
         ...t,
         type: 'tache',
         date: () => this.adaptateurHorloge.maintenant(),
@@ -103,7 +103,7 @@ class CentreNotifications {
     await this.depotDonnees.marqueNouveauteLue(idUtilisateur, idNouveaute);
   }
 
-  async marqueTacheLue(idUtilisateur, idTache) {
+  async marqueTacheDeServiceLue(idUtilisateur, idTache) {
     const taches = await this.depotDonnees.tachesDesServices(idUtilisateur);
     if (!taches.find((t) => t.id)) {
       throw new ErreurIdentifiantTacheInconnu();
@@ -111,7 +111,7 @@ class CentreNotifications {
     await this.depotDonnees.marqueTacheLue(idUtilisateur, idTache);
   }
 
-  async toutesTachesEnAttente(idUtilisateur) {
+  async toutesTachesProfilUtilisateur(idUtilisateur) {
     const utilisateur = await this.depotDonnees.utilisateur(idUtilisateur);
     if (!utilisateur) {
       return [];
