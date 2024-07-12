@@ -39,7 +39,7 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
     });
   });
 
-  describe('quand requête POST sur `/api/notifications/nouveautes/:id`', () => {
+  describe('quand requête PUT sur `/api/notifications/nouveautes/:id`', () => {
     it('délègue au centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
       testeur.depotDonnees().marqueNouveauteLue = async (
@@ -49,7 +49,7 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
         donneesRecues = { idUtilisateur, idNouveaute };
       };
 
-      const reponse = await axios.post(
+      const reponse = await axios.put(
         'http://localhost:1234/api/notifications/nouveautes/N1'
       );
 
@@ -59,7 +59,7 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
 
     it("reste robuste en cas d'erreur", async () => {
       try {
-        await axios.post(
+        await axios.put(
           'http://localhost:1234/api/notifications/nouveautes/ID_INCONNU'
         );
         expect().fail("L'appel aurait dû lever une exception");

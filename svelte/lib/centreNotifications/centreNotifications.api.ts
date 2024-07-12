@@ -4,5 +4,5 @@ export const recupereNotifications = async () => {
 };
 
 export const marqueNotificationCommeLue = async (id: string) => {
-  await axios.post(`/api/notifications/nouveautes/${id}`);
+  await axios.put(`/api/notifications/nouveautes/${id}`);
 };
