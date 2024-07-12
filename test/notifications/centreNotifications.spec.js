@@ -215,14 +215,25 @@ describe('Le centre de notifications', () => {
         {
           titre: '--%nimportequoi%--',
           service: { nomService: () => '' },
-          donnees: {
-            nimportequoi: 'nimportequi',
-          },
+          donnees: { nimportequoi: 'nimportequi' },
         },
       ];
       const notifs = await centreDeNotification().toutesNotifications('U1');
 
       expect(notifs[0].titre).to.be('--nimportequi--');
+    });
+
+    it("complète le lien avec l'ID du service", async () => {
+      depotDonnees.tachesDesServices = async (_) => [
+        {
+          lien: '/service/%ID_SERVICE%/page',
+          service: unService().avecId('S1').construis(),
+        },
+      ];
+
+      const notifs = await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifs[0].lien).to.be('/service/S1/page');
     });
 
     it('indique que la tache doit être notifiée de sa lecture', async () => {
