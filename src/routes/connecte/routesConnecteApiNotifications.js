@@ -53,7 +53,7 @@ const routesConnecteApiNotifications = ({
       adaptateurHorloge,
     });
     try {
-      await centreNotifications.marqueTacheLue(
+      await centreNotifications.marqueTacheDeServiceLue(
         requete.idUtilisateurCourant,
         requete.params.id
       );

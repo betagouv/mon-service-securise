@@ -352,12 +352,12 @@ describe('Le centre de notifications', () => {
     });
   });
 
-  describe('sur marquage de tâche lue', () => {
+  describe('sur marquage de tâche de service lue', () => {
     it("jette une erreur si l'identifiant de tâche n'est pas présent dans le dépôt", async () => {
       depotDonnees.tachesDesServices = async (_) => [];
 
       try {
-        await centreDeNotification().marqueTacheLue(
+        await centreDeNotification().marqueTacheDeServiceLue(
           'idUtilisateur',
           'ID_INCONNU'
         );
@@ -375,7 +375,7 @@ describe('Le centre de notifications', () => {
         donneesRecues = { idUtilisateur, idTache };
       };
 
-      await centreDeNotification().marqueTacheLue('U1', 'T1');
+      await centreDeNotification().marqueTacheDeServiceLue('U1', 'T1');
 
       expect(donneesRecues.idUtilisateur).to.be('U1');
       expect(donneesRecues.idTache).to.be('T1');
