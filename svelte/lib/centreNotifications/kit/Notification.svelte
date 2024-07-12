@@ -11,13 +11,12 @@
     notification.type === 'nouveaute' ? 'Nouveautés' : notification.entete;
   const cibleCta = notification.type === 'nouveaute' ? '_blank' : '';
   const relationCta = notification.type === 'nouveaute' ? 'noopener' : '';
-  const actionClick =
-    notification.type === 'nouveaute'
-      ? async () => {
-          await marqueNotificationCommeLue(notification.id);
-          dispatch('notificationMiseAJour');
-        }
-      : () => {};
+  const actionClick = notification.doitNotifierLecture
+    ? async () => {
+        await marqueNotificationCommeLue(notification.id);
+        dispatch('notificationMiseAJour');
+      }
+    : () => {};
 </script>
 
 <a

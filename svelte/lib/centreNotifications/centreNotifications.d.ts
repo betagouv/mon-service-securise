@@ -6,6 +6,7 @@ type NotificationBase = {
   statutLecture: 'lue' | 'nonLue';
   lien: string;
   type: TypeNotification;
+  doitNotifierLecture: boolean;
 };
 
 export type NotificationNouveaute = NotificationBase & {
