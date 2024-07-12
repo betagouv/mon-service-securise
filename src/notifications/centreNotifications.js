@@ -1,4 +1,7 @@
-const { ErreurIdentifiantNouveauteInconnu } = require('../erreurs');
+const {
+  ErreurIdentifiantNouveauteInconnu,
+  ErreurIdentifiantTacheInconnu,
+} = require('../erreurs');
 
 const avecStatutLecture = (notification, statutLecture) => ({
   ...notification,
@@ -101,6 +104,10 @@ class CentreNotifications {
   }
 
   async marqueTacheLue(idUtilisateur, idTache) {
+    const taches = await this.depotDonnees.tachesDesServices(idUtilisateur);
+    if (!taches.find((t) => t.id)) {
+      throw new ErreurIdentifiantTacheInconnu();
+    }
     await this.depotDonnees.marqueTacheLue(idUtilisateur, idTache);
   }
 

@@ -73,6 +73,7 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
   describe('quand requête PUT sur `/api/notifications/taches/:id`', () => {
     it('délègue au centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
+      testeur.depotDonnees().tachesDesServices = async (_) => [{ id: 'T1' }];
       testeur.depotDonnees().marqueTacheLue = async (
         idUtilisateur,
         idTache
