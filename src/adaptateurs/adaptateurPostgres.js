@@ -384,12 +384,16 @@ const nouvelAdaptateur = (env) => {
                     where (a.donnees ->> 'idUtilisateur')::uuid = ?`,
       [idUtilisateur]
     );
-    return requete.rows.map((n) => ({
-      ...n,
-      idService: n.id_service,
-      dateCreation: new Date(n.date_creation),
-      dateFaite: n.date_faite ? new Date(n.date_faite) : null,
-    }));
+    return requete.rows.map(
+      /* eslint-disable camelcase */
+      ({ id_service, date_creation, date_faite, ...reste }) => ({
+        ...reste,
+        idService: id_service,
+        dateCreation: new Date(date_creation),
+        dateFaite: date_faite ? new Date(date_faite) : null,
+      })
+      /* eslint-enable camelcase */
+    );
   };
 
   const marqueTacheDeServiceLue = async (idTache) => {
