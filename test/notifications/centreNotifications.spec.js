@@ -251,6 +251,15 @@ describe('Le centre de notifications', () => {
 
       expect(notifs[0].titre).to.be('--nimportequi--');
     });
+
+    it('indique que la tache doit être notifiée de sa lecture', async () => {
+      depotDonnees.tachesDesServices = async (_) => [{ id: 't1' }];
+
+      const notifications =
+        await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifications[0].doitNotifierLecture).to.be(true);
+    });
   });
 
   describe("concernant les tâches liées à l'utilisateur", () => {
