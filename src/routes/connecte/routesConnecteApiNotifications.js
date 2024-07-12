@@ -25,7 +25,7 @@ const routesConnecteApiNotifications = ({
     });
   });
 
-  routes.post('/nouveautes/:id', async (requete, reponse, suite) => {
+  routes.put('/nouveautes/:id', async (requete, reponse, suite) => {
     const centreNotifications = new CentreNotifications({
       depotDonnees,
       referentiel,
