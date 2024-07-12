@@ -233,6 +233,26 @@ describe('Le centre de notifications', () => {
 
       expect(notifications[0].doitNotifierLecture).to.be(true);
     });
+
+    it("indique qu'une tâche est non lue si elle n'a pas été faite", async () => {
+      depotDonnees.tachesDesServices = async (_) => [{ id: 't1' }];
+
+      const notifications =
+        await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifications[0].statutLecture).to.be('nonLue');
+    });
+
+    it("indique qu'une tâche est lue si elle a été faite", async () => {
+      depotDonnees.tachesDesServices = async (_) => [
+        { id: 't1', dateFaite: new Date() },
+      ];
+
+      const notifications =
+        await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifications[0].statutLecture).to.be('lue');
+    });
   });
 
   describe("concernant les tâches liées à l'utilisateur", () => {
