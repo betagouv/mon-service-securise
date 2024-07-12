@@ -55,6 +55,7 @@ describe("L'objet d'API de `GET /service`", () => {
     .avecDossiers([
       unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
     ])
+    .avecSuggestionAction({ nature: 'siret-a-renseigner' })
     .construis();
 
   it('fournit les données nécessaires', () => {
@@ -92,6 +93,7 @@ describe("L'objet d'API de `GET /service`", () => {
       estProprietaire: false,
       documentsPdfDisponibles: [],
       permissions: { gestionContributeurs: false },
+      suggestionActionPrioritaire: { nature: 'siret-a-renseigner' },
     });
   });
 
