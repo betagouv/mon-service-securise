@@ -117,7 +117,7 @@ const creeDepot = (config = {}) => {
 
   const {
     marqueNouveauteLue,
-    marqueTacheLue,
+    marqueTacheDeServiceLue,
     nouveautesPourUtilisateur,
     tachesDesServices,
   } = depotNotifications;
@@ -150,7 +150,7 @@ const creeDepot = (config = {}) => {
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
     marqueNouveauteLue,
-    marqueTacheLue,
+    marqueTacheDeServiceLue,
     metsAJourMotDePasse,
     metsAJourMesureGeneraleDuService,
     metsAJourMesuresSpecifiquesDuService,

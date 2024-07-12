@@ -371,7 +371,7 @@ describe('Le centre de notifications', () => {
       let donneesRecues;
       depotDonnees.tachesDesServices = async (idUtilisateur) =>
         idUtilisateur === 'U1' ? [{ id: 'T1' }] : [];
-      depotDonnees.marqueTacheLue = async (idTache) => {
+      depotDonnees.marqueTacheDeServiceLue = async (idTache) => {
         donneesRecues = { idTache };
       };
 

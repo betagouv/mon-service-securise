@@ -74,7 +74,7 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
     it('délègue au dépôt via le centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
       testeur.depotDonnees().tachesDesServices = async (_) => [{ id: 'T1' }];
-      testeur.depotDonnees().marqueTacheLue = async (idTache) => {
+      testeur.depotDonnees().marqueTacheDeServiceLue = async (idTache) => {
         donneesRecues = { idTache };
       };
 
@@ -88,7 +88,7 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
     });
 
     it("reste robuste en cas d'erreur", async () => {
-      testeur.depotDonnees().marqueTacheLue = async () => {
+      testeur.depotDonnees().marqueTacheDeServiceLue = async () => {
         throw new ErreurIdentifiantTacheInconnu();
       };
       try {
