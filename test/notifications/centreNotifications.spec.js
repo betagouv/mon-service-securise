@@ -8,7 +8,9 @@ const {
 } = require('../../src/erreurs');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
-const { unService } = require('../constructeurs/constructeurService');
+const {
+  uneTacheDeService,
+} = require('../constructeurs/constructeurTacheDeService');
 
 describe('Le centre de notifications', () => {
   let referentiel;
@@ -20,16 +22,13 @@ describe('Le centre de notifications', () => {
         { id: 'N1', dateDeDeploiement: '2024-01-01' },
         { id: 'N2', dateDeDeploiement: '2024-02-02' },
       ],
+      naturesTachesService: { natureDeTest: { titre: '', lien: '/…' } },
     });
     depotDonnees = creeDepot();
   });
 
   const centreDeNotification = () =>
-    new CentreNotifications({
-      referentiel,
-      depotDonnees,
-      adaptateurHorloge,
-    });
+    new CentreNotifications({ referentiel, depotDonnees, adaptateurHorloge });
 
   it("jette une erreur s'il n'est pas instancié avec les bonnes dépendances", () => {
     expect(() => new CentreNotifications({})).to.throwError((e) => {
@@ -41,13 +40,16 @@ describe('Le centre de notifications', () => {
 
   it('trie toutes les notifications retournées', async () => {
     const enJanvier = '2024-01-01';
-    referentiel = Referentiel.creeReferentiel({
+    referentiel.enrichis({
       nouvellesFonctionnalites: [{ id: 'N1', dateDeDeploiement: enJanvier }],
     });
 
     const enFevrier = '2024-02-02';
     depotDonnees.tachesDesServices = async () => [
-      { id: 'T1', dateCreation: new Date(enFevrier) },
+      uneTacheDeService()
+        .avecId('T1')
+        .avecDateDeCreation(new Date(enFevrier))
+        .construis(),
     ];
 
     const notifications =
@@ -138,15 +140,17 @@ describe('Le centre de notifications', () => {
 
   describe('concernant les tâches liées aux services', () => {
     beforeEach(() => {
-      referentiel = Referentiel.creeReferentiel({
+      referentiel.enrichis({
         nouvellesFonctionnalites: [],
-        naturesTachesService: { n1: {} },
+        naturesTachesService: { natureDeTest: { titre: '', lien: '/…' } },
       });
     });
 
     it('retourne les tâches', async () => {
       depotDonnees.tachesDesServices = async (idUtilisateur) =>
-        idUtilisateur === 'U1' ? [{ id: 'T1', nature: 'n1' }] : [];
+        idUtilisateur === 'U1'
+          ? [uneTacheDeService().avecId('T1').construis()]
+          : [];
 
       const notifs = await centreDeNotification().toutesNotifications('U1');
 
@@ -157,7 +161,7 @@ describe('Le centre de notifications', () => {
 
     it('complète les informations depuis le référentiel', async () => {
       depotDonnees.tachesDesServices = async (_) => [
-        { nature: 'niveauRetrograde', service: { nomService: () => '' } },
+        uneTacheDeService().avecNature('niveauRetrograde').construis(),
       ];
       referentiel = Referentiel.creeReferentiel({
         nouvellesFonctionnalites: [],
@@ -167,6 +171,7 @@ describe('Le centre de notifications', () => {
             titreCta: 'Voir le changement',
             titre:
               'Votre service [XXX] a désormais des besoins de sécurité modérés.',
+            lien: '/…',
           },
         },
       });
@@ -181,13 +186,14 @@ describe('Le centre de notifications', () => {
     });
 
     it('complète le titre avec les informations liées au service', async () => {
-      depotDonnees.tachesDesServices = async (_) => [
-        {
-          titre: '--%NOM_SERVICE%--',
-          service: unService(Referentiel.creeReferentielVide())
-            .avecNomService('toto')
-            .construis(),
+      referentiel.enrichis({
+        naturesTachesService: {
+          natureDeTest: { titre: '--%NOM_SERVICE%--', lien: '' },
         },
+      });
+
+      depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService().avecUnServiceNomme('toto').construis(),
       ];
 
       const notifs = await centreDeNotification().toutesNotifications('U1');
@@ -196,14 +202,16 @@ describe('Le centre de notifications', () => {
     });
 
     it('complète le titre avec les informations des données de la tâche', async () => {
-      depotDonnees.tachesDesServices = async (_) => [
-        {
-          titre: '--%nouveauxBesoins%--',
-          service: { nomService: () => '' },
-          donnees: {
-            nouveauxBesoins: 'petits',
-          },
+      referentiel.enrichis({
+        naturesTachesService: {
+          natureDeTest: { titre: '--%nouveauxBesoins%--', lien: '' },
         },
+      });
+
+      depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService()
+          .avecLesDonnees({ nouveauxBesoins: 'petits' })
+          .construis(),
       ];
       const notifs = await centreDeNotification().toutesNotifications('U1');
 
@@ -211,12 +219,16 @@ describe('Le centre de notifications', () => {
     });
 
     it("peut utiliser n'importe quelle donnée de la tâche pour complèter le titre", async () => {
-      depotDonnees.tachesDesServices = async (_) => [
-        {
-          titre: '--%nimportequoi%--',
-          service: { nomService: () => '' },
-          donnees: { nimportequoi: 'nimportequi' },
+      referentiel.enrichis({
+        naturesTachesService: {
+          natureDeTest: { titre: '--%nimportequoi%--', lien: '' },
         },
+      });
+
+      depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService()
+          .avecLesDonnees({ nimportequoi: 'nimportequi' })
+          .construis(),
       ];
       const notifs = await centreDeNotification().toutesNotifications('U1');
 
@@ -224,11 +236,14 @@ describe('Le centre de notifications', () => {
     });
 
     it("complète le lien avec l'ID du service", async () => {
-      depotDonnees.tachesDesServices = async (_) => [
-        {
-          lien: '/service/%ID_SERVICE%/page',
-          service: unService().avecId('S1').construis(),
+      referentiel.enrichis({
+        naturesTachesService: {
+          natureDeTest: { lien: '/service/%ID_SERVICE%/page' },
         },
+      });
+
+      depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService().avecUnServiceId('S1').construis(),
       ];
 
       const notifs = await centreDeNotification().toutesNotifications('U1');
@@ -237,7 +252,9 @@ describe('Le centre de notifications', () => {
     });
 
     it('indique que la tache doit être notifiée de sa lecture', async () => {
-      depotDonnees.tachesDesServices = async (_) => [{ id: 't1' }];
+      depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService().construis(),
+      ];
 
       const notifications =
         await centreDeNotification().toutesNotifications('U1');
@@ -246,7 +263,9 @@ describe('Le centre de notifications', () => {
     });
 
     it("indique qu'une tâche est non lue si elle n'a pas été faite", async () => {
-      depotDonnees.tachesDesServices = async (_) => [{ id: 't1' }];
+      depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService().pasFaite().construis(),
+      ];
 
       const notifications =
         await centreDeNotification().toutesNotifications('U1');
@@ -256,7 +275,7 @@ describe('Le centre de notifications', () => {
 
     it("indique qu'une tâche est lue si elle a été faite", async () => {
       depotDonnees.tachesDesServices = async (_) => [
-        { id: 't1', dateFaite: new Date() },
+        uneTacheDeService().faiteMaintenant().construis(),
       ];
 
       const notifications =
