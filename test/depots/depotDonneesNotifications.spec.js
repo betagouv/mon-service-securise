@@ -56,7 +56,7 @@ describe('Le dépôt de données des notifications', () => {
         donneesRecues = { idTache };
       };
 
-      await depotNotifications.marqueTacheLue('T1');
+      await depotNotifications.marqueTacheDeServiceLue('T1');
 
       expect(donneesRecues.idTache).to.be('T1');
     });
