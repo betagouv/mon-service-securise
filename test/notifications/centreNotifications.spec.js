@@ -105,6 +105,18 @@ describe('Le centre de notifications', () => {
 
       expect(notifications.length).to.be(0);
     });
+
+    it('indique que la nouveaute doit être notifiée de sa lecture', async () => {
+      const centreNotifications = new CentreNotifications({
+        referentiel,
+        depotDonnees,
+        adaptateurHorloge,
+      });
+
+      const notifications = await centreNotifications.toutesNotifications('U1');
+
+      expect(notifications[0].doitNotifierLecture).to.be(true);
+    });
   });
 
   describe('sur marquage de nouveauté lue', () => {

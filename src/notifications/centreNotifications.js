@@ -33,6 +33,7 @@ class CentreNotifications {
       ...nouveautes.map((t) => ({
         ...t,
         type: 'nouveaute',
+        doitNotifierLecture: true,
         date: () => new Date(t.dateDeDeploiement),
       })),
       ...tachesDesServices.map((t) => ({
