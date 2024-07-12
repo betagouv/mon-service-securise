@@ -108,7 +108,7 @@ class CentreNotifications {
     if (!taches.find((t) => t.id)) {
       throw new ErreurIdentifiantTacheInconnu();
     }
-    await this.depotDonnees.marqueTacheLue(idUtilisateur, idTache);
+    await this.depotDonnees.marqueTacheLue(idTache);
   }
 
   async toutesTachesProfilUtilisateur(idUtilisateur) {

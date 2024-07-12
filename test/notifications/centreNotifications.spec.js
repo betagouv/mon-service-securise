@@ -371,13 +371,12 @@ describe('Le centre de notifications', () => {
       let donneesRecues;
       depotDonnees.tachesDesServices = async (idUtilisateur) =>
         idUtilisateur === 'U1' ? [{ id: 'T1' }] : [];
-      depotDonnees.marqueTacheLue = async (idUtilisateur, idTache) => {
-        donneesRecues = { idUtilisateur, idTache };
+      depotDonnees.marqueTacheLue = async (idTache) => {
+        donneesRecues = { idTache };
       };
 
       await centreDeNotification().marqueTacheDeServiceLue('U1', 'T1');
 
-      expect(donneesRecues.idUtilisateur).to.be('U1');
       expect(donneesRecues.idTache).to.be('T1');
     });
   });
