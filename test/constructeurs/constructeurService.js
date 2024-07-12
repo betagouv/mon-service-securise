@@ -9,6 +9,7 @@ class ConstructeurService {
       id: '',
       descriptionService: uneDescriptionValide(referentiel).donnees,
       contributeurs: [],
+      suggestionsActions: [],
     };
     this.mesures = undefined;
     this.risques = undefined;
@@ -71,6 +72,11 @@ class ConstructeurService {
 
   ajouteUnContributeur(contributeur) {
     this.donnees.contributeurs.push(contributeur);
+    return this;
+  }
+
+  avecSuggestionAction(suggestion) {
+    this.donnees.suggestionsActions.push(suggestion);
     return this;
   }
 }

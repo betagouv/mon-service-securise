@@ -51,6 +51,16 @@ describe('Une homologation', () => {
     expect(contributeur.id).to.equal('456');
   });
 
+  it('connaît la suggestion d’action la plus prioritaire', () => {
+    const service = unService()
+      .avecSuggestionAction({ nature: 'siret-a-renseigner' })
+      .construis();
+
+    expect(service.suggestionActionPrioritaire().nature).to.be(
+      'siret-a-renseigner'
+    );
+  });
+
   it('sait décrire le type service', () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: {

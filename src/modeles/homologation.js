@@ -36,6 +36,7 @@ class Homologation {
       risquesGeneraux = [],
       risquesSpecifiques = [],
       rolesResponsabilites = {},
+      suggestionsActions = [],
     } = donnees;
 
     this.id = id;
@@ -63,6 +64,7 @@ class Homologation {
       { risquesGeneraux, risquesSpecifiques },
       referentiel
     );
+    this.suggestionsActions = suggestionsActions;
 
     this.referentiel = referentiel;
   }
@@ -264,6 +266,10 @@ class Homologation {
 
   vueAnnexePDFRisques() {
     return new ObjetPDFAnnexeRisques(this, this.referentiel);
+  }
+
+  suggestionActionPrioritaire() {
+    return this.suggestionsActions[0];
   }
 
   static creePourUnUtilisateur(utilisateur) {
