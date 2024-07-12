@@ -78,6 +78,7 @@ module.exports = {
       titreCta: 'Voir le changement',
       titre:
         'Votre service [%NOM_SERVICE%] a désormais des besoins de sécurité %nouveauxBesoins%.',
+      lien: '/service/%ID_SERVICE%/descriptionService?etape=3',
     },
   },
 
