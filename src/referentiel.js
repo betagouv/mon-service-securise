@@ -288,6 +288,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     Object.keys(donnees.etapesVisiteGuidee || {}).length;
   const natureTachesService = (nature) =>
     (donnees.naturesTachesService || {})[nature];
+  const natureSuggestionAction = (nature) =>
+    (donnees.naturesSuggestionsActions || {})[nature];
 
   valideDonnees();
 
@@ -375,6 +377,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     etapeVisiteGuideeExiste,
     nbEtapesVisiteGuidee,
     natureTachesService,
+    natureSuggestionAction,
   };
 };
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);

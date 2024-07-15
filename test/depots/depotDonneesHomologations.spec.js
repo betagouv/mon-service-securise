@@ -207,7 +207,9 @@ describe('Le dépôt de données des homologations', () => {
   });
 
   it('associe ses suggestions d’actions au service', async () => {
-    const r = Referentiel.creeReferentielVide();
+    const r = Referentiel.creeReferentiel({
+      naturesSuggestionsActions: { siret: {} },
+    });
     const persistance = unePersistanceMemoire()
       .ajouteUnService(unService(r).avecId('S1').donnees)
       .avecUneSuggestionAction({ idService: 'S1', nature: 'siret' });

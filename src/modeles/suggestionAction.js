@@ -1,6 +1,7 @@
 class SuggestionAction {
-  constructor(donnees) {
+  constructor(donnees, referentiel) {
     this.nature = donnees.nature;
+    this.lien = referentiel.natureSuggestionAction(donnees.nature).lien;
   }
 }
 

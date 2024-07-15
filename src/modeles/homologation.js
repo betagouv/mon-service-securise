@@ -66,7 +66,7 @@ class Homologation {
       referentiel
     );
     this.suggestionsActions = suggestionsActions.map(
-      (s) => new SuggestionAction(s)
+      (s) => new SuggestionAction(s, referentiel)
     );
 
     this.referentiel = referentiel;

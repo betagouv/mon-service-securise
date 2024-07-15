@@ -52,7 +52,11 @@ describe('Une homologation', () => {
   });
 
   it('connaît la suggestion d’action la plus prioritaire', () => {
-    const service = unService()
+    const referentiel = Referentiel.creeReferentiel({
+      naturesSuggestionsActions: { 'siret-a-renseigner': {} },
+    });
+
+    const service = unService(referentiel)
       .avecSuggestionAction({ nature: 'siret-a-renseigner' })
       .construis();
 
