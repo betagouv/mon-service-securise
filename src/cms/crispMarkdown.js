@@ -73,6 +73,11 @@ class CrispMarkdown {
         const profondeurAjustee = Math.min(Math.max(profondeur + 1, 2), 4);
         return `<h${profondeurAjustee}>${texte}</h${profondeurAjustee}>`;
       },
+      link(lien, _, texte) {
+        if (texte.includes('Télécharger'))
+          return `<a href='${lien}' class='telechargement' target='_blank' rel='noreferrer nofollow'>${texte}</a>`;
+        return `<a href='${lien}'>${texte}</a>`;
+      },
     };
 
     marked.use({
