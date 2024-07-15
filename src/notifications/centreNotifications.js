@@ -38,6 +38,7 @@ class CentreNotifications {
         type: 'nouveaute',
         doitNotifierLecture: true,
         date: () => new Date(t.dateDeDeploiement),
+        horodatage: new Date(t.dateDeDeploiement),
       })),
       ...tachesDesServices.map((t) => ({
         ...t,

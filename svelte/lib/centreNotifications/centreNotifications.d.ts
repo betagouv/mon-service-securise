@@ -7,13 +7,13 @@ type NotificationBase = {
   lien: string;
   type: TypeNotification;
   doitNotifierLecture: boolean;
+  horodatage?: string;
 };
 
 export type NotificationNouveaute = NotificationBase & {
   type: 'nouveaute';
   image: string;
   sousTitre: string;
-  dateDeDeploiement: string;
 };
 
 export type NotificationTache = NotificationBase & {

@@ -110,6 +110,19 @@ describe('Le centre de notifications', () => {
 
       expect(notifications[0].doitNotifierLecture).to.be(true);
     });
+
+    it('utilise la date de déploiement comme horodatage', async () => {
+      referentiel.enrichis({
+        nouvellesFonctionnalites: [
+          { id: 'N1', dateDeDeploiement: '2024-07-15' },
+        ],
+      });
+
+      const notifications =
+        await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifications[0].horodatage).to.eql(new Date('2024-07-15'));
+    });
   });
 
   describe('sur marquage de nouveauté lue', () => {
