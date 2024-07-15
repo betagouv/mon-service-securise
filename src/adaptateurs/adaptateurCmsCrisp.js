@@ -21,6 +21,7 @@ const recupereArticle = async (idArticle) => {
     return {
       contenuMarkdown: reponse.data.data.content,
       titre: reponse.data.data.title,
+      description: reponse.data.data.description,
     };
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
