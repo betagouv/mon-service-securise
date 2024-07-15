@@ -13,6 +13,7 @@ const ObjetPDFAnnexeDescription = require('./objetsPDF/objetPDFAnnexeDescription
 const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
 const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
 const Autorisation = require('./autorisations/autorisation');
+const SuggestionAction = require('./suggestionAction');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -64,7 +65,9 @@ class Homologation {
       { risquesGeneraux, risquesSpecifiques },
       referentiel
     );
-    this.suggestionsActions = suggestionsActions;
+    this.suggestionsActions = suggestionsActions.map(
+      (s) => new SuggestionAction(s)
+    );
 
     this.referentiel = referentiel;
   }
