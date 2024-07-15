@@ -199,6 +199,11 @@ main .marges-fixes {
 .table-des-matieres a {
   text-decoration: none;
   color: var(--texte-fonce);
+  opacity: 0.5;
+}
+
+.table-des-matieres a.actif {
+  opacity: 1;
 }
 
 .table-des-matieres .niveau-3 {
