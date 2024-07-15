@@ -1,10 +1,10 @@
 .article {
   text-align: left;
   max-width: 700px;
-  margin: 56px auto;
+  margin: 0 auto;
+  padding: 56px 0;
 
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 16px;
 }
 
 .article h1 {
@@ -12,14 +12,16 @@
   font-size: 40px;
   font-weight: 700;
   line-height: 52px;
-  margin: 24px 0;
+  margin: 0;
+  padding: 24px 0;
 }
 
 .article h2 {
   font-size: 32px;
   font-weight: 700;
   line-height: 42px;
-  margin: 32px 0 16px 0;
+  margin: 0;
+  padding: 32px 0 16px 0;
 }
 
 .article h3 {
@@ -27,7 +29,8 @@
   font-style: normal;
   font-weight: 700;
   line-height: 30px;
-  margin: 8px 0;
+  margin: 0;
+  padding: 8px 0;
 }
 
 .article h4 {
@@ -35,24 +38,29 @@
   font-style: normal;
   font-weight: 700;
   line-height: 42px;
-  margin: 4px 0;
+  margin: 0;
+  padding: 4px 0;
 }
 
 .article p {
   font-size: 16px;
   line-height: 24px;
   font-weight: normal;
-  margin: 16px 0;
+  margin: 0;
+  padding: 16px 0;
 }
 
 .article ul li {
-  margin-bottom: 8px;
+  padding-bottom: 8px;
 }
 
 .article hr {
   border-bottom: 1px solid var(--liseres-fonce);
   border-top: none;
-  margin: 32px 0;
+  border-left: none;
+  border-right: none;
+  margin: 16px 0;
+  padding: 16px 0;
 }
 
 .article video {
@@ -66,7 +74,8 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin: 16px 0 24px 0;
+  margin: 0;
+  padding: 16px 0 24px 0;
 }
 
 .article .conteneur-video p {
@@ -76,7 +85,8 @@
 
 .article img {
   width: 100%;
-  margin: 16px 0 24px 0;
+  margin: 0;
+  padding: 16px 0 24px 0;
   border-radius: 10px;
 }
 
