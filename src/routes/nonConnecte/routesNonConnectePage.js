@@ -111,9 +111,9 @@ const routesNonConnectePage = ({
     '/devenir-ambassadeurrice-monservicesecurise',
     async (_requete, reponse) => {
       const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
-      const { titre, contenu } = await cmsCrisp.recupereDevenirAmbassadeur();
+      const donneesArticle = await cmsCrisp.recupereDevenirAmbassadeur();
 
-      reponse.render('article', { titre, contenu });
+      reponse.render('article', donneesArticle);
     }
   );
 
@@ -121,9 +121,9 @@ const routesNonConnectePage = ({
     '/faire-connaitre-et-recommander-monservicesecurise',
     async (_requete, reponse) => {
       const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
-      const { titre, contenu } = await cmsCrisp.recupereFaireConnaitre();
+      const donneesArticle = await cmsCrisp.recupereFaireConnaitre();
 
-      reponse.render('article', { titre, contenu });
+      reponse.render('article', donneesArticle);
     }
   );
 

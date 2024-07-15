@@ -26,6 +26,7 @@ describe('Le CMS Crisp', () => {
       const donneesParDefautAdaptateur = {
         contenuMarkdown: '',
         titre: '',
+        description: '',
       };
 
       beforeEach(() => {
@@ -81,6 +82,7 @@ describe('Le CMS Crisp', () => {
           [nomMethodeAdaptateur]: async () => ({
             contenuMarkdown: 'Un contenu',
             titre: 'Un titre',
+            description: 'Une description',
           }),
         };
         constructeurCrispMarkdown = (chaine) => ({
@@ -97,6 +99,7 @@ describe('Le CMS Crisp', () => {
         expect(resultat).to.eql({
           titre: 'Un titre',
           contenu: 'HTML Un contenu',
+          description: 'Une description',
         });
       });
     });
