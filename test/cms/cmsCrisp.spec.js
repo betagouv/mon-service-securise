@@ -36,6 +36,7 @@ describe('Le CMS Crisp', () => {
         };
         constructeurCrispMarkdown = () => ({
           versHTML: () => {},
+          tableDesMatieres: () => ({}),
         });
       });
 
@@ -58,11 +59,15 @@ describe('Le CMS Crisp', () => {
         expect(adaptateurAppele).to.be(true);
       });
 
-      it("utilise la fabrique de 'CrispMarkdown' pour transformer le contenu en HTML", async () => {
-        let crispMarkdownAppele = false;
+      it("utilise la fabrique de 'CrispMarkdown' pour transformer le contenu en HTML et générer la table des matières", async () => {
+        let contenuParse = false;
+        let tdmGeneree = false;
         constructeurCrispMarkdown = () => ({
           versHTML: () => {
-            crispMarkdownAppele = true;
+            contenuParse = true;
+          },
+          tableDesMatieres: () => {
+            tdmGeneree = true;
           },
         });
 
@@ -73,10 +78,11 @@ describe('Le CMS Crisp', () => {
 
         await cmsCrisp[nomMethodeCMS]();
 
-        expect(crispMarkdownAppele).to.be(true);
+        expect(contenuParse).to.be(true);
+        expect(tdmGeneree).to.be(true);
       });
 
-      it('retourne le contenu HTML ainsi que le titre', async () => {
+      it('retourne le contenu HTML, le titre et la table des matières', async () => {
         adaptateurCmsCrisp = {
           ...adaptateurCmsCrisp,
           [nomMethodeAdaptateur]: async () => ({
@@ -87,6 +93,7 @@ describe('Le CMS Crisp', () => {
         };
         constructeurCrispMarkdown = (chaine) => ({
           versHTML: () => `HTML ${chaine}`,
+          tableDesMatieres: () => ['1', '2'],
         });
 
         const cmsCrisp = new CmsCrisp({
@@ -100,6 +107,7 @@ describe('Le CMS Crisp', () => {
           titre: 'Un titre',
           contenu: 'HTML Un contenu',
           description: 'Une description',
+          tableDesMatieres: ['1', '2'],
         });
       });
     });

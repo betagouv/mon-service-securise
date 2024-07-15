@@ -15,24 +15,28 @@ class CmsCrisp {
   async recupereDevenirAmbassadeur() {
     const { contenuMarkdown, titre, description } =
       await this.adaptateurCmsCrisp.recupereDevenirAmbassadeur();
-    const contenu = this.constructeurCrispMarkdown(contenuMarkdown).versHTML();
+    const crispMarkdown = this.constructeurCrispMarkdown(contenuMarkdown);
+    const contenu = crispMarkdown.versHTML();
 
     return {
       titre,
       contenu,
       description,
+      tableDesMatieres: crispMarkdown.tableDesMatieres(),
     };
   }
 
   async recupereFaireConnaitre() {
     const { contenuMarkdown, titre, description } =
       await this.adaptateurCmsCrisp.recupereFaireConnaitreMSS();
-    const contenu = this.constructeurCrispMarkdown(contenuMarkdown).versHTML();
+    const crispMarkdown = this.constructeurCrispMarkdown(contenuMarkdown);
+    const contenu = crispMarkdown.versHTML();
 
     return {
       titre,
       contenu,
       description,
+      tableDesMatieres: crispMarkdown.tableDesMatieres(),
     };
   }
 }
