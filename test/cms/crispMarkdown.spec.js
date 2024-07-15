@@ -51,7 +51,7 @@ describe('Le convertisseur de Markdown Crisp', () => {
 
       const resultat = crispMarkdown.versHTML();
 
-      expect(resultat).to.be('<h2>Un titre</h2>');
+      expect(resultat).to.be("<h2 id='un-titre'>Un titre</h2>");
     });
 
     it('contrains les niveaux de hierarchie entre 2 et 4', () => {
@@ -60,7 +60,18 @@ describe('Le convertisseur de Markdown Crisp', () => {
 
       const resultat = crispMarkdown.versHTML();
 
-      expect(resultat).to.be('<h2>Un titre</h2><h4>Un autre titre</h4>');
+      expect(resultat).to.be(
+        "<h2 id='un-titre'>Un titre</h2><h4 id='un-autre-titre'>Un autre titre</h4>"
+      );
+    });
+
+    it('ajoute un slug sur le titre', () => {
+      const entree = '# Un titre';
+      const crispMarkdown = new CrispMarkdown(entree);
+
+      const resultat = crispMarkdown.versHTML();
+
+      expect(resultat).to.be("<h2 id='un-titre'>Un titre</h2>");
     });
   });
 

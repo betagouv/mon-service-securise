@@ -70,8 +70,10 @@ class CrispMarkdown {
 
     const moteurDeRendu = {
       heading(texte, profondeur) {
+        const slugDuTitre = texte.toLowerCase().replace(/\W+/g, '-');
         const profondeurAjustee = Math.min(Math.max(profondeur + 1, 2), 4);
-        return `<h${profondeurAjustee}>${texte}</h${profondeurAjustee}>`;
+
+        return `<h${profondeurAjustee} id='${slugDuTitre}'>${texte}</h${profondeurAjustee}>`;
       },
       link(lien, _, texte) {
         if (texte.includes('Télécharger'))
