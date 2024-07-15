@@ -63,4 +63,26 @@ describe('Le convertisseur de Markdown Crisp', () => {
       expect(resultat).to.be('<h2>Un titre</h2><h4>Un autre titre</h4>');
     });
   });
+
+  describe('concernant les liens', () => {
+    it('ajoute une cible et une classe "telechargement" si le lien comporte le texte "Télécharger"', () => {
+      const entree = '[Télécharger un document](http://url.video)';
+      const crispMarkdown = new CrispMarkdown(entree);
+
+      const resultat = crispMarkdown.versHTML();
+
+      expect(resultat).to.be(
+        "<p><a href='http://url.video' class='telechargement' target='_blank' rel='noreferrer nofollow'>Télécharger un document</a></p>\n"
+      );
+    });
+
+    it('reste robuste pour les autres types de lien', () => {
+      const entree = '[Un lien](http://url.video)';
+      const crispMarkdown = new CrispMarkdown(entree);
+
+      const resultat = crispMarkdown.versHTML();
+
+      expect(resultat).to.be("<p><a href='http://url.video'>Un lien</a></p>\n");
+    });
+  });
 });
