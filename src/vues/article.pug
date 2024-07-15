@@ -2,6 +2,14 @@ extends mssDeconnecte
 block variables
   - const meta_description = description
 
+mixin tableDesMatieres(donnees)
+  .table-des-matieres
+    p Dans cet article
+    .contenu-tdm
+      each entree in donnees
+        a(href=`#${entree.id}` class=`niveau-${entree.profondeur}`)!= entree.texte
+
+
 block title
   title!= `${titre} | MonServiceSécurisé`
 
@@ -9,6 +17,7 @@ block append styles
   link(href = '/statique/assets/styles/article.css', rel = 'stylesheet')
 
 block main
+  +tableDesMatieres(tableDesMatieres)
   .marges-fixes
     .article
       h1!= titre
