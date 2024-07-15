@@ -8,79 +8,96 @@ describe('Le CMS Crisp', () => {
     });
   });
 
-  describe("sur demande de récupération du contenu de l'article 'Devenir ambassadeur'", () => {
-    let adaptateurCmsCrisp;
-    let constructeurCrispMarkdown;
-
-    beforeEach(() => {
-      adaptateurCmsCrisp = {
-        recupereDevenirAmbassadeur: async () => ({
-          contenuMarkdown: '',
-          titre: '',
-        }),
+  [
+    {
+      titre: 'Devenir ambassadeur',
+      nomMethodeAdaptateur: 'recupereDevenirAmbassadeur',
+      nomMethodeCMS: 'recupereDevenirAmbassadeur',
+    },
+    {
+      titre: 'Faire connaître MSS',
+      nomMethodeAdaptateur: 'recupereFaireConnaitreMSS',
+      nomMethodeCMS: 'recupereFaireConnaitre',
+    },
+  ].forEach(({ titre, nomMethodeAdaptateur, nomMethodeCMS }) => {
+    describe(`sur demande de récupération du contenu de l'article '${titre}'`, () => {
+      let adaptateurCmsCrisp;
+      let constructeurCrispMarkdown;
+      const donneesParDefautAdaptateur = {
+        contenuMarkdown: '',
+        titre: '',
       };
-      constructeurCrispMarkdown = () => ({
-        versHTML: () => {},
-      });
-    });
 
-    it("utilise l'adaptateur CMS", async () => {
-      let adaptateurAppele = false;
-      adaptateurCmsCrisp = {
-        recupereDevenirAmbassadeur: async () => {
-          adaptateurAppele = true;
-          return { contenuMarkdown: '', titre: '' };
-        },
-      };
-      const cmsCrisp = new CmsCrisp({
-        adaptateurCmsCrisp,
-        constructeurCrispMarkdown,
+      beforeEach(() => {
+        adaptateurCmsCrisp = {
+          recupereDevenirAmbassadeur: async () => donneesParDefautAdaptateur,
+          recupereFaireConnaitreMSS: async () => donneesParDefautAdaptateur,
+        };
+        constructeurCrispMarkdown = () => ({
+          versHTML: () => {},
+        });
       });
 
-      await cmsCrisp.recupereDevenirAmbassadeur();
+      it("utilise l'adaptateur CMS", async () => {
+        let adaptateurAppele = false;
+        adaptateurCmsCrisp = {
+          ...adaptateurCmsCrisp,
+          [nomMethodeAdaptateur]: async () => {
+            adaptateurAppele = true;
+            return donneesParDefautAdaptateur;
+          },
+        };
+        const cmsCrisp = new CmsCrisp({
+          adaptateurCmsCrisp,
+          constructeurCrispMarkdown,
+        });
 
-      expect(adaptateurAppele).to.be(true);
-    });
+        await cmsCrisp[nomMethodeCMS]();
 
-    it("utilise la fabrique de 'CrispMarkdown' pour transformer le contenu en HTML", async () => {
-      let crispMarkdownAppele = false;
-      constructeurCrispMarkdown = () => ({
-        versHTML: () => {
-          crispMarkdownAppele = true;
-        },
+        expect(adaptateurAppele).to.be(true);
       });
 
-      const cmsCrisp = new CmsCrisp({
-        adaptateurCmsCrisp,
-        constructeurCrispMarkdown,
+      it("utilise la fabrique de 'CrispMarkdown' pour transformer le contenu en HTML", async () => {
+        let crispMarkdownAppele = false;
+        constructeurCrispMarkdown = () => ({
+          versHTML: () => {
+            crispMarkdownAppele = true;
+          },
+        });
+
+        const cmsCrisp = new CmsCrisp({
+          adaptateurCmsCrisp,
+          constructeurCrispMarkdown,
+        });
+
+        await cmsCrisp[nomMethodeCMS]();
+
+        expect(crispMarkdownAppele).to.be(true);
       });
 
-      await cmsCrisp.recupereDevenirAmbassadeur();
+      it('retourne le contenu HTML ainsi que le titre', async () => {
+        adaptateurCmsCrisp = {
+          ...adaptateurCmsCrisp,
+          [nomMethodeAdaptateur]: async () => ({
+            contenuMarkdown: 'Un contenu',
+            titre: 'Un titre',
+          }),
+        };
+        constructeurCrispMarkdown = (chaine) => ({
+          versHTML: () => `HTML ${chaine}`,
+        });
 
-      expect(crispMarkdownAppele).to.be(true);
-    });
+        const cmsCrisp = new CmsCrisp({
+          adaptateurCmsCrisp,
+          constructeurCrispMarkdown,
+        });
 
-    it('retourne le contenu HTML ainsi que le titre', async () => {
-      adaptateurCmsCrisp = {
-        recupereDevenirAmbassadeur: async () => ({
-          contenuMarkdown: 'Un contenu',
+        const resultat = await cmsCrisp[nomMethodeCMS]();
+
+        expect(resultat).to.eql({
           titre: 'Un titre',
-        }),
-      };
-      constructeurCrispMarkdown = (chaine) => ({
-        versHTML: () => `HTML ${chaine}`,
-      });
-
-      const cmsCrisp = new CmsCrisp({
-        adaptateurCmsCrisp,
-        constructeurCrispMarkdown,
-      });
-
-      const resultat = await cmsCrisp.recupereDevenirAmbassadeur();
-
-      expect(resultat).to.eql({
-        titre: 'Un titre',
-        contenu: 'HTML Un contenu',
+          contenu: 'HTML Un contenu',
+        });
       });
     });
   });

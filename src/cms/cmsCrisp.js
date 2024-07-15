@@ -22,6 +22,17 @@ class CmsCrisp {
       contenu,
     };
   }
+
+  async recupereFaireConnaitre() {
+    const { contenuMarkdown, titre } =
+      await this.adaptateurCmsCrisp.recupereFaireConnaitreMSS();
+    const contenu = this.constructeurCrispMarkdown(contenuMarkdown).versHTML();
+
+    return {
+      titre,
+      contenu,
+    };
+  }
 }
 
 module.exports = CmsCrisp;
