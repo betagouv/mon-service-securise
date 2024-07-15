@@ -30,6 +30,9 @@ const extensionBoite = (regex, nom, classe) => ({
 class CrispMarkdown {
   constructor(contenuMarkdown) {
     this.contenuMarkdown = contenuMarkdown;
+    this.contenuHTML = null;
+    this.aDejaParse = false;
+    this.tdm = [];
 
     const boiteAide = extensionBoite(/^\|([^|\n]+)/, 'boiteAide', 'aide');
     const boiteInfo = extensionBoite(
@@ -68,10 +71,15 @@ class CrispMarkdown {
       },
     };
 
-    const moteurDeRendu = {
+    const moteurDeRendu = (that) => ({
       heading(texte, profondeur) {
         const slugDuTitre = texte.toLowerCase().replace(/\W+/g, '-');
         const profondeurAjustee = Math.min(Math.max(profondeur + 1, 2), 4);
+        that.tdm.push({
+          profondeur: profondeurAjustee,
+          texte,
+          id: slugDuTitre,
+        });
 
         return `<h${profondeurAjustee} id='${slugDuTitre}'>${texte}</h${profondeurAjustee}>`;
       },
@@ -80,16 +88,27 @@ class CrispMarkdown {
           return `<a href='${lien}' class='telechargement' target='_blank' rel='noreferrer nofollow'>${texte}</a>`;
         return `<a href='${lien}'>${texte}</a>`;
       },
-    };
+    });
 
     marked.use({
-      renderer: moteurDeRendu,
+      renderer: moteurDeRendu(this),
       extensions: [boiteAide, boiteInfo, boiteAlerte, video],
     });
   }
 
+  parseLeMarkdown() {
+    this.contenuHTML = marked.parse(this.contenuMarkdown);
+    this.aDejaParse = true;
+  }
+
   versHTML() {
-    return marked.parse(this.contenuMarkdown);
+    if (!this.aDejaParse) this.parseLeMarkdown();
+    return this.contenuHTML;
+  }
+
+  tableDesMatieres() {
+    if (!this.aDejaParse) this.parseLeMarkdown();
+    return this.tdm;
   }
 }
 
