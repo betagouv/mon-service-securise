@@ -288,6 +288,19 @@ describe('Le centre de notifications', () => {
 
     it("indique qu'une tâche est lue si elle a été faite", async () => {
       depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService()
+          .avecDateDeCreation(new Date('2024-09-13'))
+          .construis(),
+      ];
+
+      const notifications =
+        await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifications[0].horodatage).to.eql(new Date('2024-09-13'));
+    });
+
+    it('utilise la date de création comme horodatage', async () => {
+      depotDonnees.tachesDesServices = async (_) => [
         uneTacheDeService().faiteMaintenant().construis(),
       ];
 
