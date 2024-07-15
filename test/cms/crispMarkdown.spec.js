@@ -96,4 +96,26 @@ describe('Le convertisseur de Markdown Crisp', () => {
       expect(resultat).to.be("<p><a href='http://url.video'>Un lien</a></p>\n");
     });
   });
+
+  describe('sur demande de la table des matières', () => {
+    it('sait construire une table des matières', () => {
+      const entree = '# Un titre\n## Un sous titre';
+      const crispMarkdown = new CrispMarkdown(entree);
+
+      const tdm = crispMarkdown.tableDesMatieres();
+
+      expect(tdm).to.eql([
+        {
+          profondeur: 2,
+          texte: 'Un titre',
+          id: 'un-titre',
+        },
+        {
+          profondeur: 3,
+          texte: 'Un sous titre',
+          id: 'un-sous-titre',
+        },
+      ]);
+    });
+  });
 });
