@@ -53,7 +53,7 @@ describe('Une homologation', () => {
 
   it('connaît la suggestion d’action la plus prioritaire', () => {
     const referentiel = Referentiel.creeReferentiel({
-      naturesSuggestionsActions: { 'siret-a-renseigner': {} },
+      naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '' } },
     });
 
     const service = unService(referentiel)
