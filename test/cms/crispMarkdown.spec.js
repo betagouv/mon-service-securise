@@ -43,4 +43,24 @@ describe('Le convertisseur de Markdown Crisp', () => {
         '</div>'
     );
   });
+
+  describe('concernant les titres', () => {
+    it("diminue d'un niveau la hierarchie des titres afin de réserver le h1 pour le titre de la page", () => {
+      const entree = '# Un titre';
+      const crispMarkdown = new CrispMarkdown(entree);
+
+      const resultat = crispMarkdown.versHTML();
+
+      expect(resultat).to.be('<h2>Un titre</h2>');
+    });
+
+    it('contrains les niveaux de hierarchie entre 2 et 4', () => {
+      const entree = '# Un titre\n###### Un autre titre';
+      const crispMarkdown = new CrispMarkdown(entree);
+
+      const resultat = crispMarkdown.versHTML();
+
+      expect(resultat).to.be('<h2>Un titre</h2><h4>Un autre titre</h4>');
+    });
+  });
 });

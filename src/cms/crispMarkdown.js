@@ -68,7 +68,17 @@ class CrispMarkdown {
       },
     };
 
-    marked.use({ extensions: [boiteAide, boiteInfo, boiteAlerte, video] });
+    const moteurDeRendu = {
+      heading(texte, profondeur) {
+        const profondeurAjustee = Math.min(Math.max(profondeur + 1, 2), 4);
+        return `<h${profondeurAjustee}>${texte}</h${profondeurAjustee}>`;
+      },
+    };
+
+    marked.use({
+      renderer: moteurDeRendu,
+      extensions: [boiteAide, boiteInfo, boiteAlerte, video],
+    });
   }
 
   versHTML() {
