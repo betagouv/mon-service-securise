@@ -43,6 +43,15 @@ module.exports = {
       sousTitre: 'Il prend désormais en compte les mesures "partielles"',
       image: 'indiceCyber.png',
     },
+    {
+      id: 'besoinsSecurite',
+      dateDeDeploiement: '2024-07-23 12:30:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/les-besoins-de-securite-de-vos-services-yhuazp/?bust=1721652611643',
+      titre: 'Découvrez les besoins de sécurité de vos services !',
+      sousTitre:
+        "Choisissez les besoins adaptés à vos services et adaptez la démarche d'homologation, grâce aux indications fournies par l'ANSSI",
+      image: 'besoinsSecurite.svg',
+    },
   ],
 
   tachesCompletudeProfil: [
