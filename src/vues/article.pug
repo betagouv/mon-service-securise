@@ -16,6 +16,9 @@ block title
 block append styles
   link(href = '/statique/assets/styles/article.css', rel = 'stylesheet')
 
+block append scripts
+  script(type = 'module', src='/statique/scripts/article.js')
+
 block main
   +tableDesMatieres(tableDesMatieres)
   .marges-fixes
