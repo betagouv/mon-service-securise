@@ -117,6 +117,16 @@ const routesNonConnectePage = ({
     }
   );
 
+  routes.get(
+    '/faire-connaitre-et-recommander-monservicesecurise',
+    async (_requete, reponse) => {
+      const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+      const { titre, contenu } = await cmsCrisp.recupereFaireConnaitre();
+
+      reponse.render('article', { titre, contenu });
+    }
+  );
+
   routes.get('/sitemap.xml', async (_requete, reponse) => {
     reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });
   });
