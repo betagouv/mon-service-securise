@@ -55,13 +55,9 @@
       </div>
     {/if}
 
-    {#if notification.type === 'nouveaute'}
+    {#if notification.horodatage}
       <div class="horodatage">
-        <span
-          >{formatteDifferenceDateRelative(
-            notification.dateDeDeploiement
-          )}</span
-        >
+        <span>{formatteDifferenceDateRelative(notification.horodatage)}</span>
       </div>
     {/if}
   </div>
