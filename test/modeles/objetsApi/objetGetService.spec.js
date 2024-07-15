@@ -29,6 +29,7 @@ describe("L'objet d'API de `GET /service`", () => {
         id: 'autorite',
       },
     ],
+    naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '/service' } },
   });
   const lectureSurHomologuer = uneAutorisation()
     .avecDroits({ [HOMOLOGUER]: LECTURE })
@@ -93,7 +94,10 @@ describe("L'objet d'API de `GET /service`", () => {
       estProprietaire: false,
       documentsPdfDisponibles: [],
       permissions: { gestionContributeurs: false },
-      suggestionActionPrioritaire: { nature: 'siret-a-renseigner' },
+      suggestionActionPrioritaire: {
+        nature: 'siret-a-renseigner',
+        lien: '/service',
+      },
     });
   });
 
