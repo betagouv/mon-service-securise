@@ -110,34 +110,40 @@
   </div>
   <MenuFiltres {categories} {statuts} />
 </div>
-{#if !estLectureSeule}
-  <div class="barre-actions">
-    <button
-      class="bouton"
-      on:click={() => afficheTiroirDeMesure()}
-      disabled={etatEnregistrement === EnCours}
-    >
-      Ajouter une mesure
-    </button>
-    <button
-      class="bouton bouton-avec-icone bouton-tertiaire bouton-export-mesures"
-      on:click={afficheTiroirExportDesMesures}
-    >
-      Exporter la liste des mesures
-    </button>
-    {#if etatEnregistrement === EnCours}
-      <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
-    {/if}
-    {#if etatEnregistrement === Fait}
-      <p class="enregistrement-termine">Enregistré</p>
-    {/if}
-  </div>
-{/if}
 <table class="tableau-des-mesures">
   <colgroup>
     <col class="infos-mesures" />
     <col class="statut-mesure" />
   </colgroup>
+  <thead>
+    {#if !estLectureSeule}
+      <tr>
+        <th colspan="2">
+          <div class="actions">
+            <button
+              class="bouton"
+              on:click={() => afficheTiroirDeMesure()}
+              disabled={etatEnregistrement === EnCours}
+            >
+              Ajouter une mesure
+            </button>
+            <button
+              class="bouton bouton-avec-icone bouton-tertiaire bouton-export-mesures"
+              on:click={afficheTiroirExportDesMesures}
+            >
+              Exporter la liste des mesures
+            </button>
+            {#if etatEnregistrement === EnCours}
+              <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
+            {/if}
+            {#if etatEnregistrement === Fait}
+              <p class="enregistrement-termine">Enregistré</p>
+            {/if}
+          </div>
+        </th>
+      </tr>
+    {/if}
+  </thead>
   <tbody>
     {#if $nombreResultats.aucunResultat}
       <tr class="ligne-aucun-resultat">
@@ -220,16 +226,6 @@
     padding: 0;
   }
 
-  .barre-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .barre-actions p {
-    margin: 0;
-  }
-
   .enregistrement-en-cours,
   .enregistrement-termine {
     font-size: 1.1em;
@@ -291,7 +287,6 @@
   }
 
   .tableau-des-mesures {
-    border-radius: 8px;
     border-collapse: collapse;
   }
 
@@ -301,5 +296,25 @@
 
   colgroup .statut-mesure {
     width: 20%;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 18px 16px;
+    border: 1px solid var(--liseres-fonce);
+    border-radius: 4px 4px 0 0;
+    transform: translateY(1px);
+    margin-left: -0.5px;
+    margin-right: -0.5px;
+  }
+
+  .actions p {
+    margin: 0;
+  }
+
+  thead tr th {
+    padding: 0;
   }
 </style>
