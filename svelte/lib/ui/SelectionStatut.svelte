@@ -31,7 +31,7 @@
     }}
     on:click|stopPropagation
   >
-    <option value="" disabled selected>-</option>
+    <option value="" disabled selected>Statut à définir</option>
     {#each Object.entries(referentielStatuts) as [valeur, label]}
       <option value={valeur}>{label}</option>
     {/each}
@@ -44,32 +44,60 @@
   }
 
   select {
-    appearance: auto;
+    appearance: none;
     margin-top: 8px;
-    --couleur: transparent;
-    border: 1px solid var(--couleur);
-    border-right: 8px solid var(--couleur);
-    background: var(--couleur);
+    --couleur-fond: transparent;
+    --couleur-texte: transparent;
+    --taille: 32px;
+    border: none;
+    background: var(--couleur-fond);
+    color: var(--couleur-texte);
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: var(--taille);
+    cursor: pointer;
+  }
+
+  select:hover {
+    color: white;
+    background: var(--couleur-texte);
+  }
+
+  select option {
+    color: var(--texte-fonce);
   }
 
   select.fait {
-    --couleur: #d4f4db;
+    --couleur-fond: #d4f4db;
+    --couleur-texte: #0c8626;
+    --taille: 46px;
   }
 
   select.enCours {
-    --couleur: #dbeeff;
+    --couleur-fond: #dbeeff;
+    --couleur-texte: #0079d0;
+    --taille: 75px;
   }
 
   select.nonFait {
-    --couleur: #fff2de;
+    --couleur-fond: #fff2de;
+    --couleur-texte: #faa72c;
+    --taille: 155px;
   }
 
   select.aLancer {
-    --couleur: #e9ddff;
+    --couleur-fond: #e9ddff;
+    --couleur-texte: #7025da;
+    --taille: 75px;
   }
 
   select.vide {
-    --couleur: #f1f5f9;
+    --couleur-fond: #f1f5f9;
+    --couleur-texte: #667892;
+    --taille: 124px;
   }
 
   option {
