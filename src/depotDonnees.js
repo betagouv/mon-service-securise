@@ -64,7 +64,9 @@ const creeDepot = (config = {}) => {
     depotServices: depotHomologations,
   });
 
-  const depotSuggestionsActions = depotDonneesSuggestionsActions.creeDepot({});
+  const depotSuggestionsActions = depotDonneesSuggestionsActions.creeDepot({
+    adaptateurPersistance,
+  });
 
   const {
     ajouteDescriptionService,
