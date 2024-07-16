@@ -15,7 +15,8 @@
     align-items: center;
     justify-content: center;
     width: fit-content;
-    color: #08416a;
+    color: var(--bleu-survol);
     background: #f1f5f9;
+    font-size: 0.9em;
   }
 </style>
