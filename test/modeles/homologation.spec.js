@@ -51,33 +51,35 @@ describe('Une homologation', () => {
     expect(contributeur.id).to.equal('456');
   });
 
-  it('connaît la suggestion d’action la plus prioritaire', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '' } },
+  describe("concernant les suggestions d'actions", () => {
+    it('connaît la suggestion d’action la plus prioritaire', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '' } },
+      });
+
+      const service = unService(referentiel)
+        .avecSuggestionAction({ nature: 'siret-a-renseigner' })
+        .construis();
+
+      expect(service.suggestionActionPrioritaire().nature).to.be(
+        'siret-a-renseigner'
+      );
     });
 
-    const service = unService(referentiel)
-      .avecSuggestionAction({ nature: 'siret-a-renseigner' })
-      .construis();
+    it("passe son identifiant à la suggestion d'action la plus prioritaire", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: {
+          'siret-a-renseigner': { lien: '/service/%ID_SERVICE%' },
+        },
+      });
 
-    expect(service.suggestionActionPrioritaire().nature).to.be(
-      'siret-a-renseigner'
-    );
-  });
+      const service = unService(referentiel)
+        .avecId('S1')
+        .avecSuggestionAction({ nature: 'siret-a-renseigner' })
+        .construis();
 
-  it("passe son identifiant à la suggestion d'action la plus prioritaire", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      naturesSuggestionsActions: {
-        'siret-a-renseigner': { lien: '/service/%ID_SERVICE%' },
-      },
+      expect(service.suggestionActionPrioritaire().lien).to.be('/service/S1');
     });
-
-    const service = unService(referentiel)
-      .avecId('S1')
-      .avecSuggestionAction({ nature: 'siret-a-renseigner' })
-      .construis();
-
-    expect(service.suggestionActionPrioritaire().lien).to.be('/service/S1');
   });
 
   it('sait décrire le type service', () => {
