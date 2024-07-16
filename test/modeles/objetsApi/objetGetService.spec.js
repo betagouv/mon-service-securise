@@ -8,6 +8,8 @@ const {
 const {
   Rubriques: { HOMOLOGUER },
   Permissions: { LECTURE },
+  Rubriques,
+  Permissions,
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const { unService } = require('../../constructeurs/constructeurService');
 const {
@@ -29,7 +31,12 @@ describe("L'objet d'API de `GET /service`", () => {
         id: 'autorite',
       },
     ],
-    naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '/service' } },
+    naturesSuggestionsActions: {
+      'siret-a-renseigner': {
+        lien: '/service',
+        permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
+      },
+    },
   });
   const lectureSurHomologuer = uneAutorisation()
     .avecDroits({ [HOMOLOGUER]: LECTURE })
@@ -97,6 +104,10 @@ describe("L'objet d'API de `GET /service`", () => {
       suggestionActionPrioritaire: {
         nature: 'siret-a-renseigner',
         lien: '/service',
+        permissionRequise: {
+          rubrique: Rubriques.DECRIRE,
+          niveau: Permissions.ECRITURE,
+        },
       },
     });
   });

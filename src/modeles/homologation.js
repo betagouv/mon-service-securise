@@ -275,6 +275,10 @@ class Homologation {
     return this.suggestionsActions[0];
   }
 
+  routesDesSuggestionsActions() {
+    return this.suggestionsActions.map((s) => s.route());
+  }
+
   static creePourUnUtilisateur(utilisateur) {
     const donneesService = {
       descriptionService: {

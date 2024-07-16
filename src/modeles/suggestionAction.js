@@ -4,9 +4,18 @@ class SuggestionAction {
 
     this.nature = nature;
 
-    this.lien = referentiel
-      .natureSuggestionAction(nature)
-      .lien.replace('%ID_SERVICE%', idService);
+    const natureDansReferentiel = referentiel.natureSuggestionAction(nature);
+
+    this.lien = natureDansReferentiel.lien.replace('%ID_SERVICE%', idService);
+    this.permissionRequise = natureDansReferentiel.permissionRequise;
+  }
+
+  route() {
+    return {
+      rubrique: this.permissionRequise.rubrique,
+      niveau: this.permissionRequise.niveau,
+      route: this.lien,
+    };
   }
 }
 
