@@ -516,7 +516,8 @@ p {
 
 .synthese-securite .indices-par-categories {
   display: flex;
-  column-gap: 1em;
+  flex-direction: column;
+  gap: 1em;
   margin-top: 2em;
 }
 
@@ -810,6 +811,87 @@ p {
   position: absolute;
   bottom: 0;
   left: 12px;
+}
+
+.synthese-securite .conteneur-premiere-ligne {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  margin-bottom: 32px;
+  column-gap: 8px;
+}
+
+.synthese-securite .conteneur-premiere-ligne fieldset {
+  padding-bottom: 16px;
+}
+
+.synthese-securite .besoins-securite {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.synthese-securite .besoins-securite .titre-besoins {
+  font-weight: 500;
+  font-size: 12px;
+  white-space: nowrap;
+  margin-top: 8px;
+}
+
+.synthese-securite .besoins-securite .niveau-besoins {
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.synthese-securite .besoins-securite .illustration-niveau {
+  width: 90px;
+  padding: 16px;
+}
+
+.synthese-securite .besoins-securite .illustration-niveau.niveau1 {
+  content: var(--besoins-securite-niveau1);
+}
+
+.synthese-securite .besoins-securite .illustration-niveau.niveau2 {
+  content: var(--besoins-securite-niveau2);
+}
+
+.synthese-securite .besoins-securite .illustration-niveau.niveau3 {
+  content: var(--besoins-securite-niveau3);
+}
+
+.synthese-securite .besoins-securite .cartouche-besoins-identifies {
+  padding: 8px;
+  border-radius: 100px;
+  font-weight: bold;
+  background: #0079d0;
+  color: white;
+  font-size: 9px;
+  margin-top: -10px;
+}
+
+.synthese-securite
+  .besoins-securite
+  .cartouche-avertissement-besoins-superieurs {
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: #fff2de;
+  border: 1px solid #faa72c;
+  font-size: 7px;
+  margin-top: -10px;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: start;
+}
+
+.synthese-securite
+  .besoins-securite
+  .cartouche-avertissement-besoins-superieurs
+  .icone-alerte {
+  content: var(--icone-alerte);
+  width: 11px;
 }
 
 .tampon-homologation {
