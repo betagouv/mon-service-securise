@@ -12,18 +12,20 @@ const Rubriques = {
   CONTACTS: 'CONTACTS',
 };
 
+const { LECTURE } = Permissions;
+const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
+
 const premiereRouteDisponible = (autorisation) => {
   const routeParRubrique = [
-    { rubrique: Rubriques.DECRIRE, route: '/descriptionService' },
-    { rubrique: Rubriques.SECURISER, route: '/mesures' },
-    { rubrique: Rubriques.HOMOLOGUER, route: '/dossiers' },
-    { rubrique: Rubriques.RISQUES, route: '/risques' },
-    { rubrique: Rubriques.CONTACTS, route: '/rolesResponsabilites' },
+    { rubrique: DECRIRE, route: '/descriptionService', niveau: LECTURE },
+    { rubrique: SECURISER, route: '/mesures', niveau: LECTURE },
+    { rubrique: HOMOLOGUER, route: '/dossiers', niveau: LECTURE },
+    { rubrique: RISQUES, route: '/risques', niveau: LECTURE },
+    { rubrique: CONTACTS, route: '/rolesResponsabilites', niveau: LECTURE },
   ];
-  const { LECTURE } = Permissions;
 
-  return routeParRubrique.find(({ rubrique }) =>
-    autorisation.aLaPermission(LECTURE, rubrique)
+  return routeParRubrique.find(({ niveau, rubrique }) =>
+    autorisation.aLaPermission(niveau, rubrique)
   )?.route;
 };
 
