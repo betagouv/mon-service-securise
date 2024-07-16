@@ -14,7 +14,7 @@
   const dispatch = createEventDispatcher<{ input: { statut: string } }>();
 </script>
 
-<label for={`statut-${id}`} class:requis>
+<label for={`statut-${id}`} class:requis class:a-label={label !== ''}>
   {label}
   <select
     bind:value={statut}
@@ -40,12 +40,20 @@
 
 <style>
   label {
+    margin: 0;
+  }
+
+  label.a-label {
     margin-bottom: 16px;
+  }
+
+  label.a-label select {
+    margin-top: 8px;
   }
 
   select {
     appearance: none;
-    margin-top: 8px;
+    margin: 0;
     --couleur-fond: transparent;
     --couleur-texte: transparent;
     --taille: 32px;
