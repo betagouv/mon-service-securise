@@ -9,6 +9,8 @@ const PointsAcces = require('./pointsAcces');
 const Referentiel = require('../referentiel');
 const Entite = require('./entite');
 
+const tousNiveauxSecurite = ['niveau1', 'niveau2', 'niveau3'];
+
 class DescriptionService extends InformationsHomologation {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
@@ -155,10 +157,18 @@ class DescriptionService extends InformationsHomologation {
   }
 
   static niveauSecuriteChoisiSuffisant(donnees) {
-    const niveaux = ['niveau1', 'niveau2', 'niveau3'];
     const niveauMinimal = DescriptionService.estimeNiveauDeSecurite(donnees);
     return (
-      niveaux.indexOf(donnees.niveauSecurite) >= niveaux.indexOf(niveauMinimal)
+      tousNiveauxSecurite.indexOf(donnees.niveauSecurite) >=
+      tousNiveauxSecurite.indexOf(niveauMinimal)
+    );
+  }
+
+  static niveauSecuriteSuperieurRecommandation(donnees) {
+    const niveauRecommande = DescriptionService.estimeNiveauDeSecurite(donnees);
+    return (
+      tousNiveauxSecurite.indexOf(donnees.niveauSecurite) >
+      tousNiveauxSecurite.indexOf(niveauRecommande)
     );
   }
 }

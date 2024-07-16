@@ -2,6 +2,7 @@ const express = require('express');
 const Autorisation = require('../../modeles/autorisations/autorisation');
 const { genereGradientConique } = require('../../pdf/graphiques/camembert');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
+const DescriptionService = require('../../modeles/descriptionService');
 
 const routesConnecteApiServicePdf = ({
   adaptateurHorloge,
@@ -47,6 +48,13 @@ const routesConnecteApiServicePdf = ({
     ).map(([_, mesure]) => mesure.referentiel);
     const referentielConcernes =
       referentiel.formatteListeDeReferentiels(referentiels);
+    const niveauRecommande = DescriptionService.estimeNiveauDeSecurite(
+      service.descriptionService
+    );
+    const niveauSuperieurAuxRecommandations =
+      DescriptionService.niveauSecuriteSuperieurRecommandation(
+        service.descriptionService
+      );
     const donnees = {
       service,
       camembertIndispensables: genereGradientConique(
@@ -57,6 +65,8 @@ const routesConnecteApiServicePdf = ({
       ),
       referentielConcernes,
       referentiel,
+      niveauRecommande,
+      niveauSuperieurAuxRecommandations,
     };
 
     return adaptateurPdf.genereSyntheseSecurite(donnees);
