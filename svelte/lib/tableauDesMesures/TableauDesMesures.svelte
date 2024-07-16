@@ -140,8 +140,10 @@
   </colgroup>
   <tbody>
     {#if $nombreResultats.aucunResultat}
-      <tr class="aucun-resultat">
-        <td>Aucune mesure ne correspond à la recherche.</td>
+      <tr class="ligne-aucun-resultat">
+        <td colspan="2" class="aucun-resultat"
+          >Aucune mesure ne correspond à la recherche.</td
+        >
       </tr>
     {:else}
       {#each Object.entries($mesuresFiltrees.mesuresGenerales) as [id, mesure] (id)}
@@ -280,10 +282,12 @@
     background-image: url('/statique/assets/images/icone_telechargement_fichier.svg');
   }
 
+  .ligne-aucun-resultat {
+    border: 1px solid var(--liseres-fonce);
+  }
+
   .aucun-resultat {
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    padding: 9px 0;
+    padding: 24px 32px;
   }
 
   .tableau-des-mesures {
