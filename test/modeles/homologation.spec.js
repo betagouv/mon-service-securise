@@ -15,6 +15,8 @@ const { unService } = require('../constructeurs/constructeurService');
 const {
   Rubriques: { DECRIRE, SECURISER, RISQUES, HOMOLOGUER },
   Permissions: { LECTURE },
+  Rubriques,
+  Permissions,
 } = require('../../src/modeles/autorisations/gestionDroits');
 const {
   uneAutorisation,
@@ -79,6 +81,32 @@ describe('Une homologation', () => {
         .construis();
 
       expect(service.suggestionActionPrioritaire().lien).to.be('/service/S1');
+    });
+
+    it("sait obtenir les routes MSS des suggestions d'actions", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: {
+          'siret-a-renseigner': {
+            lien: '/service/%ID_SERVICE%',
+            permissionRequise: { rubrique: 'SECURISER', niveau: 2 },
+          },
+        },
+      });
+
+      const service = unService(referentiel)
+        .avecId('S1')
+        .avecSuggestionAction({ nature: 'siret-a-renseigner' })
+        .construis();
+
+      const routes = service.routesDesSuggestionsActions();
+
+      expect(routes).to.eql([
+        {
+          rubrique: Rubriques.SECURISER,
+          niveau: Permissions.ECRITURE,
+          route: '/service/S1',
+        },
+      ]);
     });
   });
 

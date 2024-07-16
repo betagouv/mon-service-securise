@@ -59,6 +59,7 @@ const routesConnectePageService = ({
         reponse.redirect('/tableauDeBord');
         return;
       }
+
       reponse.redirect(`/service/${requete.params.id}${routeRedirection}`);
     }
   );
