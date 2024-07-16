@@ -93,6 +93,27 @@ describe('Une homologation', () => {
         },
       ]);
     });
+
+    it('sait si une action n’est pas suggérée', () => {
+      const service = unService().construis();
+
+      const pourrait = service.pourraitFaire('miseAJourSiret');
+
+      expect(pourrait).to.be(false);
+    });
+
+    it('sait si une action fait partie des suggestions', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: { miseAJourSiret: { lien: '' } },
+      });
+      const service = unService(referentiel)
+        .avecSuggestionAction({ nature: 'miseAJourSiret' })
+        .construis();
+
+      const pourrait = service.pourraitFaire('miseAJourSiret');
+
+      expect(pourrait).to.be(true);
+    });
   });
 
   it('sait décrire le type service', () => {

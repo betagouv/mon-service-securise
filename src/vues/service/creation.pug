@@ -20,9 +20,6 @@ block etapier
     .etape(data-numero-etape="2")
 
 block formulaire
-  script(id = 'infos-siret-manquant', type = 'application/json').
-    !{JSON.stringify({estEnCreation: true})}
-
   dialog#modale-creation-service
     .contenu-modale
       span.icone
