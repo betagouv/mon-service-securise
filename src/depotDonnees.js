@@ -8,6 +8,7 @@ const depotDonneesNotificationsExpirationHomologation = require('./depots/depotD
 const depotDonneesParcoursUtilisateurs = require('./depots/depotDonneesParcoursUtilisateur');
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 const depotDonneesNotifications = require('./depots/depotDonneesNotifications');
+const depotDonneesSuggestionsActions = require('./depots/depotDonneesSuggestionsActions');
 
 const creeDepot = (config = {}) => {
   const {
@@ -62,6 +63,8 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     depotServices: depotHomologations,
   });
+
+  const depotSuggestionsActions = depotDonneesSuggestionsActions.creeDepot({});
 
   const {
     ajouteDescriptionService,
@@ -129,8 +132,11 @@ const creeDepot = (config = {}) => {
     supprimeNotificationsExpirationHomologationPourService,
   } = depotNotificationsExpirationHomologation;
 
+  const { acquitteSuggestionAction } = depotSuggestionsActions;
+
   return {
     accesAutorise,
+    acquitteSuggestionAction,
     ajouteContributeurAuService,
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
