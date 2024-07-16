@@ -3,7 +3,7 @@ const expect = require('expect.js');
 
 const testeurMSS = require('../testeurMSS');
 const {
-  Permissions: { LECTURE },
+  Permissions: { LECTURE, ECRITURE },
   Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES },
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const {
@@ -199,6 +199,34 @@ describe('Le serveur MSS des routes /service/*', () => {
             redirectionAttendue
           );
         });
+      });
+
+      it("redirige vers la suggestion d'action si les droits sont suffisants", async () => {
+        const etape3SiDecrireEnEcriture = {
+          lien: '/descriptionService?etape=3',
+          permissionRequise: { rubrique: DECRIRE, niveau: ECRITURE },
+        };
+
+        testeur.referentiel().recharge({
+          naturesSuggestionsActions: {
+            revoirNiveauSecurite: etape3SiDecrireEnEcriture,
+          },
+        });
+        testeur.middleware().reinitialise({
+          autorisationACharger: uneAutorisation()
+            .avecDroits({ DECRIRE: ECRITURE })
+            .construis(),
+          serviceARenvoyer: unService(testeur.referentiel())
+            .avecId('456')
+            .avecSuggestionAction({ nature: 'revoirNiveauSecurite' })
+            .construis(),
+        });
+
+        const reponse = await axios('http://localhost:1234/service/456');
+
+        expect(reponse.request.res.responseUrl).to.contain(
+          '/service/456/descriptionService?etape=3'
+        );
       });
     });
   });

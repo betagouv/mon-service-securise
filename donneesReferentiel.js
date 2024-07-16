@@ -83,7 +83,10 @@ module.exports = {
   },
 
   naturesSuggestionsActions: {
-    miseAJourSiret: { lien: '/service/%ID_SERVICE%/descriptionService' },
+    miseAJourSiret: {
+      lien: '/descriptionService',
+      permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
+    },
   },
 
   nombreOrganisationsUtilisatrices: [

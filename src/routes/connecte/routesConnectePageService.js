@@ -54,7 +54,15 @@ const routesConnectePageService = ({
     middleware.chargeAutorisationsService,
     async (requete, reponse) => {
       const { autorisationService } = requete;
-      const routeRedirection = premiereRouteDisponible(autorisationService);
+
+      const routesDesSuggestions =
+        requete.service.routesDesSuggestionsActions();
+
+      const routeRedirection = premiereRouteDisponible(
+        autorisationService,
+        routesDesSuggestions
+      );
+
       if (!routeRedirection) {
         reponse.redirect('/tableauDeBord');
         return;
