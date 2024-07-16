@@ -31,7 +31,7 @@
     }}
     on:click|stopPropagation
   >
-    <option value="" disabled selected>Statut à définir</option>
+    <option value={undefined} disabled selected>Statut à définir</option>
     {#each Object.entries(referentielStatuts) as [valeur, label]}
       <option value={valeur}>{label}</option>
     {/each}
