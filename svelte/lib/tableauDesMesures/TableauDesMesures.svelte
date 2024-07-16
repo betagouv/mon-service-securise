@@ -133,59 +133,65 @@
     {/if}
   </div>
 {/if}
-<div class="tableau-des-mesures">
-  {#if $nombreResultats.aucunResultat}
-    <div class="aucun-resultat">
-      Aucune mesure ne correspond à la recherche.
-    </div>
-  {:else}
-    {#each Object.entries($mesuresFiltrees.mesuresGenerales) as [id, mesure] (id)}
-      <LigneMesure
-        {id}
-        referentiel={mesure.referentiel}
-        indispensable={mesure.indispensable}
-        nom={mesure.description}
-        categorie={categories[mesure.categorie]}
-        referentielStatuts={statuts}
-        bind:mesure={$mesures.mesuresGenerales[id]}
-        on:modificationStatut={(e) => {
-          mesures.metAJourStatutMesureGenerale(id, e.detail.statut);
-          metsAJourMesureGenerale(id);
-        }}
-        on:click={() =>
-          afficheTiroirDeMesure({
-            mesure,
-            metadonnees: {
-              typeMesure: 'GENERALE',
-              idMesure: id,
-            },
-          })}
-        estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
-      />
-    {/each}
-    {#each $mesuresFiltrees.mesuresSpecifiques as mesure, index (index)}
-      {@const indexReel = $mesures.mesuresSpecifiques.indexOf(mesure)}
-      <LigneMesure
-        id={`specifique-${index}`}
-        referentiel={Referentiel.SPECIFIQUE}
-        nom={mesure.description}
-        categorie={categories[mesure.categorie]}
-        referentielStatuts={statuts}
-        bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
-        on:modificationStatut={(e) => {
-          mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);
-          metsAJourMesuresSpecifiques();
-        }}
-        on:click={() =>
-          afficheTiroirDeMesure({
-            mesure,
-            metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },
-          })}
-        estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
-      />
-    {/each}
-  {/if}
-</div>
+<table class="tableau-des-mesures">
+  <colgroup>
+    <col class="infos-mesures" />
+    <col class="statut-mesure" />
+  </colgroup>
+  <tbody>
+    {#if $nombreResultats.aucunResultat}
+      <tr class="aucun-resultat">
+        <td>Aucune mesure ne correspond à la recherche.</td>
+      </tr>
+    {:else}
+      {#each Object.entries($mesuresFiltrees.mesuresGenerales) as [id, mesure] (id)}
+        <LigneMesure
+          {id}
+          referentiel={mesure.referentiel}
+          indispensable={mesure.indispensable}
+          nom={mesure.description}
+          categorie={categories[mesure.categorie]}
+          referentielStatuts={statuts}
+          bind:mesure={$mesures.mesuresGenerales[id]}
+          on:modificationStatut={(e) => {
+            mesures.metAJourStatutMesureGenerale(id, e.detail.statut);
+            metsAJourMesureGenerale(id);
+          }}
+          on:click={() =>
+            afficheTiroirDeMesure({
+              mesure,
+              metadonnees: {
+                typeMesure: 'GENERALE',
+                idMesure: id,
+              },
+            })}
+          estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
+        />
+      {/each}
+      {#each $mesuresFiltrees.mesuresSpecifiques as mesure, index (index)}
+        {@const indexReel = $mesures.mesuresSpecifiques.indexOf(mesure)}
+        <LigneMesure
+          id={`specifique-${index}`}
+          referentiel={Referentiel.SPECIFIQUE}
+          nom={mesure.description}
+          categorie={categories[mesure.categorie]}
+          referentielStatuts={statuts}
+          bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
+          on:modificationStatut={(e) => {
+            mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);
+            metsAJourMesuresSpecifiques();
+          }}
+          on:click={() =>
+            afficheTiroirDeMesure({
+              mesure,
+              metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },
+            })}
+          estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
+        />
+      {/each}
+    {/if}
+  </tbody>
+</table>
 
 <style>
   .barre-filtres {
@@ -278,5 +284,18 @@
     border-radius: 8px;
     border: 1px solid #cbd5e1;
     padding: 9px 0;
+  }
+
+  .tableau-des-mesures {
+    border-radius: 8px;
+    border-collapse: collapse;
+  }
+
+  colgroup .infos-mesures {
+    width: 80%;
+  }
+
+  colgroup .statut-mesure {
+    width: 20%;
   }
 </style>

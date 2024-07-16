@@ -31,55 +31,44 @@
   );
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="ligne-de-mesure" on:click>
-  <CartoucheReferentiel {referentiel} />
-  <div class="titre-mesure">
+<tr class="ligne-de-mesure" on:click>
+  <td class="titre-mesure">
     <p class="titre">
       {@html texteSurligne}
     </p>
     <div class="conteneur-cartouches">
+      <CartoucheReferentiel {referentiel} />
       <span class="categorie">{categorie}</span>
       {#if referentiel !== Referentiel.SPECIFIQUE}
         <CartoucheIndispensable {indispensable} />
       {/if}
     </div>
-  </div>
-  <SelectionStatut
-    bind:statut={mesure.statut}
-    {id}
-    {estLectureSeule}
-    {referentielStatuts}
-    on:input={(e) =>
-      dispatch('modificationStatut', { statut: e.detail.statut })}
-  />
-</div>
+  </td>
+  <td>
+    <SelectionStatut
+      bind:statut={mesure.statut}
+      {id}
+      {estLectureSeule}
+      {referentielStatuts}
+      on:input={(e) =>
+        dispatch('modificationStatut', { statut: e.detail.statut })}
+    />
+  </td>
+</tr>
 
 <style>
   .ligne-de-mesure {
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    padding: 20px 56px 20px 16px;
-    gap: 56px;
-    margin-bottom: 8px;
-    display: grid;
-    grid-template-columns: 2fr 6fr 3fr;
-    align-items: center;
-    justify-content: space-between;
     cursor: pointer;
     position: relative;
+    border: 1px solid var(--liseres-fonce);
   }
 
-  .ligne-de-mesure:after {
-    content: '';
-    width: 24px;
-    height: 24px;
-    display: flex;
-    background: url('/statique/assets/images/forme_chevron_bleu.svg') no-repeat;
-    background-size: contain;
-    position: absolute;
-    right: 16px;
-    top: calc(50% - 12px);
+  .ligne-de-mesure:hover {
+    box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
+  }
+
+  .ligne-de-mesure td {
+    padding: 24px 32px;
   }
 
   :global(.ligne-de-mesure label) {
@@ -110,6 +99,9 @@
     font-size: 0.9em;
     font-weight: 500;
     border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .conteneur-cartouches {
