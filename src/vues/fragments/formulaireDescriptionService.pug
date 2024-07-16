@@ -75,11 +75,13 @@ mixin formulaireDescriptionService(idHomologation)
               input(type='hidden' name='nomEntite' id='nomEntite' value != entite.nom)
               input(type='hidden' name='siretEntite' id='siretEntite' value != entite.siret)
 
-            .banniere.banniere-avertissement.invisible
-              img(src='/statique/assets/images/icone_danger.svg' alt='')
-              .contenu-texte-avertissement
-                strong Information à mettre à jour
-                p Vous pouvez directement rechercher le nom ou le numéro de SIRET de votre organisation.
+            if service.pourraitFaire('miseAJourSiret')
+              .banniere.banniere-avertissement
+                img(src='/statique/assets/images/icone_danger.svg' alt='')
+                .contenu-texte-avertissement
+                  strong Information à mettre à jour
+                  p Vous pouvez directement rechercher le nom ou le numéro de SIRET de votre organisation.
+
 
         - const { borneBasse, borneHaute } = service.descriptionService.nombreOrganisationsUtilisatrices
         - const valeurService = `${borneBasse}-${borneHaute}`

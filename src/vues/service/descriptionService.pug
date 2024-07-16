@@ -25,7 +25,4 @@ block etapier
     .etape(data-numero-etape="2")
 
 block formulaire
-  script(id = 'infos-siret-manquant', type = 'application/json').
-    !{JSON.stringify({siret: service.descriptionService.organisationResponsable.siret, estEnCreation: false})}
-
   +formulaireDescriptionService(service.id)

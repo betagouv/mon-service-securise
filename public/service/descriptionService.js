@@ -21,15 +21,6 @@ const messageErreurNomDejaUtilise = {
   },
 };
 
-const afficheBanniereMiseAJourSiret = () => {
-  const { siret, estEnCreation } = JSON.parse(
-    $('#infos-siret-manquant').text()
-  );
-  if (!estEnCreation && !siret) {
-    $('.banniere-avertissement').removeClass('invisible');
-  }
-};
-
 const brancheComportementMessageErreur = () => {
   $('#nom-service').on('keydown', () => {
     messageErreurNomDejaUtilise.masque();
@@ -152,7 +143,6 @@ const brancheComportementNavigationEtapes = () => {
 };
 
 $(() => {
-  afficheBanniereMiseAJourSiret();
   const navigationEtapes = brancheComportementNavigationEtapes();
   initialiseComportementFormulaire(
     '#homologation',

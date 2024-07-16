@@ -275,6 +275,10 @@ class Homologation {
     return this.suggestionsActions[0];
   }
 
+  pourraitFaire(natureSuggestion) {
+    return this.suggestionsActions.some((s) => s.nature === natureSuggestion);
+  }
+
   routesDesSuggestionsActions() {
     return this.suggestionsActions.map((s) => s.route());
   }
