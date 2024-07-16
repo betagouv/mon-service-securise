@@ -408,6 +408,15 @@ const nouvelAdaptateur = (env) => {
       .update({ date_faite: knex.fn.now() });
   };
 
+  const marqueSuggestionActionFaiteMaintenant = async (
+    idService,
+    natureSuggestion
+  ) => {
+    await knex('suggestions_actions')
+      .where({ id_service: idService, nature: natureSuggestion })
+      .update({ date_acquittement: knex.fn.now() });
+  };
+
   return {
     ajouteAutorisation,
     ajouteUtilisateur,
@@ -422,6 +431,7 @@ const nouvelAdaptateur = (env) => {
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     marqueNouveauteLue,
+    marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
