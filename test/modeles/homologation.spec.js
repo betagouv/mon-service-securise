@@ -68,26 +68,11 @@ describe('Une homologation', () => {
       );
     });
 
-    it("passe son identifiant à la suggestion d'action la plus prioritaire", () => {
-      const referentiel = Referentiel.creeReferentiel({
-        naturesSuggestionsActions: {
-          'siret-a-renseigner': { lien: '/service/%ID_SERVICE%' },
-        },
-      });
-
-      const service = unService(referentiel)
-        .avecId('S1')
-        .avecSuggestionAction({ nature: 'siret-a-renseigner' })
-        .construis();
-
-      expect(service.suggestionActionPrioritaire().lien).to.be('/service/S1');
-    });
-
     it("sait obtenir les routes MSS des suggestions d'actions", () => {
       const referentiel = Referentiel.creeReferentiel({
         naturesSuggestionsActions: {
           'siret-a-renseigner': {
-            lien: '/service/%ID_SERVICE%',
+            lien: '/descriptionService',
             permissionRequise: { rubrique: 'SECURISER', niveau: 2 },
           },
         },
@@ -104,7 +89,7 @@ describe('Une homologation', () => {
         {
           rubrique: Rubriques.SECURISER,
           niveau: Permissions.ECRITURE,
-          route: '/service/S1',
+          route: '/descriptionService',
         },
       ]);
     });
