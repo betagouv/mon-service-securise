@@ -96,12 +96,18 @@
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
 <div class="barre-filtres">
-  <input
-    type="search"
-    id="recherche"
-    bind:value={$rechercheTextuelle}
-    placeholder="Rechercher par intitulé, description"
-  />
+  <div class="conteneur-recherche">
+    <img
+      src="/statique/assets/images/icone_recherche.svg"
+      alt="Icône de recherche"
+    />
+    <input
+      type="search"
+      id="recherche"
+      bind:value={$rechercheTextuelle}
+      placeholder="Rechercher par intitulé, description"
+    />
+  </div>
   <MenuFiltres {categories} {statuts} />
 </div>
 {#if !estLectureSeule}
@@ -189,12 +195,21 @@
     align-items: flex-start;
   }
 
+  .conteneur-recherche {
+    border: 1px solid var(--liseres-fonce);
+    display: flex;
+    gap: 6px;
+    border-radius: 4px;
+    color: var(--texte-clair);
+    width: 410px;
+    padding: 6px;
+  }
+
   #recherche {
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
-    color: #667892;
-    padding: 8px 16px;
-    min-width: 300px;
+    border: none;
+    flex: 1;
+    font-family: 'Marianne';
+    padding: 0;
   }
 
   .barre-actions {
