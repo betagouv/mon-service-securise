@@ -83,7 +83,7 @@ const nouvelAdaptateur = (env) => {
       });
 
     const requeteSuggestionsActions = knex('suggestions_actions')
-      .where({ id_service: id })
+      .where({ id_service: id, date_acquittement: null })
       .select({ nature: 'nature' });
 
     const [h, contributeurs, suggestions] = await Promise.all([
