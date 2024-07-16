@@ -40,16 +40,6 @@
   width: 100%;
 }
 
-#tableau-des-mesures > .barre-actions {
-  order: 25;
-  background: white;
-  padding-bottom: 24px;
-  position: sticky;
-  top: 100px;
-  z-index: 1;
-  width: 100%;
-}
-
 .conteneur-indice-cyber {
   display: flex;
   flex-direction: row;
