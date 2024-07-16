@@ -1,12 +1,12 @@
 class SuggestionAction {
   constructor(donnees, referentiel) {
-    const { nature, idService } = donnees;
+    const { nature } = donnees;
 
     this.nature = nature;
 
     const natureDansReferentiel = referentiel.natureSuggestionAction(nature);
 
-    this.lien = natureDansReferentiel.lien.replace('%ID_SERVICE%', idService);
+    this.lien = natureDansReferentiel.lien;
     this.permissionRequise = natureDansReferentiel.permissionRequise;
   }
 
