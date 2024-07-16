@@ -121,16 +121,18 @@
         <th colspan="2">
           <div class="actions">
             <button
-              class="bouton"
+              class="bouton-action-mesure"
               on:click={() => afficheTiroirDeMesure()}
               disabled={etatEnregistrement === EnCours}
             >
+              <img src="/statique/assets/images/icone_plus_gris.svg" alt="" />
               Ajouter une mesure
             </button>
             <button
-              class="bouton bouton-avec-icone bouton-tertiaire bouton-export-mesures"
+              class="bouton-action-mesure"
               on:click={afficheTiroirExportDesMesures}
             >
+              <img src="/statique/assets/images/icone_export_gris.svg" alt="" />
               Exporter la liste des mesures
             </button>
             {#if etatEnregistrement === EnCours}
@@ -268,14 +270,21 @@
     background-image: url('/statique/assets/images/icone_enregistrement_termine.svg');
   }
 
-  .bouton {
-    margin: 0;
-    padding: 0.5em 1em;
+  .bouton-action-mesure {
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-weight: 500;
+    color: var(--gris-fonce);
+    cursor: pointer;
+    background: none;
+    border: none;
+    border-radius: 4px;
   }
 
-  .bouton-export-mesures:before {
-    background-image: url('/statique/assets/images/icone_telechargement_fichier.svg');
+  .bouton-action-mesure:hover {
+    background: var(--fond-bleu-pale);
   }
 
   .ligne-aucun-resultat {
