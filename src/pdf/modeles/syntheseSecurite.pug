@@ -49,13 +49,13 @@ mixin totalMesures(totalMesuresGenerales, totalMesuresSpecifiques)
       .legende-a-remplir À remplir
 
 block page
-  - const { service, referentiel, camembertIndispensables, camembertRecommandees } = donnees;
+  - const { service, referentiel, camembertIndispensables, camembertRecommandees, niveauSuperieurAuxRecommandations, niveauRecommande } = donnees;
   .synthese-securite
     h1 Synthèse de la sécurité du service
     .separateur
     h2!=(service.descriptionService.organisationResponsable.nom)
     h3!=(service.nomService())
-    .conteneur
+    .conteneur-premiere-ligne
       fieldset(class='resume')
         legend
           p Résumé
@@ -73,14 +73,33 @@ block page
           - const presentation = service.presentation() ?? "";
           - const tailleMaximale = 500;
             dt Présentation :
-            dd= presentation.length > tailleMaximale ? presentation.substring(0, tailleMaximale) + '…' : presentation
+                  dd= presentation.length > tailleMaximale ? presentation.substring(0, tailleMaximale) + '…' : presentation
+      fieldset(class='besoins-securite')
+        -
+          const niveauService = service.descriptionService.niveauSecurite
+          const labelNiveaux = {niveau1: 'Élémentaires', niveau2: 'Modérés', niveau3: 'Importants'}
+        p.titre-besoins Besoins de sécurité
+        p.niveau-besoins!= labelNiveaux[niveauService]
+        img.illustration-niveau(class=niveauService)
+        if niveauSuperieurAuxRecommandations
+          .cartouche-avertissement-besoins-superieurs
+            img.icone-alerte
+            p Les besoins sélectionnés sont&nbsp;
+              b supérieurs à ceux identifiés&nbsp;
+              | à titre indicatif par l'ANSSI&nbsp;
+              span!= `(${labelNiveaux[niveauRecommande]})`
+        else
+          .cartouche-besoins-identifies
+            span Besoins identifiés
+              br
+              | par l'ANSSI
       fieldset(class='indice-cyber')
         - const indiceCyber = service.indiceCyber();
         - const noteMax = referentiel.indiceCyberNoteMax()
         - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
         .contenu
           .score-indice-cyber
-              +scoreIndiceCyber(indiceCyber.total, noteMax)
+            +scoreIndiceCyber(indiceCyber.total, noteMax)
           .indices-par-categories
             .titre
               p Par catégorie :
@@ -89,6 +108,7 @@ block page
                 .indice-cyber-categorie
                   span= referentiel.descriptionCategorie(id)
                   span.note= (typeof indiceCyber[id] === 'number' ? `${formatIndiceCyber(indiceCyber[id])}` : '–')
+    .conteneur
       fieldset.mesures-securite
         legend
           p Mesures de sécurité
