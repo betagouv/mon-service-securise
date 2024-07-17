@@ -76,3 +76,7 @@
   background: #08416a;
   color: white;
 }
+
+.conteneur-page-formulaire {
+  max-width: 1200px;
+}
