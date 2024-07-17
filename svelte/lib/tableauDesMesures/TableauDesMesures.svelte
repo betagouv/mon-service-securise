@@ -24,6 +24,8 @@
   } from './tableauDesMesures.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
+  import Toaster from '../ui/Toaster.svelte';
+  import { toasterStore } from '../ui/stores/toaster.store';
 
   enum EtatEnregistrement {
     Jamais,
@@ -47,11 +49,29 @@
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
 
-  const metsAJourMesuresSpecifiques = async () => {
+  const afficheToastChangementStatut = (
+    mesure: MesureGenerale | MesureSpecifique
+  ) => {
+    if (mesure.statut === 'fait') {
+      toasterStore.succes(
+        'Félicitation !',
+        `Le statut de la mesure <b>• ${mesure.description}</b> est désormais "<b>faite</b>" !`
+      );
+    } else if (mesure.statut) {
+      toasterStore.info(
+        'Modification du statut',
+        `Le statut de la mesure <b>• ${
+          mesure.description
+        }</b> est désormais "<b>${statuts[mesure.statut].toLowerCase()}</b>".`
+      );
+    }
+  };
+  const metsAJourMesuresSpecifiques = async (indexReel: number) => {
     etatEnregistrement = EnCours;
     await enregistreMesuresSpecifiques(idService, $mesures.mesuresSpecifiques);
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
+    afficheToastChangementStatut($mesures.mesuresSpecifiques[indexReel]);
   };
 
   const metsAJourMesureGenerale = async (idMesure: IdMesureGenerale) => {
@@ -63,6 +83,7 @@
     );
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
+    afficheToastChangementStatut($mesures.mesuresGenerales[idMesure]);
   };
 
   type MesureAEditer = {
@@ -95,6 +116,7 @@
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
+<Toaster />
 <div class="barre-filtres">
   <div class="conteneur-recherche">
     <img
@@ -189,7 +211,7 @@
           bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
           on:modificationStatut={(e) => {
             mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);
-            metsAJourMesuresSpecifiques();
+            metsAJourMesuresSpecifiques(indexReel);
           }}
           on:click={() =>
             afficheTiroirDeMesure({
