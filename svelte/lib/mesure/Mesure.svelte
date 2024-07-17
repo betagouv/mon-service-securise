@@ -62,7 +62,7 @@
           rows="2"
           bind:value={$store.mesureEditee.mesure.description}
           id="intitule"
-          placeholder="Description de la mesure"
+          placeholder="Titre de la mesure"
           readonly={estLectureSeule}
           required
           use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
@@ -78,13 +78,28 @@
       </details>
     {/if}
 
+    <div class="conteneur-statut">
+      <SelectionStatut
+        bind:statut={$store.mesureEditee.mesure.statut}
+        id="statut"
+        {estLectureSeule}
+        referentielStatuts={statuts}
+        label="Statut"
+        requis
+      />
+      <div class="mention-requis">
+        <span class="asterisque">*</span>
+        <span>champ obligatoire</span>
+      </div>
+    </div>
+
     <label for="details">
-      Détails sur la mise en œuvre
+      Précisions sur la mesure
       <textarea
         rows="6"
         bind:value={$store.mesureEditee.mesure.modalites}
         id="details"
-        placeholder="Modalités de mise en œuvre (facultatif)"
+        placeholder="Apportez des précisions sur la mesure, ses modalités de mise en œuvre, etc."
         readonly={estLectureSeule}
       />
     </label>
@@ -106,15 +121,6 @@
         </select>
       </label>
     {/if}
-
-    <SelectionStatut
-      bind:statut={$store.mesureEditee.mesure.statut}
-      id="statut"
-      {estLectureSeule}
-      referentielStatuts={statuts}
-      label="Statut de mise en œuvre"
-      requis
-    />
 
     {#if !estLectureSeule}
       {#if $configurationAffichage.doitAfficherRetourUtilisateur}
@@ -177,10 +183,7 @@
   select {
     margin-top: 8px;
     margin-bottom: 0;
-  }
-
-  #categorie {
-    border-right: 8px solid transparent;
+    background: white;
   }
 
   label.requis:before {
@@ -247,7 +250,7 @@
   }
 
   summary:before {
-    content: 'Description';
+    content: 'Description de la mesure';
   }
 
   summary:after {
@@ -272,23 +275,27 @@
     margin-bottom: 16px;
   }
 
-  .conteneur-retour-utilisateur {
-    padding: 16px;
-    border-radius: 6px;
-    background: #eff6ff;
-  }
-
   .conteneur-retour-utilisateur label {
     margin-bottom: 0;
   }
 
-  .conteneur-retour-utilisateur select {
-    background: white;
-    border: transparent;
-    border-right: 8px solid transparent;
+  .conteneur-statut {
+    position: relative;
   }
 
-  .conteneur-retour-utilisateur textarea {
-    background: white;
+  .mention-requis {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    color: var(--texte-clair);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .mention-requis .asterisque {
+    color: var(--rose-anssi);
   }
 </style>
