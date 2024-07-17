@@ -26,12 +26,6 @@
   overflow: hidden;
 }
 
-.entete-tiroir .image-entete {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
 .entete-tiroir .par-dessus {
   position: relative;
 }
