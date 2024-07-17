@@ -80,3 +80,11 @@
 .conteneur-page-formulaire {
   max-width: 1200px;
 }
+
+.titre-tiroir {
+  padding: 20px 26px 20px 0;
+}
+
+.texte-tiroir {
+  display: none;
+}
