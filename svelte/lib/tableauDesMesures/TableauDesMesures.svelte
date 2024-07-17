@@ -284,7 +284,13 @@
   }
 
   .bouton-action-mesure:hover {
-    background: var(--fond-bleu-pale);
+    background: var(--fond-gris-pale);
+    color: var(--bleu-anssi);
+  }
+
+  .bouton-action-mesure:hover img {
+    filter: brightness(0) invert(21%) sepia(87%) saturate(646%)
+      hue-rotate(168deg) brightness(89%) contrast(103%);
   }
 
   .ligne-aucun-resultat {
