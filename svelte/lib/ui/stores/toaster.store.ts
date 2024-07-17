@@ -1,4 +1,9 @@
 import { writable } from 'svelte/store';
+import type {
+  MesureGenerale,
+  MesureSpecifique,
+} from '../../tableauDesMesures/tableauDesMesures.d';
+import type { IdStatut } from '../types';
 
 export type NiveauMessage = 'info' | 'succes';
 
@@ -25,6 +30,24 @@ export const toasterStore = {
   },
   succes: (titre: string, contenu: string) => {
     afficheToast(titre, contenu, 'succes');
+  },
+  afficheToastChangementStatutMesure: (
+    mesure: MesureGenerale | MesureSpecifique,
+    statuts: Record<IdStatut, string>
+  ) => {
+    if (mesure.statut === 'fait') {
+      toasterStore.succes(
+        'Félicitation !',
+        `Le statut de la mesure <b>• ${mesure.description}</b> est désormais "<b>faite</b>" !`
+      );
+    } else if (mesure.statut) {
+      toasterStore.info(
+        'Modification du statut',
+        `Le statut de la mesure <b>• ${
+          mesure.description
+        }</b> est désormais "<b>${statuts[mesure.statut].toLowerCase()}</b>".`
+      );
+    }
   },
 };
 

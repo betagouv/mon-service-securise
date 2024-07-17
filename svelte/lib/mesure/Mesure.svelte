@@ -21,24 +21,6 @@
   export let mesuresExistantes: MesuresExistantes;
   export let estLectureSeule: boolean;
 
-  const afficheToastChangementStatut = (
-    mesure: MesureGenerale | MesureSpecifique
-  ) => {
-    if (mesure.statut === 'fait') {
-      toasterStore.succes(
-        'Félicitation !',
-        `Le statut de la mesure <b>• ${mesure.description}</b> est désormais "<b>faite</b>" !`
-      );
-    } else if (mesure.statut) {
-      toasterStore.info(
-        'Modification du statut',
-        `Le statut de la mesure <b>• ${
-          mesure.description
-        }</b> est désormais "<b>${statuts[mesure.statut].toLowerCase()}</b>".`
-      );
-    }
-  };
-
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
     enCoursEnvoi = true;
@@ -63,7 +45,10 @@
         detail: { sourceDeModification: 'tiroir' },
       })
     );
-    afficheToastChangementStatut($store.mesureEditee.mesure);
+    toasterStore.afficheToastChangementStatutMesure(
+      $store.mesureEditee.mesure,
+      statuts
+    );
   };
 
   $: texteSurligne = $store.mesureEditee.mesure.descriptionLongue?.replace(
