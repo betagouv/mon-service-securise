@@ -1,5 +1,6 @@
 <script lang="ts">
   import { toasterStore } from './stores/toaster.store';
+  import { glisse } from './animations/transitions';
 
   const icones = {
     info: 'icone_info',
@@ -9,7 +10,10 @@
 
 <aside>
   {#each $toasterStore.queue as toast (toast.id)}
-    <article class={toast.niveau}>
+    <article
+      class={toast.niveau}
+      transition:glisse={{ depuis: 'right', duree: 250 }}
+    >
       <div class="conteneur-icone">
         <div class="icone">
           <img
