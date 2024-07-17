@@ -24,6 +24,7 @@
   } from './tableauDesMesures.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
+  import Onglet from '../ui/Onglet.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
 
@@ -41,10 +42,11 @@
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
 
-  const rafraichisMesures = async () =>
+  const rafraichisMesures = async () => {
     mesures.reinitialise(
       modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
     );
+  };
   onMount(rafraichisMesures);
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
@@ -102,6 +104,49 @@
       new CustomEvent('svelte-affiche-tiroir-export-mesures')
     );
   };
+
+  type TypeOnglet = 'statutADefinir' | 'enAction' | 'traite' | 'toutes';
+  type mesuresToutType = {
+    mesuresGenerales: Record<string, MesureGenerale>;
+    mesuresSpecifiques: MesureSpecifique[];
+  };
+  const mesuresToutTypeParDefaut = {
+    mesuresGenerales: {},
+    mesuresSpecifiques: [],
+  };
+  let ongletActif: TypeOnglet = 'statutADefinir';
+  let mesuresParOnglet: Record<TypeOnglet, mesuresToutType> = {
+    statutADefinir: mesuresToutTypeParDefaut,
+    enAction: mesuresToutTypeParDefaut,
+    traite: mesuresToutTypeParDefaut,
+    toutes: mesuresToutTypeParDefaut,
+  };
+
+  const filtreMesures = (
+    predicatFiltre: (m: MesureGenerale | MesureSpecifique) => boolean
+  ) => ({
+    mesuresGenerales: Object.entries($mesuresFiltrees.mesuresGenerales)
+      .filter(([_, m]) => predicatFiltre(m))
+      .reduce((acc, [cle, donnees]) => ({ ...acc, [cle]: donnees }), {}),
+    mesuresSpecifiques: $mesuresFiltrees.mesuresSpecifiques.filter((m) =>
+      predicatFiltre(m)
+    ),
+  });
+  $: {
+    mesuresParOnglet = {
+      statutADefinir: filtreMesures((m) => !m.statut),
+      enAction: filtreMesures(
+        (m) => m.statut === 'aLancer' || m.statut === 'enCours'
+      ),
+      traite: filtreMesures(
+        (m) => m.statut === 'fait' || m.statut === 'nonFait'
+      ),
+      toutes: $mesuresFiltrees,
+    };
+  }
+  const calculNbPourOnglet = (mesuresParOnglet: mesuresToutType) =>
+    Object.keys(mesuresParOnglet.mesuresGenerales).length +
+    mesuresParOnglet.mesuresSpecifiques.length;
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
@@ -127,6 +172,36 @@
     <col class="statut-mesure" />
   </colgroup>
   <thead>
+    <tr class="ligne-onglet">
+      <th colspan="2">
+        <div class="conteneur-onglet">
+          <Onglet
+            bind:ongletActif
+            cetOnglet="statutADefinir"
+            labelOnglet="Statut à définir"
+            nbNonLue={calculNbPourOnglet(mesuresParOnglet.statutADefinir)}
+          />
+          <Onglet
+            bind:ongletActif
+            cetOnglet="enAction"
+            labelOnglet="En action"
+            nbNonLue={calculNbPourOnglet(mesuresParOnglet.enAction)}
+          />
+          <Onglet
+            bind:ongletActif
+            cetOnglet="traite"
+            labelOnglet="Traité"
+            nbNonLue={calculNbPourOnglet(mesuresParOnglet.traite)}
+          />
+          <Onglet
+            bind:ongletActif
+            cetOnglet="toutes"
+            labelOnglet="Toutes les mesures"
+            nbNonLue={calculNbPourOnglet(mesuresParOnglet.toutes)}
+          />
+        </div>
+      </th>
+    </tr>
     {#if !estLectureSeule}
       <tr>
         <th colspan="2">
@@ -162,7 +237,7 @@
         >
       </tr>
     {:else}
-      {#each Object.entries($mesuresFiltrees.mesuresGenerales) as [id, mesure] (id)}
+      {#each Object.entries(mesuresParOnglet[ongletActif].mesuresGenerales) as [id, mesure] (id)}
         <LigneMesure
           {id}
           referentiel={mesure.referentiel}
@@ -186,7 +261,7 @@
           estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
         />
       {/each}
-      {#each $mesuresFiltrees.mesuresSpecifiques as mesure, index (index)}
+      {#each mesuresParOnglet[ongletActif].mesuresSpecifiques as mesure, index (index)}
         {@const indexReel = $mesures.mesuresSpecifiques.indexOf(mesure)}
         <LigneMesure
           id={`specifique-${index}`}
@@ -311,7 +386,7 @@
     gap: 4px;
     padding: 18px 16px;
     border: 1px solid var(--liseres-fonce);
-    border-radius: 4px 4px 0 0;
+    border-radius: 0 4px 0 0;
     transform: translateY(1px);
     margin-left: -0.5px;
     margin-right: -0.5px;
@@ -323,5 +398,16 @@
 
   thead tr th {
     padding: 0;
+  }
+
+  .ligne-onglet {
+    transform: translateY(2px) translateX(-0.5px);
+    position: relative;
+    z-index: 1;
+  }
+
+  .conteneur-onglet {
+    display: flex;
+    gap: 8px;
   }
 </style>
