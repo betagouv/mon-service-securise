@@ -33,7 +33,6 @@ export const mesures = {
 
 export const rechercheTextuelle = writable<string>('');
 export const rechercheCategorie = writable<IdCategorie[]>([]);
-export const rechercheStatut = writable<IdStatut[]>([]);
 export enum IdReferentiel {
   ANSSIRecommandee,
   ANSSIIndispensable,
@@ -77,7 +76,6 @@ const estMesureGenerale = (
 enum IdFiltre {
   rechercheTextuelle,
   rechercheCategorie,
-  rechercheStatut,
   rechercheReferentiel,
 }
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
@@ -88,28 +86,16 @@ export const predicats = derived<
   [
     typeof rechercheTextuelle,
     typeof rechercheCategorie,
-    typeof rechercheStatut,
     typeof rechercheReferentiel,
   ],
   Predicats
 >(
-  [
-    rechercheTextuelle,
-    rechercheCategorie,
-    rechercheStatut,
-    rechercheReferentiel,
-  ],
-  ([
-    $rechercheTextuelle,
-    $rechercheCategorie,
-    $rechercheStatut,
-    $rechercheReferentiel,
-  ]) => {
+  [rechercheTextuelle, rechercheCategorie, rechercheReferentiel],
+  ([$rechercheTextuelle, $rechercheCategorie, $rechercheReferentiel]) => {
     const actifs = [];
     if ($rechercheTextuelle) actifs.push(IdFiltre.rechercheTextuelle);
     if ($rechercheCategorie.length > 0)
       actifs.push(IdFiltre.rechercheCategorie);
-    if ($rechercheStatut.length > 0) actifs.push(IdFiltre.rechercheStatut);
     if ($rechercheReferentiel.length > 0)
       actifs.push(IdFiltre.rechercheReferentiel);
 
@@ -128,11 +114,6 @@ export const predicats = derived<
         [IdFiltre.rechercheCategorie]: (
           mesure: MesureSpecifique | MesureGenerale
         ) => $rechercheCategorie.includes(mesure.categorie),
-        [IdFiltre.rechercheStatut]: (
-          mesure: MesureSpecifique | MesureGenerale
-        ) =>
-          $rechercheStatut.includes(mesure.statut ?? '') ||
-          ($rechercheStatut.includes('nonRenseignee') && !mesure.statut),
         [IdFiltre.rechercheReferentiel]: (
           mesure: MesureSpecifique | MesureGenerale
         ) =>
