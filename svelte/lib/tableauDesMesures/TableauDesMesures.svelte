@@ -149,9 +149,6 @@
             {#if etatEnregistrement === EnCours}
               <p class="enregistrement-en-cours">Enregistrement en cours ...</p>
             {/if}
-            {#if etatEnregistrement === Fait}
-              <p class="enregistrement-termine">Enregistré</p>
-            {/if}
           </div>
         </th>
       </tr>
@@ -239,34 +236,22 @@
     padding: 0;
   }
 
-  .enregistrement-en-cours,
-  .enregistrement-termine {
+  .enregistrement-en-cours {
     font-size: 1.1em;
     font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #0c5c98;
   }
 
-  .enregistrement-en-cours:before,
-  .enregistrement-termine:before {
+  .enregistrement-en-cours:before {
     content: '';
     display: flex;
     width: 24px;
     height: 24px;
     background-size: contain;
     background-repeat: no-repeat;
-  }
-
-  .enregistrement-en-cours {
-    color: #0c5c98;
-  }
-
-  .enregistrement-termine {
-    color: #0e972b;
-  }
-
-  .enregistrement-en-cours:before {
     background-image: url('/statique/assets/images/icone_enregistrement_en_cours.svg');
     animation: rotation 1s linear infinite;
   }
@@ -275,10 +260,6 @@
     100% {
       transform: rotate(360deg);
     }
-  }
-
-  .enregistrement-termine:before {
-    background-image: url('/statique/assets/images/icone_enregistrement_termine.svg');
   }
 
   .bouton-action-mesure {
