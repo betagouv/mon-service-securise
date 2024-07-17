@@ -230,7 +230,7 @@
     {/if}
   </thead>
   <tbody>
-    {#if $nombreResultats.aucunResultat}
+    {#if !calculNbPourOnglet(mesuresParOnglet[ongletActif])}
       <tr class="ligne-aucun-resultat">
         <td colspan="2" class="aucun-resultat"
           >Aucune mesure ne correspond à la recherche.</td
