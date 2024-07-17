@@ -49,29 +49,15 @@
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
 
-  const afficheToastChangementStatut = (
-    mesure: MesureGenerale | MesureSpecifique
-  ) => {
-    if (mesure.statut === 'fait') {
-      toasterStore.succes(
-        'Félicitation !',
-        `Le statut de la mesure <b>• ${mesure.description}</b> est désormais "<b>faite</b>" !`
-      );
-    } else if (mesure.statut) {
-      toasterStore.info(
-        'Modification du statut',
-        `Le statut de la mesure <b>• ${
-          mesure.description
-        }</b> est désormais "<b>${statuts[mesure.statut].toLowerCase()}</b>".`
-      );
-    }
-  };
   const metsAJourMesuresSpecifiques = async (indexReel: number) => {
     etatEnregistrement = EnCours;
     await enregistreMesuresSpecifiques(idService, $mesures.mesuresSpecifiques);
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
-    afficheToastChangementStatut($mesures.mesuresSpecifiques[indexReel]);
+    toasterStore.afficheToastChangementStatutMesure(
+      $mesures.mesuresSpecifiques[indexReel],
+      statuts
+    );
   };
 
   const metsAJourMesureGenerale = async (idMesure: IdMesureGenerale) => {
@@ -83,7 +69,10 @@
     );
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
-    afficheToastChangementStatut($mesures.mesuresGenerales[idMesure]);
+    toasterStore.afficheToastChangementStatutMesure(
+      $mesures.mesuresGenerales[idMesure],
+      statuts
+    );
   };
 
   type MesureAEditer = {
