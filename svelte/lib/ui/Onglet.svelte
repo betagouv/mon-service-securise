@@ -1,8 +1,6 @@
-<script lang="ts">
-  import type { TypeOnglet } from '../centreNotifications.d';
-
-  export let ongletActif: TypeOnglet;
-  export let cetOnglet: TypeOnglet;
+<script lang="ts" generics="T extends string">
+  export let ongletActif: T;
+  export let cetOnglet: T;
   export let labelOnglet: string;
   export let nbNonLue: number;
 </script>

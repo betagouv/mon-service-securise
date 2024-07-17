@@ -4,7 +4,7 @@
   import type { Notification } from '../ui/types.d';
   import type { TypeOnglet } from './centreNotifications.d';
   import ListeNotifications from './kit/ListeNotifications.svelte';
-  import Onglet from './kit/Onglet.svelte';
+  import Onglet from '../ui/Onglet.svelte';
   import { storeNotifications } from '../ui/stores/notifications.store';
 
   let ouvert = false;
