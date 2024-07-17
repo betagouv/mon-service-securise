@@ -205,7 +205,7 @@
 
   .bouton {
     margin: 0;
-    padding: 0.5em 1em;
+    padding: 6px 14px;
     font-weight: 500;
   }
 
