@@ -12,10 +12,8 @@ let enteteTiroir: EnteteTiroir;
 const changeCartoucheDuReferentiel = () => {
   enteteTiroir?.$destroy();
   const cible = document.querySelector('.titre-tiroir');
-  const insererAvant = cible?.lastChild;
   enteteTiroir = new EnteteTiroir({
     target: cible,
-    anchor: insererAvant,
   });
 };
 
