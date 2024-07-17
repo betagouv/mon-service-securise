@@ -16,7 +16,7 @@ const mesureEditeeParDefaut = (): MesureEditee => ({
   mesure: {
     categorie: '',
     description: '',
-    statut: '',
+    statut: undefined,
     modalites: '',
   },
   metadonnees: {
