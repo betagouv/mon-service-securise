@@ -8,6 +8,11 @@
   import { enregistreMesures, enregistreRetourUtilisateur } from './mesure.api';
   import SelectionStatut from '../ui/SelectionStatut.svelte';
   import { rechercheTextuelle } from '../tableauDesMesures/tableauDesMesures.store';
+  import type {
+    MesureGenerale,
+    MesureSpecifique,
+  } from '../tableauDesMesures/tableauDesMesures.d';
+  import { toasterStore } from '../ui/stores/toaster.store';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -15,6 +20,24 @@
   export let retoursUtilisateur: Record<string, string>;
   export let mesuresExistantes: MesuresExistantes;
   export let estLectureSeule: boolean;
+
+  const afficheToastChangementStatut = (
+    mesure: MesureGenerale | MesureSpecifique
+  ) => {
+    if (mesure.statut === 'fait') {
+      toasterStore.succes(
+        'Félicitation !',
+        `Le statut de la mesure <b>• ${mesure.description}</b> est désormais "<b>faite</b>" !`
+      );
+    } else if (mesure.statut) {
+      toasterStore.info(
+        'Modification du statut',
+        `Le statut de la mesure <b>• ${
+          mesure.description
+        }</b> est désormais "<b>${statuts[mesure.statut].toLowerCase()}</b>".`
+      );
+    }
+  };
 
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
@@ -40,6 +63,7 @@
         detail: { sourceDeModification: 'tiroir' },
       })
     );
+    afficheToastChangementStatut($store.mesureEditee.mesure);
   };
 
   $: texteSurligne = $store.mesureEditee.mesure.descriptionLongue?.replace(
