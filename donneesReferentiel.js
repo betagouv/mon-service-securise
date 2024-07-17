@@ -470,6 +470,7 @@ module.exports = {
         "<p>Pour évaluer l'impact des risques les plus courants, utilisez l'outil proposé par MonServiceSécurisé.</p>" +
         "<p>Cette mesure permet de mettre en place de mesures de sécurité adaptées permettant de diminuer la probabilité de survenue des risques que l'organisation choisira d'adresser.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0001',
     },
     audit: {
       description: 'Réaliser un audit de la sécurité du service',
@@ -478,6 +479,7 @@ module.exports = {
         "<p>Faire réaliser un audit de la sécurité du service. Les audits réalisés par des prestataires qualifiés par l'ANSSI (PASSI) incluent un audit d'architecture, de code, de configuration et un test d'intrusion.</pr>" +
         "<p>Cette mesure permet d'identifier les vulnérabilités du service et les mesures de sécurité spécifiques à mettre en œuvre en vue de les corriger et ainsi renforcer significativement sa sécurité.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0002',
     },
     auditsSecurite: {
       description:
@@ -487,6 +489,7 @@ module.exports = {
         "<p>Organiser des contrôles de sécurité et d'audits à intervalle régulier, par exemple, avant arrivée à échéance de la dernière homologation de sécurité.</p>" +
         "<p>Cette mesure permet d'assurer un suivi de la sécurité du service dans la durée et à permettre de corriger, le cas échéant, de nouvelles vulnérabilités identifiées.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0003',
     },
     consignesSecurite: {
       description:
@@ -498,6 +501,7 @@ module.exports = {
         '<p>Fixer, de besoin, des consignes spécifiques additionnelles relatives à leur utilisation du service. Sensibiliser régulièrement les administrateurs aux bonnes pratiques de sécurité informatique.</p>' +
         '<p>Cette mesure vise à impliquer les agents dans la mise en œuvre des mesures prévues pour sécuriser le service et à accroître leur vigilance et leurs réflexes en cas de situation à risque.</p>',
       referentiel: 'ANSSI',
+      identifiantNumerique: '0004',
     },
     contactSecurite: {
       description:
@@ -507,6 +511,7 @@ module.exports = {
         "<p>Fournir publiquement une procédure permettant à une personne ou à une entité de signaler un problème de sécurité concernant le service numérique. <br>Cette procédure doit préciser les conditions dans lesquelles un problème de sécurité peut être identifié et signalé et fournir un moyen non nominatif de contacter l'équipe en charge du service ou de sa sécurité (ex. email, formulaire de contact).</p>" +
         "<p>Cette mesure facilite l'identification et le traitement de problèmes de sécurité concernant le service.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0005',
     },
     exigencesSecurite: {
       description:
@@ -517,6 +522,7 @@ module.exports = {
         "<p>En cas de recours à des prestataires, fixer, dès les clauses contractuelles, les exigences de sécurité à respecter. Dans le cas où ces exigences ne peuvent pas être fixées a priori (ex. produit obtenu sur étagère), identifier l'ensemble des exigences de sécurité que s'engagent à respecter les prestataires.</p>" +
         "<p>Cette mesure permet d'éclairer la sélection des prestataires en fonction des garanties de sécurité que ces derniers s'engagent à respecter.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0006',
     },
     hebergementUE: {
       description:
@@ -526,6 +532,7 @@ module.exports = {
         "<p>Privilégier le recours à un hébergeur proposant la localisation au sein de l'Union européenne du service numérique et des données.</p>" +
         "<p>Cette mesure vise à renforcer la protection des données grâce aux garanties offertes par la réglementation européenne et à faciliter les actions de remédiation et d'investigation en cas d'incident de sécurité.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0007',
     },
     identificationDonneesSensibles: {
       description: 'Identifier les données importantes à protéger',
@@ -535,6 +542,7 @@ module.exports = {
         "<p>Lister l'ensemble des données à protéger en priorité (ex. données sensibles) et identifier leur localisation (technique et géographique).</p>" +
         "<p>Cette mesure permet de connaître les données les plus sensibles à protéger, d'évaluer l'impact de leur compromission et d'identifier, de besoin, des mesures de sécurité spécifiques à mettre en œuvre en vue de les protéger.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0008',
     },
     limitationInterconnexions: {
       description:
@@ -545,6 +553,7 @@ module.exports = {
         "<p>Configurer le service en vue de limiter, au strict nécessaire, ses interconnexions avec d'autres systèmes d'information et tenir une cartographie à jour de l'ensemble de ces interconnexions.</p>" +
         "<p>Cette mesure permet de réduire le risque de propagation d'une cyberattaque de ces systèmes vers le service et inversement.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0009',
     },
     listeComptesPrivilegies: {
       description:
@@ -556,6 +565,7 @@ module.exports = {
         "<p>Sont concernés par cette mesure les administrateurs techniques (ex. accès à la configuration de l'hébergement du service) et les administrateurs métiers (ex. agent public ayant un droit de modification des informations affichées sur le service).</p>" +
         "<p>Cette mesure permet de gérer la liste des comptes disposant d'un accès privilégié en vue d'en limiter le nombre au strict nécessaire et ainsi réduire le risque que des comptes non nécessaires soient détournés par un acteur malveillant.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0010',
     },
     listeEquipements: {
       description:
@@ -566,6 +576,7 @@ module.exports = {
         '<p>Créer et tenir à jour un registre des équipements et des applicatifs (ex. serveurs de base de données, annuaires, pare-feu, systèmes de gestion de contenu) participant au fonctionnement du service numérique.</p>' +
         "<p>Cette mesure est nécessaire afin d'assurer la gestion des mises à jour fonctionnelles et de sécurité du service, indispensables au maintien de la sécurité du service.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0011',
     },
     secNumCloud: {
       description:
@@ -575,6 +586,7 @@ module.exports = {
         "<p>Privilégier le recours à un prestataire de service en nuage (Cloud) qualifié SecNumCloud par l'ANSSI.</p>" +
         "<p>Cette mesure permet d'apporter des garanties élevées en matière de confiance et de sécurité de l'hébergement du service et de ses données.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0012',
     },
     testIntrusion: {
       description:
@@ -584,6 +596,7 @@ module.exports = {
         "<p>Faire réaliser un test d'intrusion et/ou une campagne de recherche de bug (bug bounty) du service, par un prestataire ou par un service compétent.</p>" +
         "<p>Cette mesure permet d'identifier des vulnérabilités du service en vue de les corriger et ainsi renforcer sa sécurité.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0013',
     },
     verificationAutomatique: {
       description:
@@ -594,6 +607,7 @@ module.exports = {
         "<p>Lors du développement du service et, autant que possible, dans le cas de l'achat d'un service sur étagère, procéder à des tests techniques automatiques de la sécurité du service.</p>" +
         "<p>Cette mesure permet de vérifier rapidement l'existence de vulnérabilités non corrigées parmi les vulnérabilités les plus connues.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0014',
     },
     registreTraitements: {
       description: 'Remplir le registre des traitements et le tenir à jour',
@@ -613,6 +627,7 @@ module.exports = {
         '<p>' +
         'Le registre est prévu par l’article 30 du RGPD, c’est un outil global avec votre organisme il participe à la documentation de la conformité. Document de recensement et d’analyse, il doit refléter la réalité de vos traitements de données personnelles.</p>',
       referentiel: 'CNIL',
+      identifiantNumerique: '0015',
     },
     minimisationCollecteDonnees: {
       description:
@@ -623,6 +638,7 @@ module.exports = {
         '<p>Evaluer le but de chaque collecte de données. Ne collecter que les données strictement nécessaires pour atteindre votre objectif. Il ne faut pas collecter des données inutiles pour votre traitement en se disant qu’elles pourraient servir plus tard. <br>Lorsque trop de données sont collectées, il faut immédiatement supprimer les données non-nécessaires.</p>' +
         '<p>Cette mesure limite la collecte des données personnelles uniquement aux informations essentielles pour réaliser un objectif spécifique. Cela réduit les risques liés à la gestion des données et renforce la protection de la vie privée des personnes.</p>',
       referentiel: 'CNIL',
+      identifiantNumerique: '0016',
     },
     dureeLimiteeConservationDonnees: {
       description:
@@ -633,6 +649,7 @@ module.exports = {
         '<p>Ne conserver les données en « base active » (ou environnement de production) que le temps strictement nécessaire à la réalisation de l’objectif poursuivi. <br>Il faut ensuite détruire ou anonymiser les données ou les archiver dans le respect des obligations légales applicables en matière de conservation des archives publiques. Vous pouvez consulter le <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/guide_durees_de_conservation.pdf" target="_blank">guide pratique prévu à cet effet</a>.</p>' +
         "<p>Cette mesure vise à limiter le temps pendant lequel les données personnelles sont conservées et traitées, réduisant ainsi les risques de mauvaise utilisation, d'accès non autorisé, de fuite de données ou de réutilisation non-anticipée.</p>",
       referentiel: 'CNIL',
+      identifiantNumerique: '0017',
     },
     utilisationDonneesCaracterePersonnel: {
       description:
@@ -648,6 +665,7 @@ module.exports = {
         '</ul><br>' +
         'Les personnes doivent conserver la maîtrise des données qui les concernent. Cela suppose qu’elles soient clairement informées de l’utilisation qui sera faite de leurs données. Les personnes doivent également être informées de leurs droits et des modalités d’exercice de ces droits. Plus d’information <a href="https://www.cnil.fr/fr/conformite-rgpd-information-des-personnes-et-transparence" target="_blank">ici</a>.',
       referentiel: 'CNIL',
+      identifiantNumerique: '0018',
     },
     modalitesExerciceDroits: {
       description:
@@ -659,6 +677,7 @@ module.exports = {
         '<br>' +
         "Les personnes ont le droit d'accéder aux données à caractère personnel qui ont été collectées à leur sujet. Elles doivent pouvoir exercer ce droit facilement et à des intervalles raisonnables, afin de prendre connaissance du traitement et d'en vérifier la licéité.",
       referentiel: 'CNIL',
+      identifiantNumerique: '0019',
     },
     analyseProtectionDonnees: {
       description:
@@ -669,6 +688,7 @@ module.exports = {
         '<p>Consulter <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">la liste des exemptions</a>. Si votre traitement n’y figure pas, regarder s’il fait partie des traitements pour lesquels <a href="https://www.cnil.fr/fr/analyse-dimpact-relative-la-protection-des-donnees-publication-dune-liste-des-traitements-pour" target="_blank">une AIPD est obligatoire</a>. Si une AIPD est nécessaire, vous pouvez la réaliser à l’aide du <a href="https://www.cnil.fr/fr/outil-pia-telechargez-et-installez-le-logiciel-de-la-cnil" target="_blank">logiciel PIA</a>.</p>' +
         "<p>Cette analyse, aussi appelée Analyse d'Impact sur la Protection des Données (AIPD), vise à évaluer et à atténuer les risques liés au traitement des données personnelles, surtout dans le cas de traitements susceptibles de présenter des risques élevés pour les droits et libertés des individus.</p>",
       referentiel: 'CNIL',
+      identifiantNumerique: '0020',
     },
     anonymisationDonnees: {
       description:
@@ -678,6 +698,7 @@ module.exports = {
         "<p>Configurer le service en vue d'anonymiser autant que possible les données à caractère personnel des utilisateurs conservées pour le bon fonctionnement ou la sécurité du service (ex. log de tentatives d'accès au service) ou à des fins d'analyse (ex. statistiques).</p>" +
         "<p>Cette mesure vise à protéger les utilisateurs contre la traçabilité nominative de leurs actions dans le cadre de l'utilisation du service tout en permettant d'assurer la sécurité de ce dernier au travers du suivi et de l'imputabilité des actions.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0021',
     },
     certificatChiffrement: {
       description:
@@ -688,6 +709,7 @@ module.exports = {
         "<p>Dans le cadre de la configuration du service, installer un certificat de sécurité serveur conforme au référentiel général de sécurité (RGS) défini par l'ANSSI, délivré par un prestataire de service de confiance qualifié.</p>" +
         "<p>Cette mesure permet de chiffrer les flux de données transitant par le service numérique avec des mécanismes de chiffrement robustes ainsi que de prouver l'identité de l'organisation détentrice du certificat.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0022',
     },
     certificatSignature: {
       description:
@@ -698,6 +720,7 @@ module.exports = {
         '<p>Dans le cadre de la configuration du service, installer un certificat de signature électronique qualifié au sens du règlement n° 910/2014 eIDAS, délivré par un prestataire qualifié, ou recourir à un service conforme.</p>' +
         "<p>Cette mesure permet la réalisation d'une signature électronique robuste sur le plan de la sécurité, conforme à la réglementation française et européenne.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0023',
     },
     chiffrementFlux: {
       description: 'Désactiver tout flux non chiffré',
@@ -707,6 +730,7 @@ module.exports = {
         "<p>Configurer le service en vue de désactiver tout flux de données qui n'est pas chiffré.</p>" +
         '<p>Cette mesure permet de protéger la confidentialité des données, dans le cas où des flux de données seraient interceptés.</p>',
       referentiel: 'ANSSI',
+      identifiantNumerique: '0024',
     },
     chiffrementMachineVirtuelle: {
       description: 'Chiffrer la machine virtuelle',
@@ -715,6 +739,7 @@ module.exports = {
         '<p>Lors de la configuration de la machine virtuelle, activez le chiffrement de cette dernière.</p>' +
         '<p>Cette mesure vise à renforcer la confidentialité des données contenues dans la machine virtuelle.</p>',
       referentiel: 'ANSSI',
+      identifiantNumerique: '0025',
     },
     coffreFort: {
       description:
@@ -725,6 +750,7 @@ module.exports = {
         '<p>Recommander ou proposer aux administrateurs le recours à une ou plusieurs solutions de gestion de mots de passe sécurisés, permettant de générer des mots de passe aléatoires et robustes et de les enregistrer.</p>' +
         "<p>Cette mesure permet de faciliter la création de mots de passe différents, longs et complexes, distincts pour chaque compte d'accès, sans effort de mémorisation.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0026',
     },
     compartimenter: {
       description: "Dissocier les rôles d'administration entre eux",
@@ -734,6 +760,7 @@ module.exports = {
         "<p>Créer des comptes d'accès d'administration différents dotés de privilèges distincts, pour les personnes devant assurer plusieurs rôles d'administration, que ceux-ci soit techniques (ex. développement, hébergement) et/ou métiers (ex. création de contenus).</p>" +
         "<p>Cette mesure permet de limiter la capacité d'action d'acteurs malveillants qui parviendraient à usurper un compte d'administration.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0027',
     },
     configurationMinimaliste: {
       description:
@@ -744,6 +771,7 @@ module.exports = {
         "<p>Lors du développement du service ou de l'installation des applicatifs contribuant à son fonctionnement, installer uniquement les fonctionnalités nécessaires et désactiver toutes les fonctionnalités inutiles proposées par défaut. <br>Cette mesure correspond à la règle de la « configuration minimaliste ».</p>" +
         "<p>Cette mesure permet d'éviter d'installer des fonctionnalités non nécessaires qui pourraient comporter des vulnérabilités non corrigées et servir de vecteurs à une attaque. Cette approche permet de réduire la « surface d'attaque » à savoir l'ensemble des éléments constitutifs d'un service qui pourraient être ciblés par un attaquant.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0028',
     },
     contraintesMotDePasse: {
       description:
@@ -754,6 +782,7 @@ module.exports = {
         "<p>Fixer des règles de longueur et de complexité des mots de passe lors de la création d'un mot de passe ou de son renouvellement par un utilisateur ou un administrateur. Lorsque cela est possible, configurer le service pour interdire les mots de passe faibles.</p>" +
         "<p>Cette mesure permet de diminuer le risque de découverte et l'usurpation de mots de passe par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0029',
     },
     deconnexionAutomatique: {
       description:
@@ -763,6 +792,7 @@ module.exports = {
         "<p>Configurer le service afin d'activer la déconnexion automatique des sessions des administrateurs et des utilisateurs inactifs après une durée déterminée.</p>" +
         "<p>Cette mesure vise à limiter le risque d'utilisation, par une personne malveillante, du compte d'un utilisateur, qui aurait laissé son équipement non verrouillé sans surveillance et ne se serait pas déconnecté du service.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0030',
     },
     differentiationFiltrage: {
       description:
@@ -772,6 +802,7 @@ module.exports = {
         "<p>Configurer le service en vue de différencier le filtrage des accès utilisateurs et administrateurs, c'est-à-dire déterminer une zone délimitée (plage d'adresses IP) accessible uniquement aux personnes disposant de privilèges élevés (administrateurs).</p>" +
         "<p>Cette mesure vise à cloisonner les différents types d'accès afin d'éviter qu'un accès utilisateur puisse être détourné par un attaquant pour accéder à une zone du service réservée aux personnes chargées de l'administrer.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0031',
     },
     dissocierComptesAdmin: {
       description:
@@ -782,6 +813,7 @@ module.exports = {
         "<p>Créer des comptes d'accès distincts aux personnes à la fois administratrices et utilisatrices du service.</p>" +
         "<p>Cette mesure permet de réduire le risque d'accès illicite à un compte utilisateur qui permettrait d'accéder également à un compte d'administration aux privilèges élevés.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0032',
     },
     doubleAuthentAdmins: {
       description:
@@ -792,6 +824,7 @@ module.exports = {
         "<p>Activer l'authentification multifacteur et la rendre obligatoire pour l'accès des administrateurs au service. Proscrire, autant que possible, le recours à un service numérique qui ne prévoirait pas l'authentification multifacteur pour son administration.</p>" +
         "<p>Cette mesure permet de réduire le risque d'accès illicite aux fonctions d'administration du service par des acteurs malveillants et diminue, d'autant, le risque d'atteinte grave au service.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0033',
     },
     environnementSecurise: {
       description:
@@ -801,6 +834,7 @@ module.exports = {
         "<p>Demander aux administrateurs techniques du service de n'administrer ce dernier que depuis un environnement informatique dédié et sécurisé. Le recours à des équipements personnels doit notamment être proscrit.</p>" +
         "<p>Cette mesure vise à diminuer le risque de compromission des droits d'administration service via des moyens informatiques insuffisamment sécurisés.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0034',
     },
     gestionComptesAcces: {
       description:
@@ -810,6 +844,7 @@ module.exports = {
         "<p>Configurer le service en vue de prévoir la suppression régulière des comptes d'accès inactifs, en priorisant la suppression des comptes d'administration. <br>Informer les personnes concernées avant toute suppression de compte.</p>" +
         "<p>Cette mesure permet d'éviter en priorité que des comptes demeurent actifs sans raison valable, afin de réduire le nombre de comptes susceptibles d'être usurpés par un acteur malveillant.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0035',
     },
     hebergementMachineVirtuelle: {
       description: 'Héberger le service dans une machine virtuelle',
@@ -819,6 +854,7 @@ module.exports = {
         "<p>Lors du choix de la solution d'hébergement du service et de ses données, optez pour son hébergement dans une ou plusieurs machines virtuelles.</p>" +
         "<p>Cette mesure vise à renforcer la sécurité du service et des données. Elle permet de filtrer plus facilement les accès, de limiter le risque d'attaques par déni de service et les chemins d'attaques par parallélisation.<p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0036',
     },
     limitationAccesAdmin: {
       description:
@@ -829,6 +865,7 @@ module.exports = {
         "<p>Créer des comptes d'administration technique et/ou métier, aux seules personnes ayant besoin de disposer de ces accès.</p>" +
         "<p>Cette mesure permet de limiter le nombre de comptes disposant de privilèges susceptibles d'être usurpés à des fins malveillantes. Cette mesure réduit la « surface d'attaque » du service.<p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0037',
     },
     limitationCreationComptes: {
       description:
@@ -839,6 +876,7 @@ module.exports = {
         '<p>Demander un nom et un prénom pour toute création de compte administrateur et utilisateur et informer chaque personne que le compte ne peut pas être partagé</p>' +
         "<p>Cette mesure permet de réduire le risque de diffusion d'identifiants et de mots de passe à des personnes qui n'auraient pas le droit d'accéder au service ou à certaines de ses fonctions. <br>Cette mesure également à la bonne gestion des comptes d'accès au service.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0038',
     },
     limitationDroitsAdmin: {
       description:
@@ -849,6 +887,7 @@ module.exports = {
         "<p>Lors de la création ou de la modification des privilèges associés à un compte d'administration, limiter ces derniers aux seuls privilèges nécessaires au rôle d'administration visé (ex. limiter aux seules fonctions d'administration de la base de données).</p>" +
         "<p>Cette mesure permet de réduire la capacité d'action d'un acteur malveillant qui parviendrait à usurper un compte administrateur et ainsi de limiter sa capacité de nuisance.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0039',
     },
     misesAJour: {
       description:
@@ -859,6 +898,7 @@ module.exports = {
         "<p>Identifier, tester et installer, sans délai, les mises à jour fonctionnelles et de sécurité des applicatifs et/ou équipement contribuant au fonctionnement et à l'administration du service.</p>" +
         "<p>Cette mesure vise à renforcer la sécurité du service en permettant de corriger rapidement les failles de sécurité susceptibles de l'affecter.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0040',
     },
     moindrePrivilege: {
       description:
@@ -869,6 +909,7 @@ module.exports = {
         "<p>Lors de l'installation d'un applicatif contribuant au fonctionnement du service, restreindre au strict nécessaire ses privilèges - à savoir les droits l'autorisant de mener certaines actions de manière autonome - et ne conserver que les privilèges nécessaires à sa finalité.</p>" +
         "<p>Cette mesure permet d'éviter que des privilèges non nécessaires accordés à un applicatif ne soient exploités à des fins malveillantes par un attaquant.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0041',
     },
     nomsDomaineFrUe: {
       description: "Privilégier l'achat d'un nom de domaine en .fr ou .eu",
@@ -877,6 +918,7 @@ module.exports = {
         "<p>Lors de l'achat du nom de domaine du service, acheter de préférence un nom de domaine en .fr ou .eu.</p>" +
         '<p>Cette mesure permet de renforcer la confiance des utilisateurs dans le service et la protection du service au titre des règlementations européennes associées à la localisation européenne du nom de domaine.</p>',
       referentiel: 'ANSSI',
+      identifiantNumerique: '0042',
     },
     nomsDomaineSimilaires: {
       description:
@@ -886,6 +928,7 @@ module.exports = {
         "<p>Lors du choix du nom de domaine du service numérique, procédez à l'achat d'un ou plusieurs noms de domaines proches du nom de domaine du service numérique, par exemple en changeant des lettres ou en achetant des noms de domaine avec d'autres extensions (ex. .com ou .net).</p>" +
         '<p>Cette mesure permet de limiter le risque de typosquatting (ex. utilisation de noms de domaines proches contenant des modifications typographiques discrètes), permettant de rediriger les utilisateurs vers un site malveillant.</p>',
       referentiel: 'ANSSI',
+      identifiantNumerique: '0043',
     },
     portsOuverts: {
       description: 'Fermer tous les ports non strictement nécessaires',
@@ -895,6 +938,7 @@ module.exports = {
         "<p>Configurer le service en vue de fermer tous les ports réseau non strictement nécessaires à l'administration et au fonctionnement du service et fermer tous les autres ports.</p>" +
         "<p>Cette mesure permet de réduire le risque d'accès illégitime au service de la part d'acteurs malveillants.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0044',
     },
     protectionDeniService: {
       description:
@@ -904,6 +948,7 @@ module.exports = {
         '<p>Recourir à un service permettant de protéger le service contre les attaques de type «déni de service» (ex. attaques par déni de service distribué dites « DDOS »).</p>' +
         "<p>Cette mesure vise à réduire le risque d'indisponibilité partielle ou totale du service.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0045',
     },
     protectionMotsDePasse: {
       description: 'Protéger les mots de passe stockés sur le service',
@@ -913,6 +958,7 @@ module.exports = {
         "<p>Dans le cadre de la configuration du service au niveau du serveur d'hébergement, veiller à ne pas stocker les mots de passe « en clair ». Seule une « empreinte » des mots de passe doit être stockée.</p>" +
         "<p>L'objectif de cette mesure est de limiter la capacité d'un attaquant à accéder aux mots de passe en cas de compromission de la base de données des mots de passe.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0046',
     },
     renouvellementMotsDePasse: {
       description:
@@ -922,6 +968,7 @@ module.exports = {
         "<p>Configurer ou recommander à intervalle régulier le renouvellement des mots de passe des comptes d'administration.</p>" +
         "<p>Cette mesure permet d'éviter qu'un mot de passe ancien ou proche d'un mot de passe déjà utilisé toujours utilisé ne soit découvert et utilisé par un acteur malveillant.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0047',
     },
     securisationCode: {
       description:
@@ -932,6 +979,7 @@ module.exports = {
         '<p>Lors du développement du service, respecter les bonnes pratiques de développement sécurisé (ex. les normes de développement sécurisé associé à un langage de programmation, procéder à des revues régulières de code par les pairs, etc.).</p>' +
         '<p>Cette mesure vise à renforcer la sécurité du service numérique dès sa conception.</p>',
       referentiel: 'ANSSI',
+      identifiantNumerique: '0048',
     },
     telechargementsOfficiels: {
       description:
@@ -942,6 +990,7 @@ module.exports = {
         "<p>Publier l'application mobile permettant l'accès au service sur une ou plusieurs bibliothèques officielles (ex. AppStore, Google Play, etc.) et informer les utilisateurs que le service n'est téléchargeable que par ce moyen.</p>" +
         "<p>Cette mesure permet de faciliter les mises à jour de l'application par les utilisateurs et réduit le risque que des acteurs malveillants proposent au téléchargement une version de l'application susceptible de contenir un applicatif malveillant.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0049',
     },
     versionRecente: {
       description:
@@ -952,6 +1001,7 @@ module.exports = {
         "<p>Lors du développement ou de l'achat du service, toujours utiliser une version récente et maintenue à jour par les éditeurs, des applicatifs contribuant au fonctionnement du service (ex. une version récente et à jour d'un système de gestion de contenu (CMS), des dépendances d'une l'application).</p>" +
         "<p>Cette mesure vise à éviter d'utiliser des versions anciennes, susceptibles de comporter des vulnérabilités connues mais non corrigées ou qui ne seraient plus appelées à faire l'objet de mises à jour de sécurité à l'avenir par l'éditeur.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0050',
     },
 
     gestionIncidents: {
@@ -962,6 +1012,7 @@ module.exports = {
         '<p>Sauvegarder ce document dans un environnement sécurisé, déconnecté du service.</p>' +
         "<p>Cette mesure permet de préparer l'organisation à réagir de manière rapide et efficace en cas d'incident de sécurité affectant le service et à remédier à la situation.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0051',
     },
     journalAcces: {
       description:
@@ -971,6 +1022,7 @@ module.exports = {
         '<p>Lors de la configuration du service, activer la journalisation et la centralisation des accès des administrateurs, des utilisateurs et des applicatifs concourant au fonctionnement du service.</p>' +
         "<p>Cette mesure permet de faciliter la détection d'actions inhabituelles susceptibles d'être malveillantes et d'investiguer a posteriori les causes d'un incident de sécurité, en vue de faciliter sa remédiation.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0052',
     },
     journalEvenementSecu: {
       description:
@@ -980,6 +1032,7 @@ module.exports = {
         "<p>Lors de la configuration du service, activer, si cela est possible, la journalisation et la centralisation des événements de sécurité. <br>A défaut, créer et maintenir à jour un document recensant l'ensemble des événements de sécurité ayant affecté le service et des mesures mises en œuvre pour y remédier.</p>" +
         "<p>Cette mesure permet de faciliter la détection d'évènements de sécurité connus et la résolution des incidents qui en découleraient.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0053',
     },
     notificationConnexionsSuspectes: {
       description:
@@ -989,6 +1042,7 @@ module.exports = {
         "<p>Configurer le service afin de proposer l'envoi d'une notification (ex. par email) aux utilisateurs et aux administrateurs, à chaque fois que ceux-ci se connectent. Signaler, si possible, toute tentative de connexion suspecte, par exemple, lorsque la connexion est effectuée depuis un nouvel appareil ou depuis une localisation inhabituelle. Dans le cas de l'achat d'une solution sur étagère, privilégier un service proposant l'envoi de notifications.</p>" +
         "<p>Cette mesure permet aux utilisateurs et administrateurs d'identifier des tentatives de connexion suspectes et d'empêcher de futures nouvelles tentatives de connexion illégitimes, par exemple, en changeant leur mot de passe.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0054',
     },
     supervision: {
       description: 'Recourir à un service de supervision de la sécurité',
@@ -997,6 +1051,7 @@ module.exports = {
         "<p>Faire appel à un service de supervision à distance de la sécurité du service ou de plusieurs services, auprès d'un prestataire ou d'un service compétent au sein d'une organisation publique (ex. Security operation center », équipe de réponse à incident, etc.).</p>" +
         "<p>Cette mesure permet de renforcer significativement la capacité de veille, de détection et de réponse en cas d'incident de sécurité.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0055',
     },
     testsProcedures: {
       description:
@@ -1006,6 +1061,7 @@ module.exports = {
         '<p>Réaliser à intervalle régulier (ex. une fois par an) un test de la procédure de gestion des incidents de sécurité du service ou de plusieurs services, en impliquant les personnes concernées (ex. vérifier que les coordonnées sont exactes, vérifier la disponibilité des personnes).</p>' +
         '<p>Cette mesure vise à vérifier que la procédure de gestion des incidents en place fonctionne bien dans la pratique.</p>',
       referentiel: 'ANSSI',
+      identifiantNumerique: '0056',
     },
     veilleSecurite: {
       description:
@@ -1015,6 +1071,7 @@ module.exports = {
         "<p>Consulter plusieurs sources d'informations sur les vulnérabilités concernant les applicatifs participant au fonctionnement du service ainsi que sur les campagnes de compromission connues (ou campagnes d'attaques informatiques), notamment les alertes de sécurité du CERT-FR.</p>" +
         "<p>Cette mesure permet d'identifier des vulnérabilités ou risques nouveaux pour le service et de mettre en œuvre les mesures de sécurité permettant d'y faire face, par exemple des mises à jour de sécurité.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0057',
     },
 
     exerciceGestionCrise: {
@@ -1024,6 +1081,7 @@ module.exports = {
         "<p>Organiser un exercice simulant une crise consécutive à un ou plusieurs incidents de sécurité aux conséquences particulièrement graves pour l'organisation.</p>" +
         "<p>Cette mesure permet d'entraîner les équipes, d'identifier freins à la gestion efficace d'une crise et de les corriger en vue de se préparer à la survenue d'une crise réelle.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0058',
     },
     garantieHauteDisponibilite: {
       description:
@@ -1033,6 +1091,7 @@ module.exports = {
         "<p>Recourir à une ou plusieurs solutions garantissant un haut niveau de disponibilité, en particulier dans le cadre de l'hébergement du service (ex. obligation de redondance de la machine virtuelle et des données).</p>" +
         "<p>Cette mesure permet d'éviter une interruption du service dépassant quelques minutes.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0059',
     },
     sauvegardeDonnees: {
       description:
@@ -1042,6 +1101,7 @@ module.exports = {
         "<p>Sauvegarder les données traitées par le service, au moins une fois par semaine, dans un environnement sécurisé, déconnecté de ce dernier (ex. dans une autre machine virtuelle chiffrée, sur un ordinateur ou un serveur local déconnecté d'internet).</p>" +
         "<p>Cette mesure permet une restauration rapide des données, à partir de la dernière sauvegarde des données effectuée, en cas d'incident de sécurité qui conduirait à leur suppression ou les rendrait inaccessibles, par exemple, en cas d'attaque par rançongiciel.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0060',
     },
     sauvegardeMachineVirtuelle: {
       description:
@@ -1052,6 +1112,7 @@ module.exports = {
         '<p>Sauvegarder en continu la machine virtuelle sur laquelle est déployée le service.</p>' +
         "<p>Cette mesure permet la restauration rapide du service, à partir de la dernière sauvegarde de la machine virtuelle effectuée, en cas d'incident de sécurité qui conduirait à leur suppression et ou les rendrait inaccessible.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0061',
     },
     testsSauvegardes: {
       description: 'Vérifier régulièrement les sauvegardes',
@@ -1061,6 +1122,7 @@ module.exports = {
         '<p>Réaliser des tests réguliers des sauvegardes (ex. tous les trois mois) afin de vérifier que celles-ci sont bien réalisées, accessibles et fonctionnelles.</p>' +
         "<p>Cette mesure permet de vérifier que les sauvegardes effectuées peuvent être utilisées pour restaurer le service et/ou ses données en cas d'incident de sécurité.</p>",
       referentiel: 'ANSSI',
+      identifiantNumerique: '0062',
     },
   },
 
