@@ -164,7 +164,7 @@
       placeholder="Rechercher par intitulé, description, ID"
     />
   </div>
-  <MenuFiltres {categories} {statuts} />
+  <MenuFiltres {categories} />
 </div>
 <table class="tableau-des-mesures">
   <colgroup>

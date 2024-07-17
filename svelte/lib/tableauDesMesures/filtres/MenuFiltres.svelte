@@ -1,22 +1,19 @@
 <script lang="ts">
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
-  import type { IdCategorie, IdStatut } from '../tableauDesMesures.d';
+  import type { IdCategorie } from '../tableauDesMesures.d';
   import {
     IdReferentiel,
     nombreResultats,
     rechercheCategorie,
     rechercheReferentiel,
-    rechercheStatut,
   } from '../tableauDesMesures.store';
   import NombreResultatsFiltres from './NombreResultatsFiltres.svelte';
   import IconeFiltre from './IconeFiltre.svelte';
 
   export let categories: Record<IdCategorie, string>;
-  export let statuts: Record<IdStatut, string>;
 
   const effaceFiltres = () => {
     rechercheCategorie.set([]);
-    rechercheStatut.set([]);
     rechercheReferentiel.set([]);
   };
 
@@ -68,21 +65,6 @@
             value={id}
           />
           <label for={id}>{categorie}</label>
-        </div>
-      {/each}
-    </fieldset>
-    <fieldset>
-      <legend>Statut</legend>
-      {#each Object.entries( { ...statuts, nonRenseignee: 'Non renseignée' } ) as [id, statut]}
-        <div>
-          <input
-            type="checkbox"
-            {id}
-            name={id}
-            bind:group={$rechercheStatut}
-            value={id}
-          />
-          <label for={id}>{statut}</label>
         </div>
       {/each}
     </fieldset>
