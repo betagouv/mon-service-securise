@@ -123,7 +123,8 @@ export const predicats = derived<
           contientEnMinuscule(
             (mesure as MesureGenerale).descriptionLongue,
             $rechercheTextuelle
-          ),
+          ) ||
+          contientEnMinuscule(mesure.identifiantNumerique, $rechercheTextuelle),
         [IdFiltre.rechercheCategorie]: (
           mesure: MesureSpecifique | MesureGenerale
         ) => $rechercheCategorie.includes(mesure.categorie),
