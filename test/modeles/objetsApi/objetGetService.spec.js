@@ -8,8 +8,6 @@ const {
 const {
   Rubriques: { HOMOLOGUER },
   Permissions: { LECTURE },
-  Rubriques,
-  Permissions,
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const { unService } = require('../../constructeurs/constructeurService');
 const {
@@ -101,14 +99,7 @@ describe("L'objet d'API de `GET /service`", () => {
       estProprietaire: false,
       documentsPdfDisponibles: [],
       permissions: { gestionContributeurs: false },
-      suggestionActionPrioritaire: {
-        nature: 'siret-a-renseigner',
-        lien: '/service',
-        permissionRequise: {
-          rubrique: Rubriques.DECRIRE,
-          niveau: Permissions.ECRITURE,
-        },
-      },
+      aUneSuggestionAction: true,
     });
   });
 

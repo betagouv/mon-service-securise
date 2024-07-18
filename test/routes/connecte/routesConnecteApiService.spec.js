@@ -1579,6 +1579,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         estProprietaire: false,
         documentsPdfDisponibles: [],
         permissions: { gestionContributeurs: false },
+        aUneSuggestionAction: false,
       });
     });
   });
