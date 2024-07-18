@@ -21,6 +21,8 @@
     mesuresFiltrees,
     nombreResultats,
     rechercheTextuelle,
+    rechercheCategorie,
+    rechercheReferentiel,
   } from './tableauDesMesures.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
@@ -147,6 +149,12 @@
   const calculNbPourOnglet = (mesuresParOnglet: mesuresToutType) =>
     Object.keys(mesuresParOnglet.mesuresGenerales).length +
     mesuresParOnglet.mesuresSpecifiques.length;
+
+  const supprimeRechercheEtFiltres = () => {
+    $rechercheTextuelle = '';
+    $rechercheCategorie = [];
+    $rechercheReferentiel = [];
+  };
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
@@ -231,11 +239,25 @@
   </thead>
   <tbody>
     {#if !calculNbPourOnglet(mesuresParOnglet[ongletActif])}
-      <tr class="ligne-aucun-resultat">
-        <td colspan="2" class="aucun-resultat"
-          >Aucune mesure ne correspond à la recherche.</td
-        >
-      </tr>
+      {#if $nombreResultats.aDesFiltresAppliques || $rechercheTextuelle}
+        <tr class="ligne-aucun-resultat">
+          <td colspan="2">
+            <div class="aucun-resultat">
+              <img
+                src="/statique/assets/images/illustration_recherche_vide.svg"
+                alt=""
+              />
+              Aucune mesure ne correspond à la recherche.
+              <button
+                class="bouton bouton-secondaire"
+                on:click={supprimeRechercheEtFiltres}
+              >
+                Effacer la recherche
+              </button>
+            </div>
+          </td>
+        </tr>
+      {/if}
     {:else}
       {#each Object.entries(mesuresParOnglet[ongletActif].mesuresGenerales) as [id, mesure] (id)}
         <LigneMesure
@@ -365,7 +387,20 @@
   }
 
   .aucun-resultat {
-    padding: 24px 32px;
+    padding: 64px 0;
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .aucun-resultat img {
+    max-width: 128px;
+  }
+
+  .aucun-resultat button {
+    margin: 0;
+    padding: 8px 16px;
   }
 
   .tableau-des-mesures {
