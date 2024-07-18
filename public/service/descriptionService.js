@@ -29,10 +29,10 @@ const brancheComportementMessageErreur = () => {
 
 const brancheComportementNombreOrganisationsUtilisatrices = () => {
   const $selection = $('#nombre-organisations-utilisatrices');
-  const $conteneur = $('.conteneur-nombre-organisations-utilisatrices');
   $selection.on('change', () => {
-    const nouvelleValeur = $selection.val();
-    $conteneur.toggleClass('vide', nouvelleValeur === '0-0');
+    $(
+      '.banniere-avertissement.miseAJourNombreOrganisationsUtilisatrices'
+    ).addClass('invisible');
   });
 };
 
