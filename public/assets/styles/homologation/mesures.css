@@ -88,3 +88,14 @@
 .texte-tiroir {
   display: none;
 }
+
+#contenu-mesure {
+  display: flex;
+  flex-grow: 1;
+}
+
+#conteneur-mesure {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}

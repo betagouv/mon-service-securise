@@ -54,7 +54,7 @@
 {#if $store.etape === 'SuppressionSpecifique'}
   <SuppressionMesureSpecifique {idService} {mesuresExistantes} />
 {:else}
-  <Formulaire on:formulaireValide={enregistreMesure}>
+  <Formulaire on:formulaireValide={enregistreMesure} id="formulaire-mesure">
     {#if $configurationAffichage.doitAfficherIntitule}
       <label for="intitule" class="requis">
         Intitulé
@@ -147,22 +147,21 @@
           {/if}
         </div>
       {/if}
-
-      <div class="conteneur-actions">
-        {#if $configurationAffichage.doitAfficherSuppression}
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <p on:click={store.afficheEtapeSuppression}>Supprimer la mesure</p>
-        {/if}
-        <button
-          type="submit"
-          class="bouton"
-          class:en-cours-chargement={enCoursEnvoi}
-          disabled={enCoursEnvoi}
-          >Enregistrer
-        </button>
-      </div>
     {/if}
   </Formulaire>
+  <div class="conteneur-actions">
+    {#if $configurationAffichage.doitAfficherSuppression}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <p on:click={store.afficheEtapeSuppression}>Supprimer la mesure</p>
+    {/if}
+    <button
+      type="submit"
+      class="bouton"
+      class:en-cours-chargement={enCoursEnvoi}
+      disabled={enCoursEnvoi}
+      >Enregistrer
+    </button>
+  </div>
 {/if}
 
 <style>
@@ -205,6 +204,8 @@
     border-top: 1px solid #cbd5e1;
     padding: 1em 0;
     background: white;
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 
   .conteneur-actions button[type='submit'] {
@@ -297,5 +298,9 @@
 
   .mention-requis .asterisque {
     color: var(--rose-anssi);
+  }
+
+  :global(#formulaire-mesure) {
+    flex-grow: 1;
   }
 </style>
