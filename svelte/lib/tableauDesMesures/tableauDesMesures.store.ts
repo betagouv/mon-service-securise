@@ -160,23 +160,37 @@ type NombreResultats = {
   aDesFiltresAppliques: boolean;
 };
 export const nombreResultats = derived<
-  [typeof mesures, typeof mesuresFiltrees],
+  [
+    typeof mesures,
+    typeof mesuresFiltrees,
+    typeof rechercheReferentiel,
+    typeof rechercheCategorie,
+  ],
   NombreResultats
->([mesures, mesuresFiltrees], ([$mesures, $mesuresFiltrees]) => {
-  const nbMesuresGenerales = Object.keys($mesures.mesuresGenerales).length;
-  const nbMesuresSpecifiques = $mesures.mesuresSpecifiques.length;
-  const nbMesuresTotal = nbMesuresGenerales + nbMesuresSpecifiques;
-  const nbMesuresGeneralesFiltrees = Object.keys(
-    $mesuresFiltrees.mesuresGenerales
-  ).length;
-  const nbMesuresSpecifiquesFiltrees =
-    $mesuresFiltrees.mesuresSpecifiques.length;
-  const nbMesuresFiltreesTotal =
-    nbMesuresGeneralesFiltrees + nbMesuresSpecifiquesFiltrees;
-  return {
-    total: nbMesuresGenerales + nbMesuresSpecifiques,
-    filtrees: nbMesuresFiltreesTotal,
-    aucunResultat: nbMesuresFiltreesTotal === 0,
-    aDesFiltresAppliques: nbMesuresTotal !== nbMesuresFiltreesTotal,
-  };
-});
+>(
+  [mesures, mesuresFiltrees, rechercheReferentiel, rechercheCategorie],
+  ([
+    $mesures,
+    $mesuresFiltrees,
+    $rechercheReferentiel,
+    $rechercheCategorie,
+  ]) => {
+    const nbMesuresGenerales = Object.keys($mesures.mesuresGenerales).length;
+    const nbMesuresSpecifiques = $mesures.mesuresSpecifiques.length;
+    const nbMesuresTotal = nbMesuresGenerales + nbMesuresSpecifiques;
+    const nbMesuresGeneralesFiltrees = Object.keys(
+      $mesuresFiltrees.mesuresGenerales
+    ).length;
+    const nbMesuresSpecifiquesFiltrees =
+      $mesuresFiltrees.mesuresSpecifiques.length;
+    const nbMesuresFiltreesTotal =
+      nbMesuresGeneralesFiltrees + nbMesuresSpecifiquesFiltrees;
+    return {
+      total: nbMesuresTotal,
+      filtrees: nbMesuresFiltreesTotal,
+      aucunResultat: nbMesuresFiltreesTotal === 0,
+      aDesFiltresAppliques:
+        $rechercheReferentiel.length > 0 || $rechercheCategorie.length > 0,
+    };
+  }
+);
