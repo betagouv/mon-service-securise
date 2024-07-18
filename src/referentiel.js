@@ -27,6 +27,7 @@ const donneesReferentielVide = {
   nombreOrganisationsUtilisatrices: [],
   estimationNombreServices: [],
   etapesVisiteGuidee: [],
+  naturesSuggestionsActions: {},
 };
 
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
@@ -288,8 +289,17 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     Object.keys(donnees.etapesVisiteGuidee || {}).length;
   const natureTachesService = (nature) =>
     (donnees.naturesTachesService || {})[nature];
-  const natureSuggestionAction = (nature) =>
-    (donnees.naturesSuggestionsActions || {})[nature];
+  const natureSuggestionAction = (nature) => {
+    const natures = donnees.naturesSuggestionsActions;
+
+    if (!Object.keys(natures).includes(nature)) {
+      throw new ErreurDonneesReferentielIncorrectes(
+        `La nature ${nature} n'est pas une nature de suggestion d'action connue.`
+      );
+    }
+
+    return natures[nature];
+  };
 
   valideDonnees();
 

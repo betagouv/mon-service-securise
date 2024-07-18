@@ -1000,4 +1000,17 @@ describe('Le référentiel', () => {
     expect(referentiel.etapeVisiteGuideeExiste('DECRIRE')).to.be(true);
     expect(referentiel.etapeVisiteGuideeExiste('MAUVAIS_ID')).to.be(false);
   });
+
+  it("lève une exception lorsqu'on lui demande une nature de suggestion d'action inconnue", () => {
+    const sansNature = Referentiel.creeReferentielVide();
+
+    expect(() =>
+      sansNature.natureSuggestionAction('INCONNUE')
+    ).to.throwException((e) => {
+      expect(e).to.be.an(ErreurDonneesReferentielIncorrectes);
+      expect(e.message).to.equal(
+        "La nature INCONNUE n'est pas une nature de suggestion d'action connue."
+      );
+    });
+  });
 });
