@@ -82,11 +82,7 @@ mixin formulaireDescriptionService(idHomologation)
                   strong Information à mettre à jour
                   p Vous pouvez directement rechercher le nom ou le numéro de SIRET de votre organisation.
 
-
-        - const { borneBasse, borneHaute } = service.descriptionService.nombreOrganisationsUtilisatrices
-        - const valeurService = `${borneBasse}-${borneHaute}`
-        - const valeurVide = '0-0'
-        .conteneur-nombre-organisations-utilisatrices(class = `${valeurService === valeurVide && !estLectureSeule && !estEnCreation ? 'vide' : ''}`)
+        .conteneur-nombre-organisations-utilisatrices
           .requis
             label À combien d'organisations publiques est destiné le service ?
               p.description Si le service est mutualisé au profit de plusieurs organisations publiques, merci de préciser combien en bénéficieront.
@@ -102,6 +98,13 @@ mixin formulaireDescriptionService(idHomologation)
                   - const valeurOption = `${tranche.borneBasse}-${tranche.borneHaute}`
                   option(value=valeurOption label=tranche.label selected=(valeurService===valeurOption))
               .message-erreur Ce champ est obligatoire. Veuillez sélectionner une option.
+          - const afficheSuggestion = service.pourraitFaire('miseAJourNombreOrganisationsUtilisatrices') && !estLectureSeule
+          if afficheSuggestion
+              .banniere.banniere-avertissement
+                img(src='/statique/assets/images/icone_danger.svg' alt='')
+                .contenu-texte-avertissement
+                  strong Information à mettre à jour
+                  p Vous pouvez renseigner le nombre d'organisations publiques qui bénéficieront du service.
 
         .requis
           +inputChoix({
