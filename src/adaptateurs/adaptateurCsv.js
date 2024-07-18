@@ -50,6 +50,7 @@ const genereCsvMesures = async (
 ) => {
   // Les `id` correspondent aux noms des propriétés dans notre modèle Mesure
   const colonnes = [
+    { id: 'identifiant', title: 'Identifiant de la mesure' },
     { id: 'description', title: 'Nom de la mesure' },
     { id: 'referentiel', title: 'Référentiel' },
     { id: 'type', title: 'Type' },
@@ -65,6 +66,7 @@ const genereCsvMesures = async (
   const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
   const donneesCsv = Object.values(mesuresGenerales)
     .map((m) => ({
+      identifiant: `#${m.identifiantNumerique}`,
       description: m.description,
       referentiel: m.referentiel,
       type: m.indispensable ? 'Indispensable' : 'Recommandée',
@@ -75,6 +77,7 @@ const genereCsvMesures = async (
     }))
     .concat(
       mesuresSpecifiques.map((m) => ({
+        identifiant: 'N/A',
         description: decode(m.description),
         referentiel: 'Mesures ajoutées',
         type: '',
