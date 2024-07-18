@@ -68,12 +68,15 @@
   padding: 2em 2em;
   display: flex;
   flex-grow: 1;
-  justify-content: center;
 }
 
 .contenu-tiroir .bouton {
   padding: 0.5em 1em;
   margin: 0;
+}
+
+#contenu-duplication {
+  flex-grow: 1;
 }
 
 #contenu-duplication p {
@@ -138,8 +141,16 @@
   width: 8em;
 }
 
+#contenu-suppression .conteneur-actions {
+  margin-top: 16px;
+}
+
 #contenu-contributeurs input {
   width: 31em;
+}
+
+#contenu-contributeurs {
+  width: 100%;
 }
 
 #contenu-contributeurs form label {
