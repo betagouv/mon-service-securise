@@ -26,6 +26,7 @@ export type MesureGenerale = {
   statut?: string;
   modalites?: string;
   referentiel: Referentiel;
+  identifiantNumerique: string;
 };
 
 export type MesureSpecifique = {
@@ -33,6 +34,7 @@ export type MesureSpecifique = {
   description: string;
   statut: string;
   modalites: string;
+  identifiantNumerique: string;
 };
 
 export type IdMesureGenerale = string;

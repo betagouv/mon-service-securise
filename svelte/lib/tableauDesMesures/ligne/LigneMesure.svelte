@@ -9,6 +9,7 @@
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import { rechercheTextuelle } from '../tableauDesMesures.store';
+  import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
 
   type IdDom = string;
 
@@ -42,6 +43,7 @@
       {#if referentiel !== Referentiel.SPECIFIQUE}
         <CartoucheIndispensable {indispensable} />
       {/if}
+      <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
     </div>
   </td>
   <td>
@@ -108,6 +110,7 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
+    align-items: center;
   }
 
   :global(mark) {
