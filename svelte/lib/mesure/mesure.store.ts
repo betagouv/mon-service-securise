@@ -63,6 +63,10 @@ export const configurationAffichage = derived(store, ($store) => {
       referentiel === Referentiel.SPECIFIQUE
         ? false
         : ($store.mesureEditee.mesure as MesureGeneraleEnrichie).indispensable,
+    identifiantNumerique:
+      $store.etape === 'EditionGenerale'
+        ? $store.mesureEditee.mesure.identifiantNumerique
+        : '',
     doitAfficherIntitule:
       $store.etape === 'Creation' || $store.etape === 'EditionSpecifique',
     doitAfficherChoixCategorie:
