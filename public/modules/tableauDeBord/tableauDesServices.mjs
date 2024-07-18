@@ -259,8 +259,7 @@ const tableauDesServices = {
                               </div>
                               ${
                                 service.statutSaisieDescription ===
-                                  'aCompleter' ||
-                                service.suggestionActionPrioritaire
+                                  'aCompleter' || service.aUneSuggestionAction
                                   ? `<div class="avertissement-completion">
                                    <img src="/statique/assets/images/icone_danger_bleu.svg" alt="" />
                                      Informations à mettre à jour
