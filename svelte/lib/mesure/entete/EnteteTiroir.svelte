@@ -3,8 +3,10 @@
   import { configurationAffichage } from '../mesure.store';
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
+  import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
 
-  const { referentiel, indispensable } = $configurationAffichage;
+  const { referentiel, indispensable, identifiantNumerique } =
+    $configurationAffichage;
 </script>
 
 <div class="conteneur">
@@ -12,6 +14,7 @@
   {#if referentiel !== Referentiel.SPECIFIQUE}
     <CartoucheIndispensable indispensable={indispensable ?? false} />
   {/if}
+  <CartoucheIdentifiantMesure identifiant={identifiantNumerique} />
 </div>
 
 <style>
@@ -20,6 +23,7 @@
     margin-top: 1em;
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 8px;
   }
 </style>
