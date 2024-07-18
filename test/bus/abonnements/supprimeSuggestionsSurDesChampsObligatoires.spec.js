@@ -1,11 +1,11 @@
 const expect = require('expect.js');
 const {
-  supprimeSuggestionSiret,
-} = require('../../../src/bus/abonnements/supprimeSuggestionSiret');
+  supprimeSuggestionsSurDesChampsObligatoires,
+} = require('../../../src/bus/abonnements/supprimeSuggestionsSurDesChampsObligatoires');
 const { unService } = require('../../constructeurs/constructeurService');
 
-describe('L’abonnement qui supprime la suggestion de mise à jour du SIRET', () => {
-  it('utilise le dépôt pour supprimer la suggestion', async () => {
+describe('L’abonnement qui supprime les suggestions portant sur des données obligatoires', () => {
+  it('utilise le dépôt pour supprimer la suggestion de mise à jour du SIRET', async () => {
     let suggestionSupprimee;
     const depotDonnees = {
       acquitteSuggestionAction: (idService, nature) => {
@@ -13,7 +13,9 @@ describe('L’abonnement qui supprime la suggestion de mise à jour du SIRET', (
       },
     };
 
-    const abonne = supprimeSuggestionSiret({ depotDonnees });
+    const abonne = supprimeSuggestionsSurDesChampsObligatoires({
+      depotDonnees,
+    });
 
     expect(abonne).to.be.an('function');
     await abonne({

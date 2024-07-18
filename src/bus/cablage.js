@@ -69,8 +69,8 @@ const {
   metAJourContactBrevoDeLUtilisateur,
 } = require('./abonnements/metAJourContactBrevoDeLUtilisateur');
 const {
-  supprimeSuggestionSiret,
-} = require('./abonnements/supprimeSuggestionSiret');
+  supprimeSuggestionsSurDesChampsObligatoires,
+} = require('./abonnements/supprimeSuggestionsSurDesChampsObligatoires');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -113,7 +113,7 @@ const cableTousLesAbonnes = (
   ]);
 
   busEvenements.abonnePlusieurs(EvenementDescriptionServiceModifiee, [
-    supprimeSuggestionSiret({ depotDonnees }),
+    supprimeSuggestionsSurDesChampsObligatoires({ depotDonnees }),
     consigneCompletudeDansJournal({
       adaptateurJournal,
       adaptateurRechercheEntreprise,
