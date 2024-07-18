@@ -71,7 +71,6 @@ describe("L'objet d'API de `GET /service`", () => {
       id: '123',
       nomService: 'Un service',
       organisationResponsable: 'Une organisation',
-      statutSaisieDescription: 'aCompleter',
       contributeurs: [
         {
           id: 'A',

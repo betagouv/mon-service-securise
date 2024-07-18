@@ -35,7 +35,6 @@ const donneesVisiteGuidee = {
       id: 'ID-SERVICE-VISITE-GUIDEE',
       nomService: 'MonServiceSécurisé',
       organisationResponsable: 'ANSSI',
-      statutSaisieDescription: 'completes',
       contributeurs: [],
       statutHomologation: {
         id: 'activee',
@@ -258,8 +257,7 @@ const tableauDesServices = {
                                 ${service.organisationResponsable}
                               </div>
                               ${
-                                service.statutSaisieDescription ===
-                                  'aCompleter' || service.aUneSuggestionAction
+                                service.aUneSuggestionAction
                                   ? `<div class="avertissement-completion">
                                    <img src="/statique/assets/images/icone_danger_bleu.svg" alt="" />
                                      Informations à mettre à jour
