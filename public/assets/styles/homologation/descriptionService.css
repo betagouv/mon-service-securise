@@ -33,27 +33,6 @@
   width: 288px;
 }
 
-.conteneur-nombre-organisations-utilisatrices {
-  position: relative;
-}
-
-.conteneur-nombre-organisations-utilisatrices.vide
-  #nombre-organisations-utilisatrices {
-  color: #667892;
-}
-
-.conteneur-nombre-organisations-utilisatrices.vide::before {
-  content: '';
-  display: block;
-  position: absolute;
-  top: -16px;
-  left: -32px;
-  width: calc(100% + 48px);
-  height: calc(100% + 32px);
-  background: #ffdfdf;
-  border-radius: 8px;
-}
-
 .banniere {
   margin-top: -2em;
   margin-bottom: 2em;

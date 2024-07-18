@@ -87,6 +87,10 @@ module.exports = {
       lien: '/descriptionService',
       permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
     },
+    miseAJourNombreOrganisationsUtilisatrices: {
+      lien: '/descriptionService',
+      permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
+    },
   },
 
   nombreOrganisationsUtilisatrices: [
