@@ -1,14 +1,14 @@
 <script lang="ts">
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { IdCategorie } from '../tableauDesMesures.d';
-  import { nombreResultats } from '../storesDeRecherche/nombreDeResultats.store';
+  import { nombreResultats } from '../stores/nombreDeResultats.store';
   import NombreResultatsFiltres from './NombreResultatsFiltres.svelte';
   import IconeFiltre from './IconeFiltre.svelte';
   import {
     IdReferentiel,
     rechercheParReferentiel,
-  } from '../storesDeRecherche/rechercheParReferentiel.store';
-  import { rechercheParCategorie } from '../storesDeRecherche/rechercheParCategorie.store';
+  } from '../stores/rechercheParReferentiel.store';
+  import { rechercheParCategorie } from '../stores/rechercheParCategorie.store';
 
   export let categories: Record<IdCategorie, string>;
 

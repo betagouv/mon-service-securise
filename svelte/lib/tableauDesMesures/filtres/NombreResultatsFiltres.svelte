@@ -1,5 +1,5 @@
 <script>
-  import { nombreResultats } from '../storesDeRecherche/nombreDeResultats.store';
+  import { nombreResultats } from '../stores/nombreDeResultats.store';
 </script>
 
 <p

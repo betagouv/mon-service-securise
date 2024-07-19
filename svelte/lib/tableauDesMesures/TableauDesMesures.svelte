@@ -16,17 +16,17 @@
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
   import { Referentiel } from '../ui/types.d';
-  import { nombreResultats } from './storesDeRecherche/nombreDeResultats.store';
+  import { nombreResultats } from './stores/nombreDeResultats.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
   import Onglet from '../ui/Onglet.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
-  import { rechercheParReferentiel } from './storesDeRecherche/rechercheParReferentiel.store';
-  import { rechercheTextuelle } from './storesDeRecherche/rechercheTextuelle.store';
-  import { rechercheParCategorie } from './storesDeRecherche/rechercheParCategorie.store';
-  import { resultatsDeRecherche } from './storesDeRecherche/resultatsDeRecherche';
-  import { mesures } from './mesures.store';
+  import { rechercheParReferentiel } from './stores/rechercheParReferentiel.store';
+  import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
+  import { rechercheParCategorie } from './stores/rechercheParCategorie.store';
+  import { resultatsDeRecherche } from './stores/resultatsDeRecherche';
+  import { mesures } from './stores/mesures.store';
 
   enum EtatEnregistrement {
     Jamais,
