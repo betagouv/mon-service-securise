@@ -91,16 +91,20 @@ export const mesuresFiltrees = derived<
   Mesures
 >([mesures, predicats], ([$mesures, $predicats]) => ({
   mesuresGenerales: Object.entries($mesures.mesuresGenerales)
-    .filter(([_, m]) =>
+    .filter(([_, mesure]) =>
       $predicats.actifs
         .map((idPredicat: IdFiltre) => $predicats.filtres[idPredicat])
-        .every((p: Filtre) => p(m))
+        .every((predicat: Filtre) => predicat(mesure))
     )
-    .reduce((record, [cle, valeur]) => ({ ...record, [cle]: valeur }), {}),
-  mesuresSpecifiques: $mesures.mesuresSpecifiques.filter((m) =>
+    .reduce(
+      (record, [idMesure, mesure]) => ({ ...record, [idMesure]: mesure }),
+      {}
+    ),
+
+  mesuresSpecifiques: $mesures.mesuresSpecifiques.filter((mesure) =>
     $predicats.actifs
       .map((idPredicat: IdFiltre) => $predicats.filtres[idPredicat])
-      .every((p: Filtre) => p(m))
+      .every((predicat: Filtre) => predicat(mesure))
   ),
 }));
 
