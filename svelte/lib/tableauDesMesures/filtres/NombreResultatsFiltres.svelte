@@ -1,5 +1,5 @@
 <script>
-  import { nombreResultats } from '../tableauDesMesures.store';
+  import { nombreResultats } from '../storesDeRecherche/nombreDeResultats.store';
 </script>
 
 <p

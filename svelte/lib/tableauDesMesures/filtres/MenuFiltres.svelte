@@ -1,7 +1,7 @@
 <script lang="ts">
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { IdCategorie } from '../tableauDesMesures.d';
-  import { nombreResultats } from '../tableauDesMesures.store';
+  import { nombreResultats } from '../storesDeRecherche/nombreDeResultats.store';
   import NombreResultatsFiltres from './NombreResultatsFiltres.svelte';
   import IconeFiltre from './IconeFiltre.svelte';
   import {

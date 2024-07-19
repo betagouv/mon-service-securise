@@ -1,8 +1,8 @@
 import { derived } from 'svelte/store';
-import { rechercheParReferentiel } from './storesDeRecherche/rechercheParReferentiel.store';
-import { rechercheParCategorie } from './storesDeRecherche/rechercheParCategorie.store';
-import { resultatsDeRecherche } from './storesDeRecherche/resultatsDeRecherche';
-import { mesures } from './mesures.store';
+import { rechercheParReferentiel } from './rechercheParReferentiel.store';
+import { rechercheParCategorie } from './rechercheParCategorie.store';
+import { resultatsDeRecherche } from './resultatsDeRecherche';
+import { mesures } from '../mesures.store';
 
 type NombreResultats = {
   total: number;
