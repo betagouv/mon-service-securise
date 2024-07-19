@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { MesureGenerale, MesureSpecifique } from '../tableauDesMesures.d';
-import { Referentiel } from '../../ui/types';
+import { Referentiel } from '../../ui/types.d';
 
 export enum IdReferentiel {
   ANSSIRecommandee,
