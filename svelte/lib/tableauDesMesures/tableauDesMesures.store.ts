@@ -1,12 +1,16 @@
 import { derived, writable } from 'svelte/store';
 import type {
-  IdCategorie,
-  IdStatut,
   MesureGenerale,
   Mesures,
   MesureSpecifique,
 } from './tableauDesMesures.d';
 import { Referentiel } from '../ui/types.d';
+import {
+  IdReferentiel,
+  rechercheParReferentiel,
+} from './storesDeRecherche/rechercheParReferentiel.store';
+import { rechercheTextuelle } from './storesDeRecherche/rechercheTextuelle.store';
+import { rechercheParCategorie } from './storesDeRecherche/rechercheParCategorie.store';
 
 const mesuresParDefaut = (): Mesures => ({
   mesuresGenerales: {},
@@ -31,40 +35,6 @@ export const mesures = {
     }),
 };
 
-export const rechercheTextuelle = writable<string>('');
-export const rechercheCategorie = writable<IdCategorie[]>([]);
-export enum IdReferentiel {
-  ANSSIRecommandee,
-  ANSSIIndispensable,
-  CNIL,
-  MesureAjoutee,
-}
-const {
-  subscribe: subscribeReferentiel,
-  set: setReferentiel,
-  update: updateReferentiel,
-} = writable<IdReferentiel[]>([]);
-export const rechercheReferentiel = {
-  subscribe: subscribeReferentiel,
-  set: setReferentiel,
-  ajouteLesReferentielsANSSI: () =>
-    updateReferentiel((etatActuel) => [
-      ...new Set([
-        ...etatActuel,
-        IdReferentiel.ANSSIRecommandee,
-        IdReferentiel.ANSSIIndispensable,
-      ]),
-    ]),
-  supprimeLesReferentielsANSSI: () =>
-    updateReferentiel((etatActuel) =>
-      etatActuel.filter(
-        (f) =>
-          f !== IdReferentiel.ANSSIIndispensable &&
-          f !== IdReferentiel.ANSSIRecommandee
-      )
-    ),
-};
-
 const contientEnMinuscule = (champ: string | undefined, recherche: string) =>
   champ ? champ.toLowerCase().includes(recherche.toLowerCase()) : false;
 const estMesureGenerale = (
@@ -85,12 +55,12 @@ type Predicats = { actifs: IdFiltre[]; filtres: FiltresPredicats };
 export const predicats = derived<
   [
     typeof rechercheTextuelle,
-    typeof rechercheCategorie,
-    typeof rechercheReferentiel,
+    typeof rechercheParCategorie,
+    typeof rechercheParReferentiel,
   ],
   Predicats
 >(
-  [rechercheTextuelle, rechercheCategorie, rechercheReferentiel],
+  [rechercheTextuelle, rechercheParCategorie, rechercheParReferentiel],
   ([$rechercheTextuelle, $rechercheCategorie, $rechercheReferentiel]) => {
     const actifs = [];
     if ($rechercheTextuelle) actifs.push(IdFiltre.rechercheTextuelle);
@@ -163,12 +133,12 @@ export const nombreResultats = derived<
   [
     typeof mesures,
     typeof mesuresFiltrees,
-    typeof rechercheReferentiel,
-    typeof rechercheCategorie,
+    typeof rechercheParReferentiel,
+    typeof rechercheParCategorie,
   ],
   NombreResultats
 >(
-  [mesures, mesuresFiltrees, rechercheReferentiel, rechercheCategorie],
+  [mesures, mesuresFiltrees, rechercheParReferentiel, rechercheParCategorie],
   ([
     $mesures,
     $mesuresFiltrees,

@@ -1,31 +1,31 @@
 <script lang="ts">
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { IdCategorie } from '../tableauDesMesures.d';
-  import {
-    IdReferentiel,
-    nombreResultats,
-    rechercheCategorie,
-    rechercheReferentiel,
-  } from '../tableauDesMesures.store';
+  import { nombreResultats } from '../tableauDesMesures.store';
   import NombreResultatsFiltres from './NombreResultatsFiltres.svelte';
   import IconeFiltre from './IconeFiltre.svelte';
+  import {
+    IdReferentiel,
+    rechercheParReferentiel,
+  } from '../storesDeRecherche/rechercheParReferentiel.store';
+  import { rechercheParCategorie } from '../storesDeRecherche/rechercheParCategorie.store';
 
   export let categories: Record<IdCategorie, string>;
 
   const effaceFiltres = () => {
-    rechercheCategorie.set([]);
-    rechercheReferentiel.set([]);
+    rechercheParCategorie.set([]);
+    rechercheParReferentiel.set([]);
   };
 
   $: cocheGlobaleANSSI =
-    $rechercheReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
-    $rechercheReferentiel.includes(IdReferentiel.ANSSIIndispensable);
+    $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
+    $rechercheParReferentiel.includes(IdReferentiel.ANSSIIndispensable);
   let selectionPartielleANSSI: boolean;
   $: {
-    const estRecommandee = $rechercheReferentiel.includes(
+    const estRecommandee = $rechercheParReferentiel.includes(
       IdReferentiel.ANSSIRecommandee
     );
-    const estIndispensable = $rechercheReferentiel.includes(
+    const estIndispensable = $rechercheParReferentiel.includes(
       IdReferentiel.ANSSIIndispensable
     );
     selectionPartielleANSSI = estRecommandee
@@ -34,8 +34,8 @@
   }
   const gereCocheANSSI = () => {
     const devientCochee = !cocheGlobaleANSSI;
-    if (devientCochee) rechercheReferentiel.ajouteLesReferentielsANSSI();
-    else rechercheReferentiel.supprimeLesReferentielsANSSI();
+    if (devientCochee) rechercheParReferentiel.ajouteLesReferentielsANSSI();
+    else rechercheParReferentiel.supprimeLesReferentielsANSSI();
   };
 </script>
 
@@ -61,7 +61,7 @@
             type="checkbox"
             {id}
             name={id}
-            bind:group={$rechercheCategorie}
+            bind:group={$rechercheParCategorie}
             value={id}
           />
           <label for={id}>{categorie}</label>
@@ -86,7 +86,7 @@
           type="checkbox"
           id="anssi-indispensable"
           name="anssi-indispensable"
-          bind:group={$rechercheReferentiel}
+          bind:group={$rechercheParReferentiel}
           value={IdReferentiel.ANSSIIndispensable}
           class="decalage-checkbox"
         />
@@ -97,7 +97,7 @@
           type="checkbox"
           id="anssi-recommandee"
           name="anssi-recommandee"
-          bind:group={$rechercheReferentiel}
+          bind:group={$rechercheParReferentiel}
           value={IdReferentiel.ANSSIRecommandee}
           class="decalage-checkbox"
         />
@@ -108,7 +108,7 @@
           type="checkbox"
           id="mesure-cnil"
           name="mesure-cnil"
-          bind:group={$rechercheReferentiel}
+          bind:group={$rechercheParReferentiel}
           value={IdReferentiel.CNIL}
         />
         <label for="mesure-cnil">CNIL</label>
@@ -118,7 +118,7 @@
           type="checkbox"
           id="mesure-ajoutee"
           name="mesure-ajoutee"
-          bind:group={$rechercheReferentiel}
+          bind:group={$rechercheParReferentiel}
           value={IdReferentiel.MesureAjoutee}
         />
         <label for="mesure-ajoutee">Mesures ajoutées</label>

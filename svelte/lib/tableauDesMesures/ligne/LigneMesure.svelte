@@ -8,8 +8,8 @@
   import { Referentiel, type ReferentielStatut } from '../../ui/types.d';
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
-  import { rechercheTextuelle } from '../tableauDesMesures.store';
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
+  import { rechercheTextuelle } from '../storesDeRecherche/rechercheTextuelle.store';
 
   type IdDom = string;
 
