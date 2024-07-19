@@ -16,11 +16,7 @@
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
   import { Referentiel } from '../ui/types.d';
-  import {
-    mesures,
-    mesuresFiltrees,
-    nombreResultats,
-  } from './tableauDesMesures.store';
+  import { nombreResultats } from './tableauDesMesures.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
   import Onglet from '../ui/Onglet.svelte';
@@ -29,6 +25,8 @@
   import { rechercheParReferentiel } from './storesDeRecherche/rechercheParReferentiel.store';
   import { rechercheTextuelle } from './storesDeRecherche/rechercheTextuelle.store';
   import { rechercheParCategorie } from './storesDeRecherche/rechercheParCategorie.store';
+  import { resultatsDeRecherche } from './storesDeRecherche/resultatsDeRecherche';
+  import { mesures } from './mesures.store';
 
   enum EtatEnregistrement {
     Jamais,
@@ -127,10 +125,10 @@
   const filtreMesures = (
     predicatFiltre: (m: MesureGenerale | MesureSpecifique) => boolean
   ) => ({
-    mesuresGenerales: Object.entries($mesuresFiltrees.mesuresGenerales)
+    mesuresGenerales: Object.entries($resultatsDeRecherche.mesuresGenerales)
       .filter(([_, m]) => predicatFiltre(m))
       .reduce((acc, [cle, donnees]) => ({ ...acc, [cle]: donnees }), {}),
-    mesuresSpecifiques: $mesuresFiltrees.mesuresSpecifiques.filter((m) =>
+    mesuresSpecifiques: $resultatsDeRecherche.mesuresSpecifiques.filter((m) =>
       predicatFiltre(m)
     ),
   });
@@ -143,7 +141,7 @@
       traite: filtreMesures(
         (m) => m.statut === 'fait' || m.statut === 'nonFait'
       ),
-      toutes: $mesuresFiltrees,
+      toutes: $resultatsDeRecherche,
     };
   }
   const calculNbPourOnglet = (mesuresParOnglet: mesuresToutType) =>
