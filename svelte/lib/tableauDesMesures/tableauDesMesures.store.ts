@@ -4,13 +4,18 @@ import type {
   Mesures,
   MesureSpecifique,
 } from './tableauDesMesures.d';
-import { Referentiel } from '../ui/types.d';
 import {
-  IdReferentiel,
+  appliqueRechercheParReferentiel,
   rechercheParReferentiel,
 } from './storesDeRecherche/rechercheParReferentiel.store';
-import { rechercheTextuelle } from './storesDeRecherche/rechercheTextuelle.store';
-import { rechercheParCategorie } from './storesDeRecherche/rechercheParCategorie.store';
+import {
+  appliqueFiltreTextuel,
+  rechercheTextuelle,
+} from './storesDeRecherche/rechercheTextuelle.store';
+import {
+  appliqueFiltreParCategorie,
+  rechercheParCategorie,
+} from './storesDeRecherche/rechercheParCategorie.store';
 
 const mesuresParDefaut = (): Mesures => ({
   mesuresGenerales: {},
@@ -35,18 +40,10 @@ export const mesures = {
     }),
 };
 
-const contientEnMinuscule = (champ: string | undefined, recherche: string) =>
-  champ ? champ.toLowerCase().includes(recherche.toLowerCase()) : false;
-const estMesureGenerale = (
-  mesure: MesureSpecifique | MesureGenerale
-): mesure is MesureGenerale =>
-  //   On utilise ici un typeguard, et on se base sur une propriété qui est uniquement présente dans les mesures générales
-  'descriptionLongue' in mesure && mesure.descriptionLongue !== undefined;
-
 enum IdFiltre {
   rechercheTextuelle,
-  rechercheCategorie,
-  rechercheReferentiel,
+  rechercheParCategorie,
+  rechercheParReferentiel,
 }
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type FiltresPredicats = Record<IdFiltre, Filtre>;
@@ -61,45 +58,29 @@ export const predicats = derived<
   Predicats
 >(
   [rechercheTextuelle, rechercheParCategorie, rechercheParReferentiel],
-  ([$rechercheTextuelle, $rechercheCategorie, $rechercheReferentiel]) => {
+  ([$rechercheTextuelle, $rechercheParCategorie, $rechercheParReferentiel]) => {
     const actifs = [];
+
     if ($rechercheTextuelle) actifs.push(IdFiltre.rechercheTextuelle);
-    if ($rechercheCategorie.length > 0)
-      actifs.push(IdFiltre.rechercheCategorie);
-    if ($rechercheReferentiel.length > 0)
-      actifs.push(IdFiltre.rechercheReferentiel);
+    if ($rechercheParCategorie.length > 0)
+      actifs.push(IdFiltre.rechercheParCategorie);
+    if ($rechercheParReferentiel.length > 0)
+      actifs.push(IdFiltre.rechercheParReferentiel);
 
     return {
       actifs,
       filtres: {
         [IdFiltre.rechercheTextuelle]: (
           mesure: MesureSpecifique | MesureGenerale
-        ) =>
-          contientEnMinuscule(mesure.description, $rechercheTextuelle) ||
-          contientEnMinuscule(
-            (mesure as MesureGenerale).descriptionLongue,
-            $rechercheTextuelle
-          ) ||
-          contientEnMinuscule(mesure.identifiantNumerique, $rechercheTextuelle),
-        [IdFiltre.rechercheCategorie]: (
+        ) => appliqueFiltreTextuel(mesure, $rechercheTextuelle),
+
+        [IdFiltre.rechercheParCategorie]: (
           mesure: MesureSpecifique | MesureGenerale
-        ) => $rechercheCategorie.includes(mesure.categorie),
-        [IdFiltre.rechercheReferentiel]: (
+        ) => appliqueFiltreParCategorie(mesure, $rechercheParCategorie),
+
+        [IdFiltre.rechercheParReferentiel]: (
           mesure: MesureSpecifique | MesureGenerale
-        ) =>
-          ($rechercheReferentiel.includes(IdReferentiel.MesureAjoutee) &&
-            !estMesureGenerale(mesure)) ||
-          ($rechercheReferentiel.includes(IdReferentiel.ANSSIIndispensable) &&
-            estMesureGenerale(mesure) &&
-            mesure.indispensable &&
-            mesure.referentiel === Referentiel.ANSSI) ||
-          ($rechercheReferentiel.includes(IdReferentiel.CNIL) &&
-            estMesureGenerale(mesure) &&
-            mesure.referentiel === Referentiel.CNIL) ||
-          ($rechercheReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
-            estMesureGenerale(mesure) &&
-            !mesure.indispensable &&
-            mesure.referentiel === Referentiel.ANSSI),
+        ) => appliqueRechercheParReferentiel(mesure, $rechercheParReferentiel),
       },
     };
   }
