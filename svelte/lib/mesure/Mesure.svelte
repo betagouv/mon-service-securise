@@ -7,7 +7,7 @@
   import { configurationAffichage, store } from './mesure.store';
   import { enregistreMesures, enregistreRetourUtilisateur } from './mesure.api';
   import SelectionStatut from '../ui/SelectionStatut.svelte';
-  import { rechercheTextuelle } from '../tableauDesMesures/tableauDesMesures.store';
+  import { rechercheTextuelle } from '../tableauDesMesures/storesDeRecherche/rechercheTextuelle.store';
   import { toasterStore } from '../ui/stores/toaster.store';
 
   export let idService: string;

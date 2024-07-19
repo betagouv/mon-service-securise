@@ -20,15 +20,15 @@
     mesures,
     mesuresFiltrees,
     nombreResultats,
-    rechercheTextuelle,
-    rechercheCategorie,
-    rechercheReferentiel,
   } from './tableauDesMesures.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
   import Onglet from '../ui/Onglet.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
+  import { rechercheParReferentiel } from './storesDeRecherche/rechercheParReferentiel.store';
+  import { rechercheTextuelle } from './storesDeRecherche/rechercheTextuelle.store';
+  import { rechercheParCategorie } from './storesDeRecherche/rechercheParCategorie.store';
 
   enum EtatEnregistrement {
     Jamais,
@@ -152,8 +152,8 @@
 
   const supprimeRechercheEtFiltres = () => {
     $rechercheTextuelle = '';
-    $rechercheCategorie = [];
-    $rechercheReferentiel = [];
+    $rechercheParCategorie = [];
+    $rechercheParReferentiel = [];
   };
 </script>
 
