@@ -2,10 +2,7 @@
   import { toasterStore } from './stores/toaster.store';
   import { glisse } from './animations/transitions';
 
-  const icones = {
-    info: 'icone_info',
-    succes: 'icone_succes',
-  };
+  const icones = { info: 'icone_info', succes: 'icone_succes' };
 </script>
 
 <aside>
@@ -17,9 +14,7 @@
       <div class="conteneur-icone">
         <div class="icone">
           <img
-            src={'/statique/assets/images/toasts/' +
-              icones[toast.niveau] +
-              '.svg'}
+            src={`/statique/assets/images/toasts/${icones[toast.niveau]}.svg`}
             alt=""
             width="24"
             height="24"
