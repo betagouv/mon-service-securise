@@ -27,6 +27,7 @@
   import { rechercheParCategorie } from './stores/rechercheParCategorie.store';
   import { resultatsDeRecherche } from './stores/resultatsDeRecherche';
   import { mesures } from './stores/mesures.store';
+  import { rechercheParAvancement } from './stores/rechercheParAvancement.store';
 
   enum EtatEnregistrement {
     Jamais,
@@ -105,49 +106,6 @@
     );
   };
 
-  type TypeOnglet = 'statutADefinir' | 'enAction' | 'traite' | 'toutes';
-  type mesuresToutType = {
-    mesuresGenerales: Record<string, MesureGenerale>;
-    mesuresSpecifiques: MesureSpecifique[];
-  };
-  const mesuresToutTypeParDefaut = {
-    mesuresGenerales: {},
-    mesuresSpecifiques: [],
-  };
-  let ongletActif: TypeOnglet = 'statutADefinir';
-  let mesuresParOnglet: Record<TypeOnglet, mesuresToutType> = {
-    statutADefinir: mesuresToutTypeParDefaut,
-    enAction: mesuresToutTypeParDefaut,
-    traite: mesuresToutTypeParDefaut,
-    toutes: mesuresToutTypeParDefaut,
-  };
-
-  const filtreMesures = (
-    predicatFiltre: (m: MesureGenerale | MesureSpecifique) => boolean
-  ) => ({
-    mesuresGenerales: Object.entries($resultatsDeRecherche.mesuresGenerales)
-      .filter(([_, m]) => predicatFiltre(m))
-      .reduce((acc, [cle, donnees]) => ({ ...acc, [cle]: donnees }), {}),
-    mesuresSpecifiques: $resultatsDeRecherche.mesuresSpecifiques.filter((m) =>
-      predicatFiltre(m)
-    ),
-  });
-  $: {
-    mesuresParOnglet = {
-      statutADefinir: filtreMesures((m) => !m.statut),
-      enAction: filtreMesures(
-        (m) => m.statut === 'aLancer' || m.statut === 'enCours'
-      ),
-      traite: filtreMesures(
-        (m) => m.statut === 'fait' || m.statut === 'nonFait'
-      ),
-      toutes: $resultatsDeRecherche,
-    };
-  }
-  const calculNbPourOnglet = (mesuresParOnglet: mesuresToutType) =>
-    Object.keys(mesuresParOnglet.mesuresGenerales).length +
-    mesuresParOnglet.mesuresSpecifiques.length;
-
   const supprimeRechercheEtFiltres = () => {
     $rechercheTextuelle = '';
     $rechercheParCategorie = [];
@@ -182,28 +140,28 @@
       <th colspan="2">
         <div class="conteneur-onglet">
           <Onglet
-            bind:ongletActif
+            bind:ongletActif={$rechercheParAvancement}
             cetOnglet="statutADefinir"
             labelOnglet="Statut à définir"
-            nbNonLue={calculNbPourOnglet(mesuresParOnglet.statutADefinir)}
+            nbNonLue={$nombreResultats.nombreParAvancement.statutADefinir}
           />
           <Onglet
-            bind:ongletActif
+            bind:ongletActif={$rechercheParAvancement}
             cetOnglet="enAction"
             labelOnglet="En action"
-            nbNonLue={calculNbPourOnglet(mesuresParOnglet.enAction)}
+            nbNonLue={$nombreResultats.nombreParAvancement.enAction}
           />
           <Onglet
-            bind:ongletActif
+            bind:ongletActif={$rechercheParAvancement}
             cetOnglet="traite"
             labelOnglet="Traité"
-            nbNonLue={calculNbPourOnglet(mesuresParOnglet.traite)}
+            nbNonLue={$nombreResultats.nombreParAvancement.traite}
           />
           <Onglet
-            bind:ongletActif
+            bind:ongletActif={$rechercheParAvancement}
             cetOnglet="toutes"
             labelOnglet="Toutes les mesures"
-            nbNonLue={calculNbPourOnglet(mesuresParOnglet.toutes)}
+            nbNonLue={$nombreResultats.nombreParAvancement.toutes}
           />
         </div>
       </th>
@@ -236,7 +194,7 @@
     {/if}
   </thead>
   <tbody>
-    {#if !calculNbPourOnglet(mesuresParOnglet[ongletActif])}
+    {#if $nombreResultats.aucunResultat}
       {#if $nombreResultats.aDesFiltresAppliques || $rechercheTextuelle}
         <tr class="ligne-aucun-resultat">
           <td colspan="2">
@@ -257,7 +215,7 @@
         </tr>
       {/if}
     {:else}
-      {#each Object.entries(mesuresParOnglet[ongletActif].mesuresGenerales) as [id, mesure] (id)}
+      {#each Object.entries($resultatsDeRecherche.mesuresGenerales) as [id, mesure] (id)}
         <LigneMesure
           {id}
           referentiel={mesure.referentiel}
@@ -281,7 +239,7 @@
           estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
         />
       {/each}
-      {#each mesuresParOnglet[ongletActif].mesuresSpecifiques as mesure, index (index)}
+      {#each $resultatsDeRecherche.mesuresSpecifiques as mesure, index (index)}
         {@const indexReel = $mesures.mesuresSpecifiques.indexOf(mesure)}
         <LigneMesure
           id={`specifique-${index}`}

@@ -3,12 +3,14 @@ import { rechercheParReferentiel } from './rechercheParReferentiel.store';
 import { rechercheParCategorie } from './rechercheParCategorie.store';
 import { resultatsDeRecherche } from './resultatsDeRecherche';
 import { mesures } from './mesures.store';
+import type { Avancement } from './rechercheParAvancement.store';
 
 type NombreResultats = {
   total: number;
   filtrees: number;
   aucunResultat: boolean;
   aDesFiltresAppliques: boolean;
+  nombreParAvancement: Record<Avancement, number>;
 };
 export const nombreResultats = derived<
   [
@@ -28,8 +30,8 @@ export const nombreResultats = derived<
   ([
     $mesures,
     $resultatsDeRecherche,
-    $rechercheReferentiel,
-    $rechercheCategorie,
+    $rechercheParReferentiel,
+    $rechercheParCategorie,
   ]) => {
     const nbMesuresGenerales = Object.keys($mesures.mesuresGenerales).length;
     const nbMesuresSpecifiques = $mesures.mesuresSpecifiques.length;
@@ -48,7 +50,15 @@ export const nombreResultats = derived<
       filtrees: nbMesuresFiltreesTotal,
       aucunResultat: nbMesuresFiltreesTotal === 0,
       aDesFiltresAppliques:
-        $rechercheReferentiel.length > 0 || $rechercheCategorie.length > 0,
+        $rechercheParReferentiel.length > 0 ||
+        $rechercheParCategorie.length > 0,
+      nombreParAvancement: {
+        statutADefinir:
+          $resultatsDeRecherche.parAvancement.statutADefinir.length,
+        enAction: $resultatsDeRecherche.parAvancement.enAction.length,
+        toutes: $resultatsDeRecherche.parAvancement.toutes.length,
+        traite: $resultatsDeRecherche.parAvancement.traite.length,
+      },
     };
   }
 );
