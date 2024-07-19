@@ -83,9 +83,9 @@
   }
 
   .conteneur-texte .texte {
-    font-size: 16px;
+    font-size: 0.9rem;
     font-weight: 400;
-    line-height: 24px;
+    line-height: normal;
   }
 
   .info {
