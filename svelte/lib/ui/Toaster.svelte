@@ -61,6 +61,18 @@
     box-shadow: 0 12px 20px 0 #0000001f;
   }
 
+  /* Donne un fond à l'article pour éviter les traces de blanc sur les `radius` de gauche */
+  article.info {
+    background: linear-gradient(
+      to right,
+      var(--bleu-mise-en-avant) 10px,
+      white 10px
+    );
+  }
+  article.succes {
+    background: linear-gradient(to right, #0c8626 10px, white 10px);
+  }
+
   .conteneur-icone {
     background: var(--couleur);
     padding: 18px 10px;
