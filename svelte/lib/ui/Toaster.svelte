@@ -58,6 +58,7 @@
     align-items: stretch;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 12px 20px 0 #0000001f;
   }
 
   .conteneur-icone {
