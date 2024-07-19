@@ -1,4 +1,4 @@
-import type { Mesures } from './tableauDesMesures.d';
+import type { Mesures } from '../tableauDesMesures';
 import { writable } from 'svelte/store';
 
 export const mesuresParDefaut = (): Mesures => ({

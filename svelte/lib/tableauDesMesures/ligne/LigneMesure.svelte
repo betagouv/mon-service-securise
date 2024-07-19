@@ -9,7 +9,7 @@
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
-  import { rechercheTextuelle } from '../storesDeRecherche/rechercheTextuelle.store';
+  import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
 
   type IdDom = string;
 

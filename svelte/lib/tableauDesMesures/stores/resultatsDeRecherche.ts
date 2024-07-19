@@ -16,7 +16,7 @@ import {
   appliqueRechercheParReferentiel,
   rechercheParReferentiel,
 } from './rechercheParReferentiel.store';
-import { mesures } from '../mesures.store';
+import { mesures } from './mesures.store';
 
 enum IdFiltre {
   rechercheTextuelle,

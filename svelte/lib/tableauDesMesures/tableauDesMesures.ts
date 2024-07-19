@@ -1,7 +1,7 @@
 import TableauDesMesures from './TableauDesMesures.svelte';
 import type { TableauDesMesuresProps } from './tableauDesMesures.d';
 
-import { mesures } from './mesures.store';
+import { mesures } from './stores/mesures.store';
 
 document.body.addEventListener(
   'svelte-recharge-tableau-mesures',
