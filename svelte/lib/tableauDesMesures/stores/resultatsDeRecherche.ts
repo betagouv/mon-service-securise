@@ -1,5 +1,6 @@
-import { derived, get } from 'svelte/store';
+import { derived } from 'svelte/store';
 import type {
+  IdCategorie,
   MesureGenerale,
   Mesures,
   MesureSpecifique,
@@ -14,6 +15,7 @@ import {
 } from './rechercheParCategorie.store';
 import {
   appliqueRechercheParReferentiel,
+  IdReferentiel,
   rechercheParReferentiel,
 } from './rechercheParReferentiel.store';
 import { mesures } from './mesures.store';
@@ -23,22 +25,41 @@ import {
   rechercheParAvancement,
 } from './rechercheParAvancement.store';
 
-enum IdFiltre {
-  rechercheTextuelle,
-  rechercheParCategorie,
-  rechercheParReferentiel,
-  rechercheParAvancement,
-}
-
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
-type FiltresPredicats = Record<IdFiltre, Filtre>;
 type Predicats = {
-  actifs: IdFiltre[];
-  filtres: FiltresPredicats;
-  substitueAvancement: (simulation: Avancement) => {
-    actifs: IdFiltre[];
-    filtres: FiltresPredicats;
-  };
+  filtres: Filtre[];
+  substitueAvancement: (simulation: Avancement) => { filtres: Filtre[] };
+};
+
+const construisFiltres = (
+  rechercheTextuelle: string,
+  categories: IdCategorie[],
+  referentiels: IdReferentiel[],
+  avancement: 'statutADefinir' | 'enAction' | 'traite' | 'toutes'
+) => {
+  const filtres: Filtre[] = [];
+
+  if (rechercheTextuelle)
+    filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
+      appliqueFiltreTextuel(mesure, rechercheTextuelle)
+    );
+
+  if (categories.length > 0)
+    filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
+      appliqueFiltreParCategorie(mesure, categories)
+    );
+
+  if (referentiels.length > 0)
+    filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
+      appliqueRechercheParReferentiel(mesure, referentiels)
+    );
+
+  if (avancement)
+    filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
+      appliqueFiltreAvancement(mesure, avancement)
+    );
+
+  return filtres;
 };
 
 const predicats = derived<
@@ -61,49 +82,22 @@ const predicats = derived<
     $rechercheParCategorie,
     $rechercheParReferentiel,
     $rechercheParAvancement,
-  ]) => {
-    const filtresActifs: IdFiltre[] = [];
-
-    if ($rechercheTextuelle) filtresActifs.push(IdFiltre.rechercheTextuelle);
-    if ($rechercheParCategorie.length > 0)
-      filtresActifs.push(IdFiltre.rechercheParCategorie);
-    if ($rechercheParReferentiel.length > 0)
-      filtresActifs.push(IdFiltre.rechercheParReferentiel);
-    if ($rechercheParAvancement)
-      filtresActifs.push(IdFiltre.rechercheParAvancement);
-
-    const implementations = {
-      [IdFiltre.rechercheTextuelle]: (
-        mesure: MesureSpecifique | MesureGenerale
-      ) => appliqueFiltreTextuel(mesure, $rechercheTextuelle),
-
-      [IdFiltre.rechercheParCategorie]: (
-        mesure: MesureSpecifique | MesureGenerale
-      ) => appliqueFiltreParCategorie(mesure, $rechercheParCategorie),
-
-      [IdFiltre.rechercheParReferentiel]: (
-        mesure: MesureSpecifique | MesureGenerale
-      ) => appliqueRechercheParReferentiel(mesure, $rechercheParReferentiel),
-
-      [IdFiltre.rechercheParAvancement]: (
-        mesure: MesureSpecifique | MesureGenerale
-      ) => appliqueFiltreAvancement(mesure, $rechercheParAvancement),
-    };
-
-    return {
-      actifs: filtresActifs,
-      filtres: implementations,
-      substitueAvancement: (simulation: Avancement) => ({
-        actifs: [...filtresActifs, IdFiltre.rechercheParAvancement],
-        filtres: {
-          ...implementations,
-          [IdFiltre.rechercheParAvancement]: (
-            mesure: MesureSpecifique | MesureGenerale
-          ) => appliqueFiltreAvancement(mesure, simulation),
-        },
-      }),
-    };
-  }
+  ]) => ({
+    filtres: construisFiltres(
+      $rechercheTextuelle,
+      $rechercheParCategorie,
+      $rechercheParReferentiel,
+      $rechercheParAvancement
+    ),
+    substitueAvancement: (avancementDeSimulation: Avancement) => ({
+      filtres: construisFiltres(
+        $rechercheTextuelle,
+        $rechercheParCategorie,
+        $rechercheParReferentiel,
+        avancementDeSimulation
+      ),
+    }),
+  })
 );
 
 type ResultatsRecherche = Mesures & {
@@ -116,9 +110,7 @@ export const resultatsDeRecherche = derived<
 >([mesures, predicats], ([$mesures, $predicats]) => {
   const mesuresGenerales = Object.entries($mesures.mesuresGenerales)
     .filter(([_, mesure]) =>
-      $predicats.actifs
-        .map((idPredicat: IdFiltre) => $predicats.filtres[idPredicat])
-        .every((predicat: Filtre) => predicat(mesure))
+      $predicats.filtres.every((predicat: Filtre) => predicat(mesure))
     )
     .reduce(
       (record, [idMesure, mesure]) => ({ ...record, [idMesure]: mesure }),
@@ -126,22 +118,20 @@ export const resultatsDeRecherche = derived<
     );
 
   const mesuresSpecifiques = $mesures.mesuresSpecifiques.filter((mesure) =>
-    $predicats.actifs
-      .map((idPredicat: IdFiltre) => $predicats.filtres[idPredicat])
-      .every((predicat: Filtre) => predicat(mesure))
+    $predicats.filtres.every((predicat: Filtre) => predicat(mesure))
   );
 
   const mesuresParAvancement = (avancementASimuler: Avancement) => {
     const avecAvancementSubstitue =
       $predicats.substitueAvancement(avancementASimuler);
+
     const toutesLesMesures = [
       ...Object.values($mesures.mesuresGenerales),
       ...$mesures.mesuresSpecifiques,
     ];
+
     return toutesLesMesures.filter((m) =>
-      avecAvancementSubstitue.actifs
-        .map((id) => avecAvancementSubstitue.filtres[id])
-        .every((p: Filtre) => p(m))
+      avecAvancementSubstitue.filtres.every((p: Filtre) => p(m))
     );
   };
 
