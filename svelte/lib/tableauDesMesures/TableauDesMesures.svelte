@@ -16,7 +16,7 @@
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
   import { Referentiel } from '../ui/types.d';
-  import { nombreResultats } from './tableauDesMesures.store';
+  import { nombreResultats } from './storesDeRecherche/nombreDeResultats.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
   import Onglet from '../ui/Onglet.svelte';
