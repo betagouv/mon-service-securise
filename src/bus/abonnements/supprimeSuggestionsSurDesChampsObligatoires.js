@@ -9,6 +9,10 @@ function supprimeSuggestionsSurDesChampsObligatoires({ depotDonnees }) {
       service.id,
       'miseAJourNombreOrganisationsUtilisatrices'
     );
+    await depotDonnees.acquitteSuggestionAction(
+      service.id,
+      'controleBesoinsDeSecuriteRetrogrades'
+    );
   };
 }
 
