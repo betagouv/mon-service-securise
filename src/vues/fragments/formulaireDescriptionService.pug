@@ -83,6 +83,9 @@ mixin formulaireDescriptionService(idHomologation)
                   p Vous pouvez directement rechercher le nom ou le numéro de SIRET de votre organisation.
 
         .conteneur-nombre-organisations-utilisatrices
+          - const { borneBasse, borneHaute } = service.descriptionService.nombreOrganisationsUtilisatrices
+          - const valeurService = `${borneBasse}-${borneHaute}`
+          - const valeurVide = '0-0'
           .requis
             label À combien d'organisations publiques est destiné le service ?
               p.description Si le service est mutualisé au profit de plusieurs organisations publiques, merci de préciser combien en bénéficieront.
