@@ -19,7 +19,6 @@ class ConstructeurDescriptionService {
       },
       presentation: 'Une présentation',
       provenanceService: 'uneProvenance',
-      risqueJuridiqueFinancierReputationnel: false,
       statutDeploiement: 'unStatutDeploiement',
       typeService: 'unType',
       nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },

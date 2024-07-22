@@ -18,11 +18,7 @@ class MoteurRegles {
 
     const valeursDescriptionService = clefsDescriptionServiceAConsiderer
       .filter((clef) => descriptionService[clef] !== false)
-      .flatMap((clef) =>
-        typeof descriptionService[clef] === 'boolean'
-          ? clef
-          : descriptionService[clef]
-      );
+      .flatMap((clef) => descriptionService[clef]);
 
     const mapMesures = Object.keys(profils)
       .map(

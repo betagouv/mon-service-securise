@@ -38,7 +38,6 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       donneesSensiblesSpecifiques,
       localisationDonnees,
       delaiAvantImpactCritique,
-      risqueJuridiqueFinancierReputationnel,
       niveauSecurite,
     } = service.descriptionService;
     const { borneBasse, borneHaute } = nombreOrganisationsUtilisatrices;
@@ -66,7 +65,6 @@ class EvenementCompletudeServiceModifiee extends Evenement {
         donneesSensiblesSpecifiques: donneesSensiblesSpecifiques.nombre(),
         localisationDonnees,
         delaiAvantImpactCritique,
-        risqueJuridiqueFinancierReputationnel,
         organisationResponsable,
         niveauSecurite,
         niveauSecuriteMinimal,

@@ -588,7 +588,6 @@ describe('Une homologation', () => {
           nomService: 'nom-service',
           presentation: 'Une présentation',
           provenanceService: 'uneProvenance',
-          risqueJuridiqueFinancierReputationnel: false,
           statutDeploiement: 'unStatutDeploiement',
           donneesCaracterePersonnel: [],
           fonctionnalites: [],

@@ -32,7 +32,6 @@ describe('La description du service', () => {
         pointsAcces: [{ description: 'Une description' }],
         presentation: 'Une présentation du service',
         provenanceService: 'uneProvenance',
-        risqueJuridiqueFinancierReputationnel: true,
         statutDeploiement: 'unStatut',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         niveauSecurite: 'niveau1',
@@ -53,9 +52,6 @@ describe('La description du service', () => {
       'Une présentation du service'
     );
     expect(descriptionService.provenanceService).to.eql('uneProvenance');
-    expect(descriptionService.risqueJuridiqueFinancierReputationnel).to.be(
-      true
-    );
     expect(descriptionService.statutDeploiement).to.equal('unStatut');
     expect(descriptionService.nombreOrganisationsUtilisatrices).to.eql({
       borneBasse: 1,
@@ -74,7 +70,6 @@ describe('La description du service', () => {
       'localisationDonnees',
       'nomService',
       'provenanceService',
-      'risqueJuridiqueFinancierReputationnel',
       'statutDeploiement',
       'typeService',
       'nombreOrganisationsUtilisatrices',
@@ -217,7 +212,6 @@ describe('La description du service', () => {
           localisationDonnees: 'france',
           presentation: 'Une présentation',
           provenanceService: 'uneProvenance',
-          risqueJuridiqueFinancierReputationnel: true,
           statutDeploiement: 'accessible',
           nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
           organisationResponsable: { nom: 'MonOrga' },
@@ -238,7 +232,6 @@ describe('La description du service', () => {
         localisationDonnees: 'france',
         presentation: 'Une présentation',
         provenanceService: 'uneProvenance',
-        risqueJuridiqueFinancierReputationnel: true,
         statutDeploiement: 'accessible',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         organisationResponsable: { siret: '12345' },
@@ -257,7 +250,6 @@ describe('La description du service', () => {
       ['fonctionnalites', ['signatureElectronique']],
       ['delaiAvantImpactCritique', 'moinsUneHeure'],
       ['donneesCaracterePersonnel', ['sensibiliteParticuliere']],
-      ['risqueJuridiqueFinancierReputationnel', true],
     ].forEach(([cle, propriete]) => {
       it(`retourne 'niveau3' si la propriété '${propriete}' est présente dans '${cle}'`, () => {
         const descriptionDeNiveau3 = new DescriptionService({
@@ -300,7 +292,6 @@ describe('La description du service', () => {
         nomService: 'Super Service',
         fonctionnalites: ['uneAutreFonctionnalite'],
         donneesCaracterePersonnel: ['uneAutreDonnees'],
-        risqueJuridiqueFinancierReputationnel: false,
         delaiAvantImpactCritique: 'autreDelai',
       });
 
@@ -316,7 +307,6 @@ describe('La description du service', () => {
           nomService: 'Super Service',
           fonctionnalites: ['uneAutreFonctionnalite'],
           donneesCaracterePersonnel: ['uneAutreDonnees'],
-          risqueJuridiqueFinancierReputationnel: false,
           delaiAvantImpactCritique: 'autreDelai',
         });
         descriptionDeNiveauIncomplete[cle] = null;
