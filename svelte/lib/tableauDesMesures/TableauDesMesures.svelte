@@ -28,6 +28,7 @@
   import { resultatsDeRecherche } from './stores/resultatsDeRecherche';
   import { mesures } from './stores/mesures.store';
   import { rechercheParAvancement } from './stores/rechercheParAvancement.store';
+  import AucunResultat from './aucunResultat/AucunResultat.svelte';
 
   enum EtatEnregistrement {
     Jamais,
@@ -108,12 +109,6 @@
     document.body.dispatchEvent(
       new CustomEvent('svelte-affiche-tiroir-export-mesures')
     );
-  };
-
-  const supprimeRechercheEtFiltres = () => {
-    $rechercheTextuelle = '';
-    $rechercheParCategorie = [];
-    $rechercheParReferentiel = [];
   };
 </script>
 
@@ -201,25 +196,7 @@
   </thead>
   <tbody>
     {#if $nombreResultats.aucunResultat}
-      {#if $nombreResultats.aDesFiltresAppliques || $rechercheTextuelle}
-        <tr class="ligne-aucun-resultat">
-          <td colspan="2">
-            <div class="aucun-resultat">
-              <img
-                src="/statique/assets/images/illustration_recherche_vide.svg"
-                alt=""
-              />
-              Aucune mesure ne correspond à la recherche.
-              <button
-                class="bouton bouton-secondaire"
-                on:click={supprimeRechercheEtFiltres}
-              >
-                Effacer la recherche
-              </button>
-            </div>
-          </td>
-        </tr>
-      {/if}
+      <AucunResultat referentielStatuts={statuts} />
     {:else}
       {#each Object.entries($resultatsDeRecherche.mesuresGenerales) as [id, mesure] (id)}
         <LigneMesure
@@ -342,27 +319,6 @@
   .bouton-action-mesure:hover img {
     filter: brightness(0) invert(21%) sepia(87%) saturate(646%)
       hue-rotate(168deg) brightness(89%) contrast(103%);
-  }
-
-  .ligne-aucun-resultat {
-    border: 1px solid var(--liseres-fonce);
-  }
-
-  .aucun-resultat {
-    padding: 64px 0;
-    display: flex;
-    gap: 16px;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .aucun-resultat img {
-    max-width: 128px;
-  }
-
-  .aucun-resultat button {
-    margin: 0;
-    padding: 8px 16px;
   }
 
   .tableau-des-mesures {
