@@ -5,9 +5,11 @@ declare global {
 }
 
 export type NiveauxDeSecuriteProps = {
+  idService: string;
   niveauDeSecuriteMinimal: IdNiveauDeSecurite;
   niveauSecuriteExistant?: IdNiveauDeSecurite;
   lectureSeule: boolean;
+  avecSuggestionBesoinsSecuriteRetrogrades: boolean;
 };
 
 export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
