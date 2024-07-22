@@ -2216,4 +2216,63 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
   });
+
+  describe('quand requête PUT sur `/api/service/:id/suggestionAction/:nature`', () => {
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/123/suggestionAction/peuimporte',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id', 'nature'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/123/suggestionAction/peuimporte',
+        },
+        done
+      );
+    });
+
+    it('utilise le dépôt de données pour acquitter la suggestion', async () => {
+      let donneesDepotAppele = null;
+      testeur.depotDonnees().acquitteSuggestionAction = (
+        idService,
+        natureSuggestion
+      ) => {
+        donneesDepotAppele = { idService, natureSuggestion };
+      };
+      testeur.referentiel().recharge({
+        naturesSuggestionsActions: {
+          niveauRetrograde: {},
+        },
+      });
+
+      const resultat = await axios.put(
+        'http://localhost:1234/api/service/123/suggestionAction/niveauRetrograde'
+      );
+
+      expect(donneesDepotAppele).to.be.an('object');
+      expect(donneesDepotAppele.idService).to.be('123');
+      expect(donneesDepotAppele.natureSuggestion).to.be('niveauRetrograde');
+      expect(resultat.status).to.be(200);
+    });
+
+    it('renvoie une erreur lorsque la nature n’est pas connue', async () => {
+      await testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        'La nature de la suggestion d’action est inconnue',
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/123/suggestionAction/inconnue',
+        }
+      );
+    });
+  });
 });
