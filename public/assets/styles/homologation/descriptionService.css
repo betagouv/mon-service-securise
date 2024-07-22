@@ -3,20 +3,6 @@
   font-size: 0.9em;
 }
 
-#risqueJuridiqueFinancierReputationnel :is(.exemple, .exemple + br) {
-  display: none;
-}
-
-#risqueJuridiqueFinancierReputationnel input[value='oui'] ~ .exemple::before {
-  display: none;
-}
-
-#risqueJuridiqueFinancierReputationnel
-  input[value='oui']:checked
-  ~ :is(.exemple, .exemple + br) {
-  display: inline-block;
-}
-
 #nom-service.invalide {
   border-color: var(--rose-anssi);
 }

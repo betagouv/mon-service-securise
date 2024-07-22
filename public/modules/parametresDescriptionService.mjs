@@ -17,10 +17,6 @@ const extraisParametresDescriptionService = (selecteurFormulaire) => {
     {}
   );
 
-  params.risqueJuridiqueFinancierReputationnel = convertisReponseOuiNon(
-    params.risqueJuridiqueFinancierReputationnel
-  );
-
   listesAvecItemsExtraits.forEach(({ cle, sourceRegExpParamsItem }) =>
     modifieParametresAvecItemsExtraits(params, cle, sourceRegExpParamsItem)
   );
