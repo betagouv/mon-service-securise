@@ -2,7 +2,6 @@ import listesAvecItemsExtraits from './listesAvecItemsExtraits.mjs';
 import parametres, {
   modifieParametresAvecItemsExtraits,
 } from './parametres.mjs';
-import convertisReponseOuiNon from './convertisReponseOuiNon.mjs';
 
 const extraisParametresDescriptionService = (selecteurFormulaire) => {
   const idFormulaires = $.map(
