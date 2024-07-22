@@ -4,10 +4,14 @@
     ordreDesNiveaux,
   } from './niveauxDeSecurite.d';
   import donneesNiveauxDeSecurite from './donneesNiveauxDeSecurite';
+  import { acquitteSuggestionBesoinsSecuriteRetrogrades } from './niveauxDeSecurite.api';
+  import { glisse } from '../ui/animations/transitions';
 
+  export let idService: string;
   export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
   export let niveauSecuriteExistant: IdNiveauDeSecurite | null = null;
   export let lectureSeule: boolean;
+  export let avecSuggestionBesoinsSecuriteRetrogrades: boolean;
 
   let niveauChoisi: IdNiveauDeSecurite;
   let niveauSurbrillance: IdNiveauDeSecurite;
@@ -33,6 +37,15 @@
       document.getElementById('diagnostic')?.removeAttribute('disabled');
     }
   }
+
+  const masqueSuggestionBesoinsSecuriteRetrogrades = async () => {
+    await acquitteSuggestionBesoinsSecuriteRetrogrades(idService);
+    avecSuggestionBesoinsSecuriteRetrogrades = false;
+  };
+
+  const nomNiveauSecurite = donneesNiveauxDeSecurite
+    .find((d) => d.id === niveauSecuriteExistant)
+    ?.nom.toLowerCase();
 </script>
 
 <div class="racine">
@@ -54,6 +67,36 @@
           Suite à une analyse par l'ANSSI, il a été déterminé que ce nouveau
           niveau de service correspond à un <b>niveau supérieur</b> à celui précédemment
           identifié.
+        </span>
+      </div>
+    </div>
+  {/if}
+  {#if avecSuggestionBesoinsSecuriteRetrogrades}
+    <div
+      class="avertissement"
+      transition:glisse={{ depuis: 'right', duree: 500 }}
+    >
+      <button
+        class="fermeture-avertissement"
+        type="button"
+        on:click|preventDefault={masqueSuggestionBesoinsSecuriteRetrogrades}
+        >×</button
+      >
+      <img
+        src="/statique/assets/images/icone_danger.svg"
+        alt="Icône de danger"
+      />
+      <div>
+        <span>
+          <b>
+            Votre service a désormais des besoins de sécurité {nomNiveauSecurite}.
+          </b>
+        </span>
+        <br />
+        <span>
+          Vous pouvez réhausser à des besoins de sécurité importants. Vous
+          retrouverez toutes les données que vous auriez rempli sur les mesures
+          associées à ce niveau.
         </span>
       </div>
     </div>
@@ -541,6 +584,7 @@
     background: var(--fond-ocre-pale);
     margin-bottom: 52px;
     text-align: left;
+    position: relative;
   }
 
   .avertissement.bleu {
@@ -552,5 +596,16 @@
   .fleche-navigation:hover:after {
     filter: brightness(0) invert(22%) sepia(49%) saturate(3021%)
       hue-rotate(188deg) brightness(95%) contrast(91%);
+  }
+
+  .fermeture-avertissement {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    line-height: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 </style>
