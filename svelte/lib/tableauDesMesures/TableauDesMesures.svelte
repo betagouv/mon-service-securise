@@ -48,7 +48,11 @@
       modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
     );
   };
-  onMount(rafraichisMesures);
+  onMount(async () => {
+    await rafraichisMesures();
+    if (!$nombreResultats.nombreParAvancement.statutADefinir)
+      $rechercheParAvancement = 'enAction';
+  });
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
 
@@ -139,12 +143,14 @@
     <tr class="ligne-onglet">
       <th colspan="2">
         <div class="conteneur-onglet">
-          <Onglet
-            bind:ongletActif={$rechercheParAvancement}
-            cetOnglet="statutADefinir"
-            labelOnglet="Statut à définir"
-            nbNonLue={$nombreResultats.nombreParAvancement.statutADefinir}
-          />
+          {#if $nombreResultats.nombreParAvancement.statutADefinir}
+            <Onglet
+              bind:ongletActif={$rechercheParAvancement}
+              cetOnglet="statutADefinir"
+              labelOnglet="Statut à définir"
+              nbNonLue={$nombreResultats.nombreParAvancement.statutADefinir}
+            />
+          {/if}
           <Onglet
             bind:ongletActif={$rechercheParAvancement}
             cetOnglet="enAction"
