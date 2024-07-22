@@ -60,7 +60,6 @@ describe('Un événement de complétude modifiée', () => {
         fonctionnalites: ['reseauSocial'],
         fonctionnalitesSpecifiques: ['feature A', 'feature B'],
         provenanceService: 'developpement',
-        risqueJuridiqueFinancierReputationnel: true,
         statutDeploiement: 'unStatutDeploiement',
         typeService: ['applicationMobile'],
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
@@ -117,9 +116,8 @@ describe('Un événement de complétude modifiée', () => {
         donneesSensiblesSpecifiques: 1,
         localisationDonnees: 'uneLocalisation',
         delaiAvantImpactCritique: 'uneHeure',
-        risqueJuridiqueFinancierReputationnel: true,
         niveauSecurite: 'niveau3',
-        niveauSecuriteMinimal: 'niveau3',
+        niveauSecuriteMinimal: 'niveau2',
         organisationResponsable: {
           estServicePublic: false,
           estFiness: false,

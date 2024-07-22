@@ -19,7 +19,6 @@ class DescriptionService extends InformationsHomologation {
         'localisationDonnees',
         'nomService',
         'provenanceService',
-        'risqueJuridiqueFinancierReputationnel',
         'statutDeploiement',
         'nombreOrganisationsUtilisatrices',
         'niveauSecurite',
@@ -96,7 +95,6 @@ class DescriptionService extends InformationsHomologation {
       'localisationDonnees',
       'nomService',
       'provenanceService',
-      'risqueJuridiqueFinancierReputationnel',
       'statutDeploiement',
       'typeService',
       'nombreOrganisationsUtilisatrices',
@@ -132,8 +130,7 @@ class DescriptionService extends InformationsHomologation {
     const estDeNiveau3 =
       donnees.fonctionnalites?.includes('signatureElectronique') ||
       donnees.donneesCaracterePersonnel?.includes('sensibiliteParticuliere') ||
-      donnees.delaiAvantImpactCritique === 'moinsUneHeure' ||
-      donnees.risqueJuridiqueFinancierReputationnel;
+      donnees.delaiAvantImpactCritique === 'moinsUneHeure';
     if (estDeNiveau3) return 'niveau3';
 
     const fonctionnalitesNiveau2 = [

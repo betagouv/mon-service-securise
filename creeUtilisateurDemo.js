@@ -20,7 +20,6 @@ const descriptionService = new DescriptionService(
     presentation:
       "Le service créé par MonServiceSécurisé comme donnée d'exemple sur ses environnements de DÉMO.",
     provenanceService: 'developpement',
-    risqueJuridiqueFinancierReputationnel: false,
     statutDeploiement: 'enLigne',
     typeService: ['siteInternet'],
     organisationResponsable: {
