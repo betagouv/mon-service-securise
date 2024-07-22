@@ -10,6 +10,7 @@ const {
   ErreurCategorieInconnue,
   ErreurStatutMesureInvalide,
   ErreurMesureInconnue,
+  ErreurDonneesReferentielIncorrectes,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -713,6 +714,29 @@ const routesConnecteApiService = ({
       );
 
       reponse.sendStatus(200);
+    }
+  );
+
+  routes.put(
+    '/:id/suggestionAction/:nature',
+    middleware.trouveService({}),
+    middleware.aseptise('id', 'nature'),
+    async (requete, reponse, suite) => {
+      try {
+        const { nature, id } = requete.params;
+        if (referentiel.natureSuggestionAction(nature)) {
+          await depotDonnees.acquitteSuggestionAction(id, nature);
+        }
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurDonneesReferentielIncorrectes) {
+          reponse
+            .status(400)
+            .send('La nature de la suggestion d’action est inconnue');
+        } else {
+          suite(e);
+        }
+      }
     }
   );
 
