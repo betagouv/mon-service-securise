@@ -94,13 +94,18 @@ const brancheComportementNavigationEtapes = () => {
         );
 
         const lectureSeule = JSON.parse($('#decrire-lecture-seule').text());
-
+        const avecSuggestionBesoinsSecuriteRetrogrades = JSON.parse(
+          $('#suggestion-controle-besoins-securite-retrogrades').text()
+        );
+        const idService = $('.page-service').data('id-service');
         document.body.dispatchEvent(
           new CustomEvent('svelte-recharge-niveaux-de-securite', {
             detail: {
               niveauDeSecuriteMinimal,
               niveauSecuriteExistant,
               lectureSeule,
+              avecSuggestionBesoinsSecuriteRetrogrades,
+              idService,
             },
           })
         );

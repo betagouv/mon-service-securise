@@ -100,6 +100,10 @@ module.exports = {
       lien: '/descriptionService',
       permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
     },
+    controleBesoinsDeSecuriteRetrogrades: {
+      lien: '/descriptionService?etape=3',
+      permissionRequise: { rubrique: 'DECRIRE', niveau: 1 },
+    },
   },
 
   nombreOrganisationsUtilisatrices: [
