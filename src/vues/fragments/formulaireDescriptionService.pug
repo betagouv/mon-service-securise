@@ -263,3 +263,5 @@ mixin formulaireDescriptionService(idHomologation)
     !{JSON.stringify(niveauRecommandeLectureSeule ? niveauRecommandeLectureSeule : null)}
   script(id = 'decrire-lecture-seule', type = 'application/json').
     !{JSON.stringify(estLectureSeule)}
+  script(id = 'suggestion-controle-besoins-securite-retrogrades', type = 'application/json').
+    !{JSON.stringify(estEnCreation ? false : service.pourraitFaire('controleBesoinsDeSecuriteRetrogrades'))}
