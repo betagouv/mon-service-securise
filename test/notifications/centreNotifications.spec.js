@@ -214,6 +214,24 @@ describe('Le centre de notifications', () => {
       expect(notifs[0].titre).to.be('--toto--');
     });
 
+    it('decode les caractères HTML dans les données liées au service', async () => {
+      referentiel.enrichis({
+        naturesTachesService: {
+          natureDeTest: { titre: '%NOM_SERVICE%', lien: '' },
+        },
+      });
+
+      depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService()
+          .avecUnServiceNomme('le service &quot;modéré&quot;')
+          .construis(),
+      ];
+
+      const notifs = await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifs[0].titre).to.be('le service "modéré"');
+    });
+
     it('complète le titre avec les informations des données de la tâche', async () => {
       referentiel.enrichis({
         naturesTachesService: {
