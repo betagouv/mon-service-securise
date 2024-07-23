@@ -5,29 +5,31 @@
   const icones = { info: 'icone_info', succes: 'icone_succes' };
 </script>
 
-<aside>
-  {#each $toasterStore.queue as toast (toast.id)}
-    <article
-      class={toast.niveau}
-      transition:glisse={{ depuis: 'right', duree: 250 }}
-    >
-      <div class="conteneur-icone">
-        <div class="icone">
-          <img
-            src={`/statique/assets/images/toasts/${icones[toast.niveau]}.svg`}
-            alt=""
-            width="24"
-            height="24"
-          />
+{#if $toasterStore.queue.length}
+  <aside>
+    {#each $toasterStore.queue as toast (toast.id)}
+      <article
+        class={toast.niveau}
+        transition:glisse={{ depuis: 'right', duree: 250 }}
+      >
+        <div class="conteneur-icone">
+          <div class="icone">
+            <img
+              src={`/statique/assets/images/toasts/${icones[toast.niveau]}.svg`}
+              alt=""
+              width="24"
+              height="24"
+            />
+          </div>
         </div>
-      </div>
-      <div class="conteneur-texte">
-        <p class="titre">{toast.titre}</p>
-        <p class="texte">{@html toast.contenu}</p>
-      </div>
-    </article>
-  {/each}
-</aside>
+        <div class="conteneur-texte">
+          <p class="titre">{toast.titre}</p>
+          <p class="texte">{@html toast.contenu}</p>
+        </div>
+      </article>
+    {/each}
+  </aside>
+{/if}
 
 <style>
   aside {
