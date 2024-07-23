@@ -1,7 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: L'intégration continue
 
 on:
   push:
@@ -11,6 +8,8 @@ on:
 
 jobs:
   build:
+    name: Construction de MonServiceSécurisé
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -22,12 +21,22 @@ jobs:
       SECRET_COOKIE: secret
 
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Cloner le dépôt Git
+        uses: actions/checkout@v4
+
+      - name: Utiliser la version Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npx prettier --check .
-      - run: npx tsc --noEmit -p svelte/tsconfig.json
-      - run: npm test
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Contrôler la mise en forme avec Prettier
+        run: npx prettier --check .
+
+      - name: Contrôler le Typescript de Svelte
+        run: npx tsc --noEmit -p svelte/tsconfig.json
+
+      - name: Exécuter les tests
+        run: npm test
