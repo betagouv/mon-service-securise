@@ -1,3 +1,4 @@
+const { decode } = require('html-entities');
 const {
   ErreurIdentifiantNouveauteInconnu,
   ErreurIdentifiantTacheInconnu,
@@ -75,7 +76,7 @@ class CentreNotifications {
     };
 
     return ['NOM_SERVICE', ...champsDonnees].reduce(
-      (acc, cle) => acc.replace(`%${cle}%`, valeurReelle(cle)),
+      (acc, cle) => acc.replace(`%${cle}%`, decode(valeurReelle(cle))),
       notification.titre
     );
   }
