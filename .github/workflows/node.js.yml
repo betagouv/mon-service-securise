@@ -12,11 +12,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     env:
       SECRET_COOKIE: secret
 
@@ -24,10 +19,10 @@ jobs:
       - name: Cloner le dépôt Git
         uses: actions/checkout@v4
 
-      - name: Utiliser la version Node.js ${{ matrix.node-version }}
+      - name: Utiliser la version Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
 
       - name: Installer les dépendances
         run: npm ci
