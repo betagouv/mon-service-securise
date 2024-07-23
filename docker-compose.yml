@@ -33,7 +33,7 @@ services:
     command: bash -c "
       export PUPPETEER_EXECUTABLE_PATH=$$(which chromium)
       && npx knex migrate:latest
-      && npx concurrently
+      && npx concurrently -n \"SERVEUR,FRONT SVELTE\"
       \"npx nodemon --inspect=0.0.0.0 server.js\"
       \"npx vite build --watch --minify false --config svelte/vite.config.mts\"
       "
