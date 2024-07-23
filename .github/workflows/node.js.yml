@@ -29,4 +29,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npx prettier --check .
+      - run: npx tsc --noEmit -p svelte/tsconfig.json
       - run: npm test
