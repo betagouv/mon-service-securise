@@ -402,10 +402,27 @@ const nouvelAdaptateur = (env) => {
     );
   };
 
+  const ajouteTacheDeService = async ({ id, idService, nature, donnees }) => {
+    await knex('taches_service').insert({
+      id,
+      id_service: idService,
+      date_creation: knex.fn.now(),
+      nature,
+      donnees,
+    });
+  };
+
   const marqueTacheDeServiceLue = async (idTache) => {
     await knex('taches_service')
       .where({ id: idTache })
       .update({ date_faite: knex.fn.now() });
+  };
+
+  const ajouteSuggestionAction = async ({ idService, nature }) => {
+    await knex('suggestions_actions').insert({
+      id_service: idService,
+      nature,
+    });
   };
 
   const marqueSuggestionActionFaiteMaintenant = async (
@@ -419,6 +436,8 @@ const nouvelAdaptateur = (env) => {
 
   return {
     ajouteAutorisation,
+    ajouteSuggestionAction,
+    ajouteTacheDeService,
     ajouteUtilisateur,
     arreteTout,
     autorisation,
