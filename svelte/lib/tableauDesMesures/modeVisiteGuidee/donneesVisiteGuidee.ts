@@ -13,6 +13,7 @@ export const mesuresVisiteGuidee: Mesures = {
       referentiel: Referentiel.ANSSI,
       statut: 'fait',
       modalites: '',
+      identifiantNumerique: '0006',
     },
     registreTraitements: {
       description: 'Remplir le registre des traitements et le tenir à jour',
@@ -20,6 +21,7 @@ export const mesuresVisiteGuidee: Mesures = {
       indispensable: true,
       descriptionLongue: '',
       referentiel: Referentiel.CNIL,
+      identifiantNumerique: '0015',
     },
     identificationDonneesSensibles: {
       description: 'Identifier les données importantes à protéger',
@@ -27,6 +29,7 @@ export const mesuresVisiteGuidee: Mesures = {
       indispensable: true,
       descriptionLongue: '',
       referentiel: Referentiel.ANSSI,
+      identifiantNumerique: '0008',
     },
     listeEquipements: {
       description:
@@ -35,6 +38,7 @@ export const mesuresVisiteGuidee: Mesures = {
       indispensable: true,
       descriptionLongue: '',
       referentiel: Referentiel.ANSSI,
+      identifiantNumerique: '0011',
     },
     limitationInterconnexions: {
       description:
@@ -43,6 +47,7 @@ export const mesuresVisiteGuidee: Mesures = {
       indispensable: true,
       descriptionLongue: '',
       referentiel: Referentiel.ANSSI,
+      identifiantNumerique: '0009',
     },
   },
   mesuresSpecifiques: [],
