@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { marqueNotificationCommeLue } from '../centreNotifications.api';
   import type { Notification } from '../centreNotifications.d';
   import { formatteDifferenceDateRelative } from '../../formatDate/formatDate';
+  import { storeNotifications } from '../../ui/stores/notifications.store';
 
   export let notification: Notification;
 
@@ -13,7 +13,7 @@
   const relationCta = notification.type === 'nouveaute' ? 'noopener' : '';
   const actionClick = notification.doitNotifierLecture
     ? async () => {
-        await marqueNotificationCommeLue(notification.type, notification.id);
+        await storeNotifications.marqueLue(notification.type, notification.id);
         dispatch('notificationMiseAJour');
       }
     : () => {};

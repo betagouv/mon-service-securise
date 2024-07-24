@@ -3,7 +3,6 @@ import type {
   Notification,
   TypeNotification,
 } from '../../centreNotifications/centreNotifications.d';
-import axios from 'axios';
 
 const { subscribe, set } = writable<Notification[]>([]);
 
