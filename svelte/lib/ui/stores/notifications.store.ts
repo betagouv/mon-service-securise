@@ -19,5 +19,6 @@ export const storeNotifications = {
   },
   marqueLue: async (type: TypeNotification, id: string) => {
     await axios.put(`/api/notifications/${routes[type]}/${id}`);
+    await storeNotifications.rafraichis();
   },
 };
