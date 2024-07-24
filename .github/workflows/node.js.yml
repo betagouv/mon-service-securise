@@ -35,3 +35,6 @@ jobs:
 
       - name: Exécuter les tests
         run: npm test
+
+      - name: Exécuter les tests Svelte
+        run: npx vitest run svelte/test
