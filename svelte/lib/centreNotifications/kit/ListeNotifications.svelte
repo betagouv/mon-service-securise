@@ -16,7 +16,7 @@
     </div>
   {:else}
     {#each notifications as notification (notification.id)}
-      <ComposantNotification {notification} on:notificationMiseAJour />
+      <ComposantNotification {notification} />
     {/each}
   {/if}
 </div>

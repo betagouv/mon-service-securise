@@ -10,28 +10,19 @@
   let elementCentreNotifications: HTMLDivElement;
   let ongletActif: TypeOnglet = 'aFaire';
 
-  let notificationsParOnglet: Record<TypeOnglet, Notification[]> = {
-    aFaire: [],
-    nouveautes: [],
-    toutes: [],
-  };
-
   const calculNbNonLue = (notifications: Notification[]) =>
     notifications.filter((n) => n.statutLecture === 'nonLue').length;
 
   $: nbNonLue = calculNbNonLue($storeNotifications);
 
-  const rafraichisNotifications = async () => {
-    await storeNotifications.rafraichis();
-    notificationsParOnglet = {
-      aFaire: $storeNotifications.filter((n) => n.type === 'tache'),
-      nouveautes: $storeNotifications.filter((n) => n.type === 'nouveaute'),
-      toutes: $storeNotifications,
-    };
+  $: notificationsParOnglet = {
+    aFaire: $storeNotifications.filter((n) => n.type === 'tache'),
+    nouveautes: $storeNotifications.filter((n) => n.type === 'nouveaute'),
+    toutes: $storeNotifications,
   };
 
   onMount(async () => {
-    await rafraichisNotifications();
+    await storeNotifications.rafraichis();
   });
 </script>
 
@@ -80,10 +71,7 @@
         nbNonLue={calculNbNonLue(notificationsParOnglet.toutes)}
       />
     </div>
-    <ListeNotifications
-      notifications={notificationsParOnglet[ongletActif]}
-      on:notificationMiseAJour={async () => rafraichisNotifications()}
-    />
+    <ListeNotifications notifications={notificationsParOnglet[ongletActif]} />
   </div>
 </div>
 

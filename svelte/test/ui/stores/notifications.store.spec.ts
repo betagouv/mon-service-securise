@@ -50,10 +50,23 @@ test('peut rafraichir les notifications du store', async () => {
 });
 
 test('peut marquer une notification comme lue', async () => {
+  vi.mocked(axios.get).mockResolvedValue({
+    data: { notifications: [] },
+  });
   await storeNotifications.marqueLue('nouveaute', 'encartHomologation');
 
   expect(vi.mocked(axios.put)).toHaveBeenCalledOnce();
   expect(vi.mocked(axios.put)).toHaveBeenCalledWith(
     '/api/notifications/nouveautes/encartHomologation'
   );
+});
+
+test('marquer une notification comme lue rafraichit le store', async () => {
+  vi.mocked(axios.get).mockResolvedValue({
+    data: { notifications: [] },
+  });
+
+  await storeNotifications.marqueLue('nouveaute', 'encartHomologation');
+
+  expect(vi.mocked(axios.get)).toHaveBeenCalledWith('/api/notifications');
 });
