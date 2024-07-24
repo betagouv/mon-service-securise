@@ -22,7 +22,7 @@ export type MesuresExistantes = {
 };
 
 export type MesureGenerale = {
-  statut: string;
+  statut?: string;
   modalites?: string;
 };
 
