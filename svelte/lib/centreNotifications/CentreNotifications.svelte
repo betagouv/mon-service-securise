@@ -2,15 +2,14 @@
   import { onMount } from 'svelte';
   import FermetureSurClicEnDehors from '../ui/FermetureSurClicEnDehors.svelte';
   import type { Notification, TypeOnglet } from './centreNotifications.d';
-  import { recupereNotifications } from './centreNotifications.api';
   import ListeNotifications from './kit/ListeNotifications.svelte';
   import Onglet from './kit/Onglet.svelte';
+  import { storeNotifications } from '../ui/stores/notifications.store';
 
   let ouvert = false;
   let elementCentreNotifications: HTMLDivElement;
   let ongletActif: TypeOnglet = 'aFaire';
 
-  let notifications: Notification[] = [];
   let notificationsParOnglet: Record<TypeOnglet, Notification[]> = {
     aFaire: [],
     nouveautes: [],
@@ -20,14 +19,14 @@
   const calculNbNonLue = (notifications: Notification[]) =>
     notifications.filter((n) => n.statutLecture === 'nonLue').length;
 
-  $: nbNonLue = calculNbNonLue(notifications);
+  $: nbNonLue = calculNbNonLue($storeNotifications);
 
   const rafraichisNotifications = async () => {
-    notifications = await recupereNotifications();
+    await storeNotifications.rafraichis();
     notificationsParOnglet = {
-      aFaire: notifications.filter((n) => n.type === 'tache'),
-      nouveautes: notifications.filter((n) => n.type === 'nouveaute'),
-      toutes: notifications,
+      aFaire: $storeNotifications.filter((n) => n.type === 'tache'),
+      nouveautes: $storeNotifications.filter((n) => n.type === 'nouveaute'),
+      toutes: $storeNotifications,
     };
   };
 

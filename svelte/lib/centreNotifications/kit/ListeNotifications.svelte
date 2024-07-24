@@ -1,6 +1,6 @@
 <script lang="ts">
   import ComposantNotification from './Notification.svelte';
-  import type { Notification } from './centreNotifications.d';
+  import type { Notification } from '../centreNotifications.d';
 
   export let notifications: Notification[];
 </script>
