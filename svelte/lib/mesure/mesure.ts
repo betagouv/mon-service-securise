@@ -12,9 +12,10 @@ let enteteTiroir: EnteteTiroir;
 const changeCartoucheDuReferentiel = () => {
   enteteTiroir?.$destroy();
   const cible = document.querySelector('.titre-tiroir');
-  enteteTiroir = new EnteteTiroir({
-    target: cible,
-  });
+  if (!cible) {
+    throw new Error('Element titre du tiroir non trouvé');
+  }
+  enteteTiroir = new EnteteTiroir({ target: cible });
 };
 
 const reinitialiseStore = (mesureAEditer?: MesureEditee) => {
@@ -32,4 +33,4 @@ const rechargeApp = ({ mesureAEditer, ...autreProps }: MesureProps) => {
   });
 };
 
-export default app;
+export default app!;
