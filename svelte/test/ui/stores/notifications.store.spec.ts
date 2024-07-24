@@ -1,8 +1,15 @@
-import { expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { get } from 'svelte/store';
 import { storeNotifications } from '../../../lib/ui/stores/notifications.store';
 import axios from 'axios';
-import adaptateurAjaxAxios from '../../../../public/modules/adaptateurAjaxAxios.mjs';
+
+beforeEach(() => {
+  vi.mock('axios');
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 test('le store est initialisé avec un tableau vide', () => {
   const notifications = get(storeNotifications);
@@ -11,7 +18,6 @@ test('le store est initialisé avec un tableau vide', () => {
 });
 
 test('peut rafraichir les notifications du store', async () => {
-  vi.mock('axios');
   vi.mocked(axios.get).mockResolvedValue({
     data: { notifications: [{ type: 'nouveaute', titre: "C'est nouveau" }] },
   });
@@ -23,4 +29,13 @@ test('peut rafraichir les notifications du store', async () => {
   expect(notifications[0].type).toBe('nouveaute');
   expect(notifications[0].titre).toBe("C'est nouveau");
   expect(vi.mocked(axios.get)).toHaveBeenCalledWith('/api/notifications');
+});
+
+test('peut marquer une notification comme lue', async () => {
+  await storeNotifications.marqueLue('nouveaute', 'encartHomologation');
+
+  expect(vi.mocked(axios.put)).toHaveBeenCalledOnce();
+  expect(vi.mocked(axios.put)).toHaveBeenCalledWith(
+    '/api/notifications/nouveautes/encartHomologation'
+  );
 });
