@@ -83,7 +83,7 @@ const brancheComportementNavigationEtapes = () => {
           const reponse = await axios({
             method: 'post',
             url: `/api/service/estimationNiveauSecurite`,
-            data: extraisParametresDescriptionService('#homologation'),
+            data: extraisParametresDescriptionService('#homologation', true),
           });
           niveauDeSecuriteMinimal = reponse.data.niveauDeSecuriteMinimal;
         }

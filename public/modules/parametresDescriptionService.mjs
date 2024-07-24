@@ -3,7 +3,10 @@ import parametres, {
   modifieParametresAvecItemsExtraits,
 } from './parametres.mjs';
 
-const extraisParametresDescriptionService = (selecteurFormulaire) => {
+const extraisParametresDescriptionService = (
+  selecteurFormulaire,
+  pourEstimationNiveauSecurite = false
+) => {
   const idFormulaires = $.map(
     $('form', selecteurFormulaire),
     (formulaire) => formulaire.id
@@ -30,9 +33,16 @@ const extraisParametresDescriptionService = (selecteurFormulaire) => {
   delete params['siretEntite-selectize'];
   delete params['departementEntite-selectize'];
 
-  const [borneBasse, borneHaute] =
-    params.nombreOrganisationsUtilisatrices.split('-');
-  params.nombreOrganisationsUtilisatrices = { borneBasse, borneHaute };
+  if (
+    pourEstimationNiveauSecurite &&
+    !params.nombreOrganisationsUtilisatrices
+  ) {
+    params.nombreOrganisationsUtilisatrices = { borneBasse: 0, borneHaute: 0 };
+  } else {
+    const [borneBasse, borneHaute] =
+      params.nombreOrganisationsUtilisatrices.split('-');
+    params.nombreOrganisationsUtilisatrices = { borneBasse, borneHaute };
+  }
 
   return params;
 };
