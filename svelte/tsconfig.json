@@ -17,6 +17,7 @@
     "lib/**/*.ts",
     "lib/**/*.js",
     "lib/**/*.svelte",
+    "test/**/*.ts",
     ".eslintrc.js"
   ]
 }
