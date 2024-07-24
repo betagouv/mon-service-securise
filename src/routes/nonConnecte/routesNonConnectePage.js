@@ -5,6 +5,7 @@ const {
   construisUrlAbsolueVersPage,
 } = require('../../http/redirection');
 const CmsCrisp = require('../../cms/cmsCrisp');
+const { ErreurArticleCrispIntrouvable } = require('../../erreurs');
 
 const routesNonConnectePage = ({
   adaptateurCmsCrisp,
@@ -126,6 +127,23 @@ const routesNonConnectePage = ({
       reponse.render('article', donneesArticle);
     }
   );
+
+  routes.get('/articles/:slug', async (requete, reponse, suite) => {
+    const { slug } = requete.params;
+
+    const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+    try {
+      const donneesArticle = await cmsCrisp.recupereArticle(slug);
+
+      reponse.render('article', donneesArticle);
+    } catch (e) {
+      if (e instanceof ErreurArticleCrispIntrouvable) {
+        reponse.sendStatus(404);
+      } else {
+        suite(e);
+      }
+    }
+  });
 
   routes.get('/sitemap.xml', async (_requete, reponse) => {
     reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });

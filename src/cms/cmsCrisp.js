@@ -39,6 +39,20 @@ class CmsCrisp {
       tableDesMatieres: crispMarkdown.tableDesMatieres(),
     };
   }
+
+  async recupereArticle(slug) {
+    const { contenuMarkdown, titre, description } =
+      await this.adaptateurCmsCrisp.recupereArticleBlog(slug);
+    const crispMarkdown = this.constructeurCrispMarkdown(contenuMarkdown);
+    const contenu = crispMarkdown.versHTML();
+
+    return {
+      titre,
+      contenu,
+      description,
+      tableDesMatieres: crispMarkdown.tableDesMatieres(),
+    };
+  }
 }
 
 module.exports = CmsCrisp;
