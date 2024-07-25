@@ -42,6 +42,12 @@ const controleurErreurs = (erreur, requete, reponse, suite) => {
     reponse.end();
     return suite();
   }
+  const estErreurCSRF = erreur.message === 'CSRF token mismatch';
+  if (estErreurCSRF) {
+    logueErreur(new Error('Une erreur CSRF mismatch a été détectée'), {
+      'Token CSRF du client': requete.headers['x-csrf-token'],
+    });
+  }
 
   if (requete && requete.body) {
     Object.keys(requete.body).forEach((cle) => {
