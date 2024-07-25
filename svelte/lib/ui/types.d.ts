@@ -18,6 +18,7 @@ type NotificationBase = {
   type: TypeNotification;
   doitNotifierLecture: boolean;
   horodatage?: string;
+  canalDiffusion: 'centreNotifications' | 'page';
 };
 
 export type NotificationNouveaute = NotificationBase & {

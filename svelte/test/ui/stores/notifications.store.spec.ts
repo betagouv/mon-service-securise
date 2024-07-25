@@ -31,24 +31,46 @@ describe('Le store de notifications', () => {
     vi.restoreAllMocks();
   });
 
-  it('est initialisé avec un tableau vide', () => {
+  it('est initialisé avec un objet comportant les notifications pour le centre de notifications et pour les pages', () => {
     const notifications = get(storeNotifications);
 
-    expect(notifications).toStrictEqual([]);
+    expect(notifications.pourCentreNotifications).toStrictEqual([]);
+    expect(notifications.pourPage).toStrictEqual([]);
   });
 
-  it('peut rafraichir les notifications du store', async () => {
-    vi.mocked(axios.get).mockResolvedValue({
-      data: { notifications: [{ type: 'nouveaute', titre: "C'est nouveau" }] },
+  describe('sur demande de rafraichissement des notifications', () => {
+    it('met à jour ses notifications en séparant celles du centre de notifications et celles des pages', async () => {
+      vi.mocked(axios.get).mockResolvedValue({
+        data: {
+          notifications: [
+            {
+              id: 'ID1',
+              type: 'nouveaute',
+              titre: "C'est nouveau",
+              canalDiffusion: 'centreNotifications',
+            },
+            {
+              id: 'ID2',
+              type: 'nouveaute',
+              canalDiffusion: 'page',
+            },
+          ],
+        },
+      });
+
+      await storeNotifications.rafraichis();
+
+      const notifications = get(storeNotifications);
+      expect(notifications.pourCentreNotifications.length).toBe(1);
+      expect(notifications.pourCentreNotifications[0].id).toBe('ID1');
+      expect(notifications.pourCentreNotifications[0].type).toBe('nouveaute');
+      expect(notifications.pourCentreNotifications[0].titre).toBe(
+        "C'est nouveau"
+      );
+      expect(notifications.pourPage.length).toBe(1);
+      expect(notifications.pourPage[0].id).toBe('ID2');
+      expect(vi.mocked(axios.get)).toHaveBeenCalledWith('/api/notifications');
     });
-
-    await storeNotifications.rafraichis();
-
-    const notifications = get(storeNotifications);
-    expect(notifications.length).toBe(1);
-    expect(notifications[0].type).toBe('nouveaute');
-    expect(notifications[0].titre).toBe("C'est nouveau");
-    expect(vi.mocked(axios.get)).toHaveBeenCalledWith('/api/notifications');
   });
 
   describe('sur demande de marquage à "lue"', () => {

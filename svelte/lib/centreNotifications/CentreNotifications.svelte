@@ -14,12 +14,16 @@
   const calculNbNonLue = (notifications: Notification[]) =>
     notifications.filter((n) => n.statutLecture === 'nonLue').length;
 
-  $: nbNonLue = calculNbNonLue($storeNotifications);
+  $: nbNonLue = calculNbNonLue($storeNotifications.pourCentreNotifications);
 
   $: notificationsParOnglet = {
-    aFaire: $storeNotifications.filter((n) => n.type === 'tache'),
-    nouveautes: $storeNotifications.filter((n) => n.type === 'nouveaute'),
-    toutes: $storeNotifications,
+    aFaire: $storeNotifications.pourCentreNotifications.filter(
+      (n) => n.type === 'tache'
+    ),
+    nouveautes: $storeNotifications.pourCentreNotifications.filter(
+      (n) => n.type === 'nouveaute'
+    ),
+    toutes: $storeNotifications.pourCentreNotifications,
   };
 
   onMount(async () => {
