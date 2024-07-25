@@ -29,6 +29,7 @@
   import { mesures } from './stores/mesures.store';
   import { rechercheParAvancement } from './stores/rechercheParAvancement.store';
   import AucunResultat from './aucunResultat/AucunResultat.svelte';
+  import { volumetrieMesures } from './stores/volumetrieMesures.store';
 
   enum EtatEnregistrement {
     Jamais,
@@ -138,7 +139,7 @@
     <tr class="ligne-onglet">
       <th colspan="2">
         <div class="conteneur-onglet">
-          {#if $nombreResultats.nombreParAvancement.statutADefinir}
+          {#if $volumetrieMesures.totalSansStatut}
             <Onglet
               bind:ongletActif={$rechercheParAvancement}
               cetOnglet="statutADefinir"
