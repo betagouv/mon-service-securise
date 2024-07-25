@@ -6,7 +6,6 @@ import { mesures } from './mesures.store';
 import type { Avancement } from './rechercheParAvancement.store';
 
 type NombreResultats = {
-  total: number;
   filtrees: number;
   aucunResultat: boolean;
   aDesFiltresAppliques: boolean;
@@ -14,29 +13,18 @@ type NombreResultats = {
 };
 export const nombreResultats = derived<
   [
-    typeof mesures,
     typeof resultatsDeRecherche,
     typeof rechercheParReferentiel,
     typeof rechercheParCategorie,
   ],
   NombreResultats
 >(
-  [
-    mesures,
-    resultatsDeRecherche,
-    rechercheParReferentiel,
-    rechercheParCategorie,
-  ],
+  [resultatsDeRecherche, rechercheParReferentiel, rechercheParCategorie],
   ([
-    $mesures,
     $resultatsDeRecherche,
     $rechercheParReferentiel,
     $rechercheParCategorie,
   ]) => {
-    const nbMesuresGenerales = Object.keys($mesures.mesuresGenerales).length;
-    const nbMesuresSpecifiques = $mesures.mesuresSpecifiques.length;
-    const nbMesuresTotal = nbMesuresGenerales + nbMesuresSpecifiques;
-
     const nbMesuresGeneralesFiltrees = Object.keys(
       $resultatsDeRecherche.mesuresGenerales
     ).length;
@@ -46,7 +34,6 @@ export const nombreResultats = derived<
       nbMesuresGeneralesFiltrees + nbMesuresSpecifiquesFiltrees;
 
     return {
-      total: nbMesuresTotal,
       filtrees: nbMesuresFiltreesTotal,
       aucunResultat: nbMesuresFiltreesTotal === 0,
       aDesFiltresAppliques:

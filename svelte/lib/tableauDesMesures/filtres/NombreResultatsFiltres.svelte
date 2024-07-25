@@ -1,5 +1,6 @@
 <script>
   import { nombreResultats } from '../stores/nombreDeResultats.store';
+  import { volumetrieMesures } from '../stores/volumetrieMesures.store';
 </script>
 
 <p
@@ -7,7 +8,7 @@
   class:visible={$nombreResultats.aDesFiltresAppliques}
 >
   <strong>{$nombreResultats.filtrees}&nbsp;</strong
-  >/&nbsp;{$nombreResultats.total}
+  >/&nbsp;{$volumetrieMesures.total}
   <span>mesures affichées</span>
 </p>
 
