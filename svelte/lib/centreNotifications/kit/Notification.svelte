@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Notification } from '../centreNotifications.d';
+  import type { Notification } from '../../ui/types.d';
   import { formatteDifferenceDateRelative } from '../../formatDate/formatDate';
   import { storeNotifications } from '../../ui/stores/notifications.store';
 

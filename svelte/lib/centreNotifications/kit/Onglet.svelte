@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { TypeOnglet } from './centreNotifications.d';
+  import type { TypeOnglet } from '../centreNotifications.d';
 
   export let ongletActif: TypeOnglet;
   export let cetOnglet: TypeOnglet;

@@ -1,8 +1,5 @@
 import { writable } from 'svelte/store';
-import type {
-  Notification,
-  TypeNotification,
-} from '../../centreNotifications/centreNotifications.d';
+import type { Notification, TypeNotification } from '../types.d';
 
 const { subscribe, set } = writable<Notification[]>([]);
 
