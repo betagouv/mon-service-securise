@@ -3,6 +3,7 @@ import { mesures } from './mesures.store';
 
 type VolumetrieMesures = {
   total: number;
+  totalSansStatut: number;
 };
 
 export const volumetrieMesures = derived<typeof mesures, VolumetrieMesures>(
@@ -11,5 +12,8 @@ export const volumetrieMesures = derived<typeof mesures, VolumetrieMesures>(
     total:
       $mesures.mesuresSpecifiques.length +
       Object.keys($mesures.mesuresGenerales).length,
+    totalSansStatut: Object.values($mesures.mesuresGenerales).filter(
+      (mesure) => !mesure.statut
+    ).length,
   })
 );
