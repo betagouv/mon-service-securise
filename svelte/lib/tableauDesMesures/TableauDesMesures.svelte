@@ -82,6 +82,12 @@
       $mesures.mesuresGenerales[idMesure],
       statuts
     );
+    if (
+      $volumetrieMesures.totalSansStatut === 0 &&
+      $rechercheParAvancement === 'statutADefinir'
+    ) {
+      $rechercheParAvancement = 'enAction';
+    }
   };
 
   type MesureAEditer = {
