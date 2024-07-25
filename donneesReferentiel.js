@@ -56,6 +56,11 @@ module.exports = {
       image: 'besoinsSecurite.svg',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'ongletStatutsMesures',
+      dateDeDeploiement: '2024-07-25 12:30:00Z',
+      canalDiffusion: 'page',
+    },
   ],
 
   tachesCompletudeProfil: [
