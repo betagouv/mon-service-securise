@@ -4,7 +4,7 @@
   "description": "",
   "engines": {
     "node": "18",
-    "npm": "9"
+    "npm": "10"
   },
   "scripts": {
     "build": "knex migrate:latest && npm run cree-utilisateur-demo && npx vite build --config svelte/vite.config.mts",
