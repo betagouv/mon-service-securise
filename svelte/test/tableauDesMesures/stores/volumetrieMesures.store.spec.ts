@@ -5,49 +5,94 @@ import { mesures } from '../../../lib/tableauDesMesures/stores/mesures.store';
 import { Referentiel } from '../../../lib/ui/types.d';
 
 describe('Le store dérivé de volumétrie des mesures', () => {
-  it('sait quand il n’y a pas de mesure', () => {
-    const { total } = get(volumetrieMesures);
+  describe('sur demande du total', () => {
+    it('sait quand il n’y a pas de mesure', () => {
+      const { total } = get(volumetrieMesures);
 
-    expect(total).toBe(0);
-  });
-
-  it('connaît le nombre total des mesures specifiques', () => {
-    mesures.reinitialise({
-      mesuresGenerales: {},
-      mesuresSpecifiques: [
-        {
-          categorie: 'Protection',
-          modalites: '',
-          statut: 'Fait',
-          description: '',
-          identifiantNumerique: '000',
-        },
-      ],
+      expect(total).toBe(0);
     });
 
-    const { total } = get(volumetrieMesures);
+    it('connaît le nombre total des mesures specifiques', () => {
+      mesures.reinitialise({
+        mesuresGenerales: {},
+        mesuresSpecifiques: [
+          {
+            categorie: 'Protection',
+            modalites: '',
+            statut: 'Fait',
+            description: '',
+            identifiantNumerique: '000',
+          },
+        ],
+      });
 
-    expect(total).toBe(1);
-  });
+      const { total } = get(volumetrieMesures);
 
-  it('connaît le nombre total des mesures générales', () => {
-    mesures.reinitialise({
-      mesuresGenerales: {
-        testIntrusion: {
-          categorie: 'Protection',
-          indispensable: true,
-          descriptionLongue: '',
-          referentiel: Referentiel.ANSSI,
-          modalites: '',
-          description: '',
-          identifiantNumerique: '000',
-        },
-      },
-      mesuresSpecifiques: [],
+      expect(total).toBe(1);
     });
 
-    const { total } = get(volumetrieMesures);
+    it('connaît le nombre total des mesures générales', () => {
+      mesures.reinitialise({
+        mesuresGenerales: {
+          testIntrusion: {
+            categorie: 'Protection',
+            indispensable: true,
+            descriptionLongue: '',
+            referentiel: Referentiel.ANSSI,
+            modalites: '',
+            description: '',
+            identifiantNumerique: '000',
+          },
+        },
+        mesuresSpecifiques: [],
+      });
 
-    expect(total).toBe(1);
+      const { total } = get(volumetrieMesures);
+
+      expect(total).toBe(1);
+    });
+  });
+  describe('sur demande du nombre de mesure sans statut', () => {
+    it('retourne 0 quand il n’y en a pas', () => {
+      mesures.reinitialise({
+        mesuresGenerales: {
+          mesureFaite: {
+            categorie: 'Protection',
+            indispensable: true,
+            statut: 'Faite',
+            descriptionLongue: '',
+            referentiel: Referentiel.ANSSI,
+            modalites: '',
+            description: '',
+            identifiantNumerique: '000',
+          },
+        },
+        mesuresSpecifiques: [],
+      });
+
+      const { totalSansStatut } = get(volumetrieMesures);
+
+      expect(totalSansStatut).toBe(0);
+    });
+    it('retourne 1 quand il y en a une', () => {
+      mesures.reinitialise({
+        mesuresGenerales: {
+          mesureSansStatut: {
+            categorie: 'Protection',
+            indispensable: true,
+            descriptionLongue: '',
+            referentiel: Referentiel.ANSSI,
+            modalites: '',
+            description: '',
+            identifiantNumerique: '000',
+          },
+        },
+        mesuresSpecifiques: [],
+      });
+
+      const { totalSansStatut } = get(volumetrieMesures);
+
+      expect(totalSansStatut).toBe(1);
+    });
   });
 });
