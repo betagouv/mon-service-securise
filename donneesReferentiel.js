@@ -25,6 +25,7 @@ module.exports = {
       sousTitre:
         "Valorisez l'effort de sécurisation mis en œuvre et renforcez la confiance de vos usagers dans vos services",
       image: 'encart_homologation.png',
+      canalDiffusion: 'centreNotifications',
     },
     {
       id: 'communauteMSS',
@@ -34,6 +35,7 @@ module.exports = {
       sousTitre:
         'Devenez membre de la communauté MonServiceSécurisé et échangez avec vos pairs',
       image: 'communauteMSS.png',
+      canalDiffusion: 'centreNotifications',
     },
     {
       id: 'mesuresPartielles',
@@ -42,6 +44,7 @@ module.exports = {
       titre: "Le calcul de l'Indice Cyber évolue !",
       sousTitre: 'Il prend désormais en compte les mesures "partielles"',
       image: 'indiceCyber.png',
+      canalDiffusion: 'centreNotifications',
     },
     {
       id: 'besoinsSecurite',
@@ -51,6 +54,7 @@ module.exports = {
       sousTitre:
         "Choisissez les besoins adaptés à vos services et adaptez la démarche d'homologation, grâce aux indications fournies par l'ANSSI",
       image: 'besoinsSecurite.svg',
+      canalDiffusion: 'centreNotifications',
     },
   ],
 
