@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import FermetureSurClicEnDehors from '../ui/FermetureSurClicEnDehors.svelte';
-  import type { Notification, TypeOnglet } from './centreNotifications.d';
+  import type { Notification } from '../ui/types.d';
+  import type { TypeOnglet } from './centreNotifications.d';
   import ListeNotifications from './kit/ListeNotifications.svelte';
   import Onglet from './kit/Onglet.svelte';
   import { storeNotifications } from '../ui/stores/notifications.store';
