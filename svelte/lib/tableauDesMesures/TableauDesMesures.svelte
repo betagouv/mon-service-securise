@@ -30,7 +30,7 @@
   import { volumetrieMesures } from './stores/volumetrieMesures.store';
   import { nouveautesPage } from '../ui/stores/nouveautesPage.store';
   import { storeNotifications } from '../ui/stores/notifications.store';
-  import { glisse } from '../ui/animations/transitions';
+  import Avertissement from '../ui/Avertissement.svelte';
 
   enum EtatEnregistrement {
     Jamais,
@@ -142,21 +142,12 @@
   <MenuFiltres {categories} />
 </div>
 {#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures')}
-  <div
+  <Avertissement
     id="nouveaute-onglet-statuts-mesures"
-    class="avertissement bleu"
-    transition:glisse={{ depuis: 'right', duree: 500 }}
+    niveau="info"
+    avecBoutonFermeture
+    on:fermeture={marqueNouveauteLue}
   >
-    <button
-      class="fermeture-avertissement"
-      type="button"
-      on:click|preventDefault={marqueNouveauteLue}
-      >×
-    </button>
-    <img
-      src="/statique/assets/images/icone_information_suppression.svg"
-      alt="Icône d'information"
-    />
     <div>
       <span>
         <b> Nous vous invitons à définir le statut de vos mesures. </b>
@@ -173,7 +164,7 @@
         sont dans l’onglet <b>“Traité”</b>
       </p>
     </div>
-  </div>
+  </Avertissement>
 {/if}
 <table class="tableau-des-mesures">
   <colgroup>
@@ -410,24 +401,6 @@
     gap: 8px;
   }
 
-  .avertissement {
-    padding: 10px 50px 10px 16px;
-    display: flex;
-    align-items: start;
-    gap: 12px;
-    border-radius: 4px;
-    border: 1px solid #faa72c;
-    background: var(--fond-ocre-pale);
-    margin-bottom: 28px;
-    text-align: left;
-    position: relative;
-  }
-
-  .avertissement.bleu {
-    border: 1px solid var(--bleu-mise-en-avant);
-    background: var(--fond-bleu-pale);
-  }
-
   .tag {
     margin: 0;
     --couleur-fond: transparent;
@@ -461,16 +434,5 @@
   .aLancer {
     --couleur-fond: #e9ddff;
     --couleur-texte: #7025da;
-  }
-
-  .fermeture-avertissement {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 22px;
-    line-height: 16px;
-    background: none;
-    border: none;
-    cursor: pointer;
   }
 </style>
