@@ -5,7 +5,7 @@
   } from './niveauxDeSecurite.d';
   import donneesNiveauxDeSecurite from './donneesNiveauxDeSecurite';
   import { acquitteSuggestionBesoinsSecuriteRetrogrades } from './niveauxDeSecurite.api';
-  import { glisse } from '../ui/animations/transitions';
+  import Avertissement from '../ui/Avertissement.svelte';
 
   export let idService: string;
   export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
@@ -51,11 +51,7 @@
 
 <div class="racine">
   {#if niveauEstRehausse}
-    <div class="avertissement bleu">
-      <img
-        src="/statique/assets/images/icone_information_suppression.svg"
-        alt="Icône de danger"
-      />
+    <Avertissement niveau="info">
       <div>
         <span>
           <b>
@@ -70,23 +66,14 @@
           identifié.
         </span>
       </div>
-    </div>
+    </Avertissement>
   {/if}
   {#if avecSuggestionBesoinsSecuriteRetrogrades}
-    <div
-      class="avertissement"
-      transition:glisse={{ depuis: 'right', duree: 500 }}
+    <Avertissement
+      niveau="avertissement"
+      avecBoutonFermeture
+      on:fermeture={masqueSuggestionBesoinsSecuriteRetrogrades}
     >
-      <button
-        class="fermeture-avertissement"
-        type="button"
-        on:click|preventDefault={masqueSuggestionBesoinsSecuriteRetrogrades}
-        >×</button
-      >
-      <img
-        src="/statique/assets/images/icone_danger.svg"
-        alt="Icône de danger"
-      />
       <div>
         <span>
           <b>
@@ -100,7 +87,7 @@
           associées à ce niveau.
         </span>
       </div>
-    </div>
+    </Avertissement>
   {/if}
   <div class="niveaux">
     {#each donneesNiveauxDeSecurite as niveau, index (index)}
@@ -164,11 +151,7 @@
         class:details-niveau-choisi={niveauChoisi === niveauSurbrillance}
       >
         {#if estNiveauSuperieur(niveauSurbrillance)}
-          <div class="avertissement">
-            <img
-              src="/statique/assets/images/icone_danger.svg"
-              alt="Icône de danger"
-            />
+          <Avertissement niveau="avertissement">
             <div>
               <span>
                 <b>
@@ -182,7 +165,7 @@
                 complète et la démarche d'homologation plus exigeante
               </span>
             </div>
-          </div>
+          </Avertissement>
         {/if}
         <span class="chip">Exemples de services numériques</span>
         <ul class="liste-exemples-services">
@@ -581,38 +564,9 @@
     transform: rotate(180deg);
   }
 
-  .avertissement {
-    padding: 10px 16px;
-    display: flex;
-    align-items: start;
-    gap: 12px;
-    border-radius: 4px;
-    border: 1px solid #faa72c;
-    background: var(--fond-ocre-pale);
-    margin-bottom: 52px;
-    text-align: left;
-    position: relative;
-  }
-
-  .avertissement.bleu {
-    border: 1px solid var(--bleu-mise-en-avant);
-    background: var(--fond-bleu-pale);
-  }
-
   .fleche-navigation:hover:before,
   .fleche-navigation:hover:after {
     filter: brightness(0) invert(22%) sepia(49%) saturate(3021%)
       hue-rotate(188deg) brightness(95%) contrast(91%);
-  }
-
-  .fermeture-avertissement {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 22px;
-    line-height: 16px;
-    background: none;
-    border: none;
-    cursor: pointer;
   }
 </style>
