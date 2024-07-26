@@ -129,15 +129,32 @@
   $: estPremiereSousEtape = indexEtapeCourante === 0;
 
   $: if (!afficheModale) rideau.style.clipPath = 'none';
+
   const calculePolygone = () => {
     if (!positionCible || !sousEtape) return;
     positionCible = sousEtape.cible.getBoundingClientRect();
     let { left, top, right, bottom } = positionCible;
-    if (sousEtape.margeElementMisEnAvant) {
-      left -= sousEtape.margeElementMisEnAvant;
-      right += sousEtape.margeElementMisEnAvant;
-      bottom += sousEtape.margeElementMisEnAvant;
-      top -= sousEtape.margeElementMisEnAvant;
+    if (sousEtape.margeElementMisEnAvant || sousEtape.margesElementMisEnAvant) {
+      let margeGauche;
+      let margeDroite;
+      let margeBas;
+      let margeHaut;
+      if (sousEtape.margeElementMisEnAvant) {
+        margeGauche = sousEtape.margeElementMisEnAvant;
+        margeDroite = sousEtape.margeElementMisEnAvant;
+        margeBas = sousEtape.margeElementMisEnAvant;
+        margeHaut = sousEtape.margeElementMisEnAvant;
+      } else if (sousEtape.margesElementMisEnAvant) {
+        const valeursMarges = sousEtape.margesElementMisEnAvant.split(' ');
+        margeHaut = Number(valeursMarges[0]);
+        margeDroite = Number(valeursMarges[1]);
+        margeBas = Number(valeursMarges[2]);
+        margeGauche = Number(valeursMarges[3]);
+      }
+      left -= margeGauche;
+      right += margeDroite;
+      bottom += margeBas;
+      top -= margeHaut;
     }
     rideau.style.clipPath = `polygon(
             0% 0%,

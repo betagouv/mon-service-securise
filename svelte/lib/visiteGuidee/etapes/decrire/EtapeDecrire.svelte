@@ -63,7 +63,7 @@
         description:
           'Sélectionnez les besoins identifiés par l’ANSSI ou des besoins plus élevés pour découvrir la liste des mesures pour sécuriser votre service.',
         animation: '/statique/assets/images/visiteGuidee/besoins_securite.gif',
-        margeElementMisEnAvant: 20,
+        margesElementMisEnAvant: '0 20 0 20',
       },
       {
         cible: cibleGererContributeurs,
