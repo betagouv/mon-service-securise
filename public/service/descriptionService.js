@@ -201,10 +201,11 @@ $(() => {
     '.bouton#diagnostic',
     extraisParametresDescriptionService,
     navigationEtapes,
-    (e) => {
+    (e, donnees) => {
       if (estNomServiceDejaUtilise(e.response)) {
         messageErreurNomDejaUtilise.affiche();
         navigationEtapes.afficheEtape1();
+        $('#niveau-securite-existant').text(`"${donnees.niveauSecurite}"`);
       }
     }
   );
