@@ -12,6 +12,7 @@
   export let niveauSecuriteExistant: IdNiveauDeSecurite | null = null;
   export let lectureSeule: boolean;
   export let avecSuggestionBesoinsSecuriteRetrogrades: boolean;
+  export let modeVisiteGuidee: boolean = false;
 
   let niveauChoisi: IdNiveauDeSecurite;
   let niveauSurbrillance: IdNiveauDeSecurite;
@@ -104,12 +105,15 @@
   <div class="niveaux">
     {#each donneesNiveauxDeSecurite as niveau, index (index)}
       <button
+        class:mode-visite-guidee={modeVisiteGuidee}
         type="button"
         class="boite-niveau"
         class:est-niveau-recommande={niveau.id === niveauDeSecuriteMinimal}
         class:niveau-choisi={niveau.id === niveauChoisi}
         class:boite-en-surbrillance={niveau.id === niveauSurbrillance}
-        on:click={() => (niveauSurbrillance = niveau.id)}
+        on:click={() => {
+          if (!modeVisiteGuidee) niveauSurbrillance = niveau.id;
+        }}
       >
         <h4>{niveau.nom}</h4>
         <p>{niveau.resume}</p>
@@ -125,7 +129,7 @@
           bind:group={niveauChoisi}
           name="niveauSecurite"
           value={niveau.id}
-          disabled={estNiveauTropBas(niveau.id)}
+          disabled={estNiveauTropBas(niveau.id) || modeVisiteGuidee}
         />
         {#if estNiveauTropBas(niveau.id)}
           {#if !lectureSeule}
@@ -294,7 +298,6 @@
     flex-direction: column;
     flex: 1;
     padding: 32px 11px;
-    cursor: pointer;
     outline: 1px dashed var(--liseres-fonce);
     border: none;
     border-radius: 5px;
@@ -305,7 +308,12 @@
       box-shadow 0.2s ease-out;
   }
 
-  .boite-niveau:hover {
+  .boite-niveau:not(.mode-visite-guidee),
+  .boite-niveau:not(.mode-visite-guidee) label {
+    cursor: pointer;
+  }
+
+  .boite-niveau:not(.mode-visite-guidee):hover {
     box-shadow: 0 16px 24px 0 rgba(0, 121, 208, 0.12);
     transform: scale(1.02);
   }
@@ -400,7 +408,6 @@
     border-radius: 4px;
     width: fit-content;
     margin: auto auto 0;
-    cursor: pointer;
   }
 
   .niveau-trop-bas {

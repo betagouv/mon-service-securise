@@ -10,6 +10,7 @@ export type NiveauxDeSecuriteProps = {
   niveauSecuriteExistant?: IdNiveauDeSecurite;
   lectureSeule: boolean;
   avecSuggestionBesoinsSecuriteRetrogrades: boolean;
+  modeVisiteGuidee: boolean;
 };
 
 export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
