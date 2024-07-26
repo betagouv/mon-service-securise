@@ -56,6 +56,7 @@ class CentreNotifications {
     const notifications = taches.map((tache) => ({
       ...tache,
       ...this.referentiel.natureTachesService(tache.nature),
+      canalDiffusion: 'centreNotifications',
     }));
 
     return notifications.map((notification) => ({
@@ -141,7 +142,11 @@ class CentreNotifications {
       .filter((t) => t !== undefined)
       .map((t) =>
         avecStatutLecture(t, CentreNotifications.NOTIFICATION_NON_LUE)
-      );
+      )
+      .map((t) => ({
+        ...t,
+        canalDiffusion: 'centreNotifications',
+      }));
   }
 
   static NOTIFICATION_LUE = 'lue';
