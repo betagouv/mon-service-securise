@@ -3,7 +3,7 @@ run-name: Déploiement du commit "${{ github.event.head_commit.message }}"
 
 on:
   push:
-    branches: [master, poc-deploiement-continu]
+    branches: [master]
   workflow_dispatch: # Pour activer le déclenchement manuel
 
 jobs:
