@@ -33,6 +33,7 @@ export type MesureGeneraleEnrichie = MesureGenerale & {
   indispensable?: boolean;
   referentiel: Referentiel;
   identifiantNumerique: string;
+  lienBlog?: string;
 };
 
 export type MesureSpecifique = MesureGenerale & {
