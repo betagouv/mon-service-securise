@@ -182,7 +182,6 @@
 <style>
   label {
     font-weight: bold;
-    margin-bottom: 16px;
   }
 
   select {
@@ -284,11 +283,13 @@
 
   details p {
     margin: 8px 0 0;
-    font-weight: 500;
+    font-weight: 400;
   }
 
-  details {
-    margin-bottom: 16px;
+  details,
+  .conteneur-statut,
+  label {
+    margin-bottom: 30px;
   }
 
   .conteneur-retour-utilisateur label {
