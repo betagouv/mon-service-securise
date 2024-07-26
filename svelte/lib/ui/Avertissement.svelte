@@ -8,11 +8,7 @@
   export let id: string | undefined = undefined;
 </script>
 
-<div
-  {id}
-  class="cadre {niveau}"
-  transition:glisse={{ depuis: 'right', duree: 500 }}
->
+<div {id} class="cadre {niveau}" out:glisse={{ depuis: 'right', duree: 500 }}>
   {#if avecBoutonFermeture}
     <button
       class="fermeture-avertissement"
