@@ -25,7 +25,7 @@ class CentreNotifications {
     const [tachesProfil, nouveautes, tachesDesServices] = await Promise.all([
       this.toutesTachesProfilUtilisateur(idUtilisateur),
       this.toutesNouveautes(idUtilisateur),
-      this.toutesTachesDeService(idUtilisateur),
+      this.toutesTachesDeServiceNonLues(idUtilisateur),
     ]);
 
     return [
@@ -51,13 +51,15 @@ class CentreNotifications {
     ].sort((a, b) => b.date() - a.date());
   }
 
-  async toutesTachesDeService(idUtilisateur) {
+  async toutesTachesDeServiceNonLues(idUtilisateur) {
     const taches = await this.depotDonnees.tachesDesServices(idUtilisateur);
-    const notifications = taches.map((tache) => ({
-      ...tache,
-      ...this.referentiel.natureTachesService(tache.nature),
-      canalDiffusion: 'centreNotifications',
-    }));
+    const notifications = taches
+      .filter((tache) => !tache.dateFaite)
+      .map((tache) => ({
+        ...tache,
+        ...this.referentiel.natureTachesService(tache.nature),
+        canalDiffusion: 'centreNotifications',
+      }));
 
     return notifications.map((notification) => ({
       ...notification,
