@@ -173,6 +173,16 @@ describe('Le centre de notifications', () => {
       expect(notifs[0].canalDiffusion).to.be('centreNotifications');
     });
 
+    it('retourne uniquement les tâches non lues', async () => {
+      depotDonnees.tachesDesServices = async () => [
+        uneTacheDeService().avecId('T1').faiteMaintenant().construis(),
+      ];
+
+      const notifs = await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifs.length).to.be(0);
+    });
+
     it('complète les informations depuis le référentiel', async () => {
       depotDonnees.tachesDesServices = async (_) => [
         uneTacheDeService().avecNature('niveauRetrograde').construis(),
@@ -294,18 +304,7 @@ describe('Le centre de notifications', () => {
       expect(notifications[0].doitNotifierLecture).to.be(true);
     });
 
-    it("indique qu'une tâche est non lue si elle n'a pas été faite", async () => {
-      depotDonnees.tachesDesServices = async (_) => [
-        uneTacheDeService().pasFaite().construis(),
-      ];
-
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
-
-      expect(notifications[0].statutLecture).to.be('nonLue');
-    });
-
-    it("indique qu'une tâche est lue si elle a été faite", async () => {
+    it('utilise la date de création comme horodatage', async () => {
       depotDonnees.tachesDesServices = async (_) => [
         uneTacheDeService()
           .avecDateDeCreation(new Date('2024-09-13'))
@@ -316,17 +315,6 @@ describe('Le centre de notifications', () => {
         await centreDeNotification().toutesNotifications('U1');
 
       expect(notifications[0].horodatage).to.eql(new Date('2024-09-13'));
-    });
-
-    it('utilise la date de création comme horodatage', async () => {
-      depotDonnees.tachesDesServices = async (_) => [
-        uneTacheDeService().faiteMaintenant().construis(),
-      ];
-
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
-
-      expect(notifications[0].statutLecture).to.be('lue');
     });
   });
 
