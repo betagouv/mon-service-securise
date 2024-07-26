@@ -43,7 +43,7 @@ const initialiseComportementFormulaire = (
       redirige(donnees);
     } catch (e) {
       basculeEnCoursChargement($bouton, false);
-      callbackErreur(e);
+      callbackErreur(e, requete.data);
     }
   });
 
