@@ -29,6 +29,8 @@
   import AucunResultat from './aucunResultat/AucunResultat.svelte';
   import { volumetrieMesures } from './stores/volumetrieMesures.store';
   import { nouveautesPage } from '../ui/stores/nouveautesPage.store';
+  import { storeNotifications } from '../ui/stores/notifications.store';
+  import { glisse } from '../ui/animations/transitions';
 
   enum EtatEnregistrement {
     Jamais,
@@ -116,6 +118,10 @@
       new CustomEvent('svelte-affiche-tiroir-export-mesures')
     );
   };
+
+  const marqueNouveauteLue = async () => {
+    await storeNotifications.marqueLue('nouveaute', 'ongletStatutsMesures');
+  };
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
@@ -136,7 +142,17 @@
   <MenuFiltres {categories} />
 </div>
 {#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures')}
-  <div id="nouveaute-onglet-statuts-mesures" class="avertissement bleu">
+  <div
+    id="nouveaute-onglet-statuts-mesures"
+    class="avertissement bleu"
+    transition:glisse={{ depuis: 'right', duree: 500 }}
+  >
+    <button
+      class="fermeture-avertissement"
+      type="button"
+      on:click|preventDefault={marqueNouveauteLue}
+      >×
+    </button>
     <img
       src="/statique/assets/images/icone_information_suppression.svg"
       alt="Icône d'information"
@@ -445,5 +461,16 @@
   .aLancer {
     --couleur-fond: #e9ddff;
     --couleur-texte: #7025da;
+  }
+
+  .fermeture-avertissement {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    line-height: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 </style>
