@@ -109,6 +109,14 @@ const repliMenu = () => {
           $gererContributeurs.addClass('ouvert');
         }
       });
+
+      $(document.body).on('jquery-replie-menu-navigation-visite-guidee', () => {
+        const menuFerme = $menu.hasClass('ferme');
+        if (!menuFerme) {
+          $menu.addClass('ferme');
+          $gererContributeurs.removeClass('ouvert');
+        }
+      });
     },
   };
 };
