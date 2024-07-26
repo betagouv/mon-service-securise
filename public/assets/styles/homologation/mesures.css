@@ -99,3 +99,7 @@
   flex-direction: column;
   flex-grow: 1;
 }
+
+#nouveaute-onglet-statuts-mesures {
+  order: 30;
+}

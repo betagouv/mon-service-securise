@@ -22,14 +22,13 @@
   import Onglet from '../ui/Onglet.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
-  import { rechercheParReferentiel } from './stores/rechercheParReferentiel.store';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
-  import { rechercheParCategorie } from './stores/rechercheParCategorie.store';
   import { resultatsDeRecherche } from './stores/resultatsDeRecherche';
   import { mesures } from './stores/mesures.store';
   import { rechercheParAvancement } from './stores/rechercheParAvancement.store';
   import AucunResultat from './aucunResultat/AucunResultat.svelte';
   import { volumetrieMesures } from './stores/volumetrieMesures.store';
+  import { nouveautesPage } from '../ui/stores/nouveautesPage.store';
 
   enum EtatEnregistrement {
     Jamais,
@@ -136,6 +135,30 @@
   </div>
   <MenuFiltres {categories} />
 </div>
+{#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures')}
+  <div id="nouveaute-onglet-statuts-mesures" class="avertissement bleu">
+    <img
+      src="/statique/assets/images/icone_information_suppression.svg"
+      alt="Icône d'information"
+    />
+    <div>
+      <span>
+        <b> Nous vous invitons à définir le statut de vos mesures. </b>
+      </span>
+      <br />
+      <p>
+        Les mesures <span class="tag aLancer">À lancer</span> et
+        <span class="tag enCours">Partielle</span>
+        sont désormais dans l’onglet <b>“En action”</b>
+      </p>
+      <p>
+        Les mesures <span class="tag fait">Faite</span> et
+        <span class="tag nonFait">Non prise en compte</span>
+        sont dans l’onglet <b>“Traité”</b>
+      </p>
+    </div>
+  </div>
+{/if}
 <table class="tableau-des-mesures">
   <colgroup>
     <col class="infos-mesures" />
@@ -369,5 +392,58 @@
   .conteneur-onglet {
     display: flex;
     gap: 8px;
+  }
+
+  .avertissement {
+    padding: 10px 50px 10px 16px;
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    border-radius: 4px;
+    border: 1px solid #faa72c;
+    background: var(--fond-ocre-pale);
+    margin-bottom: 28px;
+    text-align: left;
+    position: relative;
+  }
+
+  .avertissement.bleu {
+    border: 1px solid var(--bleu-mise-en-avant);
+    background: var(--fond-bleu-pale);
+  }
+
+  .tag {
+    margin: 0;
+    --couleur-fond: transparent;
+    --couleur-texte: transparent;
+    border: none;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: fit-content;
+    color: white;
+    background: var(--couleur-texte);
+  }
+
+  .fait {
+    --couleur-fond: #d4f4db;
+    --couleur-texte: #0c8626;
+  }
+
+  .enCours {
+    --couleur-fond: #dbeeff;
+    --couleur-texte: #0079d0;
+  }
+
+  .nonFait {
+    --couleur-fond: #fff2de;
+    --couleur-texte: #faa72c;
+  }
+
+  .aLancer {
+    --couleur-fond: #e9ddff;
+    --couleur-texte: #7025da;
   }
 </style>
