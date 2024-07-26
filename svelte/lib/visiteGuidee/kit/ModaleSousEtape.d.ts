@@ -5,7 +5,8 @@ export type PositionModale =
   | 'MilieuGauche'
   | 'HautGauche'
   | 'BasGauche'
-  | 'BasMilieu';
+  | 'BasMilieu'
+  | 'DeuxTiersCentre';
 
 export type SousEtape = {
   cible: HTMLElement;
@@ -20,4 +21,4 @@ export type SousEtape = {
   texteBoutonDerniereEtape?: string;
 };
 
-export type PositionRond = 'Droite' | 'Gauche' | 'Bas';
+export type PositionRond = 'Droite' | 'Gauche' | 'Bas' | 'DeuxTiersCentre';
