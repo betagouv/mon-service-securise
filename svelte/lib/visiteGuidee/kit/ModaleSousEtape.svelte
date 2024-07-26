@@ -38,6 +38,19 @@
   $: {
     if (sousEtape && positionCible) {
       switch (sousEtape.positionnementModale) {
+        case 'DeuxTiersCentre':
+          positionModale = {
+            top: `${positionCible.top + positionCible.height / 2}px`,
+            left: `${
+              positionCible.right -
+              (positionCible.right - positionCible.left) / 3
+            }px`,
+            transformY: '50%',
+            transformX: '0',
+            positionRond: 'DeuxTiersCentre',
+            leftPointe: '0%',
+          };
+          break;
         case 'MilieuDroite':
           positionModale = {
             top: `${positionCible.top + positionCible.height / 2}px`,
@@ -160,6 +173,15 @@
           decallageRond = {
             top: positionCible.bottom - 9,
             left: positionCible.left + positionCible.width / 2 - 9,
+          };
+          break;
+        case 'DeuxTiersCentre':
+          decallageRond = {
+            top: positionCible.top + positionCible.height / 2 - 9,
+            left:
+              positionCible.right -
+              (positionCible.right - positionCible.left) / 3 -
+              16,
           };
           break;
       }
