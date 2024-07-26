@@ -170,6 +170,7 @@ describe('Le centre de notifications', () => {
       expect(notifs.length).to.be(1);
       expect(notifs[0].id).to.be('T1');
       expect(notifs[0].type).to.be('tache');
+      expect(notifs[0].canalDiffusion).to.be('centreNotifications');
     });
 
     it('complète les informations depuis le référentiel', async () => {
@@ -384,6 +385,7 @@ describe('Le centre de notifications', () => {
         expect(taches.length).to.be(1);
         expect(taches[0].titre).to.be('Titre tâche');
         expect(taches[0].statutLecture).to.be('nonLue');
+        expect(taches[0].canalDiffusion).to.be('centreNotifications');
       });
 
       it("reste robuste si les données d'une tâche sont absentes du référentiel", async () => {
