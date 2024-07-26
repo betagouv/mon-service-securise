@@ -47,6 +47,15 @@ const estNomServiceDejaUtilise = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
+const estEnVisiteGuidee = () => {
+  const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+  const visiteGuideeActive =
+    etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
+  const modeVisiteGuidee =
+    visiteGuideeActive && etatVisiteGuidee.utilisateurCourant.profilComplet;
+  return modeVisiteGuidee;
+};
+
 const brancheComportementNavigationEtapes = () => {
   const donneesEtapes = {
     1: {
@@ -98,17 +107,20 @@ const brancheComportementNavigationEtapes = () => {
           $('#suggestion-controle-besoins-securite-retrogrades').text()
         );
         const idService = $('.page-service').data('id-service');
-        document.body.dispatchEvent(
-          new CustomEvent('svelte-recharge-niveaux-de-securite', {
-            detail: {
-              niveauDeSecuriteMinimal,
-              niveauSecuriteExistant,
-              lectureSeule,
-              avecSuggestionBesoinsSecuriteRetrogrades,
-              idService,
-            },
-          })
-        );
+
+        if (!estEnVisiteGuidee()) {
+          document.body.dispatchEvent(
+            new CustomEvent('svelte-recharge-niveaux-de-securite', {
+              detail: {
+                niveauDeSecuriteMinimal,
+                niveauSecuriteExistant,
+                lectureSeule,
+                avecSuggestionBesoinsSecuriteRetrogrades,
+                idService,
+              },
+            })
+          );
+        }
       },
     },
   };
@@ -151,8 +163,20 @@ const brancheComportementNavigationEtapes = () => {
       cacheBouton($conteneurBoutonFinaliser());
     }
 
-    $hautDePage[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!estEnVisiteGuidee()) {
+      $hautDePage[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
+
+  $(document.body).on('jquery-affiche-decrire-etape-3', () => {
+    etapeCourante = 3;
+    afficheEtape();
+  });
+
+  $(document.body).on('jquery-affiche-decrire-etape-1', () => {
+    etapeCourante = 1;
+    afficheEtape();
+  });
 
   $boutonPrecedent().on('click', () => {
     etapeCourante = Math.max(etapeCourante - 1, 1);
