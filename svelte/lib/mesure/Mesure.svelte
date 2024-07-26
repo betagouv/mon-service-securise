@@ -8,10 +8,6 @@
   import { enregistreMesures, enregistreRetourUtilisateur } from './mesure.api';
   import SelectionStatut from '../ui/SelectionStatut.svelte';
   import { rechercheTextuelle } from '../tableauDesMesures/tableauDesMesures.store';
-  import type {
-    MesureGenerale,
-    MesureSpecifique,
-  } from '../tableauDesMesures/tableauDesMesures.d';
   import { toasterStore } from '../ui/stores/toaster.store';
 
   export let idService: string;
@@ -85,6 +81,14 @@
           <p>
             {@html texteSurligne}
           </p>
+          {#if $store.mesureEditee.mesure.lienBlog}
+            <a
+              class="lien-blog"
+              href={$store.mesureEditee.mesure.lienBlog}
+              target="_blank"
+              rel="noopener">Comment mettre en œuvre cette mesure ?</a
+            >
+          {/if}
         </details>
       {/if}
 
@@ -314,5 +318,22 @@
   :global(#formulaire-mesure),
   .corps-formulaire {
     flex-grow: 1;
+  }
+
+  a.lien-blog {
+    display: block;
+  }
+
+  a.lien-blog::after {
+    display: inline-block;
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: url('/statique/assets/images/home/icone_lien_externe.svg')
+      no-repeat center;
+    filter: invert(29%) sepia(71%) saturate(1558%) hue-rotate(181deg)
+      brightness(70%) contrast(132%);
+    margin: auto 5px;
+    background-position-y: 2px;
   }
 </style>
