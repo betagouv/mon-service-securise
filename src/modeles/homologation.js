@@ -271,8 +271,8 @@ class Homologation {
     return new ObjetPDFAnnexeRisques(this, this.referentiel);
   }
 
-  suggestionActionPrioritaire() {
-    return this.suggestionsActions[0];
+  aUneSuggestionDAction() {
+    return this.suggestionsActions.length > 0;
   }
 
   pourraitFaire(natureSuggestion) {

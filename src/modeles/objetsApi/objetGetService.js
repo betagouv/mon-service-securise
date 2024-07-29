@@ -38,7 +38,7 @@ const donnees = (service, autorisation, referentiel) => {
     permissions: {
       gestionContributeurs: autorisation.peutGererContributeurs(),
     },
-    aUneSuggestionAction: !!service.suggestionActionPrioritaire(),
+    aUneSuggestionAction: !!service.aUneSuggestionDAction(),
   };
 };
 
