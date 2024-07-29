@@ -498,7 +498,7 @@ module.exports = {
       referentiel: 'ANSSI',
       identifiantNumerique: '0001',
       lienBlog:
-        'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/realiser-une-analyse-de-risques-de-la-securite-du-service-17adrp1/',
+        '/articles/realiser-une-analyse-de-risques-de-la-securite-du-service',
     },
     audit: {
       description: 'Réaliser un audit de la sécurité du service',
@@ -508,8 +508,7 @@ module.exports = {
         "<p>Cette mesure permet d'identifier les vulnérabilités du service et les mesures de sécurité spécifiques à mettre en œuvre en vue de les corriger et ainsi renforcer significativement sa sécurité.</p>",
       referentiel: 'ANSSI',
       identifiantNumerique: '0002',
-      lienBlog:
-        'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/realiser-un-audit-de-la-securite-du-service-1es6w2n/',
+      lienBlog: '/articles/realiser-un-audit-de-la-securite-du-service',
     },
     auditsSecurite: {
       description:
@@ -618,7 +617,7 @@ module.exports = {
       referentiel: 'ANSSI',
       identifiantNumerique: '0012',
       lienBlog:
-        'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/heberger-le-service-et-les-donnees-aupres-dun-prestataire-dinformatique-en-nuage-qualifie-secnumcloud-myk3ux/',
+        '/articles/heberger-le-service-et-les-donnees-aupres-dun-prestataire-dinformatique-en-nuage-qualifie-secnumcloud',
     },
     testIntrusion: {
       description:
@@ -743,7 +742,7 @@ module.exports = {
       referentiel: 'ANSSI',
       identifiantNumerique: '0022',
       lienBlog:
-        'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/chiffrer-le-trafic-des-donnees-avec-un-certificat-de-securite-conforme-a-la-reglementation-17f7fr8/',
+        '/articles/chiffrer-le-trafic-des-donnees-avec-un-certificat-de-securite-conforme-a-la-reglementation',
     },
     certificatSignature: {
       description:
@@ -756,7 +755,7 @@ module.exports = {
       referentiel: 'ANSSI',
       identifiantNumerique: '0023',
       lienBlog:
-        'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/installer-un-certificat-de-signature-electronique-conforme-a-la-reglementation-17m3ln5/',
+        '/articles/installer-un-certificat-de-signature-electronique-conforme-a-la-reglementation',
     },
     chiffrementFlux: {
       description: 'Désactiver tout flux non chiffré',
@@ -1118,8 +1117,7 @@ module.exports = {
         "<p>Cette mesure permet d'entraîner les équipes, d'identifier freins à la gestion efficace d'une crise et de les corriger en vue de se préparer à la survenue d'une crise réelle.</p>",
       referentiel: 'ANSSI',
       identifiantNumerique: '0058',
-      lienBlog:
-        'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/organiser-un-exercice-de-gestion-de-crise-1rs14n0/',
+      lienBlog: '/articles/organiser-un-exercice-de-gestion-de-crise',
     },
     garantieHauteDisponibilite: {
       description:
