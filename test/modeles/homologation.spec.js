@@ -102,6 +102,25 @@ describe('Une homologation', () => {
       ]);
     });
 
+    it("retourne la route des suggestions d'actions la plus prioritaire en premier", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: {
+          a: { lien: '/a', permissionRequise: {}, priorite: 10 },
+          b: { lien: '/b', permissionRequise: {}, priorite: 20 },
+        },
+      });
+
+      const service = unService(referentiel)
+        .avecId('S1')
+        .avecSuggestionAction({ nature: 'b' })
+        .avecSuggestionAction({ nature: 'a' })
+        .construis();
+
+      const routes = service.routesDesSuggestionsActions();
+
+      expect(routes[0].route).to.eql('/a');
+    });
+
     it('sait si une action n’est pas suggérée', () => {
       const service = unService().construis();
 
