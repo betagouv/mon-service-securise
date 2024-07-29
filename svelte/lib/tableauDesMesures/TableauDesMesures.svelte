@@ -15,7 +15,7 @@
     recupereMesures,
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
-  import { Referentiel } from '../ui/types.d';
+  import { Referentiel, type ReferentielStatut } from '../ui/types.d';
   import { nombreResultats } from './stores/nombreDeResultats.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
@@ -31,6 +31,7 @@
   import { nouveautesPage } from '../ui/stores/nouveautesPage.store';
   import { storeNotifications } from '../ui/stores/notifications.store';
   import Avertissement from '../ui/Avertissement.svelte';
+  import TagStatutMesure from '../ui/TagStatutMesure.svelte';
 
   enum EtatEnregistrement {
     Jamais,
@@ -42,7 +43,7 @@
 
   export let idService: IdService;
   export let categories: Record<IdCategorie, string>;
-  export let statuts: Record<IdStatut, string>;
+  export let statuts: ReferentielStatut;
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
 
@@ -154,13 +155,21 @@
       </span>
       <br />
       <p>
-        Les mesures <span class="tag aLancer">À lancer</span> et
-        <span class="tag enCours">Partielle</span>
+        Les mesures <TagStatutMesure
+          statut="aLancer"
+          actif
+          referentielStatuts={statuts}
+        /> et
+        <TagStatutMesure statut="enCours" actif referentielStatuts={statuts} />
         sont désormais dans l’onglet <b>“En action”</b>
       </p>
       <p>
-        Les mesures <span class="tag fait">Faite</span> et
-        <span class="tag nonFait">Non prise en compte</span>
+        Les mesures <TagStatutMesure
+          statut="fait"
+          actif
+          referentielStatuts={statuts}
+        /> et
+        <TagStatutMesure statut="nonFait" actif referentielStatuts={statuts} />
         sont dans l’onglet <b>“Traité”</b>
       </p>
     </div>
@@ -399,40 +408,5 @@
   .conteneur-onglet {
     display: flex;
     gap: 8px;
-  }
-
-  .tag {
-    margin: 0;
-    --couleur-fond: transparent;
-    --couleur-texte: transparent;
-    border: none;
-    padding: 4px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    width: fit-content;
-    color: white;
-    background: var(--couleur-texte);
-  }
-
-  .fait {
-    --couleur-fond: #d4f4db;
-    --couleur-texte: #0c8626;
-  }
-
-  .enCours {
-    --couleur-fond: #dbeeff;
-    --couleur-texte: #0079d0;
-  }
-
-  .nonFait {
-    --couleur-fond: #fff2de;
-    --couleur-texte: #faa72c;
-  }
-
-  .aLancer {
-    --couleur-fond: #e9ddff;
-    --couleur-texte: #7025da;
   }
 </style>
