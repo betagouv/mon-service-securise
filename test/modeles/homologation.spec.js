@@ -54,7 +54,7 @@ describe('Une homologation', () => {
   });
 
   describe("concernant les suggestions d'actions", () => {
-    it('connaît la suggestion d’action la plus prioritaire', () => {
+    it("sait quand il a une suggestion d'action", () => {
       const referentiel = Referentiel.creeReferentiel({
         naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '' } },
       });
@@ -63,9 +63,17 @@ describe('Une homologation', () => {
         .avecSuggestionAction({ nature: 'siret-a-renseigner' })
         .construis();
 
-      expect(service.suggestionActionPrioritaire().nature).to.be(
-        'siret-a-renseigner'
-      );
+      expect(service.aUneSuggestionDAction()).to.be(true);
+    });
+
+    it("sait quand il n'a pas de suggestion d'action", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '' } },
+      });
+
+      const service = unService(referentiel).construis();
+
+      expect(service.aUneSuggestionDAction()).to.be(false);
     });
 
     it("sait obtenir les routes MSS des suggestions d'actions", () => {

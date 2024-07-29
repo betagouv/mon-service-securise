@@ -208,7 +208,9 @@ describe('Le dépôt de données des homologations', () => {
 
   it('associe ses suggestions d’actions au service', async () => {
     const r = Referentiel.creeReferentiel({
-      naturesSuggestionsActions: { siret: { lien: '' } },
+      naturesSuggestionsActions: {
+        siret: { lien: '/lien', permissionRequise: {} },
+      },
     });
     const persistance = unePersistanceMemoire()
       .ajouteUnService(unService(r).avecId('S1').donnees)
@@ -220,7 +222,7 @@ describe('Le dépôt de données des homologations', () => {
 
     const service = await depot.homologation('S1');
 
-    expect(service.suggestionActionPrioritaire().nature).to.be('siret');
+    expect(service.routesDesSuggestionsActions()[0].route).to.be('/lien');
   });
 
   it('renseigne les mesures générales associées à une homologation', async () => {
