@@ -81,7 +81,7 @@
           <p>
             {@html texteSurligne}
           </p>
-          {#if false && $store.mesureEditee.mesure.lienBlog}
+          {#if $store.mesureEditee.mesure.lienBlog}
             <a
               class="lien-blog"
               href={$store.mesureEditee.mesure.lienBlog}
