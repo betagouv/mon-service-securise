@@ -280,7 +280,9 @@ class Homologation {
   }
 
   routesDesSuggestionsActions() {
-    return this.suggestionsActions.map((s) => s.route());
+    return this.suggestionsActions
+      .sort((s1, s2) => s1.priorite - s2.priorite)
+      .map((s) => s.route());
   }
 
   static creePourUnUtilisateur(utilisateur) {

@@ -7,6 +7,7 @@ class SuggestionAction {
     const natureDansReferentiel = referentiel.natureSuggestionAction(nature);
 
     this.lien = natureDansReferentiel.lien;
+    this.priorite = natureDansReferentiel.priorite;
     this.permissionRequise = natureDansReferentiel.permissionRequise;
   }
 
