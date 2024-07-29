@@ -217,3 +217,9 @@ main .marges-fixes {
 .table-des-matieres .niveau-4 {
   margin-left: 32px;
 }
+
+@media only screen and (max-width: 768px) {
+  .table-des-matieres {
+    display: none;
+  }
+}
