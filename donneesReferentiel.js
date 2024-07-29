@@ -104,14 +104,17 @@ module.exports = {
     miseAJourSiret: {
       lien: '/descriptionService',
       permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
+      priorite: 10,
     },
     miseAJourNombreOrganisationsUtilisatrices: {
       lien: '/descriptionService',
       permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
+      priorite: 10,
     },
     controleBesoinsDeSecuriteRetrogrades: {
       lien: '/descriptionService?etape=3',
       permissionRequise: { rubrique: 'DECRIRE', niveau: 1 },
+      priorite: 20,
     },
   },
 
