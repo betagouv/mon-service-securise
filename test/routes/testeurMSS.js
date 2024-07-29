@@ -60,6 +60,7 @@ const testeurMss = () => {
       recupereNouveautes: async () => contenuCrisp,
       recupereDevenirAmbassadeur: async () => contenuCrisp,
       recupereFaireConnaitreMSS: async () => contenuCrisp,
+      recupereArticleBlog: async () => contenuCrisp,
     };
     adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
@@ -133,6 +134,7 @@ const testeurMss = () => {
     adaptateurZip: () => adaptateurZip,
     adaptateurTracking: () => adaptateurTracking,
     adaptateurJournalMSS: () => adaptateurJournalMSS,
+    adaptateurCmsCrisp: () => adaptateurCmsCrisp,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,

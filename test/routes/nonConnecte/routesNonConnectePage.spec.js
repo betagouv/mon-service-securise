@@ -1,6 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
+const { ErreurArticleCrispIntrouvable } = require('../../../src/erreurs');
 
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   const testeur = testeurMSS();
@@ -32,6 +33,63 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
           done();
         })
         .catch(done);
+    });
+  });
+
+  describe('quand requête GET sur `/articles/:slug`', () => {
+    it('utilise le CMS Crisp pour récupérer un article de blog', async () => {
+      let idRecu;
+      testeur.adaptateurCmsCrisp().recupereArticle = async (id) => {
+        idRecu = id;
+        return {
+          contenuMarkdown: 'Un contenu',
+          titre: 'Un titre',
+          description: 'Une description',
+        };
+      };
+      testeur.adaptateurCmsCrisp().recupereArticlesBlog = async () => [
+        {
+          id: '1',
+          url: 'http://localhost://crisp/article/un-slug-generique-1ab2c3/',
+        },
+      ];
+
+      await axios.get(`http://localhost:1234/articles/un-slug-generique`);
+
+      expect(idRecu).to.be('1');
+    });
+
+    it('sert le contenu HTML de la page', async () => {
+      testeur.adaptateurCmsCrisp().recupereArticle = async () => ({
+        contenuMarkdown: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+      });
+      testeur.adaptateurCmsCrisp().recupereArticlesBlog = async () => [
+        {
+          id: '1',
+          url: 'http://localhost://crisp/article/un-slug-generique-1ab2c3/',
+        },
+      ];
+
+      const reponse = await axios.get(
+        `http://localhost:1234/articles/un-slug-generique`
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(reponse.headers['content-type']).to.contain('text/html');
+      expect(reponse.data).to.contain('Un titre');
+    });
+
+    it("renvoie une erreur 404 si l'article n'existe pas", async () => {
+      testeur.adaptateurCmsCrisp().recupereArticleBlog = async () => {
+        throw new ErreurArticleCrispIntrouvable();
+      };
+      await testeur.verifieRequeteGenereErreurHTTP(
+        404,
+        `Article Crisp inconnu`,
+        `http://localhost:1234/articles/un-slug-inexistant`
+      );
     });
   });
 

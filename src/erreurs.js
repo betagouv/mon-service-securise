@@ -4,6 +4,7 @@ class ErreurApiBrevo extends Error {}
 class ErreurDroitsIncoherents extends Error {}
 class ErreurChainageMiddleware extends Error {}
 class ErreurModele extends Error {}
+class ErreurArticleCrispIntrouvable extends ErreurModele {}
 class ErreurAutorisationExisteDeja extends ErreurModele {}
 class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
@@ -58,6 +59,7 @@ module.exports = {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurApiBrevo,
+  ErreurArticleCrispIntrouvable,
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurAvisInvalide,
