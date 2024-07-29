@@ -1,4 +1,5 @@
 const fabriqueCrispMarkdown = require('./fabriqueCrispMarkdown');
+const { ErreurArticleCrispIntrouvable } = require('../erreurs');
 
 class CmsCrisp {
   constructor({
@@ -12,9 +13,8 @@ class CmsCrisp {
     this.constructeurCrispMarkdown = constructeurCrispMarkdown;
   }
 
-  async recupereDevenirAmbassadeur() {
-    const { contenuMarkdown, titre, description } =
-      await this.adaptateurCmsCrisp.recupereDevenirAmbassadeur();
+  convertitArticle(article) {
+    const { contenuMarkdown, titre, description } = article;
     const crispMarkdown = this.constructeurCrispMarkdown(contenuMarkdown);
     const contenu = crispMarkdown.versHTML();
 
@@ -24,27 +24,36 @@ class CmsCrisp {
       description,
       tableDesMatieres: crispMarkdown.tableDesMatieres(),
     };
+  }
+
+  async recupereDevenirAmbassadeur() {
+    const article = await this.adaptateurCmsCrisp.recupereDevenirAmbassadeur();
+    return this.convertitArticle(article);
   }
 
   async recupereFaireConnaitre() {
-    const { contenuMarkdown, titre, description } =
-      await this.adaptateurCmsCrisp.recupereFaireConnaitreMSS();
-    const crispMarkdown = this.constructeurCrispMarkdown(contenuMarkdown);
-    const contenu = crispMarkdown.versHTML();
-
-    return {
-      titre,
-      contenu,
-      description,
-      tableDesMatieres: crispMarkdown.tableDesMatieres(),
-    };
+    const article = await this.adaptateurCmsCrisp.recupereFaireConnaitreMSS();
+    return this.convertitArticle(article);
   }
 
   async recupereArticleBlog(slug) {
-    await this.adaptateurCmsCrisp.recupereArticleBlog(slug);
-    return {
-      tableDesMatieres: [],
-    };
+    try {
+      const articles = await this.adaptateurCmsCrisp.recupereArticlesBlog();
+      const article = articles.find((a) => {
+        const regex = /\/article\/(.*)-[a-zA-Z0-9]{1,10}\//gm;
+        const slugArticle = regex.exec(a.url)[1];
+        return slugArticle === slug;
+      });
+      if (!article) {
+        throw new ErreurArticleCrispIntrouvable();
+      }
+      const articleCrisp = await this.adaptateurCmsCrisp.recupereArticle(
+        article.id
+      );
+      return this.convertitArticle(articleCrisp);
+    } catch (e) {
+      throw new ErreurArticleCrispIntrouvable();
+    }
   }
 }
 
