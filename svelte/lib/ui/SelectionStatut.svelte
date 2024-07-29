@@ -12,6 +12,10 @@
   export let requis = false;
 
   const dispatch = createEventDispatcher<{ input: { statut: string } }>();
+
+  $: {
+    if (!statut) statut = '';
+  }
 </script>
 
 <label for={`statut-${id}`} class:requis class:a-label={label !== ''}>
@@ -31,7 +35,7 @@
     }}
     on:click|stopPropagation
   >
-    <option value={undefined} disabled selected>Statut à définir</option>
+    <option value="" disabled selected>Statut à définir</option>
     {#each Object.entries(referentielStatuts) as [valeur, label]}
       <option value={valeur}>{label}</option>
     {/each}
