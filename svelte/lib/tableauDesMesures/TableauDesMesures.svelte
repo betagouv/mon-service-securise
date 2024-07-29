@@ -3,7 +3,6 @@
     IdCategorie,
     IdMesureGenerale,
     IdService,
-    IdStatut,
     MesureGenerale,
     MesureSpecifique,
   } from './tableauDesMesures.d';
@@ -408,5 +407,9 @@
   .conteneur-onglet {
     display: flex;
     gap: 8px;
+  }
+
+  :global(#nouveaute-onglet-statuts-mesures p) {
+    margin: 8px 0;
   }
 </style>
