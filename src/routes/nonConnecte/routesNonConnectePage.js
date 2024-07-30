@@ -114,7 +114,10 @@ const routesNonConnectePage = ({
       const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
       const donneesArticle = await cmsCrisp.recupereDevenirAmbassadeur();
 
-      reponse.render('article', donneesArticle);
+      reponse.render('article', {
+        ...donneesArticle,
+        avecTitreTableDesMatieres: false,
+      });
     }
   );
 
@@ -124,7 +127,10 @@ const routesNonConnectePage = ({
       const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
       const donneesArticle = await cmsCrisp.recupereFaireConnaitre();
 
-      reponse.render('article', donneesArticle);
+      reponse.render('article', {
+        ...donneesArticle,
+        avecTitreTableDesMatieres: false,
+      });
     }
   );
 
@@ -132,14 +138,20 @@ const routesNonConnectePage = ({
     const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
     const donneesArticle = await cmsCrisp.recuperePromouvoir();
 
-    reponse.render('article', donneesArticle);
+    reponse.render('article', {
+      ...donneesArticle,
+      avecTitreTableDesMatieres: false,
+    });
   });
 
   routes.get('/articles/:slug', async (requete, reponse, suite) => {
     try {
       const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
       const article = await cmsCrisp.recupereArticleBlog(requete.params.slug);
-      reponse.render('article', article);
+      reponse.render('article', {
+        ...article,
+        avecTitreTableDesMatieres: true,
+      });
     } catch (e) {
       if (e instanceof ErreurArticleCrispIntrouvable) {
         reponse.status(404).send(`Article Crisp inconnu`);

@@ -4,8 +4,9 @@ block variables
 
 mixin tableDesMatieres(donnees)
   .table-des-matieres
-    p Dans cet article
-    .contenu-tdm
+    if avecTitreTableDesMatieres
+      p Dans cet article
+    .contenu-tdm(class=`${avecTitreTableDesMatieres ? '' : 'decalage-sans-titre'}`)
       each entree in donnees
         a(href=`#${entree.id}` class=`niveau-${entree.profondeur}`)!= entree.texte
 

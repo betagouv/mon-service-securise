@@ -186,6 +186,10 @@ main .marges-fixes {
   line-height: 24px;
 }
 
+.contenu-tdm.decalage-sans-titre {
+  margin-top: 28px;
+}
+
 .table-des-matieres p {
   color: var(--texte-clair);
   font-weight: bold;
