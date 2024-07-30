@@ -307,8 +307,14 @@ const nouvelAdaptateur = (
 
   const marqueSuggestionActionFaiteMaintenant = async () => {};
 
+  const ajouteSuggestionAction = async () => {};
+
+  const ajouteTacheDeService = async () => {};
+
   return {
     ajouteAutorisation,
+    ajouteSuggestionAction,
+    ajouteTacheDeService,
     ajouteUtilisateur,
     autorisation,
     autorisationPour,
