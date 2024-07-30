@@ -181,10 +181,12 @@
     {#if !estLectureSeule}
       <BandeauActions {etatEnregistrement} />
     {/if}
-    <tr class="titres">
-      <th>Mesure</th>
-      <th>Statut</th>
-    </tr>
+    {#if !$nombreResultats.aucunResultat}
+      <tr class="titres">
+        <th>Mesure</th>
+        <th>Statut</th>
+      </tr>
+    {/if}
   </thead>
   <tbody>
     {#if $nombreResultats.aucunResultat}
