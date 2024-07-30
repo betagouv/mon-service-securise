@@ -54,18 +54,26 @@
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
 
-  const metsAJourMesuresSpecifiques = async (indexReel: number) => {
+  const metsAJourMesuresSpecifiques = async (
+    indexReel: number,
+    affichetoast: boolean = false
+  ) => {
     etatEnregistrement = EnCours;
     await enregistreMesuresSpecifiques(idService, $mesures.mesuresSpecifiques);
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
-    toasterStore.afficheToastChangementStatutMesure(
-      $mesures.mesuresSpecifiques[indexReel],
-      statuts
-    );
+    if (affichetoast) {
+      toasterStore.afficheToastChangementStatutMesure(
+        $mesures.mesuresSpecifiques[indexReel],
+        statuts
+      );
+    }
   };
 
-  const metsAJourMesureGenerale = async (idMesure: IdMesureGenerale) => {
+  const metsAJourMesureGenerale = async (
+    idMesure: IdMesureGenerale,
+    affichetoast: boolean = false
+  ) => {
     etatEnregistrement = EnCours;
     await enregistreMesureGenerale(
       idService,
@@ -74,10 +82,13 @@
     );
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
-    toasterStore.afficheToastChangementStatutMesure(
-      $mesures.mesuresGenerales[idMesure],
-      statuts
-    );
+
+    if (affichetoast) {
+      toasterStore.afficheToastChangementStatutMesure(
+        $mesures.mesuresGenerales[idMesure],
+        statuts
+      );
+    }
     if (
       $volumetrieMesures.totalSansStatut === 0 &&
       $rechercheParAvancement === 'statutADefinir'
@@ -202,7 +213,7 @@
           bind:mesure={$mesures.mesuresGenerales[id]}
           on:modificationStatut={(e) => {
             mesures.metAJourStatutMesureGenerale(id, e.detail.statut);
-            metsAJourMesureGenerale(id);
+            metsAJourMesureGenerale(id, true);
           }}
           on:modificationPriorite={(e) => {
             mesures.metAJourPrioriteMesureGenerale(id, e.detail.priorite);
@@ -228,7 +239,7 @@
           bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
           on:modificationStatut={(e) => {
             mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);
-            metsAJourMesuresSpecifiques(indexReel);
+            metsAJourMesuresSpecifiques(indexReel, true);
           }}
           on:modificationPriorite={(e) => {
             mesures.metAJourPrioriteMesureSpecifique(
