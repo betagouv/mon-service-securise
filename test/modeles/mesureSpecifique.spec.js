@@ -22,6 +22,7 @@ describe('Une mesure spécifique', () => {
         categorie: 'uneCategorie',
         statut: 'fait',
         modalites: 'Des modalités de mise en œuvre',
+        priorite: 'p3',
       },
       referentiel
     );
@@ -30,6 +31,7 @@ describe('Une mesure spécifique', () => {
     expect(mesure.categorie).to.equal('uneCategorie');
     expect(mesure.statut).to.equal('fait');
     expect(mesure.modalites).to.equal('Des modalités de mise en œuvre');
+    expect(mesure.priorite).to.equal('p3');
   });
 
   elle('connaît ses propriétés obligatoires', () => {
@@ -41,7 +43,7 @@ describe('Une mesure spécifique', () => {
   });
 
   elle(
-    'ne tient pas compte du champ `modalites` pour déterminer le statut de saisie',
+    'ne tient pas compte du champ `modalites` ni de la priorite pour déterminer le statut de saisie',
     () => {
       const mesure = new MesureSpecifique(
         {

@@ -217,7 +217,8 @@ const routesConnecteApiService = ({
       '*.description',
       '*.categorie',
       '*.statut',
-      '*.modalites'
+      '*.modalites',
+      '*.priorite'
     ),
     async (requete, reponse, suite) => {
       // il ne faut pas utiliser params.id qui est modifié par le middleware aseptise

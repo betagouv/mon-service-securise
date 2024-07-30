@@ -362,7 +362,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise tous les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['*.description', '*.categorie', '*.statut', '*.modalites'],
+        [
+          '*.description',
+          '*.categorie',
+          '*.statut',
+          '*.modalites',
+          '*.priorite',
+        ],
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456/mesures-specifiques',
