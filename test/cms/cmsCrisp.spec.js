@@ -31,6 +31,11 @@ describe('Le CMS Crisp', () => {
       nomMethodeAdaptateur: 'recuperePromouvoir',
       nomMethodeCMS: 'recuperePromouvoir',
     },
+    {
+      titre: 'Roadmap MSS',
+      nomMethodeAdaptateur: 'recupereRoadmap',
+      nomMethodeCMS: 'recupereRoadmap',
+    },
   ].forEach(({ titre, nomMethodeAdaptateur, nomMethodeCMS }) => {
     describe(`sur demande de récupération du contenu de l'article '${titre}'`, () => {
       let adaptateurCmsCrisp;
@@ -41,6 +46,7 @@ describe('Le CMS Crisp', () => {
           recupereDevenirAmbassadeur: async () => donneesParDefautAdaptateur,
           recupereFaireConnaitreMSS: async () => donneesParDefautAdaptateur,
           recuperePromouvoir: async () => donneesParDefautAdaptateur,
+          recupereRoadmap: async () => donneesParDefautAdaptateur,
         };
         constructeurCrispMarkdown = () => ({
           versHTML: () => {},

@@ -41,6 +41,11 @@ class CmsCrisp {
     return this.convertitArticle(article);
   }
 
+  async recupereRoadmap() {
+    const article = await this.adaptateurCmsCrisp.recupereRoadmap();
+    return this.convertitArticle(article);
+  }
+
   async recupereArticleBlog(slug) {
     try {
       const articles = await this.adaptateurCmsCrisp.recupereArticlesBlog();
