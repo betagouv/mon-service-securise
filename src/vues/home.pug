@@ -1,4 +1,5 @@
 extends mssDeconnecte
+include ./fragments/navigationSiteVitrine
 block variables
   - const meta_description = 'Pilotez la sécurité de vos services numériques en équipe et homologuez les rapidement avec MonServiceSécurisé. Découvrez maintenant !'
 
@@ -49,12 +50,11 @@ block append styles
 block append scripts
   script(type = 'module', src = '/statique/home.js')
 
+block navigation-site-vitrine
+  +navigationSiteVitrine()
+
 block main
   #home
-    nav.navigation-produit
-      .contenu-navigation
-        a.actif(href='/') Accueil
-        a(href='/promouvoir-monservicesecurise') Promouvoir MonServiceSécurisé
     .bloc-contenu.fond-couleur-principale
       .conteneur-titre
         .conteneur-centre
