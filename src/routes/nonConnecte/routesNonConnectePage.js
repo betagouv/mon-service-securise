@@ -117,6 +117,10 @@ const routesNonConnectePage = ({
       reponse.render('article', {
         ...donneesArticle,
         avecTitreTableDesMatieres: false,
+        optionsNavigation: {
+          visible: true,
+          ongletActif: 'promouvoir-monservicesecurise',
+        },
       });
     }
   );
@@ -130,6 +134,10 @@ const routesNonConnectePage = ({
       reponse.render('article', {
         ...donneesArticle,
         avecTitreTableDesMatieres: false,
+        optionsNavigation: {
+          visible: true,
+          ongletActif: 'promouvoir-monservicesecurise',
+        },
       });
     }
   );
@@ -141,6 +149,10 @@ const routesNonConnectePage = ({
     reponse.render('article', {
       ...donneesArticle,
       avecTitreTableDesMatieres: false,
+      optionsNavigation: {
+        visible: true,
+        ongletActif: 'promouvoir-monservicesecurise',
+      },
     });
   });
 
@@ -151,6 +163,9 @@ const routesNonConnectePage = ({
       reponse.render('article', {
         ...article,
         avecTitreTableDesMatieres: true,
+        optionsNavigation: {
+          visible: false,
+        },
       });
     } catch (e) {
       if (e instanceof ErreurArticleCrispIntrouvable) {
