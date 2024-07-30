@@ -37,6 +37,8 @@ const recupereDevenirAmbassadeur = () =>
   recupereArticle(process.env.CRISP_ID_ARTICLE_DEVENIR_AMBASSADEUR);
 const recupereFaireConnaitreMSS = () =>
   recupereArticle(process.env.CRISP_ID_ARTICLE_FAIRE_CONNAITRE);
+const recupereRoadmap = () =>
+  recupereArticle(process.env.CRISP_ID_ARTICLE_ROADMAP);
 
 const recupereArticlesBlog = async () => {
   try {
@@ -65,6 +67,7 @@ module.exports = {
   recuperePromouvoir,
   recupereDevenirAmbassadeur,
   recupereFaireConnaitreMSS,
+  recupereRoadmap,
   recupereArticle,
   recupereArticlesBlog,
 };
