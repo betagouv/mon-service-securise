@@ -9,6 +9,7 @@
   import SelectionStatut from '../ui/SelectionStatut.svelte';
   import { rechercheTextuelle } from '../tableauDesMesures/stores/rechercheTextuelle.store';
   import { toasterStore } from '../ui/stores/toaster.store';
+  import Onglet from '../ui/Onglet.svelte';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -58,115 +59,135 @@
 
   let retourUtilisateur: string;
   let commentaireRetourUtilisateur: string;
+  let ongletActif: string = 'mesure';
 </script>
 
 {#if $store.etape === 'SuppressionSpecifique'}
   <SuppressionMesureSpecifique {idService} {mesuresExistantes} />
 {:else}
+  <div class="conteneur-onglet">
+    <Onglet
+      bind:ongletActif
+      cetOnglet="mesure"
+      labelOnglet="Mesure"
+      nbNonLue={0}
+    />
+    <Onglet
+      bind:ongletActif
+      cetOnglet="planAction"
+      labelOnglet="Plan d'action"
+      nbNonLue={0}
+    />
+  </div>
+
   <Formulaire on:formulaireValide={enregistreMesure} id="formulaire-mesure">
-    <div class="corps-formulaire">
-      {#if $configurationAffichage.doitAfficherIntitule}
-        <label for="intitule" class="requis">
-          Intitulé
+    {#if ongletActif === 'mesure'}
+      <div class="corps-formulaire">
+        {#if $configurationAffichage.doitAfficherIntitule}
+          <label for="intitule" class="requis">
+            Intitulé
+            <textarea
+              rows="2"
+              bind:value={$store.mesureEditee.mesure.description}
+              id="intitule"
+              placeholder="Titre de la mesure"
+              readonly={estLectureSeule}
+              required
+              use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
+            />
+          </label>
+        {/if}
+        {#if $configurationAffichage.doitAfficherDescriptionLongue}
+          <details open={true}>
+            <summary />
+            <p>
+              {@html texteSurligne}
+            </p>
+            {#if $store.mesureEditee.mesure.lienBlog}
+              <a
+                class="lien-blog"
+                href={$store.mesureEditee.mesure.lienBlog}
+                target="_blank"
+                rel="noopener">Comment mettre en œuvre cette mesure ?</a
+              >
+            {/if}
+          </details>
+        {/if}
+
+        <div class="conteneur-statut">
+          <SelectionStatut
+            bind:statut={$store.mesureEditee.mesure.statut}
+            id="statut"
+            {estLectureSeule}
+            referentielStatuts={statuts}
+            label="Statut"
+            requis
+          />
+          <div class="mention-requis">
+            <span class="asterisque">*</span>
+            <span>champ obligatoire</span>
+          </div>
+        </div>
+
+        <label for="details">
+          Précisions sur la mesure
           <textarea
-            rows="2"
-            bind:value={$store.mesureEditee.mesure.description}
-            id="intitule"
-            placeholder="Titre de la mesure"
+            rows="6"
+            bind:value={$store.mesureEditee.mesure.modalites}
+            id="details"
+            placeholder="Apportez des précisions sur la mesure, ses modalités de mise en œuvre, etc."
             readonly={estLectureSeule}
-            required
-            use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
           />
         </label>
-      {/if}
-      {#if $configurationAffichage.doitAfficherDescriptionLongue}
-        <details open={true}>
-          <summary />
-          <p>
-            {@html texteSurligne}
-          </p>
-          {#if $store.mesureEditee.mesure.lienBlog}
-            <a
-              class="lien-blog"
-              href={$store.mesureEditee.mesure.lienBlog}
-              target="_blank"
-              rel="noopener">Comment mettre en œuvre cette mesure ?</a
+
+        {#if $configurationAffichage.doitAfficherChoixCategorie}
+          <label for="categorie" class="requis">
+            Catégorie
+            <select
+              bind:value={$store.mesureEditee.mesure.categorie}
+              id="categorie"
+              required
+              disabled={estLectureSeule}
+              use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
             >
-          {/if}
-        </details>
-      {/if}
-
-      <div class="conteneur-statut">
-        <SelectionStatut
-          bind:statut={$store.mesureEditee.mesure.statut}
-          id="statut"
-          {estLectureSeule}
-          referentielStatuts={statuts}
-          label="Statut"
-          requis
-        />
-        <div class="mention-requis">
-          <span class="asterisque">*</span>
-          <span>champ obligatoire</span>
-        </div>
-      </div>
-
-      <label for="details">
-        Précisions sur la mesure
-        <textarea
-          rows="6"
-          bind:value={$store.mesureEditee.mesure.modalites}
-          id="details"
-          placeholder="Apportez des précisions sur la mesure, ses modalités de mise en œuvre, etc."
-          readonly={estLectureSeule}
-        />
-      </label>
-
-      {#if $configurationAffichage.doitAfficherChoixCategorie}
-        <label for="categorie" class="requis">
-          Catégorie
-          <select
-            bind:value={$store.mesureEditee.mesure.categorie}
-            id="categorie"
-            required
-            disabled={estLectureSeule}
-            use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
-          >
-            <option value="" disabled selected>-</option>
-            {#each Object.entries(categories) as [valeur, label]}
-              <option value={valeur}>{label}</option>
-            {/each}
-          </select>
-        </label>
-      {/if}
-
-      {#if !estLectureSeule}
-        {#if $configurationAffichage.doitAfficherRetourUtilisateur}
-          <div class="conteneur-retour-utilisateur">
-            <label for="retour-utilisateur">
-              Donnez votre avis sur cette mesure
-              <select
-                id="retour-utilisateur"
-                name="retour-utilisateur"
-                bind:value={retourUtilisateur}
-              >
-                <option value="" disabled selected>-</option>
-                {#each Object.entries(retoursUtilisateur) as [valeur, label]}
-                  <option value={valeur}>{label}</option>
-                {/each}
-              </select>
-            </label>
-            {#if retourUtilisateur}
-              <textarea
-                bind:value={commentaireRetourUtilisateur}
-                placeholder="Apportez des précisions ou formulez une suggestion."
-                rows="3"
-              ></textarea>
-            {/if}
-          </div>
+              <option value="" disabled selected>-</option>
+              {#each Object.entries(categories) as [valeur, label]}
+                <option value={valeur}>{label}</option>
+              {/each}
+            </select>
+          </label>
         {/if}
-      {/if}
-    </div>
+
+        {#if !estLectureSeule}
+          {#if $configurationAffichage.doitAfficherRetourUtilisateur}
+            <div class="conteneur-retour-utilisateur">
+              <label for="retour-utilisateur">
+                Donnez votre avis sur cette mesure
+                <select
+                  id="retour-utilisateur"
+                  name="retour-utilisateur"
+                  bind:value={retourUtilisateur}
+                >
+                  <option value="" disabled selected>-</option>
+                  {#each Object.entries(retoursUtilisateur) as [valeur, label]}
+                    <option value={valeur}>{label}</option>
+                  {/each}
+                </select>
+              </label>
+              {#if retourUtilisateur}
+                <textarea
+                  bind:value={commentaireRetourUtilisateur}
+                  placeholder="Apportez des précisions ou formulez une suggestion."
+                  rows="3"
+                ></textarea>
+              {/if}
+            </div>
+          {/if}
+        {/if}
+      </div>
+    {:else}
+      <div class="corps-formulaire"></div>
+    {/if}
     <div class="conteneur-actions">
       {#if $configurationAffichage.doitAfficherSuppression}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -340,5 +361,11 @@
       brightness(70%) contrast(132%);
     margin: auto 5px;
     background-position-y: 2px;
+  }
+
+  .conteneur-onglet {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 26px;
   }
 </style>
