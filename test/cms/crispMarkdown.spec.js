@@ -94,7 +94,7 @@ describe('Le convertisseur de Markdown Crisp', () => {
       const resultat = crispMarkdown.versHTML();
 
       expect(resultat).to.be(
-        "<p><a href='http://url.video' target='_blank' rel='noreferrer nofollow'>Un lien</a></p>\n"
+        "<p><a href='http://url.video' target='_blank' rel='nofollow'>Un lien</a></p>\n"
       );
     });
   });
