@@ -24,6 +24,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/devenir-ambassadeurrice-monservicesecurise',
     '/faire-connaitre-et-recommander-monservicesecurise',
     '/promouvoir-monservicesecurise',
+    '/co-construire-monservicesecurise',
   ].forEach((route) => {
     it(`sert le contenu HTML de la page ${route}`, (done) => {
       axios

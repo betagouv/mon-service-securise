@@ -156,6 +156,20 @@ const routesNonConnectePage = ({
     });
   });
 
+  routes.get('/co-construire-monservicesecurise', async (_requete, reponse) => {
+    const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+    const donneesArticle = await cmsCrisp.recupereRoadmap();
+
+    reponse.render('article', {
+      ...donneesArticle,
+      avecTitreTableDesMatieres: false,
+      optionsNavigation: {
+        visible: true,
+        ongletActif: 'co-construire-monservicesecurise',
+      },
+    });
+  });
+
   routes.get('/articles/:slug', async (requete, reponse, suite) => {
     try {
       const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
