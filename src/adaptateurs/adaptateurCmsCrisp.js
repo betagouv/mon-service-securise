@@ -31,8 +31,8 @@ const recupereArticle = async (idArticle) => {
   }
 };
 
-const recupereNouveautes = () =>
-  recupereArticle(process.env.CRISP_ID_ARTICLE_NOUVEAUTE);
+const recuperePromouvoir = () =>
+  recupereArticle(process.env.CRISP_ID_ARTICLE_PROMOUVOIR);
 const recupereDevenirAmbassadeur = () =>
   recupereArticle(process.env.CRISP_ID_ARTICLE_DEVENIR_AMBASSADEUR);
 const recupereFaireConnaitreMSS = () =>
@@ -62,7 +62,7 @@ const recupereArticlesBlog = async () => {
 };
 
 module.exports = {
-  recupereNouveautes,
+  recuperePromouvoir,
   recupereDevenirAmbassadeur,
   recupereFaireConnaitreMSS,
   recupereArticle,
