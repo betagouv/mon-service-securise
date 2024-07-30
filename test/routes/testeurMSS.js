@@ -61,6 +61,7 @@ const testeurMss = () => {
       recupereDevenirAmbassadeur: async () => contenuCrisp,
       recupereFaireConnaitreMSS: async () => contenuCrisp,
       recupereArticleBlog: async () => contenuCrisp,
+      recupereRoadmap: async () => contenuCrisp,
     };
     adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
