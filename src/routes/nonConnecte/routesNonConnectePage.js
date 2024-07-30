@@ -128,6 +128,13 @@ const routesNonConnectePage = ({
     }
   );
 
+  routes.get('/promouvoir-monservicesecurise', async (_requete, reponse) => {
+    const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+    const donneesArticle = await cmsCrisp.recuperePromouvoir();
+
+    reponse.render('article', donneesArticle);
+  });
+
   routes.get('/articles/:slug', async (requete, reponse, suite) => {
     try {
       const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
