@@ -18,7 +18,7 @@
 </script>
 
 <tr class="ligne-aucun-resultat">
-  <td colspan="2">
+  <td>
     <div class="aucun-resultat">
       {#if $nombreResultats.aDesFiltresAppliques || $rechercheTextuelle}
         <img

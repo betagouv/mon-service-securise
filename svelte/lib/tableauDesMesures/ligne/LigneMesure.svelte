@@ -21,6 +21,7 @@
   export let categorie: string;
   export let referentielStatuts: ReferentielStatut;
   export let estLectureSeule: boolean;
+  export let affichePlanAction: boolean;
 
   const dispatch = createEventDispatcher<{
     modificationStatut: { statut: string };
@@ -46,6 +47,7 @@
       <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
     </div>
   </td>
+  {#if affichePlanAction}<td>P1</td>{/if}
   <td>
     <SelectionStatut
       bind:statut={mesure.statut}

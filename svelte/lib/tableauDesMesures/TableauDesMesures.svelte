@@ -31,6 +31,7 @@
   import TagStatutMesure from '../ui/TagStatutMesure.svelte';
   import BandeauActions from './BandeauActions.svelte';
   import { afficheTiroirDeMesure } from './actionsTiroir';
+  import { featureFlags } from '../featureFlags';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -88,6 +89,9 @@
   const marqueNouveauteLue = async () => {
     await storeNotifications.marqueLue('nouveaute', 'ongletStatutsMesures');
   };
+
+  $: affichePlanAction =
+    $rechercheParAvancement !== 'statutADefinir' && featureFlags.planAction();
 </script>
 
 <svelte:body on:mesure-modifiee={rafraichisMesures} />
@@ -141,13 +145,9 @@
   </Avertissement>
 {/if}
 <table class="tableau-des-mesures">
-  <colgroup>
-    <col class="infos-mesures" />
-    <col class="statut-mesure" />
-  </colgroup>
   <thead>
     <tr class="ligne-onglet">
-      <th colspan="2">
+      <th colspan="3">
         <div class="conteneur-onglet">
           {#if $volumetrieMesures.totalSansStatut}
             <Onglet
@@ -184,6 +184,9 @@
     {#if !$nombreResultats.aucunResultat}
       <tr class="titres">
         <th>Mesure</th>
+        {#if affichePlanAction}
+          <th>Priorité</th>
+        {/if}
         <th>Statut</th>
       </tr>
     {/if}
@@ -211,6 +214,7 @@
               metadonnees: { typeMesure: 'GENERALE', idMesure: id },
             })}
           estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
+          {affichePlanAction}
         />
       {/each}
       {#each $resultatsDeRecherche.mesuresSpecifiques as mesure, index (index)}
@@ -232,6 +236,7 @@
               metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },
             })}
           estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
+          {affichePlanAction}
         />
       {/each}
     {/if}
@@ -265,14 +270,6 @@
 
   .tableau-des-mesures {
     border-collapse: collapse;
-  }
-
-  colgroup .infos-mesures {
-    width: 80%;
-  }
-
-  colgroup .statut-mesure {
-    width: 20%;
   }
 
   thead tr th {
