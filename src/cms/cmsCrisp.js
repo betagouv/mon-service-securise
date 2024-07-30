@@ -36,6 +36,11 @@ class CmsCrisp {
     return this.convertitArticle(article);
   }
 
+  async recuperePromouvoir() {
+    const article = await this.adaptateurCmsCrisp.recuperePromouvoir();
+    return this.convertitArticle(article);
+  }
+
   async recupereArticleBlog(slug) {
     try {
       const articles = await this.adaptateurCmsCrisp.recupereArticlesBlog();
