@@ -238,6 +238,10 @@
         </th>
       </tr>
     {/if}
+    <tr class="titres">
+      <th>Mesure</th>
+      <th>Statut</th>
+    </tr>
   </thead>
   <tbody>
     {#if $nombreResultats.aucunResultat}
@@ -396,6 +400,18 @@
 
   thead tr th {
     padding: 0;
+  }
+
+  thead tr.titres {
+    border: 1px solid var(--liseres-fonce);
+  }
+
+  thead tr.titres th {
+    padding: 9px 0 9px 32px;
+    font-size: 0.875rem;
+    font-weight: normal;
+    text-align: left;
+    color: var(--texte-clair);
   }
 
   .ligne-onglet {
