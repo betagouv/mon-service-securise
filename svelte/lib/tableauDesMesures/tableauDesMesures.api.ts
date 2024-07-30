@@ -71,6 +71,7 @@ export const enregistreMesureGenerale = async (
 ) => {
   await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
     statut: donneesMesure.statut,
+    priorite: donneesMesure.priorite,
     ...(donneesMesure.modalites && { modalites: donneesMesure.modalites }),
   });
 };

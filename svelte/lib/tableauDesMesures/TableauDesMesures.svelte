@@ -124,20 +124,16 @@
       </span>
       <br />
       <p>
-        Les mesures <TagStatutMesure
-          statut="aLancer"
-          actif
-          referentielStatuts={statuts}
-        /> et
+        Les mesures
+        <TagStatutMesure statut="aLancer" actif referentielStatuts={statuts} />
+        et
         <TagStatutMesure statut="enCours" actif referentielStatuts={statuts} />
         sont désormais dans l’onglet <b>“En action”</b>
       </p>
       <p>
-        Les mesures <TagStatutMesure
-          statut="fait"
-          actif
-          referentielStatuts={statuts}
-        /> et
+        Les mesures
+        <TagStatutMesure statut="fait" actif referentielStatuts={statuts} />
+        et
         <TagStatutMesure statut="nonFait" actif referentielStatuts={statuts} />
         sont dans l’onglet <b>“Traité”</b>
       </p>
@@ -208,6 +204,10 @@
             mesures.metAJourStatutMesureGenerale(id, e.detail.statut);
             metsAJourMesureGenerale(id);
           }}
+          on:modificationPriorite={(e) => {
+            mesures.metAJourPrioriteMesureGenerale(id, e.detail.priorite);
+            metsAJourMesureGenerale(id);
+          }}
           on:click={() =>
             afficheTiroirDeMesure({
               mesure,
@@ -228,6 +228,13 @@
           bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
           on:modificationStatut={(e) => {
             mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);
+            metsAJourMesuresSpecifiques(indexReel);
+          }}
+          on:modificationPriorite={(e) => {
+            mesures.metAJourPrioriteMesureSpecifique(
+              indexReel,
+              e.detail.priorite
+            );
             metsAJourMesuresSpecifiques(indexReel);
           }}
           on:click={() =>

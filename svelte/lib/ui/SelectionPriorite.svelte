@@ -10,7 +10,7 @@
   export let estLectureSeule = false;
 
   const dispatch = createEventDispatcher<{
-    input: { statut: PrioriteMesure };
+    input: { priorite: PrioriteMesure };
   }>();
 
   const referentielPriorites: Record<PrioriteMesure, string> = {
@@ -33,7 +33,7 @@
     class:vide={!priorite}
     disabled={estLectureSeule}
     on:input={(e) => {
-      dispatch('input', { statut: e.target?.value });
+      dispatch('input', { priorite: e.target?.value });
     }}
     on:click|stopPropagation
   >

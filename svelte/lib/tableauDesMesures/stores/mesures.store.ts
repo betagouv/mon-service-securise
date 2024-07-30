@@ -1,5 +1,6 @@
 import type { Mesures } from '../tableauDesMesures.d';
 import { writable } from 'svelte/store';
+import type { PrioriteMesure } from '../../ui/types';
 
 export const mesuresParDefaut = (): Mesures => ({
   mesuresGenerales: {},
@@ -23,4 +24,22 @@ export const mesures = {
       valeur.mesuresSpecifiques[idMesure].statut = statut;
       return valeur;
     }),
+  metAJourPrioriteMesureGenerale: (
+    idMesure: string,
+    priorite: PrioriteMesure | undefined
+  ) => {
+    toutesLesMesures.update((valeur) => {
+      valeur.mesuresGenerales[idMesure].priorite = priorite;
+      return valeur;
+    });
+  },
+  metAJourPrioriteMesureSpecifique: (
+    idMesure: number,
+    priorite: PrioriteMesure | undefined
+  ) => {
+    toutesLesMesures.update((valeur) => {
+      valeur.mesuresSpecifiques[idMesure].priorite = priorite;
+      return valeur;
+    });
+  },
 };

@@ -5,7 +5,11 @@
     MesureSpecifique,
   } from '../tableauDesMesures.d';
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
-  import { Referentiel, type ReferentielStatut } from '../../ui/types.d';
+  import {
+    type PrioriteMesure,
+    Referentiel,
+    type ReferentielStatut,
+  } from '../../ui/types.d';
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
@@ -26,6 +30,7 @@
 
   const dispatch = createEventDispatcher<{
     modificationStatut: { statut: string };
+    modificationPriorite: { priorite: PrioriteMesure | undefined };
   }>();
 
   $: texteSurligne = nom.replace(
@@ -54,8 +59,11 @@
         bind:priorite={mesure.priorite}
         {id}
         {estLectureSeule}
+        on:input={(e) =>
+          dispatch('modificationPriorite', { priorite: e.detail.priorite })}
       />
-    </td>{/if}
+    </td>
+  {/if}
   <td>
     <SelectionStatut
       bind:statut={mesure.statut}
