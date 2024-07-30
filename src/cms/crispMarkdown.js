@@ -86,7 +86,7 @@ class CrispMarkdown {
       link(lien, _, texte) {
         if (texte.includes('Télécharger'))
           return `<a href='${lien}' class='telechargement' target='_blank' rel='noreferrer nofollow'>${texte}</a>`;
-        return `<a href='${lien}' target='_blank' rel='noreferrer nofollow'>${texte}</a>`;
+        return `<a href='${lien}' target='_blank' rel='nofollow'>${texte}</a>`;
       },
     });
 
