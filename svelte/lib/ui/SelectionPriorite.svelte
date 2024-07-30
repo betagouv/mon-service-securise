@@ -37,7 +37,7 @@
     }}
     on:click|stopPropagation
   >
-    <option value="" disabled selected>-</option>
+    <option value="" disabled selected>+</option>
     {#each Object.entries(referentielPriorites) as [valeur, label]}
       <option value={valeur}>{label}</option>
     {/each}
@@ -65,7 +65,7 @@
     border: none;
     background: var(--couleur-texte);
     color: white;
-    padding: 4px 6px;
+    padding: 2px 6px 4px 6px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: bold;
@@ -100,7 +100,10 @@
 
   select.vide {
     --couleur-fond: #f1f5f9;
-    --couleur-texte: #667892;
+    --couleur-texte: var(--liseres-fonce);
+    font-size: 18px;
+    line-height: 20px;
+    padding-top: 0;
   }
 
   option {
