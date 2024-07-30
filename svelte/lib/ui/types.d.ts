@@ -34,3 +34,5 @@ export type NotificationTache = NotificationBase & {
 };
 
 export type Notification = NotificationNouveaute | NotificationTache;
+
+export type PrioriteMesure = 'p1' | 'p2' | 'p3';
