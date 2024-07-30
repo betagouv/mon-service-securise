@@ -254,7 +254,7 @@ const routesConnecteApiService = ({
     '/:id/mesures/:idMesure',
     middleware.verificationAcceptationCGU,
     middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise('statut', 'modalites'),
+    middleware.aseptise('statut', 'modalites', 'priorite'),
     async (requete, reponse, suite) => {
       const { service, idUtilisateurCourant, body, params } = requete;
       const mesureGenerale = {

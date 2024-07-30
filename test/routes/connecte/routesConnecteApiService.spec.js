@@ -508,7 +508,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['statut', 'modalites'],
+        ['statut', 'modalites', 'priorite'],
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456/mesures/audit',
