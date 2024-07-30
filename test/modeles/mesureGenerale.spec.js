@@ -6,6 +6,7 @@ const {
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
+const InformationsHomologation = require('../../src/modeles/informationsHomologation');
 
 describe('Une mesure de sécurité', () => {
   let referentiel;
@@ -125,5 +126,27 @@ describe('Une mesure de sécurité', () => {
       referentiel
     );
     expect(mesure.statutRenseigne()).to.be(true);
+  });
+
+  it('connait sa priorité', () => {
+    const mesure = new MesureGenerale(
+      { id: 'identifiantMesure', priorite: 'p2' },
+      referentiel
+    );
+
+    expect(mesure.priorite).to.eql('p2');
+  });
+
+  it('ne tient pas compte du champ priorite pour déterminer le statut de saisie', () => {
+    const mesure = new MesureGenerale(
+      {
+        id: 'identifiantMesure',
+        statut: MesureGenerale.STATUT_FAIT,
+        modalites: "Des modalités d'application",
+      },
+      referentiel
+    );
+
+    expect(mesure.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
   });
 });
