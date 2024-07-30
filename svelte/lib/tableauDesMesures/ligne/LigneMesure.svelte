@@ -10,6 +10,7 @@
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
   import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
+  import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
 
   type IdDom = string;
 
@@ -47,7 +48,14 @@
       <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
     </div>
   </td>
-  {#if affichePlanAction}<td>P1</td>{/if}
+  {#if affichePlanAction}
+    <td>
+      <SelectionPriorite
+        bind:priorite={mesure.priorite}
+        {id}
+        {estLectureSeule}
+      />
+    </td>{/if}
   <td>
     <SelectionStatut
       bind:statut={mesure.statut}
