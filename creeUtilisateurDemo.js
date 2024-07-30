@@ -10,6 +10,7 @@ const {
   fabriqueAdaptateurChiffrement,
 } = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
 const adaptateurRechercheEntite = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
+const { fabriqueAdaptateurUUID } = require('./src/adaptateurs/adaptateurUUID');
 
 const referentiel = Referentiel.creeReferentiel();
 const descriptionService = new DescriptionService(
@@ -33,7 +34,7 @@ const descriptionService = new DescriptionService(
   referentiel
 );
 
-const creeDonnees = async (depotDonnees) => {
+const creeDonnees = async (depotDonnees, adaptateurPersistance) => {
   const u = await depotDonnees.nouvelUtilisateur({
     prenom: process.env.PRENOM_UTILISATEUR_DEMO,
     nom: process.env.NOM_UTILISATEUR_DEMO,
@@ -55,9 +56,24 @@ const creeDonnees = async (depotDonnees) => {
     process.env.MOT_DE_PASSE_UTILISATEUR_DEMO
   );
 
-  await depotDonnees.nouveauService(u.id, {
+  const idService = await depotDonnees.nouveauService(u.id, {
     descriptionService: descriptionService.toJSON(),
   });
+
+  const tacheService = {
+    id: fabriqueAdaptateurUUID().genereUUID(),
+    idService,
+    nature: 'niveauSecuriteRetrograde',
+    donnees: {
+      nouveauxBesoins: 'élémentaires',
+    },
+  };
+  await adaptateurPersistance.ajouteTacheDeService(tacheService);
+  const suggestionAction = {
+    idService,
+    nature: 'controleBesoinsDeSecuriteRetrogrades',
+  };
+  await adaptateurPersistance.ajouteSuggestionAction(suggestionAction);
 };
 
 const main = async () => {
@@ -85,7 +101,7 @@ const main = async () => {
       process.exit(0);
     }
 
-    await creeDonnees(depotDonnees);
+    await creeDonnees(depotDonnees, adaptateurPersistance);
     console.log('Utilisateur de démonstration créé !');
     process.exit(0);
     /* eslint-enable no-console */
