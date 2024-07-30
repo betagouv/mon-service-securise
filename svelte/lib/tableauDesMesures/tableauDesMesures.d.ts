@@ -42,3 +42,9 @@ export type Mesures = {
   mesuresGenerales: Record<IdMesureGenerale, MesureGenerale>;
   mesuresSpecifiques: MesureSpecifique[];
 };
+
+export enum EtatEnregistrement {
+  Jamais,
+  EnCours,
+  Fait,
+}
