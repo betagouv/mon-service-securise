@@ -57,7 +57,7 @@ const testeurMss = () => {
     };
     const contenuCrisp = { contenuMarkdown: 'Un contenu', titre: 'Un titre' };
     adaptateurCmsCrisp = {
-      recupereNouveautes: async () => contenuCrisp,
+      recuperePromouvoir: async () => contenuCrisp,
       recupereDevenirAmbassadeur: async () => contenuCrisp,
       recupereFaireConnaitreMSS: async () => contenuCrisp,
       recupereArticleBlog: async () => contenuCrisp,
