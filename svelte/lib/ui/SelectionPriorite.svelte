@@ -8,15 +8,18 @@
   export let priorite: PrioriteMesure | undefined | '';
   export let label = '';
   export let estLectureSeule = false;
+  export let avecLibelleOption: boolean = false;
 
   const dispatch = createEventDispatcher<{
     input: { priorite: PrioriteMesure };
   }>();
 
-  const referentielPriorites: Record<PrioriteMesure, string> = {
-    p1: 'P1',
-    p2: 'P2',
-    p3: 'P3',
+  type LabelPriorite = { court: string; complet: string };
+
+  const referentielPriorites: Record<PrioriteMesure, LabelPriorite> = {
+    p1: { court: 'P1', complet: 'P1 - Priorité élevée' },
+    p2: { court: 'P2', complet: 'P2 - Priorité moyenne' },
+    p3: { court: 'P3', complet: 'P3 - Priorité basse' },
   };
 
   $: {
@@ -30,6 +33,7 @@
     bind:value={priorite}
     id={`priorite-${id}`}
     class={priorite}
+    class:avecLibelleOption
     class:vide={!priorite}
     disabled={estLectureSeule}
     on:input={(e) => {
@@ -37,9 +41,13 @@
     }}
     on:click|stopPropagation
   >
-    <option value="" disabled selected>+</option>
-    {#each Object.entries(referentielPriorites) as [valeur, label]}
-      <option value={valeur}>{label}</option>
+    <option value="" disabled selected
+      >{avecLibelleOption ? 'Définir la priorité' : '+'}</option
+    >
+    {#each Object.entries(referentielPriorites) as [valeur, labels]}
+      <option value={valeur}
+        >{avecLibelleOption ? labels.complet : labels.court}</option
+      >
     {/each}
   </select>
 </label>
@@ -47,6 +55,9 @@
 <style>
   label {
     margin: 0;
+    font-weight: 500;
+    line-height: 22px;
+    color: var(--texte-clair);
   }
 
   label.a-label {
@@ -63,8 +74,10 @@
     --couleur-fond: transparent;
     --couleur-texte: transparent;
     border: none;
-    background: var(--couleur-texte);
-    color: white;
+    background: var(--couleur-fond-normal);
+    color: var(--couleur-texte-normal);
+    --couleur-texte-normal: white;
+    --couleur-fond-normal: var(--couleur-texte-survol);
     padding: 2px 6px 4px 6px;
     border-radius: 4px;
     font-size: 12px;
@@ -74,9 +87,15 @@
     text-align: center;
   }
 
+  select.avecLibelleOption {
+    width: fit-content;
+    appearance: auto;
+    text-align: left;
+  }
+
   select:hover {
-    color: var(--couleur-texte);
-    background: var(--couleur-fond);
+    color: var(--couleur-texte-survol);
+    background: var(--couleur-fond-survol);
   }
 
   select option {
@@ -84,29 +103,50 @@
   }
 
   select.p1 {
-    --couleur-fond: #ffe9e6;
-    --couleur-texte: #ff6584;
+    --couleur-texte-survol: #ff6584;
+    --couleur-fond-survol: #ffe9e6;
   }
 
   select.p2 {
-    --couleur-fond: #fff2de;
-    --couleur-texte: #faa72c;
+    --couleur-texte-survol: #faa72c;
+    --couleur-fond-survol: #fff2de;
   }
 
   select.p3 {
-    --couleur-fond: #d4f4db;
-    --couleur-texte: #0c8626;
+    --couleur-texte-survol: #0c8626;
+    --couleur-fond-survol: #d4f4db;
   }
 
   select.vide {
-    --couleur-fond: #f1f5f9;
-    --couleur-texte: var(--liseres-fonce);
+    --couleur-texte-normal: var(--texte-clair);
+    --couleur-fond-normal: var(--fond-gris-pale);
+    --couleur-texte-survol: white;
+    --couleur-fond-survol: var(--texte-clair);
+
     font-size: 18px;
     line-height: 20px;
     padding-top: 0;
   }
 
+  select.avecLibelleOption.vide {
+    --couleur-texte-normal: var(--texte-clair);
+    --couleur-fond-normal: white;
+    --couleur-texte-survol: var(--texte-clair);
+    --couleur-fond-survol: white;
+
+    border: 1px solid var(--liseres-fonce);
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  select.avecLibelleOption {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+  }
+
   option {
     background: white;
+    font-size: 14px;
   }
 </style>
