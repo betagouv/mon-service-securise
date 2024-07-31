@@ -24,6 +24,11 @@ import {
   type Avancement,
   rechercheParAvancement,
 } from './rechercheParAvancement.store';
+import {
+  appliqueFiltreParPriorite,
+  rechercheParPriorite,
+} from './rechercheParPriorite.store';
+import type { PrioriteMesure } from '../../ui/types';
 
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type Predicats = {
@@ -34,6 +39,7 @@ type Predicats = {
 const construisFiltres = (
   rechercheTextuelle: string,
   categories: IdCategorie[],
+  priorites: PrioriteMesure[],
   referentiels: IdReferentiel[],
   avancement: 'statutADefinir' | 'enAction' | 'traite' | 'toutes'
 ) => {
@@ -47,6 +53,11 @@ const construisFiltres = (
   if (categories.length > 0)
     filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
       appliqueFiltreParCategorie(mesure, categories)
+    );
+
+  if (priorites.length > 0)
+    filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
+      appliqueFiltreParPriorite(mesure, priorites)
     );
 
   if (referentiels.length > 0)
@@ -66,6 +77,7 @@ const predicats = derived<
   [
     typeof rechercheTextuelle,
     typeof rechercheParCategorie,
+    typeof rechercheParPriorite,
     typeof rechercheParReferentiel,
     typeof rechercheParAvancement,
   ],
@@ -74,18 +86,21 @@ const predicats = derived<
   [
     rechercheTextuelle,
     rechercheParCategorie,
+    rechercheParPriorite,
     rechercheParReferentiel,
     rechercheParAvancement,
   ],
   ([
     $rechercheTextuelle,
     $rechercheParCategorie,
+    $rechercheParPriorite,
     $rechercheParReferentiel,
     $rechercheParAvancement,
   ]) => ({
     filtres: construisFiltres(
       $rechercheTextuelle,
       $rechercheParCategorie,
+      $rechercheParPriorite,
       $rechercheParReferentiel,
       $rechercheParAvancement
     ),
@@ -93,6 +108,7 @@ const predicats = derived<
       filtres: construisFiltres(
         $rechercheTextuelle,
         $rechercheParCategorie,
+        $rechercheParPriorite,
         $rechercheParReferentiel,
         avancementDeSimulation
       ),
