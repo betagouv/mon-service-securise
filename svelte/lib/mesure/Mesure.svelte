@@ -85,7 +85,10 @@
         bind:retourUtilisateur
         bind:commentaireRetourUtilisateur
       />
-      <ContenuOngletPlanAction visible={ongletActif === 'planAction'} />
+      <ContenuOngletPlanAction
+        visible={ongletActif === 'planAction'}
+        {estLectureSeule}
+      />
     </div>
     <div class="conteneur-actions">
       {#if $configurationAffichage.doitAfficherSuppression}
