@@ -9,6 +9,8 @@
     rechercheParReferentiel,
   } from '../stores/rechercheParReferentiel.store';
   import { rechercheParCategorie } from '../stores/rechercheParCategorie.store';
+  import type { PrioriteMesure } from '../../ui/types.d';
+  import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
 
   export let categories: Record<IdCategorie, string>;
 
@@ -36,6 +38,13 @@
     const devientCochee = !cocheGlobaleANSSI;
     if (devientCochee) rechercheParReferentiel.ajouteLesReferentielsANSSI();
     else rechercheParReferentiel.supprimeLesReferentielsANSSI();
+  };
+
+  type LabelPriorite = { court: string; complet: string };
+  const referentielPriorites: Record<PrioriteMesure, LabelPriorite> = {
+    p1: { court: 'P1', complet: 'P1 - Priorité élevée' },
+    p2: { court: 'P2', complet: 'P2 - Priorité moyenne' },
+    p3: { court: 'P3', complet: 'P3 - Priorité basse' },
   };
 </script>
 
@@ -123,6 +132,21 @@
         />
         <label for="mesure-ajoutee">Mesures ajoutées</label>
       </div>
+    </fieldset>
+    <fieldset>
+      <legend>Priorité</legend>
+      {#each Object.entries(referentielPriorites) as [id, labels]}
+        <div>
+          <input
+            type="checkbox"
+            {id}
+            name={id}
+            bind:group={$rechercheParPriorite}
+            value={id}
+          />
+          <label for={id}>{labels.complet}</label>
+        </div>
+      {/each}
     </fieldset>
     <button
       class="bouton bouton-secondaire bouton-effacer-filtre"
