@@ -17,6 +17,8 @@
   export let mesuresExistantes: MesuresExistantes;
   export let estLectureSeule: boolean;
 
+  const statutInitial = $store.mesureEditee.mesure.statut;
+
   let enCoursEnvoi = false;
   const enregistreMesure = async () => {
     enCoursEnvoi = true;
@@ -41,10 +43,12 @@
         detail: { sourceDeModification: 'tiroir' },
       })
     );
-    toasterStore.afficheToastChangementStatutMesure(
-      $store.mesureEditee.mesure,
-      statuts
-    );
+    if (statutInitial !== $store.mesureEditee.mesure.statut) {
+      toasterStore.afficheToastChangementStatutMesure(
+        $store.mesureEditee.mesure,
+        statuts
+      );
+    }
   };
 
   $: texteSurligne = $store.mesureEditee.mesure.descriptionLongue?.replace(
