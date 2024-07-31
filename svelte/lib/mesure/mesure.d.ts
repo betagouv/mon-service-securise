@@ -24,6 +24,7 @@ export type MesuresExistantes = {
 export type MesureGenerale = {
   statut?: string;
   modalites?: string;
+  priorite?: string;
 };
 
 export type MesureGeneraleEnrichie = MesureGenerale & {
