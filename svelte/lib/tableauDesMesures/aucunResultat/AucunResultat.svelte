@@ -7,6 +7,7 @@
   import type { ReferentielStatut } from '../../ui/types';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import { rechercheParAvancement } from '../stores/rechercheParAvancement.store';
+  import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
 
   export let referentielStatuts: ReferentielStatut;
 
@@ -14,6 +15,7 @@
     $rechercheTextuelle = '';
     $rechercheParCategorie = [];
     $rechercheParReferentiel = [];
+    $rechercheParPriorite = [];
   };
 </script>
 

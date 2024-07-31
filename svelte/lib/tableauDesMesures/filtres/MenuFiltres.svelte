@@ -17,6 +17,7 @@
   const effaceFiltres = () => {
     rechercheParCategorie.set([]);
     rechercheParReferentiel.set([]);
+    rechercheParPriorite.set([]);
   };
 
   $: cocheGlobaleANSSI =
