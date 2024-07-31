@@ -1,7 +1,7 @@
 import { derived } from 'svelte/store';
 import { rechercheParReferentiel } from './rechercheParReferentiel.store';
 import { rechercheParCategorie } from './rechercheParCategorie.store';
-import { resultatsDeRecherche } from './resultatsDeRecherche';
+import { resultatsDeRecherche } from './resultatsDeRecherche.store';
 import { mesures } from './mesures.store';
 import type { Avancement } from './rechercheParAvancement.store';
 

@@ -20,7 +20,7 @@
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
-  import { resultatsDeRecherche } from './stores/resultatsDeRecherche';
+  import { resultatsDeRecherche } from './stores/resultatsDeRecherche.store';
   import { mesures } from './stores/mesures.store';
   import { rechercheParAvancement } from './stores/rechercheParAvancement.store';
   import AucunResultat from './aucunResultat/AucunResultat.svelte';
