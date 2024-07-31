@@ -10,6 +10,7 @@
   import { rechercheTextuelle } from '../tableauDesMesures/stores/rechercheTextuelle.store';
   import { toasterStore } from '../ui/stores/toaster.store';
   import Onglet from '../ui/Onglet.svelte';
+  import { featureFlags } from '../featureFlags';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -65,20 +66,22 @@
 {#if $store.etape === 'SuppressionSpecifique'}
   <SuppressionMesureSpecifique {idService} {mesuresExistantes} />
 {:else}
-  <div class="conteneur-onglet">
-    <Onglet
-      bind:ongletActif
-      cetOnglet="mesure"
-      labelOnglet="Mesure"
-      nbNonLue={0}
-    />
-    <Onglet
-      bind:ongletActif
-      cetOnglet="planAction"
-      labelOnglet="Plan d'action"
-      nbNonLue={0}
-    />
-  </div>
+  {#if featureFlags.planAction()}
+    <div class="conteneur-onglet">
+      <Onglet
+        bind:ongletActif
+        cetOnglet="mesure"
+        labelOnglet="Mesure"
+        nbNonLue={0}
+      />
+      <Onglet
+        bind:ongletActif
+        cetOnglet="planAction"
+        labelOnglet="Plan d'action"
+        nbNonLue={0}
+      />
+    </div>
+  {/if}
 
   <Formulaire on:formulaireValide={enregistreMesure} id="formulaire-mesure">
     {#if ongletActif === 'mesure'}
