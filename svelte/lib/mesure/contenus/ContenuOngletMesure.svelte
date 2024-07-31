@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { configurationAffichage, store } from './mesure.store';
-  import SelectionStatut from '../ui/SelectionStatut.svelte';
-  import { validationChamp } from '../directives/validationChamp';
-  import { rechercheTextuelle } from '../tableauDesMesures/stores/rechercheTextuelle.store';
-  import type { ReferentielStatut } from '../ui/types';
+  import { configurationAffichage, store } from '../mesure.store';
+  import SelectionStatut from '../../ui/SelectionStatut.svelte';
+  import { validationChamp } from '../../directives/validationChamp';
+  import { rechercheTextuelle } from '../../tableauDesMesures/stores/rechercheTextuelle.store';
+  import type { ReferentielStatut } from '../../ui/types';
 
   export let estLectureSeule: boolean;
   export let categories: Record<string, string>;
