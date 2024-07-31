@@ -5,14 +5,23 @@
 
   let formulaire: HTMLFormElement;
 
-  const dispatch = createEventDispatcher<{ formulaireValide: null }>();
+  const dispatch = createEventDispatcher<{
+    formulaireValide: null;
+    formulaireInvalide: null;
+  }>();
 
   const verifieValidite = () => {
-    formulaire.reportValidity();
-    if (formulaire.checkValidity()) dispatch('formulaireValide');
+    dispatch(
+      formulaire.checkValidity() ? 'formulaireValide' : 'formulaireInvalide'
+    );
   };
 </script>
 
-<form bind:this={formulaire} on:submit|preventDefault={verifieValidite} {id}>
+<form
+  bind:this={formulaire}
+  on:submit|preventDefault={verifieValidite}
+  {id}
+  novalidate
+>
   <slot />
 </form>

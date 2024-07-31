@@ -56,6 +56,10 @@
   let retourUtilisateur: string;
   let commentaireRetourUtilisateur: string;
   let ongletActif: string = 'mesure';
+
+  const activeOngletMesure = () => {
+    ongletActif = 'mesure';
+  };
 </script>
 
 {#if $store.etape === 'SuppressionSpecifique'}
@@ -78,7 +82,11 @@
     </div>
   {/if}
 
-  <Formulaire on:formulaireValide={enregistreMesure} id="formulaire-mesure">
+  <Formulaire
+    on:formulaireValide={enregistreMesure}
+    id="formulaire-mesure"
+    on:formulaireInvalide={activeOngletMesure}
+  >
     <div class="corps-formulaire">
       <ContenuOngletMesure
         visible={ongletActif === 'mesure'}
