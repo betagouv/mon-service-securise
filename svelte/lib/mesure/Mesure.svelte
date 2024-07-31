@@ -66,13 +66,13 @@
         bind:ongletActif
         cetOnglet="mesure"
         labelOnglet="Mesure"
-        nbNonLue={0}
+        sansBordureEnBas
       />
       <Onglet
         bind:ongletActif
         cetOnglet="planAction"
         labelOnglet="Plan d'action"
-        nbNonLue={0}
+        sansBordureEnBas
       />
     </div>
   {/if}
