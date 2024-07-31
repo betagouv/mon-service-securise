@@ -8,8 +8,9 @@
   import { toasterStore } from '../ui/stores/toaster.store';
   import Onglet from '../ui/Onglet.svelte';
   import { featureFlags } from '../featureFlags';
-  import ContenuOngletMesure from './ContenuOngletMesure.svelte';
+  import ContenuOngletMesure from './contenus/ContenuOngletMesure.svelte';
   import type { ReferentielStatut } from '../ui/types';
+  import ContenuOngletPlanAction from './contenus/ContenuOngletPlanAction.svelte';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -88,12 +89,7 @@
         bind:retourUtilisateur
         bind:commentaireRetourUtilisateur
       />
-      <div
-        id="contenu-onglet-plan-action"
-        class:visible={ongletActif === 'planAction'}
-      >
-        <p>Plan d’action</p>
-      </div>
+      <ContenuOngletPlanAction visible={ongletActif === 'planAction'} />
     </div>
     <div class="conteneur-actions">
       {#if $configurationAffichage.doitAfficherSuppression}
@@ -170,9 +166,5 @@
     display: flex;
     gap: 8px;
     margin-bottom: 26px;
-  }
-
-  #contenu-onglet-plan-action:not(.visible) {
-    display: none;
   }
 </style>
