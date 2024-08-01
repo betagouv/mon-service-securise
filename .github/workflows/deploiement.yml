@@ -29,7 +29,7 @@ jobs:
           ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
         run: |
           clever link -o="$ID_ORGANISATION" "$ID_APP"
-          clever deploy --force
+          clever deploy --force --same-commit-policy=rebuild
 
   deploiement-prod:
     needs: [deploiement-demo]
@@ -54,4 +54,4 @@ jobs:
           ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
         run: |
           clever link -o="$ID_ORGANISATION" "$ID_APP"
-          clever deploy --force
+          clever deploy --force --same-commit-policy=rebuild
