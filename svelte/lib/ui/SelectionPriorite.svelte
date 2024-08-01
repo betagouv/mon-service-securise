@@ -38,11 +38,7 @@
       >{avecLibelleOption ? 'Définir la priorité' : '+'}</option
     >
     {#each Object.entries(priorites) as [valeur, labels]}
-      <option value={valeur}
-        >{avecLibelleOption
-          ? labels.libelleComplet
-          : labels.libelleCourt}</option
-      >
+      <option value={valeur}>{labels.libelleComplet}</option>
     {/each}
   </select>
 </label>
@@ -81,7 +77,7 @@
     border-radius: 4px;
     font-size: 12px;
     font-weight: bold;
-    width: 32px;
+    width: 27px;
     text-align: center;
   }
 
