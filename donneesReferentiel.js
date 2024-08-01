@@ -484,6 +484,12 @@ module.exports = {
     aLancer: 'À lancer',
   },
 
+  prioritesMesures: {
+    p1: { libelleCourt: 'P1', libelleComplet: 'P1 - Priorité élevée' },
+    p2: { libelleCourt: 'P2', libelleComplet: 'P2 - Priorité moyenne' },
+    p3: { libelleCourt: 'P3', libelleComplet: 'P3 - Priorité basse' },
+  },
+
   articlesDefinisReferentielsMesure: {
     ANSSI: "l'",
     CNIL: 'la ',

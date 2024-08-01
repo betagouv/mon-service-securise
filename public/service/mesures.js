@@ -5,6 +5,7 @@ import ActionExportMesures from '../modules/tableauDeBord/actions/ActionExportMe
 $(() => {
   const categories = JSON.parse($('#referentiel-categories-mesures').text());
   const statuts = JSON.parse($('#referentiel-statuts-mesures').text());
+  const priorites = JSON.parse($('#referentiel-priorites-mesures').text());
   const retoursUtilisateur = JSON.parse(
     $('#referentiel-retours-utilisateur').text()
   );
@@ -19,6 +20,7 @@ $(() => {
       detail: {
         categories,
         statuts,
+        priorites,
         idService,
         estLectureSeule,
         modeVisiteGuidee:
@@ -45,6 +47,7 @@ $(() => {
       idService,
       categories,
       statuts,
+      priorites,
       retoursUtilisateur,
       estLectureSeule,
       mesuresExistantes: e.detail.mesuresExistantes,

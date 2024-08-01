@@ -23,6 +23,7 @@ const donneesReferentielVide = {
   provenancesService: {},
   statutsDeploiement: {},
   statutsMesures: {},
+  prioritesMesures: {},
   tranchesIndicesCybers: [],
   nombreOrganisationsUtilisatrices: [],
   estimationNombreServices: [],
@@ -119,6 +120,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     Object.keys(statutsDeploiement()).includes(id);
   const statutsMesures = () => donnees.statutsMesures;
   const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
+  const prioritesMesures = () => donnees.prioritesMesures;
   const departements = () => donneesReferentiel.departements || [];
   const codeDepartements = () =>
     donneesReferentiel.departements?.map((departement) => departement.code);
@@ -364,6 +366,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nouvellesFonctionnalites,
     numeroEtape,
     premiereEtapeParcours,
+    prioritesMesures,
     provenancesService,
     recharge,
     reglesPersonnalisation,

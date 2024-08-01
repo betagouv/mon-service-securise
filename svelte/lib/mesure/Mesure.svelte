@@ -9,7 +9,7 @@
   import Onglet from '../ui/Onglet.svelte';
   import { featureFlags } from '../featureFlags';
   import ContenuOngletMesure from './contenus/ContenuOngletMesure.svelte';
-  import type { ReferentielStatut } from '../ui/types';
+  import type { ReferentielPriorite, ReferentielStatut } from '../ui/types';
   import ContenuOngletPlanAction from './contenus/ContenuOngletPlanAction.svelte';
 
   export let idService: string;
@@ -18,6 +18,7 @@
   export let retoursUtilisateur: Record<string, string>;
   export let mesuresExistantes: MesuresExistantes;
   export let estLectureSeule: boolean;
+  export let priorites: ReferentielPriorite;
 
   const planDActionDisponible =
     $store.mesureEditee.mesure.statut === 'aLancer' ||
@@ -106,6 +107,7 @@
         visible={ongletActif === 'planAction'}
         {estLectureSeule}
         {statuts}
+        {priorites}
       />
     </div>
     <div class="conteneur-actions">

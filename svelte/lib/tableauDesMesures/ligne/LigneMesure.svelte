@@ -8,6 +8,7 @@
   import {
     type PrioriteMesure,
     Referentiel,
+    type ReferentielPriorite,
     type ReferentielStatut,
   } from '../../ui/types.d';
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
@@ -27,6 +28,7 @@
   export let referentielStatuts: ReferentielStatut;
   export let estLectureSeule: boolean;
   export let affichePlanAction: boolean;
+  export let priorites: ReferentielPriorite;
 
   const dispatch = createEventDispatcher<{
     modificationStatut: { statut: string };
@@ -59,6 +61,7 @@
         bind:priorite={mesure.priorite}
         {id}
         {estLectureSeule}
+        {priorites}
         on:input={(e) =>
           dispatch('modificationPriorite', { priorite: e.detail.priorite })}
       />

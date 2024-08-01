@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PrioriteMesure } from './types.d';
+  import type { PrioriteMesure, ReferentielPriorite } from './types.d';
   import { createEventDispatcher } from 'svelte';
 
   type IdDom = string;
@@ -9,18 +9,11 @@
   export let label = '';
   export let estLectureSeule = false;
   export let avecLibelleOption: boolean = false;
+  export let priorites: ReferentielPriorite;
 
   const dispatch = createEventDispatcher<{
     input: { priorite: PrioriteMesure };
   }>();
-
-  type LabelPriorite = { court: string; complet: string };
-
-  const referentielPriorites: Record<PrioriteMesure, LabelPriorite> = {
-    p1: { court: 'P1', complet: 'P1 - Priorité élevée' },
-    p2: { court: 'P2', complet: 'P2 - Priorité moyenne' },
-    p3: { court: 'P3', complet: 'P3 - Priorité basse' },
-  };
 
   $: {
     if (!priorite) priorite = '';
@@ -44,9 +37,11 @@
     <option value="" disabled selected
       >{avecLibelleOption ? 'Définir la priorité' : '+'}</option
     >
-    {#each Object.entries(referentielPriorites) as [valeur, labels]}
+    {#each Object.entries(priorites) as [valeur, labels]}
       <option value={valeur}
-        >{avecLibelleOption ? labels.complet : labels.court}</option
+        >{avecLibelleOption
+          ? labels.libelleComplet
+          : labels.libelleCourt}</option
       >
     {/each}
   </select>
