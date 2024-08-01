@@ -61,19 +61,19 @@
         bind:ongletActif
         cetOnglet="aFaire"
         labelOnglet="À faire"
-        nbNonLue={calculNbNonLue(notificationsParOnglet.aFaire)}
+        badge={calculNbNonLue(notificationsParOnglet.aFaire)}
       />
       <Onglet
         bind:ongletActif
         cetOnglet="nouveautes"
         labelOnglet="Nouveautés"
-        nbNonLue={calculNbNonLue(notificationsParOnglet.nouveautes)}
+        badge={calculNbNonLue(notificationsParOnglet.nouveautes)}
       />
       <Onglet
         bind:ongletActif
         cetOnglet="toutes"
         labelOnglet="Toutes"
-        nbNonLue={calculNbNonLue(notificationsParOnglet.toutes)}
+        badge={calculNbNonLue(notificationsParOnglet.toutes)}
       />
     </div>
     <ListeNotifications notifications={notificationsParOnglet[ongletActif]} />

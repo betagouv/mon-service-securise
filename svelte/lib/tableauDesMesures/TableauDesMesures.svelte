@@ -161,26 +161,26 @@
               bind:ongletActif={$rechercheParAvancement}
               cetOnglet="statutADefinir"
               labelOnglet="Statut à définir"
-              nbNonLue={$nombreResultats.nombreParAvancement.statutADefinir}
+              badge={$nombreResultats.nombreParAvancement.statutADefinir}
             />
           {/if}
           <Onglet
             bind:ongletActif={$rechercheParAvancement}
             cetOnglet="enAction"
             labelOnglet="En action"
-            nbNonLue={$nombreResultats.nombreParAvancement.enAction}
+            badge={$nombreResultats.nombreParAvancement.enAction}
           />
           <Onglet
             bind:ongletActif={$rechercheParAvancement}
             cetOnglet="traite"
             labelOnglet="Traité"
-            nbNonLue={$nombreResultats.nombreParAvancement.traite}
+            badge={$nombreResultats.nombreParAvancement.traite}
           />
           <Onglet
             bind:ongletActif={$rechercheParAvancement}
             cetOnglet="toutes"
             labelOnglet="Toutes les mesures"
-            nbNonLue={$nombreResultats.nombreParAvancement.toutes}
+            badge={$nombreResultats.nombreParAvancement.toutes}
           />
         </div>
       </th>

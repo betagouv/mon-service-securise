@@ -2,7 +2,7 @@
   export let ongletActif: T;
   export let cetOnglet: T;
   export let labelOnglet: string;
-  export let nbNonLue: number = 0;
+  export let badge: 'info' | number = 0;
   export let sansBordureEnBas: boolean = false;
 </script>
 
@@ -14,12 +14,22 @@
   on:click={() => (ongletActif = cetOnglet)}
 >
   <span class="label">{labelOnglet}</span>
-  {#if nbNonLue}
-    <span class="non-lue">{nbNonLue}</span>
+  {#if badge === 'info'}
+    <img
+      src="/statique/assets/images/icone_information_suppression.svg"
+      alt="Icône d'information"
+    />
+  {:else if badge}
+    <span class="badge">{badge}</span>
   {/if}
 </button>
 
 <style>
+  img {
+    width: 16px;
+    height: 16px;
+  }
+
   .onglet {
     min-width: 140px;
     padding: 9px 12px;
@@ -53,7 +63,7 @@
     font-weight: bold;
   }
 
-  .non-lue {
+  .badge {
     width: 16px;
     height: 16px;
     border-radius: 50%;
@@ -67,7 +77,7 @@
     line-height: 12px;
   }
 
-  .onglet.active .non-lue {
+  .onglet.active .badge {
     background: var(--bleu-mise-en-avant);
     border: 1px solid transparent;
     color: white;
