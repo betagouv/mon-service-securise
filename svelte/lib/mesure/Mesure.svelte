@@ -100,6 +100,7 @@
       <ContenuOngletPlanAction
         visible={ongletActif === 'planAction'}
         {estLectureSeule}
+        {statuts}
       />
     </div>
     <div class="conteneur-actions">
