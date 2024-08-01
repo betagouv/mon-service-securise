@@ -12,7 +12,11 @@
     recupereMesures,
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
-  import { Referentiel, type ReferentielStatut } from '../ui/types.d';
+  import {
+    Referentiel,
+    type ReferentielPriorite,
+    type ReferentielStatut,
+  } from '../ui/types.d';
   import { nombreResultats } from './stores/nombreDeResultats.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
   import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
@@ -38,6 +42,7 @@
   export let idService: IdService;
   export let categories: Record<IdCategorie, string>;
   export let statuts: ReferentielStatut;
+  export let priorites: ReferentielPriorite;
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
 
@@ -120,7 +125,7 @@
       placeholder="Rechercher par intitulé, description, ID"
     />
   </div>
-  <MenuFiltres {categories} />
+  <MenuFiltres {categories} {priorites} />
 </div>
 {#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures')}
   <Avertissement
@@ -210,6 +215,7 @@
           nom={mesure.description}
           categorie={categories[mesure.categorie]}
           referentielStatuts={statuts}
+          {priorites}
           bind:mesure={$mesures.mesuresGenerales[id]}
           on:modificationStatut={(e) => {
             mesures.metAJourStatutMesureGenerale(id, e.detail.statut);
@@ -236,6 +242,7 @@
           nom={mesure.description}
           categorie={categories[mesure.categorie]}
           referentielStatuts={statuts}
+          {priorites}
           bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
           on:modificationStatut={(e) => {
             mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);

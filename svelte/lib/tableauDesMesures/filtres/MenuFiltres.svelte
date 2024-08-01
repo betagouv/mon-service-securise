@@ -9,11 +9,12 @@
     rechercheParReferentiel,
   } from '../stores/rechercheParReferentiel.store';
   import { rechercheParCategorie } from '../stores/rechercheParCategorie.store';
-  import type { PrioriteMesure } from '../../ui/types.d';
+  import type { ReferentielPriorite } from '../../ui/types.d';
   import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
   import { featureFlags } from '../../featureFlags';
 
   export let categories: Record<IdCategorie, string>;
+  export let priorites: ReferentielPriorite;
 
   const effaceFiltres = () => {
     rechercheParCategorie.set([]);
@@ -40,13 +41,6 @@
     const devientCochee = !cocheGlobaleANSSI;
     if (devientCochee) rechercheParReferentiel.ajouteLesReferentielsANSSI();
     else rechercheParReferentiel.supprimeLesReferentielsANSSI();
-  };
-
-  type LabelPriorite = { court: string; complet: string };
-  const referentielPriorites: Record<PrioriteMesure, LabelPriorite> = {
-    p1: { court: 'P1', complet: 'P1 - Priorité élevée' },
-    p2: { court: 'P2', complet: 'P2 - Priorité moyenne' },
-    p3: { court: 'P3', complet: 'P3 - Priorité basse' },
   };
 </script>
 
@@ -138,7 +132,7 @@
     {#if featureFlags.planAction()}
       <fieldset>
         <legend>Priorité</legend>
-        {#each Object.entries(referentielPriorites) as [id, labels]}
+        {#each Object.entries(priorites) as [id, labels]}
           <div>
             <input
               type="checkbox"
@@ -147,7 +141,7 @@
               bind:group={$rechercheParPriorite}
               value={id}
             />
-            <label for={id}>{labels.complet}</label>
+            <label for={id}>{labels.libelleComplet}</label>
           </div>
         {/each}
       </fieldset>

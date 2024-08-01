@@ -7,6 +7,7 @@
 
   export let visible: boolean;
   export let estLectureSeule: boolean;
+  export let priorites: ReferentielPriorite;
   export let statuts: ReferentielStatut;
 
   const planDActionDisponible = (statut) =>
@@ -55,6 +56,7 @@
     label="Priorité"
     estLectureSeule={estLectureSeule || selectionDesactivee}
     avecLibelleOption
+    {priorites}
   />
 </div>
 

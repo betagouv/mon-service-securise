@@ -36,3 +36,10 @@ export type NotificationTache = NotificationBase & {
 export type Notification = NotificationNouveaute | NotificationTache;
 
 export type PrioriteMesure = 'p1' | 'p2' | 'p3';
+
+export type ReferentielPriorite = Record<PrioriteMesure, LibellePriorite>;
+
+export type LibellePriorite = {
+  libelleCourt: string;
+  libelleComplet: string;
+};
