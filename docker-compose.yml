@@ -21,6 +21,24 @@ services:
     volumes:
       - dbvol:/var/lib/postgresql/data
 
+  mss-browserless:
+    image: browserless/chrome:1.61-chrome-stable
+    environment:
+      - DEBUG=browserless:*
+      - MAX_CONCURRENT_SESSIONS=10
+      - CONNECTION_TIMEOUT=60000
+      - MAX_QUEUE_LENGTH=20
+      - PREBOOT_CHROME=true
+      - DEMO_MODE=false
+      - HOST=0.0.0.0
+      - ENABLE_DEBUGGER=false
+      - TOKEN=dev-en-local
+      - PORT=9090
+    networks:
+      - mss-network
+    ports:
+      - '9090:9090'
+
   test:
     <<: *configuration-base
     command: 'npm run test:watch'
@@ -51,6 +69,7 @@ services:
     depends_on:
       - mss-db
       - mss-crypto
+      - mss-browserless
 
   mss-crypto:
     image: hashicorp/vault:1.14
