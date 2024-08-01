@@ -71,6 +71,9 @@
     font-weight: bold;
     text-transform: uppercase;
     width: var(--taille);
+  }
+
+  select:not(:disabled) {
     cursor: pointer;
   }
 

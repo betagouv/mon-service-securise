@@ -87,12 +87,11 @@
     font-size: 12px;
     font-weight: bold;
     width: 32px;
-    cursor: pointer;
     text-align: center;
   }
 
-  select:disabled {
-    cursor: default;
+  select:not(:disabled) {
+    cursor: pointer;
   }
 
   select:disabled.avecLibelleOption.vide {
