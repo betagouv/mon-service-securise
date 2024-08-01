@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const {
   ErreurMesureInconnue,
   ErreurStatutMesureInvalide,
+  ErreurPrioriteMesureInvalide,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
@@ -74,6 +75,20 @@ describe('Une mesure de sécurité', () => {
     }
   });
 
+  it('vérifie la valeur de la priorité', () => {
+    referentiel.enrichis({ prioritesMesures: {} });
+    try {
+      new MesureGenerale(
+        { id: 'identifiantMesure', priorite: 'prioriteInvalide' },
+        referentiel
+      );
+      expect().fail('La création de la mesure aurait dû lever une exception');
+    } catch (e) {
+      expect(e).to.be.a(ErreurPrioriteMesureInvalide);
+      expect(e.message).to.equal('La priorité "prioriteInvalide" est invalide');
+    }
+  });
+
   it('connaît sa description', () => {
     expect(referentiel.mesures().identifiantMesure.description).to.equal(
       'Une description'
@@ -129,6 +144,7 @@ describe('Une mesure de sécurité', () => {
   });
 
   it('connait sa priorité', () => {
+    referentiel.enrichis({ prioritesMesures: { p2: {} } });
     const mesure = new MesureGenerale(
       { id: 'identifiantMesure', priorite: 'p2' },
       referentiel

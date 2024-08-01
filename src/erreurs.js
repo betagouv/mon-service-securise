@@ -41,6 +41,7 @@ class ErreurNiveauGraviteInconnu extends ErreurModele {}
 class ErreurNomServiceDejaExistant extends ErreurModele {}
 class ErreurRisqueInconnu extends ErreurModele {}
 class ErreurStatutDeploiementInvalide extends ErreurModele {}
+class ErreurPrioriteMesureInvalide extends ErreurModele {}
 class ErreurStatutMesureInvalide extends ErreurModele {}
 class ErreurSuppressionImpossible extends Error {}
 class ErreurUtilisateurInexistant extends ErreurModele {}
@@ -90,6 +91,7 @@ module.exports = {
   ErreurServiceInexistant,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
+  ErreurPrioriteMesureInvalide,
   ErreurSuppressionImpossible,
   ErreurTypeInconnu,
   ErreurUtilisateurExistant,

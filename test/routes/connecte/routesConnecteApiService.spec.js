@@ -474,6 +474,28 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         expect(e.response.data).to.be('Le statut "plop" est invalide');
       }
     });
+
+    it('retourne une erreur HTTP 400 si la priorite est inconnue', async () => {
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
+        async () => {};
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures-specifiques',
+          [
+            {
+              description: 'd1',
+              categorie: 'uneCategorie',
+              priorite: 'plop',
+            },
+          ]
+        );
+        expect().fail('L’appel aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La priorité "plop" est invalide');
+      }
+    });
   });
 
   describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
@@ -552,9 +574,26 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesRecues.statut).to.equal('fait');
     });
 
-    it('renvoie une erreur 400 si la mesure est invalide', async () => {
+    it('renvoie une erreur 400 si la mesure est invalide à cause du statut', async () => {
       const mesureGenerale = {
         statut: 'invalide',
+      };
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures/audit',
+          mesureGenerale
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La mesure est invalide.');
+      }
+    });
+
+    it('renvoie une erreur 400 si la mesure est invalide à cause de la priorité', async () => {
+      const mesureGenerale = {
+        priorite: 'invalide',
       };
 
       try {

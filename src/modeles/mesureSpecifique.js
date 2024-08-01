@@ -30,8 +30,8 @@ class MesureSpecifique extends Mesure {
     return ['description', 'categorie', 'statut'];
   }
 
-  static valide({ categorie, statut }, referentiel) {
-    super.valide({ statut });
+  static valide({ categorie, statut, priorite }, referentiel) {
+    super.valide({ statut, priorite }, referentiel);
 
     const identifiantsCategoriesMesures =
       referentiel.identifiantsCategoriesMesures();

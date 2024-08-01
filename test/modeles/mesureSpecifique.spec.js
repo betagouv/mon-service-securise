@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const {
   ErreurCategorieInconnue,
   ErreurStatutMesureInvalide,
+  ErreurPrioriteMesureInvalide,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const InformationsHomologation = require('../../src/modeles/informationsHomologation');
@@ -16,6 +17,8 @@ describe('Une mesure spécifique', () => {
   });
 
   elle('sait se décrire', () => {
+    referentiel.enrichis({ prioritesMesures: { p3: {} } });
+
     const mesure = new MesureSpecifique(
       {
         description: 'Une mesure spécifique',
@@ -68,6 +71,17 @@ describe('Une mesure spécifique', () => {
       expect(e).to.be.an(ErreurStatutMesureInvalide);
       expect(e.message).to.equal('Le statut "statutInconnu" est invalide');
       done();
+    }
+  });
+
+  it('vérifie la valeur de la priorité', () => {
+    referentiel.enrichis({ prioritesMesures: {} });
+    try {
+      new MesureSpecifique({ priorite: 'prioriteInvalide' }, referentiel);
+      expect().fail('La création de la mesure aurait dû lever une exception');
+    } catch (e) {
+      expect(e).to.be.a(ErreurPrioriteMesureInvalide);
+      expect(e.message).to.equal('La priorité "prioriteInvalide" est invalide');
     }
   });
 

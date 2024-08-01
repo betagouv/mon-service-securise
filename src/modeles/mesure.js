@@ -4,7 +4,10 @@
 */
 
 const InformationsHomologation = require('./informationsHomologation');
-const { ErreurStatutMesureInvalide } = require('../erreurs');
+const {
+  ErreurStatutMesureInvalide,
+  ErreurPrioriteMesureInvalide,
+} = require('../erreurs');
 
 const STATUTS = {
   STATUT_FAIT: 'fait',
@@ -43,10 +46,19 @@ class Mesure extends InformationsHomologation {
     return Object.values(STATUTS).includes(statut);
   }
 
-  static valide({ statut }) {
+  static valide({ statut, priorite }, referentiel) {
     if (statut && !this.statutsPossibles().includes(statut)) {
       throw new ErreurStatutMesureInvalide(
         `Le statut "${statut}" est invalide`
+      );
+    }
+
+    if (
+      priorite &&
+      !Object.keys(referentiel.prioritesMesures()).includes(priorite)
+    ) {
+      throw new ErreurPrioriteMesureInvalide(
+        `La priorité "${priorite}" est invalide`
       );
     }
   }

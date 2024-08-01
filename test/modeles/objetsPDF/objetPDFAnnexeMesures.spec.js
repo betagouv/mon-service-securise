@@ -16,7 +16,8 @@ describe("L'objet PDF de l'annexe des mesures", () => {
       CNIL: 'la ',
     },
   };
-  const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
+  const referentiel = Referentiel.creeReferentielVide();
+  referentiel.enrichis(donneesReferentiel);
   const homologation = new Homologation(
     {
       id: '123',

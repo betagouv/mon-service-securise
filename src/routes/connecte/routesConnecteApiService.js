@@ -11,6 +11,7 @@ const {
   ErreurStatutMesureInvalide,
   ErreurMesureInconnue,
   ErreurDonneesReferentielIncorrectes,
+  ErreurPrioriteMesureInvalide,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -241,7 +242,8 @@ const routesConnecteApiService = ({
       } catch (e) {
         if (
           e instanceof ErreurCategorieInconnue ||
-          e instanceof ErreurStatutMesureInvalide
+          e instanceof ErreurStatutMesureInvalide ||
+          e instanceof ErreurPrioriteMesureInvalide
         ) {
           reponse.status(400).send(e.message);
           return;
@@ -273,7 +275,8 @@ const routesConnecteApiService = ({
       } catch (e) {
         if (
           e instanceof ErreurMesureInconnue ||
-          e instanceof ErreurStatutMesureInvalide
+          e instanceof ErreurStatutMesureInvalide ||
+          e instanceof ErreurPrioriteMesureInvalide
         ) {
           reponse.status(400).send('La mesure est invalide.');
           return;
