@@ -60,6 +60,10 @@
     color: var(--texte-clair);
   }
 
+  label:has(> select:disabled) {
+    color: var(--liseres-fonce);
+  }
+
   label.a-label {
     margin-bottom: 16px;
   }
@@ -89,6 +93,10 @@
 
   select:disabled {
     cursor: default;
+  }
+
+  select:disabled.avecLibelleOption.vide {
+    color: var(--liseres-fonce);
   }
 
   select.avecLibelleOption {
