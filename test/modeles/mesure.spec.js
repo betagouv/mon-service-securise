@@ -1,6 +1,8 @@
 const expect = require('expect.js');
 
 const Mesure = require('../../src/modeles/mesure');
+const { ErreurPrioriteMesureInvalide } = require('../../src/erreurs');
+const Referentiel = require('../../src/referentiel');
 
 const elle = it;
 
@@ -50,6 +52,30 @@ describe('Une mesure', () => {
 
     elle("répond défavorablement quand le statut n'est pas renseigné", () => {
       expect(Mesure.statutRenseigne()).to.be(false);
+    });
+  });
+
+  describe('sur validation de la priorite', () => {
+    it("ne valide pas si la priorité n'est pas dans le référentiel", () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      referentiel.enrichis({ prioritesMesures: {} });
+
+      try {
+        Mesure.valide({ priorite: 'inconnue' }, referentiel);
+        expect().fail('L’appel aurait dû lancer une exception');
+      } catch (e) {
+        expect(e).to.be.an(ErreurPrioriteMesureInvalide);
+        expect(e.message).to.be('La priorité "inconnue" est invalide');
+      }
+    });
+
+    it('valide la priorité si elle est dans le référentiel', () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      referentiel.enrichis({
+        prioritesMesures: { p1: { libelleCourt: '', libelleComplet: '' } },
+      });
+
+      Mesure.valide({ priorite: 'p1' }, referentiel);
     });
   });
 });
