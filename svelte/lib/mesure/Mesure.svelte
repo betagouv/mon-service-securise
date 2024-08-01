@@ -19,6 +19,10 @@
   export let mesuresExistantes: MesuresExistantes;
   export let estLectureSeule: boolean;
 
+  const planDActionDisponible =
+    $store.mesureEditee.mesure.statut === 'aLancer' ||
+    $store.mesureEditee.mesure.statut === 'enCours';
+
   const statutInitial = $store.mesureEditee.mesure.statut;
 
   let enCoursEnvoi = false;
@@ -78,6 +82,7 @@
         cetOnglet="planAction"
         labelOnglet="Plan d'action"
         sansBordureEnBas
+        badge={!planDActionDisponible && 'info'}
       />
     </div>
   {/if}
