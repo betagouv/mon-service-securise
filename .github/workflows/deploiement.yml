@@ -29,7 +29,7 @@ jobs:
           ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
         run: |
           clever link -o="$ID_ORGANISATION" "$ID_APP"
-          clever deploy
+          clever deploy --force
 
   deploiement-prod:
     name: Déploiement en PROD
