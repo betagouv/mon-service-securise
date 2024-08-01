@@ -24,7 +24,7 @@
 <div id="contenu-onglet-plan-action" class:visible>
   {#if afficheAvertissementStatut}
     <Avertissement niveau="info">
-      <div>
+      <div class="info-accessibilite-plan-action">
         <p>
           Le plan d’action est accessible uniquement pour les mesures au statut <b
             >À lancer</b
@@ -68,10 +68,20 @@
     gap: 24px;
   }
 
+  p {
+    margin: 0;
+  }
+
   p.presentation {
     font-weight: bold;
     line-height: 22px;
     font-size: 16px;
     margin: 0;
+  }
+
+  .info-accessibilite-plan-action {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 </style>
