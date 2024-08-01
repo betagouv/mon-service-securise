@@ -10,6 +10,7 @@
   export let label = '';
   export let estLectureSeule = false;
   export let requis = false;
+  export let version: 'normale' | 'accentuee' = 'normale';
 
   const dispatch = createEventDispatcher<{ input: { statut: string } }>();
 
@@ -23,7 +24,7 @@
   <select
     bind:value={statut}
     id={`statut-${id}`}
-    class={statut}
+    class={`${statut} ${version}`}
     class:vide={!statut}
     disabled={estLectureSeule}
     required={requis}
@@ -58,12 +59,12 @@
   select {
     appearance: none;
     margin: 0;
-    --couleur-fond: transparent;
-    --couleur-texte: transparent;
+    --couleur-claire: transparent;
+    --couleur-foncee: transparent;
     --taille: 32px;
     border: none;
-    background: var(--couleur-fond);
-    color: var(--couleur-texte);
+    background: var(--couleur-claire);
+    color: var(--couleur-foncee);
     padding: 4px 6px;
     border-radius: 4px;
     font-size: 12px;
@@ -73,9 +74,19 @@
     cursor: pointer;
   }
 
-  select:hover {
+  select.accentuee {
     color: white;
-    background: var(--couleur-texte);
+    background: var(--couleur-foncee);
+  }
+
+  select:not(:disabled):hover {
+    color: var(--couleur-claire);
+    background: var(--couleur-foncee);
+  }
+
+  select:not(:disabled).accentuee:hover {
+    color: var(--couleur-foncee);
+    background: var(--couleur-claire);
   }
 
   select option {
@@ -83,32 +94,32 @@
   }
 
   select.fait {
-    --couleur-fond: #d4f4db;
-    --couleur-texte: #0c8626;
+    --couleur-claire: #d4f4db;
+    --couleur-foncee: #0c8626;
     --taille: 46px;
   }
 
   select.enCours {
-    --couleur-fond: #dbeeff;
-    --couleur-texte: #0079d0;
+    --couleur-claire: #dbeeff;
+    --couleur-foncee: #0079d0;
     --taille: 75px;
   }
 
   select.nonFait {
-    --couleur-fond: #fff2de;
-    --couleur-texte: #faa72c;
+    --couleur-claire: #fff2de;
+    --couleur-foncee: #faa72c;
     --taille: 155px;
   }
 
   select.aLancer {
-    --couleur-fond: #e9ddff;
-    --couleur-texte: #7025da;
+    --couleur-claire: #e9ddff;
+    --couleur-foncee: #7025da;
     --taille: 75px;
   }
 
   select.vide {
-    --couleur-fond: #f1f5f9;
-    --couleur-texte: #667892;
+    --couleur-claire: #f1f5f9;
+    --couleur-foncee: #667892;
     --taille: 124px;
   }
 

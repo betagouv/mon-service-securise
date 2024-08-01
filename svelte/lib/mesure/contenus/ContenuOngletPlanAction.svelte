@@ -38,6 +38,7 @@
             id="statut"
             {estLectureSeule}
             referentielStatuts={statuts}
+            version="accentuee"
           />
         </p>
       </div>
