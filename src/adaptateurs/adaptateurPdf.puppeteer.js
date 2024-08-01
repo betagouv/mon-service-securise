@@ -1,7 +1,39 @@
 const puppeteer = require('puppeteer');
 
-const lanceNavigateur = async () =>
-  puppeteer.launch({
+const generationPdfExterne = () => {
+  const {
+    GENERATION_PDF_URL_DU_SERVICE,
+    GENERATION_PDF_TOKEN_DU_SERVICE,
+    AVEC_GENERATION_PDF_EXTERNE,
+  } = process.env;
+
+  return {
+    activee: () => {
+      const activee = AVEC_GENERATION_PDF_EXTERNE === 'true';
+
+      if (!activee) return false;
+
+      const urlEstDefinie = !!GENERATION_PDF_URL_DU_SERVICE;
+      const tokenEstDefini = !!GENERATION_PDF_TOKEN_DU_SERVICE;
+      if (!urlEstDefinie || !tokenEstDefini)
+        throw new Error(
+          "La génération externe de PDF est activée. Mais il manque la configuration de l'URL et du token."
+        );
+
+      return true;
+    },
+    endpointWebsocket: () =>
+      `${GENERATION_PDF_URL_DU_SERVICE}?token=${GENERATION_PDF_TOKEN_DU_SERVICE}`,
+  };
+};
+
+const lanceNavigateur = async () => {
+  if (generationPdfExterne().activee())
+    return puppeteer.connect({
+      browserWSEndpoint: generationPdfExterne().endpointWebsocket(),
+    });
+
+  return puppeteer.launch({
     headless: true,
     // Documentation des arguments : https://peter.sh/experiments/chromium-command-line-switches/
     // Inspiration pour la liste utilisée ici : https://www.bannerbear.com/blog/ways-to-speed-up-puppeteer-screenshots/
@@ -48,5 +80,6 @@ const lanceNavigateur = async () =>
       '--use-mock-keychain',
     ],
   });
+};
 
 module.exports = { lanceNavigateur };
