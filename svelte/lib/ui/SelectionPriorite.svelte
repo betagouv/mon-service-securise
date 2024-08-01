@@ -87,13 +87,17 @@
     text-align: center;
   }
 
+  select:disabled {
+    cursor: default;
+  }
+
   select.avecLibelleOption {
     width: fit-content;
     appearance: auto;
     text-align: left;
   }
 
-  select:hover {
+  select:not(:disabled):hover {
     color: var(--couleur-texte-survol);
     background: var(--couleur-fond-survol);
   }
