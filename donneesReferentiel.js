@@ -620,7 +620,7 @@ module.exports = {
       referentiel: 'ANSSI',
       identifiantNumerique: '0012',
       lienBlog:
-        '/articles/heberger-le-service-et-les-donnees-aupres-dun-prestataire-dinformatique-en-nuage-qualifie-secnumcloud',
+        '/articles/heberger-le-service-et-les-donnees-aupres-dun-prestataire-secnumcloud',
     },
     testIntrusion: {
       description:
