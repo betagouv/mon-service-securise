@@ -53,7 +53,7 @@ const fabriquePersistance = (
   const persistance = {
     lis: {
       un: async (idService) => {
-        const s = await adaptateurPersistance.homologation(idService);
+        const s = await adaptateurPersistance.service(idService);
 
         if (!s) return undefined;
 

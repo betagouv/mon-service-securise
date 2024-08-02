@@ -63,7 +63,7 @@ const nouvelAdaptateur = (env) => {
 
   const arreteTout = () => knex.destroy();
 
-  const homologation = async (id) => {
+  const service = async (id) => {
     const requeteHomologation = knex('homologations')
       .where('id', id)
       .select({ id: 'id', donnees: 'donnees' })
@@ -104,7 +104,7 @@ const nouvelAdaptateur = (env) => {
     };
   };
 
-  const service = (id) => elementDeTable('services', id);
+  const serviceDeprecated = (id) => elementDeTable('services', id);
 
   const homologationAvecNomService = (
     idUtilisateur,
@@ -134,14 +134,14 @@ const nouvelAdaptateur = (env) => {
       .select({ idHomologation: knex.raw("(donnees->>'idHomologation')") })
       .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
 
-    return avecPMapPourChaqueElement(idsHomologations, homologation);
+    return avecPMapPourChaqueElement(idsHomologations, service);
   };
 
   const tousLesServices = async () => {
     const lignes = await knex('services').select({ id: 'id' });
     const ids = lignes.map(({ id }) => id);
 
-    return avecPMapPourChaqueElement(Promise.resolve(ids), homologation);
+    return avecPMapPourChaqueElement(Promise.resolve(ids), service);
   };
 
   const metsAJourHomologation = (...params) =>
@@ -444,7 +444,7 @@ const nouvelAdaptateur = (env) => {
     autorisationPour,
     autorisations,
     autorisationsDuService,
-    homologation,
+    service,
     homologationAvecNomService,
     homologations,
     lisNotificationsExpirationHomologationDansIntervalle,
@@ -458,7 +458,7 @@ const nouvelAdaptateur = (env) => {
     rechercheContributeurs,
     sauvegardeHomologation,
     sauvegardeService,
-    service,
+    serviceDeprecated,
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
