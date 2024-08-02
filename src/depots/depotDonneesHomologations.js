@@ -81,10 +81,10 @@ const fabriquePersistance = (
         adaptateurPersistance.sauvegardeHomologation(id, donneesChiffrees),
       ]);
     },
-    supprime: async (idHomologation) =>
+    supprime: async (idService) =>
       Promise.all([
-        adaptateurPersistance.supprimeHomologation(idHomologation),
-        adaptateurPersistance.supprimeService(idHomologation),
+        adaptateurPersistance.supprimeHomologation(idService),
+        adaptateurPersistance.supprimeService(idService),
       ]),
   };
 
@@ -107,7 +107,7 @@ const creeDepot = (config = {}) => {
     referentiel
   );
 
-  const homologation = (idHomologation) => p.lis.un(idHomologation);
+  const homologation = (idService) => p.lis.un(idService);
 
   const ajouteAItemsDuService = async (nomListeItems, idService, item) => {
     const s = await p.lis.un(idService);
