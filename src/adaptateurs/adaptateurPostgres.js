@@ -54,8 +54,6 @@ const nouvelAdaptateur = (env) => {
   const supprimeEnregistrement = (nomTable, id) =>
     knex(nomTable).where({ id }).del();
 
-  const ajouteHomologation = (...params) =>
-    ajouteLigneDansTable('homologations', ...params);
   const ajouteService = (...params) =>
     ajouteLigneDansTable('services', ...params);
   const ajouteUtilisateur = (...params) =>
@@ -64,7 +62,7 @@ const nouvelAdaptateur = (env) => {
   const arreteTout = () => knex.destroy();
 
   const service = async (id) => {
-    const requeteHomologation = knex('homologations')
+    const requeteHomologation = knex('services')
       .where('id', id)
       .select({ id: 'id', donnees: 'donnees' })
       .first();
@@ -140,20 +138,16 @@ const nouvelAdaptateur = (env) => {
     return avecPMapPourChaqueElement(Promise.resolve(ids), service);
   };
 
-  const metsAJourHomologation = (...params) =>
-    metsAJourTable('homologations', ...params);
   const metsAJourService = (...params) => metsAJourTable('services', ...params);
   const metsAJourUtilisateur = (...params) =>
     metsAJourTable('utilisateurs', ...params);
 
-  const supprimeHomologation = (...params) =>
-    supprimeEnregistrement('homologations', ...params);
   const supprimeService = (...params) =>
     supprimeEnregistrement('services', ...params);
   const supprimeUtilisateur = (...params) =>
     supprimeEnregistrement('utilisateurs', ...params);
 
-  const supprimeHomologations = () => knex('homologations').del();
+  const supprimeServices = () => knex('services').del();
 
   const supprimeUtilisateurs = () => knex('utilisateurs').del();
 
@@ -200,20 +194,6 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
       .whereRaw("(donnees->>'estProprietaire')::boolean=true")
       .then(([{ count }]) => parseInt(count, 10));
-
-  const sauvegardeHomologation = (id, donneesHomologations) => {
-    const testExistence = knex('homologations')
-      .where('id', id)
-      .select({ id: 'id' })
-      .first()
-      .then((ligne) => ligne !== undefined);
-
-    return testExistence.then((dejaConnue) =>
-      dejaConnue
-        ? metsAJourHomologation(id, donneesHomologations)
-        : ajouteHomologation(id, donneesHomologations)
-    );
-  };
 
   const sauvegardeService = (id, donneesService) => {
     const testExistence = knex('services')
@@ -450,7 +430,6 @@ const nouvelAdaptateur = (env) => {
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,
     rechercheContributeurs,
-    sauvegardeHomologation,
     sauvegardeService,
     serviceDeprecated,
     sauvegardeAutorisation,
@@ -460,11 +439,10 @@ const nouvelAdaptateur = (env) => {
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
-    supprimeHomologation,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
-    supprimeHomologations,
+    supprimeServices,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
