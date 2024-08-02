@@ -13,8 +13,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance.nouveautesPourUtilisateur(idUtilisateur);
 
   const tachesDesServices = async (idUtilisateur) => {
-    const servicesUtilisateur =
-      await depotServices.homologations(idUtilisateur);
+    const servicesUtilisateur = await depotServices.services(idUtilisateur);
 
     const taches =
       await adaptateurPersistance.tachesDeServicePour(idUtilisateur);

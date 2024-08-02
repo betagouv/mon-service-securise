@@ -23,7 +23,7 @@ describe('Le service de tracking des services', () => {
         .avecNContributeurs(2)
         .construis();
       const depotHomologations = {
-        homologations: async () => [premierService, secondService],
+        services: async () => [premierService, secondService],
       };
       const serviceTracking = fabriqueServiceTracking();
 
@@ -48,7 +48,7 @@ describe('Le service de tracking des services', () => {
         .avecMesures(bouchonneMesures().avecUneCompletude(100, 27).construis())
         .construis();
       const depotHomologations = {
-        homologations: async () => [premierService, secondService],
+        services: async () => [premierService, secondService],
         nombreMoyenContributeursPourUtilisateur: async () => 3,
       };
       const serviceTracking = fabriqueServiceTracking();
@@ -80,7 +80,7 @@ describe('Le service de tracking des services', () => {
       const serviceSansContributeur = unService(referentiel).construis();
 
       const depotHomologations = {
-        homologations: async (idUtilisateur) => {
+        services: async (idUtilisateur) => {
           idUtilisateurRecu = idUtilisateur;
           return [serviceAvec3Contributeurs, serviceSansContributeur];
         },
@@ -98,7 +98,7 @@ describe('Le service de tracking des services', () => {
     });
 
     it("reste robuste si il n'y a pas de service", async () => {
-      const depotSansHomologations = { homologations: async () => [] };
+      const depotSansHomologations = { services: async () => [] };
       const serviceTracking = fabriqueServiceTracking();
 
       const nbMoyenContributeurs =

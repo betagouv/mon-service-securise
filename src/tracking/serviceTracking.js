@@ -3,7 +3,7 @@ const fabriqueServiceTracking = () => {
     depotHomologations,
     idUtilisateur
   ) => {
-    const hs = await depotHomologations.homologations(idUtilisateur);
+    const hs = await depotHomologations.services(idUtilisateur);
 
     return hs.length === 0
       ? 0
@@ -24,7 +24,7 @@ const fabriqueServiceTracking = () => {
         depotHomologations,
         idUtilisateur
       ),
-      depotHomologations.homologations(idUtilisateur),
+      depotHomologations.services(idUtilisateur),
     ]);
 
     return {

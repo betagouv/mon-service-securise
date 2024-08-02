@@ -140,7 +140,7 @@ const routesNonConnecteApi = ({
         const token = utilisateur.genereToken();
         requete.session.token = token;
 
-        const services = await depotDonnees.homologations(utilisateur.id);
+        const services = await depotDonnees.services(utilisateur.id);
         await adaptateurTracking.envoieTrackingConnexion(utilisateur.email, {
           nombreServices: services.length,
         });

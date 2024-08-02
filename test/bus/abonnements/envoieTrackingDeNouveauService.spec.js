@@ -30,7 +30,7 @@ describe("L'abonnement qui envoie au tracking les informations d'un nouveau serv
     ) => {
       donneesDeTracking = { destinataire, donneesEvenement };
     };
-    depotDonnees.homologations = async () => [
+    depotDonnees.services = async () => [
       unService().construis(),
       unService().construis(),
       unService().construis(),

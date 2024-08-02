@@ -614,7 +614,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [
+          services: [
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [
@@ -667,7 +667,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             { id: '999', email: 'jean.dupont@mail.fr' },
             { id: '000', email: 'un.autre.utilisateur@mail.fr' },
           ],
-          homologations: [
+          services: [
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
           autorisations: [

@@ -47,7 +47,7 @@ const routesConnecteApi = ({
     '/services',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
-      const services = await depotDonnees.homologations(
+      const services = await depotDonnees.services(
         requete.idUtilisateurCourant
       );
       const autorisations = await depotDonnees.autorisations(
@@ -66,7 +66,7 @@ const routesConnecteApi = ({
     '/services/indices-cyber',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
-      const services = await depotDonnees.homologations(
+      const services = await depotDonnees.services(
         requete.idUtilisateurCourant
       );
       const autorisations = await depotDonnees.autorisations(
@@ -113,7 +113,7 @@ const routesConnecteApi = ({
         requete.idUtilisateurCourant
       );
 
-      const services = await depotDonnees.homologations(
+      const services = await depotDonnees.services(
         requete.idUtilisateurCourant
       );
       const donneesServices = donneesCsvServices(

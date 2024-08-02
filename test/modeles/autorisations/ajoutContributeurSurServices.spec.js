@@ -411,7 +411,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     let idEmetteur;
     let donneesTracking;
 
-    depotDonnees.homologations = async (idUtilisateur) => {
+    depotDonnees.services = async (idUtilisateur) => {
       idEmetteur = idUtilisateur;
       const serviceBouchon3Contributeurs = { contributeurs: ['a', 'b', 'c'] };
       return [serviceBouchon3Contributeurs];
