@@ -71,7 +71,7 @@ const fabriquePersistance = (
         const donneesServices = await adaptateurPersistance.tousLesServices();
         return donneesServices.map((s) => new Homologation(s, referentiel));
       },
-      celleAvecNomService: async (...params) =>
+      celuiAvecNom: async (...params) =>
         adaptateurPersistance.homologationAvecNomService(...params),
     },
     sauvegarde: async (id, donneesService) => {
@@ -182,7 +182,7 @@ const creeDepot = (config = {}) => {
     ajouteAItemsDuService('risquesGeneraux', ...params);
 
   const serviceExiste = (...params) =>
-    p.lis.celleAvecNomService(...params).then((h) => !!h);
+    p.lis.celuiAvecNom(...params).then((h) => !!h);
 
   const valideDescriptionService = async (
     idUtilisateur,
