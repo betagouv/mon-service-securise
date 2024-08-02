@@ -9,7 +9,6 @@ class ConstructeurAutorisation {
       estProprietaire: false,
       id: '',
       idUtilisateur: '',
-      idHomologation: '',
       idService: '',
       droits: {},
     };
@@ -24,7 +23,6 @@ class ConstructeurAutorisation {
     this.donnees.estProprietaire = true;
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
-    this.donnees.idHomologation = idService;
     return this;
   }
 
@@ -32,7 +30,6 @@ class ConstructeurAutorisation {
     this.donnees.estProprietaire = false;
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
-    this.donnees.idHomologation = idService;
     return this;
   }
 
