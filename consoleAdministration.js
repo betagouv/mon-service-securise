@@ -88,15 +88,12 @@ class ConsoleAdministration {
     };
   }
 
-  supprimeContributeur(idContributeur, idHomologation) {
-    return this.depotDonnees.supprimeContributeur(
-      idContributeur,
-      idHomologation
-    );
+  supprimeContributeur(idContributeur, idService) {
+    return this.depotDonnees.supprimeContributeur(idContributeur, idService);
   }
 
-  supprimeHomologation(idHomologation) {
-    return this.depotDonnees.supprimeHomologation(idHomologation);
+  supprimeService(idService) {
+    return this.depotDonnees.supprimeHomologation(idService);
   }
 
   async supprimeUtilisateur(id) {
