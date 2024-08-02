@@ -7,7 +7,7 @@ const {
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
-const InformationsHomologation = require('../../src/modeles/informationsService');
+const InformationsService = require('../../src/modeles/informationsService');
 
 describe('Une mesure de sécurité', () => {
   let referentiel;
@@ -163,6 +163,6 @@ describe('Une mesure de sécurité', () => {
       referentiel
     );
 
-    expect(mesure.statutSaisie()).to.equal(InformationsHomologation.COMPLETES);
+    expect(mesure.statutSaisie()).to.equal(InformationsService.COMPLETES);
   });
 });

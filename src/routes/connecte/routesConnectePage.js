@@ -2,7 +2,7 @@ const express = require('express');
 const { decode } = require('html-entities');
 const Utilisateur = require('../../modeles/utilisateur');
 const Service = require('../../modeles/service');
-const InformationsHomologation = require('../../modeles/informationsService');
+const InformationsService = require('../../modeles/informationsService');
 const routesConnectePageService = require('./routesConnectePageService');
 
 const routesConnectePage = ({
@@ -103,7 +103,7 @@ const routesConnectePage = ({
 
       if (idEtape === 'decrire') {
         reponse.render('service/creation', {
-          InformationsHomologation,
+          InformationsHomologation: InformationsService,
           referentiel,
           service,
           etapeActive: 'descriptionService',
@@ -115,7 +115,7 @@ const routesConnectePage = ({
 
         service.indiceCyber = () => ({ total: 4.3 });
         reponse.render('service/mesures', {
-          InformationsHomologation,
+          InformationsHomologation: InformationsService,
           referentiel,
           service,
           etapeActive: 'mesures',
@@ -124,7 +124,7 @@ const routesConnectePage = ({
         });
       } else if (idEtape === 'homologuer') {
         reponse.render('service/dossiers', {
-          InformationsHomologation,
+          InformationsHomologation: InformationsService,
           decode,
           service,
           etapeActive: 'dossiers',

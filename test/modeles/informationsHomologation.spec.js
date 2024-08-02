@@ -1,12 +1,12 @@
 /* eslint-disable max-classes-per-file */
 const expect = require('expect.js');
 
-const InformationsHomologation = require('../../src/modeles/informationsService');
+const InformationsService = require('../../src/modeles/informationsService');
 const ElementsConstructibles = require('../../src/modeles/elementsConstructibles');
 
 const elles = it;
 
-class AgregatAvecStatutSaisieDetermine extends InformationsHomologation {
+class AgregatAvecStatutSaisieDetermine extends InformationsService {
   constructor(donnees) {
     super({ proprietesAtomiquesFacultatives: ['statut'] });
     this.renseigneProprietes(donnees);
@@ -30,13 +30,13 @@ describe("Les informations d'une homologation", () => {
     elles(
       'retournent `COMPLETES` quand aucune propriété atomique requise',
       () => {
-        const objetMetier = new InformationsHomologation({
+        const objetMetier = new InformationsService({
           proprietesAtomiquesFacultatives: ['prop'],
         });
         objetMetier.renseigneProprietes({ prop: 'valeur' });
 
         expect(objetMetier.statutSaisieProprietesAtomiques()).to.equal(
-          InformationsHomologation.COMPLETES
+          InformationsService.COMPLETES
         );
       }
     );
@@ -47,7 +47,7 @@ describe("Les informations d'une homologation", () => {
 
     beforeEach(
       () =>
-        (objetMetier = new InformationsHomologation({
+        (objetMetier = new InformationsService({
           listesAgregats: { agregats1: Agregats, agregats2: Agregats },
         }))
     );
@@ -56,12 +56,12 @@ describe("Les informations d'une homologation", () => {
       'retournent `COMPLETES` si tous les agrégats ont pour statut `COMPLETES`',
       () => {
         objetMetier.renseigneProprietes({
-          agregats1: [{ statut: InformationsHomologation.COMPLETES }],
-          agregats2: [{ statut: InformationsHomologation.COMPLETES }],
+          agregats1: [{ statut: InformationsService.COMPLETES }],
+          agregats2: [{ statut: InformationsService.COMPLETES }],
         });
 
         expect(objetMetier.statutSaisieAgregats()).to.equal(
-          InformationsHomologation.COMPLETES
+          InformationsService.COMPLETES
         );
       }
     );
@@ -69,7 +69,7 @@ describe("Les informations d'une homologation", () => {
     elles("retournent `A_SAISIR` si aucun agrégat n'est saisi", () => {
       objetMetier.renseigneProprietes({ agregats1: [], agregats2: [] });
       expect(objetMetier.statutSaisieAgregats()).to.equal(
-        InformationsHomologation.A_SAISIR
+        InformationsService.A_SAISIR
       );
     });
 
@@ -77,12 +77,12 @@ describe("Les informations d'une homologation", () => {
       "retournent `COMPLETES` s'il y a au moins un agrégat saisi et si aucun n'est à compléter",
       () => {
         objetMetier.renseigneProprietes({
-          agregats1: [{ statut: InformationsHomologation.COMPLETES }],
+          agregats1: [{ statut: InformationsService.COMPLETES }],
           agregats2: [],
         });
 
         expect(objetMetier.statutSaisieAgregats()).to.equal(
-          InformationsHomologation.COMPLETES
+          InformationsService.COMPLETES
         );
       }
     );
@@ -91,12 +91,12 @@ describe("Les informations d'une homologation", () => {
       'retournent `A_COMPLETER` si au moins un des agrégats a pour statut `A_COMPLETER`',
       () => {
         objetMetier.renseigneProprietes({
-          agregats1: [{ statut: InformationsHomologation.A_COMPLETER }],
-          agregats2: [{ statut: InformationsHomologation.COMPLETES }],
+          agregats1: [{ statut: InformationsService.A_COMPLETER }],
+          agregats2: [{ statut: InformationsService.COMPLETES }],
         });
 
         expect(objetMetier.statutSaisieAgregats()).to.equal(
-          InformationsHomologation.A_COMPLETER
+          InformationsService.A_COMPLETER
         );
       }
     );
@@ -107,7 +107,7 @@ describe("Les informations d'une homologation", () => {
 
     beforeEach(
       () =>
-        (objetMetier = new InformationsHomologation({
+        (objetMetier = new InformationsService({
           proprietesAtomiquesRequises: ['propriete', 'autrePropriete'],
           listesAgregats: { agregats: Agregats },
         }))
@@ -117,10 +117,10 @@ describe("Les informations d'une homologation", () => {
       'retournent `A_COMPLETER` si les agrégats ont pour statut `A_COMPLETER`',
       () => {
         objetMetier.renseigneProprietes({
-          agregats: [{ statut: InformationsHomologation.A_COMPLETER }],
+          agregats: [{ statut: InformationsService.A_COMPLETER }],
         });
         expect(objetMetier.statutSaisie()).to.equal(
-          InformationsHomologation.A_COMPLETER
+          InformationsService.A_COMPLETER
         );
       }
     );
@@ -131,10 +131,10 @@ describe("Les informations d'une homologation", () => {
         objetMetier.renseigneProprietes({
           propriete: 'valeur',
           autrePropriete: 'autre valeur',
-          agregats: [{ statut: InformationsHomologation.COMPLETES }],
+          agregats: [{ statut: InformationsService.COMPLETES }],
         });
         expect(objetMetier.statutSaisie()).to.equal(
-          InformationsHomologation.COMPLETES
+          InformationsService.COMPLETES
         );
       }
     );
@@ -143,10 +143,10 @@ describe("Les informations d'une homologation", () => {
       'retournent `A_COMPLETER` si les agrégats sont saisis mais pas les propriétés atomiques',
       () => {
         objetMetier.renseigneProprietes({
-          agregats: [{ statut: InformationsHomologation.COMPLETES }],
+          agregats: [{ statut: InformationsService.COMPLETES }],
         });
         expect(objetMetier.statutSaisie()).to.equal(
-          InformationsHomologation.A_COMPLETER
+          InformationsService.A_COMPLETER
         );
       }
     );
@@ -156,16 +156,14 @@ describe("Les informations d'une homologation", () => {
       () => {
         objetMetier.renseigneProprietes({ propriete: 'valeur' });
         expect(objetMetier.statutSaisie()).to.equal(
-          InformationsHomologation.A_COMPLETER
+          InformationsService.A_COMPLETER
         );
       }
     );
 
     elles('retournent `A_SAISIR` si aucune information saisie', () => {
       objetMetier.renseigneProprietes({});
-      expect(objetMetier.statutSaisie()).to.equal(
-        InformationsHomologation.A_SAISIR
-      );
+      expect(objetMetier.statutSaisie()).to.equal(InformationsService.A_SAISIR);
     });
   });
 });

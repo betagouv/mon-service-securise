@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 
 const PartiePrenante = require('../../../src/modeles/partiesPrenantes/partiePrenante');
-const InformationsHomologation = require('../../../src/modeles/informationsService');
+const InformationsService = require('../../../src/modeles/informationsService');
 
 const elle = it;
 
@@ -12,7 +12,7 @@ describe('Une partie prenante', () => {
     const partiePrenante = new PartiePrenante({ nom: 'hébergeur' });
 
     expect(partiePrenante.statutSaisie()).to.equal(
-      InformationsHomologation.COMPLETES
+      InformationsService.COMPLETES
     );
   });
 
@@ -20,7 +20,7 @@ describe('Une partie prenante', () => {
     const partiePrenante = new PartiePrenante();
 
     expect(partiePrenante.statutSaisie()).to.equal(
-      InformationsHomologation.A_SAISIR
+      InformationsService.A_SAISIR
     );
   });
 

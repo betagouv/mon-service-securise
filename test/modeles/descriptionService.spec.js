@@ -6,7 +6,7 @@ const {
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const DescriptionService = require('../../src/modeles/descriptionService');
-const InformationsHomologation = require('../../src/modeles/informationsService');
+const InformationsService = require('../../src/modeles/informationsService');
 
 const elle = it;
 
@@ -189,7 +189,7 @@ describe('La description du service', () => {
   elle("détecte qu'elle est encore à saisir", () => {
     const descriptionService = new DescriptionService();
     expect(descriptionService.statutSaisie()).to.equal(
-      InformationsHomologation.A_SAISIR
+      InformationsService.A_SAISIR
     );
   });
 
@@ -198,7 +198,7 @@ describe('La description du service', () => {
       nomService: 'Super Service',
     });
     expect(descriptionService.statutSaisie()).to.equal(
-      InformationsHomologation.A_COMPLETER
+      InformationsService.A_COMPLETER
     );
   });
 
@@ -219,7 +219,7 @@ describe('La description du service', () => {
         referentielAvecStatutValide('accessible')
       );
       expect(descriptionService.statutSaisie()).to.equal(
-        InformationsHomologation.A_COMPLETER
+        InformationsService.A_COMPLETER
       );
     }
   );
@@ -241,7 +241,7 @@ describe('La description du service', () => {
     );
 
     expect(descriptionService.statutSaisie()).to.equal(
-      InformationsHomologation.COMPLETES
+      InformationsService.COMPLETES
     );
   });
 
