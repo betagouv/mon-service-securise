@@ -13,10 +13,10 @@ const routesConnecteApiServicePdf = ({
 }) => {
   const routes = express.Router();
 
-  const generePdfAnnexes = (homologation) => {
-    const donneesDescription = homologation.vueAnnexePDFDescription().donnees();
-    const donneesMesures = homologation.vueAnnexePDFMesures().donnees();
-    const donneesRisques = homologation.vueAnnexePDFRisques().donnees();
+  const generePdfAnnexes = (service) => {
+    const donneesDescription = service.vueAnnexePDFDescription().donnees();
+    const donneesMesures = service.vueAnnexePDFMesures().donnees();
+    const donneesRisques = service.vueAnnexePDFRisques().donnees();
 
     return adaptateurPdf.genereAnnexes({
       donneesDescription,
@@ -26,14 +26,14 @@ const routesConnecteApiServicePdf = ({
     });
   };
 
-  const generePdfDossierDecision = (homologation, dossierCourant) => {
+  const generePdfDossierDecision = (service, dossierCourant) => {
     const donnees = {
-      nomService: homologation.nomService(),
+      nomService: service.nomService(),
       nomPrenomAutorite: dossierCourant.autorite.nom,
       fonctionAutorite: dossierCourant.autorite.fonction,
-      indiceCyberTotal: homologation.indiceCyber().total,
+      indiceCyberTotal: service.indiceCyber().total,
       organisationResponsable:
-        homologation.descriptionService.organisationResponsable.nom,
+        service.descriptionService.organisationResponsable.nom,
       referentiel,
       ...dossierCourant.avis.toJSON(),
       ...dossierCourant.documents.toJSON(),
