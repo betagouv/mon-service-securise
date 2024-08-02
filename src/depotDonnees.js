@@ -3,7 +3,7 @@ const { fabriqueAdaptateurUUID } = require('./adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
 const Referentiel = require('./referentiel');
 const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
-const depotDonneesHomologations = require('./depots/depotDonneesHomologations');
+const depotDonneesServices = require('./depots/depotDonneesServices');
 const depotDonneesNotificationsExpirationHomologation = require('./depots/depotDonneesNotificationsExpirationHomologation');
 const depotDonneesParcoursUtilisateurs = require('./depots/depotDonneesParcoursUtilisateur');
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
@@ -21,7 +21,7 @@ const creeDepot = (config = {}) => {
     busEvenements,
   } = config;
 
-  const depotHomologations = depotDonneesHomologations.creeDepot({
+  const depotServices = depotDonneesServices.creeDepot({
     adaptateurChiffrement,
     adaptateurPersistance,
     adaptateurUUID,
@@ -35,7 +35,7 @@ const creeDepot = (config = {}) => {
     adaptateurJWT,
     adaptateurPersistance,
     adaptateurUUID,
-    depotHomologations,
+    depotHomologations: depotServices,
     busEvenements,
     adaptateurRechercheEntite,
   });
@@ -43,7 +43,7 @@ const creeDepot = (config = {}) => {
   const depotAutorisations = depotDonneesAutorisations.creeDepot({
     adaptateurPersistance,
     adaptateurUUID,
-    depotHomologations,
+    depotHomologations: depotServices,
     depotUtilisateurs,
     busEvenements,
   });
@@ -61,7 +61,7 @@ const creeDepot = (config = {}) => {
 
   const depotNotifications = depotDonneesNotifications.creeDepot({
     adaptateurPersistance,
-    depotServices: depotHomologations,
+    depotServices,
   });
 
   const depotSuggestionsActions = depotDonneesSuggestionsActions.creeDepot({
@@ -86,7 +86,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesDuService,
     supprimeHomologation,
     tousLesServices,
-  } = depotHomologations;
+  } = depotServices;
 
   const {
     metsAJourMotDePasse,

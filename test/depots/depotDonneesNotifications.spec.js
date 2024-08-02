@@ -3,7 +3,7 @@ const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
 const { creeDepot } = require('../../src/depots/depotDonneesNotifications');
-const DepotDonneesHomologations = require('../../src/depots/depotDonneesHomologations');
+const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 const { unService } = require('../constructeurs/constructeurService');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
@@ -22,7 +22,7 @@ describe('Le dépôt de données des notifications', () => {
     referentiel = creeReferentielVide();
 
     adaptateurPersistance = unePersistanceMemoire().construis();
-    const depotServices = DepotDonneesHomologations.creeDepot({
+    const depotServices = DepotDonneesServices.creeDepot({
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
       adaptateurPersistance,
       referentiel,
