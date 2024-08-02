@@ -241,8 +241,8 @@ class Homologation {
     return this.statistiquesMesuresGenerales().recommandees();
   }
 
-  statutSaisie(nomInformationsHomologation) {
-    return this[nomInformationsHomologation].statutSaisie();
+  statutSaisie(nomInformationsService) {
+    return this[nomInformationsService].statutSaisie();
   }
 
   structureDeveloppement() {

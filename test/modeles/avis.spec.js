@@ -5,7 +5,7 @@ const {
   ErreurAvisInvalide,
 } = require('../../src/erreurs');
 const Avis = require('../../src/modeles/avis');
-const InformationsHomologation = require('../../src/modeles/informationsService');
+const InformationsService = require('../../src/modeles/informationsService');
 const Referentiel = require('../../src/referentiel');
 
 describe("Un avis sur un dossier d'homologation", () => {
@@ -24,7 +24,7 @@ describe("Un avis sur un dossier d'homologation", () => {
       referentiel
     );
 
-    expect(avis.statutSaisie()).to.be(InformationsHomologation.COMPLETES);
+    expect(avis.statutSaisie()).to.be(InformationsService.COMPLETES);
   });
 
   it("est incomplet si la liste des collaborateurs n'est pas remplie", () => {
@@ -33,7 +33,7 @@ describe("Un avis sur un dossier d'homologation", () => {
         { statut: 'favorable', dureeValidite: 'unAn', collaborateurs },
         referentiel
       );
-      expect(avis.statutSaisie()).to.be(InformationsHomologation.A_COMPLETER);
+      expect(avis.statutSaisie()).to.be(InformationsService.A_COMPLETER);
     };
 
     verifieAvecCollaborateurs([null]);

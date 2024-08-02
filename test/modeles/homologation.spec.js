@@ -4,7 +4,7 @@ const uneDescriptionValide = require('../constructeurs/constructeurDescriptionSe
 const { unDossier } = require('../constructeurs/constructeurDossier');
 
 const Referentiel = require('../../src/referentiel');
-const InformationsHomologation = require('../../src/modeles/informationsService');
+const InformationsService = require('../../src/modeles/informationsService');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const Utilisateur = require('../../src/modeles/utilisateur');
@@ -395,7 +395,7 @@ describe('Une homologation', () => {
       );
 
       expect(homologation.statutSaisie('mesures')).to.equal(
-        InformationsHomologation.A_COMPLETER
+        InformationsService.A_COMPLETER
       );
     });
 
@@ -412,7 +412,7 @@ describe('Une homologation', () => {
       );
 
       expect(homologation.statutSaisie('mesures')).to.equal(
-        InformationsHomologation.COMPLETES
+        InformationsService.COMPLETES
       );
     });
   });
@@ -421,7 +421,7 @@ describe('Une homologation', () => {
     it('détecte que la liste des risques reste à vérifier', () => {
       const homologation = new Homologation({ id: '123' });
       expect(homologation.statutSaisie('risques')).to.equal(
-        InformationsHomologation.A_SAISIR
+        InformationsService.A_SAISIR
       );
     });
   });

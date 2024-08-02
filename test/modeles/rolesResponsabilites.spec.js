@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 
-const InformationsHomologation = require('../../src/modeles/informationsService');
+const InformationsService = require('../../src/modeles/informationsService');
 const Hebergement = require('../../src/modeles/partiesPrenantes/hebergement');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
@@ -97,7 +97,7 @@ describe("L'ensemble des rôles et responsabilités", () => {
   it('détermine le statut de saisie', () => {
     const rolesResponsabilites = new RolesResponsabilites();
     expect(rolesResponsabilites.statutSaisie()).to.equal(
-      InformationsHomologation.A_SAISIR
+      InformationsService.A_SAISIR
     );
   });
 

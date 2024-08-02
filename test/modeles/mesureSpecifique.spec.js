@@ -6,7 +6,7 @@ const {
   ErreurPrioriteMesureInvalide,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
-const InformationsHomologation = require('../../src/modeles/informationsService');
+const InformationsService = require('../../src/modeles/informationsService');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 
 const elle = it;
@@ -57,9 +57,7 @@ describe('Une mesure spécifique', () => {
         referentiel
       );
 
-      expect(mesure.statutSaisie()).to.equal(
-        InformationsHomologation.COMPLETES
-      );
+      expect(mesure.statutSaisie()).to.equal(InformationsService.COMPLETES);
     }
   );
 
