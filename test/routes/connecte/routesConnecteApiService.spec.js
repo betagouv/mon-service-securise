@@ -844,14 +844,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur /api/service/:id/homologation/autorite', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Service({
+      const serviceAvecDossier = new Service({
         id: '456',
         descriptionService: { nomService: 'un service' },
         dossiers: [{ id: '999' }],
       });
       testeur
         .middleware()
-        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: serviceAvecDossier });
       testeur.depotDonnees().enregistreDossier = async () => {};
     });
 
@@ -911,14 +911,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur /api/service/:id/homologation/decision', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Service({
+      const serviceAvecDossier = new Service({
         id: '456',
         descriptionService: { nomService: 'un service' },
         dossiers: [{ id: '999' }],
       });
       testeur
         .middleware()
-        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: serviceAvecDossier });
       testeur.depotDonnees().enregistreDossier = async () => {};
       testeur.referentiel().recharge({ echeancesRenouvellement: { unAn: {} } });
     });
@@ -1009,14 +1009,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur `/api/service/:id/homologation/telechargement', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Service({
+      const serviceAvecDossier = new Service({
         id: '456',
         descriptionService: { nomService: 'un service' },
         dossiers: [{ id: '999' }],
       });
       testeur
         .middleware()
-        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: serviceAvecDossier });
       testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
       testeur
         .referentiel()
@@ -1069,7 +1069,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur /api/service/:id/homologation/avis', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Service(
+      const serviceAvecDossier = new Service(
         {
           id: '456',
           descriptionService: { nomService: 'un service' },
@@ -1079,7 +1079,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       testeur
         .middleware()
-        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: serviceAvecDossier });
       testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
       testeur.referentiel().recharge({
         echeancesRenouvellement: { unAn: {} },
@@ -1214,7 +1214,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur /api/service/:id/homologation/documents', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Service(
+      const serviceAvecDossier = new Service(
         {
           id: '456',
           descriptionService: { nomService: 'un service' },
@@ -1224,7 +1224,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       testeur
         .middleware()
-        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: serviceAvecDossier });
       testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
     });
 
@@ -1327,7 +1327,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         echeancesRenouvellement: { unAn: {} },
         statutsAvisDossierHomologation: { favorable: {} },
       });
-      const homologationAvecDossier = new Service(
+      const serviceAvecDossier = new Service(
         {
           id: '456',
           descriptionService: { nomService: 'un service' },
@@ -1337,7 +1337,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       testeur
         .middleware()
-        .reinitialise({ serviceARenvoyer: homologationAvecDossier });
+        .reinitialise({ serviceARenvoyer: serviceAvecDossier });
       testeur.depotDonnees().finaliseDossierCourant = () => Promise.resolve();
     });
 

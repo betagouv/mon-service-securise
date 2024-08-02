@@ -65,14 +65,14 @@ const Entite = require('../../src/modeles/entite');
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
 
-describe('Le dépôt de données des homologations', () => {
+describe('Le dépôt de données des services', () => {
   let busEvenements;
 
   beforeEach(() => {
     busEvenements = fabriqueBusPourLesTests();
   });
 
-  it("connaît toutes les homologations d'un utilisateur donné", async () => {
+  it("connaît tous les services d'un utilisateur donné", async () => {
     const referentiel = Referentiel.creeReferentielVide();
 
     const adaptateurPersistance = unePersistanceMemoire()
@@ -91,12 +91,12 @@ describe('Le dépôt de données des homologations', () => {
       .avecReferentiel(referentiel)
       .construis();
 
-    const homologations = await depot.services('456');
+    const services = await depot.services('456');
 
-    expect(homologations.length).to.equal(1);
-    expect(homologations[0]).to.be.a(Service);
-    expect(homologations[0].id).to.equal('123');
-    expect(homologations[0].referentiel).to.equal(referentiel);
+    expect(services.length).to.equal(1);
+    expect(services[0]).to.be.a(Service);
+    expect(services[0].id).to.equal('123');
+    expect(services[0].referentiel).to.equal(referentiel);
   });
 
   it("utilise l'adaptateur de persistance pour récupérer tous les services du système", async () => {
@@ -116,7 +116,7 @@ describe('Le dépôt de données des homologations', () => {
     expect(adaptateurAppele).to.be(true);
   });
 
-  it('trie les homologations par ordre alphabétique du nom du service', async () => {
+  it('trie les services par ordre alphabétique de leur nom', async () => {
     const r = Referentiel.creeReferentielVide();
     const persistance = unePersistanceMemoire()
       .ajouteUnUtilisateur(unUtilisateur().avecId('U').donnees)
@@ -140,15 +140,15 @@ describe('Le dépôt de données des homologations', () => {
       .avecAdaptateurPersistance(persistance)
       .construis();
 
-    const hs = await depot.services('U');
+    const services = await depot.services('U');
 
-    expect(hs.length).to.equal(3);
-    expect(hs[0].nomService()).to.equal('A-service');
-    expect(hs[1].nomService()).to.equal('B-service');
-    expect(hs[2].nomService()).to.equal('C-service');
+    expect(services.length).to.equal(3);
+    expect(services[0].nomService()).to.equal('A-service');
+    expect(services[1].nomService()).to.equal('B-service');
+    expect(services[2].nomService()).to.equal('C-service');
   });
 
-  it('peut retrouver une homologation à partir de son identifiant', async () => {
+  it('peut retrouver un service à partir de son identifiant', async () => {
     let donneeDechiffree;
     const adaptateurChiffrement = {
       dechiffre: async (objetDonnee) => {
@@ -171,16 +171,16 @@ describe('Le dépôt de données des homologations', () => {
       referentiel,
     });
 
-    const homologation = await depot.service('789');
+    const service = await depot.service('789');
 
-    expect(homologation).to.be.a(Service);
-    expect(homologation.id).to.equal('789');
-    expect(homologation.referentiel).to.equal(referentiel);
-    expect(homologation.nomService()).to.be('nom');
+    expect(service).to.be.a(Service);
+    expect(service.id).to.equal('789');
+    expect(service.referentiel).to.equal(referentiel);
+    expect(service.nomService()).to.be('nom');
     expect(donneeDechiffree).to.eql({ nomService: 'nom', chiffre: true });
   });
 
-  it("associe ses contributeurs à l'homologation", async () => {
+  it('associe ses contributeurs au service', async () => {
     const r = Referentiel.creeReferentielVide();
     const persistance = unePersistanceMemoire()
       .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
@@ -197,9 +197,9 @@ describe('Le dépôt de données des homologations', () => {
       .avecAdaptateurPersistance(persistance)
       .construis();
 
-    const homologation = await depot.service('S1');
+    const service = await depot.service('S1');
 
-    const { contributeurs } = homologation;
+    const { contributeurs } = service;
     expect(contributeurs.length).to.equal(2);
     expect(contributeurs[0].id).to.equal('U1');
     expect(contributeurs[1].id).to.equal('U2');
@@ -224,14 +224,14 @@ describe('Le dépôt de données des homologations', () => {
     expect(service.routesDesSuggestionsActions()[0].route).to.be('/lien');
   });
 
-  it('renseigne les mesures générales associées à une homologation', async () => {
+  it('renseigne les mesures générales associées à un service', async () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { gouvernance: 'Gouvernance' },
       mesures: { identifiantMesure: { categorie: 'gouvernance' } },
       reglesPersonnalisation: { mesuresBase: ['identifiantMesure'] },
     });
 
-    const donneesHomologation = {
+    const donneesService = {
       id: '123',
       descriptionService: { nomService: 'Un service' },
       mesuresGenerales: [{ id: 'identifiantMesure', statut: 'fait' }],
@@ -239,7 +239,7 @@ describe('Le dépôt de données des homologations', () => {
 
     const depot = unDepotDeDonneesServices()
       .avecAdaptateurPersistance(
-        unePersistanceMemoire().ajouteUnService(donneesHomologation)
+        unePersistanceMemoire().ajouteUnService(donneesService)
       )
       .avecReferentiel(referentiel)
       .construis();
@@ -295,22 +295,6 @@ describe('Le dépôt de données des homologations', () => {
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
       const { descriptionService } = await depot.service('S1');
-      expect(descriptionService.nomService).to.equal('Nouveau Nom');
-    });
-
-    it("met à jour la description de service dans l'objet métier service", async () => {
-      const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance: adaptateurPersistance.construis(),
-        adaptateurChiffrement,
-        referentiel,
-      });
-      const description = uneDescriptionValide(referentiel)
-        .avecNomService('Nouveau Nom')
-        .construis();
-
-      await depot.ajouteDescriptionService('U1', 'S1', description);
-
-      const { descriptionService } = await depotServices.service('S1');
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
@@ -413,7 +397,7 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  it('sait associer des rôles et responsabilités à une homologation', async () => {
+  it('sait associer des rôles et responsabilités à un service', async () => {
     const r = Referentiel.creeReferentielVide();
     const depot = unDepotDeDonneesServices()
       .avecReferentiel(r)
@@ -441,7 +425,7 @@ describe('Le dépôt de données des homologations', () => {
 
     after(() => (RisqueGeneral.valide = valideRisque));
 
-    it('sait associer un risque général à une homologation', async () => {
+    it('sait associer un risque général à un service', async () => {
       RisqueGeneral.valide = () => {};
 
       const r = Referentiel.creeReferentielVide();
@@ -464,7 +448,7 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  it('sait associer un risque spécifique à une homologation', async () => {
+  it('sait associer un risque spécifique à un service', async () => {
     const r = Referentiel.creeReferentielVide();
 
     const depot = unDepotDeDonneesServices()
@@ -634,23 +618,6 @@ describe('Le dépôt de données des homologations', () => {
       expect(donneesPersistees.descriptionService.chiffre).to.equal(true);
     });
 
-    it('ajoute en copie un nouveau service au dépôt', async () => {
-      const depotDonneesServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance,
-        adaptateurChiffrement,
-        referentiel,
-      });
-
-      const descriptionService =
-        uneDescriptionValide(referentiel).avecNomService('Service').donnees;
-      const idService = await depot.nouveauService('123', {
-        descriptionService,
-      });
-
-      const service = await depotDonneesServices.service(idService);
-      expect(service.nomService()).to.equal('Service');
-    });
-
     it("déclare un accès en écriture entre l'utilisateur et le service", async () => {
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance,
@@ -748,7 +715,7 @@ describe('Le dépôt de données des homologations', () => {
       }
     });
 
-    it('lève une exception si le nom du service existe déjà pour une autre homologation', (done) => {
+    it('lève une exception si le nom du service est déjà pris par un autre service', (done) => {
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Nom service')
         .construis()
@@ -846,18 +813,18 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  describe("sur demande de suppression d'une homologation", () => {
+  describe("sur demande de suppression d'un service", () => {
     let adaptateurPersistance;
     let depot;
 
     beforeEach(() => {
-      const donneesHomologation = {
+      const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
       };
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-        services: [copie(donneesHomologation)],
+        services: [donneesService],
         autorisations: [
           uneAutorisation().avecId('456').deProprietaire('999', '123').donnees,
         ],
@@ -960,14 +927,14 @@ describe('Le dépôt de données des homologations', () => {
     beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
 
     it('ne fait rien si un dossier courant existe déjà', (done) => {
-      const donneesHomologations = {
+      const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
         dossiers: [{ id: '999' }],
       };
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          services: [copie(donneesHomologations)],
+          services: [donneesService],
         });
       const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
@@ -990,7 +957,7 @@ describe('Le dépôt de données des homologations', () => {
       };
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          services: [copie(donneesHomologations)],
+          services: [donneesHomologations],
         });
       const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
@@ -1007,13 +974,13 @@ describe('Le dépôt de données des homologations', () => {
     });
 
     it('associe un UUID au dossier créé', (done) => {
-      const donneesHomologations = {
+      const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
       };
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          services: [copie(donneesHomologations)],
+          services: [donneesService],
         });
       adaptateurUUID.genereUUID = () => '999';
       const depot = DepotDonneesServices.creeDepot({
@@ -1030,14 +997,14 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it("lève une exception si l'homologation n'existe pas", (done) => {
-      const donneesHomologations = {
+    it("lève une exception si le service n'existe pas", (done) => {
+      const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
       };
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          services: [copie(donneesHomologations)],
+          services: [donneesService],
         });
       const depot = DepotDonneesServices.creeDepot({
         adaptateurPersistance,
@@ -1066,13 +1033,13 @@ describe('Le dépôt de données des homologations', () => {
     beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
 
     it('enregistre le dossier courant', (done) => {
-      const donneesHomologations = {
+      const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
       };
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          services: [copie(donneesHomologations)],
+          services: [donneesService],
         });
       const depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
@@ -1286,7 +1253,7 @@ describe('Le dépôt de données des homologations', () => {
     });
   });
 
-  describe("sur demande de duplication d'une homologation", () => {
+  describe("sur demande de duplication d'un service", () => {
     let depot;
 
     beforeEach(() => {
@@ -1316,7 +1283,7 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
 
-    it("reste robuste quand l'homologation n'est pas trouvée", (done) => {
+    it("reste robuste quand le service n'est pas trouvé", (done) => {
       depot
         .dupliqueService('id-invalide', '123')
         .then(() =>
@@ -1330,32 +1297,32 @@ describe('Le dépôt de données des homologations', () => {
         .catch(done);
     });
 
-    it('peut dupliquer une homologation à partir de son identifiant', (done) => {
+    it('peut dupliquer un service à partir de son identifiant', (done) => {
       depot
         .dupliqueService('123-1', '123')
         .then(() => depot.services('123'))
-        .then((homologations) => {
-          expect(homologations.length).to.equal(2);
+        .then((services) => {
+          expect(services.length).to.equal(2);
           done();
         })
         .catch(done);
     });
 
-    it("utilise un nom disponible pour l'homologation dupliquée", (done) => {
+    it('utilise un nom disponible pour le service dupliqué', (done) => {
       depot
         .dupliqueService('123-1', '123')
         .then(() => depot.dupliqueService('123-1', '123'))
         .then(() => depot.services('123'))
-        .then(([_, h2, h3]) => {
-          expect(h2.nomService()).to.equal('Service à dupliquer - Copie 1');
-          expect(h3.nomService()).to.equal('Service à dupliquer - Copie 2');
+        .then(([_, s2, s3]) => {
+          expect(s2.nomService()).to.equal('Service à dupliquer - Copie 1');
+          expect(s3.nomService()).to.equal('Service à dupliquer - Copie 2');
           done();
         })
         .catch(done);
     });
   });
 
-  describe("sur une demande d'un index de copie disponible pour une homologation à dupliquer", () => {
+  describe("sur une demande d'un index de copie disponible pour un service à dupliquer", () => {
     it("utilise l'index 1 si disponible", (done) => {
       const referentiel = Referentiel.creeReferentielVide();
       const descriptionService = uneDescriptionValide(referentiel)

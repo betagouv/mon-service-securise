@@ -30,7 +30,7 @@ describe("L'objet PDF des descriptions des risques", () => {
     risques: { unRisque: { description: 'Une description' } },
   };
 
-  const homologation = new Service(
+  const service = new Service(
     {
       id: '123',
       idUtilisateur: '456',
@@ -48,10 +48,7 @@ describe("L'objet PDF des descriptions des risques", () => {
     });
 
     it('utilise les informations du référentiel', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(
-        homologation,
-        referentiel
-      );
+      const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
 
       const donnees = vueAnnexePDFRisques.donnees();
 
@@ -66,10 +63,7 @@ describe("L'objet PDF des descriptions des risques", () => {
     });
 
     it('ignore le niveau de gravité non concerné', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(
-        homologation,
-        referentiel
-      );
+      const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
 
       const { niveauxGravite } = vueAnnexePDFRisques.donnees();
 
@@ -80,10 +74,7 @@ describe("L'objet PDF des descriptions des risques", () => {
     });
 
     it('trie les niveaux de gravité par position décroissante', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(
-        homologation,
-        referentiel
-      );
+      const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
 
       const { niveauxGravite } = vueAnnexePDFRisques.donnees();
 
@@ -94,7 +85,7 @@ describe("L'objet PDF des descriptions des risques", () => {
   });
 
   it('ajoute le nom du service', () => {
-    const vueAnnexePDFRisques = new VueAnnexePDFRisques(homologation);
+    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service);
 
     const donnees = vueAnnexePDFRisques.donnees();
 
@@ -103,7 +94,7 @@ describe("L'objet PDF des descriptions des risques", () => {
   });
 
   it('ajoute les risques par niveau de gravité', () => {
-    const vueAnnexePDFRisques = new VueAnnexePDFRisques(homologation);
+    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service);
 
     const donnees = vueAnnexePDFRisques.donnees();
 

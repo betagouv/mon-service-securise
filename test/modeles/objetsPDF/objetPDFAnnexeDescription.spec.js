@@ -21,7 +21,7 @@ describe("L'objet PDF de l'annexe de description", () => {
     },
   };
   const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
-  const homologation = new Service(
+  const service = new Service(
     {
       id: '123',
       idUtilisateur: '456',
@@ -42,7 +42,7 @@ describe("L'objet PDF de l'annexe de description", () => {
   );
 
   it('fournit le nom du service', () => {
-    const vueAnnexePDFDescription = new VueAnnexePDFDescription(homologation);
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(service);
 
     const donnees = vueAnnexePDFDescription.donnees();
 
@@ -52,7 +52,7 @@ describe("L'objet PDF de l'annexe de description", () => {
 
   it('fournit la liste des fonctionnalités', () => {
     const vueAnnexePDFDescription = new VueAnnexePDFDescription(
-      homologation,
+      service,
       referentiel
     );
 
@@ -64,7 +64,7 @@ describe("L'objet PDF de l'annexe de description", () => {
 
   it('ajoute à la liste des fonctionnalités les spécifiques', () => {
     const vueAnnexePDFDescription = new VueAnnexePDFDescription(
-      homologation,
+      service,
       referentiel
     );
 
@@ -76,7 +76,7 @@ describe("L'objet PDF de l'annexe de description", () => {
 
   it('fournit la liste des données stockées', () => {
     const vueAnnexePDFDescription = new VueAnnexePDFDescription(
-      homologation,
+      service,
       referentiel
     );
 
@@ -88,7 +88,7 @@ describe("L'objet PDF de l'annexe de description", () => {
 
   it('ajoute les données spécifiques à la liste des données stockées', () => {
     const vueAnnexePDFDescription = new VueAnnexePDFDescription(
-      homologation,
+      service,
       referentiel
     );
 
@@ -100,7 +100,7 @@ describe("L'objet PDF de l'annexe de description", () => {
 
   it('fournit la durée maximale acceptable de dysfonctionnement grave', () => {
     const vueAnnexePDFDescription = new VueAnnexePDFDescription(
-      homologation,
+      service,
       referentiel
     );
 

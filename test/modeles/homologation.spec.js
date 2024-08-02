@@ -25,13 +25,13 @@ const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
-    const homologation = new Service({
+    const service = new Service({
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'Super Service' },
     });
 
-    expect(homologation.nomService()).to.equal('Super Service');
+    expect(service.nomService()).to.equal('Super Service');
   });
 
   it('connaît ses contributrices et contributeurs', () => {
@@ -150,7 +150,7 @@ describe('Une homologation', () => {
         unAutre: { description: 'Un autre' },
       },
     });
-    const homologation = new Service(
+    const service = new Service(
       {
         id: '123',
         idUtilisateur: '456',
@@ -162,18 +162,18 @@ describe('Une homologation', () => {
       referentiel
     );
 
-    expect(homologation.descriptionTypeService()).to.equal('Un type, Un autre');
+    expect(service.descriptionTypeService()).to.equal('Un type, Un autre');
   });
 
   it("se comporte correctement si le type service n'est pas présente", () => {
-    const homologation = new Service({ id: '123' });
-    expect(homologation.descriptionTypeService()).to.equal(
+    const service = new Service({ id: '123' });
+    expect(service.descriptionTypeService()).to.equal(
       'Type de service non renseignée'
     );
   });
 
   it('connaît les rôles et responsabilités de ses acteurs et parties prenantes', () => {
-    const homologation = new Service({
+    const service = new Service({
       id: '123',
       rolesResponsabilites: {
         autoriteHomologation: 'Jean Dupont',
@@ -188,32 +188,32 @@ describe('Une homologation', () => {
       },
     });
 
-    expect(homologation.autoriteHomologation()).to.equal('Jean Dupont');
-    expect(homologation.fonctionAutoriteHomologation()).to.equal('Maire');
-    expect(homologation.delegueProtectionDonnees()).to.equal('Rémi Fassol');
-    expect(homologation.piloteProjet()).to.equal('Sylvie Martin');
-    expect(homologation.expertCybersecurite()).to.equal('Anna Dubreuil');
-    expect(homologation.hebergeur()).to.equal('Hébergeur');
-    expect(homologation.structureDeveloppement()).to.equal('Une structure');
+    expect(service.autoriteHomologation()).to.equal('Jean Dupont');
+    expect(service.fonctionAutoriteHomologation()).to.equal('Maire');
+    expect(service.delegueProtectionDonnees()).to.equal('Rémi Fassol');
+    expect(service.piloteProjet()).to.equal('Sylvie Martin');
+    expect(service.expertCybersecurite()).to.equal('Anna Dubreuil');
+    expect(service.hebergeur()).to.equal('Hébergeur');
+    expect(service.structureDeveloppement()).to.equal('Une structure');
   });
 
   it('connaît ses dossiers', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: {} },
     });
-    const homologation = new Service(
+    const service = new Service(
       { id: '123', dossiers: [{ id: '999' }] },
       referentiel
     );
 
-    expect(homologation.nombreDossiers()).to.equal(1);
+    expect(service.nombreDossiers()).to.equal(1);
   });
 
   it('connaît le dossier courant', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: {} },
     });
-    const homologation = new Service(
+    const service = new Service(
       {
         id: '123',
         dossiers: [
@@ -229,7 +229,7 @@ describe('Une homologation', () => {
       referentiel
     );
 
-    expect(homologation.dossierCourant().id).to.equal('999');
+    expect(service.dossierCourant().id).to.equal('999');
   });
 
   describe('sur demande des documents PDF disponibles', () => {
@@ -281,7 +281,7 @@ describe('Une homologation', () => {
     });
 
     it("inclut le dossier de décision lorsqu'elle a un dossier d'homologation courant à une étape suffisante et les droits suffisants", () => {
-      const homologationAvecDossier = new Service(
+      const serviceAvecDossier = new Service(
         {
           id: '123',
           dossiers: [
@@ -298,14 +298,14 @@ describe('Une homologation', () => {
         .construis();
 
       expect(
-        homologationAvecDossier.documentsPdfDisponibles(
+        serviceAvecDossier.documentsPdfDisponibles(
           autorisationPourDossierDecision
         )
       ).to.eql(['dossierDecision']);
     });
 
     it("exclut le dossier de décision en cas d'absence de dossier d'homologation courant", () => {
-      const homologationSansDossier = new Service(
+      const serviceSansDossier = new Service(
         { id: '123', dossiers: [] },
         referentiel
       );
@@ -316,14 +316,14 @@ describe('Une homologation', () => {
         .construis();
 
       expect(
-        homologationSansDossier.documentsPdfDisponibles(
+        serviceSansDossier.documentsPdfDisponibles(
           autorisationPourDossierDecision
         )
       ).to.eql([]);
     });
 
     it("exclut le dossier de décision si l'étape courante du dossier d'homologation n'est pas suffisante", () => {
-      const homologationSansDossier = new Service(
+      const serviceSansDossier = new Service(
         { id: '123', dossiers: [unDossier(referentiel).donnees] },
         referentiel
       );
@@ -334,7 +334,7 @@ describe('Une homologation', () => {
         .construis();
 
       expect(
-        homologationSansDossier.documentsPdfDisponibles(
+        serviceSansDossier.documentsPdfDisponibles(
           autorisationPourDossierDecision
         )
       ).to.eql([]);
@@ -342,19 +342,19 @@ describe('Une homologation', () => {
   });
 
   it('connaît ses risques spécifiques', () => {
-    const homologation = new Service({
+    const service = new Service({
       id: '123',
       risquesSpecifiques: [{ description: 'Un risque' }],
     });
 
-    expect(homologation.risquesSpecifiques().nombre()).to.equal(1);
+    expect(service.risquesSpecifiques().nombre()).to.equal(1);
   });
 
   it('se construit en renseignant le caractère indispensable des mesures générales grâce aux mesures personnalisées', () => {
     const moteur = { mesures: () => ({ m1: { indispensable: true } }) };
     const referentiel = Referentiel.creeReferentiel({ mesures: { m1: {} } });
 
-    const homologation = new Service(
+    const service = new Service(
       {
         id: '123',
         mesuresGenerales: [{ id: 'm1' }],
@@ -364,19 +364,19 @@ describe('Une homologation', () => {
     );
 
     expect(
-      homologation.mesures.mesuresGenerales
+      service.mesures.mesuresGenerales
         .toutes()
         .find((mesure) => mesure.id === 'm1').rendueIndispensable
     ).to.be(true);
   });
 
   it('connaît ses mesures spécifiques', () => {
-    const homologation = new Service({
+    const service = new Service({
       id: '123',
       mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
     });
 
-    expect(homologation.mesuresSpecifiques().nombre()).to.equal(1);
+    expect(service.mesuresSpecifiques().nombre()).to.equal(1);
   });
 
   describe('sur évaluation du statut de saisie des mesures', () => {
@@ -386,7 +386,7 @@ describe('Une homologation', () => {
     const moteur = { mesures: () => ({ m1: {}, m2: {} }) };
 
     it('détecte que la liste des mesures est à compléter', () => {
-      const homologation = new Service(
+      const service = new Service(
         {
           mesuresGenerales: [{ id: 'm1', statut: MesureGenerale.STATUT_FAIT }],
         },
@@ -394,13 +394,13 @@ describe('Une homologation', () => {
         moteur
       );
 
-      expect(homologation.statutSaisie('mesures')).to.equal(
+      expect(service.statutSaisie('mesures')).to.equal(
         InformationsService.A_COMPLETER
       );
     });
 
     it('détecte que la liste des mesures est complète', () => {
-      const homologation = new Service(
+      const service = new Service(
         {
           mesuresGenerales: [
             { id: 'm1', statut: MesureGenerale.STATUT_FAIT },
@@ -411,7 +411,7 @@ describe('Une homologation', () => {
         moteur
       );
 
-      expect(homologation.statutSaisie('mesures')).to.equal(
+      expect(service.statutSaisie('mesures')).to.equal(
         InformationsService.COMPLETES
       );
     });
@@ -419,8 +419,8 @@ describe('Une homologation', () => {
 
   describe('sur évaluation du statut de saisie des risques', () => {
     it('détecte que la liste des risques reste à vérifier', () => {
-      const homologation = new Service({ id: '123' });
-      expect(homologation.statutSaisie('risques')).to.equal(
+      const service = new Service({ id: '123' });
+      expect(service.statutSaisie('risques')).to.equal(
         InformationsService.A_SAISIR
       );
     });
@@ -434,30 +434,30 @@ describe('Une homologation', () => {
   });
 
   it('délègue aux mesures le calcul du nombre total de mesures générales', () => {
-    const homologation = new Service({ mesuresGenerales: [] });
-    homologation.mesures.nombreTotalMesuresGenerales = () => 42;
+    const service = new Service({ mesuresGenerales: [] });
+    service.mesures.nombreTotalMesuresGenerales = () => 42;
 
-    expect(homologation.nombreTotalMesuresGenerales()).to.equal(42);
+    expect(service.nombreTotalMesuresGenerales()).to.equal(42);
   });
 
   it('délègue aux mesures le calcul du nombre de mesures spécifiques', () => {
-    const homologation = new Service({ mesuresGenerales: [] });
-    homologation.mesures.nombreMesuresSpecifiques = () => 42;
+    const service = new Service({ mesuresGenerales: [] });
+    service.mesures.nombreMesuresSpecifiques = () => 42;
 
-    expect(homologation.nombreMesuresSpecifiques()).to.equal(42);
+    expect(service.nombreMesuresSpecifiques()).to.equal(42);
   });
 
   it('délègue aux mesures la récupération des mesures par statut et par catégorie', () => {
     const referentiel = Referentiel.creeReferentiel({
       mesures: { m1: {} },
     });
-    const homologation = new Service(
+    const service = new Service(
       { mesuresGenerales: [{ id: 'm1', statut: 'enCours' }] },
       referentiel
     );
-    homologation.mesures.parStatutEtCategorie = () => ({ unStatut: {} });
+    service.mesures.parStatutEtCategorie = () => ({ unStatut: {} });
 
-    const parStatutEtCategorie = homologation.mesuresParStatutEtCategorie();
+    const parStatutEtCategorie = service.mesuresParStatutEtCategorie();
 
     expect(parStatutEtCategorie).to.eql({ unStatut: {} });
   });
@@ -471,7 +471,7 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Service(
+    const service = new Service(
       {
         id: '123',
         idUtilisateur: '456',
@@ -480,7 +480,7 @@ describe('Une homologation', () => {
       referentiel
     );
 
-    expect(homologation.descriptionStatutDeploiement()).to.equal('En ligne');
+    expect(service.descriptionStatutDeploiement()).to.equal('En ligne');
   });
 
   it('connaît la localisation des données', () => {
@@ -492,7 +492,7 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Service(
+    const service = new Service(
       {
         id: '123',
         idUtilisateur: '456',
@@ -504,7 +504,7 @@ describe('Une homologation', () => {
       referentiel
     );
 
-    expect(homologation.localisationDonnees()).to.equal('france');
+    expect(service.localisationDonnees()).to.equal('france');
   });
 
   it('sait décrire la localisation des données', () => {
@@ -516,7 +516,7 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Service(
+    const service = new Service(
       {
         id: '123',
         idUtilisateur: '456',
@@ -528,39 +528,37 @@ describe('Une homologation', () => {
       referentiel
     );
 
-    expect(homologation.descriptionLocalisationDonnees()).to.equal('France');
+    expect(service.descriptionLocalisationDonnees()).to.equal('France');
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe de la description", () => {
-    const homologation = new Service({
+    const service = new Service({
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'nom' },
     });
 
-    expect(homologation.vueAnnexePDFDescription()).to.be.a(
-      VueAnnexePDFDescription
-    );
+    expect(service.vueAnnexePDFDescription()).to.be.a(VueAnnexePDFDescription);
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des risques", () => {
-    const homologation = new Service({
+    const service = new Service({
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'nom' },
     });
 
-    expect(homologation.vueAnnexePDFRisques()).to.be.a(VueAnnexePDFRisques);
+    expect(service.vueAnnexePDFRisques()).to.be.a(VueAnnexePDFRisques);
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des mesures", () => {
-    const homologation = new Service({
+    const service = new Service({
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'nom' },
     });
 
-    expect(homologation.vueAnnexePDFMesures()).to.be.a(VueAnnexePDFMesures);
+    expect(service.vueAnnexePDFMesures()).to.be.a(VueAnnexePDFMesures);
   });
 
   describe('sur requête des données à persister', () => {
@@ -578,7 +576,7 @@ describe('Une homologation', () => {
       });
 
       const aujourdhui = new Date();
-      const homologation = new Service(
+      const service = new Service(
         {
           id: 'id-homologation',
           descriptionService: uneDescriptionValide(
@@ -607,7 +605,7 @@ describe('Une homologation', () => {
         referentiel
       );
 
-      expect(homologation.donneesAPersister().toutes()).to.eql({
+      expect(service.donneesAPersister().toutes()).to.eql({
         id: 'id-homologation',
         descriptionService: {
           delaiAvantImpactCritique: 'unDelai',
@@ -672,23 +670,23 @@ describe('Une homologation', () => {
       .toJSON();
 
     it('retourne les données sans identifiant', () => {
-      const homologation = new Service(
+      const service = new Service(
         { id: 'id-homologation', descriptionService },
         referentiel
       );
 
-      const duplicata = homologation.donneesADupliquer();
+      const duplicata = service.donneesADupliquer();
 
       expect(duplicata.id).to.be(undefined);
     });
 
     it("utilise le nom d'homologation passé en paramètre", () => {
-      const homologation = new Service(
+      const service = new Service(
         { id: 'id-homologation', descriptionService },
         referentiel
       );
 
-      const duplicata = homologation.donneesADupliquer('Nouveau service');
+      const duplicata = service.donneesADupliquer('Nouveau service');
 
       expect(duplicata.descriptionService.nomService).to.equal(
         'Nouveau service'
@@ -696,7 +694,7 @@ describe('Une homologation', () => {
     });
 
     it("ne duplique pas les dossiers de l'homologation", () => {
-      const homologation = new Service(
+      const service = new Service(
         {
           id: 'id-homologation',
           descriptionService,
@@ -705,7 +703,7 @@ describe('Une homologation', () => {
         referentiel
       );
 
-      const duplicata = homologation.donneesADupliquer();
+      const duplicata = service.donneesADupliquer();
 
       expect(duplicata.dossiers).to.be(undefined);
     });
