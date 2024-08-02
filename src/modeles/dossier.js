@@ -4,7 +4,7 @@ const DateTelechargement = require('./etapes/dateTelechargement');
 const Decision = require('./etapes/decision');
 const Documents = require('./etapes/documents');
 const EtapeAvis = require('./etapes/etapeAvis');
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 const Referentiel = require('../referentiel');
 const {
   ErreurDossierDejaFinalise,
@@ -13,7 +13,7 @@ const {
   ErreurDossierNonFinalise,
 } = require('../erreurs');
 
-class Dossier extends InformationsHomologation {
+class Dossier extends InformationsService {
   constructor(
     donneesDossier = {},
     referentiel = Referentiel.creeReferentielVide(),

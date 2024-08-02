@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 
-const InformationsHomologation = require('../../src/modeles/informationsHomologation');
+const InformationsHomologation = require('../../src/modeles/informationsService');
 const Hebergement = require('../../src/modeles/partiesPrenantes/hebergement');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 

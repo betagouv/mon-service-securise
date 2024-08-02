@@ -3,7 +3,7 @@ const expect = require('expect.js');
 const {
   A_COMPLETER,
   COMPLETES,
-} = require('../../src/modeles/informationsHomologation');
+} = require('../../src/modeles/informationsService');
 const Mesures = require('../../src/modeles/mesures');
 const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 const Referentiel = require('../../src/referentiel');

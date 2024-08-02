@@ -1,6 +1,6 @@
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 
-class EntiteExterne extends InformationsHomologation {
+class EntiteExterne extends InformationsService {
   constructor(donneesEntite) {
     super({
       proprietesAtomiquesRequises: ['nom', 'contact'],

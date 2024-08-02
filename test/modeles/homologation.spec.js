@@ -4,7 +4,7 @@ const uneDescriptionValide = require('../constructeurs/constructeurDescriptionSe
 const { unDossier } = require('../constructeurs/constructeurDossier');
 
 const Referentiel = require('../../src/referentiel');
-const InformationsHomologation = require('../../src/modeles/informationsHomologation');
+const InformationsHomologation = require('../../src/modeles/informationsService');
 const Homologation = require('../../src/modeles/homologation');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const Utilisateur = require('../../src/modeles/utilisateur');

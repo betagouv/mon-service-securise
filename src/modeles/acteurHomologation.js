@@ -1,6 +1,6 @@
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 
-class ActeurHomologation extends InformationsHomologation {
+class ActeurHomologation extends InformationsService {
   constructor(donnees) {
     super({ proprietesAtomiquesRequises: ['role', 'nom', 'fonction'] });
     this.renseigneProprietes(donnees);

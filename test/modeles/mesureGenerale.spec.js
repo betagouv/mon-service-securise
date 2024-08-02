@@ -7,7 +7,7 @@ const {
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
-const InformationsHomologation = require('../../src/modeles/informationsHomologation');
+const InformationsHomologation = require('../../src/modeles/informationsService');
 
 describe('Une mesure de sécurité', () => {
   let referentiel;

@@ -1,6 +1,6 @@
-const InformationsHomologation = require('../informationsHomologation');
+const InformationsService = require('../informationsService');
 
-class Etape extends InformationsHomologation {
+class Etape extends InformationsService {
   constructor(donnees, referentiel) {
     super(donnees);
     this.referentiel = referentiel;

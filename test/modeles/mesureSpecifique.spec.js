@@ -6,7 +6,7 @@ const {
   ErreurPrioriteMesureInvalide,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
-const InformationsHomologation = require('../../src/modeles/informationsHomologation');
+const InformationsHomologation = require('../../src/modeles/informationsService');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 
 const elle = it;

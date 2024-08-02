@@ -1,5 +1,5 @@
 const ActeursHomologation = require('./acteursHomologation');
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 const PartiesPrenantes = require('./partiesPrenantes/partiesPrenantes');
 
 const descriptionRole = (nomPrenom, fonction) => {
@@ -14,7 +14,7 @@ const descriptionRole = (nomPrenom, fonction) => {
     : description.join(' ');
 };
 
-class RolesResponsabilites extends InformationsHomologation {
+class RolesResponsabilites extends InformationsService {
   constructor(donneesRolesResponsabilites = {}) {
     super({
       proprietesAtomiquesRequises: [

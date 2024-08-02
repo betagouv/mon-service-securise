@@ -1,6 +1,6 @@
 const Etape = require('./etape');
 const Avis = require('../avis');
-const InformationsHomologation = require('../informationsHomologation');
+const InformationsService = require('../informationsService');
 const { creeReferentielVide } = require('../../referentiel');
 
 class EtapeAvis extends Etape {
@@ -28,7 +28,7 @@ class EtapeAvis extends Etape {
     if (this.avecAvis === null) return false;
     return this.avecAvis
       ? this.avis.every(
-          (a) => a.statutSaisie() === InformationsHomologation.COMPLETES
+          (a) => a.statutSaisie() === InformationsService.COMPLETES
         )
       : true;
   }
