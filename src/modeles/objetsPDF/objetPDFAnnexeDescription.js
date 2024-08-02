@@ -1,32 +1,32 @@
 const Referentiel = require('../../referentiel');
 
 class ObjetPDFAnnexeDescription {
-  constructor(homologation, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(service, referentiel = Referentiel.creeReferentielVide()) {
     this.referentiel = referentiel;
-    this.homologation = homologation;
+    this.service = service;
   }
 
   donnees() {
     const fonctionnalites = this.referentiel.descriptionsFonctionnalites(
-      this.homologation.descriptionService.fonctionnalites
+      this.service.descriptionService.fonctionnalites
     );
     const fonctionnalitesSpecifiques =
-      this.homologation.descriptionService.fonctionnalitesSpecifiques.descriptions();
+      this.service.descriptionService.fonctionnalitesSpecifiques.descriptions();
 
     const donneesStockees =
       this.referentiel.descriptionsDonneesCaracterePersonnel(
-        this.homologation.descriptionService.donneesCaracterePersonnel
+        this.service.descriptionService.donneesCaracterePersonnel
       );
     const donneesStockeesSpecifiques =
-      this.homologation.descriptionService.donneesSensiblesSpecifiques.descriptions();
+      this.service.descriptionService.donneesSensiblesSpecifiques.descriptions();
 
     const dureeDysfonctionnementMaximumAcceptable =
       this.referentiel.descriptionDelaiAvantImpactCritique(
-        this.homologation.descriptionService.delaiAvantImpactCritique
+        this.service.descriptionService.delaiAvantImpactCritique
       );
 
     return {
-      nomService: this.homologation.nomService(),
+      nomService: this.service.nomService(),
       fonctionnalites: [...fonctionnalites, ...fonctionnalitesSpecifiques],
       donneesStockees: [...donneesStockees, ...donneesStockeesSpecifiques],
       dureeDysfonctionnementMaximumAcceptable,
