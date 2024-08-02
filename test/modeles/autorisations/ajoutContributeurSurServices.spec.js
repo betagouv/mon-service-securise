@@ -59,8 +59,8 @@ describe("L'ajout d'un contributeur sur des services", () => {
 
   it("vérifie que l'utilisateur a le droit d'ajouter un contributeur à *tous* les services demandés", async () => {
     const autorisationsInterrogees = [];
-    depotDonnees.autorisationPour = async (idUtilisateur, idHomologation) => {
-      autorisationsInterrogees.push({ idUtilisateur, idHomologation });
+    depotDonnees.autorisationPour = async (idUtilisateur, idService) => {
+      autorisationsInterrogees.push({ idUtilisateur, idService });
       return peutGererContributeurs;
     };
 
@@ -76,8 +76,8 @@ describe("L'ajout d'un contributeur sur des services", () => {
     );
 
     expect(autorisationsInterrogees).to.eql([
-      { idUtilisateur: '456', idHomologation: '123' },
-      { idUtilisateur: '456', idHomologation: '888' },
+      { idUtilisateur: '456', idService: '123' },
+      { idUtilisateur: '456', idService: '888' },
     ]);
   });
 
