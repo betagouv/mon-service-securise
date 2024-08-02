@@ -67,7 +67,7 @@ const fabriquePersistance = (
           .map((s) => new Homologation(s, referentiel))
           .sort((s1, s2) => s1.nomService().localeCompare(s2.nomService()));
       },
-      toutes: async () => {
+      tous: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
         return donneesServices.map((s) => new Homologation(s, referentiel));
       },
@@ -246,7 +246,7 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const tousLesServices = () => p.lis.toutes();
+  const tousLesServices = () => p.lis.tous();
 
   const enregistreDossier = (idHomologation, dossier) =>
     ajouteAItemsDuService('dossiers', idHomologation, dossier);
