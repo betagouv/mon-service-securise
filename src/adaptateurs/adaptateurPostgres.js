@@ -75,7 +75,7 @@ const nouvelAdaptateur = (env) => {
         knex.raw("(a.donnees->>'idUtilisateur')::uuid"),
         'u.id'
       )
-      .whereRaw("(a.donnees->>'idHomologation')::uuid = ?", id)
+      .whereRaw("(a.donnees->>'idService')::uuid = ?", id)
       .select({
         id: 'u.id',
         dateCreation: 'u.date_creation',
@@ -114,7 +114,7 @@ const nouvelAdaptateur = (env) => {
     knex('homologations')
       .join(
         'autorisations',
-        knex.raw("(autorisations.donnees->>'idHomologation')::uuid"),
+        knex.raw("(autorisations.donnees->>'idService')::uuid"),
         'homologations.id'
       )
       .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
@@ -131,8 +131,8 @@ const nouvelAdaptateur = (env) => {
   const homologations = (idUtilisateur) => {
     const idsHomologations = knex('autorisations')
       .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
-      .select({ idHomologation: knex.raw("(donnees->>'idHomologation')") })
-      .then((lignes) => lignes.map(({ idHomologation }) => idHomologation));
+      .select({ idService: knex.raw("(donnees->>'idService')") })
+      .then((lignes) => lignes.map(({ idService }) => idService));
 
     return avecPMapPourChaqueElement(idsHomologations, service);
   };
@@ -172,12 +172,12 @@ const nouvelAdaptateur = (env) => {
 
   const autorisation = (id) => elementDeTable('autorisations', id);
 
-  const autorisationPour = (idUtilisateur, idHomologation) =>
+  const autorisationPour = (idUtilisateur, idService) =>
     knex('autorisations')
-      .whereRaw(
-        "donnees->>'idUtilisateur'=? and donnees->>'idHomologation'=?",
-        [idUtilisateur, idHomologation]
-      )
+      .whereRaw("donnees->>'idUtilisateur'=? and donnees->>'idService'=?", [
+        idUtilisateur,
+        idService,
+      ])
       .first()
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
@@ -245,12 +245,12 @@ const nouvelAdaptateur = (env) => {
     else await ajouteLigneDansTable('autorisations', id, donneesAutorisation);
   };
 
-  const supprimeAutorisation = (idUtilisateur, idHomologation) =>
+  const supprimeAutorisation = (idUtilisateur, idService) =>
     knex('autorisations')
-      .whereRaw(
-        "donnees->>'idUtilisateur'=? and donnees->>'idHomologation'=?",
-        [idUtilisateur, idHomologation]
-      )
+      .whereRaw("donnees->>'idUtilisateur'=? and donnees->>'idService'=?", [
+        idUtilisateur,
+        idService,
+      ])
       .del();
 
   const supprimeAutorisations = () => knex('autorisations').del();
@@ -261,10 +261,8 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("(donnees->>'estProprietaire')::boolean=false")
       .del();
 
-  const supprimeAutorisationsHomologation = (idHomologation) =>
-    knex('autorisations')
-      .whereRaw("donnees->>'idHomologation'=?", idHomologation)
-      .del();
+  const supprimeAutorisationsHomologation = (idService) =>
+    knex('autorisations').whereRaw("donnees->>'idService'=?", idService).del();
 
   const lisParcoursUtilisateur = async (id) =>
     elementDeTable('parcours_utilisateurs', id);

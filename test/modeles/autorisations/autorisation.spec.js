@@ -237,7 +237,6 @@ describe('Une autorisation', () => {
         estProprietaire: false,
         id: 'uuid',
         idService: '123',
-        idHomologation: '123',
         idUtilisateur: '999',
         droits: {
           CONTACTS: 2,
@@ -261,7 +260,6 @@ describe('Une autorisation', () => {
         estProprietaire: true,
         id: 'uuid',
         idService: '123',
-        idHomologation: '123',
         idUtilisateur: '999',
         droits: {
           CONTACTS: 2,
