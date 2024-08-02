@@ -34,7 +34,7 @@ describe('Le dépôt de données des autorisations', () => {
     DepotDonneesAutorisations.creeDepot({
       adaptateurPersistance,
       adaptateurUUID,
-      depotHomologations: DepotDonneesServices.creeDepot({
+      depotServices: DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
       }),
