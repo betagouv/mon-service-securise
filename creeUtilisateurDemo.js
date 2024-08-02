@@ -24,9 +24,9 @@ const descriptionService = new DescriptionService(
     statutDeploiement: 'enLigne',
     typeService: ['siteInternet'],
     organisationResponsable: {
-      nom: 'Agglomération de Mansart',
-      siret: '12345',
-      departement: '75',
+      siret: process.env.SIRET_ENTITE_UTILISATEUR_DEMO,
+      nom: process.env.NOM_ENTITE_UTILISATEUR_DEMO,
+      departement: process.env.DEPARTEMENT_ENTITE_UTILISATEUR_DEMO,
     },
     nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
     niveauSecurite: 'niveau1',
