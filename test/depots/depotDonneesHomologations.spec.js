@@ -660,7 +660,6 @@ describe('Le dépôt de données des homologations', () => {
       expect(apres.length).to.equal(1);
       const autorisation = apres[0];
       expect(autorisation.estProprietaire).to.be(true);
-      expect(autorisation.idHomologation).to.equal('unUUID');
       expect(autorisation.idService).to.equal('unUUID');
       expect(autorisation.idUtilisateur).to.equal('123');
       expect(autorisation.droits).to.eql({

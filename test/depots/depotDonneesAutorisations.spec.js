@@ -109,7 +109,7 @@ describe('Le dépôt de données des autorisations', () => {
       expect(a.estProprietaire).to.be(true);
       expect(a.id).to.equal('456');
       expect(a.idUtilisateur).to.equal('999');
-      expect(a.idHomologation).to.equal('123');
+      expect(a.idService).to.equal('123');
     });
 
     it("retourne `undefined` si l'autorisation est inexistante", async () => {
@@ -217,7 +217,6 @@ describe('Le dépôt de données des autorisations', () => {
       const a = await depot.autorisation('789');
 
       expect(a.estProprietaire).to.be(false);
-      expect(a.idHomologation).to.equal('123');
       expect(a.idService).to.equal('123');
       expect(a.idUtilisateur).to.equal('000');
       expect(a.droits).to.eql({
