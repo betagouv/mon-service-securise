@@ -82,7 +82,7 @@ const nouvelAdaptateur = (
     return Promise.resolve(serviceTrouve);
   };
 
-  const homologations = (idUtilisateur) =>
+  const services = (idUtilisateur) =>
     autorisations(idUtilisateur).then((as) =>
       Promise.all(as.map(({ idService }) => service(idService)))
     );
@@ -97,7 +97,7 @@ const nouvelAdaptateur = (
     nomService,
     idHomologationMiseAJour
   ) =>
-    homologations(idUtilisateur).then((hs) =>
+    services(idUtilisateur).then((hs) =>
       hs.find(
         (h) =>
           h.id !== idHomologationMiseAJour &&
@@ -322,7 +322,7 @@ const nouvelAdaptateur = (
     autorisationsDuService,
     service,
     homologationAvecNomService,
-    homologations,
+    services,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     marqueNouveauteLue,

@@ -61,8 +61,7 @@ const fabriquePersistance = (
         return new Homologation(donneesEnClair, referentiel);
       },
       ceuxDeUtilisateur: async (idUtilisateur) => {
-        const services =
-          await adaptateurPersistance.homologations(idUtilisateur);
+        const services = await adaptateurPersistance.services(idUtilisateur);
         return services
           .map((s) => new Homologation(s, referentiel))
           .sort((s1, s2) => s1.nomService().localeCompare(s2.nomService()));
