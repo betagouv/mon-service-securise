@@ -37,7 +37,7 @@ const routesConnectePageService = ({
         .utilisateur(idUtilisateurCourant)
         .then((utilisateur) => {
           reponse.render('service/creation', {
-            InformationsHomologation: InformationsService,
+            InformationsService,
             referentiel,
             service: Service.creePourUnUtilisateur(utilisateur),
             etapeActive: 'descriptionService',
@@ -85,7 +85,7 @@ const routesConnectePageService = ({
         reponse.locals.autorisationsService?.DECRIRE?.estLectureSeule;
 
       reponse.render('service/descriptionService', {
-        InformationsHomologation: InformationsService,
+        InformationsService,
         referentiel,
         service,
         etapeActive: 'descriptionService',
@@ -116,7 +116,7 @@ const routesConnectePageService = ({
       );
 
       reponse.render('service/mesures', {
-        InformationsHomologation: InformationsService,
+        InformationsService,
         referentiel,
         service,
         etapeActive: 'mesures',
@@ -176,7 +176,7 @@ const routesConnectePageService = ({
       const referentielConcernes =
         referentiel.formatteListeDeReferentiels(referentiels);
       reponse.render('service/indiceCyber', {
-        InformationsHomologation: InformationsService,
+        InformationsService,
         service,
         etapeActive: 'mesures',
         referentiel,
@@ -193,7 +193,7 @@ const routesConnectePageService = ({
     (requete, reponse) => {
       const { service } = requete;
       reponse.render('service/rolesResponsabilites', {
-        InformationsHomologation: InformationsService,
+        InformationsService,
         service,
         etapeActive: 'contactsUtiles',
         referentiel,
@@ -209,7 +209,7 @@ const routesConnectePageService = ({
     (requete, reponse) => {
       const { service } = requete;
       reponse.render('service/risques', {
-        InformationsHomologation: InformationsService,
+        InformationsService,
         referentiel,
         service,
         etapeActive: 'risques',
@@ -231,7 +231,7 @@ const routesConnectePageService = ({
         ) && service.dossiers.aUnDossierEnCoursDeValidite();
 
       reponse.render('service/dossiers', {
-        InformationsHomologation: InformationsService,
+        InformationsService,
         decode,
         service,
         etapeActive: 'dossiers',
@@ -272,7 +272,7 @@ const routesConnectePageService = ({
         }
 
         reponse.render(`service/etapeDossier/${idEtape}`, {
-          InformationsHomologation: InformationsService,
+          InformationsService,
           referentiel,
           service: s,
           etapeActive: 'dossiers',
