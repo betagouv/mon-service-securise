@@ -106,7 +106,7 @@ const middleware = (configuration = {}) => {
 
     verificationAcceptationCGU(requete, reponse, () =>
       depotDonnees
-        .homologation(idService)
+        .service(idService)
         .then((service) => {
           const idUtilisateur = requete.idUtilisateurCourant;
 

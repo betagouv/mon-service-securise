@@ -49,7 +49,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
     depotDonnees.utilisateur = async () => utilisateurCourant;
 
     const homologation = { nomService: () => '' };
-    depotDonnees.homologation = async () => homologation;
+    depotDonnees.service = async () => homologation;
 
     adaptateurMail = fabriqueAdaptateurMailMemoire();
     adaptateurMail.envoieMessageInvitationContribution = async () => {};
@@ -113,7 +113,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
 
       depotDonnees.utilisateurAvecEmail = async () => contributeur;
       depotDonnees.utilisateur = async () => utilisateurCourant;
-      depotDonnees.homologation = async () => homologation;
+      depotDonnees.service = async () => homologation;
     });
 
     describe("si le contributeur n'a pas déjà été invité", () => {
