@@ -100,7 +100,7 @@ const creeDepot = (config = {}) => {
     referentiel
   );
 
-  const homologation = (idService) => p.lis.un(idService);
+  const service = (idService) => p.lis.un(idService);
 
   const ajouteAItemsDuService = async (nomListeItems, idService, item) => {
     const s = await p.lis.un(idService);
@@ -232,10 +232,10 @@ const creeDepot = (config = {}) => {
       infos
     );
 
-    const service = await p.lis.un(idService);
+    const s = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementDescriptionServiceModifiee({ service, utilisateur })
+      new EvenementDescriptionServiceModifiee({ service: s, utilisateur })
     );
   };
 
@@ -244,12 +244,12 @@ const creeDepot = (config = {}) => {
   const enregistreDossier = (idHomologation, dossier) =>
     ajouteAItemsDuService('dossiers', idHomologation, dossier);
 
-  const finaliseDossierCourant = async (service) => {
-    const dossierAvantFinalisation = service.dossierCourant();
+  const finaliseDossierCourant = async (s) => {
+    const dossierAvantFinalisation = s.dossierCourant();
 
-    service.finaliseDossierCourant();
+    s.finaliseDossierCourant();
 
-    const { id, ...donneesAPersister } = service.donneesAPersister().toutes();
+    const { id, ...donneesAPersister } = s.donneesAPersister().toutes();
     await p.sauvegarde(id, donneesAPersister);
 
     await busEvenements.publie(
@@ -282,10 +282,10 @@ const creeDepot = (config = {}) => {
       proprietaire.donneesAPersister()
     );
 
-    const service = await p.lis.un(idService);
+    const s = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementNouveauServiceCree({ service, utilisateur })
+      new EvenementNouveauServiceCree({ service: s, utilisateur })
     );
 
     return idService;
@@ -348,12 +348,12 @@ const creeDepot = (config = {}) => {
     await duplique(s);
   };
 
-  const metsAJourService = async (service) => {
-    const s = await p.lis.un(service.id);
+  const metsAJourService = async (unService) => {
+    const s = await p.lis.un(unService.id);
     if (typeof s === 'undefined')
-      throw new ErreurServiceInexistant(`Service "${service.id}" non trouvé`);
+      throw new ErreurServiceInexistant(`Service "${unService.id}" non trouvé`);
 
-    await p.sauvegarde(service.id, service.donneesAPersister().toutes());
+    await p.sauvegarde(unService.id, unService.donneesAPersister().toutes());
   };
 
   const metsAJourMesureGeneraleDuService = async (
@@ -361,12 +361,12 @@ const creeDepot = (config = {}) => {
     idUtilisateur,
     mesure
   ) => {
-    const service = await p.lis.un(idService);
-    service.metsAJourMesureGenerale(mesure);
-    await metsAJourService(service);
+    const s = await p.lis.un(idService);
+    s.metsAJourMesureGenerale(mesure);
+    await metsAJourService(s);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service, utilisateur })
+      new EvenementMesuresServiceModifiees({ service: s, utilisateur })
     );
   };
 
@@ -376,10 +376,10 @@ const creeDepot = (config = {}) => {
     mesures
   ) => {
     await remplaceMesuresSpecifiquesPourService(idService, mesures);
-    const service = await p.lis.un(idService);
+    const s = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service, utilisateur })
+      new EvenementMesuresServiceModifiees({ service: s, utilisateur })
     );
   };
 
@@ -390,7 +390,6 @@ const creeDepot = (config = {}) => {
     ajouteRolesResponsabilitesAService,
     dupliqueService,
     finaliseDossierCourant,
-    homologation,
     serviceExiste,
     homologations,
     enregistreDossier,
@@ -398,6 +397,7 @@ const creeDepot = (config = {}) => {
     metsAJourMesuresSpecifiquesDuService,
     metsAJourService,
     nouveauService,
+    service,
     remplaceRisquesSpecifiquesDuService,
     supprimeHomologation,
     tousLesServices,

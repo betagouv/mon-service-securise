@@ -171,7 +171,7 @@ describe('Le dépôt de données des homologations', () => {
       referentiel,
     });
 
-    const homologation = await depot.homologation('789');
+    const homologation = await depot.service('789');
 
     expect(homologation).to.be.a(Homologation);
     expect(homologation.id).to.equal('789');
@@ -197,7 +197,7 @@ describe('Le dépôt de données des homologations', () => {
       .avecAdaptateurPersistance(persistance)
       .construis();
 
-    const homologation = await depot.homologation('S1');
+    const homologation = await depot.service('S1');
 
     const { contributeurs } = homologation;
     expect(contributeurs.length).to.equal(2);
@@ -219,7 +219,7 @@ describe('Le dépôt de données des homologations', () => {
       .avecAdaptateurPersistance(persistance)
       .construis();
 
-    const service = await depot.homologation('S1');
+    const service = await depot.service('S1');
 
     expect(service.routesDesSuggestionsActions()[0].route).to.be('/lien');
   });
@@ -246,7 +246,7 @@ describe('Le dépôt de données des homologations', () => {
 
     const {
       mesures: { mesuresGenerales },
-    } = await depot.homologation('123');
+    } = await depot.service('123');
 
     expect(mesuresGenerales.nombre()).to.equal(1);
     const mesure = mesuresGenerales.item(0);
@@ -294,7 +294,7 @@ describe('Le dépôt de données des homologations', () => {
 
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depot.homologation('S1');
+      const { descriptionService } = await depot.service('S1');
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
@@ -310,7 +310,7 @@ describe('Le dépôt de données des homologations', () => {
 
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depotServices.homologation('S1');
+      const { descriptionService } = await depotServices.service('S1');
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
@@ -373,7 +373,7 @@ describe('Le dépôt de données des homologations', () => {
 
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depotServices.homologation('S1');
+      const { descriptionService } = await depotServices.service('S1');
       expect(descriptionService.organisationResponsable.siret).to.equal(
         '12345'
       );
@@ -392,7 +392,7 @@ describe('Le dépôt de données des homologations', () => {
 
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const { descriptionService } = await depot.homologation('S1');
+      const { descriptionService } = await depot.service('S1');
       expect(descriptionService.presentation).to.equal(
         'Une autre présentation'
       );
@@ -427,7 +427,7 @@ describe('Le dépôt de données des homologations', () => {
     const roles = new RolesResponsabilites({ autoriteHomologation: 'Jean' });
     await depot.ajouteRolesResponsabilitesAService('S1', roles);
 
-    const { rolesResponsabilites } = await depot.homologation('S1');
+    const { rolesResponsabilites } = await depot.service('S1');
     expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean');
   });
 
@@ -457,7 +457,7 @@ describe('Le dépôt de données des homologations', () => {
       const risque = new RisqueGeneral({ id: 'R1' });
       await depot.ajouteRisqueGeneralAService('S1', risque);
 
-      const { risques } = await depot.homologation('S1');
+      const { risques } = await depot.service('S1');
       expect(risques.risquesGeneraux.nombre()).to.equal(1);
       expect(risques.risquesGeneraux.item(0)).to.be.a(RisqueGeneral);
       expect(risques.risquesGeneraux.item(0).id).to.equal('R1');
@@ -483,7 +483,7 @@ describe('Le dépôt de données des homologations', () => {
 
     const {
       risques: { risquesSpecifiques },
-    } = await depot.homologation('S1');
+    } = await depot.service('S1');
     expect(risquesSpecifiques.nombre()).to.equal(1);
     expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
     expect(risquesSpecifiques.item(0).description).to.equal('Un risque');
@@ -514,7 +514,7 @@ describe('Le dépôt de données des homologations', () => {
 
     const {
       risques: { risquesSpecifiques },
-    } = await depot.homologation('S1');
+    } = await depot.service('S1');
     expect(risquesSpecifiques.nombre()).to.equal(1);
     expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
     expect(risquesSpecifiques.item(0).description).to.be('Un nouveau risque');
@@ -647,7 +647,7 @@ describe('Le dépôt de données des homologations', () => {
         descriptionService,
       });
 
-      const service = await depotDonneesServices.homologation(idService);
+      const service = await depotDonneesServices.service(idService);
       expect(service.nomService()).to.equal('Service');
     });
 
@@ -979,7 +979,7 @@ describe('Le dépôt de données des homologations', () => {
 
       depot
         .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.homologation('123'))
+        .then(() => depot.service('123'))
         .then((h) => expect(h.nombreDossiers()).to.equal(1))
         .then(() => done())
         .catch(done);
@@ -1003,7 +1003,7 @@ describe('Le dépôt de données des homologations', () => {
 
       depot
         .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.homologation('123'))
+        .then(() => depot.service('123'))
         .then((h) => expect(h.nombreDossiers()).to.equal(1))
         .then(() => done())
         .catch(done);
@@ -1028,7 +1028,7 @@ describe('Le dépôt de données des homologations', () => {
 
       depot
         .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.homologation('123'))
+        .then(() => depot.service('123'))
         .then((h) => expect(h.dossiers.item(0).id).to.equal('999'))
         .then(() => done())
         .catch(done);
@@ -1099,7 +1099,7 @@ describe('Le dépôt de données des homologations', () => {
 
       depot
         .enregistreDossier('123', dossier)
-        .then(() => depot.homologation('123'))
+        .then(() => depot.service('123'))
         .then((h) => {
           expect(h.nombreDossiers()).to.equal(1);
           const dossierCourant = h.dossierCourant();
@@ -1133,7 +1133,7 @@ describe('Le dépôt de données des homologations', () => {
 
       depot
         .enregistreDossier('123', dossier)
-        .then(() => depot.homologation('123'))
+        .then(() => depot.service('123'))
         .then((h) => {
           expect(h.nombreDossiers()).to.equal(2);
           expect(h.dossiers.item(0).id).to.equal('888');
@@ -1174,7 +1174,7 @@ describe('Le dépôt de données des homologations', () => {
       );
       depot
         .enregistreDossier('123', seulementAutorite)
-        .then(() => depot.homologation('123'))
+        .then(() => depot.service('123'))
         .then((h) => {
           const donneesDossierCourant = h.dossierCourant().toJSON();
           expect(donneesDossierCourant.autorite).to.eql(autorite);
@@ -1554,7 +1554,7 @@ describe('Le dépôt de données des homologations', () => {
 
       const {
         mesures: { mesuresSpecifiques },
-      } = await depot.homologation('123');
+      } = await depot.service('123');
       expect(mesuresSpecifiques.nombre()).to.equal(1);
       expect(mesuresSpecifiques.item(0)).to.be.a(MesureSpecifique);
       expect(mesuresSpecifiques.item(0).description).to.equal(
@@ -1610,7 +1610,7 @@ describe('Le dépôt de données des homologations', () => {
 
       const {
         mesures: { mesuresGenerales },
-      } = await depot.homologation('123');
+      } = await depot.service('123');
       expect(mesuresGenerales.nombre()).to.equal(1);
       expect(mesuresGenerales.item(0)).to.be.a(MesureGenerale);
       expect(mesuresGenerales.item(0).id).to.equal('audit');
