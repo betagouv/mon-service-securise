@@ -128,13 +128,13 @@ const nouvelAdaptateur = (env) => {
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
 
-  const homologations = (idUtilisateur) => {
-    const idsHomologations = knex('autorisations')
+  const services = (idUtilisateur) => {
+    const idsServices = knex('autorisations')
       .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
       .select({ idService: knex.raw("(donnees->>'idService')") })
       .then((lignes) => lignes.map(({ idService }) => idService));
 
-    return avecPMapPourChaqueElement(idsHomologations, service);
+    return avecPMapPourChaqueElement(idsServices, service);
   };
 
   const tousLesServices = async () => {
@@ -443,8 +443,8 @@ const nouvelAdaptateur = (env) => {
     autorisations,
     autorisationsDuService,
     service,
+    services,
     homologationAvecNomService,
-    homologations,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     marqueNouveauteLue,
