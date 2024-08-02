@@ -92,7 +92,6 @@ class Autorisation extends Base {
       estProprietaire: this.estProprietaire,
       id: this.id,
       idService: this.idService,
-      idHomologation: this.idService,
       idUtilisateur: this.idUtilisateur,
       droits: this.droits,
     };
