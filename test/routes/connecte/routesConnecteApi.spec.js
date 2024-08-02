@@ -991,7 +991,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur
         .middleware()
         .verifieAseptisationParametres(
-          ['idHomologation', 'idContributeur'],
+          ['idService', 'idContributeur'],
           { method: 'delete', url: 'http://localhost:1234/api/autorisation' },
           done
         );
@@ -1011,18 +1011,18 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       let autorisationCherchee = {};
       testeur.depotDonnees().autorisationPour = async (
         idUtilisateur,
-        idHomologation
+        idService
       ) => {
-        autorisationCherchee = { idUtilisateur, idHomologation };
+        autorisationCherchee = { idUtilisateur, idService };
         return uneAutorisation().deProprietaire().construis();
       };
 
       await axios.delete('http://localhost:1234/api/autorisation', {
-        params: { idHomologation: '123' },
+        params: { idService: '123' },
       });
 
       expect(autorisationCherchee.idUtilisateur).to.be('456');
-      expect(autorisationCherchee.idHomologation).to.be('123');
+      expect(autorisationCherchee.idService).to.be('123');
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit de supprimer un contributeur", async () => {
@@ -1031,7 +1031,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       try {
         await axios.delete('http://localhost:1234/api/autorisation', {
-          params: { idHomologation: '123' },
+          params: { idService: '123' },
         });
         expect().fail('La requête aurait dû lever une erreur HTTP 403');
       } catch (e) {
@@ -1046,12 +1046,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       let suppressionDemandee = {};
       testeur.depotDonnees().supprimeContributeur = async (
         idContributeur,
-        idHomologation,
+        idService,
         idUtilisateurCourant
       ) => {
         suppressionDemandee = {
           idContributeur,
-          idHomologation,
+          idService,
           idUtilisateurCourant,
         };
         return {};
@@ -1059,13 +1059,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       await axios.delete('http://localhost:1234/api/autorisation', {
         params: {
-          idHomologation: 'ABC',
+          idService: 'ABC',
           idContributeur: '999',
         },
       });
 
       expect(suppressionDemandee.idContributeur).to.be('999');
-      expect(suppressionDemandee.idHomologation).to.be('ABC');
+      expect(suppressionDemandee.idService).to.be('ABC');
       expect(suppressionDemandee.idUtilisateurCourant).to.be('456');
     });
 
@@ -1077,7 +1077,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       try {
         await axios.delete('http://localhost:1234/api/autorisation', {
           params: {
-            idHomologation: '123',
+            idService: '123',
             emailContributeur: 'jean.dupont@mail.fr',
           },
         });
