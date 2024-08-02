@@ -5,7 +5,7 @@ const { unDossier } = require('../constructeurs/constructeurDossier');
 
 const Referentiel = require('../../src/referentiel');
 const InformationsService = require('../../src/modeles/informationsService');
-const Homologation = require('../../src/modeles/homologation');
+const Service = require('../../src/modeles/service');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const Utilisateur = require('../../src/modeles/utilisateur');
 const VueAnnexePDFDescription = require('../../src/modeles/objetsPDF/objetPDFAnnexeDescription');
@@ -25,7 +25,7 @@ const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
 describe('Une homologation', () => {
   it('connaît le nom du service', () => {
-    const homologation = new Homologation({
+    const homologation = new Service({
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'Super Service' },
@@ -150,7 +150,7 @@ describe('Une homologation', () => {
         unAutre: { description: 'Un autre' },
       },
     });
-    const homologation = new Homologation(
+    const homologation = new Service(
       {
         id: '123',
         idUtilisateur: '456',
@@ -166,14 +166,14 @@ describe('Une homologation', () => {
   });
 
   it("se comporte correctement si le type service n'est pas présente", () => {
-    const homologation = new Homologation({ id: '123' });
+    const homologation = new Service({ id: '123' });
     expect(homologation.descriptionTypeService()).to.equal(
       'Type de service non renseignée'
     );
   });
 
   it('connaît les rôles et responsabilités de ses acteurs et parties prenantes', () => {
-    const homologation = new Homologation({
+    const homologation = new Service({
       id: '123',
       rolesResponsabilites: {
         autoriteHomologation: 'Jean Dupont',
@@ -201,7 +201,7 @@ describe('Une homologation', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: {} },
     });
-    const homologation = new Homologation(
+    const homologation = new Service(
       { id: '123', dossiers: [{ id: '999' }] },
       referentiel
     );
@@ -213,7 +213,7 @@ describe('Une homologation', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: {} },
     });
-    const homologation = new Homologation(
+    const homologation = new Service(
       {
         id: '123',
         dossiers: [
@@ -281,7 +281,7 @@ describe('Une homologation', () => {
     });
 
     it("inclut le dossier de décision lorsqu'elle a un dossier d'homologation courant à une étape suffisante et les droits suffisants", () => {
-      const homologationAvecDossier = new Homologation(
+      const homologationAvecDossier = new Service(
         {
           id: '123',
           dossiers: [
@@ -305,7 +305,7 @@ describe('Une homologation', () => {
     });
 
     it("exclut le dossier de décision en cas d'absence de dossier d'homologation courant", () => {
-      const homologationSansDossier = new Homologation(
+      const homologationSansDossier = new Service(
         { id: '123', dossiers: [] },
         referentiel
       );
@@ -323,7 +323,7 @@ describe('Une homologation', () => {
     });
 
     it("exclut le dossier de décision si l'étape courante du dossier d'homologation n'est pas suffisante", () => {
-      const homologationSansDossier = new Homologation(
+      const homologationSansDossier = new Service(
         { id: '123', dossiers: [unDossier(referentiel).donnees] },
         referentiel
       );
@@ -342,7 +342,7 @@ describe('Une homologation', () => {
   });
 
   it('connaît ses risques spécifiques', () => {
-    const homologation = new Homologation({
+    const homologation = new Service({
       id: '123',
       risquesSpecifiques: [{ description: 'Un risque' }],
     });
@@ -354,7 +354,7 @@ describe('Une homologation', () => {
     const moteur = { mesures: () => ({ m1: { indispensable: true } }) };
     const referentiel = Referentiel.creeReferentiel({ mesures: { m1: {} } });
 
-    const homologation = new Homologation(
+    const homologation = new Service(
       {
         id: '123',
         mesuresGenerales: [{ id: 'm1' }],
@@ -371,7 +371,7 @@ describe('Une homologation', () => {
   });
 
   it('connaît ses mesures spécifiques', () => {
-    const homologation = new Homologation({
+    const homologation = new Service({
       id: '123',
       mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
     });
@@ -386,7 +386,7 @@ describe('Une homologation', () => {
     const moteur = { mesures: () => ({ m1: {}, m2: {} }) };
 
     it('détecte que la liste des mesures est à compléter', () => {
-      const homologation = new Homologation(
+      const homologation = new Service(
         {
           mesuresGenerales: [{ id: 'm1', statut: MesureGenerale.STATUT_FAIT }],
         },
@@ -400,7 +400,7 @@ describe('Une homologation', () => {
     });
 
     it('détecte que la liste des mesures est complète', () => {
-      const homologation = new Homologation(
+      const homologation = new Service(
         {
           mesuresGenerales: [
             { id: 'm1', statut: MesureGenerale.STATUT_FAIT },
@@ -419,7 +419,7 @@ describe('Une homologation', () => {
 
   describe('sur évaluation du statut de saisie des risques', () => {
     it('détecte que la liste des risques reste à vérifier', () => {
-      const homologation = new Homologation({ id: '123' });
+      const homologation = new Service({ id: '123' });
       expect(homologation.statutSaisie('risques')).to.equal(
         InformationsService.A_SAISIR
       );
@@ -434,14 +434,14 @@ describe('Une homologation', () => {
   });
 
   it('délègue aux mesures le calcul du nombre total de mesures générales', () => {
-    const homologation = new Homologation({ mesuresGenerales: [] });
+    const homologation = new Service({ mesuresGenerales: [] });
     homologation.mesures.nombreTotalMesuresGenerales = () => 42;
 
     expect(homologation.nombreTotalMesuresGenerales()).to.equal(42);
   });
 
   it('délègue aux mesures le calcul du nombre de mesures spécifiques', () => {
-    const homologation = new Homologation({ mesuresGenerales: [] });
+    const homologation = new Service({ mesuresGenerales: [] });
     homologation.mesures.nombreMesuresSpecifiques = () => 42;
 
     expect(homologation.nombreMesuresSpecifiques()).to.equal(42);
@@ -451,7 +451,7 @@ describe('Une homologation', () => {
     const referentiel = Referentiel.creeReferentiel({
       mesures: { m1: {} },
     });
-    const homologation = new Homologation(
+    const homologation = new Service(
       { mesuresGenerales: [{ id: 'm1', statut: 'enCours' }] },
       referentiel
     );
@@ -471,7 +471,7 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Homologation(
+    const homologation = new Service(
       {
         id: '123',
         idUtilisateur: '456',
@@ -492,7 +492,7 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Homologation(
+    const homologation = new Service(
       {
         id: '123',
         idUtilisateur: '456',
@@ -516,7 +516,7 @@ describe('Une homologation', () => {
       },
     });
 
-    const homologation = new Homologation(
+    const homologation = new Service(
       {
         id: '123',
         idUtilisateur: '456',
@@ -532,7 +532,7 @@ describe('Une homologation', () => {
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe de la description", () => {
-    const homologation = new Homologation({
+    const homologation = new Service({
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'nom' },
@@ -544,7 +544,7 @@ describe('Une homologation', () => {
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des risques", () => {
-    const homologation = new Homologation({
+    const homologation = new Service({
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'nom' },
@@ -554,7 +554,7 @@ describe('Une homologation', () => {
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des mesures", () => {
-    const homologation = new Homologation({
+    const homologation = new Service({
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'nom' },
@@ -578,7 +578,7 @@ describe('Une homologation', () => {
       });
 
       const aujourdhui = new Date();
-      const homologation = new Homologation(
+      const homologation = new Service(
         {
           id: 'id-homologation',
           descriptionService: uneDescriptionValide(
@@ -672,7 +672,7 @@ describe('Une homologation', () => {
       .toJSON();
 
     it('retourne les données sans identifiant', () => {
-      const homologation = new Homologation(
+      const homologation = new Service(
         { id: 'id-homologation', descriptionService },
         referentiel
       );
@@ -683,7 +683,7 @@ describe('Une homologation', () => {
     });
 
     it("utilise le nom d'homologation passé en paramètre", () => {
-      const homologation = new Homologation(
+      const homologation = new Service(
         { id: 'id-homologation', descriptionService },
         referentiel
       );
@@ -696,7 +696,7 @@ describe('Une homologation', () => {
     });
 
     it("ne duplique pas les dossiers de l'homologation", () => {
-      const homologation = new Homologation(
+      const homologation = new Service(
         {
           id: 'id-homologation',
           descriptionService,
@@ -714,7 +714,7 @@ describe('Une homologation', () => {
   describe("sur demande d'instanciation d'un service pour un utilisateur", () => {
     it('retourne un service qui utilise des valeurs par défaut', () => {
       const utilisateur = unUtilisateur().construis();
-      const service = Homologation.creePourUnUtilisateur(utilisateur);
+      const service = Service.creePourUnUtilisateur(utilisateur);
 
       expect(
         service.descriptionService.nombreOrganisationsUtilisatrices
@@ -723,7 +723,7 @@ describe('Une homologation', () => {
 
     it("ajoute le nom de l'entité si l'utilisateur en a une", () => {
       const utilisateur = unUtilisateur().avecNomEntite('ANSSI').construis();
-      const service = Homologation.creePourUnUtilisateur(utilisateur);
+      const service = Service.creePourUnUtilisateur(utilisateur);
 
       expect(service.descriptionService.organisationResponsable.nom).to.eql(
         'ANSSI'

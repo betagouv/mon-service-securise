@@ -11,7 +11,7 @@ const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
 const { creeReferentielVide } = require('../../src/referentiel');
-const Homologation = require('../../src/modeles/homologation');
+const Service = require('../../src/modeles/service');
 
 describe('Le dépôt de données des notifications', () => {
   let depotNotifications;
@@ -99,7 +99,7 @@ describe('Le dépôt de données des notifications', () => {
 
       const taches = await depotNotifications.tachesDesServices('U1');
 
-      expect(taches[0].service).to.be.an(Homologation);
+      expect(taches[0].service).to.be.an(Service);
       expect(taches[0].service.nomService()).to.be('Nom du service');
     });
   });

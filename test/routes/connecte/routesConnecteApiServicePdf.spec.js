@@ -8,7 +8,7 @@ const {
   verifieTypeFichierServiEstZIP,
 } = require('../../aides/verifieFichierServi');
 const { unDossier } = require('../../constructeurs/constructeurDossier');
-const Homologation = require('../../../src/modeles/homologation');
+const Service = require('../../../src/modeles/service');
 const Referentiel = require('../../../src/referentiel');
 const {
   Permissions,
@@ -66,7 +66,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     });
 
     beforeEach(() => {
-      const serviceARenvoyer = new Homologation(
+      const serviceARenvoyer = new Service(
         {
           id: '456',
           descriptionService: { nomService: 'un service' },
@@ -198,7 +198,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
   describe('quand requête GET sur `/api/service/:id/pdf/documentsHomologation.zip`', () => {
     const referentiel = Referentiel.creeReferentielVide();
-    const serviceARenvoyer = new Homologation(
+    const serviceARenvoyer = new Service(
       {
         id: '456',
         descriptionService: { nomService: 'un service' },

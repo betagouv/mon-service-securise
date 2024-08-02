@@ -20,7 +20,7 @@ const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisa
 const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 
 const Dossier = require('../../src/modeles/dossier');
-const Homologation = require('../../src/modeles/homologation');
+const Service = require('../../src/modeles/service');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
@@ -94,7 +94,7 @@ describe('Le dépôt de données des homologations', () => {
     const homologations = await depot.services('456');
 
     expect(homologations.length).to.equal(1);
-    expect(homologations[0]).to.be.a(Homologation);
+    expect(homologations[0]).to.be.a(Service);
     expect(homologations[0].id).to.equal('123');
     expect(homologations[0].referentiel).to.equal(referentiel);
   });
@@ -173,7 +173,7 @@ describe('Le dépôt de données des homologations', () => {
 
     const homologation = await depot.service('789');
 
-    expect(homologation).to.be.a(Homologation);
+    expect(homologation).to.be.a(Service);
     expect(homologation.id).to.equal('789');
     expect(homologation.referentiel).to.equal(referentiel);
     expect(homologation.nomService()).to.be('nom');
