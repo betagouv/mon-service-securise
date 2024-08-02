@@ -69,23 +69,23 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const verificationJWT = (requete, reponse, suite) => {
+  const verificationJWT = async (requete, reponse, suite) => {
     const token = adaptateurJWT.decode(requete.session.token);
     if (!token) {
       const urlDemandee = requete.originalUrl;
       const urlAvecRedirection = ajouteLaRedirectionPostConnexion(urlDemandee);
       reponse.redirect(urlAvecRedirection);
     } else {
-      depotDonnees
-        .utilisateurExiste(token.idUtilisateur)
-        .then((utilisateurExiste) => {
-          if (!utilisateurExiste) reponse.redirect('/connexion');
-          else {
-            requete.idUtilisateurCourant = token.idUtilisateur;
-            requete.cguAcceptees = token.cguAcceptees;
-            suite();
-          }
-        });
+      const utilisateurExiste = await depotDonnees.utilisateurExiste(
+        token.idUtilisateur
+      );
+
+      if (!utilisateurExiste) reponse.redirect('/connexion');
+      else {
+        requete.idUtilisateurCourant = token.idUtilisateur;
+        requete.cguAcceptees = token.cguAcceptees;
+        suite();
+      }
     }
   };
 
