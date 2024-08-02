@@ -31,8 +31,8 @@ $(() => {
     }
   );
 
-  const $bouton = $('.bouton[idHomologation]');
-  const identifiantService = $bouton.attr('idHomologation');
+  const $bouton = $('.bouton[idService]');
+  const identifiantService = $bouton.attr('idService');
 
   $bouton.on('click', async (e) => {
     e.preventDefault();
