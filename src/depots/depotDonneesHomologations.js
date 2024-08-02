@@ -71,7 +71,7 @@ const fabriquePersistance = (
         return donneesServices.map((s) => new Homologation(s, referentiel));
       },
       celuiAvecNom: async (...params) =>
-        adaptateurPersistance.homologationAvecNomService(...params),
+        adaptateurPersistance.serviceAvecNom(...params),
     },
     sauvegarde: async (id, donneesService) => {
       const donneesChiffrees = await chiffre.donneesService(donneesService);

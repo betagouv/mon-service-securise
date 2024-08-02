@@ -92,16 +92,12 @@ const nouvelAdaptateur = (
     return lesIds.map(service);
   };
 
-  const homologationAvecNomService = (
-    idUtilisateur,
-    nomService,
-    idHomologationMiseAJour
-  ) =>
-    services(idUtilisateur).then((hs) =>
-      hs.find(
-        (h) =>
-          h.id !== idHomologationMiseAJour &&
-          h.descriptionService?.nomService === nomService
+  const serviceAvecNom = (idUtilisateur, nomService, idServiceMisAJour) =>
+    services(idUtilisateur).then((lesServices) =>
+      lesServices.find(
+        (s) =>
+          s.id !== idServiceMisAJour &&
+          s.descriptionService?.nomService === nomService
       )
     );
 
@@ -321,7 +317,7 @@ const nouvelAdaptateur = (
     autorisations,
     autorisationsDuService,
     service,
-    homologationAvecNomService,
+    serviceAvecNom,
     services,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
