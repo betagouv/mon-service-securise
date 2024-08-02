@@ -65,7 +65,7 @@ const nouvelAdaptateur = (
   const suggestionsActionsService = (idService) =>
     donnees.suggestionsActions.filter((s) => s.idService === idService);
 
-  const homologation = (id) => {
+  const service = (id) => {
     const homologationTrouvee = donnees.homologations.find((h) => h.id === id);
     if (homologationTrouvee) {
       homologationTrouvee.contributeurs = contributeursService(id);
@@ -75,7 +75,7 @@ const nouvelAdaptateur = (
     return Promise.resolve(homologationTrouvee);
   };
 
-  const service = (id) => {
+  const serviceDeprecated = (id) => {
     const serviceTrouve = donnees.services.find((s) => s.id === id);
     if (serviceTrouve) serviceTrouve.contributeurs = contributeursService(id);
 
@@ -84,12 +84,12 @@ const nouvelAdaptateur = (
 
   const homologations = (idUtilisateur) =>
     autorisations(idUtilisateur).then((as) =>
-      Promise.all(as.map(({ idHomologation }) => homologation(idHomologation)))
+      Promise.all(as.map(({ idHomologation }) => service(idHomologation)))
     );
 
   const tousLesServices = async () => {
     const lesIds = donnees.services.map((s) => s.id);
-    return lesIds.map(homologation);
+    return lesIds.map(service);
   };
 
   const homologationAvecNomService = (
@@ -106,10 +106,10 @@ const nouvelAdaptateur = (
     );
 
   const metsAJourHomologation = (...params) =>
-    metsAJourEnregistrement(homologation, ...params);
+    metsAJourEnregistrement(service, ...params);
 
   const metsAJourService = (...params) =>
-    metsAJourEnregistrement(service, ...params);
+    metsAJourEnregistrement(serviceDeprecated, ...params);
 
   const sauvegardeAutorisation = async (id, donneesAutorisation) => {
     const dejaConnue = donnees.autorisations.find((a) => a.id === id);
@@ -320,7 +320,7 @@ const nouvelAdaptateur = (
     autorisationPour,
     autorisations,
     autorisationsDuService,
-    homologation,
+    service,
     homologationAvecNomService,
     homologations,
     lisNotificationsExpirationHomologationDansIntervalle,
@@ -337,7 +337,7 @@ const nouvelAdaptateur = (
     sauvegardeParcoursUtilisateur,
     sauvegardeHomologation,
     sauvegardeService,
-    service,
+    serviceDeprecated,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,

@@ -866,19 +866,6 @@ describe('Le dépôt de données des homologations', () => {
       });
     });
 
-    it("supprime l'homologation", (done) => {
-      adaptateurPersistance
-        .homologation('123')
-        .then((h) => expect(h).to.be.an(Object))
-        .then(() => depot.supprimeHomologation('123'))
-        .then(() => adaptateurPersistance.homologation('123'))
-        .then((h) => {
-          expect(h).to.be(undefined);
-          done();
-        })
-        .catch(done);
-    });
-
     it('supprime le service', (done) => {
       adaptateurPersistance
         .service('123')

@@ -9,7 +9,9 @@ describe('Le dépôt de données des services', () => {
   it('peut retrouver un service à partir de son identifiant', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
-        services: [{ id: '789', descriptionService: { nomService: 'nom' } }],
+        homologations: [
+          { id: '789', descriptionService: { nomService: 'nom' } },
+        ],
       }
     );
     const referentiel = Referentiel.creeReferentielVide();
