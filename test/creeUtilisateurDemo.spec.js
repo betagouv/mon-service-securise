@@ -8,6 +8,9 @@ describe("Le script de création d'un utilisateur de Démo", () => {
       'CREATION_UTILISATEUR_DEMO=true',
       'EMAIL_UTILISATEUR_DEMO=jean.dujardin@beta.gouv.fr',
       'MOT_DE_PASSE_UTILISATEUR_DEMO=UnMotDePasse',
+      'SIRET_ENTITE_UTILISATEUR_DEMO=13000766900018',
+      'NOM_ENTITE_UTILISATEUR_DEMO=ANSSI',
+      'DEPARTEMENT_ENTITE_UTILISATEUR_DEMO=75',
       'NODE_ENV=TEST',
     ].join(' ');
 
