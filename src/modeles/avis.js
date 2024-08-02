@@ -1,11 +1,11 @@
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 const {
   ErreurDureeValiditeInvalide,
   ErreurAvisInvalide,
 } = require('../erreurs');
 const Referentiel = require('../referentiel');
 
-class Avis extends InformationsHomologation {
+class Avis extends InformationsService {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
       proprietesAtomiquesRequises: Avis.proprietesAtomiquesRequises(),
@@ -45,16 +45,16 @@ class Avis extends InformationsHomologation {
     const collaborateursSaisis =
       this.collaborateurs.length > 0 && this.collaborateurs.every((c) => !!c);
     switch (statutSaisieProprietesAtomiques) {
-      case InformationsHomologation.COMPLETES:
+      case InformationsService.COMPLETES:
         return collaborateursSaisis
-          ? InformationsHomologation.COMPLETES
-          : InformationsHomologation.A_COMPLETER;
-      case InformationsHomologation.A_SAISIR:
+          ? InformationsService.COMPLETES
+          : InformationsService.A_COMPLETER;
+      case InformationsService.A_SAISIR:
         return collaborateursSaisis
-          ? InformationsHomologation.A_COMPLETER
-          : InformationsHomologation.A_SAISIR;
+          ? InformationsService.A_COMPLETER
+          : InformationsService.A_SAISIR;
       default:
-        return InformationsHomologation.A_COMPLETER;
+        return InformationsService.A_COMPLETER;
     }
   }
 }

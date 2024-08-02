@@ -4,14 +4,14 @@ const {
 } = require('../erreurs');
 const DonneesSensiblesSpecifiques = require('./donneesSensiblesSpecifiques');
 const FonctionnalitesSpecifiques = require('./fonctionnalitesSpecifiques');
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 const PointsAcces = require('./pointsAcces');
 const Referentiel = require('../referentiel');
 const Entite = require('./entite');
 
 const tousNiveauxSecurite = ['niveau1', 'niveau2', 'niveau3'];
 
-class DescriptionService extends InformationsHomologation {
+class DescriptionService extends InformationsService {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
       proprietesAtomiquesRequises: [

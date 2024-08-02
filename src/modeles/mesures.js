@@ -1,4 +1,4 @@
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 const MesuresGenerales = require('./mesuresGenerales');
 const MesuresSpecifiques = require('./mesuresSpecifiques');
 const Referentiel = require('../referentiel');
@@ -23,7 +23,7 @@ function mesuresGeneralesApplicables(
   );
 }
 
-class Mesures extends InformationsHomologation {
+class Mesures extends InformationsService {
   constructor(
     donnees = {},
     referentiel = Referentiel.creeReferentielVide(),

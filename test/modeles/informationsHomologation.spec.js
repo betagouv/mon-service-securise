@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 const expect = require('expect.js');
 
-const InformationsHomologation = require('../../src/modeles/informationsHomologation');
+const InformationsHomologation = require('../../src/modeles/informationsService');
 const ElementsConstructibles = require('../../src/modeles/elementsConstructibles');
 
 const elles = it;

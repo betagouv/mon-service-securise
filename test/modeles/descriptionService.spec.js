@@ -6,7 +6,7 @@ const {
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const DescriptionService = require('../../src/modeles/descriptionService');
-const InformationsHomologation = require('../../src/modeles/informationsHomologation');
+const InformationsHomologation = require('../../src/modeles/informationsService');
 
 const elle = it;
 

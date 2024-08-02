@@ -5,7 +5,7 @@ const {
   ErreurAvisInvalide,
 } = require('../../src/erreurs');
 const Avis = require('../../src/modeles/avis');
-const InformationsHomologation = require('../../src/modeles/informationsHomologation');
+const InformationsHomologation = require('../../src/modeles/informationsService');
 const Referentiel = require('../../src/referentiel');
 
 describe("Un avis sur un dossier d'homologation", () => {

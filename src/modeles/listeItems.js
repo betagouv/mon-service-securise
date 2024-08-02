@@ -1,6 +1,6 @@
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 
-class ListeItems extends InformationsHomologation {
+class ListeItems extends InformationsService {
   constructor(fonctionCreation, donnees, referentiel) {
     super();
     const { items } = donnees;
@@ -17,13 +17,13 @@ class ListeItems extends InformationsHomologation {
   }
 
   statutSaisie() {
-    if (this.nombre() === 0) return InformationsHomologation.A_SAISIR;
+    if (this.nombre() === 0) return InformationsService.A_SAISIR;
 
     return this.items.every(
-      (i) => i.statutSaisie() === InformationsHomologation.COMPLETES
+      (i) => i.statutSaisie() === InformationsService.COMPLETES
     )
-      ? InformationsHomologation.COMPLETES
-      : InformationsHomologation.A_COMPLETER;
+      ? InformationsService.COMPLETES
+      : InformationsService.A_COMPLETER;
   }
 
   toJSON() {

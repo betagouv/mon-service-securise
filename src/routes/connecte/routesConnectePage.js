@@ -2,7 +2,7 @@ const express = require('express');
 const { decode } = require('html-entities');
 const Utilisateur = require('../../modeles/utilisateur');
 const Service = require('../../modeles/service');
-const InformationsHomologation = require('../../modeles/informationsHomologation');
+const InformationsHomologation = require('../../modeles/informationsService');
 const routesConnectePageService = require('./routesConnectePageService');
 
 const routesConnectePage = ({

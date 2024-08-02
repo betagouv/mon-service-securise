@@ -1,7 +1,7 @@
 const express = require('express');
 const { decode } = require('html-entities');
 
-const InformationsHomologation = require('../../modeles/informationsHomologation');
+const InformationsHomologation = require('../../modeles/informationsService');
 
 const {
   Permissions,

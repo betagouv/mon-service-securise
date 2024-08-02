@@ -3,7 +3,7 @@
      ["error", { "exceptMethods": ["estIndispensable", "estRecommandee"] }]
 */
 
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 const {
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
@@ -16,7 +16,7 @@ const STATUTS = {
   STATUT_A_LANCER: 'aLancer',
 };
 
-class Mesure extends InformationsHomologation {
+class Mesure extends InformationsService {
   estIndispensable() {
     return false;
   }

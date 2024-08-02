@@ -2,9 +2,9 @@ const { ErreurDonneesObligatoiresManquantes } = require('../erreurs');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('../adaptateurs/fabriqueAdaptateurGestionErreur');
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 
-class Entite extends InformationsHomologation {
+class Entite extends InformationsService {
   constructor(donnees = {}) {
     super({
       proprietesAtomiquesRequises: ['siret'],

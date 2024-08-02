@@ -1,8 +1,8 @@
-const InformationsHomologation = require('./informationsHomologation');
+const InformationsService = require('./informationsService');
 const NiveauGravite = require('./niveauGravite');
 const Referentiel = require('../referentiel');
 
-class Risque extends InformationsHomologation {
+class Risque extends InformationsService {
   constructor(
     donneesRisque = {},
     referentiel = Referentiel.creeReferentielVide()
