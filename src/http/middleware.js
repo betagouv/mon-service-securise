@@ -74,19 +74,17 @@ const middleware = (configuration = {}) => {
     if (!token) {
       const urlDemandee = requete.originalUrl;
       const urlAvecRedirection = ajouteLaRedirectionPostConnexion(urlDemandee);
-      reponse.redirect(urlAvecRedirection);
-    } else {
-      const utilisateurExiste = await depotDonnees.utilisateurExiste(
-        token.idUtilisateur
-      );
-
-      if (!utilisateurExiste) reponse.redirect('/connexion');
-      else {
-        requete.idUtilisateurCourant = token.idUtilisateur;
-        requete.cguAcceptees = token.cguAcceptees;
-        suite();
-      }
+      return reponse.redirect(urlAvecRedirection);
     }
+
+    const utilisateurExiste = await depotDonnees.utilisateurExiste(
+      token.idUtilisateur
+    );
+    if (!utilisateurExiste) return reponse.redirect('/connexion');
+
+    requete.idUtilisateurCourant = token.idUtilisateur;
+    requete.cguAcceptees = token.cguAcceptees;
+    return suite();
   };
 
   const verificationAcceptationCGU = (requete, reponse, suite) => {
