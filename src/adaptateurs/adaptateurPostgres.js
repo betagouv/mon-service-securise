@@ -106,24 +106,20 @@ const nouvelAdaptateur = (env) => {
 
   const serviceDeprecated = (id) => elementDeTable('services', id);
 
-  const homologationAvecNomService = (
-    idUtilisateur,
-    nomService,
-    idHomologationMiseAJour = ''
-  ) =>
-    knex('homologations')
+  const serviceAvecNom = (idUtilisateur, nomService, idServiceMisAJour = '') =>
+    knex('services')
       .join(
         'autorisations',
         knex.raw("(autorisations.donnees->>'idService')::uuid"),
-        'homologations.id'
+        'services.id'
       )
       .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
-      .whereRaw('not homologations.id::text=?', idHomologationMiseAJour)
+      .whereRaw('not services.id::text=?', idServiceMisAJour)
       .whereRaw(
-        "homologations.donnees#>>'{descriptionService,nomService}'=?",
+        "services.donnees#>>'{descriptionService,nomService}'=?",
         nomService
       )
-      .select('homologations.*')
+      .select('services.*')
       .first()
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
@@ -443,8 +439,8 @@ const nouvelAdaptateur = (env) => {
     autorisations,
     autorisationsDuService,
     service,
+    serviceAvecNom,
     services,
-    homologationAvecNomService,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     marqueNouveauteLue,
