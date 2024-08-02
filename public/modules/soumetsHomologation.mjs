@@ -15,7 +15,7 @@ const initialiseComportementFormulaire = (
   adaptateurAjax = adaptateurAjaxAxios
 ) => {
   const $bouton = $(selecteurBouton);
-  const identifiantService = $bouton.attr('idHomologation');
+  const identifiantService = $bouton.attr('idService');
   const requete = identifiantService
     ? { method: 'put', url: `/api/service/${identifiantService}` }
     : { method: 'post', url: '/api/service' };
