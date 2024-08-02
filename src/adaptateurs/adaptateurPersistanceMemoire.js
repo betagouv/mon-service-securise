@@ -53,7 +53,7 @@ const nouvelAdaptateur = (
 
   const contributeursService = (idService) =>
     donnees.autorisations
-      .filter((a) => a.idHomologation === idService)
+      .filter((a) => a.idService === idService)
       .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
 
   const suggestionsActionsService = (idService) =>
@@ -150,12 +150,10 @@ const nouvelAdaptateur = (
   const autorisationsDuService = async (idService) =>
     donnees.autorisations.filter((a) => a.idService === idService);
 
-  const autorisationPour = (idUtilisateur, idHomologation) =>
+  const autorisationPour = (idUtilisateur, idService) =>
     Promise.resolve(
       donnees.autorisations.find(
-        (a) =>
-          a.idUtilisateur === idUtilisateur &&
-          a.idHomologation === idHomologation
+        (a) => a.idUtilisateur === idUtilisateur && a.idService === idService
       )
     );
 
@@ -171,10 +169,9 @@ const nouvelAdaptateur = (
       ).length
     );
 
-  const supprimeAutorisation = (idUtilisateur, idHomologation) => {
+  const supprimeAutorisation = (idUtilisateur, idService) => {
     donnees.autorisations = donnees.autorisations.filter(
-      (a) =>
-        a.idUtilisateur !== idUtilisateur || a.idHomologation !== idHomologation
+      (a) => a.idUtilisateur !== idUtilisateur || a.idService !== idService
     );
     return Promise.resolve();
   };
@@ -188,9 +185,9 @@ const nouvelAdaptateur = (
     );
   };
 
-  const supprimeAutorisationsHomologation = (idHomologation) => {
+  const supprimeAutorisationsHomologation = (idService) => {
     donnees.autorisations = donnees.autorisations.filter(
-      (a) => a.idHomologation !== idHomologation
+      (a) => a.idService !== idService
     );
     return Promise.resolve();
   };

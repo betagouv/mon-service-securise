@@ -26,11 +26,9 @@ const creeDepot = (config = {}) => {
       .autorisations(idUtilisateur)
       .then((as) => as.map((a) => FabriqueAutorisation.fabrique(a)));
 
-  const accesAutorise = async (idUtilisateur, idHomologation, droitsRequis) => {
+  const accesAutorise = async (idUtilisateur, idService, droitsRequis) => {
     const as = await autorisations(idUtilisateur);
-    const autorisationPourService = as.find(
-      (a) => a.idService === idHomologation
-    );
+    const autorisationPourService = as.find((a) => a.idService === idService);
 
     if (!autorisationPourService) return false;
 
