@@ -10,7 +10,7 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
 } = require('../../../src/erreurs');
-const Homologation = require('../../../src/modeles/homologation');
+const Service = require('../../../src/modeles/service');
 const {
   Permissions,
   Rubriques,
@@ -844,7 +844,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur /api/service/:id/homologation/autorite', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Homologation({
+      const homologationAvecDossier = new Service({
         id: '456',
         descriptionService: { nomService: 'un service' },
         dossiers: [{ id: '999' }],
@@ -911,7 +911,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur /api/service/:id/homologation/decision', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Homologation({
+      const homologationAvecDossier = new Service({
         id: '456',
         descriptionService: { nomService: 'un service' },
         dossiers: [{ id: '999' }],
@@ -1009,7 +1009,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur `/api/service/:id/homologation/telechargement', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Homologation({
+      const homologationAvecDossier = new Service({
         id: '456',
         descriptionService: { nomService: 'un service' },
         dossiers: [{ id: '999' }],
@@ -1069,7 +1069,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur /api/service/:id/homologation/avis', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Homologation(
+      const homologationAvecDossier = new Service(
         {
           id: '456',
           descriptionService: { nomService: 'un service' },
@@ -1214,7 +1214,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur /api/service/:id/homologation/documents', () => {
     beforeEach(() => {
-      const homologationAvecDossier = new Homologation(
+      const homologationAvecDossier = new Service(
         {
           id: '456',
           descriptionService: { nomService: 'un service' },
@@ -1327,7 +1327,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         echeancesRenouvellement: { unAn: {} },
         statutsAvisDossierHomologation: { favorable: {} },
       });
-      const homologationAvecDossier = new Homologation(
+      const homologationAvecDossier = new Service(
         {
           id: '456',
           descriptionService: { nomService: 'un service' },

@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 
-const Homologation = require('../../../src/modeles/homologation');
+const Service = require('../../../src/modeles/service');
 const Referentiel = require('../../../src/referentiel');
 const VueAnnexePDFDescription = require('../../../src/modeles/objetsPDF/objetPDFAnnexeDescription');
 
@@ -21,7 +21,7 @@ describe("L'objet PDF de l'annexe de description", () => {
     },
   };
   const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
-  const homologation = new Homologation(
+  const homologation = new Service(
     {
       id: '123',
       idUtilisateur: '456',
