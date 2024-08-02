@@ -16,7 +16,7 @@ const creeDepot = (config = {}) => {
   const {
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
-    depotHomologations,
+    depotServices,
     depotUtilisateurs,
     busEvenements,
   } = config;
@@ -89,7 +89,7 @@ const creeDepot = (config = {}) => {
     };
 
     const verifieServiceExiste = async (id) => {
-      const h = await depotHomologations.homologation(
+      const h = await depotServices.homologation(
         nouvelleAutorisation.idService
       );
       if (!h)

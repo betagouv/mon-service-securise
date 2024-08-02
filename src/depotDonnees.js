@@ -35,15 +35,14 @@ const creeDepot = (config = {}) => {
     adaptateurJWT,
     adaptateurPersistance,
     adaptateurUUID,
-    depotHomologations: depotServices,
-    busEvenements,
     adaptateurRechercheEntite,
+    busEvenements,
   });
 
   const depotAutorisations = depotDonneesAutorisations.creeDepot({
     adaptateurPersistance,
     adaptateurUUID,
-    depotHomologations: depotServices,
+    depotServices,
     depotUtilisateurs,
     busEvenements,
   });
