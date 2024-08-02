@@ -5,7 +5,7 @@ const { depotVide } = require('./depots/depotVide');
 describe('Le dépôt de données vide', () => {
   it('ne retourne aucune homologation pour un utilisateur donné', (done) => {
     depotVide()
-      .then((depot) => depot.homologations('456'))
+      .then((depot) => depot.services('456'))
       .then((hs) => expect(hs).to.eql([]))
       .then(() => done())
       .catch(done);

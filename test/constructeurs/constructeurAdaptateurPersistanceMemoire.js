@@ -37,7 +37,6 @@ class ConstructeurAdaptateurPersistanceMemoire {
   construis() {
     return AdaptateurPersistanceMemoire.nouvelAdaptateur({
       autorisations: this.autorisations,
-      homologations: this.services,
       services: this.services,
       utilisateurs: this.utilisateurs,
       notificationsExpirationHomologation:

@@ -10,7 +10,7 @@ function envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees }) {
 
     if (!utilisateur) leveException("l'utilisateur");
 
-    const services = await depotDonnees.homologations(utilisateur.id);
+    const services = await depotDonnees.services(utilisateur.id);
 
     await adaptateurTracking.envoieTrackingNouveauServiceCree(
       utilisateur.email,
