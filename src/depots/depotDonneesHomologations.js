@@ -52,12 +52,12 @@ const fabriquePersistance = (
 
   const persistance = {
     lis: {
-      une: async (idHomologation) => {
-        const h = await adaptateurPersistance.homologation(idHomologation);
+      un: async (idService) => {
+        const s = await adaptateurPersistance.homologation(idService);
 
-        if (!h) return undefined;
+        if (!s) return undefined;
 
-        const donneesEnClair = await dechiffre.donneesService(h);
+        const donneesEnClair = await dechiffre.donneesService(s);
         return new Homologation(donneesEnClair, referentiel);
       },
       cellesDeUtilisateur: async (idUtilisateur) => {
@@ -106,10 +106,10 @@ const creeDepot = (config = {}) => {
     referentiel
   );
 
-  const homologation = (idHomologation) => p.lis.une(idHomologation);
+  const homologation = (idHomologation) => p.lis.un(idHomologation);
 
   const ajouteAItemsDuService = async (nomListeItems, idService, item) => {
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     const donneesAPersister = s.donneesAPersister().toutes();
     donneesAPersister[nomListeItems] ||= [];
 
@@ -139,7 +139,7 @@ const creeDepot = (config = {}) => {
     const trouveDonneesService = (param) =>
       typeof param === 'object'
         ? Promise.resolve(param)
-        : p.lis.une(param).then((h) => h.donneesAPersister().toutes());
+        : p.lis.un(param).then((h) => h.donneesAPersister().toutes());
 
     return trouveDonneesService(idOuService).then(metsAJour);
   };
@@ -152,7 +152,7 @@ const creeDepot = (config = {}) => {
     idService,
     propriete
   ) => {
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     const donneesAPersister = s.donneesAPersister().toutes();
     donneesAPersister[nomPropriete] = propriete.toJSON();
 
@@ -161,7 +161,7 @@ const creeDepot = (config = {}) => {
   };
 
   const ajouteDossierCourantSiNecessaire = async (idService) => {
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
 
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
@@ -230,7 +230,7 @@ const creeDepot = (config = {}) => {
     p.lis.cellesDeUtilisateur(idUtilisateur);
 
   const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
-    const existant = await p.lis.une(idService);
+    const existant = await p.lis.un(idService);
     await valideDescriptionService(idUtilisateur, infos, existant.id);
     await completeDescriptionService(infos);
     await metsAJourDescriptionService(
@@ -238,7 +238,7 @@ const creeDepot = (config = {}) => {
       infos
     );
 
-    const service = await p.lis.une(idService);
+    const service = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
       new EvenementDescriptionServiceModifiee({ service, utilisateur })
@@ -288,7 +288,7 @@ const creeDepot = (config = {}) => {
       proprietaire.donneesAPersister()
     );
 
-    const service = await p.lis.une(idService);
+    const service = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
       new EvenementNouveauServiceCree({ service, utilisateur })
@@ -301,7 +301,7 @@ const creeDepot = (config = {}) => {
     remplaceProprieteService('risquesSpecifiques', ...params);
 
   const supprimeHomologation = async (idService) => {
-    const { contributeurs } = await p.lis.une(idService);
+    const { contributeurs } = await p.lis.un(idService);
     await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
     await p.supprime(idService);
     await busEvenements.publie(
@@ -347,7 +347,7 @@ const creeDepot = (config = {}) => {
       await nouveauService(idProprietaire, donnees);
     };
 
-    const s = await p.lis.une(idService);
+    const s = await p.lis.un(idService);
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
 
@@ -355,7 +355,7 @@ const creeDepot = (config = {}) => {
   };
 
   const metsAJourService = async (service) => {
-    const s = await p.lis.une(service.id);
+    const s = await p.lis.un(service.id);
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${service.id}" non trouvé`);
 
@@ -367,7 +367,7 @@ const creeDepot = (config = {}) => {
     idUtilisateur,
     mesure
   ) => {
-    const service = await p.lis.une(idService);
+    const service = await p.lis.un(idService);
     service.metsAJourMesureGenerale(mesure);
     await metsAJourService(service);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
@@ -382,7 +382,7 @@ const creeDepot = (config = {}) => {
     mesures
   ) => {
     await remplaceMesuresSpecifiquesPourService(idService, mesures);
-    const service = await p.lis.une(idService);
+    const service = await p.lis.un(idService);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
       new EvenementMesuresServiceModifiees({ service, utilisateur })
