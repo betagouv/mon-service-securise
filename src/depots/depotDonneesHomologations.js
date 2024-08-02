@@ -60,11 +60,12 @@ const fabriquePersistance = (
         const donneesEnClair = await dechiffre.donneesService(s);
         return new Homologation(donneesEnClair, referentiel);
       },
-      cellesDeUtilisateur: async (idUtilisateur) => {
-        const hs = await adaptateurPersistance.homologations(idUtilisateur);
-        return hs
-          .map((h) => new Homologation(h, referentiel))
-          .sort((h1, h2) => h1.nomService().localeCompare(h2.nomService()));
+      ceuxDeUtilisateur: async (idUtilisateur) => {
+        const services =
+          await adaptateurPersistance.homologations(idUtilisateur);
+        return services
+          .map((s) => new Homologation(s, referentiel))
+          .sort((s1, s2) => s1.nomService().localeCompare(s2.nomService()));
       },
       toutes: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
@@ -227,7 +228,7 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteService('rolesResponsabilites', ...params);
 
   const homologations = (idUtilisateur) =>
-    p.lis.cellesDeUtilisateur(idUtilisateur);
+    p.lis.ceuxDeUtilisateur(idUtilisateur);
 
   const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
     const existant = await p.lis.un(idService);
@@ -332,7 +333,7 @@ const creeDepot = (config = {}) => {
       return Math.max(0, resultat) + 1;
     };
 
-    const services = await p.lis.cellesDeUtilisateur(idProprietaire);
+    const services = await p.lis.ceuxDeUtilisateur(idProprietaire);
     return indexMax(services);
   };
 
