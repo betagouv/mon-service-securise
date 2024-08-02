@@ -14,7 +14,6 @@ class Autorisation extends Base {
         'estProprietaire',
         'id',
         'idUtilisateur',
-        'idHomologation',
         'idService',
         'droits',
         'type',

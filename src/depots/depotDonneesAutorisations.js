@@ -29,7 +29,7 @@ const creeDepot = (config = {}) => {
   const accesAutorise = async (idUtilisateur, idHomologation, droitsRequis) => {
     const as = await autorisations(idUtilisateur);
     const autorisationPourService = as.find(
-      (a) => a.idHomologation === idHomologation
+      (a) => a.idService === idHomologation
     );
 
     if (!autorisationPourService) return false;
