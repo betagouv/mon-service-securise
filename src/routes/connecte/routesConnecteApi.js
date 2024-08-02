@@ -338,10 +338,10 @@ const routesConnecteApi = ({
   routes.delete(
     '/autorisation',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('idHomologation', 'idContributeur'),
+    middleware.aseptise('idService', 'idContributeur'),
     async (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
-      const { idHomologation: idService, idContributeur } = requete.query;
+      const { idService, idContributeur } = requete.query;
 
       const verifiePermissionSuppression = async () => {
         const a = await depotDonnees.autorisationPour(idUtilisateur, idService);

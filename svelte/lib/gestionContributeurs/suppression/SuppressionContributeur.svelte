@@ -7,7 +7,7 @@
 
   const supprimeContributeur = async () => {
     await axios.delete('/api/autorisation', {
-      params: { idHomologation: service.id, idContributeur: utilisateur.id },
+      params: { idService: service.id, idContributeur: utilisateur.id },
     });
     store.contributeurs.supprime(utilisateur);
     document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
