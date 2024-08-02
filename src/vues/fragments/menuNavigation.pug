@@ -6,8 +6,8 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
     const estActive = etapeActive === id
     const statutSaisie = (s) => {
       switch (s) {
-        case InformationsHomologation.COMPLETES: return 'faite';
-        case InformationsHomologation.A_COMPLETER: return 'en-cours';
+        case InformationsService.COMPLETES: return 'faite';
+        case InformationsService.A_COMPLETER: return 'en-cours';
         default: return '';
       }
     }

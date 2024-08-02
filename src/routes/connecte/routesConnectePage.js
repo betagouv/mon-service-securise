@@ -103,7 +103,7 @@ const routesConnectePage = ({
 
       if (idEtape === 'decrire') {
         reponse.render('service/creation', {
-          InformationsHomologation: InformationsService,
+          InformationsService,
           referentiel,
           service,
           etapeActive: 'descriptionService',
@@ -115,7 +115,7 @@ const routesConnectePage = ({
 
         service.indiceCyber = () => ({ total: 4.3 });
         reponse.render('service/mesures', {
-          InformationsHomologation: InformationsService,
+          InformationsService,
           referentiel,
           service,
           etapeActive: 'mesures',
@@ -124,7 +124,7 @@ const routesConnectePage = ({
         });
       } else if (idEtape === 'homologuer') {
         reponse.render('service/dossiers', {
-          InformationsHomologation: InformationsService,
+          InformationsService,
           decode,
           service,
           etapeActive: 'dossiers',
