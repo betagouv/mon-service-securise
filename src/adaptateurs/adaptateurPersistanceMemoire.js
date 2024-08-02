@@ -5,7 +5,6 @@ const nouvelAdaptateur = (
   adaptateurHorloge = adaptateurHorlogeParDefaut
 ) => {
   donnees.utilisateurs ||= [];
-  donnees.homologations ||= [];
   donnees.services ||= [];
   donnees.autorisations ||= [];
   donnees.parcoursUtilisateurs ||= [];
@@ -24,11 +23,6 @@ const nouvelAdaptateur = (
 
   const supprimeEnregistrement = (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
-    return Promise.resolve();
-  };
-
-  const ajouteHomologation = (id, donneesHomologation) => {
-    donnees.homologations.push({ id, ...donneesHomologation });
     return Promise.resolve();
   };
 
@@ -66,13 +60,13 @@ const nouvelAdaptateur = (
     donnees.suggestionsActions.filter((s) => s.idService === idService);
 
   const service = (id) => {
-    const homologationTrouvee = donnees.homologations.find((h) => h.id === id);
-    if (homologationTrouvee) {
-      homologationTrouvee.contributeurs = contributeursService(id);
-      homologationTrouvee.suggestionsActions = suggestionsActionsService(id);
+    const serviceTrouve = donnees.services.find((h) => h.id === id);
+    if (serviceTrouve) {
+      serviceTrouve.contributeurs = contributeursService(id);
+      serviceTrouve.suggestionsActions = suggestionsActionsService(id);
     }
 
-    return Promise.resolve(homologationTrouvee);
+    return Promise.resolve(serviceTrouve);
   };
 
   const serviceDeprecated = (id) => {
@@ -101,9 +95,6 @@ const nouvelAdaptateur = (
       )
     );
 
-  const metsAJourHomologation = (...params) =>
-    metsAJourEnregistrement(service, ...params);
-
   const metsAJourService = (...params) =>
     metsAJourEnregistrement(serviceDeprecated, ...params);
 
@@ -114,14 +105,6 @@ const nouvelAdaptateur = (
     else Object.assign(dejaConnue, { ...donneesAutorisation });
   };
 
-  const sauvegardeHomologation = (id, donneesHomologation) => {
-    const dejaConnue =
-      donnees.homologations.find((h) => h.id === id) !== undefined;
-    return dejaConnue
-      ? metsAJourHomologation(id, donneesHomologation)
-      : ajouteHomologation(id, donneesHomologation);
-  };
-
   const sauvegardeService = (id, donneesService) => {
     const dejaConnu = donnees.services.find((s) => s.id === id) !== undefined;
     return dejaConnu
@@ -129,16 +112,13 @@ const nouvelAdaptateur = (
       : ajouteService(id, donneesService);
   };
 
-  const supprimeHomologation = (...params) =>
-    supprimeEnregistrement('homologations', ...params);
-
-  const supprimeHomologations = () => {
-    donnees.homologations = [];
-    return Promise.resolve();
-  };
-
   const supprimeService = (...params) =>
     supprimeEnregistrement('services', ...params);
+
+  const supprimeServices = () => {
+    donnees.services = [];
+    return Promise.resolve();
+  };
 
   const supprimeUtilisateur = (...params) =>
     supprimeEnregistrement('utilisateurs', ...params);
@@ -331,18 +311,16 @@ const nouvelAdaptateur = (
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
-    sauvegardeHomologation,
     sauvegardeService,
     serviceDeprecated,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
-    supprimeHomologation,
-    supprimeHomologations,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
+    supprimeServices,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,

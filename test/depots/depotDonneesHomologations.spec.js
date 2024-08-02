@@ -605,8 +605,8 @@ describe('Le dépôt de données des homologations', () => {
     it('chiffre les données métier avant de les stocker', async () => {
       let donneesPersistees;
 
-      const persistanceReelle = adaptateurPersistance.sauvegardeHomologation;
-      adaptateurPersistance.sauvegardeHomologation = (id, donnees) => {
+      const persistanceReelle = adaptateurPersistance.sauvegardeService;
+      adaptateurPersistance.sauvegardeService = (id, donnees) => {
         donneesPersistees = donnees;
         return persistanceReelle(id, donnees);
       };
@@ -884,7 +884,7 @@ describe('Le dépôt de données des homologations', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'contributeur@mail.fr' },
         ],
-        homologations: [
+        services: [
           { id: '111', descriptionService: { nomService: 'Un service' } },
           { id: '222', descriptionService: { nomService: 'Un autre service' } },
         ],
@@ -922,7 +922,7 @@ describe('Le dépôt de données des homologations', () => {
           { id: '999', email: 'jean.dupont@mail.fr' },
           { id: '000', email: 'contributeur@mail.fr' },
         ],
-        homologations: [
+        services: [
           { id: '111', descriptionService: { nomService: 'Un service' } },
         ],
         autorisations: [
@@ -1231,7 +1231,7 @@ describe('Le dépôt de données des homologations', () => {
 
     it('enregistre le service', async () => {
       let donneesPassees = {};
-      adaptateurPersistance.sauvegardeHomologation = async (id, donnees) => {
+      adaptateurPersistance.sauvegardeService = async (id, donnees) => {
         donneesPassees = { id, donnees };
       };
       const mesuresPersonnalises = {
@@ -1368,7 +1368,7 @@ describe('Le dépôt de données des homologations', () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [{ id: '123', descriptionService }],
+          services: [{ id: '123', descriptionService }],
           autorisations: [
             uneAutorisation().deProprietaire('999', '123').donnees,
           ],
@@ -1395,7 +1395,7 @@ describe('Le dépôt de données des homologations', () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [{ id: '123', descriptionService: copie1 }],
+          services: [{ id: '123', descriptionService: copie1 }],
           autorisations: [
             uneAutorisation().deProprietaire('999', '123').donnees,
           ],
@@ -1426,7 +1426,7 @@ describe('Le dépôt de données des homologations', () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [
+          services: [
             { id: '123', descriptionService: original },
             { id: '456', descriptionService: duplication },
           ],
@@ -1457,7 +1457,7 @@ describe('Le dépôt de données des homologations', () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
-          homologations: [{ id: '123', descriptionService: original }],
+          services: [{ id: '123', descriptionService: original }],
           autorisations: [
             uneAutorisation().deProprietaire('999', '123').donnees,
           ],
