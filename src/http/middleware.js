@@ -18,7 +18,6 @@ const { ajouteLaRedirectionPostConnexion } = require('./redirection');
 const middleware = (configuration = {}) => {
   const {
     depotDonnees,
-    adaptateurChiffrement,
     adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
     adaptateurJWT,
     adaptateurProtection,
@@ -59,15 +58,6 @@ const middleware = (configuration = {}) => {
 
     suite();
   };
-
-  const positionneHeadersAvecNonce = (requete, reponse, suite) =>
-    adaptateurChiffrement
-      .nonce()
-      .then((n) => {
-        requete.nonce = n;
-        positionneHeaders(requete, reponse, suite);
-      })
-      .catch(suite);
 
   const repousseExpirationCookie = (requete, _reponse, suite) => {
     requete.session.maintenant = Math.floor(Date.now() / 60_000);
@@ -328,7 +318,6 @@ const middleware = (configuration = {}) => {
     chargeEtatVisiteGuidee,
     chargePreferencesUtilisateur,
     positionneHeaders,
-    positionneHeadersAvecNonce,
     protegeTrafic,
     filtreIpAutorisees,
     repousseExpirationCookie,

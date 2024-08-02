@@ -66,7 +66,6 @@ cableTousLesAbonnes(busEvenements, {
 });
 
 const middleware = Middleware({
-  adaptateurChiffrement,
   adaptateurEnvironnement,
   adaptateurJWT,
   adaptateurProtection,
