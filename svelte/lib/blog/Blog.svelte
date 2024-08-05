@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Section, Article } from './blog.d';
+  import type { Section, Article, IdSection } from './blog.d';
 
   export let sections: Section[];
   export let articles: Article[];
 
-  let sectionSelectionnee: string = '';
+  let sectionSelectionnee: IdSection = '';
   $: nomSectionSelectionnee = sections.find(
     (s) => s.id === sectionSelectionnee
   )?.nom;
@@ -13,23 +13,29 @@
     .filter((a) =>
       sectionSelectionnee ? a.section.id === sectionSelectionnee : true
     );
+
   type DonneesSection = {
     image: string;
     couleurFond: string;
     couleurTexte: string;
   };
-  const donneesSections: Record<string, DonneesSection> = {
-    '09d78fb4-fe9a-4f60-9dd7-91232e98d419': {
+
+  const idMiseEnOeuvre: IdSection = '09d78fb4-fe9a-4f60-9dd7-91232e98d419';
+  const idHomologation: IdSection = '0cef9600-977a-4817-9735-8717942a4920';
+  const idUtilisation: IdSection = '8d97721b-ef75-4edf-acf2-c615793d69f0';
+
+  const donneesSections: Record<IdSection, DonneesSection> = {
+    [idMiseEnOeuvre]: {
       image: 'mise_en_oeuvre',
       couleurFond: '#e9ddff',
       couleurTexte: 'var(--violet-indice-cyber)',
     },
-    '0cef9600-977a-4817-9735-8717942a4920': {
+    [idHomologation]: {
       image: 'homologation',
       couleurFond: 'var(--fond-bleu-pale)',
       couleurTexte: 'var(--bleu-mise-en-avant)',
     },
-    '8d97721b-ef75-4edf-acf2-c615793d69f0': {
+    [idUtilisation]: {
       image: 'utilisation',
       couleurFond: '#d4f4db',
       couleurTexte: '#0c8626',

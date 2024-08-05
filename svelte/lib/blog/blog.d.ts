@@ -9,8 +9,10 @@ export type BlogProps = {
   articles: Article[];
 };
 
+export type IdSection = string;
+
 export type Section = {
-  id: string;
+  id: IdSection;
   nom: string;
 };
 
