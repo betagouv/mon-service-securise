@@ -13,10 +13,27 @@
     .filter((a) =>
       sectionSelectionnee ? a.section.id === sectionSelectionnee : true
     );
-  const donneesSections: Record<string, string> = {
-    '09d78fb4-fe9a-4f60-9dd7-91232e98d419': 'mise_en_oeuvre',
-    '0cef9600-977a-4817-9735-8717942a4920': 'homologation',
-    '8d97721b-ef75-4edf-acf2-c615793d69f0': 'utilisation',
+  type DonneesSection = {
+    image: string;
+    couleurFond: string;
+    couleurTexte: string;
+  };
+  const donneesSections: Record<string, DonneesSection> = {
+    '09d78fb4-fe9a-4f60-9dd7-91232e98d419': {
+      image: 'mise_en_oeuvre',
+      couleurFond: '#e9ddff',
+      couleurTexte: 'var(--violet-indice-cyber)',
+    },
+    '0cef9600-977a-4817-9735-8717942a4920': {
+      image: 'homologation',
+      couleurFond: 'var(--fond-bleu-pale)',
+      couleurTexte: 'var(--bleu-mise-en-avant)',
+    },
+    '8d97721b-ef75-4edf-acf2-c615793d69f0': {
+      image: 'utilisation',
+      couleurFond: '#d4f4db',
+      couleurTexte: '#0c8626',
+    },
   };
 </script>
 
@@ -47,7 +64,8 @@
         />
         <label for={section.id}>
           <img
-            src="/statique/assets/images/blog/{donneesSections[section.id]}.svg"
+            src="/statique/assets/images/blog/{donneesSections[section.id]
+              .image}.svg"
             alt=""
           />
           <p>{section.nom}</p>
@@ -60,8 +78,14 @@
   </h2>
   <div class="conteneur-articles">
     {#each articlesVisibles as article (article.id)}
+      {@const donneesSection = donneesSections[article.section.id]}
       <a class="article" href={article.url}>
-        <p class="etiquette-section">{article.section.nom}</p>
+        <p
+          class="etiquette-section"
+          style="color: {donneesSection.couleurTexte}; background: {donneesSection.couleurFond}"
+        >
+          {article.section.nom}
+        </p>
         <p class="titre-article">{article.titre}</p>
       </a>
     {/each}
