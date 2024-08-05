@@ -60,6 +60,7 @@ const testeurMss = () => {
       recuperePromouvoir: async () => contenuCrisp,
       recupereDevenirAmbassadeur: async () => contenuCrisp,
       recupereFaireConnaitreMSS: async () => contenuCrisp,
+      recupereSectionsBlog: async () => [],
       recupereArticleBlog: async () => contenuCrisp,
       recupereRoadmap: async () => contenuCrisp,
     };
