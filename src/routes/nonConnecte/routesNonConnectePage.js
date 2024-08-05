@@ -117,10 +117,7 @@ const routesNonConnectePage = ({
       reponse.render('article', {
         ...donneesArticle,
         avecTitreTableDesMatieres: false,
-        optionsNavigation: {
-          visible: true,
-          ongletActif: 'promouvoir-monservicesecurise',
-        },
+        ongletActif: 'promouvoir-monservicesecurise',
       });
     }
   );
@@ -134,10 +131,7 @@ const routesNonConnectePage = ({
       reponse.render('article', {
         ...donneesArticle,
         avecTitreTableDesMatieres: false,
-        optionsNavigation: {
-          visible: true,
-          ongletActif: 'promouvoir-monservicesecurise',
-        },
+        ongletActif: 'promouvoir-monservicesecurise',
       });
     }
   );
@@ -149,10 +143,7 @@ const routesNonConnectePage = ({
     reponse.render('article', {
       ...donneesArticle,
       avecTitreTableDesMatieres: false,
-      optionsNavigation: {
-        visible: true,
-        ongletActif: 'promouvoir-monservicesecurise',
-      },
+      ongletActif: 'promouvoir-monservicesecurise',
     });
   });
 
@@ -163,10 +154,7 @@ const routesNonConnectePage = ({
     reponse.render('article', {
       ...donneesArticle,
       avecTitreTableDesMatieres: false,
-      optionsNavigation: {
-        visible: true,
-        ongletActif: 'co-construire-monservicesecurise',
-      },
+      ongletActif: 'co-construire-monservicesecurise',
     });
   });
 
@@ -178,10 +166,7 @@ const routesNonConnectePage = ({
         ...article,
         avecTitreTableDesMatieres: true,
         avecFilAriane: true,
-        optionsNavigation: {
-          visible: true,
-          ongletActif: 'conseils-cyber',
-        },
+        ongletActif: 'conseils-cyber',
       });
     } catch (e) {
       if (e instanceof ErreurArticleCrispIntrouvable) {
