@@ -10,7 +10,8 @@ block title
 block append scripts
   script(type = 'module', src='/statique/scripts/conseilsCyber.js')
   script(src = "/statique/composants-svelte/blog.js", type = "module")
-
+  script(id = 'sections-blog', type = 'application/json').
+    !{JSON.stringify(sections)}
 
 block navigation-site-vitrine
   +navigationSiteVitrine('conseils-cyber')
