@@ -63,11 +63,33 @@ const recupereArticlesBlog = async () => {
   }
 };
 
+const recupereSectionsBlog = async () => {
+  try {
+    const categorie = process.env.CRISP_ID_CATEGORIE_BLOG;
+
+    const reponse = await axios.get(
+      `${urlBase}helpdesk/locale/fr/category/${categorie}/sections/0`,
+      enteteCrisp
+    );
+
+    return reponse.data.data.map((section) => ({
+      id: section.section_id,
+      nom: section.name,
+    }));
+  } catch (e) {
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Crisp': e?.response?.data,
+    });
+    throw e;
+  }
+};
+
 module.exports = {
-  recuperePromouvoir,
-  recupereDevenirAmbassadeur,
-  recupereFaireConnaitreMSS,
-  recupereRoadmap,
   recupereArticle,
   recupereArticlesBlog,
+  recupereDevenirAmbassadeur,
+  recupereFaireConnaitreMSS,
+  recuperePromouvoir,
+  recupereRoadmap,
+  recupereSectionsBlog,
 };

@@ -225,4 +225,19 @@ describe('Le CMS Crisp', () => {
       });
     });
   });
+
+  describe('sur demande des sections de la catégorie `blog`', () => {
+    it("retourne l'id et le nom des sections", async () => {
+      const adaptateurCmsCrisp = {
+        recupereSectionsBlog: async () => [{ id: 1, nom: 'uneSection' }],
+      };
+      const cmsCrisp = new CmsCrisp({
+        adaptateurCmsCrisp,
+      });
+
+      const sections = await cmsCrisp.recupereSectionsBlog();
+
+      expect(sections).to.eql([{ id: 1, nom: 'uneSection' }]);
+    });
+  });
 });
