@@ -1,7 +1,9 @@
 <script lang="ts">
-  import type { Section } from './blog.d';
+  import type { Section, Article } from './blog.d';
 
   export let sections: Section[];
+  export let articles: Article[];
+
   let sectionSelectionnee: string = '';
   const donneesSections: Record<string, string> = {
     '09d78fb4-fe9a-4f60-9dd7-91232e98d419': 'mise_en_oeuvre',
@@ -18,9 +20,12 @@
   </p>
   <div class="titre-categories">
     <h2>Catégories</h2>
-    <button id="reinitialise-filtre" on:click={() => (sectionSelectionnee = '')}
-      >Voir tous les articles</button
+    <button
+      id="reinitialise-filtre"
+      on:click={() => (sectionSelectionnee = '')}
     >
+      Voir tous les articles
+    </button>
   </div>
   <fieldset class="filtre-sections">
     {#each sections as section (section.id)}
@@ -42,6 +47,17 @@
       </div>
     {/each}
   </fieldset>
+  <h2 class="titre-conteneur-articles">Tous les articles</h2>
+  <div class="conteneur-articles">
+    {#each articles as article (article.id)}
+      {#if article.url}
+        <a class="article" href={article.url}>
+          <p class="etiquette-section">{article.section.nom}</p>
+          <p class="titre-article">{article.titre}</p>
+        </a>
+      {/if}
+    {/each}
+  </div>
 </div>
 
 <style>
@@ -134,5 +150,52 @@
     text-decoration: underline;
     color: var(--bleu-mise-en-avant);
     cursor: pointer;
+  }
+
+  .article {
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid var(--systeme-design-etat-contour-champs);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 232px;
+  }
+
+  .article:hover {
+    box-shadow: 0px 16px 32px 0px #0000001f;
+  }
+
+  .conteneur-articles {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 105px;
+  }
+
+  .etiquette-section {
+    background: var(--fond-gris-pale);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    line-height: 20px;
+    font-weight: bold;
+    color: var(--texte-clair);
+    width: fit-content;
+    margin: 0;
+  }
+
+  .titre-article {
+    margin: 0;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--bleu-anssi);
+  }
+
+  h2.titre-conteneur-articles {
+    margin-top: 82px;
+    margin-bottom: 32px;
   }
 </style>
