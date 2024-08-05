@@ -2,7 +2,7 @@
   text-align: left;
   max-width: 700px;
   margin: 0 auto;
-  padding: 56px 0;
+  padding: 0 0 56px 0;
 
   font-size: 16px;
 }
@@ -171,21 +171,22 @@
 }
 
 main {
-  gap: 64px;
+  display: block;
 }
 
 main .marges-fixes {
   position: relative;
   margin: 0;
   width: unset;
+  flex: 3;
 }
 
 .table-des-matieres {
   position: sticky;
   top: 32px;
   left: 64px;
-  margin-top: 64px;
   max-width: 374px;
+  flex: 1;
 }
 
 .contenu-tdm {
@@ -207,7 +208,7 @@ main .marges-fixes {
   color: var(--texte-clair);
   font-weight: bold;
   line-height: 42px;
-  padding: 8px;
+  padding: 8px 8px 8px 0;
   text-align: left;
   text-transform: uppercase;
   margin-top: 16px;
@@ -235,4 +236,33 @@ main .marges-fixes {
   .table-des-matieres {
     display: none;
   }
+}
+
+.contenu-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 64px;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.fil-ariane {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 1200px;
+  margin: 0 auto;
+  padding-top: 64px;
+  padding-bottom: 32px;
+  padding-left: 16px;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: normal;
+  color: #666666;
+}
+
+.fil-ariane a {
+  color: #666666;
+  text-decoration: underline;
 }
