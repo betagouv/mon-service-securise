@@ -4,7 +4,9 @@
   export let sections: Section[];
   export let articles: Article[];
 
-  let sectionSelectionnee: IdSection = '';
+  const query = new URLSearchParams(window.location.search);
+  let sectionSelectionnee: IdSection = query.get('section') ?? '';
+
   $: nomSectionSelectionnee = sections.find(
     (s) => s.id === sectionSelectionnee
   )?.nom;
