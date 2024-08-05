@@ -1,1 +1,3 @@
-["* * * * * echo 'DEPUIS LE CRON CLEVER CLOUD'"]
+[
+  "* * * * * node $ROOT/scripts/taches/tacheEnvoieMailsNotificationExpiration.js"
+]
