@@ -162,10 +162,18 @@ describe('Le CMS Crisp', () => {
         {
           id: '1',
           url: 'http://localhost://crisp/article/un-slug-1ab2c3/',
+          section: {
+            id: 'id_1',
+            nom: 'uneSection',
+          },
         },
         {
           id: '2',
           url: 'http://localhost://crisp/article/un-autre-slug-1ab2c4/',
+          section: {
+            id: 'id_2',
+            nom: 'uneAutreSection',
+          },
         },
       ];
       let idPasse;
@@ -194,7 +202,7 @@ describe('Le CMS Crisp', () => {
       }
     });
 
-    it('retourne le contenu HTML, le titre et la table des matières', async () => {
+    it("retourne tout le contenu de l'article, en ajoutant les données de section", async () => {
       adaptateurCmsCrisp.recupereArticle = async () => ({
         contenuMarkdown: 'Un contenu',
         titre: 'Un titre',
@@ -204,6 +212,10 @@ describe('Le CMS Crisp', () => {
         {
           id: '1',
           url: 'http://localhost://crisp/article/un-slug-1ab2c3/',
+          section: {
+            id: 'id_1',
+            nom: 'uneSection',
+          },
         },
       ];
       constructeurCrispMarkdown = (chaine) => ({
@@ -222,6 +234,10 @@ describe('Le CMS Crisp', () => {
         contenu: 'HTML Un contenu',
         description: 'Une description',
         tableDesMatieres: ['1', '2'],
+        section: {
+          id: 'id_1',
+          nom: 'uneSection',
+        },
       });
     });
   });
