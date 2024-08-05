@@ -227,7 +227,7 @@ describe('Le CMS Crisp', () => {
   });
 
   describe('sur demande des sections de la catégorie `blog`', () => {
-    it("retourne l'id et le nom des sections", async () => {
+    it("délègue à l'adaptateur la récupération des sections", async () => {
       const adaptateurCmsCrisp = {
         recupereSectionsBlog: async () => [{ id: 1, nom: 'uneSection' }],
       };
@@ -238,6 +238,58 @@ describe('Le CMS Crisp', () => {
       const sections = await cmsCrisp.recupereSectionsBlog();
 
       expect(sections).to.eql([{ id: 1, nom: 'uneSection' }]);
+    });
+  });
+
+  describe('sur demande des articles de la catégorie `blog`', () => {
+    it("délègue à l'adaptateur la récupération des articles et met en forme l'url", async () => {
+      const adaptateurCmsCrisp = {
+        recupereArticlesBlog: async () => [
+          {
+            id: 1,
+            titre: 'unArticle',
+            url: 'http://localhost/article/un-slug-abc123/',
+            section: {
+              id: 'A',
+              nom: 'uneSection',
+            },
+          },
+        ],
+      };
+      const cmsCrisp = new CmsCrisp({
+        adaptateurCmsCrisp,
+      });
+
+      const articles = await cmsCrisp.recupereArticlesBlog();
+
+      expect(articles).to.eql([
+        {
+          id: 1,
+          titre: 'unArticle',
+          url: '/articles/un-slug',
+          section: {
+            id: 'A',
+            nom: 'uneSection',
+          },
+        },
+      ]);
+    });
+
+    it("reste robuste si l'url n'est pas définie", async () => {
+      const adaptateurCmsCrisp = {
+        recupereArticlesBlog: async () => [
+          {
+            url: '',
+          },
+        ],
+      };
+      const cmsCrisp = new CmsCrisp({
+        adaptateurCmsCrisp,
+      });
+
+      const articles = await cmsCrisp.recupereArticlesBlog();
+
+      expect(articles[0].url).to.be(null);
     });
   });
 });

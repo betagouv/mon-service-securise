@@ -54,6 +54,11 @@ const recupereArticlesBlog = async () => {
     return reponse.data.data.map((a) => ({
       id: a.article_id,
       url: a.url,
+      titre: a.title,
+      section: {
+        id: a.category?.section?.section_id,
+        nom: a.category?.section?.name,
+      },
     }));
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
