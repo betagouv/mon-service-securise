@@ -1,0 +1,18 @@
+extends mssDeconnecte
+include ./fragments/navigationSiteVitrine
+
+block variables
+  - const meta_description = "Tous nos conseils à propos de la mise en œuvre des mesures de sécurité, de l'homologation, et de l'utilisation de MonServiceSécurisé."
+
+block title
+  title!= 'Conseils Cyber | MonServiceSécurisé'
+
+block append scripts
+  script(type = 'module', src='/statique/scripts/conseilsCyber.js')
+
+block navigation-site-vitrine
+  +navigationSiteVitrine('conseils-cyber')
+
+block main
+  .marges-fixes
+    #blog

@@ -194,6 +194,10 @@ const routesNonConnectePage = ({
     reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });
   });
 
+  routes.get('/conseils-cyber', (_requete, reponse) => {
+    reponse.render('conseilsCyber');
+  });
+
   return routes;
 };
 
