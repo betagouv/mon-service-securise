@@ -65,6 +65,10 @@ class CmsCrisp {
       throw new ErreurArticleCrispIntrouvable();
     }
   }
+
+  async recupereSectionsBlog() {
+    return this.adaptateurCmsCrisp.recupereSectionsBlog();
+  }
 }
 
 module.exports = CmsCrisp;
