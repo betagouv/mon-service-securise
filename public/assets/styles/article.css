@@ -266,3 +266,31 @@ main .marges-fixes {
   color: #666666;
   text-decoration: underline;
 }
+
+p.etiquette-section {
+  padding: 2px 8px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  margin: 0;
+  border-radius: 12px;
+  color: var(--couleur-texte);
+  background: var(--couleur-fond);
+  width: fit-content;
+}
+
+.etiquette-section.mise-en-oeuvre {
+  --couleur-texte: var(--violet-indice-cyber);
+  --couleur-fond: #e9ddff;
+}
+
+.etiquette-section.homologation {
+  --couleur-texte: var(--bleu-mise-en-avant);
+  --couleur-fond: var(--fond-bleu-pale);
+}
+
+.etiquette-section.utilisation {
+  --couleur-texte: #0c8626;
+  --couleur-fond: #d4f4db;
+}

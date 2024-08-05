@@ -38,5 +38,13 @@ block main
     +tableDesMatieres(tableDesMatieres)
     .marges-fixes
       .article
+        if avecFilAriane
+          -
+            const idMiseEnOeuvre = '09d78fb4-fe9a-4f60-9dd7-91232e98d419';
+            const idHomologation = '0cef9600-977a-4817-9735-8717942a4920';
+            const idUtilisation = '8d97721b-ef75-4edf-acf2-c615793d69f0';
+            const donneesSections = {[idMiseEnOeuvre]: 'mise-en-oeuvre',[idHomologation]: 'homologation',[idUtilisation]: 'utilisation'};
+            const classeSection = donneesSections[section.id]
+          p.etiquette-section(class=classeSection)!= section.nom
         h1!= titre
         .contenu!= contenu
