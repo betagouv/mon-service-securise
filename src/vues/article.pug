@@ -23,8 +23,7 @@ block append scripts
   script(type = 'module', src='/statique/scripts/article.js')
 
 block navigation-site-vitrine
-  if optionsNavigation && optionsNavigation.visible
-    +navigationSiteVitrine(optionsNavigation.ongletActif)
+  +navigationSiteVitrine(ongletActif)
 
 block main
   .fil-ariane
