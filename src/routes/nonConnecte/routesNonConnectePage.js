@@ -177,8 +177,10 @@ const routesNonConnectePage = ({
       reponse.render('article', {
         ...article,
         avecTitreTableDesMatieres: true,
+        avecFilAriane: true,
         optionsNavigation: {
-          visible: false,
+          visible: true,
+          ongletActif: 'conseils-cyber',
         },
       });
     } catch (e) {

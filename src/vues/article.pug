@@ -27,8 +27,16 @@ block navigation-site-vitrine
     +navigationSiteVitrine(optionsNavigation.ongletActif)
 
 block main
-  +tableDesMatieres(tableDesMatieres)
-  .marges-fixes
-    .article
-      h1!= titre
-      .contenu!= contenu
+  .fil-ariane
+    if avecFilAriane
+      a(href='/conseils-cyber') Conseils Cyber
+      span >
+      a(href=`/conseils-cyber?section=${section.id}`)!= section.nom
+      span >
+      span!= titre
+  .contenu-main
+    +tableDesMatieres(tableDesMatieres)
+    .marges-fixes
+      .article
+        h1!= titre
+        .contenu!= contenu
