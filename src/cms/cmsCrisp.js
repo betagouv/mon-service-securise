@@ -65,7 +65,10 @@ class CmsCrisp {
       const articleCrisp = await this.adaptateurCmsCrisp.recupereArticle(
         article.id
       );
-      return this.convertitArticle(articleCrisp);
+      return {
+        ...this.convertitArticle(articleCrisp),
+        section: { id: article.section?.id, nom: article.section?.nom },
+      };
     } catch (e) {
       throw new ErreurArticleCrispIntrouvable();
     }
