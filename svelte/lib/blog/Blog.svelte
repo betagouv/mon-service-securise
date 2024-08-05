@@ -16,7 +16,12 @@
     Tous nos conseils à propos de la mise en œuvre des mesures de sécurité, de
     l'homologation, et de l'utilisation de MonServiceSécurisé
   </p>
-  <h2>Catégories</h2>
+  <div class="titre-categories">
+    <h2>Catégories</h2>
+    <button id="reinitialise-filtre" on:click={() => (sectionSelectionnee = '')}
+      >Voir tous les articles</button
+    >
+  </div>
   <fieldset class="filtre-sections">
     {#each sections as section (section.id)}
       <div class="section">
@@ -61,11 +66,10 @@
   }
 
   h2 {
-    margin-top: 54px;
     font-size: 36px;
     line-height: 46px;
     font-weight: bold;
-    margin-bottom: 32px;
+    margin: 0;
   }
 
   .filtre-sections {
@@ -110,5 +114,25 @@
 
   .section:has(input[type='radio']:checked) {
     background-color: #eff6ff;
+  }
+
+  .titre-categories {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 32px;
+    margin-top: 54px;
+  }
+
+  #reinitialise-filtre {
+    background: none;
+    border: none;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    text-decoration: underline;
+    color: var(--bleu-mise-en-avant);
+    cursor: pointer;
   }
 </style>
