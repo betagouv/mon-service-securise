@@ -177,15 +177,15 @@ const routesNonConnectePage = ({
     }
   });
 
-  routes.get('/sitemap.xml', async (_requete, reponse) => {
-    reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });
-  });
-
   routes.get('/conseils-cyber', async (_requete, reponse) => {
     const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
     const sections = await cmsCrisp.recupereSectionsBlog();
     const articles = await cmsCrisp.recupereArticlesBlog();
     reponse.render('conseilsCyber', { sections, articles });
+  });
+
+  routes.get('/sitemap.xml', async (_requete, reponse) => {
+    reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });
   });
 
   return routes;
