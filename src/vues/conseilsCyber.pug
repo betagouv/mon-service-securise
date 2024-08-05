@@ -15,6 +15,8 @@ block append scripts
   script(src = "/statique/composants-svelte/blog.js", type = "module")
   script(id = 'sections-blog', type = 'application/json').
     !{JSON.stringify(sections)}
+  script(id = 'articles-blog', type = 'application/json').
+    !{JSON.stringify(articles)}
 
 block navigation-site-vitrine
   +navigationSiteVitrine('conseils-cyber')

@@ -197,7 +197,8 @@ const routesNonConnectePage = ({
   routes.get('/conseils-cyber', async (_requete, reponse) => {
     const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
     const sections = await cmsCrisp.recupereSectionsBlog();
-    reponse.render('conseilsCyber', { sections });
+    const articles = await cmsCrisp.recupereArticlesBlog();
+    reponse.render('conseilsCyber', { sections, articles });
   });
 
   return routes;
