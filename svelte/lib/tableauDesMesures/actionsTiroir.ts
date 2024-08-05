@@ -19,7 +19,7 @@ export const afficheTiroirDeMesure = (mesureAEditer?: MesureAEditer) => {
         titreTiroir:
           mesureAEditer && mesureAEditer.metadonnees.typeMesure === 'GENERALE'
             ? mesureAEditer.mesure.description
-            : '',
+            : 'Ajouter une mesure',
         ...(mesureAEditer && { mesureAEditer }),
       },
     })
