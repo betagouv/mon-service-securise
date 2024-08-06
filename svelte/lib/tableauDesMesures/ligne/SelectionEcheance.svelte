@@ -4,6 +4,7 @@
 
   export let echeance: string | undefined;
   export let estLectureSeule = false;
+  export let avecLabel = false;
 
   let elementDate: HTMLInputElement;
 
@@ -28,16 +29,22 @@
   const modifieEcheance = () => {
     if (echeance) dispatch('modificationEcheance', { echeance });
   };
+
+  const labelVide = avecLabel ? 'Définir l’échéance' : 'Échéance';
 </script>
 
 <div class="conteneur-date">
+  {#if avecLabel}
+    <p class="label" class:estLectureSeule>Échéance</p>
+  {/if}
   <button
     type="button"
     on:click|stopPropagation={afficheSelectionDate}
     class:vide={!dateFormatte}
     disabled={estLectureSeule}
+    class:avecLabel
   >
-    {dateFormatte ?? 'Échéance'}
+    {dateFormatte ?? labelVide}
   </button>
   <input
     type="date"
@@ -78,11 +85,49 @@
     justify-content: start;
   }
 
-  button.vide::before {
+  button.vide:not(.avecLabel)::before {
     content: '';
     width: 24px;
     height: 24px;
     display: flex;
     background: url('/statique/assets/images/icone_calendrier.svg');
+  }
+
+  button.avecLabel {
+    border: 1px solid var(--liseres-fonce);
+    padding: 8px 16px;
+    border-radius: 6px;
+    gap: 24px;
+    font-size: 12px;
+  }
+
+  button.avecLabel::after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    display: flex;
+    background: url('/statique/assets/images/icone_calendrier.svg');
+  }
+
+  button[disabled] {
+    color: var(--liseres-fonce);
+    cursor: not-allowed;
+  }
+
+  button[disabled].avecLabel::after {
+    filter: brightness(0) invert(89%) sepia(2%) saturate(3151%)
+      hue-rotate(190deg) brightness(105%) contrast(76%);
+  }
+
+  .label {
+    font-weight: 500;
+    line-height: 22px;
+    text-align: left;
+    color: var(--texte-clair);
+    margin: 0 0 8px;
+  }
+
+  .label.estLectureSeule {
+    color: var(--liseres-fonce);
   }
 </style>

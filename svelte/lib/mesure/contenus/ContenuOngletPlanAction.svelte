@@ -3,7 +3,8 @@
   import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
   import Avertissement from '../../ui/Avertissement.svelte';
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
-  import type { ReferentielStatut } from '../../ui/types';
+  import type { ReferentielPriorite, ReferentielStatut } from '../../ui/types';
+  import SelectionEcheance from '../../tableauDesMesures/ligne/SelectionEcheance.svelte';
 
   export let visible: boolean;
   export let estLectureSeule: boolean;
@@ -57,6 +58,11 @@
     estLectureSeule={estLectureSeule || selectionDesactivee}
     avecLibelleOption
     {priorites}
+  />
+  <SelectionEcheance
+    bind:echeance={$store.mesureEditee.mesure.echeance}
+    avecLabel={true}
+    estLectureSeule={estLectureSeule || selectionDesactivee}
   />
 </div>
 
