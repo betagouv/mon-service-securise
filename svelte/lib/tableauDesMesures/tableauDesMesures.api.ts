@@ -7,6 +7,8 @@ import type {
   MesureGenerale,
 } from './tableauDesMesures.d';
 
+const formatteurDate = new Intl.DateTimeFormat('en-EN');
+
 const decodeEntitesHtml = (mesures: Mesures) => {
   mesures.mesuresSpecifiques = mesures.mesuresSpecifiques.map(
     (m: MesureSpecifique) => ({
@@ -61,6 +63,10 @@ export const enregistreMesuresSpecifiques = async (
   idService: IdService,
   mesures: MesureSpecifique[]
 ) => {
+  const mesuresAvecEcheance = mesures.map((m) => {
+    if (m.echeance) m.echeance = formatteurDate.format(new Date(m.echeance));
+    return m;
+  });
   await axios.put(`/api/service/${idService}/mesures-specifiques`, mesures);
 };
 
@@ -72,7 +78,9 @@ export const enregistreMesureGenerale = async (
   await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
     statut: donneesMesure.statut,
     priorite: donneesMesure.priorite,
-    echeance: donneesMesure.echeance,
+    echeance: donneesMesure.echeance
+      ? formatteurDate.format(new Date(donneesMesure.echeance))
+      : donneesMesure.echeance,
     ...(donneesMesure.modalites && { modalites: donneesMesure.modalites }),
   });
 };
