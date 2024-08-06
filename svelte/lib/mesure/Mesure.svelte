@@ -11,6 +11,7 @@
   import ContenuOngletMesure from './contenus/ContenuOngletMesure.svelte';
   import type { ReferentielPriorite, ReferentielStatut } from '../ui/types';
   import ContenuOngletPlanAction from './contenus/ContenuOngletPlanAction.svelte';
+  import { planDActionDisponible } from '../modeles/mesure';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -19,10 +20,6 @@
   export let mesuresExistantes: MesuresExistantes;
   export let estLectureSeule: boolean;
   export let priorites: ReferentielPriorite;
-
-  const planDActionDisponible =
-    $store.mesureEditee.mesure.statut === 'aLancer' ||
-    $store.mesureEditee.mesure.statut === 'enCours';
 
   const statutInitial = $store.mesureEditee.mesure.statut;
 
@@ -83,7 +80,8 @@
         cetOnglet="planAction"
         labelOnglet="Plan d'action"
         sansBordureEnBas
-        badge={!planDActionDisponible && 'info'}
+        badge={!planDActionDisponible($store.mesureEditee.mesure.statut) &&
+          'info'}
       />
     </div>
   {/if}

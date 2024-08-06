@@ -1,4 +1,5 @@
 import type { Referentiel } from '../ui/types.d';
+import type { StatutMesure } from '../modeles/mesure';
 
 declare global {
   interface HTMLElementEventMap {
@@ -9,7 +10,7 @@ declare global {
 export type MesureProps = {
   idService: string;
   categories: Record<string, string>;
-  statuts: Record<string, string>;
+  statuts: Record<StatutMesure, string>;
   retoursUtilisateur: Record<string, string>;
   estLectureSeule: boolean;
   mesuresExistantes: MesuresExistantes;
@@ -22,7 +23,7 @@ export type MesuresExistantes = {
 };
 
 export type MesureGenerale = {
-  statut?: string;
+  statut?: StatutMesure;
   modalites?: string;
   priorite?: string;
   echeance?: string;
