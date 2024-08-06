@@ -159,7 +159,7 @@
 <table class="tableau-des-mesures">
   <thead>
     <tr class="ligne-onglet">
-      <th colspan="3">
+      <th colspan="4">
         <div class="conteneur-onglet">
           {#if $volumetrieMesures.totalSansStatut}
             <Onglet
@@ -198,6 +198,7 @@
         <th>Mesure</th>
         {#if affichePlanAction}
           <th>Priorité</th>
+          <th>Échéance</th>
         {/if}
         <th>Statut</th>
       </tr>
@@ -223,6 +224,10 @@
           }}
           on:modificationPriorite={(e) => {
             mesures.metAJourPrioriteMesureGenerale(id, e.detail.priorite);
+            metsAJourMesureGenerale(id);
+          }}
+          on:modificationEcheance={(e) => {
+            mesures.metAJourEcheanceMesureGenerale(id, e.detail.echeance);
             metsAJourMesureGenerale(id);
           }}
           on:click={() =>
@@ -252,6 +257,13 @@
             mesures.metAJourPrioriteMesureSpecifique(
               indexReel,
               e.detail.priorite
+            );
+            metsAJourMesuresSpecifiques(indexReel);
+          }}
+          on:modificationEcheance={(e) => {
+            mesures.metAJourEcheanceMesureSpecifique(
+              indexReel,
+              e.detail.echeance
             );
             metsAJourMesuresSpecifiques(indexReel);
           }}

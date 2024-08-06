@@ -1,6 +1,6 @@
 import type { Mesures } from '../tableauDesMesures.d';
 import { writable } from 'svelte/store';
-import type { PrioriteMesure } from '../../ui/types';
+import type { EcheanceMesure, PrioriteMesure } from '../../ui/types';
 
 export const mesuresParDefaut = (): Mesures => ({
   mesuresGenerales: {},
@@ -14,6 +14,24 @@ export const mesures = {
   subscribe: toutesLesMesures.subscribe,
   reinitialise: (mesures?: Mesures) =>
     toutesLesMesures.set(mesures ?? mesuresParDefaut()),
+  metAJourEcheanceMesureGenerale: (
+    idMesure: string,
+    echeance: EcheanceMesure
+  ) => {
+    toutesLesMesures.update((valeur) => {
+      valeur.mesuresGenerales[idMesure].echeance = echeance;
+      return valeur;
+    });
+  },
+  metAJourEcheanceMesureSpecifique: (
+    idMesure: number,
+    echeance: EcheanceMesure
+  ) => {
+    toutesLesMesures.update((valeur) => {
+      valeur.mesuresSpecifiques[idMesure].echeance = echeance;
+      return valeur;
+    });
+  },
   metAJourStatutMesureGenerale: (idMesure: string, statut: string) =>
     toutesLesMesures.update((valeur) => {
       valeur.mesuresGenerales[idMesure].statut = statut;
