@@ -607,6 +607,25 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
+    it('jette une erreur 400 si le statut est vide', async () => {
+      const mesureGenerale = {
+        statut: '',
+      };
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures/audit',
+          mesureGenerale
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Le statut de la mesure est obligatoire.'
+        );
+      }
+    });
+
     it('délègue au dépôt de données la mise à jour des mesures générales', async () => {
       let donneesRecues;
       let idServiceRecu;
@@ -656,6 +675,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('renvoie une erreur 400 si la mesure est invalide à cause de la priorité', async () => {
       const mesureGenerale = {
         priorite: 'invalide',
+        statut: 'enCours',
       };
 
       try {
@@ -673,6 +693,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it("renvoie une erreur 400 si la mesure est invalide à cause de l'échéance", async () => {
       const mesureGenerale = {
         echeance: 'invalide',
+        statut: 'enCours',
       };
 
       try {
