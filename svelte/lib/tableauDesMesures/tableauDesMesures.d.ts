@@ -1,4 +1,8 @@
-import { type PrioriteMesure, Referentiel } from '../ui/types.d';
+import {
+  type EcheanceMesure,
+  type PrioriteMesure,
+  Referentiel,
+} from '../ui/types.d';
 
 declare global {
   interface HTMLElementEventMap {
@@ -28,6 +32,7 @@ export type MesureGenerale = {
   referentiel: Referentiel;
   identifiantNumerique: string;
   priorite?: PrioriteMesure;
+  echeance?: EcheanceMesure;
 };
 
 export type MesureSpecifique = {
@@ -37,6 +42,7 @@ export type MesureSpecifique = {
   modalites: string;
   identifiantNumerique: string;
   priorite?: PrioriteMesure;
+  echeance?: EcheanceMesure;
 };
 
 export type IdMesureGenerale = string;

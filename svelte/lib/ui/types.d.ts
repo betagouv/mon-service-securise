@@ -43,3 +43,5 @@ export type LibellePriorite = {
   libelleCourt: string;
   libelleComplet: string;
 };
+
+export type EcheanceMesure = string;
