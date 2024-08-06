@@ -1,6 +1,8 @@
 import type { MesuresExistantes } from './mesure.d';
 import type { MesureStore } from './mesure.store';
 
+const formatteurDate = new Intl.DateTimeFormat('en-EN');
+
 export const enregistreMesures = async (
   idService: string,
   mesuresExistantes: MesuresExistantes,
@@ -8,8 +10,11 @@ export const enregistreMesures = async (
 ) => {
   async function enregistreMesureGenerale() {
     const idMesure = $store.mesureEditee.metadonnees.idMesure;
-    const { modalites, statut, priorite, echeance } =
-      $store.mesureEditee.mesure;
+    const { modalites, statut, priorite } = $store.mesureEditee.mesure;
+    let { echeance } = $store.mesureEditee.mesure;
+    if (echeance) {
+      echeance = formatteurDate.format(new Date(echeance));
+    }
     mesuresExistantes.mesuresGenerales[idMesure] = { modalites, statut };
     await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
       modalites,
@@ -29,7 +34,11 @@ export const enregistreMesures = async (
     }
     await axios.put(
       `/api/service/${idService}/mesures-specifiques`,
-      mesuresExistantes.mesuresSpecifiques
+      mesuresExistantes.mesuresSpecifiques.map((m) => {
+        if (m.echeance)
+          m.echeance = formatteurDate.format(new Date(m.echeance));
+        return m;
+      })
     );
   }
 
