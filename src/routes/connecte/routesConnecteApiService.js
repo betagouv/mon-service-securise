@@ -267,6 +267,10 @@ const routesConnecteApiService = ({
     middleware.aseptise('statut', 'modalites', 'priorite', 'echeance'),
     async (requete, reponse, suite) => {
       const { service, idUtilisateurCourant, body, params } = requete;
+      if (!body.statut) {
+        reponse.status(400).send('Le statut de la mesure est obligatoire.');
+        return;
+      }
       if (body.echeance) {
         body.echeance = body.echeance.replaceAll('&#x2F;', '/');
       }
