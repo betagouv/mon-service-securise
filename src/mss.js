@@ -1,6 +1,7 @@
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+
 const {
   CACHE_CONTROL_FICHIERS_STATIQUES,
   DUREE_SESSION,
@@ -64,6 +65,7 @@ const creeServeur = (
 
   app.use(middleware.positionneHeaders);
   app.use(middleware.repousseExpirationCookie);
+  app.use(middleware.ajouteVersionFichierCompiles);
 
   app.disable('x-powered-by');
 

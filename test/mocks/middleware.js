@@ -60,6 +60,7 @@ let suppressionCookieEffectuee = false;
 let traficProtege = false;
 let verificationJWTMenee = false;
 let verificationCGUMenee = false;
+let versionBuildeeChargee = false;
 
 const middlewareFantaisie = {
   reinitialise: ({
@@ -91,6 +92,12 @@ const middlewareFantaisie = {
     verificationJWTMenee = false;
     verificationCGUMenee = false;
     challengeMotDePasseEffectue = false;
+    versionBuildeeChargee = false;
+  },
+
+  ajouteVersionFichierCompiles: (_requete, _reponse, suite) => {
+    versionBuildeeChargee = true;
+    suite();
   },
 
   aseptise:
@@ -323,6 +330,13 @@ const middlewareFantaisie = {
   verifieChallengeMotDePasse: (...params) => {
     verifieRequeteChangeEtat(
       { lectureEtat: () => challengeMotDePasseEffectue },
+      ...params
+    );
+  },
+
+  verifieChargementDeLaVersionBuildee: (...params) => {
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => versionBuildeeChargee },
       ...params
     );
   },

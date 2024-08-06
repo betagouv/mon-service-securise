@@ -13,6 +13,12 @@ describe('Le serveur MSS', () => {
     testeur.middleware().verifieFiltrageIp('http://localhost:1234', done);
   });
 
+  it('charge la version de build des fichiers', (done) => {
+    testeur
+      .middleware()
+      .verifieChargementDeLaVersionBuildee('http://localhost:1234', done);
+  });
+
   describe('quand une page est servie', () => {
     it('positionne les headers', (done) => {
       testeur
