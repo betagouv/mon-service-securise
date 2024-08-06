@@ -5,7 +5,7 @@ class MesureGenerale extends Mesure {
   constructor(donneesMesure, referentiel) {
     super({
       proprietesAtomiquesRequises: ['id', 'statut'],
-      proprietesAtomiquesFacultatives: ['modalites', 'priorite'],
+      proprietesAtomiquesFacultatives: ['modalites', 'priorite', 'echeance'],
     });
 
     MesureGenerale.valide(donneesMesure, referentiel);

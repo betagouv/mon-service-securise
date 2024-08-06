@@ -9,7 +9,7 @@ class MesureSpecifique extends Mesure {
   ) {
     super({
       proprietesAtomiquesRequises: MesureSpecifique.proprietesObligatoires(),
-      proprietesAtomiquesFacultatives: ['modalites', 'priorite'],
+      proprietesAtomiquesFacultatives: ['modalites', 'priorite', 'echeance'],
     });
 
     MesureSpecifique.valide(donneesMesure, referentiel);
