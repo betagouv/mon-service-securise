@@ -87,7 +87,7 @@
     border-radius: 6px;
   }
 
-  button:not(.avecLabel):hover {
+  button:not(.avecLabel):not([disabled]):hover {
     background: var(--fond-gris-pale);
     color: var(--bleu-anssi);
   }
@@ -100,9 +100,14 @@
     background: url('/statique/assets/images/icone_calendrier.svg');
   }
 
-  button.vide:hover:not(.avecLabel)::before {
+  button.vide:hover:not(.avecLabel):not([disabled])::before {
     filter: brightness(0) invert(17%) sepia(32%) saturate(3822%)
       hue-rotate(185deg) brightness(95%) contrast(94%);
+  }
+
+  button.vide:not(.avecLabel)[disabled]::before {
+    filter: brightness(0) invert(93%) sepia(5%) saturate(618%)
+      hue-rotate(178deg) brightness(93%) contrast(89%);
   }
 
   button.avecLabel {
