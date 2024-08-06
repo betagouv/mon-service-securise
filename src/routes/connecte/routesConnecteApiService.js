@@ -230,6 +230,10 @@ const routesConnecteApiService = ({
         idUtilisateurCourant,
         body: mesuresSpecifiques,
       } = requete;
+      if (mesuresSpecifiques.some((m) => !m.statut)) {
+        reponse.status(400).send('Les statuts des mesures sont obligatoires.');
+        return;
+      }
       try {
         const donneesMesuresSpecifiques = mesuresSpecifiques.map((m) => {
           if (m.echeance) m.echeance = m.echeance.replaceAll('&#x2F;', '/');

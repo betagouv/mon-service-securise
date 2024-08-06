@@ -454,6 +454,30 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       }
     });
 
+    it('retourne une erreur HTTP 400 si le statut est vide', async () => {
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
+        async () => {};
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures-specifiques',
+          [
+            {
+              description: 'd1',
+              categorie: 'uneCategorie',
+              statut: '',
+            },
+          ]
+        );
+        expect().fail('L’appel aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Les statuts des mesures sont obligatoires.'
+        );
+      }
+    });
+
     it('retourne une erreur HTTP 400 si le statut est inconnu', async () => {
       testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
         async () => {};
@@ -488,6 +512,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
               description: 'd1',
               categorie: 'uneCategorie',
               priorite: 'plop',
+              statut: 'enCours',
             },
           ]
         );
@@ -510,6 +535,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
               description: 'd1',
               categorie: 'uneCategorie',
               echeance: 'pasUneDate',
+              statut: 'enCours',
             },
           ]
         );
