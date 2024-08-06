@@ -5,14 +5,12 @@
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import type { ReferentielPriorite, ReferentielStatut } from '../../ui/types';
   import SelectionEcheance from '../../tableauDesMesures/ligne/SelectionEcheance.svelte';
+  import { planDActionDisponible } from '../../modeles/mesure';
 
   export let visible: boolean;
   export let estLectureSeule: boolean;
   export let priorites: ReferentielPriorite;
   export let statuts: ReferentielStatut;
-
-  const planDActionDisponible = (statut) =>
-    statut === 'aLancer' || statut === 'enCours';
 
   $: selectionDesactivee = !planDActionDisponible(
     $store.mesureEditee.mesure.statut
