@@ -308,7 +308,13 @@ const middleware = (configuration = {}) => {
     });
   };
 
+  const ajouteVersionFichierCompiles = (_requete, reponse, suite) => {
+    reponse.locals.version = adaptateurEnvironnement.versionDeBuild();
+    suite();
+  };
+
   return {
+    ajouteVersionFichierCompiles,
     aseptise,
     aseptiseListe,
     aseptiseListes,

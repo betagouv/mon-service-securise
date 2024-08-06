@@ -896,4 +896,17 @@ describe('Le middleware MSS', () => {
       });
     });
   });
+
+  it('ajoute la version de build dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+    const adaptateurEnvironnement = {
+      versionDeBuild: () => '1.1',
+    };
+
+    const middleware = Middleware({ adaptateurEnvironnement });
+
+    middleware.ajouteVersionFichierCompiles(requete, reponse, () => {
+      expect(reponse.locals.version).to.be('1.1');
+      done();
+    });
+  });
 });

@@ -52,6 +52,12 @@ const featureFlag = () => ({
   visiteGuideeActive: () => process.env.FEATURE_FLAG_VISITE_GUIDEE === 'true',
 });
 
+const versionDeBuild = () => {
+  const versionCommit =
+    process.env.SOURCE_VERSION || process.env.CC_COMMIT_ID || '1';
+  return versionCommit.substring(0, 8);
+};
+
 module.exports = {
   chiffrement,
   emailMemoire,
@@ -62,4 +68,5 @@ module.exports = {
   sendinblue,
   sentry,
   statistiques,
+  versionDeBuild,
 };
