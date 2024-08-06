@@ -33,6 +33,7 @@ describe('Une mesure de sécurité', () => {
         statut: MesureGenerale.STATUT_FAIT,
         modalites: "Des modalités d'application",
         priorite: 'p3',
+        echeance: '01/01/2023',
       },
       referentiel
     );
@@ -41,11 +42,13 @@ describe('Une mesure de sécurité', () => {
     expect(mesure.statut).to.equal(MesureGenerale.STATUT_FAIT);
     expect(mesure.modalites).to.equal("Des modalités d'application");
     expect(mesure.priorite).to.equal('p3');
+    expect(mesure.echeance).to.equal('01/01/2023');
     expect(mesure.toJSON()).to.eql({
       id: 'identifiantMesure',
       statut: MesureGenerale.STATUT_FAIT,
       modalites: "Des modalités d'application",
       priorite: 'p3',
+      echeance: '01/01/2023',
     });
   });
 
