@@ -3,6 +3,7 @@ import {
   type PrioriteMesure,
   Referentiel,
 } from '../ui/types.d';
+import type { StatutMesure } from '../modeles/mesure';
 
 declare global {
   interface HTMLElementEventMap {
@@ -12,12 +13,11 @@ declare global {
 
 export type IdService = string;
 export type IdCategorie = string;
-export type IdStatut = string;
 
 export type TableauDesMesuresProps = {
   idService: IdService;
   categories: Record<IdCategorie, string>;
-  statuts: Record<IdStatut, string>;
+  statuts: Record<StatutMesure, string>;
   estLectureSeule: boolean;
   modeVisiteGuidee: boolean;
 };
@@ -27,7 +27,7 @@ export type MesureGenerale = {
   categorie: string;
   indispensable: boolean;
   descriptionLongue: string;
-  statut?: string;
+  statut?: StatutMesure;
   modalites?: string;
   referentiel: Referentiel;
   identifiantNumerique: string;
@@ -38,7 +38,7 @@ export type MesureGenerale = {
 export type MesureSpecifique = {
   categorie: string;
   description: string;
-  statut: string;
+  statut: StatutMesure;
   modalites: string;
   identifiantNumerique: string;
   priorite?: PrioriteMesure;
