@@ -1,3 +1,1 @@
-[
-  "* * * * * node $ROOT/scripts/taches/tacheEnvoieMailsNotificationExpiration.sh"
-]
+["* * * * * $ROOT/scripts/taches/tacheEnvoieMailsNotificationExpiration.sh"]
