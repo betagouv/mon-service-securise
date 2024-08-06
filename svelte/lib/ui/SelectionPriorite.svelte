@@ -89,6 +89,11 @@
     color: var(--liseres-fonce);
   }
 
+  select:disabled {
+    color: var(--liseres-fonce) !important;
+    background: var(--fond-gris-pale) !important;
+  }
+
   select.avecLibelleOption {
     width: fit-content;
     appearance: auto;
