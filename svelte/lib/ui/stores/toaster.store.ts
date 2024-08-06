@@ -3,7 +3,7 @@ import type {
   MesureGenerale,
   MesureSpecifique,
 } from '../../tableauDesMesures/tableauDesMesures.d';
-import type { IdStatut } from '../types';
+import type { StatutMesure } from '../../modeles/mesure';
 
 export type NiveauMessage = 'info' | 'succes';
 
@@ -33,7 +33,7 @@ export const toasterStore = {
   },
   afficheToastChangementStatutMesure: (
     mesure: MesureGenerale | MesureSpecifique,
-    statuts: Record<IdStatut, string>
+    statuts: Record<StatutMesure, string>
   ) => {
     if (mesure.statut === 'fait') {
       toasterStore.succes(

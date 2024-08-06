@@ -1,12 +1,12 @@
+import type { StatutMesure } from '../modeles/mesure';
+
 export enum Referentiel {
   ANSSI = 'ANSSI',
   SPECIFIQUE = 'Mesures ajoutées',
   CNIL = 'CNIL',
 }
 
-export type IdStatut = string;
-
-export type ReferentielStatut = Record<IdStatut, string>;
+export type ReferentielStatut = Record<StatutMesure, string>;
 
 export type TypeNotification = 'nouveaute' | 'tache';
 
