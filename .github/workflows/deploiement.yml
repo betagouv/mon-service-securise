@@ -31,6 +31,12 @@ jobs:
           clever link -o="$ID_ORGANISATION" "$ID_APP"
           clever deploy --force --same-commit-policy=rebuild
 
+      - name: Invalider le cache Baleen
+        env:
+          BALEEN_TOKEN: ${{ secrets.BALEEN_TOKEN }}
+          BALEEN_NAMESPACE: ${{ secrets.BALEEN_NAMESPACE }}
+        run: bash scripts/baleen/invalidation-cache.sh
+
   deploiement-prod:
     needs: [deploiement-demo]
     name: Déploiement en PROD
@@ -55,3 +61,9 @@ jobs:
         run: |
           clever link -o="$ID_ORGANISATION" "$ID_APP"
           clever deploy --force --same-commit-policy=rebuild
+
+      - name: Invalider le cache Baleen
+        env:
+          BALEEN_TOKEN: ${{ secrets.BALEEN_TOKEN }}
+          BALEEN_NAMESPACE: ${{ secrets.BALEEN_NAMESPACE }}
+        run: bash scripts/baleen/invalidation-cache.sh
