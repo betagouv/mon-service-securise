@@ -26,11 +26,13 @@ describe('Une mesure de sécurité', () => {
   );
 
   it('sait se décrire', () => {
+    referentiel.enrichis({ prioritesMesures: { p3: {} } });
     const mesure = new MesureGenerale(
       {
         id: 'identifiantMesure',
         statut: MesureGenerale.STATUT_FAIT,
         modalites: "Des modalités d'application",
+        priorite: 'p3',
       },
       referentiel
     );
@@ -38,10 +40,12 @@ describe('Une mesure de sécurité', () => {
     expect(mesure.id).to.equal('identifiantMesure');
     expect(mesure.statut).to.equal(MesureGenerale.STATUT_FAIT);
     expect(mesure.modalites).to.equal("Des modalités d'application");
+    expect(mesure.priorite).to.equal('p3');
     expect(mesure.toJSON()).to.eql({
       id: 'identifiantMesure',
       statut: MesureGenerale.STATUT_FAIT,
       modalites: "Des modalités d'application",
+      priorite: 'p3',
     });
   });
 
