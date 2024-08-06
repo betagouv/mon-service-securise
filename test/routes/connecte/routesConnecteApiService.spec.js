@@ -519,6 +519,45 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         expect(e.response.data).to.be('L\'échéance "pasUneDate" est invalide');
       }
     });
+
+    it("décode les 'slash' des dates d'échéance ", async () => {
+      const slash = '&#x2F;';
+      let donneesRecues;
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService = async (
+        _,
+        __,
+        mesuresSpecifiques
+      ) => {
+        donneesRecues = mesuresSpecifiques;
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/456/mesures-specifiques',
+        [
+          {
+            description: 'd1',
+            categorie: 'uneCategorie',
+            statut: 'fait',
+            modalites: 'm1',
+            echeance: `01${slash}01${slash}2024`,
+          },
+          {
+            description: 'd2',
+            categorie: 'uneCategorie',
+            statut: 'nonFait',
+            modalites: 'm2',
+          },
+        ]
+      );
+
+      expect(donneesRecues.item(0).toJSON().echeance).to.eql('01/01/2024');
+      expect(donneesRecues.item(1).toJSON()).to.eql({
+        description: 'd2',
+        categorie: 'uneCategorie',
+        statut: 'nonFait',
+        modalites: 'm2',
+      });
+    });
   });
 
   describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
