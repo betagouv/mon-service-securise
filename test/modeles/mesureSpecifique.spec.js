@@ -4,6 +4,7 @@ const {
   ErreurCategorieInconnue,
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
+  ErreurEcheanceMesureInvalide,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const InformationsService = require('../../src/modeles/informationsService');
@@ -82,6 +83,16 @@ describe('Une mesure spécifique', () => {
     } catch (e) {
       expect(e).to.be.a(ErreurPrioriteMesureInvalide);
       expect(e.message).to.equal('La priorité "prioriteInvalide" est invalide');
+    }
+  });
+
+  it("vérifie la valeur de l'échéance", () => {
+    try {
+      new MesureSpecifique({ echeance: 'pasUneDate' }, referentiel);
+      expect().fail('La création de la mesure aurait dû lever une exception');
+    } catch (e) {
+      expect(e).to.be.a(ErreurEcheanceMesureInvalide);
+      expect(e.message).to.equal('L\'échéance "pasUneDate" est invalide');
     }
   });
 

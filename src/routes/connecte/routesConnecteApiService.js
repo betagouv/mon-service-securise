@@ -12,6 +12,7 @@ const {
   ErreurMesureInconnue,
   ErreurDonneesReferentielIncorrectes,
   ErreurPrioriteMesureInvalide,
+  ErreurEcheanceMesureInvalide,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -219,7 +220,8 @@ const routesConnecteApiService = ({
       '*.categorie',
       '*.statut',
       '*.modalites',
-      '*.priorite'
+      '*.priorite',
+      '*.echeance'
     ),
     async (requete, reponse, suite) => {
       // il ne faut pas utiliser params.id qui est modifié par le middleware aseptise
@@ -243,7 +245,8 @@ const routesConnecteApiService = ({
         if (
           e instanceof ErreurCategorieInconnue ||
           e instanceof ErreurStatutMesureInvalide ||
-          e instanceof ErreurPrioriteMesureInvalide
+          e instanceof ErreurPrioriteMesureInvalide ||
+          e instanceof ErreurEcheanceMesureInvalide
         ) {
           reponse.status(400).send(e.message);
           return;
@@ -257,7 +260,7 @@ const routesConnecteApiService = ({
     '/:id/mesures/:idMesure',
     middleware.verificationAcceptationCGU,
     middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise('statut', 'modalites', 'priorite'),
+    middleware.aseptise('statut', 'modalites', 'priorite', 'echeance'),
     async (requete, reponse, suite) => {
       const { service, idUtilisateurCourant, body, params } = requete;
       const mesureGenerale = {
@@ -276,7 +279,8 @@ const routesConnecteApiService = ({
         if (
           e instanceof ErreurMesureInconnue ||
           e instanceof ErreurStatutMesureInvalide ||
-          e instanceof ErreurPrioriteMesureInvalide
+          e instanceof ErreurPrioriteMesureInvalide ||
+          e instanceof ErreurEcheanceMesureInvalide
         ) {
           reponse.status(400).send('La mesure est invalide.');
           return;

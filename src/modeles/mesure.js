@@ -7,6 +7,7 @@ const InformationsService = require('./informationsService');
 const {
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
+  ErreurEcheanceMesureInvalide,
 } = require('../erreurs');
 
 const STATUTS = {
@@ -46,7 +47,7 @@ class Mesure extends InformationsService {
     return Object.values(STATUTS).includes(statut);
   }
 
-  static valide({ statut, priorite }, referentiel) {
+  static valide({ statut, priorite, echeance }, referentiel) {
     if (statut && !this.statutsPossibles().includes(statut)) {
       throw new ErreurStatutMesureInvalide(
         `Le statut "${statut}" est invalide`
@@ -60,6 +61,14 @@ class Mesure extends InformationsService {
       throw new ErreurPrioriteMesureInvalide(
         `La priorité "${priorite}" est invalide`
       );
+    }
+
+    if (echeance) {
+      if (Number.isNaN(new Date(echeance).valueOf())) {
+        throw new ErreurEcheanceMesureInvalide(
+          `L'échéance "${echeance}" est invalide`
+        );
+      }
     }
   }
 }
