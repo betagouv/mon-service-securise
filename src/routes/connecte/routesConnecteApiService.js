@@ -231,8 +231,12 @@ const routesConnecteApiService = ({
         body: mesuresSpecifiques,
       } = requete;
       try {
+        const donneesMesuresSpecifiques = mesuresSpecifiques.map((m) => {
+          if (m.echeance) m.echeance = m.echeance.replaceAll('&#x2F;', '/');
+          return m;
+        });
         const mesures = new MesuresSpecifiques(
-          { mesuresSpecifiques },
+          { mesuresSpecifiques: donneesMesuresSpecifiques },
           referentiel
         );
         await depotDonnees.metsAJourMesuresSpecifiquesDuService(
