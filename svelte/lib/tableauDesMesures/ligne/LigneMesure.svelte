@@ -17,6 +17,7 @@
   import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
   import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
   import SelectionEcheance from './SelectionEcheance.svelte';
+  import { planDActionDisponible } from '../../modeles/mesure';
 
   type IdDom = string;
 
@@ -61,7 +62,8 @@
       <SelectionPriorite
         bind:priorite={mesure.priorite}
         {id}
-        {estLectureSeule}
+        estLectureSeule={estLectureSeule ||
+          !planDActionDisponible(mesure.statut)}
         {priorites}
         on:input={(e) =>
           dispatch('modificationPriorite', { priorite: e.detail.priorite })}
@@ -70,7 +72,8 @@
     <td>
       <SelectionEcheance
         bind:echeance={mesure.echeance}
-        {estLectureSeule}
+        estLectureSeule={estLectureSeule ||
+          !planDActionDisponible(mesure.statut)}
         on:modificationEcheance
       />
     </td>
