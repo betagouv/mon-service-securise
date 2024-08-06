@@ -16,6 +16,7 @@
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
   import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
   import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
+  import SelectionEcheance from './SelectionEcheance.svelte';
 
   type IdDom = string;
 
@@ -64,6 +65,13 @@
         {priorites}
         on:input={(e) =>
           dispatch('modificationPriorite', { priorite: e.detail.priorite })}
+      />
+    </td>
+    <td>
+      <SelectionEcheance
+        bind:echeance={mesure.echeance}
+        {estLectureSeule}
+        on:modificationEcheance
       />
     </td>
   {/if}
