@@ -37,8 +37,8 @@ class MesureGenerale extends Mesure {
     return Mesure.statutRenseigne(this.statut);
   }
 
-  static valide({ id, statut, priorite }, referentiel) {
-    super.valide({ statut, priorite }, referentiel);
+  static valide({ id, statut, priorite, echeance }, referentiel) {
+    super.valide({ statut, priorite, echeance }, referentiel);
 
     const identifiantsMesuresRepertoriees = referentiel.identifiantsMesures();
     if (!identifiantsMesuresRepertoriees.includes(id)) {

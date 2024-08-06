@@ -1,7 +1,10 @@
 const expect = require('expect.js');
 
 const Mesure = require('../../src/modeles/mesure');
-const { ErreurPrioriteMesureInvalide } = require('../../src/erreurs');
+const {
+  ErreurPrioriteMesureInvalide,
+  ErreurEcheanceMesureInvalide,
+} = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
 const elle = it;
@@ -76,6 +79,28 @@ describe('Une mesure', () => {
       });
 
       Mesure.valide({ priorite: 'p1' }, referentiel);
+    });
+  });
+
+  describe("sur validation de l'échéance", () => {
+    it("ne valide pas si l'échéance n'est pas une date valide", () => {
+      try {
+        Mesure.valide(
+          { echeance: 'pasunedate' },
+          Referentiel.creeReferentielVide()
+        );
+        expect().fail('L’appel aurait dû lancer une exception');
+      } catch (e) {
+        expect(e).to.be.an(ErreurEcheanceMesureInvalide);
+        expect(e.message).to.be('L\'échéance "pasunedate" est invalide');
+      }
+    });
+
+    it("valide si l'échéance est une date valide", () => {
+      Mesure.valide(
+        { echeance: '08/25/2024' },
+        Referentiel.creeReferentielVide()
+      );
     });
   });
 });

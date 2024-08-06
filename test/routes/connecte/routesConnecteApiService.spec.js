@@ -368,6 +368,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           '*.statut',
           '*.modalites',
           '*.priorite',
+          '*.echeance',
         ],
         {
           method: 'put',
@@ -496,6 +497,28 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         expect(e.response.data).to.be('La priorité "plop" est invalide');
       }
     });
+
+    it("retourne une erreur HTTP 400 si l'échéance est invalide", async () => {
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
+        async () => {};
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures-specifiques',
+          [
+            {
+              description: 'd1',
+              categorie: 'uneCategorie',
+              echeance: 'pasUneDate',
+            },
+          ]
+        );
+        expect().fail('L’appel aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('L\'échéance "pasUneDate" est invalide');
+      }
+    });
   });
 
   describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
@@ -536,7 +559,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['statut', 'modalites', 'priorite'],
+        ['statut', 'modalites', 'priorite', 'echeance'],
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456/mesures/audit',
@@ -594,6 +617,23 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('renvoie une erreur 400 si la mesure est invalide à cause de la priorité', async () => {
       const mesureGenerale = {
         priorite: 'invalide',
+      };
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures/audit',
+          mesureGenerale
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La mesure est invalide.');
+      }
+    });
+
+    it("renvoie une erreur 400 si la mesure est invalide à cause de l'échéance", async () => {
+      const mesureGenerale = {
+        echeance: 'invalide',
       };
 
       try {
