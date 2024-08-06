@@ -647,6 +647,30 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         expect(e.response.data).to.be('La mesure est invalide.');
       }
     });
+
+    it("décode les 'slash' de la date d'échéance ", async () => {
+      const slash = '&#x2F;';
+      let donneesRecues;
+      testeur.depotDonnees().metsAJourMesureGeneraleDuService = (
+        _,
+        __,
+        donnees
+      ) => {
+        donneesRecues = donnees;
+      };
+
+      const mesureGenerale = {
+        statut: 'fait',
+        echeance: `01${slash}01${slash}2024`,
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/456/mesures/audit',
+        mesureGenerale
+      );
+
+      expect(donneesRecues.echeance).to.equal('01/01/2024');
+    });
   });
 
   describe('quand requête POST sur `/api/service/:id/rolesResponsabilites`', () => {
