@@ -263,6 +263,9 @@ const routesConnecteApiService = ({
     middleware.aseptise('statut', 'modalites', 'priorite', 'echeance'),
     async (requete, reponse, suite) => {
       const { service, idUtilisateurCourant, body, params } = requete;
+      if (body.echeance) {
+        body.echeance = body.echeance.replaceAll('&#x2F;', '/');
+      }
       const mesureGenerale = {
         ...body,
         id: params.idMesure,
