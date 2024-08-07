@@ -50,6 +50,8 @@ const chiffrement = () => ({
 
 const featureFlag = () => ({
   visiteGuideeActive: () => process.env.FEATURE_FLAG_VISITE_GUIDEE === 'true',
+  avecPlanAction: () =>
+    process.env.VITE_FEATURE_FLAG_AVEC_PLAN_ACTION === 'true',
 });
 
 const versionDeBuild = () => {
