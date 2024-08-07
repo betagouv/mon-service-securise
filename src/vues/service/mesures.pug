@@ -8,10 +8,10 @@ block append styles
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
 
 block append scripts
-  +composantSvelteAvecVersion('mesure.js')
-  +composantSvelteAvecVersion('tableauDesMesures.js')
-  +composantSvelteAvecVersion('completudeMesure.js')
-  +composantSvelteAvecVersion('indiceCyber.js')
+  +composantSvelte('mesure.js')
+  +composantSvelte('tableauDesMesures.js')
+  +composantSvelte('completudeMesure.js')
+  +composantSvelte('indiceCyber.js')
   script(type = 'module', src = '/statique/service/mesures.js')
   script(id = 'referentiel-categories-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.categoriesMesures())}

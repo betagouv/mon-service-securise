@@ -6,7 +6,7 @@ block append styles
   +feuilleDeStyleSvelte()
 
 block append scripts
-  +composantSvelteAvecVersion('centreNotifications.js')
+  +composantSvelte('centreNotifications.js')
 
 block navigation
   #centre-notifications
@@ -22,7 +22,7 @@ block append session
       a.bouton(href = '/connexion') Reconnexion
 
   script(type = 'module', src = '/statique/mssConnecte.js')
-  +composantSvelteAvecVersion('visiteGuidee.js')
+  +composantSvelte('visiteGuidee.js')
 
 block bom-contenu
   p Vous souhaitez :
