@@ -60,3 +60,11 @@ export enum EtatEnregistrement {
   EnCours,
   Fait,
 }
+
+export type Contributeur = {
+  estUtilisateurCourant: boolean;
+  id: string;
+  initiales: string;
+  poste: string;
+  prenomNom: string;
+};
