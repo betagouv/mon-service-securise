@@ -54,7 +54,7 @@ const featureFlag = () => ({
 
 const versionDeBuild = () => {
   const versionCommit =
-    process.env.SOURCE_VERSION || process.env.CC_COMMIT_ID || '1';
+    process.env.CONTAINER_VERSION || process.env.CC_COMMIT_ID || '1';
   return versionCommit.substring(0, 8);
 };
 
