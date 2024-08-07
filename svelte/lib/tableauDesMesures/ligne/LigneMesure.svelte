@@ -18,6 +18,7 @@
   import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
   import SelectionEcheance from './SelectionEcheance.svelte';
   import { planDActionDisponible } from '../../modeles/mesure';
+  import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
 
   type IdDom = string;
 
@@ -75,6 +76,13 @@
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
         on:modificationEcheance
+      />
+    </td>
+    <td>
+      <SelectionResponsables
+        bind:responsables={mesure.responsables}
+        estLectureSeule={estLectureSeule ||
+          !planDActionDisponible(mesure.statut)}
       />
     </td>
   {/if}

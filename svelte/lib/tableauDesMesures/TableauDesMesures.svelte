@@ -159,7 +159,7 @@
 <table class="tableau-des-mesures">
   <thead>
     <tr class="ligne-onglet">
-      <th colspan="4">
+      <th colspan="5">
         <div class="conteneur-onglet">
           {#if $volumetrieMesures.totalSansStatut}
             <Onglet
@@ -199,6 +199,7 @@
         {#if affichePlanAction}
           <th>Priorité</th>
           <th>Échéance</th>
+          <th>Responsables</th>
         {/if}
         <th>Statut</th>
       </tr>
