@@ -5,6 +5,7 @@ const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
 const { featureFlag } = require('./adaptateurEnvironnement');
+const { dateEnFrancais } = require('../utilitaires/date');
 
 const remplaceBooleen = (booleen) => (booleen ? 'Oui' : 'Non');
 const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
@@ -65,6 +66,7 @@ const genereCsvMesures = async (
 
     if (featureFlag().avecPlanAction()) {
       colonnes.push({ id: 'priorite', title: 'Priorité' });
+      colonnes.push({ id: 'echeance', title: 'Échéance' });
     }
   }
 
@@ -80,6 +82,7 @@ const genereCsvMesures = async (
       statut: referentiel.descriptionStatutMesure(m.statut),
       commentaires: sansRetoursChariots(decode(m.modalites)),
       priorite: referentiel.prioritesMesures()[m.priorite]?.libelleCourt,
+      echeance: m.echeance ? dateEnFrancais(m.echeance) : null,
     }))
     .concat(
       mesuresSpecifiques.map((m) => ({
@@ -92,6 +95,7 @@ const genereCsvMesures = async (
         statut: referentiel.descriptionStatutMesure(m.statut),
         commentaires: sansRetoursChariots(decode(m.modalites)),
         priorite: referentiel.prioritesMesures()[m.priorite]?.libelleCourt,
+        echeance: m.echeance ? dateEnFrancais(m.echeance) : null,
       }))
     );
 
