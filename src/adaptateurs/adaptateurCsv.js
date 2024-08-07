@@ -4,6 +4,7 @@ const { stripHtml } = require('string-strip-html');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
+const { featureFlag } = require('./adaptateurEnvironnement');
 
 const remplaceBooleen = (booleen) => (booleen ? 'Oui' : 'Non');
 const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
@@ -48,7 +49,7 @@ const genereCsvMesures = async (
   avecDonneesAdditionnnelles,
   referentiel
 ) => {
-  // Les `id` correspondent aux noms des propriétés dans notre modèle Mesure
+  // Les `id` doivent correspondrent aux champs des objets dans `donneesCsv`
   const colonnes = [
     { id: 'identifiant', title: 'Identifiant de la mesure' },
     { id: 'description', title: 'Nom de la mesure' },
@@ -61,6 +62,10 @@ const genereCsvMesures = async (
   if (avecDonneesAdditionnnelles) {
     colonnes.push({ id: 'statut', title: 'Statut' });
     colonnes.push({ id: 'commentaires', title: 'Commentaires' });
+
+    if (featureFlag().avecPlanAction()) {
+      colonnes.push({ id: 'priorite', title: 'Priorité' });
+    }
   }
 
   const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
@@ -74,6 +79,7 @@ const genereCsvMesures = async (
       descriptionLongue: stripHtml(m.descriptionLongue).result,
       statut: referentiel.descriptionStatutMesure(m.statut),
       commentaires: sansRetoursChariots(decode(m.modalites)),
+      priorite: referentiel.prioritesMesures()[m.priorite]?.libelleCourt,
     }))
     .concat(
       mesuresSpecifiques.map((m) => ({
@@ -85,6 +91,7 @@ const genereCsvMesures = async (
         descriptionLongue: '',
         statut: referentiel.descriptionStatutMesure(m.statut),
         commentaires: sansRetoursChariots(decode(m.modalites)),
+        priorite: referentiel.prioritesMesures()[m.priorite]?.libelleCourt,
       }))
     );
 
