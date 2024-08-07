@@ -4,16 +4,23 @@
 
   export let responsables: ResponsableMesure[] | null;
   export let estLectureSeule: boolean;
+
+  let menuOuvert = false;
 </script>
 
-<MenuFlottant {estLectureSeule}>
+<MenuFlottant {estLectureSeule} bind:menuOuvert>
   <div slot="declencheur" class="bouton-declencheur" class:estLectureSeule>
     <div class="conteneur-image">
       <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
     </div>
     <span>{responsables?.length || 0}</span>
   </div>
-  <div class="conteneur-responsables"></div>
+  <div class="conteneur-responsables">
+    <div class="entete">
+      <span class="titre">Attribuer une mesure</span>
+      <button class="fermeture" on:click={() => (menuOuvert = false)}>✕</button>
+    </div>
+  </div>
 </MenuFlottant>
 
 <style>
@@ -25,7 +32,7 @@
     flex-direction: column;
     gap: 4px;
     background: white;
-    max-width: 274px;
+    width: 274px;
   }
 
   .bouton-declencheur {
@@ -72,5 +79,31 @@
   .bouton-declencheur:not(.estLectureSeule):hover img {
     filter: brightness(0) invert(17%) sepia(79%) saturate(1068%)
       hue-rotate(177deg) brightness(101%) contrast(98%);
+  }
+
+  .entete {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+  }
+
+  .entete .titre {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+  }
+
+  .entete .fermeture {
+    font-size: 18px;
+    color: var(--liseres-fonce);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .entete .fermeture:hover {
+    color: var(--texte-fonce);
   }
 </style>

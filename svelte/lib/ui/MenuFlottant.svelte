@@ -4,8 +4,8 @@
   export let parDessusDeclencheur = false;
   export let fermeMenuSiClicInterne = false;
   export let estLectureSeule = false;
+  export let menuOuvert = false;
 
-  let menuOuvert = false;
   let declencheurEl: HTMLButtonElement;
   let contenuEl: HTMLDivElement;
 </script>
