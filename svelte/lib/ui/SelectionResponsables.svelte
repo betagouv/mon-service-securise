@@ -8,14 +8,15 @@
   let menuOuvert = false;
 </script>
 
-<MenuFlottant {estLectureSeule} bind:menuOuvert>
+<MenuFlottant bind:menuOuvert {estLectureSeule} stopPropagation>
   <div slot="declencheur" class="bouton-declencheur" class:estLectureSeule>
     <div class="conteneur-image">
       <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
     </div>
     <span>{responsables?.length || 0}</span>
   </div>
-  <div class="conteneur-responsables">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div class="conteneur-responsables" on:click|stopPropagation>
     <div class="entete">
       <span class="titre">Attribuer une mesure</span>
       <button class="fermeture" on:click={() => (menuOuvert = false)}>✕</button>

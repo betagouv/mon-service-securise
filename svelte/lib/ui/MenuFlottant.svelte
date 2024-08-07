@@ -5,15 +5,21 @@
   export let fermeMenuSiClicInterne = false;
   export let estLectureSeule = false;
   export let menuOuvert = false;
+  export let stopPropagation = false;
 
   let declencheurEl: HTMLButtonElement;
   let contenuEl: HTMLDivElement;
+
+  const ouvreLeMenu = (e: MouseEvent) => {
+    if (stopPropagation) e.stopPropagation();
+    menuOuvert = true;
+  };
 </script>
 
 <div class="conteneur">
   <button
     class="declencheur"
-    on:click={() => (menuOuvert = true)}
+    on:click={ouvreLeMenu}
     bind:this={declencheurEl}
     disabled={estLectureSeule}
   >
