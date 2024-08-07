@@ -3,7 +3,7 @@ extends mss
 block append styles
   link(href = '/statique/assets/styles/headerLarge.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
-  link(href = `/statique/composants-svelte/style.css${version ? `?v=${version}` : ''}`, rel = 'stylesheet')
+  +feuilleDeStyleSvelte()
 
 block append scripts
   +composantSvelteAvecVersion('centreNotifications.js')
