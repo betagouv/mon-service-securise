@@ -1,3 +1,6 @@
 mixin composantSvelteAvecVersion(nomDuComposant)
     // `version` est pris dans `reponse.locals`
     script(type = 'module', src = `/statique/composants-svelte/${nomDuComposant}?v=${version}`)
+
+mixin feuilleDeStyleSvelte()
+    link(href = `/statique/composants-svelte/style.css?v=${version}`, rel = 'stylesheet')

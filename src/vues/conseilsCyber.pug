@@ -8,7 +8,7 @@ block title
   title!= 'Conseils Cyber | MonServiceSécurisé'
 
 block append styles
-  link(href = `/statique/composants-svelte/style.css${version ? `?v=${version}` : ''}`, rel = 'stylesheet')
+  +feuilleDeStyleSvelte()
 
 block append scripts
   script(type = 'module', src='/statique/scripts/conseilsCyber.js')
