@@ -3,6 +3,7 @@
 
   export let parDessusDeclencheur = false;
   export let fermeMenuSiClicInterne = false;
+  export let estLectureSeule = false;
 
   let menuOuvert = false;
   let declencheurEl: HTMLButtonElement;
@@ -14,6 +15,7 @@
     class="declencheur"
     on:click={() => (menuOuvert = true)}
     bind:this={declencheurEl}
+    disabled={estLectureSeule}
   >
     <slot name="declencheur" />
   </button>
@@ -59,5 +61,9 @@
     background: transparent;
     padding: 0;
     cursor: pointer;
+  }
+
+  button[disabled] {
+    cursor: not-allowed;
   }
 </style>

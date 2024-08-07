@@ -3,10 +3,11 @@
   import MenuFlottant from './MenuFlottant.svelte';
 
   export let responsables: ResponsableMesure[] | null;
+  export let estLectureSeule: boolean;
 </script>
 
-<MenuFlottant>
-  <div slot="declencheur" class="bouton-declencheur">
+<MenuFlottant {estLectureSeule}>
+  <div slot="declencheur" class="bouton-declencheur" class:estLectureSeule>
     <div class="conteneur-image">
       <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
     </div>
@@ -43,7 +44,11 @@
     font-weight: 500;
   }
 
-  .bouton-declencheur:hover span {
+  .bouton-declencheur.estLectureSeule span {
+    color: var(--liseres-fonce);
+  }
+
+  .bouton-declencheur:not(.estLectureSeule):hover span {
     color: var(--bleu-anssi);
   }
 
@@ -59,8 +64,13 @@
     margin: -3px;
   }
 
-  .bouton-declencheur:hover img {
-    filter: invert(17%) sepia(79%) saturate(1068%) hue-rotate(177deg)
-      brightness(101%) contrast(98%);
+  .bouton-declencheur.estLectureSeule img {
+    filter: brightness(0) invert(93%) sepia(5%) saturate(719%)
+      hue-rotate(181deg) brightness(88%) contrast(100%);
+  }
+
+  .bouton-declencheur:not(.estLectureSeule):hover img {
+    filter: brightness(0) invert(17%) sepia(79%) saturate(1068%)
+      hue-rotate(177deg) brightness(101%) contrast(98%);
   }
 </style>
