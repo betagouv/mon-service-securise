@@ -4,7 +4,7 @@ block title
   title Décrire | MonServiceSécurisé
 
 block append scripts
-  script(type = 'module', src = '/statique/composants-svelte/niveauxDeSecurite.js')
+  +composantSvelteAvecVersion('niveauxDeSecurite.js')
 
 block append styles
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
