@@ -9,7 +9,7 @@ block append styles
   link(href = '/statique/assets/styles/homologation/indiceCyber.css', rel = 'stylesheet')
 
 block append scripts
-  +composantSvelteAvecVersion('indiceCyber.js')
+  +composantSvelte('indiceCyber.js')
   script(type = 'module', src = '/statique/service/indiceCyber.js')
   script(id = 'indice-cyber', type = 'application/json').
     !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax() })}

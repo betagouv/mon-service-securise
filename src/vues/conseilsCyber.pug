@@ -12,7 +12,7 @@ block append styles
 
 block append scripts
   script(type = 'module', src='/statique/scripts/conseilsCyber.js')
-  +composantSvelteAvecVersion('blog.js')
+  +composantSvelte('blog.js')
   script(id = 'sections-blog', type = 'application/json').
     !{JSON.stringify(sections)}
   script(id = 'articles-blog', type = 'application/json').

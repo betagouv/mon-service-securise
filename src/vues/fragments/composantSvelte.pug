@@ -1,4 +1,4 @@
-mixin composantSvelteAvecVersion(nomDuComposant)
+mixin composantSvelte(nomDuComposant)
     // `version` est pris dans `reponse.locals`
     script(type = 'module', src = `/statique/composants-svelte/${nomDuComposant}?v=${version}`)
 
