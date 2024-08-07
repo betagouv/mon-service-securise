@@ -1,0 +1,66 @@
+<script lang="ts">
+  import type { ResponsableMesure } from '../tableauDesMesures/tableauDesMesures.d';
+  import MenuFlottant from './MenuFlottant.svelte';
+
+  export let responsables: ResponsableMesure[] | null;
+</script>
+
+<MenuFlottant>
+  <div slot="declencheur" class="bouton-declencheur">
+    <div class="conteneur-image">
+      <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
+    </div>
+    <span>{responsables?.length || 0}</span>
+  </div>
+  <div class="conteneur-responsables"></div>
+</MenuFlottant>
+
+<style>
+  .conteneur-responsables {
+    border-radius: 6px;
+    padding: 16px;
+    border: 1px solid var(--liseres-fonce);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: white;
+    max-width: 274px;
+  }
+
+  .bouton-declencheur {
+    background: var(--fond-gris-pale);
+    border-radius: 25px;
+    padding: 3px 6px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .bouton-declencheur span {
+    margin-right: 6px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .bouton-declencheur:hover span {
+    color: var(--bleu-anssi);
+  }
+
+  .conteneur-image {
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .conteneur-image img {
+    margin: -3px;
+  }
+
+  .bouton-declencheur:hover img {
+    filter: invert(17%) sepia(79%) saturate(1068%) hue-rotate(177deg)
+      brightness(101%) contrast(98%);
+  }
+</style>

@@ -11,7 +11,7 @@
 </script>
 
 <tr>
-  <th colspan="4">
+  <th colspan="5">
     <div class="actions">
       <button
         class="bouton-action-mesure"
