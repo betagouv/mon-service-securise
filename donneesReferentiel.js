@@ -795,6 +795,8 @@ module.exports = {
         "<p>Cette mesure permet de faciliter la création de mots de passe différents, longs et complexes, distincts pour chaque compte d'accès, sans effort de mémorisation.</p>",
       referentiel: 'ANSSI',
       identifiantNumerique: '0026',
+      lienBlog:
+        '/articles/encourager-les-administrateurs-a-utiliser-un-coffre-fort-de-mots-de-passe',
     },
     compartimenter: {
       description: "Dissocier les rôles d'administration entre eux",
@@ -827,6 +829,8 @@ module.exports = {
         "<p>Cette mesure permet de diminuer le risque de découverte et l'usurpation de mots de passe par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.</p>",
       referentiel: 'ANSSI',
       identifiantNumerique: '0029',
+      lienBlog:
+        '/articles/fixer-des-contraintes-de-longueur-et-de-complexite-des-mots-de-passe',
     },
     deconnexionAutomatique: {
       description:
@@ -869,6 +873,8 @@ module.exports = {
         "<p>Cette mesure permet de réduire le risque d'accès illicite aux fonctions d'administration du service par des acteurs malveillants et diminue, d'autant, le risque d'atteinte grave au service.</p>",
       referentiel: 'ANSSI',
       identifiantNumerique: '0033',
+      lienBlog:
+        '/articles/activer-lauthentification-multifacteur-pour-lacces-des-administrateurs-au-service',
     },
     environnementSecurise: {
       description:
@@ -1003,6 +1009,7 @@ module.exports = {
         "<p>L'objectif de cette mesure est de limiter la capacité d'un attaquant à accéder aux mots de passe en cas de compromission de la base de données des mots de passe.</p>",
       referentiel: 'ANSSI',
       identifiantNumerique: '0046',
+      lienBlog: '/articles/proteger-les-mots-de-passe-stockes-sur-le-service',
     },
     renouvellementMotsDePasse: {
       description:
@@ -1057,6 +1064,8 @@ module.exports = {
         "<p>Cette mesure permet de préparer l'organisation à réagir de manière rapide et efficace en cas d'incident de sécurité affectant le service et à remédier à la situation.</p>",
       referentiel: 'ANSSI',
       identifiantNumerique: '0051',
+      lienBlog:
+        '/articles/definir-une-politique-de-gestion-des-incidents-de-securite',
     },
     journalAcces: {
       description:
