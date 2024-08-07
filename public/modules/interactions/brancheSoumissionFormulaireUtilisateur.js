@@ -35,6 +35,7 @@ const brancheSoumissionFormulaireUtilisateur = (
   selecteurFormulaire,
   action
 ) => {
+  const $submit = $(`${selecteurFormulaire} button[type = 'submit']`);
   const reponseAcceptee = (nom) =>
     $(`#${nom}:checked`).val() ? true : undefined;
 
@@ -72,11 +73,12 @@ const brancheSoumissionFormulaireUtilisateur = (
   };
 
   brancheValidation(selecteurFormulaire);
-  $(`${selecteurFormulaire} button[type = 'submit']`).on('click', () => {
+  $submit.on('click', () => {
     declencheValidation(selecteurFormulaire);
   });
 
-  $(selecteurFormulaire).on('submit', (evenement) => {
+  $(selecteurFormulaire).on('submit', async (evenement) => {
+    $submit.addClass('en-cours-chargement').prop('disabled', true);
     evenement.preventDefault();
 
     const donnees = Object.keys(obtentionDonnees).reduce((acc, clef) => {
@@ -87,7 +89,11 @@ const brancheSoumissionFormulaireUtilisateur = (
       return { ...acc, [clef]: obtentionDonnees[clef]() };
     }, {});
 
-    action(donnees);
+    try {
+      await action(donnees);
+    } finally {
+      $submit.removeClass('en-cours-chargement').prop('disabled', false);
+    }
   });
 
   $('#posteAutrePresent', selecteurFormulaire).on('change', (evenement) => {
