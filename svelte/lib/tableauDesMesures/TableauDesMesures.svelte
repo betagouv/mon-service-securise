@@ -9,6 +9,7 @@
   import {
     enregistreMesureGenerale,
     enregistreMesuresSpecifiques,
+    recupereContributeurs,
     recupereMesures,
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
@@ -36,6 +37,7 @@
   import BandeauActions from './BandeauActions.svelte';
   import { afficheTiroirDeMesure } from './actionsTiroir';
   import { featureFlags } from '../featureFlags';
+  import { contributeurs } from './stores/contributeurs.store';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -51,8 +53,13 @@
       modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
     );
   };
+
+  const rafraichisContributeurs = async () => {
+    contributeurs.reinitialise(await recupereContributeurs(idService));
+  };
+
   onMount(async () => {
-    await rafraichisMesures();
+    await Promise.all([rafraichisMesures(), rafraichisContributeurs()]);
     if (!$nombreResultats.nombreParAvancement.statutADefinir)
       $rechercheParAvancement = 'enAction';
   });

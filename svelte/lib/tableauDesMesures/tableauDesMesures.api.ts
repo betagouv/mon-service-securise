@@ -5,6 +5,7 @@ import type {
   Mesures,
   MesureSpecifique,
   MesureGenerale,
+  Contributeur,
 } from './tableauDesMesures.d';
 
 const formatteurDate = new Intl.DateTimeFormat('en-EN');
@@ -27,10 +28,24 @@ const decodeEntitesHtml = (mesures: Mesures) => {
   }
 };
 
+const decodeContributeursHtml = (contributeurs: Contributeur[]) => {
+  contributeurs = contributeurs.map((c) => ({
+    ...c,
+    poste: decode(c.poste),
+    prenomNom: decode(c.prenomNom),
+  }));
+};
+
 export const recupereMesures = async (idService: IdService) => {
   const reponse = await axios.get(`/api/service/${idService}/mesures`);
   decodeEntitesHtml(reponse.data);
   return reponse.data as Mesures;
+};
+
+export const recupereContributeurs = async (idService: IdService) => {
+  const reponse = await axios.get(`/api/service/${idService}`);
+  decodeContributeursHtml(reponse.data.contributeurs);
+  return reponse.data.contributeurs as Contributeur[];
 };
 
 export const metEnFormeMesures = (mesures: Mesures) => {
