@@ -54,4 +54,13 @@
   --systeme-design-etat-gris-survol: #f6f6f6;
   --systeme-design-etat-gris-actif: #ededed;
   --systeme-design-etat-contour-champs: #dddddd;
+
+  --role-proprietaire: #fff4d9;
+  --role-proprietaire-texte: #faa72c;
+  --role-lecteur: #e9ddff;
+  --role-lecteur-texte: #7025da;
+  --role-editeur: #dbeeff;
+  --role-editeur-texte: #0079d0;
+  --role-personnalise: #d4f4db;
+  --role-personnalise-texte: #0c8626;
 }
