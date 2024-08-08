@@ -9,6 +9,7 @@ const { unService } = require('../../constructeurs/constructeurService');
 const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
+  ErreurResponsablesMesureInvalides,
 } = require('../../../src/erreurs');
 const Service = require('../../../src/modeles/service');
 const {
@@ -434,6 +435,34 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.status).to.equal(200);
     });
 
+    it('jette une erreur 403 si les responsables ne sont pas des contributeurs du service', async () => {
+      testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
+        async () => {
+          throw new ErreurResponsablesMesureInvalides(
+            'Les responsables des mesures spécifiques doivent être des contributeurs du service.'
+          );
+        };
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures-specifiques',
+          [
+            {
+              description: 'd1',
+              statut: 'fait',
+              responsables: ['pasUnIdDeContributeur'],
+            },
+          ]
+        );
+        expect().fail('L’appel aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+        expect(e.response.data).to.be(
+          'Les responsables des mesures spécifiques doivent être des contributeurs du service.'
+        );
+      }
+    });
+
     it('retourne une erreur HTTP 400 si la catégorie est inconnue', async () => {
       testeur.depotDonnees().metsAJourMesuresSpecifiquesDuService =
         async () => {};
@@ -636,6 +665,32 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         },
         done
       );
+    });
+
+    it('jette une erreur 403 si les responsables ne sont pas des contributeurs du service', async () => {
+      testeur.depotDonnees().metsAJourMesureGeneraleDuService = async () => {
+        throw new ErreurResponsablesMesureInvalides(
+          "Les responsables d'une mesure générale doivent être des contributeurs du service."
+        );
+      };
+
+      const mesureGenerale = {
+        statut: 'fait',
+        responsables: ['pasUnIdDeContributeur'],
+      };
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesures/audit',
+          mesureGenerale
+        );
+        expect().fail('L’appel aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+        expect(e.response.data).to.be(
+          "Les responsables d'une mesure générale doivent être des contributeurs du service."
+        );
+      }
     });
 
     it('jette une erreur 400 si le statut est vide', async () => {

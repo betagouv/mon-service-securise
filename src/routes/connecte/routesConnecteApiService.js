@@ -13,6 +13,7 @@ const {
   ErreurDonneesReferentielIncorrectes,
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
+  ErreurResponsablesMesureInvalides,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -260,6 +261,10 @@ const routesConnecteApiService = ({
           reponse.status(400).send(e.message);
           return;
         }
+        if (e instanceof ErreurResponsablesMesureInvalides) {
+          reponse.status(403).send(e.message);
+          return;
+        }
         suite(e);
       }
     }
@@ -305,6 +310,10 @@ const routesConnecteApiService = ({
           e instanceof ErreurEcheanceMesureInvalide
         ) {
           reponse.status(400).send('La mesure est invalide.');
+          return;
+        }
+        if (e instanceof ErreurResponsablesMesureInvalides) {
+          reponse.status(403).send(e.message);
           return;
         }
         suite(e);
