@@ -193,6 +193,10 @@ class Service {
     this.mesures.mesuresGenerales.metsAJourMesure(mesure);
   }
 
+  metsAJourMesuresSpecifiques(mesures) {
+    this.mesures.metsAJourMesuresSpecifiques(mesures, this.referentiel);
+  }
+
   nombreDossiers() {
     return this.dossiers.nombre();
   }

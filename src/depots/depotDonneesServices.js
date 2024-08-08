@@ -168,9 +168,6 @@ const creeDepot = (config = {}) => {
     return dossier;
   };
 
-  const remplaceMesuresSpecifiquesPourService = (...params) =>
-    remplaceProprieteService('mesuresSpecifiques', ...params);
-
   const ajouteRisqueGeneralAService = (...params) =>
     ajouteAItemsDuService('risquesGeneraux', ...params);
 
@@ -374,8 +371,9 @@ const creeDepot = (config = {}) => {
     idUtilisateur,
     mesures
   ) => {
-    await remplaceMesuresSpecifiquesPourService(idService, mesures);
     const s = await p.lis.un(idService);
+    s.metsAJourMesuresSpecifiques(mesures);
+    await metsAJourService(s);
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
     await busEvenements.publie(
       new EvenementMesuresServiceModifiees({ service: s, utilisateur })
