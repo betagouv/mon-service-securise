@@ -706,8 +706,12 @@ describe('Un service', () => {
             finalise: true,
           },
         ],
-        mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+        mesuresGenerales: [
+          { id: 'uneMesure', statut: 'fait', responsables: [] },
+        ],
+        mesuresSpecifiques: [
+          { description: 'Une mesure spécifique', responsables: [] },
+        ],
         risquesGeneraux: [{ id: 'unRisque' }],
         risquesSpecifiques: [{ description: 'Un risque' }],
         rolesResponsabilites: {

@@ -221,7 +221,8 @@ const routesConnecteApiService = ({
       '*.statut',
       '*.modalites',
       '*.priorite',
-      '*.echeance'
+      '*.echeance',
+      '*.responsables.*'
     ),
     async (requete, reponse, suite) => {
       // il ne faut pas utiliser params.id qui est modifié par le middleware aseptise
@@ -268,7 +269,13 @@ const routesConnecteApiService = ({
     '/:id/mesures/:idMesure',
     middleware.verificationAcceptationCGU,
     middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise('statut', 'modalites', 'priorite', 'echeance'),
+    middleware.aseptise(
+      'statut',
+      'modalites',
+      'priorite',
+      'echeance',
+      'responsables.*'
+    ),
     async (requete, reponse, suite) => {
       const { service, idUtilisateurCourant, body, params } = requete;
       if (!body.statut) {
