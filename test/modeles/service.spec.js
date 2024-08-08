@@ -23,8 +23,8 @@ const {
 } = require('../constructeurs/constructeurAutorisation');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
-describe('Une homologation', () => {
-  it('connaît le nom du service', () => {
+describe('Un service', () => {
+  it('connaît son nom', () => {
     const service = new Service({
       id: '123',
       idUtilisateur: '456',
