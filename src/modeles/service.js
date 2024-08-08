@@ -191,6 +191,12 @@ class Service {
   }
 
   metsAJourMesureGenerale(mesure) {
+    const idContributeurs = this.contributeurs.map((u) => u.id);
+    if (mesure.responsables.some((r) => !idContributeurs.includes(r))) {
+      throw new ErreurResponsablesMesureInvalides(
+        "Les responsables d'une mesure générale doivent être des contributeurs du service."
+      );
+    }
     this.mesures.mesuresGenerales.metsAJourMesure(mesure);
   }
 

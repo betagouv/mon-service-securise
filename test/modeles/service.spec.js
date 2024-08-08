@@ -855,4 +855,66 @@ describe('Un service', () => {
       });
     });
   });
+
+  describe("sur demande de mise à jour d'une mesure générale", () => {
+    let referentiel;
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        mesures: {
+          identifiantMesure: {},
+        },
+      });
+    });
+    it('jette une erreur si les responsables de la mesure ne font pas tous partie des contributeurs', async () => {
+      try {
+        const utilisateur = unUtilisateur()
+          .avecId('unIdDeContributeur')
+          .construis();
+        const service = unService()
+          .ajouteUnContributeur(utilisateur)
+          .construis();
+        const mesure = new MesureGenerale(
+          {
+            id: 'identifiantMesure',
+            statut: 'fait',
+            responsables: ['unIdDeContributeur', 'pasUnIdDeContributeur'],
+          },
+          referentiel
+        );
+
+        await service.metsAJourMesureGenerale(mesure);
+
+        expect().fail("L'appel aurait dû échouer");
+      } catch (e) {
+        expect(e).to.be.an(ErreurResponsablesMesureInvalides);
+        expect(e.message).to.be(
+          "Les responsables d'une mesure générale doivent être des contributeurs du service."
+        );
+      }
+    });
+
+    it('mets à jour le mesure', async () => {
+      const utilisateur = unUtilisateur()
+        .avecId('unIdDeContributeur')
+        .construis();
+      const service = unService().ajouteUnContributeur(utilisateur).construis();
+      const mesure = new MesureGenerale(
+        {
+          id: 'identifiantMesure',
+          statut: 'fait',
+          responsables: ['unIdDeContributeur'],
+        },
+        referentiel
+      );
+
+      await service.metsAJourMesureGenerale(mesure);
+
+      expect(service.mesuresGenerales().toutes().length).to.be(1);
+      expect(service.mesuresGenerales().toutes()[0].toJSON()).to.eql({
+        id: 'identifiantMesure',
+        statut: 'fait',
+        responsables: ['unIdDeContributeur'],
+      });
+    });
+  });
 });
