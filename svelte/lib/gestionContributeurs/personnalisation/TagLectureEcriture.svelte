@@ -65,7 +65,6 @@
   .droit {
     border-radius: 4px;
     font-weight: bold;
-    color: #ffffff;
     font-size: 0.85rem;
     line-height: 0.85rem;
     padding: 0.4em 0.5em;
@@ -83,15 +82,27 @@
     background: url('/statique/assets/images/icone_fleche_bas.svg') no-repeat
       center;
     background-size: contain;
-    filter: brightness(0) invert(1);
+    filter: brightness(0);
   }
 
   .droit.lecture {
-    background: linear-gradient(180deg, #a226b8 0%, #8926c9 100%);
+    background: var(--role-lecteur);
+    color: var(--role-lecteur-texte);
+  }
+
+  .droit.lecture::after {
+    filter: brightness(0) invert(20%) sepia(89%) saturate(3120%)
+      hue-rotate(259deg) brightness(83%) contrast(106%);
   }
 
   .droit.ecriture {
-    background: linear-gradient(180deg, #326fc0 0%, #4d3dc5 100%);
+    background: var(--role-editeur);
+    color: var(--role-editeur-texte);
+  }
+
+  .droit.ecriture::after {
+    filter: brightness(0) invert(37%) sepia(97%) saturate(2274%)
+      hue-rotate(184deg) brightness(85%) contrast(102%);
   }
 
   .droits-disponibles {
