@@ -2,11 +2,19 @@
   import type { ResponsableMesure } from '../tableauDesMesures/tableauDesMesures.d';
   import MenuFlottant from './MenuFlottant.svelte';
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
+  import { createEventDispatcher } from 'svelte';
 
   export let responsables: ResponsableMesure[] | null;
   export let estLectureSeule: boolean;
 
   let menuOuvert = false;
+
+  const dispatch = createEventDispatcher<{
+    modificationResponsables: { responsables: ResponsableMesure[] };
+  }>();
+  const modifieResponsables = () => {
+    if (responsables) dispatch('modificationResponsables', { responsables });
+  };
 </script>
 
 <MenuFlottant bind:menuOuvert {estLectureSeule} stopPropagation>
@@ -42,6 +50,8 @@
             type="checkbox"
             value={contributeur.id}
             class="checkbox-contributeur"
+            bind:group={responsables}
+            on:change={modifieResponsables}
           />
         </div>
       {/each}

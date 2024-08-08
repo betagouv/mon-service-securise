@@ -83,6 +83,7 @@
         bind:responsables={mesure.responsables}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
+        on:modificationResponsables
       />
     </td>
   {/if}

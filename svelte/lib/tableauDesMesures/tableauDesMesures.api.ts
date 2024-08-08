@@ -93,6 +93,7 @@ export const enregistreMesureGenerale = async (
   await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
     statut: donneesMesure.statut,
     priorite: donneesMesure.priorite,
+    responsables: donneesMesure.responsables,
     echeance: donneesMesure.echeance
       ? formatteurDate.format(new Date(donneesMesure.echeance))
       : donneesMesure.echeance,
