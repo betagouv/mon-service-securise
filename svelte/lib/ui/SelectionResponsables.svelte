@@ -2,19 +2,12 @@
   import type { ResponsableMesure } from '../tableauDesMesures/tableauDesMesures.d';
   import MenuFlottant from './MenuFlottant.svelte';
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
-  import { createEventDispatcher } from 'svelte';
+  import ReponsableSelectionnable from './ReponsableSelectionnable.svelte';
 
   export let responsables: ResponsableMesure[] | null;
   export let estLectureSeule: boolean;
 
   let menuOuvert = false;
-
-  const dispatch = createEventDispatcher<{
-    modificationResponsables: { responsables: ResponsableMesure[] };
-  }>();
-  const modifieResponsables = () => {
-    if (responsables) dispatch('modificationResponsables', { responsables });
-  };
 
   const ouvreTiroirContributeurs = () => {
     menuOuvert = false;
@@ -39,28 +32,11 @@
     </div>
     <div>
       {#each $contributeurs as contributeur (contributeur.id)}
-        <div class="conteneur-contributeur">
-          <div class="conteneur-nom">
-            <span class="initiales">
-              {#if contributeur.initiales}
-                {contributeur.initiales}
-              {:else}
-                <img
-                  src="/statique/assets/images/icone_utilisateur_trait.svg"
-                  alt=""
-                />
-              {/if}
-            </span>
-            <span class="nom-contributeur">{contributeur.prenomNom}</span>
-          </div>
-          <input
-            type="checkbox"
-            value={contributeur.id}
-            class="checkbox-contributeur"
-            bind:group={responsables}
-            on:change={modifieResponsables}
-          />
-        </div>
+        <ReponsableSelectionnable
+          {contributeur}
+          bind:responsables
+          on:modificationResponsables
+        />
       {/each}
     </div>
     <div class="pied-page">
@@ -154,47 +130,6 @@
 
   .entete .fermeture:hover {
     color: var(--texte-fonce);
-  }
-
-  .conteneur-contributeur {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 9px 0;
-    gap: 4px;
-  }
-
-  .conteneur-nom {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .initiales {
-    min-width: 32px;
-    min-height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--fond-bleu-pale);
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    border-radius: 50%;
-  }
-
-  .nom-contributeur {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    max-width: 224px;
-  }
-
-  .checkbox-contributeur {
-    margin: 0;
   }
 
   .pied-page {
