@@ -85,10 +85,17 @@ class Service {
     const completude = this.mesures.completude();
     const { nombreTotalMesures, nombreMesuresCompletes } = completude;
 
+    const { mesuresGenerales } =
+      this.mesures.enrichiesAvecDonneesPersonnalisees();
+
+    const detailMesures = Object.entries(mesuresGenerales)
+      .filter(([_id, body]) => !!body.statut)
+      .map(([id, { statut }]) => ({ idMesure: id, statut }));
+
     return {
       nombreTotalMesures,
       nombreMesuresCompletes,
-      detailMesures: this.mesures.statutsMesuresPersonnalisees(),
+      detailMesures,
       indiceCyber: this.indiceCyber(),
     };
   }

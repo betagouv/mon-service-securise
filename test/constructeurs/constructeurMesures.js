@@ -2,7 +2,6 @@ class ConstructeurMesures {
   constructor() {
     this.nombreTotalMesures = 0;
     this.nombreMesuresCompletes = 0;
-    this.statutsMesuresPersonnalisees = [];
     this.indiceCyber = 0.0;
   }
 
@@ -18,7 +17,7 @@ class ConstructeurMesures {
         nombreTotalMesures: this.nombreTotalMesures,
         nombreMesuresCompletes: this.nombreMesuresCompletes,
       }),
-      statutsMesuresPersonnalisees: () => this.statutsMesuresPersonnalisees,
+      enrichiesAvecDonneesPersonnalisees: () => ({ mesuresGenerales: {} }),
       indiceCyber: () => ({ total: this.indiceCyber }),
     };
   }
