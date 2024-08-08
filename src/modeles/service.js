@@ -14,6 +14,7 @@ const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
 const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
 const Autorisation = require('./autorisations/autorisation');
 const SuggestionAction = require('./suggestionAction');
+const { ErreurResponsablesMesureInvalides } = require('../erreurs');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -194,6 +195,17 @@ class Service {
   }
 
   metsAJourMesuresSpecifiques(mesures) {
+    const idContributeurs = this.contributeurs.map((u) => u.id);
+    if (
+      mesures
+        .toutes()
+        .flatMap((m) => m.responsables)
+        .some((r) => !idContributeurs.includes(r))
+    ) {
+      throw new ErreurResponsablesMesureInvalides(
+        'Les responsables des mesures spécifiques doivent être des contributeurs du service.'
+      );
+    }
     this.mesures.metsAJourMesuresSpecifiques(mesures, this.referentiel);
   }
 
