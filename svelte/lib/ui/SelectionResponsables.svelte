@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ResponsableMesure } from '../tableauDesMesures/tableauDesMesures.d';
+  import type { IdUtilisateur } from '../tableauDesMesures/tableauDesMesures.d';
   import MenuFlottant from './MenuFlottant.svelte';
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
   import ReponsableSelectionnable from './ReponsableSelectionnable.svelte';
 
-  export let responsables: ResponsableMesure[] | null;
+  export let responsables: IdUtilisateur[] | null;
   export let estLectureSeule: boolean;
 
   let menuOuvert = false;
