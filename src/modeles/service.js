@@ -81,8 +81,12 @@ class Service {
   }
 
   completudeMesures() {
+    const completude = this.mesures.completude();
+    const { nombreTotalMesures, nombreMesuresCompletes } = completude;
+
     return {
-      ...this.mesures.completude(),
+      nombreTotalMesures,
+      nombreMesuresCompletes,
       detailMesures: this.mesures.statutsMesuresPersonnalisees(),
       indiceCyber: this.indiceCyber(),
     };
