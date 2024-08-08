@@ -152,9 +152,10 @@ describe('Un service', () => {
     beforeEach(() => {
       referentiel = Referentiel.creeReferentiel({
         categoriesMesures: { gouvernance: {}, protection: {}, resilience: {} },
-        statutsMesures: { fait: {}, enCours: {} },
-        mesures: { mesureA: {}, mesureB: {} },
         indiceCyber: { noteMax: 5 },
+        mesures: { mesureA: {}, mesureB: {} },
+        prioritesMesures: { p1: {} },
+        statutsMesures: { fait: {}, enCours: {} },
       });
     });
 
@@ -203,7 +204,16 @@ describe('Un service', () => {
     describe('inclue le détail des mesures', () => {
       it('avec les données pertinentes', () => {
         const uneGouvernanceFaite = new Mesures(
-          { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+          {
+            mesuresGenerales: [
+              {
+                id: 'mesureA',
+                statut: 'fait',
+                priorite: 'p1',
+                echeance: '8/28/2024',
+              },
+            ],
+          },
           referentiel,
           {
             mesureA: { categorie: 'gouvernance' },
@@ -217,7 +227,12 @@ describe('Un service', () => {
         const completudeMesures = s.completudeMesures();
 
         expect(completudeMesures.detailMesures).to.eql([
-          { idMesure: 'mesureA', statut: 'fait' },
+          {
+            idMesure: 'mesureA',
+            statut: 'fait',
+            priorite: 'p1',
+            echeance: '2024-08-28',
+          },
         ]);
       });
 
