@@ -33,7 +33,7 @@ export type MesureGenerale = {
   identifiantNumerique: string;
   priorite?: PrioriteMesure;
   echeance?: EcheanceMesure;
-  responsables?: ResponsableMesure[];
+  responsables?: IdUtilisateur[];
 };
 
 export type MesureSpecifique = {
@@ -44,10 +44,10 @@ export type MesureSpecifique = {
   identifiantNumerique: string;
   priorite?: PrioriteMesure;
   echeance?: EcheanceMesure;
-  responsables?: ResponsableMesure[];
+  responsables?: IdUtilisateur[];
 };
 
-export type ResponsableMesure = string;
+export type IdUtilisateur = string;
 
 export type IdMesureGenerale = string;
 export type Mesures = {

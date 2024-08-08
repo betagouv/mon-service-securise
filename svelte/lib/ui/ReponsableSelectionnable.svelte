@@ -1,15 +1,15 @@
 <script lang="ts">
   import type {
     Contributeur,
-    ResponsableMesure,
+    IdUtilisateur,
   } from '../tableauDesMesures/tableauDesMesures.d';
   import { createEventDispatcher } from 'svelte';
 
   export let contributeur: Contributeur;
-  export let responsables: ResponsableMesure[];
+  export let responsables: IdUtilisateur[];
 
   const dispatch = createEventDispatcher<{
-    modificationResponsables: { responsables: ResponsableMesure[] };
+    modificationResponsables: { responsables: IdUtilisateur[] };
   }>();
   const modifieResponsables = () => {
     if (responsables) dispatch('modificationResponsables', { responsables });
