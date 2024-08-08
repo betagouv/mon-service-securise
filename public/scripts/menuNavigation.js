@@ -30,11 +30,19 @@ const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
           )
       );
 
-      $('#gerer-contributeurs').on('click', () => {
+      const ouvreTiroirContributeurs = () => {
         gestionnaireTiroir.afficheContenuAction(
           { action: contributeurs, estSelectionMulitple: false },
           { donneesServices: [donneesService] }
         );
+      };
+
+      $('#gerer-contributeurs').on('click', () => {
+        ouvreTiroirContributeurs();
+      });
+
+      $(document.body).on('jquery-affiche-tiroir-contributeurs', () => {
+        ouvreTiroirContributeurs();
       });
     },
   };

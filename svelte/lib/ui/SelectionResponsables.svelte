@@ -15,6 +15,13 @@
   const modifieResponsables = () => {
     if (responsables) dispatch('modificationResponsables', { responsables });
   };
+
+  const ouvreTiroirContributeurs = () => {
+    menuOuvert = false;
+    document.body.dispatchEvent(
+      new CustomEvent('jquery-affiche-tiroir-contributeurs')
+    );
+  };
 </script>
 
 <MenuFlottant bind:menuOuvert {estLectureSeule} stopPropagation>
@@ -55,6 +62,12 @@
           />
         </div>
       {/each}
+    </div>
+    <div class="pied-page">
+      <button on:click={ouvreTiroirContributeurs}
+        >Gerer les contributeurs</button
+      >
+      <span>pour modifier les droits ou ajouter des responsables.</span>
     </div>
   </div>
 </MenuFlottant>
@@ -182,5 +195,25 @@
 
   .checkbox-contributeur {
     margin: 0;
+  }
+
+  .pied-page {
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--texte-clair);
+  }
+
+  .pied-page button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--bleu-mise-en-avant);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    text-decoration-line: underline;
   }
 </style>
