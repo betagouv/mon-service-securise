@@ -238,6 +238,13 @@
             mesures.metAJourEcheanceMesureGenerale(id, e.detail.echeance);
             metsAJourMesureGenerale(id);
           }}
+          on:modificationResponsables={(e) => {
+            mesures.metAJourResponsablesMesureGenerale(
+              id,
+              e.detail.responsables
+            );
+            metsAJourMesureGenerale(id);
+          }}
           on:click={() =>
             afficheTiroirDeMesure({
               mesure,
@@ -272,6 +279,13 @@
             mesures.metAJourEcheanceMesureSpecifique(
               indexReel,
               e.detail.echeance
+            );
+            metsAJourMesuresSpecifiques(indexReel);
+          }}
+          on:modificationResponsables={(e) => {
+            mesures.metAJourResponsablesMesureSpecifique(
+              indexReel,
+              e.detail.responsables
             );
             metsAJourMesuresSpecifiques(indexReel);
           }}

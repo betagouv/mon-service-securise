@@ -1,4 +1,4 @@
-import type { Mesures } from '../tableauDesMesures.d';
+import type { Mesures, ResponsableMesure } from '../tableauDesMesures.d';
 import { writable } from 'svelte/store';
 import type { EcheanceMesure, PrioriteMesure } from '../../ui/types';
 
@@ -32,6 +32,22 @@ export const mesures = {
       return valeur;
     });
   },
+  metAJourResponsablesMesureGenerale: (
+    idMesure: string,
+    responsables: ResponsableMesure[]
+  ) =>
+    toutesLesMesures.update((valeur) => {
+      valeur.mesuresGenerales[idMesure].responsables = responsables;
+      return valeur;
+    }),
+  metAJourResponsablesMesureSpecifique: (
+    idMesure: number,
+    responsables: ResponsableMesure[]
+  ) =>
+    toutesLesMesures.update((valeur) => {
+      valeur.mesuresSpecifiques[idMesure].responsables = responsables;
+      return valeur;
+    }),
   metAJourStatutMesureGenerale: (idMesure: string, statut: string) =>
     toutesLesMesures.update((valeur) => {
       valeur.mesuresGenerales[idMesure].statut = statut;
