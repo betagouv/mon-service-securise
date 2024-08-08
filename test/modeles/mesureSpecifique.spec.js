@@ -28,6 +28,7 @@ describe('Une mesure spécifique', () => {
         modalites: 'Des modalités de mise en œuvre',
         priorite: 'p3',
         echeance: '01/01/2023',
+        responsables: ['unIdUtilisateur', 'unAutreIdUtilisateur'],
       },
       referentiel
     );
@@ -38,6 +39,10 @@ describe('Une mesure spécifique', () => {
     expect(mesure.modalites).to.equal('Des modalités de mise en œuvre');
     expect(mesure.priorite).to.equal('p3');
     expect(mesure.echeance).to.equal('01/01/2023');
+    expect(mesure.responsables).to.eql([
+      'unIdUtilisateur',
+      'unAutreIdUtilisateur',
+    ]);
   });
 
   elle('connaît ses propriétés obligatoires', () => {
