@@ -153,7 +153,7 @@ describe('Un service', () => {
       referentiel = Referentiel.creeReferentiel({
         categoriesMesures: { gouvernance: {}, protection: {}, resilience: {} },
         statutsMesures: { fait: {}, enCours: {} },
-        mesures: { mesureA: {} },
+        mesures: { mesureA: {}, mesureB: {} },
         indiceCyber: { noteMax: 5 },
       });
     });
@@ -198,6 +198,76 @@ describe('Un service', () => {
 
       expect(completudeMesures.nombreMesuresCompletes).to.be(1);
       expect(completudeMesures.nombreTotalMesures).to.be(4);
+    });
+
+    describe('inclue le détail des mesures', () => {
+      it('avec les données pertinentes', () => {
+        const uneGouvernanceFaite = new Mesures(
+          { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+          referentiel,
+          {
+            mesureA: { categorie: 'gouvernance' },
+            mesureB: { categorie: 'gouvernance' },
+            mesureC: { categorie: 'protection' },
+            mesureD: { categorie: 'resilience' },
+          }
+        );
+        const s = unService().avecMesures(uneGouvernanceFaite).construis();
+
+        const completudeMesures = s.completudeMesures();
+
+        expect(completudeMesures.detailMesures).to.eql([
+          { idMesure: 'mesureA', statut: 'fait' },
+        ]);
+      });
+
+      it('en ignorant les mesures générales qui ne sont pas des mesures personnalisées', () => {
+        const uneSeulePersonnalisee = { mesureA: { categorie: 'gouvernance' } };
+        const deuxGenerales = [
+          { id: 'mesureA', statut: 'fait' },
+          { id: 'mesureB', statut: 'fait' },
+        ];
+        const uneGeneraleEnTrop = new Mesures(
+          { mesuresGenerales: deuxGenerales },
+          referentiel,
+          uneSeulePersonnalisee
+        );
+        const s = unService().avecMesures(uneGeneraleEnTrop).construis();
+
+        const completudeMesures = s.completudeMesures();
+
+        expect(completudeMesures.detailMesures.length).to.be(1);
+        expect(completudeMesures.detailMesures[0].idMesure).to.be('mesureA');
+      });
+    });
+
+    it("en ignorant les mesures dont le statut n'est pas renseigné", () => {
+      const sansStatut = new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: '' }] },
+        referentiel,
+        { mesureA: { categorie: 'gouvernance' } }
+      );
+      const s = unService().avecMesures(sansStatut).construis();
+
+      const completudeMesures = s.completudeMesures();
+
+      expect(completudeMesures.detailMesures).to.be.empty();
+    });
+
+    it('en ignorant complètement les mesures spécifiques, car elles ne sont pas considérées quand on parle de complétude', () => {
+      const avecDesSpecifiques = new Mesures(
+        {
+          mesuresGenerales: [],
+          mesuresSpecifiques: [{ statut: 'fait', categorie: 'gouvernance' }],
+        },
+        referentiel,
+        { mesureA: { categorie: 'gouvernance' } }
+      );
+      const s = unService().avecMesures(avecDesSpecifiques).construis();
+
+      const completudeMesures = s.completudeMesures();
+
+      expect(completudeMesures.detailMesures).to.be.empty();
     });
   });
 
