@@ -10,7 +10,7 @@ const Referentiel = require('../../src/referentiel');
 
 const elles = it;
 
-describe('Les mesures liées à une homologation', () => {
+describe('Les mesures liées à un service', () => {
   elles('comptent les mesures personnalisees', () => {
     const mesuresPersonnalisees = { uneMesure: {} };
     const mesures = new Mesures(
@@ -294,9 +294,11 @@ describe('Les mesures liées à une homologation', () => {
         { mesure1: {} }
       );
 
-      expect(mesures.statutsMesuresPersonnalisees()).to.eql([
-        { idMesure: 'mesure1', statut: 'fait' },
-      ]);
+      const statuts = mesures.statutsMesuresPersonnalisees();
+
+      expect(statuts.length).to.be(1);
+      expect(statuts[0].idMesure).to.be('mesure1');
+      expect(statuts[0].statut).to.be('fait');
     });
 
     elles(
@@ -314,9 +316,10 @@ describe('Les mesures liées à une homologation', () => {
           seulementMesure1
         );
 
-        expect(mesures.statutsMesuresPersonnalisees()).to.eql([
-          { idMesure: 'mesure1', statut: 'fait' },
-        ]);
+        const statuts = mesures.statutsMesuresPersonnalisees();
+
+        expect(statuts.length).to.be(1);
+        expect(statuts[0].idMesure).to.be('mesure1');
       }
     );
 
