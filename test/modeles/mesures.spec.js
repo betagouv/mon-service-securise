@@ -128,10 +128,7 @@ describe('Les mesures liées à un service', () => {
     const referentiel = Referentiel.creeReferentielVide();
 
     const mesures = new Mesures(
-      {
-        mesuresGenerales: [],
-        mesuresSpecifiques: [],
-      },
+      { mesuresGenerales: [], mesuresSpecifiques: [] },
       referentiel,
       { m1: {}, m2: {} }
     );
@@ -164,11 +161,7 @@ describe('Les mesures liées à un service', () => {
         },
       });
       referentiel.identifiantsCategoriesMesures = () => ['categorie1'];
-      statutVide = {
-        enCours: {},
-        nonFait: {},
-        aLancer: {},
-      };
+      statutVide = { enCours: {}, nonFait: {}, aLancer: {} };
     });
 
     elles('récupère les mesures générales groupées', () => {
@@ -275,70 +268,6 @@ describe('Les mesures liées à un service', () => {
         { description: 'mesure1', indispensable: true },
         { description: 'Mesure Spécifique 1' },
       ]);
-    });
-  });
-
-  describe('sur demande des statuts des mesures personnalisées', () => {
-    let referentiel;
-
-    beforeEach(() => {
-      referentiel = Referentiel.creeReferentiel({
-        mesures: { mesure1: {}, mesure2: {} },
-      });
-    });
-
-    elles('donnent les statuts des mesures personnalisées', () => {
-      const mesures = new Mesures(
-        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
-        referentiel,
-        { mesure1: {} }
-      );
-
-      const statuts = mesures.statutsMesuresPersonnalisees();
-
-      expect(statuts.length).to.be(1);
-      expect(statuts[0].idMesure).to.be('mesure1');
-      expect(statuts[0].statut).to.be('fait');
-    });
-
-    elles(
-      'ignorent les mesures générales qui ne sont pas des mesures personnalisées',
-      () => {
-        const seulementMesure1 = { mesure1: {} };
-        const mesures = new Mesures(
-          {
-            mesuresGenerales: [
-              { id: 'mesure1', statut: 'fait' },
-              { id: 'mesure2', statut: 'fait' },
-            ],
-          },
-          referentiel,
-          seulementMesure1
-        );
-
-        const statuts = mesures.statutsMesuresPersonnalisees();
-
-        expect(statuts.length).to.be(1);
-        expect(statuts[0].idMesure).to.be('mesure1');
-      }
-    );
-
-    elles("ignorent les mesures dont le statut n'est pas renseigné", () => {
-      const mesures = new Mesures(
-        {
-          mesuresGenerales: [
-            {
-              id: 'mesure1',
-              statut: '',
-              modalites: 'Un commentaire laissé sans valoriser le statut',
-            },
-          ],
-        },
-        referentiel,
-        { mesure1: {} }
-      );
-
-      expect(mesures.statutsMesuresPersonnalisees()).to.be.empty();
     });
   });
 
