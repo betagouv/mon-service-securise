@@ -377,6 +377,7 @@ describe('Les mesures liées à un service', () => {
               description: 'Mesure une',
               categorie: 'categorie1',
               indispensable: true,
+              responsables: [],
             },
           },
           mesuresSpecifiques: [],
@@ -413,7 +414,9 @@ describe('Les mesures liées à un service', () => {
 
       expect(mesures.enrichiesAvecDonneesPersonnalisees()).to.eql({
         mesuresGenerales: {},
-        mesuresSpecifiques: [{ statut: 'fait', categorie: 'categorie1' }],
+        mesuresSpecifiques: [
+          { statut: 'fait', categorie: 'categorie1', responsables: [] },
+        ],
       });
     });
   });

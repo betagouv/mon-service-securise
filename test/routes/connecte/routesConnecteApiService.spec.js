@@ -321,6 +321,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
             statut: 'fait',
             modalites: 'un commentaire',
             referentiel: 'ANSSI',
+            responsables: [],
           },
         },
         mesuresSpecifiques: [],
@@ -369,6 +370,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           '*.modalites',
           '*.priorite',
           '*.echeance',
+          '*.responsables.*',
         ],
         {
           method: 'put',
@@ -418,12 +420,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         categorie: 'uneCategorie',
         statut: 'fait',
         modalites: 'm1',
+        responsables: [],
       });
       expect(donneesRecues.item(1).toJSON()).to.eql({
         description: 'd2',
         categorie: 'uneCategorie',
         statut: 'nonFait',
         modalites: 'm2',
+        responsables: [],
       });
       expect(idServiceRecu).to.eql(456);
       expect(idUtilisateurRecu).to.eql(999);
@@ -582,6 +586,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         categorie: 'uneCategorie',
         statut: 'nonFait',
         modalites: 'm2',
+        responsables: [],
       });
     });
   });
@@ -624,7 +629,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['statut', 'modalites', 'priorite', 'echeance'],
+        ['statut', 'modalites', 'priorite', 'echeance', 'responsables.*'],
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456/mesures/audit',
