@@ -101,17 +101,6 @@ class Mesures extends InformationsService {
       : Mesures.A_COMPLETER;
   }
 
-  statutsMesuresPersonnalisees() {
-    const personnalisees = ({ id: idMesure }) =>
-      Object.keys(this.mesuresPersonnalisees).includes(idMesure);
-
-    return this.mesuresGenerales
-      .toutes()
-      .filter(personnalisees)
-      .filter((m) => m.statut !== '')
-      .map((m) => ({ idMesure: m.id, statut: m.statut }));
-  }
-
   enrichiesAvecDonneesPersonnalisees() {
     const mesuresEnrichies = Object.entries(this.mesuresPersonnalisees).reduce(
       (acc, mesurePersonnalisee) => {
