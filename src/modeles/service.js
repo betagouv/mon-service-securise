@@ -15,6 +15,7 @@ const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
 const Autorisation = require('./autorisations/autorisation');
 const SuggestionAction = require('./suggestionAction');
 const { ErreurResponsablesMesureInvalides } = require('../erreurs');
+const { dateEnIso } = require('../utilitaires/date');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -90,7 +91,12 @@ class Service {
 
     const detailMesures = Object.entries(mesuresGenerales)
       .filter(([_id, body]) => !!body.statut)
-      .map(([id, { statut }]) => ({ idMesure: id, statut }));
+      .map(([id, { statut, priorite, echeance }]) => ({
+        idMesure: id,
+        statut,
+        ...(priorite && { priorite }),
+        ...(echeance && { echeance: dateEnIso(echeance) }),
+      }));
 
     return {
       nombreTotalMesures,

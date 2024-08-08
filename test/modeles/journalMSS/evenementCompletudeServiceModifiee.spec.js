@@ -36,16 +36,26 @@ describe('Un événement de complétude modifiée', () => {
 
   it("sait se convertir en JSON sans dévoiler le SIRET de l'organisation responsable", () => {
     const referentiel = Referentiel.creeReferentiel({
-      mesures: { mesureA: {} },
       categoriesMesures: { gouvernance: 'Gouvernance' },
-      statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
       indiceCyber: { noteMax: 5 },
+      prioritesMesures: { p1: {} },
+      mesures: { mesureA: {} },
+      statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
     });
     const mesuresPersonnalises = {
       mesureA: { categorie: 'gouvernance' },
     };
     const mesures = new Mesures(
-      { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+      {
+        mesuresGenerales: [
+          {
+            id: 'mesureA',
+            statut: 'fait',
+            priorite: 'p1',
+            echeance: '9/13/2024',
+          },
+        ],
+      },
       referentiel,
       mesuresPersonnalises
     );
@@ -64,9 +74,7 @@ describe('Un événement de complétude modifiée', () => {
         typeService: ['applicationMobile'],
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         pointsAcces: ['point A', 'point B'],
-        organisationResponsable: {
-          siret: '12345',
-        },
+        organisationResponsable: { siret: '12345' },
         niveauSecurite: 'niveau3',
       })
       .construis();
@@ -99,7 +107,14 @@ describe('Un événement de complétude modifiée', () => {
         idService: 'ABC',
         nombreTotalMesures: 1,
         nombreMesuresCompletes: 1,
-        detailMesures: [{ idMesure: 'mesureA', statut: 'fait' }],
+        detailMesures: [
+          {
+            idMesure: 'mesureA',
+            statut: 'fait',
+            priorite: 'p1',
+            echeance: '2024-09-13',
+          },
+        ],
         detailIndiceCyber: [
           { categorie: 'total', indice: 5 },
           { categorie: 'gouvernance', indice: 5 },

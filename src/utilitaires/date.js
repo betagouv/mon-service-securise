@@ -17,15 +17,13 @@ const dateEnFrancais = (chaineDate) => {
   return date.toLocaleString('fr-FR', { dateStyle: 'short' });
 };
 
-// On utilise le standard canadien pour obtenir le format YYYY-MM-DD
-const dateYYYYMMDD = (date) =>
-  Intl.DateTimeFormat('fr-CA', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  })
-    .format(date)
-    .replaceAll('-', '');
+const dateEnIso = (chaineDate) => {
+  const date = new Date(chaineDate);
+  // On utilise le standard canadien pour obtenir le format YYYY-MM-DD
+  return date.toLocaleString('fr-CA', { dateStyle: 'short' });
+};
+
+const dateYYYYMMDD = (date) => dateEnIso(date).replaceAll('-', '');
 
 const dateInvalide = (chaineDate) =>
   Number.isNaN(new Date(chaineDate).valueOf());
@@ -33,6 +31,7 @@ const dateInvalide = (chaineDate) =>
 module.exports = {
   ajouteMoisADate,
   dateEnFrancais,
+  dateEnIso,
   dateInvalide,
   dateYYYYMMDD,
 };
