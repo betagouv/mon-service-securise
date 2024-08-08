@@ -23,6 +23,8 @@ const {
 } = require('../constructeurs/constructeurAutorisation');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const Mesures = require('../../src/modeles/mesures');
+const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
+const { ErreurResponsablesMesureInvalides } = require('../../src/erreurs');
 
 describe('Un service', () => {
   it('connaît son nom', () => {
@@ -799,5 +801,58 @@ describe('Un service', () => {
 
     service.supprimeDossierCourant();
     expect(appelDelegue).to.be(true);
+  });
+
+  describe('sur demande de mise à jour des mesures spécifiques', () => {
+    it('jette une erreur si les responsables des mesures ne font pas tous partie des contributeurs', async () => {
+      try {
+        const utilisateur = unUtilisateur()
+          .avecId('unIdDeContributeur')
+          .construis();
+        const service = unService()
+          .ajouteUnContributeur(utilisateur)
+          .construis();
+        const mesures = new MesuresSpecifiques({
+          mesuresSpecifiques: [
+            {
+              description: 'Une mesure spécifique',
+              responsables: ['unIdDeContributeur', 'pasUnIdDeContributeur'],
+            },
+          ],
+        });
+
+        await service.metsAJourMesuresSpecifiques(mesures);
+
+        expect().fail("L'appel aurait dû échouer");
+      } catch (e) {
+        expect(e).to.be.an(ErreurResponsablesMesureInvalides);
+        expect(e.message).to.be(
+          'Les responsables des mesures spécifiques doivent être des contributeurs du service.'
+        );
+      }
+    });
+
+    it('mets à jour les mesures spécifiques', async () => {
+      const utilisateur = unUtilisateur()
+        .avecId('unIdDeContributeur')
+        .construis();
+      const service = unService().ajouteUnContributeur(utilisateur).construis();
+      const mesures = new MesuresSpecifiques({
+        mesuresSpecifiques: [
+          {
+            description: 'Une mesure spécifique',
+            responsables: ['unIdDeContributeur'],
+          },
+        ],
+      });
+
+      await service.metsAJourMesuresSpecifiques(mesures);
+
+      expect(service.mesuresSpecifiques().toutes().length).to.be(1);
+      expect(service.mesuresSpecifiques().toutes()[0].toJSON()).to.eql({
+        description: 'Une mesure spécifique',
+        responsables: ['unIdDeContributeur'],
+      });
+    });
   });
 });
