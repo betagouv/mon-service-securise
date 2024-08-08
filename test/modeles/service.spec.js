@@ -22,6 +22,7 @@ const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+const Mesures = require('../../src/modeles/mesures');
 
 describe('Un service', () => {
   it('connaît son nom', () => {
@@ -35,7 +36,7 @@ describe('Un service', () => {
   });
 
   it('connaît ses contributrices et contributeurs', () => {
-    const homologation = unService()
+    const service = unService()
       .avecId('123')
       .ajouteUnContributeur(
         unUtilisateur()
@@ -45,7 +46,7 @@ describe('Un service', () => {
       )
       .construis();
 
-    const { contributeurs } = homologation;
+    const { contributeurs } = service;
     expect(contributeurs.length).to.equal(1);
 
     const contributeur = contributeurs[0];
@@ -140,6 +141,61 @@ describe('Un service', () => {
       const pourrait = service.pourraitFaire('miseAJourSiret');
 
       expect(pourrait).to.be(true);
+    });
+  });
+
+  describe('concernant les données de complétude', () => {
+    let referentiel;
+
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        categoriesMesures: { gouvernance: {}, protection: {}, resilience: {} },
+        statutsMesures: { fait: {}, enCours: {} },
+        mesures: { mesureA: {} },
+        indiceCyber: { noteMax: 5 },
+      });
+    });
+
+    it("inclue le détail de l'indice cyber : l'indice de chaque catégorie ainsi que le total", () => {
+      const uneGouvernanceFaite = new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+        referentiel,
+        {
+          mesureA: { categorie: 'gouvernance' },
+          mesureB: { categorie: 'gouvernance' },
+          mesureC: { categorie: 'protection' },
+          mesureD: { categorie: 'resilience' },
+        }
+      );
+      const s = unService().avecMesures(uneGouvernanceFaite).construis();
+
+      const completudeMesures = s.completudeMesures();
+
+      expect(completudeMesures.indiceCyber).to.eql({
+        gouvernance: 2.5,
+        protection: 0,
+        resilience: 0,
+        total: 1.25,
+      });
+    });
+
+    it('inclue le nombre total de mesures et le nombre qui sont « faites »', () => {
+      const uneGouvernanceFaite = new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+        referentiel,
+        {
+          mesureA: { categorie: 'gouvernance' },
+          mesureB: { categorie: 'gouvernance' },
+          mesureC: { categorie: 'protection' },
+          mesureD: { categorie: 'resilience' },
+        }
+      );
+      const s = unService().avecMesures(uneGouvernanceFaite).construis();
+
+      const completudeMesures = s.completudeMesures();
+
+      expect(completudeMesures.nombreMesuresCompletes).to.be(1);
+      expect(completudeMesures.nombreTotalMesures).to.be(4);
     });
   });
 
