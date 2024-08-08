@@ -2,7 +2,7 @@
   import type { IdUtilisateur } from '../tableauDesMesures/tableauDesMesures.d';
   import MenuFlottant from './MenuFlottant.svelte';
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
-  import ReponsableSelectionnable from './ReponsableSelectionnable.svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let responsables: IdUtilisateur[] | null;
   export let estLectureSeule: boolean;
@@ -14,6 +14,13 @@
     document.body.dispatchEvent(
       new CustomEvent('jquery-affiche-tiroir-contributeurs')
     );
+  };
+
+  const dispatch = createEventDispatcher<{
+    modificationResponsables: { responsables: IdUtilisateur[] };
+  }>();
+  const modifieResponsables = () => {
+    if (responsables) dispatch('modificationResponsables', { responsables });
   };
 </script>
 
@@ -32,11 +39,28 @@
     </div>
     <div>
       {#each $contributeurs as contributeur (contributeur.id)}
-        <ReponsableSelectionnable
-          {contributeur}
-          bind:responsables
-          on:modificationResponsables
-        />
+        <div class="conteneur-contributeur">
+          <div class="conteneur-nom">
+            <span class="initiales">
+              {#if contributeur.initiales}
+                {contributeur.initiales}
+              {:else}
+                <img
+                  src="/statique/assets/images/icone_utilisateur_trait.svg"
+                  alt=""
+                />
+              {/if}
+            </span>
+            <span class="nom-contributeur">{contributeur.prenomNom}</span>
+          </div>
+          <input
+            type="checkbox"
+            value={contributeur.id}
+            class="checkbox-contributeur"
+            bind:group={responsables}
+            on:change={modifieResponsables}
+          />
+        </div>
       {/each}
     </div>
     <div class="pied-page">
@@ -150,5 +174,45 @@
     font-weight: 500;
     line-height: 20px;
     text-decoration-line: underline;
+  }
+  .conteneur-contributeur {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 9px 0;
+    gap: 4px;
+  }
+
+  .conteneur-nom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .initiales {
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fond-bleu-pale);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    border-radius: 50%;
+  }
+
+  .nom-contributeur {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 224px;
+  }
+
+  .checkbox-contributeur {
+    margin: 0;
   }
 </style>
