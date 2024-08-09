@@ -22,9 +22,11 @@ export type MesuresExistantes = {
   mesuresSpecifiques: MesureSpecifique[];
 };
 
+type IdUtilisateur = string;
 type PlanAction = {
   priorite?: string;
   echeance?: string;
+  responsables?: IdUtilisateur[];
 };
 
 export type MesureGenerale = PlanAction & {

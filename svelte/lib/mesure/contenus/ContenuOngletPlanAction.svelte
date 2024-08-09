@@ -86,6 +86,7 @@
             value={contributeur.id}
             class="checkbox-contributeur"
             disabled={selectionDesactivee}
+            bind:group={$store.mesureEditee.mesure.responsables}
           />
         </div>
       {/each}
