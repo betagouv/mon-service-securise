@@ -22,11 +22,14 @@ export type MesuresExistantes = {
   mesuresSpecifiques: MesureSpecifique[];
 };
 
-export type MesureGenerale = {
-  statut?: StatutMesure;
-  modalites?: string;
+type PlanAction = {
   priorite?: string;
   echeance?: string;
+};
+
+export type MesureGenerale = PlanAction & {
+  statut?: StatutMesure;
+  modalites?: string;
 };
 
 export type MesureGeneraleEnrichie = MesureGenerale & {
@@ -39,7 +42,9 @@ export type MesureGeneraleEnrichie = MesureGenerale & {
   lienBlog?: string;
 };
 
-export type MesureSpecifique = MesureGenerale & {
+export type MesureSpecifique = PlanAction & {
+  statut?: StatutMesure;
+  modalites?: string;
   categorie: string;
   description: string;
   identifiantNumerique: string;
