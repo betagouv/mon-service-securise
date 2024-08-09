@@ -129,7 +129,7 @@
 
 <svelte:body
   on:mesure-modifiee={rafraichisMesures}
-  on:jquery-recharge-services={() =>
+  on:collaboratif-service-modifie={() =>
     Promise.all([rafraichisContributeurs(), rafraichisAutorisations()])}
 />
 <Toaster />

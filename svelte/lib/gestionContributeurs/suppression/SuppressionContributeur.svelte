@@ -10,7 +10,9 @@
       params: { idService: service.id, idContributeur: utilisateur.id },
     });
     store.contributeurs.supprime(utilisateur);
-    document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
+    document.body.dispatchEvent(
+      new CustomEvent('collaboratif-service-modifie')
+    );
     store.navigation.afficheEtapeListe();
   };
 </script>
