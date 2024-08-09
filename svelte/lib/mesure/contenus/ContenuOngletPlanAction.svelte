@@ -12,9 +12,11 @@
   export let priorites: ReferentielPriorite;
   export let statuts: ReferentielStatut;
 
-  $: selectionDesactivee = !planDActionDisponible(
+  $: planDactionNonDisponible = !planDActionDisponible(
     $store.mesureEditee.mesure.statut
   );
+
+  $: selectionDesactivee = estLectureSeule || planDactionNonDisponible;
 
   const afficheAvertissementStatut = !planDActionDisponible(
     $store.mesureEditee.mesure.statut
@@ -53,15 +55,23 @@
     id="priorite"
     bind:priorite={$store.mesureEditee.mesure.priorite}
     label="Priorité"
-    estLectureSeule={estLectureSeule || selectionDesactivee}
+    estLectureSeule={selectionDesactivee}
     avecLibelleOption
     {priorites}
   />
   <SelectionEcheance
     bind:echeance={$store.mesureEditee.mesure.echeance}
     avecLabel={true}
-    estLectureSeule={estLectureSeule || selectionDesactivee}
+    estLectureSeule={selectionDesactivee}
   />
+  <div>
+    <p class="label" class:estLectureSeule={selectionDesactivee}>
+      Responsable(s)
+    </p>
+    <p class="sous-titre" class:estLectureSeule={selectionDesactivee}>
+      Vous pouvrez attribuer cette mesure à un ou plusieurs responsables.
+    </p>
+  </div>
 </div>
 
 <style>
@@ -81,8 +91,6 @@
 
   p.presentation {
     font-weight: bold;
-    line-height: 22px;
-    font-size: 16px;
     margin: 0;
   }
 
@@ -90,5 +98,22 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  p.label {
+    font-weight: 500;
+    line-height: 22px;
+    text-align: left;
+    color: var(--texte-clair);
+    margin: 0 0 4px;
+  }
+
+  p.sous-titre {
+    color: var(--texte-clair);
+    font-size: 0.8rem;
+  }
+
+  p.estLectureSeule {
+    color: var(--liseres-fonce);
   }
 </style>
