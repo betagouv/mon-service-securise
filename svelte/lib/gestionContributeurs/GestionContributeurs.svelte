@@ -6,6 +6,7 @@
   import { onMount } from 'svelte';
   import PersonnalisationContributeur from './personnalisation/PersonnalisationContributeur.svelte';
   import { autorisationsVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
+  import { storeAutorisations } from './stores/autorisations.store';
 
   export let modeVisiteGuidee: boolean;
 
@@ -14,12 +15,12 @@
   $: contributeurs = serviceUnique.contributeurs;
 
   onMount(async () => {
-    if (modeVisiteGuidee) store.autorisations.charge(autorisationsVisiteGuidee);
+    if (modeVisiteGuidee) storeAutorisations.charge(autorisationsVisiteGuidee);
     else if (surServiceUnique) {
       const reponse = await axios.get(
         `/api/service/${serviceUnique.id}/autorisations`
       );
-      store.autorisations.charge(reponse.data);
+      storeAutorisations.charge(reponse.data);
     }
   });
 </script>
