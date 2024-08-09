@@ -55,6 +55,8 @@
   --systeme-design-etat-gris-actif: #ededed;
   --systeme-design-etat-contour-champs: #dddddd;
 
+  --role-inconnu: #f1f5f9;
+  --role-inconnu-texte: #667892;
   --role-proprietaire: #fff4d9;
   --role-proprietaire-texte: #faa72c;
   --role-lecteur: #e9ddff;
