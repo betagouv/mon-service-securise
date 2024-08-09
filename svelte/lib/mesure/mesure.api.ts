@@ -10,17 +10,19 @@ export const enregistreMesures = async (
 ) => {
   async function enregistreMesureGenerale() {
     const idMesure = $store.mesureEditee.metadonnees.idMesure;
-    const { modalites, statut, priorite } = $store.mesureEditee.mesure;
+    const { modalites, statut, priorite, responsables } =
+      $store.mesureEditee.mesure;
     let { echeance } = $store.mesureEditee.mesure;
-    if (echeance) {
-      echeance = formatteurDate.format(new Date(echeance));
-    }
+    if (echeance) echeance = formatteurDate.format(new Date(echeance));
+
     mesuresExistantes.mesuresGenerales[idMesure] = { modalites, statut };
+
     await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
       modalites,
       statut,
       priorite,
       echeance,
+      responsables,
     });
   }
 
