@@ -29,9 +29,9 @@
 
   .initiales.persona::before {
     content: '';
-    width: 1.5rem;
-    height: 1.5rem;
-    background: url('/statique/assets/images/persona_invitation_contributeur.svg')
+    width: 30px;
+    height: 30px;
+    background: url('/statique/assets/images/icone_utilisateur_trait.svg')
       no-repeat;
     background-size: contain;
     filter: brightness(0) invert(43%) sepia(28%) saturate(369%)
