@@ -9,6 +9,11 @@ const avecStatutLecture = (notification, statutLecture) => ({
   statutLecture,
 });
 
+const avecCanalDiffusion = (notification, canalDiffusion) => ({
+  ...notification,
+  canalDiffusion,
+});
+
 class CentreNotifications {
   constructor({ referentiel, depotDonnees, adaptateurHorloge }) {
     if (!referentiel || !depotDonnees || !adaptateurHorloge) {
@@ -128,26 +133,18 @@ class CentreNotifications {
     const completudeProfil = utilisateur.completudeProfil();
     if (completudeProfil.estComplet) return [];
 
-    if (completudeProfil.champsNonRenseignes.includes('nom')) {
-      const tache = this.referentiel.tacheCompletudeProfil('profil');
-      return [
-        {
-          ...avecStatutLecture(tache, CentreNotifications.NOTIFICATION_NON_LUE),
-          canalDiffusion: 'centreNotifications',
-        },
-      ];
-    }
+    const profilDeInvite = completudeProfil.champsNonRenseignes.includes('nom');
 
-    return completudeProfil.champsNonRenseignes
-      .map((champ) => this.referentiel.tacheCompletudeProfil(champ))
-      .filter((t) => t !== undefined)
-      .map((t) =>
-        avecStatutLecture(t, CentreNotifications.NOTIFICATION_NON_LUE)
-      )
-      .map((t) => ({
-        ...t,
-        canalDiffusion: 'centreNotifications',
-      }));
+    const tachesAFaire = profilDeInvite
+      ? [this.referentiel.tacheCompletudeProfil('profil')]
+      : completudeProfil.champsNonRenseignes
+          .map((champ) => this.referentiel.tacheCompletudeProfil(champ))
+          .filter((t) => t !== undefined);
+
+    const { NOTIFICATION_NON_LUE } = CentreNotifications;
+    return tachesAFaire
+      .map((t) => avecStatutLecture(t, NOTIFICATION_NON_LUE))
+      .map((t) => avecCanalDiffusion(t, 'centreNotifications'));
   }
 
   static NOTIFICATION_LUE = 'lue';
