@@ -1,5 +1,7 @@
 // Axios est importé globalement depuis le pug
 // On veut utiliser Axios ici car il est configuré pour utiliser le token CSRF
+import type { ResumeNiveauDroit } from '../ui/types';
+
 declare global {
   const axios: any;
   interface HTMLElementEventMap {
@@ -35,12 +37,6 @@ type Invisible = 0;
 type Lecture = 1;
 type Ecriture = 2;
 type Permission = Invisible | Lecture | Ecriture;
-
-export type ResumeNiveauDroit =
-  | 'PROPRIETAIRE'
-  | 'ECRITURE'
-  | 'LECTURE'
-  | 'PERSONNALISE';
 
 export type Rubrique =
   | 'DECRIRE'

@@ -3,6 +3,7 @@
   import MenuFlottant from './MenuFlottant.svelte';
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
   import { createEventDispatcher } from 'svelte';
+  import Initiales from './Initiales.svelte';
 
   export let responsables: IdUtilisateur[] | null;
   export let estLectureSeule: boolean;
@@ -41,16 +42,7 @@
       {#each $contributeurs as contributeur (contributeur.id)}
         <div class="conteneur-contributeur">
           <div class="conteneur-nom">
-            <span class="initiales">
-              {#if contributeur.initiales}
-                {contributeur.initiales}
-              {:else}
-                <img
-                  src="/statique/assets/images/icone_utilisateur_trait.svg"
-                  alt=""
-                />
-              {/if}
-            </span>
+            <Initiales valeur={contributeur.initiales} />
             <span class="nom-contributeur">{contributeur.prenomNom}</span>
           </div>
           <input
@@ -188,19 +180,6 @@
     flex-direction: row;
     align-items: center;
     gap: 8px;
-  }
-
-  .initiales {
-    min-width: 32px;
-    min-height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--fond-bleu-pale);
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    border-radius: 50%;
   }
 
   .nom-contributeur {

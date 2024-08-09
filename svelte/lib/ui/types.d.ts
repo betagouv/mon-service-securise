@@ -45,3 +45,9 @@ export type LibellePriorite = {
 };
 
 export type EcheanceMesure = string;
+
+export type ResumeNiveauDroit =
+  | 'PROPRIETAIRE'
+  | 'ECRITURE'
+  | 'LECTURE'
+  | 'PERSONNALISE';
