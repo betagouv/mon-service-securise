@@ -45,7 +45,7 @@
     </Avertissement>
   {:else}
     <p class="presentation">
-      Le plan d'action vous permet de mettre en oeuvre plus rapidement les
+      Le plan d'action vous permet de mettre en œuvre plus rapidement les
       mesures en équipe.
     </p>
   {/if}
