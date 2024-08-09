@@ -4,6 +4,7 @@
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
   import { createEventDispatcher } from 'svelte';
   import Initiales from './Initiales.svelte';
+  import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
 
   export let responsables: IdUtilisateur[] | null;
   export let estLectureSeule: boolean;
@@ -23,6 +24,9 @@
   const modifieResponsables = () => {
     if (responsables) dispatch('modificationResponsables', { responsables });
   };
+
+  $: niveauDeDroitDe = (idUtilisateur: IdUtilisateur) =>
+    $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit;
 </script>
 
 <MenuFlottant bind:menuOuvert {estLectureSeule} stopPropagation>
@@ -42,7 +46,10 @@
       {#each $contributeurs as contributeur (contributeur.id)}
         <div class="conteneur-contributeur">
           <div class="conteneur-nom">
-            <Initiales valeur={contributeur.initiales} />
+            <Initiales
+              valeur={contributeur.initiales}
+              resumeNiveauDroit={niveauDeDroitDe(contributeur.id)}
+            />
             <span class="nom-contributeur">{contributeur.prenomNom}</span>
           </div>
           <input

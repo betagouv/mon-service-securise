@@ -38,6 +38,7 @@
   import { afficheTiroirEditeMesure } from './actionsTiroir';
   import { featureFlags } from '../featureFlags';
   import { contributeurs } from './stores/contributeurs.store';
+  import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -58,8 +59,17 @@
     contributeurs.reinitialise(await recupereContributeurs(idService));
   };
 
+  const rafraichisAutorisations = async () => {
+    const reponse = await axios.get(`/api/service/${idService}/autorisations`);
+    storeAutorisations.charge(reponse.data);
+  };
+
   onMount(async () => {
-    await Promise.all([rafraichisMesures(), rafraichisContributeurs()]);
+    await Promise.all([
+      rafraichisMesures(),
+      rafraichisContributeurs(),
+      rafraichisAutorisations(),
+    ]);
     if (!$nombreResultats.nombreParAvancement.statutADefinir)
       $rechercheParAvancement = 'enAction';
   });
