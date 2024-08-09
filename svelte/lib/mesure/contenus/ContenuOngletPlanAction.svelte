@@ -6,6 +6,8 @@
   import type { ReferentielPriorite, ReferentielStatut } from '../../ui/types';
   import SelectionEcheance from '../../tableauDesMesures/ligne/SelectionEcheance.svelte';
   import { planDActionDisponible } from '../../modeles/mesure';
+  import { contributeurs } from '../../tableauDesMesures/stores/contributeurs.store';
+  import Initiales from '../../ui/Initiales.svelte';
 
   export let visible: boolean;
   export let estLectureSeule: boolean;
@@ -71,6 +73,23 @@
     <p class="sous-titre" class:estLectureSeule={selectionDesactivee}>
       Vous pouvrez attribuer cette mesure à un ou plusieurs responsables.
     </p>
+
+    <div class="responsables">
+      {#each $contributeurs as contributeur (contributeur.id)}
+        <div class="un-responsable">
+          <Initiales valeur={contributeur.initiales} />
+          <div class="nom" class:estLectureSeule={selectionDesactivee}>
+            {contributeur.prenomNom}
+          </div>
+          <input
+            type="checkbox"
+            value={contributeur.id}
+            class="checkbox-contributeur"
+            disabled={selectionDesactivee}
+          />
+        </div>
+      {/each}
+    </div>
   </div>
 </div>
 
@@ -100,7 +119,7 @@
     gap: 16px;
   }
 
-  p.label {
+  .label {
     font-weight: 500;
     line-height: 22px;
     text-align: left;
@@ -108,12 +127,38 @@
     margin: 0 0 4px;
   }
 
-  p.sous-titre {
+  .sous-titre {
     color: var(--texte-clair);
     font-size: 0.8rem;
   }
 
-  p.estLectureSeule {
+  .estLectureSeule {
     color: var(--liseres-fonce);
+  }
+
+  .responsables {
+    display: flex;
+    flex-direction: column;
+    row-gap: 18px;
+    margin-top: 25px;
+    width: calc(100% - 50px);
+  }
+
+  .un-responsable {
+    display: flex;
+    align-items: center;
+
+    & .nom {
+      font-weight: 500;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      margin-left: 8px;
+      width: 15rem;
+    }
+
+    & input {
+      margin: 0 0 0 auto;
+      transform: none;
+    }
   }
 </style>
