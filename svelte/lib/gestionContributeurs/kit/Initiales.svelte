@@ -23,6 +23,8 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
+    background: var(--role-inconnu);
+    color: var(--role-inconnu-texte);
   }
 
   .initiales.persona::before {
@@ -32,7 +34,8 @@
     background: url('/statique/assets/images/persona_invitation_contributeur.svg')
       no-repeat;
     background-size: contain;
-    filter: brightness(0);
+    filter: brightness(0) invert(43%) sepia(28%) saturate(369%)
+      hue-rotate(176deg) brightness(102%) contrast(91%);
   }
 
   .PROPRIETAIRE {
