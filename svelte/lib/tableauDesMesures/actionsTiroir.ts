@@ -11,16 +11,27 @@ type MesureAEditer = {
   };
 };
 
-export const afficheTiroirDeMesure = (mesureAEditer?: MesureAEditer) => {
+export const afficheTiroirEditeMesure = (mesureAEditer: MesureAEditer) => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-affiche-tiroir-ajout-mesure-specifique', {
       detail: {
         mesuresExistantes: metEnFormeMesures(get(mesures)),
         titreTiroir:
-          mesureAEditer && mesureAEditer.metadonnees.typeMesure === 'GENERALE'
+          mesureAEditer.metadonnees.typeMesure === 'GENERALE'
             ? mesureAEditer.mesure.description
             : 'Ajouter une mesure',
-        ...(mesureAEditer && { mesureAEditer }),
+        mesureAEditer,
+      },
+    })
+  );
+};
+
+export const afficheTiroirCreeMesure = () => {
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-affiche-tiroir-ajout-mesure-specifique', {
+      detail: {
+        mesuresExistantes: metEnFormeMesures(get(mesures)),
+        titreTiroir: 'Ajouter une mesure',
       },
     })
   );

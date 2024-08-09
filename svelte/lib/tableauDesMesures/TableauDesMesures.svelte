@@ -35,7 +35,7 @@
   import Avertissement from '../ui/Avertissement.svelte';
   import TagStatutMesure from '../ui/TagStatutMesure.svelte';
   import BandeauActions from './BandeauActions.svelte';
-  import { afficheTiroirDeMesure } from './actionsTiroir';
+  import { afficheTiroirEditeMesure } from './actionsTiroir';
   import { featureFlags } from '../featureFlags';
   import { contributeurs } from './stores/contributeurs.store';
 
@@ -246,7 +246,7 @@
             metsAJourMesureGenerale(id);
           }}
           on:click={() =>
-            afficheTiroirDeMesure({
+            afficheTiroirEditeMesure({
               mesure,
               metadonnees: { typeMesure: 'GENERALE', idMesure: id },
             })}
@@ -290,7 +290,7 @@
             metsAJourMesuresSpecifiques(indexReel);
           }}
           on:click={() =>
-            afficheTiroirDeMesure({
+            afficheTiroirEditeMesure({
               mesure,
               metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },
             })}
