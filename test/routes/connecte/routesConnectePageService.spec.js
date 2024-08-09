@@ -360,6 +360,38 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
     });
 
+    it("passe à l'adaptateur les prenomNom des contributeurs du service", async () => {
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unService()
+          .avecId('456')
+          .ajouteUnContributeur(
+            unUtilisateur().avecId('123').avecEmail('email.createur@mail.fr')
+              .donnees
+          )
+          .ajouteUnContributeur(
+            unUtilisateur()
+              .avecId('145')
+              .avecEmail('email.jeandupont@mail.fr')
+              .quiSAppelle('Jean Dupont').donnees
+          )
+          .construis(),
+      });
+      let contributeursRenseignes;
+      testeur.adaptateurCsv().genereCsvMesures = async (
+        _mesures,
+        contributeurs
+      ) => {
+        contributeursRenseignes = contributeurs;
+      };
+
+      await axios.get('http://localhost:1234/service/456/mesures/export.csv');
+
+      expect(contributeursRenseignes).to.eql({
+        123: 'email.createur@mail.fr',
+        145: 'Jean Dupont',
+      });
+    });
+
     it('sert un fichier de type CSV', (done) => {
       verifieTypeFichierServiEstCSV(
         'http://localhost:1234/service/456/mesures/export.csv',

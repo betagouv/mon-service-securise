@@ -135,8 +135,12 @@ const routesConnectePageService = ({
       const { avecDonneesAdditionnelles } = requete.query;
 
       try {
+        const contributeurs = Object.fromEntries(
+          service.contributeurs.map((c) => [c.id, c.prenomNom()])
+        );
         const bufferCsv = await adaptateurCsv.genereCsvMesures(
           service.mesures.enrichiesAvecDonneesPersonnalisees(),
+          contributeurs,
           avecDonneesAdditionnelles,
           referentiel
         );
