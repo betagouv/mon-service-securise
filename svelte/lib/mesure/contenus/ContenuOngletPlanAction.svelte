@@ -8,6 +8,8 @@
   import { planDActionDisponible } from '../../modeles/mesure';
   import { contributeurs } from '../../tableauDesMesures/stores/contributeurs.store';
   import Initiales from '../../ui/Initiales.svelte';
+  import type { IdUtilisateur } from '../mesure.d';
+  import { storeAutorisations } from '../../gestionContributeurs/stores/autorisations.store';
 
   export let visible: boolean;
   export let estLectureSeule: boolean;
@@ -23,6 +25,9 @@
   const afficheAvertissementStatut = !planDActionDisponible(
     $store.mesureEditee.mesure.statut
   );
+
+  $: niveauDeDroitDe = (idUtilisateur: IdUtilisateur) =>
+    $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit;
 </script>
 
 <div id="contenu-onglet-plan-action" class:visible>
@@ -77,7 +82,10 @@
     <div class="responsables">
       {#each $contributeurs as contributeur (contributeur.id)}
         <div class="un-responsable">
-          <Initiales valeur={contributeur.initiales} />
+          <Initiales
+            valeur={contributeur.initiales}
+            resumeNiveauDroit={niveauDeDroitDe(contributeur.id)}
+          />
           <div class="nom" class:estLectureSeule={selectionDesactivee}>
             {contributeur.prenomNom}
           </div>
