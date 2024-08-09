@@ -5,6 +5,7 @@
   import TagNiveauDroit from './TagNiveauDroit.svelte';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import type { ResumeNiveauDroit } from '../../ui/types';
+  import { storeAutorisations } from '../stores/autorisations.store';
 
   export let droitsModifiables: boolean;
   export let afficheDroits: boolean = true;
@@ -12,7 +13,7 @@
 
   let serviceUnique: Service;
   $: serviceUnique = $store.services[0];
-  $: autorisation = $store.autorisations[utilisateur.id];
+  $: autorisation = $storeAutorisations.autorisations[utilisateur.id];
 
   const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
     const idAutorisation = autorisation!.idAutorisation;
@@ -22,7 +23,7 @@
       { droits: enDroitsSurRubrique(nouveauDroit) }
     );
 
-    store.autorisations.remplace(autorisationMAJ);
+    storeAutorisations.remplace(autorisationMAJ);
   };
 </script>
 

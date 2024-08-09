@@ -42,15 +42,9 @@ export const store = {
     });
   },
   afficheEtapeSuppression: () =>
-    update((etat) => ({
-      ...etat,
-      etape: 'SuppressionSpecifique',
-    })),
+    update((etat) => ({ ...etat, etape: 'SuppressionSpecifique' })),
   afficheEtapeEditionSpecifique: () =>
-    update((etat) => ({
-      ...etat,
-      etape: 'EditionSpecifique',
-    })),
+    update((etat) => ({ ...etat, etape: 'EditionSpecifique' })),
 };
 
 export const configurationAffichage = derived(store, ($store) => {

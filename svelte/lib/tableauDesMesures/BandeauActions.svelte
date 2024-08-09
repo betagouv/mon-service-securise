@@ -1,7 +1,7 @@
 <script lang="ts">
   import { EtatEnregistrement } from './tableauDesMesures.d';
   import {
-    afficheTiroirDeMesure,
+    afficheTiroirCreeMesure,
     afficheTiroirExportDesMesures,
   } from './actionsTiroir';
 
@@ -15,7 +15,7 @@
     <div class="actions">
       <button
         class="bouton-action-mesure"
-        on:click={() => afficheTiroirDeMesure()}
+        on:click={() => afficheTiroirCreeMesure()}
         disabled={etatEnregistrement === EnCours}
       >
         <img src="/statique/assets/images/icone_plus_gris.svg" alt="" />

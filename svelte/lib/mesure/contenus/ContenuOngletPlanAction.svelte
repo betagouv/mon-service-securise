@@ -6,19 +6,28 @@
   import type { ReferentielPriorite, ReferentielStatut } from '../../ui/types';
   import SelectionEcheance from '../../tableauDesMesures/ligne/SelectionEcheance.svelte';
   import { planDActionDisponible } from '../../modeles/mesure';
+  import { contributeurs } from '../../tableauDesMesures/stores/contributeurs.store';
+  import Initiales from '../../ui/Initiales.svelte';
+  import type { IdUtilisateur } from '../mesure.d';
+  import { storeAutorisations } from '../../gestionContributeurs/stores/autorisations.store';
 
   export let visible: boolean;
   export let estLectureSeule: boolean;
   export let priorites: ReferentielPriorite;
   export let statuts: ReferentielStatut;
 
-  $: selectionDesactivee = !planDActionDisponible(
+  $: planDactionNonDisponible = !planDActionDisponible(
     $store.mesureEditee.mesure.statut
   );
+
+  $: selectionDesactivee = estLectureSeule || planDactionNonDisponible;
 
   const afficheAvertissementStatut = !planDActionDisponible(
     $store.mesureEditee.mesure.statut
   );
+
+  $: niveauDeDroitDe = (idUtilisateur: IdUtilisateur) =>
+    $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit;
 </script>
 
 <div id="contenu-onglet-plan-action" class:visible>
@@ -45,7 +54,7 @@
     </Avertissement>
   {:else}
     <p class="presentation">
-      Le plan d'action vous permet de mettre en oeuvre plus rapidement les
+      Le plan d'action vous permet de mettre en œuvre plus rapidement les
       mesures en équipe.
     </p>
   {/if}
@@ -53,15 +62,55 @@
     id="priorite"
     bind:priorite={$store.mesureEditee.mesure.priorite}
     label="Priorité"
-    estLectureSeule={estLectureSeule || selectionDesactivee}
+    estLectureSeule={selectionDesactivee}
     avecLibelleOption
     {priorites}
   />
   <SelectionEcheance
     bind:echeance={$store.mesureEditee.mesure.echeance}
     avecLabel={true}
-    estLectureSeule={estLectureSeule || selectionDesactivee}
+    estLectureSeule={selectionDesactivee}
   />
+  <div>
+    <p class="label" class:estLectureSeule={selectionDesactivee}>
+      Responsable(s)
+    </p>
+    <p class="sous-titre" class:estLectureSeule={selectionDesactivee}>
+      Vous pouvrez attribuer cette mesure à un ou plusieurs responsables.
+    </p>
+    <p class="sous-titre" class:estLectureSeule={selectionDesactivee}>
+      <button
+        disabled={selectionDesactivee}
+        type="button"
+        on:click={() =>
+          document.body.dispatchEvent(
+            new CustomEvent('jquery-affiche-tiroir-contributeurs')
+          )}>Gerer les contributeurs</button
+      >
+      <span>pour modifier les droits ou ajouter des responsables.</span>
+    </p>
+
+    <div class="responsables">
+      {#each $contributeurs as contributeur (contributeur.id)}
+        <div class="un-responsable">
+          <Initiales
+            valeur={contributeur.initiales}
+            resumeNiveauDroit={niveauDeDroitDe(contributeur.id)}
+          />
+          <div class="nom" class:estLectureSeule={selectionDesactivee}>
+            {contributeur.prenomNom}
+          </div>
+          <input
+            type="checkbox"
+            value={contributeur.id}
+            class="checkbox-contributeur"
+            disabled={selectionDesactivee}
+            bind:group={$store.mesureEditee.mesure.responsables}
+          />
+        </div>
+      {/each}
+    </div>
+  </div>
 </div>
 
 <style>
@@ -81,8 +130,6 @@
 
   p.presentation {
     font-weight: bold;
-    line-height: 22px;
-    font-size: 16px;
     margin: 0;
   }
 
@@ -90,5 +137,63 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .label {
+    font-weight: 500;
+    line-height: 22px;
+    text-align: left;
+    color: var(--texte-clair);
+    margin: 0 0 4px;
+  }
+
+  .sous-titre {
+    color: var(--texte-clair);
+    font-size: 0.8rem;
+    margin-top: 2px;
+
+    & button {
+      background: none;
+      border: none;
+      padding: 0;
+      font-weight: 500;
+      line-height: 20px;
+      text-decoration-line: underline;
+
+      &:not([disabled]) {
+        color: var(--bleu-mise-en-avant);
+        cursor: pointer;
+      }
+    }
+  }
+
+  .estLectureSeule {
+    color: var(--liseres-fonce);
+  }
+
+  .responsables {
+    display: flex;
+    flex-direction: column;
+    row-gap: 18px;
+    margin-top: 25px;
+    width: calc(100% - 50px);
+  }
+
+  .un-responsable {
+    display: flex;
+    align-items: center;
+
+    & .nom {
+      font-weight: 500;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      margin-left: 8px;
+      width: 15rem;
+    }
+
+    & input {
+      margin: 0 0 0 auto;
+      transform: none;
+    }
   }
 </style>
