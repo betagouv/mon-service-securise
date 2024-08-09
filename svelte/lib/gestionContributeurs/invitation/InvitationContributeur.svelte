@@ -69,7 +69,9 @@
     await api.envoieInvitations(Object.values(invitations), services);
     invitations = {};
     etapeCourante = 'Rapport';
-    document.body.dispatchEvent(new CustomEvent('jquery-recharge-services'));
+    document.body.dispatchEvent(
+      new CustomEvent('collaboratif-service-modifie')
+    );
   };
 </script>
 

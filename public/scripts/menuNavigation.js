@@ -17,7 +17,7 @@ const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
     brancheComportement: async () => {
       if (idService) await chargeDonneesDuService();
 
-      $(document.body).on('jquery-recharge-services', async () => {
+      $(document.body).on('collaboratif-service-modifie', async () => {
         await chargeDonneesDuService();
       });
 

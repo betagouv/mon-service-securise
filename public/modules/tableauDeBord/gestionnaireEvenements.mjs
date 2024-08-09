@@ -7,7 +7,7 @@ const gestionnaireEvenements = {
   brancheComportement: () => {
     gestionnaireTiroir.brancheComportement();
 
-    $(document.body).on('jquery-recharge-services', () => {
+    $(document.body).on('collaboratif-service-modifie', () => {
       tableauDesServices.recupereServices();
     });
 
