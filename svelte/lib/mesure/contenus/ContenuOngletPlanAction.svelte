@@ -78,6 +78,17 @@
     <p class="sous-titre" class:estLectureSeule={selectionDesactivee}>
       Vous pouvrez attribuer cette mesure à un ou plusieurs responsables.
     </p>
+    <p class="sous-titre" class:estLectureSeule={selectionDesactivee}>
+      <button
+        disabled={selectionDesactivee}
+        type="button"
+        on:click={() =>
+          document.body.dispatchEvent(
+            new CustomEvent('jquery-affiche-tiroir-contributeurs')
+          )}>Gerer les contributeurs</button
+      >
+      <span>pour modifier les droits ou ajouter des responsables.</span>
+    </p>
 
     <div class="responsables">
       {#each $contributeurs as contributeur (contributeur.id)}
@@ -139,6 +150,21 @@
   .sous-titre {
     color: var(--texte-clair);
     font-size: 0.8rem;
+    margin-top: 2px;
+
+    & button {
+      background: none;
+      border: none;
+      padding: 0;
+      font-weight: 500;
+      line-height: 20px;
+      text-decoration-line: underline;
+
+      &:not([disabled]) {
+        color: var(--bleu-mise-en-avant);
+        cursor: pointer;
+      }
+    }
   }
 
   .estLectureSeule {
