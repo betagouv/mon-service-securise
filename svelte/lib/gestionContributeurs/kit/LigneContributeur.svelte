@@ -1,13 +1,10 @@
 <script lang="ts">
-  import type {
-    ResumeNiveauDroit,
-    Service,
-    Utilisateur,
-  } from '../gestionContributeurs.d';
+  import type { Service, Utilisateur } from '../gestionContributeurs.d';
   import { store } from '../gestionContributeurs.store';
-  import Initiales from './Initiales.svelte';
+  import Initiales from '../../ui/Initiales.svelte';
   import TagNiveauDroit from './TagNiveauDroit.svelte';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
+  import type { ResumeNiveauDroit } from '../../ui/types';
 
   export let droitsModifiables: boolean;
   export let afficheDroits: boolean = true;

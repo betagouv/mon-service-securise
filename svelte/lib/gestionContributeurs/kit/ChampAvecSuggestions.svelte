@@ -2,7 +2,7 @@
   import type { Utilisateur } from '../gestionContributeurs.d';
 
   import { createEventDispatcher } from 'svelte';
-  import Initiales from './Initiales.svelte';
+  import Initiales from '../../ui/Initiales.svelte';
 
   export let id: string;
   export let callbackDeRecherche: (recherche: string) => Promise<Utilisateur[]>;

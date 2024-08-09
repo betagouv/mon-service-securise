@@ -2,14 +2,14 @@
   import type {
     Invitation,
     Permission,
-    ResumeNiveauDroit,
     Rubrique,
     Utilisateur,
   } from '../gestionContributeurs.d';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
-  import Initiales from '../kit/Initiales.svelte';
+  import Initiales from '../../ui/Initiales.svelte';
   import TagNiveauDroit from '../kit/TagNiveauDroit.svelte';
   import { createEventDispatcher } from 'svelte';
+  import type { ResumeNiveauDroit } from '../../ui/types';
 
   export let invitations: Invitation[];
   const dispatch = createEventDispatcher<{
