@@ -123,14 +123,10 @@ class CentreNotifications {
 
   async toutesTachesProfilUtilisateur(idUtilisateur) {
     const utilisateur = await this.depotDonnees.utilisateur(idUtilisateur);
-    if (!utilisateur) {
-      return [];
-    }
+    if (!utilisateur) return [];
 
     const completudeProfil = utilisateur.completudeProfil();
-    if (completudeProfil.estComplet) {
-      return [];
-    }
+    if (completudeProfil.estComplet) return [];
 
     if (completudeProfil.champsNonRenseignes.includes('nom')) {
       const tache = this.referentiel.tacheCompletudeProfil('profil');
