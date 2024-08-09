@@ -127,7 +127,11 @@
     $rechercheParAvancement !== 'statutADefinir' && featureFlags.planAction();
 </script>
 
-<svelte:body on:mesure-modifiee={rafraichisMesures} />
+<svelte:body
+  on:mesure-modifiee={rafraichisMesures}
+  on:jquery-recharge-services={() =>
+    Promise.all([rafraichisContributeurs(), rafraichisAutorisations()])}
+/>
 <Toaster />
 <div class="barre-filtres">
   <div class="conteneur-recherche">
