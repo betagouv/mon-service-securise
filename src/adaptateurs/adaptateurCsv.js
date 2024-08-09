@@ -10,6 +10,7 @@ const { dateEnFrancais } = require('../utilitaires/date');
 const remplaceBooleen = (booleen) => (booleen ? 'Oui' : 'Non');
 const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
 const sansRetoursChariots = (texte) => texte.replaceAll('\n', ' ');
+const separesParVirgule = (liste) => liste.join(', ');
 
 const genereCsvServices = (tableauServices) => {
   try {
@@ -47,6 +48,7 @@ const genereCsvServices = (tableauServices) => {
 
 const genereCsvMesures = async (
   donneesMesures,
+  contributeurs,
   avecDonneesAdditionnnelles,
   referentiel
 ) => {
@@ -67,10 +69,17 @@ const genereCsvMesures = async (
     if (featureFlag().avecPlanAction()) {
       colonnes.push({ id: 'priorite', title: 'Priorité' });
       colonnes.push({ id: 'echeance', title: 'Échéance' });
+      colonnes.push({ id: 'responsables', title: 'Responsables' });
     }
   }
 
   const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
+
+  const formatteResponsables = (responsables) =>
+    separesParVirgule(
+      responsables.map((id) => contributeurs[id]).filter((value) => !!value)
+    );
+
   const donneesCsv = Object.values(mesuresGenerales)
     .map((m) => ({
       identifiant: `#${m.identifiantNumerique}`,
@@ -83,6 +92,9 @@ const genereCsvMesures = async (
       commentaires: sansRetoursChariots(decode(m.modalites)),
       priorite: referentiel.prioritesMesures()[m.priorite]?.libelleCourt,
       echeance: m.echeance ? dateEnFrancais(m.echeance) : null,
+      responsables: m.responsables
+        ? formatteResponsables(m.responsables)
+        : null,
     }))
     .concat(
       mesuresSpecifiques.map((m) => ({
