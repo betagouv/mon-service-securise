@@ -211,6 +211,7 @@ describe('Un service', () => {
                 statut: 'fait',
                 priorite: 'p1',
                 echeance: '8/28/2024',
+                responsables: ['unIdUtilisateur'],
               },
             ],
           },
@@ -232,6 +233,7 @@ describe('Un service', () => {
             statut: 'fait',
             priorite: 'p1',
             echeance: '2024-08-28',
+            nbResponsables: 1,
           },
         ]);
       });

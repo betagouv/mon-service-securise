@@ -113,6 +113,7 @@ describe('Un événement de complétude modifiée', () => {
             statut: 'fait',
             priorite: 'p1',
             echeance: '2024-09-13',
+            nbResponsables: 0,
           },
         ],
         detailIndiceCyber: [

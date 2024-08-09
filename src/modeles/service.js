@@ -91,11 +91,12 @@ class Service {
 
     const detailMesures = Object.entries(mesuresGenerales)
       .filter(([_id, body]) => !!body.statut)
-      .map(([id, { statut, priorite, echeance }]) => ({
+      .map(([id, { statut, priorite, echeance, responsables }]) => ({
         idMesure: id,
         statut,
         ...(priorite && { priorite }),
         ...(echeance && { echeance: dateEnIso(echeance) }),
+        nbResponsables: responsables.length,
       }));
 
     return {
