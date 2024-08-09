@@ -131,7 +131,10 @@ class CentreNotifications {
     if (completudeProfil.champsNonRenseignes.includes('nom')) {
       const tache = this.referentiel.tacheCompletudeProfil('profil');
       return [
-        avecStatutLecture(tache, CentreNotifications.NOTIFICATION_NON_LUE),
+        {
+          ...avecStatutLecture(tache, CentreNotifications.NOTIFICATION_NON_LUE),
+          canalDiffusion: 'centreNotifications',
+        },
       ];
     }
 

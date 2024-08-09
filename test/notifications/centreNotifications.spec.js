@@ -387,8 +387,8 @@ describe('Le centre de notifications', () => {
       });
     });
 
-    describe("lorsque l'utilisateur est invité'", () => {
-      it('renvoie uniquement la notification de profil', async () => {
+    describe("lorsque l'utilisateur vient d'être invité, donc son profil a plein de champs non renseignés", () => {
+      it('renvoie uniquement la notification « globale » de profil à mettre à jour', async () => {
         depotDonnees.utilisateur = async () =>
           unUtilisateur().quiEstInvite().construis();
         referentiel = Referentiel.creeReferentiel({
@@ -402,6 +402,7 @@ describe('Le centre de notifications', () => {
 
         expect(taches.length).to.be(1);
         expect(taches[0].id).to.be('profil');
+        expect(taches[0].canalDiffusion).to.be('centreNotifications');
       });
     });
   });
