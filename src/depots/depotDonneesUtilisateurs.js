@@ -26,11 +26,17 @@ function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
         const u = await adaptateurPersistance.utilisateurAvecIdReset(idReset);
         return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
       },
+      nbAutorisationsProprietaire: async (idUtilisateur) =>
+        adaptateurPersistance.nbAutorisationsProprietaire(idUtilisateur),
     },
     ajoute: async (id, donneesUtilisateur) =>
       adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur),
     sauvegarde: async (id, deltaDonnees) =>
       adaptateurPersistance.metsAJourUtilisateur(id, deltaDonnees),
+    supprime: async (id) => {
+      await adaptateurPersistance.supprimeAutorisationsContribution(id);
+      await adaptateurPersistance.supprimeUtilisateur(id);
+    },
   };
 }
 
@@ -153,7 +159,7 @@ const creeDepot = (config = {}) => {
 
   const supprimeUtilisateur = async (id) => {
     const verifieUtilisateurExistant = async () => {
-      const u = await adaptateurPersistance.utilisateur(id);
+      const u = await p.lis.un(id);
       if (typeof u === 'undefined')
         throw new ErreurUtilisateurInexistant(
           `L'utilisateur "${id}" n'existe pas`
@@ -161,7 +167,7 @@ const creeDepot = (config = {}) => {
     };
 
     const verifieUtilisateurPasProprietaire = async () => {
-      const nb = await adaptateurPersistance.nbAutorisationsProprietaire(id);
+      const nb = await p.lis.nbAutorisationsProprietaire(id);
       if (nb > 0)
         throw new ErreurSuppressionImpossible(
           `Suppression impossible : l'utilisateur "${id}" a créé des services`
@@ -170,8 +176,7 @@ const creeDepot = (config = {}) => {
 
     await verifieUtilisateurExistant();
     await verifieUtilisateurPasProprietaire();
-    await adaptateurPersistance.supprimeAutorisationsContribution(id);
-    await adaptateurPersistance.supprimeUtilisateur(id);
+    await p.supprime(id);
   };
 
   const tousUtilisateurs = () =>
