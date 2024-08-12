@@ -139,6 +139,7 @@ const creeDepot = (config = {}) => {
     await verifieAutorisationExiste();
     await verifieSuppressionPermise();
     await adaptateurPersistance.supprimeAutorisation(idContributeur, idService);
+    await depotServices.supprimeContributeur(idService, idContributeur);
     await publieAutorisationsDuService(idService);
   };
 
