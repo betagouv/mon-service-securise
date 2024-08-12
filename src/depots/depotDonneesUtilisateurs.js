@@ -23,6 +23,8 @@ function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
       celuiAvecEmail: async (email) =>
         adaptateurPersistance.utilisateurAvecEmail(email),
     },
+    ajoute: async (id, donneesUtilisateur) =>
+      adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur),
   };
 }
 
@@ -65,8 +67,8 @@ const creeDepot = (config = {}) => {
       );
     }
 
-    await adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur);
-    u = await utilisateur(id);
+    await p.ajoute(id, donneesUtilisateur);
+    u = await p.lis.un(id);
 
     await busEvenements.publie(
       new EvenementUtilisateurInscrit({ utilisateur: u })
