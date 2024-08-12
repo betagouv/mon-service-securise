@@ -6,28 +6,27 @@
   export let estLectureSeule = false;
   export let avecLabel = false;
 
-  let elementDate: HTMLInputElement;
-
-  const afficheSelectionDate = () => {
-    elementDate.showPicker();
-  };
-
-  const formatteur = new Intl.DateTimeFormat('fr-FR');
-  let dateFormatte: string | undefined = undefined;
-  $: {
-    try {
-      if (echeance) dateFormatte = formatteur.format(new Date(echeance));
-      else dateFormatte = undefined;
-    } catch (e) {
-      dateFormatte = undefined;
-    }
-  }
-
   const dispatch = createEventDispatcher<{
     modificationEcheance: { echeance: EcheanceMesure };
   }>();
-  const modifieEcheance = () => {
-    if (echeance) dispatch('modificationEcheance', { echeance });
+
+  let elementDate: HTMLInputElement;
+
+  let dateFormattee: string | undefined = undefined;
+  $: {
+    const formatFR = new Intl.DateTimeFormat('fr-FR');
+    try {
+      if (echeance) dateFormattee = formatFR.format(new Date(echeance));
+      else dateFormattee = undefined;
+    } catch (e) {
+      dateFormattee = undefined;
+    }
+  }
+
+  const modifieEcheance = (e: any) => {
+    const nouvelleEcheance = e.target.value;
+    echeance = nouvelleEcheance;
+    dispatch('modificationEcheance', { echeance: nouvelleEcheance });
   };
 
   const labelVide = avecLabel ? 'Définir l’échéance' : 'Échéance';
@@ -39,19 +38,15 @@
   {/if}
   <button
     type="button"
-    on:click|stopPropagation={afficheSelectionDate}
-    class:vide={!dateFormatte}
+    on:click|stopPropagation={() => elementDate.showPicker()}
+    class:vide={!dateFormattee}
     disabled={estLectureSeule}
     class:avecLabel
   >
-    {dateFormatte ?? labelVide}
+    {dateFormattee ?? labelVide}
   </button>
-  <input
-    type="date"
-    bind:value={echeance}
-    bind:this={elementDate}
-    on:change={modifieEcheance}
-  />
+  <!-- Sans passer par `bind:value` car ça casse le fonctionnement du bouton « Effacer » du date-picker -->
+  <input type="date" bind:this={elementDate} on:input={modifieEcheance} />
 </div>
 
 <style>
