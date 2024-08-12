@@ -364,7 +364,6 @@
   .ligne-onglet {
     transform: translateY(2px) translateX(-0.5px);
     position: relative;
-    z-index: 1;
   }
 
   .conteneur-onglet {
