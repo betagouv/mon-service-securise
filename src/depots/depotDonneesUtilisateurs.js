@@ -107,7 +107,7 @@ const creeDepot = (config = {}) => {
     return !!u;
   };
 
-  const { utilisateurAvecEmail } = adaptateurPersistance;
+  const utilisateurAvecEmail = async (email) => p.lis.celuiAvecEmail(email);
 
   const metsAJourMotDePasse = async (idUtilisateur, motDePasse) => {
     const hash = await adaptateurChiffrement.hacheBCrypt(motDePasse);
