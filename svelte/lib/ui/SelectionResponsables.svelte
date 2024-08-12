@@ -138,7 +138,7 @@
   }
 
   .entete .titre {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 500;
     line-height: 24px;
   }
@@ -157,10 +157,11 @@
 
   .pied-page {
     text-align: left;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
     line-height: 20px;
     color: var(--texte-clair);
+    margin-top: 6px;
   }
 
   .pied-page button {
@@ -169,7 +170,7 @@
     padding: 0;
     cursor: pointer;
     color: var(--bleu-mise-en-avant);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
     line-height: 20px;
     text-decoration-line: underline;
@@ -178,7 +179,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 9px 0;
+    padding: 6px 0;
     gap: 4px;
   }
 
@@ -190,7 +191,7 @@
   }
 
   .nom-contributeur {
-    font-size: 16px;
+    font-size: 0.875rem;
     font-weight: 500;
     line-height: 24px;
     text-overflow: ellipsis;
