@@ -25,6 +25,14 @@
     if (responsables) dispatch('modificationResponsables', { responsables });
   };
 
+  $: nombreResponsables = () => {
+    const idContributeurs = $contributeurs.map((c) => c.id);
+    const responsablesActuels = responsables?.filter((id) =>
+      idContributeurs.includes(id)
+    );
+    return responsablesActuels?.length || 0;
+  };
+
   $: niveauDeDroitDe = (idUtilisateur: IdUtilisateur) =>
     $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit;
 </script>
@@ -34,7 +42,7 @@
     <div class="conteneur-image">
       <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
     </div>
-    <span>{responsables?.length || 0}</span>
+    <span>{nombreResponsables()}</span>
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div class="conteneur-responsables" on:click|stopPropagation>
