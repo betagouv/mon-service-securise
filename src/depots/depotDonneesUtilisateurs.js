@@ -28,6 +28,12 @@ function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
       },
       nbAutorisationsProprietaire: async (idUtilisateur) =>
         adaptateurPersistance.nbAutorisationsProprietaire(idUtilisateur),
+      tous: async () => {
+        const tousUtilisateurs = await adaptateurPersistance.tousUtilisateurs();
+        return tousUtilisateurs.map(
+          (u) => new Utilisateur(u, { adaptateurJWT })
+        );
+      },
     },
     ajoute: async (id, donneesUtilisateur) =>
       adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur),
@@ -179,10 +185,7 @@ const creeDepot = (config = {}) => {
     await p.supprime(id);
   };
 
-  const tousUtilisateurs = () =>
-    adaptateurPersistance
-      .tousUtilisateurs()
-      .then((tous) => tous.map((u) => new Utilisateur(u, { adaptateurJWT })));
+  const tousUtilisateurs = async () => p.lis.tous();
 
   const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) =>
     adaptateurPersistance
