@@ -29,6 +29,8 @@ function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
     },
     ajoute: async (id, donneesUtilisateur) =>
       adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur),
+    sauvegarde: async (id, deltaDonnees) =>
+      adaptateurPersistance.metsAJourUtilisateur(id, deltaDonnees),
   };
 }
 
@@ -111,10 +113,8 @@ const creeDepot = (config = {}) => {
 
   const metsAJourMotDePasse = async (idUtilisateur, motDePasse) => {
     const hash = await adaptateurChiffrement.hacheBCrypt(motDePasse);
-    await adaptateurPersistance.metsAJourUtilisateur(idUtilisateur, {
-      motDePasse: hash,
-    });
-    return utilisateur(idUtilisateur);
+    await p.sauvegarde(idUtilisateur, { motDePasse: hash });
+    return p.lis.un(idUtilisateur);
   };
 
   const metsAJourUtilisateur = async (id, donnees) => {
