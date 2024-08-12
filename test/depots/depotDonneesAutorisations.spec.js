@@ -30,14 +30,21 @@ const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE, LECTURE } = Permissions;
 
 describe('Le dépôt de données des autorisations', () => {
-  const creeDepot = (adaptateurPersistance, adaptateurUUID, busEvenements) =>
+  const creeDepot = (
+    adaptateurPersistance,
+    adaptateurUUID,
+    busEvenements,
+    depotServices
+  ) =>
     DepotDonneesAutorisations.creeDepot({
       adaptateurPersistance,
       adaptateurUUID,
-      depotServices: DepotDonneesServices.creeDepot({
-        adaptateurChiffrement: fauxAdaptateurChiffrement(),
-        adaptateurPersistance,
-      }),
+      depotServices:
+        depotServices ||
+        DepotDonneesServices.creeDepot({
+          adaptateurChiffrement: fauxAdaptateurChiffrement(),
+          adaptateurPersistance,
+        }),
       depotUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
       }),
@@ -362,6 +369,37 @@ describe('Le dépôt de données des autorisations', () => {
 
       const apres = await depot.autorisationPour('U1', 'S1');
       expect(apres).to.be(undefined);
+    });
+
+    it('demande au dépôt données service de supprimer le contributeur', async () => {
+      const avecUneAutorisation = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U2', 'S1').donnees
+        )
+        .construis();
+
+      let idServiceRecu;
+      let idUtilisateurRecu;
+      const depotServices = {
+        supprimeContributeur: async (idService, idUtilisateur) => {
+          idServiceRecu = idService;
+          idUtilisateurRecu = idUtilisateur;
+        },
+      };
+      const depot = creeDepot(
+        avecUneAutorisation,
+        {},
+        fabriqueBusPourLesTests(),
+        depotServices
+      );
+
+      await depot.supprimeContributeur('U1', 'S1', 'U2');
+
+      expect(idServiceRecu).to.be('S1');
+      expect(idUtilisateurRecu).to.be('U1');
     });
 
     it("publie les autorisations à jour sur le bus d'événements", async () => {
