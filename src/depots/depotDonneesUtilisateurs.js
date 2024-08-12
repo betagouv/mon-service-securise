@@ -22,6 +22,10 @@ function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
       },
       celuiAvecEmail: async (email) =>
         adaptateurPersistance.utilisateurAvecEmail(email),
+      celuiAvecIdReset: async (idReset) => {
+        const u = await adaptateurPersistance.utilisateurAvecIdReset(idReset);
+        return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
+      },
     },
     ajoute: async (id, donneesUtilisateur) =>
       adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur),
@@ -77,10 +81,8 @@ const creeDepot = (config = {}) => {
     return u;
   };
 
-  const utilisateurAFinaliser = async (idReset) => {
-    const u = await adaptateurPersistance.utilisateurAvecIdReset(idReset);
-    return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
-  };
+  const utilisateurAFinaliser = async (idReset) =>
+    p.lis.celuiAvecIdReset(idReset);
 
   const utilisateurAuthentifie = async (login, motDePasse) => {
     const u = await adaptateurPersistance.utilisateurAvecEmail(login);
