@@ -1588,4 +1588,77 @@ describe('Le dépôt de données des services', () => {
       ).to.be(true);
     });
   });
+
+  describe("sur demande de suppression d'un contributeur du service", () => {
+    it('supprime le contributeur des responsables des mesures générales du service', async () => {
+      const referentiel = Referentiel.creeReferentiel({
+        mesures: { mesureA: {} },
+        categoriesMesures: { gouvernance: 'Gouvernance' },
+      });
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [
+            { id: 'mesureA', statut: 'fait', responsables: ['U1', 'U2'] },
+          ],
+        },
+        referentiel
+      );
+      const service = unService(referentiel)
+        .avecId('123')
+        .avecMesures(mesures)
+        .construis();
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .ajouteUnService(service.donneesAPersister().toutes());
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+
+      await depot.supprimeContributeur('123', 'U1');
+
+      const {
+        mesures: { mesuresGenerales },
+      } = await depot.service('123');
+      expect(mesuresGenerales.toutes()[0].responsables).to.eql(['U2']);
+    });
+
+    it('supprime le contributeur des responsables des mesures spécifiques du service', async () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const mesures = new Mesures(
+        {
+          mesuresSpecifiques: [
+            {
+              description: 'Une mesure spécifique',
+              modalites: 'Des modalités',
+              responsables: ['U1', 'U2'],
+            },
+          ],
+        },
+        referentiel
+      );
+      const service = unService(referentiel)
+        .avecId('123')
+        .avecMesures(mesures)
+        .construis();
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .ajouteUnService(service.donneesAPersister().donnees);
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+
+      await depot.supprimeContributeur('123', 'U1');
+
+      const {
+        mesures: { mesuresSpecifiques },
+      } = await depot.service('123');
+      expect(mesuresSpecifiques.toutes()[0].responsables).to.eql(['U2']);
+    });
+  });
 });

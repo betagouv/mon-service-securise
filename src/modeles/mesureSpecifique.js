@@ -27,6 +27,10 @@ class MesureSpecifique extends Mesure {
     return Mesure.statutRenseigne(this.statut);
   }
 
+  supprimeResponsable(idUtilisateur) {
+    this.responsables = this.responsables.filter((r) => r !== idUtilisateur);
+  }
+
   static proprietesObligatoires() {
     return ['description', 'categorie', 'statut'];
   }

@@ -38,6 +38,10 @@ class MesureGenerale extends Mesure {
     return Mesure.statutRenseigne(this.statut);
   }
 
+  supprimeResponsable(idUtilisateur) {
+    this.responsables = this.responsables.filter((r) => r !== idUtilisateur);
+  }
+
   static valide({ id, statut, priorite, echeance }, referentiel) {
     super.valide({ statut, priorite, echeance }, referentiel);
 
