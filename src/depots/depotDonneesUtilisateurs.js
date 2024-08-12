@@ -143,12 +143,13 @@ const creeDepot = (config = {}) => {
     return p.lis.un(u.id);
   };
 
-  const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) =>
-    adaptateurPersistance
-      .metsAJourUtilisateur(utilisateurAModifier.id, {
-        idResetMotDePasse: undefined,
-      })
-      .then(() => utilisateur(utilisateurAModifier.id));
+  const supprimeIdResetMotDePassePourUtilisateur = async (
+    utilisateurAModifier
+  ) => {
+    const { id } = utilisateurAModifier;
+    await p.sauvegarde(id, { idResetMotDePasse: undefined });
+    return p.lis.un(id);
+  };
 
   const supprimeUtilisateur = async (id) => {
     const verifieUtilisateurExistant = async () => {
