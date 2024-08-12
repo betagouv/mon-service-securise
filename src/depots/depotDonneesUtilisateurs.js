@@ -125,9 +125,9 @@ const creeDepot = (config = {}) => {
         adaptateurRechercheEntite
       );
 
-    await adaptateurPersistance.metsAJourUtilisateur(id, donnees);
+    await p.sauvegarde(id, donnees);
 
-    const u = await utilisateur(id);
+    const u = await p.lis.un(id);
     await busEvenements.publie(
       new EvenementUtilisateurModifie({ utilisateur: u })
     );
