@@ -70,8 +70,7 @@
 
   button {
     white-space: nowrap;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 0.9rem;
     line-height: 24px;
     text-align: center;
     color: var(--texte-clair);
@@ -113,7 +112,6 @@
   button.avecLabel {
     border: 1px solid var(--liseres-fonce);
     gap: 24px;
-    font-size: 12px;
   }
 
   button.avecLabel::after {
