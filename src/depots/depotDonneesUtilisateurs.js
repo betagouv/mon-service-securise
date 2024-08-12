@@ -20,6 +20,8 @@ function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
         const u = await adaptateurPersistance.utilisateur(idUtilisateur);
         return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
       },
+      celuiAvecEmail: async (email) =>
+        adaptateurPersistance.utilisateurAvecEmail(email),
     },
   };
 }
@@ -43,7 +45,7 @@ const creeDepot = (config = {}) => {
     if (!email)
       throw new ErreurEmailManquant('Le champ email doit être renseigné');
 
-    let u = await adaptateurPersistance.utilisateurAvecEmail(email);
+    let u = await p.lis.celuiAvecEmail(email);
     if (u)
       throw new ErreurUtilisateurExistant(
         'Utilisateur déjà existant pour cette adresse email',
