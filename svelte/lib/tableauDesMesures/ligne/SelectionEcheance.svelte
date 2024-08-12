@@ -75,7 +75,6 @@
     line-height: 24px;
     text-align: center;
     color: var(--texte-clair);
-    border: none;
     background: none;
     cursor: pointer;
     display: flex;
@@ -85,6 +84,7 @@
     justify-content: start;
     padding: 8px 16px;
     border-radius: 6px;
+    border: 1px solid var(--liseres);
   }
 
   button:not(.avecLabel):not([disabled]):hover {
