@@ -85,7 +85,7 @@ const creeDepot = (config = {}) => {
     p.lis.celuiAvecIdReset(idReset);
 
   const utilisateurAuthentifie = async (login, motDePasse) => {
-    const u = await adaptateurPersistance.utilisateurAvecEmail(login);
+    const u = await p.lis.celuiAvecEmail(login);
 
     const motDePasseStocke = u && u.motDePasse;
     const echecAuthentification = undefined;
