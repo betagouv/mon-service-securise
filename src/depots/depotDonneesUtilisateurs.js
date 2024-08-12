@@ -16,12 +16,20 @@ const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit'
 function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
   return {
     lis: {
+      donnees: {
+        de: async (idUtilisateur) =>
+          adaptateurPersistance.utilisateur(idUtilisateur),
+        deCeluiAvecEmail: async (email) =>
+          adaptateurPersistance.utilisateurAvecEmail(email),
+      },
       un: async (idUtilisateur) => {
         const u = await adaptateurPersistance.utilisateur(idUtilisateur);
         return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
       },
-      celuiAvecEmail: async (email) =>
-        adaptateurPersistance.utilisateurAvecEmail(email),
+      celuiAvecEmail: async (email) => {
+        const u = await adaptateurPersistance.utilisateurAvecEmail(email);
+        return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
+      },
       celuiAvecIdReset: async (idReset) => {
         const u = await adaptateurPersistance.utilisateurAvecIdReset(idReset);
         return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
@@ -99,7 +107,7 @@ const creeDepot = (config = {}) => {
     p.lis.celuiAvecIdReset(idReset);
 
   const utilisateurAuthentifie = async (login, motDePasse) => {
-    const u = await p.lis.celuiAvecEmail(login);
+    const u = await p.lis.donnees.deCeluiAvecEmail(login);
 
     const motDePasseStocke = u && u.motDePasse;
     const echecAuthentification = undefined;
@@ -196,7 +204,7 @@ const creeDepot = (config = {}) => {
     const erreurMotDePasseIncorrect = new ErreurMotDePasseIncorrect(
       'Le mot de passe est incorrect'
     );
-    const u = await p.lis.un(idUtilisateur);
+    const u = await p.lis.donnees.de(idUtilisateur);
 
     const motDePasseStocke = u && u.motDePasse;
 
