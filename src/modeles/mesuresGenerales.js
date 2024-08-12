@@ -43,6 +43,10 @@ class MesuresGenerales extends ElementsConstructibles {
       .reduce(rangeMesureParStatut, accumulateur);
   }
 
+  supprimeResponsable(idUtilisateur) {
+    this.toutes().forEach((m) => m.supprimeResponsable(idUtilisateur));
+  }
+
   statutSaisie() {
     if (this.nonSaisies()) return MesuresGenerales.A_SAISIR;
     if (

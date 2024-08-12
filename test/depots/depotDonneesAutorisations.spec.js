@@ -25,6 +25,8 @@ const {
 } = require('../../src/bus/evenementAutorisationsServiceModifiees');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
+const { unService } = require('../constructeurs/constructeurService');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE, LECTURE } = Permissions;
@@ -352,6 +354,11 @@ describe('Le dépôt de données des autorisations', () => {
 
     it('supprime le contributeur', async () => {
       const avecUneAutorisation = unePersistanceMemoire()
+        .ajouteUnService(
+          unService().avecId('S1').avecDescription({ nom: 'S1' }).donnees
+        )
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
         .ajouteUneAutorisation(
           uneAutorisation().deContributeur('U1', 'S1').donnees
         )
@@ -405,6 +412,11 @@ describe('Le dépôt de données des autorisations', () => {
     it("publie les autorisations à jour sur le bus d'événements", async () => {
       const bus = fabriqueBusPourLesTests();
       const avecDeuxExistantes = unePersistanceMemoire()
+        .ajouteUnService(
+          unService().avecId('S1').avecDescription({ nom: 'S1' }).donnees
+        )
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
         .ajouteUneAutorisation(
           uneAutorisation().avecId('A1').deProprietaire('U1', 'S1').donnees
         )

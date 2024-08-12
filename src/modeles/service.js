@@ -229,6 +229,10 @@ class Service {
     this.mesures.metsAJourMesuresSpecifiques(mesures, this.referentiel);
   }
 
+  supprimeResponsableMesures(idUtilisateur) {
+    this.mesures.supprimeResponsable(idUtilisateur);
+  }
+
   nombreDossiers() {
     return this.dossiers.nombre();
   }

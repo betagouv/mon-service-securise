@@ -134,6 +134,11 @@ class Mesures extends InformationsService {
       this.referentiel
     );
   }
+
+  supprimeResponsable(idUtilisateur) {
+    this.mesuresGenerales.supprimeResponsable(idUtilisateur);
+    this.mesuresSpecifiques.supprimeResponsable(idUtilisateur);
+  }
 }
 
 module.exports = Mesures;

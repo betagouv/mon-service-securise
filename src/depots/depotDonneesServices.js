@@ -380,6 +380,15 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const supprimeContributeur = async (idService, idUtilisateur) => {
+    const unService = await p.lis.un(idService);
+
+    unService.supprimeResponsableMesures(idUtilisateur);
+
+    const { id, ...donnees } = unService.donneesAPersister().toutes();
+    return p.sauvegarde(id, donnees);
+  };
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
@@ -396,6 +405,7 @@ const creeDepot = (config = {}) => {
     service,
     services,
     remplaceRisquesSpecifiquesDuService,
+    supprimeContributeur,
     supprimeHomologation,
     tousLesServices,
     trouveIndexDisponible,

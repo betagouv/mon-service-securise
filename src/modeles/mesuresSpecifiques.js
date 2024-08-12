@@ -22,6 +22,10 @@ class MesuresSpecifiques extends ElementsConstructibles {
     }, accumulateur);
   }
 
+  supprimeResponsable(idUtilisateur) {
+    this.toutes().forEach((m) => m.supprimeResponsable(idUtilisateur));
+  }
+
   nombreDeSansStatut() {
     return this.toutes().filter((ms) => !ms.statutRenseigne()).length;
   }
