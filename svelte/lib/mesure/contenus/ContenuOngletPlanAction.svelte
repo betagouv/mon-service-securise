@@ -35,13 +35,11 @@
     <Avertissement niveau="info">
       <div class="info-accessibilite-plan-action">
         <p>
-          Le plan d’action est accessible uniquement pour les mesures au statut <b
-            >À lancer</b
-          >
-          et <b>Partielle</b>
+          Le plan d’action est accessible uniquement pour les mesures au statut
+          <b>À lancer</b> et <b>Partielle</b>
         </p>
-        <p>
-          <b>Pour y accéder, modifiez le statut de cette mesure</b>
+        <div class="pour-acceder">
+          <p>Pour y accéder, modifiez le statut de cette mesure :</p>
           <SelectionStatut
             bind:statut={$store.mesureEditee.mesure.statut}
             id="statut"
@@ -49,7 +47,7 @@
             referentielStatuts={statuts}
             version="accentuee"
           />
-        </p>
+        </div>
       </div>
     </Avertissement>
   {:else}
@@ -137,6 +135,13 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+
+    & .pour-acceder {
+      display: flex;
+      flex-direction: column;
+      row-gap: 4px;
+      font-weight: bold;
+    }
   }
 
   .label {
