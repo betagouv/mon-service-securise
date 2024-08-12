@@ -196,7 +196,7 @@ const creeDepot = (config = {}) => {
     const erreurMotDePasseIncorrect = new ErreurMotDePasseIncorrect(
       'Le mot de passe est incorrect'
     );
-    const u = await adaptateurPersistance.utilisateur(idUtilisateur);
+    const u = await p.lis.un(idUtilisateur);
 
     const motDePasseStocke = u && u.motDePasse;
 
