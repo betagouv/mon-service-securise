@@ -142,4 +142,16 @@ describe('Une mesure spécifique', () => {
     const mesure = new MesureSpecifique({ statut: 'fait' });
     expect(mesure.statutRenseigne()).to.be(true);
   });
+
+  elle("persiste sa date d'échéance au format ISO en UTC", () => {
+    const janvierNonIso = '01/23/2024 10:00Z';
+    const avecEcheance = new MesureSpecifique(
+      { echeance: janvierNonIso },
+      referentiel
+    );
+
+    const persistance = avecEcheance.donneesSerialisees();
+
+    expect(persistance.echeance).to.be('2024-01-23T10:00:00.000Z');
+  });
 });

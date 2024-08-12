@@ -210,7 +210,7 @@ describe('Un service', () => {
                 id: 'mesureA',
                 statut: 'fait',
                 priorite: 'p1',
-                echeance: '8/28/2024',
+                echeance: '2024-08-28',
                 responsables: ['unIdUtilisateur'],
               },
             ],

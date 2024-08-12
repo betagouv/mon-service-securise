@@ -27,6 +27,13 @@ class MesureSpecifique extends Mesure {
     return Mesure.statutRenseigne(this.statut);
   }
 
+  donneesSerialisees() {
+    return {
+      ...super.donneesSerialisees(),
+      ...(this.echeance && { echeance: new Date(this.echeance).toISOString() }),
+    };
+  }
+
   supprimeResponsable(idUtilisateur) {
     this.responsables = this.responsables.filter((r) => r !== idUtilisateur);
   }

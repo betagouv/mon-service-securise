@@ -42,6 +42,13 @@ class MesureGenerale extends Mesure {
     this.responsables = this.responsables.filter((r) => r !== idUtilisateur);
   }
 
+  donneesSerialisees() {
+    return {
+      ...super.donneesSerialisees(),
+      ...(this.echeance && { echeance: new Date(this.echeance).toISOString() }),
+    };
+  }
+
   static valide({ id, statut, priorite, echeance }, referentiel) {
     super.valide({ statut, priorite, echeance }, referentiel);
 
