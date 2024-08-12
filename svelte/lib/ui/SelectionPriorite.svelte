@@ -75,9 +75,8 @@
     --couleur-fond-normal: var(--couleur-texte-survol);
     padding: 2px 6px 4px 6px;
     border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    width: 27px;
+    font-size: 0.9rem;
+    width: 29px;
     text-align: center;
   }
 
@@ -142,7 +141,7 @@
     --couleur-fond-survol: white;
 
     border: 1px solid var(--liseres-fonce);
-    font-size: 12px;
+    font-size: 0.9rem;
     line-height: 20px;
   }
 
@@ -154,6 +153,6 @@
 
   option {
     background: white;
-    font-size: 14px;
+    font-size: 0.9rem;
   }
 </style>
