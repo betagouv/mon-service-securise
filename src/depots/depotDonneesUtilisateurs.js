@@ -135,14 +135,12 @@ const creeDepot = (config = {}) => {
   };
 
   const reinitialiseMotDePasse = async (email) => {
-    const u = await adaptateurPersistance.utilisateurAvecEmail(email);
+    const u = await p.lis.celuiAvecEmail(email);
     if (!u) return undefined;
 
     const idResetMotDePasse = adaptateurUUID.genereUUID();
-    await adaptateurPersistance.metsAJourUtilisateur(u.id, {
-      idResetMotDePasse,
-    });
-    return utilisateur(u.id);
+    await p.sauvegarde(u.id, { idResetMotDePasse });
+    return p.lis.un(u.id);
   };
 
   const supprimeIdResetMotDePassePourUtilisateur = (utilisateurAModifier) =>
