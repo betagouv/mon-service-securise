@@ -23,6 +23,7 @@
   flex-shrink: 0;
   background: #f1f5f9;
   transition: width 0.2s cubic-bezier(0.05, 1.13, 0.81, 0.99);
+  z-index: 5;
 }
 
 .menu-navigation > * {
