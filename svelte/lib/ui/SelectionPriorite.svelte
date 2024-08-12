@@ -71,7 +71,7 @@
     border: none;
     background: var(--couleur-fond-normal);
     color: var(--couleur-texte-normal);
-    --couleur-texte-normal: white;
+    --couleur-texte-normal: var(--couleur-fond-survol);
     --couleur-fond-normal: var(--couleur-texte-survol);
     padding: 2px 6px 4px 6px;
     border-radius: 4px;
@@ -110,18 +110,18 @@
   }
 
   select.p1 {
-    --couleur-texte-survol: #ff6584;
-    --couleur-fond-survol: #ffe9e6;
+    --couleur-texte-survol: #ffe9e6;
+    --couleur-fond-survol: #ff6584;
   }
 
   select.p2 {
-    --couleur-texte-survol: #faa72c;
-    --couleur-fond-survol: #fff2de;
+    --couleur-texte-survol: #fff2de;
+    --couleur-fond-survol: #faa72c;
   }
 
   select.p3 {
-    --couleur-texte-survol: #0c8626;
-    --couleur-fond-survol: #d4f4db;
+    --couleur-texte-survol: #d4f4db;
+    --couleur-fond-survol: #0c8626;
   }
 
   select.vide {
