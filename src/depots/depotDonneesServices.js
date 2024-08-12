@@ -349,7 +349,8 @@ const creeDepot = (config = {}) => {
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${unService.id}" non trouvé`);
 
-    await p.sauvegarde(unService.id, unService.donneesAPersister().toutes());
+    const { id, ...donnees } = unService.donneesAPersister().toutes();
+    await p.sauvegarde(unService.id, donnees);
   };
 
   const metsAJourMesureGeneraleDuService = async (
