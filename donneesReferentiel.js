@@ -61,6 +61,16 @@ module.exports = {
       dateDeDeploiement: '2024-07-25 12:30:00Z',
       canalDiffusion: 'page',
     },
+    {
+      id: 'planActionDesMesures',
+      dateDeDeploiement: '2024-08-12 08:00:00Z',
+      titre: "Le plan d'action cyber est disponible !",
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-utiliser-le-plan-daction-cyber-dans-la-liste-des-mesures-de-securite-tft88x/',
+      sousTitre:
+        "Pour chaque mesure, attribuez un·e ou des responsables, une date d'échéance et une priorité !",
+      image: 'prioritePlanAction.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
