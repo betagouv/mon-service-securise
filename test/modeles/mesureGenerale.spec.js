@@ -192,4 +192,16 @@ describe('Une mesure de sécurité', () => {
 
     expect(mesure.statutSaisie()).to.equal(InformationsService.COMPLETES);
   });
+
+  it("persiste sa date d'échéance au format ISO en UTC", () => {
+    const janvierNonIso = '01/23/2024 10:00Z';
+    const avecEcheance = new MesureGenerale(
+      { id: 'identifiantMesure', echeance: janvierNonIso },
+      referentiel
+    );
+
+    const persistance = avecEcheance.donneesSerialisees();
+
+    expect(persistance.echeance).to.be('2024-01-23T10:00:00.000Z');
+  });
 });

@@ -52,7 +52,7 @@ describe('Un événement de complétude modifiée', () => {
             id: 'mesureA',
             statut: 'fait',
             priorite: 'p1',
-            echeance: '9/13/2024',
+            echeance: '2024-09-13',
           },
         ],
       },
