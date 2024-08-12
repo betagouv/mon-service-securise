@@ -187,10 +187,10 @@ const creeDepot = (config = {}) => {
 
   const tousUtilisateurs = async () => p.lis.tous();
 
-  const valideAcceptationCGUPourUtilisateur = (utilisateurAModifier) =>
-    adaptateurPersistance
-      .metsAJourUtilisateur(utilisateurAModifier.id, { cguAcceptees: true })
-      .then(() => utilisateur(utilisateurAModifier.id));
+  const valideAcceptationCGUPourUtilisateur = async (utilisateurAModifier) => {
+    await p.sauvegarde(utilisateurAModifier.id, { cguAcceptees: true });
+    return p.lis.un(utilisateurAModifier.id);
+  };
 
   const verifieMotDePasse = async (idUtilisateur, motDePasse) => {
     const erreurMotDePasseIncorrect = new ErreurMotDePasseIncorrect(
