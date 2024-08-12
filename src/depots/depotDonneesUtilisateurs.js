@@ -103,7 +103,7 @@ const creeDepot = (config = {}) => {
   };
 
   const utilisateurExiste = async (id) => {
-    const u = await utilisateur(id);
+    const u = await p.lis.un(id);
     return !!u;
   };
 
