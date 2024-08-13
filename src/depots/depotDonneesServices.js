@@ -87,7 +87,16 @@ const fabriquePersistance = (
     },
     sauvegarde: async (id, donneesService) => {
       const donneesChiffrees = await chiffre.donneesService(donneesService);
-      return adaptateurPersistance.sauvegardeService(id, donneesChiffrees);
+
+      const nomServiceHash = adaptateurChiffrement.hacheSha256(
+        donneesService.descriptionService.nomService
+      );
+
+      return adaptateurPersistance.sauvegardeService(
+        id,
+        donneesChiffrees,
+        nomServiceHash
+      );
     },
     supprime: async (idService) => {
       await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
