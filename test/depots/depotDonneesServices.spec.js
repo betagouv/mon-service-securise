@@ -1258,29 +1258,23 @@ describe('Le dépôt de données des services', () => {
 
     beforeEach(() => {
       const referentiel = Referentiel.creeReferentielVide();
-      const descriptionService = uneDescriptionValide(referentiel)
-        .avecNomService('Service à dupliquer')
-        .construis()
-        .toJSON();
 
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
-          services: [{ id: '123-1', descriptionService }],
-          autorisations: [
-            uneAutorisation().deProprietaire('123', '123-1').donnees,
-          ],
-        });
+      const persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '123', email: 'jean.dupont@mail.fr' })
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('123-1')
+            .avecNomService('Service à dupliquer').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('123', '123-1').donnees
+        );
 
-      depot = DepotDonneesServices.creeDepot({
-        adaptateurChiffrement: fauxAdaptateurChiffrement(),
-        adaptateurPersistance,
-        adaptateurTracking: unAdaptateurTracking().construis(),
-        adaptateurUUID: fabriqueAdaptateurUUID(),
-        busEvenements: fabriqueBusPourLesTests(),
-        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
-        referentiel,
-      });
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(persistance)
+        .avecAdaptateurUUID(fabriqueAdaptateurUUID())
+        .avecReferentiel(referentiel)
+        .construis();
     });
 
     it("reste robuste quand le service n'est pas trouvé", (done) => {
