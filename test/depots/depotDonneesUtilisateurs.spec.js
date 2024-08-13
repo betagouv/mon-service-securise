@@ -507,6 +507,16 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(utilisateur.dateCreation).to.eql(adaptateurHorloge.maintenant());
       });
 
+      it("sauvegarde le hash256 de l'email de l'utilisateur", async () => {
+        const utilisateur = await depot.nouvelUtilisateur(
+          unUtilisateur().avecEmail('jean.dupont@mail.fr').donnees
+        );
+
+        expect(utilisateur).to.be.an(Utilisateur);
+        expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
+        expect(utilisateur.emailHash).to.eql('jean.dupont@mail.fr-haché256');
+      });
+
       it("publie sur le bus d'événements l'inscription de l'utilisateur", async () => {
         await depot.nouvelUtilisateur(
           unUtilisateur()

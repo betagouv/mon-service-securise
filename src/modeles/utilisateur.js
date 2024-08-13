@@ -22,6 +22,7 @@ class Utilisateur extends Base {
         'prenom',
         'nom',
         'email',
+        'emailHash',
         'telephone',
         'cguAcceptees',
         'postes',

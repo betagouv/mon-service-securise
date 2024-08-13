@@ -31,11 +31,12 @@ const nouvelAdaptateur = (
     return Promise.resolve();
   };
 
-  const ajouteUtilisateur = (id, donneesUtilisateur) => {
+  const ajouteUtilisateur = (id, donneesUtilisateur, emailHash) => {
     donnees.utilisateurs.push(
       Object.assign(donneesUtilisateur, {
         id,
         dateCreation: adaptateurHorloge.maintenant(),
+        emailHash,
       })
     );
     return Promise.resolve();
