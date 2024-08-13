@@ -136,6 +136,30 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(u.nom).to.equal('Dubois');
     });
 
+    it("met le hash de l'email à jour", async () => {
+      await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur().avecId('123').avecEmail('jean.dubois@mail.fr').donnees
+      );
+      const u = await depot.utilisateur('123');
+      expect(u.emailHash).to.equal('jean.dubois@mail.fr-haché256');
+    });
+
+    it("ne modifie pas le hash de l'email s'il ne fait pas partie du delta de données", async () => {
+      await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur().avecId('123').avecEmail('jean.dubois@mail.fr').donnees
+      );
+
+      await depot.metsAJourUtilisateur('123', {
+        nom: 'Dupont',
+        prenom: 'Jean',
+      });
+
+      const u = await depot.utilisateur('123');
+      expect(u.emailHash).to.equal('jean.dubois@mail.fr-haché256');
+    });
+
     it("complète les informations de l'entité et les enregistre", async () => {
       adaptateurRechercheEntite.rechercheOrganisations = async () => [
         {
