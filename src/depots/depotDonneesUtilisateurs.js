@@ -13,7 +13,11 @@ const Entite = require('../modeles/entite');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
 
-function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
+function fabriquePersistance({
+  adaptateurPersistance,
+  adaptateurJWT,
+  adaptateurChiffrement,
+}) {
   return {
     lis: {
       donnees: {
@@ -43,8 +47,16 @@ function fabriquePersistance({ adaptateurPersistance, adaptateurJWT }) {
         );
       },
     },
-    ajoute: async (id, donneesUtilisateur) =>
-      adaptateurPersistance.ajouteUtilisateur(id, donneesUtilisateur),
+    ajoute: async (id, donneesUtilisateur) => {
+      const emailHash = adaptateurChiffrement.hacheSha256(
+        donneesUtilisateur.email
+      );
+      return adaptateurPersistance.ajouteUtilisateur(
+        id,
+        donneesUtilisateur,
+        emailHash
+      );
+    },
     sauvegarde: async (id, deltaDonnees) =>
       adaptateurPersistance.metsAJourUtilisateur(id, deltaDonnees),
     supprime: async (id) => {
@@ -64,7 +76,11 @@ const creeDepot = (config = {}) => {
     busEvenements,
   } = config;
 
-  const p = fabriquePersistance({ adaptateurPersistance, adaptateurJWT });
+  const p = fabriquePersistance({
+    adaptateurPersistance,
+    adaptateurJWT,
+    adaptateurChiffrement,
+  });
 
   const utilisateur = async (identifiant) => p.lis.un(identifiant);
 
