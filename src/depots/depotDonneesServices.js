@@ -77,8 +77,10 @@ const fabriquePersistance = (
       const donneesChiffrees = await chiffre.donneesService(donneesService);
       return adaptateurPersistance.sauvegardeService(id, donneesChiffrees);
     },
-    supprime: async (idService) =>
-      adaptateurPersistance.supprimeService(idService),
+    supprime: async (idService) => {
+      await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
+      await adaptateurPersistance.supprimeService(idService);
+    },
     autorisations: {
       ajoute: async (id, donnees) =>
         adaptateurPersistance.ajouteAutorisation(id, donnees),
@@ -296,13 +298,14 @@ const creeDepot = (config = {}) => {
     remplaceProprieteService('risquesSpecifiques', ...params);
 
   const supprimeHomologation = async (idService) => {
-    const { contributeurs } = await p.lis.un(idService);
-    await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
+    const { contributeurs: avantSuppression } = await p.lis.un(idService);
+
     await p.supprime(idService);
+
     await busEvenements.publie(
       new EvenementServiceSupprime({
         idService,
-        autorisations: contributeurs.map((u) => ({ idUtilisateur: u.id })),
+        autorisations: avantSuppression.map((u) => ({ idUtilisateur: u.id })),
       })
     );
   };
