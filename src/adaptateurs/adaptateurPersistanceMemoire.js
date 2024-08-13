@@ -133,6 +133,11 @@ const nouvelAdaptateur = (
   const utilisateur = async (id) =>
     donnees.utilisateurs.find((u) => u.id === id);
 
+  const metsAJourIdResetMdpUtilisateur = async (id, idResetMotDePasse) => {
+    const u = await utilisateur(id);
+    Object.assign(u, { idResetMotDePasse });
+  };
+
   const metsAJourUtilisateur = (id, donneesAMettreAJour, emailHash) =>
     utilisateur(id)
       .then((e) => Object.assign(e, donneesAMettreAJour))
@@ -298,6 +303,7 @@ const nouvelAdaptateur = (
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
+    metsAJourIdResetMdpUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,

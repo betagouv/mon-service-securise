@@ -39,6 +39,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  avecIdResetMotDePasse(idReset) {
+    this.donnees.idResetMotDePasse = idReset;
+    return this;
+  }
+
   avecEmail(email) {
     this.donnees.email = email;
     return this;
