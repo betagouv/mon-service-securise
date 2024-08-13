@@ -609,7 +609,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       });
     });
 
-    it('supprime un identifiant de reset de mot de passe', (done) => {
+    it('supprime un identifiant de reset de mot de passe', async () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [
@@ -624,19 +624,13 @@ describe('Le dépôt de données des utilisateurs', () => {
         adaptateurChiffrement,
         adaptateurPersistance,
       });
+      const utilisateur = await depot.utilisateur('123');
+      expect(utilisateur.idResetMotDePasse).to.equal('999');
 
-      depot
-        .utilisateur('123')
-        .then((utilisateur) => {
-          expect(utilisateur.idResetMotDePasse).to.equal('999');
-          depot.supprimeIdResetMotDePassePourUtilisateur(utilisateur);
-        })
-        .then(() => depot.utilisateur('123'))
-        .then((utilisateur) =>
-          expect(utilisateur.idResetMotDePasse).to.be(undefined)
-        )
-        .then(() => done())
-        .catch(done);
+      await depot.supprimeIdResetMotDePassePourUtilisateur(utilisateur);
+
+      const nouvelUtilisateur = await depot.utilisateur('123');
+      expect(nouvelUtilisateur.idResetMotDePasse).to.be(undefined);
     });
   });
 
