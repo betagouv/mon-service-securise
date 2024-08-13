@@ -57,8 +57,13 @@ const nouvelAdaptateur = (env) => {
 
   const ajouteService = (...params) =>
     ajouteLigneDansTable('services', ...params);
-  const ajouteUtilisateur = (id, donnees, emailHash) =>
-    knex('utilisateurs').insert({ id, donnees, email_hash: emailHash });
+  const ajouteUtilisateur = (id, donnees, emailHash, idResetMotDePasse) =>
+    knex('utilisateurs').insert({
+      id,
+      donnees,
+      email_hash: emailHash,
+      id_reset_mdp: idResetMotDePasse,
+    });
 
   const arreteTout = () => knex.destroy();
 

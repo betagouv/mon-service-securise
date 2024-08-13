@@ -29,12 +29,18 @@ const nouvelAdaptateur = (
     donnees.services.push({ id, ...donneesService });
   };
 
-  const ajouteUtilisateur = async (id, donneesUtilisateur, emailHash) => {
+  const ajouteUtilisateur = async (
+    id,
+    donneesUtilisateur,
+    emailHash,
+    idResetMotDePasse
+  ) => {
     donnees.utilisateurs.push(
       Object.assign(donneesUtilisateur, {
         id,
         dateCreation: adaptateurHorloge.maintenant(),
         emailHash,
+        idResetMotDePasse,
       })
     );
   };
