@@ -23,15 +23,19 @@ function fabriquePersistance({
       donnees: {
         de: async (idUtilisateur) =>
           adaptateurPersistance.utilisateur(idUtilisateur),
-        deCeluiAvecEmail: async (email) =>
-          adaptateurPersistance.utilisateurAvecEmail(email),
+        deCeluiAvecEmail: async (email) => {
+          const emailHash = adaptateurChiffrement.hacheSha256(email);
+          return adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
+        },
       },
       un: async (idUtilisateur) => {
         const u = await adaptateurPersistance.utilisateur(idUtilisateur);
         return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
       },
       celuiAvecEmail: async (email) => {
-        const u = await adaptateurPersistance.utilisateurAvecEmail(email);
+        const emailHash = adaptateurChiffrement.hacheSha256(email);
+        const u =
+          await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
         return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
       },
       celuiAvecIdReset: async (idReset) => {

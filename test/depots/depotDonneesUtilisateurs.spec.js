@@ -37,12 +37,13 @@ describe('Le dépôt de données des utilisateurs', () => {
     bus = fabriqueBusPourLesTests();
   });
 
-  it("retourne l'utilisateur authentifié", async () => {
+  it("retourne l'utilisateur authentifié en cherchant par hash d'email", async () => {
     adaptateurChiffrement = {
       hacheBCrypt: async (chaine) => {
         expect(chaine).to.equal('mdp_12345');
         return '12345-chiffré';
       },
+      hacheSha256: (chaine) => `${chaine}-haché256`,
       compareBCrypt: async (chaine1, chaine2) => {
         expect(chaine1).to.equal('mdp_12345');
         expect(chaine2).to.equal('12345-chiffré');
@@ -59,6 +60,7 @@ describe('Le dépôt de données des utilisateurs', () => {
           prenom: 'Jean',
           nom: 'Dupont',
           email: 'jean.dupont@mail.fr',
+          emailHash: 'jean.dupont@mail.fr-haché256',
           motDePasse: '12345-chiffré',
         })
         .construis(),
@@ -84,6 +86,7 @@ describe('Le dépôt de données des utilisateurs', () => {
           prenom: 'Jean',
           nom: 'Dupont',
           email: 'jean.dupont@mail.fr',
+          emailHash: 'jean.dupont@mail.fr-haché256',
           motDePasse: 'mdp_origine-chiffré',
         })
         .construis(),
@@ -318,6 +321,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             prenom: 'Jean',
             nom: 'Dupont',
             email: 'jean.dupont@mail.fr',
+            emailHash: 'jean.dupont@mail.fr-haché256',
             motDePasse: 'XXX',
           },
         ],
@@ -585,7 +589,13 @@ describe('Le dépôt de données des utilisateurs', () => {
       it('lève une `ErreurUtilisateurExistant`', (done) => {
         const adaptateurPersistance =
           AdaptateurPersistanceMemoire.nouvelAdaptateur({
-            utilisateurs: [{ id: '123', email: 'jean.dupont@mail.fr' }],
+            utilisateurs: [
+              {
+                id: '123',
+                email: 'jean.dupont@mail.fr',
+                emailHash: 'jean.dupont@mail.fr-haché256',
+              },
+            ],
           });
         depot = DepotDonneesUtilisateurs.creeDepot({
           adaptateurChiffrement,
@@ -645,7 +655,11 @@ describe('Le dépôt de données des utilisateurs', () => {
           genereUUID: () => '11111111-1111-1111-1111-111111111111',
         },
         adaptateurPersistance: unePersistanceMemoire()
-          .ajouteUnUtilisateur({ id: '123', email: 'jean.dupont@mail.fr' })
+          .ajouteUnUtilisateur({
+            id: '123',
+            email: 'jean.dupont@mail.fr',
+            emailHash: 'jean.dupont@mail.fr-haché256',
+          })
           .construis(),
       });
 

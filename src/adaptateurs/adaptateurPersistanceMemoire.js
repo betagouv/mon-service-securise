@@ -138,8 +138,10 @@ const nouvelAdaptateur = (
       .then((e) => emailHash && Object.assign(e, { emailHash }))
       .then(() => {});
 
-  const utilisateurAvecEmail = (email) =>
-    Promise.resolve(donnees.utilisateurs.find((u) => u.email === email));
+  const utilisateurAvecEmailHash = (emailHash) =>
+    Promise.resolve(
+      donnees.utilisateurs.find((u) => u.emailHash === emailHash)
+    );
 
   const utilisateurAvecIdReset = (idReset) =>
     Promise.resolve(
@@ -328,7 +330,7 @@ const nouvelAdaptateur = (
     tousLesServices,
     tousUtilisateurs,
     utilisateur,
-    utilisateurAvecEmail,
+    utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
   };
 };
