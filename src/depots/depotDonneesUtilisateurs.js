@@ -52,13 +52,15 @@ function fabriquePersistance({
       },
     },
     ajoute: async (id, donneesUtilisateur) => {
+      const { idResetMotDePasse, ...autreDonnees } = donneesUtilisateur;
       const emailHash = adaptateurChiffrement.hacheSha256(
         donneesUtilisateur.email
       );
       return adaptateurPersistance.ajouteUtilisateur(
         id,
-        donneesUtilisateur,
-        emailHash
+        autreDonnees,
+        emailHash,
+        idResetMotDePasse
       );
     },
     sauvegarde: async (id, deltaDonnees) => {
