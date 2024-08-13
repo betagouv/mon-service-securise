@@ -1297,17 +1297,15 @@ describe('Le dépôt de données des services', () => {
       expect(services.length).to.equal(2);
     });
 
-    it('utilise un nom disponible pour le service dupliqué', (done) => {
-      depot
-        .dupliqueService('123-1', '123')
-        .then(() => depot.dupliqueService('123-1', '123'))
-        .then(() => depot.services('123'))
-        .then(([_, s2, s3]) => {
-          expect(s2.nomService()).to.equal('Service à dupliquer - Copie 1');
-          expect(s3.nomService()).to.equal('Service à dupliquer - Copie 2');
-          done();
-        })
-        .catch(done);
+    it('utilise un nom disponible pour le service dupliqué', async () => {
+      await depot.dupliqueService('123-1', '123');
+      await depot.dupliqueService('123-1', '123');
+
+      // eslint-disable-next-line no-unused-vars
+      const [_, s2, s3] = await depot.services('123');
+
+      expect(s2.nomService()).to.equal('Service à dupliquer - Copie 1');
+      expect(s3.nomService()).to.equal('Service à dupliquer - Copie 2');
     });
   });
 
