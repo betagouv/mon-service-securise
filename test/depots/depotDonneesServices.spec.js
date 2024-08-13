@@ -612,6 +612,20 @@ describe('Le dépôt de données des services', () => {
       expect(donneesPersistees.descriptionService.chiffre).to.equal(true);
     });
 
+    it('stocke le SHA-256 du nom du service', async () => {
+      const descriptionService = uneDescriptionValide(referentiel)
+        .avecNomService('Super Service')
+        .construis()
+        .donneesSerialisees();
+
+      const idNouveau = await depot.nouveauService('123', {
+        descriptionService,
+      });
+
+      const donnees = await adaptateurPersistance.service(idNouveau);
+      expect(donnees.nomServiceHash).to.be('Super Service-haché256');
+    });
+
     it("déclare un accès en écriture entre l'utilisateur et le service", async () => {
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance,
