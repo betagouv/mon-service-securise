@@ -79,6 +79,10 @@ const fabriquePersistance = (
     },
     supprime: async (idService) =>
       adaptateurPersistance.supprimeService(idService),
+    autorisations: {
+      ajoute: async (id, donnees) =>
+        adaptateurPersistance.ajouteAutorisation(id, donnees),
+    },
   };
 
   return persistance;
@@ -274,7 +278,7 @@ const creeDepot = (config = {}) => {
       idUtilisateur,
       idService,
     });
-    await adaptateurPersistance.ajouteAutorisation(
+    await p.autorisations.ajoute(
       idAutorisation,
       proprietaire.donneesAPersister()
     );
