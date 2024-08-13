@@ -57,8 +57,17 @@ function fabriquePersistance({
         emailHash
       );
     },
-    sauvegarde: async (id, deltaDonnees) =>
-      adaptateurPersistance.metsAJourUtilisateur(id, deltaDonnees),
+    sauvegarde: async (id, deltaDonnees) => {
+      let emailHash;
+      if (deltaDonnees.email) {
+        emailHash = adaptateurChiffrement.hacheSha256(deltaDonnees.email);
+      }
+      return adaptateurPersistance.metsAJourUtilisateur(
+        id,
+        deltaDonnees,
+        emailHash
+      );
+    },
     supprime: async (id) => {
       await adaptateurPersistance.supprimeAutorisationsContribution(id);
       await adaptateurPersistance.supprimeUtilisateur(id);

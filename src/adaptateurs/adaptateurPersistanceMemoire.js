@@ -132,8 +132,11 @@ const nouvelAdaptateur = (
   const utilisateur = (id) =>
     Promise.resolve(donnees.utilisateurs.find((u) => u.id === id));
 
-  const metsAJourUtilisateur = (...params) =>
-    metsAJourEnregistrement(utilisateur, ...params);
+  const metsAJourUtilisateur = (id, donneesAMettreAJour, emailHash) =>
+    utilisateur(id)
+      .then((e) => Object.assign(e, donneesAMettreAJour))
+      .then((e) => emailHash && Object.assign(e, { emailHash }))
+      .then(() => {});
 
   const utilisateurAvecEmail = (email) =>
     Promise.resolve(donnees.utilisateurs.find((u) => u.email === email));
