@@ -21,15 +21,6 @@ const creeDepot = (config = {}) => {
     busEvenements,
   } = config;
 
-  const depotServices = depotDonneesServices.creeDepot({
-    adaptateurChiffrement,
-    adaptateurPersistance,
-    adaptateurUUID,
-    adaptateurRechercheEntite,
-    busEvenements,
-    referentiel,
-  });
-
   const depotUtilisateurs = depotDonneesUtilisateurs.creeDepot({
     adaptateurChiffrement,
     adaptateurJWT,
@@ -37,6 +28,16 @@ const creeDepot = (config = {}) => {
     adaptateurUUID,
     adaptateurRechercheEntite,
     busEvenements,
+  });
+
+  const depotServices = depotDonneesServices.creeDepot({
+    adaptateurChiffrement,
+    adaptateurPersistance,
+    adaptateurUUID,
+    adaptateurRechercheEntite,
+    depotDonneesUtilisateurs: depotUtilisateurs,
+    busEvenements,
+    referentiel,
   });
 
   const depotAutorisations = depotDonneesAutorisations.creeDepot({

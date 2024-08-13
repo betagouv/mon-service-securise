@@ -5,6 +5,7 @@ const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 const Referentiel = require('../../src/referentiel');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
+const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 
 class ConstructeurDepotDonneesServices {
   constructor() {
@@ -36,12 +37,18 @@ class ConstructeurDepotDonneesServices {
   }
 
   construis() {
+    const adaptateurPersistance =
+      this.constructeurAdaptateurPersistance.construis();
+
     return DepotDonneesServices.creeDepot({
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
-      adaptateurPersistance: this.constructeurAdaptateurPersistance.construis(),
+      adaptateurPersistance,
       adaptateurUUID: this.adaptateurUUID,
       adaptateurRechercheEntite: this.adaptateurRechercheEntite,
       busEvenements: this.busEvenements,
+      depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+      }),
       referentiel: this.referentiel,
     });
   }
