@@ -57,8 +57,6 @@ describe('Le dépôt de données des utilisateurs', () => {
       adaptateurPersistance: unePersistanceMemoire()
         .ajouteUnUtilisateur({
           id: '123',
-          prenom: 'Jean',
-          nom: 'Dupont',
           email: 'jean.dupont@mail.fr',
           emailHash: 'jean.dupont@mail.fr-haché256',
           motDePasse: '12345-chiffré',
@@ -83,8 +81,6 @@ describe('Le dépôt de données des utilisateurs', () => {
       adaptateurPersistance: unePersistanceMemoire()
         .ajouteUnUtilisateur({
           id: '123',
-          prenom: 'Jean',
-          nom: 'Dupont',
           email: 'jean.dupont@mail.fr',
           emailHash: 'jean.dupont@mail.fr-haché256',
           motDePasse: 'mdp_origine-chiffré',
