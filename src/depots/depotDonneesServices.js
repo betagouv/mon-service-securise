@@ -362,9 +362,9 @@ const creeDepot = (config = {}) => {
     const s = await p.lis.un(idService);
     s.metsAJourMesureGenerale(mesure);
     await metsAJourService(s);
-    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
+    const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service: s, utilisateur })
+      new EvenementMesuresServiceModifiees({ service: s, utilisateur: u })
     );
   };
 
@@ -376,9 +376,9 @@ const creeDepot = (config = {}) => {
     const s = await p.lis.un(idService);
     s.metsAJourMesuresSpecifiques(mesures);
     await metsAJourService(s);
-    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
+    const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service: s, utilisateur })
+      new EvenementMesuresServiceModifiees({ service: s, utilisateur: u })
     );
   };
 
