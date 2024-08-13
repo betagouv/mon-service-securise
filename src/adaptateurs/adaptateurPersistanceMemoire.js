@@ -21,17 +21,15 @@ const nouvelAdaptateur = (
       .then((e) => Object.assign(e, donneesAMettreAJour))
       .then(() => {});
 
-  const supprimeEnregistrement = (nomTable, id) => {
+  const supprimeEnregistrement = async (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
-    return Promise.resolve();
   };
 
-  const ajouteService = (id, donneesService) => {
+  const ajouteService = async (id, donneesService) => {
     donnees.services.push({ id, ...donneesService });
-    return Promise.resolve();
   };
 
-  const ajouteUtilisateur = (id, donneesUtilisateur, emailHash) => {
+  const ajouteUtilisateur = async (id, donneesUtilisateur, emailHash) => {
     donnees.utilisateurs.push(
       Object.assign(donneesUtilisateur, {
         id,
@@ -39,17 +37,16 @@ const nouvelAdaptateur = (
         emailHash,
       })
     );
-    return Promise.resolve();
   };
 
-  const autorisations = (idUtilisateur) => {
+  const autorisations = async (idUtilisateur) => {
     const seulementUnUtilisateur = typeof idUtilisateur !== 'undefined';
 
     const filtre = seulementUnUtilisateur
       ? (a) => a.idUtilisateur === idUtilisateur
       : (a) => a.estProprietaire;
 
-    return Promise.resolve(donnees.autorisations.filter(filtre));
+    return donnees.autorisations.filter(filtre);
   };
 
   const contributeursService = (idService) =>
@@ -60,27 +57,27 @@ const nouvelAdaptateur = (
   const suggestionsActionsService = (idService) =>
     donnees.suggestionsActions.filter((s) => s.idService === idService);
 
-  const service = (id) => {
+  const service = async (id) => {
     const serviceTrouve = donnees.services.find((h) => h.id === id);
     if (serviceTrouve) {
       serviceTrouve.contributeurs = contributeursService(id);
       serviceTrouve.suggestionsActions = suggestionsActionsService(id);
     }
 
-    return Promise.resolve(serviceTrouve);
+    return serviceTrouve;
   };
 
-  const serviceDeprecated = (id) => {
+  const serviceDeprecated = async (id) => {
     const serviceTrouve = donnees.services.find((s) => s.id === id);
     if (serviceTrouve) serviceTrouve.contributeurs = contributeursService(id);
 
-    return Promise.resolve(serviceTrouve);
+    return serviceTrouve;
   };
 
-  const services = (idUtilisateur) =>
-    autorisations(idUtilisateur).then((as) =>
-      Promise.all(as.map(({ idService }) => service(idService)))
-    );
+  const services = async (idUtilisateur) => {
+    const as = await autorisations(idUtilisateur);
+    return Promise.all(as.map(({ idService }) => service(idService)));
+  };
 
   const tousLesServices = async () => {
     const lesIds = donnees.services.map((s) => s.id);
@@ -116,21 +113,19 @@ const nouvelAdaptateur = (
   const supprimeService = (...params) =>
     supprimeEnregistrement('services', ...params);
 
-  const supprimeServices = () => {
+  const supprimeServices = async () => {
     donnees.services = [];
-    return Promise.resolve();
   };
 
   const supprimeUtilisateur = (...params) =>
     supprimeEnregistrement('utilisateurs', ...params);
 
-  const supprimeUtilisateurs = () => {
+  const supprimeUtilisateurs = async () => {
     donnees.utilisateurs = [];
-    return Promise.resolve();
   };
 
-  const utilisateur = (id) =>
-    Promise.resolve(donnees.utilisateurs.find((u) => u.id === id));
+  const utilisateur = async (id) =>
+    donnees.utilisateurs.find((u) => u.id === id);
 
   const metsAJourUtilisateur = (id, donneesAMettreAJour, emailHash) =>
     utilisateur(id)
@@ -138,52 +133,43 @@ const nouvelAdaptateur = (
       .then((e) => emailHash && Object.assign(e, { emailHash }))
       .then(() => {});
 
-  const utilisateurAvecEmailHash = (emailHash) =>
-    Promise.resolve(
-      donnees.utilisateurs.find((u) => u.emailHash === emailHash)
-    );
+  const utilisateurAvecEmailHash = async (emailHash) =>
+    donnees.utilisateurs.find((u) => u.emailHash === emailHash);
 
-  const utilisateurAvecIdReset = (idReset) =>
-    Promise.resolve(
-      donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset)
-    );
+  const utilisateurAvecIdReset = async (idReset) =>
+    donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset);
 
-  const tousUtilisateurs = () => Promise.resolve(donnees.utilisateurs);
+  const tousUtilisateurs = async () => donnees.utilisateurs;
 
-  const autorisation = (id) =>
-    Promise.resolve(donnees.autorisations.find((a) => a.id === id));
+  const autorisation = async (id) =>
+    donnees.autorisations.find((a) => a.id === id);
 
   const autorisationsDuService = async (idService) =>
     donnees.autorisations.filter((a) => a.idService === idService);
 
-  const autorisationPour = (idUtilisateur, idService) =>
-    Promise.resolve(
-      donnees.autorisations.find(
-        (a) => a.idUtilisateur === idUtilisateur && a.idService === idService
-      )
+  const autorisationPour = async (idUtilisateur, idService) =>
+    donnees.autorisations.find(
+      (a) => a.idUtilisateur === idUtilisateur && a.idService === idService
     );
 
-  const ajouteAutorisation = (id, donneesAutorisation) => {
+  const ajouteAutorisation = async (id, donneesAutorisation) => {
     donnees.autorisations.push(Object.assign(donneesAutorisation, { id }));
-    return Promise.resolve();
   };
 
-  const nbAutorisationsProprietaire = (idUtilisateur) =>
-    Promise.resolve(
-      donnees.autorisations.filter(
-        (a) => a.idUtilisateur === idUtilisateur && a.estProprietaire
-      ).length
-    );
+  const nbAutorisationsProprietaire = async (idUtilisateur) =>
+    donnees.autorisations.filter(
+      (a) => a.idUtilisateur === idUtilisateur && a.estProprietaire
+    ).length;
 
-  const supprimeAutorisation = (idUtilisateur, idService) => {
+  const supprimeAutorisation = async (idUtilisateur, idService) => {
     donnees.autorisations = donnees.autorisations.filter(
       (a) => a.idUtilisateur !== idUtilisateur || a.idService !== idService
     );
-    return Promise.resolve();
   };
 
-  const supprimeAutorisations = () =>
-    Promise.resolve((donnees.autorisations = []));
+  const supprimeAutorisations = async () => {
+    donnees.autorisations = [];
+  };
 
   const supprimeAutorisationsContribution = async (idUtilisateur) => {
     donnees.autorisations = donnees.autorisations.filter(
@@ -191,11 +177,10 @@ const nouvelAdaptateur = (
     );
   };
 
-  const supprimeAutorisationsHomologation = (idService) => {
+  const supprimeAutorisationsHomologation = async (idService) => {
     donnees.autorisations = donnees.autorisations.filter(
       (a) => a.idService !== idService
     );
-    return Promise.resolve();
   };
 
   const lisParcoursUtilisateur = async (id) =>
