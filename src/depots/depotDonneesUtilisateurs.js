@@ -64,13 +64,22 @@ function fabriquePersistance({
       );
     },
     sauvegarde: async (id, deltaDonnees) => {
-      let emailHash;
-      if (deltaDonnees.email) {
-        emailHash = adaptateurChiffrement.hacheSha256(deltaDonnees.email);
+      const { idResetMotDePasse, ...autreDonnees } = deltaDonnees;
+      if (Object.keys(deltaDonnees).includes('idResetMotDePasse')) {
+        await adaptateurPersistance.metsAJourIdResetMdpUtilisateur(
+          id,
+          idResetMotDePasse
+        );
       }
-      return adaptateurPersistance.metsAJourUtilisateur(
+      if (Object.keys(autreDonnees).length === 0) {
+        return;
+      }
+      const emailHash = deltaDonnees.email
+        ? adaptateurChiffrement.hacheSha256(deltaDonnees.email)
+        : undefined;
+      await adaptateurPersistance.metsAJourUtilisateur(
         id,
-        deltaDonnees,
+        autreDonnees,
         emailHash
       );
     },

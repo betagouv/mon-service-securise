@@ -115,6 +115,7 @@ describe('Le dépôt de données des utilisateurs', () => {
         .ajouteUnUtilisateur(
           unUtilisateur()
             .avecId('123')
+            .avecIdResetMotDePasse('unIdReset')
             .quiSAppelle('Jean Dupont')
             .avecEmail('jean.dupont@mail.fr').donnees
         )
@@ -158,6 +159,15 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       const u = await adaptateurPersistance.utilisateur('123');
       expect(u.emailHash).to.equal('jean.dubois@mail.fr-haché256');
+    });
+
+    it("ne modifie pas l'idResetMotDePasse s'il ne fait pas partie du delta de données", async () => {
+      const deltaSansIdReset = { nom: 'Dupont', prenom: 'Jean' };
+
+      await depot.metsAJourUtilisateur('123', deltaSansIdReset);
+
+      const u = await depot.utilisateur('123');
+      expect(u.idResetMotDePasse).to.equal('unIdReset');
     });
 
     it("complète les informations de l'entité et les enregistre", async () => {

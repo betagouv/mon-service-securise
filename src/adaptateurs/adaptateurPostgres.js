@@ -146,6 +146,17 @@ const nouvelAdaptateur = (env) => {
   };
 
   const metsAJourService = (...params) => metsAJourTable('services', ...params);
+
+  const metsAJourIdResetMdpUtilisateur = (id, idResetMotDePasse) =>
+    knex('utilisateurs')
+      .where({ id })
+      .first()
+      .then(() =>
+        knex('utilisateurs')
+          .where({ id })
+          .update({ id_reset_mdp: idResetMotDePasse || null })
+      );
+
   const metsAJourUtilisateur = (id, donneesAMettreAJour, emailHash) =>
     knex('utilisateurs')
       .where({ id })
@@ -446,6 +457,7 @@ const nouvelAdaptateur = (env) => {
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
+    metsAJourIdResetMdpUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,
