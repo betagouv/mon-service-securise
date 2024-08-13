@@ -1277,18 +1277,16 @@ describe('Le dépôt de données des services', () => {
         .construis();
     });
 
-    it("reste robuste quand le service n'est pas trouvé", (done) => {
-      depot
-        .dupliqueService('id-invalide', '123')
-        .then(() =>
-          done('La tentative de duplication aurait dû lever une exception')
-        )
-        .catch((e) => {
-          expect(e).to.be.an(ErreurServiceInexistant);
-          expect(e.message).to.equal('Service "id-invalide" non trouvé');
-          done();
-        })
-        .catch(done);
+    it("reste robuste quand le service n'est pas trouvé", async () => {
+      try {
+        await depot.dupliqueService('id-invalide', '123');
+        expect().fail(
+          'La tentative de duplication aurait dû lever une exception'
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurServiceInexistant);
+        expect(e.message).to.equal('Service "id-invalide" non trouvé');
+      }
     });
 
     it('peut dupliquer un service à partir de son identifiant', (done) => {
