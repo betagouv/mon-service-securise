@@ -5,6 +5,7 @@ const config = require('../../knexfile');
 
 const CORRESPONDANCE_COLONNES_PROPRIETES = {
   date_creation: 'dateCreation',
+  email_hash: 'emailHash',
 };
 
 const nouvelAdaptateur = (env) => {
@@ -56,8 +57,8 @@ const nouvelAdaptateur = (env) => {
 
   const ajouteService = (...params) =>
     ajouteLigneDansTable('services', ...params);
-  const ajouteUtilisateur = (...params) =>
-    ajouteLigneDansTable('utilisateurs', ...params);
+  const ajouteUtilisateur = (id, donnees, emailHash) =>
+    knex('utilisateurs').insert({ id, donnees, email_hash: emailHash });
 
   const arreteTout = () => knex.destroy();
 
@@ -139,8 +140,19 @@ const nouvelAdaptateur = (env) => {
   };
 
   const metsAJourService = (...params) => metsAJourTable('services', ...params);
-  const metsAJourUtilisateur = (...params) =>
-    metsAJourTable('utilisateurs', ...params);
+  const metsAJourUtilisateur = (id, donneesAMettreAJour, emailHash) =>
+    knex('utilisateurs')
+      .where({ id })
+      .first()
+      .then(({ donnees }) => {
+        const data = {
+          donnees: Object.assign(donnees, donneesAMettreAJour),
+        };
+        if (emailHash) {
+          data.email_hash = emailHash;
+        }
+        return knex('utilisateurs').where({ id }).update(data);
+      });
 
   const supprimeService = (...params) =>
     supprimeEnregistrement('services', ...params);
@@ -153,8 +165,13 @@ const nouvelAdaptateur = (env) => {
 
   const utilisateur = (id) => elementDeTable('utilisateurs', id);
 
-  const utilisateurAvecEmail = (email) =>
-    elementDeTableAvec('utilisateurs', 'email', email);
+  const utilisateurAvecEmailHash = (emailHash) =>
+    knex('utilisateurs')
+      .where('email_hash', emailHash)
+      .first()
+      .then(convertisLigneEnObjet)
+      .catch(() => undefined);
+
   const utilisateurAvecIdReset = (idReset) =>
     elementDeTableAvec('utilisateurs', 'idResetMotDePasse', idReset);
   const tousUtilisateurs = () =>
@@ -449,7 +466,7 @@ const nouvelAdaptateur = (env) => {
     tousLesServices,
     tousUtilisateurs,
     utilisateur,
-    utilisateurAvecEmail,
+    utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
   };
 };
