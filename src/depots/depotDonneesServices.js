@@ -91,6 +91,7 @@ const creeDepot = (config = {}) => {
     adaptateurUUID,
     adaptateurRechercheEntite,
     busEvenements,
+    depotDonneesUtilisateurs,
     referentiel,
   } = config;
 
@@ -229,9 +230,9 @@ const creeDepot = (config = {}) => {
     );
 
     const s = await p.lis.un(idService);
-    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
+    const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementDescriptionServiceModifiee({ service: s, utilisateur })
+      new EvenementDescriptionServiceModifiee({ service: s, utilisateur: u })
     );
   };
 
