@@ -52,40 +52,37 @@ function fabriquePersistance({
       },
     },
     ajoute: async (id, donneesUtilisateur) => {
-      const { idResetMotDePasse, ...autreDonnees } = donneesUtilisateur;
       const emailHash = adaptateurChiffrement.hacheSha256(
         donneesUtilisateur.email
       );
       return adaptateurPersistance.ajouteUtilisateur(
         id,
-        autreDonnees,
-        emailHash,
-        idResetMotDePasse
+        donneesUtilisateur,
+        emailHash
       );
     },
     sauvegarde: async (id, deltaDonnees) => {
-      const { idResetMotDePasse, ...autreDonnees } = deltaDonnees;
-      if (Object.keys(deltaDonnees).includes('idResetMotDePasse')) {
-        await adaptateurPersistance.metsAJourIdResetMdpUtilisateur(
-          id,
-          idResetMotDePasse
-        );
-      }
-      if (Object.keys(autreDonnees).length === 0) {
-        return;
-      }
       const emailHash = deltaDonnees.email
         ? adaptateurChiffrement.hacheSha256(deltaDonnees.email)
         : undefined;
       await adaptateurPersistance.metsAJourUtilisateur(
         id,
-        autreDonnees,
+        deltaDonnees,
         emailHash
       );
     },
     supprime: async (id) => {
       await adaptateurPersistance.supprimeAutorisationsContribution(id);
       await adaptateurPersistance.supprimeUtilisateur(id);
+    },
+    idResetMotDePasse: {
+      sauvegarde: async (id, idResetMotDePasse) =>
+        adaptateurPersistance.metsAJourIdResetMdpUtilisateur(
+          id,
+          idResetMotDePasse
+        ),
+      efface: async (id) =>
+        adaptateurPersistance.metsAJourIdResetMdpUtilisateur(id, undefined),
     },
   };
 }
@@ -121,7 +118,7 @@ const creeDepot = (config = {}) => {
       );
 
     const id = adaptateurUUID.genereUUID();
-    donneesUtilisateur.idResetMotDePasse = adaptateurUUID.genereUUID();
+    const idResetMotDePasse = adaptateurUUID.genereUUID();
     donneesUtilisateur.motDePasse = await adaptateurChiffrement.hacheBCrypt(
       adaptateurUUID.genereUUID()
     );
@@ -134,6 +131,7 @@ const creeDepot = (config = {}) => {
     }
 
     await p.ajoute(id, donneesUtilisateur);
+    await p.idResetMotDePasse.sauvegarde(id, idResetMotDePasse);
     u = await p.lis.un(id);
 
     await busEvenements.publie(
@@ -199,7 +197,7 @@ const creeDepot = (config = {}) => {
     if (!u) return undefined;
 
     const idResetMotDePasse = adaptateurUUID.genereUUID();
-    await p.sauvegarde(u.id, { idResetMotDePasse });
+    await p.idResetMotDePasse.sauvegarde(u.id, idResetMotDePasse);
     return p.lis.un(u.id);
   };
 
@@ -207,7 +205,7 @@ const creeDepot = (config = {}) => {
     utilisateurAModifier
   ) => {
     const { id } = utilisateurAModifier;
-    await p.sauvegarde(id, { idResetMotDePasse: undefined });
+    await p.idResetMotDePasse.efface(id);
     return p.lis.un(id);
   };
 
