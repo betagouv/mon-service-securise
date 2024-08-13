@@ -9,6 +9,7 @@ const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisate
 
 class ConstructeurDepotDonneesServices {
   constructor() {
+    this.adaptateurChiffrement = fauxAdaptateurChiffrement();
     this.constructeurAdaptateurPersistance = unePersistanceMemoire();
     this.adaptateurUUID = { genereUUID: () => 'unUUID' };
     this.busEvenements = { publie: () => {}, abonne: () => {} };
@@ -16,13 +17,23 @@ class ConstructeurDepotDonneesServices {
     this.adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
   }
 
-  avecAdaptateurPersistance(constructeurAdaptateurPersistance) {
+  avecConstructeurDePersistance(constructeurAdaptateurPersistance) {
     this.constructeurAdaptateurPersistance = constructeurAdaptateurPersistance;
+    return this;
+  }
+
+  avecAdaptateurPersistance(adaptateur) {
+    this.adaptateurPersistance = adaptateur;
     return this;
   }
 
   avecAdaptateurUUID(adaptateur) {
     this.adaptateurUUID = adaptateur;
+    return this;
+  }
+
+  avecAdaptateurChiffrement(adaptateur) {
+    this.adaptateurChiffrement = adaptateur;
     return this;
   }
 
@@ -43,10 +54,11 @@ class ConstructeurDepotDonneesServices {
 
   construis() {
     const adaptateurPersistance =
+      this.adaptateurPersistance ??
       this.constructeurAdaptateurPersistance.construis();
 
     return DepotDonneesServices.creeDepot({
-      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      adaptateurChiffrement: this.adaptateurChiffrement,
       adaptateurPersistance,
       adaptateurUUID: this.adaptateurUUID,
       adaptateurRechercheEntite: this.adaptateurRechercheEntite,

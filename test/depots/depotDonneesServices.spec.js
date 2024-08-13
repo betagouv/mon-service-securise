@@ -41,9 +41,6 @@ const {
 const {
   unDepotDeDonneesServices,
 } = require('../constructeurs/constructeurDepotDonneesServices');
-const {
-  unAdaptateurTracking,
-} = require('../constructeurs/constructeurAdaptateurTracking');
 const { unDossier } = require('../constructeurs/constructeurDossier');
 
 const {
@@ -75,7 +72,7 @@ describe('Le dépôt de données des services', () => {
   it("connaît tous les services d'un utilisateur donné", async () => {
     const referentiel = Referentiel.creeReferentielVide();
 
-    const adaptateurPersistance = unePersistanceMemoire()
+    const persistance = unePersistanceMemoire()
       .ajouteUnService(unService(referentiel).avecId('123').donnees)
       .ajouteUnService(unService(referentiel).avecId('789').donnees)
       .ajouteUnUtilisateur(unUtilisateur().avecId('456').donnees)
@@ -87,7 +84,7 @@ describe('Le dépôt de données des services', () => {
       );
 
     const depot = unDepotDeDonneesServices()
-      .avecAdaptateurPersistance(adaptateurPersistance)
+      .avecConstructeurDePersistance(persistance)
       .avecReferentiel(referentiel)
       .construis();
 
@@ -137,7 +134,7 @@ describe('Le dépôt de données des services', () => {
 
     const depot = unDepotDeDonneesServices()
       .avecReferentiel(r)
-      .avecAdaptateurPersistance(persistance)
+      .avecConstructeurDePersistance(persistance)
       .construis();
 
     const services = await depot.services('U');
@@ -194,7 +191,7 @@ describe('Le dépôt de données des services', () => {
       );
     const depot = unDepotDeDonneesServices()
       .avecReferentiel(r)
-      .avecAdaptateurPersistance(persistance)
+      .avecConstructeurDePersistance(persistance)
       .construis();
 
     const service = await depot.service('S1');
@@ -216,7 +213,7 @@ describe('Le dépôt de données des services', () => {
       .avecUneSuggestionAction({ idService: 'S1', nature: 'siret' });
     const depot = unDepotDeDonneesServices()
       .avecReferentiel(r)
-      .avecAdaptateurPersistance(persistance)
+      .avecConstructeurDePersistance(persistance)
       .construis();
 
     const service = await depot.service('S1');
@@ -238,7 +235,7 @@ describe('Le dépôt de données des services', () => {
     };
 
     const depot = unDepotDeDonneesServices()
-      .avecAdaptateurPersistance(
+      .avecConstructeurDePersistance(
         unePersistanceMemoire().ajouteUnService(donneesService)
       )
       .avecReferentiel(referentiel)
@@ -255,7 +252,7 @@ describe('Le dépôt de données des services', () => {
   });
 
   describe("sur demande de mise à jour de la description d'un service", () => {
-    let adaptateurPersistance;
+    let persistance;
     let bus;
     let depot;
     let referentiel;
@@ -265,7 +262,7 @@ describe('Le dépôt de données des services', () => {
     beforeEach(() => {
       referentiel = Referentiel.creeReferentielVide();
       adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
-      adaptateurPersistance = unePersistanceMemoire()
+      persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(
           unUtilisateur().avecId('U1').avecEmail('jean.dupont@mail.fr').donnees
         )
@@ -281,7 +278,7 @@ describe('Le dépôt de données des services', () => {
       bus = fabriqueBusPourLesTests();
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
-        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecConstructeurDePersistance(persistance)
         .avecBusEvenements(bus)
         .avecAdaptateurRechercheEntite(adaptateurRechercheEntite)
         .construis();
@@ -347,7 +344,7 @@ describe('Le dépôt de données des services', () => {
         },
       ];
       const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance: adaptateurPersistance.construis(),
+        adaptateurPersistance: persistance.construis(),
         adaptateurChiffrement,
         referentiel,
       });
@@ -401,7 +398,7 @@ describe('Le dépôt de données des services', () => {
     const r = Referentiel.creeReferentielVide();
     const depot = unDepotDeDonneesServices()
       .avecReferentiel(r)
-      .avecAdaptateurPersistance(
+      .avecConstructeurDePersistance(
         unePersistanceMemoire().ajouteUnService(
           unService(r).avecId('S1').donnees
         )
@@ -431,7 +428,7 @@ describe('Le dépôt de données des services', () => {
       const r = Referentiel.creeReferentielVide();
       const depot = unDepotDeDonneesServices()
         .avecReferentiel(r)
-        .avecAdaptateurPersistance(
+        .avecConstructeurDePersistance(
           unePersistanceMemoire().ajouteUnService(
             unService(r).avecId('S1').donnees
           )
@@ -453,7 +450,7 @@ describe('Le dépôt de données des services', () => {
 
     const depot = unDepotDeDonneesServices()
       .avecReferentiel(r)
-      .avecAdaptateurPersistance(
+      .avecConstructeurDePersistance(
         unePersistanceMemoire().ajouteUnService(
           unService(r).avecId('S1').donnees
         )
@@ -478,7 +475,7 @@ describe('Le dépôt de données des services', () => {
 
     const depot = unDepotDeDonneesServices()
       .avecReferentiel(r)
-      .avecAdaptateurPersistance(
+      .avecConstructeurDePersistance(
         unePersistanceMemoire().ajouteUnService(
           unService(r)
             .avecId('S1')
@@ -507,7 +504,6 @@ describe('Le dépôt de données des services', () => {
   describe("quand il reçoit une demande d'enregistrement d'un nouveau service", () => {
     let adaptateurChiffrement;
     let adaptateurPersistance;
-    let adaptateurTracking;
     let adaptateurUUID;
     let adaptateurRechercheEntite;
     let depot;
@@ -520,20 +516,18 @@ describe('Le dépôt de données des services', () => {
           unUtilisateur().avecId('123').avecEmail('jean.dupont@mail.fr').donnees
         )
         .construis();
-      adaptateurTracking = unAdaptateurTracking().construis();
       adaptateurUUID = { genereUUID: () => 'unUUID' };
       referentiel = Referentiel.creeReferentielVide();
       adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
 
-      depot = DepotDonneesServices.creeDepot({
-        adaptateurChiffrement,
-        adaptateurPersistance,
-        adaptateurTracking,
-        adaptateurUUID,
-        adaptateurRechercheEntite,
-        busEvenements,
-        referentiel,
-      });
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecAdaptateurChiffrement(adaptateurChiffrement)
+        .avecAdaptateurUUID(adaptateurUUID)
+        .avecReferentiel(referentiel)
+        .avecBusEvenements(busEvenements)
+        .avecAdaptateurRechercheEntite(adaptateurRechercheEntite)
+        .construis();
     });
 
     it('ajoute le nouveau service au dépôt', async () => {
@@ -752,7 +746,7 @@ describe('Le dépôt de données des services', () => {
 
       const depot = unDepotDeDonneesServices()
         .avecReferentiel(r)
-        .avecAdaptateurPersistance(persistance)
+        .avecConstructeurDePersistance(persistance)
         .construis();
 
       const existeMauvaisNom = await depot.serviceExiste('U1', 'Mauvais nom');
@@ -776,7 +770,7 @@ describe('Le dépôt de données des services', () => {
 
       const depot = unDepotDeDonneesServices()
         .avecReferentiel(r)
-        .avecAdaptateurPersistance(persistance)
+        .avecConstructeurDePersistance(persistance)
         .construis();
 
       const existeChezU2 = await depot.serviceExiste('U2', 'Service de U1');
@@ -803,7 +797,7 @@ describe('Le dépôt de données des services', () => {
         );
       const depot = unDepotDeDonneesServices()
         .avecReferentiel(r)
-        .avecAdaptateurPersistance(persistance)
+        .avecConstructeurDePersistance(persistance)
         .construis();
 
       const considereEnCours = await depot.serviceExiste('U1', 'Le S1', 'S1');
@@ -1271,7 +1265,7 @@ describe('Le dépôt de données des services', () => {
         );
 
       depot = unDepotDeDonneesServices()
-        .avecAdaptateurPersistance(persistance)
+        .avecConstructeurDePersistance(persistance)
         .avecAdaptateurUUID(fabriqueAdaptateurUUID())
         .avecReferentiel(referentiel)
         .construis();
@@ -1470,12 +1464,12 @@ describe('Le dépôt de données des services', () => {
   });
 
   describe('sur demande de mise à jour des mesures spécifiques d’un service', () => {
-    let adaptateurPersistance;
+    let persistance;
     let depot;
     const referentiel = Referentiel.creeReferentielVide();
 
     beforeEach(() => {
-      adaptateurPersistance = unePersistanceMemoire()
+      persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
         .ajouteUnService(
           unService(referentiel).avecId('123').avecNomService('nom').donnees
@@ -1485,7 +1479,7 @@ describe('Le dépôt de données des services', () => {
         );
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
-        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecConstructeurDePersistance(persistance)
         .avecBusEvenements(busEvenements)
         .construis();
     });
@@ -1521,7 +1515,7 @@ describe('Le dépôt de données des services', () => {
   });
 
   describe("sur demande de mise à jour d'une mesure générale d’un service", () => {
-    let adaptateurPersistance;
+    let persistance;
     let depot;
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { gouvernance: 'Gouvernance' },
@@ -1530,7 +1524,7 @@ describe('Le dépôt de données des services', () => {
     });
 
     beforeEach(() => {
-      adaptateurPersistance = unePersistanceMemoire()
+      persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
         .ajouteUnService(
           unService(referentiel).avecId('123').avecNomService('nom').donnees
@@ -1540,7 +1534,7 @@ describe('Le dépôt de données des services', () => {
         );
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
-        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecConstructeurDePersistance(persistance)
         .avecBusEvenements(busEvenements)
         .construis();
     });
@@ -1594,13 +1588,13 @@ describe('Le dépôt de données des services', () => {
         .avecId('123')
         .avecMesures(mesures)
         .construis();
-      const adaptateurPersistance = unePersistanceMemoire()
+      const persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
         .ajouteUnService(service.donneesAPersister().toutes());
       const depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
-        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecConstructeurDePersistance(persistance)
         .avecBusEvenements(busEvenements)
         .construis();
 
@@ -1630,13 +1624,13 @@ describe('Le dépôt de données des services', () => {
         .avecId('123')
         .avecMesures(mesures)
         .construis();
-      const adaptateurPersistance = unePersistanceMemoire()
+      const persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
         .ajouteUnService(service.donneesAPersister().donnees);
       const depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
-        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecConstructeurDePersistance(persistance)
         .avecBusEvenements(busEvenements)
         .construis();
 
