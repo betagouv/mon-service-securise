@@ -108,18 +108,20 @@ describe('Le dépôt de données des utilisateurs', () => {
 
   describe('sur demande de mise à jour des informations du profil utilisateur', () => {
     let depot;
+    let adaptateurPersistance;
 
     beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(
+          unUtilisateur()
+            .avecId('123')
+            .quiSAppelle('Jean Dupont')
+            .avecEmail('jean.dupont@mail.fr').donnees
+        )
+        .construis();
       depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurChiffrement,
-        adaptateurPersistance: unePersistanceMemoire()
-          .ajouteUnUtilisateur(
-            unUtilisateur()
-              .avecId('123')
-              .quiSAppelle('Jean Dupont')
-              .avecEmail('jean.dupont@mail.fr').donnees
-          )
-          .construis(),
+        adaptateurPersistance,
         adaptateurRechercheEntite,
         busEvenements: bus,
       });
@@ -140,7 +142,8 @@ describe('Le dépôt de données des utilisateurs', () => {
         '123',
         unUtilisateur().avecId('123').avecEmail('jean.dubois@mail.fr').donnees
       );
-      const u = await depot.utilisateur('123');
+
+      const u = await adaptateurPersistance.utilisateur('123');
       expect(u.emailHash).to.equal('jean.dubois@mail.fr-haché256');
     });
 
@@ -150,22 +153,16 @@ describe('Le dépôt de données des utilisateurs', () => {
         unUtilisateur().avecId('123').avecEmail('jean.dubois@mail.fr').donnees
       );
 
-      await depot.metsAJourUtilisateur('123', {
-        nom: 'Dupont',
-        prenom: 'Jean',
-      });
+      const deltaSansEmail = { nom: 'Dupont', prenom: 'Jean' };
+      await depot.metsAJourUtilisateur('123', deltaSansEmail);
 
-      const u = await depot.utilisateur('123');
+      const u = await adaptateurPersistance.utilisateur('123');
       expect(u.emailHash).to.equal('jean.dubois@mail.fr-haché256');
     });
 
     it("complète les informations de l'entité et les enregistre", async () => {
       adaptateurRechercheEntite.rechercheOrganisations = async () => [
-        {
-          nom: 'MonEntite',
-          departement: '75',
-          siret: '12345',
-        },
+        { nom: 'MonEntite', departement: '75', siret: '12345' },
       ];
 
       const utilisateur = await depot.metsAJourUtilisateur(
@@ -559,13 +556,13 @@ describe('Le dépôt de données des utilisateurs', () => {
       });
 
       it("sauvegarde le hash256 de l'email de l'utilisateur", async () => {
-        const utilisateur = await depot.nouvelUtilisateur(
+        const nouveau = await depot.nouvelUtilisateur(
           unUtilisateur().avecEmail('jean.dupont@mail.fr').donnees
         );
 
-        expect(utilisateur).to.be.an(Utilisateur);
-        expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
-        expect(utilisateur.emailHash).to.eql('jean.dupont@mail.fr-haché256');
+        const donnees = await adaptateurPersistance.utilisateur(nouveau.id);
+
+        expect(donnees.emailHash).to.be('jean.dupont@mail.fr-haché256');
       });
 
       it("publie sur le bus d'événements l'inscription de l'utilisateur", async () => {
