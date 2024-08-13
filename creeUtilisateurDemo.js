@@ -92,7 +92,7 @@ const main = async () => {
     });
 
     /* eslint-disable no-console */
-    const u = await adaptateurPersistance.utilisateurAvecEmail(
+    const u = await depotDonnees.utilisateurAvecEmail(
       process.env.EMAIL_UTILISATEUR_DEMO
     );
 
