@@ -78,8 +78,12 @@ const fabriquePersistance = (
         const donneesServices = await adaptateurPersistance.tousLesServices();
         return Promise.all(donneesServices.map((d) => dechiffreService(d)));
       },
-      celuiAvecNom: async (...params) =>
-        adaptateurPersistance.serviceAvecNom(...params),
+      celuiAvecNom: async (idUtilisateur, nomService, idServiceMisAJour = '') =>
+        adaptateurPersistance.serviceAvecNom(
+          idUtilisateur,
+          nomService,
+          idServiceMisAJour
+        ),
     },
     sauvegarde: async (id, donneesService) => {
       const donneesChiffrees = await chiffre.donneesService(donneesService);
@@ -186,13 +190,23 @@ const creeDepot = (config = {}) => {
   const ajouteRisqueGeneralAService = (...params) =>
     ajouteAItemsDuService('risquesGeneraux', ...params);
 
-  const serviceExiste = (...params) =>
-    p.lis.celuiAvecNom(...params).then((h) => !!h);
+  const serviceExiste = async (
+    idUtilisateur,
+    nomService,
+    idServiceMisAJour
+  ) => {
+    const s = await p.lis.celuiAvecNom(
+      idUtilisateur,
+      nomService,
+      idServiceMisAJour
+    );
+    return !!s;
+  };
 
   const valideDescriptionService = async (
     idUtilisateur,
     donnees,
-    idHomologationMiseAJour
+    idServiceMisAJour
   ) => {
     const { nomService } = donnees;
 
@@ -207,13 +221,13 @@ const creeDepot = (config = {}) => {
       throw new ErreurDonneesNiveauSecuriteInsuffisant();
     }
 
-    const serviceExistant = await serviceExiste(
+    const existeDeja = await serviceExiste(
       idUtilisateur,
       nomService,
-      idHomologationMiseAJour
+      idServiceMisAJour
     );
 
-    if (serviceExistant)
+    if (existeDeja)
       throw new ErreurNomServiceDejaExistant(
         `Le nom du service "${nomService}" existe déjà pour un autre service`
       );

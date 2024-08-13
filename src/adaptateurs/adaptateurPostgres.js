@@ -110,7 +110,7 @@ const nouvelAdaptateur = (env) => {
 
   const serviceDeprecated = (id) => elementDeTable('services', id);
 
-  const serviceAvecNom = (idUtilisateur, nomService, idServiceMisAJour = '') =>
+  const serviceAvecNom = (idUtilisateur, nomService, idServiceMisAJour) =>
     knex('services')
       .join(
         'autorisations',
