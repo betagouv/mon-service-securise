@@ -309,6 +309,33 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
   });
 
+  it("retourne l'utilisateur associé à un email donné", async () => {
+    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
+      {
+        utilisateurs: [
+          {
+            id: '123',
+            prenom: 'Jean',
+            nom: 'Dupont',
+            email: 'jean.dupont@mail.fr',
+            motDePasse: 'XXX',
+          },
+        ],
+      }
+    );
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance,
+    });
+
+    const utilisateur = await depot.utilisateurAvecEmail('jean.dupont@mail.fr');
+
+    expect(utilisateur).to.be.an(Utilisateur);
+    expect(utilisateur.id).to.equal('123');
+    expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
+  });
+
   it('retourne tous les utilisateurs enregistrés', (done) => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
