@@ -86,6 +86,7 @@ const main = async () => {
     });
     const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
     const depotDonnees = DepotDonnees.creeDepot({
+      adaptateurPersistance,
       adaptateurRechercheEntite,
       adaptateurChiffrement,
       busEvenements,
