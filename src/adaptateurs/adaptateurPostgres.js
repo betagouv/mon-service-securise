@@ -6,6 +6,7 @@ const config = require('../../knexfile');
 const CORRESPONDANCE_COLONNES_PROPRIETES = {
   date_creation: 'dateCreation',
   email_hash: 'emailHash',
+  id_reset_mdp: 'idResetMotDePasse',
 };
 
 const nouvelAdaptateur = (env) => {
@@ -45,9 +46,9 @@ const nouvelAdaptateur = (env) => {
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
 
-  const elementDeTableAvec = (nomTable, nomClef, valeur) =>
+  const elementDeTableAvecValeurColonne = (nomTable, nomColonne, valeur) =>
     knex(nomTable)
-      .whereRaw(`donnees#>>'{${nomClef}}'=?`, valeur)
+      .where({ [nomColonne]: valeur })
       .first()
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
@@ -171,14 +172,11 @@ const nouvelAdaptateur = (env) => {
   const utilisateur = (id) => elementDeTable('utilisateurs', id);
 
   const utilisateurAvecEmailHash = (emailHash) =>
-    knex('utilisateurs')
-      .where('email_hash', emailHash)
-      .first()
-      .then(convertisLigneEnObjet)
-      .catch(() => undefined);
+    elementDeTableAvecValeurColonne('utilisateurs', 'email_hash', emailHash);
 
   const utilisateurAvecIdReset = (idReset) =>
-    elementDeTableAvec('utilisateurs', 'idResetMotDePasse', idReset);
+    elementDeTableAvecValeurColonne('utilisateurs', 'id_reset_mdp', idReset);
+
   const tousUtilisateurs = () =>
     knex('utilisateurs').then((tous) => tous.map(convertisLigneEnObjet));
 
