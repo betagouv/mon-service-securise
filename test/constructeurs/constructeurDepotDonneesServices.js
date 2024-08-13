@@ -21,6 +21,11 @@ class ConstructeurDepotDonneesServices {
     return this;
   }
 
+  avecAdaptateurUUID(adaptateur) {
+    this.adaptateurUUID = adaptateur;
+    return this;
+  }
+
   avecReferentiel(referentiel) {
     this.referentiel = referentiel;
     return this;
