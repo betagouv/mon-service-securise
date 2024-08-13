@@ -1289,15 +1289,12 @@ describe('Le dépôt de données des services', () => {
       }
     });
 
-    it('peut dupliquer un service à partir de son identifiant', (done) => {
-      depot
-        .dupliqueService('123-1', '123')
-        .then(() => depot.services('123'))
-        .then((services) => {
-          expect(services.length).to.equal(2);
-          done();
-        })
-        .catch(done);
+    it('peut dupliquer un service à partir de son identifiant', async () => {
+      await depot.dupliqueService('123-1', '123');
+
+      const services = await depot.services('123');
+
+      expect(services.length).to.equal(2);
     });
 
     it('utilise un nom disponible pour le service dupliqué', (done) => {
