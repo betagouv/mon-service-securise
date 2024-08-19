@@ -1479,7 +1479,7 @@ describe('Le dépôt de données des services', () => {
     it("délègue à l'adaptateur persistance la sauvegarde du service", async () => {
       const service = unService(referentiel).avecId('S1').construis();
       const adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnService({ id: 'S1' })
+        .ajouteUnService(unService().avecId('S1').donnees)
         .construis();
 
       let donneesPersistees;
