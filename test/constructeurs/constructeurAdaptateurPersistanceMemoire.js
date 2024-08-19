@@ -1,12 +1,14 @@
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 class ConstructeurAdaptateurPersistanceMemoire {
-  constructor() {
+  constructor(adaptateurChiffrement) {
     this.autorisations = [];
     this.services = [];
     this.utilisateurs = [];
     this.notificationsExpirationHomologation = [];
     this.suggestionsActions = [];
+    this.adaptateurChiffrement = adaptateurChiffrement;
   }
 
   ajouteUneAutorisation(autorisation) {
@@ -15,7 +17,12 @@ class ConstructeurAdaptateurPersistanceMemoire {
   }
 
   ajouteUnService(service) {
-    this.services.push(service);
+    this.services.push({
+      ...service,
+      nomServiceHash: this.adaptateurChiffrement.hacheSha256(
+        service.descriptionService.nomService
+      ),
+    });
     return this;
   }
 
@@ -46,7 +53,8 @@ class ConstructeurAdaptateurPersistanceMemoire {
   }
 }
 
-const unePersistanceMemoire = () =>
-  new ConstructeurAdaptateurPersistanceMemoire();
+const unePersistanceMemoire = (
+  adaptateurChiffrement = fauxAdaptateurChiffrement()
+) => new ConstructeurAdaptateurPersistanceMemoire(adaptateurChiffrement);
 
 module.exports = { unePersistanceMemoire };

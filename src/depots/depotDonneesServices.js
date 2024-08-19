@@ -78,12 +78,18 @@ const fabriquePersistance = (
         const donneesServices = await adaptateurPersistance.tousLesServices();
         return Promise.all(donneesServices.map((d) => dechiffreService(d)));
       },
-      celuiAvecNom: async (idUtilisateur, nomService, idServiceMisAJour = '') =>
-        adaptateurPersistance.serviceAvecNom(
+      celuiAvecNom: async (
+        idUtilisateur,
+        nomService,
+        idServiceMisAJour = ''
+      ) => {
+        const hashNom = adaptateurChiffrement.hacheSha256(nomService);
+        return adaptateurPersistance.serviceAvecHashNom(
           idUtilisateur,
-          nomService,
+          hashNom,
           idServiceMisAJour
-        ),
+        );
+      },
     },
     sauvegarde: async (id, donneesService) => {
       const donneesChiffrees = await chiffre.donneesService(donneesService);
