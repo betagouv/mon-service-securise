@@ -54,8 +54,9 @@ function fabriquePersistance({
         return donnees ? dechiffreUtilisateur(donnees) : undefined;
       },
       celuiAvecIdReset: async (idReset) => {
-        const u = await adaptateurPersistance.utilisateurAvecIdReset(idReset);
-        return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
+        const donnees =
+          await adaptateurPersistance.utilisateurAvecIdReset(idReset);
+        return donnees ? dechiffreUtilisateur(donnees) : undefined;
       },
       nbAutorisationsProprietaire: async (idUtilisateur) =>
         adaptateurPersistance.nbAutorisationsProprietaire(idUtilisateur),
