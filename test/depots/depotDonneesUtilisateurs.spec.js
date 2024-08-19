@@ -695,6 +695,7 @@ describe('Le dépôt de données des utilisateurs', () => {
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
+        adaptateurChiffrement,
       });
 
       depot
@@ -749,6 +750,7 @@ describe('Le dépôt de données des utilisateurs', () => {
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
+        adaptateurChiffrement,
       });
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance,
@@ -771,6 +773,7 @@ describe('Le dépôt de données des utilisateurs', () => {
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
+        adaptateurChiffrement,
       });
 
       depot

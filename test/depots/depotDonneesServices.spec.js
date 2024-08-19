@@ -294,7 +294,8 @@ describe('Le dépôt de données des services', () => {
     beforeEach(() => {
       referentiel = Referentiel.creeReferentielVide();
       adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
-      adaptateurPersistance = unePersistanceMemoire()
+      adaptateurChiffrement = fauxAdaptateurChiffrement();
+      adaptateurPersistance = unePersistanceMemoire(adaptateurChiffrement)
         .ajouteUnUtilisateur(
           unUtilisateur().avecId('U1').avecEmail('jean.dupont@mail.fr').donnees
         )
@@ -305,11 +306,9 @@ describe('Le dépôt de données des services', () => {
           uneAutorisation().deProprietaire('U1', 'S1').donnees
         )
         .construis();
-      adaptateurChiffrement = {
-        dechiffre: async (objetDonnee) => objetDonnee,
-      };
       bus = fabriqueBusPourLesTests();
       depot = unDepotDeDonneesServices()
+        .avecAdaptateurChiffrement(adaptateurChiffrement)
         .avecReferentiel(referentiel)
         .avecAdaptateurPersistance(adaptateurPersistance)
         .avecBusEvenements(bus)

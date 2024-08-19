@@ -12,6 +12,7 @@ const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 describe("La tâche d'envoie des emails de notifications d'expiration d'homologation", () => {
   let depotDonnees;
@@ -69,7 +70,10 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
         dateProchainEnvoi: new Date('2024-01-01T00:00:00.000Z'),
       })
       .construis();
-    depotDonnees = creeDepot({ adaptateurPersistance });
+    depotDonnees = creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+    });
     adaptateurHorloge = {
       maintenant: () => new Date('2024-01-01'),
     };
@@ -97,7 +101,10 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
           .donnees
       )
       .construis();
-    depotDonnees = creeDepot({ adaptateurPersistance });
+    depotDonnees = creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+    });
 
     const idsPasses = [];
     depotDonnees.supprimeNotificationsExpirationHomologation = async (ids) => {
@@ -127,7 +134,10 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
           .donnees
       )
       .construis();
-    depotDonnees = creeDepot({ adaptateurPersistance });
+    depotDonnees = creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+    });
 
     depotDonnees.lisNotificationsExpirationHomologationEnDate = async () => [
       { id: 1, idService: 'S1' },

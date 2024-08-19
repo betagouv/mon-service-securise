@@ -13,6 +13,7 @@ const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
 const { creeDepot } = require('../../../src/depotDonnees');
+const fauxAdaptateurChiffrement = require('../../mocks/adaptateurChiffrement');
 
 describe("L'abonnement qui envoie un mail de félicitation d'homologation", () => {
   let depotDonnees;
@@ -35,7 +36,10 @@ describe("L'abonnement qui envoie un mail de félicitation d'homologation", () =
         uneAutorisation().deProprietaire('U1', 'S1').construis()
       )
       .construis();
-    depotDonnees = creeDepot({ adaptateurPersistance });
+    depotDonnees = creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+    });
   });
 
   it("lève une exception s'il ne reçoit pas d'identifiant du service", async () => {

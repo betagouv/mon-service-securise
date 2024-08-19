@@ -72,6 +72,7 @@ class ConstructeurDepotDonneesServices {
         this.depotDonneesUtilisateurs ??
         DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement: this.adaptateurChiffrement,
         }),
       referentiel: this.referentiel,
     });
