@@ -60,6 +60,8 @@ const versionDeBuild = () => {
   return versionCommit.substring(0, 8);
 };
 
+const modeMaintenance = () => process.env.MODE_MAINTENANCE === 'true';
+
 module.exports = {
   chiffrement,
   emailMemoire,
@@ -67,6 +69,7 @@ module.exports = {
   filtrageIp,
   journalMSS,
   matomo,
+  modeMaintenance,
   sendinblue,
   sentry,
   statistiques,
