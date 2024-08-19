@@ -147,7 +147,7 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(id, donnees);
   };
 
-  const metsAJourProprieteService = (nomPropriete, idOuService, propriete) => {
+  const metsAJourProprieteService = (nomPropriete, idService, propriete) => {
     const metsAJour = (h) => {
       h[nomPropriete] ||= {};
 
@@ -158,16 +158,20 @@ const creeDepot = (config = {}) => {
       return p.sauvegarde(id, donnees);
     };
 
-    const trouveDonneesService = (param) =>
-      typeof param === 'object'
-        ? Promise.resolve(param)
-        : p.lis.un(param).then((h) => h.donneesAPersister().toutes());
+    const trouveDonneesService = (id) =>
+      p.lis.un(id).then((h) => h.donneesAPersister().toutes());
 
-    return trouveDonneesService(idOuService).then(metsAJour);
+    return trouveDonneesService(idService).then(metsAJour);
   };
 
-  const metsAJourDescriptionService = (serviceCible, informations) =>
-    metsAJourProprieteService('descriptionService', serviceCible, informations);
+  const metsAJourDescriptionService = (serviceCible, informations) => {
+    serviceCible.descriptionService ||= {};
+
+    Object.assign(serviceCible.descriptionService, informations.toJSON());
+
+    const { id, ...donnees } = serviceCible;
+    return p.sauvegarde(id, donnees);
+  };
 
   const remplaceProprieteService = async (
     nomPropriete,
