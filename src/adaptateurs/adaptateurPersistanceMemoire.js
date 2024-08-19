@@ -75,12 +75,14 @@ const nouvelAdaptateur = (
     return lesIds.map(service);
   };
 
-  const serviceAvecNom = (idUtilisateur, nomService, idServiceMisAJour) =>
+  const serviceAvecHashNom = (
+    idUtilisateur,
+    hashNomService,
+    idServiceMisAJour
+  ) =>
     services(idUtilisateur).then((lesServices) =>
       lesServices.find(
-        (s) =>
-          s.id !== idServiceMisAJour &&
-          s.descriptionService?.nomService === nomService
+        (s) => s.id !== idServiceMisAJour && s.nomServiceHash === hashNomService
       )
     );
 
@@ -283,7 +285,7 @@ const nouvelAdaptateur = (
     autorisations,
     autorisationsDuService,
     service,
-    serviceAvecNom,
+    serviceAvecHashNom,
     services,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
