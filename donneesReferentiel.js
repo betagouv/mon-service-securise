@@ -20,7 +20,7 @@ module.exports = {
     {
       id: 'encartHomologation',
       dateDeDeploiement: '2024-04-03 14:30:00Z',
-      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/les-nouveautes-produit-de-monservicesecurise-146gxyn/',
+      lien: 'https://avis.monservicesecurise.cyber.gouv.fr/fr/changelog',
       titre: 'Homologuez vos services et faites-le savoir !',
       sousTitre:
         "Valorisez l'effort de sécurisation mis en œuvre et renforcez la confiance de vos usagers dans vos services",
