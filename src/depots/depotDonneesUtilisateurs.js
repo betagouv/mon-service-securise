@@ -62,8 +62,8 @@ function fabriquePersistance({
         adaptateurPersistance.nbAutorisationsProprietaire(idUtilisateur),
       tous: async () => {
         const tousUtilisateurs = await adaptateurPersistance.tousUtilisateurs();
-        return tousUtilisateurs.map(
-          (u) => new Utilisateur(u, { adaptateurJWT })
+        return Promise.all(
+          tousUtilisateurs.map((d) => dechiffreUtilisateur(d))
         );
       },
     },
