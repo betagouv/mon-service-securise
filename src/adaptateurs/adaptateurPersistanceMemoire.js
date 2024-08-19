@@ -12,15 +12,6 @@ const nouvelAdaptateur = (
   donnees.notifications ||= [];
   donnees.suggestionsActions ||= [];
 
-  const metsAJourEnregistrement = (
-    fonctionRecherche,
-    id,
-    donneesAMettreAJour
-  ) =>
-    fonctionRecherche(id)
-      .then((e) => Object.assign(e, donneesAMettreAJour))
-      .then(() => {});
-
   const supprimeEnregistrement = async (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
   };
@@ -93,8 +84,10 @@ const nouvelAdaptateur = (
       )
     );
 
-  const metsAJourService = (...params) =>
-    metsAJourEnregistrement(serviceDeprecated, ...params);
+  const metsAJourService = async (id, donneesService, nomServiceHash) => {
+    const s = await service(id);
+    Object.assign(s, { nomServiceHash, ...donneesService });
+  };
 
   const sauvegardeAutorisation = async (id, donneesAutorisation) => {
     const dejaConnue = donnees.autorisations.find((a) => a.id === id);
@@ -106,7 +99,7 @@ const nouvelAdaptateur = (
   const sauvegardeService = (id, donneesService, nomServiceHash) => {
     const dejaConnu = donnees.services.find((s) => s.id === id) !== undefined;
     return dejaConnu
-      ? metsAJourService(id, donneesService)
+      ? metsAJourService(id, donneesService, nomServiceHash)
       : ajouteService(id, donneesService, nomServiceHash);
   };
 
