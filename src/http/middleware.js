@@ -313,6 +313,15 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
+  const verificationModeMaintenance = (_requete, reponse, suite) => {
+    const modeMaintenanceActif = adaptateurEnvironnement.modeMaintenance();
+    if (modeMaintenanceActif) {
+      reponse.status(503).render('maintenance');
+    } else {
+      suite();
+    }
+  };
+
   return {
     ajouteVersionFichierCompiles,
     aseptise,
@@ -331,6 +340,7 @@ const middleware = (configuration = {}) => {
     verificationAcceptationCGU,
     verificationAddresseIP,
     verificationJWT,
+    verificationModeMaintenance,
     challengeMotDePasse,
   };
 };

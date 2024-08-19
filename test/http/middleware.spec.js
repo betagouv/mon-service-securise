@@ -75,6 +75,7 @@ describe('Le middleware MSS', () => {
       Object.assign(reponse.headers, clefsValeurs);
     reponse.status = () => reponse;
     reponse.send = () => {};
+    reponse.render = () => {};
 
     depotDonnees.service = () => Promise.resolve();
     depotDonnees.utilisateurExiste = () => Promise.resolve(true);
@@ -907,6 +908,73 @@ describe('Le middleware MSS', () => {
     middleware.ajouteVersionFichierCompiles(requete, reponse, () => {
       expect(reponse.locals.version).to.be('1.1');
       done();
+    });
+  });
+
+  describe('concernant mode maintenance', () => {
+    let adaptateurEnvironnement;
+
+    describe('quand il est actif', () => {
+      beforeEach(() => {
+        adaptateurEnvironnement = {
+          modeMaintenance: () => true,
+        };
+      });
+
+      it('renvoie une erreur 503', () => {
+        let statutRecu;
+        reponse.status = (s) => {
+          statutRecu = s;
+          return reponse;
+        };
+
+        const middleware = Middleware({ adaptateurEnvironnement });
+
+        middleware.verificationModeMaintenance(requete, reponse, () => {});
+
+        expect(statutRecu).to.be(503);
+      });
+
+      it('sert la page de maintenance', () => {
+        let pageServie;
+        reponse.render = (page) => {
+          pageServie = page;
+          return reponse;
+        };
+
+        const middleware = Middleware({ adaptateurEnvironnement });
+
+        middleware.verificationModeMaintenance(requete, reponse, () => {});
+
+        expect(pageServie).to.be('maintenance');
+      });
+    });
+
+    describe("quand il n'est pas actif", () => {
+      it('appelle le middleware suivant', () => {
+        adaptateurEnvironnement = {
+          modeMaintenance: () => false,
+        };
+        let suiteAppelee = false;
+        let requeteInterceptee = false;
+        reponse.status = () => {
+          requeteInterceptee = true;
+          return reponse;
+        };
+        reponse.send = () => {
+          requeteInterceptee = true;
+          return reponse;
+        };
+
+        const middleware = Middleware({ adaptateurEnvironnement });
+
+        middleware.verificationModeMaintenance(requete, reponse, () => {
+          suiteAppelee = true;
+        });
+
+        expect(suiteAppelee).to.be(true);
+        expect(requeteInterceptee).to.be(false);
+      });
     });
   });
 });
