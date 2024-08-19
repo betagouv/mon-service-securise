@@ -1304,6 +1304,13 @@ describe('Le dépôt de données des services', () => {
   });
 
   describe("sur une demande d'un index de copie disponible pour un service à dupliquer", () => {
+    let adaptateurChiffrement;
+
+    beforeEach(() => {
+      adaptateurChiffrement = {
+        dechiffre: async (objetDonnee) => objetDonnee,
+      };
+    });
     it("utilise l'index 1 si disponible", (done) => {
       const referentiel = Referentiel.creeReferentielVide();
       const descriptionService = uneDescriptionValide(referentiel)
@@ -1320,6 +1327,7 @@ describe('Le dépôt de données des services', () => {
         });
 
       const depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement,
         adaptateurPersistance,
         referentiel,
       });
@@ -1347,6 +1355,7 @@ describe('Le dépôt de données des services', () => {
         });
 
       const depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement,
         adaptateurPersistance,
         referentiel,
       });
@@ -1382,6 +1391,7 @@ describe('Le dépôt de données des services', () => {
         });
 
       const depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement,
         adaptateurPersistance,
         referentiel,
       });
@@ -1409,6 +1419,7 @@ describe('Le dépôt de données des services', () => {
         });
 
       const depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement,
         adaptateurPersistance,
         referentiel,
       });

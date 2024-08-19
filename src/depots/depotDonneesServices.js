@@ -50,6 +50,11 @@ const fabriquePersistance = (
 ) => {
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
+  const dechiffreService = async (donneesService) => {
+    const donneesEnClair = await dechiffre.donneesService(donneesService);
+    return new Service(donneesEnClair, referentiel);
+  };
+
   const persistance = {
     lis: {
       un: async (idService) => {
@@ -57,14 +62,17 @@ const fabriquePersistance = (
 
         if (!s) return undefined;
 
-        const donneesEnClair = await dechiffre.donneesService(s);
-        return new Service(donneesEnClair, referentiel);
+        return dechiffreService(s);
       },
       ceuxDeUtilisateur: async (idUtilisateur) => {
-        const services = await adaptateurPersistance.services(idUtilisateur);
-        return services
-          .map((s) => new Service(s, referentiel))
-          .sort((s1, s2) => s1.nomService().localeCompare(s2.nomService()));
+        const donneesServices =
+          await adaptateurPersistance.services(idUtilisateur);
+        const services = await Promise.all(
+          donneesServices.map((d) => dechiffreService(d))
+        );
+        return services.sort((s1, s2) =>
+          s1.nomService().localeCompare(s2.nomService())
+        );
       },
       tous: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
