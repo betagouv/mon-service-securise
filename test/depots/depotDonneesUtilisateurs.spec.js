@@ -357,7 +357,7 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
   });
 
-  it('retourne tous les utilisateurs enregistrés', (done) => {
+  it('retourne tous les utilisateurs enregistrés', async () => {
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
         utilisateurs: [
@@ -384,15 +384,10 @@ describe('Le dépôt de données des utilisateurs', () => {
       adaptateurPersistance,
     });
 
-    depot
-      .tousUtilisateurs()
-      .then((tous) => {
-        expect(tous.map((u) => u.id)).to.eql(['123', '456']);
-        expect(tous[0]).to.be.an(Utilisateur);
-        expect(tous[1]).to.be.an(Utilisateur);
-        done();
-      })
-      .catch(done);
+    const tous = await depot.tousUtilisateurs();
+    expect(tous.map((u) => u.id)).to.eql(['123', '456']);
+    expect(tous[0]).to.be.an(Utilisateur);
+    expect(tous[1]).to.be.an(Utilisateur);
   });
 
   it("retourne l'utilisateur avec sa date de création", (done) => {
