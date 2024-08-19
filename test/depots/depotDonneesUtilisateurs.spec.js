@@ -505,6 +505,22 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
       });
 
+      it("chiffre les données de l'utilisateur", async () => {
+        adaptateurChiffrement.chiffre = async (donnees) => ({
+          ...donnees,
+          chiffre: true,
+        });
+
+        const utilisateur = await depot.nouvelUtilisateur({
+          email: 'jean.dupont@mail.fr',
+        });
+
+        const donneesSauvegardees = await adaptateurPersistance.utilisateur(
+          utilisateur.id
+        );
+        expect(donneesSauvegardees.chiffre).to.be(true);
+      });
+
       it('génère un UUID pour cet utilisateur', async () => {
         const utilisateur = await depot.nouvelUtilisateur(
           unUtilisateur()
