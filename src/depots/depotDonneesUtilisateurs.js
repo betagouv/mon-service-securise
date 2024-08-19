@@ -27,6 +27,12 @@ function fabriquePersistance({
 }) {
   const { dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
+  const dechiffreUtilisateur = async (donneesUtilisateur) => {
+    const donneesEnClair =
+      await dechiffre.donneesUtilisateur(donneesUtilisateur);
+    return new Utilisateur(donneesEnClair, { adaptateurJWT });
+  };
+
   return {
     lis: {
       donnees: {
@@ -39,17 +45,13 @@ function fabriquePersistance({
       },
       un: async (idUtilisateur) => {
         const donnees = await adaptateurPersistance.utilisateur(idUtilisateur);
-        if (!donnees) return undefined;
-
-        const donneesUtilisateur = await dechiffre.donneesUtilisateur(donnees);
-
-        return new Utilisateur(donneesUtilisateur, { adaptateurJWT });
+        return donnees ? dechiffreUtilisateur(donnees) : undefined;
       },
       celuiAvecEmail: async (email) => {
         const emailHash = adaptateurChiffrement.hacheSha256(email);
-        const u =
+        const donnees =
           await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
-        return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
+        return donnees ? dechiffreUtilisateur(donnees) : undefined;
       },
       celuiAvecIdReset: async (idReset) => {
         const u = await adaptateurPersistance.utilisateurAvecIdReset(idReset);
