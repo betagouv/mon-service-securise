@@ -252,7 +252,7 @@ describe('Le dépôt de données des services', () => {
   });
 
   describe("sur demande de mise à jour de la description d'un service", () => {
-    let persistance;
+    let adaptateurPersistance;
     let bus;
     let depot;
     let referentiel;
@@ -262,7 +262,7 @@ describe('Le dépôt de données des services', () => {
     beforeEach(() => {
       referentiel = Referentiel.creeReferentielVide();
       adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
-      persistance = unePersistanceMemoire()
+      adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(
           unUtilisateur().avecId('U1').avecEmail('jean.dupont@mail.fr').donnees
         )
@@ -271,14 +271,15 @@ describe('Le dépôt de données des services', () => {
         )
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire('U1', 'S1').donnees
-        );
+        )
+        .construis();
       adaptateurChiffrement = {
         dechiffre: async (objetDonnee) => objetDonnee,
       };
       bus = fabriqueBusPourLesTests();
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
-        .avecConstructeurDePersistance(persistance)
+        .avecAdaptateurPersistance(adaptateurPersistance)
         .avecBusEvenements(bus)
         .avecAdaptateurRechercheEntite(adaptateurRechercheEntite)
         .construis();
@@ -344,7 +345,7 @@ describe('Le dépôt de données des services', () => {
         },
       ];
       const depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance: persistance.construis(),
+        adaptateurPersistance,
         adaptateurChiffrement,
         referentiel,
       });
