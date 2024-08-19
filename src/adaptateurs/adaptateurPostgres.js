@@ -169,9 +169,9 @@ const nouvelAdaptateur = (env) => {
     knex('utilisateurs')
       .where({ id })
       .first()
-      .then(({ donnees }) => {
+      .then(() => {
         const data = {
-          donnees: Object.assign(donnees, donneesAMettreAJour),
+          donnees: donneesAMettreAJour,
         };
         if (emailHash) {
           data.email_hash = emailHash;
