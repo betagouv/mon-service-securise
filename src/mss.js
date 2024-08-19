@@ -73,6 +73,8 @@ const creeServeur = (
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
 
+  app.use(/\/((?!statique).)*/, middleware.verificationModeMaintenance);
+
   app.use(
     '',
     routesNonConnectePage({
