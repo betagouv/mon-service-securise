@@ -102,9 +102,16 @@ function fabriquePersistance({
       const {
         emailHash: _,
         idResetMotDePasse: __,
-        ...donnees
+        ...donneesEnClairASauvegarder
       } = donneesEnClairAJour;
-      await adaptateurPersistance.metsAJourUtilisateur(id, donnees, emailHash);
+      const donneesChiffreesASauvegarder = await chiffre.donneesUtilisateur(
+        donneesEnClairASauvegarder
+      );
+      await adaptateurPersistance.metsAJourUtilisateur(
+        id,
+        donneesChiffreesASauvegarder,
+        emailHash
+      );
     },
     supprime: async (id) => {
       await adaptateurPersistance.supprimeAutorisationsContribution(id);
