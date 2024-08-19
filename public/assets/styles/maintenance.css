@@ -1,0 +1,19 @@
+.conteneur-maintenance {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.contenu-texte {
+  flex: 1;
+  text-align: left;
+}
+
+.contenu-image {
+  flex: 2;
+}
+
+.contenu-image img {
+  max-width: 714px;
+}
