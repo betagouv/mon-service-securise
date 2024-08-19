@@ -1,1 +1,20 @@
-h1 Mode maintenance
+extends mssDeconnecte
+block variables
+  - const meta_description = "MonServiceSécurisé n'est pas disponible pour le moment"
+
+block title
+  title Maintenance | MonServiceSécurisé
+
+block append styles
+  link(href = '/statique/assets/styles/maintenance.css', rel = 'stylesheet')
+
+block navigation
+
+block main
+  .marges-fixes
+    .conteneur-maintenance
+      .contenu-texte
+        h1 Oops, MonServiceSécurisé n'est pas disponible pour le moment !
+        p Nous nous excusons pour la gêne occasionnée. Veuillez réessayer d'ici quelques minutes.
+      .contenu-image
+        img(src="/statique/assets/images/illustration_maintenance.svg" alt="Illustration de Maintenance")
