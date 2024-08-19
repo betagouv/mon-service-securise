@@ -199,6 +199,10 @@ const middlewareFantaisie = {
     suite();
   },
 
+  verificationModeMaintenance: (_requete, _reponse, suite) => {
+    suite();
+  },
+
   verificationAcceptationCGU: (requete, _reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
