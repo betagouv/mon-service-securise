@@ -40,6 +40,7 @@ describe('Le dépôt de données des autorisations', () => {
   ) => {
     const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
       adaptateurPersistance,
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
     });
     return DepotDonneesAutorisations.creeDepot({
       adaptateurPersistance,
