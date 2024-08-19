@@ -49,6 +49,8 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(chaine2).to.equal('12345-chiffré');
         return true;
       },
+      chiffre: async (donnees) => donnees,
+      dechiffre: async (donnees) => donnees,
     };
 
     const depot = DepotDonneesUtilisateurs.creeDepot({
@@ -825,6 +827,7 @@ describe('Le dépôt de données des utilisateurs', () => {
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
+        adaptateurChiffrement,
       });
 
       try {
