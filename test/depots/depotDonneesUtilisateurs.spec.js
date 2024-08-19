@@ -288,7 +288,13 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(connait999).to.be(false);
   });
 
-  it("retourne l'utilisateur associé à un identifiant donné", async () => {
+  it("retourne l'utilisateur associé à un identifiant donné en le déchiffrant", async () => {
+    let donneeDechiffree;
+    adaptateurChiffrement.dechiffre = async (objetDonnee) => {
+      donneeDechiffree = objetDonnee;
+      return { ...objetDonnee, email: 'dechiffre' };
+    };
+
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
         utilisateurs: [
@@ -313,6 +319,14 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur).to.be.an(Utilisateur);
     expect(utilisateur.id).to.equal('123');
     expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
+    expect(utilisateur.email).to.equal('dechiffre');
+    expect(donneeDechiffree).to.eql({
+      id: '123',
+      prenom: 'Jean',
+      nom: 'Dupont',
+      email: 'jean.dupont@mail.fr',
+      motDePasse: 'XXX',
+    });
   });
 
   it("retourne l'utilisateur associé à un email donné", async () => {

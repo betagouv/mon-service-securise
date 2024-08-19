@@ -13,11 +13,20 @@ const Entite = require('../modeles/entite');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
 
+const fabriqueChiffrement = (adaptateurChiffrement) => ({
+  dechiffre: {
+    donneesUtilisateur: async (donnees) =>
+      adaptateurChiffrement.dechiffre(donnees),
+  },
+});
+
 function fabriquePersistance({
   adaptateurPersistance,
   adaptateurJWT,
   adaptateurChiffrement,
 }) {
+  const { dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
+
   return {
     lis: {
       donnees: {
@@ -29,8 +38,12 @@ function fabriquePersistance({
         },
       },
       un: async (idUtilisateur) => {
-        const u = await adaptateurPersistance.utilisateur(idUtilisateur);
-        return u ? new Utilisateur(u, { adaptateurJWT }) : undefined;
+        const donnees = await adaptateurPersistance.utilisateur(idUtilisateur);
+        if (!donnees) return undefined;
+
+        const donneesUtilisateur = await dechiffre.donneesUtilisateur(donnees);
+
+        return new Utilisateur(donneesUtilisateur, { adaptateurJWT });
       },
       celuiAvecEmail: async (email) => {
         const emailHash = adaptateurChiffrement.hacheSha256(email);
