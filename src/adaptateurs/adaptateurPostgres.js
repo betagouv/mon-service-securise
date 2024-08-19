@@ -145,7 +145,18 @@ const nouvelAdaptateur = (env) => {
     return avecPMapPourChaqueElement(Promise.resolve(ids), service);
   };
 
-  const metsAJourService = (...params) => metsAJourTable('services', ...params);
+  const metsAJourService = (id, donneesService, nomServiceHash) =>
+    knex('services')
+      .where({ id })
+      .first()
+      .then(({ donnees }) =>
+        knex('services')
+          .where({ id })
+          .update({
+            donnees: Object.assign(donnees, donneesService),
+            nom_service_hash: nomServiceHash,
+          })
+      );
 
   const metsAJourIdResetMdpUtilisateur = (id, idResetMotDePasse) =>
     knex('utilisateurs')
@@ -235,7 +246,7 @@ const nouvelAdaptateur = (env) => {
 
     return testExistence.then((dejaConnu) =>
       dejaConnu
-        ? metsAJourService(id, donneesService)
+        ? metsAJourService(id, donneesService, nomServiceHash)
         : ajouteService(id, donneesService, nomServiceHash)
     );
   };

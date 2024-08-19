@@ -296,6 +296,17 @@ describe('Le dépôt de données des services', () => {
       expect(descriptionService.nomService).to.equal('Nouveau Nom');
     });
 
+    it('met à jour le SHA-256 du nom du service', async () => {
+      const description = uneDescriptionValide(referentiel)
+        .avecNomService('Nouveau Nom')
+        .construis();
+
+      await depot.ajouteDescriptionService('U1', 'S1', description);
+
+      const donnees = await adaptateurPersistance.service('S1');
+      expect(donnees.nomServiceHash).to.be('Nouveau Nom-haché256');
+    });
+
     it('lève une exception si des propriétés obligatoires ne sont pas renseignées', async () => {
       const descriptionIncomplete = uneDescriptionValide(referentiel)
         .avecNomService('')
