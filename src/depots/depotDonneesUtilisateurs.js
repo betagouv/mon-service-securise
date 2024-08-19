@@ -18,6 +18,10 @@ const fabriqueChiffrement = (adaptateurChiffrement) => ({
     donneesUtilisateur: async (donnees) =>
       adaptateurChiffrement.dechiffre(donnees),
   },
+  chiffre: {
+    donneesUtilisateur: async (donnees) =>
+      adaptateurChiffrement.chiffre(donnees),
+  },
 });
 
 function fabriquePersistance({
@@ -25,7 +29,7 @@ function fabriquePersistance({
   adaptateurJWT,
   adaptateurChiffrement,
 }) {
-  const { dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
+  const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
   const dechiffreDonneesUtilisateur = async (donneesUtilisateur) =>
     dechiffre.donneesUtilisateur(donneesUtilisateur);
@@ -79,9 +83,11 @@ function fabriquePersistance({
       const emailHash = adaptateurChiffrement.hacheSha256(
         donneesUtilisateur.email
       );
+      const donneesChiffrees =
+        await chiffre.donneesUtilisateur(donneesUtilisateur);
       return adaptateurPersistance.ajouteUtilisateur(
         id,
-        donneesUtilisateur,
+        donneesChiffrees,
         emailHash
       );
     },
