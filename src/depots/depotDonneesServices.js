@@ -76,7 +76,7 @@ const fabriquePersistance = (
       },
       tous: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
-        return donneesServices.map((s) => new Service(s, referentiel));
+        return Promise.all(donneesServices.map((d) => dechiffreService(d)));
       },
       celuiAvecNom: async (...params) =>
         adaptateurPersistance.serviceAvecNom(...params),
