@@ -140,6 +140,23 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(u.nom).to.equal('Dubois');
     });
 
+    it('chiffre les données', async () => {
+      adaptateurChiffrement.chiffre = async (donnees) => ({
+        ...donnees,
+        chiffre: true,
+      });
+
+      await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur().avecId('123').quiSAppelle('Jérôme Dubois').donnees
+      );
+
+      const u = await adaptateurPersistance.utilisateur('123');
+      expect(u.prenom).to.equal('Jérôme');
+      expect(u.nom).to.equal('Dubois');
+      expect(u.chiffre).to.equal(true);
+    });
+
     it("met le hash de l'email à jour", async () => {
       await depot.metsAJourUtilisateur(
         '123',
