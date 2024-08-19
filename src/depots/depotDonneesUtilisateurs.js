@@ -65,11 +65,13 @@ function fabriquePersistance({
       const emailHash = deltaDonnees.email
         ? adaptateurChiffrement.hacheSha256(deltaDonnees.email)
         : undefined;
-      await adaptateurPersistance.metsAJourUtilisateur(
-        id,
-        deltaDonnees,
-        emailHash
-      );
+      const u = await adaptateurPersistance.utilisateur(id);
+      const {
+        emailHash: _,
+        idResetMotDePasse: __,
+        ...donnees
+      } = Object.assign(u, deltaDonnees);
+      await adaptateurPersistance.metsAJourUtilisateur(id, donnees, emailHash);
     },
     supprime: async (id) => {
       await adaptateurPersistance.supprimeAutorisationsContribution(id);
