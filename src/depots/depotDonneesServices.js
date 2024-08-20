@@ -55,22 +55,32 @@ const fabriquePersistance = (
     return new Service(donneesEnClair, referentiel);
   };
 
+  const enrichisService = async (service) => {
+    service.contributeurs = await adaptateurPersistance.contributeursService(
+      service.id
+    );
+    service.suggestionsActions =
+      await adaptateurPersistance.suggestionsActionsService(service.id);
+    return dechiffreService(service);
+  };
+
   const persistance = {
     lis: {
       un: async (idService) => {
         const s = await adaptateurPersistance.service(idService);
 
         if (!s) return undefined;
-
-        return dechiffreService(s);
+        return enrichisService(s);
       },
       ceuxDeUtilisateur: async (idUtilisateur) => {
         const donneesServices =
           await adaptateurPersistance.services(idUtilisateur);
-        const services = await Promise.all(
-          donneesServices.map((d) => dechiffreService(d))
+
+        const servicesEnrichis = await Promise.all(
+          donneesServices.map(async (ds) => enrichisService(ds))
         );
-        return services.sort((s1, s2) =>
+
+        return servicesEnrichis.sort((s1, s2) =>
           s1.nomService().localeCompare(s2.nomService())
         );
       },
@@ -78,6 +88,7 @@ const fabriquePersistance = (
         const donneesServices = await adaptateurPersistance.tousLesServices();
         return Promise.all(donneesServices.map((d) => dechiffreService(d)));
       },
+      // TODO : refactorer -> renommer et retourner un bool
       celuiAvecNom: async (
         idUtilisateur,
         nomService,

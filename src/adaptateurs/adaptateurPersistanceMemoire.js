@@ -48,15 +48,7 @@ const nouvelAdaptateur = (
   const suggestionsActionsService = (idService) =>
     donnees.suggestionsActions.filter((s) => s.idService === idService);
 
-  const service = async (id) => {
-    const serviceTrouve = donnees.services.find((h) => h.id === id);
-    if (serviceTrouve) {
-      serviceTrouve.contributeurs = contributeursService(id);
-      serviceTrouve.suggestionsActions = suggestionsActionsService(id);
-    }
-
-    return serviceTrouve;
-  };
+  const service = async (id) => donnees.services.find((h) => h.id === id);
 
   const serviceDeprecated = async (id) => {
     const serviceTrouve = donnees.services.find((s) => s.id === id);
@@ -284,6 +276,8 @@ const nouvelAdaptateur = (
     autorisationPour,
     autorisations,
     autorisationsDuService,
+    contributeursService,
+    suggestionsActionsService,
     service,
     serviceAvecHashNom,
     services,
