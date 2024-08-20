@@ -11,7 +11,7 @@ export const mesuresVisiteGuidee: Mesures = {
       descriptionLongue:
         "<p>En cas de recours à des prestataires, fixer, dès les clauses contractuelles, les exigences de sécurité à respecter. Dans le cas où ces exigences ne peuvent pas être fixées a priori (ex. produit obtenu sur étagère), identifier l'ensemble des exigences de sécurité que s'engagent à respecter les prestataires.</p><p>Cette mesure permet d'éclairer la sélection des prestataires en fonction des garanties de sécurité que ces derniers s'engagent à respecter.</p>",
       referentiel: Referentiel.ANSSI,
-      statut: 'fait',
+      statut: 'enCours',
       modalites: '',
       identifiantNumerique: '0006',
     },

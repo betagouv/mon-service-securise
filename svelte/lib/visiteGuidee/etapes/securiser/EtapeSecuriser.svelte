@@ -4,6 +4,7 @@
 
   let ciblePremiereMesure: HTMLDivElement;
   let cibleOnglets: HTMLDivElement;
+  let cibleTiroirMesure: HTMLDivElement;
   let cibleIndiceCyber: HTMLDivElement;
   onMount(() => {
     ciblePremiereMesure = document.getElementsByClassName(
@@ -12,13 +13,16 @@
     cibleOnglets = document.getElementsByClassName(
       'conteneur-onglet'
     )[0]! as HTMLDivElement;
+    cibleTiroirMesure = document.getElementsByClassName(
+      'tiroir'
+    )[0]! as HTMLDivElement;
     cibleIndiceCyber = document.getElementsByClassName(
       'conteneur-indice-cyber'
     )[0]! as HTMLDivElement;
   });
 </script>
 
-{#if ciblePremiereMesure && cibleOnglets && cibleIndiceCyber}
+{#if ciblePremiereMesure && cibleOnglets && cibleTiroirMesure && cibleIndiceCyber}
   <ModaleSousEtape
     sousEtapes={[
       {
@@ -26,6 +30,10 @@
         callbackInitialeCible: (cible) => {
           const ligneMesure = cible.parentElement;
           if (ligneMesure) ligneMesure.inert = true;
+          const onglets = document.querySelectorAll(
+            '.conteneur-onglet button.onglet'
+          );
+          onglets[0].dispatchEvent(new Event('click'));
         },
         delaiAvantAffichage: 200,
         positionnementModale: 'DeuxTiersCentre',
@@ -37,7 +45,8 @@
       {
         cible: cibleOnglets,
         callbackInitialeCible: (cible) => {
-          const onglets = cible.childNodes;
+          const onglets = cible.querySelectorAll('button.onglet');
+          onglets[1].dispatchEvent(new Event('click'));
           for (let i = 0; i < onglets.length; i++) {
             onglets[i].inert = true;
           }
@@ -47,6 +56,43 @@
         description:
           'En fonction du statut défini, les mesures sont catégorisées par onglets afin de faciliter le suivi de celles qui vous restent à faire.',
         animation: '/statique/assets/images/visiteGuidee/securiser_2.gif',
+      },
+      {
+        cible: cibleTiroirMesure,
+        callbackInitialeCible: () => {
+          document
+            .getElementsByClassName('ligne-de-mesure')[0]
+            .dispatchEvent(new Event('click'));
+          document.querySelector(
+            '#conteneur-mesure .conteneur-actions button'
+          ).disabled = true;
+          document.getElementsByClassName(
+            'fermeture-tiroir'
+          )[0].disabled = true;
+          const onglets = document.querySelectorAll(
+            '#conteneur-mesure .conteneur-onglet .onglet'
+          );
+          for (let i = 0; i < onglets.length; i++) {
+            onglets[i].inert = true;
+          }
+          setTimeout(() => {
+            const ongletPlanAction = document.querySelector(
+              '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(2)'
+            );
+            ongletPlanAction.dispatchEvent(new Event('click'));
+          }, 300);
+        },
+        delaiAvantAffichage: 300,
+        callbackFinaleCible: () => {
+          document
+            .getElementsByClassName('fermeture-tiroir')[0]
+            .dispatchEvent(new Event('click'));
+        },
+        positionnementModale: 'MilieuGauche',
+        titre: "Définissez votre plan d'action cyber !",
+        description:
+          'Fixez des priorités, des échéances, et attribuez les différentes mesures aux contributeurs du projet',
+        animation: '/statique/assets/images/visiteGuidee/securiser_3.gif',
       },
       {
         cible: cibleIndiceCyber,
