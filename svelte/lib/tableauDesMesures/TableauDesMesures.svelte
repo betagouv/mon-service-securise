@@ -137,6 +137,10 @@
 
   $: affichePlanAction =
     $rechercheParAvancement !== 'statutADefinir' && featureFlags.planAction();
+
+  if (modeVisiteGuidee) {
+    $rechercheParAvancement = 'enAction';
+  }
 </script>
 
 <svelte:body
