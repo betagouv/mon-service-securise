@@ -152,9 +152,9 @@ describe('Le dépôt de données des utilisateurs', () => {
       );
 
       const u = await adaptateurPersistance.utilisateur('123');
-      expect(u.prenom).to.equal('Jérôme');
-      expect(u.nom).to.equal('Dubois');
-      expect(u.chiffre).to.equal(true);
+      expect(u.donnees.prenom).to.equal('Jérôme');
+      expect(u.donnees.nom).to.equal('Dubois');
+      expect(u.donnees.chiffre).to.equal(true);
     });
 
     it("met le hash de l'email à jour", async () => {
@@ -260,10 +260,12 @@ describe('Le dépôt de données des utilisateurs', () => {
         utilisateurs: [
           {
             id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-            motDePasse: 'XXX',
+            donnees: {
+              prenom: 'Jean',
+              nom: 'Dupont',
+              email: 'jean.dupont@mail.fr',
+              motDePasse: 'XXX',
+            },
           },
         ],
       }
@@ -319,10 +321,12 @@ describe('Le dépôt de données des utilisateurs', () => {
         utilisateurs: [
           {
             id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-            motDePasse: 'XXX',
+            donnees: {
+              prenom: 'Jean',
+              nom: 'Dupont',
+              email: 'jean.dupont@mail.fr',
+              motDePasse: 'XXX',
+            },
           },
         ],
       }
@@ -340,7 +344,6 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
     expect(utilisateur.email).to.equal('dechiffre');
     expect(donneeDechiffree).to.eql({
-      id: '123',
       prenom: 'Jean',
       nom: 'Dupont',
       email: 'jean.dupont@mail.fr',
@@ -354,11 +357,13 @@ describe('Le dépôt de données des utilisateurs', () => {
         utilisateurs: [
           {
             id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
+            donnees: {
+              prenom: 'Jean',
+              nom: 'Dupont',
+              email: 'jean.dupont@mail.fr',
+              motDePasse: 'XXX',
+            },
             emailHash: 'jean.dupont@mail.fr-haché256',
-            motDePasse: 'XXX',
           },
         ],
       }
@@ -382,17 +387,21 @@ describe('Le dépôt de données des utilisateurs', () => {
         utilisateurs: [
           {
             id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-            motDePasse: 'XXX',
+            donnees: {
+              prenom: 'Jean',
+              nom: 'Dupont',
+              email: 'jean.dupont@mail.fr',
+              motDePasse: 'XXX',
+            },
           },
           {
             id: '456',
-            prenom: 'Murielle',
-            nom: 'Renard',
-            email: 'mr@mail.fr',
-            motDePasse: 'ZZZ',
+            donnees: {
+              prenom: 'Murielle',
+              nom: 'Renard',
+              email: 'mr@mail.fr',
+              motDePasse: 'ZZZ',
+            },
           },
         ],
       }
@@ -416,11 +425,13 @@ describe('Le dépôt de données des utilisateurs', () => {
         utilisateurs: [
           {
             id: '123',
-            prenom: 'Jean',
-            nom: 'Dupont',
-            email: 'jean.dupont@mail.fr',
-            motDePasse: 'XXX',
-            dateCreation: date,
+            donnees: {
+              prenom: 'Jean',
+              nom: 'Dupont',
+              email: 'jean.dupont@mail.fr',
+              motDePasse: 'XXX',
+              dateCreation: date,
+            },
           },
         ],
       }
@@ -535,12 +546,13 @@ describe('Le dépôt de données des utilisateurs', () => {
         const donneesSauvegardees = await adaptateurPersistance.utilisateur(
           utilisateur.id
         );
-        expect(donneesSauvegardees.chiffre).to.be(true);
+        expect(donneesSauvegardees.donnees.chiffre).to.be(true);
       });
 
       it('génère un UUID pour cet utilisateur', async () => {
         const utilisateur = await depot.nouvelUtilisateur(
           unUtilisateur()
+            .sansId()
             .quiSAppelle('Jean Dupont')
             .avecEmail('jean.dupont@mail.fr').donnees
         );
@@ -639,7 +651,9 @@ describe('Le dépôt de données des utilisateurs', () => {
             utilisateurs: [
               {
                 id: '123',
-                email: 'jean.dupont@mail.fr',
+                donnees: {
+                  email: 'jean.dupont@mail.fr',
+                },
                 emailHash: 'jean.dupont@mail.fr-haché256',
               },
             ],
@@ -669,8 +683,10 @@ describe('Le dépôt de données des utilisateurs', () => {
           utilisateurs: [
             {
               id: '123',
-              email: 'jean.dupont@mail.fr',
               idResetMotDePasse: '999',
+              donnees: {
+                email: 'jean.dupont@mail.fr',
+              },
             },
           ],
         });
@@ -729,7 +745,9 @@ describe('Le dépôt de données des utilisateurs', () => {
     it("lève une exception si l'utilisateur a créé des services", (done) => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+          utilisateurs: [
+            { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+          ],
           services: [
             { id: '123', descriptionService: { nomService: 'Un service' } },
           ],
@@ -781,8 +799,8 @@ describe('Le dépôt de données des utilisateurs', () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [
-            { id: '999', email: 'jean.dupont@mail.fr' },
-            { id: '000', email: 'un.autre.utilisateur@mail.fr' },
+            { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+            { id: '000', donnees: { email: 'un.autre.utilisateur@mail.fr' } },
           ],
           services: [
             { id: '123', descriptionService: { nomService: 'Un service' } },
@@ -813,7 +831,9 @@ describe('Le dépôt de données des utilisateurs', () => {
     it("supprime l'utilisateur", (done) => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+          utilisateurs: [
+            { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+          ],
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
@@ -877,7 +897,7 @@ describe('Le dépôt de données des utilisateurs', () => {
     it('ne jette aucune erreur si le mot de passe est correct', async () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '123', motDePasse: 'MDP-haché' }],
+          utilisateurs: [{ id: '123', donnees: { motDePasse: 'MDP-haché' } }],
         });
       const depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
