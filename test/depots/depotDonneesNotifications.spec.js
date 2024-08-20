@@ -12,6 +12,7 @@ const {
 } = require('../constructeurs/constructeurAutorisation');
 const { creeReferentielVide } = require('../../src/referentiel');
 const Service = require('../../src/modeles/service');
+const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 
 describe('Le dépôt de données des notifications', () => {
   let depotNotifications;
@@ -26,6 +27,9 @@ describe('Le dépôt de données des notifications', () => {
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
       adaptateurPersistance,
       referentiel,
+      depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+      }),
     });
     depotNotifications = creeDepot({
       adaptateurPersistance,

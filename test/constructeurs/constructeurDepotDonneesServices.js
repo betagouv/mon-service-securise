@@ -52,6 +52,11 @@ class ConstructeurDepotDonneesServices {
     return this;
   }
 
+  avecDepotDonneesUtilisateurs(depotUtilisateurs) {
+    this.depotDonneesUtilisateurs = depotUtilisateurs;
+    return this;
+  }
+
   construis() {
     const adaptateurPersistance =
       this.adaptateurPersistance ??
@@ -63,9 +68,11 @@ class ConstructeurDepotDonneesServices {
       adaptateurUUID: this.adaptateurUUID,
       adaptateurRechercheEntite: this.adaptateurRechercheEntite,
       busEvenements: this.busEvenements,
-      depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      }),
+      depotDonneesUtilisateurs:
+        this.depotDonneesUtilisateurs ??
+        DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       referentiel: this.referentiel,
     });
   }

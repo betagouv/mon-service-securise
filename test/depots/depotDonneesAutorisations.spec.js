@@ -37,8 +37,11 @@ describe('Le dépôt de données des autorisations', () => {
     adaptateurUUID,
     busEvenements,
     depotServices
-  ) =>
-    DepotDonneesAutorisations.creeDepot({
+  ) => {
+    const depotUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurPersistance,
+    });
+    return DepotDonneesAutorisations.creeDepot({
       adaptateurPersistance,
       adaptateurUUID,
       depotServices:
@@ -46,12 +49,12 @@ describe('Le dépôt de données des autorisations', () => {
         DepotDonneesServices.creeDepot({
           adaptateurChiffrement: fauxAdaptateurChiffrement(),
           adaptateurPersistance,
+          depotDonneesUtilisateurs: depotUtilisateurs,
         }),
-      depotUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-      }),
+      depotUtilisateurs,
       busEvenements: busEvenements ?? fabriqueBusPourLesTests(),
     });
+  };
 
   describe("sur demande de validation d'autorisation d'accès", () => {
     it("retourne `false` si aucune n'autorisation n'existe pour cet utilisateur et ce service", async () => {

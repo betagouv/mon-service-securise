@@ -58,6 +58,8 @@ const EvenementDossierHomologationFinalise = require('../../src/bus/evenementDos
 const EvenementServiceSupprime = require('../../src/bus/evenementServiceSupprime');
 const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
 const Entite = require('../../src/modeles/entite');
+const Utilisateur = require('../../src/modeles/utilisateur');
+const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -200,6 +202,36 @@ describe('Le dépôt de données des services', () => {
     expect(contributeurs.length).to.equal(2);
     expect(contributeurs[0].id).to.equal('U1');
     expect(contributeurs[1].id).to.equal('U2');
+  });
+
+  it("délègue au dépôt d'utilisateurs de déchiffrer les contributeurs", async () => {
+    const r = Referentiel.creeReferentielVide();
+    const persistance = unePersistanceMemoire()
+      .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+      .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+      .ajouteUnService(unService(r).avecId('S1').donnees)
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U1', 'S1').donnees
+      )
+      .ajouteUneAutorisation(
+        uneAutorisation().deContributeur('U2', 'S1').donnees
+      );
+    const unDepotUtilisateur = {
+      dechiffreUtilisateur: async (donneesUtilisateur) => {
+        donneesUtilisateur.nom = `${donneesUtilisateur.id}-déchiffré`;
+        return new Utilisateur(donneesUtilisateur);
+      },
+    };
+    const depot = unDepotDeDonneesServices()
+      .avecDepotDonneesUtilisateurs(unDepotUtilisateur)
+      .avecReferentiel(r)
+      .avecConstructeurDePersistance(persistance)
+      .construis();
+
+    const service = await depot.service('S1');
+
+    expect(service.contributeurs[0].nom).to.equal('U1-déchiffré');
+    expect(service.contributeurs[1].nom).to.equal('U2-déchiffré');
   });
 
   it('associe ses suggestions d’actions au service', async () => {
@@ -359,6 +391,9 @@ describe('Le dépôt de données des services', () => {
         adaptateurPersistance,
         adaptateurChiffrement,
         referentiel,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       });
       const description = uneDescriptionValide(referentiel)
         .deLOrganisation(new Entite({ siret: '12345' }))
@@ -854,6 +889,9 @@ describe('Le dépôt de données des services', () => {
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         busEvenements,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       });
     });
 
@@ -890,6 +928,9 @@ describe('Le dépôt de données des services', () => {
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         busEvenements,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       });
 
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
@@ -926,6 +967,9 @@ describe('Le dépôt de données des services', () => {
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         busEvenements,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       });
 
       await depot.supprimeHomologation('111');
@@ -1356,6 +1400,9 @@ describe('Le dépôt de données des services', () => {
         adaptateurChiffrement,
         adaptateurPersistance,
         referentiel,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       });
 
       depot
@@ -1384,6 +1431,9 @@ describe('Le dépôt de données des services', () => {
         adaptateurChiffrement,
         adaptateurPersistance,
         referentiel,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       });
 
       depot
@@ -1420,6 +1470,9 @@ describe('Le dépôt de données des services', () => {
         adaptateurChiffrement,
         adaptateurPersistance,
         referentiel,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       });
 
       depot
@@ -1448,6 +1501,9 @@ describe('Le dépôt de données des services', () => {
         adaptateurChiffrement,
         adaptateurPersistance,
         referentiel,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
       });
 
       depot
