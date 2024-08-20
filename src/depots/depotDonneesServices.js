@@ -456,6 +456,9 @@ const creeDepot = (config = {}) => {
     return p.sauvegarde(id, donnees);
   };
 
+  const rechercheContributeurs = async (idUtilisateur, recherche) =>
+    adaptateurPersistance.rechercheContributeurs(idUtilisateur, recherche);
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
@@ -471,6 +474,7 @@ const creeDepot = (config = {}) => {
     nouveauService,
     service,
     services,
+    rechercheContributeurs,
     remplaceRisquesSpecifiquesDuService,
     supprimeContributeur,
     supprimeHomologation,

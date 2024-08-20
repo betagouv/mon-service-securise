@@ -1735,4 +1735,93 @@ describe('Le dépôt de données des services', () => {
       expect(mesuresSpecifiques.toutes()[0].responsables).to.eql(['U2']);
     });
   });
+
+  describe('sur recherche dans les autres contributeurs de ses services', () => {
+    let depot;
+    let adaptateurPersistance;
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('moi').donnees)
+        .ajouteUnUtilisateur(
+          unUtilisateur()
+            .avecId('pasmoi')
+            .quiSAppelle('Pauline Doe')
+            .avecEmail('pauline.doe@mail.com').donnees
+        )
+        .ajouteUnService(unService().avecId('S1').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('moi', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('pasmoi', 'S1').donnees
+        )
+        .construis();
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance,
+        busEvenements,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance,
+        }),
+      });
+    });
+
+    it('renvoie tous les contributeurs autres que moi', async () => {
+      const contributeurs = await depot.rechercheContributeurs('moi', '');
+
+      expect(contributeurs.length).to.be(1);
+      expect(contributeurs[0].id).to.be('pasmoi');
+    });
+
+    it('filtre les contributeurs sur leur nom', async () => {
+      adaptateurPersistance.ajouteUtilisateur(
+        'U1',
+        unUtilisateur().avecId('U1').quiSAppelle('Jean Valjean').donnees
+      );
+      adaptateurPersistance.ajouteAutorisation(
+        'A1',
+        uneAutorisation().deContributeur('U1', 'S1').donnees
+      );
+
+      const contributeurs = await depot.rechercheContributeurs('moi', 'alj');
+
+      expect(contributeurs.length).to.be(1);
+      expect(contributeurs[0].id).to.be('U1');
+    });
+
+    it('filtre les contributeurs sur leur prénom', async () => {
+      adaptateurPersistance.ajouteUtilisateur(
+        'U1',
+        unUtilisateur().avecId('U1').quiSAppelle('Jean Valjean').donnees
+      );
+      adaptateurPersistance.ajouteAutorisation(
+        'A1',
+        uneAutorisation().deContributeur('U1', 'S1').donnees
+      );
+
+      const contributeurs = await depot.rechercheContributeurs('moi', 'Jean');
+
+      expect(contributeurs.length).to.be(1);
+      expect(contributeurs[0].id).to.be('U1');
+    });
+
+    it('filtre les contributeurs sur leur email', async () => {
+      adaptateurPersistance.ajouteUtilisateur(
+        'U1',
+        unUtilisateur().avecId('U1').avecEmail('jean.valjean@mail.fr').donnees
+      );
+      adaptateurPersistance.ajouteAutorisation(
+        'A1',
+        uneAutorisation().deContributeur('U1', 'S1').donnees
+      );
+
+      const contributeurs = await depot.rechercheContributeurs(
+        'moi',
+        'ean.val'
+      );
+
+      expect(contributeurs.length).to.be(1);
+      expect(contributeurs[0].id).to.be('U1');
+    });
+  });
 });

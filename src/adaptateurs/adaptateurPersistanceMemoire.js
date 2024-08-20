@@ -193,9 +193,9 @@ const nouvelAdaptateur = (
     const idServices = donnees.autorisations
       .filter((a) => a.idUtilisateur === idUtilisateur && a.estProprietaire)
       .map((a) => a.idService);
-    const idUniquesContributeurs = donnees.autorisations.filter(
-      (a) => idServices.includes(a.idService) && !a.estProprietaire
-    );
+    const idUniquesContributeurs = donnees.autorisations
+      .filter((a) => idServices.includes(a.idService) && !a.estProprietaire)
+      .map((a) => a.idUtilisateur);
     const tousContributeurs = donnees.utilisateurs.filter((u) =>
       idUniquesContributeurs.includes(u.id)
     );

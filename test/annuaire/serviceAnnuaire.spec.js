@@ -4,15 +4,15 @@ const { fabriqueAnnuaire } = require('../../src/annuaire/serviceAnnuaire');
 
 describe("Le service d'annuaire", () => {
   describe('sur demande de contributeurs', () => {
-    it('retourne des Utilisateurs du domaine', async () => {
-      const bouchonPersistance = {
+    it('délègue au dépôt de données la recherche de contributeurs', async () => {
+      const depotDonnees = {
         rechercheContributeurs: async () => [
           { id: '123', email: 'jean.dujardin@beta.gouv.fr' },
         ],
       };
 
       const annuaire = fabriqueAnnuaire({
-        adaptateurPersistance: bouchonPersistance,
+        depotDonnees,
       });
 
       const contributeurs = await annuaire.rechercheContributeurs('X', 'Y');
