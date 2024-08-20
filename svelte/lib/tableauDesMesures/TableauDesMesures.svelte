@@ -377,6 +377,7 @@
   .conteneur-onglet {
     display: flex;
     gap: 8px;
+    width: fit-content;
   }
 
   :global(#nouveaute-onglet-statuts-mesures p) {
