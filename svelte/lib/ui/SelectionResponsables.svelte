@@ -84,13 +84,18 @@
   }
 
   .bouton-declencheur {
-    background: var(--fond-gris-pale);
+    border: 1px solid var(--fond-gris-pale);
+    background: white;
     border-radius: 25px;
     padding: 3px 6px;
     display: flex;
     flex-direction: row;
     gap: 8px;
     align-items: center;
+  }
+
+  .bouton-declencheur:not(.estLectureSeule):hover {
+    background: var(--fond-gris-pale);
   }
 
   .bouton-declencheur span {
