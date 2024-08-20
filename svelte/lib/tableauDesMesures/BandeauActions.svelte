@@ -36,6 +36,10 @@
 </tr>
 
 <style>
+  tr {
+    border: 1px solid var(--liseres-fonce);
+  }
+
   .enregistrement-en-cours {
     font-size: 1.1em;
     font-weight: 500;
@@ -94,11 +98,6 @@
     align-items: center;
     gap: 4px;
     padding: 18px 16px;
-    border: 1px solid var(--liseres-fonce);
-    border-radius: 0 4px 0 0;
-    transform: translateY(1px);
-    margin-left: -0.5px;
-    margin-right: -0.5px;
   }
 
   .actions p {

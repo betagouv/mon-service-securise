@@ -382,8 +382,7 @@
   }
 
   .ligne-onglet {
-    transform: translateY(2px) translateX(-0.5px);
-    position: relative;
+    transform: translateY(1px) translateX(-0.5px);
   }
 
   .conteneur-onglet {
