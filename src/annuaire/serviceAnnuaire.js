@@ -1,13 +1,10 @@
 const Utilisateur = require('../modeles/utilisateur');
 
-const fabriqueAnnuaire = ({
-  adaptateurRechercheEntreprise,
-  adaptateurPersistance,
-}) => ({
+const fabriqueAnnuaire = ({ adaptateurRechercheEntreprise, depotDonnees }) => ({
   rechercheOrganisations: async (terme, departement) =>
     adaptateurRechercheEntreprise.rechercheOrganisations(terme, departement),
   rechercheContributeurs: async (idUtilisateur, recherche) => {
-    const contributeurs = await adaptateurPersistance.rechercheContributeurs(
+    const contributeurs = await depotDonnees.rechercheContributeurs(
       idUtilisateur,
       recherche
     );
