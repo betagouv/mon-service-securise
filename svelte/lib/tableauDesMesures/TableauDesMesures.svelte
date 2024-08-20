@@ -9,6 +9,7 @@
   import {
     enregistreMesureGenerale,
     enregistreMesuresSpecifiques,
+    recupereAutorisations,
     recupereContributeurs,
     recupereMesures,
   } from './tableauDesMesures.api';
@@ -56,12 +57,15 @@
   };
 
   const rafraichisContributeurs = async () => {
-    contributeurs.reinitialise(await recupereContributeurs(idService));
+    contributeurs.reinitialise(
+      modeVisiteGuidee ? [] : await recupereContributeurs(idService)
+    );
   };
 
   const rafraichisAutorisations = async () => {
-    const reponse = await axios.get(`/api/service/${idService}/autorisations`);
-    storeAutorisations.charge(reponse.data);
+    storeAutorisations.charge(
+      modeVisiteGuidee ? [] : await recupereAutorisations(idService)
+    );
   };
 
   onMount(async () => {
