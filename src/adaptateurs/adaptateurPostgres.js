@@ -294,8 +294,8 @@ const nouvelAdaptateur = (env) => {
     else await metsAJourTable('parcours_utilisateurs', id, donnees);
   };
 
-  const rechercheContributeurs = async (idUtilisateur, recherche) => {
-    const tousContributeurs = await knex.raw(
+  const contributeursDesServicesDe = async (idProprietaire) => {
+    const contributeurs = await knex.raw(
       `
                     WITH mes_services
                              AS (SELECT donnees ->>'idService' AS ids_services
@@ -311,26 +311,9 @@ const nouvelAdaptateur = (env) => {
                     WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services)
                       AND a.donnees->>'idUtilisateur' != ?
                 `,
-      [idUtilisateur, idUtilisateur]
+      [idProprietaire, idProprietaire]
     );
-
-    const normalise = (texte) =>
-      texte
-        ?.toLowerCase()
-        // Permet de supprimer les accents : https://stackoverflow.com/a/51874002
-        .normalize('NFD')
-        .replace(/\p{Diacritic}/gu, '');
-
-    const rechercheNormalisee = normalise(recherche);
-
-    return tousContributeurs.rows
-      .map(convertisLigneEnObjet)
-      .filter(
-        (contributeur) =>
-          normalise(contributeur.email).includes(rechercheNormalisee) ||
-          normalise(contributeur.prenom)?.includes(rechercheNormalisee) ||
-          normalise(contributeur.nom)?.includes(rechercheNormalisee)
-      );
+    return contributeurs.rows.map(convertisLigneEnObjet);
   };
 
   const lisNotificationsExpirationHomologationDansIntervalle = async (
@@ -470,7 +453,7 @@ const nouvelAdaptateur = (env) => {
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,
-    rechercheContributeurs,
+    contributeursDesServicesDe,
     sauvegardeService,
     serviceDeprecated,
     sauvegardeAutorisation,

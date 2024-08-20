@@ -189,23 +189,17 @@ const nouvelAdaptateur = (
     else Object.assign(dejaConnu, { ...donneesParcoursUtilisateur });
   };
 
-  const rechercheContributeurs = async (idUtilisateur, recherche) => {
+  const contributeursDesServicesDe = async (idProprietaire) => {
     const idServices = donnees.autorisations
-      .filter((a) => a.idUtilisateur === idUtilisateur && a.estProprietaire)
+      .filter((a) => a.idUtilisateur === idProprietaire && a.estProprietaire)
       .map((a) => a.idService);
+
     const idUniquesContributeurs = donnees.autorisations
       .filter((a) => idServices.includes(a.idService) && !a.estProprietaire)
       .map((a) => a.idUtilisateur);
-    const tousContributeurs = donnees.utilisateurs.filter((u) =>
-      idUniquesContributeurs.includes(u.id)
-    );
 
-    const rechercheMinuscule = recherche.toLowerCase();
-    return tousContributeurs.filter(
-      (c) =>
-        c.email.toLowerCase().includes(rechercheMinuscule) ||
-        c.prenom?.toLowerCase().includes(rechercheMinuscule) ||
-        c.nom?.toLowerCase().includes(rechercheMinuscule)
+    return donnees.utilisateurs.filter((u) =>
+      idUniquesContributeurs.includes(u.id)
     );
   };
 
@@ -290,7 +284,7 @@ const nouvelAdaptateur = (
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,
-    rechercheContributeurs,
+    contributeursDesServicesDe,
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
