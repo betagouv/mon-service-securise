@@ -456,8 +456,29 @@ const creeDepot = (config = {}) => {
     return p.sauvegarde(id, donnees);
   };
 
-  const rechercheContributeurs = async (idUtilisateur, recherche) =>
-    adaptateurPersistance.rechercheContributeurs(idUtilisateur, recherche);
+  const rechercheContributeurs = async (idProprietaire, recherche) => {
+    const tousContributeurs =
+      await adaptateurPersistance.contributeursDesServicesDe(
+        idProprietaire,
+        recherche
+      );
+
+    const normalise = (texte) =>
+      texte
+        ?.toLowerCase()
+        // Permet de supprimer les accents : https://stackoverflow.com/a/51874002
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '');
+
+    const rechercheNormalisee = normalise(recherche);
+
+    return tousContributeurs.filter(
+      (contributeur) =>
+        normalise(contributeur.email).includes(rechercheNormalisee) ||
+        normalise(contributeur.prenom)?.includes(rechercheNormalisee) ||
+        normalise(contributeur.nom)?.includes(rechercheNormalisee)
+    );
+  };
 
   return {
     ajouteDescriptionService,
