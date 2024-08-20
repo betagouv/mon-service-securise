@@ -69,12 +69,19 @@ const nouvelAdaptateur = (env) => {
   const arreteTout = () => knex.destroy();
 
   const service = async (id) => {
-    const requeteHomologation = knex('services')
+    const s = await knex('services')
       .where('id', id)
       .select({ id: 'id', donnees: 'donnees' })
       .first();
 
-    const requeteContributeurs = knex('autorisations as a')
+    return {
+      id: s.id,
+      ...s.donnees,
+    };
+  };
+
+  const contributeursService = async (id) => {
+    const contributeurs = await knex('autorisations as a')
       .join(
         'utilisateurs as u',
         knex.raw("(a.donnees->>'idUtilisateur')::uuid"),
@@ -86,28 +93,17 @@ const nouvelAdaptateur = (env) => {
         dateCreation: 'u.date_creation',
         donnees: 'u.donnees',
       });
+    return contributeurs.map((c) => ({
+      id: c.id,
+      dateCreation: c.dateCreation,
+      ...c.donnees,
+    }));
+  };
 
-    const requeteSuggestionsActions = knex('suggestions_actions')
+  const suggestionsActionsService = async (id) =>
+    knex('suggestions_actions')
       .where({ id_service: id, date_acquittement: null })
       .select({ nature: 'nature' });
-
-    const [h, contributeurs, suggestions] = await Promise.all([
-      requeteHomologation,
-      requeteContributeurs,
-      requeteSuggestionsActions,
-    ]);
-
-    return {
-      id: h.id,
-      ...h.donnees,
-      contributeurs: contributeurs.map((c) => ({
-        id: c.id,
-        dateCreation: c.dateCreation,
-        ...c.donnees,
-      })),
-      suggestionsActions: suggestions,
-    };
-  };
 
   const serviceDeprecated = (id) => elementDeTable('services', id);
 
@@ -461,6 +457,7 @@ const nouvelAdaptateur = (env) => {
     autorisationPour,
     autorisations,
     autorisationsDuService,
+    contributeursService,
     service,
     serviceAvecHashNom,
     services,
@@ -479,6 +476,7 @@ const nouvelAdaptateur = (env) => {
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
+    suggestionsActionsService,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
