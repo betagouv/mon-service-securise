@@ -132,6 +132,7 @@
     font-size: 18px;
     line-height: 20px;
     padding-top: 0;
+    padding-bottom: 6px;
   }
 
   select.avecLibelleOption.vide {
