@@ -23,12 +23,14 @@ describe('Le dépôt de données des notifications', () => {
     referentiel = creeReferentielVide();
 
     adaptateurPersistance = unePersistanceMemoire().construis();
+    const adaptateurChiffrement = fauxAdaptateurChiffrement();
     const depotServices = DepotDonneesServices.creeDepot({
-      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      adaptateurChiffrement,
       adaptateurPersistance,
       referentiel,
       depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
+        adaptateurChiffrement,
       }),
     });
     depotNotifications = creeDepot({

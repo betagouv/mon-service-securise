@@ -218,8 +218,11 @@ describe('Le dépôt de données des services', () => {
       );
     const unDepotUtilisateur = {
       dechiffreUtilisateur: async (donneesUtilisateur) => {
-        donneesUtilisateur.nom = `${donneesUtilisateur.id}-déchiffré`;
-        return new Utilisateur(donneesUtilisateur);
+        donneesUtilisateur.donnees.nom = `${donneesUtilisateur.id}-déchiffré`;
+        return new Utilisateur({
+          id: donneesUtilisateur.id,
+          ...donneesUtilisateur.donnees,
+        });
       },
     };
     const depot = unDepotDeDonneesServices()
@@ -392,6 +395,7 @@ describe('Le dépôt de données des services', () => {
         referentiel,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement,
         }),
       });
       const description = uneDescriptionValide(referentiel)
@@ -871,13 +875,16 @@ describe('Le dépôt de données des services', () => {
     let adaptateurPersistance;
     let depot;
 
+    const adaptateurChiffrement = fauxAdaptateurChiffrement();
     beforeEach(() => {
       const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
       };
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+        utilisateurs: [
+          { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+        ],
         services: [donneesService],
         autorisations: [
           uneAutorisation().avecId('456').deProprietaire('999', '123').donnees,
@@ -885,11 +892,12 @@ describe('Le dépôt de données des services', () => {
       });
 
       depot = DepotDonneesServices.creeDepot({
-        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurChiffrement,
         adaptateurPersistance,
         busEvenements,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement,
         }),
       });
     });
@@ -910,8 +918,8 @@ describe('Le dépôt de données des services', () => {
     it('supprime les autorisations associées', (done) => {
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
-          { id: '999', email: 'jean.dupont@mail.fr' },
-          { id: '000', email: 'contributeur@mail.fr' },
+          { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+          { id: '000', donnees: { email: 'contributeur@mail.fr' } },
         ],
         services: [
           { id: '111', descriptionService: { nomService: 'Un service' } },
@@ -924,11 +932,12 @@ describe('Le dépôt de données des services', () => {
         ],
       });
       depot = DepotDonneesServices.creeDepot({
-        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurChiffrement,
         adaptateurPersistance,
         busEvenements,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement,
         }),
       });
 
@@ -951,8 +960,8 @@ describe('Le dépôt de données des services', () => {
     it("publie sur le bus d'événements le service supprimé", async () => {
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
-          { id: '999', email: 'jean.dupont@mail.fr' },
-          { id: '000', email: 'contributeur@mail.fr' },
+          { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+          { id: '000', donnees: { email: 'contributeur@mail.fr' } },
         ],
         services: [
           { id: '111', descriptionService: { nomService: 'Un service' } },
@@ -963,11 +972,12 @@ describe('Le dépôt de données des services', () => {
         ],
       });
       depot = DepotDonneesServices.creeDepot({
-        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurChiffrement,
         adaptateurPersistance,
         busEvenements,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement,
         }),
       });
 
@@ -1388,7 +1398,9 @@ describe('Le dépôt de données des services', () => {
         .toJSON();
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+          utilisateurs: [
+            { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+          ],
           services: [{ id: '123', descriptionService }],
           autorisations: [
             uneAutorisation().deProprietaire('999', '123').donnees,
@@ -1401,6 +1413,7 @@ describe('Le dépôt de données des services', () => {
         referentiel,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement,
         }),
       });
 
@@ -1419,7 +1432,9 @@ describe('Le dépôt de données des services', () => {
         .toJSON();
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+          utilisateurs: [
+            { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+          ],
           services: [{ id: '123', descriptionService: copie1 }],
           autorisations: [
             uneAutorisation().deProprietaire('999', '123').donnees,
@@ -1432,6 +1447,7 @@ describe('Le dépôt de données des services', () => {
         referentiel,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement,
         }),
       });
 
@@ -1454,7 +1470,9 @@ describe('Le dépôt de données des services', () => {
         .toJSON();
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+          utilisateurs: [
+            { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+          ],
           services: [
             { id: '123', descriptionService: original },
             { id: '456', descriptionService: duplication },
@@ -1471,6 +1489,7 @@ describe('Le dépôt de données des services', () => {
         referentiel,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement,
         }),
       });
 
@@ -1489,7 +1508,9 @@ describe('Le dépôt de données des services', () => {
         .toJSON();
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '999', email: 'jean.dupont@mail.fr' }],
+          utilisateurs: [
+            { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
+          ],
           services: [{ id: '123', descriptionService: original }],
           autorisations: [
             uneAutorisation().deProprietaire('999', '123').donnees,
@@ -1502,6 +1523,7 @@ describe('Le dépôt de données des services', () => {
         referentiel,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
           adaptateurPersistance,
+          adaptateurChiffrement,
         }),
       });
 

@@ -32,6 +32,7 @@ function fabriquePersistance({
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
   const dechiffreDonneesUtilisateur = async (donneesUtilisateur) => {
+    if (!donneesUtilisateur) return undefined;
     const donneesEnClair = await dechiffre.donneesUtilisateur(
       donneesUtilisateur.donnees
     );
@@ -43,12 +44,15 @@ function fabriquePersistance({
   };
 
   const dechiffreUtilisateur = async (donneesUtilisateur) => {
+    if (!donneesUtilisateur) return undefined;
     const donneesDechiffrees =
       await dechiffreDonneesUtilisateur(donneesUtilisateur);
     return new Utilisateur(donneesDechiffrees, { adaptateurJWT });
   };
 
   return {
+    dechiffreUtilisateur: async (donneesUtilisateur) =>
+      dechiffreUtilisateur(donneesUtilisateur),
     lis: {
       donnees: {
         de: async (idUtilisateur) => {
@@ -65,18 +69,18 @@ function fabriquePersistance({
       },
       un: async (idUtilisateur) => {
         const donnees = await adaptateurPersistance.utilisateur(idUtilisateur);
-        return donnees ? dechiffreUtilisateur(donnees) : undefined;
+        return dechiffreUtilisateur(donnees);
       },
       celuiAvecEmail: async (email) => {
         const emailHash = adaptateurChiffrement.hacheSha256(email);
         const donnees =
           await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
-        return donnees ? dechiffreUtilisateur(donnees) : undefined;
+        return dechiffreUtilisateur(donnees);
       },
       celuiAvecIdReset: async (idReset) => {
         const donnees =
           await adaptateurPersistance.utilisateurAvecIdReset(idReset);
-        return donnees ? dechiffreUtilisateur(donnees) : undefined;
+        return dechiffreUtilisateur(donnees);
       },
       nbAutorisationsProprietaire: async (idUtilisateur) =>
         adaptateurPersistance.nbAutorisationsProprietaire(idUtilisateur),
@@ -154,7 +158,7 @@ const creeDepot = (config = {}) => {
   });
 
   const dechiffreUtilisateur = async (donneesUtilisateur) =>
-    new Utilisateur(donneesUtilisateur);
+    p.dechiffreUtilisateur(donneesUtilisateur);
 
   const utilisateur = async (identifiant) => p.lis.un(identifiant);
 
