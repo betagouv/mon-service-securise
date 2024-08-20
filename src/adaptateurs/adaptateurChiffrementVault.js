@@ -25,8 +25,7 @@ const chiffre = async (chaineOuObjet) => {
       },
     }
   );
-
-  return reponse.data.data.ciphertext;
+  return JSON.stringify(reponse.data.data.ciphertext);
 };
 
 const dechiffre = async (chaineChiffree) => {
