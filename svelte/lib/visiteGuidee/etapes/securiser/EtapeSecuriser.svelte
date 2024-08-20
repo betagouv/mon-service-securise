@@ -35,7 +35,7 @@
           if (ligneMesure) ligneMesure.inert = true;
         },
         delaiAvantAffichage: 200,
-        positionnementModale: 'MilieuDroite',
+        positionnementModale: 'BasDroite',
         titre: 'Sécurisez, grâce à des mesures adaptées',
         description:
           'Chaque mesure est associée à son référentiel (ANSSI, CNIL) et son niveau d’importance (recommandée ou indispensable pour les mesures ANSSI).',
@@ -49,7 +49,7 @@
             onglets[i].inert = true;
           }
         },
-        positionnementModale: 'HautDroite',
+        positionnementModale: 'MilieuDroite',
         titre: 'Définissez un statut pour chaque mesure !',
         description:
           'En fonction du statut défini, les mesures sont catégorisées par onglets afin de faciliter le suivi de celles qui vous restent à faire.',
@@ -96,7 +96,7 @@
         cible: cibleIndiceCyber,
         callbackInitialeCible: (cible) => cible.removeAttribute('href'),
         margeElementMisEnAvant: 3,
-        positionnementModale: 'HautGauche',
+        positionnementModale: 'MilieuGauche',
         titre: "Améliorez l'indice cyber de votre service",
         description:
           'Mettez en œuvre les mesures proposées et obtenez une évaluation indicative du niveau de sécurisation de votre service.',
