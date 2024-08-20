@@ -27,6 +27,15 @@ const nouvelAdaptateur = (env) => {
     return Object.assign(donnees, { id, ...autresProprietes });
   };
 
+  const convertisLigneEnObjetSansMiseAPlatDonnees = (ligne) => {
+    const { id, donnees, ...autresColonnes } = ligne;
+    const autresProprietes = Object.keys(autresColonnes).reduce(
+      (acc, clef) => ({ ...acc, [nomPropriete(clef)]: autresColonnes[clef] }),
+      {}
+    );
+    return { id, donnees, ...autresProprietes };
+  };
+
   const metsAJourTable = (nomTable, id, donneesAMettreAJour) =>
     knex(nomTable)
       .where({ id })
@@ -46,11 +55,22 @@ const nouvelAdaptateur = (env) => {
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
 
-  const elementDeTableAvecValeurColonne = (nomTable, nomColonne, valeur) =>
+  const elementDeTableSansMiseAPlatDonnees = (nomTable, id) =>
+    knex(nomTable)
+      .where({ id })
+      .first()
+      .then(convertisLigneEnObjetSansMiseAPlatDonnees)
+      .catch(() => undefined);
+
+  const elementDeTableAvecValeurColonneSansMiseAPlatDonnees = (
+    nomTable,
+    nomColonne,
+    valeur
+  ) =>
     knex(nomTable)
       .where({ [nomColonne]: valeur })
       .first()
-      .then(convertisLigneEnObjet)
+      .then(convertisLigneEnObjetSansMiseAPlatDonnees)
       .catch(() => undefined);
 
   const supprimeEnregistrement = (nomTable, id) =>
@@ -188,16 +208,27 @@ const nouvelAdaptateur = (env) => {
 
   const supprimeUtilisateurs = () => knex('utilisateurs').del();
 
-  const utilisateur = (id) => elementDeTable('utilisateurs', id);
+  const utilisateur = (id) =>
+    elementDeTableSansMiseAPlatDonnees('utilisateurs', id);
 
   const utilisateurAvecEmailHash = (emailHash) =>
-    elementDeTableAvecValeurColonne('utilisateurs', 'email_hash', emailHash);
+    elementDeTableAvecValeurColonneSansMiseAPlatDonnees(
+      'utilisateurs',
+      'email_hash',
+      emailHash
+    );
 
   const utilisateurAvecIdReset = (idReset) =>
-    elementDeTableAvecValeurColonne('utilisateurs', 'id_reset_mdp', idReset);
+    elementDeTableAvecValeurColonneSansMiseAPlatDonnees(
+      'utilisateurs',
+      'id_reset_mdp',
+      idReset
+    );
 
   const tousUtilisateurs = () =>
-    knex('utilisateurs').then((tous) => tous.map(convertisLigneEnObjet));
+    knex('utilisateurs').then((tous) =>
+      tous.map(convertisLigneEnObjetSansMiseAPlatDonnees())
+    );
 
   const autorisation = (id) => elementDeTable('autorisations', id);
 
