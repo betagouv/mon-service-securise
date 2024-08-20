@@ -48,6 +48,11 @@ export const recupereContributeurs = async (idService: IdService) => {
   return reponse.data.contributeurs as Contributeur[];
 };
 
+export const recupereAutorisations = async (idService: IdService) => {
+  const reponse = await axios.get(`/api/service/${idService}/autorisations`);
+  return reponse.data;
+};
+
 export const metEnFormeMesures = (mesures: Mesures) => {
   type MesureGeneraleApi = {
     statut: string;
