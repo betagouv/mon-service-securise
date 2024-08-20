@@ -119,6 +119,8 @@
 
   button[disabled] {
     color: var(--liseres-fonce);
+    background: var(--fond-gris-pale);
+    border: none;
     cursor: not-allowed;
   }
 

@@ -94,6 +94,12 @@
     align-items: center;
   }
 
+  .bouton-declencheur.estLectureSeule {
+    color: var(--liseres-fonce);
+    background: var(--fond-gris-pale);
+    border: none;
+  }
+
   .bouton-declencheur:not(.estLectureSeule):hover {
     background: var(--fond-gris-pale);
   }
