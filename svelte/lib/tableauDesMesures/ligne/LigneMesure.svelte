@@ -44,8 +44,9 @@
   );
 </script>
 
-<tr class="ligne-de-mesure" on:click>
-  <td class="titre-mesure">
+<tr class="ligne-de-mesure">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <td class="titre-mesure" on:click>
     <p class="titre">
       {@html texteSurligne}
     </p>
@@ -101,12 +102,11 @@
 
 <style>
   .ligne-de-mesure {
-    cursor: pointer;
     position: relative;
     border: 1px solid var(--liseres-fonce);
   }
 
-  .ligne-de-mesure:hover {
+  .ligne-de-mesure:has(.titre-mesure:hover) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
   }
 
@@ -123,6 +123,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+    cursor: pointer;
+  }
+
+  .titre-mesure:hover .titre {
+    color: var(--bleu-mise-en-avant);
   }
 
   .titre-mesure p {

@@ -29,7 +29,7 @@
     $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit;
 </script>
 
-<MenuFlottant bind:menuOuvert {estLectureSeule} stopPropagation>
+<MenuFlottant bind:menuOuvert {estLectureSeule}>
   <div slot="declencheur" class="bouton-declencheur" class:estLectureSeule>
     <div class="conteneur-image">
       <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
