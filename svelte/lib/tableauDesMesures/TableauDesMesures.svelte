@@ -168,7 +168,7 @@
   </div>
   <MenuFiltres {categories} {priorites} />
 </div>
-{#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures')}
+{#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures') && !modeVisiteGuidee}
   <Avertissement
     id="nouveaute-onglet-statuts-mesures"
     niveau="info"
