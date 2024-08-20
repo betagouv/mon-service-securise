@@ -1,5 +1,6 @@
-import type { Mesures } from '../tableauDesMesures.d';
+import type { Contributeur, Mesures } from '../tableauDesMesures.d';
 import { Referentiel } from '../../ui/types.d';
+import type { Autorisation } from '../../gestionContributeurs/gestionContributeurs.d';
 
 export const mesuresVisiteGuidee: Mesures = {
   mesuresGenerales: {
@@ -14,6 +15,7 @@ export const mesuresVisiteGuidee: Mesures = {
       statut: 'enCours',
       modalites: '',
       identifiantNumerique: '0006',
+      responsables: ['U2'],
     },
     registreTraitements: {
       description: 'Remplir le registre des traitements et le tenir à jour',
@@ -52,3 +54,47 @@ export const mesuresVisiteGuidee: Mesures = {
   },
   mesuresSpecifiques: [],
 };
+
+export const contributeursVisiteGuidee: Contributeur[] = [
+  {
+    prenomNom: 'Manuel Gargan',
+    poste: '',
+    id: 'U1',
+    initiales: 'MG',
+    estUtilisateurCourant: false,
+  },
+  {
+    prenomNom: 'Amélie Leroy',
+    poste: '',
+    id: 'U2',
+    initiales: 'AL',
+    estUtilisateurCourant: false,
+  },
+];
+
+export const autorisationsVisiteGuidee: Autorisation[] = [
+  {
+    idAutorisation: 'A1',
+    idUtilisateur: 'U1',
+    droits: {
+      CONTACTS: 0,
+      RISQUES: 0,
+      SECURISER: 0,
+      HOMOLOGUER: 0,
+      DECRIRE: 0,
+    },
+    resumeNiveauDroit: 'PROPRIETAIRE',
+  },
+  {
+    idAutorisation: 'A2',
+    idUtilisateur: 'U2',
+    droits: {
+      CONTACTS: 0,
+      RISQUES: 0,
+      SECURISER: 0,
+      HOMOLOGUER: 0,
+      DECRIRE: 0,
+    },
+    resumeNiveauDroit: 'LECTURE',
+  },
+];
