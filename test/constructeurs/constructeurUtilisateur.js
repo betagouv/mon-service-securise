@@ -34,6 +34,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  sansId() {
+    delete this.donnees.id;
+    return this;
+  }
+
   avecId(idUtilisateur) {
     this.donnees.id = idUtilisateur;
     return this;

@@ -27,7 +27,8 @@ class ConstructeurAdaptateurPersistanceMemoire {
   }
 
   ajouteUnUtilisateur(utilisateur) {
-    this.utilisateurs.push(utilisateur);
+    const { id, emailHash, idResetMotDePasse, ...donnees } = utilisateur;
+    this.utilisateurs.push({ id, donnees, emailHash, idResetMotDePasse });
     return this;
   }
 

@@ -31,13 +31,21 @@ function fabriquePersistance({
 }) {
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
-  const dechiffreDonneesUtilisateur = async (donneesUtilisateur) =>
-    dechiffre.donneesUtilisateur(donneesUtilisateur);
+  const dechiffreDonneesUtilisateur = async (donneesUtilisateur) => {
+    const donneesEnClair = await dechiffre.donneesUtilisateur(
+      donneesUtilisateur.donnees
+    );
+    return {
+      ...donneesEnClair,
+      id: donneesUtilisateur.id,
+      idResetMotDePasse: donneesUtilisateur.idResetMotDePasse,
+    };
+  };
 
   const dechiffreUtilisateur = async (donneesUtilisateur) => {
-    const donneesEnClair =
+    const donneesDechiffrees =
       await dechiffreDonneesUtilisateur(donneesUtilisateur);
-    return new Utilisateur(donneesEnClair, { adaptateurJWT });
+    return new Utilisateur(donneesDechiffrees, { adaptateurJWT });
   };
 
   return {

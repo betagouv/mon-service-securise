@@ -21,13 +21,12 @@ const nouvelAdaptateur = (
   };
 
   const ajouteUtilisateur = async (id, donneesUtilisateur, emailHash) => {
-    donnees.utilisateurs.push(
-      Object.assign(donneesUtilisateur, {
-        id,
-        dateCreation: adaptateurHorloge.maintenant(),
-        emailHash,
-      })
-    );
+    donnees.utilisateurs.push({
+      id,
+      donnees: donneesUtilisateur,
+      dateCreation: adaptateurHorloge.maintenant(),
+      emailHash,
+    });
   };
 
   const autorisations = async (idUtilisateur) => {
@@ -119,11 +118,13 @@ const nouvelAdaptateur = (
     Object.assign(u, { idResetMotDePasse });
   };
 
-  const metsAJourUtilisateur = (id, donneesAMettreAJour, emailHash) =>
-    utilisateur(id)
-      .then((e) => Object.assign(e, donneesAMettreAJour))
-      .then((e) => emailHash && Object.assign(e, { emailHash }))
-      .then(() => {});
+  const metsAJourUtilisateur = async (id, donneesAMettreAJour, emailHash) => {
+    const u = await utilisateur(id);
+    Object.assign(u.donnees, donneesAMettreAJour);
+    if (emailHash) {
+      u.emailHash = emailHash;
+    }
+  };
 
   const utilisateurAvecEmailHash = async (emailHash) =>
     donnees.utilisateurs.find((u) => u.emailHash === emailHash);
