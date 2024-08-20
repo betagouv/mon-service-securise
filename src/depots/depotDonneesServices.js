@@ -46,7 +46,8 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
 const fabriquePersistance = (
   adaptateurPersistance,
   adaptateurChiffrement,
-  referentiel
+  referentiel,
+  depotDonneesUtilisateurs
 ) => {
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
@@ -56,8 +57,12 @@ const fabriquePersistance = (
   };
 
   const enrichisService = async (service) => {
-    service.contributeurs = await adaptateurPersistance.contributeursService(
-      service.id
+    const donneesContributeurs =
+      await adaptateurPersistance.contributeursService(service.id);
+    service.contributeurs = await Promise.all(
+      donneesContributeurs.map((d) =>
+        depotDonneesUtilisateurs.dechiffreUtilisateur(d)
+      )
     );
     service.suggestionsActions =
       await adaptateurPersistance.suggestionsActionsService(service.id);
@@ -142,7 +147,8 @@ const creeDepot = (config = {}) => {
   const p = fabriquePersistance(
     adaptateurPersistance,
     adaptateurChiffrement,
-    referentiel
+    referentiel,
+    depotDonneesUtilisateurs
   );
 
   const service = (idService) => p.lis.un(idService);

@@ -103,6 +103,9 @@ const creeDepot = (config = {}) => {
     adaptateurChiffrement,
   });
 
+  const dechiffreUtilisateur = async (donneesUtilisateur) =>
+    new Utilisateur(donneesUtilisateur);
+
   const utilisateur = async (identifiant) => p.lis.un(identifiant);
 
   const nouvelUtilisateur = async (donneesUtilisateur) => {
@@ -257,6 +260,7 @@ const creeDepot = (config = {}) => {
   };
 
   return {
+    dechiffreUtilisateur,
     metsAJourMotDePasse,
     metsAJourUtilisateur,
     nouvelUtilisateur,
