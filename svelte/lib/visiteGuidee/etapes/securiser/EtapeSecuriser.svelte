@@ -2,11 +2,11 @@
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount } from 'svelte';
 
-  let cibleTiroirMesure: HTMLDivElement;
+  let ciblePremiereMesure: HTMLDivElement;
   let cibleIndiceCyber: HTMLDivElement;
   onMount(() => {
-    cibleTiroirMesure = document.getElementsByClassName(
-      'tiroir'
+    ciblePremiereMesure = document.getElementsByClassName(
+      'titre-mesure'
     )[0]! as HTMLDivElement;
     cibleIndiceCyber = document.getElementsByClassName(
       'conteneur-indice-cyber'
@@ -14,33 +14,21 @@
   });
 </script>
 
-{#if cibleTiroirMesure && cibleIndiceCyber}
+{#if ciblePremiereMesure && cibleIndiceCyber}
   <ModaleSousEtape
     sousEtapes={[
       {
-        cible: cibleTiroirMesure,
-        callbackInitialeCible: () => {
-          document
-            .getElementsByClassName('ligne-de-mesure')[0]
-            .dispatchEvent(new Event('click'));
-          document.querySelector(
-            '#conteneur-mesure .conteneur-actions button'
-          ).disabled = true;
-          document.getElementsByClassName(
-            'fermeture-tiroir'
-          )[0].disabled = true;
+        cible: ciblePremiereMesure,
+        callbackInitialeCible: (cible) => {
+          const ligneMesure = cible.parentElement;
+          if (ligneMesure) ligneMesure.inert = true;
         },
-        delaiAvantAffichage: 300,
-        callbackFinaleCible: () => {
-          document
-            .getElementsByClassName('fermeture-tiroir')[0]
-            .dispatchEvent(new Event('click'));
-        },
-        positionnementModale: 'MilieuGauche',
-        titre: 'Sécurisez grâce à des mesures adaptées',
+        delaiAvantAffichage: 200,
+        positionnementModale: 'DeuxTiersCentre',
+        titre: 'Sécurisez, grâce à des mesures adaptées',
         description:
           'Chaque mesure est associée à son référentiel (ANSSI, CNIL) et son niveau d’importance (recommandée ou indispensable pour les mesures ANSSI).',
-        animation: '/statique/assets/images/visiteGuidee/securiser.gif',
+        animation: '/statique/assets/images/visiteGuidee/securiser_1.gif',
       },
       {
         cible: cibleIndiceCyber,
