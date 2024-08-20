@@ -21,7 +21,11 @@
   } from '../ui/types.d';
   import { nombreResultats } from './stores/nombreDeResultats.store';
   import MenuFiltres from './filtres/MenuFiltres.svelte';
-  import { mesuresVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
+  import {
+    autorisationsVisiteGuidee,
+    contributeursVisiteGuidee,
+    mesuresVisiteGuidee,
+  } from './modeVisiteGuidee/donneesVisiteGuidee';
   import Onglet from '../ui/Onglet.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
@@ -58,13 +62,17 @@
 
   const rafraichisContributeurs = async () => {
     contributeurs.reinitialise(
-      modeVisiteGuidee ? [] : await recupereContributeurs(idService)
+      modeVisiteGuidee
+        ? contributeursVisiteGuidee
+        : await recupereContributeurs(idService)
     );
   };
 
   const rafraichisAutorisations = async () => {
     storeAutorisations.charge(
-      modeVisiteGuidee ? [] : await recupereAutorisations(idService)
+      modeVisiteGuidee
+        ? autorisationsVisiteGuidee
+        : await recupereAutorisations(idService)
     );
   };
 
