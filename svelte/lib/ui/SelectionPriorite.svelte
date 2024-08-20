@@ -55,10 +55,6 @@
     color: var(--liseres-fonce);
   }
 
-  label.a-label {
-    margin-bottom: 16px;
-  }
-
   label.a-label select {
     margin-top: 8px;
   }
