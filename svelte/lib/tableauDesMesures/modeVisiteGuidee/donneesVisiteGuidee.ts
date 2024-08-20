@@ -24,6 +24,7 @@ export const mesuresVisiteGuidee: Mesures = {
       descriptionLongue: '',
       referentiel: Referentiel.CNIL,
       identifiantNumerique: '0015',
+      statut: 'enCours',
     },
     identificationDonneesSensibles: {
       description: 'Identifier les données importantes à protéger',
@@ -32,6 +33,7 @@ export const mesuresVisiteGuidee: Mesures = {
       descriptionLongue: '',
       referentiel: Referentiel.ANSSI,
       identifiantNumerique: '0008',
+      statut: 'enCours',
     },
     listeEquipements: {
       description:
@@ -41,6 +43,7 @@ export const mesuresVisiteGuidee: Mesures = {
       descriptionLongue: '',
       referentiel: Referentiel.ANSSI,
       identifiantNumerique: '0011',
+      statut: 'enCours',
     },
     limitationInterconnexions: {
       description:

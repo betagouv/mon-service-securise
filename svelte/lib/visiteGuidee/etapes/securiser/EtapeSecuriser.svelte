@@ -7,6 +7,9 @@
   let cibleTiroirMesure: HTMLDivElement;
   let cibleIndiceCyber: HTMLDivElement;
   onMount(() => {
+    document.body.dispatchEvent(
+      new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
+    );
     ciblePremiereMesure = document.getElementsByClassName(
       'titre-mesure'
     )[0]! as HTMLDivElement;
@@ -30,13 +33,9 @@
         callbackInitialeCible: (cible) => {
           const ligneMesure = cible.parentElement;
           if (ligneMesure) ligneMesure.inert = true;
-          const onglets = document.querySelectorAll(
-            '.conteneur-onglet button.onglet'
-          );
-          onglets[0].dispatchEvent(new Event('click'));
         },
         delaiAvantAffichage: 200,
-        positionnementModale: 'DeuxTiersCentre',
+        positionnementModale: 'MilieuDroite',
         titre: 'Sécurisez, grâce à des mesures adaptées',
         description:
           'Chaque mesure est associée à son référentiel (ANSSI, CNIL) et son niveau d’importance (recommandée ou indispensable pour les mesures ANSSI).',
@@ -46,7 +45,6 @@
         cible: cibleOnglets,
         callbackInitialeCible: (cible) => {
           const onglets = cible.querySelectorAll('button.onglet');
-          onglets[1].dispatchEvent(new Event('click'));
           for (let i = 0; i < onglets.length; i++) {
             onglets[i].inert = true;
           }
