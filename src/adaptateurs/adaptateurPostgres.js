@@ -88,17 +88,11 @@ const nouvelAdaptateur = (env) => {
 
   const arreteTout = () => knex.destroy();
 
-  const service = async (id) => {
-    const s = await knex('services')
+  const service = async (id) =>
+    knex('services')
       .where('id', id)
       .select({ id: 'id', donnees: 'donnees' })
       .first();
-
-    return {
-      id: s.id,
-      ...s.donnees,
-    };
-  };
 
   const contributeursService = async (id) =>
     knex('autorisations as a')
@@ -137,7 +131,7 @@ const nouvelAdaptateur = (env) => {
       .whereRaw('services.nom_service_hash=?', hashNomService)
       .select('services.*')
       .first()
-      .then(convertisLigneEnObjet)
+      .then(convertisLigneEnObjetSansMiseAPlatDonnees)
       .catch(() => undefined);
 
   const services = (idUtilisateur) => {

@@ -17,8 +17,10 @@ class ConstructeurAdaptateurPersistanceMemoire {
   }
 
   ajouteUnService(service) {
+    const { id, ...donnees } = service;
     this.services.push({
-      ...service,
+      id,
+      donnees,
       nomServiceHash: this.adaptateurChiffrement.hacheSha256(
         service.descriptionService.nomService
       ),

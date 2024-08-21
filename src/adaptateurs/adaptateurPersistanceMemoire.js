@@ -17,7 +17,7 @@ const nouvelAdaptateur = (
   };
 
   const ajouteService = async (id, donneesService, nomServiceHash) => {
-    donnees.services.push({ id, ...donneesService, nomServiceHash });
+    donnees.services.push({ id, donnees: donneesService, nomServiceHash });
   };
 
   const ajouteUtilisateur = async (id, donneesUtilisateur, emailHash) => {
