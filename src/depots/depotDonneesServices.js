@@ -474,9 +474,9 @@ const creeDepot = (config = {}) => {
 
     return tousContributeurs.filter(
       (contributeur) =>
-        normalise(contributeur.email).includes(rechercheNormalisee) ||
-        normalise(contributeur.prenom)?.includes(rechercheNormalisee) ||
-        normalise(contributeur.nom)?.includes(rechercheNormalisee)
+        normalise(contributeur.donnees.email).includes(rechercheNormalisee) ||
+        normalise(contributeur.donnees.prenom)?.includes(rechercheNormalisee) ||
+        normalise(contributeur.donnees.nom)?.includes(rechercheNormalisee)
     );
   };
 
