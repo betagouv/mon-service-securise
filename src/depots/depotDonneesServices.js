@@ -16,6 +16,7 @@ const {
 const EvenementDossierHomologationFinalise = require('../bus/evenementDossierHomologationFinalise');
 const EvenementServiceSupprime = require('../bus/evenementServiceSupprime');
 const Entite = require('../modeles/entite');
+const Utilisateur = require('../modeles/utilisateur');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -472,11 +473,14 @@ const creeDepot = (config = {}) => {
 
     const rechercheNormalisee = normalise(recherche);
 
-    return tousContributeurs.filter(
+    const resultatsFiltres = tousContributeurs.filter(
       (contributeur) =>
         normalise(contributeur.donnees.email).includes(rechercheNormalisee) ||
         normalise(contributeur.donnees.prenom)?.includes(rechercheNormalisee) ||
         normalise(contributeur.donnees.nom)?.includes(rechercheNormalisee)
+    );
+    return resultatsFiltres.map(
+      (u) => new Utilisateur({ id: u.id, ...u.donnees })
     );
   };
 

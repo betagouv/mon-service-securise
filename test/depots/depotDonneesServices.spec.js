@@ -1791,6 +1791,7 @@ describe('Le dépôt de données des services', () => {
       const contributeurs = await depot.rechercheContributeurs('moi', '');
 
       expect(contributeurs.length).to.be(1);
+      expect(contributeurs[0]).to.be.an(Utilisateur);
       expect(contributeurs[0].id).to.be('pasmoi');
     });
 
