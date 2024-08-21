@@ -344,7 +344,7 @@ const nouvelAdaptateur = (env) => {
                 `,
       [idProprietaire, idProprietaire]
     );
-    return contributeurs.rows.map(convertisLigneEnObjet);
+    return contributeurs.rows.map(convertisLigneEnObjetSansMiseAPlatDonnees);
   };
 
   const lisNotificationsExpirationHomologationDansIntervalle = async (
