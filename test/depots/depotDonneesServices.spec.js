@@ -664,7 +664,7 @@ describe('Le dépôt de données des services', () => {
       expect(donneesPersistees.descriptionService.nomService).to.equal(
         'Service A'
       );
-      expect(donneesPersistees.descriptionService.chiffre).to.equal(true);
+      expect(donneesPersistees.chiffre).to.equal(true);
     });
 
     it('stocke le SHA-256 du nom du service', async () => {

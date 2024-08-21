@@ -23,13 +23,7 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
 
   return {
     chiffre: {
-      donneesService: async (donnees) => {
-        const { descriptionService } = donnees;
-        return {
-          ...donnees,
-          descriptionService: await chiffre(descriptionService),
-        };
-      },
+      donneesService: async (donneesEnClair) => chiffre(donneesEnClair),
     },
     dechiffre: {
       donneesService: async (donneesChiffrees) => dechiffre(donneesChiffrees),
